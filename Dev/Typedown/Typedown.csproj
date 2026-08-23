@@ -7,14 +7,14 @@
 		<LangVersion>latest</LangVersion>
 		<Platforms>x64;x86</Platforms>
 		<AssetTargetFallback>uap10.0.19041</AssetTargetFallback>
-		<TargetPlatformVersion>10.0.22000.0</TargetPlatformVersion>
+		<TargetPlatformVersion>10.0.22621.0</TargetPlatformVersion>
 		<TargetPlatformMinVersion>10.0.18362.0</TargetPlatformMinVersion>
 		<StartupObject>Typedown.Program</StartupObject>
 		<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
 		<ApplicationIcon>Assets\logo.ico</ApplicationIcon>
 		<PublishTrimmed>true</PublishTrimmed>
 		<_SuppressWpfTrimError>true</_SuppressWpfTrimError>
-		<Version>1.2.18</Version>
+		<Version>1.0.0</Version>
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 		<Configurations>Debug;Release;Debug_Local</Configurations>
 	</PropertyGroup>
@@ -22,11 +22,13 @@
 	<PropertyGroup Condition="'$(Platform)' == 'x64'">
 		<SelfContained>false</SelfContained>
 		<RuntimeIdentifier>win10-x64</RuntimeIdentifier>
+		<RuntimeIdentifiers>win10-x64;win-x64</RuntimeIdentifiers>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Platform)' == 'x86'">
 		<SelfContained>false</SelfContained>
 		<RuntimeIdentifier>win10-x86</RuntimeIdentifier>
+		<RuntimeIdentifiers>win10-x86;win-x86</RuntimeIdentifiers>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -39,7 +41,8 @@
 		<PackageReference Include="PdfiumViewer" Version="2.13.0" />
 		<PackageReference Include="PdfiumViewer.Native.x86_64.no_v8-no_xfa" Version="2018.4.8.256" />
 		<PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="all" />
-		<PackageReference Include="Typedown.XamlUI" Version="1.0.1" />
+		<PackageReference Include="System.Reactive" Version="5.0.0" />
+		<PackageReference Include="Typedown.XamlUI" Version="1.0.1" GeneratePathProperty="true" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -62,6 +65,12 @@
 	  <None Update="MicrosoftEdgeWebview2Setup.exe">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(Platform)' == 'x64'">
+		<None Include="$(PkgTypedown_XamlUI)\runtimes\win10-x64\native\Microsoft.UI.Xaml.dll" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Link="Microsoft.UI.Xaml.dll" />
+		<None Include="$(PkgTypedown_XamlUI)\lib\netstandard2.0\Microsoft.UI.Xaml.pri" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Link="Microsoft.UI.Xaml.pri" />
+		<None Include="$(PkgTypedown_XamlUI)\lib\netstandard2.0\Typedown.XamlUI.pri" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Link="Typedown.XamlUI.pri" />
 	</ItemGroup>
 	
 </Project>
