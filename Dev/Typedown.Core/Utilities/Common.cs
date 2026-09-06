@@ -14,6 +14,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Typedown.Core.Models;
 using Typedown.Core.Models.RuntimeModels;
+using Config = Typedown.Core.Config;
 using Windows.System;
 
 namespace Typedown.Core.Utilities
@@ -81,6 +82,8 @@ namespace Typedown.Core.Utilities
 
         public static async Task<JObject> Post(string url, object obj)
         {
+            if (!Config.AllowOutboundNetwork)
+                throw new InvalidOperationException("Outbound network is disabled.");
             var client = new HttpClient();
             var content = new StringContent(JsonConvert.SerializeObject(obj), Encoding.UTF8, "application/json");
             var result = await client.PostAsync(url, content);

@@ -17,6 +17,9 @@ namespace Typedown.Core
     {
         public static bool IsMicaSupported { get; } = Environment.OSVersion.Version.Build >= 22000;
 
+        // Set true to restore crash reports and feedback POSTs to typedown.ownbox.cn.
+        public static bool AllowOutboundNetwork { get; } = false;
+
         public static IReadOnlyList<string> WebView2Args { get; } = new List<string>()
         {
             "--disable-web-security",
