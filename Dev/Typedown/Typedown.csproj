@@ -17,6 +17,12 @@
 		<Configurations>Debug;Release;Debug_Local</Configurations>
 	</PropertyGroup>
 
+	<!-- VCRTForwarders' UseDebugCRT task needs solution-provided ProjectReference Configuration metadata,
+	     which is absent when the packaging project is built directly (e.g. CI). Skip it outside Debug. -->
+	<PropertyGroup Condition="'$(Configuration)' != 'Debug'">
+		<VCRTForwarders-IncludeDebugCRT>false</VCRTForwarders-IncludeDebugCRT>
+	</PropertyGroup>
+
 	<PropertyGroup Condition="'$(Platform)' == 'x64'">
 		<SelfContained>true</SelfContained>
 		<RuntimeIdentifier>win10-x64</RuntimeIdentifier>
