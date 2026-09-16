@@ -87,9 +87,9 @@ jobs:
           /p:AppxBundle=Never
           /p:UapAppxPackageBuildMode=SideloadOnly
           /p:AppxPackageSigningEnabled=true
-          /p:PackageCertificateKeyFile="${{ steps.cert.outputs.pfx }}"
+          /p:PackageCertificateKeyFile=${{ steps.cert.outputs.pfx }}
           /p:PackageCertificatePassword=ci
-          /p:AppxPackageDir="${{ github.workspace }}\AppxPackages\"
+          /p:AppxPackageDir=${{ github.workspace }}\AppxPackages\
 
       - name: Collect artifacts
         shell: pwsh
