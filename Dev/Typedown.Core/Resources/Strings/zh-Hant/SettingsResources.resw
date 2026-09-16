@@ -133,10 +133,6 @@
     <value>一款所見即所得 Markdown 編輯器</value>
     <comment>关于/一款所见即所得 Markdown 编辑器</comment>
   </data>
-  <data name="About.ZiyezmNotice" xml:space="preserve">
-    <value>本構建由 ziyezm 維護，基於開源 Typedown，並非 Microsoft Store 官方版本。</value>
-    <comment>关于/ziyezm 说明</comment>
-  </data>
   <data name="About.SendFeedback" xml:space="preserve">
     <value>發送反饋</value>
     <comment>关于/发送反馈</comment>

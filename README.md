@@ -3,15 +3,9 @@
   <h1 align="center">Typedown</h1>
 </p>
 
+[![Typedown Download](https://get.microsoft.com/images/en-us%20light.svg)](https://apps.microsoft.com/detail/9p8tcw4h2hb4)
+
 Typedown is a lightweight Markdown editor designed specifically for the Windows platform. With the WinUI framework, it provides users with a seamless interface and efficient editing experience that perfectly matches the operating system. Whether you're writing technical documents, academic papers, or blog posts, Typedown is your go-to assistant!
-
-## 关于本仓库
-
-本仓库由 **ziyezm** 维护，基于开源 [Typedown](https://github.com/byxiaozhi/Typedown)，版本 **1.0.0**。这不是 Microsoft Store 官方应用。
-
-主要改动：当前打开的 Markdown 被其他程序修改时自动刷新，可在设置中选择是否先询问。Windows 安装包：`Typedown-ziyezm-windows-x64-v1.0.0.exe`。
-
-原 LICENSE（MIT）仍适用。
 
 ## Screenshots
 <figure>

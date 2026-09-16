@@ -133,10 +133,6 @@
     <value>A WYSIWYG Markdown editor</value>
     <comment>关于/一款所见即所得 Markdown 编辑器</comment>
   </data>
-  <data name="About.ZiyezmNotice" xml:space="preserve">
-    <value>This build is maintained by ziyezm, based on open-source Typedown. It is not the Microsoft Store official app.</value>
-    <comment>关于/ziyezm 说明</comment>
-  </data>
   <data name="About.SendFeedback" xml:space="preserve">
     <value>Send Feedback</value>
     <comment>关于/发送反馈</comment>

@@ -1,6 +1,6 @@
 #define MyAppName "Typedown"
-#define MyAppVersion "1.0.0"
-#define MyAppPublisher "ziyezm"
+#define MyAppVersion "1.2.19"
+#define MyAppPublisher "Typedown Community"
 #define MyAppExeName "Typedown.exe"
 #define MyAppAssocName "Typedown Markdown"
 #define MyAppAssocKey "Typedown.Markdown"
@@ -13,7 +13,7 @@ AppPublisher={#MyAppPublisher}
 DefaultDirName={autopf}\{#MyAppName}
 DisableProgramGroupPage=yes
 OutputDir=Output
-OutputBaseFilename=Typedown-ziyezm-windows-x64-v{#MyAppVersion}
+OutputBaseFilename=Typedown-windows-x64-v{#MyAppVersion}
 SetupIconFile=..\..\Dev\Typedown\Assets\logo.ico
 Compression=lzma2/max
 SolidCompression=yes
