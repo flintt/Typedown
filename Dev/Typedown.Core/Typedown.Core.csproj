@@ -1555,16 +1555,12 @@
     <PRIResource Include="Resources\Strings\ur\SettingsResources.resw" />
   </ItemGroup>
   <ItemGroup>
-    <PRIResource Include="Resources\Strings\uz\CommonResources.resw" />
   </ItemGroup>
   <ItemGroup>
-    <PRIResource Include="Resources\Strings\uz\DialogResources.resw" />
   </ItemGroup>
   <ItemGroup>
-    <PRIResource Include="Resources\Strings\uz\Resources.resw" />
   </ItemGroup>
   <ItemGroup>
-    <PRIResource Include="Resources\Strings\uz\SettingsResources.resw" />
   </ItemGroup>
   <ItemGroup>
     <PRIResource Include="Resources\Strings\vi\CommonResources.resw" />
