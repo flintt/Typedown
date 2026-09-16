@@ -1,0 +1,115 @@
+name: Build
+
+on:
+  push:
+    branches: [ main, integrate-upstream-prs ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  editor:
+    name: Build editor (JS)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: yarn
+          cache-dependency-path: Dev/Typedown.Editor/yarn.lock
+
+      - name: yarn install
+        working-directory: Dev/Typedown.Editor
+        run: yarn install --frozen-lockfile --network-timeout 600000
+
+      - name: yarn build
+        working-directory: Dev/Typedown.Editor
+        env:
+          CI: 'false'
+          GENERATE_SOURCEMAP: 'false'
+        run: yarn build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: editor-statics
+          path: Dev/Typedown/Resources/Statics/
+          if-no-files-found: error
+
+  app:
+    name: Build app (${{ matrix.platform }})
+    needs: editor
+    runs-on: windows-2022
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [ x64 ]
+    env:
+      Configuration: Release
+      Platform: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: editor-statics
+          path: Dev/Typedown/Resources/Statics/
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '3.1.x'
+
+      - uses: microsoft/setup-msbuild@v2
+
+      - name: Create self-signed signing certificate
+        id: cert
+        shell: pwsh
+        run: |
+          $publisher = ([xml](Get-Content Tools/Typedown.Package/Package.appxmanifest)).Package.Identity.Publisher
+          $cert = New-SelfSignedCertificate -Type Custom -Subject $publisher -KeyUsage DigitalSignature `
+            -FriendlyName "Typedown CI" -CertStoreLocation "Cert:\CurrentUser\My" `
+            -TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.3", "2.5.29.19={text}")
+          $pfx = Join-Path $env:RUNNER_TEMP "Typedown_CI.pfx"
+          $pwd = ConvertTo-SecureString -String "ci" -Force -AsPlainText
+          Export-PfxCertificate -Cert $cert -FilePath $pfx -Password $pwd | Out-Null
+          Export-Certificate -Cert $cert -FilePath (Join-Path $env:RUNNER_TEMP "Typedown_CI.cer") | Out-Null
+          "pfx=$pfx" >> $env:GITHUB_OUTPUT
+
+      - name: Restore
+        run: >
+          msbuild Tools/Typedown.Package/Typedown.Package.wapproj /t:Restore /m
+          /p:Configuration=${{ env.Configuration }} /p:Platform=${{ env.Platform }}
+
+      - name: Build MSIX
+        run: >
+          msbuild Tools/Typedown.Package/Typedown.Package.wapproj /m
+          /p:Configuration=${{ env.Configuration }} /p:Platform=${{ env.Platform }}
+          /p:AppxBundle=Never
+          /p:UapAppxPackageBuildMode=SideloadOnly
+          /p:AppxPackageSigningEnabled=true
+          /p:PackageCertificateKeyFile="${{ steps.cert.outputs.pfx }}"
+          /p:PackageCertificatePassword=ci
+          /p:AppxPackageDir="${{ github.workspace }}\AppxPackages\"
+
+      - name: Collect artifacts
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force out | Out-Null
+          Get-ChildItem AppxPackages -Recurse -Include *.msix,*.msixbundle | Copy-Item -Destination out
+          Copy-Item (Join-Path $env:RUNNER_TEMP "Typedown_CI.cer") out
+          Get-ChildItem out
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Typedown-msix-${{ matrix.platform }}
+          path: out/
+
+      - name: Upload build logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output-${{ matrix.platform }}
+          path: |
+            Dev/**/obj/**/*.log
+            Dev/**/bin/**/*.log
+          if-no-files-found: ignore
