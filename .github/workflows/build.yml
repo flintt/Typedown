@@ -81,6 +81,8 @@ jobs:
           /p:Configuration=${{ env.Configuration }} /p:Platform=${{ env.Platform }}
 
       - name: Build MSIX
+        id: build
+        continue-on-error: true
         run: >
           msbuild Tools/Typedown.Package/Typedown.Package.wapproj /m
           /p:Configuration=${{ env.Configuration }} /p:Platform=${{ env.Platform }}
@@ -90,6 +92,20 @@ jobs:
           /p:PackageCertificateKeyFile=${{ steps.cert.outputs.pfx }}
           /p:PackageCertificatePassword=ci
           /p:AppxPackageDir=${{ github.workspace }}\AppxPackages\
+
+      - name: Diagnose MakeAppx failure
+        if: steps.build.outcome == 'failure'
+        shell: pwsh
+        run: |
+          $map = "Tools/Typedown.Package/obj/${{ env.Platform }}/${{ env.Configuration }}/package.map.txt"
+          if (Test-Path $map) {
+            Write-Host "===== package.map.txt ====="; Get-Content $map
+            $makeappx = Get-ChildItem "C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\makeappx.exe"
+            Push-Location Tools/Typedown.Package
+            & $makeappx pack /v /l /h sha256 /f "obj/${{ env.Platform }}/${{ env.Configuration }}/package.map.txt" /o /p "$env:RUNNER_TEMP\diag.msix"
+            Pop-Location
+          } else { Write-Host "no package.map.txt" ; Get-ChildItem -Recurse Tools/Typedown.Package/obj | Select-Object -First 50 }
+          exit 1
 
       - name: Collect artifacts
         shell: pwsh
