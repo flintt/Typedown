@@ -133,6 +133,10 @@
     <value>一款所见即所得 Markdown 编辑器</value>
     <comment>关于/一款所见即所得 Markdown 编辑器</comment>
   </data>
+  <data name="About.ZiyezmNotice" xml:space="preserve">
+    <value>本构建由 ziyezm 维护，基于开源 Typedown，并非 Microsoft Store 官方版本。</value>
+    <comment>关于/ziyezm 说明</comment>
+  </data>
   <data name="About.SendFeedback" xml:space="preserve">
     <value>发送反馈</value>
     <comment>关于/发送反馈</comment>
@@ -384,6 +388,22 @@
   <data name="General.AutoSave.Title" xml:space="preserve">
     <value>自动保存</value>
     <comment>通用/自动保存</comment>
+  </data>
+  <data name="General.AutoReload.Description" xml:space="preserve">
+    <value>监视当前打开的文件，被其他程序修改后刷新</value>
+    <comment>通用/外部修改时自动刷新</comment>
+  </data>
+  <data name="General.AutoReload.Title" xml:space="preserve">
+    <value>外部修改时自动刷新</value>
+    <comment>通用/外部修改时自动刷新</comment>
+  </data>
+  <data name="General.AskBeforeReload.Description" xml:space="preserve">
+    <value>关闭后仅在有未保存更改时询问，否则直接重新加载</value>
+    <comment>通用/外部修改时询问</comment>
+  </data>
+  <data name="General.AskBeforeReload.Title" xml:space="preserve">
+    <value>重新加载前询问</value>
+    <comment>通用/外部修改时询问</comment>
   </data>
   <data name="General.Custom" xml:space="preserve">
     <value>自定义</value>

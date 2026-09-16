@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
+using PropertyChanged;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Typedown.Core.Controls;
 using Typedown.Core.Interfaces;
@@ -15,6 +17,7 @@ using Typedown.Core.Services;
 using Typedown.Core.Utilities;
 using Windows.ApplicationModel.Core;
 using Windows.Storage.Pickers;
+using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -38,6 +41,7 @@ namespace Typedown.Core.ViewModels
 
         public string WorkFolder { get; private set; } = null;
 
+        [OnChangedMethod(nameof(OnFilePathChanged))]
         public string FilePath { get; private set; } = null;
 
         public string ImageBasePath => string.IsNullOrEmpty(FilePath) ? SettingsViewModel.DefaultImageBasePath : Path.GetDirectoryName(FilePath);
@@ -58,6 +62,16 @@ namespace Typedown.Core.ViewModels
         public Command<Unit> ExitCommand { get; } = new();
 
         private readonly DispatcherTimer saveFileTimer = new();
+
+        private readonly DispatcherTimer fileReloadTimer = new();
+
+        private FileSystemWatcher fileWatcher;
+
+        private DispatcherQueue dispatcherQueue;
+
+        private DateTime ignoreExternalChangeUntil = DateTime.MinValue;
+
+        private bool reloadDialogOpened;
 
         public AutoBackup AutoBackup => ServiceProvider.GetService<AutoBackup>();
 
@@ -83,6 +97,10 @@ namespace Typedown.Core.ViewModels
             saveFileTimer.Interval = TimeSpan.FromSeconds(5);
             saveFileTimer.Tick += SaveFileTimerTick;
             saveFileTimer.Start();
+            dispatcherQueue = DispatcherQueue.GetForCurrentThread();
+            fileReloadTimer.Interval = TimeSpan.FromMilliseconds(400);
+            fileReloadTimer.Tick += FileReloadTimerTick;
+            disposables.Add(SettingsViewModel.WhenPropertyChanged(nameof(SettingsViewModel.AutoReload)).Subscribe(_ => StartWatchFile()));
             _ = CoreApplication.GetCurrentView().CoreWindow.Dispatcher.RunIdleAsync(() => OnStartup());
         }
 
@@ -281,7 +299,9 @@ namespace Typedown.Core.ViewModels
         {
             try
             {
+                IgnoreOwnFileWrite();
                 await File.WriteAllTextAsync(path, text);
+                IgnoreOwnFileWrite();
                 return true;
             }
             catch (Exception ex)
@@ -548,7 +568,193 @@ namespace Typedown.Core.ViewModels
         public void Dispose()
         {
             saveFileTimer.Stop();
+            fileReloadTimer.Stop();
+            StopWatchFile();
             disposables.Dispose();
+        }
+
+        private void OnFilePathChanged()
+        {
+            StartWatchFile();
+        }
+
+        private void IgnoreOwnFileWrite()
+        {
+            ignoreExternalChangeUntil = DateTime.UtcNow.AddMilliseconds(1000);
+        }
+
+        private void StartWatchFile()
+        {
+            StopWatchFile();
+            if (!SettingsViewModel.AutoReload || string.IsNullOrEmpty(FilePath))
+                return;
+            var dir = Path.GetDirectoryName(FilePath);
+            var name = Path.GetFileName(FilePath);
+            if (string.IsNullOrEmpty(dir) || string.IsNullOrEmpty(name) || !Directory.Exists(dir))
+                return;
+            try
+            {
+                fileWatcher = new FileSystemWatcher
+                {
+                    Path = dir,
+                    Filter = name,
+                    NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size | NotifyFilters.FileName | NotifyFilters.CreationTime,
+                    IncludeSubdirectories = false
+                };
+                fileWatcher.Changed += OnDiskFileEvent;
+                fileWatcher.Created += OnDiskFileEvent;
+                fileWatcher.Deleted += OnDiskFileEvent;
+                fileWatcher.Renamed += OnDiskFileRenamed;
+                fileWatcher.EnableRaisingEvents = true;
+            }
+            catch
+            {
+                StopWatchFile();
+            }
+        }
+
+        private void StopWatchFile()
+        {
+            if (fileWatcher == null)
+                return;
+            fileWatcher.EnableRaisingEvents = false;
+            fileWatcher.Changed -= OnDiskFileEvent;
+            fileWatcher.Created -= OnDiskFileEvent;
+            fileWatcher.Deleted -= OnDiskFileEvent;
+            fileWatcher.Renamed -= OnDiskFileRenamed;
+            fileWatcher.Dispose();
+            fileWatcher = null;
+        }
+
+        private void OnDiskFileEvent(object sender, FileSystemEventArgs e)
+        {
+            ScheduleReloadFromDisk();
+        }
+
+        private void OnDiskFileRenamed(object sender, RenamedEventArgs e)
+        {
+            dispatcherQueue?.TryEnqueue(() =>
+            {
+                if (disposables.IsDisposed)
+                    return;
+                if (!string.IsNullOrEmpty(FilePath) &&
+                    string.Equals(e.OldFullPath, FilePath, StringComparison.OrdinalIgnoreCase) &&
+                    !string.IsNullOrEmpty(e.FullPath))
+                {
+                    FilePath = e.FullPath;
+                    _ = AccessHistory.RecordFileHistory(FilePath);
+                    return;
+                }
+                ScheduleReloadFromDisk();
+            });
+        }
+
+        private void ScheduleReloadFromDisk()
+        {
+            if (DateTime.UtcNow < ignoreExternalChangeUntil)
+                return;
+            dispatcherQueue?.TryEnqueue(() =>
+            {
+                if (disposables.IsDisposed || DateTime.UtcNow < ignoreExternalChangeUntil)
+                    return;
+                fileReloadTimer.Stop();
+                fileReloadTimer.Start();
+            });
+        }
+
+        private async void FileReloadTimerTick(object sender, object e)
+        {
+            fileReloadTimer.Stop();
+            if (disposables.IsDisposed || DateTime.UtcNow < ignoreExternalChangeUntil)
+                return;
+            await HandleExternalFileChange();
+        }
+
+        private async Task HandleExternalFileChange()
+        {
+            if (!SettingsViewModel.AutoReload || string.IsNullOrEmpty(FilePath) || reloadDialogOpened)
+                return;
+
+            string text = null;
+            for (var i = 0; i < 10; i++)
+            {
+                try
+                {
+                    if (!File.Exists(FilePath))
+                    {
+                        if (EditorViewModel.Saved)
+                        {
+                            EditorViewModel.FileHash = EditorViewModel.CurrentHash == 0 ? 1UL : 0UL;
+                            EditorViewModel.Saved = false;
+                        }
+                        return;
+                    }
+                    text = await File.ReadAllTextAsync(FilePath);
+                    break;
+                }
+                catch (IOException)
+                {
+                    await Task.Delay(100);
+                }
+                catch
+                {
+                    return;
+                }
+            }
+            if (text == null)
+                return;
+
+            var diskHash = Common.SimpleHash(text);
+            if (diskHash == EditorViewModel.FileHash)
+                return;
+            if (diskHash == EditorViewModel.CurrentHash)
+            {
+                EditorViewModel.FileHash = diskHash;
+                EditorViewModel.Saved = true;
+                return;
+            }
+
+            if (EditorViewModel.Saved && !SettingsViewModel.AskBeforeReload)
+            {
+                ApplyDiskText(text);
+                return;
+            }
+
+            reloadDialogOpened = true;
+            try
+            {
+                var contentKey = EditorViewModel.Saved ? "ReloadFromDiskContentClean" : "ReloadFromDiskContent";
+                var contentFallback = EditorViewModel.Saved
+                    ? "磁盘上的文件已更改，是否重新加载？"
+                    : "磁盘上的文件已更改。重新加载将丢失当前未保存的更改。";
+                var result = await AppContentDialog.Create(
+                    Locale.GetDialogString("ReloadFromDiskTitle") ?? "文件已在外部被修改",
+                    Locale.GetDialogString(contentKey) ?? contentFallback,
+                    Locale.GetDialogString("Keep") ?? "保留",
+                    Locale.GetDialogString("Reload") ?? "重新加载").ShowAsync(AppViewModel.XamlRoot);
+                if (result == ContentDialogResult.Primary)
+                    ApplyDiskText(text);
+                else
+                    EditorViewModel.FileHash = diskHash;
+            }
+            finally
+            {
+                reloadDialogOpened = false;
+            }
+        }
+
+        private void ApplyDiskText(string text)
+        {
+            EditorViewModel.FirstStart = false;
+            EditorViewModel.FileHash = Common.SimpleHash(text);
+            EditorViewModel.Markdown = text;
+            EditorViewModel.CurrentHash = EditorViewModel.FileHash;
+            EditorViewModel.Saved = true;
+            EditorViewModel.FileLoaded = false;
+            EditorViewModel.AutoSavedSucc = true;
+            EditorViewModel.History.InitHistory(text);
+            AutoBackup.DeleteBackup(FilePath);
+            MarkdownEditor?.PostMessage("LoadFile", new { text, basePath = ImageBasePath });
         }
 
         private void Exit()

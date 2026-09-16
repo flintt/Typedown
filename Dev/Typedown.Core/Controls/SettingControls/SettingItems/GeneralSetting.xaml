@@ -66,6 +66,22 @@
             </controls:NormalSettingItem.Icon>
             <ToggleSwitch IsOn="{x:Bind Settings.AutoSave, Mode=TwoWay}"/>
         </controls:NormalSettingItem>
+        <controls:NormalSettingItem Title="{u:LocaleString Key=General.AutoReload.Title}" Description="{u:LocaleString Key=General.AutoReload.Description}">
+            <controls:NormalSettingItem.Icon>
+                <FontIcon Glyph="&#xe72c;"/>
+            </controls:NormalSettingItem.Icon>
+            <ToggleSwitch IsOn="{x:Bind Settings.AutoReload, Mode=TwoWay}"/>
+        </controls:NormalSettingItem>
+        <controls:NormalSettingItem
+            x:Name="AskBeforeReloadItem"
+            x:Load="{x:Bind Settings.AutoReload, Mode=OneWay}"
+            Title="{u:LocaleString Key=General.AskBeforeReload.Title}"
+            Description="{u:LocaleString Key=General.AskBeforeReload.Description}">
+            <controls:NormalSettingItem.Icon>
+                <FontIcon Glyph="&#xe8bd;"/>
+            </controls:NormalSettingItem.Icon>
+            <ToggleSwitch IsOn="{x:Bind Settings.AskBeforeReload, Mode=TwoWay}"/>
+        </controls:NormalSettingItem>
         <controls:NormalSettingItem Title="{u:LocaleString Key=General.KeepRun.Title}" Description="{u:LocaleString Key=General.KeepRun.Description}">
             <controls:NormalSettingItem.Icon>
                 <FontIcon Glyph="&#xe945;"/>

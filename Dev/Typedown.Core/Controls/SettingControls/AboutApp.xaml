@@ -22,11 +22,11 @@
                 <TextBlock Text="{x:Bind local:AboutApp.GetAppVersion()}"/>
             </StackPanel>
             <TextBlock Text="{u:LocaleString Key=About.Introduction}"/>
+            <TextBlock Margin="0,8,0,0" TextWrapping="Wrap" Text="{u:LocaleString Key=About.ZiyezmNotice}"/>
         </StackPanel>
 
         <StackPanel Margin="-12,8,0,0">
             <HyperlinkButton Content="{u:LocaleString Key=About.BasedOnOpenSourceSoftware}" NavigateUri="https://typedown.ownbox.cn/credits" />
-            <HyperlinkButton Content="{u:LocaleString Key=About.AppStorePage}" NavigateUri="https://www.microsoft.com/store/apps/9P8TCW4H2HB4" />
         </StackPanel>
 
         <StackPanel Margin="0,8,0,0" Spacing="16">

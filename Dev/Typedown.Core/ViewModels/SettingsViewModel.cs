@@ -41,6 +41,8 @@ namespace Typedown.Core.ViewModels
         public string FontFamily { get => GetSettingValue(""); set => SetSettingValue(value); }
         public string TextDirection { get => GetSettingValue("auto"); set => SetSettingValue(value); }
         public bool AutoSave { get => GetSettingValue(false); set => SetSettingValue(value); }
+        public bool AutoReload { get => GetSettingValue(true); set => SetSettingValue(value); }
+        public bool AskBeforeReload { get => GetSettingValue(true); set => SetSettingValue(value); }
         public AppTheme AppTheme { get => GetSettingValue(AppTheme.Default); set => SetSettingValue(value); }
         public string Language { get => GetSettingValue("default"); set => SetSettingValue(value); }
         public int WordCountMethod { get => GetSettingValue(0); set => SetSettingValue(value); }
