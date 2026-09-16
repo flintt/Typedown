@@ -106,7 +106,6 @@ namespace Typedown.Core.ViewModels
                 Settings.SourceCode,
                 Settings.FontSize,
                 Settings.LineHeight,
-                Settings.FontFamily,
                 Settings.AutoPairBracket,
                 Settings.AutoPairQuote,
                 Settings.TrimUnnecessaryCodeBlockEmptyLines,
