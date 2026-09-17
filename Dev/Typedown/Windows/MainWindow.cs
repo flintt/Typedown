@@ -94,7 +94,16 @@ namespace Typedown.Windows
 
         private void EnableMicaEffect(bool enable)
         {
-            RootControl.Background = enable ? new SystemBackdropBrush(this) : new SolidColorBrush(Colors.Transparent);
+            try
+            {
+                RootControl.Background = enable ? new SystemBackdropBrush(this) : new SolidColorBrush(Colors.Transparent);
+            }
+            catch (Exception ex)
+            {
+                // SystemBackdropBrush needs Win2D (Microsoft.Graphics.Canvas.dll); fall back rather than take the window down.
+                Debug.WriteLine($"Mica effect unavailable: {ex}");
+                RootControl.Background = new SolidColorBrush(Colors.Transparent);
+            }
         }
 
         private void OnLoaded(object sender, EventArgs e)

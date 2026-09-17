@@ -53,6 +53,9 @@
 		<PackageReference Include="System.Drawing.Common" Version="9.0.8" />
 		<PackageReference Include="System.Reactive" Version="5.0.0" />
 		<PackageReference Include="Typedown.XamlUI" Version="1.0.1" GeneratePathProperty="true" />
+		<!-- Typedown.XamlUI depends on Win2D with build assets excluded, and the packaging project publishes with RID win-x64,
+		     so Win2D's runtimes/win10-* native DLL is never selected. Reference it directly and copy the native DLL explicitly. -->
+		<PackageReference Include="Win2D.uwp" Version="1.26.0" GeneratePathProperty="true" ExcludeAssets="build" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -77,8 +80,17 @@
 	  </None>
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(Platform)' == 'x64'">
-		<None Include="$(PkgTypedown_XamlUI)\runtimes\win10-x64\native\Microsoft.UI.Xaml.dll" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Link="Microsoft.UI.Xaml.dll" />
+	<PropertyGroup>
+		<_NativeRid Condition="'$(Platform)' == 'x64'">win10-x64</_NativeRid>
+		<_NativeRid Condition="'$(Platform)' == 'x86'">win10-x86</_NativeRid>
+		<_NativeRid Condition="'$(Platform)' == 'ARM64'">win10-arm64</_NativeRid>
+	</PropertyGroup>
+
+	<!-- Native WinRT components that only ship as runtimes/win10-* assets. Copied explicitly so they are present
+	     regardless of which RID the publish step uses (VS uses win10-x64, the packaging project uses win-x64). -->
+	<ItemGroup Condition="'$(_NativeRid)' != ''">
+		<None Include="$(PkgTypedown_XamlUI)\runtimes\$(_NativeRid)\native\Microsoft.UI.Xaml.dll" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Link="Microsoft.UI.Xaml.dll" />
+		<None Include="$(PkgWin2D_uwp)\runtimes\$(_NativeRid)\native\Microsoft.Graphics.Canvas.dll" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Link="Microsoft.Graphics.Canvas.dll" />
 		<None Include="$(PkgTypedown_XamlUI)\lib\netstandard2.0\Microsoft.UI.Xaml.pri" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Link="Microsoft.UI.Xaml.pri" />
 		<None Include="$(PkgTypedown_XamlUI)\lib\netstandard2.0\Typedown.XamlUI.pri" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Link="Typedown.XamlUI.pri" />
 	</ItemGroup>
