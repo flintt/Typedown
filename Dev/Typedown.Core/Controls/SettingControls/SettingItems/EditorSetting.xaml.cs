@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Drawing.Text;
 using System.Linq;
+using Microsoft.Graphics.Canvas.Text;
 using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
 using Windows.Globalization.NumberFormatting;
@@ -24,15 +24,22 @@ namespace Typedown.Core.Controls.SettingControls.SettingItems
         public DecimalFormatter IntegerFormatter { get; } = new() { FractionDigits = 0, NumberRounder = new IncrementNumberRounder { Increment = 1, RoundingAlgorithm = RoundingAlgorithm.RoundHalfUp } };
 
         // Every font family actually installed on this machine (evaluated once, lazily).
+        // Uses Win2D/DirectWrite: System.Drawing.Common is not usable from this UWP class library.
         private static readonly Lazy<List<string>> installedFontFamilies = new(() =>
         {
-            using var installedFonts = new InstalledFontCollection();
-            return installedFonts.Families
-                .Select(f => f.Name)
-                .Where(name => !string.IsNullOrWhiteSpace(name))
-                .Distinct()
-                .OrderBy(name => name, StringComparer.CurrentCultureIgnoreCase)
-                .ToList();
+            try
+            {
+                return CanvasTextFormat.GetSystemFontFamilies()
+                    .Where(name => !string.IsNullOrWhiteSpace(name))
+                    .Distinct()
+                    .OrderBy(name => name, StringComparer.CurrentCultureIgnoreCase)
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                Log.WriteLocal("FontEnumeration", ex.ToString());
+                return new List<string>();
+            }
         });
 
         public ObservableCollection<string> FontFamilySuggestions { get; } = new();
