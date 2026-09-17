@@ -42,13 +42,20 @@ namespace Typedown
         {
             var providers = new List<IXamlMetadataProvider>() { new Core.Typedown_Core_XamlTypeInfo.XamlMetaDataProvider() };
             var xamlApp = new App(providers) { Resources = new Core.Resources() };
-            xamlApp.UnhandledException += (_, e) => Log.WriteLocal("XamlUnhandledException", $"{e.Message}\n{e.Exception}");
             xamlApp.Run();
         }
 
         protected override async void OnLaunched()
         {
             base.OnLaunched();
+            try
+            {
+                Windows.UI.Xaml.Application.Current.UnhandledException += (_, e) => Log.WriteLocal("XamlUnhandledException", $"{e.Message}\n{e.Exception}");
+            }
+            catch (Exception ex)
+            {
+                Log.WriteLocal("XamlUnhandledExceptionHook", ex.ToString());
+            }
             if (!await EnvCheck.EnsureWebView2Installed())
             {
                 Exit();
