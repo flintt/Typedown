@@ -21,9 +21,10 @@ namespace Typedown
 
         private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
+            Log.WriteLocal(e.IsTerminating ? "UnhandledException" : "UnhandledException-NonFatal", e.ExceptionObject?.ToString());
             if (e.IsTerminating)
             {
-                Log.Report("UnhandledException", e.ExceptionObject.ToString()).Wait();
+                try { Log.Report("UnhandledException", e.ExceptionObject.ToString()).Wait(3000); } catch { }
             }
         }
     }

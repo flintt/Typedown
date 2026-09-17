@@ -42,6 +42,7 @@ namespace Typedown
         {
             var providers = new List<IXamlMetadataProvider>() { new Core.Typedown_Core_XamlTypeInfo.XamlMetaDataProvider() };
             var xamlApp = new App(providers) { Resources = new Core.Resources() };
+            xamlApp.UnhandledException += (_, e) => Log.WriteLocal("XamlUnhandledException", $"{e.Message}\n{e.Exception}");
             xamlApp.Run();
         }
 
