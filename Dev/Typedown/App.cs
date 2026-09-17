@@ -50,7 +50,7 @@ namespace Typedown
             base.OnLaunched();
             try
             {
-                Windows.UI.Xaml.Application.Current.UnhandledException += (_, e) => Log.WriteLocal("XamlUnhandledException", $"{e.Message}\n{e.Exception}");
+                global::Windows.UI.Xaml.Application.Current.UnhandledException += (_, e) => Log.WriteLocal("XamlUnhandledException", $"{e.Message}\n{e.Exception}");
             }
             catch (Exception ex)
             {
