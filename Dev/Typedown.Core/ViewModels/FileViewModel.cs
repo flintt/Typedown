@@ -357,7 +357,7 @@ namespace Typedown.Core.ViewModels
                 if (result && !disposables.IsDisposed && FilePath == path)
                 {
                     EditorViewModel.FileHash = hash;
-                    EditorViewModel.Saved = EditorViewModel.Markdown == markdown;
+                    EditorViewModel.Saved = EditorViewModel.CurrentHash == hash; // CurrentHash tracks the live buffer; avoids an O(n) string compare per save
                     if (EditorViewModel.Saved)
                         AutoBackup.DeleteBackup(path);
                     _ = AccessHistory.RecordFileHistory(path);
@@ -401,7 +401,7 @@ namespace Typedown.Core.ViewModels
                     {
                         FilePath = file.Path;
                         EditorViewModel.FileHash = hash;
-                        EditorViewModel.Saved = EditorViewModel.Markdown == markdown;
+                        EditorViewModel.Saved = EditorViewModel.CurrentHash == hash; // CurrentHash tracks the live buffer; avoids an O(n) string compare per save
                         if (EditorViewModel.Saved)
                             AutoBackup.DeleteBackup(originalPath);
                         _ = AccessHistory.RecordFileHistory(FilePath);
