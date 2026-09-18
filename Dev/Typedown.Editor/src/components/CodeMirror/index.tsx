@@ -9,6 +9,8 @@ require('codemirror/mode/markdown/markdown');
 interface ICodeMirrorEditor {
     markdown: string
     cursor: any
+    /** Incremented by the container whenever the host replaces the content; forces the effect below to re-check. */
+    contentVersion?: number
     options: any
     searchOpen: number
     searchArg: { value: string, opt: any } | undefined
@@ -191,7 +193,7 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
                 search({ value, opt: { ...opt, selection } })
             }
         }
-    }, [editor, props.markdown, props.scrollTopRef, search])
+    }, [editor, props.markdown, props.contentVersion, props.scrollTopRef, search])
 
     useEffect(() => {
         if (props.searchArg && editor) {

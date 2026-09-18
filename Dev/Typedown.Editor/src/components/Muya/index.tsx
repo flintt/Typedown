@@ -16,6 +16,8 @@ import 'components/Muya/themes/default.css'
 interface IMuyaEditor {
     markdown: string
     cursor: any
+    /** Incremented by the container whenever the host replaces the content; forces the effect below to re-check. */
+    contentVersion?: number
     options: any
     searchOpen: number
     searchArg: { value: string, opt: any } | undefined
@@ -118,7 +120,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
                 search(searchArgRef.current)
             }, 100);
         }
-    }, [editor, props.markdown, props.scrollTopRef, scrollToCursorIfInvisible, scrollToElementIfInvisible, search])
+    }, [editor, props.markdown, props.contentVersion, props.scrollTopRef, scrollToCursorIfInvisible, scrollToElementIfInvisible, search])
 
     useEffect(() => {
         search(props.searchArg)

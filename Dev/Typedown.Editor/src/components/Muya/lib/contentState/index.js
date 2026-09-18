@@ -299,23 +299,47 @@ class ContentState {
     return this.cursor
   }
 
+  // getBlock is called many times per keystroke; a linear search over the whole tree made it O(document) each time.
+  // Cache key -> block and verify the cached block is still attached (identity checks up the parent chain), so any
+  // structural edit (splice/replace/undo copies) simply causes a miss and a rebuild.
   getBlock(key) {
     if (!key) return null
+    const cached = this.blockCache ? this.blockCache.get(key) : undefined
+    if (cached && this.isBlockAttached(cached)) {
+      return cached
+    }
     let result = null
+    const cache = new Map()
     const travel = blocks => {
       for (const block of blocks) {
+        cache.set(block.key, block)
         if (block.key === key) {
           result = block
-          return
         }
         const { children } = block
-        if (children.length) {
+        if (children && children.length) {
           travel(children)
         }
       }
     }
     travel(this.blocks)
+    this.blockCache = cache
     return result
+  }
+
+  isBlockAttached(block) {
+    let current = block
+    for (let depth = 0; depth < 256; depth++) {
+      if (!current.parent) {
+        return this.blocks.includes(current)
+      }
+      const parent = this.blockCache.get(current.parent)
+      if (!parent || !parent.children || !parent.children.includes(current)) {
+        return false
+      }
+      current = parent
+    }
+    return false
   }
 
   copyBlock(origin) {
