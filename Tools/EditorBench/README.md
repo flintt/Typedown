@@ -1,0 +1,18 @@
+# Editor benchmark
+
+Drives the built editor bundle (`Dev/Typedown/Resources/Statics`) in headless Chrome with the WebView2 host
+stubbed out, loads a large document, types into it and reports per-keystroke cost plus a CPU profile.
+
+```bash
+cd Tools/EditorBench
+npm init -y && npm i puppeteer-core source-map          # once
+# build the editor first (GENERATE_SOURCEMAP=true gives readable profiles)
+node bench.js ../../Dev/Typedown/Resources/Statics big.md label
+node prof-summary.js profile-label.cpuprofile ../../Dev/Typedown/Resources/Statics/static/js/main.*.js.map
+```
+
+`bench.js` expects Chrome at `/opt/google/chrome/chrome`; edit `executablePath` otherwise. The harness itself
+costs ~20 ms per keystroke (CDP round trips), so compare runs against each other, not against zero.
+
+Reference (80k-char document, 1287 blocks, 4-core Linux box): before the 2026-09-18 fixes 83–107 ms per
+keystroke, after 45–53 ms.
