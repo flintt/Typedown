@@ -29,7 +29,7 @@
             <HyperlinkButton Content="{u:LocaleString Key=About.AppStorePage}" NavigateUri="https://www.microsoft.com/store/apps/9P8TCW4H2HB4" />
         </StackPanel>
 
-        <StackPanel Margin="0,8,0,0" Spacing="16">
+        <StackPanel Margin="0,8,0,0" Spacing="16" Visibility="Collapsed">
             <Button MinWidth="100" Name="FeedBackButton" Content="{u:LocaleString Key=About.SendFeedback}" Click="FeedBackButton_Click"/>
         </StackPanel>
 

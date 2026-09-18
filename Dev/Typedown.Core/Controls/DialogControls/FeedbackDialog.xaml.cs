@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Typedown.Core.Utilities;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Config = Typedown.Core.Config;
 
 namespace Typedown.Core.Controls
 {
@@ -24,6 +25,8 @@ namespace Typedown.Core.Controls
 
         public static async Task OpenFeedbackDialog(XamlRoot xamlRoot)
         {
+            if (!Config.AllowOutboundNetwork)
+                return;
             var content = new FeedbackDialog();
             var result = await AppContentDialog.Create(Locale.GetDialogString("FeedbackTitle"), content, Locale.GetDialogString("Cancel"), Locale.GetDialogString("Submit")).ShowAsync(xamlRoot);
             if (result == ContentDialogResult.None)

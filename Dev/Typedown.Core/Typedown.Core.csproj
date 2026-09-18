@@ -19,6 +19,7 @@
     <LangVersion>latest</LangVersion>
     <DisableEmbeddedXbf>false</DisableEmbeddedXbf>
     <IntermediateOutputPath>obj\</IntermediateOutputPath>
+    <TargetPlatformVersion>10.0.19041.0</TargetPlatformVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Platform)' == 'x64'">
     <SelfContained>false</SelfContained>
@@ -1549,18 +1550,6 @@
   </ItemGroup>
   <ItemGroup>
     <PRIResource Include="Resources\Strings\ur\SettingsResources.resw" />
-  </ItemGroup>
-  <ItemGroup>
-    <PRIResource Include="Resources\Strings\uz\CommonResources.resw" />
-  </ItemGroup>
-  <ItemGroup>
-    <PRIResource Include="Resources\Strings\uz\DialogResources.resw" />
-  </ItemGroup>
-  <ItemGroup>
-    <PRIResource Include="Resources\Strings\uz\Resources.resw" />
-  </ItemGroup>
-  <ItemGroup>
-    <PRIResource Include="Resources\Strings\uz\SettingsResources.resw" />
   </ItemGroup>
   <ItemGroup>
     <PRIResource Include="Resources\Strings\vi\CommonResources.resw" />

@@ -143,6 +143,10 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         editor?.setFont({ fontSize: props.options?.fontSize, lineHeight: props.options?.lineHeight })
     }, [editor, props.options?.fontSize, props.options?.lineHeight])
 
+    useEffect(() => {
+        editor?.setTextDirection(props.options?.textDirection)
+    }, [editor, props.options?.textDirection])
+
     useEffect(() => transport.addListener<{ slug: string }>('ScrollTo', ({ slug }) => {
         scrollToElement(`#${slug}`)
     }), [editor, scrollToElement]);
@@ -238,6 +242,14 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         }
     }), [editor, scrollToCursor]);
 
+    useEffect(() => transport.addListener('ThemeChanged', () => {
+        if (editor) {
+            // Defer so the theme service's listener has updated window.actualTheme first,
+            // then re-render so mermaid diagrams recolor to the new theme.
+            setTimeout(() => (editor as any).contentState.render(true), 0)
+        }
+    }), [editor]);
+
     useEffect(() => editor?.on('selectionChange', (selection: any) => {
         const menuState = createApplicationMenuState(selection)
         const selectionText = window.getSelection()?.toString();
@@ -283,6 +295,14 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     }, [props.options?.editorAreaWidth])
 
     useEffect(() => {
+        if (props.options?.fontFamily) {
+            document.body.style.setProperty('--editorFontFamily', props.options.fontFamily)
+        } else {
+            document.body.style.removeProperty('--editorFontFamily')
+        }
+    }, [props.options?.fontFamily])
+
+    useEffect(() => {
         try {
             editor?.focus()
         } catch (err) {
@@ -301,7 +321,8 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     return (
         <div style={{
             fontSize: props.options?.fontSize,
-            lineHeight: props.options?.lineHeight
+            lineHeight: props.options?.lineHeight,
+            fontFamily: props.options?.fontFamily ? `${props.options.fontFamily}, "Open Sans", "Segoe UI", sans-serif` : undefined
         }}>
             <div id="editor" />
         </div>

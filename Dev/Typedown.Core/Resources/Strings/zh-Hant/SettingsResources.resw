@@ -205,6 +205,14 @@
     <value>字體大小</value>
     <comment>编辑器/字体大小</comment>
   </data>
+  <data name="Editor.FontFamily.Description" xml:space="preserve">
+    <value>編輯器使用的字體</value>
+    <comment>编辑器/编辑器使用的字体</comment>
+  </data>
+  <data name="Editor.FontFamily.Title" xml:space="preserve">
+    <value>字體</value>
+    <comment>编辑器/字体</comment>
+  </data>
   <data name="Editor.LineHeight.Description" xml:space="preserve">
     <value>編輯器行高倍數</value>
     <comment>编辑器/编辑器行高倍数</comment>
@@ -352,6 +360,22 @@
   <data name="General.AutoSave.Title" xml:space="preserve">
     <value>自動保存</value>
     <comment>通用/自动保存</comment>
+  </data>
+  <data name="General.AutoReload.Description" xml:space="preserve">
+    <value>監視目前開啟的檔案，被其他程式修改後重新整理</value>
+    <comment>通用/外部修改时自动刷新</comment>
+  </data>
+  <data name="General.AutoReload.Title" xml:space="preserve">
+    <value>外部修改時自動重新整理</value>
+    <comment>通用/外部修改时自动刷新</comment>
+  </data>
+  <data name="General.AskBeforeReload.Description" xml:space="preserve">
+    <value>關閉後僅在有未儲存變更時詢問，否則直接重新載入</value>
+    <comment>通用/外部修改时询问</comment>
+  </data>
+  <data name="General.AskBeforeReload.Title" xml:space="preserve">
+    <value>重新載入前詢問</value>
+    <comment>通用/外部修改时询问</comment>
   </data>
   <data name="General.Custom" xml:space="preserve">
     <value>自訂</value>

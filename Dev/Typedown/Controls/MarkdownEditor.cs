@@ -187,7 +187,8 @@ namespace Typedown.Controls
             // WebViewController.CoreWebView2.Navigate($"file:///{staticsFolder}/index.html");
 #else
             var staticsFolder = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Statics");
-            WebViewController.CoreWebView2.Navigate($"file:///{staticsFolder}/index.html");
+            var htmlPath = System.IO.Path.Combine(staticsFolder, "index.html");
+            WebViewController.CoreWebView2.Navigate(new Uri(htmlPath).AbsoluteUri);
 #endif
         }
 

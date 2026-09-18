@@ -48,6 +48,14 @@ namespace Typedown
         protected override async void OnLaunched()
         {
             base.OnLaunched();
+            try
+            {
+                global::Windows.UI.Xaml.Application.Current.UnhandledException += (_, e) => Log.WriteLocal("XamlUnhandledException", $"{e.Message}\n{e.Exception}");
+            }
+            catch (Exception ex)
+            {
+                Log.WriteLocal("XamlUnhandledExceptionHook", ex.ToString());
+            }
             if (!await EnvCheck.EnsureWebView2Installed())
             {
                 Exit();

@@ -201,6 +201,26 @@
     <value>Do you want to restore the file?</value>
     <comment>恢复文件对话框/是否要恢复文件？</comment>
   </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Reload</value>
+    <comment>外部修改对话框/重新加载</comment>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>The file has been changed on disk. Reloading will discard unsaved changes.</value>
+    <comment>外部修改对话框/磁盘上的文件已更改</comment>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>The file has been changed on disk. Reload it?</value>
+    <comment>外部修改对话框/无未保存更改时询问</comment>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>The file has been changed on disk</value>
+    <comment>外部修改对话框/文件已在外部被修改</comment>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>Keep</value>
+    <comment>外部修改对话框/保留</comment>
+  </data>
   <data name="ResizeTableTitle" xml:space="preserve">
     <value>Resize Table</value>
     <comment>表格对话框/调整表格</comment>

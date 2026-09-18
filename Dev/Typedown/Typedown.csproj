@@ -3,30 +3,43 @@
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
 		<TargetFramework>netcoreapp3.1</TargetFramework>
-		<UseWPF>True</UseWPF>
 		<LangVersion>latest</LangVersion>
-		<Platforms>x64;x86</Platforms>
+		<Platforms>x64;x86;ARM64</Platforms>
 		<AssetTargetFallback>uap10.0.19041</AssetTargetFallback>
-		<TargetPlatformVersion>10.0.22000.0</TargetPlatformVersion>
+		<TargetPlatformVersion>10.0.22621.0</TargetPlatformVersion>
 		<TargetPlatformMinVersion>10.0.18362.0</TargetPlatformMinVersion>
 		<StartupObject>Typedown.Program</StartupObject>
 		<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
 		<ApplicationIcon>Assets\logo.ico</ApplicationIcon>
-		<PublishTrimmed>true</PublishTrimmed>
-		<_SuppressWpfTrimError>true</_SuppressWpfTrimError>
-		<Version>1.2.18</Version>
+		<!-- Trimming was a no-op upstream (framework-dependent). With SelfContained=true it strips reflection-used
+		     code (x:Bind, Fody, EF Core, WinRT projections) and the app crashes at runtime, so keep it off. -->
+		<PublishTrimmed>false</PublishTrimmed>
+		<Version>1.2.19</Version>
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 		<Configurations>Debug;Release;Debug_Local</Configurations>
 	</PropertyGroup>
 
+	<!-- VCRTForwarders' UseDebugCRT task needs solution-provided ProjectReference Configuration metadata,
+	     which is absent when the packaging project is built directly (e.g. CI). Skip it outside Debug. -->
+	<PropertyGroup Condition="'$(Configuration)' != 'Debug'">
+		<VCRTForwarders-IncludeDebugCRT>false</VCRTForwarders-IncludeDebugCRT>
+	</PropertyGroup>
+
 	<PropertyGroup Condition="'$(Platform)' == 'x64'">
-		<SelfContained>false</SelfContained>
+		<SelfContained>true</SelfContained>
 		<RuntimeIdentifier>win10-x64</RuntimeIdentifier>
+		<RuntimeIdentifiers>win10-x64;win-x64</RuntimeIdentifiers>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Platform)'=='ARM64'">
+	  <SelfContained>true</SelfContained>
+	  <RuntimeIdentifier>win10-arm64</RuntimeIdentifier>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Platform)' == 'x86'">
-		<SelfContained>false</SelfContained>
+		<SelfContained>true</SelfContained>
 		<RuntimeIdentifier>win10-x86</RuntimeIdentifier>
+		<RuntimeIdentifiers>win10-x86;win-x86</RuntimeIdentifiers>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -36,10 +49,13 @@
 		<PackageReference Include="Microsoft.Web.WebView2" Version="1.0.1661.34" />
 		<PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.22621.755" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="PdfiumViewer" Version="2.13.0" />
-		<PackageReference Include="PdfiumViewer.Native.x86_64.no_v8-no_xfa" Version="2018.4.8.256" />
 		<PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="all" />
-		<PackageReference Include="Typedown.XamlUI" Version="1.0.1" />
+		<PackageReference Include="System.Drawing.Common" Version="9.0.8" />
+		<PackageReference Include="System.Reactive" Version="5.0.0" />
+		<PackageReference Include="Typedown.XamlUI" Version="1.0.1" GeneratePathProperty="true" />
+		<!-- Typedown.XamlUI depends on Win2D with build assets excluded, and the packaging project publishes with RID win-x64,
+		     so Win2D's runtimes/win10-* native DLL is never selected. Reference it directly and copy the native DLL explicitly. -->
+		<PackageReference Include="Win2D.uwp" Version="1.26.0" GeneratePathProperty="true" ExcludeAssets="build" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -55,13 +71,28 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="Resources\Statics\**" CopyToOutputDirectory="Always" Link="Resources\Statics\%(RecursiveDir)\%(Filename)%(Extension)" />
+		<None Include="Resources\Statics\**" CopyToOutputDirectory="Always" Link="Resources\Statics\%(RecursiveDir)%(Filename)%(Extension)" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <None Update="MicrosoftEdgeWebview2Setup.exe">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
+	</ItemGroup>
+
+	<PropertyGroup>
+		<_NativeRid Condition="'$(Platform)' == 'x64'">win10-x64</_NativeRid>
+		<_NativeRid Condition="'$(Platform)' == 'x86'">win10-x86</_NativeRid>
+		<_NativeRid Condition="'$(Platform)' == 'ARM64'">win10-arm64</_NativeRid>
+	</PropertyGroup>
+
+	<!-- Native WinRT components that only ship as runtimes/win10-* assets. Copied explicitly so they are present
+	     regardless of which RID the publish step uses (VS uses win10-x64, the packaging project uses win-x64). -->
+	<ItemGroup Condition="'$(_NativeRid)' != ''">
+		<None Include="$(PkgTypedown_XamlUI)\runtimes\$(_NativeRid)\native\Microsoft.UI.Xaml.dll" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Link="Microsoft.UI.Xaml.dll" />
+		<None Include="$(PkgWin2D_uwp)\runtimes\$(_NativeRid)\native\Microsoft.Graphics.Canvas.dll" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Link="Microsoft.Graphics.Canvas.dll" />
+		<None Include="$(PkgTypedown_XamlUI)\lib\netstandard2.0\Microsoft.UI.Xaml.pri" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Link="Microsoft.UI.Xaml.pri" />
+		<None Include="$(PkgTypedown_XamlUI)\lib\netstandard2.0\Typedown.XamlUI.pri" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Link="Typedown.XamlUI.pri" />
 	</ItemGroup>
 	
 </Project>
