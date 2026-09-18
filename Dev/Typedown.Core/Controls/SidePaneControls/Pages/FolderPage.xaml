@@ -107,6 +107,11 @@
     </Page.Resources>
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
         <muxc:TreeView 
             x:Name="TreeView"
             CanReorderItems="False"
@@ -123,5 +128,10 @@
                 </TransitionCollection>
             </muxc:TreeView.ItemContainerTransitions>
         </muxc:TreeView>
+        <TextBlock Grid.Row="1" Margin="8,0" TextWrapping="Wrap"
+                   Text="{x:Bind WorkFolderExplorerItem.Exception.Message, Mode=OneWay}"/>
+        <Button Grid.Row="2" Margin="8" HorizontalAlignment="Stretch"
+                Content="{u:LocaleString Key=OpenFolder}"
+                Command="{x:Bind FileViewModel.OpenFolderCommand, Mode=OneWay}"/>
     </Grid>
 </Page>

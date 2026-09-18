@@ -79,6 +79,18 @@ jobs:
           "version=$v" >> $env:GITHUB_OUTPUT
           Write-Host "Version: $v"
 
+      - name: Stamp test build label
+        shell: pwsh
+        run: |
+          $label = "test.$env:GITHUB_RUN_NUMBER.$env:GITHUB_RUN_ATTEMPT+$($env:GITHUB_SHA.Substring(0, 8))"
+          $path = "Dev/Typedown.Core/Config.cs"
+          $source = Get-Content $path -Raw
+          $pattern = 'public const string TestBuild = "[^"]*";'
+          if ($source -notmatch $pattern) { throw "TestBuild declaration not found" }
+          $source = $source -replace $pattern, "public const string TestBuild = `"$label`";"
+          Set-Content $path $source -Encoding utf8
+          Write-Host "Test build: $label"
+
       # Uses the repo's signing certificate (secrets TYPEDOWN_PFX_BASE64 / TYPEDOWN_PFX_PASSWORD) when present,
       # otherwise a throwaway self-signed one. The subject must match Package.appxmanifest's Publisher.
       - name: Prepare signing certificate

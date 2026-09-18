@@ -42,18 +42,34 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
+            if (WorkFolderExplorerItem != null || FileViewModel == null)
+                return;
             WorkFolderExplorerItem = new ExplorerItem(FileViewModel) { IsExpanded = true };
-            disposables.Add(FileViewModel.WhenPropertyChanged(nameof(FileViewModel.WorkFolder)).Cast<string>().StartWith(FileViewModel.WorkFolder).Subscribe(UpdateWorkFolder));
-            disposables.Add(FileViewModel.WhenPropertyChanged(nameof(FileViewModel.FilePath)).Cast<string>().StartWith(FileViewModel.FilePath).Subscribe(_ => UpdateSelectedItem(WorkFolderExplorerItem)));
+            disposables.Add(FileViewModel.WhenPropertyChanged(nameof(FileViewModel.WorkFolder)).Subscribe(_ => UpdateWorkFolder()));
+            disposables.Add(FileViewModel.WhenPropertyChanged(nameof(FileViewModel.FilePath)).Subscribe(_ =>
+            {
+                UpdateWorkFolder();
+                UpdateSelectedItem(WorkFolderExplorerItem);
+            }));
+            UpdateWorkFolder();
+            Bindings.Update();
         }
 
-        private void UpdateWorkFolder(string workFolder)
+        private void UpdateWorkFolder()
         {
+            var workFolder = FileViewModel.WorkFolder;
+            // Opening an individual document does not set WorkFolder. Show its
+            // siblings until the user explicitly chooses a workspace folder.
+            if (string.IsNullOrEmpty(workFolder) && !string.IsNullOrEmpty(FileViewModel.FilePath))
+                workFolder = Path.GetDirectoryName(FileViewModel.FilePath);
             WorkFolderExplorerItem.FullPath = workFolder;
+            WorkFolderExplorerItem.IsExpanded = true;
         }
 
         private void UpdateSelectedItem(ExplorerItem item)
         {
+            if (item == null || FileViewModel == null)
+                return;
             item.IsSelected = FileViewModel.FilePath == item.FullPath;
             foreach (var next in item.Children)
                 UpdateSelectedItem(next);
@@ -61,13 +77,10 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
+            disposables.Clear();
             WorkFolderExplorerItem?.Dispose();
             WorkFolderExplorerItem = null;
-            disposables.Clear();
-            TreeView.DataContext = null;
-            TreeView.ItemTemplateSelector = null;
-            TreeView.ItemsSource = null;
-            TreeView.ContextFlyout = null;
+            // Keep the XAML bindings, templates and flyouts for the next load.
         }
 
         private void OnItemContextFlyoutOpened(object sender, object e)
@@ -422,7 +435,7 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
 
         private void OnTreeViewContextFlyoutOpening(object sender, object e)
         {
-            if (!Directory.Exists(FileViewModel.WorkFolder) && sender is MenuFlyout flyout)
+            if (!Directory.Exists(WorkFolderExplorerItem?.FullPath) && sender is MenuFlyout flyout)
                 flyout.Hide();
         }
     }

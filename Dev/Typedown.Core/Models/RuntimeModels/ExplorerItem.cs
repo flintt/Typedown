@@ -43,6 +43,8 @@ namespace Typedown.Core.Models
         private bool IsWatching { get; set; } = false;
 
         private FileSystemWatcher fileSystemWatcher;
+        private bool disposed;
+        private int childrenUpdateVersion;
 
         private FileViewModel ViewModel { get; }
 
@@ -111,14 +113,32 @@ namespace Typedown.Core.Models
 
         private async void UpdateChildren()
         {
+            if (disposed) return;
+            var updateVersion = ++childrenUpdateVersion;
+            var path = FullPath;
+            var filter = Filter;
             StopWatchFolder();
+            Exception = null;
             try
             {
                 if (IsWatching && Type == ExplorerItemType.Folder)
                 {
-                    var files = await Task.Run(() => EnumerateFilteredFileSystemInfos().ToList());
+                    var files = await Task.Run(() => new DirectoryInfo(path).EnumerateFileSystemInfos()
+                        .Where(info => filter(info.Attributes, info.Name)).ToList());
+                    // A previous folder enumeration can finish after navigation,
+                    // collapse or disposal. It must not repopulate this node.
+                    if (disposed || updateVersion != childrenUpdateVersion) return;
                     SetChildren(files.Select(x => CreateChild(x.Name)).ToList());
-                    StartWatchFolder();
+                    try
+                    {
+                        StartWatchFolder();
+                    }
+                    catch (Exception ex)
+                    {
+                        // A watcher failure must not hide successfully read files.
+                        StopWatchFolder();
+                        Exception = ex;
+                    }
                 }
                 else
                 {
@@ -127,11 +147,12 @@ namespace Typedown.Core.Models
             }
             catch (Exception ex)
             {
-                Exception = ex;
+                if (disposed || updateVersion != childrenUpdateVersion) return;
                 IsWatching = false;
                 IsExpanded = false;
                 StopWatchFolder();
                 ClearChildren();
+                Exception = ex;
             }
         }
 
@@ -151,7 +172,11 @@ namespace Typedown.Core.Models
 
         private void SetChildren(List<ExplorerItem> children)
         {
-            ClearChildren();
+            // Reordering passes existing nodes back in; keep their watchers alive.
+            var retained = new HashSet<ExplorerItem>(children);
+            foreach (var item in Children)
+                if (!retained.Contains(item)) item.Dispose();
+            Children.Clear();
             foreach (var item in children.OrderBy(x => x, Comparer))
                 Children.Add(item);
         }
@@ -207,29 +232,42 @@ namespace Typedown.Core.Models
             if (Type != ExplorerItemType.Folder) return;
             fileSystemWatcher?.Dispose();
             fileSystemWatcher = new() { NotifyFilter = NotifyFilters.FileName | NotifyFilters.DirectoryName | NotifyFilters.Attributes };
+            var watcher = fileSystemWatcher;
             var dispatcherQueue = DispatcherQueue.GetForCurrentThread();
             fileSystemWatcher.Created += async (s, e) =>
             {
                 if (e?.Name == null) return;
-                var attr = await GetFileAttributes(Path.Combine(FullPath, e.Name));
-                if (attr.HasValue) dispatcherQueue.TryEnqueue(() => OnFileCreated(e, attr.Value));
+                var attr = await GetFileAttributes(e.FullPath);
+                if (attr.HasValue) dispatcherQueue?.TryEnqueue(() =>
+                {
+                    if (!disposed && fileSystemWatcher == watcher) OnFileCreated(e, attr.Value);
+                });
             };
             fileSystemWatcher.Renamed += async (s, e) =>
             {
                 if (e?.Name == null) return;
-                var attr = await GetFileAttributes(Path.Combine(FullPath, e.Name));
-                if (attr.HasValue) dispatcherQueue.TryEnqueue(() => OnFileRenamed(e, attr.Value));
+                var attr = await GetFileAttributes(e.FullPath);
+                if (attr.HasValue) dispatcherQueue?.TryEnqueue(() =>
+                {
+                    if (!disposed && fileSystemWatcher == watcher) OnFileRenamed(e, attr.Value);
+                });
             };
             fileSystemWatcher.Changed += async (s, e) =>
             {
                 if (e?.Name == null) return;
-                var attr = await GetFileAttributes(Path.Combine(FullPath, e.Name));
-                if (attr.HasValue) dispatcherQueue.TryEnqueue(() => OnFileChanged(e, attr.Value));
+                var attr = await GetFileAttributes(e.FullPath);
+                if (attr.HasValue) dispatcherQueue?.TryEnqueue(() =>
+                {
+                    if (!disposed && fileSystemWatcher == watcher) OnFileChanged(e, attr.Value);
+                });
             };
             fileSystemWatcher.Deleted += (s, e) =>
             {
                 if (e?.Name == null) return;
-                dispatcherQueue.TryEnqueue(() => OnFileDeleted(e));
+                dispatcherQueue?.TryEnqueue(() =>
+                {
+                    if (!disposed && fileSystemWatcher == watcher) OnFileDeleted(e);
+                });
             };
             fileSystemWatcher.Path = FullPath;
             fileSystemWatcher.EnableRaisingEvents = true;
@@ -271,22 +309,11 @@ namespace Typedown.Core.Models
 
         public void Dispose()
         {
+            if (disposed) return;
+            disposed = true;
+            childrenUpdateVersion++;
             StopWatchFolder();
             ClearChildren();
-        }
-
-        private IEnumerable<FileSystemInfo> EnumerateFilteredFileSystemInfos()
-        {
-            try
-            {
-                if (Type == ExplorerItemType.Folder)
-                    return new DirectoryInfo(FullPath).EnumerateFileSystemInfos().Where(info => Filter(info.Attributes, info.Name));
-                return new List<FileSystemInfo>();
-            }
-            catch
-            {
-                return new List<FileSystemInfo>();
-            }
         }
 
         private static bool DefaultFilter(FileAttributes attr, string name)
