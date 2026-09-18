@@ -1,5 +1,5 @@
 #define MyAppName "Typedown"
-#define MyAppVersion "1.2.19"
+#define MyAppVersion "1.2.20"
 #define MyAppPublisher "Typedown Community"
 #define MyAppExeName "Typedown.exe"
 #define MyAppAssocName "Typedown Markdown"
