@@ -2,7 +2,7 @@
 
 - 整合分支：`integrate-upstream-prs`（基于 `main` = 上游 `main` a1baeae）
 - 日期：2026-09-16
-- 前端 `Dev/Typedown.Editor` 已在 Linux 上 `yarn install && yarn build` 验证通过；C# 部分（UWP/WinUI）无法在 Linux 编译，**需在 Windows + Visual Studio 上验证**。
+- 前端 `Dev/Typedown.Editor` 已在 Linux 上 `yarn install && yarn build` 验证通过；C# 部分由 GitHub Actions（`.github/workflows/build.yml`）在 windows-2022 上编译打包，产物已在 Windows 11 26100 上实测可用。
 
 ---
 
@@ -50,6 +50,22 @@
 | **zhoujianwen** `codex/compile-typedown-to-exe` | 登录/git 历史/评审/锁定的服务桩 | 无实质实现 |
 | **Gerammer/Typedown_Gmix** | 改了几个主题 CSS | 个人样式偏好 |
 | **DavidBerdik/Typedown** `my-updates` | = 1.2.19 + #78 + #79 | 已通过 PR 合入 |
+
+## 三之二、CI 与运行时修复（2026-09-16 ~ 09-18）
+
+把合并结果放到 GitHub Actions 上编译、在 Win11 上实测后修掉的问题，其中前四个是**上游代码本来就有的**，只是在作者的 VS 环境里被掩盖：
+
+| 问题 | 现象 | 修复 |
+|---|---|---|
+| `Typedown.csproj` Statics `Link` 多一个 `\` | MakeAppx 报 `0x8007007B` 拒绝 `Statics\\index.html` | 去掉多余反斜杠 |
+| manifest 声明 `uz` 语言但 MakePri 静默跳过 | MSIX 安装报 "UZ 不是有效的语言" | 移除 `uz` 资源 |
+| VCRTForwarders `UseDebugCRT` 任务依赖 sln 注入的元数据 | 直接构建 wapproj 报 MSB4044 | Release 下设 `VCRTForwarders-IncludeDebugCRT=false` |
+| Win2D 原生 DLL 只有 `runtimes/win10-x64`，wapproj 用 `win-x64` 发布 | Win11 启动即崩（Mica 需要 Win2D，`0x8007007E`） | 直接引用 Win2D.uwp 并显式复制 `Microsoft.Graphics.Canvas.dll`；`EnableMicaEffect` 加 try/catch |
+| `PublishTrimmed=true` 在 1.2.19 的 `SelfContained=true` 下真正生效 | 反射相关代码被裁掉 | 关闭裁剪 |
+| PR #83 在 UWP 类库里用 `System.Drawing` 枚举字体 | 打开"编辑器"设置页崩溃 | 改用 Win2D `CanvasTextFormat.GetSystemFontFamilies()` |
+| 崩溃信息只发到作者服务器 | 无法诊断 | 写本地日志 `%LOCALAPPDATA%\Typedown\logs` |
+
+CI 产物：`Typedown-windows-x64-v*.exe`（Inno Setup 安装包）、`Typedown-portable-x64-v*.zip`、`Typedown.Package_*_x64.msix`、签名证书 `.cer`。推 `v*` tag 自动发布 GitHub Release。签名证书存于仓库 secrets（`TYPEDOWN_PFX_BASE64` / `TYPEDOWN_PFX_PASSWORD`），本地备份 `~/typedown-signing/`。
 
 ## 四、本地分支与 remote
 
