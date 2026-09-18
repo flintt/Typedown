@@ -27,6 +27,12 @@ jobs:
         working-directory: Dev/Typedown.Editor
         run: yarn install --frozen-lockfile --network-timeout 600000
 
+      - name: Test editor
+        working-directory: Dev/Typedown.Editor
+        env:
+          CI: 'true'
+        run: yarn test --watchAll=false --runInBand
+
       - name: yarn build
         working-directory: Dev/Typedown.Editor
         env:

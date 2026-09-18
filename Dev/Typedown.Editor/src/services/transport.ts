@@ -17,6 +17,9 @@ window.chrome.webview.addEventListener<string>("message", ({ data }) => {
 });
 
 const prevMap = new Map<string, string>();
+// Only idempotent state notifications may be skipped. Commands such as OpenURI
+// and lifecycle messages such as FileLoaded must still run when repeated.
+const deduplicatedStates = new Set(['OnScroll', 'SelectionFormats']);
 const ref = { pos: 0 };
 
 
@@ -39,6 +42,7 @@ const remoteFunction =
 const postMessageDiff = (name: string, arg: unknown) => {
   const oldArg = prevMap.get(name);
   const newArg = JSON.stringify(arg);
+  if (oldArg === newArg && deduplicatedStates.has(name)) return;
   if (!oldArg) {
     postMessage({
       type: "diffmsg",
@@ -65,7 +69,6 @@ const postMessageDiff = (name: string, arg: unknown) => {
       break;
     }
   }
-  prevMap.set(name, newArg);
   const diffArgs = newArg.slice(start, newEnd);
   postMessage({
     type: "diffmsg",
@@ -75,6 +78,8 @@ const postMessageDiff = (name: string, arg: unknown) => {
     start,
     end: oldEnd,
   });
+  // A failed send must not advance the baseline used by the receiver.
+  prevMap.set(name, newArg);
 };
 
 export default {

@@ -11,10 +11,19 @@ const postScrollState = () => {
     })
 }
 
-const resizeObserver = new ResizeObserver(postScrollState)
+let pendingFrame: number | undefined
+const scheduleScrollState = () => {
+    if (pendingFrame !== undefined) return
+    pendingFrame = requestAnimationFrame(() => {
+        pendingFrame = undefined
+        postScrollState()
+    })
+}
+
+const resizeObserver = new ResizeObserver(scheduleScrollState)
 resizeObserver.observe(document.body)
-addEventListener('scroll', postScrollState)
-addEventListener('resize', postScrollState)
+addEventListener('scroll', scheduleScrollState, { passive: true })
+addEventListener('resize', scheduleScrollState)
 
 transport.addListener<{ scrollX: number, scrollY: number }>('OnScroll', ({ scrollX, scrollY }) => {
     const equals = (a: number, b: number) => Math.abs(a - b) < 1

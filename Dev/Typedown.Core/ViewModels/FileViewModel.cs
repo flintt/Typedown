@@ -9,6 +9,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Typedown.Core.Controls;
 using Typedown.Core.Interfaces;
@@ -62,6 +63,8 @@ namespace Typedown.Core.ViewModels
         public Command<Unit> ExitCommand { get; } = new();
 
         private readonly DispatcherTimer saveFileTimer = new();
+        private readonly SemaphoreSlim saveLock = new(1, 1);
+        private bool saveTimerRunning;
 
         private readonly DispatcherTimer fileReloadTimer = new();
 
@@ -106,19 +109,27 @@ namespace Typedown.Core.ViewModels
 
         private async void SaveFileTimerTick(object sender, object e)
         {
-            if (disposables.IsDisposed)
+            if (disposables.IsDisposed || saveTimerRunning)
             {
                 return;
             }
-            if (SettingsViewModel.AutoSave)
+            saveTimerRunning = true;
+            try
             {
-                EditorViewModel.AutoSavedSucc = await AutoSaveFile();
-                if (!EditorViewModel.AutoSavedSucc)
+                if (SettingsViewModel.AutoSave)
+                {
+                    EditorViewModel.AutoSavedSucc = await AutoSaveFile();
+                    if (!EditorViewModel.AutoSavedSucc)
+                        await AutoBackupFile();
+                }
+                else
+                {
                     await AutoBackupFile();
+                }
             }
-            else
+            finally
             {
-                await AutoBackupFile();
+                saveTimerRunning = false;
             }
         }
 
@@ -171,10 +182,10 @@ namespace Typedown.Core.ViewModels
                 EditorViewModel.AutoSavedSucc = false;
                 EditorViewModel.FileLoaded = true;
             }
-            EditorViewModel.History.InitHistory(Common.DefaultMarkdwn);
+            EditorViewModel.History.InitHistory(EditorViewModel.Markdown);
             if (postMessage)
             {
-                MarkdownEditor?.PostMessage("LoadFile", EditorViewModel.Markdown);
+                MarkdownEditor?.PostMessage("LoadFile", new { text = EditorViewModel.Markdown, basePath = ImageBasePath });
             }
         }
 
@@ -223,7 +234,7 @@ namespace Typedown.Core.ViewModels
                 EditorViewModel.FileHash = Common.SimpleHash(text);
                 FilePath = path;
                 _ = AccessHistory.RecordFileHistory(FilePath);
-                var backup = await CheckBackup(path, EditorViewModel.CurrentHash);
+                var backup = await CheckBackup(path, EditorViewModel.FileHash);
                 if (backup == null)
                 {
                     EditorViewModel.Markdown = text;
@@ -316,45 +327,85 @@ namespace Typedown.Core.ViewModels
 
         private async Task<bool> Save(bool alert = true)
         {
+            var path = FilePath;
+            await saveLock.WaitAsync();
+            try
+            {
+                if (disposables.IsDisposed || FilePath != path)
+                    return false;
+                return await SaveCore(alert);
+            }
+            finally
+            {
+                saveLock.Release();
+            }
+        }
+
+        private async Task<bool> SaveCore(bool alert)
+        {
             if (FilePath == null)
             {
-                var result = await SaveAs();
+                var result = await SaveAsCore();
                 return result != null;
             }
             else
             {
-                var result = await WriteAllText(FilePath, EditorViewModel.Markdown, alert);
-                if (result)
+                var path = FilePath;
+                var markdown = EditorViewModel.Markdown;
+                var hash = Common.SimpleHash(markdown);
+                var result = await WriteAllText(path, markdown, alert);
+                if (result && !disposables.IsDisposed && FilePath == path)
                 {
-                    EditorViewModel.FileHash = EditorViewModel.CurrentHash;
-                    EditorViewModel.Saved = true;
-                    AutoBackup.DeleteBackup(FilePath);
-                    _ = AccessHistory.RecordFileHistory(FilePath);
+                    EditorViewModel.FileHash = hash;
+                    EditorViewModel.Saved = EditorViewModel.Markdown == markdown;
+                    if (EditorViewModel.Saved)
+                        AutoBackup.DeleteBackup(path);
+                    _ = AccessHistory.RecordFileHistory(path);
                 }
-                return result;
+                return result && !disposables.IsDisposed && FilePath == path && EditorViewModel.Saved;
             }
         }
 
         private async Task<string> SaveAs()
         {
+            var path = FilePath;
+            await saveLock.WaitAsync();
             try
             {
+                if (disposables.IsDisposed || FilePath != path)
+                    return null;
+                return await SaveAsCore();
+            }
+            finally
+            {
+                saveLock.Release();
+            }
+        }
+
+        private async Task<string> SaveAsCore()
+        {
+            try
+            {
+                var originalPath = FilePath;
                 var filePicker = new FileSavePicker();
                 filePicker.SetOwnerWindow(AppViewModel.MainWindow);
                 filePicker.FileTypeChoices.Add("Markdown Files", FileTypeHelper.Markdown.ToList());
                 filePicker.SuggestedFileName = FileName ?? "untitled";
                 var file = await filePicker.PickSaveFileAsync();
-                if (file != null)
+                if (file != null && !disposables.IsDisposed && FilePath == originalPath)
                 {
-                    var result = await WriteAllText(file.Path, EditorViewModel.Markdown);
-                    if (result)
+                    var markdown = EditorViewModel.Markdown;
+                    var hash = Common.SimpleHash(markdown);
+                    var result = await WriteAllText(file.Path, markdown);
+                    if (result && !disposables.IsDisposed && FilePath == originalPath)
                     {
-                        AutoBackup.DeleteBackup(FilePath);
                         FilePath = file.Path;
-                        EditorViewModel.FileHash = EditorViewModel.CurrentHash;
-                        EditorViewModel.Saved = true;
+                        EditorViewModel.FileHash = hash;
+                        EditorViewModel.Saved = EditorViewModel.Markdown == markdown;
+                        if (EditorViewModel.Saved)
+                            AutoBackup.DeleteBackup(originalPath);
                         _ = AccessHistory.RecordFileHistory(FilePath);
-                        return file.Path;
+                        return EditorViewModel.Saved ? file.Path : null;
                     }
                 }
                 return null;
@@ -675,12 +726,15 @@ namespace Typedown.Core.ViewModels
             if (!SettingsViewModel.AutoReload || string.IsNullOrEmpty(FilePath) || reloadDialogOpened)
                 return;
 
+            var path = FilePath;
             string text = null;
             for (var i = 0; i < 10; i++)
             {
+                if (disposables.IsDisposed || FilePath != path)
+                    return;
                 try
                 {
-                    if (!File.Exists(FilePath))
+                    if (!File.Exists(path))
                     {
                         if (EditorViewModel.Saved)
                         {
@@ -689,7 +743,7 @@ namespace Typedown.Core.ViewModels
                         }
                         return;
                     }
-                    text = await File.ReadAllTextAsync(FilePath);
+                    text = await File.ReadAllTextAsync(path);
                     break;
                 }
                 catch (IOException)
@@ -701,7 +755,7 @@ namespace Typedown.Core.ViewModels
                     return;
                 }
             }
-            if (text == null)
+            if (text == null || disposables.IsDisposed || FilePath != path)
                 return;
 
             var diskHash = Common.SimpleHash(text);
@@ -732,10 +786,15 @@ namespace Typedown.Core.ViewModels
                     Locale.GetDialogString(contentKey) ?? contentFallback,
                     Locale.GetDialogString("Keep") ?? "保留",
                     Locale.GetDialogString("Reload") ?? "重新加载").ShowAsync(AppViewModel.XamlRoot);
+                if (disposables.IsDisposed || FilePath != path)
+                    return;
                 if (result == ContentDialogResult.Primary)
                     ApplyDiskText(text);
                 else
+                {
                     EditorViewModel.FileHash = diskHash;
+                    EditorViewModel.Saved = EditorViewModel.CurrentHash == diskHash;
+                }
             }
             finally
             {
