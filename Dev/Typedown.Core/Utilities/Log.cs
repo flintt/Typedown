@@ -25,6 +25,19 @@ namespace Typedown.Core.Utilities
             }
         }
 
+        /// <summary>Appends one line to %LOCALAPPDATA%\Typedown\logs\debug.log. Cheap enough for diagnostics of UI flows.</summary>
+        public static void Debug(string message)
+        {
+            try
+            {
+                Directory.CreateDirectory(LogFolder);
+                File.AppendAllText(Path.Combine(LogFolder, "debug.log"), $"{DateTime.Now:HH:mm:ss.fff} {message}\n");
+            }
+            catch
+            {
+            }
+        }
+
         public static Task Report(string type, string content)
         {
             WriteLocal(type, content);

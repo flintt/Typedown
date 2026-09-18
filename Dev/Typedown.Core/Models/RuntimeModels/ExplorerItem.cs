@@ -117,6 +117,8 @@ namespace Typedown.Core.Models
             var updateVersion = ++childrenUpdateVersion;
             var path = FullPath;
             var filter = Filter;
+            if (!string.IsNullOrEmpty(path))
+                Log.Debug($"ExplorerItem.UpdateChildren: path='{path}' type={Type} watching={IsWatching} expanded={IsExpanded}");
             StopWatchFolder();
             Exception = null;
             try
@@ -127,7 +129,12 @@ namespace Typedown.Core.Models
                         .Where(info => filter(info.Attributes, info.Name)).ToList());
                     // A previous folder enumeration can finish after navigation,
                     // collapse or disposal. It must not repopulate this node.
-                    if (disposed || updateVersion != childrenUpdateVersion) return;
+                    if (disposed || updateVersion != childrenUpdateVersion)
+                    {
+                        Log.Debug($"ExplorerItem.UpdateChildren: stale result for '{path}' (disposed={disposed}, v{updateVersion} != v{childrenUpdateVersion})");
+                        return;
+                    }
+                    Log.Debug($"ExplorerItem.UpdateChildren: '{path}' -> {files.Count} entries");
                     SetChildren(files.Select(x => CreateChild(x.Name)).ToList());
                     try
                     {
@@ -147,6 +154,7 @@ namespace Typedown.Core.Models
             }
             catch (Exception ex)
             {
+                Log.Debug($"ExplorerItem.UpdateChildren: '{path}' failed: {ex.GetType().Name}: {ex.Message}");
                 if (disposed || updateVersion != childrenUpdateVersion) return;
                 IsWatching = false;
                 IsExpanded = false;

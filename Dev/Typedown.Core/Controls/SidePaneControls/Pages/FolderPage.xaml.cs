@@ -42,6 +42,7 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
+            Log.Debug($"FolderPage.OnLoaded: item={(WorkFolderExplorerItem != null)} vm={(FileViewModel != null)}");
             if (WorkFolderExplorerItem != null || FileViewModel == null)
                 return;
             WorkFolderExplorerItem = new ExplorerItem(FileViewModel) { IsExpanded = true };
@@ -62,6 +63,7 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             // siblings until the user explicitly chooses a workspace folder.
             if (string.IsNullOrEmpty(workFolder) && !string.IsNullOrEmpty(FileViewModel.FilePath))
                 workFolder = Path.GetDirectoryName(FileViewModel.FilePath);
+            Log.Debug($"FolderPage.UpdateWorkFolder: WorkFolder='{FileViewModel.WorkFolder}' FilePath='{FileViewModel.FilePath}' -> '{workFolder}'");
             WorkFolderExplorerItem.FullPath = workFolder;
             WorkFolderExplorerItem.IsExpanded = true;
         }
