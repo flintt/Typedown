@@ -177,6 +177,17 @@ Lexer.prototype.token = function (src, top) {
         continue
       }
 
+      cap = this.rules.multiplemathSingleLine.exec(src)
+      if (cap) {
+        src = src.substring(cap[0].length)
+        this.tokens.push({
+          type: 'multiplemath',
+          text: cap[1].trim(),
+          mathStyle: 'singleline'
+        })
+        continue
+      }
+
       // match GitLab display math blocks (```math)
       if (isGitlabCompatibilityEnabled) {
         cap = this.rules.multiplemathGitlab.exec(src)

@@ -239,9 +239,15 @@ class ExportMarkdown {
       endToken = '```'
     }
 
+    const lines = block.children[0].children[0].children
+    // Keep the author's single-line `$$ ... $$` form as long as the formula still fits on one line.
+    if (block.mathStyle === 'singleline' && lines.length === 1 && !lines[0].text.includes('$')) {
+      return `${indent}$$${lines[0].text}$$\n`
+    }
+
     const result = []
     result.push(`${indent}${startToken}\n`)
-    for (const line of block.children[0].children[0].children) {
+    for (const line of lines) {
       result.push(`${indent}${line.text}\n`)
     }
     result.push(`${indent}${endToken}\n`)
