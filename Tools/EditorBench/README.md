@@ -16,3 +16,6 @@ costs ~20 ms per keystroke (CDP round trips), so compare runs against each other
 
 Reference (80k-char document, 1287 blocks, 4-core Linux box): before the 2026-09-18 fixes 83–107 ms per
 keystroke, after 45–53 ms.
+
+`modeswitch-check.js` reproduces upstream #20/#61 (blank lines appended on every source-mode switch): the
+markdown printed after "back to muya" must be identical to the value shown before the switch.

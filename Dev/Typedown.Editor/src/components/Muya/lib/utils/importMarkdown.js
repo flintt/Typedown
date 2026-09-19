@@ -454,21 +454,43 @@ const importRegister = ContentState => {
     }
 
     // 调整光标位置，防止影响解析
-    anchor = adjustCursor(anchor, lines[anchor.line - 1], lines[anchor.line], lines[anchor.line + 1])
-    focus = adjustCursor(focus, lines[focus.line - 1], lines[focus.line], lines[focus.line + 1])
+    const adjust = c => adjustCursor(c, lines[c.line - 1], lines[c.line], lines[c.line + 1])
+    // adjustCursor 对空行/HTML 行返回 null。以前的做法是把光标挪到文档末尾并追加一行放标记，
+    // 这会在每次切换源码模式时给文件末尾多加空行（#20 #61）。改为放到最近的非空行末尾/行首。
+    const nearest = c => {
+      for (let i = Math.min(c.line, lines.length - 1); i >= 0; i--) {
+        if (/\S/.test(lines[i])) {
+          const adjusted = adjust({ line: i, ch: lines[i].length })
+          if (adjusted) return adjusted
+        }
+      }
+      for (let i = c.line + 1; i < lines.length; i++) {
+        if (/\S/.test(lines[i])) {
+          const adjusted = adjust({ line: i, ch: 0 })
+          if (adjusted) return adjusted
+        }
+      }
+      return null
+    }
+    anchor = adjust(anchor) || nearest(anchor)
+    focus = adjust(focus) || nearest(focus)
+    if (anchor && focus && (anchor.line > focus.line || (anchor.line == focus.line && anchor.ch > focus.ch))) {
+      [anchor, focus] = [focus, anchor]
+    }
 
-    // 注入 anchor
-    if (!anchor || !lines[anchor.line]) {
-      if (lines.length > 0 && lines[lines.length - 1] != '')
-        lines.push('')
-      lines.push(CURSOR_ANCHOR_DNA)
+    // 注入 anchor（空行的内容是 ''，必须用 === undefined 判断行是否存在，否则光标在末尾空行时会
+    // 被当成"行不存在"而额外追加一行，切换源码模式时文件末尾不断增加空行）
+    if (!anchor || lines[anchor.line] === undefined) {
+      // Only reached when the document has no content line at all: mark the last line in place instead of
+      // appending lines, so an empty document stays empty across mode switches.
+      lines[lines.length - 1] += CURSOR_ANCHOR_DNA
     } else {
       const anchorText = lines[anchor.line]
       lines[anchor.line] = anchorText.substring(0, anchor.ch) + CURSOR_ANCHOR_DNA + anchorText.substring(anchor.ch)
     }
 
     // 注入 focus
-    if (!focus || !lines[focus.line]) {
+    if (!focus || lines[focus.line] === undefined) {
       lines[lines.length - 1] += CURSOR_FOCUS_DNA
     } else {
       const focusText = lines[focus.line]
