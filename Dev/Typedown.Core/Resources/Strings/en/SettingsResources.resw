@@ -718,7 +718,7 @@
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
-    <value>Enable the mica background effect for the window background</value>
+    <value>Give the window a Mica backdrop (requires Windows 11)</value>
     <comment>视图/开启后窗口背景具有云母背景效果</comment>
   </data>
   <data name="View.UseMicaMaterial.Title" xml:space="preserve">
