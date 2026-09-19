@@ -67,6 +67,31 @@
 
 CI 产物：`Typedown-windows-x64-v*.exe`（Inno Setup 安装包）、`Typedown-portable-x64-v*.zip`、`Typedown.Package_*_x64.msix`、签名证书 `.cer`。推 `v*` tag 自动发布 GitHub Release。签名证书存于仓库 secrets（`TYPEDOWN_PFX_BASE64` / `TYPEDOWN_PFX_PASSWORD`），本地备份 `~/typedown-signing/`。
 
+
+## 三之三、功能与性能改进（2026-09-18 ~ 09-19，v1.2.20 之后）
+
+用 `Tools/EditorBench`（headless Chrome + stub 宿主）实测并回归验证，C# 部分由 CI 编译。
+
+| 上游 issue | 问题 | 处理 |
+|---|---|---|
+| #7 | 大文档每键 60–100 ms | 去掉每键 React 提交（避免 React 遍历整个 contenteditable 保存选区）、`getBlock` 加缓存、`SelectionChange` 去重、大文档字数统计节流；每键 ~85 ms → ~40 ms（含 ~20 ms 测试工具开销） |
+| — | 打开 80k 文档强制 3 次全文布局，启动后 `ThemeChanged` 再渲染一遍 | 样式 effect 先于内容渲染；主题未变且无 mermaid 时不重渲染 |
+| #23 | 撤销历史 100 份全文快照、每键 Trim 拷贝 | 总量上限 32M 字符；无分配比较 |
+| #56 | 断电后文件清空 | `SafeFile.WriteAllTextAtomicAsync`：临时文件 + flush + `File.Replace` |
+| #1 | 列表被改写成 2 空格缩进、项间加空行 | 设置：列表缩进（1/2/4 空格、4 空格标准）、宽松列表开关 |
+| #24 #70 | 表格自动补空格对齐 | 设置：对齐表格列（关闭即紧凑） |
+| #20 #61 | 切换源码模式末尾不断加空行 | `addCursorToMarkdown` 空行光标改放到最近内容行，不再追加行 |
+| #26 | 单行 `$$...$$` 不渲染 | 新块规则 `multiplemathSingleLine`，导出保留单行形式 |
+| #41 | 大纲显示 HTML 标签/Markdown 标记 | `getHeadingPlainText` |
+| #59 #2 | 大纲单击不跳转 | `TreeView.ItemInvoked` 总是跳转 |
+| #51 | ↑ 键光标移出视口不滚动 | 光标 y < 100 时向上滚动 |
+| #17 | `../` 相对路径图片不显示 | `resolveLocalPath` 处理盘符/UNC 前缀（path-browserify 只认 POSIX） |
+| #48 | 导出 HTML/PDF 时 `(*"Share"*)` 斜体错乱 | 导出用的 marked em 规则允许 `*"`，与编辑器/CommonMark 一致 |
+| #44 | 新建文件空白无法输入 | `LoadFile` 消息改为对象（另一会话修复） |
+| — | 保存期间编辑被误标已保存、保存并发 | 保存串行化 + 快照哈希（另一会话修复） |
+
+仍未处理：#63 撤销粒度（C# 侧 3 秒/换行提交策略）、#16 表格编辑闪退、#44 偶发启动空白、图床 PowerShell 未实现（#58）、多级引用 #43、#29 大纲跳转含行内代码。
+
 ## 四、本地分支与 remote
 
 ```
