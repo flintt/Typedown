@@ -117,13 +117,35 @@ class Muya {
   dispatchChangeContentChange = () => {
     try {
       const { markdown, cursor } = this.getMarkdownAndCursor()
-      const wordCount = this.getWordCount(markdown)
+      const wordCount = this.getWordCountThrottled(markdown)
       this.markdown = markdown
       const toc = this.getTOC()
       this.eventCenter.dispatch('contentChange', { markdown, wordCount, cursor, toc })
     } catch (err) {
       console.log(err)
     }
+  }
+
+  // Counting words is O(document) with several regex passes; on large documents it is a noticeable share of
+  // every keystroke. Recompute at most every 300 ms while typing and dispatch one final update when idle.
+  getWordCountThrottled (markdown) {
+    const THROTTLE_ABOVE = 50000
+    const INTERVAL = 300
+    if (markdown.length < THROTTLE_ABOVE) {
+      return this.getWordCount(markdown)
+    }
+    const now = Date.now()
+    clearTimeout(this.wordCountTimer)
+    if (!this.wordCountCache || now - this.wordCountCache.time >= INTERVAL) {
+      this.wordCountCache = { time: now, value: this.getWordCount(markdown) }
+      return this.wordCountCache.value
+    }
+    this.wordCountTimer = setTimeout(() => {
+      this.wordCountCache = null
+      const { anchor, focus } = this.contentState.cursor || {}
+      if (anchor && focus) this.dispatchChangeContentChange()
+    }, INTERVAL)
+    return this.wordCountCache.value
   }
 
   dispatchSelectionChange = () => {
@@ -420,6 +442,7 @@ class Muya {
   }
 
   destroy() {
+    clearTimeout(this.wordCountTimer)
     // this.quickInsert.destroy()
     // this.tablePicker.destroy()
     this.contentState.clear()
