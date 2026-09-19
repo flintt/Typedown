@@ -4,6 +4,7 @@ using System.IO;
 using System.IO.Pipes;
 using System.Threading;
 using System.Threading.Tasks;
+using Typedown.Core;
 using Typedown.Core.Utilities;
 using Typedown.Windows;
 using Typedown.XamlUI;
@@ -48,6 +49,7 @@ namespace Typedown
         protected override async void OnLaunched()
         {
             base.OnLaunched();
+            Log.Debug($"startup: version={Core.Controls.AboutApp.GetAppVersion()} windowsBuild={Config.WindowsBuild} osVersion={Environment.OSVersion.VersionString} mica={Config.IsMicaSupported} packaged={Config.IsPackaged}");
             try
             {
                 global::Windows.UI.Xaml.Application.Current.UnhandledException += (_, e) => Log.WriteLocal("XamlUnhandledException", $"{e.Message}\n{e.Exception}");
