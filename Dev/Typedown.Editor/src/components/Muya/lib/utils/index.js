@@ -353,6 +353,24 @@ export const escapeHtmlTags = html => {
   return html.replace(/[&<>"']/g, x => { return HTML_TAG_REPLACEMENTS[x] })
 }
 
+/**
+ * Plain text of a heading for outlines: strips HTML tags and inline Markdown markers
+ * (emphasis, code, strikethrough, links, images) but keeps the visible text (upstream #41).
+ */
+export const getHeadingPlainText = content => {
+  return content
+    .replace(/<\/?[a-zA-Z][^>]*>/g, '')                    // HTML tags
+    .replace(/!\[([^\]]*)\]\([^)]*\)/g, '$1')               // images -> alt text
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')                // links -> link text
+    .replace(/(`+)([^`]+?)\1/g, '$2')                      // inline code
+    .replace(/(\*\*|__)(?=\S)([\s\S]*?\S)\1/g, '$2')        // bold
+    .replace(/(\*|_)(?=\S)([\s\S]*?\S)\1/g, '$2')           // italic
+    .replace(/~~(?=\S)([\s\S]*?\S)~~/g, '$1')              // strikethrough
+    .replace(/\\([\\`*_{}[\]()#+\-.!~|])/g, '$1')          // escaped characters
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
 export const wordCount = markdown => {
   const paragraph = markdown.split(/\n{2,}/).filter(line => line).length
   let word = 0
