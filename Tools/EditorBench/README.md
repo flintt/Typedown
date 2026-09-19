@@ -19,3 +19,9 @@ keystroke, after 45–53 ms.
 
 `modeswitch-check.js` reproduces upstream #20/#61 (blank lines appended on every source-mode switch): the
 markdown printed after "back to muya" must be identical to the value shown before the switch.
+
+Other checks (all take `STATICS=<dir>` or default to the built editor):
+
+- `roundtrip-check.js '"md..."' ...` — import each markdown string into Muya and print blocks + exported markdown.
+- `export-check.js '"md..."'` — run the HTML export pipeline and print the body (upstream #48 emphasis case by default).
+- `scrollup-check.js` — Up arrow must scroll the caret back into view (upstream #51).
