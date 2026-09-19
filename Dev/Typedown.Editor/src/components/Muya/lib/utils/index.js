@@ -260,6 +260,27 @@ export const checkImageContentType = url => {
  * @param {string} src Image url
  * @param {string} basePath Base path; used on desktop to fix the relative image path.
  */
+/**
+ * Resolve a relative image path against the document folder. `path-browserify` is POSIX-only, so a Windows base
+ * path such as `C:\notes\sub` was treated as a single segment and `../img/a.png` resolved to `/img/a.png`
+ * (upstream #17). Handle drive-letter and UNC prefixes explicitly and resolve the rest as POSIX segments.
+ */
+export const resolveLocalPath = (basePath, src) => {
+  const toPosix = p => p.replace(/\\/g, '/')
+  let base = toPosix(basePath)
+  let prefix = ''
+  const drive = base.match(/^([a-zA-Z]:)(\/.*)?$/)
+  const unc = base.match(/^(\/\/[^/]+\/[^/]+)(\/.*)?$/)
+  if (drive) {
+    prefix = drive[1]
+    base = drive[2] || '/'
+  } else if (unc) {
+    prefix = unc[1]
+    base = unc[2] || '/'
+  }
+  return prefix + path.resolve(base, toPosix(src))
+}
+
 export const getImageInfo = (src, basePath = window.basePath) => {
   const imageExtension = IMAGE_EXT_REG.test(src)
   const isUrl = URL_REG.test(src) || (imageExtension && /^file:\/\/.+/.test(src))
@@ -290,7 +311,7 @@ export const getImageInfo = (src, basePath = window.basePath) => {
       // NOTE: We don't need to convert Windows styled path to UNIX style because Chromium handels this internal.
       return {
         isUnknownType: false,
-        src: path.resolve(basePath, src)
+        src: resolveLocalPath(basePath, src)
       }
     }
   } else if (isUrl && !imageExtension) {
