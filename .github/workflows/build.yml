@@ -53,7 +53,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [ x64 ]
+        platform: [ x64, ARM64 ]
     env:
       Configuration: Release
       Platform: ${{ matrix.platform }}
@@ -77,6 +77,7 @@ jobs:
         run: |
           $v = ([xml](Get-Content Dev/Typedown/Typedown.csproj)).Project.PropertyGroup.Version | Where-Object { $_ } | Select-Object -First 1
           "version=$v" >> $env:GITHUB_OUTPUT
+          "arch=$('${{ matrix.platform }}'.ToLower())" >> $env:GITHUB_OUTPUT
           Write-Host "Version: $v"
 
       - name: Stamp test build label
@@ -164,7 +165,8 @@ jobs:
           foreach ($f in "Typedown.exe","Microsoft.UI.Xaml.dll","Microsoft.Graphics.Canvas.dll","msvcp140_app.dll","vcruntime140_app.dll","e_sqlite3.dll","Resources\Statics\index.html") {
             if (-not (Test-Path (Join-Path $dir.FullName $f))) { throw "$f missing in $($dir.FullName)" }
           }
-          if (-not ((Test-Path "$($dir.FullName)\WebView2Loader.dll") -or (Test-Path "$($dir.FullName)\runtimes\win-x64\native\WebView2Loader.dll"))) { throw "WebView2Loader.dll missing" }
+          $arch = "${{ steps.ver.outputs.arch }}"
+          if (-not ((Test-Path "$($dir.FullName)\WebView2Loader.dll") -or (Test-Path "$($dir.FullName)\runtimes\win-$arch\native\WebView2Loader.dll"))) { throw "WebView2Loader.dll missing" }
           "dir=$($dir.FullName)" >> $env:GITHUB_OUTPUT
           Write-Host "Published app: $($dir.FullName)"
 
@@ -181,12 +183,13 @@ jobs:
           $pub = "${{ steps.pub.outputs.dir }}"
           New-Item -ItemType Directory -Force out | Out-Null
           # portable zip
-          Compress-Archive -Path "$pub\*" -DestinationPath "out\Typedown-portable-${{ env.Platform }}-v$ver.zip" -CompressionLevel Optimal
+          $arch = "${{ steps.ver.outputs.arch }}"
+          Compress-Archive -Path "$pub\*" -DestinationPath "out\Typedown-portable-$arch-v$ver.zip" -CompressionLevel Optimal
           # installer
           New-Item -ItemType Directory -Force Tools/Installer/publish | Out-Null
           Copy-Item "$pub\*" Tools/Installer/publish -Recurse -Force
           $iscc = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
-          & $iscc /DMyAppVersion=$ver Tools/Installer/Typedown.iss
+          & $iscc /DMyAppVersion=$ver /DMyArch=$arch Tools/Installer/Typedown.iss
           $setup = Get-ChildItem Tools/Installer/Output/*.exe | Select-Object -First 1
           $signtool = Get-ChildItem "C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\signtool.exe"
           & $signtool sign /fd SHA256 /f "${{ steps.cert.outputs.pfx }}" /p "${{ steps.cert.outputs.password }}" $setup.FullName
@@ -201,7 +204,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: Typedown-${{ matrix.platform }}
+          name: Typedown-${{ steps.ver.outputs.arch }}
           path: out/
 
   release:
@@ -226,9 +229,9 @@ jobs:
 
           | File | What it is |
           |---|---|
-          | `Typedown-windows-x64-v*.exe` | Installer (Inno Setup). Installs WebView2 Runtime if missing, registers `.md` associations. |
-          | `Typedown-portable-x64-v*.zip` | Portable build – unzip and run `Typedown.exe`. |
-          | `Typedown.Package_*.msix` | MSIX package for sideloading. |
+          | `Typedown-windows-x64-v*.exe` / `-arm64-` | Installer (Inno Setup) for x64 / ARM64 Windows. Installs WebView2 Runtime if missing, registers `.md` associations. |
+          | `Typedown-portable-x64-v*.zip` / `-arm64-` | Portable build – unzip and run `Typedown.exe`. |
+          | `Typedown.Package_*_x64.msix` / `_ARM64.msix` | MSIX packages for sideloading. |
           | `Typedown-signing-certificate.cer` | Self-signed certificate used to sign the above. To install the MSIX, first import this into **Local Machine → Trusted People** (or Trusted Root). The .exe/.zip run without it (SmartScreen may warn). |
           MD
           gh release create "${{ github.ref_name }}" dist/* \

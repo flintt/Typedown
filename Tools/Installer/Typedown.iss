@@ -1,4 +1,7 @@
 #define MyAppName "Typedown"
+#ifndef MyArch
+  #define MyArch "x64"
+#endif
 #define MyAppVersion "1.2.20"
 #define MyAppPublisher "Typedown Community"
 #define MyAppExeName "Typedown.exe"
@@ -13,13 +16,18 @@ AppPublisher={#MyAppPublisher}
 DefaultDirName={autopf}\{#MyAppName}
 DisableProgramGroupPage=yes
 OutputDir=Output
-OutputBaseFilename=Typedown-windows-x64-v{#MyAppVersion}
+OutputBaseFilename=Typedown-windows-{#MyArch}-v{#MyAppVersion}
 SetupIconFile=..\..\Dev\Typedown\Assets\logo.ico
 Compression=lzma2/max
 SolidCompression=yes
 WizardStyle=modern
+#if MyArch == "arm64"
+ArchitecturesAllowed=arm64
+ArchitecturesInstallIn64BitMode=arm64
+#else
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
+#endif
 PrivilegesRequired=admin
 ChangesAssociations=yes
 UninstallDisplayIcon={app}\{#MyAppExeName}
