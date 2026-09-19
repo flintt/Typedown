@@ -101,7 +101,7 @@ namespace Typedown.Windows
             catch (Exception ex)
             {
                 // SystemBackdropBrush needs Win2D (Microsoft.Graphics.Canvas.dll); fall back rather than take the window down.
-                Log.WriteLocal("MicaEffect", $"enable={enable} IsMicaSupported={Config.IsMicaSupported} OS={Environment.OSVersion.VersionString}\n{ex}");
+                Log.WriteLocal("MicaEffect", $"enable={enable} IsMicaSupported={Config.IsMicaSupported} build={Config.WindowsBuild} OS={Environment.OSVersion.VersionString}\n{ex}");
                 RootControl.Background = new SolidColorBrush(Colors.Transparent);
             }
         }

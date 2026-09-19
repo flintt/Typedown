@@ -18,7 +18,10 @@ namespace Typedown.Core
         // Change this label for local test builds; CI stamps its run and commit.
         public const string TestBuild = "test.20260918.1";
 
-        public static bool IsMicaSupported { get; } = Environment.OSVersion.Version.Build >= 22000;
+        /// <summary>Windows 11 (build 22000+). Uses RtlGetVersion so the compatibility manifest cannot mask the real build.</summary>
+        public static int WindowsBuild { get; } = Math.Max(Utilities.PInvoke.GetWindowsBuildNumber(), Environment.OSVersion.Version.Build);
+
+        public static bool IsMicaSupported { get; } = WindowsBuild >= 22000;
 
         // Set true to restore crash reports and feedback POSTs to typedown.ownbox.cn.
         public static bool AllowOutboundNetwork { get; } = false;

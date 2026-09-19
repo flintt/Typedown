@@ -429,6 +429,7 @@
     <Compile Include="Utilities\NumberUnit.cs" />
     <Compile Include="Utilities\PInvoke\PInvoke.DwmApi.cs" />
     <Compile Include="Utilities\PInvoke\PInvoke.Kernel32.cs" />
+    <Compile Include="Utilities\PInvoke\PInvoke.NtDll.cs" />
     <Compile Include="Utilities\PInvoke\PInvoke.Shell32.cs" />
     <Compile Include="Utilities\PInvoke\PInvoke.User32.cs" />
     <Compile Include="Utilities\ReactiveExtensions.cs" />
