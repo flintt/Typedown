@@ -311,7 +311,7 @@ namespace Typedown.Core.ViewModels
             try
             {
                 IgnoreOwnFileWrite();
-                await File.WriteAllTextAsync(path, text);
+                await SafeFile.WriteAllTextAtomicAsync(path, text);
                 IgnoreOwnFileWrite();
                 return true;
             }

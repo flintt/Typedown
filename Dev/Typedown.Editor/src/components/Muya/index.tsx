@@ -104,25 +104,6 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     }, [editor])
 
     useEffect(() => {
-        cursorRef.current = props.cursor
-    }, [props.cursor])
-
-    useEffect(() => {
-        if (markdownRef.current != props.markdown && editor) {
-            markdownRef.current = props.markdown
-            editor.setMarkdown(props.markdown, cursorRef.current)
-            const scrollTop = props.scrollTopRef.current;
-            window.scrollTo(window.scrollX, scrollTop)
-            scrollToCursorIfInvisible()
-            setTimeout(() => {
-                window.scrollTo(window.scrollX, scrollTop)
-                scrollToCursorIfInvisible()
-                search(searchArgRef.current)
-            }, 100);
-        }
-    }, [editor, props.markdown, props.contentVersion, props.scrollTopRef, scrollToCursorIfInvisible, scrollToElementIfInvisible, search])
-
-    useEffect(() => {
         search(props.searchArg)
     }, [editor, props.searchArg, search])
 
@@ -244,11 +225,21 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         }
     }), [editor, scrollToCursor]);
 
+    const lastRenderedThemeRef = useRef<string | undefined>(window.actualTheme);
     useEffect(() => transport.addListener('ThemeChanged', () => {
         if (editor) {
-            // Defer so the theme service's listener has updated window.actualTheme first,
-            // then re-render so mermaid diagrams recolor to the new theme.
-            setTimeout(() => (editor as any).contentState.render(true), 0)
+            // Defer so the theme service's listener has updated window.actualTheme first. A full re-render is only
+            // needed to recolor mermaid diagrams, and only when the theme really changed (the host also posts
+            // ThemeChanged right after startup, which would otherwise re-render the whole document a second time).
+            setTimeout(() => {
+                const theme = window.actualTheme
+                if (theme === lastRenderedThemeRef.current) return
+                lastRenderedThemeRef.current = theme
+                const { contentState } = editor as any
+                const hasMermaid = (blocks: any[]): boolean => blocks.some(b => b.functionType === 'mermaid' || (b.children?.length && hasMermaid(b.children)))
+                if (hasMermaid(contentState.getBlocks()))
+                    contentState.render(true)
+            }, 0)
         }
     }), [editor]);
 
@@ -303,6 +294,28 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             document.body.style.removeProperty('--editorFontFamily')
         }
     }, [props.options?.fontFamily])
+
+    // Content is applied after every font/direction/padding/CSS-variable effect above so that the render's
+    // synchronous selection placement forces exactly one layout; style changes after the render would make
+    // the following focus() force a second full layout of the document.
+    useEffect(() => {
+        cursorRef.current = props.cursor
+    }, [props.cursor])
+
+    useEffect(() => {
+        if (markdownRef.current != props.markdown && editor) {
+            markdownRef.current = props.markdown
+            editor.setMarkdown(props.markdown, cursorRef.current)
+            const scrollTop = props.scrollTopRef.current;
+            window.scrollTo(window.scrollX, scrollTop)
+            scrollToCursorIfInvisible()
+            setTimeout(() => {
+                window.scrollTo(window.scrollX, scrollTop)
+                scrollToCursorIfInvisible()
+                search(searchArgRef.current)
+            }, 100);
+        }
+    }, [editor, props.markdown, props.contentVersion, props.scrollTopRef, scrollToCursorIfInvisible, scrollToElementIfInvisible, search])
 
     useEffect(() => {
         try {

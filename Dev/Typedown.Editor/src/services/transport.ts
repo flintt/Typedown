@@ -19,7 +19,7 @@ window.chrome.webview.addEventListener<string>("message", ({ data }) => {
 const prevMap = new Map<string, string>();
 // Only idempotent state notifications may be skipped. Commands such as OpenURI
 // and lifecycle messages such as FileLoaded must still run when repeated.
-const deduplicatedStates = new Set(['OnScroll', 'SelectionFormats']);
+const deduplicatedStates = new Set(['OnScroll', 'SelectionFormats', 'SelectionChange']);
 const ref = { pos: 0 };
 
 
