@@ -38,6 +38,8 @@ namespace Typedown.Core.ViewModels
         public bool PreferLooseListItem { get => GetSettingValue(true); set => SetSettingValue(value); }
         /// <summary>Spaces after the list marker for nested items: "1".."4", or "dfm" (4-space indentation). Muya default is 1.</summary>
         public string ListIndentation { get => GetSettingValue("1"); set => SetSettingValue(value); }
+        /// <summary>Pad table cells so columns line up in the source (upstream #24/#70 ask for a way to turn this off).</summary>
+        public bool TableAlignColumns { get => GetSettingValue(true); set => SetSettingValue(value); }
         public bool AutoPairMarkdownSyntax { get => GetSettingValue(true); set => SetSettingValue(value); }
         public string EditorAreaWidth { get => GetSettingValue("1200px"); set => SetSettingValue(value); }
         public string FontFamily { get => GetSettingValue(""); set => SetSettingValue(value); }
@@ -103,6 +105,7 @@ namespace Typedown.Core.ViewModels
             "TrimUnnecessaryCodeBlockEmptyLines",
             "PreferLooseListItem",
             "ListIndentation",
+            "TableAlignColumns",
             "AutoPairMarkdownSyntax",
             "EditorAreaWidth",
             "FontFamily",

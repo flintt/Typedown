@@ -142,7 +142,8 @@ class Muya {
     }
     const blocks = this.contentState.getBlocks()
     const { isGitlabCompatibilityEnabled, listIndentation } = this.contentState
-    return new ExportMarkdown(blocks, listIndentation, isGitlabCompatibilityEnabled).generate();
+    const { tableAlignColumns } = this.options
+    return new ExportMarkdown(blocks, listIndentation, isGitlabCompatibilityEnabled, { alignTableColumns: tableAlignColumns !== false }).generate();
   }
 
   getTOC() {

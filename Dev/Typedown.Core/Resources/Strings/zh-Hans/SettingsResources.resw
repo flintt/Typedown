@@ -761,4 +761,12 @@
     <value>新建列表项时在源码中用空行分隔</value>
     <comment>编辑器/新建列表项时在源码中用空行分隔</comment>
   </data>
+  <data name="Editor.TableAlignColumns.Title" xml:space="preserve">
+    <value>对齐表格列</value>
+    <comment>编辑器/对齐表格列</comment>
+  </data>
+  <data name="Editor.TableAlignColumns.Description" xml:space="preserve">
+    <value>在 Markdown 源码中用空格填充单元格使各列对齐；关闭则保持紧凑（喂给 AI 时占用更少 token）</value>
+    <comment>编辑器/对齐表格列说明</comment>
+  </data>
 </root>

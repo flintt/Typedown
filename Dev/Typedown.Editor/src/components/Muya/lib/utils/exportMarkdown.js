@@ -10,8 +10,10 @@
  */
 
 class ExportMarkdown {
-  constructor(blocks, listIndentation = 1, isGitlabCompatibilityEnabled = false) {
+  constructor(blocks, listIndentation = 1, isGitlabCompatibilityEnabled = false, { alignTableColumns = true } = {}) {
     this.blocks = blocks
+    // false: write tables compactly (`| a | b |`) instead of padding every cell to the column width
+    this.alignTableColumns = alignTableColumns
     this.listType = [] // 'ul' or 'ol'
     // helper to translate the first tight item in a nested list
     this.isLooseParentList = true
@@ -318,20 +320,23 @@ class ExportMarkdown {
     let i
     let j
 
-    for (i = 0; i <= row; i++) {
-      for (j = 0; j <= column; j++) {
-        columnWidth[j].width = Math.max(columnWidth[j].width, tableData[i][j].length + 2) // add 2, because have two space around text
+    if (this.alignTableColumns) {
+      for (i = 0; i <= row; i++) {
+        for (j = 0; j <= column; j++) {
+          columnWidth[j].width = Math.max(columnWidth[j].width, tableData[i][j].length + 2) // add 2, because have two space around text
+        }
       }
     }
     tableData.forEach((r, i) => {
       const rs = indent + '|' + r.map((cell, j) => {
+        if (!this.alignTableColumns) return ` ${cell} `
         const raw = ` ${cell + ' '.repeat(columnWidth[j].width)}`
         return raw.substring(0, columnWidth[j].width)
       }).join('|') + '|'
       result.push(rs)
       if (i === 0) {
         const cutOff = indent + '|' + columnWidth.map(({ width, align }) => {
-          let raw = '-'.repeat(width - 2)
+          let raw = '-'.repeat(this.alignTableColumns ? width - 2 : 3)
           switch (align) {
             case 'left':
               raw = `:${raw} `
