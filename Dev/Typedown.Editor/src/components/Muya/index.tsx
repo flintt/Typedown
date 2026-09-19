@@ -255,8 +255,14 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         const selectionText = window.getSelection()?.toString();
         transport.postMessage('SelectionChange', { selection, menuState, selectionText });
         const { y } = selection.cursorCoords
-        props.options?.typewriter && relativeScroll(y - window.innerHeight / 2 + 136);
-        window.innerHeight - y < 100 && relativeScroll(y - window.innerHeight + 100);
+        if (props.options?.typewriter) {
+            relativeScroll(y - window.innerHeight / 2 + 136);
+        } else if (window.innerHeight - y < 100) {
+            relativeScroll(y - window.innerHeight + 100);
+        } else if (y < 100 && window.scrollY > 0) {
+            // Keep the caret visible when it moves above the viewport (Up arrow / Page Up), upstream #51.
+            relativeScroll(y - 100);
+        }
     }), [editor, props.options?.typewriter, relativeScroll])
 
     useEffect(() => editor?.on('selectionFormats', (formats: any) => {
