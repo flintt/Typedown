@@ -16,6 +16,14 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             Unloaded += OnUnloaded;
         }
 
+        // Selection-change already jumps, but clicking the heading the cursor is currently in (after scrolling
+        // away) changed nothing, which reads as "single click does not work" (upstream #59, #2). Always jump on click.
+        private void OnItemInvoked(Microsoft.UI.Xaml.Controls.TreeView sender, Microsoft.UI.Xaml.Controls.TreeViewItemInvokedEventArgs args)
+        {
+            if (args.InvokedItem is Models.TocTreeItem item && item.TocItem?.Slug != null)
+                Editor?.JumpBySlug(item.TocItem.Slug);
+        }
+
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
             Bindings?.StopTracking();

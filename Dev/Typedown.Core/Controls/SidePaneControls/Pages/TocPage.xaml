@@ -25,7 +25,8 @@
         <muxc:TreeView 
             x:Name="TreeView"
             ItemsSource="{x:Bind Editor.Toc.Children, Mode=OneWay}" 
-            ItemTemplate="{StaticResource TocItemTemplate}" >
+            ItemTemplate="{StaticResource TocItemTemplate}"
+            ItemInvoked="OnItemInvoked">
             <muxc:TreeView.ItemContainerTransitions>
                 <TransitionCollection>
                     <ContentThemeTransition/>
