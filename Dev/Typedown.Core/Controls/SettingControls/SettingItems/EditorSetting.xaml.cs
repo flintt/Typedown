@@ -53,6 +53,16 @@ namespace Typedown.Core.Controls.SettingControls.SettingItems
 
         public static string GetTextDirectionDisplayName(string key) => TextDirectionOptions.TryGetValue(key, out var value) ? value : key;
 
+        public static Dictionary<string, string> ListIndentationOptions { get; } = new()
+        {
+            { "1", Locale.GetString("Editor.ListIndentation.Spaces1") },
+            { "2", Locale.GetString("Editor.ListIndentation.Spaces2") },
+            { "4", Locale.GetString("Editor.ListIndentation.Spaces4") },
+            { "dfm", Locale.GetString("Editor.ListIndentation.Dfm") },
+        };
+
+        public static string GetListIndentationDisplayName(string key) => ListIndentationOptions.TryGetValue(key, out var value) ? value : key;
+
         public EditorSetting()
         {
             InitializeComponent();

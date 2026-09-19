@@ -705,4 +705,36 @@
     <value>視窗</value>
     <comment>视图/窗口</comment>
   </data>
+  <data name="Editor.ListIndentation.Title" xml:space="preserve">
+    <value>列表縮進</value>
+    <comment>编辑器/列表缩进</comment>
+  </data>
+  <data name="Editor.ListIndentation.Description" xml:space="preserve">
+    <value>嵌套列表項寫入原始碼時的縮進；4 個空格與 Obsidian 等編輯器一致</value>
+    <comment>编辑器/嵌套列表项写入源码时的缩进；4 个空格与 Obsidian 等编辑器一致</comment>
+  </data>
+  <data name="Editor.ListIndentation.Spaces1" xml:space="preserve">
+    <value>標記後 1 個空格</value>
+    <comment>编辑器/标记后 1 个空格</comment>
+  </data>
+  <data name="Editor.ListIndentation.Spaces2" xml:space="preserve">
+    <value>標記後 2 個空格</value>
+    <comment>编辑器/标记后 2 个空格</comment>
+  </data>
+  <data name="Editor.ListIndentation.Spaces4" xml:space="preserve">
+    <value>標記後 4 個空格</value>
+    <comment>编辑器/标记后 4 个空格</comment>
+  </data>
+  <data name="Editor.ListIndentation.Dfm" xml:space="preserve">
+    <value>4 空格縮進（Markdown 標準）</value>
+    <comment>编辑器/4 空格缩进（Markdown 标准）</comment>
+  </data>
+  <data name="Editor.PreferLooseListItem.Title" xml:space="preserve">
+    <value>寬鬆列表</value>
+    <comment>编辑器/宽松列表</comment>
+  </data>
+  <data name="Editor.PreferLooseListItem.Description" xml:space="preserve">
+    <value>新建列表項時在原始碼中用空行分隔</value>
+    <comment>编辑器/新建列表项时在源码中用空行分隔</comment>
+  </data>
 </root>

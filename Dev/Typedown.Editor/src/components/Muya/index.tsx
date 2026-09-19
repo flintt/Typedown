@@ -110,6 +110,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     useEffect(() => {
         const ele = document.getElementById('editor');
         const muya = new Muya(ele, optionsRef.current);
+        (window as any).__typedownMuya = muya; // for Tools/EditorBench and DevTools inspection
         setEditor(muya);
         return () => muya.destroy()
     }, []);
@@ -129,6 +130,12 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     useEffect(() => {
         editor?.setTextDirection(props.options?.textDirection)
     }, [editor, props.options?.textDirection])
+
+    useEffect(() => {
+        // Muya: 'dfm' = 4-space nested indentation, otherwise the number of spaces after the list marker (1-4).
+        const value = props.options?.listIndentation
+        editor?.setListIndentation(value === 'dfm' ? 'dfm' : (parseInt(value, 10) || 1))
+    }, [editor, props.options?.listIndentation])
 
     useEffect(() => transport.addListener<{ slug: string }>('ScrollTo', ({ slug }) => {
         scrollToElement(`#${slug}`)

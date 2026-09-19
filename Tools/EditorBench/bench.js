@@ -103,25 +103,8 @@ const profilerStub = `(() => {
   const loadMs = Date.now() - t0;
   const blocks = await page.evaluate(() => document.querySelectorAll('#ag-editor-id > .ag-paragraph').length);
 
-  // find the Muya instance through React fiber of #editor's parent
-  const found = await page.evaluate(() => {
-    const el = document.getElementById('editor');
-    let node = el;
-    for (let i = 0; i < 6 && node; i++) {
-      const key = Object.keys(node).find(k => k.startsWith('__reactFiber$'));
-      if (key) {
-        let fiber = node[key];
-        for (let j = 0; j < 30 && fiber; j++) {
-          const hooks = fiber.memoizedState;
-          let h = hooks;
-          while (h) { const v = h.memoizedState; if (v && v.contentState && v.eventCenter) { window.__muya = v; return true; } h = h.next; }
-          fiber = fiber.return;
-        }
-      }
-      node = node.parentElement;
-    }
-    return false;
-  });
+  // the editor exposes its Muya instance for tooling
+  const found = await page.evaluate(() => { window.__muya = window.__typedownMuya; return !!window.__muya; });
   if (!found) { console.log('could not locate Muya instance'); }
   else await page.evaluate(() => window.__installProfiler(window.__muya));
 

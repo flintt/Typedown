@@ -110,6 +110,7 @@ namespace Typedown.Core.ViewModels
                 Settings.AutoPairQuote,
                 Settings.TrimUnnecessaryCodeBlockEmptyLines,
                 Settings.PreferLooseListItem,
+                Settings.ListIndentation,
                 Settings.AutoPairMarkdownSyntax,
                 Settings.EditorAreaWidth,
                 Settings.FontFamily,
