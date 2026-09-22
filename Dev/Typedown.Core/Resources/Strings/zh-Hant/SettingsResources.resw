@@ -777,4 +777,16 @@
     <value>重新開啟文件時回到上次編輯的位置</value>
     <comment>常规/重新打开文档时回到上次位置</comment>
   </data>
+  <data name="View.CustomCss.Title" xml:space="preserve">
+    <value>自訂樣式（CSS）</value>
+    <comment>外观/自定义样式</comment>
+  </data>
+  <data name="View.CustomCss.Description" xml:space="preserve">
+    <value>附加到編輯器和匯出的 HTML/PDF 的樣式</value>
+    <comment>外观/编辑器和导出的额外样式</comment>
+  </data>
+  <data name="View.CustomCss.Placeholder" xml:space="preserve">
+    <value>例如 .markdown-body h1 { color: #c00; }  或  :root { --editorBgColor: #111; }</value>
+    <comment>外观/自定义样式示例</comment>
+  </data>
 </root>

@@ -287,6 +287,7 @@ class ExportHtml {
   </style>
   <style>${exportStyle}</style>
   ${extraCss ? `<style>${extraCss}</style>` : ''}
+  ${this.options?.customCss ? `<style>${this.options.customCss}</style>` : ''}
   ${extraHead ?? ''}
 </head>
 <body>

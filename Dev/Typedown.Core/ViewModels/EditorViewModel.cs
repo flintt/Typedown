@@ -114,6 +114,7 @@ namespace Typedown.Core.ViewModels
                 Settings.TableAlignColumns,
                 Settings.ShowParagraphMarker,
                 Settings.ReadOnly,
+                Settings.CustomCss,
                 Settings.AutoPairMarkdownSyntax,
                 Settings.EditorAreaWidth,
                 Settings.FontFamily,

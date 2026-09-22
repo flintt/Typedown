@@ -319,6 +319,16 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     }, [props.options?.showParagraphMarker])
 
     useEffect(() => {
+        let style = document.getElementById('typedown-custom-css') as HTMLStyleElement | null
+        if (!style) {
+            style = document.createElement('style')
+            style.id = 'typedown-custom-css'
+            document.head.appendChild(style)
+        }
+        style.textContent = props.options?.customCss || ''
+    }, [props.options?.customCss])
+
+    useEffect(() => {
         const readOnly = !!props.options?.readOnly
         document.body.classList.toggle('read-only', readOnly)
         editor?.container?.setAttribute('contenteditable', String(!readOnly))

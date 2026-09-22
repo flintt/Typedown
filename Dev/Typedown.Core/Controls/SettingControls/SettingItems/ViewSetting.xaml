@@ -61,6 +61,18 @@
             <ToggleSwitch IsOn="{x:Bind Settings.Topmost, Mode=TwoWay}"/>
         </controls:NormalSettingItem>
 
+        <controls:ExpanderSettingItem Title="{u:LocaleString Key=View.CustomCss.Title}" Description="{u:LocaleString Key=View.CustomCss.Description}">
+            <controls:ExpanderSettingItem.Icon>
+                <FontIcon Glyph="&#xe943;"/>
+            </controls:ExpanderSettingItem.Icon>
+            <StackPanel Padding="48,16,16,16" Spacing="8">
+                <TextBox AcceptsReturn="True" TextWrapping="NoWrap" MinHeight="140" FontFamily="Consolas"
+                         ScrollViewer.VerticalScrollBarVisibility="Auto"
+                         PlaceholderText="{u:LocaleString Key=View.CustomCss.Placeholder}"
+                         Text="{x:Bind Settings.CustomCss, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+            </StackPanel>
+        </controls:ExpanderSettingItem>
+
         <TextBlock Text="{u:LocaleString Key=View.Layout}" Margin="0,16,0,4"/>
         <controls:NormalSettingItem Title="{u:LocaleString Key=View.AppCompactMode.Title}" Description="{u:LocaleString Key=View.AppCompactMode.Description}">
             <controls:NormalSettingItem.Icon>

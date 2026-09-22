@@ -48,6 +48,8 @@ namespace Typedown.Core.ViewModels
         public bool TocAutoExpand { get => GetSettingValue(true); set => SetSettingValue(value); }
         /// <summary>Reopen documents at the last caret position (upstream #50).</summary>
         public bool RememberCursorPosition { get => GetSettingValue(true); set => SetSettingValue(value); }
+        /// <summary>User CSS applied to the editor and to HTML/PDF export (upstream #30).</summary>
+        public string CustomCss { get => GetSettingValue(""); set => SetSettingValue(value); }
         public bool AutoPairMarkdownSyntax { get => GetSettingValue(true); set => SetSettingValue(value); }
         public string EditorAreaWidth { get => GetSettingValue("1200px"); set => SetSettingValue(value); }
         public string FontFamily { get => GetSettingValue(""); set => SetSettingValue(value); }
@@ -116,6 +118,7 @@ namespace Typedown.Core.ViewModels
             "TableAlignColumns",
             "ShowParagraphMarker",
             "ReadOnly",
+            "CustomCss",
             "AutoPairMarkdownSyntax",
             "EditorAreaWidth",
             "FontFamily",

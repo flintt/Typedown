@@ -801,4 +801,16 @@
     <value>Reopen documents where you left off</value>
     <comment>常规/重新打开文档时回到上次位置</comment>
   </data>
+  <data name="View.CustomCss.Title" xml:space="preserve">
+    <value>Custom CSS</value>
+    <comment>外观/自定义样式</comment>
+  </data>
+  <data name="View.CustomCss.Description" xml:space="preserve">
+    <value>Extra styles for the editor and exported HTML/PDF</value>
+    <comment>外观/编辑器和导出的额外样式</comment>
+  </data>
+  <data name="View.CustomCss.Placeholder" xml:space="preserve">
+    <value>e.g. .markdown-body h1 { color: #c00; }  or  :root { --editorBgColor: #111; }</value>
+    <comment>外观/自定义样式示例</comment>
+  </data>
 </root>
