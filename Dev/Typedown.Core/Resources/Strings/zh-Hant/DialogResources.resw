@@ -290,4 +290,16 @@
   <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
     <value>請先在 設定 → 匯出 中填寫 HedgeDoc 伺服器位址。</value>
   </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>文件自上次分享後沒有變化，以下是既有的連結。</value>
+  </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>這篇文件之前分享過，但內容已更改。HedgeDoc 1.x 無法更新既有筆記，重新上傳會產生新的筆記和新連結。</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>重新上傳（新連結）</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>使用舊連結</value>
+  </data>
 </root>

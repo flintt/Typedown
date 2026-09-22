@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Typedown.Core.Services;
 using Typedown.Core.Utilities;
 using Windows.ApplicationModel.DataTransfer;
@@ -10,9 +10,11 @@ namespace Typedown.Core.Controls.DialogControls
     /// <summary>Shows the links of a note just shared to HedgeDoc with copy / open-in-browser actions.</summary>
     public static class HedgeDocShareDialog
     {
-        public static async Task ShowAsync(XamlRoot xamlRoot, HedgeDocShareResult result)
+        public static async Task ShowAsync(XamlRoot xamlRoot, HedgeDocShareResult result, string note)
         {
             var panel = new StackPanel { Spacing = 8, MinWidth = 420 };
+            if (!string.IsNullOrEmpty(note))
+                panel.Children.Add(new TextBlock { Text = note, TextWrapping = TextWrapping.Wrap });
             if (result.PublishedUrl != null)
                 AddLink(panel, Locale.GetDialogString("HedgeDocShare.ReadOnlyLink"), result.PublishedUrl);
             AddLink(panel, Locale.GetDialogString("HedgeDocShare.EditLink"), result.NoteUrl);

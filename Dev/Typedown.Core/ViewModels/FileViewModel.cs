@@ -465,7 +465,9 @@ namespace Typedown.Core.ViewModels
             }
         }
 
-        // Upload the current document to the configured HedgeDoc server and show the resulting links.
+        // Upload the current document to the configured HedgeDoc server and show the resulting links. HedgeDoc 1.x
+        // cannot update a note over HTTP, so an unchanged document gets its previous links back and a changed one
+        // asks before a new note (new link) is created.
         private async void ShareToHedgeDoc()
         {
             try
@@ -476,8 +478,34 @@ namespace Typedown.Core.ViewModels
                     AppViewModel.NavigateCommand.Execute("Settings/Export");
                     return;
                 }
-                var result = await HedgeDocService.ShareAsync(SettingsViewModel.HedgeDocServer, EditorViewModel.Markdown, SettingsViewModel.HedgeDocEmail, SettingsViewModel.HedgeDocPassword, SettingsViewModel.HedgeDocPublishReadOnly);
-                await HedgeDocShareDialog.ShowAsync(AppViewModel.XamlRoot, result);
+                var markdown = EditorViewModel.Markdown;
+                var hash = Common.SimpleHash(markdown);
+                var previous = HedgeDocShareMemory.Get(FilePath);
+                if (previous != null)
+                {
+                    var previousResult = new HedgeDocShareResult { NoteUrl = previous.NoteUrl, PublishedUrl = previous.PublishedUrl };
+                    if (previous.ContentHash == hash)
+                    {
+                        await HedgeDocShareDialog.ShowAsync(AppViewModel.XamlRoot, previousResult, Locale.GetDialogString("HedgeDocShare.Unchanged"));
+                        return;
+                    }
+                    var choice = await AppContentDialog.Create(
+                        Locale.GetDialogString("HedgeDocShare.ResultTitle"),
+                        Locale.GetDialogString("HedgeDocShare.ChangedPrompt"),
+                        Locale.GetString("Cancel"),
+                        Locale.GetDialogString("HedgeDocShare.ReUpload"),
+                        Locale.GetDialogString("HedgeDocShare.UseOldLink")).ShowAsync(AppViewModel.XamlRoot);
+                    if (choice == Windows.UI.Xaml.Controls.ContentDialogResult.Secondary)
+                    {
+                        await HedgeDocShareDialog.ShowAsync(AppViewModel.XamlRoot, previousResult, null);
+                        return;
+                    }
+                    if (choice != Windows.UI.Xaml.Controls.ContentDialogResult.Primary)
+                        return;
+                }
+                var result = await HedgeDocService.ShareAsync(SettingsViewModel.HedgeDocServer, markdown, SettingsViewModel.HedgeDocEmail, SettingsViewModel.HedgeDocPassword, SettingsViewModel.HedgeDocPublishReadOnly);
+                HedgeDocShareMemory.Set(FilePath, result, hash);
+                await HedgeDocShareDialog.ShowAsync(AppViewModel.XamlRoot, result, null);
             }
             catch (Exception ex)
             {

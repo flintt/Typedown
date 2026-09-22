@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -61,8 +61,7 @@ namespace Typedown.Core.Services
             {
                 try
                 {
-                    using var pub = await client.GetAsync($"{noteUrl}/publish");
-                    result.PublishedUrl = ResolveRedirect(server, pub, "publish the note");
+                    result.PublishedUrl = await FollowRedirectsAsync(client, server, $"{noteUrl}/publish", "publish the note");
                 }
                 catch (Exception ex)
                 {
@@ -71,6 +70,27 @@ namespace Typedown.Core.Services
                 }
             }
             return result;
+        }
+
+        /// <summary>
+        /// Walks a redirect chain by hand (the client never auto-follows) and returns the final address. A server
+        /// behind a proxy may answer with an <c>http://</c> location that the proxy then bounces back to https and only
+        /// afterwards to <c>/s/…</c>, so a single hop would report an intermediate URL.
+        /// </summary>
+        private static async Task<string> FollowRedirectsAsync(HttpClient client, string server, string url, string action)
+        {
+            for (var hop = 0; hop < 6; hop++)
+            {
+                using var response = await client.GetAsync(url);
+                var code = (int)response.StatusCode;
+                if (code < 300 || code >= 400 || response.Headers.Location == null)
+                {
+                    if (hop == 0) ResolveRedirect(server, response, action); // throws with a readable reason
+                    return url;
+                }
+                url = NormalizeLocation(server, response.Headers.Location);
+            }
+            return url;
         }
 
         /// <summary>Checks the server and login; returns a short human-readable status line.</summary>
@@ -102,14 +122,23 @@ namespace Typedown.Core.Services
             return token["name"]?.ToString() ?? email;
         }
 
+        // Relative locations are resolved against the server; absolute ones for the same host take the configured
+        // scheme (a misconfigured serverURL/proxy commonly hands out http:// for an https site).
+        private static string NormalizeLocation(string server, Uri location)
+        {
+            if (!location.IsAbsoluteUri)
+                return $"{server}/{location.ToString().TrimStart('/')}".TrimEnd('/');
+            var serverUri = new Uri(server);
+            if (string.Equals(location.Host, serverUri.Host, StringComparison.OrdinalIgnoreCase) && location.Scheme != serverUri.Scheme)
+                return $"{serverUri.Scheme}://{serverUri.Authority}{location.PathAndQuery}".TrimEnd('/');
+            return location.ToString().TrimEnd('/');
+        }
+
         private static string ResolveRedirect(string server, HttpResponseMessage response, string action)
         {
             var code = (int)response.StatusCode;
             if (code >= 300 && code < 400 && response.Headers.Location != null)
-            {
-                var location = response.Headers.Location;
-                return location.IsAbsoluteUri ? location.ToString().TrimEnd('/') : $"{server}/{location.ToString().TrimStart('/')}".TrimEnd('/');
-            }
+                return NormalizeLocation(server, response.Headers.Location);
             var hint = code switch
             {
                 403 => "the server does not allow anonymous notes; sign in with an email account",

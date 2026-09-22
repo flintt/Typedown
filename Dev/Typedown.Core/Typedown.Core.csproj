@@ -263,6 +263,7 @@
     </Compile>
     <Compile Include="Controls\DialogControls\HedgeDocShareDialog.cs" />
     <Compile Include="Services\HedgeDocService.cs" />
+    <Compile Include="Services\HedgeDocShareMemory.cs" />
     <Compile Include="Utilities\Secret.cs" />
     <Compile Include="Controls\SettingControls\SettingItems\GeneralSetting.xaml.cs">
       <DependentUpon>GeneralSetting.xaml</DependentUpon>

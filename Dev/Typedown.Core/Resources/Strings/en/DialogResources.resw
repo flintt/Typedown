@@ -290,4 +290,16 @@
   <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
     <value>Set the HedgeDoc server address in Settings → Export first.</value>
   </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>The document has not changed since it was last shared; these are the existing links.</value>
+  </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>This document was shared before but has changed since. HedgeDoc 1.x cannot update an existing note, so uploading again creates a new note with a new link.</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>Upload again (new link)</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>Use previous link</value>
+  </data>
 </root>
