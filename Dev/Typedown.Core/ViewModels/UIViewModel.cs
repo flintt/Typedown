@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Text;
@@ -39,6 +40,11 @@ namespace Typedown.Core.ViewModels
         public bool IsPrintPreviewOpen { get; private set; }
 
 
+        /// <summary>Folder-wide search pane in the side bar (Edit → Find → Search in folder, Ctrl+Shift+F).</summary>
+        public bool FolderSearchOpen { get; set; }
+
+        public Command<Unit> SearchInFolderCommand { get; } = new();
+
         /// <summary>Borderless full-screen window without the caption/menu bar (F11).</summary>
 
         public bool IsFullScreen { get; set; }
@@ -57,6 +63,11 @@ namespace Typedown.Core.ViewModels
         {
             dispatcher = CoreApplication.GetCurrentView().CoreWindow.Dispatcher;
             ServiceProvider = serviceProvider;
+            SearchInFolderCommand.OnExecute.Subscribe(_ =>
+            {
+                SettingsViewModel.SidePaneOpen = true;
+                FolderSearchOpen = true;
+            });
             disposables.Add(RemoteInvoke.Handle<JToken, object>("GetStringResources", GetStringResources));
             _ = dispatcher.RunIdleAsync(() => InitializeBinding());
         }

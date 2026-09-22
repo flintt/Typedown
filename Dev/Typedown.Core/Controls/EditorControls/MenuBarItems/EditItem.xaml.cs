@@ -74,6 +74,7 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             RegisterWindowShortcut(Settings.ShortcutFindNext, FindNextItem);
             RegisterWindowShortcut(Settings.ShortcutFindPrevious, FindPreviousItem);
             RegisterWindowShortcut(Settings.ShortcutReplace, ReplaceItem);
+            RegisterWindowShortcut(Settings.ShortcutSearchInFolder, SearchInFolderItem);
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)

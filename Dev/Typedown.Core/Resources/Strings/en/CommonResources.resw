@@ -1000,4 +1000,7 @@
   <data name="ShareToHedgeDoc" xml:space="preserve">
     <value>Share to HedgeDoc…</value>
   </data>
+  <data name="SearchInFolder" xml:space="preserve">
+    <value>Search in folder</value>
+  </data>
 </root>

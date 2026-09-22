@@ -76,6 +76,9 @@ namespace Typedown.Core.ViewModels
         [Locale("Edit", "FindAndReplace", "Find")]
         public ShortcutKey ShortcutFind { get => GetSettingValue<ShortcutKey>(new(Mod.Control, Key.F)); set => SetSettingValue(value); }
 
+        [Locale("Edit", "FindAndReplace", "SearchInFolder")]
+        public ShortcutKey ShortcutSearchInFolder { get => GetSettingValue<ShortcutKey>(new(Mod.Control | Mod.Shift, Key.F)); set => SetSettingValue(value); }
+
         [Locale("Edit", "FindAndReplace", "FindNext")]
         public ShortcutKey ShortcutFindNext { get => GetSettingValue<ShortcutKey>(new(Mod.None, Key.F3)); set => SetSettingValue(value); }
 

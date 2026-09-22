@@ -33,6 +33,11 @@ namespace Typedown.Core.Controls
                 .Cast<int>()
                 .StartWith(Settings.SidePaneIndex)
                 .Subscribe(UpdateSelectedItem));
+            var uiViewModel = ViewModel.UIViewModel;
+            disposables.Add(uiViewModel.WhenPropertyChanged(nameof(UIViewModel.FolderSearchOpen))
+                .Cast<bool>()
+                .StartWith(uiViewModel.FolderSearchOpen)
+                .Subscribe(open => IsSearchPaneOpen = open));
         }
 
         private void UpdateSelectedItem(int index)
@@ -51,11 +56,13 @@ namespace Typedown.Core.Controls
 
         private void OnSearchButtonClick(object sender, RoutedEventArgs e)
         {
+            if (ViewModel?.UIViewModel != null) ViewModel.UIViewModel.FolderSearchOpen = true;
             IsSearchPaneOpen = true;
         }
 
         private void OnSearchPaneClose(object sender, EventArgs e)
         {
+            if (ViewModel?.UIViewModel != null) ViewModel.UIViewModel.FolderSearchOpen = false;
             IsSearchPaneOpen = false;
         }
 
