@@ -59,13 +59,27 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
         private void UpdateWorkFolder()
         {
             var workFolder = FileViewModel.WorkFolder;
-            // Opening an individual document does not set WorkFolder. Show its
-            // siblings until the user explicitly chooses a workspace folder.
-            if (string.IsNullOrEmpty(workFolder) && !string.IsNullOrEmpty(FileViewModel.FilePath))
+            // Show the current document's folder when there is no workspace folder, or when the document lives
+            // outside it (e.g. a folder restored by "open last folder" that has nothing to do with this file).
+            if (!string.IsNullOrEmpty(FileViewModel.FilePath) && (string.IsNullOrEmpty(workFolder) || !IsInsideFolder(FileViewModel.FilePath, workFolder)))
                 workFolder = Path.GetDirectoryName(FileViewModel.FilePath);
             Log.Debug($"FolderPage.UpdateWorkFolder: WorkFolder='{FileViewModel.WorkFolder}' FilePath='{FileViewModel.FilePath}' -> '{workFolder}'");
             WorkFolderExplorerItem.FullPath = workFolder;
             WorkFolderExplorerItem.IsExpanded = true;
+        }
+
+        private static bool IsInsideFolder(string filePath, string folder)
+        {
+            try
+            {
+                var full = Path.GetFullPath(filePath);
+                var root = Path.GetFullPath(folder).TrimEnd('\\', '/') + Path.DirectorySeparatorChar;
+                return full.StartsWith(root, StringComparison.OrdinalIgnoreCase);
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public static Visibility IsVisible(string path) => string.IsNullOrEmpty(path) ? Visibility.Collapsed : Visibility.Visible;
