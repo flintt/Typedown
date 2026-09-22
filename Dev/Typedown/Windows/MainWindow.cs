@@ -97,9 +97,11 @@ namespace Typedown.Windows
 
         private PInvoke.WINDOWPLACEMENT? placementBeforeFullScreen;
         private int styleBeforeFullScreen;
+        private FrameworkElement captionControlGroup;
 
         // Borderless full screen (upstream #11): drop the caption/thick frame styles and cover the monitor;
-        // restore the saved style and placement on exit. The in-app caption/menu bar hides via RootControl.
+        // restore the saved style and placement on exit. The in-app caption/menu bar hides via RootControl/MainPage,
+        // the XamlUI min/max/close buttons are collapsed here since they live outside our content.
         private void SetFullScreen(bool enable)
         {
             try
@@ -111,18 +113,25 @@ namespace Typedown.Windows
                     PInvoke.GetWindowPlacement(hwnd, out var placement);
                     placementBeforeFullScreen = placement;
                     styleBeforeFullScreen = PInvoke.GetWindowLong(hwnd, PInvoke.WindowLongFlags.GWL_STYLE);
+                    // A maximized window keeps its work-area clamp and frame insets; leave that state first.
+                    if (PInvoke.IsZoomed(hwnd))
+                        PInvoke.ShowWindow(hwnd, PInvoke.ShowWindowCommand.Restore);
                     var rect = PInvoke.GetWindowMonitorRect(hwnd);
                     var style = styleBeforeFullScreen & ~(int)(PInvoke.WindowStyles.WS_CAPTION | PInvoke.WindowStyles.WS_THICKFRAME);
                     PInvoke.SetWindowLong(hwnd, PInvoke.WindowLongFlags.GWL_STYLE, style);
+                    SetFullScreenDwmAttributes(hwnd, true);
                     PInvoke.SetWindowPos(hwnd, IntPtr.Zero, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top,
                         PInvoke.SetWindowPosFlags.SWP_NOZORDER | PInvoke.SetWindowPosFlags.SWP_NOOWNERZORDER | PInvoke.SetWindowPosFlags.SWP_FRAMECHANGED);
+                    SetCaptionControlGroupVisible(false);
                 }
                 else
                 {
                     if (placementBeforeFullScreen == null) return;
                     var placement = placementBeforeFullScreen.Value;
                     placementBeforeFullScreen = null;
+                    SetCaptionControlGroupVisible(true);
                     PInvoke.SetWindowLong(hwnd, PInvoke.WindowLongFlags.GWL_STYLE, styleBeforeFullScreen);
+                    SetFullScreenDwmAttributes(hwnd, false);
                     PInvoke.SetWindowPlacement(hwnd, ref placement);
                     PInvoke.SetWindowPos(hwnd, IntPtr.Zero, 0, 0, 0, 0,
                         PInvoke.SetWindowPosFlags.SWP_NOMOVE | PInvoke.SetWindowPosFlags.SWP_NOSIZE | PInvoke.SetWindowPosFlags.SWP_NOZORDER | PInvoke.SetWindowPosFlags.SWP_NOOWNERZORDER | PInvoke.SetWindowPosFlags.SWP_FRAMECHANGED);
@@ -132,6 +141,47 @@ namespace Typedown.Windows
             {
                 Log.WriteLocal("FullScreen", ex.ToString());
             }
+        }
+
+        // Win11 draws rounded corners and a 1px border on every top-level window; both look wrong on a full-screen surface.
+        // The attributes are unknown on Win10 and simply fail there.
+        private static void SetFullScreenDwmAttributes(nint hwnd, bool enable)
+        {
+            var corner = enable ? PInvoke.DWMWCP_DONOTROUND : PInvoke.DWMWCP_DEFAULT;
+            PInvoke.DwmSetWindowAttribute(hwnd, PInvoke.DwmWindowAttribute.DWMWA_WINDOW_CORNER_PREFERENCE, ref corner, sizeof(uint));
+            var border = enable ? PInvoke.DWMWA_COLOR_NONE : PInvoke.DWMWA_COLOR_DEFAULT;
+            PInvoke.DwmSetWindowAttribute(hwnd, PInvoke.DwmWindowAttribute.DWMWA_BORDER_COLOR, ref border, sizeof(uint));
+        }
+
+        // XamlUI hosts its own min/max/close buttons above our Content (RootLayout template); find them once by type name.
+        private void SetCaptionControlGroupVisible(bool visible)
+        {
+            captionControlGroup ??= FindCaptionControlGroup();
+            if (captionControlGroup != null)
+                captionControlGroup.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        private FrameworkElement FindCaptionControlGroup()
+        {
+            DependencyObject root = RootControl;
+            if (root == null) return null;
+            while (VisualTreeHelper.GetParent(root) is DependencyObject parent)
+                root = parent;
+            return FindDescendant(root, e => e.GetType().Name == "CaptionControlGroup");
+        }
+
+        private static FrameworkElement FindDescendant(DependencyObject node, Func<FrameworkElement, bool> predicate)
+        {
+            var count = VisualTreeHelper.GetChildrenCount(node);
+            for (var i = 0; i < count; i++)
+            {
+                var child = VisualTreeHelper.GetChild(node, i);
+                if (child is FrameworkElement fe && predicate(fe))
+                    return fe;
+                if (FindDescendant(child, predicate) is FrameworkElement found)
+                    return found;
+            }
+            return null;
         }
 
         private void EnableMicaEffect(bool enable)

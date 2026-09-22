@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:controls="using:Typedown.Core.Controls"
+    Loaded="OnLoaded"
     Unloaded="OnUnloaded"
     mc:Ignorable="d">
     <Grid>
@@ -14,8 +15,13 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <controls:MenuBar/>
         <controls:MainContent Grid.Row="1"/>
         <controls:StatusBar x:Name="StatusBar" Grid.Row="2" x:Load="{x:Bind AppViewModel.SettingsViewModel.StatusBarOpen, Mode=OneWay}"/>
+        <!-- Kept loaded (not x:Load) in full screen so its menu shortcuts (F11 included) stay registered; only collapsed. -->
+        <controls:MenuBar x:Name="MenuBarHost" PointerEntered="OnMenuBarPointerEntered" PointerExited="OnMenuBarPointerExited"/>
+        <!-- Full screen: a thin strip along the top edge reveals the hidden menu bar on hover. -->
+        <Grid x:Name="FullScreenRevealStrip" Grid.RowSpan="3" Height="6" VerticalAlignment="Top" Background="Transparent"
+              x:Load="{x:Bind AppViewModel.UIViewModel.IsFullScreen, Mode=OneWay}"
+              PointerEntered="OnRevealStripPointerEntered"/>
     </Grid>
 </Page>
