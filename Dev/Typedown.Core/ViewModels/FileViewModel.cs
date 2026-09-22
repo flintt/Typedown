@@ -45,6 +45,9 @@ namespace Typedown.Core.ViewModels
         /// <summary>True when the user chose the workspace folder (Open Folder), false when it was restored at startup.</summary>
         public bool WorkFolderIsExplicit { get; private set; }
 
+        /// <summary>Raised after a document was loaded from disk (not on tab switches); <c>preview</c> = single-click open.</summary>
+        public event Action<string, bool> FileOpened;
+
         [OnChangedMethod(nameof(OnFilePathChanged))]
         public string FilePath { get; private set; } = null;
 
@@ -293,6 +296,7 @@ namespace Typedown.Core.ViewModels
                 }
                 if (TabsViewModel != null)
                     TabsViewModel.ActiveTab.IsPreview = preview;
+                FileOpened?.Invoke(path, preview);
                 return true;
             }
             catch (Exception ex)
