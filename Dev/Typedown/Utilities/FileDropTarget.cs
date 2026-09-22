@@ -1,0 +1,205 @@
+using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ComTypes;
+using System.Text;
+using Typedown.Core.Utilities;
+using Typedown.Windows;
+
+namespace Typedown.Utilities
+{
+    /// <summary>
+    /// OLE drop target for files dragged from Explorer. In the unpackaged build the XAML Islands DragEnter
+    /// arrives with an empty DataPackageView (no formats), so Explorer drops were rejected. This wraps the
+    /// drop target XAML registered on the island window: CF_HDROP drops with one Markdown/image file are
+    /// handled here, everything else is forwarded to XAML unchanged (in-app drags keep working).
+    /// </summary>
+    [ComVisible(true)]
+    public sealed class FileDropTarget : IOleDropTarget
+    {
+        private const uint DROPEFFECT_NONE = 0;
+        private const uint DROPEFFECT_COPY = 1;
+        private const uint DROPEFFECT_LINK = 4;
+        private const short CF_HDROP = 15;
+
+        private readonly MainWindow window;
+        private readonly IOleDropTarget inner;
+        private string pendingFile;
+
+        private FileDropTarget(MainWindow window, IOleDropTarget inner)
+        {
+            this.window = window;
+            this.inner = inner;
+        }
+
+        /// <summary>Wraps the drop targets of the window and its children. Safe to call more than once.</summary>
+        public static void Install(MainWindow window)
+        {
+            try
+            {
+                OleInitialize(IntPtr.Zero);
+                var handles = new List<IntPtr> { window.Handle };
+                EnumChildWindows(window.Handle, (h, _) => { handles.Add(h); return true; }, IntPtr.Zero);
+                var wrapped = 0;
+                foreach (var hwnd in handles)
+                {
+                    if (GetPropW(hwnd, "Typedown.FileDropTarget") != IntPtr.Zero) continue;
+                    var existing = GetPropW(hwnd, "OleDropTargetInterface");
+                    if (existing == IntPtr.Zero) continue;
+                    var original = (IOleDropTarget)Marshal.GetObjectForIUnknown(existing);
+                    var revoke = RevokeDragDrop(hwnd);
+                    var register = RegisterDragDrop(hwnd, new FileDropTarget(window, original));
+                    SetPropW(hwnd, "Typedown.FileDropTarget", (IntPtr)1);
+                    Log.Debug($"FileDropTarget: wrapped hwnd=0x{hwnd.ToInt64():X} revoke=0x{revoke:X} register=0x{register:X}");
+                    wrapped++;
+                }
+                if (wrapped == 0) Log.Debug("FileDropTarget: no OLE drop target found yet");
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"FileDropTarget.Install failed: {ex}");
+            }
+        }
+
+        public int DragEnter(System.Runtime.InteropServices.ComTypes.IDataObject dataObject, uint keyState, POINTL point, ref uint effect)
+        {
+            pendingFile = GetSingleSupportedFile(dataObject);
+            if (pendingFile != null)
+            {
+                effect = FileTypeHelper.IsImageFile(pendingFile) ? DROPEFFECT_COPY : DROPEFFECT_LINK;
+                return 0;
+            }
+            return inner != null ? inner.DragEnter(dataObject, keyState, point, ref effect) : SetNone(ref effect);
+        }
+
+        public int DragOver(uint keyState, POINTL point, ref uint effect)
+        {
+            if (pendingFile != null)
+            {
+                effect = FileTypeHelper.IsImageFile(pendingFile) ? DROPEFFECT_COPY : DROPEFFECT_LINK;
+                return 0;
+            }
+            return inner != null ? inner.DragOver(keyState, point, ref effect) : SetNone(ref effect);
+        }
+
+        public int DragLeave()
+        {
+            if (pendingFile != null)
+            {
+                pendingFile = null;
+                return 0;
+            }
+            return inner?.DragLeave() ?? 0;
+        }
+
+        public int Drop(System.Runtime.InteropServices.ComTypes.IDataObject dataObject, uint keyState, POINTL point, ref uint effect)
+        {
+            var file = pendingFile ?? GetSingleSupportedFile(dataObject);
+            pendingFile = null;
+            if (file == null)
+                return inner != null ? inner.Drop(dataObject, keyState, point, ref effect) : SetNone(ref effect);
+            effect = FileTypeHelper.IsImageFile(file) ? DROPEFFECT_COPY : DROPEFFECT_LINK;
+            Log.Debug($"FileDropTarget: drop '{file}'");
+            _ = window.Dispatcher.RunAsync(() =>
+            {
+                var app = window.AppViewModel;
+                if (app == null) return;
+                if (FileTypeHelper.IsMarkdownFile(file))
+                    app.FileViewModel.OpenFileCommand.Execute(file);
+                else if (FileTypeHelper.IsImageFile(file))
+                    app.MarkdownEditor?.PostMessage("InsertImage", new { src = file });
+            });
+            return 0;
+        }
+
+        private static int SetNone(ref uint effect)
+        {
+            effect = DROPEFFECT_NONE;
+            return 0;
+        }
+
+        private static string GetSingleSupportedFile(System.Runtime.InteropServices.ComTypes.IDataObject dataObject)
+        {
+            try
+            {
+                var files = GetDroppedFiles(dataObject);
+                if (files.Count == 1 && (FileTypeHelper.IsMarkdownFile(files[0]) || FileTypeHelper.IsImageFile(files[0])))
+                    return files[0];
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"FileDropTarget: reading CF_HDROP failed: {ex.Message}");
+            }
+            return null;
+        }
+
+        private static List<string> GetDroppedFiles(System.Runtime.InteropServices.ComTypes.IDataObject dataObject)
+        {
+            var result = new List<string>();
+            if (dataObject == null) return result;
+            var format = new FORMATETC { cfFormat = CF_HDROP, dwAspect = DVASPECT.DVASPECT_CONTENT, lindex = -1, tymed = TYMED.TYMED_HGLOBAL };
+            if (dataObject.QueryGetData(ref format) != 0) return result;
+            dataObject.GetData(ref format, out var medium);
+            try
+            {
+                var hDrop = medium.unionmember;
+                if (hDrop == IntPtr.Zero) return result;
+                var count = DragQueryFileW(hDrop, 0xFFFFFFFF, null, 0);
+                for (uint i = 0; i < count; i++)
+                {
+                    var length = DragQueryFileW(hDrop, i, null, 0);
+                    var buffer = new StringBuilder((int)length + 1);
+                    DragQueryFileW(hDrop, i, buffer, (uint)buffer.Capacity);
+                    result.Add(buffer.ToString());
+                }
+            }
+            finally
+            {
+                ReleaseStgMedium(ref medium);
+            }
+            return result;
+        }
+
+        private delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
+
+        [DllImport("user32.dll", ExactSpelling = true)]
+        private static extern bool EnumChildWindows(IntPtr hWndParent, EnumWindowsProc lpEnumFunc, IntPtr lParam);
+
+        [DllImport("user32.dll", CharSet = CharSet.Unicode, ExactSpelling = true)]
+        private static extern IntPtr GetPropW(IntPtr hWnd, string lpString);
+
+        [DllImport("user32.dll", CharSet = CharSet.Unicode, ExactSpelling = true)]
+        private static extern bool SetPropW(IntPtr hWnd, string lpString, IntPtr hData);
+
+        [DllImport("ole32.dll", ExactSpelling = true)]
+        private static extern int OleInitialize(IntPtr pvReserved);
+
+        [DllImport("ole32.dll", ExactSpelling = true)]
+        private static extern int RegisterDragDrop(IntPtr hwnd, IOleDropTarget pDropTarget);
+
+        [DllImport("ole32.dll", ExactSpelling = true)]
+        private static extern int RevokeDragDrop(IntPtr hwnd);
+
+        [DllImport("ole32.dll", ExactSpelling = true)]
+        private static extern void ReleaseStgMedium(ref STGMEDIUM pmedium);
+
+        [DllImport("shell32.dll", CharSet = CharSet.Unicode, ExactSpelling = true)]
+        private static extern uint DragQueryFileW(IntPtr hDrop, uint iFile, StringBuilder lpszFile, uint cch);
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct POINTL
+    {
+        public int x;
+        public int y;
+    }
+
+    [ComImport, Guid("00000122-0000-0000-C000-000000000046"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    public interface IOleDropTarget
+    {
+        [PreserveSig] int DragEnter([In, MarshalAs(UnmanagedType.Interface)] System.Runtime.InteropServices.ComTypes.IDataObject pDataObj, [In] uint grfKeyState, [In] POINTL pt, [In, Out] ref uint pdwEffect);
+        [PreserveSig] int DragOver([In] uint grfKeyState, [In] POINTL pt, [In, Out] ref uint pdwEffect);
+        [PreserveSig] int DragLeave();
+        [PreserveSig] int Drop([In, MarshalAs(UnmanagedType.Interface)] System.Runtime.InteropServices.ComTypes.IDataObject pDataObj, [In] uint grfKeyState, [In] POINTL pt, [In, Out] ref uint pdwEffect);
+    }
+}

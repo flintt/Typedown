@@ -153,6 +153,9 @@ namespace Typedown.Windows
             this.ShowWindowWithSavedPlacement();
             SaveWindowPlacementWithOffset(false);
             AppViewModel.MainWindow = Handle;
+            // XAML registers its OLE drop target once the island is up; wrap it a moment later (retry once).
+            _ = Dispatcher.RunIdleAsync(() => Utilities.FileDropTarget.Install(this));
+            _ = Task.Delay(2000).ContinueWith(_ => Dispatcher.RunAsync(() => Utilities.FileDropTarget.Install(this)));
         }
 
         private void OnStateChanged(object sender, StateChangedEventArgs e)
