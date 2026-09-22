@@ -805,4 +805,34 @@
     <value>從檔案總管開啟的檔案進入目前視窗的新標籤頁；關閉則每次開啟新視窗</value>
     <comment>常规/从资源管理器打开的文件进入当前窗口的标签页</comment>
   </data>
+  <data name="HedgeDocShare.Section" xml:space="preserve">
+    <value>分享到 HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Server.Title" xml:space="preserve">
+    <value>伺服器</value>
+  </data>
+  <data name="HedgeDocShare.Server.Description" xml:space="preserve">
+    <value>HedgeDoc 1.x 位址，例如 https://md.example.com</value>
+  </data>
+  <data name="HedgeDocShare.Email.Title" xml:space="preserve">
+    <value>電子郵件（選填）</value>
+  </data>
+  <data name="HedgeDocShare.Email.Description" xml:space="preserve">
+    <value>留空則匿名建立筆記；填寫帳號後筆記歸你所有</value>
+  </data>
+  <data name="HedgeDocShare.Password.Title" xml:space="preserve">
+    <value>密碼</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Title" xml:space="preserve">
+    <value>同時產生唯讀連結</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Description" xml:space="preserve">
+    <value>發布筆記（/s/…），分享出去的連結無法被編輯</value>
+  </data>
+  <data name="HedgeDocShare.TestTitle" xml:space="preserve">
+    <value>測試連線</value>
+  </data>
+  <data name="HedgeDocShare.TestButton" xml:space="preserve">
+    <value>測試</value>
+  </data>
 </root>

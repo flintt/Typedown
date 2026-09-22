@@ -269,4 +269,25 @@
     <value>WebView2 運行時未安裝</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>已分享到 HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>唯讀連結</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>可編輯連結</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>拿到此連結的人都可以編輯這篇筆記。</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>複製連結</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>在瀏覽器開啟</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>請先在 設定 → 匯出 中填寫 HedgeDoc 伺服器位址。</value>
+  </data>
 </root>

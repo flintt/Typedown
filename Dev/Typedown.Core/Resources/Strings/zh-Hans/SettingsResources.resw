@@ -829,4 +829,34 @@
     <value>从资源管理器打开的文件进入当前窗口的新标签页；关闭则每次打开新窗口</value>
     <comment>常规/从资源管理器打开的文件进入当前窗口的标签页</comment>
   </data>
+  <data name="HedgeDocShare.Section" xml:space="preserve">
+    <value>分享到 HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Server.Title" xml:space="preserve">
+    <value>服务器</value>
+  </data>
+  <data name="HedgeDocShare.Server.Description" xml:space="preserve">
+    <value>HedgeDoc 1.x 地址，例如 https://md.example.com</value>
+  </data>
+  <data name="HedgeDocShare.Email.Title" xml:space="preserve">
+    <value>邮箱（可选）</value>
+  </data>
+  <data name="HedgeDocShare.Email.Description" xml:space="preserve">
+    <value>留空则匿名创建笔记；填写账号后笔记归你所有</value>
+  </data>
+  <data name="HedgeDocShare.Password.Title" xml:space="preserve">
+    <value>密码</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Title" xml:space="preserve">
+    <value>同时生成只读链接</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Description" xml:space="preserve">
+    <value>发布笔记（/s/…），分享出去的链接不可被编辑</value>
+  </data>
+  <data name="HedgeDocShare.TestTitle" xml:space="preserve">
+    <value>测试连接</value>
+  </data>
+  <data name="HedgeDocShare.TestButton" xml:space="preserve">
+    <value>测试</value>
+  </data>
 </root>

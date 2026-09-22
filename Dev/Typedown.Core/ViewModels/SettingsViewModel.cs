@@ -50,6 +50,12 @@ namespace Typedown.Core.ViewModels
         public bool RememberCursorPosition { get => GetSettingValue(true); set => SetSettingValue(value); }
         /// <summary>User CSS applied to the editor and to HTML/PDF export (upstream #30).</summary>
         public string CustomCss { get => GetSettingValue(""); set => SetSettingValue(value); }
+
+        // Share to HedgeDoc (1.x): server, optional email login (password stored DPAPI-protected), publish read-only link
+        public string HedgeDocServer { get => GetSettingValue(""); set => SetSettingValue(value); }
+        public string HedgeDocEmail { get => GetSettingValue(""); set => SetSettingValue(value); }
+        public string HedgeDocPassword { get => Secret.Unprotect(GetSettingValue("")); set => SetSettingValue(Secret.Protect(value)); }
+        public bool HedgeDocPublishReadOnly { get => GetSettingValue(true); set => SetSettingValue(value); }
         /// <summary>Show the document tab strip even with a single tab.</summary>
         public bool AlwaysShowTabBar { get => GetSettingValue(false); set => SetSettingValue(value); }
         /// <summary>Files opened from Explorer / the command line go into a tab of the current window instead of a new window.</summary>

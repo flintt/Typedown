@@ -997,4 +997,7 @@
     <value>Show the current file's folder</value>
     <comment>文件栏/定位到当前文件所在目录</comment>
   </data>
+  <data name="ShareToHedgeDoc" xml:space="preserve">
+    <value>Share to HedgeDoc…</value>
+  </data>
 </root>

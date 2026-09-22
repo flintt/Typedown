@@ -997,4 +997,7 @@
     <value>定位到目前檔案所在資料夾</value>
     <comment>文件栏/定位到当前文件所在目录</comment>
   </data>
+  <data name="ShareToHedgeDoc" xml:space="preserve">
+    <value>分享到 HedgeDoc…</value>
+  </data>
 </root>

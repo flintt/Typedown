@@ -829,4 +829,34 @@
     <value>Files opened from Explorer open as a tab in the current window; off opens a new window</value>
     <comment>常规/从资源管理器打开的文件进入当前窗口的标签页</comment>
   </data>
+  <data name="HedgeDocShare.Section" xml:space="preserve">
+    <value>Share to HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Server.Title" xml:space="preserve">
+    <value>Server</value>
+  </data>
+  <data name="HedgeDocShare.Server.Description" xml:space="preserve">
+    <value>HedgeDoc 1.x address, e.g. https://md.example.com</value>
+  </data>
+  <data name="HedgeDocShare.Email.Title" xml:space="preserve">
+    <value>Email (optional)</value>
+  </data>
+  <data name="HedgeDocShare.Email.Description" xml:space="preserve">
+    <value>Leave empty to create notes anonymously; with an account the note belongs to you</value>
+  </data>
+  <data name="HedgeDocShare.Password.Title" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Title" xml:space="preserve">
+    <value>Also publish a read-only link</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Description" xml:space="preserve">
+    <value>Publishes the note (/s/…) so the shared link cannot be edited</value>
+  </data>
+  <data name="HedgeDocShare.TestTitle" xml:space="preserve">
+    <value>Test connection</value>
+  </data>
+  <data name="HedgeDocShare.TestButton" xml:space="preserve">
+    <value>Test</value>
+  </data>
 </root>

@@ -12,6 +12,7 @@ using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Typedown.Core.Controls;
+using Typedown.Core.Controls.DialogControls;
 using Typedown.Core.Interfaces;
 using Typedown.Core.Models;
 using Typedown.Core.Services;
@@ -66,6 +67,7 @@ namespace Typedown.Core.ViewModels
         public Command<Unit> ImportCommand { get; } = new();
         public Command<ExportConfig> ExportCommand { get; } = new();
         public Command<Unit> PrintCommand { get; } = new();
+        public Command<Unit> ShareToHedgeDocCommand { get; } = new();
         public Command<Unit> ExitCommand { get; } = new();
 
         private readonly DispatcherTimer saveFileTimer = new();
@@ -100,6 +102,7 @@ namespace Typedown.Core.ViewModels
             ClearHistoryCommand.OnExecute.Subscribe(x => { _ = AccessHistory.ClearHistory(); });
             ExportCommand.OnExecute.Subscribe(Export);
             PrintCommand.OnExecute.Subscribe(_ => Print());
+            ShareToHedgeDocCommand.OnExecute.Subscribe(_ => ShareToHedgeDoc());
             ImportCommand.OnExecute.Subscribe(_ => Import());
             RemoteInvoke.Handle<JToken, bool>("ExportCallback", ExportCallback);
             RemoteInvoke.Handle<JToken, bool>("PrintHTML", PrintHTML);
@@ -459,6 +462,26 @@ namespace Typedown.Core.ViewModels
             {
                 await AppContentDialog.Create(Locale.GetString("Error"), ex.Message, Locale.GetString("Ok")).ShowAsync(AppViewModel.XamlRoot);
                 return null;
+            }
+        }
+
+        // Upload the current document to the configured HedgeDoc server and show the resulting links.
+        private async void ShareToHedgeDoc()
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(SettingsViewModel.HedgeDocServer))
+                {
+                    await AppContentDialog.Create(Locale.GetDialogString("HedgeDocShare.ResultTitle"), Locale.GetDialogString("HedgeDocShare.NotConfigured"), Locale.GetString("Ok")).ShowAsync(AppViewModel.XamlRoot);
+                    AppViewModel.NavigateCommand.Execute("Settings/Export");
+                    return;
+                }
+                var result = await HedgeDocService.ShareAsync(SettingsViewModel.HedgeDocServer, EditorViewModel.Markdown, SettingsViewModel.HedgeDocEmail, SettingsViewModel.HedgeDocPassword, SettingsViewModel.HedgeDocPublishReadOnly);
+                await HedgeDocShareDialog.ShowAsync(AppViewModel.XamlRoot, result);
+            }
+            catch (Exception ex)
+            {
+                await AppContentDialog.Create(Locale.GetString("Error"), ex.Message, Locale.GetString("Ok")).ShowAsync(AppViewModel.XamlRoot);
             }
         }
 

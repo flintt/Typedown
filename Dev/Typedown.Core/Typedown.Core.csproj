@@ -258,6 +258,12 @@
     <Compile Include="Controls\SettingControls\SettingItems\ExportSetting.xaml.cs">
       <DependentUpon>ExportSetting.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SettingControls\SettingItems\HedgeDocSetting.xaml.cs">
+      <DependentUpon>HedgeDocSetting.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DialogControls\HedgeDocShareDialog.cs" />
+    <Compile Include="Services\HedgeDocService.cs" />
+    <Compile Include="Utilities\Secret.cs" />
     <Compile Include="Controls\SettingControls\SettingItems\GeneralSetting.xaml.cs">
       <DependentUpon>GeneralSetting.xaml</DependentUpon>
     </Compile>
@@ -629,6 +635,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\SettingControls\SettingItems\ExportSetting.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\SettingControls\SettingItems\HedgeDocSetting.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
