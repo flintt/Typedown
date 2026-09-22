@@ -92,6 +92,32 @@ CI 产物：`Typedown-windows-x64-v*.exe`（Inno Setup 安装包）、`Typedown-
 
 仍未处理：#63 撤销粒度（C# 侧 3 秒/换行提交策略）、#16 表格编辑闪退、#44 偶发启动空白、图床 PowerShell 未实现（#58）、多级引用 #43、#29 大纲跳转含行内代码。
 
+
+## 三之四、功能请求实现（2026-09-22）
+
+| 上游 issue | 功能 | 位置 |
+|---|---|---|
+| #11 #65 | 全屏（F11 / 视图菜单），隐藏标题栏和菜单栏 | `UIViewModel.IsFullScreen`、`MainWindow.SetFullScreen` |
+| #45 | 隐藏段落左侧的 P/H1 标记 | 设置 → 编辑器 → 段落标记 |
+| #38 | 阅读模式（Ctrl+Shift+R / 视图菜单） | `Settings.ReadOnly`，编辑器 contenteditable + 宿主命令门禁 |
+| #28 | 开始菜单搜 "markdown" 可找到 | exe FileDescription、快捷方式 Comment |
+| #3 | .txt / .text 出现在"打开方式" | MSIX 支持类型、安装包 OpenWithProgids |
+| #12 | 纯黑主题 | `AppTheme.Black` + `theme/*/black.theme.css` |
+| #33 | 文件夹范围全文搜索 | 侧边栏搜索面板 `SearchPane` |
+| #85 | 侧边栏默认页（文件/大纲） | 设置 → 外观 |
+| #35 | 大纲全部展开/折叠、定位时自动展开 | `TocPage`、`TocTreeItem.ExpandToSelected` |
+| #8 | 图片目录变量 `${filename}` `${filedir}` `${year}`… | `ImageAction.ExpandPathVariables` |
+| #43 | 增加/减少引用层级 | 段落菜单 |
+| #40 | 输入 `</` 自动补全闭合标签 | `inputCtrl.js` |
+| #50 | 记住每个文件的光标位置 | `CursorMemory`（`cursors.json`） |
+| #30 | 自定义 CSS（编辑器 + 导出） | 设置 → 外观 |
+| #57 | 拼写检查开关（Chromium） | 设置 → 编辑器 |
+| #30 #73 #85 | **多标签页** | `TabsViewModel`、`DocumentTab`、`DocumentTabBar`（WinUI TabView） |
+
+多标签设计：单个编辑器实例；切换标签时把编辑器状态（文本、哈希、光标、撤销历史）快照到 `DocumentTab`，再通过常规 `LoadFile` 路径恢复目标标签。已打开的文件再次打开只切换标签；新建/打开会复用干净的"未命名"标签。Ctrl+W 关闭当前标签（最后一个则关闭窗口），Ctrl+Tab / Ctrl+Shift+Tab 切换。已知限制：后台标签不做自动备份和外部修改监视（切回时检查一次）；重启不恢复标签。
+
+未做：图床（#58 #9 #25，按要求跳过）、#66（需求不明确）、#46（源码模式本来就有行号）。
+
 ## 四、本地分支与 remote
 
 ```
