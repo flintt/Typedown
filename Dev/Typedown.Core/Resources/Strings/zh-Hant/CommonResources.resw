@@ -953,4 +953,16 @@
     <value>此資料夾中沒有 Markdown 檔案。</value>
     <comment>文件栏/没有 Markdown 文件</comment>
   </data>
+  <data name="Search.InFolderPlaceholder" xml:space="preserve">
+    <value>在資料夾中搜尋…</value>
+    <comment>搜索/在文件夹中搜索</comment>
+  </data>
+  <data name="Search.Searching" xml:space="preserve">
+    <value>搜尋中…</value>
+    <comment>搜索/搜索中</comment>
+  </data>
+  <data name="Search.ResultSummary" xml:space="preserve">
+    <value>{1} 個檔案中有 {0} 個匹配</value>
+    <comment>搜索/结果统计</comment>
+  </data>
 </root>

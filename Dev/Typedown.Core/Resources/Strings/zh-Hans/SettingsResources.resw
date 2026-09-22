@@ -781,4 +781,12 @@
     <value>纯黑</value>
     <comment>外观/纯黑</comment>
   </data>
+  <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
+    <value>侧边栏默认页</value>
+    <comment>外观/侧边栏默认页</comment>
+  </data>
+  <data name="View.SidePaneDefaultPage.Description" xml:space="preserve">
+    <value>启动时侧边栏显示"文件"还是"大纲"</value>
+    <comment>外观/启动时侧边栏显示的页面</comment>
+  </data>
 </root>

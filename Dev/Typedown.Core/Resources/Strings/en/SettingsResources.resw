@@ -781,4 +781,12 @@
     <value>Black (OLED)</value>
     <comment>外观/纯黑</comment>
   </data>
+  <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
+    <value>Side pane default page</value>
+    <comment>外观/侧边栏默认页</comment>
+  </data>
+  <data name="View.SidePaneDefaultPage.Description" xml:space="preserve">
+    <value>Which page the side pane shows when the app starts</value>
+    <comment>外观/启动时侧边栏显示的页面</comment>
+  </data>
 </root>
