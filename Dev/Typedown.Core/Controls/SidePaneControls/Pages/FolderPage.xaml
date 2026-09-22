@@ -114,10 +114,21 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <!-- Which folder is open: without this an unrelated or Markdown-less folder just looks like an empty pane. -->
-        <TextBlock Grid.Row="0" Margin="12,4,12,6" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"
-                   Text="{x:Bind WorkFolderExplorerItem.Name, Mode=OneWay}"
-                   ToolTipService.ToolTip="{x:Bind WorkFolderExplorerItem.FullPath, Mode=OneWay}"
-                   Visibility="{x:Bind local:FolderPage.IsVisible(WorkFolderExplorerItem.FullPath), Mode=OneWay}"/>
+        <Grid Grid.Row="0" Margin="12,2,4,4" ColumnSpacing="4" Visibility="{x:Bind local:FolderPage.IsVisible(WorkFolderExplorerItem.FullPath), Mode=OneWay}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock FontWeight="SemiBold" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"
+                       Text="{x:Bind WorkFolderExplorerItem.Name, Mode=OneWay}"
+                       ToolTipService.ToolTip="{x:Bind WorkFolderExplorerItem.FullPath, Mode=OneWay}"/>
+            <!-- Jump the tree to the folder of the current document when it lives somewhere else. -->
+            <Button Grid.Column="1" Width="32" Height="28" Style="{ThemeResource EllipsisIconButtonStyle}" Click="OnRevealCurrentFileClick"
+                    ToolTipService.ToolTip="{u:LocaleString Key=FolderPane.RevealCurrentFile}"
+                    Visibility="{x:Bind local:FolderPage.IsVisible(local:FolderPage.CanReveal(FileViewModel.FilePath, WorkFolderExplorerItem.FullPath)), Mode=OneWay}">
+                <FontIcon FontSize="12" Glyph="&#xe8b7;"/>
+            </Button>
+        </Grid>
         <muxc:TreeView 
             x:Name="TreeView"
             Grid.Row="1"

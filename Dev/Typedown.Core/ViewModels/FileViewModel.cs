@@ -42,6 +42,9 @@ namespace Typedown.Core.ViewModels
 
         public string WorkFolder { get; private set; } = null;
 
+        /// <summary>True when the user chose the workspace folder (Open Folder), false when it was restored at startup.</summary>
+        public bool WorkFolderIsExplicit { get; private set; }
+
         [OnChangedMethod(nameof(OnFilePathChanged))]
         public string FilePath { get; private set; } = null;
 
@@ -229,6 +232,7 @@ namespace Typedown.Core.ViewModels
                 return false;
             if (!await LoadFolder(folderPath))
                 return false;
+            WorkFolderIsExplicit = true;
             SettingsViewModel.SidePaneOpen = true;
             SettingsViewModel.SidePaneIndex = 0;
             return true;

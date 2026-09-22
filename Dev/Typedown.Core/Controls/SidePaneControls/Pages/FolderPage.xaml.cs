@@ -56,16 +56,42 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             Bindings.Update();
         }
 
+        // The folder the tree is currently rooted at. It is sticky: switching tabs or previewing files elsewhere must
+        // not yank the tree away (the user could not navigate back). It changes only when a folder is opened explicitly,
+        // when there is no root yet, or via the "reveal current file" button.
+        private string stickyRoot;
+
         private void UpdateWorkFolder()
         {
-            var workFolder = FileViewModel.WorkFolder;
-            // Show the current document's folder when there is no workspace folder, or when the document lives
-            // outside it (e.g. a folder restored by "open last folder" that has nothing to do with this file).
-            if (!string.IsNullOrEmpty(FileViewModel.FilePath) && (string.IsNullOrEmpty(workFolder) || !IsInsideFolder(FileViewModel.FilePath, workFolder)))
-                workFolder = Path.GetDirectoryName(FileViewModel.FilePath);
+            var explicitFolder = FileViewModel.WorkFolderIsExplicit ? FileViewModel.WorkFolder : null;
+            var filePath = FileViewModel.FilePath;
+            string workFolder;
+            if (!string.IsNullOrEmpty(explicitFolder))
+                workFolder = explicitFolder;
+            else if (!string.IsNullOrEmpty(stickyRoot))
+                workFolder = stickyRoot;
+            else if (!string.IsNullOrEmpty(filePath))
+                workFolder = Path.GetDirectoryName(filePath);
+            else
+                workFolder = FileViewModel.WorkFolder;
+            if (!string.IsNullOrEmpty(workFolder))
+                stickyRoot = workFolder;
             Log.Debug($"FolderPage.UpdateWorkFolder: WorkFolder='{FileViewModel.WorkFolder}' FilePath='{FileViewModel.FilePath}' -> '{workFolder}'");
             WorkFolderExplorerItem.FullPath = workFolder;
             WorkFolderExplorerItem.IsExpanded = true;
+        }
+
+        private void OnRevealCurrentFileClick(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(FileViewModel?.FilePath)) return;
+            stickyRoot = Path.GetDirectoryName(FileViewModel.FilePath);
+            UpdateWorkFolder();
+            UpdateSelectedItem(WorkFolderExplorerItem);
+        }
+
+        public static bool CanReveal(string filePath, string root)
+        {
+            return !string.IsNullOrEmpty(filePath) && !IsInsideFolder(filePath, root ?? "");
         }
 
         private static bool IsInsideFolder(string filePath, string folder)
