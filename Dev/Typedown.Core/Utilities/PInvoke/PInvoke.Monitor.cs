@@ -1,4 +1,4 @@
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
 namespace Typedown.Core.Utilities
 {
@@ -17,6 +17,18 @@ namespace Typedown.Core.Utilities
 
         [DllImport("user32.dll", ExactSpelling = true)]
         public static extern nint MonitorFromWindow(nint hwnd, uint dwFlags);
+
+        [DllImport("user32.dll", ExactSpelling = true)]
+        public static extern bool ClientToScreen(nint hWnd, ref POINT lpPoint);
+
+        /// <summary>Client area of the window in screen coordinates.</summary>
+        public static RECT GetClientRectOnScreen(nint hwnd)
+        {
+            GetClientRect(hwnd, out var client);
+            var origin = new POINT(0, 0);
+            ClientToScreen(hwnd, ref origin);
+            return new RECT { left = origin.X, top = origin.Y, right = origin.X + client.right, bottom = origin.Y + client.bottom };
+        }
 
         [DllImport("user32.dll", ExactSpelling = true, SetLastError = true)]
         public static extern bool GetMonitorInfoW(nint hMonitor, ref MONITORINFO lpmi);

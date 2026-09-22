@@ -46,6 +46,12 @@ namespace Typedown.Core.ViewModels
         public bool DisplaySaved { get; set; } = true;
         public ulong FileHash { get; set; }
         public ulong CurrentHash { get; set; }
+
+        /// <summary>
+        /// Bumped on every content load pushed to the editor and echoed back on its reports; a report carrying an
+        /// older id belongs to the previous document (in flight during a tab switch) and is dropped.
+        /// </summary>
+        public int LoadId { get; private set; }
         public string SearchValue { get; set; } = null;
         public bool FirstStart { get; set; } = true;
         public bool FileLoaded { get; set; }
@@ -124,7 +130,22 @@ namespace Typedown.Core.ViewModels
                 Markdown,
                 BasePath = FileViewModel.ImageBasePath,
                 Cursor = Settings.RememberCursorPosition ? CursorMemory.Get(FileViewModel.FilePath) : null,
+                LoadId = ++LoadId,
             };
+        }
+
+        /// <summary>Pushes a whole document into the editor (see <see cref="LoadId"/>).</summary>
+        public void PostLoadFile(string text, object cursor = null)
+        {
+            MarkdownEditor?.PostMessage("LoadFile", new { text, basePath = FileViewModel.ImageBasePath, cursor, loadId = ++LoadId });
+        }
+
+        private bool IsStaleReport(JToken arg)
+        {
+            var id = arg?["loadId"];
+            if (id == null || id.Type != JTokenType.Integer || id.Value<int>() == LoadId) return false;
+            Log.Debug($"Editor report dropped: loadId={id} current={LoadId}");
+            return true;
         }
 
         public void OnSelectionChange(JToken arg)
@@ -161,16 +182,23 @@ namespace Typedown.Core.ViewModels
             if (!contentUpdating) History.ContentChange(Markdown);
             CurrentHash = Common.SimpleHash(Markdown);
             if (!FileLoaded) await Task.Delay(100);
-            Saved = FileHash == CurrentHash;
+            var saved = FileHash == CurrentHash;
+            if (Saved && !saved && !History.Undoable && !History.IsPending)
+                Log.Debug($"MarkdownChange: became unsaved without an undoable edit (len={markdown.Length} fileHash={FileHash} currentHash={CurrentHash} loaded={FileLoaded} loadId={LoadId})");
+            Saved = saved;
         }
 
         public void OnFileLoaded(JToken arg)
         {
+            if (IsStaleReport(arg)) return;
             if (!FileLoaded)
             {
                 FileLoaded = true;
                 var newText = arg["text"].ToString();
-                FileHash = Common.SimpleHash(newText);
+                var hash = Common.SimpleHash(newText);
+                if (hash != FileHash)
+                    Log.Debug($"FileLoaded: editor normalized the text (len {Markdown.Length} -> {newText.Length}, loadId={LoadId})");
+                FileHash = hash;
                 History.InitHistory(newText);
                 OnMarkdownChange(newText);
                 if (FloatViewModel.FindReplaceDialogOpen > 0)
@@ -180,6 +208,7 @@ namespace Typedown.Core.ViewModels
 
         public void OnMarkdownChange(JToken arg)
         {
+            if (IsStaleReport(arg)) return;
             OnMarkdownChange(arg["text"].ToString());
         }
 
@@ -187,6 +216,7 @@ namespace Typedown.Core.ViewModels
 
         public void OnCursorChange(JToken arg)
         {
+            if (IsStaleReport(arg)) return;
             var cursor = arg["cursor"]?.ToObject<CursorState>();
             History.CursorChange(cursor);
             if (cursor != null)

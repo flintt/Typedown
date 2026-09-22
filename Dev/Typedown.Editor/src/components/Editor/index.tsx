@@ -24,19 +24,59 @@ const Editor: React.FC = () => {
     const muyaScrollTopRef = useRef(0);
     const codeMirrorScrollRef = useRef(0);
 
-    const OnFileLoaded = useCallback(() => setTimeout(() => transport.postMessage('FileLoaded', { text: markdownRef.current }), 100), [])
+    // Every host-driven load carries a `loadId`; it is echoed on everything the editor reports so the host can drop
+    // messages that still belong to the previous document (a tab switch races with in-flight change events).
+    const loadIdRef = useRef<number>()
+
+    // The FileLoaded handshake tells the host what the editor actually holds after a load (Muya normalizes the
+    // markdown on import), so the host's "saved" hash must come from the first change report *after* the editor
+    // applied the new text — not from a fixed delay, which a large document or a slow first render overruns and
+    // then leaves the file looking modified without an edit. The timers are only fallbacks.
+    const fileLoadPending = useRef<{ armed: boolean, timer?: number }>()
+
+    const flushFileLoaded = useCallback(() => {
+        const pending = fileLoadPending.current
+        if (!pending) return
+        clearTimeout(pending.timer)
+        fileLoadPending.current = undefined
+        transport.postMessage('FileLoaded', { text: markdownRef.current, loadId: loadIdRef.current })
+    }, [])
+
+    const OnFileLoaded = useCallback(() => {
+        clearTimeout(fileLoadPending.current?.timer)
+        fileLoadPending.current = { armed: false, timer: window.setTimeout(flushFileLoaded, 3000) }
+    }, [flushFileLoaded])
+
+    // Called by the child editor right after it applied host content; the next change report completes the handshake.
+    const onContentApplied = useCallback(() => {
+        const pending = fileLoadPending.current
+        if (!pending || pending.armed) return
+        clearTimeout(pending.timer)
+        pending.armed = true
+        pending.timer = window.setTimeout(flushFileLoaded, 500)
+    }, [flushFileLoaded])
 
     // Editor -> host: called by the child editor on every change; no React re-render involved.
     const onMarkdownChange = useCallback((markdown: string) => {
-        if (markdown != undefined && markdownRef.current != markdown) {
+        if (markdown == undefined) return
+        const pending = fileLoadPending.current
+        if (pending) {
+            // Before the new text is applied any report still describes the previous document: drop it.
+            if (!pending.armed) return
             markdownRef.current = markdown
-            transport.postMessage('MarkdownChange', { text: markdown });
+            flushFileLoaded()
+            return
         }
-    }, [])
+        if (markdownRef.current != markdown) {
+            markdownRef.current = markdown
+            transport.postMessage('MarkdownChange', { text: markdown, loadId: loadIdRef.current });
+        }
+    }, [flushFileLoaded])
 
     const onCursorChange = useCallback((cursor: any) => {
+        if (fileLoadPending.current && !fileLoadPending.current.armed) return
         cursorRef.current = cursor
-        transport.postMessage('CursorChange', { cursor })
+        transport.postMessage('CursorChange', { cursor, loadId: loadIdRef.current })
     }, [])
 
     // Host -> editor: replace the content without echoing it back as a MarkdownChange.
@@ -47,11 +87,12 @@ const Editor: React.FC = () => {
     }, [])
 
     useEffect(() => {
-        remote.getSettings().then(({ markdown, basePath, cursor, ...opt }: any) => {
+        remote.getSettings().then(({ markdown, basePath, cursor, loadId, ...opt }: any) => {
             window.basePath = basePath
+            loadIdRef.current = loadId
             setOptions(opt)
-            setContentFromHost(markdown, cursor ?? undefined)
             OnFileLoaded();
+            setContentFromHost(markdown, cursor ?? undefined)
         })
     }, [OnFileLoaded, setContentFromHost]);
 
@@ -77,10 +118,11 @@ const Editor: React.FC = () => {
         setContentVersion(v => v + 1)
     }), [options, onMarkdownChange]);
 
-    useEffect(() => transport.addListener<{ text: string, basePath: string, cursor?: any }>('LoadFile', ({ text, basePath, cursor }) => {
+    useEffect(() => transport.addListener<{ text: string, basePath: string, cursor?: any, loadId?: number }>('LoadFile', ({ text, basePath, cursor, loadId }) => {
         window.basePath = basePath
-        setContentFromHost(text, cursor ?? undefined)
+        loadIdRef.current = loadId
         OnFileLoaded();
+        setContentFromHost(text, cursor ?? undefined)
     }), [OnFileLoaded, setContentFromHost]);
 
     useEffect(() => transport.addListener<{ text: string, cursor: string, basePath: string }>('SetMarkdown', ({ text, cursor, basePath }) => {
@@ -116,6 +158,7 @@ const Editor: React.FC = () => {
                 searchArg={searchArg}
                 scrollTopRef={codeMirrorScrollRef}
                 onMarkdownChange={onMarkdownChange}
+                onContentApplied={onContentApplied}
                 onCursorChange={onCursorChange}
                 onSearchArgChange={setSearchArg}
             />
@@ -131,6 +174,7 @@ const Editor: React.FC = () => {
                 searchArg={searchArg}
                 scrollTopRef={muyaScrollTopRef}
                 onMarkdownChange={onMarkdownChange}
+                onContentApplied={onContentApplied}
                 onCursorChange={onCursorChange}
                 onSearchArgChange={setSearchArg}
             />

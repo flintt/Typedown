@@ -215,7 +215,7 @@ namespace Typedown.Core.ViewModels
             EditorViewModel.History.InitHistory(EditorViewModel.Markdown);
             if (postMessage)
             {
-                MarkdownEditor?.PostMessage("LoadFile", new { text = EditorViewModel.Markdown, basePath = ImageBasePath });
+                EditorViewModel.PostLoadFile(EditorViewModel.Markdown);
             }
         }
 
@@ -292,7 +292,7 @@ namespace Typedown.Core.ViewModels
                 if (postMessage)
                 {
                     var cursor = SettingsViewModel.RememberCursorPosition ? CursorMemory.Get(path) : null;
-                    MarkdownEditor?.PostMessage("LoadFile", new { text = EditorViewModel.Markdown, basePath = ImageBasePath, cursor });
+                    EditorViewModel.PostLoadFile(EditorViewModel.Markdown, cursor);
                 }
                 if (TabsViewModel != null)
                     TabsViewModel.ActiveTab.IsPreview = preview;
@@ -861,7 +861,7 @@ namespace Typedown.Core.ViewModels
             EditorViewModel.AutoSavedSucc = true;
             EditorViewModel.History.InitHistory(text);
             AutoBackup.DeleteBackup(FilePath);
-            MarkdownEditor?.PostMessage("LoadFile", new { text, basePath = ImageBasePath });
+            EditorViewModel.PostLoadFile(text);
         }
 
         private void Exit()

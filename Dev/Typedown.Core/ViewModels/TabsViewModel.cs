@@ -1,4 +1,4 @@
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -170,7 +170,7 @@ namespace Typedown.Core.ViewModels
             editor.FileLoaded = true; // the FileLoaded handshake must not reset the restored history/hash
             editor.CurrentCursor = tab.Cursor;
             tab.IsDirty = !tab.Saved;
-            MarkdownEditor?.PostMessage("LoadFile", new { text = editor.Markdown, basePath = FileViewModel.ImageBasePath, cursor = tab.Cursor });
+            editor.PostLoadFile(editor.Markdown, tab.Cursor);
         }
 
         public async Task<bool> CloseTab(DocumentTab tab)

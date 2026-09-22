@@ -23,5 +23,6 @@ markdown printed after "back to muya" must be identical to the value shown befor
 Other checks (all take `STATICS=<dir>` or default to the built editor):
 
 - `roundtrip-check.js '"md..."' ...` — import each markdown string into Muya and print blocks + exported markdown.
+- `handshake-check.js` — LoadFile → FileLoaded handshake: FileLoaded carries the normalized text and the load id, a superseded load leaks nothing, an edit afterwards reports MarkdownChange (exit code 1 on failure).
 - `export-check.js '"md..."'` — run the HTML export pipeline and print the body (upstream #48 emphasis case by default).
 - `scrollup-check.js` — Up arrow must scroll the caret back into view (upstream #51).

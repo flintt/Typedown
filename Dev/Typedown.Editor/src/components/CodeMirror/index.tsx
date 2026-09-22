@@ -16,6 +16,8 @@ interface ICodeMirrorEditor {
     searchArg: { value: string, opt: any } | undefined
     scrollTopRef: React.MutableRefObject<number>
     onMarkdownChange: (markdown: string) => void
+    /** Fired once host content has been pushed into the editor (see the FileLoaded handshake in Editor). */
+    onContentApplied?: () => void
     onCursorChange: (cursor: any) => void
     onSearchArgChange: (arg: { value: string, opt: any } | undefined) => void
 }
@@ -180,7 +182,8 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
     }, [editor])
 
     useEffect(() => {
-        if (markdownRef.current != props.markdown && editor) {
+        if (!editor) return
+        if (markdownRef.current != props.markdown) {
             markdownRef.current = props.markdown
             const { anchor, head } = cursorRef.current ?? {}
             editor.setValue(markdownRef.current)
@@ -193,6 +196,8 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
                 search({ value, opt: { ...opt, selection } })
             }
         }
+        props.onContentApplied?.()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [editor, props.markdown, props.contentVersion, props.scrollTopRef, search])
 
     useEffect(() => {

@@ -23,6 +23,8 @@ interface IMuyaEditor {
     searchArg: { value: string, opt: any } | undefined
     scrollTopRef: React.MutableRefObject<number>
     onMarkdownChange: (markdown: string) => void
+    /** Fired once host content has been pushed into the editor (see the FileLoaded handshake in Editor). */
+    onContentApplied?: () => void
     onCursorChange: (cursor: any) => void
     onSearchArgChange: (arg: { value: string, opt: any } | undefined) => void
 }
@@ -355,7 +357,8 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     }, [props.cursor])
 
     useEffect(() => {
-        if (markdownRef.current != props.markdown && editor) {
+        if (!editor) return
+        if (markdownRef.current != props.markdown) {
             markdownRef.current = props.markdown
             editor.setMarkdown(props.markdown, cursorRef.current)
             const scrollTop = props.scrollTopRef.current;
@@ -367,6 +370,8 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
                 search(searchArgRef.current)
             }, 100);
         }
+        props.onContentApplied?.()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [editor, props.markdown, props.contentVersion, props.scrollTopRef, scrollToCursorIfInvisible, scrollToElementIfInvisible, search])
 
     useEffect(() => {

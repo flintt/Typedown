@@ -120,8 +120,18 @@ namespace Typedown.Windows
                     var style = styleBeforeFullScreen & ~(int)(PInvoke.WindowStyles.WS_CAPTION | PInvoke.WindowStyles.WS_THICKFRAME);
                     PInvoke.SetWindowLong(hwnd, PInvoke.WindowLongFlags.GWL_STYLE, style);
                     SetFullScreenDwmAttributes(hwnd, true);
-                    PInvoke.SetWindowPos(hwnd, IntPtr.Zero, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top,
-                        PInvoke.SetWindowPosFlags.SWP_NOZORDER | PInvoke.SetWindowPosFlags.SWP_NOOWNERZORDER | PInvoke.SetWindowPosFlags.SWP_FRAMECHANGED);
+                    var flags = PInvoke.SetWindowPosFlags.SWP_NOZORDER | PInvoke.SetWindowPosFlags.SWP_NOOWNERZORDER | PInvoke.SetWindowPosFlags.SWP_FRAMECHANGED;
+                    PInvoke.SetWindowPos(hwnd, IntPtr.Zero, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, flags);
+                    // XamlUI's WM_NCCALCSIZE keeps the resize-border insets on the left/right/bottom regardless of the
+                    // style, so the client area ends up short of the monitor edges. Measure the shortfall and grow the
+                    // window past the monitor by exactly that much (the same trick Windows uses for maximized windows).
+                    var client = PInvoke.GetClientRectOnScreen(hwnd);
+                    int dl = client.left - rect.left, dt = client.top - rect.top, dr = rect.right - client.right, db = rect.bottom - client.bottom;
+                    if (dl != 0 || dt != 0 || dr != 0 || db != 0)
+                    {
+                        Log.Debug($"FullScreen: client inset l={dl} t={dt} r={dr} b={db}, compensating");
+                        PInvoke.SetWindowPos(hwnd, IntPtr.Zero, rect.left - dl, rect.top - dt, rect.right - rect.left + dl + dr, rect.bottom - rect.top + dt + db, flags);
+                    }
                     SetCaptionControlGroupVisible(false);
                 }
                 else
