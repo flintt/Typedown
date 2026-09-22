@@ -245,7 +245,15 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           ls -la dist
-          cat > notes.md <<'MD'
+          # Release notes = the annotated tag's message (what changed) + the file table below.
+          ref=$(gh api "repos/${{ github.repository }}/git/refs/tags/${{ github.ref_name }}")
+          if [ "$(jq -r .object.type <<<"$ref")" = "tag" ]; then
+            gh api "repos/${{ github.repository }}/git/tags/$(jq -r .object.sha <<<"$ref")" -q .message | sed '1{/^Typedown /d}' > notes.md
+            printf '\n---\n\n' >> notes.md
+          else
+            : > notes.md
+          fi
+          cat >> notes.md <<'MD'
           Built by GitHub Actions from tag `${{ github.ref_name }}`.
 
           | File | What it is |
