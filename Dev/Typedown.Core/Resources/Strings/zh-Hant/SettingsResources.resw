@@ -765,4 +765,8 @@
     <value>啟動時側邊欄顯示「檔案」還是「大綱」</value>
     <comment>外观/启动时侧边栏显示的页面</comment>
   </data>
+  <data name="View.Image.CopyPath.Placeholder" xml:space="preserve">
+    <value>例如 ./${filename}.assets，可用變數：${filename} ${filedir} ${year} ${month} ${day}</value>
+    <comment>图片/路径变量说明</comment>
+  </data>
 </root>

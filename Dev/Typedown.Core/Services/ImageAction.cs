@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Typedown.Core.Controls;
 using Typedown.Core.Interfaces;
@@ -162,13 +163,34 @@ namespace Typedown.Core.Services
 
         public string GetDefaultDestFolder(InsertImageSource source)
         {
-            return source switch
+            var folder = source switch
             {
                 InsertImageSource.Clipboard => Settings.InsertClipboardImageAction == Enums.InsertImageAction.CopyToPath ? Settings.InsertClipboardImageCopyPath : Settings.DefaultImageBasePath,
                 InsertImageSource.Local => Settings.InsertLocalImageAction == Enums.InsertImageAction.CopyToPath ? Settings.InsertLocalImageCopyPath : Settings.DefaultImageBasePath,
                 InsertImageSource.Web => Settings.InsertWebImageAction == Enums.InsertImageAction.CopyToPath ? Settings.InsertWebImageCopyPath : Settings.DefaultImageBasePath,
                 _ => throw new NotImplementedException()
             };
+            return ExpandPathVariables(folder);
+        }
+
+        /// <summary>
+        /// Typora-style variables in image folders (upstream #8): ${filename} (document name without extension),
+        /// ${filedir} (document folder), ${year} ${month} ${day}. Relative results resolve against the document folder.
+        /// </summary>
+        public string ExpandPathVariables(string folder)
+        {
+            if (string.IsNullOrEmpty(folder) || !folder.Contains("${")) return folder;
+            var filePath = FileViewModel?.FilePath;
+            var now = DateTime.Now;
+            return Regex.Replace(folder, @"\$\{(\w+)\}", m => m.Groups[1].Value.ToLowerInvariant() switch
+            {
+                "filename" => string.IsNullOrEmpty(filePath) ? "untitled" : Path.GetFileNameWithoutExtension(filePath),
+                "filedir" or "dirname" => string.IsNullOrEmpty(filePath) ? "." : Path.GetDirectoryName(filePath),
+                "year" => now.ToString("yyyy"),
+                "month" => now.ToString("MM"),
+                "day" => now.ToString("dd"),
+                _ => m.Value,
+            });
         }
 
         public async Task<string> Upload(InsertImageSource source, string filePath)

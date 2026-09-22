@@ -47,7 +47,7 @@
                             <ColumnDefinition Width="1e10*" MaxWidth="300"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBox Grid.Column="1" Text="{x:Bind Settings.InsertClipboardImageCopyPath, Mode=TwoWay}"/>
+                        <TextBox Grid.Column="1" Text="{x:Bind Settings.InsertClipboardImageCopyPath, Mode=TwoWay}" PlaceholderText="{u:LocaleString Key=View.Image.CopyPath.Placeholder}" ToolTipService.ToolTip="{u:LocaleString Key=View.Image.CopyPath.Placeholder}"/>
                         <controls:PathPickerButton Grid.Column="2" Content="{u:LocaleString Key=Browse}" Mode="Folder" Path="{x:Bind Settings.InsertClipboardImageCopyPath, Mode=TwoWay}"/>
                     </Grid>
                 </controls:NormalSettingItem>
@@ -91,7 +91,7 @@
                             <ColumnDefinition Width="1e10*" MaxWidth="300"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBox Grid.Column="1" Text="{x:Bind Settings.InsertLocalImageCopyPath, Mode=TwoWay}"/>
+                        <TextBox Grid.Column="1" Text="{x:Bind Settings.InsertLocalImageCopyPath, Mode=TwoWay}" PlaceholderText="{u:LocaleString Key=View.Image.CopyPath.Placeholder}" ToolTipService.ToolTip="{u:LocaleString Key=View.Image.CopyPath.Placeholder}"/>
                         <controls:PathPickerButton Grid.Column="2" Content="{u:LocaleString Key=Browse}" Mode="Folder" Path="{x:Bind Settings.InsertLocalImageCopyPath, Mode=TwoWay}"/>
                     </Grid>
                 </controls:NormalSettingItem>
@@ -135,7 +135,7 @@
                             <ColumnDefinition Width="1e10*" MaxWidth="300"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBox Grid.Column="1" Text="{x:Bind Settings.InsertWebImageCopyPath, Mode=TwoWay}"/>
+                        <TextBox Grid.Column="1" Text="{x:Bind Settings.InsertWebImageCopyPath, Mode=TwoWay}" PlaceholderText="{u:LocaleString Key=View.Image.CopyPath.Placeholder}" ToolTipService.ToolTip="{u:LocaleString Key=View.Image.CopyPath.Placeholder}"/>
                         <controls:PathPickerButton Grid.Column="2" Content="{u:LocaleString Key=Browse}" Mode="Folder" Path="{x:Bind Settings.InsertWebImageCopyPath, Mode=TwoWay}"/>
                     </Grid>
                 </controls:NormalSettingItem>
