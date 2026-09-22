@@ -38,6 +38,11 @@ namespace Typedown.Core.ViewModels
 
         public bool IsPrintPreviewOpen { get; private set; }
 
+
+        /// <summary>Borderless full-screen window without the caption/menu bar (F11).</summary>
+
+        public bool IsFullScreen { get; set; }
+
         public object PrintPreviewContent { get; private set; }
 
         public string PrintPreviewTitle { get; private set; }

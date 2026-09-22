@@ -933,4 +933,8 @@
     <value>Zoom</value>
     <comment>字体缩放</comment>
   </data>
+  <data name="FullScreen" xml:space="preserve">
+    <value>Full Screen</value>
+    <comment>全屏</comment>
+  </data>
 </root>

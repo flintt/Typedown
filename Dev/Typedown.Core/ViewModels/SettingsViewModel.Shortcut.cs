@@ -213,5 +213,8 @@ namespace Typedown.Core.ViewModels
 
         [Locale("View", "StatusBar")]
         public ShortcutKey ShortcutStatusBar { get => GetSettingValue<ShortcutKey>(null); set => SetSettingValue(value); }
+
+        [Locale("View", "FullScreen")]
+        public ShortcutKey ShortcutFullScreen { get => GetSettingValue<ShortcutKey>(new(Mod.None, Key.F11)); set => SetSettingValue(value); }
     }
 }

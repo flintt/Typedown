@@ -16,4 +16,5 @@
     <ToggleMenuFlyoutItem x:Name="TypewriterModeItem" Text="{u:LocaleString Key=TypewriterMode}" IsChecked="{x:Bind Settings.Typewriter, Mode=TwoWay}"/>
     <MenuFlyoutSeparator/>
     <ToggleMenuFlyoutItem x:Name="StatusBarItem" Text="{u:LocaleString Key=StatusBar}" IsChecked="{x:Bind Settings.StatusBarOpen, Mode=TwoWay}"/>
+    <ToggleMenuFlyoutItem x:Name="FullScreenItem" Text="{u:LocaleString Key=FullScreen}" IsChecked="{x:Bind ViewModel.UIViewModel.IsFullScreen, Mode=TwoWay}"/>
 </local:MenuBarItemBase>

@@ -933,4 +933,8 @@
     <value>縮放</value>
     <comment>字体缩放</comment>
   </data>
+  <data name="FullScreen" xml:space="preserve">
+    <value>全螢幕</value>
+    <comment>全屏</comment>
+  </data>
 </root>

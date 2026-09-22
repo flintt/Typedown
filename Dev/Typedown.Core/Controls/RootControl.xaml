@@ -31,7 +31,7 @@
             <RowDefinition Height="Auto" MinHeight="4"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <local:Caption x:Name="Caption" x:Load="{x:Bind local:RootControl.GetCaptionIsLoad(Settings.AppCompactMode, Frame.SourcePageType), Mode=OneWay}"/>
+        <local:Caption x:Name="Caption" x:Load="{x:Bind local:RootControl.GetCaptionIsLoad(Settings.AppCompactMode, Frame.SourcePageType, ViewModel.UIViewModel.IsFullScreen), Mode=OneWay}"/>
         <local:GlobalFrame x:Name="Frame" Background="{ThemeResource ContentFrameBackgroundBrush}" Grid.Row="1"/>
         <Grid x:Name="PrintPreviewHost"
               Grid.Row="1"

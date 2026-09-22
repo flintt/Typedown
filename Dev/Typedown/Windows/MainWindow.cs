@@ -75,6 +75,7 @@ namespace Typedown.Windows
             disposables.Add(AppViewModel.FileViewModel.NewWindowCommand.OnExecute.Subscribe(path => Utilities.Common.OpenNewWindow(new string[] { path })));
             disposables.Add(AppViewModel.SettingsViewModel.WhenPropertyChanged(nameof(SettingsViewModel.UseMicaEffect)).Cast<bool>().StartWith(AppViewModel.SettingsViewModel.UseMicaEffect).Subscribe(EnableMicaEffect));
             disposables.Add(AppViewModel.SettingsViewModel.WhenPropertyChanged(nameof(SettingsViewModel.Topmost)).Cast<bool>().StartWith(AppViewModel.SettingsViewModel.Topmost).Subscribe(SetTopmost));
+            disposables.Add(AppViewModel.UIViewModel.WhenPropertyChanged(nameof(UIViewModel.IsFullScreen)).Cast<bool>().Subscribe(SetFullScreen));
         }
 
         private void SetTheme(AppTheme theme)
@@ -90,6 +91,45 @@ namespace Typedown.Windows
         private void SetTitle(string title)
         {
             Title = title;
+        }
+
+        private PInvoke.WINDOWPLACEMENT? placementBeforeFullScreen;
+        private int styleBeforeFullScreen;
+
+        // Borderless full screen (upstream #11): drop the caption/thick frame styles and cover the monitor;
+        // restore the saved style and placement on exit. The in-app caption/menu bar hides via RootControl.
+        private void SetFullScreen(bool enable)
+        {
+            try
+            {
+                var hwnd = Handle;
+                if (enable)
+                {
+                    if (placementBeforeFullScreen != null) return;
+                    PInvoke.GetWindowPlacement(hwnd, out var placement);
+                    placementBeforeFullScreen = placement;
+                    styleBeforeFullScreen = PInvoke.GetWindowLong(hwnd, PInvoke.WindowLongFlags.GWL_STYLE);
+                    var rect = PInvoke.GetWindowMonitorRect(hwnd);
+                    var style = styleBeforeFullScreen & ~(int)(PInvoke.WindowStyles.WS_CAPTION | PInvoke.WindowStyles.WS_THICKFRAME);
+                    PInvoke.SetWindowLong(hwnd, PInvoke.WindowLongFlags.GWL_STYLE, style);
+                    PInvoke.SetWindowPos(hwnd, IntPtr.Zero, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top,
+                        PInvoke.SetWindowPosFlags.SWP_NOZORDER | PInvoke.SetWindowPosFlags.SWP_NOOWNERZORDER | PInvoke.SetWindowPosFlags.SWP_FRAMECHANGED);
+                }
+                else
+                {
+                    if (placementBeforeFullScreen == null) return;
+                    var placement = placementBeforeFullScreen.Value;
+                    placementBeforeFullScreen = null;
+                    PInvoke.SetWindowLong(hwnd, PInvoke.WindowLongFlags.GWL_STYLE, styleBeforeFullScreen);
+                    PInvoke.SetWindowPlacement(hwnd, ref placement);
+                    PInvoke.SetWindowPos(hwnd, IntPtr.Zero, 0, 0, 0, 0,
+                        PInvoke.SetWindowPosFlags.SWP_NOMOVE | PInvoke.SetWindowPosFlags.SWP_NOSIZE | PInvoke.SetWindowPosFlags.SWP_NOZORDER | PInvoke.SetWindowPosFlags.SWP_NOOWNERZORDER | PInvoke.SetWindowPosFlags.SWP_FRAMECHANGED);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.WriteLocal("FullScreen", ex.ToString());
+            }
         }
 
         private void EnableMicaEffect(bool enable)
@@ -197,7 +237,7 @@ namespace Typedown.Windows
 
         private async void SaveWindowPlacementWithOffset(bool throttle = true)
         {
-            if (!isPlacementSaving && !isCloseable && !isClosing)
+            if (!isPlacementSaving && !isCloseable && !isClosing && placementBeforeFullScreen == null)
             {
                 isPlacementSaving = true;
                 try
