@@ -181,10 +181,12 @@ jobs:
         run: |
           $ver = "${{ steps.ver.outputs.version }}"
           $pub = "${{ steps.pub.outputs.dir }}"
-          New-Item -ItemType Directory -Force out | Out-Null
-          # portable zip
+          New-Item -ItemType Directory -Force out, out-installer | Out-Null
           $arch = "${{ steps.ver.outputs.arch }}"
-          Compress-Archive -Path "$pub\*" -DestinationPath "out\Typedown-portable-$arch-v$ver.zip" -CompressionLevel Optimal
+          # The portable zip is only produced for releases; day-to-day test artifacts stay small.
+          if ("${{ github.ref }}".StartsWith("refs/tags/")) {
+            Compress-Archive -Path "$pub\*" -DestinationPath "out\Typedown-portable-$arch-v$ver.zip" -CompressionLevel Optimal
+          }
           # installer
           New-Item -ItemType Directory -Force Tools/Installer/publish | Out-Null
           Copy-Item "$pub\*" Tools/Installer/publish -Recurse -Force
@@ -194,6 +196,7 @@ jobs:
           $signtool = Get-ChildItem "C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\signtool.exe"
           & $signtool sign /fd SHA256 /f "${{ steps.cert.outputs.pfx }}" /p "${{ steps.cert.outputs.password }}" $setup.FullName
           Copy-Item $setup.FullName out
+          Copy-Item $setup.FullName out-installer
 
       - name: Collect MSIX
         shell: pwsh
@@ -202,10 +205,20 @@ jobs:
           Copy-Item "${{ steps.cert.outputs.cer }}" out/Typedown-signing-certificate.cer
           Get-ChildItem out
 
+      # Small artifact for everyday testing: just the installer.
       - uses: actions/upload-artifact@v4
+        with:
+          name: Typedown-installer-${{ steps.ver.outputs.arch }}
+          path: out-installer/
+          compression-level: 0
+
+      # Full set (installer, MSIX, certificate, portable zip) only on release tags; feeds the release job.
+      - uses: actions/upload-artifact@v4
+        if: startsWith(github.ref, 'refs/tags/')
         with:
           name: Typedown-${{ steps.ver.outputs.arch }}
           path: out/
+          compression-level: 0
 
   release:
     name: Publish GitHub Release
@@ -215,7 +228,12 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
-          pattern: Typedown-*
+          pattern: Typedown-x64
+          merge-multiple: true
+          path: dist
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: Typedown-arm64
           merge-multiple: true
           path: dist
 
