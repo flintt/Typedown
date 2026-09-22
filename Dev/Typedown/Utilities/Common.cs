@@ -69,7 +69,7 @@ namespace Typedown.Utilities
             return true;
         }
 
-        public static IntPtr OpenNewWindow(string[] args)
+        public static IntPtr OpenNewWindow(string[] args, bool forceNewWindow = false)
         {
             var filePath = CommandLine.GetOpenFilePath(args);
             if (!string.IsNullOrEmpty(filePath) && FileViewModel.TryGetOpenedWindow(filePath, out var windowHWnd))
@@ -88,7 +88,7 @@ namespace Typedown.Utilities
             // A file opened from the shell goes into the last active window as a new tab (upstream #73) unless the
             // user prefers separate windows; a plain launch without a file always creates a window.
             var target = MainWindow.LastActive ?? XamlWindow.AllWindows.OfType<MainWindow>().FirstOrDefault();
-            if (!string.IsNullOrEmpty(filePath) && target != null && target.AppViewModel != null && target.AppViewModel.SettingsViewModel.OpenFilesInNewTab)
+            if (!forceNewWindow && !string.IsNullOrEmpty(filePath) && target != null && target.AppViewModel != null && target.AppViewModel.SettingsViewModel.OpenFilesInNewTab)
             {
                 if (PInvoke.IsIconic(target.Handle))
                     PInvoke.ShowWindow(target.Handle, PInvoke.ShowWindowCommand.Restore);
