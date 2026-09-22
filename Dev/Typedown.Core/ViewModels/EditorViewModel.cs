@@ -37,15 +37,17 @@ namespace Typedown.Core.ViewModels
         public TocTreeItem Toc { get; } = new();
         public ContentHistory History { get; set; } = new();
 
-        public string Markdown { get; set; } = "";
+        // A fresh editor counts as a pristine untitled document (see TabsViewModel.IsActiveTabBlank), otherwise the
+        // first file opened at startup would land in a second tab next to an empty one.
+        public string Markdown { get; set; } = Common.DefaultMarkdwn;
         public bool Selected { get; set; }
         public string SelectionText { get; set; }
         public bool TextSelected { get; set; }
         public bool Saved { get; set; } = true;
         public bool AutoSavedSucc { get; set; } = true;
         public bool DisplaySaved { get; set; } = true;
-        public ulong FileHash { get; set; }
-        public ulong CurrentHash { get; set; }
+        public ulong FileHash { get; set; } = Common.SimpleHash(Common.DefaultMarkdwn);
+        public ulong CurrentHash { get; set; } = Common.SimpleHash(Common.DefaultMarkdwn);
 
         /// <summary>
         /// Bumped on every content load pushed to the editor and echoed back on its reports; a report carrying an

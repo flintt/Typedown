@@ -9,6 +9,7 @@ using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using Typedown.Core.Interfaces;
 using Typedown.Core.Models;
+using Typedown.Core.Services;
 using Typedown.Core.Utilities;
 
 namespace Typedown.Core.ViewModels
@@ -167,10 +168,13 @@ namespace Typedown.Core.ViewModels
             editor.CurrentHash = tab.CurrentHash;
             editor.Saved = tab.Saved;
             editor.AutoSavedSucc = tab.AutoSavedSucc;
-            editor.FileLoaded = true; // the FileLoaded handshake must not reset the restored history/hash
+            // A tab that was shown before keeps its history/hash (the handshake must not reset them); one loaded
+            // in the background (session restore) has never been through the editor and still needs it.
+            editor.FileLoaded = tab.FileLoaded;
             editor.CurrentCursor = tab.Cursor;
             tab.IsDirty = !tab.Saved;
-            editor.PostLoadFile(editor.Markdown, tab.Cursor);
+            var cursor = tab.Cursor ?? (ServiceProvider.GetService<SettingsViewModel>().RememberCursorPosition ? CursorMemory.Get(tab.FilePath) : null);
+            editor.PostLoadFile(editor.Markdown, cursor);
         }
 
         public async Task<bool> CloseTab(DocumentTab tab)
@@ -219,6 +223,16 @@ namespace Typedown.Core.ViewModels
         }
 
         public bool IsOpenInAnyTab(string path) => FindByPath(path) != null;
+
+        /// <summary>Writes the open documents (untitled ones excluded) and the active one for the next start.</summary>
+        public void SaveSession()
+        {
+            var files = Tabs.Select(t => t == ActiveTab ? FileViewModel.FilePath : t.FilePath).ToList();
+            var activeIndex = Tabs.IndexOf(ActiveTab);
+            var activePath = activeIndex >= 0 ? files[activeIndex] : null;
+            var kept = files.Where(f => !string.IsNullOrEmpty(f)).ToList();
+            SessionMemory.Save(kept, Math.Max(0, kept.IndexOf(activePath)));
+        }
 
         public void Dispose()
         {

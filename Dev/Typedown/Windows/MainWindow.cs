@@ -263,7 +263,10 @@ namespace Typedown.Windows
                         isClosing = true;
                         await AppViewModel.FileViewModel.AutoSaveFile();
                         if (await AppViewModel.TabsViewModel.AskToSaveAll())
+                        {
+                            AppViewModel.TabsViewModel.SaveSession();
                             ForceClose();
+                        }
                     }
                 }
             }

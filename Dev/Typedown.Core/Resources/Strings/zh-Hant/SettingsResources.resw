@@ -835,4 +835,7 @@
   <data name="HedgeDocShare.TestButton" xml:space="preserve">
     <value>測試</value>
   </data>
+  <data name="General.StartupAction.FileStartupAction.RestoreSession" xml:space="preserve">
+    <value>恢復上次開啟的所有文件</value>
+  </data>
 </root>

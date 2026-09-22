@@ -859,4 +859,7 @@
   <data name="HedgeDocShare.TestButton" xml:space="preserve">
     <value>Test</value>
   </data>
+  <data name="General.StartupAction.FileStartupAction.RestoreSession" xml:space="preserve">
+    <value>Restore all documents of the last session</value>
+  </data>
 </root>

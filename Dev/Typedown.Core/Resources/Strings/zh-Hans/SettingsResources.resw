@@ -859,4 +859,7 @@
   <data name="HedgeDocShare.TestButton" xml:space="preserve">
     <value>测试</value>
   </data>
+  <data name="General.StartupAction.FileStartupAction.RestoreSession" xml:space="preserve">
+    <value>恢复上次打开的所有文档</value>
+  </data>
 </root>

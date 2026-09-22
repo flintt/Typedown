@@ -417,6 +417,7 @@
     <Compile Include="Resources.cs" />
     <Compile Include="Services\AccessHistory.cs" />
     <Compile Include="Services\CursorMemory.cs" />
+    <Compile Include="Services\SessionMemory.cs" />
     <Compile Include="Services\AppDbContext.cs" />
     <Compile Include="Services\AutoBackup.cs" />
     <Compile Include="Services\EventCenter.cs" />

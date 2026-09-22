@@ -583,6 +583,39 @@ namespace Typedown.Core.ViewModels
             return false;
         }
 
+        /// <summary>
+        /// Reopens the documents of the last session as tabs (only for the first window, before the editor is up).
+        /// Each file is loaded into the editor state in turn (no message: the editor gets the active document from
+        /// GetSettings); the previously active tab is switched to at the end. Returns false when nothing was restored.
+        /// </summary>
+        private async Task<bool> RestoreSession()
+        {
+            var session = SessionMemory.Load();
+            if (session == null || TabsViewModel == null) return false;
+            var opened = 0;
+            foreach (var file in session.Files)
+            {
+                if (TryGetOpenedWindow(file, out _)) continue;
+                try
+                {
+                    if (opened > 0) TabsViewModel.BeginNewTab();
+                    if (await LoadFile(file, true, false)) opened++;
+                    else if (opened > 0) TabsViewModel.AbortNewTab(TabsViewModel.ActiveTab);
+                }
+                catch (Exception ex)
+                {
+                    Log.Debug($"RestoreSession: {file}: {ex.Message}");
+                    if (opened > 0) TabsViewModel.AbortNewTab(TabsViewModel.ActiveTab);
+                }
+            }
+            if (opened == 0) return false;
+            var active = TabsViewModel.FindByPath(session.ActiveIndex < session.Files.Count ? session.Files[session.ActiveIndex] : null);
+            if (active != null && active != TabsViewModel.ActiveTab)
+                await TabsViewModel.SwitchTo(active);
+            Log.Debug($"RestoreSession: {opened} tab(s), active={TabsViewModel.ActiveTab?.FilePath}");
+            return true;
+        }
+
         public async Task LoadStartUpMarkdown()
         {
             var path = CommandLine.GetOpenFilePath(AppViewModel.CommandLineArgs);
@@ -605,6 +638,10 @@ namespace Typedown.Core.ViewModels
                         await AccessHistory.EnsureInitialized();
                         if (AccessHistory.FileRecentlyOpened.FirstOrDefault() is string lastFile && !TryGetOpenedWindow(lastFile, out _) && File.Exists(lastFile))
                             await LoadFile(lastFile, true);
+                        break;
+                    case Enums.FileStartupAction.RestoreSession:
+                        if (!await RestoreSession())
+                            await NewFileFun(false);
                         break;
                     default:
                         await NewFileFun(false);
