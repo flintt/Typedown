@@ -4,7 +4,10 @@ on:
   push:
     branches: [ main, integrate-upstream-prs ]
     tags: [ 'v*' ]
+    # Docs and issue templates never need a build.
+    paths-ignore: [ '**.md', '.github/ISSUE_TEMPLATE/**' ]
   pull_request:
+    paths-ignore: [ '**.md', '.github/ISSUE_TEMPLATE/**' ]
   workflow_dispatch:
 
 permissions:
