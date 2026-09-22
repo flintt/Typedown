@@ -84,6 +84,7 @@ namespace Typedown.Windows
             {
                 AppTheme.Light => ElementTheme.Light,
                 AppTheme.Dark => ElementTheme.Dark,
+                AppTheme.Black => ElementTheme.Dark,
                 _ => ElementTheme.Default,
             };
         }

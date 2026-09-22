@@ -777,4 +777,8 @@
     <value>Show the block type (P, H1, ...) next to the current paragraph</value>
     <comment>编辑器/在当前段落旁显示块类型</comment>
   </data>
+  <data name="View.AppTheme.Black" xml:space="preserve">
+    <value>Black (OLED)</value>
+    <comment>外观/纯黑</comment>
+  </data>
 </root>

@@ -753,4 +753,8 @@
     <value>在目前段落左側顯示區塊類型（P、H1 …）</value>
     <comment>编辑器/在当前段落旁显示块类型</comment>
   </data>
+  <data name="View.AppTheme.Black" xml:space="preserve">
+    <value>純黑</value>
+    <comment>外观/纯黑</comment>
+  </data>
 </root>

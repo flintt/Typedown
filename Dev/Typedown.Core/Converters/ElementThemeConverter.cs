@@ -15,6 +15,7 @@ namespace Typedown.Core.Converters
                 {
                     AppTheme.Light => ElementTheme.Light,
                     AppTheme.Dark => ElementTheme.Dark,
+                    AppTheme.Black => ElementTheme.Dark,
                     _ => ElementTheme.Default,
                 };
             }
