@@ -54,8 +54,10 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             }));
             // A real (non-preview) open of a file outside the current root moves the tree there; previews and tab
             // switches never move it, so browsing the tree with single clicks cannot lose the folder.
-            FileViewModel.FileOpened += OnFileOpened;
-            disposables.Add(System.Reactive.Disposables.Disposable.Create(() => FileViewModel.FileOpened -= OnFileOpened));
+            // Capture the instance: by the time Unloaded runs the DataContext (and so FileViewModel) is already null.
+            var fileViewModel = FileViewModel;
+            fileViewModel.FileOpened += OnFileOpened;
+            disposables.Add(System.Reactive.Disposables.Disposable.Create(() => fileViewModel.FileOpened -= OnFileOpened));
             UpdateWorkFolder();
             Bindings.Update();
         }
@@ -87,7 +89,7 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
 
         private void OnFileOpened(string path, bool preview)
         {
-            if (preview || FileViewModel.WorkFolderIsExplicit || string.IsNullOrEmpty(path)) return;
+            if (preview || FileViewModel == null || FileViewModel.WorkFolderIsExplicit || string.IsNullOrEmpty(path)) return;
             if (!string.IsNullOrEmpty(stickyRoot) && IsInsideFolder(path, stickyRoot)) return;
             stickyRoot = Path.GetDirectoryName(path);
             UpdateWorkFolder();
