@@ -45,6 +45,7 @@ jobs:
           name: editor-statics
           path: Dev/Typedown/Resources/Statics/
           if-no-files-found: error
+          retention-days: 1
 
   app:
     name: Build app (${{ matrix.platform }})
@@ -211,6 +212,7 @@ jobs:
           name: Typedown-installer-${{ steps.ver.outputs.arch }}
           path: out-installer/
           compression-level: 0
+          retention-days: 3
 
       # Full set (installer, MSIX, certificate, portable zip) only on release tags; feeds the release job.
       - uses: actions/upload-artifact@v4
@@ -219,6 +221,7 @@ jobs:
           name: Typedown-${{ steps.ver.outputs.arch }}
           path: out/
           compression-level: 0
+          retention-days: 7
 
   release:
     name: Publish GitHub Release
