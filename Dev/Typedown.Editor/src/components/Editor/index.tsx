@@ -80,19 +80,25 @@ const Editor: React.FC = () => {
     }, [])
 
     // Host -> editor: replace the content without echoing it back as a MarkdownChange.
-    const setContentFromHost = useCallback((markdown: string, cursor?: any) => {
+    // A remembered scroll offset (reading mode has no caret to remember) takes precedence over scrolling to the caret.
+    const scrollFromHostRef = useRef(false)
+
+    const setContentFromHost = useCallback((markdown: string, cursor?: any, scrollTop?: number | null) => {
         markdownRef.current = markdown
         cursorRef.current = cursor
+        scrollFromHostRef.current = typeof scrollTop === 'number'
+        muyaScrollTopRef.current = typeof scrollTop === 'number' ? scrollTop : 0
+        codeMirrorScrollRef.current = typeof scrollTop === 'number' ? scrollTop : 0
         setContentVersion(v => v + 1)
     }, [])
 
     useEffect(() => {
-        remote.getSettings().then(({ markdown, basePath, cursor, loadId, ...opt }: any) => {
+        remote.getSettings().then(({ markdown, basePath, cursor, scrollTop, loadId, ...opt }: any) => {
             window.basePath = basePath
             loadIdRef.current = loadId
             setOptions(opt)
             OnFileLoaded();
-            setContentFromHost(markdown, cursor ?? undefined)
+            setContentFromHost(markdown, cursor ?? undefined, scrollTop)
         })
     }, [OnFileLoaded, setContentFromHost]);
 
@@ -118,11 +124,11 @@ const Editor: React.FC = () => {
         setContentVersion(v => v + 1)
     }), [options, onMarkdownChange]);
 
-    useEffect(() => transport.addListener<{ text: string, basePath: string, cursor?: any, loadId?: number }>('LoadFile', ({ text, basePath, cursor, loadId }) => {
+    useEffect(() => transport.addListener<{ text: string, basePath: string, cursor?: any, scrollTop?: number | null, loadId?: number }>('LoadFile', ({ text, basePath, cursor, scrollTop, loadId }) => {
         window.basePath = basePath
         loadIdRef.current = loadId
         OnFileLoaded();
-        setContentFromHost(text, cursor ?? undefined)
+        setContentFromHost(text, cursor ?? undefined, scrollTop)
     }), [OnFileLoaded, setContentFromHost]);
 
     useEffect(() => transport.addListener<{ text: string, cursor: string, basePath: string }>('SetMarkdown', ({ text, cursor, basePath }) => {
@@ -157,6 +163,7 @@ const Editor: React.FC = () => {
                 searchOpen={searchOpen}
                 searchArg={searchArg}
                 scrollTopRef={codeMirrorScrollRef}
+                scrollFromHostRef={scrollFromHostRef}
                 onMarkdownChange={onMarkdownChange}
                 onContentApplied={onContentApplied}
                 onCursorChange={onCursorChange}
@@ -173,6 +180,7 @@ const Editor: React.FC = () => {
                 searchOpen={searchOpen}
                 searchArg={searchArg}
                 scrollTopRef={muyaScrollTopRef}
+                scrollFromHostRef={scrollFromHostRef}
                 onMarkdownChange={onMarkdownChange}
                 onContentApplied={onContentApplied}
                 onCursorChange={onCursorChange}

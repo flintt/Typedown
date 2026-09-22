@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,6 +16,8 @@ namespace Typedown.Core.Services
         private class Entry
         {
             public CursorState Cursor { get; set; }
+            /// <summary>Vertical scroll offset (px); the only position reading mode has, since it never moves a caret.</summary>
+            public double? ScrollY { get; set; }
             public DateTime Time { get; set; }
         }
 
@@ -57,7 +59,32 @@ namespace Typedown.Core.Services
             lock (sync)
             {
                 EnsureLoaded();
-                entries[Normalize(path)] = new Entry { Cursor = cursor, Time = DateTime.UtcNow };
+                var key = Normalize(path);
+                var scroll = entries.TryGetValue(key, out var existing) ? existing.ScrollY : null;
+                entries[key] = new Entry { Cursor = cursor, ScrollY = scroll, Time = DateTime.UtcNow };
+                dirty = true;
+            }
+        }
+
+        public static double? GetScroll(string path)
+        {
+            if (string.IsNullOrEmpty(path)) return null;
+            lock (sync)
+            {
+                EnsureLoaded();
+                return entries.TryGetValue(Normalize(path), out var entry) ? entry.ScrollY : null;
+            }
+        }
+
+        public static void SetScroll(string path, double scrollY)
+        {
+            if (string.IsNullOrEmpty(path)) return;
+            lock (sync)
+            {
+                EnsureLoaded();
+                var key = Normalize(path);
+                var cursor = entries.TryGetValue(key, out var existing) ? existing.Cursor : null;
+                entries[key] = new Entry { Cursor = cursor, ScrollY = scrollY, Time = DateTime.UtcNow };
                 dirty = true;
             }
         }

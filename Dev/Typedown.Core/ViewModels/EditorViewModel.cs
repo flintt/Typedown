@@ -81,6 +81,7 @@ namespace Typedown.Core.ViewModels
             EventCenter.GetObservable<EditorEventArgs>("MarkdownChange").Subscribe(x => OnMarkdownChange(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("FileLoaded").Subscribe(x => OnFileLoaded(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("CursorChange").Subscribe(x => OnCursorChange(x.Args));
+            EventCenter.GetObservable<EditorEventArgs>("OnScroll").Subscribe(x => OnScroll(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("SelectionChange").Subscribe(x => OnSelectionChange(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("CodeMirrorSelectionChange").Subscribe(x => OnCodeMirrorSelectionChange(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("StateChange").Subscribe(x => OnStateChange(x.Args));
@@ -132,6 +133,7 @@ namespace Typedown.Core.ViewModels
                 Markdown,
                 BasePath = FileViewModel.ImageBasePath,
                 Cursor = Settings.RememberCursorPosition ? CursorMemory.Get(FileViewModel.FilePath) : null,
+                ScrollTop = Settings.RememberCursorPosition ? CursorMemory.GetScroll(FileViewModel.FilePath) : null,
                 LoadId = ++LoadId,
             };
         }
@@ -139,7 +141,16 @@ namespace Typedown.Core.ViewModels
         /// <summary>Pushes a whole document into the editor (see <see cref="LoadId"/>).</summary>
         public void PostLoadFile(string text, object cursor = null)
         {
-            MarkdownEditor?.PostMessage("LoadFile", new { text, basePath = FileViewModel.ImageBasePath, cursor, loadId = ++LoadId });
+            var scrollTop = Settings.RememberCursorPosition ? CursorMemory.GetScroll(FileViewModel.FilePath) : null;
+            MarkdownEditor?.PostMessage("LoadFile", new { text, basePath = FileViewModel.ImageBasePath, cursor, scrollTop, loadId = ++LoadId });
+        }
+
+        // Scroll offset per file: reading mode has no caret, so this is what brings it back to the same place.
+        private void OnScroll(JToken arg)
+        {
+            if (!FileLoaded || string.IsNullOrEmpty(FileViewModel.FilePath)) return;
+            var scrollY = arg["scrollY"]?.Value<double?>();
+            if (scrollY != null) CursorMemory.SetScroll(FileViewModel.FilePath, scrollY.Value);
         }
 
         private bool IsStaleReport(JToken arg)

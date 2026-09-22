@@ -22,6 +22,8 @@ interface IMuyaEditor {
     searchOpen: number
     searchArg: { value: string, opt: any } | undefined
     scrollTopRef: React.MutableRefObject<number>
+    /** True when scrollTopRef holds a remembered offset from the host for this load: restore it instead of chasing the caret. */
+    scrollFromHostRef?: React.MutableRefObject<boolean>
     onMarkdownChange: (markdown: string) => void
     /** Fired once host content has been pushed into the editor (see the FileLoaded handshake in Editor). */
     onContentApplied?: () => void
@@ -362,11 +364,13 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             markdownRef.current = props.markdown
             editor.setMarkdown(props.markdown, cursorRef.current)
             const scrollTop = props.scrollTopRef.current;
+            const keepScroll = !!props.scrollFromHostRef?.current
             window.scrollTo(window.scrollX, scrollTop)
-            scrollToCursorIfInvisible()
+            if (!keepScroll) scrollToCursorIfInvisible()
             setTimeout(() => {
                 window.scrollTo(window.scrollX, scrollTop)
-                scrollToCursorIfInvisible()
+                if (!keepScroll) scrollToCursorIfInvisible()
+                if (props.scrollFromHostRef) props.scrollFromHostRef.current = false
                 search(searchArgRef.current)
             }, 100);
         }
