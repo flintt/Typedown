@@ -470,6 +470,22 @@ const paragraphCtrl = ContentState => {
     const { text, type } = block
     let needDispatchChange = true
 
+    // Nested blockquotes (upstream #43): "increase" always wraps in one more level, "decrease" removes the
+    // innermost level; both map onto the existing quote handler.
+    if (paraType === 'blockquote-increase' || paraType === 'blockquote-decrease') {
+      const increase = paraType === 'blockquote-increase'
+      if (!increase) {
+        const { affiliation } = this.selectionChange(this.cursor)
+        if (!affiliation.slice(0, 2).some(b => /blockquote/.test(b.type))) return
+      } else if (!this.isAllowedTransformation(block, 'blockquote', start.key !== end.key)) {
+        return
+      }
+      this.handleQuoteMenu(increase)
+      this.partialRender()
+      this.muya.dispatchChange()
+      return
+    }
+
     // Only allow valid transformations.
     if (!this.isAllowedTransformation(block, paraType, start.key !== end.key)) {
       return

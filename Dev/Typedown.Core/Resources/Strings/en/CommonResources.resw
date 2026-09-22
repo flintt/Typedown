@@ -973,4 +973,12 @@
     <value>Collapse all</value>
     <comment>大纲/全部折叠</comment>
   </data>
+  <data name="QuoteIncrease" xml:space="preserve">
+    <value>Increase Quote Level</value>
+    <comment>段落/增加引用层级</comment>
+  </data>
+  <data name="QuoteDecrease" xml:space="preserve">
+    <value>Decrease Quote Level</value>
+    <comment>段落/减少引用层级</comment>
+  </data>
 </root>

@@ -124,6 +124,12 @@ namespace Typedown.Core.ViewModels
         [Locale("Paragraph", "Quote")]
         public ShortcutKey ShortcutQuote { get => GetSettingValue<ShortcutKey>(new(Mod.Control | Mod.Shift, Key.Q)); set => SetSettingValue(value); }
 
+        [Locale("Paragraph", "QuoteIncrease")]
+        public ShortcutKey ShortcutQuoteIncrease { get => GetSettingValue<ShortcutKey>(null); set => SetSettingValue(value); }
+
+        [Locale("Paragraph", "QuoteDecrease")]
+        public ShortcutKey ShortcutQuoteDecrease { get => GetSettingValue<ShortcutKey>(null); set => SetSettingValue(value); }
+
         [Locale("Paragraph", "OrderedList")]
         public ShortcutKey ShortcutOrderedList { get => GetSettingValue<ShortcutKey>(new(Mod.Control | Mod.Shift, (Key)219)); set => SetSettingValue(value); }
 

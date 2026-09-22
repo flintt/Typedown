@@ -30,6 +30,8 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             RegisterEditorShortcut(Settings.ShortcutCodeFences, CodeFencesItem);
             RegisterEditorShortcut(Settings.ShortcutMathBlock, MathBlockItem);
             RegisterEditorShortcut(Settings.ShortcutQuote, QuoteItem);
+            RegisterEditorShortcut(Settings.ShortcutQuoteIncrease, QuoteIncreaseItem);
+            RegisterEditorShortcut(Settings.ShortcutQuoteDecrease, QuoteDecreaseItem);
             RegisterEditorShortcut(Settings.ShortcutOrderedList, OrderedListItem);
             RegisterEditorShortcut(Settings.ShortcutUnorderedList, UnorderedListItem);
             RegisterEditorShortcut(Settings.ShortcutTaskList, TaskListItem);
