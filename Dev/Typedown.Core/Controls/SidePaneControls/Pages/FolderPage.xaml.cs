@@ -400,6 +400,11 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             }
         }
 
+        // Single click = open in the current tab, double click = open in a new tab. The single-click action is
+        // deferred by the system double-click interval so a double click can cancel it (otherwise the first click
+        // has already replaced the current document and the double click has nothing left to do).
+        private System.Threading.CancellationTokenSource pendingSingleClickOpen;
+
         private async void OnTreeViewItemPointerReleased(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
         {
             try
@@ -407,11 +412,21 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
                 var kind = e.GetCurrentPoint(sender as UIElement).Properties.PointerUpdateKind;
                 if (kind == Windows.UI.Input.PointerUpdateKind.LeftButtonReleased &&
                     (sender as muxc.TreeViewItem).DataContext is ExplorerItem item &&
-                    item.Type == ExplorerItem.ExplorerItemType.File)
+                    item.Type == ExplorerItem.ExplorerItemType.File &&
+                    item.FullPath != ViewModel.FileViewModel.FilePath)
                 {
-                    // Single click previews in the current tab; double click (below) keeps the tab.
-                    if (item.FullPath != ViewModel.FileViewModel.FilePath)
-                        await ViewModel.FileViewModel.OpenFile(item.FullPath, preview: true);
+                    pendingSingleClickOpen?.Cancel();
+                    var cts = pendingSingleClickOpen = new System.Threading.CancellationTokenSource();
+                    try
+                    {
+                        await Task.Delay((int)Math.Min(Math.Max(PInvoke.GetDoubleClickTime(), 150), 600), cts.Token);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        return;
+                    }
+                    if (cts.IsCancellationRequested || disposables.IsDisposed) return;
+                    await ViewModel.FileViewModel.OpenFile(item.FullPath, preview: true);
                 }
                 UpdateSelectedItem(WorkFolderExplorerItem);
             }
@@ -428,7 +443,9 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
                 if ((sender as muxc.TreeViewItem)?.DataContext is ExplorerItem item && item.Type == ExplorerItem.ExplorerItemType.File)
                 {
                     e.Handled = true;
+                    pendingSingleClickOpen?.Cancel();
                     await ViewModel.FileViewModel.OpenFile(item.FullPath, preview: false);
+                    UpdateSelectedItem(WorkFolderExplorerItem);
                 }
             }
             catch

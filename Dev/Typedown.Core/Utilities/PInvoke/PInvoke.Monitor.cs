@@ -18,6 +18,10 @@ namespace Typedown.Core.Utilities
         [DllImport("user32.dll", ExactSpelling = true)]
         public static extern nint MonitorFromWindow(nint hwnd, uint dwFlags);
 
+        /// <summary>System double-click interval in milliseconds.</summary>
+        [DllImport("user32.dll", ExactSpelling = true)]
+        public static extern uint GetDoubleClickTime();
+
         [DllImport("user32.dll", ExactSpelling = true, SetLastError = true)]
         public static extern bool GetMonitorInfoW(nint hMonitor, ref MONITORINFO lpmi);
 
