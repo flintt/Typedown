@@ -15,6 +15,10 @@
 		     code (x:Bind, Fody, EF Core, WinRT projections) and the app crashes at runtime, so keep it off. -->
 		<PublishTrimmed>false</PublishTrimmed>
 		<Version>1.2.21</Version>
+		<!-- Shown as "File description" in Explorer and indexed by Start menu search (upstream #28) -->
+		<AssemblyTitle>Typedown - Lightweight Markdown Editor</AssemblyTitle>
+		<Product>Typedown Markdown Editor</Product>
+		<Description>Typedown - Lightweight Markdown Editor</Description>
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 		<Configurations>Debug;Release;Debug_Local</Configurations>
 	</PropertyGroup>
