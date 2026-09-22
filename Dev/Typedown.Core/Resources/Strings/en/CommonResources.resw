@@ -965,4 +965,12 @@
     <value>{0} matching file(s) of {1} searched</value>
     <comment>搜索/结果统计</comment>
   </data>
+  <data name="Toc.ExpandAll" xml:space="preserve">
+    <value>Expand all</value>
+    <comment>大纲/全部展开</comment>
+  </data>
+  <data name="Toc.CollapseAll" xml:space="preserve">
+    <value>Collapse all</value>
+    <comment>大纲/全部折叠</comment>
+  </data>
 </root>

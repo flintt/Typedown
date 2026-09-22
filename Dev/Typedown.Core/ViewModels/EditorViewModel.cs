@@ -198,6 +198,8 @@ namespace Typedown.Core.ViewModels
                 });
             }
             Toc.UpdateChildren(ContentState.Toc);
+            if (Settings.TocAutoExpand)
+                Toc.ExpandToSelected();
         }
 
         public void OnSearch()

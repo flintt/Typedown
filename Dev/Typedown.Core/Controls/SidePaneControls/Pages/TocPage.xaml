@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="using:Typedown.Core.Models" 
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    xmlns:u="using:Typedown.Core.Utilities"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
@@ -22,8 +23,21 @@
         </DataTemplate>
     </Page.Resources>
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="4,2" Spacing="2">
+            <Button Width="32" Height="28" Style="{ThemeResource EllipsisIconButtonStyle}" Click="OnExpandAllClick" ToolTipService.ToolTip="{u:LocaleString Key=Toc.ExpandAll}">
+                <FontIcon FontSize="12" Glyph="&#xe70d;"/>
+            </Button>
+            <Button Width="32" Height="28" Style="{ThemeResource EllipsisIconButtonStyle}" Click="OnCollapseAllClick" ToolTipService.ToolTip="{u:LocaleString Key=Toc.CollapseAll}">
+                <FontIcon FontSize="12" Glyph="&#xe70e;"/>
+            </Button>
+        </StackPanel>
         <muxc:TreeView 
             x:Name="TreeView"
+            Grid.Row="1"
             ItemsSource="{x:Bind Editor.Toc.Children, Mode=OneWay}" 
             ItemTemplate="{StaticResource TocItemTemplate}"
             ItemInvoked="OnItemInvoked">

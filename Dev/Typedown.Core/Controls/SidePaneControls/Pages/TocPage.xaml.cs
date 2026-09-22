@@ -24,6 +24,10 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
                 Editor?.JumpBySlug(item.TocItem.Slug);
         }
 
+        private void OnExpandAllClick(object sender, RoutedEventArgs e) => Editor?.Toc?.SetExpandedRecursive(true);
+
+        private void OnCollapseAllClick(object sender, RoutedEventArgs e) => Editor?.Toc?.SetExpandedRecursive(false);
+
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
             Bindings?.StopTracking();

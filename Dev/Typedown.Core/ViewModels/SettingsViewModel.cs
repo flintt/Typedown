@@ -44,6 +44,8 @@ namespace Typedown.Core.ViewModels
         public bool ShowParagraphMarker { get => GetSettingValue(true); set => SetSettingValue(value); }
         /// <summary>Reading mode: the editor rejects edits (upstream #38).</summary>
         public bool ReadOnly { get => GetSettingValue(false); set => SetSettingValue(value); }
+        /// <summary>Outline: expand collapsed sections automatically to reveal the current heading (upstream #35).</summary>
+        public bool TocAutoExpand { get => GetSettingValue(true); set => SetSettingValue(value); }
         public bool AutoPairMarkdownSyntax { get => GetSettingValue(true); set => SetSettingValue(value); }
         public string EditorAreaWidth { get => GetSettingValue("1200px"); set => SetSettingValue(value); }
         public string FontFamily { get => GetSettingValue(""); set => SetSettingValue(value); }
