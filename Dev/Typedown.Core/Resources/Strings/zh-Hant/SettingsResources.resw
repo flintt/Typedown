@@ -797,4 +797,12 @@
     <value>只開啟一個文件時也顯示標籤列</value>
     <comment>外观/只有一个文档时也显示标签栏</comment>
   </data>
+  <data name="General.OpenFilesInNewTab.Title" xml:space="preserve">
+    <value>在標籤頁中開啟檔案</value>
+    <comment>常规/在标签页中打开文件</comment>
+  </data>
+  <data name="General.OpenFilesInNewTab.Description" xml:space="preserve">
+    <value>從檔案總管開啟的檔案進入目前視窗的新標籤頁；關閉則每次開啟新視窗</value>
+    <comment>常规/从资源管理器打开的文件进入当前窗口的标签页</comment>
+  </data>
 </root>

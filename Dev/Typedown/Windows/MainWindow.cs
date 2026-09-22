@@ -66,6 +66,7 @@ namespace Typedown.Windows
             Closed += OnClosed;
             InitializeBinding();
             checkActiveTimer = new(CheckActiveTimerCallback, null, TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(1));
+            LastActive ??= this;
         }
 
         public void InitializeBinding()
@@ -161,10 +162,14 @@ namespace Typedown.Windows
                 SaveWindowPlacementWithOffset();
         }
 
+        /// <summary>The window that was most recently active; files opened from the shell land here as tabs.</summary>
+        public static MainWindow LastActive { get; private set; }
+
         private void OnIsActiveChanged(object sender, IsActiveChangedEventArgs e)
         {
             WindowService?.RaiseWindowIsActivedChanged(Handle);
             KeyboardAccelerator.IsEnable = e.NewIsActive;
+            if (e.NewIsActive) LastActive = this;
         }
 
         private void OnLocationChanged(object sender, LocationChangedEventArgs e)

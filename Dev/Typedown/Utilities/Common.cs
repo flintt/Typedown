@@ -72,21 +72,33 @@ namespace Typedown.Utilities
         public static IntPtr OpenNewWindow(string[] args)
         {
             var filePath = CommandLine.GetOpenFilePath(args);
-            if (string.IsNullOrEmpty(filePath) || !FileViewModel.TryGetOpenedWindow(filePath, out var windowHWnd))
+            if (!string.IsNullOrEmpty(filePath) && FileViewModel.TryGetOpenedWindow(filePath, out var windowHWnd))
             {
-                var newWindow = new MainWindow();
-                newWindow.Show(ShowWindowCommand.SW_HIDE);
-                newWindow.AppViewModel.CommandLineArgs = args;
-                return newWindow.Handle;
-            }
-            else
-            {
-                var appWindows = XamlWindow.AllWindows;
-                var window = appWindows.Where(x => x.Handle == windowHWnd).FirstOrDefault();
-                if (window != null && PInvoke.IsIconic(window.Handle))
-                    PInvoke.ShowWindow(window.Handle, PInvoke.ShowWindowCommand.Restore);
+                // Already open somewhere: bring that window (and tab) to the front.
+                var window = XamlWindow.AllWindows.OfType<MainWindow>().FirstOrDefault(x => x.Handle == windowHWnd);
+                if (window != null)
+                {
+                    if (PInvoke.IsIconic(window.Handle))
+                        PInvoke.ShowWindow(window.Handle, PInvoke.ShowWindowCommand.Restore);
+                    var tab = window.AppViewModel.TabsViewModel?.FindByPath(filePath);
+                    if (tab != null) _ = window.AppViewModel.TabsViewModel.SwitchTo(tab);
+                }
                 return windowHWnd;
             }
+            // A file opened from the shell goes into the last active window as a new tab (upstream #73) unless the
+            // user prefers separate windows; a plain launch without a file always creates a window.
+            var target = MainWindow.LastActive ?? XamlWindow.AllWindows.OfType<MainWindow>().FirstOrDefault();
+            if (!string.IsNullOrEmpty(filePath) && target != null && target.AppViewModel != null && target.AppViewModel.SettingsViewModel.OpenFilesInNewTab)
+            {
+                if (PInvoke.IsIconic(target.Handle))
+                    PInvoke.ShowWindow(target.Handle, PInvoke.ShowWindowCommand.Restore);
+                target.AppViewModel.FileViewModel.OpenFileCommand.Execute(filePath);
+                return target.Handle;
+            }
+            var newWindow = new MainWindow();
+            newWindow.Show(ShowWindowCommand.SW_HIDE);
+            newWindow.AppViewModel.CommandLineArgs = args;
+            return newWindow.Handle;
         }
     }
 }

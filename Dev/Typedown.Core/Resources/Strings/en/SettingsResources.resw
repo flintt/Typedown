@@ -821,4 +821,12 @@
     <value>Show the document tab strip even when only one document is open</value>
     <comment>外观/只有一个文档时也显示标签栏</comment>
   </data>
+  <data name="General.OpenFilesInNewTab.Title" xml:space="preserve">
+    <value>Open files in tabs</value>
+    <comment>常规/在标签页中打开文件</comment>
+  </data>
+  <data name="General.OpenFilesInNewTab.Description" xml:space="preserve">
+    <value>Files opened from Explorer open as a tab in the current window; off opens a new window</value>
+    <comment>常规/从资源管理器打开的文件进入当前窗口的标签页</comment>
+  </data>
 </root>

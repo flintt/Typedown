@@ -89,6 +89,7 @@ namespace Typedown.Core.ViewModels
             tab.Markdown = editor.Markdown;
             tab.CurrentHash = editor.CurrentHash;
             tab.FileHash = editor.FileHash;
+            tab.DiskHash = FileViewModel.DiskHash;
             tab.Saved = editor.Saved;
             tab.AutoSavedSucc = editor.AutoSavedSucc;
             tab.FileLoaded = editor.FileLoaded;
@@ -151,6 +152,7 @@ namespace Typedown.Core.ViewModels
             editor.History = tab.History ?? new ContentHistory();
             editor.Markdown = tab.Markdown ?? Common.DefaultMarkdwn;
             editor.FileHash = tab.FileHash;
+            FileViewModel.DiskHash = tab.DiskHash;
             editor.CurrentHash = tab.CurrentHash;
             editor.Saved = tab.Saved;
             editor.AutoSavedSucc = tab.AutoSavedSucc;

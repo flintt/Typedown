@@ -162,6 +162,13 @@ namespace Typedown.Core.ViewModels
         /// <summary>Used by <see cref="TabsViewModel"/> when restoring a background tab into the editor.</summary>
         internal void SetFilePathFromTab(string path) => FilePath = path;
 
+        /// <summary>
+        /// Hash of the raw text last read from or written to disk. The editor normalizes the document on import, so
+        /// <c>EditorViewModel.FileHash</c> (hash of the normalized text) can differ from the disk content even when
+        /// nothing changed; comparing against this avoids false "file changed" prompts.
+        /// </summary>
+        internal ulong DiskHash { get; set; }
+
         /// <summary>After a tab switch the file was not watched; check the disk copy once.</summary>
         internal async Task CheckExternalChangeAfterSwitch()
         {
@@ -253,6 +260,7 @@ namespace Typedown.Core.ViewModels
                 var text = await File.ReadAllTextAsync(path);
                 EditorViewModel.FirstStart = false;
                 EditorViewModel.FileHash = Common.SimpleHash(text);
+                DiskHash = EditorViewModel.FileHash;
                 FilePath = path;
                 _ = AccessHistory.RecordFileHistory(FilePath);
                 var backup = await CheckBackup(path, EditorViewModel.FileHash);
@@ -380,6 +388,7 @@ namespace Typedown.Core.ViewModels
                 if (result && !disposables.IsDisposed && FilePath == path)
                 {
                     EditorViewModel.FileHash = hash;
+                    DiskHash = hash;
                     EditorViewModel.Saved = EditorViewModel.CurrentHash == hash; // CurrentHash tracks the live buffer; avoids an O(n) string compare per save
                     if (EditorViewModel.Saved)
                         AutoBackup.DeleteBackup(path);
@@ -424,6 +433,7 @@ namespace Typedown.Core.ViewModels
                     {
                         FilePath = file.Path;
                         EditorViewModel.FileHash = hash;
+                        DiskHash = hash;
                         EditorViewModel.Saved = EditorViewModel.CurrentHash == hash; // CurrentHash tracks the live buffer; avoids an O(n) string compare per save
                         if (EditorViewModel.Saved)
                             AutoBackup.DeleteBackup(originalPath);
@@ -783,7 +793,7 @@ namespace Typedown.Core.ViewModels
                 return;
 
             var diskHash = Common.SimpleHash(text);
-            if (diskHash == EditorViewModel.FileHash)
+            if (diskHash == EditorViewModel.FileHash || diskHash == DiskHash)
                 return;
             if (diskHash == EditorViewModel.CurrentHash)
             {
@@ -817,6 +827,7 @@ namespace Typedown.Core.ViewModels
                 else
                 {
                     EditorViewModel.FileHash = diskHash;
+                    DiskHash = diskHash;
                     EditorViewModel.Saved = EditorViewModel.CurrentHash == diskHash;
                 }
             }
@@ -830,6 +841,7 @@ namespace Typedown.Core.ViewModels
         {
             EditorViewModel.FirstStart = false;
             EditorViewModel.FileHash = Common.SimpleHash(text);
+            DiskHash = EditorViewModel.FileHash;
             EditorViewModel.Markdown = text;
             EditorViewModel.CurrentHash = EditorViewModel.FileHash;
             EditorViewModel.Saved = true;

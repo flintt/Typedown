@@ -52,6 +52,8 @@ namespace Typedown.Core.ViewModels
         public string CustomCss { get => GetSettingValue(""); set => SetSettingValue(value); }
         /// <summary>Show the document tab strip even with a single tab.</summary>
         public bool AlwaysShowTabBar { get => GetSettingValue(false); set => SetSettingValue(value); }
+        /// <summary>Files opened from Explorer / the command line go into a tab of the current window instead of a new window.</summary>
+        public bool OpenFilesInNewTab { get => GetSettingValue(true); set => SetSettingValue(value); }
         public bool AutoPairMarkdownSyntax { get => GetSettingValue(true); set => SetSettingValue(value); }
         public string EditorAreaWidth { get => GetSettingValue("1200px"); set => SetSettingValue(value); }
         public string FontFamily { get => GetSettingValue(""); set => SetSettingValue(value); }

@@ -18,6 +18,8 @@ namespace Typedown.Core.Models
 
         public ulong FileHash { get; set; }
 
+        public ulong DiskHash { get; set; }
+
         public bool Saved { get; set; } = true;
 
         public bool AutoSavedSucc { get; set; } = true;
