@@ -40,20 +40,37 @@ namespace Typedown.Utilities
                 OleInitialize(IntPtr.Zero);
                 var handles = new List<IntPtr> { window.Handle };
                 EnumChildWindows(window.Handle, (h, _) => { handles.Add(h); return true; }, IntPtr.Zero);
-                var wrapped = 0;
+                const int DRAGDROP_E_ALREADYREGISTERED = unchecked((int)0x80040101);
+                var registered = 0;
                 foreach (var hwnd in handles)
                 {
                     if (GetPropW(hwnd, "Typedown.FileDropTarget") != IntPtr.Zero) continue;
+                    var className = new StringBuilder(256);
+                    GetClassNameW(hwnd, className, className.Capacity);
                     var existing = GetPropW(hwnd, "OleDropTargetInterface");
-                    if (existing == IntPtr.Zero) continue;
-                    var original = (IOleDropTarget)Marshal.GetObjectForIUnknown(existing);
-                    var revoke = RevokeDragDrop(hwnd);
-                    var register = RegisterDragDrop(hwnd, new FileDropTarget(window, original));
-                    SetPropW(hwnd, "Typedown.FileDropTarget", (IntPtr)1);
-                    Log.Debug($"FileDropTarget: wrapped hwnd=0x{hwnd.ToInt64():X} revoke=0x{revoke:X} register=0x{register:X}");
-                    wrapped++;
+                    IOleDropTarget original = null;
+                    if (existing != IntPtr.Zero)
+                    {
+                        // Wrap XAML's own target so in-app drags keep working.
+                        original = (IOleDropTarget)Marshal.GetObjectForIUnknown(existing);
+                        RevokeDragDrop(hwnd);
+                    }
+                    var target = new FileDropTarget(window, original);
+                    var hr = RegisterDragDrop(hwnd, target);
+                    Log.Debug($"FileDropTarget: hwnd=0x{hwnd.ToInt64():X} class='{className}' existing={(existing != IntPtr.Zero)} register=0x{hr:X}");
+                    if (hr == 0)
+                    {
+                        SetPropW(hwnd, "Typedown.FileDropTarget", (IntPtr)1);
+                        GC.KeepAlive(target);
+                        registered++;
+                    }
+                    else if (hr == DRAGDROP_E_ALREADYREGISTERED && original == null)
+                    {
+                        // A target exists but is not exposed through the well-known property; leave it alone.
+                        SetPropW(hwnd, "Typedown.FileDropTarget", (IntPtr)2);
+                    }
                 }
-                if (wrapped == 0) Log.Debug("FileDropTarget: no OLE drop target found yet");
+                Log.Debug($"FileDropTarget: registered on {registered} window(s)");
             }
             catch (Exception ex)
             {
@@ -167,6 +184,9 @@ namespace Typedown.Utilities
 
         [DllImport("user32.dll", CharSet = CharSet.Unicode, ExactSpelling = true)]
         private static extern IntPtr GetPropW(IntPtr hWnd, string lpString);
+
+        [DllImport("user32.dll", CharSet = CharSet.Unicode, ExactSpelling = true)]
+        private static extern int GetClassNameW(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
 
         [DllImport("user32.dll", CharSet = CharSet.Unicode, ExactSpelling = true)]
         private static extern bool SetPropW(IntPtr hWnd, string lpString, IntPtr hData);

@@ -85,8 +85,11 @@ namespace Typedown.Core.ViewModels
         /// <summary>True when the active tab is a pristine untitled document that a new/open action may reuse.</summary>
         public bool IsActiveTabBlank => FileViewModel.FilePath == null && EditorViewModel.Saved && EditorViewModel.CurrentHash == Common.SimpleHash(Common.DefaultMarkdwn);
 
-        /// <summary>True when a single-click (preview) open may replace the active tab's document instead of adding a tab.</summary>
-        public bool CanReuseActiveTabForPreview => IsActiveTabBlank || (ActiveTab.IsPreview && EditorViewModel.Saved);
+        /// <summary>
+        /// Single-click open navigates within the current tab: it may replace the active document whenever it has no
+        /// unsaved changes (a dirty document gets a new tab instead).
+        /// </summary>
+        public bool CanReuseActiveTabForPreview => IsActiveTabBlank || EditorViewModel.Saved;
 
         /// <summary>Copies the live editor state into the active tab.</summary>
         public void SnapshotActive()
