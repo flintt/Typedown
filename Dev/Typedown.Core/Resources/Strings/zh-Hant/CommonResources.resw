@@ -993,4 +993,8 @@
     <value>上一個標籤頁</value>
     <comment>上一个标签页</comment>
   </data>
+  <data name="FolderPane.RevealCurrentFile" xml:space="preserve">
+    <value>定位到目前檔案所在資料夾</value>
+    <comment>文件栏/定位到当前文件所在目录</comment>
+  </data>
 </root>

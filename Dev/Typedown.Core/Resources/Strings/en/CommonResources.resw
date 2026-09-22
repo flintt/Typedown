@@ -993,4 +993,8 @@
     <value>Previous Tab</value>
     <comment>上一个标签页</comment>
   </data>
+  <data name="FolderPane.RevealCurrentFile" xml:space="preserve">
+    <value>Show the current file's folder</value>
+    <comment>文件栏/定位到当前文件所在目录</comment>
+  </data>
 </root>

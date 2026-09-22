@@ -89,9 +89,9 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             UpdateSelectedItem(WorkFolderExplorerItem);
         }
 
-        public static bool CanReveal(string filePath, string root)
+        public static Visibility RevealVisibility(string filePath, string root)
         {
-            return !string.IsNullOrEmpty(filePath) && !IsInsideFolder(filePath, root ?? "");
+            return !string.IsNullOrEmpty(filePath) && !IsInsideFolder(filePath, root ?? "") ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private static bool IsInsideFolder(string filePath, string folder)
