@@ -6,6 +6,18 @@ body:
   - type: markdown
     attributes:
       value: |
+        > **本仓库的 issue 由 AI（Claude Code）负责分析和修复，维护者只做验收。**
+        > AI 看不到你的屏幕，只能依据你写的内容和日志来定位问题，所以请尽量写清楚：
+        > 精确的版本号、复现步骤（按什么、点哪里、顺序）、实际结果与期望结果、相关日志和触发问题的 Markdown 片段。
+        > 描述越具体，修复越快；含糊的描述通常会被追问一轮。
+        >
+        > **Issues in this repository are triaged and fixed by an AI (Claude Code); the maintainer only reviews.**
+        > It cannot see your screen, so precise versions, exact steps, actual vs. expected results, logs and a
+        > minimal Markdown sample are what make a fix possible. Vague reports get a round of follow-up questions.
+
+  - type: markdown
+    attributes:
+      value: |
         感谢反馈。请尽量填写完整，尤其是版本号和日志，这样才能定位问题。
         Thanks for the report. Version and logs matter most for tracking it down.
 
