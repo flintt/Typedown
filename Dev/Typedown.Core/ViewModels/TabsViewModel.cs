@@ -61,7 +61,12 @@ namespace Typedown.Core.ViewModels
             PreviousTabCommand.OnExecute.Subscribe(async _ => await SwitchRelative(-1));
             // Keep the active tab's label in sync with the editor state.
             disposables.Add(FileViewModel.WhenPropertyChanged(nameof(FileViewModel.FilePath)).Subscribe(_ => { if (!switching) ActiveTab.FilePath = FileViewModel.FilePath; }));
-            disposables.Add(EditorViewModel.WhenPropertyChanged(nameof(EditorViewModel.Saved)).Subscribe(_ => { if (!switching) ActiveTab.IsDirty = !EditorViewModel.Saved; }));
+            disposables.Add(EditorViewModel.WhenPropertyChanged(nameof(EditorViewModel.Saved)).Subscribe(_ =>
+            {
+                if (switching) return;
+                ActiveTab.IsDirty = !EditorViewModel.Saved;
+                if (ActiveTab.IsDirty) ActiveTab.IsPreview = false;
+            }));
         }
 
         public DocumentTab FindByPath(string path)
@@ -79,6 +84,9 @@ namespace Typedown.Core.ViewModels
 
         /// <summary>True when the active tab is a pristine untitled document that a new/open action may reuse.</summary>
         public bool IsActiveTabBlank => FileViewModel.FilePath == null && EditorViewModel.Saved && EditorViewModel.CurrentHash == Common.SimpleHash(Common.DefaultMarkdwn);
+
+        /// <summary>True when a single-click (preview) open may replace the active tab's document instead of adding a tab.</summary>
+        public bool CanReuseActiveTabForPreview => IsActiveTabBlank || (ActiveTab.IsPreview && EditorViewModel.Saved);
 
         /// <summary>Copies the live editor state into the active tab.</summary>
         public void SnapshotActive()

@@ -32,9 +32,12 @@ namespace Typedown.Core.Models
 
         public bool IsDirty { get; set; }
 
+        /// <summary>Opened by a single click in the file tree: the next single-click open replaces this tab (VS Code style).</summary>
+        public bool IsPreview { get; set; }
+
         public string Title => string.IsNullOrEmpty(FilePath) ? Locale.GetString("Untitled") : Path.GetFileName(FilePath);
 
-        public string DisplayTitle => IsDirty ? $"{Title} •" : Title;
+        public string DisplayTitle => IsDirty ? $"{Title} •" : IsPreview ? $"{Title} ◇" : Title;
 
         public string ToolTip => string.IsNullOrEmpty(FilePath) ? Title : FilePath;
 

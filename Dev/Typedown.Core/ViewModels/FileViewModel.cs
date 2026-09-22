@@ -213,12 +213,13 @@ namespace Typedown.Core.ViewModels
             }
         }
 
-        public async Task<bool> OpenFile(string filePath = null)
+        /// <param name="preview">Single-click open from the file tree: reuse the current preview tab instead of adding one.</param>
+        public async Task<bool> OpenFile(string filePath = null, bool preview = false)
         {
             filePath ??= await AppViewModel.MainWindow.PickMarkdownFileAsync();
             if (filePath == null)
                 return false;
-            return await LoadFile(filePath, true);
+            return await LoadFile(filePath, true, true, preview);
         }
 
         public async Task<bool> OpenFolder(string folderPath = null)
@@ -233,7 +234,7 @@ namespace Typedown.Core.ViewModels
             return true;
         }
 
-        private async Task<bool> LoadFile(string path, bool skipSavedCheck = false, bool postMessage = true)
+        private async Task<bool> LoadFile(string path, bool skipSavedCheck = false, bool postMessage = true, bool preview = false)
         {
             DocumentTab startedTab = null;
             try
@@ -253,9 +254,10 @@ namespace Typedown.Core.ViewModels
                 if (TabsViewModel?.FindByPath(path) is DocumentTab existing)
                 {
                     await TabsViewModel.SwitchTo(existing);
+                    if (!preview) existing.IsPreview = false; // double-click / explicit open pins a preview tab
                     return true;
                 }
-                if (TabsViewModel != null && !TabsViewModel.IsActiveTabBlank)
+                if (TabsViewModel != null && !(preview ? TabsViewModel.CanReuseActiveTabForPreview : TabsViewModel.IsActiveTabBlank))
                     startedTab = TabsViewModel.BeginNewTab();
                 var text = await File.ReadAllTextAsync(path);
                 EditorViewModel.FirstStart = false;
@@ -285,6 +287,8 @@ namespace Typedown.Core.ViewModels
                     var cursor = SettingsViewModel.RememberCursorPosition ? CursorMemory.Get(path) : null;
                     MarkdownEditor?.PostMessage("LoadFile", new { text = EditorViewModel.Markdown, basePath = ImageBasePath, cursor });
                 }
+                if (TabsViewModel != null)
+                    TabsViewModel.ActiveTab.IsPreview = preview;
                 return true;
             }
             catch (Exception ex)

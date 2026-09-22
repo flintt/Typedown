@@ -332,6 +332,8 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             var treeViewItemPointerReleasedEventHandler = new PointerEventHandler(page.OnTreeViewItemPointerReleased);
             grid.AddHandler(PointerPressedEvent, treeViewItemPointerPressedEventHandler, true);
             item.AddHandler(PointerReleasedEvent, treeViewItemPointerReleasedEventHandler, true);
+            var treeViewItemDoubleTappedEventHandler = new Windows.UI.Xaml.Input.DoubleTappedEventHandler(page.OnTreeViewItemDoubleTapped);
+            item.AddHandler(DoubleTappedEvent, treeViewItemDoubleTappedEventHandler, true);
             if (item.DataContext is ExplorerItem explorerItem)
                 page.UpdateSelectedItem(explorerItem);
 
@@ -342,6 +344,7 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
                 var page = item.GetAncestor<FolderPage>();
                 grid.RemoveHandler(PointerPressedEvent, treeViewItemPointerPressedEventHandler);
                 item.RemoveHandler(PointerReleasedEvent, treeViewItemPointerReleasedEventHandler);
+                item.RemoveHandler(DoubleTappedEvent, treeViewItemDoubleTappedEventHandler);
             }
         }
 
@@ -367,10 +370,27 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
                     (sender as muxc.TreeViewItem).DataContext is ExplorerItem item &&
                     item.Type == ExplorerItem.ExplorerItemType.File)
                 {
+                    // Single click previews in the current tab; double click (below) keeps the tab.
                     if (item.FullPath != ViewModel.FileViewModel.FilePath)
-                        await ViewModel.FileViewModel.OpenFile(item.FullPath);
+                        await ViewModel.FileViewModel.OpenFile(item.FullPath, preview: true);
                 }
                 UpdateSelectedItem(WorkFolderExplorerItem);
+            }
+            catch
+            {
+                // Ignore
+            }
+        }
+
+        private async void OnTreeViewItemDoubleTapped(object sender, Windows.UI.Xaml.Input.DoubleTappedRoutedEventArgs e)
+        {
+            try
+            {
+                if ((sender as muxc.TreeViewItem)?.DataContext is ExplorerItem item && item.Type == ExplorerItem.ExplorerItemType.File)
+                {
+                    e.Handled = true;
+                    await ViewModel.FileViewModel.OpenFile(item.FullPath, preview: false);
+                }
             }
             catch
             {
