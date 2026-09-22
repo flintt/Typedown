@@ -1003,4 +1003,7 @@
   <data name="SearchInFolder" xml:space="preserve">
     <value>在資料夾中搜尋</value>
   </data>
+  <data name="FolderSearch.NameMatch" xml:space="preserve">
+    <value>（檔名符合）</value>
+  </data>
 </root>

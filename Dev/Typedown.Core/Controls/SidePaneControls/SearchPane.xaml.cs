@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -115,6 +115,7 @@ namespace Typedown.Core.Controls
 
         private static (int files, int hits) SearchFolder(string root, string query, IProgress<SearchResultItem> progress, CancellationToken token)
         {
+            var nameMatchLabel = Locale.GetString("FolderSearch.NameMatch");
             var files = 0;
             var hits = 0;
             var pending = new Stack<string>();
@@ -150,6 +151,9 @@ namespace Typedown.Core.Controls
                         }
                     }
                     catch { continue; }
+                    // A file whose name contains the query is a hit too (shown once: content snippet wins if both match).
+                    if (snippet == null && entry.Name.IndexOf(query, StringComparison.OrdinalIgnoreCase) >= 0)
+                        snippet = nameMatchLabel;
                     if (snippet == null) continue;
                     hits++;
                     var relative = entry.FullName.StartsWith(root, StringComparison.OrdinalIgnoreCase) ? entry.FullName.Substring(root.Length).TrimStart('\\', '/') : entry.FullName;

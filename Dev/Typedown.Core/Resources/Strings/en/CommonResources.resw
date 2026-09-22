@@ -1003,4 +1003,7 @@
   <data name="SearchInFolder" xml:space="preserve">
     <value>Search in folder</value>
   </data>
+  <data name="FolderSearch.NameMatch" xml:space="preserve">
+    <value>(file name matches)</value>
+  </data>
 </root>
