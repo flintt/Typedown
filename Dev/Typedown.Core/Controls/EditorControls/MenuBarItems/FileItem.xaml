@@ -38,5 +38,5 @@
     <MenuFlyoutSeparator/>
     <MenuFlyoutItem x:Name="SettingItem" Text="{u:LocaleString Key=Settings}" Command="{x:Bind ViewModel.NavigateCommand}" CommandParameter="Settings/General"/>
     <MenuFlyoutSeparator/>
-    <MenuFlyoutItem x:Name="CloseItem" Text="{u:LocaleString Key=Close}" Command="{x:Bind File.ExitCommand}"/>
+    <MenuFlyoutItem x:Name="CloseItem" Text="{u:LocaleString Key=Close}" Command="{x:Bind ViewModel.TabsViewModel.CloseActiveTabCommand}"/>
 </local:MenuBarItemBase>

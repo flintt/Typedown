@@ -16,6 +16,8 @@
             RegisterWindowShortcut(Settings.ShortcutStatusBar, StatusBarItem);
             RegisterWindowShortcut(Settings.ShortcutFullScreen, FullScreenItem);
             RegisterWindowShortcut(Settings.ShortcutReadOnlyMode, ReadOnlyModeItem);
+            RegisterWindowShortcut(Settings.ShortcutNextTab, NextTabItem);
+            RegisterWindowShortcut(Settings.ShortcutPreviousTab, PreviousTabItem);
         }
 
         private void OnUnloaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)

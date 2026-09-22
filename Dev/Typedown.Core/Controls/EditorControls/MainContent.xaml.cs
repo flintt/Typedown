@@ -60,6 +60,8 @@ namespace Typedown.Core.Controls
             Bindings?.StopTracking();
         }
 
+        public static bool IsTabBarLoad(int tabCount, bool alwaysShow) => alwaysShow || tabCount > 1;
+
         public static double GetColumnWidthNegative(GridLength length)
         {
             return -length.Value;

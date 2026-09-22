@@ -35,7 +35,7 @@ namespace Typedown.Core.ViewModels
         public MenuState MenuState { get; set; }
         public ParagraphState ParagraphState { get; set; }
         public TocTreeItem Toc { get; } = new();
-        public ContentHistory History { get; } = new();
+        public ContentHistory History { get; set; } = new();
 
         public string Markdown { get; set; } = "";
         public bool Selected { get; set; }
@@ -183,7 +183,7 @@ namespace Typedown.Core.ViewModels
             OnMarkdownChange(arg["text"].ToString());
         }
 
-        public CursorState CurrentCursor { get; private set; }
+        public CursorState CurrentCursor { get; internal set; }
 
         public void OnCursorChange(JToken arg)
         {

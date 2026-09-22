@@ -981,4 +981,16 @@
     <value>Decrease Quote Level</value>
     <comment>段落/减少引用层级</comment>
   </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>Untitled</value>
+    <comment>未命名</comment>
+  </data>
+  <data name="NextTab" xml:space="preserve">
+    <value>Next Tab</value>
+    <comment>下一个标签页</comment>
+  </data>
+  <data name="PreviousTab" xml:space="preserve">
+    <value>Previous Tab</value>
+    <comment>上一个标签页</comment>
+  </data>
 </root>

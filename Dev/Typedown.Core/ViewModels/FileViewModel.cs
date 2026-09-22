@@ -157,9 +157,25 @@ namespace Typedown.Core.ViewModels
             return true;
         }
 
-        private async Task NewFileFun(bool postMessage = true)
+        public TabsViewModel TabsViewModel => ServiceProvider.GetService<TabsViewModel>();
+
+        /// <summary>Used by <see cref="TabsViewModel"/> when restoring a background tab into the editor.</summary>
+        internal void SetFilePathFromTab(string path) => FilePath = path;
+
+        /// <summary>After a tab switch the file was not watched; check the disk copy once.</summary>
+        internal async Task CheckExternalChangeAfterSwitch()
         {
-            if (!await AskToSave()) return;
+            if (string.IsNullOrEmpty(FilePath) || !SettingsViewModel.AutoReload) return;
+            await HandleExternalFileChange();
+        }
+
+        private async Task NewFileFun(bool postMessage = true, bool inNewTab = true)
+        {
+            // Tabs (upstream #73): a new document opens in its own tab unless the current one is a pristine untitled tab.
+            if (inNewTab && TabsViewModel != null && !TabsViewModel.IsActiveTabBlank)
+                TabsViewModel.BeginNewTab();
+            else if (!await AskToSave())
+                return;
             FilePath = null;
             EditorViewModel.FileHash = Common.SimpleHash(Common.DefaultMarkdwn);
             string backup = null;
@@ -192,8 +208,6 @@ namespace Typedown.Core.ViewModels
 
         public async Task<bool> OpenFile(string filePath = null)
         {
-            if (!await AskToSave())
-                return false;
             filePath ??= await AppViewModel.MainWindow.PickMarkdownFileAsync();
             if (filePath == null)
                 return false;
@@ -214,6 +228,7 @@ namespace Typedown.Core.ViewModels
 
         private async Task<bool> LoadFile(string path, bool skipSavedCheck = false, bool postMessage = true)
         {
+            DocumentTab startedTab = null;
             try
             {
                 if (TryGetOpenedWindow(path, out var window) && window != AppViewModel.MainWindow)
@@ -226,10 +241,15 @@ namespace Typedown.Core.ViewModels
                     _ = AccessHistory.RemoveFileHistory(path);
                     throw new FileNotFoundException("File does not exist.");
                 }
-                else if (!skipSavedCheck && !await AskToSave())
+                // Tabs: an already open file just becomes active; anything else opens beside the current document
+                // (reusing a pristine untitled tab), so the old document never needs a save prompt here.
+                if (TabsViewModel?.FindByPath(path) is DocumentTab existing)
                 {
-                    return false;
+                    await TabsViewModel.SwitchTo(existing);
+                    return true;
                 }
+                if (TabsViewModel != null && !TabsViewModel.IsActiveTabBlank)
+                    startedTab = TabsViewModel.BeginNewTab();
                 var text = await File.ReadAllTextAsync(path);
                 EditorViewModel.FirstStart = false;
                 EditorViewModel.FileHash = Common.SimpleHash(text);
@@ -261,6 +281,7 @@ namespace Typedown.Core.ViewModels
             }
             catch (Exception ex)
             {
+                if (startedTab != null) TabsViewModel?.AbortNewTab(startedTab);
                 await AppContentDialog.Create(Locale.GetDialogString("ReadErrorTitle"), ex.Message, Locale.GetDialogString("Ok")).ShowAsync(AppViewModel.XamlRoot);
                 return false;
             }
@@ -601,7 +622,7 @@ namespace Typedown.Core.ViewModels
                 window = default;
                 return false;
             }
-            window = AppViewModel.GetInstances().Where(x => x.FileViewModel.FilePath?.ToLower() == filePath.ToLower()).FirstOrDefault()?.MainWindow ?? default;
+            window = AppViewModel.GetInstances().Where(x => x.FileViewModel.FilePath?.ToLower() == filePath.ToLower() || (x.TabsViewModel?.IsOpenInAnyTab(filePath) ?? false)).FirstOrDefault()?.MainWindow ?? default;
             return window != default;
         }
 

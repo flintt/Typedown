@@ -30,6 +30,8 @@ namespace Typedown.Core.ViewModels
 
         public UIViewModel UIViewModel => ServiceProvider.GetService<UIViewModel>();
 
+        public TabsViewModel TabsViewModel => ServiceProvider.GetService<TabsViewModel>();
+
         public IReadOnlyList<Frame> FrameStack { get; set; } = new List<Frame>();
 
         public Command<Unit> GoBackCommand { get; } = new(false);

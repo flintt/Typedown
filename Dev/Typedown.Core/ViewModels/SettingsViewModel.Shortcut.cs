@@ -225,5 +225,11 @@ namespace Typedown.Core.ViewModels
 
         [Locale("View", "ReadOnlyMode")]
         public ShortcutKey ShortcutReadOnlyMode { get => GetSettingValue<ShortcutKey>(new(Mod.Control | Mod.Shift, Key.R)); set => SetSettingValue(value); }
+
+        [Locale("View", "NextTab")]
+        public ShortcutKey ShortcutNextTab { get => GetSettingValue<ShortcutKey>(new(Mod.Control, Key.Tab)); set => SetSettingValue(value); }
+
+        [Locale("View", "PreviousTab")]
+        public ShortcutKey ShortcutPreviousTab { get => GetSettingValue<ShortcutKey>(new(Mod.Control | Mod.Shift, Key.Tab)); set => SetSettingValue(value); }
     }
 }

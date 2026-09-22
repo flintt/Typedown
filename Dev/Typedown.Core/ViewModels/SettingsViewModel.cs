@@ -50,6 +50,8 @@ namespace Typedown.Core.ViewModels
         public bool RememberCursorPosition { get => GetSettingValue(true); set => SetSettingValue(value); }
         /// <summary>User CSS applied to the editor and to HTML/PDF export (upstream #30).</summary>
         public string CustomCss { get => GetSettingValue(""); set => SetSettingValue(value); }
+        /// <summary>Show the document tab strip even with a single tab.</summary>
+        public bool AlwaysShowTabBar { get => GetSettingValue(false); set => SetSettingValue(value); }
         public bool AutoPairMarkdownSyntax { get => GetSettingValue(true); set => SetSettingValue(value); }
         public string EditorAreaWidth { get => GetSettingValue("1200px"); set => SetSettingValue(value); }
         public string FontFamily { get => GetSettingValue(""); set => SetSettingValue(value); }

@@ -194,7 +194,7 @@ namespace Typedown.Windows
                     {
                         isClosing = true;
                         await AppViewModel.FileViewModel.AutoSaveFile();
-                        if (AppViewModel.EditorViewModel.Saved || await AppViewModel.FileViewModel.AskToSave())
+                        if (await AppViewModel.TabsViewModel.AskToSaveAll())
                             ForceClose();
                     }
                 }

@@ -981,4 +981,16 @@
     <value>减少引用层级</value>
     <comment>段落/减少引用层级</comment>
   </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>未命名</value>
+    <comment>未命名</comment>
+  </data>
+  <data name="NextTab" xml:space="preserve">
+    <value>下一个标签页</value>
+    <comment>下一个标签页</comment>
+  </data>
+  <data name="PreviousTab" xml:space="preserve">
+    <value>上一个标签页</value>
+    <comment>上一个标签页</comment>
+  </data>
 </root>

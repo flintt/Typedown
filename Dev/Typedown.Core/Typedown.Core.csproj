@@ -204,6 +204,9 @@
     <Compile Include="Controls\EditorControls\StatusBar.xaml.cs">
       <DependentUpon>StatusBar.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\EditorControls\DocumentTabBar.xaml.cs">
+      <DependentUpon>DocumentTabBar.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\FloatControls\FindReplace.xaml.cs">
       <DependentUpon>FindReplace.xaml</DependentUpon>
     </Compile>
@@ -340,6 +343,7 @@
     <Compile Include="Models\RuntimeModels\ContentHistory.cs" />
     <Compile Include="Models\RuntimeModels\ContentState.cs" />
     <Compile Include="Models\RuntimeModels\CursorState.cs" />
+    <Compile Include="Models\RuntimeModels\DocumentTab.cs" />
     <Compile Include="Models\RuntimeModels\DimNumber.cs" />
     <Compile Include="Models\RuntimeModels\ExplorerItem.cs" />
     <Compile Include="Models\RuntimeModels\ExportConfigModels\ConfigModel.cs" />
@@ -445,6 +449,7 @@
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.Shortcut.cs" />
     <Compile Include="ViewModels\UIViewModel.cs" />
+    <Compile Include="ViewModels\TabsViewModel.cs" />
     <EmbeddedResource Include="Properties\Typedown.Core.rd.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -552,6 +557,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\EditorControls\StatusBar.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\EditorControls\DocumentTabBar.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
