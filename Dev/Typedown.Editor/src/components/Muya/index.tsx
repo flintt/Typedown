@@ -100,6 +100,10 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     }, [props.searchArg])
 
     useEffect(() => {
+        optionsRef.current = props.options
+    }, [props.options])
+
+    useEffect(() => {
         markdownRef.current = ''
     }, [editor])
 
@@ -142,26 +146,32 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     }), [editor, scrollToElement]);
 
     useEffect(() => transport.addListener('UpdateParagraph', type => {
+        if (optionsRef.current?.readOnly) return
         editor?.updateParagraph(type)
     }), [editor]);
 
     useEffect(() => transport.addListener('InsertParagraph', pos => {
+        if (optionsRef.current?.readOnly) return
         editor?.insertParagraph(pos, '', true)
     }), [editor]);
 
     useEffect(() => transport.addListener('DeleteParagraph', () => {
+        if (optionsRef.current?.readOnly) return
         editor?.deleteParagraph()
     }), [editor]);
 
     useEffect(() => transport.addListener('Duplicate', () => {
+        if (optionsRef.current?.readOnly) return
         editor?.duplicate()
     }), [editor]);
 
     useEffect(() => transport.addListener('Format', type => {
+        if (optionsRef.current?.readOnly) return
         editor?.format(type)
     }), [editor]);
 
     useEffect(() => transport.addListener('DeleteSelection', () => {
+        if (optionsRef.current?.readOnly) return
         editor?.delete()
     }), [editor]);
 
@@ -174,18 +184,22 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     }), [editor]);
 
     useEffect(() => transport.addListener<any>('Cut', arg => {
+        if (optionsRef.current?.readOnly) return
         editor?.clipboard.cut(arg)
     }), [editor]);
 
     useEffect(() => transport.addListener<any>('Paste', arg => {
+        if (optionsRef.current?.readOnly) return
         editor?.clipboard.paste(arg)
     }), [editor]);
 
     useEffect(() => transport.addListener<string>('InsertTable', arg => {
+        if (optionsRef.current?.readOnly) return
         editor?.createTable(arg)
     }), [editor]);
 
     useEffect(() => transport.addListener<string>('InsertImage', arg => {
+        if (optionsRef.current?.readOnly) return
         editor?.insertImage(arg)
     }), [editor]);
 
@@ -299,6 +313,16 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     useEffect(() => {
         document.body.style.setProperty('--editorAreaWidth', props.options?.editorAreaWidth)
     }, [props.options?.editorAreaWidth])
+
+    useEffect(() => {
+        document.body.classList.toggle('hide-paragraph-marker', props.options?.showParagraphMarker === false)
+    }, [props.options?.showParagraphMarker])
+
+    useEffect(() => {
+        const readOnly = !!props.options?.readOnly
+        document.body.classList.toggle('read-only', readOnly)
+        editor?.container?.setAttribute('contenteditable', String(!readOnly))
+    }, [editor, props.options?.readOnly])
 
     useEffect(() => {
         if (props.options?.fontFamily) {

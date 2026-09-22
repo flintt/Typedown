@@ -745,4 +745,12 @@
     <value>在 Markdown 原始碼中用空格填充儲存格使各列對齊；關閉則保持緊湊（餵給 AI 時佔用更少 token）</value>
     <comment>编辑器/对齐表格列说明</comment>
   </data>
+  <data name="Editor.ShowParagraphMarker.Title" xml:space="preserve">
+    <value>段落標記</value>
+    <comment>编辑器/段落标记</comment>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Description" xml:space="preserve">
+    <value>在目前段落左側顯示區塊類型（P、H1 …）</value>
+    <comment>编辑器/在当前段落旁显示块类型</comment>
+  </data>
 </root>

@@ -40,6 +40,10 @@ namespace Typedown.Core.ViewModels
         public string ListIndentation { get => GetSettingValue("1"); set => SetSettingValue(value); }
         /// <summary>Pad table cells so columns line up in the source (upstream #24/#70 ask for a way to turn this off).</summary>
         public bool TableAlignColumns { get => GetSettingValue(true); set => SetSettingValue(value); }
+        /// <summary>Show the paragraph type marker ("P", "H1"...) left of the active block (upstream #45).</summary>
+        public bool ShowParagraphMarker { get => GetSettingValue(true); set => SetSettingValue(value); }
+        /// <summary>Reading mode: the editor rejects edits (upstream #38).</summary>
+        public bool ReadOnly { get => GetSettingValue(false); set => SetSettingValue(value); }
         public bool AutoPairMarkdownSyntax { get => GetSettingValue(true); set => SetSettingValue(value); }
         public string EditorAreaWidth { get => GetSettingValue("1200px"); set => SetSettingValue(value); }
         public string FontFamily { get => GetSettingValue(""); set => SetSettingValue(value); }
@@ -106,6 +110,8 @@ namespace Typedown.Core.ViewModels
             "PreferLooseListItem",
             "ListIndentation",
             "TableAlignColumns",
+            "ShowParagraphMarker",
+            "ReadOnly",
             "AutoPairMarkdownSyntax",
             "EditorAreaWidth",
             "FontFamily",

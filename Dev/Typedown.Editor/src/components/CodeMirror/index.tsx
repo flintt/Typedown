@@ -289,7 +289,8 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
                     theme: 'one-dark',
                     mode: 'markdown',
                     lineNumbers: true,
-                    lineWrapping: true
+                    lineWrapping: true,
+                    readOnly: !!props.options?.readOnly
                 }}
                 onChange={handleCodeMirrorContent}
                 onSelection={handleCodeMirrorSelection}

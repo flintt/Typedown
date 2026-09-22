@@ -937,4 +937,20 @@
     <value>全屏</value>
     <comment>全屏</comment>
   </data>
+  <data name="ReadOnlyMode" xml:space="preserve">
+    <value>阅读模式</value>
+    <comment>阅读模式</comment>
+  </data>
+  <data name="Folder.NoFolderOpen" xml:space="preserve">
+    <value>未打开文件夹。打开文件或文件夹后在此浏览。</value>
+    <comment>文件栏/未打开文件夹</comment>
+  </data>
+  <data name="Folder.NotFound" xml:space="preserve">
+    <value>该文件夹已不存在。</value>
+    <comment>文件栏/文件夹不存在</comment>
+  </data>
+  <data name="Folder.NoMarkdownFiles" xml:space="preserve">
+    <value>此文件夹中没有 Markdown 文件。</value>
+    <comment>文件栏/没有 Markdown 文件</comment>
+  </data>
 </root>

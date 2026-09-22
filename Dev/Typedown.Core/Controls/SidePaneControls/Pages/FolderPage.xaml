@@ -108,12 +108,19 @@
 
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+        <!-- Which folder is open: without this an unrelated or Markdown-less folder just looks like an empty pane. -->
+        <TextBlock Grid.Row="0" Margin="12,4,12,6" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"
+                   Text="{x:Bind WorkFolderExplorerItem.Name, Mode=OneWay}"
+                   ToolTipService.ToolTip="{x:Bind WorkFolderExplorerItem.FullPath, Mode=OneWay}"
+                   Visibility="{x:Bind local:FolderPage.IsVisible(WorkFolderExplorerItem.FullPath), Mode=OneWay}"/>
         <muxc:TreeView 
             x:Name="TreeView"
+            Grid.Row="1"
             CanReorderItems="False"
             CanDragItems="False"
             AllowDrop="False"
@@ -128,9 +135,9 @@
                 </TransitionCollection>
             </muxc:TreeView.ItemContainerTransitions>
         </muxc:TreeView>
-        <TextBlock Grid.Row="1" Margin="8,0" TextWrapping="Wrap"
-                   Text="{x:Bind WorkFolderExplorerItem.Exception.Message, Mode=OneWay}"/>
-        <Button Grid.Row="2" Margin="8" HorizontalAlignment="Stretch"
+        <TextBlock Grid.Row="2" Margin="12,0,12,4" TextWrapping="Wrap" Opacity="0.7"
+                   Text="{x:Bind local:FolderPage.GetStatusText(WorkFolderExplorerItem.FullPath, WorkFolderExplorerItem.Children.Count, WorkFolderExplorerItem.Exception), Mode=OneWay}"/>
+        <Button Grid.Row="3" Margin="8" HorizontalAlignment="Stretch"
                 Content="{u:LocaleString Key=OpenFolder}"
                 Command="{x:Bind FileViewModel.OpenFolderCommand, Mode=OneWay}"/>
     </Grid>

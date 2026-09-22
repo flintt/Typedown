@@ -1171,6 +1171,14 @@ span.ag-reference-link {
   display: block;
 }
 
+body.hide-paragraph-marker .ag-paragraph.ag-active .ag-front-icon {
+  display: none;
+}
+
+body.read-only #ag-editor-id {
+  caret-color: transparent;
+}
+
 .ag-meta-or-ctrl img,
 .ag-meta-or-ctrl a.ag-inline-rule {
   cursor: pointer !important;

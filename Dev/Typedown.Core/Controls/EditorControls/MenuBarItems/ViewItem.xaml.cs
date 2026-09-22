@@ -15,6 +15,7 @@
             RegisterWindowShortcut(Settings.ShortcutTypewriterMode, TypewriterModeItem);
             RegisterWindowShortcut(Settings.ShortcutStatusBar, StatusBarItem);
             RegisterWindowShortcut(Settings.ShortcutFullScreen, FullScreenItem);
+            RegisterWindowShortcut(Settings.ShortcutReadOnlyMode, ReadOnlyModeItem);
         }
 
         private void OnUnloaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)

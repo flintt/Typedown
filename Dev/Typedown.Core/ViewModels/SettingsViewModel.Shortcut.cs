@@ -216,5 +216,8 @@ namespace Typedown.Core.ViewModels
 
         [Locale("View", "FullScreen")]
         public ShortcutKey ShortcutFullScreen { get => GetSettingValue<ShortcutKey>(new(Mod.None, Key.F11)); set => SetSettingValue(value); }
+
+        [Locale("View", "ReadOnlyMode")]
+        public ShortcutKey ShortcutReadOnlyMode { get => GetSettingValue<ShortcutKey>(new(Mod.Control | Mod.Shift, Key.R)); set => SetSettingValue(value); }
     }
 }

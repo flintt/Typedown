@@ -68,6 +68,16 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             WorkFolderExplorerItem.IsExpanded = true;
         }
 
+        public static Visibility IsVisible(string path) => string.IsNullOrEmpty(path) ? Visibility.Collapsed : Visibility.Visible;
+
+        public static string GetStatusText(string path, int childCount, Exception exception)
+        {
+            if (exception != null) return exception.Message;
+            if (string.IsNullOrEmpty(path)) return Locale.GetString("Folder.NoFolderOpen");
+            if (!Directory.Exists(path)) return Locale.GetString("Folder.NotFound");
+            return childCount == 0 ? Locale.GetString("Folder.NoMarkdownFiles") : "";
+        }
+
         private void UpdateSelectedItem(ExplorerItem item)
         {
             if (item == null || FileViewModel == null)

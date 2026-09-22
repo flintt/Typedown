@@ -112,6 +112,8 @@ namespace Typedown.Core.ViewModels
                 Settings.PreferLooseListItem,
                 Settings.ListIndentation,
                 Settings.TableAlignColumns,
+                Settings.ShowParagraphMarker,
+                Settings.ReadOnly,
                 Settings.AutoPairMarkdownSyntax,
                 Settings.EditorAreaWidth,
                 Settings.FontFamily,

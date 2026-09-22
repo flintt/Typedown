@@ -769,4 +769,12 @@
     <value>Pad table cells so columns line up in the Markdown source. Turn off to keep tables compact (fewer tokens for AI tools)</value>
     <comment>编辑器/对齐表格列说明</comment>
   </data>
+  <data name="Editor.ShowParagraphMarker.Title" xml:space="preserve">
+    <value>Paragraph marker</value>
+    <comment>编辑器/段落标记</comment>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Description" xml:space="preserve">
+    <value>Show the block type (P, H1, ...) next to the current paragraph</value>
+    <comment>编辑器/在当前段落旁显示块类型</comment>
+  </data>
 </root>
