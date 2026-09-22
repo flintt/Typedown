@@ -224,6 +224,7 @@ namespace Typedown.Windows
 
         private void OnClosed(object sender, ClosedEventArgs e)
         {
+            if (LastActive == this) LastActive = null;
             var keepRun = AppViewModel.SettingsViewModel.KeepRun;
             checkActiveTimer?.Dispose();
             checkActiveTimer = null;

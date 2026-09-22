@@ -144,6 +144,7 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
+            pendingSingleClickOpen?.Cancel();
             disposables.Clear();
             WorkFolderExplorerItem?.Dispose();
             WorkFolderExplorerItem = null;
@@ -427,7 +428,7 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
                     {
                         return;
                     }
-                    if (cts.IsCancellationRequested || disposables.IsDisposed) return;
+                    if (cts.IsCancellationRequested || ViewModel?.FileViewModel == null) return; // page may have unloaded meanwhile
                     await ViewModel.FileViewModel.OpenFile(item.FullPath, preview: true);
                 }
                 UpdateSelectedItem(WorkFolderExplorerItem);
@@ -442,7 +443,7 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
         {
             try
             {
-                if ((sender as muxc.TreeViewItem)?.DataContext is ExplorerItem item && item.Type == ExplorerItem.ExplorerItemType.File)
+                if ((sender as muxc.TreeViewItem)?.DataContext is ExplorerItem item && item.Type == ExplorerItem.ExplorerItemType.File && ViewModel?.FileViewModel != null)
                 {
                     e.Handled = true;
                     pendingSingleClickOpen?.Cancel();

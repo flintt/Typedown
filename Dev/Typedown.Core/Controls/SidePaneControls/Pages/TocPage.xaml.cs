@@ -8,7 +8,7 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
     {
         public AppViewModel ViewModel => DataContext as AppViewModel;
 
-        public EditorViewModel Editor => ViewModel.EditorViewModel;
+        public EditorViewModel Editor => ViewModel?.EditorViewModel;
 
         public TocPage()
         {

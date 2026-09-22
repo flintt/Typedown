@@ -167,9 +167,10 @@ namespace Typedown.Core.Controls
             ViewModel.FileViewModel.OpenFileCommand.Execute(item.FullPath);
             if (string.IsNullOrEmpty(query)) return;
             // Let the document load, then open the in-document find with the same query.
+            var editor = ViewModel.EditorViewModel;
             await Task.Delay(400);
-            ViewModel.EditorViewModel.SearchValue = query;
-            ViewModel.EditorViewModel.FindCommand.Execute("search");
+            editor.SearchValue = query;
+            editor.FindCommand.Execute("search");
         }
     }
 }
