@@ -36,7 +36,7 @@
                 LostFocus="OnSearchTextBoxLostFocus" 
                 TextChanged="OnSearchTextChanged"
                 QueryIcon="Find"
-                PlaceholderText="{u:LocaleString Key=Search.InFolderPlaceholder}"/>
+                PlaceholderText="{u:LocaleString Key=FolderSearch.InFolderPlaceholder}"/>
             <Button Grid.Column="1" Width="32" Height="32" x:Name="CloseButton" Click="OnCloseButtonClick" Style="{ThemeResource EllipsisIconButtonStyle}">
                 <FontIcon FontSize="10" Glyph="&#xe8bb;"/>
             </Button>

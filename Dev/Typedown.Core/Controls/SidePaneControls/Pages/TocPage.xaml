@@ -28,10 +28,10 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="4,2" Spacing="2">
-            <Button Width="32" Height="28" Style="{ThemeResource EllipsisIconButtonStyle}" Click="OnExpandAllClick" ToolTipService.ToolTip="{u:LocaleString Key=Toc.ExpandAll}">
+            <Button Width="32" Height="28" Style="{ThemeResource EllipsisIconButtonStyle}" Click="OnExpandAllClick" ToolTipService.ToolTip="{u:LocaleString Key=TocPane.ExpandAll}">
                 <FontIcon FontSize="12" Glyph="&#xe70d;"/>
             </Button>
-            <Button Width="32" Height="28" Style="{ThemeResource EllipsisIconButtonStyle}" Click="OnCollapseAllClick" ToolTipService.ToolTip="{u:LocaleString Key=Toc.CollapseAll}">
+            <Button Width="32" Height="28" Style="{ThemeResource EllipsisIconButtonStyle}" Click="OnCollapseAllClick" ToolTipService.ToolTip="{u:LocaleString Key=TocPane.CollapseAll}">
                 <FontIcon FontSize="12" Glyph="&#xe70e;"/>
             </Button>
         </StackPanel>

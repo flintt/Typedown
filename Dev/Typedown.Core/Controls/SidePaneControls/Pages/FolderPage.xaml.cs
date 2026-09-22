@@ -73,9 +73,9 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
         public static string GetStatusText(string path, int childCount, Exception exception)
         {
             if (exception != null) return exception.Message;
-            if (string.IsNullOrEmpty(path)) return Locale.GetString("Folder.NoFolderOpen");
-            if (!Directory.Exists(path)) return Locale.GetString("Folder.NotFound");
-            return childCount == 0 ? Locale.GetString("Folder.NoMarkdownFiles") : "";
+            if (string.IsNullOrEmpty(path)) return Locale.GetString("FolderPane.NoFolderOpen");
+            if (!Directory.Exists(path)) return Locale.GetString("FolderPane.NotFound");
+            return childCount == 0 ? Locale.GetString("FolderPane.NoMarkdownFiles") : "";
         }
 
         private void UpdateSelectedItem(ExplorerItem item)

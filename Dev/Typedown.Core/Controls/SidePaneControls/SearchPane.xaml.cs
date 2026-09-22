@@ -91,18 +91,18 @@ namespace Typedown.Core.Controls
             var root = SearchRoot;
             if (root == null)
             {
-                Status = Locale.GetString("Folder.NoFolderOpen");
+                Status = Locale.GetString("FolderPane.NoFolderOpen");
                 return;
             }
             var cts = searchCts = new CancellationTokenSource();
             try
             {
                 await Task.Delay(300, cts.Token); // debounce typing
-                Status = Locale.GetString("Search.Searching");
+                Status = Locale.GetString("FolderSearch.Searching");
                 var progress = new Progress<SearchResultItem>(item => { if (!cts.IsCancellationRequested && Results.Count < MaxResults) Results.Add(item); });
                 var (files, hits) = await Task.Run(() => SearchFolder(root, query, progress, cts.Token), cts.Token);
                 if (cts.IsCancellationRequested) return;
-                Status = string.Format(Locale.GetString("Search.ResultSummary"), hits, files) + (hits >= MaxResults ? " (max)" : "");
+                Status = string.Format(Locale.GetString("FolderSearch.ResultSummary"), hits, files) + (hits >= MaxResults ? " (max)" : "");
             }
             catch (OperationCanceledException)
             {

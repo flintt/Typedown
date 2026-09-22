@@ -941,35 +941,35 @@
     <value>Reading Mode</value>
     <comment>阅读模式</comment>
   </data>
-  <data name="Folder.NoFolderOpen" xml:space="preserve">
+  <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>No folder is open. Open a file or a folder to browse it here.</value>
     <comment>文件栏/未打开文件夹</comment>
   </data>
-  <data name="Folder.NotFound" xml:space="preserve">
+  <data name="FolderPane.NotFound" xml:space="preserve">
     <value>This folder no longer exists.</value>
     <comment>文件栏/文件夹不存在</comment>
   </data>
-  <data name="Folder.NoMarkdownFiles" xml:space="preserve">
+  <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>No Markdown files in this folder.</value>
     <comment>文件栏/没有 Markdown 文件</comment>
   </data>
-  <data name="Search.InFolderPlaceholder" xml:space="preserve">
+  <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>Search in folder…</value>
     <comment>搜索/在文件夹中搜索</comment>
   </data>
-  <data name="Search.Searching" xml:space="preserve">
+  <data name="FolderSearch.Searching" xml:space="preserve">
     <value>Searching…</value>
     <comment>搜索/搜索中</comment>
   </data>
-  <data name="Search.ResultSummary" xml:space="preserve">
+  <data name="FolderSearch.ResultSummary" xml:space="preserve">
     <value>{0} matching file(s) of {1} searched</value>
     <comment>搜索/结果统计</comment>
   </data>
-  <data name="Toc.ExpandAll" xml:space="preserve">
+  <data name="TocPane.ExpandAll" xml:space="preserve">
     <value>Expand all</value>
     <comment>大纲/全部展开</comment>
   </data>
-  <data name="Toc.CollapseAll" xml:space="preserve">
+  <data name="TocPane.CollapseAll" xml:space="preserve">
     <value>Collapse all</value>
     <comment>大纲/全部折叠</comment>
   </data>
