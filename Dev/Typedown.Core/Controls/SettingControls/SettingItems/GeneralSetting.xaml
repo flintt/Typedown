@@ -66,6 +66,12 @@
             </controls:NormalSettingItem.Icon>
             <ToggleSwitch IsOn="{x:Bind Settings.AutoSave, Mode=TwoWay}"/>
         </controls:NormalSettingItem>
+        <controls:NormalSettingItem Title="{u:LocaleString Key=General.RememberCursorPosition.Title}" Description="{u:LocaleString Key=General.RememberCursorPosition.Description}">
+            <controls:NormalSettingItem.Icon>
+                <FontIcon Glyph="&#xe8ac;"/>
+            </controls:NormalSettingItem.Icon>
+            <ToggleSwitch IsOn="{x:Bind Settings.RememberCursorPosition, Mode=TwoWay}"/>
+        </controls:NormalSettingItem>
         <controls:NormalSettingItem Title="{u:LocaleString Key=General.AutoReload.Title}" Description="{u:LocaleString Key=General.AutoReload.Description}">
             <controls:NormalSettingItem.Icon>
                 <FontIcon Glyph="&#xe72c;"/>

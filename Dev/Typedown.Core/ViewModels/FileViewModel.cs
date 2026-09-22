@@ -113,6 +113,7 @@ namespace Typedown.Core.ViewModels
             {
                 return;
             }
+            CursorMemory.Flush();
             saveTimerRunning = true;
             try
             {
@@ -253,7 +254,8 @@ namespace Typedown.Core.ViewModels
                 EditorViewModel.History.InitHistory(EditorViewModel.Markdown);
                 if (postMessage)
                 {
-                    MarkdownEditor?.PostMessage("LoadFile", new { text = EditorViewModel.Markdown, basePath = ImageBasePath });
+                    var cursor = SettingsViewModel.RememberCursorPosition ? CursorMemory.Get(path) : null;
+                    MarkdownEditor?.PostMessage("LoadFile", new { text = EditorViewModel.Markdown, basePath = ImageBasePath, cursor });
                 }
                 return true;
             }
@@ -618,6 +620,7 @@ namespace Typedown.Core.ViewModels
 
         public void Dispose()
         {
+            CursorMemory.Flush();
             saveFileTimer.Stop();
             fileReloadTimer.Stop();
             StopWatchFile();

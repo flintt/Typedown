@@ -121,6 +121,7 @@ namespace Typedown.Core.ViewModels
                 Settings.TabSize,
                 Markdown,
                 BasePath = FileViewModel.ImageBasePath,
+                Cursor = Settings.RememberCursorPosition ? CursorMemory.Get(FileViewModel.FilePath) : null,
             };
         }
 
@@ -180,9 +181,18 @@ namespace Typedown.Core.ViewModels
             OnMarkdownChange(arg["text"].ToString());
         }
 
+        public CursorState CurrentCursor { get; private set; }
+
         public void OnCursorChange(JToken arg)
         {
-            History.CursorChange(arg["cursor"]?.ToObject<CursorState>());
+            var cursor = arg["cursor"]?.ToObject<CursorState>();
+            History.CursorChange(cursor);
+            if (cursor != null)
+            {
+                CurrentCursor = cursor;
+                if (FileLoaded && !string.IsNullOrEmpty(FileViewModel.FilePath))
+                    CursorMemory.Set(FileViewModel.FilePath, cursor);
+            }
         }
 
         public void OnStateChange(JToken arg)

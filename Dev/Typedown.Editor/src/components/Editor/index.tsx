@@ -47,10 +47,10 @@ const Editor: React.FC = () => {
     }, [])
 
     useEffect(() => {
-        remote.getSettings().then(({ markdown, basePath, ...opt }: any) => {
+        remote.getSettings().then(({ markdown, basePath, cursor, ...opt }: any) => {
             window.basePath = basePath
             setOptions(opt)
-            setContentFromHost(markdown)
+            setContentFromHost(markdown, cursor ?? undefined)
             OnFileLoaded();
         })
     }, [OnFileLoaded, setContentFromHost]);
@@ -77,9 +77,9 @@ const Editor: React.FC = () => {
         setContentVersion(v => v + 1)
     }), [options, onMarkdownChange]);
 
-    useEffect(() => transport.addListener<{ text: string, basePath: string }>('LoadFile', ({ text, basePath }) => {
+    useEffect(() => transport.addListener<{ text: string, basePath: string, cursor?: any }>('LoadFile', ({ text, basePath, cursor }) => {
         window.basePath = basePath
-        setContentFromHost(text, undefined)
+        setContentFromHost(text, cursor ?? undefined)
         OnFileLoaded();
     }), [OnFileLoaded, setContentFromHost]);
 
