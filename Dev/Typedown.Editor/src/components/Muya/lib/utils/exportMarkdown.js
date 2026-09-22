@@ -9,6 +9,8 @@
  * The output markdown needs to obey the standards of these Spec.
  */
 
+import { CURSOR_ANCHOR_DNA, CURSOR_FOCUS_DNA } from '../config'
+
 class ExportMarkdown {
   constructor(blocks, listIndentation = 1, isGitlabCompatibilityEnabled = false, { alignTableColumns = true } = {}) {
     this.blocks = blocks
@@ -317,21 +319,27 @@ class ExportMarkdown {
 
     const columnWidth = tHeader.children[0].children.map(th => ({ width: 5, align: th.align }))
 
+    // While the caret is inside a cell the cell text carries the (long) cursor markers, which are stripped
+    // again after export. Measure and pad by the visible text only, otherwise the table is written with
+    // different column widths whenever the caret sits in it and the document looks modified.
+    const visibleLength = cell => cell.replace(CURSOR_ANCHOR_DNA, '').replace(CURSOR_FOCUS_DNA, '').length
+
     let i
     let j
 
     if (this.alignTableColumns) {
       for (i = 0; i <= row; i++) {
         for (j = 0; j <= column; j++) {
-          columnWidth[j].width = Math.max(columnWidth[j].width, tableData[i][j].length + 2) // add 2, because have two space around text
+          columnWidth[j].width = Math.max(columnWidth[j].width, visibleLength(tableData[i][j]) + 2) // add 2, because have two space around text
         }
       }
     }
     tableData.forEach((r, i) => {
       const rs = indent + '|' + r.map((cell, j) => {
         if (!this.alignTableColumns) return ` ${cell} `
-        const raw = ` ${cell + ' '.repeat(columnWidth[j].width)}`
-        return raw.substring(0, columnWidth[j].width)
+        const width = columnWidth[j].width + (cell.length - visibleLength(cell))
+        const raw = ` ${cell + ' '.repeat(width)}`
+        return raw.substring(0, width)
       }).join('|') + '|'
       result.push(rs)
       if (i === 0) {
