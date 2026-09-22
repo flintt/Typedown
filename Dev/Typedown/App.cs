@@ -39,6 +39,19 @@ namespace Typedown
             }
         }
 
+        private static bool IsElevated()
+        {
+            try
+            {
+                using var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+                return new System.Security.Principal.WindowsPrincipal(identity).IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public static void LaunchNewApplication()
         {
             var providers = new List<IXamlMetadataProvider>() { new Core.Typedown_Core_XamlTypeInfo.XamlMetaDataProvider() };
@@ -49,7 +62,7 @@ namespace Typedown
         protected override async void OnLaunched()
         {
             base.OnLaunched();
-            Log.Debug($"startup: version={Core.Controls.AboutApp.GetAppVersion()} windowsBuild={Config.WindowsBuild} osVersion={Environment.OSVersion.VersionString} mica={Config.IsMicaSupported} packaged={Config.IsPackaged}");
+            Log.Debug($"startup: version={Core.Controls.AboutApp.GetAppVersion()} windowsBuild={Config.WindowsBuild} osVersion={Environment.OSVersion.VersionString} mica={Config.IsMicaSupported} packaged={Config.IsPackaged} elevated={IsElevated()} exe={AppDomain.CurrentDomain.BaseDirectory}");
             try
             {
                 global::Windows.UI.Xaml.Application.Current.UnhandledException += (_, e) => Log.WriteLocal("XamlUnhandledException", $"{e.Message}\n{e.Exception}");

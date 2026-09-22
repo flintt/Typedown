@@ -93,9 +93,11 @@ namespace Typedown.Core.Controls
             var deferral = e.GetDeferral();
             try
             {
+                Log.Debug($"DragEnter: formats=[{string.Join(", ", e.DataView.AvailableFormats)}]");
                 if (e.DataView.Contains(StandardDataFormats.StorageItems))
                 {
                     var items = await e.DataView.GetStorageItemsAsync();
+                    Log.Debug($"DragEnter: {items.Count} storage item(s): {string.Join(", ", items.Select(x => x.Path))}");
                     if (items.Count != 1) return;
                     var item = items.First();
                     switch (FileTypeHelper.GetFileType(item.Path))
@@ -111,8 +113,9 @@ namespace Typedown.Core.Controls
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                Log.Debug($"DragEnter failed: {ex}");
                 e.AcceptedOperation = DataPackageOperation.None;
             }
             finally
@@ -123,6 +126,7 @@ namespace Typedown.Core.Controls
 
         private async void OnDrop(object sender, DragEventArgs e)
         {
+            Log.Debug($"Drop: formats=[{string.Join(", ", e.DataView.AvailableFormats)}]");
             if (e.DataView.Contains(StandardDataFormats.StorageItems))
             {
                 var items = await e.DataView.GetStorageItemsAsync();
