@@ -82,7 +82,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <local:DocumentTabBar x:Name="DocumentTabBar" x:Load="{x:Bind IsTabBarLoad(ViewModel.TabsViewModel.Tabs.Count, Settings.AlwaysShowTabBar), Mode=OneWay}"/>
+            <local:DocumentTabBar x:Name="DocumentTabBar" x:Load="{x:Bind local:MainContent.IsTabBarLoad(ViewModel.TabsViewModel.Tabs.Count, Settings.AlwaysShowTabBar), Mode=OneWay}"/>
             <local:EditorContainer Grid.Row="1" />
         </Grid>
         <Border 
