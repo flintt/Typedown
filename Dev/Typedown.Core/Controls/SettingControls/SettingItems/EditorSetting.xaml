@@ -121,6 +121,13 @@
                 <x:String>HTML</x:String>
             </ComboBox>
         </controls:NormalSettingItem>-->
+        <TextBlock Text="{u:LocaleString Key=Editor.Extension}" Margin="0,16,0,4"/>
+        <controls:NormalSettingItem Title="{u:LocaleString Key=Editor.SpellcheckEnabled.Title}" Description="{u:LocaleString Key=Editor.SpellcheckEnabled.Description}">
+            <controls:NormalSettingItem.Icon>
+                <FontIcon Glyph="&#xf87b;"/>
+            </controls:NormalSettingItem.Icon>
+            <ToggleSwitch IsOn="{x:Bind Settings.SpellcheckEnabled, Mode=TwoWay}"/>
+        </controls:NormalSettingItem>
         <!--<TextBlock Text="{u:LocaleString Key=Editor.Extension}" Margin="0,16,0,4"/>
         <controls:ExpanderSettingItem Title="{u:LocaleString Key=Editor.SpellcheckEnabled.Title}" Description="{u:LocaleString Key=Editor.SpellcheckEnabled.Description}">
             <controls:ExpanderSettingItem.Icon>

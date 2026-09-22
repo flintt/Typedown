@@ -136,6 +136,11 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     }, [editor, props.options?.textDirection])
 
     useEffect(() => {
+        // Chromium/WebView2 spell checking on the contenteditable root (upstream #57)
+        editor?.setOptions({ spellcheckEnabled: !!props.options?.spellcheckEnabled })
+    }, [editor, props.options?.spellcheckEnabled])
+
+    useEffect(() => {
         // Muya: 'dfm' = 4-space nested indentation, otherwise the number of spaces after the list marker (1-4).
         const value = props.options?.listIndentation
         editor?.setListIndentation(value === 'dfm' ? 'dfm' : (parseInt(value, 10) || 1))
