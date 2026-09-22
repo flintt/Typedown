@@ -39,17 +39,12 @@ namespace Typedown
             }
         }
 
+        [System.Runtime.InteropServices.DllImport("shell32.dll", ExactSpelling = true)]
+        private static extern bool IsUserAnAdmin();
+
         private static bool IsElevated()
         {
-            try
-            {
-                using var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
-                return new System.Security.Principal.WindowsPrincipal(identity).IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator);
-            }
-            catch
-            {
-                return false;
-            }
+            try { return IsUserAnAdmin(); } catch { return false; }
         }
 
         public static void LaunchNewApplication()
