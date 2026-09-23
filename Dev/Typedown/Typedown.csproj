@@ -77,6 +77,8 @@
 
 	<ItemGroup>
 		<None Include="Resources\Statics\**" CopyToOutputDirectory="Always" Link="Resources\Statics\%(RecursiveDir)%(Filename)%(Extension)" />
+		<!-- The themes that ship with the app; the themes folder in %LOCALAPPDATA% is added to these at runtime. -->
+		<None Include="Resources\Themes\**" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Link="Resources\Themes\%(RecursiveDir)%(Filename)%(Extension)" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -14,6 +14,23 @@
 
 文件夹不存在时程序会自动创建，并放一个 `example.css` 作为起点。文件名（不含 `.css`）就是主题的内部标识，改名等于换了一个主题。
 
+## 内置主题
+
+程序自带六个主题，装好就能在 视图 → 主题 和 设置 → 外观 里选到，不用往主题文件夹放任何东西：
+
+| 主题 | 基底 | 说明 |
+|---|---|---|
+| Solarized Light | light | Solarized 的浅色一版，米黄底 |
+| Sepia | light | 暖纸色，长时间阅读用 |
+| Nord | dark | 冷灰蓝 |
+| Solarized Dark | dark | Solarized 的深色一版 |
+| Dracula | dark | 深紫灰配亮色语法高亮 |
+| Gruvbox Dark | dark | 暖褐底，对比偏高 |
+
+内置主题的文件随程序安装（Windows 在安装目录的 `Resources\Themes\`，Linux 在 `/opt/typedown/Assets/Themes/`），
+不要直接改——升级会覆盖。想在它们的基础上改：把文件复制到上面的主题文件夹，改完即可；**同名文件会顶替掉内置的那一个**，
+在列表里仍然占同一个位置。换个文件名则是多出一个主题。
+
 ## 文件结构
 
 ```css
@@ -183,6 +200,12 @@
 A theme is a single CSS file dropped into the themes folder (`%LOCALAPPDATA%\Typedown\themes\` on Windows,
 `~/.local/share/Typedown.Uno/themes/` on Linux, `~/Library/Application Support/Typedown.Uno/themes/` on macOS).
 It then appears under Settings → Appearance → Theme.
+
+Six themes ship with the app — Solarized Light, Sepia, Nord, Solarized Dark, Dracula and Gruvbox Dark — and are
+listed under View → Theme without installing anything. Their files sit next to the program (`Resources\Themes\`
+on Windows, `/opt/typedown/Assets/Themes/` on Linux) and are replaced on upgrade, so edit a copy instead: put it
+in the themes folder above, and a copy under the same file name takes the place of the bundled theme it came
+from. Under a different name it becomes a theme of its own.
 
 The first comment block carries the metadata — `name`, `base` (`light`, `dark` or `black`; which built-in theme
 fills in what you leave out), `accent`, `author`, and `background`, `surface`, `foreground` and `border`, which

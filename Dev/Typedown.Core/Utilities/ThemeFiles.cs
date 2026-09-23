@@ -44,17 +44,33 @@ namespace Typedown.Core.Utilities
     {
         public static string Folder => System.IO.Path.Combine(Config.GetLocalFolderPath(), "themes");
 
+        /// <summary>The themes that ship with the app, next to the executable and never written to.</summary>
+        public static string BundledFolder => System.IO.Path.Combine(AppContext.BaseDirectory, "Resources", "Themes");
+
+        /// <summary>
+        /// Every readable theme, by file name: the ones that ship with the app first, then the user's folder. A
+        /// file in the user's folder takes the place of a bundled one with the same name, which is how a bundled
+        /// theme is edited — copy it over, change it, and it keeps its place in the list.
+        /// </summary>
         public static IReadOnlyList<CustomTheme> List()
         {
-            var themes = new List<CustomTheme>();
+            var themes = new Dictionary<string, CustomTheme>(StringComparer.OrdinalIgnoreCase);
+            Collect(BundledFolder, themes);
+            Collect(Folder, themes);
+            return themes.Values.OrderBy(x => x.Name, StringComparer.CurrentCultureIgnoreCase).ToList();
+        }
+
+        private static void Collect(string folder, Dictionary<string, CustomTheme> themes)
+        {
             try
             {
-                if (!Directory.Exists(Folder)) return themes;
-                foreach (var path in Directory.EnumerateFiles(Folder, "*.css").OrderBy(x => x))
+                if (!Directory.Exists(folder)) return;
+                foreach (var path in Directory.EnumerateFiles(folder, "*.css").OrderBy(x => x))
                 {
                     try
                     {
-                        themes.Add(Parse(path, File.ReadAllText(path)));
+                        var theme = Parse(path, File.ReadAllText(path));
+                        themes[theme.Id] = theme;
                     }
                     catch (Exception ex)
                     {
@@ -66,7 +82,6 @@ namespace Typedown.Core.Utilities
             {
                 Log.Debug($"theme folder: {ex.Message}");
             }
-            return themes;
         }
 
         public static CustomTheme Find(string id) =>
