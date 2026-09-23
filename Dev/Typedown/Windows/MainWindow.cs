@@ -346,18 +346,19 @@ namespace Typedown.Windows
 
         private void TrySetPrimaryLanguage()
         {
+            var settingLanguage = AppViewModel.SettingsViewModel.Language;
+            var supported = Locale.SupportedLangs.ContainsKey(settingLanguage);
             try
             {
-                var settingLanguage = AppViewModel.SettingsViewModel.Language;
-                if (Locale.SupportedLangs.ContainsKey(settingLanguage))
-                    ApplicationLanguages.PrimaryLanguageOverride = settingLanguage;
-                else
-                    ApplicationLanguages.PrimaryLanguageOverride = string.Empty;
+                // Only works with package identity (the MSIX build); it throws in the installer and portable
+                // builds, which is why the language is also set on the resource contexts below.
+                ApplicationLanguages.PrimaryLanguageOverride = supported ? settingLanguage : string.Empty;
             }
-            catch
+            catch (Exception ex)
             {
-
+                Log.Debug($"language: PrimaryLanguageOverride refused: {ex.Message}");
             }
+            Locale.ApplyLanguage(supported ? settingLanguage : null);
         }
     }
 }

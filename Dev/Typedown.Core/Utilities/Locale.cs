@@ -108,17 +108,55 @@ namespace Typedown.Core.Utilities
             {"zu","Isi-Zulu"},
         };
 
-        public static Dictionary<string, string> LangsOptions { get; } = new(SupportedLangs.Append(new("default", GetString("UseSystemSetting"))));
+        /// <summary>Computed on each access: the "follow system" label has to follow the chosen language too,
+        /// and the static initializer runs before the language is applied.</summary>
+        public static Dictionary<string, string> LangsOptions => new(SupportedLangs.Append(new("default", GetString("UseSystemSetting"))));
 
         public static string GetLangOptionDisplayName(string key) => LangsOptions[key];
 
         public static ResourceContext ResourceContext { get; } = new();
 
+        /// <summary>
+        /// Chooses the language the .resw resources are read in. <c>ApplicationLanguages.PrimaryLanguageOverride</c>
+        /// alone is not enough: it needs package identity, so in the installer and portable builds it throws and
+        /// the app stays in the system language no matter what the setting says. Setting the language on the
+        /// resource contexts works either way — that is what the lookups below actually consult.
+        /// </summary>
+        public static void ApplyLanguage(string language)
+        {
+            var wanted = SupportedLangs.ContainsKey(language ?? "") ? language : null;
+            Apply(ResourceContext, wanted);
+            try
+            {
+                Apply(ResourceManager.Current.DefaultContext, wanted);
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"language: default context refused {wanted ?? "(system)"}: {ex.Message}");
+            }
+            Log.Debug($"language: setting={language} applied={wanted ?? "(system)"} resolved={string.Join(",", ResourceContext.Languages)}");
+        }
+
+        private static void Apply(ResourceContext context, string language)
+        {
+            try
+            {
+                if (language == null)
+                    context.Reset();
+                else
+                    context.QualifierValues["Language"] = language;
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"language: cannot set {language ?? "(system)"}: {ex.Message}");
+            }
+        }
+
         public static string GetString(string key, ResourceSource source = 0)
         {
             key = key.Replace('.', '/');
             if (source == 0 || !ResourcesDictionary.ContainsKey(source))
-                return ResourcesDictionary.Values.Select(x => x.GetValue(key)?.ValueAsString).Where(x => !string.IsNullOrEmpty(x)).FirstOrDefault();
+                return ResourcesDictionary.Values.Select(x => x.GetValue(key, ResourceContext)?.ValueAsString).Where(x => !string.IsNullOrEmpty(x)).FirstOrDefault();
             return ResourcesDictionary[source].GetValue(key, ResourceContext)?.ValueAsString;
         }
 
