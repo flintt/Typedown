@@ -59,6 +59,12 @@ namespace Typedown.Core.ViewModels
         /// <summary>User CSS applied to the editor and to HTML/PDF export (upstream #30).</summary>
         public string CustomCss { get => GetSettingValue(""); set => SetSettingValue(value); }
 
+        /// <summary>
+        /// File name (without .css) of a theme in the themes folder, empty for none. The theme's CSS is applied
+        /// to the editor after the built-in theme it builds on; see docs/custom-theme.md.
+        /// </summary>
+        public string CustomTheme { get => GetSettingValue(""); set => SetSettingValue(value); }
+
         // Share to HedgeDoc (1.x): server, optional email login (password stored DPAPI-protected), publish read-only link
         public string HedgeDocServer { get => GetSettingValue(""); set => SetSettingValue(value); }
         public string HedgeDocEmail { get => GetSettingValue(""); set => SetSettingValue(value); }

@@ -862,4 +862,19 @@
   <data name="General.StartupAction.FileStartupAction.RestoreSession" xml:space="preserve">
     <value>恢复上次打开的所有文档</value>
   </data>
+  <data name="View.CustomTheme.Title" xml:space="preserve">
+    <value>自定义主题</value>
+  </data>
+  <data name="View.CustomTheme.Description" xml:space="preserve">
+    <value>一个主题就是主题文件夹里的一个 CSS 文件，格式见 docs/custom-theme.md</value>
+  </data>
+  <data name="View.CustomTheme.None" xml:space="preserve">
+    <value>（无）</value>
+  </data>
+  <data name="View.CustomTheme.OpenFolder" xml:space="preserve">
+    <value>打开主题文件夹</value>
+  </data>
+  <data name="View.CustomTheme.Refresh" xml:space="preserve">
+    <value>重新加载主题</value>
+  </data>
 </root>

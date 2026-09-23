@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.IO;
@@ -98,6 +99,9 @@ namespace Typedown.Core.ViewModels
             RemoteInvoke.Handle<JToken>("SetClipboard", OnSetClipboard);
             Settings.WhenPropertyChanged(nameof(Settings.AutoSave)).Subscribe(_ => Settings_AutoSaveChanged(Settings.AutoSave));
             Settings.WhenPropertyChanged(nameof(Settings.SourceCode)).Subscribe(_ => modeSwitching = true);
+            // The editor reads the theme as "themeCss"; the setting only holds the file name.
+            Settings.WhenPropertyChanged(nameof(Settings.CustomTheme)).Subscribe(_ =>
+                MarkdownEditor?.PostMessage("SettingsChanged", new Dictionary<string, object>() { { "themeCss", ThemeFiles.Read(Settings.CustomTheme) } }));
             this.WhenPropertyChanged(nameof(SearchValue)).Subscribe(_ => SearchValueChanged());
             this.WhenPropertyChanged(nameof(Saved)).Subscribe(_ => SavedOrAutoSavedSuccChanged());
             this.WhenPropertyChanged(nameof(AutoSavedSucc)).Subscribe(_ => SavedOrAutoSavedSuccChanged());
@@ -134,6 +138,7 @@ namespace Typedown.Core.ViewModels
                 Settings.ShowParagraphMarker,
                 Settings.ReadOnly,
                 Settings.CustomCss,
+                ThemeCss = ThemeFiles.Read(Settings.CustomTheme),
                 Settings.SpellcheckEnabled,
                 Settings.AutoPairMarkdownSyntax,
                 Settings.EditorAreaWidth,

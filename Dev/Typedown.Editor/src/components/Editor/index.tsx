@@ -107,7 +107,11 @@ const Editor: React.FC = () => {
     }, [options])
 
     useEffect(() => transport.addListener<IExportArgs>('Export', async ({ type, context, basePath, title, options }) => {
-        const generateOption = { printOptimization: false, title, toc: getHtmlToc(getTOC(markdownRef.current ?? '').toc), ...options }
+        // The theme and the user's own CSS style the editor, so the exported file should carry them too —
+        // otherwise a document looks different the moment it leaves the app.
+        const styling = [optionsRef.current?.themeCss, optionsRef.current?.customCss].filter(Boolean).join('\n')
+        const generateOption: any = { printOptimization: false, title, toc: getHtmlToc(getTOC(markdownRef.current ?? '').toc), ...options }
+        if (styling) generateOption.extraCss = [generateOption.extraCss, styling].filter(Boolean).join('\n')
         const baseUrl = basePath ? `file:///${basePath.replaceAll('\\', '/')}/` : undefined
         const html = await new ExportHtml(markdownRef.current, { ...optionsRef.current, baseUrl }).generate(generateOption)
         if (type == 'print') {

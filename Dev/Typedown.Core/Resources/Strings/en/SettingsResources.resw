@@ -862,4 +862,19 @@
   <data name="General.StartupAction.FileStartupAction.RestoreSession" xml:space="preserve">
     <value>Restore all documents of the last session</value>
   </data>
+  <data name="View.CustomTheme.Title" xml:space="preserve">
+    <value>Custom theme</value>
+  </data>
+  <data name="View.CustomTheme.Description" xml:space="preserve">
+    <value>A theme is one CSS file in the themes folder; see docs/custom-theme.md</value>
+  </data>
+  <data name="View.CustomTheme.None" xml:space="preserve">
+    <value>(none)</value>
+  </data>
+  <data name="View.CustomTheme.OpenFolder" xml:space="preserve">
+    <value>Open the themes folder</value>
+  </data>
+  <data name="View.CustomTheme.Refresh" xml:space="preserve">
+    <value>Reload themes</value>
+  </data>
 </root>

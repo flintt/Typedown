@@ -37,6 +37,18 @@
                 </muxc:RadioButtons>
             </StackPanel>
         </controls:ExpanderSettingItem>
+        <controls:ExpanderSettingItem Title="{u:LocaleString Key=View.CustomTheme.Title}" Description="{u:LocaleString Key=View.CustomTheme.Description}">
+            <controls:ExpanderSettingItem.Icon>
+                <FontIcon Glyph="&#xe771;"/>
+            </controls:ExpanderSettingItem.Icon>
+            <controls:ExpanderSettingItem.State>
+                <ComboBox x:Name="CustomThemeBox" MinWidth="180" SelectionChanged="OnCustomThemeChanged"/>
+            </controls:ExpanderSettingItem.State>
+            <StackPanel Padding="48,16,16,16" Orientation="Horizontal" Spacing="8">
+                <Button Content="{u:LocaleString Key=View.CustomTheme.OpenFolder}" Click="OnOpenThemeFolder"/>
+                <Button Content="{u:LocaleString Key=View.CustomTheme.Refresh}" Click="OnRefreshThemes"/>
+            </StackPanel>
+        </controls:ExpanderSettingItem>
         <controls:ExpanderSettingItem Title="{u:LocaleString Key=View.UseMicaMaterial.Title}" Description="{u:LocaleString Key=View.UseMicaMaterial.Description}">
             <controls:ExpanderSettingItem.Icon>
                 <FontIcon Glyph="&#xf4a5;"/>
