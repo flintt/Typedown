@@ -954,6 +954,7 @@ namespace Typedown.Core.ViewModels
 
         private void Exit()
         {
+            Utilities.Log.Debug($"exit requested\n{Environment.StackTrace}");
             var SC_CLOSE = 0xF060;
             PInvoke.PostMessage(AppViewModel.MainWindow, (uint)PInvoke.WindowMessage.WM_SYSCOMMAND, (nint)SC_CLOSE, IntPtr.Zero);
         }

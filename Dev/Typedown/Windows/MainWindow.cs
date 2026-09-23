@@ -287,6 +287,9 @@ namespace Typedown.Windows
 
         private void OnClosed(object sender, ClosedEventArgs e)
         {
+            // A window that closes without the user asking for it is how "the app just vanished" happens, and
+            // nothing else records it: note who asked.
+            Log.Debug($"window closed\n{Environment.StackTrace}");
             if (LastActive == this) LastActive = null;
             var keepRun = AppViewModel.SettingsViewModel.KeepRun;
             checkActiveTimer?.Dispose();
@@ -302,7 +305,10 @@ namespace Typedown.Windows
                 if (keepRun)
                     Process.GetCurrentProcess().MaxWorkingSet = Process.GetCurrentProcess().MinWorkingSet;
                 else
+                {
+                    Log.Debug("last window closed, exiting");
                     XamlApplication.Current.Exit();
+                }
             }
         }
 

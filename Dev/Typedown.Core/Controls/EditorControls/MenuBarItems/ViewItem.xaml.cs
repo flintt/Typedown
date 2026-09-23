@@ -13,11 +13,7 @@
             // no caret) or in source mode (which is a plain text editor): grey them out instead of letting them
             // look enabled while doing nothing. The settings themselves are kept for when the mode is left.
             UpdateModeAvailability();
-            if (Settings != null)
-            {
-                Settings.PropertyChanged -= OnSettingsChanged; // OnRegisterShortcut runs again on every load
-                Settings.PropertyChanged += OnSettingsChanged;
-            }
+            Subscribe(Settings);
             RegisterWindowShortcut(Settings.ShortcutSidePane, SidePaneItem);
             RegisterWindowShortcut(Settings.ShortcutSourceCodeMode, SourceCodeModeItem);
             RegisterWindowShortcut(Settings.ShortcutFocusMode, FocusModeItem);
@@ -29,14 +25,35 @@
             RegisterWindowShortcut(Settings.ShortcutPreviousTab, PreviousTabItem);
         }
 
+        /// <summary>
+        /// The settings outlive this control, so the subscription is remembered rather than looked up again on
+        /// the way out: the data context is already gone by the time a torn-down menu bar unloads, and a
+        /// subscription that cannot be found is a subscription that is never removed — the stale handler then
+        /// runs on the next mode switch with no data context and takes the app down.
+        /// </summary>
+        private ViewModels.SettingsViewModel subscribed;
+
+        private void Subscribe(ViewModels.SettingsViewModel settings)
+        {
+            if (subscribed == settings) return;
+            Unsubscribe();
+            subscribed = settings;
+            if (subscribed != null)
+                subscribed.PropertyChanged += OnSettingsChanged;
+        }
+
+        private void Unsubscribe()
+        {
+            if (subscribed == null) return;
+            subscribed.PropertyChanged -= OnSettingsChanged;
+            subscribed = null;
+        }
+
         private void OnSettingsChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            // The menu bar can be torn down while the settings object lives on, and then this handler would run
-            // against a control whose DataContext is gone: drop the subscription instead.
             if (Settings == null)
             {
-                if (sender is ViewModels.SettingsViewModel settings)
-                    settings.PropertyChanged -= OnSettingsChanged;
+                Unsubscribe();
                 return;
             }
             if (e.PropertyName is nameof(Settings.ReadOnly) or nameof(Settings.SourceCode))
@@ -54,7 +71,7 @@
 
         private void OnUnloaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            if (Settings != null) Settings.PropertyChanged -= OnSettingsChanged;
+            Unsubscribe();
             Bindings?.StopTracking();
         }
     }
