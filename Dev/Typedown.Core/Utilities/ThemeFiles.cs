@@ -124,6 +124,17 @@ namespace Typedown.Core.Utilities
             }
         }
 
+        /// <summary>Black or white, whichever can be read on the given colour; null when there is no colour.</summary>
+        public static Windows.UI.Xaml.Media.Brush Readable(string colour)
+        {
+            var brush = Brush(colour) as Windows.UI.Xaml.Media.SolidColorBrush;
+            if (brush == null) return null;
+            var c = brush.Color;
+            var luminance = (0.299 * c.R + 0.587 * c.G + 0.114 * c.B) / 255;
+            var tone = (byte)(luminance > 0.55 ? 26 : 240);
+            return new Windows.UI.Xaml.Media.SolidColorBrush(Windows.UI.Color.FromArgb(255, tone, tone, tone));
+        }
+
         private static CustomTheme Parse(string path, string css)
         {
             var id = System.IO.Path.GetFileNameWithoutExtension(path);

@@ -32,6 +32,29 @@ namespace Typedown.Core.Pages
         {
             var uiViewModel = AppViewModel.UIViewModel;
             disposables.Add(uiViewModel.WhenPropertyChanged(nameof(UIViewModel.IsFullScreen)).Cast<bool>().StartWith(uiViewModel.IsFullScreen).Subscribe(OnFullScreenChanged));
+            var settings = AppViewModel.SettingsViewModel;
+            disposables.Add(settings.WhenPropertyChanged(nameof(settings.CustomTheme)).StartWith(settings.CustomTheme).Subscribe(_ => UpdateThemeColours()));
+        }
+
+        /// <summary>
+        /// A custom theme colours the strips around the editor as well: the menu bar and the status bar. What
+        /// the theme does not name keeps the colours of the built-in theme it builds on, and a panel painted
+        /// without a text colour gets one that can be read on it.
+        /// </summary>
+        private void UpdateThemeColours()
+        {
+            try
+            {
+                var theme = ThemeFiles.Find(AppViewModel.SettingsViewModel.CustomTheme);
+                var surface = ThemeFiles.Brush(theme?.Surface) ?? ThemeFiles.Brush(theme?.Background);
+                var foreground = ThemeFiles.Brush(theme?.Foreground) ?? ThemeFiles.Readable(theme?.Surface ?? theme?.Background);
+                MenuBarHost?.ApplyThemeBrushes(surface, foreground);
+                StatusBar?.ApplyThemeBrushes(surface, foreground);
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"theme colours: {ex.Message}");
+            }
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)

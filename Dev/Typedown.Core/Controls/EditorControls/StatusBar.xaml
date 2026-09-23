@@ -16,7 +16,7 @@
     <UserControl.Resources>
         <converters:BoolToObjectConverter x:Key="SidePaneIconConverter" TrueValue="&#xea49;" FalseValue="&#xea5b;"/>
     </UserControl.Resources>
-    <Grid BorderThickness="0,1,0,0" Padding="4,2,4,3" BorderBrush="{ThemeResource CardStrokeColorDefault}">
+    <Grid x:Name="RootGrid" BorderThickness="0,1,0,0" Padding="4,2,4,3" BorderBrush="{ThemeResource CardStrokeColorDefault}">
         <Grid.Background>
             <SolidColorBrush Color="{ThemeResource SolidBackgroundFillColorBase}" Opacity="0.5"/>
         </Grid.Background>

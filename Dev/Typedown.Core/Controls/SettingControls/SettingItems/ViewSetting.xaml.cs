@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using Typedown.Core.Utilities;
@@ -23,8 +24,30 @@ namespace Typedown.Core.Controls.SettingControls.SettingItems
         public ViewSetting()
         {
             InitializeComponent();
-            Loaded += (_, _) => FillThemes();
+            Loaded += (_, _) =>
+            {
+                FillThemes();
+                if (Settings != null) Settings.PropertyChanged += OnSettingsChanged;
+            };
+            Unloaded += (_, _) =>
+            {
+                if (Settings != null) Settings.PropertyChanged -= OnSettingsChanged;
+            };
         }
+
+        private void OnSettingsChanged(object sender, PropertyChangedEventArgs e)
+        {
+            // Picking a built-in theme in the radio buttons turns the custom theme off, otherwise the two
+            // disagree: the radio says "Light" while a custom theme is still painting everything.
+            if (e.PropertyName != nameof(Settings.AppTheme) || applyingTheme || Settings == null) return;
+            if (string.IsNullOrEmpty(Settings.CustomTheme)) return;
+            Settings.CustomTheme = string.Empty;
+            fillingThemes = true;
+            CustomThemeBox.SelectedIndex = 0;
+            fillingThemes = false;
+        }
+
+        private bool applyingTheme;
 
         private void FillThemes()
         {
@@ -62,7 +85,16 @@ namespace Typedown.Core.Controls.SettingControls.SettingItems
             }
             var theme = themes[index];
             // The theme names the built-in theme it builds on, and that one also colours the window around it.
-            Settings.AppTheme = theme.Base;
+            // The flag keeps this assignment from being read as "the user picked a built-in theme".
+            applyingTheme = true;
+            try
+            {
+                Settings.AppTheme = theme.Base;
+            }
+            finally
+            {
+                applyingTheme = false;
+            }
             Settings.CustomTheme = theme.Id;
         }
 

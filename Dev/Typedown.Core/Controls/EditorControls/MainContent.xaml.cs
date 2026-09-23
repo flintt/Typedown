@@ -73,8 +73,11 @@ namespace Typedown.Core.Controls
             }
             if (LeftPane != null)
             {
+                var foreground = ThemeFiles.Brush(theme?.Foreground) ?? ThemeFiles.Readable(theme?.Surface ?? theme?.Background);
                 if (surface != null) LeftPane.Background = surface;
                 else LeftPane.ClearValue(Control.BackgroundProperty);
+                if (foreground != null) LeftPane.Foreground = foreground;
+                else LeftPane.ClearValue(Control.ForegroundProperty);
             }
         }
 

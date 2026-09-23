@@ -11,6 +11,21 @@ namespace Typedown.Core.Controls
 {
     public sealed partial class MenuBar : UserControl
     {
+        /// <summary>
+        /// Paints this bar from a custom theme. Null puts the colours of the built-in theme back; the inner
+        /// grid carries the visible background, so setting the control's own is not enough.
+        /// </summary>
+        public void ApplyThemeBrushes(Windows.UI.Xaml.Media.Brush background, Windows.UI.Xaml.Media.Brush foreground)
+        {
+            if (RootGrid != null)
+            {
+                if (background != null) RootGrid.Background = background;
+                else RootGrid.ClearValue(Windows.UI.Xaml.Controls.Panel.BackgroundProperty);
+            }
+            if (foreground != null) Foreground = foreground;
+            else ClearValue(ForegroundProperty);
+        }
+
         public AppViewModel ViewModel => DataContext as AppViewModel;
         public SettingsViewModel Settings => ViewModel?.SettingsViewModel;
 
