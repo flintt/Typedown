@@ -598,14 +598,15 @@ namespace Typedown.Core.ViewModels
                 if (TryGetOpenedWindow(file, out _)) continue;
                 try
                 {
-                    if (opened > 0) TabsViewModel.BeginNewTab();
+                    // No tab is opened here: LoadFile adds one itself whenever the active document is not a
+                    // pristine untitled one. Starting a tab first only meant it saw the previous document still
+                    // loaded, opened a second tab for the file and left the first as a copy of its predecessor —
+                    // two documents came back as three, one of them twice.
                     if (await LoadFile(file, true, false)) opened++;
-                    else if (opened > 0) TabsViewModel.AbortNewTab(TabsViewModel.ActiveTab);
                 }
                 catch (Exception ex)
                 {
                     Log.Debug($"RestoreSession: {file}: {ex.Message}");
-                    if (opened > 0) TabsViewModel.AbortNewTab(TabsViewModel.ActiveTab);
                 }
             }
             if (opened == 0) return false;
