@@ -10,6 +10,7 @@ import LinkTools from 'components/Muya/lib/ui/linkTools'
 import TableBarTools from 'components/Muya/lib/ui/tableTools'
 import FootnoteTool from 'components/Muya/lib/ui/footnoteTool'
 import FrontMenu from 'components/Muya/lib/ui/frontMenu'
+import FormatPicker from 'components/Muya/lib/ui/formatPicker'
 import { createApplicationMenuState } from "services/menuState";
 import 'components/Muya/themes/default.css'
 
@@ -37,6 +38,8 @@ Muya.use(EmojiPicker)
 Muya.use(ImageSelector)
 Muya.use(ImageToolbar)
 Muya.use(FrontMenu)
+// The selection format bar: the plugin was never registered, so the host's handler for it never fired.
+Muya.use(FormatPicker)
 Muya.use(LinkTools, { jumpClick: (linkInfo: { href: string }) => { transport.postMessage('OpenURI', { uri: linkInfo.href }) } })
 Muya.use(TableBarTools)
 Muya.use(FootnoteTool)

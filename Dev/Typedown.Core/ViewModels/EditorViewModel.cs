@@ -75,6 +75,15 @@ namespace Typedown.Core.ViewModels
 
         private bool contentUpdating = false;
 
+        /// <summary>
+        /// Set while switching to or from source mode. The text is re-parsed on the way back, and the editor
+        /// cannot always reproduce it exactly (trailing empty paragraphs have no Markdown spelling, tables get
+        /// their padding recomputed), so the first report after a switch can differ from what was loaded
+        /// without the user having typed anything. That is not an edit, and a document that was saved must not
+        /// come out of the switch marked as modified.
+        /// </summary>
+        private bool modeSwitching = false;
+
         public EditorViewModel(IServiceProvider serviceProvider)
         {
             ServiceProvider = serviceProvider;
@@ -88,6 +97,7 @@ namespace Typedown.Core.ViewModels
             RemoteInvoke.Handle("GetSettings", GetSettings);
             RemoteInvoke.Handle<JToken>("SetClipboard", OnSetClipboard);
             Settings.WhenPropertyChanged(nameof(Settings.AutoSave)).Subscribe(_ => Settings_AutoSaveChanged(Settings.AutoSave));
+            Settings.WhenPropertyChanged(nameof(Settings.SourceCode)).Subscribe(_ => modeSwitching = true);
             this.WhenPropertyChanged(nameof(SearchValue)).Subscribe(_ => SearchValueChanged());
             this.WhenPropertyChanged(nameof(Saved)).Subscribe(_ => SavedOrAutoSavedSuccChanged());
             this.WhenPropertyChanged(nameof(AutoSavedSucc)).Subscribe(_ => SavedOrAutoSavedSuccChanged());
@@ -196,6 +206,16 @@ namespace Typedown.Core.ViewModels
             CurrentHash = Common.SimpleHash(Markdown);
             if (!FileLoaded) await Task.Delay(100);
             var saved = FileHash == CurrentHash;
+            if (modeSwitching)
+            {
+                modeSwitching = false;
+                if (Saved && !saved)
+                {
+                    Log.Debug($"MarkdownChange: mode switch normalized the text (len={markdown.Length}), keeping the document saved");
+                    FileHash = CurrentHash;
+                    saved = true;
+                }
+            }
             if (Saved && !saved && !History.Undoable && !History.IsPending)
                 Log.Debug($"MarkdownChange: became unsaved without an undoable edit (len={markdown.Length} fileHash={FileHash} currentHash={CurrentHash} loaded={FileLoaded} loadId={LoadId})");
             Saved = saved;

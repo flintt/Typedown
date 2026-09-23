@@ -20,7 +20,9 @@ namespace Typedown.Core.Controls
             }
             else
             {
-                var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+                // The entry assembly is Typedown.exe, whose version comes from the release number in its csproj;
+                // this code lives in Typedown.Core, whose own version is a separate number that nobody bumps.
+                var version = (System.Reflection.Assembly.GetEntryAssembly() ?? System.Reflection.Assembly.GetExecutingAssembly()).GetName().Version;
                 return string.Format("{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision) + " (" + Config.TestBuild + ", Unpackaged)";
             }
         }
