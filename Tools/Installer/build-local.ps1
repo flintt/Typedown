@@ -33,7 +33,9 @@ param(
     # Packs whatever was built last instead of building again.
     [switch]$SkipBuild,
     # Stops after the build, without making an installer.
-    [switch]$NoInstaller
+    [switch]$NoInstaller,
+    # What to show in About instead of "local.<commit>"; empty keeps whatever the file already says.
+    [string]$Label
 )
 
 $ErrorActionPreference = 'Stop'
@@ -86,15 +88,46 @@ $version = ([xml](Get-Content 'Dev\Typedown\Typedown.csproj')).Project.PropertyG
 $arch = $Platform.ToLowerInvariant()
 Write-Host "Typedown $version  $Platform  $Configuration"
 
+# About shows this next to the version. CI stamps its run and commit here, so a local build says where it came
+# from too rather than carrying whatever label the repository was committed with.
+function Get-LocalLabel {
+    if ($Label) { return $Label }
+    try {
+        $commit = (git rev-parse --short HEAD 2>$null)
+        if ($LASTEXITCODE -ne 0 -or -not $commit) { return "local.$(Get-Date -Format yyyyMMdd.HHmm)" }
+        $dirty = (git status --porcelain 2>$null | Measure-Object).Count -gt 0
+        return "local.$commit" + $(if ($dirty) { '+dirty' } else { '' })
+    }
+    catch {
+        return "local.$(Get-Date -Format yyyyMMdd.HHmm)"
+    }
+}
+
 if (-not $SkipBuild) {
     $msbuild = Find-MSBuild
     $sdk = Find-SdkTools
     Write-Host "MSBuild: $msbuild"
     Write-Host "Windows SDK: $($sdk.Version)"
-    & $msbuild 'Dev\Typedown\Typedown.csproj' /t:Restore,Build /m /v:m `
-        /p:Configuration=$Configuration /p:Platform=$Platform `
-        /p:ManifestTool=$($sdk.ManifestTool) /p:MakePri=$($sdk.MakePri)
-    if ($LASTEXITCODE -ne 0) { throw "build failed" }
+
+    # The label lives in a source file, so it is put back afterwards: building must not leave the checkout
+    # modified, or the next build would call itself dirty and a commit could carry the label by accident.
+    $configPath = Join-Path $repo 'Dev\Typedown.Core\Config.cs'
+    $configOriginal = Get-Content $configPath -Raw
+    $label = Get-LocalLabel
+    Write-Host "Label: $label"
+    $stamped = [regex]::Replace($configOriginal, 'public const string TestBuild = "[^"]*";', "public const string TestBuild = `"$label`";")
+    if ($stamped -eq $configOriginal) { Write-Warning "TestBuild not found in Config.cs; building without a label" }
+    try {
+        Set-Content $configPath $stamped -Encoding utf8 -NoNewline
+        & $msbuild 'Dev\Typedown\Typedown.csproj' /t:Restore,Build /m /v:m `
+            /p:Configuration=$Configuration /p:Platform=$Platform `
+            /p:ManifestTool=$($sdk.ManifestTool) /p:MakePri=$($sdk.MakePri)
+        $buildFailed = $LASTEXITCODE -ne 0
+    }
+    finally {
+        Set-Content $configPath $configOriginal -Encoding utf8 -NoNewline
+    }
+    if ($buildFailed) { throw "build failed" }
 }
 
 $rid = if ($Platform -eq 'ARM64') { 'win10-arm64' } else { 'win10-x64' }
