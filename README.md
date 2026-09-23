@@ -3,9 +3,34 @@
   <h1 align="center">Typedown</h1>
 </p>
 
-[![Typedown Download](https://get.microsoft.com/images/en-us%20light.svg)](https://apps.microsoft.com/detail/9p8tcw4h2hb4)
+<p align="center">
+  <a href="https://github.com/flintt/Typedown/releases/latest"><img alt="最新版本" src="https://img.shields.io/github/v/release/flintt/Typedown?label=%E6%9C%80%E6%96%B0%E7%89%88%E6%9C%AC"></a>
+  <a href="https://github.com/flintt/Typedown/releases"><img alt="下载量" src="https://img.shields.io/github/downloads/flintt/Typedown/total?label=%E4%B8%8B%E8%BD%BD%E9%87%8F"></a>
+  <a href="LICENSE"><img alt="许可证" src="https://img.shields.io/github/license/flintt/Typedown?label=%E8%AE%B8%E5%8F%AF%E8%AF%81"></a>
+</p>
 
-Typedown is a lightweight Markdown editor designed specifically for the Windows platform. With the WinUI framework, it provides users with a seamless interface and efficient editing experience that perfectly matches the operating system. Whether you're writing technical documents, academic papers, or blog posts, Typedown is your go-to assistant!
+Windows 平台的所见即所得 Markdown 编辑器，WinUI 界面，编辑内核来自 MarkText 的 Muya。
+本仓库是 [byxiaozhi/Typedown](https://github.com/byxiaozhi/Typedown) 的 fork，在上游基础上持续修 bug、加功能（多标签、全文搜索、会话恢复、HedgeDoc 分享、阅读模式……），每个版本的具体改动见 [Releases](https://github.com/flintt/Typedown/releases)。
+
+> A WYSIWYG Markdown editor for Windows (WinUI), forked from [byxiaozhi/Typedown](https://github.com/byxiaozhi/Typedown)
+> and developed further: document tabs, folder-wide search, session restore, HedgeDoc sharing, reading mode and more.
+> See the [releases](https://github.com/flintt/Typedown/releases) for what each version changed.
+
+## 下载
+
+去 **[最新发布](https://github.com/flintt/Typedown/releases/latest)** 下载，x64 和 ARM64 都有：
+
+| 文件 | 说明 |
+|---|---|
+| `Typedown-windows-x64-*.exe` / `-arm64-*.exe` | 安装包，一路下一步即可 |
+| `Typedown-portable-x64-*.zip` / `-arm64-*.zip` | 便携版，解压即用，不写注册表 |
+| `Typedown.Package_*.msix` | MSIX 包；需要先安装同一发布里的 `Typedown-signing-certificate.cer` 到「受信任的根证书颁发机构」 |
+
+跨平台（Linux / macOS）请用 Uno 移植版：**[flintt/Typedown-Uno](https://github.com/flintt/Typedown-Uno/releases/latest)**。
+
+上游作者在微软商店上架的是**上游版本**，不含本仓库的改动：[Microsoft Store](https://apps.microsoft.com/detail/9p8tcw4h2hb4)。
+
+遇到问题请开 [issue](https://github.com/flintt/Typedown/issues/new/choose)，写清楚版本号（设置 → 关于）、复现步骤和日志（`%LOCALAPPDATA%\Typedown\logs\`）。本仓库的 issue 由 AI（Claude Code）分析和修复。
 
 ## Screenshots
 <figure>
@@ -27,7 +52,7 @@ Typedown is a lightweight Markdown editor designed specifically for the Windows 
 
 ### 2. Clone the repository
 ```ps
-git clone https://github.com/byxiaozhi/Typedown
+git clone https://github.com/flintt/Typedown
 ```
 
 This will create a local copy of the repository.
@@ -55,4 +80,10 @@ Then select the platform you want to build on (x64, x86, or arm64) and click Run
 ![20240319232529_rec_](https://github.com/byxiaozhi/Typedown/assets/31278216/50ef6e56-b177-49b0-b361-83659d25a40e)
 
 ### Contributors
-Want to contribute to this project? Let us know with an [issue](https://github.com/byxiaozhi/Typedown/issues) that communicates your intent to create a [pull request](https://github.com/byxiaozhi/Typedown/pulls).
+Want to contribute? Open an [issue](https://github.com/flintt/Typedown/issues) describing what you intend to
+change before sending a [pull request](https://github.com/flintt/Typedown/pulls). Upstream discussions belong
+in [byxiaozhi/Typedown](https://github.com/byxiaozhi/Typedown/issues).
+
+## 许可证
+
+MIT，沿用上游的许可证（见 `LICENSE`）。编辑内核来自 [MarkText](https://github.com/marktext/marktext) 的 Muya（同为 MIT）。
