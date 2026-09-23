@@ -16,7 +16,20 @@ namespace Typedown
         public static void Main()
         {
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
+            // A crash that kills the process without reaching the handlers above (an exception escaping into the
+            // native XAML dispatcher, a stack overflow) leaves no report at all. First-chance logging records
+            // every exception as it is thrown, so the last lines of debug.log still say what happened.
+            AppDomain.CurrentDomain.FirstChanceException += OnFirstChanceException;
             App.Launch();
+        }
+
+        private static int firstChanceCount;
+
+        private static void OnFirstChanceException(object sender, System.Runtime.ExceptionServices.FirstChanceExceptionEventArgs e)
+        {
+            // handled exceptions are normal in places (settings file in use, clipboard formats); keep the flood bounded
+            if (System.Threading.Interlocked.Increment(ref firstChanceCount) > 200) return;
+            Log.Debug($"exception: {e.Exception.GetType().Name}: {e.Exception.Message}\n{e.Exception.StackTrace}");
         }
 
         private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)

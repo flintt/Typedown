@@ -26,7 +26,20 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
 
         private void OnLoaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            _ = Dispatcher.RunIdleAsync(() => { if (IsLoaded) OnRegisterShortcut(); });
+            // An exception here runs on the dispatcher with nothing above it to catch it, which on XAML islands
+            // takes the process down without a report.
+            _ = Dispatcher.RunIdleAsync(() =>
+            {
+                if (!IsLoaded) return;
+                try
+                {
+                    OnRegisterShortcut();
+                }
+                catch (Exception ex)
+                {
+                    Log.WriteLocal("MenuShortcutRegister", $"{GetType().Name}\n{ex}");
+                }
+            });
         }
 
         protected abstract void OnRegisterShortcut();
@@ -73,9 +86,17 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
 
         private void TriggerMenuFlyoutItem(MenuFlyoutItem item)
         {
-            item.Command?.Execute(item.CommandParameter);
-            if (item is ToggleMenuFlyoutItem toggle)
-                toggle.IsChecked = !toggle.IsChecked;
+            // Same reasoning as OnLoaded: this runs from a dispatcher callback started by a keyboard accelerator.
+            try
+            {
+                item.Command?.Execute(item.CommandParameter);
+                if (item is ToggleMenuFlyoutItem toggle)
+                    toggle.IsChecked = !toggle.IsChecked;
+            }
+            catch (Exception ex)
+            {
+                Log.WriteLocal("MenuShortcutTrigger", $"{GetType().Name} / {item?.Name}\n{ex}");
+            }
         }
 
         private void OnUnloaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)

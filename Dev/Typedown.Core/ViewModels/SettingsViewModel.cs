@@ -193,7 +193,17 @@ namespace Typedown.Core.ViewModels
 
         public void OnPropertyChanged(string propertyName, object before, object after)
         {
-            PropertyChanged?.Invoke(this, new(propertyName));
+            // Notifications run inside the property setter, so anything that throws here (a handler on a control
+            // that is no longer loaded, a binding update) escapes into the XAML dispatcher, where nothing catches
+            // it and the process goes down without a report.
+            try
+            {
+                PropertyChanged?.Invoke(this, new(propertyName));
+            }
+            catch (Exception ex)
+            {
+                Utilities.Log.WriteLocal("SettingsPropertyChanged", $"{propertyName}\n{ex}");
+            }
             if (notifySet.Contains(propertyName))
                 MarkdownEditor.PostMessage("SettingsChanged", new Dictionary<string, object>() { { propertyName, after } });
         }
