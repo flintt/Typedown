@@ -221,7 +221,9 @@ export const LINE_BREAK = '\n'
 
 export const PREVIEW_DOMPURIFY_CONFIG = Object.freeze({
   // do not forbit `class` because `code` element use class to present language
-  FORBID_ATTR: ['style', 'contenteditable'],
+  // 'style' stays allowed: an html block that carries its own CSS is the point of writing raw html in a
+  // document, and DOMPurify still strips scripts, event handlers and javascript: urls from it.
+  FORBID_ATTR: ['contenteditable'],
   ALLOW_DATA_ATTR: false,
   USE_PROFILES: {
     html: true,

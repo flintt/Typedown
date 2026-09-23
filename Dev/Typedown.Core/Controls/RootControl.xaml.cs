@@ -35,15 +35,28 @@ namespace Typedown.Core.Controls
             Bindings?.StopTracking();
         }
 
+        /// <summary>Where the frame is now, so that asking for it again can be read as "close this".</summary>
+        private string currentRoute;
+
         private void Navigate(string args)
         {
             var path = args?.TrimStart('/').Split('/');
-            if (path != null && path.Any())
+            if (path == null || !path.Any())
+                return;
+            var type = Route.GetRootPageType(path.First());
+            // Navigating to the page that is already open, by the same route, closes it: the shortcut that
+            // opens the settings is then the one that leaves them again. Another route into the same page (the
+            // image settings from the image menu, say) still just moves to that section.
+            if (type == Frame.SourcePageType)
             {
-                var type = Route.GetRootPageType(path.First());
-                if (type != Frame.SourcePageType)
-                    Frame.Navigate(type, string.Join('/', path.Skip(1)), GetTransition());
+                if (type == typeof(MainPage) || args != currentRoute)
+                    return;
+                currentRoute = "Main";
+                Frame.Navigate(typeof(MainPage), null, GetTransition());
+                return;
             }
+            currentRoute = args;
+            Frame.Navigate(type, string.Join('/', path.Skip(1)), GetTransition());
         }
 
         public NavigationTransitionInfo GetTransition() => Settings?.AnimationEnable ?? false ? new SlideNavigationTransitionInfo()

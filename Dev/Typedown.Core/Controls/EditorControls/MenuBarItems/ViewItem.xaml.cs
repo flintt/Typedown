@@ -23,6 +23,25 @@
             RegisterWindowShortcut(Settings.ShortcutReadOnlyMode, ReadOnlyModeItem);
             RegisterWindowShortcut(Settings.ShortcutNextTab, NextTabItem);
             RegisterWindowShortcut(Settings.ShortcutPreviousTab, PreviousTabItem);
+            RegisterTabNumberShortcuts();
+        }
+
+        /// <summary>
+        /// Alt+1..9 switch to a tab by position, 9 being the last one however many there are. Alt rather than
+        /// Ctrl because Ctrl+1..6 already sets the heading level. They are fixed, not bindable, so they have no
+        /// menu entry.
+        /// </summary>
+        private void RegisterTabNumberShortcuts()
+        {
+            var tabs = ViewModel?.TabsViewModel;
+            if (tabs == null) return;
+            for (var n = 1; n <= 9; n++)
+            {
+                var index = n == 9 ? int.MaxValue : n - 1;
+                var key = new Models.ShortcutKey(Windows.System.VirtualKeyModifiers.Menu,
+                    (Windows.System.VirtualKey)((int)Windows.System.VirtualKey.Number0 + n));
+                RegisterWindowShortcut(key, () => tabs.SwitchTabIndexCommand.Execute(index));
+            }
         }
 
         /// <summary>

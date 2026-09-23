@@ -26,6 +26,19 @@ namespace Typedown.Core.Controls
             Bindings.Update();
         }
 
+        /// <summary>
+        /// The wheel over the tab strip moves between tabs: up goes left, down goes right. The strip scrolls
+        /// itself when there are more tabs than fit, which is never what the wheel is wanted for here.
+        /// </summary>
+        private void OnPointerWheelChanged(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            if (Tabs == null) return;
+            var delta = e.GetCurrentPoint(this).Properties.MouseWheelDelta;
+            if (delta == 0) return;
+            e.Handled = true;
+            (delta > 0 ? Tabs.PreviousTabCommand : Tabs.NextTabCommand).Execute(default);
+        }
+
         private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (Tabs == null) return;

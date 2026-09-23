@@ -42,6 +42,9 @@ namespace Typedown.Core.ViewModels
 
         public Command<Unit> PreviousTabCommand { get; } = new();
 
+        /// <summary>Picks a tab by position, counted from zero; anything past the last tab means the last one.</summary>
+        public Command<int> SwitchTabIndexCommand { get; } = new();
+
         private readonly CompositeDisposable disposables = new();
 
         private bool switching;
@@ -60,6 +63,7 @@ namespace Typedown.Core.ViewModels
             CloseActiveTabCommand.OnExecute.Subscribe(async _ => await CloseTab(ActiveTab));
             NextTabCommand.OnExecute.Subscribe(async _ => await SwitchRelative(1));
             PreviousTabCommand.OnExecute.Subscribe(async _ => await SwitchRelative(-1));
+            SwitchTabIndexCommand.OnExecute.Subscribe(async index => await SwitchToIndex(index));
             // Keep the active tab's label in sync with the editor state.
             disposables.Add(FileViewModel.WhenPropertyChanged(nameof(FileViewModel.FilePath)).Subscribe(_ => { if (!switching) ActiveTab.FilePath = FileViewModel.FilePath; }));
             disposables.Add(EditorViewModel.WhenPropertyChanged(nameof(EditorViewModel.Saved)).Subscribe(_ =>
@@ -148,6 +152,13 @@ namespace Typedown.Core.ViewModels
                 switching = false;
             }
             await FileViewModel.CheckExternalChangeAfterSwitch();
+        }
+
+        private async Task SwitchToIndex(int index)
+        {
+            if (Tabs.Count == 0) return;
+            var tab = index >= Tabs.Count ? Tabs[Tabs.Count - 1] : Tabs[Math.Max(index, 0)];
+            if (tab != ActiveTab) await SwitchTo(tab);
         }
 
         private async Task SwitchRelative(int delta)

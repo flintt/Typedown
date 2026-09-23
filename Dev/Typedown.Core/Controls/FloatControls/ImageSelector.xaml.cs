@@ -62,7 +62,17 @@ namespace Typedown.Core.Controls.FloatControls
             }
             catch (Exception ex)
             {
-                await AppContentDialog.Create(Locale.GetString("Error"), ex.Message, Locale.GetDialogString("Ok")).ShowAsync(XamlRoot);
+                // This runs from an async void handler, so anything thrown here escapes with nothing above it
+                // to catch it and takes the process down without leaving a report. Showing the error is worth
+                // trying — a second dialog while one is already open is not worth the app for.
+                try
+                {
+                    await AppContentDialog.Create(Locale.GetString("Error"), ex.Message, Locale.GetDialogString("Ok")).ShowAsync(XamlRoot);
+                }
+                catch (Exception dialogEx)
+                {
+                    Log.WriteLocal("ImageSaveError", $"{ex}\n--- while reporting it ---\n{dialogEx}");
+                }
             }
             finally
             {

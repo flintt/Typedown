@@ -9,6 +9,7 @@
     xmlns:models="using:Typedown.Core.Models"
     Loaded="OnLoaded"
     Unloaded="OnUnloaded"
+    PointerWheelChanged="OnPointerWheelChanged"
     mc:Ignorable="d">
     <muxc:TabView
         x:Name="TabView"

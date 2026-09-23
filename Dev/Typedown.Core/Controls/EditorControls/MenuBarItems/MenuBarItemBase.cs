@@ -49,6 +49,21 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             RegisterMenuItemShortcut(OnWindowShortcutEvent, key, item);
         }
 
+        /// <summary>
+        /// A window shortcut with no menu entry behind it — the tab numbers, which are fixed rather than
+        /// bindable and would only clutter the menu.
+        /// </summary>
+        protected void RegisterWindowShortcut(ShortcutKey key, Action action)
+        {
+            var acc = this.GetService<IKeyboardAccelerator>();
+            disposables.Add(acc.Register(key, (s, e) =>
+            {
+                if (PInvoke.GetForegroundWindow() != ViewModel.MainWindow) return;
+                e.Handled = true;
+                _ = Dispatcher.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => action());
+            }));
+        }
+
         protected void RegisterEditorShortcut(ShortcutKey key, MenuFlyoutItem item)
         {
             RegisterMenuItemShortcut(OnEditorShortcutEvent, key, item);

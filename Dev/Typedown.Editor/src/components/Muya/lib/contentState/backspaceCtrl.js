@@ -113,10 +113,40 @@ const backspaceCtrl = ContentState => {
     }
   }
 
+
+  /**
+   * A selection inside one table cell, deleted by the browser, takes the cell's own element with it: the empty
+   * inline span is dropped and the caret ends up on the `td`, which is not a cursor position Muya knows, so the
+   * keystroke is thrown away and the cell stops taking input until it is clicked again. Cut the text out of the
+   * block instead and leave the element alone.
+   *
+   * @returns true when the deletion was handled here.
+   */
+  ContentState.prototype.deleteSelectionInCell = function (event, start, end) {
+    if (start.key !== end.key || start.offset === end.offset) return false
+    const block = this.getBlock(start.key)
+    if (!block || block.functionType !== 'cellContent') return false
+    event?.preventDefault()
+    const from = Math.min(start.offset, end.offset)
+    const to = Math.max(start.offset, end.offset)
+    block.text = block.text.substring(0, from) + block.text.substring(to)
+    this.cursor = {
+      start: { key: block.key, offset: from },
+      end: { key: block.key, offset: from }
+    }
+    this.partialRender()
+    this.muya.dispatchChange()
+    return true
+  }
+
   ContentState.prototype.backspaceHandler = function (event) {
     const { start, end } = selection.getCursorRange()
 
     if (!start || !end) {
+      return
+    }
+
+    if (this.deleteSelectionInCell(event, start, end)) {
       return
     }
 
