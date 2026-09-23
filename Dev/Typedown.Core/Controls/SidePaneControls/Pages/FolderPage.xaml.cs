@@ -49,12 +49,9 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             disposables.Add(FileViewModel.WhenPropertyChanged(nameof(FileViewModel.WorkFolder)).Subscribe(_ => UpdateWorkFolder()));
             disposables.Add(FileViewModel.WhenPropertyChanged(nameof(FileViewModel.FilePath)).Subscribe(_ =>
             {
-                // Switching to a tab from another folder moves the tree there: the document in front of you and
-                // the tree beside it should not be in different places. A preview stays put — it is a click in
-                // the tree itself, and its file is inside the root anyway.
-                FollowFile(FileViewModel?.FilePath, preview: false);
                 UpdateWorkFolder();
                 UpdateSelectedItem(WorkFolderExplorerItem);
+                RevealActiveFile();
             }));
             // A real (non-preview) open of a file outside the current root moves the tree there; previews never
             // move it, so browsing the tree with single clicks cannot lose the folder.
@@ -78,10 +75,13 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             string workFolder;
             if (!string.IsNullOrEmpty(explicitFolder))
                 workFolder = explicitFolder;
+            // The tree follows the document in front of you whenever that document is somewhere else. Deciding
+            // it here rather than in a handler means it does not matter what triggered the update: a page that
+            // was on the outline while the tabs were switched, or one rebuilt since, lands on the same answer.
+            else if (!string.IsNullOrEmpty(filePath) && (string.IsNullOrEmpty(stickyRoot) || !IsInsideFolder(filePath, stickyRoot)))
+                workFolder = Path.GetDirectoryName(filePath);
             else if (!string.IsNullOrEmpty(stickyRoot))
                 workFolder = stickyRoot;
-            else if (!string.IsNullOrEmpty(filePath))
-                workFolder = Path.GetDirectoryName(filePath);
             else
                 workFolder = FileViewModel.WorkFolder;
             if (!string.IsNullOrEmpty(workFolder))
@@ -93,22 +93,10 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
 
         private void OnFileOpened(string path, bool preview)
         {
-            if (!FollowFile(path, preview)) return;
+            if (preview || FileViewModel == null || FileViewModel.WorkFolderIsExplicit || string.IsNullOrEmpty(path)) return;
             UpdateWorkFolder();
             UpdateSelectedItem(WorkFolderExplorerItem);
-        }
-
-        /// <summary>
-        /// Moves the root to the folder of a document that sits outside it. A folder the user opened on purpose
-        /// is left alone: that is a workspace the documents move around in.
-        /// </summary>
-        /// <returns>true when the root moved.</returns>
-        private bool FollowFile(string path, bool preview)
-        {
-            if (preview || FileViewModel == null || FileViewModel.WorkFolderIsExplicit || string.IsNullOrEmpty(path)) return false;
-            if (!string.IsNullOrEmpty(stickyRoot) && IsInsideFolder(path, stickyRoot)) return false;
-            stickyRoot = Path.GetDirectoryName(path);
-            return true;
+            RevealActiveFile();
         }
 
         private void OnRevealCurrentFileClick(object sender, RoutedEventArgs e)
@@ -146,6 +134,49 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             if (string.IsNullOrEmpty(path)) return Locale.GetString("FolderPane.NoFolderOpen");
             if (!Directory.Exists(path)) return Locale.GetString("FolderPane.NotFound");
             return childCount == 0 ? Locale.GetString("FolderPane.NoMarkdownFiles") : "";
+        }
+
+        /// <summary>
+        /// Opens the way down to the document in front of you and selects it. A document in a subfolder of the
+        /// root leaves the root where it is — that folder is the workspace — but a collapsed subfolder meant
+        /// nothing visibly happened on a tab switch, which read as "the tree did not follow".
+        /// </summary>
+        private async void RevealActiveFile()
+        {
+            try
+            {
+                var path = FileViewModel?.FilePath;
+                var root = WorkFolderExplorerItem?.FullPath;
+                if (string.IsNullOrEmpty(path) || string.IsNullOrEmpty(root) || !IsInsideFolder(path, root)) return;
+                var rootFull = Path.GetFullPath(root).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+                var relative = Path.GetFullPath(path).Substring(rootFull.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+                var item = WorkFolderExplorerItem;
+                var current = rootFull;
+                foreach (var segment in relative.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar))
+                {
+                    if (item == null) return;
+                    item.IsExpanded = true;
+                    current = Path.Combine(current, segment);
+                    item = await FindChild(item, current);
+                }
+                UpdateSelectedItem(WorkFolderExplorerItem);
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"FolderPage.RevealActiveFile: {ex.Message}");
+            }
+        }
+
+        /// <summary>A folder is enumerated in the background, so the child may take a moment to appear.</summary>
+        private static async System.Threading.Tasks.Task<ExplorerItem> FindChild(ExplorerItem parent, string fullPath)
+        {
+            for (var attempt = 0; attempt < 20; attempt++)
+            {
+                var found = parent.Children.FirstOrDefault(x => string.Equals(x.FullPath, fullPath, StringComparison.OrdinalIgnoreCase));
+                if (found != null) return found;
+                await System.Threading.Tasks.Task.Delay(100);
+            }
+            return null;
         }
 
         private void UpdateSelectedItem(ExplorerItem item)
