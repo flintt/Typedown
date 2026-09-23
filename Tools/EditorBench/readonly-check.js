@@ -42,8 +42,23 @@ const markdown = '# Title\n\nSome **bold** and `code` and a [link](https://examp
     return state;
   };
 
+  // reading mode must still allow selecting text with the mouse and copying it
+  const selectByDrag = async () => {
+    const el = await page.$('p.ag-paragraph');
+    const box = await el.boundingBox();
+    await page.mouse.move(box.x + 4, box.y + box.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(box.x + box.width - 10, box.y + box.height / 2, { steps: 10 });
+    await page.mouse.up();
+    await new Promise(r => setTimeout(r, 400));
+    return page.evaluate(() => window.getSelection().toString());
+  };
+
   const ro = await probe('reading mode :');
+  const selected = await selectByDrag();
+  console.log('reading mode : selection after drag', JSON.stringify(selected));
   const problems = [];
+  if (!selected) problems.push('text cannot be selected with the mouse');
   if (ro.editable !== 'false') problems.push('container still editable');
   if (ro.grayOnInline) problems.push(`${ro.grayOnInline} source markers visible`);
   if (ro.activeOnInline) problems.push(`${ro.activeOnInline} active blocks`);

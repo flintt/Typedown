@@ -128,8 +128,10 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     }, [editor, props.options])
 
     useEffect(() => {
-        editor?.setFocusMode(props.options.focusMode)
-    }, [editor, props.options.focusMode])
+        // Focus mode dims everything but the active block, and reading mode has no active block: together they
+        // would grey out the whole document, so reading mode wins.
+        editor?.setFocusMode(props.options.focusMode && !props.options.readOnly)
+    }, [editor, props.options.focusMode, props.options.readOnly])
 
     useEffect(() => {
         editor?.setFont({ fontSize: props.options?.fontSize, lineHeight: props.options?.lineHeight })
@@ -278,7 +280,8 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         const selectionText = window.getSelection()?.toString();
         transport.postMessage('SelectionChange', { selection, menuState, selectionText });
         const { y } = selection.cursorCoords
-        if (props.options?.typewriter) {
+        // Typewriter mode centres the caret line; in reading mode there is no caret to follow.
+        if (props.options?.typewriter && !props.options?.readOnly) {
             relativeScroll(y - window.innerHeight / 2 + 136);
         } else if (window.innerHeight - y < 100) {
             relativeScroll(y - window.innerHeight + 100);
@@ -286,7 +289,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             // Keep the caret visible when it moves above the viewport (Up arrow / Page Up), upstream #51.
             relativeScroll(y - 100);
         }
-    }), [editor, props.options?.typewriter, relativeScroll])
+    }), [editor, props.options?.typewriter, props.options?.readOnly, relativeScroll])
 
     useEffect(() => editor?.on('selectionFormats', (formats: any) => {
         const fotmats_simple = formats.map((e: any) => ({ type: e.type, tag: e.tag }));
@@ -309,7 +312,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         if (ele) {
             ele.style.boxSizing = `border-box`
             ele.style.minHeight = `100vh`
-            if (props.options?.typewriter) {
+            if (props.options?.typewriter && !props.options?.readOnly) {
                 ele.style.paddingTop = `calc(50vh - ${136 - marginTop}px)`
                 ele.style.paddingBottom = 'calc(50vh - 54px)'
             } else {
@@ -317,7 +320,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
                 ele.style.paddingBottom = '0'
             }
         }
-    }, [marginTop, props.options?.typewriter])
+    }, [marginTop, props.options?.typewriter, props.options?.readOnly])
 
     useEffect(() => {
         document.body.style.setProperty('--editorAreaWidth', props.options?.editorAreaWidth)

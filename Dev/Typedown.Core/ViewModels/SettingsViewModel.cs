@@ -23,7 +23,11 @@ namespace Typedown.Core.ViewModels
         public double SidePaneWidth { get => GetSettingValue(300d); set => SetSettingValue(value); }
         public bool StatusBarOpen { get => GetSettingValue(true); set => SetSettingValue(value); }
         public double FindReplaceDialogWidth { get => GetSettingValue(600d); set => SetSettingValue(value); }
-        public bool SourceCode { get => GetSettingValue(false); set => SetSettingValue(value); }
+        /// <summary>
+        /// Source mode shows the raw Markdown, reading mode shows only the rendered document: the two contradict
+        /// each other, so turning one on turns the other off (see also <see cref="ReadOnly"/>).
+        /// </summary>
+        public bool SourceCode { get => GetSettingValue(false); set { SetSettingValue(value); if (value) ReadOnly = false; } }
         public bool Typewriter { get => GetSettingValue(false); set => SetSettingValue(value); }
         public bool FocusMode { get => GetSettingValue(false); set => SetSettingValue(value); }
         public bool SearchIsCaseSensitive { get => GetSettingValue(false); set => SetSettingValue(value); }
@@ -42,8 +46,12 @@ namespace Typedown.Core.ViewModels
         public bool TableAlignColumns { get => GetSettingValue(true); set => SetSettingValue(value); }
         /// <summary>Show the paragraph type marker ("P", "H1"...) left of the active block (upstream #45).</summary>
         public bool ShowParagraphMarker { get => GetSettingValue(true); set => SetSettingValue(value); }
-        /// <summary>Reading mode: the editor rejects edits (upstream #38).</summary>
-        public bool ReadOnly { get => GetSettingValue(false); set => SetSettingValue(value); }
+        /// <summary>
+        /// Reading mode: only the rendered document, no caret and no edits (upstream #38). Mutually exclusive
+        /// with <see cref="SourceCode"/>; focus and typewriter mode follow the caret and are ignored while it
+        /// is on (the menu greys them out).
+        /// </summary>
+        public bool ReadOnly { get => GetSettingValue(false); set { SetSettingValue(value); if (value) SourceCode = false; } }
         /// <summary>Outline: expand collapsed sections automatically to reveal the current heading (upstream #35).</summary>
         public bool TocAutoExpand { get => GetSettingValue(true); set => SetSettingValue(value); }
         /// <summary>Reopen documents at the last caret position (upstream #50).</summary>

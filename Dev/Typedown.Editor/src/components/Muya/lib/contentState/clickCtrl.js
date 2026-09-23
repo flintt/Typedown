@@ -8,6 +8,10 @@ const clickCtrl = ContentState => {
   ContentState.prototype.clickHandler = function (event) {
     const { eventCenter, container } = this.muya
     const { target } = event
+    // Reading mode: clicking below the last paragraph would append one, and the front menu does not exist.
+    if (this.muya.options.readOnly) {
+      return
+    }
     if (isMuyaEditorElement(target) || target === container) {
       const lastBlock = this.getLastBlock()
       const archor = this.findOutMostBlock(lastBlock)
@@ -82,6 +86,12 @@ const clickCtrl = ContentState => {
     const { start, end } = selection.getCursorRange()
     // fix #625, the selection maybe not in edit area.
     if (!start || !end) {
+      return
+    }
+    // Reading mode has nothing to re-render on mouse up (no active block, no markers, no format picker), and
+    // the re-render would throw away the text the user just selected with the mouse.
+    if (this.muya.options.readOnly) {
+      this.cursor = { start, end }
       return
     }
     // format-click
