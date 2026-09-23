@@ -57,6 +57,10 @@ class StateRender {
   }
 
   checkConflicted(block, token, cursor) {
+    // Reading mode never reveals the Markdown source of a token.
+    if (this.muya.options.readOnly) {
+      return false
+    }
     const { start, end } = cursor
     const key = block.key
     const { start: tokenStart, end: tokenEnd } = token.range
@@ -84,7 +88,8 @@ class StateRender {
   getSelector(block, activeBlocks) {
     const { cursor, selectedBlock } = this.muya.contentState
     const type = block.type === 'hr' ? 'p' : block.type
-    const isActive = activeBlocks.some(b => b.key === block.key) || block.key === cursor.start.key
+    const isActive = !this.muya.options.readOnly &&
+      (activeBlocks.some(b => b.key === block.key) || block.key === cursor.start.key)
 
     let selector = `${type}#${block.key}.${CLASS_OR_ID.AG_PARAGRAPH}`
     if (isActive) {

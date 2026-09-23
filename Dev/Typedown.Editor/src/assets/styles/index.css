@@ -1179,6 +1179,26 @@ body.read-only #ag-editor-id {
   caret-color: transparent;
 }
 
+/* Reading mode renders the document and nothing else: no caret, no editing hints and no hover affordances.
+   The active-block rules above already hide the table drag bars, the tool bar and the language input; these
+   cover what does not depend on the active block. */
+body.read-only .ag-show-quick-insert-hint .ag-paragraph:empty::after,
+body.read-only .ag-drag-handler,
+body.read-only .ag-tool-bar,
+body.read-only .ag-front-icon,
+body.read-only .ag-image-icon-delete,
+body.read-only .ag-image-icon-close,
+body.read-only .ag-container-icon {
+  display: none !important;
+}
+
+body.read-only img,
+body.read-only table,
+body.read-only table td,
+body.read-only table th {
+  cursor: default;
+}
+
 .ag-meta-or-ctrl img,
 .ag-meta-or-ctrl a.ag-inline-rule {
   cursor: pointer !important;

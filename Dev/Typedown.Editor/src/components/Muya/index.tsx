@@ -341,6 +341,9 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         const readOnly = !!props.options?.readOnly
         document.body.classList.toggle('read-only', readOnly)
         editor?.container?.setAttribute('contenteditable', String(!readOnly))
+        // Re-render so the Markdown markers and the editing affordances of the active block disappear (and come
+        // back with the caret when reading mode is switched off) instead of waiting for the next edit.
+        editor?.contentState?.render(!readOnly, true)
     }, [editor, props.options?.readOnly])
 
     useEffect(() => {

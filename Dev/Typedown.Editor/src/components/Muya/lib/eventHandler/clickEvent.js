@@ -64,11 +64,15 @@ class ClickEvent {
     const { container, eventCenter, contentState } = this.muya
     const clickHandler = event => {
       const { target } = event
+      // Reading mode is display only: everything that would start an edit (table tools, image tools, switching a
+      // math/HTML block back to its source, ticking a task box) is skipped. Links, the code copy button and the
+      // footnote back link still work because they only navigate or copy.
+      const readOnly = !!this.muya.options.readOnly
       // handler table click
       const toolItem = getToolItem(target)
       contentState.selectedImage = null
       contentState.selectedTableCells = null
-      if (toolItem) {
+      if (toolItem && !readOnly) {
         event.preventDefault()
         event.stopPropagation()
         const type = toolItem.getAttribute('data-label')
@@ -78,7 +82,7 @@ class ClickEvent {
         }
       }
       // Handle table drag bar click
-      if (target.classList.contains('ag-drag-handler')) {
+      if (target.classList.contains('ag-drag-handler') && !readOnly) {
         event.preventDefault()
         event.stopPropagation()
         const rect = target.getBoundingClientRect()
@@ -106,7 +110,9 @@ class ClickEvent {
       const imageDelete = target.closest('.ag-image-icon-delete') || target.closest('.ag-image-icon-close')
       const mathText = mathRender && mathRender.previousElementSibling
       const rubyText = rubyRender && rubyRender.previousElementSibling
-      if (markedImageText && markedImageText.classList.contains(CLASS_OR_ID.AG_IMAGE_MARKED_TEXT)) {
+      if (readOnly) {
+        // nothing below selects or reveals source text in reading mode
+      } else if (markedImageText && markedImageText.classList.contains(CLASS_OR_ID.AG_IMAGE_MARKED_TEXT)) {
         eventCenter.dispatch('format-click', {
           event,
           formatType: 'image',
@@ -124,7 +130,7 @@ class ClickEvent {
         return this.muya.contentState.copyCodeBlock(event)
       }
       // Handle delete inline iamge by click delete icon.
-      if (imageDelete && imageWrapper) {
+      if (imageDelete && imageWrapper && !readOnly) {
         const imageInfo = getImageInfo(imageWrapper)
         event.preventDefault()
         event.stopPropagation()
@@ -148,7 +154,7 @@ class ClickEvent {
       }
 
       // Handle image click, to select the current image
-      if (target.tagName === 'IMG' && imageWrapper) {
+      if (target.tagName === 'IMG' && imageWrapper && !readOnly) {
         // Handle select image
         const imageInfo = getImageInfo(imageWrapper)
         event.preventDefault()
@@ -174,11 +180,11 @@ class ClickEvent {
 
       // Handle click imagewrapper when it's empty or image load failed.
       if (
-        (imageWrapper &&
-          (
-            imageWrapper.classList.contains('ag-empty-image') ||
-            imageWrapper.classList.contains('ag-image-fail')
-          ))
+        !readOnly && imageWrapper &&
+        (
+          imageWrapper.classList.contains('ag-empty-image') ||
+          imageWrapper.classList.contains('ag-image-fail')
+        )
       ) {
         const rect = imageWrapper.getBoundingClientRect()
         const reference = {
@@ -198,7 +204,7 @@ class ClickEvent {
 
       if (target.closest('div.ag-container-preview') || target.closest('div.ag-html-preview')) {
         event.stopPropagation()
-        if (target.closest('div.ag-container-preview')) {
+        if (target.closest('div.ag-container-preview') && !readOnly) {
           event.preventDefault()
           const figureEle = target.closest('figure')
           contentState.handleContainerBlockClick(figureEle)
@@ -207,7 +213,7 @@ class ClickEvent {
       }
       // handler container preview click
       const editIcon = target.closest('.ag-container-icon')
-      if (editIcon) {
+      if (editIcon && !readOnly) {
         event.preventDefault()
         event.stopPropagation()
         if (editIcon.parentNode.classList.contains('ag-container-block')) {
@@ -216,7 +222,7 @@ class ClickEvent {
       }
 
       // handler to-do checkbox click
-      if (target.tagName === 'INPUT' && target.classList.contains(CLASS_OR_ID.AG_TASK_LIST_ITEM_CHECKBOX)) {
+      if (target.tagName === 'INPUT' && target.classList.contains(CLASS_OR_ID.AG_TASK_LIST_ITEM_CHECKBOX) && !readOnly) {
         contentState.listItemCheckBoxClick(target)
       }
 

@@ -530,6 +530,12 @@ class ContentState {
 
   getActiveBlocks() {
     const result = []
+    // Reading mode shows the rendered document only: with no active block the renderer keeps every Markdown
+    // marker hidden and leaves out the editing affordances that hang off the active block (table drag bars and
+    // tool bar, the paragraph front icon, the code-fence language input).
+    if (this.muya.options.readOnly) {
+      return result
+    }
     let block = this.getBlock(this.cursor.start.key)
     if (block) {
       result.push(block)
