@@ -65,6 +65,13 @@ namespace Typedown.Core.ViewModels
         /// </summary>
         public string CustomTheme { get => GetSettingValue(""); set => SetSettingValue(value); }
 
+        /// <summary>
+        /// The theme actually in force. A custom theme says which built-in theme it builds on, and that is what
+        /// decides light or dark for the window and the editor — a dark theme picked while the app is set to
+        /// light would otherwise paint dark colours over a light editor, and the two fight.
+        /// </summary>
+        public AppTheme EffectiveTheme => Utilities.ThemeFiles.Find(CustomTheme)?.Base ?? AppTheme;
+
         // Share to HedgeDoc (1.x): server, optional email login (password stored DPAPI-protected), publish read-only link
         public string HedgeDocServer { get => GetSettingValue(""); set => SetSettingValue(value); }
         public string HedgeDocEmail { get => GetSettingValue(""); set => SetSettingValue(value); }

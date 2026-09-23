@@ -78,7 +78,10 @@ namespace Typedown.Core.ViewModels
                 return;
             disposables.Add(EditorViewModel.WhenPropertyChanged(nameof(EditorViewModel.DisplaySaved)).Subscribe(_ => UpdateTitle()));
             disposables.Add(FileViewModel.WhenPropertyChanged(nameof(FileViewModel.FileName)).Subscribe(_ => UpdateTitle()));
-            disposables.Add(Observable.FromEventPattern(uiSettings, nameof(uiSettings.ColorValuesChanged)).Merge(SettingsViewModel.WhenPropertyChanged(nameof(SettingsViewModel.AppTheme))).Subscribe(_ => UpdateActualTheme()));
+            disposables.Add(Observable.FromEventPattern(uiSettings, nameof(uiSettings.ColorValuesChanged))
+                .Merge(SettingsViewModel.WhenPropertyChanged(nameof(SettingsViewModel.AppTheme)))
+                .Merge(SettingsViewModel.WhenPropertyChanged(nameof(SettingsViewModel.CustomTheme)))
+                .Subscribe(_ => UpdateActualTheme()));
             UpdateTitle();
             UpdateActualTheme();
         }
@@ -101,10 +104,11 @@ namespace Typedown.Core.ViewModels
             {
                 try
                 {
-                    if (SettingsViewModel.AppTheme == Enums.AppTheme.Default)
+                    var theme = SettingsViewModel.EffectiveTheme;
+                    if (theme == Enums.AppTheme.Default)
                         ActualTheme = Application.Current.RequestedTheme == ApplicationTheme.Light ? ElementTheme.Light : ElementTheme.Dark;
                     else
-                        ActualTheme = SettingsViewModel.AppTheme == Enums.AppTheme.Light ? ElementTheme.Light : ElementTheme.Dark;
+                        ActualTheme = theme == Enums.AppTheme.Light ? ElementTheme.Light : ElementTheme.Dark;
                 }
                 catch
                 {

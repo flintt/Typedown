@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Typedown.Core.Pages;
+using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
@@ -26,7 +27,33 @@ namespace Typedown.Core.Controls
         {
             ViewModel.XamlRoot = XamlRoot;
             disposables.Add(ViewModel.NavigateCommand.OnExecute.Subscribe(args => Navigate(args)));
+            RegisterSettingsShortcut();
+            disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.ShortcutSettings)).Subscribe(_ => RegisterSettingsShortcut()));
             Frame.Navigate(typeof(MainPage), null);
+        }
+
+        private IDisposable settingsShortcut;
+
+        /// <summary>
+        /// The way out of the settings. The menu entry takes care of opening them, but the menu bar belongs to
+        /// the main page and is gone while the settings are up, so the shortcut that opened them would do
+        /// nothing — this one lives above the frame and stays registered.
+        /// </summary>
+        private void RegisterSettingsShortcut()
+        {
+            settingsShortcut?.Dispose();
+            settingsShortcut = null;
+            var accelerator = this.GetService<Interfaces.IKeyboardAccelerator>();
+            var key = Settings?.ShortcutSettings;
+            if (accelerator == null || key == null) return;
+            settingsShortcut = accelerator.Register(key, (s, e) =>
+            {
+                if (Frame.SourcePageType != typeof(SettingsPage)) return;
+                if (Utilities.PInvoke.GetForegroundWindow() != ViewModel.MainWindow) return;
+                e.Handled = true;
+                _ = Dispatcher.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => Navigate("Main"));
+            });
+            disposables.Add(settingsShortcut);
         }
 
         private void OnUnloaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
