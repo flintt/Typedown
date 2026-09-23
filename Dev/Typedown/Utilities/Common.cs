@@ -32,7 +32,8 @@ namespace Typedown.Utilities
             var isBlack = theme == Typedown.Core.Enums.AppTheme.Black;
             // A custom theme may name its own accent; without one the editor keeps the system colour.
             var custom = Typedown.Core.Utilities.ThemeFiles.Find(settings.CustomTheme);
-            var themeAccent = Typedown.Core.Utilities.ThemeFiles.Brush(custom?.Accent) as Windows.UI.Xaml.Media.SolidColorBrush;
+            // global:: — inside Typedown.* a plain "Windows." binds to Typedown.Windows, the app's own namespace.
+            var themeAccent = Typedown.Core.Utilities.ThemeFiles.Brush(custom?.Accent) as global::Windows.UI.Xaml.Media.SolidColorBrush;
             var accentColor = themeAccent?.Color ?? new UISettings().GetColorValue(UIColorType.Accent);
             var solidBackground = isBlack ? Colors.Black : isDarkMode ? Color.FromArgb(0xFF, 0x28, 0x28, 0x28) : Color.FromArgb(0xFF, 0xF9, 0xF9, 0xF9);
             var background = settings.UseMicaEffect && settings.UseEditorMicaEffect && !isBlack ? Colors.Transparent : solidBackground;
