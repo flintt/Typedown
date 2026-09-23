@@ -8,6 +8,7 @@ const markdown = '# Title\n\nSome **bold** and `code` and a [link](https://examp
   await new Promise(r => server.listen(0, r)); const port = server.address().port;
   const browser = await puppeteer.launch({ executablePath: '/opt/google/chrome/chrome', headless: 'new', args: ['--no-sandbox'] });
   const page = await browser.newPage();
+  page.on('pageerror', e => console.log('PAGEERROR:', e.message.split('\n')[0]));
   const settings = { fontSize: 16, lineHeight: 1.6, editorAreaWidth: '1200px', tabSize: 4, textDirection: 'auto', preferLooseListItem: true, listIndentation: '1', tableAlignColumns: false, readOnly: true, markdown, basePath: '/tmp' };
   await page.evaluateOnNewDocument(`(()=>{const ls=[];window.__marks={};const deliver=(n,a)=>ls.forEach(l=>l({data:JSON.stringify({name:n,args:a})}));const resp={GetSettings:${JSON.stringify(settings)},GetCurrentTheme:{theme:'Light',accentColor:{r:0,g:120,b:212,a:1},background:{R:249,G:249,B:249,A:1}},ContentLoaded:'',GetStringResources:{}};window.chrome={webview:{addEventListener:(t,l)=>ls.push(l),postMessage:(raw)=>{const m=JSON.parse(raw);window.__marks[m.name]=1;if(m.type==='invoke'){setTimeout(()=>deliver(m.id,{code:0,data:m.name in resp?resp[m.name]:null}),0);}}}}})()`);
   await page.goto(`http://127.0.0.1:${port}/index.html`, { waitUntil: 'load' });
@@ -45,6 +46,10 @@ const markdown = '# Title\n\nSome **bold** and `code` and a [link](https://examp
   // reading mode must still allow selecting text with the mouse and copying it
   const selectByDrag = async () => {
     const el = await page.$('p.ag-paragraph');
+    if (!el) {
+      console.log('DEBUG editor html:', (await page.evaluate(() => document.querySelector('#ag-editor-id')?.innerHTML || 'no editor')).slice(0, 400));
+      return '';
+    }
     const box = await el.boundingBox();
     await page.mouse.move(box.x + 4, box.y + box.height / 2);
     await page.mouse.down();

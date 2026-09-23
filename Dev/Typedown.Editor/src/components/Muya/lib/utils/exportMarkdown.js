@@ -300,6 +300,11 @@ class ExportMarkdown {
     return result.join('')
   }
 
+  /**
+   * Widest column, in characters, that still gets its cells padded so the columns line up in the source.
+   */
+  static MAX_ALIGNED_COLUMN_WIDTH = 60
+
   normalizeTable(table, indent) {
     const result = []
     const { row, column } = table
@@ -333,10 +338,16 @@ class ExportMarkdown {
           columnWidth[j].width = Math.max(columnWidth[j].width, visibleLength(tableData[i][j]) + 2) // add 2, because have two space around text
         }
       }
+      // A single long cell would pad every other cell in its column to the same width: a table of test cases
+      // with one wide "steps" column grew fifteen-fold that way, and the padding is written to the file. Past
+      // this width the column keeps one space on each side, which is what a column that wide looks like anyway.
+      columnWidth.forEach(c => {
+        if (c.width - 2 > ExportMarkdown.MAX_ALIGNED_COLUMN_WIDTH) c.width = 0
+      })
     }
     tableData.forEach((r, i) => {
       const rs = indent + '|' + r.map((cell, j) => {
-        if (!this.alignTableColumns) return ` ${cell} `
+        if (!this.alignTableColumns || !columnWidth[j].width) return ` ${cell} `
         const width = columnWidth[j].width + (cell.length - visibleLength(cell))
         const raw = ` ${cell + ' '.repeat(width)}`
         return raw.substring(0, width)
@@ -344,7 +355,7 @@ class ExportMarkdown {
       result.push(rs)
       if (i === 0) {
         const cutOff = indent + '|' + columnWidth.map(({ width, align }) => {
-          let raw = '-'.repeat(this.alignTableColumns ? width - 2 : 3)
+          let raw = '-'.repeat(this.alignTableColumns && width ? width - 2 : 3)
           switch (align) {
             case 'left':
               raw = `:${raw} `
