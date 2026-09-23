@@ -830,4 +830,7 @@
   <data name="View.CustomTheme.Document" xml:space="preserve">
     <value>Cómo escribir uno</value>
   </data>
+  <data name="View.CustomTheme.Folder" xml:space="preserve">
+    <value>Los temas son archivos CSS en esta carpeta; el documento explica el formato.</value>
+  </data>
 </root>

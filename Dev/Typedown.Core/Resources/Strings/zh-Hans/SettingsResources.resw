@@ -880,4 +880,7 @@
   <data name="View.CustomTheme.Document" xml:space="preserve">
     <value>如何编写主题</value>
   </data>
+  <data name="View.CustomTheme.Folder" xml:space="preserve">
+    <value>主题是这个文件夹里的 CSS 文件，写法见随附文档。</value>
+  </data>
 </root>

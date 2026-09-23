@@ -25,25 +25,17 @@
                 <FontIcon Glyph="&#xe790;"/>
             </controls:ExpanderSettingItem.Icon>
             <controls:ExpanderSettingItem.State>
-                <controls:EnumNameBlock Value="{x:Bind Settings.AppTheme, Mode=OneWay}"/>
+                <!-- One list: the built-in themes and the ones from the themes folder, picked the same way. -->
+                <ComboBox x:Name="ThemeBox" MinWidth="180" SelectionChanged="OnThemeChanged"/>
             </controls:ExpanderSettingItem.State>
             <StackPanel Padding="48,16,16,16">
-                <muxc:RadioButtons ItemsSource="{x:Bind enums:Enumerable.AppThemes}" SelectedItem="{Binding SettingsViewModel.AppTheme, Mode=TwoWay}">
-                    <muxc:RadioButtons.ItemTemplate>
-                        <DataTemplate>
-                            <controls:EnumNameBlock Value="{Binding}"/>
-                        </DataTemplate>
-                    </muxc:RadioButtons.ItemTemplate>
-                </muxc:RadioButtons>
+                <TextBlock Text="{u:LocaleString Key=View.CustomTheme.Description}" TextWrapping="Wrap" Opacity="0.7"/>
             </StackPanel>
         </controls:ExpanderSettingItem>
-        <controls:ExpanderSettingItem Title="{u:LocaleString Key=View.CustomTheme.Title}" Description="{u:LocaleString Key=View.CustomTheme.Description}">
+        <controls:ExpanderSettingItem Title="{u:LocaleString Key=View.CustomTheme.Title}" Description="{u:LocaleString Key=View.CustomTheme.Folder}">
             <controls:ExpanderSettingItem.Icon>
                 <FontIcon Glyph="&#xe771;"/>
             </controls:ExpanderSettingItem.Icon>
-            <controls:ExpanderSettingItem.State>
-                <ComboBox x:Name="CustomThemeBox" MinWidth="180" SelectionChanged="OnCustomThemeChanged"/>
-            </controls:ExpanderSettingItem.State>
             <StackPanel Padding="48,16,16,16" Orientation="Horizontal" Spacing="8">
                 <Button Content="{u:LocaleString Key=View.CustomTheme.OpenFolder}" Click="OnOpenThemeFolder"/>
                 <Button Content="{u:LocaleString Key=View.CustomTheme.Refresh}" Click="OnRefreshThemes"/>

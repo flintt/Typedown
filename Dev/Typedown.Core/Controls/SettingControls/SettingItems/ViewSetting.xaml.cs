@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
 using Windows.UI.Xaml;
@@ -38,23 +39,18 @@ namespace Typedown.Core.Controls.SettingControls.SettingItems
 
         private void OnSettingsChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName != nameof(Settings.AppTheme) || Settings == null) return;
-            // Picking a built-in theme in the radio buttons turns the custom theme off, otherwise the two
-            // disagree: the radio says "Light" while a custom theme is still painting everything.
-            if (!applyingTheme && !string.IsNullOrEmpty(Settings.CustomTheme))
-            {
-                Settings.CustomTheme = string.Empty;
-                fillingThemes = true;
-                CustomThemeBox.SelectedIndex = 0;
-                fillingThemes = false;
-            }
+            if (Settings == null) return;
+            if (e.PropertyName is not (nameof(Settings.AppTheme) or nameof(Settings.CustomTheme))) return;
             // The entries were built under the theme in force at the time and keep its text colour — white
-            // text on a light list after a switch to the light theme. Building them again picks up the new one.
+            // text on a light list after a switch to the light theme. Building them again picks up the new one,
+            // and moves the selection to whatever the theme is now (the View menu can change it too).
             FillThemes();
         }
 
-        private bool applyingTheme;
-
+        /// <summary>
+        /// The built-in themes first, then the ones from the themes folder — one list, one choice. The index
+        /// into <see cref="themes"/> is the entry's position minus the number of built-in ones.
+        /// </summary>
         private void FillThemes()
         {
             if (Settings == null) return;
@@ -64,11 +60,13 @@ namespace Typedown.Core.Controls.SettingControls.SettingItems
                 ThemeFiles.EnsureFolder();
                 themes.Clear();
                 themes.AddRange(ThemeFiles.List());
-                CustomThemeBox.Items.Clear();
-                CustomThemeBox.Items.Add(Locale.GetString("View.CustomTheme.None"));
-                foreach (var theme in themes) CustomThemeBox.Items.Add(ThemeFiles.DisplayName(theme, themes));
+                ThemeBox.Items.Clear();
+                foreach (var builtIn in Enums.Enumerable.AppThemes) ThemeBox.Items.Add(EnumName(builtIn));
+                foreach (var theme in themes) ThemeBox.Items.Add(ThemeFiles.DisplayName(theme, themes));
                 var index = themes.FindIndex(x => x.Id == Settings.CustomTheme);
-                CustomThemeBox.SelectedIndex = index < 0 ? 0 : index + 1;
+                ThemeBox.SelectedIndex = index < 0
+                    ? Enums.Enumerable.AppThemes.ToList().IndexOf(Settings.AppTheme)
+                    : Enums.Enumerable.AppThemes.Count + index;
             }
             catch (Exception ex)
             {
@@ -80,28 +78,23 @@ namespace Typedown.Core.Controls.SettingControls.SettingItems
             }
         }
 
-        private void OnCustomThemeChanged(object sender, SelectionChangedEventArgs e)
+        private static string EnumName(Enums.AppTheme theme)
+        {
+            var field = typeof(Enums.AppTheme).GetField(theme.ToString());
+            var attribute = field?.GetCustomAttribute(typeof(LocaleAttribute)) as LocaleAttribute;
+            return attribute?.Text ?? theme.ToString();
+        }
+
+        private void OnThemeChanged(object sender, SelectionChangedEventArgs e)
         {
             if (fillingThemes || Settings == null) return;
-            var index = CustomThemeBox.SelectedIndex - 1;
-            if (index < 0 || index >= themes.Count)
-            {
-                Settings.CustomTheme = string.Empty;
-                return;
-            }
-            var theme = themes[index];
-            // The theme names the built-in theme it builds on, and that one also colours the window around it.
-            // The flag keeps this assignment from being read as "the user picked a built-in theme".
-            applyingTheme = true;
-            try
-            {
-                Settings.AppTheme = theme.Base;
-            }
-            finally
-            {
-                applyingTheme = false;
-            }
-            Settings.CustomTheme = theme.Id;
+            var builtInCount = Enums.Enumerable.AppThemes.Count;
+            var index = ThemeBox.SelectedIndex;
+            if (index < 0) return;
+            if (index < builtInCount)
+                Settings.ApplyBuiltInTheme(Enums.Enumerable.AppThemes[index]);
+            else if (index - builtInCount < themes.Count)
+                Settings.ApplyCustomTheme(themes[index - builtInCount]);
         }
 
         /// <summary>Opens the document that explains the theme format, which ships next to the app.</summary>

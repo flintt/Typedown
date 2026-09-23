@@ -859,4 +859,7 @@
   <data name="View.CustomTheme.Document" xml:space="preserve">
     <value>如何編寫主題</value>
   </data>
+  <data name="View.CustomTheme.Folder" xml:space="preserve">
+    <value>主題是這個資料夾裡的 CSS 檔案，寫法見隨附文件。</value>
+  </data>
 </root>

@@ -65,6 +65,46 @@ namespace Typedown.Core.ViewModels
         /// </summary>
         public string CustomTheme { get => GetSettingValue(""); set => SetSettingValue(value); }
 
+        /// <summary>True while a theme is being applied, so a handler can tell it from a user's own change.</summary>
+        public bool ApplyingTheme { get; private set; }
+
+        /// <summary>
+        /// Picks a built-in theme: the custom theme goes with it. Themes are one choice, not two — a custom
+        /// theme that stayed on while a built-in one was picked would paint over it and the two would fight.
+        /// </summary>
+        public void ApplyBuiltInTheme(AppTheme theme)
+        {
+            ApplyingTheme = true;
+            try
+            {
+                CustomTheme = string.Empty;
+                AppTheme = theme;
+            }
+            finally
+            {
+                ApplyingTheme = false;
+            }
+        }
+
+        /// <summary>
+        /// Picks a custom theme, which also sets the built-in theme it says it builds on: that one decides
+        /// light or dark for the window and the editor, and the custom CSS is applied on top of it.
+        /// </summary>
+        public void ApplyCustomTheme(Utilities.CustomTheme theme)
+        {
+            if (theme == null) return;
+            ApplyingTheme = true;
+            try
+            {
+                AppTheme = theme.Base;
+                CustomTheme = theme.Id;
+            }
+            finally
+            {
+                ApplyingTheme = false;
+            }
+        }
+
         /// <summary>
         /// The theme actually in force. A custom theme says which built-in theme it builds on, and that is what
         /// decides light or dark for the window and the editor — a dark theme picked while the app is set to

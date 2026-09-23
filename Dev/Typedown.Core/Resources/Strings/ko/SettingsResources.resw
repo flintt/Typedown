@@ -830,4 +830,7 @@
   <data name="View.CustomTheme.Document" xml:space="preserve">
     <value>테마 작성 방법</value>
   </data>
+  <data name="View.CustomTheme.Folder" xml:space="preserve">
+    <value>테마는 이 폴더의 CSS 파일입니다. 작성 방법은 함께 제공되는 문서를 참고하세요.</value>
+  </data>
 </root>

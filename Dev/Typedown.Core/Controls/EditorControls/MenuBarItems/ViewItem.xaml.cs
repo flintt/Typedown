@@ -25,7 +25,7 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             {
                 var theme = value;
                 var item = new muxc.RadioMenuFlyoutItem { Text = EnumName(theme), GroupName = "AppTheme" };
-                item.Click += (_, _) => { Settings.CustomTheme = string.Empty; Settings.AppTheme = theme; };
+                item.Click += (_, _) => Settings.ApplyBuiltInTheme(theme);
                 themeItems.Add((item, null, theme));
                 ThemeSubMenu.Items.Add(item);
             }
@@ -36,8 +36,9 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
                 foreach (var custom in customThemes)
                 {
                     var id = custom.Id;
+                    var theme = custom;
                     var item = new muxc.RadioMenuFlyoutItem { Text = ThemeFiles.DisplayName(custom, customThemes), GroupName = "AppTheme" };
-                    item.Click += (_, _) => Settings.CustomTheme = id;
+                    item.Click += (_, _) => Settings.ApplyCustomTheme(theme);
                     themeItems.Add((item, id, null));
                     ThemeSubMenu.Items.Add(item);
                 }
