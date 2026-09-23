@@ -3,6 +3,7 @@ using Typedown.Core.Models;
 using Typedown.Core.ViewModels;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
 using muxc = Microsoft.UI.Xaml.Controls;
 
 namespace Typedown.Core.Controls
@@ -19,6 +20,10 @@ namespace Typedown.Core.Controls
         public DocumentTabBar()
         {
             InitializeComponent();
+            // handledEventsToo: once there are more tabs than fit, the strip's own scroll viewer takes the
+            // wheel and marks it handled, so a plain handler never sees it and the wheel only slid the strip
+            // sideways instead of moving between tabs.
+            AddHandler(PointerWheelChangedEvent, new PointerEventHandler(OnPointerWheelChanged), true);
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
@@ -37,6 +42,8 @@ namespace Typedown.Core.Controls
             if (delta == 0) return;
             e.Handled = true;
             (delta > 0 ? Tabs.PreviousTabCommand : Tabs.NextTabCommand).Execute(default);
+            // The strip may have scrolled itself before this ran; following the selection puts it right.
+            TabView.SelectedItem = Tabs.ActiveTab;
         }
 
         private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
