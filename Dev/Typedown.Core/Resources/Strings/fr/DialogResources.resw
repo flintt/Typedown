@@ -249,4 +249,52 @@
     <value>Runtime WebView2 non installé</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Recharger</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>Le fichier a été modifié sur le disque. Le recharger abandonnera les modifications non enregistrées.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>Le fichier a été modifié sur le disque. Le recharger ?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>Le fichier a été modifié sur le disque</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>Conserver</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>Partagé sur HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>Lien en lecture seule</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>Lien modifiable</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>Toute personne disposant de ce lien peut modifier la note.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>Copier le lien</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>Ouvrir dans le navigateur</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>Renseignez d'abord l'adresse du serveur HedgeDoc dans Paramètres → Exporter.</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>Le document n'a pas changé depuis le dernier partage ; voici les liens existants.</value>
+  </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>Ce document a déjà été partagé mais a changé depuis. HedgeDoc 1.x ne peut pas mettre à jour une note existante : un nouvel envoi crée une nouvelle note avec un nouveau lien.</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>Envoyer à nouveau (nouveau lien)</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>Utiliser le lien précédent</value>
+  </data>
 </root>

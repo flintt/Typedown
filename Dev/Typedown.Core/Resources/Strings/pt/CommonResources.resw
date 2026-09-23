@@ -875,4 +875,61 @@
     <value>Zoom</value>
     <comment>字体缩放</comment>
   </data>
+  <data name="FullScreen" xml:space="preserve">
+    <value>Tela cheia</value>
+  </data>
+  <data name="ReadOnlyMode" xml:space="preserve">
+    <value>Modo de leitura</value>
+  </data>
+  <data name="FolderPane.NoFolderOpen" xml:space="preserve">
+    <value>Nenhuma pasta aberta. Abra um arquivo ou uma pasta para navegar aqui.</value>
+  </data>
+  <data name="FolderPane.NotFound" xml:space="preserve">
+    <value>Esta pasta não existe mais.</value>
+  </data>
+  <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
+    <value>Nenhum arquivo Markdown nesta pasta.</value>
+  </data>
+  <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
+    <value>Pesquisar na pasta…</value>
+  </data>
+  <data name="FolderSearch.Searching" xml:space="preserve">
+    <value>Pesquisando…</value>
+  </data>
+  <data name="FolderSearch.ResultSummary" xml:space="preserve">
+    <value>{0} arquivo(s) correspondente(s) de {1} pesquisado(s)</value>
+  </data>
+  <data name="TocPane.ExpandAll" xml:space="preserve">
+    <value>Expandir tudo</value>
+  </data>
+  <data name="TocPane.CollapseAll" xml:space="preserve">
+    <value>Recolher tudo</value>
+  </data>
+  <data name="QuoteIncrease" xml:space="preserve">
+    <value>Aumentar nível de citação</value>
+  </data>
+  <data name="QuoteDecrease" xml:space="preserve">
+    <value>Diminuir nível de citação</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>Sem título</value>
+  </data>
+  <data name="NextTab" xml:space="preserve">
+    <value>Próxima guia</value>
+  </data>
+  <data name="PreviousTab" xml:space="preserve">
+    <value>Guia anterior</value>
+  </data>
+  <data name="FolderPane.RevealCurrentFile" xml:space="preserve">
+    <value>Mostrar a pasta do arquivo atual</value>
+  </data>
+  <data name="ShareToHedgeDoc" xml:space="preserve">
+    <value>Compartilhar no HedgeDoc…</value>
+  </data>
+  <data name="SearchInFolder" xml:space="preserve">
+    <value>Pesquisar na pasta</value>
+  </data>
+  <data name="FolderSearch.NameMatch" xml:space="preserve">
+    <value>(nome do arquivo corresponde)</value>
+  </data>
 </root>

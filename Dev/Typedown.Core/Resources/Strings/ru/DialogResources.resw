@@ -249,4 +249,52 @@
     <value>WebView2 Runtime не установлен</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Перезагрузить</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>Файл изменён на диске. Перезагрузка отменит несохранённые изменения.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>Файл изменён на диске. Перезагрузить его?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>Файл изменён на диске</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>Оставить</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>Опубликовано в HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>Ссылка только для чтения</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>Ссылка для редактирования</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>Любой, у кого есть эта ссылка, может редактировать заметку.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>Копировать ссылку</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>Открыть в браузере</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>Сначала укажите адрес сервера HedgeDoc в разделе «Параметры → Экспорт».</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>Документ не изменился с момента последней публикации; вот прежние ссылки.</value>
+  </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>Этот документ уже публиковался, но с тех пор изменился. HedgeDoc 1.x не умеет обновлять существующую заметку, поэтому повторная загрузка создаст новую заметку с новой ссылкой.</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>Загрузить заново (новая ссылка)</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>Использовать прежнюю ссылку</value>
+  </data>
 </root>

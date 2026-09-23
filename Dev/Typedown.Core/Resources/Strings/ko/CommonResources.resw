@@ -933,4 +933,61 @@
     <value>확대/축소</value>
     <comment>字体缩放</comment>
   </data>
+  <data name="FullScreen" xml:space="preserve">
+    <value>전체 화면</value>
+  </data>
+  <data name="ReadOnlyMode" xml:space="preserve">
+    <value>읽기 모드</value>
+  </data>
+  <data name="FolderPane.NoFolderOpen" xml:space="preserve">
+    <value>열린 폴더가 없습니다. 파일이나 폴더를 열면 여기에 표시됩니다.</value>
+  </data>
+  <data name="FolderPane.NotFound" xml:space="preserve">
+    <value>이 폴더가 더 이상 존재하지 않습니다.</value>
+  </data>
+  <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
+    <value>이 폴더에 Markdown 파일이 없습니다.</value>
+  </data>
+  <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
+    <value>폴더에서 검색…</value>
+  </data>
+  <data name="FolderSearch.Searching" xml:space="preserve">
+    <value>검색 중…</value>
+  </data>
+  <data name="FolderSearch.ResultSummary" xml:space="preserve">
+    <value>검색한 {1}개 파일 중 {0}개 일치</value>
+  </data>
+  <data name="TocPane.ExpandAll" xml:space="preserve">
+    <value>모두 펼치기</value>
+  </data>
+  <data name="TocPane.CollapseAll" xml:space="preserve">
+    <value>모두 접기</value>
+  </data>
+  <data name="QuoteIncrease" xml:space="preserve">
+    <value>인용 수준 늘리기</value>
+  </data>
+  <data name="QuoteDecrease" xml:space="preserve">
+    <value>인용 수준 줄이기</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>제목 없음</value>
+  </data>
+  <data name="NextTab" xml:space="preserve">
+    <value>다음 탭</value>
+  </data>
+  <data name="PreviousTab" xml:space="preserve">
+    <value>이전 탭</value>
+  </data>
+  <data name="FolderPane.RevealCurrentFile" xml:space="preserve">
+    <value>현재 파일이 있는 폴더 표시</value>
+  </data>
+  <data name="ShareToHedgeDoc" xml:space="preserve">
+    <value>HedgeDoc으로 공유…</value>
+  </data>
+  <data name="SearchInFolder" xml:space="preserve">
+    <value>폴더에서 검색</value>
+  </data>
+  <data name="FolderSearch.NameMatch" xml:space="preserve">
+    <value>(파일 이름 일치)</value>
+  </data>
 </root>

@@ -689,4 +689,142 @@
     <value>Janela</value>
     <comment>视图/窗口</comment>
   </data>
+  <data name="Editor.FontFamily.Placeholder" xml:space="preserve">
+    <value>Padrão</value>
+  </data>
+  <data name="Editor.TextDirection.Auto" xml:space="preserve">
+    <value>Detectar automaticamente por parágrafo</value>
+  </data>
+  <data name="Editor.TextDirection.Description" xml:space="preserve">
+    <value>Direção do texto no editor; útil para árabe, hebraico e outros idiomas da direita para a esquerda</value>
+  </data>
+  <data name="Editor.TextDirection.Ltr" xml:space="preserve">
+    <value>Da esquerda para a direita</value>
+  </data>
+  <data name="Editor.TextDirection.Rtl" xml:space="preserve">
+    <value>Da direita para a esquerda</value>
+  </data>
+  <data name="Editor.TextDirection.Title" xml:space="preserve">
+    <value>Direção do texto</value>
+  </data>
+  <data name="General.AutoReload.Description" xml:space="preserve">
+    <value>Monitorar o arquivo aberto e atualizá-lo quando outro programa o alterar</value>
+  </data>
+  <data name="General.AutoReload.Title" xml:space="preserve">
+    <value>Recarregar automaticamente em alterações externas</value>
+  </data>
+  <data name="General.AskBeforeReload.Description" xml:space="preserve">
+    <value>Se desativado, recarrega sem perguntar, a menos que haja alterações não salvas</value>
+  </data>
+  <data name="General.AskBeforeReload.Title" xml:space="preserve">
+    <value>Perguntar antes de recarregar</value>
+  </data>
+  <data name="Editor.ListIndentation.Title" xml:space="preserve">
+    <value>Recuo das listas</value>
+  </data>
+  <data name="Editor.ListIndentation.Description" xml:space="preserve">
+    <value>Recuo escrito para itens de lista aninhados. 4 espaços corresponde ao Obsidian e à maioria dos editores</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces1" xml:space="preserve">
+    <value>1 espaço após o marcador</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces2" xml:space="preserve">
+    <value>2 espaços após o marcador</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces4" xml:space="preserve">
+    <value>4 espaços após o marcador</value>
+  </data>
+  <data name="Editor.ListIndentation.Dfm" xml:space="preserve">
+    <value>Recuo de 4 espaços (padrão do Markdown)</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Title" xml:space="preserve">
+    <value>Itens de lista espaçados</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Description" xml:space="preserve">
+    <value>Inserir uma linha em branco entre novos itens de lista no código</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Title" xml:space="preserve">
+    <value>Alinhar colunas das tabelas</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Description" xml:space="preserve">
+    <value>Preencher as células para as colunas ficarem alinhadas no código Markdown. Desative para tabelas compactas (menos tokens em ferramentas de IA)</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Title" xml:space="preserve">
+    <value>Marcador de parágrafo</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Description" xml:space="preserve">
+    <value>Mostrar o tipo de bloco (P, H1, …) ao lado do parágrafo atual</value>
+  </data>
+  <data name="View.AppTheme.Black" xml:space="preserve">
+    <value>Preto (OLED)</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
+    <value>Página padrão do painel lateral</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Description" xml:space="preserve">
+    <value>Qual página o painel lateral mostra ao iniciar</value>
+  </data>
+  <data name="View.Image.CopyPath.Placeholder" xml:space="preserve">
+    <value>ex.: ./${filename}.assets — variáveis: ${filename} ${filedir} ${year} ${month} ${day}</value>
+  </data>
+  <data name="General.RememberCursorPosition.Title" xml:space="preserve">
+    <value>Lembrar a posição do cursor</value>
+  </data>
+  <data name="General.RememberCursorPosition.Description" xml:space="preserve">
+    <value>Reabrir os documentos onde você parou</value>
+  </data>
+  <data name="View.CustomCss.Title" xml:space="preserve">
+    <value>CSS personalizado</value>
+  </data>
+  <data name="View.CustomCss.Description" xml:space="preserve">
+    <value>Estilos extras para o editor e para o HTML/PDF exportado</value>
+  </data>
+  <data name="View.CustomCss.Placeholder" xml:space="preserve">
+    <value>ex.: .markdown-body h1 { color: #c00; } ou :root { --editorBgColor: #111; }</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Title" xml:space="preserve">
+    <value>Sempre mostrar as guias</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Description" xml:space="preserve">
+    <value>Mostrar a barra de guias mesmo com apenas um documento aberto</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Title" xml:space="preserve">
+    <value>Abrir arquivos em guias</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Description" xml:space="preserve">
+    <value>Arquivos abertos pelo Explorador viram uma guia da janela atual; se desativado, abrem em uma janela nova</value>
+  </data>
+  <data name="HedgeDocShare.Section" xml:space="preserve">
+    <value>Compartilhar no HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Server.Title" xml:space="preserve">
+    <value>Servidor</value>
+  </data>
+  <data name="HedgeDocShare.Server.Description" xml:space="preserve">
+    <value>Endereço do HedgeDoc 1.x, ex.: https://md.example.com</value>
+  </data>
+  <data name="HedgeDocShare.Email.Title" xml:space="preserve">
+    <value>E-mail (opcional)</value>
+  </data>
+  <data name="HedgeDocShare.Email.Description" xml:space="preserve">
+    <value>Deixe vazio para criar notas anonimamente; com uma conta a nota pertence a você</value>
+  </data>
+  <data name="HedgeDocShare.Password.Title" xml:space="preserve">
+    <value>Senha</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Title" xml:space="preserve">
+    <value>Publicar também um link somente leitura</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Description" xml:space="preserve">
+    <value>Publica a nota (/s/…) para que o link compartilhado não possa ser editado</value>
+  </data>
+  <data name="HedgeDocShare.TestTitle" xml:space="preserve">
+    <value>Testar conexão</value>
+  </data>
+  <data name="HedgeDocShare.TestButton" xml:space="preserve">
+    <value>Testar</value>
+  </data>
+  <data name="General.StartupAction.FileStartupAction.RestoreSession" xml:space="preserve">
+    <value>Restaurar todos os documentos da última sessão</value>
+  </data>
 </root>

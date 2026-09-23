@@ -249,4 +249,52 @@
     <value>WebView2-Runtime nicht installiert</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Neu laden</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>Die Datei wurde auf dem Datenträger geändert. Beim Neuladen gehen nicht gespeicherte Änderungen verloren.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>Die Datei wurde auf dem Datenträger geändert. Neu laden?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>Die Datei wurde auf dem Datenträger geändert</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>Behalten</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>Auf HedgeDoc geteilt</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>Schreibgeschützter Link</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>Bearbeitbarer Link</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>Wer diesen Link hat, kann die Notiz bearbeiten.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>Link kopieren</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>Im Browser öffnen</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>Trage zuerst die HedgeDoc-Serveradresse unter Einstellungen → Exportieren ein.</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>Das Dokument hat sich seit dem letzten Teilen nicht geändert; dies sind die vorhandenen Links.</value>
+  </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>Dieses Dokument wurde bereits geteilt, danach aber geändert. HedgeDoc 1.x kann eine vorhandene Notiz nicht aktualisieren – ein erneutes Hochladen erzeugt eine neue Notiz mit neuem Link.</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>Erneut hochladen (neuer Link)</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>Bisherigen Link verwenden</value>
+  </data>
 </root>

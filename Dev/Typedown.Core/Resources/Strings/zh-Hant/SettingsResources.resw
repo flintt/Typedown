@@ -838,4 +838,22 @@
   <data name="General.StartupAction.FileStartupAction.RestoreSession" xml:space="preserve">
     <value>恢復上次開啟的所有文件</value>
   </data>
+  <data name="Editor.FontFamily.Placeholder" xml:space="preserve">
+    <value>預設</value>
+  </data>
+  <data name="Editor.TextDirection.Auto" xml:space="preserve">
+    <value>依段落自動偵測</value>
+  </data>
+  <data name="Editor.TextDirection.Description" xml:space="preserve">
+    <value>編輯器內容的文字方向，適用於阿拉伯文、希伯來文等由右至左的語言</value>
+  </data>
+  <data name="Editor.TextDirection.Ltr" xml:space="preserve">
+    <value>由左至右</value>
+  </data>
+  <data name="Editor.TextDirection.Rtl" xml:space="preserve">
+    <value>由右至左</value>
+  </data>
+  <data name="Editor.TextDirection.Title" xml:space="preserve">
+    <value>文字方向</value>
+  </data>
 </root>

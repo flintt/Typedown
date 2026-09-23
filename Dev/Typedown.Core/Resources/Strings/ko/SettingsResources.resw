@@ -689,4 +689,142 @@
     <value>창</value>
     <comment>视图/窗口</comment>
   </data>
+  <data name="Editor.FontFamily.Placeholder" xml:space="preserve">
+    <value>기본값</value>
+  </data>
+  <data name="Editor.TextDirection.Auto" xml:space="preserve">
+    <value>단락마다 자동 감지</value>
+  </data>
+  <data name="Editor.TextDirection.Description" xml:space="preserve">
+    <value>편집기 내용의 텍스트 방향입니다. 아랍어, 히브리어 등 오른쪽에서 왼쪽으로 쓰는 언어에 사용합니다</value>
+  </data>
+  <data name="Editor.TextDirection.Ltr" xml:space="preserve">
+    <value>왼쪽에서 오른쪽</value>
+  </data>
+  <data name="Editor.TextDirection.Rtl" xml:space="preserve">
+    <value>오른쪽에서 왼쪽</value>
+  </data>
+  <data name="Editor.TextDirection.Title" xml:space="preserve">
+    <value>텍스트 방향</value>
+  </data>
+  <data name="General.AutoReload.Description" xml:space="preserve">
+    <value>열린 파일을 감시하다가 다른 프로그램이 변경하면 새로 고칩니다</value>
+  </data>
+  <data name="General.AutoReload.Title" xml:space="preserve">
+    <value>외부 변경 시 자동으로 다시 불러오기</value>
+  </data>
+  <data name="General.AskBeforeReload.Description" xml:space="preserve">
+    <value>끄면 저장하지 않은 변경이 없는 한 확인 없이 다시 불러옵니다</value>
+  </data>
+  <data name="General.AskBeforeReload.Title" xml:space="preserve">
+    <value>다시 불러오기 전에 확인</value>
+  </data>
+  <data name="Editor.ListIndentation.Title" xml:space="preserve">
+    <value>목록 들여쓰기</value>
+  </data>
+  <data name="Editor.ListIndentation.Description" xml:space="preserve">
+    <value>중첩된 목록 항목에 기록할 들여쓰기입니다. 공백 4칸은 Obsidian 및 대부분의 편집기와 동일합니다</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces1" xml:space="preserve">
+    <value>기호 뒤 공백 1칸</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces2" xml:space="preserve">
+    <value>기호 뒤 공백 2칸</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces4" xml:space="preserve">
+    <value>기호 뒤 공백 4칸</value>
+  </data>
+  <data name="Editor.ListIndentation.Dfm" xml:space="preserve">
+    <value>공백 4칸 들여쓰기(Markdown 표준)</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Title" xml:space="preserve">
+    <value>느슨한 목록 항목</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Description" xml:space="preserve">
+    <value>원본에서 새 목록 항목 사이에 빈 줄을 넣습니다</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Title" xml:space="preserve">
+    <value>표 열 맞추기</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Description" xml:space="preserve">
+    <value>Markdown 원본에서 열이 맞도록 셀을 공백으로 채웁니다. 끄면 표가 간결해집니다(AI 도구의 토큰 수 감소)</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Title" xml:space="preserve">
+    <value>단락 표시</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Description" xml:space="preserve">
+    <value>현재 단락 옆에 블록 종류(P, H1 등)를 표시합니다</value>
+  </data>
+  <data name="View.AppTheme.Black" xml:space="preserve">
+    <value>검정(OLED)</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
+    <value>사이드 패널 기본 페이지</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Description" xml:space="preserve">
+    <value>앱을 시작할 때 사이드 패널이 보여줄 페이지</value>
+  </data>
+  <data name="View.Image.CopyPath.Placeholder" xml:space="preserve">
+    <value>예: ./${filename}.assets — 변수: ${filename} ${filedir} ${year} ${month} ${day}</value>
+  </data>
+  <data name="General.RememberCursorPosition.Title" xml:space="preserve">
+    <value>커서 위치 기억</value>
+  </data>
+  <data name="General.RememberCursorPosition.Description" xml:space="preserve">
+    <value>문서를 마지막 위치에서 다시 엽니다</value>
+  </data>
+  <data name="View.CustomCss.Title" xml:space="preserve">
+    <value>사용자 지정 CSS</value>
+  </data>
+  <data name="View.CustomCss.Description" xml:space="preserve">
+    <value>편집기와 내보낸 HTML/PDF에 적용할 추가 스타일</value>
+  </data>
+  <data name="View.CustomCss.Placeholder" xml:space="preserve">
+    <value>예: .markdown-body h1 { color: #c00; } 또는 :root { --editorBgColor: #111; }</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Title" xml:space="preserve">
+    <value>항상 탭 표시</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Description" xml:space="preserve">
+    <value>문서가 하나만 열려 있어도 탭 표시줄을 보여줍니다</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Title" xml:space="preserve">
+    <value>파일을 탭으로 열기</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Description" xml:space="preserve">
+    <value>탐색기에서 연 파일을 현재 창의 탭으로 엽니다. 끄면 새 창으로 엽니다</value>
+  </data>
+  <data name="HedgeDocShare.Section" xml:space="preserve">
+    <value>HedgeDoc으로 공유</value>
+  </data>
+  <data name="HedgeDocShare.Server.Title" xml:space="preserve">
+    <value>서버</value>
+  </data>
+  <data name="HedgeDocShare.Server.Description" xml:space="preserve">
+    <value>HedgeDoc 1.x 주소(예: https://md.example.com)</value>
+  </data>
+  <data name="HedgeDocShare.Email.Title" xml:space="preserve">
+    <value>이메일(선택)</value>
+  </data>
+  <data name="HedgeDocShare.Email.Description" xml:space="preserve">
+    <value>비워 두면 익명으로 노트를 만듭니다. 계정을 사용하면 노트가 내 것이 됩니다</value>
+  </data>
+  <data name="HedgeDocShare.Password.Title" xml:space="preserve">
+    <value>비밀번호</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Title" xml:space="preserve">
+    <value>읽기 전용 링크도 게시</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Description" xml:space="preserve">
+    <value>노트를 게시(/s/…)하여 공유한 링크를 편집할 수 없게 합니다</value>
+  </data>
+  <data name="HedgeDocShare.TestTitle" xml:space="preserve">
+    <value>연결 테스트</value>
+  </data>
+  <data name="HedgeDocShare.TestButton" xml:space="preserve">
+    <value>테스트</value>
+  </data>
+  <data name="General.StartupAction.FileStartupAction.RestoreSession" xml:space="preserve">
+    <value>지난 세션의 모든 문서 복원</value>
+  </data>
 </root>

@@ -933,4 +933,61 @@
     <value>ズーム</value>
     <comment>字体缩放</comment>
   </data>
+  <data name="FullScreen" xml:space="preserve">
+    <value>全画面表示</value>
+  </data>
+  <data name="ReadOnlyMode" xml:space="preserve">
+    <value>読み取りモード</value>
+  </data>
+  <data name="FolderPane.NoFolderOpen" xml:space="preserve">
+    <value>フォルダーが開かれていません。ファイルまたはフォルダーを開くとここに表示されます。</value>
+  </data>
+  <data name="FolderPane.NotFound" xml:space="preserve">
+    <value>このフォルダーは存在しません。</value>
+  </data>
+  <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
+    <value>このフォルダーに Markdown ファイルがありません。</value>
+  </data>
+  <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
+    <value>フォルダー内を検索…</value>
+  </data>
+  <data name="FolderSearch.Searching" xml:space="preserve">
+    <value>検索中…</value>
+  </data>
+  <data name="FolderSearch.ResultSummary" xml:space="preserve">
+    <value>{1} 件中 {0} 件のファイルが一致</value>
+  </data>
+  <data name="TocPane.ExpandAll" xml:space="preserve">
+    <value>すべて展開</value>
+  </data>
+  <data name="TocPane.CollapseAll" xml:space="preserve">
+    <value>すべて折りたたむ</value>
+  </data>
+  <data name="QuoteIncrease" xml:space="preserve">
+    <value>引用レベルを上げる</value>
+  </data>
+  <data name="QuoteDecrease" xml:space="preserve">
+    <value>引用レベルを下げる</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>無題</value>
+  </data>
+  <data name="NextTab" xml:space="preserve">
+    <value>次のタブ</value>
+  </data>
+  <data name="PreviousTab" xml:space="preserve">
+    <value>前のタブ</value>
+  </data>
+  <data name="FolderPane.RevealCurrentFile" xml:space="preserve">
+    <value>現在のファイルのフォルダーを表示</value>
+  </data>
+  <data name="ShareToHedgeDoc" xml:space="preserve">
+    <value>HedgeDoc で共有…</value>
+  </data>
+  <data name="SearchInFolder" xml:space="preserve">
+    <value>フォルダー内を検索</value>
+  </data>
+  <data name="FolderSearch.NameMatch" xml:space="preserve">
+    <value>（ファイル名が一致）</value>
+  </data>
 </root>

@@ -689,4 +689,142 @@
     <value>ウィンドウ</value>
     <comment>视图/窗口</comment>
   </data>
+  <data name="Editor.FontFamily.Placeholder" xml:space="preserve">
+    <value>既定</value>
+  </data>
+  <data name="Editor.TextDirection.Auto" xml:space="preserve">
+    <value>段落ごとに自動判定</value>
+  </data>
+  <data name="Editor.TextDirection.Description" xml:space="preserve">
+    <value>エディターの文字方向。アラビア語やヘブライ語など右から左に書く言語で使います</value>
+  </data>
+  <data name="Editor.TextDirection.Ltr" xml:space="preserve">
+    <value>左から右</value>
+  </data>
+  <data name="Editor.TextDirection.Rtl" xml:space="preserve">
+    <value>右から左</value>
+  </data>
+  <data name="Editor.TextDirection.Title" xml:space="preserve">
+    <value>文字方向</value>
+  </data>
+  <data name="General.AutoReload.Description" xml:space="preserve">
+    <value>開いているファイルを監視し、他のプログラムが変更したら読み込み直します</value>
+  </data>
+  <data name="General.AutoReload.Title" xml:space="preserve">
+    <value>外部の変更を自動で再読み込み</value>
+  </data>
+  <data name="General.AskBeforeReload.Description" xml:space="preserve">
+    <value>オフの場合、未保存の変更がなければ確認せずに再読み込みします</value>
+  </data>
+  <data name="General.AskBeforeReload.Title" xml:space="preserve">
+    <value>再読み込み前に確認する</value>
+  </data>
+  <data name="Editor.ListIndentation.Title" xml:space="preserve">
+    <value>リストのインデント</value>
+  </data>
+  <data name="Editor.ListIndentation.Description" xml:space="preserve">
+    <value>入れ子のリスト項目に書き出すインデント。4 スペースは Obsidian や多くのエディターと同じです</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces1" xml:space="preserve">
+    <value>マーカーの後に 1 スペース</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces2" xml:space="preserve">
+    <value>マーカーの後に 2 スペース</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces4" xml:space="preserve">
+    <value>マーカーの後に 4 スペース</value>
+  </data>
+  <data name="Editor.ListIndentation.Dfm" xml:space="preserve">
+    <value>4 スペースのインデント（Markdown 標準）</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Title" xml:space="preserve">
+    <value>ルーズなリスト項目</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Description" xml:space="preserve">
+    <value>ソース内で新しいリスト項目の間に空行を入れます</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Title" xml:space="preserve">
+    <value>表の列をそろえる</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Description" xml:space="preserve">
+    <value>Markdown ソースで列がそろうようにセルを空白で埋めます。オフにすると表がコンパクトになります（AI ツールでのトークン数が減ります）</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Title" xml:space="preserve">
+    <value>段落マーカー</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Description" xml:space="preserve">
+    <value>現在の段落の横にブロックの種類（P、H1 など）を表示します</value>
+  </data>
+  <data name="View.AppTheme.Black" xml:space="preserve">
+    <value>ブラック（OLED）</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
+    <value>サイドパネルの既定ページ</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Description" xml:space="preserve">
+    <value>起動時にサイドパネルが表示するページ</value>
+  </data>
+  <data name="View.Image.CopyPath.Placeholder" xml:space="preserve">
+    <value>例: ./${filename}.assets — 変数: ${filename} ${filedir} ${year} ${month} ${day}</value>
+  </data>
+  <data name="General.RememberCursorPosition.Title" xml:space="preserve">
+    <value>カーソル位置を記憶</value>
+  </data>
+  <data name="General.RememberCursorPosition.Description" xml:space="preserve">
+    <value>文書を前回の位置から開き直します</value>
+  </data>
+  <data name="View.CustomCss.Title" xml:space="preserve">
+    <value>カスタム CSS</value>
+  </data>
+  <data name="View.CustomCss.Description" xml:space="preserve">
+    <value>エディターと書き出した HTML/PDF に適用する追加スタイル</value>
+  </data>
+  <data name="View.CustomCss.Placeholder" xml:space="preserve">
+    <value>例: .markdown-body h1 { color: #c00; } または :root { --editorBgColor: #111; }</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Title" xml:space="preserve">
+    <value>常にタブを表示</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Description" xml:space="preserve">
+    <value>開いている文書が 1 つだけでもタブバーを表示します</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Title" xml:space="preserve">
+    <value>ファイルをタブで開く</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Description" xml:space="preserve">
+    <value>エクスプローラーから開いたファイルを現在のウィンドウのタブとして開きます。オフの場合は新しいウィンドウで開きます</value>
+  </data>
+  <data name="HedgeDocShare.Section" xml:space="preserve">
+    <value>HedgeDoc で共有</value>
+  </data>
+  <data name="HedgeDocShare.Server.Title" xml:space="preserve">
+    <value>サーバー</value>
+  </data>
+  <data name="HedgeDocShare.Server.Description" xml:space="preserve">
+    <value>HedgeDoc 1.x のアドレス（例: https://md.example.com）</value>
+  </data>
+  <data name="HedgeDocShare.Email.Title" xml:space="preserve">
+    <value>メールアドレス（任意）</value>
+  </data>
+  <data name="HedgeDocShare.Email.Description" xml:space="preserve">
+    <value>空のままなら匿名でノートを作成します。アカウントを使うとノートは自分のものになります</value>
+  </data>
+  <data name="HedgeDocShare.Password.Title" xml:space="preserve">
+    <value>パスワード</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Title" xml:space="preserve">
+    <value>読み取り専用リンクも公開する</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Description" xml:space="preserve">
+    <value>ノートを公開（/s/…）して、共有したリンクを編集できないようにします</value>
+  </data>
+  <data name="HedgeDocShare.TestTitle" xml:space="preserve">
+    <value>接続テスト</value>
+  </data>
+  <data name="HedgeDocShare.TestButton" xml:space="preserve">
+    <value>テスト</value>
+  </data>
+  <data name="General.StartupAction.FileStartupAction.RestoreSession" xml:space="preserve">
+    <value>前回のセッションのすべての文書を復元</value>
+  </data>
 </root>

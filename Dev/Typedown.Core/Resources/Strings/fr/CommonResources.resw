@@ -933,4 +933,61 @@
     <value>Zoom</value>
     <comment>字体缩放</comment>
   </data>
+  <data name="FullScreen" xml:space="preserve">
+    <value>Plein écran</value>
+  </data>
+  <data name="ReadOnlyMode" xml:space="preserve">
+    <value>Mode lecture</value>
+  </data>
+  <data name="FolderPane.NoFolderOpen" xml:space="preserve">
+    <value>Aucun dossier ouvert. Ouvrez un fichier ou un dossier pour le parcourir ici.</value>
+  </data>
+  <data name="FolderPane.NotFound" xml:space="preserve">
+    <value>Ce dossier n'existe plus.</value>
+  </data>
+  <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
+    <value>Aucun fichier Markdown dans ce dossier.</value>
+  </data>
+  <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
+    <value>Rechercher dans le dossier…</value>
+  </data>
+  <data name="FolderSearch.Searching" xml:space="preserve">
+    <value>Recherche…</value>
+  </data>
+  <data name="FolderSearch.ResultSummary" xml:space="preserve">
+    <value>{0} fichier(s) correspondant(s) sur {1} analysé(s)</value>
+  </data>
+  <data name="TocPane.ExpandAll" xml:space="preserve">
+    <value>Tout développer</value>
+  </data>
+  <data name="TocPane.CollapseAll" xml:space="preserve">
+    <value>Tout réduire</value>
+  </data>
+  <data name="QuoteIncrease" xml:space="preserve">
+    <value>Augmenter le niveau de citation</value>
+  </data>
+  <data name="QuoteDecrease" xml:space="preserve">
+    <value>Diminuer le niveau de citation</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>Sans titre</value>
+  </data>
+  <data name="NextTab" xml:space="preserve">
+    <value>Onglet suivant</value>
+  </data>
+  <data name="PreviousTab" xml:space="preserve">
+    <value>Onglet précédent</value>
+  </data>
+  <data name="FolderPane.RevealCurrentFile" xml:space="preserve">
+    <value>Afficher le dossier du fichier actuel</value>
+  </data>
+  <data name="ShareToHedgeDoc" xml:space="preserve">
+    <value>Partager sur HedgeDoc…</value>
+  </data>
+  <data name="SearchInFolder" xml:space="preserve">
+    <value>Rechercher dans le dossier</value>
+  </data>
+  <data name="FolderSearch.NameMatch" xml:space="preserve">
+    <value>(nom de fichier correspondant)</value>
+  </data>
 </root>
