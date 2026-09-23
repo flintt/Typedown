@@ -84,6 +84,13 @@ namespace Typedown.Core.Utilities
             }
         }
 
+        /// <summary>
+        /// What to call a theme in a list. Two files may carry the same name — copying a bundled theme to edit
+        /// it under another file name is the usual way — so the file name comes along to tell them apart.
+        /// </summary>
+        public static string DisplayName(CustomTheme theme, IReadOnlyList<CustomTheme> all) =>
+            all.Count(x => x.Name == theme.Name) > 1 ? $"{theme.Name} ({theme.Id})" : theme.Name;
+
         public static CustomTheme Find(string id) =>
             string.IsNullOrEmpty(id) ? null : List().FirstOrDefault(x => x.Id == id);
 
@@ -103,14 +110,26 @@ namespace Typedown.Core.Utilities
             }
         }
 
-        /// <summary>Creates the folder and, the first time, an example theme to start from.</summary>
+        /// <summary>The theme document that ships with the app, in the themes folder where it is looked for.</summary>
+        public static string DocumentPath => System.IO.Path.Combine(Folder, "custom-theme.md");
+
+        /// <summary>
+        /// Creates the folder and, the first time, an example theme to start from and the document that
+        /// explains the format — a theme folder with nothing in it says nothing about how to fill it.
+        /// </summary>
         public static void EnsureFolder()
         {
             try
             {
-                if (Directory.Exists(Folder)) return;
-                Directory.CreateDirectory(Folder);
-                File.WriteAllText(System.IO.Path.Combine(Folder, "example.css"), Example);
+                var existed = Directory.Exists(Folder);
+                if (!existed)
+                {
+                    Directory.CreateDirectory(Folder);
+                    File.WriteAllText(System.IO.Path.Combine(Folder, "example.css"), Example);
+                }
+                var shipped = System.IO.Path.Combine(BundledFolder, "custom-theme.md");
+                if (File.Exists(shipped) && (!File.Exists(DocumentPath) || File.GetLastWriteTimeUtc(shipped) > File.GetLastWriteTimeUtc(DocumentPath)))
+                    File.Copy(shipped, DocumentPath, true);
             }
             catch (Exception ex)
             {

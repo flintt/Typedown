@@ -45,6 +45,9 @@ namespace Typedown.Core.ViewModels
         /// <summary>Picks a tab by position, counted from zero; anything past the last tab means the last one.</summary>
         public Command<int> SwitchTabIndexCommand { get; } = new();
 
+        /// <summary>Back to the tab used before this one — two tabs out of many, swapped between.</summary>
+        public Command<Unit> LastUsedTabCommand { get; } = new();
+
         private readonly CompositeDisposable disposables = new();
 
         private bool switching;
@@ -64,6 +67,7 @@ namespace Typedown.Core.ViewModels
             NextTabCommand.OnExecute.Subscribe(async _ => await SwitchRelative(1));
             PreviousTabCommand.OnExecute.Subscribe(async _ => await SwitchRelative(-1));
             SwitchTabIndexCommand.OnExecute.Subscribe(async index => await SwitchToIndex(index));
+            LastUsedTabCommand.OnExecute.Subscribe(async _ => await SwitchToLastUsed());
             // Keep the active tab's label in sync with the editor state.
             disposables.Add(FileViewModel.WhenPropertyChanged(nameof(FileViewModel.FilePath)).Subscribe(_ => { if (!switching) ActiveTab.FilePath = FileViewModel.FilePath; }));
             disposables.Add(EditorViewModel.WhenPropertyChanged(nameof(EditorViewModel.Saved)).Subscribe(_ =>
@@ -137,6 +141,21 @@ namespace Typedown.Core.ViewModels
             tabBeforeNew = null;
         }
 
+        /// <summary>The tab that was active before this one, for the shortcut that jumps back and forth.</summary>
+        private DocumentTab previousTab;
+
+        /// <summary>
+        /// Back to the tab used before this one, the way Alt+Tab switches between two windows. With no history
+        /// yet it behaves as "next tab".
+        /// </summary>
+        private async Task SwitchToLastUsed()
+        {
+            if (previousTab != null && previousTab != ActiveTab && Tabs.Contains(previousTab))
+                await SwitchTo(previousTab);
+            else
+                await SwitchRelative(1);
+        }
+
         public async Task SwitchTo(DocumentTab tab)
         {
             if (tab == null || tab == ActiveTab || !Tabs.Contains(tab)) return;
@@ -144,6 +163,7 @@ namespace Typedown.Core.ViewModels
             try
             {
                 SnapshotActive();
+                previousTab = ActiveTab;
                 ActiveTab = tab;
                 Restore(tab);
             }

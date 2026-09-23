@@ -79,6 +79,8 @@
 		<None Include="Resources\Statics\**" CopyToOutputDirectory="Always" Link="Resources\Statics\%(RecursiveDir)%(Filename)%(Extension)" />
 		<!-- The themes that ship with the app; the themes folder in %LOCALAPPDATA% is added to these at runtime. -->
 		<None Include="Resources\Themes\**" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Link="Resources\Themes\%(RecursiveDir)%(Filename)%(Extension)" />
+		<!-- The theme document ships next to the themes, and a copy lands in the user's themes folder. -->
+		<None Include="..\..\docs\custom-theme.md" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Link="Resources\Themes\custom-theme.md" />
 	</ItemGroup>
 
 	<ItemGroup>

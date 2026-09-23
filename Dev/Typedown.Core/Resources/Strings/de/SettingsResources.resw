@@ -827,4 +827,7 @@
   <data name="General.StartupAction.FileStartupAction.RestoreSession" xml:space="preserve">
     <value>Alle Dokumente der letzten Sitzung wiederherstellen</value>
   </data>
+  <data name="View.CustomTheme.Document" xml:space="preserve">
+    <value>So schreibt man eins</value>
+  </data>
 </root>

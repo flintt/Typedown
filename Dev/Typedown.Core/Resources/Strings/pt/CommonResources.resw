@@ -932,4 +932,7 @@
   <data name="FolderSearch.NameMatch" xml:space="preserve">
     <value>(nome do arquivo corresponde)</value>
   </data>
+  <data name="LastUsedTab" xml:space="preserve">
+    <value>Última guia usada</value>
+  </data>
 </root>

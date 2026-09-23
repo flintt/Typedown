@@ -47,6 +47,7 @@
             <StackPanel Padding="48,16,16,16" Orientation="Horizontal" Spacing="8">
                 <Button Content="{u:LocaleString Key=View.CustomTheme.OpenFolder}" Click="OnOpenThemeFolder"/>
                 <Button Content="{u:LocaleString Key=View.CustomTheme.Refresh}" Click="OnRefreshThemes"/>
+                <Button Content="{u:LocaleString Key=View.CustomTheme.Document}" Click="OnOpenThemeDocument"/>
             </StackPanel>
         </controls:ExpanderSettingItem>
         <controls:ExpanderSettingItem Title="{u:LocaleString Key=View.UseMicaMaterial.Title}" Description="{u:LocaleString Key=View.UseMicaMaterial.Description}">

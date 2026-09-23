@@ -874,6 +874,9 @@
   <data name="View.CustomTheme.OpenFolder" xml:space="preserve">
     <value>Open the themes folder</value>
   </data>
+  <data name="View.CustomTheme.Document" xml:space="preserve">
+    <value>How to write one</value>
+  </data>
   <data name="View.CustomTheme.Refresh" xml:space="preserve">
     <value>Reload themes</value>
   </data>

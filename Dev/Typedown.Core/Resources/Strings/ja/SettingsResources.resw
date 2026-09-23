@@ -827,4 +827,7 @@
   <data name="General.StartupAction.FileStartupAction.RestoreSession" xml:space="preserve">
     <value>前回のセッションのすべての文書を復元</value>
   </data>
+  <data name="View.CustomTheme.Document" xml:space="preserve">
+    <value>テーマの書き方</value>
+  </data>
 </root>

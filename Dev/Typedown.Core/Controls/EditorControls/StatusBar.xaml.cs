@@ -32,6 +32,24 @@ namespace Typedown.Core.Controls
         public StatusBar()
         {
             this.InitializeComponent();
+            // Switching the status bar off and on again builds a new control, which knows nothing of the
+            // theme that was applied to the old one — so it asks for the colours itself when it loads.
+            Loaded += (_, _) => ApplyCurrentTheme();
+        }
+
+        private void ApplyCurrentTheme()
+        {
+            try
+            {
+                var theme = ThemeFiles.Find(Settings?.CustomTheme);
+                ApplyThemeBrushes(
+                    ThemeFiles.Brush(theme?.Surface) ?? ThemeFiles.Brush(theme?.Background),
+                    ThemeFiles.Brush(theme?.Foreground) ?? ThemeFiles.Readable(theme?.Surface ?? theme?.Background));
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"status bar theme: {ex.Message}");
+            }
         }
 
         private string CharacterUnit(int number) => number != 1 ? Locale.GetString("Characters") : Locale.GetString("Character");

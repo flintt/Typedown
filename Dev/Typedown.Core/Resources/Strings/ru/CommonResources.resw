@@ -990,4 +990,7 @@
   <data name="FolderSearch.NameMatch" xml:space="preserve">
     <value>(совпадение по имени файла)</value>
   </data>
+  <data name="LastUsedTab" xml:space="preserve">
+    <value>Последняя использованная вкладка</value>
+  </data>
 </root>

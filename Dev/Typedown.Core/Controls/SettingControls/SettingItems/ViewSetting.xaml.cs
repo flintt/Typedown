@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
@@ -37,14 +38,19 @@ namespace Typedown.Core.Controls.SettingControls.SettingItems
 
         private void OnSettingsChanged(object sender, PropertyChangedEventArgs e)
         {
+            if (e.PropertyName != nameof(Settings.AppTheme) || Settings == null) return;
             // Picking a built-in theme in the radio buttons turns the custom theme off, otherwise the two
             // disagree: the radio says "Light" while a custom theme is still painting everything.
-            if (e.PropertyName != nameof(Settings.AppTheme) || applyingTheme || Settings == null) return;
-            if (string.IsNullOrEmpty(Settings.CustomTheme)) return;
-            Settings.CustomTheme = string.Empty;
-            fillingThemes = true;
-            CustomThemeBox.SelectedIndex = 0;
-            fillingThemes = false;
+            if (!applyingTheme && !string.IsNullOrEmpty(Settings.CustomTheme))
+            {
+                Settings.CustomTheme = string.Empty;
+                fillingThemes = true;
+                CustomThemeBox.SelectedIndex = 0;
+                fillingThemes = false;
+            }
+            // The entries were built under the theme in force at the time and keep its text colour — white
+            // text on a light list after a switch to the light theme. Building them again picks up the new one.
+            FillThemes();
         }
 
         private bool applyingTheme;
@@ -60,7 +66,7 @@ namespace Typedown.Core.Controls.SettingControls.SettingItems
                 themes.AddRange(ThemeFiles.List());
                 CustomThemeBox.Items.Clear();
                 CustomThemeBox.Items.Add(Locale.GetString("View.CustomTheme.None"));
-                foreach (var theme in themes) CustomThemeBox.Items.Add(theme.Name);
+                foreach (var theme in themes) CustomThemeBox.Items.Add(ThemeFiles.DisplayName(theme, themes));
                 var index = themes.FindIndex(x => x.Id == Settings.CustomTheme);
                 CustomThemeBox.SelectedIndex = index < 0 ? 0 : index + 1;
             }
@@ -96,6 +102,23 @@ namespace Typedown.Core.Controls.SettingControls.SettingItems
                 applyingTheme = false;
             }
             Settings.CustomTheme = theme.Id;
+        }
+
+        /// <summary>Opens the document that explains the theme format, which ships next to the app.</summary>
+        private void OnOpenThemeDocument(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ThemeFiles.EnsureFolder();
+                var path = File.Exists(ThemeFiles.DocumentPath)
+                    ? ThemeFiles.DocumentPath
+                    : System.IO.Path.Combine(ThemeFiles.BundledFolder, "custom-theme.md");
+                if (File.Exists(path)) Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"open theme document: {ex.Message}");
+            }
         }
 
         private void OnOpenThemeFolder(object sender, RoutedEventArgs e)

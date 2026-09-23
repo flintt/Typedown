@@ -898,7 +898,7 @@
     <comment>Vega Chart</comment>
   </data>
   <data name="View" xml:space="preserve">
-    <value>查看</value>
+    <value>视图</value>
     <comment>查看</comment>
   </data>
   <data name="Website" xml:space="preserve">
@@ -1005,5 +1005,8 @@
   </data>
   <data name="FolderSearch.NameMatch" xml:space="preserve">
     <value>（文件名匹配）</value>
+  </data>
+  <data name="LastUsedTab" xml:space="preserve">
+    <value>上次使用的标签页</value>
   </data>
 </root>

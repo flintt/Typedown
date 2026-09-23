@@ -877,4 +877,7 @@
   <data name="View.CustomTheme.Refresh" xml:space="preserve">
     <value>重新加载主题</value>
   </data>
+  <data name="View.CustomTheme.Document" xml:space="preserve">
+    <value>如何编写主题</value>
+  </data>
 </root>

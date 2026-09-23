@@ -856,4 +856,7 @@
   <data name="Editor.TextDirection.Title" xml:space="preserve">
     <value>文字方向</value>
   </data>
+  <data name="View.CustomTheme.Document" xml:space="preserve">
+    <value>如何編寫主題</value>
+  </data>
 </root>

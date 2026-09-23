@@ -827,4 +827,7 @@
   <data name="General.StartupAction.FileStartupAction.RestoreSession" xml:space="preserve">
     <value>지난 세션의 모든 문서 복원</value>
   </data>
+  <data name="View.CustomTheme.Document" xml:space="preserve">
+    <value>테마 작성 방법</value>
+  </data>
 </root>
