@@ -49,11 +49,15 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             disposables.Add(FileViewModel.WhenPropertyChanged(nameof(FileViewModel.WorkFolder)).Subscribe(_ => UpdateWorkFolder()));
             disposables.Add(FileViewModel.WhenPropertyChanged(nameof(FileViewModel.FilePath)).Subscribe(_ =>
             {
+                // Switching to a tab from another folder moves the tree there: the document in front of you and
+                // the tree beside it should not be in different places. A preview stays put — it is a click in
+                // the tree itself, and its file is inside the root anyway.
+                FollowFile(FileViewModel?.FilePath, preview: false);
                 UpdateWorkFolder();
                 UpdateSelectedItem(WorkFolderExplorerItem);
             }));
-            // A real (non-preview) open of a file outside the current root moves the tree there; previews and tab
-            // switches never move it, so browsing the tree with single clicks cannot lose the folder.
+            // A real (non-preview) open of a file outside the current root moves the tree there; previews never
+            // move it, so browsing the tree with single clicks cannot lose the folder.
             // Capture the instance: by the time Unloaded runs the DataContext (and so FileViewModel) is already null.
             var fileViewModel = FileViewModel;
             fileViewModel.FileOpened += OnFileOpened;
@@ -89,11 +93,22 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
 
         private void OnFileOpened(string path, bool preview)
         {
-            if (preview || FileViewModel == null || FileViewModel.WorkFolderIsExplicit || string.IsNullOrEmpty(path)) return;
-            if (!string.IsNullOrEmpty(stickyRoot) && IsInsideFolder(path, stickyRoot)) return;
-            stickyRoot = Path.GetDirectoryName(path);
+            if (!FollowFile(path, preview)) return;
             UpdateWorkFolder();
             UpdateSelectedItem(WorkFolderExplorerItem);
+        }
+
+        /// <summary>
+        /// Moves the root to the folder of a document that sits outside it. A folder the user opened on purpose
+        /// is left alone: that is a workspace the documents move around in.
+        /// </summary>
+        /// <returns>true when the root moved.</returns>
+        private bool FollowFile(string path, bool preview)
+        {
+            if (preview || FileViewModel == null || FileViewModel.WorkFolderIsExplicit || string.IsNullOrEmpty(path)) return false;
+            if (!string.IsNullOrEmpty(stickyRoot) && IsInsideFolder(path, stickyRoot)) return false;
+            stickyRoot = Path.GetDirectoryName(path);
+            return true;
         }
 
         private void OnRevealCurrentFileClick(object sender, RoutedEventArgs e)
