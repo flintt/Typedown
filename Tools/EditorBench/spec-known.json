@@ -1179,7 +1179,7 @@
  },
  "293": {
   "section": "List items",
-  "out": "> 1. > Blockquote\n>    \n>    continued here.\n"
+  "out": "> 1. > Blockquote\n>    continued here.\n"
  },
  "294": {
   "section": "List items",
@@ -1207,8 +1207,7 @@
  },
  "300": {
   "section": "List items",
-  "out": "- # Foo\n- Bar\n  ---\n  \n  baz\n",
-  "drift": "- # Foo\n\n- Bar\n  ---\n  \n  baz\n"
+  "out": "- # Foo\n- Bar\n  ---\n  baz\n"
  },
  "301": {
   "section": "Lists",
@@ -1282,7 +1281,7 @@
  "318": {
   "section": "Lists",
   "out": "- a\n- ```\n  b\n  \n  \n  ```\n\n```\n- c\n```\n",
-  "drift": "- a\n- ```\n  b\n  \n  \n  ```\n\n```\n\n```\n\n- c\n  \n  ```\n  \n  ```\n"
+  "drift": "- a\n- ```\n  b\n  \n  \n  ```\n\n```\n\n```\n\n- c\n  ```\n  \n  ```\n"
  },
  "319": {
   "section": "Lists",
@@ -1290,13 +1289,11 @@
  },
  "320": {
   "section": "Lists",
-  "out": "* a\n  \n  > b\n* c\n",
-  "drift": "* a\n  \n  > b\n\n* c\n"
+  "out": "* a\n  > b\n* c\n"
  },
  "321": {
   "section": "Lists",
-  "out": "- a\n  \n  > b\n  \n  ```\n  c\n  ```\n- d\n",
-  "drift": "- a\n  \n  > b\n  \n  ```\n  c\n  ```\n\n- d\n"
+  "out": "- a\n  > b\n  ```\n  c\n  ```\n- d\n"
  },
  "322": {
   "section": "Lists",

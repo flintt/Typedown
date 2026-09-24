@@ -37,8 +37,12 @@ class ExportMarkdown {
     return this.translateBlocks2Markdown(this.blocks)
   }
 
-  translateBlocks2Markdown(blocks, indent = '', listIndent = '') {
+  // `tight` is set for the direct children of a tight list item: such an item had no blank line between its
+  // blocks in the source (that is what makes a list tight), so writing one back would turn the whole list
+  // loose the next time the file is read.
+  translateBlocks2Markdown(blocks, indent = '', listIndent = '', tight = false) {
     const result = []
+    const separate = tight ? () => {} : (res, ind) => this.insertLineBreak(res, ind)
     // helper for CommonMark 264
     let lastListBullet = ''
 
@@ -50,7 +54,7 @@ class ExportMarkdown {
       switch (block.type) {
         case 'p':
         case 'hr': {
-          this.insertLineBreak(result, indent)
+          separate(result, indent)
           result.push(this.translateBlocks2Markdown(block.children, indent))
           break
         }
@@ -64,12 +68,12 @@ class ExportMarkdown {
         case 'h4':
         case 'h5':
         case 'h6': {
-          this.insertLineBreak(result, indent)
+          separate(result, indent)
           result.push(this.normalizeHeaderText(block, indent))
           break
         }
         case 'figure': {
-          this.insertLineBreak(result, indent)
+          separate(result, indent)
           switch (block.functionType) {
             case 'table': {
               const table = block.children[0]
@@ -107,7 +111,7 @@ class ExportMarkdown {
           if (insertNewLine) {
             this.insertLineBreak(result, indent)
           }
-          result.push(this.normalizeListItem(block, indent + listIndent))
+          result.push(this.normalizeListItem(block, indent + listIndent, !insertNewLine))
           this.isLooseParentList = true
           break
         }
@@ -150,7 +154,7 @@ class ExportMarkdown {
           break
         }
         case 'pre': {
-          this.insertLineBreak(result, indent)
+          separate(result, indent)
           if (block.functionType === 'frontmatter') {
             result.push(this.normalizeFrontMatter(block, indent))
           } else {
@@ -159,7 +163,7 @@ class ExportMarkdown {
           break
         }
         case 'blockquote': {
-          this.insertLineBreak(result, indent)
+          separate(result, indent)
           result.push(this.normalizeBlockquote(block, indent))
           break
         }
@@ -383,7 +387,7 @@ class ExportMarkdown {
     return this.translateBlocks2Markdown(children, indent, listIndent)
   }
 
-  normalizeListItem(block, indent) {
+  normalizeListItem(block, indent, tight = false) {
     const result = []
     const listInfo = this.listType[this.listType.length - 1]
     const isUnorderedList = listInfo.type === 'ul'
@@ -429,7 +433,7 @@ class ExportMarkdown {
     }
 
     result.push(`${indent}${itemMarker}`)
-    result.push(this.translateBlocks2Markdown(children, newIndent, listIndent).substring(newIndent.length))
+    result.push(this.translateBlocks2Markdown(children, newIndent, listIndent, tight).substring(newIndent.length))
     return result.join('')
   }
 
