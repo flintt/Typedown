@@ -21,6 +21,8 @@
                      no administrator) or the machine-wide one.
       Editor bundle  Dev\Typedown\Resources\Statics, which is not in the repository: build it with
                      "npm ci && npm run build" in Dev\Typedown.Editor, or copy it from another machine.
+                     The script refuses to package a bundle older than the editor sources, so a change to the
+                     editor cannot quietly stay out of the installer; -BuildEditor rebuilds it here instead.
 
 .EXAMPLE
     powershell -ExecutionPolicy Bypass -File Tools\Installer\build-local.ps1
@@ -35,7 +37,9 @@ param(
     # Stops after the build, without making an installer.
     [switch]$NoInstaller,
     # What to show in About instead of "local.<commit>"; empty keeps whatever the file already says.
-    [string]$Label
+    [string]$Label,
+    # Rebuilds the editor bundle first (needs node and Dev\Typedown.Editor\node_modules).
+    [switch]$BuildEditor
 )
 
 $ErrorActionPreference = 'Stop'
@@ -78,9 +82,33 @@ function Find-ISCC {
     throw "ISCC.exe not found - install Inno Setup 6 (innosetup-6.x.exe /VERYSILENT /CURRENTUSER needs no administrator)"
 }
 
+$editorDir = Join-Path $repo 'Dev\Typedown.Editor'
 $statics = Join-Path $repo 'Dev\Typedown\Resources\Statics\index.html'
+
+if ($BuildEditor) {
+    if (-not (Test-Path (Join-Path $editorDir 'node_modules'))) {
+        throw "the editor has no dependencies installed - run 'npm ci' (or 'yarn install') in Dev\Typedown.Editor first"
+    }
+    Write-Host 'Building the editor bundle'
+    Push-Location $editorDir
+    try {
+        & npm run build
+        if ($LASTEXITCODE -ne 0) { throw "the editor build failed" }
+    } finally { Pop-Location }
+}
+
 if (-not (Test-Path $statics)) {
     throw "the editor bundle is missing (Dev\Typedown\Resources\Statics) - build it in Dev\Typedown.Editor with npm run build, or copy it from a machine that has it"
+}
+
+# A bundle older than the editor sources would mean packaging an app whose editor is a version behind, which
+# is silent and very easy to miss: the installer builds, runs, and simply does not contain the change.
+$builtAt = (Get-Item $statics).LastWriteTimeUtc
+$newestSource = Get-ChildItem (Join-Path $editorDir 'src') -Recurse -File -ErrorAction SilentlyContinue |
+    Sort-Object LastWriteTimeUtc -Descending | Select-Object -First 1
+if ($newestSource -and $newestSource.LastWriteTimeUtc -gt $builtAt) {
+    $rel = $newestSource.FullName.Substring($repo.Length).TrimStart('\')
+    throw "the editor bundle is older than the editor sources ($rel changed after it was built) - rerun with -BuildEditor, or copy a fresh bundle from the machine that built it"
 }
 
 $version = ([xml](Get-Content 'Dev\Typedown\Typedown.csproj')).Project.PropertyGroup.Version |
