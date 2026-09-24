@@ -833,7 +833,19 @@
   <data name="View.CustomTheme.Folder" xml:space="preserve">
     <value>Los temas son archivos CSS en esta carpeta; el documento explica el formato.</value>
   </data>
-  <data name="RestartNow" xml:space="preserve">
-    <value>Reiniciar ahora</value>
+  <data name="View.CustomTheme.Title" xml:space="preserve">
+    <value>Tema personalizado</value>
+  </data>
+  <data name="View.CustomTheme.Description" xml:space="preserve">
+    <value>Un tema es un archivo CSS en la carpeta de temas; consulta docs/custom-theme.md</value>
+  </data>
+  <data name="View.CustomTheme.None" xml:space="preserve">
+    <value>(ninguno)</value>
+  </data>
+  <data name="View.CustomTheme.OpenFolder" xml:space="preserve">
+    <value>Abrir la carpeta de temas</value>
+  </data>
+  <data name="View.CustomTheme.Refresh" xml:space="preserve">
+    <value>Recargar temas</value>
   </data>
 </root>

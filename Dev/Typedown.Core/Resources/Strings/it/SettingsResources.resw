@@ -827,4 +827,25 @@
   <data name="General.StartupAction.FileStartupAction.RestoreSession" xml:space="preserve">
     <value>Ripristina tutti i documenti della sessione precedente</value>
   </data>
+  <data name="View.CustomTheme.Title" xml:space="preserve">
+    <value>Tema personalizzato</value>
+  </data>
+  <data name="View.CustomTheme.Description" xml:space="preserve">
+    <value>Un tema è un file CSS nella cartella dei temi; vedi docs/custom-theme.md</value>
+  </data>
+  <data name="View.CustomTheme.None" xml:space="preserve">
+    <value>(nessuno)</value>
+  </data>
+  <data name="View.CustomTheme.OpenFolder" xml:space="preserve">
+    <value>Apri la cartella dei temi</value>
+  </data>
+  <data name="View.CustomTheme.Refresh" xml:space="preserve">
+    <value>Ricarica i temi</value>
+  </data>
+  <data name="View.CustomTheme.Folder" xml:space="preserve">
+    <value>I temi sono file CSS in questa cartella; il documento spiega il formato.</value>
+  </data>
+  <data name="View.CustomTheme.Document" xml:space="preserve">
+    <value>Come scriverne uno</value>
+  </data>
 </root>

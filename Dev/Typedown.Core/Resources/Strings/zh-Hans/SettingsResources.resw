@@ -883,7 +883,4 @@
   <data name="View.CustomTheme.Folder" xml:space="preserve">
     <value>主题是这个文件夹里的 CSS 文件，写法见随附文档。</value>
   </data>
-  <data name="RestartNow" xml:space="preserve">
-    <value>立即重启</value>
-  </data>
 </root>

@@ -862,7 +862,19 @@
   <data name="View.CustomTheme.Folder" xml:space="preserve">
     <value>主題是這個資料夾裡的 CSS 檔案，寫法見隨附文件。</value>
   </data>
-  <data name="RestartNow" xml:space="preserve">
-    <value>立即重新啟動</value>
+  <data name="View.CustomTheme.Title" xml:space="preserve">
+    <value>自訂主題</value>
+  </data>
+  <data name="View.CustomTheme.Description" xml:space="preserve">
+    <value>主題是主題資料夾裡的一個 CSS 檔案，寫法見 docs/custom-theme.md</value>
+  </data>
+  <data name="View.CustomTheme.None" xml:space="preserve">
+    <value>（無）</value>
+  </data>
+  <data name="View.CustomTheme.OpenFolder" xml:space="preserve">
+    <value>開啟主題資料夾</value>
+  </data>
+  <data name="View.CustomTheme.Refresh" xml:space="preserve">
+    <value>重新載入主題</value>
   </data>
 </root>
