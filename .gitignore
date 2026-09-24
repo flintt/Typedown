@@ -351,3 +351,4 @@ MigrationBackup/
 
 # Inno Setup output
 Tools/Installer/Output/
+Tools/EditorBench/cm-bundle/

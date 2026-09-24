@@ -11,6 +11,7 @@ const at = (flag, fallback) => { const i = args.indexOf(flag); return i >= 0 ? a
 const ours = path.resolve(process.env.STATICS || '../../Dev/Typedown/Resources/Statics');
 const other = at('--other', null);
 const sizes = at('--sizes', '30,100,300').split(',').map(n => Number(n) * 1000);
+const extraCss = at('--css', null);
 
 const section = (i) => [
   `## Section ${i}`,
@@ -64,6 +65,15 @@ async function measure(browser, dir, which, markdown) {
     await page.evaluateOnNewDocument(`(()=>{const ls=[];window.__marks={};const deliver=(n,a)=>ls.forEach(l=>l({data:JSON.stringify({name:n,args:a})}));const resp={GetSettings:${JSON.stringify(settings)},GetCurrentTheme:{theme:'Light',accentColor:{r:0,g:120,b:212,a:1},background:{R:249,G:249,B:249,A:1}},ContentLoaded:'',GetStringResources:{}};window.chrome={webview:{addEventListener:(t,l)=>ls.push(l),dispatchEvent:(e)=>ls.forEach(l=>l(e)),postMessage:(raw)=>{const m=JSON.parse(raw);window.__marks[m.name]=1;if(m.type==='invoke'){setTimeout(()=>deliver(m.id,{code:0,data:m.name in resp?resp[m.name]:null}),0);}}}}})()`);
   }
   await page.evaluateOnNewDocument(probe);
+  // An experiment hook: extra CSS applied before the document is laid out, so ideas like content-visibility
+  // can be measured before anyone changes the editor's stylesheet.
+  if (extraCss) await page.evaluateOnNewDocument((css) => {
+    document.addEventListener('DOMContentLoaded', () => {
+      const style = document.createElement('style');
+      style.textContent = css;
+      document.head.appendChild(style);
+    });
+  }, extraCss);
 
   const started = Date.now();
   await page.goto(`http://127.0.0.1:${port}/index.html`, { waitUntil: 'load' });

@@ -46,6 +46,20 @@ mark::after {
   outline: none;
 }
 
+/*
+ * Long documents: let the browser skip layout and painting for the blocks that are off screen. The blocks are
+ * still in the document — the model, find, and the scrollbar are unaffected — but the work the browser does on
+ * every keystroke stops growing with the file.
+ *
+ * Measured on a 300k-character document: keystroke latency 186 ms -> 76 ms, p90 304 ms -> 108 ms, opening
+ * 8.0 s -> 4.7 s. On small documents it costs about half a second of opening time and saves nothing that
+ * matters, which is why the class is only set past a thousand blocks (see Muya's index.tsx).
+ */
+#editor.ag-long-document #ag-editor-id > * {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 120px;
+}
+
 #mu-dragover-ghost {
   height: 3px;
   position: absolute;

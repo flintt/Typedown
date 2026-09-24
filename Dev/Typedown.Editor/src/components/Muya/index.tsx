@@ -310,8 +310,28 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         transport.postMessage('SelectionFormats', { formats: fotmats_simple });
     }), [editor])
 
+    // Past this many blocks the browser is told it may skip laying out what is off screen (see the
+    // .ag-long-document rule). Below it the bookkeeping costs more than it saves.
+    const longDocumentBlocks = 1000
+
+    // The class has to be on the element before the first render, or the browser lays the whole document out
+    // once and then has to take it apart again — which costs more than it saves. Before the document is
+    // parsed the only measure available is its length; afterwards the block count corrects it.
+    const longDocumentChars = 40000
+
+    const markLongDocument = useCallback((markdown?: string) => {
+        // On the wrapper, not on the editor element itself: rendering patches that element and would strip a
+        // class it does not know about.
+        const root = document.getElementById('editor')
+        if (!root) return
+        const blocks = (editor as any)?.contentState?.blocks?.length ?? 0
+        const long = markdown != null ? markdown.length > longDocumentChars : blocks > longDocumentBlocks
+        root.classList.toggle('ag-long-document', long)
+    }, [editor])
+
     useEffect(() => editor?.on('contentChange', ({ markdown, wordCount, cursor, toc: { toc, cur } }: any) => {
         markdownRef.current = markdown;
+        markLongDocument()
 
         // 同步内容与光标
         props.onMarkdownChange(markdown)
@@ -386,6 +406,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         if (!editor) return
         if (markdownRef.current != props.markdown) {
             markdownRef.current = props.markdown
+            markLongDocument(props.markdown)
             editor.setMarkdown(props.markdown, cursorRef.current)
             const scrollTop = props.scrollTopRef.current;
             const keepScroll = !!props.scrollFromHostRef?.current
