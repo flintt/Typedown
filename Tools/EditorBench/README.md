@@ -29,6 +29,14 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   alter the document model of 652 documents. `--update` re-records, `--section <name>` or example numbers narrow
   the run. 12 examples still do not survive a second import (tab-indented list items, setext dashes touching
   their neighbours, fences nested in fences, blank lines inside list items); they are marked in the baseline.
+- `style-check.js` — lays out `style-fixture.md` (headings, lists, tables, code, quote, maths, footnote, raw
+  html) and measures every element: position, size, font, weight, colour, background. A block passes if it is
+  within 2px of where it was and within 1px of its size; fonts and colours must match exactly. `--update`
+  records, `--theme dark` keeps its own baseline, and `--against <dir>` compares two editor builds directly
+  instead of against a baseline — that is how the Windows and Uno bundles are checked against each other:
+
+      node style-check.js --against ../../../Typedown-Uno/Typedown.Uno/Assets/Editor
+
 - `legacy-issues.js` — the issues reported against the original Typedown, in one run: raw html renders with its
   inline CSS, a code block is in the saved markdown the moment it is typed, a table cell whose text is selected
   and deleted still takes input, PageUp/PageDown keep moving.
