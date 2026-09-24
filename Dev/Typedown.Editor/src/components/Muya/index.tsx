@@ -413,6 +413,14 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     useEffect(() => {
         if (!editor) return
         if (markdownRef.current != props.markdown) {
+            // The editor normalizes what it is given, and the host hands that normalized text back; applying it
+            // again would be a second load — and a second load scrolls to the caret, which is why switching
+            // tabs could jump to the top of the document a moment after landing in the right place.
+            if (editor.getMarkdown() === props.markdown) {
+                markdownRef.current = props.markdown
+                props.onContentApplied?.()
+                return
+            }
             markdownRef.current = props.markdown
             markLongDocument(props.markdown)
             editor.setMarkdown(props.markdown, cursorRef.current)
@@ -420,6 +428,26 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             const keepScroll = !!props.scrollFromHostRef?.current
             window.scrollTo(window.scrollX, scrollTop)
             if (!keepScroll) scrollToCursorIfInvisible()
+            // Laying a long document out goes on for a while after the first paint, and the page can be put
+            // back to the top by that work with nobody scrolling it — which is what made switching tabs show
+            // the top of the document for a moment. Keep putting it back for half a second, and stop early
+            // once it stays, or as soon as the reader scrolls themselves.
+            if (keepScroll && scrollTop > 0) {
+                // Counted in frames, not milliseconds: laying out a long document blocks the main thread for
+                // whole seconds, and a deadline in wall-clock time would expire while nothing could run.
+                let frames = 40
+                let held = 0
+                const hold = () => {
+                    if (frames-- <= 0 || held >= 3) return
+                    if (Math.abs(window.scrollY - scrollTop) > 2) { window.scrollTo(window.scrollX, scrollTop); held = 0 }
+                    else held++
+                    requestAnimationFrame(hold)
+                }
+                requestAnimationFrame(hold)
+                const stop = () => { held = 3; window.removeEventListener('wheel', stop); window.removeEventListener('keydown', stop); }
+                window.addEventListener('wheel', stop, { once: true, passive: true })
+                window.addEventListener('keydown', stop, { once: true })
+            }
             setTimeout(() => {
                 window.scrollTo(window.scrollX, scrollTop)
                 if (!keepScroll) scrollToCursorIfInvisible()

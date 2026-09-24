@@ -52,6 +52,11 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   and deleted still takes input, PageUp/PageDown keep moving.
 - `roundtrip-check.js '"md..."' ...` — import each markdown string into Muya and print blocks + exported markdown.
 - `handshake-check.js` — LoadFile → FileLoaded handshake: FileLoaded carries the normalized text and the load id, a superseded load leaks nothing, an edit afterwards reports MarkdownChange (exit code 1 on failure).
+- `scroll-flash-check.js` — a tab switch hands the document over with the offset it was left at; this samples
+  where the page actually is over the frames that follow. Laying out a long document goes on well past the
+  first paint and the browser can drop the position with nobody scrolling, which showed as the top of the
+  document appearing for a moment. `--trace` records every scroll call with its stack and watches the editor
+  root for replacement — useful when hunting, misleading when timing, so it is off by default.
 - `scroll-restore-check.js` — a load that carries `scrollTop` (remembered offset, read-only mode) lands at that offset instead of at the caret; a load without it starts at the top.
 - `export-check.js '"md..."'` — run the HTML export pipeline and print the body (upstream #48 emphasis case by default).
 - `scrollup-check.js` — Up arrow must scroll the caret back into view (upstream #51).
