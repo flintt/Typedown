@@ -22,6 +22,13 @@ markdown printed after "back to muya" must be identical to the value shown befor
 
 Other checks (all take `STATICS=<dir>` or default to the built editor):
 
+- `spec-check.js` — every CommonMark 0.31.2 example (652) imported, exported, imported and exported again. The
+  second export must equal the first (importing what we just wrote must not keep changing the document), and the
+  first must equal `spec-known.json`, the recorded behaviour of this editor. Muya is not a CommonMark renderer,
+  so the baseline records what we do, not what the spec says; its point is that no editor change can quietly
+  alter the document model of 652 documents. `--update` re-records, `--section <name>` or example numbers narrow
+  the run. 12 examples still do not survive a second import (tab-indented list items, setext dashes touching
+  their neighbours, fences nested in fences, blank lines inside list items); they are marked in the baseline.
 - `legacy-issues.js` — the issues reported against the original Typedown, in one run: raw html renders with its
   inline CSS, a code block is in the saved markdown the moment it is typed, a table cell whose text is selected
   and deleted still takes input, PageUp/PageDown keep moving.
