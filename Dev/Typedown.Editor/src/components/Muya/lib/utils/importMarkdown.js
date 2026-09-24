@@ -258,7 +258,9 @@ const importRegister = ContentState => {
 
         case 'text': {
           value = token.text
-          while (tokens[0].type === 'text') {
+          // Lines of one paragraph inside a list item arrive as separate text tokens and belong together —
+          // unless a blank line stood between them, in which case they are two paragraphs.
+          while (tokens[0] && tokens[0].type === 'text' && !token.followedByBlankLine) {
             token = tokens.shift()
             value += `\n${token.text}`
           }

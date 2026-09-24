@@ -13,7 +13,10 @@ export const block = {
   hr: /^ {0,3}((?:- *){3,}|(?:_ *){3,}|(?:\* *){3,})(?=\n+|$)/,
   heading: /^ {0,3}(#{1,6})(?=\s|$)(.*)(?=\n+|$)/,
   blockquote: /^( {0,3}> ?(paragraph|[^\n]*)(?:\n|$))*( {0,3}> ?(paragraph|[^\n]*)(?=\n|$))/,
-  list: /^( {0,3})(bull) [\s\S]+?(?:hr|def|\n{2,}(?! )(?!\1bull )\n*|\s*$)/,
+  // The lookahead has to refuse a newline as well as a space: with three or more newlines the engine would
+  // otherwise backtrack to two of them, see a newline where a space was forbidden, and end the list in the
+  // middle of a fenced code block inside a list item — leaving its closing fence behind to open a new one.
+  list: /^( {0,3})(bull) [\s\S]+?(?:hr|def|\n{2,}(?![ \n])(?!\1bull )\n*|\s*$)/,
   html: '^ {0,3}(?:' + // optional indentation
     '<(script|pre|style)[\\s>][\\s\\S]*?(?:</\\1>[^\\n]*\\n+|$)' + // (1)
     '|comment[^\\n]*(\\n+|$)' + // (2)

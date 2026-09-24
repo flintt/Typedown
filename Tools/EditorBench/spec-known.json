@@ -13,11 +13,11 @@
  },
  "4": {
   "section": "Tabs",
-  "out": "- foo\n  bar\n"
+  "out": "- foo\n\n  bar\n"
  },
  "5": {
   "section": "Tabs",
-  "out": "- foo\n  \n        bar\n"
+  "out": "- foo\n\n        bar\n"
  },
  "6": {
   "section": "Tabs",
@@ -362,8 +362,7 @@
  },
  "91": {
   "section": "Setext headings",
-  "out": "`Foo\n----\n\n`\n<a title=\"a lot\n---\n\nof dashes\"/>\n",
-  "drift": "`Foo\n----\n\n`\n<a title=\"a lot\n\n---\n\nof dashes\"/>\n"
+  "out": "`Foo\n----\n\n`\n\n<a title=\"a lot\n---\n\nof dashes\"/>\n"
  },
  "92": {
   "section": "Setext headings",
@@ -412,8 +411,7 @@
  },
  "103": {
   "section": "Setext headings",
-  "out": "Foo\nbar\n---\n\nbaz\n",
-  "drift": "Foo\nbar\n\n---\n\nbaz\n"
+  "out": "Foo\n\nbar\n---\n\nbaz\n"
  },
  "104": {
   "section": "Setext headings",
@@ -433,11 +431,11 @@
  },
  "108": {
   "section": "Indented code blocks",
-  "out": "- foo\n  bar\n"
+  "out": "- foo\n\n  bar\n"
  },
  "109": {
   "section": "Indented code blocks",
-  "out": "1. foo\n   \n   - bar\n"
+  "out": "1. foo\n\n   - bar\n"
  },
  "110": {
   "section": "Indented code blocks",
@@ -494,13 +492,11 @@
  },
  "123": {
   "section": "Fenced code blocks",
-  "out": "```\naaa\n```\n```\n",
-  "drift": "```\naaa\n```\n\n```\n\n```\n"
+  "out": "````\naaa\n```\n````\n"
  },
  "124": {
   "section": "Fenced code blocks",
-  "out": "```\naaa\n```\n```\n",
-  "drift": "```\naaa\n```\n\n```\n\n```\n"
+  "out": "````\naaa\n```\n````\n"
  },
  "125": {
   "section": "Fenced code blocks",
@@ -512,8 +508,7 @@
  },
  "127": {
   "section": "Fenced code blocks",
-  "out": "```\n\n```\naaa\n```\n",
-  "drift": "```\n\n```\n\naaa\n\n```\n\n```\n"
+  "out": "````\n\n```\naaa\n````\n"
  },
  "128": {
   "section": "Fenced code blocks",
@@ -593,7 +588,7 @@
  },
  "147": {
   "section": "Fenced code blocks",
-  "out": "```\n``` aaa\n```\n"
+  "out": "````\n``` aaa\n````\n"
  },
  "148": {
   "section": "HTML blocks",
@@ -1021,27 +1016,27 @@
  },
  "254": {
   "section": "List items",
-  "out": "1. A paragraph\n   with two lines.\n   \n       indented code\n   \n   > A block quote.\n"
+  "out": "1. A paragraph\n   with two lines.\n\n       indented code\n\n   > A block quote.\n"
  },
  "255": {
   "section": "List items",
-  "out": "- one\n  two\n"
+  "out": "- one\n\n  two\n"
  },
  "256": {
   "section": "List items",
-  "out": "- one\n  two\n"
+  "out": "- one\n\n  two\n"
  },
  "257": {
   "section": "List items",
-  "out": "- one\n  two\n"
+  "out": "- one\n\n  two\n"
  },
  "258": {
   "section": "List items",
-  "out": "- one\n  two\n"
+  "out": "- one\n\n  two\n"
  },
  "259": {
   "section": "List items",
-  "out": "> > 1. one\n> >    two\n"
+  "out": "> > 1. one\n> >    \n> >    two\n"
  },
  "260": {
   "section": "List items",
@@ -1053,17 +1048,15 @@
  },
  "262": {
   "section": "List items",
-  "out": "- foo\n\n  bar\n",
-  "drift": "- foo\n  bar\n"
+  "out": "- foo\n\n  bar\n"
  },
  "263": {
   "section": "List items",
-  "out": "1. foo\n   \n   ```\n   bar\n   ```\n   \n   baz\n   \n   > bam\n"
+  "out": "1. foo\n\n   ```\n   bar\n   ```\n\n   baz\n\n   > bam\n"
  },
  "264": {
   "section": "List items",
-  "out": "- Foo\n  \n      bar\n\n      baz\n",
-  "drift": "- Foo\n  \n      bar\n      \n      baz\n"
+  "out": "- Foo\n\n      bar\n      \n      \n      baz\n"
  },
  "265": {
   "section": "List items",
@@ -1087,11 +1080,11 @@
  },
  "270": {
   "section": "List items",
-  "out": "- foo\n  \n      bar\n"
+  "out": "- foo\n\n      bar\n"
  },
  "271": {
   "section": "List items",
-  "out": "10. foo\n    \n        bar\n"
+  "out": "10. foo\n\n        bar\n"
  },
  "272": {
   "section": "List items",
@@ -1099,11 +1092,11 @@
  },
  "273": {
   "section": "List items",
-  "out": "1. indented code\n   paragraph\n    more code\n"
+  "out": "1. indented code\n\n   paragraph\n\n    more code\n"
  },
  "274": {
   "section": "List items",
-  "out": "1. indented code\n   paragraph\n    more code\n"
+  "out": "1. indented code\n\n   paragraph\n\n    more code\n"
  },
  "275": {
   "section": "List items",
@@ -1111,11 +1104,11 @@
  },
  "276": {
   "section": "List items",
-  "out": "- foo\n  bar\n"
+  "out": "- foo\n\n  bar\n"
  },
  "277": {
   "section": "List items",
-  "out": "- foo\n  bar\n"
+  "out": "- foo\n\n  bar\n"
  },
  "278": {
   "section": "List items",
@@ -1151,15 +1144,15 @@
  },
  "286": {
   "section": "List items",
-  "out": "1. A paragraph\n   with two lines.\n   \n       indented code\n   \n   > A block quote.\n"
+  "out": "1. A paragraph\n   with two lines.\n\n       indented code\n\n   > A block quote.\n"
  },
  "287": {
   "section": "List items",
-  "out": "1. A paragraph\n   with two lines.\n   \n       indented code\n   \n   > A block quote.\n"
+  "out": "1. A paragraph\n   with two lines.\n\n       indented code\n\n   > A block quote.\n"
  },
  "288": {
   "section": "List items",
-  "out": "1. A paragraph\n   with two lines.\n   \n       indented code\n   \n   > A block quote.\n"
+  "out": "1. A paragraph\n   with two lines.\n\n       indented code\n\n   > A block quote.\n"
  },
  "289": {
   "section": "List items",
@@ -1167,7 +1160,7 @@
  },
  "290": {
   "section": "List items",
-  "out": "1. A paragraph\n   with two lines.\n   \n       indented code\n   \n   > A block quote.\n"
+  "out": "1. A paragraph\n   with two lines.\n\n       indented code\n\n   > A block quote.\n"
  },
  "291": {
   "section": "List items",
@@ -1235,8 +1228,7 @@
  },
  "307": {
   "section": "Lists",
-  "out": "- foo\n  - bar\n    - baz\n\n      bim\n",
-  "drift": "- foo\n  \n  - bar\n    \n    - baz\n      bim\n"
+  "out": "- foo\n\n  - bar\n\n    - baz\n\n      bim\n"
  },
  "308": {
   "section": "Lists",
@@ -1244,7 +1236,7 @@
  },
  "309": {
   "section": "Lists",
-  "out": "- foo\n  notcode\n\n- foo\n\n<!-- -->\n\n    code\n"
+  "out": "- foo\n\n  notcode\n\n- foo\n\n<!-- -->\n\n    code\n"
  },
  "310": {
   "section": "Lists",
@@ -1252,7 +1244,7 @@
  },
  "311": {
   "section": "Lists",
-  "out": "1. a\n   \n   2. b\n   \n   3. c\n"
+  "out": "1. a\n\n   2. b\n\n   3. c\n"
  },
  "312": {
   "section": "Lists",
@@ -1260,7 +1252,7 @@
  },
  "313": {
   "section": "Lists",
-  "out": "1. a\n   \n   2. b\n      \n      3. c\n"
+  "out": "1. a\n\n   2. b\n\n      3. c\n"
  },
  "314": {
   "section": "Lists",
@@ -1272,7 +1264,7 @@
  },
  "316": {
   "section": "Lists",
-  "out": "- a\n\n- b\n  c\n\n- d\n"
+  "out": "- a\n\n- b\n\n  c\n\n- d\n"
  },
  "317": {
   "section": "Lists",
@@ -1280,12 +1272,11 @@
  },
  "318": {
   "section": "Lists",
-  "out": "- a\n- ```\n  b\n  \n  \n  ```\n\n```\n- c\n```\n",
-  "drift": "- a\n- ```\n  b\n  \n  \n  ```\n\n```\n\n```\n\n- c\n  ```\n  \n  ```\n"
+  "out": "- a\n\n- ```\n  b\n  \n  \n  ```\n\n- c\n"
  },
  "319": {
   "section": "Lists",
-  "out": "- a\n  \n  - b\n    c\n\n- d\n"
+  "out": "- a\n\n  - b\n\n    c\n\n- d\n"
  },
  "320": {
   "section": "Lists",
@@ -1305,15 +1296,15 @@
  },
  "324": {
   "section": "Lists",
-  "out": "1. ```\n   foo\n   ```\n   \n   bar\n"
+  "out": "1. ```\n   foo\n   ```\n\n   bar\n"
  },
  "325": {
   "section": "Lists",
-  "out": "* foo\n  \n  * bar\n  \n  baz\n"
+  "out": "* foo\n\n  * bar\n\n  baz\n"
  },
  "326": {
   "section": "Lists",
-  "out": "- a\n  \n  - b\n  - c\n\n- d\n  \n  - e\n  - f\n"
+  "out": "- a\n\n  - b\n  - c\n\n- d\n\n  - e\n  - f\n"
  },
  "327": {
   "section": "Inlines",

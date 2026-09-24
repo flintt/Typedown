@@ -27,8 +27,9 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   first must equal `spec-known.json`, the recorded behaviour of this editor. Muya is not a CommonMark renderer,
   so the baseline records what we do, not what the spec says; its point is that no editor change can quietly
   alter the document model of 652 documents. `--update` re-records, `--section <name>` or example numbers narrow
-  the run. 12 examples still do not survive a second import (tab-indented list items, setext dashes touching
-  their neighbours, fences nested in fences, blank lines inside list items); they are marked in the baseline.
+  the run. Three examples still do not survive a second import — a tab-indented list item, a rule immediately
+  followed by a setext heading, and an indented code block wrapped in blank lines; each settles after one more
+  round and none of them loses text. They are marked in the baseline.
 - `style-check.js` — lays out `style-fixture.md` (headings, lists, tables, code, quote, maths, footnote, raw
   html) and measures every element: position, size, font, weight, colour, background. A block passes if it is
   within 2px of where it was and within 1px of its size; fonts and colours must match exactly. `--update`

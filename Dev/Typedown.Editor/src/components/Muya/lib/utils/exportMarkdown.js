@@ -42,7 +42,17 @@ class ExportMarkdown {
   // loose the next time the file is read.
   translateBlocks2Markdown(blocks, indent = '', listIndent = '', tight = false) {
     const result = []
-    const separate = tight ? () => {} : (res, ind) => this.insertLineBreak(res, ind)
+    // Inside a tight list item a blank line is left out wherever the two blocks still read as two blocks
+    // without it, because a blank line there makes the whole list loose the next time the file is read.
+    // It is kept where dropping it would change the text: two paragraphs would run into one, a rule right
+    // under a paragraph would become a setext heading, and an indented code block would become plain text.
+    let previous = null
+    const separate = (res, ind, block) => {
+      const needed = !tight || previous === null || block.type === 'hr' ||
+        (block.type === 'p' && previous === 'p') ||
+        (block.type === 'pre' && block.functionType !== 'fencecode' && block.functionType !== 'frontmatter')
+      if (needed) this.insertLineBreak(res, ind)
+    }
     // helper for CommonMark 264
     let lastListBullet = ''
 
@@ -54,7 +64,7 @@ class ExportMarkdown {
       switch (block.type) {
         case 'p':
         case 'hr': {
-          separate(result, indent)
+          separate(result, indent, block)
           result.push(this.translateBlocks2Markdown(block.children, indent))
           break
         }
@@ -68,12 +78,12 @@ class ExportMarkdown {
         case 'h4':
         case 'h5':
         case 'h6': {
-          separate(result, indent)
+          separate(result, indent, block)
           result.push(this.normalizeHeaderText(block, indent))
           break
         }
         case 'figure': {
-          separate(result, indent)
+          separate(result, indent, block)
           switch (block.functionType) {
             case 'table': {
               const table = block.children[0]
@@ -154,7 +164,7 @@ class ExportMarkdown {
           break
         }
         case 'pre': {
-          separate(result, indent)
+          separate(result, indent, block)
           if (block.functionType === 'frontmatter') {
             result.push(this.normalizeFrontMatter(block, indent))
           } else {
@@ -163,7 +173,7 @@ class ExportMarkdown {
           break
         }
         case 'blockquote': {
-          separate(result, indent)
+          separate(result, indent, block)
           result.push(this.normalizeBlockquote(block, indent))
           break
         }
@@ -172,13 +182,16 @@ class ExportMarkdown {
           break
         }
       }
+      previous = block.type
     }
     return result.join('')
   }
 
   insertLineBreak(result, indent) {
     if (!result.length) return
-    result.push(`${indent}\n`)
+    // Inside a quotation the marker has to be repeated or the quotation ends; list indentation is only
+    // spaces, and a line of trailing spaces is no better than an empty one — it just shows up in diffs.
+    result.push(/^ *$/.test(indent) ? '\n' : `${indent}\n`)
   }
 
   normalizeParagraphText(block, indent) {
@@ -280,11 +293,15 @@ class ExportMarkdown {
     const textList = codeContent.text.split('\n')
     const { functionType } = block
     if (functionType === 'fencecode') {
-      result.push(`${indent}${block.lang ? '```' + block.lang + '\n' : '```\n'}`)
+      // Code containing a line of backticks needs a longer fence, or the block ends in the middle of itself
+      // and everything after it is read as ordinary text.
+      const longest = (codeContent.text.match(/^ {0,3}`{3,}/gm) || []).reduce((n, m) => Math.max(n, m.trim().length), 0)
+      const fence = '`'.repeat(Math.max(3, longest + 1))
+      result.push(`${indent}${fence}${block.lang || ''}\n`)
       textList.forEach(text => {
         result.push(`${indent}${text}\n`)
       })
-      result.push(indent + '```\n')
+      result.push(indent + fence + '\n')
     } else {
       textList.forEach(text => {
         result.push(`${indent}    ${text}\n`)

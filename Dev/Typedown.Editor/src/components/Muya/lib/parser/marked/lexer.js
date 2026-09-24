@@ -136,11 +136,10 @@ Lexer.prototype.token = function (src, top) {
         })
       }
 
-      // if (cap[0].length > 1) {
-      //   this.tokens.push({
-      //     type: 'space'
-      //   })
-      // }
+      // No 'space' token is pushed (that is what the empty paragraphs above are for), so anything that looks
+      // back at the previous token has to be told that a blank line stood between them.
+      const lastToken = this.tokens[this.tokens.length - 1]
+      if (lastToken && cap[0].length > 1) lastToken.followedByBlankLine = true // a single newline is not a blank line
     }
 
     // code
@@ -609,7 +608,9 @@ Lexer.prototype.token = function (src, top) {
       const marker = chops[chops.length - 1]
       src = src.substring(cap[0].length)
 
-      if (precededToken && precededToken.type === 'paragraph') {
+      // A paragraph on the line right above belongs to the heading (a setext heading may span lines); one
+      // separated by a blank line is its own paragraph and must not be swallowed.
+      if (precededToken && precededToken.type === 'paragraph' && !precededToken.followedByBlankLine) {
         this.tokens.pop()
         this.tokens.push({
           type: 'heading',
