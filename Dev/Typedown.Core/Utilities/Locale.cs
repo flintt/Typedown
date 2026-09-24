@@ -122,9 +122,13 @@ namespace Typedown.Core.Utilities
         /// the app stays in the system language no matter what the setting says. Setting the language on the
         /// resource contexts works either way — that is what the lookups below actually consult.
         /// </summary>
+        /// <summary>The language the interface was actually built with, so the settings can say when it moved on.</summary>
+        public static string AppliedLanguage { get; private set; }
+
         public static void ApplyLanguage(string language)
         {
             var wanted = SupportedLangs.ContainsKey(language ?? "") ? language : null;
+            AppliedLanguage ??= wanted ?? string.Empty; // the first application is the one the interface was built with
             Apply(ResourceContext, wanted);
             try
             {

@@ -43,6 +43,9 @@ namespace Typedown.Windows
         public MainWindow()
         {
             TrySetPrimaryLanguage();
+            // Applied again whenever the setting changes: the windows and dialogs opened after it then come up
+            // in the new language, and the settings say which parts still need the program restarted.
+            disposables.Add(AppViewModel.SettingsViewModel.WhenPropertyChanged(nameof(SettingsViewModel.Language)).Subscribe(_ => TrySetPrimaryLanguage()));
             Title = Config.AppName;
             MinWidth = 480;
             MinHeight = 300;
@@ -307,6 +310,7 @@ namespace Typedown.Windows
                 else
                 {
                     Log.Debug("last window closed, exiting");
+                    StartAgainIfAsked();
                     XamlApplication.Current.Exit();
                 }
             }
@@ -342,6 +346,22 @@ namespace Typedown.Windows
                         KeyboardAccelerator.IsEnable = isActive;
                 }
             });
+        }
+
+        /// <summary>The settings ask for this after a language change: the interface is built once, at startup.</summary>
+        private static void StartAgainIfAsked()
+        {
+            var path = Config.RestartOnExit;
+            if (string.IsNullOrEmpty(path)) return;
+            Config.RestartOnExit = null;
+            try
+            {
+                Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"restart: {ex.Message}");
+            }
         }
 
         private void TrySetPrimaryLanguage()

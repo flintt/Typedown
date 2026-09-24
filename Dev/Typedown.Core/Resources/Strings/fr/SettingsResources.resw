@@ -833,4 +833,7 @@
   <data name="View.CustomTheme.Folder" xml:space="preserve">
     <value>Les thèmes sont des fichiers CSS dans ce dossier ; le document explique le format.</value>
   </data>
+  <data name="RestartNow" xml:space="preserve">
+    <value>Redémarrer maintenant</value>
+  </data>
 </root>

@@ -833,4 +833,7 @@
   <data name="View.CustomTheme.Folder" xml:space="preserve">
     <value>テーマはこのフォルダー内の CSS ファイルです。書き方は付属の文書を参照してください。</value>
   </data>
+  <data name="RestartNow" xml:space="preserve">
+    <value>今すぐ再起動</value>
+  </data>
 </root>
