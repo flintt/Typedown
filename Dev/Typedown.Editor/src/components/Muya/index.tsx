@@ -26,6 +26,8 @@ interface IMuyaEditor {
     /** True when scrollTopRef holds a remembered offset from the host for this load: restore it instead of chasing the caret. */
     scrollFromHostRef?: React.MutableRefObject<boolean>
     onMarkdownChange: (markdown: string) => void
+    /** The shell puts a function here that reports the current text at once, for saves and exports. */
+    flushRef?: React.MutableRefObject<(() => void) | null>
     /** Fired once host content has been pushed into the editor (see the FileLoaded handshake in Editor). */
     onContentApplied?: () => void
     onCursorChange: (cursor: any) => void
@@ -328,6 +330,12 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         const long = markdown != null ? markdown.length > longDocumentChars : blocks > longDocumentBlocks
         root.classList.toggle('ag-long-document', long)
     }, [editor])
+
+    useEffect(() => {
+        if (!props.flushRef) return
+        props.flushRef.current = () => (editor as any)?.flushContentChange?.()
+        return () => { if (props.flushRef) props.flushRef.current = null }
+    }, [editor, props.flushRef])
 
     useEffect(() => editor?.on('contentChange', ({ markdown, wordCount, cursor, toc: { toc, cur } }: any) => {
         markdownRef.current = markdown;

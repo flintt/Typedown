@@ -89,6 +89,7 @@ namespace Typedown.Core.ViewModels
         {
             ServiceProvider = serviceProvider;
             EventCenter.GetObservable<EditorEventArgs>("MarkdownChange").Subscribe(x => OnMarkdownChange(x.Args));
+            EventCenter.GetObservable<EditorEventArgs>("ContentFlushed").Subscribe(x => OnContentFlushed(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("FileLoaded").Subscribe(x => OnFileLoaded(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("CursorChange").Subscribe(x => OnCursorChange(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("OnScroll").Subscribe(x => OnScroll(x.Args));
@@ -297,6 +298,37 @@ namespace Typedown.Core.ViewModels
                     selection = Settings.SourceCode ? CodeMirrorSelection : Selection
                 }
             });
+        }
+
+        // Reporting the text is throttled in the editor while typing, so anything that reads Markdown as the
+        // document — saving, exporting, sharing — asks for it to be brought up to date first. The wait is
+        // bounded: if the page does not answer, what we already hold is still written rather than nothing.
+        private int flushToken;
+        private readonly Dictionary<int, TaskCompletionSource<bool>> flushWaiters = new();
+
+        public async Task FlushContentAsync(int timeoutMs = 500)
+        {
+            if (MarkdownEditor == null || !FileLoaded) return;
+            var token = ++flushToken;
+            var waiter = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+            lock (flushWaiters) flushWaiters[token] = waiter;
+            try
+            {
+                MarkdownEditor.PostMessage("FlushContent", new { token });
+                await Task.WhenAny(waiter.Task, Task.Delay(timeoutMs));
+            }
+            finally
+            {
+                lock (flushWaiters) flushWaiters.Remove(token);
+            }
+        }
+
+        private void OnContentFlushed(JToken args)
+        {
+            var token = args?["token"]?.ToObject<int>() ?? 0;
+            TaskCompletionSource<bool> waiter = null;
+            lock (flushWaiters) flushWaiters.TryGetValue(token, out waiter);
+            waiter?.TrySetResult(true);
         }
 
         public void Undo()

@@ -103,7 +103,7 @@ class Muya {
   }
 
   dispatchChange = () => {
-    this.dispatchChangeContentChange()
+    this.dispatchChangeContentChangeThrottled()
     setTimeout(() => {
       try {
         this.dispatchSelectionChange()
@@ -112,6 +112,39 @@ class Muya {
         console.log(err)
       }
     });
+  }
+
+  // Turning the whole document back into Markdown, working out where the caret lands in it and rebuilding the
+  // outline costs tens of milliseconds on a large document, and none of it is needed between two keystrokes.
+  // While typing it runs at most every 250 ms; whoever needs the text right now (a save, an export, leaving
+  // the editor) calls flushContentChange first.
+  dispatchChangeContentChangeThrottled = () => {
+    const THROTTLE_ABOVE = 50000
+    const INTERVAL = 250
+    const length = this.markdown ? this.markdown.length : 0
+    if (length < THROTTLE_ABOVE) {
+      this.dispatchChangeContentChange()
+      return
+    }
+    const now = Date.now()
+    const since = now - (this.lastContentChangeAt || 0)
+    clearTimeout(this.contentChangeTimer)
+    if (since >= INTERVAL) {
+      this.lastContentChangeAt = now
+      this.dispatchChangeContentChange()
+      return
+    }
+    this.contentChangeTimer = setTimeout(() => {
+      this.lastContentChangeAt = Date.now()
+      this.dispatchChangeContentChange()
+    }, INTERVAL - since)
+  }
+
+  /// Runs the pending report now, so the text the host holds is the text on screen.
+  flushContentChange = () => {
+    clearTimeout(this.contentChangeTimer)
+    this.lastContentChangeAt = Date.now()
+    this.dispatchChangeContentChange()
   }
 
   dispatchChangeContentChange = () => {

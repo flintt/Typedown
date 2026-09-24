@@ -15,6 +15,8 @@ const Editor: React.FC = () => {
     // snapshot/restore the selection (O(document size) on every key press). Only host-driven content
     // replacements (LoadFile/SetMarkdown/ImportFile) bump `contentVersion` to push new text into the editor.
     const markdownRef = useRef<string>();
+    // Reporting the text is throttled while typing; this runs it now (see Muya's flushContentChange).
+    const flushRef = useRef<(() => void) | null>(null);
     const cursorRef = useRef<any>();
     const [contentVersion, setContentVersion] = useState(0);
     const [options, setOptions] = useState<any>();
@@ -106,7 +108,14 @@ const Editor: React.FC = () => {
         optionsRef.current = options
     }, [options])
 
+    // The host asks for this before it saves: whatever it holds must be what is on screen.
+    useEffect(() => transport.addListener<{ token?: number }>('FlushContent', ({ token }) => {
+        flushRef.current?.()
+        transport.postMessage('ContentFlushed', { token: token ?? 0, text: markdownRef.current })
+    }), []);
+
     useEffect(() => transport.addListener<IExportArgs>('Export', async ({ type, context, basePath, title, options }) => {
+        flushRef.current?.()
         // The theme and the user's own CSS style the editor, so the exported file should carry them too —
         // otherwise a document looks different the moment it leaves the app.
         const styling = [optionsRef.current?.themeCss, optionsRef.current?.customCss].filter(Boolean).join('\n')
@@ -185,6 +194,7 @@ const Editor: React.FC = () => {
                 searchArg={searchArg}
                 scrollTopRef={muyaScrollTopRef}
                 scrollFromHostRef={scrollFromHostRef}
+                flushRef={flushRef}
                 onMarkdownChange={onMarkdownChange}
                 onContentApplied={onContentApplied}
                 onCursorChange={onCursorChange}

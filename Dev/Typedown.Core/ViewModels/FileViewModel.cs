@@ -405,6 +405,7 @@ namespace Typedown.Core.ViewModels
             else
             {
                 var path = FilePath;
+                await EditorViewModel.FlushContentAsync(); // what we write must be what is on screen
                 var markdown = EditorViewModel.Markdown;
                 var hash = Common.SimpleHash(markdown);
                 var result = await WriteAllText(path, markdown, alert);
@@ -449,6 +450,7 @@ namespace Typedown.Core.ViewModels
                 var file = await filePicker.PickSaveFileAsync();
                 if (file != null && !disposables.IsDisposed && FilePath == originalPath)
                 {
+                    await EditorViewModel.FlushContentAsync();
                     var markdown = EditorViewModel.Markdown;
                     var hash = Common.SimpleHash(markdown);
                     var result = await WriteAllText(file.Path, markdown);
@@ -486,6 +488,7 @@ namespace Typedown.Core.ViewModels
                     AppViewModel.NavigateCommand.Execute("Settings/Export");
                     return;
                 }
+                await EditorViewModel.FlushContentAsync();
                 var markdown = EditorViewModel.Markdown;
                 var hash = Common.SimpleHash(markdown);
                 var previous = HedgeDocShareMemory.Get(FilePath);
