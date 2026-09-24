@@ -249,4 +249,52 @@
     <value>Thời gian chạy WebView2 chưa được cài đặt</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>Tài liệu này đã được chia sẻ trước đây nhưng đã thay đổi. HedgeDoc 1.x không thể cập nhật ghi chú sẵn có, nên tải lên lại sẽ tạo ghi chú mới với liên kết mới.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>Sao chép liên kết</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>Liên kết có thể sửa</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>Bất kỳ ai có liên kết này đều có thể sửa ghi chú.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>Hãy đặt địa chỉ máy chủ HedgeDoc trong Cài đặt → Xuất trước.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>Mở trong trình duyệt</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>Tải lên lại (liên kết mới)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>Liên kết chỉ đọc</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>Đã chia sẻ lên HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>Tài liệu không thay đổi kể từ lần chia sẻ trước; đây là các liên kết hiện có.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>Dùng liên kết trước</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>Giữ</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Tải lại</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>Tệp đã thay đổi trên đĩa. Tải lại sẽ bỏ các thay đổi chưa lưu.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>Tệp đã thay đổi trên đĩa. Tải lại chứ?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>Tệp đã thay đổi trên đĩa</value>
+  </data>
 </root>

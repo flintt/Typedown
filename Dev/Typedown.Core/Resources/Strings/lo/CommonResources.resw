@@ -933,4 +933,64 @@
     <value>Zoom</value>
     <comment>字体缩放</comment>
   </data>
+  <data name="FolderPane.NoFolderOpen" xml:space="preserve">
+    <value>ບໍ່ມີໂຟນເດີທີ່ເປີດຢູ່. ເປີດໄຟລ໌ ຫຼື ໂຟນເດີເພື່ອເບິ່ງຢູ່ນີ້.</value>
+  </data>
+  <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
+    <value>ບໍ່ມີໄຟລ໌ Markdown ໃນໂຟນເດີນີ້.</value>
+  </data>
+  <data name="FolderPane.NotFound" xml:space="preserve">
+    <value>ໂຟນເດີນີ້ບໍ່ມີອີກແລ້ວ.</value>
+  </data>
+  <data name="FolderPane.RevealCurrentFile" xml:space="preserve">
+    <value>ສະແດງໂຟນເດີຂອງໄຟລ໌ປັດຈຸບັນ</value>
+  </data>
+  <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
+    <value>ຄົ້ນຫາໃນໂຟນເດີ…</value>
+  </data>
+  <data name="FolderSearch.NameMatch" xml:space="preserve">
+    <value>(ຊື່ໄຟລ໌ກົງກັນ)</value>
+  </data>
+  <data name="FolderSearch.ResultSummary" xml:space="preserve">
+    <value>ພົບ {0} ໄຟລ໌ ຈາກ {1} ທີ່ຄົ້ນຫາ</value>
+  </data>
+  <data name="FolderSearch.Searching" xml:space="preserve">
+    <value>ກຳລັງຄົ້ນຫາ…</value>
+  </data>
+  <data name="FullScreen" xml:space="preserve">
+    <value>ເຕັມຈໍ</value>
+  </data>
+  <data name="LastUsedTab" xml:space="preserve">
+    <value>ແທັບທີ່ໃຊ້ລ່າສຸດ</value>
+  </data>
+  <data name="NextTab" xml:space="preserve">
+    <value>ແທັບຕໍ່ໄປ</value>
+  </data>
+  <data name="PreviousTab" xml:space="preserve">
+    <value>ແທັບກ່ອນໜ້າ</value>
+  </data>
+  <data name="QuoteDecrease" xml:space="preserve">
+    <value>ຫຼຸດລະດັບການອ້າງອີງ</value>
+  </data>
+  <data name="QuoteIncrease" xml:space="preserve">
+    <value>ເພີ່ມລະດັບການອ້າງອີງ</value>
+  </data>
+  <data name="ReadOnlyMode" xml:space="preserve">
+    <value>ໂໝດອ່ານ</value>
+  </data>
+  <data name="SearchInFolder" xml:space="preserve">
+    <value>ຄົ້ນຫາໃນໂຟນເດີ</value>
+  </data>
+  <data name="ShareToHedgeDoc" xml:space="preserve">
+    <value>ແບ່ງປັນໄປ HedgeDoc…</value>
+  </data>
+  <data name="TocPane.CollapseAll" xml:space="preserve">
+    <value>ຫຍໍ້ທັງໝົດ</value>
+  </data>
+  <data name="TocPane.ExpandAll" xml:space="preserve">
+    <value>ຂະຫຍາຍທັງໝົດ</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>ບໍ່ມີຫົວຂໍ້</value>
+  </data>
 </root>

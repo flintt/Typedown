@@ -689,4 +689,163 @@
     <value>Παράθυρο</value>
     <comment>视图/窗口</comment>
   </data>
+  <data name="Editor.FontFamily.Placeholder" xml:space="preserve">
+    <value>Προεπιλογή</value>
+  </data>
+  <data name="Editor.ListIndentation.Description" xml:space="preserve">
+    <value>Η εσοχή που γράφεται για ένθετα στοιχεία λίστας. Τα 4 κενά ταιριάζουν με το Obsidian και τους περισσότερους άλλους επεξεργαστές</value>
+  </data>
+  <data name="Editor.ListIndentation.Dfm" xml:space="preserve">
+    <value>Εσοχή 4 κενών (πρότυπο Markdown)</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces1" xml:space="preserve">
+    <value>1 κενό μετά τον δείκτη</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces2" xml:space="preserve">
+    <value>2 κενά μετά τον δείκτη</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces4" xml:space="preserve">
+    <value>4 κενά μετά τον δείκτη</value>
+  </data>
+  <data name="Editor.ListIndentation.Title" xml:space="preserve">
+    <value>Εσοχή λιστών</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Description" xml:space="preserve">
+    <value>Εισαγωγή κενής γραμμής ανάμεσα σε νέα στοιχεία λίστας στον πηγαίο κώδικα</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Title" xml:space="preserve">
+    <value>Χαλαρά στοιχεία λίστας</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Description" xml:space="preserve">
+    <value>Εμφάνιση του τύπου μπλοκ (P, H1, ...) δίπλα στην τρέχουσα παράγραφο</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Title" xml:space="preserve">
+    <value>Δείκτης παραγράφου</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Description" xml:space="preserve">
+    <value>Συμπλήρωση των κελιών ώστε οι στήλες να ευθυγραμμίζονται στον πηγαίο κώδικα Markdown. Απενεργοποιήστε το για συμπαγείς πίνακες (λιγότερα tokens για εργαλεία AI)</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Title" xml:space="preserve">
+    <value>Ευθυγράμμιση στηλών πίνακα</value>
+  </data>
+  <data name="Editor.TextDirection.Auto" xml:space="preserve">
+    <value>Αυτόματος εντοπισμός ανά παράγραφο</value>
+  </data>
+  <data name="Editor.TextDirection.Description" xml:space="preserve">
+    <value>Κατεύθυνση κειμένου στον επεξεργαστή· χρήσιμη για αραβικά, εβραϊκά και άλλες γλώσσες από δεξιά προς αριστερά</value>
+  </data>
+  <data name="Editor.TextDirection.Ltr" xml:space="preserve">
+    <value>Από αριστερά προς δεξιά</value>
+  </data>
+  <data name="Editor.TextDirection.Rtl" xml:space="preserve">
+    <value>Από δεξιά προς αριστερά</value>
+  </data>
+  <data name="Editor.TextDirection.Title" xml:space="preserve">
+    <value>Κατεύθυνση κειμένου</value>
+  </data>
+  <data name="General.AskBeforeReload.Description" xml:space="preserve">
+    <value>Αν είναι ανενεργό, επαναφόρτωση χωρίς ερώτηση εκτός αν υπάρχουν μη αποθηκευμένες αλλαγές</value>
+  </data>
+  <data name="General.AskBeforeReload.Title" xml:space="preserve">
+    <value>Ερώτηση πριν την επαναφόρτωση</value>
+  </data>
+  <data name="General.AutoReload.Description" xml:space="preserve">
+    <value>Παρακολούθηση του ανοιχτού αρχείου και ανανέωση όταν το αλλάζει άλλο πρόγραμμα</value>
+  </data>
+  <data name="General.AutoReload.Title" xml:space="preserve">
+    <value>Αυτόματη επαναφόρτωση σε εξωτερική αλλαγή</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Description" xml:space="preserve">
+    <value>Τα αρχεία που ανοίγουν από την Εξερεύνηση ανοίγουν ως καρτέλα στο τρέχον παράθυρο· ανενεργό ανοίγει νέο παράθυρο</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Title" xml:space="preserve">
+    <value>Άνοιγμα αρχείων σε καρτέλες</value>
+  </data>
+  <data name="General.RememberCursorPosition.Description" xml:space="preserve">
+    <value>Άνοιγμα εγγράφων από εκεί που σταματήσατε</value>
+  </data>
+  <data name="General.RememberCursorPosition.Title" xml:space="preserve">
+    <value>Απομνημόνευση θέσης δρομέα</value>
+  </data>
+  <data name="General.StartupAction.FileStartupAction.RestoreSession" xml:space="preserve">
+    <value>Επαναφορά όλων των εγγράφων της τελευταίας συνεδρίας</value>
+  </data>
+  <data name="HedgeDocShare.Email.Description" xml:space="preserve">
+    <value>Αφήστε το κενό για ανώνυμες σημειώσεις· με λογαριασμό η σημείωση ανήκει σε εσάς</value>
+  </data>
+  <data name="HedgeDocShare.Email.Title" xml:space="preserve">
+    <value>Email (προαιρετικό)</value>
+  </data>
+  <data name="HedgeDocShare.Password.Title" xml:space="preserve">
+    <value>Κωδικός πρόσβασης</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Description" xml:space="preserve">
+    <value>Δημοσιεύει τη σημείωση (/s/…) ώστε ο κοινόχρηστος σύνδεσμος να μην μπορεί να επεξεργαστεί</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Title" xml:space="preserve">
+    <value>Δημοσίευση και συνδέσμου μόνο για ανάγνωση</value>
+  </data>
+  <data name="HedgeDocShare.Section" xml:space="preserve">
+    <value>Κοινοποίηση στο HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Server.Description" xml:space="preserve">
+    <value>Διεύθυνση HedgeDoc 1.x, π.χ. https://md.example.com</value>
+  </data>
+  <data name="HedgeDocShare.Server.Title" xml:space="preserve">
+    <value>Διακομιστής</value>
+  </data>
+  <data name="HedgeDocShare.TestButton" xml:space="preserve">
+    <value>Δοκιμή</value>
+  </data>
+  <data name="HedgeDocShare.TestTitle" xml:space="preserve">
+    <value>Δοκιμή σύνδεσης</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Description" xml:space="preserve">
+    <value>Εμφάνιση της γραμμής καρτελών ακόμη και με ένα μόνο ανοιχτό έγγραφο</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Title" xml:space="preserve">
+    <value>Πάντα εμφάνιση καρτελών</value>
+  </data>
+  <data name="View.AppTheme.Black" xml:space="preserve">
+    <value>Μαύρο (OLED)</value>
+  </data>
+  <data name="View.CustomCss.Description" xml:space="preserve">
+    <value>Επιπλέον στυλ για τον επεξεργαστή και το εξαγόμενο HTML/PDF</value>
+  </data>
+  <data name="View.CustomCss.Placeholder" xml:space="preserve">
+    <value>π.χ. .markdown-body h1 { color: #c00; }  ή  :root { --editorBgColor: #111; }</value>
+  </data>
+  <data name="View.CustomCss.Title" xml:space="preserve">
+    <value>Προσαρμοσμένο CSS</value>
+  </data>
+  <data name="View.CustomTheme.Description" xml:space="preserve">
+    <value>Ένα θέμα είναι ένα αρχείο CSS στον φάκελο θεμάτων· δείτε docs/custom-theme.md</value>
+  </data>
+  <data name="View.CustomTheme.Document" xml:space="preserve">
+    <value>Πώς να γράψετε ένα</value>
+  </data>
+  <data name="View.CustomTheme.Folder" xml:space="preserve">
+    <value>Τα θέματα είναι αρχεία CSS σε αυτόν τον φάκελο· το έγγραφο εξηγεί τη μορφή.</value>
+  </data>
+  <data name="View.CustomTheme.None" xml:space="preserve">
+    <value>(κανένα)</value>
+  </data>
+  <data name="View.CustomTheme.OpenFolder" xml:space="preserve">
+    <value>Άνοιγμα του φακέλου θεμάτων</value>
+  </data>
+  <data name="View.CustomTheme.Refresh" xml:space="preserve">
+    <value>Επαναφόρτωση θεμάτων</value>
+  </data>
+  <data name="View.CustomTheme.Title" xml:space="preserve">
+    <value>Προσαρμοσμένο θέμα</value>
+  </data>
+  <data name="View.Image.CopyPath.Placeholder" xml:space="preserve">
+    <value>π.χ. ./${filename}.assets — μεταβλητές: ${filename} ${filedir} ${year} ${month} ${day}</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Description" xml:space="preserve">
+    <value>Ποια σελίδα δείχνει το πλαϊνό πλαίσιο κατά την εκκίνηση</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
+    <value>Προεπιλεγμένη σελίδα πλαϊνού πλαισίου</value>
+  </data>
 </root>

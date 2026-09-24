@@ -689,4 +689,163 @@
     <value>Leihoa</value>
     <comment>视图/窗口</comment>
   </data>
+  <data name="Editor.FontFamily.Placeholder" xml:space="preserve">
+    <value>Lehenetsia</value>
+  </data>
+  <data name="Editor.ListIndentation.Description" xml:space="preserve">
+    <value>Zerrenda-elementu habiaratuetarako idazten den koska. 4 zuriune Obsidian eta beste editore gehienekin bat dator</value>
+  </data>
+  <data name="Editor.ListIndentation.Dfm" xml:space="preserve">
+    <value>4 zuriuneko koska (Markdown estandarra)</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces1" xml:space="preserve">
+    <value>Zuriune 1 markatzailearen ondoren</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces2" xml:space="preserve">
+    <value>2 zuriune markatzailearen ondoren</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces4" xml:space="preserve">
+    <value>4 zuriune markatzailearen ondoren</value>
+  </data>
+  <data name="Editor.ListIndentation.Title" xml:space="preserve">
+    <value>Zerrenden koska</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Description" xml:space="preserve">
+    <value>Txertatu lerro huts bat zerrenda-elementu berrien artean iturburuan</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Title" xml:space="preserve">
+    <value>Zerrenda-elementu lasaiak</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Description" xml:space="preserve">
+    <value>Erakutsi blokearen mota (P, H1, ...) uneko paragrafoaren ondoan</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Title" xml:space="preserve">
+    <value>Paragrafo-marka</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Description" xml:space="preserve">
+    <value>Bete taula-gelaxkak zutabeak Markdown iturburuan lerrokatu daitezen. Desaktibatu taulak trinko mantentzeko (token gutxiago AA tresnentzat)</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Title" xml:space="preserve">
+    <value>Lerrokatu taularen zutabeak</value>
+  </data>
+  <data name="Editor.TextDirection.Auto" xml:space="preserve">
+    <value>Hauteman automatikoki paragrafoka</value>
+  </data>
+  <data name="Editor.TextDirection.Description" xml:space="preserve">
+    <value>Editorearen testu-norabidea; baliagarria arabierarako, hebreerarako eta eskuinetik ezkerrera idazten diren beste hizkuntzetarako</value>
+  </data>
+  <data name="Editor.TextDirection.Ltr" xml:space="preserve">
+    <value>Ezkerretik eskuinera</value>
+  </data>
+  <data name="Editor.TextDirection.Rtl" xml:space="preserve">
+    <value>Eskuinetik ezkerrera</value>
+  </data>
+  <data name="Editor.TextDirection.Title" xml:space="preserve">
+    <value>Testu-norabidea</value>
+  </data>
+  <data name="General.AskBeforeReload.Description" xml:space="preserve">
+    <value>Desaktibatuta badago, kargatu berriro galdetu gabe gorde gabeko aldaketarik ez badago</value>
+  </data>
+  <data name="General.AskBeforeReload.Title" xml:space="preserve">
+    <value>Galdetu birkargatu aurretik</value>
+  </data>
+  <data name="General.AutoReload.Description" xml:space="preserve">
+    <value>Zaindu irekitako fitxategia eta freskatu beste programa batek aldatzen duenean</value>
+  </data>
+  <data name="General.AutoReload.Title" xml:space="preserve">
+    <value>Birkarga automatikoa kanpoko aldaketetan</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Description" xml:space="preserve">
+    <value>Explorer-etik irekitako fitxategiak fitxa gisa irekitzen dira uneko leihoan; desaktibatuta leiho berria irekitzen du</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Title" xml:space="preserve">
+    <value>Ireki fitxategiak fitxetan</value>
+  </data>
+  <data name="General.RememberCursorPosition.Description" xml:space="preserve">
+    <value>Ireki dokumentuak utzi zenituen lekuan</value>
+  </data>
+  <data name="General.RememberCursorPosition.Title" xml:space="preserve">
+    <value>Gogoratu kurtsorearen kokapena</value>
+  </data>
+  <data name="General.StartupAction.FileStartupAction.RestoreSession" xml:space="preserve">
+    <value>Leheneratu azken saioko dokumentu guztiak</value>
+  </data>
+  <data name="HedgeDocShare.Email.Description" xml:space="preserve">
+    <value>Utzi hutsik oharrak anonimoki sortzeko; kontu batekin oharra zurea da</value>
+  </data>
+  <data name="HedgeDocShare.Email.Title" xml:space="preserve">
+    <value>Helbide elektronikoa (aukerakoa)</value>
+  </data>
+  <data name="HedgeDocShare.Password.Title" xml:space="preserve">
+    <value>Pasahitza</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Description" xml:space="preserve">
+    <value>Oharra argitaratzen du (/s/…), partekatutako esteka editatu ezin izateko</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Title" xml:space="preserve">
+    <value>Argitaratu irakurtzeko soilik den esteka ere</value>
+  </data>
+  <data name="HedgeDocShare.Section" xml:space="preserve">
+    <value>Partekatu HedgeDoc-en</value>
+  </data>
+  <data name="HedgeDocShare.Server.Description" xml:space="preserve">
+    <value>HedgeDoc 1.x helbidea, adib. https://md.example.com</value>
+  </data>
+  <data name="HedgeDocShare.Server.Title" xml:space="preserve">
+    <value>Zerbitzaria</value>
+  </data>
+  <data name="HedgeDocShare.TestButton" xml:space="preserve">
+    <value>Probatu</value>
+  </data>
+  <data name="HedgeDocShare.TestTitle" xml:space="preserve">
+    <value>Probatu konexioa</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Description" xml:space="preserve">
+    <value>Erakutsi fitxa-barra dokumentu bakarra irekita dagoenean ere</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Title" xml:space="preserve">
+    <value>Erakutsi beti fitxak</value>
+  </data>
+  <data name="View.AppTheme.Black" xml:space="preserve">
+    <value>Beltza (OLED)</value>
+  </data>
+  <data name="View.CustomCss.Description" xml:space="preserve">
+    <value>Estilo gehigarriak editorerako eta esportatutako HTML/PDFrako</value>
+  </data>
+  <data name="View.CustomCss.Placeholder" xml:space="preserve">
+    <value>adib. .markdown-body h1 { color: #c00; }  edo  :root { --editorBgColor: #111; }</value>
+  </data>
+  <data name="View.CustomCss.Title" xml:space="preserve">
+    <value>CSS pertsonalizatua</value>
+  </data>
+  <data name="View.CustomTheme.Description" xml:space="preserve">
+    <value>Gai bat gaien karpetako CSS fitxategi bat da; ikusi docs/custom-theme.md</value>
+  </data>
+  <data name="View.CustomTheme.Document" xml:space="preserve">
+    <value>Nola idatzi bat</value>
+  </data>
+  <data name="View.CustomTheme.Folder" xml:space="preserve">
+    <value>Gaiak karpeta honetako CSS fitxategiak dira; dokumentuak formatua azaltzen du.</value>
+  </data>
+  <data name="View.CustomTheme.None" xml:space="preserve">
+    <value>(bat ere ez)</value>
+  </data>
+  <data name="View.CustomTheme.OpenFolder" xml:space="preserve">
+    <value>Ireki gaien karpeta</value>
+  </data>
+  <data name="View.CustomTheme.Refresh" xml:space="preserve">
+    <value>Kargatu gaiak berriro</value>
+  </data>
+  <data name="View.CustomTheme.Title" xml:space="preserve">
+    <value>Gai pertsonalizatua</value>
+  </data>
+  <data name="View.Image.CopyPath.Placeholder" xml:space="preserve">
+    <value>adib. ./${filename}.assets — aldagaiak: ${filename} ${filedir} ${year} ${month} ${day}</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Description" xml:space="preserve">
+    <value>Alboko panelak abiaraztean erakusten duen orria</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
+    <value>Alboko panelaren orri lehenetsia</value>
+  </data>
 </root>

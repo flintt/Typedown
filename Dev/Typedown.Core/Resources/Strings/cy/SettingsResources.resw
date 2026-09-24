@@ -689,4 +689,163 @@
     <value>Ffenestr</value>
     <comment>视图/窗口</comment>
   </data>
+  <data name="Editor.FontFamily.Placeholder" xml:space="preserve">
+    <value>Rhagosodiad</value>
+  </data>
+  <data name="Editor.ListIndentation.Description" xml:space="preserve">
+    <value>Y mewnoliad a ysgrifennir ar gyfer eitemau rhestr nythog. Mae 4 bwlch yn cyd-fynd ag Obsidian a'r rhan fwyaf o olygyddion eraill</value>
+  </data>
+  <data name="Editor.ListIndentation.Dfm" xml:space="preserve">
+    <value>Mewnoliad 4 bwlch (safon Markdown)</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces1" xml:space="preserve">
+    <value>1 bwlch ar ôl y marc</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces2" xml:space="preserve">
+    <value>2 fwlch ar ôl y marc</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces4" xml:space="preserve">
+    <value>4 bwlch ar ôl y marc</value>
+  </data>
+  <data name="Editor.ListIndentation.Title" xml:space="preserve">
+    <value>Mewnoliad rhestrau</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Description" xml:space="preserve">
+    <value>Mewnosod llinell wag rhwng eitemau rhestr newydd yn y ffynhonnell</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Title" xml:space="preserve">
+    <value>Eitemau rhestr llac</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Description" xml:space="preserve">
+    <value>Dangos math y bloc (P, H1, ...) wrth ymyl y paragraff cyfredol</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Title" xml:space="preserve">
+    <value>Marc paragraff</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Description" xml:space="preserve">
+    <value>Llenwi celloedd y tabl fel bod y colofnau'n cyd-fynd yn ffynhonnell Markdown. Diffoddwch i gadw tablau'n gryno (llai o docynnau ar gyfer offer DA)</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Title" xml:space="preserve">
+    <value>Alinio colofnau'r tabl</value>
+  </data>
+  <data name="Editor.TextDirection.Auto" xml:space="preserve">
+    <value>Canfod yn awtomatig fesul paragraff</value>
+  </data>
+  <data name="Editor.TextDirection.Description" xml:space="preserve">
+    <value>Cyfeiriad testun y golygydd; defnyddiol ar gyfer Arabeg, Hebraeg ac ieithoedd eraill a ysgrifennir o'r dde i'r chwith</value>
+  </data>
+  <data name="Editor.TextDirection.Ltr" xml:space="preserve">
+    <value>O'r chwith i'r dde</value>
+  </data>
+  <data name="Editor.TextDirection.Rtl" xml:space="preserve">
+    <value>O'r dde i'r chwith</value>
+  </data>
+  <data name="Editor.TextDirection.Title" xml:space="preserve">
+    <value>Cyfeiriad testun</value>
+  </data>
+  <data name="General.AskBeforeReload.Description" xml:space="preserve">
+    <value>Os yw i ffwrdd, ail-lwytho'n dawel oni bai bod newidiadau heb eu cadw</value>
+  </data>
+  <data name="General.AskBeforeReload.Title" xml:space="preserve">
+    <value>Gofyn cyn ail-lwytho</value>
+  </data>
+  <data name="General.AutoReload.Description" xml:space="preserve">
+    <value>Gwylio'r ffeil agored a'i hadnewyddu pan fydd rhaglen arall yn ei newid</value>
+  </data>
+  <data name="General.AutoReload.Title" xml:space="preserve">
+    <value>Ail-lwytho'n awtomatig pan fo newid allanol</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Description" xml:space="preserve">
+    <value>Mae ffeiliau a agorir o Explorer yn agor fel tab yn y ffenestr gyfredol; i ffwrdd yn agor ffenestr newydd</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Title" xml:space="preserve">
+    <value>Agor ffeiliau mewn tabiau</value>
+  </data>
+  <data name="General.RememberCursorPosition.Description" xml:space="preserve">
+    <value>Agor dogfennau lle gwnaethoch orffen</value>
+  </data>
+  <data name="General.RememberCursorPosition.Title" xml:space="preserve">
+    <value>Cofio safle'r cyrchwr</value>
+  </data>
+  <data name="General.StartupAction.FileStartupAction.RestoreSession" xml:space="preserve">
+    <value>Adfer holl ddogfennau'r sesiwn ddiwethaf</value>
+  </data>
+  <data name="HedgeDocShare.Email.Description" xml:space="preserve">
+    <value>Gadewch yn wag i greu nodiadau'n ddienw; gyda chyfrif mae'r nodyn yn eiddo i chi</value>
+  </data>
+  <data name="HedgeDocShare.Email.Title" xml:space="preserve">
+    <value>E-bost (dewisol)</value>
+  </data>
+  <data name="HedgeDocShare.Password.Title" xml:space="preserve">
+    <value>Cyfrinair</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Description" xml:space="preserve">
+    <value>Yn cyhoeddi'r nodyn (/s/…) fel na ellir golygu'r ddolen a rennir</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Title" xml:space="preserve">
+    <value>Cyhoeddi dolen darllen-yn-unig hefyd</value>
+  </data>
+  <data name="HedgeDocShare.Section" xml:space="preserve">
+    <value>Rhannu i HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Server.Description" xml:space="preserve">
+    <value>Cyfeiriad HedgeDoc 1.x, e.e. https://md.example.com</value>
+  </data>
+  <data name="HedgeDocShare.Server.Title" xml:space="preserve">
+    <value>Gweinydd</value>
+  </data>
+  <data name="HedgeDocShare.TestButton" xml:space="preserve">
+    <value>Profi</value>
+  </data>
+  <data name="HedgeDocShare.TestTitle" xml:space="preserve">
+    <value>Profi'r cysylltiad</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Description" xml:space="preserve">
+    <value>Dangos y stribed tabiau hyd yn oed pan fo un ddogfen ar agor</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Title" xml:space="preserve">
+    <value>Dangos tabiau bob amser</value>
+  </data>
+  <data name="View.AppTheme.Black" xml:space="preserve">
+    <value>Du (OLED)</value>
+  </data>
+  <data name="View.CustomCss.Description" xml:space="preserve">
+    <value>Arddulliau ychwanegol ar gyfer y golygydd a'r HTML/PDF a allforiwyd</value>
+  </data>
+  <data name="View.CustomCss.Placeholder" xml:space="preserve">
+    <value>e.e. .markdown-body h1 { color: #c00; }  neu  :root { --editorBgColor: #111; }</value>
+  </data>
+  <data name="View.CustomCss.Title" xml:space="preserve">
+    <value>CSS addasedig</value>
+  </data>
+  <data name="View.CustomTheme.Description" xml:space="preserve">
+    <value>Ffeil CSS unigol yn y ffolder themâu yw thema; gweler docs/custom-theme.md</value>
+  </data>
+  <data name="View.CustomTheme.Document" xml:space="preserve">
+    <value>Sut i ysgrifennu un</value>
+  </data>
+  <data name="View.CustomTheme.Folder" xml:space="preserve">
+    <value>Ffeiliau CSS yn y ffolder hwn yw themâu; mae'r ddogfen yn esbonio'r fformat.</value>
+  </data>
+  <data name="View.CustomTheme.None" xml:space="preserve">
+    <value>(dim)</value>
+  </data>
+  <data name="View.CustomTheme.OpenFolder" xml:space="preserve">
+    <value>Agor y ffolder themâu</value>
+  </data>
+  <data name="View.CustomTheme.Refresh" xml:space="preserve">
+    <value>Ail-lwytho themâu</value>
+  </data>
+  <data name="View.CustomTheme.Title" xml:space="preserve">
+    <value>Thema addasedig</value>
+  </data>
+  <data name="View.Image.CopyPath.Placeholder" xml:space="preserve">
+    <value>e.e. ./${filename}.assets — newidynnau: ${filename} ${filedir} ${year} ${month} ${day}</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Description" xml:space="preserve">
+    <value>Pa dudalen mae'r cwarel ochr yn ei dangos wrth gychwyn</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
+    <value>Tudalen ragosodedig y cwarel ochr</value>
+  </data>
 </root>

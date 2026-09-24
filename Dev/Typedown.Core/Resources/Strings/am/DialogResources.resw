@@ -249,4 +249,52 @@
     <value>WebView2 ሩንታይም አልተገጠመም</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>ይህ ሰነድ ቀደም ብሎ ተጋርቷል ነገር ግን ከዚያ በኋላ ተቀይሯል። HedgeDoc 1.x ነባር ማስታወሻን ማዘመን ስለማይችል፣ እንደገና መጫን አዲስ አገናኝ ያለው አዲስ ማስታወሻ ይፈጥራል።</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>አገናኝ ቅዳ</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>ሊስተካከል የሚችል አገናኝ</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>ይህ አገናኝ ያለው ማንኛውም ሰው ማስታወሻውን ማስተካከል ይችላል።</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>በቅድሚያ የHedgeDoc አገልጋይ አድራሻን በቅንብሮች → ወደ ውጭ ላክ ያዘጋጁ።</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>በአሳሽ ክፈት</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>እንደገና ስቀል (አዲስ አገናኝ)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>ለንባብ ብቻ አገናኝ</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>ወደ HedgeDoc ተጋርቷል</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>ከመጨረሻው መጋራት ወዲህ ሰነዱ አልተቀየረም፤ እነዚህ ነባር አገናኞች ናቸው።</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>ቀዳሚውን አገናኝ ተጠቀም</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>አቆይ</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>እንደገና ጫን</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>ፋይሉ በዲስክ ላይ ተቀይሯል። እንደገና መጫን ያልተቀመጡ ለውጦችን ያስወግዳል።</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>ፋይሉ በዲስክ ላይ ተቀይሯል። እንደገና ይጫን?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>ፋይሉ በዲስክ ላይ ተቀይሯል</value>
+  </data>
 </root>

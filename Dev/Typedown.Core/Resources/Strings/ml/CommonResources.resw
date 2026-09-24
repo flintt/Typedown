@@ -933,4 +933,64 @@
     <value>Zoom</value>
     <comment>字体缩放</comment>
   </data>
+  <data name="FolderPane.NoFolderOpen" xml:space="preserve">
+    <value>ഒരു ഫോൾഡറും തുറന്നിട്ടില്ല. ഇവിടെ ബ്രൗസ് ചെയ്യാൻ ഒരു ഫയലോ ഫോൾഡറോ തുറക്കുക.</value>
+  </data>
+  <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
+    <value>ഈ ഫോൾഡറിൽ Markdown ഫയലുകളില്ല.</value>
+  </data>
+  <data name="FolderPane.NotFound" xml:space="preserve">
+    <value>ഈ ഫോൾഡർ ഇപ്പോൾ നിലവിലില്ല.</value>
+  </data>
+  <data name="FolderPane.RevealCurrentFile" xml:space="preserve">
+    <value>നിലവിലെ ഫയലിന്റെ ഫോൾഡർ കാണിക്കുക</value>
+  </data>
+  <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
+    <value>ഫോൾഡറിൽ തിരയുക…</value>
+  </data>
+  <data name="FolderSearch.NameMatch" xml:space="preserve">
+    <value>(ഫയലിന്റെ പേര് യോജിക്കുന്നു)</value>
+  </data>
+  <data name="FolderSearch.ResultSummary" xml:space="preserve">
+    <value>തിരഞ്ഞ {1} ഫയലുകളിൽ {0} എണ്ണം യോജിച്ചു</value>
+  </data>
+  <data name="FolderSearch.Searching" xml:space="preserve">
+    <value>തിരയുന്നു…</value>
+  </data>
+  <data name="FullScreen" xml:space="preserve">
+    <value>പൂർണ്ണ സ്ക്രീൻ</value>
+  </data>
+  <data name="LastUsedTab" xml:space="preserve">
+    <value>അവസാനം ഉപയോഗിച്ച ടാബ്</value>
+  </data>
+  <data name="NextTab" xml:space="preserve">
+    <value>അടുത്ത ടാബ്</value>
+  </data>
+  <data name="PreviousTab" xml:space="preserve">
+    <value>മുൻ ടാബ്</value>
+  </data>
+  <data name="QuoteDecrease" xml:space="preserve">
+    <value>ഉദ്ധരണി നില കുറയ്ക്കുക</value>
+  </data>
+  <data name="QuoteIncrease" xml:space="preserve">
+    <value>ഉദ്ധരണി നില കൂട്ടുക</value>
+  </data>
+  <data name="ReadOnlyMode" xml:space="preserve">
+    <value>വായനാ മോഡ്</value>
+  </data>
+  <data name="SearchInFolder" xml:space="preserve">
+    <value>ഫോൾഡറിൽ തിരയുക</value>
+  </data>
+  <data name="ShareToHedgeDoc" xml:space="preserve">
+    <value>HedgeDoc-ൽ പങ്കിടുക…</value>
+  </data>
+  <data name="TocPane.CollapseAll" xml:space="preserve">
+    <value>എല്ലാം ചുരുക്കുക</value>
+  </data>
+  <data name="TocPane.ExpandAll" xml:space="preserve">
+    <value>എല്ലാം വികസിപ്പിക്കുക</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>തലക്കെട്ടില്ലാത്തത്</value>
+  </data>
 </root>

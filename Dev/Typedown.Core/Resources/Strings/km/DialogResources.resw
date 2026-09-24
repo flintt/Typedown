@@ -249,4 +249,52 @@
     <value>WebView2 Runtime មិនដំឡើង</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>ឯកសារនេះធ្លាប់ចែករំលែករួចហើយ ប៉ុន្តែបានផ្លាស់ប្ដូរតាំងពីពេលនោះ។ HedgeDoc 1.x មិនអាចធ្វើបច្ចុប្បន្នភាពកំណត់ត្រាដែលមានស្រាប់បានទេ ដូច្នេះការផ្ទុកឡើងម្ដងទៀតនឹងបង្កើតកំណត់ត្រាថ្មីជាមួយតំណថ្មី។</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>ចម្លងតំណ</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>តំណដែលកែបាន</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>អ្នកណាដែលមានតំណនេះអាចកែកំណត់ត្រាបាន។</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>សូមកំណត់អាសយដ្ឋានម៉ាស៊ីនបម្រើ HedgeDoc ក្នុង ការកំណត់ → នាំចេញ ជាមុនសិន។</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>បើកក្នុងកម្មវិធីរុករក</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>ផ្ទុកឡើងម្ដងទៀត (តំណថ្មី)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>តំណអានតែប៉ុណ្ណោះ</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>បានចែករំលែកទៅ HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>ឯកសារមិនបានផ្លាស់ប្ដូរតាំងពីការចែករំលែកចុងក្រោយ នេះជាតំណដែលមានស្រាប់។</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>ប្រើតំណមុន</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>រក្សាទុក</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>ផ្ទុកឡើងវិញ</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>ឯកសារបានផ្លាស់ប្ដូរនៅលើថាស។ ការផ្ទុកឡើងវិញនឹងបោះបង់ការផ្លាស់ប្ដូរដែលមិនទាន់រក្សាទុក។</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>ឯកសារបានផ្លាស់ប្ដូរនៅលើថាស។ ផ្ទុកឡើងវិញឬ?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>ឯកសារបានផ្លាស់ប្ដូរនៅលើថាស</value>
+  </data>
 </root>

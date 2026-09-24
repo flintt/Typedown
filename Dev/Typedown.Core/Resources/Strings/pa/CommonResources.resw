@@ -933,4 +933,64 @@
     <value>ਜ਼ੂਮ</value>
     <comment>字体缩放</comment>
   </data>
+  <data name="FolderPane.NoFolderOpen" xml:space="preserve">
+    <value>ਕੋਈ ਫੋਲਡਰ ਖੁੱਲ੍ਹਾ ਨਹੀਂ ਹੈ। ਇੱਥੇ ਵੇਖਣ ਲਈ ਫਾਈਲ ਜਾਂ ਫੋਲਡਰ ਖੋਲ੍ਹੋ।</value>
+  </data>
+  <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
+    <value>ਇਸ ਫੋਲਡਰ ਵਿੱਚ Markdown ਫਾਈਲਾਂ ਨਹੀਂ ਹਨ।</value>
+  </data>
+  <data name="FolderPane.NotFound" xml:space="preserve">
+    <value>ਇਹ ਫੋਲਡਰ ਹੁਣ ਮੌਜੂਦ ਨਹੀਂ ਹੈ।</value>
+  </data>
+  <data name="FolderPane.RevealCurrentFile" xml:space="preserve">
+    <value>ਮੌਜੂਦਾ ਫਾਈਲ ਦਾ ਫੋਲਡਰ ਵਿਖਾਓ</value>
+  </data>
+  <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
+    <value>ਫੋਲਡਰ ਵਿੱਚ ਖੋਜੋ…</value>
+  </data>
+  <data name="FolderSearch.NameMatch" xml:space="preserve">
+    <value>(ਫਾਈਲ ਦਾ ਨਾਂ ਮੇਲ ਖਾਂਦਾ ਹੈ)</value>
+  </data>
+  <data name="FolderSearch.ResultSummary" xml:space="preserve">
+    <value>ਖੋਜੀਆਂ {1} ਫਾਈਲਾਂ ਵਿੱਚੋਂ {0} ਮੇਲ ਖਾਂਦੀਆਂ ਹਨ</value>
+  </data>
+  <data name="FolderSearch.Searching" xml:space="preserve">
+    <value>ਖੋਜ ਰਿਹਾ ਹੈ…</value>
+  </data>
+  <data name="FullScreen" xml:space="preserve">
+    <value>ਪੂਰੀ ਸਕਰੀਨ</value>
+  </data>
+  <data name="LastUsedTab" xml:space="preserve">
+    <value>ਆਖਰੀ ਵਰਤਿਆ ਟੈਬ</value>
+  </data>
+  <data name="NextTab" xml:space="preserve">
+    <value>ਅਗਲਾ ਟੈਬ</value>
+  </data>
+  <data name="PreviousTab" xml:space="preserve">
+    <value>ਪਿਛਲਾ ਟੈਬ</value>
+  </data>
+  <data name="QuoteDecrease" xml:space="preserve">
+    <value>ਹਵਾਲੇ ਦਾ ਪੱਧਰ ਘਟਾਓ</value>
+  </data>
+  <data name="QuoteIncrease" xml:space="preserve">
+    <value>ਹਵਾਲੇ ਦਾ ਪੱਧਰ ਵਧਾਓ</value>
+  </data>
+  <data name="ReadOnlyMode" xml:space="preserve">
+    <value>ਪੜ੍ਹਨ ਮੋਡ</value>
+  </data>
+  <data name="SearchInFolder" xml:space="preserve">
+    <value>ਫੋਲਡਰ ਵਿੱਚ ਖੋਜੋ</value>
+  </data>
+  <data name="ShareToHedgeDoc" xml:space="preserve">
+    <value>HedgeDoc 'ਤੇ ਸਾਂਝਾ ਕਰੋ…</value>
+  </data>
+  <data name="TocPane.CollapseAll" xml:space="preserve">
+    <value>ਸਭ ਸਮੇਟੋ</value>
+  </data>
+  <data name="TocPane.ExpandAll" xml:space="preserve">
+    <value>ਸਭ ਫੈਲਾਓ</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>ਬਿਨਾਂ ਸਿਰਲੇਖ</value>
+  </data>
 </root>

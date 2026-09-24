@@ -249,4 +249,52 @@
     <value>WebView2 Runtime nie geïnstalleer nie</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>Hierdie dokument is voorheen gedeel, maar het sedertdien verander. HedgeDoc 1.x kan nie 'n bestaande nota opdateer nie, dus skep 'n nuwe oplaai 'n nuwe nota met 'n nuwe skakel.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>Kopieer skakel</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>Redigeerbare skakel</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>Enigiemand met hierdie skakel kan die nota redigeer.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>Stel eers die HedgeDoc-bedieneradres in Instellings → Uitvoer.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>Maak in blaaier oop</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>Laai weer op (nuwe skakel)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>Leesalleen-skakel</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>Gedeel na HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>Die dokument het nie verander sedert dit laas gedeel is nie; hier is die bestaande skakels.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>Gebruik vorige skakel</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>Hou</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Herlaai</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>Die lêer het op die skyf verander. Herlaai sal ongestoorde veranderinge weggooi.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>Die lêer het op die skyf verander. Herlaai dit?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>Die lêer het op die skyf verander</value>
+  </data>
 </root>

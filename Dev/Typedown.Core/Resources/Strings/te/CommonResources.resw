@@ -933,4 +933,64 @@
     <value>జూమ్</value>
     <comment>字体缩放</comment>
   </data>
+  <data name="FolderPane.NoFolderOpen" xml:space="preserve">
+    <value>ఏ ఫోల్డర్ తెరవబడలేదు. ఇక్కడ బ్రౌజ్ చేయడానికి ఫైల్ లేదా ఫోల్డర్ తెరవండి.</value>
+  </data>
+  <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
+    <value>ఈ ఫోల్డర్‌లో Markdown ఫైళ్లు లేవు.</value>
+  </data>
+  <data name="FolderPane.NotFound" xml:space="preserve">
+    <value>ఈ ఫోల్డర్ ఇక లేదు.</value>
+  </data>
+  <data name="FolderPane.RevealCurrentFile" xml:space="preserve">
+    <value>ప్రస్తుత ఫైల్ ఫోల్డర్‌ను చూపించు</value>
+  </data>
+  <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
+    <value>ఫోల్డర్‌లో వెతుకు…</value>
+  </data>
+  <data name="FolderSearch.NameMatch" xml:space="preserve">
+    <value>(ఫైల్ పేరు సరిపోలింది)</value>
+  </data>
+  <data name="FolderSearch.ResultSummary" xml:space="preserve">
+    <value>వెతికిన {1} ఫైళ్లలో {0} సరిపోలాయి</value>
+  </data>
+  <data name="FolderSearch.Searching" xml:space="preserve">
+    <value>వెతుకుతోంది…</value>
+  </data>
+  <data name="FullScreen" xml:space="preserve">
+    <value>పూర్తి తెర</value>
+  </data>
+  <data name="LastUsedTab" xml:space="preserve">
+    <value>చివరిగా వాడిన టాబ్</value>
+  </data>
+  <data name="NextTab" xml:space="preserve">
+    <value>తదుపరి టాబ్</value>
+  </data>
+  <data name="PreviousTab" xml:space="preserve">
+    <value>మునుపటి టాబ్</value>
+  </data>
+  <data name="QuoteDecrease" xml:space="preserve">
+    <value>ఉల్లేఖన స్థాయిని తగ్గించు</value>
+  </data>
+  <data name="QuoteIncrease" xml:space="preserve">
+    <value>ఉల్లేఖన స్థాయిని పెంచు</value>
+  </data>
+  <data name="ReadOnlyMode" xml:space="preserve">
+    <value>చదివే మోడ్</value>
+  </data>
+  <data name="SearchInFolder" xml:space="preserve">
+    <value>ఫోల్డర్‌లో వెతుకు</value>
+  </data>
+  <data name="ShareToHedgeDoc" xml:space="preserve">
+    <value>HedgeDocకు పంచు…</value>
+  </data>
+  <data name="TocPane.CollapseAll" xml:space="preserve">
+    <value>అన్నీ ముడుచు</value>
+  </data>
+  <data name="TocPane.ExpandAll" xml:space="preserve">
+    <value>అన్నీ విస్తరించు</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>శీర్షిక లేనిది</value>
+  </data>
 </root>

@@ -933,4 +933,64 @@
     <value>பெரிதாக்கு</value>
     <comment>字体缩放</comment>
   </data>
+  <data name="FolderPane.NoFolderOpen" xml:space="preserve">
+    <value>எந்தக் கோப்புறையும் திறக்கப்படவில்லை. இங்கே உலாவ ஒரு கோப்பையோ கோப்புறையையோ திறக்கவும்.</value>
+  </data>
+  <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
+    <value>இந்தக் கோப்புறையில் Markdown கோப்புகள் இல்லை.</value>
+  </data>
+  <data name="FolderPane.NotFound" xml:space="preserve">
+    <value>இந்தக் கோப்புறை இனி இல்லை.</value>
+  </data>
+  <data name="FolderPane.RevealCurrentFile" xml:space="preserve">
+    <value>தற்போதைய கோப்பின் கோப்புறையைக் காட்டு</value>
+  </data>
+  <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
+    <value>கோப்புறையில் தேடு…</value>
+  </data>
+  <data name="FolderSearch.NameMatch" xml:space="preserve">
+    <value>(கோப்புப் பெயர் பொருந்துகிறது)</value>
+  </data>
+  <data name="FolderSearch.ResultSummary" xml:space="preserve">
+    <value>தேடப்பட்ட {1} கோப்புகளில் {0} பொருந்தியவை</value>
+  </data>
+  <data name="FolderSearch.Searching" xml:space="preserve">
+    <value>தேடுகிறது…</value>
+  </data>
+  <data name="FullScreen" xml:space="preserve">
+    <value>முழுத்திரை</value>
+  </data>
+  <data name="LastUsedTab" xml:space="preserve">
+    <value>கடைசியாகப் பயன்படுத்திய தாவல்</value>
+  </data>
+  <data name="NextTab" xml:space="preserve">
+    <value>அடுத்த தாவல்</value>
+  </data>
+  <data name="PreviousTab" xml:space="preserve">
+    <value>முந்தைய தாவல்</value>
+  </data>
+  <data name="QuoteDecrease" xml:space="preserve">
+    <value>மேற்கோள் நிலையைக் குறை</value>
+  </data>
+  <data name="QuoteIncrease" xml:space="preserve">
+    <value>மேற்கோள் நிலையை அதிகரி</value>
+  </data>
+  <data name="ReadOnlyMode" xml:space="preserve">
+    <value>வாசிப்பு முறை</value>
+  </data>
+  <data name="SearchInFolder" xml:space="preserve">
+    <value>கோப்புறையில் தேடு</value>
+  </data>
+  <data name="ShareToHedgeDoc" xml:space="preserve">
+    <value>HedgeDoc இல் பகிர்…</value>
+  </data>
+  <data name="TocPane.CollapseAll" xml:space="preserve">
+    <value>அனைத்தையும் சுருக்கு</value>
+  </data>
+  <data name="TocPane.ExpandAll" xml:space="preserve">
+    <value>அனைத்தையும் விரி</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>தலைப்பில்லாதது</value>
+  </data>
 </root>

@@ -933,4 +933,64 @@
     <value>Zoem</value>
     <comment>字体缩放</comment>
   </data>
+  <data name="FolderPane.NoFolderOpen" xml:space="preserve">
+    <value>Geen vouer is oop nie. Maak 'n lêer of vouer oop om hier te blaai.</value>
+  </data>
+  <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
+    <value>Geen Markdown-lêers in hierdie vouer nie.</value>
+  </data>
+  <data name="FolderPane.NotFound" xml:space="preserve">
+    <value>Hierdie vouer bestaan nie meer nie.</value>
+  </data>
+  <data name="FolderPane.RevealCurrentFile" xml:space="preserve">
+    <value>Wys die huidige lêer se vouer</value>
+  </data>
+  <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
+    <value>Soek in vouer…</value>
+  </data>
+  <data name="FolderSearch.NameMatch" xml:space="preserve">
+    <value>(lêernaam pas)</value>
+  </data>
+  <data name="FolderSearch.ResultSummary" xml:space="preserve">
+    <value>{0} passende lêer(s) uit {1} deursoek</value>
+  </data>
+  <data name="FolderSearch.Searching" xml:space="preserve">
+    <value>Soek tans…</value>
+  </data>
+  <data name="FullScreen" xml:space="preserve">
+    <value>Volskerm</value>
+  </data>
+  <data name="LastUsedTab" xml:space="preserve">
+    <value>Laas gebruikte oortjie</value>
+  </data>
+  <data name="NextTab" xml:space="preserve">
+    <value>Volgende oortjie</value>
+  </data>
+  <data name="PreviousTab" xml:space="preserve">
+    <value>Vorige oortjie</value>
+  </data>
+  <data name="QuoteDecrease" xml:space="preserve">
+    <value>Verminder aanhalingsvlak</value>
+  </data>
+  <data name="QuoteIncrease" xml:space="preserve">
+    <value>Verhoog aanhalingsvlak</value>
+  </data>
+  <data name="ReadOnlyMode" xml:space="preserve">
+    <value>Leesmodus</value>
+  </data>
+  <data name="SearchInFolder" xml:space="preserve">
+    <value>Soek in vouer</value>
+  </data>
+  <data name="ShareToHedgeDoc" xml:space="preserve">
+    <value>Deel na HedgeDoc…</value>
+  </data>
+  <data name="TocPane.CollapseAll" xml:space="preserve">
+    <value>Vou alles toe</value>
+  </data>
+  <data name="TocPane.ExpandAll" xml:space="preserve">
+    <value>Vou alles oop</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>Ongetiteld</value>
+  </data>
 </root>

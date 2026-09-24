@@ -933,4 +933,64 @@
     <value>Powiększenia</value>
     <comment>字体缩放</comment>
   </data>
+  <data name="FolderPane.NoFolderOpen" xml:space="preserve">
+    <value>Nie otwarto żadnego folderu. Otwórz plik lub folder, aby go tu przeglądać.</value>
+  </data>
+  <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
+    <value>Brak plików Markdown w tym folderze.</value>
+  </data>
+  <data name="FolderPane.NotFound" xml:space="preserve">
+    <value>Ten folder już nie istnieje.</value>
+  </data>
+  <data name="FolderPane.RevealCurrentFile" xml:space="preserve">
+    <value>Pokaż folder bieżącego pliku</value>
+  </data>
+  <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
+    <value>Szukaj w folderze…</value>
+  </data>
+  <data name="FolderSearch.NameMatch" xml:space="preserve">
+    <value>(pasuje nazwa pliku)</value>
+  </data>
+  <data name="FolderSearch.ResultSummary" xml:space="preserve">
+    <value>Pasujące pliki: {0} z {1} przeszukanych</value>
+  </data>
+  <data name="FolderSearch.Searching" xml:space="preserve">
+    <value>Wyszukiwanie…</value>
+  </data>
+  <data name="FullScreen" xml:space="preserve">
+    <value>Pełny ekran</value>
+  </data>
+  <data name="LastUsedTab" xml:space="preserve">
+    <value>Ostatnio używana karta</value>
+  </data>
+  <data name="NextTab" xml:space="preserve">
+    <value>Następna karta</value>
+  </data>
+  <data name="PreviousTab" xml:space="preserve">
+    <value>Poprzednia karta</value>
+  </data>
+  <data name="QuoteDecrease" xml:space="preserve">
+    <value>Zmniejsz poziom cytatu</value>
+  </data>
+  <data name="QuoteIncrease" xml:space="preserve">
+    <value>Zwiększ poziom cytatu</value>
+  </data>
+  <data name="ReadOnlyMode" xml:space="preserve">
+    <value>Tryb czytania</value>
+  </data>
+  <data name="SearchInFolder" xml:space="preserve">
+    <value>Szukaj w folderze</value>
+  </data>
+  <data name="ShareToHedgeDoc" xml:space="preserve">
+    <value>Udostępnij w HedgeDoc…</value>
+  </data>
+  <data name="TocPane.CollapseAll" xml:space="preserve">
+    <value>Zwiń wszystko</value>
+  </data>
+  <data name="TocPane.ExpandAll" xml:space="preserve">
+    <value>Rozwiń wszystko</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>Bez tytułu</value>
+  </data>
 </root>

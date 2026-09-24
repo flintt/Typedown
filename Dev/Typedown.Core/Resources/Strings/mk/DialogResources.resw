@@ -249,4 +249,52 @@
     <value>WebView2 Runtime не е инсталиран</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>Овој документ веќе беше споделен, но оттогаш е променет. HedgeDoc 1.x не може да ажурира постоечка белешка, па повторното поставување создава нова белешка со нова врска.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>Копирај врска</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>Врска за уредување</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>Секој со оваа врска може да ја уредува белешката.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>Прво поставете ја адресата на серверот HedgeDoc во Поставки → Извоз.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>Отвори во прелистувач</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>Постави повторно (нова врска)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>Врска само за читање</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>Споделено на HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>Документот не е променет од последното споделување; ова се постоечките врски.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>Користи ја претходната врска</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>Задржи</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Вчитај повторно</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>Датотеката е променета на дискот. Повторното вчитување ќе ги отфрли незачуваните промени.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>Датотеката е променета на дискот. Да се вчита повторно?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>Датотеката е променета на дискот</value>
+  </data>
 </root>

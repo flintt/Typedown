@@ -249,4 +249,52 @@
     <value>WebView2 ਰਨਟਾਈਮ ਇੰਸਟਾਲ ਨਹੀਂ ਹੈ</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>ਇਹ ਦਸਤਾਵੇਜ਼ ਪਹਿਲਾਂ ਸਾਂਝਾ ਕੀਤਾ ਗਿਆ ਸੀ ਪਰ ਉਸ ਤੋਂ ਬਾਅਦ ਬਦਲ ਗਿਆ ਹੈ। HedgeDoc 1.x ਮੌਜੂਦਾ ਨੋਟ ਨੂੰ ਅੱਪਡੇਟ ਨਹੀਂ ਕਰ ਸਕਦਾ, ਇਸ ਲਈ ਮੁੜ ਅੱਪਲੋਡ ਕਰਨ 'ਤੇ ਨਵੇਂ ਲਿੰਕ ਨਾਲ ਨਵਾਂ ਨੋਟ ਬਣੇਗਾ।</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>ਲਿੰਕ ਕਾਪੀ ਕਰੋ</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>ਸੋਧਣਯੋਗ ਲਿੰਕ</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>ਇਹ ਲਿੰਕ ਰੱਖਣ ਵਾਲਾ ਕੋਈ ਵੀ ਨੋਟ ਸੋਧ ਸਕਦਾ ਹੈ।</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>ਪਹਿਲਾਂ ਸੈਟਿੰਗਾਂ → ਨਿਰਯਾਤ ਵਿੱਚ HedgeDoc ਸਰਵਰ ਦਾ ਪਤਾ ਸੈੱਟ ਕਰੋ।</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>ਬਰਾਊਜ਼ਰ ਵਿੱਚ ਖੋਲ੍ਹੋ</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>ਮੁੜ ਅੱਪਲੋਡ ਕਰੋ (ਨਵਾਂ ਲਿੰਕ)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>ਸਿਰਫ਼-ਪੜ੍ਹਨ ਵਾਲਾ ਲਿੰਕ</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>HedgeDoc 'ਤੇ ਸਾਂਝਾ ਕੀਤਾ</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>ਪਿਛਲੀ ਵਾਰ ਸਾਂਝਾ ਕਰਨ ਤੋਂ ਬਾਅਦ ਦਸਤਾਵੇਜ਼ ਨਹੀਂ ਬਦਲਿਆ; ਇਹ ਮੌਜੂਦਾ ਲਿੰਕ ਹਨ।</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>ਪਿਛਲਾ ਲਿੰਕ ਵਰਤੋ</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>ਰੱਖੋ</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>ਮੁੜ ਲੋਡ ਕਰੋ</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>ਡਿਸਕ 'ਤੇ ਫਾਈਲ ਬਦਲ ਗਈ ਹੈ। ਮੁੜ ਲੋਡ ਕਰਨ ਨਾਲ ਨਾ-ਸੰਭਾਲੇ ਬਦਲਾਅ ਚਲੇ ਜਾਣਗੇ।</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>ਡਿਸਕ 'ਤੇ ਫਾਈਲ ਬਦਲ ਗਈ ਹੈ। ਮੁੜ ਲੋਡ ਕਰੀਏ?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>ਡਿਸਕ 'ਤੇ ਫਾਈਲ ਬਦਲ ਗਈ ਹੈ</value>
+  </data>
 </root>

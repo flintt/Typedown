@@ -933,4 +933,64 @@
     <value>Zoomata</value>
     <comment>字体缩放</comment>
   </data>
+  <data name="FolderPane.NoFolderOpen" xml:space="preserve">
+    <value>Yhtään kansiota ei ole auki. Avaa tiedosto tai kansio selataksesi sitä tässä.</value>
+  </data>
+  <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
+    <value>Tässä kansiossa ei ole Markdown-tiedostoja.</value>
+  </data>
+  <data name="FolderPane.NotFound" xml:space="preserve">
+    <value>Tätä kansiota ei enää ole.</value>
+  </data>
+  <data name="FolderPane.RevealCurrentFile" xml:space="preserve">
+    <value>Näytä nykyisen tiedoston kansio</value>
+  </data>
+  <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
+    <value>Etsi kansiosta…</value>
+  </data>
+  <data name="FolderSearch.NameMatch" xml:space="preserve">
+    <value>(tiedostonimi täsmää)</value>
+  </data>
+  <data name="FolderSearch.ResultSummary" xml:space="preserve">
+    <value>{0} osumaa {1} haetusta tiedostosta</value>
+  </data>
+  <data name="FolderSearch.Searching" xml:space="preserve">
+    <value>Haetaan…</value>
+  </data>
+  <data name="FullScreen" xml:space="preserve">
+    <value>Koko näyttö</value>
+  </data>
+  <data name="LastUsedTab" xml:space="preserve">
+    <value>Viimeksi käytetty välilehti</value>
+  </data>
+  <data name="NextTab" xml:space="preserve">
+    <value>Seuraava välilehti</value>
+  </data>
+  <data name="PreviousTab" xml:space="preserve">
+    <value>Edellinen välilehti</value>
+  </data>
+  <data name="QuoteDecrease" xml:space="preserve">
+    <value>Vähennä lainaustasoa</value>
+  </data>
+  <data name="QuoteIncrease" xml:space="preserve">
+    <value>Lisää lainaustasoa</value>
+  </data>
+  <data name="ReadOnlyMode" xml:space="preserve">
+    <value>Lukutila</value>
+  </data>
+  <data name="SearchInFolder" xml:space="preserve">
+    <value>Etsi kansiosta</value>
+  </data>
+  <data name="ShareToHedgeDoc" xml:space="preserve">
+    <value>Jaa HedgeDociin…</value>
+  </data>
+  <data name="TocPane.CollapseAll" xml:space="preserve">
+    <value>Tiivistä kaikki</value>
+  </data>
+  <data name="TocPane.ExpandAll" xml:space="preserve">
+    <value>Laajenna kaikki</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>Nimetön</value>
+  </data>
 </root>

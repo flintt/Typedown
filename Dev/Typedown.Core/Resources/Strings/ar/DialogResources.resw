@@ -249,4 +249,52 @@
     <value>برنامج تشغيل WebView2 غير مثبت</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>تمت مشاركة هذا المستند من قبل لكنه تغيّر منذ ذلك الحين. لا يستطيع HedgeDoc 1.x تحديث ملاحظة موجودة، لذا سينشئ الرفع من جديد ملاحظة جديدة برابط جديد.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>نسخ الرابط</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>رابط قابل للتحرير</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>يمكن لأي شخص لديه هذا الرابط تحرير الملاحظة.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>اضبط عنوان خادم HedgeDoc أولًا في الإعدادات ← التصدير.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>فتح في المتصفح</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>ارفع مجددًا (رابط جديد)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>رابط للقراءة فقط</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>تمت المشاركة إلى HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>لم يتغيّر المستند منذ آخر مشاركة؛ هذه هي الروابط الحالية.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>استخدام الرابط السابق</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>إبقاء</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>إعادة تحميل</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>تغيّر الملف على القرص. ستؤدي إعادة التحميل إلى تجاهل التغييرات غير المحفوظة.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>تغيّر الملف على القرص. هل تريد إعادة تحميله؟</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>تغيّر الملف على القرص</value>
+  </data>
 </root>

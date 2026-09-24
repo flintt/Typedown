@@ -249,4 +249,52 @@
     <value>Kāore i Tāutahia te Wāhaere WebView2</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>I tiritiria tēnei tuhinga i mua engari kua rerekē mai i tērā wā. Kāore e taea e HedgeDoc 1.x te whakahou i tētahi tuhipoka e noho ana, nō reira ka hangaia he tuhipoka hou me tētahi hono hou.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>Tāruatia te hono</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>Hono ka taea te whakatika</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>Ka taea e te tangata whai hono te whakatika i te tuhipoka.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>Tautuhia tuatahi te wāhitau tūmau HedgeDoc i Tautuhinga → Kaweake.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>Whakatuwherahia i te pūtirotiro</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>Tukuna anō (hono hou)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>Hono pānui-anake</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>Kua tiritiria ki HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>Kāore te tuhinga i rerekē mai i te tiritiri whakamutunga; koinei ngā hono e noho ana.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>Whakamahia te hono o mua</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>Puritia</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Uta anō</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>Kua rerekē te kōnae i te kōpae. Mā te uta anō ka ngaro ngā huringa kāore anō kia tiakina.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>Kua rerekē te kōnae i te kōpae. Utaina anō?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>Kua rerekē te kōnae i te kōpae</value>
+  </data>
 </root>

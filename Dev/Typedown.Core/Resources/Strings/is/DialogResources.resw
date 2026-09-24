@@ -249,4 +249,52 @@
     <value>WebView2 keyrslutími ekki uppsett</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>Þessu skjali hefur verið deilt áður en það hefur breyst síðan. HedgeDoc 1.x getur ekki uppfært fyrirliggjandi minnispunkt, svo ný upphleðsla býr til nýjan minnispunkt með nýjum hlekk.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>Afrita hlekk</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>Breytanlegur hlekkur</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>Hver sem er með þennan hlekk getur breytt minnispunktinum.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>Stilltu fyrst vistfang HedgeDoc þjóns í Stillingar → Flytja út.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>Opna í vafra</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>Hlaða upp aftur (nýr hlekkur)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>Hlekkur til lesturs eingöngu</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>Deilt á HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>Skjalið hefur ekki breyst síðan því var síðast deilt; þetta eru núverandi hlekkir.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>Nota fyrri hlekk</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>Halda</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Endurhlaða</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>Skránni hefur verið breytt á diski. Endurhleðsla hendir óvistuðum breytingum.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>Skránni hefur verið breytt á diski. Á að endurhlaða hana?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>Skránni hefur verið breytt á diski</value>
+  </data>
 </root>

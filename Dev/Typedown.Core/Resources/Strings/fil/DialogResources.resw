@@ -249,4 +249,52 @@
     <value>Hindi Naka install ang WebView2 Runtime</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>Naibahagi na dati ang dokumentong ito ngunit nagbago mula noon. Hindi ma-update ng HedgeDoc 1.x ang umiiral na note, kaya ang muling pag-upload ay gumagawa ng bagong note na may bagong link.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>Kopyahin ang link</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>Link na maaaring i-edit</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>Sinumang may ganitong link ay maaaring mag-edit ng note.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>Itakda muna ang address ng HedgeDoc server sa Mga Setting → Export.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>Buksan sa browser</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>Mag-upload muli (bagong link)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>Read-only na link</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>Naibahagi sa HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>Hindi nagbago ang dokumento mula nang huling ibahagi; ito ang mga umiiral na link.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>Gamitin ang dating link</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>Panatilihin</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>I-reload</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>Nabago ang file sa disk. Ang pag-reload ay magtatapon ng mga hindi pa nase-save na pagbabago.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>Nabago ang file sa disk. I-reload ito?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>Nabago ang file sa disk</value>
+  </data>
 </root>

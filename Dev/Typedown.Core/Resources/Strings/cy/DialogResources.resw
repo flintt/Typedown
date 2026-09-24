@@ -249,4 +249,52 @@
     <value>WebView2 Runtime heb ei osod</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>Rhannwyd y ddogfen hon o'r blaen ond mae wedi newid ers hynny. Ni all HedgeDoc 1.x ddiweddaru nodyn presennol, felly bydd llwytho eto yn creu nodyn newydd gyda dolen newydd.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>Copïo'r ddolen</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>Dolen olygadwy</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>Gall unrhyw un sydd â'r ddolen hon olygu'r nodyn.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>Gosodwch gyfeiriad gweinydd HedgeDoc yn Gosodiadau → Allforio yn gyntaf.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>Agor yn y porwr</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>Llwytho eto (dolen newydd)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>Dolen darllen-yn-unig</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>Rhannwyd i HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>Nid yw'r ddogfen wedi newid ers iddi gael ei rhannu ddiwethaf; dyma'r dolenni presennol.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>Defnyddio'r ddolen flaenorol</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>Cadw</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Ail-lwytho</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>Mae'r ffeil wedi newid ar y ddisg. Bydd ail-lwytho yn taflu newidiadau heb eu cadw.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>Mae'r ffeil wedi newid ar y ddisg. Ei hail-lwytho?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>Mae'r ffeil wedi newid ar y ddisg</value>
+  </data>
 </root>

@@ -249,4 +249,52 @@
     <value>WebView2 Runtime არ არის დაინსტალირებული</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>ეს დოკუმენტი უკვე გაზიარებული იყო, მაგრამ მას შემდეგ შეიცვალა. HedgeDoc 1.x ვერ განაახლებს არსებულ ჩანაწერს, ამიტომ ხელახლა ატვირთვა შექმნის ახალ ჩანაწერს ახალი ბმულით.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>ბმულის კოპირება</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>რედაქტირებადი ბმული</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>ვისაც ეს ბმული აქვს, შეუძლია ჩანაწერის რედაქტირება.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>ჯერ მიუთითეთ HedgeDoc სერვერის მისამართი პარამეტრები → ექსპორტი-ში.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>ბრაუზერში გახსნა</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>ხელახლა ატვირთვა (ახალი ბმული)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>მხოლოდ წასაკითხი ბმული</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>გაზიარდა HedgeDoc-ზე</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>დოკუმენტი ბოლო გაზიარების შემდეგ არ შეცვლილა; ეს არსებული ბმულებია.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>წინა ბმულის გამოყენება</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>შენარჩუნება</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>ხელახლა ჩატვირთვა</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>ფაილი შეიცვალა დისკზე. ხელახლა ჩატვირთვა წაშლის შეუნახავ ცვლილებებს.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>ფაილი შეიცვალა დისკზე. ხელახლა ჩაიტვირთოს?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>ფაილი შეიცვალა დისკზე</value>
+  </data>
 </root>

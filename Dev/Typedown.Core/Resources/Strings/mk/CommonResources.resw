@@ -933,4 +933,64 @@
     <value>Зум</value>
     <comment>字体缩放</comment>
   </data>
+  <data name="FolderPane.NoFolderOpen" xml:space="preserve">
+    <value>Нема отворена папка. Отворете датотека или папка за да ја прелистувате овде.</value>
+  </data>
+  <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
+    <value>Во оваа папка нема датотеки Markdown.</value>
+  </data>
+  <data name="FolderPane.NotFound" xml:space="preserve">
+    <value>Оваа папка повеќе не постои.</value>
+  </data>
+  <data name="FolderPane.RevealCurrentFile" xml:space="preserve">
+    <value>Прикажи ја папката на тековната датотека</value>
+  </data>
+  <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
+    <value>Барај во папката…</value>
+  </data>
+  <data name="FolderSearch.NameMatch" xml:space="preserve">
+    <value>(името на датотеката се совпаѓа)</value>
+  </data>
+  <data name="FolderSearch.ResultSummary" xml:space="preserve">
+    <value>{0} совпаднати датотеки од {1} пребарани</value>
+  </data>
+  <data name="FolderSearch.Searching" xml:space="preserve">
+    <value>Пребарување…</value>
+  </data>
+  <data name="FullScreen" xml:space="preserve">
+    <value>Цел екран</value>
+  </data>
+  <data name="LastUsedTab" xml:space="preserve">
+    <value>Последно користена картичка</value>
+  </data>
+  <data name="NextTab" xml:space="preserve">
+    <value>Следна картичка</value>
+  </data>
+  <data name="PreviousTab" xml:space="preserve">
+    <value>Претходна картичка</value>
+  </data>
+  <data name="QuoteDecrease" xml:space="preserve">
+    <value>Намали ниво на цитат</value>
+  </data>
+  <data name="QuoteIncrease" xml:space="preserve">
+    <value>Зголеми ниво на цитат</value>
+  </data>
+  <data name="ReadOnlyMode" xml:space="preserve">
+    <value>Режим на читање</value>
+  </data>
+  <data name="SearchInFolder" xml:space="preserve">
+    <value>Барај во папката</value>
+  </data>
+  <data name="ShareToHedgeDoc" xml:space="preserve">
+    <value>Сподели на HedgeDoc…</value>
+  </data>
+  <data name="TocPane.CollapseAll" xml:space="preserve">
+    <value>Собери сè</value>
+  </data>
+  <data name="TocPane.ExpandAll" xml:space="preserve">
+    <value>Рашири сè</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>Без наслов</value>
+  </data>
 </root>

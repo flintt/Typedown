@@ -933,4 +933,64 @@
     <value>Zooma</value>
     <comment>字体缩放</comment>
   </data>
+  <data name="FolderPane.NoFolderOpen" xml:space="preserve">
+    <value>Ingen mapp är öppen. Öppna en fil eller mapp för att bläddra här.</value>
+  </data>
+  <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
+    <value>Inga Markdown-filer i den här mappen.</value>
+  </data>
+  <data name="FolderPane.NotFound" xml:space="preserve">
+    <value>Mappen finns inte längre.</value>
+  </data>
+  <data name="FolderPane.RevealCurrentFile" xml:space="preserve">
+    <value>Visa den aktuella filens mapp</value>
+  </data>
+  <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
+    <value>Sök i mappen…</value>
+  </data>
+  <data name="FolderSearch.NameMatch" xml:space="preserve">
+    <value>(filnamnet matchar)</value>
+  </data>
+  <data name="FolderSearch.ResultSummary" xml:space="preserve">
+    <value>{0} matchande fil(er) av {1} genomsökta</value>
+  </data>
+  <data name="FolderSearch.Searching" xml:space="preserve">
+    <value>Söker…</value>
+  </data>
+  <data name="FullScreen" xml:space="preserve">
+    <value>Helskärm</value>
+  </data>
+  <data name="LastUsedTab" xml:space="preserve">
+    <value>Senast använda fliken</value>
+  </data>
+  <data name="NextTab" xml:space="preserve">
+    <value>Nästa flik</value>
+  </data>
+  <data name="PreviousTab" xml:space="preserve">
+    <value>Föregående flik</value>
+  </data>
+  <data name="QuoteDecrease" xml:space="preserve">
+    <value>Minska citatnivån</value>
+  </data>
+  <data name="QuoteIncrease" xml:space="preserve">
+    <value>Öka citatnivån</value>
+  </data>
+  <data name="ReadOnlyMode" xml:space="preserve">
+    <value>Läsläge</value>
+  </data>
+  <data name="SearchInFolder" xml:space="preserve">
+    <value>Sök i mappen</value>
+  </data>
+  <data name="ShareToHedgeDoc" xml:space="preserve">
+    <value>Dela till HedgeDoc…</value>
+  </data>
+  <data name="TocPane.CollapseAll" xml:space="preserve">
+    <value>Fäll ihop alla</value>
+  </data>
+  <data name="TocPane.ExpandAll" xml:space="preserve">
+    <value>Expandera alla</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>Namnlös</value>
+  </data>
 </root>

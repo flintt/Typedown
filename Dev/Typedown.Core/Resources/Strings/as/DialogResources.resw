@@ -249,4 +249,52 @@
     <value>ৱেবদৰ্শন2 ৰানটাইম ইনস্টল কৰা হোৱা নাই</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>এই নথি আগতে ভাগ কৰা হৈছিল কিন্তু তাৰ পিছত সলনি হৈছে। HedgeDoc 1.x-এ থকা টোকা আপডেট কৰিব নোৱাৰে, সেয়ে পুনৰ আপল'ড কৰিলে নতুন লিংকৰ সৈতে নতুন টোকা সৃষ্টি হ'ব।</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>লিংক কপি কৰক</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>সম্পাদনযোগ্য লিংক</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>এই লিংক থকা যিকোনো ব্যক্তিয়ে টোকা সম্পাদনা কৰিব পাৰে।</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>প্ৰথমে ছেটিংছ → ৰপ্তানি-ত HedgeDoc চাৰ্ভাৰৰ ঠিকনা দিয়ক।</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>ব্ৰাউজাৰত খোলক</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>পুনৰ আপল'ড কৰক (নতুন লিংক)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>কেৱল-পঢ়া লিংক</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>HedgeDoc-ত ভাগ কৰা হ'ল</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>শেষবাৰ ভাগ কৰাৰ পিছত নথি সলনি হোৱা নাই; এইবোৰ বৰ্তমানৰ লিংক।</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>আগৰ লিংক ব্যৱহাৰ কৰক</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>ৰাখক</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>পুনৰ ল'ড কৰক</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>ডিস্কত ফাইল সলনি হৈছে। পুনৰ ল'ড কৰিলে অসংৰক্ষিত সালসলনি হেৰাব।</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>ডিস্কত ফাইল সলনি হৈছে। পুনৰ ল'ড কৰিবনে?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>ডিস্কত ফাইল সলনি হৈছে</value>
+  </data>
 </root>

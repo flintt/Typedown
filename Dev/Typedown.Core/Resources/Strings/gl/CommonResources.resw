@@ -933,4 +933,64 @@
     <value>Zoom</value>
     <comment>字体缩放</comment>
   </data>
+  <data name="FolderPane.NoFolderOpen" xml:space="preserve">
+    <value>Non hai ningún cartafol aberto. Abre un ficheiro ou cartafol para navegar aquí.</value>
+  </data>
+  <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
+    <value>Non hai ficheiros Markdown neste cartafol.</value>
+  </data>
+  <data name="FolderPane.NotFound" xml:space="preserve">
+    <value>Este cartafol xa non existe.</value>
+  </data>
+  <data name="FolderPane.RevealCurrentFile" xml:space="preserve">
+    <value>Amosar o cartafol do ficheiro actual</value>
+  </data>
+  <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
+    <value>Buscar no cartafol…</value>
+  </data>
+  <data name="FolderSearch.NameMatch" xml:space="preserve">
+    <value>(coincide o nome do ficheiro)</value>
+  </data>
+  <data name="FolderSearch.ResultSummary" xml:space="preserve">
+    <value>{0} ficheiro(s) coincidente(s) de {1} buscados</value>
+  </data>
+  <data name="FolderSearch.Searching" xml:space="preserve">
+    <value>Buscando…</value>
+  </data>
+  <data name="FullScreen" xml:space="preserve">
+    <value>Pantalla completa</value>
+  </data>
+  <data name="LastUsedTab" xml:space="preserve">
+    <value>Última lapela usada</value>
+  </data>
+  <data name="NextTab" xml:space="preserve">
+    <value>Lapela seguinte</value>
+  </data>
+  <data name="PreviousTab" xml:space="preserve">
+    <value>Lapela anterior</value>
+  </data>
+  <data name="QuoteDecrease" xml:space="preserve">
+    <value>Diminuír o nivel de cita</value>
+  </data>
+  <data name="QuoteIncrease" xml:space="preserve">
+    <value>Aumentar o nivel de cita</value>
+  </data>
+  <data name="ReadOnlyMode" xml:space="preserve">
+    <value>Modo de lectura</value>
+  </data>
+  <data name="SearchInFolder" xml:space="preserve">
+    <value>Buscar no cartafol</value>
+  </data>
+  <data name="ShareToHedgeDoc" xml:space="preserve">
+    <value>Compartir en HedgeDoc…</value>
+  </data>
+  <data name="TocPane.CollapseAll" xml:space="preserve">
+    <value>Pregar todo</value>
+  </data>
+  <data name="TocPane.ExpandAll" xml:space="preserve">
+    <value>Despregar todo</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>Sen título</value>
+  </data>
 </root>

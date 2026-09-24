@@ -249,4 +249,52 @@
     <value>వెబ్ వ్యూ2 రన్ టైమ్ స్థాపించబడలేదు</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>ఈ పత్రం గతంలో పంచబడింది కానీ అప్పటి నుండి మారింది. HedgeDoc 1.x ఇప్పటికే ఉన్న నోట్‌ను నవీకరించలేదు, కాబట్టి మళ్లీ అప్‌లోడ్ చేస్తే కొత్త లింక్‌తో కొత్త నోట్ సృష్టించబడుతుంది.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>లింక్‌ను కాపీ చేయి</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>సవరించగల లింక్</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>ఈ లింక్ ఉన్న ఎవరైనా నోట్‌ను సవరించగలరు.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>ముందుగా సెట్టింగ్‌లు → ఎగుమతిలో HedgeDoc సర్వర్ చిరునామాను సెట్ చేయండి.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>బ్రౌజర్‌లో తెరువు</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>మళ్లీ అప్‌లోడ్ చేయి (కొత్త లింక్)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>చదవడానికి మాత్రమే లింక్</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>HedgeDocకు పంచబడింది</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>చివరిసారి పంచినప్పటి నుండి పత్రం మారలేదు; ఇవి ఇప్పటికే ఉన్న లింక్‌లు.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>మునుపటి లింక్‌ను వాడు</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>ఉంచు</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>మళ్లీ లోడ్ చేయి</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>డిస్క్‌లో ఫైల్ మారింది. మళ్లీ లోడ్ చేస్తే సేవ్ చేయని మార్పులు పోతాయి.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>డిస్క్‌లో ఫైల్ మారింది. మళ్లీ లోడ్ చేయాలా?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>డిస్క్‌లో ఫైల్ మారింది</value>
+  </data>
 </root>

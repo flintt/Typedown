@@ -249,4 +249,52 @@
     <value>WebView2 Runtime Install ചെയ്തിട്ടില്ല</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>ഈ പ്രമാണം മുമ്പ് പങ്കിട്ടിരുന്നു, പക്ഷേ അതിനുശേഷം മാറിയിട്ടുണ്ട്. HedgeDoc 1.x-ന് നിലവിലുള്ള കുറിപ്പ് പുതുക്കാനാകില്ല, അതിനാൽ വീണ്ടും അപ്‌ലോഡ് ചെയ്താൽ പുതിയ ലിങ്കോടെ പുതിയ കുറിപ്പുണ്ടാകും.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>ലിങ്ക് പകർത്തുക</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>തിരുത്താവുന്ന ലിങ്ക്</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>ഈ ലിങ്കുള്ള ആർക്കും കുറിപ്പ് തിരുത്താം.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>ആദ്യം ക്രമീകരണങ്ങൾ → കയറ്റുമതി എന്നതിൽ HedgeDoc സെർവർ വിലാസം നൽകുക.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>ബ്രൗസറിൽ തുറക്കുക</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>വീണ്ടും അപ്‌ലോഡ് ചെയ്യുക (പുതിയ ലിങ്ക്)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>വായിക്കാൻ മാത്രമുള്ള ലിങ്ക്</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>HedgeDoc-ൽ പങ്കിട്ടു</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>അവസാനം പങ്കിട്ടതിനുശേഷം പ്രമാണം മാറിയിട്ടില്ല; ഇവയാണ് നിലവിലുള്ള ലിങ്കുകൾ.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>മുൻ ലിങ്ക് ഉപയോഗിക്കുക</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>നിലനിർത്തുക</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>വീണ്ടും ലോഡ് ചെയ്യുക</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>ഡിസ്കിൽ ഫയൽ മാറിയിട്ടുണ്ട്. വീണ്ടും ലോഡ് ചെയ്താൽ സേവ് ചെയ്യാത്ത മാറ്റങ്ങൾ നഷ്ടമാകും.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>ഡിസ്കിൽ ഫയൽ മാറിയിട്ടുണ്ട്. വീണ്ടും ലോഡ് ചെയ്യണോ?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>ഡിസ്കിൽ ഫയൽ മാറിയിട്ടുണ്ട്</value>
+  </data>
 </root>

@@ -933,4 +933,64 @@
     <value>Զովք</value>
     <comment>字体缩放</comment>
   </data>
+  <data name="FolderPane.NoFolderOpen" xml:space="preserve">
+    <value>Ոչ մի պանակ բացված չէ։ Բացեք ֆայլ կամ պանակ՝ այստեղ դիտելու համար։</value>
+  </data>
+  <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
+    <value>Այս պանակում Markdown ֆայլեր չկան։</value>
+  </data>
+  <data name="FolderPane.NotFound" xml:space="preserve">
+    <value>Այս պանակն այլևս գոյություն չունի։</value>
+  </data>
+  <data name="FolderPane.RevealCurrentFile" xml:space="preserve">
+    <value>Ցույց տալ ընթացիկ ֆայլի պանակը</value>
+  </data>
+  <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
+    <value>Որոնել պանակում…</value>
+  </data>
+  <data name="FolderSearch.NameMatch" xml:space="preserve">
+    <value>(ֆայլի անունը համընկնում է)</value>
+  </data>
+  <data name="FolderSearch.ResultSummary" xml:space="preserve">
+    <value>Որոնված {1} ֆայլից {0}-ը համընկավ</value>
+  </data>
+  <data name="FolderSearch.Searching" xml:space="preserve">
+    <value>Որոնվում է…</value>
+  </data>
+  <data name="FullScreen" xml:space="preserve">
+    <value>Լիաէկրան</value>
+  </data>
+  <data name="LastUsedTab" xml:space="preserve">
+    <value>Վերջին օգտագործված ներդիրը</value>
+  </data>
+  <data name="NextTab" xml:space="preserve">
+    <value>Հաջորդ ներդիր</value>
+  </data>
+  <data name="PreviousTab" xml:space="preserve">
+    <value>Նախորդ ներդիր</value>
+  </data>
+  <data name="QuoteDecrease" xml:space="preserve">
+    <value>Նվազեցնել մեջբերման մակարդակը</value>
+  </data>
+  <data name="QuoteIncrease" xml:space="preserve">
+    <value>Ավելացնել մեջբերման մակարդակը</value>
+  </data>
+  <data name="ReadOnlyMode" xml:space="preserve">
+    <value>Ընթերցման ռեժիմ</value>
+  </data>
+  <data name="SearchInFolder" xml:space="preserve">
+    <value>Որոնել պանակում</value>
+  </data>
+  <data name="ShareToHedgeDoc" xml:space="preserve">
+    <value>Կիսվել HedgeDoc-ում…</value>
+  </data>
+  <data name="TocPane.CollapseAll" xml:space="preserve">
+    <value>Ծալել բոլորը</value>
+  </data>
+  <data name="TocPane.ExpandAll" xml:space="preserve">
+    <value>Ծավալել բոլորը</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>Անվերնագիր</value>
+  </data>
 </root>

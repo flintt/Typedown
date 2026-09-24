@@ -933,4 +933,64 @@
     <value>जुम</value>
     <comment>字体缩放</comment>
   </data>
+  <data name="FolderPane.NoFolderOpen" xml:space="preserve">
+    <value>कुनै फोल्डर खुलेको छैन। यहाँ हेर्न फाइल वा फोल्डर खोल्नुहोस्।</value>
+  </data>
+  <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
+    <value>यो फोल्डरमा Markdown फाइल छैनन्।</value>
+  </data>
+  <data name="FolderPane.NotFound" xml:space="preserve">
+    <value>यो फोल्डर अब छैन।</value>
+  </data>
+  <data name="FolderPane.RevealCurrentFile" xml:space="preserve">
+    <value>हालको फाइलको फोल्डर देखाउनुहोस्</value>
+  </data>
+  <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
+    <value>फोल्डरमा खोज्नुहोस्…</value>
+  </data>
+  <data name="FolderSearch.NameMatch" xml:space="preserve">
+    <value>(फाइलको नाम मिल्यो)</value>
+  </data>
+  <data name="FolderSearch.ResultSummary" xml:space="preserve">
+    <value>खोजिएका {1} फाइलमध्ये {0} मिले</value>
+  </data>
+  <data name="FolderSearch.Searching" xml:space="preserve">
+    <value>खोज्दै…</value>
+  </data>
+  <data name="FullScreen" xml:space="preserve">
+    <value>पूर्ण स्क्रिन</value>
+  </data>
+  <data name="LastUsedTab" xml:space="preserve">
+    <value>पछिल्लो प्रयोग गरिएको ट्याब</value>
+  </data>
+  <data name="NextTab" xml:space="preserve">
+    <value>अर्को ट्याब</value>
+  </data>
+  <data name="PreviousTab" xml:space="preserve">
+    <value>अघिल्लो ट्याब</value>
+  </data>
+  <data name="QuoteDecrease" xml:space="preserve">
+    <value>उद्धरण तह घटाउनुहोस्</value>
+  </data>
+  <data name="QuoteIncrease" xml:space="preserve">
+    <value>उद्धरण तह बढाउनुहोस्</value>
+  </data>
+  <data name="ReadOnlyMode" xml:space="preserve">
+    <value>पढ्ने मोड</value>
+  </data>
+  <data name="SearchInFolder" xml:space="preserve">
+    <value>फोल्डरमा खोज्नुहोस्</value>
+  </data>
+  <data name="ShareToHedgeDoc" xml:space="preserve">
+    <value>HedgeDoc मा साझा गर्नुहोस्…</value>
+  </data>
+  <data name="TocPane.CollapseAll" xml:space="preserve">
+    <value>सबै खुम्च्याउनुहोस्</value>
+  </data>
+  <data name="TocPane.ExpandAll" xml:space="preserve">
+    <value>सबै फैलाउनुहोस्</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>शीर्षकविहीन</value>
+  </data>
 </root>

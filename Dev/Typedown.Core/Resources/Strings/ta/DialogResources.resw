@@ -249,4 +249,52 @@
     <value>வெப்வியூ2 இயக்க நேரம் நிறுவப்படவில்லை</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>இந்த ஆவணம் முன்பு பகிரப்பட்டது, ஆனால் அதன்பிறகு மாறிவிட்டது. HedgeDoc 1.x ஏற்கனவே உள்ள குறிப்பைப் புதுப்பிக்க முடியாது, எனவே மீண்டும் பதிவேற்றினால் புதிய இணைப்புடன் புதிய குறிப்பு உருவாகும்.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>இணைப்பை நகலெடு</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>திருத்தக்கூடிய இணைப்பு</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>இந்த இணைப்பு உள்ள எவரும் குறிப்பைத் திருத்தலாம்.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>முதலில் அமைப்புகள் → ஏற்றுமதி இல் HedgeDoc சேவையக முகவரியை அமைக்கவும்.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>உலாவியில் திற</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>மீண்டும் பதிவேற்று (புதிய இணைப்பு)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>படிக்க மட்டும் இணைப்பு</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>HedgeDoc இல் பகிரப்பட்டது</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>கடைசியாகப் பகிர்ந்ததிலிருந்து ஆவணம் மாறவில்லை; இவை ஏற்கனவே உள்ள இணைப்புகள்.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>முந்தைய இணைப்பைப் பயன்படுத்து</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>வைத்திரு</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>மீள்ஏற்று</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>வட்டில் கோப்பு மாறியுள்ளது. மீள்ஏற்றினால் சேமிக்கப்படாத மாற்றங்கள் நீக்கப்படும்.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>வட்டில் கோப்பு மாறியுள்ளது. மீள்ஏற்ற வேண்டுமா?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>வட்டில் கோப்பு மாறியுள்ளது</value>
+  </data>
 </root>

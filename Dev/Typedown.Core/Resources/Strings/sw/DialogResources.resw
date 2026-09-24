@@ -249,4 +249,52 @@
     <value>Runtime ya WebView2 Haijasakinishwa</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>Hati hii ilishirikiwa awali lakini imebadilika tangu wakati huo. HedgeDoc 1.x haiwezi kusasisha noti iliyopo, hivyo kupakia tena kutaunda noti mpya yenye kiungo kipya.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>Nakili kiungo</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>Kiungo kinachoharirika</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>Yeyote mwenye kiungo hiki anaweza kuhariri noti.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>Kwanza weka anwani ya seva ya HedgeDoc katika Mipangilio → Hamisha.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>Fungua katika kivinjari</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>Pakia tena (kiungo kipya)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>Kiungo cha kusoma tu</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>Imeshirikiwa kwenye HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>Hati haijabadilika tangu ilipo­shirikiwa mwisho; hivi ndivyo viungo vilivyopo.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>Tumia kiungo cha awali</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>Weka</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Pakia upya</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>Faili imebadilika kwenye diski. Kupakia upya kutatupa mabadiliko ambayo hayajahifadhiwa.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>Faili imebadilika kwenye diski. Uipakie upya?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>Faili imebadilika kwenye diski</value>
+  </data>
 </root>

@@ -249,4 +249,52 @@
     <value>WebView2 Runtime Mhux Installat</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>Dan id-dokument diġà kien maqsum imma nbidel minn dakinhar. HedgeDoc 1.x ma jistax jaġġorna nota eżistenti, għalhekk tagħbija ġdida toħloq nota ġdida b'link ġdid.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>Ikkopja l-link</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>Link li jista' jiġi editjat</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>Kull min għandu dan il-link jista' jeditja n-nota.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>L-ewwel issettja l-indirizz tas-server HedgeDoc f'Settings → Esporta.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>Iftaħ fil-brawżer</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>Erġa' tella' (link ġdid)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>Link għall-qari biss</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>Maqsum ma' HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>Id-dokument ma nbidilx minn meta nqasam l-aħħar; dawn huma l-links eżistenti.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>Uża l-link ta' qabel</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>Żomm</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Erġa' agħbi</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>Il-fajl inbidel fuq id-diska. It-tagħbija mill-ġdid tarmi l-bidliet mhux salvati.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>Il-fajl inbidel fuq id-diska. Terġa' tagħbih?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>Il-fajl inbidel fuq id-diska</value>
+  </data>
 </root>

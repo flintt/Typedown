@@ -249,4 +249,52 @@
     <value>A WebView2 futtatókörnyezet nincs telepítve</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>Ezt a dokumentumot korábban megosztották, de azóta megváltozott. A HedgeDoc 1.x nem tud meglévő jegyzetet frissíteni, ezért az újbóli feltöltés új jegyzetet hoz létre új hivatkozással.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>Hivatkozás másolása</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>Szerkeszthető hivatkozás</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>Bárki szerkesztheti a jegyzetet, akinek megvan ez a hivatkozás.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>Először állítsa be a HedgeDoc-kiszolgáló címét a Beállítások → Exportálás alatt.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>Megnyitás böngészőben</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>Feltöltés újra (új hivatkozás)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>Csak olvasható hivatkozás</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>Megosztva a HedgeDocra</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>A dokumentum a legutóbbi megosztás óta nem változott; ezek a meglévő hivatkozások.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>Előző hivatkozás használata</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>Megtartás</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Újratöltés</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>A fájl megváltozott a lemezen. Az újratöltés elveti a mentetlen módosításokat.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>A fájl megváltozott a lemezen. Újratölti?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>A fájl megváltozott a lemezen</value>
+  </data>
 </root>

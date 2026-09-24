@@ -933,4 +933,64 @@
     <value>Ұлғайту</value>
     <comment>字体缩放</comment>
   </data>
+  <data name="FolderPane.NoFolderOpen" xml:space="preserve">
+    <value>Бірде-бір қалта ашылмаған. Осында шолу үшін файл немесе қалта ашыңыз.</value>
+  </data>
+  <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
+    <value>Бұл қалтада Markdown файлдары жоқ.</value>
+  </data>
+  <data name="FolderPane.NotFound" xml:space="preserve">
+    <value>Бұл қалта енді жоқ.</value>
+  </data>
+  <data name="FolderPane.RevealCurrentFile" xml:space="preserve">
+    <value>Ағымдағы файлдың қалтасын көрсету</value>
+  </data>
+  <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
+    <value>Қалтадан іздеу…</value>
+  </data>
+  <data name="FolderSearch.NameMatch" xml:space="preserve">
+    <value>(файл аты сәйкес келеді)</value>
+  </data>
+  <data name="FolderSearch.ResultSummary" xml:space="preserve">
+    <value>Ізделген {1} файлдың {0} сәйкес келді</value>
+  </data>
+  <data name="FolderSearch.Searching" xml:space="preserve">
+    <value>Ізделуде…</value>
+  </data>
+  <data name="FullScreen" xml:space="preserve">
+    <value>Толық экран</value>
+  </data>
+  <data name="LastUsedTab" xml:space="preserve">
+    <value>Соңғы пайдаланылған қойынды</value>
+  </data>
+  <data name="NextTab" xml:space="preserve">
+    <value>Келесі қойынды</value>
+  </data>
+  <data name="PreviousTab" xml:space="preserve">
+    <value>Алдыңғы қойынды</value>
+  </data>
+  <data name="QuoteDecrease" xml:space="preserve">
+    <value>Дәйексөз деңгейін азайту</value>
+  </data>
+  <data name="QuoteIncrease" xml:space="preserve">
+    <value>Дәйексөз деңгейін арттыру</value>
+  </data>
+  <data name="ReadOnlyMode" xml:space="preserve">
+    <value>Оқу режимі</value>
+  </data>
+  <data name="SearchInFolder" xml:space="preserve">
+    <value>Қалтадан іздеу</value>
+  </data>
+  <data name="ShareToHedgeDoc" xml:space="preserve">
+    <value>HedgeDoc-қа бөлісу…</value>
+  </data>
+  <data name="TocPane.CollapseAll" xml:space="preserve">
+    <value>Барлығын жию</value>
+  </data>
+  <data name="TocPane.ExpandAll" xml:space="preserve">
+    <value>Барлығын жаю</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>Атаусыз</value>
+  </data>
 </root>

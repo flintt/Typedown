@@ -249,4 +249,52 @@
     <value>Masa Jalan WebView2 Tidak Dipasang</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>Dokumen ini pernah dikongsi tetapi telah berubah sejak itu. HedgeDoc 1.x tidak boleh mengemas kini nota sedia ada, jadi muat naik semula akan mencipta nota baharu dengan pautan baharu.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>Salin pautan</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>Pautan boleh sunting</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>Sesiapa yang mempunyai pautan ini boleh menyunting nota.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>Tetapkan alamat pelayan HedgeDoc dahulu dalam Tetapan → Eksport.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>Buka dalam pelayar</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>Muat naik semula (pautan baharu)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>Pautan baca sahaja</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>Dikongsi ke HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>Dokumen tidak berubah sejak kali terakhir dikongsi; ini pautan sedia ada.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>Guna pautan sebelumnya</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>Simpan</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Muat semula</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>Fail telah berubah pada cakera. Memuat semula akan membuang perubahan yang belum disimpan.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>Fail telah berubah pada cakera. Muat semula?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>Fail telah berubah pada cakera</value>
+  </data>
 </root>

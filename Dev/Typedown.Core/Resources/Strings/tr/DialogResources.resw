@@ -249,4 +249,52 @@
     <value>WebView2 Runtime Yüklü Değil</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>Bu belge daha önce paylaşıldı ama o zamandan beri değişti. HedgeDoc 1.x mevcut bir notu güncelleyemez, bu yüzden yeniden yükleme yeni bağlantılı yeni bir not oluşturur.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>Bağlantıyı kopyala</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>Düzenlenebilir bağlantı</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>Bu bağlantıya sahip herkes notu düzenleyebilir.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>Önce Ayarlar → Dışa Aktar bölümünde HedgeDoc sunucu adresini ayarlayın.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>Tarayıcıda aç</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>Yeniden yükle (yeni bağlantı)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>Salt okunur bağlantı</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>HedgeDoc'ta paylaşıldı</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>Belge son paylaşımdan bu yana değişmedi; mevcut bağlantılar şunlar.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>Önceki bağlantıyı kullan</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>Koru</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Yeniden yükle</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>Dosya diskte değişti. Yeniden yüklemek kaydedilmemiş değişiklikleri siler.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>Dosya diskte değişti. Yeniden yüklensin mi?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>Dosya diskte değişti</value>
+  </data>
 </root>

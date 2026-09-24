@@ -249,4 +249,52 @@
     <value>Modul runtime WebView2 není nainstalován</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>Tento dokument již byl sdílen, ale od té doby se změnil. HedgeDoc 1.x neumí aktualizovat existující poznámku, takže nové nahrání vytvoří novou poznámku s novým odkazem.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>Kopírovat odkaz</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>Odkaz pro úpravy</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>Kdokoli s tímto odkazem může poznámku upravovat.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>Nejprve nastavte adresu serveru HedgeDoc v Nastavení → Export.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>Otevřít v prohlížeči</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>Nahrát znovu (nový odkaz)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>Odkaz jen pro čtení</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>Sdíleno do HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>Dokument se od posledního sdílení nezměnil; toto jsou existující odkazy.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>Použít předchozí odkaz</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>Ponechat</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Načíst znovu</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>Soubor byl na disku změněn. Opětovné načtení zahodí neuložené změny.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>Soubor byl na disku změněn. Načíst jej znovu?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>Soubor byl na disku změněn</value>
+  </data>
 </root>

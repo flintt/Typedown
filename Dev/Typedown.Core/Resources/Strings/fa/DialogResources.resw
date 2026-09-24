@@ -249,4 +249,52 @@
     <value>WebView2 زمان اجرا نصب نشده است</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>این سند پیش‌تر هم‌رسانی شده اما از آن زمان تغییر کرده است. HedgeDoc 1.x نمی‌تواند یادداشت موجود را به‌روزرسانی کند، بنابراین بارگذاری دوباره یادداشتی تازه با پیوند تازه می‌سازد.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>رونوشت پیوند</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>پیوند قابل ویرایش</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>هر کسی که این پیوند را داشته باشد می‌تواند یادداشت را ویرایش کند.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>ابتدا نشانی کارساز HedgeDoc را در تنظیمات ← برون‌برد تعیین کنید.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>باز کردن در مرورگر</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>بارگذاری دوباره (پیوند تازه)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>پیوند فقط‌خواندنی</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>هم‌رسانی‌شده در HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>سند از آخرین هم‌رسانی تغییر نکرده است؛ این‌ها پیوندهای موجودند.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>استفاده از پیوند پیشین</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>نگه داشتن</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>بارگذاری مجدد</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>پرونده روی دیسک تغییر کرده است. بارگذاری مجدد تغییرات ذخیره‌نشده را دور می‌ریزد.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>پرونده روی دیسک تغییر کرده است. بارگذاری مجدد شود؟</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>پرونده روی دیسک تغییر کرده است</value>
+  </data>
 </root>

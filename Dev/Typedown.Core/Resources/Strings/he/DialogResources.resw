@@ -249,4 +249,52 @@
     <value>זמן ריצה של WebView2 אינו מותקן</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>מסמך זה שותף בעבר אך השתנה מאז. HedgeDoc 1.x אינו יכול לעדכן פתק קיים, ולכן העלאה מחדש יוצרת פתק חדש עם קישור חדש.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>העתק קישור</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>קישור לעריכה</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>כל מי שיש לו קישור זה יכול לערוך את הפתק.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>הגדר תחילה את כתובת שרת HedgeDoc בהגדרות ← ייצוא.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>פתח בדפדפן</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>העלה שוב (קישור חדש)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>קישור לקריאה בלבד</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>שותף ל-HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>המסמך לא השתנה מאז השיתוף האחרון; אלה הקישורים הקיימים.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>השתמש בקישור הקודם</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>שמור</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>טען מחדש</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>הקובץ שונה בדיסק. טעינה מחדש תבטל שינויים שלא נשמרו.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>הקובץ שונה בדיסק. לטעון אותו מחדש?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>הקובץ שונה בדיסק</value>
+  </data>
 </root>

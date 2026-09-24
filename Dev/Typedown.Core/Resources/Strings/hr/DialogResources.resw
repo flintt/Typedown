@@ -249,4 +249,52 @@
     <value>WebView2 Vrijeme izvođenja nije instalirano</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>Ovaj je dokument već dijeljen, ali se od tada promijenio. HedgeDoc 1.x ne može ažurirati postojeću bilješku, pa ponovno slanje stvara novu bilješku s novom poveznicom.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>Kopiraj poveznicu</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>Poveznica za uređivanje</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>Svatko s ovom poveznicom može uređivati bilješku.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>Najprije postavite adresu HedgeDoc poslužitelja u Postavke → Izvoz.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>Otvori u pregledniku</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>Pošalji ponovno (nova poveznica)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>Poveznica samo za čitanje</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>Podijeljeno na HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>Dokument se nije promijenio od zadnjeg dijeljenja; ovo su postojeće poveznice.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>Upotrijebi prethodnu poveznicu</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>Zadrži</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Ponovno učitaj</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>Datoteka je promijenjena na disku. Ponovno učitavanje odbacit će nespremljene promjene.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>Datoteka je promijenjena na disku. Želite li je ponovno učitati?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>Datoteka je promijenjena na disku</value>
+  </data>
 </root>

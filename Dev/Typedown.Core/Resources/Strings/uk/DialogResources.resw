@@ -249,4 +249,52 @@
     <value>Середовище виконання WebView2 не інстальовано</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>Цей документ уже надсилали, але відтоді він змінився. HedgeDoc 1.x не може оновити наявну нотатку, тому повторне завантаження створить нову нотатку з новим посиланням.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>Копіювати посилання</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>Посилання для редагування</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>Будь-хто з цим посиланням може редагувати нотатку.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>Спочатку вкажіть адресу сервера HedgeDoc у Параметри → Експорт.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>Відкрити у браузері</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>Завантажити знову (нове посилання)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>Посилання лише для читання</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>Надіслано в HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>Документ не змінювався з часу останнього надсилання; ось наявні посилання.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>Використати попереднє посилання</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>Залишити</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Перезавантажити</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>Файл змінено на диску. Перезавантаження скасує незбережені зміни.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>Файл змінено на диску. Перезавантажити його?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>Файл змінено на диску</value>
+  </data>
 </root>

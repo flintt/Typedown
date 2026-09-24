@@ -249,4 +249,52 @@
     <value>WebView2 Runtime är inte installerat</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>Det här dokumentet har delats tidigare men har ändrats sedan dess. HedgeDoc 1.x kan inte uppdatera en befintlig anteckning, så en ny uppladdning skapar en ny anteckning med en ny länk.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>Kopiera länk</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>Redigerbar länk</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>Alla med den här länken kan redigera anteckningen.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>Ange först HedgeDoc-serverns adress i Inställningar → Export.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>Öppna i webbläsare</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>Ladda upp igen (ny länk)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>Skrivskyddad länk</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>Delad till HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>Dokumentet har inte ändrats sedan det delades senast; det här är de befintliga länkarna.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>Använd föregående länk</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>Behåll</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Läs om</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>Filen har ändrats på disken. Omläsning kasserar osparade ändringar.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>Filen har ändrats på disken. Läsa om den?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>Filen har ändrats på disken</value>
+  </data>
 </root>

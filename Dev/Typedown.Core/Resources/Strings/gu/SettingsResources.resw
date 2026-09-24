@@ -689,4 +689,163 @@
     <value>બારી</value>
     <comment>视图/窗口</comment>
   </data>
+  <data name="Editor.FontFamily.Placeholder" xml:space="preserve">
+    <value>ડિફૉલ્ટ</value>
+  </data>
+  <data name="Editor.ListIndentation.Description" xml:space="preserve">
+    <value>નેસ્ટેડ યાદી વસ્તુઓ માટે લખાતું ઇન્ડેન્ટ. 4 સ્પેસ Obsidian અને મોટા ભાગના અન્ય સંપાદકો સાથે મેળ ખાય છે</value>
+  </data>
+  <data name="Editor.ListIndentation.Dfm" xml:space="preserve">
+    <value>4 સ્પેસનું ઇન્ડેન્ટ (Markdown ધોરણ)</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces1" xml:space="preserve">
+    <value>ચિહ્ન પછી 1 સ્પેસ</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces2" xml:space="preserve">
+    <value>ચિહ્ન પછી 2 સ્પેસ</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces4" xml:space="preserve">
+    <value>ચિહ્ન પછી 4 સ્પેસ</value>
+  </data>
+  <data name="Editor.ListIndentation.Title" xml:space="preserve">
+    <value>યાદીનું ઇન્ડેન્ટ</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Description" xml:space="preserve">
+    <value>સ્રોતમાં નવી યાદી વસ્તુઓ વચ્ચે ખાલી લીટી ઉમેરો</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Title" xml:space="preserve">
+    <value>છૂટી યાદી વસ્તુઓ</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Description" xml:space="preserve">
+    <value>વર્તમાન ફકરા પાસે બ્લોકનો પ્રકાર (P, H1, ...) બતાવો</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Title" xml:space="preserve">
+    <value>ફકરા ચિહ્ન</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Description" xml:space="preserve">
+    <value>Markdown સ્રોતમાં કૉલમ સીધી રહે તે માટે કોષ્ટકના ખાનાં ભરો. કોષ્ટકો સંક્ષિપ્ત રાખવા બંધ કરો (AI સાધનો માટે ઓછા ટોકન)</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Title" xml:space="preserve">
+    <value>કોષ્ટકની કૉલમ ગોઠવો</value>
+  </data>
+  <data name="Editor.TextDirection.Auto" xml:space="preserve">
+    <value>દરેક ફકરા માટે આપમેળે ઓળખો</value>
+  </data>
+  <data name="Editor.TextDirection.Description" xml:space="preserve">
+    <value>સંપાદકની લખાણ દિશા; અરબી, હિબ્રૂ અને જમણેથી ડાબે લખાતી અન્ય ભાષાઓ માટે ઉપયોગી</value>
+  </data>
+  <data name="Editor.TextDirection.Ltr" xml:space="preserve">
+    <value>ડાબેથી જમણે</value>
+  </data>
+  <data name="Editor.TextDirection.Rtl" xml:space="preserve">
+    <value>જમણેથી ડાબે</value>
+  </data>
+  <data name="Editor.TextDirection.Title" xml:space="preserve">
+    <value>લખાણ દિશા</value>
+  </data>
+  <data name="General.AskBeforeReload.Description" xml:space="preserve">
+    <value>બંધ હોય તો, સાચવ્યા વિનાના ફેરફારો ન હોય ત્યારે પૂછ્યા વગર ફરી લોડ કરો</value>
+  </data>
+  <data name="General.AskBeforeReload.Title" xml:space="preserve">
+    <value>ફરી લોડ કરતા પહેલાં પૂછો</value>
+  </data>
+  <data name="General.AutoReload.Description" xml:space="preserve">
+    <value>ખુલ્લી ફાઇલ પર નજર રાખો અને બીજો પ્રોગ્રામ બદલે ત્યારે તાજી કરો</value>
+  </data>
+  <data name="General.AutoReload.Title" xml:space="preserve">
+    <value>બહારના ફેરફાર પર આપમેળે ફરી લોડ</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Description" xml:space="preserve">
+    <value>Explorer માંથી ખોલેલી ફાઇલો વર્તમાન વિન્ડોમાં ટૅબ તરીકે ખૂલે છે; બંધ હોય તો નવી વિન્ડો ખૂલે છે</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Title" xml:space="preserve">
+    <value>ફાઇલો ટૅબમાં ખોલો</value>
+  </data>
+  <data name="General.RememberCursorPosition.Description" xml:space="preserve">
+    <value>તમે જ્યાં છોડ્યું ત્યાંથી દસ્તાવેજો ખોલો</value>
+  </data>
+  <data name="General.RememberCursorPosition.Title" xml:space="preserve">
+    <value>કર્સરની સ્થિતિ યાદ રાખો</value>
+  </data>
+  <data name="General.StartupAction.FileStartupAction.RestoreSession" xml:space="preserve">
+    <value>છેલ્લા સત્રના બધા દસ્તાવેજો પુનઃસ્થાપિત કરો</value>
+  </data>
+  <data name="HedgeDocShare.Email.Description" xml:space="preserve">
+    <value>અનામી નોંધ બનાવવા ખાલી રાખો; ખાતા સાથે નોંધ તમારી રહેશે</value>
+  </data>
+  <data name="HedgeDocShare.Email.Title" xml:space="preserve">
+    <value>ઇમેઇલ (વૈકલ્પિક)</value>
+  </data>
+  <data name="HedgeDocShare.Password.Title" xml:space="preserve">
+    <value>પાસવર્ડ</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Description" xml:space="preserve">
+    <value>નોંધ પ્રકાશિત કરે છે (/s/…) જેથી શેર કરેલી લિંક સંપાદિત ન થઈ શકે</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Title" xml:space="preserve">
+    <value>ફક્ત-વાંચન લિંક પણ પ્રકાશિત કરો</value>
+  </data>
+  <data name="HedgeDocShare.Section" xml:space="preserve">
+    <value>HedgeDoc પર શેર કરો</value>
+  </data>
+  <data name="HedgeDocShare.Server.Description" xml:space="preserve">
+    <value>HedgeDoc 1.x સરનામું, દા.ત. https://md.example.com</value>
+  </data>
+  <data name="HedgeDocShare.Server.Title" xml:space="preserve">
+    <value>સર્વર</value>
+  </data>
+  <data name="HedgeDocShare.TestButton" xml:space="preserve">
+    <value>ચકાસો</value>
+  </data>
+  <data name="HedgeDocShare.TestTitle" xml:space="preserve">
+    <value>જોડાણ ચકાસો</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Description" xml:space="preserve">
+    <value>એક જ દસ્તાવેજ ખુલ્લો હોય ત્યારે પણ ટૅબ પટ્ટી બતાવો</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Title" xml:space="preserve">
+    <value>હંમેશાં ટૅબ બતાવો</value>
+  </data>
+  <data name="View.AppTheme.Black" xml:space="preserve">
+    <value>કાળું (OLED)</value>
+  </data>
+  <data name="View.CustomCss.Description" xml:space="preserve">
+    <value>સંપાદક અને નિકાસ કરેલા HTML/PDF માટે વધારાની શૈલીઓ</value>
+  </data>
+  <data name="View.CustomCss.Placeholder" xml:space="preserve">
+    <value>દા.ત. .markdown-body h1 { color: #c00; }  અથવા  :root { --editorBgColor: #111; }</value>
+  </data>
+  <data name="View.CustomCss.Title" xml:space="preserve">
+    <value>કસ્ટમ CSS</value>
+  </data>
+  <data name="View.CustomTheme.Description" xml:space="preserve">
+    <value>થીમ એ થીમ ફોલ્ડરમાંની એક CSS ફાઇલ છે; docs/custom-theme.md જુઓ</value>
+  </data>
+  <data name="View.CustomTheme.Document" xml:space="preserve">
+    <value>એક કેવી રીતે લખવી</value>
+  </data>
+  <data name="View.CustomTheme.Folder" xml:space="preserve">
+    <value>થીમ આ ફોલ્ડરની CSS ફાઇલો છે; ફોર્મેટ દસ્તાવેજમાં સમજાવ્યું છે.</value>
+  </data>
+  <data name="View.CustomTheme.None" xml:space="preserve">
+    <value>(કોઈ નહીં)</value>
+  </data>
+  <data name="View.CustomTheme.OpenFolder" xml:space="preserve">
+    <value>થીમ ફોલ્ડર ખોલો</value>
+  </data>
+  <data name="View.CustomTheme.Refresh" xml:space="preserve">
+    <value>થીમ ફરી લોડ કરો</value>
+  </data>
+  <data name="View.CustomTheme.Title" xml:space="preserve">
+    <value>કસ્ટમ થીમ</value>
+  </data>
+  <data name="View.Image.CopyPath.Placeholder" xml:space="preserve">
+    <value>દા.ત. ./${filename}.assets — ચલ: ${filename} ${filedir} ${year} ${month} ${day}</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Description" xml:space="preserve">
+    <value>ઍપ શરૂ થાય ત્યારે બાજુની પેનલ કયું પાનું બતાવે</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
+    <value>બાજુની પેનલનું ડિફૉલ્ટ પાનું</value>
+  </data>
 </root>

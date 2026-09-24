@@ -689,4 +689,163 @@
     <value>Gluggi</value>
     <comment>视图/窗口</comment>
   </data>
+  <data name="Editor.FontFamily.Placeholder" xml:space="preserve">
+    <value>Sjálfgefið</value>
+  </data>
+  <data name="Editor.ListIndentation.Description" xml:space="preserve">
+    <value>Inndráttur sem er skrifaður fyrir hreiðraða listaliði. 4 bil samsvara Obsidian og flestum öðrum ritlum</value>
+  </data>
+  <data name="Editor.ListIndentation.Dfm" xml:space="preserve">
+    <value>4 bila inndráttur (Markdown staðall)</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces1" xml:space="preserve">
+    <value>1 bil á eftir merkinu</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces2" xml:space="preserve">
+    <value>2 bil á eftir merkinu</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces4" xml:space="preserve">
+    <value>4 bil á eftir merkinu</value>
+  </data>
+  <data name="Editor.ListIndentation.Title" xml:space="preserve">
+    <value>Inndráttur lista</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Description" xml:space="preserve">
+    <value>Setja auða línu milli nýrra listaliða í frumkóðanum</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Title" xml:space="preserve">
+    <value>Gisnir listaliðir</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Description" xml:space="preserve">
+    <value>Sýna gerð blokkar (P, H1, ...) við hlið núverandi málsgreinar</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Title" xml:space="preserve">
+    <value>Málsgreinamerki</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Description" xml:space="preserve">
+    <value>Fylla reiti töflunnar svo dálkar stillist af í Markdown frumkóðanum. Slökktu á þessu til að halda töflum þéttum (færri tákn fyrir gervigreindartól)</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Title" xml:space="preserve">
+    <value>Jafna dálka töflu</value>
+  </data>
+  <data name="Editor.TextDirection.Auto" xml:space="preserve">
+    <value>Greina sjálfkrafa fyrir hverja málsgrein</value>
+  </data>
+  <data name="Editor.TextDirection.Description" xml:space="preserve">
+    <value>Textastefna ritilsins; gagnleg fyrir arabísku, hebresku og önnur mál sem eru skrifuð frá hægri til vinstri</value>
+  </data>
+  <data name="Editor.TextDirection.Ltr" xml:space="preserve">
+    <value>Frá vinstri til hægri</value>
+  </data>
+  <data name="Editor.TextDirection.Rtl" xml:space="preserve">
+    <value>Frá hægri til vinstri</value>
+  </data>
+  <data name="Editor.TextDirection.Title" xml:space="preserve">
+    <value>Textastefna</value>
+  </data>
+  <data name="General.AskBeforeReload.Description" xml:space="preserve">
+    <value>Ef slökkt, endurhlaða án þess að spyrja nema óvistaðar breytingar séu til staðar</value>
+  </data>
+  <data name="General.AskBeforeReload.Title" xml:space="preserve">
+    <value>Spyrja fyrir endurhleðslu</value>
+  </data>
+  <data name="General.AutoReload.Description" xml:space="preserve">
+    <value>Fylgjast með opinni skrá og endurnýja hana þegar annað forrit breytir henni</value>
+  </data>
+  <data name="General.AutoReload.Title" xml:space="preserve">
+    <value>Sjálfvirk endurhleðsla við utanaðkomandi breytingu</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Description" xml:space="preserve">
+    <value>Skrár sem opnaðar eru úr Explorer opnast sem flipi í núverandi glugga; slökkt opnar nýjan glugga</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Title" xml:space="preserve">
+    <value>Opna skrár í flipum</value>
+  </data>
+  <data name="General.RememberCursorPosition.Description" xml:space="preserve">
+    <value>Opna skjöl þar sem frá var horfið</value>
+  </data>
+  <data name="General.RememberCursorPosition.Title" xml:space="preserve">
+    <value>Muna staðsetningu bendils</value>
+  </data>
+  <data name="General.StartupAction.FileStartupAction.RestoreSession" xml:space="preserve">
+    <value>Endurheimta öll skjöl síðustu lotu</value>
+  </data>
+  <data name="HedgeDocShare.Email.Description" xml:space="preserve">
+    <value>Skildu eftir autt til að búa til nafnlausa minnispunkta; með reikningi tilheyrir hann þér</value>
+  </data>
+  <data name="HedgeDocShare.Email.Title" xml:space="preserve">
+    <value>Netfang (valfrjálst)</value>
+  </data>
+  <data name="HedgeDocShare.Password.Title" xml:space="preserve">
+    <value>Lykilorð</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Description" xml:space="preserve">
+    <value>Birtir minnispunktinn (/s/…) svo ekki sé hægt að breyta deilda hlekknum</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Title" xml:space="preserve">
+    <value>Birta einnig hlekk sem aðeins er hægt að lesa</value>
+  </data>
+  <data name="HedgeDocShare.Section" xml:space="preserve">
+    <value>Deila á HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Server.Description" xml:space="preserve">
+    <value>HedgeDoc 1.x vistfang, t.d. https://md.example.com</value>
+  </data>
+  <data name="HedgeDocShare.Server.Title" xml:space="preserve">
+    <value>Þjónn</value>
+  </data>
+  <data name="HedgeDocShare.TestButton" xml:space="preserve">
+    <value>Prófa</value>
+  </data>
+  <data name="HedgeDocShare.TestTitle" xml:space="preserve">
+    <value>Prófa tenginguna</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Description" xml:space="preserve">
+    <value>Sýna flipastikuna jafnvel þótt aðeins eitt skjal sé opið</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Title" xml:space="preserve">
+    <value>Sýna flipa alltaf</value>
+  </data>
+  <data name="View.AppTheme.Black" xml:space="preserve">
+    <value>Svart (OLED)</value>
+  </data>
+  <data name="View.CustomCss.Description" xml:space="preserve">
+    <value>Auka stílar fyrir ritilinn og útflutt HTML/PDF</value>
+  </data>
+  <data name="View.CustomCss.Placeholder" xml:space="preserve">
+    <value>t.d. .markdown-body h1 { color: #c00; }  eða  :root { --editorBgColor: #111; }</value>
+  </data>
+  <data name="View.CustomCss.Title" xml:space="preserve">
+    <value>Sérsniðið CSS</value>
+  </data>
+  <data name="View.CustomTheme.Description" xml:space="preserve">
+    <value>Þema er ein CSS skrá í þemamöppunni; sjá docs/custom-theme.md</value>
+  </data>
+  <data name="View.CustomTheme.Document" xml:space="preserve">
+    <value>Hvernig á að skrifa þema</value>
+  </data>
+  <data name="View.CustomTheme.Folder" xml:space="preserve">
+    <value>Þemu eru CSS skrár í þessari möppu; skjalið útskýrir sniðið.</value>
+  </data>
+  <data name="View.CustomTheme.None" xml:space="preserve">
+    <value>(ekkert)</value>
+  </data>
+  <data name="View.CustomTheme.OpenFolder" xml:space="preserve">
+    <value>Opna þemamöppuna</value>
+  </data>
+  <data name="View.CustomTheme.Refresh" xml:space="preserve">
+    <value>Endurhlaða þemu</value>
+  </data>
+  <data name="View.CustomTheme.Title" xml:space="preserve">
+    <value>Sérsniðið þema</value>
+  </data>
+  <data name="View.Image.CopyPath.Placeholder" xml:space="preserve">
+    <value>t.d. ./${filename}.assets — breytur: ${filename} ${filedir} ${year} ${month} ${day}</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Description" xml:space="preserve">
+    <value>Hvaða síðu hliðarstikan sýnir við ræsingu</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
+    <value>Sjálfgefin síða hliðarstiku</value>
+  </data>
 </root>

@@ -929,4 +929,67 @@
     <value>አቅርበው</value>
     <comment>字体缩放</comment>
   </data>
+  <data name="FolderPane.NoFolderOpen" xml:space="preserve">
+    <value>ምንም አቃፊ አልተከፈተም። እዚህ ለማሰስ ፋይል ወይም አቃፊ ክፈት።</value>
+  </data>
+  <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
+    <value>በዚህ አቃፊ ውስጥ የMarkdown ፋይሎች የሉም።</value>
+  </data>
+  <data name="FolderPane.NotFound" xml:space="preserve">
+    <value>ይህ አቃፊ ከእንግዲህ የለም።</value>
+  </data>
+  <data name="FolderPane.RevealCurrentFile" xml:space="preserve">
+    <value>የአሁኑን ፋይል አቃፊ አሳይ</value>
+  </data>
+  <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
+    <value>በአቃፊ ውስጥ ፈልግ…</value>
+  </data>
+  <data name="FolderSearch.NameMatch" xml:space="preserve">
+    <value>(የፋይል ስም ይዛመዳል)</value>
+  </data>
+  <data name="FolderSearch.ResultSummary" xml:space="preserve">
+    <value>ከተፈለጉት {1} ፋይሎች {0} ተዛምደዋል</value>
+  </data>
+  <data name="FolderSearch.Searching" xml:space="preserve">
+    <value>በመፈለግ ላይ…</value>
+  </data>
+  <data name="FullScreen" xml:space="preserve">
+    <value>ሙሉ ማያ</value>
+  </data>
+  <data name="LastUsedTab" xml:space="preserve">
+    <value>መጨረሻ የተጠቀሙበት ትር</value>
+  </data>
+  <data name="NextTab" xml:space="preserve">
+    <value>ቀጣይ ትር</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>በርቷል</value>
+  </data>
+  <data name="PreviousTab" xml:space="preserve">
+    <value>ቀዳሚ ትር</value>
+  </data>
+  <data name="QuoteDecrease" xml:space="preserve">
+    <value>የጥቅስ ደረጃን ቀንስ</value>
+  </data>
+  <data name="QuoteIncrease" xml:space="preserve">
+    <value>የጥቅስ ደረጃን ጨምር</value>
+  </data>
+  <data name="ReadOnlyMode" xml:space="preserve">
+    <value>የንባብ ሁኔታ</value>
+  </data>
+  <data name="SearchInFolder" xml:space="preserve">
+    <value>በአቃፊ ውስጥ ፈልግ</value>
+  </data>
+  <data name="ShareToHedgeDoc" xml:space="preserve">
+    <value>ወደ HedgeDoc አጋራ…</value>
+  </data>
+  <data name="TocPane.CollapseAll" xml:space="preserve">
+    <value>ሁሉንም ሰብስብ</value>
+  </data>
+  <data name="TocPane.ExpandAll" xml:space="preserve">
+    <value>ሁሉንም ዘርጋ</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>ርዕስ የለሽ</value>
+  </data>
 </root>

@@ -249,4 +249,52 @@
     <value>WebView2 Runtime Չի տեղադրվել</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>Այս փաստաթուղթը նախկինում կիսվել է, բայց այդ ժամանակից փոխվել է։ HedgeDoc 1.x-ը չի կարող թարմացնել առկա նշումը, ուստի կրկին վերբեռնելը կստեղծի նոր նշում՝ նոր հղումով։</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>Պատճենել հղումը</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>Խմբագրելի հղում</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>Այս հղումն ունեցող ցանկացած ոք կարող է խմբագրել նշումը։</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>Նախ նշեք HedgeDoc սերվերի հասցեն Կարգավորումներ → Արտահանում բաժնում։</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>Բացել դիտարկիչում</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>Կրկին վերբեռնել (նոր հղում)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>Միայն կարդալու հղում</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>Կիսվել է HedgeDoc-ում</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>Փաստաթուղթը վերջին կիսվելուց հետո չի փոխվել; սրանք առկա հղումներն են։</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>Օգտագործել նախորդ հղումը</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>Պահել</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Վերբեռնել</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>Ֆայլը փոխվել է սկավառակի վրա։ Վերբեռնումը կչեղարկի չպահպանված փոփոխությունները։</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>Ֆայլը փոխվել է սկավառակի վրա։ Վերբեռնե՞լ։</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>Ֆայլը փոխվել է սկավառակի վրա</value>
+  </data>
 </root>

@@ -689,4 +689,163 @@
     <value>Window</value>
     <comment>视图/窗口</comment>
   </data>
+  <data name="Editor.FontFamily.Placeholder" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="Editor.ListIndentation.Description" xml:space="preserve">
+    <value>Ang indent na isinusulat para sa mga nested na item ng listahan. Ang 4 na espasyo ay tugma sa Obsidian at sa karamihan ng ibang editor</value>
+  </data>
+  <data name="Editor.ListIndentation.Dfm" xml:space="preserve">
+    <value>4-espasyong indent (pamantayan ng Markdown)</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces1" xml:space="preserve">
+    <value>1 espasyo pagkatapos ng marka</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces2" xml:space="preserve">
+    <value>2 espasyo pagkatapos ng marka</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces4" xml:space="preserve">
+    <value>4 na espasyo pagkatapos ng marka</value>
+  </data>
+  <data name="Editor.ListIndentation.Title" xml:space="preserve">
+    <value>Indent ng listahan</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Description" xml:space="preserve">
+    <value>Maglagay ng blangkong linya sa pagitan ng mga bagong item ng listahan sa source</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Title" xml:space="preserve">
+    <value>Maluwag na mga item ng listahan</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Description" xml:space="preserve">
+    <value>Ipakita ang uri ng block (P, H1, ...) katabi ng kasalukuyang talata</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Title" xml:space="preserve">
+    <value>Marka ng talata</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Description" xml:space="preserve">
+    <value>Punan ang mga cell ng talahanayan para pumantay ang mga hanay sa Markdown source. Patayin para manatiling siksik ang mga talahanayan (mas kaunting token para sa mga AI tool)</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Title" xml:space="preserve">
+    <value>Ipantay ang mga hanay ng talahanayan</value>
+  </data>
+  <data name="Editor.TextDirection.Auto" xml:space="preserve">
+    <value>Awtomatikong tukuyin bawat talata</value>
+  </data>
+  <data name="Editor.TextDirection.Description" xml:space="preserve">
+    <value>Direksyon ng teksto sa editor, kapaki-pakinabang para sa Arabic, Hebrew at iba pang wikang mula kanan pakaliwa</value>
+  </data>
+  <data name="Editor.TextDirection.Ltr" xml:space="preserve">
+    <value>Kaliwa pakanan</value>
+  </data>
+  <data name="Editor.TextDirection.Rtl" xml:space="preserve">
+    <value>Kanan pakaliwa</value>
+  </data>
+  <data name="Editor.TextDirection.Title" xml:space="preserve">
+    <value>Direksyon ng teksto</value>
+  </data>
+  <data name="General.AskBeforeReload.Description" xml:space="preserve">
+    <value>Kung naka-off, mag-reload nang tahimik maliban kung may hindi pa nase-save na pagbabago</value>
+  </data>
+  <data name="General.AskBeforeReload.Title" xml:space="preserve">
+    <value>Magtanong bago mag-reload</value>
+  </data>
+  <data name="General.AutoReload.Description" xml:space="preserve">
+    <value>Bantayan ang bukas na file at i-refresh kapag binago ito ng ibang programa</value>
+  </data>
+  <data name="General.AutoReload.Title" xml:space="preserve">
+    <value>Awtomatikong mag-reload kapag may panlabas na pagbabago</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Description" xml:space="preserve">
+    <value>Ang mga file na binuksan mula sa Explorer ay nagbubukas bilang tab sa kasalukuyang window; kapag naka-off, bagong window</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Title" xml:space="preserve">
+    <value>Buksan ang mga file sa tab</value>
+  </data>
+  <data name="General.RememberCursorPosition.Description" xml:space="preserve">
+    <value>Buksan ang mga dokumento kung saan ka huminto</value>
+  </data>
+  <data name="General.RememberCursorPosition.Title" xml:space="preserve">
+    <value>Tandaan ang posisyon ng cursor</value>
+  </data>
+  <data name="General.StartupAction.FileStartupAction.RestoreSession" xml:space="preserve">
+    <value>Ibalik ang lahat ng dokumento ng huling session</value>
+  </data>
+  <data name="HedgeDocShare.Email.Description" xml:space="preserve">
+    <value>Iwanang blangko para gumawa ng anonymous na note; kapag may account, sa iyo ang note</value>
+  </data>
+  <data name="HedgeDocShare.Email.Title" xml:space="preserve">
+    <value>Email (opsyonal)</value>
+  </data>
+  <data name="HedgeDocShare.Password.Title" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Description" xml:space="preserve">
+    <value>Ini-publish ang note (/s/…) para hindi ma-edit ang ibinahaging link</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Title" xml:space="preserve">
+    <value>Mag-publish din ng read-only na link</value>
+  </data>
+  <data name="HedgeDocShare.Section" xml:space="preserve">
+    <value>Ibahagi sa HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Server.Description" xml:space="preserve">
+    <value>Address ng HedgeDoc 1.x, hal. https://md.example.com</value>
+  </data>
+  <data name="HedgeDocShare.Server.Title" xml:space="preserve">
+    <value>Server</value>
+  </data>
+  <data name="HedgeDocShare.TestButton" xml:space="preserve">
+    <value>Subukan</value>
+  </data>
+  <data name="HedgeDocShare.TestTitle" xml:space="preserve">
+    <value>Subukan ang koneksyon</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Description" xml:space="preserve">
+    <value>Ipakita ang tab strip kahit isang dokumento lang ang bukas</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Title" xml:space="preserve">
+    <value>Laging ipakita ang mga tab</value>
+  </data>
+  <data name="View.AppTheme.Black" xml:space="preserve">
+    <value>Itim (OLED)</value>
+  </data>
+  <data name="View.CustomCss.Description" xml:space="preserve">
+    <value>Karagdagang estilo para sa editor at sa na-export na HTML/PDF</value>
+  </data>
+  <data name="View.CustomCss.Placeholder" xml:space="preserve">
+    <value>hal. .markdown-body h1 { color: #c00; }  o  :root { --editorBgColor: #111; }</value>
+  </data>
+  <data name="View.CustomCss.Title" xml:space="preserve">
+    <value>Custom na CSS</value>
+  </data>
+  <data name="View.CustomTheme.Description" xml:space="preserve">
+    <value>Ang tema ay isang CSS file sa themes folder; tingnan ang docs/custom-theme.md</value>
+  </data>
+  <data name="View.CustomTheme.Document" xml:space="preserve">
+    <value>Paano gumawa ng isa</value>
+  </data>
+  <data name="View.CustomTheme.Folder" xml:space="preserve">
+    <value>Ang mga tema ay CSS files sa folder na ito; ipinapaliwanag ng dokumento ang format.</value>
+  </data>
+  <data name="View.CustomTheme.None" xml:space="preserve">
+    <value>(wala)</value>
+  </data>
+  <data name="View.CustomTheme.OpenFolder" xml:space="preserve">
+    <value>Buksan ang themes folder</value>
+  </data>
+  <data name="View.CustomTheme.Refresh" xml:space="preserve">
+    <value>I-reload ang mga tema</value>
+  </data>
+  <data name="View.CustomTheme.Title" xml:space="preserve">
+    <value>Custom na tema</value>
+  </data>
+  <data name="View.Image.CopyPath.Placeholder" xml:space="preserve">
+    <value>hal. ./${filename}.assets — mga variable: ${filename} ${filedir} ${year} ${month} ${day}</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Description" xml:space="preserve">
+    <value>Aling pahina ang ipinapakita ng side pane sa pagsisimula</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
+    <value>Default na pahina ng side pane</value>
+  </data>
 </root>

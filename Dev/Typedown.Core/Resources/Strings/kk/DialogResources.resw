@@ -249,4 +249,52 @@
     <value>WebView2 іске қосу уақыты орнатылмаған</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>Бұл құжат бұрын бөлісілген, бірақ содан бері өзгерген. HedgeDoc 1.x бар жазбаны жаңарта алмайды, сондықтан қайта жүктегенде жаңа сілтемесі бар жаңа жазба жасалады.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>Сілтемені көшіру</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>Өңдеуге болатын сілтеме</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>Осы сілтемесі бар кез келген адам жазбаны өңдей алады.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>Алдымен Параметрлер → Экспорт бөлімінде HedgeDoc сервер мекенжайын орнатыңыз.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>Браузерде ашу</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>Қайта жүктеу (жаңа сілтеме)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>Тек оқуға арналған сілтеме</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>HedgeDoc-қа бөлісілді</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>Құжат соңғы бөлісуден бері өзгерген жоқ; бұл — бар сілтемелер.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>Алдыңғы сілтемені пайдалану</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>Сақтау</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Қайта жүктеу</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>Файл дискіде өзгерген. Қайта жүктеу сақталмаған өзгерістерді жояды.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>Файл дискіде өзгерген. Қайта жүктелсін бе?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>Файл дискіде өзгерген</value>
+  </data>
 </root>

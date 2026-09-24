@@ -249,4 +249,52 @@
     <value>I-WebView2 Isikhathi sokusebenza asifakiwe</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>Le dokhumenti yake yabelwana ngayo kodwa isishintshile. I-HedgeDoc 1.x ayikwazi ukuvuselela inothi elikhona, ngakho ukulayisha kabusha kudala inothi elisha nelinye ilinki.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>Kopisha ilinki</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>Ilinki engahlelwa</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>Noma ubani onalelinki angahlela inothi.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>Qala usethe ikheli leseva ye-HedgeDoc kuzilungiselelo → Thumela ngaphandle.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>Vula kusiphequluli</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>Layisha futhi (ilinki entsha)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>Ilinki yokufunda kuphela</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>Kwabelwane ne-HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>Idokhumenti ayishintshile selokhu yabelwana ngayo okokugcina; lezi yizilinki ezikhona.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>Sebenzisa ilinki yangaphambilini</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>Gcina</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Layisha kabusha</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>Ifayela lishintshile kudiski. Ukulayisha kabusha kuzolahla izinguquko ezingalondoloziwe.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>Ifayela lishintshile kudiski. Ulayishe kabusha?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>Ifayela lishintshile kudiski</value>
+  </data>
 </root>

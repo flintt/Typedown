@@ -933,4 +933,64 @@
     <value>In-/Uitzoomen</value>
     <comment>字体缩放</comment>
   </data>
+  <data name="FolderPane.NoFolderOpen" xml:space="preserve">
+    <value>Er is geen map geopend. Open een bestand of map om hier te bladeren.</value>
+  </data>
+  <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
+    <value>Geen Markdown-bestanden in deze map.</value>
+  </data>
+  <data name="FolderPane.NotFound" xml:space="preserve">
+    <value>Deze map bestaat niet meer.</value>
+  </data>
+  <data name="FolderPane.RevealCurrentFile" xml:space="preserve">
+    <value>Map van het huidige bestand tonen</value>
+  </data>
+  <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
+    <value>Zoeken in map…</value>
+  </data>
+  <data name="FolderSearch.NameMatch" xml:space="preserve">
+    <value>(bestandsnaam komt overeen)</value>
+  </data>
+  <data name="FolderSearch.ResultSummary" xml:space="preserve">
+    <value>{0} overeenkomende bestand(en) van {1} doorzocht</value>
+  </data>
+  <data name="FolderSearch.Searching" xml:space="preserve">
+    <value>Bezig met zoeken…</value>
+  </data>
+  <data name="FullScreen" xml:space="preserve">
+    <value>Volledig scherm</value>
+  </data>
+  <data name="LastUsedTab" xml:space="preserve">
+    <value>Laatst gebruikt tabblad</value>
+  </data>
+  <data name="NextTab" xml:space="preserve">
+    <value>Volgend tabblad</value>
+  </data>
+  <data name="PreviousTab" xml:space="preserve">
+    <value>Vorig tabblad</value>
+  </data>
+  <data name="QuoteDecrease" xml:space="preserve">
+    <value>Citaatniveau verlagen</value>
+  </data>
+  <data name="QuoteIncrease" xml:space="preserve">
+    <value>Citaatniveau verhogen</value>
+  </data>
+  <data name="ReadOnlyMode" xml:space="preserve">
+    <value>Leesmodus</value>
+  </data>
+  <data name="SearchInFolder" xml:space="preserve">
+    <value>Zoeken in map</value>
+  </data>
+  <data name="ShareToHedgeDoc" xml:space="preserve">
+    <value>Delen met HedgeDoc…</value>
+  </data>
+  <data name="TocPane.CollapseAll" xml:space="preserve">
+    <value>Alles samenvouwen</value>
+  </data>
+  <data name="TocPane.ExpandAll" xml:space="preserve">
+    <value>Alles uitvouwen</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>Naamloos</value>
+  </data>
 </root>

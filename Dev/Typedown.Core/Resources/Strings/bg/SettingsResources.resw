@@ -689,4 +689,163 @@
     <value>Прозорец</value>
     <comment>视图/窗口</comment>
   </data>
+  <data name="Editor.FontFamily.Placeholder" xml:space="preserve">
+    <value>По подразбиране</value>
+  </data>
+  <data name="Editor.ListIndentation.Description" xml:space="preserve">
+    <value>Отстъп, записван за вложени елементи на списък. 4 интервала съответстват на Obsidian и на повечето други редактори</value>
+  </data>
+  <data name="Editor.ListIndentation.Dfm" xml:space="preserve">
+    <value>Отстъп от 4 интервала (стандарт на Markdown)</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces1" xml:space="preserve">
+    <value>1 интервал след маркера</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces2" xml:space="preserve">
+    <value>2 интервала след маркера</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces4" xml:space="preserve">
+    <value>4 интервала след маркера</value>
+  </data>
+  <data name="Editor.ListIndentation.Title" xml:space="preserve">
+    <value>Отстъп на списъците</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Description" xml:space="preserve">
+    <value>Вмъквай празен ред между новите елементи на списъка в изходния текст</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Title" xml:space="preserve">
+    <value>Свободни елементи на списък</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Description" xml:space="preserve">
+    <value>Показвай типа на блока (P, H1, ...) до текущия абзац</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Title" xml:space="preserve">
+    <value>Маркер за абзац</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Description" xml:space="preserve">
+    <value>Допълвай клетките на таблицата, за да се подравнят колоните в изходния Markdown. Изключете, за да останат таблиците компактни (по-малко токени за AI инструменти)</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Title" xml:space="preserve">
+    <value>Подравняване на колоните</value>
+  </data>
+  <data name="Editor.TextDirection.Auto" xml:space="preserve">
+    <value>Автоматично разпознаване за всеки абзац</value>
+  </data>
+  <data name="Editor.TextDirection.Description" xml:space="preserve">
+    <value>Посока на текста в редактора; полезно за арабски, иврит и други езици, писани отдясно наляво</value>
+  </data>
+  <data name="Editor.TextDirection.Ltr" xml:space="preserve">
+    <value>Отляво надясно</value>
+  </data>
+  <data name="Editor.TextDirection.Rtl" xml:space="preserve">
+    <value>Отдясно наляво</value>
+  </data>
+  <data name="Editor.TextDirection.Title" xml:space="preserve">
+    <value>Посока на текста</value>
+  </data>
+  <data name="General.AskBeforeReload.Description" xml:space="preserve">
+    <value>Ако е изключено, презареждай без питане, освен ако има незапазени промени</value>
+  </data>
+  <data name="General.AskBeforeReload.Title" xml:space="preserve">
+    <value>Питай преди презареждане</value>
+  </data>
+  <data name="General.AutoReload.Description" xml:space="preserve">
+    <value>Следи отворения файл и го опреснявай, когато друга програма го промени</value>
+  </data>
+  <data name="General.AutoReload.Title" xml:space="preserve">
+    <value>Автоматично презареждане при външна промяна</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Description" xml:space="preserve">
+    <value>Файловете, отворени от Explorer, се отварят като раздел в текущия прозорец; изключено отваря нов прозорец</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Title" xml:space="preserve">
+    <value>Отваряй файловете в раздели</value>
+  </data>
+  <data name="General.RememberCursorPosition.Description" xml:space="preserve">
+    <value>Отваряй документите оттам, докъдето си стигнал</value>
+  </data>
+  <data name="General.RememberCursorPosition.Title" xml:space="preserve">
+    <value>Запомняй позицията на курсора</value>
+  </data>
+  <data name="General.StartupAction.FileStartupAction.RestoreSession" xml:space="preserve">
+    <value>Възстанови всички документи от последната сесия</value>
+  </data>
+  <data name="HedgeDocShare.Email.Description" xml:space="preserve">
+    <value>Оставете празно за анонимни бележки; с акаунт бележката принадлежи на вас</value>
+  </data>
+  <data name="HedgeDocShare.Email.Title" xml:space="preserve">
+    <value>Имейл (незадължително)</value>
+  </data>
+  <data name="HedgeDocShare.Password.Title" xml:space="preserve">
+    <value>Парола</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Description" xml:space="preserve">
+    <value>Публикува бележката (/s/…), така че споделената връзка да не може да се редактира</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Title" xml:space="preserve">
+    <value>Публикувай и връзка само за четене</value>
+  </data>
+  <data name="HedgeDocShare.Section" xml:space="preserve">
+    <value>Сподели в HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Server.Description" xml:space="preserve">
+    <value>Адрес на HedgeDoc 1.x, напр. https://md.example.com</value>
+  </data>
+  <data name="HedgeDocShare.Server.Title" xml:space="preserve">
+    <value>Сървър</value>
+  </data>
+  <data name="HedgeDocShare.TestButton" xml:space="preserve">
+    <value>Тест</value>
+  </data>
+  <data name="HedgeDocShare.TestTitle" xml:space="preserve">
+    <value>Провери връзката</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Description" xml:space="preserve">
+    <value>Показвай лентата с раздели дори когато е отворен само един документ</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Title" xml:space="preserve">
+    <value>Винаги показвай разделите</value>
+  </data>
+  <data name="View.AppTheme.Black" xml:space="preserve">
+    <value>Черна (OLED)</value>
+  </data>
+  <data name="View.CustomCss.Description" xml:space="preserve">
+    <value>Допълнителни стилове за редактора и експортирания HTML/PDF</value>
+  </data>
+  <data name="View.CustomCss.Placeholder" xml:space="preserve">
+    <value>напр. .markdown-body h1 { color: #c00; }  или  :root { --editorBgColor: #111; }</value>
+  </data>
+  <data name="View.CustomCss.Title" xml:space="preserve">
+    <value>Потребителски CSS</value>
+  </data>
+  <data name="View.CustomTheme.Description" xml:space="preserve">
+    <value>Темата е един CSS файл в папката с теми; вижте docs/custom-theme.md</value>
+  </data>
+  <data name="View.CustomTheme.Document" xml:space="preserve">
+    <value>Как да напишете тема</value>
+  </data>
+  <data name="View.CustomTheme.Folder" xml:space="preserve">
+    <value>Темите са CSS файлове в тази папка; форматът е описан в документа.</value>
+  </data>
+  <data name="View.CustomTheme.None" xml:space="preserve">
+    <value>(няма)</value>
+  </data>
+  <data name="View.CustomTheme.OpenFolder" xml:space="preserve">
+    <value>Отвори папката с теми</value>
+  </data>
+  <data name="View.CustomTheme.Refresh" xml:space="preserve">
+    <value>Презареди темите</value>
+  </data>
+  <data name="View.CustomTheme.Title" xml:space="preserve">
+    <value>Потребителска тема</value>
+  </data>
+  <data name="View.Image.CopyPath.Placeholder" xml:space="preserve">
+    <value>напр. ./${filename}.assets — променливи: ${filename} ${filedir} ${year} ${month} ${day}</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Description" xml:space="preserve">
+    <value>Коя страница показва страничният панел при стартиране</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
+    <value>Начална страница на страничния панел</value>
+  </data>
 </root>

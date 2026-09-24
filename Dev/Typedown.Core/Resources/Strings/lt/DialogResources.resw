@@ -249,4 +249,52 @@
     <value>"WebView2 Runtime" neįdiegta</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>Šis dokumentas jau buvo bendrintas, bet nuo tada pasikeitė. HedgeDoc 1.x negali atnaujinti esamo užrašo, todėl įkėlus iš naujo sukuriamas naujas užrašas su nauja nuoroda.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>Kopijuoti nuorodą</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>Redaguojama nuoroda</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>Bet kas, turintis šią nuorodą, gali redaguoti užrašą.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>Pirmiausia nustatykite HedgeDoc serverio adresą Nustatymai → Eksportas.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>Atverti naršyklėje</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>Įkelti iš naujo (nauja nuoroda)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>Tik skaitymo nuoroda</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>Bendrinta į HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>Dokumentas nepasikeitė nuo paskutinio bendrinimo; tai esamos nuorodos.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>Naudoti ankstesnę nuorodą</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>Palikti</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Įkelti iš naujo</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>Failas diske pasikeitė. Įkėlus iš naujo neįrašyti pakeitimai bus prarasti.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>Failas diske pasikeitė. Įkelti jį iš naujo?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>Failas diske pasikeitė</value>
+  </data>
 </root>

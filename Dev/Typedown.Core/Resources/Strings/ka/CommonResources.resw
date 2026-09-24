@@ -933,4 +933,64 @@
     <value>გადიდება</value>
     <comment>字体缩放</comment>
   </data>
+  <data name="FolderPane.NoFolderOpen" xml:space="preserve">
+    <value>არცერთი საქაღალდე არ არის გახსნილი. გახსენით ფაილი ან საქაღალდე აქ დასათვალიერებლად.</value>
+  </data>
+  <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
+    <value>ამ საქაღალდეში Markdown ფაილები არ არის.</value>
+  </data>
+  <data name="FolderPane.NotFound" xml:space="preserve">
+    <value>ეს საქაღალდე აღარ არსებობს.</value>
+  </data>
+  <data name="FolderPane.RevealCurrentFile" xml:space="preserve">
+    <value>მიმდინარე ფაილის საქაღალდის ჩვენება</value>
+  </data>
+  <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
+    <value>ძებნა საქაღალდეში…</value>
+  </data>
+  <data name="FolderSearch.NameMatch" xml:space="preserve">
+    <value>(ფაილის სახელი ემთხვევა)</value>
+  </data>
+  <data name="FolderSearch.ResultSummary" xml:space="preserve">
+    <value>{1} მოძებნილიდან {0} ფაილი დაემთხვა</value>
+  </data>
+  <data name="FolderSearch.Searching" xml:space="preserve">
+    <value>მიმდინარეობს ძებნა…</value>
+  </data>
+  <data name="FullScreen" xml:space="preserve">
+    <value>სრული ეკრანი</value>
+  </data>
+  <data name="LastUsedTab" xml:space="preserve">
+    <value>ბოლოს გამოყენებული ჩანართი</value>
+  </data>
+  <data name="NextTab" xml:space="preserve">
+    <value>შემდეგი ჩანართი</value>
+  </data>
+  <data name="PreviousTab" xml:space="preserve">
+    <value>წინა ჩანართი</value>
+  </data>
+  <data name="QuoteDecrease" xml:space="preserve">
+    <value>ციტატის დონის შემცირება</value>
+  </data>
+  <data name="QuoteIncrease" xml:space="preserve">
+    <value>ციტატის დონის გაზრდა</value>
+  </data>
+  <data name="ReadOnlyMode" xml:space="preserve">
+    <value>კითხვის რეჟიმი</value>
+  </data>
+  <data name="SearchInFolder" xml:space="preserve">
+    <value>ძებნა საქაღალდეში</value>
+  </data>
+  <data name="ShareToHedgeDoc" xml:space="preserve">
+    <value>გაზიარება HedgeDoc-ზე…</value>
+  </data>
+  <data name="TocPane.CollapseAll" xml:space="preserve">
+    <value>ყველას ჩაკეცვა</value>
+  </data>
+  <data name="TocPane.ExpandAll" xml:space="preserve">
+    <value>ყველას გაშლა</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>უსათაურო</value>
+  </data>
 </root>

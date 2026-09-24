@@ -933,4 +933,64 @@
     <value>Zoom</value>
     <comment>字体缩放</comment>
   </data>
+  <data name="FolderPane.NoFolderOpen" xml:space="preserve">
+    <value>No hi ha cap carpeta oberta. Obre un fitxer o una carpeta per navegar-hi aquí.</value>
+  </data>
+  <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
+    <value>No hi ha fitxers Markdown en aquesta carpeta.</value>
+  </data>
+  <data name="FolderPane.NotFound" xml:space="preserve">
+    <value>Aquesta carpeta ja no existeix.</value>
+  </data>
+  <data name="FolderPane.RevealCurrentFile" xml:space="preserve">
+    <value>Mostra la carpeta del fitxer actual</value>
+  </data>
+  <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
+    <value>Cerca a la carpeta…</value>
+  </data>
+  <data name="FolderSearch.NameMatch" xml:space="preserve">
+    <value>(coincideix el nom del fitxer)</value>
+  </data>
+  <data name="FolderSearch.ResultSummary" xml:space="preserve">
+    <value>{0} fitxer(s) coincident(s) de {1} cercats</value>
+  </data>
+  <data name="FolderSearch.Searching" xml:space="preserve">
+    <value>S'està cercant…</value>
+  </data>
+  <data name="FullScreen" xml:space="preserve">
+    <value>Pantalla completa</value>
+  </data>
+  <data name="LastUsedTab" xml:space="preserve">
+    <value>Darrera pestanya utilitzada</value>
+  </data>
+  <data name="NextTab" xml:space="preserve">
+    <value>Pestanya següent</value>
+  </data>
+  <data name="PreviousTab" xml:space="preserve">
+    <value>Pestanya anterior</value>
+  </data>
+  <data name="QuoteDecrease" xml:space="preserve">
+    <value>Disminueix el nivell de citació</value>
+  </data>
+  <data name="QuoteIncrease" xml:space="preserve">
+    <value>Augmenta el nivell de citació</value>
+  </data>
+  <data name="ReadOnlyMode" xml:space="preserve">
+    <value>Mode de lectura</value>
+  </data>
+  <data name="SearchInFolder" xml:space="preserve">
+    <value>Cerca a la carpeta</value>
+  </data>
+  <data name="ShareToHedgeDoc" xml:space="preserve">
+    <value>Comparteix a HedgeDoc…</value>
+  </data>
+  <data name="TocPane.CollapseAll" xml:space="preserve">
+    <value>Redueix-ho tot</value>
+  </data>
+  <data name="TocPane.ExpandAll" xml:space="preserve">
+    <value>Desplega-ho tot</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>Sense títol</value>
+  </data>
 </root>

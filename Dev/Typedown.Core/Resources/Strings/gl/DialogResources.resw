@@ -249,4 +249,52 @@
     <value>Tempo de execución de WebView2 Non instalado</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>Este documento xa se compartira pero cambiou desde entón. HedgeDoc 1.x non pode actualizar unha nota existente, así que subilo de novo crea unha nota nova cunha ligazón nova.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>Copiar a ligazón</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>Ligazón editable</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>Calquera persoa con esta ligazón pode editar a nota.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>Primeiro configura o enderezo do servidor HedgeDoc en Configuración → Exportar.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>Abrir no navegador</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>Subir de novo (ligazón nova)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>Ligazón só de lectura</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>Compartido en HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>O documento non cambiou desde a última vez que se compartiu; estas son as ligazóns existentes.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>Usar a ligazón anterior</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>Conservar</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Recargar</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>O ficheiro cambiou no disco. Recargalo descartará os cambios sen gardar.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>O ficheiro cambiou no disco. Queres recargalo?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>O ficheiro cambiou no disco</value>
+  </data>
 </root>

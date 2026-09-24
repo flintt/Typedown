@@ -249,4 +249,52 @@
     <value>WebView2 Runtime ei ole asennettu</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>Tämä asiakirja on jaettu aiemmin, mutta se on muuttunut sen jälkeen. HedgeDoc 1.x ei voi päivittää olemassa olevaa muistiinpanoa, joten uusi lataus luo uuden muistiinpanon ja uuden linkin.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>Kopioi linkki</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>Muokattava linkki</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>Kuka tahansa, jolla on tämä linkki, voi muokata muistiinpanoa.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>Aseta ensin HedgeDoc-palvelimen osoite kohdassa Asetukset → Vienti.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>Avaa selaimessa</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>Lataa uudelleen (uusi linkki)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>Vain luku -linkki</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>Jaettu HedgeDociin</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>Asiakirja ei ole muuttunut sitten viime jaon; tässä ovat olemassa olevat linkit.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>Käytä edellistä linkkiä</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>Säilytä</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Lataa uudelleen</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>Tiedosto on muuttunut levyllä. Uudelleenlataus hylkää tallentamattomat muutokset.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>Tiedosto on muuttunut levyllä. Ladataanko uudelleen?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>Tiedosto on muuttunut levyllä</value>
+  </data>
 </root>

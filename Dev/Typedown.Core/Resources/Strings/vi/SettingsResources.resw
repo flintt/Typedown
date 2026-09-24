@@ -689,4 +689,163 @@
     <value>Cửa sổ</value>
     <comment>视图/窗口</comment>
   </data>
+  <data name="Editor.FontFamily.Placeholder" xml:space="preserve">
+    <value>Mặc định</value>
+  </data>
+  <data name="Editor.ListIndentation.Description" xml:space="preserve">
+    <value>Thụt lề được ghi cho các mục danh sách lồng nhau. 4 khoảng trắng khớp với Obsidian và hầu hết trình soạn thảo khác</value>
+  </data>
+  <data name="Editor.ListIndentation.Dfm" xml:space="preserve">
+    <value>Thụt lề 4 khoảng trắng (chuẩn Markdown)</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces1" xml:space="preserve">
+    <value>1 khoảng trắng sau dấu đầu mục</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces2" xml:space="preserve">
+    <value>2 khoảng trắng sau dấu đầu mục</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces4" xml:space="preserve">
+    <value>4 khoảng trắng sau dấu đầu mục</value>
+  </data>
+  <data name="Editor.ListIndentation.Title" xml:space="preserve">
+    <value>Thụt lề danh sách</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Description" xml:space="preserve">
+    <value>Chèn một dòng trống giữa các mục danh sách mới trong mã nguồn</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Title" xml:space="preserve">
+    <value>Mục danh sách thưa</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Description" xml:space="preserve">
+    <value>Hiển thị loại khối (P, H1, ...) bên cạnh đoạn hiện tại</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Title" xml:space="preserve">
+    <value>Dấu đoạn văn</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Description" xml:space="preserve">
+    <value>Đệm ô bảng để các cột thẳng hàng trong mã nguồn Markdown. Tắt để bảng gọn hơn (ít token hơn cho công cụ AI)</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Title" xml:space="preserve">
+    <value>Căn cột bảng</value>
+  </data>
+  <data name="Editor.TextDirection.Auto" xml:space="preserve">
+    <value>Tự phát hiện theo từng đoạn</value>
+  </data>
+  <data name="Editor.TextDirection.Description" xml:space="preserve">
+    <value>Hướng văn bản trong trình soạn thảo, hữu ích cho tiếng Ả Rập, Do Thái và các ngôn ngữ viết từ phải sang trái</value>
+  </data>
+  <data name="Editor.TextDirection.Ltr" xml:space="preserve">
+    <value>Trái sang phải</value>
+  </data>
+  <data name="Editor.TextDirection.Rtl" xml:space="preserve">
+    <value>Phải sang trái</value>
+  </data>
+  <data name="Editor.TextDirection.Title" xml:space="preserve">
+    <value>Hướng văn bản</value>
+  </data>
+  <data name="General.AskBeforeReload.Description" xml:space="preserve">
+    <value>Nếu tắt, tải lại không hỏi trừ khi có thay đổi chưa lưu</value>
+  </data>
+  <data name="General.AskBeforeReload.Title" xml:space="preserve">
+    <value>Hỏi trước khi tải lại</value>
+  </data>
+  <data name="General.AutoReload.Description" xml:space="preserve">
+    <value>Theo dõi tệp đang mở và làm mới khi chương trình khác thay đổi nó</value>
+  </data>
+  <data name="General.AutoReload.Title" xml:space="preserve">
+    <value>Tự động tải lại khi có thay đổi bên ngoài</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Description" xml:space="preserve">
+    <value>Tệp mở từ Explorer sẽ mở thành thẻ trong cửa sổ hiện tại; tắt sẽ mở cửa sổ mới</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Title" xml:space="preserve">
+    <value>Mở tệp trong thẻ</value>
+  </data>
+  <data name="General.RememberCursorPosition.Description" xml:space="preserve">
+    <value>Mở tài liệu tại nơi bạn dừng lại</value>
+  </data>
+  <data name="General.RememberCursorPosition.Title" xml:space="preserve">
+    <value>Ghi nhớ vị trí con trỏ</value>
+  </data>
+  <data name="General.StartupAction.FileStartupAction.RestoreSession" xml:space="preserve">
+    <value>Khôi phục mọi tài liệu của phiên trước</value>
+  </data>
+  <data name="HedgeDocShare.Email.Description" xml:space="preserve">
+    <value>Để trống để tạo ghi chú ẩn danh; với tài khoản, ghi chú thuộc về bạn</value>
+  </data>
+  <data name="HedgeDocShare.Email.Title" xml:space="preserve">
+    <value>Email (tùy chọn)</value>
+  </data>
+  <data name="HedgeDocShare.Password.Title" xml:space="preserve">
+    <value>Mật khẩu</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Description" xml:space="preserve">
+    <value>Xuất bản ghi chú (/s/…) để liên kết chia sẻ không thể sửa</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Title" xml:space="preserve">
+    <value>Đồng thời xuất bản liên kết chỉ đọc</value>
+  </data>
+  <data name="HedgeDocShare.Section" xml:space="preserve">
+    <value>Chia sẻ lên HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Server.Description" xml:space="preserve">
+    <value>Địa chỉ HedgeDoc 1.x, ví dụ https://md.example.com</value>
+  </data>
+  <data name="HedgeDocShare.Server.Title" xml:space="preserve">
+    <value>Máy chủ</value>
+  </data>
+  <data name="HedgeDocShare.TestButton" xml:space="preserve">
+    <value>Kiểm tra</value>
+  </data>
+  <data name="HedgeDocShare.TestTitle" xml:space="preserve">
+    <value>Kiểm tra kết nối</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Description" xml:space="preserve">
+    <value>Hiện thanh thẻ ngay cả khi chỉ mở một tài liệu</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Title" xml:space="preserve">
+    <value>Luôn hiện thẻ</value>
+  </data>
+  <data name="View.AppTheme.Black" xml:space="preserve">
+    <value>Đen (OLED)</value>
+  </data>
+  <data name="View.CustomCss.Description" xml:space="preserve">
+    <value>Kiểu bổ sung cho trình soạn thảo và HTML/PDF đã xuất</value>
+  </data>
+  <data name="View.CustomCss.Placeholder" xml:space="preserve">
+    <value>ví dụ .markdown-body h1 { color: #c00; }  hoặc  :root { --editorBgColor: #111; }</value>
+  </data>
+  <data name="View.CustomCss.Title" xml:space="preserve">
+    <value>CSS tùy chỉnh</value>
+  </data>
+  <data name="View.CustomTheme.Description" xml:space="preserve">
+    <value>Một chủ đề là một tệp CSS trong thư mục chủ đề; xem docs/custom-theme.md</value>
+  </data>
+  <data name="View.CustomTheme.Document" xml:space="preserve">
+    <value>Cách viết một chủ đề</value>
+  </data>
+  <data name="View.CustomTheme.Folder" xml:space="preserve">
+    <value>Chủ đề là các tệp CSS trong thư mục này; tài liệu giải thích định dạng.</value>
+  </data>
+  <data name="View.CustomTheme.None" xml:space="preserve">
+    <value>(không có)</value>
+  </data>
+  <data name="View.CustomTheme.OpenFolder" xml:space="preserve">
+    <value>Mở thư mục chủ đề</value>
+  </data>
+  <data name="View.CustomTheme.Refresh" xml:space="preserve">
+    <value>Tải lại chủ đề</value>
+  </data>
+  <data name="View.CustomTheme.Title" xml:space="preserve">
+    <value>Chủ đề tùy chỉnh</value>
+  </data>
+  <data name="View.Image.CopyPath.Placeholder" xml:space="preserve">
+    <value>ví dụ ./${filename}.assets — biến: ${filename} ${filedir} ${year} ${month} ${day}</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Description" xml:space="preserve">
+    <value>Trang mà bảng bên hiển thị khi khởi động</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
+    <value>Trang mặc định của bảng bên</value>
+  </data>
 </root>

@@ -689,4 +689,163 @@
     <value>Dritare</value>
     <comment>视图/窗口</comment>
   </data>
+  <data name="Editor.FontFamily.Placeholder" xml:space="preserve">
+    <value>Parazgjedhje</value>
+  </data>
+  <data name="Editor.ListIndentation.Description" xml:space="preserve">
+    <value>Zhvendosja që shkruhet për elementet e listave të ndërthurura. 4 hapësira përputhen me Obsidian dhe me shumicën e redaktorëve të tjerë</value>
+  </data>
+  <data name="Editor.ListIndentation.Dfm" xml:space="preserve">
+    <value>Zhvendosje me 4 hapësira (standard i Markdown)</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces1" xml:space="preserve">
+    <value>1 hapësirë pas shenjës</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces2" xml:space="preserve">
+    <value>2 hapësira pas shenjës</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces4" xml:space="preserve">
+    <value>4 hapësira pas shenjës</value>
+  </data>
+  <data name="Editor.ListIndentation.Title" xml:space="preserve">
+    <value>Zhvendosja e listave</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Description" xml:space="preserve">
+    <value>Fut një rresht bosh midis elementeve të reja të listës në burim</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Title" xml:space="preserve">
+    <value>Elemente liste të shkëputura</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Description" xml:space="preserve">
+    <value>Shfaq llojin e bllokut (P, H1, ...) pranë paragrafit aktual</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Title" xml:space="preserve">
+    <value>Shenjë paragrafi</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Description" xml:space="preserve">
+    <value>Mbush qelizat e tabelës që kolonat të rreshtohen në burimin Markdown. Çaktivizoje që tabelat të mbeten kompakte (më pak token për mjetet e IA)</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Title" xml:space="preserve">
+    <value>Rreshto kolonat e tabelës</value>
+  </data>
+  <data name="Editor.TextDirection.Auto" xml:space="preserve">
+    <value>Zbulo automatikisht për çdo paragraf</value>
+  </data>
+  <data name="Editor.TextDirection.Description" xml:space="preserve">
+    <value>Drejtimi i tekstit në redaktues; i dobishëm për arabishten, hebraishten dhe gjuhë të tjera që shkruhen nga e djathta në të majtë</value>
+  </data>
+  <data name="Editor.TextDirection.Ltr" xml:space="preserve">
+    <value>Nga e majta në të djathtë</value>
+  </data>
+  <data name="Editor.TextDirection.Rtl" xml:space="preserve">
+    <value>Nga e djathta në të majtë</value>
+  </data>
+  <data name="Editor.TextDirection.Title" xml:space="preserve">
+    <value>Drejtimi i tekstit</value>
+  </data>
+  <data name="General.AskBeforeReload.Description" xml:space="preserve">
+    <value>Nëse është joaktiv, ringarko pa pyetur përveçse kur ka ndryshime të paruajtura</value>
+  </data>
+  <data name="General.AskBeforeReload.Title" xml:space="preserve">
+    <value>Pyet para ringarkimit</value>
+  </data>
+  <data name="General.AutoReload.Description" xml:space="preserve">
+    <value>Mbikëqyr skedarin e hapur dhe rifresko atë kur e ndryshon një program tjetër</value>
+  </data>
+  <data name="General.AutoReload.Title" xml:space="preserve">
+    <value>Ringarkim automatik në ndryshim të jashtëm</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Description" xml:space="preserve">
+    <value>Skedarët e hapur nga Explorer hapen si skedë në dritaren aktuale; joaktiv hap një dritare të re</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Title" xml:space="preserve">
+    <value>Hap skedarët në skeda</value>
+  </data>
+  <data name="General.RememberCursorPosition.Description" xml:space="preserve">
+    <value>Hap dokumentet aty ku i latë</value>
+  </data>
+  <data name="General.RememberCursorPosition.Title" xml:space="preserve">
+    <value>Mbaj mend pozicionin e kursorit</value>
+  </data>
+  <data name="General.StartupAction.FileStartupAction.RestoreSession" xml:space="preserve">
+    <value>Rikthe të gjitha dokumentet e sesionit të fundit</value>
+  </data>
+  <data name="HedgeDocShare.Email.Description" xml:space="preserve">
+    <value>Lëre bosh për të krijuar shënime anonime; me një llogari shënimi është yti</value>
+  </data>
+  <data name="HedgeDocShare.Email.Title" xml:space="preserve">
+    <value>Email (opsional)</value>
+  </data>
+  <data name="HedgeDocShare.Password.Title" xml:space="preserve">
+    <value>Fjalëkalim</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Description" xml:space="preserve">
+    <value>Publikon shënimin (/s/…) që lidhja e ndarë të mos mund të redaktohet</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Title" xml:space="preserve">
+    <value>Publiko edhe një lidhje vetëm për lexim</value>
+  </data>
+  <data name="HedgeDocShare.Section" xml:space="preserve">
+    <value>Ndaje në HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Server.Description" xml:space="preserve">
+    <value>Adresa e HedgeDoc 1.x, p.sh. https://md.example.com</value>
+  </data>
+  <data name="HedgeDocShare.Server.Title" xml:space="preserve">
+    <value>Server</value>
+  </data>
+  <data name="HedgeDocShare.TestButton" xml:space="preserve">
+    <value>Provo</value>
+  </data>
+  <data name="HedgeDocShare.TestTitle" xml:space="preserve">
+    <value>Provo lidhjen</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Description" xml:space="preserve">
+    <value>Shfaq shiritin e skedave edhe kur është hapur vetëm një dokument</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Title" xml:space="preserve">
+    <value>Shfaq gjithmonë skedat</value>
+  </data>
+  <data name="View.AppTheme.Black" xml:space="preserve">
+    <value>E zezë (OLED)</value>
+  </data>
+  <data name="View.CustomCss.Description" xml:space="preserve">
+    <value>Stile shtesë për redaktuesin dhe HTML/PDF të eksportuar</value>
+  </data>
+  <data name="View.CustomCss.Placeholder" xml:space="preserve">
+    <value>p.sh. .markdown-body h1 { color: #c00; }  ose  :root { --editorBgColor: #111; }</value>
+  </data>
+  <data name="View.CustomCss.Title" xml:space="preserve">
+    <value>CSS i personalizuar</value>
+  </data>
+  <data name="View.CustomTheme.Description" xml:space="preserve">
+    <value>Një temë është një skedar CSS në dosjen e temave; shih docs/custom-theme.md</value>
+  </data>
+  <data name="View.CustomTheme.Document" xml:space="preserve">
+    <value>Si të shkruash një temë</value>
+  </data>
+  <data name="View.CustomTheme.Folder" xml:space="preserve">
+    <value>Temat janë skedarë CSS në këtë dosje; dokumenti shpjegon formatin.</value>
+  </data>
+  <data name="View.CustomTheme.None" xml:space="preserve">
+    <value>(asnjë)</value>
+  </data>
+  <data name="View.CustomTheme.OpenFolder" xml:space="preserve">
+    <value>Hap dosjen e temave</value>
+  </data>
+  <data name="View.CustomTheme.Refresh" xml:space="preserve">
+    <value>Ringarko temat</value>
+  </data>
+  <data name="View.CustomTheme.Title" xml:space="preserve">
+    <value>Temë e personalizuar</value>
+  </data>
+  <data name="View.Image.CopyPath.Placeholder" xml:space="preserve">
+    <value>p.sh. ./${filename}.assets — variabla: ${filename} ${filedir} ${year} ${month} ${day}</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Description" xml:space="preserve">
+    <value>Cilën faqe shfaq paneli anësor në nisje</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
+    <value>Faqja e parazgjedhur e panelit anësor</value>
+  </data>
 </root>

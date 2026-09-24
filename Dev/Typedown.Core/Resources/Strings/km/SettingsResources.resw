@@ -689,4 +689,163 @@
     <value>បង្អួច</value>
     <comment>视图/窗口</comment>
   </data>
+  <data name="Editor.FontFamily.Placeholder" xml:space="preserve">
+    <value>លំនាំដើម</value>
+  </data>
+  <data name="Editor.ListIndentation.Description" xml:space="preserve">
+    <value>ការចូលបន្ទាត់ដែលសរសេរសម្រាប់ធាតុបញ្ជីដែលដាក់ជាន់គ្នា។ ចន្លោះ ៤ ស្របនឹង Obsidian និងកម្មវិធីនិពន្ធភាគច្រើនផ្សេងទៀត</value>
+  </data>
+  <data name="Editor.ListIndentation.Dfm" xml:space="preserve">
+    <value>ការចូលបន្ទាត់ ៤ ចន្លោះ (ស្តង់ដារ Markdown)</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces1" xml:space="preserve">
+    <value>១ ចន្លោះបន្ទាប់ពីសញ្ញា</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces2" xml:space="preserve">
+    <value>២ ចន្លោះបន្ទាប់ពីសញ្ញា</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces4" xml:space="preserve">
+    <value>៤ ចន្លោះបន្ទាប់ពីសញ្ញា</value>
+  </data>
+  <data name="Editor.ListIndentation.Title" xml:space="preserve">
+    <value>ការចូលបន្ទាត់បញ្ជី</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Description" xml:space="preserve">
+    <value>បញ្ចូលបន្ទាត់ទទេរវាងធាតុបញ្ជីថ្មីក្នុងប្រភព</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Title" xml:space="preserve">
+    <value>ធាតុបញ្ជីរលុង</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Description" xml:space="preserve">
+    <value>បង្ហាញប្រភេទប្លុក (P, H1, ...) នៅជាប់កថាខណ្ឌបច្ចុប្បន្ន</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Title" xml:space="preserve">
+    <value>សញ្ញាកថាខណ្ឌ</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Description" xml:space="preserve">
+    <value>បំពេញក្រឡាតារាងដើម្បីឲ្យជួរឈរត្រង់គ្នាក្នុងប្រភព Markdown។ បិទដើម្បីរក្សាតារាងឲ្យខ្លី (តិចថូខិនសម្រាប់ឧបករណ៍ AI)</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Title" xml:space="preserve">
+    <value>តម្រឹមជួរឈរតារាង</value>
+  </data>
+  <data name="Editor.TextDirection.Auto" xml:space="preserve">
+    <value>រកឃើញដោយស្វ័យប្រវត្តិតាមកថាខណ្ឌ</value>
+  </data>
+  <data name="Editor.TextDirection.Description" xml:space="preserve">
+    <value>ទិសអក្សរក្នុងកម្មវិធីនិពន្ធ មានប្រយោជន៍សម្រាប់ភាសាអារ៉ាប់ ហេប្រិ និងភាសាដែលសរសេរពីស្ដាំទៅឆ្វេង</value>
+  </data>
+  <data name="Editor.TextDirection.Ltr" xml:space="preserve">
+    <value>ពីឆ្វេងទៅស្ដាំ</value>
+  </data>
+  <data name="Editor.TextDirection.Rtl" xml:space="preserve">
+    <value>ពីស្ដាំទៅឆ្វេង</value>
+  </data>
+  <data name="Editor.TextDirection.Title" xml:space="preserve">
+    <value>ទិសអក្សរ</value>
+  </data>
+  <data name="General.AskBeforeReload.Description" xml:space="preserve">
+    <value>បើបិទ ផ្ទុកឡើងវិញដោយមិនសួរ លុះត្រាតែមានការផ្លាស់ប្ដូរមិនទាន់រក្សាទុក</value>
+  </data>
+  <data name="General.AskBeforeReload.Title" xml:space="preserve">
+    <value>សួរមុនពេលផ្ទុកឡើងវិញ</value>
+  </data>
+  <data name="General.AutoReload.Description" xml:space="preserve">
+    <value>តាមដានឯកសារដែលបើក ហើយធ្វើឲ្យស្រស់នៅពេលកម្មវិធីផ្សេងផ្លាស់ប្ដូរវា</value>
+  </data>
+  <data name="General.AutoReload.Title" xml:space="preserve">
+    <value>ផ្ទុកឡើងវិញដោយស្វ័យប្រវត្តិពេលមានការផ្លាស់ប្ដូរពីខាងក្រៅ</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Description" xml:space="preserve">
+    <value>ឯកសារដែលបើកពី Explorer បើកជាផ្ទាំងក្នុងបង្អួចបច្ចុប្បន្ន បើបិទនឹងបើកបង្អួចថ្មី</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Title" xml:space="preserve">
+    <value>បើកឯកសារជាផ្ទាំង</value>
+  </data>
+  <data name="General.RememberCursorPosition.Description" xml:space="preserve">
+    <value>បើកឯកសារនៅកន្លែងដែលអ្នកឈប់</value>
+  </data>
+  <data name="General.RememberCursorPosition.Title" xml:space="preserve">
+    <value>ចងចាំទីតាំងទស្សន៍ទ្រនិច</value>
+  </data>
+  <data name="General.StartupAction.FileStartupAction.RestoreSession" xml:space="preserve">
+    <value>ស្ដារឯកសារទាំងអស់ពីវគ្គមុន</value>
+  </data>
+  <data name="HedgeDocShare.Email.Description" xml:space="preserve">
+    <value>ទុកទទេដើម្បីបង្កើតកំណត់ត្រាអនាមិក បើមានគណនី កំណត់ត្រាជារបស់អ្នក</value>
+  </data>
+  <data name="HedgeDocShare.Email.Title" xml:space="preserve">
+    <value>អ៊ីមែល (ស្រេចចិត្ត)</value>
+  </data>
+  <data name="HedgeDocShare.Password.Title" xml:space="preserve">
+    <value>ពាក្យសម្ងាត់</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Description" xml:space="preserve">
+    <value>បោះពុម្ពកំណត់ត្រា (/s/…) ដើម្បីកុំឲ្យតំណដែលចែករំលែកអាចកែបាន</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Title" xml:space="preserve">
+    <value>បោះពុម្ពតំណអានតែប៉ុណ្ណោះផងដែរ</value>
+  </data>
+  <data name="HedgeDocShare.Section" xml:space="preserve">
+    <value>ចែករំលែកទៅ HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Server.Description" xml:space="preserve">
+    <value>អាសយដ្ឋាន HedgeDoc 1.x ឧ. https://md.example.com</value>
+  </data>
+  <data name="HedgeDocShare.Server.Title" xml:space="preserve">
+    <value>ម៉ាស៊ីនបម្រើ</value>
+  </data>
+  <data name="HedgeDocShare.TestButton" xml:space="preserve">
+    <value>សាកល្បង</value>
+  </data>
+  <data name="HedgeDocShare.TestTitle" xml:space="preserve">
+    <value>សាកល្បងការតភ្ជាប់</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Description" xml:space="preserve">
+    <value>បង្ហាញរបារផ្ទាំង ទោះបីមានឯកសារតែមួយបើកក៏ដោយ</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Title" xml:space="preserve">
+    <value>បង្ហាញផ្ទាំងជានិច្ច</value>
+  </data>
+  <data name="View.AppTheme.Black" xml:space="preserve">
+    <value>ខ្មៅ (OLED)</value>
+  </data>
+  <data name="View.CustomCss.Description" xml:space="preserve">
+    <value>រចនាបថបន្ថែមសម្រាប់កម្មវិធីនិពន្ធ និង HTML/PDF ដែលនាំចេញ</value>
+  </data>
+  <data name="View.CustomCss.Placeholder" xml:space="preserve">
+    <value>ឧ. .markdown-body h1 { color: #c00; }  ឬ  :root { --editorBgColor: #111; }</value>
+  </data>
+  <data name="View.CustomCss.Title" xml:space="preserve">
+    <value>CSS ផ្ទាល់ខ្លួន</value>
+  </data>
+  <data name="View.CustomTheme.Description" xml:space="preserve">
+    <value>រូបរាងគឺជាឯកសារ CSS មួយក្នុងថតរូបរាង សូមមើល docs/custom-theme.md</value>
+  </data>
+  <data name="View.CustomTheme.Document" xml:space="preserve">
+    <value>របៀបសរសេរមួយ</value>
+  </data>
+  <data name="View.CustomTheme.Folder" xml:space="preserve">
+    <value>រូបរាងគឺជាឯកសារ CSS ក្នុងថតនេះ ឯកសារពន្យល់ពីទម្រង់។</value>
+  </data>
+  <data name="View.CustomTheme.None" xml:space="preserve">
+    <value>(គ្មាន)</value>
+  </data>
+  <data name="View.CustomTheme.OpenFolder" xml:space="preserve">
+    <value>បើកថតរូបរាង</value>
+  </data>
+  <data name="View.CustomTheme.Refresh" xml:space="preserve">
+    <value>ផ្ទុករូបរាងឡើងវិញ</value>
+  </data>
+  <data name="View.CustomTheme.Title" xml:space="preserve">
+    <value>រូបរាងផ្ទាល់ខ្លួន</value>
+  </data>
+  <data name="View.Image.CopyPath.Placeholder" xml:space="preserve">
+    <value>ឧ. ./${filename}.assets — អថេរ៖ ${filename} ${filedir} ${year} ${month} ${day}</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Description" xml:space="preserve">
+    <value>ទំព័រណាដែលផ្ទាំងចំហៀងបង្ហាញពេលកម្មវិធីចាប់ផ្ដើម</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
+    <value>ទំព័រលំនាំដើមនៃផ្ទាំងចំហៀង</value>
+  </data>
 </root>

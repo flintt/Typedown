@@ -249,4 +249,52 @@
     <value>WebView2 Runtime nuk është instaluar</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>Ky dokument është ndarë më parë, por ka ndryshuar që atëherë. HedgeDoc 1.x nuk mund të përditësojë një shënim ekzistues, kështu që ngarkimi i ri krijon një shënim të ri me një lidhje të re.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>Kopjo lidhjen</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>Lidhje e redaktueshme</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>Kushdo që ka këtë lidhje mund ta redaktojë shënimin.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>Së pari cakto adresën e serverit HedgeDoc te Cilësimet → Eksport.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>Hap në shfletues</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>Ngarko sërish (lidhje e re)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>Lidhje vetëm për lexim</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>U nda në HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>Dokumenti nuk ka ndryshuar që nga ndarja e fundit; këto janë lidhjet ekzistuese.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>Përdor lidhjen e mëparshme</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>Mbaje</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Ringarko</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>Skedari ka ndryshuar në disk. Ringarkimi do të hedhë poshtë ndryshimet e paruajtura.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>Skedari ka ndryshuar në disk. Ta ringarkoj?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>Skedari ka ndryshuar në disk</value>
+  </data>
 </root>

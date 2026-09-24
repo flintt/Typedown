@@ -249,4 +249,52 @@
     <value>WebView2 Runtime Tidak Diinstal</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>Dokumen ini pernah dibagikan tetapi sudah berubah sejak itu. HedgeDoc 1.x tidak dapat memperbarui catatan yang ada, jadi unggah ulang membuat catatan baru dengan tautan baru.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>Salin tautan</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>Tautan yang dapat disunting</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>Siapa pun dengan tautan ini dapat menyunting catatan.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>Atur alamat server HedgeDoc dulu di Pengaturan → Ekspor.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>Buka di peramban</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>Unggah lagi (tautan baru)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>Tautan hanya-baca</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>Dibagikan ke HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>Dokumen tidak berubah sejak terakhir dibagikan; ini tautan yang sudah ada.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>Gunakan tautan sebelumnya</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>Simpan</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Muat ulang</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>Berkas telah berubah di disk. Memuat ulang akan membuang perubahan yang belum disimpan.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>Berkas telah berubah di disk. Muat ulang?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>Berkas telah berubah di disk</value>
+  </data>
 </root>

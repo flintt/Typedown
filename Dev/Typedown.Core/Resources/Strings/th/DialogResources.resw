@@ -249,4 +249,52 @@
     <value>ไม่ได้ติดตั้ง WebView2 Runtime</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>เอกสารนี้เคยแชร์แล้วแต่มีการเปลี่ยนแปลงตั้งแต่นั้น HedgeDoc 1.x ไม่สามารถอัปเดตโน้ตเดิมได้ การอัปโหลดใหม่จึงสร้างโน้ตใหม่พร้อมลิงก์ใหม่</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>คัดลอกลิงก์</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>ลิงก์ที่แก้ไขได้</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>ใครก็ตามที่มีลิงก์นี้สามารถแก้ไขโน้ตได้</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>ตั้งค่าที่อยู่เซิร์ฟเวอร์ HedgeDoc ในการตั้งค่า → ส่งออก ก่อน</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>เปิดในเบราว์เซอร์</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>อัปโหลดอีกครั้ง (ลิงก์ใหม่)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>ลิงก์อ่านอย่างเดียว</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>แชร์ไปยัง HedgeDoc แล้ว</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>เอกสารไม่เปลี่ยนแปลงตั้งแต่แชร์ครั้งล่าสุด นี่คือลิงก์ที่มีอยู่</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>ใช้ลิงก์เดิม</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>เก็บไว้</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>โหลดใหม่</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>ไฟล์ถูกแก้ไขบนดิสก์ การโหลดใหม่จะละทิ้งการเปลี่ยนแปลงที่ยังไม่บันทึก</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>ไฟล์ถูกแก้ไขบนดิสก์ ต้องการโหลดใหม่หรือไม่</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>ไฟล์ถูกแก้ไขบนดิสก์</value>
+  </data>
 </root>

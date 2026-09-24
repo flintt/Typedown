@@ -689,4 +689,163 @@
     <value>Fönster</value>
     <comment>视图/窗口</comment>
   </data>
+  <data name="Editor.FontFamily.Placeholder" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="Editor.ListIndentation.Description" xml:space="preserve">
+    <value>Indrag som skrivs för nästlade listobjekt. 4 blanksteg matchar Obsidian och de flesta andra redigerare</value>
+  </data>
+  <data name="Editor.ListIndentation.Dfm" xml:space="preserve">
+    <value>4 blanstegs indrag (Markdown-standard)</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces1" xml:space="preserve">
+    <value>1 blanksteg efter markören</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces2" xml:space="preserve">
+    <value>2 blanksteg efter markören</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces4" xml:space="preserve">
+    <value>4 blanksteg efter markören</value>
+  </data>
+  <data name="Editor.ListIndentation.Title" xml:space="preserve">
+    <value>Listindrag</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Description" xml:space="preserve">
+    <value>Infoga en tom rad mellan nya listobjekt i källan</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Title" xml:space="preserve">
+    <value>Glesa listobjekt</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Description" xml:space="preserve">
+    <value>Visa blocktypen (P, H1, ...) bredvid aktuellt stycke</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Title" xml:space="preserve">
+    <value>Styckesmarkör</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Description" xml:space="preserve">
+    <value>Fyll ut tabellceller så att kolumnerna radas upp i Markdown-källan. Stäng av för kompakta tabeller (färre tokens för AI-verktyg)</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Title" xml:space="preserve">
+    <value>Justera tabellkolumner</value>
+  </data>
+  <data name="Editor.TextDirection.Auto" xml:space="preserve">
+    <value>Identifiera automatiskt per stycke</value>
+  </data>
+  <data name="Editor.TextDirection.Description" xml:space="preserve">
+    <value>Textriktning för innehållet, användbart för arabiska, hebreiska och andra språk som skrivs från höger till vänster</value>
+  </data>
+  <data name="Editor.TextDirection.Ltr" xml:space="preserve">
+    <value>Vänster till höger</value>
+  </data>
+  <data name="Editor.TextDirection.Rtl" xml:space="preserve">
+    <value>Höger till vänster</value>
+  </data>
+  <data name="Editor.TextDirection.Title" xml:space="preserve">
+    <value>Textriktning</value>
+  </data>
+  <data name="General.AskBeforeReload.Description" xml:space="preserve">
+    <value>Om av, läs om tyst om det inte finns osparade ändringar</value>
+  </data>
+  <data name="General.AskBeforeReload.Title" xml:space="preserve">
+    <value>Fråga före omläsning</value>
+  </data>
+  <data name="General.AutoReload.Description" xml:space="preserve">
+    <value>Bevaka den öppna filen och uppdatera den när ett annat program ändrar den</value>
+  </data>
+  <data name="General.AutoReload.Title" xml:space="preserve">
+    <value>Läs om automatiskt vid extern ändring</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Description" xml:space="preserve">
+    <value>Filer som öppnas från Utforskaren öppnas som en flik i det aktuella fönstret; av öppnar ett nytt fönster</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Title" xml:space="preserve">
+    <value>Öppna filer i flikar</value>
+  </data>
+  <data name="General.RememberCursorPosition.Description" xml:space="preserve">
+    <value>Öppna dokument där du slutade</value>
+  </data>
+  <data name="General.RememberCursorPosition.Title" xml:space="preserve">
+    <value>Kom ihåg markörens position</value>
+  </data>
+  <data name="General.StartupAction.FileStartupAction.RestoreSession" xml:space="preserve">
+    <value>Återställ alla dokument från förra sessionen</value>
+  </data>
+  <data name="HedgeDocShare.Email.Description" xml:space="preserve">
+    <value>Lämna tomt för att skapa anteckningar anonymt; med ett konto tillhör anteckningen dig</value>
+  </data>
+  <data name="HedgeDocShare.Email.Title" xml:space="preserve">
+    <value>E-post (valfritt)</value>
+  </data>
+  <data name="HedgeDocShare.Password.Title" xml:space="preserve">
+    <value>Lösenord</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Description" xml:space="preserve">
+    <value>Publicerar anteckningen (/s/…) så att den delade länken inte kan redigeras</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Title" xml:space="preserve">
+    <value>Publicera även en skrivskyddad länk</value>
+  </data>
+  <data name="HedgeDocShare.Section" xml:space="preserve">
+    <value>Dela till HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Server.Description" xml:space="preserve">
+    <value>HedgeDoc 1.x-adress, t.ex. https://md.example.com</value>
+  </data>
+  <data name="HedgeDocShare.Server.Title" xml:space="preserve">
+    <value>Server</value>
+  </data>
+  <data name="HedgeDocShare.TestButton" xml:space="preserve">
+    <value>Testa</value>
+  </data>
+  <data name="HedgeDocShare.TestTitle" xml:space="preserve">
+    <value>Testa anslutningen</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Description" xml:space="preserve">
+    <value>Visa flikraden även när bara ett dokument är öppet</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Title" xml:space="preserve">
+    <value>Visa alltid flikar</value>
+  </data>
+  <data name="View.AppTheme.Black" xml:space="preserve">
+    <value>Svart (OLED)</value>
+  </data>
+  <data name="View.CustomCss.Description" xml:space="preserve">
+    <value>Extra stilar för redigeraren och exporterad HTML/PDF</value>
+  </data>
+  <data name="View.CustomCss.Placeholder" xml:space="preserve">
+    <value>t.ex. .markdown-body h1 { color: #c00; }  eller  :root { --editorBgColor: #111; }</value>
+  </data>
+  <data name="View.CustomCss.Title" xml:space="preserve">
+    <value>Anpassad CSS</value>
+  </data>
+  <data name="View.CustomTheme.Description" xml:space="preserve">
+    <value>Ett tema är en CSS-fil i temamappen; se docs/custom-theme.md</value>
+  </data>
+  <data name="View.CustomTheme.Document" xml:space="preserve">
+    <value>Så skriver du ett</value>
+  </data>
+  <data name="View.CustomTheme.Folder" xml:space="preserve">
+    <value>Teman är CSS-filer i den här mappen; dokumentet förklarar formatet.</value>
+  </data>
+  <data name="View.CustomTheme.None" xml:space="preserve">
+    <value>(inget)</value>
+  </data>
+  <data name="View.CustomTheme.OpenFolder" xml:space="preserve">
+    <value>Öppna temamappen</value>
+  </data>
+  <data name="View.CustomTheme.Refresh" xml:space="preserve">
+    <value>Läs om teman</value>
+  </data>
+  <data name="View.CustomTheme.Title" xml:space="preserve">
+    <value>Anpassat tema</value>
+  </data>
+  <data name="View.Image.CopyPath.Placeholder" xml:space="preserve">
+    <value>t.ex. ./${filename}.assets — variabler: ${filename} ${filedir} ${year} ${month} ${day}</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Description" xml:space="preserve">
+    <value>Vilken sida sidopanelen visar när appen startar</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
+    <value>Sidopanelens standardsida</value>
+  </data>
 </root>

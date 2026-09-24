@@ -689,4 +689,163 @@
     <value>Prozor</value>
     <comment>视图/窗口</comment>
   </data>
+  <data name="Editor.FontFamily.Placeholder" xml:space="preserve">
+    <value>Zadano</value>
+  </data>
+  <data name="Editor.ListIndentation.Description" xml:space="preserve">
+    <value>Uvlaka koja se upisuje za ugniježđene stavke liste. 4 razmaka odgovaraju Obsidianu i većini drugih uređivača</value>
+  </data>
+  <data name="Editor.ListIndentation.Dfm" xml:space="preserve">
+    <value>Uvlaka od 4 razmaka (Markdown standard)</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces1" xml:space="preserve">
+    <value>1 razmak nakon oznake</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces2" xml:space="preserve">
+    <value>2 razmaka nakon oznake</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces4" xml:space="preserve">
+    <value>4 razmaka nakon oznake</value>
+  </data>
+  <data name="Editor.ListIndentation.Title" xml:space="preserve">
+    <value>Uvlaka listi</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Description" xml:space="preserve">
+    <value>Umetni prazan red između novih stavki liste u izvoru</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Title" xml:space="preserve">
+    <value>Razmaknute stavke liste</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Description" xml:space="preserve">
+    <value>Prikaži vrstu bloka (P, H1, ...) pored trenutnog pasusa</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Title" xml:space="preserve">
+    <value>Oznaka pasusa</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Description" xml:space="preserve">
+    <value>Popuni ćelije tabele da se kolone poravnaju u Markdown izvoru. Isključi da tabele ostanu kompaktne (manje tokena za AI alate)</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Title" xml:space="preserve">
+    <value>Poravnaj kolone tabele</value>
+  </data>
+  <data name="Editor.TextDirection.Auto" xml:space="preserve">
+    <value>Automatski prepoznaj po pasusu</value>
+  </data>
+  <data name="Editor.TextDirection.Description" xml:space="preserve">
+    <value>Smjer teksta u uređivaču; korisno za arapski, hebrejski i druge jezike koji se pišu zdesna nalijevo</value>
+  </data>
+  <data name="Editor.TextDirection.Ltr" xml:space="preserve">
+    <value>Slijeva nadesno</value>
+  </data>
+  <data name="Editor.TextDirection.Rtl" xml:space="preserve">
+    <value>Zdesna nalijevo</value>
+  </data>
+  <data name="Editor.TextDirection.Title" xml:space="preserve">
+    <value>Smjer teksta</value>
+  </data>
+  <data name="General.AskBeforeReload.Description" xml:space="preserve">
+    <value>Ako je isključeno, ponovo učitaj bez pitanja osim ako ima nesačuvanih izmjena</value>
+  </data>
+  <data name="General.AskBeforeReload.Title" xml:space="preserve">
+    <value>Pitaj prije ponovnog učitavanja</value>
+  </data>
+  <data name="General.AutoReload.Description" xml:space="preserve">
+    <value>Prati otvorenu datoteku i osvježi je kada je drugi program promijeni</value>
+  </data>
+  <data name="General.AutoReload.Title" xml:space="preserve">
+    <value>Automatsko ponovno učitavanje pri vanjskoj promjeni</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Description" xml:space="preserve">
+    <value>Datoteke otvorene iz Explorera otvaraju se kao kartica u trenutnom prozoru; isključeno otvara novi prozor</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Title" xml:space="preserve">
+    <value>Otvaraj datoteke u karticama</value>
+  </data>
+  <data name="General.RememberCursorPosition.Description" xml:space="preserve">
+    <value>Otvori dokumente tamo gdje ste stali</value>
+  </data>
+  <data name="General.RememberCursorPosition.Title" xml:space="preserve">
+    <value>Zapamti položaj kursora</value>
+  </data>
+  <data name="General.StartupAction.FileStartupAction.RestoreSession" xml:space="preserve">
+    <value>Vrati sve dokumente prošle sesije</value>
+  </data>
+  <data name="HedgeDocShare.Email.Description" xml:space="preserve">
+    <value>Ostavite prazno za anonimne bilješke; s računom bilješka pripada vama</value>
+  </data>
+  <data name="HedgeDocShare.Email.Title" xml:space="preserve">
+    <value>E-pošta (opcionalno)</value>
+  </data>
+  <data name="HedgeDocShare.Password.Title" xml:space="preserve">
+    <value>Lozinka</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Description" xml:space="preserve">
+    <value>Objavljuje bilješku (/s/…) tako da se dijeljeni link ne može uređivati</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Title" xml:space="preserve">
+    <value>Objavi i link samo za čitanje</value>
+  </data>
+  <data name="HedgeDocShare.Section" xml:space="preserve">
+    <value>Podijeli na HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Server.Description" xml:space="preserve">
+    <value>Adresa HedgeDoc 1.x, npr. https://md.example.com</value>
+  </data>
+  <data name="HedgeDocShare.Server.Title" xml:space="preserve">
+    <value>Server</value>
+  </data>
+  <data name="HedgeDocShare.TestButton" xml:space="preserve">
+    <value>Testiraj</value>
+  </data>
+  <data name="HedgeDocShare.TestTitle" xml:space="preserve">
+    <value>Testiraj vezu</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Description" xml:space="preserve">
+    <value>Prikaži traku kartica čak i kada je otvoren samo jedan dokument</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Title" xml:space="preserve">
+    <value>Uvijek prikazuj kartice</value>
+  </data>
+  <data name="View.AppTheme.Black" xml:space="preserve">
+    <value>Crna (OLED)</value>
+  </data>
+  <data name="View.CustomCss.Description" xml:space="preserve">
+    <value>Dodatni stilovi za uređivač i izvezeni HTML/PDF</value>
+  </data>
+  <data name="View.CustomCss.Placeholder" xml:space="preserve">
+    <value>npr. .markdown-body h1 { color: #c00; }  ili  :root { --editorBgColor: #111; }</value>
+  </data>
+  <data name="View.CustomCss.Title" xml:space="preserve">
+    <value>Prilagođeni CSS</value>
+  </data>
+  <data name="View.CustomTheme.Description" xml:space="preserve">
+    <value>Tema je jedna CSS datoteka u folderu tema; vidi docs/custom-theme.md</value>
+  </data>
+  <data name="View.CustomTheme.Document" xml:space="preserve">
+    <value>Kako je napisati</value>
+  </data>
+  <data name="View.CustomTheme.Folder" xml:space="preserve">
+    <value>Teme su CSS datoteke u ovom folderu; dokument objašnjava format.</value>
+  </data>
+  <data name="View.CustomTheme.None" xml:space="preserve">
+    <value>(nijedna)</value>
+  </data>
+  <data name="View.CustomTheme.OpenFolder" xml:space="preserve">
+    <value>Otvori folder tema</value>
+  </data>
+  <data name="View.CustomTheme.Refresh" xml:space="preserve">
+    <value>Ponovo učitaj teme</value>
+  </data>
+  <data name="View.CustomTheme.Title" xml:space="preserve">
+    <value>Prilagođena tema</value>
+  </data>
+  <data name="View.Image.CopyPath.Placeholder" xml:space="preserve">
+    <value>npr. ./${filename}.assets — varijable: ${filename} ${filedir} ${year} ${month} ${day}</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Description" xml:space="preserve">
+    <value>Koju stranicu bočna ploča prikazuje pri pokretanju</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
+    <value>Zadana stranica bočne ploče</value>
+  </data>
 </root>

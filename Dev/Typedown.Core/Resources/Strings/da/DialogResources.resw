@@ -249,4 +249,52 @@
     <value>WebView2 Runtime ikke installeret</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>Dette dokument er delt før, men er ændret siden. HedgeDoc 1.x kan ikke opdatere en eksisterende note, så en ny upload opretter en ny note med et nyt link.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>Kopiér link</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>Redigerbart link</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>Alle med dette link kan redigere noten.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>Angiv først HedgeDoc-serverens adresse i Indstillinger → Eksport.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>Åbn i browser</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>Upload igen (nyt link)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>Skrivebeskyttet link</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>Delt til HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>Dokumentet er ikke ændret, siden det sidst blev delt; her er de eksisterende links.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>Brug forrige link</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>Behold</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Genindlæs</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>Filen er ændret på disken. Genindlæsning kasserer ugemte ændringer.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>Filen er ændret på disken. Genindlæs den?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>Filen er ændret på disken</value>
+  </data>
 </root>

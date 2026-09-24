@@ -933,4 +933,64 @@
     <value>Zoom</value>
     <comment>字体缩放</comment>
   </data>
+  <data name="FolderPane.NoFolderOpen" xml:space="preserve">
+    <value>Tiada folder dibuka. Buka fail atau folder untuk melayarinya di sini.</value>
+  </data>
+  <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
+    <value>Tiada fail Markdown dalam folder ini.</value>
+  </data>
+  <data name="FolderPane.NotFound" xml:space="preserve">
+    <value>Folder ini tidak wujud lagi.</value>
+  </data>
+  <data name="FolderPane.RevealCurrentFile" xml:space="preserve">
+    <value>Tunjukkan folder fail semasa</value>
+  </data>
+  <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
+    <value>Cari dalam folder…</value>
+  </data>
+  <data name="FolderSearch.NameMatch" xml:space="preserve">
+    <value>(nama fail sepadan)</value>
+  </data>
+  <data name="FolderSearch.ResultSummary" xml:space="preserve">
+    <value>{0} fail sepadan daripada {1} yang dicari</value>
+  </data>
+  <data name="FolderSearch.Searching" xml:space="preserve">
+    <value>Mencari…</value>
+  </data>
+  <data name="FullScreen" xml:space="preserve">
+    <value>Skrin penuh</value>
+  </data>
+  <data name="LastUsedTab" xml:space="preserve">
+    <value>Tab terakhir digunakan</value>
+  </data>
+  <data name="NextTab" xml:space="preserve">
+    <value>Tab seterusnya</value>
+  </data>
+  <data name="PreviousTab" xml:space="preserve">
+    <value>Tab sebelumnya</value>
+  </data>
+  <data name="QuoteDecrease" xml:space="preserve">
+    <value>Kurangkan aras petikan</value>
+  </data>
+  <data name="QuoteIncrease" xml:space="preserve">
+    <value>Tambah aras petikan</value>
+  </data>
+  <data name="ReadOnlyMode" xml:space="preserve">
+    <value>Mod bacaan</value>
+  </data>
+  <data name="SearchInFolder" xml:space="preserve">
+    <value>Cari dalam folder</value>
+  </data>
+  <data name="ShareToHedgeDoc" xml:space="preserve">
+    <value>Kongsi ke HedgeDoc…</value>
+  </data>
+  <data name="TocPane.CollapseAll" xml:space="preserve">
+    <value>Runtuhkan semua</value>
+  </data>
+  <data name="TocPane.ExpandAll" xml:space="preserve">
+    <value>Kembangkan semua</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>Tanpa tajuk</value>
+  </data>
 </root>

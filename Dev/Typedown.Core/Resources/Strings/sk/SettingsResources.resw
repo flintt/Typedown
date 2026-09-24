@@ -689,4 +689,163 @@
     <value>Okno</value>
     <comment>视图/窗口</comment>
   </data>
+  <data name="Editor.FontFamily.Placeholder" xml:space="preserve">
+    <value>Predvolené</value>
+  </data>
+  <data name="Editor.ListIndentation.Description" xml:space="preserve">
+    <value>Odsadenie zapísané pre vnorené položky zoznamu. 4 medzery zodpovedajú Obsidianu a väčšine ďalších editorov</value>
+  </data>
+  <data name="Editor.ListIndentation.Dfm" xml:space="preserve">
+    <value>Odsadenie 4 medzerami (štandard Markdownu)</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces1" xml:space="preserve">
+    <value>1 medzera za značkou</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces2" xml:space="preserve">
+    <value>2 medzery za značkou</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces4" xml:space="preserve">
+    <value>4 medzery za značkou</value>
+  </data>
+  <data name="Editor.ListIndentation.Title" xml:space="preserve">
+    <value>Odsadenie zoznamov</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Description" xml:space="preserve">
+    <value>Vkladať prázdny riadok medzi nové položky zoznamu v zdroji</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Title" xml:space="preserve">
+    <value>Voľné položky zoznamu</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Description" xml:space="preserve">
+    <value>Zobrazovať typ bloku (P, H1, ...) vedľa aktuálneho odseku</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Title" xml:space="preserve">
+    <value>Značka odseku</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Description" xml:space="preserve">
+    <value>Doplniť bunky tabuľky, aby stĺpce lícovali v zdroji Markdownu. Vypnite, aby tabuľky zostali kompaktné (menej tokenov pre nástroje AI)</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Title" xml:space="preserve">
+    <value>Zarovnať stĺpce tabuľky</value>
+  </data>
+  <data name="Editor.TextDirection.Auto" xml:space="preserve">
+    <value>Rozpoznať automaticky podľa odseku</value>
+  </data>
+  <data name="Editor.TextDirection.Description" xml:space="preserve">
+    <value>Smer textu v editore, hodí sa pre arabčinu, hebrejčinu a ďalšie jazyky písané sprava doľava</value>
+  </data>
+  <data name="Editor.TextDirection.Ltr" xml:space="preserve">
+    <value>Zľava doprava</value>
+  </data>
+  <data name="Editor.TextDirection.Rtl" xml:space="preserve">
+    <value>Sprava doľava</value>
+  </data>
+  <data name="Editor.TextDirection.Title" xml:space="preserve">
+    <value>Smer textu</value>
+  </data>
+  <data name="General.AskBeforeReload.Description" xml:space="preserve">
+    <value>Ak je vypnuté, načítať znova bez pýtania, ak nie sú neuložené zmeny</value>
+  </data>
+  <data name="General.AskBeforeReload.Title" xml:space="preserve">
+    <value>Spýtať sa pred znovunačítaním</value>
+  </data>
+  <data name="General.AutoReload.Description" xml:space="preserve">
+    <value>Sledovať otvorený súbor a obnoviť ho, keď ho zmení iný program</value>
+  </data>
+  <data name="General.AutoReload.Title" xml:space="preserve">
+    <value>Automaticky načítať pri vonkajšej zmene</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Description" xml:space="preserve">
+    <value>Súbory otvorené z Prieskumníka sa otvoria ako karta v aktuálnom okne; vypnuté otvorí nové okno</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Title" xml:space="preserve">
+    <value>Otvárať súbory na kartách</value>
+  </data>
+  <data name="General.RememberCursorPosition.Description" xml:space="preserve">
+    <value>Otvárať dokumenty tam, kde ste skončili</value>
+  </data>
+  <data name="General.RememberCursorPosition.Title" xml:space="preserve">
+    <value>Zapamätať si pozíciu kurzora</value>
+  </data>
+  <data name="General.StartupAction.FileStartupAction.RestoreSession" xml:space="preserve">
+    <value>Obnoviť všetky dokumenty z poslednej relácie</value>
+  </data>
+  <data name="HedgeDocShare.Email.Description" xml:space="preserve">
+    <value>Nechajte prázdne pre anonymné poznámky; s účtom poznámka patrí vám</value>
+  </data>
+  <data name="HedgeDocShare.Email.Title" xml:space="preserve">
+    <value>E-mail (voliteľné)</value>
+  </data>
+  <data name="HedgeDocShare.Password.Title" xml:space="preserve">
+    <value>Heslo</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Description" xml:space="preserve">
+    <value>Poznámku publikuje (/s/…), takže zdieľaný odkaz nemožno upravovať</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Title" xml:space="preserve">
+    <value>Publikovať aj odkaz len na čítanie</value>
+  </data>
+  <data name="HedgeDocShare.Section" xml:space="preserve">
+    <value>Zdieľať do HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Server.Description" xml:space="preserve">
+    <value>Adresa HedgeDoc 1.x, napr. https://md.example.com</value>
+  </data>
+  <data name="HedgeDocShare.Server.Title" xml:space="preserve">
+    <value>Server</value>
+  </data>
+  <data name="HedgeDocShare.TestButton" xml:space="preserve">
+    <value>Otestovať</value>
+  </data>
+  <data name="HedgeDocShare.TestTitle" xml:space="preserve">
+    <value>Otestovať pripojenie</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Description" xml:space="preserve">
+    <value>Zobrazovať pruh kariet, aj keď je otvorený len jeden dokument</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Title" xml:space="preserve">
+    <value>Vždy zobrazovať karty</value>
+  </data>
+  <data name="View.AppTheme.Black" xml:space="preserve">
+    <value>Čierna (OLED)</value>
+  </data>
+  <data name="View.CustomCss.Description" xml:space="preserve">
+    <value>Doplnkové štýly pre editor a exportované HTML/PDF</value>
+  </data>
+  <data name="View.CustomCss.Placeholder" xml:space="preserve">
+    <value>napr. .markdown-body h1 { color: #c00; }  alebo  :root { --editorBgColor: #111; }</value>
+  </data>
+  <data name="View.CustomCss.Title" xml:space="preserve">
+    <value>Vlastné CSS</value>
+  </data>
+  <data name="View.CustomTheme.Description" xml:space="preserve">
+    <value>Motív je jeden súbor CSS v priečinku motívov; pozri docs/custom-theme.md</value>
+  </data>
+  <data name="View.CustomTheme.Document" xml:space="preserve">
+    <value>Ako ho napísať</value>
+  </data>
+  <data name="View.CustomTheme.Folder" xml:space="preserve">
+    <value>Motívy sú súbory CSS v tomto priečinku; formát vysvetľuje dokument.</value>
+  </data>
+  <data name="View.CustomTheme.None" xml:space="preserve">
+    <value>(žiadny)</value>
+  </data>
+  <data name="View.CustomTheme.OpenFolder" xml:space="preserve">
+    <value>Otvoriť priečinok motívov</value>
+  </data>
+  <data name="View.CustomTheme.Refresh" xml:space="preserve">
+    <value>Znova načítať motívy</value>
+  </data>
+  <data name="View.CustomTheme.Title" xml:space="preserve">
+    <value>Vlastný motív</value>
+  </data>
+  <data name="View.Image.CopyPath.Placeholder" xml:space="preserve">
+    <value>napr. ./${filename}.assets — premenné: ${filename} ${filedir} ${year} ${month} ${day}</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Description" xml:space="preserve">
+    <value>Ktorú stránku zobrazí bočný panel po spustení</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
+    <value>Predvolená stránka bočného panela</value>
+  </data>
 </root>

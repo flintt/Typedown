@@ -933,4 +933,64 @@
     <value>ซูม</value>
     <comment>字体缩放</comment>
   </data>
+  <data name="FolderPane.NoFolderOpen" xml:space="preserve">
+    <value>ยังไม่ได้เปิดโฟลเดอร์ เปิดไฟล์หรือโฟลเดอร์เพื่อเรียกดูที่นี่</value>
+  </data>
+  <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
+    <value>ไม่มีไฟล์ Markdown ในโฟลเดอร์นี้</value>
+  </data>
+  <data name="FolderPane.NotFound" xml:space="preserve">
+    <value>ไม่มีโฟลเดอร์นี้แล้ว</value>
+  </data>
+  <data name="FolderPane.RevealCurrentFile" xml:space="preserve">
+    <value>แสดงโฟลเดอร์ของไฟล์ปัจจุบัน</value>
+  </data>
+  <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
+    <value>ค้นหาในโฟลเดอร์…</value>
+  </data>
+  <data name="FolderSearch.NameMatch" xml:space="preserve">
+    <value>(ชื่อไฟล์ตรงกัน)</value>
+  </data>
+  <data name="FolderSearch.ResultSummary" xml:space="preserve">
+    <value>พบ {0} ไฟล์ จาก {1} ไฟล์ที่ค้นหา</value>
+  </data>
+  <data name="FolderSearch.Searching" xml:space="preserve">
+    <value>กำลังค้นหา…</value>
+  </data>
+  <data name="FullScreen" xml:space="preserve">
+    <value>เต็มหน้าจอ</value>
+  </data>
+  <data name="LastUsedTab" xml:space="preserve">
+    <value>แท็บที่ใช้ล่าสุด</value>
+  </data>
+  <data name="NextTab" xml:space="preserve">
+    <value>แท็บถัดไป</value>
+  </data>
+  <data name="PreviousTab" xml:space="preserve">
+    <value>แท็บก่อนหน้า</value>
+  </data>
+  <data name="QuoteDecrease" xml:space="preserve">
+    <value>ลดระดับการอ้างอิง</value>
+  </data>
+  <data name="QuoteIncrease" xml:space="preserve">
+    <value>เพิ่มระดับการอ้างอิง</value>
+  </data>
+  <data name="ReadOnlyMode" xml:space="preserve">
+    <value>โหมดอ่าน</value>
+  </data>
+  <data name="SearchInFolder" xml:space="preserve">
+    <value>ค้นหาในโฟลเดอร์</value>
+  </data>
+  <data name="ShareToHedgeDoc" xml:space="preserve">
+    <value>แชร์ไปยัง HedgeDoc…</value>
+  </data>
+  <data name="TocPane.CollapseAll" xml:space="preserve">
+    <value>ยุบทั้งหมด</value>
+  </data>
+  <data name="TocPane.ExpandAll" xml:space="preserve">
+    <value>ขยายทั้งหมด</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>ไม่มีชื่อ</value>
+  </data>
 </root>

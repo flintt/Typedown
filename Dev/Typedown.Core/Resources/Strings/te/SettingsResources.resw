@@ -689,4 +689,163 @@
     <value>కిటికి</value>
     <comment>视图/窗口</comment>
   </data>
+  <data name="Editor.FontFamily.Placeholder" xml:space="preserve">
+    <value>డిఫాల్ట్</value>
+  </data>
+  <data name="Editor.ListIndentation.Description" xml:space="preserve">
+    <value>నెస్టెడ్ జాబితా అంశాలకు రాసే ఇండెంట్. 4 ఖాళీలు Obsidian మరియు ఇతర చాలా ఎడిటర్లతో సరిపోతాయి</value>
+  </data>
+  <data name="Editor.ListIndentation.Dfm" xml:space="preserve">
+    <value>4 ఖాళీల ఇండెంట్ (Markdown ప్రమాణం)</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces1" xml:space="preserve">
+    <value>గుర్తు తర్వాత 1 ఖాళీ</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces2" xml:space="preserve">
+    <value>గుర్తు తర్వాత 2 ఖాళీలు</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces4" xml:space="preserve">
+    <value>గుర్తు తర్వాత 4 ఖాళీలు</value>
+  </data>
+  <data name="Editor.ListIndentation.Title" xml:space="preserve">
+    <value>జాబితా ఇండెంట్</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Description" xml:space="preserve">
+    <value>మూలంలో కొత్త జాబితా అంశాల మధ్య ఖాళీ పంక్తిని చొప్పించండి</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Title" xml:space="preserve">
+    <value>వదులుగా ఉన్న జాబితా అంశాలు</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Description" xml:space="preserve">
+    <value>ప్రస్తుత పేరా పక్కన బ్లాక్ రకాన్ని (P, H1, ...) చూపించు</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Title" xml:space="preserve">
+    <value>పేరా గుర్తు</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Description" xml:space="preserve">
+    <value>Markdown మూలంలో నిలువు వరుసలు సమంగా ఉండేలా పట్టిక గడులను నింపండి. పట్టికలు కుదించి ఉంచడానికి ఆపివేయండి (AI సాధనాలకు తక్కువ టోకెన్లు)</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Title" xml:space="preserve">
+    <value>పట్టిక నిలువు వరుసలను సమలేఖనం చేయి</value>
+  </data>
+  <data name="Editor.TextDirection.Auto" xml:space="preserve">
+    <value>ప్రతి పేరాకు స్వయంచాలకంగా గుర్తించు</value>
+  </data>
+  <data name="Editor.TextDirection.Description" xml:space="preserve">
+    <value>ఎడిటర్ వచన దిశ; అరబిక్, హీబ్రూ మరియు కుడి నుండి ఎడమకు రాసే ఇతర భాషలకు ఉపయోగకరం</value>
+  </data>
+  <data name="Editor.TextDirection.Ltr" xml:space="preserve">
+    <value>ఎడమ నుండి కుడికి</value>
+  </data>
+  <data name="Editor.TextDirection.Rtl" xml:space="preserve">
+    <value>కుడి నుండి ఎడమకు</value>
+  </data>
+  <data name="Editor.TextDirection.Title" xml:space="preserve">
+    <value>వచన దిశ</value>
+  </data>
+  <data name="General.AskBeforeReload.Description" xml:space="preserve">
+    <value>ఆపివేసి ఉంటే, సేవ్ చేయని మార్పులు లేకపోతే అడగకుండా మళ్లీ లోడ్ చేయి</value>
+  </data>
+  <data name="General.AskBeforeReload.Title" xml:space="preserve">
+    <value>మళ్లీ లోడ్ చేసే ముందు అడుగు</value>
+  </data>
+  <data name="General.AutoReload.Description" xml:space="preserve">
+    <value>తెరిచిన ఫైల్‌ను గమనించి, మరో ప్రోగ్రామ్ మార్చినప్పుడు రిఫ్రెష్ చేయి</value>
+  </data>
+  <data name="General.AutoReload.Title" xml:space="preserve">
+    <value>బాహ్య మార్పుపై స్వయంచాలక రీలోడ్</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Description" xml:space="preserve">
+    <value>Explorer నుండి తెరిచిన ఫైళ్లు ప్రస్తుత విండోలో టాబ్‌గా తెరుచుకుంటాయి; ఆపివేస్తే కొత్త విండో తెరుచుకుంటుంది</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Title" xml:space="preserve">
+    <value>ఫైళ్లను టాబ్‌లలో తెరువు</value>
+  </data>
+  <data name="General.RememberCursorPosition.Description" xml:space="preserve">
+    <value>మీరు ఆపిన చోటి నుండి పత్రాలను తెరువు</value>
+  </data>
+  <data name="General.RememberCursorPosition.Title" xml:space="preserve">
+    <value>కర్సర్ స్థానాన్ని గుర్తుంచుకో</value>
+  </data>
+  <data name="General.StartupAction.FileStartupAction.RestoreSession" xml:space="preserve">
+    <value>గత సెషన్‌లోని అన్ని పత్రాలను పునరుద్ధరించు</value>
+  </data>
+  <data name="HedgeDocShare.Email.Description" xml:space="preserve">
+    <value>అనామక నోట్లను సృష్టించడానికి ఖాళీగా ఉంచండి; ఖాతాతో నోట్ మీదే</value>
+  </data>
+  <data name="HedgeDocShare.Email.Title" xml:space="preserve">
+    <value>ఇమెయిల్ (ఐచ్ఛికం)</value>
+  </data>
+  <data name="HedgeDocShare.Password.Title" xml:space="preserve">
+    <value>పాస్‌వర్డ్</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Description" xml:space="preserve">
+    <value>నోట్‌ను ప్రచురిస్తుంది (/s/…) తద్వారా పంచిన లింక్‌ను సవరించలేరు</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Title" xml:space="preserve">
+    <value>చదవడానికి మాత్రమే లింక్‌ను కూడా ప్రచురించు</value>
+  </data>
+  <data name="HedgeDocShare.Section" xml:space="preserve">
+    <value>HedgeDocకు పంచు</value>
+  </data>
+  <data name="HedgeDocShare.Server.Description" xml:space="preserve">
+    <value>HedgeDoc 1.x చిరునామా, ఉదా. https://md.example.com</value>
+  </data>
+  <data name="HedgeDocShare.Server.Title" xml:space="preserve">
+    <value>సర్వర్</value>
+  </data>
+  <data name="HedgeDocShare.TestButton" xml:space="preserve">
+    <value>పరీక్షించు</value>
+  </data>
+  <data name="HedgeDocShare.TestTitle" xml:space="preserve">
+    <value>కనెక్షన్‌ను పరీక్షించు</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Description" xml:space="preserve">
+    <value>ఒకే పత్రం తెరిచి ఉన్నా టాబ్ పట్టీని చూపించు</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Title" xml:space="preserve">
+    <value>ఎల్లప్పుడూ టాబ్‌లను చూపించు</value>
+  </data>
+  <data name="View.AppTheme.Black" xml:space="preserve">
+    <value>నలుపు (OLED)</value>
+  </data>
+  <data name="View.CustomCss.Description" xml:space="preserve">
+    <value>ఎడిటర్ మరియు ఎగుమతి చేసిన HTML/PDF కోసం అదనపు శైలులు</value>
+  </data>
+  <data name="View.CustomCss.Placeholder" xml:space="preserve">
+    <value>ఉదా. .markdown-body h1 { color: #c00; }  లేదా  :root { --editorBgColor: #111; }</value>
+  </data>
+  <data name="View.CustomCss.Title" xml:space="preserve">
+    <value>అనుకూల CSS</value>
+  </data>
+  <data name="View.CustomTheme.Description" xml:space="preserve">
+    <value>థీమ్ అంటే థీమ్‌ల ఫోల్డర్‌లోని ఒక CSS ఫైల్; docs/custom-theme.md చూడండి</value>
+  </data>
+  <data name="View.CustomTheme.Document" xml:space="preserve">
+    <value>ఒకదాన్ని ఎలా రాయాలి</value>
+  </data>
+  <data name="View.CustomTheme.Folder" xml:space="preserve">
+    <value>థీమ్‌లు ఈ ఫోల్డర్‌లోని CSS ఫైళ్లు; ఆకృతిని పత్రం వివరిస్తుంది.</value>
+  </data>
+  <data name="View.CustomTheme.None" xml:space="preserve">
+    <value>(ఏదీ లేదు)</value>
+  </data>
+  <data name="View.CustomTheme.OpenFolder" xml:space="preserve">
+    <value>థీమ్‌ల ఫోల్డర్‌ను తెరువు</value>
+  </data>
+  <data name="View.CustomTheme.Refresh" xml:space="preserve">
+    <value>థీమ్‌లను మళ్లీ లోడ్ చేయి</value>
+  </data>
+  <data name="View.CustomTheme.Title" xml:space="preserve">
+    <value>అనుకూల థీమ్</value>
+  </data>
+  <data name="View.Image.CopyPath.Placeholder" xml:space="preserve">
+    <value>ఉదా. ./${filename}.assets — చరాలు: ${filename} ${filedir} ${year} ${month} ${day}</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Description" xml:space="preserve">
+    <value>యాప్ ప్రారంభమైనప్పుడు ప్రక్క పలక చూపించే పేజీ</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
+    <value>ప్రక్క పలక డిఫాల్ట్ పేజీ</value>
+  </data>
 </root>

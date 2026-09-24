@@ -933,4 +933,64 @@
     <value>Iżżumja</value>
     <comment>字体缩放</comment>
   </data>
+  <data name="FolderPane.NoFolderOpen" xml:space="preserve">
+    <value>L-ebda kartella miftuħa. Iftaħ fajl jew kartella biex tibbrawżjaha hawn.</value>
+  </data>
+  <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
+    <value>L-ebda fajl Markdown f'din il-kartella.</value>
+  </data>
+  <data name="FolderPane.NotFound" xml:space="preserve">
+    <value>Din il-kartella m'għadhiex teżisti.</value>
+  </data>
+  <data name="FolderPane.RevealCurrentFile" xml:space="preserve">
+    <value>Uri l-kartella tal-fajl attwali</value>
+  </data>
+  <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
+    <value>Fittex fil-kartella…</value>
+  </data>
+  <data name="FolderSearch.NameMatch" xml:space="preserve">
+    <value>(l-isem tal-fajl jaqbel)</value>
+  </data>
+  <data name="FolderSearch.ResultSummary" xml:space="preserve">
+    <value>{0} fajl(s) jaqblu minn {1} imfittxija</value>
+  </data>
+  <data name="FolderSearch.Searching" xml:space="preserve">
+    <value>Qed ifittex…</value>
+  </data>
+  <data name="FullScreen" xml:space="preserve">
+    <value>Skrin sħiħ</value>
+  </data>
+  <data name="LastUsedTab" xml:space="preserve">
+    <value>L-aħħar tab użat</value>
+  </data>
+  <data name="NextTab" xml:space="preserve">
+    <value>It-tab li jmiss</value>
+  </data>
+  <data name="PreviousTab" xml:space="preserve">
+    <value>It-tab ta' qabel</value>
+  </data>
+  <data name="QuoteDecrease" xml:space="preserve">
+    <value>Naqqas il-livell tal-kwotazzjoni</value>
+  </data>
+  <data name="QuoteIncrease" xml:space="preserve">
+    <value>Żid il-livell tal-kwotazzjoni</value>
+  </data>
+  <data name="ReadOnlyMode" xml:space="preserve">
+    <value>Modalità ta' qari</value>
+  </data>
+  <data name="SearchInFolder" xml:space="preserve">
+    <value>Fittex fil-kartella</value>
+  </data>
+  <data name="ShareToHedgeDoc" xml:space="preserve">
+    <value>Aqsam ma' HedgeDoc…</value>
+  </data>
+  <data name="TocPane.CollapseAll" xml:space="preserve">
+    <value>Agħlaq kollox</value>
+  </data>
+  <data name="TocPane.ExpandAll" xml:space="preserve">
+    <value>Iftaħ kollox</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>Bla titlu</value>
+  </data>
 </root>

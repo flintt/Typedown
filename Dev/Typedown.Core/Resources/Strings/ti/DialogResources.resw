@@ -249,4 +249,52 @@
     <value>ወብ ቪው2 ዘይተገጥመሉ ግዜ</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>እዚ ሰነድ ቀደም ተማቒሉ ነይሩ ግን ካብኡ ንደሓር ተቐዪሩ። HedgeDoc 1.x ነቲ ዘሎ መዘክር ከሐድሶ ስለዘይክእል፣ እንደገና ምስቃል ሓድሽ መዘክር ምስ ሓድሽ መላግቦ ይፈጥር።</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>መላግቦ ቅዳሕ</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>ክእረም ዝኽእል መላግቦ</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>እዚ መላግቦ ዘለዎ ዝኾነ ሰብ ነቲ መዘክር ከዐርዮ ይኽእል።</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>ቅድም ቀዳድም ኣድራሻ ሰርቨር HedgeDoc ኣብ ቅንብራት → ናብ ወጻኢ ምስዳድ ኣቐምጥ።</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>ብመድህስቲ ክፈት</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>እንደገና ስቐል (ሓድሽ መላግቦ)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>ንንባብ ጥራይ መላግቦ</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>ናብ HedgeDoc ተማቒሉ</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>እቲ ሰነድ ካብ ናይ መወዳእታ ምምቃል ኣትሒዙ ኣይተቐየረን፤ እዚኦም እቶም ዘለዉ መላግቦታት እዮም።</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>ናይ ቅድም መላግቦ ተጠቐም</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>ሓዝ</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>እንደገና ጽዓን</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>እቲ ፋይል ኣብ ዲስክ ተቐዪሩ። እንደገና ምጽዓን ዘይተዓቀቡ ለውጥታት ይድርብዮም።</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>እቲ ፋይል ኣብ ዲስክ ተቐዪሩ። እንደገና ይጸዓን?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>እቲ ፋይል ኣብ ዲስክ ተቐዪሩ</value>
+  </data>
 </root>

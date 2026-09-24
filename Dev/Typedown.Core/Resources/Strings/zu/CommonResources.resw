@@ -933,4 +933,64 @@
     <value>Sondeza</value>
     <comment>字体缩放</comment>
   </data>
+  <data name="FolderPane.NoFolderOpen" xml:space="preserve">
+    <value>Ayikho ifolda evuliwe. Vula ifayela noma ifolda ukuze uyibheke lapha.</value>
+  </data>
+  <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
+    <value>Awekho amafayela e-Markdown kule folda.</value>
+  </data>
+  <data name="FolderPane.NotFound" xml:space="preserve">
+    <value>Le folda ayisekho.</value>
+  </data>
+  <data name="FolderPane.RevealCurrentFile" xml:space="preserve">
+    <value>Bonisa ifolda yefayela lamanje</value>
+  </data>
+  <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
+    <value>Sesha efoldeni…</value>
+  </data>
+  <data name="FolderSearch.NameMatch" xml:space="preserve">
+    <value>(igama lefayela liyafana)</value>
+  </data>
+  <data name="FolderSearch.ResultSummary" xml:space="preserve">
+    <value>Amafayela angu-{0} ayafana kwangu-{1} aseshwe</value>
+  </data>
+  <data name="FolderSearch.Searching" xml:space="preserve">
+    <value>Iyasesha…</value>
+  </data>
+  <data name="FullScreen" xml:space="preserve">
+    <value>Isikrini esigcwele</value>
+  </data>
+  <data name="LastUsedTab" xml:space="preserve">
+    <value>Ithebhu yokugcina esetshenzisiwe</value>
+  </data>
+  <data name="NextTab" xml:space="preserve">
+    <value>Ithebhu elandelayo</value>
+  </data>
+  <data name="PreviousTab" xml:space="preserve">
+    <value>Ithebhu edlule</value>
+  </data>
+  <data name="QuoteDecrease" xml:space="preserve">
+    <value>Nciphisa izinga lesicaphuno</value>
+  </data>
+  <data name="QuoteIncrease" xml:space="preserve">
+    <value>Khulisa izinga lesicaphuno</value>
+  </data>
+  <data name="ReadOnlyMode" xml:space="preserve">
+    <value>Imodi yokufunda</value>
+  </data>
+  <data name="SearchInFolder" xml:space="preserve">
+    <value>Sesha efoldeni</value>
+  </data>
+  <data name="ShareToHedgeDoc" xml:space="preserve">
+    <value>Yabelana ne-HedgeDoc…</value>
+  </data>
+  <data name="TocPane.CollapseAll" xml:space="preserve">
+    <value>Goqa konke</value>
+  </data>
+  <data name="TocPane.ExpandAll" xml:space="preserve">
+    <value>Nweba konke</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>Akunasihloko</value>
+  </data>
 </root>

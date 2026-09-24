@@ -689,4 +689,163 @@
     <value>Fereastră</value>
     <comment>视图/窗口</comment>
   </data>
+  <data name="Editor.FontFamily.Placeholder" xml:space="preserve">
+    <value>Implicit</value>
+  </data>
+  <data name="Editor.ListIndentation.Description" xml:space="preserve">
+    <value>Indentarea scrisă pentru elementele de listă imbricate. 4 spații corespund cu Obsidian și cu majoritatea celorlalte editoare</value>
+  </data>
+  <data name="Editor.ListIndentation.Dfm" xml:space="preserve">
+    <value>Indentare de 4 spații (standard Markdown)</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces1" xml:space="preserve">
+    <value>1 spațiu după marcaj</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces2" xml:space="preserve">
+    <value>2 spații după marcaj</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces4" xml:space="preserve">
+    <value>4 spații după marcaj</value>
+  </data>
+  <data name="Editor.ListIndentation.Title" xml:space="preserve">
+    <value>Indentarea listelor</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Description" xml:space="preserve">
+    <value>Inserează un rând gol între elementele noi de listă în sursă</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Title" xml:space="preserve">
+    <value>Elemente de listă lejere</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Description" xml:space="preserve">
+    <value>Afișează tipul blocului (P, H1, ...) lângă paragraful curent</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Title" xml:space="preserve">
+    <value>Marcaj de paragraf</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Description" xml:space="preserve">
+    <value>Completează celulele tabelului astfel încât coloanele să se alinieze în sursa Markdown. Dezactivează pentru tabele compacte (mai puține tokenuri pentru instrumentele AI)</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Title" xml:space="preserve">
+    <value>Aliniază coloanele tabelului</value>
+  </data>
+  <data name="Editor.TextDirection.Auto" xml:space="preserve">
+    <value>Detectează automat pentru fiecare paragraf</value>
+  </data>
+  <data name="Editor.TextDirection.Description" xml:space="preserve">
+    <value>Direcția textului din editor, utilă pentru arabă, ebraică și alte limbi scrise de la dreapta la stânga</value>
+  </data>
+  <data name="Editor.TextDirection.Ltr" xml:space="preserve">
+    <value>De la stânga la dreapta</value>
+  </data>
+  <data name="Editor.TextDirection.Rtl" xml:space="preserve">
+    <value>De la dreapta la stânga</value>
+  </data>
+  <data name="Editor.TextDirection.Title" xml:space="preserve">
+    <value>Direcția textului</value>
+  </data>
+  <data name="General.AskBeforeReload.Description" xml:space="preserve">
+    <value>Dacă este dezactivat, reîncarcă fără să întrebe, cu excepția cazului în care există modificări nesalvate</value>
+  </data>
+  <data name="General.AskBeforeReload.Title" xml:space="preserve">
+    <value>Întreabă înainte de reîncărcare</value>
+  </data>
+  <data name="General.AutoReload.Description" xml:space="preserve">
+    <value>Urmărește fișierul deschis și îl reîmprospătează când alt program îl modifică</value>
+  </data>
+  <data name="General.AutoReload.Title" xml:space="preserve">
+    <value>Reîncărcare automată la modificări externe</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Description" xml:space="preserve">
+    <value>Fișierele deschise din Explorer se deschid ca filă în fereastra curentă; dezactivat deschide o fereastră nouă</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Title" xml:space="preserve">
+    <value>Deschide fișierele în file</value>
+  </data>
+  <data name="General.RememberCursorPosition.Description" xml:space="preserve">
+    <value>Redeschide documentele de unde ai rămas</value>
+  </data>
+  <data name="General.RememberCursorPosition.Title" xml:space="preserve">
+    <value>Reține poziția cursorului</value>
+  </data>
+  <data name="General.StartupAction.FileStartupAction.RestoreSession" xml:space="preserve">
+    <value>Restaurează toate documentele din ultima sesiune</value>
+  </data>
+  <data name="HedgeDocShare.Email.Description" xml:space="preserve">
+    <value>Lasă gol pentru note anonime; cu un cont nota îți aparține</value>
+  </data>
+  <data name="HedgeDocShare.Email.Title" xml:space="preserve">
+    <value>E-mail (opțional)</value>
+  </data>
+  <data name="HedgeDocShare.Password.Title" xml:space="preserve">
+    <value>Parolă</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Description" xml:space="preserve">
+    <value>Publică nota (/s/…) astfel încât linkul partajat să nu poată fi editat</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Title" xml:space="preserve">
+    <value>Publică și un link doar pentru citire</value>
+  </data>
+  <data name="HedgeDocShare.Section" xml:space="preserve">
+    <value>Partajează pe HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Server.Description" xml:space="preserve">
+    <value>Adresă HedgeDoc 1.x, de ex. https://md.example.com</value>
+  </data>
+  <data name="HedgeDocShare.Server.Title" xml:space="preserve">
+    <value>Server</value>
+  </data>
+  <data name="HedgeDocShare.TestButton" xml:space="preserve">
+    <value>Testează</value>
+  </data>
+  <data name="HedgeDocShare.TestTitle" xml:space="preserve">
+    <value>Testează conexiunea</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Description" xml:space="preserve">
+    <value>Afișează bara de file chiar și când e deschis un singur document</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Title" xml:space="preserve">
+    <value>Afișează întotdeauna filele</value>
+  </data>
+  <data name="View.AppTheme.Black" xml:space="preserve">
+    <value>Negru (OLED)</value>
+  </data>
+  <data name="View.CustomCss.Description" xml:space="preserve">
+    <value>Stiluri suplimentare pentru editor și pentru HTML/PDF exportat</value>
+  </data>
+  <data name="View.CustomCss.Placeholder" xml:space="preserve">
+    <value>de ex. .markdown-body h1 { color: #c00; }  sau  :root { --editorBgColor: #111; }</value>
+  </data>
+  <data name="View.CustomCss.Title" xml:space="preserve">
+    <value>CSS personalizat</value>
+  </data>
+  <data name="View.CustomTheme.Description" xml:space="preserve">
+    <value>O temă este un fișier CSS din folderul de teme; vezi docs/custom-theme.md</value>
+  </data>
+  <data name="View.CustomTheme.Document" xml:space="preserve">
+    <value>Cum scrii una</value>
+  </data>
+  <data name="View.CustomTheme.Folder" xml:space="preserve">
+    <value>Temele sunt fișiere CSS în acest folder; documentul explică formatul.</value>
+  </data>
+  <data name="View.CustomTheme.None" xml:space="preserve">
+    <value>(niciuna)</value>
+  </data>
+  <data name="View.CustomTheme.OpenFolder" xml:space="preserve">
+    <value>Deschide folderul de teme</value>
+  </data>
+  <data name="View.CustomTheme.Refresh" xml:space="preserve">
+    <value>Reîncarcă temele</value>
+  </data>
+  <data name="View.CustomTheme.Title" xml:space="preserve">
+    <value>Temă personalizată</value>
+  </data>
+  <data name="View.Image.CopyPath.Placeholder" xml:space="preserve">
+    <value>de ex. ./${filename}.assets — variabile: ${filename} ${filedir} ${year} ${month} ${day}</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Description" xml:space="preserve">
+    <value>Ce pagină arată panoul lateral la pornire</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
+    <value>Pagina implicită a panoului lateral</value>
+  </data>
 </root>

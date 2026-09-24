@@ -933,4 +933,64 @@
     <value>Zoom</value>
     <comment>字体缩放</comment>
   </data>
+  <data name="FolderPane.NoFolderOpen" xml:space="preserve">
+    <value>Niciun folder deschis. Deschide un fișier sau un folder pentru a-l răsfoi aici.</value>
+  </data>
+  <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
+    <value>Niciun fișier Markdown în acest folder.</value>
+  </data>
+  <data name="FolderPane.NotFound" xml:space="preserve">
+    <value>Acest folder nu mai există.</value>
+  </data>
+  <data name="FolderPane.RevealCurrentFile" xml:space="preserve">
+    <value>Arată folderul fișierului curent</value>
+  </data>
+  <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
+    <value>Caută în folder…</value>
+  </data>
+  <data name="FolderSearch.NameMatch" xml:space="preserve">
+    <value>(numele fișierului se potrivește)</value>
+  </data>
+  <data name="FolderSearch.ResultSummary" xml:space="preserve">
+    <value>{0} fișier(e) potrivit(e) din {1} căutate</value>
+  </data>
+  <data name="FolderSearch.Searching" xml:space="preserve">
+    <value>Se caută…</value>
+  </data>
+  <data name="FullScreen" xml:space="preserve">
+    <value>Ecran complet</value>
+  </data>
+  <data name="LastUsedTab" xml:space="preserve">
+    <value>Ultima filă folosită</value>
+  </data>
+  <data name="NextTab" xml:space="preserve">
+    <value>Fila următoare</value>
+  </data>
+  <data name="PreviousTab" xml:space="preserve">
+    <value>Fila anterioară</value>
+  </data>
+  <data name="QuoteDecrease" xml:space="preserve">
+    <value>Scade nivelul citatului</value>
+  </data>
+  <data name="QuoteIncrease" xml:space="preserve">
+    <value>Crește nivelul citatului</value>
+  </data>
+  <data name="ReadOnlyMode" xml:space="preserve">
+    <value>Mod lectură</value>
+  </data>
+  <data name="SearchInFolder" xml:space="preserve">
+    <value>Caută în folder</value>
+  </data>
+  <data name="ShareToHedgeDoc" xml:space="preserve">
+    <value>Partajează pe HedgeDoc…</value>
+  </data>
+  <data name="TocPane.CollapseAll" xml:space="preserve">
+    <value>Restrânge tot</value>
+  </data>
+  <data name="TocPane.ExpandAll" xml:space="preserve">
+    <value>Extinde tot</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>Fără titlu</value>
+  </data>
 </root>

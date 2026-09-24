@@ -249,4 +249,52 @@
     <value>WebView2 izpildlaiks nav instalēts</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>Šis dokuments jau tika kopīgots, bet kopš tā laika ir mainījies. HedgeDoc 1.x nevar atjaunināt esošu piezīmi, tāpēc atkārtota augšupielāde izveido jaunu piezīmi ar jaunu saiti.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>Kopēt saiti</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>Rediģējama saite</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>Ikviens ar šo saiti var rediģēt piezīmi.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>Vispirms iestatiet HedgeDoc servera adresi sadaļā Iestatījumi → Eksports.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>Atvērt pārlūkā</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>Augšupielādēt vēlreiz (jauna saite)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>Tikai lasāma saite</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>Kopīgots pakalpojumā HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>Dokuments kopš pēdējās kopīgošanas nav mainījies; šīs ir esošās saites.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>Izmantot iepriekšējo saiti</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>Paturēt</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Pārlādēt</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>Fails diskā ir mainīts. Pārlāde atmetīs nesaglabātās izmaiņas.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>Fails diskā ir mainīts. Vai pārlādēt to?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>Fails diskā ir mainīts</value>
+  </data>
 </root>

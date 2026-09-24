@@ -689,4 +689,163 @@
     <value>Dirisha</value>
     <comment>视图/窗口</comment>
   </data>
+  <data name="Editor.FontFamily.Placeholder" xml:space="preserve">
+    <value>Chaguo-msingi</value>
+  </data>
+  <data name="Editor.ListIndentation.Description" xml:space="preserve">
+    <value>Nafasi ya kuanzia inayoandikwa kwa vipengee vya orodha vilivyowekwa ndani. Nafasi 4 zinalingana na Obsidian na wahariri wengine wengi</value>
+  </data>
+  <data name="Editor.ListIndentation.Dfm" xml:space="preserve">
+    <value>Nafasi ya kuanzia ya nafasi 4 (kiwango cha Markdown)</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces1" xml:space="preserve">
+    <value>Nafasi 1 baada ya alama</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces2" xml:space="preserve">
+    <value>Nafasi 2 baada ya alama</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces4" xml:space="preserve">
+    <value>Nafasi 4 baada ya alama</value>
+  </data>
+  <data name="Editor.ListIndentation.Title" xml:space="preserve">
+    <value>Nafasi ya kuanzia ya orodha</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Description" xml:space="preserve">
+    <value>Weka mstari tupu kati ya vipengee vipya vya orodha katika chanzo</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Title" xml:space="preserve">
+    <value>Vipengee vya orodha vilivyoachanishwa</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Description" xml:space="preserve">
+    <value>Onyesha aina ya kizuizi (P, H1, ...) karibu na aya ya sasa</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Title" xml:space="preserve">
+    <value>Alama ya aya</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Description" xml:space="preserve">
+    <value>Jaza visanduku vya jedwali ili safuwima zilingane katika chanzo cha Markdown. Zima ili majedwali yabaki mafupi (tokeni chache kwa zana za AI)</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Title" xml:space="preserve">
+    <value>Panga safuwima za jedwali</value>
+  </data>
+  <data name="Editor.TextDirection.Auto" xml:space="preserve">
+    <value>Tambua kiotomatiki kwa kila aya</value>
+  </data>
+  <data name="Editor.TextDirection.Description" xml:space="preserve">
+    <value>Mwelekeo wa maandishi ya kihariri; hufaa kwa Kiarabu, Kiebrania na lugha nyingine zinazoandikwa kutoka kulia kwenda kushoto</value>
+  </data>
+  <data name="Editor.TextDirection.Ltr" xml:space="preserve">
+    <value>Kushoto kwenda kulia</value>
+  </data>
+  <data name="Editor.TextDirection.Rtl" xml:space="preserve">
+    <value>Kulia kwenda kushoto</value>
+  </data>
+  <data name="Editor.TextDirection.Title" xml:space="preserve">
+    <value>Mwelekeo wa maandishi</value>
+  </data>
+  <data name="General.AskBeforeReload.Description" xml:space="preserve">
+    <value>Ikiwa imezimwa, pakia upya bila kuuliza isipokuwa kuna mabadiliko ambayo hayajahifadhiwa</value>
+  </data>
+  <data name="General.AskBeforeReload.Title" xml:space="preserve">
+    <value>Uliza kabla ya kupakia upya</value>
+  </data>
+  <data name="General.AutoReload.Description" xml:space="preserve">
+    <value>Fuatilia faili iliyofunguliwa na uionyeshe upya programu nyingine inapoibadilisha</value>
+  </data>
+  <data name="General.AutoReload.Title" xml:space="preserve">
+    <value>Pakia upya kiotomatiki mabadiliko ya nje yanapotokea</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Description" xml:space="preserve">
+    <value>Faili zinazofunguliwa kutoka Explorer hufunguka kama kichupo katika dirisha la sasa; ikiwa imezimwa hufungua dirisha jipya</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Title" xml:space="preserve">
+    <value>Fungua faili katika vichupo</value>
+  </data>
+  <data name="General.RememberCursorPosition.Description" xml:space="preserve">
+    <value>Fungua hati pale ulipoishia</value>
+  </data>
+  <data name="General.RememberCursorPosition.Title" xml:space="preserve">
+    <value>Kumbuka nafasi ya kiashiria</value>
+  </data>
+  <data name="General.StartupAction.FileStartupAction.RestoreSession" xml:space="preserve">
+    <value>Rejesha hati zote za kipindi kilichopita</value>
+  </data>
+  <data name="HedgeDocShare.Email.Description" xml:space="preserve">
+    <value>Acha wazi ili kuunda noti bila jina; ukiwa na akaunti noti ni yako</value>
+  </data>
+  <data name="HedgeDocShare.Email.Title" xml:space="preserve">
+    <value>Barua pepe (si lazima)</value>
+  </data>
+  <data name="HedgeDocShare.Password.Title" xml:space="preserve">
+    <value>Nenosiri</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Description" xml:space="preserve">
+    <value>Huchapisha noti (/s/…) ili kiungo kilichoshirikiwa kisiharirike</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Title" xml:space="preserve">
+    <value>Chapisha pia kiungo cha kusoma tu</value>
+  </data>
+  <data name="HedgeDocShare.Section" xml:space="preserve">
+    <value>Shiriki kwenye HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Server.Description" xml:space="preserve">
+    <value>Anwani ya HedgeDoc 1.x, k.m. https://md.example.com</value>
+  </data>
+  <data name="HedgeDocShare.Server.Title" xml:space="preserve">
+    <value>Seva</value>
+  </data>
+  <data name="HedgeDocShare.TestButton" xml:space="preserve">
+    <value>Jaribu</value>
+  </data>
+  <data name="HedgeDocShare.TestTitle" xml:space="preserve">
+    <value>Jaribu muunganisho</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Description" xml:space="preserve">
+    <value>Onyesha upau wa vichupo hata wakati hati moja tu imefunguliwa</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Title" xml:space="preserve">
+    <value>Onyesha vichupo kila wakati</value>
+  </data>
+  <data name="View.AppTheme.Black" xml:space="preserve">
+    <value>Nyeusi (OLED)</value>
+  </data>
+  <data name="View.CustomCss.Description" xml:space="preserve">
+    <value>Mitindo ya ziada kwa kihariri na HTML/PDF iliyohamishwa</value>
+  </data>
+  <data name="View.CustomCss.Placeholder" xml:space="preserve">
+    <value>k.m. .markdown-body h1 { color: #c00; }  au  :root { --editorBgColor: #111; }</value>
+  </data>
+  <data name="View.CustomCss.Title" xml:space="preserve">
+    <value>CSS maalum</value>
+  </data>
+  <data name="View.CustomTheme.Description" xml:space="preserve">
+    <value>Mandhari ni faili moja ya CSS katika folda ya mandhari; angalia docs/custom-theme.md</value>
+  </data>
+  <data name="View.CustomTheme.Document" xml:space="preserve">
+    <value>Jinsi ya kuandika moja</value>
+  </data>
+  <data name="View.CustomTheme.Folder" xml:space="preserve">
+    <value>Mandhari ni faili za CSS katika folda hii; hati inaeleza muundo.</value>
+  </data>
+  <data name="View.CustomTheme.None" xml:space="preserve">
+    <value>(hakuna)</value>
+  </data>
+  <data name="View.CustomTheme.OpenFolder" xml:space="preserve">
+    <value>Fungua folda ya mandhari</value>
+  </data>
+  <data name="View.CustomTheme.Refresh" xml:space="preserve">
+    <value>Pakia upya mandhari</value>
+  </data>
+  <data name="View.CustomTheme.Title" xml:space="preserve">
+    <value>Mandhari maalum</value>
+  </data>
+  <data name="View.Image.CopyPath.Placeholder" xml:space="preserve">
+    <value>k.m. ./${filename}.assets — vigezo: ${filename} ${filedir} ${year} ${month} ${day}</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Description" xml:space="preserve">
+    <value>Ukurasa ambao kidirisha cha kando huonyesha programu inapoanza</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
+    <value>Ukurasa chaguo-msingi wa kidirisha cha kando</value>
+  </data>
 </root>

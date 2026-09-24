@@ -249,4 +249,52 @@
     <value>वेबभ्यू२ रनटाइम स्थापना गरिएको छैन</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>यो कागजात पहिले साझा गरिएको थियो तर त्यसपछि बदलिएको छ। HedgeDoc 1.x ले भएको नोट अद्यावधिक गर्न सक्दैन, त्यसैले पुनः अपलोड गर्दा नयाँ लिङ्कसहित नयाँ नोट बन्छ।</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>लिङ्क प्रतिलिपि गर्नुहोस्</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>सम्पादनयोग्य लिङ्क</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>यो लिङ्क भएको जोसुकैले नोट सम्पादन गर्न सक्छ।</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>पहिले सेटिङ → निर्यात मा HedgeDoc सर्भरको ठेगाना राख्नुहोस्।</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>ब्राउजरमा खोल्नुहोस्</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>पुनः अपलोड गर्नुहोस् (नयाँ लिङ्क)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>पढ्न-मात्र लिङ्क</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>HedgeDoc मा साझा गरियो</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>पछिल्लो पटक साझा गरेपछि कागजात बदलिएको छैन; यी हालका लिङ्क हुन्।</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>अघिल्लो लिङ्क प्रयोग गर्नुहोस्</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>राख्नुहोस्</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>पुनः लोड गर्नुहोस्</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>डिस्कमा फाइल बदलिएको छ। पुनः लोड गर्दा नबचाइएका परिवर्तन हराउँछन्।</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>डिस्कमा फाइल बदलिएको छ। पुनः लोड गर्ने?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>डिस्कमा फाइल बदलिएको छ</value>
+  </data>
 </root>

@@ -249,4 +249,52 @@
     <value>WebView2-runtime niet geïnstalleerd</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>Dit document is eerder gedeeld maar sindsdien gewijzigd. HedgeDoc 1.x kan een bestaande notitie niet bijwerken, dus opnieuw uploaden maakt een nieuwe notitie met een nieuwe link.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>Link kopiëren</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>Bewerkbare link</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>Iedereen met deze link kan de notitie bewerken.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>Stel eerst het HedgeDoc-serveradres in bij Instellingen → Exporteren.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>In browser openen</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>Opnieuw uploaden (nieuwe link)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>Alleen-lezen link</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>Gedeeld met HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>Het document is niet gewijzigd sinds het laatst werd gedeeld; dit zijn de bestaande links.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>Vorige link gebruiken</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>Behouden</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Herladen</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>Het bestand is op schijf gewijzigd. Herladen verwerpt niet-opgeslagen wijzigingen.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>Het bestand is op schijf gewijzigd. Herladen?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>Het bestand is op schijf gewijzigd</value>
+  </data>
 </root>

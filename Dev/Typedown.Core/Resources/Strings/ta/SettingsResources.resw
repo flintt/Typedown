@@ -689,4 +689,163 @@
     <value>பலகணி</value>
     <comment>视图/窗口</comment>
   </data>
+  <data name="Editor.FontFamily.Placeholder" xml:space="preserve">
+    <value>இயல்புநிலை</value>
+  </data>
+  <data name="Editor.ListIndentation.Description" xml:space="preserve">
+    <value>உள்ளடங்கிய பட்டியல் உருப்படிகளுக்கு எழுதப்படும் உள்தள்ளல். 4 இடைவெளிகள் Obsidian மற்றும் பிற பெரும்பாலான திருத்திகளுடன் பொருந்தும்</value>
+  </data>
+  <data name="Editor.ListIndentation.Dfm" xml:space="preserve">
+    <value>4 இடைவெளி உள்தள்ளல் (Markdown தரநிலை)</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces1" xml:space="preserve">
+    <value>குறியீட்டிற்குப் பின் 1 இடைவெளி</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces2" xml:space="preserve">
+    <value>குறியீட்டிற்குப் பின் 2 இடைவெளிகள்</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces4" xml:space="preserve">
+    <value>குறியீட்டிற்குப் பின் 4 இடைவெளிகள்</value>
+  </data>
+  <data name="Editor.ListIndentation.Title" xml:space="preserve">
+    <value>பட்டியல் உள்தள்ளல்</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Description" xml:space="preserve">
+    <value>மூலத்தில் புதிய பட்டியல் உருப்படிகளுக்கு இடையே காலி வரியைச் சேர்க்கவும்</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Title" xml:space="preserve">
+    <value>தளர்வான பட்டியல் உருப்படிகள்</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Description" xml:space="preserve">
+    <value>தற்போதைய பத்திக்கு அருகில் தொகுதி வகையை (P, H1, ...) காட்டு</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Title" xml:space="preserve">
+    <value>பத்தி குறி</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Description" xml:space="preserve">
+    <value>Markdown மூலத்தில் நெடுவரிசைகள் சீராக இருக்க அட்டவணைக் கட்டங்களை நிரப்பவும். அட்டவணைகள் சுருக்கமாக இருக்க அணைக்கவும் (AI கருவிகளுக்கு குறைவான டோக்கன்கள்)</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Title" xml:space="preserve">
+    <value>அட்டவணை நெடுவரிசைகளைச் சீரமை</value>
+  </data>
+  <data name="Editor.TextDirection.Auto" xml:space="preserve">
+    <value>ஒவ்வொரு பத்திக்கும் தானாகக் கண்டறி</value>
+  </data>
+  <data name="Editor.TextDirection.Description" xml:space="preserve">
+    <value>திருத்தியின் உரை திசை; அரபு, ஹீப்ரு மற்றும் வலமிருந்து இடமாக எழுதப்படும் பிற மொழிகளுக்குப் பயனுள்ளது</value>
+  </data>
+  <data name="Editor.TextDirection.Ltr" xml:space="preserve">
+    <value>இடமிருந்து வலம்</value>
+  </data>
+  <data name="Editor.TextDirection.Rtl" xml:space="preserve">
+    <value>வலமிருந்து இடம்</value>
+  </data>
+  <data name="Editor.TextDirection.Title" xml:space="preserve">
+    <value>உரை திசை</value>
+  </data>
+  <data name="General.AskBeforeReload.Description" xml:space="preserve">
+    <value>அணைக்கப்பட்டிருந்தால், சேமிக்கப்படாத மாற்றங்கள் இல்லாதபோது கேட்காமல் மீள்ஏற்று</value>
+  </data>
+  <data name="General.AskBeforeReload.Title" xml:space="preserve">
+    <value>மீள்ஏற்றும் முன் கேள்</value>
+  </data>
+  <data name="General.AutoReload.Description" xml:space="preserve">
+    <value>திறந்த கோப்பைக் கண்காணித்து, வேறு நிரல் மாற்றும்போது புதுப்பிக்கவும்</value>
+  </data>
+  <data name="General.AutoReload.Title" xml:space="preserve">
+    <value>வெளிப்புற மாற்றத்தில் தானியங்கி மீள்ஏற்றம்</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Description" xml:space="preserve">
+    <value>Explorer இலிருந்து திறக்கப்படும் கோப்புகள் தற்போதைய சாளரத்தில் தாவலாகத் திறக்கும்; அணைத்தால் புதிய சாளரம் திறக்கும்</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Title" xml:space="preserve">
+    <value>கோப்புகளைத் தாவல்களில் திற</value>
+  </data>
+  <data name="General.RememberCursorPosition.Description" xml:space="preserve">
+    <value>நீங்கள் நிறுத்திய இடத்திலிருந்து ஆவணங்களைத் திற</value>
+  </data>
+  <data name="General.RememberCursorPosition.Title" xml:space="preserve">
+    <value>இடஞ்சுட்டியின் நிலையை நினைவில் வை</value>
+  </data>
+  <data name="General.StartupAction.FileStartupAction.RestoreSession" xml:space="preserve">
+    <value>கடைசி அமர்வின் அனைத்து ஆவணங்களையும் மீட்டெடு</value>
+  </data>
+  <data name="HedgeDocShare.Email.Description" xml:space="preserve">
+    <value>அநாமதேயக் குறிப்புகளை உருவாக்க காலியாக விடவும்; கணக்குடன் குறிப்பு உங்களுடையது</value>
+  </data>
+  <data name="HedgeDocShare.Email.Title" xml:space="preserve">
+    <value>மின்னஞ்சல் (விருப்பத்தேர்வு)</value>
+  </data>
+  <data name="HedgeDocShare.Password.Title" xml:space="preserve">
+    <value>கடவுச்சொல்</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Description" xml:space="preserve">
+    <value>குறிப்பை வெளியிடுகிறது (/s/…) எனவே பகிரப்பட்ட இணைப்பைத் திருத்த முடியாது</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Title" xml:space="preserve">
+    <value>படிக்க மட்டும் இணைப்பையும் வெளியிடு</value>
+  </data>
+  <data name="HedgeDocShare.Section" xml:space="preserve">
+    <value>HedgeDoc இல் பகிர்</value>
+  </data>
+  <data name="HedgeDocShare.Server.Description" xml:space="preserve">
+    <value>HedgeDoc 1.x முகவரி, எ.கா. https://md.example.com</value>
+  </data>
+  <data name="HedgeDocShare.Server.Title" xml:space="preserve">
+    <value>சேவையகம்</value>
+  </data>
+  <data name="HedgeDocShare.TestButton" xml:space="preserve">
+    <value>சோதி</value>
+  </data>
+  <data name="HedgeDocShare.TestTitle" xml:space="preserve">
+    <value>இணைப்பைச் சோதி</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Description" xml:space="preserve">
+    <value>ஒரே ஆவணம் திறந்திருந்தாலும் தாவல் பட்டியைக் காட்டு</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Title" xml:space="preserve">
+    <value>எப்போதும் தாவல்களைக் காட்டு</value>
+  </data>
+  <data name="View.AppTheme.Black" xml:space="preserve">
+    <value>கருப்பு (OLED)</value>
+  </data>
+  <data name="View.CustomCss.Description" xml:space="preserve">
+    <value>திருத்தி மற்றும் ஏற்றுமதி செய்யப்பட்ட HTML/PDF க்கான கூடுதல் பாணிகள்</value>
+  </data>
+  <data name="View.CustomCss.Placeholder" xml:space="preserve">
+    <value>எ.கா. .markdown-body h1 { color: #c00; }  அல்லது  :root { --editorBgColor: #111; }</value>
+  </data>
+  <data name="View.CustomCss.Title" xml:space="preserve">
+    <value>தனிப்பயன் CSS</value>
+  </data>
+  <data name="View.CustomTheme.Description" xml:space="preserve">
+    <value>தீம் என்பது தீம் கோப்புறையில் உள்ள ஒரு CSS கோப்பு; docs/custom-theme.md ஐப் பார்க்கவும்</value>
+  </data>
+  <data name="View.CustomTheme.Document" xml:space="preserve">
+    <value>ஒன்றை எப்படி எழுதுவது</value>
+  </data>
+  <data name="View.CustomTheme.Folder" xml:space="preserve">
+    <value>தீம்கள் இந்தக் கோப்புறையில் உள்ள CSS கோப்புகள்; வடிவமைப்பை ஆவணம் விளக்குகிறது.</value>
+  </data>
+  <data name="View.CustomTheme.None" xml:space="preserve">
+    <value>(எதுவும் இல்லை)</value>
+  </data>
+  <data name="View.CustomTheme.OpenFolder" xml:space="preserve">
+    <value>தீம் கோப்புறையைத் திற</value>
+  </data>
+  <data name="View.CustomTheme.Refresh" xml:space="preserve">
+    <value>தீம்களை மீள்ஏற்று</value>
+  </data>
+  <data name="View.CustomTheme.Title" xml:space="preserve">
+    <value>தனிப்பயன் தீம்</value>
+  </data>
+  <data name="View.Image.CopyPath.Placeholder" xml:space="preserve">
+    <value>எ.கா. ./${filename}.assets — மாறிகள்: ${filename} ${filedir} ${year} ${month} ${day}</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Description" xml:space="preserve">
+    <value>செயலி தொடங்கும்போது பக்கப் பலகம் காட்டும் பக்கம்</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
+    <value>பக்கப் பலகத்தின் இயல்புநிலைப் பக்கம்</value>
+  </data>
 </root>

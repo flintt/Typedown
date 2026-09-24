@@ -249,4 +249,52 @@
     <value>Temps d'execució de WebView2 no instal·lat</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>Aquest document ja s'havia compartit però ha canviat des d'aleshores. HedgeDoc 1.x no pot actualitzar una nota existent, així que tornar-lo a pujar crea una nota nova amb un enllaç nou.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>Copia l'enllaç</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>Enllaç editable</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>Qualsevol persona amb aquest enllaç pot editar la nota.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>Primer, configura l'adreça del servidor HedgeDoc a Configuració → Exporta.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>Obre al navegador</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>Torna a pujar (enllaç nou)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>Enllaç de només lectura</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>Compartit a HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>El document no ha canviat des de l'última vegada que es va compartir; aquests són els enllaços existents.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>Fes servir l'enllaç anterior</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>Conserva</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Torna a carregar</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>El fitxer ha canviat al disc. Tornar-lo a carregar descartarà els canvis sense desar.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>El fitxer ha canviat al disc. Vols tornar-lo a carregar?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>El fitxer ha canviat al disc</value>
+  </data>
 </root>

@@ -249,4 +249,52 @@
     <value>WebView2 Runtime ບໍ່ຕິດຕັ້ງ</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>ເອກະສານນີ້ເຄີຍແບ່ງປັນມາກ່ອນ ແຕ່ໄດ້ປ່ຽນແປງຫຼັງຈາກນັ້ນ. HedgeDoc 1.x ບໍ່ສາມາດອັບເດດບັນທຶກທີ່ມີຢູ່ ດັ່ງນັ້ນການອັບໂຫຼດໃໝ່ຈະສ້າງບັນທຶກໃໝ່ພ້ອມລິ້ງໃໝ່.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>ສຳເນົາລິ້ງ</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>ລິ້ງທີ່ແກ້ໄຂໄດ້</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>ຜູ້ໃດກໍ່ຕາມທີ່ມີລິ້ງນີ້ສາມາດແກ້ໄຂບັນທຶກໄດ້.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>ກະລຸນາຕັ້ງທີ່ຢູ່ເຊີບເວີ HedgeDoc ໃນ ການຕັ້ງຄ່າ → ສົ່ງອອກ ກ່ອນ.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>ເປີດໃນບຣາວເຊີ</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>ອັບໂຫຼດໃໝ່ (ລິ້ງໃໝ່)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>ລິ້ງອ່ານຢ່າງດຽວ</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>ແບ່ງປັນໄປ HedgeDoc ແລ້ວ</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>ເອກະສານບໍ່ໄດ້ປ່ຽນແປງນັບແຕ່ການແບ່ງປັນຄັ້ງລ່າສຸດ; ນີ້ແມ່ນລິ້ງທີ່ມີຢູ່.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>ໃຊ້ລິ້ງກ່ອນໜ້າ</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>ເກັບໄວ້</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>ໂຫຼດຄືນ</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>ໄຟລ໌ປ່ຽນແປງຢູ່ດິສກ໌. ການໂຫຼດຄືນຈະຍົກເລີກການປ່ຽນແປງທີ່ຍັງບໍ່ໄດ້ບັນທຶກ.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>ໄຟລ໌ປ່ຽນແປງຢູ່ດິສກ໌. ໂຫຼດຄືນບໍ?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>ໄຟລ໌ປ່ຽນແປງຢູ່ດິສກ໌</value>
+  </data>
 </root>

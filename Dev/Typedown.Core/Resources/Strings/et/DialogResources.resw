@@ -249,4 +249,52 @@
     <value>WebView2 käitusaeg pole installitud</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>Seda dokumenti on varem jagatud, kuid see on pärast seda muutunud. HedgeDoc 1.x ei saa olemasolevat märkmet uuendada, seega uus üleslaadimine loob uue märkme uue lingiga.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>Kopeeri link</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>Redigeeritav link</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>Igaüks, kellel on see link, saab märget redigeerida.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>Määra esmalt HedgeDoci serveri aadress jaotises Sätted → Eksport.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>Ava brauseris</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>Laadi uuesti üles (uus link)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>Ainult lugemiseks link</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>Jagatud HedgeDoci</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>Dokument pole pärast viimast jagamist muutunud; need on olemasolevad lingid.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>Kasuta eelmist linki</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>Säilita</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Laadi uuesti</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>Faili on kettal muudetud. Uuesti laadimine loobub salvestamata muudatustest.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>Faili on kettal muudetud. Kas laadida see uuesti?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>Faili on kettal muudetud</value>
+  </data>
 </root>

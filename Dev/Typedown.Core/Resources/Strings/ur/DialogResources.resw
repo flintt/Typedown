@@ -249,4 +249,52 @@
     <value>WebView2 رن ٹائم انسٹال نہیں</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>یہ دستاویز پہلے شیئر کی گئی تھی مگر اس کے بعد بدل گئی ہے۔ HedgeDoc 1.x موجودہ نوٹ کو اپ ڈیٹ نہیں کر سکتا، اس لیے دوبارہ اپ لوڈ کرنے پر نئے لنک کے ساتھ نیا نوٹ بنے گا۔</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>لنک کاپی کریں</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>قابلِ ترمیم لنک</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>اس لنک والا کوئی بھی شخص نوٹ میں ترمیم کر سکتا ہے۔</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>پہلے ترتیبات ← برآمد میں HedgeDoc سرور کا پتہ درج کریں۔</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>براؤزر میں کھولیں</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>دوبارہ اپ لوڈ کریں (نیا لنک)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>صرف پڑھنے والا لنک</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>HedgeDoc پر شیئر کیا گیا</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>آخری بار شیئر کرنے کے بعد دستاویز نہیں بدلی؛ یہ موجودہ لنکس ہیں۔</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>پچھلا لنک استعمال کریں</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>رکھیں</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>دوبارہ لوڈ کریں</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>فائل ڈسک پر بدل گئی ہے۔ دوبارہ لوڈ کرنے سے غیر محفوظ تبدیلیاں ضائع ہو جائیں گی۔</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>فائل ڈسک پر بدل گئی ہے۔ دوبارہ لوڈ کریں؟</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>فائل ڈسک پر بدل گئی ہے</value>
+  </data>
 </root>

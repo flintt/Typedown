@@ -689,4 +689,163 @@
     <value>Finestra</value>
     <comment>视图/窗口</comment>
   </data>
+  <data name="Editor.FontFamily.Placeholder" xml:space="preserve">
+    <value>Predeterminat</value>
+  </data>
+  <data name="Editor.ListIndentation.Description" xml:space="preserve">
+    <value>Sagnat escrit per als elements de llista imbricats. 4 espais coincideix amb Obsidian i amb la majoria d'altres editors</value>
+  </data>
+  <data name="Editor.ListIndentation.Dfm" xml:space="preserve">
+    <value>Sagnat de 4 espais (estàndard de Markdown)</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces1" xml:space="preserve">
+    <value>1 espai després del marcador</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces2" xml:space="preserve">
+    <value>2 espais després del marcador</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces4" xml:space="preserve">
+    <value>4 espais després del marcador</value>
+  </data>
+  <data name="Editor.ListIndentation.Title" xml:space="preserve">
+    <value>Sagnat de llistes</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Description" xml:space="preserve">
+    <value>Insereix una línia en blanc entre els elements nous de llista a la font</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Title" xml:space="preserve">
+    <value>Elements de llista separats</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Description" xml:space="preserve">
+    <value>Mostra el tipus de bloc (P, H1, ...) al costat del paràgraf actual</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Title" xml:space="preserve">
+    <value>Marca de paràgraf</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Description" xml:space="preserve">
+    <value>Omple les cel·les perquè les columnes quedin alineades a la font Markdown. Desactiva-ho per mantenir les taules compactes (menys tokens per a eines d'IA)</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Title" xml:space="preserve">
+    <value>Alinea les columnes de la taula</value>
+  </data>
+  <data name="Editor.TextDirection.Auto" xml:space="preserve">
+    <value>Detecta automàticament per paràgraf</value>
+  </data>
+  <data name="Editor.TextDirection.Description" xml:space="preserve">
+    <value>Direcció del text de l'editor; útil per a l'àrab, l'hebreu i altres llengües escrites de dreta a esquerra</value>
+  </data>
+  <data name="Editor.TextDirection.Ltr" xml:space="preserve">
+    <value>D'esquerra a dreta</value>
+  </data>
+  <data name="Editor.TextDirection.Rtl" xml:space="preserve">
+    <value>De dreta a esquerra</value>
+  </data>
+  <data name="Editor.TextDirection.Title" xml:space="preserve">
+    <value>Direcció del text</value>
+  </data>
+  <data name="General.AskBeforeReload.Description" xml:space="preserve">
+    <value>Si està desactivat, torna a carregar sense preguntar llevat que hi hagi canvis sense desar</value>
+  </data>
+  <data name="General.AskBeforeReload.Title" xml:space="preserve">
+    <value>Pregunta abans de tornar a carregar</value>
+  </data>
+  <data name="General.AutoReload.Description" xml:space="preserve">
+    <value>Vigila el fitxer obert i actualitza'l quan un altre programa el modifiqui</value>
+  </data>
+  <data name="General.AutoReload.Title" xml:space="preserve">
+    <value>Recàrrega automàtica en canvis externs</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Description" xml:space="preserve">
+    <value>Els fitxers oberts des de l'Explorador s'obren com a pestanya a la finestra actual; desactivat obre una finestra nova</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Title" xml:space="preserve">
+    <value>Obre els fitxers en pestanyes</value>
+  </data>
+  <data name="General.RememberCursorPosition.Description" xml:space="preserve">
+    <value>Obre els documents on els vas deixar</value>
+  </data>
+  <data name="General.RememberCursorPosition.Title" xml:space="preserve">
+    <value>Recorda la posició del cursor</value>
+  </data>
+  <data name="General.StartupAction.FileStartupAction.RestoreSession" xml:space="preserve">
+    <value>Restaura tots els documents de la darrera sessió</value>
+  </data>
+  <data name="HedgeDocShare.Email.Description" xml:space="preserve">
+    <value>Deixa-ho buit per crear notes anònimes; amb un compte la nota és teva</value>
+  </data>
+  <data name="HedgeDocShare.Email.Title" xml:space="preserve">
+    <value>Correu electrònic (opcional)</value>
+  </data>
+  <data name="HedgeDocShare.Password.Title" xml:space="preserve">
+    <value>Contrasenya</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Description" xml:space="preserve">
+    <value>Publica la nota (/s/…) perquè l'enllaç compartit no es pugui editar</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Title" xml:space="preserve">
+    <value>Publica també un enllaç de només lectura</value>
+  </data>
+  <data name="HedgeDocShare.Section" xml:space="preserve">
+    <value>Comparteix a HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Server.Description" xml:space="preserve">
+    <value>Adreça de HedgeDoc 1.x, p. ex. https://md.example.com</value>
+  </data>
+  <data name="HedgeDocShare.Server.Title" xml:space="preserve">
+    <value>Servidor</value>
+  </data>
+  <data name="HedgeDocShare.TestButton" xml:space="preserve">
+    <value>Prova</value>
+  </data>
+  <data name="HedgeDocShare.TestTitle" xml:space="preserve">
+    <value>Prova la connexió</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Description" xml:space="preserve">
+    <value>Mostra la barra de pestanyes encara que només hi hagi un document obert</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Title" xml:space="preserve">
+    <value>Mostra sempre les pestanyes</value>
+  </data>
+  <data name="View.AppTheme.Black" xml:space="preserve">
+    <value>Negre (OLED)</value>
+  </data>
+  <data name="View.CustomCss.Description" xml:space="preserve">
+    <value>Estils addicionals per a l'editor i l'HTML/PDF exportat</value>
+  </data>
+  <data name="View.CustomCss.Placeholder" xml:space="preserve">
+    <value>p. ex. .markdown-body h1 { color: #c00; }  o  :root { --editorBgColor: #111; }</value>
+  </data>
+  <data name="View.CustomCss.Title" xml:space="preserve">
+    <value>CSS personalitzat</value>
+  </data>
+  <data name="View.CustomTheme.Description" xml:space="preserve">
+    <value>Un tema és un fitxer CSS a la carpeta de temes; consulta docs/custom-theme.md</value>
+  </data>
+  <data name="View.CustomTheme.Document" xml:space="preserve">
+    <value>Com escriure'n un</value>
+  </data>
+  <data name="View.CustomTheme.Folder" xml:space="preserve">
+    <value>Els temes són fitxers CSS d'aquesta carpeta; el document n'explica el format.</value>
+  </data>
+  <data name="View.CustomTheme.None" xml:space="preserve">
+    <value>(cap)</value>
+  </data>
+  <data name="View.CustomTheme.OpenFolder" xml:space="preserve">
+    <value>Obre la carpeta de temes</value>
+  </data>
+  <data name="View.CustomTheme.Refresh" xml:space="preserve">
+    <value>Torna a carregar els temes</value>
+  </data>
+  <data name="View.CustomTheme.Title" xml:space="preserve">
+    <value>Tema personalitzat</value>
+  </data>
+  <data name="View.Image.CopyPath.Placeholder" xml:space="preserve">
+    <value>p. ex. ./${filename}.assets — variables: ${filename} ${filedir} ${year} ${month} ${day}</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Description" xml:space="preserve">
+    <value>Quina pàgina mostra el tauler lateral en iniciar</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
+    <value>Pàgina predeterminada del tauler lateral</value>
+  </data>
 </root>

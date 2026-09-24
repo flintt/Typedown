@@ -249,4 +249,52 @@
     <value>Środowisko uruchomieniowe WebView2 nie jest zainstalowane</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>Ten dokument był już udostępniony, ale od tego czasu się zmienił. HedgeDoc 1.x nie potrafi zaktualizować istniejącej notatki, więc ponowne przesłanie utworzy nową notatkę z nowym linkiem.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>Kopiuj link</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>Link do edycji</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>Każdy, kto ma ten link, może edytować notatkę.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>Najpierw ustaw adres serwera HedgeDoc w Ustawienia → Eksport.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>Otwórz w przeglądarce</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>Prześlij ponownie (nowy link)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>Link tylko do odczytu</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>Udostępniono w HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>Dokument nie zmienił się od ostatniego udostępnienia; to są istniejące linki.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>Użyj poprzedniego linku</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>Zachowaj</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Przeładuj</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>Plik został zmieniony na dysku. Przeładowanie odrzuci niezapisane zmiany.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>Plik został zmieniony na dysku. Przeładować?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>Plik został zmieniony na dysku</value>
+  </data>
 </root>

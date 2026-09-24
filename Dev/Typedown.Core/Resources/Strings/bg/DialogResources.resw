@@ -249,4 +249,52 @@
     <value>WebView2 Runtime не е инсталиран</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>Този документ вече е споделян, но оттогава е променен. HedgeDoc 1.x не може да обнови съществуваща бележка, затова ново качване създава нова бележка с нова връзка.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>Копирай връзката</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>Връзка за редактиране</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>Всеки с тази връзка може да редактира бележката.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>Първо задайте адреса на сървъра HedgeDoc в Настройки → Експорт.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>Отвори в браузър</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>Качи отново (нова връзка)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>Връзка само за четене</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>Споделено в HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>Документът не е променян след последното споделяне; това са съществуващите връзки.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>Използвай предишната връзка</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>Запази</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Презареди</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>Файлът е променен на диска. Презареждането ще отхвърли незапазените промени.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>Файлът е променен на диска. Да се презареди ли?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>Файлът е променен на диска</value>
+  </data>
 </root>

@@ -933,4 +933,64 @@
     <value>Búg</value>
     <comment>字体缩放</comment>
   </data>
+  <data name="FolderPane.NoFolderOpen" xml:space="preserve">
+    <value>Nincs megnyitott mappa. Nyisson meg egy fájlt vagy mappát a böngészéshez.</value>
+  </data>
+  <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
+    <value>Nincsenek Markdown-fájlok ebben a mappában.</value>
+  </data>
+  <data name="FolderPane.NotFound" xml:space="preserve">
+    <value>Ez a mappa már nem létezik.</value>
+  </data>
+  <data name="FolderPane.RevealCurrentFile" xml:space="preserve">
+    <value>Az aktuális fájl mappájának megjelenítése</value>
+  </data>
+  <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
+    <value>Keresés a mappában…</value>
+  </data>
+  <data name="FolderSearch.NameMatch" xml:space="preserve">
+    <value>(a fájlnév egyezik)</value>
+  </data>
+  <data name="FolderSearch.ResultSummary" xml:space="preserve">
+    <value>{0} találat a(z) {1} átvizsgált fájlból</value>
+  </data>
+  <data name="FolderSearch.Searching" xml:space="preserve">
+    <value>Keresés…</value>
+  </data>
+  <data name="FullScreen" xml:space="preserve">
+    <value>Teljes képernyő</value>
+  </data>
+  <data name="LastUsedTab" xml:space="preserve">
+    <value>Legutóbb használt lap</value>
+  </data>
+  <data name="NextTab" xml:space="preserve">
+    <value>Következő lap</value>
+  </data>
+  <data name="PreviousTab" xml:space="preserve">
+    <value>Előző lap</value>
+  </data>
+  <data name="QuoteDecrease" xml:space="preserve">
+    <value>Idézetszint csökkentése</value>
+  </data>
+  <data name="QuoteIncrease" xml:space="preserve">
+    <value>Idézetszint növelése</value>
+  </data>
+  <data name="ReadOnlyMode" xml:space="preserve">
+    <value>Olvasási mód</value>
+  </data>
+  <data name="SearchInFolder" xml:space="preserve">
+    <value>Keresés a mappában</value>
+  </data>
+  <data name="ShareToHedgeDoc" xml:space="preserve">
+    <value>Megosztás a HedgeDocra…</value>
+  </data>
+  <data name="TocPane.CollapseAll" xml:space="preserve">
+    <value>Összes összecsukása</value>
+  </data>
+  <data name="TocPane.ExpandAll" xml:space="preserve">
+    <value>Összes kibontása</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>Névtelen</value>
+  </data>
 </root>

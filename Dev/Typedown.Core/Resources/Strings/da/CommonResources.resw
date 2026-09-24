@@ -933,4 +933,64 @@
     <value>Zoome</value>
     <comment>字体缩放</comment>
   </data>
+  <data name="FolderPane.NoFolderOpen" xml:space="preserve">
+    <value>Ingen mappe er åben. Åbn en fil eller mappe for at gennemse den her.</value>
+  </data>
+  <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
+    <value>Ingen Markdown-filer i denne mappe.</value>
+  </data>
+  <data name="FolderPane.NotFound" xml:space="preserve">
+    <value>Denne mappe findes ikke længere.</value>
+  </data>
+  <data name="FolderPane.RevealCurrentFile" xml:space="preserve">
+    <value>Vis den aktuelle fils mappe</value>
+  </data>
+  <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
+    <value>Søg i mappe…</value>
+  </data>
+  <data name="FolderSearch.NameMatch" xml:space="preserve">
+    <value>(filnavnet matcher)</value>
+  </data>
+  <data name="FolderSearch.ResultSummary" xml:space="preserve">
+    <value>{0} matchende fil(er) ud af {1} søgte</value>
+  </data>
+  <data name="FolderSearch.Searching" xml:space="preserve">
+    <value>Søger…</value>
+  </data>
+  <data name="FullScreen" xml:space="preserve">
+    <value>Fuld skærm</value>
+  </data>
+  <data name="LastUsedTab" xml:space="preserve">
+    <value>Senest brugte fane</value>
+  </data>
+  <data name="NextTab" xml:space="preserve">
+    <value>Næste fane</value>
+  </data>
+  <data name="PreviousTab" xml:space="preserve">
+    <value>Forrige fane</value>
+  </data>
+  <data name="QuoteDecrease" xml:space="preserve">
+    <value>Reducér citatniveau</value>
+  </data>
+  <data name="QuoteIncrease" xml:space="preserve">
+    <value>Forøg citatniveau</value>
+  </data>
+  <data name="ReadOnlyMode" xml:space="preserve">
+    <value>Læsetilstand</value>
+  </data>
+  <data name="SearchInFolder" xml:space="preserve">
+    <value>Søg i mappe</value>
+  </data>
+  <data name="ShareToHedgeDoc" xml:space="preserve">
+    <value>Del til HedgeDoc…</value>
+  </data>
+  <data name="TocPane.CollapseAll" xml:space="preserve">
+    <value>Fold alt sammen</value>
+  </data>
+  <data name="TocPane.ExpandAll" xml:space="preserve">
+    <value>Fold alt ud</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>Uden titel</value>
+  </data>
 </root>

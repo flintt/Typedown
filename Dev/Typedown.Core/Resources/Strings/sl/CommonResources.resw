@@ -933,4 +933,64 @@
     <value>Zoom</value>
     <comment>字体缩放</comment>
   </data>
+  <data name="FolderPane.NoFolderOpen" xml:space="preserve">
+    <value>Nobena mapa ni odprta. Odprite datoteko ali mapo, da jo boste brskali tukaj.</value>
+  </data>
+  <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
+    <value>V tej mapi ni datotek Markdown.</value>
+  </data>
+  <data name="FolderPane.NotFound" xml:space="preserve">
+    <value>Ta mapa ne obstaja več.</value>
+  </data>
+  <data name="FolderPane.RevealCurrentFile" xml:space="preserve">
+    <value>Pokaži mapo trenutne datoteke</value>
+  </data>
+  <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
+    <value>Iskanje v mapi…</value>
+  </data>
+  <data name="FolderSearch.NameMatch" xml:space="preserve">
+    <value>(ime datoteke se ujema)</value>
+  </data>
+  <data name="FolderSearch.ResultSummary" xml:space="preserve">
+    <value>{0} ujemajočih datotek od {1} preiskanih</value>
+  </data>
+  <data name="FolderSearch.Searching" xml:space="preserve">
+    <value>Iskanje…</value>
+  </data>
+  <data name="FullScreen" xml:space="preserve">
+    <value>Celozaslonski način</value>
+  </data>
+  <data name="LastUsedTab" xml:space="preserve">
+    <value>Nazadnje uporabljeni zavihek</value>
+  </data>
+  <data name="NextTab" xml:space="preserve">
+    <value>Naslednji zavihek</value>
+  </data>
+  <data name="PreviousTab" xml:space="preserve">
+    <value>Prejšnji zavihek</value>
+  </data>
+  <data name="QuoteDecrease" xml:space="preserve">
+    <value>Zmanjšaj raven citata</value>
+  </data>
+  <data name="QuoteIncrease" xml:space="preserve">
+    <value>Povečaj raven citata</value>
+  </data>
+  <data name="ReadOnlyMode" xml:space="preserve">
+    <value>Bralni način</value>
+  </data>
+  <data name="SearchInFolder" xml:space="preserve">
+    <value>Iskanje v mapi</value>
+  </data>
+  <data name="ShareToHedgeDoc" xml:space="preserve">
+    <value>Deli v HedgeDoc…</value>
+  </data>
+  <data name="TocPane.CollapseAll" xml:space="preserve">
+    <value>Strni vse</value>
+  </data>
+  <data name="TocPane.ExpandAll" xml:space="preserve">
+    <value>Razširi vse</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>Brez naslova</value>
+  </data>
 </root>

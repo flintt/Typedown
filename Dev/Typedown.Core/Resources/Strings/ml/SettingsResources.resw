@@ -689,4 +689,163 @@
     <value>ജാലകം</value>
     <comment>视图/窗口</comment>
   </data>
+  <data name="Editor.FontFamily.Placeholder" xml:space="preserve">
+    <value>സ്ഥിരസ്ഥിതി</value>
+  </data>
+  <data name="Editor.ListIndentation.Description" xml:space="preserve">
+    <value>നെസ്റ്റഡ് ലിസ്റ്റ് ഇനങ്ങൾക്കായി എഴുതുന്ന ഇൻഡന്റ്. 4 സ്പേസുകൾ Obsidian-നോടും മറ്റു മിക്ക എഡിറ്ററുകളോടും യോജിക്കുന്നു</value>
+  </data>
+  <data name="Editor.ListIndentation.Dfm" xml:space="preserve">
+    <value>4 സ്പേസ് ഇൻഡന്റ് (Markdown നിലവാരം)</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces1" xml:space="preserve">
+    <value>അടയാളത്തിനു ശേഷം 1 സ്പേസ്</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces2" xml:space="preserve">
+    <value>അടയാളത്തിനു ശേഷം 2 സ്പേസ്</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces4" xml:space="preserve">
+    <value>അടയാളത്തിനു ശേഷം 4 സ്പേസ്</value>
+  </data>
+  <data name="Editor.ListIndentation.Title" xml:space="preserve">
+    <value>ലിസ്റ്റ് ഇൻഡന്റ്</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Description" xml:space="preserve">
+    <value>ഉറവിടത്തിൽ പുതിയ ലിസ്റ്റ് ഇനങ്ങൾക്കിടയിൽ ഒഴിഞ്ഞ വരി ചേർക്കുക</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Title" xml:space="preserve">
+    <value>അയഞ്ഞ ലിസ്റ്റ് ഇനങ്ങൾ</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Description" xml:space="preserve">
+    <value>നിലവിലെ ഖണ്ഡികയ്ക്കരികെ ബ്ലോക്ക് തരം (P, H1, ...) കാണിക്കുക</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Title" xml:space="preserve">
+    <value>ഖണ്ഡികാ അടയാളം</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Description" xml:space="preserve">
+    <value>Markdown ഉറവിടത്തിൽ നിരകൾ വരിയൊപ്പിക്കാൻ പട്ടികയിലെ കള്ളികൾ നിറയ്ക്കുക. പട്ടികകൾ ഒതുക്കമായിരിക്കാൻ ഓഫ് ചെയ്യുക (AI ഉപകരണങ്ങൾക്ക് കുറഞ്ഞ ടോക്കണുകൾ)</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Title" xml:space="preserve">
+    <value>പട്ടികയുടെ നിരകൾ വിന്യസിക്കുക</value>
+  </data>
+  <data name="Editor.TextDirection.Auto" xml:space="preserve">
+    <value>ഓരോ ഖണ്ഡികയ്ക്കും സ്വയമേവ കണ്ടെത്തുക</value>
+  </data>
+  <data name="Editor.TextDirection.Description" xml:space="preserve">
+    <value>എഡിറ്ററിലെ എഴുത്തിന്റെ ദിശ; അറബി, ഹീബ്രു തുടങ്ങിയ വലത്തുനിന്ന് ഇടത്തോട്ടുള്ള ഭാഷകൾക്ക് ഉപകാരപ്രദം</value>
+  </data>
+  <data name="Editor.TextDirection.Ltr" xml:space="preserve">
+    <value>ഇടത്തുനിന്ന് വലത്തോട്ട്</value>
+  </data>
+  <data name="Editor.TextDirection.Rtl" xml:space="preserve">
+    <value>വലത്തുനിന്ന് ഇടത്തോട്ട്</value>
+  </data>
+  <data name="Editor.TextDirection.Title" xml:space="preserve">
+    <value>എഴുത്തിന്റെ ദിശ</value>
+  </data>
+  <data name="General.AskBeforeReload.Description" xml:space="preserve">
+    <value>ഓഫാണെങ്കിൽ, സേവ് ചെയ്യാത്ത മാറ്റങ്ങളില്ലെങ്കിൽ ചോദിക്കാതെ വീണ്ടും ലോഡ് ചെയ്യുക</value>
+  </data>
+  <data name="General.AskBeforeReload.Title" xml:space="preserve">
+    <value>വീണ്ടും ലോഡ് ചെയ്യും മുമ്പ് ചോദിക്കുക</value>
+  </data>
+  <data name="General.AutoReload.Description" xml:space="preserve">
+    <value>തുറന്ന ഫയൽ നിരീക്ഷിച്ച് മറ്റൊരു പ്രോഗ്രാം മാറ്റുമ്പോൾ പുതുക്കുക</value>
+  </data>
+  <data name="General.AutoReload.Title" xml:space="preserve">
+    <value>പുറമേയുള്ള മാറ്റത്തിൽ സ്വയമേവ വീണ്ടും ലോഡ് ചെയ്യുക</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Description" xml:space="preserve">
+    <value>Explorer-ൽ നിന്ന് തുറക്കുന്ന ഫയലുകൾ നിലവിലെ വിൻഡോയിൽ ടാബായി തുറക്കും; ഓഫാണെങ്കിൽ പുതിയ വിൻഡോ തുറക്കും</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Title" xml:space="preserve">
+    <value>ഫയലുകൾ ടാബുകളിൽ തുറക്കുക</value>
+  </data>
+  <data name="General.RememberCursorPosition.Description" xml:space="preserve">
+    <value>നിർത്തിയിടത്തുനിന്ന് പ്രമാണങ്ങൾ തുറക്കുക</value>
+  </data>
+  <data name="General.RememberCursorPosition.Title" xml:space="preserve">
+    <value>കഴ്‌സറിന്റെ സ്ഥാനം ഓർക്കുക</value>
+  </data>
+  <data name="General.StartupAction.FileStartupAction.RestoreSession" xml:space="preserve">
+    <value>കഴിഞ്ഞ സെഷനിലെ എല്ലാ പ്രമാണങ്ങളും പുനഃസ്ഥാപിക്കുക</value>
+  </data>
+  <data name="HedgeDocShare.Email.Description" xml:space="preserve">
+    <value>അജ്ഞാത കുറിപ്പുകൾക്കായി ശൂന്യമാക്കിയിടുക; അക്കൗണ്ട് ഉണ്ടെങ്കിൽ കുറിപ്പ് നിങ്ങളുടേതാണ്</value>
+  </data>
+  <data name="HedgeDocShare.Email.Title" xml:space="preserve">
+    <value>ഇമെയിൽ (ഐച്ഛികം)</value>
+  </data>
+  <data name="HedgeDocShare.Password.Title" xml:space="preserve">
+    <value>പാസ്‌വേഡ്</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Description" xml:space="preserve">
+    <value>കുറിപ്പ് പ്രസിദ്ധീകരിക്കുന്നു (/s/…) അതിനാൽ പങ്കിട്ട ലിങ്ക് തിരുത്താനാകില്ല</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Title" xml:space="preserve">
+    <value>വായിക്കാൻ മാത്രമുള്ള ലിങ്കും പ്രസിദ്ധീകരിക്കുക</value>
+  </data>
+  <data name="HedgeDocShare.Section" xml:space="preserve">
+    <value>HedgeDoc-ൽ പങ്കിടുക</value>
+  </data>
+  <data name="HedgeDocShare.Server.Description" xml:space="preserve">
+    <value>HedgeDoc 1.x വിലാസം, ഉദാ. https://md.example.com</value>
+  </data>
+  <data name="HedgeDocShare.Server.Title" xml:space="preserve">
+    <value>സെർവർ</value>
+  </data>
+  <data name="HedgeDocShare.TestButton" xml:space="preserve">
+    <value>പരിശോധിക്കുക</value>
+  </data>
+  <data name="HedgeDocShare.TestTitle" xml:space="preserve">
+    <value>കണക്ഷൻ പരിശോധിക്കുക</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Description" xml:space="preserve">
+    <value>ഒരു പ്രമാണം മാത്രം തുറന്നിരിക്കുമ്പോഴും ടാബ് ബാർ കാണിക്കുക</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Title" xml:space="preserve">
+    <value>എപ്പോഴും ടാബുകൾ കാണിക്കുക</value>
+  </data>
+  <data name="View.AppTheme.Black" xml:space="preserve">
+    <value>കറുപ്പ് (OLED)</value>
+  </data>
+  <data name="View.CustomCss.Description" xml:space="preserve">
+    <value>എഡിറ്ററിനും കയറ്റുമതി ചെയ്ത HTML/PDF-നും അധിക ശൈലികൾ</value>
+  </data>
+  <data name="View.CustomCss.Placeholder" xml:space="preserve">
+    <value>ഉദാ. .markdown-body h1 { color: #c00; }  അല്ലെങ്കിൽ  :root { --editorBgColor: #111; }</value>
+  </data>
+  <data name="View.CustomCss.Title" xml:space="preserve">
+    <value>ഇഷ്ട CSS</value>
+  </data>
+  <data name="View.CustomTheme.Description" xml:space="preserve">
+    <value>തീം എന്നത് തീം ഫോൾഡറിലെ ഒരു CSS ഫയലാണ്; docs/custom-theme.md കാണുക</value>
+  </data>
+  <data name="View.CustomTheme.Document" xml:space="preserve">
+    <value>ഒന്ന് എങ്ങനെ എഴുതാം</value>
+  </data>
+  <data name="View.CustomTheme.Folder" xml:space="preserve">
+    <value>തീമുകൾ ഈ ഫോൾഡറിലെ CSS ഫയലുകളാണ്; ഫോർമാറ്റ് പ്രമാണത്തിൽ വിശദീകരിച്ചിട്ടുണ്ട്.</value>
+  </data>
+  <data name="View.CustomTheme.None" xml:space="preserve">
+    <value>(ഒന്നുമില്ല)</value>
+  </data>
+  <data name="View.CustomTheme.OpenFolder" xml:space="preserve">
+    <value>തീം ഫോൾഡർ തുറക്കുക</value>
+  </data>
+  <data name="View.CustomTheme.Refresh" xml:space="preserve">
+    <value>തീമുകൾ വീണ്ടും ലോഡ് ചെയ്യുക</value>
+  </data>
+  <data name="View.CustomTheme.Title" xml:space="preserve">
+    <value>ഇഷ്ട തീം</value>
+  </data>
+  <data name="View.Image.CopyPath.Placeholder" xml:space="preserve">
+    <value>ഉദാ. ./${filename}.assets — ചരങ്ങൾ: ${filename} ${filedir} ${year} ${month} ${day}</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Description" xml:space="preserve">
+    <value>ആപ്പ് തുടങ്ങുമ്പോൾ സൈഡ് പാളി കാണിക്കുന്ന പേജ്</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
+    <value>സൈഡ് പാളിയുടെ സ്ഥിരസ്ഥിതി പേജ്</value>
+  </data>
 </root>

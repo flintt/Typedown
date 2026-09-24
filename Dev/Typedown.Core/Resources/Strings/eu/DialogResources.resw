@@ -249,4 +249,52 @@
     <value>Web-a egiteko denbora Instalatu gabeko WebView2</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>Dokumentu hau lehenago partekatu zen, baina ordutik aldatu egin da. HedgeDoc 1.x-ek ezin du lehendik dagoen oharra eguneratu; beraz, berriro igotzeak ohar berri bat sortzen du esteka berriarekin.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>Kopiatu esteka</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>Esteka editagarria</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>Esteka hau duen edonork edita dezake oharra.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>Ezarri lehenik HedgeDoc zerbitzariaren helbidea Ezarpenak → Esportatu atalean.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>Ireki nabigatzailean</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>Igo berriro (esteka berria)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>Irakurtzeko soilik den esteka</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>HedgeDoc-en partekatuta</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>Dokumentua ez da aldatu azkenekoz partekatu zenetik; hauek dira lehendik dauden estekak.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>Erabili aurreko esteka</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>Mantendu</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Kargatu berriro</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>Fitxategia diskoan aldatu da. Birkargatzeak gorde gabeko aldaketak baztertuko ditu.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>Fitxategia diskoan aldatu da. Birkargatu nahi duzu?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>Fitxategia diskoan aldatu da</value>
+  </data>
 </root>

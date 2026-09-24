@@ -689,4 +689,163 @@
     <value>Vindue</value>
     <comment>视图/窗口</comment>
   </data>
+  <data name="Editor.FontFamily.Placeholder" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="Editor.ListIndentation.Description" xml:space="preserve">
+    <value>Indrykning der skrives for indlejrede listepunkter. 4 mellemrum svarer til Obsidian og de fleste andre editorer</value>
+  </data>
+  <data name="Editor.ListIndentation.Dfm" xml:space="preserve">
+    <value>4 mellemrums indrykning (Markdown-standard)</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces1" xml:space="preserve">
+    <value>1 mellemrum efter markøren</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces2" xml:space="preserve">
+    <value>2 mellemrum efter markøren</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces4" xml:space="preserve">
+    <value>4 mellemrum efter markøren</value>
+  </data>
+  <data name="Editor.ListIndentation.Title" xml:space="preserve">
+    <value>Listeindrykning</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Description" xml:space="preserve">
+    <value>Indsæt en tom linje mellem nye listepunkter i kilden</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Title" xml:space="preserve">
+    <value>Løse listepunkter</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Description" xml:space="preserve">
+    <value>Vis bloktypen (P, H1, ...) ved siden af det aktuelle afsnit</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Title" xml:space="preserve">
+    <value>Afsnitsmarkør</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Description" xml:space="preserve">
+    <value>Udfyld tabelceller, så kolonnerne flugter i Markdown-kilden. Slå fra for kompakte tabeller (færre tokens til AI-værktøjer)</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Title" xml:space="preserve">
+    <value>Justér tabelkolonner</value>
+  </data>
+  <data name="Editor.TextDirection.Auto" xml:space="preserve">
+    <value>Registrér automatisk pr. afsnit</value>
+  </data>
+  <data name="Editor.TextDirection.Description" xml:space="preserve">
+    <value>Tekstretning for indholdet, nyttigt til arabisk, hebraisk og andre sprog der skrives fra højre mod venstre</value>
+  </data>
+  <data name="Editor.TextDirection.Ltr" xml:space="preserve">
+    <value>Venstre mod højre</value>
+  </data>
+  <data name="Editor.TextDirection.Rtl" xml:space="preserve">
+    <value>Højre mod venstre</value>
+  </data>
+  <data name="Editor.TextDirection.Title" xml:space="preserve">
+    <value>Tekstretning</value>
+  </data>
+  <data name="General.AskBeforeReload.Description" xml:space="preserve">
+    <value>Hvis slået fra, genindlæs uden at spørge, medmindre der er ugemte ændringer</value>
+  </data>
+  <data name="General.AskBeforeReload.Title" xml:space="preserve">
+    <value>Spørg før genindlæsning</value>
+  </data>
+  <data name="General.AutoReload.Description" xml:space="preserve">
+    <value>Hold øje med den åbne fil og opdatér den, når et andet program ændrer den</value>
+  </data>
+  <data name="General.AutoReload.Title" xml:space="preserve">
+    <value>Genindlæs automatisk ved ekstern ændring</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Description" xml:space="preserve">
+    <value>Filer åbnet fra Stifinder åbnes som en fane i det aktuelle vindue; slået fra åbner et nyt vindue</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Title" xml:space="preserve">
+    <value>Åbn filer i faner</value>
+  </data>
+  <data name="General.RememberCursorPosition.Description" xml:space="preserve">
+    <value>Åbn dokumenter, hvor du slap</value>
+  </data>
+  <data name="General.RememberCursorPosition.Title" xml:space="preserve">
+    <value>Husk markørens position</value>
+  </data>
+  <data name="General.StartupAction.FileStartupAction.RestoreSession" xml:space="preserve">
+    <value>Gendan alle dokumenter fra sidste session</value>
+  </data>
+  <data name="HedgeDocShare.Email.Description" xml:space="preserve">
+    <value>Lad stå tomt for at oprette noter anonymt; med en konto tilhører noten dig</value>
+  </data>
+  <data name="HedgeDocShare.Email.Title" xml:space="preserve">
+    <value>E-mail (valgfrit)</value>
+  </data>
+  <data name="HedgeDocShare.Password.Title" xml:space="preserve">
+    <value>Adgangskode</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Description" xml:space="preserve">
+    <value>Udgiver noten (/s/…), så det delte link ikke kan redigeres</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Title" xml:space="preserve">
+    <value>Udgiv også et skrivebeskyttet link</value>
+  </data>
+  <data name="HedgeDocShare.Section" xml:space="preserve">
+    <value>Del til HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Server.Description" xml:space="preserve">
+    <value>HedgeDoc 1.x-adresse, f.eks. https://md.example.com</value>
+  </data>
+  <data name="HedgeDocShare.Server.Title" xml:space="preserve">
+    <value>Server</value>
+  </data>
+  <data name="HedgeDocShare.TestButton" xml:space="preserve">
+    <value>Test</value>
+  </data>
+  <data name="HedgeDocShare.TestTitle" xml:space="preserve">
+    <value>Test forbindelsen</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Description" xml:space="preserve">
+    <value>Vis fanelinjen, selv når kun ét dokument er åbent</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Title" xml:space="preserve">
+    <value>Vis altid faner</value>
+  </data>
+  <data name="View.AppTheme.Black" xml:space="preserve">
+    <value>Sort (OLED)</value>
+  </data>
+  <data name="View.CustomCss.Description" xml:space="preserve">
+    <value>Ekstra typografier til editoren og eksporteret HTML/PDF</value>
+  </data>
+  <data name="View.CustomCss.Placeholder" xml:space="preserve">
+    <value>f.eks. .markdown-body h1 { color: #c00; }  eller  :root { --editorBgColor: #111; }</value>
+  </data>
+  <data name="View.CustomCss.Title" xml:space="preserve">
+    <value>Tilpasset CSS</value>
+  </data>
+  <data name="View.CustomTheme.Description" xml:space="preserve">
+    <value>Et tema er én CSS-fil i temamappen; se docs/custom-theme.md</value>
+  </data>
+  <data name="View.CustomTheme.Document" xml:space="preserve">
+    <value>Sådan skriver du et</value>
+  </data>
+  <data name="View.CustomTheme.Folder" xml:space="preserve">
+    <value>Temaer er CSS-filer i denne mappe; dokumentet forklarer formatet.</value>
+  </data>
+  <data name="View.CustomTheme.None" xml:space="preserve">
+    <value>(ingen)</value>
+  </data>
+  <data name="View.CustomTheme.OpenFolder" xml:space="preserve">
+    <value>Åbn temamappen</value>
+  </data>
+  <data name="View.CustomTheme.Refresh" xml:space="preserve">
+    <value>Genindlæs temaer</value>
+  </data>
+  <data name="View.CustomTheme.Title" xml:space="preserve">
+    <value>Tilpasset tema</value>
+  </data>
+  <data name="View.Image.CopyPath.Placeholder" xml:space="preserve">
+    <value>f.eks. ./${filename}.assets — variabler: ${filename} ${filedir} ${year} ${month} ${day}</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Description" xml:space="preserve">
+    <value>Hvilken side sidepanelet viser, når appen starter</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
+    <value>Sidepanelets standardside</value>
+  </data>
 </root>

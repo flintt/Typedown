@@ -689,4 +689,163 @@
     <value>খিৰিকী</value>
     <comment>视图/窗口</comment>
   </data>
+  <data name="Editor.FontFamily.Placeholder" xml:space="preserve">
+    <value>অবিকল্পিত</value>
+  </data>
+  <data name="Editor.ListIndentation.Description" xml:space="preserve">
+    <value>নেষ্টেড তালিকা বস্তুৰ বাবে লিখা ইণ্ডেণ্ট। ৪টা স্পেচ Obsidian আৰু আন বেছিভাগ সম্পাদকৰ সৈতে মিলে</value>
+  </data>
+  <data name="Editor.ListIndentation.Dfm" xml:space="preserve">
+    <value>৪ স্পেচ ইণ্ডেণ্ট (Markdown মানদণ্ড)</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces1" xml:space="preserve">
+    <value>চিহ্নৰ পিছত ১ স্পেচ</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces2" xml:space="preserve">
+    <value>চিহ্নৰ পিছত ২ স্পেচ</value>
+  </data>
+  <data name="Editor.ListIndentation.Spaces4" xml:space="preserve">
+    <value>চিহ্নৰ পিছত ৪ স্পেচ</value>
+  </data>
+  <data name="Editor.ListIndentation.Title" xml:space="preserve">
+    <value>তালিকাৰ ইণ্ডেণ্ট</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Description" xml:space="preserve">
+    <value>উৎসত নতুন তালিকা বস্তুৰ মাজত এটা খালী শাৰী দিয়ক</value>
+  </data>
+  <data name="Editor.PreferLooseListItem.Title" xml:space="preserve">
+    <value>ঢিলা তালিকা বস্তু</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Description" xml:space="preserve">
+    <value>বৰ্তমান অনুচ্ছেদৰ কাষত ব্লকৰ প্ৰকাৰ (P, H1, ...) দেখুৱাওক</value>
+  </data>
+  <data name="Editor.ShowParagraphMarker.Title" xml:space="preserve">
+    <value>অনুচ্ছেদ চিহ্ন</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Description" xml:space="preserve">
+    <value>Markdown উৎসত স্তম্ভবোৰ শাৰীবদ্ধ হ'বলৈ তালিকাৰ ঘৰবোৰ পূৰ কৰক। তালিকা সংক্ষিপ্ত ৰাখিবলৈ বন্ধ কৰক (AI সঁজুলিৰ বাবে কম টোকেন)</value>
+  </data>
+  <data name="Editor.TableAlignColumns.Title" xml:space="preserve">
+    <value>তালিকাৰ স্তম্ভ শাৰীবদ্ধ কৰক</value>
+  </data>
+  <data name="Editor.TextDirection.Auto" xml:space="preserve">
+    <value>প্ৰতিটো অনুচ্ছেদৰ বাবে স্বয়ংক্ৰিয়ভাৱে চিনাক্ত কৰক</value>
+  </data>
+  <data name="Editor.TextDirection.Description" xml:space="preserve">
+    <value>সম্পাদকৰ লিখনিৰ দিশ; আৰবী, হিব্ৰু আৰু সোঁফালৰ পৰা বাওঁফাললৈ লিখা ভাষাৰ বাবে উপযোগী</value>
+  </data>
+  <data name="Editor.TextDirection.Ltr" xml:space="preserve">
+    <value>বাওঁফালৰ পৰা সোঁফাললৈ</value>
+  </data>
+  <data name="Editor.TextDirection.Rtl" xml:space="preserve">
+    <value>সোঁফালৰ পৰা বাওঁফাললৈ</value>
+  </data>
+  <data name="Editor.TextDirection.Title" xml:space="preserve">
+    <value>লিখনিৰ দিশ</value>
+  </data>
+  <data name="General.AskBeforeReload.Description" xml:space="preserve">
+    <value>বন্ধ থাকিলে, অসংৰক্ষিত সালসলনি নাথাকিলে নোসোধাকৈ পুনৰ ল'ড কৰক</value>
+  </data>
+  <data name="General.AskBeforeReload.Title" xml:space="preserve">
+    <value>পুনৰ ল'ড কৰাৰ আগতে সোধক</value>
+  </data>
+  <data name="General.AutoReload.Description" xml:space="preserve">
+    <value>খোলা ফাইললৈ লক্ষ্য ৰাখক আৰু আন কাৰ্যসূচীয়ে সলনি কৰিলে সতেজ কৰক</value>
+  </data>
+  <data name="General.AutoReload.Title" xml:space="preserve">
+    <value>বাহ্যিক সালসলনিত স্বয়ংক্ৰিয় পুনৰ ল'ড</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Description" xml:space="preserve">
+    <value>Explorer-ৰ পৰা খোলা ফাইল বৰ্তমান উইণ্ড'ত টেব হিচাপে খোলে; বন্ধ থাকিলে নতুন উইণ্ড' খোলে</value>
+  </data>
+  <data name="General.OpenFilesInNewTab.Title" xml:space="preserve">
+    <value>ফাইল টেবত খোলক</value>
+  </data>
+  <data name="General.RememberCursorPosition.Description" xml:space="preserve">
+    <value>য'ত এৰিছিল তাৰ পৰাই নথি খোলক</value>
+  </data>
+  <data name="General.RememberCursorPosition.Title" xml:space="preserve">
+    <value>কাৰ্ছাৰৰ স্থান মনত ৰাখক</value>
+  </data>
+  <data name="General.StartupAction.FileStartupAction.RestoreSession" xml:space="preserve">
+    <value>যোৱা ছেশ্যনৰ সকলো নথি পুনৰুদ্ধাৰ কৰক</value>
+  </data>
+  <data name="HedgeDocShare.Email.Description" xml:space="preserve">
+    <value>নামবিহীন টোকা সৃষ্টি কৰিবলৈ খালী ৰাখক; একাউণ্ট থাকিলে টোকা আপোনাৰ</value>
+  </data>
+  <data name="HedgeDocShare.Email.Title" xml:space="preserve">
+    <value>ইমেইল (বিকল্প)</value>
+  </data>
+  <data name="HedgeDocShare.Password.Title" xml:space="preserve">
+    <value>পাছৱৰ্ড</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Description" xml:space="preserve">
+    <value>টোকা প্ৰকাশ কৰে (/s/…) যাতে ভাগ কৰা লিংক সম্পাদনা কৰিব নোৱাৰি</value>
+  </data>
+  <data name="HedgeDocShare.Publish.Title" xml:space="preserve">
+    <value>কেৱল-পঢ়া লিংকো প্ৰকাশ কৰক</value>
+  </data>
+  <data name="HedgeDocShare.Section" xml:space="preserve">
+    <value>HedgeDoc-ত ভাগ কৰক</value>
+  </data>
+  <data name="HedgeDocShare.Server.Description" xml:space="preserve">
+    <value>HedgeDoc 1.x ঠিকনা, যেনে https://md.example.com</value>
+  </data>
+  <data name="HedgeDocShare.Server.Title" xml:space="preserve">
+    <value>চাৰ্ভাৰ</value>
+  </data>
+  <data name="HedgeDocShare.TestButton" xml:space="preserve">
+    <value>পৰীক্ষা</value>
+  </data>
+  <data name="HedgeDocShare.TestTitle" xml:space="preserve">
+    <value>সংযোগ পৰীক্ষা কৰক</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Description" xml:space="preserve">
+    <value>কেৱল এখন নথি খোলা থাকিলেও টেব বাৰ দেখুৱাওক</value>
+  </data>
+  <data name="View.AlwaysShowTabBar.Title" xml:space="preserve">
+    <value>সদায় টেব দেখুৱাওক</value>
+  </data>
+  <data name="View.AppTheme.Black" xml:space="preserve">
+    <value>ক'লা (OLED)</value>
+  </data>
+  <data name="View.CustomCss.Description" xml:space="preserve">
+    <value>সম্পাদক আৰু ৰপ্তানি কৰা HTML/PDF-ৰ বাবে অতিৰিক্ত শৈলী</value>
+  </data>
+  <data name="View.CustomCss.Placeholder" xml:space="preserve">
+    <value>যেনে .markdown-body h1 { color: #c00; }  বা  :root { --editorBgColor: #111; }</value>
+  </data>
+  <data name="View.CustomCss.Title" xml:space="preserve">
+    <value>কাষ্টম CSS</value>
+  </data>
+  <data name="View.CustomTheme.Description" xml:space="preserve">
+    <value>থীম হৈছে থীম ফোল্ডাৰৰ এটা CSS ফাইল; docs/custom-theme.md চাওক</value>
+  </data>
+  <data name="View.CustomTheme.Document" xml:space="preserve">
+    <value>এটা কেনেকৈ লিখিব</value>
+  </data>
+  <data name="View.CustomTheme.Folder" xml:space="preserve">
+    <value>থীমবোৰ এই ফোল্ডাৰৰ CSS ফাইল; বিন্যাস নথিত বৰ্ণনা কৰা আছে।</value>
+  </data>
+  <data name="View.CustomTheme.None" xml:space="preserve">
+    <value>(একো নাই)</value>
+  </data>
+  <data name="View.CustomTheme.OpenFolder" xml:space="preserve">
+    <value>থীম ফোল্ডাৰ খোলক</value>
+  </data>
+  <data name="View.CustomTheme.Refresh" xml:space="preserve">
+    <value>থীম পুনৰ ল'ড কৰক</value>
+  </data>
+  <data name="View.CustomTheme.Title" xml:space="preserve">
+    <value>কাষ্টম থীম</value>
+  </data>
+  <data name="View.Image.CopyPath.Placeholder" xml:space="preserve">
+    <value>যেনে ./${filename}.assets — চলক: ${filename} ${filedir} ${year} ${month} ${day}</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Description" xml:space="preserve">
+    <value>এপ আৰম্ভ হ'লে কাষৰ পেনেলে কোনটো পৃষ্ঠা দেখুৱাব</value>
+  </data>
+  <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
+    <value>কাষৰ পেনেলৰ অবিকল্পিত পৃষ্ঠা</value>
+  </data>
 </root>

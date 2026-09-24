@@ -249,4 +249,52 @@
     <value>WebView2 Runtime Nach bhfuil suiteáilte</value>
     <comment>环境检查对话框/WebView2 运行时未安装</comment>
   </data>
+  <data name="HedgeDocShare.ChangedPrompt" xml:space="preserve">
+    <value>Roinneadh an cháipéis seo cheana ach tá sí athraithe ó shin. Ní féidir le HedgeDoc 1.x nóta atá ann a nuashonrú, mar sin cruthaíonn uaslódáil nua nóta nua le nasc nua.</value>
+  </data>
+  <data name="HedgeDocShare.CopyLink" xml:space="preserve">
+    <value>Cóipeáil an nasc</value>
+  </data>
+  <data name="HedgeDocShare.EditLink" xml:space="preserve">
+    <value>Nasc in-eagarthóireachta</value>
+  </data>
+  <data name="HedgeDocShare.EditableWarning" xml:space="preserve">
+    <value>Is féidir le duine ar bith a bhfuil an nasc seo aige an nóta a chur in eagar.</value>
+  </data>
+  <data name="HedgeDocShare.NotConfigured" xml:space="preserve">
+    <value>Socraigh seoladh an fhreastalaí HedgeDoc i Socruithe → Easpórtáil ar dtús.</value>
+  </data>
+  <data name="HedgeDocShare.OpenInBrowser" xml:space="preserve">
+    <value>Oscail sa bhrabhsálaí</value>
+  </data>
+  <data name="HedgeDocShare.ReUpload" xml:space="preserve">
+    <value>Uaslódáil arís (nasc nua)</value>
+  </data>
+  <data name="HedgeDocShare.ReadOnlyLink" xml:space="preserve">
+    <value>Nasc inléite amháin</value>
+  </data>
+  <data name="HedgeDocShare.ResultTitle" xml:space="preserve">
+    <value>Roinnte le HedgeDoc</value>
+  </data>
+  <data name="HedgeDocShare.Unchanged" xml:space="preserve">
+    <value>Níl an cháipéis athraithe ón uair dheireanach a roinneadh í; seo na naisc atá ann.</value>
+  </data>
+  <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
+    <value>Úsáid an nasc roimhe seo</value>
+  </data>
+  <data name="Keep" xml:space="preserve">
+    <value>Coinnigh</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Athlódáil</value>
+  </data>
+  <data name="ReloadFromDiskContent" xml:space="preserve">
+    <value>Athraíodh an comhad ar an diosca. Scriosfaidh athlódáil athruithe gan sábháil.</value>
+  </data>
+  <data name="ReloadFromDiskContentClean" xml:space="preserve">
+    <value>Athraíodh an comhad ar an diosca. Athlódáil é?</value>
+  </data>
+  <data name="ReloadFromDiskTitle" xml:space="preserve">
+    <value>Athraíodh an comhad ar an diosca</value>
+  </data>
 </root>
