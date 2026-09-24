@@ -108,9 +108,29 @@ namespace Typedown.Core.Utilities
             {"zu","Isi-Zulu"},
         };
 
+        /// <summary>
+        /// The languages that come first in the list. Seventy-four entries in alphabetical order means scrolling
+        /// past Afrikaans to reach Chinese; the ones people actually pick are at the top, the rest follow in
+        /// their usual order.
+        /// </summary>
+        private static readonly string[] CommonLangs = { "zh-Hans", "zh-Hant", "en", "ja", "ko", "de", "fr", "es", "ru", "pt", "it" };
+
         /// <summary>Computed on each access: the "follow system" label has to follow the chosen language too,
         /// and the static initializer runs before the language is applied.</summary>
-        public static Dictionary<string, string> LangsOptions => new(SupportedLangs.Append(new("default", GetString("UseSystemSetting"))));
+        public static Dictionary<string, string> LangsOptions
+        {
+            get
+            {
+                var options = new Dictionary<string, string> { { "default", GetString("UseSystemSetting") } };
+                foreach (var lang in CommonLangs)
+                    if (SupportedLangs.TryGetValue(lang, out var name))
+                        options[lang] = name;
+                foreach (var pair in SupportedLangs)
+                    if (!options.ContainsKey(pair.Key))
+                        options[pair.Key] = pair.Value;
+                return options;
+            }
+        }
 
         public static string GetLangOptionDisplayName(string key) => LangsOptions[key];
 
