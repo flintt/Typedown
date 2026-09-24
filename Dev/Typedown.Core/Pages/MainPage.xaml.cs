@@ -34,50 +34,6 @@ namespace Typedown.Core.Pages
             disposables.Add(uiViewModel.WhenPropertyChanged(nameof(UIViewModel.IsFullScreen)).Cast<bool>().StartWith(uiViewModel.IsFullScreen).Subscribe(OnFullScreenChanged));
             var settings = AppViewModel.SettingsViewModel;
             disposables.Add(settings.WhenPropertyChanged(nameof(settings.CustomTheme)).StartWith(settings.CustomTheme).Subscribe(_ => UpdateThemeColours()));
-            disposables.Add(settings.WhenPropertyChanged(nameof(settings.Language)).Subscribe(_ => RebuildLocalizedChrome()));
-        }
-
-        /// <summary>
-        /// Builds the parts that hold text again after a language change. Every label in the XAML is resolved
-        /// once, when the control is created, so the menu bar and the status bar keep the language they were
-        /// built in — the way to change them is to build them again. Menus, dialogs and the context menu are
-        /// created when they are opened and come up in the new language on their own.
-        /// </summary>
-        private void RebuildLocalizedChrome()
-        {
-            _ = Dispatcher.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-            {
-                try
-                {
-                    var grid = MenuBarHost?.Parent as Grid;
-                    if (grid == null) return;
-                    var index = grid.Children.IndexOf(MenuBarHost);
-                    var row = Grid.GetRow(MenuBarHost);
-                    var alignment = MenuBarHost.VerticalAlignment;
-                    var background = MenuBarHost.Background;
-                    var visibility = MenuBarHost.Visibility;
-                    grid.Children.RemoveAt(index);
-                    var menuBar = new Controls.MenuBar { DataContext = DataContext, Visibility = visibility, VerticalAlignment = alignment, Background = background };
-                    menuBar.PointerEntered += OnMenuBarPointerEntered;
-                    menuBar.PointerExited += OnMenuBarPointerExited;
-                    Grid.SetRow(menuBar, row);
-                    grid.Children.Insert(index, menuBar);
-                    MenuBarHost = menuBar;
-                    // The status bar is created by its x:Load binding, so turning it off and on again is what
-                    // builds it afresh; it paints itself from the theme when it loads.
-                    var settings = AppViewModel.SettingsViewModel;
-                    if (settings.StatusBarOpen)
-                    {
-                        settings.StatusBarOpen = false;
-                        _ = Dispatcher.RunIdleAsync(_ => settings.StatusBarOpen = true);
-                    }
-                    UpdateThemeColours();
-                }
-                catch (Exception ex)
-                {
-                    Log.Debug($"rebuild after language change: {ex.Message}");
-                }
-            });
         }
 
         /// <summary>
