@@ -106,6 +106,7 @@ namespace Typedown.Core.ViewModels
             var tab = ActiveTab;
             var editor = EditorViewModel;
             tab.FilePath = FileViewModel.FilePath;
+            tab.FileFormat = FileViewModel.FileFormat;
             tab.Markdown = editor.Markdown;
             tab.CurrentHash = editor.CurrentHash;
             tab.FileHash = editor.FileHash;
@@ -192,6 +193,7 @@ namespace Typedown.Core.ViewModels
         {
             var editor = EditorViewModel;
             FileViewModel.SetFilePathFromTab(tab.FilePath);
+            FileViewModel.FileFormat = tab.FileFormat ?? Utilities.TextFileFormat.Default;
             editor.History = tab.History ?? new ContentHistory();
             editor.Markdown = tab.Markdown ?? Common.DefaultMarkdwn;
             editor.FileHash = tab.FileHash;

@@ -193,6 +193,7 @@ namespace Typedown.Core.ViewModels
             else if (!await AskToSave())
                 return;
             FilePath = null;
+            FileFormat = TextFileFormat.Default;
             EditorViewModel.FileHash = Common.SimpleHash(Common.DefaultMarkdwn);
             string backup = null;
             if (AppViewModel.GetInstances().Where(x => x != AppViewModel).All(x => !string.IsNullOrEmpty(x.FileViewModel.FilePath)))
@@ -269,7 +270,8 @@ namespace Typedown.Core.ViewModels
                 }
                 if (TabsViewModel != null && !(preview ? TabsViewModel.CanReuseActiveTabForPreview : TabsViewModel.IsActiveTabBlank))
                     startedTab = TabsViewModel.BeginNewTab();
-                var text = await File.ReadAllTextAsync(path);
+                var (text, format) = await TextFileFormat.ReadAsync(path);
+                FileFormat = format;
                 EditorViewModel.FirstStart = false;
                 EditorViewModel.FileHash = Common.SimpleHash(text);
                 DiskHash = EditorViewModel.FileHash;
@@ -352,12 +354,18 @@ namespace Typedown.Core.ViewModels
             }
         }
 
+        /// <summary>
+        /// The byte shape of the open document: its encoding, byte order mark and line ending. A file opened with
+        /// CRLF is written back with CRLF — saving a document without editing it must not rewrite every line.
+        /// </summary>
+        public TextFileFormat FileFormat { get; set; } = TextFileFormat.Default;
+
         private async Task<bool> WriteAllText(string path, string text, bool alert = true)
         {
             try
             {
                 IgnoreOwnFileWrite();
-                await SafeFile.WriteAllTextAtomicAsync(path, text);
+                await SafeFile.WriteAllBytesAtomicAsync(path, (FileFormat ?? TextFileFormat.Default).GetBytes(text));
                 IgnoreOwnFileWrite();
                 return true;
             }
@@ -878,7 +886,9 @@ namespace Typedown.Core.ViewModels
                         }
                         return;
                     }
-                    text = await File.ReadAllTextAsync(path);
+                    var reloaded = await TextFileFormat.ReadAsync(path);
+                    text = reloaded.Text;
+                    FileFormat = reloaded.Format;
                     break;
                 }
                 catch (IOException)

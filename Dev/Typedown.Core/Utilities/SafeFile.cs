@@ -13,16 +13,21 @@ namespace Typedown.Core.Utilities
         /// target in one step. A crash or power loss mid-write leaves the previous version intact (upstream #56).
         /// Falls back to a direct write where the replace step is not supported (some network/virtual file systems).
         /// </summary>
-        public static async Task WriteAllTextAtomicAsync(string path, string text, Encoding encoding = null)
+        public static Task WriteAllTextAtomicAsync(string path, string text, Encoding encoding = null) =>
+            WriteAllBytesAtomicAsync(path, (encoding ?? new UTF8Encoding(encoderShouldEmitUTF8Identifier: false)).GetBytes(text));
+
+        /// <summary>
+        /// The same atomic write for content whose bytes the caller has already produced — a document keeps the
+        /// encoding, byte order mark and line ending it was opened with (see <see cref="TextFileFormat"/>).
+        /// </summary>
+        public static async Task WriteAllBytesAtomicAsync(string path, byte[] bytes)
         {
-            encoding ??= new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
             var directory = Path.GetDirectoryName(path);
             var tempPath = Path.Combine(string.IsNullOrEmpty(directory) ? "." : directory, $".{Path.GetFileName(path)}.{Guid.NewGuid():N}.tmp");
             try
             {
                 using (var stream = new FileStream(tempPath, FileMode.CreateNew, FileAccess.Write, FileShare.None, 4096, FileOptions.Asynchronous))
                 {
-                    var bytes = encoding.GetBytes(text);
                     await stream.WriteAsync(bytes, 0, bytes.Length);
                     stream.Flush(flushToDisk: true);
                 }

@@ -12,6 +12,9 @@ namespace Typedown.Core.Models
     {
         public string FilePath { get; set; }
 
+        /// <summary>The encoding, byte order mark and line ending the file was opened with.</summary>
+        public Utilities.TextFileFormat FileFormat { get; set; } = Utilities.TextFileFormat.Default;
+
         public string Markdown { get; set; }
 
         public ulong CurrentHash { get; set; }
