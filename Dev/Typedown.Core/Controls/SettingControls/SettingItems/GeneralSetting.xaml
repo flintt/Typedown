@@ -110,19 +110,6 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <!-- Shown from code: x:Load with a function binding never re-evaluated here, so the notice
-                     stayed hidden however the language changed. -->
-                <StackPanel x:Name="LangChangedPanel" Orientation="Horizontal" Spacing="12" HorizontalAlignment="Right"
-                            VerticalAlignment="Center" Margin="0,0,16,0" Visibility="Collapsed">
-                    <TextBlock
-                        TextWrapping="Wrap"
-                        VerticalAlignment="Center"
-                        x:Name="LangChangedTextBlock"
-                        Text="{u:LocaleString Key=RestartAppIsRequireForChangesToTakeEffect}"
-                        FontSize="14"
-                        Foreground="{ThemeResource SystemErrorTextColor}"/>
-                    <Button Content="{u:LocaleString Key=RestartNow}" Click="OnRestartClick"/>
-                </StackPanel>
                 <ComboBox Grid.Column="1" VerticalAlignment="Center" ItemsSource="{x:Bind utils:Locale.LangsOptions.Keys}" Width="200" SelectedItem="{Binding SettingsViewModel.Language, Mode=TwoWay}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate x:DataType="x:String">

@@ -76,6 +76,10 @@ namespace Typedown.Controls
                 .Merge(AppViewModel.SettingsViewModel.WhenPropertyChanged(nameof(SettingsViewModel.CustomTheme)))
                 .Merge(Observable.FromEventPattern(uiSettings, nameof(uiSettings.ColorValuesChanged)))
                 .Subscribe(_ => OnThemeChanged()));
+            // The editor holds a few strings of its own (the placeholders in footnotes, code fences and images),
+            // fetched once when it starts. A language change is the one thing that leaves them behind.
+            disposables.Add(AppViewModel.SettingsViewModel.WhenPropertyChanged(nameof(SettingsViewModel.Language))
+                .Subscribe(_ => _ = Dispatcher.RunIdleAsync(() => PostMessage("LanguageChanged", null))));
         }
 
         private static readonly HashSet<ulong> reported = new();

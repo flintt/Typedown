@@ -18,12 +18,6 @@ namespace Typedown.Core
         // Change this label for local test builds; CI stamps its run and commit.
         public const string TestBuild = "test.20260918.1";
 
-        /// <summary>
-        /// Set to the program's own path to have it started again once the last window has closed — the way the
-        /// settings offer to restart after a language change.
-        /// </summary>
-        public static string RestartOnExit { get; set; }
-
         /// <summary>Windows 11 (build 22000+). Uses RtlGetVersion so the compatibility manifest cannot mask the real build.</summary>
         public static int WindowsBuild { get; } = Math.Max(Utilities.PInvoke.GetWindowsBuildNumber(), Environment.OSVersion.Version.Build);
 
