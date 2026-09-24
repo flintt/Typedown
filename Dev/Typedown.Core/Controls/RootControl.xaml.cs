@@ -45,7 +45,12 @@ namespace Typedown.Core.Controls
                 try
                 {
                     var path = route?.TrimStart('/').Split('/');
+                    var depth = Frame.BackStackDepth;
                     Frame.Navigate(typeof(SettingsPage), path != null ? string.Join('/', path.Skip(1)) : null, new SuppressNavigationTransitionInfo());
+                    // Building the page again is not somewhere the user navigated to, so it leaves no entry
+                    // behind: otherwise every language change added one more press to the way back out.
+                    while (Frame.BackStackDepth > depth && Frame.BackStack.Count > 0)
+                        Frame.BackStack.RemoveAt(Frame.BackStack.Count - 1);
                 }
                 catch (Exception ex)
                 {
