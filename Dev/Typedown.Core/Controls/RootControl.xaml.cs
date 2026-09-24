@@ -28,8 +28,30 @@ namespace Typedown.Core.Controls
             ViewModel.XamlRoot = XamlRoot;
             disposables.Add(ViewModel.NavigateCommand.OnExecute.Subscribe(args => Navigate(args)));
             RegisterSettingsShortcut();
+            // The settings are the one page you are looking at when you change the language, so they are built
+            // again straight away. The rest of the interface was built at startup and waits for the restart the
+            // settings offer.
+            disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.Language)).Subscribe(_ => ReloadSettingsPage()));
             disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.ShortcutSettings)).Subscribe(_ => RegisterSettingsShortcut()));
             Frame.Navigate(typeof(MainPage), null);
+        }
+
+        private void ReloadSettingsPage()
+        {
+            if (Frame.SourcePageType != typeof(SettingsPage)) return;
+            var route = currentRoute;
+            _ = Dispatcher.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            {
+                try
+                {
+                    var path = route?.TrimStart('/').Split('/');
+                    Frame.Navigate(typeof(SettingsPage), path != null ? string.Join('/', path.Skip(1)) : null, new SuppressNavigationTransitionInfo());
+                }
+                catch (Exception ex)
+                {
+                    Utilities.Log.Debug($"reload settings after language change: {ex.Message}");
+                }
+            });
         }
 
         private IDisposable settingsShortcut;

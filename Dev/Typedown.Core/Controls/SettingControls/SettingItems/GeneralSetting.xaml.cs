@@ -14,9 +14,33 @@ namespace Typedown.Core.Controls.SettingControls.SettingItems
 
         public SettingsViewModel Settings => ViewModel?.SettingsViewModel;
 
+        private SettingsViewModel subscribed;
+
         public GeneralSetting()
         {
             InitializeComponent();
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            subscribed = Settings;
+            if (subscribed != null) subscribed.PropertyChanged += OnSettingsChanged;
+            UpdateLangChangedNotice();
+        }
+
+        private void OnSettingsChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(SettingsViewModel.Language)) UpdateLangChangedNotice();
+        }
+
+        /// <summary>
+        /// The interface is built in one language, at startup. Once the setting names another one, the notice
+        /// and the restart button appear.
+        /// </summary>
+        private void UpdateLangChangedNotice()
+        {
+            if (LangChangedPanel == null) return;
+            LangChangedPanel.Visibility = IsLangChanged(Settings?.Language) ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public static bool IsStartupOpenFolderItemLoad(FolderStartupAction action)
@@ -63,6 +87,10 @@ namespace Typedown.Core.Controls.SettingControls.SettingItems
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
+            // The settings outlive this control and its data context is already gone here, so the instance the
+            // handler was added to is the one it has to be taken off.
+            if (subscribed != null) subscribed.PropertyChanged -= OnSettingsChanged;
+            subscribed = null;
             Bindings?.StopTracking();
         }
     }

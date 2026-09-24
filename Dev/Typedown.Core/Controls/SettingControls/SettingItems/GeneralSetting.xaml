@@ -11,6 +11,7 @@
     xmlns:viewmodels="using:Typedown.Core.ViewModels" 
     xmlns:u="using:Typedown.Core.Utilities"
     d:DataContext="{d:DesignInstance Type=viewmodels:AppViewModel}"
+    Loaded="OnLoaded"
     Unloaded="OnUnloaded"
     mc:Ignorable="d"
     d:DesignHeight="300"
@@ -109,8 +110,10 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <StackPanel Orientation="Horizontal" Spacing="12" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,16,0"
-                            x:Load="{x:Bind IsLangChanged(Settings.Language), Mode=OneWay}">
+                <!-- Shown from code: x:Load with a function binding never re-evaluated here, so the notice
+                     stayed hidden however the language changed. -->
+                <StackPanel x:Name="LangChangedPanel" Orientation="Horizontal" Spacing="12" HorizontalAlignment="Right"
+                            VerticalAlignment="Center" Margin="0,0,16,0" Visibility="Collapsed">
                     <TextBlock
                         TextWrapping="Wrap"
                         VerticalAlignment="Center"
