@@ -161,8 +161,15 @@ namespace Typedown.Core.ViewModels
         /// Keep a document that a tab switch moved away from built, instead of building it again on return.
         /// Trades memory for the wait: a long document costs seconds to parse and lay out, and tens of
         /// megabytes to hold. Off means every switch rebuilds.
+        /// <para>
+        /// Off by default. Holding more than one editor at a time has produced five faults so far — a new
+        /// editor rendering into the document on screen, one kept in memory answering the keyboard, the
+        /// report after a switch reaching nobody, a loop with the outline, and one that only appears with
+        /// the host running and that none of the checks in Tools/EditorBench can reproduce. The last is the
+        /// reason for the default: what cannot be reproduced cannot be verified fixed.
+        /// </para>
         /// </summary>
-        public bool KeepSwitchedDocuments { get => GetSettingValue(true); set => SetSettingValue(value); }
+        public bool KeepSwitchedDocuments { get => GetSettingValue(false); set => SetSettingValue(value); }
         public bool AutoEncodeImageURL { get => GetSettingValue(true); set => SetSettingValue(value); }
         public bool OpenFolderAfterExport { get => GetSettingValue(false); set => SetSettingValue(value); }
         public bool FileExportDatabaseInitialized { get => GetSettingValue(false); set => SetSettingValue(value); }
