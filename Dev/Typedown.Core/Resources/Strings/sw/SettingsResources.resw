@@ -764,14 +764,6 @@
   <data name="General.RememberCursorPosition.Description" xml:space="preserve">
     <value>Fungua hati pale ulipoishia</value>
   </data>
-  <data name="General.KeepSwitchedDocuments.Title" xml:space="preserve">
-    <value>Hifadhi kwenye kumbukumbu hati ulizoziacha</value>
-    <comment>常规/在内存中保留切走的文档</comment>
-  </data>
-  <data name="General.KeepSwitchedDocuments.Description" xml:space="preserve">
-    <value>Kurudi kwenye kichupo hutokea papo hapo badala ya kujenga upya hati; hati ndefu hugharimu makumi ya megabaiti kuihifadhi, na ile isiyorudiwa huachiliwa baada ya dakika chache.</value>
-    <comment>常规/在内存中保留切走的文档</comment>
-  </data>
   <data name="General.RememberCursorPosition.Title" xml:space="preserve">
     <value>Kumbuka nafasi ya kiashiria</value>
   </data>

@@ -767,14 +767,6 @@
   <data name="View.Image.CopyPath.Placeholder" xml:space="preserve">
     <value>예: ./${filename}.assets — 변수: ${filename} ${filedir} ${year} ${month} ${day}</value>
   </data>
-  <data name="General.KeepSwitchedDocuments.Title" xml:space="preserve">
-    <value>전환하며 떠난 문서를 메모리에 유지</value>
-    <comment>常规/在内存中保留切走的文档</comment>
-  </data>
-  <data name="General.KeepSwitchedDocuments.Description" xml:space="preserve">
-    <value>탭으로 돌아올 때 문서를 다시 만들지 않고 즉시 표시됩니다. 긴 문서는 수십 MB를 차지하며, 몇 분 동안 돌아오지 않은 문서는 해제됩니다.</value>
-    <comment>常规/在内存中保留切走的文档</comment>
-  </data>
   <data name="General.RememberCursorPosition.Title" xml:space="preserve">
     <value>커서 위치 기억</value>
   </data>

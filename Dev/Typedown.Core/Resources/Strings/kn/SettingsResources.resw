@@ -764,14 +764,6 @@
   <data name="General.RememberCursorPosition.Description" xml:space="preserve">
     <value>ನೀವು ನಿಲ್ಲಿಸಿದಲ್ಲಿಂದ ದಾಖಲೆಗಳನ್ನು ತೆರೆಯಿರಿ</value>
   </data>
-  <data name="General.KeepSwitchedDocuments.Title" xml:space="preserve">
-    <value>ಬಿಟ್ಟು ಬಂದ ದಾಖಲೆಗಳನ್ನು ಮೆಮೊರಿಯಲ್ಲಿ ಇರಿಸಿ</value>
-    <comment>常规/在内存中保留切走的文档</comment>
-  </data>
-  <data name="General.KeepSwitchedDocuments.Description" xml:space="preserve">
-    <value>ಟ್ಯಾಬ್‌ಗೆ ಮರಳುವುದು ದಾಖಲೆಯನ್ನು ಮತ್ತೆ ಕಟ್ಟುವ ಬದಲು ತಕ್ಷಣವೇ ಆಗುತ್ತದೆ; ಉದ್ದದ ದಾಖಲೆಗೆ ಹತ್ತಾರು ಮೆಗಾಬೈಟ್ ಬೇಕಾಗುತ್ತದೆ, ಮತ್ತು ಮರಳದ ದಾಖಲೆಯನ್ನು ಕೆಲವು ನಿಮಿಷಗಳ ನಂತರ ಬಿಡಲಾಗುತ್ತದೆ.</value>
-    <comment>常规/在内存中保留切走的文档</comment>
-  </data>
   <data name="General.RememberCursorPosition.Title" xml:space="preserve">
     <value>ಕರ್ಸರ್ ಸ್ಥಾನವನ್ನು ನೆನಪಿಡಿ</value>
   </data>

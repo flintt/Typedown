@@ -764,14 +764,6 @@
   <data name="General.RememberCursorPosition.Description" xml:space="preserve">
     <value>Ireki dokumentuak utzi zenituen lekuan</value>
   </data>
-  <data name="General.KeepSwitchedDocuments.Title" xml:space="preserve">
-    <value>Gorde memorian utzitako dokumentuak</value>
-    <comment>常规/在内存中保留切走的文档</comment>
-  </data>
-  <data name="General.KeepSwitchedDocuments.Description" xml:space="preserve">
-    <value>Fitxa batera itzultzea berehalakoa da dokumentua berriro eraiki beharrean; dokumentu luze batek hamarnaka megabyte hartzen ditu, eta itzultzen ez zaionari muturra askatzen zaio minutu batzuen ondoren.</value>
-    <comment>常规/在内存中保留切走的文档</comment>
-  </data>
   <data name="General.RememberCursorPosition.Title" xml:space="preserve">
     <value>Gogoratu kurtsorearen kokapena</value>
   </data>

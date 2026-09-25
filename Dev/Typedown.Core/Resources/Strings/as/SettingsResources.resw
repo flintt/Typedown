@@ -764,14 +764,6 @@
   <data name="General.RememberCursorPosition.Description" xml:space="preserve">
     <value>য'ত এৰিছিল তাৰ পৰাই নথি খোলক</value>
   </data>
-  <data name="General.KeepSwitchedDocuments.Title" xml:space="preserve">
-    <value>সলনি কৰি অহা নথিসমূহ মেমৰিত ৰাখক</value>
-    <comment>常规/在内存中保留切走的文档</comment>
-  </data>
-  <data name="General.KeepSwitchedDocuments.Description" xml:space="preserve">
-    <value>টেবলৈ ঘূৰি অহাটো নথিখন পুনৰ নিৰ্মাণ কৰাৰ সলনি তৎক্ষণাৎ হয়; এখন দীঘল নথি ৰাখিবলৈ কেইবা দহ মেগাবাইট লাগে, আৰু যিখনলৈ ঘূৰি অহা নহয় সেইখন কেইমিনিটমানৰ পিছত এৰি দিয়া হয়।</value>
-    <comment>常规/在内存中保留切走的文档</comment>
-  </data>
   <data name="General.RememberCursorPosition.Title" xml:space="preserve">
     <value>কাৰ্ছাৰৰ স্থান মনত ৰাখক</value>
   </data>

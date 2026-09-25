@@ -136,67 +136,20 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         search(props.searchArg)
     }, [editor, props.searchArg, search])
 
-    // ---------------------------------------------------------------------------------------------------
-    // More than one editor can exist at once, and everything below depends on four rules. They are not
-    // properties the code has on its own — each is held up by one specific piece of it, named here — and
-    // every bug this feature has produced was one of them being broken. Tools/EditorBench checks each.
+    // One editor, one document. Keeping the document a tab switch moved away from — a second editor held in
+    // memory so returning to it was instant — was tried and taken out again. It bought about two seconds on
+    // a switch between long documents and cost five faults: a new editor rendering into the document on
+    // screen and wiping it, one held in memory answering the keyboard and deleting an image nobody could
+    // see, the report after a switch reaching nobody so the outline described the previous document, a loop
+    // with the outline that made the page twitch, and one that only ever appeared with the host running and
+    // that nothing here could reproduce. Every one was found in use, none by a check.
     //
-    //   1. Only the editor in the page renders.
-    //      Held by: StateRender using its own container instead of document.querySelector. Every editor
-    //      calls its root ag-editor-id, so a global lookup lets a new editor render into the document on
-    //      screen and wipe it. Broken once: a new instance's constructor renders an empty document.
-    //      Checked by: tab-switch-check (the restored document still has its blocks).
-    //
-    //   2. Only the editor in the page answers events.
-    //      Held by: the container.isConnected guards in keyboard.js, tooltip.js and ui/baseFloat. Each
-    //      editor binds to `document`, and one kept in memory still holds what was selected in it — a
-    //      Backspace deleted an image in a document nobody was looking at.
-    //      Checked by: background-quiet-check.
-    //
-    //   3. Whatever is shown, the host is told what it now holds.
-    //      Held by: reportWhenShownRef and the effect after the change handler. A restored document
-    //      produces no change of its own, and asking for the report before React has moved the listener
-    //      sends it to nobody — the outline then describes the previous document.
-    //      Checked by: tab-state-check.
-    //
-    //   4. Nothing takes the page away from the reader.
-    //      Held by: GIVE_WAY, and by the restore path arming no hold at all. The hold that keeps a long
-    //      document at its offset answers scroll events, and dragging the scrollbar raises no wheel event,
-    //      so it pulled the page back from under the pointer.
-    //      Checked by: scroll-flash-check (it holds) and scroll-yield-check (it lets go).
-    //
-    // Anything added here that renders, listens, reports or scrolls has to say which rule it obeys.
-    // ---------------------------------------------------------------------------------------------------
-    // One window has one editor, so switching tabs used to mean building the other document from scratch —
-    // parsing it and creating a hundred thousand elements, seconds of it for a long document. A document that
-    // has already been built is kept instead: its element is taken out of the page rather than thrown away,
-    // and put back when the reader returns to it. A detached subtree costs the browser nothing to keep, so
-    // what this spends is memory, and the two limits below are what bounds it: how many documents, and how
-    // much text between them. Every document is worth keeping — rebuilding even a twenty-thousand-character
-    // one costs half a second of a window that does not answer — so the size limit is on the total, not on
-    // each one, and it is what stops a few very long documents adding up.
-    // A document is also let go once the reader has stopped going back to it: the memory is worth spending
-    // while two documents are being worked on together, not for one that was left behind half an hour ago.
-    const maxKept = 2
-    const maxKeptChars = 800000
-    const keepForMs = 180000
+    // Two things it left behind are worth keeping, because both are right on their own: StateRender renders
+    // into its own container rather than looking its root up in the document, and the setters below only
+    // push a setting that has actually changed instead of re-rendering the whole document each time.
 
-    const hostRef = useRef<HTMLDivElement>(null)
-    type Doc = { muya: any, element: HTMLElement, markdown: string, leftAt: number }
-    const activeRef = useRef<Doc | null>(null)
-    const keptRef = useRef<Doc[]>([])
-    const keepingRef = useRef(true)
-    // Restoring a document produces no change of its own, so the host would never hear what it now holds —
-    // its outline, its word count. The report has to be asked for, but not at the moment of the switch:
-    // showing an editor only sets React state, and until that has been through a render the change listener
-    // is still attached to the editor being left, so the report reaches nobody and the outline goes on
-    // describing the previous document. This names the instance to ask once the listener has followed it.
-    const reportWhenShownRef = useRef<any>(null)
-
-    // Several of Muya's setters re-render the whole document, which is fine once but ruinous when the active
-    // instance changes and every settings effect runs again against a document that is already correct —
-    // four full re-renders of a hundred thousand elements. Each instance remembers what has been applied to
-    // it, so a setting is only pushed when it has actually changed for that instance.
+    // Several of Muya's setters re-render the whole document, which is fine once and wasteful every time
+    // after: the editor remembers what has been applied to it, so a setting is only pushed when it changed.
     const applyOnce = (muya: any, key: string, value: unknown, apply: () => void) => {
         if (!muya) return
         const applied = muya.__applied || (muya.__applied = {})
@@ -206,65 +159,23 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         apply()
     }
 
-    const createDoc = useCallback((): Doc => {
-        const seed = document.createElement('div')
-        seed.id = 'editor'
-        hostRef.current?.appendChild(seed)
-        // Muya replaces the element it is handed with its own, which inherits the attributes; that one is
-        // what has to be detached and put back, so take it from the instance rather than keeping the seed.
+    useEffect(() => {
+        const ele = document.getElementById('editor')
         const o = optionsRef.current
-        const muya = new Muya(seed, o)
+        const muya = new Muya(ele, o);
         // The constructor already built the document with these, so they count as applied.
-        ;(muya as any).__applied = {
+        (muya as any).__applied = {
             font: JSON.stringify({ fontSize: o?.fontSize, lineHeight: o?.lineHeight }),
             direction: JSON.stringify(o?.textDirection ?? null),
             spellcheck: JSON.stringify(!!o?.spellcheckEnabled),
             listIndentation: JSON.stringify(o?.listIndentation ?? null),
             readOnly: JSON.stringify(!!o?.readOnly)
-        }
-        return { muya, element: muya.container, markdown: '', leftAt: 0 }
-    }, [])
-
-    const show = useCallback((doc: Doc) => {
-        const previous = activeRef.current
-        if (previous === doc) return
-        previous?.element.remove()
-        hostRef.current?.appendChild(doc.element)
-        activeRef.current = doc;
-        (window as any).__typedownMuya = doc.muya // for Tools/EditorBench and DevTools inspection
-        setEditor(doc.muya)
-    }, [])
-
-    useEffect(() => {
-        const doc = createDoc()
-        show(doc)
-        const kept = keptRef.current
-        return () => { doc.muya.destroy(); kept.forEach(k => k.muya.destroy()); kept.length = 0 }
+        };
+        (window as any).__typedownMuya = muya // for Tools/EditorBench and DevTools inspection
+        setEditor(muya)
+        return () => muya.destroy()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    // Switched off, or on for the first time: the setting reaches the page as an ordinary option, and turning
-    // it off has to hand the memory back at once rather than at the next switch.
-    useEffect(() => {
-        keepingRef.current = props.options?.keepSwitchedDocuments !== false
-        if (!keepingRef.current) {
-            keptRef.current.forEach(d => d.muya.destroy())
-            keptRef.current.length = 0
-        }
-    }, [props.options?.keepSwitchedDocuments])
-
-    useEffect(() => {
-        const timer = window.setInterval(() => {
-            const now = Date.now()
-            const kept = keptRef.current
-            for (let i = kept.length - 1; i >= 0; i--) {
-                if (now - kept[i].leftAt < keepForMs) continue
-                kept.splice(i, 1)[0].muya.destroy()
-            }
-        }, 30000)
-        return () => window.clearInterval(timer)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
 
     useEffect(() => {
         editor && Object.assign(editor.options, props.options)
@@ -404,7 +315,6 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
 
     // What the last contentChange reported, so the outline can be re-sent with a different current heading
     // without the document having changed. The heading elements are looked up once per document.
-    const lastStateRef = useRef<{ wordCount: any, toc: any[] } | null>(null)
 
     // The outline used to follow the page here in reading mode, where there is no caret for it to follow.
     // It was taken out: it reported the heading it had scrolled to through StateChange, the same message
@@ -482,8 +392,6 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     useEffect(() => editor?.on('contentChange', ({ markdown, wordCount, cursor, toc: { toc, cur } }: any) => {
         markdownRef.current = markdown;
         markLongDocument()
-        lastStateRef.current = { wordCount, toc }
-        if (activeRef.current) activeRef.current.markdown = markdown
 
         // 同步内容与光标
         props.onMarkdownChange(markdown)
@@ -492,15 +400,6 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         // StateChange 必须在 onMarkdownChange、onCursorChange 之后发送，否则会导致编辑器内容/光标不同步
         props.onStateChange({ wordCount, toc, cur })
     }), [editor, props])
-
-    // Declared after the change handler on purpose: effects run in the order they are written, so by the
-    // time this one runs the listener above is attached to the editor now being shown, and the report a
-    // restore asked for reaches the host.
-    useEffect(() => {
-        if (!editor || reportWhenShownRef.current !== editor) return
-        reportWhenShownRef.current = null
-        editor.dispatchChange()
-    }, [editor])
 
     useEffect(() => {
         const ele = document.getElementById('editor');
@@ -616,8 +515,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     }, [props.scrollFromHostRef, scrollToCursorIfInvisible, search])
 
     useEffect(() => {
-        const active = activeRef.current
-        if (!editor || !active) return
+        if (!editor) return
         if (markdownRef.current === props.markdown) { props.onContentApplied?.(); return }
         // The editor normalizes what it is given, and the host hands that normalized text back; applying it
         // again would be a second load — and a second load scrolls to the caret, which is why switching
@@ -628,50 +526,12 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             return
         }
         markdownRef.current = props.markdown
-        const scrollTop = props.scrollTopRef.current
-        const keepScroll = !!props.scrollFromHostRef?.current
-
-        // Is this one of the documents still in memory? Its text is kept current by every change report, so
-        // matching it means the elements on hand are exactly what building the text again would produce.
-        const kept = keptRef.current
-        const found = kept.findIndex(d => d.markdown === props.markdown)
-        if (found >= 0) {
-            const doc = kept.splice(found, 1)[0]
-            const keepOutgoing = active.markdown.length > 0 && keepingRef.current
-            if (keepOutgoing) { active.leftAt = Date.now(); kept.push(active) }
-            show(doc)
-            // Only once it is off the page: destroying an editor whose element is still shown would take the
-            // document out from under the reader.
-            if (!keepOutgoing) active.muya.destroy()
-            markLongDocument(props.markdown)
-            reportWhenShownRef.current = doc.muya
-            // No hold: this document is already laid out, so nothing is going to knock the page off the
-            // offset a moment later, and a watch that answers scroll events would only fight the reader.
-            window.scrollTo(window.scrollX, scrollTop)
-            if (!keepScroll) scrollToCursorIfInvisible()
-            if (props.scrollFromHostRef) props.scrollFromHostRef.current = false
-            props.onContentApplied?.()
-            return
-        }
-
-        // A new document: keep the one being left, and build the new one beside it. An empty editor — the one
-        // the window starts with, before any file is open — is not a document and is reused rather than kept.
-        let target = active
-        if (active.markdown.length > 0 && keepingRef.current && !kept.includes(active)) {
-            active.leftAt = Date.now()
-            kept.push(active)
-            const total = () => kept.reduce((n, d) => n + d.markdown.length, 0)
-            while (kept.length > maxKept || (kept.length > 1 && total() > maxKeptChars)) kept.shift()!.muya.destroy()
-            target = createDoc()
-            show(target)
-        }
         markLongDocument(props.markdown)
-        target.markdown = props.markdown
-        target.muya.setMarkdown(props.markdown, cursorRef.current)
-        settleScroll(scrollTop, keepScroll)
+        editor.setMarkdown(props.markdown, cursorRef.current)
+        settleScroll(props.scrollTopRef.current, !!props.scrollFromHostRef?.current)
         props.onContentApplied?.()
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [editor, props.markdown, props.contentVersion, props.scrollTopRef, settleScroll, show, createDoc, markLongDocument])
+    }, [editor, props.markdown, props.contentVersion, props.scrollTopRef, settleScroll, markLongDocument])
 
     useEffect(() => {
         try {
@@ -695,7 +555,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             lineHeight: props.options?.lineHeight,
             fontFamily: props.options?.fontFamily ? `${props.options.fontFamily}, "Open Sans", "Segoe UI", sans-serif` : undefined
         }}>
-            <div ref={hostRef} />
+            <div id="editor" />
         </div>
     )
 

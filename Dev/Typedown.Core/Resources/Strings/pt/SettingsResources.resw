@@ -767,14 +767,6 @@
   <data name="View.Image.CopyPath.Placeholder" xml:space="preserve">
     <value>ex.: ./${filename}.assets — variáveis: ${filename} ${filedir} ${year} ${month} ${day}</value>
   </data>
-  <data name="General.KeepSwitchedDocuments.Title" xml:space="preserve">
-    <value>Manter na memória os documentos que deixou</value>
-    <comment>常规/在内存中保留切走的文档</comment>
-  </data>
-  <data name="General.KeepSwitchedDocuments.Description" xml:space="preserve">
-    <value>Voltar a um separador é imediato em vez de construir o documento de novo; um documento longo ocupa dezenas de megabytes, e aquele a que não se volta é libertado ao fim de alguns minutos.</value>
-    <comment>常规/在内存中保留切走的文档</comment>
-  </data>
   <data name="General.RememberCursorPosition.Title" xml:space="preserve">
     <value>Lembrar a posição do cursor</value>
   </data>

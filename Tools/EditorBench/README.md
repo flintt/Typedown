@@ -52,6 +52,11 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   (see `docs/editor-performance.md`), the hidden tree is parsed as real MathML instead of as elements that
   merely happen to be called `math` — one element fewer, different metrics, and nothing visible changes. That
   is what the baseline was re-recorded for.
+- `idle-quiet-check.js` — an editor left alone must send nothing and re-render nothing. A stream of reports
+  with nobody typing shows up as an outline that flickers and collapses, a selection that cannot be dragged
+  because it dies on every render, and eventually a crash.
+- `tab-stress-check.js` — twelve switches in a row, the way a tab bar is actually used: one editor element
+  and one editable root throughout, and nothing sent once the switching stops.
 - `tab-state-check.js` — what the host is told after a switch. The outline, the word count and the caret
   all reach the host through StateChange, and restoring a document already built produces no change of its
   own, so the report has to be asked for — at the wrong moment it goes to an editor that is no longer

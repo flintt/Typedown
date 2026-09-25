@@ -764,14 +764,6 @@
   <data name="General.RememberCursorPosition.Description" xml:space="preserve">
     <value>ሰነዶችን ካቆሙበት ቦታ ክፈት</value>
   </data>
-  <data name="General.KeepSwitchedDocuments.Title" xml:space="preserve">
-    <value>የተቀየሩ ሰነዶችን በማህደረ ትውስታ ውስጥ አስቀምጥ</value>
-    <comment>常规/在内存中保留切走的文档</comment>
-  </data>
-  <data name="General.KeepSwitchedDocuments.Description" xml:space="preserve">
-    <value>ወደ ትር መመለስ ሰነዱን እንደገና ከመገንባት ይልቅ ወዲያውኑ ነው፤ ረጅም ሰነድ ለማስቀመጥ በአስር የሚቆጠሩ ሜጋባይቶች ይፈልጋል፣ እና ያልተመለሰበት ከጥቂት ደቂቃዎች በኋላ ይለቀቃል።</value>
-    <comment>常规/在内存中保留切走的文档</comment>
-  </data>
   <data name="General.RememberCursorPosition.Title" xml:space="preserve">
     <value>የጠቋሚውን ቦታ አስታውስ</value>
   </data>

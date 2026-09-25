@@ -764,14 +764,6 @@
   <data name="General.RememberCursorPosition.Description" xml:space="preserve">
     <value>Otvori dokumente ondje gdje ste stali</value>
   </data>
-  <data name="General.KeepSwitchedDocuments.Title" xml:space="preserve">
-    <value>Zadrži napuštene dokumente u memoriji</value>
-    <comment>常规/在内存中保留切走的文档</comment>
-  </data>
-  <data name="General.KeepSwitchedDocuments.Description" xml:space="preserve">
-    <value>Povratak na karticu je trenutačan umjesto ponovne izgradnje dokumenta; dugačak dokument zauzima desetke megabajta, a onaj na koji se ne vratite oslobađa se nakon nekoliko minuta.</value>
-    <comment>常规/在内存中保留切走的文档</comment>
-  </data>
   <data name="General.RememberCursorPosition.Title" xml:space="preserve">
     <value>Zapamti položaj pokazivača</value>
   </data>

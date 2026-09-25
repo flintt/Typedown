@@ -764,14 +764,6 @@
   <data name="General.RememberCursorPosition.Description" xml:space="preserve">
     <value>Oscail cáipéisí san áit ar stop tú</value>
   </data>
-  <data name="General.KeepSwitchedDocuments.Title" xml:space="preserve">
-    <value>Coinnigh cáipéisí a fágadh sa chuimhne</value>
-    <comment>常规/在内存中保留切走的文档</comment>
-  </data>
-  <data name="General.KeepSwitchedDocuments.Description" xml:space="preserve">
-    <value>Bíonn filleadh ar chluaisín láithreach in ionad an cháipéis a atógáil; cosnaíonn cáipéis fhada na mórán meigibheart le coinneáil, agus scaoiltear ceann nach bhfilltear uirthi tar éis cúpla nóiméad.</value>
-    <comment>常规/在内存中保留切走的文档</comment>
-  </data>
   <data name="General.RememberCursorPosition.Title" xml:space="preserve">
     <value>Cuimhnigh ar shuíomh an chúrsóra</value>
   </data>

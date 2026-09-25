@@ -764,14 +764,6 @@
   <data name="General.RememberCursorPosition.Description" xml:space="preserve">
     <value>Mở tài liệu tại nơi bạn dừng lại</value>
   </data>
-  <data name="General.KeepSwitchedDocuments.Title" xml:space="preserve">
-    <value>Giữ trong bộ nhớ các tài liệu đã chuyển khỏi</value>
-    <comment>常规/在内存中保留切走的文档</comment>
-  </data>
-  <data name="General.KeepSwitchedDocuments.Description" xml:space="preserve">
-    <value>Quay lại một thẻ diễn ra ngay lập tức thay vì dựng lại tài liệu; một tài liệu dài chiếm hàng chục megabyte, và tài liệu không được quay lại sẽ được giải phóng sau vài phút.</value>
-    <comment>常规/在内存中保留切走的文档</comment>
-  </data>
   <data name="General.RememberCursorPosition.Title" xml:space="preserve">
     <value>Ghi nhớ vị trí con trỏ</value>
   </data>

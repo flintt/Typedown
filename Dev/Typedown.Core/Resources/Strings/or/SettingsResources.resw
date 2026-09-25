@@ -764,14 +764,6 @@
   <data name="General.RememberCursorPosition.Description" xml:space="preserve">
     <value>ଯେଉଁଠି ଛାଡ଼ିଥିଲେ ସେଠାରୁ ଡକ୍ୟୁମେଣ୍ଟ ଖୋଲନ୍ତୁ</value>
   </data>
-  <data name="General.KeepSwitchedDocuments.Title" xml:space="preserve">
-    <value>ଛାଡ଼ିଯାଇଥିବା ଦଲିଲଗୁଡ଼ିକୁ ମେମୋରୀରେ ରଖନ୍ତୁ</value>
-    <comment>常规/在内存中保留切走的文档</comment>
-  </data>
-  <data name="General.KeepSwitchedDocuments.Description" xml:space="preserve">
-    <value>ଟ୍ୟାବକୁ ଫେରିବା ଦଲିଲକୁ ପୁନର୍ବାର ତିଆରି କରିବା ବଦଳରେ ତତକ୍ଷଣାତ ହୁଏ; ଲମ୍ବା ଦଲିଲ ଦଶେକ ମେଗାବାଇଟ ନିଏ, ଏବଂ ଯେଉଁଥିକୁ ଫେରାଯାଏ ନାହିଁ ତାହା କିଛି ମିନିଟ ପରେ ଛାଡ଼ିଦିଆଯାଏ।</value>
-    <comment>常规/在内存中保留切走的文档</comment>
-  </data>
   <data name="General.RememberCursorPosition.Title" xml:space="preserve">
     <value>କର୍ସର୍ ସ୍ଥାନ ମନେ ରଖନ୍ତୁ</value>
   </data>

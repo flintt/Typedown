@@ -146,7 +146,6 @@ namespace Typedown.Core.ViewModels
                 Settings.FontFamily,
                 Settings.TextDirection,
                 Settings.TabSize,
-                Settings.KeepSwitchedDocuments,
                 Markdown,
                 BasePath = FileViewModel.ImageBasePath,
                 Cursor = Settings.RememberCursorPosition ? CursorMemory.Get(FileViewModel.FilePath) : null,

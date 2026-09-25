@@ -764,14 +764,6 @@
   <data name="General.RememberCursorPosition.Description" xml:space="preserve">
     <value>Buksan ang mga dokumento kung saan ka huminto</value>
   </data>
-  <data name="General.KeepSwitchedDocuments.Title" xml:space="preserve">
-    <value>Panatilihin sa memory ang mga dokumentong nilisan</value>
-    <comment>常规/在内存中保留切走的文档</comment>
-  </data>
-  <data name="General.KeepSwitchedDocuments.Description" xml:space="preserve">
-    <value>Agad ang pagbalik sa isang tab sa halip na muling buuin ang dokumento; ang mahabang dokumento ay umuubos ng ilang sampung megabyte, at ang hindi binabalikan ay pinapakawalan pagkalipas ng ilang minuto.</value>
-    <comment>常规/在内存中保留切走的文档</comment>
-  </data>
   <data name="General.RememberCursorPosition.Title" xml:space="preserve">
     <value>Tandaan ang posisyon ng cursor</value>
   </data>

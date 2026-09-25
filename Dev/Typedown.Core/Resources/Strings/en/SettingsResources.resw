@@ -793,14 +793,6 @@
     <value>e.g. ./${filename}.assets — variables: ${filename} ${filedir} ${year} ${month} ${day}</value>
     <comment>图片/路径变量说明</comment>
   </data>
-  <data name="General.KeepSwitchedDocuments.Title" xml:space="preserve">
-    <value>Keep switched-away documents in memory</value>
-    <comment>常规/在内存中保留切走的文档</comment>
-  </data>
-  <data name="General.KeepSwitchedDocuments.Description" xml:space="preserve">
-    <value>Returning to a tab is immediate instead of building the document again; a long document costs tens of megabytes to hold, and one not returned to is let go after a few minutes.</value>
-    <comment>常规/在内存中保留切走的文档</comment>
-  </data>
   <data name="General.RememberCursorPosition.Title" xml:space="preserve">
     <value>Remember cursor position</value>
     <comment>常规/记住光标位置</comment>

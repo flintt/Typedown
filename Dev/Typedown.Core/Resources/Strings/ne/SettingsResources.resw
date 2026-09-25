@@ -764,14 +764,6 @@
   <data name="General.RememberCursorPosition.Description" xml:space="preserve">
     <value>जहाँ छोड्नुभएको थियो त्यहीँबाट कागजात खोल्नुहोस्</value>
   </data>
-  <data name="General.KeepSwitchedDocuments.Title" xml:space="preserve">
-    <value>छोडिएका कागजातहरू मेमोरीमा राख्नुहोस्</value>
-    <comment>常规/在内存中保留切走的文档</comment>
-  </data>
-  <data name="General.KeepSwitchedDocuments.Description" xml:space="preserve">
-    <value>ट्याबमा फर्कँदा कागजात फेरि बनाउनुको सट्टा तुरुन्तै देखिन्छ; लामो कागजातले दशौं मेगाबाइट ओगट्छ, र फर्किइएको छैन भने केही मिनेटपछि छाडिन्छ।</value>
-    <comment>常规/在内存中保留切走的文档</comment>
-  </data>
   <data name="General.RememberCursorPosition.Title" xml:space="preserve">
     <value>कर्सरको स्थान सम्झनुहोस्</value>
   </data>
