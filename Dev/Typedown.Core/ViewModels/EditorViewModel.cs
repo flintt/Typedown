@@ -8,6 +8,7 @@ using System.IO;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Linq;
 using System.Threading.Tasks;
 using Typedown.Core.Controls;
 using Typedown.Core.Interfaces;
@@ -304,9 +305,17 @@ namespace Typedown.Core.ViewModels
             rebuildingToc = true;
             try
             {
+                if (ContentState.Cur == null)
+                {
+                    // Nothing is highlighted when the editor reports no current heading — a selection that
+                    // spans two sections does that on purpose, but seeing it any other time is the bug.
+                    Log.Debug($"outline: no current heading in a report of {ContentState.Toc?.Count ?? 0} entries");
+                }
                 if (ContentState.Cur != null)
                 {
                     appliedCurSlug = ContentState.Cur.Slug;
+                    if (ContentState.Toc.All(x => x.Slug != ContentState.Cur.Slug))
+                        Log.Debug($"outline: current heading {ContentState.Cur.Slug} is not among the {ContentState.Toc.Count} entries reported with it");
                     ContentState.Toc.ForEach(x =>
                     {
                         x.IsSelected = x.Slug == ContentState.Cur.Slug;
@@ -336,9 +345,15 @@ namespace Typedown.Core.ViewModels
         {
             if (IsStaleReport(arg)) return;
             var slug = arg["slug"]?.ToString();
-            if (string.IsNullOrEmpty(slug) || ContentState?.Toc == null) return;
+            if (string.IsNullOrEmpty(slug) || ContentState?.Toc == null)
+            {
+                Log.Debug($"outline: reading-mode heading {slug ?? "(none)"} ignored, toc={(ContentState?.Toc == null ? "null" : "empty")}");
+                return;
+            }
             if (appliedCurSlug == slug) return;
             appliedCurSlug = slug;
+            if (ContentState.Toc.All(x => x.Slug != slug))
+                Log.Debug($"outline: reading-mode heading {slug} is not in the outline of {ContentState.Toc.Count} entries");
             rebuildingToc = true;
             try
             {
