@@ -949,6 +949,9 @@
     <value>该文件夹已不存在。</value>
     <comment>文件栏/文件夹不存在</comment>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>此文件夹有 {0} 项，数量过多，未在此列出。</value>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>此文件夹中没有 Markdown 文件。</value>
     <comment>文件栏/没有 Markdown 文件</comment>

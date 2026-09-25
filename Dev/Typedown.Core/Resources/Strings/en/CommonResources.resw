@@ -949,6 +949,9 @@
     <value>This folder no longer exists.</value>
     <comment>文件栏/文件夹不存在</comment>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>This folder has {0} items — too many to list here.</value>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>No Markdown files in this folder.</value>
     <comment>文件栏/没有 Markdown 文件</comment>

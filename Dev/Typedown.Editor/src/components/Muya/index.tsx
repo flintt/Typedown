@@ -314,12 +314,16 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
 
     // Past this many blocks the browser is told it may skip laying out what is off screen (see the
     // .ag-long-document rule). Below it the bookkeeping costs more than it saves.
-    const longDocumentBlocks = 1000
+    const longDocumentBlocks = 6000
 
     // The class has to be on the element before the first render, or the browser lays the whole document out
     // once and then has to take it apart again — which costs more than it saves. Before the document is
     // parsed the only measure available is its length; afterwards the block count corrects it.
-    const longDocumentChars = 40000
+    // Raised from forty thousand: while the blocks off screen are unlaid out the page can only guess its own
+    // height, and the scrollbar is drawn from that guess — the thumb ends up too small and the document runs
+    // away from the pointer. Documents this side of three hundred thousand characters open in about a second
+    // and type in under twenty milliseconds anyway, so they keep an exact scrollbar instead.
+    const longDocumentChars = 300000
 
     const markLongDocument = useCallback((markdown?: string) => {
         // On the wrapper, not on the editor element itself: rendering patches that element and would strip a
@@ -330,12 +334,6 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         const long = markdown != null ? markdown.length > longDocumentChars : blocks > longDocumentBlocks
         root.classList.toggle('ag-long-document', long)
     }, [editor])
-
-    useEffect(() => {
-        if (!props.flushRef) return
-        props.flushRef.current = () => (editor as any)?.flushContentChange?.()
-        return () => { if (props.flushRef) props.flushRef.current = null }
-    }, [editor, props.flushRef])
 
     useEffect(() => editor?.on('contentChange', ({ markdown, wordCount, cursor, toc: { toc, cur } }: any) => {
         markdownRef.current = markdown;

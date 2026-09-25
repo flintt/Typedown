@@ -57,7 +57,11 @@ mark::after {
  */
 #editor.ag-long-document #ag-editor-id > * {
   content-visibility: auto;
-  contain-intrinsic-size: auto 120px;
+  /* Measured across two very different documents: a top-level block averages 51 px once it is laid out.
+     The estimate is what the scrollbar is drawn from while the blocks off screen are unlaid out, so it is
+     wrong by some tens of per cent until scrolling replaces guesses with real sizes — acceptable only
+     because the rule is reserved for documents that would otherwise take half a minute to open. */
+  contain-intrinsic-size: auto 50px;
 }
 
 #mu-dragover-ghost {

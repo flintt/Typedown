@@ -55,6 +55,9 @@ namespace Typedown.Core.Models
             ViewModel = viewModel;
         }
 
+        /// <summary>A row carrying only a message has no path change to trigger its name.</summary>
+        public string DisplayName => Notice ?? Name;
+
         private void OnFullPathChanged()
         {
             UpdateName();
@@ -74,8 +77,16 @@ namespace Typedown.Core.Models
             Reorder();
         }
 
+        /// <summary>Set when the entry came from a folder listing, which already said what it is.</summary>
+        private ExplorerItemType? knownType;
+
         private void UpdateType()
         {
+            if (knownType is { } known)
+            {
+                Type = known;
+                return;
+            }
             if (string.IsNullOrEmpty(FullPath))
                 Type = ExplorerItemType.None;
             else if (Directory.Exists(FullPath))
@@ -86,9 +97,12 @@ namespace Typedown.Core.Models
                 Type = ExplorerItemType.None;
         }
 
+        /// <summary>Set on a row that stands in for content, such as a folder too large to list.</summary>
+        public string Notice { get; init; }
+
         private void UpdateName()
         {
-            Name = Path.GetFileName(FullPath);
+            Name = Notice ?? Path.GetFileName(FullPath);
         }
 
         private void OnIsExpandedChanged()
@@ -114,6 +128,13 @@ namespace Typedown.Core.Models
         private async void UpdateChildren()
         {
             if (disposed) return;
+            if (Type == ExplorerItemType.File)
+            {
+                // A file has nothing to enumerate; saying so here keeps tens of thousands of entries out of the
+                // asynchronous path below.
+                ClearChildren();
+                return;
+            }
             var updateVersion = ++childrenUpdateVersion;
             var path = FullPath;
             var filter = Filter;
@@ -133,7 +154,17 @@ namespace Typedown.Core.Models
                         return;
                     }
                     Log.Debug($"ExplorerItem.UpdateChildren: '{path}' -> {files.Count} entries");
-                    SetChildren(files.Select(x => CreateChild(x.Name)).ToList());
+                    if (files.Count > TooManyEntries)
+                    {
+                        // Tens of thousands of entries cost more than they are worth: every one of them is a
+                        // view model the tree keeps, and on a synced folder the listing alone takes minutes,
+                        // with everything else — opening a document included — waiting behind it.
+                        SetChildren(new List<ExplorerItem> { CreateNotice(string.Format(Locale.GetString("FolderPane.TooManyEntries") ?? "{0} items", files.Count)) });
+                        StopWatchFolder();
+                        return;
+                    }
+                    SetChildren(files.Select(x => CreateChild(x.Name,
+                        x.Attributes.HasFlag(FileAttributes.Directory) ? ExplorerItemType.Folder : ExplorerItemType.File)).ToList());
                     try
                     {
                         StartWatchFolder();
@@ -201,9 +232,18 @@ namespace Typedown.Core.Models
             Children.InsertByOrder(CreateChild(name), Comparer.Compare);
         }
 
-        private ExplorerItem CreateChild(string name)
+        /// <summary>Beyond this many entries a folder is described rather than listed.</summary>
+        private const int TooManyEntries = 2000;
+
+        /// <summary>A row that only says something; it has no path, so nothing opens it.</summary>
+        private ExplorerItem CreateNotice(string text)
         {
-            return new(ViewModel) { FullPath = Path.Combine(FullPath, name), Comparer = Comparer, IsWatching = IsExpanded };
+            return new(ViewModel) { knownType = ExplorerItemType.None, Notice = text, Comparer = Comparer };
+        }
+
+        private ExplorerItem CreateChild(string name, ExplorerItemType? type = null)
+        {
+            return new(ViewModel) { knownType = type, FullPath = Path.Combine(FullPath, name), Comparer = Comparer, IsWatching = IsExpanded };
         }
 
         private bool ContainsChildren(string name)
