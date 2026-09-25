@@ -57,6 +57,12 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   does not move the page. Its fake host is hostile on purpose — it scrolls to whatever `cur` a state report
   carries, which is what the first attempt fed it, so a heading routed back through that report starts the
   loop and the check sees the page moving on its own.
+- `anchor-link-check.js` — a link to a place in the same document: Ctrl+click while editing, plain click in
+  reading mode, and the heading the fragment names lands at the top. Fragments are slugs of the heading text
+  the way the export names them, may be percent-encoded, and duplicates number the same way. Two things
+  used to defeat it: headings carry block keys as ids, not slugs, so `querySelector('#fragment')` found
+  nothing; and the caret-follow rule scrolled back up on the Ctrl key-up, which Muya reports as a selection
+  change. Five Store reviews.
 - `inline-mark-check.js` — `==text==` is highlight: it renders as `<mark>`, survives a round trip through the
   editor unchanged, exports as `<mark>`, is stripped from the outline's heading text, and HTML with `<mark>`
   imports as `==text==`. Three Store reviews asked for it; the markers used to be plain text.

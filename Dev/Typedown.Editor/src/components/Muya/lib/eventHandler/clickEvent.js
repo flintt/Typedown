@@ -3,12 +3,44 @@ import { getImageInfo } from '../utils/getImageInfo'
 import { CLASS_OR_ID } from '../config'
 import selection from '../selection'
 import remote from 'services/remote/common'
+import Slugger from '../parser/marked/slugger'
+import { getHeadingPlainText } from '../utils'
 
 class ClickEvent {
   constructor(muya) {
     this.muya = muya
     this.clickBinding()
     this.contextClickBingding()
+  }
+
+  /**
+   * A link to a place in this document: `#fragment`. Headings in the editor carry their block key as id, not
+   * a slug of their text, so `document.querySelector('#some-heading')` found nothing and the link did nothing
+   * (five Store reviews). The fragment is matched the way the export names headings — the same slugger, in
+   * document order, so duplicates number the same way — and the heading lands at the top, as from the outline.
+   */
+  scrollToAnchor(href) {
+    let fragment = href.slice(1)
+    try { fragment = decodeURIComponent(fragment) } catch (e) { }
+    let target = fragment ? document.getElementById(fragment) : null
+    if (!target) {
+      const slugger = new Slugger()
+      const wanted = fragment.toLowerCase()
+      for (const block of this.muya.contentState.blocks) {
+        if (!/^h\d$/.test(block.type)) continue
+        const { headingStyle, key } = block
+        const text = block.children[0].text
+        const plain = getHeadingPlainText(headingStyle === 'setext' ? text.trim() : text.replace(/^\s*#{1,6}\s{1,}/, '').trim())
+        const slug = slugger.slug(plain)
+        if (slug === wanted || plain.toLowerCase() === wanted) {
+          target = document.querySelector(`#${key}`)
+          break
+        }
+      }
+    }
+    if (!target) return
+    const top = target.getBoundingClientRect().top
+    window.scrollTo(window.scrollX, window.scrollY + top - 16)
   }
 
   contextClickBingding() {
@@ -226,20 +258,13 @@ class ClickEvent {
         contentState.listItemCheckBoxClick(target)
       }
 
-      // handler open link
+      // Links are followed on mousedown (below). The click that follows must not place the caret either:
+      // the page has just been scrolled to the anchor, and a caret put back into the link's paragraph
+      // would be above the window, which the caret-follow rule answers by scrolling right back up.
       const link = event.target.closest('a')
       if (link) {
         event.preventDefault();
-        if (event.metaKey || event.ctrlKey) {
-          const href = link.getAttribute('href');
-          if (href) {
-            if (href.startsWith('#')) {
-              document.querySelector(href)?.scrollIntoView({ behavior: "smooth" })
-            } else {
-              remote.openNewWindow(href)
-            }
-          }
-        }
+        if (event.metaKey || event.ctrlKey || readOnly) return
       }
 
       contentState.clickHandler(event)
@@ -249,6 +274,27 @@ class ClickEvent {
       setTimeout(() => contentState.mouseupHandler(event))
     }
 
+    // Following a link has to happen on mousedown, not click: while editing, the mousedown puts the caret
+    // into the link's block, the block re-renders as raw Markdown, and by the time the click arrives the
+    // <a> is gone — "Ctrl+click says it will open the link and does nothing" (Store reviews). Ctrl+click
+    // follows a link while editing; in reading mode a plain click does, there being nothing else a click
+    // on a link could mean there.
+    const linkMousedownHandler = event => {
+      if (event.button !== 0) return
+      const readOnly = !!this.muya.options.readOnly
+      if (!(event.metaKey || event.ctrlKey || readOnly)) return
+      const link = event.target.closest('a')
+      const href = link && link.getAttribute('href')
+      if (!href) return
+      event.preventDefault()
+      event.stopPropagation()
+      if (href.startsWith('#')) {
+        this.scrollToAnchor(href)
+      } else {
+        remote.openNewWindow(href)
+      }
+    }
+    eventCenter.attachDOMEvent(container, 'mousedown', linkMousedownHandler)
     eventCenter.attachDOMEvent(window, 'mouseup', mouseupHandler)
     eventCenter.attachDOMEvent(container, 'click', clickHandler)
     eventCenter.attachDOMEvent(container, 'contextmenu', clickHandler)

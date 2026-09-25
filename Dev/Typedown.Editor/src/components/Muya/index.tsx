@@ -82,6 +82,8 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     // reader asked for stands: the jump's own scroll must not be re-read as the reader moving on.
     const readingSlugRef = useRef<string | null>(null)
     const jumpHoldRef = useRef(0)
+    // Where the caret was at the last selection change, so a report of an unmoved caret is not followed.
+    const lastSelectionRef = useRef('')
 
     const relativeScroll = useCallback((delta: number) => {
         window.scrollBy(0, delta)
@@ -433,7 +435,14 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         // document was left — and following that "movement" took the page to wherever the caret had been
         // remembered, the top of the document as often as not. That was the jump to the top after a tab
         // switch, and in reading mode there is no caret to follow at all.
-        if (selection?.fromLoad || props.options?.readOnly) return
+        // And only a caret that actually moved. Muya reports a selection change on every key-up, modifier
+        // keys included, so releasing Ctrl after Ctrl+clicking an anchor link reported the unmoved caret —
+        // now above the window, since the page had just gone to the anchor — and the rule below scrolled
+        // straight back up to it. The link "did nothing". Same for Ctrl+wheel after scrolling away.
+        const at = `${selection?.start?.key}:${selection?.start?.offset}:${selection?.end?.key}:${selection?.end?.offset}`
+        const moved = at !== lastSelectionRef.current
+        lastSelectionRef.current = at
+        if (selection?.fromLoad || props.options?.readOnly || !moved) return
         const { y } = selection.cursorCoords
         // Typewriter mode centres the caret line.
         if (props.options?.typewriter) {
