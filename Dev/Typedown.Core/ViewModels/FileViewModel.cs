@@ -270,8 +270,10 @@ namespace Typedown.Core.ViewModels
                 }
                 if (TabsViewModel != null && !(preview ? TabsViewModel.CanReuseActiveTabForPreview : TabsViewModel.IsActiveTabBlank))
                     startedTab = TabsViewModel.BeginNewTab();
+                var openedAt = System.Diagnostics.Stopwatch.StartNew();
                 var (text, format) = await TextFileFormat.ReadAsync(path);
                 FileFormat = format;
+                var readMs = openedAt.ElapsedMilliseconds;
                 EditorViewModel.FirstStart = false;
                 EditorViewModel.FileHash = Common.SimpleHash(text);
                 DiskHash = EditorViewModel.FileHash;
@@ -302,6 +304,10 @@ namespace Typedown.Core.ViewModels
                 if (TabsViewModel != null)
                     TabsViewModel.ActiveTab.IsPreview = preview;
                 FileOpened?.Invoke(path, preview);
+                // Opening a large document is the one place where the host's own work is worth timing: the
+                // editor reports back when it has the text, and the gap between the two is the page's share.
+                if (text.Length > 200000)
+                    Log.Debug($"open {System.IO.Path.GetFileName(path)}: {text.Length} chars, read {readMs} ms, host {openedAt.ElapsedMilliseconds} ms up to handing it over");
                 return true;
             }
             catch (Exception ex)

@@ -44,19 +44,27 @@ namespace Typedown.Core
             MaxDepth = 256
         };
 
-        public static string GetLocalFolderPath()
+        private static string localFolderPath;
+
+        /// <summary>
+        /// Where settings, the database and the remembered state live. Worked out once: an installed build has
+        /// no package identity, so asking the platform for its folder throws, and this is called from the
+        /// property that names every one of those files — which meant an exception (and a line in the log)
+        /// several times a second.
+        /// </summary>
+        public static string GetLocalFolderPath() => localFolderPath ??= ResolveLocalFolderPath();
+
+        private static string ResolveLocalFolderPath()
         {
-            try
+            if (IsPackaged)
             {
-                return ApplicationData.Current.LocalFolder.Path;
+                try { return ApplicationData.Current.LocalFolder.Path; }
+                catch (Exception) { /* fall through to the folder an installed build uses */ }
             }
-            catch (Exception)
-            {
-                var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), AppName);
-                if (!Directory.Exists(path))
-                    Directory.CreateDirectory(path);
-                return path;
-            }
+            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), AppName);
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+            return path;
         }
 
         public static string AppName => "Typedown";

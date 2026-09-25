@@ -158,6 +158,7 @@ namespace Typedown.Core.ViewModels
         public void PostLoadFile(string text, object cursor = null)
         {
             var scrollTop = Settings.RememberCursorPosition ? CursorMemory.GetScroll(FileViewModel.FilePath) : null;
+            loadClock = text != null && text.Length > 200000 ? System.Diagnostics.Stopwatch.StartNew() : null;
             MarkdownEditor?.PostMessage("LoadFile", new { text, basePath = FileViewModel.ImageBasePath, cursor, scrollTop, loadId = ++LoadId });
         }
 
@@ -227,9 +228,16 @@ namespace Typedown.Core.ViewModels
             Saved = saved;
         }
 
+        private System.Diagnostics.Stopwatch loadClock;
+
         public void OnFileLoaded(JToken arg)
         {
             if (IsStaleReport(arg)) return;
+            if (loadClock != null)
+            {
+                Log.Debug($"FileLoaded after {loadClock.ElapsedMilliseconds} ms in the editor");
+                loadClock = null;
+            }
             if (!FileLoaded)
             {
                 FileLoaded = true;
