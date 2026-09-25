@@ -23,6 +23,13 @@ namespace Typedown.Controls
 
         private bool disposed;
 
+        /// <summary>
+        /// The print dialog has been closed, printed or not. The preview used to stay on screen after it,
+        /// showing the document as a plain page until its own close button was found; the page is told by
+        /// the browser when the dialog goes (afterprint), and that is passed on here.
+        /// </summary>
+        public event Action PrintDismissed;
+
         public PrintPreviewControl(string html, string documentName)
         {
             this.html = html;
@@ -57,6 +64,14 @@ namespace Typedown.Controls
                 coreWebView2.Settings.IsStatusBarEnabled = false;
                 var navigationCompletedTaskSource = new TaskCompletionSource<bool>();
                 coreWebView2.NavigationCompleted += (s, args) => navigationCompletedTaskSource.TrySetResult(args.IsSuccess);
+                await coreWebView2.AddScriptToExecuteOnDocumentCreatedAsync("window.addEventListener('afterprint', () => window.chrome.webview.postMessage('afterprint'))");
+                coreWebView2.WebMessageReceived += (s, args) =>
+                {
+                    string message = null;
+                    try { message = args.TryGetWebMessageAsString(); } catch { }
+                    // Not from inside the browser's own callback: closing the preview disposes this web view.
+                    if (message == "afterprint") _ = Dispatcher.RunIdleAsync(_ => PrintDismissed?.Invoke());
+                };
                 tempFile = Core.Utilities.Common.GetTempFileName(".html");
                 File.WriteAllText(tempFile, html);
                 coreWebView2.Navigate(tempFile);

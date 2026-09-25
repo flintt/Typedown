@@ -109,7 +109,10 @@ namespace Typedown.Services
 
         public Task Print(string basePath, string html, string documentName = null)
         {
-            ViewModel.UIViewModel.ShowPrintPreview(new PrintPreviewControl(html, documentName), documentName);
+            var preview = new PrintPreviewControl(html, documentName);
+            // The preview leaves with the print dialog; its close button stays for a dialog that never came.
+            preview.PrintDismissed += () => { if (ViewModel.UIViewModel.PrintPreviewContent == preview) ViewModel.UIViewModel.ClosePrintPreview(); };
+            ViewModel.UIViewModel.ShowPrintPreview(preview, documentName);
             return Task.CompletedTask;
         }
 
