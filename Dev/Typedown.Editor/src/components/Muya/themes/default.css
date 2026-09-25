@@ -690,3 +690,11 @@ figure[data-role] svg use[fill="#000000"] {
   fill: var(--editorColor);
 }
 
+
+/* ==highlight==: translucent so it reads on light and dark backgrounds alike. */
+mark.ag-inline-rule {
+  background-color: rgba(255, 213, 0, 0.35);
+  color: inherit;
+  border-radius: 2px;
+  padding: 0 1px;
+}

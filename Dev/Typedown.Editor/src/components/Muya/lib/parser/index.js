@@ -176,8 +176,8 @@ const tokenizerFac = (src, beginRules, inlineRules, pos = 0, top, labels, option
     }
     if (inChunk) continue
 
-    // strong | em | emoji | inline_code | del | inline_math
-    const chunks = ['inline_code', 'del', 'emoji', 'inline_math']
+    // strong | em | emoji | inline_code | del | mark | inline_math
+    const chunks = ['inline_code', 'del', 'mark', 'emoji', 'inline_math']
     for (const rule of chunks) {
       const to = inlineRules[rule].exec(src)
       if (to && isLengthEven(to[3])) {

@@ -387,6 +387,7 @@ export const getHeadingPlainText = content => {
     .replace(/(\*\*|__)(?=\S)([\s\S]*?\S)\1/g, '$2')        // bold
     .replace(/(\*|_)(?=\S)([\s\S]*?\S)\1/g, '$2')           // italic
     .replace(/~~(?=\S)([\s\S]*?\S)~~/g, '$1')              // strikethrough
+    .replace(/==(?=\S)([\s\S]*?\S)==/g, '$1')              // highlight
     .replace(/\\([\\`*_{}[\]()#+\-.!~|])/g, '$1')          // escaped characters
     .replace(/\s+/g, ' ')
     .trim()
