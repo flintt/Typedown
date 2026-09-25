@@ -764,6 +764,14 @@
   <data name="General.RememberCursorPosition.Description" xml:space="preserve">
     <value>যেখানে থেমেছিলেন সেখান থেকে নথি খুলুন</value>
   </data>
+  <data name="General.KeepSwitchedDocuments.Title" xml:space="preserve">
+    <value>যে নথি থেকে সরে এসেছেন তা মেমরিতে রাখুন</value>
+    <comment>常规/在内存中保留切走的文档</comment>
+  </data>
+  <data name="General.KeepSwitchedDocuments.Description" xml:space="preserve">
+    <value>ট্যাবে ফিরে আসা নথিটি পুনরায় তৈরি করার বদলে তাৎক্ষণিক হয়; একটি দীর্ঘ নথি রাখতে কয়েক দশ মেগাবাইট লাগে, আর যেটিতে ফেরা হয় না সেটি কয়েক মিনিট পরে ছেড়ে দেওয়া হয়।</value>
+    <comment>常规/在内存中保留切走的文档</comment>
+  </data>
   <data name="General.RememberCursorPosition.Title" xml:space="preserve">
     <value>কার্সারের অবস্থান মনে রাখুন</value>
   </data>

@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>Níl fillteán ar bith oscailte. Oscail comhad nó fillteán chun brabhsáil anseo.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>Tá {0} mír san fhillteán seo — an iomarca le liostáil anseo.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>Níl comhaid Markdown sa fhillteán seo.</value>
   </data>

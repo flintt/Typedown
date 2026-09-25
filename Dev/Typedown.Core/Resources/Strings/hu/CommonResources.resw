@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>Nincs megnyitott mappa. Nyisson meg egy fájlt vagy mappát a böngészéshez.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>Ez a mappa {0} elemet tartalmaz — túl sokat ahhoz, hogy itt felsoroljuk.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>Nincsenek Markdown-fájlok ebben a mappában.</value>
   </data>

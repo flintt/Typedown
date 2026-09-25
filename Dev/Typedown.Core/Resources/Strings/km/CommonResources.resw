@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>មិនមានថតត្រូវបានបើកទេ។ បើកឯកសារ ឬថតដើម្បីរុករកនៅទីនេះ។</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>ថតនេះមាន {0} ធាតុ — ច្រើនពេកមិនអាចរាយនៅទីនេះបានទេ។</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>មិនមានឯកសារ Markdown ក្នុងថតនេះទេ។</value>
   </data>

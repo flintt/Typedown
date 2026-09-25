@@ -764,6 +764,14 @@
   <data name="General.RememberCursorPosition.Description" xml:space="preserve">
     <value>Belgeleri kaldığınız yerden açın</value>
   </data>
+  <data name="General.KeepSwitchedDocuments.Title" xml:space="preserve">
+    <value>Geçiş yapılan belgeleri bellekte tut</value>
+    <comment>常规/在内存中保留切走的文档</comment>
+  </data>
+  <data name="General.KeepSwitchedDocuments.Description" xml:space="preserve">
+    <value>Bir sekmeye dönmek, belge yeniden oluşturulmak yerine anında gerçekleşir; uzun bir belge onlarca megabayt yer kaplar ve dönülmeyen belge birkaç dakika sonra serbest bırakılır.</value>
+    <comment>常规/在内存中保留切走的文档</comment>
+  </data>
   <data name="General.RememberCursorPosition.Title" xml:space="preserve">
     <value>İmleç konumunu hatırla</value>
   </data>

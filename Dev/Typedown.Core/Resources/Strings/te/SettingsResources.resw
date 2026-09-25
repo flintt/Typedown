@@ -764,6 +764,14 @@
   <data name="General.RememberCursorPosition.Description" xml:space="preserve">
     <value>మీరు ఆపిన చోటి నుండి పత్రాలను తెరువు</value>
   </data>
+  <data name="General.KeepSwitchedDocuments.Title" xml:space="preserve">
+    <value>వదిలిన పత్రాలను మెమరీలో ఉంచు</value>
+    <comment>常规/在内存中保留切走的文档</comment>
+  </data>
+  <data name="General.KeepSwitchedDocuments.Description" xml:space="preserve">
+    <value>ట్యాబ్‌కు తిరిగి రావడం పత్రాన్ని మళ్లీ నిర్మించకుండా వెంటనే జరుగుతుంది; పొడవైన పత్రానికి పదుల మెగాబైట్లు అవసరం, తిరిగి చూడని పత్రం కొన్ని నిమిషాల తర్వాత విడుదల చేయబడుతుంది.</value>
+    <comment>常规/在内存中保留切走的文档</comment>
+  </data>
   <data name="General.RememberCursorPosition.Title" xml:space="preserve">
     <value>కర్సర్ స్థానాన్ని గుర్తుంచుకో</value>
   </data>

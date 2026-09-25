@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>ಯಾವುದೇ ಫೋಲ್ಡರ್ ತೆರೆದಿಲ್ಲ. ಇಲ್ಲಿ ಬ್ರೌಸ್ ಮಾಡಲು ಫೈಲ್ ಅಥವಾ ಫೋಲ್ಡರ್ ತೆರೆಯಿರಿ.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>ಈ ಫೋಲ್ಡರ್‌ನಲ್ಲಿ {0} ಐಟಂಗಳಿವೆ — ಇಲ್ಲಿ ಪಟ್ಟಿ ಮಾಡಲು ತುಂಬಾ ಹೆಚ್ಚು.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>ಈ ಫೋಲ್ಡರ್‌ನಲ್ಲಿ Markdown ಫೈಲ್‌ಗಳಿಲ್ಲ.</value>
   </data>

@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>Ոչ մի պանակ բացված չէ։ Բացեք ֆայլ կամ պանակ՝ այստեղ դիտելու համար։</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>Այս պանակում կա {0} տարր — շատ է այստեղ թվարկելու համար։</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>Այս պանակում Markdown ֆայլեր չկան։</value>
   </data>

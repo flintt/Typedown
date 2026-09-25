@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>எந்தக் கோப்புறையும் திறக்கப்படவில்லை. இங்கே உலாவ ஒரு கோப்பையோ கோப்புறையையோ திறக்கவும்.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>இந்தக் கோப்புறையில் {0} உருப்படிகள் உள்ளன — இங்கே பட்டியலிட மிக அதிகம்.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>இந்தக் கோப்புறையில் Markdown கோப்புகள் இல்லை.</value>
   </data>

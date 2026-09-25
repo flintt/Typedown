@@ -945,6 +945,10 @@
   <data name="FolderPane.NotFound" xml:space="preserve">
     <value>Этой папки больше не существует.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>В этой папке {0} элементов — слишком много, чтобы перечислять здесь.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>В этой папке нет файлов Markdown.</value>
   </data>

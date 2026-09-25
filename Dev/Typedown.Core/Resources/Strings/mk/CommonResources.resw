@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>Нема отворена папка. Отворете датотека или папка за да ја прелистувате овде.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>Оваа папка има {0} ставки — премногу за да се наведат овде.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>Во оваа папка нема датотеки Markdown.</value>
   </data>

@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>Ez dago karpetarik irekita. Ireki fitxategi edo karpeta bat hemen arakatzeko.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>Karpeta honek {0} elementu ditu — gehiegi hemen zerrendatzeko.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>Ez dago Markdown fitxategirik karpeta honetan.</value>
   </data>

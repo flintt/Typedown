@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>Δεν υπάρχει ανοιχτός φάκελος. Ανοίξτε ένα αρχείο ή φάκελο για περιήγηση εδώ.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>Αυτός ο φάκελος έχει {0} στοιχεία — πάρα πολλά για να εμφανιστούν εδώ.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>Δεν υπάρχουν αρχεία Markdown σε αυτόν τον φάκελο.</value>
   </data>

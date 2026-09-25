@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>Жодної теки не відкрито. Відкрийте файл або теку, щоб переглядати її тут.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>У цій теці {0} елементів — забагато, щоб перелічити тут.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>У цій теці немає файлів Markdown.</value>
   </data>

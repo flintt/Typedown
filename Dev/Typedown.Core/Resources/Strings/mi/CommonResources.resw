@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>Kāore he kōpaki e tuwhera ana. Whakatuwherahia he kōnae, he kōpaki rānei kia tirotirohia i konei.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>E {0} ngā tūemi kei tēnei kōpaki — he nui rawa hei rārangi i konei.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>Kāore he kōnae Markdown i tēnei kōpaki.</value>
   </data>

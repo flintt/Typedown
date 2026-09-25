@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>Nie otwarto żadnego folderu. Otwórz plik lub folder, aby go tu przeglądać.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>Ten folder zawiera {0} elementów — zbyt wiele, aby je tutaj wymienić.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>Brak plików Markdown w tym folderze.</value>
   </data>

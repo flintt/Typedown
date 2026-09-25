@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>Бірде-бір қалта ашылмаған. Осында шолу үшін файл немесе қалта ашыңыз.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>Бұл қалтада {0} элемент бар — мұнда тізімдеу үшін тым көп.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>Бұл қалтада Markdown файлдары жоқ.</value>
   </data>

@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>Ühtegi kausta pole avatud. Ava fail või kaust, et seda siin sirvida.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>Selles kaustas on {0} üksust — liiga palju siin loetlemiseks.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>Selles kaustas pole Markdowni faile.</value>
   </data>

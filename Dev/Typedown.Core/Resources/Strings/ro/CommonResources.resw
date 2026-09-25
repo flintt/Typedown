@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>Niciun folder deschis. Deschide un fișier sau un folder pentru a-l răsfoi aici.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>Acest folder are {0} elemente — prea multe pentru a fi listate aici.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>Niciun fișier Markdown în acest folder.</value>
   </data>

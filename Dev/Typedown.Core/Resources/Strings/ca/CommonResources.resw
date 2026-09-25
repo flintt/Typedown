@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>No hi ha cap carpeta oberta. Obre un fitxer o una carpeta per navegar-hi aquí.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>Aquesta carpeta té {0} elements — massa per mostrar-los aquí.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>No hi ha fitxers Markdown en aquesta carpeta.</value>
   </data>

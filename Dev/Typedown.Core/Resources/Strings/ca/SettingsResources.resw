@@ -764,6 +764,14 @@
   <data name="General.RememberCursorPosition.Description" xml:space="preserve">
     <value>Obre els documents on els vas deixar</value>
   </data>
+  <data name="General.KeepSwitchedDocuments.Title" xml:space="preserve">
+    <value>Mantén a la memòria els documents que has deixat</value>
+    <comment>常规/在内存中保留切走的文档</comment>
+  </data>
+  <data name="General.KeepSwitchedDocuments.Description" xml:space="preserve">
+    <value>Tornar a una pestanya és immediat en comptes de tornar a construir el document; un document llarg ocupa desenes de megabytes, i el que no es recupera s'allibera al cap d'uns minuts.</value>
+    <comment>常规/在内存中保留切走的文档</comment>
+  </data>
   <data name="General.RememberCursorPosition.Title" xml:space="preserve">
     <value>Recorda la posició del cursor</value>
   </data>

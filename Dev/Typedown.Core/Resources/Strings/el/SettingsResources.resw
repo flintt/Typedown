@@ -764,6 +764,14 @@
   <data name="General.RememberCursorPosition.Description" xml:space="preserve">
     <value>Άνοιγμα εγγράφων από εκεί που σταματήσατε</value>
   </data>
+  <data name="General.KeepSwitchedDocuments.Title" xml:space="preserve">
+    <value>Διατήρηση στη μνήμη των εγγράφων που αφήσατε</value>
+    <comment>常规/在内存中保留切走的文档</comment>
+  </data>
+  <data name="General.KeepSwitchedDocuments.Description" xml:space="preserve">
+    <value>Η επιστροφή σε μια καρτέλα είναι άμεση αντί να ξαναχτιστεί το έγγραφο· ένα μεγάλο έγγραφο κοστίζει δεκάδες megabyte, και όποιο δεν ξαναχρησιμοποιηθεί απελευθερώνεται μετά από λίγα λεπτά.</value>
+    <comment>常规/在内存中保留切走的文档</comment>
+  </data>
   <data name="General.RememberCursorPosition.Title" xml:space="preserve">
     <value>Απομνημόνευση θέσης δρομέα</value>
   </data>

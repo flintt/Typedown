@@ -945,6 +945,10 @@
   <data name="FolderPane.NotFound" xml:space="preserve">
     <value>이 폴더가 더 이상 존재하지 않습니다.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>이 폴더에는 {0}개의 항목이 있습니다. 여기에 모두 표시하기에는 너무 많습니다.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>이 폴더에 Markdown 파일이 없습니다.</value>
   </data>

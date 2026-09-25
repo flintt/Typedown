@@ -764,6 +764,14 @@
   <data name="General.RememberCursorPosition.Description" xml:space="preserve">
     <value>તમે જ્યાં છોડ્યું ત્યાંથી દસ્તાવેજો ખોલો</value>
   </data>
+  <data name="General.KeepSwitchedDocuments.Title" xml:space="preserve">
+    <value>છોડેલા દસ્તાવેજો મેમરીમાં રાખો</value>
+    <comment>常规/在内存中保留切走的文档</comment>
+  </data>
+  <data name="General.KeepSwitchedDocuments.Description" xml:space="preserve">
+    <value>ટૅબ પર પાછા આવવું દસ્તાવેજ ફરીથી બનાવવાને બદલે તરત થાય છે; લાંબો દસ્તાવેજ રાખવા માટે દસેક મેગાબાઇટ જોઈએ, અને જેના પર પાછા ન ફરાય તે થોડી મિનિટો પછી છોડી દેવાય છે.</value>
+    <comment>常规/在内存中保留切走的文档</comment>
+  </data>
   <data name="General.RememberCursorPosition.Title" xml:space="preserve">
     <value>કર્સરની સ્થિતિ યાદ રાખો</value>
   </data>

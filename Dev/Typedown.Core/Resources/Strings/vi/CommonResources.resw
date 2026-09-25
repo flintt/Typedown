@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>Chưa mở thư mục nào. Hãy mở một tệp hoặc thư mục để duyệt tại đây.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>Thư mục này có {0} mục — quá nhiều để liệt kê ở đây.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>Không có tệp Markdown trong thư mục này.</value>
   </data>

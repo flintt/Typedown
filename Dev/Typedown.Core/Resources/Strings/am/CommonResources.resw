@@ -932,6 +932,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>ምንም አቃፊ አልተከፈተም። እዚህ ለማሰስ ፋይል ወይም አቃፊ ክፈት።</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>ይህ አቃፊ {0} ንጥሎች አሉት — እዚህ ለመዘርዘር በጣም ብዙ ናቸው።</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>በዚህ አቃፊ ውስጥ የMarkdown ፋይሎች የሉም።</value>
   </data>

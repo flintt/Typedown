@@ -945,6 +945,10 @@
   <data name="FolderPane.NotFound" xml:space="preserve">
     <value>Questa cartella non esiste più.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>Questa cartella contiene {0} elementi — troppi per elencarli qui.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>Nessun file Markdown in questa cartella.</value>
   </data>

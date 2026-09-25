@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>ບໍ່ມີໂຟນເດີທີ່ເປີດຢູ່. ເປີດໄຟລ໌ ຫຼື ໂຟນເດີເພື່ອເບິ່ງຢູ່ນີ້.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>ໂຟນເດີນີ້ມີ {0} ລາຍການ — ຫຼາຍເກີນໄປທີ່ຈະສະແດງຢູ່ນີ້.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>ບໍ່ມີໄຟລ໌ Markdown ໃນໂຟນເດີນີ້.</value>
   </data>

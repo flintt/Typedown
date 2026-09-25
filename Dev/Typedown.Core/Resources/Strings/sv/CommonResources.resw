@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>Ingen mapp är öppen. Öppna en fil eller mapp för att bläddra här.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>Den här mappen har {0} objekt — för många för att listas här.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>Inga Markdown-filer i den här mappen.</value>
   </data>

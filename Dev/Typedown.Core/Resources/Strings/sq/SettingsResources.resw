@@ -764,6 +764,14 @@
   <data name="General.RememberCursorPosition.Description" xml:space="preserve">
     <value>Hap dokumentet aty ku i latë</value>
   </data>
+  <data name="General.KeepSwitchedDocuments.Title" xml:space="preserve">
+    <value>Mbaji në memorie dokumentet e lëna</value>
+    <comment>常规/在内存中保留切走的文档</comment>
+  </data>
+  <data name="General.KeepSwitchedDocuments.Description" xml:space="preserve">
+    <value>Kthimi te një skedë është i menjëhershëm në vend që dokumenti të ndërtohet sërish; një dokument i gjatë zë dhjetëra megabajt, dhe ai te i cili nuk kthehesh lirohet pas pak minutash.</value>
+    <comment>常规/在内存中保留切走的文档</comment>
+  </data>
   <data name="General.RememberCursorPosition.Title" xml:space="preserve">
     <value>Mbaj mend pozicionin e kursorit</value>
   </data>

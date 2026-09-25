@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>Tiada folder dibuka. Buka fail atau folder untuk melayarinya di sini.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>Folder ini mempunyai {0} item — terlalu banyak untuk disenaraikan di sini.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>Tiada fail Markdown dalam folder ini.</value>
   </data>

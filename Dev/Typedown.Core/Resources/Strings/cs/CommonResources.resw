@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>Není otevřena žádná složka. Otevřete soubor nebo složku a procházejte ji zde.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>Tato složka obsahuje {0} položek — příliš mnoho na to, aby se zde vypsaly.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>V této složce nejsou žádné soubory Markdown.</value>
   </data>

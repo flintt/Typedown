@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>Geen vouer is oop nie. Maak 'n lêer of vouer oop om hier te blaai.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>Hierdie vouer het {0} items — te veel om hier te lys.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>Geen Markdown-lêers in hierdie vouer nie.</value>
   </data>

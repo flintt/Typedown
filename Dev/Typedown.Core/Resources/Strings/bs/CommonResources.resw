@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>Nijedan folder nije otvoren. Otvorite datoteku ili folder da biste ga ovdje pregledali.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>Ova mapa sadrži {0} stavki — previše da bi se ovdje navele.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>U ovom folderu nema Markdown datoteka.</value>
   </data>

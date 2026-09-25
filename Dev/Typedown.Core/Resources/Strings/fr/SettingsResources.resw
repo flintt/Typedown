@@ -767,6 +767,14 @@
   <data name="View.Image.CopyPath.Placeholder" xml:space="preserve">
     <value>ex. ./${filename}.assets — variables : ${filename} ${filedir} ${year} ${month} ${day}</value>
   </data>
+  <data name="General.KeepSwitchedDocuments.Title" xml:space="preserve">
+    <value>Garder en mémoire les documents quittés</value>
+    <comment>常规/在内存中保留切走的文档</comment>
+  </data>
+  <data name="General.KeepSwitchedDocuments.Description" xml:space="preserve">
+    <value>Revenir à un onglet est immédiat au lieu de reconstruire le document ; un document long occupe des dizaines de mégaoctets, et celui qu'on ne rouvre pas est libéré au bout de quelques minutes.</value>
+    <comment>常规/在内存中保留切走的文档</comment>
+  </data>
   <data name="General.RememberCursorPosition.Title" xml:space="preserve">
     <value>Mémoriser la position du curseur</value>
   </data>

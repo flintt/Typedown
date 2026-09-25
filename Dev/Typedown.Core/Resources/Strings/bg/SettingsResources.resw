@@ -764,6 +764,14 @@
   <data name="General.RememberCursorPosition.Description" xml:space="preserve">
     <value>Отваряй документите оттам, докъдето си стигнал</value>
   </data>
+  <data name="General.KeepSwitchedDocuments.Title" xml:space="preserve">
+    <value>Запазване на напуснатите документи в паметта</value>
+    <comment>常规/在内存中保留切走的文档</comment>
+  </data>
+  <data name="General.KeepSwitchedDocuments.Description" xml:space="preserve">
+    <value>Връщането към раздел е незабавно, вместо документът да се изгражда отново; дълъг документ заема десетки мегабайта, а този, към който не се върнете, се освобождава след няколко минути.</value>
+    <comment>常规/在内存中保留切走的文档</comment>
+  </data>
   <data name="General.RememberCursorPosition.Title" xml:space="preserve">
     <value>Запомняй позицията на курсора</value>
   </data>

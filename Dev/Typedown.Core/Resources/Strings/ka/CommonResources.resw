@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>არცერთი საქაღალდე არ არის გახსნილი. გახსენით ფაილი ან საქაღალდე აქ დასათვალიერებლად.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>ამ საქაღალდეში {0} ერთეულია — ძალიან ბევრია აქ ჩამოსათვლელად.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>ამ საქაღალდეში Markdown ფაილები არ არის.</value>
   </data>

@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>Yhtään kansiota ei ole auki. Avaa tiedosto tai kansio selataksesi sitä tässä.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>Tässä kansiossa on {0} kohdetta — liian monta lueteltavaksi tässä.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>Tässä kansiossa ei ole Markdown-tiedostoja.</value>
   </data>

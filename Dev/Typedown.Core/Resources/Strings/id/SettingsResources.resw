@@ -764,6 +764,14 @@
   <data name="General.RememberCursorPosition.Description" xml:space="preserve">
     <value>Buka dokumen dari tempat Anda berhenti</value>
   </data>
+  <data name="General.KeepSwitchedDocuments.Title" xml:space="preserve">
+    <value>Simpan dokumen yang ditinggalkan di memori</value>
+    <comment>常规/在内存中保留切走的文档</comment>
+  </data>
+  <data name="General.KeepSwitchedDocuments.Description" xml:space="preserve">
+    <value>Kembali ke tab berlangsung seketika alih-alih membangun ulang dokumen; dokumen panjang memakan puluhan megabyte, dan yang tidak dikunjungi lagi dilepaskan setelah beberapa menit.</value>
+    <comment>常规/在内存中保留切走的文档</comment>
+  </data>
   <data name="General.RememberCursorPosition.Title" xml:space="preserve">
     <value>Ingat posisi kursor</value>
   </data>

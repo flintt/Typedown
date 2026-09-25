@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>Nie je otvorený žiadny priečinok. Otvorte súbor alebo priečinok a prezerajte ho tu.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>Tento priečinok obsahuje {0} položiek — priveľa na to, aby sa tu vypísali.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>V tomto priečinku nie sú žiadne súbory Markdown.</value>
   </data>

@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>Non hai ningún cartafol aberto. Abre un ficheiro ou cartafol para navegar aquí.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>Este cartafol ten {0} elementos — demasiados para amosalos aquí.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>Non hai ficheiros Markdown neste cartafol.</value>
   </data>

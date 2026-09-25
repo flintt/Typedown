@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>L-ebda kartella miftuħa. Iftaħ fajl jew kartella biex tibbrawżjaha hawn.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>Din il-kartella fiha {0} oġġetti — wisq biex jiġu elenkati hawn.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>L-ebda fajl Markdown f'din il-kartella.</value>
   </data>

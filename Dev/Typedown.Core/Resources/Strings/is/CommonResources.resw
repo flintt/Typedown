@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>Engin mappa er opin. Opnaðu skrá eða möppu til að fletta henni hér.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>Þessi mappa inniheldur {0} atriði — of mörg til að telja upp hér.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>Engar Markdown skrár í þessari möppu.</value>
   </data>

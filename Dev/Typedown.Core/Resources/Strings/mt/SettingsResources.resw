@@ -764,6 +764,14 @@
   <data name="General.RememberCursorPosition.Description" xml:space="preserve">
     <value>Iftaħ id-dokumenti minn fejn waqaft</value>
   </data>
+  <data name="General.KeepSwitchedDocuments.Title" xml:space="preserve">
+    <value>Żomm fil-memorja d-dokumenti li tħallew</value>
+    <comment>常规/在内存中保留切走的文档</comment>
+  </data>
+  <data name="General.KeepSwitchedDocuments.Description" xml:space="preserve">
+    <value>Ir-ritorn għal tab isir minnufih minflok ma d-dokument jinbena mill-ġdid; dokument twil jieħu għexieren ta' megabytes, u dak li ma terġax lura għalih jinħeles wara ftit minuti.</value>
+    <comment>常规/在内存中保留切走的文档</comment>
+  </data>
   <data name="General.RememberCursorPosition.Title" xml:space="preserve">
     <value>Ftakar il-pożizzjoni tal-kursur</value>
   </data>

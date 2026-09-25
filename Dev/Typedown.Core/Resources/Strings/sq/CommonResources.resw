@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>Asnjë dosje e hapur. Hap një skedar ose dosje për ta shfletuar këtu.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>Kjo dosje ka {0} artikuj — tepër shumë për t'u renditur këtu.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>Nuk ka skedarë Markdown në këtë dosje.</value>
   </data>

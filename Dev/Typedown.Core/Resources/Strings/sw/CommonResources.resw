@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>Hakuna folda iliyofunguliwa. Fungua faili au folda ili kuivinjari hapa.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>Folda hii ina vipengee {0} — ni vingi mno kuorodheshwa hapa.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>Hakuna faili za Markdown katika folda hii.</value>
   </data>

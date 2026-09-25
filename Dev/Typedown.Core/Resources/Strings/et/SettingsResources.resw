@@ -764,6 +764,14 @@
   <data name="General.RememberCursorPosition.Description" xml:space="preserve">
     <value>Ava dokumendid sealt, kus pooleli jäid</value>
   </data>
+  <data name="General.KeepSwitchedDocuments.Title" xml:space="preserve">
+    <value>Hoia lahkutud dokumendid mälus</value>
+    <comment>常规/在内存中保留切走的文档</comment>
+  </data>
+  <data name="General.KeepSwitchedDocuments.Description" xml:space="preserve">
+    <value>Kaardile naasmine on kohene, mitte dokumendi uuesti ülesehitamine; pikk dokument võtab kümneid megabaite ja see, mille juurde ei naasta, vabastatakse mõne minuti pärast.</value>
+    <comment>常规/在内存中保留切走的文档</comment>
+  </data>
   <data name="General.RememberCursorPosition.Title" xml:space="preserve">
     <value>Jäta kursori asukoht meelde</value>
   </data>

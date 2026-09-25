@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>Nid oes ffolder ar agor. Agorwch ffeil neu ffolder i bori yma.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>Mae {0} eitem yn y ffolder hwn — gormod i'w rhestru yma.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>Dim ffeiliau Markdown yn y ffolder hwn.</value>
   </data>

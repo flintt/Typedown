@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>Ayikho ifolda evuliwe. Vula ifayela noma ifolda ukuze uyibheke lapha.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>Leli folda linezinto ezingu-{0} — ziningi kakhulu ukuthi zibalwe lapha.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>Awekho amafayela e-Markdown kule folda.</value>
   </data>

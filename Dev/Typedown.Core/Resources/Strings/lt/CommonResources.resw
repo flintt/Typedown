@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>Nėra atverto aplanko. Atverkite failą arba aplanką, kad galėtumėte jį naršyti čia.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>Šiame aplanke yra {0} elementų — per daug, kad būtų išvardyti čia.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>Šiame aplanke nėra Markdown failų.</value>
   </data>

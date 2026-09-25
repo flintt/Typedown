@@ -887,6 +887,10 @@
   <data name="FolderPane.NotFound" xml:space="preserve">
     <value>Esta pasta não existe mais.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>Esta pasta tem {0} itens — demasiados para listar aqui.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>Nenhum arquivo Markdown nesta pasta.</value>
   </data>

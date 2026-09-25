@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>Nav atvērta neviena mape. Atveriet failu vai mapi, lai to šeit pārlūkotu.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>Šajā mapē ir {0} vienumi — pārāk daudz, lai tos šeit uzskaitītu.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>Šajā mapē nav Markdown failu.</value>
   </data>

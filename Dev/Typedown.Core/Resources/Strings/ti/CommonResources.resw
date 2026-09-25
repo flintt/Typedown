@@ -932,6 +932,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>ዝኾነ ፎልደር ኣይተኸፍተን። ኣብዚ ንምድህሳስ ፋይል ወይ ፎልደር ክፈት።</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>እዚ ፋይል ኣብ ውሽጡ {0} ኣቕሑ ኣለዎ — ኣብዚ ንምዝርዛር ኣዝዩ ብዙሕ እዩ።</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>ኣብዚ ፎልደር ናይ Markdown ፋይላት የለዉን።</value>
   </data>

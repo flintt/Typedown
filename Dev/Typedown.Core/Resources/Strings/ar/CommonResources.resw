@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>لا يوجد مجلد مفتوح. افتح ملفًا أو مجلدًا لتصفحه هنا.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>يحتوي هذا المجلد على {0} عنصر — أكثر من أن تُعرض هنا.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>لا توجد ملفات Markdown في هذا المجلد.</value>
   </data>

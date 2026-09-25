@@ -764,6 +764,14 @@
   <data name="General.RememberCursorPosition.Description" xml:space="preserve">
     <value>A dokumentumok ott nyíljanak meg, ahol abbahagyta</value>
   </data>
+  <data name="General.KeepSwitchedDocuments.Title" xml:space="preserve">
+    <value>Az elhagyott dokumentumok megtartása a memóriában</value>
+    <comment>常规/在内存中保留切走的文档</comment>
+  </data>
+  <data name="General.KeepSwitchedDocuments.Description" xml:space="preserve">
+    <value>A lapra való visszatérés azonnali ahelyett, hogy a dokumentum újraépülne; egy hosszú dokumentum több tíz megabájtot foglal, és amelyikhez nem térünk vissza, néhány perc után felszabadul.</value>
+    <comment>常规/在内存中保留切走的文档</comment>
+  </data>
   <data name="General.RememberCursorPosition.Title" xml:space="preserve">
     <value>Kurzorpozíció megjegyzése</value>
   </data>

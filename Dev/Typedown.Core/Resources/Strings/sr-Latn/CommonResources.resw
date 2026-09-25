@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>Nijedna fascikla nije otvorena. Otvorite datoteku ili fasciklu da biste je ovde pregledali.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>Ova fascikla ima {0} stavki — previše da bi se ovde navele.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>U ovoj fascikli nema Markdown datoteka.</value>
   </data>

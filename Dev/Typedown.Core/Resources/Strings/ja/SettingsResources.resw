@@ -767,6 +767,14 @@
   <data name="View.Image.CopyPath.Placeholder" xml:space="preserve">
     <value>例: ./${filename}.assets — 変数: ${filename} ${filedir} ${year} ${month} ${day}</value>
   </data>
+  <data name="General.KeepSwitchedDocuments.Title" xml:space="preserve">
+    <value>切り替えて離れた文書をメモリに保持する</value>
+    <comment>常规/在内存中保留切走的文档</comment>
+  </data>
+  <data name="General.KeepSwitchedDocuments.Description" xml:space="preserve">
+    <value>タブに戻るとき、文書を作り直さずにすぐ表示されます。長い文書は数十 MB を占有し、数分間戻らなかったものは解放されます。</value>
+    <comment>常规/在内存中保留切走的文档</comment>
+  </data>
   <data name="General.RememberCursorPosition.Title" xml:space="preserve">
     <value>カーソル位置を記憶</value>
   </data>

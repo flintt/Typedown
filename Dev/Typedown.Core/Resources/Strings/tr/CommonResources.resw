@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>Açık klasör yok. Burada göz atmak için bir dosya veya klasör açın.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>Bu klasörde {0} öğe var — burada listelenemeyecek kadar çok.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>Bu klasörde Markdown dosyası yok.</value>
   </data>

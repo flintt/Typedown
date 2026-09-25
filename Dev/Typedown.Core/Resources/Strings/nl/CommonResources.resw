@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>Er is geen map geopend. Open een bestand of map om hier te bladeren.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>Deze map bevat {0} items — te veel om hier op te sommen.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>Geen Markdown-bestanden in deze map.</value>
   </data>

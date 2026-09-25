@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>אין תיקייה פתוחה. פתח קובץ או תיקייה כדי לעיין בה כאן.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>בתיקייה זו {0} פריטים — יותר מדי מכדי להציג כאן.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>אין קובצי Markdown בתיקייה זו.</value>
   </data>

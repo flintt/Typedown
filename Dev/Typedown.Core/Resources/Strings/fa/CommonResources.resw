@@ -936,6 +936,10 @@
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
     <value>هیچ پوشه‌ای باز نیست. برای مرور، پرونده یا پوشه‌ای باز کنید.</value>
   </data>
+  <data name="FolderPane.TooManyEntries" xml:space="preserve">
+    <value>این پوشه {0} مورد دارد — بیش از آن که اینجا فهرست شود.</value>
+    <comment>文件夹/条目过多</comment>
+  </data>
   <data name="FolderPane.NoMarkdownFiles" xml:space="preserve">
     <value>در این پوشه پرونده Markdown وجود ندارد.</value>
   </data>
