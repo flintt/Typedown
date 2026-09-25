@@ -51,6 +51,28 @@ while (markdown.length < chars) markdown += section(++n) + '\n\n';
     console.log(`  scrollY ${String(y).padStart(6)}  ->  heading ${r.slug ?? 'none'}, page at ${r.at}`);
   }
 
+  // The same again, but reported while the page is still moving — a reader holds Page Down and the
+  // answer has to be right during the movement, not only once it stops. Asking the browser where each
+  // heading is one at a time was wrong exactly here: every question saw a different scroll position.
+  const during = await page.evaluate(async () => {
+    const heads = Array.from(document.querySelectorAll('#ag-editor-id > h1, #ag-editor-id > h2, #ag-editor-id > h3, #ag-editor-id > h4, #ag-editor-id > h5, #ag-editor-id > h6'));
+    const order = new Map(heads.map((h, i) => [h.id, i]));
+    window.scrollTo(0, 0);
+    for (let i = 0; i < 10; i++) await new Promise(r => requestAnimationFrame(r));
+    const start = window.__slugs.length;
+    // Step down the document a screen at a time, sampling on every frame in between.
+    for (let step = 0; step < 40; step++) {
+      window.scrollBy(0, 700);
+      await new Promise(r => requestAnimationFrame(r));
+    }
+    for (let i = 0; i < 20; i++) await new Promise(r => requestAnimationFrame(r));
+    const reported = window.__slugs.slice(start).map(s => order.get(s)).filter(i => i !== undefined);
+    let backwards = 0;
+    for (let i = 1; i < reported.length; i++) if (reported[i] < reported[i - 1]) backwards++;
+    return { count: reported.length, backwards, first: reported[0], last: reported[reported.length - 1], headings: heads.length };
+  });
+  console.log(`  while scrolling: ${during.count} headings reported, ${during.backwards} of them going backwards (${during.first} -> ${during.last} of ${during.headings})`);
+
   // Left alone, the page must stay exactly where the reader put it.
   const still = await page.evaluate(async () => {
     const before = Math.round(window.scrollY);
@@ -62,9 +84,11 @@ while (markdown.length < chars) markdown += section(++n) + '\n\n';
   const moved = new Set(seen.map(s => s.slug).filter(Boolean)).size > 1;
   const cameBack = seen[seen.length - 1].slug === seen[0].slug;
   const steady = still.before === still.after;
-  const ok = moved && cameBack && steady;
+  // Scrolling one way must never report a heading from further back.
+  const forwards = during.backwards === 0 && during.count > 3;
+  const ok = moved && cameBack && steady && forwards;
   console.log(ok ? 'OK: the outline follows the page, and following it does not move the page'
-                 : `FAIL: ${!moved ? 'the heading does not follow' : !cameBack ? 'it does not come back' : 'the page moved on its own'}`);
+                 : `FAIL: ${!moved ? 'the heading does not follow' : !cameBack ? 'it does not come back' : !steady ? 'the page moved on its own' : `it went backwards ${during.backwards} times while scrolling down`}`);
   await browser.close(); server.close();
   process.exit(ok ? 0 : 1);
 })().catch(e => { console.error(e); process.exit(1); });

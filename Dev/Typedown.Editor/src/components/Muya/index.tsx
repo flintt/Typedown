@@ -34,7 +34,7 @@ interface IMuyaEditor {
     /** Reports the outline, word count and caret line. The shell tags it with the load it belongs to. */
     onStateChange: (state: { wordCount: any, toc: any[], cur: any }) => void
     /** Reading mode only: the heading the page has been scrolled to. Highlight only — never a scroll. */
-    onOutlineCurrent: (slug: string) => void
+    onOutlineCurrent: (slug: string, where: { y: number, index: number, of: number, top: number }) => void
     onSearchArgChange: (arg: { value: string, opt: any } | undefined) => void
 }
 
@@ -342,18 +342,20 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             const root = editor.container?.querySelector?.('#ag-editor-id') || document.getElementById('ag-editor-id')
             const heads = root ? Array.from(root.querySelectorAll(':scope > h1, :scope > h2, :scope > h3, :scope > h4, :scope > h5, :scope > h6')) as HTMLElement[] : []
             if (!heads.length) return
-            // Headings sit in document order, so their tops only increase: a binary search reads a dozen
-            // rectangles instead of one per heading, which matters on a document with thousands of them.
-            let lo = 0, hi = heads.length - 1, found = -1
-            while (lo <= hi) {
-                const mid = (lo + hi) >> 1
-                if (heads[mid].getBoundingClientRect().top <= 0) { found = mid; lo = mid + 1 }
-                else hi = mid - 1
-            }
-            const slug = heads[found >= 0 ? found : 0].id
+            // Every position read in one pass, before looking at any of them. A binary search reading one
+            // rectangle at a time was asking the browser where things are while the page was still moving —
+            // each comparison saw a different scroll position, so "the tops only increase" stopped being
+            // true and the answer landed anywhere: scrolling down reported headings from further up.
+            const tops = heads.map(h => h.getBoundingClientRect().top)
+            let found = -1
+            for (let i = 0; i < tops.length; i++) { if (tops[i] <= 0) found = i; else break }
+            const chosen = found >= 0 ? found : 0
+            const slug = heads[chosen].id
             if (!slug || slug === readingSlugRef.current) return
             readingSlugRef.current = slug
-            props.onOutlineCurrent(slug)
+            // The position goes with it: in the log the heading can then be checked against where the page
+            // actually was, which is the only way to tell a wrong answer from a document that simply moved.
+            props.onOutlineCurrent(slug, { y: Math.round(window.scrollY), index: chosen, of: heads.length, top: Math.round(tops[chosen]) })
         }
         const onScroll = () => { if (!frame) frame = requestAnimationFrame(anchor) }
         window.addEventListener('scroll', onScroll, { passive: true })

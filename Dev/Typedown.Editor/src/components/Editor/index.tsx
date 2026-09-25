@@ -87,8 +87,8 @@ const Editor: React.FC = () => {
     // Which heading the reader has scrolled to, in reading mode. Deliberately not part of the state report:
     // the host decides where to scroll from `cur` in that report, so a heading sent that way comes back as a
     // scroll, which moves the page, which reports another heading.
-    const onOutlineCurrent = useCallback((slug: string) => {
-        transport.postMessage('OutlineCurrent', { slug, loadId: loadIdRef.current })
+    const onOutlineCurrent = useCallback((slug: string, where?: unknown) => {
+        transport.postMessage('OutlineCurrent', { slug, where, loadId: loadIdRef.current })
     }, [])
 
     const onCursorChange = useCallback((cursor: any) => {
