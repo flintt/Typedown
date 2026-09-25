@@ -273,6 +273,56 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         }
     }), [editor, scrollToCursor]);
 
+    // What the last contentChange reported, so the outline can be re-sent with a different current heading
+    // without the document having changed. The heading elements are looked up once per document.
+    const lastStateRef = useRef<{ wordCount: any, toc: any[] } | null>(null)
+    const headingsRef = useRef<{ item: any, el: HTMLElement }[] | null>(null)
+    const readingSlugRef = useRef<string | null>(null)
+
+    // The outline follows the caret, and reading mode has no caret — so the highlight used to stop wherever
+    // the caret happened to be left and never move again. Anchor it to the scroll position instead: the
+    // section being read is the one whose heading has passed the top of the window, and above the first
+    // heading it is the first one.
+    useEffect(() => {
+        if (!editor || !props.options?.readOnly) return
+        let frame = 0
+        const anchor = () => {
+            frame = 0
+            const state = lastStateRef.current
+            if (!state || !state.toc?.length) return
+            if (!headingsRef.current) {
+                headingsRef.current = state.toc
+                    .map((item: any) => ({ item, el: document.getElementById(item.slug) as HTMLElement }))
+                    .filter((pair: any) => pair.el)
+            }
+            const pairs = headingsRef.current
+            if (!pairs.length) return
+            // Headings sit in document order, so their tops only increase: a binary search reads a dozen
+            // rectangles instead of one per heading, which matters on a document with thousands of them.
+            let lo = 0, hi = pairs.length - 1, found = -1
+            while (lo <= hi) {
+                const mid = (lo + hi) >> 1
+                if (pairs[mid].el.getBoundingClientRect().top <= 0) { found = mid; lo = mid + 1 }
+                else hi = mid - 1
+            }
+            // Sections can be short enough for several headings to share the screen, so the line is the top
+            // edge itself: a heading becomes current the moment it goes past it, not when it is merely visible.
+            const cur = pairs[found >= 0 ? found : 0].item
+            const slug = cur ? cur.slug : null
+            if (slug === readingSlugRef.current) return
+            readingSlugRef.current = slug
+            transport.postMessage('StateChange', { state: { wordCount: state.wordCount, toc: state.toc, cur }, muya: true })
+        }
+        const onScroll = () => { if (!frame) frame = requestAnimationFrame(anchor) }
+        window.addEventListener('scroll', onScroll, { passive: true })
+        // The document may already be scrolled when reading mode is switched on, or restored to an offset.
+        frame = requestAnimationFrame(anchor)
+        return () => {
+            window.removeEventListener('scroll', onScroll)
+            if (frame) cancelAnimationFrame(frame)
+        }
+    }, [editor, props.options?.readOnly, props.contentVersion])
+
     const lastRenderedThemeRef = useRef<string | undefined>(window.actualTheme);
     useEffect(() => transport.addListener('ThemeChanged', () => {
         if (editor) {
@@ -338,6 +388,9 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     useEffect(() => editor?.on('contentChange', ({ markdown, wordCount, cursor, toc: { toc, cur } }: any) => {
         markdownRef.current = markdown;
         markLongDocument()
+        lastStateRef.current = { wordCount, toc }
+        headingsRef.current = null
+        readingSlugRef.current = cur?.slug ?? null
 
         // 同步内容与光标
         props.onMarkdownChange(markdown)
@@ -428,23 +481,37 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             if (!keepScroll) scrollToCursorIfInvisible()
             // Laying a long document out goes on for a while after the first paint, and the page can be put
             // back to the top by that work with nobody scrolling it — which is what made switching tabs show
-            // the top of the document for a moment. Keep putting it back for half a second, and stop early
-            // once it stays, or as soon as the reader scrolls themselves.
+            // the top of the document for a moment. Keep putting it back until the layout has settled, or
+            // until the reader scrolls themselves.
             if (keepScroll && scrollTop > 0) {
                 // Counted in frames, not milliseconds: laying out a long document blocks the main thread for
                 // whole seconds, and a deadline in wall-clock time would expire while nothing could run.
+                // It also runs to the end of its budget rather than stopping at the first few steady frames:
+                // the position holds from the first paint and is knocked to the top a second or two later,
+                // when the last of the layout lands, so an early stop means the watch is already over.
                 let frames = 40
-                let held = 0
+                let done = false
+                // The knock arrives as a scroll event, so answer it there as well as on the next frame:
+                // during the layout a frame can be a hundred milliseconds long, and that is a hundred
+                // milliseconds of looking at the top of the document. Correcting puts scrollY back where it
+                // belongs, so the event this fires in turn finds nothing to do.
+                const putBack = () => { if (!done && Math.abs(window.scrollY - scrollTop) > 2) window.scrollTo(window.scrollX, scrollTop) }
+                const stop = () => {
+                    done = true
+                    window.removeEventListener('scroll', putBack)
+                    window.removeEventListener('wheel', stop)
+                    window.removeEventListener('keydown', stop)
+                }
                 const hold = () => {
-                    if (frames-- <= 0 || held >= 3) return
-                    if (Math.abs(window.scrollY - scrollTop) > 2) { window.scrollTo(window.scrollX, scrollTop); held = 0 }
-                    else held++
+                    if (done) return
+                    if (frames-- <= 0) return stop()
+                    putBack()
                     requestAnimationFrame(hold)
                 }
-                requestAnimationFrame(hold)
-                const stop = () => { held = 3; window.removeEventListener('wheel', stop); window.removeEventListener('keydown', stop); }
+                window.addEventListener('scroll', putBack, { passive: true })
                 window.addEventListener('wheel', stop, { once: true, passive: true })
                 window.addEventListener('keydown', stop, { once: true })
+                requestAnimationFrame(hold)
             }
             setTimeout(() => {
                 window.scrollTo(window.scrollX, scrollTop)

@@ -52,6 +52,10 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   (see `docs/editor-performance.md`), the hidden tree is parsed as real MathML instead of as elements that
   merely happen to be called `math` — one element fewer, different metrics, and nothing visible changes. That
   is what the baseline was re-recorded for.
+- `outline-follow-check.js` — reading mode has no caret, so the outline's current heading is anchored to the
+  scroll position instead; this scrolls a read-only document and checks the reported heading moves with it
+  and comes back. It also decodes the diff protocol `transport.postMessage` uses — `StateChange` arrives as a
+  fragment plus a range, not as an object, and a harness that reads `args.state` straight off it sees nothing.
 - `tab-switch-check.js` — there is one editor and switching tabs re-loads the document into it, so this
   measures both directions between a long document and an ordinary one. `--big`, `--small`, `--rounds`.
 - `legacy-issues.js` — the issues reported against the original Typedown, in one run: raw html renders with its
