@@ -117,7 +117,9 @@ export const gfm = Object.assign({}, normal, {
   _extended_email: /[A-Za-z0-9._+-]+(@)[a-zA-Z0-9-_]+(?:\.[a-zA-Z0-9-_]*[a-zA-Z0-9])+(?![-_])/,
   url: /^((?:ftp|https?):\/\/|www\.)(?:[a-zA-Z0-9\-]+\.?)+[^\s<]*|^email/,
   _backpedal: /(?:[^?!.,:;*_~()&]+|\([^)]*\)|&(?![a-zA-Z0-9]+;$)|[?!.,:;*_~)]+(?!$))+/,
-  del: /^(~~?)(?=[^\s~])([\s\S]*?[^\s~])\1(?=[^~]|$)/,
+  // Strikethrough is ~~text~~, two tildes, matching the editor. A single ~ (a range like 1~6, or a
+  // subscript) is not strikethrough — exporting it as one struck through Chinese number ranges in PDFs.
+  del: /^(~~)(?=[^\s~])([\s\S]*?[^\s~])\1(?=[^~]|$)/,
   // ==highlight==, the same shape as del; also in the editor's own rules (parser/rules.js)
   mark: /^(==)(?=[^\s=])([\s\S]*?[^\s=])\1(?=[^=]|$)/,
 

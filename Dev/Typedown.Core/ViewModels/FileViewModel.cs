@@ -682,6 +682,9 @@ namespace Typedown.Core.ViewModels
             var filePicker = new FileSavePicker();
             filePicker.SetOwnerWindow(AppViewModel.MainWindow);
             config.FileExtensions.ForEach(x => filePicker.FileTypeChoices.Add(x.name, new List<string> { x.extension }));
+            // Default to the document's own name (a PDF of readme.md is offered as readme.pdf), the extension
+            // coming from the chosen format; an unsaved document has no name, so fall back to "untitled".
+            filePicker.SuggestedFileName = FilePath != null ? Path.GetFileNameWithoutExtension(FilePath) : (FileName ?? "untitled");
             var file = await filePicker.PickSaveFileAsync();
             if (file == null) return;
             string basePath = null;

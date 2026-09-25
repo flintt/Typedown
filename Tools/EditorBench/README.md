@@ -79,6 +79,9 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
 - `caret-check.js` — edit mode has to have a caret after every load: the editor focused, a selection inside
   it, and a typed key landing in the text. Checked for the first load and for a load arriving as a tab
   switch. The page side passes; a caret that is missing on Windows is the host holding XAML focus elsewhere.
+- `export-tilde-check.js` — a single `~` is text, not strikethrough: a range like `1~6` or `2~5` (common in
+  Chinese) survives export intact, and only `~~text~~` strikes through. The export lexer accepted one tilde,
+  so an exported PDF struck through the middle of a number range. Checks the editor render and the export.
 - `export-pdf-check.js` — the exported HTML carries what the PDF is made from: images by absolute path (so
   they survive being opened from a temp file) and KaTeX fonts by real address (so a formula keeps its font).
   A PDF is then produced from that HTML with a document outline, and the outline is checked to have an entry
