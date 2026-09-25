@@ -279,6 +279,20 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
         return () => removeEventListener('scroll', onscroll)
     }, [props.scrollTopRef])
 
+    // Font and tab size reach the editor by hand: CodeMirror 5 keeps its own font size once created, and
+    // its tab width is an option, not a style. "The text in code boxes stays as it was when the font is
+    // enlarged" and "pasted code is not indented by four" were Store reviews.
+    useEffect(() => {
+        if (!editor) return
+        const wrapper = editor.getWrapperElement()
+        wrapper.style.fontSize = props.options?.fontSize ? `${props.options.fontSize}px` : ''
+        wrapper.style.lineHeight = props.options?.lineHeight ? String(props.options.lineHeight) : ''
+        const tab = Number(props.options?.tabSize) || 4
+        editor.setOption('tabSize', tab)
+        editor.setOption('indentUnit', tab)
+        editor.refresh()
+    }, [editor, props.options?.fontSize, props.options?.lineHeight, props.options?.tabSize])
+
     return (
         <div
             className="cm-s-one-dark"

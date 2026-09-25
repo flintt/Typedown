@@ -57,6 +57,10 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   does not move the page. Its fake host is hostile on purpose — it scrolls to whatever `cur` a state report
   carries, which is what the first attempt fed it, so a heading routed back through that report starts the
   loop and the check sees the page moving on its own.
+- `code-font-check.js` — code follows the font size setting and the tab size setting: in a code block, in
+  inline code and in source mode, measured before and after a settings change. Source mode kept its own
+  font size once created (CodeMirror 5) and never heard of the tab size; the Prism themes drew tabs two
+  columns wide whatever the setting said. Two Store reviews.
 - `theme-contrast-check.js` — inline code, table borders and dividers have to be visible against the page in
   each bundled theme: colours are composited the way the browser paints them and compared as contrast
   ratios. Light inline code was white at 70% on a near-white page (ratio 1.05), dark table borders 1.25;

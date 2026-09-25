@@ -205,6 +205,14 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         applyOnce(editor, 'font', font, () => editor?.setFont(font))
     }, [editor, props.options?.fontSize, props.options?.lineHeight])
 
+    // The tab size setting reaches both what a tab key inserts (Muya) and how wide a tab character is drawn
+    // (CSS tab-size, inherited from the root below); without the latter, pasted code with tabs showed
+    // eight columns per tab whatever the setting said.
+    useEffect(() => {
+        const tab = Number(props.options?.tabSize) || 4
+        applyOnce(editor, 'tabSize', tab, () => editor?.setTabSize(tab))
+    }, [editor, props.options?.tabSize])
+
     useEffect(() => {
         applyOnce(editor, 'direction', props.options?.textDirection, () => editor?.setTextDirection(props.options?.textDirection))
     }, [editor, props.options?.textDirection])
@@ -679,6 +687,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
 
     return (
         <div style={{
+            tabSize: Number(props.options?.tabSize) || 4,
             fontSize: props.options?.fontSize,
             lineHeight: props.options?.lineHeight,
             fontFamily: props.options?.fontFamily ? `${props.options.fontFamily}, "Open Sans", "Segoe UI", sans-serif` : undefined

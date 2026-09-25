@@ -180,6 +180,7 @@ namespace Typedown.Core.ViewModels
             "SearchIsRegexp",
             "SearchIsWholeWord",
             "FontSize",
+            "TabSize",
             "LineHeight",
             "AutoPairBracket",
             "AutoPairQuote",
