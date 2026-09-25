@@ -117,8 +117,6 @@ namespace Typedown.Core.Models
             var updateVersion = ++childrenUpdateVersion;
             var path = FullPath;
             var filter = Filter;
-            if (!string.IsNullOrEmpty(path))
-                Log.Debug($"ExplorerItem.UpdateChildren: path='{path}' type={Type} watching={IsWatching} expanded={IsExpanded}");
             StopWatchFolder();
             Exception = null;
             try

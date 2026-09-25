@@ -25,17 +25,47 @@ namespace Typedown.Core.Utilities
             }
         }
 
-        /// <summary>Appends one line to %LOCALAPPDATA%\Typedown\logs\debug.log. Cheap enough for diagnostics of UI flows.</summary>
+        private static readonly System.Collections.Concurrent.ConcurrentQueue<string> pending = new();
+        private static int writerRunning;
+
+        /// <summary>
+        /// Puts one line into %LOCALAPPDATA%\Typedown\logs\debug.log. The line is queued and written by a
+        /// background task: opening and closing the file for every line used to cost minutes of UI-thread time
+        /// when something chatty ran — walking a folder of tens of thousands of files, for instance.
+        /// </summary>
         public static void Debug(string message)
         {
-            try
+            pending.Enqueue($"{DateTime.Now:HH:mm:ss.fff} {message}\n");
+            if (System.Threading.Interlocked.Exchange(ref writerRunning, 1) == 1) return;
+            Task.Run(async () =>
             {
-                Directory.CreateDirectory(LogFolder);
-                File.AppendAllText(Path.Combine(LogFolder, "debug.log"), $"{DateTime.Now:HH:mm:ss.fff} {message}\n");
-            }
-            catch
-            {
-            }
+                try
+                {
+                    Directory.CreateDirectory(LogFolder);
+                    var file = Path.Combine(LogFolder, "debug.log");
+                    while (true)
+                    {
+                        var batch = new System.Text.StringBuilder();
+                        while (pending.TryDequeue(out var line)) batch.Append(line);
+                        if (batch.Length > 0)
+                        {
+                            try { File.AppendAllText(file, batch.ToString()); } catch { }
+                        }
+                        await Task.Delay(500);
+                        if (pending.IsEmpty)
+                        {
+                            System.Threading.Interlocked.Exchange(ref writerRunning, 0);
+                            // Anything queued between the check and the release is picked up by the next caller.
+                            if (pending.IsEmpty) return;
+                            if (System.Threading.Interlocked.Exchange(ref writerRunning, 1) == 1) return;
+                        }
+                    }
+                }
+                catch
+                {
+                    System.Threading.Interlocked.Exchange(ref writerRunning, 0);
+                }
+            });
         }
 
         public static Task Report(string type, string content)
