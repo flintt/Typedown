@@ -79,6 +79,10 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
 - `caret-check.js` — edit mode has to have a caret after every load: the editor focused, a selection inside
   it, and a typed key landing in the text. Checked for the first load and for a load arriving as a tab
   switch. The page side passes; a caret that is missing on Windows is the host holding XAML focus elsewhere.
+- `export-pdf-check.js` — the exported HTML carries what the PDF is made from: images by absolute path (so
+  they survive being opened from a temp file) and KaTeX fonts by real address (so a formula keeps its font).
+  A PDF is then produced from that HTML with a document outline, and the outline is checked to have an entry
+  per heading. Three Store reviews: PDF loses images, PDF has no bookmarks, the formula font changes.
 - `print-check.js` — printing prints the editor page itself, in its own theme. Under print media none of the
   editing chrome is visible (block icons, tool bars, drag handles, syntax markers), every block is laid out
   even past the off-screen rule (which would print blanks), the page is white on a dark theme, and a long

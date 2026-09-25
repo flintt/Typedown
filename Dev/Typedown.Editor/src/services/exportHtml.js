@@ -21,6 +21,38 @@ const DIAGRAM_TYPE = [
   'vega-lite'
 ]
 
+// The KaTeX stylesheet, taken raw, points its fonts at `fonts/…` next to a stylesheet the export does not
+// have: an exported page, and a PDF made from one, fell back to whatever font the browser had — "the formula
+// font is different in the PDF" (a Store review). This page has the same fonts bundled under hashed names;
+// their absolute addresses are read off the page's own @font-face rules and put into the export.
+const withAbsoluteKatexFonts = (css) => {
+  const found = {}
+  try {
+    for (const sheet of document.styleSheets) {
+      let rules
+      try { rules = sheet.cssRules } catch (e) { continue }
+      for (const rule of rules) {
+        if (!(rule instanceof CSSFontFaceRule)) continue
+        const family = (rule.style.getPropertyValue('font-family') || '').replace(/["']/g, '')
+        if (!family.startsWith('KaTeX_')) continue
+        const src = rule.style.getPropertyValue('src') || ''
+        for (const m of src.matchAll(/url\(["']?([^"')]+)["']?\)/g)) {
+          const url = new URL(m[1], sheet.href || document.baseURI).href
+          // Bundled as KaTeX_Main-BoldItalic.<hash>.woff2: the base name is the one the raw stylesheet uses.
+          const named = url.match(/(KaTeX_[A-Za-z0-9-]+)\.[0-9a-f]+\.(woff2|woff|ttf)(\?|$)/)
+          if (named) found[`${named[1]}|${named[2]}`] = url
+        }
+      }
+    }
+  } catch (e) {
+    console.log('could not read the page\'s KaTeX font faces', e)
+  }
+  return css.replace(/url\(fonts\/(KaTeX_[A-Za-z0-9-]+)\.(woff2|woff|ttf)\)/g, (whole, name, ext) => {
+    const hit = found[`${name}|${ext}`]
+    return hit ? `url(${hit})` : whole
+  })
+}
+
 class ExportHtml {
   constructor(markdown, options) {
     this.markdown = markdown
@@ -202,7 +234,7 @@ class ExportHtml {
     // WORKAROUND: Hide Prism.js style when exporting or printing. Otherwise the background color is white in the dark theme.
     const highlightCssStyle = printOptimization ? `@media print { ${highlightCss} }` : highlightCss
     const html = this._prepareHtml(await this.renderHtml(options.toc), options)
-    const katexCssStyle = this.mathRendererCalled ? katexCss : ''
+    const katexCssStyle = this.mathRendererCalled ? withAbsoluteKatexFonts(katexCss) : ''
     this.mathRendererCalled = false
 
     // `extraCss` may changed in the mean time.
