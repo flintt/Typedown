@@ -52,6 +52,13 @@ namespace Typedown.Core.Controls
             }
         }
 
+        /// <summary>The badge is also the way out: clicking it puts the document back into editing.</summary>
+        private void OnLeaveReadOnlyClick(object sender, RoutedEventArgs e)
+        {
+            if (Settings != null)
+                Settings.ReadOnly = false;
+        }
+
         private string CharacterUnit(int number) => number != 1 ? Locale.GetString("Characters") : Locale.GetString("Character");
 
         private string WordUnit(int number) => number != 1 ? Locale.GetString("Words") : Locale.GetString("Word");

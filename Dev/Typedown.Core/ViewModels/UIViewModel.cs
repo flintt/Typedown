@@ -78,6 +78,7 @@ namespace Typedown.Core.ViewModels
                 return;
             disposables.Add(EditorViewModel.WhenPropertyChanged(nameof(EditorViewModel.DisplaySaved)).Subscribe(_ => UpdateTitle()));
             disposables.Add(FileViewModel.WhenPropertyChanged(nameof(FileViewModel.FileName)).Subscribe(_ => UpdateTitle()));
+            disposables.Add(SettingsViewModel.WhenPropertyChanged(nameof(SettingsViewModel.ReadOnly)).Subscribe(_ => UpdateTitle()));
             disposables.Add(Observable.FromEventPattern(uiSettings, nameof(uiSettings.ColorValuesChanged))
                 .Merge(SettingsViewModel.WhenPropertyChanged(nameof(SettingsViewModel.AppTheme)))
                 .Merge(SettingsViewModel.WhenPropertyChanged(nameof(SettingsViewModel.CustomTheme)))
@@ -129,6 +130,11 @@ namespace Typedown.Core.ViewModels
                 if (AppViewModel.FileViewModel.FileName != null)
                     title.Append(AppViewModel.FileViewModel.FileName + " - ");
                 title.Append(Config.AppName);
+                // Reading mode swallows every keystroke, and without a word about it that looks like the editor
+                // has stopped responding. The status bar says so too, but it can be switched off — the title
+                // cannot, and it is what the taskbar shows.
+                if (SettingsViewModel.ReadOnly)
+                    title.Append(" \u00b7 " + Locale.GetString("ReadOnlyMode"));
                 MainWindowTitle = title.ToString();
             }
             catch
