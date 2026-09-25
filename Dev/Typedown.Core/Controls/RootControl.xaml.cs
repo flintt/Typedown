@@ -29,8 +29,11 @@ namespace Typedown.Core.Controls
             disposables.Add(ViewModel.NavigateCommand.OnExecute.Subscribe(args => Navigate(args)));
             RegisterSettingsShortcut();
             // The settings are the one page you are looking at when you change the language, so they are built
-            // again straight away. The rest of the interface was built at startup and waits for the restart the
-            // settings offer.
+            // again straight away. The rest of the interface catches up by itself: leaving the settings
+            // navigates to MainPage, and with no NavigationCacheMode that is a new page, so the menus and
+            // everything else built from {u:LocaleString} are evaluated again in the new language. What does
+            // not catch up is anything a view model holds as a finished string — the view models outlive the
+            // navigation — which is why UIViewModel rebuilds the window title on a language change.
             disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.Language)).Subscribe(_ => ReloadSettingsPage()));
             disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.ShortcutSettings)).Subscribe(_ => RegisterSettingsShortcut()));
             Frame.Navigate(typeof(MainPage), null);
