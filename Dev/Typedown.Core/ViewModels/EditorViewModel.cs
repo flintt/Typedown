@@ -292,6 +292,9 @@ namespace Typedown.Core.ViewModels
         /// </summary>
         private bool rebuildingToc;
 
+        /// <summary>A heading the page reported before there was an outline to mark it in.</summary>
+        private string pendingOutlineSlug;
+
         public void OnStateChange(JToken arg)
         {
             // Cleared whatever the report describes: it means the editor has answered, and leaving it set
@@ -332,6 +335,12 @@ namespace Typedown.Core.ViewModels
             {
                 rebuildingToc = false;
             }
+            if (pendingOutlineSlug != null)
+            {
+                var slug = pendingOutlineSlug;
+                pendingOutlineSlug = null;
+                OnOutlineCurrent(new JObject { ["slug"] = slug, ["loadId"] = LoadId });
+            }
         }
 
         /// <summary>
@@ -345,15 +354,23 @@ namespace Typedown.Core.ViewModels
         {
             if (IsStaleReport(arg)) return;
             var slug = arg["slug"]?.ToString();
-            if (string.IsNullOrEmpty(slug) || ContentState?.Toc == null)
+            if (string.IsNullOrEmpty(slug)) return;
+            if (ContentState?.Toc == null)
             {
-                Log.Debug($"outline: reading-mode heading {slug ?? "(none)"} ignored, toc={(ContentState?.Toc == null ? "null" : "empty")}");
+                // The page reports where it is as soon as it has laid the document out, which is before the
+                // first state report has reached here — there is no outline yet to mark. Dropping it left the
+                // highlight blank until the reader happened to scroll to a different heading, because the
+                // page only reports a heading when it changes. Keep it for the outline to arrive.
+                pendingOutlineSlug = slug;
+                Log.Debug($"outline: heading {slug} arrived before the outline; kept for when it does");
                 return;
             }
             if (appliedCurSlug == slug) return;
             appliedCurSlug = slug;
-            if (ContentState.Toc.All(x => x.Slug != slug))
-                Log.Debug($"outline: reading-mode heading {slug} is not in the outline of {ContentState.Toc.Count} entries");
+            var match = ContentState.Toc.FirstOrDefault(x => x.Slug == slug);
+            Log.Debug(match == null
+                ? $"outline: heading {slug} is not among the {ContentState.Toc.Count} entries"
+                : $"outline: now on {match.Content}");
             rebuildingToc = true;
             try
             {
