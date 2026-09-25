@@ -168,9 +168,23 @@ namespace Typedown.Core.Utilities
             }
         }
 
+        /// <summary>
+        /// A temporary file of ours, in our own data folder rather than the user's %TEMP%: printing wrote the
+        /// page there and, under some accounts, got "access to the path is denied" for its trouble (a Store
+        /// review, non-administrator account). Falls back to %TEMP% only if our folder cannot be used.
+        /// </summary>
         public static string GetTempFileName(string extension)
         {
-            return Path.Combine(Path.GetTempPath(), Guid.NewGuid() + extension);
+            try
+            {
+                var folder = Path.Combine(Config.GetLocalFolderPath(), "temp");
+                Directory.CreateDirectory(folder);
+                return Path.Combine(folder, Guid.NewGuid() + extension);
+            }
+            catch (Exception)
+            {
+                return Path.Combine(Path.GetTempPath(), Guid.NewGuid() + extension);
+            }
         }
 
         public static HtmlImgTag MatchHtmlImg(string html)

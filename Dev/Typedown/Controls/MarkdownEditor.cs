@@ -178,6 +178,15 @@ namespace Typedown.Controls
             CoreWebView2.ScriptDialogOpening += OnScriptDialogOpening;
             CoreWebView2.WebMessageReceived += OnWebMessageReceived;
             CoreWebView2.NewWindowRequested += OnNewWindowRequested;
+            // The browser process can die under the editor (a GPU driver, a renderer bug). Left alone that is a
+            // blank editor until the app is restarted; reloading the page brings the document back through the
+            // usual start-up handshake, and the log says what happened.
+            CoreWebView2.ProcessFailed += (s, args) =>
+            {
+                Core.Utilities.Log.Debug($"editor: web view process failed: {args.ProcessFailedKind} {args.Reason} exit={args.ExitCode}");
+                if (args.ProcessFailedKind == CoreWebView2ProcessFailedKind.BrowserProcessExited || args.ProcessFailedKind == CoreWebView2ProcessFailedKind.RenderProcessExited || args.ProcessFailedKind == CoreWebView2ProcessFailedKind.RenderProcessUnresponsive)
+                    _ = Dispatcher.RunIdleAsync(_ => { try { CoreWebView2.Reload(); } catch (Exception ex) { Core.Utilities.Log.Debug($"editor: reload after process failure failed: {ex.Message}"); } });
+            };
 #if DEBUG
             CoreWebView2.AddWebResourceRequestedFilter("http://local-file-access/*", CoreWebView2WebResourceContext.All);
             CoreWebView2.WebResourceRequested += OnWebResourceRequested;

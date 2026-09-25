@@ -30,6 +30,9 @@ namespace Typedown.Controls
         /// </summary>
         public event Action PrintDismissed;
 
+        /// <summary>Printing could not start, or the web view behind the preview died; the message says which.</summary>
+        public event Action<string> PrintFailed;
+
         public PrintPreviewControl(string html, string documentName)
         {
             this.html = html;
@@ -74,15 +77,33 @@ namespace Typedown.Controls
                 };
                 tempFile = Core.Utilities.Common.GetTempFileName(".html");
                 File.WriteAllText(tempFile, html);
+                // The browser process behind the preview can die (a driver, a renderer bug): say so instead of
+                // leaving a blank preview on screen — "the app crashes when I click print" in the Store reviews
+                // may well have been this, with nothing to see but the blank.
+                coreWebView2.ProcessFailed += (s, args) =>
+                {
+                    Core.Utilities.Log.Debug($"print preview: web view process failed: {args.ProcessFailedKind} {args.Reason} exit={args.ExitCode}");
+                    _ = Dispatcher.RunIdleAsync(_ => PrintFailed?.Invoke($"{args.ProcessFailedKind}: {args.Reason}"));
+                };
                 coreWebView2.Navigate(tempFile);
                 await navigationCompletedTaskSource.Task;
                 if (disposed)
                     return;
-                coreWebView2.ShowPrintUI(CoreWebView2PrintDialogKind.Browser);
+                try
+                {
+                    coreWebView2.ShowPrintUI(CoreWebView2PrintDialogKind.Browser);
+                }
+                catch (Exception ex)
+                {
+                    // The browser's own dialog failed to open; the system one is a separate code path.
+                    Core.Utilities.Log.Debug($"print: browser print dialog failed, trying the system one: {ex.Message}");
+                    coreWebView2.ShowPrintUI(CoreWebView2PrintDialogKind.System);
+                }
             }
-            catch
+            catch (Exception ex)
             {
-                // Ignore
+                Core.Utilities.Log.Debug($"print: could not start: {ex}");
+                if (!disposed) PrintFailed?.Invoke(ex.Message);
             }
         }
 

@@ -112,6 +112,12 @@ namespace Typedown.Services
             var preview = new PrintPreviewControl(html, documentName);
             // The preview leaves with the print dialog; its close button stays for a dialog that never came.
             preview.PrintDismissed += () => { if (ViewModel.UIViewModel.PrintPreviewContent == preview) ViewModel.UIViewModel.ClosePrintPreview(); };
+            preview.PrintFailed += async message =>
+            {
+                if (ViewModel.UIViewModel.PrintPreviewContent == preview) ViewModel.UIViewModel.ClosePrintPreview();
+                try { await Core.Controls.AppContentDialog.Create(Core.Utilities.Locale.GetString("Error"), message, Core.Utilities.Locale.GetString("Ok")).ShowAsync(ViewModel.XamlRoot); }
+                catch (Exception ex) { Core.Utilities.Log.Debug($"print: could not show the failure: {ex.Message}"); }
+            };
             ViewModel.UIViewModel.ShowPrintPreview(preview, documentName);
             return Task.CompletedTask;
         }
