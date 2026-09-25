@@ -34,14 +34,31 @@ namespace Typedown.Core.ViewModels
         public FloatViewModel(IServiceProvider serviceProvider)
         {
             ServiceProvider = serviceProvider;
-            EventCenter.GetObservable<EditorEventArgs>("OpenFrontMenu").Subscribe(x => OnOpenFrontMenu(x.Args));
-            EventCenter.GetObservable<EditorEventArgs>("OpenFormatPicker").Subscribe(x => OnOpenFormatPicker(x.Args));
-            EventCenter.GetObservable<EditorEventArgs>("OpenImageSelector").Subscribe(x => OnOpenImageSelector(x.Args));
-            EventCenter.GetObservable<EditorEventArgs>("OpenTableTools").Subscribe(x => OnOpenTableTools(x.Args));
-            EventCenter.GetObservable<EditorEventArgs>("OpenImageToolbar").Subscribe(x => OnOpenImageToolbar(x.Args));
-            EventCenter.GetObservable<EditorEventArgs>("OpenToolTip").Subscribe(x => OnOpenToolTip(x.Args));
+            Subscribe("OpenFrontMenu", OnOpenFrontMenu);
+            // A message from the page must never be able to end the process: each of these draws something, and
+            // a failure to draw is worth a line in the log, not a crash.
+            Subscribe("OpenFormatPicker", OnOpenFormatPicker);
+            Subscribe("OpenImageSelector", OnOpenImageSelector);
+            Subscribe("OpenTableTools", OnOpenTableTools);
+            Subscribe("OpenImageToolbar", OnOpenImageToolbar);
+            Subscribe("OpenToolTip", OnOpenToolTip);
             this.WhenPropertyChanged(nameof(FindReplaceDialogOpen)).Subscribe(_ => OnFindReplaceDialogOpenChange(FindReplaceDialogOpen));
             SearchCommand.OnExecute.Subscribe(Search);
+        }
+
+        private void Subscribe(string name, Action<JToken> handler)
+        {
+            EventCenter.GetObservable<EditorEventArgs>(name).Subscribe(x =>
+            {
+                try
+                {
+                    handler(x.Args);
+                }
+                catch (Exception ex)
+                {
+                    Log.Debug($"{name}: {ex.GetType().Name}: {ex.Message}");
+                }
+            });
         }
 
         public void Search(FindReplaceDialogState open)
@@ -73,9 +90,14 @@ namespace Typedown.Core.ViewModels
             frontMenu.Open(rect);
         }
 
+        /// <summary>
+        /// The editor asks for the little formatting toolbar when a selection is made — double-clicking a word
+        /// is enough. This edition has never drawn one, and the stub that stood here threw, which took the
+        /// whole process down. Until there is one, the request is noted and ignored.
+        /// </summary>
         public void OnOpenFormatPicker(JToken args)
         {
-            throw new NotImplementedException();
+            Log.Debug("OpenFormatPicker: no formatting toolbar in this edition; ignoring");
         }
 
         public void OnOpenImageSelector(JToken args)

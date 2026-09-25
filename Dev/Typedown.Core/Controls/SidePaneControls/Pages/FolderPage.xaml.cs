@@ -461,7 +461,7 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
                 var kind = e.GetCurrentPoint(sender as UIElement).Properties.PointerUpdateKind;
                 if (kind == Windows.UI.Input.PointerUpdateKind.LeftButtonReleased &&
                     (sender as muxc.TreeViewItem).DataContext is ExplorerItem item &&
-                    item.Type == ExplorerItem.ExplorerItemType.File &&
+                    item.Type == ExplorerItem.ExplorerItemType.File && !item.IsNotice &&
                     item.FullPath != ViewModel.FileViewModel.FilePath)
                 {
                     pendingSingleClickOpen?.Cancel();

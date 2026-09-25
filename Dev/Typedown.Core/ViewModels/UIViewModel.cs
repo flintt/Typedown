@@ -100,7 +100,9 @@ namespace Typedown.Core.ViewModels
 
         private void UpdateActualTheme()
         {
-            _ = dispatcher?.TryRunIdleAsync(_ =>
+            // Not at idle priority: with a large document rendering or a folder being walked, an idle callback
+            // waits for the thread to go quiet, and the window sits in the old theme until it does.
+            _ = dispatcher?.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
             {
                 try
                 {

@@ -18,7 +18,7 @@ namespace Typedown.Core.Models
     {
         public enum ExplorerItemType { None, Folder, File };
 
-        public string Name { get; private set; }
+        public string Name { get; internal set; }
 
         [OnChangedMethod(nameof(OnFullPathChanged))]
         public string FullPath { get; set; }
@@ -55,8 +55,8 @@ namespace Typedown.Core.Models
             ViewModel = viewModel;
         }
 
-        /// <summary>A row carrying only a message has no path change to trigger its name.</summary>
-        public string DisplayName => Notice ?? Name;
+        /// <summary>True for a row that only carries a message, such as "this folder has too many items".</summary>
+        public bool IsNotice => Notice != null;
 
         private void OnFullPathChanged()
         {
@@ -238,7 +238,8 @@ namespace Typedown.Core.Models
         /// <summary>A row that only says something; it has no path, so nothing opens it.</summary>
         private ExplorerItem CreateNotice(string text)
         {
-            return new(ViewModel) { knownType = ExplorerItemType.None, Notice = text, Comparer = Comparer };
+            // No path, so nothing sets the name from one: the row carries its own text.
+            return new(ViewModel) { knownType = ExplorerItemType.File, Notice = text, Comparer = Comparer, Name = text };
         }
 
         private ExplorerItem CreateChild(string name, ExplorerItemType? type = null)
