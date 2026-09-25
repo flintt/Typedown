@@ -5,7 +5,7 @@
 const puppeteer = require('puppeteer-core'); const http = require('http'); const fs = require('fs'); const path = require('path');
 const statics = path.resolve(process.env.STATICS || '../../Dev/Typedown/Resources/Statics');
 const filler = Array.from({ length: 12 }, (_, i) => `Paragraph ${i} of filler text so that the document scrolls.`).join('\n\n');
-const markdown = `# Top\n\n[to section two](#section-two) · [to 中文](#中文标题) · [to second same](#same-1) · [encoded](#%E4%B8%AD%E6%96%87%E6%A0%87%E9%A2%98)\n\n${filler}\n\n## Section Two\n\n${filler}\n\n## 中文标题\n\n${filler}\n\n## Same\n\n${filler}\n\n## Same\n\n${filler}\n`;
+const markdown = `# Top\n\n[to section two](#section-two) · [to 中文](#中文标题) · [to second same](#same-1) · [encoded](#%E4%B8%AD%E6%96%87%E6%A0%87%E9%A2%98) · [dotted](#1.1-研究背景与意义)\n\n${filler}\n\n## Section Two\n\n${filler}\n\n## 中文标题\n\n${filler}\n\n## Same\n\n${filler}\n\n## Same\n\n${filler}\n\n## 1.1 研究背景与意义\n\n${filler}\n`;
 const server = http.createServer((req, res) => {
   let p = decodeURIComponent(req.url.split('?')[0]); if (p === '/') p = '/index.html';
   const f = path.join(statics, p);
@@ -24,7 +24,7 @@ const run = async (browser, port, readOnly) => {
   await page.waitForFunction(() => window.__marks.FileLoaded, { timeout: 60000 });
   await new Promise(r => setTimeout(r, 800));
   const results = [];
-  for (const [text, heading] of [['to section two', 'Section Two'], ['to 中文', '中文标题'], ['to second same', 'Same'], ['encoded', '中文标题']]) {
+  for (const [text, heading] of [['to section two', 'Section Two'], ['to 中文', '中文标题'], ['to second same', 'Same'], ['encoded', '中文标题'], ['dotted', '1.1 研究背景与意义']]) {
     await page.evaluate(() => window.scrollTo(0, 0));
     const box = await page.evaluate((t) => { const a = Array.from(document.querySelectorAll('#ag-editor-id a')).find(a => a.textContent.trim() === t); const r = a.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; }, text);
     if (!readOnly) await page.keyboard.down('Control');

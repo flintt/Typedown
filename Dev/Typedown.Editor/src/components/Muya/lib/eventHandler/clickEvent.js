@@ -24,8 +24,15 @@ class ClickEvent {
     try { fragment = decodeURIComponent(fragment) } catch (e) { }
     let target = fragment ? document.getElementById(fragment) : null
     if (!target) {
+      // Headings carry a block key as id, not a slug, so match the fragment against each heading. Tools and
+      // people write the fragment differently — with the dots kept (#1.1-x), dropped (#11-x), or spaces left
+      // in — so besides the exact slug this also compares a loose form with every non-letter/digit/CJK
+      // character removed, which brings "1.1-研究" and "11 研究" to the same thing.
       const slugger = new Slugger()
       const wanted = fragment.toLowerCase()
+      const loose = t => t.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, '')
+      const wantedLoose = loose(fragment)
+      let looseHit = null
       for (const block of this.muya.contentState.blocks) {
         if (!/^h\d$/.test(block.type)) continue
         const { headingStyle, key } = block
@@ -36,7 +43,11 @@ class ClickEvent {
           target = document.querySelector(`#${key}`)
           break
         }
+        if (!looseHit && wantedLoose && (loose(slug) === wantedLoose || loose(plain) === wantedLoose)) {
+          looseHit = key
+        }
       }
+      if (!target && looseHit) target = document.querySelector(`#${looseHit}`)
     }
     if (!target) return
     const top = target.getBoundingClientRect().top
