@@ -54,7 +54,7 @@ const server = http.createServer((req, res) => {
   const show = async (log) => { for (const e of log) console.log('    ' + String(e.t).padStart(6) + 'ms  ' + (e.loaded ? 'FileLoaded' : e.slug ? `outline -> ${await name(e.slug)}  [scrollY ${e.where && e.where.y}]` : 'cur' in e ? `state report, cur ${e.cur ? await name(e.cur) : 'NONE'}` : e.call ? `${e.call}   ${e.stack}` : `page at ${e.y} (document ${e.h} tall)`)); };
 
   console.log(`open ${path.basename(file)} ${readOnly ? 'reading' : 'editing'}, remembered scroll ${scrollTop}, caret line ${line}`);
-  const first = await page.evaluate(() => { const l = window.__log.splice(0); return { log: l, top: window.__topHead(), y: Math.round(window.scrollY), nocur: window.__nocur, shrunk: window.__hmax - document.documentElement.scrollHeight }; });
+  const first = await page.evaluate(() => { const l = window.__log.splice(0); return { log: l, top: window.__topHead(), y: Math.round(window.scrollY), nocur: window.__nocur, shrunk: window.__hmax - document.documentElement.scrollHeight, max: document.documentElement.scrollHeight - window.innerHeight }; });
   await show(first.log);
   const lastSlug = (log) => { const s = log.filter(e => e.slug); return s.length ? s[s.length - 1].slug : null; };
   const afterOpen = { y: first.y, top: first.top, last: lastSlug(first.log), nocur: first.nocur };
@@ -77,7 +77,7 @@ const server = http.createServer((req, res) => {
   const read = await page.evaluate(() => { const l = window.__log.splice(0); return { log: l, top: window.__topHead(), y: Math.round(window.scrollY), nocur: window.__nocur, states: window.__states }; });
   const slugs = read.log.filter(e => e.slug); const nocurNow = read.log.filter(e => 'cur' in e && !e.cur);
   console.log(`  wheeled to ${read.y}: ${slugs.length} outline reports, ${read.log.filter(e => 'cur' in e).length} state reports of which ${nocurNow.length} without a current heading`);
-  console.log(`  heading at top "${read.top && read.top.text}", outline last told "${lastSlug(read.log) ? await name(lastSlug(read.log)) : 'nothing'}"`);
+  console.log(`  heading at top "${read.top && read.top.text}", outline last told "${(lastSlug(read.log) || afterOpen.last) ? await name(lastSlug(read.log) || afterOpen.last) : 'nothing'}"`);
   if (nocurNow.length) await show(read.log.filter(e => 'cur' in e).slice(0, 5));
 
   let clicked = null;
@@ -105,9 +105,11 @@ const server = http.createServer((req, res) => {
 
   // Diagrams render after the page has landed, and the document above the window gets shorter; the browser
   // then keeps the same content in view, which moves scrollY by that much. That is not the page leaving.
-  const settledRight = Math.abs(afterOpen.y - scrollTop) <= Math.max(2, first.shrunk) || (scrollTop === 0);
+  // An offset past the end of the document lands at the end.
+  const settledRight = Math.abs(afterOpen.y - scrollTop) <= Math.max(2, first.shrunk) || (scrollTop === 0) || (scrollTop > first.max && Math.abs(afterOpen.y - first.max) <= 2);
   const opened = readOnly ? (afterOpen.last && afterOpen.top && afterOpen.last === afterOpen.top.id) : true;
-  const followed = readOnly ? (lastSlug(read.log) === (read.top && read.top.id)) : true;
+  // A page that could not move (opened at the end) reports nothing while wheeling; what it said on opening still stands.
+  const followed = readOnly ? ((lastSlug(read.log) || afterOpen.last) === (read.top && read.top.id)) : true;
   const quiet = afterOpen.nocur === 0 && nocurNow.length === 0;
   const clickOk = !clicked || clicked.error || clicked.ok;
   const ok = settledRight && opened && followed && quiet && clickOk;

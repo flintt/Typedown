@@ -573,24 +573,36 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             let frames = 40
             let cap = 600
             let done = false
-            const tall = () => document.documentElement.scrollHeight >= scrollTop + window.innerHeight
+            const startedAt = { innerHeight: window.innerHeight, scrollHeight: document.documentElement.scrollHeight }
+            // A viewport with no height is a page that is not in a window yet: the host navigates the web
+            // view to this page while putting it back into a rebuilt window, and the document is laid out
+            // at no width, absurdly tall, before the window arrives. An offset applied then lands somewhere
+            // near the start once the real layout comes, and the browser keeps that content in view — the
+            // page was at the top after leaving the settings, every time. Such frames do not count.
+            const tall = () => window.innerHeight > 0 && document.documentElement.scrollHeight >= scrollTop + window.innerHeight
             // The knock arrives as a scroll event, so answer it there as well as on the next frame:
             // during the layout a frame can be a hundred milliseconds long, and that is a hundred
             // milliseconds of looking at the top of the document. Correcting puts scrollY back where it
             // belongs, so the event this fires in turn finds nothing to do.
             const putBack = () => { if (!done && !yielded && Math.abs(window.scrollY - scrollTop) > 2) window.scrollTo(window.scrollX, scrollTop) }
-            const stop = () => { done = true; window.removeEventListener('scroll', putBack); for (const e of GIVE_WAY) window.removeEventListener(e, giveWay) }
+            const stop = (why: string) => {
+                done = true; window.removeEventListener('scroll', putBack); for (const e of GIVE_WAY) window.removeEventListener(e, giveWay)
+                // What the hold saw, for the host's log: the only way to tell from a machine one cannot watch.
+                transport.postMessage('ScrollSettled', { asked: scrollTop, at: Math.round(window.scrollY), why, framesLeft: frames, capLeft: cap, innerHeight: window.innerHeight, scrollHeight: document.documentElement.scrollHeight, startedAt })
+            }
             const hold = () => {
                 if (done) return
                 // Dragging the scrollbar raises no wheel event, so watching the wheel alone left the hold
                 // pulling the page back from under the pointer — the reader drags, it yanks.
-                if (yielded || cap-- <= 0 || (tall() && frames-- <= 0)) return stop()
+                if (yielded) return stop('reader moved')
+                if (cap-- <= 0) return stop('gave up')
+                if (tall() && frames-- <= 0) return stop('held')
                 putBack()
                 requestAnimationFrame(hold)
             }
             window.addEventListener('scroll', putBack, { passive: true })
             requestAnimationFrame(hold)
-            stopHold = stop
+            stopHold = () => stop('replaced')
         }
         setTimeout(() => {
             if (!yielded) {
