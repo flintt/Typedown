@@ -46,7 +46,8 @@ const server = http.createServer((req, res) => {
 
   await page.evaluate(() => { window.__topHead = () => {
     const heads = Array.from(document.querySelectorAll('#ag-editor-id > h1, #ag-editor-id > h2, #ag-editor-id > h3, #ag-editor-id > h4, #ag-editor-id > h5, #ag-editor-id > h6'));
-    let found = -1; heads.forEach((h, i) => { if (h.getBoundingClientRect().top <= 0) found = i; });
+    // Reached once it is where an outline jump puts it (16px below the edge), the same rule the follower uses.
+    let found = -1; heads.forEach((h, i) => { if (h.getBoundingClientRect().top <= 17) found = i; });
     const h = heads[found >= 0 ? found : 0]; return h ? { id: h.id, text: h.textContent.trim().slice(0, 40) } : null;
   }; });
   const name = async (slug) => page.evaluate((s) => { const h = document.getElementById(s); return h ? h.textContent.trim().slice(0, 40) : s; }, slug);

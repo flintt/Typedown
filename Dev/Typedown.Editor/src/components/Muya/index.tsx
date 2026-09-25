@@ -34,7 +34,8 @@ interface IMuyaEditor {
     /** Reports the outline, word count and caret line. The shell tags it with the load it belongs to. */
     onStateChange: (state: { wordCount: any, toc: any[], cur: any }) => void
     /** Reading mode only: the heading the page has been scrolled to. Highlight only — never a scroll. */
-    onOutlineCurrent: (slug: string, where: { y: number, index: number, of: number, top: number }) => void
+    /** Where the page was when it named the heading: its position among the headings, or that it was jumped to. */
+    onOutlineCurrent: (slug: string, where: { y: number, index?: number, of?: number, top?: number, jump?: boolean }) => void
     onSearchArgChange: (arg: { value: string, opt: any } | undefined) => void
 }
 
@@ -51,6 +52,10 @@ Muya.use(TableBarTools)
 Muya.use(FootnoteTool)
 
 const STANDAR_Y = 320
+// Where a heading goes when it is chosen in the outline: at the top, a line's breathing room below the
+// edge. The caret's 320 put it a third of the way down, and the reader then saw the section before it
+// at the top of the window — and the outline, reading the top, marked that one instead.
+const OUTLINE_TOP = 16
 
 /** Anything that means the reader is moving the page themselves; the scroll hold stops at the first of them. */
 const GIVE_WAY = ['wheel', 'keydown', 'pointerdown', 'touchstart']
@@ -73,19 +78,23 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     const searchArgRef = useRef<any>();
     const cursorRef = useRef<any>();
     const optionsRef = useRef<any>(props.options);
+    // The heading the outline was last told about in reading mode, and the moment until which a jump the
+    // reader asked for stands: the jump's own scroll must not be re-read as the reader moving on.
+    const readingSlugRef = useRef<string | null>(null)
+    const jumpHoldRef = useRef(0)
 
     const relativeScroll = useCallback((delta: number) => {
         window.scrollBy(0, delta)
     }, [])
 
-    const scrollToElement = useCallback((selector) => {
+    const scrollToElement = useCallback((selector, offset = STANDAR_Y) => {
         if (editor == null) {
             return;
         }
         const anchor = document.querySelector(selector)
         if (anchor) {
             const { y } = anchor.getBoundingClientRect()
-            relativeScroll(y - STANDAR_Y)
+            relativeScroll(y - offset)
         }
     }, [editor, relativeScroll])
 
@@ -211,8 +220,16 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     }, [editor, props.options?.listIndentation])
 
     useEffect(() => transport.addListener<{ slug: string }>('ScrollTo', ({ slug }) => {
-        scrollToElement(`#${slug}`)
-    }), [editor, scrollToElement]);
+        scrollToElement(`#${slug}`, OUTLINE_TOP)
+        // The reader chose this heading, so this is the one the outline marks — also at the end of the
+        // document, where the page cannot scroll far enough to bring it to the top and reading the top
+        // would name the section before it.
+        if (props.options?.readOnly && readingSlugRef.current !== slug) {
+            readingSlugRef.current = slug
+            jumpHoldRef.current = performance.now() + 300
+            props.onOutlineCurrent(slug, { y: Math.round(window.scrollY), jump: true })
+        }
+    }), [editor, scrollToElement, props.options?.readOnly]);
 
     useEffect(() => transport.addListener('UpdateParagraph', type => {
         if (optionsRef.current?.readOnly) return
@@ -333,13 +350,13 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     // section being read is the one whose heading has passed the top of the window. The headings are the
     // top-level h1..h6 of the document and their element id is the slug the outline uses, so this needs
     // nothing from the host and reports nothing but a slug.
-    const readingSlugRef = useRef<string | null>(null)
     useEffect(() => {
         if (!editor || !props.options?.readOnly) return
         let frame = 0
         let retries = 60
         const anchor = () => {
             frame = 0
+            if (performance.now() < jumpHoldRef.current) return
             const root = editor.container?.querySelector?.('#ag-editor-id') || document.getElementById('ag-editor-id')
             const heads = root ? Array.from(root.querySelectorAll(':scope > h1, :scope > h2, :scope > h3, :scope > h4, :scope > h5, :scope > h6')) as HTMLElement[] : []
             if (!heads.length) return
@@ -359,8 +376,10 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
                 return
             }
             retries = 60
+            // A heading counts as reached once it is where a jump would have put it, not only once it has
+            // gone past the edge: the two have to agree, or a chosen heading is marked as the one before.
             let found = -1
-            for (let i = 0; i < tops.length; i++) { if (tops[i] <= 0) found = i; else break }
+            for (let i = 0; i < tops.length; i++) { if (tops[i] <= OUTLINE_TOP + 1) found = i; else break }
             const chosen = found >= 0 ? found : 0
             const slug = heads[chosen].id
             if (!slug || slug === readingSlugRef.current) return

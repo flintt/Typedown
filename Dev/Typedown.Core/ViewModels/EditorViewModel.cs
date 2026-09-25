@@ -382,7 +382,7 @@ namespace Typedown.Core.ViewModels
             appliedCurSlug = slug;
             var match = ContentState.Toc.FirstOrDefault(x => x.Slug == slug);
             var where = arg["where"];
-            var at = where == null ? "" : $" [scrollY={where["y"]}, heading {where["index"]}/{where["of"]} at {where["top"]}]";
+            var at = where == null ? "" : where["jump"] != null ? $" [jumped to it, scrollY={where["y"]}]" : $" [scrollY={where["y"]}, heading {where["index"]}/{where["of"]} at {where["top"]}]";
             Log.Debug(match == null
                 ? $"outline: heading {slug} is not among the {ContentState.Toc.Count} entries{at}"
                 : $"outline: now on {match.Content}{at}");

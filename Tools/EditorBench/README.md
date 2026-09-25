@@ -57,6 +57,10 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   does not move the page. Its fake host is hostile on purpose — it scrolls to whatever `cur` a state report
   carries, which is what the first attempt fed it, so a heading routed back through that report starts the
   loop and the check sees the page moving on its own.
+- `outline-jump-check.js [--file doc.md]` — clicks every heading in the outline. Each has to land at the top
+  of the window (16px below the edge, or as far as the page goes at the end of the document) and end up
+  marked in the outline. The heading used to land 320px down, the caret's offset, so the section before it
+  showed at the top and the follower marked that one: 3 of 40 at the top, 1 of 40 marked, before the fix.
 - `open-position-check.js --file doc.md [--scroll N] [--line L] [--readonly 0|1] [--click "5.4.1"]` — opens a
   real document the way the host does, with a remembered caret and scroll offset, and records every move
   of the page and every outline report for the first seconds, then reads it with the wheel. The page has
