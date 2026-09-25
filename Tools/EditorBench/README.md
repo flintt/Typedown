@@ -79,11 +79,12 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
 - `caret-check.js` — edit mode has to have a caret after every load: the editor focused, a selection inside
   it, and a typed key landing in the text. Checked for the first load and for a load arriving as a tab
   switch. The page side passes; a caret that is missing on Windows is the host holding XAML focus elsewhere.
-- `print-check.js` — asks the editor for the print HTML the way the host does, renders it as print media on
-  an A4-wide page and checks that no code block is wider than its box. A long code line used to print a
-  horizontal scrollbar and lose the rest of the line (a Store review from 2022, still true in 2026): the
-  GitHub sheet and Prism keep `white-space: pre` on the code inside the block, more specifically than the
-  export's own wrap rule. Failed with two blocks about 4000px too wide before the print rule went in.
+- `print-check.js` — printing prints the editor page itself, in its own theme. Under print media none of the
+  editing chrome is visible (block icons, tool bars, drag handles, syntax markers), every block is laid out
+  even past the off-screen rule (which would print blanks), the page is white on a dark theme, and a long
+  code line wraps instead of printing a scrollbar and losing its end (a Store review from 2022). Printing
+  used to render an export with the GitHub stylesheet, which is why "the print did not look like the
+  document".
 - `outline-jump-check.js [--file doc.md]` — clicks every heading in the outline. Each has to land at the top
   of the window (16px below the edge, or as far as the page goes at the end of the document) and end up
   marked in the outline. The heading used to land 320px down, the caret's offset, so the section before it

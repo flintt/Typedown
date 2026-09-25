@@ -140,6 +140,19 @@ const Editor: React.FC = () => {
         const generateOption: any = { printOptimization: false, title, toc: getHtmlToc(getTOC(markdownRef.current ?? '').toc), ...options }
         if (styling) generateOption.extraCss = [generateOption.extraCss, styling].filter(Boolean).join('\n')
         const baseUrl = basePath ? `file:///${basePath.replaceAll('\\', '/')}/` : undefined
+        if (type == 'print') {
+            // Print this page — the document as the reader sees it, in the editor's theme — rather than an
+            // export rendered with another stylesheet. The print rules in index.css take the editing chrome
+            // out and lay every block out; the editor loses focus first so no block is the active one.
+            try {
+                (document.activeElement as HTMLElement | null)?.blur?.()
+                await new Promise(r => requestAnimationFrame(() => r(null)))
+                window.print()
+                return
+            } catch (e) {
+                console.log('window.print failed, printing the export instead', e)
+            }
+        }
         const html = await new ExportHtml(markdownRef.current, { ...optionsRef.current, baseUrl }).generate(generateOption)
         if (type == 'print') {
             remote.printHTML({ html, context })

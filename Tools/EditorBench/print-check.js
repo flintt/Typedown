@@ -1,47 +1,61 @@
-// Printing a code block with a long line. The printed page has no scrollbar to scroll, so the line has to
-// wrap; what came out instead was a horizontal scrollbar drawn on paper and the rest of the line cut off
-// (also a Store review from 2022, still true in 2026). This asks the editor for the print HTML the way the
-// host does, renders it as print media, and checks that no code block is wider than its box.
+// Printing prints the editor page itself, in its own theme. Under print media: none of the editing chrome
+// (block icons, tool bars, drag handles, syntax markers) is visible; every block is laid out even in a long
+// document (the off-screen rule would print blanks); the page is white; and a code block with a long line
+// wraps instead of printing a scrollbar and losing its end (a Store review from 2022, still true in 2026).
 //
 //   node print-check.js
 const puppeteer = require('puppeteer-core'); const http = require('http'); const fs = require('fs'); const path = require('path');
 const statics = path.resolve(process.env.STATICS || '../../Dev/Typedown/Resources/Statics');
 const longLine = 'const veryLongIdentifier = ' + Array.from({ length: 30 }, (_, i) => `argumentNumber${i}`).join(' + ') + ';';
-const markdown = `# Print\n\nSome text.\n\n\`\`\`js\n${longLine}\nshort();\n\`\`\`\n\n\`\`\`\n${longLine}\n\`\`\`\n`;
-
+const section = (i) => [`## Section ${i}`, `Paragraph ${i} with text long enough to wrap onto a second line in the editor.`, '- one\n- two'].join('\n\n');
+let markdown = `# Print\n\nSome text.\n\n\`\`\`js\n${longLine}\nshort();\n\`\`\`\n\n| a | b |\n|---|---|\n| 1 | 2 |\n\n`;
+for (let i = 1; i <= 2100; i++) markdown += section(i) + '\n\n';   // long enough for the off-screen rule
 const server = http.createServer((req, res) => {
   let p = decodeURIComponent(req.url.split('?')[0]); if (p === '/') p = '/index.html';
   const f = path.join(statics, p);
   if (!fs.existsSync(f) || fs.statSync(f).isDirectory()) { res.statusCode = 404; return res.end(); }
   fs.createReadStream(f).pipe(res);
 });
-
 (async () => {
   await new Promise(r => server.listen(0, r)); const port = server.address().port;
-  const browser = await puppeteer.launch({ executablePath: process.env.CHROME || '/opt/google/chrome/chrome', headless: 'new', args: ['--no-sandbox'] });
-  const page = await browser.newPage(); await page.setViewport({ width: 1000, height: 700 });
-  const settings = { fontSize: 16, lineHeight: 1.6, editorAreaWidth: '900px', tabSize: 4, textDirection: 'auto', preferLooseListItem: true, listIndentation: '1', tableAlignColumns: false, markdown, basePath: '/tmp', loadId: 1 };
-  await page.evaluateOnNewDocument(`(()=>{const ls=[];window.__marks={};window.__print=null;
+  const browser = await puppeteer.launch({ executablePath: process.env.CHROME || '/opt/google/chrome/chrome', headless: 'new', args: ['--no-sandbox'], protocolTimeout: 180000 });
+  const page = await browser.newPage(); await page.setViewport({ width: 794, height: 1123 });
+  const dark = fs.readFileSync(path.join(statics, 'theme/editor/dark.theme.css'), 'utf8');
+  const settings = { fontSize: 16, lineHeight: 1.6, editorAreaWidth: '900px', tabSize: 4, textDirection: 'auto', preferLooseListItem: true, listIndentation: '1', tableAlignColumns: false, readOnly: false, markdown, basePath: '/tmp', loadId: 1, themeCss: dark };
+  await page.evaluateOnNewDocument(`(()=>{const ls=[];window.__marks={};
     window.__deliver=(n,a)=>ls.forEach(l=>l({data:JSON.stringify({name:n,args:a})}));
-    const resp={GetSettings:${JSON.stringify(settings)},GetCurrentTheme:{theme:'Light',accentColor:{r:0,g:120,b:212,a:1},background:{R:249,G:249,B:249,A:1}},ContentLoaded:'',GetStringResources:{}};
+    const resp={GetSettings:${JSON.stringify(settings)},GetCurrentTheme:{theme:'Dark',accentColor:{r:0,g:120,b:212,a:1},background:{R:40,G:40,B:40,A:1}},ContentLoaded:'',GetStringResources:{}};
     window.chrome={webview:{addEventListener:(t,l)=>ls.push(l),dispatchEvent:(e)=>ls.forEach(l=>l(e)),postMessage:(raw)=>{const m=JSON.parse(raw);window.__marks[m.name]=1;
-      if(m.type==='invoke'&&m.name==='PrintHTML'){window.__print=m.args;}
       if(m.type==='invoke'){setTimeout(()=>window.__deliver(m.id,{code:0,data:m.name in resp?resp[m.name]:null}),0);}}}}})()`);
   await page.goto(`http://127.0.0.1:${port}/index.html`, { waitUntil: 'load' });
-  await page.waitForFunction(() => window.__marks.FileLoaded, { timeout: 60000 });
-  await page.evaluate(() => window.__deliver('Export', { type: 'print', context: 1, basePath: '/tmp', title: 'Print', options: { printOptimization: true } }));
-  await page.waitForFunction(() => window.__print, { timeout: 60000 });
-  const html = await page.evaluate(() => typeof window.__print === 'string' ? JSON.parse(window.__print).html : window.__print.html);
-
-  const paper = await browser.newPage(); await paper.setViewport({ width: 794, height: 1123 }); // A4 at 96dpi
-  await paper.emulateMediaType('print');
-  await paper.setContent(html, { waitUntil: 'load' });
-  const blocks = await paper.evaluate(() => Array.from(document.querySelectorAll('pre')).map(pre => {
-    const code = pre.querySelector('code') || pre;
-    return { overflow: pre.scrollWidth - pre.clientWidth, wrap: getComputedStyle(code).whiteSpace, lines: Math.round(code.getBoundingClientRect().height / parseFloat(getComputedStyle(code).lineHeight || '20')) };
-  }));
-  for (const b of blocks) console.log(`  code block: ${b.overflow > 0 ? `${b.overflow}px wider than its box` : 'fits'}, white-space ${b.wrap}, about ${b.lines} lines`);
-  const ok = blocks.length >= 2 && blocks.every(b => b.overflow <= 0);
-  console.log(ok ? 'OK: every code block fits the printed page' : 'FAIL: a code block is cut off on paper');
+  await page.waitForFunction(() => window.__marks.FileLoaded, { timeout: 120000 });
+  await new Promise(r => setTimeout(r, 1500));
+  // Click into a paragraph so a block is active, the way a reader who prints mid-edit has one.
+  await page.click('#ag-editor-id p');
+  await new Promise(r => setTimeout(r, 300));
+  const screen = await page.evaluate(() => ({ chrome: Array.from(document.querySelectorAll('.ag-front-icon, .ag-tool-bar, .ag-drag-handler')).filter(e => getComputedStyle(e).display !== 'none').length, longDoc: document.getElementById('editor').classList.contains('ag-long-document') }));
+  await page.evaluate(() => { (document.activeElement || {}).blur?.(); });
+  await page.emulateMediaType('print');
+  await new Promise(r => setTimeout(r, 500));
+  const r = await page.evaluate(() => {
+    const root = document.getElementById('ag-editor-id');
+    const visible = (sel) => Array.from(document.querySelectorAll(sel)).filter(e => { const s = getComputedStyle(e); return s.display !== 'none' && s.visibility !== 'hidden'; }).length;
+    const blocks = Array.from(root.children);
+    const last = blocks[blocks.length - 3];
+    const bg = getComputedStyle(document.body).backgroundColor;
+    const pre = root.querySelector('pre');
+    return {
+      chrome: visible('.ag-front-icon, .ag-tool-bar, .ag-drag-handler, .ag-gray, .ag-remove'),
+      lastBlockHeight: last ? last.getBoundingClientRect().height : 0,
+      cv: last ? getComputedStyle(last).contentVisibility : null,
+      bg,
+      codeOverflow: pre ? pre.scrollWidth - pre.clientWidth : null,
+      blocks: blocks.length,
+    };
+  });
+  console.log(`  on screen: ${screen.chrome} editing controls visible, long-document rule ${screen.longDoc ? 'on' : 'off'}`);
+  console.log(`  in print media: ${r.chrome} editing controls visible, body ${r.bg}, block ${r.blocks - 2} of ${r.blocks} is ${Math.round(r.lastBlockHeight)}px tall (content-visibility ${r.cv}), code block ${r.codeOverflow > 0 ? `${r.codeOverflow}px wider than its box` : 'fits'}`);
+  const ok = r.chrome === 0 && r.lastBlockHeight > 0 && /255, 255, 255/.test(r.bg) && r.codeOverflow <= 0 && screen.longDoc;
+  console.log(ok ? 'OK: the page prints as the reader sees it, without the editing chrome, every block laid out' : 'FAIL');
   await browser.close(); server.close(); process.exit(ok ? 0 : 1);
 })().catch(e => { console.error(e); process.exit(1); });

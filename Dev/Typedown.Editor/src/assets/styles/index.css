@@ -1339,3 +1339,47 @@ span.ag-footnote-backlink {
   cursor: pointer;
   z-index: 100;
 }
+/* Printing prints this page — what the reader sees, in the editor's own theme — not an export rendered
+   with another stylesheet (which is what "the print does not look like the document" was). The editing
+   chrome goes; every block is laid out (the off-screen rule would print blanks); paper is white. */
+@media print {
+  html, body, #editor, #ag-editor-id {
+    background: #fff !important;
+    color: #000 !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  #editor {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: none !important;
+  }
+  #editor.ag-long-document #ag-editor-id > * {
+    content-visibility: visible;
+    contain-intrinsic-size: auto none;
+  }
+  .ag-front-icon,
+  .ag-tool-bar,
+  .ag-drag-handler,
+  .ag-gray,
+  .ag-remove,
+  .ag-hide,
+  .ag-show-quick-insert-hint .ag-paragraph:empty::after {
+    display: none !important;
+  }
+  #ag-editor-id > * {
+    break-inside: avoid;
+  }
+  #ag-editor-id h1, #ag-editor-id h2, #ag-editor-id h3 {
+    break-after: avoid;
+  }
+  #ag-editor-id pre,
+  #ag-editor-id pre code,
+  #ag-editor-id pre[class*="language-"],
+  #ag-editor-id pre[class*="language-"] > code {
+    white-space: pre-wrap;
+    word-break: break-all;
+    overflow-wrap: anywhere;
+    overflow: visible;
+  }
+}
