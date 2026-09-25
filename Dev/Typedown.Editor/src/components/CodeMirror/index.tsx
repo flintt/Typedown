@@ -20,6 +20,7 @@ interface ICodeMirrorEditor {
     /** Fired once host content has been pushed into the editor (see the FileLoaded handshake in Editor). */
     onContentApplied?: () => void
     onCursorChange: (cursor: any) => void
+    onStateChange: (state: any) => void
     onSearchArgChange: (arg: { value: string, opt: any } | undefined) => void
 }
 
@@ -219,7 +220,7 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
         const wordCount = { character: value.length, word: value.split(' ').length }
         const { toc } = getTOC(value)
         const state = { wordCount, toc, cur: toc[0] }
-        transport.postMessage('StateChange', { state, codeMirror: true })
+        props.onStateChange(state)
     }, [])
 
     const handleCodeMirrorContent = useCallback((cm: any, data: any, value: string) => {

@@ -31,6 +31,8 @@ interface IMuyaEditor {
     /** Fired once host content has been pushed into the editor (see the FileLoaded handshake in Editor). */
     onContentApplied?: () => void
     onCursorChange: (cursor: any) => void
+    /** Reports the outline, word count and caret line. The shell tags it with the load it belongs to. */
+    onStateChange: (state: { wordCount: any, toc: any[], cur: any }) => void
     onSearchArgChange: (arg: { value: string, opt: any } | undefined) => void
 }
 
@@ -488,7 +490,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         props.onCursorChange(cursor)
 
         // StateChange 必须在 onMarkdownChange、onCursorChange 之后发送，否则会导致编辑器内容/光标不同步
-        transport.postMessage('StateChange', { state: { wordCount, toc, cur }, muya: true });
+        props.onStateChange({ wordCount, toc, cur })
     }), [editor, props])
 
     // Declared after the change handler on purpose: effects run in the order they are written, so by the

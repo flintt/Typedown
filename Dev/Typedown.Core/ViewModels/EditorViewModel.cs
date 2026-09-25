@@ -283,24 +283,44 @@ namespace Typedown.Core.ViewModels
         /// </summary>
         private string appliedCurSlug;
 
+        /// <summary>
+        /// True while the outline is being rebuilt from a report. The tree is bound to the collection being
+        /// rewritten, and its own selection writes back into these items as it goes — selections this class
+        /// caused, not ones anybody chose. Jumping on them scrolled the document away and re-entered the
+        /// rebuild, which is what crashed when two tabs were switched between quickly.
+        /// </summary>
+        private bool rebuildingToc;
+
         public void OnStateChange(JToken arg)
         {
+            // A report describes the document that was loaded when it was made. Switch tabs quickly and the
+            // previous document's report arrives after the new one is open: its outline is of a document no
+            // longer on screen, and every heading in it is a place the editor cannot go.
+            if (IsStaleReport(arg)) return;
             contentUpdating = false;
             ContentState = arg["state"].ToObject<ContentState>();
-            if (ContentState.Cur != null)
+            rebuildingToc = true;
+            try
             {
-                appliedCurSlug = ContentState.Cur.Slug;
-                ContentState.Toc.ForEach(x =>
+                if (ContentState.Cur != null)
                 {
-                    x.IsSelected = x.Slug == ContentState.Cur.Slug;
-                    // Clicking is handled by the tree's ItemInvoked, which jumps even to the heading already
-                    // selected (upstream #59); this is for the selection moving by keyboard.
-                    x.SelectedChanged += (s, b) => { if (b && x.Slug != appliedCurSlug) JumpBySlug(x.Slug); };
-                });
+                    appliedCurSlug = ContentState.Cur.Slug;
+                    ContentState.Toc.ForEach(x =>
+                    {
+                        x.IsSelected = x.Slug == ContentState.Cur.Slug;
+                        // Clicking is handled by the tree's ItemInvoked, which jumps even to the heading already
+                        // selected (upstream #59); this is for the selection moving by keyboard.
+                        x.SelectedChanged += (s, b) => { if (b && !rebuildingToc && x.Slug != appliedCurSlug) JumpBySlug(x.Slug); };
+                    });
+                }
+                Toc.UpdateChildren(ContentState.Toc);
+                if (Settings.TocAutoExpand)
+                    Toc.ExpandToSelected();
             }
-            Toc.UpdateChildren(ContentState.Toc);
-            if (Settings.TocAutoExpand)
-                Toc.ExpandToSelected();
+            finally
+            {
+                rebuildingToc = false;
+            }
         }
 
         public void OnSearch()

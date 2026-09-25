@@ -75,6 +75,15 @@ const Editor: React.FC = () => {
         }
     }, [flushFileLoaded])
 
+    // The outline, the word count and the caret line, tagged with the load they describe. Without the tag
+    // the host cannot tell a report about the document just left from one about the document now shown, and
+    // a quick switch left it holding the previous document's outline — headings that are not in the
+    // document on screen, which it then tried to scroll to.
+    const onStateChange = useCallback((state: any) => {
+        if (fileLoadPending.current && !fileLoadPending.current.armed) return
+        transport.postMessage('StateChange', { state, loadId: loadIdRef.current, muya: true })
+    }, [])
+
     const onCursorChange = useCallback((cursor: any) => {
         if (fileLoadPending.current && !fileLoadPending.current.armed) return
         cursorRef.current = cursor
@@ -179,6 +188,7 @@ const Editor: React.FC = () => {
                 scrollFromHostRef={scrollFromHostRef}
                 onMarkdownChange={onMarkdownChange}
                 onContentApplied={onContentApplied}
+                onStateChange={onStateChange}
                 onCursorChange={onCursorChange}
                 onSearchArgChange={setSearchArg}
             />
@@ -197,6 +207,7 @@ const Editor: React.FC = () => {
                 flushRef={flushRef}
                 onMarkdownChange={onMarkdownChange}
                 onContentApplied={onContentApplied}
+                onStateChange={onStateChange}
                 onCursorChange={onCursorChange}
                 onSearchArgChange={setSearchArg}
             />
