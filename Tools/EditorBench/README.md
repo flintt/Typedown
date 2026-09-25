@@ -56,6 +56,10 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   scroll position instead; this scrolls a read-only document and checks the reported heading moves with it
   and comes back. It also decodes the diff protocol `transport.postMessage` uses — `StateChange` arrives as a
   fragment plus a range, not as an object, and a harness that reads `args.state` straight off it sees nothing.
+- `background-quiet-check.js` — a document kept in memory must not answer events meant for the one on
+  screen. Every editor binds handlers to `document`, and a kept one still holds what was selected in it when
+  it was left: a Backspace would have deleted an image in a document nobody was looking at. It checks the
+  same events *do* reach that editor once it is shown again, so it cannot pass by dispatching into nothing.
 - `tab-switch-check.js` — switching tabs between a long document and an ordinary one, both directions.
   `--big`, `--small`, `--rounds`. It reports **blocked time**, not only when the content appears: what a
   reader feels is how long the window stops answering, and work that lands after the content does still

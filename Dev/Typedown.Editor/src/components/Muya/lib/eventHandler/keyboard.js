@@ -100,6 +100,12 @@ class Keyboard {
   keydownBinding() {
     const { container, eventCenter, contentState } = this.muya
     const docHandler = event => {
+      // A document kept in memory while another is shown is still an editor with these handlers bound, and
+      // it still holds whatever was selected in it when it was left — an image selected there would be
+      // deleted by a Backspace meant for the document actually on screen. Only the one in the page answers.
+      if (!this.muya.container.isConnected) {
+        return
+      }
       if (this.muya.options.readOnly) {
         return
       }
