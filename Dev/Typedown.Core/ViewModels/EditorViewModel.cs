@@ -305,6 +305,13 @@ namespace Typedown.Core.ViewModels
         private string pendingOutlineSlug;
         private JToken pendingOutlineWhere;
 
+        /// <summary>
+        /// Raised with the slug of the heading just marked in the outline. The outline pane brings that row
+        /// into view: with the page following the reader, the mark ran off the bottom of the pane about
+        /// two-thirds of the way through a fifty-heading report and looked as if it had disappeared.
+        /// </summary>
+        public event Action<string> OutlineHighlighted;
+
         public void OnStateChange(JToken arg)
         {
             // Cleared whatever the report describes: it means the editor has answered, and leaving it set
@@ -345,6 +352,8 @@ namespace Typedown.Core.ViewModels
             {
                 rebuildingToc = false;
             }
+            if (ContentState.Cur != null && pendingOutlineSlug == null)
+                OutlineHighlighted?.Invoke(ContentState.Cur.Slug);
             if (pendingOutlineSlug != null)
             {
                 var slug = pendingOutlineSlug;
@@ -379,13 +388,22 @@ namespace Typedown.Core.ViewModels
                 return;
             }
             if (appliedCurSlug == slug) return;
-            appliedCurSlug = slug;
             var match = ContentState.Toc.FirstOrDefault(x => x.Slug == slug);
             var where = arg["where"];
             var at = where == null ? "" : where["jump"] != null ? $" [jumped to it, scrollY={where["y"]}]" : $" [scrollY={where["y"]}, heading {where["index"]}/{where["of"]} at {where["top"]}]";
-            Log.Debug(match == null
-                ? $"outline: heading {slug} is not among the {ContentState.Toc.Count} entries{at}"
-                : $"outline: now on {match.Content}{at}");
+            if (match == null)
+            {
+                // The document was rebuilt (a reload, a switch back to this tab) and the page named a heading
+                // by its new key before the outline with the new keys got here. Marking "none of these" left
+                // the outline blank; the report is kept for the outline that is on its way, like one that
+                // arrives before any outline at all.
+                pendingOutlineSlug = slug;
+                pendingOutlineWhere = where;
+                Log.Debug($"outline: heading {slug} is not among the {ContentState.Toc.Count} entries{at}; kept for the next outline");
+                return;
+            }
+            appliedCurSlug = slug;
+            Log.Debug($"outline: now on {match.Content}{at}");
             rebuildingToc = true;
             try
             {
@@ -398,6 +416,7 @@ namespace Typedown.Core.ViewModels
             {
                 rebuildingToc = false;
             }
+            OutlineHighlighted?.Invoke(slug);
         }
 
         public void OnSearch()
