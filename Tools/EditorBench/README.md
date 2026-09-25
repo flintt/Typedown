@@ -57,6 +57,12 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   does not move the page. Its fake host is hostile on purpose — it scrolls to whatever `cur` a state report
   carries, which is what the first attempt fed it, so a heading routed back through that report starts the
   loop and the check sees the page moving on its own.
+- `theme-contrast-check.js` — inline code, table borders and dividers have to be visible against the page in
+  each bundled theme: colours are composited the way the browser paints them and compared as contrast
+  ratios. Light inline code was white at 70% on a near-white page (ratio 1.05), dark table borders 1.25;
+  two Store reviews. Inline code now has its own variable, `--inlineCodeBgColor`, falling back to the
+  code-block colour for themes without it. The style baselines were re-recorded for this: the fixture's
+  `==highlight==` renders as `<mark>` now and the inline-code fill changed, nothing else moved.
 - `anchor-link-check.js` — a link to a place in the same document: Ctrl+click while editing, plain click in
   reading mode, and the heading the fragment names lands at the top. Fragments are slugs of the heading text
   the way the export names them, may be percent-encoded, and duplicates number the same way. Two things

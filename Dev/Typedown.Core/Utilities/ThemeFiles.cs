@@ -225,6 +225,7 @@ namespace Typedown.Core.Utilities
   --editorColor: #073642;
   --codeBgColor: #eee8d5;
   --codeBlockBgColor: #eee8d5;
+  --inlineCodeBgColor: rgba(0, 0, 0, .075);
   --tableBorderColor: #e0dbc8;
   --floatBgColor: #fdf6e3;
   --itemBgColor: #eee8d5;

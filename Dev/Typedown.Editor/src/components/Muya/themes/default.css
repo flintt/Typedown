@@ -548,7 +548,10 @@ kbd {
   span code,
   td code,
   th code {
-    background-color: var(--codeBlockBgColor);
+    /* Its own colour: the code-block colour is meant to sit inside a border, and on the light theme it was
+       white at 70% on a near-white page — inline code could not be told from the text around it. Themes
+       without the variable keep the old one. */
+    background-color: var(--inlineCodeBgColor, var(--codeBlockBgColor));
     border-radius: 3px;
     padding: 0;
     /*font-family: Menlo, Monaco, Consolas, "Courier New", monospace;*/
