@@ -131,12 +131,70 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         search(props.searchArg)
     }, [editor, props.searchArg, search])
 
+    // One window has one editor, so switching tabs used to mean building the other document from scratch —
+    // parsing it and creating a hundred thousand elements, seconds of it for a long document. A document that
+    // has already been built is kept instead: its element is taken out of the page rather than thrown away,
+    // and put back when the reader returns to it. A detached subtree costs the browser nothing to keep, so
+    // what this spends is memory, and the two limits below are what bounds it: how many documents, and how
+    // much text between them. Every document is worth keeping — rebuilding even a twenty-thousand-character
+    // one costs half a second of a window that does not answer — so the size limit is on the total, not on
+    // each one, and it is what stops a few very long documents adding up.
+    const maxKept = 2
+    const maxKeptChars = 800000
+
+    const hostRef = useRef<HTMLDivElement>(null)
+    type Doc = { muya: any, element: HTMLElement, markdown: string }
+    const activeRef = useRef<Doc | null>(null)
+    const keptRef = useRef<Doc[]>([])
+
+    // Several of Muya's setters re-render the whole document, which is fine once but ruinous when the active
+    // instance changes and every settings effect runs again against a document that is already correct —
+    // four full re-renders of a hundred thousand elements. Each instance remembers what has been applied to
+    // it, so a setting is only pushed when it has actually changed for that instance.
+    const applyOnce = (muya: any, key: string, value: unknown, apply: () => void) => {
+        if (!muya) return
+        const applied = muya.__applied || (muya.__applied = {})
+        const encoded = JSON.stringify(value ?? null)
+        if (applied[key] === encoded) return
+        applied[key] = encoded
+        apply()
+    }
+
+    const createDoc = useCallback((): Doc => {
+        const seed = document.createElement('div')
+        seed.id = 'editor'
+        hostRef.current?.appendChild(seed)
+        // Muya replaces the element it is handed with its own, which inherits the attributes; that one is
+        // what has to be detached and put back, so take it from the instance rather than keeping the seed.
+        const o = optionsRef.current
+        const muya = new Muya(seed, o)
+        // The constructor already built the document with these, so they count as applied.
+        ;(muya as any).__applied = {
+            font: JSON.stringify({ fontSize: o?.fontSize, lineHeight: o?.lineHeight }),
+            direction: JSON.stringify(o?.textDirection ?? null),
+            spellcheck: JSON.stringify(!!o?.spellcheckEnabled),
+            listIndentation: JSON.stringify(o?.listIndentation ?? null),
+            readOnly: JSON.stringify(!!o?.readOnly)
+        }
+        return { muya, element: muya.container, markdown: '' }
+    }, [])
+
+    const show = useCallback((doc: Doc) => {
+        const previous = activeRef.current
+        if (previous === doc) return
+        previous?.element.remove()
+        hostRef.current?.appendChild(doc.element)
+        activeRef.current = doc;
+        (window as any).__typedownMuya = doc.muya // for Tools/EditorBench and DevTools inspection
+        setEditor(doc.muya)
+    }, [])
+
     useEffect(() => {
-        const ele = document.getElementById('editor');
-        const muya = new Muya(ele, optionsRef.current);
-        (window as any).__typedownMuya = muya; // for Tools/EditorBench and DevTools inspection
-        setEditor(muya);
-        return () => muya.destroy()
+        const doc = createDoc()
+        show(doc)
+        const kept = keptRef.current
+        return () => { doc.muya.destroy(); kept.forEach(k => k.muya.destroy()); kept.length = 0 }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -150,22 +208,24 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     }, [editor, props.options.focusMode, props.options.readOnly])
 
     useEffect(() => {
-        editor?.setFont({ fontSize: props.options?.fontSize, lineHeight: props.options?.lineHeight })
+        const font = { fontSize: props.options?.fontSize, lineHeight: props.options?.lineHeight }
+        applyOnce(editor, 'font', font, () => editor?.setFont(font))
     }, [editor, props.options?.fontSize, props.options?.lineHeight])
 
     useEffect(() => {
-        editor?.setTextDirection(props.options?.textDirection)
+        applyOnce(editor, 'direction', props.options?.textDirection, () => editor?.setTextDirection(props.options?.textDirection))
     }, [editor, props.options?.textDirection])
 
     useEffect(() => {
         // Chromium/WebView2 spell checking on the contenteditable root (upstream #57)
-        editor?.setOptions({ spellcheckEnabled: !!props.options?.spellcheckEnabled })
+        const on = !!props.options?.spellcheckEnabled
+        applyOnce(editor, 'spellcheck', on, () => editor?.setOptions({ spellcheckEnabled: on }))
     }, [editor, props.options?.spellcheckEnabled])
 
     useEffect(() => {
         // Muya: 'dfm' = 4-space nested indentation, otherwise the number of spaces after the list marker (1-4).
         const value = props.options?.listIndentation
-        editor?.setListIndentation(value === 'dfm' ? 'dfm' : (parseInt(value, 10) || 1))
+        applyOnce(editor, 'listIndentation', value, () => editor?.setListIndentation(value === 'dfm' ? 'dfm' : (parseInt(value, 10) || 1)))
     }, [editor, props.options?.listIndentation])
 
     useEffect(() => transport.addListener<{ slug: string }>('ScrollTo', ({ slug }) => {
@@ -389,6 +449,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         markdownRef.current = markdown;
         markLongDocument()
         lastStateRef.current = { wordCount, toc }
+        if (activeRef.current) activeRef.current.markdown = markdown
         headingsRef.current = null
         readingSlugRef.current = cur?.slug ?? null
 
@@ -443,7 +504,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         editor?.container?.setAttribute('contenteditable', String(!readOnly))
         // Re-render so the Markdown markers and the editing affordances of the active block disappear (and come
         // back with the caret when reading mode is switched off) instead of waiting for the next edit.
-        editor?.contentState?.render(!readOnly, true)
+        applyOnce(editor, 'readOnly', readOnly, () => editor?.contentState?.render(!readOnly, true))
     }, [editor, props.options?.readOnly])
 
     useEffect(() => {
@@ -461,68 +522,104 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         cursorRef.current = props.cursor
     }, [props.cursor])
 
-    useEffect(() => {
-        if (!editor) return
-        if (markdownRef.current != props.markdown) {
-            // The editor normalizes what it is given, and the host hands that normalized text back; applying it
-            // again would be a second load — and a second load scrolls to the caret, which is why switching
-            // tabs could jump to the top of the document a moment after landing in the right place.
-            if (editor.getMarkdown() === props.markdown) {
-                markdownRef.current = props.markdown
-                props.onContentApplied?.()
-                return
+    // Puts the page back where the document was left and keeps it there while the layout settles. Shared by
+    // both ways a document arrives: rebuilt from its text, or restored from the one kept in memory.
+    const settleScroll = useCallback((scrollTop: number, keepScroll: boolean) => {
+        window.scrollTo(window.scrollX, scrollTop)
+        if (!keepScroll) scrollToCursorIfInvisible()
+        // Laying a long document out goes on for a while after the first paint, and the page can be put
+        // back to the top by that work with nobody scrolling it — which is what made switching tabs show
+        // the top of the document for a moment. Keep putting it back until the layout has settled, or
+        // until the reader scrolls themselves.
+        if (keepScroll && scrollTop > 0) {
+            // Counted in frames, not milliseconds: laying out a long document blocks the main thread for
+            // whole seconds, and a deadline in wall-clock time would expire while nothing could run.
+            // It also runs to the end of its budget rather than stopping at the first few steady frames:
+            // the position holds from the first paint and is knocked to the top a second or two later,
+            // when the last of the layout lands, so an early stop means the watch is already over.
+            let frames = 40
+            let done = false
+            // The knock arrives as a scroll event, so answer it there as well as on the next frame:
+            // during the layout a frame can be a hundred milliseconds long, and that is a hundred
+            // milliseconds of looking at the top of the document. Correcting puts scrollY back where it
+            // belongs, so the event this fires in turn finds nothing to do.
+            const putBack = () => { if (!done && Math.abs(window.scrollY - scrollTop) > 2) window.scrollTo(window.scrollX, scrollTop) }
+            const stop = () => {
+                done = true
+                window.removeEventListener('scroll', putBack)
+                window.removeEventListener('wheel', stop)
+                window.removeEventListener('keydown', stop)
             }
-            markdownRef.current = props.markdown
-            markLongDocument(props.markdown)
-            editor.setMarkdown(props.markdown, cursorRef.current)
-            const scrollTop = props.scrollTopRef.current;
-            const keepScroll = !!props.scrollFromHostRef?.current
-            window.scrollTo(window.scrollX, scrollTop)
-            if (!keepScroll) scrollToCursorIfInvisible()
-            // Laying a long document out goes on for a while after the first paint, and the page can be put
-            // back to the top by that work with nobody scrolling it — which is what made switching tabs show
-            // the top of the document for a moment. Keep putting it back until the layout has settled, or
-            // until the reader scrolls themselves.
-            if (keepScroll && scrollTop > 0) {
-                // Counted in frames, not milliseconds: laying out a long document blocks the main thread for
-                // whole seconds, and a deadline in wall-clock time would expire while nothing could run.
-                // It also runs to the end of its budget rather than stopping at the first few steady frames:
-                // the position holds from the first paint and is knocked to the top a second or two later,
-                // when the last of the layout lands, so an early stop means the watch is already over.
-                let frames = 40
-                let done = false
-                // The knock arrives as a scroll event, so answer it there as well as on the next frame:
-                // during the layout a frame can be a hundred milliseconds long, and that is a hundred
-                // milliseconds of looking at the top of the document. Correcting puts scrollY back where it
-                // belongs, so the event this fires in turn finds nothing to do.
-                const putBack = () => { if (!done && Math.abs(window.scrollY - scrollTop) > 2) window.scrollTo(window.scrollX, scrollTop) }
-                const stop = () => {
-                    done = true
-                    window.removeEventListener('scroll', putBack)
-                    window.removeEventListener('wheel', stop)
-                    window.removeEventListener('keydown', stop)
-                }
-                const hold = () => {
-                    if (done) return
-                    if (frames-- <= 0) return stop()
-                    putBack()
-                    requestAnimationFrame(hold)
-                }
-                window.addEventListener('scroll', putBack, { passive: true })
-                window.addEventListener('wheel', stop, { once: true, passive: true })
-                window.addEventListener('keydown', stop, { once: true })
+            const hold = () => {
+                if (done) return
+                if (frames-- <= 0) return stop()
+                putBack()
                 requestAnimationFrame(hold)
             }
-            setTimeout(() => {
-                window.scrollTo(window.scrollX, scrollTop)
-                if (!keepScroll) scrollToCursorIfInvisible()
-                if (props.scrollFromHostRef) props.scrollFromHostRef.current = false
-                search(searchArgRef.current)
-            }, 100);
+            window.addEventListener('scroll', putBack, { passive: true })
+            window.addEventListener('wheel', stop, { once: true, passive: true })
+            window.addEventListener('keydown', stop, { once: true })
+            requestAnimationFrame(hold)
         }
+        setTimeout(() => {
+            window.scrollTo(window.scrollX, scrollTop)
+            if (!keepScroll) scrollToCursorIfInvisible()
+            if (props.scrollFromHostRef) props.scrollFromHostRef.current = false
+            search(searchArgRef.current)
+        }, 100);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props.scrollFromHostRef, scrollToCursorIfInvisible, search])
+
+    useEffect(() => {
+        const active = activeRef.current
+        if (!editor || !active) return
+        if (markdownRef.current === props.markdown) { props.onContentApplied?.(); return }
+        // The editor normalizes what it is given, and the host hands that normalized text back; applying it
+        // again would be a second load — and a second load scrolls to the caret, which is why switching
+        // tabs could jump to the top of the document a moment after landing in the right place.
+        if (editor.getMarkdown() === props.markdown) {
+            markdownRef.current = props.markdown
+            props.onContentApplied?.()
+            return
+        }
+        markdownRef.current = props.markdown
+        const scrollTop = props.scrollTopRef.current
+        const keepScroll = !!props.scrollFromHostRef?.current
+
+        // Is this one of the documents still in memory? Its text is kept current by every change report, so
+        // matching it means the elements on hand are exactly what building the text again would produce.
+        const kept = keptRef.current
+        const found = kept.findIndex(d => d.markdown === props.markdown)
+        if (found >= 0) {
+            const doc = kept.splice(found, 1)[0]
+            if (active.markdown.length > 0) kept.push(active)
+            show(doc)
+            markLongDocument(props.markdown)
+            // Nothing changed, so no report would follow on its own — and the host waits for one to know the
+            // load finished. Asking for it also refreshes the word count and the outline for this document.
+            doc.muya.dispatchChange()
+            settleScroll(scrollTop, keepScroll)
+            props.onContentApplied?.()
+            return
+        }
+
+        // A new document: keep the one being left, and build the new one beside it. An empty editor — the one
+        // the window starts with, before any file is open — is not a document and is reused rather than kept.
+        let target = active
+        if (active.markdown.length > 0 && !kept.includes(active)) {
+            kept.push(active)
+            const total = () => kept.reduce((n, d) => n + d.markdown.length, 0)
+            while (kept.length > maxKept || (kept.length > 1 && total() > maxKeptChars)) kept.shift()!.muya.destroy()
+            target = createDoc()
+            show(target)
+        }
+        markLongDocument(props.markdown)
+        target.markdown = props.markdown
+        target.muya.setMarkdown(props.markdown, cursorRef.current)
+        settleScroll(scrollTop, keepScroll)
         props.onContentApplied?.()
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [editor, props.markdown, props.contentVersion, props.scrollTopRef, scrollToCursorIfInvisible, scrollToElementIfInvisible, search])
+    }, [editor, props.markdown, props.contentVersion, props.scrollTopRef, settleScroll, show, createDoc, markLongDocument])
 
     useEffect(() => {
         try {
@@ -546,7 +643,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             lineHeight: props.options?.lineHeight,
             fontFamily: props.options?.fontFamily ? `${props.options.fontFamily}, "Open Sans", "Segoe UI", sans-serif` : undefined
         }}>
-            <div id="editor" />
+            <div ref={hostRef} />
         </div>
     )
 

@@ -31,34 +31,48 @@ const median = (a) => { const s = [...a].sort((x, y) => x - y); return s[Math.fl
   await page.waitForFunction(() => window.__marks.FileLoaded, { timeout: 180000 });
   await new Promise(r => setTimeout(r, 1500));
 
-  // One switch: deliver LoadFile and wait until the editor has the new text laid out (one animation frame
-  // after the DOM shows the expected number of top-level blocks).
+  // One switch: deliver LoadFile, wait until the editor has the new text laid out, then keep watching for a
+  // while. What a reader feels is not when the content appears but how long the window stops answering, so
+  // the blocked time is the number that matters — work that lands after the content does still counts.
   const switchTo = (text, blocks) => page.evaluate(async ([text, blocks]) => {
+    let blocked = 0, longest = 0;
+    const po = new PerformanceObserver(l => { for (const e of l.getEntries()) { blocked += e.duration; longest = Math.max(longest, e.duration) } });
+    po.observe({ entryTypes: ['longtask'] });
     const start = performance.now();
     window.__deliver('LoadFile', { text, basePath: '/tmp', cursor: null, scrollTop: 0, loadId: Date.now() });
     const root = () => document.querySelector('#ag-editor-id');
+    let shown = null;
     for (let i = 0; i < 2000; i++) {
       await new Promise(r => requestAnimationFrame(r));
-      if (root() && root().children.length === blocks) break;
+      if (shown === null && root() && root().children.length === blocks) shown = performance.now() - start;
+      if (shown !== null && performance.now() - start > shown + 2000) break;
     }
-    await new Promise(r => requestAnimationFrame(r));
-    return Math.round(performance.now() - start);
+    po.disconnect();
+    return { shown: Math.round(shown ?? -1), blocked: Math.round(blocked), longest: Math.round(longest) };
   }, [text, blocks]);
 
   const count = async () => page.evaluate(() => document.querySelector('#ag-editor-id').children.length);
+  // The editor normalizes the markdown it is given and the host stores what comes back, so a tab switch
+  // hands over the normalized text, not the file as written. Switching with anything else is a load of a
+  // different document — which is what the host would do too, and would miss a document held in memory.
+  const normalized = async () => page.evaluate(() => window.__typedownMuya.getMarkdown());
   const bigBlocks = await count();
+  const bigText = await normalized();
   await switchTo(small, 0).catch(() => 0); // prime; block count unknown yet
   const smallBlocks = await count();
+  const smallText = await normalized();
 
   const toSmall = [], toBig = [];
   for (let r = 0; r < rounds; r++) {
-    toBig.push(await switchTo(big, bigBlocks));
-    toSmall.push(await switchTo(small, smallBlocks));
+    toBig.push(await switchTo(bigText, bigBlocks));
+    toSmall.push(await switchTo(smallText, smallBlocks));
   }
-  const elements = await page.evaluate(() => document.querySelectorAll('#ag-editor-id *').length);
+  const heap = await page.evaluate(() => performance.memory ? Math.round(performance.memory.usedJSHeapSize / 1048576) : -1);
+  const line = (name, rows) => console.log(`  ${name.padEnd(26)}${String(median(rows.map(r => r.shown))).padStart(5)} ms${String(median(rows.map(r => r.blocked))).padStart(7)} ms${String(median(rows.map(r => r.longest))).padStart(7)} ms`);
   console.log(`big ${big.length} chars / ${bigBlocks} blocks, small ${small.length} chars / ${smallBlocks} blocks`);
-  console.log(`  switch to the big one     ${median(toBig)} ms   ${toBig.join(', ')}`);
-  console.log(`  switch back to the small  ${median(toSmall)} ms   ${toSmall.join(', ')}`);
-  console.log(`  elements now              ${elements}`);
+  console.log(`  ${''.padEnd(26)}shown  blocked  longest frame`);
+  line('switch to the big one', toBig);
+  line('switch back to the small', toSmall);
+  console.log(`  JS heap                   ${heap} MB`);
   await browser.close(); server.close();
 })().catch(e => { console.error(e); process.exit(1); });

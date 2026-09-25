@@ -56,8 +56,12 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   scroll position instead; this scrolls a read-only document and checks the reported heading moves with it
   and comes back. It also decodes the diff protocol `transport.postMessage` uses — `StateChange` arrives as a
   fragment plus a range, not as an object, and a harness that reads `args.state` straight off it sees nothing.
-- `tab-switch-check.js` — there is one editor and switching tabs re-loads the document into it, so this
-  measures both directions between a long document and an ordinary one. `--big`, `--small`, `--rounds`.
+- `tab-switch-check.js` — switching tabs between a long document and an ordinary one, both directions.
+  `--big`, `--small`, `--rounds`. It reports **blocked time**, not only when the content appears: what a
+  reader feels is how long the window stops answering, and work that lands after the content does still
+  counts — measuring up to first paint once had me reporting a win that could not be felt. It switches with
+  the text the editor reports back, not the file as written, because that is what the host stores and hands
+  over, and anything else is a load of a different document.
 - `legacy-issues.js` — the issues reported against the original Typedown, in one run: raw html renders with its
   inline CSS, a code block is in the saved markdown the moment it is typed, a table cell whose text is selected
   and deleted still takes input, PageUp/PageDown keep moving.

@@ -215,7 +215,10 @@ class StateRender {
     const children = blocks.map(block => {
       return this.renderBlock(null, block, activeBlocks, matches, true)
     })
-    const rootDom = document.querySelector(selector) || this.container
+    // Its own root, not whatever the document happens to hold: more than one editor can exist at a time
+    // (a document kept in memory while another is shown) and they all call their root ag-editor-id, so a
+    // global lookup would let a new editor render itself into the document that is still on screen.
+    const rootDom = this.container || document.querySelector(selector)
     if (fresh) {
       // Nothing of the old document survives, so there is nothing to diff: building the new one as a single
       // HTML string and letting the parser create the nodes is several times faster than creating a hundred
@@ -241,9 +244,8 @@ class StateRender {
     const html = toHTML(newVnode).replace(/^<section>([\s\S]+?)<\/section>$/, '$1')
 
     const needToRemoved = []
-    const firstOldDom = startKey
-      ? document.querySelector(`#${startKey}`)
-      : document.querySelector(`div#${CLASS_OR_ID.AG_EDITOR_ID}`).firstElementChild
+    const root = this.container || document.querySelector(`div#${CLASS_OR_ID.AG_EDITOR_ID}`)
+    const firstOldDom = startKey ? root.querySelector(`#${startKey}`) : root.firstElementChild
     if (!firstOldDom) {
       // TODO@Jocs Just for fix #541, Because I'll rewrite block and render method, it will nolonger have this issue.
       return
@@ -263,7 +265,7 @@ class StateRender {
     // Render cursor block independently
     if (needRenderCursorBlock) {
       const { key } = cursorOutMostBlock
-      const cursorDom = document.querySelector(`#${key}`)
+      const cursorDom = root.querySelector(`#${key}`)
       if (cursorDom) {
         const oldCursorVnode = toVNode(cursorDom)
         const newCursorVnode = this.renderBlock(null, cursorOutMostBlock, activeBlocks, matches)
@@ -286,7 +288,7 @@ class StateRender {
   singleRender(block, activeBlocks, matches) {
     const selector = `#${block.key}`
     const newVdom = this.renderBlock(null, block, activeBlocks, matches, true)
-    const rootDom = document.querySelector(selector)
+    const rootDom = (this.container || document).querySelector(selector)
     const oldVdom = toVNode(rootDom)
     patch(oldVdom, newVdom)
     this.renderMermaid()
