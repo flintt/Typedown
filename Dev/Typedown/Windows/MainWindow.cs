@@ -303,15 +303,29 @@ namespace Typedown.Windows
             Content = null;
             DataContext = null;
             disposables.Dispose();
-            if (!AppViewModel.GetInstances().Any())
+            // Whether this was the last window is read off the windows, not off the list of view models: that
+            // list is kept by weak references and emptied on disposal, and a view model not yet collected or
+            // not yet disposed counted as a live window. The process then stayed, headless, with the
+            // single-instance mutex — the installer could not replace its files, and the next launch handed
+            // its request to a process that showed nothing.
+            var others = XamlWindow.AllWindows.OfType<MainWindow>().Count(x => x != this);
+            var instances = AppViewModel.GetInstances().Count;
+            if (others == 0)
             {
                 if (keepRun)
+                {
+                    Log.Debug($"last window closed, staying (KeepRun on; {instances} view model(s) still referenced)");
                     Process.GetCurrentProcess().MaxWorkingSet = Process.GetCurrentProcess().MinWorkingSet;
+                }
                 else
                 {
-                    Log.Debug("last window closed, exiting");
+                    Log.Debug($"last window closed, exiting ({instances} view model(s) still referenced)");
                     XamlApplication.Current.Exit();
                 }
+            }
+            else
+            {
+                Log.Debug($"window closed, {others} other window(s) remain");
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.IO.Pipes;
 using System.Threading;
 using System.Threading.Tasks;
@@ -87,7 +88,22 @@ namespace Typedown
                     using var reader = new StreamReader(server);
                     using var writer = new StreamWriter(server);
                     var args = (await reader.ReadLineAsync()).Split("\0");
-                    var handle = await dispatcher.RunIdleAsync(() => Utilities.Common.OpenNewWindow(args));
+                    Log.Debug($"another launch handed its arguments to this process: {string.Join(" ", args.Skip(1))}");
+                    IntPtr handle;
+                    try
+                    {
+                        handle = await dispatcher.RunIdleAsync(() => Utilities.Common.OpenNewWindow(args));
+                    }
+                    catch (Exception ex)
+                    {
+                        // A process that cannot open a window any more (its files replaced under it by an
+                        // installer, say) must not keep the mutex: the launch that asked falls back to starting
+                        // afresh, and this one goes.
+                        Log.Debug($"could not open a window for another launch, exiting: {ex}");
+                        try { await writer.WriteLineAsync("0"); await writer.FlushAsync(); } catch { }
+                        Environment.Exit(1);
+                        return;
+                    }
                     await writer.WriteLineAsync(handle.ToString());
                     await writer.FlushAsync();
                 }
@@ -100,28 +116,30 @@ namespace Typedown
 
         internal static void OpenNewWindow()
         {
+            // Another process holds the mutex: ask it for a window. Bounded waits throughout — a process that
+            // holds the mutex but answers nothing (headless, hung, its files replaced) used to leave this
+            // launch waiting invisibly, which reads as "clicked the icon and no window came".
             try
             {
                 using var client = new NamedPipeClientStream(".", "Typedown.App.PiPe", PipeDirection.InOut);
-                client.Connect();
+                client.Connect(3000);
                 using var reader = new StreamReader(client);
                 using var writer = new StreamWriter(client);
                 writer.WriteLine(string.Join("\0", Environment.GetCommandLineArgs()));
                 writer.Flush();
-                try
+                var reply = reader.ReadLineAsync();
+                if (reply.Wait(TimeSpan.FromSeconds(10)) && long.TryParse(reply.Result, out var handle) && handle != 0)
                 {
-                    if (long.TryParse(reader.ReadLine(), out var handle))
-                        PInvoke.SetForegroundWindow((nint)handle);
+                    PInvoke.SetForegroundWindow((nint)handle);
+                    return;
                 }
-                catch
-                {
-                    // Ignore
-                }
+                Log.Debug("the running instance did not produce a window in time; starting afresh");
             }
-            catch
+            catch (Exception ex)
             {
-                LaunchNewApplication();
+                Log.Debug($"could not hand over to the running instance ({ex.GetType().Name}); starting afresh");
             }
+            LaunchNewApplication();
         }
     }
 }
