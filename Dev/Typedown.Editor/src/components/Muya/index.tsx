@@ -139,13 +139,17 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     // much text between them. Every document is worth keeping — rebuilding even a twenty-thousand-character
     // one costs half a second of a window that does not answer — so the size limit is on the total, not on
     // each one, and it is what stops a few very long documents adding up.
+    // A document is also let go once the reader has stopped going back to it: the memory is worth spending
+    // while two documents are being worked on together, not for one that was left behind half an hour ago.
     const maxKept = 2
     const maxKeptChars = 800000
+    const keepForMs = 180000
 
     const hostRef = useRef<HTMLDivElement>(null)
-    type Doc = { muya: any, element: HTMLElement, markdown: string }
+    type Doc = { muya: any, element: HTMLElement, markdown: string, leftAt: number }
     const activeRef = useRef<Doc | null>(null)
     const keptRef = useRef<Doc[]>([])
+    const keepingRef = useRef(true)
 
     // Several of Muya's setters re-render the whole document, which is fine once but ruinous when the active
     // instance changes and every settings effect runs again against a document that is already correct —
@@ -176,7 +180,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             listIndentation: JSON.stringify(o?.listIndentation ?? null),
             readOnly: JSON.stringify(!!o?.readOnly)
         }
-        return { muya, element: muya.container, markdown: '' }
+        return { muya, element: muya.container, markdown: '', leftAt: 0 }
     }, [])
 
     const show = useCallback((doc: Doc) => {
@@ -196,6 +200,29 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         return () => { doc.muya.destroy(); kept.forEach(k => k.muya.destroy()); kept.length = 0 }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    // Switched off, or on for the first time: the setting reaches the page as an ordinary option, and turning
+    // it off has to hand the memory back at once rather than at the next switch.
+    useEffect(() => {
+        keepingRef.current = props.options?.keepSwitchedDocuments !== false
+        if (!keepingRef.current) {
+            keptRef.current.forEach(d => d.muya.destroy())
+            keptRef.current.length = 0
+        }
+    }, [props.options?.keepSwitchedDocuments])
+
+    useEffect(() => {
+        const timer = window.setInterval(() => {
+            const now = Date.now()
+            const kept = keptRef.current
+            for (let i = kept.length - 1; i >= 0; i--) {
+                if (now - kept[i].leftAt < keepForMs) continue
+                kept.splice(i, 1)[0].muya.destroy()
+            }
+        }, 30000)
+        return () => window.clearInterval(timer)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     useEffect(() => {
         editor && Object.assign(editor.options, props.options)
@@ -592,8 +619,12 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         const found = kept.findIndex(d => d.markdown === props.markdown)
         if (found >= 0) {
             const doc = kept.splice(found, 1)[0]
-            if (active.markdown.length > 0) kept.push(active)
+            const keepOutgoing = active.markdown.length > 0 && keepingRef.current
+            if (keepOutgoing) { active.leftAt = Date.now(); kept.push(active) }
             show(doc)
+            // Only once it is off the page: destroying an editor whose element is still shown would take the
+            // document out from under the reader.
+            if (!keepOutgoing) active.muya.destroy()
             markLongDocument(props.markdown)
             // Nothing changed, so no report would follow on its own — and the host waits for one to know the
             // load finished. Asking for it also refreshes the word count and the outline for this document.
@@ -606,7 +637,8 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         // A new document: keep the one being left, and build the new one beside it. An empty editor — the one
         // the window starts with, before any file is open — is not a document and is reused rather than kept.
         let target = active
-        if (active.markdown.length > 0 && !kept.includes(active)) {
+        if (active.markdown.length > 0 && keepingRef.current && !kept.includes(active)) {
+            active.leftAt = Date.now()
             kept.push(active)
             const total = () => kept.reduce((n, d) => n + d.markdown.length, 0)
             while (kept.length > maxKept || (kept.length > 1 && total() > maxKeptChars)) kept.shift()!.muya.destroy()

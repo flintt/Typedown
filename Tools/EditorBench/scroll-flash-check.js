@@ -98,8 +98,12 @@ while (markdown.length < chars) markdown += section(++n) + '\n\n';
   for (const row of dom.slice(-8)) console.log(row.join('  '));
   console.log('--- who moved the page ---');
   for (const [ms, what, y, stack] of scrolls.slice(-14)) console.log(String(ms).padStart(6), what.padEnd(26), String(y).padStart(8), stack.slice(0, 150));
-  const firstFrame = samples.length ? samples[0][1] : null;
-  const flashed = samples.some(([, y]) => Math.abs(y - scrollTarget) > 200) && Math.abs(final - scrollTarget) <= 200;
-  console.log(flashed ? `FLASH: the page was somewhere else before settling (first frame at ${firstFrame})` : 'no flash: the restore held from the first frame');
+  // Only frames where the document is long enough to hold the offset count: before it is laid out the page
+  // is one viewport tall and sitting at zero, which is not the position being lost — there is nothing there
+  // yet. Counting those made a clean restore read as a flash.
+  const settled = samples.filter(([, , h]) => h > scrollTarget + 700);
+  const firstFrame = settled.length ? settled[0][1] : null;
+  const flashed = settled.some(([, y]) => Math.abs(y - scrollTarget) > 200) && Math.abs(final - scrollTarget) <= 200;
+  console.log(flashed ? `FLASH: the page was somewhere else before settling (first laid-out frame at ${firstFrame})` : `no flash: the restore held from the first laid-out frame (${settled.length} frames checked)`);
   await browser.close(); server.close();
 })().catch(e => { console.error(e); process.exit(1); });

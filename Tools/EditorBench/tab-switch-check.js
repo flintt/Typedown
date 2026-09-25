@@ -6,6 +6,8 @@ const puppeteer = require('puppeteer-core'); const http = require('http'); const
 const args = process.argv.slice(2);
 const at = (flag, fallback) => { const i = args.indexOf(flag); return i >= 0 ? Number(args[i + 1]) : fallback; };
 const bigChars = at('--big', 300000), smallChars = at('--small', 20000), rounds = at('--rounds', 3);
+// --keep 0 turns off keeping switched-away documents in memory, which is the setting's off position.
+const keep = at('--keep', 1) !== 0;
 const statics = path.resolve(process.env.STATICS || '../../Dev/Typedown/Resources/Statics');
 
 const server = http.createServer((req, res) => {
@@ -23,9 +25,11 @@ const median = (a) => { const s = [...a].sort((x, y) => x - y); return s[Math.fl
 
 (async () => {
   await new Promise(r => server.listen(0, r)); const port = server.address().port;
-  const browser = await puppeteer.launch({ executablePath: process.env.CHROME || '/opt/google/chrome/chrome', headless: 'new', args: ['--no-sandbox'] });
+  // --expose-gc so the heap can be read after a collection: without it the figure is mostly garbage that
+  // has not been collected yet, and switching with the keeping turned *off* reads higher than with it on.
+  const browser = await puppeteer.launch({ executablePath: process.env.CHROME || '/opt/google/chrome/chrome', headless: 'new', args: ['--no-sandbox', '--js-flags=--expose-gc'] });
   const page = await browser.newPage(); await page.setViewport({ width: 1000, height: 700 });
-  const settings = { fontSize: 16, lineHeight: 1.6, editorAreaWidth: '900px', tabSize: 4, textDirection: 'auto', preferLooseListItem: true, listIndentation: '1', tableAlignColumns: false, markdown: big, basePath: '/tmp' };
+  const settings = { fontSize: 16, lineHeight: 1.6, editorAreaWidth: '900px', tabSize: 4, textDirection: 'auto', preferLooseListItem: true, listIndentation: '1', tableAlignColumns: false, keepSwitchedDocuments: keep, markdown: big, basePath: '/tmp' };
   await page.evaluateOnNewDocument(`(()=>{const ls=[];window.__marks={};window.__loaded=0;window.__deliver=(n,a)=>ls.forEach(l=>l({data:JSON.stringify({name:n,args:a})}));const resp={GetSettings:${JSON.stringify(settings)},GetCurrentTheme:{theme:'Light',accentColor:{r:0,g:120,b:212,a:1},background:{R:249,G:249,B:249,A:1}},ContentLoaded:'',GetStringResources:{}};window.chrome={webview:{addEventListener:(t,l)=>ls.push(l),dispatchEvent:(e)=>ls.forEach(l=>l(e)),postMessage:(raw)=>{const m=JSON.parse(raw);window.__marks[m.name]=1;if(m.name==='FileLoaded')window.__loaded++;if(m.type==='invoke'){setTimeout(()=>window.__deliver(m.id,{code:0,data:m.name in resp?resp[m.name]:null}),0);}}}}})()`);
   await page.goto(`http://127.0.0.1:${port}/index.html`, { waitUntil: 'load' });
   await page.waitForFunction(() => window.__marks.FileLoaded, { timeout: 180000 });
@@ -67,12 +71,15 @@ const median = (a) => { const s = [...a].sort((x, y) => x - y); return s[Math.fl
     toBig.push(await switchTo(bigText, bigBlocks));
     toSmall.push(await switchTo(smallText, smallBlocks));
   }
-  const heap = await page.evaluate(() => performance.memory ? Math.round(performance.memory.usedJSHeapSize / 1048576) : -1);
+  const heap = await page.evaluate(async () => {
+    if (typeof window.gc === 'function') { window.gc(); await new Promise(r => setTimeout(r, 300)); window.gc() }
+    return performance.memory ? Math.round(performance.memory.usedJSHeapSize / 1048576) : -1;
+  });
   const line = (name, rows) => console.log(`  ${name.padEnd(26)}${String(median(rows.map(r => r.shown))).padStart(5)} ms${String(median(rows.map(r => r.blocked))).padStart(7)} ms${String(median(rows.map(r => r.longest))).padStart(7)} ms`);
-  console.log(`big ${big.length} chars / ${bigBlocks} blocks, small ${small.length} chars / ${smallBlocks} blocks`);
+  console.log(`big ${big.length} chars / ${bigBlocks} blocks, small ${small.length} chars / ${smallBlocks} blocks, keeping ${keep ? 'on' : 'off'}`);
   console.log(`  ${''.padEnd(26)}shown  blocked  longest frame`);
   line('switch to the big one', toBig);
   line('switch back to the small', toSmall);
-  console.log(`  JS heap                   ${heap} MB`);
+  console.log(`  JS heap (after a gc)      ${heap} MB`);
   await browser.close(); server.close();
 })().catch(e => { console.error(e); process.exit(1); });

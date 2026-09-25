@@ -157,6 +157,12 @@ namespace Typedown.Core.ViewModels
         public bool AutoCopyRelativePathImage { get => GetSettingValue(true); set => SetSettingValue(value); }
         public bool PreferRelativeImagePaths { get => GetSettingValue(false); set => SetSettingValue(value); }
         public bool AddSymbolBeforeRelativePath { get => GetSettingValue(false); set => SetSettingValue(value); }
+        /// <summary>
+        /// Keep a document that a tab switch moved away from built, instead of building it again on return.
+        /// Trades memory for the wait: a long document costs seconds to parse and lay out, and tens of
+        /// megabytes to hold. Off means every switch rebuilds.
+        /// </summary>
+        public bool KeepSwitchedDocuments { get => GetSettingValue(true); set => SetSettingValue(value); }
         public bool AutoEncodeImageURL { get => GetSettingValue(true); set => SetSettingValue(value); }
         public bool OpenFolderAfterExport { get => GetSettingValue(false); set => SetSettingValue(value); }
         public bool FileExportDatabaseInitialized { get => GetSettingValue(false); set => SetSettingValue(value); }
@@ -194,7 +200,8 @@ namespace Typedown.Core.ViewModels
             "AutoPairMarkdownSyntax",
             "EditorAreaWidth",
             "FontFamily",
-            "TextDirection"
+            "TextDirection",
+            "KeepSwitchedDocuments"
         };
 
         public SettingsViewModel(IServiceProvider serviceProvider)
