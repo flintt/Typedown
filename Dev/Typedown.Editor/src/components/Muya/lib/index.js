@@ -181,8 +181,24 @@ class Muya {
     return this.wordCountCache.value
   }
 
-  dispatchSelectionChange = () => {
+  // The report a load makes of itself. It is the same report as after an edit, except that the selection
+  // change carries a mark saying so: the caret has not moved, a document has arrived, and whoever keeps
+  // the caret in view must not treat it as a caret movement — see the selectionChange handler.
+  dispatchLoadChange = () => {
+    this.dispatchChangeContentChangeThrottled()
+    setTimeout(() => {
+      try {
+        this.dispatchSelectionChange(true)
+        this.dispatchSelectionFormats()
+      } catch (err) {
+        console.log(err)
+      }
+    })
+  }
+
+  dispatchSelectionChange = (fromLoad = false) => {
     const selection = this.contentState.selectionChange()
+    if (fromLoad) selection.fromLoad = true
     this.eventCenter.dispatch('selectionChange', selection)
   }
 
@@ -241,7 +257,7 @@ class Muya {
     // diff against it (see StateRender.render).
     this.contentState.render(isRenderCursor, false, true)
     setTimeout(() => {
-      this.dispatchChange()
+      this.dispatchLoadChange()
     }, 0)
   }
 

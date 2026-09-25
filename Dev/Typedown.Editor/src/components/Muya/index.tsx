@@ -337,6 +337,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     useEffect(() => {
         if (!editor || !props.options?.readOnly) return
         let frame = 0
+        let retries = 60
         const anchor = () => {
             frame = 0
             const root = editor.container?.querySelector?.('#ag-editor-id') || document.getElementById('ag-editor-id')
@@ -351,7 +352,13 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             // headings that have no box yet all sit at zero, which reads as "already scrolled past", and the
             // outline was seen to jump to the last heading, then the fifth, then the right one — all in the
             // first tenth of a second after opening. Positions in document order are what a real layout has.
-            for (let i = 1; i < tops.length; i++) if (tops[i] <= tops[i - 1]) return
+            // An unfinished one is looked at again next frame, for a while: giving up on it left the
+            // outline pointing at a place the page had merely passed through on its way somewhere else.
+            for (let i = 1; i < tops.length; i++) if (tops[i] <= tops[i - 1]) {
+                if (retries-- > 0) frame = requestAnimationFrame(anchor)
+                return
+            }
+            retries = 60
             let found = -1
             for (let i = 0; i < tops.length; i++) { if (tops[i] <= 0) found = i; else break }
             const chosen = found >= 0 ? found : 0
@@ -395,9 +402,15 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         const menuState = createApplicationMenuState(selection)
         const selectionText = window.getSelection()?.toString();
         transport.postMessage('SelectionChange', { selection, menuState, selectionText });
+        // Only a caret the reader moved is worth following. A load reports a selection too, through two
+        // timers, which on a long document fire a good while after the page has been put where the
+        // document was left — and following that "movement" took the page to wherever the caret had been
+        // remembered, the top of the document as often as not. That was the jump to the top after a tab
+        // switch, and in reading mode there is no caret to follow at all.
+        if (selection?.fromLoad || props.options?.readOnly) return
         const { y } = selection.cursorCoords
-        // Typewriter mode centres the caret line; in reading mode there is no caret to follow.
-        if (props.options?.typewriter && !props.options?.readOnly) {
+        // Typewriter mode centres the caret line.
+        if (props.options?.typewriter) {
             relativeScroll(y - window.innerHeight / 2 + 136);
         } else if (window.innerHeight - y < 100) {
             relativeScroll(y - window.innerHeight + 100);

@@ -80,7 +80,9 @@ while (markdown.length < chars) markdown += section(++n) + '\n\n';
       if (performance.now() - start < 6000) requestAnimationFrame(tick);
     };
     window.__msgs.length = 0;
-    window.__deliver('LoadFile', { text, basePath: '/tmp', scrollTop, loadId: 2 });
+    // With the caret the host remembers for the tab, at the top of the document — where it usually is,
+    // and where the page was seen to end up a moment after landing at the offset.
+    window.__deliver('LoadFile', { text, basePath: '/tmp', scrollTop, loadId: 2, cursor: { anchor: { line: 0, ch: 0 }, focus: { line: 0, ch: 0 } } });
     requestAnimationFrame(tick);
   }, markdown, scrollTarget);
 
@@ -104,6 +106,9 @@ while (markdown.length < chars) markdown += section(++n) + '\n\n';
   const settled = samples.filter(([, , h]) => h > scrollTarget + 700);
   const firstFrame = settled.length ? settled[0][1] : null;
   const flashed = settled.some(([, y]) => Math.abs(y - scrollTarget) > 200) && Math.abs(final - scrollTarget) <= 200;
-  console.log(flashed ? `FLASH: the page was somewhere else before settling (first laid-out frame at ${firstFrame})` : `no flash: the restore held from the first laid-out frame (${settled.length} frames checked)`);
+  // Ending somewhere else is worse than flashing: that is the tab switch that lands, then leaves.
+  const lost = Math.abs(final - scrollTarget) > 200;
+  console.log(lost ? `LOST: the page ended at ${final}, not ${scrollTarget}` : flashed ? `FLASH: the page was somewhere else before settling (first laid-out frame at ${firstFrame})` : `no flash: the restore held from the first laid-out frame (${settled.length} frames sampled)`);
   await browser.close(); server.close();
+  process.exit(lost || flashed ? 1 : 0);
 })().catch(e => { console.error(e); process.exit(1); });

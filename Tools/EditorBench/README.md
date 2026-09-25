@@ -57,6 +57,14 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   does not move the page. Its fake host is hostile on purpose — it scrolls to whatever `cur` a state report
   carries, which is what the first attempt fed it, so a heading routed back through that report starts the
   loop and the check sees the page moving on its own.
+- `open-position-check.js --file doc.md [--scroll N] [--line L] [--readonly 0|1] [--click "5.4.1"]` — opens a
+  real document the way the host does, with a remembered caret and scroll offset, and records every move
+  of the page and every outline report for the first seconds, then reads it with the wheel. The page has
+  to settle where the host asked, the outline may not be left pointing at a place the page merely passed
+  through, and no state report may arrive without a current heading. Written for a report that lost its
+  outline highlight; what it found instead was the page leaving the remembered offset for the remembered
+  caret a quarter of a second after landing — the load's own selection change, arriving through two timers,
+  treated as a caret movement. It failed on that bundle (settled at 97, not 6000) before the fix went in.
 - `idle-quiet-check.js` — an editor left alone must send nothing and re-render nothing. A stream of reports
   with nobody typing shows up as an outline that flickers and collapses, a selection that cannot be dragged
   because it dies on every render, and eventually a crash.
