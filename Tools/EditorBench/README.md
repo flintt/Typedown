@@ -52,14 +52,6 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   (see `docs/editor-performance.md`), the hidden tree is parsed as real MathML instead of as elements that
   merely happen to be called `math` — one element fewer, different metrics, and nothing visible changes. That
   is what the baseline was re-recorded for.
-- `outline-follow-check.js` — reading mode has no caret, so the outline's current heading is anchored to the
-  scroll position instead; this scrolls a read-only document and checks the reported heading moves with it
-  and comes back. It also decodes the diff protocol `transport.postMessage` uses — `StateChange` arrives as a
-  fragment plus a range, not as an object, and a harness that reads `args.state` straight off it sees nothing.
-- `background-quiet-check.js` — a document kept in memory must not answer events meant for the one on
-  screen. Every editor binds handlers to `document`, and a kept one still holds what was selected in it when
-  it was left: a Backspace would have deleted an image in a document nobody was looking at. It checks the
-  same events *do* reach that editor once it is shown again, so it cannot pass by dispatching into nothing.
 - `tab-state-check.js` — what the host is told after a switch. The outline, the word count and the caret
   all reach the host through StateChange, and restoring a document already built produces no change of its
   own, so the report has to be asked for — at the wrong moment it goes to an editor that is no longer

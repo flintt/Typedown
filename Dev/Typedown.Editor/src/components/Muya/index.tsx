@@ -403,52 +403,17 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     // What the last contentChange reported, so the outline can be re-sent with a different current heading
     // without the document having changed. The heading elements are looked up once per document.
     const lastStateRef = useRef<{ wordCount: any, toc: any[] } | null>(null)
-    const headingsRef = useRef<{ item: any, el: HTMLElement }[] | null>(null)
-    const readingSlugRef = useRef<string | null>(null)
 
-    // The outline follows the caret, and reading mode has no caret — so the highlight used to stop wherever
-    // the caret happened to be left and never move again. Anchor it to the scroll position instead: the
-    // section being read is the one whose heading has passed the top of the window, and above the first
-    // heading it is the first one.
-    useEffect(() => {
-        if (!editor || !props.options?.readOnly) return
-        let frame = 0
-        const anchor = () => {
-            frame = 0
-            const state = lastStateRef.current
-            if (!state || !state.toc?.length) return
-            if (!headingsRef.current) {
-                headingsRef.current = state.toc
-                    .map((item: any) => ({ item, el: document.getElementById(item.slug) as HTMLElement }))
-                    .filter((pair: any) => pair.el)
-            }
-            const pairs = headingsRef.current
-            if (!pairs.length) return
-            // Headings sit in document order, so their tops only increase: a binary search reads a dozen
-            // rectangles instead of one per heading, which matters on a document with thousands of them.
-            let lo = 0, hi = pairs.length - 1, found = -1
-            while (lo <= hi) {
-                const mid = (lo + hi) >> 1
-                if (pairs[mid].el.getBoundingClientRect().top <= 0) { found = mid; lo = mid + 1 }
-                else hi = mid - 1
-            }
-            // Sections can be short enough for several headings to share the screen, so the line is the top
-            // edge itself: a heading becomes current the moment it goes past it, not when it is merely visible.
-            const cur = pairs[found >= 0 ? found : 0].item
-            const slug = cur ? cur.slug : null
-            if (slug === readingSlugRef.current) return
-            readingSlugRef.current = slug
-            transport.postMessage('StateChange', { state: { wordCount: state.wordCount, toc: state.toc, cur }, muya: true })
-        }
-        const onScroll = () => { if (!frame) frame = requestAnimationFrame(anchor) }
-        window.addEventListener('scroll', onScroll, { passive: true })
-        // The document may already be scrolled when reading mode is switched on, or restored to an offset.
-        frame = requestAnimationFrame(anchor)
-        return () => {
-            window.removeEventListener('scroll', onScroll)
-            if (frame) cancelAnimationFrame(frame)
-        }
-    }, [editor, props.options?.readOnly, props.contentVersion])
+    // The outline used to follow the page here in reading mode, where there is no caret for it to follow.
+    // It was taken out: it reported the heading it had scrolled to through StateChange, the same message
+    // the host reads `cur` from to decide where to scroll — so the page scrolled, reported a heading, was
+    // scrolled to it and reported again, with nobody touching it. The outline flickered and collapsed as
+    // the host rebuilt it, text could not be dragged because the selection died on every render, and it
+    // ended in a crash.
+    //
+    // Following the page is worth having, but not on the channel the host uses to move the page. It needs a
+    // message of its own that only ever sets the highlight. Until then the highlight stays on the caret,
+    // which in reading mode means it stays where the caret was left.
 
     const lastRenderedThemeRef = useRef<string | undefined>(window.actualTheme);
     useEffect(() => transport.addListener('ThemeChanged', () => {
@@ -517,8 +482,6 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         markLongDocument()
         lastStateRef.current = { wordCount, toc }
         if (activeRef.current) activeRef.current.markdown = markdown
-        headingsRef.current = null
-        readingSlugRef.current = cur?.slug ?? null
 
         // 同步内容与光标
         props.onMarkdownChange(markdown)
