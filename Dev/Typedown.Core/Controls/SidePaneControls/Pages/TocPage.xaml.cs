@@ -25,10 +25,14 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             if (watched != null) watched.OutlineHighlighted += OnOutlineHighlighted;
         }
 
-        // The highlighted row follows the reader down the document, and the pane does not follow the row
-        // by itself: two-thirds of the way through a fifty-heading report the mark was below the bottom of
-        // the pane, which reads as "the highlight disappeared after 5.4". Bring the row into view, moving
-        // the list as little as possible so the rows around it stay put.
+        // The mark is set on the item model and reaches the row through the IsSelected binding of its
+        // container — and the rows are virtualized: only those in view when the pane was built have a
+        // container at all. A row further down gets one when it is scrolled to, and in preparing it the
+        // list resets IsSelected from its own selection state, which never heard of the model's mark. So
+        // the highlight worked for the first thirty-odd headings and vanished for the rest, from 5.4 in a
+        // tall window and 5.3 in a shorter one. Selecting through the tree's own SelectedNode puts the mark
+        // where the list keeps it, and it survives the row being rebuilt. The row is then brought into
+        // view, moving the list as little as possible.
         private void OnOutlineHighlighted(string slug)
         {
             _ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () =>
@@ -36,10 +40,11 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
                 try
                 {
                     var node = FindNode(TreeView.RootNodes, slug);
-                    var list = FindList(TreeView);
-                    if (node != null && list != null) list.ScrollIntoView(node);
+                    if (node == null) { Utilities.Log.Debug($"outline: no row for {slug} in the pane"); return; }
+                    if (TreeView.SelectedNode != node) TreeView.SelectedNode = node;
+                    FindList(TreeView)?.ScrollIntoView(node);
                 }
-                catch (System.Exception ex) { Utilities.Log.Debug($"outline: could not bring {slug} into view: {ex.Message}"); }
+                catch (System.Exception ex) { Utilities.Log.Debug($"outline: could not mark {slug}: {ex.Message}"); }
             });
         }
 
