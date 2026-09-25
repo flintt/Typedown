@@ -36,7 +36,17 @@ namespace Typedown.Core.ViewModels
         public ContentState ContentState { get; set; }
         public MenuState MenuState { get; set; }
         public ParagraphState ParagraphState { get; set; }
-        public TocTreeItem Toc { get; } = new();
+        /// <summary>
+        /// The outline tree. Replaced whole when a different document arrives, updated in place when the
+        /// same document changes: the tree control is bound to it, and taking a document's outline apart
+        /// row by row under that control while a second document's arrived is what crashed the process —
+        /// a fail-fast inside Windows.UI.Xaml from the collection-changed handler, in the dump, and a stack
+        /// overflow there before that. One document's rows are never removed one at a time any more.
+        /// </summary>
+        public TocTreeItem Toc { get; private set; } = new();
+
+        /// <summary>The load whose outline <see cref="Toc"/> holds.</summary>
+        private int tocLoadId = -1;
         public ContentHistory History { get; set; } = new();
 
         // A fresh editor counts as a pristine untitled document (see TabsViewModel.IsActiveTabBlank), otherwise the
@@ -369,7 +379,18 @@ namespace Typedown.Core.ViewModels
                     // the tree's own selection, when OutlineHighlighted is raised below.
                     ContentState.Toc.ForEach(x => x.IsSelected = x.Slug == ContentState.Cur.Slug);
                 }
-                Toc.UpdateChildren(ContentState.Toc);
+                if (tocLoadId == LoadId)
+                {
+                    Toc.UpdateChildren(ContentState.Toc);
+                }
+                else
+                {
+                    // Another document: build its tree away from the control, then hand it over in one step.
+                    var fresh = new TocTreeItem();
+                    fresh.UpdateChildren(ContentState.Toc);
+                    tocLoadId = LoadId;
+                    Toc = fresh;
+                }
                 if (Settings.TocAutoExpand)
                     Toc.ExpandToSelected();
             }
