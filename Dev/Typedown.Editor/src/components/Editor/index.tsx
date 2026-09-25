@@ -1,3 +1,4 @@
+import { setScrollLoadId } from 'services/scrollbar'
 import CodeMirror from "components/CodeMirror";
 import MuyaEditor from "components/Muya";
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -114,6 +115,7 @@ const Editor: React.FC = () => {
         remote.getSettings().then(({ markdown, basePath, cursor, scrollTop, loadId, ...opt }: any) => {
             window.basePath = basePath
             loadIdRef.current = loadId
+            setScrollLoadId(loadId)
             setOptions(opt)
             OnFileLoaded();
             setContentFromHost(markdown, cursor ?? undefined, scrollTop)
@@ -156,6 +158,7 @@ const Editor: React.FC = () => {
     useEffect(() => transport.addListener<{ text: string, basePath: string, cursor?: any, scrollTop?: number | null, loadId?: number }>('LoadFile', ({ text, basePath, cursor, scrollTop, loadId }) => {
         window.basePath = basePath
         loadIdRef.current = loadId
+        setScrollLoadId(loadId)
         OnFileLoaded();
         setContentFromHost(text, cursor ?? undefined, scrollTop)
     }), [OnFileLoaded, setContentFromHost]);

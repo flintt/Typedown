@@ -192,6 +192,11 @@ namespace Typedown.Core.ViewModels
             var scrollY = arg["scrollY"]?.Value<double?>();
             if (scrollY == null) return;
             if (EditorDetached) return;
+            // Only the page showing the current load knows where the reader is. A report without a load id is
+            // a page that has just been navigated and has no document yet; one with another id is the page
+            // that was, still talking. Either recorded a 0 that the next load then came back to.
+            var id = arg["loadId"];
+            if (id == null || id.Type != JTokenType.Integer || id.Value<int>() != LoadId) return;
             LastScrollY = scrollY.Value;
             CursorMemory.SetScroll(FileViewModel.FilePath, scrollY.Value);
             // Every 500px, not every event: enough to see in the log that the page moved, and how far.
