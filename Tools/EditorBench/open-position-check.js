@@ -58,6 +58,16 @@ const server = http.createServer((req, res) => {
   await show(first.log);
   const lastSlug = (log) => { const s = log.filter(e => e.slug); return s.length ? s[s.length - 1].slug : null; };
   const afterOpen = { y: first.y, top: first.top, last: lastSlug(first.log), nocur: first.nocur };
+  if (args.includes('--probe')) {
+    const probe = await page.evaluate(async () => {
+      const before = window.__log.length;
+      window.dispatchEvent(new Event('scroll'));
+      for (let i = 0; i < 10; i++) await new Promise(r => requestAnimationFrame(r));
+      const heads = Array.from(document.querySelectorAll('#ag-editor-id > h1, #ag-editor-id > h2, #ag-editor-id > h3, #ag-editor-id > h4, #ag-editor-id > h5, #ag-editor-id > h6'));
+      return { reported: window.__log.slice(before).filter(e => e.slug).map(e => e.slug), tops: heads.slice(10, 18).map(h => [h.textContent.trim().slice(0, 12), Math.round(h.getBoundingClientRect().top)]), y: window.scrollY };
+    });
+    console.log('  probe: synthetic scroll event ->', JSON.stringify(probe));
+  }
   console.log(`  settled: page at ${afterOpen.y}, heading at top "${afterOpen.top && afterOpen.top.text}", outline last told "${afterOpen.last ? await name(afterOpen.last) : 'nothing'}"${first.shrunk ? ` (the document got ${first.shrunk}px shorter after landing — diagrams rendering — and the browser kept the content in view)` : ''}`);
 
   // A reader with a wheel, three notches at a time, down the whole document.

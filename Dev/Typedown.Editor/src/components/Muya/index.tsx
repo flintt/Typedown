@@ -390,9 +390,16 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         }
         const onScroll = () => { if (!frame) frame = requestAnimationFrame(anchor) }
         window.addEventListener('scroll', onScroll, { passive: true })
+        // Headings also move under a page that has not scrolled: diagrams and images finish rendering
+        // and everything below them shifts. The document's height changes with it, and that is watched
+        // too — the outline was left on the heading that had been at the top before the diagrams came in.
+        const root = editor.container?.querySelector?.('#ag-editor-id') || document.getElementById('ag-editor-id')
+        const sizes = typeof ResizeObserver === 'function' && root ? new ResizeObserver(onScroll) : null
+        if (root) sizes?.observe(root)
         frame = requestAnimationFrame(anchor)
         return () => {
             window.removeEventListener('scroll', onScroll)
+            sizes?.disconnect()
             if (frame) cancelAnimationFrame(frame)
             readingSlugRef.current = null
         }
@@ -555,42 +562,60 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         // back to the top by that work with nobody scrolling it — which is what made switching tabs show
         // the top of the document for a moment. Keep putting it back until the layout has settled, or
         // until the reader scrolls themselves.
+        let stopHold = () => { }
         if (keepScroll && scrollTop > 0) {
             // Counted in frames, not milliseconds: laying out a long document blocks the main thread for
             // whole seconds, and a deadline in wall-clock time would expire while nothing could run.
-            // It also runs to the end of its budget rather than stopping at the first few steady frames:
-            // the position holds from the first paint and is knocked to the top a second or two later,
-            // when the last of the layout lands, so an early stop means the watch is already over.
+            // Only frames in which the document is tall enough to be scrolled that far count towards the
+            // budget: while it is still being built the offset cannot be applied at all, the page sits at
+            // the top, and a budget spent there ran out just as the document became tall enough — the
+            // reader then saw the top of the new document for a third of a second before it moved.
             let frames = 40
+            let cap = 600
             let done = false
+            const tall = () => document.documentElement.scrollHeight >= scrollTop + window.innerHeight
             // The knock arrives as a scroll event, so answer it there as well as on the next frame:
             // during the layout a frame can be a hundred milliseconds long, and that is a hundred
             // milliseconds of looking at the top of the document. Correcting puts scrollY back where it
             // belongs, so the event this fires in turn finds nothing to do.
             const putBack = () => { if (!done && !yielded && Math.abs(window.scrollY - scrollTop) > 2) window.scrollTo(window.scrollX, scrollTop) }
-            const stop = () => { done = true; window.removeEventListener('scroll', putBack) }
+            const stop = () => { done = true; window.removeEventListener('scroll', putBack); for (const e of GIVE_WAY) window.removeEventListener(e, giveWay) }
             const hold = () => {
                 if (done) return
                 // Dragging the scrollbar raises no wheel event, so watching the wheel alone left the hold
                 // pulling the page back from under the pointer — the reader drags, it yanks.
-                if (yielded || frames-- <= 0) return stop()
+                if (yielded || cap-- <= 0 || (tall() && frames-- <= 0)) return stop()
                 putBack()
                 requestAnimationFrame(hold)
             }
             window.addEventListener('scroll', putBack, { passive: true })
             requestAnimationFrame(hold)
+            stopHold = stop
         }
         setTimeout(() => {
             if (!yielded) {
                 window.scrollTo(window.scrollX, scrollTop)
                 if (!keepScroll) scrollToCursorIfInvisible()
             }
-            giveWay()
+            // The hold above decides for itself when it is over; ending it here ended it after six frames,
+            // whatever its budget said. The reader's own movement still ends everything at once.
+            if (!keepScroll) giveWay()
             if (props.scrollFromHostRef) props.scrollFromHostRef.current = false
             search(searchArgRef.current)
         }, 100);
+        void stopHold
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.scrollFromHostRef, scrollToCursorIfInvisible, search])
+
+    // The host takes the web view out of its window and puts it back when it navigates between its own
+    // pages (leaving the settings does that), and the browser is at the top when it comes back. The host
+    // sends the offset it last heard of; the page waits for a window to exist again before going there.
+    useEffect(() => transport.addListener<{ y: number }>('RestoreScroll', ({ y }) => {
+        if (!(y > 0)) return
+        let tries = 120
+        const go = () => { if (window.innerHeight > 0 || tries-- <= 0) settleScroll(y, true); else requestAnimationFrame(go) }
+        go()
+    }), [settleScroll]);
 
     useEffect(() => {
         if (!editor) return

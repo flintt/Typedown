@@ -47,6 +47,12 @@ namespace Typedown.Core.Controls
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             MarkdownEditorPresenter.Content = this.GetService<IMarkdownEditor>();
+            // Back in a window: the page went to the top while it had none (see EditorViewModel.EditorDetached).
+            if (Editor != null && Editor.EditorDetached)
+            {
+                Editor.EditorDetached = false;
+                Editor.RestoreScroll();
+            }
             disposables.Add(Float.WhenPropertyChanged(nameof(Float.FindReplaceDialogOpen))
                 .Cast<FloatViewModel.FindReplaceDialogState>()
                 .Subscribe(x => UpdateFindReplaceState(x, true)));
@@ -57,6 +63,7 @@ namespace Typedown.Core.Controls
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
+            if (Editor != null) Editor.EditorDetached = true;
             MarkdownEditorPresenter.Content = null;
             disposables.Clear();
             Bindings?.StopTracking();

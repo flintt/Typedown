@@ -167,11 +167,29 @@ namespace Typedown.Core.ViewModels
         // Scroll offset per file: reading mode has no caret, so this is what brings it back to the same place.
         private double lastLoggedScroll = double.NaN;
 
+        /// <summary>
+        /// True while the web view is out of the window: leaving the settings page rebuilds the main page,
+        /// and the editor container lets go of the view and takes it back. The browser reports a scroll to
+        /// the top in between, which is not the reader moving and must not be remembered.
+        /// </summary>
+        public bool EditorDetached { get; set; }
+
+        /// <summary>The last offset the page reported while it was in the window.</summary>
+        public double LastScrollY { get; private set; }
+
+        /// <summary>Puts the page back where it was before the web view was taken out of the window.</summary>
+        public void RestoreScroll()
+        {
+            if (LastScrollY > 0) MarkdownEditor?.PostMessage("RestoreScroll", new { y = LastScrollY });
+        }
+
         private void OnScroll(JToken arg)
         {
             if (!FileLoaded || string.IsNullOrEmpty(FileViewModel.FilePath)) return;
             var scrollY = arg["scrollY"]?.Value<double?>();
             if (scrollY == null) return;
+            if (EditorDetached) return;
+            LastScrollY = scrollY.Value;
             CursorMemory.SetScroll(FileViewModel.FilePath, scrollY.Value);
             // Every 500px, not every event: enough to see in the log that the page moved, and how far.
             if (double.IsNaN(lastLoggedScroll) || Math.Abs(scrollY.Value - lastLoggedScroll) >= 500)
