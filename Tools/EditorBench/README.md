@@ -57,6 +57,9 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   does not move the page. Its fake host is hostile on purpose — it scrolls to whatever `cur` a state report
   carries, which is what the first attempt fed it, so a heading routed back through that report starts the
   loop and the check sees the page moving on its own.
+- `caret-check.js` — edit mode has to have a caret after every load: the editor focused, a selection inside
+  it, and a typed key landing in the text. Checked for the first load and for a load arriving as a tab
+  switch. The page side passes; a caret that is missing on Windows is the host holding XAML focus elsewhere.
 - `print-check.js` — asks the editor for the print HTML the way the host does, renders it as print media on
   an A4-wide page and checks that no code block is wider than its box. A long code line used to print a
   horizontal scrollbar and lose the rest of the line (a Store review from 2022, still true in 2026): the
