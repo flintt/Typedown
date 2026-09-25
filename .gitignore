@@ -352,3 +352,5 @@ MigrationBackup/
 # Inno Setup output
 Tools/Installer/Output/
 Tools/EditorBench/cm-bundle/
+Tools/EditorBench/doc*.md
+Tools/EditorBench/*.cpuprofile
