@@ -111,14 +111,7 @@ namespace Typedown.Services
         {
             var preview = new PrintPreviewControl(html, documentName);
             // The preview leaves with the print dialog; its close button stays for a dialog that never came.
-            preview.PrintDismissed += () =>
-            {
-                if (ViewModel.UIViewModel.PrintPreviewContent != preview) return;
-                ViewModel.UIViewModel.ClosePrintPreview();
-                // Focus was in the preview's own web view; with that gone it is nowhere, and the editor shows
-                // no caret until it is clicked. Give it back to the editor, which hands it to its web view.
-                (ViewModel.EditorViewModel.MarkdownEditor as Windows.UI.Xaml.Controls.Control)?.Focus(Windows.UI.Xaml.FocusState.Programmatic);
-            };
+            preview.PrintDismissed += () => { if (ViewModel.UIViewModel.PrintPreviewContent == preview) ViewModel.UIViewModel.ClosePrintPreview(); };
             ViewModel.UIViewModel.ShowPrintPreview(preview, documentName);
             return Task.CompletedTask;
         }
