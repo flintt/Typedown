@@ -1,4 +1,4 @@
-#define MyAppName "Typedown"
+﻿#define MyAppName "Typedown"
 #ifndef MyArch
   #define MyArch "x64"
 #endif
@@ -32,6 +32,15 @@ PrivilegesRequired=admin
 ChangesAssociations=yes
 UninstallDisplayIcon={app}\{#MyAppExeName}
 CloseApplications=yes
+; Which files are checked for being held open. The default is *.exe,*.dll,*.chm, and the files that are
+; actually locked here are the editor bundle — .js, .html, .css under Resources\Statics, held by the
+; WebView2 processes. Outside the default filter the installer cannot see who is holding them, so it
+; closes nothing and then fails on "file in use".
+CloseApplicationsFilter=*.*
+; Lets the installer recognise a running copy even when no file lock has been noticed yet — the app can
+; outlive its window (see the "keep running in the background" setting), so "I closed it" is not enough.
+AppMutex=Typedown.App.Mutex
+RestartApplications=no
 MinVersion=10.0
 VersionInfoVersion={#MyAppVersion}.0
 
