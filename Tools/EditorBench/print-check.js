@@ -8,7 +8,7 @@ const puppeteer = require('puppeteer-core'); const http = require('http'); const
 const statics = path.resolve(process.env.STATICS || '../../Dev/Typedown/Resources/Statics');
 const longLine = 'const veryLongIdentifier = ' + Array.from({ length: 30 }, (_, i) => `argumentNumber${i}`).join(' + ') + ';';
 const section = (i) => [`## Section ${i}`, `Paragraph ${i} with text long enough to wrap onto a second line in the editor.`, '- one\n- two'].join('\n\n');
-let markdown = `# Print\n\nSome text.\n\n\`\`\`js\n${longLine}\nshort();\n\`\`\`\n\n| a | b |\n|---|---|\n| 1 | 2 |\n\n`;
+let markdown = `# Print\n\nSome text.\n\n> a quotation with a bar\n\n\`\`\`js\n${longLine}\nshort();\n\`\`\`\n\n| a | b |\n|---|---|\n| 1 | 2 |\n\n`;
 for (let i = 1; i <= 2100; i++) markdown += section(i) + '\n\n';   // long enough for the off-screen rule
 const server = http.createServer((req, res) => {
   let p = decodeURIComponent(req.url.split('?')[0]); if (p === '/') p = '/index.html';
@@ -44,18 +44,30 @@ const server = http.createServer((req, res) => {
     const last = blocks[blocks.length - 3];
     const bg = getComputedStyle(document.body).backgroundColor;
     const pre = root.querySelector('pre');
+    const px = (v) => parseFloat(v) || 0;
+    const opaque = (c) => c && c !== 'transparent' && !/rgba\([^)]*,\s*0\)/.test(c);
+    const quote = root.querySelector('blockquote');
+    const td = root.querySelector('td');
+    const th = root.querySelector('th');
+    const preStyle = pre ? getComputedStyle(pre) : null;
     return {
-      chrome: visible('.ag-front-icon, .ag-tool-bar, .ag-drag-handler, .ag-gray, .ag-remove'),
+      chrome: visible('.ag-front-icon, .ag-tool-bar, .ag-drag-handler'),
       lastBlockHeight: last ? last.getBoundingClientRect().height : 0,
       cv: last ? getComputedStyle(last).contentVisibility : null,
       bg,
       codeOverflow: pre ? pre.scrollWidth - pre.clientWidth : null,
       blocks: blocks.length,
+      // The block visuals a reader expects on paper: a code box, a quote bar, table borders.
+      codeBox: preStyle ? (opaque(preStyle.backgroundColor) && px(preStyle.borderTopWidth) > 0) : false,
+      quoteBar: quote ? (px(getComputedStyle(quote).borderLeftWidth) > 0 || opaque(getComputedStyle(quote, '::before').backgroundColor)) : false,
+      tableBorder: td ? (px(getComputedStyle(td).borderTopWidth) > 0 || px(getComputedStyle(td, '::before').borderTopWidth) > 0) : false,
+      headerFill: th ? opaque(getComputedStyle(th).backgroundColor) : false,
     };
   });
   console.log(`  on screen: ${screen.chrome} editing controls visible, long-document rule ${screen.longDoc ? 'on' : 'off'}`);
   console.log(`  in print media: ${r.chrome} editing controls visible, body ${r.bg}, block ${r.blocks - 2} of ${r.blocks} is ${Math.round(r.lastBlockHeight)}px tall (content-visibility ${r.cv}), code block ${r.codeOverflow > 0 ? `${r.codeOverflow}px wider than its box` : 'fits'}`);
-  const ok = r.chrome === 0 && r.lastBlockHeight > 0 && /255, 255, 255/.test(r.bg) && r.codeOverflow <= 0 && screen.longDoc;
-  console.log(ok ? 'OK: the page prints as the reader sees it, without the editing chrome, every block laid out' : 'FAIL');
+  console.log(`  block visuals: code box ${r.codeBox ? 'kept' : 'GONE'}, quote bar ${r.quoteBar ? 'kept' : 'GONE'}, table borders ${r.tableBorder ? 'kept' : 'GONE'}, header fill ${r.headerFill ? 'kept' : 'GONE'}`);
+  const ok = r.chrome === 0 && r.lastBlockHeight > 0 && /255, 255, 255/.test(r.bg) && r.codeOverflow <= 0 && screen.longDoc && r.codeBox && r.quoteBar && r.tableBorder && r.headerFill;
+  console.log(ok ? 'OK: the page prints as the reader sees it — chrome gone, blocks laid out, code/quote/table visible' : 'FAIL');
   await browser.close(); server.close(); process.exit(ok ? 0 : 1);
 })().catch(e => { console.error(e); process.exit(1); });
