@@ -370,6 +370,15 @@ namespace Typedown.Core.ViewModels
         {
             try
             {
+                // An empty buffer over a file that has content, while the editor has not yet handed this document
+                // back, is not a document the reader emptied: it is a save that fired between opening the file
+                // and the editor answering (a hang, a crash-reload, an exit on the way). A reader lost an
+                // afternoon's work to a file "overwritten with 0K"; nothing here writes that.
+                if (text.Length == 0 && !EditorViewModel.FileLoaded && File.Exists(path) && new FileInfo(path).Length > 0)
+                {
+                    Log.Debug($"save skipped: the editor has not loaded this document yet, and the buffer is empty while the file has {new FileInfo(path).Length} bytes");
+                    return false;
+                }
                 IgnoreOwnFileWrite();
                 await SafeFile.WriteAllBytesAtomicAsync(path, (FileFormat ?? TextFileFormat.Default).GetBytes(text));
                 IgnoreOwnFileWrite();

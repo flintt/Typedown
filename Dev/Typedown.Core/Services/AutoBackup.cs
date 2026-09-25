@@ -22,7 +22,8 @@ namespace Typedown.Core.Services
         {
             try
             {
-                await File.WriteAllTextAsync(GetBackupFilePath(path), markdown);
+                // The backup is the last line of defence; a crash while it is being written must not leave half of it.
+                await Utilities.SafeFile.WriteAllTextAtomicAsync(GetBackupFilePath(path), markdown);
                 return true;
             }
             catch
