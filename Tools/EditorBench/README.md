@@ -57,6 +57,11 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   does not move the page. Its fake host is hostile on purpose — it scrolls to whatever `cur` a state report
   carries, which is what the first attempt fed it, so a heading routed back through that report starts the
   loop and the check sees the page moving on its own.
+- `print-check.js` — asks the editor for the print HTML the way the host does, renders it as print media on
+  an A4-wide page and checks that no code block is wider than its box. A long code line used to print a
+  horizontal scrollbar and lose the rest of the line (a Store review from 2022, still true in 2026): the
+  GitHub sheet and Prism keep `white-space: pre` on the code inside the block, more specifically than the
+  export's own wrap rule. Failed with two blocks about 4000px too wide before the print rule went in.
 - `outline-jump-check.js [--file doc.md]` — clicks every heading in the outline. Each has to land at the top
   of the window (16px below the edge, or as far as the page goes at the end of the document) and end up
   marked in the outline. The heading used to land 320px down, the caret's offset, so the section before it

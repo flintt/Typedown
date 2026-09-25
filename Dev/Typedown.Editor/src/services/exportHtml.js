@@ -253,6 +253,20 @@ class ExportHtml {
     .markdown-body pre {
       white-space: pre-wrap;
     }
+    /* Paper has no scrollbar. The GitHub sheet and Prism both put white-space: pre on the code inside
+       the block and overflow: auto on the block, which on paper prints a scrollbar and cuts the line;
+       both are more specific than the rule above, so they are named here and told to wrap. */
+    @media print {
+      .markdown-body pre,
+      .markdown-body pre > code,
+      .markdown-body pre[class*="language-"],
+      .markdown-body pre[class*="language-"] > code {
+        white-space: pre-wrap;
+        word-break: break-all;
+        overflow-wrap: anywhere;
+        overflow: visible;
+      }
+    }
     .markdown-body table {
       display: table;
     }
