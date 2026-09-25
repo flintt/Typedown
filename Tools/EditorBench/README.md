@@ -76,6 +76,10 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
 - `inline-mark-check.js` — `==text==` is highlight: it renders as `<mark>`, survives a round trip through the
   editor unchanged, exports as `<mark>`, is stripped from the outline's heading text, and HTML with `<mark>`
   imports as `==text==`. Three Store reviews asked for it; the markers used to be plain text.
+- `void-html-check.js` — a void HTML element (`<br>`, `<hr>`, `<img>`, `<wbr>` …) has no close tag, so a stray
+  `</br>` in `<br></br>` is literal text, not the element's close. Pairing them dropped a character as it was
+  typed and destroyed the editor on the next render (a reading-mode round trip). Each case must load back
+  unchanged and survive a reading-mode toggle with the editor intact.
 - `caret-check.js` — edit mode has to have a caret after every load: the editor focused, a selection inside
   it, and a typed key landing in the text. Checked for the first load and for a load arriving as a tab
   switch. The page side passes; a caret that is missing on Windows is the host holding XAML focus elsewhere.
