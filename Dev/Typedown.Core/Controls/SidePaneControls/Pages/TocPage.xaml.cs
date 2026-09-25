@@ -58,9 +58,24 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
 
         // The reader moving the selection with the keyboard goes to that heading; the page marking a heading
         // (above) does not come back through here.
+        // The tree raises this after the fact, not inside the SelectedNode setter, so the flag above is down
+        // again by the time it arrives; and while the outline is replaced for another document it raises it
+        // for rows nobody chose. What tells the reader's keyboard from all of that is focus: a reader moving
+        // the selection has the tree focused, the page marking a heading does not.
+        private bool TreeHasFocus()
+        {
+            var focused = Windows.UI.Xaml.Input.FocusManager.GetFocusedElement(XamlRoot) as DependencyObject;
+            while (focused != null)
+            {
+                if (focused == TreeView) return true;
+                focused = Windows.UI.Xaml.Media.VisualTreeHelper.GetParent(focused);
+            }
+            return false;
+        }
+
         private void OnSelectionChanged(Microsoft.UI.Xaml.Controls.TreeView sender, Microsoft.UI.Xaml.Controls.TreeViewSelectionChangedEventArgs args)
         {
-            if (marking) return;
+            if (marking || !TreeHasFocus()) return;
             foreach (var added in args.AddedItems)
                 if (added is Models.TocTreeItem item && item.TocItem?.Slug != null && item.TocItem.Slug != Editor?.AppliedCurSlug)
                 { Editor?.JumpBySlug(item.TocItem.Slug); return; }

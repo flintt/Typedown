@@ -77,8 +77,23 @@ const docs = ['Alpha', 'Beta', 'Gamma'].map(doc);
   console.log(`  then idle for 2.5s:        ${noisy.length ? noisy.map(([k, n]) => `${k}×${n}`).join(', ') : 'nothing sent'}`);
   if (errors.length) console.log(`  page errors:               ${errors.slice(0, 3).join(' | ')}`);
 
-  const ok = !worst && noisy.length === 0 && errors.length === 0;
-  console.log(ok ? 'OK: one editor in the page throughout, quiet afterwards' : 'FAIL: switching leaves the page in a state it should not be in');
+  let ok = !worst && noisy.length === 0 && errors.length === 0;
+  // A key held down on the tab shortcut: two hundred loads in one burst, no time between them. The page
+  // must end on the last one and must not have rendered them all — the host drops every report but the
+  // newest anyway, and rendering each in turn kept the reader waiting a minute after the key came up.
+  const burst = await page.evaluate(async () => {
+    let fileLoaded = 0;
+    const real = window.chrome.webview.postMessage;
+    window.chrome.webview.postMessage = (raw) => { if (JSON.parse(raw).name === 'FileLoaded') fileLoaded++; return real(raw); };
+    for (let i = 1; i <= 200; i++) window.__deliver('LoadFile', { text: `# burst ${i}\n\nparagraph ${i}\n`, basePath: '/tmp', cursor: null, scrollTop: 0, loadId: 100000 + i });
+    await new Promise(r => setTimeout(r, 3000));
+    const h1 = document.querySelector('#ag-editor-id h1');
+    return { fileLoaded, shown: h1 ? h1.textContent.trim() : '(none)' };
+  });
+  const burstOk = burst.shown.includes('burst 200') && burst.fileLoaded <= 10;
+  console.log(`  200 loads in one burst:    ${burst.fileLoaded} rendered, page shows "${burst.shown}"`);
+  ok = ok && burstOk;
+  console.log(ok ? 'OK: one editor in the page throughout, quiet afterwards' : burstOk ? 'FAIL: switching leaves the page in a state it should not be in' : 'FAIL: a burst of loads is rendered one by one');
   await browser.close(); server.close();
   process.exit(ok ? 0 : 1);
 })().catch(e => { console.error(e); process.exit(1); });

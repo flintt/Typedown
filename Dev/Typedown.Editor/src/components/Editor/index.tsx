@@ -155,12 +155,24 @@ const Editor: React.FC = () => {
         setContentVersion(v => v + 1)
     }), [options, onMarkdownChange]);
 
-    useEffect(() => transport.addListener<{ text: string, basePath: string, cursor?: any, scrollTop?: number | null, loadId?: number }>('LoadFile', ({ text, basePath, cursor, scrollTop, loadId }) => {
-        window.basePath = basePath
-        loadIdRef.current = loadId
-        setScrollLoadId(loadId)
-        OnFileLoaded();
-        setContentFromHost(text, cursor ?? undefined, scrollTop)
+    // Loads arrive one message each and are applied one per frame, the newest only. A key held down on
+    // the tab shortcut sent five hundred of them in a few seconds; every one was rendered in turn, the host
+    // dropped their reports as stale, and the reader waited a minute for the last to come round. Only the
+    // load the host still wants can matter, and the host's stale-report rule already says which that is.
+    const pendingLoadRef = useRef<{ text: string, basePath: string, cursor?: any, scrollTop?: number | null, loadId?: number } | null>(null)
+    useEffect(() => transport.addListener<{ text: string, basePath: string, cursor?: any, scrollTop?: number | null, loadId?: number }>('LoadFile', (load) => {
+        const scheduled = pendingLoadRef.current != null
+        pendingLoadRef.current = load
+        if (scheduled) return
+        requestAnimationFrame(() => {
+            const { text, basePath, cursor, scrollTop, loadId } = pendingLoadRef.current!
+            pendingLoadRef.current = null
+            window.basePath = basePath
+            loadIdRef.current = loadId
+            setScrollLoadId(loadId)
+            OnFileLoaded();
+            setContentFromHost(text, cursor ?? undefined, scrollTop)
+        })
     }), [OnFileLoaded, setContentFromHost]);
 
     useEffect(() => transport.addListener<{ text: string, cursor: string, basePath: string }>('SetMarkdown', ({ text, cursor, basePath }) => {
