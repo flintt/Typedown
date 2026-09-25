@@ -4,6 +4,7 @@
     python3 Tools/Translations/check.py            # summary, one line per language
     python3 Tools/Translations/check.py de ja      # the missing keys of those languages
     python3 Tools/Translations/check.py --missing  # every language's missing keys
+    python3 Tools/Translations/check.py --strict   # exit 1 if any language has a gap (CI)
 
 Strings live in Dev/Typedown.Core/Resources/Strings/<lang>/<file>.resw. A key that a
 language does not have falls back to the project's default language at runtime, so a gap
@@ -49,6 +50,11 @@ def main():
                     print(f"    {f.replace('Resources.resw',''):9} {key} = {reference[f][key]}")
     incomplete = [r for r in rows if r[0] < 1]
     print(f"\n{len(rows) - len(incomplete)}/{len(rows)} complete; {len(incomplete)} with gaps")
+    if '--strict' in sys.argv and incomplete:
+        # A gap is not an error at runtime — the key falls back to English — so nothing fails until someone
+        # sees one English line in their own language. This is what makes it fail earlier.
+        print("run with --missing to see them, and add them to every language before merging")
+        return 1
     return 0
 
 

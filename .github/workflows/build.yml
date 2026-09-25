@@ -14,6 +14,15 @@ permissions:
   contents: write
 
 jobs:
+  strings:
+    name: Check translations
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # A key a language does not have falls back to English, so a gap is invisible until someone sees one
+      # English line in the middle of their own language. This is what makes it fail before that.
+      - run: python3 Tools/Translations/check.py --strict
+
   editor:
     name: Build editor (JS)
     # A release pushes the version bump to main and then the tag, which used to start the same build twice.
