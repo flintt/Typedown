@@ -206,16 +206,27 @@ class StateRender {
     }
   }
 
-  render(blocks, activeBlocks, matches) {
+  // `fresh` means the whole document is being replaced (a new file, not an edit). Diffing the outgoing
+  // document against the incoming one is pure waste then, and on a long document it is most of the cost of
+  // a tab switch: reading the old tree back with toVNode and deleting it node by node. Drop it in one go
+  // instead and let the patch below build the new tree into an empty element.
+  render(blocks, activeBlocks, matches, fresh = false) {
     const selector = `div#${CLASS_OR_ID.AG_EDITOR_ID}`
     const children = blocks.map(block => {
       return this.renderBlock(null, block, activeBlocks, matches, true)
     })
-    const newVdom = h(selector, children)
     const rootDom = document.querySelector(selector) || this.container
-    const oldVdom = toVNode(rootDom)
-
-    patch(oldVdom, newVdom)
+    if (fresh) {
+      // Nothing of the old document survives, so there is nothing to diff: building the new one as a single
+      // HTML string and letting the parser create the nodes is several times faster than creating a hundred
+      // thousand elements one at a time — and it is what partialRender already does for the blocks an edit
+      // touches, so every block type goes through this serializer on every keystroke anyway.
+      const html = toHTML(h('section', children)).replace(/^<section>([\s\S]*?)<\/section>$/, '$1')
+      rootDom.id = CLASS_OR_ID.AG_EDITOR_ID
+      rootDom.innerHTML = html
+    } else {
+      patch(toVNode(rootDom), h(selector, children))
+    }
     this.renderMermaid()
     this.renderDiagram()
     this.codeCache.clear()

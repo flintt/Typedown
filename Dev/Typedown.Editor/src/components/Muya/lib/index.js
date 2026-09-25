@@ -237,7 +237,9 @@ class Muya {
     }
     this.contentState.importMarkdown(newMarkdown)
     this.contentState.importCursor(cursor && isValid)
-    this.contentState.render(isRenderCursor)
+    // A whole new document: the one on screen has nothing in common with it, so throw it away rather than
+    // diff against it (see StateRender.render).
+    this.contentState.render(isRenderCursor, false, true)
     setTimeout(() => {
       this.dispatchChange()
     }, 0)

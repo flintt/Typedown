@@ -173,7 +173,7 @@ class ContentState {
     this.resizeLineNumber()
   }
 
-  render(isRenderCursor = true, clearCache = false) {
+  render(isRenderCursor = true, clearCache = false, fresh = false) {
     const { blocks, searchMatches: { matches, index } } = this
     const activeBlocks = this.getActiveBlocks()
     if (clearCache) {
@@ -184,7 +184,7 @@ class ContentState {
     })
     this.setNextRenderRange()
     this.stateRender.collectLabels(blocks)
-    this.stateRender.render(blocks, activeBlocks, matches)
+    this.stateRender.render(blocks, activeBlocks, matches, fresh)
     if (isRenderCursor) {
       this.setCursor()
     } else {

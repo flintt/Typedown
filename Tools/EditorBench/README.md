@@ -47,6 +47,13 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
 
       node style-check.js --against ../../../Typedown-Uno/Typedown.Uno/Assets/Editor
 
+  The maths in the fixture is measured twice over: KaTeX writes a visible `.katex-html` tree and a hidden
+  `.katex-mathml` one for screen readers. Since a whole-document load builds the page from an HTML string
+  (see `docs/editor-performance.md`), the hidden tree is parsed as real MathML instead of as elements that
+  merely happen to be called `math` — one element fewer, different metrics, and nothing visible changes. That
+  is what the baseline was re-recorded for.
+- `tab-switch-check.js` — there is one editor and switching tabs re-loads the document into it, so this
+  measures both directions between a long document and an ordinary one. `--big`, `--small`, `--rounds`.
 - `legacy-issues.js` — the issues reported against the original Typedown, in one run: raw html renders with its
   inline CSS, a code block is in the saved markdown the moment it is typed, a table cell whose text is selected
   and deleted still takes input, PageUp/PageDown keep moving.
