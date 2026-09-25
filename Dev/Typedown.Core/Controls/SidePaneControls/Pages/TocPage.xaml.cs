@@ -33,10 +33,17 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
         // tall window and 5.3 in a shorter one. Selecting through the tree's own SelectedNode puts the mark
         // where the list keeps it, and it survives the row being rebuilt. The row is then brought into
         // view, moving the list as little as possible.
+        // The selection is the tree's alone now. The row used to bind IsSelected both ways to the item model,
+        // and the tree, the binding and the model then kept each other informed of every change while the
+        // whole outline was being torn down and rebuilt twice per tab switch — twenty quick switches ended
+        // in a stack overflow inside Windows.UI.Xaml. Nothing writes the model's mark back from the tree.
+        private bool marking;
+
         private void OnOutlineHighlighted(string slug)
         {
             _ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () =>
             {
+                marking = true;
                 try
                 {
                     var node = FindNode(TreeView.RootNodes, slug);
@@ -45,7 +52,18 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
                     FindList(TreeView)?.ScrollIntoView(node);
                 }
                 catch (System.Exception ex) { Utilities.Log.Debug($"outline: could not mark {slug}: {ex.Message}"); }
+                finally { marking = false; }
             });
+        }
+
+        // The reader moving the selection with the keyboard goes to that heading; the page marking a heading
+        // (above) does not come back through here.
+        private void OnSelectionChanged(Microsoft.UI.Xaml.Controls.TreeView sender, Microsoft.UI.Xaml.Controls.TreeViewSelectionChangedEventArgs args)
+        {
+            if (marking) return;
+            foreach (var added in args.AddedItems)
+                if (added is Models.TocTreeItem item && item.TocItem?.Slug != null && item.TocItem.Slug != Editor?.AppliedCurSlug)
+                { Editor?.JumpBySlug(item.TocItem.Slug); return; }
         }
 
         private static Microsoft.UI.Xaml.Controls.TreeViewNode FindNode(System.Collections.Generic.IList<Microsoft.UI.Xaml.Controls.TreeViewNode> nodes, string slug)

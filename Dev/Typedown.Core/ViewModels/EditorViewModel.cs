@@ -293,6 +293,9 @@ namespace Typedown.Core.ViewModels
         /// </summary>
         private string appliedCurSlug;
 
+        /// <summary>The heading the outline currently marks, so a selection landing on it again is not a jump.</summary>
+        public string AppliedCurSlug => appliedCurSlug;
+
         /// <summary>
         /// True while the outline is being rebuilt from a report. The tree is bound to the collection being
         /// rewritten, and its own selection writes back into these items as it goes — selections this class
@@ -336,13 +339,9 @@ namespace Typedown.Core.ViewModels
                     appliedCurSlug = ContentState.Cur.Slug;
                     if (ContentState.Toc.All(x => x.Slug != ContentState.Cur.Slug))
                         Log.Debug($"outline: current heading {ContentState.Cur.Slug} is not among the {ContentState.Toc.Count} entries reported with it");
-                    ContentState.Toc.ForEach(x =>
-                    {
-                        x.IsSelected = x.Slug == ContentState.Cur.Slug;
-                        // Clicking is handled by the tree's ItemInvoked, which jumps even to the heading already
-                        // selected (upstream #59); this is for the selection moving by keyboard.
-                        x.SelectedChanged += (s, b) => { if (b && !rebuildingToc && x.Slug != appliedCurSlug) JumpBySlug(x.Slug); };
-                    });
+                    // The mark on the model is for ExpandToSelected; the row itself is marked by the pane, through
+                    // the tree's own selection, when OutlineHighlighted is raised below.
+                    ContentState.Toc.ForEach(x => x.IsSelected = x.Slug == ContentState.Cur.Slug);
                 }
                 Toc.UpdateChildren(ContentState.Toc);
                 if (Settings.TocAutoExpand)
