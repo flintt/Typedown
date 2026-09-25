@@ -2,7 +2,7 @@
 #ifndef MyArch
   #define MyArch "x64"
 #endif
-#define MyAppVersion "1.2.25"
+#define MyAppVersion "1.2.26"
 #define MyAppPublisher "Typedown Community"
 #define MyAppExeName "Typedown.exe"
 #define MyAppAssocName "Typedown Markdown"
