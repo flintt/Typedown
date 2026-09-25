@@ -347,6 +347,11 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             // each comparison saw a different scroll position, so "the tops only increase" stopped being
             // true and the answer landed anywhere: scrolling down reported headings from further up.
             const tops = heads.map(h => h.getBoundingClientRect().top)
+            // Only a finished layout is worth reading. While the document is still being laid out the
+            // headings that have no box yet all sit at zero, which reads as "already scrolled past", and the
+            // outline was seen to jump to the last heading, then the fifth, then the right one — all in the
+            // first tenth of a second after opening. Positions in document order are what a real layout has.
+            for (let i = 1; i < tops.length; i++) if (tops[i] <= tops[i - 1]) return
             let found = -1
             for (let i = 0; i < tops.length; i++) { if (tops[i] <= 0) found = i; else break }
             const chosen = found >= 0 ? found : 0

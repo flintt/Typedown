@@ -165,11 +165,20 @@ namespace Typedown.Core.ViewModels
         }
 
         // Scroll offset per file: reading mode has no caret, so this is what brings it back to the same place.
+        private double lastLoggedScroll = double.NaN;
+
         private void OnScroll(JToken arg)
         {
             if (!FileLoaded || string.IsNullOrEmpty(FileViewModel.FilePath)) return;
             var scrollY = arg["scrollY"]?.Value<double?>();
-            if (scrollY != null) CursorMemory.SetScroll(FileViewModel.FilePath, scrollY.Value);
+            if (scrollY == null) return;
+            CursorMemory.SetScroll(FileViewModel.FilePath, scrollY.Value);
+            // Every 500px, not every event: enough to see in the log that the page moved, and how far.
+            if (double.IsNaN(lastLoggedScroll) || Math.Abs(scrollY.Value - lastLoggedScroll) >= 500)
+            {
+                lastLoggedScroll = scrollY.Value;
+                Log.Debug($"scroll: {scrollY.Value:0}");
+            }
         }
 
         private bool IsStaleReport(JToken arg)
@@ -294,6 +303,7 @@ namespace Typedown.Core.ViewModels
 
         /// <summary>A heading the page reported before there was an outline to mark it in.</summary>
         private string pendingOutlineSlug;
+        private JToken pendingOutlineWhere;
 
         public void OnStateChange(JToken arg)
         {
@@ -338,8 +348,10 @@ namespace Typedown.Core.ViewModels
             if (pendingOutlineSlug != null)
             {
                 var slug = pendingOutlineSlug;
+                var where = pendingOutlineWhere;
                 pendingOutlineSlug = null;
-                OnOutlineCurrent(new JObject { ["slug"] = slug, ["loadId"] = LoadId });
+                pendingOutlineWhere = null;
+                OnOutlineCurrent(new JObject { ["slug"] = slug, ["where"] = where, ["loadId"] = LoadId });
             }
         }
 
@@ -362,6 +374,7 @@ namespace Typedown.Core.ViewModels
                 // highlight blank until the reader happened to scroll to a different heading, because the
                 // page only reports a heading when it changes. Keep it for the outline to arrive.
                 pendingOutlineSlug = slug;
+                pendingOutlineWhere = arg["where"];
                 Log.Debug($"outline: heading {slug} arrived before the outline; kept for when it does");
                 return;
             }
