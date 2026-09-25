@@ -33,6 +33,8 @@ interface IMuyaEditor {
     onCursorChange: (cursor: any) => void
     /** Reports the outline, word count and caret line. The shell tags it with the load it belongs to. */
     onStateChange: (state: { wordCount: any, toc: any[], cur: any }) => void
+    /** Reading mode only: the heading the page has been scrolled to. Highlight only — never a scroll. */
+    onOutlineCurrent: (slug: string) => void
     onSearchArgChange: (arg: { value: string, opt: any } | undefined) => void
 }
 
@@ -326,6 +328,43 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     // Following the page is worth having, but not on the channel the host uses to move the page. It needs a
     // message of its own that only ever sets the highlight. Until then the highlight stays on the caret,
     // which in reading mode means it stays where the caret was left.
+
+    // Reading mode has no caret, so the outline has nothing to follow. Anchor it to the page instead: the
+    // section being read is the one whose heading has passed the top of the window. The headings are the
+    // top-level h1..h6 of the document and their element id is the slug the outline uses, so this needs
+    // nothing from the host and reports nothing but a slug.
+    const readingSlugRef = useRef<string | null>(null)
+    useEffect(() => {
+        if (!editor || !props.options?.readOnly) return
+        let frame = 0
+        const anchor = () => {
+            frame = 0
+            const root = editor.container?.querySelector?.('#ag-editor-id') || document.getElementById('ag-editor-id')
+            const heads = root ? Array.from(root.querySelectorAll(':scope > h1, :scope > h2, :scope > h3, :scope > h4, :scope > h5, :scope > h6')) as HTMLElement[] : []
+            if (!heads.length) return
+            // Headings sit in document order, so their tops only increase: a binary search reads a dozen
+            // rectangles instead of one per heading, which matters on a document with thousands of them.
+            let lo = 0, hi = heads.length - 1, found = -1
+            while (lo <= hi) {
+                const mid = (lo + hi) >> 1
+                if (heads[mid].getBoundingClientRect().top <= 0) { found = mid; lo = mid + 1 }
+                else hi = mid - 1
+            }
+            const slug = heads[found >= 0 ? found : 0].id
+            if (!slug || slug === readingSlugRef.current) return
+            readingSlugRef.current = slug
+            props.onOutlineCurrent(slug)
+        }
+        const onScroll = () => { if (!frame) frame = requestAnimationFrame(anchor) }
+        window.addEventListener('scroll', onScroll, { passive: true })
+        frame = requestAnimationFrame(anchor)
+        return () => {
+            window.removeEventListener('scroll', onScroll)
+            if (frame) cancelAnimationFrame(frame)
+            readingSlugRef.current = null
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [editor, props.options?.readOnly, props.contentVersion])
 
     const lastRenderedThemeRef = useRef<string | undefined>(window.actualTheme);
     useEffect(() => transport.addListener('ThemeChanged', () => {

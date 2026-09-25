@@ -84,6 +84,13 @@ const Editor: React.FC = () => {
         transport.postMessage('StateChange', { state, loadId: loadIdRef.current, muya: true })
     }, [])
 
+    // Which heading the reader has scrolled to, in reading mode. Deliberately not part of the state report:
+    // the host decides where to scroll from `cur` in that report, so a heading sent that way comes back as a
+    // scroll, which moves the page, which reports another heading.
+    const onOutlineCurrent = useCallback((slug: string) => {
+        transport.postMessage('OutlineCurrent', { slug, loadId: loadIdRef.current })
+    }, [])
+
     const onCursorChange = useCallback((cursor: any) => {
         if (fileLoadPending.current && !fileLoadPending.current.armed) return
         cursorRef.current = cursor
@@ -208,6 +215,7 @@ const Editor: React.FC = () => {
                 onMarkdownChange={onMarkdownChange}
                 onContentApplied={onContentApplied}
                 onStateChange={onStateChange}
+                onOutlineCurrent={onOutlineCurrent}
                 onCursorChange={onCursorChange}
                 onSearchArgChange={setSearchArg}
             />

@@ -32,13 +32,10 @@ PrivilegesRequired=admin
 ChangesAssociations=yes
 UninstallDisplayIcon={app}\{#MyAppExeName}
 CloseApplications=yes
-; Which files are checked for being held open. The default is *.exe,*.dll,*.chm, and the files that are
-; actually locked here are the editor bundle — .js, .html, .css under Resources\Statics, held by the
-; WebView2 processes. Outside the default filter the installer cannot see who is holding them, so it
-; closes nothing and then fails on "file in use".
-CloseApplicationsFilter=*.*
-; Lets the installer recognise a running copy even when no file lock has been noticed yet — the app can
-; outlive its window (see the "keep running in the background" setting), so "I closed it" is not enough.
+; The app outlives its window when "keep running in the background" is on, and a window is what the
+; restart manager sends its close request to — so it finds Typedown.exe, asks it to close, and nothing
+; happens. Checking the mutex says so before a single file is touched, instead of failing partway
+; through with a list of files in use and an uninstall that then cannot finish either.
 AppMutex=Typedown.App.Mutex
 RestartApplications=no
 MinVersion=10.0

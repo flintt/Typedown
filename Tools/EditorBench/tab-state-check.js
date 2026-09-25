@@ -28,7 +28,7 @@ const docB = ['# Beta', 'text of the second document', '## Beta one', 'more'].jo
     const apply=(m)=>{if(typeof m.args!=='string')return null;const o=window.__prev[m.name];const v=m.diff?o.slice(0,m.start)+m.args+o.slice(m.end):m.args;window.__prev[m.name]=v;try{return JSON.parse(v)}catch(e){return null}};
     const resp={GetSettings:${JSON.stringify(settings)},GetCurrentTheme:{theme:'Light',accentColor:{r:0,g:120,b:212,a:1},background:{R:249,G:249,B:249,A:1}},ContentLoaded:'',GetStringResources:{}};
     window.chrome={webview:{addEventListener:(t,l)=>ls.push(l),dispatchEvent:(e)=>ls.forEach(l=>l(e)),postMessage:(raw)=>{const m=JSON.parse(raw);window.__marks[m.name]=1;
-      if(m.name==='StateChange'){const a=apply(m);if(a&&a.state){window.__state=a.state;window.__states++;}}
+      if(m.name==='StateChange'){const a=apply(m);if(a&&a.state){window.__state=a.state;window.__states++;window.__lastLoadId=(a.loadId===undefined?'(none)':a.loadId);}}
       if(m.type==='invoke'){setTimeout(()=>window.__deliver(m.id,{code:0,data:m.name in resp?resp[m.name]:null}),0);}}}}})()`);
   await page.goto(`http://127.0.0.1:${port}/index.html`, { waitUntil: 'load' });
   await page.waitForFunction(() => window.__marks.FileLoaded, { timeout: 60000 });
@@ -40,12 +40,17 @@ const docB = ['# Beta', 'text of the second document', '## Beta one', 'more'].jo
   const go = async (text, label) => {
     const r = await page.evaluate(async (text) => {
       const before = window.__states;
-      window.__deliver('LoadFile', { text, basePath: '/tmp', cursor: null, scrollTop: 0, loadId: Date.now() });
+      const id = Date.now();
+      window.__deliver('LoadFile', { text, basePath: '/tmp', cursor: null, scrollTop: 0, loadId: id });
       for (let i = 0; i < 180; i++) await new Promise(r => requestAnimationFrame(r));
       const s = window.__state || {};
-      return { reports: window.__states - before, toc: (s.toc || []).map(t => t.content), words: s.wordCount ? s.wordCount.word : null };
+      return { reports: window.__states - before, toc: (s.toc || []).map(t => t.content), sent: id, tagged: window.__lastLoadId };
     }, text);
-    console.log(`  ${label.padEnd(22)} ${r.reports} report(s), outline [${r.toc.join(', ')}]`);
+    // The host drops a report whose load id is not the one it is waiting for, so a report that arrives
+    // untagged or tagged with anything else never reaches the outline at all.
+    const matches = r.tagged === r.sent;
+    console.log(`  ${label.padEnd(22)} ${r.reports} report(s), loadId ${matches ? 'matches' : `${r.tagged} != ${r.sent}`}, outline [${r.toc.join(', ')}]`);
+    r.matches = matches;
     return r;
   };
 
@@ -54,8 +59,8 @@ const docB = ['# Beta', 'text of the second document', '## Beta one', 'more'].jo
   const backToA = await go(textA, 'back to A (restored)');
   const toB = await go(textB, 'to B again (restored)');
 
-  const okA = backToA.toc.join('|') === 'Alpha|Alpha one|Alpha two';
-  const okB = toB.toc.join('|') === 'Beta|Beta one';
+  const okA = backToA.toc.join('|') === 'Alpha|Alpha one|Alpha two' && backToA.matches;
+  const okB = toB.toc.join('|') === 'Beta|Beta one' && toB.matches;
   console.log(okA && okB ? 'OK: the host is told the restored document\'s outline' : 'FAIL: the outline the host holds is not the document being shown');
   await browser.close(); server.close();
   process.exit(okA && okB ? 0 : 1);

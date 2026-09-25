@@ -52,6 +52,11 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   (see `docs/editor-performance.md`), the hidden tree is parsed as real MathML instead of as elements that
   merely happen to be called `math` — one element fewer, different metrics, and nothing visible changes. That
   is what the baseline was re-recorded for.
+- `outline-follow-check.js` — reading mode has no caret, so the outline follows the page. Two things have
+  to hold and it checks both: the heading reported moves with the page and comes back, and reporting it
+  does not move the page. Its fake host is hostile on purpose — it scrolls to whatever `cur` a state report
+  carries, which is what the first attempt fed it, so a heading routed back through that report starts the
+  loop and the check sees the page moving on its own.
 - `idle-quiet-check.js` — an editor left alone must send nothing and re-render nothing. A stream of reports
   with nobody typing shows up as an outline that flickers and collapses, a selection that cannot be dragged
   because it dies on every render, and eventually a crash.

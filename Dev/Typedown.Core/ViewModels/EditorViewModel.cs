@@ -96,6 +96,7 @@ namespace Typedown.Core.ViewModels
             EventCenter.GetObservable<EditorEventArgs>("SelectionChange").Subscribe(x => OnSelectionChange(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("CodeMirrorSelectionChange").Subscribe(x => OnCodeMirrorSelectionChange(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("StateChange").Subscribe(x => OnStateChange(x.Args));
+            EventCenter.GetObservable<EditorEventArgs>("OutlineCurrent").Subscribe(x => OnOutlineCurrent(x.Args));
             RemoteInvoke.Handle("GetSettings", GetSettings);
             RemoteInvoke.Handle<JToken>("SetClipboard", OnSetClipboard);
             Settings.WhenPropertyChanged(nameof(Settings.AutoSave)).Subscribe(_ => Settings_AutoSaveChanged(Settings.AutoSave));
@@ -292,11 +293,13 @@ namespace Typedown.Core.ViewModels
 
         public void OnStateChange(JToken arg)
         {
+            // Cleared whatever the report describes: it means the editor has answered, and leaving it set
+            // would keep the next real edit out of the undo history.
+            contentUpdating = false;
             // A report describes the document that was loaded when it was made. Switch tabs quickly and the
             // previous document's report arrives after the new one is open: its outline is of a document no
             // longer on screen, and every heading in it is a place the editor cannot go.
             if (IsStaleReport(arg)) return;
-            contentUpdating = false;
             ContentState = arg["state"].ToObject<ContentState>();
             rebuildingToc = true;
             try
@@ -313,6 +316,34 @@ namespace Typedown.Core.ViewModels
                     });
                 }
                 Toc.UpdateChildren(ContentState.Toc);
+                if (Settings.TocAutoExpand)
+                    Toc.ExpandToSelected();
+            }
+            finally
+            {
+                rebuildingToc = false;
+            }
+        }
+
+        /// <summary>
+        /// Which heading the reader has scrolled to. Reading mode has no caret for the outline to follow, so
+        /// the editor says where the page is instead — on a message of its own, and this is the whole reason
+        /// for that: `cur` in a state report is what <see cref="JumpBySlug"/> decides from, so a heading
+        /// arriving that way would be scrolled to, which moves the page, which reports another heading. The
+        /// first attempt did exactly that and the page twitched with nobody touching it. Nothing here scrolls.
+        /// </summary>
+        public void OnOutlineCurrent(JToken arg)
+        {
+            if (IsStaleReport(arg)) return;
+            var slug = arg["slug"]?.ToString();
+            if (string.IsNullOrEmpty(slug) || ContentState?.Toc == null) return;
+            if (appliedCurSlug == slug) return;
+            appliedCurSlug = slug;
+            rebuildingToc = true;
+            try
+            {
+                foreach (var item in ContentState.Toc)
+                    item.IsSelected = item.Slug == slug;
                 if (Settings.TocAutoExpand)
                     Toc.ExpandToSelected();
             }
