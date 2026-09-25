@@ -37,9 +37,13 @@ const server = http.createServer((req, res) => {
 
   const pdfPage = await browser.newPage();
   await pdfPage.setContent(html.replace(/src="([A-Za-z]:[\\/][^"]*)"/g, (m, p) => `src="file:///${p.replace(/\\/g, '/')}"`), { waitUntil: 'networkidle0' });
+  // The exact call the WinUI code makes (FileConverter.HtmlToPdfWithOutline), through CDP, not puppeteer's
+  // pdf() helper: Page.printToPDF with generateDocumentOutline + generateTaggedPDF. Same engine WebView2 uses.
+  const client = await pdfPage.target().createCDPSession();
+  const { data } = await client.send('Page.printToPDF', { generateDocumentOutline: true, generateTaggedPDF: true, printBackground: true });
   const pdfPath = path.join(os.tmpdir(), 'exp.pdf');
-  await pdfPage.pdf({ path: pdfPath, printBackground: true, outline: true, tagged: true });
-  const pdf = fs.readFileSync(pdfPath, 'latin1');
+  fs.writeFileSync(pdfPath, Buffer.from(data, 'base64'));
+  const pdf = Buffer.from(data, 'base64').toString('latin1');
   const outlineCount = (pdf.match(/\/Type\s*\/Outlines/) ? (pdf.match(/\/Title\s*\(/g) || []).length : 0);
   const hasImage = /\/Subtype\s*\/Image/.test(pdf);
 
