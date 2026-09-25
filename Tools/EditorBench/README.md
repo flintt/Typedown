@@ -60,6 +60,13 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   screen. Every editor binds handlers to `document`, and a kept one still holds what was selected in it when
   it was left: a Backspace would have deleted an image in a document nobody was looking at. It checks the
   same events *do* reach that editor once it is shown again, so it cannot pass by dispatching into nothing.
+- `tab-state-check.js` — what the host is told after a switch. The outline, the word count and the caret
+  all reach the host through StateChange, and restoring a document already built produces no change of its
+  own, so the report has to be asked for — at the wrong moment it goes to an editor that is no longer
+  listening and the outline goes on describing the previous document, which is what shipped.
+- `scroll-yield-check.js` — the hold that keeps a long document at its offset has to let go the moment the
+  reader moves the page, by wheel, key, pointer or touch. Each gesture gets a page of its own: sharing one
+  meant only the first met a live hold, and the check passed against a build with the guard removed.
 - `tab-switch-check.js` — switching tabs between a long document and an ordinary one, both directions.
   `--big`, `--small`, `--rounds`. It reports **blocked time**, not only when the content appears: what a
   reader feels is how long the window stops answering, and work that lands after the content does still

@@ -48,6 +48,9 @@ Muya.use(FootnoteTool)
 
 const STANDAR_Y = 320
 
+/** Anything that means the reader is moving the page themselves; the scroll hold stops at the first of them. */
+const GIVE_WAY = ['wheel', 'keydown', 'pointerdown', 'touchstart']
+
 /** The style element with this id, appended to the head on first use. */
 const styleElement = (id: string) => {
     let style = document.getElementById(id) as HTMLStyleElement | null
@@ -131,6 +134,37 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         search(props.searchArg)
     }, [editor, props.searchArg, search])
 
+    // ---------------------------------------------------------------------------------------------------
+    // More than one editor can exist at once, and everything below depends on four rules. They are not
+    // properties the code has on its own — each is held up by one specific piece of it, named here — and
+    // every bug this feature has produced was one of them being broken. Tools/EditorBench checks each.
+    //
+    //   1. Only the editor in the page renders.
+    //      Held by: StateRender using its own container instead of document.querySelector. Every editor
+    //      calls its root ag-editor-id, so a global lookup lets a new editor render into the document on
+    //      screen and wipe it. Broken once: a new instance's constructor renders an empty document.
+    //      Checked by: tab-switch-check (the restored document still has its blocks).
+    //
+    //   2. Only the editor in the page answers events.
+    //      Held by: the container.isConnected guards in keyboard.js, tooltip.js and ui/baseFloat. Each
+    //      editor binds to `document`, and one kept in memory still holds what was selected in it — a
+    //      Backspace deleted an image in a document nobody was looking at.
+    //      Checked by: background-quiet-check.
+    //
+    //   3. Whatever is shown, the host is told what it now holds.
+    //      Held by: reportWhenShownRef and the effect after the change handler. A restored document
+    //      produces no change of its own, and asking for the report before React has moved the listener
+    //      sends it to nobody — the outline then describes the previous document.
+    //      Checked by: tab-state-check.
+    //
+    //   4. Nothing takes the page away from the reader.
+    //      Held by: GIVE_WAY, and by the restore path arming no hold at all. The hold that keeps a long
+    //      document at its offset answers scroll events, and dragging the scrollbar raises no wheel event,
+    //      so it pulled the page back from under the pointer.
+    //      Checked by: scroll-flash-check (it holds) and scroll-yield-check (it lets go).
+    //
+    // Anything added here that renders, listens, reports or scrolls has to say which rule it obeys.
+    // ---------------------------------------------------------------------------------------------------
     // One window has one editor, so switching tabs used to mean building the other document from scratch —
     // parsing it and creating a hundred thousand elements, seconds of it for a long document. A document that
     // has already been built is kept instead: its element is taken out of the page rather than thrown away,
@@ -150,6 +184,12 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     const activeRef = useRef<Doc | null>(null)
     const keptRef = useRef<Doc[]>([])
     const keepingRef = useRef(true)
+    // Restoring a document produces no change of its own, so the host would never hear what it now holds —
+    // its outline, its word count. The report has to be asked for, but not at the moment of the switch:
+    // showing an editor only sets React state, and until that has been through a render the change listener
+    // is still attached to the editor being left, so the report reaches nobody and the outline goes on
+    // describing the previous document. This names the instance to ask once the listener has followed it.
+    const reportWhenShownRef = useRef<any>(null)
 
     // Several of Muya's setters re-render the whole document, which is fine once but ruinous when the active
     // instance changes and every settings effect runs again against a document that is already correct —
@@ -488,6 +528,15 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         transport.postMessage('StateChange', { state: { wordCount, toc, cur }, muya: true });
     }), [editor, props])
 
+    // Declared after the change handler on purpose: effects run in the order they are written, so by the
+    // time this one runs the listener above is attached to the editor now being shown, and the report a
+    // restore asked for reaches the host.
+    useEffect(() => {
+        if (!editor || reportWhenShownRef.current !== editor) return
+        reportWhenShownRef.current = null
+        editor.dispatchChange()
+    }, [editor])
+
     useEffect(() => {
         const ele = document.getElementById('editor');
         if (ele) {
@@ -554,6 +603,12 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     const settleScroll = useCallback((scrollTop: number, keepScroll: boolean) => {
         window.scrollTo(window.scrollX, scrollTop)
         if (!keepScroll) scrollToCursorIfInvisible()
+        // One flag for everything that puts the page back, the frame-by-frame hold and the delayed second
+        // go alike: the moment the reader moves the page, none of them may touch it again. The delayed one
+        // used to ignore this and yanked the page back a tenth of a second after a drag.
+        let yielded = false
+        const giveWay = () => { yielded = true; for (const e of GIVE_WAY) window.removeEventListener(e, giveWay) }
+        for (const e of GIVE_WAY) window.addEventListener(e, giveWay, { once: true, passive: true })
         // Laying a long document out goes on for a while after the first paint, and the page can be put
         // back to the top by that work with nobody scrolling it — which is what made switching tabs show
         // the top of the document for a moment. Keep putting it back until the layout has settled, or
@@ -570,27 +625,25 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             // during the layout a frame can be a hundred milliseconds long, and that is a hundred
             // milliseconds of looking at the top of the document. Correcting puts scrollY back where it
             // belongs, so the event this fires in turn finds nothing to do.
-            const putBack = () => { if (!done && Math.abs(window.scrollY - scrollTop) > 2) window.scrollTo(window.scrollX, scrollTop) }
-            const stop = () => {
-                done = true
-                window.removeEventListener('scroll', putBack)
-                window.removeEventListener('wheel', stop)
-                window.removeEventListener('keydown', stop)
-            }
+            const putBack = () => { if (!done && !yielded && Math.abs(window.scrollY - scrollTop) > 2) window.scrollTo(window.scrollX, scrollTop) }
+            const stop = () => { done = true; window.removeEventListener('scroll', putBack) }
             const hold = () => {
                 if (done) return
-                if (frames-- <= 0) return stop()
+                // Dragging the scrollbar raises no wheel event, so watching the wheel alone left the hold
+                // pulling the page back from under the pointer — the reader drags, it yanks.
+                if (yielded || frames-- <= 0) return stop()
                 putBack()
                 requestAnimationFrame(hold)
             }
             window.addEventListener('scroll', putBack, { passive: true })
-            window.addEventListener('wheel', stop, { once: true, passive: true })
-            window.addEventListener('keydown', stop, { once: true })
             requestAnimationFrame(hold)
         }
         setTimeout(() => {
-            window.scrollTo(window.scrollX, scrollTop)
-            if (!keepScroll) scrollToCursorIfInvisible()
+            if (!yielded) {
+                window.scrollTo(window.scrollX, scrollTop)
+                if (!keepScroll) scrollToCursorIfInvisible()
+            }
+            giveWay()
             if (props.scrollFromHostRef) props.scrollFromHostRef.current = false
             search(searchArgRef.current)
         }, 100);
@@ -626,10 +679,12 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             // document out from under the reader.
             if (!keepOutgoing) active.muya.destroy()
             markLongDocument(props.markdown)
-            // Nothing changed, so no report would follow on its own — and the host waits for one to know the
-            // load finished. Asking for it also refreshes the word count and the outline for this document.
-            doc.muya.dispatchChange()
-            settleScroll(scrollTop, keepScroll)
+            reportWhenShownRef.current = doc.muya
+            // No hold: this document is already laid out, so nothing is going to knock the page off the
+            // offset a moment later, and a watch that answers scroll events would only fight the reader.
+            window.scrollTo(window.scrollX, scrollTop)
+            if (!keepScroll) scrollToCursorIfInvisible()
+            if (props.scrollFromHostRef) props.scrollFromHostRef.current = false
             props.onContentApplied?.()
             return
         }

@@ -275,16 +275,27 @@ namespace Typedown.Core.ViewModels
             }
         }
 
+        /// <summary>
+        /// The heading the editor last said it is at. Selecting it is this class echoing the editor back, not
+        /// somebody choosing it, and jumping there would send the editor a scroll it did not ask for — which
+        /// in reading mode, where the outline follows the page, is a loop: the page scrolls, reports a
+        /// heading, gets scrolled to it, reports again. The page then twitches with nobody touching it.
+        /// </summary>
+        private string appliedCurSlug;
+
         public void OnStateChange(JToken arg)
         {
             contentUpdating = false;
             ContentState = arg["state"].ToObject<ContentState>();
             if (ContentState.Cur != null)
             {
+                appliedCurSlug = ContentState.Cur.Slug;
                 ContentState.Toc.ForEach(x =>
                 {
                     x.IsSelected = x.Slug == ContentState.Cur.Slug;
-                    x.SelectedChanged += (s, b) => { if (b) JumpBySlug(x.Slug); };
+                    // Clicking is handled by the tree's ItemInvoked, which jumps even to the heading already
+                    // selected (upstream #59); this is for the selection moving by keyboard.
+                    x.SelectedChanged += (s, b) => { if (b && x.Slug != appliedCurSlug) JumpBySlug(x.Slug); };
                 });
             }
             Toc.UpdateChildren(ContentState.Toc);
