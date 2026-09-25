@@ -549,7 +549,13 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
 
     // Puts the page back where the document was left and keeps it there while the layout settles. Shared by
     // both ways a document arrives: rebuilt from its text, or restored from the one kept in memory.
+    // The hold of the load before this one. Switching tabs quickly starts a new load while the previous
+    // hold is still putting the page back to its own offset: two holds then pull the page to two places
+    // every frame until the older one's budget runs out. It is ended here before the next one begins.
+    const holdStopRef = useRef<() => void>(() => { })
     const settleScroll = useCallback((scrollTop: number, keepScroll: boolean) => {
+        holdStopRef.current()
+        holdStopRef.current = () => { }
         window.scrollTo(window.scrollX, scrollTop)
         if (!keepScroll) scrollToCursorIfInvisible()
         // One flag for everything that puts the page back, the frame-by-frame hold and the delayed second
@@ -562,7 +568,6 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         // back to the top by that work with nobody scrolling it — which is what made switching tabs show
         // the top of the document for a moment. Keep putting it back until the layout has settled, or
         // until the reader scrolls themselves.
-        let stopHold = () => { }
         if (keepScroll && scrollTop > 0) {
             // Counted in frames, not milliseconds: laying out a long document blocks the main thread for
             // whole seconds, and a deadline in wall-clock time would expire while nothing could run.
@@ -602,7 +607,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             }
             window.addEventListener('scroll', putBack, { passive: true })
             requestAnimationFrame(hold)
-            stopHold = () => stop('replaced')
+            holdStopRef.current = () => { if (!done) stop('replaced') }
         }
         setTimeout(() => {
             if (!yielded) {
@@ -615,7 +620,6 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             if (props.scrollFromHostRef) props.scrollFromHostRef.current = false
             search(searchArgRef.current)
         }, 100);
-        void stopHold
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.scrollFromHostRef, scrollToCursorIfInvisible, search])
 
