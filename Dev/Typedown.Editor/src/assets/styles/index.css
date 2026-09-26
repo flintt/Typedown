@@ -1253,6 +1253,16 @@ pre:not(.ag-active):hover .ag-code-copy {
   opacity: .5;
 }
 
+.ag-code-copy.ag-code-copied > svg { display: none; }
+.ag-code-copy.ag-code-copied::after {
+  content: '';
+  display: block;
+  width: 16px;
+  height: 16px;
+  /* a check mark, drawn so it needs no icon font */
+  background: no-repeat center/12px url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2322a06b' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><path d='M20 6L9 17l-5-5'/></svg>");
+}
+
 .ag-code-copy:hover {
   opacity: 1;
 }

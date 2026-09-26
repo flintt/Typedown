@@ -89,7 +89,7 @@
 
 | # | 建议（评论） | 核对结果 | 做法 | 估时 |
 |---|---|---|---|---|
-| S1 | 复制代码块后给反馈（2 条） | 有复制按钮但点后无任何提示（copyCodeBlock 只复制不反馈） | 点后按钮短暂变对号或提示"已复制" | 半天 |
+| S1 | 复制代码块后给反馈（2 条） | 已做：复制后按钮短暂显示对号（1.5 秒）；dbg 验证点击后加 ag-code-copied 类 | — |
 | S2 | 应用内反馈入口失效（1 条） | 反馈按钮在 Visibility=Collapsed 面板里、且 POST 到原作者服务器（AllowOutboundNetwork=false 已关） | 已改：关于页去掉原应用商店/致谢链接，换成 GitHub（贡献/提 issue 的去处） | 已做 |
 | S3 | 开始菜单搜 "markdown" 搜不到（1 条） | MSIX 清单 Description="Markdown editor"；安装版(Inno)的 exe 描述待核对 | 安装版 exe 的 FileDescription/AppName 里加 Markdown 关键字 | 小，待核对 |
 | S4 | 锚点 HTML `<a id="x"></a>` 原样显示（1 条） | 和 `<br>` 同类：空/锚点元素在编辑器显示源码 | 复现后按 void/隐藏规则统一处理 | 半天，待复现 |

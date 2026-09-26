@@ -153,6 +153,14 @@ const codeBlockCtrl = ContentState => {
     const codeBlock = preBlock.children.find(c => c.type === 'code')
     const codeContent = codeBlock.children[0].text
     this.muya.clipboard.copy({ type: 'copyCodeContent', copyInfo: codeContent })
+    // Confirm the copy: the button briefly shows a check instead of the copy icon. Without it there was no
+    // sign the click did anything (a Store review).
+    const button = target.closest('.ag-code-copy')
+    if (button) {
+      button.classList.add('ag-code-copied')
+      clearTimeout(button._copiedTimer)
+      button._copiedTimer = setTimeout(() => button.classList.remove('ag-code-copied'), 1500)
+    }
   }
 
   ContentState.prototype.resizeLineNumber = function () {
