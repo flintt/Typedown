@@ -14,7 +14,7 @@
 		<!-- Trimming was a no-op upstream (framework-dependent). With SelfContained=true it strips reflection-used
 		     code (x:Bind, Fody, EF Core, WinRT projections) and the app crashes at runtime, so keep it off. -->
 		<PublishTrimmed>false</PublishTrimmed>
-		<Version>1.2.26</Version>
+		<Version>1.2.27</Version>
 		<!-- Shown as "File description" in Explorer and indexed by Start menu search (upstream #28) -->
 		<AssemblyTitle>Typedown - Lightweight Markdown Editor</AssemblyTitle>
 		<Product>Typedown Markdown Editor</Product>
