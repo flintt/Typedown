@@ -3,7 +3,12 @@ var path = require("path")
 var webpack = require("webpack")
 
 const paths = require('react-scripts/config/paths')
-paths.appBuild = path.join(path.dirname(paths.appBuild),'../Typedown/Resources/Statics')
+// Default output is the Windows app's Statics (unchanged). CM6_BUILD_OUT redirects the build elsewhere so
+// the migration branch can build without overwriting the Windows bundle. Default path preserved => Windows
+// build behaviour is identical when the env var is unset.
+paths.appBuild = process.env.CM6_BUILD_OUT
+    ? path.resolve(process.env.CM6_BUILD_OUT)
+    : path.join(path.dirname(paths.appBuild),'../Typedown/Resources/Statics')
 
 module.exports = function override(config, env) {
     const overrideConfig = {

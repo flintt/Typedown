@@ -20,6 +20,15 @@
     "last 2 edge versions"
   ],
   "dependencies": {
+    "@codemirror/commands": "^6.11.1",
+    "@codemirror/lang-javascript": "^6.2.5",
+    "@codemirror/lang-markdown": "^6.5.2",
+    "@codemirror/language": "^6.12.4",
+    "@codemirror/search": "^6.7.2",
+    "@codemirror/state": "^6.7.6",
+    "@codemirror/view": "^6.43.13",
+    "@lezer/highlight": "^1.2.4",
+    "@lezer/markdown": "^1.7.2",
     "@marktext/file-icons": "^1.0.6",
     "classnames": "^2.3.1",
     "codemirror": "^5.65.1",
