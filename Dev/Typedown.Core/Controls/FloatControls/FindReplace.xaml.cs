@@ -16,7 +16,7 @@ namespace Typedown.Core.Controls.FloatControls
     {
         public AppViewModel ViewModel => DataContext as AppViewModel;
 
-        public FloatViewModel Float => ViewModel.FloatViewModel;
+        public FloatViewModel Float => ViewModel?.FloatViewModel;
 
         public SettingsViewModel Settings => ViewModel?.SettingsViewModel;
 
