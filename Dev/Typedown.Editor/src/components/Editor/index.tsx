@@ -1,6 +1,7 @@
 import { setScrollLoadId } from 'services/scrollbar'
 import CodeMirror from "components/CodeMirror";
 import MuyaEditor from "components/Muya";
+import MilkdownEditor from "components/Milkdown";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { remote } from "services/remote";
 import transport from "services/transport";
@@ -230,7 +231,7 @@ const Editor: React.FC = () => {
         )
     } else {
         return (
-            <MuyaEditor
+            <MilkdownEditor
                 options={options}
                 cursor={cursorRef.current}
                 markdown={markdownRef.current ?? ''}

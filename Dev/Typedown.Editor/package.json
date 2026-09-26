@@ -21,6 +21,9 @@
   ],
   "dependencies": {
     "@marktext/file-icons": "^1.0.6",
+    "@milkdown/core": "^7.22.2",
+    "@milkdown/crepe": "^7.22.2",
+    "@milkdown/kit": "^7.22.2",
     "classnames": "^2.3.1",
     "codemirror": "^5.65.1",
     "domino": "^2.1.6",
