@@ -370,13 +370,20 @@ namespace Typedown.Core.ViewModels
         {
             try
             {
-                // An empty buffer over a file that has content, while the editor has not yet handed this document
-                // back, is not a document the reader emptied: it is a save that fired between opening the file
-                // and the editor answering (a hang, a crash-reload, an exit on the way). A reader lost an
-                // afternoon's work to a file "overwritten with 0K"; nothing here writes that.
-                if (text.Length == 0 && !EditorViewModel.FileLoaded && File.Exists(path) && new FileInfo(path).Length > 0)
+                // A blank buffer over a file that has content is data loss unless the reader actually deleted the
+                // text — an undoable edit. It happens two ways, and neither is a document the reader emptied:
+                //   - a save fires between opening the file and the editor answering (a hang, a crash-reload, an
+                //     exit on the way) — the editor has not loaded yet;
+                //   - the editor is cleared programmatically after loading (a stale/empty load, a tab race, the
+                //     document handed back blank) — there is no undoable edit behind the change, and Ctrl+Z
+                //     cannot bring it back either.
+                // In both cases refuse the write, so the file on disk keeps its content and the reader can reopen
+                // it. A genuine "select all, delete" is undoable and still saves. A reader lost an afternoon's
+                // work to a file "overwritten with 0K"; nothing here writes that.
+                if (string.IsNullOrWhiteSpace(text) && File.Exists(path) && new FileInfo(path).Length > 0
+                    && (!EditorViewModel.FileLoaded || !EditorViewModel.History.Undoable))
                 {
-                    Log.Debug($"save skipped: the editor has not loaded this document yet, and the buffer is empty while the file has {new FileInfo(path).Length} bytes");
+                    Log.Debug($"save skipped: buffer is blank (len={text.Length}) with no undoable edit (loaded={EditorViewModel.FileLoaded} undoable={EditorViewModel.History.Undoable}) while the file has {new FileInfo(path).Length} bytes");
                     return false;
                 }
                 IgnoreOwnFileWrite();
