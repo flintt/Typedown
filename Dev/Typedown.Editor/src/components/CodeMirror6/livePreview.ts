@@ -125,6 +125,13 @@ function buildInline(view: EditorView, reveal: boolean): DecorationSet {
                     if (!on(node.from, node.to)) { const m = /!\[([^\]]*)\]\(([^)\s]+)/.exec(state.doc.sliceString(node.from, node.to)); if (m) deco.push(Decoration.replace({ widget: new ImageWidget(m[2], m[1]) }).range(node.from, node.to)); }
                 } else if (name === "TaskMarker") {
                     if (!onLine(node.from)) { const checked = /x/i.test(state.doc.sliceString(node.from, node.to)); deco.push(Decoration.replace({ widget: new CheckboxWidget(checked) }).range(node.from, node.to)); }
+                } else if (name === "ListMark") {
+                    // hide the '- ' bullet only for task items (the checkbox replaces it); keep normal bullets
+                    const li = node.node.parent;
+                    if (li && li.getChild("Task") && !onLine(node.from)) {
+                        const line = state.doc.lineAt(node.to); const rest = line.text.slice(node.to - line.from); const ws = rest.length && rest[0] === " " ? 1 : 0;
+                        deco.push(Decoration.replace({}).range(node.from, node.to + ws));
+                    }
                 }
 
                 if (name === "QuoteMark") {
