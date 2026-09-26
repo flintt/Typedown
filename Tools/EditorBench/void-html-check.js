@@ -5,7 +5,13 @@
 // reading-mode toggle with #ag-editor-id intact.
 const puppeteer = require('puppeteer-core'); const http = require('http'); const fs = require('fs'); const path = require('path');
 const statics = path.resolve(process.env.STATICS || '../../Dev/Typedown/Resources/Statics');
-const cases = ['<br></br>', 'a<br>b', 'x<hr></hr>y', '<img src="p.png"></img>', 'keep <span>text</span> here', '<wbr></wbr>'];
+// Void elements paired with a stray close, self-closing forms, uppercase, attributes, repeats, and normal
+// tags that must still work. Each must round-trip through the editor unchanged and survive a re-render.
+const cases = [
+  '<br></br>', 'a<br>b', 'a<br>b<br>c', '<br></br></br>', '<br/>', '<BR>', '<br class="x"></br>',
+  'x<hr></hr>y', 'a<hr/>b', '<img src="p.png"></img>', '<img src="p.png"/>', 'a<wbr></wbr>b',
+  'text <input> more', 'keep <span>text</span> here', 'nested <strong><em>x</em></strong> ok',
+];
 const server = http.createServer((req, res) => {
   let p = decodeURIComponent(req.url.split('?')[0]); if (p === '/') p = '/index.html';
   const f = path.join(statics, p);
@@ -35,12 +41,20 @@ const server = http.createServer((req, res) => {
     await new Promise(r => setTimeout(r, 300));
     await page.evaluate(() => window.__deliver('SettingsChanged', { readOnly: false }));
     await new Promise(r => setTimeout(r, 300));
+    // Still in reading mode after the toggle sequence ended on readOnly=false; set it back to read to check
+    // that a <br>'s literal source is not shown to a reader (width collapses to 0).
+    let srcHidden = true;
+    if (md.includes('<br')) {
+      await page.evaluate(() => window.__deliver('SettingsChanged', { readOnly: true }));
+      await new Promise(r => setTimeout(r, 300));
+      srcHidden = await page.evaluate(() => { const t = document.querySelector('#ag-editor-id .ag-html-tag'); return t ? Math.round(t.getBoundingClientRect().width) === 0 : true; });
+    }
     const survived = await page.evaluate(() => !!document.getElementById('ag-editor-id'));
     const kept = loaded === md;
-    if (!kept || !survived) ok = false;
-    console.log(`  ${JSON.stringify(md)} -> loaded ${JSON.stringify(loaded)} ${kept ? '(kept)' : '(CHANGED)'}; editor survived toggle ${survived}`);
+    if (!kept || !survived || !srcHidden) ok = false;
+    console.log(`  ${JSON.stringify(md)} -> loaded ${JSON.stringify(loaded)} ${kept ? '(kept)' : '(CHANGED)'}; survived ${survived}${md.includes('<br') ? `; br source hidden in reading ${srcHidden}` : ''}`);
     await page.close();
   }
-  console.log(ok ? 'OK: void HTML elements keep the text and the editor survives a re-render' : 'FAIL');
+  console.log(ok ? 'OK: void HTML round-trips, survives re-render, and hides its source in reading mode' : 'FAIL');
   await browser.close(); server.close(); process.exit(ok ? 0 : 1);
 })().catch(e => { console.error(e); process.exit(1); });

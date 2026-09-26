@@ -19,13 +19,17 @@ export default function htmlTag (h, cursor, block, token, outerClass) {
     }, [])
     : ''
 
-  switch (tag) {
+  switch (tag.toLowerCase()) {
     // Handle html img.
     case 'img': {
       return this.image(h, cursor, block, token, outerClass)
     }
     case 'br': {
-      return [h(`span.${CLASS_OR_ID.AG_HTML_TAG}`, [...openContent, h(tag)])]
+      // The <br> renders as an actual line break either way. Its source text goes in a marker span that is
+      // shown, greyed, only while the caret is in it, and hidden otherwise — so a reader sees the break,
+      // not the literal "<br>". Same rule as every other inline marker (getClassName).
+      const brMarker = this.getClassName(outerClass, block, token, cursor)
+      return [h(`span.${CLASS_OR_ID.AG_HTML_TAG}.${brMarker}`, openContent), h(tag)]
     }
     default:
       // handle void html tag
