@@ -1253,16 +1253,16 @@ pre:not(.ag-active):hover .ag-code-copy {
   opacity: .5;
 }
 
-/* While the check shows it fully replaces the copy icon and is not faded, even if the pointer has left. */
+/* While the check shows it fully replaces the copy icon (which lives in a span.icon), covering the button,
+   and is not faded even after the pointer leaves. */
 .ag-code-copy.ag-code-copied { opacity: 1 !important; }
-.ag-code-copy.ag-code-copied > svg { display: none; }
+.ag-code-copy.ag-code-copied .icon { visibility: hidden; }
 .ag-code-copy.ag-code-copied::after {
   content: '';
-  display: block;
-  width: 16px;
-  height: 16px;
+  position: absolute;
+  inset: 0;
   /* a check mark, drawn so it needs no icon font */
-  background: no-repeat center/12px url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2322a06b' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><path d='M20 6L9 17l-5-5'/></svg>");
+  background: no-repeat center/14px url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2322a06b' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><path d='M20 6L9 17l-5-5'/></svg>");
 }
 
 .ag-code-copy:hover {
