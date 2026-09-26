@@ -20,6 +20,18 @@ namespace Typedown.Core.Utilities
         /// The same atomic write for content whose bytes the caller has already produced — a document keeps the
         /// encoding, byte order mark and line ending it was opened with (see <see cref="TextFileFormat"/>).
         /// </summary>
+        // MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH: an atomic same-volume rename that overwrites the
+        // target and leaves no backup file beside it. Returns false when it is not applicable (not Windows, or
+        // a cross-volume move the OS refuses), so the caller falls back to the managed path.
+        [System.Runtime.InteropServices.DllImport("kernel32.dll", SetLastError = true, CharSet = System.Runtime.InteropServices.CharSet.Unicode)]
+        private static extern bool MoveFileEx(string existing, string newName, uint flags);
+
+        private static bool MoveReplace(string source, string destination)
+        {
+            try { return MoveFileEx(source, destination, 0x1 | 0x8); }
+            catch { return false; }
+        }
+
         public static async Task WriteAllBytesAtomicAsync(string path, byte[] bytes)
         {
             var directory = Path.GetDirectoryName(path);
@@ -38,14 +50,21 @@ namespace Typedown.Core.Utilities
                 try { File.SetAttributes(tempPath, FileAttributes.Hidden | FileAttributes.Temporary); } catch { }
                 try
                 {
-                    // File.Move with overwrite is an atomic same-volume replace. Unlike File.Replace it leaves
-                    // no backup file (…~RF….TMP) beside the target — which was both what the watcher followed
-                    // and, on a sync drive, an extra file to upload and possibly leave behind after a crash.
-                    File.Move(tempPath, path, overwrite: true);
+                    // Replace atomically, and without the ~RF….TMP backup file File.Replace leaves on Windows —
+                    // which a sync drive would upload and could leave behind after a crash. MoveFileEx with
+                    // REPLACE_EXISTING is the same-volume atomic rename with no backup; the managed fallbacks
+                    // cover other file systems.
+                    if (!MoveReplace(tempPath, path))
+                    {
+                        if (File.Exists(path))
+                            File.Replace(tempPath, path, null, ignoreMetadataErrors: true);
+                        else
+                            File.Move(tempPath, path);
+                    }
                 }
                 catch (Exception ex) when (ex is PlatformNotSupportedException || ex is IOException || ex is UnauthorizedAccessException)
                 {
-                    // Move can fail across volumes or on file systems without rename semantics; keep the data
+                    // Replace can fail across volumes or on file systems without rename semantics; keep the data
                     // safe by copying the finished temp file over the target instead of streaming into it.
                     File.Copy(tempPath, path, overwrite: true);
                 }
