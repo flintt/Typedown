@@ -160,6 +160,11 @@ namespace Typedown.Core.ViewModels
         public async Task SwitchTo(DocumentTab tab)
         {
             if (tab == null || tab == ActiveTab || !Tabs.Contains(tab)) return;
+            // Bring the outgoing document's latest edits in and let its pending change reports resolve before we
+            // snapshot it and load the next one. Without this a throttled MarkdownChange for the tab being left
+            // can arrive after the switch and land on the tab now shown — one document's text crossing into
+            // another. Flushing captures the accurate text and drains those reports first.
+            await EditorViewModel.FlushContentAsync();
             switching = true;
             try
             {
