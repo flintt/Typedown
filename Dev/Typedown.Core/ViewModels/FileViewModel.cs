@@ -846,15 +846,31 @@ namespace Typedown.Core.ViewModels
             ScheduleReloadFromDisk();
         }
 
+        // A saved file is written by replacing it: the content goes to a temporary file, and the original is
+        // renamed aside before the new one takes its place. That internal rename must not be mistaken for the
+        // user renaming the file in Explorer — following it pointed the editor at a "*.md~RF….TMP" backup.
+        private static bool LooksLikeSaveArtifact(string path)
+        {
+            var name = Path.GetFileName(path) ?? string.Empty;
+            return name.EndsWith(".TMP", StringComparison.OrdinalIgnoreCase) ||
+                   name.EndsWith(".tmp", StringComparison.OrdinalIgnoreCase) ||
+                   name.Contains("~RF") ||
+                   (name.StartsWith(".") && name.Contains(".tmp"));
+        }
+
         private void OnDiskFileRenamed(object sender, RenamedEventArgs e)
         {
+            // Our own write, in progress: the rename is part of the atomic replace, not the user's doing.
+            if (DateTime.UtcNow < ignoreExternalChangeUntil)
+                return;
             dispatcherQueue?.TryEnqueue(() =>
             {
-                if (disposables.IsDisposed)
+                if (disposables.IsDisposed || DateTime.UtcNow < ignoreExternalChangeUntil)
                     return;
                 if (!string.IsNullOrEmpty(FilePath) &&
                     string.Equals(e.OldFullPath, FilePath, StringComparison.OrdinalIgnoreCase) &&
-                    !string.IsNullOrEmpty(e.FullPath))
+                    !string.IsNullOrEmpty(e.FullPath) &&
+                    !LooksLikeSaveArtifact(e.FullPath))
                 {
                     FilePath = e.FullPath;
                     _ = AccessHistory.RecordFileHistory(FilePath);
