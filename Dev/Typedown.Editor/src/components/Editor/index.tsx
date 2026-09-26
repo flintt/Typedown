@@ -1,5 +1,5 @@
 import { setScrollLoadId } from 'services/scrollbar'
-import CodeMirror from "components/CodeMirror";
+import CodeMirror from "components/CodeMirror6";
 import MuyaEditor from "components/Muya";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { remote } from "services/remote";

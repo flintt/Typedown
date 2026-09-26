@@ -41,7 +41,16 @@ CM6 内核要逐条对齐这些消息名与字段形状，宿主（Windows/Uno�
 ## 进度
 
 - [x] **M0** 分支、Linux 可构建、输出可重定向、CM6 依赖、基线、协议契约
-- [ ] **M1** 源码模式换 CM6（替 CM5）
+- [x] **M1** 源码模式换 CM6（替 CM5）— headless 验证（300k 文档，源码模式）：
+
+  | 指标 | CM5 旧 | CM6 新 |
+  |---|---|---|
+  | 渲染的行 DOM | 22705 | 60 |
+  | DOM 节点总数 | 135078 | 225 |
+  | 加载 | 4571 ms | 1156 ms |
+  | 逐键中位 | 513 ms | 67 ms |
+
+  只渲染视口内约 60 行,加载 4x、逐键 7.6x 更快。`MarkdownChange` 每条仍约 11.6KB（整篇发送，属宿主协议，M5 再优化）。新增 `components/CodeMirror6`，Editor 源码模式切到它；config-overrides 加 `fullySpecified:false` 让 Lezer 的 ESM 能被 webpack5 解析。**待办：nuc/WebKitGTK 上冒烟验证渲染与滚动。**
 - [ ] M2 Live Preview 基础设施
 - [ ] M3 内联元素
 - [ ] M4 块级元素

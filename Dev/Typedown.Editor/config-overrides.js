@@ -20,6 +20,12 @@ module.exports = function override(config, env) {
                 {
                     test: require.resolve(path.join(__dirname, './src/assets/libs/snap.svg-min.js')),
                     use: 'imports-loader?this=>window,fix=>module.exports=0'
+                },
+                // CodeMirror 6 / Lezer ship ESM with fully-specified imports (e.g. 'process/browser'), which
+                // webpack 5 under CRA rejects. Relaxing fullySpecified lets those modules resolve.
+                {
+                    test: /\.m?js$/,
+                    resolve: { fullySpecified: false }
                 }
             ]
         },
