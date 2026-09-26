@@ -50,7 +50,7 @@ CM6 内核要逐条对齐这些消息名与字段形状，宿主（Windows/Uno�
   | 加载 | 4571 ms | 1156 ms |
   | 逐键中位 | 513 ms | 67 ms |
 
-  只渲染视口内约 60 行,加载 4x、逐键 7.6x 更快。`MarkdownChange` 每条仍约 11.6KB（整篇发送，属宿主协议，M5 再优化）。新增 `components/CodeMirror6`，Editor 源码模式切到它；config-overrides 加 `fullySpecified:false` 让 Lezer 的 ESM 能被 webpack5 解析。**待办：nuc/WebKitGTK 上冒烟验证渲染与滚动。**
+  只渲染视口内约 60 行,加载 4x、逐键 7.6x 更快。`MarkdownChange` 每条仍约 11.6KB（整篇发送，属宿主协议，M5 再优化）。新增 `components/CodeMirror6`，Editor 源码模式切到它；config-overrides 加 `fullySpecified:false` 让 Lezer 的 ESM 能被 webpack5 解析。**nuc/WebKitGTK 冒烟通过**：行号、语法高亮、换行、输入、大纲、字数、深色主题都正常（截图存档）。
 - [ ] M2 Live Preview 基础设施
 - [ ] M3 内联元素
 - [ ] M4 块级元素
