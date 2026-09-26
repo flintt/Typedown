@@ -23,6 +23,10 @@ namespace Typedown.Core.Utilities
         public static async Task WriteAllBytesAtomicAsync(string path, byte[] bytes)
         {
             var directory = Path.GetDirectoryName(path);
+            // The temp file has to sit in the same directory as the target, so the replace below is a rename
+            // on the same volume and therefore atomic. It exists only for the moment between being written and
+            // becoming the target. It is a dot-file and marked hidden and temporary so a sync client (Synology
+            // Drive, OneDrive) skips it rather than uploading a file that is about to vanish.
             var tempPath = Path.Combine(string.IsNullOrEmpty(directory) ? "." : directory, $".{Path.GetFileName(path)}.{Guid.NewGuid():N}.tmp");
             try
             {
@@ -31,17 +35,18 @@ namespace Typedown.Core.Utilities
                     await stream.WriteAsync(bytes, 0, bytes.Length);
                     stream.Flush(flushToDisk: true);
                 }
+                try { File.SetAttributes(tempPath, FileAttributes.Hidden | FileAttributes.Temporary); } catch { }
                 try
                 {
-                    if (File.Exists(path))
-                        File.Replace(tempPath, path, null, ignoreMetadataErrors: true);
-                    else
-                        File.Move(tempPath, path);
+                    // File.Move with overwrite is an atomic same-volume replace. Unlike File.Replace it leaves
+                    // no backup file (…~RF….TMP) beside the target — which was both what the watcher followed
+                    // and, on a sync drive, an extra file to upload and possibly leave behind after a crash.
+                    File.Move(tempPath, path, overwrite: true);
                 }
                 catch (Exception ex) when (ex is PlatformNotSupportedException || ex is IOException || ex is UnauthorizedAccessException)
                 {
-                    // Replace can fail across volumes or on file systems without rename semantics; keep the data safe
-                    // by copying the finished temp file over the target instead of streaming into it.
+                    // Move can fail across volumes or on file systems without rename semantics; keep the data
+                    // safe by copying the finished temp file over the target instead of streaming into it.
                     File.Copy(tempPath, path, overwrite: true);
                 }
             }
