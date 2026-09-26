@@ -8,7 +8,10 @@ import { getDefer } from '../utils'
  */
 export const loadedLanguages = new Set(['markup', 'css', 'clike', 'javascript'])
 export const languages = components.languages
-export const alias = { 'c++': 'cpp' }
+// Prism ships no Vue grammar; a .vue single-file component is closest to markup (its <template> is HTML,
+// with <script>/<style> sections). Aliasing it to markup at least highlights the template rather than
+// leaving a ```vue block plain. jsx/tsx (React) are real Prism languages and already highlight.
+export const alias = { 'c++': 'cpp', 'vue': 'markup' }
 
 // 补充别名
 Object.keys(alias).forEach(name => Object.assign(languages[alias[name]], { alias: [...languages[alias[name]].alias ?? [], name] }))

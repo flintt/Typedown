@@ -97,6 +97,6 @@
 | S6 | 粘贴纯文本被识别成代码块（2 条） | 待复现粘贴判定 | 粘贴逻辑收紧对"看起来像代码"的判定 | 半天，待复现 |
 | S7 | 图片缩放不自由 / img width 无效（2 条） | 待核对 zoom/width 处理 | 支持自由缩放或让 width 生效 | 1 天，待复现 |
 | S8 | 多个空行被合并（1 条） | Markdown 规范行为 | 作为选项：保留多空行 | 半天 |
-| S9 | 代码高亮补 vue/jsx（2 条） | Prism 按需加载，需核对是否含 jsx/vue 组件 | 缺则加语言包 | 半天，待核对 |
+| S9 | 代码高亮补 vue/jsx（2 条） | 已核对：jsx/tsx（react）本就按需加载、已高亮；vue 不在 Prism。已把 vue 别名到 markup，至少高亮模板；dbg 验证 vue 0→13 tokens | — |
 | S10 | YAML front matter 渲染异常（1 条） | 待复现 | 复现后修 | 待定 |
 | S11 | LaTeX `\color{rgb()}` 不支持（1 条） | 待复现 | KaTeX 配置或宏 | 待定 |
