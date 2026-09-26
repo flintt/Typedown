@@ -98,5 +98,5 @@
 | S7 | 图片缩放不自由 / img width 无效（2 条） | 待核对 zoom/width 处理 | 支持自由缩放或让 width 生效 | 1 天，待复现 |
 | S8 | 多个空行被合并（1 条） | Markdown 规范行为 | 作为选项：保留多空行 | 半天 |
 | S9 | 代码高亮补 vue/jsx（2 条） | 已核对：jsx/tsx（react）本就按需加载、已高亮；vue 不在 Prism。已把 vue 别名到 markup，至少高亮模板；dbg 验证 vue 0→13 tokens | — |
-| S10 | YAML front matter 渲染异常（1 条） | 待复现 | 复现后修 | 待定 |
-| S11 | LaTeX `\color{rgb()}` 不支持（1 条） | 待复现 | KaTeX 配置或宏 | 待定 |
+| S10 | YAML front matter 渲染异常（1 条） | 已复现：当前渲染为带 yaml 高亮的 front-matter 框、往返不变，未见异常；缺原评论的具体文档，暂判定不可复现 | 不改 |
+| S11 | LaTeX `\color{rgb()}` 不支持（1 条） | 确认：KaTeX 只认命名色和 #hex，rgb() 非其语法；需预处理 rgb()→#hex 或加宏 | 低优先，1 条 2022 年，暂缓 |
