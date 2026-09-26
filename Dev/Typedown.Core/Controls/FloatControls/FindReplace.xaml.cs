@@ -42,6 +42,19 @@ namespace Typedown.Core.Controls.FloatControls
             TextBoxSearch.SelectionLength = TextBoxSearch.Text.Length;
             disposables.Add(Float.WhenPropertyChanged(nameof(Float.FindReplaceDialogOpen)).Cast<FloatViewModel.FindReplaceDialogState>().Subscribe(s => SearchOpenChanged(s, true)));
             SearchOpenChanged(Float.FindReplaceDialogOpen, false);
+            // Take focus on open and whenever the search shortcut is pressed again (see FloatViewModel.Search).
+            Float.FocusSearchRequested += OnFocusSearchRequested;
+        }
+
+        private void OnFocusSearchRequested()
+        {
+            _ = Dispatcher.RunIdleAsync(_ =>
+            {
+                // Focus the search box and select its text, so pressing the shortcut again after clicking
+                // into the document brings the caret back and the next keystroke replaces the old query.
+                TextBoxSearch?.Focus(FocusState.Programmatic);
+                TextBoxSearch?.SelectAll();
+            });
         }
 
         private void SearchOpenChanged(FloatViewModel.FindReplaceDialogState state, bool useTransitions)
@@ -59,6 +72,7 @@ namespace Typedown.Core.Controls.FloatControls
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
+            if (Float != null) Float.FocusSearchRequested -= OnFocusSearchRequested;
             disposables.Clear();
             Bindings?.StopTracking();
         }

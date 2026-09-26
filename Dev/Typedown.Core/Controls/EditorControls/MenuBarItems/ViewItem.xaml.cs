@@ -88,8 +88,9 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             RegisterWindowShortcut(Settings.ShortcutNextTab, NextTabItem);
             RegisterWindowShortcut(Settings.ShortcutPreviousTab, PreviousTabItem);
             RegisterTabNumberShortcuts();
-            RegisterWindowShortcut(new Models.ShortcutKey(Windows.System.VirtualKeyModifiers.Menu, Windows.System.VirtualKey.Number0),
-                () => ViewModel?.TabsViewModel?.LastUsedTabCommand.Execute(default));
+            // Bind the shortcut through the menu item so the key is shown next to it (it runs the item's own
+            // command); the action overload leaves the entry with no visible shortcut.
+            RegisterWindowShortcut(new Models.ShortcutKey(Windows.System.VirtualKeyModifiers.Menu, Windows.System.VirtualKey.Number0), LastUsedTabItem);
         }
 
         /// <summary>

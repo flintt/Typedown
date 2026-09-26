@@ -1253,6 +1253,8 @@ pre:not(.ag-active):hover .ag-code-copy {
   opacity: .5;
 }
 
+/* While the check shows it fully replaces the copy icon and is not faded, even if the pointer has left. */
+.ag-code-copy.ag-code-copied { opacity: 1 !important; }
 .ag-code-copy.ag-code-copied > svg { display: none; }
 .ag-code-copy.ag-code-copied::after {
   content: '';

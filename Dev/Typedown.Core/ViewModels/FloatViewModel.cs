@@ -61,6 +61,10 @@ namespace Typedown.Core.ViewModels
             });
         }
 
+        /// <summary>Raised every time the search shortcut is pressed, so the bar can take focus even when it
+        /// was already open — pressing it again after clicking back into the document used to do nothing.</summary>
+        public event Action FocusSearchRequested;
+
         public void Search(FindReplaceDialogState open)
         {
             FindReplaceDialogOpen = open;
@@ -68,6 +72,7 @@ namespace Typedown.Core.ViewModels
             ViewModel.EditorViewModel.SearchValue = text;
             if (!string.IsNullOrEmpty(text))
                 ViewModel.EditorViewModel.OnSearch();
+            FocusSearchRequested?.Invoke();
         }
 
         public void OnFindReplaceDialogOpenChange(FindReplaceDialogState open)

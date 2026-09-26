@@ -30,7 +30,7 @@
             <HyperlinkButton Content="GitHub" NavigateUri="https://github.com/flintt/Typedown" />
         </StackPanel>
 
-        <StackPanel Margin="0,8,0,0" Spacing="16" Visibility="Collapsed">
+        <StackPanel Margin="0,8,0,0" Spacing="16">
             <Button MinWidth="100" Name="FeedBackButton" Content="{u:LocaleString Key=About.SendFeedback}" Click="FeedBackButton_Click"/>
         </StackPanel>
 

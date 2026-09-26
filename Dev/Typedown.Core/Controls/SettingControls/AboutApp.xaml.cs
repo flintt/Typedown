@@ -27,9 +27,11 @@ namespace Typedown.Core.Controls
             }
         }
 
-        private async void FeedBackButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void FeedBackButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            await FeedbackDialog.OpenFeedbackDialog(XamlRoot);
+            // Feedback goes to the fork's GitHub issues, where it reaches the people who build this, rather
+            // than the original author's server that the in-app dialog posted to.
+            Utilities.Common.OpenUrl("https://github.com/flintt/Typedown/issues");
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
