@@ -139,7 +139,7 @@ namespace Typedown.Core.Controls
                 var items = await e.DataView.GetStorageItemsAsync();
                 if (items.Count != 1) return;
                 var item = items.First();
-                if (FileTypeHelper.IsMarkdownFile(item.Path))
+                if (FileTypeHelper.IsEditableTextFile(item.Path))
                 {
                     ViewModel.FileViewModel.OpenFileCommand.Execute(item.Path);
                 }

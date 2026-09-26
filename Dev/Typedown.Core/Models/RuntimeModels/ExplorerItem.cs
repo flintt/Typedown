@@ -369,7 +369,7 @@ namespace Typedown.Core.Models
                 return false;
             if (attr.HasFlag(FileAttributes.Directory))
                 return true;
-            return FileTypeHelper.IsMarkdownFile(name);
+            return FileTypeHelper.IsEditableTextFile(name);
         }
 
         private class DefaultComparer : Comparer<ExplorerItem>

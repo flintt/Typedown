@@ -136,7 +136,7 @@ namespace Typedown.Core.Controls
                         if (!entry.Name.StartsWith(".") && entry.Name != "node_modules") pending.Push(entry.FullName);
                         continue;
                     }
-                    if (!FileTypeHelper.IsMarkdownFile(entry.Name) || ((FileInfo)entry).Length > MaxFileBytes) continue;
+                    if (!FileTypeHelper.IsEditableTextFile(entry.Name) || ((FileInfo)entry).Length > MaxFileBytes) continue;
                     files++;
                     string snippet = null;
                     try
