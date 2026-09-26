@@ -52,7 +52,7 @@ CM6 内核要逐条对齐这些消息名与字段形状，宿主（Windows/Uno�
 
   只渲染视口内约 60 行,加载 4x、逐键 7.6x 更快。`MarkdownChange` 每条仍约 11.6KB（整篇发送，属宿主协议，M5 再优化）。新增 `components/CodeMirror6`，Editor 源码模式切到它；config-overrides 加 `fullySpecified:false` 让 Lezer 的 ESM 能被 webpack5 解析。**nuc/WebKitGTK 冒烟通过**：行号、语法高亮、换行、输入、大纲、字数、深色主题都正常（截图存档）。
 - [x] **M2** Live Preview 基础设施 — Lezer 树→装饰管线打通，三档模式（源码/实时/阅读），光标进出露源码（atomicRanges 防卡）。内联元素首批：粗体/斜体/行内代码/链接/标题，标记隐藏、样式套用。headless 验证：`**粗体**`→粗体、反引号/URL 隐藏、光标所在行露源码。Editor 的所见即所得也切到 CM6（Muya 暂留待 M6 移除）。
-- [ ] M3 内联元素
+- [x] **M3** 内联元素 — 删除线（GFM）、`==高亮==`（正则）、图片（`<img>` widget）、行内公式 `$...$`（KaTeX widget）。headless 验证：四者都渲染成成品，`~~`/`==`/`$`/图片 URL 全部隐藏，光标进入露源码。
 - [ ] M4 块级元素
 - [ ] M5 外围能力（TOC/大纲/查找/撤销/滚动）
 - [ ] M6 移除 Muya + 回归
