@@ -220,7 +220,7 @@
   "font": "DejaVu Sans Mono",
   "size": "13.6px",
   "weight": "400",
-  "colour": "rgb(0, 0, 0)",
+  "colour": "rgb(36, 41, 46)",
   "fill": "rgba(0, 0, 0, 0.075)"
  },
  {
@@ -2684,7 +2684,7 @@
   "font": "Open Sans",
   "size": "11.2px",
   "weight": "400",
-  "colour": "rgb(0, 0, 0)",
+  "colour": "rgb(36, 41, 46)",
   "fill": ""
  },
  {
@@ -3230,7 +3230,7 @@
   "font": "monospace",
   "size": "11.2px",
   "weight": "600",
-  "colour": "rgb(0, 0, 0)",
+  "colour": "rgb(36, 41, 46)",
   "fill": ""
  },
  {
@@ -3244,7 +3244,7 @@
   "font": "monospace",
   "size": "11.2px",
   "weight": "600",
-  "colour": "rgb(0, 0, 0)",
+  "colour": "rgb(36, 41, 46)",
   "fill": ""
  },
  {

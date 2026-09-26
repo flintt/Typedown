@@ -2,7 +2,7 @@
   color: black;
   --highlightColor: rgba(104, 134, 170, .4);
   --selectionColor: rgba(0, 0, 0, .1);
-  --editorColor: rgb(0, 0, 0);
+  --editorColor: rgb(36, 41, 46); /* near-black instead of pure #000; pure black on white was called harsh */
   --editorColor80: rgba(0, 0, 0, .8);
   --editorColor60: rgba(0, 0, 0, .6);
   --editorColor50: rgba(0, 0, 0, .5);
