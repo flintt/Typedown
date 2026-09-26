@@ -11,6 +11,7 @@ const cases = [
   '<br></br>', 'a<br>b', 'a<br>b<br>c', '<br></br></br>', '<br/>', '<BR>', '<br class="x"></br>',
   'x<hr></hr>y', 'a<hr/>b', '<img src="p.png"></img>', '<img src="p.png"/>', 'a<wbr></wbr>b',
   'text <input> more', 'keep <span>text</span> here', 'nested <strong><em>x</em></strong> ok',
+  'jump <a id="sec"></a> here', 'anchor <a name="s2"></a> point',
 ];
 const server = http.createServer((req, res) => {
   let p = decodeURIComponent(req.url.split('?')[0]); if (p === '/') p = '/index.html';
@@ -44,15 +45,17 @@ const server = http.createServer((req, res) => {
     // Still in reading mode after the toggle sequence ended on readOnly=false; set it back to read to check
     // that a <br>'s literal source is not shown to a reader (width collapses to 0).
     let srcHidden = true;
-    if (md.includes('<br')) {
+    const hidesSource = md.includes('<br') || /<a (id|name)=/.test(md);
+    if (hidesSource) {
       await page.evaluate(() => window.__deliver('SettingsChanged', { readOnly: true }));
       await new Promise(r => setTimeout(r, 300));
-      srcHidden = await page.evaluate(() => { const t = document.querySelector('#ag-editor-id .ag-html-tag'); return t ? Math.round(t.getBoundingClientRect().width) === 0 : true; });
+      // In reading mode the literal HTML source of a <br> or an empty anchor must not be visible.
+      srcHidden = await page.evaluate(() => { const tags = document.querySelectorAll('#ag-editor-id .ag-html-tag'); for (const t of tags) if (Math.round(t.getBoundingClientRect().width) > 0) return false; return true; });
     }
     const survived = await page.evaluate(() => !!document.getElementById('ag-editor-id'));
     const kept = loaded === md;
     if (!kept || !survived || !srcHidden) ok = false;
-    console.log(`  ${JSON.stringify(md)} -> loaded ${JSON.stringify(loaded)} ${kept ? '(kept)' : '(CHANGED)'}; survived ${survived}${md.includes('<br') ? `; br source hidden in reading ${srcHidden}` : ''}`);
+    console.log(`  ${JSON.stringify(md)} -> loaded ${JSON.stringify(loaded)} ${kept ? '(kept)' : '(CHANGED)'}; survived ${survived}${hidesSource ? `; source hidden in reading ${srcHidden}` : ''}`);
     await page.close();
   }
   console.log(ok ? 'OK: void HTML round-trips, survives re-render, and hides its source in reading mode' : 'FAIL');

@@ -92,7 +92,7 @@
 | S1 | 复制代码块后给反馈（2 条） | 已做：复制后按钮短暂显示对号（1.5 秒）；dbg 验证点击后加 ag-code-copied 类 | — |
 | S2 | 应用内反馈入口失效（1 条） | 反馈按钮在 Visibility=Collapsed 面板里、且 POST 到原作者服务器（AllowOutboundNetwork=false 已关） | 已改：关于页去掉原应用商店/致谢链接，换成 GitHub（贡献/提 issue 的去处） | 已做 |
 | S3 | 开始菜单搜 "markdown" 搜不到（1 条） | MSIX 清单 Description="Markdown editor"；安装版(Inno)的 exe 描述待核对 | 安装版 exe 的 FileDescription/AppName 里加 Markdown 关键字 | 小，待核对 |
-| S4 | 锚点 HTML `<a id="x"></a>` 原样显示（1 条） | 和 `<br>` 同类：空/锚点元素在编辑器显示源码 | 复现后按 void/隐藏规则统一处理 | 半天，待复现 |
+| S4 | 锚点 HTML `<a id="x"></a>` 原样显示（1 条） | 已做：空的行内元素源码在阅读模式隐藏（原来无子节点时被强制常显）；void-html-check.js 加锚点用例 | — |
 | S5 | 默认字体颜色偏深刺眼（1 条） | 正文用 --editorColor（纯黑），无单独可调 | 设置里加正文字体颜色，或默认调柔 | 半天 |
 | S6 | 粘贴纯文本被识别成代码块（2 条） | 待复现粘贴判定 | 粘贴逻辑收紧对"看起来像代码"的判定 | 半天，待复现 |
 | S7 | 图片缩放不自由 / img width 无效（2 条） | 待核对 zoom/width 处理 | 支持自由缩放或让 width 生效 | 1 天，待复现 |
