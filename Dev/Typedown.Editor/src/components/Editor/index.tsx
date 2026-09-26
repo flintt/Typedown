@@ -230,7 +230,7 @@ const Editor: React.FC = () => {
         )
     } else {
         return (
-            <MuyaEditor
+            <CodeMirror
                 options={options}
                 cursor={cursorRef.current}
                 markdown={markdownRef.current ?? ''}
