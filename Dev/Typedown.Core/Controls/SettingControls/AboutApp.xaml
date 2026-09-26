@@ -25,8 +25,9 @@
         </StackPanel>
 
         <StackPanel Margin="-12,8,0,0">
-            <HyperlinkButton Content="{u:LocaleString Key=About.BasedOnOpenSourceSoftware}" NavigateUri="https://typedown.ownbox.cn/credits" />
-            <HyperlinkButton Content="{u:LocaleString Key=About.AppStorePage}" NavigateUri="https://www.microsoft.com/store/apps/9P8TCW4H2HB4" />
+            <!-- A fork: the original app's store page and credits site are not ours. What stays is where this
+                 build is developed and contributed to. -->
+            <HyperlinkButton Content="GitHub" NavigateUri="https://github.com/flintt/Typedown" />
         </StackPanel>
 
         <StackPanel Margin="0,8,0,0" Spacing="16" Visibility="Collapsed">
