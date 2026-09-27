@@ -18,6 +18,10 @@ namespace Typedown.Core.Services
 
         private readonly TaskCompletionSource<bool> initializedTask = new();
 
+        // Serialise record writes: two concurrent DbContexts could each find no row and both insert, duplicating a
+        // path. This closes the in-process race (a cross-process unique index/migration is still TODO).
+        private static readonly System.Threading.SemaphoreSlim recordLock = new(1, 1);
+
         public AccessHistory()
         {
             _ = UpdateRecentlyOpened();
@@ -25,16 +29,24 @@ namespace Typedown.Core.Services
 
         public async Task RecordFileHistory(string filePath)
         {
-            using var ctx = await AppDbContext.Create();
-            var model = ctx.FileAccessHistories;
-            // One row per path, its time updated — not a new row every save. Otherwise the table grows without
-            // bound and the most-recent query returns many rows of the same file, crowding others out of the list.
-            var existing = await model.FirstOrDefaultAsync(x => x.FilePath == filePath);
-            if (existing != null)
-                existing.AccessTime = DateTime.Now;
-            else
-                await model.AddAsync(new FileAccessHistory() { FilePath = filePath, AccessTime = DateTime.Now });
-            await ctx.SaveChangesAsync();
+            await recordLock.WaitAsync();
+            try
+            {
+                using var ctx = await AppDbContext.Create();
+                var model = ctx.FileAccessHistories;
+                // One row per path, its time updated — not a new row every save. Otherwise the table grows without
+                // bound and the most-recent query returns many rows of the same file, crowding others out.
+                var existing = await model.FirstOrDefaultAsync(x => x.FilePath == filePath);
+                if (existing != null)
+                    existing.AccessTime = DateTime.Now;
+                else
+                    await model.AddAsync(new FileAccessHistory() { FilePath = filePath, AccessTime = DateTime.Now });
+                await ctx.SaveChangesAsync();
+            }
+            finally
+            {
+                recordLock.Release();
+            }
             await UpdateFileRecentlyOpened(filePath, CollectionChangeAction.Add);
         }
 
@@ -90,15 +102,23 @@ namespace Typedown.Core.Services
 
         public async Task RecordFolderHistory(string folderPath)
         {
-            using var ctx = await AppDbContext.Create();
-            var model = ctx.FolderAccessHistories;
-            // One row per path, its time updated — see RecordFileHistory.
-            var existing = await model.FirstOrDefaultAsync(x => x.FolderPath == folderPath);
-            if (existing != null)
-                existing.AccessTime = DateTime.Now;
-            else
-                await model.AddAsync(new FolderAccessHistory() { FolderPath = folderPath, AccessTime = DateTime.Now });
-            await ctx.SaveChangesAsync();
+            await recordLock.WaitAsync();
+            try
+            {
+                using var ctx = await AppDbContext.Create();
+                var model = ctx.FolderAccessHistories;
+                // One row per path, its time updated — see RecordFileHistory.
+                var existing = await model.FirstOrDefaultAsync(x => x.FolderPath == folderPath);
+                if (existing != null)
+                    existing.AccessTime = DateTime.Now;
+                else
+                    await model.AddAsync(new FolderAccessHistory() { FolderPath = folderPath, AccessTime = DateTime.Now });
+                await ctx.SaveChangesAsync();
+            }
+            finally
+            {
+                recordLock.Release();
+            }
             await UpdateFolderRecentlyOpened(folderPath, CollectionChangeAction.Add);
         }
 
