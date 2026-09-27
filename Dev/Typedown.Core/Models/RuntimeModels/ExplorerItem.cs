@@ -153,6 +153,10 @@ namespace Typedown.Core.Models
                     await enumerationGate.WaitAsync();
                     try
                     {
+                        // The request may have waited in the queue while this node was collapsed or navigated
+                        // away from; skip the scan entirely rather than read a directory that is no longer shown.
+                        if (disposed || updateVersion != childrenUpdateVersion)
+                            return;
                         files = await Task.Run(() => new DirectoryInfo(path).EnumerateFileSystemInfos()
                             .Where(info => filter(info.Attributes, info.Name)).ToList());
                     }

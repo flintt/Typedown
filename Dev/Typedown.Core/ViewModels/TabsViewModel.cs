@@ -261,10 +261,11 @@ namespace Typedown.Core.ViewModels
         {
             // Bring the live editor's latest text in before judging what is dirty: an edit made within the report
             // throttle would otherwise still read as saved, and the window would close without asking about it.
-            await EditorViewModel.FlushContentAsync();
+            // If the editor did not answer, treat the active document as dirty rather than closing it silently.
+            var flushed = await EditorViewModel.FlushContentAsync();
             foreach (var tab in Tabs.ToList())
             {
-                var dirty = tab == ActiveTab ? !EditorViewModel.Saved : !tab.Saved;
+                var dirty = tab == ActiveTab ? (!EditorViewModel.Saved || !flushed) : !tab.Saved;
                 if (!dirty) continue;
                 await SwitchTo(tab);
                 await FileViewModel.AutoSaveFile();

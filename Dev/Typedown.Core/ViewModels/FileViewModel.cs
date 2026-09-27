@@ -491,11 +491,13 @@ namespace Typedown.Core.ViewModels
             else
             {
                 var path = FilePath;
+                var tab = TabsViewModel?.ActiveTab;
                 await EditorViewModel.FlushContentAsync(); // what we write must be what is on screen
                 // The flush awaited, and a tab switch does not take this lock: if the active document changed
                 // under us the live buffer now belongs to another document, and writing it to this path would
-                // put one document's text into another. Abort rather than corrupt the file.
-                if (disposables.IsDisposed || FilePath != path)
+                // put one document's text into another. Check the tab reference too — two untitled tabs share a
+                // null path, so the path check alone would not notice a switch between them.
+                if (disposables.IsDisposed || FilePath != path || TabsViewModel?.ActiveTab != tab)
                     return false;
                 var markdown = EditorViewModel.Markdown;
                 var hash = Common.SimpleHash(markdown);
@@ -537,15 +539,16 @@ namespace Typedown.Core.ViewModels
             try
             {
                 var originalPath = FilePath;
+                var originalTab = TabsViewModel?.ActiveTab;
                 var filePicker = new FileSavePicker();
                 filePicker.SetOwnerWindow(AppViewModel.MainWindow);
                 filePicker.FileTypeChoices.Add("Markdown Files", FileTypeHelper.Markdown.ToList());
                 filePicker.SuggestedFileName = FileName ?? "untitled";
                 var file = await filePicker.PickSaveFileAsync();
-                if (file != null && !disposables.IsDisposed && FilePath == originalPath)
+                if (file != null && !disposables.IsDisposed && FilePath == originalPath && TabsViewModel?.ActiveTab == originalTab)
                 {
                     await EditorViewModel.FlushContentAsync();
-                    if (disposables.IsDisposed || FilePath != originalPath)
+                    if (disposables.IsDisposed || FilePath != originalPath || TabsViewModel?.ActiveTab != originalTab)
                         return null;
                     var markdown = EditorViewModel.Markdown;
                     var hash = Common.SimpleHash(markdown);
@@ -663,7 +666,11 @@ namespace Typedown.Core.ViewModels
 
         public async Task<bool> AskToSave()
         {
-            if (EditorViewModel.Saved || (SettingsViewModel.AutoSave && await AutoSaveFile()))
+            // Bring the editor's latest text in before deciding there is nothing to save. If the editor did not
+            // answer (timeout), do not trust the stale Saved flag — fall through to auto-save or the prompt, so a
+            // just-typed edit is not dropped on close.
+            var flushed = await EditorViewModel.FlushContentAsync();
+            if ((flushed && EditorViewModel.Saved) || (SettingsViewModel.AutoSave && await AutoSaveFile()))
             {
                 return true;
             }

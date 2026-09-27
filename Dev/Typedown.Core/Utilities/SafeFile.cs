@@ -40,6 +40,7 @@ namespace Typedown.Core.Utilities
             // becoming the target. It is a dot-file and marked hidden and temporary so a sync client (Synology
             // Drive, OneDrive) skips it rather than uploading a file that is about to vanish.
             var tempPath = Path.Combine(string.IsNullOrEmpty(directory) ? "." : directory, $".{Path.GetFileName(path)}.{Guid.NewGuid():N}.tmp");
+            var keepTemp = false;
             try
             {
                 using (var stream = new FileStream(tempPath, FileMode.CreateNew, FileAccess.Write, FileShare.None, 4096, FileOptions.Asynchronous))
@@ -62,37 +63,46 @@ namespace Typedown.Core.Utilities
                             File.Move(tempPath, path);
                     }
                 }
-                catch (Exception ex) when (ex is PlatformNotSupportedException || ex is IOException || ex is UnauthorizedAccessException)
+                catch (PlatformNotSupportedException)
                 {
-                    // A transient lock (an antivirus scan, a sync client) is the common recoverable cause of a
-                    // failed replace, so retry the atomic replace briefly before the last-resort copy — which is
-                    // not atomic and can leave a partial file. A PlatformNotSupportedException means the file
-                    // system has no rename semantics at all: nothing to retry, so go straight to the copy.
-                    if (!(ex is PlatformNotSupportedException))
-                    {
-                        for (var attempt = 0; attempt < 4; attempt++)
-                        {
-                            await Task.Delay(75);
-                            try
-                            {
-                                if (MoveReplace(tempPath, path)) return;
-                                if (File.Exists(path))
-                                    File.Replace(tempPath, path, null, ignoreMetadataErrors: true);
-                                else
-                                    File.Move(tempPath, path);
-                                return;
-                            }
-                            catch (IOException) { }
-                            catch (UnauthorizedAccessException) { }
-                        }
-                    }
-                    // Still failing: copy the finished temp file over the target as the last resort.
+                    // The file system has no atomic rename at all (some network/virtual file systems); the copy
+                    // is the only way to place the content. This is the one path where a non-atomic overwrite is
+                    // unavoidable.
                     File.Copy(tempPath, path, overwrite: true);
+                }
+                catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
+                {
+                    // A transient lock (an antivirus scan, a sync client briefly holding the file) is the common
+                    // recoverable cause; retry the atomic replace a few times.
+                    for (var attempt = 0; attempt < 4; attempt++)
+                    {
+                        await Task.Delay(75);
+                        try
+                        {
+                            if (MoveReplace(tempPath, path)) return;
+                            if (File.Exists(path))
+                                File.Replace(tempPath, path, null, ignoreMetadataErrors: true);
+                            else
+                                File.Move(tempPath, path);
+                            return;
+                        }
+                        catch (IOException) { }
+                        catch (UnauthorizedAccessException) { }
+                    }
+                    // Still locked after the retries. Do NOT overwrite in place with a non-atomic copy that could
+                    // leave a partial file — keep the original intact and the finished temp file as a recovery
+                    // copy, and report the failure to the caller so it can prompt or retry.
+                    keepTemp = true;
+                    throw;
                 }
             }
             finally
             {
-                try { if (File.Exists(tempPath)) File.Delete(tempPath); } catch { }
+                // Delete the temp file unless it is being kept as the recovery copy for a failed atomic replace.
+                if (!keepTemp)
+                {
+                    try { if (File.Exists(tempPath)) File.Delete(tempPath); } catch { }
+                }
             }
         }
     }
