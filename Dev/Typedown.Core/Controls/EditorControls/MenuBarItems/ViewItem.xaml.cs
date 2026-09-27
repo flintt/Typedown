@@ -47,7 +47,14 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             // Picks up a theme that was just added or edited without restarting. The rebuild waits for the click
             // to be over: the menu would otherwise be torn down while it is still on screen.
             var reload = new MenuFlyoutItem { Text = Locale.GetString("View.CustomTheme.Refresh") };
-            reload.Click += (_, _) => _ = Dispatcher.RunIdleAsync(_ => BuildThemeMenu());
+            reload.Click += (_, _) => _ = Dispatcher.RunIdleAsync(_ =>
+            {
+                BuildThemeMenu();
+                // Re-apply the current theme too, so edits to the file that is already selected take effect —
+                // the same as the settings page's refresh. Rebuilding the menu alone only picks up added or
+                // renamed theme files, not changes to the CSS of the theme currently in use.
+                Settings?.OnPropertyChanged(nameof(Settings.CustomTheme), null, Settings.CustomTheme);
+            });
             ThemeSubMenu.Items.Add(reload);
             UpdateThemeChecks();
         }
