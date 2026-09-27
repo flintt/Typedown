@@ -924,6 +924,7 @@ namespace Typedown.Core.ViewModels
 
             var path = FilePath;
             string text = null;
+            TextFileFormat format = null;
             for (var i = 0; i < 10; i++)
             {
                 if (disposables.IsDisposed || FilePath != path)
@@ -941,7 +942,10 @@ namespace Typedown.Core.ViewModels
                     }
                     var reloaded = await TextFileFormat.ReadAsync(path);
                     text = reloaded.Text;
-                    FileFormat = reloaded.Format;
+                    // Hold the format locally; committing it to the shared FileFormat here — before the identity
+                    // re-check below — would stamp this file's encoding/line-ending onto whatever document the
+                    // reader switched to while the read was in flight.
+                    format = reloaded.Format;
                     break;
                 }
                 catch (IOException)
@@ -955,6 +959,7 @@ namespace Typedown.Core.ViewModels
             }
             if (text == null || disposables.IsDisposed || FilePath != path)
                 return;
+            FileFormat = format;
 
             var diskHash = Common.SimpleHash(text);
             if (diskHash == EditorViewModel.FileHash || diskHash == DiskHash)
