@@ -437,6 +437,11 @@ namespace Typedown.Core.ViewModels
             {
                 var path = FilePath;
                 await EditorViewModel.FlushContentAsync(); // what we write must be what is on screen
+                // The flush awaited, and a tab switch does not take this lock: if the active document changed
+                // under us the live buffer now belongs to another document, and writing it to this path would
+                // put one document's text into another. Abort rather than corrupt the file.
+                if (disposables.IsDisposed || FilePath != path)
+                    return false;
                 var markdown = EditorViewModel.Markdown;
                 var hash = Common.SimpleHash(markdown);
                 var result = await WriteAllText(path, markdown, alert);
@@ -482,6 +487,8 @@ namespace Typedown.Core.ViewModels
                 if (file != null && !disposables.IsDisposed && FilePath == originalPath)
                 {
                     await EditorViewModel.FlushContentAsync();
+                    if (disposables.IsDisposed || FilePath != originalPath)
+                        return null;
                     var markdown = EditorViewModel.Markdown;
                     var hash = Common.SimpleHash(markdown);
                     var result = await WriteAllText(file.Path, markdown);
