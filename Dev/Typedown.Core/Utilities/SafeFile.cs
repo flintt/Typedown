@@ -64,8 +64,29 @@ namespace Typedown.Core.Utilities
                 }
                 catch (Exception ex) when (ex is PlatformNotSupportedException || ex is IOException || ex is UnauthorizedAccessException)
                 {
-                    // Replace can fail across volumes or on file systems without rename semantics; keep the data
-                    // safe by copying the finished temp file over the target instead of streaming into it.
+                    // A transient lock (an antivirus scan, a sync client) is the common recoverable cause of a
+                    // failed replace, so retry the atomic replace briefly before the last-resort copy — which is
+                    // not atomic and can leave a partial file. A PlatformNotSupportedException means the file
+                    // system has no rename semantics at all: nothing to retry, so go straight to the copy.
+                    if (!(ex is PlatformNotSupportedException))
+                    {
+                        for (var attempt = 0; attempt < 4; attempt++)
+                        {
+                            await Task.Delay(75);
+                            try
+                            {
+                                if (MoveReplace(tempPath, path)) return;
+                                if (File.Exists(path))
+                                    File.Replace(tempPath, path, null, ignoreMetadataErrors: true);
+                                else
+                                    File.Move(tempPath, path);
+                                return;
+                            }
+                            catch (IOException) { }
+                            catch (UnauthorizedAccessException) { }
+                        }
+                    }
+                    // Still failing: copy the finished temp file over the target as the last resort.
                     File.Copy(tempPath, path, overwrite: true);
                 }
             }
