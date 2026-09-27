@@ -16,14 +16,22 @@ namespace Typedown.Core.Utilities
 
         public bool HasByteOrderMark { get; }
 
+        /// <summary>
+        /// True when the file's bytes did not round-trip through <see cref="Encoding"/> — a non-UTF-8 file (GBK,
+        /// Latin-1, …) read as UTF-8 has U+FFFD where bytes could not be decoded, and saving it back would replace
+        /// those bytes for good. Callers refuse to silently overwrite such a file.
+        /// </summary>
+        public bool LossyDecode { get; }
+
         /// <summary>"\n", "\r\n" or "\r"; the one the file used most, and what a save writes back.</summary>
         public string LineEnding { get; }
 
-        private TextFileFormat(Encoding encoding, bool hasByteOrderMark, string lineEnding)
+        private TextFileFormat(Encoding encoding, bool hasByteOrderMark, string lineEnding, bool lossyDecode = false)
         {
             Encoding = encoding;
             HasByteOrderMark = hasByteOrderMark;
             LineEnding = lineEnding;
+            LossyDecode = lossyDecode;
         }
 
         /// <summary>
@@ -36,7 +44,7 @@ namespace Typedown.Core.Utilities
             var bytes = await File.ReadAllBytesAsync(path);
             var (encoding, bomLength) = DetectEncoding(bytes);
             var text = encoding.GetString(bytes, bomLength, bytes.Length - bomLength);
-            var format = new TextFileFormat(encoding, bomLength > 0, DetectLineEnding(text));
+            var format = new TextFileFormat(encoding, bomLength > 0, DetectLineEnding(text), !RoundTrips(encoding, bytes, bomLength, text));
             return (Normalize(text), format);
         }
 
@@ -55,6 +63,25 @@ namespace Typedown.Core.Utilities
 
         /// <summary>Every line ending as "\n". The editor works in that alone; the file's own form is restored on save.</summary>
         public static string Normalize(string text) => text.Replace("\r\n", "\n").Replace('\r', '\n');
+
+        /// <summary>Whether re-encoding the decoded text reproduces the file's body bytes exactly — a mismatch
+        /// means the decode lost information and a save would not preserve the original file.</summary>
+        private static bool RoundTrips(Encoding encoding, byte[] original, int bomLength, string decoded)
+        {
+            try
+            {
+                var reencoded = encoding.GetBytes(decoded);
+                var bodyLength = original.Length - bomLength;
+                if (reencoded.Length != bodyLength) return false;
+                for (var i = 0; i < bodyLength; i++)
+                    if (reencoded[i] != original[bomLength + i]) return false;
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
 
         private static (Encoding Encoding, int BomLength) DetectEncoding(byte[] bytes)
         {

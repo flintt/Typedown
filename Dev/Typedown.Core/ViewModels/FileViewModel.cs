@@ -386,6 +386,15 @@ namespace Typedown.Core.ViewModels
                     Log.Debug($"save skipped: buffer is blank (len={text.Length}) with no undoable edit (loaded={EditorViewModel.FileLoaded} undoable={EditorViewModel.History.Undoable}) while the file has {new FileInfo(path).Length} bytes");
                     return false;
                 }
+                // A file we could not decode losslessly (a non-UTF-8 file — GBK, Latin-1 — read as UTF-8, so its
+                // undecodable bytes became U+FFFD) must not be overwritten by an automatic save: that would replace
+                // the original bytes for good. An explicit save (alert) is the reader's own choice and still goes
+                // through; a skipped auto-save falls through to a crash backup, so nothing typed is lost.
+                if (!alert && (FileFormat?.LossyDecode ?? false) && File.Exists(path))
+                {
+                    Log.Debug($"auto-save skipped: '{path}' was decoded lossily as {(FileFormat?.Encoding?.WebName ?? "utf-8")}; an automatic overwrite would replace its original bytes");
+                    return false;
+                }
                 IgnoreOwnFileWrite();
                 await SafeFile.WriteAllBytesAtomicAsync(path, (FileFormat ?? TextFileFormat.Default).GetBytes(text));
                 IgnoreOwnFileWrite();
