@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
@@ -49,6 +50,10 @@ namespace Typedown.Core.Models
         private FileViewModel ViewModel { get; }
 
         private static readonly ConditionalWeakTable<FileViewModel, HashSet<string>> expandedFolder = new();
+
+        // Expanding a folder marks every child for watching, so a folder with hundreds of subfolders would
+        // start hundreds of directory listings at once and saturate the disk. Bound how many run together.
+        private static readonly SemaphoreSlim enumerationGate = new(Math.Max(2, Environment.ProcessorCount));
 
         public ExplorerItem(FileViewModel viewModel)
         {
@@ -144,8 +149,18 @@ namespace Typedown.Core.Models
             {
                 if (IsWatching && Type == ExplorerItemType.Folder)
                 {
-                    var files = await Task.Run(() => new DirectoryInfo(path).EnumerateFileSystemInfos()
-                        .Where(info => filter(info.Attributes, info.Name)).ToList());
+                    List<FileSystemInfo> files;
+                    await enumerationGate.WaitAsync();
+                    try
+                    {
+                        files = await Task.Run(() => new DirectoryInfo(path).EnumerateFileSystemInfos()
+                            .Where(info => filter(info.Attributes, info.Name)).ToList());
+                    }
+                    finally
+                    {
+                        // Release before the UI update below so the slot is not held while children are built.
+                        enumerationGate.Release();
+                    }
                     // A previous folder enumeration can finish after navigation,
                     // collapse or disposal. It must not repopulate this node.
                     if (disposed || updateVersion != childrenUpdateVersion)
