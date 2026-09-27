@@ -13,6 +13,11 @@ beforeEach(() => {
     transport = require('./transport').default;
 });
 
+afterEach(() => {
+    // A test that used fake timers must not leave them installed, or a later test's real awaits never resolve.
+    jest.useRealTimers();
+});
+
 const messages = () => send.mock.calls.map(([message]) => JSON.parse(message));
 
 function reconstruct() {
@@ -71,24 +76,30 @@ const lastInvokeId = () => {
 const respond = (id: string, payload: unknown) =>
     messageHandler()({ data: JSON.stringify({ name: id, args: payload }) });
 
-test('invoke resolves with the host reply and rejects on an error reply', async () => {
-    const { remoteFunction } = require('./transport');
+test('invoke resolves/rejects on reply and leaves no listener behind', async () => {
+    const { remoteFunction, _listenerCount } = require('./transport');
     const ok = remoteFunction('X')();
-    respond(lastInvokeId(), { code: 0, data: 42 });
+    const okId = lastInvokeId();
+    respond(okId, { code: 0, data: 42 });
     await expect(ok).resolves.toBe(42);
+    expect(_listenerCount(okId)).toBe(0);
     const bad = remoteFunction('X')();
-    respond(lastInvokeId(), { code: 1, msg: 'nope' });
+    const badId = lastInvokeId();
+    respond(badId, { code: 1, msg: 'nope' });
     await expect(bad).rejects.toThrow('nope');
+    expect(_listenerCount(badId)).toBe(0);
 });
 
 test('invoke rejects when the host never replies within the deadline', async () => {
     jest.useFakeTimers();
     const { remoteFunction } = require('./transport');
+    const { _listenerCount } = require('./transport');
     const p = remoteFunction('X', 1000)();
+    const id = lastInvokeId();
     const rejected = expect(p).rejects.toThrow(/timed out/);
     jest.advanceTimersByTime(1000);
     await rejected;
-    jest.useRealTimers();
+    expect(_listenerCount(id)).toBe(0);
 });
 
 test('invoke with timeout 0 never times out (export/print) and still resolves', async () => {
@@ -98,13 +109,16 @@ test('invoke with timeout 0 never times out (export/print) and still resolves', 
     jest.advanceTimersByTime(10 * 60 * 1000);
     respond(lastInvokeId(), { code: 0, data: 'done' });
     await expect(p).resolves.toBe('done');
-    jest.useRealTimers();
 });
 
 test('invoke rejects and cleans up when the send throws', async () => {
     const { remoteFunction } = require('./transport');
+    const { _listenerCount } = require('./transport');
     send.mockImplementationOnce(() => { throw new Error('boom'); });
-    await expect(remoteFunction('X')()).rejects.toThrow('boom');
+    const p = remoteFunction('X')();
+    const id = lastInvokeId();
+    await expect(p).rejects.toThrow('boom');
+    expect(_listenerCount(id)).toBe(0);
 });
 
 test('a resolved invoke does not fire a late timeout', async () => {
@@ -114,5 +128,4 @@ test('a resolved invoke does not fire a late timeout', async () => {
     respond(lastInvokeId(), { code: 0, data: 1 });
     await expect(p).resolves.toBe(1);
     jest.advanceTimersByTime(5000); // the timer was cleared on resolve; nothing rejects here
-    jest.useRealTimers();
 });

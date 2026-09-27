@@ -108,4 +108,7 @@ export default {
   postMessage: postMessageDiff,
 };
 
+// Test hook: the number of live listeners for an id, to assert an invoke leaves none behind.
+export const _listenerCount = (name: string) => transport.listenerCount(name);
+
 export { remoteFunction };
