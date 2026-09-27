@@ -48,10 +48,6 @@ namespace Typedown.Core.Utilities
             return (Normalize(text), format);
         }
 
-        /// <summary>The same shape but no longer flagged as a lossy decode — used after the reader has confirmed a
-        /// save that rewrites the file as UTF-8, so the session stops asking about the original bytes.</summary>
-        public TextFileFormat WithoutLossyFlag() => LossyDecode ? new TextFileFormat(Encoding, HasByteOrderMark, LineEnding, false) : this;
-
         /// <summary>The text as it should hit the disk: the file's own line endings, and its byte order mark.</summary>
         public byte[] GetBytes(string text)
         {

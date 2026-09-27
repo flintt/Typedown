@@ -428,31 +428,18 @@ namespace Typedown.Core.ViewModels
                     return false;
                 }
                 // A file we could not decode losslessly (a non-UTF-8 file — GBK, Latin-1 — read as UTF-8, so its
-                // undecodable bytes became U+FFFD) must not be overwritten without the reader knowing: the write
-                // rewrites it as UTF-8 and the undecodable bytes are lost. An automatic save is refused outright
-                // (it falls through to a crash backup, so nothing typed is lost); a save the reader asked for
-                // (alert) asks first — every overwrite path checks this, not just auto-save.
-                if ((FileFormat?.LossyDecode ?? false) && File.Exists(path))
+                // undecodable bytes became U+FFFD) must not be overwritten by an automatic save: that rewrites it
+                // as UTF-8 and the undecodable bytes are lost for good. The skipped auto-save falls through to a
+                // crash backup, so nothing typed is lost. (A confirm-on-manual-save prompt is deferred until its
+                // dialog strings are translated.)
+                if (!alert && (FileFormat?.LossyDecode ?? false) && File.Exists(path))
                 {
-                    if (!alert)
-                    {
-                        Log.Debug($"auto-save skipped: '{path}' was decoded lossily as {(FileFormat?.Encoding?.WebName ?? "utf-8")}; an automatic overwrite would replace its original bytes");
-                        return false;
-                    }
-                    var confirm = await AppContentDialog.Create(
-                        Locale.GetDialogString("LossyEncodingTitle"),
-                        Locale.GetDialogString("LossyEncodingContent"),
-                        Locale.GetDialogString("Cancel"),
-                        Locale.GetDialogString("SaveAnyway")).ShowAsync(AppViewModel.XamlRoot);
-                    if (confirm != ContentDialogResult.Primary)
-                        return false;
+                    Log.Debug($"auto-save skipped: '{path}' was decoded lossily as {(FileFormat?.Encoding?.WebName ?? "utf-8")}; an automatic overwrite would replace its original bytes");
+                    return false;
                 }
                 IgnoreOwnFileWrite();
                 await SafeFile.WriteAllBytesAtomicAsync(path, (FileFormat ?? TextFileFormat.Default).GetBytes(text));
                 IgnoreOwnFileWrite();
-                // The file now holds valid UTF-8; the session should not keep asking about the original bytes.
-                if (FileFormat?.LossyDecode == true)
-                    FileFormat = FileFormat.WithoutLossyFlag();
                 return true;
             }
             catch (Exception ex)
