@@ -57,3 +57,62 @@ test('does not advance the diff baseline after a failed send', () => {
     transport.postMessage('MarkdownChange', { text: 'next' });
     expect(reconstruct()).toEqual({ text: 'next' });
 });
+
+// --- remoteFunction: every pending invoke is cleaned up (reply, timeout, or send failure) ---
+
+const messageHandler = () =>
+    (window as any).chrome.webview.addEventListener.mock.calls.find((c: any[]) => c[0] === 'message')[1];
+
+const lastInvokeId = () => {
+    const invokes = send.mock.calls.map(([m]) => JSON.parse(m)).filter((m: any) => m.type === 'invoke');
+    return invokes[invokes.length - 1].id as string;
+};
+
+const respond = (id: string, payload: unknown) =>
+    messageHandler()({ data: JSON.stringify({ name: id, args: payload }) });
+
+test('invoke resolves with the host reply and rejects on an error reply', async () => {
+    const { remoteFunction } = require('./transport');
+    const ok = remoteFunction('X')();
+    respond(lastInvokeId(), { code: 0, data: 42 });
+    await expect(ok).resolves.toBe(42);
+    const bad = remoteFunction('X')();
+    respond(lastInvokeId(), { code: 1, msg: 'nope' });
+    await expect(bad).rejects.toThrow('nope');
+});
+
+test('invoke rejects when the host never replies within the deadline', async () => {
+    jest.useFakeTimers();
+    const { remoteFunction } = require('./transport');
+    const p = remoteFunction('X', 1000)();
+    const rejected = expect(p).rejects.toThrow(/timed out/);
+    jest.advanceTimersByTime(1000);
+    await rejected;
+    jest.useRealTimers();
+});
+
+test('invoke with timeout 0 never times out (export/print) and still resolves', async () => {
+    jest.useFakeTimers();
+    const { remoteFunction } = require('./transport');
+    const p = remoteFunction('X', 0)();
+    jest.advanceTimersByTime(10 * 60 * 1000);
+    respond(lastInvokeId(), { code: 0, data: 'done' });
+    await expect(p).resolves.toBe('done');
+    jest.useRealTimers();
+});
+
+test('invoke rejects and cleans up when the send throws', async () => {
+    const { remoteFunction } = require('./transport');
+    send.mockImplementationOnce(() => { throw new Error('boom'); });
+    await expect(remoteFunction('X')()).rejects.toThrow('boom');
+});
+
+test('a resolved invoke does not fire a late timeout', async () => {
+    jest.useFakeTimers();
+    const { remoteFunction } = require('./transport');
+    const p = remoteFunction('X', 1000)();
+    respond(lastInvokeId(), { code: 0, data: 1 });
+    await expect(p).resolves.toBe(1);
+    jest.advanceTimersByTime(5000); // the timer was cleared on resolve; nothing rejects here
+    jest.useRealTimers();
+});

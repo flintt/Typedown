@@ -3,8 +3,8 @@ import { remoteFunction } from '../transport'
 const remote = {
     getCurrentTheme: remoteFunction<undefined, string>('GetCurrentTheme'),
     contentLoaded: remoteFunction<undefined, string>('ContentLoaded'),
-    exportCallback: remoteFunction<{ html: string, context: unknown }, boolean>('ExportCallback'),
-    printHTML: remoteFunction<{ html: string, context: unknown }, boolean>('PrintHTML'),
+    exportCallback: remoteFunction<{ html: string, context: unknown }, boolean>('ExportCallback', 0),
+    printHTML: remoteFunction<{ html: string, context: unknown }, boolean>('PrintHTML', 0),
     resizeTable: remoteFunction<{ row: number, column: number }, { row: number, column: number }>('ResizeTable'),
     loadImage: remoteFunction<{ url: string, width: number, height: number }, { url: string }>('LoadImage'),
     getSettings: remoteFunction<undefined, unknown>('GetSettings'),

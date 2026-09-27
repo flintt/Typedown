@@ -23,20 +23,35 @@ const deduplicatedStates = new Set(['OnScroll', 'SelectionFormats', 'SelectionCh
 const ref = { pos: 0 };
 
 
+// A pending invoke whose host reply never arrives would otherwise keep its listener (and its Promise) forever.
+// Every path — reply, send failure, timeout — removes the listener exactly once. The default deadline suits the
+// fast metadata calls; a value of 0 disables it for the few host operations that can legitimately run long
+// (export, print), which are always answered and so cannot pile up.
+const DEFAULT_INVOKE_TIMEOUT_MS = 30000;
+
 const remoteFunction =
-  <T, TResult>(name: string) =>
+  <T, TResult>(name: string, timeoutMs: number = DEFAULT_INVOKE_TIMEOUT_MS) =>
     (args?: T) =>
       new Promise<TResult>((resolve, reject) => {
         const id = `invoke_${ref.pos++}`;
-        transport.addListener(id, (e) => {
-          if (e.code == 0) {
-            resolve(e.data);
-          } else {
-            reject(new Error(e.msg));
-          }
+        let timer: ReturnType<typeof setTimeout> | undefined;
+        const settle = (finish: () => void) => {
+          if (timer !== undefined) clearTimeout(timer);
           transport.removeAllListeners(id);
-        });
-        postMessage({ type: "invoke", id, name, args });
+          finish();
+        };
+        transport.addListener(id, (e) => settle(() => {
+          if (e.code == 0) resolve(e.data);
+          else reject(new Error(e.msg));
+        }));
+        if (timeoutMs > 0) {
+          timer = setTimeout(() => settle(() => reject(new Error(`invoke "${name}" timed out after ${timeoutMs} ms`))), timeoutMs);
+        }
+        try {
+          postMessage({ type: "invoke", id, name, args });
+        } catch (err) {
+          settle(() => reject(err instanceof Error ? err : new Error(String(err))));
+        }
       });
 
 const postMessageDiff = (name: string, arg: unknown) => {
