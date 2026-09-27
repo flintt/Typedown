@@ -130,6 +130,11 @@ namespace Typedown.Core.ViewModels
             var tab = new DocumentTab();
             Tabs.Add(tab);
             ActiveTab = tab;
+            // Bind the editor to the new tab's own (fresh) history. SnapshotActive just stored the live history
+            // object into the previous tab; without this the editor would keep that same object, and the load
+            // that follows (History.InitHistory) would reinitialise it — wiping the previous tab's undo history
+            // and mixing the new document's content into it.
+            EditorViewModel.History = tab.History;
             return tab;
         }
 
