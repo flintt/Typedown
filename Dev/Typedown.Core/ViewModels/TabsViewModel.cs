@@ -138,13 +138,19 @@ namespace Typedown.Core.ViewModels
             return tab;
         }
 
-        /// <summary>Undo <see cref="BeginNewTab"/> when loading failed before the editor was touched.</summary>
+        /// <summary>Undo <see cref="BeginNewTab"/> when loading the new document failed.</summary>
         public void AbortNewTab(DocumentTab tab)
         {
             if (tab == null || !Tabs.Contains(tab) || tab != ActiveTab) return;
             Tabs.Remove(tab);
-            ActiveTab = tabBeforeNew != null && Tabs.Contains(tabBeforeNew) ? tabBeforeNew : Tabs.FirstOrDefault();
+            var back = tabBeforeNew != null && Tabs.Contains(tabBeforeNew) ? tabBeforeNew : Tabs.FirstOrDefault();
+            ActiveTab = back;
             tabBeforeNew = null;
+            // BeginNewTab pointed the editor's history at the tab we just removed (and the failed load may have
+            // posted some content), so restoring only ActiveTab would leave the editor on the wrong history and
+            // buffer — the previous tab's undo would be broken. Restore the full document state of the tab we fell
+            // back to.
+            if (back != null) Restore(back);
         }
 
         /// <summary>The tab that was active before this one, for the shortcut that jumps back and forth.</summary>

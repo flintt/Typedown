@@ -201,6 +201,15 @@
     <value>Do you want to restore the file?</value>
     <comment>恢复文件对话框/是否要恢复文件？</comment>
   </data>
+  <data name="LossyEncodingTitle" xml:space="preserve">
+    <value>This file is not UTF-8</value>
+  </data>
+  <data name="LossyEncodingContent" xml:space="preserve">
+    <value>Some bytes in this file could not be decoded as UTF-8, so parts of it show as the replacement character. Saving now rewrites it as UTF-8 and those original bytes are lost. Save anyway?</value>
+  </data>
+  <data name="SaveAnyway" xml:space="preserve">
+    <value>Save anyway</value>
+  </data>
   <data name="Reload" xml:space="preserve">
     <value>Reload</value>
     <comment>外部修改对话框/重新加载</comment>

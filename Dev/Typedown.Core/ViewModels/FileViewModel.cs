@@ -136,6 +136,9 @@ namespace Typedown.Core.ViewModels
                 {
                     await AutoBackupFile();
                 }
+                // Background tabs are never auto-saved, so back up their dirty ones every tick regardless of the
+                // active document's auto-save result.
+                await BackupDirtyBackgroundTabsAsync();
             }
             finally
             {
@@ -159,34 +162,49 @@ namespace Typedown.Core.ViewModels
 
         private async Task<bool> AutoBackupFile()
         {
+            var active = TabsViewModel?.ActiveTab;
             if (EditorViewModel.FileHash != EditorViewModel.CurrentHash && !string.IsNullOrWhiteSpace(EditorViewModel.Markdown))
-                await AutoBackup.Backup(FilePath, EditorViewModel.Markdown);
-            else
-                AutoBackup.DeleteBackup(FilePath);
-            // Background tabs are snapshots the live editor does not hold, so a crash would lose their unsaved
-            // edits. Back up every dirty titled background tab too (keyed by its path, which recovery matches on
-            // reopen), skipping ones whose content has not changed since their last backup. Untitled background
-            // tabs all share the empty key and are left to the active flow.
-            var tabs = TabsViewModel;
-            if (tabs != null)
             {
-                foreach (var tab in tabs.Tabs.ToList())
+                var backedHash = EditorViewModel.CurrentHash;
+                var ok = await AutoBackup.Backup(FilePath, EditorViewModel.Markdown);
+                // Keep the active tab's BackupHash in step with what is on disk, so the invariant still holds when
+                // this tab later becomes a background one (see BackupDirtyBackgroundTabsAsync).
+                if (ok && active != null) active.BackupHash = backedHash;
+                return ok;
+            }
+            AutoBackup.DeleteBackup(FilePath);
+            if (active != null) active.BackupHash = 0;
+            return true;
+        }
+
+        // Background tabs are snapshots the live editor does not hold, so a crash would lose their unsaved edits.
+        // This runs every save tick regardless of whether the active document's auto-save ran or succeeded — the
+        // active save never touches the other tabs. Each dirty titled background tab is backed up (keyed by its
+        // path, which recovery matches on reopen), skipping ones unchanged since their last backup. Untitled
+        // background tabs all share the empty key and are left to the active flow (a stable-id manifest is TODO).
+        private async Task BackupDirtyBackgroundTabsAsync()
+        {
+            var tabs = TabsViewModel;
+            if (tabs == null) return;
+            foreach (var tab in tabs.Tabs.ToList())
+            {
+                if (tab == tabs.ActiveTab || string.IsNullOrEmpty(tab.FilePath))
+                    continue;
+                if (!tab.Saved && !string.IsNullOrWhiteSpace(tab.Markdown))
                 {
-                    if (tab == tabs.ActiveTab || string.IsNullOrEmpty(tab.FilePath))
-                        continue;
-                    if (!tab.Saved && !string.IsNullOrWhiteSpace(tab.Markdown))
-                    {
-                        if (tab.CurrentHash != tab.BackupHash && await AutoBackup.Backup(tab.FilePath, tab.Markdown))
-                            tab.BackupHash = tab.CurrentHash;
-                    }
-                    else if (tab.Saved && tab.BackupHash != 0)
-                    {
-                        AutoBackup.DeleteBackup(tab.FilePath);
-                        tab.BackupHash = 0;
-                    }
+                    // Capture text and its hash together before the await; switching into this tab, editing and
+                    // switching away could otherwise update the snapshot to a hash that never reached disk.
+                    var text = tab.Markdown;
+                    var backedHash = tab.CurrentHash;
+                    if (backedHash != tab.BackupHash && await AutoBackup.Backup(tab.FilePath, text))
+                        tab.BackupHash = backedHash;
+                }
+                else if (tab.Saved && tab.BackupHash != 0)
+                {
+                    AutoBackup.DeleteBackup(tab.FilePath);
+                    tab.BackupHash = 0;
                 }
             }
-            return true;
         }
 
         public TabsViewModel TabsViewModel => ServiceProvider.GetService<TabsViewModel>();
@@ -410,17 +428,31 @@ namespace Typedown.Core.ViewModels
                     return false;
                 }
                 // A file we could not decode losslessly (a non-UTF-8 file — GBK, Latin-1 — read as UTF-8, so its
-                // undecodable bytes became U+FFFD) must not be overwritten by an automatic save: that would replace
-                // the original bytes for good. An explicit save (alert) is the reader's own choice and still goes
-                // through; a skipped auto-save falls through to a crash backup, so nothing typed is lost.
-                if (!alert && (FileFormat?.LossyDecode ?? false) && File.Exists(path))
+                // undecodable bytes became U+FFFD) must not be overwritten without the reader knowing: the write
+                // rewrites it as UTF-8 and the undecodable bytes are lost. An automatic save is refused outright
+                // (it falls through to a crash backup, so nothing typed is lost); a save the reader asked for
+                // (alert) asks first — every overwrite path checks this, not just auto-save.
+                if ((FileFormat?.LossyDecode ?? false) && File.Exists(path))
                 {
-                    Log.Debug($"auto-save skipped: '{path}' was decoded lossily as {(FileFormat?.Encoding?.WebName ?? "utf-8")}; an automatic overwrite would replace its original bytes");
-                    return false;
+                    if (!alert)
+                    {
+                        Log.Debug($"auto-save skipped: '{path}' was decoded lossily as {(FileFormat?.Encoding?.WebName ?? "utf-8")}; an automatic overwrite would replace its original bytes");
+                        return false;
+                    }
+                    var confirm = await AppContentDialog.Create(
+                        Locale.GetDialogString("LossyEncodingTitle"),
+                        Locale.GetDialogString("LossyEncodingContent"),
+                        Locale.GetDialogString("Cancel"),
+                        Locale.GetDialogString("SaveAnyway")).ShowAsync(AppViewModel.XamlRoot);
+                    if (confirm != ContentDialogResult.Primary)
+                        return false;
                 }
                 IgnoreOwnFileWrite();
                 await SafeFile.WriteAllBytesAtomicAsync(path, (FileFormat ?? TextFileFormat.Default).GetBytes(text));
                 IgnoreOwnFileWrite();
+                // The file now holds valid UTF-8; the session should not keep asking about the original bytes.
+                if (FileFormat?.LossyDecode == true)
+                    FileFormat = FileFormat.WithoutLossyFlag();
                 return true;
             }
             catch (Exception ex)
@@ -474,7 +506,10 @@ namespace Typedown.Core.ViewModels
                     DiskHash = hash;
                     EditorViewModel.Saved = EditorViewModel.CurrentHash == hash; // CurrentHash tracks the live buffer; avoids an O(n) string compare per save
                     if (EditorViewModel.Saved)
+                    {
                         AutoBackup.DeleteBackup(path);
+                        if (TabsViewModel?.ActiveTab is { } savedTab) savedTab.BackupHash = 0;
+                    }
                     _ = AccessHistory.RecordFileHistory(path);
                 }
                 return result && !disposables.IsDisposed && FilePath == path && EditorViewModel.Saved;
@@ -522,7 +557,10 @@ namespace Typedown.Core.ViewModels
                         DiskHash = hash;
                         EditorViewModel.Saved = EditorViewModel.CurrentHash == hash; // CurrentHash tracks the live buffer; avoids an O(n) string compare per save
                         if (EditorViewModel.Saved)
+                        {
                             AutoBackup.DeleteBackup(originalPath);
+                            if (TabsViewModel?.ActiveTab is { } savedTab) savedTab.BackupHash = 0;
+                        }
                         _ = AccessHistory.RecordFileHistory(FilePath);
                         return EditorViewModel.Saved ? file.Path : null;
                     }

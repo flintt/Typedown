@@ -201,6 +201,15 @@
     <value>是否要恢复文件？</value>
     <comment>恢复文件对话框/是否要恢复文件？</comment>
   </data>
+  <data name="LossyEncodingTitle" xml:space="preserve">
+    <value>此文件不是 UTF-8 编码</value>
+  </data>
+  <data name="LossyEncodingContent" xml:space="preserve">
+    <value>此文件中有部分字节无法按 UTF-8 解码，界面上以替代字符显示。现在保存会将其改写为 UTF-8，那些原始字节将丢失。仍要保存吗？</value>
+  </data>
+  <data name="SaveAnyway" xml:space="preserve">
+    <value>仍然保存</value>
+  </data>
   <data name="Reload" xml:space="preserve">
     <value>重新加载</value>
     <comment>外部修改对话框/重新加载</comment>
