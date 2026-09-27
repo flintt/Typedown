@@ -160,9 +160,32 @@ namespace Typedown.Core.ViewModels
         private async Task<bool> AutoBackupFile()
         {
             if (EditorViewModel.FileHash != EditorViewModel.CurrentHash && !string.IsNullOrWhiteSpace(EditorViewModel.Markdown))
-                return await AutoBackup.Backup(FilePath, EditorViewModel.Markdown);
+                await AutoBackup.Backup(FilePath, EditorViewModel.Markdown);
             else
                 AutoBackup.DeleteBackup(FilePath);
+            // Background tabs are snapshots the live editor does not hold, so a crash would lose their unsaved
+            // edits. Back up every dirty titled background tab too (keyed by its path, which recovery matches on
+            // reopen), skipping ones whose content has not changed since their last backup. Untitled background
+            // tabs all share the empty key and are left to the active flow.
+            var tabs = TabsViewModel;
+            if (tabs != null)
+            {
+                foreach (var tab in tabs.Tabs.ToList())
+                {
+                    if (tab == tabs.ActiveTab || string.IsNullOrEmpty(tab.FilePath))
+                        continue;
+                    if (!tab.Saved && !string.IsNullOrWhiteSpace(tab.Markdown))
+                    {
+                        if (tab.CurrentHash != tab.BackupHash && await AutoBackup.Backup(tab.FilePath, tab.Markdown))
+                            tab.BackupHash = tab.CurrentHash;
+                    }
+                    else if (tab.Saved && tab.BackupHash != 0)
+                    {
+                        AutoBackup.DeleteBackup(tab.FilePath);
+                        tab.BackupHash = 0;
+                    }
+                }
+            }
             return true;
         }
 
