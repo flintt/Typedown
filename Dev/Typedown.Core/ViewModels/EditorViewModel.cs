@@ -488,16 +488,22 @@ namespace Typedown.Core.ViewModels
         private int flushToken;
         private readonly Dictionary<int, TaskCompletionSource<bool>> flushWaiters = new();
 
-        public async Task FlushContentAsync(int timeoutMs = 500)
+        /// <summary>
+        /// Brings the editor's latest text in. Returns true when the editor answered (or there was nothing to
+        /// flush), false when it did not answer within <paramref name="timeoutMs"/> — a caller deciding whether it
+        /// is safe to close or replace a document without asking must not treat a timeout as "content is current".
+        /// </summary>
+        public async Task<bool> FlushContentAsync(int timeoutMs = 500)
         {
-            if (MarkdownEditor == null || !FileLoaded) return;
+            if (MarkdownEditor == null || !FileLoaded) return true;
             var token = ++flushToken;
             var waiter = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
             lock (flushWaiters) flushWaiters[token] = waiter;
             try
             {
                 MarkdownEditor.PostMessage("FlushContent", new { token });
-                await Task.WhenAny(waiter.Task, Task.Delay(timeoutMs));
+                var finished = await Task.WhenAny(waiter.Task, Task.Delay(timeoutMs));
+                return finished == waiter.Task;
             }
             finally
             {

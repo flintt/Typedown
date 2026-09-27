@@ -253,6 +253,9 @@ namespace Typedown.Core.ViewModels
         /// <summary>Asks to save every dirty tab (window close). Returns false if the user cancels.</summary>
         public async Task<bool> AskToSaveAll()
         {
+            // Bring the live editor's latest text in before judging what is dirty: an edit made within the report
+            // throttle would otherwise still read as saved, and the window would close without asking about it.
+            await EditorViewModel.FlushContentAsync();
             foreach (var tab in Tabs.ToList())
             {
                 var dirty = tab == ActiveTab ? !EditorViewModel.Saved : !tab.Saved;
