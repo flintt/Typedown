@@ -15,7 +15,7 @@ const server = http.createServer((req, res) => {
 });
 (async () => {
  await new Promise(r => server.listen(0, '127.0.0.1', r));
- const browser = await puppeteer.launch({executablePath:'/opt/google/chrome/chrome',headless:true,args:['--no-sandbox']});
+ const browser = await puppeteer.launch({executablePath:process.env.CHROME || '/opt/google/chrome/chrome',headless:true,args:['--no-sandbox']});
  try {
  const page = await browser.newPage();
  const settings = {markdown, sourceCode:true, readOnly:false, fontSize:16,lineHeight:1.6,editorAreaWidth:'900px',tabSize:4,textDirection:'auto',preferLooseListItem:true,listIndentation:'1',tableAlignColumns:false,basePath:'/tmp',loadId:1};
@@ -83,6 +83,24 @@ const server = http.createServer((req, res) => {
      assert.equal(await page.evaluate(() => window.__last.MarkdownChange), undefined, 'no edit reported for mode switches');
    }
  }
+
+ // A real source-mode edit must become the visual/reading document and remain the saved source afterwards.
+ const sourceEdited = tableAfterParagraph.replace('v1', 'v2')
+ await page.evaluate(({text, loadId}) => {
+   delete window.__last.FileLoaded;
+   delete window.__last.MarkdownChange;
+   window.__deliver('LoadFile', {text, loadId, basePath:'/tmp'});
+ }, {text: tableAfterParagraph, loadId: ++loadId});
+ await page.waitForFunction(id => window.__last.FileLoaded?.loadId === id, {}, loadId);
+ await page.evaluate(text => document.querySelector('.CodeMirror').CodeMirror.setValue(text), sourceEdited);
+ await page.waitForFunction(text => window.__last.MarkdownChange?.text === text, {}, sourceEdited);
+ await mode(false, true);
+ assert.equal(await flush(), sourceEdited, 'reading mode receives an edit made in source mode');
+ await mode(false, false);
+ assert.equal(await flush(), sourceEdited, 'visual mode preserves an edit made in source mode');
+ await mode(true, false);
+ assert.equal(await source(), sourceEdited, 'source edit survives a full source/reading/visual round trip');
+
  // Loading directly into reading mode must also preserve source in the handshake.
  await mode(false, true);
  await page.evaluate(text => {
@@ -112,6 +130,6 @@ const server = http.createServer((req, res) => {
  assert.ok((await source()).startsWith('edited before switch'));
  assert.equal(await page.evaluate(() => window.__last.MarkdownChange.loadId), 101);
  assert.deepEqual(errors, []);
- console.log('PASS: original source, reading structure, repeated mode switches, direct reading loads and pending edits');
+ console.log('PASS: original source, source edits, reading structure, repeated mode switches, direct reading loads and pending edits');
  } finally { await browser.close(); server.close(); }
 })().catch(e=>{console.error(e);server.close();process.exitCode=1;});

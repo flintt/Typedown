@@ -24,8 +24,8 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
 
 - `reading-source-check.js` — preserves exact source through reading/source/visual mode switches and
   save flushes, checks a list followed immediately by a heading and fenced code, checks a GFM table
-  interrupting a paragraph, and verifies pending edits survive a mode switch. `handshake-check.js` also
-  checks original source in `FileLoaded`.
+  interrupting a paragraph, verifies a source-mode edit survives a full mode round trip, and verifies pending
+  visual edits survive a mode switch. `handshake-check.js` also checks original source in `FileLoaded`.
 - `spec-check.js` — every CommonMark 0.31.2 example (652) imported, exported, imported and exported again. The
   second export must equal the first (importing what we just wrote must not keep changing the document), and the
   first must equal `spec-known.json`, the recorded behaviour of this editor. Muya is not a CommonMark renderer,
@@ -134,7 +134,8 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   inline CSS, a code block is in the saved markdown the moment it is typed, a table cell whose text is selected
   and deleted still takes input, PageUp/PageDown keep moving.
 - `roundtrip-check.js '"md..."' ...` — import each markdown string into Muya and print blocks + exported markdown.
-- `handshake-check.js` — LoadFile → FileLoaded handshake: FileLoaded carries the normalized text and the load id, a superseded load leaks nothing, an edit afterwards reports MarkdownChange (exit code 1 on failure).
+- `handshake-check.js` — LoadFile → FileLoaded handshake: FileLoaded carries the original source text and the
+  load id, a superseded load leaks nothing, an edit afterwards reports MarkdownChange (exit code 1 on failure).
 - `scroll-flash-check.js` — a tab switch hands the document over with the offset it was left at; this samples
   where the page actually is over the frames that follow. Laying out a long document goes on well past the
   first paint and the browser can drop the position with nobody scrolling, which showed as the top of the

@@ -28,11 +28,20 @@
 
 ## 仍需处理或进一步验证
 
-1. **高：文件写入不是原子替换。** `FileViewModel.WriteAllText` 和 `AutoBackup.Backup` 仍直接覆盖目标；写入中断风险仍存在。本次保存串行化不能解决断电保护。后续需要临时文件、可靠刷新和替换策略，并验证 Windows 文件权限、网络盘与文件监控交互。
-2. **中：外部文件监控存在盲区。** `ScheduleReloadFromDisk` 在自身写入后一秒直接丢弃事件，可能漏掉同期真正的外部编辑；同一路径关闭后重新打开也不能仅凭路径识别文档会话。需要引入会话标识与延迟复查策略。
-3. **中：自动备份重复 I/O。** 未保存内容不变时仍可能每五秒重写备份；可按文档修订去重，但需要同步处理备份删除、恢复与失败重试。
-4. **中：PowerShell 图床服务未实现。** `Dev/Typedown/Services/PowerShellService.cs` 仍抛出 NotImplementedException。
-5. **待评估：WebView2 信任边界。** `Config.WebView2Args` 启用了 disable-web-security 和 allow-file-access-from-files，需要结合 HTML 清洗、本地资源访问和宿主消息来源检查单独审查，不能仅凭配置认定可利用漏洞。
+原清单中的“文件写入不是原子替换”已经解决：正文和崩溃备份都通过 `SafeFile` 写入同目录临时文件，刷新到磁盘后使用 `MoveFileEx`/`File.Replace` 替换；锁冲突会重试并保留恢复副本，不再退回可能截断正文的直接覆盖。
+
+1. **中：外部文件监控存在盲区。** `ScheduleReloadFromDisk` 在自身写入后一秒直接丢弃事件，可能漏掉同期真正的外部编辑；同一路径关闭后重新打开也不能仅凭路径识别文档会话。需要引入会话标识与延迟复查策略。
+2. **中：活动文档自动备份仍有重复 I/O。** 后台标签已经按 `BackupHash` 去重；活动文档内容不变时仍可能每五秒重写备份。可以继续按修订去重，但需要同步处理备份被外部删除和失败重试。
+3. **中：PowerShell 图床服务未实现。** `Dev/Typedown/Services/PowerShellService.cs` 仍抛出 NotImplementedException。
+4. **待评估：WebView2 信任边界。** `Config.WebView2Args` 启用了 disable-web-security 和 allow-file-access-from-files，需要结合 HTML 清洗、本地资源访问和宿主消息来源检查单独审查，不能仅凭配置认定可利用漏洞。
+
+## v1.2.28 后发布前复审（2026-09-28）
+
+- 修复正式标签仍显示 `test.<run>` 的问题：稳定 release 不显示测试标识；分支构建和带后缀的预发布标签继续显示可追踪标识。
+- CI 新增版本闸门，要求发布标签、应用项目、MSIX 清单、核心程序集和 Inno Setup 版本一致，避免标签与安装包版本不同。
+- CI 在生产构建后运行加载握手、阅读/源码/可视化模式往返及 652 条 CommonMark 基线。源码模式真实编辑也加入模式往返测试。
+- 发布前验证通过：32 项前端单元测试；652 条 CommonMark 基线无新增差异；明暗主题各 240 个布局元素无变化；快速标签切换、只读模式、历史问题集、表格膨胀、空闲稳定性和 74 种翻译检查通过；Windows x64 安装包编译成功。
+- 当前没有已知的发布阻断级问题。上面的中优先级项目均为此前版本已有的限制，本次改动没有扩大其影响范围。
 
 ## 文件导航与测试版本标识补充
 

@@ -15,8 +15,8 @@ namespace Typedown.Core
 {
     public static class Config
     {
-        // Change this label for local test builds; CI stamps its run and commit.
-        public const string TestBuild = "test.20260918.1";
+        // Build scripts stamp local/CI test builds. Stable release tags deliberately leave this empty.
+        public const string TestBuild = "";
 
         /// <summary>Windows 11 (build 22000+). Uses RtlGetVersion so the compatibility manifest cannot mask the real build.</summary>
         public static int WindowsBuild { get; } = Math.Max(Utilities.PInvoke.GetWindowsBuildNumber(), Environment.OSVersion.Version.Build);

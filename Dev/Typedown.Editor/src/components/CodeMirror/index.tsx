@@ -27,6 +27,7 @@ interface ICodeMirrorEditor {
 const STANDAR_Y = 320
 
 const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
+    const { onStateChange } = props
     const [editor, setEditor] = useState<any>();
     const [marginTop, setMarginTop] = useState(0);
     const matchsRef = useRef<any[]>([]);
@@ -220,8 +221,8 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
         const wordCount = { character: value.length, word: value.split(' ').length }
         const { toc } = getTOC(value)
         const state = { wordCount, toc, cur: toc[0] }
-        props.onStateChange(state)
-    }, [])
+        onStateChange(state)
+    }, [onStateChange])
 
     const handleCodeMirrorContent = useCallback((cm: any, data: any, value: string) => {
         handleCodeMirrorState(value)

@@ -178,8 +178,10 @@ const Editor: React.FC = () => {
         pendingLoadRef.current = load
         if (scheduled) return
         requestAnimationFrame(() => {
-            const { text, basePath, cursor, scrollTop, loadId } = pendingLoadRef.current!
+            const pending = pendingLoadRef.current
             pendingLoadRef.current = null
+            if (!pending) return
+            const { text, basePath, cursor, scrollTop, loadId } = pending
             window.basePath = basePath
             loadIdRef.current = loadId
             setScrollLoadId(loadId)

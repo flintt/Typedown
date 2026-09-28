@@ -55,6 +55,19 @@ jobs:
           GENERATE_SOURCEMAP: 'false'
         run: yarn build
 
+      # These exercise the built application in Chrome. They caught source rewriting and parser-boundary bugs
+      # that unit tests cannot see because those bugs only appear while loading and switching editor modes.
+      - name: Test editor integration
+        working-directory: Tools/EditorBench
+        env:
+          NODE_PATH: ${{ github.workspace }}/Dev/Typedown.Editor/node_modules
+        run: |
+          export CHROME="$(command -v google-chrome || command -v google-chrome-stable || true)"
+          test -x "$CHROME"
+          node handshake-check.js
+          node reading-source-check.js
+          node spec-check.js
+
       - uses: actions/upload-artifact@v4
         with:
           name: editor-statics
@@ -96,17 +109,40 @@ jobs:
           "arch=$('${{ matrix.platform }}'.ToLower())" >> $env:GITHUB_OUTPUT
           Write-Host "Version: $v"
 
-      - name: Stamp test build label
+      - name: Validate release versions
+        if: startsWith(github.ref, 'refs/tags/v')
         shell: pwsh
         run: |
-          $label = "test.$env:GITHUB_RUN_NUMBER.$env:GITHUB_RUN_ATTEMPT+$($env:GITHUB_SHA.Substring(0, 8))"
+          $version = "${{ steps.ver.outputs.version }}"
+          $tag = "${{ github.ref_name }}"
+          if ($tag -notmatch ("^v" + [regex]::Escape($version) + "(?:-|$)")) {
+            throw "release tag $tag does not match project version $version"
+          }
+          $fourPart = "$version.0"
+          $manifest = ([xml](Get-Content Tools/Typedown.Package/Package.appxmanifest)).Package.Identity.Version
+          if ($manifest -ne $fourPart) { throw "MSIX version $manifest does not match $fourPart" }
+          $assembly = Get-Content Dev/Typedown.Core/Properties/AssemblyInfo.cs -Raw
+          if (-not $assembly.Contains("AssemblyVersion(`"$fourPart`")") -or -not $assembly.Contains("AssemblyFileVersion(`"$fourPart`")")) {
+            throw "Typedown.Core assembly versions do not match $fourPart"
+          }
+          $installer = Get-Content Tools/Installer/Typedown.iss -Raw
+          if (-not $installer.Contains("#define MyAppVersion `"$version`"")) {
+            throw "installer version does not match $version"
+          }
+          Write-Host "Release versions agree: $tag / $version / $fourPart"
+
+      - name: Stamp build label
+        shell: pwsh
+        run: |
+          $stableRelease = "${{ github.ref_type }}" -eq "tag" -and "${{ github.ref_name }}" -notmatch "-"
+          $label = if ($stableRelease) { "" } else { "test.$env:GITHUB_RUN_NUMBER.$env:GITHUB_RUN_ATTEMPT+$($env:GITHUB_SHA.Substring(0, 8))" }
           $path = "Dev/Typedown.Core/Config.cs"
           $source = Get-Content $path -Raw
           $pattern = 'public const string TestBuild = "[^"]*";'
           if ($source -notmatch $pattern) { throw "TestBuild declaration not found" }
           $source = $source -replace $pattern, "public const string TestBuild = `"$label`";"
           Set-Content $path $source -Encoding utf8
-          Write-Host "Test build: $label"
+          Write-Host $(if ($label) { "Test build: $label" } else { "Stable release: no test label" })
 
       # Uses the repo's signing certificate (secrets TYPEDOWN_PFX_BASE64 / TYPEDOWN_PFX_PASSWORD) when present,
       # otherwise a throwaway self-signed one. The subject must match Package.appxmanifest's Publisher.

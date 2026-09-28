@@ -72,6 +72,7 @@ const styleElement = (id: string) => {
 }
 
 const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
+    const { onMarkdownChange, onCursorChange, onStateChange, onOutlineCurrent } = props
     const [editor, setEditor] = useState<Muya>();
     const [marginTop, setMarginTop] = useState(0);
     const markdownRef = useRef('');
@@ -241,9 +242,9 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         if (props.options?.readOnly && readingSlugRef.current !== slug) {
             readingSlugRef.current = slug
             jumpHoldRef.current = performance.now() + 300
-            props.onOutlineCurrent(slug, { y: Math.round(window.scrollY), jump: true })
+            onOutlineCurrent(slug, { y: Math.round(window.scrollY), jump: true })
         }
-    }), [editor, scrollToElement, props.options?.readOnly]);
+    }), [editor, scrollToElement, props.options?.readOnly, onOutlineCurrent]);
 
     useEffect(() => transport.addListener('UpdateParagraph', type => {
         if (optionsRef.current?.readOnly) return
@@ -502,12 +503,12 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         markLongDocument()
 
         // 同步内容与光标
-        props.onMarkdownChange(text)
-        props.onCursorChange(cursor)
+        onMarkdownChange(text)
+        onCursorChange(cursor)
 
         // StateChange 必须在 onMarkdownChange、onCursorChange 之后发送，否则会导致编辑器内容/光标不同步
-        props.onStateChange({ wordCount, toc, cur })
-    }), [editor, props])
+        onStateChange({ wordCount, toc, cur })
+    }), [editor, markLongDocument, onMarkdownChange, onCursorChange, onStateChange])
 
     useEffect(() => {
         if (!editor || !props.flushRef) return

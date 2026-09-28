@@ -13,18 +13,20 @@ namespace Typedown.Core.Controls
 
         public static string GetAppVersion()
         {
+            string version;
             if (Config.IsPackaged)
             {
-                var version = Package.Current.Id.Version;
-                return string.Format("{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision) + " (" + Config.TestBuild + ")";
+                var packageVersion = Package.Current.Id.Version;
+                version = string.Format("{0}.{1}.{2}.{3}", packageVersion.Major, packageVersion.Minor, packageVersion.Build, packageVersion.Revision);
+                return string.IsNullOrWhiteSpace(Config.TestBuild) ? version : version + " (" + Config.TestBuild + ")";
             }
-            else
-            {
-                // The entry assembly is Typedown.exe, whose version comes from the release number in its csproj;
-                // this code lives in Typedown.Core, whose own version is a separate number that nobody bumps.
-                var version = (System.Reflection.Assembly.GetEntryAssembly() ?? System.Reflection.Assembly.GetExecutingAssembly()).GetName().Version;
-                return string.Format("{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision) + " (" + Config.TestBuild + ", Unpackaged)";
-            }
+
+            // The entry assembly is Typedown.exe, whose version comes from the release number in its csproj;
+            // use it here so an unpackaged build reports the application version rather than the library version.
+            var assemblyVersion = (System.Reflection.Assembly.GetEntryAssembly() ?? System.Reflection.Assembly.GetExecutingAssembly()).GetName().Version;
+            version = string.Format("{0}.{1}.{2}.{3}", assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build, assemblyVersion.Revision);
+            var buildKind = string.IsNullOrWhiteSpace(Config.TestBuild) ? "Unpackaged" : Config.TestBuild + ", Unpackaged";
+            return version + " (" + buildKind + ")";
         }
 
         private void FeedBackButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
