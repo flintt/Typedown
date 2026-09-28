@@ -353,6 +353,29 @@ Lexer.prototype.token = function (src, top) {
     // list
     cap = this.rules.list.exec(src)
     if (cap) {
+      // The legacy list regex accepts lazy continuation lines too broadly. A heading or
+      // fence outside the item's indentation starts a new block, even without a blank
+      // line. Split before matching items, otherwise '* text' inside that fence becomes
+      // another list item and the code block is destroyed.
+      if (!this.options.pedantic) {
+        const baseIndent = cap[1].length
+        let contentIndent = baseIndent + cap[2].length + 1
+        let offset = 0
+        for (const line of cap[0].split('\n')) {
+          const marker = /^( *)([*+-]|\d{1,9}[.)])( +)/.exec(line)
+          if (marker && marker[1].length <= baseIndent) {
+            const padding = marker[3].length > 4 ? 1 : marker[3].length
+            contentIndent = marker[1].length + marker[2].length + padding
+          } else if (offset > 0) {
+            const indent = /^ */.exec(line)[0].length
+            if (indent < contentIndent && /^ {0,3}(?:#{1,6}(?:[ \t]|$)|`{3,}[^`]*$|~{3,})/.test(line)) {
+              cap[0] = cap[0].slice(0, offset)
+              break
+            }
+          }
+          offset += line.length + 1
+        }
+      }
       let checked
       src = src.substring(cap[0].length)
       bull = cap[2]

@@ -1,4 +1,4 @@
-// Verifies the LoadFile -> FileLoaded handshake: FileLoaded must carry the editor's normalized text and the
+// Verifies the LoadFile -> FileLoaded handshake: FileLoaded must carry the original source text and the
 // load's id, nothing for a superseded load may leak through, and no MarkdownChange precedes FileLoaded.
 const puppeteer = require('puppeteer-core'); const http = require('http'); const fs = require('fs'); const path = require('path');
 const statics = path.resolve(process.env.STATICS || '../../Dev/Typedown/Resources/Statics');
@@ -17,9 +17,8 @@ const server = http.createServer((req, res) => { let p = decodeURIComponent(req.
   await waitFor(() => window.__msgs.some(m => m.name === 'FileLoaded'));
   let list = await msgs();
   const fl = list.find(m => m.name === 'FileLoaded');
-  const md = await page.evaluate(() => window.__typedownMuya.getMarkdown());
   check(fl.loadId === 1, 'initial FileLoaded echoes loadId=1');
-  check(fl.text === md, `initial FileLoaded text is the normalized editor text (${JSON.stringify(fl.text)})`);
+  check(fl.text === settings.markdown, 'initial FileLoaded preserves the original source');
   check(!list.some(m => m.name === 'MarkdownChange' && list.indexOf(m) < list.indexOf(fl)), 'no MarkdownChange before initial FileLoaded');
 
   // Load a document that Muya rewrites on import (setext heading, '*' bullets, trailing spaces).
@@ -27,9 +26,8 @@ const server = http.createServer((req, res) => { let p = decodeURIComponent(req.
   await waitFor(() => window.__msgs.some(m => m.name === 'FileLoaded'));
   list = await msgs();
   const fl2 = list.find(m => m.name === 'FileLoaded');
-  const md2 = await page.evaluate(() => window.__typedownMuya.getMarkdown());
   check(fl2.loadId === 2, 'LoadFile FileLoaded echoes loadId=2');
-  check(fl2.text === md2, `FileLoaded text equals editor text after normalization (${JSON.stringify(fl2.text)})`);
+  check(fl2.text === 'Title\n=====\n\n* a   \n* b\n', 'FileLoaded preserves source despite internal normalization');
   check(!list.some(m => m.loadId !== 2), 'nothing tagged with a stale loadId after LoadFile');
   check(!list.some(m => m.name === 'MarkdownChange'), 'no MarkdownChange emitted for a load (host takes the text from FileLoaded)');
 

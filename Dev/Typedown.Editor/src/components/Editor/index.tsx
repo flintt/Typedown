@@ -31,8 +31,8 @@ const Editor: React.FC = () => {
     // messages that still belong to the previous document (a tab switch races with in-flight change events).
     const loadIdRef = useRef<number>()
 
-    // The FileLoaded handshake tells the host what the editor actually holds after a load (Muya normalizes the
-    // markdown on import), so the host's "saved" hash must come from the first change report *after* the editor
+    // The FileLoaded handshake reports the loaded source, preserving its spelling even though Muya normalizes
+    // its internal model. The host's "saved" hash must come from the first change report *after* the editor
     // applied the new text — not from a fixed delay, which a large document or a slow first render overruns and
     // then leaves the file looking modified without an edit. The timers are only fallbacks.
     const fileLoadPending = useRef<{ armed: boolean, timer?: number }>()
@@ -194,6 +194,8 @@ const Editor: React.FC = () => {
     }), [setContentFromHost]);
 
     useEffect(() => transport.addListener<Record<string, unknown>>('SettingsChanged', (newOptions) => {
+        // Finish any throttled edit before changing mode or unmounting its editor.
+        if ('sourceCode' in newOptions || 'readOnly' in newOptions) flushRef.current?.()
         for (const name in newOptions) {
             const value = newOptions[name];
             if (name.startsWith('search'))

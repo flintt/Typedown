@@ -75,6 +75,9 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     const [editor, setEditor] = useState<Muya>();
     const [marginTop, setMarginTop] = useState(0);
     const markdownRef = useRef('');
+    // Import/export normalizes Markdown. Keep the original text while the document
+    // still exports to its initial value, including after an undo back to that value.
+    const importedRef = useRef<{ source: string, normalized: string }>();
     const searchArgRef = useRef<any>();
     const cursorRef = useRef<any>();
     const optionsRef = useRef<any>(props.options);
@@ -143,6 +146,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
 
     useEffect(() => {
         markdownRef.current = ''
+        importedRef.current = undefined
     }, [editor])
 
     useEffect(() => {
@@ -492,16 +496,27 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     }, [editor])
 
     useEffect(() => editor?.on('contentChange', ({ markdown, wordCount, cursor, toc: { toc, cur } }: any) => {
-        markdownRef.current = markdown;
+        const imported = importedRef.current
+        const text = imported && markdown === imported.normalized ? imported.source : markdown
+        markdownRef.current = text;
         markLongDocument()
 
         // 同步内容与光标
-        props.onMarkdownChange(markdown)
+        props.onMarkdownChange(text)
         props.onCursorChange(cursor)
 
         // StateChange 必须在 onMarkdownChange、onCursorChange 之后发送，否则会导致编辑器内容/光标不同步
         props.onStateChange({ wordCount, toc, cur })
     }), [editor, props])
+
+    useEffect(() => {
+        if (!editor || !props.flushRef) return
+        const flush = () => editor.flushContentChange()
+        props.flushRef.current = flush
+        return () => {
+            if (props.flushRef?.current === flush) props.flushRef.current = null
+        }
+    }, [editor, props.flushRef])
 
     useEffect(() => {
         const ele = document.getElementById('editor');
@@ -652,18 +667,19 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
 
     useEffect(() => {
         if (!editor) return
-        if (markdownRef.current === props.markdown) { props.onContentApplied?.(); return }
-        // The editor normalizes what it is given, and the host hands that normalized text back; applying it
-        // again would be a second load — and a second load scrolls to the caret, which is why switching
-        // tabs could jump to the top of the document a moment after landing in the right place.
+        if (importedRef.current && markdownRef.current === props.markdown) { props.onContentApplied?.(); return }
+        // After an actual edit the host may hand the exported text back. Reuse the
+        // existing model when it already matches, avoiding another load and caret scroll.
         if (editor.getMarkdown() === props.markdown) {
             markdownRef.current = props.markdown
+            importedRef.current = { source: props.markdown, normalized: props.markdown }
             props.onContentApplied?.()
             return
         }
         markdownRef.current = props.markdown
         markLongDocument(props.markdown)
         editor.setMarkdown(props.markdown, cursorRef.current)
+        importedRef.current = { source: props.markdown, normalized: editor.getMarkdown() }
         settleScroll(props.scrollTopRef.current, !!props.scrollFromHostRef?.current)
         props.onContentApplied?.()
         // eslint-disable-next-line react-hooks/exhaustive-deps

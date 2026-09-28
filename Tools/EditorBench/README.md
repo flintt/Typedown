@@ -22,6 +22,9 @@ markdown printed after "back to muya" must be identical to the value shown befor
 
 Other checks (all take `STATICS=<dir>` or default to the built editor):
 
+- `reading-source-check.js` — preserves exact source through reading/source/visual mode switches and
+  save flushes, checks a list followed immediately by a heading and fenced code, and verifies pending
+  edits survive a mode switch. `handshake-check.js` also checks original source in `FileLoaded`.
 - `spec-check.js` — every CommonMark 0.31.2 example (652) imported, exported, imported and exported again. The
   second export must equal the first (importing what we just wrote must not keep changing the document), and the
   first must equal `spec-known.json`, the recorded behaviour of this editor. Muya is not a CommonMark renderer,
