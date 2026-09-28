@@ -6,7 +6,7 @@
 
 ## 可视化配色工具
 
-不想手写 CSS 时，可以[下载中英双语主题配色工具](../Tools/Themes/theme-designer.html?raw=1)，然后在浏览器中打开。它是一个离线单 HTML 文件，支持实时预览、对比度检查、导入现有单文件主题或 editor / CodeMirror / Prism 三文件主题，并导出 Typedown 可直接使用的 CSS。
+不想手写 CSS 时，可以直接打开[中英双语主题配色工具](https://flintt.github.io/Typedown/)。它支持实时预览、对比度检查、导入现有单文件主题或 editor / CodeMirror / Prism 三文件主题，并导出 Typedown 可直接使用的 CSS。工具仍以[离线单 HTML 文件](../Tools/Themes/theme-designer.html?raw=1)随源码提供。
 
 “保存设计工程（.json）”只用于备份或换设备继续编辑；安装主题时请下载 CSS。“继承基底”决定 CSS 未覆盖区域以及菜单、弹窗等原生界面使用 `light`、`dark` 还是 `black`，不会重置当前调色板。
 
@@ -207,9 +207,10 @@ A theme is a single CSS file dropped into the themes folder (`%LOCALAPPDATA%\Typ
 `~/.local/share/Typedown.Uno/themes/` on Linux, `~/Library/Application Support/Typedown.Uno/themes/` on macOS).
 It then appears under Settings → Appearance → Theme.
 
-Download the [bilingual theme designer](../Tools/Themes/theme-designer.html?raw=1) and open it in a browser.
-This standalone offline HTML file provides live previews, contrast checks, imports for existing single-file themes
-or separate editor / CodeMirror / Prism CSS, and exports CSS ready for Typedown.
+Open the [bilingual theme designer](https://flintt.github.io/Typedown/) directly in a browser. It provides live
+previews, contrast checks, imports for existing single-file themes or separate editor / CodeMirror / Prism CSS,
+and exports CSS ready for Typedown. A [standalone offline HTML file](../Tools/Themes/theme-designer.html?raw=1)
+is also included in the repository.
 Its JSON project files are only for backup and continued editing; install the exported CSS in Typedown.
 
 Six themes ship with the app — Solarized Light, Sepia, Nord, Solarized Dark, Dracula and Gruvbox Dark — and are

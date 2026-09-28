@@ -30,7 +30,7 @@ Windows 平台的所见即所得 Markdown 编辑器，WinUI 界面，编辑内�
 
 上游作者在微软商店上架的是**上游版本**，不含本仓库的改动：[Microsoft Store](https://apps.microsoft.com/detail/9p8tcw4h2hb4)。
 
-主题可以自己写：一个 CSS 文件放进主题文件夹即可，格式见 **[自定义主题](docs/custom-theme.md)**；也可以下载仓库中的 **[中英双语主题配色工具](Tools/Themes/theme-designer.html?raw=1)**，在浏览器中设计、导入和导出主题。
+主题可以自己写：一个 CSS 文件放进主题文件夹即可，格式见 **[自定义主题](docs/custom-theme.md)**；也可以直接打开 **[中英双语主题配色工具](https://flintt.github.io/Typedown/)**，在浏览器中设计、导入和导出主题。
 
 遇到问题请开 [issue](https://github.com/flintt/Typedown/issues/new/choose)，写清楚版本号（设置 → 关于）、复现步骤和日志（`%LOCALAPPDATA%\Typedown\logs\`）。本仓库的 issue 由 AI（Claude Code）分析和修复。
 
