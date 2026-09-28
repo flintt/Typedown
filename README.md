@@ -44,6 +44,8 @@ Windows 平台的所见即所得 Markdown 编辑器，WinUI 界面，编辑内�
 
 ## Building from source
 
+维护者文档：[当前架构](docs/architecture.md) · [WebView 消息协议](docs/editor-protocol.md) · [本地化规范](docs/localization.md) · [打包与发布](PACKAGING.md) · [Windows 真机验证](docs/windows-verification.md)
+
 ### 1. Prerequisites
 [Visual Studio 2022](https://visualstudio.microsoft.com/vs/) with the following individual components:
   - .NET Core 3.1 SDK

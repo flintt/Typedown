@@ -23,6 +23,28 @@ jobs:
       # English line in the middle of their own language. This is what makes it fail before that.
       - run: python3 Tools/Translations/check.py --strict
 
+  reliability:
+    name: Test persistence and packaging
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Run reliability tests
+        run: dotnet test Tests/Typedown.ReliabilityTests/Typedown.ReliabilityTests.csproj --configuration Release --results-directory Tests/Typedown.ReliabilityTests/TestResults --logger "trx;LogFileName=reliability.trx"
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reliability-test-results
+          path: Tests/Typedown.ReliabilityTests/TestResults/reliability.trx
+          if-no-files-found: error
+          retention-days: 14
+
   editor:
     name: Build editor (JS)
     # A release pushes the version bump to main and then the tag, which used to start the same build twice.
@@ -80,7 +102,7 @@ jobs:
 
   app:
     name: Build app (${{ matrix.platform }})
-    needs: editor
+    needs: [strings, editor, reliability]
     runs-on: windows-2022
     strategy:
       fail-fast: false

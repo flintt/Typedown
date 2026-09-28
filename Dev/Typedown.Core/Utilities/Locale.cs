@@ -101,7 +101,6 @@ namespace Typedown.Core.Utilities
             {"tr","Türkçe"},
             {"uk","Українська"},
             {"ur","اردو"},
-            {"uz","Uzbek (Latin)"},
             {"vi","Tiếng Việt"},
             {"zh-Hans","中文 (简体)"},
             {"zh-Hant","繁體中文 (繁體)"},

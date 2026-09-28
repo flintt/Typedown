@@ -282,6 +282,8 @@ namespace Typedown.Windows
         public async void ForceClose()
         {
             this.TrySaveWindowPlacement();
+            // Window placement is itself a setting. Do not let process shutdown cut off the queued atomic write.
+            await AppViewModel.SettingsViewModel.FlushSettingsAsync();
             isCloseable = true;
             await Task.Yield();
             if (Handle != default)

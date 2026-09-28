@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,9 +7,11 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using Typedown.Core.Controls;
 using Typedown.Core.Enums;
 using Typedown.Core.Interfaces;
+using Typedown.Core.Services;
 using Typedown.Core.Utilities;
 using Windows.UI.Xaml.Controls;
 
@@ -167,9 +168,7 @@ namespace Typedown.Core.ViewModels
 
         private readonly CompositeDisposable disposables = new();
 
-        private readonly string settingsFile = Path.Combine(Config.GetLocalFolderPath(), "Settings.json");
-
-        private JToken store;
+        private readonly JsonSettingsStore settingsStore;
 
         private readonly HashSet<string> notifySet = new()
         {
@@ -201,49 +200,22 @@ namespace Typedown.Core.ViewModels
         public SettingsViewModel(IServiceProvider serviceProvider)
         {
             ServiceProvider = serviceProvider;
+            var settingsFile = Path.Combine(Config.GetLocalFolderPath(), "Settings.json");
+            settingsStore = new JsonSettingsStore(settingsFile, onWriteError: ex => Utilities.Log.WriteLocal("SettingsSave", ex.ToString()));
             ResetSettingsCommand.OnExecute.Subscribe(_ => ResetSetting());
-            LoadAllSettings();
-        }
-
-        private void LoadAllSettings()
-        {
-            try
-            {
-                store = JToken.Parse(File.ReadAllText(settingsFile));
-            }
-            catch
-            {
-                store = new JObject();
-            }
-        }
-
-        private async void SaveAllSettings()
-        {
-            try
-            {
-                await File.WriteAllTextAsync(settingsFile, store.ToString());
-            }
-            catch
-            {
-                // Ignore
-            }
         }
 
         public T GetSettingValue<T>(T defaultValue = default, [CallerMemberName] string propertyName = null)
         {
-            return (T)(store[propertyName]?.ToObject(typeof(T)) ?? defaultValue);
+            return settingsStore.Get(propertyName, defaultValue);
         }
 
         public void SetSettingValue<T>(T value, [CallerMemberName] string propertyName = null)
         {
-            if (value is null || value is string || value is long || value is int || value is short || value is sbyte || value is ulong ||
-                value is uint || value is ushort || value is byte || value is Enum || value is double || value is float || value is decimal ||
-                value is DateTime || value is byte[] || value is bool || value is Guid || value is Uri || value is TimeSpan)
-                store[propertyName] = new JValue(value);
-            else
-                store[propertyName] = JObject.FromObject(value);
-            SaveAllSettings();
+            settingsStore.Set(propertyName, value);
         }
+
+        public Task FlushSettingsAsync() => settingsStore.FlushAsync();
 
         public void OnPropertyChanged(string propertyName, object before, object after)
         {
@@ -269,8 +241,7 @@ namespace Typedown.Core.ViewModels
             var result = await dialog.ShowAsync(ServiceProvider.GetService<AppViewModel>().XamlRoot);
             if (result != ContentDialogResult.Primary)
                 return;
-            store = new JObject();
-            SaveAllSettings();
+            settingsStore.Reset();
             foreach (var item in GetType().GetProperties().Where(x => x.GetSetMethod() != null).Select(x => x.Name))
                 OnPropertyChanged(item);
         }

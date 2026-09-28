@@ -420,6 +420,7 @@
     <Compile Include="Services\SessionMemory.cs" />
     <Compile Include="Services\AppDbContext.cs" />
     <Compile Include="Services\AutoBackup.cs" />
+    <Compile Include="Services\JsonSettingsStore.cs" />
     <Compile Include="Services\EventCenter.cs" />
     <Compile Include="Services\ImageAction.cs" />
     <Compile Include="Services\ImageUpload.cs" />

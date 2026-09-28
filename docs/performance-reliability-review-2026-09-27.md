@@ -407,3 +407,46 @@ SemaphoreSlim 确实约束了正在枚举的数量，但每个请求先排队，
 3. 在 Windows 上覆盖日常打开、输入、保存、关闭、切换和恢复流程；没有新的数据完整性回归后，再决定下一批工作。
 
 当前最需要补的是行为验证。完成这些保护后，不以“所有建议全部打勾”为目标继续增加机制。
+
+## 可靠性基线补充（2026-09-28）
+
+本次按“先建立可持续测试基线”的范围完成了以下项目。这些项目补上持久化和发布检查，但不改变上文 F01–F10 对文档切换、备份调度、编码和协议恢复的剩余判断。
+
+### 设置持久化
+
+`Settings.json` 现在由 `JsonSettingsStore` 统一持有：快速连续变更合并为最新快照，同一时刻只运行一个写入任务，写入通过 `SafeFile` 原子提交。正常关闭在保存窗口位置后等待设置队列排空，避免进程退出截断最后一次修改。有效旧文件中的未知字段会保留；单个旧字段类型不兼容时只回退该设置的默认值；损坏 JSON 会在下一次修改时写回有效文档。写入失败会记录并允许后续变更重新触发写入。
+
+新增测试覆盖旧版 JSON、未知字段、损坏文件、旧字段类型变化、400 次快速连续修改、重置、首次写入失败后重试。测试断言最终快照正确、写入不并发且确实发生合并。
+
+### SQLite 和持久化测试
+
+新增独立的 `Tests/Typedown.ReliabilityTests`，直接链接生产的 `SafeFile`、`AutoBackup`、`JsonSettingsStore` 和 EF migration 源码。SQLite 测试包含两条路径：
+
+1. 空库应用当前 migrations，核对表、字段、迁移历史和 `PRAGMA integrity_check`；
+2. 用旧 EF 版本标记和代表性用户数据的 SQL fixture 建库，执行迁移两次，核对数据、表、主键索引、迁移历史和完整性。
+
+当前仓库只有 `InitialCreate` 一条 migration，因此旧库此时已经位于当前 schema；该 fixture 的作用是固定旧发布基线。未来加入新 migration 后，同一测试会从该基线实际执行新增升级步骤并检查数据保留。它没有解决 F09 的最近记录去重、路径规范化或唯一索引设计。
+
+同一项目还覆盖原子替换成功、临时文件创建失败、Windows 独占锁导致提交失败时原文件和恢复副本、自动备份读写删除、MSIX 文件关联/full-trust 能力、四处版本号一致性、语言代码/资源目录/manifest 一致性，以及 Core → 桌面宿主的禁止反向引用。语言守卫建立时发现 `uz` 只有代码选项、没有资源和 manifest 声明，现已移除该无效选项。
+
+### CI 和维护文档
+
+Windows CI 新增 `reliability` job。它在应用打包前运行上述测试并上传 TRX；失败会阻止 x64/ARM64 app job。测试项目也加入 solution 的 Tests 文件夹。翻译严格检查仍单独运行。
+
+新增并从 README 链接以下维护文档：
+
+- [当前架构](architecture.md)；
+- [WebView 消息协议](editor-protocol.md)；
+- [本地化规范](localization.md)；
+- [打包与发布](../PACKAGING.md)；
+- [Windows 真机验证](windows-verification.md)。
+
+### 验证结果与边界
+
+- Linux/.NET 9：17 项中 16 项通过，Windows 独占锁测试按平台条件跳过；
+- Windows 10/.NET 9：设置、SQLite、SafeFile、AutoBackup、清单和架构测试全部通过，独占锁测试实际执行；
+- Windows x64 Release：`Typedown.Core` 和 `Typedown` 编译通过；
+- 翻译：74/74 语言、471/471 键完整；
+- workflow YAML 可解析，差异检查无空白错误。
+
+Windows 编译使用临时检出和编译占位的 editor `index.html`，只证明 C#/XAML 工程集成正确，不等同于带完整前端 bundle 的可运行安装包或 UI 冒烟。发布前仍按 [Windows 真机验证](windows-verification.md) 使用真实构建产物执行打开、输入、保存、切换、恢复和安装升级检查。上文 F01–F07 的文档状态一致性问题不能因为本批基础设施测试通过而关闭。

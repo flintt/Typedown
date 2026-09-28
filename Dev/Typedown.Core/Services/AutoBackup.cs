@@ -6,7 +6,12 @@ namespace Typedown.Core.Services
 {
     public class AutoBackup
     {
-        private readonly string backupPath = Path.Combine(Config.GetLocalFolderPath(), "Backup");
+        private readonly string backupPath;
+
+        public AutoBackup(string backupPath = null)
+        {
+            this.backupPath = backupPath ?? Path.Combine(Config.GetLocalFolderPath(), "Backup");
+        }
 
         public string GetBackupFilePath(string sourcePath)
         {
