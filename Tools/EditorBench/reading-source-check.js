@@ -6,6 +6,7 @@ const path = require('path');
 const assert = require('assert/strict');
 const statics = path.resolve(process.env.STATICS || '../../Dev/Typedown/Resources/Statics');
 const markdown = '## Repo分支说明\n目前有`master`（默认），`test`2个分支。\n- `master`: 用于分阶段working的代码\n- `test`： 将本地的`local`分支代码提交到这个分支`git push origin local:test`\n## 提交和拉取说明\n```bash\n# git branch\n* test\n# git remote\norigin\n```\n提交：`git push origin test:test`, 或者`git push`\n\n拉取：`git pull `\n';
+const tableAfterParagraph = '**改进汇总**：\n| 版本 | 改进焦点 | 核心变化 |\n| --- | --- | --- |\n| v1 | 结构化重构 | 章节重组 |\n';
 const server = http.createServer((req, res) => {
  const p = decodeURIComponent(req.url.split('?')[0]);
  const f = path.join(statics, p === '/' ? 'index.html' : p);
@@ -47,7 +48,7 @@ const server = http.createServer((req, res) => {
    });
  };
  const source = () => page.evaluate(() => document.querySelector('.CodeMirror').CodeMirror.getValue());
- const fixtures = [markdown, markdown.replace('说明\n```', '说明\n\n```'), 'Title\n=====\n\n* a   \n* b', '', 'no final newline'];
+ const fixtures = [markdown, tableAfterParagraph, markdown.replace('说明\n```', '说明\n\n```'), 'Title\n=====\n\n* a   \n* b', '', 'no final newline'];
  let loadId = 1;
  for (const text of fixtures) {
    await page.evaluate(({text, loadId}) => {
@@ -66,6 +67,14 @@ const server = http.createServer((req, res) => {
        });
        assert.deepEqual(structure.types, ['h2', 'p', 'ul', 'h2', 'pre', 'p', 'p']);
        assert.equal(structure.code, '# git branch\n* test\n# git remote\norigin');
+     }
+     if (text === tableAfterParagraph) {
+       const structure = await page.evaluate(() => ({
+         types: window.__typedownMuya.contentState.blocks.map(b => b.type),
+         rows: document.querySelectorAll('#ag-editor-id table tr').length
+       }));
+       assert.deepEqual(structure.types, ['p', 'figure']);
+       assert.equal(structure.rows, 2, 'the table after a paragraph is rendered as a table');
      }
      await mode(false, false);
      assert.equal(await flush(), text, 'entering visual editing without editing preserves source');

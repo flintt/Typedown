@@ -122,6 +122,7 @@ Lexer.prototype.token = function (src, top) {
     src = '\n\n' + src;
 
   while (src) {
+    let rejectedTable = false
 
     // newline
     cap = this.rules.newline.exec(src)
@@ -311,6 +312,8 @@ Lexer.prototype.token = function (src, top) {
 
         continue
       }
+
+      rejectedTable = true
     }
 
     // hr
@@ -621,6 +624,8 @@ Lexer.prototype.token = function (src, top) {
 
         continue
       }
+
+      rejectedTable = true
     }
 
     // lheading
@@ -664,12 +669,18 @@ Lexer.prototype.token = function (src, top) {
         continue
       }
 
-      this.tokens.push({
-        type: 'paragraph',
-        text: cap[1].charAt(cap[1].length - 1) === '\n'
-          ? cap[1].slice(0, -1)
-          : cap[1]
-      })
+      const text = cap[1].charAt(cap[1].length - 1) === '\n'
+        ? cap[1].slice(0, -1)
+        : cap[1]
+      const previous = this.tokens[this.tokens.length - 1]
+      // A rejected GFM table candidate clipped the paragraph before its header.
+      // Join only that candidate back; merging every adjacent paragraph would
+      // also change link definitions emitted as paragraphs by disableInline.
+      if (rejectedTable && previous && previous.type === 'paragraph' && !previous.followedByBlankLine) {
+        previous.text += `\n${text}`
+      } else {
+        this.tokens.push({ type: 'paragraph', text })
+      }
       continue
     }
 

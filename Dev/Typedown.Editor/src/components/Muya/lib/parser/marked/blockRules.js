@@ -33,7 +33,7 @@ export const block = {
   lheading: /^([^\n]+)\n {0,3}(=+|-+) *(?=\n+|$)/,
   // regex template, placeholders will be replaced according to different paragraph
   // interruption rules of commonmark and the original markdown spec:
-  _paragraph: /^([^\n]+(?:\n(?!hr|heading|lheading|blockquote|fences|list|html)[^\n]+)*)/,
+  _paragraph: /^([^\n]+(?:\n(?!hr|heading|lheading|blockquote|fences|list|html|table)[^\n]+)*)/,
   text: /^[^\n]+/,
 
   // extra
@@ -86,6 +86,7 @@ block.paragraph = edit(block._paragraph)
   .replace('hr', block.hr)
   .replace('heading', ' {0,3}#{1,6} ')
   .replace('|lheading', '') // setex headings don't interrupt commonmark paragraphs
+  .replace('|table', '') // tables are a GFM extension
   .replace('blockquote', ' {0,3}>')
   .replace('fences', ' {0,3}(?:`{3,}(?=[^`\\n]*\\n)|~{3,})[^\\n]*\\n')
   .replace('list', ' {0,3}(?:[*+-]|1[.)]) ') // only lists starting from 1 can interrupt
@@ -138,6 +139,22 @@ gfm.table = edit(gfm.table)
   .replace('tag', block._tag) // tables can be interrupted by type (6) html blocks
   .getRegex()
 
+// GFM tables can interrupt a paragraph when the following two lines form a
+// table header and delimiter row. Keep this out of the normal and pedantic
+// grammars, and use the complete table rules so an isolated pipe is not enough.
+const gfmTableInterrupt = new RegExp('(?:' + gfm.nptable.source + '|' + gfm.table.source + ')')
+gfm.paragraph = edit(block._paragraph)
+  .replace('hr', block.hr)
+  .replace('heading', ' {0,3}#{1,6} ')
+  .replace('|lheading', '')
+  .replace('table', gfmTableInterrupt)
+  .replace('blockquote', ' {0,3}>')
+  .replace('fences', ' {0,3}(?:`{3,}(?=[^`\\n]*\\n)|~{3,})[^\\n]*\\n')
+  .replace('list', ' {0,3}(?:[*+-]|1[.)]) ')
+  .replace('html', '</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|!--)')
+  .replace('tag', block._tag)
+  .getRegex()
+
 /**
  * Pedantic grammar (original John Gruber's loose markdown specification)
  */
@@ -160,6 +177,7 @@ export const pedantic = Object.assign({}, normal, {
     .replace('hr', block.hr)
     .replace('heading', ' *#{1,6} *[^\n]')
     .replace('lheading', block.lheading)
+    .replace('|table', '')
     .replace('blockquote', ' {0,3}>')
     .replace('|fences', '')
     .replace('|list', '')
