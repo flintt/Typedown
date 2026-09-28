@@ -423,7 +423,7 @@
         sampleTitle:'设计一套可读的主题', sampleIntro:'这是一段正文，用来检查长时间阅读时的舒适度。主题需要兼顾 <strong>文字层级</strong>、<a href="#">链接辨识度</a>和<mark>搜索高亮</mark>。', sampleQuote:'好的配色不抢内容的注意力，但能让结构一眼可见。', sampleElements:'内容元素', sampleInlineCode:'行内代码 <code>theme.css</code> 应该清晰，但不应像按钮一样突出。',
         item:'项目', status:'状态', description:'说明', bodyText:'正文', comfortableReading:'适合连续阅读', code:'代码', pass:'通过', clearSyntax:'语法层级清晰', wordCount:'84 字　Ln 12, Col 8', sourceHeading:'源码模式', sourceLine:'主题支持 <span class="tok-keyword">**Markdown**</span> 与 <span class="tok-string">`代码`</span>。',
         contrast:'对比度', contrastHelp:'正文与注释按 4.5:1 检查，强调色按 3:1 检查；未通过仅提示可读性风险，不影响导出。', targetRatio:'目标 {target}:1', generatedCss:'生成的主题 CSS', close:'关闭', copyCss:'复制 CSS', downloadSingle:'下载单文件主题', downloadEditor:'下载 editor CSS', downloadCodeMirror:'下载 CodeMirror CSS', downloadPrism:'下载 Prism CSS',
-        editorBackground:'编辑区背景', windowSurface:'窗口面板', bodyForeground:'正文文字', accent:'强调色', border:'边框', codeBlockBackground:'代码块背景', selection:'选区', searchHighlight:'搜索高亮', inlineCode:'行内代码', footnoteBackground:'脚注背景', inputBackground:'输入框背景', listItemBackground:'列表项背景', floatBackground:'浮层背景', floatHover:'浮层悬停', floatBorder:'浮层边框', mask:'遮罩', icon:'图标', danger:'危险操作',
+        editorBackground:'编辑区 / 活动标签', windowSurface:'窗口面板 / 非活动标签', bodyForeground:'正文文字', accent:'强调色 / 活动标识', border:'边框 / 标签分隔线', codeBlockBackground:'代码块背景', selection:'选区', searchHighlight:'搜索高亮', inlineCode:'行内代码', footnoteBackground:'脚注背景', inputBackground:'输入框背景', listItemBackground:'列表项背景', floatBackground:'浮层背景', floatHover:'浮层悬停', floatBorder:'浮层边框', mask:'遮罩', icon:'图标', danger:'危险操作',
         comment:'注释', keyword:'关键字', string:'字符串', number:'数字', function:'函数', operator:'运算符', tagAttribute:'标签 / 属性', colorPicker:'{name}颜色选择器', defaultThemeName:'我的主题',
         bodyEditorContrast:'正文 / 编辑区', bodyPanelContrast:'正文 / 面板', accentEditorContrast:'强调色 / 编辑区', commentCodeContrast:'注释 / 代码块', invalid:'无效', uiPass:'UI 通过', aa:'AA', aaa:'AAA', failed:'未通过',
         presetLight:'已应用浅色起点', presetDark:'已应用深色起点', presetBlack:'已应用纯黑起点', baseChanged:'继承基底已改为 {base}；当前配色保持不变', chooseCss:'请选择 CSS 主题文件', importedCount:'已导入 {count} 个 CSS 文件', jsonImported:'已打开设计工程', jsonError:'无法打开该设计工程', cssCopied:'CSS 已复制', resetDone:'已恢复默认配色'
@@ -437,7 +437,7 @@
         sampleTitle:'Design a readable theme', sampleIntro:'This paragraph checks comfort during long reading sessions. A theme should balance <strong>text hierarchy</strong>, <a href="#">recognizable links</a>, and <mark>search highlights</mark>.', sampleQuote:'Good colors keep attention on the content while making its structure clear.', sampleElements:'Content elements', sampleInlineCode:'Inline code such as <code>theme.css</code> should be clear without looking like a button.',
         item:'Item', status:'Status', description:'Description', bodyText:'Body text', comfortableReading:'Comfortable for continuous reading', code:'Code', pass:'Pass', clearSyntax:'Clear syntax hierarchy', wordCount:'84 words　Ln 12, Col 8', sourceHeading:'Source mode', sourceLine:'The theme supports <span class="tok-keyword">**Markdown**</span> and <span class="tok-string">`code`</span>.',
         contrast:'Contrast', contrastHelp:'Body text and comments target 4.5:1; accents target 3:1. A failed check warns about readability and does not block export.', targetRatio:'target {target}:1', generatedCss:'Generated theme CSS', close:'Close', copyCss:'Copy CSS', downloadSingle:'Download single-file theme', downloadEditor:'Download editor CSS', downloadCodeMirror:'Download CodeMirror CSS', downloadPrism:'Download Prism CSS',
-        editorBackground:'Editor background', windowSurface:'Window surface', bodyForeground:'Body text', accent:'Accent', border:'Border', codeBlockBackground:'Code block background', selection:'Selection', searchHighlight:'Search highlight', inlineCode:'Inline code', footnoteBackground:'Footnote background', inputBackground:'Input background', listItemBackground:'List item background', floatBackground:'Floating panel background', floatHover:'Floating panel hover', floatBorder:'Floating panel border', mask:'Mask', icon:'Icon', danger:'Danger action',
+        editorBackground:'Editor / active tab', windowSurface:'Panels / inactive tabs', bodyForeground:'Body text', accent:'Accent / active marker', border:'Borders / tab separators', codeBlockBackground:'Code block background', selection:'Selection', searchHighlight:'Search highlight', inlineCode:'Inline code', footnoteBackground:'Footnote background', inputBackground:'Input background', listItemBackground:'List item background', floatBackground:'Floating panel background', floatHover:'Floating panel hover', floatBorder:'Floating panel border', mask:'Mask', icon:'Icon', danger:'Danger action',
         comment:'Comment', keyword:'Keyword', string:'String', number:'Number', function:'Function', operator:'Operator', tagAttribute:'Tag / attribute', colorPicker:'{name} color picker', defaultThemeName:'My Theme',
         bodyEditorContrast:'Body / editor', bodyPanelContrast:'Body / panel', accentEditorContrast:'Accent / editor', commentCodeContrast:'Comment / code block', invalid:'Invalid', uiPass:'UI pass', aa:'AA', aaa:'AAA', failed:'Fail',
         presetLight:'Light starting point applied', presetDark:'Dark starting point applied', presetBlack:'Black starting point applied', baseChanged:'Fallback base changed to {base}; the current palette was kept', chooseCss:'Choose CSS theme files', importedCount:'Imported {count} CSS file(s)', jsonImported:'Design project opened', jsonError:'Could not open this design project', cssCopied:'CSS copied', resetDone:'Default palette restored'
@@ -501,6 +501,7 @@
         lab.htmlFor = `${group}-${key}`
         lab.dataset.i18n = labelKey
         lab.textContent = t(labelKey)
+        lab.title = t(labelKey)
         const picker = document.createElement('input')
         picker.type = 'color'
         picker.dataset.picker = `${group}.${key}`
@@ -526,6 +527,7 @@
       document.querySelectorAll('[data-i18n]').forEach(element => { element.textContent=t(element.dataset.i18n) })
       document.querySelectorAll('[data-i18n-html]').forEach(element => { element.innerHTML=t(element.dataset.i18nHtml) })
       document.querySelectorAll('[data-i18n-aria-label]').forEach(element => { element.setAttribute('aria-label',t(element.dataset.i18nAriaLabel)) })
+      document.querySelectorAll('.color-row label[data-i18n]').forEach(element => { element.title=t(element.dataset.i18n) })
       document.querySelectorAll('[data-label-key]').forEach(element => { element.setAttribute('aria-label',t('colorPicker',{name:t(element.dataset.labelKey)})) })
     }
     function setLanguage(next) {
