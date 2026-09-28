@@ -4,10 +4,10 @@ on:
   push:
     branches: [ main, integrate-upstream-prs ]
     tags: [ 'v*' ]
-    # Docs and issue templates never need a build.
-    paths-ignore: [ '**.md', '.github/ISSUE_TEMPLATE/**' ]
+    # Docs, issue templates, and the standalone theme designer never need an application build.
+    paths-ignore: [ '**.md', '.github/ISSUE_TEMPLATE/**', '.github/workflows/pages.yml', 'Tools/Themes/**' ]
   pull_request:
-    paths-ignore: [ '**.md', '.github/ISSUE_TEMPLATE/**' ]
+    paths-ignore: [ '**.md', '.github/ISSUE_TEMPLATE/**', '.github/workflows/pages.yml', 'Tools/Themes/**' ]
   workflow_dispatch:
 
 permissions:
@@ -26,8 +26,10 @@ jobs:
   editor:
     name: Build editor (JS)
     # A release pushes the version bump to main and then the tag, which used to start the same build twice.
-    # The tag run is the one that publishes, so the branch run for a version commit is skipped.
-    if: github.ref_type == 'tag' || !startsWith(github.event.head_commit.message, 'Version ')
+    # The tag run is the one that publishes, so the branch run for a version commit is skipped. The explicit
+    # marker is for infrastructure-only commits that must update this workflow without rebuilding the app.
+    # Tags always build, even if their target commit contains the marker.
+    if: github.ref_type == 'tag' || (!startsWith(github.event.head_commit.message, 'Version ') && !contains(github.event.head_commit.message, '[skip app build]'))
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
