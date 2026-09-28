@@ -141,8 +141,16 @@ class StateRender {
         try {
           let svg = this.mermaidRenderCache.get(cacheKey)
           if (svg == null) {
-            const result = await mermaid.render(`mermaid-render-${mermaidRenderId++}`, code)
-            svg = result.svg
+            const renderId = `mermaid-render-${mermaidRenderId++}`
+            try {
+              const result = await mermaid.render(renderId, code)
+              svg = result.svg
+            } finally {
+              // Mermaid appends d<renderId> to <body> when parsing fails. The block below already shows the
+              // inline error, so keeping that second diagnostic puts it below the document in every mode.
+              // It also survives when the block or tab is removed and accumulates on every retry.
+              document.getElementById(`d${renderId}`)?.remove()
+            }
             this.mermaidRenderCache.set(cacheKey, svg)
           }
           target.innerHTML = svg

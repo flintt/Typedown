@@ -26,6 +26,12 @@ const rendererFixtures = [
     ready: '.ag-container-preview svg'
   },
   {
+    name: 'Invalid Mermaid cleanup',
+    markdown: `Before\n\n~~~mermaid\ngraph TD\n  A[broken\n~~~\n\nAfter\n`,
+    ready: '.ag-math-error',
+    exerciseCleanup: true
+  },
+  {
     name: 'Vega-Lite input',
     markdown: `~~~vega-lite\n{"$schema":"https://vega.github.io/schema/vega-lite/v6.json","data":{"values":[{"category":"A","value":3},{"category":"B","value":5}]},"title":"<img src=x onerror=window.__typedownXss.push('vega')>","mark":"bar","encoding":{"x":{"field":"category","type":"nominal"},"y":{"field":"value","type":"quantitative"}}}\n~~~\n`,
     ready: '.ag-container-preview svg'
@@ -58,6 +64,7 @@ async function openEditor(browser, markdown) {
     window.__marks = {};
     const listeners = [];
     const deliver = (eventName, args) => listeners.forEach(listener => listener({ data: JSON.stringify({ name: eventName, args }) }));
+    window.__deliver = deliver;
     const replies = { GetSettings: settings, GetCurrentTheme: { theme: 'Light', accentColor: { r: 0, g: 120, b: 212, a: 1 }, background: { R: 249, G: 249, B: 249, A: 1 } }, ContentLoaded: '', GetStringResources: {} };
     window.chrome = { webview: { addEventListener: (_type, listener) => listeners.push(listener), postMessage: raw => {
       const message = JSON.parse(raw);
@@ -85,6 +92,7 @@ const inspect = (page, selector) => page.evaluate(selector => {
     executed: window.__typedownXss,
     dangerousAttributes,
     activeTags: root ? [...root.querySelectorAll('script,iframe,object,embed')].map(element => element.tagName) : [],
+    leakedMermaidDiagnostics: [...document.querySelectorAll('[id^="dmermaid-render-"]')].map(element => element.id),
     unhandled: window.__unhandled,
     pageError: window.__pageError
   };
@@ -110,7 +118,7 @@ const inspect = (page, selector) => page.evaluate(selector => {
     }
     console.log('PASS: raw Markdown HTML is inert after the full editor render path');
 
-    for (const { name, markdown, ready } of rendererFixtures) {
+    for (const { name, markdown, ready, exerciseCleanup } of rendererFixtures) {
       const page = await openEditor(browser, markdown);
       await page.waitForSelector(ready, { timeout: 30000 });
       await new Promise(resolve => setTimeout(resolve, 350));
@@ -122,6 +130,25 @@ const inspect = (page, selector) => page.evaluate(selector => {
       assert.deepEqual(result.executed, [], `${name}: renderer input must not execute`);
       assert.deepEqual(result.dangerousAttributes, [], `${name}: renderer output must not contain active attributes or javascript: URLs`);
       assert.deepEqual(result.activeTags, [], `${name}: renderer output must not contain active embedded content`);
+      assert.deepEqual(result.leakedMermaidDiagnostics, [], `${name}: Mermaid diagnostics must not leak below the document`);
+      if (exerciseCleanup) {
+        await page.evaluate(() => window.__deliver('SettingsChanged', { sourceCode: true }));
+        await page.waitForSelector('.CodeMirror');
+        assert.deepEqual((await inspect(page, 'body')).leakedMermaidDiagnostics, [], `${name}: source mode must not retain Mermaid diagnostics`);
+
+        await page.evaluate(() => window.__deliver('SettingsChanged', { sourceCode: false }));
+        await page.waitForSelector('.ag-math-error');
+        assert.deepEqual((await inspect(page, 'body')).leakedMermaidDiagnostics, [], `${name}: returning to visual mode must not accumulate diagnostics`);
+
+        await page.evaluate(() => {
+          delete window.__marks.FileLoaded;
+          window.__deliver('LoadFile', { text: '# Clean document\n', basePath: '/tmp', loadId: 2 });
+        });
+        await page.waitForFunction(() => window.__marks.FileLoaded && document.querySelector('#ag-editor-id')?.textContent.includes('Clean document'));
+        const cleaned = await inspect(page, 'body');
+        assert.deepEqual(cleaned.leakedMermaidDiagnostics, [], `${name}: removing the invalid block must leave no diagnostics`);
+        assert.equal(await page.$('.ag-math-error'), null, `${name}: removing the invalid block must remove its inline error`);
+      }
       console.log(`PASS ${name}`);
       await page.close();
     }
