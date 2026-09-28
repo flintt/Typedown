@@ -30,18 +30,25 @@
 
 原清单中的“文件写入不是原子替换”已经解决：正文和崩溃备份都通过 `SafeFile` 写入同目录临时文件，刷新到磁盘后使用 `MoveFileEx`/`File.Replace` 替换；锁冲突会重试并保留恢复副本，不再退回可能截断正文的直接覆盖。
 
-1. **中：外部文件监控存在盲区。** `ScheduleReloadFromDisk` 在自身写入后一秒直接丢弃事件，可能漏掉同期真正的外部编辑；同一路径关闭后重新打开也不能仅凭路径识别文档会话。需要引入会话标识与延迟复查策略。
-2. **中：活动文档自动备份仍有重复 I/O。** 后台标签已经按 `BackupHash` 去重；活动文档内容不变时仍可能每五秒重写备份。可以继续按修订去重，但需要同步处理备份被外部删除和失败重试。
-3. **中：PowerShell 图床服务未实现。** `Dev/Typedown/Services/PowerShellService.cs` 仍抛出 NotImplementedException。
-4. **待评估：WebView2 信任边界。** `Config.WebView2Args` 启用了 disable-web-security 和 allow-file-access-from-files，需要结合 HTML 清洗、本地资源访问和宿主消息来源检查单独审查，不能仅凭配置认定可利用漏洞。
+1. **高/架构：桌面端仍以 `netcoreapp3.1` 为目标。** .NET Core 3.1 已于 2022-12-13 结束支持，后续不会获得运行时安全修复；项目的旧 UWP/WinRT 互操作使这不是一次简单的目标框架改名。发布当前版本不会新增这个问题，但应把迁移到受支持 .NET 版本作为独立里程碑。在迁移前至少确保自包含包固定使用 3.1.32，并保留安装包启动、打印、WebView2 与文件选择的实机回归。
+2. **中/兼容：`System.Drawing.Common` 9.0.8 与 `netcoreapp3.1` 跨代组合。** Windows 编译可以完成，但构建会报告兼容性警告；当前仅使用 Color/Point/Rectangle 等基础类型。应在框架迁移时改用目标框架自带类型或匹配版本，避免未来 NuGet/SDK 更新把警告变成恢复失败。
+3. **中/构建链：Create React App 5 工具链有审计告警。** `react-scripts` 带入的旧 SVGO、PostCSS、webpack-dev-server 等包被 npm 标为中高风险。它们用于编译或本地开发，不进入安装包的 Node 运行时，也不处理用户打开的 Markdown；仍应在独立分支迁移构建系统，并让发布 CI 只构建受信任提交、保持 lockfile 冻结安装。
+4. **中：外部文件监控存在盲区。** `ScheduleReloadFromDisk` 在自身写入后一秒直接丢弃事件，可能漏掉同期真正的外部编辑；同一路径关闭后重新打开也不能仅凭路径识别文档会话。需要引入会话标识与延迟复查策略。
+5. **中：活动文档自动备份仍有重复 I/O。** 后台标签已经按 `BackupHash` 去重；活动文档内容不变时仍可能每五秒重写备份。可以继续按修订去重，但需要同步处理备份被外部删除和失败重试。
+6. **中：PowerShell 图床服务未实现。** `Dev/Typedown/Services/PowerShellService.cs` 仍抛出 NotImplementedException。
+7. **中：WebView2 信任边界需要继续收紧。** `Config.WebView2Args` 启用了 disable-web-security 和 allow-file-access-from-files。当前已升级 HTML 清洗器并用完整渲染路径覆盖 HTML、SVG、公式和各图表输入，但这些全局开关仍会放大未来清洗绕过的影响；后续应改为虚拟主机映射/受控资源请求，并校验宿主消息来源。
 
 ## v1.2.28 后发布前复审（2026-09-28）
 
 - 修复正式标签仍显示 `test.<run>` 的问题：稳定 release 不显示测试标识；分支构建和带后缀的预发布标签继续显示可追踪标识。
 - CI 新增版本闸门，要求发布标签、应用项目、MSIX 清单、核心程序集和 Inno Setup 版本一致，避免标签与安装包版本不同。
-- CI 在生产构建后运行加载握手、阅读/源码/可视化模式往返及 652 条 CommonMark 基线。源码模式真实编辑也加入模式往返测试。
-- 发布前验证通过：32 项前端单元测试；652 条 CommonMark 基线无新增差异；明暗主题各 240 个布局元素无变化；快速标签切换、只读模式、历史问题集、表格膨胀、空闲稳定性和 74 种翻译检查通过；Windows x64 安装包编译成功。
-- 当前没有已知的发布阻断级问题。上面的中优先级项目均为此前版本已有的限制，本次改动没有扩大其影响范围。
+- CI 在生产构建后运行加载握手、阅读/源码/可视化模式往返、安全输入及 652 条 CommonMark 基线。源码模式真实编辑也加入模式往返测试。
+- 发布安全复审发现并修复四个阻断项：DOMPurify 从 2.3.5 升至 3.4.16；KaTeX 从 0.15.2 升至 0.16.47；Vega/Vega-Lite/Vega-Embed 从 5.21.0/5.2.0/6.20.7 升至 6.4.0/6.4.3/7.3.0；Mermaid 从 11.16.0 升至修复版 11.16.1，同时将 Underscore 固定到 1.13.8。旧版本分别处于已公开的 XSS、CSS 注入、原型污染、属性清洗或拒绝服务影响范围。
+- DOMPurify 3 会移除危险图片 URL，但保留无 `src` 的 `<img>`；旧渲染代码会把空值交给路径解析并卸载整个编辑器。现在无来源图片会被安全保留，并以恶意 HTML/SVG/URL/iframe/object 用例覆盖该路径。
+- 安全回归通过完整 Markdown 导入与实际 DOM 渲染，而非单独调用清洗函数；KaTeX、Mermaid、Vega-Lite、flowchart.js 和 sequence 均验证能够生成内容，且载荷不执行、不留下事件属性、`javascript:` URL 或活动嵌入元素。
+- 发布前验证通过：32 项前端单元测试；652 条 CommonMark 基线无新增差异；明暗主题各 240 个布局元素无变化；快速标签切换、只读模式、历史问题集、表格膨胀、空闲稳定性和 74 种翻译检查通过；Windows x64 与 ARM64 安装包均编译成功。
+- 依赖升级后主 JS 的 gzip 大小从约 1.13 MB 增至约 1.15 MB；没有布局基线变化。npm 公告接口对 DOMPurify、KaTeX、Mermaid、Underscore、Vega 全套和 flowchart.js 的实际锁定版本返回零条公告；完整依赖树仍有上面所述的旧构建工具链告警。
+- 修复以上阻断项后，当前没有已知的本次发布阻断级问题。仍需接受的主要风险是 .NET Core 3.1 已停止支持，以及上面列出的既有中优先级限制。
 
 ## 文件导航与测试版本标识补充
 

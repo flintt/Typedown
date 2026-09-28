@@ -26,6 +26,9 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   save flushes, checks a list followed immediately by a heading and fenced code, checks a GFM table
   interrupting a paragraph, verifies a source-mode edit survives a full mode round trip, and verifies pending
   visual edits survive a mode switch. `handshake-check.js` also checks original source in `FileLoaded`.
+- `security-check.js` — sends raw HTML, SVG, event-handler, `javascript:` URL and embedded-content payloads
+  through the complete Markdown render path, then exercises KaTeX, Mermaid, Vega-Lite, flowchart.js and the
+  sequence renderer with hostile labels; none may execute or leave active attributes/elements in the editor.
 - `spec-check.js` — every CommonMark 0.31.2 example (652) imported, exported, imported and exported again. The
   second export must equal the first (importing what we just wrote must not keep changing the document), and the
   first must equal `spec-known.json`, the recorded behaviour of this editor. Muya is not a CommonMark renderer,

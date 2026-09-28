@@ -144,6 +144,9 @@ export default function renderLeafBlock (parent, block, activeBlocks, matches, u
           const imgs = doc.documentElement.querySelectorAll('img')
           for (const img of imgs) {
             const src = img.getAttribute('src')
+            // DOMPurify removes unsafe/invalid image URLs. The remaining img is still valid HTML, but there is
+            // no path for getImageInfo to resolve; leave it without a source instead of crashing the editor.
+            if (!src) continue
             const imageInfo = getImageInfo(src)
             img.setAttribute('src', imageInfo.src)
           }
