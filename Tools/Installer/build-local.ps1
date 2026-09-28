@@ -147,7 +147,9 @@ if (-not $SkipBuild) {
     if ($stamped -eq $configOriginal) { Write-Warning "TestBuild not found in Config.cs; building without a label" }
     try {
         Set-Content $configPath $stamped -Encoding utf8 -NoNewline
-        & $msbuild 'Dev\Typedown\Typedown.csproj' /t:Restore,Build /m /v:m `
+        # /restore re-evaluates the project after generating NuGet imports. Running
+        # Restore,Build as targets in one evaluation misses those imports on a fresh checkout.
+        & $msbuild 'Dev\Typedown\Typedown.csproj' /restore /t:Build /m /v:m `
             /p:Configuration=$Configuration /p:Platform=$Platform `
             /p:ManifestTool=$($sdk.ManifestTool) /p:MakePri=$($sdk.MakePri)
         $buildFailed = $LASTEXITCODE -ne 0
