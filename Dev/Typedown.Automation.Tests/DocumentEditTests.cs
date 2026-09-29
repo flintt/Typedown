@@ -68,6 +68,8 @@ namespace Typedown.Automation.Tests
             UndoSteps++;
         }
 
+        public void EndEdit() => Calls.Add("end");
+
         public Task<bool> SaveAsync(CancellationToken ct)
         {
             Calls.Add("save");
@@ -96,7 +98,7 @@ namespace Typedown.Automation.Tests
             Assert.Equal("automation", result.Origin);
             Assert.False(result.Saved);
             Assert.Equal(32, result.OperationId.Length);
-            Assert.Equal(new[] { "flush", "capture", "apply", "commit" }, doc.Calls);
+            Assert.Equal(new[] { "flush", "capture", "apply", "commit", "end" }, doc.Calls);
             Assert.Equal(("# new\n", 1L, 1), (doc.Text, doc.Revision, doc.UndoSteps));
         }
 
@@ -214,7 +216,7 @@ namespace Typedown.Automation.Tests
             Assert.Null(e.ErrorData["normalizedHash"]);
             var result = await coordinator.EditAsync(doc, Replace(0, "x\n", allowUnknown: true), CancellationToken.None);
             Assert.Equal(1, result.Revision);
-            Assert.Equal(new[] { "commit" }, doc.Calls);
+            Assert.Equal(new[] { "commit", "end" }, doc.Calls);
         }
 
         [Fact]
@@ -251,6 +253,8 @@ namespace Typedown.Automation.Tests
             doc.SaveWorks = true;
             var saved = await coordinator.EditAsync(doc, Replace(1, "y\n", save: true), CancellationToken.None);
             Assert.True(saved.Saved);
+            // Held typing is released only after the save: the save writes the edit's revision.
+            Assert.Equal(new[] { "commit", "save", "end" }, doc.Calls.Where(c => c is "commit" or "save" or "end").TakeLast(3));
         }
 
         [Fact]
@@ -339,6 +343,7 @@ namespace Typedown.Automation.Tests
             public Task<string?> RestoreAsync(object state, CancellationToken ct) { Note(); return Task.FromResult<string?>(null); }
             public void Commit(string t, long revision, string operationId) { Note(); text = t; rev = revision; }
             public Task<bool> SaveAsync(CancellationToken ct) { Note(); return Task.FromResult(true); }
+            public void EndEdit() => Note();
         }
     }
 }

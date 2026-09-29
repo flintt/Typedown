@@ -115,6 +115,13 @@ namespace Typedown.Automation
 
         /// <summary>Saves through the normal atomic save path; false when it failed.</summary>
         Task<bool> SaveAsync(CancellationToken cancellationToken);
+
+        /// <summary>
+        /// The committed edit (and its save, if asked for) is complete. Typing the reader did on top of the edit while
+        /// it was in flight becomes the next revision only now, so a save made for the edit writes exactly the edit's
+        /// revision and not text the reader has not saved.
+        /// </summary>
+        void EndEdit();
     }
 
     /// <summary>
@@ -325,16 +332,23 @@ namespace Typedown.Automation
             document.Commit(candidate, targetRevision, operationId);
 
             // 11. Save when asked; the edit stays committed if the save fails.
-            var saved = document.Saved;
-            if (request.Save)
+            try
             {
-                await Barrier(EditBarrierPoints.BeforeSaveCommit, document, operationId);
-                if (!await document.SaveAsync(CancellationToken.None))
-                    throw Error(AutomationErrorKind.save_failed, "The edit was applied but saving failed; the document stays unsaved.",
-                        new Dictionary<string, object?> { ["applied"] = true, ["revision"] = targetRevision });
-                saved = true;
+                var saved = document.Saved;
+                if (request.Save)
+                {
+                    await Barrier(EditBarrierPoints.BeforeSaveCommit, document, operationId);
+                    if (!await document.SaveAsync(CancellationToken.None))
+                        throw Error(AutomationErrorKind.save_failed, "The edit was applied but saving failed; the document stays unsaved.",
+                            new Dictionary<string, object?> { ["applied"] = true, ["revision"] = targetRevision });
+                    saved = true;
+                }
+                return new EditResult(operationId, targetRevision, candidateHash, saved, normalization);
             }
-            return new EditResult(operationId, targetRevision, candidateHash, saved, normalization);
+            finally
+            {
+                document.EndEdit();
+            }
         }
 
         private static Dictionary<string, object?> NormalizationData(NormalizationInfo n) => new()

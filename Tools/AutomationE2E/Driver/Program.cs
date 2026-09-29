@@ -206,7 +206,9 @@ internal static class Program
         await TypeIntoWindow("Q");
         await WaitForPage(c, id, t => t.Contains('Q'), "the keystroke");
         var after = await Get(c, id);
-        Check(((string)after["text"]!).Contains('Q') && ((string)after["text"]!).Length == ((string)before["text"]!).Length + 1, $"the keystroke is in the text ({JsonConvert.SerializeObject((string)after["text"]!)})");
+        var text = (string)after["text"]!;
+        Check(text.Contains('Q') && text.StartsWith("# S1\n\nbefore"), $"the keystroke is in the text, the rest intact ({JsonConvert.SerializeObject(text)})");
+        Check(!(bool)after["saved"]!, "the keystroke leaves the document unsaved");
         Check((long)after["revision"]! > (long)before["revision"]!, "the keystroke advanced the revision");
     }
 

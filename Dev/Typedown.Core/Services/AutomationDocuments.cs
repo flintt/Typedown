@@ -93,14 +93,9 @@ namespace Typedown.Core.Services
             if (IsActive)
             {
                 Editor.CommitAutomationText(text);
-                // Typing that arrived after the page took the edit becomes the next revision, on top of it.
-                Editor.ReleaseEditorReports(apply: true);
             }
             else
             {
-                // The tab was left while the edit was in the page: the editor shows another document now, and typing
-                // held for this one must not be applied to that one.
-                Editor.ReleaseEditorReports(apply: false);
                 if (!string.Equals(tab.Markdown, text, StringComparison.Ordinal)) tab.NoteTextChanged();
                 tab.Markdown = text;
                 tab.CurrentHash = Common.SimpleHash(text);
@@ -112,6 +107,13 @@ namespace Typedown.Core.Services
             if (tab.Revision != revision)
                 Log.Debug($"automation: {operationId} committed revision {tab.Revision}, expected {revision}");
             tab.IsPreview = false; // an edited tab is no longer a throwaway preview
+        }
+
+        public void EndEdit()
+        {
+            // Typing that arrived after the page took the edit becomes the next revision, on top of it - unless the tab
+            // was left meanwhile: the editor then shows another document, and this one's typing must not land there.
+            Editor.ReleaseEditorReports(apply: IsActive);
         }
 
         /// <summary>Only the active document is saved in this version; a background tab is focused first.</summary>
