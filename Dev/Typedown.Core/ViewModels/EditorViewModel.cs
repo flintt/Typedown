@@ -290,7 +290,58 @@ namespace Typedown.Core.ViewModels
         public void OnMarkdownChange(JToken arg)
         {
             if (IsStaleReport(arg)) return;
-            OnMarkdownChange(arg["text"].ToString());
+            var text = arg["text"].ToString();
+            if (holdingReports)
+            {
+                // An automation edit is applied in the page and not yet committed here: the reader's typing on top
+                // of it waits until the commit, so it lands after the edit instead of being overwritten by it.
+                heldReport = text;
+                return;
+            }
+            OnMarkdownChange(text);
+        }
+
+        private bool holdingReports;
+        private string heldReport;
+
+        /// <summary>From the moment the page is handed an automation edit until the host commits or restores.</summary>
+        public void HoldEditorReports()
+        {
+            holdingReports = true;
+            heldReport = null;
+        }
+
+        /// <summary>
+        /// Ends <see cref="HoldEditorReports"/>. After a commit the held typing is applied as the next change; after a
+        /// restore it is dropped - it was typed on the edit that was rolled back.
+        /// </summary>
+        public void ReleaseEditorReports(bool apply)
+        {
+            holdingReports = false;
+            var text = heldReport;
+            heldReport = null;
+            if (apply && text != null) OnMarkdownChange(text);
+        }
+
+        private readonly Dictionary<int, TaskCompletionSource<string>> pageTextWaiters = new();
+
+        /// <summary>The text the page holds right now (for the automation test host's test.editor.pageText).</summary>
+        public async Task<string> ReadPageTextAsync(int timeoutMs)
+        {
+            if (MarkdownEditor == null) return null;
+            var token = ++flushToken;
+            var waiter = new TaskCompletionSource<string>(TaskCreationOptions.RunContinuationsAsynchronously);
+            lock (pageTextWaiters) pageTextWaiters[token] = waiter;
+            try
+            {
+                MarkdownEditor.PostMessage("FlushContent", new { token });
+                var finished = await Task.WhenAny(waiter.Task, Task.Delay(timeoutMs));
+                return finished == waiter.Task ? waiter.Task.Result : null;
+            }
+            finally
+            {
+                lock (pageTextWaiters) pageTextWaiters.Remove(token);
+            }
         }
 
         public CursorState CurrentCursor { get; internal set; }
@@ -501,6 +552,9 @@ namespace Typedown.Core.ViewModels
         private void OnContentFlushed(JToken args)
         {
             var token = args?["token"]?.ToObject<int>() ?? 0;
+            TaskCompletionSource<string> pageText = null;
+            lock (pageTextWaiters) pageTextWaiters.TryGetValue(token, out pageText);
+            pageText?.TrySetResult(args?["text"]?.ToString());
             TaskCompletionSource<bool> waiter = null;
             lock (flushWaiters) flushWaiters.TryGetValue(token, out waiter);
             waiter?.TrySetResult(true);

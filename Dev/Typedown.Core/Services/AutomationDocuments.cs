@@ -52,11 +52,14 @@ namespace Typedown.Core.Services
 
         public async Task<ApplyReply> ApplyInEditorAsync(ApplyCommand command, CancellationToken cancellationToken)
         {
+            Editor.HoldEditorReports();
             var reply = await Editor.ApplyDocumentEditAsync(command.OperationId, command.TargetRevision, command.BaseContentHash, command.Text, ApplyTimeoutMs);
             if (reply == null) throw new TimeoutException("The editor did not answer ApplyDocumentEdit.");
             switch (reply["outcome"]?.ToString())
             {
                 case "conflict":
+                    // Nothing was applied: whatever the reader typed is theirs, as usual.
+                    Editor.ReleaseEditorReports(apply: true);
                     return new ApplyReply(ApplyOutcome.Conflict);
                 case "applied":
                     var n = reply["normalization"];
@@ -78,7 +81,8 @@ namespace Typedown.Core.Services
             var state = (State)captured;
             // The host never took the candidate in, so its own text is still the one before the edit. If another tab
             // has been brought up meanwhile, the page shows that one and this tab's snapshot is already right.
-            if (!IsActive) return DocumentText.ContentHash(tab.Markdown ?? "");
+            if (!IsActive) { Editor.ReleaseEditorReports(apply: false); return DocumentText.ContentHash(tab.Markdown ?? ""); }
+            Editor.ReleaseEditorReports(apply: false);
             var confirmed = await Editor.ReloadAsync(state.Text, state.Cursor, state.ScrollTop, ReloadTimeoutMs);
             return confirmed == null ? null : DocumentText.ContentHash(confirmed);
         }
@@ -88,9 +92,14 @@ namespace Typedown.Core.Services
             if (IsActive)
             {
                 Editor.CommitAutomationText(text);
+                // Typing that arrived after the page took the edit becomes the next revision, on top of it.
+                Editor.ReleaseEditorReports(apply: true);
             }
             else
             {
+                // The tab was left while the edit was in the page: the editor shows another document now, and typing
+                // held for this one must not be applied to that one.
+                Editor.ReleaseEditorReports(apply: false);
                 if (!string.Equals(tab.Markdown, text, StringComparison.Ordinal)) tab.NoteTextChanged();
                 tab.Markdown = text;
                 tab.CurrentHash = Common.SimpleHash(text);

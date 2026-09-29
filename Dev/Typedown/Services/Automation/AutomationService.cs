@@ -21,6 +21,7 @@ namespace Typedown.Services.Automation
         private const int NoticeMs = 4000;
 
         private static AutomationServer server;
+        private static string endpointName;
         private static JsonSettingsStore settings;
         private static readonly object gate = new();
         private static Task applying = Task.CompletedTask;
@@ -40,7 +41,8 @@ namespace Typedown.Services.Automation
             };
             var barriers = TestHostHooks.Barriers;
             var host = new WindowsAutomationHost(info.Version, barriers);
-            var name = EndpointName(buildType, sid);
+            endpointName = EndpointName(buildType, sid);
+            var name = endpointName;
             server = new AutomationServer(
                 () => new SecurePipeListener(name, sid),
                 () =>
@@ -71,7 +73,14 @@ namespace Typedown.Services.Automation
                 {
                     try
                     {
-                        if (on && !server.IsRunning) { server.Start(); Log.Debug("automation: listening"); }
+                        if (on && !server.IsRunning)
+                        {
+                            server.Start();
+                            Log.Debug("automation: listening");
+                            // The test host tells its driver where it listens (the name carries the data root).
+                            if (Config.IsAutomationTestHost)
+                                File.WriteAllText(Path.Combine(Config.AutomationTestRoot, "automation-endpoint.txt"), endpointName);
+                        }
                         else if (!on && server.IsRunning) { await server.StopAsync(); Log.Debug("automation: stopped"); }
                     }
                     catch (Exception e) { Log.Debug($"automation: {e.Message}"); }

@@ -1,0 +1,331 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.IO.Pipes;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Typedown.Automation;
+
+// End-to-end cases against a running automation test host. Every case checks the API's answer, the revision the
+// window holds and the bytes on disk; interleavings are forced with test.barrier.* (arm -> wait until hit -> act ->
+// release), never with sleeps; a person's keystroke is real input (SendInput) into the window.
+//
+//   Typedown.AutomationE2E --root <test data root> --pid <host process id> --fixtures <dir> --out <result.json>
+
+internal static class Program
+{
+    private sealed class NoHandler : IJsonRpcHandler
+    {
+        public Task<JToken?> HandleRequestAsync(JsonRpcRequest r, CancellationToken ct) => throw new AutomationException(AutomationErrorKind.method_not_found, "no");
+        public Task HandleNotificationAsync(JsonRpcRequest n, CancellationToken ct) => Task.CompletedTask;
+    }
+
+    private sealed class Client : IDisposable
+    {
+        private readonly NamedPipeClientStream pipe;
+        public readonly JsonRpcConnection Connection;
+        private readonly Task running;
+
+        public Client(string endpoint)
+        {
+            pipe = new NamedPipeClientStream(".", endpoint, PipeDirection.InOut, PipeOptions.Asynchronous);
+            pipe.Connect(5000);
+            Connection = new JsonRpcConnection(new MessageFraming(pipe, 64L << 20), new NoHandler());
+            running = Connection.RunAsync();
+        }
+
+        public async Task<JToken> Call(string method, object? parameters = null)
+        {
+            var p = parameters == null ? null : JToken.FromObject(parameters);
+            return (await Connection.SendRequestAsync(method, p).WaitAsync(TimeSpan.FromSeconds(60)))!;
+        }
+
+        public async Task<int> ErrorCode(string method, object? parameters = null)
+        {
+            try { await Call(method, parameters); return 0; }
+            catch (JsonRpcRemoteException e) { return e.Code; }
+        }
+
+        public void Dispose() { Connection.Dispose(); pipe.Dispose(); }
+    }
+
+    private static readonly List<JObject> results = new();
+    private static string endpoint = "";
+    private static int hostPid;
+    private static string fixtures = "";
+
+    private static async Task<int> Main(string[] args)
+    {
+        string Arg(string name) => args[Array.IndexOf(args, name) + 1];
+        var root = Arg("--root");
+        hostPid = int.Parse(Arg("--pid"));
+        fixtures = Arg("--fixtures");
+        var output = Arg("--out");
+        var started = DateTime.UtcNow;
+        var environmentError = (string?)null;
+        try
+        {
+            var endpointFile = Path.Combine(root, "automation-endpoint.txt");
+            for (var i = 0; i < 300 && !File.Exists(endpointFile); i++) await Task.Delay(100); // the host starting up
+            if (!File.Exists(endpointFile)) throw new InvalidOperationException("the test host never published its endpoint");
+            endpoint = File.ReadAllText(endpointFile).Trim();
+
+            using (var probe = await Connect())
+            {
+                var init = await Initialize(probe, "e2e-probe");
+                if ((string?)init["server"]?["buildType"] != BuildTypes.AutomationTestHost)
+                    throw new InvalidOperationException($"connected to a '{init["server"]?["buildType"]}' build, not the automation test host");
+                await WaitForWindow(probe);
+            }
+
+            await Case("S0 open, write, read back exactly, save bytes, stale write refused", S0);
+            await Case("S1 a real keystroke is an edit of the reader: revision advances, the text is in", S1);
+            await Case("R01 a write held after its flush while the reader switches tabs never writes the other document", R01);
+            await Case("R02 undo and redo stay in their own document", R02);
+            await Case("R03 a keystroke while a saving write is held: the saved file is the written revision, the keystroke is kept", R03);
+        }
+        catch (Exception e)
+        {
+            environmentError = e.Message;
+        }
+        var failed = results.Count(r => !(bool)r["passed"]!);
+        var summary = new JObject
+        {
+            ["started"] = started.ToString("O"),
+            ["seconds"] = Math.Round((DateTime.UtcNow - started).TotalSeconds, 1),
+            ["environmentError"] = environmentError,
+            ["passed"] = results.Count(r => (bool)r["passed"]!),
+            ["failed"] = failed,
+            ["cases"] = new JArray(results),
+        };
+        File.WriteAllText(output, summary.ToString(Formatting.Indented));
+        Console.WriteLine(summary.ToString(Formatting.Indented));
+        return environmentError != null ? 3 : failed > 0 ? 1 : 0;
+    }
+
+    private static async Task<Client> Connect() { await Task.Yield(); return new Client(endpoint); }
+
+    private static readonly string[] AllScopes = { Scopes.AppRead, Scopes.DocumentRead, Scopes.DocumentWrite, Scopes.DocumentSave, Scopes.WindowFocus };
+
+    private static Task<JToken> Initialize(Client c, string name) => c.Call("system.initialize", new
+    {
+        apiVersion = 1,
+        client = new { id = "0f0f0f0f-0000-4000-8000-00000000e2e0", name, version = "1" },
+        requestedScopes = AllScopes,
+    });
+
+    private static async Task<Client> Session(string name)
+    {
+        var c = await Connect();
+        await Initialize(c, name);
+        return c;
+    }
+
+    private static async Task WaitForWindow(Client c)
+    {
+        for (var i = 0; i < 300; i++)
+        {
+            var windows = (JArray)(await c.Call("window.list"))["windows"]!;
+            if (windows.Count > 0) return;
+            await Task.Delay(100);
+        }
+        throw new InvalidOperationException("the test host opened no window");
+    }
+
+    private sealed class CaseFailed : Exception { public CaseFailed(string m) : base(m) { } }
+
+    private static void Check(bool condition, string what)
+    {
+        if (!condition) throw new CaseFailed(what);
+    }
+
+    private static async Task Case(string name, Func<List<string>, Task> body)
+    {
+        var notes = new List<string>();
+        var watch = Stopwatch.StartNew();
+        try
+        {
+            await body(notes);
+            results.Add(new JObject { ["name"] = name, ["passed"] = true, ["ms"] = watch.ElapsedMilliseconds, ["notes"] = new JArray(notes) });
+        }
+        catch (Exception e)
+        {
+            results.Add(new JObject { ["name"] = name, ["passed"] = false, ["ms"] = watch.ElapsedMilliseconds, ["error"] = e is CaseFailed ? e.Message : e.ToString(), ["notes"] = new JArray(notes) });
+        }
+    }
+
+    // ---- helpers over the API ----
+
+    private static string Fixture(string name, string text)
+    {
+        var path = Path.Combine(fixtures, name);
+        File.WriteAllBytes(path, new UTF8Encoding(false).GetBytes(text));
+        return path;
+    }
+
+    private static string Disk(string path) => new UTF8Encoding(false).GetString(File.ReadAllBytes(path));
+
+    private static async Task<string> Open(Client c, string path) => (string)(await c.Call("document.open", new { path, reveal = "document" }))["documentId"]!;
+
+    private static async Task<JToken> Get(Client c, string id) => await c.Call("document.get", new { documentId = id, consistency = "latest", include = new[] { "text" } });
+
+    private static async Task<long> Revision(Client c, string id) => (long)(await c.Call("document.get", new { documentId = id, consistency = "latest" }))["revision"]!;
+
+    // ---- cases ----
+
+    private static async Task S0(List<string> notes)
+    {
+        using var c = await Session("e2e S0");
+        var path = Fixture("s0.md", "# S0\n\nalpha\n");
+        var id = await Open(c, path);
+        var doc = await Get(c, id);
+        Check((string)doc["text"]! == "# S0\n\nalpha\n", "the opened text is the file's text");
+        var r = (long)doc["revision"]!;
+        var written = await c.Call("document.replace", new { documentId = id, baseRevision = r, text = "# S0\n\nalpha written\n", reveal = "document", normalizationPolicy = "allowUnknown" });
+        Check((long)written["revision"]! == r + 1, $"the write advanced the revision ({written["revision"]} after {r})");
+        notes.Add($"normalization {written["normalization"]?["pendingNormalization"]}");
+        Check((string)(await Get(c, id))["text"]! == "# S0\n\nalpha written\n", "latest read returns exactly what was written");
+        Check(await c.ErrorCode("document.replace", new { documentId = id, baseRevision = r, text = "stale\n" }) == -32012, "a stale base revision is a revision_conflict");
+        await c.Call("document.save", new { documentId = id, baseRevision = r + 1 });
+        Check(Disk(path) == "# S0\n\nalpha written\n", "the file holds exactly the saved revision");
+        Check(WindowTitle().Contains("AUTOMATION TEST HOST"), $"the title marks the test host ({WindowTitle()})");
+    }
+
+    private static async Task S1(List<string> notes)
+    {
+        using var c = await Session("e2e S1");
+        var id = await Open(c, Fixture("s1.md", "# S1\n\nbefore\n"));
+        await c.Call("document.focus", new { documentId = id });
+        var before = await Get(c, id);
+        await TypeIntoWindow("Q");
+        await WaitForPage(c, id, t => t.Contains('Q'), "the keystroke");
+        var after = await Get(c, id);
+        Check(((string)after["text"]!).Contains('Q') && ((string)after["text"]!).Length == ((string)before["text"]!).Length + 1, $"the keystroke is in the text ({JsonConvert.SerializeObject((string)after["text"]!)})");
+        Check((long)after["revision"]! > (long)before["revision"]!, "the keystroke advanced the revision");
+    }
+
+    private static async Task R01(List<string> notes)
+    {
+        using var writer = await Session("e2e R01 writer");
+        using var driver = await Session("e2e R01 driver");
+        var pathA = Fixture("r01-a.md", "# A\n\nalpha\n");
+        var pathB = Fixture("r01-b.md", "# B\n\nbeta\n");
+        var b = await Open(driver, pathB);
+        var a = await Open(driver, pathA);
+        var rA = await Revision(driver, a);
+        var barrier = (string)(await driver.Call("test.barrier.arm", new { point = EditBarrierPoints.BeforeFlushReply, documentId = a }))["barrierId"]!;
+        var write = writer.Call("document.replace", new { documentId = a, baseRevision = rA, text = "# A\n\nalpha by API\n", save = true, normalizationPolicy = "allowUnknown" });
+        var hit = await driver.Call("test.barrier.waitHit", new { barrierId = barrier, timeoutMs = 20000 });
+        Check((bool)hit["hit"]!, "the write reached the barrier after its flush");
+        await driver.Call("document.focus", new { documentId = b }); // the reader switches to B meanwhile
+        await driver.Call("test.barrier.release", new { barrierId = barrier });
+        string outcome;
+        try { var result = await write; outcome = $"committed r{result["revision"]} saved={result["saved"]}"; }
+        catch (JsonRpcRemoteException e) { outcome = $"refused {e.ErrorData?["kind"]}"; }
+        notes.Add(outcome);
+        Check(Disk(pathB) == "# B\n\nbeta\n", "B's file is untouched");
+        var diskA = Disk(pathA);
+        Check(diskA == "# A\n\nalpha\n" || diskA == "# A\n\nalpha by API\n", $"A's file is either the old text or the written revision ({JsonConvert.SerializeObject(diskA)})");
+        Check((string)(await Get(driver, b))["text"]! == "# B\n\nbeta\n", "B's text in the window is untouched");
+    }
+
+    private static async Task R02(List<string> notes)
+    {
+        using var c = await Session("e2e R02");
+        var a = await Open(c, Fixture("r02-a.md", "# A\n\none\n"));
+        var b = await Open(c, Fixture("r02-b.md", "# B\n\ntwo\n"));
+        await c.Call("document.replace", new { documentId = a, baseRevision = await Revision(c, a), text = "# A\n\none edited\n", reveal = "document", normalizationPolicy = "allowUnknown" });
+        await c.Call("document.replace", new { documentId = b, baseRevision = await Revision(c, b), text = "# B\n\ntwo edited\n", reveal = "document", normalizationPolicy = "allowUnknown" });
+        await c.Call("document.undo", new { documentId = a, baseRevision = await Revision(c, a), reveal = "document" });
+        Check((string)(await Get(c, a))["text"]! == "# A\n\none\n", "undo in A restores A");
+        Check((string)(await Get(c, b))["text"]! == "# B\n\ntwo edited\n", "B is not touched by A's undo");
+        await c.Call("document.undo", new { documentId = b, baseRevision = await Revision(c, b), reveal = "document" });
+        Check((string)(await Get(c, b))["text"]! == "# B\n\ntwo\n", "undo in B restores B");
+        await c.Call("document.redo", new { documentId = a, baseRevision = await Revision(c, a), reveal = "document" });
+        Check((string)(await Get(c, a))["text"]! == "# A\n\none edited\n", "redo in A brings A's edit back");
+        Check((string)(await Get(c, b))["text"]! == "# B\n\ntwo\n", "B is not touched by A's redo");
+    }
+
+    private static async Task R03(List<string> notes)
+    {
+        using var writer = await Session("e2e R03 writer");
+        using var driver = await Session("e2e R03 driver");
+        var path = Fixture("r03.md", "# R03\n\nstart\n");
+        var id = await Open(driver, path);
+        await driver.Call("document.focus", new { documentId = id });
+        var r = await Revision(driver, id);
+        var barrier = (string)(await driver.Call("test.barrier.arm", new { point = EditBarrierPoints.AfterEditorMutationBeforeReport, documentId = id }))["barrierId"]!;
+        var write = writer.Call("document.replace", new { documentId = id, baseRevision = r, text = "# R03\n\nwritten\n", save = true, normalizationPolicy = "allowUnknown" });
+        Check((bool)(await driver.Call("test.barrier.waitHit", new { barrierId = barrier, timeoutMs = 20000 }))["hit"]!, "the write reached the barrier with the page already changed");
+        await TypeIntoWindow("Z"); // the reader's keystroke on top of the write, while the host has not committed it
+        await WaitForPage(driver, id, t => t.Contains('Z'), "the keystroke");
+        await driver.Call("test.barrier.release", new { barrierId = barrier });
+        var result = await write;
+        var saved = Disk(path);
+        notes.Add($"write r{result["revision"]} saved={result["saved"]}");
+        Check(saved == "# R03\n\nwritten\n", $"the file holds exactly the written revision ({JsonConvert.SerializeObject(saved)})");
+        var now = await Get(driver, id);
+        Check(((string)now["text"]!).Contains('Z'), "the keystroke is not lost");
+        Check((long)now["revision"]! > (long)result["revision"]!, "the keystroke is a later revision than the write");
+        Check(!(bool)now["saved"]!, "the keystroke leaves the document unsaved");
+    }
+
+    // ---- real input ----
+
+    private static IntPtr MainWindow() => Process.GetProcessById(hostPid).MainWindowHandle;
+
+    private static string WindowTitle()
+    {
+        var sb = new StringBuilder(512);
+        GetWindowText(MainWindow(), sb, sb.Capacity);
+        return sb.ToString();
+    }
+
+    /// <summary>Real keystrokes into the host's window. The caller waits for them to reach the page (WaitForPage).</summary>
+    private static async Task TypeIntoWindow(string text)
+    {
+        var window = MainWindow();
+        AllowSetForegroundWindow(hostPid);
+        SetForegroundWindow(window);
+        for (var i = 0; i < 100 && GetForegroundWindow() != window; i++) await Task.Delay(50);
+        if (GetForegroundWindow() != window) throw new CaseFailed("the test host window could not be brought to the front (is the desktop locked?)");
+        var inputs = new List<INPUT>();
+        foreach (var ch in text)
+        {
+            inputs.Add(new INPUT { type = 1, u = new InputUnion { ki = new KEYBDINPUT { wScan = ch, dwFlags = 0x0004 } } });
+            inputs.Add(new INPUT { type = 1, u = new InputUnion { ki = new KEYBDINPUT { wScan = ch, dwFlags = 0x0004 | 0x0002 } } });
+        }
+        var sent = SendInput((uint)inputs.Count, inputs.ToArray(), Marshal.SizeOf<INPUT>());
+        if (sent != inputs.Count) throw new CaseFailed($"SendInput sent {sent} of {inputs.Count} events (is the desktop locked?)");
+    }
+
+    /// <summary>Waits until the page itself holds text satisfying the condition (test.editor.pageText), bounded.</summary>
+    private static async Task<string> WaitForPage(Client c, string documentId, Func<string, bool> condition, string what)
+    {
+        string? text = null;
+        for (var i = 0; i < 100; i++)
+        {
+            text = (string?)(await c.Call("test.editor.pageText", new { documentId }))["text"];
+            if (text != null && condition(text)) return text;
+            await Task.Delay(50);
+        }
+        throw new CaseFailed($"{what} never reached the page ({JsonConvert.SerializeObject(text)})");
+    }
+
+    [StructLayout(LayoutKind.Sequential)] private struct INPUT { public uint type; public InputUnion u; }
+    [StructLayout(LayoutKind.Explicit)] private struct InputUnion { [FieldOffset(0)] public KEYBDINPUT ki; [FieldOffset(0)] public MOUSEINPUT mi; }
+    [StructLayout(LayoutKind.Sequential)] private struct KEYBDINPUT { public ushort wVk; public ushort wScan; public uint dwFlags; public uint time; public IntPtr dwExtraInfo; }
+    [StructLayout(LayoutKind.Sequential)] private struct MOUSEINPUT { public int dx, dy; public uint mouseData, dwFlags, time; public IntPtr dwExtraInfo; }
+
+    [DllImport("user32.dll", SetLastError = true)] private static extern uint SendInput(uint count, INPUT[] inputs, int size);
+    [DllImport("user32.dll")] private static extern bool SetForegroundWindow(IntPtr window);
+    [DllImport("user32.dll")] private static extern IntPtr GetForegroundWindow();
+    [DllImport("user32.dll")] private static extern bool AllowSetForegroundWindow(int processId);
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)] private static extern int GetWindowText(IntPtr window, StringBuilder text, int max);
+}
