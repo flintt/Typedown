@@ -145,6 +145,9 @@ namespace Typedown.Automation
         }
 
         public bool IsInitialized { get; private set; }
+
+        /// <summary>Raised once initialize succeeded (the client's name is known from then on).</summary>
+        public event Action? Initialized;
         public string? ClientSessionId { get; private set; }
         public ClientInfo? Client { get; private set; }
         public bool ClientAcceptsServerRequests { get; private set; }
@@ -210,6 +213,7 @@ namespace Typedown.Automation
                     ClientAcceptsServerRequests = serverRequests;
                     IsInitialized = true;
                 }
+                try { Initialized?.Invoke(); } catch { }
                 return new JObject
                 {
                     ["apiVersion"] = ApiVersion,

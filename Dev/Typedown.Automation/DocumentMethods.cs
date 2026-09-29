@@ -12,7 +12,9 @@ namespace Typedown.Automation
     /// </summary>
     public static class DocumentMethods
     {
-        public static MethodTable AddTo(MethodTable table, IAutomationHost host, string instanceId)
+        /// <param name="onWrite">Called after each successful write with the client's display name and the document, so the
+        /// application can show briefly who changed what (section 5.1).</param>
+        public static MethodTable AddTo(MethodTable table, IAutomationHost host, string instanceId, Action<string, string>? onWrite = null)
         {
             table.Add(new MethodDescriptor("app.getState", Scopes.AppRead, "app.getState/1", async (c, ct) =>
             {
@@ -152,6 +154,7 @@ namespace Typedown.Automation
                 var reveal = RevealChecked(c, p);
                 p.OptionalString("clientOperationId");
                 var result = await host.EditDocumentAsync(documentId, request, reveal, ct).ConfigureAwait(false);
+                Wrote(c, documentId);
                 return WriteResult(result);
             }
 
@@ -162,8 +165,15 @@ namespace Typedown.Automation
                 if (save && !c.Session.HasScope(Scopes.DocumentSave))
                     throw new AutomationException(AutomationErrorKind.scope_required, "Saving needs the 'document.save' scope.",
                         new System.Collections.Generic.Dictionary<string, object?> { ["scope"] = Scopes.DocumentSave });
-                var result = await host.UndoAsync(p.RequiredString("documentId", allowEmpty: false), p.RequiredInteger("baseRevision"), redo, save, RevealChecked(c, p), ct).ConfigureAwait(false);
+                var documentId = p.RequiredString("documentId", allowEmpty: false);
+                var result = await host.UndoAsync(documentId, p.RequiredInteger("baseRevision"), redo, save, RevealChecked(c, p), ct).ConfigureAwait(false);
+                Wrote(c, documentId);
                 return WriteResult(result);
+            }
+
+            void Wrote(MethodContext c, string documentId)
+            {
+                try { onWrite?.Invoke(AutomationServer.DisplayName(c.Session.Client?.Name), documentId); } catch { }
             }
         }
 
