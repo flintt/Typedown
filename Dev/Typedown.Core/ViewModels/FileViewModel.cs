@@ -233,6 +233,8 @@ namespace Typedown.Core.ViewModels
                 TabsViewModel.BeginNewTab();
             else if (!await AskToSave())
                 return;
+            else
+                TabsViewModel?.ActiveTab?.BecomeNewDocument();
             FilePath = null;
             FileFormat = TextFileFormat.Default;
             EditorViewModel.FileHash = Common.SimpleHash(Common.DefaultMarkdwn);
@@ -313,6 +315,8 @@ namespace Typedown.Core.ViewModels
                     startedTab = TabsViewModel.BeginNewTab();
                 var openedAt = System.Diagnostics.Stopwatch.StartNew();
                 var (text, format) = await TextFileFormat.ReadAsync(path);
+                // Read: the reused tab now holds another document.
+                if (startedTab == null) TabsViewModel?.ActiveTab?.BecomeNewDocument();
                 FileFormat = format;
                 var readMs = openedAt.ElapsedMilliseconds;
                 EditorViewModel.FirstStart = false;
@@ -1070,6 +1074,8 @@ namespace Typedown.Core.ViewModels
 
         private void ApplyDiskText(string text)
         {
+            if (!string.Equals(EditorViewModel.Markdown, text, StringComparison.Ordinal))
+                TabsViewModel?.ActiveTab?.NoteTextChanged();
             EditorViewModel.FirstStart = false;
             EditorViewModel.FileHash = Common.SimpleHash(text);
             DiskHash = EditorViewModel.FileHash;

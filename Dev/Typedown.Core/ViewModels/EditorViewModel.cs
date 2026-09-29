@@ -245,6 +245,8 @@ namespace Typedown.Core.ViewModels
 
         public async void OnMarkdownChange(string markdown)
         {
+            if (!string.Equals(Markdown, markdown, StringComparison.Ordinal))
+                ServiceProvider.GetService<TabsViewModel>()?.ActiveTab?.NoteTextChanged();
             Markdown = markdown;
             if (!contentUpdating) History.ContentChange(Markdown);
             CurrentHash = Common.SimpleHash(Markdown);

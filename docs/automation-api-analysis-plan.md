@@ -272,14 +272,14 @@ Typedown.Uno/Automation/
 
 任务：
 
-- [ ] 把现有 `reading-source-check.js` 纳入固定回归入口；保留审阅所举的列表、紧邻标题和 fenced bash 文档，并把测试名称与断言说明改为“源文本映射稳定性”。
-- [ ] 扩充无用户编辑时的稳定性 fixture：GFM 表格、HTML、脚注、公式、Mermaid、emoji、组合字符、CRLF、无末尾换行、大文档和已记录的 CommonMark 边界样例。
+- [x] 把现有 `reading-source-check.js` 纳入固定回归入口；保留审阅所举的列表、紧邻标题和 fenced bash 文档，并把测试名称与断言说明改为“源文本映射稳定性”。*（`Tools/EditorBench` 的 `npm run check:source`。）*
+- [x] 扩充无用户编辑时的稳定性 fixture：GFM 表格、HTML、脚注、公式、Mermaid、emoji、组合字符、CRLF、无末尾换行、大文档和已记录的 CommonMark 边界样例。*（`source-stability-check.js`，90 个样例，`--full` 全部 652 个 CommonMark 例子。CRLF 改为宿主契约：正文只用 `\n`，见规格。）*
 - [ ] 增加“接口候选写入 → 可视/阅读/源码模式往返 → flush/get/save”的测试；没有真实编辑时逐字节相同、不推进 revision、不标脏。该测试不能被描述为首次编辑后的保真证明。
-- [ ] 活动编辑器写入时取得 `source` 与 `importedRef.normalized` 的 hash，定义并返回 `pendingNormalization` 和分类器版本；默认 `requireKnownSafe` 拒绝 `unknown`，显式 `allowUnknown` 才能提交。后台标签在首次可视加载、启用输入前完成分类。不得把同解析器渲染等价当作充分条件。
+- [ ] 活动编辑器写入时取得 `source` 与 `importedRef.normalized` 的 hash，定义并返回 `pendingNormalization` 和分类器版本；默认 `requireKnownSafe` 拒绝 `unknown`，显式 `allowUnknown` 才能提交。后台标签在首次可视加载、启用输入前完成分类。不得把同解析器渲染等价当作充分条件。*（页面侧已完成：`services/normalization.ts` 分类器 v2，按原文独立扫描受保护载荷；`window.__typedownPendingNormalization`。待做：宿主经消息取得结果并据此拒绝写入。）*
 - [ ] 建立独立的受保护载荷 fixture，覆盖链接/图片 URL、代码围栏语言和正文、脚注、任务状态、原始 HTML 属性、front matter、公式及扩展块；已确认内容或结构损坏时返回 `content_not_roundtrippable`。
-- [ ] 增加“接口写入 → 一次真实可视输入 → latest 读取”基线，记录 Muya 首次编辑造成的完整序列化结果和实际变化范围，并验证受保护载荷与文档结构仍在。
-- [ ] 给页面变化报告增加来源或等价判定，确保内部重渲染和初始规范化不能伪装成用户编辑。
-- [ ] Windows `DocumentTab` 增加稳定 `documentId` 和只在真实正文变化时递增的 revision；协议 fixture 记录 Uno 后续必须复现的语义。
+- [ ] 增加“接口写入 → 一次真实可视输入 → latest 读取”基线，记录 Muya 首次编辑造成的完整序列化结果和实际变化范围，并验证受保护载荷与文档结构仍在。*（页面级已完成：`first-edit-check.js` 以 `LoadFile` 代替接口写入，要求实际结果与预测一致，基线 63 none / 24 unknown / 3 unsafe。接口可用后改走接口。）*
+- [x] 给页面变化报告增加来源或等价判定，确保内部重渲染和初始规范化不能伪装成用户编辑。*（`MarkdownChange.origin` = `user`/`editor`，`services/changeOrigin.ts`；`Tools/EditorBench/origin-check.js`。宿主尚未使用该字段。）*
+- [x] Windows `DocumentTab` 增加稳定 `documentId` 和只在真实正文变化时递增的 revision；协议 fixture 记录 Uno 后续必须复现的语义。*（`DocumentTab.DocumentId/Revision`；语义见 `docs/automation-fixtures/document-identity.json`。）*
 - [ ] 建立 Windows 线程安全的窗口/文档注册表和 dispatcher 定位方式。
 - [ ] 定义 `ApplyDocumentEdit` 的暂存、成功提交和宿主恢复状态机；失败统一用写入前权威正文、光标和滚动经 `LoadFile` 恢复，撤销历史只能在页面确认后提交。
 - [ ] 为独立测试宿主设计一次性 barrier：至少能停在 `beforeFlushReply`、`afterEditorMutationBeforeReport` 和 `beforeSaveCommit`，并提供等待已命中和释放操作。
