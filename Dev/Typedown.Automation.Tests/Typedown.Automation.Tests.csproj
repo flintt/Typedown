@@ -20,5 +20,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Typedown.Automation\Typedown.Automation.csproj" />
     <ProjectReference Include="..\Typedown.Automation.TestHost\Typedown.Automation.TestHost.csproj" />
+    <ProjectReference Include="..\..\Tools\Typedown.Cli\Typedown.Cli.csproj" />
   </ItemGroup>
 </Project>
