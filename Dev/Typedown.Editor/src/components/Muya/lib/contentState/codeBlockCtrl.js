@@ -5,6 +5,11 @@ import selection from '../selection'
 
 const CODE_UPDATE_REP = /^`{3,}(.*)/
 
+// Fence languages that are diagrams: typed as ```mermaid they must become the diagram block with its preview, the
+// block a loaded document gets for the same fence. A plain code block with lang "mermaid" never renders; it only
+// turned into a diagram after the document was loaded again (a tab or mode switch).
+const DIAGRAM_LANGS = ['mermaid', 'flowchart', 'sequence', 'plantuml', 'vega-lite']
+
 const codeBlockCtrl = ContentState => {
   /**
   * check edit language
@@ -105,6 +110,25 @@ const codeBlockCtrl = ContentState => {
     const match = CODE_UPDATE_REP.exec(text)
     if (match || lang) {
       const language = lang || (match ? match[1] : '')
+      const diagram = language.trim().toLowerCase()
+      if (DIAGRAM_LANGS.includes(diagram)) {
+        // Turn the paragraph itself into the diagram figure, so callers holding this block keep a valid one.
+        const figure = this.createContainerBlock(diagram, code)
+        block.type = 'figure'
+        block.functionType = diagram
+        block.text = ''
+        block.history = null
+        delete block.lang
+        block.children = []
+        figure.children.forEach(child => this.appendChild(block, child))
+        const codeContent = block.children[0].children[0].children[0]
+        const offset = code.length
+        this.cursor = {
+          start: { key: codeContent.key, offset },
+          end: { key: codeContent.key, offset }
+        }
+        return true
+      }
       const codeBlock = this.createBlock('code', {
         lang: language
       })

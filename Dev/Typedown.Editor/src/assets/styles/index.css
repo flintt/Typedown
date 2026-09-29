@@ -770,7 +770,10 @@ figure.ag-container-block div.ag-container-preview>svg {
   width: 100%;
 }
 
+/* While the block is edited its preview floats over what follows it. It must let clicks through: otherwise a click on
+   the paragraph below lands on the preview, which reopens this block, and the caret can never leave it that way. */
 figure.ag-active.ag-container-block>div.ag-container-preview {
+  pointer-events: none;
   position: absolute;
   top: calc(100% + 20px);
   left: 50%;

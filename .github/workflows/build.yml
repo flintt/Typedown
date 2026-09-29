@@ -91,6 +91,7 @@ jobs:
           node handshake-check.js
           node reading-source-check.js
           node mermaid-edit-check.js
+          node mermaid-typed-check.js
           node security-check.js
           node spec-check.js
 

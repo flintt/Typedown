@@ -506,7 +506,10 @@ const enterCtrl = ContentState => {
 
     switch (true) {
       case !!blockNeedFocus:
-        cursorBlock = block
+        // A diagram fence became a figure: the caret goes into its code, the figure itself holds no text.
+        cursorBlock = preParagraphBlock.type === 'figure'
+          ? preParagraphBlock.children[0].children[0].children[0]
+          : block
         break
       case !!tableNeedFocus:
         cursorBlock = tableNeedFocus
