@@ -89,6 +89,7 @@ internal static class Program
             await Case("R01 a write held after its flush while the reader switches tabs never writes the other document", R01);
             await Case("R02 undo and redo stay in their own document", R02);
             await Case("R03 a keystroke while a saving write is held: the saved file is the written revision, the keystroke is kept", R03);
+            await Case("B01 settings: one window's change reaches the other window; window modes stay with their window", B01);
         }
         catch (Exception e)
         {
@@ -276,6 +277,34 @@ internal static class Program
         Check(((string)now["text"]!).Contains('Z'), "the keystroke is not lost");
         Check((long)now["revision"]! > (long)result["revision"]!, "the keystroke is a later revision than the write");
         Check(!(bool)now["saved"]!, "the keystroke leaves the document unsaved");
+    }
+
+    private static async Task B01(List<string> notes)
+    {
+        using var c = await Session("e2e B01");
+        var first = (string)((JArray)(await c.Call("window.list"))["windows"]!)[0]["windowId"]!;
+        var second = (string)(await c.Call("test.window.open"))["windowId"]!;
+        async Task<JToken> Value(string window, string name) => (await c.Call("test.settings.get", new { windowId = window, name }))["value"]!;
+        async Task Until(string window, string name, Func<JToken, bool> ok, string what)
+        {
+            for (var i = 0; i < 100; i++) { if (ok(await Value(window, name))) return; await Task.Delay(50); }
+            throw new CaseFailed($"{what} (still {await Value(window, name)})");
+        }
+        var font = (double)await Value(first, "FontSize") == 21 ? 19.0 : 21.0;
+        await c.Call("test.settings.set", new { windowId = first, name = "FontSize", value = font });
+        await Until(second, "FontSize", v => (double)v == font, $"the second window follows the first window's font size {font}");
+        await c.Call("test.settings.set", new { windowId = second, name = "TextDirection", value = "rtl" });
+        await Until(first, "TextDirection", v => (string)v! == "rtl", "the first window follows the second window's text direction");
+        await c.Call("test.settings.set", new { windowId = second, name = "TextDirection", value = "auto" });
+        await Until(first, "TextDirection", v => (string)v! == "auto", "and back");
+        // Window-local: switching one window to source mode must not switch the other.
+        var sourceBefore = (bool)await Value(second, "SourceCode");
+        await c.Call("test.settings.set", new { windowId = first, name = "SourceCode", value = !sourceBefore });
+        await Until(first, "SourceCode", v => (bool)v == !sourceBefore, "the first window's own mode changes");
+        await c.Call("window.list"); // a round trip through both windows' queues after the change
+        Check((bool)await Value(second, "SourceCode") == sourceBefore, "the second window keeps its mode");
+        await c.Call("test.settings.set", new { windowId = first, name = "SourceCode", value = sourceBefore });
+        notes.Add($"font {font}, text direction rtl/auto, source mode stayed per window");
     }
 
     // ---- real input ----
