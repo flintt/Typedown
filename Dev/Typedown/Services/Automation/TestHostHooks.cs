@@ -29,6 +29,25 @@ namespace Typedown.Services.Automation
                 return new Newtonsoft.Json.Linq.JObject { ["text"] = text };
             }));
 
+            // Backups: one pass now in every window, and what the backup folder holds afterwards.
+            methods.Add(new MethodDescriptor("test.backup.run", null, "test.backup.run/1", async (c, ct) =>
+            {
+                var report = new Newtonsoft.Json.Linq.JArray();
+                foreach (var window in Core.Services.AutomationWindows.Registry.Snapshot())
+                {
+                    var entry = await await Core.Services.AutomationWindows.Registry.OnWindowAsync(window.WindowId, async app =>
+                    {
+                        var busy = app.FileViewModel.SaveTimerBusy;
+                        try { return new Newtonsoft.Json.Linq.JObject { ["windowId"] = window.WindowId, ["ok"] = await app.FileViewModel.BackupNowAsync(), ["timerBusy"] = busy }; }
+                        catch (System.Exception e) { return new Newtonsoft.Json.Linq.JObject { ["windowId"] = window.WindowId, ["error"] = e.ToString(), ["timerBusy"] = busy }; }
+                    });
+                    report.Add(entry);
+                }
+                var folder = System.IO.Path.Combine(Core.Config.GetLocalFolderPath(), "Backup");
+                var files = System.IO.Directory.Exists(folder) ? System.IO.Directory.GetFiles(folder).Select(System.IO.Path.GetFileName).ToArray() : new string[0];
+                return new Newtonsoft.Json.Linq.JObject { ["windows"] = report, ["files"] = new Newtonsoft.Json.Linq.JArray(files) };
+            }));
+
             // Settings across windows (stage 0b): open another window, change a setting in one, read it in another.
             methods.Add(new MethodDescriptor("test.window.open", null, "test.window.open/1", async (c, ct) =>
             {

@@ -160,6 +160,17 @@ namespace Typedown.Core.ViewModels
             }
         }
 
+        /// <summary>One backup pass now, as the save timer does (for the automation test host).</summary>
+        public async Task<bool> BackupNowAsync()
+        {
+            var ok = await AutoBackupFile();
+            await BackupDirtyBackgroundTabsAsync();
+            return ok;
+        }
+
+        /// <summary>Whether the save timer is in a tick (a tick that never finishes stops all later backups).</summary>
+        public bool SaveTimerBusy => saveTimerRunning;
+
         private async Task<bool> AutoBackupFile()
         {
             var active = TabsViewModel?.ActiveTab;

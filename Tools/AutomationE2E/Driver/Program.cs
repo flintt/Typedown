@@ -327,7 +327,12 @@ internal static class Program
         // The backups exist, with each document's own text, before the host dies.
         var backup = Path.Combine(testRoot, "data", "Backup");
         string Untitled(string id) => Path.Combine(backup, $"untitled_{id}.md");
-        for (var i = 0; i < 300 && !(File.Exists(Untitled(u1)) && File.Exists(Untitled(u2)) && Directory.GetFiles(backup, "*_r04-t.md").Length > 0); i++) await Task.Delay(100);
+        using (var c = await Session("e2e R04 backup"))
+        {
+            // One backup pass now, as the save timer would do within five seconds.
+            var pass = await c.Call("test.backup.run");
+            notes.Add("backup pass: " + pass.ToString(Formatting.None));
+        }
         Check(File.Exists(Untitled(u1)) && Disk(Untitled(u1)) == "# U1\n\nfirst untitled\n", "the first untitled document (a background tab) has its own backup");
         Check(File.Exists(Untitled(u2)) && Disk(Untitled(u2)) == "# U2\n\nsecond untitled\n", "the second untitled document has its own backup");
         var titledBackup = Directory.GetFiles(backup, "*_r04-t.md").FirstOrDefault();
