@@ -201,9 +201,50 @@ namespace Typedown.Core.ViewModels
         {
             ServiceProvider = serviceProvider;
             var settingsFile = Path.Combine(Config.GetLocalFolderPath(), "Settings.json");
-            settingsStore = new JsonSettingsStore(settingsFile, onWriteError: ex => Utilities.Log.WriteLocal("SettingsSave", ex.ToString()));
+            settingsStore = JsonSettingsStore.Shared(settingsFile, onWriteError: ex => Utilities.Log.WriteLocal("SettingsSave", ex.ToString()));
+            // Created with its window, on that window's thread: other windows' changes are applied there.
+            windowContext = System.Threading.SynchronizationContext.Current;
+            settingsStore.Changed += OnStoreChanged;
             ResetSettingsCommand.OnExecute.Subscribe(_ => ResetSetting());
         }
+
+        private readonly System.Threading.SynchronizationContext windowContext;
+
+        /// <summary>The settings revision: advances with every change from any window.</summary>
+        public long SettingsRevision => settingsStore.Revision;
+
+        // Another window (or, later, the automation API) changed a setting: this window applies it as if it had
+        // been changed here - bindings, the editor page, theme and language handlers all hear of it.
+        private void OnStoreChanged(string name, object origin)
+        {
+            if (ReferenceEquals(origin, this) || disposed) return;
+            if (SettingsScope.IsWindowLocal(name)) return;
+            void Apply()
+            {
+                if (disposed) return;
+                if (name != null)
+                {
+                    RaiseChangedFromElsewhere(name);
+                    return;
+                }
+                foreach (var property in GetType().GetProperties().Where(x => x.GetSetMethod() != null && !SettingsScope.IsWindowLocal(x.Name)))
+                    RaiseChangedFromElsewhere(property.Name);
+            }
+            if (windowContext == null || windowContext == System.Threading.SynchronizationContext.Current) Apply();
+            else windowContext.Post(_ => Apply(), null);
+        }
+
+        private void RaiseChangedFromElsewhere(string name)
+        {
+            var property = GetType().GetProperty(name);
+            if (property == null || property.GetSetMethod() == null) return;
+            object value;
+            try { value = property.GetValue(this); }
+            catch { return; }
+            OnPropertyChanged(name, null, value);
+        }
+
+        private bool disposed;
 
         public T GetSettingValue<T>(T defaultValue = default, [CallerMemberName] string propertyName = null)
         {
@@ -212,7 +253,7 @@ namespace Typedown.Core.ViewModels
 
         public void SetSettingValue<T>(T value, [CallerMemberName] string propertyName = null)
         {
-            settingsStore.Set(propertyName, value);
+            settingsStore.Set(propertyName, value, this);
         }
 
         public Task FlushSettingsAsync() => settingsStore.FlushAsync();
@@ -241,13 +282,15 @@ namespace Typedown.Core.ViewModels
             var result = await dialog.ShowAsync(ServiceProvider.GetService<AppViewModel>().XamlRoot);
             if (result != ContentDialogResult.Primary)
                 return;
-            settingsStore.Reset();
+            settingsStore.Reset(this);
             foreach (var item in GetType().GetProperties().Where(x => x.GetSetMethod() != null).Select(x => x.Name))
                 OnPropertyChanged(item);
         }
 
         public void Dispose()
         {
+            disposed = true;
+            settingsStore.Changed -= OnStoreChanged;
             disposables.Dispose();
         }
     }

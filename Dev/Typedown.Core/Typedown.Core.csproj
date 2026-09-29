@@ -423,6 +423,7 @@
     <Compile Include="Services\AutomationWindows.cs" />
     <Compile Include="Services\AutomationDocuments.cs" />
     <Compile Include="Services\JsonSettingsStore.cs" />
+    <Compile Include="Services\SettingsScope.cs" />
     <Compile Include="Services\EventCenter.cs" />
     <Compile Include="Services\ImageAction.cs" />
     <Compile Include="Services\ImageUpload.cs" />

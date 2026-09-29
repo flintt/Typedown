@@ -12,6 +12,12 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
   </ItemGroup>
   <ItemGroup>
+    <!-- Plain .NET files of the Windows core, tested here because that project only builds on Windows. -->
+    <Compile Include="..\Typedown.Core\Services\JsonSettingsStore.cs" Link="Core\JsonSettingsStore.cs" />
+    <Compile Include="..\Typedown.Core\Services\SettingsScope.cs" Link="Core\SettingsScope.cs" />
+    <Compile Include="..\Typedown.Core\Utilities\SafeFile.cs" Link="Core\SafeFile.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Typedown.Automation\Typedown.Automation.csproj" />
     <ProjectReference Include="..\Typedown.Automation.TestHost\Typedown.Automation.TestHost.csproj" />
   </ItemGroup>
