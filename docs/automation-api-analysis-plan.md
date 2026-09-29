@@ -274,16 +274,16 @@ Typedown.Uno/Automation/
 
 - [x] 把现有 `reading-source-check.js` 纳入固定回归入口；保留审阅所举的列表、紧邻标题和 fenced bash 文档，并把测试名称与断言说明改为“源文本映射稳定性”。*（`Tools/EditorBench` 的 `npm run check:source`。）*
 - [x] 扩充无用户编辑时的稳定性 fixture：GFM 表格、HTML、脚注、公式、Mermaid、emoji、组合字符、CRLF、无末尾换行、大文档和已记录的 CommonMark 边界样例。*（`source-stability-check.js`，90 个样例，`--full` 全部 652 个 CommonMark 例子。CRLF 改为宿主契约：正文只用 `\n`，见规格。）*
-- [ ] 增加“接口候选写入 → 可视/阅读/源码模式往返 → flush/get/save”的测试；没有真实编辑时逐字节相同、不推进 revision、不标脏。该测试不能被描述为首次编辑后的保真证明。
-- [ ] 活动编辑器写入时取得 `source` 与 `importedRef.normalized` 的 hash，定义并返回 `pendingNormalization` 和分类器版本；默认 `requireKnownSafe` 拒绝 `unknown`，显式 `allowUnknown` 才能提交。后台标签在首次可视加载、启用输入前完成分类。不得把同解析器渲染等价当作充分条件。*（页面侧已完成：`services/normalization.ts` 分类器 v2，按原文独立扫描受保护载荷；`window.__typedownPendingNormalization`。待做：宿主经消息取得结果并据此拒绝写入。）*
+- [ ] 增加“接口候选写入 → 可视/阅读/源码模式往返 → flush/get/save”的测试；没有真实编辑时逐字节相同、不推进 revision、不标脏。该测试不能被描述为首次编辑后的保真证明。*（未完成：E2E S0 覆盖写入→latest 读取→保存字节，尚未加入写入后的三模式往返。）*
+- [ ] 活动编辑器写入时取得 `source` 与 `importedRef.normalized` 的 hash，定义并返回 `pendingNormalization` 和分类器版本；默认 `requireKnownSafe` 拒绝 `unknown`，显式 `allowUnknown` 才能提交。后台标签在首次可视加载、启用输入前完成分类。不得把同解析器渲染等价当作充分条件。*（页面侧已完成：`services/normalization.ts` 分类器 v2，按原文独立扫描受保护载荷；`window.__typedownPendingNormalization`。待做：宿主经消息取得结果并据此拒绝写入。）**（宿主侧已接上：写入结果和 `document.get` 带 normalization，默认拒绝 unknown；仍缺：后台标签首次可视加载前分类、unsafe 时阻止进入可编辑可视模式。）*
 - [x] 建立独立的受保护载荷 fixture，覆盖链接/图片 URL、代码围栏语言和正文、脚注、任务状态、原始 HTML 属性、front matter、公式及扩展块；已确认内容或结构损坏时返回 `content_not_roundtrippable`。*（`docs/automation-fixtures/protected-payload.json`：13 个 preserve 文档（带逐字 `mustKeep`）、18 个 loss 对、9 个 safe 对。编辑器 jest 要求每个 loss 判 unsafe 且原因正确、safe 不判 unsafe；`protected-payload-check.js` 用真实按键检查，丢失按子串判断、不借用分类器（借用时去掉围栏保护检查仍通过，已改）。新发现并补上：行内公式未受保护（分类器 v3）。现状：Muya 首次编辑会丢围栏信息串属性和围栏正文空白，均已预测为 unsafe；unsafe 到 `content_not_roundtrippable` 的映射由 `DocumentEditTests` 覆盖。）*
-- [ ] 增加“接口写入 → 一次真实可视输入 → latest 读取”基线，记录 Muya 首次编辑造成的完整序列化结果和实际变化范围，并验证受保护载荷与文档结构仍在。*（页面级已完成：`first-edit-check.js` 以 `LoadFile` 代替接口写入，要求实际结果与预测一致，基线 63 none / 24 unknown / 3 unsafe。接口可用后改走接口。）*
+- [ ] 增加“接口写入 → 一次真实可视输入 → latest 读取”基线，记录 Muya 首次编辑造成的完整序列化结果和实际变化范围，并验证受保护载荷与文档结构仍在。*（页面级已完成：`first-edit-check.js` 以 `LoadFile` 代替接口写入，要求实际结果与预测一致，基线 63 none / 24 unknown / 3 unsafe。接口可用后改走接口。）**（E2E S1 已在真实窗口里用真实按键验证写入后输入与读取；首次编辑序列化基线仍是页面级。）*
 - [x] 给页面变化报告增加来源或等价判定，确保内部重渲染和初始规范化不能伪装成用户编辑。*（`MarkdownChange.origin` = `user`/`editor`，`services/changeOrigin.ts`；`Tools/EditorBench/origin-check.js`。宿主尚未使用该字段。）*
 - [x] Windows `DocumentTab` 增加稳定 `documentId` 和只在真实正文变化时递增的 revision；协议 fixture 记录 Uno 后续必须复现的语义。*（`DocumentTab.DocumentId/Revision`；语义见 `docs/automation-fixtures/document-identity.json`。）*
 - [x] 建立 Windows 线程安全的窗口/文档注册表和 dispatcher 定位方式。*（平台无关部分在 `Dev/Typedown.Automation`（netstandard2.0，`WindowRegistry`、错误码），测试 `dotnet test Dev/Typedown.Automation.Tests` 在 Linux 运行；Windows 适配 `Typedown.Core/Services/AutomationWindows.cs`，窗口加载后注册、关闭时注销。）*
 - [x] 定义 `ApplyDocumentEdit` 的暂存、成功提交和宿主恢复状态机；失败统一用写入前权威正文、光标和滚动经 `LoadFile` 恢复，撤销历史只能在页面确认后提交。*（`Dev/Typedown.Automation/DocumentEdit.cs` 的 `DocumentEditCoordinator`，宿主实现 `IEditableDocument`；17 个测试覆盖成功、revision 冲突、刷新超时、页面检测到输入冲突、unknown/unsafe、页面失败/超时/文本不符后恢复、恢复失败隔离、后台文档、无变化、保存失败和同文档并发。待做：Windows 端 `IEditableDocument` 与页面 `ApplyDocumentEdit` 消息。）*
 - [x] 为独立测试宿主设计一次性 barrier：至少能停在 `beforeFlushReply`、`afterEditorMutationBeforeReport` 和 `beforeSaveCommit`，并提供等待已命中和释放操作。*（协调器只有中性接口 `IEditBarriers`；`Dev/Typedown.Automation.TestHost` 的 `EditBarriers` 提供 `test.barrier.arm/waitHit/release`，一次性、可限定文档、最长保持 60 秒。）*
-- [ ] 建立独立测试宿主/程序集；正式应用项目不得引用它。测试宿主使用 `AUTOMATION TEST HOST` 标签、`buildType=automationTestHost`、独立数据目录/IPC/互斥体；正式应用返回 `buildType=application`，其 schema、方法表、能力响应和二进制均不包含 `test.*`。*（部分完成：程序集已独立；应用方法表拒绝注册 `test.*`；`BuildSeparationTests` 检查没有应用项目引用它；`Tools/Installer/assert-application-build.ps1` 在本地和 CI 打包前拒收含测试宿主的目录，已在 hp 验证。待做：测试宿主 exe 变体、标签、独立数据目录/IPC/互斥体，随阶段 1 的管道服务一起做。）*
+- [x] 建立独立测试宿主/程序集；正式应用项目不得引用它。测试宿主使用 `AUTOMATION TEST HOST` 标签、`buildType=automationTestHost`、独立数据目录/IPC/互斥体；正式应用返回 `buildType=application`，其 schema、方法表、能力响应和二进制均不包含 `test.*`。*（部分完成：程序集已独立；应用方法表拒绝注册 `test.*`；`BuildSeparationTests` 检查没有应用项目引用它；`Tools/Installer/assert-application-build.ps1` 在本地和 CI 打包前拒收含测试宿主的目录，已在 hp 验证。待做：测试宿主 exe 变体、标签、独立数据目录/IPC/互斥体，随阶段 1 的管道服务一起做。）**（已完成：`build-local.ps1 -AutomationTestHost` 构建到 `bin\AutomationTestHost`，带标记文件；`--automation-test-root` 隔离数据/日志/WebView2，互斥体、交接管道和自动化端点都按数据根命名；`buildType=automationTestHost`，标题前缀 AUTOMATION TEST HOST。关于页版本标签尚未加标识。）*
 - [x] 编写文档 MVP 的 JSON Schema、错误 fixture、scope、稳定客户端 ID、双向请求路由和 `Content-Length` framing 测试。*（`docs/automation-schema/`；`Dev/Typedown.Automation`：`MessageFraming`、`JsonRpcConnection`、`AutomationSession`/`MethodTable`、`Params`、`DocumentText`；75 个测试在 Linux 运行。）*
 
 完成标准：无真实编辑时三种模式的源文本映射稳定；每次写入公开待规范化状态；首次可视编辑后的全文序列化和受保护语义有固定基线；失败写入通过唯一的宿主恢复路径还原旧正文、光标、滚动和 history；R01/R03 能用 barrier 确定性命中竞态；稳定身份、revision 和协议 fixture 可供阶段 1 使用。
@@ -295,7 +295,7 @@ Typedown.Uno/Automation/
 任务：
 
 - [x] 将 Windows 持久化设置抽成应用级单一 store，消除每窗口独立快照。*（`JsonSettingsStore.Shared`：每个设置文件一个进程级 store，带 `Changed(name, origin)` 事件和 `Revision`。）*
-- [ ] 每窗口保留 UI/编辑器 apply façade，验证多个窗口和已打开设置页同步刷新。*（代码已完成：各窗口的 `SettingsViewModel` 在自己的 UI 线程上把其他窗口的改动当作本窗口改动通知出去，窗口级设置（模式、侧栏、窗口位置、搜索选项、置顶）见 `SettingsScope`，只保存不广播。待做：在 hp 上用两个窗口和已打开的设置页实际验证。）*
+- [ ] 每窗口保留 UI/编辑器 apply façade，验证多个窗口和已打开设置页同步刷新。*（代码已完成：各窗口的 `SettingsViewModel` 在自己的 UI 线程上把其他窗口的改动当作本窗口改动通知出去，窗口级设置（模式、侧栏、窗口位置、搜索选项、置顶）见 `SettingsScope`，只保存不广播。待做：在 hp 上用两个窗口和已打开的设置页实际验证。）**（E2E B01 在 hp 真实桌面验证：一个窗口改字号、文字方向，另一窗口跟随；源码模式留在各自窗口（B01 发现并修复了共享 store 下窗口级设置串窗口）。已打开设置页的控件刷新依赖绑定，尚未用 UI Automation 验证。）*
 - [x] 建立外部设置 key 的规范映射数据，覆盖 scope、类型、范围、平台属性、apply handler、可见目标和敏感级别。*（`docs/automation-fixtures/settings-map.json`：首批 4 个 key（主题、字号、行高、文字方向）的类型、范围、Windows/Uno 属性、应用路径、可见目标和敏感级别；其余每个已存储的 Windows 设置都按原因分组列为不开放（窗口级、视图状态、搜索、秘密、内部、路径、代码、需重启、待评审）。`SettingsMapTests` 要求每个设置都有归属，新增设置不登记就失败。）*
 - [x] 为快速连续写、持久化失败、窗口关闭和旧窗口覆盖新值建立回归测试。*（`SettingsStoreTests`，Linux 运行：多线程连续写、写失败后恢复、监听者抛异常不影响其他窗口、旧窗口覆盖新值（改回每窗口一个 store 时该测试失败）。窗口关闭时取消订阅在 `SettingsViewModel.Dispose`，待 GUI 验证。）*
 
@@ -307,19 +307,19 @@ Typedown.Uno/Automation/
 
 任务：
 
-- [ ] 实现独立命名管道服务、当前用户 SID ACL、连接上限和默认关闭开关。
-- [ ] `JsonRpcConnection` 同时路由两个方向的请求/响应；MVP 不发送服务端请求，但实现不固化为单向。
-- [ ] 实现 `system.initialize/ping`、`app.getState`、`window.list/focus`，返回 scope、`clientSessionId` 和能力。
-- [ ] 实现 `document.list/get/open/create/focus`，latest 读取必须完成 WebView 刷新。
-- [ ] 实现 `document.replace`、`document.replaceText`、`document.save`、`undo/redo`，强制 `baseRevision`。
-- [ ] 新增 `ApplyDocumentEdit/DocumentEditApplied/DocumentEditRejected`；页面应用前再次检查 `baseContentHash`，成功后返回源文本、初始序列化文本的 hash 与 `pendingNormalization`，失败后由宿主通过 `LoadFile` 完成恢复确认。
-- [ ] 让一次成功外部修改形成一个撤销步骤；`replaceText` 先保证精确文本结果，页面局部应用留到阶段 2。
-- [ ] 只在独立测试宿主注册 `test.*` barrier；正式应用和 Release 测试断言这些方法返回 `method_not_found`、能力中不可见，并检查包内容不存在测试程序集或 `test.*` 符号。
-- [ ] 状态栏显示不可由客户端关闭的连接标记，写入时短暂显示客户端名称和目标文档。
-- [ ] 实现 `typedownctl` 的 `status/windows/documents/get/open/create/replace/replace-text/save`，所有命令支持 `--json` 和稳定退出码；正文写命令用显式 `--allow-unknown-normalization` 映射协议中的风险接受，不能默认开启。
-- [ ] 用 CLI/客户端及 barrier 编写 R01～R04 端到端测试；比对 API 结果、界面 revision 和磁盘/备份字节。
-- [ ] 提供 `Tools/AutomationE2E/run-windows-e2e.ps1` 一键入口，以及从 SSH 侧创建并等待交互式计划任务的包装脚本；按第 10.7 节收集结果并隔离数据。
-- [ ] 修改 `Tools/Installer/build-local.ps1` 和 CI：测试宿主只能构建散装输出，拒绝 Inno/MSIX/portable 打包；正式包在产出后扫描测试程序集、`test.*` 和 `AUTOMATION TEST HOST` 标识。
+- [x] 实现独立命名管道服务、当前用户 SID ACL、连接上限和默认关闭开关。*（`SecurePipeListener`：受保护 DACL 只含当前用户 SID、拒绝远程客户端、首实例标志防抢注；`AutomationServer` 连接上限 8；“允许本机自动化”默认关闭，关闭即停止监听并断开全部连接。）*
+- [x] `JsonRpcConnection` 同时路由两个方向的请求/响应；MVP 不发送服务端请求，但实现不固化为单向。*（阶段 0a 已完成并有测试。）*
+- [x] 实现 `system.initialize/ping`、`app.getState`、`window.list/focus`，返回 scope、`clientSessionId` 和能力。*（`AutomationSession` + `DocumentMethods` + `WindowsAutomationHost`。）*
+- [x] 实现 `document.list/get/open/create/focus`，latest 读取必须完成 WebView 刷新。*（latest 读取先等页面确认当前加载再刷新；E2E S0 验证逐字读回。）*
+- [x] 实现 `document.replace`、`document.replaceText`、`document.save`、`undo/redo`，强制 `baseRevision`。*（后台标签的 save/undo/redo 本版返回 `editor_not_ready`（reason `notActive`），需先 focus。）*
+- [x] 新增 `ApplyDocumentEdit/DocumentEditApplied/DocumentEditRejected`；页面应用前再次检查 `baseContentHash`，成功后返回源文本、初始序列化文本的 hash 与 `pendingNormalization`，失败后由宿主通过 `LoadFile` 完成恢复确认。*（拒绝用 `DocumentEditApplied` 的 `outcome: conflict/failed` 表达，没有单独的 Rejected 消息。）*
+- [x] 让一次成功外部修改形成一个撤销步骤；`replaceText` 先保证精确文本结果，页面局部应用留到阶段 2。*（`CommitAutomationText` 先结束读者待定输入再单独成步；E2E R02 验证撤销/重做不串文档。）*
+- [ ] 只在独立测试宿主注册 `test.*` barrier；正式应用和 Release 测试断言这些方法返回 `method_not_found`、能力中不可见，并检查包内容不存在测试程序集或 `test.*` 符号。*（方法表拒绝应用构建注册 `test.*`；`BuildSeparationTests` 保证只有测试宿主变体引用该程序集；打包脚本拒收含测试宿主程序集或标记文件的目录。仍缺：对正式包二进制扫描 `test.*` 字符串。）*
+- [x] 状态栏显示不可由客户端关闭的连接标记，写入时短暂显示客户端名称和目标文档。*（改为窗口标题：状态栏可被用户关闭（hp 上就是关闭的），标题不能；连接时显示“自动化已连接”，写入后 4 秒显示“{客户端} 编辑了 {文档}”，74 种语言。）*
+- [x] 实现 `typedownctl` 的 `status/windows/documents/get/open/create/replace/replace-text/save`，所有命令支持 `--json` 和稳定退出码；正文写命令用显式 `--allow-unknown-normalization` 映射协议中的风险接受，不能默认开启。*（Linux 上对真实管道服务端测试；尚未在 Windows 上对正式应用运行。）*
+- [ ] 用 CLI/客户端及 barrier 编写 R01～R04 端到端测试；比对 API 结果、界面 revision 和磁盘/备份字节。*（R01～R03、S0、S1、B01 在 hp 真实桌面通过并重复运行；过程中发现并修复：写入与文档加载竞争、写入期间的读者按键被覆盖、写入的保存把读者未保存的按键写盘、窗口级设置串窗口。R04（备份与强杀重启）未做。）*
+- [x] 提供 `Tools/AutomationE2E/run-windows-e2e.ps1` 一键入口，以及从 SSH 侧创建并等待交互式计划任务的包装脚本；按第 10.7 节收集结果并隔离数据。*（`start-interactive.ps1` 从 SSH 注册并触发“仅用户登录时运行”的计划任务、等待 result.json；无人登录时报环境错误。）*
+- [ ] 修改 `Tools/Installer/build-local.ps1` 和 CI：测试宿主只能构建散装输出，拒绝 Inno/MSIX/portable 打包；正式包在产出后扫描测试程序集、`test.*` 和 `AUTOMATION TEST HOST` 标识。*（`-AutomationTestHost` 只出散装输出；本地与 CI 打包前运行 `assert-application-build.ps1`。仍缺：产出后扫描 `test.*` 与 AUTOMATION TEST HOST 字符串。）*
 
 完成标准：过期版本不能覆盖用户输入；失败写入不留下半提交状态；外部写入在人正在看的编辑器中实际出现并可一次撤销；`save` 成功后磁盘字节与目标 revision 一致；R01～R04 能在 HP 登录桌面会话中由一条命令重复运行且无需概率性 sleep；正式安装包通过测试代码缺失检查；接口关闭时没有监听端点。
 

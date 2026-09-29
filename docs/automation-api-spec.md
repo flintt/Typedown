@@ -221,6 +221,15 @@ MVP 为每个方法定义服务端超时，并在连接断开时取消尚未开�
 
 `presentation` 是观察近似值，不是事务提交级别。它不能证明窗口没有被遮挡、桌面合成器已经把像素送到显示器或人确实看到了变化。超时响应必须同时说明正文是否已经应用，调用方据此读取状态，不能盲目重放写操作。
 
+### 2.4 Windows MVP 实现说明
+
+- **写入前等待加载确认。** 宿主在把写入交给页面前，先等页面对当前 `loadId` 回报 `FileLoaded`；否则 `document.open` 后立即写入会与加载竞争。`consistency: "latest"` 读取同样先等加载确认再刷新。
+- **写入期间读者的输入。** 页面应用候选后、宿主提交前，读者在页面里的输入由宿主暂存；提交（以及请求的保存）完成后再作为下一个 revision 应用。因此写入的 `save` 写盘的是写入的 revision，不含读者尚未保存的输入；写入失败恢复时暂存输入随被撤回的候选一起丢弃；写入期间标签已被切走时也丢弃，不会落到另一个文档。
+- **后台标签。** 后台标签没有 Muya 实例，写入的 normalization 为 `unknown`（`notEvaluated`），只有 `allowUnknown` 才提交；本版 `document.save`、`document.undo/redo` 只作用于窗口当前显示的文档，后台标签返回 `editor_not_ready`（`data.reason: "notActive"`），需先 `document.focus`。
+- **连接标记在窗口标题。** 状态栏可被用户关闭，标题不能：有客户端连接时标题附加“自动化已连接”，写入后约 4 秒显示“{客户端} 编辑了 {文档}”（客户端名去掉控制字符和双向控制符，最长 40 字符）。
+- **页面规范化查询。** `document.get` 通过 `QueryNormalization`/`NormalizationReport` 向页面取当前的规范化判定。
+- **测试宿主。** `buildType=automationTestHost` 的构建以 `--automation-test-root <dir>` 启动，数据、日志、WebView2、互斥体、交接管道和自动化端点都与日常实例分开，端点名写入 `<dir>\automation-endpoint.txt`；它另有 `test.barrier.*`、`test.editor.pageText`、`test.window.open`、`test.settings.get/set`。
+
 ## 3. 方法与设置契约
 
 ### 3.1 系统与应用
