@@ -7,6 +7,7 @@ import renderInlines from './renderInlines'
 import renderBlock from './renderBlock'
 
 let mermaidRenderId = 0
+const MERMAID_RENDER_CACHE_LIMIT = 32
 
 class StateRender {
   constructor(muya) {
@@ -18,6 +19,9 @@ class StateRender {
     this.mermaidCache = new Map()
     this.mermaidRenderCache = new Map()
     this.mermaidRenderTargets = new WeakMap()
+    this.mermaidRenderRequests = new WeakMap()
+    this.mermaidRenderRequestId = 0
+    this.mermaidRenderQueue = Promise.resolve()
     this.diagramCache = new Map()
     this.tokenCache = new Map()
     this.labels = new Map()
@@ -104,10 +108,34 @@ class StateRender {
     return selector
   }
 
-  async renderMermaid() {
-    if (this.mermaidCache.size) {
+  renderMermaid() {
+    if (!this.mermaidCache.size) return this.mermaidRenderQueue
+
+    const theme = window.actualTheme == 'dark' ? 'dark' : 'default'
+    // Rendering is asynchronous, while typing can replace this DOM node every 300 ms. Take ownership of the
+    // current batch immediately: an older render must never clear work collected by a newer partial render.
+    const requests = []
+    for (const [key, { code }] of this.mermaidCache.entries()) {
+      const target = document.querySelector(key)
+      if (!target) continue
+      const cacheKey = `${theme}\n${code}`
+      if (this.mermaidRenderTargets.get(target) === cacheKey && target.querySelector('svg')) continue
+      const requestId = ++this.mermaidRenderRequestId
+      this.mermaidRenderRequests.set(target, requestId)
+      requests.push({ target, code, cacheKey, requestId })
+    }
+    this.mermaidCache.clear()
+    if (!requests.length) return this.mermaidRenderQueue
+
+    // Mermaid is a stateful global. Concurrent calls interfere with its temporary DOM and can stall WebKit;
+    // serializing them also lets queued edits discard intermediate nodes before doing expensive work.
+    this.mermaidRenderQueue = this.mermaidRenderQueue.catch(() => {}).then(async () => {
+      const isCurrent = request => request.target.isConnected &&
+        this.mermaidRenderRequests.get(request.target) === request.requestId
+      const current = requests.filter(isCurrent)
+      if (!current.length) return
+
       let mermaid
-      const theme = window.actualTheme == 'dark' ? 'dark' : 'default'
       try {
         mermaid = await loadRenderer('mermaid')
         mermaid.initialize({
@@ -117,27 +145,17 @@ class StateRender {
         })
       } catch (err) {
         console.error('Failed to load mermaid renderer', err)
-        for (const [key] of this.mermaidCache.entries()) {
-          const target = document.querySelector(key)
-          if (target) {
-            target.innerHTML = '< Invalid Mermaid Codes >'
-            target.classList.add(CLASS_OR_ID.AG_MATH_ERROR)
-          }
+        for (const request of current) {
+          if (!isCurrent(request)) continue
+          request.target.innerHTML = '< Invalid Mermaid Codes >'
+          request.target.classList.add(CLASS_OR_ID.AG_MATH_ERROR)
         }
-        this.mermaidCache.clear()
         return
       }
-      for (const [key, value] of this.mermaidCache.entries()) {
-        const { code } = value
-        const target = document.querySelector(key)
-        if (!target) {
-          continue
-        }
-        const cacheKey = `${theme}\n${code}`
-        // Already showing this exact diagram - don't re-parse the SVG (avoids flicker).
-        if (this.mermaidRenderTargets.get(target) === cacheKey && target.querySelector('svg')) {
-          continue
-        }
+
+      for (const request of current) {
+        if (!isCurrent(request)) continue
+        const { target, code, cacheKey } = request
         try {
           let svg = this.mermaidRenderCache.get(cacheKey)
           if (svg == null) {
@@ -152,17 +170,26 @@ class StateRender {
               document.getElementById(`d${renderId}`)?.remove()
             }
             this.mermaidRenderCache.set(cacheKey, svg)
+            while (this.mermaidRenderCache.size > MERMAID_RENDER_CACHE_LIMIT) {
+              this.mermaidRenderCache.delete(this.mermaidRenderCache.keys().next().value)
+            }
+          } else {
+            // Refresh insertion order so the bounded cache keeps recently reused diagrams.
+            this.mermaidRenderCache.delete(cacheKey)
+            this.mermaidRenderCache.set(cacheKey, svg)
           }
+          if (!isCurrent(request)) continue
           target.innerHTML = svg
+          target.classList.remove(CLASS_OR_ID.AG_MATH_ERROR)
           this.mermaidRenderTargets.set(target, cacheKey)
         } catch (err) {
+          if (!isCurrent(request)) continue
           target.innerHTML = '< Invalid Mermaid Codes >'
           target.classList.add(CLASS_OR_ID.AG_MATH_ERROR)
         }
       }
-
-      this.mermaidCache.clear()
-    }
+    })
+    return this.mermaidRenderQueue
   }
 
   async renderDiagram() {
