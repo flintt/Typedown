@@ -25,7 +25,7 @@ export interface NormalizationResult {
     reasons: string[];
 }
 
-export const classifierVersion = 2;
+export const classifierVersion = 3;
 
 export interface ProtectedPayload {
     /** Fenced code blocks as `info\u0000body`, where info is the full info string after the fence; `\u0000broken` is
@@ -41,7 +41,7 @@ export interface ProtectedPayload {
     htmlTags: string[];
     /** The YAML front matter body, if the document starts with one. */
     frontMatter: string[];
-    /** Display maths bodies between `$$` lines. */
+    /** Display maths bodies between `$$` lines, and inline maths as `inline:body`. */
     math: string[];
     /** Letter/number runs of the whole text, in order. */
     words: string[];
@@ -55,6 +55,11 @@ const referencePattern = /^ {0,3}\[(?!\^)(?:[^\]\\]|\\.)+\]:\s*<?(\S+?)>?(?:\s+(
 const autolinkPattern = /<((?:https?|ftp|mailto):[^\s<>]+)>/g;
 const htmlTagPattern = /<([A-Za-z][A-Za-z0-9-]*)((?:\s+[^\s"'>/=]+(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'=<>`]+))?)*)\s*\/?>/g;
 const htmlAttributePattern = /([^\s"'>/=]+)(?:\s*=\s*("[^"]*"|'[^']*'|[^\s"'=<>`]+))?/g;
+// Inline maths: `$body$` where the body neither starts nor ends with a space (so "$5 and $6" is not maths), outside
+// code spans. `$$` is display maths, handled per line above.
+const inlineMathPattern = /(?<![\\$])\$(?!\$)(?!\s)([^$\n]+?)(?<![\\\s])\$(?!\$)/g;
+const codeSpanPattern = /(`+)[^`]*?\1/g;
+
 const containerStart = /^\s*(?:[-*+]\s|\d+[.)]\s|>)/;
 const taskPattern = /^\s*(?:[-*+]|\d+[.)])\s+\[([ xX])\](?=\s)/;
 
@@ -128,6 +133,7 @@ export function extractProtectedPayload(markdown: string): ProtectedPayload {
     const text = prose.join('\n');
     for (const match of text.matchAll(inlineLinkPattern)) payload.links.push(`${match[1]}\u0000${unquote(match[2] ?? '')}`);
     for (const match of text.matchAll(autolinkPattern)) payload.links.push(`${match[1]}\u0000`);
+    for (const match of text.replace(codeSpanPattern, '').matchAll(inlineMathPattern)) payload.math.push(`inline:${match[1]}`);
     for (const match of text.matchAll(footnotePattern)) payload.footnotes.push(`${match[2] ? 'def' : 'ref'}:${match[1]}`);
     for (const match of text.matchAll(htmlTagPattern)) {
         const attributes = [...match[2].matchAll(htmlAttributePattern)].map(a => `${a[1].toLowerCase()}=${unquote(a[2] ?? '')}`).sort();

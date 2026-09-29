@@ -12,7 +12,7 @@ import FootnoteTool from 'components/Muya/lib/ui/footnoteTool'
 import FrontMenu from 'components/Muya/lib/ui/frontMenu'
 import FormatPicker from 'components/Muya/lib/ui/formatPicker'
 import { createApplicationMenuState } from "services/menuState";
-import { classifyNormalization } from "services/normalization";
+import { classifyNormalization, extractProtectedPayload } from "services/normalization";
 import 'components/Muya/themes/default.css'
 
 interface IMuyaEditor {
@@ -203,6 +203,8 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
                 : { ...classifyNormalization(markdownRef.current, markdownRef.current), normalized: markdownRef.current }
         };
         (window as any).__typedownPendingNormalization = pendingNormalization
+        // For Tools/EditorBench: the same classifier, to judge what a real edit did.
+        ;(window as any).__typedownNormalization = { classifyNormalization, extractProtectedPayload }
         setEditor(muya)
         return () => {
             // Source mode has no Muya: a hook left behind would describe the document as it was when Muya went.

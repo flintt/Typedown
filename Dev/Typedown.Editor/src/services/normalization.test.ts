@@ -47,6 +47,9 @@ test('links, footnotes, task states, raw HTML, front matter and maths are protec
     expect(verdict('<div data-x="1" align="center">y</div>\n', '<div align="center" data-x="1">y</div>\n')).toBe('unknown');
     expect(reasons('---\ntitle: a\n---\n\nx\n', '---\ntitle: b\n---\n\nx\n')).toContain('front-matter-lost');
     expect(reasons('$$\nx^2\n$$\n', '$$\nx^3\n$$\n')).toContain('math-lost');
+    expect(reasons('a $\\alpha$ b\n', 'a $\\beta$ b\n')).toContain('math-lost');
+    expect(extractProtectedPayload('costs $5 and $6, `$x$` in code\n').math).toEqual([]);
+    expect(extractProtectedPayload('a $x^2$ and $$ not inline\n').math).toEqual(['inline:x^2']);
 });
 
 test('a lost word is unsafe; added text alone is unknown', () => {
