@@ -35,6 +35,13 @@ namespace Typedown.Automation.Tests
             return wrapper.Evaluate(doc.RootElement.Clone(), new EvaluationOptions { OutputFormat = OutputFormat.List });
         }
 
+        /// <summary>For other tests: validates a Newtonsoft token against a definition of v1.json.</summary>
+        internal static (bool valid, string errors) EvaluateFor(string def, JToken? instance)
+        {
+            var r = Evaluate(def, instance == null ? null : ToNode(instance));
+            return (r.IsValid, Errors(r));
+        }
+
         private static JsonNode? ToNode(JToken token) => JsonNode.Parse(token.ToString(Newtonsoft.Json.Formatting.None));
 
         private static string Errors(EvaluationResults r) =>
