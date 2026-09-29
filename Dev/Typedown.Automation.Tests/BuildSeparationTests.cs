@@ -18,7 +18,24 @@ namespace Typedown.Automation.Tests
                 .ToList();
             Assert.Contains(projects, p => p.EndsWith("Typedown.Core.csproj"));
             foreach (var project in projects)
-                Assert.DoesNotContain("Automation.TestHost", File.ReadAllText(project));
+            {
+                var xml = System.Xml.Linq.XDocument.Load(project);
+                foreach (var element in xml.Descendants().Where(e => ((string?)e.Attribute("Include") ?? "").Contains("Automation.TestHost")))
+                {
+                    // Only the test host variant of the application may pull it in.
+                    var condition = (string?)element.Parent?.Attribute("Condition") ?? (string?)element.Attribute("Condition") ?? "";
+                    Assert.True(condition.Replace(" ", "") == "'$(AutomationTestHost)'=='true'",
+                        $"{Path.GetFileName(project)} references the test host outside the AutomationTestHost build");
+                }
+            }
+        }
+
+        [Fact]
+        public void Only_the_test_host_variant_of_the_app_references_it()
+        {
+            var app = File.ReadAllText(Path.Combine(Dev, "Typedown", "Typedown.csproj"));
+            Assert.Contains("Typedown.Automation.TestHost.csproj", app);
+            Assert.DoesNotContain("Automation.TestHost", File.ReadAllText(Path.Combine(Dev, "Typedown.Core", "Typedown.Core.csproj")));
         }
 
         [Fact]
