@@ -280,7 +280,7 @@ Typedown.Uno/Automation/
 - [ ] 增加“接口写入 → 一次真实可视输入 → latest 读取”基线，记录 Muya 首次编辑造成的完整序列化结果和实际变化范围，并验证受保护载荷与文档结构仍在。*（页面级已完成：`first-edit-check.js` 以 `LoadFile` 代替接口写入，要求实际结果与预测一致，基线 63 none / 24 unknown / 3 unsafe。接口可用后改走接口。）*
 - [x] 给页面变化报告增加来源或等价判定，确保内部重渲染和初始规范化不能伪装成用户编辑。*（`MarkdownChange.origin` = `user`/`editor`，`services/changeOrigin.ts`；`Tools/EditorBench/origin-check.js`。宿主尚未使用该字段。）*
 - [x] Windows `DocumentTab` 增加稳定 `documentId` 和只在真实正文变化时递增的 revision；协议 fixture 记录 Uno 后续必须复现的语义。*（`DocumentTab.DocumentId/Revision`；语义见 `docs/automation-fixtures/document-identity.json`。）*
-- [ ] 建立 Windows 线程安全的窗口/文档注册表和 dispatcher 定位方式。
+- [x] 建立 Windows 线程安全的窗口/文档注册表和 dispatcher 定位方式。*（平台无关部分在 `Dev/Typedown.Automation`（netstandard2.0，`WindowRegistry`、错误码），测试 `dotnet test Dev/Typedown.Automation.Tests` 在 Linux 运行；Windows 适配 `Typedown.Core/Services/AutomationWindows.cs`，窗口加载后注册、关闭时注销。）*
 - [ ] 定义 `ApplyDocumentEdit` 的暂存、成功提交和宿主恢复状态机；失败统一用写入前权威正文、光标和滚动经 `LoadFile` 恢复，撤销历史只能在页面确认后提交。
 - [ ] 为独立测试宿主设计一次性 barrier：至少能停在 `beforeFlushReply`、`afterEditorMutationBeforeReport` 和 `beforeSaveCommit`，并提供等待已命中和释放操作。
 - [ ] 建立独立测试宿主/程序集；正式应用项目不得引用它。测试宿主使用 `AUTOMATION TEST HOST` 标签、`buildType=automationTestHost`、独立数据目录/IPC/互斥体；正式应用返回 `buildType=application`，其 schema、方法表、能力响应和二进制均不包含 `test.*`。

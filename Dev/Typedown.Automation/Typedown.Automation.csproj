@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- The platform-neutral half of the local automation API (docs/automation-api-spec.md): protocol types, errors,
+       framing and the window/document registry. No UI types, so the Windows host, the Uno port and the tests on
+       Linux all use the same code. -->
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Typedown.Automation</RootNamespace>
+  </PropertyGroup>
+</Project>
