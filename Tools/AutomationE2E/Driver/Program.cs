@@ -318,9 +318,20 @@ internal static class Program
         var titled = Fixture("r04-t.md", "# T\n\nsaved\n");
         using (var c = await Session("e2e R04 before"))
         {
-            u1 = (string)(await c.Call("document.create", new { text = "# U1\n\nfirst untitled\n", reveal = "document", normalizationPolicy = "allowUnknown" }))["documentId"]!;
+            async Task Trace(string step)
+            {
+                var docs = (JArray)(await c.Call("document.list"))["documents"]!;
+                notes.Add(step + ": " + string.Join(" ", docs.Where(d => d["path"]!.Type == JTokenType.Null || ((string)d["path"]!).Contains("r04")).Select(d => $"{((string)d["documentId"]!)[..6]}/{((string)d["windowId"]!)[..6]}/{(bool)d["active"]!}")));
+            }
+            await Trace("start");
+            var created = await c.Call("document.create", new { text = "# U1\n\nfirst untitled\n", reveal = "document", normalizationPolicy = "allowUnknown" });
+            u1 = (string)created["documentId"]!;
+            notes.Add("create u1 -> " + created.ToString(Formatting.None));
+            await Trace("after u1");
             u2 = (string)(await c.Call("document.create", new { text = "# U2\n\nsecond untitled\n", reveal = "document", normalizationPolicy = "allowUnknown" }))["documentId"]!;
+            await Trace("after u2");
             t = await Open(c, titled);
+            await Trace("after t");
             await c.Call("document.replace", new { documentId = t, baseRevision = await Revision(c, t), text = "# T\n\nedited, not saved\n", normalizationPolicy = "allowUnknown" });
             await c.Call("document.focus", new { documentId = u2 }); // u1 and t are background tabs now
         }
@@ -329,11 +340,14 @@ internal static class Program
         string Untitled(string id) => Path.Combine(backup, $"untitled_{id}.md");
         using (var c = await Session("e2e R04 backup"))
         {
+            foreach (var d in (JArray)(await c.Call("document.list"))["documents"]!)
+                notes.Add($"{d["documentId"]} w={((string)d["windowId"]!)[..6]} active={d["active"]} saved={d["saved"]} r={d["revision"]} title={d["title"]}");
             // One backup pass now, as the save timer would do within five seconds.
             var pass = await c.Call("test.backup.run");
             notes.Add("backup pass: " + pass.ToString(Formatting.None));
         }
-        Check(File.Exists(Untitled(u1)) && Disk(Untitled(u1)) == "# U1\n\nfirst untitled\n", "the first untitled document (a background tab) has its own backup");
+        notes.Add($"u1={u1} u2={u2} t={t}");
+        Check(File.Exists(Untitled(u1)) && Disk(Untitled(u1)) == "# U1\n\nfirst untitled\n", $"the first untitled document (a background tab) has its own backup ({(File.Exists(Untitled(u1)) ? JsonConvert.SerializeObject(Disk(Untitled(u1))) : "missing")})");
         Check(File.Exists(Untitled(u2)) && Disk(Untitled(u2)) == "# U2\n\nsecond untitled\n", "the second untitled document has its own backup");
         var titledBackup = Directory.GetFiles(backup, "*_r04-t.md").FirstOrDefault();
         Check(titledBackup != null && Disk(titledBackup) == "# T\n\nedited, not saved\n", "the background titled document has its backup");

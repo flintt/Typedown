@@ -29,6 +29,7 @@ namespace Typedown.Core.Models
         /// <summary>The tab now holds a different document (a preview or blank tab reused for an open or new file).</summary>
         public void BecomeNewDocument()
         {
+            Utilities.Log.Debug($"tab {DocumentId}: becomes a new document\n{System.Environment.StackTrace}");
             DocumentId = NewDocumentId();
             Revision = 0;
         }
