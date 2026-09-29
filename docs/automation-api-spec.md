@@ -92,7 +92,7 @@ MVP 定义最小 scope 名称：`app.read`、`document.read`、`document.write`�
 
 ### 1.4 机器契约原则
 
-接口定义以 JSON Schema、标准 fixture 和行为测试为准，文档及 CLI 帮助由同一份方法描述生成或校验。每个方法必须明确：
+接口定义以 JSON Schema、标准 fixture 和行为测试为准，文档及 CLI 帮助由同一份方法描述生成或校验。v1 的 schema 是 [`automation-schema/v1.json`](automation-schema/v1.json)（每个方法的 `<method>.params` / `<method>.result`、错误对象及其 code/kind 对照），必须接受和必须拒绝的实例在 [`automation-schema/fixtures.json`](automation-schema/fixtures.json)；`Dev/Typedown.Automation.Tests` 校验 fixture、服务端实际输出，以及 schema、本节错误表与代码三者的错误码一致。每个方法必须明确：
 
 - 参数和结果 schema、必填字段、默认值及大小限制。
 - 是否只读、是否幂等、是否允许并行及是否支持取消。
@@ -258,7 +258,7 @@ MVP 为每个方法定义服务端超时，并在连接断开时取消尚未开�
 
 `includeText: false` 只返回低成本元数据。调用方可用 `include: ["text", "headings"]` 请求正文和标题；每个标题至少返回稳定于该 revision 的顺序、层级、纯文本和 slug。MVP 不在标题结果中混入尚未协商单位的源码偏移。
 
-写方法接受 `normalizationPolicy: "requireKnownSafe" | "allowUnknown"`，默认前者。成功结果包含 `operationId`、`revision`、`contentHash`、`saved` 和 `normalization`，请求了可见呈现时再包含 `presentation`。`normalization` 至少包含 `pendingNormalization`、`sourceHash`、可空的 `normalizedHash`、`reason` 和 `classifierVersion`；后台标签尚未经过 Muya 时是 `unknown`、`reason: "notEvaluated"` 和 `normalizedHash: null`，所以只有显式 `allowUnknown` 才能提交。`document.get` 在这个边界仍存在时返回同一组元数据。后台标签第一次可视加载必须在允许用户输入前完成分类；若结果为 `unsafe`，保留权威源文本并阻止进入可编辑的可视模式，源码模式仍可编辑。写入后在没有用户编辑的情况下，`document.get(consistency: "latest")` 必须逐字返回调用方提交的文本，不能用规范化文本替代它。
+写方法接受 `normalizationPolicy: "requireKnownSafe" | "allowUnknown"`，默认前者。成功结果包含 `operationId`、`revision`、`contentHash`、`saved` 和 `normalization`，请求了可见呈现时再包含 `presentation`。`normalization` 至少包含 `pendingNormalization`、`sourceHash`、可空的 `normalizedHash`、`reasons`（稳定英文原因数组）和 `classifierVersion`；后台标签尚未经过 Muya 时是 `unknown`、`reasons: ["notEvaluated"]` 和 `normalizedHash: null`，所以只有显式 `allowUnknown` 才能提交。`document.get` 在这个边界仍存在时返回同一组元数据。后台标签第一次可视加载必须在允许用户输入前完成分类；若结果为 `unsafe`，保留权威源文本并阻止进入可编辑的可视模式，源码模式仍可编辑。写入后在没有用户编辑的情况下，`document.get(consistency: "latest")` 必须逐字返回调用方提交的文本，不能用规范化文本替代它。
 
 `document.replaceText` 使用固定字符串，不使用正则。`find` 不能为空；`expectedCount` 必填，服务端按 ordinal、从左到右、互不重叠地计数，数量不符时返回 `match_count_mismatch` 并保持 revision 不变，数量一致时替换全部匹配项。常见 AI 编辑因此无需计算 Unicode 偏移，同时仍由 `baseRevision` 防止在旧正文上定位。
 

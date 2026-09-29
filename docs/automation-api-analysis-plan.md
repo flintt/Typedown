@@ -284,7 +284,7 @@ Typedown.Uno/Automation/
 - [ ] 定义 `ApplyDocumentEdit` 的暂存、成功提交和宿主恢复状态机；失败统一用写入前权威正文、光标和滚动经 `LoadFile` 恢复，撤销历史只能在页面确认后提交。
 - [ ] 为独立测试宿主设计一次性 barrier：至少能停在 `beforeFlushReply`、`afterEditorMutationBeforeReport` 和 `beforeSaveCommit`，并提供等待已命中和释放操作。
 - [ ] 建立独立测试宿主/程序集；正式应用项目不得引用它。测试宿主使用 `AUTOMATION TEST HOST` 标签、`buildType=automationTestHost`、独立数据目录/IPC/互斥体；正式应用返回 `buildType=application`，其 schema、方法表、能力响应和二进制均不包含 `test.*`。
-- [ ] 编写文档 MVP 的 JSON Schema、错误 fixture、scope、稳定客户端 ID、双向请求路由和 `Content-Length` framing 测试。
+- [x] 编写文档 MVP 的 JSON Schema、错误 fixture、scope、稳定客户端 ID、双向请求路由和 `Content-Length` framing 测试。*（`docs/automation-schema/`；`Dev/Typedown.Automation`：`MessageFraming`、`JsonRpcConnection`、`AutomationSession`/`MethodTable`、`Params`、`DocumentText`；75 个测试在 Linux 运行。）*
 
 完成标准：无真实编辑时三种模式的源文本映射稳定；每次写入公开待规范化状态；首次可视编辑后的全文序列化和受保护语义有固定基线；失败写入通过唯一的宿主恢复路径还原旧正文、光标、滚动和 history；R01/R03 能用 barrier 确定性命中竞态；稳定身份、revision 和协议 fixture 可供阶段 1 使用。
 
