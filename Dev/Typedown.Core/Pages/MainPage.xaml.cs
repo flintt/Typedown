@@ -22,10 +22,14 @@ namespace Typedown.Core.Pages
 
         private readonly DispatcherTimer hideMenuBarTimer = new() { Interval = TimeSpan.FromMilliseconds(400) };
 
+        // The pointer has to rest on the top edge a moment: passing over it on the way to a tab must not reveal.
+        private readonly DispatcherTimer revealMenuBarTimer = new() { Interval = TimeSpan.FromMilliseconds(150) };
+
         public MainPage()
         {
             InitializeComponent();
             hideMenuBarTimer.Tick += OnHideMenuBarTimerTick;
+            revealMenuBarTimer.Tick += OnRevealMenuBarTimerTick;
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
@@ -60,6 +64,7 @@ namespace Typedown.Core.Pages
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
             hideMenuBarTimer.Stop();
+            revealMenuBarTimer.Stop();
             disposables.Clear();
             Bindings?.StopTracking();
         }
@@ -68,6 +73,7 @@ namespace Typedown.Core.Pages
         {
             menuBarRevealed = false;
             hideMenuBarTimer.Stop();
+            revealMenuBarTimer.Stop();
             UpdateMenuBarVisibility();
         }
 
@@ -75,10 +81,14 @@ namespace Typedown.Core.Pages
         {
             var isFullScreen = AppViewModel?.UIViewModel?.IsFullScreen ?? false;
             MenuBarHost.Visibility = !isFullScreen || menuBarRevealed ? Visibility.Visible : Visibility.Collapsed;
-            // Revealed in full screen it floats over the editor instead of pushing the content down.
-            Grid.SetRow(MenuBarHost, isFullScreen ? 1 : 0);
-            MenuBarHost.VerticalAlignment = isFullScreen ? VerticalAlignment.Top : VerticalAlignment.Stretch;
+            // Revealed in full screen it takes its own row and pushes the tabs and editor down. It used to float
+            // over the content: it then lay on the tabs, and with the pointer still inside it the bar never hid,
+            // so the tabs could not be clicked.
+            Grid.SetRow(MenuBarHost, 0);
+            MenuBarHost.VerticalAlignment = VerticalAlignment.Stretch;
             MenuBarHost.Background = isFullScreen ? GetOpaqueBackground() : null;
+            // While the bar is out the edge strip would only cover the top of its menus.
+            if (FullScreenRevealStrip != null) FullScreenRevealStrip.IsHitTestVisible = !menuBarRevealed;
         }
 
         private Brush GetOpaqueBackground()
@@ -90,8 +100,20 @@ namespace Typedown.Core.Pages
 
         private void OnRevealStripPointerEntered(object sender, PointerRoutedEventArgs e)
         {
-            menuBarRevealed = true;
             hideMenuBarTimer.Stop();
+            if (!menuBarRevealed) revealMenuBarTimer.Start();
+        }
+
+        private void OnRevealStripPointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            revealMenuBarTimer.Stop();
+        }
+
+        private void OnRevealMenuBarTimerTick(object sender, object e)
+        {
+            revealMenuBarTimer.Stop();
+            if (!(AppViewModel?.UIViewModel?.IsFullScreen ?? false)) return;
+            menuBarRevealed = true;
             UpdateMenuBarVisibility();
         }
 

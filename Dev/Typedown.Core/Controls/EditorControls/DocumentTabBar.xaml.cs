@@ -98,6 +98,22 @@ namespace Typedown.Core.Controls
             SetBrush("TabViewItemHeaderPressedCloseButtonBackground", buttonPressed);
             SetBrush("TabViewItemHeaderSelectedCloseButtonBackground", new SolidColorBrush(Colors.Transparent), surface != null);
             SetBrush("TabViewItemHeaderDisabledCloseButtonBackground", new SolidColorBrush(Colors.Transparent), surface != null);
+            RefreshThemeResources();
+        }
+
+        /// <summary>
+        /// Changing these resources does not reach tabs that already exist: each tab looked its brushes up when it
+        /// was created, while its selected/pointer-over states look theirs up again on every change of state. Without
+        /// this the first tabs kept the default colours, new tabs got the theme's, and switching tabs mixed the two -
+        /// two different "current tab" looks, and a tab left behind with the other one's colours - until something
+        /// else (toggling a setting) happened to make the tab strip look everything up again. Flipping the strip's
+        /// theme and back makes every tab and every state resolve its theme resources afresh, from these values.
+        /// </summary>
+        private void RefreshThemeResources()
+        {
+            var requested = TabView.RequestedTheme;
+            TabView.RequestedTheme = TabView.ActualTheme == ElementTheme.Dark ? ElementTheme.Light : ElementTheme.Dark;
+            TabView.RequestedTheme = requested;
         }
 
         private void SetButtonBrushes(string prefix, Brush background, Brush hover, Brush pressed, Brush foreground, Brush disabledForeground, Brush border)
