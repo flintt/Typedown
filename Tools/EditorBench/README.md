@@ -20,7 +20,19 @@ keystroke, after 45–53 ms.
 `modeswitch-check.js` reproduces upstream #20/#61 (blank lines appended on every source-mode switch): the
 markdown printed after "back to muya" must be identical to the value shown before the switch.
 
+Setup once with `npm ci` in this directory (Chrome at `/opt/google/chrome/chrome`, or set `CHROME`).
+`npm run check:source` runs the source-text mapping checks that gate automation writes (stage 0a of
+`docs/automation-api-analysis-plan.md`).
+
 Other checks (all take `STATICS=<dir>` or default to the built editor):
+
+- `source-stability-check.js` — source-text mapping stability over a wide fixture set (GFM tables, raw HTML,
+  footnotes, maths, Mermaid, fence info strings, emoji and ZWJ sequences, combining characters, task lists, front
+  matter, links/images/reference definitions, a 50k slice of `doc300k.md`, and every tenth CommonMark example;
+  `--full` runs all 652 examples and the whole 300k document). Each document goes reading → visual → source
+  twice and must come back byte for byte with no edit reported. It proves the mapping back to the original
+  source holds, not that the first real visual edit serializes faithfully. CR never reaches the editor (the host
+  normalizes line endings), so there is no CRLF fixture: CodeMirror would rewrite one and report an edit.
 
 - `reading-source-check.js` — preserves exact source through reading/source/visual mode switches and
   save flushes, checks a list followed immediately by a heading and fenced code, checks a GFM table

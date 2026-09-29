@@ -108,6 +108,7 @@ MVP 定义最小 scope 名称：`app.read`、`document.read`、`document.write`�
 - 时间使用带时区的 RFC 3339 字符串；持续时间和超时使用整数毫秒。
 - 路径返回目标平台的规范化绝对路径，身份判断仍只依赖 `documentId`；路径大小写不能作为跨平台协议语义。
 - `null`、字段缺省和空字符串分别在 schema 中定义，不由客户端猜测。
+- **正文只用 `\n` 换行。** 接口读写的正文与宿主交给编辑器的文本一致：宿主载入文件时已把换行统一为 `\n`（`TextFileFormat.Normalize`），保存时再按文件原有换行写回。文件的磁盘换行作为文档元数据 `lineEnding`（`lf`、`crlf` 或 `cr`）返回。写入的正文含 `\r` 时返回 `invalid_params`，不静默转换；否则编辑器（CodeMirror）会自行改写换行并把它报告成一次编辑。`contentHash` 按 `\n` 正文计算。*（实施阶段 0a 新增：`source-stability-check.js` 发现 CodeMirror 会改写 CRLF，待确认。）*
 
 程序接口不能依赖当前语言下的错误文案。JSON-RPC `error.code` 使用稳定整数，`error.data.kind` 使用稳定英文标识，面向人的本地化说明只放在 `error.message`。
 
