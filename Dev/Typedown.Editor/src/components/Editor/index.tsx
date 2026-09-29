@@ -58,19 +58,29 @@ const Editor: React.FC = () => {
 
     // Reports what the page now holds for the edit in flight: the exact source and what the first visual edit would
     // do to it (services/normalization). Without Muya (source mode) nothing is known about the latter.
-    const replyEditApplied = useCallback(() => {
-        const edit = pendingEditRef.current
-        if (!edit) return false
-        pendingEditRef.current = null
+    const describeNormalization = useCallback(() => {
         const source = markdownRef.current ?? ''
         const sourceHash = sha256Hex(source)
         const pending = (window as any).__typedownPendingNormalization?.()
         const normalization = pending
             ? { pendingNormalization: pending.pendingNormalization, sourceHash, normalizedHash: sha256Hex(pending.normalized), reasons: pending.reasons, classifierVersion: pending.classifierVersion }
             : { pendingNormalization: 'unknown', sourceHash, normalizedHash: null, reasons: ['notEvaluated'], classifierVersion }
-        transport.postMessage('DocumentEditApplied', { operationId: edit.operationId, loadId: loadIdRef.current, outcome: 'applied', sourceHash, normalization })
-        return true
+        return { sourceHash, normalization }
     }, [])
+
+    const replyEditApplied = useCallback(() => {
+        const edit = pendingEditRef.current
+        if (!edit) return false
+        pendingEditRef.current = null
+        transport.postMessage('DocumentEditApplied', { operationId: edit.operationId, loadId: loadIdRef.current, outcome: 'applied', ...describeNormalization() })
+        return true
+    }, [describeNormalization])
+
+    // Host -> editor: what the first visual edit would do to the text shown now (document.get's normalization).
+    useEffect(() => transport.addListener<{ token: number }>('QueryNormalization', ({ token }) => {
+        flushRef.current?.()
+        transport.postMessage('NormalizationReport', { token, loadId: loadIdRef.current, ...describeNormalization() })
+    }), [describeNormalization]);
 
     // Called by the child editor right after it applied host content; the next change report completes the handshake.
     const onContentApplied = useCallback(() => {

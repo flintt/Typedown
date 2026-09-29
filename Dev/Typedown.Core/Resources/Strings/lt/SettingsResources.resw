@@ -848,4 +848,10 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>Numatytasis šoninio skydelio puslapis</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>Leisti vietinį automatizavimą</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>Šiame kompiuteryje jūsų paleistos programos gali skaityti ir redaguoti atidarytus dokumentus. Lango pavadinimas rodo, kai kuri nors prisijungusi.</value>
+  </data>
 </root>

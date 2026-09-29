@@ -848,4 +848,10 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>Կողային վահանակի կանխադրված էջ</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>Թույլատրել տեղային ավտոմատացումը</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>Ձեր գործարկած ծրագրերը այս համակարգչում կարող են կարդալ և խմբագրել բաց փաստաթղթերը։ Պատուհանի վերնագիրը ցույց է տալիս, երբ որևէ մեկը միացված է։</value>
+  </data>
 </root>

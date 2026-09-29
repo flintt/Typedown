@@ -848,4 +848,10 @@
   <data name="View.CustomTheme.Refresh" xml:space="preserve">
     <value>Designs neu laden</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>Lokale Automatisierung zulassen</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>Programme, die Sie auf diesem Computer ausführen, können geöffnete Dokumente lesen und bearbeiten. Der Fenstertitel zeigt an, wenn eines verbunden ist.</value>
+  </data>
 </root>

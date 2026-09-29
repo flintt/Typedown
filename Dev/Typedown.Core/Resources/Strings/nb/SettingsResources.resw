@@ -848,4 +848,10 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>Standardside for sidepanel</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>Tillat lokal automatisering</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>Programmer du kjører på denne datamaskinen, kan lese og redigere åpne dokumenter. Vindustittelen viser når et er tilkoblet.</value>
+  </data>
 </root>

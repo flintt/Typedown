@@ -997,4 +997,10 @@
   <data name="Untitled" xml:space="preserve">
     <value>Ongetiteld</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>Outomatisering gekoppel</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0} het {1} geredigeer</value>
+  </data>
 </root>

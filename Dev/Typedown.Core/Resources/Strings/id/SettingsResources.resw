@@ -848,4 +848,10 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>Halaman bawaan panel samping</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>Izinkan otomatisasi lokal</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>Program yang Anda jalankan di komputer ini dapat membaca dan mengedit dokumen yang terbuka. Judul jendela menunjukkan saat ada yang terhubung.</value>
+  </data>
 </root>

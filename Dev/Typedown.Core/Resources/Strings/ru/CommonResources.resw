@@ -997,4 +997,10 @@
   <data name="LastUsedTab" xml:space="preserve">
     <value>Последняя использованная вкладка</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>Автоматизация подключена</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0} изменил(а) {1}</value>
+  </data>
 </root>

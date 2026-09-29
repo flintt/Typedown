@@ -33,6 +33,12 @@ namespace Typedown.Core.ViewModels
 
         public string MainWindowTitle { get; private set; }
 
+        /// <summary>A local automation client is connected (Typedown.Services.Automation): the title says so.</summary>
+        public bool AutomationConnected { get; set; }
+
+        /// <summary>Briefly, which client just changed a document in this window; shown in the title.</summary>
+        public string AutomationNotice { get; set; }
+
         public ElementTheme ActualTheme { get; private set; }
 
         public double CaptionHeight { get; set; } = 32;
@@ -79,6 +85,8 @@ namespace Typedown.Core.ViewModels
             disposables.Add(EditorViewModel.WhenPropertyChanged(nameof(EditorViewModel.DisplaySaved)).Subscribe(_ => UpdateTitle()));
             disposables.Add(FileViewModel.WhenPropertyChanged(nameof(FileViewModel.FileName)).Subscribe(_ => UpdateTitle()));
             disposables.Add(SettingsViewModel.WhenPropertyChanged(nameof(SettingsViewModel.ReadOnly)).Subscribe(_ => UpdateTitle()));
+            disposables.Add(this.WhenPropertyChanged(nameof(AutomationConnected)).Subscribe(_ => UpdateTitle()));
+            disposables.Add(this.WhenPropertyChanged(nameof(AutomationNotice)).Subscribe(_ => UpdateTitle()));
             // The title carries a translated word now, so it has to be rebuilt when the language changes —
             // otherwise it keeps the old one while the menus around it have already changed.
             disposables.Add(SettingsViewModel.WhenPropertyChanged(nameof(SettingsViewModel.Language)).Subscribe(_ => UpdateTitle()));
@@ -138,6 +146,12 @@ namespace Typedown.Core.ViewModels
                 // cannot, and it is what the taskbar shows.
                 if (SettingsViewModel.ReadOnly)
                     title.Append(" \u00b7 " + Locale.GetString("ReadOnlyMode"));
+                // Automation is visible in the title for the same reason: the status bar can be switched off, the
+                // title cannot, and no client can clear it.
+                if (!string.IsNullOrEmpty(AutomationNotice))
+                    title.Append(" \u00b7 " + AutomationNotice);
+                else if (AutomationConnected)
+                    title.Append(" \u00b7 " + Locale.GetString("AutomationConnected"));
                 MainWindowTitle = title.ToString();
             }
             catch

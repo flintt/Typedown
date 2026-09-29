@@ -997,4 +997,10 @@
   <data name="Untitled" xml:space="preserve">
     <value>Sense títol</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>Automatització connectada</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0} ha editat {1}</value>
+  </data>
 </root>

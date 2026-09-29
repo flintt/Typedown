@@ -1013,4 +1013,12 @@
   <data name="FolderSearch.NameMatch" xml:space="preserve">
     <value>(file name matches)</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>Automation connected</value>
+    <comment>窗口标题：自动化已连接</comment>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0} edited {1}</value>
+    <comment>窗口标题：{0} 客户端名，{1} 文档标题</comment>
+  </data>
 </root>

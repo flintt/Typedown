@@ -136,6 +136,11 @@ namespace Typedown.Core.ViewModels
         public bool SpellcheckEnabled { get => GetSettingValue(false); set => SetSettingValue(value); }
         public string SpellcheckLang { get => GetSettingValue(""); set => SetSettingValue(value); }
         public bool KeepRun { get => GetSettingValue(Config.IsPackaged); set => SetSettingValue(value); }
+        /// <summary>
+        /// Lets programs running as this user read and edit open documents through the local automation endpoint
+        /// (docs/automation-api-spec.md). Off by default; turning it off closes the endpoint and every connection.
+        /// </summary>
+        public bool AllowLocalAutomation { get => GetSettingValue(false); set => SetSettingValue(value); }
         public bool AnimationEnable { get => GetSettingValue(true); set => SetSettingValue(value); }
         public bool UseMicaEffect { get => GetSettingValue(Config.IsMicaSupported); set => SetSettingValue(value); }
         public bool UseEditorMicaEffect { get => GetSettingValue(false); set => SetSettingValue(value); }

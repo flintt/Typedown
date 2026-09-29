@@ -997,4 +997,10 @@
   <data name="Untitled" xml:space="preserve">
     <value>தலைப்பில்லாதது</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>தானியக்கம் இணைந்துள்ளது</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0} {1} ஐத் திருத்தியது</value>
+  </data>
 </root>

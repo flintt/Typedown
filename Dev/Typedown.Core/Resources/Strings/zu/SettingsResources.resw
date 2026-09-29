@@ -848,4 +848,10 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>Ikhasi elizenzakalelayo lephaneli eseceleni</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>Vumela ukuzenzakalela kwasendaweni</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>Izinhlelo ozisebenzisa kule khompyutha zingafunda futhi zihlele amadokhumenti avuliwe. Isihloko sewindi siyabonisa uma kukhona oxhunyiwe.</value>
+  </data>
 </root>

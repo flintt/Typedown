@@ -94,6 +94,7 @@ namespace Typedown.Core.ViewModels
             EventCenter.GetObservable<EditorEventArgs>("ContentFlushed").Subscribe(x => OnContentFlushed(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("FileLoaded").Subscribe(x => OnFileLoaded(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("DocumentEditApplied").Subscribe(x => OnDocumentEditApplied(x.Args));
+            EventCenter.GetObservable<EditorEventArgs>("NormalizationReport").Subscribe(x => OnNormalizationReport(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("CursorChange").Subscribe(x => OnCursorChange(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("OnScroll").Subscribe(x => OnScroll(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("SelectionChange").Subscribe(x => OnSelectionChange(x.Args));
@@ -536,6 +537,41 @@ namespace Typedown.Core.ViewModels
             var id = arg["loadId"];
             var sameLoad = id != null && id.Type == JTokenType.Integer && id.Value<int>() == entry.loadId && entry.loadId == LoadId;
             entry.waiter.TrySetResult(sameLoad ? arg : new JObject { ["operationId"] = operationId, ["outcome"] = "failed", ["reason"] = "superseded" });
+        }
+
+        private int normalizationToken;
+        private readonly Dictionary<int, TaskCompletionSource<JToken>> normalizationWaiters = new();
+
+        /// <summary>
+        /// Asks the page what the first visual edit would do to the text it shows (automation document.get); null when
+        /// it did not answer in time or answered for another load.
+        /// </summary>
+        public async Task<JToken> QueryNormalizationAsync(int timeoutMs)
+        {
+            if (MarkdownEditor == null || !FileLoaded) return null;
+            var token = ++normalizationToken;
+            var loadId = LoadId;
+            var waiter = new TaskCompletionSource<JToken>(TaskCreationOptions.RunContinuationsAsynchronously);
+            normalizationWaiters[token] = waiter;
+            try
+            {
+                MarkdownEditor.PostMessage("QueryNormalization", new { token });
+                var finished = await Task.WhenAny(waiter.Task, Task.Delay(timeoutMs));
+                if (finished != waiter.Task) return null;
+                var reply = waiter.Task.Result;
+                var id = reply?["loadId"];
+                return id != null && id.Type == JTokenType.Integer && id.Value<int>() == loadId && loadId == LoadId ? reply : null;
+            }
+            finally
+            {
+                normalizationWaiters.Remove(token);
+            }
+        }
+
+        private void OnNormalizationReport(JToken arg)
+        {
+            var token = arg?["token"]?.Value<int?>() ?? 0;
+            if (normalizationWaiters.TryGetValue(token, out var waiter)) waiter.TrySetResult(arg);
         }
 
         /// <summary>

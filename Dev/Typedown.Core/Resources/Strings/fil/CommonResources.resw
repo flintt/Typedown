@@ -997,4 +997,10 @@
   <data name="Untitled" xml:space="preserve">
     <value>Walang pamagat</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>Nakakonekta ang automation</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>In-edit ng {0} ang {1}</value>
+  </data>
 </root>

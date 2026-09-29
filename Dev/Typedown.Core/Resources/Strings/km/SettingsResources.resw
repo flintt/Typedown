@@ -848,4 +848,10 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>ទំព័រលំនាំដើមនៃផ្ទាំងចំហៀង</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>អនុញ្ញាតស្វ័យប្រវត្តិកម្មមូលដ្ឋាន</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>កម្មវិធីដែលអ្នកដំណើរការលើកុំព្យូទ័រនេះអាចអាន និងកែសម្រួលឯកសារដែលកំពុងបើក។ ចំណងជើងបង្អួចបង្ហាញពេលមានការតភ្ជាប់។</value>
+  </data>
 </root>

@@ -132,6 +132,25 @@ namespace Typedown.Automation.Tests
             Assert.ThrowsAny<Exception>(() => late.Connect(300));
         }
 
+        private sealed class BrokenListener : IConnectionListener
+        {
+            public Task<Stream> AcceptAsync(CancellationToken cancellationToken) => throw new UnauthorizedAccessException("the name is taken");
+            public void Dispose() { }
+        }
+
+        [Fact]
+        public async Task A_listener_that_cannot_listen_is_reported_not_retried_forever()
+        {
+            var info = new ServerInfo();
+            var server = new AutomationServer(() => new BrokenListener(), () => new AutomationSession(info, new MethodTable(BuildTypes.Application)), info.MaxMessageBytes);
+            var failed = new TaskCompletionSource<Exception>();
+            server.ListenerFailed += e => failed.TrySetResult(e);
+            server.Start();
+            var error = await failed.Task.WaitAsync(TimeSpan.FromSeconds(10));
+            Assert.IsType<UnauthorizedAccessException>(error);
+            await server.StopAsync();
+        }
+
         [Fact]
         public void Endpoint_names_separate_users_and_the_test_host()
         {

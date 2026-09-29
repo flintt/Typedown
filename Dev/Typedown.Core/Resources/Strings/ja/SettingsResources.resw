@@ -848,4 +848,10 @@
   <data name="View.CustomTheme.Refresh" xml:space="preserve">
     <value>テーマを再読み込み</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>ローカル自動化を許可</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>このコンピューターで実行するプログラムが、開いている文書を読み取り、編集できます。接続中はウィンドウのタイトルに表示されます。</value>
+  </data>
 </root>

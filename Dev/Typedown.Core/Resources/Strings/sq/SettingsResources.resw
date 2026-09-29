@@ -848,4 +848,10 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>Faqja e parazgjedhur e panelit anësor</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>Lejo automatizimin lokal</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>Programet që ekzekutoni në këtë kompjuter mund të lexojnë dhe redaktojnë dokumentet e hapura. Titulli i dritares tregon kur është lidhur ndonjë.</value>
+  </data>
 </root>

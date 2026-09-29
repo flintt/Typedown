@@ -848,4 +848,10 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>გვერდითი პანელის ნაგულისხმევი გვერდი</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>ლოკალური ავტომატიზაციის დაშვება</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>ამ კომპიუტერზე თქვენ მიერ გაშვებულ პროგრამებს შეუძლიათ ღია დოკუმენტების წაკითხვა და რედაქტირება. ფანჯრის სათაური აჩვენებს, როცა რომელიმე დაკავშირებულია.</value>
+  </data>
 </root>

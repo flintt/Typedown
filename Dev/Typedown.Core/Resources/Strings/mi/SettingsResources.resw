@@ -848,4 +848,10 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>Whārangi taunoa o te paepae taha</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>Tukua te aunoatanga ā-rohe</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>Ka taea e ngā hōtaka e whakahaerehia ana e koe i tēnei rorohiko te pānui me te whakatika i ngā tuhinga tuwhera. Ka whakaatu te taitara matapihi ina hono tētahi.</value>
+  </data>
 </root>

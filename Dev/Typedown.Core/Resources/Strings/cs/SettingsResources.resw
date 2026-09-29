@@ -848,4 +848,10 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>Výchozí stránka bočního panelu</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>Povolit místní automatizaci</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>Programy, které na tomto počítači spouštíte, mohou číst a upravovat otevřené dokumenty. Název okna ukazuje, kdy je některý připojen.</value>
+  </data>
 </root>

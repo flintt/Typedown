@@ -848,4 +848,10 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>ਪਾਸੇ ਵਾਲੇ ਪੈਨਲ ਦਾ ਡਿਫੌਲਟ ਪੰਨਾ</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>ਸਥਾਨਕ ਆਟੋਮੇਸ਼ਨ ਦੀ ਇਜਾਜ਼ਤ ਦਿਓ</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>ਇਸ ਕੰਪਿਊਟਰ 'ਤੇ ਤੁਹਾਡੇ ਚਲਾਏ ਪ੍ਰੋਗਰਾਮ ਖੁੱਲ੍ਹੇ ਦਸਤਾਵੇਜ਼ ਪੜ੍ਹ ਅਤੇ ਸੋਧ ਸਕਦੇ ਹਨ। ਕਿਸੇ ਦੇ ਜੁੜੇ ਹੋਣ 'ਤੇ ਵਿੰਡੋ ਸਿਰਲੇਖ ਵਿੱਚ ਦਿਖਾਇਆ ਜਾਂਦਾ ਹੈ।</value>
+  </data>
 </root>

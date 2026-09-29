@@ -997,4 +997,10 @@
   <data name="Untitled" xml:space="preserve">
     <value>Be pavadinimo</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>Automatizavimas prijungtas</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0} redagavo {1}</value>
+  </data>
 </root>

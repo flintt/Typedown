@@ -848,4 +848,10 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>Бүйір тақтаның әдепкі беті</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>Жергілікті автоматтандыруға рұқсат беру</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>Осы компьютерде сіз іске қосатын бағдарламалар ашық құжаттарды оқып, өңдей алады. Біреуі қосылғанда терезе тақырыбында көрсетіледі.</value>
+  </data>
 </root>

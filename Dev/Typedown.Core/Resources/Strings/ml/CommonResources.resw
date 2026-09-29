@@ -997,4 +997,10 @@
   <data name="Untitled" xml:space="preserve">
     <value>തലക്കെട്ടില്ലാത്തത്</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>ഓട്ടോമേഷൻ ബന്ധിപ്പിച്ചു</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0} {1} എഡിറ്റ് ചെയ്തു</value>
+  </data>
 </root>

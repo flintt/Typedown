@@ -848,4 +848,10 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>Sivupaneelin oletussivu</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>Salli paikallinen automaatio</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>Tällä tietokoneella suorittamasi ohjelmat voivat lukea ja muokata avoimia asiakirjoja. Ikkunan otsikko näyttää, kun jokin on yhdistetty.</value>
+  </data>
 </root>

@@ -997,4 +997,10 @@
   <data name="LastUsedTab" xml:space="preserve">
     <value>Dernier onglet utilisé</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>Automatisation connectée</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0} a modifié {1}</value>
+  </data>
 </root>

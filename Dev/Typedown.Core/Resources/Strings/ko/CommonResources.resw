@@ -997,4 +997,10 @@
   <data name="LastUsedTab" xml:space="preserve">
     <value>마지막으로 사용한 탭</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>자동화 연결됨</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0}이(가) {1}을(를) 편집함</value>
+  </data>
 </root>

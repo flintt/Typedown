@@ -848,4 +848,10 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>Külgpaani vaikeleht</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>Luba kohalik automatiseerimine</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>Programmid, mida selles arvutis käivitate, saavad avatud dokumente lugeda ja muuta. Akna pealkiri näitab, kui mõni on ühendatud.</value>
+  </data>
 </root>

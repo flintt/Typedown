@@ -456,6 +456,9 @@ namespace Typedown.Core.ViewModels
             }
         }
 
+        /// <summary>A new untitled document in this window (a new tab, or the pristine blank one), as the New command.</summary>
+        public Task NewDocumentAsync() => NewFileFun();
+
         /// <summary>
         /// Saves the active document to its existing path without any dialog (the automation API's save): false when
         /// it has no path or the write was refused or failed. Follows the auto-save rules, so a file decoded lossily

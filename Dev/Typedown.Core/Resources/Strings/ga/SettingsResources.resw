@@ -848,4 +848,10 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>Leathanach réamhshocraithe an phána taoibh</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>Ceadaigh uathoibriú áitiúil</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>Is féidir le cláir a ritheann tú ar an ríomhaire seo doiciméid oscailte a léamh agus a chur in eagar. Taispeánann teideal na fuinneoige nuair atá ceann ceangailte.</value>
+  </data>
 </root>

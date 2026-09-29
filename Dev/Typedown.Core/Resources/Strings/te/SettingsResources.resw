@@ -848,4 +848,10 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>ప్రక్క పలక డిఫాల్ట్ పేజీ</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>స్థానిక ఆటోమేషన్‌ను అనుమతించు</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>ఈ కంప్యూటర్‌లో మీరు నడిపే ప్రోగ్రామ్‌లు తెరిచిన పత్రాలను చదవగలవు, సవరించగలవు. ఏదైనా కనెక్ట్ అయినప్పుడు విండో శీర్షికలో చూపబడుతుంది.</value>
+  </data>
 </root>

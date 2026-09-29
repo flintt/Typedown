@@ -422,6 +422,7 @@
     <Compile Include="Services\AutoBackup.cs" />
     <Compile Include="Services\AutomationWindows.cs" />
     <Compile Include="Services\AutomationDocuments.cs" />
+    <Compile Include="Services\WindowsAutomationHost.cs" />
     <Compile Include="Services\JsonSettingsStore.cs" />
     <Compile Include="Services\SettingsScope.cs" />
     <Compile Include="Services\EventCenter.cs" />

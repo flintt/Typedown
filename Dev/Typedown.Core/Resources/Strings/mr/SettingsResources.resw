@@ -848,4 +848,10 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>बाजूच्या पट्टीचे डीफॉल्ट पान</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>स्थानिक स्वयंचलनास अनुमती द्या</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>या संगणकावर तुम्ही चालवलेले प्रोग्राम उघडलेले दस्तऐवज वाचू आणि संपादित करू शकतात. एखादा जोडलेला असताना विंडो शीर्षकात दिसते.</value>
+  </data>
 </root>

@@ -1012,4 +1012,10 @@
   <data name="LastUsedTab" xml:space="preserve">
     <value>上次使用的分頁</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>自動化已連線</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0} 編輯了 {1}</value>
+  </data>
 </root>

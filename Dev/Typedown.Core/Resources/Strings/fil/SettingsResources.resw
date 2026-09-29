@@ -848,4 +848,10 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>Default na pahina ng side pane</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>Payagan ang lokal na automation</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>Ang mga program na pinapatakbo mo sa computer na ito ay maaaring magbasa at mag-edit ng mga bukas na dokumento. Ipinapakita ng pamagat ng window kapag may nakakonekta.</value>
+  </data>
 </root>

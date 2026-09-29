@@ -53,6 +53,12 @@ namespace Typedown.Automation
         /// <summary>Raised on the thread that noticed the change; handlers marshal to their UI themselves.</summary>
         public event Action<AutomationActivity>? ActivityChanged;
 
+        /// <summary>
+        /// The listener failed for good (for example another process already holds the endpoint name): the service
+        /// stops listening and says why. Connections already open are not affected.
+        /// </summary>
+        public event Action<Exception>? ListenerFailed;
+
         public bool IsRunning
         {
             get { lock (gate) return stopping != null; }
@@ -129,6 +135,11 @@ namespace Typedown.Automation
                 {
                     // A client that went away while connecting; keep listening.
                     continue;
+                }
+                catch (Exception e)
+                {
+                    try { ListenerFailed?.Invoke(e); } catch { }
+                    break;
                 }
                 bool full;
                 lock (gate) full = connections.Count >= maxConnections;

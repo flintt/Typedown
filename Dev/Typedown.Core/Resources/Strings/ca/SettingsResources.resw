@@ -848,4 +848,10 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>Pàgina predeterminada del tauler lateral</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>Permet l'automatització local</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>Els programes que executeu en aquest ordinador poden llegir i editar els documents oberts. El títol de la finestra indica quan n'hi ha un de connectat.</value>
+  </data>
 </root>

@@ -997,4 +997,10 @@
   <data name="Untitled" xml:space="preserve">
     <value>Án titils</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>Sjálfvirkni tengd</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0} breytti {1}</value>
+  </data>
 </root>

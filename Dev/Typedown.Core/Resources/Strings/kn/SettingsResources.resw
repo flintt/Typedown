@@ -848,4 +848,10 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>ಪಕ್ಕದ ಫಲಕದ ಪೂರ್ವನಿಯೋಜಿತ ಪುಟ</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>ಸ್ಥಳೀಯ ಸ್ವಯಂಚಾಲನೆಯನ್ನು ಅನುಮತಿಸಿ</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>ಈ ಕಂಪ್ಯೂಟರ್‌ನಲ್ಲಿ ನೀವು ಚಲಾಯಿಸುವ ಪ್ರೋಗ್ರಾಂಗಳು ತೆರೆದ ದಾಖಲೆಗಳನ್ನು ಓದಬಹುದು ಮತ್ತು ಸಂಪಾದಿಸಬಹುದು. ಯಾವುದಾದರೂ ಸಂಪರ್ಕಗೊಂಡಾಗ ವಿಂಡೋ ಶೀರ್ಷಿಕೆಯಲ್ಲಿ ತೋರಿಸಲಾಗುತ್ತದೆ.</value>
+  </data>
 </root>

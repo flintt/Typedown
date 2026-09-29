@@ -997,4 +997,10 @@
   <data name="LastUsedTab" xml:space="preserve">
     <value>Ultima scheda usata</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>Automazione connessa</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0} ha modificato {1}</value>
+  </data>
 </root>

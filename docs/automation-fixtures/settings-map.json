@@ -156,6 +156,12 @@
   ],
   "notExposed": [
     {
+      "reason": "security: the automation switch itself; only the person at the settings page turns automation on or off",
+      "windows": [
+        "AllowLocalAutomation"
+      ]
+    },
+    {
       "reason": "windowLocal: layout or mode of one window (Core/Services/SettingsScope.cs); becomes a view command, not a setting",
       "windows": [
         "StartupPlacement",

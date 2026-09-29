@@ -883,4 +883,12 @@
   <data name="View.CustomTheme.Refresh" xml:space="preserve">
     <value>Reload themes</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>Allow local automation</value>
+    <comment>通用/允许本机自动化</comment>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>Programs you run on this computer can read and edit open documents. The window title shows when one is connected.</value>
+    <comment>通用/允许本机自动化说明</comment>
+  </data>
 </root>

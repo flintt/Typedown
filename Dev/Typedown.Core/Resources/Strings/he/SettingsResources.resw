@@ -848,4 +848,10 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>עמוד ברירת המחדל של הלוח הצדדי</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>התרת אוטומציה מקומית</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>תוכניות שאתה מפעיל במחשב זה יכולות לקרוא ולערוך מסמכים פתוחים. כותרת החלון מציינת כשתוכנית מחוברת.</value>
+  </data>
 </root>

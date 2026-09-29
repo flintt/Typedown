@@ -997,4 +997,10 @@
   <data name="Untitled" xml:space="preserve">
     <value>Անվերնագիր</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>Ավտոմատացումը միացված է</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0}-ը խմբագրեց {1}-ը</value>
+  </data>
 </root>

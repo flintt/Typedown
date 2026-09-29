@@ -997,4 +997,10 @@
   <data name="LastUsedTab" xml:space="preserve">
     <value>Última pestaña usada</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>Automatización conectada</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0} editó {1}</value>
+  </data>
 </root>

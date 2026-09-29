@@ -883,4 +883,10 @@
   <data name="View.CustomTheme.Folder" xml:space="preserve">
     <value>主题是这个文件夹里的 CSS 文件，写法见随附文档。</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>允许本机自动化</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>本机上以你的身份运行的程序可以读取和编辑已打开的文档。有程序连接时，窗口标题会显示。</value>
+  </data>
 </root>

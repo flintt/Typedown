@@ -997,4 +997,10 @@
   <data name="Untitled" xml:space="preserve">
     <value>శీర్షిక లేనిది</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>ఆటోమేషన్ కనెక్ట్ అయింది</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0} {1}ని సవరించింది</value>
+  </data>
 </root>

@@ -848,4 +848,10 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>സൈഡ് പാളിയുടെ സ്ഥിരസ്ഥിതി പേജ്</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>പ്രാദേശിക ഓട്ടോമേഷൻ അനുവദിക്കുക</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>ഈ കമ്പ്യൂട്ടറിൽ നിങ്ങൾ പ്രവർത്തിപ്പിക്കുന്ന പ്രോഗ്രാമുകൾക്ക് തുറന്ന പ്രമാണങ്ങൾ വായിക്കാനും എഡിറ്റ് ചെയ്യാനും കഴിയും. ഏതെങ്കിലും ബന്ധിപ്പിച്ചിരിക്കുമ്പോൾ ജാലക ശീർഷകത്തിൽ കാണിക്കും.</value>
+  </data>
 </root>

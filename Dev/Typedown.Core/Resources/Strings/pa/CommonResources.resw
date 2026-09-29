@@ -997,4 +997,10 @@
   <data name="Untitled" xml:space="preserve">
     <value>ਬਿਨਾਂ ਸਿਰਲੇਖ</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>ਆਟੋਮੇਸ਼ਨ ਜੁੜਿਆ</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0} ਨੇ {1} ਸੋਧਿਆ</value>
+  </data>
 </root>

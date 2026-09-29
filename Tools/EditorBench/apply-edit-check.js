@@ -51,6 +51,9 @@ const sha = text => crypto.createHash('sha256').update(text, 'utf8').digest('hex
     ({ reply } = await apply(typed, '|a|b|\n|-|-|\n|1|2|\n'));
     check(reply.outcome === 'applied' && reply.normalization.pendingNormalization === 'unknown', `a formatting difference is unknown (${reply.normalization.pendingNormalization})`);
     check(await flush() === '|a|b|\n|-|-|\n|1|2|\n', 'the source is kept exactly, not the normalized form');
+    const report = await page.evaluate(() => { delete window.__last.NormalizationReport; window.__deliver('QueryNormalization', { token: 7 }); return window.__last.NormalizationReport; });
+    check(report?.token === 7 && report.normalization.pendingNormalization === reply.normalization.pendingNormalization && report.sourceHash === reply.sourceHash,
+      `QueryNormalization reports what the write reported (${report?.normalization?.pendingNormalization})`);
 
     ({ reply } = await apply('|a|b|\n|-|-|\n|1|2|\n', '```ts {title="x.ts"}\nconst a = 1;\n```\n'));
     check(reply.normalization.pendingNormalization === 'unsafe' && reply.normalization.reasons.includes('fence-lost'), `fence attributes are unsafe (${reply.normalization.reasons})`);

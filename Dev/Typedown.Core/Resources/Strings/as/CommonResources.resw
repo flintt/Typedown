@@ -997,4 +997,10 @@
   <data name="Untitled" xml:space="preserve">
     <value>শিৰোনামহীন</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>স্বয়ংক্ৰিয়কৰণ সংযুক্ত</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0}এ {1} সম্পাদনা কৰিলে</value>
+  </data>
 </root>

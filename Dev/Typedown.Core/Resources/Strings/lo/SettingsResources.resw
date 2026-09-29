@@ -848,4 +848,10 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>ໜ້າເລີ່ມຕົ້ນຂອງແຖບຂ້າງ</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>ອະນຸຍາດລະບົບອັດຕະໂນມັດພາຍໃນ</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>ໂປຣແກຣມທີ່ທ່ານແລ່ນໃນຄອມພິວເຕີນີ້ສາມາດອ່ານ ແລະ ແກ້ໄຂເອກະສານທີ່ເປີດຢູ່ໄດ້. ຫົວຂໍ້ໜ້າຕ່າງຈະສະແດງເມື່ອມີການເຊື່ອມຕໍ່.</value>
+  </data>
 </root>

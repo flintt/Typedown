@@ -848,4 +848,10 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>ପାର୍ଶ୍ୱ ପ୍ୟାନେଲ୍‌ର ଡିଫଲ୍ଟ ପୃଷ୍ଠା</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>ସ୍ଥାନୀୟ ସ୍ୱୟଂଚାଳନକୁ ଅନୁମତି ଦିଅନ୍ତୁ</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>ଏହି କମ୍ପ୍ୟୁଟରରେ ଆପଣ ଚଲାଉଥିବା ପ୍ରୋଗ୍ରାମ ଖୋଲା ଡକ୍ୟୁମେଣ୍ଟ ପଢ଼ି ଓ ସମ୍ପାଦନ କରିପାରିବ। କୌଣସିଟି ସଂଯୁକ୍ତ ହେଲେ ୱିଣ୍ଡୋ ଶୀର୍ଷକରେ ଦେଖାଯାଏ।</value>
+  </data>
 </root>

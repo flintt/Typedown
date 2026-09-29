@@ -997,4 +997,10 @@
   <data name="Untitled" xml:space="preserve">
     <value>Izenbururik gabe</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>Automatizazioa konektatuta</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0}(e)k {1} editatu du</value>
+  </data>
 </root>

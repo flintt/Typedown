@@ -939,4 +939,10 @@
   <data name="LastUsedTab" xml:space="preserve">
     <value>Última guia usada</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>Automação conectada</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0} editou {1}</value>
+  </data>
 </root>

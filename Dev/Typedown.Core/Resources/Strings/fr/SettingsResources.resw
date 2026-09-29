@@ -848,4 +848,10 @@
   <data name="View.CustomTheme.Refresh" xml:space="preserve">
     <value>Recharger les thèmes</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>Autoriser l'automatisation locale</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>Les programmes que vous exécutez sur cet ordinateur peuvent lire et modifier les documents ouverts. Le titre de la fenêtre indique quand l'un d'eux est connecté.</value>
+  </data>
 </root>

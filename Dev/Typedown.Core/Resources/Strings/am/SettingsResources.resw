@@ -848,4 +848,10 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>የጎን ፓነል ነባሪ ገጽ</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>አካባቢያዊ ራስ-ሰር አሰራርን ፍቀድ</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>በዚህ ኮምፒውተር ላይ የሚያሄዷቸው ፕሮግራሞች የተከፈቱ ሰነዶችን ማንበብ እና ማርትዕ ይችላሉ። አንዱ ሲገናኝ የመስኮቱ ርዕስ ያሳያል።</value>
+  </data>
 </root>

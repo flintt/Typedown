@@ -997,4 +997,10 @@
   <data name="Untitled" xml:space="preserve">
     <value>بلا عنوان</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>خودکاری منسلک ہے</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0} نے {1} میں ترمیم کی</value>
+  </data>
 </root>

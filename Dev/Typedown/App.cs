@@ -75,6 +75,8 @@ namespace Typedown
             var window = new MainWindow();
             window.Show(ShowWindowCommand.SW_HIDE);
             ListenPipe(window.Dispatcher);
+            // Local automation: nothing listens until the setting is turned on (docs/automation-api-spec.md, 5.1).
+            Services.Automation.AutomationService.Initialize();
         }
 
         private static async void ListenPipe(CoreDispatcher dispatcher)

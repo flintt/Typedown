@@ -848,4 +848,10 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>Standaardpagina zijpaneel</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>Lokale automatisering toestaan</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>Programma's die u op deze computer uitvoert, kunnen geopende documenten lezen en bewerken. De venstertitel toont wanneer er een verbonden is.</value>
+  </data>
 </root>
