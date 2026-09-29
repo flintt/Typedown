@@ -15,6 +15,20 @@ namespace Typedown.Core.Controls
         /// Paints this bar from a custom theme. Null puts the colours of the built-in theme back; the inner
         /// grid carries the visible background, so setting the control's own is not enough.
         /// </summary>
+        /// <summary>
+        /// Turns the compact menu bar's window-drag areas on or off. Each drag area is a separate native window laid
+        /// over its element, and it stays where it was when the element is merely collapsed: in full screen the menu
+        /// bar is hidden, the tabs move up into its place, and the drag window left on top of them took every click
+        /// as a title-bar drag - an invisible thing covering the tabs. Full screen has no window to drag, so the areas
+        /// are detached (their native windows destroyed) while it lasts.
+        /// </summary>
+        public void SetDragEnabled(bool enabled)
+        {
+            foreach (var bar in new Windows.UI.Xaml.FrameworkElement[] { LeftDragBar, RightDragBar })
+                if (bar != null && Typedown.XamlUI.XamlWindow.GetDrag(bar) != enabled)
+                    Typedown.XamlUI.XamlWindow.SetDrag(bar, enabled);
+        }
+
         public void ApplyThemeBrushes(Windows.UI.Xaml.Media.Brush background, Windows.UI.Xaml.Media.Brush foreground)
         {
             if (RootGrid != null)

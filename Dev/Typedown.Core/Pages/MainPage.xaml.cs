@@ -87,6 +87,7 @@ namespace Typedown.Core.Pages
             Grid.SetRow(MenuBarHost, 0);
             MenuBarHost.VerticalAlignment = VerticalAlignment.Stretch;
             MenuBarHost.Background = isFullScreen ? GetOpaqueBackground() : null;
+            MenuBarHost.SetDragEnabled(!isFullScreen);
             // While the bar is out the edge strip would only cover the top of its menus.
             if (FullScreenRevealStrip != null) FullScreenRevealStrip.IsHitTestVisible = !menuBarRevealed;
         }
