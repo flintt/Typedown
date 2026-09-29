@@ -8,4 +8,8 @@
     <Nullable>enable</Nullable>
     <RootNamespace>Typedown.Automation</RootNamespace>
   </PropertyGroup>
+  <ItemGroup>
+    <!-- The version Typedown.Core already uses. -->
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
 </Project>
