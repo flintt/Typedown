@@ -93,7 +93,7 @@ namespace Typedown.Utilities
                 commandLineArgs.Add("--remote-debugging-port=9222");
 #endif
                 var options = new CoreWebView2EnvironmentOptions(string.Join(" ", commandLineArgs));
-                var userDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), Core.Config.AppName, "WebView2");
+                var userDataFolder = Path.Combine(Core.Config.LocalAppDataFolder, "WebView2");
                 Directory.CreateDirectory(userDataFolder);
                 coreWebView2EnvironmentTask = CoreWebView2Environment.CreateAsync(null, userDataFolder, options);
                 var environment = await coreWebView2EnvironmentTask;

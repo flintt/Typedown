@@ -56,6 +56,8 @@ namespace Typedown.Core
 
         private static string ResolveLocalFolderPath()
         {
+            if (IsAutomationTestHost)
+                return Directory.CreateDirectory(Path.Combine(AutomationTestRoot, "data")).FullName;
             if (IsPackaged)
             {
                 try { return ApplicationData.Current.LocalFolder.Path; }
@@ -68,6 +70,50 @@ namespace Typedown.Core
         }
 
         public static string AppName => "Typedown";
+
+        /// <summary>
+        /// True in the automation test host build (docs/automation-api-analysis-plan.md, 10.7): everything it keeps -
+        /// settings, session, backups, logs, WebView2 data - lives under <see cref="AutomationTestRoot"/>, and its
+        /// single-instance names differ, so it never reads or writes the everyday Typedown's data.
+        /// </summary>
+        public static bool IsAutomationTestHost { get; private set; }
+
+        public static string AutomationTestRoot { get; private set; }
+
+        public const string AutomationTestRootArgument = "--automation-test-root";
+
+        /// <summary>Called first thing in Main by the test host build, before anything names a file.</summary>
+        public static void UseAutomationTestHost(string root)
+        {
+            IsAutomationTestHost = true;
+            AutomationTestRoot = Directory.CreateDirectory(root).FullName;
+            localFolderPath = null;
+        }
+
+        /// <summary>
+        /// Base of the single-instance mutex and hand-over pipe names: the application's own names, or for the test host
+        /// names tied to its data root, so two test runs and the everyday instance never answer for each other.
+        /// </summary>
+        public static string InstanceName => IsAutomationTestHost
+            ? "Typedown.AutomationTestHost." + Convert.ToString((uint)AutomationTestRoot.ToLowerInvariant().GetHashCode() ^ (uint)AutomationTestRoot.Length, 16)
+            : "Typedown.App";
+
+        /// <summary>Folder for logs and browser data beside the settings folder.</summary>
+        public static string LocalAppDataFolder => IsAutomationTestHost
+            ? AutomationTestRoot
+            : Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), AppName);
+
+        /// <summary>The command line without the test host's own arguments, which are not files to open.</summary>
+        public static string[] StripHostArguments(string[] args)
+        {
+            var list = new System.Collections.Generic.List<string>();
+            for (var i = 0; i < args.Length; i++)
+            {
+                if (args[i] == AutomationTestRootArgument) { i++; continue; }
+                list.Add(args[i]);
+            }
+            return list.ToArray();
+        }
 
         public static bool IsPackaged { get; private set; }
 

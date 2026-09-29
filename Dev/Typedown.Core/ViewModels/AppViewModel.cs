@@ -40,7 +40,7 @@ namespace Typedown.Core.ViewModels
 
         public IMarkdownEditor MarkdownEditor => ServiceProvider.GetService<IMarkdownEditor>();
 
-        public string[] CommandLineArgs { get; set; } = Environment.GetCommandLineArgs();
+        public string[] CommandLineArgs { get; set; } = Config.StripHostArguments(Environment.GetCommandLineArgs());
 
         public IntPtr MainWindow { get; set; }
 

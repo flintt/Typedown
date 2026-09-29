@@ -39,7 +39,10 @@ param(
     # What to show in About instead of "local.<commit>"; empty keeps whatever the file already says.
     [string]$Label,
     # Rebuilds the editor bundle first (needs node and Dev\Typedown.Editor\node_modules).
-    [switch]$BuildEditor
+    [switch]$BuildEditor,
+    # Builds the automation test host instead (the app with test.* methods and edit barriers, its own data root) into
+    # Dev\Typedown\bin\AutomationTestHost. Implies -NoInstaller: a test host is never packaged.
+    [switch]$AutomationTestHost
 )
 
 $ErrorActionPreference = 'Stop'
@@ -149,9 +152,11 @@ if (-not $SkipBuild) {
         Set-Content $configPath $stamped -Encoding utf8 -NoNewline
         # /restore re-evaluates the project after generating NuGet imports. Running
         # Restore,Build as targets in one evaluation misses those imports on a fresh checkout.
+        $hostArgs = @()
+        if ($AutomationTestHost) { $hostArgs = @('/p:AutomationTestHost=true') }
         & $msbuild 'Dev\Typedown\Typedown.csproj' /restore /t:Build /m /v:m `
             /p:Configuration=$Configuration /p:Platform=$Platform `
-            /p:ManifestTool=$($sdk.ManifestTool) /p:MakePri=$($sdk.MakePri)
+            /p:ManifestTool=$($sdk.ManifestTool) /p:MakePri=$($sdk.MakePri) @hostArgs
         $buildFailed = $LASTEXITCODE -ne 0
     }
     finally {
@@ -161,6 +166,12 @@ if (-not $SkipBuild) {
 }
 
 $rid = if ($Platform -eq 'ARM64') { 'win10-arm64' } else { 'win10-x64' }
+if ($AutomationTestHost) {
+    $published = Join-Path $repo "Dev\Typedown\bin\AutomationTestHost\$Platform\$Configuration\netcoreapp3.1\$rid"
+    if (-not (Test-Path (Join-Path $published 'automation-test-host.marker'))) { throw "no test host marker in $published" }
+    Write-Host "Automation test host: $published"
+    return
+}
 $published = Join-Path $repo "Dev\Typedown\bin\$Platform\$Configuration\netcoreapp3.1\$rid"
 if (-not (Test-Path (Join-Path $published 'Typedown.exe'))) { throw "Typedown.exe not found in $published" }
 Write-Host "App: $published"

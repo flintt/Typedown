@@ -106,4 +106,15 @@
 		<None Include="$(PkgTypedown_XamlUI)\lib\netstandard2.0\Typedown.XamlUI.pri" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Link="Typedown.XamlUI.pri" />
 	</ItemGroup>
 	
+	<!-- The automation test host (docs/automation-api-analysis-plan.md, 10.7): the same application built with
+	     /p:AutomationTestHost=true into its own folder, with the edit barriers and test.* methods, its own data root and
+	     single-instance names, and a marker file. Never packaged: build-local.ps1 and CI refuse it. -->
+	<PropertyGroup Condition="'$(AutomationTestHost)' == 'true'">
+		<DefineConstants>$(DefineConstants);AUTOMATION_TEST_HOST</DefineConstants>
+		<OutputPath>bin\AutomationTestHost\$(Platform)\$(Configuration)\</OutputPath>
+	</PropertyGroup>
+	<ItemGroup Condition="'$(AutomationTestHost)' == 'true'">
+		<ProjectReference Include="..\Typedown.Automation.TestHost\Typedown.Automation.TestHost.csproj" />
+		<None Update="automation-test-host.marker" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+	</ItemGroup>
 </Project>

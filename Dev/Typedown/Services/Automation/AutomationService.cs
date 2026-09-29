@@ -29,19 +29,26 @@ namespace Typedown.Services.Automation
         {
             if (server != null) return;
             var sid = SecurePipeListener.CurrentUserSid();
+            var buildType = Config.IsAutomationTestHost ? BuildTypes.AutomationTestHost : BuildTypes.Application;
             var info = new ServerInfo
             {
                 Version = Core.Controls.AboutApp.GetAppVersion(),
                 Commit = Config.TestBuild ?? "",
                 Platform = "windows",
-                BuildType = BuildTypes.Application,
+                BuildType = buildType,
                 MaxMessageBytes = 32L * 1024 * 1024,
             };
-            var host = new WindowsAutomationHost(info.Version);
-            var name = AutomationEndpoint.PipeName(BuildTypes.Application, sid);
+            var barriers = TestHostHooks.Barriers;
+            var host = new WindowsAutomationHost(info.Version, barriers);
+            var name = EndpointName(buildType, sid);
             server = new AutomationServer(
                 () => new SecurePipeListener(name, sid),
-                () => new AutomationSession(info, DocumentMethods.AddTo(new MethodTable(BuildTypes.Application), host, info.InstanceId, OnWrite)),
+                () =>
+                {
+                    var methods = DocumentMethods.AddTo(new MethodTable(buildType), host, info.InstanceId, OnWrite);
+                    TestHostHooks.AddMethods(methods);
+                    return new AutomationSession(info, methods);
+                },
                 info.MaxMessageBytes);
             server.ActivityChanged += OnActivityChanged;
             server.ListenerFailed += e => Log.Debug($"automation: the endpoint could not listen: {e.Message}");
@@ -51,9 +58,14 @@ namespace Typedown.Services.Automation
             Apply();
         }
 
+        /// <summary>The pipe name; the test host's also carries its data root, so each run has its own endpoint.</summary>
+        public static string EndpointName(string buildType, string sid) =>
+            AutomationEndpoint.PipeName(buildType, sid) + (Config.IsAutomationTestHost ? "." + Config.InstanceName.Substring(Config.InstanceName.LastIndexOf('.') + 1) : "");
+
         private static void Apply()
         {
-            var on = settings.Get(SettingName, false);
+            // The test host exists to be driven: its endpoint is always on (and only it has test.* methods).
+            var on = Config.IsAutomationTestHost || settings.Get(SettingName, false);
             lock (gate)
                 applying = applying.ContinueWith(async _ =>
                 {

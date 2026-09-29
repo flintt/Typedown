@@ -15,6 +15,13 @@ namespace Typedown
         [STAThread]
         public static void Main()
         {
+#if AUTOMATION_TEST_HOST
+            // The test host: its data root comes from the command line (or a fixed manual one), before anything else.
+            var args = Environment.GetCommandLineArgs();
+            var at = Array.IndexOf(args, Core.Config.AutomationTestRootArgument);
+            Core.Config.UseAutomationTestHost(at >= 0 && at + 1 < args.Length ? args[at + 1]
+                : System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Typedown-AutomationTests", "manual"));
+#endif
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
             // A crash that kills the process without reaching the handlers above (an exception escaping into the
             // native XAML dispatcher, a stack overflow) leaves no report at all. First-chance logging records
