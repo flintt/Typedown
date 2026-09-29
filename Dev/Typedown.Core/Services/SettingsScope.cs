@@ -29,5 +29,7 @@ namespace Typedown.Core.Services
         };
 
         public static bool IsWindowLocal(string name) => name != null && windowLocal.Contains(name);
+
+        public static IReadOnlyCollection<string> WindowLocalNames => windowLocal;
     }
 }

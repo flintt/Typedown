@@ -209,11 +209,17 @@ namespace Typedown.Core.ViewModels
             settingsStore = JsonSettingsStore.Shared(settingsFile, onWriteError: ex => Utilities.Log.WriteLocal("SettingsSave", ex.ToString()));
             // Created with its window, on that window's thread: other windows' changes are applied there.
             windowContext = System.Threading.SynchronizationContext.Current;
+            // Window-local settings (modes, layout) are this window's own from now on: it starts from what was saved
+            // last, and another window changing them only changes what the next new window starts with.
+            foreach (var name in SettingsScope.WindowLocalNames)
+                windowLocalValues[name] = settingsStore.GetToken(name);
             settingsStore.Changed += OnStoreChanged;
             ResetSettingsCommand.OnExecute.Subscribe(_ => ResetSetting());
         }
 
         private readonly System.Threading.SynchronizationContext windowContext;
+
+        private readonly Dictionary<string, Newtonsoft.Json.Linq.JToken> windowLocalValues = new();
 
         /// <summary>The settings revision: advances with every change from any window.</summary>
         public long SettingsRevision => settingsStore.Revision;
@@ -253,11 +259,19 @@ namespace Typedown.Core.ViewModels
 
         public T GetSettingValue<T>(T defaultValue = default, [CallerMemberName] string propertyName = null)
         {
+            if (windowLocalValues.TryGetValue(propertyName, out var own))
+            {
+                if (own == null || own.Type == Newtonsoft.Json.Linq.JTokenType.Null) return defaultValue;
+                try { return own.ToObject<T>() is T value ? value : defaultValue; }
+                catch { return defaultValue; }
+            }
             return settingsStore.Get(propertyName, defaultValue);
         }
 
         public void SetSettingValue<T>(T value, [CallerMemberName] string propertyName = null)
         {
+            if (windowLocalValues.ContainsKey(propertyName))
+                windowLocalValues[propertyName] = value == null ? null : Newtonsoft.Json.Linq.JToken.FromObject(value);
             settingsStore.Set(propertyName, value, this);
         }
 
@@ -288,6 +302,8 @@ namespace Typedown.Core.ViewModels
             if (result != ContentDialogResult.Primary)
                 return;
             settingsStore.Reset(this);
+            foreach (var name in SettingsScope.WindowLocalNames)
+                windowLocalValues[name] = null;
             foreach (var item in GetType().GetProperties().Where(x => x.GetSetMethod() != null).Select(x => x.Name))
                 OnPropertyChanged(item);
         }

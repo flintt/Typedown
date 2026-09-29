@@ -98,6 +98,12 @@ namespace Typedown.Core.Services
             }
         }
 
+        /// <summary>A copy of the stored value (null when there is none), for a window keeping its own copy.</summary>
+        public JToken GetToken(string name)
+        {
+            lock (sync) return values.TryGetValue(name, out var token) ? token.DeepClone() : null;
+        }
+
         public void Set<T>(string name, T value, object origin = null)
         {
             var token = ToToken(value);
