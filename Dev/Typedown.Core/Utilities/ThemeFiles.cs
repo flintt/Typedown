@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Typedown.Core.Enums;
 
 namespace Typedown.Core.Utilities
@@ -46,6 +48,13 @@ namespace Typedown.Core.Utilities
 
         /// <summary>The themes that ship with the app, next to the executable and never written to.</summary>
         public static string BundledFolder => System.IO.Path.Combine(AppContext.BaseDirectory, "Resources", "Themes");
+
+        public static string DesignerTemplatePath => System.IO.Path.Combine(BundledFolder, "theme-designer.html");
+
+        /// <summary>The generated browser page. It is outside the themes folder, so it never appears as a theme.</summary>
+        public static string DesignerPath => System.IO.Path.Combine(Config.GetLocalFolderPath(), "theme-designer.html");
+
+        private const long MaxDesignerThemeBytes = 2 * 1024 * 1024;
 
         /// <summary>
         /// Every readable theme, by file name: the ones that ship with the app first, then the user's folder. A
@@ -108,6 +117,68 @@ namespace Typedown.Core.Utilities
                 Log.Debug($"read theme {id}: {ex.Message}");
                 return string.Empty;
             }
+        }
+
+        /// <summary>
+        /// Creates a browser-readable snapshot of every currently available theme and opens the packaged offline
+        /// designer. Browsers do not let a file:// page enumerate the themes folder, so the native app performs
+        /// that trusted read. The generated page contains CSS text and display names, never local file paths.
+        /// </summary>
+        public static async Task OpenDesignerAsync(string selectedId)
+        {
+            var path = await PrepareDesignerAsync(selectedId);
+            Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });
+        }
+
+        public static async Task<string> PrepareDesignerAsync(string selectedId)
+        {
+            EnsureFolder();
+            if (!File.Exists(DesignerTemplatePath))
+                throw new FileNotFoundException("The packaged theme designer is missing.", DesignerTemplatePath);
+
+            var entries = new List<ThemeDesignerEntry>();
+            foreach (var theme in List())
+            {
+                try
+                {
+                    var info = new FileInfo(theme.Path);
+                    if (!info.Exists || info.Length > MaxDesignerThemeBytes)
+                    {
+                        Log.Debug($"theme designer skipped {info.Name}: missing or larger than {MaxDesignerThemeBytes} bytes");
+                        continue;
+                    }
+                    entries.Add(new ThemeDesignerEntry
+                    {
+                        Id = theme.Id,
+                        Name = theme.Name,
+                        FileName = info.Name,
+                        Source = SameFolder(info.DirectoryName, BundledFolder) ? "bundled" : "user",
+                        Css = File.ReadAllText(theme.Path)
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Log.Debug($"theme designer read {theme.Id}: {ex.Message}");
+                }
+            }
+
+            var template = File.ReadAllText(DesignerTemplatePath);
+            var html = ThemeDesignerPage.EmbedCatalog(template, new ThemeDesignerCatalog
+            {
+                SelectedId = selectedId,
+                Themes = entries
+            });
+            Directory.CreateDirectory(System.IO.Path.GetDirectoryName(DesignerPath));
+            await SafeFile.WriteAllTextAtomicAsync(DesignerPath, html);
+            return DesignerPath;
+        }
+
+        private static bool SameFolder(string left, string right)
+        {
+            if (string.IsNullOrEmpty(left) || string.IsNullOrEmpty(right)) return false;
+            return string.Equals(System.IO.Path.GetFullPath(left).TrimEnd(System.IO.Path.DirectorySeparatorChar),
+                System.IO.Path.GetFullPath(right).TrimEnd(System.IO.Path.DirectorySeparatorChar),
+                StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>The theme document that ships with the app, in the themes folder where it is looked for.</summary>

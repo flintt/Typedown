@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using Typedown.Core.Utilities;
 
 namespace Typedown.ReliabilityTests
 {
@@ -36,6 +37,22 @@ namespace Typedown.ReliabilityTests
             StringAssert.Contains(assembly, $"AssemblyVersion(\"{appVersion}.0\")");
             StringAssert.Contains(assembly, $"AssemblyFileVersion(\"{appVersion}.0\")");
             StringAssert.Contains(installer, $"#define MyAppVersion \"{appVersion}\"");
+        }
+
+        [TestMethod]
+        public void StandaloneThemeDesignerIsCopiedIntoApplicationOutput()
+        {
+            var project = XDocument.Load(Path.Combine(Repository.Root, "Dev", "Typedown", "Typedown.csproj"));
+            var item = project.Descendants().SingleOrDefault(node => node.Name.LocalName == "None" &&
+                (((string)node.Attribute("Include")) ?? string.Empty).Replace('/', '\\').EndsWith("Tools\\Themes\\theme-designer.html", StringComparison.OrdinalIgnoreCase));
+
+            Assert.IsNotNull(item, "theme-designer.html is not included by the desktop host project");
+            Assert.AreEqual("Resources\\Themes\\theme-designer.html", item.Attributes().Single(attribute => attribute.Name.LocalName == "Link").Value);
+            Assert.AreEqual("PreserveNewest", item.Attributes().Single(attribute => attribute.Name.LocalName == "CopyToOutputDirectory").Value);
+            Assert.AreEqual("PreserveNewest", item.Attributes().Single(attribute => attribute.Name.LocalName == "CopyToPublishDirectory").Value);
+
+            var html = File.ReadAllText(Path.Combine(Repository.Root, "Tools", "Themes", "theme-designer.html"));
+            Assert.AreEqual(1, Regex.Matches(html, Regex.Escape(ThemeDesignerPage.EmptyCatalog)).Count);
         }
 
         [TestMethod]

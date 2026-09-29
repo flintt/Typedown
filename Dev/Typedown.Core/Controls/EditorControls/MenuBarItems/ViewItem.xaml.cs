@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Typedown.Core.Utilities;
 using Windows.UI.Xaml.Controls;
@@ -44,6 +45,9 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
                 }
             }
             ThemeSubMenu.Items.Add(new MenuFlyoutSeparator());
+            var designer = new MenuFlyoutItem { Text = (Locale.GetString("View.CustomTheme.Title") ?? "Theme designer") + "…" };
+            designer.Click += OnOpenThemeDesigner;
+            ThemeSubMenu.Items.Add(designer);
             // Picks up a theme that was just added or edited without restarting. The rebuild waits for the click
             // to be over: the menu would otherwise be torn down while it is still on screen.
             var reload = new MenuFlyoutItem { Text = Locale.GetString("View.CustomTheme.Refresh") };
@@ -57,6 +61,18 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             });
             ThemeSubMenu.Items.Add(reload);
             UpdateThemeChecks();
+        }
+
+        private async void OnOpenThemeDesigner(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            try
+            {
+                await ThemeFiles.OpenDesignerAsync(Settings?.CustomTheme);
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"open theme designer: {ex.Message}");
+            }
         }
 
         /// <summary>The name a theme goes by in the menu, from the enum's own locale attribute.</summary>

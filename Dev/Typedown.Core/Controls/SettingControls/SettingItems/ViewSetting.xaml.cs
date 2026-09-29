@@ -127,6 +127,18 @@ namespace Typedown.Core.Controls.SettingControls.SettingItems
             }
         }
 
+        private async void OnOpenThemeDesigner(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                await ThemeFiles.OpenDesignerAsync(Settings?.CustomTheme);
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"open theme designer: {ex.Message}");
+            }
+        }
+
         private void OnRefreshThemes(object sender, RoutedEventArgs e)
         {
             FillThemes();
