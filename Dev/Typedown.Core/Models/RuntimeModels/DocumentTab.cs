@@ -17,6 +17,11 @@ namespace Typedown.Core.Models
         /// </summary>
         public string DocumentId { get; private set; } = NewDocumentId();
 
+        public DocumentTab()
+        {
+            Utilities.Log.Debug($"tab {DocumentId}: created\n{System.Environment.StackTrace}");
+        }
+
         /// <summary>
         /// Advanced only when the document text really changes: an edit, an undo or redo, a reload from disk.
         /// Loads into the editor, tab and mode switches and saves leave it where it is (they change the internal
@@ -37,6 +42,7 @@ namespace Typedown.Core.Models
         /// <summary>A document recovered from its backup keeps the id it had, and so its backup file.</summary>
         public void RestoreIdentity(string documentId)
         {
+            Utilities.Log.Debug($"tab {DocumentId}: restored as {documentId}\n{System.Environment.StackTrace}");
             DocumentId = documentId;
             Revision = 0;
         }
