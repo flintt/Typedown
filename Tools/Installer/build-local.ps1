@@ -164,6 +164,7 @@ $rid = if ($Platform -eq 'ARM64') { 'win10-arm64' } else { 'win10-x64' }
 $published = Join-Path $repo "Dev\Typedown\bin\$Platform\$Configuration\netcoreapp3.1\$rid"
 if (-not (Test-Path (Join-Path $published 'Typedown.exe'))) { throw "Typedown.exe not found in $published" }
 Write-Host "App: $published"
+& (Join-Path $PSScriptRoot 'assert-application-build.ps1') -Path $published
 if ($NoInstaller) { return }
 
 $iscc = Find-ISCC

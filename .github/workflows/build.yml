@@ -262,6 +262,7 @@ jobs:
           $pub = "${{ steps.pub.outputs.dir }}"
           New-Item -ItemType Directory -Force out, out-installer | Out-Null
           $arch = "${{ steps.ver.outputs.arch }}"
+          ./Tools/Installer/assert-application-build.ps1 -Path $pub
           # The portable zip is only produced for releases; day-to-day test artifacts stay small.
           if ("${{ github.ref }}".StartsWith("refs/tags/")) {
             Compress-Archive -Path "$pub\*" -DestinationPath "out\Typedown-portable-$arch-v$ver.zip" -CompressionLevel Optimal

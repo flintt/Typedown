@@ -117,6 +117,26 @@ namespace Typedown.Automation
         Task<bool> SaveAsync(CancellationToken cancellationToken);
     }
 
+    /// <summary>
+    /// Points in the write path where a test build can hold an edit (docs/automation-api-analysis-plan.md, the test
+    /// host). The application passes none; the automation test host passes its barriers.
+    /// </summary>
+    public interface IEditBarriers
+    {
+        /// <summary>Returns when the edit may go on past <paramref name="point"/>.</summary>
+        Task PassAsync(string point, string documentId, string? operationId);
+    }
+
+    public static class EditBarrierPoints
+    {
+        /// <summary>The host has the page's flushed text and has not checked the revision yet.</summary>
+        public const string BeforeFlushReply = "beforeFlushReply";
+        /// <summary>The page has applied the candidate; the host has not committed it.</summary>
+        public const string AfterEditorMutationBeforeReport = "afterEditorMutationBeforeReport";
+        /// <summary>The edit is committed; the save has not started.</summary>
+        public const string BeforeSaveCommit = "beforeSaveCommit";
+    }
+
     public sealed class EditRequest
     {
         public long BaseRevision { get; set; }
@@ -158,11 +178,16 @@ namespace Typedown.Automation
         private readonly Dictionary<string, SemaphoreSlim> locks = new(StringComparer.Ordinal);
         private readonly HashSet<string> quarantined = new(StringComparer.Ordinal);
         private readonly int classifierVersion;
+        private readonly IEditBarriers? barriers;
 
-        public DocumentEditCoordinator(int classifierVersion)
+        public DocumentEditCoordinator(int classifierVersion, IEditBarriers? barriers = null)
         {
             this.classifierVersion = classifierVersion;
+            this.barriers = barriers;
         }
+
+        private Task Barrier(string point, IEditableDocument document, string? operationId) =>
+            barriers == null ? Task.CompletedTask : barriers.PassAsync(point, document.DocumentId, operationId);
 
         public bool IsQuarantined(string documentId)
         {
@@ -213,6 +238,7 @@ namespace Typedown.Automation
             // 2. The active document's latest text first; a stale snapshot must never be overwritten.
             if (document.IsActive && !await document.FlushAsync(cancellationToken))
                 throw Error(AutomationErrorKind.content_sync_timeout, "Could not confirm the editor's latest text.");
+            await Barrier(EditBarrierPoints.BeforeFlushReply, document, null);
 
             // 3. Revision check against the flushed state.
             if (document.Revision != request.BaseRevision)
@@ -252,6 +278,7 @@ namespace Typedown.Automation
                 {
                     // 5-7. The page compares its live text with baseContentHash, applies, and reports.
                     reply = await document.ApplyInEditorAsync(new ApplyCommand(operationId, targetRevision, baseHash, candidate), CancellationToken.None);
+                    if (reply.Outcome == ApplyOutcome.Applied) await Barrier(EditBarrierPoints.AfterEditorMutationBeforeReport, document, operationId);
                 }
                 catch (Exception e) when (e is TimeoutException || e is OperationCanceledException)
                 {
@@ -301,6 +328,7 @@ namespace Typedown.Automation
             var saved = document.Saved;
             if (request.Save)
             {
+                await Barrier(EditBarrierPoints.BeforeSaveCommit, document, operationId);
                 if (!await document.SaveAsync(CancellationToken.None))
                     throw Error(AutomationErrorKind.save_failed, "The edit was applied but saving failed; the document stays unsaved.",
                         new Dictionary<string, object?> { ["applied"] = true, ["revision"] = targetRevision });
