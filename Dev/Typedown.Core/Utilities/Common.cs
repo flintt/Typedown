@@ -189,6 +189,8 @@ namespace Typedown.Core.Utilities
 
         public static HtmlImgTag MatchHtmlImg(string html)
         {
+            if (string.IsNullOrEmpty(html))
+                return null;
             var tagRegex = @"(?<=<!--StartFragment-->\s*)(<img)[^>]*(/>|>)(?=\s*<!--EndFragment-->)";
             var tagMatch = Regex.Match(html, tagRegex, RegexOptions.IgnoreCase);
             if (!tagMatch.Success)
