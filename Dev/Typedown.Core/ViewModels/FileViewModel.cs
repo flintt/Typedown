@@ -166,29 +166,29 @@ namespace Typedown.Core.ViewModels
             if (EditorViewModel.FileHash != EditorViewModel.CurrentHash && !string.IsNullOrWhiteSpace(EditorViewModel.Markdown))
             {
                 var backedHash = EditorViewModel.CurrentHash;
-                var ok = await AutoBackup.Backup(FilePath, EditorViewModel.Markdown);
+                var ok = await AutoBackup.Backup(FilePath, EditorViewModel.Markdown, active?.DocumentId);
                 // Keep the active tab's BackupHash in step with what is on disk, so the invariant still holds when
                 // this tab later becomes a background one (see BackupDirtyBackgroundTabsAsync).
                 if (ok && active != null) active.BackupHash = backedHash;
                 return ok;
             }
-            AutoBackup.DeleteBackup(FilePath);
+            AutoBackup.DeleteBackup(FilePath, active?.DocumentId);
             if (active != null) active.BackupHash = 0;
             return true;
         }
 
         // Background tabs are snapshots the live editor does not hold, so a crash would lose their unsaved edits.
         // This runs every save tick regardless of whether the active document's auto-save ran or succeeded — the
-        // active save never touches the other tabs. Each dirty titled background tab is backed up (keyed by its
-        // path, which recovery matches on reopen), skipping ones unchanged since their last backup. Untitled
-        // background tabs all share the empty key and are left to the active flow (a stable-id manifest is TODO).
+        // active save never touches the other tabs. Each dirty background tab is backed up - a titled one keyed by
+        // its path, which recovery matches on reopen, an untitled one by its document id, which the next start
+        // recovers (RecoverUntitledBackupsAsync) - skipping ones unchanged since their last backup.
         private async Task BackupDirtyBackgroundTabsAsync()
         {
             var tabs = TabsViewModel;
             if (tabs == null) return;
             foreach (var tab in tabs.Tabs.ToList())
             {
-                if (tab == tabs.ActiveTab || string.IsNullOrEmpty(tab.FilePath))
+                if (tab == tabs.ActiveTab)
                     continue;
                 if (!tab.Saved && !string.IsNullOrWhiteSpace(tab.Markdown))
                 {
@@ -196,12 +196,12 @@ namespace Typedown.Core.ViewModels
                     // switching away could otherwise update the snapshot to a hash that never reached disk.
                     var text = tab.Markdown;
                     var backedHash = tab.CurrentHash;
-                    if (backedHash != tab.BackupHash && await AutoBackup.Backup(tab.FilePath, text))
+                    if (backedHash != tab.BackupHash && await AutoBackup.Backup(tab.FilePath, text, tab.DocumentId))
                         tab.BackupHash = backedHash;
                 }
                 else if (tab.Saved && tab.BackupHash != 0)
                 {
-                    AutoBackup.DeleteBackup(tab.FilePath);
+                    AutoBackup.DeleteBackup(tab.FilePath, tab.DocumentId);
                     tab.BackupHash = 0;
                 }
             }
@@ -562,7 +562,7 @@ namespace Typedown.Core.ViewModels
                         EditorViewModel.Saved = EditorViewModel.CurrentHash == hash; // CurrentHash tracks the live buffer; avoids an O(n) string compare per save
                         if (EditorViewModel.Saved)
                         {
-                            AutoBackup.DeleteBackup(originalPath);
+                            AutoBackup.DeleteBackup(originalPath, originalTab?.DocumentId);
                             if (TabsViewModel?.ActiveTab is { } savedTab) savedTab.BackupHash = 0;
                         }
                         _ = AccessHistory.RecordFileHistory(FilePath);
@@ -693,7 +693,7 @@ namespace Typedown.Core.ViewModels
                     var saveResult = await Save();
                     return saveResult;
                 case ContentDialogResult.Secondary:
-                    AutoBackup.DeleteBackup(FilePath);
+                    AutoBackup.DeleteBackup(FilePath, TabsViewModel?.ActiveTab?.DocumentId);
                     return true;
                 case ContentDialogResult.None:
                     return false;
@@ -767,6 +767,53 @@ namespace Typedown.Core.ViewModels
                         break;
                 }
             }
+            await RecoverUntitledBackupsAsync();
+        }
+
+        private static bool untitledRecoveryDone;
+
+        /// <summary>
+        /// Untitled documents the last run left unsaved (it crashed, or was killed) come back as tabs of the first window,
+        /// each with its own document id - once per process, after asking. Recover reopens them; Delete throws them away.
+        /// </summary>
+        private async Task RecoverUntitledBackupsAsync()
+        {
+            if (untitledRecoveryDone || TabsViewModel == null) return;
+            untitledRecoveryDone = true;
+            var backups = AutoBackup.UntitledBackups();
+            if (backups.Count == 0) return;
+            var dialog = AppContentDialog.Create();
+            dialog.Title = Locale.GetDialogString("RecoverTitle");
+            dialog.Content = Locale.GetDialogString("RecoverContent");
+            dialog.PrimaryButtonText = Locale.GetDialogString("Recover");
+            dialog.SecondaryButtonText = Locale.GetDialogString("Delete");
+            dialog.DefaultButton = ContentDialogButton.Primary;
+            if (await dialog.ShowAsync(AppViewModel.XamlRoot) != ContentDialogResult.Primary)
+            {
+                foreach (var (documentId, _) in backups) AutoBackup.DeleteBackup(null, documentId);
+                return;
+            }
+            foreach (var (documentId, file) in backups)
+            {
+                string text;
+                try { text = await File.ReadAllTextAsync(file); }
+                catch (Exception ex) { Log.Debug($"recover untitled {documentId}: {ex.Message}"); continue; }
+                if (TabsViewModel.Tabs.Any(t => t.DocumentId == documentId)) continue;
+                if (!TabsViewModel.IsActiveTabBlank) TabsViewModel.BeginNewTab();
+                TabsViewModel.ActiveTab.RestoreIdentity(documentId);
+                FilePath = null;
+                FileFormat = TextFileFormat.Default;
+                EditorViewModel.FileHash = Common.SimpleHash(Common.DefaultMarkdwn);
+                EditorViewModel.Markdown = text;
+                EditorViewModel.CurrentHash = Common.SimpleHash(text);
+                EditorViewModel.Saved = false;
+                EditorViewModel.AutoSavedSucc = false;
+                EditorViewModel.FileLoaded = true;
+                EditorViewModel.History.InitHistory(text);
+                TabsViewModel.ActiveTab.BackupHash = EditorViewModel.CurrentHash;
+            }
+            Log.Debug($"recovered {backups.Count} untitled document(s)");
+            EditorViewModel.PostLoadFile(EditorViewModel.Markdown);
         }
 
         private async void Export(ExportConfig config)

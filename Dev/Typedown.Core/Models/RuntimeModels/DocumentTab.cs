@@ -33,6 +33,13 @@ namespace Typedown.Core.Models
             Revision = 0;
         }
 
+        /// <summary>A document recovered from its backup keeps the id it had, and so its backup file.</summary>
+        public void RestoreIdentity(string documentId)
+        {
+            DocumentId = documentId;
+            Revision = 0;
+        }
+
         private static string NewDocumentId() => System.Guid.NewGuid().ToString("N");
 
         public string FilePath { get; set; }

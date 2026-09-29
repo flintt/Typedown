@@ -28,11 +28,12 @@ if (-not (Test-Path (Join-Path $TestHost 'automation-test-host.marker'))) { thro
 $hostProcess = Start-Process -FilePath $exe -ArgumentList @('--automation-test-root', "`"$root`"") -PassThru
 $code = 3
 try {
-    & dotnet (Join-Path $Driver 'Typedown.AutomationE2E.dll') --root $root --pid $hostProcess.Id --fixtures $fixtures --out (Join-Path $out 'result.json') *> (Join-Path $out 'driver.log')
+    & dotnet (Join-Path $Driver 'Typedown.AutomationE2E.dll') --root $root --pid $hostProcess.Id --exe $exe --fixtures $fixtures --out (Join-Path $out 'result.json') *> (Join-Path $out 'driver.log')
     $code = $LASTEXITCODE
 }
 finally {
-    try { Stop-Process -Id $hostProcess.Id -Force -ErrorAction SilentlyContinue } catch { }
+    # The driver may have restarted the host (R04): stop every test host started from this build.
+    Get-Process Typedown -ErrorAction SilentlyContinue | Where-Object { $_.Path -eq $exe } | Stop-Process -Force -ErrorAction SilentlyContinue
     Start-Sleep -Milliseconds 500
     $log = Join-Path $root 'logs\debug.log'
     if ($code -ne 0 -and (Test-Path $log)) { Copy-Item $log (Join-Path $out 'debug.log') }

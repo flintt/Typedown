@@ -835,7 +835,7 @@ namespace Typedown.Core.ViewModels
                 var fileViewModel = ServiceProvider.GetService<FileViewModel>();
                 DisplaySaved = Saved || (Settings.AutoSave && fileViewModel.FilePath != null && AutoSavedSucc);
                 if (Saved)
-                    AutoBackup.DeleteBackup(fileViewModel.FilePath);
+                    AutoBackup.DeleteBackup(fileViewModel.FilePath, ServiceProvider.GetService<TabsViewModel>()?.ActiveTab?.DocumentId);
             }
             catch
             {

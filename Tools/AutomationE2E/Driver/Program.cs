@@ -56,6 +56,8 @@ internal static class Program
     }
 
     private static readonly List<JObject> results = new();
+    private static string hostExe = "";
+    private static string testRoot = "";
     private static string endpoint = "";
     private static int hostPid;
     private static string fixtures = "";
@@ -65,6 +67,8 @@ internal static class Program
         string Arg(string name) => args[Array.IndexOf(args, name) + 1];
         var root = Arg("--root");
         hostPid = int.Parse(Arg("--pid"));
+        hostExe = Arg("--exe");
+        testRoot = root;
         fixtures = Arg("--fixtures");
         var output = Arg("--out");
         var started = DateTime.UtcNow;
@@ -90,6 +94,7 @@ internal static class Program
             await Case("R02 undo and redo stay in their own document", R02);
             await Case("R03 a keystroke while a saving write is held: the saved file is the written revision, the keystroke is kept", R03);
             await Case("B01 settings: one window's change reaches the other window; window modes stay with their window", B01);
+            await Case("R04 untitled and background documents come back from their backups after a kill, each its own", R04);
         }
         catch (Exception e)
         {
@@ -305,6 +310,68 @@ internal static class Program
         Check((bool)await Value(second, "SourceCode") == sourceBefore, "the second window keeps its mode");
         await c.Call("test.settings.set", new { windowId = first, name = "SourceCode", value = sourceBefore });
         notes.Add($"font {font}, text direction rtl/auto, source mode stayed per window");
+    }
+
+    private static async Task R04(List<string> notes)
+    {
+        string u1, u2, t;
+        var titled = Fixture("r04-t.md", "# T\n\nsaved\n");
+        using (var c = await Session("e2e R04 before"))
+        {
+            u1 = (string)(await c.Call("document.create", new { text = "# U1\n\nfirst untitled\n", reveal = "document", normalizationPolicy = "allowUnknown" }))["documentId"]!;
+            u2 = (string)(await c.Call("document.create", new { text = "# U2\n\nsecond untitled\n", reveal = "document", normalizationPolicy = "allowUnknown" }))["documentId"]!;
+            t = await Open(c, titled);
+            await c.Call("document.replace", new { documentId = t, baseRevision = await Revision(c, t), text = "# T\n\nedited, not saved\n", normalizationPolicy = "allowUnknown" });
+            await c.Call("document.focus", new { documentId = u2 }); // u1 and t are background tabs now
+        }
+        // The backups exist, with each document's own text, before the host dies.
+        var backup = Path.Combine(testRoot, "data", "Backup");
+        string Untitled(string id) => Path.Combine(backup, $"untitled_{id}.md");
+        for (var i = 0; i < 300 && !(File.Exists(Untitled(u1)) && File.Exists(Untitled(u2)) && Directory.GetFiles(backup, "*_r04-t.md").Length > 0); i++) await Task.Delay(100);
+        Check(File.Exists(Untitled(u1)) && Disk(Untitled(u1)) == "# U1\n\nfirst untitled\n", "the first untitled document (a background tab) has its own backup");
+        Check(File.Exists(Untitled(u2)) && Disk(Untitled(u2)) == "# U2\n\nsecond untitled\n", "the second untitled document has its own backup");
+        var titledBackup = Directory.GetFiles(backup, "*_r04-t.md").FirstOrDefault();
+        Check(titledBackup != null && Disk(titledBackup) == "# T\n\nedited, not saved\n", "the background titled document has its backup");
+
+        // Killed, not closed: nothing gets to save or clean up.
+        Process.GetProcessById(hostPid).Kill();
+        Process.GetProcessById(hostPid).WaitForExit(10000);
+        File.Delete(Path.Combine(testRoot, "automation-endpoint.txt"));
+        var restarted = Process.Start(new ProcessStartInfo(hostExe) { ArgumentList = { "--automation-test-root", testRoot }, UseShellExecute = false })!;
+        hostPid = restarted.Id;
+        for (var i = 0; i < 300 && !File.Exists(Path.Combine(testRoot, "automation-endpoint.txt")); i++) await Task.Delay(100);
+        using var after = await Session("e2e R04 after");
+        await WaitForWindow(after);
+        // The recovery question: answered as a person would, with Enter (Recover is the default button).
+        JArray documents = new();
+        for (var i = 0; i < 60; i++)
+        {
+            documents = (JArray)(await after.Call("document.list"))["documents"]!;
+            if (documents.Any(d => (string)d["documentId"]! == u1)) break;
+            await PressEnter();
+            await Task.Delay(250);
+        }
+        async Task<string> TextOf(string id) => (string)(await Get(after, id))["text"]!;
+        Check(documents.Any(d => (string)d["documentId"]! == u1) && documents.Any(d => (string)d["documentId"]! == u2), "both untitled documents came back with their ids");
+        Check(await TextOf(u1) == "# U1\n\nfirst untitled\n", "the first untitled document has its own text");
+        Check(await TextOf(u2) == "# U2\n\nsecond untitled\n", "the second untitled document has its own text");
+        // The titled one comes back when opened again (its backup is matched by path) - the open asks, Enter recovers.
+        var reopening = after.Call("document.open", new { path = titled, reveal = "document" });
+        for (var i = 0; i < 60 && !reopening.IsCompleted; i++) { await PressEnter(); await Task.Delay(250); }
+        var reopened = (string)(await reopening)["documentId"]!;
+        Check(await TextOf(reopened) == "# T\n\nedited, not saved\n", "the titled document recovers its unsaved text");
+        Check(Disk(titled) == "# T\n\nsaved\n", "and its file was never written");
+        notes.Add($"recovered {u1[..6]} {u2[..6]} and {Path.GetFileName(titled)}");
+    }
+
+    private static async Task PressEnter()
+    {
+        var window = MainWindow();
+        if (window == IntPtr.Zero) return;
+        AllowSetForegroundWindow(hostPid);
+        SetForegroundWindow(window);
+        for (var i = 0; i < 40 && GetForegroundWindow() != window; i++) await Task.Delay(25);
+        Send(Key(0x0D, false), Key(0x0D, true));
     }
 
     // ---- real input ----
