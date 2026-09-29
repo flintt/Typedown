@@ -194,15 +194,21 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         // What the next real visual edit would rewrite in the document (services/normalization): the loaded
         // source against Muya's export of it. Once an edit has made the export the text there is nothing left
         // to rewrite. Null before anything was loaded.
-        (window as any).__typedownPendingNormalization = () => {
+        // Also returns the normalized text itself, for its hash in the automation edit reply.
+        const pendingNormalization = () => {
             const imported = importedRef.current
             if (!imported) return null
             return markdownRef.current === imported.source
-                ? classifyNormalization(imported.source, imported.normalized)
-                : classifyNormalization(markdownRef.current, markdownRef.current)
-        }
+                ? { ...classifyNormalization(imported.source, imported.normalized), normalized: imported.normalized }
+                : { ...classifyNormalization(markdownRef.current, markdownRef.current), normalized: markdownRef.current }
+        };
+        (window as any).__typedownPendingNormalization = pendingNormalization
         setEditor(muya)
-        return () => muya.destroy()
+        return () => {
+            // Source mode has no Muya: a hook left behind would describe the document as it was when Muya went.
+            if ((window as any).__typedownPendingNormalization === pendingNormalization) delete (window as any).__typedownPendingNormalization
+            muya.destroy()
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

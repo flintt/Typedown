@@ -278,3 +278,67 @@ namespace Typedown.Automation.Tests
         }
     }
 }
+
+namespace Typedown.Automation.Tests
+{
+    public class DocumentEditThreadTests
+    {
+        /// <summary>Started on a UI thread with a synchronization context, every document call stays on that thread.</summary>
+        [Fact]
+        public async Task An_edit_started_on_the_ui_thread_stays_there()
+        {
+            var threads = new System.Collections.Concurrent.ConcurrentBag<int>();
+            var uiThread = 0;
+            var done = new TaskCompletionSource<EditResult>();
+            var thread = new Thread(() =>
+            {
+                uiThread = Environment.CurrentManagedThreadId;
+                var context = new SingleThreadContext();
+                SynchronizationContext.SetSynchronizationContext(context);
+                var doc = new ThreadRecordingDocument(threads);
+                var coordinator = new DocumentEditCoordinator(2);
+                coordinator.EditAsync(doc, new EditRequest { BaseRevision = 0, Edit = _ => "x\n" }, CancellationToken.None)
+                    .ContinueWith(t => { if (t.IsFaulted) done.SetException(t.Exception!.InnerException!); else done.SetResult(t.Result); context.Complete(); }, TaskScheduler.Default);
+                context.Run();
+            });
+            thread.Start();
+            var result = await done.Task.WaitAsync(TimeSpan.FromSeconds(10));
+            Assert.Equal(1, result.Revision);
+            Assert.NotEmpty(threads);
+            Assert.All(threads, t => Assert.Equal(uiThread, t));
+        }
+
+        private sealed class SingleThreadContext : SynchronizationContext
+        {
+            private readonly System.Collections.Concurrent.BlockingCollection<(SendOrPostCallback, object?)> queue = new();
+            public override void Post(SendOrPostCallback d, object? state) => queue.Add((d, state));
+            public void Run() { foreach (var (d, s) in queue.GetConsumingEnumerable()) d(s); }
+            public void Complete() => queue.CompleteAdding();
+        }
+
+        /// <summary>Awaits real asynchrony (a timer) inside each call, so continuations have to find their way back.</summary>
+        private sealed class ThreadRecordingDocument : IEditableDocument
+        {
+            private readonly System.Collections.Concurrent.ConcurrentBag<int> threads;
+            public ThreadRecordingDocument(System.Collections.Concurrent.ConcurrentBag<int> threads) => this.threads = threads;
+            private void Note() => threads.Add(Environment.CurrentManagedThreadId);
+            public string DocumentId { get; } = "d";
+            public long Revision { get { Note(); return rev; } }
+            private long rev;
+            public string Text { get { Note(); return text; } }
+            private string text = "a\n";
+            public bool Saved { get { Note(); return true; } }
+            public bool IsActive { get { Note(); return true; } }
+            public async Task<bool> FlushAsync(CancellationToken ct) { Note(); await Task.Delay(20); Note(); return true; }
+            public object CaptureState() { Note(); return text; }
+            public async Task<ApplyReply> ApplyInEditorAsync(ApplyCommand c, CancellationToken ct)
+            {
+                Note(); await Task.Delay(20); Note();
+                return FakeDocument.Classified(c, PendingNormalization.None);
+            }
+            public Task<string?> RestoreAsync(object state, CancellationToken ct) { Note(); return Task.FromResult<string?>(null); }
+            public void Commit(string t, long revision, string operationId) { Note(); text = t; rev = revision; }
+            public Task<bool> SaveAsync(CancellationToken ct) { Note(); return Task.FromResult(true); }
+        }
+    }
+}

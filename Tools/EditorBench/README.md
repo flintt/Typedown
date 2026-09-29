@@ -43,6 +43,10 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
 - `origin-check.js` — every `MarkdownChange` carries `origin`: `user` after a real key, pointer, paste or drop
   event or a host editing command, `editor` for a change nothing the reader did caused (`services/changeOrigin.ts`).
   Loads, mode switches and late renders report nothing; an action counts for one report; a load forgets it.
+- `apply-edit-check.js` — the page's half of an automation write (`ApplyDocumentEdit` → `DocumentEditApplied`): a
+  stale `baseContentHash`, including typing the host has not heard of yet, is refused; otherwise the exact text is
+  applied in visual, source and reading mode with no `MarkdownChange`, and the reply carries the SHA-256 of the
+  source and the normalization verdict (`notEvaluated` in source mode, which has no Muya).
 
 - `reading-source-check.js` — preserves exact source through reading/source/visual mode switches and
   save flushes, checks a list followed immediately by a heading and fenced code, checks a GFM table

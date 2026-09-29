@@ -421,6 +421,7 @@
     <Compile Include="Services\AppDbContext.cs" />
     <Compile Include="Services\AutoBackup.cs" />
     <Compile Include="Services\AutomationWindows.cs" />
+    <Compile Include="Services\AutomationDocuments.cs" />
     <Compile Include="Services\JsonSettingsStore.cs" />
     <Compile Include="Services\EventCenter.cs" />
     <Compile Include="Services\ImageAction.cs" />

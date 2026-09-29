@@ -93,6 +93,7 @@ namespace Typedown.Core.ViewModels
             EventCenter.GetObservable<EditorEventArgs>("MarkdownChange").Subscribe(x => OnMarkdownChange(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("ContentFlushed").Subscribe(x => OnContentFlushed(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("FileLoaded").Subscribe(x => OnFileLoaded(x.Args));
+            EventCenter.GetObservable<EditorEventArgs>("DocumentEditApplied").Subscribe(x => OnDocumentEditApplied(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("CursorChange").Subscribe(x => OnCursorChange(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("OnScroll").Subscribe(x => OnScroll(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("SelectionChange").Subscribe(x => OnSelectionChange(x.Args));
@@ -264,6 +265,7 @@ namespace Typedown.Core.ViewModels
         public void OnFileLoaded(JToken arg)
         {
             if (IsStaleReport(arg)) return;
+            CompleteReloadWaiter(arg);
             if (loadClock != null)
             {
                 Log.Debug($"FileLoaded after {loadClock.ElapsedMilliseconds} ms in the editor");
@@ -501,6 +503,85 @@ namespace Typedown.Core.ViewModels
             TaskCompletionSource<bool> waiter = null;
             lock (flushWaiters) flushWaiters.TryGetValue(token, out waiter);
             waiter?.TrySetResult(true);
+        }
+
+        // Automation writes (docs/automation-api-spec.md, section 2.2; Services/AutomationDocuments.cs). The page applies
+        // an edit and answers DocumentEditApplied; a failed edit is undone by reloading the text held before it.
+        private readonly Dictionary<string, (int loadId, TaskCompletionSource<JToken> waiter)> editWaiters = new();
+        private readonly Dictionary<int, TaskCompletionSource<string>> reloadWaiters = new();
+
+        /// <summary>Hands an automation edit to the page and waits for its reply; null when it did not answer in time.</summary>
+        public async Task<JToken> ApplyDocumentEditAsync(string operationId, long targetRevision, string baseContentHash, string text, int timeoutMs)
+        {
+            if (MarkdownEditor == null) return null;
+            var waiter = new TaskCompletionSource<JToken>(TaskCreationOptions.RunContinuationsAsynchronously);
+            editWaiters[operationId] = (LoadId, waiter);
+            try
+            {
+                MarkdownEditor.PostMessage("ApplyDocumentEdit", new { operationId, targetRevision, baseContentHash, text, loadId = LoadId });
+                var finished = await Task.WhenAny(waiter.Task, Task.Delay(timeoutMs));
+                return finished == waiter.Task ? waiter.Task.Result : null;
+            }
+            finally
+            {
+                editWaiters.Remove(operationId);
+            }
+        }
+
+        private void OnDocumentEditApplied(JToken arg)
+        {
+            var operationId = arg?["operationId"]?.ToString();
+            if (operationId == null || !editWaiters.TryGetValue(operationId, out var entry)) return;
+            // A reply from another load is about another document's text: the edit's outcome is unknown.
+            var id = arg["loadId"];
+            var sameLoad = id != null && id.Type == JTokenType.Integer && id.Value<int>() == entry.loadId && entry.loadId == LoadId;
+            entry.waiter.TrySetResult(sameLoad ? arg : new JObject { ["operationId"] = operationId, ["outcome"] = "failed", ["reason"] = "superseded" });
+        }
+
+        /// <summary>
+        /// Reloads the editor with the given text through the normal LoadFile flow, keeping the host's history, hashes
+        /// and revision, and returns the text the page confirmed (null when it did not confirm in time).
+        /// </summary>
+        public async Task<string> ReloadAsync(string text, object cursor, double? scrollTop, int timeoutMs)
+        {
+            if (MarkdownEditor == null) return null;
+            var loadId = ++LoadId;
+            var waiter = new TaskCompletionSource<string>(TaskCreationOptions.RunContinuationsAsynchronously);
+            reloadWaiters[loadId] = waiter;
+            try
+            {
+                MarkdownEditor.PostMessage("LoadFile", new { text, basePath = FileViewModel.ImageBasePath, cursor, scrollTop, loadId });
+                var finished = await Task.WhenAny(waiter.Task, Task.Delay(timeoutMs));
+                return finished == waiter.Task ? waiter.Task.Result : null;
+            }
+            finally
+            {
+                reloadWaiters.Remove(loadId);
+            }
+        }
+
+        private void CompleteReloadWaiter(JToken arg)
+        {
+            var id = arg?["loadId"];
+            if (id == null || id.Type != JTokenType.Integer) return;
+            if (reloadWaiters.TryGetValue(id.Value<int>(), out var waiter)) waiter.TrySetResult(arg["text"]?.ToString());
+        }
+
+        /// <summary>
+        /// Commits text the page has confirmed for an automation edit: one undo step of its own (the reader's pending
+        /// typing is closed first so the two never merge), the unsaved state and the revision.
+        /// </summary>
+        public void CommitAutomationText(string text)
+        {
+            if (!string.Equals(Markdown, text, StringComparison.Ordinal))
+                ServiceProvider.GetService<TabsViewModel>()?.ActiveTab?.NoteTextChanged();
+            History.CommitPending();
+            Markdown = text;
+            History.ContentChange(text);
+            History.CursorChange(CurrentCursor ?? new(Focus: new(Line: 0, Ch: 0), Anchor: new(Line: 0, Ch: 0)));
+            History.CommitPending();
+            CurrentHash = Common.SimpleHash(text);
+            Saved = FileHash == CurrentHash;
         }
 
         public void Undo()

@@ -79,8 +79,9 @@ namespace Typedown.Automation
     }
 
     /// <summary>
-    /// One document as the edit coordinator needs it. The host implements it for a tab; its members marshal to the
-    /// window's dispatcher themselves. Text is always the authoritative host text ("\n" line endings).
+    /// One document as the edit coordinator needs it. The host implements it for a tab and runs the whole edit on the
+    /// window's dispatcher (spec 2.2: writes run in the window's UI queue), so members may touch UI state directly.
+    /// Text is always the authoritative host text ("\n" line endings).
     /// </summary>
     public interface IEditableDocument
     {
@@ -152,6 +153,8 @@ namespace Typedown.Automation
     /// </summary>
     public sealed class DocumentEditCoordinator
     {
+        // No ConfigureAwait(false) in this class, on purpose: started on a window's UI thread, every step after an
+        // await must resume there, because the document's members touch that window's state.
         private readonly Dictionary<string, SemaphoreSlim> locks = new(StringComparer.Ordinal);
         private readonly HashSet<string> quarantined = new(StringComparer.Ordinal);
         private readonly int classifierVersion;
@@ -190,10 +193,10 @@ namespace Typedown.Automation
         public async Task<EditResult> EditAsync(IEditableDocument document, EditRequest request, CancellationToken cancellationToken)
         {
             var gate = LockFor(document.DocumentId);
-            await gate.WaitAsync(cancellationToken).ConfigureAwait(false);
+            await gate.WaitAsync(cancellationToken);
             try
             {
-                return await EditLockedAsync(document, request, cancellationToken).ConfigureAwait(false);
+                return await EditLockedAsync(document, request, cancellationToken);
             }
             finally
             {
@@ -208,7 +211,7 @@ namespace Typedown.Automation
                 throw Error(AutomationErrorKind.editor_inconsistent, "The document's editor could not be restored after a failed edit; it refuses writes until reopened.");
 
             // 2. The active document's latest text first; a stale snapshot must never be overwritten.
-            if (document.IsActive && !await document.FlushAsync(cancellationToken).ConfigureAwait(false))
+            if (document.IsActive && !await document.FlushAsync(cancellationToken))
                 throw Error(AutomationErrorKind.content_sync_timeout, "Could not confirm the editor's latest text.");
 
             // 3. Revision check against the flushed state.
@@ -248,7 +251,7 @@ namespace Typedown.Automation
                 try
                 {
                     // 5-7. The page compares its live text with baseContentHash, applies, and reports.
-                    reply = await document.ApplyInEditorAsync(new ApplyCommand(operationId, targetRevision, baseHash, candidate), CancellationToken.None).ConfigureAwait(false);
+                    reply = await document.ApplyInEditorAsync(new ApplyCommand(operationId, targetRevision, baseHash, candidate), CancellationToken.None);
                 }
                 catch (Exception e) when (e is TimeoutException || e is OperationCanceledException)
                 {
@@ -278,7 +281,7 @@ namespace Typedown.Automation
                 {
                     // 8-9. One recovery path: reload what was there before, and check it came back exactly.
                     string? restored = null;
-                    try { restored = await document.RestoreAsync(state, CancellationToken.None).ConfigureAwait(false); }
+                    try { restored = await document.RestoreAsync(state, CancellationToken.None); }
                     catch (Exception) { }
                     if (restored != baseHash)
                     {
@@ -298,7 +301,7 @@ namespace Typedown.Automation
             var saved = document.Saved;
             if (request.Save)
             {
-                if (!await document.SaveAsync(CancellationToken.None).ConfigureAwait(false))
+                if (!await document.SaveAsync(CancellationToken.None))
                     throw Error(AutomationErrorKind.save_failed, "The edit was applied but saving failed; the document stays unsaved.",
                         new Dictionary<string, object?> { ["applied"] = true, ["revision"] = targetRevision });
                 saved = true;

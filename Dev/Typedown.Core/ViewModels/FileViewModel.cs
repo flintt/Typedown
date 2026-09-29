@@ -456,6 +456,13 @@ namespace Typedown.Core.ViewModels
             }
         }
 
+        /// <summary>
+        /// Saves the active document to its existing path without any dialog (the automation API's save): false when
+        /// it has no path or the write was refused or failed. Follows the auto-save rules, so a file decoded lossily
+        /// is not overwritten.
+        /// </summary>
+        public Task<bool> SaveToExistingPathAsync() => FilePath == null ? Task.FromResult(false) : Save(false);
+
         private async Task<bool> Save(bool alert = true)
         {
             var path = FilePath;

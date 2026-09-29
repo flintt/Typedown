@@ -10,6 +10,8 @@ import { htmlToMarkdown } from "services/importHtml";
 import { DEFAULT_TURNDOWN_CONFIG } from "components/Muya/lib/config";
 import { getHtmlToc, getTOC } from "services/common";
 import { resetUserIntent, takeChangeOrigin } from "services/changeOrigin";
+import { sha256Hex } from "services/sha256";
+import { classifierVersion } from "services/normalization";
 
 const Editor: React.FC = () => {
     // The document text and cursor live in refs, not React state: a state update per keystroke would commit
@@ -51,14 +53,34 @@ const Editor: React.FC = () => {
         fileLoadPending.current = { armed: false, timer: window.setTimeout(flushFileLoaded, 3000) }
     }, [flushFileLoaded])
 
+    // An automation edit the page has been asked to apply (ApplyDocumentEdit), until it has replied.
+    const pendingEditRef = useRef<{ operationId: string } | null>(null)
+
+    // Reports what the page now holds for the edit in flight: the exact source and what the first visual edit would
+    // do to it (services/normalization). Without Muya (source mode) nothing is known about the latter.
+    const replyEditApplied = useCallback(() => {
+        const edit = pendingEditRef.current
+        if (!edit) return false
+        pendingEditRef.current = null
+        const source = markdownRef.current ?? ''
+        const sourceHash = sha256Hex(source)
+        const pending = (window as any).__typedownPendingNormalization?.()
+        const normalization = pending
+            ? { pendingNormalization: pending.pendingNormalization, sourceHash, normalizedHash: sha256Hex(pending.normalized), reasons: pending.reasons, classifierVersion: pending.classifierVersion }
+            : { pendingNormalization: 'unknown', sourceHash, normalizedHash: null, reasons: ['notEvaluated'], classifierVersion }
+        transport.postMessage('DocumentEditApplied', { operationId: edit.operationId, loadId: loadIdRef.current, outcome: 'applied', sourceHash, normalization })
+        return true
+    }, [])
+
     // Called by the child editor right after it applied host content; the next change report completes the handshake.
     const onContentApplied = useCallback(() => {
+        if (replyEditApplied()) return
         const pending = fileLoadPending.current
         if (!pending || pending.armed) return
         clearTimeout(pending.timer)
         pending.armed = true
         pending.timer = window.setTimeout(flushFileLoaded, 500)
-    }, [flushFileLoaded])
+    }, [flushFileLoaded, replyEditApplied])
 
     // Editor -> host: called by the child editor on every change; no React re-render involved.
     const onMarkdownChange = useCallback((markdown: string) => {
@@ -70,6 +92,12 @@ const Editor: React.FC = () => {
             markdownRef.current = markdown
             resetUserIntent()
             flushFileLoaded()
+            return
+        }
+        // While an automation edit is being applied the host holds the text it sent; the editor's reports of
+        // applying it are not edits and must not advance the host's history or revision.
+        if (pendingEditRef.current) {
+            markdownRef.current = markdown
             return
         }
         if (markdownRef.current != markdown) {
@@ -176,6 +204,13 @@ const Editor: React.FC = () => {
     // load the host still wants can matter, and the host's stale-report rule already says which that is.
     const pendingLoadRef = useRef<{ text: string, basePath: string, cursor?: any, scrollTop?: number | null, loadId?: number } | null>(null)
     useEffect(() => transport.addListener<{ text: string, basePath: string, cursor?: any, scrollTop?: number | null, loadId?: number }>('LoadFile', (load) => {
+        // A load replaces whatever an automation edit was applying (the host restoring it, or a tab switch): that
+        // edit's outcome is unknown to the host, which then restores from its own copy.
+        const edit = pendingEditRef.current
+        if (edit) {
+            pendingEditRef.current = null
+            transport.postMessage('DocumentEditApplied', { operationId: edit.operationId, loadId: loadIdRef.current, outcome: 'failed', reason: 'superseded' })
+        }
         const scheduled = pendingLoadRef.current != null
         pendingLoadRef.current = load
         if (scheduled) return
@@ -191,6 +226,20 @@ const Editor: React.FC = () => {
             setContentFromHost(text, cursor ?? undefined, scrollTop)
         })
     }), [OnFileLoaded, setContentFromHost]);
+
+    // Host -> editor: an automation edit (docs/automation-api-spec.md, section 2.2, steps 6-7). In this one event the
+    // page takes in its own throttled typing, compares the live text with the base the host checked, and either
+    // refuses (the reader typed meanwhile) or starts applying; the reply follows once the editor holds the text.
+    useEffect(() => transport.addListener<{ operationId: string, baseContentHash: string, text: string }>('ApplyDocumentEdit', ({ operationId, baseContentHash, text }) => {
+        const refuse = (outcome: string, reason: string) => transport.postMessage('DocumentEditApplied', { operationId, loadId: loadIdRef.current, outcome, reason })
+        if (fileLoadPending.current || pendingEditRef.current) return refuse('failed', 'busy')
+        flushRef.current?.()
+        if (sha256Hex(markdownRef.current ?? '') !== baseContentHash) return refuse('conflict', 'baseContentHashMismatch')
+        pendingEditRef.current = { operationId }
+        resetUserIntent()
+        const y = optionsRef.current?.sourceCode ? codeMirrorScrollRef.current : window.scrollY
+        setContentFromHost(text, undefined, y)
+    }), [setContentFromHost]);
 
     useEffect(() => transport.addListener<{ text: string, cursor: string, basePath: string }>('SetMarkdown', ({ text, cursor, basePath }) => {
         window.basePath = basePath
