@@ -1,0 +1,270 @@
+{
+  "description": "External settings of the automation API (docs/automation-api-spec.md, section 3.3): the only settings settings.describe/get/set may touch, and for every other stored Windows setting the reason it is not exposed. Nothing is exposed by reflection; a new setting fails Dev/Typedown.Automation.Tests (SettingsMapTests) until it is listed here. The Uno names are recorded for the port and are not checked from this repository.",
+  "version": 1,
+  "exposed": [
+    {
+      "key": "appearance.theme",
+      "scope": "application",
+      "type": {
+        "type": "object",
+        "oneOf": [
+          {
+            "properties": {
+              "kind": {
+                "const": "builtIn"
+              },
+              "id": {
+                "enum": [
+                  "system",
+                  "light",
+                  "dark",
+                  "black"
+                ]
+              }
+            },
+            "required": [
+              "kind",
+              "id"
+            ]
+          },
+          {
+            "properties": {
+              "kind": {
+                "const": "custom"
+              },
+              "id": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "kind",
+              "id"
+            ]
+          }
+        ]
+      },
+      "windows": {
+        "properties": [
+          "AppTheme",
+          "CustomTheme"
+        ],
+        "apply": "builtIn: SettingsViewModel.ApplyBuiltInTheme (system -> AppTheme.Default); custom: ApplyCustomTheme(ThemeFiles.Find(id)), unknown id -> setting_invalid"
+      },
+      "uno": {
+        "properties": [
+          "Theme",
+          "CustomTheme"
+        ],
+        "apply": "builtIn: Theme + clear CustomTheme; custom: Theme from the theme's metadata + CustomTheme"
+      },
+      "visibleIn": [
+        "every window",
+        "every editor page",
+        "menu theme checks",
+        "an open settings page"
+      ],
+      "sensitivity": "none",
+      "restartRequired": false
+    },
+    {
+      "key": "editor.fontSize",
+      "scope": "application",
+      "type": {
+        "type": "integer",
+        "minimum": 8,
+        "maximum": 48
+      },
+      "windows": {
+        "properties": [
+          "FontSize"
+        ],
+        "storedAs": "double",
+        "apply": "SettingsViewModel.FontSize; editor pages via SettingsChanged"
+      },
+      "uno": {
+        "properties": [
+          "FontSize"
+        ],
+        "storedAs": "int",
+        "apply": "AppSettings.FontSize ([EditorOption])"
+      },
+      "visibleIn": [
+        "every editor page",
+        "an open settings page"
+      ],
+      "sensitivity": "none",
+      "restartRequired": false
+    },
+    {
+      "key": "editor.lineHeight",
+      "scope": "application",
+      "type": {
+        "type": "number",
+        "minimum": 1.0,
+        "maximum": 3.0
+      },
+      "rounding": "to 0.1, the same on both platforms",
+      "windows": {
+        "properties": [
+          "LineHeight"
+        ],
+        "apply": "SettingsViewModel.LineHeight; editor pages via SettingsChanged"
+      },
+      "uno": {
+        "properties": [
+          "LineHeight"
+        ],
+        "apply": "AppSettings.LineHeight ([EditorOption])"
+      },
+      "visibleIn": [
+        "every editor page",
+        "an open settings page"
+      ],
+      "sensitivity": "none",
+      "restartRequired": false
+    },
+    {
+      "key": "editor.textDirection",
+      "scope": "application",
+      "type": {
+        "enum": [
+          "auto",
+          "ltr",
+          "rtl"
+        ]
+      },
+      "windows": {
+        "properties": [
+          "TextDirection"
+        ],
+        "apply": "SettingsViewModel.TextDirection; editor pages via SettingsChanged"
+      },
+      "uno": {
+        "properties": [
+          "TextDirection"
+        ],
+        "apply": "AppSettings.TextDirection ([EditorOption])"
+      },
+      "visibleIn": [
+        "every editor page",
+        "an open settings page"
+      ],
+      "sensitivity": "none",
+      "restartRequired": false
+    }
+  ],
+  "notExposed": [
+    {
+      "reason": "windowLocal: layout or mode of one window (Core/Services/SettingsScope.cs); becomes a view command, not a setting",
+      "windows": [
+        "StartupPlacement",
+        "SidePaneOpen",
+        "SidePaneWidth",
+        "SidePaneIndex",
+        "StatusBarOpen",
+        "FindReplaceDialogWidth",
+        "Topmost"
+      ]
+    },
+    {
+      "reason": "viewState: editing mode of a window; exposed later as explicit view commands once mode switches are serialized with writes (spec 3.3)",
+      "windows": [
+        "SourceCode",
+        "ReadOnly",
+        "Typewriter",
+        "FocusMode"
+      ]
+    },
+    {
+      "reason": "searchState: options of the find panel",
+      "windows": [
+        "SearchIsCaseSensitive",
+        "SearchIsRegexp",
+        "SearchIsWholeWord"
+      ]
+    },
+    {
+      "reason": "secret: never described, read or written through the API",
+      "windows": [
+        "HedgeDocPassword",
+        "HedgeDocEmail",
+        "HedgeDocServer"
+      ]
+    },
+    {
+      "reason": "internal: migration or database flags",
+      "windows": [
+        "FileExportDatabaseInitialized",
+        "ImageUploadDatabaseInitialized"
+      ]
+    },
+    {
+      "reason": "path: may point outside the user's documents or change where files are written; needs its own review",
+      "windows": [
+        "StartupOpenFolder",
+        "DefaultImageBasePath",
+        "InsertClipboardImageCopyPath",
+        "InsertLocalImageCopyPath",
+        "InsertWebImageCopyPath"
+      ]
+    },
+    {
+      "reason": "code: user CSS runs in every editor page; not exposed",
+      "windows": [
+        "CustomCss"
+      ]
+    },
+    {
+      "reason": "restartRequired: takes effect only after a restart or affects process lifetime",
+      "windows": [
+        "Language",
+        "KeepRun",
+        "UseMicaEffect",
+        "UseEditorMicaEffect",
+        "AppCompactMode",
+        "AnimationEnable"
+      ]
+    },
+    {
+      "reason": "candidate: application preference not yet reviewed for exposure (type, range, apply path, multi-window test)",
+      "windows": [
+        "AutoPairBracket",
+        "AutoPairQuote",
+        "TrimUnnecessaryCodeBlockEmptyLines",
+        "PreferLooseListItem",
+        "ListIndentation",
+        "TableAlignColumns",
+        "ShowParagraphMarker",
+        "TocAutoExpand",
+        "RememberCursorPosition",
+        "HedgeDocPublishReadOnly",
+        "AlwaysShowTabBar",
+        "OpenFilesInNewTab",
+        "AutoPairMarkdownSyntax",
+        "EditorAreaWidth",
+        "FontFamily",
+        "AutoSave",
+        "AutoReload",
+        "AskBeforeReload",
+        "WordCountMethod",
+        "TabSize",
+        "SpellcheckEnabled",
+        "SpellcheckLang",
+        "FileStartupAction",
+        "FolderStartupAction",
+        "InsertClipboardImageAction",
+        "InsertClipboardImageUseUploadConfigId",
+        "InsertLocalImageAction",
+        "InsertLocalImageUseUploadConfigId",
+        "InsertWebImageAction",
+        "InsertWebImageUseUploadConfigId",
+        "AutoCopyRelativePathImage",
+        "PreferRelativeImagePaths",
+        "AddSymbolBeforeRelativePath",
+        "AutoEncodeImageURL",
+        "OpenFolderAfterExport"
+      ]
+    }
+  ]
+}

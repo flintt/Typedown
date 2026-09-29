@@ -296,7 +296,7 @@ Typedown.Uno/Automation/
 
 - [x] 将 Windows 持久化设置抽成应用级单一 store，消除每窗口独立快照。*（`JsonSettingsStore.Shared`：每个设置文件一个进程级 store，带 `Changed(name, origin)` 事件和 `Revision`。）*
 - [ ] 每窗口保留 UI/编辑器 apply façade，验证多个窗口和已打开设置页同步刷新。*（代码已完成：各窗口的 `SettingsViewModel` 在自己的 UI 线程上把其他窗口的改动当作本窗口改动通知出去，窗口级设置（模式、侧栏、窗口位置、搜索选项、置顶）见 `SettingsScope`，只保存不广播。待做：在 hp 上用两个窗口和已打开的设置页实际验证。）*
-- [ ] 建立外部设置 key 的规范映射数据，覆盖 scope、类型、范围、平台属性、apply handler、可见目标和敏感级别。
+- [x] 建立外部设置 key 的规范映射数据，覆盖 scope、类型、范围、平台属性、apply handler、可见目标和敏感级别。*（`docs/automation-fixtures/settings-map.json`：首批 4 个 key（主题、字号、行高、文字方向）的类型、范围、Windows/Uno 属性、应用路径、可见目标和敏感级别；其余每个已存储的 Windows 设置都按原因分组列为不开放（窗口级、视图状态、搜索、秘密、内部、路径、代码、需重启、待评审）。`SettingsMapTests` 要求每个设置都有归属，新增设置不登记就失败。）*
 - [x] 为快速连续写、持久化失败、窗口关闭和旧窗口覆盖新值建立回归测试。*（`SettingsStoreTests`，Linux 运行：多线程连续写、写失败后恢复、监听者抛异常不影响其他窗口、旧窗口覆盖新值（改回每窗口一个 store 时该测试失败）。窗口关闭时取消订阅在 `SettingsViewModel.Dispose`，待 GUI 验证。）*
 
 完成标准：Windows 多窗口不再有设置多写入者；相同映射数据能够生成 `settings.describe`，但阶段 1 无需等待本阶段完成。
