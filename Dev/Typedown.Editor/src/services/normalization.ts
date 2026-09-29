@@ -25,10 +25,11 @@ export interface NormalizationResult {
     reasons: string[];
 }
 
-export const classifierVersion = 1;
+export const classifierVersion = 2;
 
 export interface ProtectedPayload {
-    /** Fenced code blocks as `info\u0000body`, where info is the full info string after the fence. */
+    /** Fenced code blocks as `info\u0000body`, where info is the full info string after the fence; `\u0000broken` is
+     *  appended when a container line inside it would end it (see extractProtectedPayload). */
     fences: string[];
     /** Link and image destinations with their titles, from inline links, reference definitions and autolinks. */
     links: string[];
@@ -54,6 +55,7 @@ const referencePattern = /^ {0,3}\[(?!\^)(?:[^\]\\]|\\.)+\]:\s*<?(\S+?)>?(?:\s+(
 const autolinkPattern = /<((?:https?|ftp|mailto):[^\s<>]+)>/g;
 const htmlTagPattern = /<([A-Za-z][A-Za-z0-9-]*)((?:\s+[^\s"'>/=]+(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'=<>`]+))?)*)\s*\/?>/g;
 const htmlAttributePattern = /([^\s"'>/=]+)(?:\s*=\s*("[^"]*"|'[^']*'|[^\s"'=<>`]+))?/g;
+const containerStart = /^\s*(?:[-*+]\s|\d+[.)]\s|>)/;
 const taskPattern = /^\s*(?:[-*+]|\d+[.)])\s+\[([ xX])\](?=\s)/;
 
 // Identifiers that are not text: task markers, reference labels and footnote ids. They are protected (or merely
@@ -92,13 +94,20 @@ export function extractProtectedPayload(markdown: string): ProtectedPayload {
         if (open) {
             const marker = open[2];
             const body: string[] = [];
+            let broken = false;
             let j = i + 1;
             for (; j < lines.length; j++) {
                 const close = new RegExp(`^ {0,3}${marker[0] === '`' ? '`' : '~'}{${marker.length},}\\s*$`);
                 if (close.test(lines[j])) break;
-                body.push(lines[j]);
+                // CommonMark: a fence indented by n spaces takes up to n spaces off each line of its content.
+                // This scanner does not track containers, so an indented fence is taken as possibly inside a list
+                // or quote: a less indented line that starts one of those would end that container, and the fence
+                // with it, in a real parser. Such a fence is recorded as broken rather than as its text.
+                const indent = lines[j].length - lines[j].trimStart().length;
+                if (indent < open[1].length && containerStart.test(lines[j])) broken = true;
+                body.push(lines[j].replace(new RegExp(`^ {0,${open[1].length}}`), ''));
             }
-            payload.fences.push(`${open[3].trim()}\u0000${body.join('\n')}`);
+            payload.fences.push(`${open[3].trim()}\u0000${body.join('\n')}${broken ? '\u0000broken' : ''}`);
             i = j;
             continue;
         }

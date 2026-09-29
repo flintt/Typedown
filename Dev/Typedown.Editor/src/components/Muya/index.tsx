@@ -12,6 +12,7 @@ import FootnoteTool from 'components/Muya/lib/ui/footnoteTool'
 import FrontMenu from 'components/Muya/lib/ui/frontMenu'
 import FormatPicker from 'components/Muya/lib/ui/formatPicker'
 import { createApplicationMenuState } from "services/menuState";
+import { classifyNormalization } from "services/normalization";
 import 'components/Muya/themes/default.css'
 
 interface IMuyaEditor {
@@ -189,7 +190,17 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             listIndentation: JSON.stringify(o?.listIndentation ?? null),
             readOnly: JSON.stringify(!!o?.readOnly)
         };
-        (window as any).__typedownMuya = muya // for Tools/EditorBench and DevTools inspection
+        (window as any).__typedownMuya = muya; // for Tools/EditorBench and DevTools inspection
+        // What the next real visual edit would rewrite in the document (services/normalization): the loaded
+        // source against Muya's export of it. Once an edit has made the export the text there is nothing left
+        // to rewrite. Null before anything was loaded.
+        (window as any).__typedownPendingNormalization = () => {
+            const imported = importedRef.current
+            if (!imported) return null
+            return markdownRef.current === imported.source
+                ? classifyNormalization(imported.source, imported.normalized)
+                : classifyNormalization(markdownRef.current, markdownRef.current)
+        }
         setEditor(muya)
         return () => muya.destroy()
         // eslint-disable-next-line react-hooks/exhaustive-deps

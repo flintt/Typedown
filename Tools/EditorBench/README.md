@@ -33,6 +33,13 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   twice and must come back byte for byte with no edit reported. It proves the mapping back to the original
   source holds, not that the first real visual edit serializes faithfully. CR never reaches the editor (the host
   normalizes line endings), so there is no CRLF fixture: CodeMirror would rewrite one and report an edit.
+- `first-edit-check.js` — the same fixtures, each with a paragraph `EDITHERE` appended, loaded, switched to
+  visual mode and edited for real (click, then type `X`). The flushed text must be Muya's export with only that
+  keystroke added, and must match what `window.__typedownPendingNormalization()` (`services/normalization.ts`)
+  predicted before the edit. Each fixture's verdict (`none` / `unknown` / `unsafe`) is kept in
+  `first-edit-known.json`; a worse verdict fails, `--update` rewrites the baseline. `unsafe` entries are text a
+  single keystroke would lose (today: a fence info string's attributes, an HTML entity in raw HTML, blank lines
+  inserted into a multi-line HTML attribute). `harness.js` holds the fixtures and the stub-host page both use.
 
 - `reading-source-check.js` — preserves exact source through reading/source/visual mode switches and
   save flushes, checks a list followed immediately by a heading and fenced code, checks a GFM table

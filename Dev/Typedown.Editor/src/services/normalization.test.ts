@@ -23,6 +23,9 @@ test('a reference link turned inline keeps its destination and title', () => {
 test('a fence info string or body that changes is unsafe', () => {
     expect(verdict('```ts {title="x.ts"}\nconst a = 1;\n```\n', '```ts\nconst a = 1;\n```\n')).toBe('unsafe');
     expect(reasons('```js\nlet a\n```\n', '```js\nlet b\n```\n')).toContain('fence-lost');
+    // An indented fence strips that indentation from its content, so dropping both loses nothing.
+    expect(verdict(' ```\n aaa\naaa\n```\n', '```\naaa\naaa\n```\n')).toBe('unknown');
+    expect(verdict('  ```\n   aaa\n  ```\n', '```\naaa\n```\n')).toBe('unsafe');
 });
 
 test('the reading-mode corruption fixed in 7c02d10 would be caught', () => {
