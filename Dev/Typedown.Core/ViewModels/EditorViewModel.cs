@@ -266,6 +266,7 @@ namespace Typedown.Core.ViewModels
         public void OnFileLoaded(JToken arg)
         {
             if (IsStaleReport(arg)) return;
+            ConfirmedLoadId = LoadId;
             CompleteReloadWaiter(arg);
             if (loadClock != null)
             {
@@ -560,6 +561,24 @@ namespace Typedown.Core.ViewModels
             waiter?.TrySetResult(true);
         }
 
+        /// <summary>The newest load the page has confirmed with FileLoaded.</summary>
+        public int ConfirmedLoadId { get; private set; } = -1;
+
+        /// <summary>
+        /// Waits until the page has taken in the current load (its FileLoaded arrived). An automation edit sent before
+        /// that races the load: the page may still show the previous text, or apply the edit and then the load.
+        /// </summary>
+        public async Task<bool> WaitForLoadAsync(int timeoutMs)
+        {
+            var clock = System.Diagnostics.Stopwatch.StartNew();
+            while (ConfirmedLoadId != LoadId)
+            {
+                if (MarkdownEditor == null || clock.ElapsedMilliseconds > timeoutMs) return false;
+                await Task.Delay(25);
+            }
+            return true;
+        }
+
         // Automation writes (docs/automation-api-spec.md, section 2.2; Services/AutomationDocuments.cs). The page applies
         // an edit and answers DocumentEditApplied; a failed edit is undone by reloading the text held before it.
         private readonly Dictionary<string, (int loadId, TaskCompletionSource<JToken> waiter)> editWaiters = new();
@@ -586,6 +605,7 @@ namespace Typedown.Core.ViewModels
         private void OnDocumentEditApplied(JToken arg)
         {
             var operationId = arg?["operationId"]?.ToString();
+            Log.Debug($"automation: page reply {operationId} {arg?["outcome"]} {arg?["reason"]} loadId={arg?["loadId"]} current={LoadId}");
             if (operationId == null || !editWaiters.TryGetValue(operationId, out var entry)) return;
             // A reply from another load is about another document's text: the edit's outcome is unknown.
             var id = arg["loadId"];

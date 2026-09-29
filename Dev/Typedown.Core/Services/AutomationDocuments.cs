@@ -38,7 +38,8 @@ namespace Typedown.Core.Services
         public string Text => IsActive ? Editor.Markdown : tab.Markdown ?? "";
         public bool Saved => IsActive ? Editor.Saved : tab.Saved;
 
-        public Task<bool> FlushAsync(CancellationToken cancellationToken) => Editor.FlushContentAsync(FlushTimeoutMs);
+        public async Task<bool> FlushAsync(CancellationToken cancellationToken) =>
+            await Editor.WaitForLoadAsync(ReloadTimeoutMs) && await Editor.FlushContentAsync(FlushTimeoutMs);
 
         private sealed class State
         {

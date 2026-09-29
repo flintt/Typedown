@@ -295,6 +295,12 @@ internal static class Program
         SetForegroundWindow(window);
         for (var i = 0; i < 100 && GetForegroundWindow() != window; i++) await Task.Delay(50);
         if (GetForegroundWindow() != window) throw new CaseFailed("the test host window could not be brought to the front (is the desktop locked?)");
+        // Keyboard focus into the editor as a person gives it: a click in the text area, then Ctrl+End.
+        GetWindowRect(window, out var rect);
+        SetCursorPos((rect.Left + rect.Right) / 2, rect.Top + (rect.Bottom - rect.Top) * 2 / 5);
+        Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0002 } } }, new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0004 } } });
+        await Task.Delay(200); // the click's caret placement settles before the keys; the result is still checked below
+        Send(Key(0x11, false), Key(0x23, false), Key(0x23, true), Key(0x11, true));
         var inputs = new List<INPUT>();
         foreach (var ch in text)
         {
@@ -304,6 +310,17 @@ internal static class Program
         var sent = SendInput((uint)inputs.Count, inputs.ToArray(), Marshal.SizeOf<INPUT>());
         if (sent != inputs.Count) throw new CaseFailed($"SendInput sent {sent} of {inputs.Count} events (is the desktop locked?)");
     }
+
+    private static INPUT Key(ushort vk, bool up) => new() { type = 1, u = new InputUnion { ki = new KEYBDINPUT { wVk = vk, dwFlags = up ? 0x0002u : 0u } } };
+
+    private static void Send(params INPUT[] inputs)
+    {
+        if (SendInput((uint)inputs.Length, inputs, Marshal.SizeOf<INPUT>()) != inputs.Length) throw new CaseFailed("SendInput was refused (is the desktop locked?)");
+    }
+
+    [StructLayout(LayoutKind.Sequential)] private struct RECT { public int Left, Top, Right, Bottom; }
+    [DllImport("user32.dll")] private static extern bool GetWindowRect(IntPtr window, out RECT rect);
+    [DllImport("user32.dll")] private static extern bool SetCursorPos(int x, int y);
 
     /// <summary>Waits until the page itself holds text satisfying the condition (test.editor.pageText), bounded.</summary>
     private static async Task<string> WaitForPage(Client c, string documentId, Func<string, bool> condition, string what)
