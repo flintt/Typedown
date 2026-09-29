@@ -40,6 +40,9 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   `first-edit-known.json`; a worse verdict fails, `--update` rewrites the baseline. `unsafe` entries are text a
   single keystroke would lose (today: a fence info string's attributes, an HTML entity in raw HTML, blank lines
   inserted into a multi-line HTML attribute). `harness.js` holds the fixtures and the stub-host page both use.
+- `origin-check.js` — every `MarkdownChange` carries `origin`: `user` after a real key, pointer, paste or drop
+  event or a host editing command, `editor` for a change nothing the reader did caused (`services/changeOrigin.ts`).
+  Loads, mode switches and late renders report nothing; an action counts for one report; a load forgets it.
 
 - `reading-source-check.js` — preserves exact source through reading/source/visual mode switches and
   save flushes, checks a list followed immediately by a heading and fenced code, checks a GFM table

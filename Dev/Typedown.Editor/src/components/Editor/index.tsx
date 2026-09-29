@@ -9,6 +9,7 @@ import ExportHtml from "services/exportHtml";
 import { htmlToMarkdown } from "services/importHtml";
 import { DEFAULT_TURNDOWN_CONFIG } from "components/Muya/lib/config";
 import { getHtmlToc, getTOC } from "services/common";
+import { resetUserIntent, takeChangeOrigin } from "services/changeOrigin";
 
 const Editor: React.FC = () => {
     // The document text and cursor live in refs, not React state: a state update per keystroke would commit
@@ -67,12 +68,13 @@ const Editor: React.FC = () => {
             // Before the new text is applied any report still describes the previous document: drop it.
             if (!pending.armed) return
             markdownRef.current = markdown
+            resetUserIntent()
             flushFileLoaded()
             return
         }
         if (markdownRef.current != markdown) {
             markdownRef.current = markdown
-            transport.postMessage('MarkdownChange', { text: markdown, loadId: loadIdRef.current });
+            transport.postMessage('MarkdownChange', { text: markdown, loadId: loadIdRef.current, origin: takeChangeOrigin() });
         }
     }, [flushFileLoaded])
 
