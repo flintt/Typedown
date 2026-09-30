@@ -379,8 +379,8 @@ Typedown.Uno/Automation/
 
 ### 阶段 5：发布稳定化
 
-- [ ] 冻结 v1 兼容政策和弃用流程。
-- [ ] 把接口状态、版本、scope 的实际安全边界、连接指示和 CLI 示例加入用户文档与 release notes。
+- [x] 冻结 v1 兼容政策和弃用流程。*（规格第 6 节：允许的新增、不允许的改动、弃用步骤与 v2 并存期。冻结副本 `automation-schema/v1-frozen.json`，`SchemaCompatibilityTests` 逐项比对，并验证删除定义、新增必填、删字段、改类型、结果少保证、删枚举值都会被报出。）*
+- [x] 把接口状态、版本、scope 的实际安全边界、连接指示和 CLI 示例加入用户文档与 release notes。*（用户文档 `docs/automation.md`（README 有入口）；发布说明草稿 `docs/automation-release-notes-draft.md`，发布时并入 tag 说明。）*
 - [ ] 在 Windows 真机和 NUC Uno 环境各完成一次直接客户端、CLI 和 MCP 的发布候选验证。
 - [ ] 只有出现明确远程场景时才设计带认证的网络网关；本机接口不能直接改成 TCP 服务。
 

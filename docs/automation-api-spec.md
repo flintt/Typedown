@@ -414,3 +414,33 @@ JSON-RPC 的 `error.code` 必须是整数。除 `-32602` 等标准错误外，v1
 - 限制单连接并发请求数、事件队列长度和每秒写操作数。
 - 解析 JSON 前验证帧长度；格式错误或持续超限的连接直接关闭。
 - 正文写入仍受现有文件保存、备份和路径校验流程保护。
+
+## 6. 兼容政策与弃用流程（v1 冻结）
+
+`apiVersion: 1` 自本节起冻结。冻结的范围是调用方能依赖的一切：方法名及其参数和结果（[`automation-schema/v1.json`](automation-schema/v1.json)）、错误 `code` 与 `data.kind`、scope 名称、`typedownctl` 的命令和退出码、`typedown-mcp` 的工具名和参数、正文与 revision 的语义（第 2 节）。冻结时的 schema 另存为 [`automation-schema/v1-frozen.json`](automation-schema/v1-frozen.json)；`SchemaCompatibilityTests` 逐项比较两者，只允许下面列出的新增。
+
+### 6.1 v1 内允许的改动
+
+- 新增方法。它出现在 `system.initialize` 返回的方法列表里，客户端据此判断，不按应用版本号猜。
+- 给已有方法新增**可选**参数；缺省时行为与之前完全相同。
+- 在结果或错误 `data` 里新增字段。客户端必须忽略不认识的字段（第 1.2 节）。
+- 给已有的枚举新增取值，只限结果中的枚举，并且新值只在调用方通过参数或能力要求时才出现；参数中的枚举新增取值等同于新增可选行为。
+- 新增错误 `kind`，只用于新方法或新参数引出的新情况；已有情况的 `code` 和 `kind` 不变。
+- 平台差异只通过 `capabilities` 和方法列表表达，不改变同一方法在不同平台上的语义（第 4 阶段的等价场景 `Tools/AutomationE2E/equivalence` 检查这一点）。
+
+### 6.2 v1 内不允许的改动
+
+- 删除或改名方法、参数、结果字段、枚举值、scope。
+- 改变字段类型，或把可选参数改成必填，或收紧此前接受的输入。
+- 改变成功所代表的保证（例如“成功表示编辑器已应用”“`save: true` 成功表示已写盘”），或改变默认策略（例如 `normalizationPolicy` 默认 `requireKnownSafe`）。
+- 让已有方法需要更多 scope。
+- 改变 `typedownctl` 已有命令的退出码或 `--json` 输出结构，改变 `typedown-mcp` 已有工具的名称或参数。
+
+这些改动只能进入 `apiVersion: 2`。
+
+### 6.3 弃用流程
+
+1. 在 schema 中给被替代的方法或参数加 `"deprecated": true` 和 `"x-replacedBy"`，在 `system.initialize` 的结果里用 `deprecated` 列出（方法名、替代者、最早移除的 API 版本）。被弃用的方法在整个 v1 内照常工作。
+2. 发布说明写明弃用和替代方式；`typedownctl` 在调用被弃用的方法时向 stderr 打印一行提示，不改变 stdout 和退出码。
+3. 移除只发生在新的 `apiVersion`。引入 v2 的版本同时继续接受 v1 的 `system.initialize`，至少保留两个次版本且不少于六个月；这段时间里，请求已不支持的版本时，`unsupported_version` 的 `data.supportedVersions` 列出仍可用的版本。
+4. 冻结副本只在开始 v2 时另存为 `v2-frozen.json`；`v1-frozen.json` 不再改动。
