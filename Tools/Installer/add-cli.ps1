@@ -31,8 +31,11 @@ $AppFolder = (Resolve-Path $AppFolder).Path
 if (-not (Test-Path (Join-Path $AppFolder 'Typedown.exe'))) { throw "add-cli: no Typedown.exe in $AppFolder" }
 
 $out = Join-Path ([IO.Path]::GetTempPath()) ("typedownctl-" + [Guid]::NewGuid().ToString('N'))
-Write-Host "add-cli: publishing typedownctl for netcoreapp3.1 / $RuntimeIdentifier"
-& dotnet publish (Join-Path $repo 'Tools\Typedown.Cli\Typedown.Cli.csproj') -f netcoreapp3.1 -r $RuntimeIdentifier `
+# The portable identifier (win-x64 for the app's win10-x64): the project also targets net8.0, which no longer knows
+# the version-specific ones, and both name the same runtime pack - the file comparison below proves it.
+$rid = $RuntimeIdentifier -replace '^win10-', 'win-'
+Write-Host "add-cli: publishing typedownctl for netcoreapp3.1 / $rid"
+& dotnet publish (Join-Path $repo 'Tools\Typedown.Cli\Typedown.Cli.csproj') -f netcoreapp3.1 -r $rid `
     --self-contained true -c $Configuration -o $out -nologo -v q
 if ($LASTEXITCODE -ne 0) { throw "add-cli: dotnet publish failed" }
 
