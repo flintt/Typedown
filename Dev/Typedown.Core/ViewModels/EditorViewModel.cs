@@ -577,6 +577,18 @@ namespace Typedown.Core.ViewModels
         public int ConfirmedLoadId { get; private set; } = -1;
 
         /// <summary>
+        /// The editor page is being loaded again (leaving the settings page loads it again, as do a page error and a
+        /// crashed web process). The load the old page confirmed is not the new page's: until the new page has asked
+        /// for its settings and confirmed that load, <see cref="WaitForLoadAsync"/> waits instead of letting a read or
+        /// write through to a page that is not listening yet (it then timed out after the 2 s flush).
+        /// </summary>
+        public void OnEditorPageNavigating()
+        {
+            if (ConfirmedLoadId != -1) Log.Debug($"editor: page loading again, load {ConfirmedLoadId} no longer confirmed");
+            ConfirmedLoadId = -1;
+        }
+
+        /// <summary>
         /// Waits until the page has taken in the current load (its FileLoaded arrived). An automation edit sent before
         /// that races the load: the page may still show the previous text, or apply the edit and then the load.
         /// </summary>
