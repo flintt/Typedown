@@ -41,6 +41,8 @@ namespace Typedown.Services.Automation
             };
             var barriers = TestHostHooks.Barriers;
             var host = new WindowsAutomationHost(info.Version, barriers);
+            var settingsHost = new WindowsSettingsHost();
+            var catalog = SettingsCatalog.Load();
             endpointName = EndpointName(buildType, sid);
             var name = endpointName;
             server = new AutomationServer(
@@ -48,6 +50,7 @@ namespace Typedown.Services.Automation
                 () =>
                 {
                     var methods = DocumentMethods.AddTo(new MethodTable(buildType), host, info.InstanceId, OnWrite);
+                    SettingsMethods.AddTo(methods, settingsHost, catalog);
                     TestHostHooks.AddMethods(methods);
                     return new AutomationSession(info, methods);
                 },

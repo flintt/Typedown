@@ -126,3 +126,49 @@ namespace Typedown.Automation.Tests
         }
     }
 }
+
+namespace Typedown.Automation.Tests
+{
+    public class CliSettingsTests : IAsyncLifetime
+    {
+        private readonly string endpoint = "td-cli-s-" + Guid.NewGuid().ToString("N");
+        private readonly FakeSettingsHost host = new();
+        private AutomationServer server = null!;
+
+        public Task InitializeAsync()
+        {
+            var info = new ServerInfo();
+            server = new AutomationServer(() => new PlainPipeListener(endpoint),
+                () => new AutomationSession(info, SettingsMethods.AddTo(new MethodTable(BuildTypes.Application), host, SettingsCatalog.Load())), info.MaxMessageBytes);
+            server.Start();
+            return Task.CompletedTask;
+        }
+
+        public Task DisposeAsync() => server.StopAsync();
+
+        private async Task<(int exit, string stdout)> Run(params string[] args)
+        {
+            var output = new System.IO.StringWriter();
+            var all = new System.Collections.Generic.List<string>(args) { "--endpoint", endpoint, "--client-id", "5c05cf79-35ef-4ff5-9dce-cf3fcb63b42c" };
+            var exit = await new Cli.Cli(new System.IO.StringReader(""), output, new System.IO.StringWriter()).RunAsync(all.ToArray()).WaitAsync(TimeSpan.FromSeconds(20));
+            return (exit, output.ToString());
+        }
+
+        [Fact]
+        public async Task Settings_commands_read_and_write()
+        {
+            var (exit, stdout) = await Run("--json", "settings", "get", "editor.fontSize");
+            Assert.Equal(0, exit);
+            Assert.Equal(16, (int)Newtonsoft.Json.Linq.JObject.Parse(stdout)["values"]!["editor.fontSize"]!);
+            (exit, stdout) = await Run("--json", "settings", "set", "editor.textDirection", "rtl", "--base-revision", "7");
+            Assert.Equal(0, exit);
+            Assert.Equal("rtl", (string)host.Values["editor.textDirection"]);
+            (exit, _) = await Run("settings", "set", "editor.fontSize", "99", "--base-revision", "8");
+            Assert.Equal(Cli.Cli.Other, exit); // setting_invalid
+            (exit, _) = await Run("settings", "set", "editor.fontSize", "20", "--base-revision", "1");
+            Assert.Equal(Cli.Cli.Conflict, exit);
+            (exit, stdout) = await Run("--json", "settings", "describe");
+            Assert.Equal(4, ((Newtonsoft.Json.Linq.JArray)Newtonsoft.Json.Linq.JObject.Parse(stdout)["settings"]!).Count);
+        }
+    }
+}

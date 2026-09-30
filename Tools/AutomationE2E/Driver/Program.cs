@@ -94,6 +94,7 @@ internal static class Program
             await Case("R02 undo and redo stay in their own document", R02);
             await Case("R03 a keystroke while a saving write is held: the saved file is the written revision, the keystroke is kept", R03);
             await Case("B01 settings: one window's change reaches the other window; window modes stay with their window", B01);
+            await Case("S2 settings.set reaches every window and the settings file; a stale revision is refused", S2);
             await Case("M01 a written text survives visual, reading and source mode switches byte for byte, then saves exactly", M01);
             await Case("R04 untitled and background documents come back from their backups after a kill, each its own", R04);
         }
@@ -127,7 +128,7 @@ internal static class Program
         }
     }
 
-    private static readonly string[] AllScopes = { Scopes.AppRead, Scopes.DocumentRead, Scopes.DocumentWrite, Scopes.DocumentSave, Scopes.WindowFocus };
+    private static readonly string[] AllScopes = { Scopes.AppRead, Scopes.DocumentRead, Scopes.DocumentWrite, Scopes.DocumentSave, Scopes.WindowFocus, Scopes.SettingsRead, Scopes.SettingsWrite };
 
     private static Task<JToken> Initialize(Client c, string name) => c.Call("system.initialize", new
     {
@@ -323,6 +324,25 @@ internal static class Program
         Check((bool)await Value(second, "SourceCode") == sourceBefore, "the second window keeps its mode");
         await c.Call("test.settings.set", new { windowId = first, name = "SourceCode", value = sourceBefore });
         notes.Add($"font {font}, text direction rtl/auto, source mode stayed per window");
+    }
+
+    private static async Task S2(List<string> notes)
+    {
+        using var c = await Session("e2e S2");
+        var windows = ((JArray)(await c.Call("window.list"))["windows"]!).Select(w => (string)w["windowId"]!).ToList();
+        var got = await c.Call("settings.get", new { keys = new[] { "editor.fontSize" } });
+        var revision = (long)got["settingsRevision"]!;
+        var font = (int)got["values"]!["editor.fontSize"]! == 23 ? 24 : 23;
+        var set = await c.Call("settings.set", new { key = "editor.fontSize", value = font, baseSettingsRevision = revision });
+        Check((long)set["settingsRevision"]! > revision, "the settings revision advanced");
+        foreach (var window in windows)
+            Check((double)(await c.Call("test.settings.get", new { windowId = window, name = "FontSize" }))["value"]! == font, $"window {window[..7]} has font size {font}");
+        var file = JObject.Parse(File.ReadAllText(Path.Combine(testRoot, "data", "Settings.json")));
+        Check((double)file["FontSize"]! == font, $"Settings.json holds {font} ({file["FontSize"]})");
+        Check((int)(await c.Call("settings.get", new { keys = new[] { "editor.fontSize" } }))["values"]!["editor.fontSize"]! == font, "settings.get reads it back");
+        Check(await c.ErrorCode("settings.set", new { key = "editor.fontSize", value = 12, baseSettingsRevision = revision }) == -32012, "a stale settings revision is refused");
+        Check(await c.ErrorCode("settings.set", new { key = "SourceCode", value = true, baseSettingsRevision = (long)set["settingsRevision"]! }) == -32020, "a window mode is not an external setting");
+        notes.Add($"{windows.Count} window(s), font {font}");
     }
 
     private static async Task M01(List<string> notes)

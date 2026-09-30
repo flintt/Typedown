@@ -38,6 +38,8 @@ usage: typedownctl [--json] [--endpoint NAME] [--client-id UUID] <command> [opti
   replace-text <documentId> --base-revision N --find S --replacement S --expected-count N [--save] [--reveal]
           [--allow-unknown-normalization] [--client-operation-id S]
   save <documentId> [--base-revision N]
+  settings describe | settings get [key ...] | settings set <key> <json value> --base-revision N
+                                          external settings (appearance.theme, editor.fontSize, ...)
 
 Document text uses \n line endings; text with \r is refused unless --lf converts it on the way in.
 Exit codes: 0 ok, 2 usage, 3 not running or not reachable, 4 version or scope, 5 window/document not found,
@@ -221,6 +223,30 @@ Exit codes: 0 ok, 2 usage, 3 not running or not reachable, 4 version or scope, 5
                         ["expectedCount"] = a.RequiredLong("expected-count"),
                     };
                     return Write("document.replaceText", p, a);
+                }
+                case "settings":
+                {
+                    var sub = a.Positional0("settings describe | get | set");
+                    switch (sub)
+                    {
+                        case "describe":
+                            a.CheckAllUsed(1);
+                            return ("settings.describe", new JObject(), new[] { Scopes.SettingsRead });
+                        case "get":
+                            p = new JObject();
+                            if (a.Positional.Count > 1) p["keys"] = new JArray(a.Positional.Skip(1));
+                            return ("settings.get", p, new[] { Scopes.SettingsRead });
+                        case "set":
+                            if (a.Positional.Count < 3) throw new UsageException("settings set <key> <json value> --base-revision N");
+                            JToken value;
+                            try { value = JToken.Parse(a.Positional[2]); }
+                            catch (JsonException) { value = a.Positional[2]; } // a bare word is a string: rtl, auto
+                            p = new JObject { ["key"] = a.Positional[1], ["value"] = value, ["baseSettingsRevision"] = a.RequiredLong("base-revision") };
+                            a.CheckAllUsed(3);
+                            return ("settings.set", p, new[] { Scopes.SettingsWrite });
+                        default:
+                            throw new UsageException($"unknown settings command '{sub}'");
+                    }
                 }
                 case "save":
                     p = new JObject { ["documentId"] = a.Positional0("documentId") };

@@ -135,9 +135,12 @@ namespace Typedown.Automation
     /// <summary>settings.describe/get/set (docs/automation-api-spec.md, section 3.3).</summary>
     public static class SettingsMethods
     {
+        // One gate per host, shared by every connection: each connection builds its own method table.
+        private static readonly System.Runtime.CompilerServices.ConditionalWeakTable<ISettingsHost, SemaphoreSlim> gates = new();
+
         public static MethodTable AddTo(MethodTable table, ISettingsHost host, SettingsCatalog catalog, Action<string, string>? onWrite = null)
         {
-            var gate = new SemaphoreSlim(1, 1);
+            var gate = gates.GetValue(host, _ => new SemaphoreSlim(1, 1));
             table.Add(new MethodDescriptor("settings.describe", Scopes.SettingsRead, "settings.describe/1", (c, ct) =>
                 Task.FromResult<JToken?>(new JObject
                 {
