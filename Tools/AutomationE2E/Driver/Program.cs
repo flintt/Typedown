@@ -94,6 +94,7 @@ internal static class Program
             await Case("R02 undo and redo stay in their own document", R02);
             await Case("R03 a keystroke while a saving write is held: the saved file is the written revision, the keystroke is kept", R03);
             await Case("B01 settings: one window's change reaches the other window; window modes stay with their window", B01);
+            await Case("M01 a written text survives visual, reading and source mode switches byte for byte, then saves exactly", M01);
             await Case("R04 untitled and background documents come back from their backups after a kill, each its own", R04);
         }
         catch (Exception e)
@@ -322,6 +323,34 @@ internal static class Program
         Check((bool)await Value(second, "SourceCode") == sourceBefore, "the second window keeps its mode");
         await c.Call("test.settings.set", new { windowId = first, name = "SourceCode", value = sourceBefore });
         notes.Add($"font {font}, text direction rtl/auto, source mode stayed per window");
+    }
+
+    private static async Task M01(List<string> notes)
+    {
+        using var c = await Session("e2e M01");
+        var path = Fixture("m01.md", "# M01\n\nstart\n");
+        var id = await Open(c, path);
+        var window = (string)(await c.Call("document.focus", new { documentId = id }))["windowId"]!;
+        // Text Muya would write back differently (setext heading, '*' bullets, a ragged table): only the mapping to the
+        // source keeps it exact while nobody edits.
+        const string text = "Title\n=====\n\n* one\n* two\n\n|a|b|\n|-|-|\n|1|2|\n";
+        var written = await c.Call("document.replace", new { documentId = id, baseRevision = await Revision(c, id), text, normalizationPolicy = "allowUnknown" });
+        var revision = (long)written["revision"]!;
+        notes.Add($"written r{revision}, normalization {written["normalization"]?["pendingNormalization"]}");
+        foreach (var (source, reading, name) in new[] { (false, true, "reading"), (true, false, "source"), (false, false, "visual"), (false, true, "reading"), (false, false, "visual") })
+        {
+            await c.Call("test.settings.set", new { windowId = window, name = "SourceCode", value = source });
+            await c.Call("test.settings.set", new { windowId = window, name = "ReadOnly", value = reading });
+            var page = await WaitForPage(c, id, t => t == text, $"the {name} view's text");
+            var doc = await Get(c, id);
+            Check((string)doc["text"]! == text, $"{name}: latest read is the written text ({JsonConvert.SerializeObject((string)doc["text"]!)})");
+            Check((long)doc["revision"]! == revision, $"{name}: no revision without an edit (r{doc["revision"]})");
+            Check(!(bool)doc["saved"]!, $"{name}: still unsaved, not marked saved or re-dirtied oddly");
+        }
+        await c.Call("test.settings.set", new { windowId = window, name = "SourceCode", value = false });
+        await c.Call("test.settings.set", new { windowId = window, name = "ReadOnly", value = false });
+        await c.Call("document.save", new { documentId = id, baseRevision = revision });
+        Check(Disk(path) == text, $"the file holds exactly the written text ({JsonConvert.SerializeObject(Disk(path))})");
     }
 
     private static async Task R04(List<string> notes)
