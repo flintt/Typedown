@@ -183,6 +183,9 @@ $stage = Join-Path $repo 'Tools\Installer\publish'
 Remove-Item $stage -Recurse -Force -ErrorAction SilentlyContinue
 New-Item -ItemType Directory -Force $stage | Out-Null
 Copy-Item (Join-Path $published '*') $stage -Recurse -Force
+# typedownctl (and its MCP server) beside the app, on the app's runtime, with the automation documents.
+& (Join-Path $PSScriptRoot 'add-cli.ps1') -AppFolder $stage -RuntimeIdentifier $rid -Configuration $Configuration
+& (Join-Path $PSScriptRoot 'assert-application-build.ps1') -Path $stage
 
 & $iscc /DMyAppVersion=$version /DMyArch=$arch 'Tools\Installer\Typedown.iss' | Select-String -Pattern 'error|Successful compile' | ForEach-Object { $_.Line }
 if ($LASTEXITCODE -ne 0) { throw "ISCC failed" }

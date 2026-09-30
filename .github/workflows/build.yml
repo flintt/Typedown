@@ -263,13 +263,17 @@ jobs:
           New-Item -ItemType Directory -Force out, out-installer | Out-Null
           $arch = "${{ steps.ver.outputs.arch }}"
           ./Tools/Installer/assert-application-build.ps1 -Path $pub
-          # The portable zip is only produced for releases; day-to-day test artifacts stay small.
-          if ("${{ github.ref }}".StartsWith("refs/tags/")) {
-            Compress-Archive -Path "$pub\*" -DestinationPath "out\Typedown-portable-$arch-v$ver.zip" -CompressionLevel Optimal
-          }
-          # installer
+          # The app folder the installer and the portable zip carry: the published app plus typedownctl (on the
+          # app's runtime) and the automation documents.
           New-Item -ItemType Directory -Force Tools/Installer/publish | Out-Null
           Copy-Item "$pub\*" Tools/Installer/publish -Recurse -Force
+          ./Tools/Installer/add-cli.ps1 -AppFolder Tools/Installer/publish -RuntimeIdentifier "win10-$arch"
+          ./Tools/Installer/assert-application-build.ps1 -Path Tools/Installer/publish
+          # The portable zip is only produced for releases; day-to-day test artifacts stay small.
+          if ("${{ github.ref }}".StartsWith("refs/tags/")) {
+            Compress-Archive -Path "Tools/Installer/publish\*" -DestinationPath "out\Typedown-portable-$arch-v$ver.zip" -CompressionLevel Optimal
+          }
+          # installer
           $iscc = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
           & $iscc /DMyAppVersion=$ver /DMyArch=$arch Tools/Installer/Typedown.iss
           $setup = Get-ChildItem Tools/Installer/Output/*.exe | Select-Object -First 1

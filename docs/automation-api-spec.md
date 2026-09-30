@@ -417,7 +417,7 @@ JSON-RPC 的 `error.code` 必须是整数。除 `-32602` 等标准错误外，v1
 
 ## 6. 兼容政策与弃用流程（v1 冻结）
 
-`apiVersion: 1` 自本节起冻结。冻结的范围是调用方能依赖的一切：方法名及其参数和结果（[`automation-schema/v1.json`](automation-schema/v1.json)）、错误 `code` 与 `data.kind`、scope 名称、`typedownctl` 的命令和退出码、`typedown-mcp` 的工具名和参数、正文与 revision 的语义（第 2 节）。冻结时的 schema 另存为 [`automation-schema/v1-frozen.json`](automation-schema/v1-frozen.json)；`SchemaCompatibilityTests` 逐项比较两者，只允许下面列出的新增。
+`apiVersion: 1` 自本节起冻结。冻结的范围是调用方能依赖的一切：方法名及其参数和结果（[`automation-schema/v1.json`](automation-schema/v1.json)）、错误 `code` 与 `data.kind`、scope 名称、`typedownctl` 的命令和退出码、`typedownctl mcp` 的工具名和参数、正文与 revision 的语义（第 2 节）。冻结时的 schema 另存为 [`automation-schema/v1-frozen.json`](automation-schema/v1-frozen.json)；`SchemaCompatibilityTests` 逐项比较两者，只允许下面列出的新增。
 
 ### 6.1 v1 内允许的改动
 
@@ -434,7 +434,7 @@ JSON-RPC 的 `error.code` 必须是整数。除 `-32602` 等标准错误外，v1
 - 改变字段类型，或把可选参数改成必填，或收紧此前接受的输入。
 - 改变成功所代表的保证（例如“成功表示编辑器已应用”“`save: true` 成功表示已写盘”），或改变默认策略（例如 `normalizationPolicy` 默认 `requireKnownSafe`）。
 - 让已有方法需要更多 scope。
-- 改变 `typedownctl` 已有命令的退出码或 `--json` 输出结构，改变 `typedown-mcp` 已有工具的名称或参数。
+- 改变 `typedownctl` 已有命令的退出码或 `--json` 输出结构，改变 MCP 服务器（`typedownctl mcp`）已有工具的名称或参数。
 
 这些改动只能进入 `apiVersion: 2`。
 

@@ -49,7 +49,7 @@ echo "== MCP, then its connection cut"
 python3 - "$A" "$SOCK" "$ID" <<'PY'
 import json, subprocess, sys, time, os
 A, sock, doc = sys.argv[1:4]
-p = subprocess.Popen(["dotnet", f"{A}/mcp/typedown-mcp.dll", "--endpoint", sock], stdin=subprocess.PIPE, stdout=subprocess.PIPE, text=True, bufsize=1)
+p = subprocess.Popen(["dotnet", f"{A}/cli/typedownctl.dll", "mcp", "--endpoint", sock], stdin=subprocess.PIPE, stdout=subprocess.PIPE, text=True, bufsize=1)
 n = 0
 def send(m, params):
     global n; n += 1

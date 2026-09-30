@@ -40,6 +40,7 @@ usage: typedownctl [--json] [--endpoint NAME] [--client-id UUID] <command> [opti
   save <documentId> [--base-revision N]
   settings describe | settings get [key ...] | settings set <key> <json value> --base-revision N
                                           external settings (appearance.theme, editor.fontSize, ...)
+  mcp [--endpoint NAME]                   run as an MCP server on stdin/stdout, for AI agents
 
 Document text uses \n line endings; text with \r is refused unless --lf converts it on the way in.
 Exit codes: 0 ok, 2 usage, 3 not running or not reachable, 4 version or scope, 5 window/document not found,
@@ -368,14 +369,16 @@ Exit codes: 0 ok, 2 usage, 3 not running or not reachable, 4 version or scope, 5
         }
 
         /// <summary>The installed application's endpoint: its named pipe on Windows, its socket path elsewhere.</summary>
-        public static string DefaultEndpoint() => RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-            ? AutomationEndpoint.PipeName(BuildTypes.Application, CurrentUserId())
-            : UnixSocketListener.DefaultPath(BuildTypes.Application);
+        public static string DefaultEndpoint() =>
+#if NET7_0_OR_GREATER
+            !RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? UnixSocketListener.DefaultPath(BuildTypes.Application) :
+#endif
+            AutomationEndpoint.PipeName(BuildTypes.Application, CurrentUserId());
 
         public static string CurrentUserId()
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                return System.Security.Principal.WindowsIdentity.GetCurrent().User?.Value ?? Environment.UserName;
+                return WindowsUser.CurrentSid();
             return geteuid().ToString(System.Globalization.CultureInfo.InvariantCulture);
         }
 
@@ -385,6 +388,7 @@ Exit codes: 0 ok, 2 usage, 3 not running or not reachable, 4 version or scope, 5
         /// <summary>A pipe name, or a socket path (anything with a '/') on Linux and macOS.</summary>
         public static async Task<Stream> ConnectPipeAsync(string endpoint, CancellationToken ct)
         {
+#if NET7_0_OR_GREATER
             if (endpoint.Contains('/') && !RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 using var timeout = CancellationTokenSource.CreateLinkedTokenSource(ct);
@@ -392,6 +396,7 @@ Exit codes: 0 ok, 2 usage, 3 not running or not reachable, 4 version or scope, 5
                 try { return await UnixSocketListener.ConnectAsync(endpoint, timeout.Token).ConfigureAwait(false); }
                 catch (OperationCanceledException) when (!ct.IsCancellationRequested) { throw new TimeoutException("No answer from " + endpoint); }
             }
+#endif
             var pipe = new NamedPipeClientStream(".", endpoint, PipeDirection.InOut, PipeOptions.Asynchronous);
             try
             {

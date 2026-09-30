@@ -130,7 +130,7 @@ namespace Typedown.Automation
             try { File.Delete(Path); } catch { }
         }
 
-        /// <summary>A client connection to a socket path (the CLI and typedown-mcp on Linux and macOS).</summary>
+        /// <summary>A client connection to a socket path (typedownctl and typedownctl mcp on Linux and macOS).</summary>
         public static async Task<Stream> ConnectAsync(string path, CancellationToken cancellationToken)
         {
             if (!Fits(path)) throw new IOException($"The socket path is longer than {MaxPathBytes} bytes: {path}");

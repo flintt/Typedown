@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Typedown.Automation.Tests
 {
-    /// <summary>typedown-mcp against a real pipe server and the fake host, message by message.</summary>
+    /// <summary>The MCP server (typedownctl mcp) against a real pipe server and the fake host, message by message.</summary>
     public class McpTests : IAsyncLifetime
     {
         private readonly string endpoint = "td-mcp-" + Guid.NewGuid().ToString("N");

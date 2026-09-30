@@ -121,7 +121,7 @@ internal static class Program
             await Case("W01 the editor page reloads after it applied a write and before the commit: nothing is committed, host and page agree", W01);
             await Case("W02 a mode switch while a write is held after the page applied it: the write commits and every mode shows it", W02);
             await Case("W03 the tab switched away and back while a write is held: refused and restored; switched away only: committed into the tab", W03);
-            await Case("MC01 typedown-mcp as its own process: read, replace text with reveal, a stale revision is a conflict that says to read again", MC01);
+            await Case("MC01 typedownctl mcp as its own process: read, replace text with reveal, a stale revision is a conflict that says to read again", MC01);
             await Case("EX01 the PowerShell and Python client examples edit through the real pipe", EX01);
             await Case("EQ01 the equivalence scenario (compared with the Uno edition's answers offline)", EQ01);
             await Case("R04 untitled and background documents come back from their backups after a kill, each its own", R04);
@@ -658,7 +658,7 @@ internal static class Program
         Check(await WaitForPage(driver, a, t => t == written, "A again") == written, "away: A shows the write when it comes back");
     }
 
-    // typedown-mcp published next to the driver (e2e/mcp), started the way an agent host starts it: stdio, one message per line.
+    // typedownctl published next to the driver (e2e/cli) and run as "typedownctl mcp", started the way an agent host starts it: stdio, one message per line.
     private sealed class McpProcess : IDisposable
     {
         private readonly Process process;
@@ -666,11 +666,11 @@ internal static class Program
 
         public McpProcess(string endpoint)
         {
-            var dll = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "mcp", "typedown-mcp.dll"));
-            if (!File.Exists(dll)) throw new CaseFailed("typedown-mcp is not published next to the driver: " + dll);
+            var dll = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "cli", "typedownctl.dll"));
+            if (!File.Exists(dll)) throw new CaseFailed("typedownctl is not published next to the driver: " + dll);
             process = Process.Start(new ProcessStartInfo("dotnet")
             {
-                ArgumentList = { dll, "--endpoint", endpoint },
+                ArgumentList = { dll, "mcp", "--endpoint", endpoint },
                 UseShellExecute = false,
                 RedirectStandardInput = true,
                 RedirectStandardOutput = true,
@@ -740,7 +740,7 @@ internal static class Program
         Check((bool)stale["isError"]! && (string?)stale["structuredContent"]?["error"]?["data"]?["kind"] == "revision_conflict", "a stale revision is a revision_conflict");
         Check(((string?)stale["structuredContent"]?["next"] ?? "").Contains("typedown_read_document"), "the conflict tells the agent to read again");
         Check((string)(await Get(driver, a))["text"]! == written, "the stale write changed nothing");
-        Check(mcp.CloseAndWait(), "typedown-mcp exits when its input closes");
+        Check(mcp.CloseAndWait(), "typedownctl mcp exits when its input closes");
     }
 
     // Runs a program to its end (at most 60 s), for the client examples shipped next to the driver (e2e/examples).

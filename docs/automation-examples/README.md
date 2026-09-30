@@ -1,6 +1,6 @@
 # Automation client examples
 
-Direct clients of the local automation API (`docs/automation-api-spec.md`), without typedownctl or typedown-mcp.
+Direct clients of the local automation API (`docs/automation-api-spec.md`), without typedownctl (or its MCP server).
 Turn the API on in Typedown first: Settings > General > Allow local automation.
 
 - `typedown_client.py`: Python 3.8+, standard library only. `list`, `read`, `replace-text`.

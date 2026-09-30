@@ -33,6 +33,8 @@ Typedown 可以让**本机上以你的身份运行的程序**读取和编辑已�
 
 ## 命令行：typedownctl
 
+Windows 安装版把 `typedownctl.exe` 装在 Typedown 的安装目录里（默认 `C:\Program Files\Typedown\typedownctl.exe`），这些说明文档装在它旁边的 `docs` 文件夹。
+
 ```
 typedownctl status
 typedownctl documents
@@ -43,9 +45,9 @@ typedownctl replace <documentId> --base-revision 4 --stdin < new.md
 
 加 `--json` 时标准输出只有一个 JSON 值，适合脚本。退出码：0 成功，3 Typedown 没运行或开关没开，5 文档不存在，6 版本或匹配次数冲突（重新读取后再试），7 编辑器未就绪，8 保存失败。完整说明见 `typedownctl help`。
 
-## AI 助手：typedown-mcp
+## AI 助手：typedownctl mcp
 
-`typedown-mcp` 是一个 MCP 服务器，支持 MCP 的 AI 工具（例如 Claude Code）通过它读写你打开的文档。注册方法见 [Tools/Typedown.Mcp/README.md](../Tools/Typedown.Mcp/README.md)。遇到冲突时它会让 AI 重新读取，不会拿旧内容重试。
+`typedownctl mcp` 是一个 MCP 服务器，支持 MCP 的 AI 工具（例如 Claude Code）通过它读写你打开的文档。注册方法见 [automation-mcp.md](automation-mcp.md)。遇到冲突时它会让 AI 重新读取，不会拿旧内容重试。
 
 ## 自己写程序
 
@@ -55,6 +57,6 @@ v1 接口已经冻结：v1 内只会新增方法和可选参数，不会删除�
 
 ## 目前的限制
 
-- `typedownctl` 和 `typedown-mcp` 还没有打进安装包，需要从源码构建（`dotnet publish Tools/Typedown.Cli`、`dotnet publish Tools/Typedown.Mcp`）。
+- 微软商店版（MSIX）不带 `typedownctl`；Linux、macOS 上从源码构建：`dotnet publish Tools/Typedown.Cli -f net8.0`。
 - 保存、撤销和重做只作用于窗口当前显示的文档；后台标签先用 `document.focus` 切过去。
 - Linux 版（Typedown-Uno）的接口在 `automation` 分支，socket 位于 `$XDG_RUNTIME_DIR/typedown/automation.v1.sock`。
