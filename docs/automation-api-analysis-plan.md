@@ -357,7 +357,9 @@ Typedown.Uno/Automation/
 - [ ] `events.subscribe/unsubscribe`、原子快照水位、事件合并、有界队列和 `events.resyncRequired`。
 - [ ] `document.applyEdits` 与 `positionEncoding` 协商。
 - [ ] 跨连接 `clientOperationId` 结果缓存及明确的过期、进程崩溃和查询语义。
-- [ ] `settings.update` 批量原子更新和更多设置白名单。
+- [ ] `settings.update` 批量原子更新。
+- [x] 视图命令 `window.getView/setView`（`window.view` scope）：模式、侧栏、状态栏、专注/打字机、窗口外框。*（调用方：README 多语言截图，要在一个运行中的窗口里连续切换，不重开程序。2026-09-30：Windows 与 Uno 都实现；模式切换与该文档的自动化写入串行；返回时新视图已画出（Uno 等 X11 原生 WebView 跟上布局）。E2E V01、Linux 截图验证；CLI `view`、MCP `typedown_get_view/set_view`。）*
+- [x] 更多设置白名单。*（同一调用方：界面语言等 26 个，全部即时生效；平台没有的设置不描述、返回 notOnThisPlatform。E2E S3。）*
 - [ ] 选区编辑、保存为、工作区级状态等扩展方法。
 - [ ] 另写插件体系设计，覆盖安装登记、凭据、逐插件授权、声明式界面贡献、同步钩子、生命周期和编辑器扩展隔离；不能直接把自动化方法改名成插件 API。
 

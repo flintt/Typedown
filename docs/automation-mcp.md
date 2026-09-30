@@ -41,6 +41,8 @@ claude mcp add typedown -- typedownctl mcp
 | `typedown_replace_text` | 把 `find` 换成 `replacement`，只在它在 `baseRevision` 时正好出现 `expectedCount` 次（默认 1）才执行 |
 | `typedown_replace_document` | 替换整篇正文，只在文档仍是 `baseRevision` 时执行 |
 | `typedown_save_document` | 保存到文档原有的文件（未命名文档不行） |
+| `typedown_get_view` | 窗口的模式、侧栏、状态栏、专注/打字机模式和屏幕位置大小 |
+| `typedown_set_view` | 改变上面几项；模式等是你自己的设置，工具说明要求 AI 只在你要求时改、用完改回去 |
 
 写入可以带 `save`（顺便保存）、`reveal`（把文档切到前台）和 `allowFormattingChanges`（接受可视编辑器首次编辑时可能改写格式的正文）。
 

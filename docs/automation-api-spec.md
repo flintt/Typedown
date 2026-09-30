@@ -87,6 +87,7 @@ MVP 定义最小 scope 名称：`app.read`、`document.read`、`document.write`�
 | `window.focus` | `window.focus`、`document.focus` 和任何 `reveal` 请求 |
 | `settings.read` | 独立设置线的 `settings.describe/get` |
 | `settings.write` | 独立设置线的 `settings.set/update` |
+| `window.view` | `window.setView`：切换模式、侧栏、状态栏、专注/打字机模式，移动或调整窗口大小（v1 新增，2026-09-30） |
 
 `client.id` 是客户端生成并持久保存的 UUID，用于连接提示、日志关联、限流和未来登记流程。它与 `client.name` 一样可以被同一用户的其他进程冒充，不能单独作为授权依据。真正的插件身份需要 Typedown 安装登记产生的 `installationId`，并由不可伪造的凭据证明；以后可以在 initialize 中增加可选 credential，而不改变现有字段。
 
@@ -246,6 +247,22 @@ MVP 为每个方法定义服务端超时，并在连接断开时取消尚未开�
 | `app.getState` | 查询 | 返回应用版本、活动窗口和基本状态 |
 | `window.list` | 查询 | 列出窗口、活动状态和文档数量 |
 | `window.focus` | 命令 | 激活指定窗口 |
+| `window.getView` | 查询 | 窗口的显示方式：模式、侧栏、状态栏、专注/打字机模式、屏幕上的外框和是否最大化（`app.read`） |
+| `window.setView` | 命令 | 改变上面任意几项（`window.view`）；返回改变之后的显示方式 |
+
+`window.setView` 的参数都可选，但至少给一项，否则 `invalid_params`（`reason: nothingToChange`）：
+
+- `mode`：`visual`（可视）、`source`（源码）或 `reading`（阅读）。
+- `sidePane: {open?, page?}`：`page` 是 `files` 或 `outline`。
+- `statusBar`、`focusMode`、`typewriter`：布尔值。
+- `bounds: {x?, y?, width?, height?}`：窗口外框，屏幕像素；宽至少 480、高至少 320、都不超过 16384，坐标在 ±32768 内。最大化或最小化的窗口先还原。
+
+语义：
+
+- 模式、侧栏、状态栏、专注和打字机就是“视图”菜单改的那几项，和人在那个窗口里点菜单一样生效、一样被记住。Windows 上模式是每个窗口自己的（B01），Uno 上是应用级的。外框只属于这个窗口。
+- 改模式与这个窗口当前文档的自动化写入串行：写入进行中时，模式切换等它提交或放弃后才执行，不会插在写入中间（E2E V01）。改完模式后，等编辑器重新显示文档再返回。
+- 返回时新的显示已经画出来：页面又画了两帧；Uno 的 WebView 在 X11 上是独立的原生窗口，调整布局后会晚一步移动，所以 Uno 还要等页面视口连续几次都等于布局给它的大小。之后立即截图，得到的就是新视图。
+- 正文、revision 和保存状态都不变。
 
 ### 3.2 文档
 
@@ -305,7 +322,9 @@ MVP 为每个方法定义服务端超时，并在连接断开时取消尚未开�
 | `editor.lineHeight` | number，1.0～3.0 | `LineHeight` | `LineHeight` | 统一舍入规则后广播 |
 | `editor.textDirection` | `auto`、`ltr` 或 `rtl` | `TextDirection` | `TextDirection` | 所有活动和后续打开的编辑器生效 |
 
-`SourceCode`、`ReadOnly` 更接近窗口/文档显示状态，不作为上述应用级设置直接开放。它们要等精确往返和模式切换串行测试通过后，作为显式视图命令设计，避免一个窗口切模式时改变其他窗口。
+`SourceCode`、`ReadOnly` 更接近窗口/文档显示状态，不作为上述应用级设置直接开放；它们由 3.1 的 `window.setView` 按窗口改变（2026-09-30 实现）。
+
+上表是首批。2026-09-30 起 `settings-map.json` 另外开放 26 个：界面语言 `ui.language`，编辑器（字体、编辑区宽度、Tab 宽度、段落标记、括号/引号/Markdown 符号自动配对），Markdown 输出（表格列对齐、列表缩进、松散列表、去掉代码块多余空行），拼写检查，标签栏、大纲自动展开、字数统计方式，图片相对路径的四个选项，以及紧凑模式、两个 Mica 效果、动画和“关闭窗口后保持运行”。都立即生效，不需要重启。某个平台没有的设置不在它的 `settings.describe` 里，读写时返回 `setting_not_exposed`（`reason: notOnThisPlatform`）；平台有这个设置但不支持某个值时（例如 Windows 的列表缩进没有 `tab`，不支持 Mica 的系统打开 Mica），返回 `setting_invalid` 并说明原因。
 
 `settings.set` 成功表示运行时模型已应用且设置快照已持久化，返回 `settingsRevision` 和服务端 `operationId`。需要重启的设置由 `settings.describe` 标出，首批默认不开放。调用方请求 `awaitPresentation` 时，才额外返回各窗口和编辑器的近似呈现状态。
 
