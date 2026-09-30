@@ -385,6 +385,7 @@ internal static class Program
             if (AnswerDialog()) notes.Add("answered the recovery question");
             await Task.Delay(250);
         }
+        if (!documents.Any(d => (string)d["documentId"]! == u1)) throw new CaseFailed("the recovery question was not answered: " + lastDialogProblem);
         async Task<string> TextOf(string id) => (string)(await Get(after, id))["text"]!;
         Check(documents.Any(d => (string)d["documentId"]! == u1) && documents.Any(d => (string)d["documentId"]! == u2), "both untitled documents came back with their ids");
         Check(await TextOf(u1) == "# U1\n\nfirst untitled\n", "the first untitled document has its own text");
@@ -403,23 +404,37 @@ internal static class Program
     /// (A key press does not reach a XAML dialog while keyboard focus is outside the XAML island.) True when a dialog
     /// was answered.
     /// </summary>
+    private static string lastDialogProblem = "";
+
     private static bool AnswerDialog()
     {
         var window = MainWindow();
-        if (window == IntPtr.Zero) return false;
+        if (window == IntPtr.Zero) { lastDialogProblem = "no main window"; return false; }
         try
         {
             var root = System.Windows.Automation.AutomationElement.FromHandle(window);
             var button = root.FindFirst(System.Windows.Automation.TreeScope.Descendants,
                 new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.AutomationIdProperty, "PrimaryButton"));
-            if (button == null) return false;
+            if (button == null) { lastDialogProblem = "no PrimaryButton under " + window + ": " + Describe(root, 0); return false; }
             ((System.Windows.Automation.InvokePattern)button.GetCurrentPattern(System.Windows.Automation.InvokePattern.Pattern)).Invoke();
             return true;
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            lastDialogProblem = e.GetType().Name + ": " + e.Message;
             return false;
         }
+    }
+
+    /// <summary>A short outline of the UI Automation tree, for a failure message.</summary>
+    private static string Describe(System.Windows.Automation.AutomationElement element, int depth)
+    {
+        if (depth > 6) return "";
+        var c = element.Current;
+        var text = $"[{c.ControlType.ProgrammaticName.Replace("ControlType.", "")} '{c.Name}' id={c.AutomationId} cls={c.ClassName}";
+        var children = element.FindAll(System.Windows.Automation.TreeScope.Children, System.Windows.Automation.Condition.TrueCondition);
+        foreach (System.Windows.Automation.AutomationElement child in children) text += " " + Describe(child, depth + 1);
+        return text + "]";
     }
 
     /// <summary>
