@@ -40,6 +40,16 @@ namespace Typedown.Core.Controls
             else ClearValue(ForegroundProperty);
         }
 
+        /// <summary>
+        /// The line under the menu row. It separates the menu from the tabs when both have the same background (the
+        /// built-in themes); when a custom theme paints the menu row with its own panel colour, the change of colour
+        /// already does that and the line only makes the header heavier.
+        /// </summary>
+        public void SetDivider(bool visible)
+        {
+            if (RootGrid != null) RootGrid.BorderThickness = visible ? new Thickness(0, 0, 0, 1) : new Thickness(0);
+        }
+
         public AppViewModel ViewModel => DataContext as AppViewModel;
         public SettingsViewModel Settings => ViewModel?.SettingsViewModel;
 

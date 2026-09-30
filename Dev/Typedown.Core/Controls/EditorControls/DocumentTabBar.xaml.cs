@@ -41,8 +41,12 @@ namespace Typedown.Core.Controls
 
         /// <summary>
         /// The editor CSS runs in WebView and cannot style this native WinUI control. Mirror the custom theme's
-        /// shell colours here: inactive tabs use the panel surface, while the selected tab joins the editor
-        /// background. The remaining states are derived so hover, press, close and add buttons stay legible.
+        /// colours here. The strip itself stays transparent, so it shows the same background as the side pane
+        /// beside it and the header band (menu row) ends at one height across the window; inactive tabs have no
+        /// fill of their own, and the selected tab is a card a little lighter than the editor background, edged
+        /// with the theme's border colour. Painting the strip and the inactive tabs with the panel surface made
+        /// the header twice as tall on the right as on the left and heavy. The remaining states are derived so
+        /// hover, press, close and add buttons stay legible.
         /// </summary>
         private void UpdateThemeColours()
         {
@@ -51,22 +55,24 @@ namespace Typedown.Core.Controls
             var surface = ThemeFiles.Brush(theme?.Surface) ?? editor;
             var foreground = ThemeFiles.Brush(theme?.Foreground) ?? ThemeFiles.Readable(theme?.Surface ?? theme?.Background);
             var border = ThemeFiles.Brush(theme?.Border);
-            var accent = ThemeFiles.Brush(theme?.Accent);
 
-            TabView.Background = surface ?? new SolidColorBrush(Colors.Transparent);
+            TabView.Background = new SolidColorBrush(Colors.Transparent);
 
+            var transparent = theme == null ? null : new SolidColorBrush(Colors.Transparent);
+            var strip = editor ?? surface;
+            var card = Card(strip);
             var inactiveForeground = WithOpacity(foreground, .68);
             var disabledForeground = WithOpacity(foreground, .40);
-            var hover = Blend(surface, foreground, .08);
-            var pressed = Blend(surface, foreground, .14);
+            var hover = Blend(strip, foreground, .06);
+            var pressed = Blend(strip, foreground, .12);
             var buttonHover = WithOpacity(foreground, .10);
             var buttonPressed = WithOpacity(foreground, .16);
 
-            SetBrush("TabViewItemHeaderBackground", surface);
-            SetBrush("TabViewItemHeaderBackgroundSelected", editor ?? surface);
+            SetBrush("TabViewItemHeaderBackground", transparent);
+            SetBrush("TabViewItemHeaderBackgroundSelected", card);
             SetBrush("TabViewItemHeaderBackgroundPointerOver", hover);
             SetBrush("TabViewItemHeaderBackgroundPressed", pressed);
-            SetBrush("TabViewItemHeaderBackgroundDisabled", surface);
+            SetBrush("TabViewItemHeaderBackgroundDisabled", transparent);
             SetBrush("TabViewItemHeaderForeground", inactiveForeground);
             SetBrush("TabViewItemHeaderForegroundSelected", foreground);
             SetBrush("TabViewItemHeaderForegroundPointerOver", foreground);
@@ -80,11 +86,11 @@ namespace Typedown.Core.Controls
             SetBrush("TabViewItemSeparator", border);
             SetBrush("TabViewBorderBrush", border);
             SetBrush("TabViewItemBorderBrush", border);
-            SetBrush("TabViewSelectedItemBorderBrush", accent ?? border);
-            SetResource("TabViewSelectedItemBorderThickness", accent == null ? null : new Thickness(0, 2, 0, 0));
+            SetBrush("TabViewSelectedItemBorderBrush", border);
+            SetResource("TabViewSelectedItemBorderThickness", null);
 
-            SetButtonBrushes("TabViewButton", surface, hover, pressed, foreground, disabledForeground, border);
-            SetButtonBrushes("TabViewScrollButton", surface, hover, pressed, foreground, disabledForeground, border);
+            SetButtonBrushes("TabViewButton", transparent, hover, pressed, foreground, disabledForeground, border);
+            SetButtonBrushes("TabViewScrollButton", transparent, hover, pressed, foreground, disabledForeground, border);
 
             SetBrush("TabViewItemHeaderCloseButtonForeground", inactiveForeground);
             SetBrush("TabViewItemHeaderCloseButtonForegroundPointerOver", foreground);
@@ -147,6 +153,15 @@ namespace Typedown.Core.Controls
             if (!(brush is SolidColorBrush solid)) return brush;
             var colour = solid.Color;
             return new SolidColorBrush(Color.FromArgb((byte)(255 * opacity), colour.R, colour.G, colour.B));
+        }
+
+        /// <summary>The selected tab: the background moved toward white (a light theme) or lifted slightly (a dark one).</summary>
+        private static Brush Card(Brush background)
+        {
+            if (!(background is SolidColorBrush bg)) return background;
+            var c = bg.Color;
+            var light = (0.299 * c.R + 0.587 * c.G + 0.114 * c.B) > 128;
+            return Blend(background, new SolidColorBrush(Colors.White), light ? .55 : .07);
         }
 
         private static Brush Blend(Brush background, Brush foreground, double amount)
