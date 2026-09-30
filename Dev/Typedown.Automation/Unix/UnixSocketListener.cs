@@ -83,7 +83,7 @@ namespace Typedown.Automation
 
         private static bool IsSocketFile(string path)
         {
-            try { return (File.GetAttributes(path) & FileAttributes.Directory) == 0; }
+            try { return (File.GetAttributes(path) & System.IO.FileAttributes.Directory) == 0; }
             catch (FileNotFoundException) { return false; }
             catch (DirectoryNotFoundException) { return false; }
         }
