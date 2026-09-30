@@ -35,6 +35,15 @@ namespace Typedown.Utilities
         /// <summary>Wraps the drop targets of the window and its children. Safe to call more than once.</summary>
         public static void Install(MainWindow window)
         {
+            // It runs a moment after the window loads (and again two seconds later). A window closed in between has
+            // torn its island down, and the pointer XAML left in OleDropTargetInterface is no longer an object:
+            // GetObjectForIUnknown on it is an access violation in the runtime, which no catch stops - opening a
+            // window and closing it at once took the whole process down (E2E Q02, 2026-10-01).
+            if (window.IsGoingAway || !IsWindow(window.Handle))
+            {
+                Log.Debug("FileDropTarget: the window is closing, nothing to install");
+                return;
+            }
             try
             {
                 OleInitialize(IntPtr.Zero);
@@ -178,6 +187,9 @@ namespace Typedown.Utilities
         }
 
         private delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
+
+        [DllImport("user32.dll", ExactSpelling = true)]
+        private static extern bool IsWindow(IntPtr hWnd);
 
         [DllImport("user32.dll", ExactSpelling = true)]
         private static extern bool EnumChildWindows(IntPtr hWndParent, EnumWindowsProc lpEnumFunc, IntPtr lParam);
