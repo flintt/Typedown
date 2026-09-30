@@ -15,15 +15,27 @@ $task = 'TypedownAutomationE2E'
 $script = Join-Path $PSScriptRoot 'run-windows-e2e.ps1'
 New-Item -ItemType Directory -Force $Artifacts | Out-Null
 $before = @(Get-ChildItem $Artifacts -Directory | ForEach-Object { $_.Name })
-# Hidden: a console window on the desktop would cover the test host and take the foreground from it.
-$command = "powershell -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File `"$script`" -TestHost `"$TestHost`" -Driver `"$Driver`" -Artifacts `"$Artifacts`""
-schtasks /Create /TN $task /TR $command /SC ONCE /ST 23:59 /IT /F | Out-Null
+# The full command goes into a launcher file: schtasks cuts /TR at 261 characters, and a cut command runs with
+# broken arguments and never reports. Hidden: a console window would cover the test host and take the foreground.
+$launcher = Join-Path $PSScriptRoot 'launch-e2e.cmd'
+"@powershell -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File `"$script`" -TestHost `"$TestHost`" -Driver `"$Driver`" -Artifacts `"$Artifacts`"" |
+    Out-File $launcher -Encoding ascii
+schtasks /Create /TN $task /TR "`"$launcher`"" /SC ONCE /ST 23:59 /IT /F | Out-Null
+if ($LASTEXITCODE -ne 0) { Write-Output "ENVIRONMENT ERROR: could not register the scheduled task"; exit 3 }
 schtasks /Run /TN $task | Out-Null
+if ($LASTEXITCODE -ne 0) { Write-Output "ENVIRONMENT ERROR: could not start the scheduled task"; exit 3 }
 $deadline = (Get-Date).AddSeconds($TimeoutSeconds)
 $run = $null
+$started = Get-Date
 while ((Get-Date) -lt $deadline) {
     $run = Get-ChildItem $Artifacts -Directory | Where-Object { $before -notcontains $_.Name } | Select-Object -First 1
     if ($run -and (Test-Path (Join-Path $run.FullName 'done.txt'))) { break }
+    # A task that never got as far as creating its run folder has failed to start: say so now, not at the deadline.
+    if (-not $run -and ((Get-Date) - $started).TotalSeconds -gt 30) {
+        $info = schtasks /Query /TN $task /V /FO LIST | Out-String
+        Write-Output "ENVIRONMENT ERROR: the task started no run within 30 s`n$info"
+        exit 3
+    }
     Start-Sleep -Seconds 2
 }
 if (-not $run -or -not (Test-Path (Join-Path $run.FullName 'done.txt'))) {
