@@ -135,6 +135,7 @@ namespace Typedown.Core.ViewModels
 
         public async Task<object> GetSettings()
         {
+            awaitingNewPage = false;
             if (FirstStart)
             {
                 FirstStart = false;
@@ -278,7 +279,10 @@ namespace Typedown.Core.ViewModels
         public void OnFileLoaded(JToken arg)
         {
             if (IsStaleReport(arg)) return;
-            ConfirmedLoadId = LoadId;
+            // The page being replaced still answers a load sent while it goes (the file opened meanwhile); only the
+            // new page, once it has asked for its settings, can confirm what it shows.
+            if (awaitingNewPage) Log.Debug($"editor: load {LoadId} confirmed by the page being replaced, not counted");
+            else ConfirmedLoadId = LoadId;
             CompleteReloadWaiter(arg);
             if (loadClock != null)
             {
@@ -586,12 +590,16 @@ namespace Typedown.Core.ViewModels
         {
             if (ConfirmedLoadId != -1) Log.Debug($"editor: page loading again, load {ConfirmedLoadId} no longer confirmed");
             ConfirmedLoadId = -1;
+            awaitingNewPage = true;
             PageGeneration++;
             // A flush sent to the page going away is never answered: say so now instead of after its timeout.
             List<TaskCompletionSource<bool>> waiting;
             lock (flushWaiters) waiting = flushWaiters.Values.ToList();
             foreach (var waiter in waiting) waiter.TrySetResult(false);
         }
+
+        /// <summary>From the editor page starting to load again until the new page asks for its settings.</summary>
+        private bool awaitingNewPage;
 
         /// <summary>Advances every time the editor page starts loading again.</summary>
         public int PageGeneration { get; private set; }
