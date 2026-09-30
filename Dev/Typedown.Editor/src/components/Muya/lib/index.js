@@ -261,6 +261,82 @@ class Muya {
     }, 0)
   }
 
+  /**
+   * An automation edit of the document shown (docs/automation-api-spec.md, section 2.2). The new text is parsed as a
+   * whole, but the top-level blocks that did not change keep their objects and their DOM: the reader's cursor, the
+   * scroll position and whatever is drawn there stay, and only the changed blocks are rendered. Returns false and
+   * changes nothing when that cannot be shown to give the state setMarkdown would: the cursor is in a changed
+   * block, reference definitions changed (they change how other blocks render), or the assembled blocks do not
+   * export exactly what the whole new document exports. The caller then uses setMarkdown.
+   */
+  replaceMarkdownLocally(markdown) {
+    const { contentState } = this
+    const { stateRender } = contentState
+    const oldBlocks = contentState.blocks
+    const newBlocks = contentState.markdownToState(markdown)
+    const signature = block => JSON.stringify(block, (name, value) =>
+      name === 'key' || name === 'parent' || name === 'preSibling' || name === 'nextSibling' ? undefined : value)
+    const oldSignatures = oldBlocks.map(signature)
+    const newSignatures = newBlocks.map(signature)
+    let head = 0
+    while (head < oldBlocks.length && head < newBlocks.length && oldSignatures[head] === newSignatures[head]) head++
+    let tail = 0
+    while (tail < oldBlocks.length - head && tail < newBlocks.length - head &&
+      oldSignatures[oldBlocks.length - 1 - tail] === newSignatures[newBlocks.length - 1 - tail]) tail++
+    if (head === 0 && tail === 0) return false
+
+    const removed = oldBlocks.slice(head, oldBlocks.length - tail)
+    const inserted = newBlocks.slice(head, newBlocks.length - tail)
+    const kept = block => !removed.includes(block)
+    const { start, end } = contentState.cursor || {}
+    const outMost = key => {
+      const block = key && contentState.getBlock(key)
+      return block ? contentState.findOutMostBlock(block) : null
+    }
+    const startBlock = outMost(start && start.key)
+    const endBlock = outMost(end && end.key)
+    if (!startBlock || !endBlock || !kept(startBlock) || !kept(endBlock)) return false
+
+    const labelsOf = blocks => {
+      stateRender.collectLabels(blocks)
+      return JSON.stringify([...stateRender.labels.entries()])
+    }
+    const oldLabels = labelsOf(oldBlocks)
+    const newLabels = labelsOf(newBlocks)
+    if (oldLabels !== newLabels) {
+      stateRender.collectLabels(oldBlocks)
+      return false
+    }
+
+    const assembled = [...oldBlocks.slice(0, head), ...inserted, ...oldBlocks.slice(oldBlocks.length - tail)]
+    const link = blocks => blocks.forEach((block, i) => {
+      block.preSibling = i > 0 ? blocks[i - 1].key : null
+      block.nextSibling = i < blocks.length - 1 ? blocks[i + 1].key : null
+    })
+    const exportOf = blocks => {
+      const { isGitlabCompatibilityEnabled, listIndentation } = contentState
+      return new ExportMarkdown(blocks, listIndentation, isGitlabCompatibilityEnabled, { alignTableColumns: this.options.tableAlignColumns !== false }).generate()
+    }
+    link(assembled)
+    if (exportOf(assembled) !== exportOf(newBlocks)) {
+      link(oldBlocks)
+      stateRender.collectLabels(oldBlocks)
+      return false
+    }
+
+    contentState.blocks = assembled
+    contentState.blockCache = null
+    stateRender.collectLabels(assembled)
+    const { matches } = contentState.searchMatches
+    stateRender.replaceBlocks(removed.map(b => b.key), inserted, tail > 0 ? assembled[assembled.length - tail].key : null,
+      contentState.getActiveBlocks(), matches)
+    contentState.postRender()
+    setTimeout(() => {
+      this.dispatchLoadChange()
+    }, 0)
+    return true
+  }
+
   setCursor(cursor) {
     try {
       const markdown = this.getMarkdown()

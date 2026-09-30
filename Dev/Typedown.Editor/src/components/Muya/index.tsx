@@ -26,6 +26,8 @@ interface IMuyaEditor {
     scrollTopRef: React.MutableRefObject<number>
     /** True when scrollTopRef holds a remembered offset from the host for this load: restore it instead of chasing the caret. */
     scrollFromHostRef?: React.MutableRefObject<boolean>
+    /** True when the new markdown is an edit of the text shown (automation): only the changed blocks are replaced. */
+    localChangeRef?: React.MutableRefObject<boolean>
     onMarkdownChange: (markdown: string) => void
     /** The shell puts a function here that reports the current text at once, for saves and exports. */
     flushRef?: React.MutableRefObject<(() => void) | null>
@@ -688,6 +690,8 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
 
     useEffect(() => {
         if (!editor) return
+        const local = props.localChangeRef?.current
+        if (props.localChangeRef) props.localChangeRef.current = false
         if (importedRef.current && markdownRef.current === props.markdown) { props.onContentApplied?.(); return }
         // After an actual edit the host may hand the exported text back. Reuse the
         // existing model when it already matches, avoiding another load and caret scroll.
@@ -700,12 +704,17 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         }
         markdownRef.current = props.markdown
         markLongDocument(props.markdown)
-        editor.setMarkdown(props.markdown, cursorRef.current)
+        // An automation edit keeps the blocks it did not change, with the reader's cursor and scroll position; the
+        // browser keeps what is on screen in place when blocks above it change. Otherwise, a whole new document.
+        const replacedLocally = !!local && editor.replaceMarkdownLocally(props.markdown)
+        if (!replacedLocally) editor.setMarkdown(props.markdown, cursorRef.current)
+        ;(window as any).__typedownLastApply = replacedLocally ? 'local' : 'whole'
         importedRef.current = { source: props.markdown, normalized: editor.getMarkdown() }
         // Text the first visual edit would change in a way that loses something (today: some raw HTML) gets a notice
         // that does not block editing; source mode keeps it exactly.
         setFirstEditWarning(classifyNormalization(props.markdown, importedRef.current.normalized).pendingNormalization === 'unsafe')
-        settleScroll(props.scrollTopRef.current, !!props.scrollFromHostRef?.current)
+        if (replacedLocally) { if (props.scrollFromHostRef) props.scrollFromHostRef.current = false }
+        else settleScroll(props.scrollTopRef.current, !!props.scrollFromHostRef?.current)
         props.onContentApplied?.()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [editor, props.markdown, props.contentVersion, props.scrollTopRef, settleScroll, markLongDocument])

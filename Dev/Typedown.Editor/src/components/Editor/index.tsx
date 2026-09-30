@@ -53,8 +53,8 @@ const Editor: React.FC = () => {
         fileLoadPending.current = { armed: false, timer: window.setTimeout(flushFileLoaded, 3000) }
     }, [flushFileLoaded])
 
-    // Set when the next content from the host is an automation edit of the text shown: the source editor then applies
-    // only the changed part and keeps the reader's cursor and scroll position. Loads replace the whole text.
+    // Set when the next content from the host is an automation edit of the text shown: the editor then applies only
+    // the changed part and keeps the reader's cursor and scroll position. Loads replace the whole text.
     const localChangeRef = useRef(false)
 
     // An automation edit the page has been asked to apply (ApplyDocumentEdit), until it has replied.
@@ -327,6 +327,7 @@ const Editor: React.FC = () => {
                 searchArg={searchArg}
                 scrollTopRef={muyaScrollTopRef}
                 scrollFromHostRef={scrollFromHostRef}
+                localChangeRef={localChangeRef}
                 flushRef={flushRef}
                 onMarkdownChange={onMarkdownChange}
                 onContentApplied={onContentApplied}
