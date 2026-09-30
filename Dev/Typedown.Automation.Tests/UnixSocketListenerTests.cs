@@ -83,6 +83,18 @@ namespace Typedown.Automation.Tests
         }
 
         [Fact]
+        public async Task A_path_too_long_for_a_socket_is_a_clear_error_not_a_crash()
+        {
+            if (!OnUnix) return;
+            var longPath = Path.Combine(root, new string('d', 120), "automation.v1.sock");
+            Assert.Throws<InvalidOperationException>(() => UnixSocketListener.Open(longPath));
+            await Assert.ThrowsAsync<IOException>(() => UnixSocketListener.ConnectAsync(longPath, default));
+            var output = new StringWriter();
+            var exit = await new Cli.Cli(TextReader.Null, output, TextWriter.Null).RunAsync(new[] { "--json", "--endpoint", longPath, "documents" });
+            Assert.Equal(Cli.Cli.NotRunning, exit);
+        }
+
+        [Fact]
         public void The_default_path_is_in_the_runtime_directory()
         {
             if (!OnUnix) return;
@@ -92,6 +104,8 @@ namespace Typedown.Automation.Tests
                 Environment.SetEnvironmentVariable("XDG_RUNTIME_DIR", "/run/user/4242");
                 Assert.Equal("/run/user/4242/typedown/automation.v1.sock", UnixSocketListener.DefaultPath(BuildTypes.Application));
                 Assert.Equal("/run/user/4242/typedown/automation-test-host.v1.sock", UnixSocketListener.DefaultPath(BuildTypes.AutomationTestHost));
+                Environment.SetEnvironmentVariable("XDG_RUNTIME_DIR", "/run/" + new string('x', 120));
+                Assert.StartsWith("/tmp/typedown-", UnixSocketListener.DefaultPath(BuildTypes.Application));
                 Environment.SetEnvironmentVariable("XDG_RUNTIME_DIR", null);
                 Assert.StartsWith("/tmp/typedown-", UnixSocketListener.DefaultPath(BuildTypes.Application));
             }

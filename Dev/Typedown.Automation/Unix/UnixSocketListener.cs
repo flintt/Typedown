@@ -35,15 +35,21 @@ namespace Typedown.Automation
         {
             var file = buildType == BuildTypes.AutomationTestHost ? TestHostFile : ApplicationFile;
             var runtime = Environment.GetEnvironmentVariable("XDG_RUNTIME_DIR");
-            var dir = !string.IsNullOrEmpty(runtime) && System.IO.Path.IsPathRooted(runtime)
-                ? System.IO.Path.Combine(runtime, "typedown")
-                : System.IO.Path.Combine("/tmp", "typedown-" + geteuid());
-            return System.IO.Path.Combine(dir, file);
+            var fallback = System.IO.Path.Combine("/tmp", "typedown-" + geteuid(), file);
+            if (string.IsNullOrEmpty(runtime) || !System.IO.Path.IsPathRooted(runtime)) return fallback;
+            var path = System.IO.Path.Combine(runtime, "typedown", file);
+            return Fits(path) ? path : fallback;
         }
+
+        /// <summary>Socket addresses are short (108 bytes on Linux, 104 on macOS, with the terminating zero).</summary>
+        public const int MaxPathBytes = 103;
+
+        public static bool Fits(string path) => System.Text.Encoding.UTF8.GetByteCount(path) <= MaxPathBytes;
 
         /// <exception cref="InvalidOperationException">Another instance is listening, or the directory is not safe to use.</exception>
         public static UnixSocketListener Open(string path)
         {
+            if (!Fits(path)) throw new InvalidOperationException($"The socket path is longer than {MaxPathBytes} bytes: {path}");
             var dir = System.IO.Path.GetDirectoryName(path) ?? throw new ArgumentException("The socket path has no directory.", nameof(path));
             EnsurePrivateDirectory(dir);
             if (File.Exists(path) || IsSocketFile(path))
@@ -127,6 +133,7 @@ namespace Typedown.Automation
         /// <summary>A client connection to a socket path (the CLI and typedown-mcp on Linux and macOS).</summary>
         public static async Task<Stream> ConnectAsync(string path, CancellationToken cancellationToken)
         {
+            if (!Fits(path)) throw new IOException($"The socket path is longer than {MaxPathBytes} bytes: {path}");
             var client = new Socket(AddressFamily.Unix, SocketType.Stream, ProtocolType.Unspecified);
             try
             {
