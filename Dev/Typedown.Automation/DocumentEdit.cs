@@ -230,6 +230,18 @@ namespace Typedown.Automation
 
         private static AutomationException Error(AutomationErrorKind kind, string message, Dictionary<string, object?>? data = null) => new(kind, message, data);
 
+        /// <summary>
+        /// Runs work while no edit of the document is in flight, and keeps the next one waiting until it is done: a mode
+        /// switch must not unload the editor while an edit is applied and not yet committed (spec 2.2).
+        /// </summary>
+        public async Task<T> ExclusiveAsync<T>(string documentId, Func<Task<T>> work, CancellationToken cancellationToken)
+        {
+            var gate = LockFor(documentId);
+            await gate.WaitAsync(cancellationToken);
+            try { return await work(); }
+            finally { gate.Release(); }
+        }
+
         public async Task<EditResult> EditAsync(IEditableDocument document, EditRequest request, CancellationToken cancellationToken)
         {
             var gate = LockFor(document.DocumentId);

@@ -16,9 +16,11 @@ namespace Typedown.Automation
         public const string WindowFocus = "window.focus";
         public const string SettingsRead = "settings.read";
         public const string SettingsWrite = "settings.write";
+        /// <summary>Changing how a window shows its document: mode, side pane, status bar, size and position.</summary>
+        public const string WindowView = "window.view";
 
         /// <summary>Every scope name the protocol defines; ones a build does not serve are denied as <c>notAvailable</c>.</summary>
-        public static readonly IReadOnlyList<string> Defined = new[] { AppRead, DocumentRead, DocumentWrite, DocumentSave, WindowFocus, SettingsRead, SettingsWrite };
+        public static readonly IReadOnlyList<string> Defined = new[] { AppRead, DocumentRead, DocumentWrite, DocumentSave, WindowFocus, SettingsRead, SettingsWrite, WindowView };
     }
 
     public static class BuildTypes

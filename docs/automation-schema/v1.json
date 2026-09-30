@@ -49,7 +49,8 @@
         "document.save",
         "window.focus",
         "settings.read",
-        "settings.write"
+        "settings.write",
+        "window.view"
       ]
     },
     "lineEnding": {
@@ -1747,6 +1748,165 @@
         },
         "value": {}
       }
+    },
+    "viewState": {
+      "type": "object",
+      "required": [
+        "mode",
+        "sidePane",
+        "statusBar",
+        "focusMode",
+        "typewriter",
+        "bounds",
+        "maximized"
+      ],
+      "properties": {
+        "mode": {
+          "enum": [
+            "visual",
+            "source",
+            "reading"
+          ]
+        },
+        "sidePane": {
+          "type": "object",
+          "required": [
+            "open",
+            "page"
+          ],
+          "properties": {
+            "open": {
+              "type": "boolean"
+            },
+            "page": {
+              "enum": [
+                "files",
+                "outline"
+              ]
+            }
+          }
+        },
+        "statusBar": {
+          "type": "boolean"
+        },
+        "focusMode": {
+          "type": "boolean"
+        },
+        "typewriter": {
+          "type": "boolean"
+        },
+        "bounds": {
+          "type": "object",
+          "required": [
+            "x",
+            "y",
+            "width",
+            "height"
+          ],
+          "properties": {
+            "x": {
+              "type": "integer"
+            },
+            "y": {
+              "type": "integer"
+            },
+            "width": {
+              "type": "integer"
+            },
+            "height": {
+              "type": "integer"
+            }
+          }
+        },
+        "maximized": {
+          "type": "boolean"
+        }
+      }
+    },
+    "window.getView.params": {
+      "type": "object",
+      "required": [
+        "windowId"
+      ],
+      "properties": {
+        "windowId": {
+          "$ref": "#/$defs/windowId"
+        }
+      }
+    },
+    "window.getView.result": {
+      "$ref": "#/$defs/viewState"
+    },
+    "window.setView.params": {
+      "type": "object",
+      "required": [
+        "windowId"
+      ],
+      "description": "At least one of mode, sidePane, statusBar, focusMode, typewriter, bounds. A mode switch waits for automation edits of the window's active document to finish.",
+      "properties": {
+        "windowId": {
+          "$ref": "#/$defs/windowId"
+        },
+        "mode": {
+          "enum": [
+            "visual",
+            "source",
+            "reading"
+          ]
+        },
+        "sidePane": {
+          "type": "object",
+          "properties": {
+            "open": {
+              "type": "boolean"
+            },
+            "page": {
+              "enum": [
+                "files",
+                "outline"
+              ]
+            }
+          }
+        },
+        "statusBar": {
+          "type": "boolean"
+        },
+        "focusMode": {
+          "type": "boolean"
+        },
+        "typewriter": {
+          "type": "boolean"
+        },
+        "bounds": {
+          "type": "object",
+          "description": "Screen pixels; the window leaves the maximized state.",
+          "properties": {
+            "x": {
+              "type": "integer",
+              "minimum": -32768,
+              "maximum": 32768
+            },
+            "y": {
+              "type": "integer",
+              "minimum": -32768,
+              "maximum": 32768
+            },
+            "width": {
+              "type": "integer",
+              "minimum": 480,
+              "maximum": 16384
+            },
+            "height": {
+              "type": "integer",
+              "minimum": 320,
+              "maximum": 16384
+            }
+          }
+        }
+      }
+    },
+    "window.setView.result": {
+      "$ref": "#/$defs/viewState"
     }
   }
 }
