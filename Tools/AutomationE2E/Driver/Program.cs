@@ -399,10 +399,24 @@ internal static class Program
     {
         var window = MainWindow();
         if (window == IntPtr.Zero) return;
+        await Activate(window);
+        Send(Key(0x0D, false), Key(0x0D, true));
+    }
+
+    /// <summary>
+    /// Brings the window to the front. SetForegroundWindow is refused when another process holds the foreground; a
+    /// real click on the window's title strip activates it the way a person would.
+    /// </summary>
+    private static async Task Activate(IntPtr window)
+    {
         AllowSetForegroundWindow(hostPid);
         SetForegroundWindow(window);
+        for (var i = 0; i < 20 && GetForegroundWindow() != window; i++) await Task.Delay(25);
+        if (GetForegroundWindow() == window) return;
+        GetWindowRect(window, out var rect);
+        SetCursorPos(rect.Left + 120, rect.Top + 12);
+        Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0002 } } }, new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0004 } } });
         for (var i = 0; i < 40 && GetForegroundWindow() != window; i++) await Task.Delay(25);
-        Send(Key(0x0D, false), Key(0x0D, true));
     }
 
     // ---- real input ----
@@ -420,9 +434,7 @@ internal static class Program
     private static async Task TypeIntoWindow(string text)
     {
         var window = MainWindow();
-        AllowSetForegroundWindow(hostPid);
-        SetForegroundWindow(window);
-        for (var i = 0; i < 100 && GetForegroundWindow() != window; i++) await Task.Delay(50);
+        await Activate(window);
         if (GetForegroundWindow() != window) throw new CaseFailed("the test host window could not be brought to the front (is the desktop locked?)");
         // Keyboard focus into the editor as a person gives it: a click in the text area, then Ctrl+End.
         GetWindowRect(window, out var rect);

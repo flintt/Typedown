@@ -15,7 +15,8 @@ $task = 'TypedownAutomationE2E'
 $script = Join-Path $PSScriptRoot 'run-windows-e2e.ps1'
 New-Item -ItemType Directory -Force $Artifacts | Out-Null
 $before = @(Get-ChildItem $Artifacts -Directory | ForEach-Object { $_.Name })
-$command = "powershell -NoProfile -ExecutionPolicy Bypass -File `"$script`" -TestHost `"$TestHost`" -Driver `"$Driver`" -Artifacts `"$Artifacts`""
+# Hidden: a console window on the desktop would cover the test host and take the foreground from it.
+$command = "powershell -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File `"$script`" -TestHost `"$TestHost`" -Driver `"$Driver`" -Artifacts `"$Artifacts`""
 schtasks /Create /TN $task /TR $command /SC ONCE /ST 23:59 /IT /F | Out-Null
 schtasks /Run /TN $task | Out-Null
 $deadline = (Get-Date).AddSeconds($TimeoutSeconds)
