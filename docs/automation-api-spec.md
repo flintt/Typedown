@@ -228,6 +228,10 @@ MVP 为每个方法定义服务端超时，并在连接断开时取消尚未开�
 - **后台标签。** 后台标签没有 Muya 实例，写入的 normalization 为 `unknown`（`notEvaluated`），只有 `allowUnknown` 才提交；本版 `document.save`、`document.undo/redo` 只作用于窗口当前显示的文档，后台标签返回 `editor_not_ready`（`data.reason: "notActive"`），需先 `document.focus`。
 - **连接标记在窗口标题。** 状态栏可被用户关闭，标题不能：有客户端连接时标题附加“自动化已连接”，写入后约 4 秒显示“{客户端} 编辑了 {文档}”（客户端名去掉控制字符和双向控制符，最长 40 字符）。
 - **页面规范化查询。** `document.get` 通过 `QueryNormalization`/`NormalizationReport` 向页面取当前的规范化判定。
+- **写入与模式切换、标签切换、页面重载。** 页面在同一个事件里完成比较和应用，所以写入在页面一侧没有可被打断的中间态。页面应用之后、宿主提交之前（测试宿主屏障 `afterEditorMutationBeforeReport`）可能出现三种情况：
+  - **切换模式**：可视、源码、阅读三种模式都从页面持有的正文重新挂载，那已经是候选正文，所以照常提交，三种模式都显示写入的正文（E2E W02）。
+  - **WebView 重载**（页面出错、渲染进程崩溃）**或标签切走又切回**：页面从宿主重新载入的是提交前的旧正文。宿主发现页面的 `loadId` 已经变了，就不提交，返回 `editor_not_ready`（`data.reason: "editorReloaded"`），并按第 8～9 步恢复（E2E W01、W03）。
+  - **标签切走、此后没有切回**：候选正文提交进该标签的快照，切回时经正常 `LoadFile` 显示（E2E W03）。
 - **呈现回执。** `awaitPresentation` 只能与 `reveal: "document"` 同用，否则 `invalid_params`（`reason: "requiresReveal"`）。写入提交（及请求的保存）后，宿主最多等 3 秒：页面收到 `AwaitPresentation` 后经过两次 `requestAnimationFrame` 回 `PresentationFrames`，宿主同时等一次 `CompositionTarget.Rendering`，再读窗口可见（可见且未最小化）和标签是否仍是当前标签。四项都成立时结果带 `presentation`；否则返回 `presentation_timeout`，`data` 带 `applied: true`、已提交的 `revision`、`contentHash`、`operationId`、`saved` 和观察到的 `presentation`。
 - **测试宿主。** `buildType=automationTestHost` 的构建以 `--automation-test-root <dir>` 启动，数据、日志、WebView2、互斥体、交接管道和自动化端点都与日常实例分开，端点名写入 `<dir>\automation-endpoint.txt`；它另有 `test.barrier.*`、`test.editor.pageText`、`test.window.open`、`test.settings.get/set`。
 
