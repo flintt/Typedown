@@ -243,6 +243,10 @@ internal static class Program
         Check(await c.ErrorCode("document.replace", new { documentId = id, baseRevision = r, text = "stale\n" }) == -32012, "a stale base revision is a revision_conflict");
         await c.Call("document.save", new { documentId = id, baseRevision = r + 1 });
         Check(Disk(path) == "# S0\n\nalpha written\n", "the file holds exactly the saved revision");
+        // Saving goes through a hidden, temporary-marked temp file renamed over the target: the target must not keep
+        // those marks (1.2.27-1.2.30 left every saved file hidden, and sync clients skip such files).
+        var attributes = File.GetAttributes(path);
+        Check((attributes & (FileAttributes.Hidden | FileAttributes.Temporary)) == 0, $"the saved file is neither hidden nor temporary ({attributes})");
         Check(WindowTitle().Contains("AUTOMATION TEST HOST"), $"the title marks the test host ({WindowTitle()})");
     }
 
