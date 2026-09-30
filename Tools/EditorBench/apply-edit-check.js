@@ -69,6 +69,31 @@ const sha = text => crypto.createHash('sha256').update(text, 'utf8').digest('hex
     check(await page.evaluate(() => document.querySelector('.CodeMirror').CodeMirror.getValue()) === '# source mode\n', 'CodeMirror holds the exact text');
     check(!change, 'source mode: no MarkdownChange');
 
+    // A short edit of a long document in source mode replaces only the changed word: the reader's cursor, the scroll
+    // position and a mark in untouched text all stay (a whole-text setValue loses the mark and moves the cursor).
+    const long = '# Long\n\n' + Array.from({ length: 400 }, (_, i) => `line ${i} of the document`).join('\n') + '\n';
+    await load(long);
+    await page.evaluate(() => {
+      const cm = document.querySelector('.CodeMirror').CodeMirror;
+      cm.focus();
+      cm.setCursor({ line: 300, ch: 5 });
+      cm.scrollIntoView({ line: 300, ch: 5 });
+      window.__mark = cm.markText({ line: 250, ch: 0 }, { line: 250, ch: 4 }, { className: 'bench-mark' });
+    });
+    await pause(300);
+    const placeBefore = await page.evaluate(() => ({ y: window.scrollY, cursor: document.querySelector('.CodeMirror').CodeMirror.getCursor() }));
+    const edited = long.replace('line 10 of', 'line ten of');
+    ({ reply } = await apply(long, edited));
+    const placeAfter = await page.evaluate(() => {
+      const cm = document.querySelector('.CodeMirror').CodeMirror;
+      return { y: window.scrollY, cursor: cm.getCursor(), mark: window.__mark.find() ? true : false, text: cm.getValue() };
+    });
+    check(reply.outcome === 'applied' && placeAfter.text === edited, 'source mode: a short edit of a long document applies exactly');
+    check(placeAfter.cursor.line === 300 && placeAfter.cursor.ch === 5, `the reader's cursor stays (${JSON.stringify(placeAfter.cursor)})`);
+    check(Math.abs(placeAfter.y - placeBefore.y) < 2 && placeBefore.y > 0, `the scroll position stays (${placeBefore.y} -> ${placeAfter.y})`);
+    check(placeAfter.mark, 'a mark in untouched text survives: only the changed part was replaced');
+    await load('# source mode\n');
+
     await mode(false, true);
     ({ reply } = await apply('# source mode\n', '# reading\n\ntext\n'));
     check(reply.outcome === 'applied' && reply.normalization.pendingNormalization === 'none', `reading mode accepts writes (${reply.outcome}/${reply.normalization.pendingNormalization} ${JSON.stringify(reply.normalization.reasons)})`);

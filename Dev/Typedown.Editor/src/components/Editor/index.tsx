@@ -53,6 +53,10 @@ const Editor: React.FC = () => {
         fileLoadPending.current = { armed: false, timer: window.setTimeout(flushFileLoaded, 3000) }
     }, [flushFileLoaded])
 
+    // Set when the next content from the host is an automation edit of the text shown: the source editor then applies
+    // only the changed part and keeps the reader's cursor and scroll position. Loads replace the whole text.
+    const localChangeRef = useRef(false)
+
     // An automation edit the page has been asked to apply (ApplyDocumentEdit), until it has replied.
     const pendingEditRef = useRef<{ operationId: string } | null>(null)
 
@@ -159,7 +163,8 @@ const Editor: React.FC = () => {
     // A remembered scroll offset (reading mode has no caret to remember) takes precedence over scrolling to the caret.
     const scrollFromHostRef = useRef(false)
 
-    const setContentFromHost = useCallback((markdown: string, cursor?: any, scrollTop?: number | null) => {
+    const setContentFromHost = useCallback((markdown: string, cursor?: any, scrollTop?: number | null, local = false) => {
+        localChangeRef.current = local
         markdownRef.current = markdown
         cursorRef.current = cursor
         scrollFromHostRef.current = typeof scrollTop === 'number'
@@ -265,7 +270,7 @@ const Editor: React.FC = () => {
         pendingEditRef.current = { operationId }
         resetUserIntent()
         const y = optionsRef.current?.sourceCode ? codeMirrorScrollRef.current : window.scrollY
-        setContentFromHost(text, undefined, y)
+        setContentFromHost(text, undefined, y, true)
     }), [setContentFromHost]);
 
     useEffect(() => transport.addListener<{ text: string, cursor: string, basePath: string }>('SetMarkdown', ({ text, cursor, basePath }) => {
@@ -303,6 +308,7 @@ const Editor: React.FC = () => {
                 searchArg={searchArg}
                 scrollTopRef={codeMirrorScrollRef}
                 scrollFromHostRef={scrollFromHostRef}
+                localChangeRef={localChangeRef}
                 onMarkdownChange={onMarkdownChange}
                 onContentApplied={onContentApplied}
                 onStateChange={onStateChange}

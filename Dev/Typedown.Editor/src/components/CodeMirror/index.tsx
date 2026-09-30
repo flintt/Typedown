@@ -4,6 +4,7 @@ import { matchString } from 'services/common'
 import { UnControlled as CodeMirror } from 'react-codemirror2';
 import 'codemirror/lib/codemirror.css';
 import { getTOC } from "services/common";
+import { minimalChange } from "services/minimalChange";
 require('codemirror/mode/markdown/markdown');
 
 interface ICodeMirrorEditor {
@@ -16,6 +17,8 @@ interface ICodeMirrorEditor {
     searchArg: { value: string, opt: any } | undefined
     scrollTopRef: React.MutableRefObject<number>
     scrollFromHostRef?: React.MutableRefObject<boolean>
+    /** True when the new markdown is an edit of the text shown (automation): only the changed part is replaced. */
+    localChangeRef?: React.MutableRefObject<boolean>
     onMarkdownChange: (markdown: string) => void
     /** Fired once host content has been pushed into the editor (see the FileLoaded handshake in Editor). */
     onContentApplied?: () => void
@@ -186,7 +189,16 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
 
     useEffect(() => {
         if (!editor) return
-        if (markdownRef.current != props.markdown) {
+        const local = props.localChangeRef?.current
+        if (props.localChangeRef) props.localChangeRef.current = false
+        if (local && markdownRef.current != props.markdown) {
+            // Replacing only what changed keeps the cursor, the selection and the scroll position where the reader
+            // left them; CodeMirror maps them over the change.
+            const change = minimalChange(editor.getValue(), props.markdown)
+            markdownRef.current = props.markdown
+            if (change) editor.replaceRange(change.text, editor.posFromIndex(change.from), editor.posFromIndex(change.to), '+automation')
+            if (props.scrollFromHostRef) props.scrollFromHostRef.current = false
+        } else if (markdownRef.current != props.markdown) {
             markdownRef.current = props.markdown
             const { anchor, head } = cursorRef.current ?? {}
             editor.setValue(markdownRef.current)
