@@ -19,7 +19,10 @@ namespace Typedown.Automation.Tests
         };
         public long Revision { get; set; } = 7;
         public bool FailPersist;
-        public Task<JToken> GetAsync(string key, CancellationToken ct) => Task.FromResult(Values[key]);
+        /// <summary>Settings this fake platform does not have (Supports answers false for them).</summary>
+        public readonly HashSet<string> Missing = new() { "app.keepRunning" };
+        public bool Supports(string key) => !Missing.Contains(key);
+        public Task<JToken> GetAsync(string key, CancellationToken ct) => Task.FromResult(Values.TryGetValue(key, out var v) ? v : JValue.CreateNull());
         public Task<long> SetAsync(string key, JToken value, CancellationToken ct)
         {
             if (key == "appearance.theme" && (string?)value["kind"] == "custom" && (string?)value["id"] != "solarized")
@@ -52,7 +55,49 @@ namespace Typedown.Automation.Tests
         public void The_catalog_is_the_settings_map_and_exposes_nothing_else()
         {
             var keys = SettingsCatalog.Load().Settings.Select(s => s.Key).ToArray();
-            Assert.Equal(new[] { "appearance.theme", "editor.fontSize", "editor.lineHeight", "editor.textDirection" }, keys);
+            Assert.Equal(new[] { "appearance.theme", "editor.fontSize", "editor.lineHeight", "editor.textDirection" }, keys.Take(4));
+            Assert.Contains("ui.language", keys);
+            Assert.DoesNotContain(keys, k => k.Contains("hedgeDoc", StringComparison.OrdinalIgnoreCase) || k.Contains("automation", StringComparison.OrdinalIgnoreCase) || k.Contains("css", StringComparison.OrdinalIgnoreCase));
+            Assert.Equal(keys.Length, keys.Distinct().Count());
+        }
+
+        [Fact]
+        public async Task Booleans_patterns_and_enums_are_checked_before_the_platform_sees_them()
+        {
+            var (h, host) = Start();
+            await using var _h = h;
+            await h.InitializeAsync(Scopes.SettingsRead, Scopes.SettingsWrite);
+            async Task<JToken> Set(string key, JToken value) => await h.CallAsync("settings.set", new JObject { ["key"] = key, ["value"] = value, ["baseSettingsRevision"] = host.Revision });
+            string? Reason(JToken reply) => (string?)reply["error"]?["data"]?["reason"];
+
+            Assert.Equal("doesNotMatch", Reason(await Set("editor.paragraphMarkers", "yes")));
+            Assert.Equal("doesNotMatch", Reason(await Set("editor.paragraphMarkers", 1)));
+            Assert.Null((await Set("editor.paragraphMarkers", false))["error"]);
+            Assert.Equal("doesNotMatch", Reason(await Set("editor.fontFamily", "Inter; } body { display: none")));
+            Assert.Null((await Set("editor.fontFamily", "\"Noto Sans\", sans-serif"))["error"]);
+            Assert.Equal("doesNotMatch", Reason(await Set("editor.areaWidth", "12px")));
+            Assert.Null((await Set("editor.areaWidth", "90%"))["error"]);
+            Assert.Equal("doesNotMatch", Reason(await Set("ui.language", "ZH")));
+            Assert.Null((await Set("ui.language", "zh-Hans"))["error"]);
+            Assert.Equal("doesNotMatch", Reason(await Set("status.wordCount", "lines")));
+            Assert.Equal("doesNotMatch", Reason(await Set("editor.tabSize", 9)));
+        }
+
+        [Fact]
+        public async Task A_setting_this_platform_does_not_have_is_neither_described_nor_readable()
+        {
+            var (h, host) = Start();
+            await using var _h = h;
+            await h.InitializeAsync(Scopes.SettingsRead, Scopes.SettingsWrite);
+            var described = (JArray)(await h.CallAsync("settings.describe"))["result"]!["settings"]!;
+            Assert.DoesNotContain(described, d => (string)d["key"]! == "app.keepRunning");
+            Assert.Contains(described, d => (string)d["key"]! == "ui.language");
+            var got = await h.CallAsync("settings.get", new JObject { ["keys"] = new JArray("app.keepRunning") });
+            Assert.Equal("notOnThisPlatform", (string)got["error"]!["data"]!["reason"]!);
+            var all = await h.CallAsync("settings.get");
+            Assert.Null(all["result"]!["values"]!["app.keepRunning"]);
+            var set = await h.CallAsync("settings.set", new JObject { ["key"] = "app.keepRunning", ["value"] = true, ["baseSettingsRevision"] = host.Revision });
+            Assert.Equal("notOnThisPlatform", (string)set["error"]!["data"]!["reason"]!);
         }
 
         [Fact]

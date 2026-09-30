@@ -1,3 +1,4 @@
+using System.Linq;
 using System;
 using System.IO;
 using System.IO.Pipes;
@@ -168,7 +169,7 @@ namespace Typedown.Automation.Tests
             (exit, _) = await Run("settings", "set", "editor.fontSize", "20", "--base-revision", "1");
             Assert.Equal(Cli.Cli.Conflict, exit);
             (exit, stdout) = await Run("--json", "settings", "describe");
-            Assert.Equal(4, ((Newtonsoft.Json.Linq.JArray)Newtonsoft.Json.Linq.JObject.Parse(stdout)["settings"]!).Count);
+            Assert.Equal(SettingsCatalog.Load().Settings.Count(x => new FakeSettingsHost().Supports(x.Key)), ((Newtonsoft.Json.Linq.JArray)Newtonsoft.Json.Linq.JObject.Parse(stdout)["settings"]!).Count);
         }
     }
 }

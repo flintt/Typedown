@@ -68,8 +68,9 @@ namespace Typedown.Automation
             new(AutomationErrorKind.setting_invalid, $"The value for '{setting.Key}' is not valid: {reason}.",
                 new Dictionary<string, object?> { ["key"] = setting.Key, ["reason"] = reason, ["allowed"] = setting.Type });
 
-        // The subset of JSON Schema the map uses: type integer/number/string/object with minimum/maximum, enum, const,
-        // properties, required and oneOf. Returns the value when it fits, null when not.
+        // The subset of JSON Schema the map uses: type boolean/integer/number/string/object with minimum/maximum,
+        // minLength/maxLength/pattern, enum, const, properties, required and oneOf. Returns the value when it fits, null
+        // when not.
         private static JToken? Check(JObject schema, JToken value, SettingDescription setting)
         {
             if (schema["oneOf"] is JArray options)
@@ -83,6 +84,8 @@ namespace Typedown.Automation
                 return JToken.DeepEquals(constant, value) ? value : null;
             switch ((string?)schema["type"])
             {
+                case "boolean":
+                    return value.Type == JTokenType.Boolean ? value : null;
                 case "integer":
                     if (value.Type != JTokenType.Integer && !(value.Type == JTokenType.Float && Math.Floor((double)value) == (double)value)) return null;
                     return InRange(schema, (double)value) ? new JValue((long)(double)value) : null;
@@ -91,7 +94,10 @@ namespace Typedown.Automation
                     return InRange(schema, (double)value) ? new JValue((double)value) : null;
                 case "string":
                     if (value.Type != JTokenType.String) return null;
-                    return ((string)value!).Length >= ((int?)schema["minLength"] ?? 0) ? value : null;
+                    var text = (string)value!;
+                    if (text.Length < ((int?)schema["minLength"] ?? 0) || text.Length > ((int?)schema["maxLength"] ?? int.MaxValue)) return null;
+                    if (schema["pattern"] is JToken pattern && !System.Text.RegularExpressions.Regex.IsMatch(text, (string)pattern!)) return null;
+                    return value;
                 case "object":
                 case null when schema["properties"] != null:
                     if (!(value is JObject obj)) return null;
@@ -121,6 +127,12 @@ namespace Typedown.Automation
         /// <summary>Advances with every change of any setting, from any window or the API.</summary>
         long Revision { get; }
 
+        /// <summary>
+        /// Whether this platform has the setting at all (some exist on Windows only): settings.describe lists only these,
+        /// and get/set of another answers setting_not_exposed with reason notOnThisPlatform.
+        /// </summary>
+        bool Supports(string key);
+
         /// <summary>The external value of an exposed setting.</summary>
         Task<JToken> GetAsync(string key, CancellationToken cancellationToken);
 
@@ -141,11 +153,20 @@ namespace Typedown.Automation
         public static MethodTable AddTo(MethodTable table, ISettingsHost host, SettingsCatalog catalog, Action<string, string>? onWrite = null)
         {
             var gate = gates.GetValue(host, _ => new SemaphoreSlim(1, 1));
+            // A setting this platform does not have is as unknown here as one the map withholds, with the reason said.
+            SettingDescription Find(string key)
+            {
+                var setting = catalog.Find(key);
+                if (!host.Supports(setting.Key))
+                    throw new AutomationException(AutomationErrorKind.setting_not_exposed, $"'{key}' does not exist on this platform.",
+                        new Dictionary<string, object?> { ["key"] = key, ["reason"] = "notOnThisPlatform" });
+                return setting;
+            }
             table.Add(new MethodDescriptor("settings.describe", Scopes.SettingsRead, "settings.describe/1", (c, ct) =>
                 Task.FromResult<JToken?>(new JObject
                 {
                     ["settingsRevision"] = host.Revision,
-                    ["settings"] = new JArray(catalog.Settings.Select(s => new JObject
+                    ["settings"] = new JArray(catalog.Settings.Where(s => host.Supports(s.Key)).Select(s => new JObject
                     {
                         ["key"] = s.Key,
                         ["scope"] = s.Scope,
@@ -156,16 +177,16 @@ namespace Typedown.Automation
                 })));
             table.Add(new MethodDescriptor("settings.get", Scopes.SettingsRead, "settings.get/1", async (c, ct) =>
             {
-                var keys = c.Params.OptionalStringArray("keys") ?? catalog.Settings.Select(s => s.Key).ToList();
+                var keys = c.Params.OptionalStringArray("keys") ?? catalog.Settings.Where(s => host.Supports(s.Key)).Select(s => s.Key).ToList();
                 var values = new JObject();
                 var revision = host.Revision;
-                foreach (var key in keys) values[catalog.Find(key).Key] = await host.GetAsync(key, ct).ConfigureAwait(false);
+                foreach (var key in keys) values[Find(key).Key] = await host.GetAsync(key, ct).ConfigureAwait(false);
                 return new JObject { ["settingsRevision"] = revision, ["values"] = values };
             }));
             table.Add(new MethodDescriptor("settings.set", Scopes.SettingsWrite, "settings.set/1", async (c, ct) =>
             {
                 var p = c.Params;
-                var setting = catalog.Find(p.RequiredString("key", allowEmpty: false));
+                var setting = Find(p.RequiredString("key", allowEmpty: false));
                 var value = catalog.Validate(setting, (c.Request.Params as JObject)?["value"]);
                 var baseRevision = p.RequiredInteger("baseSettingsRevision");
                 p.OptionalString("clientOperationId");
