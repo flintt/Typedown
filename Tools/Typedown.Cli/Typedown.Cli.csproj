@@ -11,6 +11,9 @@
     <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\..\Dev\Typedown.Automation\Unix\UnixSocketListener.cs" Link="Unix\UnixSocketListener.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\Dev\Typedown.Automation\Typedown.Automation.csproj" />
   </ItemGroup>
 </Project>

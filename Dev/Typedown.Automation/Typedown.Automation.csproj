@@ -9,6 +9,11 @@
     <RootNamespace>Typedown.Automation</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <!-- Needs .NET 7+ (Unix sockets, file modes): the CLI, the Uno port and the tests compile it themselves. -->
+    <Compile Remove="Unix\**" />
+    <None Include="Unix\**" />
+  </ItemGroup>
+  <ItemGroup>
     <!-- The one description of the external settings: settings.describe and the checks both read it. -->
     <EmbeddedResource Include="..\..\docs\automation-fixtures\settings-map.json" LogicalName="settings-map.json" />
   </ItemGroup>

@@ -367,7 +367,10 @@ Exit codes: 0 ok, 2 usage, 3 not running or not reachable, 4 version or scope, 5
             return sb.ToString();
         }
 
-        public static string DefaultEndpoint() => AutomationEndpoint.PipeName(BuildTypes.Application, CurrentUserId());
+        /// <summary>The installed application's endpoint: its named pipe on Windows, its socket path elsewhere.</summary>
+        public static string DefaultEndpoint() => RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+            ? AutomationEndpoint.PipeName(BuildTypes.Application, CurrentUserId())
+            : UnixSocketListener.DefaultPath(BuildTypes.Application);
 
         public static string CurrentUserId()
         {
@@ -379,8 +382,16 @@ Exit codes: 0 ok, 2 usage, 3 not running or not reachable, 4 version or scope, 5
         [DllImport("libc")]
         private static extern uint geteuid();
 
+        /// <summary>A pipe name, or a socket path (anything with a '/') on Linux and macOS.</summary>
         public static async Task<Stream> ConnectPipeAsync(string endpoint, CancellationToken ct)
         {
+            if (endpoint.Contains('/') && !RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                using var timeout = CancellationTokenSource.CreateLinkedTokenSource(ct);
+                timeout.CancelAfter(3000);
+                try { return await UnixSocketListener.ConnectAsync(endpoint, timeout.Token).ConfigureAwait(false); }
+                catch (OperationCanceledException) when (!ct.IsCancellationRequested) { throw new TimeoutException("No answer from " + endpoint); }
+            }
             var pipe = new NamedPipeClientStream(".", endpoint, PipeDirection.InOut, PipeOptions.Asynchronous);
             try
             {
