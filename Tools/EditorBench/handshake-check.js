@@ -57,6 +57,19 @@ const server = http.createServer((req, res) => { let p = decodeURIComponent(req.
   const afterUndo = list.find(m => m.name === 'MarkdownChange');
   check(afterUndo.loadId === 5 && afterUndo.text.includes('undone text, typed'), `a report after SetMarkdown with loadId=5 carries it (${afterUndo.loadId})`);
 
+  // The race seen in the Uno edition: redo arrives while the editor still holds the undone text and reports it
+  // (Muya's late change event). That report must not reach the host as a change under the redo's loadId.
+  await page.evaluate(() => {
+    window.__msgs.length = 0;
+    window.__deliver('SetMarkdown', { text: '# B\n\nredone text\n', basePath: 'C:\\tmp', loadId: 6 });
+    window.__typedownMuya.dispatchChange(); // same tick: the editor still holds the previous text
+  });
+  await new Promise(r => setTimeout(r, 800));
+  list = await msgs();
+  const stale = list.filter(m => m.name === 'MarkdownChange' && !m.text.includes('redone'));
+  check(stale.length === 0, `no report of the previous text after SetMarkdown (${JSON.stringify(stale.map(m => [m.loadId, m.text.slice(0, 20)]))})`);
+  check(!list.some(m => m.name === 'MarkdownChange' && m.loadId === 6 && !m.text.includes('redone')), 'nothing under loadId=6 describes the previous text');
+
   await browser.close(); server.close();
   process.exit(ok ? 0 : 1);
 })().catch(e => { console.error(e); process.exit(1); });

@@ -104,7 +104,18 @@ const Editor: React.FC = () => {
     }), [describeNormalization]);
 
     // Called by the child editor right after it applied host content; the next change report completes the handshake.
+    // Text from the host's history (SetMarkdown) until the editor holds it: its load id takes effect then.
+    const pendingSetRef = useRef<{ loadId?: number } | null>(null)
+
     const onContentApplied = useCallback(() => {
+        const set = pendingSetRef.current
+        if (set) {
+            pendingSetRef.current = null
+            if (typeof set.loadId === 'number') {
+                loadIdRef.current = set.loadId
+                setScrollLoadId(set.loadId)
+            }
+        }
         if (replyEditApplied()) return
         const pending = fileLoadPending.current
         if (!pending || pending.armed) return
@@ -125,6 +136,9 @@ const Editor: React.FC = () => {
             flushFileLoaded()
             return
         }
+        // Host history text on its way into the editor: until it is there, a report (a late one about the text
+        // the editor held before) describes content the host has already replaced. Drop it, as for a load.
+        if (pendingSetRef.current) return
         // While an automation edit is being applied the host holds the text it sent; the editor's reports of
         // applying it are not edits and must not advance the host's history or revision.
         if (pendingEditRef.current) {
@@ -273,14 +287,11 @@ const Editor: React.FC = () => {
         setContentFromHost(text, undefined, y, true)
     }), [setContentFromHost]);
 
-    // Host -> editor: text from the host's own undo history. With a loadId, reports the page made before it (still on
-    // their way to the host) are recognizably older than the text now shown, as after a LoadFile.
+    // Host -> editor: text from the host's own undo history. Reports about the text held before are dropped until the
+    // new text is in the editor, which then reports under the given loadId: the host can tell the two apart.
     useEffect(() => transport.addListener<{ text: string, cursor: string, basePath: string, loadId?: number }>('SetMarkdown', ({ text, cursor, basePath, loadId }) => {
         window.basePath = basePath
-        if (typeof loadId === 'number') {
-            loadIdRef.current = loadId
-            setScrollLoadId(loadId)
-        }
+        pendingSetRef.current = { loadId }
         setContentFromHost(text, cursor)
     }), [setContentFromHost]);
 
