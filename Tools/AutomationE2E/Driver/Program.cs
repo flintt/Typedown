@@ -527,7 +527,15 @@ internal static class Program
         ShowWindow(window, 6); // SW_MINIMIZE: reveal has to bring the window back
         await Task.Delay(500);
         var watch = System.Diagnostics.Stopwatch.StartNew();
-        var written = await c.Call("document.replace", new { documentId = a, baseRevision = rA, text = "# A\n\nalpha shown\n", reveal = "document", awaitPresentation = true, normalizationPolicy = "allowUnknown" });
+        JToken written;
+        try
+        {
+            written = await c.Call("document.replace", new { documentId = a, baseRevision = rA, text = "# A\n\nalpha shown\n", reveal = "document", awaitPresentation = true, normalizationPolicy = "allowUnknown" });
+        }
+        catch (JsonRpcRemoteException e)
+        {
+            throw new CaseFailed($"{e.ErrorData?["kind"]} after {watch.ElapsedMilliseconds} ms: {e.ErrorData?.ToString(Formatting.None)}");
+        }
         notes.Add($"presentation {written["presentation"]?.ToString(Formatting.None)} in {watch.ElapsedMilliseconds} ms");
         var presentation = written["presentation"];
         Check(presentation != null && (bool)presentation["windowVisible"]! && (bool)presentation["tabActive"]! && (bool)presentation["pageFramesPassed"]! && (bool)presentation["hostRenderPassed"]!,
