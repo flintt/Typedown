@@ -166,7 +166,10 @@ internal static class Program
         var watch = Stopwatch.StartNew();
         try
         {
-            await body(notes);
+            // Every case is bounded: a hang is a failure with what it got to, never a run that never ends.
+            var run = body(notes);
+            if (await Task.WhenAny(run, Task.Delay(TimeSpan.FromSeconds(120))) != run) throw new CaseFailed("the case did not finish within 120 s");
+            await run;
             results.Add(new JObject { ["name"] = name, ["passed"] = true, ["ms"] = watch.ElapsedMilliseconds, ["notes"] = new JArray(notes) });
         }
         catch (Exception e)
@@ -379,7 +382,7 @@ internal static class Program
         {
             documents = (JArray)(await after.Call("document.list"))["documents"]!;
             if (documents.Any(d => (string)d["documentId"]! == u1)) break;
-            await PressEnter();
+            if (AnswerDialog()) notes.Add("answered the recovery question");
             await Task.Delay(250);
         }
         async Task<string> TextOf(string id) => (string)(await Get(after, id))["text"]!;
@@ -388,19 +391,35 @@ internal static class Program
         Check(await TextOf(u2) == "# U2\n\nsecond untitled\n", "the second untitled document has its own text");
         // The titled one comes back when opened again (its backup is matched by path) - the open asks, Enter recovers.
         var reopening = after.Call("document.open", new { path = titled, reveal = "document" });
-        for (var i = 0; i < 60 && !reopening.IsCompleted; i++) { await PressEnter(); await Task.Delay(250); }
+        for (var i = 0; i < 60 && !reopening.IsCompleted; i++) { AnswerDialog(); await Task.Delay(250); }
         var reopened = (string)(await reopening)["documentId"]!;
         Check(await TextOf(reopened) == "# T\n\nedited, not saved\n", "the titled document recovers its unsaved text");
         Check(Disk(titled) == "# T\n\nsaved\n", "and its file was never written");
         notes.Add($"recovered {u1[..6]} {u2[..6]} and {Path.GetFileName(titled)}");
     }
 
-    private static async Task PressEnter()
+    /// <summary>
+    /// Answers the app's dialog with its primary button, through UI Automation - the button a person would press.
+    /// (A key press does not reach a XAML dialog while keyboard focus is outside the XAML island.) True when a dialog
+    /// was answered.
+    /// </summary>
+    private static bool AnswerDialog()
     {
         var window = MainWindow();
-        if (window == IntPtr.Zero) return;
-        await Activate(window);
-        Send(Key(0x0D, false), Key(0x0D, true));
+        if (window == IntPtr.Zero) return false;
+        try
+        {
+            var root = System.Windows.Automation.AutomationElement.FromHandle(window);
+            var button = root.FindFirst(System.Windows.Automation.TreeScope.Descendants,
+                new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.AutomationIdProperty, "PrimaryButton"));
+            if (button == null) return false;
+            ((System.Windows.Automation.InvokePattern)button.GetCurrentPattern(System.Windows.Automation.InvokePattern.Pattern)).Invoke();
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
     }
 
     /// <summary>
