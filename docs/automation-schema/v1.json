@@ -1620,6 +1620,133 @@
           ]
         }
       ]
+    },
+    "settings.describe.params": {
+      "type": "object",
+      "properties": {}
+    },
+    "settings.describe.result": {
+      "type": "object",
+      "required": [
+        "settingsRevision",
+        "settings"
+      ],
+      "properties": {
+        "settingsRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "settings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "key",
+              "scope",
+              "type",
+              "visibleIn",
+              "restartRequired"
+            ],
+            "properties": {
+              "key": {
+                "type": "string",
+                "pattern": "^[a-z]+\\.[a-zA-Z]+$"
+              },
+              "scope": {
+                "const": "application"
+              },
+              "type": {
+                "type": "object"
+              },
+              "visibleIn": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "restartRequired": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "settings.get.params": {
+      "type": "object",
+      "properties": {
+        "keys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "settings.get.result": {
+      "type": "object",
+      "required": [
+        "settingsRevision",
+        "values"
+      ],
+      "properties": {
+        "settingsRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "values": {
+          "type": "object"
+        }
+      }
+    },
+    "settings.set.params": {
+      "type": "object",
+      "required": [
+        "key",
+        "value",
+        "baseSettingsRevision"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "value": {},
+        "baseSettingsRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "clientOperationId": {
+          "type": "string",
+          "maxLength": 256
+        }
+      }
+    },
+    "settings.set.result": {
+      "type": "object",
+      "required": [
+        "settingsRevision",
+        "operationId",
+        "key",
+        "value"
+      ],
+      "properties": {
+        "settingsRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "operationId": {
+          "$ref": "#/$defs/hex32"
+        },
+        "key": {
+          "type": "string"
+        },
+        "value": {}
+      }
     }
   }
 }

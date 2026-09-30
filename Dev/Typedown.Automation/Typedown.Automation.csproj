@@ -9,6 +9,10 @@
     <RootNamespace>Typedown.Automation</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <!-- The one description of the external settings: settings.describe and the checks both read it. -->
+    <EmbeddedResource Include="..\..\docs\automation-fixtures\settings-map.json" LogicalName="settings-map.json" />
+  </ItemGroup>
+  <ItemGroup>
     <!-- The version Typedown.Core already uses. -->
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
