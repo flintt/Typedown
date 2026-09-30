@@ -299,12 +299,22 @@ class Muya {
     if (lineHeight) {
       this.options.lineHeight = lineHeight
     }
-    this.contentState.render(false)
+    this.renderStyle()
   }
 
   setTextDirection(textDirection) {
     this.options.textDirection = textDirection === 'ltr' || textDirection === 'rtl' ? textDirection : 'auto'
-    this.contentState.render(false)
+    this.renderStyle()
+  }
+
+  /**
+   * The redraw after a style setting (font, line height, direction). render(false) blurs the editor, which is right
+   * when nobody is typing into it and wrong when the reader is: the caret stayed on screen and the keys went nowhere
+   * until a click (a setting changed from another window or through the automation API). A focused editor is redrawn
+   * with its cursor put back instead.
+   */
+  renderStyle() {
+    this.contentState.render(document.activeElement === this.container)
   }
 
   setTabSize(tabSize) {
