@@ -460,7 +460,11 @@ const importRegister = ContentState => {
     }
 
     // 调整光标位置，防止影响解析
-    const adjust = c => adjustCursor(c, lines[c.line - 1], lines[c.line], lines[c.line + 1])
+    // The fences of a front matter block (found the way the lexer finds it) take no marker either, including the
+    // JSON "{" and "}" that adjustCursor cannot tell from ordinary text.
+    const frontMatter = /^(?:(?:---\n([\s\S]+?)---)|(?:\+\+\+\n([\s\S]+?)\+\+\+)|(?:;;;\n([\s\S]+?);;;)|(?:\{\n([\s\S]+?)\}))(?=\n{2,}|\n{1,2}$)/.exec(markdown.replace(/^ +$/gm, ''))
+    const fenceLines = frontMatter ? [0, frontMatter[0].split('\n').length - 1] : []
+    const adjust = c => fenceLines.includes(c.line) ? null : adjustCursor(c, lines[c.line - 1], lines[c.line], lines[c.line + 1])
     // adjustCursor 对空行/HTML 行返回 null。以前的做法是把光标挪到文档末尾并追加一行放标记，
     // 这会在每次切换源码模式时给文件末尾多加空行（#20 #61）。改为放到最近的非空行末尾/行首。
     const nearest = c => {
