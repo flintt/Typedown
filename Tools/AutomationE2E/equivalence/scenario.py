@@ -45,7 +45,7 @@ def main():
         return entry.get("result")
 
     call("initialize", "system.initialize", {"apiVersion": 1, "client": {"id": "7a6f3b5e-9f0e-4d2c-8a1b-3c4d5e6f7a8b", "name": "equivalence", "version": "1"},
-                                            "requestedScopes": ["app.read", "document.read", "document.write", "document.save", "window.focus"]})
+                                            "requestedScopes": ["app.read", "document.read", "document.write", "document.save", "window.focus", "settings.read", "settings.write"]})
     a_path = fixture("eq-a.md", "# Equivalence\n\nThe quick brown fox.\n\n- one\n- two\n")
     opened = call("open", "document.open", {"path": a_path, "reveal": "document"})
     ids["A"] = opened["documentId"]
@@ -78,6 +78,22 @@ def main():
     call("unknown method", "document.teleport", {})
     call("focus A", "document.focus", {"documentId": "$A"})
     call("revealed write, presentation awaited", "document.replaceText", {"documentId": "$A", "baseRevision": now["revision"] if now else 5, "find": "star", "replacement": "starry", "expectedCount": 1, "reveal": "document", "awaitPresentation": True, "normalizationPolicy": "allowUnknown"})
+    # Settings: the external ones only, each change against the settings revision read.
+    call("settings.describe", "settings.describe")
+    # The starting values are whatever this machine has: read them outside the transcript.
+    got = client.call("settings.get", {"keys": ["editor.fontSize", "editor.textDirection"]})
+    base = got["settingsRevision"] if got else 0
+    font = got["values"]["editor.fontSize"] if got else 16
+    # Fixed values, not relative ones: earlier runs may have left any font size behind.
+    changed = call("settings.set fontSize", "settings.set", {"key": "editor.fontSize", "value": 20 if font != 20 else 21, "baseSettingsRevision": base})
+    call("settings.set on a stale revision", "settings.set", {"key": "editor.fontSize", "value": 22, "baseSettingsRevision": base})
+    after = changed["settingsRevision"] if changed else base
+    call("settings.set out of range", "settings.set", {"key": "editor.fontSize", "value": 99, "baseSettingsRevision": after})
+    call("settings.set not exposed", "settings.set", {"key": "editor.customCss", "value": "x", "baseSettingsRevision": after})
+    call("settings.get after", "settings.get", {"keys": ["editor.fontSize"]})
+    # Put the reader's size back; not part of the transcript, since it differs from machine to machine.
+    try: client.call("settings.set", {"key": "editor.fontSize", "value": font, "baseSettingsRevision": after})
+    except td.TypedownError: pass
     json.dump(transcript, sys.stdout, ensure_ascii=False, indent=1)
     client.close()
 

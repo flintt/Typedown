@@ -762,7 +762,8 @@ namespace Typedown.Core.ViewModels
             {
                 text = state.Text,
                 cursor = state.Cursor,
-                basePath = FileViewModel.ImageBasePath
+                basePath = FileViewModel.ImageBasePath,
+                loadId = NextHistoryLoadId(),
             });
         }
 
@@ -778,8 +779,20 @@ namespace Typedown.Core.ViewModels
             MarkdownEditor?.PostMessage("SetMarkdown", new
             {
                 text = state.Text,
-                cursor = state.Cursor
+                cursor = state.Cursor,
+                loadId = NextHistoryLoadId(),
             });
+        }
+
+        /// <summary>
+        /// Undo and redo put text into the page under a new load id: a report the page made before (still on its way)
+        /// then carries the old id and is dropped, instead of writing the text just undone back over the history.
+        /// SetMarkdown has no FileLoaded handshake, so the new id counts as confirmed at once.
+        /// </summary>
+        private int NextHistoryLoadId()
+        {
+            ConfirmedLoadId = ++LoadId;
+            return LoadId;
         }
 
         public void Cut(string type)

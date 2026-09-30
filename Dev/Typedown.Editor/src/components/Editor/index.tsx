@@ -273,8 +273,14 @@ const Editor: React.FC = () => {
         setContentFromHost(text, undefined, y, true)
     }), [setContentFromHost]);
 
-    useEffect(() => transport.addListener<{ text: string, cursor: string, basePath: string }>('SetMarkdown', ({ text, cursor, basePath }) => {
+    // Host -> editor: text from the host's own undo history. With a loadId, reports the page made before it (still on
+    // their way to the host) are recognizably older than the text now shown, as after a LoadFile.
+    useEffect(() => transport.addListener<{ text: string, cursor: string, basePath: string, loadId?: number }>('SetMarkdown', ({ text, cursor, basePath, loadId }) => {
         window.basePath = basePath
+        if (typeof loadId === 'number') {
+            loadIdRef.current = loadId
+            setScrollLoadId(loadId)
+        }
         setContentFromHost(text, cursor)
     }), [setContentFromHost]);
 
