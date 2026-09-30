@@ -117,6 +117,7 @@ internal static class Program
             await Case("B02 an open settings page shows a font size changed from elsewhere", B02);
             await Case("F01 a written document with protected payloads keeps every one of them through a real first keystroke", F01);
             await Case("M01 a written text survives visual, reading and source mode switches byte for byte, then saves exactly", M01);
+            await Case("P01 awaitPresentation: a revealed write in a background tab of a minimized window reports it drawn; it needs reveal", P01);
             await Case("R04 untitled and background documents come back from their backups after a kill, each its own", R04);
         }
         catch (Exception e)
@@ -511,6 +512,33 @@ internal static class Program
         Check(Disk(path) == text, $"the file holds exactly the written text ({JsonConvert.SerializeObject(Disk(path))})");
     }
 
+    private static async Task P01(List<string> notes)
+    {
+        using var c = await Session("e2e P01");
+        var a = await Open(c, Fixture("p01-a.md", "# A\n\nalpha\n"));
+        await Open(c, Fixture("p01-b.md", "# B\n\nbeta\n")); // A is now a background tab
+        var windowId = (string)(await c.Call("document.get", new { documentId = a, consistency = "snapshot" }))["windowId"]!;
+        var rA = await Revision(c, a);
+        Check(await c.ErrorCode("document.replace", new { documentId = a, baseRevision = rA, text = "x\n", awaitPresentation = true }) == -32602,
+            "awaitPresentation without reveal is invalid_params");
+        Check(await Revision(c, a) == rA, "the refused write changed nothing");
+
+        var window = await WindowOf(windowId, c);
+        ShowWindow(window, 6); // SW_MINIMIZE: reveal has to bring the window back
+        await Task.Delay(500);
+        var watch = System.Diagnostics.Stopwatch.StartNew();
+        var written = await c.Call("document.replace", new { documentId = a, baseRevision = rA, text = "# A\n\nalpha shown\n", reveal = "document", awaitPresentation = true, normalizationPolicy = "allowUnknown" });
+        notes.Add($"presentation {written["presentation"]?.ToString(Formatting.None)} in {watch.ElapsedMilliseconds} ms");
+        var presentation = written["presentation"];
+        Check(presentation != null && (bool)presentation["windowVisible"]! && (bool)presentation["tabActive"]! && (bool)presentation["pageFramesPassed"]! && (bool)presentation["hostRenderPassed"]!,
+            "every presentation target was observed");
+        Check((long)written["revision"]! == rA + 1, "the write committed");
+        var windows = (JArray)(await c.Call("window.list"))["windows"]!;
+        Check(windows.Any(w => (string)w["windowId"]! == windowId && (string?)w["activeDocumentId"] == a), "the written document is the window's active tab");
+        Check(!IsIconic(window), "the window is no longer minimized");
+        Check((string)(await Get(c, a))["text"]! == "# A\n\nalpha shown\n", "latest read returns the written text");
+    }
+
     private static async Task R04(List<string> notes)
     {
         string u1, u2, t;
@@ -723,6 +751,8 @@ internal static class Program
 
     [DllImport("user32.dll", SetLastError = true)] private static extern uint SendInput(uint count, INPUT[] inputs, int size);
     [DllImport("user32.dll")] private static extern bool SetForegroundWindow(IntPtr window);
+    [DllImport("user32.dll")] private static extern bool ShowWindow(IntPtr window, int command);
+    [DllImport("user32.dll")] private static extern bool IsIconic(IntPtr window);
     [DllImport("user32.dll")] private static extern IntPtr GetForegroundWindow();
     [DllImport("user32.dll")] private static extern bool AllowSetForegroundWindow(int processId);
     [DllImport("user32.dll", CharSet = CharSet.Unicode)] private static extern int GetWindowText(IntPtr window, StringBuilder text, int max);

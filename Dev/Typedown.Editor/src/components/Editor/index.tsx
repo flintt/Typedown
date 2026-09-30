@@ -87,6 +87,12 @@ const Editor: React.FC = () => {
         transport.postMessage('EditorStyle', { token, fontSize: style?.fontSize ?? null, lineHeight: style?.lineHeight ?? null, direction })
     }), []);
 
+    // Host -> editor: answer once the page has drawn twice more (automation awaitPresentation). Two frames, because
+    // the first callback runs before the frame that shows the latest change is painted.
+    useEffect(() => transport.addListener<{ token: number }>('AwaitPresentation', ({ token }) => {
+        requestAnimationFrame(() => requestAnimationFrame(() => transport.postMessage('PresentationFrames', { token })))
+    }), []);
+
     // Host -> editor: what the first visual edit would do to the text shown now (document.get's normalization).
     useEffect(() => transport.addListener<{ token: number }>('QueryNormalization', ({ token }) => {
         flushRef.current?.()

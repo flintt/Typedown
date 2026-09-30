@@ -87,6 +87,16 @@ namespace Typedown.Automation.Tests
         public Task<EditResult> UndoAsync(string documentId, long baseRevision, bool redo, bool save, Reveal reveal, CancellationToken ct) =>
             throw new AutomationException(AutomationErrorKind.editor_not_ready, "not in the fake");
 
+        public Presentation NextPresentation = new() { WindowVisible = true, TabActive = true, PageFramesPassed = true, HostRenderPassed = true };
+        public int PresentationWaits;
+
+        public Task<Presentation> AwaitPresentationAsync(string documentId, int timeoutMs, CancellationToken ct)
+        {
+            Find(documentId);
+            PresentationWaits++;
+            return Task.FromResult(NextPresentation);
+        }
+
         public Task DiscardDocumentAsync(string documentId, CancellationToken ct)
         {
             Discarded.Add(documentId);
@@ -232,7 +242,38 @@ namespace Typedown.Automation.Tests
             Assert.True((bool)saved["result"]!["saved"]!);
             Valid("document.save.result", (await h2.CallAsync("document.save", new JObject { ["documentId"] = named.DocumentId, ["baseRevision"] = 1 }))["result"]);
             Assert.Equal(-32016, (int)(await h2.CallAsync("document.save", new JObject { ["documentId"] = blank.DocumentId }))["error"]!["code"]!);
-            Assert.Equal("notSupported", (string)(await h2.CallAsync("document.replace", new JObject { ["documentId"] = named.DocumentId, ["baseRevision"] = 1, ["text"] = "c\n", ["reveal"] = "document", ["awaitPresentation"] = true }))["error"]!["data"]!["reason"]!);
+        }
+
+        [Fact]
+        public async Task AwaitPresentation_reports_what_was_drawn_and_needs_reveal()
+        {
+            var (h, host) = Start();
+            await using var _ = h;
+            var doc = host.Add("a\n", "/tmp/p.md");
+            await h.InitializeAsync(AllScopes);
+
+            var alone = await h.CallAsync("document.replace", new JObject { ["documentId"] = doc.DocumentId, ["baseRevision"] = 0, ["text"] = "b\n", ["awaitPresentation"] = true });
+            Assert.Equal("requiresReveal", (string)alone["error"]!["data"]!["reason"]!);
+            Assert.Equal(0, doc.Revision);
+
+            var shown = await h.CallAsync("document.replace", new JObject { ["documentId"] = doc.DocumentId, ["baseRevision"] = 0, ["text"] = "b\n", ["reveal"] = "document", ["awaitPresentation"] = true });
+            Valid("document.replace.result", shown["result"]);
+            Assert.True((bool)shown["result"]!["presentation"]!["pageFramesPassed"]!);
+
+            var plain = await h.CallAsync("document.replace", new JObject { ["documentId"] = doc.DocumentId, ["baseRevision"] = 1, ["text"] = "c\n", ["reveal"] = "document" });
+            Assert.Null(plain["result"]!["presentation"]);
+            Assert.Equal(1, host.PresentationWaits);
+
+            // A page that does not draw in time: the write stays committed and the error says so.
+            host.NextPresentation = new Presentation { WindowVisible = true, TabActive = true, PageFramesPassed = false, HostRenderPassed = true };
+            var late = await h.CallAsync("document.replace", new JObject { ["documentId"] = doc.DocumentId, ["baseRevision"] = 2, ["text"] = "b\n", ["reveal"] = "document", ["awaitPresentation"] = true });
+            Assert.Equal(-32023, (int)late["error"]!["code"]!);
+            var data = late["error"]!["data"]!;
+            Assert.True((bool)data["applied"]!);
+            Assert.Equal(3, (long)data["revision"]!);
+            Assert.Equal(DocumentText.ContentHash("b\n"), (string)data["contentHash"]!);
+            Assert.False((bool)data["presentation"]!["pageFramesPassed"]!);
+            Assert.Equal(3, doc.Revision);
         }
 
         [Fact]

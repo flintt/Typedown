@@ -340,7 +340,7 @@ Typedown.Uno/Automation/
 
 任务：
 
-- [ ] 为 `reveal: "document"` 增加可选 `awaitPresentation`；页面用两次 `requestAnimationFrame`，宿主报告 dispatcher/窗口/标签可见状态。
+- [x] 为 `reveal: "document"` 增加可选 `awaitPresentation`；页面用两次 `requestAnimationFrame`，宿主报告 dispatcher/窗口/标签可见状态。*（Windows 实现见规格 2.4“呈现回执”；超时返回 `presentation_timeout` 并带已提交的 revision。测试：`DocumentMethodsTests`、E2E P01（最小化窗口的后台标签）。）*
 - [ ] 把 `replaceText` 的匹配范围映射为当前编辑器的局部修改，避免为一个短替换重建全文。
 - [ ] 优化显式全文替换：计算等价的最小变化区间后局部交给 CodeMirror/Muya；不能证明等价时仍走正确的全文路径。
 - [ ] 保持观察者滚动、光标和选区；短暂高亮外部改变的范围，并允许用户关闭高亮动画。

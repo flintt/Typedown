@@ -151,11 +151,11 @@ namespace Typedown.Automation
                 if (request.Save && !c.Session.HasScope(Scopes.DocumentSave))
                     throw new AutomationException(AutomationErrorKind.scope_required, "Saving needs the 'document.save' scope.",
                         new System.Collections.Generic.Dictionary<string, object?> { ["scope"] = Scopes.DocumentSave });
-                var reveal = RevealChecked(c, p);
+                var (reveal, awaitPresentation) = RevealChecked(c, p);
                 p.OptionalString("clientOperationId");
                 var result = await host.EditDocumentAsync(documentId, request, reveal, ct).ConfigureAwait(false);
                 Wrote(c, documentId);
-                return WriteResult(result);
+                return await Presented(documentId, WriteResult(result), awaitPresentation, ct).ConfigureAwait(false);
             }
 
             async Task<JToken?> UndoAsync(MethodContext c, bool redo, CancellationToken ct)
@@ -166,9 +166,38 @@ namespace Typedown.Automation
                     throw new AutomationException(AutomationErrorKind.scope_required, "Saving needs the 'document.save' scope.",
                         new System.Collections.Generic.Dictionary<string, object?> { ["scope"] = Scopes.DocumentSave });
                 var documentId = p.RequiredString("documentId", allowEmpty: false);
-                var result = await host.UndoAsync(documentId, p.RequiredInteger("baseRevision"), redo, save, RevealChecked(c, p), ct).ConfigureAwait(false);
+                var (reveal, awaitPresentation) = RevealChecked(c, p);
+                var result = await host.UndoAsync(documentId, p.RequiredInteger("baseRevision"), redo, save, reveal, ct).ConfigureAwait(false);
                 Wrote(c, documentId);
-                return WriteResult(result);
+                return await Presented(documentId, WriteResult(result), awaitPresentation, ct).ConfigureAwait(false);
+            }
+
+            // The write is committed whatever happens here: a page that does not draw in time is reported as
+            // presentation_timeout carrying the committed revision, so the caller reads instead of repeating the write.
+            async Task<JToken?> Presented(string documentId, JObject result, bool awaitPresentation, CancellationToken ct)
+            {
+                if (!awaitPresentation) return result;
+                var presentation = await host.AwaitPresentationAsync(documentId, PresentationTimeoutMs, ct).ConfigureAwait(false);
+                var observed = new JObject
+                {
+                    ["windowVisible"] = presentation.WindowVisible,
+                    ["tabActive"] = presentation.TabActive,
+                    ["pageFramesPassed"] = presentation.PageFramesPassed,
+                    ["hostRenderPassed"] = presentation.HostRenderPassed,
+                };
+                if (!presentation.Complete)
+                    throw new AutomationException(AutomationErrorKind.presentation_timeout, "The change was applied but was not confirmed on screen in time.",
+                        new System.Collections.Generic.Dictionary<string, object?>
+                        {
+                            ["applied"] = true,
+                            ["operationId"] = result["operationId"],
+                            ["revision"] = result["revision"],
+                            ["contentHash"] = result["contentHash"],
+                            ["saved"] = result["saved"],
+                            ["presentation"] = observed,
+                        });
+                result["presentation"] = observed;
+                return result;
             }
 
             void Wrote(MethodContext c, string documentId)
@@ -183,16 +212,20 @@ namespace Typedown.Automation
         private static Reveal RevealOf(Params p) => p.OptionalEnum("reveal", "none", "none", "document") == "document" ? Reveal.Document : Reveal.None;
 
         // Showing a document to the person is a focus change: it needs the window.focus scope (section 1.3).
-        private static Reveal RevealChecked(MethodContext c, Params p)
+        private static (Reveal reveal, bool awaitPresentation) RevealChecked(MethodContext c, Params p)
         {
             var reveal = RevealOf(p);
             if (reveal == Reveal.Document && !c.Session.HasScope(Scopes.WindowFocus))
                 throw new AutomationException(AutomationErrorKind.scope_required, "reveal needs the 'window.focus' scope.",
                     new System.Collections.Generic.Dictionary<string, object?> { ["scope"] = Scopes.WindowFocus });
-            if (p.OptionalBoolean("awaitPresentation", false))
-                throw Params.Invalid("awaitPresentation", "notSupported", "awaitPresentation is not available in this version.");
-            return reveal;
+            var awaitPresentation = p.OptionalBoolean("awaitPresentation", false);
+            if (awaitPresentation && reveal != Reveal.Document)
+                throw Params.Invalid("awaitPresentation", "requiresReveal", "awaitPresentation needs reveal: \"document\".");
+            return (reveal, awaitPresentation);
         }
+
+        /// <summary>How long a write waits for the revealed document to draw before reporting presentation_timeout.</summary>
+        public const int PresentationTimeoutMs = 3000;
 
         private static JObject Window(WindowInfo w) => new()
         {

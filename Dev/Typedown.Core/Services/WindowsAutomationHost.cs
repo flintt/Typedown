@@ -249,6 +249,37 @@ namespace Typedown.Core.Services
             });
         }
 
+        public async Task<Presentation> AwaitPresentationAsync(string documentId, int timeoutMs, CancellationToken cancellationToken)
+        {
+            var (window, tab) = await Find(documentId);
+            return await OnWindow(window.WindowId, async app =>
+            {
+                var deadline = Task.Delay(timeoutMs);
+                var tabActive = app.TabsViewModel.ActiveTab == tab;
+                // The page's two frames and one host render run side by side; each only reports whether it came in time.
+                var frames = tabActive ? app.EditorViewModel.AwaitPageFramesAsync(timeoutMs) : Task.FromResult(false);
+                var rendered = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+                EventHandler<object> onRendering = (sender, e) => rendered.TrySetResult(true);
+                global::Windows.UI.Xaml.Media.CompositionTarget.Rendering += onRendering;
+                try
+                {
+                    await Task.WhenAny(rendered.Task, deadline);
+                    var pageFramesPassed = await frames;
+                    return new Presentation
+                    {
+                        WindowVisible = PInvoke.IsWindowVisible(app.MainWindow) && !PInvoke.IsIconic(app.MainWindow),
+                        TabActive = app.TabsViewModel.ActiveTab == tab,
+                        PageFramesPassed = pageFramesPassed,
+                        HostRenderPassed = rendered.Task.IsCompleted,
+                    };
+                }
+                finally
+                {
+                    global::Windows.UI.Xaml.Media.CompositionTarget.Rendering -= onRendering;
+                }
+            });
+        }
+
         public async Task<EditResult> UndoAsync(string documentId, long baseRevision, bool redo, bool save, Reveal reveal, CancellationToken cancellationToken)
         {
             if (reveal == Reveal.Document) await FocusDocumentAsync(documentId, cancellationToken);

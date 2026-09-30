@@ -95,6 +95,7 @@ namespace Typedown.Core.ViewModels
             EventCenter.GetObservable<EditorEventArgs>("FileLoaded").Subscribe(x => OnFileLoaded(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("DocumentEditApplied").Subscribe(x => OnDocumentEditApplied(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("NormalizationReport").Subscribe(x => OnNormalizationReport(x.Args));
+            EventCenter.GetObservable<EditorEventArgs>("PresentationFrames").Subscribe(x => { var t = x.Args?["token"]?.Value<int?>() ?? 0; if (framesWaiters.TryGetValue(t, out var w)) w.TrySetResult(true); });
             EventCenter.GetObservable<EditorEventArgs>("EditorStyle").Subscribe(x => { var t = x.Args?["token"]?.Value<int?>() ?? 0; if (styleWaiters.TryGetValue(t, out var w)) w.TrySetResult(x.Args); });
             EventCenter.GetObservable<EditorEventArgs>("CursorChange").Subscribe(x => OnCursorChange(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("OnScroll").Subscribe(x => OnScroll(x.Args));
@@ -669,6 +670,29 @@ namespace Typedown.Core.ViewModels
             finally
             {
                 styleWaiters.Remove(token);
+            }
+        }
+
+        private readonly Dictionary<int, TaskCompletionSource<bool>> framesWaiters = new();
+
+        /// <summary>
+        /// True once the page has drawn two animation frames after this call (automation awaitPresentation); false when
+        /// it does not answer in time.
+        /// </summary>
+        public async Task<bool> AwaitPageFramesAsync(int timeoutMs)
+        {
+            if (MarkdownEditor == null) return false;
+            var token = ++normalizationToken;
+            var waiter = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+            framesWaiters[token] = waiter;
+            try
+            {
+                MarkdownEditor.PostMessage("AwaitPresentation", new { token });
+                return await Task.WhenAny(waiter.Task, Task.Delay(timeoutMs)) == waiter.Task;
+            }
+            finally
+            {
+                framesWaiters.Remove(token);
             }
         }
 

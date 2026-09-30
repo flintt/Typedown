@@ -39,6 +39,22 @@ namespace Typedown.Automation
     public enum Reveal { None, Document }
 
     /// <summary>
+    /// An approximate observation that a revealed document reached the screen (section 2.3): it cannot prove the window
+    /// is not covered or that anyone saw the change.
+    /// </summary>
+    public sealed class Presentation
+    {
+        public bool WindowVisible { get; set; }
+        public bool TabActive { get; set; }
+        /// <summary>The page drew two animation frames after the write.</summary>
+        public bool PageFramesPassed { get; set; }
+        /// <summary>The window's dispatcher had one chance to render after the write.</summary>
+        public bool HostRenderPassed { get; set; }
+
+        public bool Complete => WindowVisible && TabActive && PageFramesPassed && HostRenderPassed;
+    }
+
+    /// <summary>
     /// What the document methods need from the application (Windows or Uno). Implementations map closed or unknown
     /// ids to <c>window_not_found</c> / <c>document_not_found</c>, run each call on the owning window's dispatcher,
     /// and never show a dialog.
@@ -72,6 +88,12 @@ namespace Typedown.Automation
 
         /// <summary>One step back (or forward) in the document's own history, after the revision check.</summary>
         Task<EditResult> UndoAsync(string documentId, long baseRevision, bool redo, bool save, Reveal reveal, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// After a write with <c>reveal: "document"</c>: waits up to <paramref name="timeoutMs"/> for the window and the
+        /// page to draw, and reports what was observed. It never fails for a slow page; the caller decides.
+        /// </summary>
+        Task<Presentation> AwaitPresentationAsync(string documentId, int timeoutMs, CancellationToken cancellationToken);
 
         /// <summary>Closes a document created by a failed <c>document.create</c>; nothing else uses it.</summary>
         Task DiscardDocumentAsync(string documentId, CancellationToken cancellationToken);

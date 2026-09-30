@@ -239,7 +239,7 @@ namespace Typedown.Automation
                     ["capabilities"] = new JObject
                     {
                         ["replaceText"] = methods.TryGet("document.replaceText", out _),
-                        ["presentationAcknowledgement"] = false,
+                        ["presentationAcknowledgement"] = true,
                         ["events"] = false,
                         ["offsetEdits"] = false,
                         ["selectionEdits"] = false,

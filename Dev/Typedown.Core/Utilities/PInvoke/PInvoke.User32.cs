@@ -978,6 +978,10 @@ namespace Typedown.Core.Utilities
 
         [DllImport("user32.dll", ExactSpelling = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool IsWindowVisible(IntPtr Hwnd);
+
+        [DllImport("user32.dll", ExactSpelling = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool EnumThreadWindows(int dwThreadId, EnumThreadDelegate lpfn, nint lParam);
 
         public static IEnumerable<IntPtr> EnumProcessWindow(int processId)
