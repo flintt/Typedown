@@ -1003,4 +1003,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>{0} {1} সম্পাদনা করেছে</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>ভিজ্যুয়াল মোডে এই নথি সম্পাদনা করলে এর কিছু HTML পুনর্লিখিত হতে পারে। হুবহু রাখতে সোর্স মোডে সম্পাদনা করুন।</value>
+  </data>
 </root>

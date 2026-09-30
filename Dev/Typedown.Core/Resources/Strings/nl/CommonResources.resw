@@ -1003,4 +1003,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>{0} heeft {1} bewerkt</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>Bewerken in de visuele modus kan een deel van de HTML van dit document herschrijven. Bewerk het in de bronmodus om het ongewijzigd te houden.</value>
+  </data>
 </root>

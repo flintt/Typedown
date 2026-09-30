@@ -1003,4 +1003,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>{0}-ը խմբագրեց {1}-ը</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>Այս փաստաթուղթը տեսողական ռեժիմում խմբագրելը կարող է վերաշարադրել դրա HTML-ի մի մասը։ Անփոփոխ պահելու համար խմբագրեք աղբյուրի ռեժիմում։</value>
+  </data>
 </root>

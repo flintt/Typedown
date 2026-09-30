@@ -1003,4 +1003,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>{0} изменил(а) {1}</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>Редактирование этого документа в визуальном режиме может изменить часть его HTML-кода. Чтобы сохранить его как есть, редактируйте в режиме исходного кода.</value>
+  </data>
 </root>

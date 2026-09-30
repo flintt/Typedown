@@ -1003,4 +1003,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>{0} redagavo {1}</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>Redaguojant vaizdiniu režimu gali būti perrašyta dalis šio dokumento HTML. Kad jis liktų nepakitęs, redaguokite šaltinio režimu.</value>
+  </data>
 </root>

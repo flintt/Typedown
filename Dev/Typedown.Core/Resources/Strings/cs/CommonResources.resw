@@ -1003,4 +1003,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>{0} upravil(a) {1}</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>Úpravy tohoto dokumentu ve vizuálním režimu mohou přepsat část jeho kódu HTML. Chcete-li jej zachovat beze změn, upravujte ho v režimu zdrojového kódu.</value>
+  </data>
 </root>

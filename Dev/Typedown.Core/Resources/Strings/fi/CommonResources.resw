@@ -1003,4 +1003,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>{0} muokkasi kohdetta {1}</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>Muokkaaminen visuaalisessa tilassa voi kirjoittaa osan tämän asiakirjan HTML-koodista uudelleen. Säilytä se ennallaan muokkaamalla lähdetilassa.</value>
+  </data>
 </root>

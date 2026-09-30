@@ -1003,4 +1003,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>I whakatika a {0} i {1}</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>Mā te whakatika i tēnei tuhinga i te aratau ataata ka tuhia anōtia ētahi o tōna HTML. Kia mau tonu, whakatikaina i te aratau pūtake.</value>
+  </data>
 </root>

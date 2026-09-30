@@ -1018,4 +1018,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>{0} 编辑了 {1}</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>在可视模式下编辑这份文档，可能会改写其中的部分原始 HTML。需要保持原样时，请在源码模式下编辑。</value>
+  </data>
 </root>

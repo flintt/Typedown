@@ -1003,4 +1003,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>{0} a editat {1}</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>Editarea în modul vizual poate rescrie o parte din HTML-ul acestui document. Pentru a-l păstra neschimbat, editați-l în modul sursă.</value>
+  </data>
 </root>

@@ -1003,4 +1003,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>{0} mengedit {1}</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>Mengedit dokumen ini dalam mod visual mungkin menulis semula sebahagian HTML nya. Untuk mengekalkannya, edit dalam mod sumber.</value>
+  </data>
 </root>

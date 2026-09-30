@@ -1003,4 +1003,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>{0} {1} құжатын өңдеді</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>Бұл құжатты көрнекі режимде өңдеу оның HTML кодының бір бөлігін қайта жазуы мүмкін. Өзгертпей сақтау үшін бастапқы код режимінде өңдеңіз.</value>
+  </data>
 </root>

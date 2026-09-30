@@ -1003,4 +1003,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>{0} го уреди {1}</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>Уредувањето на овој документ во визуелен режим може да препише дел од неговиот HTML. За да остане непроменет, уредувајте во режим на изворен код.</value>
+  </data>
 </root>

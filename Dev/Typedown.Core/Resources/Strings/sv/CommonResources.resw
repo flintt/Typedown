@@ -1003,4 +1003,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>{0} redigerade {1}</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>Om du redigerar dokumentet i visuellt läge kan en del av dess HTML skrivas om. Redigera i källkodsläge för att behålla det exakt som det är.</value>
+  </data>
 </root>

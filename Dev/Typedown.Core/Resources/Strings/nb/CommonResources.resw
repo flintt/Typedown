@@ -1003,4 +1003,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>{0} redigerte {1}</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>Redigering i visuell modus kan skrive om deler av HTML-koden i dette dokumentet. Rediger i kildemodus for å beholde det uendret.</value>
+  </data>
 </root>

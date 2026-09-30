@@ -1003,4 +1003,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>{0} ແກ້ໄຂ {1}</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>ການແກ້ໄຂເອກະສານນີ້ໃນໂໝດພາບອາດຂຽນ HTML ບາງສ່ວນຄືນໃໝ່. ເພື່ອຮັກສາໄວ້ຕາມເດີມ, ໃຫ້ແກ້ໄຂໃນໂໝດຊອດ.</value>
+  </data>
 </root>

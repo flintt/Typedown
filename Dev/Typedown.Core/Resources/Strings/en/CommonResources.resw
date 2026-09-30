@@ -1021,4 +1021,8 @@
     <value>{0} edited {1}</value>
     <comment>窗口标题：{0} 客户端名，{1} 文档标题</comment>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>Editing this document in visual mode may rewrite some of its raw HTML. To keep it exactly as it is, edit it in source mode.</value>
+    <comment>可视编辑提示：首次可视编辑可能改写原始 HTML</comment>
+  </data>
 </root>

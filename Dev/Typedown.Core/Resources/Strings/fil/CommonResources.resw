@@ -1003,4 +1003,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>In-edit ng {0} ang {1}</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>Ang pag-edit ng dokumentong ito sa visual mode ay maaaring muling isulat ang ilan sa HTML nito. Para manatili ito nang eksakto, i-edit ito sa source mode.</value>
+  </data>
 </root>

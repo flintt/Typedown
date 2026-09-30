@@ -1003,4 +1003,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>{0} edytował(a) {1}</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>Edycja tego dokumentu w trybie wizualnym może zmienić część jego kodu HTML. Aby zachować go bez zmian, edytuj w trybie źródłowym.</value>
+  </data>
 </root>

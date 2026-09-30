@@ -945,4 +945,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>{0} editou {1}</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>Editar este documento no modo visual pode reescrever parte do seu HTML. Para mantê-lo como está, edite-o no modo de código-fonte.</value>
+  </data>
 </root>

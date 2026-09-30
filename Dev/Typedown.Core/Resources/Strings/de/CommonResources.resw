@@ -1003,4 +1003,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>{0} hat {1} bearbeitet</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>Beim Bearbeiten im visuellen Modus kann ein Teil des HTML-Codes dieses Dokuments umgeschrieben werden. Um es unverändert zu lassen, bearbeiten Sie es im Quellmodus.</value>
+  </data>
 </root>

@@ -1003,4 +1003,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>{0}, {1} belgesini düzenledi</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>Bu belgeyi görsel modda düzenlemek HTML kodunun bir kısmını yeniden yazabilir. Olduğu gibi korumak için kaynak modunda düzenleyin.</value>
+  </data>
 </root>

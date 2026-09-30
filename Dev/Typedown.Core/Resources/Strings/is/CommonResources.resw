@@ -1003,4 +1003,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>{0} breytti {1}</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>Breytingar í sjónrænum ham geta endurskrifað hluta af HTML-kóða skjalsins. Til að halda því óbreyttu skaltu breyta því í frumkóðaham.</value>
+  </data>
 </root>

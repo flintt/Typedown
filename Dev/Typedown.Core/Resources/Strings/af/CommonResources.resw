@@ -1003,4 +1003,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>{0} het {1} geredigeer</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>Om hierdie dokument in visuele modus te redigeer, kan van sy HTML herskryf. Redigeer dit in bronmodus om dit presies so te hou.</value>
+  </data>
 </root>

@@ -8,7 +8,8 @@ const names = [
     'InputLanguageIdentifier',
     'ClickToAddAnImage',
     'LoadImageFail',
-    'Footnote'
+    'Footnote',
+    'FirstEditWarning'
 ]
 
 // These end up as CSS variables the editor's own placeholders read, so they are fetched rather than bound.
@@ -16,7 +17,9 @@ const names = [
 // started in, which is the one thing in the window that a language change used to leave behind.
 const load = () => remote.getStringResources({ names }).then(dic => {
     for (const key in dic) {
-        document.documentElement.style.setProperty(`--${key}`, `'${dic[key]}'`)
+        // A CSS string: JSON's quoting escapes quotes and backslashes the way CSS reads them (a Welsh apostrophe
+        // used to end the string early).
+        document.documentElement.style.setProperty(`--${key}`, JSON.stringify(dic[key]))
     }
 });
 

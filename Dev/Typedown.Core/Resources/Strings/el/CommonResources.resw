@@ -1003,4 +1003,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>{0}: επεξεργασία του {1}</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>Η επεξεργασία σε οπτική λειτουργία μπορεί να αναδιατυπώσει μέρος του HTML αυτού του εγγράφου. Για να μείνει αμετάβλητο, επεξεργαστείτε το σε λειτουργία πηγαίου κώδικα.</value>
+  </data>
 </root>

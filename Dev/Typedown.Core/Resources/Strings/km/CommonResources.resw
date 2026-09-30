@@ -1003,4 +1003,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>{0} បានកែសម្រួល {1}</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>ការកែសម្រួលឯកសារនេះក្នុងរបៀបមើលឃើញអាចសរសេរ HTML ខ្លះឡើងវិញ។ ដើម្បីរក្សាទុកដដែល សូមកែសម្រួលក្នុងរបៀបកូដប្រភព។</value>
+  </data>
 </root>

@@ -80,6 +80,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     // Import/export normalizes Markdown. Keep the original text while the document
     // still exports to its initial value, including after an undo back to that value.
     const importedRef = useRef<{ source: string, normalized: string }>();
+    const [firstEditWarning, setFirstEditWarning] = useState(false)
     const searchArgRef = useRef<any>();
     const cursorRef = useRef<any>();
     const optionsRef = useRef<any>(props.options);
@@ -693,6 +694,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         if (editor.getMarkdown() === props.markdown) {
             markdownRef.current = props.markdown
             importedRef.current = { source: props.markdown, normalized: props.markdown }
+            setFirstEditWarning(false)
             props.onContentApplied?.()
             return
         }
@@ -700,6 +702,9 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         markLongDocument(props.markdown)
         editor.setMarkdown(props.markdown, cursorRef.current)
         importedRef.current = { source: props.markdown, normalized: editor.getMarkdown() }
+        // Text the first visual edit would change in a way that loses something (today: some raw HTML) gets a notice
+        // that does not block editing; source mode keeps it exactly.
+        setFirstEditWarning(classifyNormalization(props.markdown, importedRef.current.normalized).pendingNormalization === 'unsafe')
         settleScroll(props.scrollTopRef.current, !!props.scrollFromHostRef?.current)
         props.onContentApplied?.()
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -728,6 +733,15 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             lineHeight: props.options?.lineHeight,
             fontFamily: props.options?.fontFamily ? `${props.options.fontFamily}, "Open Sans", "Segoe UI", sans-serif` : undefined
         }}>
+            {/* A wrapper that always exists: Muya replaces #editor's node, so React must never insert next to it -
+                inserting the notice before #editor threw and took the whole page down. */}
+            <div className="td-first-edit-warning-slot">
+                {firstEditWarning && !props.options?.readOnly &&
+                    <div className="td-first-edit-warning" role="status">
+                        <span className="td-first-edit-warning-text" />
+                        <button className="td-first-edit-warning-close" aria-label="Close" onClick={() => setFirstEditWarning(false)}>×</button>
+                    </div>}
+            </div>
             <div id="editor" />
         </div>
     )

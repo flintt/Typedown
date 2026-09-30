@@ -1002,4 +1002,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>{0} {1}ን አርትዕ አድርጓል</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>ይህን ሰነድ በእይታ ሁነታ ማርትዕ የተወሰነውን HTML እንደገና ሊጽፍ ይችላል። እንዳለ ለማቆየት በምንጭ ሁነታ ያርትዑት።</value>
+  </data>
 </root>

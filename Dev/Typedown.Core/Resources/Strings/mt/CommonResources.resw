@@ -1003,4 +1003,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>{0} editja {1}</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>L-editjar ta’ dan id-dokument fil-modalità viżwali jista’ jerġa’ jikteb parti mill-HTML tiegħu. Biex iżżommu eżatt kif inhu, editjah fil-modalità tas-sors.</value>
+  </data>
 </root>

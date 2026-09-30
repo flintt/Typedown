@@ -1003,4 +1003,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>{0} ha editat {1}</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>Editar aquest document en mode visual pot reescriure part del seu HTML. Per conservar-lo tal com és, editeu-lo en mode font.</value>
+  </data>
 </root>

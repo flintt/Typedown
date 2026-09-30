@@ -199,7 +199,7 @@ MVP 为每个方法定义服务端超时，并在连接断开时取消尚未开�
 | `none` | `source` 与 `normalized` 逐字相同 |
 | `knownFormatting` | 差异完全属于有 fixture 证明的保守白名单转换，且受保护载荷逐字保留；允许提交 |
 | `unknown` | 两者不同且尚未分类，或后台文档尚无 Muya 实例可计算 `normalized`；默认策略拒绝，调用方显式选择 `allowUnknown` 时才允许提交并持续公开风险 |
-| `unsafe` | 已确认首次可视编辑会损失内容或结构；不作为活动编辑器写入的成功结果，已有文档或后台文档延迟分类后可处于此状态，并禁止进入可编辑的可视模式 |
+| `unsafe` | 已确认首次可视编辑会损失内容或结构；不作为活动编辑器写入的成功结果，已有文档或后台文档延迟分类后可处于此状态，可视模式显示不阻断的提示 |
 
 已确认会丢失内容或结构的输入不产生成功结果，返回 `content_not_roundtrippable` 并走第 8～9 步的宿主恢复路径。分类器必须有版本号；初版可以把除逐字相同和少量已证明转换以外的差异都归入 `unknown`，不能为了提高 `knownFormatting` 命中率而降低证据要求。
 
@@ -267,7 +267,7 @@ MVP 为每个方法定义服务端超时，并在连接断开时取消尚未开�
 
 `includeText: false` 只返回低成本元数据。调用方可用 `include: ["text", "headings"]` 请求正文和标题；每个标题至少返回稳定于该 revision 的顺序、层级、纯文本和 slug。MVP 不在标题结果中混入尚未协商单位的源码偏移。
 
-写方法接受 `normalizationPolicy: "requireKnownSafe" | "allowUnknown"`，默认前者。成功结果包含 `operationId`、`revision`、`contentHash`、`saved` 和 `normalization`，请求了可见呈现时再包含 `presentation`。`normalization` 至少包含 `pendingNormalization`、`sourceHash`、可空的 `normalizedHash`、`reasons`（稳定英文原因数组）和 `classifierVersion`；后台标签尚未经过 Muya 时是 `unknown`、`reasons: ["notEvaluated"]` 和 `normalizedHash: null`，所以只有显式 `allowUnknown` 才能提交。`document.get` 在这个边界仍存在时返回同一组元数据。后台标签第一次可视加载必须在允许用户输入前完成分类；若结果为 `unsafe`，保留权威源文本并阻止进入可编辑的可视模式，源码模式仍可编辑。写入后在没有用户编辑的情况下，`document.get(consistency: "latest")` 必须逐字返回调用方提交的文本，不能用规范化文本替代它。
+写方法接受 `normalizationPolicy: "requireKnownSafe" | "allowUnknown"`，默认前者。成功结果包含 `operationId`、`revision`、`contentHash`、`saved` 和 `normalization`，请求了可见呈现时再包含 `presentation`。`normalization` 至少包含 `pendingNormalization`、`sourceHash`、可空的 `normalizedHash`、`reasons`（稳定英文原因数组）和 `classifierVersion`；后台标签尚未经过 Muya 时是 `unknown`、`reasons: ["notEvaluated"]` 和 `normalizedHash: null`，所以只有显式 `allowUnknown` 才能提交。`document.get` 在这个边界仍存在时返回同一组元数据。后台标签第一次可视加载必须在允许用户输入前完成分类；若结果为 `unsafe`，保留权威源文本，并在可视模式顶部显示不阻断的提示（首次可视编辑可能改写部分原始 HTML，需要保持原样请用源码模式）。*（2026-09-30 决定：不阻止进入可视模式，改为修复已知的丢失——代码块信息串与 Tab——并对剩余情况提示。）*写入后在没有用户编辑的情况下，`document.get(consistency: "latest")` 必须逐字返回调用方提交的文本，不能用规范化文本替代它。
 
 `document.replaceText` 使用固定字符串，不使用正则。`find` 不能为空；`expectedCount` 必填，服务端按 ordinal、从左到右、互不重叠地计数，数量不符时返回 `match_count_mismatch` 并保持 revision 不变，数量一致时替换全部匹配项。常见 AI 编辑因此无需计算 Unicode 偏移，同时仍由 `baseRevision` 防止在旧正文上定位。
 

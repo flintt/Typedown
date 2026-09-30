@@ -1003,4 +1003,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>{0} szerkesztette: {1}</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>A vizuális módban való szerkesztés átírhatja a dokumentum HTML-kódjának egy részét. Ha változatlanul szeretné megtartani, szerkessze forrás módban.</value>
+  </data>
 </root>

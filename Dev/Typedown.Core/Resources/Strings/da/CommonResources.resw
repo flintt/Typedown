@@ -1003,4 +1003,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>{0} redigerede {1}</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>Redigering i visuel tilstand kan omskrive en del af dokumentets HTML. Rediger i kildetilstand for at bevare det uændret.</value>
+  </data>
 </root>

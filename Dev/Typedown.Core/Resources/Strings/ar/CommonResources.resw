@@ -1003,4 +1003,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>قام {0} بتحرير {1}</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>قد يؤدي تحرير هذا المستند في الوضع المرئي إلى إعادة كتابة جزء من شيفرة HTML فيه. للحفاظ عليه كما هو، حرّره في وضع المصدر.</value>
+  </data>
 </root>

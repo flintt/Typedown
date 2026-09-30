@@ -49,6 +49,9 @@ const anchor = 'EDITHERE';
         await mode(false, false);
         const { prediction, exported } = await page.evaluate(() => ({ prediction: window.__typedownPendingNormalization(), exported: window.__typedownMuya.getMarkdown() }));
         if (!prediction) { fail('no prediction after the load'); continue; }
+        // The notice that the first edit may rewrite part of the document shows exactly when that is predicted.
+        const warned = await page.evaluate(() => !!document.querySelector('.td-first-edit-warning'));
+        if (warned !== (prediction.pendingNormalization === 'unsafe')) fail(`first-edit notice ${warned ? 'shown' : 'missing'} for a ${prediction.pendingNormalization} prediction`);
         if (exported.split(anchor).length !== 2) { fail(`the export does not hold "${anchor}" exactly once`); continue; }
 
         // A real click and keystroke, so the edit goes through Muya's own input handling. The caret may start in

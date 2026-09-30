@@ -1003,4 +1003,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>{0} ha modificato {1}</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>Modificare questo documento in modalità visuale può riscrivere parte del suo HTML. Per mantenerlo invariato, modificalo in modalità sorgente.</value>
+  </data>
 </root>

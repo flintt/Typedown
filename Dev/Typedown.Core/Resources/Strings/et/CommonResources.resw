@@ -1003,4 +1003,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>{0} muutis dokumenti {1}</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>Visuaalses režiimis muutmine võib osa selle dokumendi HTML-ist ümber kirjutada. Muutmata hoidmiseks muutke seda lähtekoodi režiimis.</value>
+  </data>
 </root>

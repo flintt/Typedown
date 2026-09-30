@@ -1003,4 +1003,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>{0} が {1} を編集しました</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>ビジュアルモードでこの文書を編集すると、生の HTML の一部が書き換えられることがあります。そのまま保つには、ソースモードで編集してください。</value>
+  </data>
 </root>

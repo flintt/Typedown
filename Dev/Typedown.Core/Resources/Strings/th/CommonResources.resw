@@ -1003,4 +1003,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>{0} แก้ไข {1}</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>การแก้ไขเอกสารนี้ในโหมดภาพอาจเขียน HTML บางส่วนใหม่ หากต้องการคงไว้ตามเดิม ให้แก้ไขในโหมดซอร์ส</value>
+  </data>
 </root>

@@ -1003,4 +1003,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>{0} એ {1} સંપાદિત કર્યું</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>આ દસ્તાવેજને વિઝ્યુઅલ મોડમાં સંપાદિત કરવાથી તેનું કેટલુંક HTML ફરીથી લખાઈ શકે છે. તેને જેમ છે તેમ રાખવા સોર્સ મોડમાં સંપાદિત કરો.</value>
+  </data>
 </root>

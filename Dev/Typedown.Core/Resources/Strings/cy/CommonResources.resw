@@ -1003,4 +1003,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>Golygodd {0} {1}</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>Gall golygu'r ddogfen hon yn y modd gweledol ailysgrifennu rhywfaint o'i HTML. I'w chadw'n union fel y mae, golygwch hi yn y modd ffynhonnell.</value>
+  </data>
 </root>

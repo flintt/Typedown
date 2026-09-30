@@ -1436,3 +1436,44 @@ span.ag-footnote-backlink {
   #ag-editor-id > * { break-inside: avoid; }
   #ag-editor-id h1, #ag-editor-id h2, #ag-editor-id h3 { break-after: avoid; }
 }
+
+/* Notice that the first visual edit may rewrite part of this document (components/Muya: firstEditWarning). It stays
+   at the top while scrolling and never blocks editing. */
+.td-first-edit-warning-slot {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.td-first-edit-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0 auto;
+  max-width: var(--editorAreaWidth);
+  padding: 6px 10px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--editorColor);
+  background: var(--floatBgColor);
+  border: 1px solid var(--floatBorderColor);
+  border-radius: 4px;
+}
+
+.td-first-edit-warning-text {
+  flex: 1;
+}
+
+.td-first-edit-warning-text::before {
+  content: var(--FirstEditWarning);
+}
+
+.td-first-edit-warning-close {
+  border: none;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  padding: 0 2px;
+}

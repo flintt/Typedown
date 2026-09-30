@@ -1003,4 +1003,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>{0} redaktoi {1}</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>Redaktimi i këtij dokumenti në modalitetin vizual mund të rishkruajë një pjesë të HTML-së së tij. Për ta mbajtur siç është, redaktojeni në modalitetin e burimit.</value>
+  </data>
 </root>

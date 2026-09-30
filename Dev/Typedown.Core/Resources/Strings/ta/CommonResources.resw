@@ -1003,4 +1003,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>{0} {1} ஐத் திருத்தியது</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>இந்த ஆவணத்தை காட்சி முறையில் திருத்தினால் அதன் சில HTML மீண்டும் எழுதப்படலாம். உள்ளபடியே வைக்க மூல முறையில் திருத்தவும்.</value>
+  </data>
 </root>

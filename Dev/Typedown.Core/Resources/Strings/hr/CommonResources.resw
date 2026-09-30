@@ -1003,4 +1003,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>{0} je uredio {1}</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>Uređivanje ovog dokumenta u vizualnom načinu može prepisati dio njegova HTML-a. Da bi ostao nepromijenjen, uređujte ga u načinu izvornog koda.</value>
+  </data>
 </root>

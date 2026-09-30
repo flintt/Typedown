@@ -1003,4 +1003,7 @@
   <data name="AutomationWrote" xml:space="preserve">
     <value>{0} نے {1} میں ترمیم کی</value>
   </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>اس دستاویز میں بصری وضع میں ترمیم سے اس کے HTML کا کچھ حصہ دوبارہ لکھا جا سکتا ہے۔ اسے جوں کا توں رکھنے کے لیے ماخذ وضع میں ترمیم کریں۔</value>
+  </data>
 </root>
