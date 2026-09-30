@@ -48,6 +48,23 @@ namespace Typedown.Services.Automation
                 return new Newtonsoft.Json.Linq.JObject { ["windows"] = report, ["files"] = new Newtonsoft.Json.Linq.JArray(files) };
             }));
 
+            // How a window's editor page is drawn, and moving a window to a page (the settings page) of its own.
+            methods.Add(new MethodDescriptor("test.editor.style", null, "test.editor.style/1", async (c, ct) =>
+                await await Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app => app.EditorViewModel.QueryEditorStyleAsync(5000))
+                    ?? throw new AutomationException(AutomationErrorKind.editor_not_ready, "the page did not answer")));
+            methods.Add(new MethodDescriptor("test.window.handle", null, "test.window.handle/1", (c, ct) =>
+                Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                    (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["hwnd"] = app.MainWindow.ToInt64() })));
+            methods.Add(new MethodDescriptor("test.window.navigate", null, "test.window.navigate/1", (c, ct) =>
+            {
+                var route = c.Params.RequiredString("route", allowEmpty: false);
+                return Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    app.NavigateCommand.Execute(route);
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject();
+                });
+            }));
+
             // Settings across windows (stage 0b): open another window, change a setting in one, read it in another.
             methods.Add(new MethodDescriptor("test.window.open", null, "test.window.open/1", async (c, ct) =>
             {

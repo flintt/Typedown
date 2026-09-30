@@ -95,6 +95,7 @@ namespace Typedown.Core.ViewModels
             EventCenter.GetObservable<EditorEventArgs>("FileLoaded").Subscribe(x => OnFileLoaded(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("DocumentEditApplied").Subscribe(x => OnDocumentEditApplied(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("NormalizationReport").Subscribe(x => OnNormalizationReport(x.Args));
+            EventCenter.GetObservable<EditorEventArgs>("EditorStyle").Subscribe(x => { var t = x.Args?["token"]?.Value<int?>() ?? 0; if (styleWaiters.TryGetValue(t, out var w)) w.TrySetResult(x.Args); });
             EventCenter.GetObservable<EditorEventArgs>("CursorChange").Subscribe(x => OnCursorChange(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("OnScroll").Subscribe(x => OnScroll(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("SelectionChange").Subscribe(x => OnSelectionChange(x.Args));
@@ -648,6 +649,26 @@ namespace Typedown.Core.ViewModels
             finally
             {
                 normalizationWaiters.Remove(token);
+            }
+        }
+
+        private readonly Dictionary<int, TaskCompletionSource<JToken>> styleWaiters = new();
+
+        /// <summary>The page's computed font size, line height and direction (automation test host checks).</summary>
+        public async Task<JToken> QueryEditorStyleAsync(int timeoutMs)
+        {
+            if (MarkdownEditor == null) return null;
+            var token = ++normalizationToken;
+            var waiter = new TaskCompletionSource<JToken>(TaskCreationOptions.RunContinuationsAsynchronously);
+            styleWaiters[token] = waiter;
+            try
+            {
+                MarkdownEditor.PostMessage("QueryEditorStyle", new { token });
+                return await Task.WhenAny(waiter.Task, Task.Delay(timeoutMs)) == waiter.Task ? waiter.Task.Result : null;
+            }
+            finally
+            {
+                styleWaiters.Remove(token);
             }
         }
 

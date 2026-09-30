@@ -76,6 +76,14 @@ const Editor: React.FC = () => {
         return true
     }, [describeNormalization])
 
+    // Host -> editor: how the editor is drawn right now (the settings it applied), for checking that a setting reached
+    // the page and not only the host.
+    useEffect(() => transport.addListener<{ token: number }>('QueryEditorStyle', ({ token }) => {
+        const element = document.querySelector('#ag-editor-id') || document.querySelector('.CodeMirror')
+        const style = element ? getComputedStyle(element) : null
+        transport.postMessage('EditorStyle', { token, fontSize: style?.fontSize ?? null, lineHeight: style?.lineHeight ?? null, direction: style?.direction ?? null })
+    }), []);
+
     // Host -> editor: what the first visual edit would do to the text shown now (document.get's normalization).
     useEffect(() => transport.addListener<{ token: number }>('QueryNormalization', ({ token }) => {
         flushRef.current?.()

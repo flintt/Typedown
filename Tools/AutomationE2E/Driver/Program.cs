@@ -95,6 +95,7 @@ internal static class Program
             await Case("R03 a keystroke while a saving write is held: the saved file is the written revision, the keystroke is kept", R03);
             await Case("B01 settings: one window's change reaches the other window; window modes stay with their window", B01);
             await Case("S2 settings.set reaches every window and the settings file; a stale revision is refused", S2);
+            await Case("B02 an open settings page shows a font size changed from elsewhere", B02);
             await Case("M01 a written text survives visual, reading and source mode switches byte for byte, then saves exactly", M01);
             await Case("R04 untitled and background documents come back from their backups after a kill, each its own", R04);
         }
@@ -337,12 +338,72 @@ internal static class Program
         Check((long)set["settingsRevision"]! > revision, "the settings revision advanced");
         foreach (var window in windows)
             Check((double)(await c.Call("test.settings.get", new { windowId = window, name = "FontSize" }))["value"]! == font, $"window {window[..7]} has font size {font}");
+        foreach (var window in windows)
+        {
+            // The editor page itself is drawn with it, not only the host's setting.
+            string? drawn = null;
+            for (var i = 0; i < 100 && drawn != $"{font}px"; i++)
+            {
+                drawn = (string?)(await c.Call("test.editor.style", new { windowId = window }))["fontSize"];
+                if (drawn != $"{font}px") await Task.Delay(50);
+            }
+            Check(drawn == $"{font}px", $"window {window[..7]}'s editor page is drawn at {font}px ({drawn})");
+        }
         var file = JObject.Parse(File.ReadAllText(Path.Combine(testRoot, "data", "Settings.json")));
         Check((double)file["FontSize"]! == font, $"Settings.json holds {font} ({file["FontSize"]})");
         Check((int)(await c.Call("settings.get", new { keys = new[] { "editor.fontSize" } }))["values"]!["editor.fontSize"]! == font, "settings.get reads it back");
         Check(await c.ErrorCode("settings.set", new { key = "editor.fontSize", value = 12, baseSettingsRevision = revision }) == -32012, "a stale settings revision is refused");
         Check(await c.ErrorCode("settings.set", new { key = "SourceCode", value = true, baseSettingsRevision = (long)set["settingsRevision"]! }) == -32020, "a window mode is not an external setting");
         notes.Add($"{windows.Count} window(s), font {font}");
+    }
+
+    private static async Task B02(List<string> notes)
+    {
+        using var c = await Session("e2e B02");
+        var windows = ((JArray)(await c.Call("window.list"))["windows"]!).Select(w => (string)w["windowId"]!).ToList();
+        if (windows.Count < 2) windows.Add((string)(await c.Call("test.window.open"))["windowId"]!);
+        var settingsWindow = windows[1];
+        await c.Call("test.window.navigate", new { windowId = settingsWindow, route = "Settings/Editor" });
+        try
+        {
+            var got = await c.Call("settings.get", new { keys = new[] { "editor.fontSize" } });
+            var before = (int)got["values"]!["editor.fontSize"]!;
+            var windowHandle = WindowOf(settingsWindow, c);
+            await WaitForNumberBox(await windowHandle, before, notes, "the settings page shows the current size");
+            var font = before == 25 ? 26 : 25;
+            await c.Call("settings.set", new { key = "editor.fontSize", value = font, baseSettingsRevision = (long)got["settingsRevision"]! });
+            await WaitForNumberBox(await windowHandle, font, notes, "the open settings page follows a change made elsewhere");
+        }
+        finally
+        {
+            await c.Call("test.window.navigate", new { windowId = settingsWindow, route = "Main" });
+        }
+    }
+
+    private static async Task<IntPtr> WindowOf(string windowId, Client c) =>
+        new IntPtr((long)(await c.Call("test.window.handle", new { windowId }))["hwnd"]!);
+
+    private static async Task WaitForNumberBox(IntPtr window, int expected, List<string> notes, string what)
+    {
+        string seen = "";
+        for (var i = 0; i < 80; i++)
+        {
+            try
+            {
+                var root = System.Windows.Automation.AutomationElement.FromHandle(window);
+                var edits = root.FindAll(System.Windows.Automation.TreeScope.Descendants,
+                    new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.Edit));
+                var values = new List<string>();
+                foreach (System.Windows.Automation.AutomationElement edit in edits)
+                    if (edit.TryGetCurrentPattern(System.Windows.Automation.ValuePattern.Pattern, out var pattern))
+                        values.Add(((System.Windows.Automation.ValuePattern)pattern).Current.Value);
+                seen = string.Join(" | ", values);
+                if (values.Any(v => new string(v.TakeWhile(char.IsDigit).ToArray()) == expected.ToString())) { notes.Add($"{what}: {seen}"); return; }
+            }
+            catch (Exception e) { seen = e.Message; }
+            await Task.Delay(100);
+        }
+        throw new CaseFailed($"{what}: expected {expected}, the page shows [{seen}]");
     }
 
     private static async Task M01(List<string> notes)
