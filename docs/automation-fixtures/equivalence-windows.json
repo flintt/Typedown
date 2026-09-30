@@ -14,25 +14,29 @@
     "document.read",
     "document.write",
     "document.save",
-    "window.focus"
+    "window.focus",
+    "settings.read",
+    "settings.write"
    ]
   },
   "result": {
    "apiVersion": 1,
    "server": {
     "name": "Typedown",
-    "version": "1.2.30.0 (local.0eb0e26c, Unpackaged)",
-    "commit": "local.0eb0e26c",
+    "version": "1.2.30.0 (local.94404bf2, Unpackaged)",
+    "commit": "local.94404bf2",
     "platform": "windows",
     "buildType": "automationTestHost"
    },
-   "instanceId": "82ba308f700841739199e492f1d994df",
-   "clientSessionId": "8aa6a6e537b54436a9617f1bef8f0998",
+   "instanceId": "2ed318719ae34964bc1c5a24c8d98100",
+   "clientSessionId": "4395a5fbd0c2483aab79f419464d47b1",
    "grantedScopes": [
     "app.read",
     "document.read",
     "document.save",
     "document.write",
+    "settings.read",
+    "settings.write",
     "window.focus"
    ],
    "deniedScopes": [],
@@ -198,12 +202,12 @@
   "step": "open",
   "method": "document.open",
   "params": {
-   "path": "C:\\Users\\huanggj\\AppData\\Local\\Typedown-AutomationTests\\20260930-131655-c0c8ce\\fixtures\\equivalence\\eq-a.md",
+   "path": "C:\\Users\\huanggj\\AppData\\Local\\Typedown-AutomationTests\\20260930-140204-f4fbf1\\fixtures\\equivalence\\eq-a.md",
    "reveal": "document"
   },
   "result": {
-   "windowId": "w6e4c1289eb8642fcb80d1d920968f614",
-   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "windowId": "w5b96141ad7924fd6a33dc335c1916aad",
+   "documentId": "10d08f09a23c4107bca2b1a4673de98b",
    "revision": 0
   }
  },
@@ -211,7 +215,7 @@
   "step": "get latest with text and headings",
   "method": "document.get",
   "params": {
-   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "documentId": "10d08f09a23c4107bca2b1a4673de98b",
    "consistency": "latest",
    "include": [
     "text",
@@ -219,9 +223,9 @@
    ]
   },
   "result": {
-   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
-   "windowId": "w6e4c1289eb8642fcb80d1d920968f614",
-   "path": "C:\\Users\\huanggj\\AppData\\Local\\Typedown-AutomationTests\\20260930-131655-c0c8ce\\fixtures\\equivalence\\eq-a.md",
+   "documentId": "10d08f09a23c4107bca2b1a4673de98b",
+   "windowId": "w5b96141ad7924fd6a33dc335c1916aad",
+   "path": "C:\\Users\\huanggj\\AppData\\Local\\Typedown-AutomationTests\\20260930-140204-f4fbf1\\fixtures\\equivalence\\eq-a.md",
    "title": "eq-a.md",
    "revision": 0,
    "saved": true,
@@ -251,7 +255,7 @@
   "step": "get without consistency",
   "method": "document.get",
   "params": {
-   "documentId": "3ec98475a14d4ea182271b8ae04671bd"
+   "documentId": "10d08f09a23c4107bca2b1a4673de98b"
   },
   "error": {
    "code": -32602,
@@ -267,12 +271,12 @@
   "step": "replace",
   "method": "document.replace",
   "params": {
-   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "documentId": "10d08f09a23c4107bca2b1a4673de98b",
    "baseRevision": 0,
    "text": "# Equivalence\n\nThe quick red fox.\n\n- one\n- two\n"
   },
   "result": {
-   "operationId": "de4c57d33d5a4a92beb81c5b1bdab10b",
+   "operationId": "03217a8054c947269322fe6b39c8e426",
    "revision": 1,
    "contentHash": "1353f4662de42b2290a4606a0a19e1df12a86a526585e86421f363d9f0077531",
    "saved": false,
@@ -290,7 +294,7 @@
   "step": "replace on a stale revision",
   "method": "document.replace",
   "params": {
-   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "documentId": "10d08f09a23c4107bca2b1a4673de98b",
    "baseRevision": 0,
    "text": "stale\n"
   },
@@ -307,7 +311,7 @@
   "step": "replaceText with the wrong count",
   "method": "document.replaceText",
   "params": {
-   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "documentId": "10d08f09a23c4107bca2b1a4673de98b",
    "baseRevision": 1,
    "find": "o",
    "replacement": "0",
@@ -327,14 +331,14 @@
   "step": "replaceText",
   "method": "document.replaceText",
   "params": {
-   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "documentId": "10d08f09a23c4107bca2b1a4673de98b",
    "baseRevision": 1,
    "find": "red",
    "replacement": "green",
    "expectedCount": 1
   },
   "result": {
-   "operationId": "b3d6684b3ea445529be24e882e2f8154",
+   "operationId": "e2b041db424745728200a36143c791d5",
    "revision": 2,
    "contentHash": "fa44128bee21b4e56b4e0b41c89f3151f98039bda71bb016fe184299b3e2ab6b",
    "saved": false,
@@ -352,14 +356,14 @@
   "step": "replaceText of nothing is no change",
   "method": "document.replaceText",
   "params": {
-   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "documentId": "10d08f09a23c4107bca2b1a4673de98b",
    "baseRevision": 2,
    "find": "absent",
    "replacement": "x",
    "expectedCount": 0
   },
   "result": {
-   "operationId": "2da0975b0f2f4c5f9f9bcb472e103679",
+   "operationId": "d835c916511b4ee7b6d2f2e7bded98c3",
    "revision": 2,
    "contentHash": "fa44128bee21b4e56b4e0b41c89f3151f98039bda71bb016fe184299b3e2ab6b",
    "saved": false,
@@ -377,7 +381,7 @@
   "step": "text with a carriage return",
   "method": "document.replace",
   "params": {
-   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "documentId": "10d08f09a23c4107bca2b1a4673de98b",
    "baseRevision": 2,
    "text": "a\r\nb\n"
   },
@@ -395,12 +399,12 @@
   "step": "formatting the editor would rewrite",
   "method": "document.replace",
   "params": {
-   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "documentId": "10d08f09a23c4107bca2b1a4673de98b",
    "baseRevision": 2,
    "text": "Title\n=====\n\n* star\n"
   },
   "result": {
-   "operationId": "d126be38a0b9494894c8644d8604c45c",
+   "operationId": "18b60e28eb0e4b139cffc5e913da6c20",
    "revision": 3,
    "contentHash": "250cac01bdedc93cb0721eb2906ba78a6acb2e82a3d08d6e3ccb96e51d55a6d0",
    "saved": false,
@@ -418,7 +422,7 @@
   "step": "the same, accepted",
   "method": "document.replace",
   "params": {
-   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "documentId": "10d08f09a23c4107bca2b1a4673de98b",
    "baseRevision": 2,
    "text": "Title\n=====\n\n* star\n",
    "normalizationPolicy": "allowUnknown"
@@ -436,7 +440,7 @@
   "step": "text the editor would lose",
   "method": "document.replace",
   "params": {
-   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "documentId": "10d08f09a23c4107bca2b1a4673de98b",
    "baseRevision": 3,
    "text": "<div>\n&copy; kept\n</div>\n",
    "normalizationPolicy": "allowUnknown"
@@ -460,7 +464,7 @@
   "step": "awaitPresentation without reveal",
   "method": "document.replace",
   "params": {
-   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "documentId": "10d08f09a23c4107bca2b1a4673de98b",
    "baseRevision": 3,
    "text": "x\n",
    "awaitPresentation": true
@@ -479,11 +483,11 @@
   "step": "undo",
   "method": "document.undo",
   "params": {
-   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "documentId": "10d08f09a23c4107bca2b1a4673de98b",
    "baseRevision": 3
   },
   "result": {
-   "operationId": "1d7e00f554c64941961f42cbcd7f790e",
+   "operationId": "f4fee0a056f046ce8721a03bd24a3466",
    "revision": 4,
    "contentHash": "fa44128bee21b4e56b4e0b41c89f3151f98039bda71bb016fe184299b3e2ab6b",
    "saved": false,
@@ -503,16 +507,16 @@
   "step": "get after undo",
   "method": "document.get",
   "params": {
-   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "documentId": "10d08f09a23c4107bca2b1a4673de98b",
    "consistency": "latest",
    "include": [
     "text"
    ]
   },
   "result": {
-   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
-   "windowId": "w6e4c1289eb8642fcb80d1d920968f614",
-   "path": "C:\\Users\\huanggj\\AppData\\Local\\Typedown-AutomationTests\\20260930-131655-c0c8ce\\fixtures\\equivalence\\eq-a.md",
+   "documentId": "10d08f09a23c4107bca2b1a4673de98b",
+   "windowId": "w5b96141ad7924fd6a33dc335c1916aad",
+   "path": "C:\\Users\\huanggj\\AppData\\Local\\Typedown-AutomationTests\\20260930-140204-f4fbf1\\fixtures\\equivalence\\eq-a.md",
    "title": "eq-a.md",
    "revision": 4,
    "saved": false,
@@ -534,11 +538,11 @@
   "step": "redo",
   "method": "document.redo",
   "params": {
-   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "documentId": "10d08f09a23c4107bca2b1a4673de98b",
    "baseRevision": 4
   },
   "result": {
-   "operationId": "0c9a53800f26497797121d180fcc2e5a",
+   "operationId": "342026b51c154115a96d18514fa71797",
    "revision": 5,
    "contentHash": "250cac01bdedc93cb0721eb2906ba78a6acb2e82a3d08d6e3ccb96e51d55a6d0",
    "saved": false,
@@ -558,16 +562,16 @@
   "step": "get after redo",
   "method": "document.get",
   "params": {
-   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "documentId": "10d08f09a23c4107bca2b1a4673de98b",
    "consistency": "latest",
    "include": [
     "text"
    ]
   },
   "result": {
-   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
-   "windowId": "w6e4c1289eb8642fcb80d1d920968f614",
-   "path": "C:\\Users\\huanggj\\AppData\\Local\\Typedown-AutomationTests\\20260930-131655-c0c8ce\\fixtures\\equivalence\\eq-a.md",
+   "documentId": "10d08f09a23c4107bca2b1a4673de98b",
+   "windowId": "w5b96141ad7924fd6a33dc335c1916aad",
+   "path": "C:\\Users\\huanggj\\AppData\\Local\\Typedown-AutomationTests\\20260930-140204-f4fbf1\\fixtures\\equivalence\\eq-a.md",
    "title": "eq-a.md",
    "revision": 5,
    "saved": false,
@@ -589,14 +593,14 @@
   "step": "save",
   "method": "document.save",
   "params": {
-   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "documentId": "10d08f09a23c4107bca2b1a4673de98b",
    "baseRevision": 5
   },
   "result": {
    "revision": 5,
    "contentHash": "250cac01bdedc93cb0721eb2906ba78a6acb2e82a3d08d6e3ccb96e51d55a6d0",
    "saved": true,
-   "path": "C:\\Users\\huanggj\\AppData\\Local\\Typedown-AutomationTests\\20260930-131655-c0c8ce\\fixtures\\equivalence\\eq-a.md"
+   "path": "C:\\Users\\huanggj\\AppData\\Local\\Typedown-AutomationTests\\20260930-140204-f4fbf1\\fixtures\\equivalence\\eq-a.md"
   }
  },
  {
@@ -607,7 +611,7 @@
   "step": "save on a stale revision",
   "method": "document.save",
   "params": {
-   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "documentId": "10d08f09a23c4107bca2b1a4673de98b",
    "baseRevision": 0
   },
   "error": {
@@ -627,8 +631,8 @@
    "normalizationPolicy": "allowUnknown"
   },
   "result": {
-   "windowId": "w6e4c1289eb8642fcb80d1d920968f614",
-   "documentId": "550f1a7d1505456c83ca21f9d742d918",
+   "windowId": "w5b96141ad7924fd6a33dc335c1916aad",
+   "documentId": "db0175a2ef3540718dec2b2965ff829d",
    "revision": 1,
    "contentHash": "f676b43bd55f91451babc1663739064abb7e11e2b5f4a7efe62c29e4eeb0d117",
    "normalization": {
@@ -644,15 +648,15 @@
   "step": "get the new document",
   "method": "document.get",
   "params": {
-   "documentId": "550f1a7d1505456c83ca21f9d742d918",
+   "documentId": "db0175a2ef3540718dec2b2965ff829d",
    "consistency": "latest",
    "include": [
     "text"
    ]
   },
   "result": {
-   "documentId": "550f1a7d1505456c83ca21f9d742d918",
-   "windowId": "w6e4c1289eb8642fcb80d1d920968f614",
+   "documentId": "db0175a2ef3540718dec2b2965ff829d",
+   "windowId": "w5b96141ad7924fd6a33dc335c1916aad",
    "path": null,
    "title": "δ����",
    "revision": 1,
@@ -675,7 +679,7 @@
   "step": "save an untitled document",
   "method": "document.save",
   "params": {
-   "documentId": "550f1a7d1505456c83ca21f9d742d918"
+   "documentId": "db0175a2ef3540718dec2b2965ff829d"
   },
   "error": {
    "code": -32016,
@@ -735,18 +739,18 @@
   "step": "focus A",
   "method": "document.focus",
   "params": {
-   "documentId": "3ec98475a14d4ea182271b8ae04671bd"
+   "documentId": "10d08f09a23c4107bca2b1a4673de98b"
   },
   "result": {
-   "windowId": "w6e4c1289eb8642fcb80d1d920968f614",
-   "documentId": "3ec98475a14d4ea182271b8ae04671bd"
+   "windowId": "w5b96141ad7924fd6a33dc335c1916aad",
+   "documentId": "10d08f09a23c4107bca2b1a4673de98b"
   }
  },
  {
   "step": "revealed write, presentation awaited",
   "method": "document.replaceText",
   "params": {
-   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "documentId": "10d08f09a23c4107bca2b1a4673de98b",
    "baseRevision": 5,
    "find": "star",
    "replacement": "starry",
@@ -756,7 +760,7 @@
    "normalizationPolicy": "allowUnknown"
   },
   "result": {
-   "operationId": "242aa63b3d3d4e519ba67720690d248f",
+   "operationId": "98fa56cf500b4645be22d76a1e5a8eb7",
    "revision": 6,
    "contentHash": "d0cb93573c0119ff7ca8fed5c05a6bcc0ccbd2d22a86b1a4e29900df0e73b018",
    "saved": false,
@@ -773,6 +777,197 @@
     "tabActive": true,
     "pageFramesPassed": true,
     "hostRenderPassed": true
+   }
+  }
+ },
+ {
+  "step": "settings.describe",
+  "method": "settings.describe",
+  "params": {},
+  "result": {
+   "settingsRevision": 26,
+   "settings": [
+    {
+     "key": "appearance.theme",
+     "scope": "application",
+     "type": {
+      "type": "object",
+      "oneOf": [
+       {
+        "properties": {
+         "kind": {
+          "const": "builtIn"
+         },
+         "id": {
+          "enum": [
+           "system",
+           "light",
+           "dark",
+           "black"
+          ]
+         }
+        },
+        "required": [
+         "kind",
+         "id"
+        ]
+       },
+       {
+        "properties": {
+         "kind": {
+          "const": "custom"
+         },
+         "id": {
+          "type": "string",
+          "minLength": 1
+         }
+        },
+        "required": [
+         "kind",
+         "id"
+        ]
+       }
+      ]
+     },
+     "visibleIn": [
+      "every window",
+      "every editor page",
+      "menu theme checks",
+      "an open settings page"
+     ],
+     "restartRequired": false
+    },
+    {
+     "key": "editor.fontSize",
+     "scope": "application",
+     "type": {
+      "type": "integer",
+      "minimum": 8,
+      "maximum": 48
+     },
+     "visibleIn": [
+      "every editor page",
+      "an open settings page"
+     ],
+     "restartRequired": false
+    },
+    {
+     "key": "editor.lineHeight",
+     "scope": "application",
+     "type": {
+      "type": "number",
+      "minimum": 1.0,
+      "maximum": 3.0
+     },
+     "visibleIn": [
+      "every editor page",
+      "an open settings page"
+     ],
+     "restartRequired": false
+    },
+    {
+     "key": "editor.textDirection",
+     "scope": "application",
+     "type": {
+      "enum": [
+       "auto",
+       "ltr",
+       "rtl"
+      ]
+     },
+     "visibleIn": [
+      "every editor page",
+      "an open settings page"
+     ],
+     "restartRequired": false
+    }
+   ]
+  }
+ },
+ {
+  "step": "settings.set fontSize",
+  "method": "settings.set",
+  "params": {
+   "key": "editor.fontSize",
+   "value": 20,
+   "baseSettingsRevision": 26
+  },
+  "result": {
+   "settingsRevision": 27,
+   "operationId": "59f75b64f825400fa6f25d72a2a6a7bb",
+   "key": "editor.fontSize",
+   "value": 20
+  }
+ },
+ {
+  "step": "settings.set on a stale revision",
+  "method": "settings.set",
+  "params": {
+   "key": "editor.fontSize",
+   "value": 22,
+   "baseSettingsRevision": 26
+  },
+  "error": {
+   "code": -32012,
+   "message": "The settings changed since baseSettingsRevision.",
+   "data": {
+    "kind": "revision_conflict",
+    "settingsRevision": 27
+   }
+  }
+ },
+ {
+  "step": "settings.set out of range",
+  "method": "settings.set",
+  "params": {
+   "key": "editor.fontSize",
+   "value": 99,
+   "baseSettingsRevision": 27
+  },
+  "error": {
+   "code": -32021,
+   "message": "The value for 'editor.fontSize' is not valid: doesNotMatch.",
+   "data": {
+    "kind": "setting_invalid",
+    "key": "editor.fontSize",
+    "reason": "doesNotMatch",
+    "allowed": {
+     "type": "integer",
+     "minimum": 8,
+     "maximum": 48
+    }
+   }
+  }
+ },
+ {
+  "step": "settings.set not exposed",
+  "method": "settings.set",
+  "params": {
+   "key": "editor.customCss",
+   "value": "x",
+   "baseSettingsRevision": 27
+  },
+  "error": {
+   "code": -32020,
+   "message": "'editor.customCss' is not an external setting.",
+   "data": {
+    "kind": "setting_not_exposed",
+    "key": "editor.customCss"
+   }
+  }
+ },
+ {
+  "step": "settings.get after",
+  "method": "settings.get",
+  "params": {
+   "keys": [
+    "editor.fontSize"
+   ]
+  },
+  "result": {
+   "settingsRevision": 27,
+   "values": {
+    "editor.fontSize": 20
    }
   }
  }
