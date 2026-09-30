@@ -65,6 +65,16 @@ namespace Typedown.Services.Automation
                         ?? throw new AutomationException(AutomationErrorKind.editor_not_ready, "the window shows no editor page");
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["focused"] = editor.Focus(global::Windows.UI.Xaml.FocusState.Programmatic) };
                 })));
+            // Runs a script in the window's editor page and returns its JSON result: for diagnosing what the page holds
+            // (caret, Muya's state) when a check fails in the real window and not in the page harness.
+            methods.Add(new MethodDescriptor("test.editor.eval", null, "test.editor.eval/1", async (c, ct) =>
+                await await Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), async app =>
+                {
+                    var editor = app.MarkdownEditor as Typedown.Controls.MarkdownEditor
+                        ?? throw new AutomationException(AutomationErrorKind.editor_not_ready, "the window shows no editor page");
+                    var json = await editor.CoreWebView2.ExecuteScriptAsync(c.Params.RequiredString("script"));
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["result"] = Newtonsoft.Json.Linq.JToken.Parse(json) };
+                })));
             // Reloads the window's editor page, as the application does after a page error or a crashed web process.
             methods.Add(new MethodDescriptor("test.editor.reload", null, "test.editor.reload/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
