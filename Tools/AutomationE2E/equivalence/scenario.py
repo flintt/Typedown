@@ -4,6 +4,9 @@ and the Uno edition (Unix socket) must answer it alike. Prints one JSON transcri
 compare.py normalizes two transcripts, checks each reply against docs/automation-schema/v1.json and diffs them.
 
     python scenario.py --examples DIR (--endpoint PIPE | --socket PATH) --workdir DIR > transcript.json
+
+Run it against an instance in the visual mode (a fresh profile): in source mode the editor does not classify
+normalization, so the default policy refuses the writes that are expected to succeed.
 """
 import argparse, json, os, sys
 
