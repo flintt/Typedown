@@ -307,7 +307,7 @@ internal static class Program
         var barrier = (string)(await driver.Call("test.barrier.arm", new { point = EditBarrierPoints.AfterEditorMutationBeforeReport, documentId = id }))["barrierId"]!;
         var write = writer.Call("document.replace", new { documentId = id, baseRevision = r, text = "# R03\n\nwritten\n", save = true, normalizationPolicy = "allowUnknown" });
         Check((bool)(await driver.Call("test.barrier.waitHit", new { barrierId = barrier, timeoutMs = 20000 }))["hit"]!, "the write reached the barrier with the page already changed");
-        await TypeIntoWindow("Z", await WindowOf((string)(await driver.Call("document.get", new { documentId = id, consistency = "snapshot" }))["windowId"]!, driver)); // the reader's keystroke on top of the write, while the host has not committed it
+        await TypeIntoWindow(driver, (string)(await driver.Call("document.get", new { documentId = id, consistency = "snapshot" }))["windowId"]!, "Z"); // the reader's keystroke on top of the write, while the host has not committed it
         await WaitForPage(driver, id, t => t.Contains('Z'), "the keystroke");
         await driver.Call("test.barrier.release", new { barrierId = barrier });
         var result = await write;
@@ -667,23 +667,20 @@ internal static class Program
     private static async Task TypeInto(Client c, string documentId, string text)
     {
         var windowId = (string)(await c.Call("document.focus", new { documentId }))["windowId"]!;
-        await TypeIntoWindow(text, await WindowOf(windowId, c));
+        await TypeIntoWindow(c, windowId, text);
     }
 
-    private static async Task TypeIntoWindow(string text, IntPtr window = default)
+    private static async Task TypeIntoWindow(Client c, string windowId, string text)
     {
-        if (window == IntPtr.Zero) window = MainWindow();
+        var window = await WindowOf(windowId, c);
         await Activate(window);
         if (GetForegroundWindow() != window) throw new CaseFailed("the test host window could not be brought to the front (is the desktop locked?)");
         // Keyboard focus into the editor as a person gives it: a click in the text area, then Ctrl+End.
         GetWindowRect(window, out var rect);
-        // Keyboard focus into the page through UI Automation - the way assistive technology moves focus - rather than a
-        // click: what lies under a click depends on the document (an image or a maths block takes it, and then the
-        // keys). Ctrl+End then puts the caret at the end.
-        var document = await FindPageDocument(window);
-        if (document == null) throw new CaseFailed("the editor page is not in the window's UI Automation tree");
-        document.SetFocus();
-        await Task.Delay(150); // focus change settling; whether the keys arrived is checked by the caller
+        // Keyboard focus into the editor page as the app gives it, not by a click: what lies under a click depends on
+        // the document (an image block takes the click, and then the keys). Ctrl+End then puts the caret at the end.
+        await c.Call("test.editor.focus", new { windowId });
+        await Task.Delay(150); // focus hand-over settling; whether the keys arrived is checked by the caller
         Send(Key(0x11, false), Key(0x23, false), Key(0x23, true), Key(0x11, true));
         var inputs = new List<INPUT>();
         foreach (var ch in text)
@@ -693,23 +690,6 @@ internal static class Program
         }
         var sent = SendInput((uint)inputs.Count, inputs.ToArray(), Marshal.SizeOf<INPUT>());
         if (sent != inputs.Count) throw new CaseFailed($"SendInput sent {sent} of {inputs.Count} events (is the desktop locked?)");
-    }
-
-    private static async Task<System.Windows.Automation.AutomationElement?> FindPageDocument(IntPtr window)
-    {
-        for (var i = 0; i < 40; i++)
-        {
-            try
-            {
-                var root = System.Windows.Automation.AutomationElement.FromHandle(window);
-                var doc = root.FindFirst(System.Windows.Automation.TreeScope.Descendants,
-                    new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.Document));
-                if (doc != null) return doc;
-            }
-            catch (Exception) { }
-            await Task.Delay(100);
-        }
-        return null;
     }
 
     private static INPUT Key(ushort vk, bool up) => new() { type = 1, u = new InputUnion { ki = new KEYBDINPUT { wVk = vk, dwFlags = up ? 0x0002u : 0u } } };

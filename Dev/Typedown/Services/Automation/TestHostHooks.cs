@@ -56,6 +56,15 @@ namespace Typedown.Services.Automation
                     return await app.EditorViewModel.QueryEditorStyleAsync(5000)
                         ?? throw new AutomationException(AutomationErrorKind.editor_not_ready, "the editor page did not answer within 5 s");
                 })));
+            // Keyboard focus into the window's editor page, the way the app itself gives it (the editor control's
+            // focus is handed on to the web view) - independent of what a click would land on.
+            methods.Add(new MethodDescriptor("test.editor.focus", null, "test.editor.focus/1", (c, ct) =>
+                Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    var editor = app.MarkdownEditor as global::Windows.UI.Xaml.Controls.Control
+                        ?? throw new AutomationException(AutomationErrorKind.editor_not_ready, "the window shows no editor page");
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["focused"] = editor.Focus(global::Windows.UI.Xaml.FocusState.Programmatic) };
+                })));
             methods.Add(new MethodDescriptor("test.window.handle", null, "test.window.handle/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
                     (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["hwnd"] = app.MainWindow.ToInt64() })));
