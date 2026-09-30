@@ -4,7 +4,7 @@
 
 ## 注册
 
-Windows 安装版把 `typedownctl.exe` 装在 Typedown 的安装目录里（默认 `C:\Program Files\Typedown\typedownctl.exe`）。
+Windows 安装版把 `typedownctl.exe` 装在 Typedown 的安装目录里（默认 `C:\Program Files\Typedown\typedownctl.exe`）；Linux 版（deb 包）的命令是 `/usr/bin/typedownctl`。
 
 Claude Code：
 
@@ -12,7 +12,13 @@ Claude Code：
 claude mcp add typedown -- "C:\Program Files\Typedown\typedownctl.exe" mcp
 ```
 
-其他 MCP 客户端（它们 JSON 配置里的 `mcpServers`）：
+Linux：
+
+```
+claude mcp add typedown -- typedownctl mcp
+```
+
+其他 MCP 客户端（它们 JSON 配置里的 `mcpServers`，Linux 上 `command` 写 `typedownctl`）：
 
 ```json
 {
@@ -22,7 +28,7 @@ claude mcp add typedown -- "C:\Program Files\Typedown\typedownctl.exe" mcp
 }
 ```
 
-从源码运行（Linux、macOS 或开发时）：`dotnet publish Tools/Typedown.Cli -f net8.0 -o <dir>`，然后命令是 `dotnet <dir>/typedownctl.dll mcp`。
+从源码运行（开发时）：`dotnet publish Tools/Typedown.Cli -f net8.0 -o <dir>`，然后命令是 `dotnet <dir>/typedownctl.dll mcp`。
 
 `--endpoint NAME` 连接另一个端点（自动化测试宿主把它的端点名写在 `automation-endpoint.txt`）。
 
