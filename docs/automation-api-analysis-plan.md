@@ -369,9 +369,9 @@ Typedown.Uno/Automation/
 
 任务：
 
-- [ ] 实现权限为 `0600` 的独立 Unix Domain Socket。
+- [x] 实现权限为 `0600` 的独立 Unix Domain Socket。*（`Dev/Typedown.Automation/Unix/UnixSocketListener.cs`：`$XDG_RUNTIME_DIR/typedown/automation.v1.sock`，没有运行目录或路径超长时用 `/tmp/typedown-<uid>`（只有属主可进时才用）；socket 0600，Linux 上核对对端 uid；崩溃残留的 socket 被替换，仍在应答的不动；超长路径给出清楚的错误。`UnixSocketListenerTests`（去掉 chmod 或目录检查时失败）。typedownctl 和 typedown-mcp 在 Linux/macOS 上连它。）*
 - [ ] 复用 Windows schema、错误 fixture、CLI 和文档行为测试。
-- [ ] 映射 Uno 已有 `DocumentId`、共享 `AppSettings.Current`、标签和正文刷新逻辑。
+- [ ] 映射 Uno 已有 `DocumentId`、共享 `AppSettings.Current`、标签和正文刷新逻辑。*（文档部分已完成（Typedown-Uno `automation` 分支 e45ebe3）：协议库由 `Tools/sync-automation.sh` 同步；`DocumentViewModel` 增加 revision、写入期间暂存读者上报、`ApplyDocumentEdit`、保留历史的恢复加载和提交（含后台标签）；复用空白/预览标签打开文件时换新 documentId，符合身份 fixture；设置开关、标题标记、改动高亮。在 Linux（Xvfb + xfwm4）上用 typedownctl 和 typedown-mcp 实测：逐字读取、带保存的 replaceText、过期 revision 冲突、新建文档写入、带 reveal 的 MCP 写入在页面显示并高亮、标题标记。待做：`settings.*` 映射到 `AppSettings.Current`。）*
 - [ ] 验证 Linux 路径、换行、大小写、符号链接、socket 崩溃残留和 WebKitGTK 大文档行为。
 - [ ] 在 NUC 执行 CLI、MCP、断线、应用退出、模式切换和大文档测试。
 
