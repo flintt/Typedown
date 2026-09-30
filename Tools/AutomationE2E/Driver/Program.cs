@@ -219,6 +219,9 @@ internal static class Program
         }
         catch (Exception e)
         {
+            // A call that got no answer: what the screen showed (a dialog holding the window, say) is the first clue.
+            if (e is TimeoutException || e is CaseFailed && e.Message.Contains("did not finish"))
+                notes.Add("screen at the timeout: " + Screenshot(name.Split(' ')[0] + "-timeout-" + DateTime.Now.ToString("HHmmss")));
             results.Add(new JObject { ["name"] = name, ["passed"] = false, ["ms"] = watch.ElapsedMilliseconds, ["error"] = e is CaseFailed ? e.Message : e.ToString(), ["notes"] = new JArray(notes) });
         }
     }
