@@ -52,6 +52,12 @@ internal static class Program
             catch (JsonRpcRemoteException e) { return e.Code; }
         }
 
+        public async Task<string?> ErrorKind(string method, object? parameters = null)
+        {
+            try { await Call(method, parameters); return null; }
+            catch (JsonRpcRemoteException e) { return (string?)e.ErrorData?["kind"]; }
+        }
+
         public void Dispose() { Connection.Dispose(); pipe.Dispose(); }
     }
 
@@ -114,6 +120,8 @@ internal static class Program
             await Case("R03 a keystroke while a saving write is held: the saved file is the written revision, the keystroke is kept", R03);
             await Case("B01 settings: one window's change reaches the other window; window modes stay with their window", B01);
             await Case("S2 settings.set reaches every window and the settings file; a stale revision is refused", S2);
+            await Case("S3 the newer settings: language, tab size, compact mode and word count reach the window and go back", S3);
+            await Case("V01 window.setView: source mode with the outline in a restored 1100x720 window, then reading; a mode switch waits for a held write", V01);
             await Case("B02 an open settings page shows a font size changed from elsewhere", B02);
             await Case("F01 a written document with protected payloads keeps every one of them through a real first keystroke", F01);
             await Case("M01 a written text survives visual, reading and source mode switches byte for byte, then saves exactly", M01);
@@ -156,7 +164,7 @@ internal static class Program
         }
     }
 
-    private static readonly string[] AllScopes = { Scopes.AppRead, Scopes.DocumentRead, Scopes.DocumentWrite, Scopes.DocumentSave, Scopes.WindowFocus, Scopes.SettingsRead, Scopes.SettingsWrite };
+    private static readonly string[] AllScopes = { Scopes.AppRead, Scopes.DocumentRead, Scopes.DocumentWrite, Scopes.DocumentSave, Scopes.WindowFocus, Scopes.SettingsRead, Scopes.SettingsWrite, Scopes.WindowView };
 
     private static Task<JToken> Initialize(Client c, string name) => c.Call("system.initialize", new
     {
@@ -329,6 +337,101 @@ internal static class Program
         Check(((string)now["text"]!).Contains('Z'), "the keystroke is not lost");
         Check((long)now["revision"]! > (long)result["revision"]!, "the keystroke is a later revision than the write");
         Check(!(bool)now["saved"]!, "the keystroke leaves the document unsaved");
+    }
+
+    private static async Task S3(List<string> notes)
+    {
+        using var c = await Session("e2e S3");
+        var windowId = (string)((JArray)(await c.Call("window.list"))["windows"]!)[0]["windowId"]!;
+        var keys = new[] { "ui.language", "editor.tabSize", "appearance.compactMode", "status.wordCount" };
+        var got = await c.Call("settings.get", new { keys });
+        var original = (JObject)got["values"]!;
+        var revision = (long)got["settingsRevision"]!;
+        async Task<JToken> Setting(string name) => (await c.Call("test.settings.get", new { windowId, name }))["value"]!;
+        async Task Set(string key, JToken value) => revision = (long)(await c.Call("settings.set", new { key, value, baseSettingsRevision = revision }))["settingsRevision"]!;
+        try
+        {
+            var language = (string)original["ui.language"]! == "ja" ? "en" : "ja";
+            await Set("ui.language", language);
+            Check((string)(await Setting("Language"))! == language, $"the window's language is {language}");
+            var tab = (int)original["editor.tabSize"]! == 2 ? 4 : 2;
+            await Set("editor.tabSize", tab);
+            Check((int)await Setting("TabSize") == tab, $"tab size {tab}");
+            var compact = !(bool)original["appearance.compactMode"]!;
+            await Set("appearance.compactMode", compact);
+            Check((bool)await Setting("AppCompactMode") == compact, $"compact mode {compact}");
+            await Set("status.wordCount", "characters");
+            Check((int)await Setting("WordCountMethod") == 0, "word count by characters");
+            Check(await c.ErrorKind("settings.set", new { key = "status.wordCount", value = "paragraphs", baseSettingsRevision = revision }) == "setting_invalid",
+                "paragraphs is not a word count this edition has");
+            Check(await c.ErrorKind("settings.set", new { key = "markdown.listIndentation", value = "tab", baseSettingsRevision = revision }) == "setting_invalid",
+                "tab is not a list indentation this edition has");
+            var described = (JArray)(await c.Call("settings.describe"))["settings"]!;
+            notes.Add($"{described.Count} settings described; language {language}, tab {tab}, compact {compact}");
+        }
+        finally
+        {
+            foreach (var key in keys) await Set(key, original[key]!);
+        }
+        var back = (JObject)(await c.Call("settings.get", new { keys }))["values"]!;
+        Check(JToken.DeepEquals(back, original), $"every setting is back ({back.ToString(Formatting.None)})");
+    }
+
+    private static async Task V01(List<string> notes)
+    {
+        using var c = await Session("e2e V01");
+        using var writer = await Session("e2e V01 writer");
+        using var viewer = await Session("e2e V01 viewer");
+        const string text = "# V01\n\n## One\n\nfirst\n\n## Two\n\nsecond\n";
+        var id = await Open(c, Fixture("v01.md", text));
+        await c.Call("document.focus", new { documentId = id });
+        var windowId = await WindowIdOf(c, id);
+        var window = await WindowOf(windowId, c);
+        var before = await c.Call("window.getView", new { windowId });
+        var revision = await Revision(c, id);
+        async Task<JToken> Setting(string name) => (await c.Call("test.settings.get", new { windowId, name }))["value"]!;
+        try
+        {
+            ShowWindow(window, 3); // SW_MAXIMIZE: bounds restore the window first
+            await Task.Delay(300);
+            var v = await c.Call("window.setView", new { windowId, mode = "source", sidePane = new { open = true, page = "outline" }, bounds = new { x = 60, y = 50, width = 1100, height = 720 } });
+            Check((string)v["mode"]! == "source" && (bool)v["sidePane"]!["open"]! && (string)v["sidePane"]!["page"]! == "outline", $"the reply is the new view ({v.ToString(Formatting.None)})");
+            Check(!(bool)v["maximized"]!, "the maximized window was restored");
+            GetWindowRect(window, out var rect);
+            Check(rect.Left == 60 && rect.Top == 50 && rect.Right - rect.Left == 1100 && rect.Bottom - rect.Top == 720,
+                $"the window is at 60,50 1100x720 ({rect.Left},{rect.Top} {rect.Right - rect.Left}x{rect.Bottom - rect.Top})");
+            Check((bool)await Setting("SourceCode") && (bool)await Setting("SidePaneOpen") && (int)await Setting("SidePaneIndex") == 1, "the window's settings say source mode with the outline");
+            Check(await WaitForPage(c, id, t => t == text, "source mode") == text, "source mode shows the text");
+
+            v = await c.Call("window.setView", new { windowId, mode = "reading", sidePane = new { open = false } });
+            Check((string)v["mode"]! == "reading" && (bool)await Setting("ReadOnly") && !(bool)await Setting("SourceCode"), "reading mode, source mode off");
+            Check(!(bool)v["sidePane"]!["open"]!, "the side pane is closed");
+            Check(await Revision(c, id) == revision, "no revision from a view change");
+
+            // A mode switch waits for an automation write that is under way in the window's active document.
+            const string written = "# V01\n\nwritten while the view waits\n";
+            await c.Call("window.setView", new { windowId, mode = "visual" });
+            var (write, barrier) = await HoldAfterApply(writer, c, id, written);
+            var view = viewer.Call("window.setView", new { windowId, mode = "source" });
+            await Task.Delay(700);
+            Check(!view.IsCompleted, "the mode switch waits while the write is held");
+            await c.Call("test.barrier.release", new { barrierId = barrier });
+            var outcome = await Outcome(write);
+            Check(outcome.StartsWith("committed"), $"the write commits ({outcome})");
+            Check((string)(await view)["mode"]! == "source", "then the mode switches");
+            Check(await WaitForPage(c, id, t => t == written, "source mode after the write") == written, "source mode shows the write");
+            Check(await c.ErrorKind("window.setView", new { windowId, bounds = new { width = 100 } }) == "invalid_params", "a 100 pixel wide window is refused");
+            notes.Add(outcome);
+        }
+        finally
+        {
+            var b = before["bounds"]!;
+            await c.Call("window.setView", new
+            {
+                windowId, mode = (string)before["mode"]!, sidePane = new { open = (bool)before["sidePane"]!["open"]!, page = (string)before["sidePane"]!["page"]! },
+                statusBar = (bool)before["statusBar"]!, bounds = new { x = (int)b["x"]!, y = (int)b["y"]!, width = (int)b["width"]!, height = (int)b["height"]! },
+            });
+        }
     }
 
     private static async Task B01(List<string> notes)
