@@ -1005,14 +1005,23 @@ internal static class Program
             var windows = ((JArray)(await c.Call("window.list"))["windows"]!).Select(w => (string)w["windowId"]!).ToList();
             if (windows.Count < 2) windows.Add((string)(await c.Call("test.window.open"))["windowId"]!);
             notes.Add($"{windows.Count} window(s)");
+            // XamlWindow.AllWindows lists a window until the garbage collector has finalized it: the first window is
+            // kept in memory after it closes, as it was, minutes later, for the reader who saw the process stay.
             foreach (var windowId in windows)
             {
-                try { await c.Call("test.window.forceClose", new { windowId }); }
+                try { await c.Call("test.window.forceClose", new { windowId, keepInMemory = windowId == windows[0] }); await Task.Delay(1000); }
                 catch (Exception e) when (e is JsonRpcRemoteException || e is IOException || e is ObjectDisposedException) { notes.Add($"close {windowId[..7]}: {e.GetType().Name}"); }
-                await Task.Delay(1500);
             }
         }
         var exited = host.WaitForExit(20000);
+        try
+        {
+            var log = Path.Combine(testRoot, "logs", "debug.log");
+            using var reader = new StreamReader(new FileStream(log, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete));
+            foreach (var line in reader.ReadToEnd().Split('\n').Where(l => l.Contains("window(s) remain") || l.Contains("last window closed")))
+                notes.Add(line.Trim());
+        }
+        catch (Exception e) { notes.Add("no log: " + e.Message); }
         Check(exited, "the process exits once its last window is closed (it stayed running with no window)");
     }
 

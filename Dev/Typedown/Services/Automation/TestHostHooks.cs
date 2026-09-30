@@ -15,6 +15,8 @@ namespace Typedown.Services.Automation
 
         public static IEditBarriers Barriers => barriers;
 
+        private static readonly System.Collections.Generic.List<object> keptWindows = new();
+
         public static void AddMethods(MethodTable methods)
         {
             barriers.AddMethods(methods);
@@ -88,11 +90,14 @@ namespace Typedown.Services.Automation
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
                     (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["hwnd"] = app.MainWindow.ToInt64() })));
             // Closes a window the way the app does once the save question is answered: its session saved, no dialog.
+            // keepInMemory holds the closed window, as anything still referring to it does: XamlWindow.AllWindows
+            // lists a window until the garbage collector has finalized it, closed or not.
             methods.Add(new MethodDescriptor("test.window.forceClose", null, "test.window.forceClose/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
                 {
                     var window = global::Typedown.XamlUI.XamlWindow.AllWindows.OfType<Typedown.Windows.MainWindow>().FirstOrDefault(w => w.Handle == app.MainWindow)
                         ?? throw new AutomationException(AutomationErrorKind.window_not_found, "no main window with that handle");
+                    if (c.Params.OptionalBoolean("keepInMemory", false)) keptWindows.Add(window);
                     window.ForceClose();
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject();
                 })));
