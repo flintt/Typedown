@@ -92,6 +92,21 @@ try {
     $final = ((& $ctl --json get $a --latest --text) | ConvertFrom-Json).text
     Check ($final -eq "# RC`n`nThe very quick red dog.`n") "every write is in the document ($($final -replace "`n", '|'))"
 
+    # 5b. Settings and view through the installed typedownctl, in the window that is open (no restart). Settings first:
+    # a resized window stores its placement a moment later, which advances the settings revision.
+    $got = (& $ctl --json settings get ui.language) | ConvertFrom-Json
+    $language = $got.values.'ui.language'
+    $set = (& $ctl --json settings set ui.language ja --base-revision $got.settingsRevision) | ConvertFrom-Json
+    Check ($set.value -eq 'ja') "typedownctl settings set ui.language ja (was $language)"
+    $r = ((& $ctl --json settings get ui.language) | ConvertFrom-Json).settingsRevision
+    & $ctl --json settings set ui.language $language --base-revision $r | Out-Null
+    Check ($LASTEXITCODE -eq 0) "and back to $language"
+    $w = ((& $ctl --json windows) | ConvertFrom-Json).windows[0].windowId
+    $v = (& $ctl --json view $w --mode source --side-pane outline --size 1100x700) | ConvertFrom-Json
+    Check ($v.mode -eq 'source' -and $v.sidePane.open -and $v.sidePane.page -eq 'outline' -and $v.bounds.width -eq 1100 -and $v.bounds.height -eq 700) "typedownctl view: source mode, the outline, 1100x700 in one call ($($v | ConvertTo-Json -Compress))"
+    $v = (& $ctl --json view $w --mode visual --side-pane closed) | ConvertFrom-Json
+    Check ($v.mode -eq 'visual' -and -not $v.sidePane.open) 'typedownctl view: back to visual, the pane closed'
+
     # 6. The equivalence scenario against the installed app (compared with the recorded Windows answer elsewhere).
     # Through cmd, so the transcript keeps Python's UTF-8 bytes (PowerShell 5 would re-encode it to UTF-16).
     $env:PYTHONIOENCODING = 'utf-8'

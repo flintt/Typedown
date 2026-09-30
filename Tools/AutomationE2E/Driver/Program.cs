@@ -135,6 +135,8 @@ internal static class Program
             await Case("EX01 the PowerShell and Python client examples edit through the real pipe", EX01);
             await Case("EQ01 the equivalence scenario (compared with the Uno edition's answers offline)", EQ01);
             await Case("R04 untitled and background documents come back from their backups after a kill, each its own", R04);
+            // Last: it ends the test host.
+            await Case("Q01 two windows closed one after the other: the process exits (it stayed, headless)", Q01);
         }
         catch (Exception e)
         {
@@ -993,6 +995,25 @@ internal static class Program
         Check(run.exit == 0, "the scenario ran: " + run.stderr);
         notes.Add("TRANSCRIPT " + run.stdout);
         return Task.CompletedTask;
+    }
+
+    private static async Task Q01(List<string> notes)
+    {
+        using var host = Process.GetProcessById(hostPid);
+        using (var c = await Session("e2e Q01"))
+        {
+            var windows = ((JArray)(await c.Call("window.list"))["windows"]!).Select(w => (string)w["windowId"]!).ToList();
+            if (windows.Count < 2) windows.Add((string)(await c.Call("test.window.open"))["windowId"]!);
+            notes.Add($"{windows.Count} window(s)");
+            foreach (var windowId in windows)
+            {
+                try { await c.Call("test.window.forceClose", new { windowId }); }
+                catch (Exception e) when (e is JsonRpcRemoteException || e is IOException || e is ObjectDisposedException) { notes.Add($"close {windowId[..7]}: {e.GetType().Name}"); }
+                await Task.Delay(1500);
+            }
+        }
+        var exited = host.WaitForExit(20000);
+        Check(exited, "the process exits once its last window is closed (it stayed running with no window)");
     }
 
     private static async Task R04(List<string> notes)
