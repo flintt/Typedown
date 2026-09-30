@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- typedown-mcp: an MCP server (stdio) over the local automation API, so AI agents edit open documents through
+       the same revision and conflict rules as every other client (docs/automation-api-analysis-plan.md, phase 2). -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <RollForward>Major</RollForward>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <AssemblyName>typedown-mcp</AssemblyName>
+    <RootNamespace>Typedown.Mcp</RootNamespace>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Dev\Typedown.Automation\Typedown.Automation.csproj" />
+    <!-- The endpoint name and the pipe connection are the CLI's. -->
+    <ProjectReference Include="..\Typedown.Cli\Typedown.Cli.csproj" />
+  </ItemGroup>
+</Project>

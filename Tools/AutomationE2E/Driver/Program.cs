@@ -121,6 +121,7 @@ internal static class Program
             await Case("W01 the editor page reloads after it applied a write and before the commit: nothing is committed, host and page agree", W01);
             await Case("W02 a mode switch while a write is held after the page applied it: the write commits and every mode shows it", W02);
             await Case("W03 the tab switched away and back while a write is held: refused and restored; switched away only: committed into the tab", W03);
+            await Case("MC01 typedown-mcp as its own process: read, replace text with reveal, a stale revision is a conflict that says to read again", MC01);
             await Case("R04 untitled and background documents come back from their backups after a kill, each its own", R04);
         }
         catch (Exception e)
@@ -653,6 +654,89 @@ internal static class Program
         Check((string)(await Get(driver, a))["text"]! == written, "away: A's tab holds the write");
         await driver.Call("document.focus", new { documentId = a });
         Check(await WaitForPage(driver, a, t => t == written, "A again") == written, "away: A shows the write when it comes back");
+    }
+
+    // typedown-mcp published next to the driver (e2e/mcp), started the way an agent host starts it: stdio, one message per line.
+    private sealed class McpProcess : IDisposable
+    {
+        private readonly Process process;
+        private int id;
+
+        public McpProcess(string endpoint)
+        {
+            var dll = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "mcp", "typedown-mcp.dll"));
+            if (!File.Exists(dll)) throw new CaseFailed("typedown-mcp is not published next to the driver: " + dll);
+            process = Process.Start(new ProcessStartInfo("dotnet")
+            {
+                ArgumentList = { dll, "--endpoint", endpoint },
+                UseShellExecute = false,
+                RedirectStandardInput = true,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                StandardOutputEncoding = new UTF8Encoding(false),
+                CreateNoWindow = true,
+            })!;
+            process.StandardInput.AutoFlush = true;
+        }
+
+        public async Task<JObject> Send(string method, object parameters)
+        {
+            var request = new JObject { ["jsonrpc"] = "2.0", ["id"] = ++id, ["method"] = method, ["params"] = JToken.FromObject(parameters) };
+            await process.StandardInput.WriteLineAsync(request.ToString(Formatting.None));
+            var line = process.StandardOutput.ReadLineAsync();
+            if (await Task.WhenAny(line, Task.Delay(20000)) != line) throw new CaseFailed($"typedown-mcp did not answer {method}");
+            return JObject.Parse(await line ?? throw new CaseFailed("typedown-mcp closed its output: " + process.StandardError.ReadToEnd()));
+        }
+
+        public async Task<JObject> Tool(string name, object arguments) =>
+            (JObject)(await Send("tools/call", new { name, arguments }))["result"]!;
+
+        /// <summary>Closing its input is how an agent host stops it; it must then exit by itself.</summary>
+        public bool CloseAndWait()
+        {
+            process.StandardInput.Close();
+            return process.WaitForExit(10000);
+        }
+
+        public void Dispose()
+        {
+            try { if (!process.HasExited) process.Kill(); } catch { }
+            process.Dispose();
+        }
+    }
+
+    private static async Task MC01(List<string> notes)
+    {
+        using var driver = await Session("e2e MC01 driver");
+        const string original = "# MC01\n\nThe quick brown fox.\n";
+        var a = await Open(driver, Fixture("mc01.md", original));
+        await Open(driver, Fixture("mc01-other.md", "# other\n")); // MC01 is a background tab until revealed
+
+        using var mcp = new McpProcess(endpoint);
+        var init = await mcp.Send("initialize", new { protocolVersion = "2025-06-18", capabilities = new { }, clientInfo = new { name = "E2E agent", version = "1" } });
+        Check((string?)init["result"]?["protocolVersion"] == "2025-06-18", "initialize answers with the protocol version");
+        var tools = ((JArray)(await mcp.Send("tools/list", new { }))["result"]!["tools"]!).Select(t => (string)t["name"]!).ToList();
+        Check(tools.Count == 5 && tools.Contains("typedown_replace_text"), $"five tools ({string.Join(", ", tools)})");
+
+        var list = await mcp.Tool("typedown_list_documents", new { });
+        Check(!(bool)list["isError"]! && list["structuredContent"]!["documents"]!.Any(d => (string)d["documentId"]! == a), "the document is listed");
+        var read = await mcp.Tool("typedown_read_document", new { documentId = a });
+        Check((string)read["structuredContent"]!["text"]! == original, "read returns the exact text");
+        var revision = (long)read["structuredContent"]!["revision"]!;
+
+        var write = await mcp.Tool("typedown_replace_text", new { documentId = a, baseRevision = revision, find = "brown", replacement = "red", reveal = true, allowFormattingChanges = true });
+        Check(!(bool)write["isError"]!, "replace_text succeeds: " + write["content"]?[0]?["text"]);
+        var title = WindowTitle();
+        notes.Add("title after the write: " + title);
+        Check(title.Contains("E2E agent (MCP)"), "the window title names the agent");
+        const string written = "# MC01\n\nThe quick red fox.\n";
+        Check(await WaitForPage(driver, a, t => t == written, "the MCP write") == written, "the revealed page shows the write");
+
+        var stale = await mcp.Tool("typedown_replace_text", new { documentId = a, baseRevision = revision, find = "red", replacement = "blue" });
+        Check((bool)stale["isError"]! && (string?)stale["structuredContent"]?["error"]?["data"]?["kind"] == "revision_conflict", "a stale revision is a revision_conflict");
+        Check(((string?)stale["structuredContent"]?["next"] ?? "").Contains("typedown_read_document"), "the conflict tells the agent to read again");
+        Check((string)(await Get(driver, a))["text"]! == written, "the stale write changed nothing");
+        Check(mcp.CloseAndWait(), "typedown-mcp exits when its input closes");
     }
 
     private static async Task R04(List<string> notes)

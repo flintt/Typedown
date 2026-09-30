@@ -379,7 +379,7 @@ Exit codes: 0 ok, 2 usage, 3 not running or not reachable, 4 version or scope, 5
         [DllImport("libc")]
         private static extern uint geteuid();
 
-        private static async Task<Stream> ConnectPipeAsync(string endpoint, CancellationToken ct)
+        public static async Task<Stream> ConnectPipeAsync(string endpoint, CancellationToken ct)
         {
             var pipe = new NamedPipeClientStream(".", endpoint, PipeDirection.InOut, PipeOptions.Asynchronous);
             try
