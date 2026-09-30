@@ -274,7 +274,7 @@ Typedown.Uno/Automation/
 
 - [x] 把现有 `reading-source-check.js` 纳入固定回归入口；保留审阅所举的列表、紧邻标题和 fenced bash 文档，并把测试名称与断言说明改为“源文本映射稳定性”。*（`Tools/EditorBench` 的 `npm run check:source`。）*
 - [x] 扩充无用户编辑时的稳定性 fixture：GFM 表格、HTML、脚注、公式、Mermaid、emoji、组合字符、CRLF、无末尾换行、大文档和已记录的 CommonMark 边界样例。*（`source-stability-check.js`，90 个样例，`--full` 全部 652 个 CommonMark 例子。CRLF 改为宿主契约：正文只用 `\n`，见规格。）*
-- [ ] 增加“接口候选写入 → 可视/阅读/源码模式往返 → flush/get/save”的测试；没有真实编辑时逐字节相同、不推进 revision、不标脏。该测试不能被描述为首次编辑后的保真证明。*（未完成：E2E S0 覆盖写入→latest 读取→保存字节，尚未加入写入后的三模式往返。）*
+- [x] 增加“接口候选写入 → 可视/阅读/源码模式往返 → flush/get/save”的测试；没有真实编辑时逐字节相同、不推进 revision、不标脏。该测试不能被描述为首次编辑后的保真证明。*（E2E M01：接口写入 Muya 会改写的正文（setext、`*` 列表、不齐表格），阅读/源码/可视来回切换 5 次，每次逐字读回、revision 与未保存状态不变，保存后磁盘字节等于写入正文；hp 通过。）*
 - [x] 活动编辑器写入时取得 `source` 与 `importedRef.normalized` 的 hash，定义并返回 `pendingNormalization` 和分类器版本；默认 `requireKnownSafe` 拒绝 `unknown`，显式 `allowUnknown` 才能提交。后台标签在首次可视加载、启用输入前完成分类。不得把同解析器渲染等价当作充分条件。*（页面侧已完成：`services/normalization.ts` 分类器 v2，按原文独立扫描受保护载荷；`window.__typedownPendingNormalization`。待做：宿主经消息取得结果并据此拒绝写入。）**（宿主侧已接上：写入结果和 `document.get` 带 normalization，默认拒绝 unknown；仍缺：后台标签首次可视加载前分类、unsafe 时阻止进入可编辑可视模式。）**（2026-09-30 决定方案 A：修复而非阻断。已修：代码块信息串属性、Tab（词法只展开块前缀里的 Tab）。剩余 unsafe（HTML 块里的实体、多行 HTML 属性里的空行）日常使用显示不阻断的提示条，自动化写入仍按 `content_not_roundtrippable` 拒绝；不再阻止进入可视模式。）*
 - [x] 建立独立的受保护载荷 fixture，覆盖链接/图片 URL、代码围栏语言和正文、脚注、任务状态、原始 HTML 属性、front matter、公式及扩展块；已确认内容或结构损坏时返回 `content_not_roundtrippable`。*（`docs/automation-fixtures/protected-payload.json`：13 个 preserve 文档（带逐字 `mustKeep`）、18 个 loss 对、9 个 safe 对。编辑器 jest 要求每个 loss 判 unsafe 且原因正确、safe 不判 unsafe；`protected-payload-check.js` 用真实按键检查，丢失按子串判断、不借用分类器（借用时去掉围栏保护检查仍通过，已改）。新发现并补上：行内公式未受保护（分类器 v3）。现状：Muya 首次编辑会丢围栏信息串属性和围栏正文空白，均已预测为 unsafe；unsafe 到 `content_not_roundtrippable` 的映射由 `DocumentEditTests` 覆盖。）*
 - [ ] 增加“接口写入 → 一次真实可视输入 → latest 读取”基线，记录 Muya 首次编辑造成的完整序列化结果和实际变化范围，并验证受保护载荷与文档结构仍在。*（页面级已完成：`first-edit-check.js` 以 `LoadFile` 代替接口写入，要求实际结果与预测一致，基线 63 none / 24 unknown / 3 unsafe。接口可用后改走接口。）**（E2E S1 已在真实窗口里用真实按键验证写入后输入与读取；首次编辑序列化基线仍是页面级。）*
@@ -295,7 +295,7 @@ Typedown.Uno/Automation/
 任务：
 
 - [x] 将 Windows 持久化设置抽成应用级单一 store，消除每窗口独立快照。*（`JsonSettingsStore.Shared`：每个设置文件一个进程级 store，带 `Changed(name, origin)` 事件和 `Revision`。）*
-- [ ] 每窗口保留 UI/编辑器 apply façade，验证多个窗口和已打开设置页同步刷新。*（代码已完成：各窗口的 `SettingsViewModel` 在自己的 UI 线程上把其他窗口的改动当作本窗口改动通知出去，窗口级设置（模式、侧栏、窗口位置、搜索选项、置顶）见 `SettingsScope`，只保存不广播。待做：在 hp 上用两个窗口和已打开的设置页实际验证。）**（E2E B01 在 hp 真实桌面验证：一个窗口改字号、文字方向，另一窗口跟随；源码模式留在各自窗口（B01 发现并修复了共享 store 下窗口级设置串窗口）。已打开设置页的控件刷新依赖绑定，尚未用 UI Automation 验证。）*
+- [x] 每窗口保留 UI/编辑器 apply façade，验证多个窗口和已打开设置页同步刷新。*（E2E B01/S2/B02：两窗口互相跟随、窗口级模式不串；两个窗口的编辑器页面实际字号改变；另一窗口已打开的设置页字号框由 UI Automation 读到新值；hp 通过。）*
 - [x] 建立外部设置 key 的规范映射数据，覆盖 scope、类型、范围、平台属性、apply handler、可见目标和敏感级别。*（`docs/automation-fixtures/settings-map.json`：首批 4 个 key（主题、字号、行高、文字方向）的类型、范围、Windows/Uno 属性、应用路径、可见目标和敏感级别；其余每个已存储的 Windows 设置都按原因分组列为不开放（窗口级、视图状态、搜索、秘密、内部、路径、代码、需重启、待评审）。`SettingsMapTests` 要求每个设置都有归属，新增设置不登记就失败。）*
 - [x] 为快速连续写、持久化失败、窗口关闭和旧窗口覆盖新值建立回归测试。*（`SettingsStoreTests`，Linux 运行：多线程连续写、写失败后恢复、监听者抛异常不影响其他窗口、旧窗口覆盖新值（改回每窗口一个 store 时该测试失败）。窗口关闭时取消订阅在 `SettingsViewModel.Dispose`，待 GUI 验证。）*
 
@@ -329,7 +329,7 @@ Typedown.Uno/Automation/
 
 - [x] 实现 `settings.describe/get/set` 和 `settings.read/settings.write` scope。*（`SettingsMethods` + 嵌入的 `settings-map.json`；`WindowsSettingsHost`；E2E S2 在 hp 通过。）*
 - [x] 新增 `ApplySettings/SettingsApplied`，普通成功等待运行时应用与设置持久化。*（没有新增页面消息：宿主经某个窗口的 `SettingsViewModel` 设置（与设置页同一套 setter），各窗口通过共享 store 的变更事件应用，编辑器页面由既有的 `SettingsChanged` 更新；成功前等待 store 落盘，写盘失败返回 `persistence_failed`。）*
-- [ ] 只开放规范映射表中通过多窗口、WebView 和设置页同步测试的设置。*（部分：只开放映射表的 4 个 key，多窗口同步由 E2E B01/S2 验证；编辑器页面实际字号与已打开设置页控件的刷新尚未自动验证。）*
+- [x] 只开放规范映射表中通过多窗口、WebView 和设置页同步测试的设置。*（开放的 4 个 key 来自映射表；多窗口、编辑器页面和已打开设置页的同步由 E2E S2/B02 覆盖字号，其余 3 个 key 走同一路径，尚未逐个端到端验证。）*
 - [x] CLI 增加 `settings` 命令；设置接口失败不能影响文档接口。*（`typedownctl settings describe|get|set`；设置方法独立注册，失败只返回该请求的错误。）*
 
 完成标准：设置修改在全部相关窗口和编辑器中可见并在重启后保留；设置线未完成不影响文档 MVP 发布。
