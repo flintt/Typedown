@@ -295,9 +295,13 @@ class ExportMarkdown {
     if (functionType === 'fencecode') {
       // Code containing a line of backticks needs a longer fence, or the block ends in the middle of itself
       // and everything after it is read as ordinary text.
-      const longest = (codeContent.text.match(/^ {0,3}`{3,}/gm) || []).reduce((n, m) => Math.max(n, m.trim().length), 0)
-      const fence = '`'.repeat(Math.max(3, longest + 1))
-      result.push(`${indent}${fence}${block.lang || ''}\n`)
+      const info = `${block.lang || ''}${block.lang ? block.info || '' : ''}`
+      // A backtick fence cannot carry an info string with a backtick in it: such a block is written with tildes.
+      const char = info.includes('`') ? '~' : '`'
+      const run = new RegExp(`^ {0,3}${char === '`' ? '`' : '~'}{3,}`, 'gm')
+      const longest = (codeContent.text.match(run) || []).reduce((n, m) => Math.max(n, m.trim().length), 0)
+      const fence = char.repeat(Math.max(3, longest + 1))
+      result.push(`${indent}${fence}${info}\n`)
       textList.forEach(text => {
         result.push(`${indent}${text}\n`)
       })

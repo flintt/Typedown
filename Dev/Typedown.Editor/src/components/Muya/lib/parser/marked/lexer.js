@@ -25,10 +25,59 @@ function Lexer(opts) {
  * Preprocessing
  */
 
+// Tabs are expanded (to the next multiple of four columns) only where the block structure depends on them: the
+// indentation and marker prefix of a line (list and quote markers, heading hashes). Everywhere else a tab is text and
+// stays one - replacing every tab made the first visual edit turn the tabs of Go code, Makefiles and prose into
+// spaces. Inside a fenced code block only the fence's own indentation is expanded.
+const BLOCK_PREFIX = /^(?:[ \t]*(?:[-*+]|\d{1,9}[.)]|>|#{1,6})(?=[ \t]))*[ \t]*/
+const FENCE_OPEN = /^( *)(`{3,}|~{3,})([^`]*)$/
+
+const expandColumns = (text, startColumn, stopAt = Infinity) => {
+  let column = startColumn
+  let out = ''
+  let i = 0
+  for (; i < text.length && column < stopAt; i++) {
+    const ch = text[i]
+    if (ch === '\t') {
+      const next = column + 4 - (column % 4)
+      out += ' '.repeat(next - column)
+      column = next
+    } else {
+      out += ch
+      column++
+    }
+  }
+  return { out, rest: text.slice(i) }
+}
+
+export const expandStructuralTabs = src => {
+  let fence = null
+  return src.split('\n').map(line => {
+    if (line.indexOf('\t') === -1 && !fence) {
+      const open = FENCE_OPEN.exec(line)
+      if (open && open[1].length <= 3) fence = { marker: open[2], indent: open[1].length }
+      return line
+    }
+    if (fence) {
+      const closing = new RegExp(`^ {0,3}${fence.marker[0] === '`' ? '`' : '~'}{${fence.marker.length},}[ \\t]*$`)
+      if (closing.test(line.replace(/^\t+/, m => ' '.repeat(4 * m.length)))) {
+        fence = null
+        return line.replace(/^[ \t]+/, ws => expandColumns(ws, 0).out)
+      }
+      const leading = /^[ \t]*/.exec(line)[0]
+      const { out, rest } = expandColumns(leading, 0, fence.indent)
+      return out + rest + line.slice(leading.length)
+    }
+    const prefix = BLOCK_PREFIX.exec(line)[0]
+    const expanded = expandColumns(prefix, 0).out + line.slice(prefix.length)
+    const open = FENCE_OPEN.exec(expanded)
+    if (open && open[1].length <= 3) fence = { marker: open[2], indent: open[1].length }
+    return expanded
+  }).join('\n')
+}
+
 Lexer.prototype.lex = function (src) {
-  src = src
-    .replace(/\r\n|\r/g, '\n')
-    .replace(/\t/g, '    ')
+  src = expandStructuralTabs(src.replace(/\r\n|\r/g, '\n'))
   this.checkFrontmatter = true
   this.footnoteOrder = 0
   this.token(src, true)
