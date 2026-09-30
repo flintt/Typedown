@@ -854,4 +854,10 @@
   <data name="General.LocalAutomation.Description" xml:space="preserve">
     <value>Los programas que ejecutas en este equipo pueden leer y editar los documentos abiertos. El título de la ventana indica cuándo hay uno conectado.</value>
   </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>Resaltar los cambios hechos por programas</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>Resalta brevemente el texto que cambió un programa conectado, para que veas qué se modificó.</value>
+  </data>
 </root>

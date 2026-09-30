@@ -69,7 +69,7 @@ const sha = text => crypto.createHash('sha256').update(text, 'utf8').digest('hex
       if (skip >= 0) root.children[skip].remove();
       root.querySelectorAll('[id]').forEach(e => e.removeAttribute('id'));
       root.querySelectorAll('[data-key], [key]').forEach(e => { e.removeAttribute('data-key'); e.removeAttribute('key'); });
-      root.querySelectorAll('.ag-active, .ag-cursor').forEach(e => { e.classList.remove('ag-active'); e.classList.remove('ag-cursor'); });
+      root.querySelectorAll('.ag-active, .ag-cursor, .td-external-change').forEach(e => { e.classList.remove('ag-active'); e.classList.remove('ag-cursor'); e.classList.remove('td-external-change'); });
       return root.innerHTML.replace(/ag-[a-z-]*\d+/g, 'ag-N');
     }, skip);
     const paragraphs = Array.from({ length: 120 }, (_, i) => `Paragraph ${i} with *emphasis* and a [link](https://example.com/${i}).`);
@@ -114,6 +114,12 @@ const sha = text => crypto.createHash('sha256').update(text, 'utf8').digest('hex
       check(state.kept, `visual ${name}: an untouched block keeps its DOM`);
       check(Math.abs(state.top - topBefore) < 2, `visual ${name}: what the reader looks at stays in place (${topBefore} -> ${state.top})`);
       check(state.caretInside, `visual ${name}: the reader's caret stays in its block`);
+      if (name === 'paragraphs') {
+        const lit = await page.evaluate(() => Array.from(document.querySelectorAll('#ag-editor-id > .td-external-change')).map(e => e.textContent));
+        check(lit.length === 1 && lit[0].includes('Paragraph three'), `visual: the changed block is highlighted, nothing else (${JSON.stringify(lit)})`);
+        await pause(2300);
+        check(await page.evaluate(() => !document.querySelector('.td-external-change')), 'visual: the highlight goes away');
+      }
       const skip = await page.evaluate(() => Array.from(document.querySelector('#ag-editor-id').children).indexOf(window.__watched));
       const localShape = await shape(skip);
       await load('# other\n');
@@ -177,6 +183,17 @@ const sha = text => crypto.createHash('sha256').update(text, 'utf8').digest('hex
     check(placeAfter.cursor.line === 300 && placeAfter.cursor.ch === 5, `the reader's cursor stays (${JSON.stringify(placeAfter.cursor)})`);
     check(Math.abs(placeAfter.y - placeBefore.y) < 2 && placeBefore.y > 0, `the scroll position stays (${placeBefore.y} -> ${placeAfter.y})`);
     check(placeAfter.mark, 'a mark in untouched text survives: only the changed part was replaced');
+    const litSource = await page.evaluate(() => Array.from(document.querySelectorAll('.CodeMirror .td-external-change')).map(e => e.textContent).join(''));
+    check(litSource === 'ten', `source mode: the changed text is highlighted (${JSON.stringify(litSource)})`);
+    // The reader turned the highlight off: nothing is lit.
+    await page.evaluate(() => window.__deliver('SettingsChanged', { highlightAutomationChanges: false }));
+    await pause(300);
+    const shownNow = await flush();
+    ({ reply } = await apply(shownNow, shownNow.replace('line 20 of', 'line twenty of')));
+    const litOff = await page.evaluate(() => Array.from(document.querySelectorAll('.CodeMirror .td-external-change')).map(e => e.textContent).join(''));
+    check(reply.outcome === 'applied' && !litOff.includes('twenty'), `source mode: with the setting off the change is not highlighted (${JSON.stringify(litOff)})`);
+    await page.evaluate(() => window.__deliver('SettingsChanged', { highlightAutomationChanges: true }));
+    await pause(300);
     await load('# source mode\n');
 
     await mode(false, true);

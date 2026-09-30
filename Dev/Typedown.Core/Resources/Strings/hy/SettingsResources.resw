@@ -854,4 +854,10 @@
   <data name="General.LocalAutomation.Description" xml:space="preserve">
     <value>Ձեր գործարկած ծրագրերը այս համակարգչում կարող են կարդալ և խմբագրել բաց փաստաթղթերը։ Պատուհանի վերնագիրը ցույց է տալիս, երբ որևէ մեկը միացված է։</value>
   </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>Ընդգծել ծրագրերի կատարած փոփոխությունները</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>Կարճ ժամանակով ընդգծում է միացված ծրագրի փոխած տեքստը, որպեսզի տեսնեք, թե ինչն է փոխվել։</value>
+  </data>
 </root>

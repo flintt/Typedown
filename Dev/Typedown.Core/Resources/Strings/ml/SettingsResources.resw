@@ -854,4 +854,10 @@
   <data name="General.LocalAutomation.Description" xml:space="preserve">
     <value>ഈ കമ്പ്യൂട്ടറിൽ നിങ്ങൾ പ്രവർത്തിപ്പിക്കുന്ന പ്രോഗ്രാമുകൾക്ക് തുറന്ന പ്രമാണങ്ങൾ വായിക്കാനും എഡിറ്റ് ചെയ്യാനും കഴിയും. ഏതെങ്കിലും ബന്ധിപ്പിച്ചിരിക്കുമ്പോൾ ജാലക ശീർഷകത്തിൽ കാണിക്കും.</value>
   </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>പ്രോഗ്രാമുകൾ വരുത്തിയ മാറ്റങ്ങൾ ഹൈലൈറ്റ് ചെയ്യുക</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>ബന്ധിപ്പിച്ച പ്രോഗ്രാം മാറ്റിയ വാചകം അൽപ്പനേരം ഹൈലൈറ്റ് ചെയ്യുന്നു, എന്താണ് മാറിയതെന്ന് നിങ്ങൾക്ക് കാണാം.</value>
+  </data>
 </root>

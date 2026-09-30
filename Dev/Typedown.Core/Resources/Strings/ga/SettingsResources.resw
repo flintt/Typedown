@@ -854,4 +854,10 @@
   <data name="General.LocalAutomation.Description" xml:space="preserve">
     <value>Is féidir le cláir a ritheann tú ar an ríomhaire seo doiciméid oscailte a léamh agus a chur in eagar. Taispeánann teideal na fuinneoige nuair atá ceann ceangailte.</value>
   </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>Aibhsigh athruithe a rinne ríomhchláir</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>Aibhsíonn sé go hachomair an téacs a d'athraigh ríomhchlár ceangailte, ionas go bhfeicfidh tú cad a d'athraigh.</value>
+  </data>
 </root>

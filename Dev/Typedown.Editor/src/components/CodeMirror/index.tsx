@@ -5,6 +5,7 @@ import { UnControlled as CodeMirror } from 'react-codemirror2';
 import 'codemirror/lib/codemirror.css';
 import { getTOC } from "services/common";
 import { minimalChange } from "services/minimalChange";
+import { EXTERNAL_CHANGE_CLASS, EXTERNAL_CHANGE_MS } from "services/externalChange";
 require('codemirror/mode/markdown/markdown');
 
 interface ICodeMirrorEditor {
@@ -196,7 +197,13 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
             // left them; CodeMirror maps them over the change.
             const change = minimalChange(editor.getValue(), props.markdown)
             markdownRef.current = props.markdown
-            if (change) editor.replaceRange(change.text, editor.posFromIndex(change.from), editor.posFromIndex(change.to), '+automation')
+            if (change) {
+                editor.replaceRange(change.text, editor.posFromIndex(change.from), editor.posFromIndex(change.to), '+automation')
+                if (change.text && props.options?.highlightAutomationChanges !== false) {
+                    const mark = editor.markText(editor.posFromIndex(change.from), editor.posFromIndex(change.from + change.text.length), { className: EXTERNAL_CHANGE_CLASS })
+                    setTimeout(() => mark.clear(), EXTERNAL_CHANGE_MS)
+                }
+            }
             if (props.scrollFromHostRef) props.scrollFromHostRef.current = false
         } else if (markdownRef.current != props.markdown) {
             markdownRef.current = props.markdown

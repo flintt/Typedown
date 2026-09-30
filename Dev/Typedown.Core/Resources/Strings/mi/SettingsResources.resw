@@ -854,4 +854,10 @@
   <data name="General.LocalAutomation.Description" xml:space="preserve">
     <value>Ka taea e ngā hōtaka e whakahaerehia ana e koe i tēnei rorohiko te pānui me te whakatika i ngā tuhinga tuwhera. Ka whakaatu te taitara matapihi ina hono tētahi.</value>
   </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>Miramira ngā panoni nā ngā hōtaka</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>Ka miramira poto i te kuputuhi i panonitia e tētahi hōtaka hono, kia kite ai koe i te mea i panoni.</value>
+  </data>
 </root>

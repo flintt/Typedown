@@ -854,4 +854,10 @@
   <data name="General.LocalAutomation.Description" xml:space="preserve">
     <value>Els programes que executeu en aquest ordinador poden llegir i editar els documents oberts. El títol de la finestra indica quan n'hi ha un de connectat.</value>
   </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>Ressalta els canvis fets per programes</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>Ressalta breument el text que ha canviat un programa connectat, perquè vegis què s'ha modificat.</value>
+  </data>
 </root>

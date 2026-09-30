@@ -854,4 +854,10 @@
   <data name="General.LocalAutomation.Description" xml:space="preserve">
     <value>Programmid, mida selles arvutis käivitate, saavad avatud dokumente lugeda ja muuta. Akna pealkiri näitab, kui mõni on ühendatud.</value>
   </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>Tõsta esile programmide tehtud muudatused</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>Tõstab korraks esile teksti, mida ühendatud programm muutis, et näeksite, mis muutus.</value>
+  </data>
 </root>

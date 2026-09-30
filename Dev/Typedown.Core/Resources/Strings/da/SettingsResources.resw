@@ -854,4 +854,10 @@
   <data name="General.LocalAutomation.Description" xml:space="preserve">
     <value>Programmer, du kører på denne computer, kan læse og redigere åbne dokumenter. Vinduets titel viser, når et er forbundet.</value>
   </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>Fremhæv ændringer foretaget af programmer</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>Fremhæver kortvarigt den tekst, et tilsluttet program har ændret, så du kan se, hvad der er ændret.</value>
+  </data>
 </root>

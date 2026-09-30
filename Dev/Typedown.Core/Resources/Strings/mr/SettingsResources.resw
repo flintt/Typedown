@@ -854,4 +854,10 @@
   <data name="General.LocalAutomation.Description" xml:space="preserve">
     <value>या संगणकावर तुम्ही चालवलेले प्रोग्राम उघडलेले दस्तऐवज वाचू आणि संपादित करू शकतात. एखादा जोडलेला असताना विंडो शीर्षकात दिसते.</value>
   </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>प्रोग्राम्सनी केलेले बदल हायलाइट करा</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>कनेक्ट केलेल्या प्रोग्रामने बदललेला मजकूर थोड्या वेळासाठी हायलाइट करते, जेणेकरून काय बदलले ते तुम्हाला दिसेल.</value>
+  </data>
 </root>

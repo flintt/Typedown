@@ -162,6 +162,12 @@
       ]
     },
     {
+      "reason": "security: shows the person what a program changed; a program must not be able to hide its own edits",
+      "windows": [
+        "HighlightAutomationChanges"
+      ]
+    },
+    {
       "reason": "windowLocal: layout or mode of one window (Core/Services/SettingsScope.cs); becomes a view command, not a setting",
       "windows": [
         "StartupPlacement",

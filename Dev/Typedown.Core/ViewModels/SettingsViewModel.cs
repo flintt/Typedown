@@ -141,6 +141,8 @@ namespace Typedown.Core.ViewModels
         /// (docs/automation-api-spec.md). Off by default; turning it off closes the endpoint and every connection.
         /// </summary>
         public bool AllowLocalAutomation { get => GetSettingValue(false); set => SetSettingValue(value); }
+        /// <summary>Editor pages briefly highlight what an automation write changed.</summary>
+        public bool HighlightAutomationChanges { get => GetSettingValue(true); set => SetSettingValue(value); }
         public bool AnimationEnable { get => GetSettingValue(true); set => SetSettingValue(value); }
         public bool UseMicaEffect { get => GetSettingValue(Config.IsMicaSupported); set => SetSettingValue(value); }
         public bool UseEditorMicaEffect { get => GetSettingValue(false); set => SetSettingValue(value); }
@@ -199,7 +201,8 @@ namespace Typedown.Core.ViewModels
             "AutoPairMarkdownSyntax",
             "EditorAreaWidth",
             "FontFamily",
-            "TextDirection"
+            "TextDirection",
+            "HighlightAutomationChanges"
         };
 
         public SettingsViewModel(IServiceProvider serviceProvider)

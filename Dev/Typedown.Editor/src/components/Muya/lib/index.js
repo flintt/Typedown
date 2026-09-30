@@ -13,6 +13,22 @@ import ExportHtml from '../../../services/exportHtml'
 import ToolTip from './ui/tooltip'
 import '../../../assets/styles/index.css'
 
+// A top-level block's content without its identity (keys and links to its neighbours), for comparing two parses.
+const blockSignature = block => JSON.stringify(block, (name, value) =>
+  name === 'key' || name === 'parent' || name === 'preSibling' || name === 'nextSibling' ? undefined : value)
+
+// How many top-level blocks at the start (head) and at the end (tail) two block lists share.
+function unchangedEnds(oldBlocks, newBlocks) {
+  const oldSignatures = oldBlocks.map(blockSignature)
+  const newSignatures = newBlocks.map(blockSignature)
+  let head = 0
+  while (head < oldBlocks.length && head < newBlocks.length && oldSignatures[head] === newSignatures[head]) head++
+  let tail = 0
+  while (tail < oldBlocks.length - head && tail < newBlocks.length - head &&
+    oldSignatures[oldBlocks.length - 1 - tail] === newSignatures[newBlocks.length - 1 - tail]) tail++
+  return { head, tail }
+}
+
 class Muya {
   static plugins = []
 
@@ -261,6 +277,13 @@ class Muya {
     }, 0)
   }
 
+  /** The keys of the top-level blocks shown now that differ from oldBlocks (what an automation edit changed). */
+  changedBlockKeys(oldBlocks) {
+    const blocks = this.contentState.blocks
+    const { head, tail } = unchangedEnds(oldBlocks, blocks)
+    return blocks.slice(head, blocks.length - tail).map(block => block.key)
+  }
+
   /**
    * An automation edit of the document shown (docs/automation-api-spec.md, section 2.2). The new text is parsed as a
    * whole, but the top-level blocks that did not change keep their objects and their DOM: the reader's cursor, the
@@ -274,15 +297,7 @@ class Muya {
     const { stateRender } = contentState
     const oldBlocks = contentState.blocks
     const newBlocks = contentState.markdownToState(markdown)
-    const signature = block => JSON.stringify(block, (name, value) =>
-      name === 'key' || name === 'parent' || name === 'preSibling' || name === 'nextSibling' ? undefined : value)
-    const oldSignatures = oldBlocks.map(signature)
-    const newSignatures = newBlocks.map(signature)
-    let head = 0
-    while (head < oldBlocks.length && head < newBlocks.length && oldSignatures[head] === newSignatures[head]) head++
-    let tail = 0
-    while (tail < oldBlocks.length - head && tail < newBlocks.length - head &&
-      oldSignatures[oldBlocks.length - 1 - tail] === newSignatures[newBlocks.length - 1 - tail]) tail++
+    const { head, tail } = unchangedEnds(oldBlocks, newBlocks)
     if (head === 0 && tail === 0) return false
 
     const removed = oldBlocks.slice(head, oldBlocks.length - tail)

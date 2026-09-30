@@ -13,6 +13,7 @@ import FrontMenu from 'components/Muya/lib/ui/frontMenu'
 import FormatPicker from 'components/Muya/lib/ui/formatPicker'
 import { createApplicationMenuState } from "services/menuState";
 import { classifyNormalization, extractProtectedPayload } from "services/normalization";
+import { highlightExternalChange } from "services/externalChange";
 import 'components/Muya/themes/default.css'
 
 interface IMuyaEditor {
@@ -706,8 +707,11 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         markLongDocument(props.markdown)
         // An automation edit keeps the blocks it did not change, with the reader's cursor and scroll position; the
         // browser keeps what is on screen in place when blocks above it change. Otherwise, a whole new document.
+        const blocksBefore = local ? editor.contentState.blocks : null
         const replacedLocally = !!local && editor.replaceMarkdownLocally(props.markdown)
         if (!replacedLocally) editor.setMarkdown(props.markdown, cursorRef.current)
+        if (blocksBefore && props.options?.highlightAutomationChanges !== false)
+            highlightExternalChange(editor.changedBlockKeys(blocksBefore).map((key: string) => document.getElementById(key)))
         ;(window as any).__typedownLastApply = replacedLocally ? 'local' : 'whole'
         importedRef.current = { source: props.markdown, normalized: editor.getMarkdown() }
         // Text the first visual edit would change in a way that loses something (today: some raw HTML) gets a notice

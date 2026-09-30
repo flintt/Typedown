@@ -854,4 +854,10 @@
   <data name="General.LocalAutomation.Description" xml:space="preserve">
     <value>इस कंप्यूटर पर आपके द्वारा चलाए गए प्रोग्राम खुले दस्तावेज़ पढ़ और संपादित कर सकते हैं। किसी के जुड़े होने पर विंडो शीर्षक में दिखता है।</value>
   </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>प्रोग्रामों द्वारा किए गए बदलाव हाइलाइट करें</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>किसी कनेक्टेड प्रोग्राम द्वारा बदले गए टेक्स्ट को थोड़ी देर के लिए हाइलाइट करता है, ताकि आप देख सकें कि क्या बदला।</value>
+  </data>
 </root>

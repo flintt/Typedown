@@ -854,4 +854,10 @@
   <data name="General.LocalAutomation.Description" xml:space="preserve">
     <value>Programi koje pokrećete na ovom računaru mogu čitati i uređivati otvorene dokumente. Naslov prozora pokazuje kada je neki povezan.</value>
   </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>Istakni promjene koje su napravili programi</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>Kratko ističe tekst koji je promijenio povezani program kako biste vidjeli šta se promijenilo.</value>
+  </data>
 </root>

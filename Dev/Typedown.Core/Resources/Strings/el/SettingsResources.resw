@@ -854,4 +854,10 @@
   <data name="General.LocalAutomation.Description" xml:space="preserve">
     <value>Τα προγράμματα που εκτελείτε σε αυτόν τον υπολογιστή μπορούν να διαβάζουν και να επεξεργάζονται τα ανοιχτά έγγραφα. Ο τίτλος του παραθύρου δείχνει πότε είναι συνδεδεμένο κάποιο.</value>
   </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>Επισήμανση αλλαγών από προγράμματα</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>Επισημαίνει για λίγο το κείμενο που άλλαξε ένα συνδεδεμένο πρόγραμμα, ώστε να βλέπετε τι άλλαξε.</value>
+  </data>
 </root>

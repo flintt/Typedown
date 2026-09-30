@@ -343,7 +343,7 @@ Typedown.Uno/Automation/
 - [x] 为 `reveal: "document"` 增加可选 `awaitPresentation`；页面用两次 `requestAnimationFrame`，宿主报告 dispatcher/窗口/标签可见状态。*（Windows 实现见规格 2.4“呈现回执”；超时返回 `presentation_timeout` 并带已提交的 revision。测试：`DocumentMethodsTests`、E2E P01（最小化窗口的后台标签）。）*
 - [x] 把 `replaceText` 的匹配范围映射为当前编辑器的局部修改，避免为一个短替换重建全文。*（页面统一处理：`replaceText` 和 `replace` 都把新全文交给页面，页面算最小变化区间。源码模式一次 `replaceRange`；可视模式见下一项。）*
 - [x] 优化显式全文替换：计算等价的最小变化区间后局部交给 CodeMirror/Muya；不能证明等价时仍走正确的全文路径。*（Muya `replaceMarkdownLocally`：新全文照常解析，前后未变的顶层块沿用旧块对象和 DOM，只渲染变化的块；读者光标在变化块里、引用定义变了、或拼出的块导出与整篇导入不逐字相同时退回 `setMarkdown`。`apply-edit-check.js`：5 种文档局部应用后与整篇载入的 DOM 逐字相同（读者点过的块除外），未变块 DOM、光标和屏幕位置保留，两种退回情形；新块插错位置时检查失败。3000 段文档局部应用约 340 ms。）*
-- [ ] 保持观察者滚动、光标和选区；短暂高亮外部改变的范围，并允许用户关闭高亮动画。
+- [x] 保持观察者滚动、光标和选区；短暂高亮外部改变的范围，并允许用户关闭高亮动画。*（局部应用保留滚动、光标、选区和未变内容；改动的文字（源码模式）或块（可视模式，含退回整篇路径）淡出高亮 2 秒，系统“减少动态效果”时为静态底色。设置“高亮程序所做的更改”（`HighlightAutomationChanges`，默认开，74 种语言），接口不可改（settings-map：security）。已知限制：读者光标就在被改的块里时退回整篇载入，光标回到文首。）*
 - [ ] 明确三种模式下的写入和模式切换串行行为，增加写入过程中切模式、切标签、重载 WebView 的测试。
 - [ ] 实现 MCP sidecar，把列举、读取、按文本替换、全文替换和保存映射为受控工具；`match_count_mismatch` 指引代理重新读取，不自动用旧文本重试。
 - [ ] 提供 PowerShell、Python 或 TypeScript 直接客户端示例。

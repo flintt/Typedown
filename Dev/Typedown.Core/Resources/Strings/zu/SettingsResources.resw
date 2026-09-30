@@ -854,4 +854,10 @@
   <data name="General.LocalAutomation.Description" xml:space="preserve">
     <value>Izinhlelo ozisebenzisa kule khompyutha zingafunda futhi zihlele amadokhumenti avuliwe. Isihloko sewindi siyabonisa uma kukhona oxhunyiwe.</value>
   </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>Gqamisa izinguquko ezenziwe yizinhlelo</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>Igqamisa isikhashana umbhalo oshintshwe uhlelo oluxhunyiwe, ukuze ubone ukuthi yini eshintshile.</value>
+  </data>
 </root>

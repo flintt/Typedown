@@ -854,4 +854,10 @@
   <data name="General.LocalAutomation.Description" xml:space="preserve">
     <value>ఈ కంప్యూటర్‌లో మీరు నడిపే ప్రోగ్రామ్‌లు తెరిచిన పత్రాలను చదవగలవు, సవరించగలవు. ఏదైనా కనెక్ట్ అయినప్పుడు విండో శీర్షికలో చూపబడుతుంది.</value>
   </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>ప్రోగ్రామ్‌లు చేసిన మార్పులను హైలైట్ చేయండి</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>కనెక్ట్ అయిన ప్రోగ్రామ్ మార్చిన వచనాన్ని కొద్దిసేపు హైలైట్ చేస్తుంది, తద్వారా ఏమి మారిందో మీరు చూడవచ్చు.</value>
+  </data>
 </root>

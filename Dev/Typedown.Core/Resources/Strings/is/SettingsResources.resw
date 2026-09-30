@@ -854,4 +854,10 @@
   <data name="General.LocalAutomation.Description" xml:space="preserve">
     <value>Forrit sem þú keyrir á þessari tölvu geta lesið og breytt opnum skjölum. Titill gluggans sýnir þegar eitt er tengt.</value>
   </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>Auðkenna breytingar sem forrit gera</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>Auðkennir í stutta stund textann sem tengt forrit breytti, svo þú sjáir hvað breyttist.</value>
+  </data>
 </root>

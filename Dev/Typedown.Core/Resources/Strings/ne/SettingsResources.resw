@@ -854,4 +854,10 @@
   <data name="General.LocalAutomation.Description" xml:space="preserve">
     <value>यस कम्प्युटरमा तपाईंले चलाउने प्रोग्रामले खुला कागजात पढ्न र सम्पादन गर्न सक्छन्। कुनै जोडिएको बेला विन्डो शीर्षकमा देखाइन्छ।</value>
   </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>प्रोग्रामहरूले गरेका परिवर्तनहरू हाइलाइट गर्नुहोस्</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>जडित प्रोग्रामले परिवर्तन गरेको पाठलाई छोटो समयका लागि हाइलाइट गर्छ, ताकि के परिवर्तन भयो भनेर देख्न सक्नुहुन्छ।</value>
+  </data>
 </root>

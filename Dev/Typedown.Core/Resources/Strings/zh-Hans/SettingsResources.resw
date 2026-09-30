@@ -889,4 +889,10 @@
   <data name="General.LocalAutomation.Description" xml:space="preserve">
     <value>本机上以你的身份运行的程序可以读取和编辑已打开的文档。有程序连接时，窗口标题会显示。</value>
   </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>高亮程序所做的更改</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>短暂高亮已连接的程序修改过的文字，让你看清哪里变了。</value>
+  </data>
 </root>

@@ -854,4 +854,10 @@
   <data name="General.LocalAutomation.Description" xml:space="preserve">
     <value>Program som du kör på den här datorn kan läsa och redigera öppna dokument. Fönstrets titel visar när ett är anslutet.</value>
   </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>Markera ändringar gjorda av program</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>Markerar kort texten som ett anslutet program har ändrat, så att du ser vad som ändrats.</value>
+  </data>
 </root>

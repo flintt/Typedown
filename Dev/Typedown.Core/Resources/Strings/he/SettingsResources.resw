@@ -854,4 +854,10 @@
   <data name="General.LocalAutomation.Description" xml:space="preserve">
     <value>תוכניות שאתה מפעיל במחשב זה יכולות לקרוא ולערוך מסמכים פתוחים. כותרת החלון מציינת כשתוכנית מחוברת.</value>
   </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>הדגשת שינויים שבוצעו על ידי תוכניות</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>מדגיש לזמן קצר את הטקסט שתוכנית מחוברת שינתה, כדי שתראה מה השתנה.</value>
+  </data>
 </root>

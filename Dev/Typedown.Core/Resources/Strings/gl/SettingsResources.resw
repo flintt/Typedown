@@ -854,4 +854,10 @@
   <data name="General.LocalAutomation.Description" xml:space="preserve">
     <value>Os programas que executas neste ordenador poden ler e editar os documentos abertos. O título da xanela indica cando hai un conectado.</value>
   </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>Resaltar os cambios feitos por programas</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>Resalta brevemente o texto que cambiou un programa conectado, para que vexas que se modificou.</value>
+  </data>
 </root>

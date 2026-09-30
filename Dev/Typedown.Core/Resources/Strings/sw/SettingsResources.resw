@@ -854,4 +854,10 @@
   <data name="General.LocalAutomation.Description" xml:space="preserve">
     <value>Programu unazoendesha kwenye kompyuta hii zinaweza kusoma na kuhariri hati zilizo wazi. Kichwa cha dirisha kinaonyesha moja inapounganishwa.</value>
   </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>Angazia mabadiliko yaliyofanywa na programu</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>Huangazia kwa muda mfupi maandishi yaliyobadilishwa na programu iliyounganishwa, ili uone kilichobadilika.</value>
+  </data>
 </root>

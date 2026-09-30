@@ -106,6 +106,12 @@
             </controls:NormalSettingItem.Icon>
             <ToggleSwitch IsOn="{x:Bind Settings.AllowLocalAutomation, Mode=TwoWay}"/>
         </controls:NormalSettingItem>
+        <controls:NormalSettingItem Title="{u:LocaleString Key=General.HighlightAutomationChanges.Title}" Description="{u:LocaleString Key=General.HighlightAutomationChanges.Description}">
+            <controls:NormalSettingItem.Icon>
+                <FontIcon Glyph="&#xe7e6;"/>
+            </controls:NormalSettingItem.Icon>
+            <ToggleSwitch IsOn="{x:Bind Settings.HighlightAutomationChanges, Mode=TwoWay}"/>
+        </controls:NormalSettingItem>
         <controls:NormalSettingItem Title="{u:LocaleString Key=General.Language.Title}" Description="{u:LocaleString Key=General.Language.Description}" HorizontalActionAlignment="Stretch">
             <controls:NormalSettingItem.Icon>
                 <FontIcon Glyph="&#xf2b7;"/>

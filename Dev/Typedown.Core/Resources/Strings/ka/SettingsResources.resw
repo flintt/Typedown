@@ -854,4 +854,10 @@
   <data name="General.LocalAutomation.Description" xml:space="preserve">
     <value>ამ კომპიუტერზე თქვენ მიერ გაშვებულ პროგრამებს შეუძლიათ ღია დოკუმენტების წაკითხვა და რედაქტირება. ფანჯრის სათაური აჩვენებს, როცა რომელიმე დაკავშირებულია.</value>
   </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>პროგრამების მიერ შეტანილი ცვლილებების გამოკვეთა</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>მოკლე დროით გამოკვეთს ტექსტს, რომელიც დაკავშირებულმა პროგრამამ შეცვალა, რათა დაინახოთ, რა შეიცვალა.</value>
+  </data>
 </root>

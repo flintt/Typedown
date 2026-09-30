@@ -854,4 +854,10 @@
   <data name="General.LocalAutomation.Description" xml:space="preserve">
     <value>Programma's die u op deze computer uitvoert, kunnen geopende documenten lezen en bewerken. De venstertitel toont wanneer er een verbonden is.</value>
   </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>Wijzigingen door programma's markeren</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>Markeert kort de tekst die een verbonden programma heeft gewijzigd, zodat u ziet wat er is veranderd.</value>
+  </data>
 </root>

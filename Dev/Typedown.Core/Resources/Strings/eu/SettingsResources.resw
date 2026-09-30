@@ -854,4 +854,10 @@
   <data name="General.LocalAutomation.Description" xml:space="preserve">
     <value>Ordenagailu honetan exekutatzen dituzun programek dokumentu irekiak irakurri eta editatu ditzakete. Leihoaren izenburuak adierazten du bat konektatuta dagoenean.</value>
   </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>Nabarmendu programek egindako aldaketak</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>Konektatutako programa batek aldatutako testua une batez nabarmentzen du, zer aldatu den ikus dezazun.</value>
+  </data>
 </root>

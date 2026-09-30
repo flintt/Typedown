@@ -854,4 +854,10 @@
   <data name="General.LocalAutomation.Description" xml:space="preserve">
     <value>Programme, die Sie auf diesem Computer ausführen, können geöffnete Dokumente lesen und bearbeiten. Der Fenstertitel zeigt an, wenn eines verbunden ist.</value>
   </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>Änderungen durch Programme hervorheben</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>Hebt den von einem verbundenen Programm geänderten Text kurz hervor, damit Sie sehen, was sich geändert hat.</value>
+  </data>
 </root>

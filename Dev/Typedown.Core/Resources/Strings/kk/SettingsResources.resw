@@ -854,4 +854,10 @@
   <data name="General.LocalAutomation.Description" xml:space="preserve">
     <value>Осы компьютерде сіз іске қосатын бағдарламалар ашық құжаттарды оқып, өңдей алады. Біреуі қосылғанда терезе тақырыбында көрсетіледі.</value>
   </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>Бағдарламалар енгізген өзгерістерді ерекшелеу</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>Қосылған бағдарлама өзгерткен мәтінді қысқа уақытқа ерекшелейді, не өзгергенін көре аласыз.</value>
+  </data>
 </root>

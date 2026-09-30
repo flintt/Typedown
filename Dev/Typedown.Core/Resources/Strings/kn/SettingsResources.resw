@@ -854,4 +854,10 @@
   <data name="General.LocalAutomation.Description" xml:space="preserve">
     <value>ಈ ಕಂಪ್ಯೂಟರ್‌ನಲ್ಲಿ ನೀವು ಚಲಾಯಿಸುವ ಪ್ರೋಗ್ರಾಂಗಳು ತೆರೆದ ದಾಖಲೆಗಳನ್ನು ಓದಬಹುದು ಮತ್ತು ಸಂಪಾದಿಸಬಹುದು. ಯಾವುದಾದರೂ ಸಂಪರ್ಕಗೊಂಡಾಗ ವಿಂಡೋ ಶೀರ್ಷಿಕೆಯಲ್ಲಿ ತೋರಿಸಲಾಗುತ್ತದೆ.</value>
   </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>ಪ್ರೋಗ್ರಾಂಗಳು ಮಾಡಿದ ಬದಲಾವಣೆಗಳನ್ನು ಹೈಲೈಟ್ ಮಾಡಿ</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>ಸಂಪರ್ಕಿತ ಪ್ರೋಗ್ರಾಂ ಬದಲಾಯಿಸಿದ ಪಠ್ಯವನ್ನು ಸ್ವಲ್ಪ ಸಮಯ ಹೈಲೈಟ್ ಮಾಡುತ್ತದೆ, ಇದರಿಂದ ಏನು ಬದಲಾಗಿದೆ ಎಂದು ನೀವು ನೋಡಬಹುದು.</value>
+  </data>
 </root>

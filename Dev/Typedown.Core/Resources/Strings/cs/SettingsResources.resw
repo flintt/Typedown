@@ -854,4 +854,10 @@
   <data name="General.LocalAutomation.Description" xml:space="preserve">
     <value>Programy, které na tomto počítači spouštíte, mohou číst a upravovat otevřené dokumenty. Název okna ukazuje, kdy je některý připojen.</value>
   </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>Zvýraznit změny provedené programy</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>Krátce zvýrazní text změněný připojeným programem, abyste viděli, co se změnilo.</value>
+  </data>
 </root>
