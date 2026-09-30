@@ -50,8 +50,12 @@ namespace Typedown.Services.Automation
 
             // How a window's editor page is drawn, and moving a window to a page (the settings page) of its own.
             methods.Add(new MethodDescriptor("test.editor.style", null, "test.editor.style/1", async (c, ct) =>
-                await await Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app => app.EditorViewModel.QueryEditorStyleAsync(5000))
-                    ?? throw new AutomationException(AutomationErrorKind.editor_not_ready, "the page did not answer")));
+                await await Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), async app =>
+                {
+                    if (app.MarkdownEditor == null) throw new AutomationException(AutomationErrorKind.editor_not_ready, "the window has no editor page (another page is shown)");
+                    return await app.EditorViewModel.QueryEditorStyleAsync(5000)
+                        ?? throw new AutomationException(AutomationErrorKind.editor_not_ready, "the editor page did not answer within 5 s");
+                })));
             methods.Add(new MethodDescriptor("test.window.handle", null, "test.window.handle/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
                     (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["hwnd"] = app.MainWindow.ToInt64() })));

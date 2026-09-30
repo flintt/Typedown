@@ -344,10 +344,11 @@ internal static class Program
             string? drawn = null;
             for (var i = 0; i < 100 && drawn != $"{font}px"; i++)
             {
-                drawn = (string?)(await c.Call("test.editor.style", new { windowId = window }))["fontSize"];
+                try { drawn = (string?)(await c.Call("test.editor.style", new { windowId = window }))["fontSize"]; }
+                catch (JsonRpcRemoteException e) { drawn = "error: " + e.Message; }
                 if (drawn != $"{font}px") await Task.Delay(50);
             }
-            Check(drawn == $"{font}px", $"window {window[..7]}'s editor page is drawn at {font}px ({drawn})");
+            Check(drawn == $"{font}px", $"window {window[..7]} ({windows.IndexOf(window) + 1} of {windows.Count})'s editor page is drawn at {font}px ({drawn})");
         }
         var file = JObject.Parse(File.ReadAllText(Path.Combine(testRoot, "data", "Settings.json")));
         Check((double)file["FontSize"]! == font, $"Settings.json holds {font} ({file["FontSize"]})");
