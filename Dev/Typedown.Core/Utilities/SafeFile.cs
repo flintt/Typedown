@@ -41,6 +41,9 @@ namespace Typedown.Core.Utilities
             // Drive, OneDrive) skips it rather than uploading a file that is about to vanish.
             var tempPath = Path.Combine(string.IsNullOrEmpty(directory) ? "." : directory, $".{Path.GetFileName(path)}.{Guid.NewGuid():N}.tmp");
             var keepTemp = false;
+            // The rename below makes the temp file the target, attributes and all: remember the target's own.
+            FileAttributes? previous = null;
+            try { if (File.Exists(path)) previous = File.GetAttributes(path); } catch { }
             try
             {
                 using (var stream = new FileStream(tempPath, FileMode.CreateNew, FileAccess.Write, FileShare.None, 4096, FileOptions.Asynchronous))
@@ -79,11 +82,14 @@ namespace Typedown.Core.Utilities
                         await Task.Delay(75);
                         try
                         {
-                            if (MoveReplace(tempPath, path)) return;
-                            if (File.Exists(path))
-                                File.Replace(tempPath, path, null, ignoreMetadataErrors: true);
-                            else
-                                File.Move(tempPath, path);
+                            if (!MoveReplace(tempPath, path))
+                            {
+                                if (File.Exists(path))
+                                    File.Replace(tempPath, path, null, ignoreMetadataErrors: true);
+                                else
+                                    File.Move(tempPath, path);
+                            }
+                            RestoreAttributes(path, previous);
                             return;
                         }
                         catch (IOException) { }
@@ -95,6 +101,7 @@ namespace Typedown.Core.Utilities
                     keepTemp = true;
                     throw;
                 }
+                RestoreAttributes(path, previous);
             }
             finally
             {
@@ -104,6 +111,22 @@ namespace Typedown.Core.Utilities
                     try { if (File.Exists(tempPath)) File.Delete(tempPath); } catch { }
                 }
             }
+        }
+
+        /// <summary>
+        /// The saved file gets back the attributes it had, not the temp file's hidden and temporary marks - which the
+        /// rename carried over in 1.2.27 to 1.2.30, leaving every file Typedown saved hidden (sync clients skip such
+        /// files). A file that carries both marks was left so by those versions and is put right on its next save.
+        /// </summary>
+        private static void RestoreAttributes(string path, FileAttributes? previous)
+        {
+            try
+            {
+                var attributes = previous ?? File.GetAttributes(path);
+                if ((attributes & FileAttributes.Temporary) != 0) attributes &= ~(FileAttributes.Hidden | FileAttributes.Temporary);
+                File.SetAttributes(path, attributes == 0 ? FileAttributes.Normal : attributes);
+            }
+            catch { }
         }
     }
 }
