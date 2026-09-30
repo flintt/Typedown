@@ -87,6 +87,23 @@ python3 $A/scripts/scenario.py --examples $A/scripts --socket $SOCK --workdir $T
 echo "== Linux checks"
 python3 $A/scripts/linux_checks.py --examples $A/scripts --socket $SOCK --workdir $T/lx
 
+echo "== the installed typedownctl: view and settings (no restart)"
+if [ -x /usr/bin/typedownctl ]; then
+  ICTL="/usr/bin/typedownctl --json --endpoint $SOCK"
+  $ICTL status >/dev/null; check $? "the installed typedownctl answers"
+  W=$($ICTL windows | python3 -c 'import json,sys; print(json.load(sys.stdin)["windows"][0]["windowId"])')
+  V=$($ICTL view $W --mode source --side-pane outline --size 1100x700)
+  check $(echo "$V" | python3 -c 'import json,sys; v=json.load(sys.stdin); sys.exit(0 if v["mode"]=="source" and v["sidePane"]=={"open":True,"page":"outline"} and v["bounds"]["width"]==1100 and v["bounds"]["height"]==700 else 1)'; echo $?) "view: source mode, the outline, 1100x700 in one call ($(echo $V | cut -c1-120))"
+  V=$($ICTL view $W --mode visual --side-pane closed)
+  check $(echo "$V" | python3 -c 'import json,sys; v=json.load(sys.stdin); sys.exit(0 if v["mode"]=="visual" and not v["sidePane"]["open"] else 1)'; echo $?) "view: back to visual, pane closed"
+  R=$($ICTL settings get | python3 -c 'import json,sys; print(json.load(sys.stdin)["settingsRevision"])')
+  R=$($ICTL settings set ui.language ja --base-revision $R | python3 -c 'import json,sys; print(json.load(sys.stdin)["settingsRevision"])'); check $? "settings: the language set to ja"
+  check $(grep -q '"Language": "ja"' $T/data/Typedown.Uno/settings.json; echo $?) "the settings file says ja"
+  $ICTL settings set ui.language en --base-revision $R >/dev/null; check $? "and back to en"
+else
+  echo "(no /usr/bin/typedownctl: the package is not installed)"
+fi
+
 echo "== clean exit removes the socket (a fresh instance, nothing unsaved to ask about)"
 pkill -f "$APP_PATTERN"; sleep 2
 printf '# exit\n' > $T/docs/tdnuc-exit.md

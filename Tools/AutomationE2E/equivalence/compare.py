@@ -61,6 +61,23 @@ def normalize(value, key=None):
     return value
 
 
+# Some settings exist on one platform only (settings-map.json: a platform without one does not describe it). The
+# settings both describe must be described alike; the others are listed, not counted as problems.
+def common_settings(a_steps, b_steps, a_name, b_name):
+    for a, b in zip(a_steps, b_steps):
+        if not (isinstance(a, dict) and isinstance(b, dict) and a.get("method") == b.get("method") == "settings.describe"):
+            continue
+        ra, rb = a.get("result") or {}, b.get("result") or {}
+        ka = {s["key"] for s in ra.get("settings", [])}
+        kb = {s["key"] for s in rb.get("settings", [])}
+        for only, name in ((ka - kb, a_name), (kb - ka, b_name)):
+            if only:
+                print(f"settings only {name} describes (not compared): {', '.join(sorted(only))}")
+        for r in (ra, rb):
+            if "settings" in r:
+                r["settings"] = [s for s in r["settings"] if s["key"] in ka & kb]
+
+
 def main():
     names = sys.argv[1:]
     transcripts = [json.load(open(n, encoding="utf-8")) for n in names]
@@ -68,6 +85,7 @@ def main():
     base = [normalize(e) for e in transcripts[0]]
     for other, name in zip(transcripts[1:], names[1:]):
         steps = [normalize(e) for e in other]
+        common_settings(base, steps, names[0], name)
         for i in range(max(len(base), len(steps))):
             a = base[i] if i < len(base) else None
             b = steps[i] if i < len(steps) else None
