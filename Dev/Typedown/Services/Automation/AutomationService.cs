@@ -53,7 +53,12 @@ namespace Typedown.Services.Automation
                 },
                 info.MaxMessageBytes);
             server.ActivityChanged += OnActivityChanged;
-            server.ListenerFailed += e => Log.Debug($"automation: the endpoint could not listen: {e.Message}");
+            server.ListenerFailed += e =>
+            {
+                Log.Debug($"automation: the endpoint could not listen: {e.Message}");
+                if (Config.IsAutomationTestHost)
+                    try { File.WriteAllText(Path.Combine(Config.AutomationTestRoot, "automation-endpoint-error.txt"), e.ToString()); } catch { }
+            };
 
             settings = JsonSettingsStore.Shared(Path.Combine(Config.GetLocalFolderPath(), "Settings.json"));
             settings.Changed += (setting, _) => { if (setting == null || setting == SettingName) Apply(); };

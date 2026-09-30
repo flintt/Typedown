@@ -35,7 +35,7 @@ internal static class Program
         public Client(string endpoint)
         {
             pipe = new NamedPipeClientStream(".", endpoint, PipeDirection.InOut, PipeOptions.Asynchronous);
-            pipe.Connect(5000);
+            pipe.Connect(1000);
             Connection = new JsonRpcConnection(new MessageFraming(pipe, 64L << 20), new NoHandler());
             running = Connection.RunAsync();
         }
@@ -115,7 +115,16 @@ internal static class Program
         return environmentError != null ? 3 : failed > 0 ? 1 : 0;
     }
 
-    private static async Task<Client> Connect() { await Task.Yield(); return new Client(endpoint); }
+    /// <summary>Connects, retrying while the endpoint is not there yet (a host that has just started), up to ~30 s.</summary>
+    private static async Task<Client> Connect()
+    {
+        for (var attempt = 0; ; attempt++)
+        {
+            await Task.Yield();
+            try { return new Client(endpoint); }
+            catch (TimeoutException) when (attempt < 30) { }
+        }
+    }
 
     private static readonly string[] AllScopes = { Scopes.AppRead, Scopes.DocumentRead, Scopes.DocumentWrite, Scopes.DocumentSave, Scopes.WindowFocus };
 
@@ -347,10 +356,22 @@ internal static class Program
             dying.WaitForExit(10000);
         }
         File.Delete(Path.Combine(testRoot, "automation-endpoint.txt"));
-        var restarted = Process.Start(new ProcessStartInfo(hostExe) { ArgumentList = { "--automation-test-root", testRoot }, UseShellExecute = false })!;
+        // Shell-started: a child started directly would inherit this driver's redirected output, and the script
+        // running the driver would then wait for the test host to exit before it could finish.
+        var restarted = Process.Start(new ProcessStartInfo(hostExe, $"--automation-test-root \"{testRoot}\"") { UseShellExecute = true })!;
         hostPid = restarted.Id;
         for (var i = 0; i < 300 && !File.Exists(Path.Combine(testRoot, "automation-endpoint.txt")); i++) await Task.Delay(100);
-        using var after = await Session("e2e R04 after");
+        var listenError = Path.Combine(testRoot, "automation-endpoint-error.txt");
+        Client? afterClient = null;
+        for (var i = 0; i < 30 && afterClient == null; i++)
+        {
+            if (File.Exists(listenError)) throw new CaseFailed("the restarted host could not listen: " + File.ReadAllText(listenError));
+            try { afterClient = await Connect(); }
+            catch (TimeoutException) { }
+        }
+        if (afterClient == null) throw new CaseFailed("the restarted host never accepted a connection");
+        using var after = afterClient;
+        await Initialize(after, "e2e R04 after");
         await WaitForWindow(after);
         // The recovery question: answered as a person would, with Enter (Recover is the default button).
         JArray documents = new();
