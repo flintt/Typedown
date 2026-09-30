@@ -648,11 +648,12 @@ internal static class Program
         if (GetForegroundWindow() != window) throw new CaseFailed("the test host window could not be brought to the front (is the desktop locked?)");
         // Keyboard focus into the editor as a person gives it: a click in the text area, then Ctrl+End.
         GetWindowRect(window, out var rect);
-        // In the editor's left margin, below the tab strip: a click there focuses the editor without opening a block
-        // (an image, a maths or diagram preview) that the middle of the window may hold.
-        SetCursorPos(rect.Left + 40, rect.Top + (rect.Bottom - rect.Top) * 2 / 5);
+        // Towards the right of the text area: the left margin holds Muya's block menu button, which a click opens and
+        // which then takes the keys. Escape closes whatever a click may have opened; Ctrl+End puts the caret at the end.
+        SetCursorPos(rect.Right - 80, rect.Top + (rect.Bottom - rect.Top) * 2 / 5);
         Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0002 } } }, new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0004 } } });
         await Task.Delay(200); // the click's caret placement settles before the keys; the result is still checked below
+        Send(Key(0x1B, false), Key(0x1B, true));
         Send(Key(0x11, false), Key(0x23, false), Key(0x23, true), Key(0x11, true));
         var inputs = new List<INPUT>();
         foreach (var ch in text)
