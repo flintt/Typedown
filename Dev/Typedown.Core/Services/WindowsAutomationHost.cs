@@ -39,7 +39,19 @@ namespace Typedown.Core.Services
         private static AutomationException DocumentNotFound(string documentId) =>
             new(AutomationErrorKind.document_not_found, "The document is closed or the id is not valid.", new Dictionary<string, object> { ["documentId"] = documentId });
 
-        private static async Task<T> OnWindow<T>(string windowId, Func<AppViewModel, Task<T>> work) => await (await Registry.OnWindowAsync(windowId, work));
+        public const int StartupTimeoutMs = 30000;
+
+        /// <summary>
+        /// Runs work on a window once its startup document is in place: a window that has just opened would otherwise
+        /// have its startup flow replace what the work did (seen in E2E R04 - a new document lost its id).
+        /// </summary>
+        private static async Task<T> OnWindow<T>(string windowId, Func<AppViewModel, Task<T>> work) => await (await Registry.OnWindowAsync(windowId, async app =>
+        {
+            var ready = app.EditorViewModel.StartupDocumentReady;
+            if (await Task.WhenAny(ready, Task.Delay(StartupTimeoutMs)) != ready)
+                throw new AutomationException(AutomationErrorKind.editor_not_ready, "The window has not finished starting.");
+            return await work(app);
+        }));
 
         private static async Task<(RegisteredWindow<AppViewModel> window, DocumentTab tab)> Find(string documentId)
         {

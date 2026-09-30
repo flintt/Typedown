@@ -123,6 +123,14 @@ namespace Typedown.Core.ViewModels
             SelectAllCommand.OnExecute.Subscribe(_ => SelectAll());
         }
 
+        private readonly TaskCompletionSource<bool> startupDocumentReady = new(TaskCreationOptions.RunContinuationsAsynchronously);
+
+        /// <summary>
+        /// Completes once the page has asked for its settings and the window's startup document is in place. Until then
+        /// the startup flow may still replace the active document (a new window's blank one), so automation waits.
+        /// </summary>
+        public Task StartupDocumentReady => startupDocumentReady.Task;
+
         public async Task<object> GetSettings()
         {
             if (FirstStart)
@@ -130,6 +138,7 @@ namespace Typedown.Core.ViewModels
                 FirstStart = false;
                 await FileViewModel.LoadStartUpMarkdown();
             }
+            startupDocumentReady.TrySetResult(true);
             return new
             {
                 Settings.FocusMode,
