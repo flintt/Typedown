@@ -1005,25 +1005,25 @@ internal static class Program
             var windows = ((JArray)(await c.Call("window.list"))["windows"]!).Select(w => (string)w["windowId"]!).ToList();
             if (windows.Count < 2) windows.Add((string)(await c.Call("test.window.open"))["windowId"]!);
             notes.Add($"{windows.Count} window(s)");
+            var first = await WindowOf(windows[0], c);
+            var second = await WindowOf(windows[1], c);
             // XamlWindow.AllWindows lists a window until the garbage collector has finalized it: the first window is
             // kept in memory after it closes, as it was, minutes later, for the reader who saw the process stay.
-            foreach (var windowId in windows)
-            {
-                try { await c.Call("test.window.forceClose", new { windowId, keepInMemory = windowId == windows[0] }); await Task.Delay(1000); }
-                catch (Exception e) when (e is JsonRpcRemoteException || e is IOException || e is ObjectDisposedException) { notes.Add($"close {windowId[..7]}: {e.GetType().Name}"); }
-            }
+            await c.Call("test.window.keep", new { windowId = windows[0] });
+            // Closed the way the close button closes a window (nothing unsaved here, so no question).
+            PostMessage(first, 0x0010, IntPtr.Zero, IntPtr.Zero);
+            for (var i = 0; i < 10 && !host.HasExited; i++) await Task.Delay(300);
+            Check(!host.HasExited, $"the process stays while a window is open (exit code {(host.HasExited ? host.ExitCode.ToString() : "-")})");
+            var left = ((JArray)(await c.Call("window.list"))["windows"]!).Select(w => (string)w["windowId"]!).ToList();
+            Check(left.Count == 1 && left[0] == windows[1], $"one window left ({string.Join(", ", left)})");
+            PostMessage(second, 0x0010, IntPtr.Zero, IntPtr.Zero);
         }
         var exited = host.WaitForExit(20000);
-        try
-        {
-            var log = Path.Combine(testRoot, "logs", "debug.log");
-            using var reader = new StreamReader(new FileStream(log, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete));
-            foreach (var line in reader.ReadToEnd().Split('\n').Where(l => l.Contains("window(s) remain") || l.Contains("last window closed")))
-                notes.Add(line.Trim());
-        }
-        catch (Exception e) { notes.Add("no log: " + e.Message); }
+        if (exited) notes.Add($"exit code {host.ExitCode}");
         Check(exited, "the process exits once its last window is closed (it stayed running with no window)");
     }
+
+    [DllImport("user32.dll")] private static extern bool PostMessage(IntPtr window, uint message, IntPtr wParam, IntPtr lParam);
 
     private static async Task R04(List<string> notes)
     {
