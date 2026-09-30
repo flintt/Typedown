@@ -314,12 +314,12 @@ Typedown.Uno/Automation/
 - [x] 实现 `document.replace`、`document.replaceText`、`document.save`、`undo/redo`，强制 `baseRevision`。*（后台标签的 save/undo/redo 本版返回 `editor_not_ready`（reason `notActive`），需先 focus。）*
 - [x] 新增 `ApplyDocumentEdit/DocumentEditApplied/DocumentEditRejected`；页面应用前再次检查 `baseContentHash`，成功后返回源文本、初始序列化文本的 hash 与 `pendingNormalization`，失败后由宿主通过 `LoadFile` 完成恢复确认。*（拒绝用 `DocumentEditApplied` 的 `outcome: conflict/failed` 表达，没有单独的 Rejected 消息。）*
 - [x] 让一次成功外部修改形成一个撤销步骤；`replaceText` 先保证精确文本结果，页面局部应用留到阶段 2。*（`CommitAutomationText` 先结束读者待定输入再单独成步；E2E R02 验证撤销/重做不串文档。）*
-- [ ] 只在独立测试宿主注册 `test.*` barrier；正式应用和 Release 测试断言这些方法返回 `method_not_found`、能力中不可见，并检查包内容不存在测试程序集或 `test.*` 符号。*（方法表拒绝应用构建注册 `test.*`；`BuildSeparationTests` 保证只有测试宿主变体引用该程序集；打包脚本拒收含测试宿主程序集或标记文件的目录。仍缺：对正式包二进制扫描 `test.*` 字符串。）*
+- [x] 只在独立测试宿主注册 `test.*` barrier；正式应用和 Release 测试断言这些方法返回 `method_not_found`、能力中不可见，并检查包内容不存在测试程序集或 `test.*` 符号。*（方法表拒绝应用构建注册 `test.*`；`BuildSeparationTests` 保证只有测试宿主变体引用该程序集；打包脚本拒收含测试宿主程序集或标记文件的目录，并扫描 Typedown 二进制中的 test.* 方法名（UTF-16/UTF-8），已在 hp 两向验证。）*
 - [x] 状态栏显示不可由客户端关闭的连接标记，写入时短暂显示客户端名称和目标文档。*（改为窗口标题：状态栏可被用户关闭（hp 上就是关闭的），标题不能；连接时显示“自动化已连接”，写入后 4 秒显示“{客户端} 编辑了 {文档}”，74 种语言。）*
-- [x] 实现 `typedownctl` 的 `status/windows/documents/get/open/create/replace/replace-text/save`，所有命令支持 `--json` 和稳定退出码；正文写命令用显式 `--allow-unknown-normalization` 映射协议中的风险接受，不能默认开启。*（Linux 上对真实管道服务端测试；尚未在 Windows 上对正式应用运行。）*
-- [ ] 用 CLI/客户端及 barrier 编写 R01～R04 端到端测试；比对 API 结果、界面 revision 和磁盘/备份字节。*（R01～R03、S0、S1、B01 在 hp 真实桌面通过并重复运行；过程中发现并修复：写入与文档加载竞争、写入期间的读者按键被覆盖、写入的保存把读者未保存的按键写盘、窗口级设置串窗口。R04（备份与强杀重启）未做。）*
+- [x] 实现 `typedownctl` 的 `status/windows/documents/get/open/create/replace/replace-text/save`，所有命令支持 `--json` 和稳定退出码；正文写命令用显式 `--allow-unknown-normalization` 映射协议中的风险接受，不能默认开启。*（Linux 对真实管道服务端测试；在 hp 上通过 SSH 对运行中的测试宿主执行 status/windows/documents/get 正常。）*
+- [x] 用 CLI/客户端及 barrier 编写 R01～R04 端到端测试；比对 API 结果、界面 revision 和磁盘/备份字节。*（S0、S1、R01～R04、B01 共 7 个用例在 hp 真实桌面通过并连续重复。过程中发现并修复：写入与文档加载竞争、写入期间读者按键被覆盖、写入的保存带上读者未保存的按键、窗口级设置串窗口、未命名文档共用一个备份（多个时崩溃只剩一个，后台未命名文档不备份）、新窗口启动流程覆盖刚创建的文档、测试宿主实例名用了按进程随机的哈希。）*
 - [x] 提供 `Tools/AutomationE2E/run-windows-e2e.ps1` 一键入口，以及从 SSH 侧创建并等待交互式计划任务的包装脚本；按第 10.7 节收集结果并隔离数据。*（`start-interactive.ps1` 从 SSH 注册并触发“仅用户登录时运行”的计划任务、等待 result.json；无人登录时报环境错误。）*
-- [ ] 修改 `Tools/Installer/build-local.ps1` 和 CI：测试宿主只能构建散装输出，拒绝 Inno/MSIX/portable 打包；正式包在产出后扫描测试程序集、`test.*` 和 `AUTOMATION TEST HOST` 标识。*（`-AutomationTestHost` 只出散装输出；本地与 CI 打包前运行 `assert-application-build.ps1`。仍缺：产出后扫描 `test.*` 与 AUTOMATION TEST HOST 字符串。）*
+- [x] 修改 `Tools/Installer/build-local.ps1` 和 CI：测试宿主只能构建散装输出，拒绝 Inno/MSIX/portable 打包；正式包在产出后扫描测试程序集、`test.*` 和 `AUTOMATION TEST HOST` 标识。*（`-AutomationTestHost` 只出散装输出；本地与 CI 打包前运行 `assert-application-build.ps1`：拒收测试宿主程序集、标记文件，以及二进制中含 test.* 方法名的构建。AUTOMATION TEST HOST 字样在应用 Core 中也存在（仅测试宿主模式使用），不作为扫描依据。）*
 
 完成标准：过期版本不能覆盖用户输入；失败写入不留下半提交状态；外部写入在人正在看的编辑器中实际出现并可一次撤销；`save` 成功后磁盘字节与目标 revision 一致；R01～R04 能在 HP 登录桌面会话中由一条命令重复运行且无需概率性 sleep；正式安装包通过测试代码缺失检查；接口关闭时没有监听端点。
 
