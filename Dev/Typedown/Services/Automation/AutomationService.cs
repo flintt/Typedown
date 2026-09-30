@@ -51,6 +51,7 @@ namespace Typedown.Services.Automation
                 {
                     var methods = DocumentMethods.AddTo(new MethodTable(buildType), host, info.InstanceId, OnWrite);
                     SettingsMethods.AddTo(methods, settingsHost, catalog);
+                    ViewMethods.AddTo(methods, host);
                     TestHostHooks.AddMethods(methods);
                     return new AutomationSession(info, methods);
                 },

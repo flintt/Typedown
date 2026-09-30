@@ -14,6 +14,7 @@ namespace Typedown.Automation.Tests
     {
         private readonly string endpoint = "td-cli-" + Guid.NewGuid().ToString("N");
         private readonly FakeHost host = new();
+        private readonly FakeViewHost view = new();
         private AutomationServer server = null!;
         private FakeDocument doc = null!;
 
@@ -21,7 +22,7 @@ namespace Typedown.Automation.Tests
         {
             var info = new ServerInfo { Version = "1.2.30", Platform = "test" };
             server = new AutomationServer(() => new PlainPipeListener(endpoint),
-                () => new AutomationSession(info, DocumentMethods.AddTo(new MethodTable(BuildTypes.Application), host, info.InstanceId)), info.MaxMessageBytes);
+                () => new AutomationSession(info, ViewMethods.AddTo(DocumentMethods.AddTo(new MethodTable(BuildTypes.Application), host, info.InstanceId), view)), info.MaxMessageBytes);
             doc = host.Add("# Title\n\nold text\n", "/tmp/a.md");
             server.Start();
             return Task.CompletedTask;
@@ -125,6 +126,27 @@ namespace Typedown.Automation.Tests
             Assert.Equal(8, Cli.Cli.ExitCodeFor("save_failed"));
             Assert.Equal(9, Cli.Cli.ExitCodeFor("content_not_roundtrippable"));
         }
+
+        [Fact]
+        public async Task View_reads_without_options_and_sets_with_them()
+        {
+            var (exit, stdout, _) = await Run("", "view", FakeHost.WindowId);
+            Assert.Equal(0, exit);
+            Assert.Contains("mode visual  side pane closed  status bar on", stdout);
+            Assert.Contains("bounds 10,20,1200,800", stdout);
+            (exit, stdout, _) = await Run("", "--json", "view", FakeHost.WindowId, "--mode", "reading", "--side-pane", "outline", "--size", "1280x860");
+            Assert.Equal(0, exit);
+            var result = JObject.Parse(stdout);
+            Assert.Equal("reading", (string)result["mode"]!);
+            Assert.Equal(1280, (int)result["bounds"]!["width"]!);
+            Assert.Equal(860, (int)view.State.Height);
+            (exit, _, _) = await Run("", "view", FakeHost.WindowId, "--side-pane", "left");
+            Assert.Equal(2, exit);
+            (exit, _, _) = await Run("", "view", FakeHost.WindowId, "--bounds", "1,2,3");
+            Assert.Equal(2, exit);
+            (exit, _, _) = await Run("", "view", FakeHost.WindowId, "--size", "300x300");
+            Assert.Equal(2, exit);
+        }
     }
 }
 
@@ -171,5 +193,6 @@ namespace Typedown.Automation.Tests
             (exit, stdout) = await Run("--json", "settings", "describe");
             Assert.Equal(SettingsCatalog.Load().Settings.Count(x => new FakeSettingsHost().Supports(x.Key)), ((Newtonsoft.Json.Linq.JArray)Newtonsoft.Json.Linq.JObject.Parse(stdout)["settings"]!).Count);
         }
+
     }
 }

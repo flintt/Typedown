@@ -193,6 +193,42 @@ namespace Typedown.Mcp
                 }, "documentId"),
                 ["annotations"] = new JObject { ["readOnlyHint"] = false, ["destructiveHint"] = false, ["idempotentHint"] = true, ["openWorldHint"] = false },
             },
+            new JObject
+            {
+                ["name"] = "typedown_get_view",
+                ["title"] = "Read how a window shows its document",
+                ["description"] = "The window's editing mode (visual, source or reading), side pane, status bar, focus and typewriter mode, and its bounds on screen in pixels.",
+                ["inputSchema"] = Schema(new JObject { ["windowId"] = Prop("string", "From typedown_list_documents.") }, "windowId"),
+                ["annotations"] = new JObject { ["readOnlyHint"] = true, ["openWorldHint"] = false },
+            },
+            new JObject
+            {
+                ["name"] = "typedown_set_view",
+                ["title"] = "Change how a window shows its document",
+                ["description"] = "Switches the editing mode, opens or closes the side pane (files or outline), shows or hides the status bar, turns focus or typewriter mode on or off, or moves and resizes the window. Mode, pane, status bar, focus and typewriter are the person's own settings and stay as set; change them only when asked, and put them back afterwards. The text is not changed. Returns the view as it is afterwards.",
+                ["inputSchema"] = Schema(new JObject
+                {
+                    ["windowId"] = Prop("string", "From typedown_list_documents."),
+                    ["mode"] = new JObject { ["type"] = "string", ["enum"] = new JArray("visual", "source", "reading"), ["description"] = "visual (rendered, editable), source (the raw Markdown) or reading (rendered, not editable)." },
+                    ["sidePane"] = new JObject
+                    {
+                        ["type"] = "object",
+                        ["properties"] = new JObject { ["open"] = Prop("boolean", "Show the side pane."), ["page"] = new JObject { ["type"] = "string", ["enum"] = new JArray("files", "outline") } },
+                        ["additionalProperties"] = false,
+                    },
+                    ["statusBar"] = Prop("boolean", "Show the status bar."),
+                    ["focusMode"] = Prop("boolean", "Dim everything but the current paragraph."),
+                    ["typewriter"] = Prop("boolean", "Keep the current line in the middle of the window."),
+                    ["bounds"] = new JObject
+                    {
+                        ["type"] = "object",
+                        ["description"] = "The window's outer bounds in screen pixels; give any of them. A maximized window is restored first.",
+                        ["properties"] = new JObject { ["x"] = Prop("integer", ""), ["y"] = Prop("integer", ""), ["width"] = Prop("integer", "At least 480."), ["height"] = Prop("integer", "At least 320.") },
+                        ["additionalProperties"] = false,
+                    },
+                }, "windowId"),
+                ["annotations"] = new JObject { ["readOnlyHint"] = false, ["destructiveHint"] = false, ["idempotentHint"] = true, ["openWorldHint"] = false },
+            },
         };
 
         private async Task<JObject> CallToolAsync(JObject? p, CancellationToken ct)
@@ -216,6 +252,8 @@ namespace Typedown.Mcp
                         ["text"] = Required(args, "text", JTokenType.String),
                     }), ct).ConfigureAwait(false),
                     "typedown_save_document" => await typedown.CallAsync("document.save", Pick(args, "documentId", "baseRevision"), ct).ConfigureAwait(false),
+                    "typedown_get_view" => await typedown.CallAsync("window.getView", Pick(args, "windowId"), ct).ConfigureAwait(false),
+                    "typedown_set_view" => await typedown.CallAsync("window.setView", Pick(args, "windowId", "mode", "sidePane", "statusBar", "focusMode", "typewriter", "bounds"), ct).ConfigureAwait(false),
                     _ => throw new RpcError(-32602, $"Unknown tool: {name}"),
                 };
                 return Success(result);

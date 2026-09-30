@@ -17,7 +17,7 @@ namespace Typedown.Core.Services
     /// call runs on the dispatcher of the window that holds the document and continues there; nothing here shows a
     /// dialog of its own.
     /// </summary>
-    public sealed class WindowsAutomationHost : IAutomationHost
+    public sealed class WindowsAutomationHost : IAutomationHost, IViewHost
     {
         /// <summary>The classifier version of the editor bundle (services/normalization.ts).</summary>
         public const int EditorClassifierVersion = 3;
@@ -316,6 +316,70 @@ namespace Typedown.Core.Services
                 coordinator.Forget(documentId);
                 return true;
             });
+        }
+
+        private static ViewState ReadView(AppViewModel app)
+        {
+            var settings = app.SettingsViewModel;
+            PInvoke.GetWindowRect(app.MainWindow, out var r);
+            return new ViewState
+            {
+                Mode = settings.SourceCode ? "source" : settings.ReadOnly ? "reading" : "visual",
+                SidePaneOpen = settings.SidePaneOpen,
+                SidePanePage = settings.SidePaneIndex == 1 ? "outline" : "files",
+                StatusBar = settings.StatusBarOpen,
+                FocusMode = settings.FocusMode,
+                Typewriter = settings.Typewriter,
+                X = r.left,
+                Y = r.top,
+                Width = r.right - r.left,
+                Height = r.bottom - r.top,
+                Maximized = PInvoke.IsZoomed(app.MainWindow),
+            };
+        }
+
+        public Task<ViewState> GetViewAsync(string windowId, CancellationToken cancellationToken) =>
+            Registry.OnWindowAsync(windowId, ReadView);
+
+        /// <summary>
+        /// Mode, side pane, status bar, focus and typewriter are the app's own settings (the menu changes the same ones,
+        /// and they are remembered); bounds belong to this window. A mode switch waits until the editor shows the
+        /// document again, and runs between - never during - automation edits of the window's active document.
+        /// </summary>
+        public async Task<ViewState> SetViewAsync(string windowId, ViewChange change, CancellationToken cancellationToken)
+        {
+            var documentId = await Registry.OnWindowAsync(windowId, app => app.TabsViewModel?.ActiveTab?.DocumentId ?? "");
+            return await coordinator.ExclusiveAsync(documentId, () => OnWindow(windowId, async app =>
+            {
+                var settings = app.SettingsViewModel;
+                var editor = app.EditorViewModel;
+                var modeChanged = change.Mode != null && change.Mode != ReadView(app).Mode;
+                if (modeChanged)
+                {
+                    // Setting one on turns the other off (SettingsViewModel); visual turns both off.
+                    if (change.Mode == "source") settings.SourceCode = true;
+                    else if (change.Mode == "reading") settings.ReadOnly = true;
+                    else { settings.SourceCode = false; settings.ReadOnly = false; }
+                }
+                if (change.SidePanePage != null) settings.SidePaneIndex = change.SidePanePage == "outline" ? 1 : 0;
+                if (change.SidePaneOpen is bool open) settings.SidePaneOpen = open;
+                if (change.StatusBar is bool statusBar) settings.StatusBarOpen = statusBar;
+                if (change.FocusMode is bool focus) settings.FocusMode = focus;
+                if (change.Typewriter is bool typewriter) settings.Typewriter = typewriter;
+                if (change.X != null || change.Y != null || change.Width != null || change.Height != null)
+                {
+                    var hwnd = app.MainWindow;
+                    if (PInvoke.IsZoomed(hwnd) || PInvoke.IsIconic(hwnd)) PInvoke.ShowWindow(hwnd, PInvoke.ShowWindowCommand.Restore);
+                    PInvoke.GetWindowRect(hwnd, out var r);
+                    PInvoke.SetWindowPos(hwnd, IntPtr.Zero, change.X ?? r.left, change.Y ?? r.top, change.Width ?? r.right - r.left, change.Height ?? r.bottom - r.top,
+                        PInvoke.SetWindowPosFlags.SWP_NOZORDER | PInvoke.SetWindowPosFlags.SWP_NOACTIVATE);
+                }
+                if (modeChanged && !await editor.WaitForLoadAsync(AutomationDocument.ReloadTimeoutMs))
+                    throw new AutomationException(AutomationErrorKind.content_sync_timeout, "The editor did not show the document again after the mode switch.");
+                // Two page frames after the change: what a screenshot taken now shows is the new view.
+                await editor.AwaitPageFramesAsync(QueryTimeoutMs);
+                return ReadView(app);
+            }), cancellationToken);
         }
     }
 }

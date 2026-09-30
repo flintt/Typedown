@@ -94,7 +94,9 @@ const Editor: React.FC = () => {
     // Host -> editor: answer once the page has drawn twice more (automation awaitPresentation). Two frames, because
     // the first callback runs before the frame that shows the latest change is painted.
     useEffect(() => transport.addListener<{ token: number }>('AwaitPresentation', ({ token }) => {
-        requestAnimationFrame(() => requestAnimationFrame(() => transport.postMessage('PresentationFrames', { token })))
+        // The viewport comes along: a host whose web view is a separate native window (Uno on X11) compares it with
+        // the size it laid the view out at, to know the page has caught up with a resize.
+        requestAnimationFrame(() => requestAnimationFrame(() => transport.postMessage('PresentationFrames', { token, width: window.innerWidth, height: window.innerHeight })))
     }), []);
 
     // Host -> editor: what the first visual edit would do to the text shown now (document.get's normalization).

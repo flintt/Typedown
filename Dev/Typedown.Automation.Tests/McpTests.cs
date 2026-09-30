@@ -14,6 +14,7 @@ namespace Typedown.Automation.Tests
     {
         private readonly string endpoint = "td-mcp-" + Guid.NewGuid().ToString("N");
         private readonly FakeHost host = new();
+        private readonly FakeViewHost view = new();
         private AutomationServer server = null!;
         private FakeDocument doc = null!;
         private McpServer mcp = null!;
@@ -23,7 +24,7 @@ namespace Typedown.Automation.Tests
         {
             var info = new ServerInfo { Version = "1.2.30", Platform = "test" };
             server = new AutomationServer(() => new PlainPipeListener(endpoint),
-                () => new AutomationSession(info, DocumentMethods.AddTo(new MethodTable(BuildTypes.Application), host, info.InstanceId)), info.MaxMessageBytes);
+                () => new AutomationSession(info, ViewMethods.AddTo(DocumentMethods.AddTo(new MethodTable(BuildTypes.Application), host, info.InstanceId), view)), info.MaxMessageBytes);
             doc = host.Add("# Title\n\nold text\n", "/tmp/a.md");
             server.Start();
             mcp = New(endpoint);
@@ -43,7 +44,7 @@ namespace Typedown.Automation.Tests
             (JObject)(await Send("tools/call", new JObject { ["name"] = name, ["arguments"] = arguments }, server))["result"]!;
 
         [Fact]
-        public async Task Initialize_negotiates_the_version_and_lists_five_tools()
+        public async Task Initialize_negotiates_the_version_and_lists_the_tools()
         {
             var init = await Send("initialize", new JObject { ["protocolVersion"] = "2025-03-26", ["capabilities"] = new JObject(), ["clientInfo"] = new JObject { ["name"] = "Agent‮", ["version"] = "1" } });
             Assert.Equal("2025-03-26", (string)init["result"]!["protocolVersion"]!);
@@ -53,7 +54,8 @@ namespace Typedown.Automation.Tests
             Assert.Equal(McpServer.ProtocolVersions[0], (string)unknownVersion["result"]!["protocolVersion"]!);
 
             var tools = (JArray)(await Send("tools/list"))["result"]!["tools"]!;
-            Assert.Equal(new[] { "typedown_list_documents", "typedown_read_document", "typedown_replace_text", "typedown_replace_document", "typedown_save_document" },
+            Assert.Equal(new[] { "typedown_list_documents", "typedown_read_document", "typedown_replace_text", "typedown_replace_document", "typedown_save_document",
+                "typedown_get_view", "typedown_set_view" },
                 tools.Select(t => (string)t["name"]!));
             foreach (var t in tools)
             {
@@ -91,6 +93,20 @@ namespace Typedown.Automation.Tests
             Assert.Equal("# Whole\n", doc.Text);
             var saved = await Tool("typedown_save_document", new JObject { ["documentId"] = doc.DocumentId, ["baseRevision"] = revision + 2 });
             Assert.False((bool)saved["isError"]!);
+        }
+
+        [Fact]
+        public async Task The_view_tools_read_and_change_the_window()
+        {
+            var got = await Tool("typedown_get_view", new JObject { ["windowId"] = FakeHost.WindowId });
+            Assert.Equal("visual", (string)got["structuredContent"]!["mode"]!);
+            var set = await Tool("typedown_set_view", new JObject { ["windowId"] = FakeHost.WindowId, ["mode"] = "source", ["sidePane"] = new JObject { ["open"] = true, ["page"] = "outline" } });
+            Assert.False((bool)set["isError"]!);
+            Assert.Equal("source", (string)set["structuredContent"]!["mode"]!);
+            Assert.Equal("outline", (string)set["structuredContent"]!["sidePane"]!["page"]!);
+            var bad = await Tool("typedown_set_view", new JObject { ["windowId"] = FakeHost.WindowId, ["bounds"] = new JObject { ["width"] = 100 } });
+            Assert.True((bool)bad["isError"]!);
+            Assert.Equal("invalid_params", (string)bad["structuredContent"]!["error"]!["data"]!["kind"]!);
         }
 
         [Fact]

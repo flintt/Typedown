@@ -23,7 +23,7 @@ namespace Typedown.Mcp
     public sealed class TypedownConnection : IDisposable
     {
         public static readonly string[] RequestedScopes =
-            { Scopes.AppRead, Scopes.DocumentRead, Scopes.DocumentWrite, Scopes.DocumentSave, Scopes.WindowFocus };
+            { Scopes.AppRead, Scopes.DocumentRead, Scopes.DocumentWrite, Scopes.DocumentSave, Scopes.WindowFocus, Scopes.WindowView };
 
         private readonly string endpoint;
         private readonly string clientId;

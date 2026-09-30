@@ -40,6 +40,9 @@ usage: typedownctl [--json] [--endpoint NAME] [--client-id UUID] <command> [opti
   save <documentId> [--base-revision N]
   settings describe | settings get [key ...] | settings set <key> <json value> --base-revision N
                                           external settings (appearance.theme, editor.fontSize, ...)
+  view <windowId> [--mode visual|source|reading] [--side-pane closed|files|outline] [--status-bar on|off]
+          [--focus on|off] [--typewriter on|off] [--bounds X,Y,W,H | --size WxH]
+                                          how the window shows its document; no option only reads it
   mcp [--endpoint NAME]                   run as an MCP server on stdin/stdout, for AI agents
 
 Document text uses \n line endings; text with \r is refused unless --lf converts it on the way in.
@@ -249,6 +252,36 @@ Exit codes: 0 ok, 2 usage, 3 not running or not reachable, 4 version or scope, 5
                             throw new UsageException($"unknown settings command '{sub}'");
                     }
                 }
+                case "view":
+                {
+                    p = new JObject { ["windowId"] = a.Positional0("windowId") };
+                    if (a.Value("mode") is string mode) p["mode"] = mode;
+                    if (a.Value("side-pane") is string pane)
+                        p["sidePane"] = pane switch
+                        {
+                            "closed" => new JObject { ["open"] = false },
+                            "files" or "outline" => new JObject { ["open"] = true, ["page"] = pane },
+                            _ => throw new UsageException("--side-pane is closed, files or outline"),
+                        };
+                    if (OnOff(a, "status-bar") is bool statusBar) p["statusBar"] = statusBar;
+                    if (OnOff(a, "focus") is bool focus) p["focusMode"] = focus;
+                    if (OnOff(a, "typewriter") is bool typewriter) p["typewriter"] = typewriter;
+                    var bounds = a.Value("bounds");
+                    var size = a.Value("size");
+                    if (bounds != null && size != null) throw new UsageException("give --bounds or --size, not both");
+                    if (bounds != null)
+                    {
+                        var n = Numbers(bounds, ',', 4, "--bounds X,Y,W,H");
+                        p["bounds"] = new JObject { ["x"] = n[0], ["y"] = n[1], ["width"] = n[2], ["height"] = n[3] };
+                    }
+                    if (size != null)
+                    {
+                        var n = Numbers(size, 'x', 2, "--size WxH");
+                        p["bounds"] = new JObject { ["width"] = n[0], ["height"] = n[1] };
+                    }
+                    a.CheckAllUsed(1);
+                    return p.Count == 1 ? ("window.getView", p, new[] { Scopes.AppRead }) : ("window.setView", p, new[] { Scopes.WindowView });
+                }
                 case "save":
                     p = new JObject { ["documentId"] = a.Positional0("documentId") };
                     if (a.OptionalLong("base-revision") is long r) p["baseRevision"] = r;
@@ -268,6 +301,24 @@ Exit codes: 0 ok, 2 usage, 3 not running or not reachable, 4 version or scope, 5
             scopes.AddRange(Reveal(a, p).Where(s => !scopes.Contains(s)));
             a.CheckAllUsed(1);
             return (method, p, scopes.ToArray());
+        }
+
+        private static bool? OnOff(Args a, string name) => a.Value(name) switch
+        {
+            null => null,
+            "on" or "true" => true,
+            "off" or "false" => false,
+            _ => throw new UsageException($"--{name} is on or off"),
+        };
+
+        private static long[] Numbers(string text, char separator, int count, string usage)
+        {
+            var parts = text.Split(separator);
+            var numbers = new long[parts.Length];
+            for (var i = 0; i < parts.Length; i++)
+                if (!long.TryParse(parts[i].Trim(), System.Globalization.NumberStyles.AllowLeadingSign, System.Globalization.CultureInfo.InvariantCulture, out numbers[i]))
+                    throw new UsageException(usage);
+            return parts.Length == count ? numbers : throw new UsageException(usage);
         }
 
         private static void Policy(Args a, JObject p)
@@ -359,6 +410,12 @@ Exit codes: 0 ok, 2 usage, 3 not running or not reachable, 4 version or scope, 5
                     sb.AppendLine($"{result["documentId"]}  revision {result["revision"]}  {((bool)result["saved"]! ? "saved" : "unsaved")}  {(string?)result["path"] ?? "(untitled)"}");
                     sb.AppendLine($"contentHash {result["contentHash"]}  pendingNormalization {result["normalization"]?["pendingNormalization"]}");
                     if (result["headings"] is JArray hs) foreach (var h in hs) sb.AppendLine($"{new string('#', (int)h["level"]!)} {h["text"]}  ({h["slug"]})");
+                    break;
+                case "view":
+                    sb.AppendLine($"mode {result["mode"]}  side pane {((bool)result["sidePane"]!["open"]! ? (string?)result["sidePane"]!["page"] : "closed")}  status bar {((bool)result["statusBar"]! ? "on" : "off")}"
+                        + $"  focus {((bool)result["focusMode"]! ? "on" : "off")}  typewriter {((bool)result["typewriter"]! ? "on" : "off")}");
+                    var b = result["bounds"]!;
+                    sb.AppendLine($"bounds {b["x"]},{b["y"]},{b["width"]},{b["height"]}{((bool)result["maximized"]! ? "  maximized" : "")}");
                     break;
                 default:
                     foreach (var property in ((JObject)result).Properties().Where(p => p.Value.Type != JTokenType.Object))
