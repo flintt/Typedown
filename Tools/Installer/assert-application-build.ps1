@@ -17,7 +17,9 @@ if ($found) {
 # The test host's methods must not be in an application build's binaries either (spec 5.1: not only hidden at run
 # time). Their names are string literals: UTF-16 in .NET metadata, UTF-8 anywhere else.
 $names = @('test.barrier', 'test.editor.pageText', 'test.window.open', 'test.settings.set', 'test.backup.run')
-$patterns = foreach ($name in $names) { [Text.Encoding]::Unicode.GetBytes($name); [Text.Encoding]::UTF8.GetBytes($name) }
+# A list, not pipeline output: PowerShell would unroll each byte array into single bytes.
+$patterns = New-Object 'System.Collections.Generic.List[byte[]]'
+foreach ($name in $names) { $patterns.Add([Text.Encoding]::Unicode.GetBytes($name)); $patterns.Add([Text.Encoding]::UTF8.GetBytes($name)) }
 function Test-Contains([byte[]]$data, [byte[]]$pattern) {
     $first = $pattern[0]
     $i = [Array]::IndexOf($data, $first)
