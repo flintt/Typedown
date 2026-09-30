@@ -44,10 +44,9 @@
     "reasons": []
   },
   "code-fence-lang": {
-    "pendingNormalization": "unsafe",
+    "pendingNormalization": "unknown",
     "reasons": [
-      "fence-lost",
-      "word-lost"
+      "formatting-changed"
     ]
   },
   "emoji": {

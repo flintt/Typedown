@@ -1,15 +1,15 @@
 {
  "1": {
   "section": "Tabs",
-  "out": "    foo    baz        bim\n"
+  "out": "    foo\tbaz\t\tbim\n"
  },
  "2": {
   "section": "Tabs",
-  "out": "      foo    baz        bim\n"
+  "out": "    foo\tbaz\t\tbim\n"
  },
  "3": {
   "section": "Tabs",
-  "out": "    a    a\n    ὐ    a\n"
+  "out": "    a\ta\n    ὐ\ta\n"
  },
  "4": {
   "section": "Tabs",
@@ -21,12 +21,12 @@
  },
  "6": {
   "section": "Tabs",
-  "out": ">        foo\n"
+  "out": ">       foo\n"
  },
  "7": {
   "section": "Tabs",
-  "out": "-     foo\n",
-  "drift": "-  foo\n"
+  "out": "-    foo\n",
+  "drift": "- foo\n"
  },
  "8": {
   "section": "Tabs",
@@ -42,7 +42,7 @@
  },
  "11": {
   "section": "Tabs",
-  "out": "*    *    *    \n"
+  "out": "*   *   *   \n"
  },
  "12": {
   "section": "Backslash escapes",
@@ -50,7 +50,7 @@
  },
  "13": {
   "section": "Backslash escapes",
-  "out": "\\    \\A\\a\\ \\3\\φ\\«\n"
+  "out": "\\\t\\A\\a\\ \\3\\φ\\«\n"
  },
  "14": {
   "section": "Backslash escapes",
@@ -326,7 +326,7 @@
  },
  "82": {
   "section": "Setext headings",
-  "out": "  Foo *bar\nbaz*    \n====\n"
+  "out": "  Foo *bar\nbaz*\t\n====\n"
  },
  "83": {
   "section": "Setext headings",
@@ -572,7 +572,7 @@
  },
  "143": {
   "section": "Fenced code blocks",
-  "out": "```ruby\ndef foo(x)\n  return 3\nend\n```\n"
+  "out": "```ruby startline=3 $%@#$\ndef foo(x)\n  return 3\nend\n```\n"
  },
  "144": {
   "section": "Fenced code blocks",
@@ -584,7 +584,7 @@
  },
  "146": {
   "section": "Fenced code blocks",
-  "out": "```aa\nfoo\n```\n"
+  "out": "~~~aa ``` ~~~\nfoo\n~~~\n"
  },
  "147": {
   "section": "Fenced code blocks",

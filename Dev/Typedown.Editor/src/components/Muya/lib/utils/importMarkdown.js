@@ -123,6 +123,9 @@ const importRegister = ContentState => {
 
           // GH#697, markedjs#1387
           const lang = (infostring || '').match(/\S*/)[0]
+          // The rest of the info string (`ts {title="x.ts"}`, `python linenos`) is kept as it was and written back:
+          // the first visual edit used to drop it.
+          const info = (infostring || '').slice(lang.length)
 
           value = text
           // Fix: #1265.
@@ -136,7 +139,8 @@ const importRegister = ContentState => {
           } else {
             block = this.createBlock('pre', {
               functionType: codeBlockStyle === 'fenced' ? 'fencecode' : 'indentcode',
-              lang
+              lang,
+              info
             })
             const codeBlock = this.createBlock('code', {
               lang

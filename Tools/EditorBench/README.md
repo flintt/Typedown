@@ -38,8 +38,8 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   keystroke added, and must match what `window.__typedownPendingNormalization()` (`services/normalization.ts`)
   predicted before the edit. Each fixture's verdict (`none` / `unknown` / `unsafe`) is kept in
   `first-edit-known.json`; a worse verdict fails, `--update` rewrites the baseline. `unsafe` entries are text a
-  single keystroke would lose (today: a fence info string's attributes, an HTML entity in raw HTML, blank lines
-  inserted into a multi-line HTML attribute). `harness.js` holds the fixtures and the stub-host page both use.
+  single keystroke would lose (today: an HTML entity in an HTML block, blank lines inserted into a multi-line HTML
+  attribute; fence info strings and tabs are kept since the lexer fix). `harness.js` holds the fixtures and the stub-host page both use.
 - `protected-payload-check.js` — the preserve documents of `docs/automation-fixtures/protected-payload.json` (links,
   images, reference definitions, autolinks, fence info strings and bodies, footnotes, task states, raw HTML
   attributes, front matter, maths, diagram blocks) each get one real keystroke in visual mode. Any `mustKeep` string

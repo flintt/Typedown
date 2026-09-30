@@ -56,7 +56,10 @@ const sha = text => crypto.createHash('sha256').update(text, 'utf8').digest('hex
       `QueryNormalization reports what the write reported (${report?.normalization?.pendingNormalization})`);
 
     ({ reply } = await apply('|a|b|\n|-|-|\n|1|2|\n', '```ts {title="x.ts"}\nconst a = 1;\n```\n'));
-    check(reply.normalization.pendingNormalization === 'unsafe' && reply.normalization.reasons.includes('fence-lost'), `fence attributes are unsafe (${reply.normalization.reasons})`);
+    check(reply.normalization.pendingNormalization === 'none', `fence attributes are kept, so the text normalizes to itself (${reply.normalization.pendingNormalization})`);
+    // Muya still decodes entities in an HTML block (CommonMark example 31): text it would change is unsafe.
+    ({ reply } = await apply('```ts {title="x.ts"}\nconst a = 1;\n```\n', '<a href="&ouml;&ouml;.html">\n'));
+    check(reply.normalization.pendingNormalization === 'unsafe' && reply.normalization.reasons.includes('html-lost'), `an HTML entity Muya would decode is unsafe (${reply.normalization.reasons})`);
 
     await mode(true, false);
     const current = await flush();
