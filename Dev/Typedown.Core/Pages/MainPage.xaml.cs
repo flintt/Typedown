@@ -53,6 +53,10 @@ namespace Typedown.Core.Pages
                 var surface = ThemeFiles.Brush(theme?.Surface) ?? ThemeFiles.Brush(theme?.Background);
                 var foreground = ThemeFiles.Brush(theme?.Foreground) ?? ThemeFiles.Readable(theme?.Surface ?? theme?.Background);
                 MenuBarHost?.ApplyThemeBrushes(surface, foreground);
+                // A menu row in its own colour needs no line under it (see MenuBar.SetDivider).
+                var panel = ThemeFiles.Brush(theme?.Surface) as Windows.UI.Xaml.Media.SolidColorBrush;
+                var editor = ThemeFiles.Brush(theme?.Background) as Windows.UI.Xaml.Media.SolidColorBrush;
+                MenuBarHost?.SetDivider(!(panel != null && editor != null && panel.Color != editor.Color));
                 StatusBar?.ApplyThemeBrushes(surface, foreground);
             }
             catch (Exception ex)
