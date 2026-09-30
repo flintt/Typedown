@@ -130,7 +130,7 @@ namespace Typedown.Core.Services
             return await OnWindow(window.WindowId, async app =>
             {
                 var active = app.TabsViewModel.ActiveTab == tab;
-                if (latest && active && !(await app.EditorViewModel.WaitForLoadAsync(AutomationDocument.ReloadTimeoutMs) && await app.EditorViewModel.FlushContentAsync(AutomationDocument.FlushTimeoutMs)))
+                if (latest && active && !await app.EditorViewModel.SyncWithPageAsync(AutomationDocument.ReloadTimeoutMs, AutomationDocument.FlushTimeoutMs))
                     throw new AutomationException(AutomationErrorKind.content_sync_timeout, "Could not confirm the editor's latest text.");
                 if (!app.TabsViewModel.Tabs.Contains(tab)) throw DocumentNotFound(documentId);
                 var text = active ? app.EditorViewModel.Markdown : tab.Markdown ?? "";
@@ -239,7 +239,7 @@ namespace Typedown.Core.Services
             {
                 if (app.TabsViewModel.ActiveTab != tab) throw NotActive();
                 if (app.FileViewModel.FilePath == null) throw new AutomationException(AutomationErrorKind.path_required, "The document has no file yet; the API does not open a Save As dialog.");
-                if (!(await app.EditorViewModel.WaitForLoadAsync(AutomationDocument.ReloadTimeoutMs) && await app.EditorViewModel.FlushContentAsync(AutomationDocument.FlushTimeoutMs)))
+                if (!await app.EditorViewModel.SyncWithPageAsync(AutomationDocument.ReloadTimeoutMs, AutomationDocument.FlushTimeoutMs))
                     throw new AutomationException(AutomationErrorKind.content_sync_timeout, "Could not confirm the editor's latest text.");
                 if (baseRevision != null && baseRevision != tab.Revision)
                     throw new AutomationException(AutomationErrorKind.revision_conflict, "The document changed since baseRevision.", new Dictionary<string, object> { ["revision"] = tab.Revision });
@@ -288,7 +288,7 @@ namespace Typedown.Core.Services
             {
                 if (app.TabsViewModel.ActiveTab != tab) throw NotActive();
                 var editor = app.EditorViewModel;
-                if (!(await editor.WaitForLoadAsync(AutomationDocument.ReloadTimeoutMs) && await editor.FlushContentAsync(AutomationDocument.FlushTimeoutMs)))
+                if (!await editor.SyncWithPageAsync(AutomationDocument.ReloadTimeoutMs, AutomationDocument.FlushTimeoutMs))
                     throw new AutomationException(AutomationErrorKind.content_sync_timeout, "Could not confirm the editor's latest text.");
                 if (tab.Revision != baseRevision)
                     throw new AutomationException(AutomationErrorKind.revision_conflict, "The document changed since baseRevision.", new Dictionary<string, object> { ["revision"] = tab.Revision });

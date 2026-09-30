@@ -554,7 +554,7 @@ namespace Typedown.Core.ViewModels
             {
                 MarkdownEditor.PostMessage("FlushContent", new { token });
                 var finished = await Task.WhenAny(waiter.Task, Task.Delay(timeoutMs));
-                return finished == waiter.Task;
+                return finished == waiter.Task && waiter.Task.Result;
             }
             finally
             {
@@ -586,6 +586,29 @@ namespace Typedown.Core.ViewModels
         {
             if (ConfirmedLoadId != -1) Log.Debug($"editor: page loading again, load {ConfirmedLoadId} no longer confirmed");
             ConfirmedLoadId = -1;
+            PageGeneration++;
+            // A flush sent to the page going away is never answered: say so now instead of after its timeout.
+            List<TaskCompletionSource<bool>> waiting;
+            lock (flushWaiters) waiting = flushWaiters.Values.ToList();
+            foreach (var waiter in waiting) waiter.TrySetResult(false);
+        }
+
+        /// <summary>Advances every time the editor page starts loading again.</summary>
+        public int PageGeneration { get; private set; }
+
+        /// <summary>
+        /// The page has taken in the current load and handed over its latest text. When the page loads again while
+        /// this waits (leaving the settings page), it starts over once with the new page instead of failing.
+        /// </summary>
+        public async Task<bool> SyncWithPageAsync(int loadTimeoutMs, int flushTimeoutMs)
+        {
+            for (var attempt = 0; attempt < 2; attempt++)
+            {
+                var generation = PageGeneration;
+                if (await WaitForLoadAsync(loadTimeoutMs) && await FlushContentAsync(flushTimeoutMs)) return true;
+                if (PageGeneration == generation) return false;
+            }
+            return false;
         }
 
         /// <summary>

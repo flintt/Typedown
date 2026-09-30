@@ -211,6 +211,9 @@ namespace Typedown.Controls
 
         private void LoadStaticResources()
         {
+            // At once, not only when the web view raises NavigationStarting a moment later: a read in between would
+            // still trust the page this navigation replaces.
+            AppViewModel.EditorViewModel.OnEditorPageNavigating();
 # if DEBUG
             WebViewController.CoreWebView2.Navigate("http://localhost:3000");
             // var staticsFolder = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Statics");
