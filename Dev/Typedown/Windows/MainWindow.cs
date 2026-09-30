@@ -294,6 +294,9 @@ namespace Typedown.Windows
         /// <summary>Set as the window's close handler starts: from then on it is not one of the open windows.</summary>
         private bool closed;
 
+        /// <summary>The window is closing for good (past the save question) or has closed.</summary>
+        internal bool IsGoingAway => isCloseable || closed;
+
         private void OnClosed(object sender, ClosedEventArgs e)
         {
             closed = true;

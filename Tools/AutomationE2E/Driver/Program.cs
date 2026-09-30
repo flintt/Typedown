@@ -135,10 +135,10 @@ internal static class Program
             await Case("EX01 the PowerShell and Python client examples edit through the real pipe", EX01);
             await Case("EQ01 the equivalence scenario (compared with the Uno edition's answers offline)", EQ01);
             await Case("R04 untitled and background documents come back from their backups after a kill, each its own", R04);
-            // Last: it ends the test host. Only when asked for (--only Q01): closing one of two windows in the test host
-            // breaks the automation connection and the window does not finish closing (2026-10-01, not yet understood).
-            if (only != null) await Case("Q01 two windows closed one after the other: the process exits (it stayed, headless)", Q01);
+            // Only when asked for (--only Q02): it crashes the host until that is fixed.
             if (only != null) await Case("Q02 a window closed at once after it opened (its web view still being created): the process lives on", Q02);
+            // Last: it ends the test host.
+            await Case("Q01 two windows closed one after the other: the process exits (it stayed, headless)", Q01);
         }
         catch (Exception e)
         {
@@ -1057,7 +1057,7 @@ internal static class Program
                     notes.Add("log: " + line.Trim());
             }
             catch (Exception e) { notes.Add("no log: " + e.Message); }
-            Check(!host.HasExited, $"the process stays while a window is open (exit code {(host.HasExited ? host.ExitCode.ToString() : "-")})");
+            Check(!host.HasExited, "the process stays while a window is open");
             List<string> left;
             try { left = ((JArray)(await c.Call("window.list"))["windows"]!).Select(w => (string)w["windowId"]!).ToList(); }
             catch (Exception e) when (e is IOException || e is ObjectDisposedException)
@@ -1069,7 +1069,7 @@ internal static class Program
             PostMessage(second, 0x0010, IntPtr.Zero, IntPtr.Zero);
         }
         var exited = host.WaitForExit(20000);
-        if (exited) notes.Add($"exit code {host.ExitCode}");
+        if (exited) notes.Add("the process ended");
         Check(exited, "the process exits once its last window is closed (it stayed running with no window)");
     }
 
