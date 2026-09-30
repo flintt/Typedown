@@ -1,0 +1,779 @@
+[
+ {
+  "step": "initialize",
+  "method": "system.initialize",
+  "params": {
+   "apiVersion": 1,
+   "client": {
+    "id": "7a6f3b5e-9f0e-4d2c-8a1b-3c4d5e6f7a8b",
+    "name": "equivalence",
+    "version": "1"
+   },
+   "requestedScopes": [
+    "app.read",
+    "document.read",
+    "document.write",
+    "document.save",
+    "window.focus"
+   ]
+  },
+  "result": {
+   "apiVersion": 1,
+   "server": {
+    "name": "Typedown",
+    "version": "1.2.30.0 (local.0eb0e26c, Unpackaged)",
+    "commit": "local.0eb0e26c",
+    "platform": "windows",
+    "buildType": "automationTestHost"
+   },
+   "instanceId": "82ba308f700841739199e492f1d994df",
+   "clientSessionId": "8aa6a6e537b54436a9617f1bef8f0998",
+   "grantedScopes": [
+    "app.read",
+    "document.read",
+    "document.save",
+    "document.write",
+    "window.focus"
+   ],
+   "deniedScopes": [],
+   "maxMessageBytes": 33554432,
+   "methods": [
+    {
+     "name": "app.getState",
+     "scope": "app.read",
+     "schema": "app.getState/1"
+    },
+    {
+     "name": "document.create",
+     "scope": "document.write",
+     "schema": "document.create/1"
+    },
+    {
+     "name": "document.focus",
+     "scope": "window.focus",
+     "schema": "document.focus/1"
+    },
+    {
+     "name": "document.get",
+     "scope": "document.read",
+     "schema": "document.get/1"
+    },
+    {
+     "name": "document.list",
+     "scope": "document.read",
+     "schema": "document.list/1"
+    },
+    {
+     "name": "document.open",
+     "scope": "document.write",
+     "schema": "document.open/1"
+    },
+    {
+     "name": "document.redo",
+     "scope": "document.write",
+     "schema": "document.redo/1"
+    },
+    {
+     "name": "document.replace",
+     "scope": "document.write",
+     "schema": "document.replace/1"
+    },
+    {
+     "name": "document.replaceText",
+     "scope": "document.write",
+     "schema": "document.replaceText/1"
+    },
+    {
+     "name": "document.save",
+     "scope": "document.save",
+     "schema": "document.save/1"
+    },
+    {
+     "name": "document.undo",
+     "scope": "document.write",
+     "schema": "document.undo/1"
+    },
+    {
+     "name": "settings.describe",
+     "scope": "settings.read",
+     "schema": "settings.describe/1"
+    },
+    {
+     "name": "settings.get",
+     "scope": "settings.read",
+     "schema": "settings.get/1"
+    },
+    {
+     "name": "settings.set",
+     "scope": "settings.write",
+     "schema": "settings.set/1"
+    },
+    {
+     "name": "test.backup.run",
+     "scope": null,
+     "schema": "test.backup.run/1"
+    },
+    {
+     "name": "test.barrier.arm",
+     "scope": null,
+     "schema": "test.barrier.arm/1"
+    },
+    {
+     "name": "test.barrier.release",
+     "scope": null,
+     "schema": "test.barrier.release/1"
+    },
+    {
+     "name": "test.barrier.waitHit",
+     "scope": null,
+     "schema": "test.barrier.waitHit/1"
+    },
+    {
+     "name": "test.editor.focus",
+     "scope": null,
+     "schema": "test.editor.focus/1"
+    },
+    {
+     "name": "test.editor.pageText",
+     "scope": null,
+     "schema": "test.editor.pageText/1"
+    },
+    {
+     "name": "test.editor.reload",
+     "scope": null,
+     "schema": "test.editor.reload/1"
+    },
+    {
+     "name": "test.editor.style",
+     "scope": null,
+     "schema": "test.editor.style/1"
+    },
+    {
+     "name": "test.settings.get",
+     "scope": null,
+     "schema": "test.settings.get/1"
+    },
+    {
+     "name": "test.settings.set",
+     "scope": null,
+     "schema": "test.settings.set/1"
+    },
+    {
+     "name": "test.window.handle",
+     "scope": null,
+     "schema": "test.window.handle/1"
+    },
+    {
+     "name": "test.window.navigate",
+     "scope": null,
+     "schema": "test.window.navigate/1"
+    },
+    {
+     "name": "test.window.open",
+     "scope": null,
+     "schema": "test.window.open/1"
+    },
+    {
+     "name": "window.focus",
+     "scope": "window.focus",
+     "schema": "window.focus/1"
+    },
+    {
+     "name": "window.list",
+     "scope": "app.read",
+     "schema": "window.list/1"
+    }
+   ],
+   "capabilities": {
+    "replaceText": true,
+    "presentationAcknowledgement": true,
+    "events": false,
+    "offsetEdits": false,
+    "selectionEdits": false,
+    "serverRequests": false
+   }
+  }
+ },
+ {
+  "step": "open",
+  "method": "document.open",
+  "params": {
+   "path": "C:\\Users\\huanggj\\AppData\\Local\\Typedown-AutomationTests\\20260930-131655-c0c8ce\\fixtures\\equivalence\\eq-a.md",
+   "reveal": "document"
+  },
+  "result": {
+   "windowId": "w6e4c1289eb8642fcb80d1d920968f614",
+   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "revision": 0
+  }
+ },
+ {
+  "step": "get latest with text and headings",
+  "method": "document.get",
+  "params": {
+   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "consistency": "latest",
+   "include": [
+    "text",
+    "headings"
+   ]
+  },
+  "result": {
+   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "windowId": "w6e4c1289eb8642fcb80d1d920968f614",
+   "path": "C:\\Users\\huanggj\\AppData\\Local\\Typedown-AutomationTests\\20260930-131655-c0c8ce\\fixtures\\equivalence\\eq-a.md",
+   "title": "eq-a.md",
+   "revision": 0,
+   "saved": true,
+   "active": true,
+   "lineEnding": "lf",
+   "contentHash": "a329d8e5dc3a72fc785b2b49630a215a42042e15703407c69d79e9ca8b55371d",
+   "isCurrent": true,
+   "normalization": {
+    "pendingNormalization": "none",
+    "sourceHash": "a329d8e5dc3a72fc785b2b49630a215a42042e15703407c69d79e9ca8b55371d",
+    "normalizedHash": "a329d8e5dc3a72fc785b2b49630a215a42042e15703407c69d79e9ca8b55371d",
+    "reasons": [],
+    "classifierVersion": 3
+   },
+   "text": "# Equivalence\n\nThe quick brown fox.\n\n- one\n- two\n",
+   "headings": [
+    {
+     "index": 0,
+     "level": 1,
+     "text": "Equivalence",
+     "slug": "equivalence"
+    }
+   ]
+  }
+ },
+ {
+  "step": "get without consistency",
+  "method": "document.get",
+  "params": {
+   "documentId": "3ec98475a14d4ea182271b8ae04671bd"
+  },
+  "error": {
+   "code": -32602,
+   "message": "Invalid parameter 'consistency': required.",
+   "data": {
+    "kind": "invalid_params",
+    "field": "consistency",
+    "reason": "required"
+   }
+  }
+ },
+ {
+  "step": "replace",
+  "method": "document.replace",
+  "params": {
+   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "baseRevision": 0,
+   "text": "# Equivalence\n\nThe quick red fox.\n\n- one\n- two\n"
+  },
+  "result": {
+   "operationId": "de4c57d33d5a4a92beb81c5b1bdab10b",
+   "revision": 1,
+   "contentHash": "1353f4662de42b2290a4606a0a19e1df12a86a526585e86421f363d9f0077531",
+   "saved": false,
+   "origin": "automation",
+   "normalization": {
+    "pendingNormalization": "none",
+    "sourceHash": "1353f4662de42b2290a4606a0a19e1df12a86a526585e86421f363d9f0077531",
+    "normalizedHash": "1353f4662de42b2290a4606a0a19e1df12a86a526585e86421f363d9f0077531",
+    "reasons": [],
+    "classifierVersion": 3
+   }
+  }
+ },
+ {
+  "step": "replace on a stale revision",
+  "method": "document.replace",
+  "params": {
+   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "baseRevision": 0,
+   "text": "stale\n"
+  },
+  "error": {
+   "code": -32012,
+   "message": "The document changed since baseRevision.",
+   "data": {
+    "kind": "revision_conflict",
+    "revision": 1
+   }
+  }
+ },
+ {
+  "step": "replaceText with the wrong count",
+  "method": "document.replaceText",
+  "params": {
+   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "baseRevision": 1,
+   "find": "o",
+   "replacement": "0",
+   "expectedCount": 1
+  },
+  "error": {
+   "code": -32019,
+   "message": "Expected 1 match(es), found 3.",
+   "data": {
+    "kind": "match_count_mismatch",
+    "expectedCount": 1,
+    "actualCount": 3
+   }
+  }
+ },
+ {
+  "step": "replaceText",
+  "method": "document.replaceText",
+  "params": {
+   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "baseRevision": 1,
+   "find": "red",
+   "replacement": "green",
+   "expectedCount": 1
+  },
+  "result": {
+   "operationId": "b3d6684b3ea445529be24e882e2f8154",
+   "revision": 2,
+   "contentHash": "fa44128bee21b4e56b4e0b41c89f3151f98039bda71bb016fe184299b3e2ab6b",
+   "saved": false,
+   "origin": "automation",
+   "normalization": {
+    "pendingNormalization": "none",
+    "sourceHash": "fa44128bee21b4e56b4e0b41c89f3151f98039bda71bb016fe184299b3e2ab6b",
+    "normalizedHash": "fa44128bee21b4e56b4e0b41c89f3151f98039bda71bb016fe184299b3e2ab6b",
+    "reasons": [],
+    "classifierVersion": 3
+   }
+  }
+ },
+ {
+  "step": "replaceText of nothing is no change",
+  "method": "document.replaceText",
+  "params": {
+   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "baseRevision": 2,
+   "find": "absent",
+   "replacement": "x",
+   "expectedCount": 0
+  },
+  "result": {
+   "operationId": "2da0975b0f2f4c5f9f9bcb472e103679",
+   "revision": 2,
+   "contentHash": "fa44128bee21b4e56b4e0b41c89f3151f98039bda71bb016fe184299b3e2ab6b",
+   "saved": false,
+   "origin": "automation",
+   "normalization": {
+    "pendingNormalization": "none",
+    "sourceHash": "fa44128bee21b4e56b4e0b41c89f3151f98039bda71bb016fe184299b3e2ab6b",
+    "normalizedHash": "fa44128bee21b4e56b4e0b41c89f3151f98039bda71bb016fe184299b3e2ab6b",
+    "reasons": [],
+    "classifierVersion": 3
+   }
+  }
+ },
+ {
+  "step": "text with a carriage return",
+  "method": "document.replace",
+  "params": {
+   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "baseRevision": 2,
+   "text": "a\r\nb\n"
+  },
+  "error": {
+   "code": -32602,
+   "message": "'text' contains \"\\r\"; document text uses \"\\n\" line endings only.",
+   "data": {
+    "kind": "invalid_params",
+    "field": "text",
+    "reason": "carriageReturn"
+   }
+  }
+ },
+ {
+  "step": "formatting the editor would rewrite",
+  "method": "document.replace",
+  "params": {
+   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "baseRevision": 2,
+   "text": "Title\n=====\n\n* star\n"
+  },
+  "result": {
+   "operationId": "d126be38a0b9494894c8644d8604c45c",
+   "revision": 3,
+   "contentHash": "250cac01bdedc93cb0721eb2906ba78a6acb2e82a3d08d6e3ccb96e51d55a6d0",
+   "saved": false,
+   "origin": "automation",
+   "normalization": {
+    "pendingNormalization": "none",
+    "sourceHash": "250cac01bdedc93cb0721eb2906ba78a6acb2e82a3d08d6e3ccb96e51d55a6d0",
+    "normalizedHash": "250cac01bdedc93cb0721eb2906ba78a6acb2e82a3d08d6e3ccb96e51d55a6d0",
+    "reasons": [],
+    "classifierVersion": 3
+   }
+  }
+ },
+ {
+  "step": "the same, accepted",
+  "method": "document.replace",
+  "params": {
+   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "baseRevision": 2,
+   "text": "Title\n=====\n\n* star\n",
+   "normalizationPolicy": "allowUnknown"
+  },
+  "error": {
+   "code": -32012,
+   "message": "The document changed since baseRevision.",
+   "data": {
+    "kind": "revision_conflict",
+    "revision": 3
+   }
+  }
+ },
+ {
+  "step": "text the editor would lose",
+  "method": "document.replace",
+  "params": {
+   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "baseRevision": 3,
+   "text": "<div>\n&copy; kept\n</div>\n",
+   "normalizationPolicy": "allowUnknown"
+  },
+  "error": {
+   "code": -32018,
+   "message": "The first visual edit would lose content from this text; the document was restored.",
+   "data": {
+    "kind": "content_not_roundtrippable",
+    "pendingNormalization": "unsafe",
+    "sourceHash": "f0cd2311b224fb21a07831cc10f15da97c3fd0a010b57e020d3853b1479db65c",
+    "normalizedHash": "d485b20c61c7e6b6b314d3ec42fc99131f2955a7628a24cea52c57176ce16f74",
+    "reasons": [
+     "word-lost"
+    ],
+    "classifierVersion": 3
+   }
+  }
+ },
+ {
+  "step": "awaitPresentation without reveal",
+  "method": "document.replace",
+  "params": {
+   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "baseRevision": 3,
+   "text": "x\n",
+   "awaitPresentation": true
+  },
+  "error": {
+   "code": -32602,
+   "message": "awaitPresentation needs reveal: \"document\".",
+   "data": {
+    "kind": "invalid_params",
+    "field": "awaitPresentation",
+    "reason": "requiresReveal"
+   }
+  }
+ },
+ {
+  "step": "undo",
+  "method": "document.undo",
+  "params": {
+   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "baseRevision": 3
+  },
+  "result": {
+   "operationId": "1d7e00f554c64941961f42cbcd7f790e",
+   "revision": 4,
+   "contentHash": "fa44128bee21b4e56b4e0b41c89f3151f98039bda71bb016fe184299b3e2ab6b",
+   "saved": false,
+   "origin": "automation",
+   "normalization": {
+    "pendingNormalization": "unknown",
+    "sourceHash": "fa44128bee21b4e56b4e0b41c89f3151f98039bda71bb016fe184299b3e2ab6b",
+    "normalizedHash": null,
+    "reasons": [
+     "notEvaluated"
+    ],
+    "classifierVersion": 3
+   }
+  }
+ },
+ {
+  "step": "get after undo",
+  "method": "document.get",
+  "params": {
+   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "consistency": "latest",
+   "include": [
+    "text"
+   ]
+  },
+  "result": {
+   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "windowId": "w6e4c1289eb8642fcb80d1d920968f614",
+   "path": "C:\\Users\\huanggj\\AppData\\Local\\Typedown-AutomationTests\\20260930-131655-c0c8ce\\fixtures\\equivalence\\eq-a.md",
+   "title": "eq-a.md",
+   "revision": 4,
+   "saved": false,
+   "active": true,
+   "lineEnding": "lf",
+   "contentHash": "fa44128bee21b4e56b4e0b41c89f3151f98039bda71bb016fe184299b3e2ab6b",
+   "isCurrent": true,
+   "normalization": {
+    "pendingNormalization": "none",
+    "sourceHash": "fa44128bee21b4e56b4e0b41c89f3151f98039bda71bb016fe184299b3e2ab6b",
+    "normalizedHash": "fa44128bee21b4e56b4e0b41c89f3151f98039bda71bb016fe184299b3e2ab6b",
+    "reasons": [],
+    "classifierVersion": 3
+   },
+   "text": "# Equivalence\n\nThe quick green fox.\n\n- one\n- two\n"
+  }
+ },
+ {
+  "step": "redo",
+  "method": "document.redo",
+  "params": {
+   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "baseRevision": 4
+  },
+  "result": {
+   "operationId": "0c9a53800f26497797121d180fcc2e5a",
+   "revision": 5,
+   "contentHash": "250cac01bdedc93cb0721eb2906ba78a6acb2e82a3d08d6e3ccb96e51d55a6d0",
+   "saved": false,
+   "origin": "automation",
+   "normalization": {
+    "pendingNormalization": "unknown",
+    "sourceHash": "250cac01bdedc93cb0721eb2906ba78a6acb2e82a3d08d6e3ccb96e51d55a6d0",
+    "normalizedHash": null,
+    "reasons": [
+     "notEvaluated"
+    ],
+    "classifierVersion": 3
+   }
+  }
+ },
+ {
+  "step": "get after redo",
+  "method": "document.get",
+  "params": {
+   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "consistency": "latest",
+   "include": [
+    "text"
+   ]
+  },
+  "result": {
+   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "windowId": "w6e4c1289eb8642fcb80d1d920968f614",
+   "path": "C:\\Users\\huanggj\\AppData\\Local\\Typedown-AutomationTests\\20260930-131655-c0c8ce\\fixtures\\equivalence\\eq-a.md",
+   "title": "eq-a.md",
+   "revision": 5,
+   "saved": false,
+   "active": true,
+   "lineEnding": "lf",
+   "contentHash": "250cac01bdedc93cb0721eb2906ba78a6acb2e82a3d08d6e3ccb96e51d55a6d0",
+   "isCurrent": true,
+   "normalization": {
+    "pendingNormalization": "none",
+    "sourceHash": "250cac01bdedc93cb0721eb2906ba78a6acb2e82a3d08d6e3ccb96e51d55a6d0",
+    "normalizedHash": "250cac01bdedc93cb0721eb2906ba78a6acb2e82a3d08d6e3ccb96e51d55a6d0",
+    "reasons": [],
+    "classifierVersion": 3
+   },
+   "text": "Title\n=====\n\n* star\n"
+  }
+ },
+ {
+  "step": "save",
+  "method": "document.save",
+  "params": {
+   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "baseRevision": 5
+  },
+  "result": {
+   "revision": 5,
+   "contentHash": "250cac01bdedc93cb0721eb2906ba78a6acb2e82a3d08d6e3ccb96e51d55a6d0",
+   "saved": true,
+   "path": "C:\\Users\\huanggj\\AppData\\Local\\Typedown-AutomationTests\\20260930-131655-c0c8ce\\fixtures\\equivalence\\eq-a.md"
+  }
+ },
+ {
+  "step": "file on disk",
+  "disk": "Title\n=====\n\n* star\n"
+ },
+ {
+  "step": "save on a stale revision",
+  "method": "document.save",
+  "params": {
+   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "baseRevision": 0
+  },
+  "error": {
+   "code": -32012,
+   "message": "The document changed since baseRevision.",
+   "data": {
+    "kind": "revision_conflict",
+    "revision": 5
+   }
+  }
+ },
+ {
+  "step": "create",
+  "method": "document.create",
+  "params": {
+   "text": "# New\n",
+   "normalizationPolicy": "allowUnknown"
+  },
+  "result": {
+   "windowId": "w6e4c1289eb8642fcb80d1d920968f614",
+   "documentId": "550f1a7d1505456c83ca21f9d742d918",
+   "revision": 1,
+   "contentHash": "f676b43bd55f91451babc1663739064abb7e11e2b5f4a7efe62c29e4eeb0d117",
+   "normalization": {
+    "pendingNormalization": "none",
+    "sourceHash": "f676b43bd55f91451babc1663739064abb7e11e2b5f4a7efe62c29e4eeb0d117",
+    "normalizedHash": "f676b43bd55f91451babc1663739064abb7e11e2b5f4a7efe62c29e4eeb0d117",
+    "reasons": [],
+    "classifierVersion": 3
+   }
+  }
+ },
+ {
+  "step": "get the new document",
+  "method": "document.get",
+  "params": {
+   "documentId": "550f1a7d1505456c83ca21f9d742d918",
+   "consistency": "latest",
+   "include": [
+    "text"
+   ]
+  },
+  "result": {
+   "documentId": "550f1a7d1505456c83ca21f9d742d918",
+   "windowId": "w6e4c1289eb8642fcb80d1d920968f614",
+   "path": null,
+   "title": "δ����",
+   "revision": 1,
+   "saved": false,
+   "active": true,
+   "lineEnding": "crlf",
+   "contentHash": "f676b43bd55f91451babc1663739064abb7e11e2b5f4a7efe62c29e4eeb0d117",
+   "isCurrent": true,
+   "normalization": {
+    "pendingNormalization": "none",
+    "sourceHash": "f676b43bd55f91451babc1663739064abb7e11e2b5f4a7efe62c29e4eeb0d117",
+    "normalizedHash": "f676b43bd55f91451babc1663739064abb7e11e2b5f4a7efe62c29e4eeb0d117",
+    "reasons": [],
+    "classifierVersion": 3
+   },
+   "text": "# New\n"
+  }
+ },
+ {
+  "step": "save an untitled document",
+  "method": "document.save",
+  "params": {
+   "documentId": "550f1a7d1505456c83ca21f9d742d918"
+  },
+  "error": {
+   "code": -32016,
+   "message": "The document has no file yet; the API does not open a Save As dialog.",
+   "data": {
+    "kind": "path_required"
+   }
+  }
+ },
+ {
+  "step": "a document that does not exist",
+  "method": "document.get",
+  "params": {
+   "documentId": "0123456789abcdef0123456789abcdef",
+   "consistency": "snapshot"
+  },
+  "error": {
+   "code": -32011,
+   "message": "The document is closed or the id is not valid.",
+   "data": {
+    "kind": "document_not_found",
+    "documentId": "0123456789abcdef0123456789abcdef"
+   }
+  }
+ },
+ {
+  "step": "missing documentId",
+  "method": "document.replace",
+  "params": {
+   "baseRevision": 0,
+   "text": "x\n"
+  },
+  "error": {
+   "code": -32602,
+   "message": "Invalid parameter 'documentId': required.",
+   "data": {
+    "kind": "invalid_params",
+    "field": "documentId",
+    "reason": "required"
+   }
+  }
+ },
+ {
+  "step": "unknown method",
+  "method": "document.teleport",
+  "params": {},
+  "error": {
+   "code": -32601,
+   "message": "No method 'document.teleport'.",
+   "data": {
+    "kind": "method_not_found",
+    "method": "document.teleport"
+   }
+  }
+ },
+ {
+  "step": "focus A",
+  "method": "document.focus",
+  "params": {
+   "documentId": "3ec98475a14d4ea182271b8ae04671bd"
+  },
+  "result": {
+   "windowId": "w6e4c1289eb8642fcb80d1d920968f614",
+   "documentId": "3ec98475a14d4ea182271b8ae04671bd"
+  }
+ },
+ {
+  "step": "revealed write, presentation awaited",
+  "method": "document.replaceText",
+  "params": {
+   "documentId": "3ec98475a14d4ea182271b8ae04671bd",
+   "baseRevision": 5,
+   "find": "star",
+   "replacement": "starry",
+   "expectedCount": 1,
+   "reveal": "document",
+   "awaitPresentation": true,
+   "normalizationPolicy": "allowUnknown"
+  },
+  "result": {
+   "operationId": "242aa63b3d3d4e519ba67720690d248f",
+   "revision": 6,
+   "contentHash": "d0cb93573c0119ff7ca8fed5c05a6bcc0ccbd2d22a86b1a4e29900df0e73b018",
+   "saved": false,
+   "origin": "automation",
+   "normalization": {
+    "pendingNormalization": "none",
+    "sourceHash": "d0cb93573c0119ff7ca8fed5c05a6bcc0ccbd2d22a86b1a4e29900df0e73b018",
+    "normalizedHash": "d0cb93573c0119ff7ca8fed5c05a6bcc0ccbd2d22a86b1a4e29900df0e73b018",
+    "reasons": [],
+    "classifierVersion": 3
+   },
+   "presentation": {
+    "windowVisible": true,
+    "tabActive": true,
+    "pageFramesPassed": true,
+    "hostRenderPassed": true
+   }
+  }
+ }
+]

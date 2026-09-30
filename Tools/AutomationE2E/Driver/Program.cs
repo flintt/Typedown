@@ -123,6 +123,7 @@ internal static class Program
             await Case("W03 the tab switched away and back while a write is held: refused and restored; switched away only: committed into the tab", W03);
             await Case("MC01 typedown-mcp as its own process: read, replace text with reveal, a stale revision is a conflict that says to read again", MC01);
             await Case("EX01 the PowerShell and Python client examples edit through the real pipe", EX01);
+            await Case("EQ01 the equivalence scenario (compared with the Uno edition's answers offline)", EQ01);
             await Case("R04 untitled and background documents come back from their backups after a kill, each its own", R04);
         }
         catch (Exception e)
@@ -727,7 +728,9 @@ internal static class Program
 
         var write = await mcp.Tool("typedown_replace_text", new { documentId = a, baseRevision = revision, find = "brown", replacement = "red", reveal = true, allowFormattingChanges = true });
         Check(!(bool)write["isError"]!, "replace_text succeeds: " + write["content"]?[0]?["text"]);
+        // The notice is set after the reply, from the service thread: give it a moment.
         var title = WindowTitle();
+        for (var i = 0; i < 40 && !title.Contains("E2E agent (MCP)"); i++) { await Task.Delay(50); title = WindowTitle(); }
         notes.Add("title after the write: " + title);
         Check(title.Contains("E2E agent (MCP)"), "the window title names the agent");
         const string written = "# MC01\n\nThe quick red fox.\n";
@@ -776,6 +779,16 @@ internal static class Program
         var expected = "Typedown.Automation.v1." + System.Security.Principal.WindowsIdentity.GetCurrent().User!.Value;
         var name = RunTool("python", "-c", $"import sys; sys.path.insert(0, r'{examples}'); import typedown_client; print(typedown_client.Client.default_endpoint())");
         Check(name.stdout.Trim() == expected, $"the Python example finds the application's pipe name ({name.stdout.Trim()} {name.stderr.Trim()})");
+    }
+
+    private static Task EQ01(List<string> notes)
+    {
+        var e2e = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, ".."));
+        var run = RunTool("python", Path.Combine(e2e, "equivalence", "scenario.py"), "--examples", Path.Combine(e2e, "examples"),
+            "--endpoint", endpoint, "--workdir", Path.Combine(fixtures, "equivalence"));
+        Check(run.exit == 0, "the scenario ran: " + run.stderr);
+        notes.Add("TRANSCRIPT " + run.stdout);
+        return Task.CompletedTask;
     }
 
     private static async Task R04(List<string> notes)
