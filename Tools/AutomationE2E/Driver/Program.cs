@@ -677,12 +677,13 @@ internal static class Program
         if (GetForegroundWindow() != window) throw new CaseFailed("the test host window could not be brought to the front (is the desktop locked?)");
         // Keyboard focus into the editor as a person gives it: a click in the text area, then Ctrl+End.
         GetWindowRect(window, out var rect);
-        // Towards the right of the text area: the left margin holds Muya's block menu button, which a click opens and
-        // which then takes the keys. Escape closes whatever a click may have opened; Ctrl+End puts the caret at the end.
-        SetCursorPos(rect.Right - 80, rect.Top + (rect.Bottom - rect.Top) * 2 / 5);
-        Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0002 } } }, new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0004 } } });
-        await Task.Delay(200); // the click's caret placement settles before the keys; the result is still checked below
-        Send(Key(0x1B, false), Key(0x1B, true));
+        // Keyboard focus into the page through UI Automation - the way assistive technology moves focus - rather than a
+        // click: what lies under a click depends on the document (an image or a maths block takes it, and then the
+        // keys). Ctrl+End then puts the caret at the end.
+        var document = await FindPageDocument(window);
+        if (document == null) throw new CaseFailed("the editor page is not in the window's UI Automation tree");
+        document.SetFocus();
+        await Task.Delay(150); // focus change settling; whether the keys arrived is checked by the caller
         Send(Key(0x11, false), Key(0x23, false), Key(0x23, true), Key(0x11, true));
         var inputs = new List<INPUT>();
         foreach (var ch in text)
@@ -692,6 +693,23 @@ internal static class Program
         }
         var sent = SendInput((uint)inputs.Count, inputs.ToArray(), Marshal.SizeOf<INPUT>());
         if (sent != inputs.Count) throw new CaseFailed($"SendInput sent {sent} of {inputs.Count} events (is the desktop locked?)");
+    }
+
+    private static async Task<System.Windows.Automation.AutomationElement?> FindPageDocument(IntPtr window)
+    {
+        for (var i = 0; i < 40; i++)
+        {
+            try
+            {
+                var root = System.Windows.Automation.AutomationElement.FromHandle(window);
+                var doc = root.FindFirst(System.Windows.Automation.TreeScope.Descendants,
+                    new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.Document));
+                if (doc != null) return doc;
+            }
+            catch (Exception) { }
+            await Task.Delay(100);
+        }
+        return null;
     }
 
     private static INPUT Key(ushort vk, bool up) => new() { type = 1, u = new InputUnion { ki = new KEYBDINPUT { wVk = vk, dwFlags = up ? 0x0002u : 0u } } };
