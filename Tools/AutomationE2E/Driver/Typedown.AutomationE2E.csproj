@@ -6,6 +6,7 @@
     <TargetFramework>net8.0-windows</TargetFramework>
     <!-- UI Automation (answering the app's dialogs through their buttons); buildable on Linux too. -->
     <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <RollForward>Major</RollForward>
     <Nullable>enable</Nullable>

@@ -13,7 +13,8 @@
 param(
     [Parameter(Mandatory = $true)][string]$TestHost,
     [Parameter(Mandatory = $true)][string]$Driver,
-    [Parameter(Mandatory = $true)][string]$Artifacts
+    [Parameter(Mandatory = $true)][string]$Artifacts,
+    [string]$Only = ''
 )
 $ErrorActionPreference = 'Stop'
 $runId = (Get-Date -Format 'yyyyMMdd-HHmmss') + '-' + [guid]::NewGuid().ToString('N').Substring(0, 6)
@@ -28,7 +29,7 @@ if (-not (Test-Path (Join-Path $TestHost 'automation-test-host.marker'))) { thro
 $hostProcess = Start-Process -FilePath $exe -ArgumentList @('--automation-test-root', "`"$root`"") -PassThru
 $code = 3
 try {
-    & dotnet (Join-Path $Driver 'Typedown.AutomationE2E.dll') --root $root --pid $hostProcess.Id --exe $exe --fixtures $fixtures --out (Join-Path $out 'result.json') *> (Join-Path $out 'driver.log')
+    & dotnet (Join-Path $Driver 'Typedown.AutomationE2E.dll') --root $root --pid $hostProcess.Id --exe $exe --fixtures $fixtures --out (Join-Path $out 'result.json') $(if ($Only) { '--only'; $Only }) *> (Join-Path $out 'driver.log')
     $code = $LASTEXITCODE
 }
 finally {

@@ -56,6 +56,23 @@ internal static class Program
     }
 
     private static readonly List<JObject> results = new();
+    private static string outputDir = ".";
+    private static string[]? only;
+
+    /// <summary>A picture of the screen next to result.json, for a failure that depends on what is shown.</summary>
+    private static string Screenshot(string name)
+    {
+        try
+        {
+            var bounds = System.Windows.Forms.Screen.PrimaryScreen!.Bounds;
+            using var bitmap = new System.Drawing.Bitmap(bounds.Width, bounds.Height);
+            using (var g = System.Drawing.Graphics.FromImage(bitmap)) g.CopyFromScreen(bounds.Location, System.Drawing.Point.Empty, bounds.Size);
+            var path = Path.Combine(outputDir, name + ".png");
+            bitmap.Save(path, System.Drawing.Imaging.ImageFormat.Png);
+            return path;
+        }
+        catch (Exception e) { return "no screenshot: " + e.Message; }
+    }
     private static string hostExe = "";
     private static string testRoot = "";
     private static string endpoint = "";
@@ -71,6 +88,8 @@ internal static class Program
         testRoot = root;
         fixtures = Arg("--fixtures");
         var output = Arg("--out");
+        outputDir = Path.GetDirectoryName(Path.GetFullPath(output))!;
+        only = args.Contains("--only") ? Arg("--only").Split(',') : null;
         var started = DateTime.UtcNow;
         var environmentError = (string?)null;
         try
@@ -166,6 +185,7 @@ internal static class Program
 
     private static async Task Case(string name, Func<List<string>, Task> body)
     {
+        if (only != null && !only.Any(o => name.StartsWith(o + " "))) return;
         var notes = new List<string>();
         var watch = Stopwatch.StartNew();
         try
@@ -695,7 +715,7 @@ internal static class Program
             if (text != null && condition(text)) return text;
             await Task.Delay(50);
         }
-        throw new CaseFailed($"{what} never reached the page ({JsonConvert.SerializeObject(text)})");
+        throw new CaseFailed($"{what} never reached the page ({JsonConvert.SerializeObject(text)}); screen: {Screenshot("no-keystroke-" + DateTime.Now.ToString("HHmmss"))}");
     }
 
     [StructLayout(LayoutKind.Sequential)] private struct INPUT { public uint type; public InputUnion u; }
