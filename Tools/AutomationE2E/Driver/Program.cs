@@ -372,8 +372,15 @@ internal static class Program
         try
         {
             var language = (string)original["ui.language"]! == "ja" ? "en" : "ja";
+            async Task<string> Menu() => string.Join(" ", ((JArray)(await c.Call("test.window.menuTitles", new { windowId }))["titles"]!).Select(t => (string)t!));
+            var menuBefore = await Menu();
             await Set("ui.language", language);
             Check((string)(await Setting("Language"))! == language, $"the window's language is {language}");
+            // The menu bar follows without a restart (it kept the old language when the change came through the API).
+            string menuAfter = menuBefore;
+            for (var i = 0; i < 40 && (menuAfter == menuBefore || menuAfter == ""); i++) { await Task.Delay(250); try { menuAfter = await Menu(); } catch (JsonRpcRemoteException) { } }
+            notes.Add($"menu: {menuBefore} -> {menuAfter}");
+            Check(menuAfter != menuBefore && menuAfter != "", $"the menu bar follows the language ({menuBefore} -> {menuAfter})");
             var tab = (int)original["editor.tabSize"]! == 2 ? 4 : 2;
             await Set("editor.tabSize", tab);
             Check((int)await Setting("TabSize") == tab, $"tab size {tab}");

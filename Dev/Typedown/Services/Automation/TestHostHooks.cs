@@ -89,6 +89,20 @@ namespace Typedown.Services.Automation
             methods.Add(new MethodDescriptor("test.window.handle", null, "test.window.handle/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
                     (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["hwnd"] = app.MainWindow.ToInt64() })));
+            // The titles of the window's menu bar, as drawn: the menu follows the interface language.
+            methods.Add(new MethodDescriptor("test.window.menuTitles", null, "test.window.menuTitles/1", (c, ct) =>
+                Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    var titles = new Newtonsoft.Json.Linq.JArray();
+                    void Walk(global::Windows.UI.Xaml.DependencyObject node)
+                    {
+                        if (node is global::Windows.UI.Xaml.Controls.MenuBarItem item) titles.Add(item.Title);
+                        var count = global::Windows.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(node);
+                        for (var i = 0; i < count; i++) Walk(global::Windows.UI.Xaml.Media.VisualTreeHelper.GetChild(node, i));
+                    }
+                    if (app.XamlRoot?.Content is global::Windows.UI.Xaml.DependencyObject root) Walk(root);
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["titles"] = titles };
+                })));
             // Holds a window in memory from now on, as anything still referring to it does after it closes:
             // XamlWindow.AllWindows lists a window until the garbage collector has finalized it, closed or not.
             methods.Add(new MethodDescriptor("test.window.keep", null, "test.window.keep/1", (c, ct) =>
