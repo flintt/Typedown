@@ -96,6 +96,7 @@ internal static class Program
             await Case("B01 settings: one window's change reaches the other window; window modes stay with their window", B01);
             await Case("S2 settings.set reaches every window and the settings file; a stale revision is refused", S2);
             await Case("B02 an open settings page shows a font size changed from elsewhere", B02);
+            await Case("F01 a written document with protected payloads keeps every one of them through a real first keystroke", F01);
             await Case("M01 a written text survives visual, reading and source mode switches byte for byte, then saves exactly", M01);
             await Case("R04 untitled and background documents come back from their backups after a kill, each its own", R04);
         }
@@ -350,6 +351,29 @@ internal static class Program
             }
             Check(drawn == $"{font}px", $"window {window[..7]} ({windows.IndexOf(window) + 1} of {windows.Count})'s editor page is drawn at {font}px ({drawn})");
         }
+        // The other exposed keys reach the pages too: line height, text direction; the theme reaches every window.
+        var rev = (long)(await c.Call("settings.get"))["settingsRevision"]!;
+        rev = (long)(await c.Call("settings.set", new { key = "editor.lineHeight", value = 1.83, baseSettingsRevision = rev }))["settingsRevision"]!;
+        rev = (long)(await c.Call("settings.set", new { key = "editor.textDirection", value = "rtl", baseSettingsRevision = rev }))["settingsRevision"]!;
+        foreach (var window in windows)
+        {
+            JToken? style = null;
+            for (var i = 0; i < 100; i++)
+            {
+                try { style = await c.Call("test.editor.style", new { windowId = window }); } catch (JsonRpcRemoteException) { }
+                if ((string?)style?["direction"] == "rtl" && Math.Abs(double.Parse(((string)style!["lineHeight"]!).Replace("px", ""), System.Globalization.CultureInfo.InvariantCulture) - font * 1.8) < 0.6) break;
+                await Task.Delay(50);
+            }
+            Check((string?)style?["direction"] == "rtl", $"window {window[..7]}'s page is right-to-left ({style})");
+            Check(style != null && Math.Abs(double.Parse(((string)style["lineHeight"]!).Replace("px", ""), System.Globalization.CultureInfo.InvariantCulture) - font * 1.8) < 0.6, $"window {window[..7]}'s page line height is {font}*1.8 (1.83 rounded) ({style})");
+        }
+        rev = (long)(await c.Call("settings.set", new { key = "editor.textDirection", value = "auto", baseSettingsRevision = rev }))["settingsRevision"]!;
+        rev = (long)(await c.Call("settings.set", new { key = "editor.lineHeight", value = 1.6, baseSettingsRevision = rev }))["settingsRevision"]!;
+        rev = (long)(await c.Call("settings.set", new { key = "appearance.theme", value = new { kind = "builtIn", id = "dark" }, baseSettingsRevision = rev }))["settingsRevision"]!;
+        foreach (var window in windows)
+            Check((int)(await c.Call("test.settings.get", new { windowId = window, name = "AppTheme" }))["value"]! == 2, $"window {window[..7]} uses the dark theme");
+        Check((string)(await c.Call("settings.get", new { keys = new[] { "appearance.theme" } }))["values"]!["appearance.theme"]!["id"]! == "dark", "settings.get reads the theme back");
+        await c.Call("settings.set", new { key = "appearance.theme", value = new { kind = "builtIn", id = "system" }, baseSettingsRevision = rev });
         var file = JObject.Parse(File.ReadAllText(Path.Combine(testRoot, "data", "Settings.json")));
         Check((double)file["FontSize"]! == font, $"Settings.json holds {font} ({file["FontSize"]})");
         Check((int)(await c.Call("settings.get", new { keys = new[] { "editor.fontSize" } }))["values"]!["editor.fontSize"]! == font, "settings.get reads it back");
@@ -405,6 +429,37 @@ internal static class Program
             await Task.Delay(100);
         }
         throw new CaseFailed($"{what}: expected {expected}, the page shows [{seen}]");
+    }
+
+    private static async Task F01(List<string> notes)
+    {
+        using var c = await Session("e2e F01");
+        var id = await Open(c, Fixture("f01.md", "# F01\n"));
+        // Written through the API, then typed into by a person: every protected payload must survive the first
+        // visual edit (checked by exact strings, not by the editor's classifier).
+        var keep = new[]
+        {
+            "---\ntitle: \"F01: kept\"\n---",
+            "[site](https://example.com/a_b?x=1&y=2 \"Title\")",
+            "![alt](./img/a%20b.png \"Pic\")",
+            "claim[^note]",
+            "[^note]: The note.",
+            "- [x] done",
+            "- [ ] todo",
+            "```ts {title=\"x.ts\"}\nconst a:\tnumber = 1;\n```",
+            "$$\nE = mc^2\n$$",
+            "<kbd>Ctrl</kbd>",
+        };
+        var text = keep[0] + "\n\n# F01\n\n" + string.Join("\n\n", keep.Skip(1).Take(3)) + "\n\n" + keep[5] + "\n" + keep[6] + "\n\n" + string.Join("\n\n", keep.Skip(7)) + "\n\n" + keep[4] + "\n";
+        var written = await c.Call("document.replace", new { documentId = id, baseRevision = await Revision(c, id), text, normalizationPolicy = "allowUnknown", reveal = "document" });
+        notes.Add($"written, normalization {written["normalization"]?["pendingNormalization"]} {written["normalization"]?["reasons"]?.ToString(Formatting.None)}");
+        Check((string?)written["normalization"]?["pendingNormalization"] != "unsafe", "the written text is not predicted to lose anything");
+        await TypeIntoWindow("Q");
+        var after = await WaitForPage(c, id, t => t.Contains('Q'), "the keystroke");
+        var latest = (string)(await Get(c, id))["text"]!;
+        Check(latest == after, "latest read is what the page holds");
+        var lost = keep.Where(k => !latest.Contains(k)).ToList();
+        Check(lost.Count == 0, $"every protected payload survives the first edit (lost: {JsonConvert.SerializeObject(lost)}; text {JsonConvert.SerializeObject(latest)})");
     }
 
     private static async Task M01(List<string> notes)
