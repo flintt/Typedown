@@ -1015,6 +1015,18 @@ internal static class Program
 
     private static async Task Q01(List<string> notes)
     {
+        // A host of its own, in a fresh folder: the cases before leave unsaved documents, and closing a window then
+        // stops at the save question. This one has nothing unsaved. It is the last case: the suite's host goes.
+        using (var previous = Process.GetProcessById(hostPid)) { previous.Kill(); previous.WaitForExit(10000); }
+        var root = testRoot + "-q01";
+        if (Directory.Exists(root)) Directory.Delete(root, true);
+        Directory.CreateDirectory(root);
+        var started = Process.Start(new ProcessStartInfo(hostExe, $"--automation-test-root \"{root}\"") { UseShellExecute = true })!;
+        for (var i = 0; i < 300 && !File.Exists(Path.Combine(root, "automation-endpoint.txt")); i++) await Task.Delay(100);
+        endpoint = File.ReadAllText(Path.Combine(root, "automation-endpoint.txt")).Trim();
+        hostPid = started.Id;
+        testRoot = root;
+        await Task.Delay(3000);
         using var host = Process.GetProcessById(hostPid);
         using (var c = await Session("e2e Q01"))
         {
@@ -1069,6 +1081,8 @@ internal static class Program
         }
         var exited = host.WaitForExit(20000);
         if (exited) notes.Add("the process ended");
+        else { host.Kill(); host.WaitForExit(10000); }
+        try { await Task.Delay(1000); Directory.Delete(testRoot, true); } catch (Exception e) { notes.Add("the folder stays: " + e.Message); }
         Check(exited, "the process exits once its last window is closed (it stayed running with no window)");
     }
 
