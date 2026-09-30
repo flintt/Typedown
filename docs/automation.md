@@ -45,6 +45,7 @@ typedownctl replace <documentId> --base-revision 4 --stdin < new.md
 typedownctl view <windowId> --mode source --side-pane outline --size 1280x860
 typedownctl close <documentId>
 typedownctl settings set ui.language ja --base-revision 12
+typedownctl settings set appearance.theme dark --base-revision 13     # 或 custom:sepia；也可写完整 JSON
 ```
 
 `view` 返回时新视图已经画在屏幕上，可以直接截图——做说明书插图时不用重开程序。

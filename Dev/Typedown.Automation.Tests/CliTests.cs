@@ -116,6 +116,19 @@ namespace Typedown.Automation.Tests
             Assert.Equal("path_required", (string)JObject.Parse(stdout)["error"]!["data"]!["kind"]!);
         }
 
+        [Theory]
+        [InlineData("appearance.theme", "{\"kind\":\"builtIn\",\"id\":\"dark\"}", "{\"kind\":\"builtIn\",\"id\":\"dark\"}")]
+        [InlineData("appearance.theme", "{kind:builtIn,id:dark}", "{\"kind\":\"builtIn\",\"id\":\"dark\"}")]   // Windows PowerShell 5 dropped the quotes
+        [InlineData("appearance.theme", "{ kind: custom, id: solarized-light }", "{\"kind\":\"custom\",\"id\":\"solarized-light\"}")]
+        [InlineData("appearance.theme", "dark", "{\"kind\":\"builtIn\",\"id\":\"dark\"}")]
+        [InlineData("appearance.theme", "custom:sepia", "{\"kind\":\"custom\",\"id\":\"sepia\"}")]
+        [InlineData("editor.textDirection", "rtl", "\"rtl\"")]
+        [InlineData("editor.fontSize", "18", "18")]
+        [InlineData("editor.autoPairQuotes", "false", "false")]
+        [InlineData("status.wordCount", "dark", "\"dark\"")]   // the theme's short form is the theme's only
+        public void Setting_values_take_json_bare_words_the_theme_short_form_and_json_without_its_quotes(string key, string typed, string sent) =>
+            Assert.Equal(sent, Cli.Cli.SettingValue(key, typed).ToString(Newtonsoft.Json.Formatting.None));
+
         [Fact]
         public void Exit_codes_follow_the_spec_table()
         {

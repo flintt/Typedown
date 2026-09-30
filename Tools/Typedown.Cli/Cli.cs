@@ -40,7 +40,8 @@ usage: typedownctl [--json] [--endpoint NAME] [--client-id UUID] <command> [opti
   save <documentId> [--base-revision N]
   close <documentId> [--base-revision N]  close a saved document (an unsaved one is refused, exit 6)
   settings describe | settings get [key ...] | settings set <key> <json value> --base-revision N
-                                          external settings (appearance.theme, editor.fontSize, ...)
+                                          external settings (appearance.theme, editor.fontSize, ...);
+                                          the theme also as dark / light / black / system or custom:<id>
   view <windowId> [--mode visual|source|reading] [--side-pane closed|files|outline] [--status-bar on|off]
           [--focus on|off] [--typewriter on|off] [--bounds X,Y,W,H | --size WxH]
                                           how the window shows its document; no option only reads it
@@ -243,10 +244,7 @@ Exit codes: 0 ok, 2 usage, 3 not running or not reachable, 4 version or scope, 5
                             return ("settings.get", p, new[] { Scopes.SettingsRead });
                         case "set":
                             if (a.Positional.Count < 3) throw new UsageException("settings set <key> <json value> --base-revision N");
-                            JToken value;
-                            try { value = JToken.Parse(a.Positional[2]); }
-                            catch (JsonException) { value = a.Positional[2]; } // a bare word is a string: rtl, auto
-                            p = new JObject { ["key"] = a.Positional[1], ["value"] = value, ["baseSettingsRevision"] = a.RequiredLong("base-revision") };
+                            p = new JObject { ["key"] = a.Positional[1], ["value"] = SettingValue(a.Positional[1], a.Positional[2]), ["baseSettingsRevision"] = a.RequiredLong("base-revision") };
                             a.CheckAllUsed(3);
                             return ("settings.set", p, new[] { Scopes.SettingsWrite });
                         default:
@@ -307,6 +305,32 @@ Exit codes: 0 ok, 2 usage, 3 not running or not reachable, 4 version or scope, 5
             scopes.AddRange(Reveal(a, p).Where(s => !scopes.Contains(s)));
             a.CheckAllUsed(1);
             return (method, p, scopes.ToArray());
+        }
+
+        /// <summary>
+        /// A setting's value as typed. JSON as it is; a bare word is a string (rtl, auto). The theme also takes a short
+        /// form - a built-in theme's name (dark), or custom:&lt;id&gt; - and an object whose quotes Windows PowerShell 5
+        /// dropped on the way ({kind:builtIn,id:dark}) gets them back: that shell strips the double quotes inside an
+        /// argument to a native program, so the JSON a person typed arrived as invalid JSON.
+        /// </summary>
+        public static JToken SettingValue(string key, string text)
+        {
+            try { return JToken.Parse(text); }
+            catch (JsonException) { }
+            var trimmed = text.Trim();
+            if (trimmed.StartsWith("{") && trimmed.EndsWith("}"))
+            {
+                var quoted = System.Text.RegularExpressions.Regex.Replace(trimmed, @"(?<=[{,:]\s*)([A-Za-z_][\w.\-]*)(?=\s*[,:}])",
+                    m => m.Value is "true" or "false" or "null" ? m.Value : "\"" + m.Value + "\"");
+                try { return JToken.Parse(quoted); }
+                catch (JsonException) { }
+            }
+            if (key == "appearance.theme")
+            {
+                if (trimmed is "system" or "light" or "dark" or "black") return new JObject { ["kind"] = "builtIn", ["id"] = trimmed };
+                if (trimmed.StartsWith("custom:") && trimmed.Length > 7) return new JObject { ["kind"] = "custom", ["id"] = trimmed.Substring(7) };
+            }
+            return text;
         }
 
         private static bool? OnOff(Args a, string name) => a.Value(name) switch
