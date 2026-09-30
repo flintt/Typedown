@@ -122,6 +122,8 @@ internal static class Program
             await Case("S2 settings.set reaches every window and the settings file; a stale revision is refused", S2);
             await Case("S3 the newer settings: language, tab size, compact mode and word count reach the window and go back", S3);
             await Case("V01 window.setView: source mode with the outline in a restored 1100x720 window, then reading; a mode switch waits for a held write", V01);
+            await Case("N01 back from the settings page (the editor page loads again), a file opened at once is read and written without a timeout", N01);
+            await Case("K01 a font size changed through the API while the reader types: the keys still reach the page", K01);
             await Case("B02 an open settings page shows a font size changed from elsewhere", B02);
             await Case("F01 a written document with protected payloads keeps every one of them through a real first keystroke", F01);
             await Case("M01 a written text survives visual, reading and source mode switches byte for byte, then saves exactly", M01);
@@ -598,6 +600,66 @@ internal static class Program
             await Task.Delay(100);
         }
         throw new CaseFailed($"{what}: expected {expected}, the page shows [{seen}]");
+    }
+
+    // What the editor page holds - focus, the caret's block - for failure messages.
+    private const string PageStateScript = @"(() => {
+        const s = getSelection(); const n = s && s.anchorNode; const e = n && (n.nodeType === 1 ? n : n.parentElement);
+        const blk = e && e.closest('[id^=""ag-""]');
+        return { hasFocus: document.hasFocus(), active: document.activeElement && (document.activeElement.id || document.activeElement.tagName), caret: blk && blk.id, editor: !!window.__typedownMuya };
+    })()";
+
+    private static async Task<string> PageState(Client c, string windowId)
+    {
+        try { return (await c.Call("test.editor.eval", new { windowId, script = PageStateScript }))["result"]!.ToString(Formatting.None); }
+        catch (Exception e) { return "no state: " + e.Message; }
+    }
+
+    private static async Task N01(List<string> notes)
+    {
+        using var c = await Session("e2e N01");
+        const string text = "---\ntitle: kept\n---\n\n# N01\n\nbody\n";
+        var windowId = (string)((JArray)(await c.Call("window.list"))["windows"]!)[0]["windowId"]!;
+        for (var round = 0; round < 4; round++)
+        {
+            await c.Call("test.window.navigate", new { windowId, route = "Settings/Editor" });
+            await Task.Delay(800);
+            await c.Call("test.window.navigate", new { windowId, route = "Main" });
+            var id = await Open(c, Fixture($"n01-{round}.md", "# N01\n"));
+            var clock = System.Diagnostics.Stopwatch.StartNew();
+            var kind = await c.ErrorKind("document.get", new { documentId = id, consistency = "latest" });
+            Check(kind == null, $"round {round}: the first latest read after returning from the settings page succeeds ({kind} after {clock.ElapsedMilliseconds} ms; page {await PageState(c, windowId)})");
+            await c.Call("document.replace", new { documentId = id, baseRevision = await Revision(c, id), text, normalizationPolicy = "allowUnknown" });
+            Check((string)(await Get(c, id))["text"]! == text, $"round {round}: the write is the text");
+            notes.Add($"round {round}: read in {clock.ElapsedMilliseconds} ms");
+        }
+    }
+
+    private static async Task K01(List<string> notes)
+    {
+        using var c = await Session("e2e K01");
+        var id = await Open(c, Fixture("k01.md", "# K01\n\nThe end.\n"));
+        var windowId = await WindowIdOf(c, id);
+        await TypeInto(c, id, "A");
+        await WaitForPage(c, id, t => t.Contains('A'), "the first keystroke");
+        // Another program changes the font size and the line height while the reader has the keyboard.
+        using (var other = await Session("e2e K01 settings"))
+        {
+            var font = (int)(await other.Call("settings.get", new { keys = new[] { "editor.fontSize" } }))["values"]!["editor.fontSize"]!;
+            await SetSetting(other, "editor.fontSize", font + 1);
+            await Task.Delay(500);
+            await SetSetting(other, "editor.fontSize", font);
+            await Task.Delay(500);
+        }
+        var state = await PageState(c, windowId);
+        // No new focus from the host: the keys go wherever the page's own focus is, as they do for the reader.
+        Send(Key(0x11, false), Key(0x23, false), Key(0x23, true), Key(0x11, true));
+        var inputs = new[] { new INPUT { type = 1, u = new InputUnion { ki = new KEYBDINPUT { wScan = 'B', dwFlags = 0x0004 } } }, new INPUT { type = 1, u = new InputUnion { ki = new KEYBDINPUT { wScan = 'B', dwFlags = 0x0006 } } } };
+        SendInput(2, inputs, Marshal.SizeOf<INPUT>());
+        string? text = null;
+        for (var i = 0; i < 40 && text?.Contains('B') != true; i++) { await Task.Delay(100); text = (string?)(await c.Call("test.editor.pageText", new { documentId = id }))["text"]; }
+        Check(text?.Contains('B') == true, $"the keystroke after the font change reached the page (page after the change: {state}; text {JsonConvert.SerializeObject(text)})");
+        notes.Add("page after the change: " + state);
     }
 
     private static async Task F01(List<string> notes)
