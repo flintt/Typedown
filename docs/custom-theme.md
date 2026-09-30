@@ -66,14 +66,14 @@
 | `base` | 否 | `light`（默认）/ `dark` / `black`。决定没被覆盖的部分取自哪套内置主题 |
 | `accent` | 否 | 强调色（链接、光标、选中态），`#RGB` 或 `#RRGGBB` |
 | `author` | 否 | 仅作记录 |
-| `background` | 否 | **窗口底色**：编辑区以及当前活动标签 |
-| `surface` | 否 | **面板底色**：侧边栏、非活动标签与标签栏空白处、状态栏。省略则跟随 `background` |
+| `background` | 否 | **窗口底色**：编辑区、标签栏；当前活动标签是它略微提亮的卡片 |
+| `surface` | 否 | **面板底色**：侧边栏、状态栏等面板。省略则跟随 `background` |
 | `foreground` | 否 | 窗口里的文字颜色 |
 | `border` | 否 | 面板之间以及标签之间的分隔线 |
 
 后面四个决定**编辑区之外**的配色。不写它们，窗口就保持 `base` 那套内置主题的颜色——但那样编辑区和窗口会是两种色调，通常不好看，所以建议一起写。
 
-标签栏会由这些颜色组合生成：活动标签使用 `background`，非活动标签使用 `surface`，标签文字使用 `foreground`，分隔线使用 `border`，活动标签顶部标识使用 `accent`。悬停和按下状态由 `surface` 与 `foreground` 自动混合，不需要再写额外颜色。
+标签栏本身不上色，和旁边的侧边栏是同一片底色，所以顶部的色带左右齐平。活动标签是在 `background` 基础上略微提亮的卡片，边框用 `border`；非活动标签不画底色；标签文字用 `foreground`。悬停和按下状态由 `background` 与 `foreground` 自动混合，不需要再写额外的颜色。
 
 > Windows 上如果开启了 Mica 材质，主题指定的 `background` 会覆盖掉编辑区背后的 Mica 效果。
 
@@ -234,8 +234,9 @@ colour the window around the editor: the menu bar, the side pane, the tab bar an
 after the comment is plain CSS applied on top of the built-in theme, so a theme only states what it changes.
 The user's own custom CSS from the settings is applied after the theme and still wins.
 
-In the tab bar, the active tab uses `background`, inactive tabs use `surface`, labels use `foreground`, separators
-use `border`, and the active marker uses `accent`. Hover and pressed colours are derived automatically.
+The tab bar itself is not painted: it shows the same background as the side pane next to it, so the header band
+ends at one height. The active tab is a card slightly lighter than `background`, edged with `border`; inactive tabs
+have no fill; labels use `foreground`. Hover and pressed colours are derived automatically.
 
 The variables are listed in the tables above; they live on `:root`. Beyond them a theme can style anything:
 `#ag-editor-id` is the document root, Prism class names (`.token.keyword`) colour code, CodeMirror class names
