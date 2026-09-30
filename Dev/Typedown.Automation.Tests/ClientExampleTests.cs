@@ -23,7 +23,15 @@ namespace Typedown.Automation.Tests
             server = new AutomationServer(() => new PlainPipeListener(endpoint),
                 () => new AutomationSession(info, DocumentMethods.AddTo(new MethodTable(BuildTypes.Application), host, info.InstanceId)), info.MaxMessageBytes);
             server.Start();
-            return Task.CompletedTask;
+            return WaitForSocket();
+        }
+
+        // Start returns before the listener exists; the example connects at once and would find no socket yet.
+        private async Task WaitForSocket()
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) return;
+            var socket = Path.Combine(Path.GetTempPath(), "CoreFxPipe_" + endpoint);
+            for (var i = 0; i < 100 && !File.Exists(socket); i++) await Task.Delay(20);
         }
 
         public Task DisposeAsync() => server.StopAsync();

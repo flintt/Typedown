@@ -228,19 +228,14 @@
       ]
     },
     {
-      "reason": "restartRequired: takes effect only after a restart or affects process lifetime",
+      "reason": "candidate: application preference not yet reviewed for exposure (type, range, apply path, multi-window test)",
       "windows": [
         "Language",
         "KeepRun",
         "UseMicaEffect",
         "UseEditorMicaEffect",
         "AppCompactMode",
-        "AnimationEnable"
-      ]
-    },
-    {
-      "reason": "candidate: application preference not yet reviewed for exposure (type, range, apply path, multi-window test)",
-      "windows": [
+        "AnimationEnable",
         "AutoPairBracket",
         "AutoPairQuote",
         "TrimUnnecessaryCodeBlockEmptyLines",
