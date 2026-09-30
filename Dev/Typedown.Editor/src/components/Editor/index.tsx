@@ -81,7 +81,10 @@ const Editor: React.FC = () => {
     useEffect(() => transport.addListener<{ token: number }>('QueryEditorStyle', ({ token }) => {
         const element = document.querySelector('#ag-editor-id') || document.querySelector('.CodeMirror')
         const style = element ? getComputedStyle(element) : null
-        transport.postMessage('EditorStyle', { token, fontSize: style?.fontSize ?? null, lineHeight: style?.lineHeight ?? null, direction: style?.direction ?? null })
+        // Muya sets the text direction on each block (a dir attribute), not on the editor: read the first block's.
+        const block = document.querySelector('#ag-editor-id > *') || element
+        const direction = block ? getComputedStyle(block).direction : null
+        transport.postMessage('EditorStyle', { token, fontSize: style?.fontSize ?? null, lineHeight: style?.lineHeight ?? null, direction })
     }), []);
 
     // Host -> editor: what the first visual edit would do to the text shown now (document.get's normalization).

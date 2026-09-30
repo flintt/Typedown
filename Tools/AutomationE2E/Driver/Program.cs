@@ -450,7 +450,8 @@ internal static class Program
             "$$\nE = mc^2\n$$",
             "<kbd>Ctrl</kbd>",
         };
-        var text = keep[0] + "\n\n# F01\n\n" + string.Join("\n\n", keep.Skip(1).Take(3)) + "\n\n" + keep[5] + "\n" + keep[6] + "\n\n" + string.Join("\n\n", keep.Skip(7)) + "\n\n" + keep[4] + "\n";
+        // A plain last paragraph: Ctrl+End lands the caret there, not in an image or a maths block.
+        var text = keep[0] + "\n\n# F01\n\n" + string.Join("\n\n", keep.Skip(1).Take(3)) + "\n\n" + keep[5] + "\n" + keep[6] + "\n\n" + string.Join("\n\n", keep.Skip(7)) + "\n\n" + keep[4] + "\n\nThe end.\n";
         var written = await c.Call("document.replace", new { documentId = id, baseRevision = await Revision(c, id), text, normalizationPolicy = "allowUnknown", reveal = "document" });
         notes.Add($"written, normalization {written["normalization"]?["pendingNormalization"]} {written["normalization"]?["reasons"]?.ToString(Formatting.None)}");
         Check((string?)written["normalization"]?["pendingNormalization"] != "unsafe", "the written text is not predicted to lose anything");
@@ -647,7 +648,9 @@ internal static class Program
         if (GetForegroundWindow() != window) throw new CaseFailed("the test host window could not be brought to the front (is the desktop locked?)");
         // Keyboard focus into the editor as a person gives it: a click in the text area, then Ctrl+End.
         GetWindowRect(window, out var rect);
-        SetCursorPos((rect.Left + rect.Right) / 2, rect.Top + (rect.Bottom - rect.Top) * 2 / 5);
+        // In the editor's left margin, below the tab strip: a click there focuses the editor without opening a block
+        // (an image, a maths or diagram preview) that the middle of the window may hold.
+        SetCursorPos(rect.Left + 40, rect.Top + (rect.Bottom - rect.Top) * 2 / 5);
         Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0002 } } }, new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0004 } } });
         await Task.Delay(200); // the click's caret placement settles before the keys; the result is still checked below
         Send(Key(0x11, false), Key(0x23, false), Key(0x23, true), Key(0x11, true));
