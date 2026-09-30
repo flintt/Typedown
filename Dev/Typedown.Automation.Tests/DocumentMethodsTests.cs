@@ -103,6 +103,21 @@ namespace Typedown.Automation.Tests
             Docs.RemoveAll(d => d.doc.DocumentId == documentId);
             return Task.CompletedTask;
         }
+
+        public async Task<DocumentInfo> CloseDocumentAsync(string documentId, long? baseRevision, CancellationToken ct)
+        {
+            var d = Find(documentId);
+            if (d.doc.IsActive && !await d.doc.FlushAsync(ct)) throw new AutomationException(AutomationErrorKind.content_sync_timeout, "no answer");
+            if (baseRevision != null && baseRevision != d.doc.Revision)
+                throw new AutomationException(AutomationErrorKind.revision_conflict, "moved on", new Dictionary<string, object?> { ["revision"] = d.doc.Revision });
+            if (!d.doc.Saved)
+                throw new AutomationException(AutomationErrorKind.unsaved_changes, "unsaved", new Dictionary<string, object?> { ["revision"] = d.doc.Revision });
+            var info = Info(d);
+            Docs.Remove(d);
+            if (Docs.Count == 0) Add("", null);   // the window keeps a document
+            else if (d.doc == Active) { Active = Docs[0].doc; Active.IsActive = true; }
+            return info;
+        }
     }
 
     public class DocumentMethodsTests
@@ -148,6 +163,47 @@ namespace Typedown.Automation.Tests
             var noConsistency = await h.CallAsync("document.get", new JObject { ["documentId"] = doc.DocumentId });
             Assert.Equal("consistency", (string)noConsistency["error"]!["data"]!["field"]!);
             Assert.Equal("document_not_found", Kind(await h.CallAsync("document.get", new JObject { ["documentId"] = "0000", ["consistency"] = "snapshot" })));
+        }
+
+        [Fact]
+        public async Task Close_takes_a_saved_document_away_and_refuses_an_unsaved_one()
+        {
+            var (h, host) = Start();
+            await using var _ = h;
+            var a = host.Add("# A\n", "/tmp/a.md", active: false);
+            var b = host.Add("# B\n", "/tmp/b.md");
+            await h.InitializeAsync(Scopes.DocumentRead);
+            Assert.Equal("document.write", (string)(await h.CallAsync("document.close", new JObject { ["documentId"] = a.DocumentId }))["error"]!["data"]!["scope"]!);
+            await h.DisposeAsync();
+
+            (h, host) = Start();
+            await using var _2 = h;
+            a = host.Add("# A\n", "/tmp/a.md", active: false);
+            b = host.Add("# B\n", "/tmp/b.md");
+            await h.InitializeAsync(AllScopes);
+
+            // Unsaved: refused with the revision, nothing closed.
+            b.Saved = false; b.Revision = 4;
+            var refused = await h.CallAsync("document.close", new JObject { ["documentId"] = b.DocumentId });
+            Assert.Equal("unsaved_changes", Kind(refused));
+            Assert.Equal(-32026, (int)refused["error"]!["code"]!);
+            Assert.Equal(4, (int)refused["error"]!["data"]!["revision"]!);
+            Assert.Equal(2, host.Docs.Count);
+
+            // Typing the page has not reported yet counts: the page is asked first (flush) - here it has none.
+            b.Saved = true;
+            Assert.Equal("revision_conflict", Kind(await h.CallAsync("document.close", new JObject { ["documentId"] = b.DocumentId, ["baseRevision"] = 3 })));
+            var closed = await h.CallAsync("document.close", new JObject { ["documentId"] = b.DocumentId, ["baseRevision"] = 4 });
+            Valid("document.close.result", closed["result"]);
+            Assert.True((bool)closed["result"]!["closed"]!);
+            Assert.Equal(new[] { a.DocumentId }, host.Docs.Select(d => d.doc.DocumentId));
+            Assert.Equal("document_not_found", Kind(await h.CallAsync("document.close", new JObject { ["documentId"] = b.DocumentId })));
+
+            // The window's last document: it goes, and an empty one takes its place.
+            await h.CallAsync("document.close", new JObject { ["documentId"] = a.DocumentId });
+            Assert.Single(host.Docs);
+            Assert.Null(host.Docs[0].path);
+            Assert.Equal("invalid_params", Kind(await h.CallAsync("document.close", new JObject())));
         }
 
         [Fact]

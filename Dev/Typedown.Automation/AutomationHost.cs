@@ -97,5 +97,13 @@ namespace Typedown.Automation
 
         /// <summary>Closes a document created by a failed <c>document.create</c>; nothing else uses it.</summary>
         Task DiscardDocumentAsync(string documentId, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// document.close: closes a saved document's tab, after the editor's latest text is in. Throws
+        /// <c>unsaved_changes</c> (with the revision) for a document with unsaved changes - nothing is discarded and no
+        /// dialog is shown - and <c>revision_conflict</c> when <paramref name="baseRevision"/> is given and not current.
+        /// The window's only document is replaced by a new empty one: the window stays. Returns the closed document.
+        /// </summary>
+        Task<DocumentInfo> CloseDocumentAsync(string documentId, long? baseRevision, CancellationToken cancellationToken);
     }
 }

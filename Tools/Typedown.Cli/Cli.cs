@@ -38,6 +38,7 @@ usage: typedownctl [--json] [--endpoint NAME] [--client-id UUID] <command> [opti
   replace-text <documentId> --base-revision N --find S --replacement S --expected-count N [--save] [--reveal]
           [--allow-unknown-normalization] [--client-operation-id S]
   save <documentId> [--base-revision N]
+  close <documentId> [--base-revision N]  close a saved document (an unsaved one is refused, exit 6)
   settings describe | settings get [key ...] | settings set <key> <json value> --base-revision N
                                           external settings (appearance.theme, editor.fontSize, ...)
   view <windowId> [--mode visual|source|reading] [--side-pane closed|files|outline] [--status-bar on|off]
@@ -47,7 +48,7 @@ usage: typedownctl [--json] [--endpoint NAME] [--client-id UUID] <command> [opti
 
 Document text uses \n line endings; text with \r is refused unless --lf converts it on the way in.
 Exit codes: 0 ok, 2 usage, 3 not running or not reachable, 4 version or scope, 5 window/document not found,
-6 revision or match-count conflict, 7 editor not ready, 8 save failed, 9 other.
+6 revision, match-count or unsaved-changes conflict, 7 editor not ready, 8 save failed, 9 other.
 ";
 
         private readonly TextReader stdin;
@@ -282,6 +283,11 @@ Exit codes: 0 ok, 2 usage, 3 not running or not reachable, 4 version or scope, 5
                     a.CheckAllUsed(1);
                     return p.Count == 1 ? ("window.getView", p, new[] { Scopes.AppRead }) : ("window.setView", p, new[] { Scopes.WindowView });
                 }
+                case "close":
+                    p = new JObject { ["documentId"] = a.Positional0("documentId") };
+                    if (a.OptionalLong("base-revision") is long cr) p["baseRevision"] = cr;
+                    a.CheckAllUsed(1);
+                    return ("document.close", p, new[] { Scopes.DocumentWrite });
                 case "save":
                     p = new JObject { ["documentId"] = a.Positional0("documentId") };
                     if (a.OptionalLong("base-revision") is long r) p["baseRevision"] = r;
@@ -366,7 +372,7 @@ Exit codes: 0 ok, 2 usage, 3 not running or not reachable, 4 version or scope, 5
         {
             "unsupported_version" or "scope_required" or "not_initialized" or "method_not_found" => Incompatible,
             "window_not_found" or "document_not_found" => NotFound,
-            "revision_conflict" or "match_count_mismatch" => Conflict,
+            "revision_conflict" or "match_count_mismatch" or "unsaved_changes" => Conflict,
             "editor_not_ready" or "content_sync_timeout" or "presentation_timeout" => NotReady,
             "save_failed" or "persistence_failed" => SaveFailed,
             "invalid_params" => Usage,

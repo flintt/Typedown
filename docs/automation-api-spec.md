@@ -276,11 +276,14 @@ MVP 为每个方法定义服务端超时，并在连接断开时取消尚未开�
 | `document.replace` | MVP | 带 `baseRevision` 替换全文，形成一个撤销步骤 |
 | `document.replaceText` | MVP | 在精确正文中计数并替换固定字符串，计数不符时不修改 |
 | `document.save` | MVP | 保存现有路径；无路径时返回 `path_required`，不弹出文件选择器 |
+| `document.close` | v1 新增 | 关闭一个已保存的文档；有未保存更改时返回 `unsaved_changes`，不丢弃、不弹对话框（2026-10-01） |
 | `document.saveAs` | 后续 | 只接受调用方给出的明确路径，不由后台调用弹出对话框 |
 | `document.undo` / `redo` | MVP | 调用文档自己的历史栈 |
 | `document.applyEdits` | 后续 | 协商位置编码后按范围应用一组互不重叠编辑 |
 | `selection.get` | 后续 | 获取当前选区和选中文本 |
 | `selection.replace` | 后续 | 按文档版本替换当前选区 |
+
+`document.close { documentId, baseRevision? }`（`document.write`）关闭文档所在的标签。先取编辑器的最新正文（尚未上报的输入也算），文档有未保存的更改就返回 `unsaved_changes` 和当前 revision，什么都不关：接口永远不替人丢弃内容，也不弹出保存对话框，要关先 `document.save`。给了 `baseRevision` 而文档已不在该 revision 时返回 `revision_conflict`。窗口里只剩这一个文档时，窗口留下，换成一个新的空白未命名文档：关闭文档不会关闭窗口或退出程序。成功返回 `{ documentId, windowId, closed: true }`，之后该 `documentId` 是 `document_not_found`。
 
 `document.get` 不使用含糊的隐式一致性。调用方传入：
 
@@ -397,6 +400,7 @@ JSON-RPC 的 `error.code` 必须是整数。除 `-32602` 等标准错误外，v1
 | `-32023` | `presentation_timeout` | 状态已应用，但一个或多个界面目标未及时确认呈现 |
 | `-32024` | `editor_inconsistent` | 候选操作失败后，宿主使用权威旧正文执行的恢复加载也未确认；文档进入隔离状态 |
 | `-32025` | `normalization_unclassified` | 默认安全策略下无法证明候选只有已知格式变化；正文和 revision 未提交，调用方可审查后显式选择 `allowUnknown` |
+| `-32026` | `unsaved_changes` | `document.close` 的文档有未保存的更改；什么都没关闭，`data.revision` 是当前 revision（v1 新增，2026-10-01） |
 | `-32030` | `message_too_large` | 请求超过协商上限 |
 | `-32031` | `busy` | 文档操作队列已达到限制 |
 | `-32032` | `request_cancelled` | 操作在提交前被取消 |

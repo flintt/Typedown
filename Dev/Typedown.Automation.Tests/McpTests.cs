@@ -55,7 +55,7 @@ namespace Typedown.Automation.Tests
 
             var tools = (JArray)(await Send("tools/list"))["result"]!["tools"]!;
             Assert.Equal(new[] { "typedown_list_documents", "typedown_read_document", "typedown_replace_text", "typedown_replace_document", "typedown_save_document",
-                "typedown_get_view", "typedown_set_view" },
+                "typedown_close_document", "typedown_get_view", "typedown_set_view" },
                 tools.Select(t => (string)t["name"]!));
             foreach (var t in tools)
             {

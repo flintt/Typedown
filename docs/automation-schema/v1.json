@@ -960,6 +960,39 @@
         }
       }
     },
+    "document.close.params": {
+      "type": "object",
+      "properties": {
+        "documentId": {
+          "$ref": "#/$defs/documentId"
+        },
+        "baseRevision": {
+          "$ref": "#/$defs/revision"
+        }
+      },
+      "required": [
+        "documentId"
+      ]
+    },
+    "document.close.result": {
+      "type": "object",
+      "required": [
+        "documentId",
+        "windowId",
+        "closed"
+      ],
+      "properties": {
+        "documentId": {
+          "$ref": "#/$defs/documentId"
+        },
+        "windowId": {
+          "$ref": "#/$defs/windowId"
+        },
+        "closed": {
+          "const": true
+        }
+      }
+    },
     "error": {
       "type": "object",
       "required": [
@@ -990,6 +1023,7 @@
         "presentation_timeout": -32023,
         "editor_inconsistent": -32024,
         "normalization_unclassified": -32025,
+        "unsaved_changes": -32026,
         "message_too_large": -32030,
         "busy": -32031,
         "request_cancelled": -32032,
@@ -1038,6 +1072,7 @@
                 "scope_required",
                 "setting_invalid",
                 "setting_not_exposed",
+                "unsaved_changes",
                 "unsupported_version",
                 "window_not_found"
               ]
@@ -1302,6 +1337,26 @@
             "properties": {
               "code": {
                 "const": -32025
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "data": {
+                "properties": {
+                  "kind": {
+                    "const": "unsaved_changes"
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "code": {
+                "const": -32026
               }
             }
           }

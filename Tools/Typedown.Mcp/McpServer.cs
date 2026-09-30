@@ -195,6 +195,18 @@ namespace Typedown.Mcp
             },
             new JObject
             {
+                ["name"] = "typedown_close_document",
+                ["title"] = "Close a document",
+                ["description"] = "Closes a document's tab. Only a saved document is closed: one with unsaved changes is refused (unsaved_changes) and nothing is lost - save it first or leave it open. The window's only document is replaced by an empty one; the window stays.",
+                ["inputSchema"] = Schema(new JObject
+                {
+                    ["documentId"] = Prop("string", "From typedown_list_documents."),
+                    ["baseRevision"] = Prop("integer", "Close only if the document is still at this revision."),
+                }, "documentId"),
+                ["annotations"] = new JObject { ["readOnlyHint"] = false, ["destructiveHint"] = false, ["idempotentHint"] = false, ["openWorldHint"] = false },
+            },
+            new JObject
+            {
                 ["name"] = "typedown_get_view",
                 ["title"] = "Read how a window shows its document",
                 ["description"] = "The window's editing mode (visual, source or reading), side pane, status bar, focus and typewriter mode, and its bounds on screen in pixels.",
@@ -252,6 +264,7 @@ namespace Typedown.Mcp
                         ["text"] = Required(args, "text", JTokenType.String),
                     }), ct).ConfigureAwait(false),
                     "typedown_save_document" => await typedown.CallAsync("document.save", Pick(args, "documentId", "baseRevision"), ct).ConfigureAwait(false),
+                    "typedown_close_document" => await typedown.CallAsync("document.close", Pick(args, "documentId", "baseRevision"), ct).ConfigureAwait(false),
                     "typedown_get_view" => await typedown.CallAsync("window.getView", Pick(args, "windowId"), ct).ConfigureAwait(false),
                     "typedown_set_view" => await typedown.CallAsync("window.setView", Pick(args, "windowId", "mode", "sidePane", "statusBar", "focusMode", "typewriter", "bounds"), ct).ConfigureAwait(false),
                     _ => throw new RpcError(-32602, $"Unknown tool: {name}"),
@@ -356,6 +369,7 @@ namespace Typedown.Mcp
             "document_not_found" => "That document is closed or the id is wrong. Call typedown_list_documents.",
             "window_not_found" => "That window is closed. Call typedown_list_documents.",
             "path_required" => "The document is untitled; only the person can choose where to save it.",
+            "unsaved_changes" => "The document has unsaved changes, so it was not closed and nothing was lost. Save it first with typedown_save_document (or ask the person), then close it.",
             "save_failed" => "Saving failed; the edit stays in the document, unsaved. Tell the person.",
             "scope_required" => "This Typedown does not allow that operation for automation clients.",
             "busy" => "Typedown is busy with this document. Wait a moment, read the document again, then retry.",

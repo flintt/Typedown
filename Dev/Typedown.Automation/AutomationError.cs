@@ -27,6 +27,8 @@ namespace Typedown.Automation
         presentation_timeout = -32023,
         editor_inconsistent = -32024,
         normalization_unclassified = -32025,
+        /// <summary>The document has changes that are not saved: document.close refuses rather than discard them.</summary>
+        unsaved_changes = -32026,
         message_too_large = -32030,
         busy = -32031,
         request_cancelled = -32032,

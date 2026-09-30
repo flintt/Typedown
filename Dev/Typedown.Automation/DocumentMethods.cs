@@ -130,6 +130,12 @@ namespace Typedown.Automation
             }));
             table.Add(new MethodDescriptor("document.undo", Scopes.DocumentWrite, "document.undo/1", (c, ct) => UndoAsync(c, redo: false, ct)));
             table.Add(new MethodDescriptor("document.redo", Scopes.DocumentWrite, "document.redo/1", (c, ct) => UndoAsync(c, redo: true, ct)));
+            table.Add(new MethodDescriptor("document.close", Scopes.DocumentWrite, "document.close/1", async (c, ct) =>
+            {
+                var p = c.Params;
+                var info = await host.CloseDocumentAsync(p.RequiredString("documentId", allowEmpty: false), p.OptionalInteger("baseRevision"), ct).ConfigureAwait(false);
+                return new JObject { ["documentId"] = info.DocumentId, ["windowId"] = info.WindowId, ["closed"] = true };
+            }));
             table.Add(new MethodDescriptor("document.save", Scopes.DocumentSave, "document.save/1", async (c, ct) =>
             {
                 var p = c.Params;

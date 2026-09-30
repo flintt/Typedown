@@ -135,6 +135,7 @@ internal static class Program
             await Case("EX01 the PowerShell and Python client examples edit through the real pipe", EX01);
             await Case("EQ01 the equivalence scenario (compared with the Uno edition's answers offline)", EQ01);
             await Case("R04 untitled and background documents come back from their backups after a kill, each its own", R04);
+            await Case("C01 document.close: a saved document closes, an unsaved one (a fresh keystroke too) is refused, the last one leaves an empty document", C01);
             await Case("Q02 a window closed at once after it opened (its web view still being created): the process lives on", Q02);
             // Last: it ends the test host.
             await Case("Q01 two windows closed one after the other: the process exits (it stayed, headless)", Q01);
@@ -925,7 +926,7 @@ internal static class Program
         var init = await mcp.Send("initialize", new { protocolVersion = "2025-06-18", capabilities = new { }, clientInfo = new { name = "E2E agent", version = "1" } });
         Check((string?)init["result"]?["protocolVersion"] == "2025-06-18", "initialize answers with the protocol version");
         var tools = ((JArray)(await mcp.Send("tools/list", new { }))["result"]!["tools"]!).Select(t => (string)t["name"]!).ToList();
-        Check(tools.Count == 7 && tools.Contains("typedown_replace_text") && tools.Contains("typedown_set_view"), $"seven tools ({string.Join(", ", tools)})");
+        Check(tools.Count == 8 && tools.Contains("typedown_replace_text") && tools.Contains("typedown_close_document"), $"eight tools ({string.Join(", ", tools)})");
 
         var list = await mcp.Tool("typedown_list_documents", new { });
         Check(!(bool)list["isError"]! && list["structuredContent"]!["documents"]!.Any(d => (string)d["documentId"]! == a), "the document is listed");
@@ -996,6 +997,58 @@ internal static class Program
         Check(run.exit == 0, "the scenario ran: " + run.stderr);
         notes.Add("TRANSCRIPT " + run.stdout);
         return Task.CompletedTask;
+    }
+
+    private static async Task C01(List<string> notes)
+    {
+        using var c = await Session("e2e C01");
+        async Task<List<string>> Ids(string window) => ((JArray)(await c.Call("document.list", new { windowId = window }))["documents"]!).Select(d => (string)d["documentId"]!).ToList();
+        var a = await Open(c, Fixture("c01-a.md", "# A\n\nalpha\n"));
+        var b = await Open(c, Fixture("c01-b.md", "# B\n\nbeta\n")); // b is shown, a is a background tab
+        var window = await WindowIdOf(c, b);
+
+        // 1. A saved background document.
+        var closed = await c.Call("document.close", new { documentId = a });
+        Check((bool)closed["closed"]! && (string)closed["windowId"]! == window, "a saved background document closes");
+        Check(!(await Ids(window)).Contains(a), "and is gone from the list");
+        Check(await c.ErrorKind("document.get", new { documentId = a, consistency = "snapshot" }) == "document_not_found", "its id is not found any more");
+
+        // 2. Unsaved: refused, still open, the text as it was.
+        var r = await Revision(c, b);
+        await c.Call("document.replace", new { documentId = b, baseRevision = r, text = "# B\n\nchanged\n" });
+        Check(await c.ErrorKind("document.close", new { documentId = b }) == "unsaved_changes", "an unsaved document is refused");
+        Check((await Ids(window)).Contains(b) && (string)(await Get(c, b))["text"]! == "# B\n\nchanged\n", "it stays open with its text");
+
+        // 3. Saved, it closes.
+        await c.Call("document.save", new { documentId = b });
+        var c2 = await Open(c, Fixture("c01-c.md", "# C\n\ngamma\n"));
+        await c.Call("document.focus", new { documentId = b });
+        Check(await c.ErrorKind("document.close", new { documentId = b, baseRevision = 0 }) == "revision_conflict", "a stale baseRevision is a conflict");
+        await c.Call("document.close", new { documentId = b, baseRevision = await Revision(c, b) });
+        Check(!(await Ids(window)).Contains(b), "once saved it closes");
+
+        // 4. A keystroke the page has not reported yet makes the document unsaved: close asks the page first.
+        await TypeInto(c, c2, "Z");
+        var refused = await c.ErrorKind("document.close", new { documentId = c2 });
+        notes.Add($"close right after a keystroke: {refused ?? "closed"}");
+        Check(refused == "unsaved_changes", "a keystroke not yet reported counts as unsaved");
+        Check(((string)(await Get(c, c2))["text"]!).Contains('Z'), "and the keystroke is in the document");
+        await c.Call("document.save", new { documentId = c2 });
+
+        // 5. The window's only document: the window stays, with an empty untitled document.
+        foreach (var other in (await Ids(window)).Where(id => id != c2).ToList())
+        {
+            var info = (JObject)(await c.Call("document.get", new { documentId = other, consistency = "snapshot" }));
+            if ((bool)info["saved"]!) await c.Call("document.close", new { documentId = other });
+            else notes.Add($"left open (unsaved from an earlier case): {(string?)info["path"] ?? "untitled"}");
+        }
+        if ((await Ids(window)).Count == 1)
+        {
+            await c.Call("document.close", new { documentId = c2 });
+            var left = ((JArray)(await c.Call("document.list", new { windowId = window }))["documents"]!);
+            Check(left.Count == 1 && left[0]!["path"]!.Type == JTokenType.Null, $"the window stays with one empty untitled document ({left.ToString(Formatting.None)})");
+        }
+        else notes.Add("other unsaved documents in the window: the last-document part is not reached here");
     }
 
     private static async Task Q02(List<string> notes)

@@ -128,6 +128,19 @@ namespace Typedown.Automation.Tests
         }
 
         [Fact]
+        public async Task Close_closes_a_saved_document_and_refuses_an_unsaved_one_with_exit_6()
+        {
+            var other = host.Add("# Other\n", "/tmp/b.md");
+            other.Saved = false;
+            var (exit, _, stderr) = await Run("", "close", other.DocumentId);
+            Assert.Equal(6, exit);
+            Assert.Contains("unsaved_changes", stderr);
+            (exit, _, _) = await Run("", "close", doc.DocumentId);
+            Assert.Equal(0, exit);
+            Assert.DoesNotContain(host.Docs, d => d.doc == doc);
+        }
+
+        [Fact]
         public async Task View_reads_without_options_and_sets_with_them()
         {
             var (exit, stdout, _) = await Run("", "view", FakeHost.WindowId);

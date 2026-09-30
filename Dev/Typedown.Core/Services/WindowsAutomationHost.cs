@@ -306,6 +306,33 @@ namespace Typedown.Core.Services
             });
         }
 
+        public async Task<DocumentInfo> CloseDocumentAsync(string documentId, long? baseRevision, CancellationToken cancellationToken)
+        {
+            var (window, tab) = await Find(documentId);
+            // Between automation edits of this document, never during one.
+            return await coordinator.ExclusiveAsync(documentId, () => OnWindow(window.WindowId, async app =>
+            {
+                if (!app.TabsViewModel.Tabs.Contains(tab)) throw DocumentNotFound(documentId);
+                var active = app.TabsViewModel.ActiveTab == tab;
+                // Typing the page has not reported yet counts: its latest text first.
+                if (active && !await app.EditorViewModel.SyncWithPageAsync(AutomationDocument.ReloadTimeoutMs, AutomationDocument.FlushTimeoutMs))
+                    throw new AutomationException(AutomationErrorKind.content_sync_timeout, "Could not confirm the editor's latest text.");
+                if (baseRevision != null && baseRevision != tab.Revision)
+                    throw new AutomationException(AutomationErrorKind.revision_conflict, "The document changed since baseRevision.", new Dictionary<string, object> { ["revision"] = tab.Revision });
+                var saved = active ? app.EditorViewModel.Saved : tab.Saved;
+                if (!saved)
+                    throw new AutomationException(AutomationErrorKind.unsaved_changes, "The document has unsaved changes; save it first. Nothing was closed.",
+                        new Dictionary<string, object> { ["revision"] = tab.Revision });
+                var info = Info(app, window.WindowId, tab);
+                // The window's only document: a new empty one comes first, so the window stays.
+                if (app.TabsViewModel.Tabs.Count == 1) await app.FileViewModel.NewDocumentAsync();
+                if (app.TabsViewModel.Tabs.Count == 1 || !await app.TabsViewModel.CloseTab(tab))
+                    throw new AutomationException(AutomationErrorKind.editor_not_ready, "The document could not be closed.");
+                coordinator.Forget(documentId);
+                return info;
+            }), cancellationToken);
+        }
+
         public async Task DiscardDocumentAsync(string documentId, CancellationToken cancellationToken)
         {
             var (window, tab) = await Find(documentId);
