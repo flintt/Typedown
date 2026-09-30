@@ -8,7 +8,8 @@ param(
     [Parameter(Mandatory = $true)][string]$TestHost,
     [Parameter(Mandatory = $true)][string]$Driver,
     [Parameter(Mandatory = $true)][string]$Artifacts,
-    [int]$TimeoutSeconds = 600
+    [int]$TimeoutSeconds = 600,
+    [string]$Only = ''
 )
 $ErrorActionPreference = 'Stop'
 $task = 'TypedownAutomationE2E'
@@ -18,7 +19,7 @@ $before = @(Get-ChildItem $Artifacts -Directory | ForEach-Object { $_.Name })
 # The full command goes into a launcher file: schtasks cuts /TR at 261 characters, and a cut command runs with
 # broken arguments and never reports. Hidden: a console window would cover the test host and take the foreground.
 $launcher = Join-Path $PSScriptRoot 'launch-e2e.cmd'
-"@powershell -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File `"$script`" -TestHost `"$TestHost`" -Driver `"$Driver`" -Artifacts `"$Artifacts`"" |
+"@powershell -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File `"$script`" -TestHost `"$TestHost`" -Driver `"$Driver`" -Artifacts `"$Artifacts`" -Only `"$Only`"" |
     Out-File $launcher -Encoding ascii
 schtasks /Create /TN $task /TR "`"$launcher`"" /SC ONCE /ST 23:59 /IT /F | Out-Null
 if ($LASTEXITCODE -ne 0) { Write-Output "ENVIRONMENT ERROR: could not register the scheduled task"; exit 3 }

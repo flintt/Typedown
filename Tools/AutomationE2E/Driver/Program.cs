@@ -339,6 +339,20 @@ internal static class Program
         Check(!(bool)now["saved"]!, "the keystroke leaves the document unsaved");
     }
 
+    /// <summary>
+    /// settings.set as a client should do it: against the revision just read, again after a conflict. The revision also
+    /// advances when the app stores a window's placement (a moved or resized window), so a conflict can come from that.
+    /// </summary>
+    private static async Task<long> SetSetting(Client c, string key, JToken value)
+    {
+        for (var attempt = 0; ; attempt++)
+        {
+            var revision = (long)(await c.Call("settings.get", new { keys = new[] { key } }))["settingsRevision"]!;
+            try { return (long)(await c.Call("settings.set", new { key, value, baseSettingsRevision = revision }))["settingsRevision"]!; }
+            catch (JsonRpcRemoteException e) when ((string?)e.ErrorData?["kind"] == "revision_conflict" && attempt < 3) { }
+        }
+    }
+
     private static async Task S3(List<string> notes)
     {
         using var c = await Session("e2e S3");
@@ -348,7 +362,7 @@ internal static class Program
         var original = (JObject)got["values"]!;
         var revision = (long)got["settingsRevision"]!;
         async Task<JToken> Setting(string name) => (await c.Call("test.settings.get", new { windowId, name }))["value"]!;
-        async Task Set(string key, JToken value) => revision = (long)(await c.Call("settings.set", new { key, value, baseSettingsRevision = revision }))["settingsRevision"]!;
+        async Task Set(string key, JToken value) => revision = await SetSetting(c, key, value);
         try
         {
             var language = (string)original["ui.language"]! == "ja" ? "en" : "ja";
@@ -362,9 +376,11 @@ internal static class Program
             Check((bool)await Setting("AppCompactMode") == compact, $"compact mode {compact}");
             await Set("status.wordCount", "characters");
             Check((int)await Setting("WordCountMethod") == 0, "word count by characters");
-            Check(await c.ErrorKind("settings.set", new { key = "status.wordCount", value = "paragraphs", baseSettingsRevision = revision }) == "setting_invalid",
+            // Valid in the catalog (the Uno edition has them), refused by this edition after the revision check.
+            async Task<long> Current() => (long)(await c.Call("settings.get", new { keys = new[] { "ui.language" } }))["settingsRevision"]!;
+            Check(await c.ErrorKind("settings.set", new { key = "status.wordCount", value = "paragraphs", baseSettingsRevision = await Current() }) == "setting_invalid",
                 "paragraphs is not a word count this edition has");
-            Check(await c.ErrorKind("settings.set", new { key = "markdown.listIndentation", value = "tab", baseSettingsRevision = revision }) == "setting_invalid",
+            Check(await c.ErrorKind("settings.set", new { key = "markdown.listIndentation", value = "tab", baseSettingsRevision = await Current() }) == "setting_invalid",
                 "tab is not a list indentation this edition has");
             var described = (JArray)(await c.Call("settings.describe"))["settings"]!;
             notes.Add($"{described.Count} settings described; language {language}, tab {tab}, compact {compact}");
@@ -432,6 +448,11 @@ internal static class Program
                 statusBar = (bool)before["statusBar"]!, bounds = new { x = (int)b["x"]!, y = (int)b["y"]!, width = (int)b["width"]!, height = (int)b["height"]! },
             });
         }
+        // Diagnosis: does anything change settings on its own after the view change (the window placement)?
+        var r0 = (long)(await c.Call("settings.get", new { keys = new[] { "editor.fontSize" } }))["settingsRevision"]!;
+        await Task.Delay(3000);
+        var r1 = (long)(await c.Call("settings.get", new { keys = new[] { "editor.fontSize" } }))["settingsRevision"]!;
+        notes.Add($"settings revision {r0} -> {r1} in the 3 s after the view was restored");
     }
 
     private static async Task B01(List<string> notes)
@@ -513,7 +534,20 @@ internal static class Program
         Check((int)(await c.Call("settings.get", new { keys = new[] { "editor.fontSize" } }))["values"]!["editor.fontSize"]! == font, "settings.get reads it back");
         Check(await c.ErrorCode("settings.set", new { key = "editor.fontSize", value = 12, baseSettingsRevision = revision }) == -32012, "a stale settings revision is refused");
         Check(await c.ErrorCode("settings.set", new { key = "SourceCode", value = true, baseSettingsRevision = (long)set["settingsRevision"]! }) == -32020, "a window mode is not an external setting");
-        notes.Add($"{windows.Count} window(s), font {font}");
+        // Leave the windows as they were: a later case that clicks and types into a page (F01) found it re-laid out
+        // under a font size nobody put back, and its keystroke went elsewhere.
+        var original = (int)got["values"]!["editor.fontSize"]!;
+        await SetSetting(c, "editor.fontSize", original);
+        foreach (var window in windows)
+        {
+            string? drawn = null;
+            for (var i = 0; i < 100 && drawn != $"{original}px"; i++)
+            {
+                try { drawn = (string?)(await c.Call("test.editor.style", new { windowId = window }))["fontSize"]; } catch (JsonRpcRemoteException) { }
+                if (drawn != $"{original}px") await Task.Delay(50);
+            }
+        }
+        notes.Add($"{windows.Count} window(s), font {font}, back to {original}");
     }
 
     private static async Task B02(List<string> notes)
@@ -530,8 +564,9 @@ internal static class Program
             var windowHandle = WindowOf(settingsWindow, c);
             await WaitForNumberBox(await windowHandle, before, notes, "the settings page shows the current size");
             var font = before == 25 ? 26 : 25;
-            await c.Call("settings.set", new { key = "editor.fontSize", value = font, baseSettingsRevision = (long)got["settingsRevision"]! });
+            await SetSetting(c, "editor.fontSize", font);
             await WaitForNumberBox(await windowHandle, font, notes, "the open settings page follows a change made elsewhere");
+            await SetSetting(c, "editor.fontSize", before);
         }
         finally
         {
@@ -825,7 +860,7 @@ internal static class Program
         var init = await mcp.Send("initialize", new { protocolVersion = "2025-06-18", capabilities = new { }, clientInfo = new { name = "E2E agent", version = "1" } });
         Check((string?)init["result"]?["protocolVersion"] == "2025-06-18", "initialize answers with the protocol version");
         var tools = ((JArray)(await mcp.Send("tools/list", new { }))["result"]!["tools"]!).Select(t => (string)t["name"]!).ToList();
-        Check(tools.Count == 5 && tools.Contains("typedown_replace_text"), $"five tools ({string.Join(", ", tools)})");
+        Check(tools.Count == 7 && tools.Contains("typedown_replace_text") && tools.Contains("typedown_set_view"), $"seven tools ({string.Join(", ", tools)})");
 
         var list = await mcp.Tool("typedown_list_documents", new { });
         Check(!(bool)list["isError"]! && list["structuredContent"]!["documents"]!.Any(d => (string)d["documentId"]! == a), "the document is listed");
