@@ -352,18 +352,23 @@ internal static class Program
         var titledBackup = Directory.GetFiles(backup, "*_r04-t.md").FirstOrDefault();
         Check(titledBackup != null && Disk(titledBackup) == "# T\n\nedited, not saved\n", "the background titled document has its backup");
 
+        notes.Add("backups checked");
         // Killed, not closed: nothing gets to save or clean up.
         using (var dying = Process.GetProcessById(hostPid))
         {
             dying.Kill();
             dying.WaitForExit(10000);
         }
+        notes.Add("killed");
         File.Delete(Path.Combine(testRoot, "automation-endpoint.txt"));
         // Shell-started: a child started directly would inherit this driver's redirected output, and the script
         // running the driver would then wait for the test host to exit before it could finish.
         var restarted = Process.Start(new ProcessStartInfo(hostExe, $"--automation-test-root \"{testRoot}\"") { UseShellExecute = true })!;
         hostPid = restarted.Id;
+        notes.Add($"restarted pid {hostPid}");
         for (var i = 0; i < 300 && !File.Exists(Path.Combine(testRoot, "automation-endpoint.txt")); i++) await Task.Delay(100);
+        var restartedEndpoint = File.ReadAllText(Path.Combine(testRoot, "automation-endpoint.txt")).Trim();
+        Check(restartedEndpoint == endpoint, $"the restarted host listens on the same endpoint as before ({restartedEndpoint} vs {endpoint})");
         var listenError = Path.Combine(testRoot, "automation-endpoint-error.txt");
         Client? afterClient = null;
         for (var i = 0; i < 30 && afterClient == null; i++)
@@ -374,15 +379,19 @@ internal static class Program
         }
         if (afterClient == null) throw new CaseFailed("the restarted host never accepted a connection");
         using var after = afterClient;
+        notes.Add("connected");
         await Initialize(after, "e2e R04 after");
         await WaitForWindow(after);
+        notes.Add("window up");
         // The recovery question: answered as a person would, with Enter (Recover is the default button).
         JArray documents = new();
         for (var i = 0; i < 60; i++)
         {
             documents = (JArray)(await after.Call("document.list"))["documents"]!;
             if (documents.Any(d => (string)d["documentId"]! == u1)) break;
-            if (AnswerDialog()) notes.Add("answered the recovery question");
+            var sw = Stopwatch.StartNew();
+            var answered = AnswerDialog();
+            notes.Add($"dialog attempt {i}: {(answered ? "answered" : lastDialogProblem[..Math.Min(300, lastDialogProblem.Length)])} ({sw.ElapsedMilliseconds} ms)");
             await Task.Delay(250);
         }
         if (!documents.Any(d => (string)d["documentId"]! == u1)) throw new CaseFailed("the recovery question was not answered: " + lastDialogProblem);

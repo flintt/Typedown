@@ -94,9 +94,16 @@ namespace Typedown.Core
         /// Base of the single-instance mutex and hand-over pipe names: the application's own names, or for the test host
         /// names tied to its data root, so two test runs and the everyday instance never answer for each other.
         /// </summary>
-        public static string InstanceName => IsAutomationTestHost
-            ? "Typedown.AutomationTestHost." + Convert.ToString((uint)AutomationTestRoot.ToLowerInvariant().GetHashCode() ^ (uint)AutomationTestRoot.Length, 16)
-            : "Typedown.App";
+        public static string InstanceName => IsAutomationTestHost ? "Typedown.AutomationTestHost." + StableHash(AutomationTestRoot.ToLowerInvariant()) : "Typedown.App";
+
+        // Not string.GetHashCode: that is randomized per process, so a restarted test host got other instance names
+        // than the one before it on the same root - another mutex, another endpoint.
+        private static string StableHash(string text)
+        {
+            using var sha = System.Security.Cryptography.SHA256.Create();
+            var hash = sha.ComputeHash(System.Text.Encoding.UTF8.GetBytes(text));
+            return BitConverter.ToString(hash, 0, 6).Replace("-", "").ToLowerInvariant();
+        }
 
         /// <summary>Folder for logs and browser data beside the settings folder.</summary>
         public static string LocalAppDataFolder => IsAutomationTestHost
