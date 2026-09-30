@@ -135,8 +135,7 @@ internal static class Program
             await Case("EX01 the PowerShell and Python client examples edit through the real pipe", EX01);
             await Case("EQ01 the equivalence scenario (compared with the Uno edition's answers offline)", EQ01);
             await Case("R04 untitled and background documents come back from their backups after a kill, each its own", R04);
-            // Only when asked for (--only Q02): it crashes the host until that is fixed.
-            if (only != null) await Case("Q02 a window closed at once after it opened (its web view still being created): the process lives on", Q02);
+            await Case("Q02 a window closed at once after it opened (its web view still being created): the process lives on", Q02);
             // Last: it ends the test host.
             await Case("Q01 two windows closed one after the other: the process exits (it stayed, headless)", Q01);
         }
