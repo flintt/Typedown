@@ -327,10 +327,10 @@ Typedown.Uno/Automation/
 
 依赖阶段 0b，不依赖阶段 2：
 
-- [ ] 实现 `settings.describe/get/set` 和 `settings.read/settings.write` scope。
-- [ ] 新增 `ApplySettings/SettingsApplied`，普通成功等待运行时应用与设置持久化。
-- [ ] 只开放规范映射表中通过多窗口、WebView 和设置页同步测试的设置。
-- [ ] CLI 增加 `settings` 命令；设置接口失败不能影响文档接口。
+- [x] 实现 `settings.describe/get/set` 和 `settings.read/settings.write` scope。*（`SettingsMethods` + 嵌入的 `settings-map.json`；`WindowsSettingsHost`；E2E S2 在 hp 通过。）*
+- [x] 新增 `ApplySettings/SettingsApplied`，普通成功等待运行时应用与设置持久化。*（没有新增页面消息：宿主经某个窗口的 `SettingsViewModel` 设置（与设置页同一套 setter），各窗口通过共享 store 的变更事件应用，编辑器页面由既有的 `SettingsChanged` 更新；成功前等待 store 落盘，写盘失败返回 `persistence_failed`。）*
+- [ ] 只开放规范映射表中通过多窗口、WebView 和设置页同步测试的设置。*（部分：只开放映射表的 4 个 key，多窗口同步由 E2E B01/S2 验证；编辑器页面实际字号与已打开设置页控件的刷新尚未自动验证。）*
+- [x] CLI 增加 `settings` 命令；设置接口失败不能影响文档接口。*（`typedownctl settings describe|get|set`；设置方法独立注册，失败只返回该请求的错误。）*
 
 完成标准：设置修改在全部相关窗口和编辑器中可见并在重启后保留；设置线未完成不影响文档 MVP 发布。
 
