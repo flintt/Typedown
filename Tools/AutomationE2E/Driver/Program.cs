@@ -341,8 +341,11 @@ internal static class Program
         Check(titledBackup != null && Disk(titledBackup) == "# T\n\nedited, not saved\n", "the background titled document has its backup");
 
         // Killed, not closed: nothing gets to save or clean up.
-        Process.GetProcessById(hostPid).Kill();
-        Process.GetProcessById(hostPid).WaitForExit(10000);
+        using (var dying = Process.GetProcessById(hostPid))
+        {
+            dying.Kill();
+            dying.WaitForExit(10000);
+        }
         File.Delete(Path.Combine(testRoot, "automation-endpoint.txt"));
         var restarted = Process.Start(new ProcessStartInfo(hostExe) { ArgumentList = { "--automation-test-root", testRoot }, UseShellExecute = false })!;
         hostPid = restarted.Id;
