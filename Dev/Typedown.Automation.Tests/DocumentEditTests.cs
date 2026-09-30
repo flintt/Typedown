@@ -51,6 +51,17 @@ namespace Typedown.Automation.Tests
             return Task.FromResult(reply);
         }
 
+        /// <summary>Set by a test: the page loaded something else after applying (a web view reload).</summary>
+        public bool ReloadedAfterApply;
+
+        public bool EditorStillHoldsEdit()
+        {
+            Calls.Add("check");
+            if (!ReloadedAfterApply) return true;
+            PageText = Text; // a reload shows what the host holds, which is still the text before the edit
+            return false;
+        }
+
         public Task<string?> RestoreAsync(object state, CancellationToken ct)
         {
             Calls.Add("restore");
@@ -98,7 +109,7 @@ namespace Typedown.Automation.Tests
             Assert.Equal("automation", result.Origin);
             Assert.False(result.Saved);
             Assert.Equal(32, result.OperationId.Length);
-            Assert.Equal(new[] { "flush", "capture", "apply", "commit", "end" }, doc.Calls);
+            Assert.Equal(new[] { "flush", "capture", "apply", "check", "commit", "end" }, doc.Calls);
             Assert.Equal(("# new\n", 1L, 1), (doc.Text, doc.Revision, doc.UndoSteps));
         }
 
@@ -181,6 +192,20 @@ namespace Typedown.Automation.Tests
             Assert.Equal(AutomationErrorKind.editor_not_ready, await Fails(doc, Replace(0, "x\n")));
             Assert.Equal(("# base\n", "# base\n", 0L), (doc.Text, doc.PageText, doc.Revision));
             Assert.DoesNotContain("commit", doc.Calls);
+        }
+
+        [Fact]
+        public async Task A_reload_after_the_page_applied_is_not_committed_and_restores()
+        {
+            var doc = new FakeDocument { ReloadedAfterApply = true };
+            var e = await Assert.ThrowsAsync<AutomationException>(() => coordinator.EditAsync(doc, Replace(0, "# written\n"), CancellationToken.None));
+            Assert.Equal(AutomationErrorKind.editor_not_ready, e.Kind);
+            Assert.Equal("editorReloaded", e.ErrorData["reason"]);
+            Assert.DoesNotContain("commit", doc.Calls);
+            Assert.Contains("restore", doc.Calls);
+            Assert.Equal(0, doc.Revision);
+            Assert.Equal("# base\n", doc.Text);
+            Assert.Equal("# base\n", doc.PageText);
         }
 
         [Fact]
@@ -340,6 +365,7 @@ namespace Typedown.Automation.Tests
                 Note(); await Task.Delay(20); Note();
                 return FakeDocument.Classified(c, PendingNormalization.None);
             }
+            public bool EditorStillHoldsEdit() { Note(); return true; }
             public Task<string?> RestoreAsync(object state, CancellationToken ct) { Note(); return Task.FromResult<string?>(null); }
             public void Commit(string t, long revision, string operationId) { Note(); text = t; rev = revision; }
             public Task<bool> SaveAsync(CancellationToken ct) { Note(); return Task.FromResult(true); }

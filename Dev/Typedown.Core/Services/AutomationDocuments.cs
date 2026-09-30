@@ -51,9 +51,13 @@ namespace Typedown.Core.Services
 
         public object CaptureState() => new State { Text = Editor.Markdown, Cursor = Editor.CurrentCursor, ScrollTop = Editor.LastScrollY, LoadId = Editor.LoadId };
 
+        // The load the page was on when it applied the edit: another load since means it no longer shows the edit.
+        private int appliedLoadId;
+
         public async Task<ApplyReply> ApplyInEditorAsync(ApplyCommand command, CancellationToken cancellationToken)
         {
             Editor.HoldEditorReports();
+            appliedLoadId = Editor.LoadId;
             var reply = await Editor.ApplyDocumentEditAsync(command.OperationId, command.TargetRevision, command.BaseContentHash, command.Text, ApplyTimeoutMs);
             if (reply == null) throw new TimeoutException("The editor did not answer ApplyDocumentEdit.");
             switch (reply["outcome"]?.ToString())
@@ -76,6 +80,8 @@ namespace Typedown.Core.Services
                     return new ApplyReply(ApplyOutcome.Failed);
             }
         }
+
+        public bool EditorStillHoldsEdit() => !IsActive || Editor.LoadId == appliedLoadId;
 
         public async Task<string> RestoreAsync(object captured, CancellationToken cancellationToken)
         {

@@ -102,6 +102,14 @@ namespace Typedown.Automation
         Task<ApplyReply> ApplyInEditorAsync(ApplyCommand command, CancellationToken cancellationToken);
 
         /// <summary>
+        /// After the page applied the edit: false when the window has since shown the document through another load
+        /// (the web view reloaded, the tab was switched away and back), so the page no longer holds the candidate and
+        /// committing would leave host and page apart. A tab switched away and not back still takes the commit into
+        /// its snapshot.
+        /// </summary>
+        bool EditorStillHoldsEdit();
+
+        /// <summary>
         /// Reloads the captured state through the normal LoadFile flow under a new load id and returns the hash of
         /// the text the page confirmed, or null when it did not confirm. Never changes the revision or the history.
         /// </summary>
@@ -309,6 +317,9 @@ namespace Typedown.Automation
                             NormalizationData(reply.Normalization));
                     else if (reply.Normalization.Pending == PendingNormalization.Unknown && !request.AllowUnknown)
                         failure = Unclassified(reply.Normalization);
+                    else if (!document.EditorStillHoldsEdit())
+                        failure = Error(AutomationErrorKind.editor_not_ready, "The editor was reloaded before the edit was committed; the document was restored.",
+                            new Dictionary<string, object?> { ["reason"] = "editorReloaded" });
                 }
 
                 if (failure != null)

@@ -65,6 +65,15 @@ namespace Typedown.Services.Automation
                         ?? throw new AutomationException(AutomationErrorKind.editor_not_ready, "the window shows no editor page");
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["focused"] = editor.Focus(global::Windows.UI.Xaml.FocusState.Programmatic) };
                 })));
+            // Reloads the window's editor page, as the application does after a page error or a crashed web process.
+            methods.Add(new MethodDescriptor("test.editor.reload", null, "test.editor.reload/1", (c, ct) =>
+                Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    var editor = app.MarkdownEditor as Typedown.Controls.MarkdownEditor
+                        ?? throw new AutomationException(AutomationErrorKind.editor_not_ready, "the window shows no editor page");
+                    editor.CoreWebView2.Reload();
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject();
+                })));
             methods.Add(new MethodDescriptor("test.window.handle", null, "test.window.handle/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
                     (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["hwnd"] = app.MainWindow.ToInt64() })));

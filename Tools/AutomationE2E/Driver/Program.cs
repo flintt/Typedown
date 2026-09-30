@@ -118,6 +118,9 @@ internal static class Program
             await Case("F01 a written document with protected payloads keeps every one of them through a real first keystroke", F01);
             await Case("M01 a written text survives visual, reading and source mode switches byte for byte, then saves exactly", M01);
             await Case("P01 awaitPresentation: a revealed write in a background tab of a minimized window reports it drawn; it needs reveal", P01);
+            await Case("W01 the editor page reloads after it applied a write and before the commit: nothing is committed, host and page agree", W01);
+            await Case("W02 a mode switch while a write is held after the page applied it: the write commits and every mode shows it", W02);
+            await Case("W03 the tab switched away and back while a write is held: refused and restored; switched away only: committed into the tab", W03);
             await Case("R04 untitled and background documents come back from their backups after a kill, each its own", R04);
         }
         catch (Exception e)
@@ -545,6 +548,111 @@ internal static class Program
         Check(windows.Any(w => (string)w["windowId"]! == windowId && (string?)w["activeDocumentId"] == a), "the written document is the window's active tab");
         Check(!IsIconic(window), "the window is no longer minimized");
         Check((string)(await Get(c, a))["text"]! == "# A\n\nalpha shown\n", "latest read returns the written text");
+    }
+
+    private static async Task<string> WindowIdOf(Client c, string documentId) =>
+        (string)(await c.Call("document.get", new { documentId, consistency = "snapshot" }))["windowId"]!;
+
+    // Starts a write and holds it where the page has applied it but the host has not committed it yet.
+    private static async Task<(Task<JToken> write, string barrier)> HoldAfterApply(Client writer, Client driver, string documentId, string text)
+    {
+        var barrier = (string)(await driver.Call("test.barrier.arm", new { point = EditBarrierPoints.AfterEditorMutationBeforeReport, documentId }))["barrierId"]!;
+        var write = writer.Call("document.replace", new { documentId, baseRevision = await Revision(driver, documentId), text, normalizationPolicy = "allowUnknown" });
+        var hit = await driver.Call("test.barrier.waitHit", new { barrierId = barrier, timeoutMs = 20000 });
+        if (!(bool)hit["hit"]!) throw new CaseFailed("the write never reached the page");
+        return (write, barrier);
+    }
+
+    private static async Task<string> Outcome(Task<JToken> write)
+    {
+        try { var r = await write; return $"committed r{r["revision"]}"; }
+        catch (JsonRpcRemoteException e) { return $"refused {e.ErrorData?["kind"]} {e.ErrorData?["reason"]}"; }
+    }
+
+    private static async Task W01(List<string> notes)
+    {
+        using var writer = await Session("e2e W01 writer");
+        using var driver = await Session("e2e W01 driver");
+        const string original = "# W01\n\noriginal\n";
+        var a = await Open(driver, Fixture("w01.md", original));
+        var windowId = await WindowIdOf(driver, a);
+        var r = await Revision(driver, a);
+        var (write, barrier) = await HoldAfterApply(writer, driver, a, "# W01\n\nwritten\n");
+        Check((await WaitForPage(driver, a, t => t.Contains("written"), "the applied write")).Contains("written"), "the page shows the write before the commit");
+        await driver.Call("test.editor.reload", new { windowId });
+        await WaitForPage(driver, a, t => t == original, "the reloaded page");
+        await driver.Call("test.barrier.release", new { barrierId = barrier });
+        var outcome = await Outcome(write);
+        notes.Add(outcome);
+        Check(outcome.Contains("editorReloaded"), "the write is refused because the page reloaded");
+        var doc = await Get(driver, a);
+        Check((string)doc["text"]! == original && (long)doc["revision"]! == r, "host text and revision are the ones before the write");
+        Check(await WaitForPage(driver, a, t => t == original, "the restored page") == original, "the page shows the same text as the host");
+        var again = await driver.Call("document.replace", new { documentId = a, baseRevision = r, text = "# W01\n\nsecond try\n", normalizationPolicy = "allowUnknown" });
+        Check((long)again["revision"]! == r + 1, "the document still takes writes");
+    }
+
+    private static async Task W02(List<string> notes)
+    {
+        using var writer = await Session("e2e W02 writer");
+        using var driver = await Session("e2e W02 driver");
+        var a = await Open(driver, Fixture("w02.md", "# W02\n\noriginal\n"));
+        var windowId = await WindowIdOf(driver, a);
+        const string written = "# W02\n\nwritten across a mode switch\n";
+        try
+        {
+            var (write, barrier) = await HoldAfterApply(writer, driver, a, written);
+            await driver.Call("test.settings.set", new { windowId, name = "SourceCode", value = true });
+            await Task.Delay(500);
+            await driver.Call("test.barrier.release", new { barrierId = barrier });
+            var outcome = await Outcome(write);
+            notes.Add(outcome);
+            Check(outcome.StartsWith("committed"), "the write commits");
+            Check((string)(await Get(driver, a))["text"]! == written, "the host holds the write");
+            Check(await WaitForPage(driver, a, t => t == written, "source mode") == written, "source mode shows exactly the write");
+            await driver.Call("test.settings.set", new { windowId, name = "SourceCode", value = false });
+            Check(await WaitForPage(driver, a, t => t == written, "visual mode") == written, "visual mode shows exactly the write");
+            Check((string)(await Get(driver, a))["text"]! == written, "the host still holds the write after switching back");
+        }
+        finally
+        {
+            await driver.Call("test.settings.set", new { windowId, name = "SourceCode", value = false });
+        }
+    }
+
+    private static async Task W03(List<string> notes)
+    {
+        using var writer = await Session("e2e W03 writer");
+        using var driver = await Session("e2e W03 driver");
+        const string originalA = "# A\n\nalpha\n", originalB = "# B\n\nbeta\n";
+        var b = await Open(driver, Fixture("w03-b.md", originalB));
+        var a = await Open(driver, Fixture("w03-a.md", originalA));
+
+        // Away and back: the page reloaded A from the host, which never took the write in.
+        var rA = await Revision(driver, a);
+        var (write, barrier) = await HoldAfterApply(writer, driver, a, "# A\n\nwritten\n");
+        await driver.Call("document.focus", new { documentId = b });
+        await driver.Call("document.focus", new { documentId = a });
+        await driver.Call("test.barrier.release", new { barrierId = barrier });
+        var outcome = await Outcome(write);
+        notes.Add("away and back: " + outcome);
+        Check(outcome.Contains("editorReloaded"), "away and back: refused");
+        Check((string)(await Get(driver, a))["text"]! == originalA && await Revision(driver, a) == rA, "away and back: A is unchanged in the host");
+        Check(await WaitForPage(driver, a, t => t == originalA, "A") == originalA, "away and back: the page shows A as the host holds it");
+        Check((string)(await Get(driver, b))["text"]! == originalB, "away and back: B is untouched");
+
+        // Away only: the write goes into A's tab, and shows when A comes back.
+        const string written = "# A\n\nwritten while away\n";
+        (write, barrier) = await HoldAfterApply(writer, driver, a, written);
+        await driver.Call("document.focus", new { documentId = b });
+        await driver.Call("test.barrier.release", new { barrierId = barrier });
+        outcome = await Outcome(write);
+        notes.Add("away: " + outcome);
+        Check(outcome.StartsWith("committed"), "away: committed");
+        Check(await WaitForPage(driver, b, t => t == originalB, "B") == originalB, "away: the page shows B untouched");
+        Check((string)(await Get(driver, a))["text"]! == written, "away: A's tab holds the write");
+        await driver.Call("document.focus", new { documentId = a });
+        Check(await WaitForPage(driver, a, t => t == written, "A again") == written, "away: A shows the write when it comes back");
     }
 
     private static async Task R04(List<string> notes)
