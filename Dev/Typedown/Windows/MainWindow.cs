@@ -290,8 +290,12 @@ namespace Typedown.Windows
                 Close();
         }
 
+        /// <summary>Set as the window's close handler starts: from then on it is not one of the open windows.</summary>
+        private bool closed;
+
         private void OnClosed(object sender, ClosedEventArgs e)
         {
+            closed = true;
             // A window that closes without the user asking for it is how "the app just vanished" happens, and
             // nothing else records it: note who asked.
             Log.Debug($"window closed\n{Environment.StackTrace}");
@@ -310,7 +314,11 @@ namespace Typedown.Windows
             // not yet disposed counted as a live window. The process then stayed, headless, with the
             // single-instance mutex — the installer could not replace its files, and the next launch handed
             // its request to a process that showed nothing.
-            var others = XamlWindow.AllWindows.OfType<MainWindow>().Count(x => x != this);
+            // The windows list itself can still hold a window that has closed: with two windows, closing one and
+            // then the other left the process running with no window (seen 2026-09-30, the second close logged
+            // "1 other window(s) remain" while the process owned no main window). A window that has closed does
+            // not count.
+            var others = XamlWindow.AllWindows.OfType<MainWindow>().Count(x => x != this && !x.closed);
             var instances = AppViewModel.GetInstances().Count;
             if (others == 0)
             {
