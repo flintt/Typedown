@@ -225,7 +225,7 @@ internal static class Program
         var id = await Open(c, Fixture("s1.md", "# S1\n\nbefore\n"));
         await c.Call("document.focus", new { documentId = id });
         var before = await Get(c, id);
-        await TypeIntoWindow("Q");
+        await TypeInto(c, id, "Q");
         await WaitForPage(c, id, t => t.Contains('Q'), "the keystroke");
         var after = await Get(c, id);
         var text = (string)after["text"]!;
@@ -287,7 +287,7 @@ internal static class Program
         var barrier = (string)(await driver.Call("test.barrier.arm", new { point = EditBarrierPoints.AfterEditorMutationBeforeReport, documentId = id }))["barrierId"]!;
         var write = writer.Call("document.replace", new { documentId = id, baseRevision = r, text = "# R03\n\nwritten\n", save = true, normalizationPolicy = "allowUnknown" });
         Check((bool)(await driver.Call("test.barrier.waitHit", new { barrierId = barrier, timeoutMs = 20000 }))["hit"]!, "the write reached the barrier with the page already changed");
-        await TypeIntoWindow("Z"); // the reader's keystroke on top of the write, while the host has not committed it
+        await TypeIntoWindow("Z", await WindowOf((string)(await driver.Call("document.get", new { documentId = id, consistency = "snapshot" }))["windowId"]!, driver)); // the reader's keystroke on top of the write, while the host has not committed it
         await WaitForPage(driver, id, t => t.Contains('Z'), "the keystroke");
         await driver.Call("test.barrier.release", new { barrierId = barrier });
         var result = await write;
@@ -455,7 +455,7 @@ internal static class Program
         var written = await c.Call("document.replace", new { documentId = id, baseRevision = await Revision(c, id), text, normalizationPolicy = "allowUnknown", reveal = "document" });
         notes.Add($"written, normalization {written["normalization"]?["pendingNormalization"]} {written["normalization"]?["reasons"]?.ToString(Formatting.None)}");
         Check((string?)written["normalization"]?["pendingNormalization"] != "unsafe", "the written text is not predicted to lose anything");
-        await TypeIntoWindow("Q");
+        await TypeInto(c, id, "Q");
         var after = await WaitForPage(c, id, t => t.Contains('Q'), "the keystroke");
         var latest = (string)(await Get(c, id))["text"]!;
         Check(latest == after, "latest read is what the page holds");
@@ -640,10 +640,19 @@ internal static class Program
         return sb.ToString();
     }
 
-    /// <summary>Real keystrokes into the host's window. The caller waits for them to reach the page (WaitForPage).</summary>
-    private static async Task TypeIntoWindow(string text)
+    /// <summary>
+    /// Real keystrokes into the window that shows the document (not the process's first window: with two windows the
+    /// document may be in the other one). The caller waits for them to reach the page (WaitForPage).
+    /// </summary>
+    private static async Task TypeInto(Client c, string documentId, string text)
     {
-        var window = MainWindow();
+        var windowId = (string)(await c.Call("document.focus", new { documentId }))["windowId"]!;
+        await TypeIntoWindow(text, await WindowOf(windowId, c));
+    }
+
+    private static async Task TypeIntoWindow(string text, IntPtr window = default)
+    {
+        if (window == IntPtr.Zero) window = MainWindow();
         await Activate(window);
         if (GetForegroundWindow() != window) throw new CaseFailed("the test host window could not be brought to the front (is the desktop locked?)");
         // Keyboard focus into the editor as a person gives it: a click in the text area, then Ctrl+End.
