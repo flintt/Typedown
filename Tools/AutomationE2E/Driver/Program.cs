@@ -138,6 +138,7 @@ internal static class Program
             // Last: it ends the test host. Only when asked for (--only Q01): closing one of two windows in the test host
             // breaks the automation connection and the window does not finish closing (2026-10-01, not yet understood).
             if (only != null) await Case("Q01 two windows closed one after the other: the process exits (it stayed, headless)", Q01);
+            if (only != null) await Case("Q02 a window closed at once after it opened (its web view still being created): the process lives on", Q02);
         }
         catch (Exception e)
         {
@@ -998,6 +999,21 @@ internal static class Program
         return Task.CompletedTask;
     }
 
+    private static async Task Q02(List<string> notes)
+    {
+        using var host = Process.GetProcessById(hostPid);
+        using var c = await Session("e2e Q02");
+        var opened = (string)(await c.Call("test.window.open"))["windowId"]!;
+        var window = await WindowOf(opened, c);
+        await Task.Delay(200);
+        PostMessage(window, 0x0010, IntPtr.Zero, IntPtr.Zero);
+        for (var i = 0; i < 10 && !host.HasExited; i++) await Task.Delay(500);
+        Check(!host.HasExited, "the process lives on after a window was closed while its editor was still being created");
+        using var again = await Session("e2e Q02 after");
+        var left = ((JArray)(await again.Call("window.list"))["windows"]!).Count;
+        Check(left == 1, $"one window left ({left})");
+    }
+
     private static async Task Q01(List<string> notes)
     {
         using var host = Process.GetProcessById(hostPid);
@@ -1008,12 +1024,31 @@ internal static class Program
             notes.Add($"{windows.Count} window(s)");
             var first = await WindowOf(windows[0], c);
             var second = await WindowOf(windows[1], c);
+            await Task.Delay(8000); // both editors loaded: a window closed while its web view is created is Q02
             // XamlWindow.AllWindows lists a window until the garbage collector has finalized it: the first window is
             // kept in memory after it closes, as it was, minutes later, for the reader who saw the process stay.
             await c.Call("test.window.keep", new { windowId = windows[0] });
             // Closed the way the close button closes a window (nothing unsaved here, so no question).
             PostMessage(first, 0x0010, IntPtr.Zero, IntPtr.Zero);
-            for (var i = 0; i < 10 && !host.HasExited; i++) await Task.Delay(300);
+            // Diagnosis: second by second, is the process alive, how many main windows are shown, does a fresh
+            // connection get an answer (and the old one?).
+            for (var i = 1; i <= 10; i++)
+            {
+                await Task.Delay(1000);
+                string fresh;
+                try
+                {
+                    using var probe = await Session($"e2e Q01 probe {i}").WaitAsync(TimeSpan.FromSeconds(4));
+                    fresh = $"{((JArray)(await probe.Call("window.list").WaitAsync(TimeSpan.FromSeconds(4)))["windows"]!).Count} window(s) listed";
+                }
+                catch (Exception e) { fresh = e.GetType().Name; }
+                string old;
+                try { old = $"{((JArray)(await c.Call("window.list").WaitAsync(TimeSpan.FromSeconds(4)))["windows"]!).Count} listed"; }
+                catch (Exception e) { old = e.GetType().Name; }
+                notes.Add($"t+{i}s: exited={host.HasExited} first window alive={IsWindow(first)} visible={IsWindowVisible(first)} second alive={IsWindow(second)}; new connection: {fresh}; old connection: {old}");
+                if (i == 2) notes.Add("screen: " + Screenshot("q01-after-first-close"));
+                if (host.HasExited) break;
+            }
             await Task.Delay(1000); // the log is written in batches
             try
             {
@@ -1039,6 +1074,8 @@ internal static class Program
     }
 
     [DllImport("user32.dll")] private static extern bool PostMessage(IntPtr window, uint message, IntPtr wParam, IntPtr lParam);
+    [DllImport("user32.dll")] private static extern bool IsWindow(IntPtr window);
+    [DllImport("user32.dll")] private static extern bool IsWindowVisible(IntPtr window);
 
     private static async Task R04(List<string> notes)
     {
