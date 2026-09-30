@@ -96,7 +96,7 @@ namespace Typedown.Services.Automation
                     var titles = new Newtonsoft.Json.Linq.JArray();
                     void Walk(global::Windows.UI.Xaml.DependencyObject node)
                     {
-                        if (node is global::Windows.UI.Xaml.Controls.MenuBarItem item) titles.Add(item.Title);
+                        if (node is global::Microsoft.UI.Xaml.Controls.MenuBarItem item) titles.Add(item.Title);
                         var count = global::Windows.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(node);
                         for (var i = 0; i < count; i++) Walk(global::Windows.UI.Xaml.Media.VisualTreeHelper.GetChild(node, i));
                     }
