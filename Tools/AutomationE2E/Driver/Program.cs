@@ -122,6 +122,7 @@ internal static class Program
             await Case("W02 a mode switch while a write is held after the page applied it: the write commits and every mode shows it", W02);
             await Case("W03 the tab switched away and back while a write is held: refused and restored; switched away only: committed into the tab", W03);
             await Case("MC01 typedown-mcp as its own process: read, replace text with reveal, a stale revision is a conflict that says to read again", MC01);
+            await Case("EX01 the PowerShell and Python client examples edit through the real pipe", EX01);
             await Case("R04 untitled and background documents come back from their backups after a kill, each its own", R04);
         }
         catch (Exception e)
@@ -737,6 +738,44 @@ internal static class Program
         Check(((string?)stale["structuredContent"]?["next"] ?? "").Contains("typedown_read_document"), "the conflict tells the agent to read again");
         Check((string)(await Get(driver, a))["text"]! == written, "the stale write changed nothing");
         Check(mcp.CloseAndWait(), "typedown-mcp exits when its input closes");
+    }
+
+    // Runs a program to its end (at most 60 s), for the client examples shipped next to the driver (e2e/examples).
+    private static (int exit, string stdout, string stderr) RunTool(string file, params string[] args)
+    {
+        var start = new ProcessStartInfo(file) { UseShellExecute = false, RedirectStandardOutput = true, RedirectStandardError = true, CreateNoWindow = true };
+        foreach (var a in args) start.ArgumentList.Add(a);
+        using var process = Process.Start(start)!;
+        var stdout = process.StandardOutput.ReadToEndAsync();
+        var stderr = process.StandardError.ReadToEndAsync();
+        if (!process.WaitForExit(60000)) { try { process.Kill(true); } catch { } throw new CaseFailed($"{file} did not finish"); }
+        return (process.ExitCode, stdout.Result, stderr.Result);
+    }
+
+    private static async Task EX01(List<string> notes)
+    {
+        using var driver = await Session("e2e EX01 driver");
+        var examples = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "examples"));
+        var a = await Open(driver, Fixture("ex01.md", "# EX01\n\nold text, old news\n"));
+
+        var ps = RunTool("powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command",
+            $". '{Path.Combine(examples, "Typedown-Client.ps1")}'; $c = Connect-Typedown '{endpoint}'; " +
+            "Initialize-Typedown $c @('document.read','document.write') | Out-Null; " +
+            $"$r = Set-TypedownText $c '{a}' 'old' 'new'; $r | ConvertTo-Json -Compress; $c.Pipe.Dispose()");
+        notes.Add($"powershell exit {ps.exit}: {ps.stdout.Trim()} {ps.stderr.Trim()}");
+        Check(ps.exit == 0 && ps.stdout.Contains("\"revision\""), "the PowerShell example writes");
+        Check((string)(await Get(driver, a))["text"]! == "# EX01\n\nnew text, new news\n", "the PowerShell example replaced both occurrences");
+
+        (int exit, string stdout, string stderr) py;
+        try { py = RunTool("python", Path.Combine(examples, "typedown_client.py"), "--endpoint", endpoint, "replace-text", a, "news", "notes"); }
+        catch (System.ComponentModel.Win32Exception) { notes.Add("no python on this machine: the Python example was not run"); return; }
+        notes.Add($"python exit {py.exit}: {py.stdout.Trim()} {py.stderr.Trim()}");
+        Check(py.exit == 0, "the Python example writes");
+        Check((string)(await Get(driver, a))["text"]! == "# EX01\n\nnew text, new notes\n", "the Python example replaced the word");
+
+        var expected = "Typedown.Automation.v1." + System.Security.Principal.WindowsIdentity.GetCurrent().User!.Value;
+        var name = RunTool("python", "-c", $"import sys; sys.path.insert(0, r'{examples}'); import typedown_client; print(typedown_client.Client.default_endpoint())");
+        Check(name.stdout.Trim() == expected, $"the Python example finds the application's pipe name ({name.stdout.Trim()} {name.stderr.Trim()})");
     }
 
     private static async Task R04(List<string> notes)

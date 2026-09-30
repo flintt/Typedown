@@ -346,7 +346,7 @@ Typedown.Uno/Automation/
 - [x] 保持观察者滚动、光标和选区；短暂高亮外部改变的范围，并允许用户关闭高亮动画。*（局部应用保留滚动、光标、选区和未变内容；改动的文字（源码模式）或块（可视模式，含退回整篇路径）淡出高亮 2 秒，系统“减少动态效果”时为静态底色。设置“高亮程序所做的更改”（`HighlightAutomationChanges`，默认开，74 种语言），接口不可改（settings-map：security）。已知限制：读者光标就在被改的块里时退回整篇载入，光标回到文首。）*
 - [x] 明确三种模式下的写入和模式切换串行行为，增加写入过程中切模式、切标签、重载 WebView 的测试。*（规格 2.4“写入与模式切换、标签切换、页面重载”。E2E W01–W03 在页面已应用、宿主未提交时重载页面、切换模式、切标签。修复一个真实缺陷：页面重载或标签切走又切回后，宿主仍会提交页面已不再显示的正文；去掉修复时 W01、W03 失败。）*
 - [x] 实现 MCP sidecar，把列举、读取、按文本替换、全文替换和保存映射为受控工具；`match_count_mismatch` 指引代理重新读取，不自动用旧文本重试。*（`Tools/Typedown.Mcp`（`typedown-mcp`，stdio，无新依赖），用法见其 README。失败结果带原样的接口错误和下一步指引；`McpTests` 断言同一冲突与 `typedownctl --json` 的错误对象逐字相同、不匹配时不重试（加入自动重试时测试失败）。E2E MC01 在 hp 上以独立进程走真实管道：读取、带 reveal 的替换、窗口标题显示代理名、过期 revision 冲突、关闭输入后自行退出。）*
-- [ ] 提供 PowerShell、Python 或 TypeScript 直接客户端示例。
+- [x] 提供 PowerShell、Python 或 TypeScript 直接客户端示例。*（`docs/automation-examples`：Python（仅标准库）和 PowerShell 5.1，都演示“读取 → 按读到的 revision 写入 → 冲突时重新读取、重新决定”。`ClientExampleTests` 让 Python 示例经真实管道服务端遇到读者在读写之间打字，要求按新正文替换（冲突后不重新读取时测试失败）；E2E EX01 在 hp 上用两个示例经真实命名管道写入，并核对 Python 算出的默认管道名。）*
 
 完成标准：外部局部修改不导致无关整页跳动；呈现超时不掩盖正文是否已应用；CLI 与 MCP 对同一冲突给出等价结构化原因。
 
