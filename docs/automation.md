@@ -13,14 +13,14 @@ Typedown 可以让**本机上以你的身份运行的程序**读取和编辑已�
 程序可以：
 
 - 列出打开的窗口和文档，读取正文（包括你刚输入、还没保存的内容）和标题结构；
-- 打开文件、新建文档、切到某个文档；
+- 打开文件、新建文档、切到某个文档，关闭已保存的文档；
 - 按文本替换或整篇替换正文，撤销、重做，保存到文档原有的路径；
 - 切换窗口的显示方式：可视、源码或阅读模式，侧栏（文件或大纲），状态栏，专注和打字机模式，窗口位置和大小——和你点“视图”菜单一样；
 - 读写 30 个设置：主题、字号、行高、文字方向、界面语言、编辑器与 Markdown 输出的选项、拼写检查、图片路径选项，以及（Windows）紧凑模式、Mica、动画和关闭后保持运行。改了立即生效，不用重启。
 
 程序不能：
 
-- 选择保存位置（没有“另存为”），关闭文档或窗口；
+- 选择保存位置（没有“另存为”），关闭窗口；关闭有未保存更改的文档（会被拒绝，什么都不丢，要关先保存）；
 - 读写其他设置，包括密码、自定义 CSS、文件夹路径、这两个自动化开关本身；
 - 通过网络访问：接口只在本机，Windows 上是只允许你这个用户打开的命名管道，Linux 上是只有你能进入的目录里的 socket（`$XDG_RUNTIME_DIR/typedown/automation.v1.sock`，权限 0600）。
 
@@ -43,6 +43,7 @@ typedownctl get <documentId> --latest --text
 typedownctl replace-text <documentId> --base-revision 3 --find "旧说法" --replacement "新说法" --expected-count 1 --save
 typedownctl replace <documentId> --base-revision 4 --stdin < new.md
 typedownctl view <windowId> --mode source --side-pane outline --size 1280x860
+typedownctl close <documentId>
 typedownctl settings set ui.language ja --base-revision 12
 ```
 
