@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -28,7 +28,7 @@ namespace Typedown.Core.Services
         public WindowsAutomationHost(string version, IEditBarriers barriers = null)
         {
             Version = version;
-            coordinator = new DocumentEditCoordinator(EditorClassifierVersion, barriers);
+            coordinator = new DocumentEditCoordinator(EditorClassifierVersion, barriers) { Diagnostics = message => Log.Debug("automation: " + message) };
         }
 
         public string Version { get; }
@@ -48,6 +48,7 @@ namespace Typedown.Core.Services
         private static async Task<T> OnWindow<T>(string windowId, Func<AppViewModel, Task<T>> work) => await (await Registry.OnWindowAsync(windowId, async app =>
         {
             var ready = app.EditorViewModel.StartupDocumentReady;
+            if (!ready.IsCompleted) Log.Debug($"automation: window {windowId} waits for its startup document");
             if (await Task.WhenAny(ready, Task.Delay(StartupTimeoutMs)) != ready)
                 throw new AutomationException(AutomationErrorKind.editor_not_ready, "The window has not finished starting.");
             return await work(app);
@@ -309,11 +310,13 @@ namespace Typedown.Core.Services
         public async Task<DocumentInfo> CloseDocumentAsync(string documentId, long? baseRevision, CancellationToken cancellationToken)
         {
             var (window, tab) = await Find(documentId);
+            Log.Debug($"close {documentId}: found in {window.WindowId}");
             // Between automation edits of this document, never during one.
             return await coordinator.ExclusiveAsync(documentId, () => OnWindow(window.WindowId, async app =>
             {
                 if (!app.TabsViewModel.Tabs.Contains(tab)) throw DocumentNotFound(documentId);
                 var active = app.TabsViewModel.ActiveTab == tab;
+                Log.Debug($"close {documentId}: on the window, active {active}, load {app.EditorViewModel.LoadId} confirmed {app.EditorViewModel.ConfirmedLoadId}");
                 // Typing the page has not reported yet counts: its latest text first.
                 if (active && !await app.EditorViewModel.SyncWithPageAsync(AutomationDocument.ReloadTimeoutMs, AutomationDocument.FlushTimeoutMs))
                     throw new AutomationException(AutomationErrorKind.content_sync_timeout, "Could not confirm the editor's latest text.");

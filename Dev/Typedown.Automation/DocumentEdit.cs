@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -191,6 +191,9 @@ namespace Typedown.Automation
         // No ConfigureAwait(false) in this class, on purpose: started on a window's UI thread, every step after an
         // await must resume there, because the document's members touch that window's state.
         private readonly Dictionary<string, SemaphoreSlim> locks = new(StringComparer.Ordinal);
+
+        /// <summary>Where the coordinator says what it is waiting for (the platform's log); nothing when unset.</summary>
+        public Action<string>? Diagnostics { get; set; }
         private readonly HashSet<string> quarantined = new(StringComparer.Ordinal);
         private readonly int classifierVersion;
         private readonly IEditBarriers? barriers;
@@ -237,7 +240,12 @@ namespace Typedown.Automation
         public async Task<T> ExclusiveAsync<T>(string documentId, Func<Task<T>> work, CancellationToken cancellationToken)
         {
             var gate = LockFor(documentId);
-            await gate.WaitAsync(cancellationToken);
+            // An operation that waits here long is behind another one on the same document: worth a line in the log.
+            if (!await gate.WaitAsync(5000, cancellationToken))
+            {
+                Diagnostics?.Invoke($"document {documentId}: waiting for another operation on it");
+                await gate.WaitAsync(cancellationToken);
+            }
             try { return await work(); }
             finally { gate.Release(); }
         }
