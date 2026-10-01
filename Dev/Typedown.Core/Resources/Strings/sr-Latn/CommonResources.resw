@@ -997,4 +997,13 @@
   <data name="Untitled" xml:space="preserve">
     <value>Bez naslova</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>Automatizacija povezana</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0} je uredio {1}</value>
+  </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>Uređivanje ovog dokumenta u vizuelnom režimu može da prepiše deo njegovog HTML-a. Da bi ostao nepromenjen, uređujte ga u režimu izvornog koda.</value>
+  </data>
 </root>

@@ -848,4 +848,16 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>ໜ້າເລີ່ມຕົ້ນຂອງແຖບຂ້າງ</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>ອະນຸຍາດລະບົບອັດຕະໂນມັດພາຍໃນ</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>ໂປຣແກຣມທີ່ທ່ານແລ່ນໃນຄອມພິວເຕີນີ້ສາມາດອ່ານ ແລະ ແກ້ໄຂເອກະສານທີ່ເປີດຢູ່ໄດ້. ຫົວຂໍ້ໜ້າຕ່າງຈະສະແດງເມື່ອມີການເຊື່ອມຕໍ່.</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>ໄຮໄລທ໌ການປ່ຽນແປງທີ່ໂປຣແກຣມເຮັດ</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>ໄຮໄລທ໌ຂໍ້ຄວາມທີ່ໂປຣແກຣມທີ່ເຊື່ອມຕໍ່ປ່ຽນແປງຊົ່ວຄາວ ເພື່ອໃຫ້ທ່ານເຫັນວ່າມີຫຍັງປ່ຽນໄປ.</value>
+  </data>
 </root>

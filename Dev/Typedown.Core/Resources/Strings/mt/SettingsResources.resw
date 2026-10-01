@@ -848,4 +848,16 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>Paġna awtomatika tal-pannell tal-ġenb</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>Ħalli l-awtomazzjoni lokali</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>Il-programmi li tħaddem fuq dan il-kompjuter jistgħu jaqraw u jeditjaw dokumenti miftuħa. It-titlu tat-tieqa juri meta wieħed ikun konness.</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>Enfasizza l-bidliet magħmula minn programmi</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>Jenfasizza għal ftit żmien it-test li biddel programm konness, biex tara x'inbidel.</value>
+  </data>
 </root>

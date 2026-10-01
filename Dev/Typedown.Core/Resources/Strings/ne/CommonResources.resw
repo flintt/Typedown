@@ -997,4 +997,13 @@
   <data name="Untitled" xml:space="preserve">
     <value>शीर्षकविहीन</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>स्वचालन जोडियो</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0} ले {1} सम्पादन गर्‍यो</value>
+  </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>यो कागजात दृश्य मोडमा सम्पादन गर्दा यसको केही HTML पुनर्लेखन हुन सक्छ। जस्ताको तस्तै राख्न स्रोत मोडमा सम्पादन गर्नुहोस्।</value>
+  </data>
 </root>

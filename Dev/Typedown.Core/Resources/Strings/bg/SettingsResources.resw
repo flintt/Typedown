@@ -848,4 +848,16 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>Начална страница на страничния панел</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>Разрешаване на локална автоматизация</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>Програмите, които стартирате на този компютър, могат да четат и редактират отворените документи. Заглавието на прозореца показва, когато има свързана програма.</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>Открояване на промените, направени от програми</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>За кратко откроява текста, променен от свързана програма, за да видите какво се е променило.</value>
+  </data>
 </root>

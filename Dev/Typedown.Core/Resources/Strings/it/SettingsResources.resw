@@ -848,4 +848,16 @@
   <data name="View.CustomTheme.Document" xml:space="preserve">
     <value>Come scriverne uno</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>Consenti l'automazione locale</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>I programmi che esegui su questo computer possono leggere e modificare i documenti aperti. Il titolo della finestra indica quando uno è connesso.</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>Evidenzia le modifiche fatte dai programmi</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>Evidenzia brevemente il testo modificato da un programma connesso, così puoi vedere cosa è cambiato.</value>
+  </data>
 </root>

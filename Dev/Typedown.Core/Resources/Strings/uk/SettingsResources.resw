@@ -848,4 +848,16 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>Типова сторінка бічної панелі</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>Дозволити локальну автоматизацію</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>Програми, які ви запускаєте на цьому комп'ютері, можуть читати й редагувати відкриті документи. Заголовок вікна показує, коли програму під'єднано.</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>Виділяти зміни, зроблені програмами</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>Ненадовго виділяє текст, змінений підключеною програмою, щоб було видно, що змінилося.</value>
+  </data>
 </root>

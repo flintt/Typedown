@@ -997,4 +997,13 @@
   <data name="Untitled" xml:space="preserve">
     <value>शीर्षकरहित</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>स्वयंचलन जोडलेले</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0} ने {1} संपादित केले</value>
+  </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>हा दस्तऐवज दृश्य मोडमध्ये संपादित केल्यास त्यातील काही HTML पुन्हा लिहिले जाऊ शकते. तसेच ठेवण्यासाठी स्रोत मोडमध्ये संपादित करा.</value>
+  </data>
 </root>

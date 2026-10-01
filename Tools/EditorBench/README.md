@@ -20,7 +20,39 @@ keystroke, after 45–53 ms.
 `modeswitch-check.js` reproduces upstream #20/#61 (blank lines appended on every source-mode switch): the
 markdown printed after "back to muya" must be identical to the value shown before the switch.
 
+Setup once with `npm ci` in this directory (Chrome at `/opt/google/chrome/chrome`, or set `CHROME`).
+`npm run check:source` runs the source-text mapping checks that gate automation writes (stage 0a of
+`docs/automation-api-analysis-plan.md`).
+
 Other checks (all take `STATICS=<dir>` or default to the built editor):
+
+- `source-stability-check.js` — source-text mapping stability over a wide fixture set (GFM tables, raw HTML,
+  footnotes, maths, Mermaid, fence info strings, emoji and ZWJ sequences, combining characters, task lists, front
+  matter, links/images/reference definitions, a 50k slice of `doc300k.md`, and every tenth CommonMark example;
+  `--full` runs all 652 examples and the whole 300k document). Each document goes reading → visual → source
+  twice and must come back byte for byte with no edit reported. It proves the mapping back to the original
+  source holds, not that the first real visual edit serializes faithfully. CR never reaches the editor (the host
+  normalizes line endings), so there is no CRLF fixture: CodeMirror would rewrite one and report an edit.
+- `first-edit-check.js` — the same fixtures, each with a paragraph `EDITHERE` appended, loaded, switched to
+  visual mode and edited for real (click, then type `X`). The flushed text must be Muya's export with only that
+  keystroke added, and must match what `window.__typedownPendingNormalization()` (`services/normalization.ts`)
+  predicted before the edit. Each fixture's verdict (`none` / `unknown` / `unsafe`) is kept in
+  `first-edit-known.json`; a worse verdict fails, `--update` rewrites the baseline. `unsafe` entries are text a
+  single keystroke would lose (today: an HTML entity in an HTML block, blank lines inserted into a multi-line HTML
+  attribute; fence info strings and tabs are kept since the lexer fix). `harness.js` holds the fixtures and the stub-host page both use.
+- `protected-payload-check.js` — the preserve documents of `docs/automation-fixtures/protected-payload.json` (links,
+  images, reference definitions, autolinks, fence info strings and bodies, footnotes, task states, raw HTML
+  attributes, front matter, maths, diagram blocks) each get one real keystroke in visual mode. Any `mustKeep` string
+  missing from what Muya writes back must have been predicted `unsafe` before the edit; losses are found by substring
+  search, not by the classifier, so a blind spot in the classifier cannot hide itself. Each document is also written
+  through `ApplyDocumentEdit` and must get the verdict predicted on load.
+- `origin-check.js` — every `MarkdownChange` carries `origin`: `user` after a real key, pointer, paste or drop
+  event or a host editing command, `editor` for a change nothing the reader did caused (`services/changeOrigin.ts`).
+  Loads, mode switches and late renders report nothing; an action counts for one report; a load forgets it.
+- `apply-edit-check.js` — the page's half of an automation write (`ApplyDocumentEdit` → `DocumentEditApplied`): a
+  stale `baseContentHash`, including typing the host has not heard of yet, is refused; otherwise the exact text is
+  applied in visual, source and reading mode with no `MarkdownChange`, and the reply carries the SHA-256 of the
+  source and the normalization verdict (`notEvaluated` in source mode, which has no Muya).
 
 - `reading-source-check.js` — preserves exact source through reading/source/visual mode switches and
   save flushes, checks a list followed immediately by a heading and fenced code, checks a GFM table

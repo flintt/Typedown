@@ -997,4 +997,13 @@
   <data name="Untitled" xml:space="preserve">
     <value>ไม่มีชื่อ</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>ระบบอัตโนมัติเชื่อมต่ออยู่</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0} แก้ไข {1}</value>
+  </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>การแก้ไขเอกสารนี้ในโหมดภาพอาจเขียน HTML บางส่วนใหม่ หากต้องการคงไว้ตามเดิม ให้แก้ไขในโหมดซอร์ส</value>
+  </data>
 </root>

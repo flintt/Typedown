@@ -848,4 +848,16 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>Yan panel varsayılan sayfası</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>Yerel otomasyona izin ver</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>Bu bilgisayarda çalıştırdığınız programlar açık belgeleri okuyup düzenleyebilir. Biri bağlandığında pencere başlığında gösterilir.</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>Programların yaptığı değişiklikleri vurgula</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>Bağlı bir programın değiştirdiği metni kısa süre vurgular, böylece neyin değiştiğini görebilirsiniz.</value>
+  </data>
 </root>

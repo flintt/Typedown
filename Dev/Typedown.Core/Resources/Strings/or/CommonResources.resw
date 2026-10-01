@@ -997,4 +997,13 @@
   <data name="Untitled" xml:space="preserve">
     <value>ଶୀର୍ଷକହୀନ</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>ସ୍ୱୟଂଚାଳନ ସଂଯୁକ୍ତ</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0} {1} ସମ୍ପାଦନ କଲା</value>
+  </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>ଏହି ଡକ୍ୟୁମେଣ୍ଟକୁ ଭିଜୁଆଲ ମୋଡରେ ସମ୍ପାଦନ କଲେ ଏହାର କିଛି HTML ପୁନଃ ଲେଖାଯାଇପାରେ। ଯେମିତି ଅଛି ସେମିତି ରଖିବାକୁ ସୋର୍ସ ମୋଡରେ ସମ୍ପାଦନ କରନ୍ତୁ।</value>
+  </data>
 </root>

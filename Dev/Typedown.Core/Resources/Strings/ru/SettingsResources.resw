@@ -848,4 +848,16 @@
   <data name="View.CustomTheme.Refresh" xml:space="preserve">
     <value>Перезагрузить темы</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>Разрешить локальную автоматизацию</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>Программы, запущенные вами на этом компьютере, могут читать и изменять открытые документы. Заголовок окна показывает, когда программа подключена.</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>Выделять изменения, сделанные программами</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>Ненадолго выделяет текст, изменённый подключённой программой, чтобы было видно, что поменялось.</value>
+  </data>
 </root>

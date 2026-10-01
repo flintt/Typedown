@@ -848,4 +848,16 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>Az oldalsáv alapértelmezett oldala</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>Helyi automatizálás engedélyezése</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>Az ezen a számítógépen futtatott programok olvashatják és szerkeszthetik a megnyitott dokumentumokat. Az ablak címe jelzi, ha valamelyik csatlakozik.</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>Programok által végzett módosítások kiemelése</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>Rövid ideig kiemeli a csatlakozott program által módosított szöveget, hogy lássa, mi változott.</value>
+  </data>
 </root>

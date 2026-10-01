@@ -848,4 +848,16 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>Pagina implicită a panoului lateral</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>Permite automatizarea locală</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>Programele pe care le rulați pe acest computer pot citi și edita documentele deschise. Titlul ferestrei arată când unul este conectat.</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>Evidențiază modificările făcute de programe</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>Evidențiază pentru scurt timp textul modificat de un program conectat, ca să vedeți ce s-a schimbat.</value>
+  </data>
 </root>

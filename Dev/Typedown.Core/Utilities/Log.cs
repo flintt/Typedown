@@ -9,7 +9,7 @@ namespace Typedown.Core.Utilities
     public static class Log
     {
         /// <summary>%LOCALAPPDATA%\Typedown\logs — crash reports are always written here, regardless of network settings.</summary>
-        public static string LogFolder => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), Config.AppName, "logs");
+        public static string LogFolder => Path.Combine(Config.LocalAppDataFolder, "logs");
 
         public static void WriteLocal(string type, string content)
         {

@@ -883,4 +883,20 @@
   <data name="View.CustomTheme.Refresh" xml:space="preserve">
     <value>Reload themes</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>Allow local automation</value>
+    <comment>通用/允许本机自动化</comment>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>Programs you run on this computer can read and edit open documents. The window title shows when one is connected.</value>
+    <comment>通用/允许本机自动化说明</comment>
+  </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>Highlight changes made by programs</value>
+    <comment>通用/高亮程序所做的更改</comment>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>Briefly highlights the text a connected program changed, so you can see what moved.</value>
+    <comment>通用/高亮程序所做的更改说明</comment>
+  </data>
 </root>

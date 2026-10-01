@@ -997,4 +997,13 @@
   <data name="Untitled" xml:space="preserve">
     <value>بدون عنوان</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>خودکارسازی وصل است</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0} سند {1} را ویرایش کرد</value>
+  </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>ویرایش این سند در حالت دیداری ممکن است بخشی از HTML آن را بازنویسی کند. برای حفظ آن به همین شکل، در حالت منبع ویرایش کنید.</value>
+  </data>
 </root>

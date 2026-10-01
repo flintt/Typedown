@@ -997,4 +997,13 @@
   <data name="Untitled" xml:space="preserve">
     <value>Bila kichwa</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>Uendeshaji otomatiki umeunganishwa</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0} alihariri {1}</value>
+  </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>Kuhariri hati hii katika hali ya kuona kunaweza kuandika upya sehemu ya HTML yake. Ili kuiacha kama ilivyo, ihariri katika hali ya chanzo.</value>
+  </data>
 </root>

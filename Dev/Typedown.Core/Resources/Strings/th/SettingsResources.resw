@@ -848,4 +848,16 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>หน้าเริ่มต้นของแผงด้านข้าง</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>อนุญาตระบบอัตโนมัติภายในเครื่อง</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>โปรแกรมที่คุณเรียกใช้บนคอมพิวเตอร์นี้สามารถอ่านและแก้ไขเอกสารที่เปิดอยู่ได้ ชื่อหน้าต่างจะแสดงเมื่อมีโปรแกรมเชื่อมต่อ</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>ไฮไลต์การเปลี่ยนแปลงที่โปรแกรมทำ</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>ไฮไลต์ข้อความที่โปรแกรมที่เชื่อมต่อเปลี่ยนแปลงชั่วครู่ เพื่อให้คุณเห็นว่ามีอะไรเปลี่ยนไป</value>
+  </data>
 </root>

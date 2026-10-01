@@ -848,4 +848,16 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>Tudalen ragosodedig y cwarel ochr</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>Caniatáu awtomeiddio lleol</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>Gall rhaglenni rydych chi'n eu rhedeg ar y cyfrifiadur hwn ddarllen a golygu dogfennau agored. Mae teitl y ffenestr yn dangos pan fydd un wedi'i gysylltu.</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>Amlygu newidiadau a wnaed gan raglenni</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>Yn amlygu'n fyr y testun a newidiwyd gan raglen gysylltiedig, fel y gallwch weld beth sydd wedi newid.</value>
+  </data>
 </root>

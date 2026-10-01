@@ -11,17 +11,35 @@ namespace Typedown.Core.Models
     public partial class DocumentTab : INotifyPropertyChanged
     {
         /// <summary>
-        /// The document's identity: from the tab's creation to its close, or until the tab is reused for another
-        /// document. Not the path: an untitled document has none, and Save As changes it. An untitled document's
-        /// backup is kept under it.
+        /// The document's identity for the automation API (docs/automation-api-spec.md): from the tab's creation to
+        /// its close, or until the tab is reused for another document. Not the path: an untitled document has none,
+        /// and Save As changes it.
         /// </summary>
         public string DocumentId { get; private set; } = NewDocumentId();
 
+
+        /// <summary>
+        /// Advanced only when the document text really changes: an edit, an undo or redo, a reload from disk.
+        /// Loads into the editor, tab and mode switches and saves leave it where it is (they change the internal
+        /// load id instead). Interpreted together with the process's instance id.
+        /// </summary>
+        public long Revision { get; private set; }
+
+        public void NoteTextChanged() => Revision++;
+
         /// <summary>The tab now holds a different document (a preview or blank tab reused for an open or new file).</summary>
-        public void BecomeNewDocument() => DocumentId = NewDocumentId();
+        public void BecomeNewDocument()
+        {
+            DocumentId = NewDocumentId();
+            Revision = 0;
+        }
 
         /// <summary>A document recovered from its backup keeps the id it had, and so its backup file.</summary>
-        public void RestoreIdentity(string documentId) => DocumentId = documentId;
+        public void RestoreIdentity(string documentId)
+        {
+            DocumentId = documentId;
+            Revision = 0;
+        }
 
         private static string NewDocumentId() => System.Guid.NewGuid().ToString("N");
 

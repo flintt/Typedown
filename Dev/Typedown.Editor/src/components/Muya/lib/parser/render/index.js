@@ -270,6 +270,29 @@ class StateRender {
     this.codeCache.clear()
   }
 
+  /**
+   * Replaces the DOM of some top-level blocks with other blocks, leaving every other block's DOM alone (Muya's
+   * replaceMarkdownLocally). The new blocks go before beforeKey's element, or at the end.
+   */
+  replaceBlocks(removedKeys, blocks, beforeKey, activeBlocks, matches) {
+    const root = this.container || document.querySelector(`div#${CLASS_OR_ID.AG_EDITOR_ID}`)
+    const byId = key => root.querySelector(`#${key}`)
+    if (blocks.length) {
+      const html = toHTML(h('section', blocks.map(block => this.renderBlock(null, block, activeBlocks, matches, true))))
+        .replace(/^<section>([\s\S]*?)<\/section>$/, '$1')
+      const before = beforeKey ? byId(beforeKey) : null
+      if (before) before.insertAdjacentHTML('beforebegin', html)
+      else root.insertAdjacentHTML('beforeend', html)
+    }
+    for (const key of removedKeys) {
+      const dom = byId(key)
+      if (dom) dom.remove()
+    }
+    this.renderMermaid()
+    this.renderDiagram()
+    this.codeCache.clear()
+  }
+
   // Only render the blocks which you updated
   partialRender(blocks, activeBlocks, matches, startKey, endKey) {
     const cursorOutMostBlock = activeBlocks[activeBlocks.length - 1]

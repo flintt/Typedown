@@ -848,4 +848,16 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>Privzeta stran stranske plošče</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>Dovoli lokalno avtomatizacijo</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>Programi, ki jih zaženete v tem računalniku, lahko berejo in urejajo odprte dokumente. Naslov okna pokaže, ko je kateri povezan.</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>Označi spremembe, ki jih naredijo programi</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>Za kratek čas označi besedilo, ki ga je spremenil povezan program, da vidite, kaj se je spremenilo.</value>
+  </data>
 </root>

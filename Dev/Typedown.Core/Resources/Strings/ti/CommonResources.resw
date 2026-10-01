@@ -996,4 +996,13 @@
   <data name="Untitled" xml:space="preserve">
     <value>ኣርእስቲ ዘይብሉ</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>ኣውቶሜሽን ተራኺቡ</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0} {1} ኣመሓይሹ</value>
+  </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>ነዚ ሰነድ ብናይ ርእይቶ ኩነታት ምምሕያሽ ገለ ካብ HTML ዳግማይ ክጽሕፎ ይኽእል። ከም ዘለዎ ንምሕላው ብምንጪ ኩነታት ኣመሓይሽዎ።</value>
+  </data>
 </root>

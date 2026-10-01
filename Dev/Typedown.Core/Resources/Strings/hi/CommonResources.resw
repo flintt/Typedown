@@ -997,4 +997,13 @@
   <data name="Untitled" xml:space="preserve">
     <value>बिना शीर्षक</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>स्वचालन जुड़ा है</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0} ने {1} संपादित किया</value>
+  </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>इस दस्तावेज़ को विज़ुअल मोड में संपादित करने से इसका कुछ HTML फिर से लिखा जा सकता है। इसे जस का तस रखने के लिए सोर्स मोड में संपादित करें।</value>
+  </data>
 </root>

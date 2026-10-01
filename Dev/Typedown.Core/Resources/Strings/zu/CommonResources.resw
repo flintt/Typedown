@@ -997,4 +997,13 @@
   <data name="Untitled" xml:space="preserve">
     <value>Akunasihloko</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>Ukuzenzakalela kuxhunyiwe</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>U-{0} uhlele u-{1}</value>
+  </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>Ukuhlela le dokhumenti kumodi ebonakalayo kungabhala kabusha enye ye-HTML yayo. Ukuze uyigcine injalo, yihlele kumodi yomthombo.</value>
+  </data>
 </root>

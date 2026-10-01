@@ -216,6 +216,7 @@ namespace Typedown.Windows
             this.ShowWindowWithSavedPlacement();
             SaveWindowPlacementWithOffset(false);
             AppViewModel.MainWindow = Handle;
+            Core.Services.AutomationWindows.Register(AppViewModel, Dispatcher);
             // XAML registers its OLE drop target once the island is up; wrap it a moment later (retry once).
             _ = Dispatcher.RunIdleAsync(() => Utilities.FileDropTarget.Install(this));
             _ = Task.Delay(2000).ContinueWith(_ => Dispatcher.RunAsync(() => Utilities.FileDropTarget.Install(this)));
@@ -306,6 +307,7 @@ namespace Typedown.Windows
             var keepRun = AppViewModel.SettingsViewModel.KeepRun;
             checkActiveTimer?.Dispose();
             checkActiveTimer = null;
+            if (ServiceScope != null) Core.Services.AutomationWindows.Unregister(AppViewModel);
             ServiceScope?.Dispose();
             ServiceScope = null;
             RootControl = null;

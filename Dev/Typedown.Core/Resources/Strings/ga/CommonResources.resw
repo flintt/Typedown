@@ -997,4 +997,13 @@
   <data name="Untitled" xml:space="preserve">
     <value>Gan teideal</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>Uathoibriú ceangailte</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>Chuir {0} {1} in eagar</value>
+  </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>D’fhéadfadh cuid den HTML a athscríobh má chuirtear an doiciméad seo in eagar sa mhód amhairc. Chun é a choinneáil díreach mar atá, cuir in eagar sa mhód foinse é.</value>
+  </data>
 </root>

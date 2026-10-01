@@ -848,4 +848,16 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>Ukurasa chaguo-msingi wa kidirisha cha kando</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>Ruhusu uendeshaji otomatiki wa ndani</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>Programu unazoendesha kwenye kompyuta hii zinaweza kusoma na kuhariri hati zilizo wazi. Kichwa cha dirisha kinaonyesha moja inapounganishwa.</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>Angazia mabadiliko yaliyofanywa na programu</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>Huangazia kwa muda mfupi maandishi yaliyobadilishwa na programu iliyounganishwa, ili uone kilichobadilika.</value>
+  </data>
 </root>

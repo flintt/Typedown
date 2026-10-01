@@ -997,4 +997,13 @@
   <data name="LastUsedTab" xml:space="preserve">
     <value>Dernier onglet utilisé</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>Automatisation connectée</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0} a modifié {1}</value>
+  </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>Modifier ce document en mode visuel peut réécrire une partie de son HTML brut. Pour le garder tel quel, modifiez-le en mode source.</value>
+  </data>
 </root>

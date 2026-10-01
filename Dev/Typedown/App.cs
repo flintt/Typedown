@@ -16,7 +16,9 @@ namespace Typedown
 {
     public class App : XamlApplication
     {
-        private static readonly Mutex mutex = new(true, "Typedown.App.Mutex");
+        // Named after the instance (Config.InstanceName) - the application's own name, or the test host's, which is tied
+        // to its data root.
+        private static readonly Mutex mutex = new(true, Config.InstanceName + ".Mutex");
 
         private App(IEnumerable<IXamlMetadataProvider> providers) : base(providers) { }
 
@@ -75,6 +77,8 @@ namespace Typedown
             var window = new MainWindow();
             window.Show(ShowWindowCommand.SW_HIDE);
             ListenPipe(window.Dispatcher);
+            // Local automation: nothing listens until the setting is turned on (docs/automation-api-spec.md, 5.1).
+            Services.Automation.AutomationService.Initialize();
         }
 
         private static async void ListenPipe(CoreDispatcher dispatcher)
@@ -83,7 +87,7 @@ namespace Typedown
             {
                 try
                 {
-                    using var server = new NamedPipeServerStream("Typedown.App.PiPe", PipeDirection.InOut);
+                    using var server = new NamedPipeServerStream(Config.InstanceName + ".PiPe", PipeDirection.InOut);
                     await server.WaitForConnectionAsync();
                     using var reader = new StreamReader(server);
                     using var writer = new StreamWriter(server);
@@ -121,11 +125,11 @@ namespace Typedown
             // launch waiting invisibly, which reads as "clicked the icon and no window came".
             try
             {
-                using var client = new NamedPipeClientStream(".", "Typedown.App.PiPe", PipeDirection.InOut);
+                using var client = new NamedPipeClientStream(".", Config.InstanceName + ".PiPe", PipeDirection.InOut);
                 client.Connect(3000);
                 using var reader = new StreamReader(client);
                 using var writer = new StreamWriter(client);
-                writer.WriteLine(string.Join("\0", Environment.GetCommandLineArgs()));
+                writer.WriteLine(string.Join("\0", Config.StripHostArguments(Environment.GetCommandLineArgs())));
                 writer.Flush();
                 var reply = reader.ReadLineAsync();
                 if (reply.Wait(TimeSpan.FromSeconds(10)) && long.TryParse(reply.Result, out var handle) && handle != 0)

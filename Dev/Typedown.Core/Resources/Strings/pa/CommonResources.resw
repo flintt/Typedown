@@ -997,4 +997,13 @@
   <data name="Untitled" xml:space="preserve">
     <value>ਬਿਨਾਂ ਸਿਰਲੇਖ</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>ਆਟੋਮੇਸ਼ਨ ਜੁੜਿਆ</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0} ਨੇ {1} ਸੋਧਿਆ</value>
+  </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>ਇਸ ਦਸਤਾਵੇਜ਼ ਨੂੰ ਵਿਜ਼ੂਅਲ ਮੋਡ ਵਿੱਚ ਸੋਧਣ ਨਾਲ ਇਸਦਾ ਕੁਝ HTML ਦੁਬਾਰਾ ਲਿਖਿਆ ਜਾ ਸਕਦਾ ਹੈ। ਜਿਉਂ ਦਾ ਤਿਉਂ ਰੱਖਣ ਲਈ ਸਰੋਤ ਮੋਡ ਵਿੱਚ ਸੋਧੋ।</value>
+  </data>
 </root>

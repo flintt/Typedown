@@ -136,6 +136,13 @@ namespace Typedown.Core.ViewModels
         public bool SpellcheckEnabled { get => GetSettingValue(false); set => SetSettingValue(value); }
         public string SpellcheckLang { get => GetSettingValue(""); set => SetSettingValue(value); }
         public bool KeepRun { get => GetSettingValue(Config.IsPackaged); set => SetSettingValue(value); }
+        /// <summary>
+        /// Lets programs running as this user read and edit open documents through the local automation endpoint
+        /// (docs/automation-api-spec.md). Off by default; turning it off closes the endpoint and every connection.
+        /// </summary>
+        public bool AllowLocalAutomation { get => GetSettingValue(false); set => SetSettingValue(value); }
+        /// <summary>Editor pages briefly highlight what an automation write changed.</summary>
+        public bool HighlightAutomationChanges { get => GetSettingValue(true); set => SetSettingValue(value); }
         public bool AnimationEnable { get => GetSettingValue(true); set => SetSettingValue(value); }
         public bool UseMicaEffect { get => GetSettingValue(Config.IsMicaSupported); set => SetSettingValue(value); }
         public bool UseEditorMicaEffect { get => GetSettingValue(false); set => SetSettingValue(value); }
@@ -194,25 +201,81 @@ namespace Typedown.Core.ViewModels
             "AutoPairMarkdownSyntax",
             "EditorAreaWidth",
             "FontFamily",
-            "TextDirection"
+            "TextDirection",
+            "HighlightAutomationChanges"
         };
 
         public SettingsViewModel(IServiceProvider serviceProvider)
         {
             ServiceProvider = serviceProvider;
             var settingsFile = Path.Combine(Config.GetLocalFolderPath(), "Settings.json");
-            settingsStore = new JsonSettingsStore(settingsFile, onWriteError: ex => Utilities.Log.WriteLocal("SettingsSave", ex.ToString()));
+            settingsStore = JsonSettingsStore.Shared(settingsFile, onWriteError: ex => Utilities.Log.WriteLocal("SettingsSave", ex.ToString()));
+            // Created with its window, on that window's thread: other windows' changes are applied there.
+            windowContext = System.Threading.SynchronizationContext.Current;
+            // Window-local settings (modes, layout) are this window's own from now on: it starts from what was saved
+            // last, and another window changing them only changes what the next new window starts with.
+            foreach (var name in SettingsScope.WindowLocalNames)
+                windowLocalValues[name] = settingsStore.GetToken(name);
+            settingsStore.Changed += OnStoreChanged;
             ResetSettingsCommand.OnExecute.Subscribe(_ => ResetSetting());
         }
 
+        private readonly System.Threading.SynchronizationContext windowContext;
+
+        private readonly Dictionary<string, Newtonsoft.Json.Linq.JToken> windowLocalValues = new();
+
+        /// <summary>The settings revision: advances with every change from any window.</summary>
+        public long SettingsRevision => settingsStore.Revision;
+
+        // Another window (or, later, the automation API) changed a setting: this window applies it as if it had
+        // been changed here - bindings, the editor page, theme and language handlers all hear of it.
+        private void OnStoreChanged(string name, object origin)
+        {
+            if (ReferenceEquals(origin, this) || disposed) return;
+            if (SettingsScope.IsWindowLocal(name)) return;
+            void Apply()
+            {
+                if (disposed) return;
+                if (name != null)
+                {
+                    RaiseChangedFromElsewhere(name);
+                    return;
+                }
+                foreach (var property in GetType().GetProperties().Where(x => x.GetSetMethod() != null && !SettingsScope.IsWindowLocal(x.Name)))
+                    RaiseChangedFromElsewhere(property.Name);
+            }
+            if (windowContext == null || windowContext == System.Threading.SynchronizationContext.Current) Apply();
+            else windowContext.Post(_ => Apply(), null);
+        }
+
+        private void RaiseChangedFromElsewhere(string name)
+        {
+            var property = GetType().GetProperty(name);
+            if (property == null || property.GetSetMethod() == null) return;
+            object value;
+            try { value = property.GetValue(this); }
+            catch { return; }
+            OnPropertyChanged(name, null, value);
+        }
+
+        private bool disposed;
+
         public T GetSettingValue<T>(T defaultValue = default, [CallerMemberName] string propertyName = null)
         {
+            if (windowLocalValues.TryGetValue(propertyName, out var own))
+            {
+                if (own == null || own.Type == Newtonsoft.Json.Linq.JTokenType.Null) return defaultValue;
+                try { return own.ToObject<T>() is T value ? value : defaultValue; }
+                catch { return defaultValue; }
+            }
             return settingsStore.Get(propertyName, defaultValue);
         }
 
         public void SetSettingValue<T>(T value, [CallerMemberName] string propertyName = null)
         {
-            settingsStore.Set(propertyName, value);
+            if (windowLocalValues.ContainsKey(propertyName))
+                windowLocalValues[propertyName] = value == null ? null : Newtonsoft.Json.Linq.JToken.FromObject(value);
+            settingsStore.Set(propertyName, value, this);
         }
 
         public Task FlushSettingsAsync() => settingsStore.FlushAsync();
@@ -241,13 +304,17 @@ namespace Typedown.Core.ViewModels
             var result = await dialog.ShowAsync(ServiceProvider.GetService<AppViewModel>().XamlRoot);
             if (result != ContentDialogResult.Primary)
                 return;
-            settingsStore.Reset();
+            settingsStore.Reset(this);
+            foreach (var name in SettingsScope.WindowLocalNames)
+                windowLocalValues[name] = null;
             foreach (var item in GetType().GetProperties().Where(x => x.GetSetMethod() != null).Select(x => x.Name))
                 OnPropertyChanged(item);
         }
 
         public void Dispose()
         {
+            disposed = true;
+            settingsStore.Changed -= OnStoreChanged;
             disposables.Dispose();
         }
     }

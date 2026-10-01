@@ -997,4 +997,13 @@
   <data name="Untitled" xml:space="preserve">
     <value>Без заглавие</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>Автоматизацията е свързана</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0} редактира {1}</value>
+  </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>Редактирането във визуален режим може да промени част от HTML кода на документа. За да го запазите непроменен, редактирайте в режим на изходен код.</value>
+  </data>
 </root>

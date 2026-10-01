@@ -997,4 +997,13 @@
   <data name="Untitled" xml:space="preserve">
     <value>Bez nosaukuma</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>Automatizācija savienota</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0} rediģēja {1}</value>
+  </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>Rediģēšana vizuālajā režīmā var pārrakstīt daļu šī dokumenta HTML. Lai to saglabātu nemainītu, rediģējiet avota režīmā.</value>
+  </data>
 </root>

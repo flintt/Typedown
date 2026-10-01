@@ -1,4 +1,7 @@
-// Regression: viewing a document must never rewrite its source. Run against a freshly built editor.
+// Regression (source-text mapping stability): viewing a document must never rewrite its source. Run against a
+// freshly built editor. This covers the document from the reading-mode bug fixed in 7c02d10 and a few structural
+// assertions; source-stability-check.js runs the wider fixture set. Neither proves that the first real visual
+// edit serializes faithfully (first-edit-check.js).
 const puppeteer = require('puppeteer-core');
 const fs = require('fs');
 const http = require('http');
@@ -130,6 +133,6 @@ const server = http.createServer((req, res) => {
  assert.ok((await source()).startsWith('edited before switch'));
  assert.equal(await page.evaluate(() => window.__last.MarkdownChange.loadId), 101);
  assert.deepEqual(errors, []);
- console.log('PASS: original source, source edits, reading structure, repeated mode switches, direct reading loads and pending edits');
+ console.log('PASS (source mapping stability): original source, source edits, reading structure, repeated mode switches, direct reading loads and pending edits');
  } finally { await browser.close(); server.close(); }
 })().catch(e=>{console.error(e);server.close();process.exitCode=1;});

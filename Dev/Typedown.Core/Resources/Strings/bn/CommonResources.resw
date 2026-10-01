@@ -997,4 +997,13 @@
   <data name="Untitled" xml:space="preserve">
     <value>শিরোনামহীন</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>স্বয়ংক্রিয়তা সংযুক্ত</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0} {1} সম্পাদনা করেছে</value>
+  </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>ভিজ্যুয়াল মোডে এই নথি সম্পাদনা করলে এর কিছু HTML পুনর্লিখিত হতে পারে। হুবহু রাখতে সোর্স মোডে সম্পাদনা করুন।</value>
+  </data>
 </root>

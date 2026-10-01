@@ -997,4 +997,13 @@
   <data name="Untitled" xml:space="preserve">
     <value>Без назви</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>Автоматизацію під'єднано</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0} змінив(ла) {1}</value>
+  </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>Редагування цього документа у візуальному режимі може змінити частину його HTML-коду. Щоб зберегти його без змін, редагуйте в режимі вихідного коду.</value>
+  </data>
 </root>

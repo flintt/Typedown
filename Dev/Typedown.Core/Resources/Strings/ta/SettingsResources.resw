@@ -848,4 +848,16 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>பக்கப் பலகத்தின் இயல்புநிலைப் பக்கம்</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>உள்ளூர் தானியக்கத்தை அனுமதி</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>இந்தக் கணினியில் நீங்கள் இயக்கும் நிரல்கள் திறந்த ஆவணங்களைப் படிக்கவும் திருத்தவும் முடியும். ஏதேனும் இணைந்திருக்கும்போது சாளரத் தலைப்பில் காட்டப்படும்.</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>நிரல்கள் செய்த மாற்றங்களைச் சிறப்பிடு</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>இணைக்கப்பட்ட நிரல் மாற்றிய உரையைச் சிறிது நேரம் சிறப்பித்துக் காட்டுகிறது, எது மாறியது என்பதை நீங்கள் பார்க்கலாம்.</value>
+  </data>
 </root>

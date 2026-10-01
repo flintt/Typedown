@@ -997,4 +997,13 @@
   <data name="Untitled" xml:space="preserve">
     <value>Dideitl</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>Awtomeiddio wedi'i gysylltu</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>Golygodd {0} {1}</value>
+  </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>Gall golygu'r ddogfen hon yn y modd gweledol ailysgrifennu rhywfaint o'i HTML. I'w chadw'n union fel y mae, golygwch hi yn y modd ffynhonnell.</value>
+  </data>
 </root>

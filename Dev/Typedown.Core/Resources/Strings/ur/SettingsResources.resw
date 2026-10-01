@@ -848,4 +848,16 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>سائیڈ پینل کا طے شدہ صفحہ</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>مقامی خودکاری کی اجازت دیں</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>اس کمپیوٹر پر آپ کے چلائے گئے پروگرام کھلی دستاویزات پڑھ اور ترمیم کر سکتے ہیں۔ کسی کے منسلک ہونے پر ونڈو کے عنوان میں دکھایا جاتا ہے۔</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>پروگراموں کی کی گئی تبدیلیوں کو نمایاں کریں</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>منسلک پروگرام کی تبدیل کردہ عبارت کو مختصر وقت کے لیے نمایاں کرتا ہے تاکہ آپ دیکھ سکیں کہ کیا بدلا۔</value>
+  </data>
 </root>

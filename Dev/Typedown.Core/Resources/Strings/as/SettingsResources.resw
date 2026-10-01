@@ -848,4 +848,16 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>কাষৰ পেনেলৰ অবিকল্পিত পৃষ্ঠা</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>স্থানীয় স্বয়ংক্ৰিয়কৰণৰ অনুমতি দিয়ক</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>এই কম্পিউটাৰত আপুনি চলোৱা প্ৰগ্ৰেমে খোলা নথি পঢ়িব আৰু সম্পাদনা কৰিব পাৰে। কোনো সংযুক্ত হ'লে উইণ্ড'ৰ শিৰোনামত দেখুওৱা হয়।</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>প্ৰগ্ৰামে কৰা সলনিসমূহ হাইলাইট কৰক</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>সংযুক্ত প্ৰগ্ৰামে সলনি কৰা পাঠ কিছু সময়ৰ বাবে হাইলাইট কৰে, যাতে আপুনি কি সলনি হ'ল দেখিব পাৰে।</value>
+  </data>
 </root>

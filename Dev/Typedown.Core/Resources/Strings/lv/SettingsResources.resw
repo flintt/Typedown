@@ -848,4 +848,16 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>Sānu rūts noklusējuma lapa</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>Atļaut lokālo automatizāciju</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>Programmas, ko palaižat šajā datorā, var lasīt un rediģēt atvērtos dokumentus. Loga virsraksts rāda, kad kāda ir savienota.</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>Izcelt programmu veiktās izmaiņas</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>Uz brīdi izceļ tekstu, ko mainīja pievienota programma, lai jūs redzētu, kas mainījies.</value>
+  </data>
 </root>

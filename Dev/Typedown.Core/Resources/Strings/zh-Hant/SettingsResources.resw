@@ -877,4 +877,16 @@
   <data name="View.CustomTheme.Refresh" xml:space="preserve">
     <value>重新載入主題</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>允許本機自動化</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>本機上以你的身分執行的程式可以讀取和編輯已開啟的文件。有程式連線時，視窗標題會顯示。</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>醒目提示程式所做的變更</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>短暫醒目提示已連線的程式修改過的文字，讓你看清哪裡變了。</value>
+  </data>
 </root>

@@ -997,4 +997,13 @@
   <data name="Untitled" xml:space="preserve">
     <value>Không tên</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>Đã kết nối tự động hóa</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0} đã sửa {1}</value>
+  </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>Chỉnh sửa tài liệu này ở chế độ trực quan có thể viết lại một phần HTML của nó. Để giữ nguyên, hãy chỉnh sửa ở chế độ mã nguồn.</value>
+  </data>
 </root>

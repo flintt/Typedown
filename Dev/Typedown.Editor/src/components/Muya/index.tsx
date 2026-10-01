@@ -12,6 +12,8 @@ import FootnoteTool from 'components/Muya/lib/ui/footnoteTool'
 import FrontMenu from 'components/Muya/lib/ui/frontMenu'
 import FormatPicker from 'components/Muya/lib/ui/formatPicker'
 import { createApplicationMenuState } from "services/menuState";
+import { classifyNormalization, extractProtectedPayload } from "services/normalization";
+import { highlightExternalChange } from "services/externalChange";
 import 'components/Muya/themes/default.css'
 
 interface IMuyaEditor {
@@ -25,6 +27,8 @@ interface IMuyaEditor {
     scrollTopRef: React.MutableRefObject<number>
     /** True when scrollTopRef holds a remembered offset from the host for this load: restore it instead of chasing the caret. */
     scrollFromHostRef?: React.MutableRefObject<boolean>
+    /** True when the new markdown is an edit of the text shown (automation): only the changed blocks are replaced. */
+    localChangeRef?: React.MutableRefObject<boolean>
     onMarkdownChange: (markdown: string) => void
     /** The shell puts a function here that reports the current text at once, for saves and exports. */
     flushRef?: React.MutableRefObject<(() => void) | null>
@@ -79,6 +83,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     // Import/export normalizes Markdown. Keep the original text while the document
     // still exports to its initial value, including after an undo back to that value.
     const importedRef = useRef<{ source: string, normalized: string }>();
+    const [firstEditWarning, setFirstEditWarning] = useState(false)
     const searchArgRef = useRef<any>();
     const cursorRef = useRef<any>();
     const optionsRef = useRef<any>(props.options);
@@ -189,9 +194,27 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             listIndentation: JSON.stringify(o?.listIndentation ?? null),
             readOnly: JSON.stringify(!!o?.readOnly)
         };
-        (window as any).__typedownMuya = muya // for Tools/EditorBench and DevTools inspection
+        (window as any).__typedownMuya = muya; // for Tools/EditorBench and DevTools inspection
+        // What the next real visual edit would rewrite in the document (services/normalization): the loaded
+        // source against Muya's export of it. Once an edit has made the export the text there is nothing left
+        // to rewrite. Null before anything was loaded.
+        // Also returns the normalized text itself, for its hash in the automation edit reply.
+        const pendingNormalization = () => {
+            const imported = importedRef.current
+            if (!imported) return null
+            return markdownRef.current === imported.source
+                ? { ...classifyNormalization(imported.source, imported.normalized), normalized: imported.normalized }
+                : { ...classifyNormalization(markdownRef.current, markdownRef.current), normalized: markdownRef.current }
+        };
+        (window as any).__typedownPendingNormalization = pendingNormalization
+        // For Tools/EditorBench: the same classifier, to judge what a real edit did.
+        ;(window as any).__typedownNormalization = { classifyNormalization, extractProtectedPayload }
         setEditor(muya)
-        return () => muya.destroy()
+        return () => {
+            // Source mode has no Muya: a hook left behind would describe the document as it was when Muya went.
+            if ((window as any).__typedownPendingNormalization === pendingNormalization) delete (window as any).__typedownPendingNormalization
+            muya.destroy()
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -668,20 +691,34 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
 
     useEffect(() => {
         if (!editor) return
+        const local = props.localChangeRef?.current
+        if (props.localChangeRef) props.localChangeRef.current = false
         if (importedRef.current && markdownRef.current === props.markdown) { props.onContentApplied?.(); return }
         // After an actual edit the host may hand the exported text back. Reuse the
         // existing model when it already matches, avoiding another load and caret scroll.
         if (editor.getMarkdown() === props.markdown) {
             markdownRef.current = props.markdown
             importedRef.current = { source: props.markdown, normalized: props.markdown }
+            setFirstEditWarning(false)
             props.onContentApplied?.()
             return
         }
         markdownRef.current = props.markdown
         markLongDocument(props.markdown)
-        editor.setMarkdown(props.markdown, cursorRef.current)
+        // An automation edit keeps the blocks it did not change, with the reader's cursor and scroll position; the
+        // browser keeps what is on screen in place when blocks above it change. Otherwise, a whole new document.
+        const blocksBefore = local ? editor.contentState.blocks : null
+        const replacedLocally = !!local && editor.replaceMarkdownLocally(props.markdown)
+        if (!replacedLocally) editor.setMarkdown(props.markdown, cursorRef.current)
+        if (blocksBefore && props.options?.highlightAutomationChanges !== false)
+            highlightExternalChange(editor.changedBlockKeys(blocksBefore).map((key: string) => document.getElementById(key)))
+        ;(window as any).__typedownLastApply = replacedLocally ? 'local' : 'whole'
         importedRef.current = { source: props.markdown, normalized: editor.getMarkdown() }
-        settleScroll(props.scrollTopRef.current, !!props.scrollFromHostRef?.current)
+        // Text the first visual edit would change in a way that loses something (today: some raw HTML) gets a notice
+        // that does not block editing; source mode keeps it exactly.
+        setFirstEditWarning(classifyNormalization(props.markdown, importedRef.current.normalized).pendingNormalization === 'unsafe')
+        if (replacedLocally) { if (props.scrollFromHostRef) props.scrollFromHostRef.current = false }
+        else settleScroll(props.scrollTopRef.current, !!props.scrollFromHostRef?.current)
         props.onContentApplied?.()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [editor, props.markdown, props.contentVersion, props.scrollTopRef, settleScroll, markLongDocument])
@@ -709,6 +746,15 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             lineHeight: props.options?.lineHeight,
             fontFamily: props.options?.fontFamily ? `${props.options.fontFamily}, "Open Sans", "Segoe UI", sans-serif` : undefined
         }}>
+            {/* A wrapper that always exists: Muya replaces #editor's node, so React must never insert next to it -
+                inserting the notice before #editor threw and took the whole page down. */}
+            <div className="td-first-edit-warning-slot">
+                {firstEditWarning && !props.options?.readOnly &&
+                    <div className="td-first-edit-warning" role="status">
+                        <span className="td-first-edit-warning-text" />
+                        <button className="td-first-edit-warning-close" aria-label="Close" onClick={() => setFirstEditWarning(false)}>×</button>
+                    </div>}
+            </div>
             <div id="editor" />
         </div>
     )

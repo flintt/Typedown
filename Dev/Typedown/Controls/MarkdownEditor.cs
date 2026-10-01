@@ -178,6 +178,12 @@ namespace Typedown.Controls
             CoreWebView2.ScriptDialogOpening += OnScriptDialogOpening;
             CoreWebView2.WebMessageReceived += OnWebMessageReceived;
             CoreWebView2.NewWindowRequested += OnNewWindowRequested;
+            // The editor page is loaded again (leaving the settings page, a page error, a crashed web process): until
+            // the new page confirms a load, what the host knows the old page confirmed says nothing about it.
+            CoreWebView2.NavigationStarting += (s, args) =>
+            {
+                if (IsEditorPage(args.Uri)) AppViewModel.EditorViewModel.OnEditorPageNavigating();
+            };
             // The browser process can die under the editor (a GPU driver, a renderer bug). Left alone that is a
             // blank editor until the app is restarted; reloading the page brings the document back through the
             // usual start-up handshake, and the log says what happened.
@@ -194,8 +200,20 @@ namespace Typedown.Controls
 #endif
         }
 
+        private static bool IsEditorPage(string uri)
+        {
+#if DEBUG
+            if (uri != null && uri.StartsWith("http://localhost:3000", StringComparison.OrdinalIgnoreCase)) return true;
+#endif
+            var index = new Uri(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Statics", "index.html")).AbsoluteUri;
+            return uri != null && uri.StartsWith(index, StringComparison.OrdinalIgnoreCase);
+        }
+
         private void LoadStaticResources()
         {
+            // At once, not only when the web view raises NavigationStarting a moment later: a read in between would
+            // still trust the page this navigation replaces.
+            AppViewModel.EditorViewModel.OnEditorPageNavigating();
 # if DEBUG
             WebViewController.CoreWebView2.Navigate("http://localhost:3000");
             // var staticsFolder = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Statics");

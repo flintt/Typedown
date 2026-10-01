@@ -848,4 +848,16 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>صفحهٔ پیش‌فرض پنل کناری</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>اجازهٔ خودکارسازی محلی</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>برنامه‌هایی که بالای این کمپیوتر اجرا می‌کنید می‌توانند اسناد باز را بخوانند و ویرایش کنند. هنگام وصل شدن یکی، عنوان پنجره نشان می‌دهد.</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>برجسته ساختن تغییراتی که برنامه‌ها ایجاد کرده‌اند</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>متنی را که یک برنامهٔ وصل‌شده تغییر داده برای مدت کوتاهی برجسته می‌سازد تا ببینید چه چیزی تغییر کرده است.</value>
+  </data>
 </root>

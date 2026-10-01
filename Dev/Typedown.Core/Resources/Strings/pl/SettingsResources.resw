@@ -848,4 +848,16 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>Domyślna strona panelu bocznego</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>Zezwalaj na lokalną automatyzację</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>Programy uruchamiane przez Ciebie na tym komputerze mogą odczytywać i edytować otwarte dokumenty. Tytuł okna pokazuje, gdy któryś jest połączony.</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>Wyróżniaj zmiany wprowadzone przez programy</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>Krótko wyróżnia tekst zmieniony przez podłączony program, aby było widać, co się zmieniło.</value>
+  </data>
 </root>

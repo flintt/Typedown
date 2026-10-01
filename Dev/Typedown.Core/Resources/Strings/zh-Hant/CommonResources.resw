@@ -1012,4 +1012,13 @@
   <data name="LastUsedTab" xml:space="preserve">
     <value>上次使用的分頁</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>自動化已連線</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0} 編輯了 {1}</value>
+  </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>在視覺化模式下編輯這份文件，可能會改寫其中的部分原始 HTML。需要保持原樣時，請在原始碼模式下編輯。</value>
+  </data>
 </root>

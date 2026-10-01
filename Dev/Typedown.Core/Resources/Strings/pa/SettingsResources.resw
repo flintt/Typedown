@@ -848,4 +848,16 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>ਪਾਸੇ ਵਾਲੇ ਪੈਨਲ ਦਾ ਡਿਫੌਲਟ ਪੰਨਾ</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>ਸਥਾਨਕ ਆਟੋਮੇਸ਼ਨ ਦੀ ਇਜਾਜ਼ਤ ਦਿਓ</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>ਇਸ ਕੰਪਿਊਟਰ 'ਤੇ ਤੁਹਾਡੇ ਚਲਾਏ ਪ੍ਰੋਗਰਾਮ ਖੁੱਲ੍ਹੇ ਦਸਤਾਵੇਜ਼ ਪੜ੍ਹ ਅਤੇ ਸੋਧ ਸਕਦੇ ਹਨ। ਕਿਸੇ ਦੇ ਜੁੜੇ ਹੋਣ 'ਤੇ ਵਿੰਡੋ ਸਿਰਲੇਖ ਵਿੱਚ ਦਿਖਾਇਆ ਜਾਂਦਾ ਹੈ।</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>ਪ੍ਰੋਗਰਾਮਾਂ ਵੱਲੋਂ ਕੀਤੀਆਂ ਤਬਦੀਲੀਆਂ ਉਜਾਗਰ ਕਰੋ</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>ਜੁੜੇ ਹੋਏ ਪ੍ਰੋਗਰਾਮ ਵੱਲੋਂ ਬਦਲੇ ਗਏ ਟੈਕਸਟ ਨੂੰ ਥੋੜ੍ਹੀ ਦੇਰ ਲਈ ਉਜਾਗਰ ਕਰਦਾ ਹੈ, ਤਾਂ ਜੋ ਤੁਸੀਂ ਦੇਖ ਸਕੋ ਕਿ ਕੀ ਬਦਲਿਆ।</value>
+  </data>
 </root>

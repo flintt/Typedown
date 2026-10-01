@@ -854,4 +854,16 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>الصفحة الافتراضية للجزء الجانبي</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>السماح بالأتمتة المحلية</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>يمكن للبرامج التي تشغلها على هذا الكمبيوتر قراءة المستندات المفتوحة وتحريرها. يظهر ذلك في عنوان النافذة عند اتصال أحدها.</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>تمييز التغييرات التي أجرتها البرامج</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>يميّز لفترة وجيزة النص الذي غيّره برنامج متصل، لترى ما الذي تغيّر.</value>
+  </data>
 </root>

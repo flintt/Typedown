@@ -848,4 +848,16 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>ነባሪ ገጽ ናይ ጎናዊ ፓነል</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>ከባቢያዊ ኣውቶሜሽን ፍቐድ</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>ኣብዚ ኮምፒተር እተካይድዎም ፕሮግራማት ዝተኸፍቱ ሰነዳት ከንብቡን ከመሓይሹን ይኽእሉ። ሓደ ምስ ተራኸበ ኣርእስቲ መስኮት የርኢ።</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>ብፕሮግራማት ዝተገብሩ ለውጥታት ኣጉልሕ</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>ዝተራኸበ ፕሮግራም ዝቐየሮ ጽሑፍ ንሓጺር እዋን የጉልሕ፣ እንታይ ከም ዝተቐየረ ክትርእዩ።</value>
+  </data>
 </root>

@@ -848,4 +848,16 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>Trang mặc định của bảng bên</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>Cho phép tự động hóa cục bộ</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>Các chương trình bạn chạy trên máy tính này có thể đọc và chỉnh sửa tài liệu đang mở. Tiêu đề cửa sổ cho biết khi có chương trình kết nối.</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>Tô sáng thay đổi do chương trình thực hiện</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>Tô sáng trong giây lát phần văn bản mà một chương trình đã kết nối thay đổi, để bạn thấy chỗ nào đã thay đổi.</value>
+  </data>
 </root>

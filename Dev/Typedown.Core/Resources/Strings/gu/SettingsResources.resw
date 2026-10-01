@@ -848,4 +848,16 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>બાજુની પેનલનું ડિફૉલ્ટ પાનું</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>સ્થાનિક ઓટોમેશનને મંજૂરી આપો</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>આ કમ્પ્યુટર પર તમે ચલાવો છો તે પ્રોગ્રામ ખુલ્લા દસ્તાવેજો વાંચી અને સંપાદિત કરી શકે છે. કોઈ જોડાયેલ હોય ત્યારે વિન્ડો શીર્ષકમાં દેખાય છે.</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>પ્રોગ્રામ્સે કરેલા ફેરફારો હાઇલાઇટ કરો</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>કનેક્ટેડ પ્રોગ્રામે બદલેલું લખાણ થોડા સમય માટે હાઇલાઇટ કરે છે, જેથી તમે જોઈ શકો કે શું બદલાયું.</value>
+  </data>
 </root>

@@ -420,7 +420,12 @@
     <Compile Include="Services\SessionMemory.cs" />
     <Compile Include="Services\AppDbContext.cs" />
     <Compile Include="Services\AutoBackup.cs" />
+    <Compile Include="Services\AutomationWindows.cs" />
+    <Compile Include="Services\AutomationDocuments.cs" />
+    <Compile Include="Services\WindowsAutomationHost.cs" />
+    <Compile Include="Services\WindowsSettingsHost.cs" />
     <Compile Include="Services\JsonSettingsStore.cs" />
+    <Compile Include="Services\SettingsScope.cs" />
     <Compile Include="Services\EventCenter.cs" />
     <Compile Include="Services\ImageAction.cs" />
     <Compile Include="Services\ImageUpload.cs" />
@@ -463,6 +468,9 @@
     <Compile Include="ViewModels\UIViewModel.cs" />
     <Compile Include="ViewModels\TabsViewModel.cs" />
     <EmbeddedResource Include="Properties\Typedown.Core.rd.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Typedown.Automation\Typedown.Automation.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite">

@@ -997,4 +997,13 @@
   <data name="Untitled" xml:space="preserve">
     <value>គ្មានចំណងជើង</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>ស្វ័យប្រវត្តិកម្មបានតភ្ជាប់</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0} បានកែសម្រួល {1}</value>
+  </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>ការកែសម្រួលឯកសារនេះក្នុងរបៀបមើលឃើញអាចសរសេរ HTML ខ្លះឡើងវិញ។ ដើម្បីរក្សាទុកដដែល សូមកែសម្រួលក្នុងរបៀបកូដប្រភព។</value>
+  </data>
 </root>

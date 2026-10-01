@@ -997,4 +997,13 @@
   <data name="Untitled" xml:space="preserve">
     <value>തലക്കെട്ടില്ലാത്തത്</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>ഓട്ടോമേഷൻ ബന്ധിപ്പിച്ചു</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0} {1} എഡിറ്റ് ചെയ്തു</value>
+  </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>ഈ പ്രമാണം ദൃശ്യ മോഡിൽ എഡിറ്റ് ചെയ്താൽ അതിലെ ചില HTML മാറ്റിയെഴുതപ്പെടാം. അതേപടി നിലനിർത്താൻ സോഴ്സ് മോഡിൽ എഡിറ്റ് ചെയ്യുക.</value>
+  </data>
 </root>

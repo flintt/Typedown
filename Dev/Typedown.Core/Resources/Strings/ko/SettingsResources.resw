@@ -848,4 +848,16 @@
   <data name="View.CustomTheme.Refresh" xml:space="preserve">
     <value>테마 다시 불러오기</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>로컬 자동화 허용</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>이 컴퓨터에서 실행하는 프로그램이 열려 있는 문서를 읽고 편집할 수 있습니다. 연결되면 창 제목에 표시됩니다.</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>프로그램이 변경한 내용 강조</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>연결된 프로그램이 변경한 텍스트를 잠시 강조하여 무엇이 바뀌었는지 볼 수 있게 합니다.</value>
+  </data>
 </root>

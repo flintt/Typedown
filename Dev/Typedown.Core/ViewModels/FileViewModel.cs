@@ -160,6 +160,17 @@ namespace Typedown.Core.ViewModels
             }
         }
 
+        /// <summary>One backup pass now, as the save timer does (for the automation test host).</summary>
+        public async Task<bool> BackupNowAsync()
+        {
+            var ok = await AutoBackupFile();
+            await BackupDirtyBackgroundTabsAsync();
+            return ok;
+        }
+
+        /// <summary>Whether the save timer is in a tick (a tick that never finishes stops all later backups).</summary>
+        public bool SaveTimerBusy => saveTimerRunning;
+
         private async Task<bool> AutoBackupFile()
         {
             var active = TabsViewModel?.ActiveTab;
@@ -455,6 +466,16 @@ namespace Typedown.Core.ViewModels
                 return false;
             }
         }
+
+        /// <summary>A new untitled document in this window (a new tab, or the pristine blank one), as the New command.</summary>
+        public Task NewDocumentAsync() => NewFileFun();
+
+        /// <summary>
+        /// Saves the active document to its existing path without any dialog (the automation API's save): false when
+        /// it has no path or the write was refused or failed. Follows the auto-save rules, so a file decoded lossily
+        /// is not overwritten.
+        /// </summary>
+        public Task<bool> SaveToExistingPathAsync() => FilePath == null ? Task.FromResult(false) : Save(false);
 
         private async Task<bool> Save(bool alert = true)
         {
@@ -1121,6 +1142,8 @@ namespace Typedown.Core.ViewModels
 
         private void ApplyDiskText(string text)
         {
+            if (!string.Equals(EditorViewModel.Markdown, text, StringComparison.Ordinal))
+                TabsViewModel?.ActiveTab?.NoteTextChanged();
             EditorViewModel.FirstStart = false;
             EditorViewModel.FileHash = Common.SimpleHash(text);
             DiskHash = EditorViewModel.FileHash;

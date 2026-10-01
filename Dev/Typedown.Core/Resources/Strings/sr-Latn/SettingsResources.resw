@@ -848,4 +848,16 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>Podrazumevana stranica bočne table</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>Dozvoli lokalnu automatizaciju</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>Programi koje pokrećete na ovom računaru mogu da čitaju i uređuju otvorene dokumente. Naslov prozora pokazuje kada je neki povezan.</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>Istakni promene koje su napravili programi</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>Kratko ističe tekst koji je promenio povezani program kako biste videli šta se promenilo.</value>
+  </data>
 </root>

@@ -848,4 +848,16 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>পাশের প্যানেলের ডিফল্ট পৃষ্ঠা</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>স্থানীয় স্বয়ংক্রিয়তার অনুমতি দিন</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>এই কম্পিউটারে আপনার চালানো প্রোগ্রাম খোলা নথি পড়তে ও সম্পাদনা করতে পারে। কোনোটি সংযুক্ত হলে উইন্ডোর শিরোনামে দেখানো হয়।</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>প্রোগ্রামের করা পরিবর্তন হাইলাইট করুন</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>সংযুক্ত কোনো প্রোগ্রাম যে লেখা বদলেছে তা কিছুক্ষণের জন্য হাইলাইট করে, যাতে আপনি দেখতে পান কী বদলেছে।</value>
+  </data>
 </root>

@@ -848,4 +848,16 @@
   <data name="View.SidePaneDefaultPage.Title" xml:space="preserve">
     <value>Predvolená stránka bočného panela</value>
   </data>
+  <data name="General.LocalAutomation.Title" xml:space="preserve">
+    <value>Povoliť miestnu automatizáciu</value>
+  </data>
+  <data name="General.LocalAutomation.Description" xml:space="preserve">
+    <value>Programy, ktoré na tomto počítači spúšťate, môžu čítať a upravovať otvorené dokumenty. Názov okna ukazuje, kedy je niektorý pripojený.</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Title" xml:space="preserve">
+    <value>Zvýrazniť zmeny vykonané programami</value>
+  </data>
+  <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
+    <value>Krátko zvýrazní text zmenený pripojeným programom, aby ste videli, čo sa zmenilo.</value>
+  </data>
 </root>

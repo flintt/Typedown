@@ -997,4 +997,13 @@
   <data name="Untitled" xml:space="preserve">
     <value>ಶೀರ್ಷಿಕೆಯಿಲ್ಲದ</value>
   </data>
+  <data name="AutomationConnected" xml:space="preserve">
+    <value>ಸ್ವಯಂಚಾಲನೆ ಸಂಪರ್ಕಗೊಂಡಿದೆ</value>
+  </data>
+  <data name="AutomationWrote" xml:space="preserve">
+    <value>{0} {1} ಅನ್ನು ಸಂಪಾದಿಸಿದೆ</value>
+  </data>
+  <data name="FirstEditWarning" xml:space="preserve">
+    <value>ಈ ದಾಖಲೆಯನ್ನು ದೃಶ್ಯ ಮೋಡ್‌ನಲ್ಲಿ ಸಂಪಾದಿಸಿದರೆ ಅದರ ಕೆಲವು HTML ಮರುಬರೆಯಲ್ಪಡಬಹುದು. ಇದ್ದಂತೆಯೇ ಇಡಲು ಮೂಲ ಮೋಡ್‌ನಲ್ಲಿ ಸಂಪಾದಿಸಿ.</value>
+  </data>
 </root>
