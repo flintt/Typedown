@@ -102,10 +102,15 @@ try {
     & $ctl --json settings set ui.language $language --base-revision $r | Out-Null
     Check ($LASTEXITCODE -eq 0) "and back to $language"
     $w = ((& $ctl --json windows) | ConvertFrom-Json).windows[0].windowId
+    $revisionBefore = ((& $ctl --json settings get editor.fontSize) | ConvertFrom-Json).settingsRevision
     $v = (& $ctl --json view $w --mode source --side-pane outline --size 1100x700) | ConvertFrom-Json
     Check ($v.mode -eq 'source' -and $v.sidePane.open -and $v.sidePane.page -eq 'outline' -and $v.bounds.width -eq 1100 -and $v.bounds.height -eq 700) "typedownctl view: source mode, the outline, 1100x700 in one call ($($v | ConvertTo-Json -Compress))"
     $v = (& $ctl --json view $w --mode visual --side-pane closed) | ConvertFrom-Json
     Check ($v.mode -eq 'visual' -and -not $v.sidePane.open) 'typedownctl view: back to visual, the pane closed'
+    # The window saves its placement a moment after a resize: the app's own state, not a setting.
+    Start-Sleep 3
+    $revisionAfter = ((& $ctl --json settings get editor.fontSize) | ConvertFrom-Json).settingsRevision
+    Check ($null -ne $revisionBefore -and $revisionAfter -eq $revisionBefore) "the view changes and the saved placement leave settingsRevision as it was ($revisionBefore -> $revisionAfter)"
 
     # 6. The equivalence scenario against the installed app (compared with the recorded Windows answer elsewhere).
     # Through cmd, so the transcript keeps Python's UTF-8 bytes (PowerShell 5 would re-encode it to UTF-16).
