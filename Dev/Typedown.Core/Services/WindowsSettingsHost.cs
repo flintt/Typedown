@@ -24,7 +24,10 @@ namespace Typedown.Core.Services
 
         private JsonSettingsStore Store => JsonSettingsStore.Shared(Path.Combine(Config.GetLocalFolderPath(), "Settings.json"));
 
-        public long Revision => Store.Revision;
+        // The stored properties behind the exposed settings: only their changes advance settingsRevision.
+        private static readonly ISet<string> Counted = SettingsCatalog.Load().StoredProperties("windows");
+
+        public long Revision => Store.RevisionOf(Counted);
 
         private static readonly string[] Original = { "appearance.theme", "editor.fontSize", "editor.lineHeight", "editor.textDirection" };
 
@@ -149,8 +152,8 @@ namespace Typedown.Core.Services
             await store.FlushAsync();
             if (store.LastWriteError != null)
                 throw new AutomationException(AutomationErrorKind.persistence_failed, "The setting is applied but could not be saved.",
-                    new Dictionary<string, object> { ["settingsRevision"] = store.Revision, ["applied"] = true });
-            return store.Revision;
+                    new Dictionary<string, object> { ["settingsRevision"] = Revision, ["applied"] = true });
+            return Revision;
         }
     }
 }

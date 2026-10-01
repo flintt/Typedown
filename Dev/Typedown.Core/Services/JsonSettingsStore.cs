@@ -41,8 +41,27 @@ namespace Typedown.Core.Services
         /// </summary>
         public event Action<string, object> Changed;
 
-        /// <summary>Advances with every change that altered a value; the automation API's settingsRevision.</summary>
+        /// <summary>Advances with every change that altered a value.</summary>
         public long Revision { get; private set; }
+
+        // How often each value changed, and how often everything was reset: what RevisionOf adds up.
+        private readonly Dictionary<string, long> changes = new(StringComparer.Ordinal);
+        private long resets;
+
+        /// <summary>
+        /// Advances with every change of one of <paramref name="names"/> (and with a reset): the automation API's
+        /// settingsRevision, which counts the exposed settings only.
+        /// </summary>
+        public long RevisionOf(IEnumerable<string> names)
+        {
+            lock (sync)
+            {
+                var revision = resets;
+                foreach (var name in names)
+                    if (changes.TryGetValue(name, out var count)) revision += count;
+                return revision;
+            }
+        }
 
         private readonly object sync = new();
         private readonly string path;
@@ -112,6 +131,7 @@ namespace Typedown.Core.Services
                 if (values.TryGetValue(name, out var old) && JToken.DeepEquals(old, token)) return;
                 values[name] = token;
                 Revision++;
+                changes[name] = (changes.TryGetValue(name, out var count) ? count : 0) + 1;
                 QueueWriteLocked();
             }
             RaiseChanged(name, origin);
@@ -123,6 +143,7 @@ namespace Typedown.Core.Services
             {
                 values = new JObject();
                 Revision++;
+                resets++;
                 QueueWriteLocked();
             }
             RaiseChanged(null, origin);

@@ -37,6 +37,21 @@ namespace Typedown.Automation.Tests
         }
 
         [Fact]
+        public void The_settings_revision_counts_the_exposed_properties_and_not_the_window_state()
+        {
+            var map = Map();
+            var windows = SettingsCatalog.Parse(map).StoredProperties("windows");
+            Assert.Equal(map["exposed"]!.SelectMany(e => e["windows"]!["properties"]!.Select(p => (string)p!)).Distinct().Count(), windows.Count);
+            foreach (var name in new[] { "FontSize", "AppTheme", "CustomTheme", "Language" }) Assert.Contains(name, windows);
+            foreach (var name in new[] { "StartupPlacement", "SidePaneWidth", "SidePaneOpen", "SourceCode", "AllowLocalAutomation" }) Assert.DoesNotContain(name, windows);
+            var uno = SettingsCatalog.Parse(map).StoredProperties("uno");
+            foreach (var name in new[] { "FontSize", "Language" }) Assert.Contains(name, uno);
+            // What the running application reads is the embedded copy: the same as the document.
+            Assert.True(windows.SetEquals(SettingsCatalog.Load().StoredProperties("windows")));
+            Assert.True(uno.SetEquals(SettingsCatalog.Load().StoredProperties("uno")));
+        }
+
+        [Fact]
         public void Secrets_window_state_and_modes_are_never_exposed()
         {
             var exposed = Map()["exposed"]!.SelectMany(e => e["windows"]!["properties"]!.Select(p => (string)p!)).ToList();

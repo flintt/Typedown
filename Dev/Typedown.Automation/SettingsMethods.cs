@@ -18,6 +18,9 @@ namespace Typedown.Automation
         public bool RestartRequired { get; set; }
         public string Sensitivity { get; set; } = "none";
         public double? Rounding { get; set; }
+
+        /// <summary>The stored properties behind the setting on each platform ("windows", "uno"), as the map lists them.</summary>
+        public IReadOnlyDictionary<string, IReadOnlyList<string>> Properties { get; set; } = new Dictionary<string, IReadOnlyList<string>>();
     }
 
     /// <summary>
@@ -48,7 +51,16 @@ namespace Typedown.Automation
                 RestartRequired = (bool?)e["restartRequired"] ?? false,
                 Sensitivity = (string?)e["sensitivity"] ?? "none",
                 Rounding = ((string?)e["rounding"])?.StartsWith("to 0.1") == true ? 0.1 : null,
+                Properties = new[] { "windows", "uno" }.ToDictionary(platform => platform,
+                    platform => (IReadOnlyList<string>)(((e[platform] as JObject)?["properties"] as JArray)?.Select(n => (string)n!).ToList() ?? new List<string>())),
             }).ToList());
+
+        /// <summary>
+        /// The stored properties behind every exposed setting on a platform: the changes settingsRevision counts. A
+        /// property only the application keeps (a window's placement, the recent files) is not among them.
+        /// </summary>
+        public ISet<string> StoredProperties(string platform) =>
+            new HashSet<string>(Settings.SelectMany(s => s.Properties.TryGetValue(platform, out var names) ? names : Array.Empty<string>()), StringComparer.Ordinal);
 
         public SettingDescription Find(string key) =>
             Settings.FirstOrDefault(s => s.Key == key)
@@ -124,7 +136,11 @@ namespace Typedown.Automation
     /// <summary>The application's settings as the API sees them (Windows: the shared settings store).</summary>
     public interface ISettingsHost
     {
-        /// <summary>Advances with every change of any setting, from any window or the API.</summary>
+        /// <summary>
+        /// Advances with every change of an exposed setting, from any window or the API - and only those: a property the
+        /// application keeps for itself (a window moved, so its placement saved) does not, or a client's next
+        /// settings.set would be refused as stale with none of its settings changed.
+        /// </summary>
         long Revision { get; }
 
         /// <summary>

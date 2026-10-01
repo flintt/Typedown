@@ -418,6 +418,9 @@ internal static class Program
         var id = await Open(c, Fixture("v01.md", text));
         await c.Call("document.focus", new { documentId = id });
         var windowId = await WindowIdOf(c, id);
+        // Mode, side pane, status bar and bounds are the window's own state, not settings a client can set: changing them
+        // (and the placement the window then saves) leaves settingsRevision as it was.
+        var settingsBefore = (long)(await c.Call("settings.get", new { keys = new[] { "editor.fontSize" } }))["settingsRevision"]!;
         var window = await WindowOf(windowId, c);
         var before = await c.Call("window.getView", new { windowId });
         var revision = await Revision(c, id);
@@ -464,11 +467,11 @@ internal static class Program
                 statusBar = (bool)before["statusBar"]!, bounds = new { x = (int)b["x"]!, y = (int)b["y"]!, width = (int)b["width"]!, height = (int)b["height"]! },
             });
         }
-        // Diagnosis: does anything change settings on its own after the view change (the window placement)?
-        var r0 = (long)(await c.Call("settings.get", new { keys = new[] { "editor.fontSize" } }))["settingsRevision"]!;
+        // The window saves its placement a moment after a move or resize.
         await Task.Delay(3000);
-        var r1 = (long)(await c.Call("settings.get", new { keys = new[] { "editor.fontSize" } }))["settingsRevision"]!;
-        notes.Add($"settings revision {r0} -> {r1} in the 3 s after the view was restored");
+        var settingsAfter = (long)(await c.Call("settings.get", new { keys = new[] { "editor.fontSize" } }))["settingsRevision"]!;
+        notes.Add($"settings revision {settingsBefore} -> {settingsAfter} across the view changes");
+        Check(settingsAfter == settingsBefore, "view changes and the saved window placement leave settingsRevision as it was");
     }
 
     private static async Task B01(List<string> notes)

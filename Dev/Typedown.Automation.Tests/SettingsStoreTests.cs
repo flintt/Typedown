@@ -18,6 +18,25 @@ namespace Typedown.Automation.Tests
         public void Dispose() { try { Directory.Delete(dir, true); } catch { } }
 
         [Fact]
+        public void The_api_revision_counts_only_the_names_it_is_given_and_resets()
+        {
+            var store = new JsonSettingsStore(File(), (_, _) => Task.CompletedTask);
+            var exposed = new[] { "FontSize", "AppTheme" };
+            var start = store.RevisionOf(exposed);
+            // A window moved and its pane resized: values the application keeps for itself.
+            store.Set("StartupPlacement", "somewhere");
+            store.Set("SidePaneWidth", 320d);
+            Assert.Equal(start, store.RevisionOf(exposed));
+            store.Set("FontSize", 20d);
+            Assert.Equal(start + 1, store.RevisionOf(exposed));
+            store.Set("FontSize", 20d); // the same value: nothing changed
+            Assert.Equal(start + 1, store.RevisionOf(exposed));
+            store.Reset();
+            Assert.Equal(start + 2, store.RevisionOf(exposed));
+            Assert.True(store.Revision >= 4, "the store's own revision still counts every change");
+        }
+
+        [Fact]
         public void Every_window_gets_the_same_store()
         {
             var path = File();
