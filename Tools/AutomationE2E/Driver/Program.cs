@@ -1038,7 +1038,32 @@ internal static class Program
         Check(!(await Ids(window)).Contains(b), "once saved it closes");
 
         // 4. A keystroke the page has not reported yet makes the document unsaved: close asks the page first.
+        // The page reports a key within milliseconds, so "not reported yet" is made to happen: the page's change
+        // reports are held back and go out only just before its answer to a flush - where a late report would arrive.
+        // Close finds the key only if it asks the page; without asking it closed the document with the key in it.
+        // The page has to show c first (closing b reloads it, and a key typed into the reload is lost).
+        await Revision(c, c2);
+        var cWindow = await WindowIdOf(c, c2);
+        const string hold = @"(() => {
+            const wv = window.chrome.webview;
+            if (!wv.__send) wv.__send = wv.postMessage.bind(wv);
+            window.__held = [];
+            wv.postMessage = m => {
+                if (typeof m === 'string' && m.includes('""name"":""MarkdownChange""')) { window.__held.push(m); return; }
+                if (typeof m === 'string' && m.includes('""name"":""ContentFlushed""')) { window.__held.splice(0).forEach(h => wv.__send(h)); wv.postMessage = wv.__send; }
+                return wv.__send(m);
+            };
+            return wv.postMessage !== wv.__send;
+        })()";
+        Check((bool)(await c.Call("test.editor.eval", new { windowId = cWindow, script = hold }))["result"]!, "the page's change reports can be held");
         await TypeInto(c, c2, "Z");
+        var held = 0;
+        for (var i = 0; i < 60 && held == 0; i++)
+        {
+            if (i > 0) await Task.Delay(50);
+            held = (int)(await c.Call("test.editor.eval", new { windowId = cWindow, script = "window.__held.length" }))["result"]!;
+        }
+        if (held == 0) throw new CaseFailed($"the keystroke never reached the page; screen: {Screenshot("c01-no-keystroke")}");
         var refused = await c.ErrorKind("document.close", new { documentId = c2 });
         notes.Add($"close right after a keystroke: {refused ?? "closed"}");
         Check(refused == "unsaved_changes", "a keystroke not yet reported counts as unsaved");
