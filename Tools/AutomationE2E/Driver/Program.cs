@@ -138,6 +138,8 @@ internal static class Program
             await Case("C01 document.close: a saved document closes, an unsaved one (a fresh keystroke too) is refused, the last one leaves an empty document", C01);
             await Case("Q02 a window closed at once after it opened (its web view still being created): the process lives on", Q02);
             await Case("D01 the window's UI thread runs every callback posted to it, from many threads at once", D01);
+            await Case("K02 Ctrl+, twice opens and closes the settings: the caret and the keyboard are where they were", K02);
+            await Case("K03 the same with an untitled document (no per-file caret memory)", K03);
             // Last: it ends the test host.
             await Case("Q01 two windows closed one after the other: the process exits (it stayed, headless)", Q01);
         }
@@ -732,6 +734,78 @@ internal static class Program
         for (var i = 0; i < 40 && text?.Contains('B') != true; i++) { await Task.Delay(100); text = (string?)(await c.Call("test.editor.pageText", new { documentId = id }))["text"]; }
         Check(text?.Contains('B') == true, $"the keystroke after the font change reached the page (page after the change: {state}; text {JsonConvert.SerializeObject(text)})");
         notes.Add("page after the change: " + state);
+    }
+
+    // Ctrl+, opens the settings and Ctrl+, closes them: the reader is back where they were, caret and keyboard. Closing
+    // the settings builds the main page again and reloads the editor page; the caret came back from the per-file memory
+    // only (or not at all), and the keyboard was not given back.
+    private static Task K02(List<string> notes) => SettingsRoundTrip(notes, untitled: false);
+
+    // The same with an untitled document: no file, so no per-file caret memory to come back from.
+    private static Task K03(List<string> notes) => SettingsRoundTrip(notes, untitled: true);
+
+    private static async Task SettingsRoundTrip(List<string> notes, bool untitled)
+    {
+        using var c = await Session(untitled ? "e2e K03" : "e2e K02");
+        const string text0 = "# K02\n\nfirst line\n\nsecond line\n\nthird line\n";
+        string id;
+        if (untitled)
+        {
+            id = (string)(await c.Call("document.create", new { text = text0, reveal = "document" }))["documentId"]!;
+            await c.Call("document.get", new { documentId = id, consistency = "latest" });
+        }
+        else id = await Open(c, Fixture("k02.md", text0));
+        var windowId = await WindowIdOf(c, id);
+        await TypeInto(c, id, "A");
+        await WaitForPage(c, id, t => t.Contains("third lineA"), "the first keystroke");
+        // Up to the second paragraph (one Up: the blank lines between paragraphs are no lines here), its end, a letter.
+        Send(Key(0x26, false), Key(0x26, true));
+        await Task.Delay(150);
+        Send(Key(0x23, false), Key(0x23, true));
+        await Task.Delay(150);
+        TypeChar('B');
+        await WaitForPage(c, id, t => t.Contains("second lineB"), "B at the end of the second paragraph");
+        var before = await PageState(c, windowId);
+        // Ctrl+, twice, as the reader presses it: open the settings, close them.
+        async Task<int> Menus() => ((JArray)(await c.Call("test.window.menuTitles", new { windowId }))["titles"]!).Count;
+        await CtrlComma();
+        await Task.Delay(2000);
+        var inSettings = await Menus();
+        if (inSettings != 0) notes.Add("screen after the first Ctrl+,: " + Screenshot("k02-settings"));
+        await CtrlComma();
+        await Task.Delay(1500);
+        var back = await Menus();
+        notes.Add($"menus: {inSettings} with the settings open, {back} after");
+        Check(inSettings == 0 && back > 0, $"Ctrl+, opened the settings and Ctrl+, closed them (menus {inSettings}, then {back})");
+        await c.Call("document.get", new { documentId = id, consistency = "latest" });
+        await Task.Delay(500);
+        var after = await PageState(c, windowId);
+        notes.Add($"before {before}; after {after}");
+        TypeChar('C');
+        string? text = null;
+        for (var i = 0; i < 30 && text?.Contains('C') != true; i++) { await Task.Delay(100); text = (string?)(await c.Call("test.editor.pageText", new { documentId = id }))["text"]; }
+        Check(text?.Contains("second lineBC") == true, $"a letter typed after the settings closed goes where the caret was ({JsonConvert.SerializeObject(text)})");
+    }
+
+    // Ctrl+, as a person types it: the settings shortcut is a low-level keyboard hook reading the key state, and Ctrl
+    // sent in the same batch as the comma was not down yet when the hook looked.
+    private static async Task CtrlComma()
+    {
+        Send(Key(0x11, false));
+        await Task.Delay(80);
+        Send(Comma(false), Comma(true));
+        await Task.Delay(80);
+        Send(Key(0x11, true));
+    }
+
+    // The comma key with its scan code: the editor page (Chromium) reads the key from it, and a bare VK_OEM_COMMA
+    // was not Ctrl+, there - the settings never opened.
+    private static INPUT Comma(bool up) => new() { type = 1, u = new InputUnion { ki = new KEYBDINPUT { wVk = 0xBC, wScan = 0x33, dwFlags = up ? 0x0002u : 0u } } };
+
+    private static void TypeChar(char ch)
+    {
+        var inputs = new[] { new INPUT { type = 1, u = new InputUnion { ki = new KEYBDINPUT { wScan = ch, dwFlags = 0x0004 } } }, new INPUT { type = 1, u = new InputUnion { ki = new KEYBDINPUT { wScan = ch, dwFlags = 0x0006 } } } };
+        if (SendInput(2, inputs, Marshal.SizeOf<INPUT>()) != 2) throw new CaseFailed("SendInput was refused (is the desktop locked?)");
     }
 
     private static async Task F01(List<string> notes)
