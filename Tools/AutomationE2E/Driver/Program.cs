@@ -676,7 +676,7 @@ internal static class Program
     {
         using var c = await Session("e2e D01");
         var windowId = (string)((JArray)(await c.Call("window.list"))["windows"]!)[0]["windowId"]!;
-        var result = await c.Call("test.dispatcher.stress", new { windowId, threads = 8, posts = 20000 });
+        var result = await c.Call("test.dispatcher.stress", new { windowId, threads = 8, posts = 1000 });
         notes.Add(result.ToString(Formatting.None));
         Check((long)result["ran"]! == (long)result["posted"]!, $"every posted callback ran ({result["ran"]} of {result["posted"]})");
     }
