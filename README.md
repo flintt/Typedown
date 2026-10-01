@@ -10,10 +10,11 @@
 </p>
 
 Windows 平台的所见即所得 Markdown 编辑器，WinUI 界面，编辑内核来自 MarkText 的 Muya。
-本仓库是 [byxiaozhi/Typedown](https://github.com/byxiaozhi/Typedown) 的 fork，在上游基础上持续修 bug、加功能（多标签、全文搜索、会话恢复、HedgeDoc 分享、阅读模式……），每个版本的具体改动见 [Releases](https://github.com/flintt/Typedown/releases)。
+本仓库是 [byxiaozhi/Typedown](https://github.com/byxiaozhi/Typedown) 的 fork，在上游基础上持续修 bug、加功能（多标签、全文搜索、会话恢复、HedgeDoc 分享、阅读模式、自定义主题、供脚本和 AI 助手使用的本机自动化……），每个版本的具体改动见 [Releases](https://github.com/flintt/Typedown/releases)。
 
 > A WYSIWYG Markdown editor for Windows (WinUI), forked from [byxiaozhi/Typedown](https://github.com/byxiaozhi/Typedown)
-> and developed further: document tabs, folder-wide search, session restore, HedgeDoc sharing, reading mode and more.
+> and developed further: document tabs, folder-wide search, session restore, HedgeDoc sharing, reading mode, custom
+> themes, and local automation for scripts and AI assistants (a CLI and an MCP server).
 > See the [releases](https://github.com/flintt/Typedown/releases) for what each version changed.
 
 ## 下载
@@ -32,17 +33,19 @@ Windows 平台的所见即所得 Markdown 编辑器，WinUI 界面，编辑内�
 
 主题可以自己写：一个 CSS 文件放进主题文件夹即可，格式见 **[自定义主题](docs/custom-theme.md)**；也可以直接打开 **[中英双语主题配色工具](https://flintt.github.io/Typedown/)**，在浏览器中设计、导入和导出主题。
 
-脚本和 AI 助手可以读写你打开的文档：在 设置 → 通用 里打开“允许本机自动化”，用法、能做的事和安全边界见 **[本机自动化](docs/automation.md)**。默认关闭。
+脚本和 AI 助手可以读写你打开的文档、切换窗口的模式和侧栏、调整设置：在 设置 → 通用 里打开“允许本机自动化”（默认关闭）。安装目录里的 `typedownctl.exe` 是命令行工具，`typedownctl mcp` 是给 AI 工具用的 MCP 服务器；用法、能做的事和安全边界见 **[本机自动化](docs/automation.md)** 和 **[MCP](docs/automation-mcp.md)**。
 
 遇到问题请开 [issue](https://github.com/flintt/Typedown/issues/new/choose)，写清楚版本号（设置 → 关于）、复现步骤和日志（`%LOCALAPPDATA%\Typedown\logs\`）。本仓库的 issue 由 AI（Claude Code）分析和修复。
 
-## Screenshots
-<figure>
-<img src="https://github.com/byxiaozhi/Typedown/assets/31278216/d0c9d76b-ecd2-4941-90ca-0f8c639c2ef0" width=200/>
-<img src="https://github.com/byxiaozhi/Typedown/assets/31278216/d5320590-2d0b-4f9a-a3d2-4661eb021758" width=200/>
-<img src="https://github.com/byxiaozhi/Typedown/assets/31278216/2ce7795c-1043-41ed-a420-c42f7aa5aa80" width=200/>
-<img src="https://github.com/byxiaozhi/Typedown/assets/31278216/a2df17f3-3100-4129-b0ba-0e90e14a89bf" width=200/>
-</figure>
+## 截图
+
+| 可视编辑 | 源码模式 |
+|:--:|:--:|
+| <img src="docs/media/visual.png" alt="可视编辑"> | <img src="docs/media/source.png" alt="源码模式"> |
+| **大纲** | **深色主题** |
+| <img src="docs/media/outline.png" alt="大纲"> | <img src="docs/media/dark.png" alt="深色主题"> |
+
+这些截图由 [Tools/Screenshots](Tools/Screenshots) 在一个运行中的 Typedown 里只用本机自动化接口拍下（切换语言、文档、模式、侧栏和主题，不重启）。
 
 ## Building from source
 
