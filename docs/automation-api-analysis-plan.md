@@ -382,7 +382,7 @@ Typedown.Uno/Automation/
 ### 阶段 5：发布稳定化
 
 - [x] 冻结 v1 兼容政策和弃用流程。*（规格第 6 节：允许的新增、不允许的改动、弃用步骤与 v2 并存期。冻结副本 `automation-schema/v1-frozen.json`，`SchemaCompatibilityTests` 逐项比对，并验证删除定义、新增必填、删字段、改类型、结果少保证、删枚举值都会被报出。）*
-- [x] 把接口状态、版本、scope 的实际安全边界、连接指示和 CLI 示例加入用户文档与 release notes。*（用户文档 `docs/automation.md`（README 有入口）；发布说明草稿 `docs/automation-release-notes-draft.md`，发布时并入 tag 说明。）*
+- [x] 把接口状态、版本、scope 的实际安全边界、连接指示和 CLI 示例加入用户文档与 release notes。*（用户文档 `docs/automation.md`（README 有入口）；发布说明已并入 v1.3.0 的 tag 说明（草稿随之删除）。）*
 - [x] 在 Windows 真机和 NUC Uno 环境各完成一次直接客户端、CLI 和 MCP 的发布候选验证。*（Windows：hp 上安装 automation 分支的安装包（7a11788，`typedownctl.exe` 与文档随安装），`Tools/AutomationE2E/windows-rc-check.ps1` 用安装好的 `typedownctl`、`typedownctl mcp`、安装目录里的 Python 与 PowerShell 示例读写，35 步等价场景与 Windows 基准一致；用户数据目录（`Documents\Typedown`）先整体备份、结束后逐文件哈希核对恢复。NUC：`nuc-run.sh` 用 `typedownctl mcp` 全部通过。验证中发现 1.2.27 起保存的文件会变成隐藏+临时属性（`SafeFile` 临时文件的属性随改名留在目标上），另行修复。）*
 - [ ] 只有出现明确远程场景时才设计带认证的网络网关；本机接口不能直接改成 TCP 服务。
 
