@@ -34,7 +34,7 @@ namespace Typedown.Core.Controls
             // everything else built from {u:LocaleString} are evaluated again in the new language. What does
             // not catch up is anything a view model holds as a finished string — the view models outlive the
             // navigation — which is why UIViewModel rebuilds the window title on a language change.
-            disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.Language)).Subscribe(_ => { ReloadSettingsPage(); ReloadMainPage(); }));
+            disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.Language)).Subscribe(_ => ReloadSettingsPage()));
             disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.ShortcutSettings)).Subscribe(_ => RegisterSettingsShortcut()));
             Frame.Navigate(typeof(MainPage), null);
         }
@@ -58,30 +58,6 @@ namespace Typedown.Core.Controls
                 catch (Exception ex)
                 {
                     Utilities.Log.Debug($"reload settings after language change: {ex.Message}");
-                }
-            });
-        }
-
-        /// <summary>
-        /// A language changed while the main page is shown (through the automation API, or another window's settings)
-        /// never passes the settings page, whose leaving builds the main page again: the menu bar kept the old
-        /// language while the side pane and the status bar followed. The main page is built again the same way.
-        /// </summary>
-        private void ReloadMainPage()
-        {
-            if (Frame.SourcePageType != typeof(MainPage)) return;
-            _ = Dispatcher.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-            {
-                try
-                {
-                    var depth = Frame.BackStackDepth;
-                    Frame.Navigate(typeof(MainPage), null, new SuppressNavigationTransitionInfo());
-                    while (Frame.BackStackDepth > depth && Frame.BackStack.Count > 0)
-                        Frame.BackStack.RemoveAt(Frame.BackStack.Count - 1);
-                }
-                catch (Exception ex)
-                {
-                    Utilities.Log.Debug($"reload main page after language change: {ex.Message}");
                 }
             });
         }

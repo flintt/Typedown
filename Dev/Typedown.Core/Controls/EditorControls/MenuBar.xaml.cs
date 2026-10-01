@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reactive.Disposables;
+using Typedown.Core.Controls.EditorControls.MenuBarItems;
 using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
 using Typedown.XamlUI;
@@ -88,6 +89,43 @@ namespace Typedown.Core.Controls
                 uiViewModel.CaptionHeight = 40;
                 disposables.Add(Disposable.Create(() => uiViewModel.CaptionHeight = oldCaptionHeight));
             }
+            // A language changed while this window shows its document (through the automation API, or another window's
+            // settings) passes no page that would build the menus again, and they kept the old language while the side
+            // pane and the status bar followed. Their titles and items are read from {u:LocaleString} when they are
+            // created, so the menus - and only they - are created again. The main page used to be built again instead,
+            // which reloaded the editor page: a read or a write right then could fail, and two pages talking to the host
+            // at once could end the process.
+            disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.Language)).Subscribe(_ =>
+                _ = Dispatcher.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, RebuildMenus)));
+            disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.SourceCode)).Subscribe(_ => ApplyModeToMenus()));
+        }
+
+        private void RebuildMenus()
+        {
+            try
+            {
+                var items = MenuBarControl.Items;
+                items.Clear();
+                items.Add(new FileItem());
+                items.Add(new EditItem());
+                items.Add(new ParagraphItem());
+                items.Add(new FormatItem());
+                items.Add(new ViewItem());
+                ApplyModeToMenus();
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"menus after a language change: {ex.Message}");
+            }
+        }
+
+        // Paragraph and Format have nothing to do in source mode (the markup binds this for the menus it creates).
+        private void ApplyModeToMenus()
+        {
+            if (Settings == null) return;
+            var visibility = IsCollapsed(Settings.SourceCode);
+            foreach (var item in MenuBarControl.Items)
+                if (item is ParagraphItem || item is FormatItem) item.Visibility = visibility;
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
