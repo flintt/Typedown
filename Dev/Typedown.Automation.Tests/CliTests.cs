@@ -120,6 +120,9 @@ namespace Typedown.Automation.Tests
         [InlineData("appearance.theme", "{\"kind\":\"builtIn\",\"id\":\"dark\"}", "{\"kind\":\"builtIn\",\"id\":\"dark\"}")]
         [InlineData("appearance.theme", "{kind:builtIn,id:dark}", "{\"kind\":\"builtIn\",\"id\":\"dark\"}")]   // Windows PowerShell 5 dropped the quotes
         [InlineData("appearance.theme", "{ kind: custom, id: solarized-light }", "{\"kind\":\"custom\",\"id\":\"solarized-light\"}")]
+        [InlineData("appearance.theme", "{kind:custom,id:My Theme}", "{\"kind\":\"custom\",\"id\":\"My Theme\"}")]   // a space in the id
+        [InlineData("appearance.theme", "{kind:custom,id:\"My Theme\"}", "{\"kind\":\"custom\",\"id\":\"My Theme\"}")]   // quotes kept by another shell
+        [InlineData("appearance.theme", "{kind:custom,id:2024}", "{\"kind\":\"custom\",\"id\":2024}")]
         [InlineData("appearance.theme", "dark", "{\"kind\":\"builtIn\",\"id\":\"dark\"}")]
         [InlineData("appearance.theme", "custom:sepia", "{\"kind\":\"custom\",\"id\":\"sepia\"}")]
         [InlineData("editor.textDirection", "rtl", "\"rtl\"")]

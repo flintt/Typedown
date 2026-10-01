@@ -320,8 +320,16 @@ Exit codes: 0 ok, 2 usage, 3 not running or not reachable, 4 version or scope, 5
             var trimmed = text.Trim();
             if (trimmed.StartsWith("{") && trimmed.EndsWith("}"))
             {
-                var quoted = System.Text.RegularExpressions.Regex.Replace(trimmed, @"(?<=[{,:]\s*)([A-Za-z_][\w.\-]*)(?=\s*[,:}])",
-                    m => m.Value is "true" or "false" or "null" ? m.Value : "\"" + m.Value + "\"");
+                // Each bare name or value between the separators, spaces inside it included (a custom theme
+                // named My Theme); numbers, true, false and null stay as they are.
+                var quoted = System.Text.RegularExpressions.Regex.Replace(trimmed, @"(?<=[{,:])\s*([^{}\[\],:""]+?)\s*(?=[,:}])",
+                    m =>
+                    {
+                        var word = m.Groups[1].Value;
+                        var literal = word is "true" or "false" or "null" ||
+                            double.TryParse(word, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out _);
+                        return literal ? word : JsonConvert.ToString(word);
+                    });
                 try { return JToken.Parse(quoted); }
                 catch (JsonException) { }
             }
