@@ -137,6 +137,7 @@ internal static class Program
             await Case("R04 untitled and background documents come back from their backups after a kill, each its own", R04);
             await Case("C01 document.close: a saved document closes, an unsaved one (a fresh keystroke too) is refused, the last one leaves an empty document", C01);
             await Case("Q02 a window closed at once after it opened (its web view still being created): the process lives on", Q02);
+            await Case("D01 the window's UI thread runs every callback posted to it, from many threads at once", D01);
             // Last: it ends the test host.
             await Case("Q01 two windows closed one after the other: the process exits (it stayed, headless)", Q01);
         }
@@ -221,7 +222,11 @@ internal static class Program
         {
             // A call that got no answer: what the screen showed (a dialog holding the window, say) is the first clue.
             if (e is TimeoutException || e is CaseFailed && e.Message.Contains("did not finish"))
+            {
                 notes.Add("screen at the timeout: " + Screenshot(name.Split(' ')[0] + "-timeout-" + DateTime.Now.ToString("HHmmss")));
+                // And the host's threads at that moment: a window's UI thread stuck shows nothing in the log.
+                notes.Add("host dump at the timeout: " + HangDump(name.Split(' ')[0] + "-timeout-" + DateTime.Now.ToString("HHmmss")));
+            }
             results.Add(new JObject { ["name"] = name, ["passed"] = false, ["ms"] = watch.ElapsedMilliseconds, ["error"] = e is CaseFailed ? e.Message : e.ToString(), ["notes"] = new JArray(notes) });
         }
     }
@@ -649,6 +654,32 @@ internal static class Program
         const blk = e && e.closest('[id^=""ag-""]');
         return { hasFocus: document.hasFocus(), active: document.activeElement && (document.activeElement.id || document.activeElement.tagName), caret: blk && blk.id, editor: !!window.__typedownMuya };
     })()";
+
+    /// <summary>A full dump of the test host (dotnet-dump, where installed) next to the screenshots; why not, otherwise.</summary>
+    private static string HangDump(string label)
+    {
+        try
+        {
+            var tool = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".dotnet", "tools", "dotnet-dump.exe");
+            if (!File.Exists(tool)) return "no dotnet-dump";
+            var file = Path.Combine(outputDir, label + ".dmp");
+            using var dump = Process.Start(new ProcessStartInfo(tool, $"collect -p {hostPid} --type Full -o \"{file}\"") { UseShellExecute = false, CreateNoWindow = true })!;
+            return dump.WaitForExit(180000) && File.Exists(file) ? file : "dump failed";
+        }
+        catch (Exception e)
+        {
+            return "dump failed: " + e.Message;
+        }
+    }
+
+    private static async Task D01(List<string> notes)
+    {
+        using var c = await Session("e2e D01");
+        var windowId = (string)((JArray)(await c.Call("window.list"))["windows"]!)[0]["windowId"]!;
+        var result = await c.Call("test.dispatcher.stress", new { windowId, threads = 8, posts = 20000 });
+        notes.Add(result.ToString(Formatting.None));
+        Check((long)result["ran"]! == (long)result["posted"]!, $"every posted callback ran ({result["ran"]} of {result["posted"]})");
+    }
 
     private static async Task<string> PageState(Client c, string windowId)
     {

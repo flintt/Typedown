@@ -31,6 +31,30 @@ namespace Typedown.Services.Automation
                 return new Newtonsoft.Json.Linq.JObject { ["text"] = text };
             }));
 
+            // The window's UI thread runs every callback posted to it, from any number of threads at once. Its dispatcher
+            // numbered posts with a plain increment: two threads could take the same number, and one callback was
+            // dropped - an await continuation that never ran (E2E C01 hung a minute with the UI thread idle).
+            methods.Add(new MethodDescriptor("test.dispatcher.stress", null, "test.dispatcher.stress/1", async (c, ct) =>
+            {
+                var windowId = c.Params.RequiredString("windowId", allowEmpty: false);
+                var threads = (int)(c.Params.OptionalInteger("threads") ?? 8);
+                var posts = (int)(c.Params.OptionalInteger("posts") ?? 20000);
+                var context = await Core.Services.AutomationWindows.Registry.OnWindowAsync(windowId, app => System.Threading.SynchronizationContext.Current);
+                var ran = 0;
+                var start = new System.Threading.ManualResetEventSlim();
+                var senders = Enumerable.Range(0, threads).Select(_ => System.Threading.Tasks.Task.Run(() =>
+                {
+                    start.Wait();
+                    for (var i = 0; i < posts; i++) context.Post(__ => System.Threading.Interlocked.Increment(ref ran), null);
+                })).ToArray();
+                start.Set();
+                await System.Threading.Tasks.Task.WhenAll(senders);
+                var total = threads * posts;
+                var clock = System.Diagnostics.Stopwatch.StartNew();
+                while (System.Threading.Volatile.Read(ref ran) < total && clock.ElapsedMilliseconds < 20000) await System.Threading.Tasks.Task.Delay(50);
+                return new Newtonsoft.Json.Linq.JObject { ["posted"] = total, ["ran"] = System.Threading.Volatile.Read(ref ran), ["context"] = context?.GetType().FullName };
+            }));
+
             // Backups: one pass now in every window, and what the backup folder holds afterwards.
             methods.Add(new MethodDescriptor("test.backup.run", null, "test.backup.run/1", async (c, ct) =>
             {
