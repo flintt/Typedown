@@ -112,6 +112,11 @@ namespace Typedown.Controls
         {
             Opacity = 1;
             IsEditorLoaded = true;
+            if (AppViewModel.EditorViewModel.FocusWhenLoaded)
+            {
+                AppViewModel.EditorViewModel.FocusWhenLoaded = false;
+                Focus(FocusState.Programmatic);
+            }
         }
 
         protected override void OnPointerPressed(PointerRoutedEventArgs e)

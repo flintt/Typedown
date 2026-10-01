@@ -168,7 +168,10 @@ namespace Typedown.Core.ViewModels
                 Settings.HighlightAutomationChanges,
                 Markdown,
                 BasePath = FileViewModel.ImageBasePath,
-                Cursor = Settings.RememberCursorPosition ? CursorMemory.Get(FileViewModel.FilePath) : null,
+                // The editor page loading again (leaving the settings page rebuilds the main page) shows the document the
+                // window already has: its caret is where the reader left it, whether or not positions are remembered
+                // across sessions, and whether or not the document has a file. At start-up there is none yet.
+                Cursor = CurrentCursor ?? (Settings.RememberCursorPosition ? CursorMemory.Get(FileViewModel.FilePath) : null),
                 ScrollTop = Settings.RememberCursorPosition ? CursorMemory.GetScroll(FileViewModel.FilePath) : null,
                 LoadId = ++LoadId,
             };
@@ -177,6 +180,8 @@ namespace Typedown.Core.ViewModels
         /// <summary>Pushes a whole document into the editor (see <see cref="LoadId"/>).</summary>
         public void PostLoadFile(string text, object cursor = null)
         {
+            // Another document, or this one again from its start: the caret it comes with (if any) is the current one.
+            CurrentCursor = cursor as CursorState;
             var scrollTop = Settings.RememberCursorPosition ? CursorMemory.GetScroll(FileViewModel.FilePath) : null;
             loadClock = text != null && text.Length > 200000 ? System.Diagnostics.Stopwatch.StartNew() : null;
             MarkdownEditor?.PostMessage("LoadFile", new { text, basePath = FileViewModel.ImageBasePath, cursor, scrollTop, loadId = ++LoadId });
@@ -362,6 +367,13 @@ namespace Typedown.Core.ViewModels
         }
 
         public CursorState CurrentCursor { get; internal set; }
+
+        /// <summary>
+        /// Set when the window comes back from the settings page: the editor takes the keyboard again once its page has
+        /// loaded. The main page is built anew and the reader was in the document - keys went nowhere until a click,
+        /// and the click moved the caret.
+        /// </summary>
+        public bool FocusWhenLoaded { get; set; }
 
         public void OnCursorChange(JToken arg)
         {

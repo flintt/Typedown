@@ -5,8 +5,10 @@ using System.Reactive.Linq;
 using Typedown.Core.Pages;
 using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
+using Windows.UI.Xaml.Navigation;
 
 namespace Typedown.Core.Controls
 {
@@ -36,7 +38,21 @@ namespace Typedown.Core.Controls
             // navigation — which is why UIViewModel rebuilds the window title on a language change.
             disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.Language)).Subscribe(_ => ReloadSettingsPage()));
             disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.ShortcutSettings)).Subscribe(_ => RegisterSettingsShortcut()));
+            Frame.Navigated += OnFrameNavigated;
             Frame.Navigate(typeof(MainPage), null);
+        }
+
+        private Type shownPage;
+
+        // Back from the settings page (its shortcut, the back button): the reader returns to the document, keyboard
+        // included. The editor takes it now, and again once its page has loaded (it usually loads again here).
+        private void OnFrameNavigated(object sender, NavigationEventArgs e)
+        {
+            var from = shownPage;
+            shownPage = e.SourcePageType;
+            if (e.SourcePageType != typeof(MainPage) || from != typeof(SettingsPage)) return;
+            ViewModel.EditorViewModel.FocusWhenLoaded = true;
+            _ = Dispatcher.RunIdleAsync(_ => (ViewModel.MarkdownEditor as Windows.UI.Xaml.Controls.Control)?.Focus(FocusState.Programmatic));
         }
 
         private void ReloadSettingsPage()
