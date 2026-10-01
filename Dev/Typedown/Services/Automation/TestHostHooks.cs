@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using Typedown.Automation;
 
 namespace Typedown.Services.Automation
@@ -96,7 +96,8 @@ namespace Typedown.Services.Automation
                     var titles = new Newtonsoft.Json.Linq.JArray();
                     void Walk(global::Windows.UI.Xaml.DependencyObject node)
                     {
-                        if (node is global::Microsoft.UI.Xaml.Controls.MenuBarItem item) titles.Add(item.Title);
+                        // The menus shown: Paragraph and Format are hidden in source mode.
+                        if (node is global::Microsoft.UI.Xaml.Controls.MenuBarItem item && item.Visibility == global::Windows.UI.Xaml.Visibility.Visible) titles.Add(item.Title);
                         var count = global::Windows.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(node);
                         for (var i = 0; i < count; i++) Walk(global::Windows.UI.Xaml.Media.VisualTreeHelper.GetChild(node, i));
                     }

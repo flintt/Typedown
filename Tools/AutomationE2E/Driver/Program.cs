@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -385,6 +385,20 @@ internal static class Program
             for (var i = 0; i < 40 && (menuAfter == menuBefore || menuAfter == ""); i++) { await Task.Delay(250); try { menuAfter = await Menu(); } catch (JsonRpcRemoteException) { } }
             notes.Add($"menu: {menuBefore} -> {menuAfter}");
             Check(menuAfter != menuBefore && menuAfter != "", $"the menu bar follows the language ({menuBefore} -> {menuAfter})");
+            // Menus made again in source mode still follow it: the language is changed back while the window is in source
+            // mode, and Paragraph and Format stay hidden; back in visual mode all five are there.
+            async Task<int> MenuCount() => ((JArray)(await c.Call("test.window.menuTitles", new { windowId }))["titles"]!).Count;
+            await c.Call("window.setView", new { windowId, mode = "source" });
+            await Set("ui.language", original["ui.language"]!);
+            var menuBack = "";
+            // In source mode the bar shows three of the five titles: "back" is no longer the other language's menu.
+            for (var i = 0; i < 40 && (menuBack == menuAfter || menuBack == ""); i++) { await Task.Delay(250); try { menuBack = await Menu(); } catch (JsonRpcRemoteException) { } }
+            var inSource = await MenuCount();
+            await c.Call("window.setView", new { windowId, mode = "visual" });
+            var inVisual = 0;
+            for (var i = 0; i < 20 && inVisual != 5; i++) { await Task.Delay(150); inVisual = await MenuCount(); }
+            Check(menuBack != menuAfter && menuBack != "" && inSource == 3 && inVisual == 5,
+                $"menus made again in source mode: {inSource} shown ({menuBack}); in visual mode {inVisual}");
             var tab = (int)original["editor.tabSize"]! == 2 ? 4 : 2;
             await Set("editor.tabSize", tab);
             Check((int)await Setting("TabSize") == tab, $"tab size {tab}");
