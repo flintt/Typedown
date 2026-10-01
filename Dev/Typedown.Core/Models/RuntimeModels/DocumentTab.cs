@@ -10,6 +10,21 @@ namespace Typedown.Core.Models
     /// </summary>
     public partial class DocumentTab : INotifyPropertyChanged
     {
+        /// <summary>
+        /// The document's identity: from the tab's creation to its close, or until the tab is reused for another
+        /// document. Not the path: an untitled document has none, and Save As changes it. An untitled document's
+        /// backup is kept under it.
+        /// </summary>
+        public string DocumentId { get; private set; } = NewDocumentId();
+
+        /// <summary>The tab now holds a different document (a preview or blank tab reused for an open or new file).</summary>
+        public void BecomeNewDocument() => DocumentId = NewDocumentId();
+
+        /// <summary>A document recovered from its backup keeps the id it had, and so its backup file.</summary>
+        public void RestoreIdentity(string documentId) => DocumentId = documentId;
+
+        private static string NewDocumentId() => System.Guid.NewGuid().ToString("N");
+
         public string FilePath { get; set; }
 
         /// <summary>The encoding, byte order mark and line ending the file was opened with.</summary>

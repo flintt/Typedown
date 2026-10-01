@@ -237,6 +237,8 @@ namespace Typedown.Core.ViewModels
             }
             if (tab != ActiveTab) await SwitchTo(tab);
             if (!await FileViewModel.AskToSave()) return false;
+            // Closed on purpose: an untitled document's backup must not come back at the next start.
+            if (string.IsNullOrEmpty(FileViewModel.FilePath)) FileViewModel.AutoBackup.DeleteBackup(null, tab.DocumentId);
             // Saved or explicitly discarded: nothing in the editor needs to survive.
             EditorViewModel.Saved = true;
             var index = Tabs.IndexOf(tab);
