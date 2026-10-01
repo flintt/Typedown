@@ -372,11 +372,12 @@ internal static class Program
         var revision = (long)got["settingsRevision"]!;
         async Task<JToken> Setting(string name) => (await c.Call("test.settings.get", new { windowId, name }))["value"]!;
         async Task Set(string key, JToken value) => revision = await SetSetting(c, key, value);
+        async Task<string> Menu() => string.Join(" ", ((JArray)(await c.Call("test.window.menuTitles", new { windowId }))["titles"]!).Select(t => (string)t!));
+        string? menuBefore = null;
         try
         {
             var language = (string)original["ui.language"]! == "ja" ? "en" : "ja";
-            async Task<string> Menu() => string.Join(" ", ((JArray)(await c.Call("test.window.menuTitles", new { windowId }))["titles"]!).Select(t => (string)t!));
-            var menuBefore = await Menu();
+            menuBefore = await Menu();
             await Set("ui.language", language);
             Check((string)(await Setting("Language"))! == language, $"the window's language is {language}");
             // The menu bar follows without a restart (it kept the old language when the change came through the API).
@@ -404,6 +405,15 @@ internal static class Program
         finally
         {
             foreach (var key in keys) await Set(key, original[key]!);
+            // The language put back rebuilds the main page and reloads the editor page once more: the case ends only when
+            // that is done, or the next case starts on a page about to go (a write to it was refused, editor_not_ready).
+            if (menuBefore != null)
+            {
+                var menu = "";
+                for (var i = 0; i < 40 && menu != menuBefore; i++) { await Task.Delay(250); try { menu = await Menu(); } catch (JsonRpcRemoteException) { } }
+                var active = (string?)((JArray)(await c.Call("window.list"))["windows"]!).First(w => (string)w["windowId"]! == windowId)["activeDocumentId"];
+                if (active != null) await c.Call("document.get", new { documentId = active, consistency = "latest" });
+            }
         }
         var back = (JObject)(await c.Call("settings.get", new { keys }))["values"]!;
         Check(JToken.DeepEquals(back, original), $"every setting is back ({back.ToString(Formatting.None)})");
@@ -782,7 +792,11 @@ internal static class Program
     {
         var barrier = (string)(await driver.Call("test.barrier.arm", new { point = EditBarrierPoints.AfterEditorMutationBeforeReport, documentId }))["barrierId"]!;
         var write = writer.Call("document.replace", new { documentId, baseRevision = await Revision(driver, documentId), text, normalizationPolicy = "allowUnknown" });
-        var hit = await driver.Call("test.barrier.waitHit", new { barrierId = barrier, timeoutMs = 20000 });
+        var waiting = driver.Call("test.barrier.waitHit", new { barrierId = barrier, timeoutMs = 20000 });
+        // A write refused before it reached the page (the page reloading, say) ends first: say why, without the wait.
+        if (await Task.WhenAny(waiting, write) == write && !waiting.IsCompleted)
+            throw new CaseFailed($"the write ended before it reached the page: {await Outcome(write)}");
+        var hit = await waiting;
         if (!(bool)hit["hit"]!) throw new CaseFailed("the write never reached the page");
         return (write, barrier);
     }
