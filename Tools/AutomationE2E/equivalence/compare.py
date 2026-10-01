@@ -11,7 +11,7 @@ import json, re, sys, os
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SCHEMA = os.path.join(HERE, "..", "..", "..", "docs", "automation-schema", "v1.json")
-# settingsRevision counts every settings change since the store was made: its value is each platform's own.
+# settingsRevision counts the changes of the exposed settings since the app started: its value is each platform's own.
 VOLATILE = {"documentId", "windowId", "operationId", "instanceId", "version", "commit", "platform", "sessionId", "path",
             "settingsRevision", "baseSettingsRevision"}
 
