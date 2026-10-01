@@ -12,7 +12,8 @@
       - there and different: the build stops. A different runtime file would replace the app's own. The only
         exceptions are the libraries both are compiled against (Typedown.Automation, Newtonsoft.Json): the app's
         copy stays, provided the assembly version is the same.
-    Then typedownctl.exe is run from the app folder ("help") to prove it starts on the app's runtime, and the
+    Then typedownctl.exe is run from the app folder ("help") to prove it starts on the app's runtime (not for an
+    ARM64 build on an x64 machine, which cannot start it), and the
     documents go to <app>\docs with their relative links intact.
 
 .EXAMPLE
@@ -71,12 +72,20 @@ finally {
 }
 Write-Host "add-cli: $added file(s) added, $same already there and identical, $kept shared librar(ies) kept from the app"
 
-# It has to start on the app's runtime, from the app folder.
-$help = & (Join-Path $AppFolder 'typedownctl.exe') help 2>&1
-if ($LASTEXITCODE -ne 0 -or -not ($help -join "`n").Contains('typedownctl')) {
-    throw "add-cli: typedownctl.exe does not run from the app folder (exit $LASTEXITCODE): $help"
+# It has to start on the app's runtime, from the app folder - where this machine can run it: an ARM64 build made on an
+# x64 machine (CI builds both there) cannot start, and the release build stopped here. The file checks above hold for
+# it all the same.
+$hostArch = [System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture.ToString().ToLowerInvariant()
+if ($rid -like '*-arm64' -and $hostArch -ne 'arm64') {
+    Write-Host "add-cli: typedownctl.exe not started: $rid does not run on this $hostArch machine"
 }
-Write-Host "add-cli: typedownctl.exe runs from the app folder"
+else {
+    $help = & (Join-Path $AppFolder 'typedownctl.exe') help 2>&1
+    if ($LASTEXITCODE -ne 0 -or -not ($help -join "`n").Contains('typedownctl')) {
+        throw "add-cli: typedownctl.exe does not run from the app folder (exit $LASTEXITCODE): $help"
+    }
+    Write-Host "add-cli: typedownctl.exe runs from the app folder"
+}
 
 # The documents, keeping their relative links: automation.md links the spec, the schema, the examples and the MCP page.
 $docs = Join-Path $AppFolder 'docs'
