@@ -128,6 +128,8 @@ def run(d, keep):
     original_settings = c.call("settings.get", {"keys": keys})["values"]
     closed = False
     try:
+        # In front of the terminal the demo runs from, or it plays behind it.
+        c.call("window.focus", {"windowId": window_id})
         d.view(window_id, mode="visual")
         d.wait()
 
