@@ -36,3 +36,12 @@ launch and closed at once). With the lock held, a null list now leaves the metho
 
 Decompiled, the patched assembly differs from 1.0.2 in that method only (`if (_windowMessagehooks != null)` around the
 removal). Both DLLs in the package are replaced; the nuspec says 1.0.3.
+
+## Repacking: give the patched DLLs the time they were made
+
+A patched DLL has the size of the one it replaces, and the package entry kept the original's time (2023-04-18). An
+incremental build copies a reference only when its size or time differs, so after the switch to 1.0.3 a build on hp
+kept the 1.0.2 DLL in `bin` and packed it into the installer (clean builds, as on CI, were not affected). The DLL
+entries carry the time of the repack; when a later version is made, restamp them the same way, then delete the old
+copy of that version from the NuGet cache (`%USERPROFILE%\.nuget\packages\typedown.xamlui\<version>`) on machines
+that restored it before.
