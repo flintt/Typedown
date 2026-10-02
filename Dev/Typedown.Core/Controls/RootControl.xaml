@@ -28,7 +28,9 @@
     </UserControl.Resources>
     <Grid x:Name="RootGrid" Background="{x:Bind Background, Mode=OneWay}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" MinHeight="4"/>
+            <!-- 4 px above the main page in compact mode, where the menu bar (moved up 4 px) covers it; nothing covers it in
+                 full screen, where it was a strip of window background along the top of the screen. -->
+            <RowDefinition Height="Auto" MinHeight="{x:Bind local:RootControl.GetCaptionRowMinHeight(ViewModel.UIViewModel.IsFullScreen), Mode=OneWay}"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <local:Caption x:Name="Caption" x:Load="{x:Bind local:RootControl.GetCaptionIsLoad(Settings.AppCompactMode, Frame.SourcePageType, ViewModel.UIViewModel.IsFullScreen), Mode=OneWay}"/>
