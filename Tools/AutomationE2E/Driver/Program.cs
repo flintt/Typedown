@@ -863,9 +863,9 @@ internal static class Program
                 "caret: s && s.anchorNode ? (s.anchorNode.textContent || '').slice(0, 30) : null, apply: window.__typedownLastApply || null } })()";
             return (await c.Call("test.editor.eval", new { windowId, script }))["result"]!;
         }
-        async Task<JToken> Replace(string find, string replacement, string reveal)
+        async Task<JToken> Replace(string find, string replacement, string reveal, string normalizationPolicy = "requireKnownSafe")
         {
-            await c.Call("document.replaceText", new { documentId = id, baseRevision = await Revision(c, id), find, replacement, expectedCount = 1, reveal });
+            await c.Call("document.replaceText", new { documentId = id, baseRevision = await Revision(c, id), find, replacement, expectedCount = 1, reveal, normalizationPolicy });
             await Task.Delay(600);
             return await State(replacement.Split('\n')[0]);
         }
@@ -897,6 +897,23 @@ internal static class Program
         notes.Add("deletion: " + deleted.ToString(Formatting.None));
         Check((int)deleted["y"]! > 0 && Shown(deleted), "a deletion scrolls the block now in its place into view");
 
+        try
+        {
+            await c.Call("window.setView", new { windowId, mode = "source" });
+            await Task.Delay(500);
+            await ToTop();
+            // Source mode has no visual editor to tell what it would rewrite: every write there is "unknown".
+            await Replace("Paragraph 120 of", "Paragraph 120 (source) of", "change", "allowUnknown");
+            // CodeMirror marks only the changed characters, which splits the line into text nodes.
+            var s = await State("Paragraph 120 ");
+            notes.Add("source mode: " + s.ToString(Formatting.None));
+            Check((int)s["y"]! > 0 && Shown(s), "in source mode the change is scrolled into view");
+        }
+        finally
+        {
+            await c.Call("window.setView", new { windowId, mode = "visual" });
+        }
+
         // A new reference definition changes how other blocks may render: the editor loads the whole document, and the
         // hold that puts the page back where it was must hold it at the change instead.
         await ToTop();
@@ -906,20 +923,6 @@ internal static class Program
         notes.Add("whole document: " + wholeState.ToString(Formatting.None));
         Check((string?)wholeState["apply"] == "whole", "a new reference definition loads the whole document");
         Check((int)wholeState["y"]! > 0 && Shown(wholeState), "after a whole load the change is in view too");
-
-        try
-        {
-            await c.Call("window.setView", new { windowId, mode = "source" });
-            await Task.Delay(500);
-            await ToTop();
-            var s = await Replace("Paragraph 120 of", "Paragraph 120 (source) of", "change");
-            notes.Add("source mode: " + s.ToString(Formatting.None));
-            Check((int)s["y"]! > 0 && Shown(s), "in source mode the change is scrolled into view");
-        }
-        finally
-        {
-            await c.Call("window.setView", new { windowId, mode = "visual" });
-        }
     }
 
     private static void TypeChar(char ch)
