@@ -128,6 +128,29 @@ namespace Typedown.Services.Automation
                     if (app.XamlRoot?.Content is global::Windows.UI.Xaml.DependencyObject root) Walk(root);
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["titles"] = titles };
                 })));
+            // Where the main page starts in its window, and whether the window is in full screen: in full screen nothing may
+            // sit above it (a 4 px row of window background did, along the top of the screen).
+            methods.Add(new MethodDescriptor("test.window.layout", null, "test.window.layout/1", (c, ct) =>
+                Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    var root = app.XamlRoot?.Content as global::Windows.UI.Xaml.UIElement;
+                    global::Windows.UI.Xaml.FrameworkElement? page = null;
+                    void Walk(global::Windows.UI.Xaml.DependencyObject node)
+                    {
+                        if (page != null) return;
+                        if (node is Core.Pages.MainPage found) { page = found; return; }
+                        var count = global::Windows.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(node);
+                        for (var i = 0; i < count; i++) Walk(global::Windows.UI.Xaml.Media.VisualTreeHelper.GetChild(node, i));
+                    }
+                    if (root != null) Walk(root);
+                    var top = page != null && root != null ? page.TransformToVisual(root).TransformPoint(new global::Windows.Foundation.Point(0, 0)).Y : double.NaN;
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject
+                    {
+                        ["fullScreen"] = app.UIViewModel.IsFullScreen,
+                        ["mainPageTop"] = top,
+                        ["rootHeight"] = (root as global::Windows.UI.Xaml.FrameworkElement)?.ActualHeight ?? double.NaN,
+                    };
+                })));
             // Holds a window in memory from now on, as anything still referring to it does after it closes:
             // XamlWindow.AllWindows lists a window until the garbage collector has finalized it, closed or not.
             methods.Add(new MethodDescriptor("test.window.keep", null, "test.window.keep/1", (c, ct) =>

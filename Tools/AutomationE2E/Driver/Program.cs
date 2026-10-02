@@ -140,6 +140,7 @@ internal static class Program
             await Case("D01 the window's UI thread runs every callback posted to it, from many threads at once", D01);
             await Case("K02 Ctrl+, twice opens and closes the settings: the caret and the keyboard are where they were", K02);
             await Case("K03 the same with an untitled document (no per-file caret memory)", K03);
+            await Case("FS01 in full screen the main page starts at the top edge of the screen", FS01);
             // Last: it ends the test host.
             await Case("Q01 two windows closed one after the other: the process exits (it stayed, headless)", Q01);
         }
@@ -801,6 +802,41 @@ internal static class Program
     // The comma key with its scan code: the editor page (Chromium) reads the key from it, and a bare VK_OEM_COMMA
     // was not Ctrl+, there - the settings never opened.
     private static INPUT Comma(bool up) => new() { type = 1, u = new InputUnion { ki = new KEYBDINPUT { wVk = 0xBC, wScan = 0x33, dwFlags = up ? 0x0002u : 0u } } };
+
+    // F11 puts the window in full screen: the main page then starts at the top edge of the screen. A 4 px row kept for
+    // compact mode's top border stayed above it, a strip of window background along the top.
+    private static async Task FS01(List<string> notes)
+    {
+        using var c = await Session("e2e FS01");
+        var id = await Open(c, Fixture("fs01.md", "# FS01\n\nText\n"));
+        var windowId = await WindowIdOf(c, id);
+        var window = await WindowOf(windowId, c);
+        await Activate(window);
+        async Task<JToken> Layout() => await c.Call("test.window.layout", new { windowId });
+        var before = await Layout();
+        Send(Key(0x7A, false), Key(0x7A, true));
+        JToken full = before;
+        for (var i = 0; i < 30 && !(bool)full["fullScreen"]!; i++) { await Task.Delay(100); full = await Layout(); }
+        await Task.Delay(800);
+        full = await Layout();
+        notes.Add($"before {before.ToString(Formatting.None)}; full screen {full.ToString(Formatting.None)}");
+        try
+        {
+            Check((bool)full["fullScreen"]!, "F11 put the window in full screen");
+            Check((double)full["mainPageTop"]! == 0, $"in full screen the main page starts at the top edge ({full["mainPageTop"]} px below it)");
+        }
+        finally
+        {
+            await Activate(window);
+            Send(Key(0x7A, false), Key(0x7A, true));
+            JToken after = full;
+            for (var i = 0; i < 30 && (bool)after["fullScreen"]!; i++) { await Task.Delay(100); after = await Layout(); }
+            await Task.Delay(500);
+            after = await Layout();
+            notes.Add("after " + after.ToString(Formatting.None));
+            Check(!(bool)after["fullScreen"]! && (double)after["mainPageTop"]! == (double)before["mainPageTop"]!, "F11 again leaves full screen, the layout as it was");
+        }
+    }
 
     private static void TypeChar(char ch)
     {
