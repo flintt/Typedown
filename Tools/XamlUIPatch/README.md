@@ -1,7 +1,10 @@
-# Typedown.XamlUI 1.0.2
+# Typedown.XamlUI 1.0.3
 
-`nupkgs/Typedown.XamlUI.1.0.2.nupkg` is the vendored 1.0.1 package (upstream https://github.com/byxiaozhi/Typedown.XamlUI,
-whose source has the same code) with one change in `Dispatcher.PostTask`:
+`nupkgs/Typedown.XamlUI.1.0.3.nupkg` is the vendored 1.0.1 package (upstream https://github.com/byxiaozhi/Typedown.XamlUI,
+whose source has the same code) with two changes.
+
+## 1.0.2: `Dispatcher.PostTask`
+
 
     var taskId = curTaskId++;                                        // 1.0.1
     var taskId = (uint)(Interlocked.Increment(ref curTaskId) - 1);   // 1.0.2
@@ -19,3 +22,17 @@ the patched assembly differs in that line only):
 
 Both copies in the package (`lib/netstandard2.0`, `lib/uap10.0.18362`) were the same file and are replaced by the
 patched one; the nuspec says 1.0.2. Everything else in the package is unchanged.
+
+## 1.0.3: `Window.RemoveWindowMessageHook`
+
+The list of a window's message hooks is created by the first `AddWindowMessageHook`. The caption buttons
+(`CaptionControlGroup`) add theirs when they load and remove it when they unload; a window closed as it opens unloads
+them before they loaded, and `RemoveWindowMessageHook` ran `Where` over the null list: an ArgumentNullException in a XAML
+event handler, which ended the process (`XamlUnhandledException`, seen 2026-10-02 on hp with a window opened by a second
+launch and closed at once). With the lock held, a null list now leaves the method as it would after removing:
+
+    dotnet run --project Tools/XamlUIPatch -- show-remove  <1.0.2 Typedown.XamlUI.dll>
+    dotnet run --project Tools/XamlUIPatch -- patch-remove <1.0.2 Typedown.XamlUI.dll> <patched dll>
+
+Decompiled, the patched assembly differs from 1.0.2 in that method only (`if (_windowMessagehooks != null)` around the
+removal). Both DLLs in the package are replaced; the nuspec says 1.0.3.

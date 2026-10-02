@@ -57,7 +57,7 @@
 		<PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="all" />
 		<PackageReference Include="System.Drawing.Common" Version="9.0.8" />
 		<PackageReference Include="System.Reactive" Version="5.0.0" />
-		<PackageReference Include="Typedown.XamlUI" Version="1.0.2" GeneratePathProperty="true" />
+		<PackageReference Include="Typedown.XamlUI" Version="1.0.3" GeneratePathProperty="true" />
 		<!-- Typedown.XamlUI depends on Win2D with build assets excluded, and the packaging project publishes with RID win-x64,
 		     so Win2D's runtimes/win10-* native DLL is never selected. Reference it directly and copy the native DLL explicitly. -->
 		<PackageReference Include="Win2D.uwp" Version="1.26.0" GeneratePathProperty="true" ExcludeAssets="build" />
