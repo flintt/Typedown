@@ -285,6 +285,17 @@ class Muya {
   }
 
   /**
+   * Where an automation edit happened, for reveal: "change": the key of the first changed top-level block, or after a
+   * pure deletion the block now in its place (the last block when the deletion was at the end); null when empty.
+   */
+  changeAnchorKey(oldBlocks) {
+    const blocks = this.contentState.blocks
+    if (!blocks.length) return null
+    const { head } = unchangedEnds(oldBlocks, blocks)
+    return blocks[Math.min(head, blocks.length - 1)].key
+  }
+
+  /**
    * An automation edit of the document shown (docs/automation-api-spec.md, section 2.2). The new text is parsed as a
    * whole, but the top-level blocks that did not change keep their objects and their DOM: the reader's cursor, the
    * scroll position and whatever is drawn there stay, and only the changed blocks are rendered. Returns false and

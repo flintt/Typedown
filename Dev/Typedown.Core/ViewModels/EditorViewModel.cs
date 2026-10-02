@@ -652,14 +652,14 @@ namespace Typedown.Core.ViewModels
         private readonly Dictionary<int, TaskCompletionSource<string>> reloadWaiters = new();
 
         /// <summary>Hands an automation edit to the page and waits for its reply; null when it did not answer in time.</summary>
-        public async Task<JToken> ApplyDocumentEditAsync(string operationId, long targetRevision, string baseContentHash, string text, int timeoutMs)
+        public async Task<JToken> ApplyDocumentEditAsync(string operationId, long targetRevision, string baseContentHash, string text, bool scrollToChange, int timeoutMs)
         {
             if (MarkdownEditor == null) return null;
             var waiter = new TaskCompletionSource<JToken>(TaskCreationOptions.RunContinuationsAsynchronously);
             editWaiters[operationId] = (LoadId, waiter);
             try
             {
-                MarkdownEditor.PostMessage("ApplyDocumentEdit", new { operationId, targetRevision, baseContentHash, text, loadId = LoadId });
+                MarkdownEditor.PostMessage("ApplyDocumentEdit", new { operationId, targetRevision, baseContentHash, text, scrollToChange, loadId = LoadId });
                 var finished = await Task.WhenAny(waiter.Task, Task.Delay(timeoutMs));
                 return finished == waiter.Task ? waiter.Task.Result : null;
             }

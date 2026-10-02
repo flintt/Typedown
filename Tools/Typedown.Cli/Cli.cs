@@ -33,9 +33,10 @@ usage: typedownctl [--json] [--endpoint NAME] [--client-id UUID] <command> [opti
                                           metadata; --latest flushes the editor first (default: snapshot)
   open <path> [--window ID] [--reveal]    open a file (an open one is returned as is)
   create [--text-file F | --stdin] [--window ID] [--reveal] [--allow-unknown-normalization]
-  replace <documentId> --base-revision N (--text-file F | --stdin) [--save] [--reveal] [--lf]
+  replace <documentId> --base-revision N (--text-file F | --stdin) [--save] [--reveal | --reveal-change] [--lf]
           [--allow-unknown-normalization] [--client-operation-id S]
-  replace-text <documentId> --base-revision N --find S --replacement S --expected-count N [--save] [--reveal]
+  replace-text <documentId> --base-revision N --find S --replacement S --expected-count N [--save]
+          [--reveal | --reveal-change]
           [--allow-unknown-normalization] [--client-operation-id S]
   save <documentId> [--base-revision N]
   close <documentId> [--base-revision N]  close a saved document (an unsaved one is refused, exit 6)
@@ -47,6 +48,8 @@ usage: typedownctl [--json] [--endpoint NAME] [--client-id UUID] <command> [opti
                                           how the window shows its document; no option only reads it
   mcp [--endpoint NAME]                   run as an MCP server on stdin/stdout, for AI agents
 
+--reveal brings the document's window and tab to the front; --reveal-change also scrolls the first changed passage
+into view when it is off screen (the cursor stays).
 Document text uses \n line endings; text with \r is refused unless --lf converts it on the way in.
 Exit codes: 0 ok, 2 usage, 3 not running or not reachable, 4 version or scope, 5 window/document not found,
 6 revision, match-count or unsaved-changes conflict, 7 editor not ready, 8 save failed, 9 other.
@@ -90,7 +93,7 @@ Exit codes: 0 ok, 2 usage, 3 not running or not reachable, 4 version or scope, 5
             }
         }
 
-        private static readonly HashSet<string> Flags = new() { "json", "latest", "text", "headings", "reveal", "save", "stdin", "lf", "allow-unknown-normalization", "help" };
+        private static readonly HashSet<string> Flags = new() { "json", "latest", "text", "headings", "reveal", "reveal-change", "save", "stdin", "lf", "allow-unknown-normalization", "help" };
 
         private static (string command, Args args) Parse(string[] argv)
         {
@@ -367,8 +370,12 @@ Exit codes: 0 ok, 2 usage, 3 not running or not reachable, 4 version or scope, 5
 
         private static string[] Reveal(Args a, JObject p, params string[] scopes)
         {
-            if (!a.Flag("reveal")) return scopes;
-            p["reveal"] = "document";
+            var document = a.Flag("reveal");
+            var change = a.Flag("reveal-change");
+            if (!document && !change) return scopes;
+            if (document && change) throw new UsageException("give --reveal or --reveal-change, not both");
+            // --reveal-change: also scroll the first changed block into view (reveal: "change").
+            p["reveal"] = change ? "change" : "document";
             return scopes.Append(Scopes.WindowFocus).ToArray();
         }
 

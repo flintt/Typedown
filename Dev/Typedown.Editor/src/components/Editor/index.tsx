@@ -56,6 +56,8 @@ const Editor: React.FC = () => {
     // Set when the next content from the host is an automation edit of the text shown: the editor then applies only
     // the changed part and keeps the reader's cursor and scroll position. Loads replace the whole text.
     const localChangeRef = useRef(false)
+    // The automation edit being applied asked to be scrolled into view (reveal: "change"); read once by the editor.
+    const scrollToChangeRef = useRef(false)
 
     // An automation edit the page has been asked to apply (ApplyDocumentEdit), until it has replied.
     const pendingEditRef = useRef<{ operationId: string } | null>(null)
@@ -278,7 +280,7 @@ const Editor: React.FC = () => {
     // Host -> editor: an automation edit (docs/automation-api-spec.md, section 2.2, steps 6-7). In this one event the
     // page takes in its own throttled typing, compares the live text with the base the host checked, and either
     // refuses (the reader typed meanwhile) or starts applying; the reply follows once the editor holds the text.
-    useEffect(() => transport.addListener<{ operationId: string, baseContentHash: string, text: string }>('ApplyDocumentEdit', ({ operationId, baseContentHash, text }) => {
+    useEffect(() => transport.addListener<{ operationId: string, baseContentHash: string, text: string, scrollToChange?: boolean }>('ApplyDocumentEdit', ({ operationId, baseContentHash, text, scrollToChange }) => {
         const refuse = (outcome: string, reason: string) => transport.postMessage('DocumentEditApplied', { operationId, loadId: loadIdRef.current, outcome, reason })
         if (fileLoadPending.current || pendingEditRef.current) return refuse('failed', 'busy')
         flushRef.current?.()
@@ -286,6 +288,7 @@ const Editor: React.FC = () => {
         pendingEditRef.current = { operationId }
         resetUserIntent()
         const y = optionsRef.current?.sourceCode ? codeMirrorScrollRef.current : window.scrollY
+        scrollToChangeRef.current = !!scrollToChange
         setContentFromHost(text, undefined, y, true)
     }), [setContentFromHost]);
 
@@ -328,6 +331,7 @@ const Editor: React.FC = () => {
                 scrollTopRef={codeMirrorScrollRef}
                 scrollFromHostRef={scrollFromHostRef}
                 localChangeRef={localChangeRef}
+                scrollToChangeRef={scrollToChangeRef}
                 onMarkdownChange={onMarkdownChange}
                 onContentApplied={onContentApplied}
                 onStateChange={onStateChange}
@@ -347,6 +351,7 @@ const Editor: React.FC = () => {
                 scrollTopRef={muyaScrollTopRef}
                 scrollFromHostRef={scrollFromHostRef}
                 localChangeRef={localChangeRef}
+                scrollToChangeRef={scrollToChangeRef}
                 flushRef={flushRef}
                 onMarkdownChange={onMarkdownChange}
                 onContentApplied={onContentApplied}

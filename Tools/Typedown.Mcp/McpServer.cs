@@ -103,7 +103,8 @@ namespace Typedown.Mcp
             "(typedown_read_document) right before changing it and pass the revision you read as baseRevision. Prefer " +
             "typedown_replace_text with a short passage that occurs exactly as often as you mean to change it. When a write " +
             "fails with revision_conflict or match_count_mismatch, read the document again and redo the edit against the new " +
-            "text; never resend an edit computed from old text.";
+            "text; never resend an edit computed from old text. When the person is watching, pass scrollToChange so they see where " +
+            "the text changed.";
 
         // ---- tools -------------------------------------------------------------------------------------------
 
@@ -122,6 +123,7 @@ namespace Typedown.Mcp
             ["save"] = Prop("boolean", "Also save the file after the edit (not for untitled documents). Default false."),
             ["allowFormattingChanges"] = Prop("boolean", "Accept text whose formatting Typedown's visual editor may rewrite on the person's first edit (normalization 'unknown'). Default false: such writes are refused and nothing changes."),
             ["reveal"] = Prop("boolean", "Bring the document's window and tab to the front so the person sees the change. Default false."),
+            ["scrollToChange"] = Prop("boolean", "As reveal, and scroll the person's view to the first changed passage when it is off screen; their cursor stays where it is. Default false."),
         };
 
         private static JObject With(JObject properties, JObject extra)
@@ -310,7 +312,8 @@ namespace Typedown.Mcp
             foreach (var s in specific.Properties()) p[s.Name] = s.Value;
             if ((bool?)args["save"] == true) p["save"] = true;
             if ((bool?)args["allowFormattingChanges"] == true) p["normalizationPolicy"] = "allowUnknown";
-            if ((bool?)args["reveal"] == true) p["reveal"] = "document";
+            if ((bool?)args["scrollToChange"] == true) p["reveal"] = "change";
+            else if ((bool?)args["reveal"] == true) p["reveal"] = "document";
             return p;
         }
 

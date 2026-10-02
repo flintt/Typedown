@@ -71,7 +71,7 @@ namespace Typedown.Automation
             {
                 var p = c.Params;
                 var path = p.RequiredString("path", allowEmpty: false);
-                var info = await host.OpenDocumentAsync(path, p.OptionalString("windowId", allowEmpty: false), RevealOf(p), ct).ConfigureAwait(false);
+                var info = await host.OpenDocumentAsync(path, p.OptionalString("windowId", allowEmpty: false), RevealOf(c, p), ct).ConfigureAwait(false);
                 return new JObject { ["windowId"] = info.WindowId, ["documentId"] = info.DocumentId, ["revision"] = info.Revision };
             }));
             table.Add(new MethodDescriptor("document.create", Scopes.DocumentWrite, "document.create/1", async (c, ct) =>
@@ -80,7 +80,7 @@ namespace Typedown.Automation
                 var text = p.OptionalString("text");
                 if (text != null) DocumentText.Validate("text", text);
                 var allowUnknown = PolicyAllowsUnknown(p);
-                var reveal = RevealOf(p);
+                var reveal = RevealOf(c, p);
                 var info = await host.CreateDocumentAsync(p.OptionalString("windowId", allowEmpty: false), reveal, ct).ConfigureAwait(false);
                 var result = new JObject { ["windowId"] = info.WindowId, ["documentId"] = info.DocumentId };
                 if (string.IsNullOrEmpty(text))
@@ -158,6 +158,7 @@ namespace Typedown.Automation
                     throw new AutomationException(AutomationErrorKind.scope_required, "Saving needs the 'document.save' scope.",
                         new System.Collections.Generic.Dictionary<string, object?> { ["scope"] = Scopes.DocumentSave });
                 var (reveal, awaitPresentation) = RevealChecked(c, p);
+                request.ScrollToChange = p.OptionalEnum("reveal", "none", RevealValues) == "change";
                 p.OptionalString("clientOperationId");
                 var result = await host.EditDocumentAsync(documentId, request, reveal, ct).ConfigureAwait(false);
                 Wrote(c, documentId);
@@ -215,18 +216,34 @@ namespace Typedown.Automation
         private static bool PolicyAllowsUnknown(Params p) =>
             p.OptionalEnum("normalizationPolicy", "requireKnownSafe", "requireKnownSafe", "allowUnknown") == "allowUnknown";
 
-        private static Reveal RevealOf(Params p) => p.OptionalEnum("reveal", "none", "none", "document") == "document" ? Reveal.Document : Reveal.None;
+        // "change" (added in v1, 2026-10-02) shows the document as "document" does and, for a write, scrolls the first
+        // changed block into view; for open, create without text, undo and redo it is the same as "document".
+        private static readonly string[] RevealValues = { "none", "document", "change" };
+
+        private static Reveal RevealOf(MethodContext c, Params p)
+        {
+            var value = p.OptionalEnum("reveal", "none", RevealValues);
+            // "document" on open and create has never asked for window.focus, and v1 cannot start asking now; the
+            // newer value asks for it, as section 1.3 says every reveal should.
+            if (value == "change") RequireFocusScope(c);
+            return value == "none" ? Reveal.None : Reveal.Document;
+        }
+
+        private static void RequireFocusScope(MethodContext c)
+        {
+            if (!c.Session.HasScope(Scopes.WindowFocus))
+                throw new AutomationException(AutomationErrorKind.scope_required, "reveal needs the 'window.focus' scope.",
+                    new System.Collections.Generic.Dictionary<string, object?> { ["scope"] = Scopes.WindowFocus });
+        }
 
         // Showing a document to the person is a focus change: it needs the window.focus scope (section 1.3).
         private static (Reveal reveal, bool awaitPresentation) RevealChecked(MethodContext c, Params p)
         {
-            var reveal = RevealOf(p);
-            if (reveal == Reveal.Document && !c.Session.HasScope(Scopes.WindowFocus))
-                throw new AutomationException(AutomationErrorKind.scope_required, "reveal needs the 'window.focus' scope.",
-                    new System.Collections.Generic.Dictionary<string, object?> { ["scope"] = Scopes.WindowFocus });
+            var reveal = RevealOf(c, p);
+            if (reveal == Reveal.Document) RequireFocusScope(c);
             var awaitPresentation = p.OptionalBoolean("awaitPresentation", false);
             if (awaitPresentation && reveal != Reveal.Document)
-                throw Params.Invalid("awaitPresentation", "requiresReveal", "awaitPresentation needs reveal: \"document\".");
+                throw Params.Invalid("awaitPresentation", "requiresReveal", "awaitPresentation needs reveal: \"document\" or \"change\".");
             return (reveal, awaitPresentation);
         }
 

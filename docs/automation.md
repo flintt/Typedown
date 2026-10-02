@@ -41,12 +41,15 @@ typedownctl status
 typedownctl documents
 typedownctl get <documentId> --latest --text
 typedownctl replace-text <documentId> --base-revision 3 --find "旧说法" --replacement "新说法" --expected-count 1 --save
-typedownctl replace <documentId> --base-revision 4 --stdin < new.md
+typedownctl replace-text <documentId> --base-revision 4 --find "第二章" --replacement "第 2 章" --expected-count 1 --reveal-change
+typedownctl replace <documentId> --base-revision 5 --stdin < new.md
 typedownctl view <windowId> --mode source --side-pane outline --size 1280x860
 typedownctl close <documentId>
 typedownctl settings set ui.language ja --base-revision 12
 typedownctl settings set appearance.theme dark --base-revision 13     # 或 custom:sepia；也可写完整 JSON
 ```
+
+`--reveal` 把文档的窗口和标签切到前台；`--reveal-change` 还会把改动处滚进视野（已经在屏幕上就不滚，光标不动），适合你看着程序改长文档的时候。
 
 `view` 返回时新视图已经画在屏幕上，可以直接截图——做说明书插图时不用重开程序。
 

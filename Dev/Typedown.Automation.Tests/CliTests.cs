@@ -67,6 +67,21 @@ namespace Typedown.Automation.Tests
         }
 
         [Fact]
+        public async Task Reveal_change_asks_for_the_change_to_be_scrolled_into_view()
+        {
+            var (exit, _, _) = await Run("", "replace-text", doc.DocumentId, "--base-revision", "0", "--find", "old", "--replacement", "new", "--expected-count", "1", "--reveal-change");
+            Assert.Equal(0, exit);
+            Assert.True(doc.LastApply!.ScrollToChange);
+            Assert.Equal(Reveal.Document, host.Reveals[^1]);
+            (exit, _, _) = await Run("", "replace-text", doc.DocumentId, "--base-revision", "1", "--find", "new", "--replacement", "old", "--expected-count", "1", "--reveal");
+            Assert.Equal(0, exit);
+            Assert.False(doc.LastApply!.ScrollToChange);
+            (exit, _, _) = await Run("", "replace-text", doc.DocumentId, "--base-revision", "2", "--find", "old", "--replacement", "new", "--expected-count", "1", "--reveal", "--reveal-change");
+            Assert.Equal(Cli.Cli.Usage, exit);
+            Assert.Equal(2, doc.Revision);
+        }
+
+        [Fact]
         public async Task Replace_text_counts_and_crlf_needs_lf()
         {
             var (exit, _, _) = await Run("", "replace-text", doc.DocumentId, "--base-revision", "0", "--find", "text", "--replacement", "words", "--expected-count", "2");

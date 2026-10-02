@@ -56,8 +56,12 @@ namespace Typedown.Automation.Tests
             return new DocumentSnapshot { Info = Info(d), Text = d.doc.Text, IsCurrent = !d.doc.IsActive || d.doc.PageText == d.doc.Text, Normalization = NormalizationInfo.NotEvaluated(hash, 3) };
         }
 
+        /// <summary>The reveal each open, create and edit was given.</summary>
+        public readonly List<Reveal> Reveals = new();
+
         public Task<DocumentInfo> OpenDocumentAsync(string path, string? windowId, Reveal reveal, CancellationToken ct)
         {
+            Reveals.Add(reveal);
             if (!path.EndsWith(".md")) throw new AutomationException(AutomationErrorKind.invalid_params, "not found", new Dictionary<string, object?> { ["field"] = "path", ["reason"] = "notFound" });
             var existing = Docs.FirstOrDefault(d => d.path == path);
             return Task.FromResult(Info(existing.doc != null ? existing : (Add("# opened\n", path), path)));
@@ -72,8 +76,11 @@ namespace Typedown.Automation.Tests
 
         public Task<DocumentInfo> FocusDocumentAsync(string documentId, CancellationToken ct) => Task.FromResult(Info(Find(documentId)));
 
-        public Task<EditResult> EditDocumentAsync(string documentId, EditRequest request, Reveal reveal, CancellationToken ct) =>
-            Coordinator.EditAsync(Find(documentId).doc, request, ct);
+        public Task<EditResult> EditDocumentAsync(string documentId, EditRequest request, Reveal reveal, CancellationToken ct)
+        {
+            Reveals.Add(reveal);
+            return Coordinator.EditAsync(Find(documentId).doc, request, ct);
+        }
 
         public async Task<(DocumentInfo info, string contentHash)> SaveDocumentAsync(string documentId, long? baseRevision, CancellationToken ct)
         {
@@ -298,6 +305,48 @@ namespace Typedown.Automation.Tests
             Assert.True((bool)saved["result"]!["saved"]!);
             Valid("document.save.result", (await h2.CallAsync("document.save", new JObject { ["documentId"] = named.DocumentId, ["baseRevision"] = 1 }))["result"]);
             Assert.Equal(-32016, (int)(await h2.CallAsync("document.save", new JObject { ["documentId"] = blank.DocumentId }))["error"]!["code"]!);
+        }
+
+        [Fact]
+        public async Task Reveal_change_shows_the_document_and_asks_the_page_to_scroll_to_the_change()
+        {
+            var (h, host) = Start();
+            await using var _ = h;
+            var doc = host.Add("a\nb\n", "/tmp/c.md");
+            await h.InitializeAsync(Scopes.DocumentRead, Scopes.DocumentWrite);
+            // The newer value asks for window.focus everywhere; "document" on open keeps not asking (v1 cannot start now).
+            Assert.Equal("window.focus", (string)(await h.CallAsync("document.replaceText", new JObject { ["documentId"] = doc.DocumentId, ["baseRevision"] = 0, ["find"] = "b", ["replacement"] = "B", ["expectedCount"] = 1, ["reveal"] = "change" }))["error"]!["data"]!["scope"]!);
+            Assert.Equal("window.focus", (string)(await h.CallAsync("document.open", new JObject { ["path"] = "/tmp/c.md", ["reveal"] = "change" }))["error"]!["data"]!["scope"]!);
+            Assert.NotNull((await h.CallAsync("document.open", new JObject { ["path"] = "/tmp/c.md", ["reveal"] = "document" }))["result"]);
+            Assert.Equal(0, doc.Revision);
+
+            var (h2, host2) = Start();
+            await using var __ = h2;
+            var shown = host2.Add("a\nb\n", "/tmp/d.md");
+            await h2.InitializeAsync(AllScopes);
+            async Task<JObject> Replace(string find, string replacement, object? reveal, bool awaitShown = false)
+            {
+                var p = new JObject { ["documentId"] = shown.DocumentId, ["baseRevision"] = shown.Revision, ["find"] = find, ["replacement"] = replacement, ["expectedCount"] = 1 };
+                if (reveal != null) p["reveal"] = JToken.FromObject(reveal);
+                if (awaitShown) p["awaitPresentation"] = true;
+                return await h2.CallAsync("document.replaceText", p);
+            }
+            var changed = await Replace("b", "B", "change", awaitShown: true);
+            Valid("document.replaceText.result", changed["result"]);
+            Assert.True((bool)changed["result"]!["presentation"]!["pageFramesPassed"]!);
+            Assert.Equal(Reveal.Document, host2.Reveals[^1]);
+            Assert.True(shown.LastApply!.ScrollToChange);
+
+            Assert.NotNull((await Replace("B", "b", "document"))["result"]);
+            Assert.Equal(Reveal.Document, host2.Reveals[^1]);
+            Assert.False(shown.LastApply!.ScrollToChange);
+            Assert.NotNull((await Replace("b", "B", null))["result"]);
+            Assert.Equal(Reveal.None, host2.Reveals[^1]);
+            Assert.False(shown.LastApply!.ScrollToChange);
+
+            var unknown = await Replace("B", "b", "elsewhere");
+            Assert.Equal("invalid_params", Kind(unknown));
+            Assert.Equal("a\nB\n", shown.Text);
         }
 
         [Fact]

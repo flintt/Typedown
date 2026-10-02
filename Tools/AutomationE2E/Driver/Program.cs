@@ -141,6 +141,7 @@ internal static class Program
             await Case("K02 Ctrl+, twice opens and closes the settings: the caret and the keyboard are where they were", K02);
             await Case("K03 the same with an untitled document (no per-file caret memory)", K03);
             await Case("FS01 in full screen the main page starts at the top edge of the screen", FS01);
+            await Case("RV01 reveal: \"change\" scrolls a change off screen into view, the caret where it was; \"document\" leaves the page", RV01);
             // Last: it ends the test host.
             await Case("Q01 two windows closed one after the other: the process exits (it stayed, headless)", Q01);
         }
@@ -835,6 +836,89 @@ internal static class Program
             after = await Layout();
             notes.Add("after " + after.ToString(Formatting.None));
             Check(!(bool)after["fullScreen"]! && (double)after["mainPageTop"]! == (double)before["mainPageTop"]!, "F11 again leaves full screen, the layout as it was");
+        }
+    }
+
+    // reveal: "change" (spec 2.3): a write scrolls its first changed block into view when it is off screen and leaves
+    // the caret where the reader had it; "document" leaves the page where it was, and so does a change already on screen.
+    private static async Task RV01(List<string> notes)
+    {
+        using var c = await Session("e2e RV01");
+        var text = new StringBuilder("# RV01\n\n");
+        for (var i = 1; i <= 120; i++) text.Append($"Paragraph {i} of the long document.\n\n");
+        text.Append("Last paragraph.\n");
+        var id = await Open(c, Fixture("rv01.md", text.ToString()));
+        var windowId = await WindowIdOf(c, id);
+        await c.Call("test.editor.focus", new { windowId });
+        await Task.Delay(500);
+        async Task ToTop() { await c.Call("test.editor.eval", new { windowId, script = "window.scrollTo(0, 0), 0" }); await Task.Delay(300); }
+        // Where the page is, the window height, where the block holding mark is (null: not drawn), and the text the
+        // caret is in.
+        async Task<JToken> State(string mark)
+        {
+            var script = "(() => { const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); let n, e = null; " +
+                $"while ((n = w.nextNode())) if (n.textContent.includes({JsonConvert.ToString(mark)})) {{ e = n.parentElement; break }} " +
+                "const r = e && e.getBoundingClientRect(); const s = getSelection(); " +
+                "return { y: Math.round(scrollY), h: innerHeight, top: r ? Math.round(r.top) : null, " +
+                "caret: s && s.anchorNode ? (s.anchorNode.textContent || '').slice(0, 30) : null, apply: window.__typedownLastApply || null } })()";
+            return (await c.Call("test.editor.eval", new { windowId, script }))["result"]!;
+        }
+        async Task<JToken> Replace(string find, string replacement, string reveal)
+        {
+            await c.Call("document.replaceText", new { documentId = id, baseRevision = await Revision(c, id), find, replacement, expectedCount = 1, reveal });
+            await Task.Delay(600);
+            return await State(replacement.Split('\n')[0]);
+        }
+        bool Shown(JToken s) => s["top"]!.Type == JTokenType.Integer && (int)s["top"]! >= 0 && (int)s["top"]! < (int)s["h"]!;
+
+        await ToTop();
+        var caret = (string?)(await State("RV01"))["caret"];
+        notes.Add($"caret before: {caret}");
+        Check(!string.IsNullOrEmpty(caret), "the caret is in the document");
+
+        var a = await Replace("Last paragraph.", "Last paragraph, A.", "document");
+        notes.Add("document, at the end: " + a.ToString(Formatting.None));
+        Check((int)a["y"]! < 5, "reveal: \"document\" leaves the page at the top");
+
+        var b = await Replace("Last paragraph, A.", "Last paragraph, B.", "change");
+        notes.Add("change, at the end: " + b.ToString(Formatting.None));
+        Check((int)b["y"]! > 0 && Shown(b), "reveal: \"change\" scrolls the change at the end into view");
+        Check((string?)b["caret"] == caret, "the caret stays where it was");
+
+        await ToTop();
+        var d = await Replace("Paragraph 2 of", "Paragraph 2 (changed) of", "change");
+        notes.Add("change on screen: " + d.ToString(Formatting.None));
+        Check((int)d["y"]! < 5, "a change already on screen does not move the page");
+
+        await ToTop();
+        await c.Call("document.replaceText", new { documentId = id, baseRevision = await Revision(c, id), find = "Paragraph 100 of the long document.\n\n", replacement = "", expectedCount = 1, reveal = "change" });
+        await Task.Delay(600);
+        var deleted = await State("Paragraph 101 of");
+        notes.Add("deletion: " + deleted.ToString(Formatting.None));
+        Check((int)deleted["y"]! > 0 && Shown(deleted), "a deletion scrolls the block now in its place into view");
+
+        // A new reference definition changes how other blocks may render: the editor loads the whole document, and the
+        // hold that puts the page back where it was must hold it at the change instead.
+        await ToTop();
+        await Replace("Last paragraph, B.", "Last paragraph, [D][r].\n\n[r]: https://example.com/", "change");
+        // The link splits the line into text nodes; nothing else says "Last paragraph, " by now.
+        var wholeState = await State("Last paragraph, ");
+        notes.Add("whole document: " + wholeState.ToString(Formatting.None));
+        Check((string?)wholeState["apply"] == "whole", "a new reference definition loads the whole document");
+        Check((int)wholeState["y"]! > 0 && Shown(wholeState), "after a whole load the change is in view too");
+
+        try
+        {
+            await c.Call("window.setView", new { windowId, mode = "source" });
+            await Task.Delay(500);
+            await ToTop();
+            var s = await Replace("Paragraph 120 of", "Paragraph 120 (source) of", "change");
+            notes.Add("source mode: " + s.ToString(Formatting.None));
+            Check((int)s["y"]! > 0 && Shown(s), "in source mode the change is scrolled into view");
+        }
+        finally
+        {
+            await c.Call("window.setView", new { windowId, mode = "visual" });
         }
     }
 

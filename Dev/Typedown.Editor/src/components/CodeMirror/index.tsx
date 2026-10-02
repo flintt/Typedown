@@ -5,7 +5,7 @@ import { UnControlled as CodeMirror } from 'react-codemirror2';
 import 'codemirror/lib/codemirror.css';
 import { getTOC } from "services/common";
 import { minimalChange } from "services/minimalChange";
-import { EXTERNAL_CHANGE_CLASS, EXTERNAL_CHANGE_MS } from "services/externalChange";
+import { EXTERNAL_CHANGE_CLASS, EXTERNAL_CHANGE_MS, scrollTargetForChange } from "services/externalChange";
 require('codemirror/mode/markdown/markdown');
 
 interface ICodeMirrorEditor {
@@ -20,6 +20,7 @@ interface ICodeMirrorEditor {
     scrollFromHostRef?: React.MutableRefObject<boolean>
     /** True when the new markdown is an edit of the text shown (automation): only the changed part is replaced. */
     localChangeRef?: React.MutableRefObject<boolean>
+    scrollToChangeRef?: React.MutableRefObject<boolean>
     onMarkdownChange: (markdown: string) => void
     /** Fired once host content has been pushed into the editor (see the FileLoaded handshake in Editor). */
     onContentApplied?: () => void
@@ -192,6 +193,8 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
         if (!editor) return
         const local = props.localChangeRef?.current
         if (props.localChangeRef) props.localChangeRef.current = false
+        const scrollToChange = !!props.scrollToChangeRef?.current
+        if (props.scrollToChangeRef) props.scrollToChangeRef.current = false
         if (local && markdownRef.current != props.markdown) {
             // Replacing only what changed keeps the cursor, the selection and the scroll position where the reader
             // left them; CodeMirror maps them over the change.
@@ -202,6 +205,13 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
                 if (change.text && props.options?.highlightAutomationChanges !== false) {
                     const mark = editor.markText(editor.posFromIndex(change.from), editor.posFromIndex(change.from + change.text.length), { className: EXTERNAL_CHANGE_CLASS })
                     setTimeout(() => mark.clear(), EXTERNAL_CHANGE_MS)
+                }
+                // reveal: "change": the start of the change into view unless the reader can already see it.
+                if (scrollToChange) {
+                    const start = editor.charCoords(editor.posFromIndex(change.from), 'page')
+                    const end = editor.charCoords(editor.posFromIndex(change.from + change.text.length), 'page')
+                    const y = scrollTargetForChange(start.top, end.bottom, window.scrollY)
+                    if (y !== null) window.scrollTo(window.scrollX, y)
                 }
             }
             if (props.scrollFromHostRef) props.scrollFromHostRef.current = false

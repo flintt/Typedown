@@ -189,6 +189,8 @@ MVP 为每个方法定义服务端超时，并在连接断开时取消尚未开�
 
 修改后台文档默认不抢占用户焦点，只更新标签快照和未保存标记；人在切换到该标签时通过正常 `LoadFile` 握手看到新内容。调用方确实希望人立即看到目标文档时，显式传入 `reveal: "document"`，服务端再激活窗口、切换标签并等待呈现回执。
 
+`reveal: "document"` 不改变页面的滚动位置：编辑器保留读者的光标和滚动位置，改在屏幕外的内容只能从标题提示得知。调用方希望人看到改了哪里时，传 `reveal: "change"`（v1 新增，2026-10-02）：先做 `"document"` 的一切，页面应用写入后再把第一个改动的顶层块滚进视野——它的开头已在窗口内，并且整块放得下或开头在窗口上半部分时不滚；否则把开头放到窗口自上而下三分之一处。纯删除滚到删除处现在所在的块（删在末尾时是最后一块）。源码模式按改动的起始字符滚动。读者的光标和选区不动，只移动画面。`"change"` 对 `document.open`、不带正文的 `document.create` 和 `document.undo/redo` 与 `"document"` 相同：打开没有改动可示；撤销和重做本来就把光标放回历史记录的位置并滚到那里。它和 `"document"` 一样需要 `window.focus`；`"document"` 在 `document.open/create` 上一直没有检查这个 scope，v1 内不能再收紧（第 6.2 节），新值在所有方法上都检查。
+
 三种模式遵守同一正文规则：宿主的文档状态保存权威源文本；源码模式把它精确交给 CodeMirror；可视和阅读模式可建立规范化的内部模型，但在用户没有真实编辑时必须保留源文本。阅读模式允许外部写入并重新渲染。模式切换先刷新待上报输入，并与该文档的外部写操作串行；不能在一次写入尚未确认时卸载当前编辑器。
 
 当前 `7c02d10` 通过 `importedRef` 保存 Muya 导入前的源文本：只要 Muya 当前输出仍等于初始 `normalized`，读取时就返回原始 `source`。因此“无用户编辑时逐字读回”主要验证该映射在模式切换、异步渲染和刷新之间是否稳定，不能证明人第一次可视编辑后的序列化一定保真。
@@ -216,7 +218,7 @@ MVP 为每个方法定义服务端超时，并在连接断开时取消尚未开�
 | --- | --- |
 | 普通写操作成功 | 权威内存状态和当前活动编辑器都已应用目标 revision；响应返回 `revision`、`contentHash` 和服务端 `operationId` |
 | `save: true` 或 `document.save` 成功 | 在上一项基础上，目标 revision 已通过现有原子保存路径写入磁盘 |
-| `awaitPresentation: true` | 仅在配合 `reveal: "document"` 时有效；返回 `presentation`，说明窗口/标签是否可见、页面是否经过两帧、宿主 dispatcher 是否经过一次呈现机会 |
+| `awaitPresentation: true` | 仅在配合 `reveal: "document"` 或 `"change"` 时有效；返回 `presentation`，说明窗口/标签是否可见、页面是否经过两帧、宿主 dispatcher 是否经过一次呈现机会 |
 
 普通成功不能只表示“消息已经发给 WebView”。后台文档没有活动编辑器可确认时，成功表示标签快照已应用；调用方若要求人在当前窗口观察，必须使用 `reveal: "document"`。
 
@@ -233,7 +235,8 @@ MVP 为每个方法定义服务端超时，并在连接断开时取消尚未开�
   - **切换模式**：可视、源码、阅读三种模式都从页面持有的正文重新挂载，那已经是候选正文，所以照常提交，三种模式都显示写入的正文（E2E W02）。
   - **WebView 重载**（页面出错、渲染进程崩溃）**或标签切走又切回**：页面从宿主重新载入的是提交前的旧正文。宿主发现页面的 `loadId` 已经变了，就不提交，返回 `editor_not_ready`（`data.reason: "editorReloaded"`），并按第 8～9 步恢复（E2E W01、W03）。
   - **标签切走、此后没有切回**：候选正文提交进该标签的快照，切回时经正常 `LoadFile` 显示（E2E W03）。
-- **呈现回执。** `awaitPresentation` 只能与 `reveal: "document"` 同用，否则 `invalid_params`（`reason: "requiresReveal"`）。写入提交（及请求的保存）后，宿主最多等 3 秒：页面收到 `AwaitPresentation` 后经过两次 `requestAnimationFrame` 回 `PresentationFrames`，宿主同时等一次 `CompositionTarget.Rendering`，再读窗口可见（可见且未最小化）和标签是否仍是当前标签。四项都成立时结果带 `presentation`；否则返回 `presentation_timeout`，`data` 带 `applied: true`、已提交的 `revision`、`contentHash`、`operationId`、`saved` 和观察到的 `presentation`。
+- **呈现回执。** `awaitPresentation` 只能与 `reveal: "document"` 或 `"change"` 同用，否则 `invalid_params`（`reason: "requiresReveal"`）。写入提交（及请求的保存）后，宿主最多等 3 秒：页面收到 `AwaitPresentation` 后经过两次 `requestAnimationFrame` 回 `PresentationFrames`，宿主同时等一次 `CompositionTarget.Rendering`，再读窗口可见（可见且未最小化）和标签是否仍是当前标签。四项都成立时结果带 `presentation`；否则返回 `presentation_timeout`，`data` 带 `applied: true`、已提交的 `revision`、`contentHash`、`operationId`、`saved` 和观察到的 `presentation`。
+- **滚动到改动处。** `reveal: "change"` 让 `ApplyDocumentEdit` 带上 `scrollToChange: true`。页面用和高亮相同的块比较找出第一个改动的块；局部替换直接滚动，整篇重新载入（引用定义变了等情况）时把“保持原滚动位置”的逐帧保持改为保持在改动处，否则那段保持会把画面拉回原处（E2E RV01）。
 - **测试宿主。** `buildType=automationTestHost` 的构建以 `--automation-test-root <dir>` 启动，数据、日志、WebView2、互斥体、交接管道和自动化端点都与日常实例分开，端点名写入 `<dir>\automation-endpoint.txt`；它另有 `test.barrier.*`、`test.editor.pageText`、`test.window.open`、`test.settings.get/set`。
 
 ## 3. 方法与设置契约

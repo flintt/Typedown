@@ -96,6 +96,22 @@ namespace Typedown.Automation.Tests
         }
 
         [Fact]
+        public async Task ScrollToChange_reveals_the_change()
+        {
+            var write = await Tool("typedown_replace_text", new JObject { ["documentId"] = doc.DocumentId, ["baseRevision"] = 0, ["find"] = "old", ["replacement"] = "new", ["scrollToChange"] = true });
+            Assert.False((bool)write["isError"]!);
+            Assert.True(doc.LastApply!.ScrollToChange);
+            Assert.Equal(Reveal.Document, host.Reveals[^1]);
+            write = await Tool("typedown_replace_text", new JObject { ["documentId"] = doc.DocumentId, ["baseRevision"] = 1, ["find"] = "new", ["replacement"] = "old", ["reveal"] = true });
+            Assert.False((bool)write["isError"]!);
+            Assert.False(doc.LastApply!.ScrollToChange);
+            write = await Tool("typedown_replace_text", new JObject { ["documentId"] = doc.DocumentId, ["baseRevision"] = 2, ["find"] = "old", ["replacement"] = "new" });
+            Assert.False((bool)write["isError"]!);
+            Assert.False(doc.LastApply!.ScrollToChange);
+            Assert.Equal(Reveal.None, host.Reveals[^1]);
+        }
+
+        [Fact]
         public async Task The_view_tools_read_and_change_the_window()
         {
             var got = await Tool("typedown_get_view", new JObject { ["windowId"] = FakeHost.WindowId });

@@ -13,7 +13,7 @@ import FrontMenu from 'components/Muya/lib/ui/frontMenu'
 import FormatPicker from 'components/Muya/lib/ui/formatPicker'
 import { createApplicationMenuState } from "services/menuState";
 import { classifyNormalization, extractProtectedPayload } from "services/normalization";
-import { highlightExternalChange } from "services/externalChange";
+import { highlightExternalChange, scrollTargetForChange } from "services/externalChange";
 import 'components/Muya/themes/default.css'
 
 interface IMuyaEditor {
@@ -29,6 +29,7 @@ interface IMuyaEditor {
     scrollFromHostRef?: React.MutableRefObject<boolean>
     /** True when the new markdown is an edit of the text shown (automation): only the changed blocks are replaced. */
     localChangeRef?: React.MutableRefObject<boolean>
+    scrollToChangeRef?: React.MutableRefObject<boolean>
     onMarkdownChange: (markdown: string) => void
     /** The shell puts a function here that reports the current text at once, for saves and exports. */
     flushRef?: React.MutableRefObject<(() => void) | null>
@@ -693,6 +694,8 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         if (!editor) return
         const local = props.localChangeRef?.current
         if (props.localChangeRef) props.localChangeRef.current = false
+        const scrollToChange = !!props.scrollToChangeRef?.current
+        if (props.scrollToChangeRef) props.scrollToChangeRef.current = false
         if (importedRef.current && markdownRef.current === props.markdown) { props.onContentApplied?.(); return }
         // After an actual edit the host may hand the exported text back. Reuse the
         // existing model when it already matches, avoiding another load and caret scroll.
@@ -717,7 +720,23 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         // Text the first visual edit would change in a way that loses something (today: some raw HTML) gets a notice
         // that does not block editing; source mode keeps it exactly.
         setFirstEditWarning(classifyNormalization(props.markdown, importedRef.current.normalized).pendingNormalization === 'unsafe')
-        if (replacedLocally) { if (props.scrollFromHostRef) props.scrollFromHostRef.current = false }
+        // reveal: "change": the first changed block into view unless the reader can already see it. Measured in page
+        // coordinates against where the page is (a local edit) or is about to be put back (a whole new document).
+        let changeY: number | null = null
+        if (blocksBefore && scrollToChange) {
+            const key = editor.changeAnchorKey(blocksBefore)
+            const element = key ? document.getElementById(key) : null
+            if (element) {
+                const rect = element.getBoundingClientRect()
+                changeY = scrollTargetForChange(rect.top + window.scrollY, rect.bottom + window.scrollY,
+                    replacedLocally ? window.scrollY : props.scrollTopRef.current)
+            }
+        }
+        if (replacedLocally) {
+            if (props.scrollFromHostRef) props.scrollFromHostRef.current = false
+            if (changeY !== null) window.scrollTo(window.scrollX, changeY)
+        }
+        else if (changeY !== null) settleScroll(changeY, true)
         else settleScroll(props.scrollTopRef.current, !!props.scrollFromHostRef?.current)
         props.onContentApplied?.()
         // eslint-disable-next-line react-hooks/exhaustive-deps

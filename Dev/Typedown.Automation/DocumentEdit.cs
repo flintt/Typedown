@@ -64,18 +64,21 @@ namespace Typedown.Automation
     /// <summary>What the host hands the page for one edit (the page-side ApplyDocumentEdit message).</summary>
     public sealed class ApplyCommand
     {
-        public ApplyCommand(string operationId, long targetRevision, string baseContentHash, string text)
+        public ApplyCommand(string operationId, long targetRevision, string baseContentHash, string text, bool scrollToChange = false)
         {
             OperationId = operationId;
             TargetRevision = targetRevision;
             BaseContentHash = baseContentHash;
             Text = text;
+            ScrollToChange = scrollToChange;
         }
 
         public string OperationId { get; }
         public long TargetRevision { get; }
         public string BaseContentHash { get; }
         public string Text { get; }
+        /// <summary>See <see cref="EditRequest.ScrollToChange"/>.</summary>
+        public bool ScrollToChange { get; }
     }
 
     /// <summary>
@@ -159,6 +162,11 @@ namespace Typedown.Automation
         public Func<string, string> Edit { get; set; } = t => t;
         public bool AllowUnknown { get; set; }
         public bool Save { get; set; }
+        /// <summary>
+        /// <c>reveal: "change"</c>: once applied, the page scrolls the first changed block into view when it is off
+        /// screen. The reader's cursor stays where it was.
+        /// </summary>
+        public bool ScrollToChange { get; set; }
     }
 
     public sealed class EditResult
@@ -312,7 +320,7 @@ namespace Typedown.Automation
                 try
                 {
                     // 5-7. The page compares its live text with baseContentHash, applies, and reports.
-                    reply = await document.ApplyInEditorAsync(new ApplyCommand(operationId, targetRevision, baseHash, candidate), CancellationToken.None);
+                    reply = await document.ApplyInEditorAsync(new ApplyCommand(operationId, targetRevision, baseHash, candidate, request.ScrollToChange), CancellationToken.None);
                     if (reply.Outcome == ApplyOutcome.Applied) await Barrier(EditBarrierPoints.AfterEditorMutationBeforeReport, document, operationId);
                 }
                 catch (Exception e) when (e is TimeoutException || e is OperationCanceledException)

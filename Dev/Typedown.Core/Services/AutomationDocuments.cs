@@ -58,7 +58,7 @@ namespace Typedown.Core.Services
         {
             Editor.HoldEditorReports();
             appliedLoadId = Editor.LoadId;
-            var reply = await Editor.ApplyDocumentEditAsync(command.OperationId, command.TargetRevision, command.BaseContentHash, command.Text, ApplyTimeoutMs);
+            var reply = await Editor.ApplyDocumentEditAsync(command.OperationId, command.TargetRevision, command.BaseContentHash, command.Text, command.ScrollToChange, ApplyTimeoutMs);
             if (reply == null) throw new TimeoutException("The editor did not answer ApplyDocumentEdit.");
             switch (reply["outcome"]?.ToString())
             {

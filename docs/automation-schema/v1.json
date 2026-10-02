@@ -63,9 +63,11 @@
     "reveal": {
       "enum": [
         "none",
-        "document"
+        "document",
+        "change"
       ],
-      "default": "none"
+      "default": "none",
+      "description": "document: bring the window to the front and show the document's tab. change (added in v1): the same, and a write then scrolls its first changed block into view when it is off screen, without moving the cursor; on open, create without text, undo and redo the same as document. Needs window.focus."
     },
     "origin": {
       "enum": [
@@ -783,7 +785,7 @@
         "awaitPresentation": {
           "type": "boolean",
           "default": false,
-          "description": "Only with reveal: document."
+          "description": "Only with reveal: document or change."
         },
         "text": {
           "$ref": "#/$defs/text"
@@ -828,7 +830,7 @@
         "awaitPresentation": {
           "type": "boolean",
           "default": false,
-          "description": "Only with reveal: document."
+          "description": "Only with reveal: document or change."
         },
         "find": {
           "type": "string",
@@ -878,7 +880,7 @@
         "awaitPresentation": {
           "type": "boolean",
           "default": false,
-          "description": "Only with reveal: document."
+          "description": "Only with reveal: document or change."
         }
       },
       "required": [
@@ -912,7 +914,7 @@
         "awaitPresentation": {
           "type": "boolean",
           "default": false,
-          "description": "Only with reveal: document."
+          "description": "Only with reveal: document or change."
         }
       },
       "required": [

@@ -42,9 +42,13 @@ namespace Typedown.Automation.Tests
 
         public object CaptureState() { Calls.Add("capture"); var state = (Text, "caret", 12.5); AfterCapture?.Invoke(); return state; }
 
+        /// <summary>What the page was last handed.</summary>
+        public ApplyCommand? LastApply;
+
         public Task<ApplyReply> ApplyInEditorAsync(ApplyCommand command, CancellationToken ct)
         {
             Calls.Add("apply");
+            LastApply = command;
             if (DocumentText.ContentHash(PageText) != command.BaseContentHash) return Task.FromResult(new ApplyReply(ApplyOutcome.Conflict));
             var reply = (Page ?? (c => Classified(c, PendingNormalization.None)))(command);
             if (reply.Outcome != ApplyOutcome.Conflict) PageText = command.Text; // whatever happened, the page changed

@@ -45,6 +45,6 @@ claude mcp add typedown -- typedownctl mcp
 | `typedown_get_view` | 窗口的模式、侧栏、状态栏、专注/打字机模式和屏幕位置大小 |
 | `typedown_set_view` | 改变上面几项；模式等是你自己的设置，工具说明要求 AI 只在你要求时改、用完改回去 |
 
-写入可以带 `save`（顺便保存）、`reveal`（把文档切到前台）和 `allowFormattingChanges`（接受可视编辑器首次编辑时可能改写格式的正文）。
+写入可以带 `save`（顺便保存）、`reveal`（把文档切到前台）、`scrollToChange`（切到前台，并把改动处滚进视野，光标不动；你看着它改稿时用）和 `allowFormattingChanges`（接受可视编辑器首次编辑时可能改写格式的正文）。
 
 失败时返回 `isError: true`，`structuredContent` 是 `{ "error": <接口错误，和 typedownctl --json 输出的完全一样>, "next": "<下一步该怎么做>" }`。遇到 `revision_conflict` 或 `match_count_mismatch` 时什么都没写，AI 必须重新读取；服务器不会拿旧内容重试。
