@@ -54,6 +54,8 @@ class Demo:
         self.pause = pause
         self.step = step
         self.n = 0
+        # "change" also scrolls each change into view; versions before it know only "document".
+        self.reveal = "change"
 
     def say(self, text):
         self.n += 1
@@ -76,8 +78,12 @@ class Demo:
             try:
                 return self.c.call("document.replaceText", {
                     "documentId": doc_id, "baseRevision": doc["revision"], "find": find, "replacement": replacement,
-                    "expectedCount": count, "reveal": "document"})
+                    "expectedCount": count, "reveal": self.reveal})
             except TypedownError as e:
+                if e.kind == "invalid_params" and e.data.get("field") == "reveal" and self.reveal == "change":
+                    print("    这个版本还不能滚动到改动处，改用 reveal: document")
+                    self.reveal = "document"
+                    continue
                 if e.kind not in ("revision_conflict", "match_count_mismatch"):
                     raise
                 print(f"    文档在这期间变了（{e.kind}），重新读取")
@@ -133,7 +139,7 @@ def run(d, keep):
         d.view(window_id, mode="visual")
         d.wait()
 
-        d.say("一节一节写入正文：标题栏会显示“Typedown 演示 编辑了 …”，新文字淡出高亮")
+        d.say("一节一节写入正文：标题栏会显示“Typedown 演示 编辑了 …”，新文字淡出高亮，写到屏幕外时画面跟过去")
         for section in SECTIONS:
             print("    + " + section.split("\n", 1)[0])
             d.replace_text(doc_id, MORE, section + "\n\n" + MORE)
