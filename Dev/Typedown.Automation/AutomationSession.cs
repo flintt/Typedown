@@ -32,7 +32,7 @@ namespace Typedown.Automation
     /// <summary>What <c>system.initialize</c> reports about this process.</summary>
     public sealed class ServerInfo
     {
-        public string Name { get; set; } = "Typedown";
+        public string Name { get; set; } = Brand.Name;
         public string Version { get; set; } = "";
         public string Commit { get; set; } = "";
         public string Platform { get; set; } = "";

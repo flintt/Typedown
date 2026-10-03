@@ -11,6 +11,10 @@ namespace Typedown.Core.Controls
             InitializeComponent();
         }
 
+        // From Typedown.Automation.Brand: the edition's own link and feedback place.
+        public static string LinkText => Typedown.Automation.Brand.AboutLinkText;
+        public static System.Uri LinkUrl => new(Typedown.Automation.Brand.AboutLinkUrl);
+
         public static string GetAppVersion()
         {
             string version;
@@ -31,9 +35,9 @@ namespace Typedown.Core.Controls
 
         private void FeedBackButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            // Feedback goes to the fork's GitHub issues, where it reaches the people who build this, rather
+            // Feedback goes to the edition's GitHub issues, where it reaches the people who build it, rather
             // than the original author's server that the in-app dialog posted to.
-            Utilities.Common.OpenUrl("https://github.com/flintt/Typedown/issues");
+            Utilities.Common.OpenUrl(Typedown.Automation.Brand.FeedbackUrl);
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)

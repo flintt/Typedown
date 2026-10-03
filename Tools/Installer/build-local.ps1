@@ -173,7 +173,8 @@ if ($AutomationTestHost) {
     return
 }
 $published = Join-Path $repo "Dev\Typedown\bin\$Platform\$Configuration\netcoreapp3.1\$rid"
-if (-not (Test-Path (Join-Path $published 'Typedown.exe'))) { throw "Typedown.exe not found in $published" }
+$exe = ([xml](Get-Content (Join-Path $repo 'Branding.props'))).Project.PropertyGroup.BrandExeName + '.exe'
+if (-not (Test-Path (Join-Path $published $exe))) { throw "$exe not found in $published" }
 Write-Host "App: $published"
 & (Join-Path $PSScriptRoot 'assert-application-build.ps1') -Path $published
 if ($NoInstaller) { return }
@@ -183,7 +184,7 @@ $stage = Join-Path $repo 'Tools\Installer\publish'
 Remove-Item $stage -Recurse -Force -ErrorAction SilentlyContinue
 New-Item -ItemType Directory -Force $stage | Out-Null
 Copy-Item (Join-Path $published '*') $stage -Recurse -Force
-# typedownctl (and its MCP server) beside the app, on the app's runtime, with the automation documents.
+# The CLI (and its MCP server) beside the app, on the app's runtime, with the automation documents.
 & (Join-Path $PSScriptRoot 'add-cli.ps1') -AppFolder $stage -RuntimeIdentifier $rid -Configuration $Configuration
 & (Join-Path $PSScriptRoot 'assert-application-build.ps1') -Path $stage
 

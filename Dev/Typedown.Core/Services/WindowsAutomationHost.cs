@@ -152,7 +152,7 @@ namespace Typedown.Core.Services
         {
             if (windowId != null) return windowId;
             var windows = Registry.Snapshot();
-            if (windows.Count == 0) throw new AutomationException(AutomationErrorKind.window_not_found, "Typedown has no open window.");
+            if (windows.Count == 0) throw new AutomationException(AutomationErrorKind.window_not_found, Brand.Name + " has no open window.");
             var foreground = PInvoke.GetForegroundWindow();
             // Prefer the window in front; otherwise the most recently opened one.
             return windows.LastOrDefault(w => w.Window.MainWindow == foreground)?.WindowId ?? windows[windows.Count - 1].WindowId;

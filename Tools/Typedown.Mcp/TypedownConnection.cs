@@ -57,7 +57,7 @@ namespace Typedown.Mcp
                 catch (Exception e) when (e is IOException || e is FramingException || e is ObjectDisposedException)
                 {
                     Drop();
-                    throw new NotConnectedException($"The connection to Typedown closed during {method}: {e.Message}");
+                    throw new NotConnectedException($"The connection to {Brand.Name} closed during {method}: {e.Message}");
                 }
                 if (reply["error"] is JObject error) throw new ApiError(error);
                 return reply["result"] ?? JValue.CreateNull();
@@ -74,7 +74,7 @@ namespace Typedown.Mcp
             try { stream = await connect(endpoint, ct).ConfigureAwait(false); }
             catch (Exception e) when (e is TimeoutException || e is IOException || e is UnauthorizedAccessException)
             {
-                throw new NotConnectedException($"Typedown is not running, or its automation switch is off ({e.Message}).");
+                throw new NotConnectedException($"{Brand.Name} is not running, or its automation switch is off ({e.Message}).");
             }
             var opened = new MessageFraming(stream, 64L * 1024 * 1024);
             JObject init;
@@ -90,7 +90,7 @@ namespace Typedown.Mcp
             catch (Exception e) when (e is IOException || e is FramingException)
             {
                 Drop();
-                throw new NotConnectedException($"Typedown closed the connection while starting the session: {e.Message}");
+                throw new NotConnectedException($"{Brand.Name} closed the connection while starting the session: {e.Message}");
             }
             if (init["error"] is JObject error) { Drop(); throw new ApiError(error); }
             DeniedScopes = (init["result"]?["deniedScopes"] as JArray)?.Select(d => (string?)d["scope"] ?? "").ToArray() ?? Array.Empty<string>();
@@ -106,7 +106,7 @@ namespace Typedown.Mcp
             while (true)
             {
                 var frame = await framing.ReadAsync(ct).ConfigureAwait(false);
-                if (frame.Status == FrameStatus.EndOfStream) throw new IOException("Typedown closed the connection.");
+                if (frame.Status == FrameStatus.EndOfStream) throw new IOException($"{Brand.Name} closed the connection.");
                 if (frame.Status != FrameStatus.Message) continue;
                 var reply = JObject.Parse(new UTF8Encoding(false).GetString(frame.Body!));
                 if (reply["id"]?.Type == JTokenType.Integer && (int)reply["id"]! == id) return reply;

@@ -40,7 +40,7 @@ namespace Typedown.Core.Services
         {
             var handler = new HttpClientHandler { AllowAutoRedirect = false, UseCookies = true, CookieContainer = cookies };
             var client = new HttpClient(handler) { Timeout = TimeSpan.FromSeconds(30) };
-            client.DefaultRequestHeaders.UserAgent.ParseAdd("Typedown");
+            client.DefaultRequestHeaders.UserAgent.ParseAdd(Typedown.Automation.Brand.Name);
             return client;
         }
 

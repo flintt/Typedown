@@ -96,7 +96,7 @@ namespace Typedown.Core.Services
         private static Task<T> OnFirstWindow<T>(Func<AppViewModel, T> work)
         {
             var window = AutomationWindows.Registry.Snapshot().FirstOrDefault()
-                ?? throw new AutomationException(AutomationErrorKind.editor_not_ready, "Typedown has no open window to apply settings in.");
+                ?? throw new AutomationException(AutomationErrorKind.editor_not_ready, Typedown.Automation.Brand.Name + " has no open window to apply settings in.");
             return AutomationWindows.Registry.OnWindowAsync(window.WindowId, work);
         }
 
@@ -145,7 +145,7 @@ namespace Typedown.Core.Services
             }
 
             var window = AutomationWindows.Registry.Snapshot().FirstOrDefault()
-                ?? throw new AutomationException(AutomationErrorKind.editor_not_ready, "Typedown has no open window to apply settings in.");
+                ?? throw new AutomationException(AutomationErrorKind.editor_not_ready, Typedown.Automation.Brand.Name + " has no open window to apply settings in.");
             await AutomationWindows.Registry.OnWindowAsync(window.WindowId, app => { Apply(app.SettingsViewModel); return true; });
 
             var store = Store;

@@ -1,22 +1,21 @@
-﻿#define MyAppName "Typedown"
+﻿; MyAppName, MyAppPublisher, MyAppExeName, MyAppId: the edition's names.
+#include "brand.iss"
 #ifndef MyArch
   #define MyArch "x64"
 #endif
 #define MyAppVersion "1.3.1"
-#define MyAppPublisher "Typedown Community"
-#define MyAppExeName "Typedown.exe"
-#define MyAppAssocName "Typedown Markdown"
-#define MyAppAssocKey "Typedown.Markdown"
+#define MyAppAssocName MyAppName + " Markdown"
+#define MyAppAssocKey MyAppName + ".Markdown"
 
 [Setup]
-AppId={{B6F0C3A1-4E27-4D8B-9C11-7A2E5D8F1B30}
+AppId={#MyAppId}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 DefaultDirName={autopf}\{#MyAppName}
 DisableProgramGroupPage=yes
 OutputDir=Output
-OutputBaseFilename=Typedown-windows-{#MyArch}-v{#MyAppVersion}
+OutputBaseFilename={#MyAppName}-windows-{#MyArch}-v{#MyAppVersion}
 SetupIconFile=..\..\Dev\Typedown\Assets\logo.ico
 Compression=lzma2/max
 SolidCompression=yes
@@ -33,10 +32,11 @@ ChangesAssociations=yes
 UninstallDisplayIcon={app}\{#MyAppExeName}
 CloseApplications=yes
 ; The app outlives its window when "keep running in the background" is on, and a window is what the
-; restart manager sends its close request to — so it finds Typedown.exe, asks it to close, and nothing
+; restart manager sends its close request to — so it finds the app, asks it to close, and nothing
 ; happens. Checking the mutex says so before a single file is touched, instead of failing partway
 ; through with a list of files in use and an uninstall that then cannot finish either.
-AppMutex=Typedown.App.Mutex
+; Config.InstanceName + ".Mutex" (Dev/Typedown/App.cs)
+AppMutex={#MyAppName}.App.Mutex
 RestartApplications=no
 MinVersion=10.0
 VersionInfoVersion={#MyAppVersion}.0
@@ -65,7 +65,7 @@ Root: HKCR; Subkey: ".mdwn"; ValueType: string; ValueName: ""; ValueData: "{#MyA
 Root: HKCR; Subkey: ".mdtxt"; ValueType: string; ValueName: ""; ValueData: "{#MyAppAssocKey}"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: ".mdtext"; ValueType: string; ValueName: ""; ValueData: "{#MyAppAssocKey}"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: ".rmd"; ValueType: string; ValueName: ""; ValueData: "{#MyAppAssocKey}"; Flags: uninsdeletevalue
-; .txt / .text: offer Typedown in "Open with" without taking over the default handler (upstream #3)
+; .txt / .text: offer the app in "Open with" without taking over the default handler (upstream #3)
 Root: HKCR; Subkey: ".txt\OpenWithProgids"; ValueType: string; ValueName: "{#MyAppAssocKey}"; ValueData: ""; Flags: uninsdeletevalue
 Root: HKCR; Subkey: ".text\OpenWithProgids"; ValueType: string; ValueName: "{#MyAppAssocKey}"; ValueData: ""; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "{#MyAppAssocKey}"; ValueType: string; ValueName: ""; ValueData: "{#MyAppAssocName}"; Flags: uninsdeletekey

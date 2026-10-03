@@ -1,4 +1,5 @@
 using System;
+using Typedown.Automation;
 using System.IO;
 using System.Text;
 using Typedown.Mcp;
@@ -16,7 +17,7 @@ namespace Typedown.Cli
                 if (args[i] == "--endpoint" && i + 1 < args.Length) endpoint = args[++i];
                 else if (args[i] == "--help" || args[i] == "-h")
                 {
-                    Console.Error.WriteLine("typedownctl mcp [--endpoint NAME] - MCP server (stdio) for a running Typedown with local automation on.");
+                    Console.Error.WriteLine($"{Brand.CliName} mcp [--endpoint NAME] - MCP server (stdio) for a running {Brand.Name} with local automation on.");
                     return 0;
                 }
             }

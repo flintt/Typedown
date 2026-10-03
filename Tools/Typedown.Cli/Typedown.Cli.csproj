@@ -1,5 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <!-- typedownctl: the reference client of the local automation API (docs/automation-api-spec.md, section 3.5). -->
+  <!-- typedownctl ($(BrandCliName)): the reference client of the local automation API (docs/automation-api-spec.md, section 3.5). -->
+  <Import Project="..\..\Branding.props" />
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <!-- net8.0 for Linux, macOS and development; netcoreapp3.1 is what the Windows installer ships, beside the app,
@@ -8,7 +9,7 @@
     <RollForward>Major</RollForward>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
-    <AssemblyName>typedownctl</AssemblyName>
+    <AssemblyName>$(BrandCliName)</AssemblyName>
     <RootNamespace>Typedown.Cli</RootNamespace>
     <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>

@@ -31,7 +31,9 @@ function Test-Contains([byte[]]$data, [byte[]]$pattern) {
     }
     return $false
 }
-$binaries = Get-ChildItem -Path $Path -Recurse -File -Include *.dll, *.exe -ErrorAction SilentlyContinue | Where-Object { $_.Name -like 'Typedown*' }
+# Typedown.* libraries and the app itself, under the edition's exe name (Branding.props).
+$exeName = ([xml](Get-Content (Join-Path $PSScriptRoot '..\..\Branding.props'))).Project.PropertyGroup.BrandExeName
+$binaries = Get-ChildItem -Path $Path -Recurse -File -Include *.dll, *.exe -ErrorAction SilentlyContinue | Where-Object { $_.Name -like 'Typedown*' -or $_.Name -like "$exeName.*" }
 foreach ($binary in $binaries) {
     $data = [IO.File]::ReadAllBytes($binary.FullName)
     for ($k = 0; $k -lt $names.Count; $k++) {

@@ -69,7 +69,7 @@ namespace Typedown.Core
             return path;
         }
 
-        public static string AppName => "Typedown";
+        public static string AppName => Typedown.Automation.Brand.Name;
 
         /// <summary>
         /// True in the automation test host build (docs/automation-api-analysis-plan.md, 10.7): everything it keeps -
@@ -94,7 +94,7 @@ namespace Typedown.Core
         /// Base of the single-instance mutex and hand-over pipe names: the application's own names, or for the test host
         /// names tied to its data root, so two test runs and the everyday instance never answer for each other.
         /// </summary>
-        public static string InstanceName => IsAutomationTestHost ? "Typedown.AutomationTestHost." + StableHash(AutomationTestRoot.ToLowerInvariant()) : "Typedown.App";
+        public static string InstanceName => IsAutomationTestHost ? AppName + ".AutomationTestHost." + StableHash(AutomationTestRoot.ToLowerInvariant()) : AppName + ".App";
 
         // Not string.GetHashCode: that is randomized per process, so a restarted test host got other instance names
         // than the one before it on the same root - another mutex, another endpoint.

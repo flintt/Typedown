@@ -23,6 +23,14 @@ jobs:
       # English line in the middle of their own language. This is what makes it fail before that.
       - run: python3 Tools/Translations/check.py --strict
 
+  brand:
+    name: Check brand names
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # The product's names come from the brand files only (Tools/Branding/check-brand.py).
+      - run: python3 Tools/Branding/check-brand.py
+
   reliability:
     name: Test persistence and packaging
     runs-on: windows-2022
@@ -104,7 +112,7 @@ jobs:
 
   app:
     name: Build app (${{ matrix.platform }})
-    needs: [strings, editor, reliability]
+    needs: [strings, brand, editor, reliability]
     runs-on: windows-2022
     strategy:
       fail-fast: false
@@ -241,7 +249,11 @@ jobs:
         run: |
           $dir = Get-ChildItem Dev/Typedown/bin -Recurse -Directory -Filter msixpublish | Select-Object -First 1
           if (-not $dir) { throw "msixpublish folder not found" }
-          foreach ($f in "Typedown.exe","Microsoft.UI.Xaml.dll","Microsoft.Graphics.Canvas.dll","msvcp140_app.dll","vcruntime140_app.dll","e_sqlite3.dll","Resources\Statics\index.html") {
+          # The edition's names (Branding.props).
+          $brand = ([xml](Get-Content Branding.props)).Project.PropertyGroup
+          "exe=$($brand.BrandExeName).exe" >> $env:GITHUB_OUTPUT
+          "name=$($brand.BrandName)" >> $env:GITHUB_OUTPUT
+          foreach ($f in "$($brand.BrandExeName).exe","Microsoft.UI.Xaml.dll","Microsoft.Graphics.Canvas.dll","msvcp140_app.dll","vcruntime140_app.dll","e_sqlite3.dll","Resources\Statics\index.html") {
             if (-not (Test-Path (Join-Path $dir.FullName $f))) { throw "$f missing in $($dir.FullName)" }
           }
           $arch = "${{ steps.ver.outputs.arch }}"
@@ -249,11 +261,11 @@ jobs:
           "dir=$($dir.FullName)" >> $env:GITHUB_OUTPUT
           Write-Host "Published app: $($dir.FullName)"
 
-      - name: Sign Typedown.exe
+      - name: Sign the app's exe
         shell: pwsh
         run: |
           $signtool = Get-ChildItem "C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\signtool.exe"
-          & $signtool sign /fd SHA256 /f "${{ steps.cert.outputs.pfx }}" /p "${{ steps.cert.outputs.password }}" "${{ steps.pub.outputs.dir }}\Typedown.exe"
+          & $signtool sign /fd SHA256 /f "${{ steps.cert.outputs.pfx }}" /p "${{ steps.cert.outputs.password }}" "${{ steps.pub.outputs.dir }}\${{ steps.pub.outputs.exe }}"
 
       - name: Build installer (Inno Setup) and portable zip
         shell: pwsh
@@ -263,7 +275,7 @@ jobs:
           New-Item -ItemType Directory -Force out, out-installer | Out-Null
           $arch = "${{ steps.ver.outputs.arch }}"
           ./Tools/Installer/assert-application-build.ps1 -Path $pub
-          # The app folder the installer and the portable zip carry: the published app plus typedownctl (on the
+          # The app folder the installer and the portable zip carry: the published app plus the CLI (on the
           # app's runtime) and the automation documents.
           New-Item -ItemType Directory -Force Tools/Installer/publish | Out-Null
           Copy-Item "$pub\*" Tools/Installer/publish -Recurse -Force
@@ -271,7 +283,7 @@ jobs:
           ./Tools/Installer/assert-application-build.ps1 -Path Tools/Installer/publish
           # The portable zip is only produced for releases; day-to-day test artifacts stay small.
           if ("${{ github.ref }}".StartsWith("refs/tags/")) {
-            Compress-Archive -Path "Tools/Installer/publish\*" -DestinationPath "out\Typedown-portable-$arch-v$ver.zip" -CompressionLevel Optimal
+            Compress-Archive -Path "Tools/Installer/publish\*" -DestinationPath "out\${{ steps.pub.outputs.name }}-portable-$arch-v$ver.zip" -CompressionLevel Optimal
           }
           # installer
           $iscc = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
@@ -286,7 +298,7 @@ jobs:
         shell: pwsh
         run: |
           Get-ChildItem AppxPackages -Recurse -Include *.msix,*.msixbundle | Copy-Item -Destination out
-          Copy-Item "${{ steps.cert.outputs.cer }}" out/Typedown-signing-certificate.cer
+          Copy-Item "${{ steps.cert.outputs.cer }}" out/${{ steps.pub.outputs.name }}-signing-certificate.cer
           Get-ChildItem out
 
       # Small artifact for everyday testing: just the installer.
@@ -312,6 +324,11 @@ jobs:
     needs: app
     runs-on: ubuntu-latest
     steps:
+      # Only for the edition's names (Branding.props).
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: Branding.props
+          sparse-checkout-cone-mode: false
       - uses: actions/download-artifact@v4
         with:
           pattern: Typedown-x64
@@ -328,10 +345,12 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           ls -la dist
+          name=$(sed -n 's:.*<BrandName>\(.*\)</BrandName>.*:\1:p' Branding.props)
+          exe=$(sed -n 's:.*<BrandExeName>\(.*\)</BrandExeName>.*:\1:p' Branding.props)
           # Release notes = the annotated tag's message (what changed) + the file table below.
           ref=$(gh api "repos/${{ github.repository }}/git/refs/tags/${{ github.ref_name }}")
           if [ "$(jq -r .object.type <<<"$ref")" = "tag" ]; then
-            gh api "repos/${{ github.repository }}/git/tags/$(jq -r .object.sha <<<"$ref")" -q .message | sed '1{/^Typedown /d}' > notes.md
+            gh api "repos/${{ github.repository }}/git/tags/$(jq -r .object.sha <<<"$ref")" -q .message | sed "1{/^$name /d}" > notes.md
             printf '\n---\n\n' >> notes.md
           else
             : > notes.md
@@ -341,11 +360,12 @@ jobs:
 
           | File | What it is |
           |---|---|
-          | `Typedown-windows-x64-v*.exe` / `-arm64-` | Installer (Inno Setup) for x64 / ARM64 Windows. Installs WebView2 Runtime if missing, registers `.md` associations. |
-          | `Typedown-portable-x64-v*.zip` / `-arm64-` | Portable build – unzip and run `Typedown.exe`. |
+          | `@NAME@-windows-x64-v*.exe` / `-arm64-` | Installer (Inno Setup) for x64 / ARM64 Windows. Installs WebView2 Runtime if missing, registers `.md` associations. |
+          | `@NAME@-portable-x64-v*.zip` / `-arm64-` | Portable build – unzip and run `@EXE@.exe`. |
           | `Typedown.Package_*_x64.msix` / `_ARM64.msix` | MSIX packages for sideloading. |
-          | `Typedown-signing-certificate.cer` | Self-signed certificate used to sign the above. To install the MSIX, first import this into **Local Machine → Trusted People** (or Trusted Root). The .exe/.zip run without it (SmartScreen may warn). |
+          | `@NAME@-signing-certificate.cer` | Self-signed certificate used to sign the above. To install the MSIX, first import this into **Local Machine → Trusted People** (or Trusted Root). The .exe/.zip run without it (SmartScreen may warn). |
           MD
+          sed -i "s/@NAME@/$name/g; s/@EXE@/$exe/g" notes.md
           # A tag with a suffix (v1.2.24-test.1) publishes as a pre-release, so "Latest" keeps pointing at the
           # last stable build while a fix is being tried out.
           prerelease=""
@@ -353,11 +373,11 @@ jobs:
           # Re-pushing a tag replaces the existing release in place (notes + assets) instead of failing.
           if gh release view "${{ github.ref_name }}" --repo "${{ github.repository }}" >/dev/null 2>&1; then
             gh release edit "${{ github.ref_name }}" --repo "${{ github.repository }}" \
-              --title "Typedown ${{ github.ref_name }}" --notes-file notes.md ${prerelease:+--prerelease}
+              --title "$name ${{ github.ref_name }}" --notes-file notes.md ${prerelease:+--prerelease}
             gh release upload "${{ github.ref_name }}" dist/* --repo "${{ github.repository }}" --clobber
           else
             gh release create "${{ github.ref_name }}" dist/* \
               --repo "${{ github.repository }}" \
-              --title "Typedown ${{ github.ref_name }}" \
+              --title "$name ${{ github.ref_name }}" \
               --notes-file notes.md $prerelease
           fi

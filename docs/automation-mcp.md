@@ -4,7 +4,7 @@
 
 ## 注册
 
-Windows 安装版把 `typedownctl.exe` 装在 Typedown 的安装目录里（默认 `C:\Program Files\Typedown\typedownctl.exe`）；Linux 版（deb 包）的命令是 `/usr/bin/typedownctl`。
+Windows 安装版把 `typedownctl.exe` 装在 Typedown 的安装目录里（默认 `C:\Program Files\Typedown\typedownctl.exe`）<!-- linux -->；Linux 版（deb 包）的命令是 `/usr/bin/typedownctl`<!-- /linux -->。
 
 Claude Code：
 
@@ -12,13 +12,15 @@ Claude Code：
 claude mcp add typedown -- "C:\Program Files\Typedown\typedownctl.exe" mcp
 ```
 
+<!-- linux -->
 Linux：
 
 ```
 claude mcp add typedown -- typedownctl mcp
 ```
 
-其他 MCP 客户端（它们 JSON 配置里的 `mcpServers`，Linux 上 `command` 写 `typedownctl`）：
+<!-- /linux -->
+其他 MCP 客户端（它们 JSON 配置里的 `mcpServers`<!-- linux -->，Linux 上 `command` 写 `typedownctl`<!-- /linux -->）：
 
 ```json
 {

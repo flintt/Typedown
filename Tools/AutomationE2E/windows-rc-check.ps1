@@ -5,10 +5,13 @@
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
 [Console]::OutputEncoding = [Text.Encoding]::UTF8
-$app = 'C:\Program Files\Typedown'
-$ctl = Join-Path $app 'typedownctl.exe'
+# The edition's names (Branding.props): its install folder, exe, CLI and data folder.
+$brand = ([xml](Get-Content (Join-Path $PSScriptRoot '..\..\Branding.props'))).Project.PropertyGroup
+$app = Join-Path $env:ProgramFiles $brand.BrandName
+$exe = Join-Path $app ($brand.BrandExeName + '.exe')
+$ctl = Join-Path $app ($brand.BrandCliName + '.exe')
 $examples = Join-Path $app 'docs\automation-examples'
-$data = Join-Path ([Environment]::GetFolderPath('MyDocuments')) 'Typedown'
+$data = Join-Path ([Environment]::GetFolderPath('MyDocuments')) $brand.BrandName
 $work = 'E:\src\rc'
 $saved = 'E:\src\rc-saved-data'
 $results = New-Object System.Collections.Generic.List[string]
@@ -21,7 +24,7 @@ $utf8 = New-Object Text.UTF8Encoding($false)
 
 # 1. Keep the user's data.
 if (Test-Path $saved) { throw "a previous check's saved copy is still at $saved - restore it first" }
-if (Get-Process Typedown -ErrorAction SilentlyContinue | Where-Object { $_.Path -eq (Join-Path $app 'Typedown.exe') }) { throw "Typedown is running - quit it first" }
+if (Get-Process $brand.BrandExeName -ErrorAction SilentlyContinue | Where-Object { $_.Path -eq $exe }) { throw "$($brand.BrandName) is running - quit it first" }
 # -Force: Typedown 1.2.27-1.2.30 left the files it saves hidden (SafeFile's temp attributes survive the rename).
 function Snapshot($root) { Get-ChildItem $root -Recurse -File -Force | ForEach-Object { $_.FullName.Substring($root.Length) + ' ' + (Get-FileHash $_.FullName).Hash } | Sort-Object }
 $before = Snapshot $data
@@ -41,7 +44,7 @@ $started = Get-Date
 $ErrorActionPreference = 'Continue'
 try {
     # 2. Start the installed app in the logged-on session.
-    Set-Content "$work\start.cmd" "start `"`" `"$app\Typedown.exe`" `"$work\rc-a.md`"" -Encoding ASCII
+    Set-Content "$work\start.cmd" "start `"`" `"$exe`" `"$work\rc-a.md`"" -Encoding ASCII
     schtasks /Create /TN TdRcStart /TR "$work\start.cmd" /SC ONCE /ST 23:59 /IT /F | Out-Null
     schtasks /Run /TN TdRcStart | Out-Null
     $up = $false
@@ -75,7 +78,7 @@ try {
         $mcp.StandardOutput.ReadLine() | ConvertFrom-Json
     }
     $init = Send 'initialize' @{ protocolVersion = '2025-06-18'; clientInfo = @{ name = 'RC agent'; version = '1' } }
-    Check ($init.result.serverInfo.name -eq 'typedown-mcp') 'typedownctl mcp answers initialize'
+    Check ($init.result.serverInfo.name -eq ($brand.BrandName.ToLowerInvariant() + '-mcp')) 'typedownctl mcp answers initialize'
     $read = (Send 'tools/call' @{ name = 'typedown_read_document'; arguments = @{ documentId = $a } }).result
     $w = (Send 'tools/call' @{ name = 'typedown_replace_text'; arguments = @{ documentId = $a; baseRevision = $read.structuredContent.revision; find = 'quick'; replacement = 'very quick'; reveal = $true } }).result
     Check (-not $w.isError) 'MCP replace_text with reveal'
@@ -120,8 +123,8 @@ try {
 }
 finally {
     # 7. Stop what this check started, put the user's data back, drop the files it made.
-    Get-Process Typedown -ErrorAction SilentlyContinue | Where-Object { $_.StartTime -gt $started } | Stop-Process -Force -ErrorAction SilentlyContinue
-    Get-Process typedownctl -ErrorAction SilentlyContinue | Where-Object { $_.StartTime -gt $started } | Stop-Process -Force -ErrorAction SilentlyContinue
+    Get-Process $brand.BrandExeName -ErrorAction SilentlyContinue | Where-Object { $_.StartTime -gt $started } | Stop-Process -Force -ErrorAction SilentlyContinue
+    Get-Process $brand.BrandCliName -ErrorAction SilentlyContinue | Where-Object { $_.StartTime -gt $started } | Stop-Process -Force -ErrorAction SilentlyContinue
     Start-Sleep 2
     robocopy $saved $data /MIR /NFL /NDL /NJH /NJS | Out-Null
     $after = Snapshot $data

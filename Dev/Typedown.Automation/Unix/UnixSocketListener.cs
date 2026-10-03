@@ -54,7 +54,7 @@ namespace Typedown.Automation
             EnsurePrivateDirectory(dir);
             if (File.Exists(path) || IsSocketFile(path))
             {
-                if (Answers(path)) throw new InvalidOperationException("Another Typedown is already listening on " + path);
+                if (Answers(path)) throw new InvalidOperationException("Another " + Brand.Name + " is already listening on " + path);
                 File.Delete(path); // left behind by an instance that did not shut down
             }
             var socket = new Socket(AddressFamily.Unix, SocketType.Stream, ProtocolType.Unspecified);

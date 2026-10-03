@@ -11,8 +11,8 @@ namespace Typedown.Automation
     /// </summary>
     public static class AutomationEndpoint
     {
-        public const string ApplicationPrefix = "Typedown.Automation.v1";
-        public const string TestHostPrefix = "Typedown.AutomationTestHost.v1";
+        public const string ApplicationPrefix = Brand.Name + ".Automation.v1";
+        public const string TestHostPrefix = Brand.Name + ".AutomationTestHost.v1";
 
         public static string PipeName(string buildType, string userId)
         {

@@ -1253,7 +1253,7 @@ internal static class Program
         Check(py.exit == 0, "the Python example writes");
         Check((string)(await Get(driver, a))["text"]! == "# EX01\n\nnew text, new notes\n", "the Python example replaced the word");
 
-        var expected = "Typedown.Automation.v1." + System.Security.Principal.WindowsIdentity.GetCurrent().User!.Value;
+        var expected = Typedown.Automation.Brand.Name + ".Automation.v1." + System.Security.Principal.WindowsIdentity.GetCurrent().User!.Value;
         var name = RunTool("python", "-c", $"import sys; sys.path.insert(0, r'{examples}'); import typedown_client; print(typedown_client.Client.default_endpoint())");
         Check(name.stdout.Trim() == expected, $"the Python example finds the application's pipe name ({name.stdout.Trim()} {name.stderr.Trim()})");
     }

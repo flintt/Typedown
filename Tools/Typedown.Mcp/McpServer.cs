@@ -1,4 +1,5 @@
 using System;
+using Typedown.Automation;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -31,7 +32,7 @@ namespace Typedown.Mcp
         }
 
         /// <summary>What the Typedown window title shows: the agent's own name when it gave one.</summary>
-        public string ClientName => string.IsNullOrWhiteSpace(clientName) ? "typedown-mcp" : $"{clientName} (MCP)";
+        public string ClientName => string.IsNullOrWhiteSpace(clientName) ? Brand.McpServerName : $"{clientName} (MCP)";
 
         public async Task RunAsync(CancellationToken ct = default)
         {
@@ -90,7 +91,7 @@ namespace Typedown.Mcp
             {
                 ["protocolVersion"] = requested != null && ProtocolVersions.Contains(requested) ? requested : ProtocolVersions[0],
                 ["capabilities"] = new JObject { ["tools"] = new JObject { ["listChanged"] = false } },
-                ["serverInfo"] = new JObject { ["name"] = "typedown-mcp", ["title"] = "Typedown", ["version"] = typeof(McpServer).Assembly.GetName().Version?.ToString() ?? "" },
+                ["serverInfo"] = new JObject { ["name"] = Brand.McpServerName, ["title"] = Brand.Name, ["version"] = typeof(McpServer).Assembly.GetName().Version?.ToString() ?? "" },
                 ["instructions"] = Instructions,
             };
         }
@@ -99,7 +100,7 @@ namespace Typedown.Mcp
             new string((name ?? "").Where(c => !char.IsControl(c) && !(c >= '‪' && c <= '‮') && !(c >= '⁦' && c <= '⁩')).Take(30).ToArray()).Trim();
 
         public const string Instructions =
-            "Typedown edits Markdown documents that are open in its windows while a person watches. Always read a document " +
+            $"{Brand.Name} edits Markdown documents that are open in its windows while a person watches. Always read a document " +
             "(typedown_read_document) right before changing it and pass the revision you read as baseRevision. Prefer " +
             "typedown_replace_text with a short passage that occurs exactly as often as you mean to change it. When a write " +
             "fails with revision_conflict or match_count_mismatch, read the document again and redo the edit against the new " +
@@ -121,7 +122,7 @@ namespace Typedown.Mcp
         private static readonly JObject WriteOptions = new()
         {
             ["save"] = Prop("boolean", "Also save the file after the edit (not for untitled documents). Default false."),
-            ["allowFormattingChanges"] = Prop("boolean", "Accept text whose formatting Typedown's visual editor may rewrite on the person's first edit (normalization 'unknown'). Default false: such writes are refused and nothing changes."),
+            ["allowFormattingChanges"] = Prop("boolean", $"Accept text whose formatting {Brand.Name}'s visual editor may rewrite on the person's first edit (normalization 'unknown'). Default false: such writes are refused and nothing changes."),
             ["reveal"] = Prop("boolean", "Bring the document's window and tab to the front so the person sees the change. Default false."),
             ["scrollToChange"] = Prop("boolean", "As reveal, and scroll the person's view to the first changed passage when it is off screen; their cursor stays where it is. Default false."),
         };
@@ -139,7 +140,7 @@ namespace Typedown.Mcp
             {
                 ["name"] = "typedown_list_documents",
                 ["title"] = "List open documents",
-                ["description"] = "The documents open in Typedown's windows: id, window, path (null when untitled), title, revision, whether saved, whether it is the tab shown in its window. No text.",
+                ["description"] = $"The documents open in {Brand.Name}'s windows: id, window, path (null when untitled), title, revision, whether saved, whether it is the tab shown in its window. No text.",
                 ["inputSchema"] = Schema(new JObject { ["windowId"] = Prop("string", "Only this window's documents.") }),
                 ["annotations"] = new JObject { ["readOnlyHint"] = true, ["openWorldHint"] = false },
             },
@@ -147,7 +148,7 @@ namespace Typedown.Mcp
             {
                 ["name"] = "typedown_read_document",
                 ["title"] = "Read a document",
-                ["description"] = "The document's current text (including what the person typed and Typedown has not yet reported), its revision and content hash. Use the revision as baseRevision for the next edit.",
+                ["description"] = $"The document's current text (including what the person typed and {Brand.Name} has not yet reported), its revision and content hash. Use the revision as baseRevision for the next edit.",
                 ["inputSchema"] = Schema(new JObject
                 {
                     ["documentId"] = Prop("string", "From typedown_list_documents."),
@@ -281,8 +282,8 @@ namespace Typedown.Mcp
             {
                 var error = new JObject { ["code"] = 0, ["message"] = e.Message, ["data"] = new JObject { ["kind"] = "not_connected" } };
                 return Failure(error, name.Contains("replace") || name.Contains("save")
-                    ? "Typedown could not be reached. If a write was under way it may or may not have been applied: once Typedown is back, read the document before doing anything else. If Typedown is running, the person has to turn on Settings > General > Allow local automation."
-                    : "Typedown is not running, or its automation switch is off (Settings > General > Allow local automation). Ask the person.");
+                    ? $"{Brand.Name} could not be reached. If a write was under way it may or may not have been applied: once {Brand.Name} is back, read the document before doing anything else. If {Brand.Name} is running, the person has to turn on Settings > General > Allow local automation."
+                    : $"{Brand.Name} is not running, or its automation switch is off (Settings > General > Allow local automation). Ask the person.");
             }
             catch (ArgumentException e)
             {
@@ -360,11 +361,11 @@ namespace Typedown.Mcp
             "match_count_mismatch" =>
                 $"find occurs {data?["actualCount"] ?? "a different number of"} time(s), not {data?["expectedCount"] ?? "as expected"}. Nothing was written. Read the document again and choose a find that occurs exactly as often as you mean to replace; do not retry with the old text.",
             "normalization_unclassified" =>
-                "Nothing was written: Typedown cannot show that its visual editor keeps this text's exact formatting. If formatting changes on the person's first visual edit are acceptable, repeat the edit with allowFormattingChanges: true (reading the document first if you are unsure it is still at baseRevision).",
+                $"Nothing was written: {Brand.Name} cannot show that its visual editor keeps this text's exact formatting. If formatting changes on the person's first visual edit are acceptable, repeat the edit with allowFormattingChanges: true (reading the document first if you are unsure it is still at baseRevision).",
             "content_not_roundtrippable" =>
                 $"Nothing was written: the visual editor would lose part of this text ({string.Join(", ", (data?["reasons"] as JArray)?.Select(r => (string?)r) ?? Array.Empty<string>())}), usually raw HTML. Write that part differently, or ask the person.",
             "editor_not_ready" or "content_sync_timeout" =>
-                "Typedown's editor did not confirm in time, or reloaded; the document is as it was before this call. Read the document again, then retry.",
+                $"{Brand.Name}'s editor did not confirm in time, or reloaded; the document is as it was before this call. Read the document again, then retry.",
             "editor_inconsistent" =>
                 "The document refuses writes until the person reopens it. Tell the person; do not keep trying.",
             "presentation_timeout" =>
@@ -374,8 +375,8 @@ namespace Typedown.Mcp
             "path_required" => "The document is untitled; only the person can choose where to save it.",
             "unsaved_changes" => "The document has unsaved changes, so it was not closed and nothing was lost. Save it first with typedown_save_document (or ask the person), then close it.",
             "save_failed" => "Saving failed; the edit stays in the document, unsaved. Tell the person.",
-            "scope_required" => "This Typedown does not allow that operation for automation clients.",
-            "busy" => "Typedown is busy with this document. Wait a moment, read the document again, then retry.",
+            "scope_required" => $"This {Brand.Name} does not allow that operation for automation clients.",
+            "busy" => $"{Brand.Name} is busy with this document. Wait a moment, read the document again, then retry.",
             "invalid_params" => "Fix the arguments as the message says.",
             _ => "Read the document again before trying anything else.",
         };

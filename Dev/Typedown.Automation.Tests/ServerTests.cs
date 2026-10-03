@@ -156,10 +156,10 @@ namespace Typedown.Automation.Tests
         {
             var app = AutomationEndpoint.PipeName(BuildTypes.Application, "S-1-5-21-1-2-3-1001");
             var test = AutomationEndpoint.PipeName(BuildTypes.AutomationTestHost, "S-1-5-21-1-2-3-1001");
-            Assert.Equal("Typedown.Automation.v1.S-1-5-21-1-2-3-1001", app);
+            Assert.Equal(Brand.Name + ".Automation.v1.S-1-5-21-1-2-3-1001", app);
             Assert.NotEqual(app, test);
             Assert.NotEqual(app, AutomationEndpoint.PipeName(BuildTypes.Application, "S-1-5-21-1-2-3-1002"));
-            Assert.Equal("Typedown.Automation.v1.1000x", AutomationEndpoint.PipeName(BuildTypes.Application, "1000/../x")); // only letters, digits and -
+            Assert.Equal(Brand.Name + ".Automation.v1.1000x", AutomationEndpoint.PipeName(BuildTypes.Application, "1000/../x")); // only letters, digits and -
             Assert.Throws<ArgumentException>(() => AutomationEndpoint.PipeName(BuildTypes.Application, " "));
         }
 

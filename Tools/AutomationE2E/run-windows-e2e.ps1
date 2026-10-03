@@ -24,7 +24,8 @@ $out = Join-Path $Artifacts $runId
 New-Item -ItemType Directory -Force $fixtures, $out | Out-Null
 "runId=$runId" | Out-File (Join-Path $out 'run.txt') -Encoding utf8
 
-$exe = Join-Path $TestHost 'Typedown.exe'
+# The app's exe under the edition's name (Branding.props).
+$exe = Join-Path $TestHost (([xml](Get-Content (Join-Path $PSScriptRoot '..\..\Branding.props'))).Project.PropertyGroup.BrandExeName + '.exe')
 if (-not (Test-Path (Join-Path $TestHost 'automation-test-host.marker'))) { throw "$TestHost is not an automation test host build" }
 $hostProcess = Start-Process -FilePath $exe -ArgumentList @('--automation-test-root', "`"$root`"") -PassThru
 $code = 3

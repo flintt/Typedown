@@ -22,9 +22,9 @@ namespace Typedown.Cli
     {
         public const int Ok = 0, Usage = 2, NotRunning = 3, Incompatible = 4, NotFound = 5, Conflict = 6, NotReady = 7, SaveFailed = 8, Other = 9;
 
-        public const string Help = @"typedownctl - control a running Typedown through its local automation API
+        public const string Help = $@"{Brand.CliName} - control a running {Brand.Name} through its local automation API
 
-usage: typedownctl [--json] [--endpoint NAME] [--client-id UUID] <command> [options]
+usage: {Brand.CliName} [--json] [--endpoint NAME] [--client-id UUID] <command> [options]
 
   status                                  application, version and windows
   windows                                 open windows
@@ -135,7 +135,7 @@ Exit codes: 0 ok, 2 usage, 3 not running or not reachable, 4 version or scope, 5
                 try { stream = await connect(endpoint, cancellationToken).ConfigureAwait(false); }
                 catch (Exception e) when (e is TimeoutException || e is IOException || e is UnauthorizedAccessException)
                 {
-                    return Fail(json, NotRunning, null, $"Typedown is not running, or its automation switch is off ({e.Message}).");
+                    return Fail(json, NotRunning, null, $"{Brand.Name} is not running, or its automation switch is off ({e.Message}).");
                 }
                 using (stream)
                 {
@@ -143,14 +143,14 @@ Exit codes: 0 ok, 2 usage, 3 not running or not reachable, 4 version or scope, 5
                     var initialize = new JObject
                     {
                         ["apiVersion"] = AutomationSession.ApiVersion,
-                        ["client"] = new JObject { ["id"] = clientId, ["name"] = "typedownctl", ["version"] = typeof(Cli).Assembly.GetName().Version?.ToString() ?? "" },
+                        ["client"] = new JObject { ["id"] = clientId, ["name"] = Brand.CliName, ["version"] = typeof(Cli).Assembly.GetName().Version?.ToString() ?? "" },
                         ["requestedScopes"] = new JArray(scopes),
                     };
                     var init = await CallAsync(framing, 1, "system.initialize", initialize, cancellationToken).ConfigureAwait(false);
                     if (init["error"] is JObject initError) return FailWith(json, initError);
                     var denied = init["result"]?["deniedScopes"] as JArray;
                     if (denied != null && denied.Count > 0)
-                        return Fail(json, Incompatible, null, $"This Typedown does not grant: {string.Join(", ", denied.Select(d => d["scope"]))}.");
+                        return Fail(json, Incompatible, null, $"This {Brand.Name} does not grant: {string.Join(", ", denied.Select(d => d["scope"]))}.");
                     var reply = await CallAsync(framing, 2, method, parameters, cancellationToken).ConfigureAwait(false);
                     if (reply["error"] is JObject error) return FailWith(json, error);
                     var result = reply["result"] ?? JValue.CreateNull();
@@ -161,7 +161,7 @@ Exit codes: 0 ok, 2 usage, 3 not running or not reachable, 4 version or scope, 5
             }
             catch (UsageException e)
             {
-                return Fail(json, Usage, null, e.Message + " (typedownctl help)");
+                return Fail(json, Usage, null, e.Message + $" ({Brand.CliName} help)");
             }
             catch (FramingException e)
             {
@@ -399,7 +399,7 @@ Exit codes: 0 ok, 2 usage, 3 not running or not reachable, 4 version or scope, 5
             while (true)
             {
                 var frame = await framing.ReadAsync(ct).ConfigureAwait(false);
-                if (frame.Status == FrameStatus.EndOfStream) throw new IOException("Typedown closed the connection.");
+                if (frame.Status == FrameStatus.EndOfStream) throw new IOException($"{Brand.Name} closed the connection.");
                 if (frame.Status != FrameStatus.Message) continue;
                 var reply = JObject.Parse(new UTF8Encoding(false).GetString(frame.Body!));
                 if (reply["id"]?.Type == JTokenType.Integer && (int)reply["id"]! == id) return reply;
@@ -426,7 +426,7 @@ Exit codes: 0 ok, 2 usage, 3 not running or not reachable, 4 version or scope, 5
 
         private int Fail(bool json, int exit, JObject? error, string message)
         {
-            stderr.WriteLine("typedownctl: " + message);
+            stderr.WriteLine($"{Brand.CliName}: " + message);
             if (json)
             {
                 error ??= new JObject { ["code"] = 0, ["message"] = message, ["data"] = new JObject { ["kind"] = exit == Usage ? "cli_usage" : exit == NotRunning ? "cli_not_connected" : "cli_error" } };
@@ -441,7 +441,7 @@ Exit codes: 0 ok, 2 usage, 3 not running or not reachable, 4 version or scope, 5
             switch (command)
             {
                 case "status":
-                    sb.AppendLine($"Typedown {result["version"]}, {result["windowCount"]} window(s), active window {result["activeWindowId"]}");
+                    sb.AppendLine($"{Brand.Name} {result["version"]}, {result["windowCount"]} window(s), active window {result["activeWindowId"]}");
                     break;
                 case "windows":
                     foreach (var w in result["windows"]!) sb.AppendLine($"{w["windowId"]}  {(bool)w["active"]! switch { true => "active", false => "      " }}  {w["documentCount"]} document(s)");
@@ -520,7 +520,7 @@ Exit codes: 0 ok, 2 usage, 3 not running or not reachable, 4 version or scope, 5
         {
             try
             {
-                var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData, Environment.SpecialFolderOption.Create), "Typedown");
+                var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData, Environment.SpecialFolderOption.Create), Brand.Name);
                 Directory.CreateDirectory(dir);
                 var file = Path.Combine(dir, "typedownctl-client-id");
                 if (File.Exists(file) && Guid.TryParseExact(File.ReadAllText(file).Trim(), "D", out var existing)) return existing.ToString("D");

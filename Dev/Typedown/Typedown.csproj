@@ -1,7 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
+	<Import Project="..\..\Branding.props" />
+
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
+		<!-- $(BrandExeName).exe; the projects and namespaces keep their names in every edition. -->
+		<AssemblyName>$(BrandExeName)</AssemblyName>
+		<RootNamespace>Typedown</RootNamespace>
 		<TargetFramework>netcoreapp3.1</TargetFramework>
 		<LangVersion>latest</LangVersion>
 		<Platforms>x64;x86;ARM64</Platforms>
@@ -16,9 +21,9 @@
 		<PublishTrimmed>false</PublishTrimmed>
 		<Version>1.3.1</Version>
 		<!-- Shown as "File description" in Explorer and indexed by Start menu search (upstream #28) -->
-		<AssemblyTitle>Typedown - Lightweight Markdown Editor</AssemblyTitle>
-		<Product>Typedown Markdown Editor</Product>
-		<Description>Typedown - Lightweight Markdown Editor</Description>
+		<AssemblyTitle>$(BrandName) - Lightweight Markdown Editor</AssemblyTitle>
+		<Product>$(BrandName) Markdown Editor</Product>
+		<Description>$(BrandName) - Lightweight Markdown Editor</Description>
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 		<Configurations>Debug;Release;Debug_Local</Configurations>
 	</PropertyGroup>
@@ -80,6 +85,8 @@
 		<!-- The themes that ship with the app; the themes folder in %LOCALAPPDATA% is added to these at runtime. -->
 		<None Include="Resources\Themes\**" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Link="Resources\Themes\%(RecursiveDir)%(Filename)%(Extension)" />
 		<!-- The theme document ships next to the themes, and a copy lands in the user's themes folder. -->
+		<!-- The MIT notice travels with the program (installer, portable zip and MSIX alike). -->
+		<None Include="..\..\LICENSE" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Link="LICENSE.txt" />
 		<None Include="..\..\docs\custom-theme.md" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Link="Resources\Themes\custom-theme.md" />
 		<!-- Standalone theme designer. Typedown embeds a snapshot of the installed themes when opening it. -->
 		<None Include="..\..\Tools\Themes\theme-designer.html" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Link="Resources\Themes\theme-designer.html" />

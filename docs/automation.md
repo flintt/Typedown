@@ -22,7 +22,7 @@ Typedown 可以让**本机上以你的身份运行的程序**读取和编辑已�
 
 - 选择保存位置（没有“另存为”），关闭窗口；关闭有未保存更改的文档（会被拒绝，什么都不丢，要关先保存）；
 - 读写其他设置，包括密码、自定义 CSS、文件夹路径、这两个自动化开关本身；
-- 通过网络访问：接口只在本机，Windows 上是只允许你这个用户打开的命名管道，Linux 上是只有你能进入的目录里的 socket（`$XDG_RUNTIME_DIR/typedown/automation.v1.sock`，权限 0600）。
+- 通过网络访问：接口只在本机，Windows 上是只允许你这个用户打开的命名管道<!-- linux -->，Linux 上是只有你能进入的目录里的 socket（`$XDG_RUNTIME_DIR/typedown/automation.v1.sock`，权限 0600）<!-- /linux -->。
 
 每次写入都要带上程序读到的**版本号**。你在程序读取之后又输入了内容，它的写入会被拒绝，它必须重新读取；不会有旧内容覆盖你刚写的字。可视编辑器可能改写格式的正文（例如 setext 标题）默认也会被拒绝，除非程序明确表示接受；可视编辑会丢失内容的正文（例如部分原始 HTML）一律拒绝。
 
@@ -34,7 +34,7 @@ Typedown 可以让**本机上以你的身份运行的程序**读取和编辑已�
 
 ## 命令行：typedownctl
 
-Windows 安装版把 `typedownctl.exe` 装在 Typedown 的安装目录里（默认 `C:\Program Files\Typedown\typedownctl.exe`），这些说明文档装在它旁边的 `docs` 文件夹。Linux 版（deb 包）的命令是 `typedownctl`（`/usr/bin/typedownctl`），文档在 `/opt/typedown/docs`。
+Windows 安装版把 `typedownctl.exe` 装在 Typedown 的安装目录里（默认 `C:\Program Files\Typedown\typedownctl.exe`），这些说明文档装在它旁边的 `docs` 文件夹。<!-- linux -->Linux 版（deb 包）的命令是 `typedownctl`（`/usr/bin/typedownctl`），文档在 `/opt/typedown/docs`。<!-- /linux -->
 
 ```
 typedownctl status

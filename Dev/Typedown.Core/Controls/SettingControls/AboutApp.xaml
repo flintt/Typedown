@@ -25,9 +25,9 @@
         </StackPanel>
 
         <StackPanel Margin="-12,8,0,0">
-            <!-- A fork: the original app's store page and credits site are not ours. What stays is where this
-                 build is developed and contributed to. -->
-            <HyperlinkButton Content="GitHub" NavigateUri="https://github.com/flintt/Typedown" />
+            <!-- A fork: the original app's store page and credits site are not ours. The link is the edition's own
+                 (Typedown.Automation.Brand): where this build is developed, or what it is built on. -->
+            <HyperlinkButton Content="{x:Bind local:AboutApp.LinkText}" NavigateUri="{x:Bind local:AboutApp.LinkUrl}" />
         </StackPanel>
 
         <StackPanel Margin="0,8,0,0" Spacing="16">

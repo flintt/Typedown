@@ -1,4 +1,5 @@
 using System;
+using Typedown.Automation;
 using System.IO;
 
 namespace Typedown.Mcp
@@ -10,7 +11,7 @@ namespace Typedown.Mcp
         {
             try
             {
-                var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData, Environment.SpecialFolderOption.Create), "Typedown");
+                var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData, Environment.SpecialFolderOption.Create), Brand.Name);
                 Directory.CreateDirectory(dir);
                 var file = Path.Combine(dir, "typedown-mcp-client-id");
                 if (File.Exists(file) && Guid.TryParseExact(File.ReadAllText(file).Trim(), "D", out var existing)) return existing.ToString("D");
