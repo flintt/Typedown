@@ -874,4 +874,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>ที่อยู่ของเซิร์ฟเวอร์ PlantUML (plantuml-server) ที่วาดแผนภาพ ว่าง: plantuml.com หากใช้เซิร์ฟเวอร์ของคุณเอง ซอร์สของแผนภาพจะอยู่กับคุณ</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>ปุ่ม Vim</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>Vim ในโหมดซอร์ส (:w บันทึก, :q ปิดแท็บ); j/k, gg/G, ]] และ / เพื่อเลื่อนไปมาในโหมดอ่าน ใช้ไม่ได้ในตัวแก้ไขแบบภาพ</value>
+  </data>
 </root>

@@ -874,4 +874,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>Адреса сервера PlantUML (plantuml-server), який малює діаграми. Порожньо: plantuml.com. Із власним сервером вихідний код діаграм залишається у вас.</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>Клавіші Vim</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>Vim у режимі вихідного коду (:w зберігає, :q закриває вкладку); j/k, gg/G, ]] і / для переміщення в режимі читання. Не у візуальному редакторі.</value>
+  </data>
 </root>

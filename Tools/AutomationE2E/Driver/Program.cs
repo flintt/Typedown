@@ -1009,7 +1009,9 @@ internal static class Program
             async Task<string?> Badge() => (string?)(await c.Call("test.editor.eval", new { windowId, script = "(document.querySelector('.vim-mode-badge') || {}).textContent || null" }))["result"];
 
             Check(await Badge() == "-- NORMAL --", $"the badge says normal mode ({await Badge()})");
+            await c.Call("test.editor.eval", new { windowId, script = "(window.__keys = [], window.addEventListener('keydown', e => window.__keys.push(e.key + (e.ctrlKey ? '^' : '')), true), 0)" });
             Keys("gg2jdd", "A!", (ushort)0x1B);
+            notes.Add("page saw: " + (await c.Call("test.editor.eval", new { windowId, script = "JSON.stringify({ keys: window.__keys, active: document.activeElement && (document.activeElement.tagName + '.' + document.activeElement.className), state: window.__typedownVimWants ? 'loaded' : 'none' })" }))["result"]);
             var edited = await Text();
             notes.Add("after dd, A!, Esc: " + JsonConvert.SerializeObject(edited));
             Check(edited == "# VI01\n\ntwo!\nthree\n", "dd deleted the line, A appended, Esc left insert mode");

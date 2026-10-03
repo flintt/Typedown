@@ -874,4 +874,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>Диаграммаларды салатын PlantUML серверінің (plantuml-server) мекенжайы. Бос: plantuml.com. Өз серверіңізбен диаграммалардың бастапқы коды өзіңізде қалады.</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>Vim пернелері</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>Бастапқы код режимінде Vim (:w сақтайды, :q қойындыны жабады); оқу режимінде жылжу үшін j/k, gg/G, ]] және /. Көрнекі редакторда емес.</value>
+  </data>
 </root>

@@ -874,4 +874,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>आरेख बनाने वाले PlantUML सर्वर (plantuml-server) का पता। खाली: plantuml.com। अपने सर्वर से आरेखों का स्रोत आपके पास ही रहता है।</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>Vim कुंजियाँ</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>सोर्स मोड में Vim (:w सहेजता है, :q टैब बंद करता है); पठन मोड में घूमने के लिए j/k, gg/G, ]] और /। विज़ुअल संपादक में नहीं।</value>
+  </data>
 </root>

@@ -874,4 +874,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>आकृत्या काढणाऱ्या PlantUML सर्व्हरचा (plantuml-server) पत्ता. रिकामे: plantuml.com. स्वतःच्या सर्व्हरमुळे आकृत्यांचा स्रोत तुमच्याकडेच राहतो.</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>Vim की</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>सोर्स मोडमध्ये Vim (:w जतन करते, :q टॅब बंद करते); वाचन मोडमध्ये फिरण्यासाठी j/k, gg/G, ]] आणि /. दृश्य संपादकात नाही.</value>
+  </data>
 </root>

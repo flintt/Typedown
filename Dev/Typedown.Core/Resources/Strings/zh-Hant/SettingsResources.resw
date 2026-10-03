@@ -903,4 +903,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>繪製圖表的 PlantUML 伺服器（plantuml-server）位址。留空：plantuml.com。使用自己的伺服器時，圖表原始碼不會離開你手中。</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>Vim 按鍵</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>原始碼模式下使用 Vim（:w 儲存，:q 關閉索引標籤）；閱讀模式下用 j/k、gg/G、]] 和 / 移動。視覺化編輯器中無法使用。</value>
+  </data>
 </root>

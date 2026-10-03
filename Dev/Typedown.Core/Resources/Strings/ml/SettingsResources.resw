@@ -874,4 +874,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>ഡയഗ്രാമുകൾ വരയ്ക്കുന്ന PlantUML സെർവറിന്റെ (plantuml-server) വിലാസം. ശൂന്യം: plantuml.com. സ്വന്തം സെർവറാണെങ്കിൽ ഡയഗ്രാമുകളുടെ ഉറവിടം നിങ്ങളുടെ പക്കൽ തന്നെ തുടരും.</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>Vim കീകൾ</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>സോഴ്സ് മോഡിൽ Vim (:w സേവ് ചെയ്യുന്നു, :q ടാബ് അടയ്ക്കുന്നു); വായനാ മോഡിൽ നീങ്ങാൻ j/k, gg/G, ]], /. ദൃശ്യ എഡിറ്ററിൽ ഇല്ല.</value>
+  </data>
 </root>

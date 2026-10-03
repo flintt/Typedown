@@ -874,4 +874,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>Naslov strežnika PlantUML (plantuml-server), ki riše diagrame. Prazno: plantuml.com. Z lastnim strežnikom izvorna koda diagramov ostane pri vas.</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>Tipke Vim</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>Vim v načinu izvorne kode (:w shrani, :q zapre zavihek); j/k, gg/G, ]] in / za premikanje v bralnem načinu. Ne v vizualnem urejevalniku.</value>
+  </data>
 </root>

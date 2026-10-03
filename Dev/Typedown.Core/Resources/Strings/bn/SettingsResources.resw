@@ -874,4 +874,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>যে PlantUML সার্ভার (plantuml-server) ডায়াগ্রাম আঁকে তার ঠিকানা। খালি: plantuml.com। নিজের সার্ভার থাকলে ডায়াগ্রামের উৎস আপনার কাছেই থাকে।</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>Vim কী</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>সোর্স মোডে Vim (:w সংরক্ষণ করে, :q ট্যাব বন্ধ করে); পঠন মোডে চলাচলের জন্য j/k, gg/G, ]] এবং /। ভিজ্যুয়াল এডিটরে নয়।</value>
+  </data>
 </root>

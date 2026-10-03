@@ -874,4 +874,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>다이어그램을 그리는 PlantUML 서버(plantuml-server)의 주소입니다. 비워 두면: plantuml.com. 직접 운영하는 서버를 쓰면 다이어그램 소스가 외부로 나가지 않습니다.</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>Vim 키</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>소스 모드에서 Vim 사용(:w 저장, :q 탭 닫기). 읽기 모드에서는 j/k, gg/G, ]], /로 이동합니다. 시각 편집기에서는 사용할 수 없습니다.</value>
+  </data>
 </root>

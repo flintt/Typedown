@@ -874,4 +874,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>Ikheli leseva ye-PlantUML (plantuml-server) edweba imidwebo. Akunalutho: plantuml.com. Ngeseva yakho, umthombo wemidwebo uhlala kuwe.</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>Okhiye be-Vim</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>I-Vim kumodi yomthombo (:w iyalondoloza, :q ivala ithebhu); j/k, gg/G, ]] kanye no-/ ukuze uzulazule kumodi yokufunda. Hhayi kusihleli esibonakalayo.</value>
+  </data>
 </root>

@@ -874,4 +874,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>Adresa e serverit PlantUML (plantuml-server) që vizaton diagramet. Bosh: plantuml.com. Me serverin tuaj, burimi i diagrameve mbetet te ju.</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>Tastet e Vim</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>Vim në modalitetin e burimit (:w ruan, :q mbyll skedën); j/k, gg/G, ]] dhe / për lëvizje në modalitetin e leximit. Jo në redaktorin vizual.</value>
+  </data>
 </root>

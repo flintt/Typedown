@@ -874,4 +874,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>Address ng PlantUML server (plantuml-server) na gumuguhit ng mga diagram. Walang laman: plantuml.com. Kapag sarili mong server, sa iyo lang mananatili ang source ng mga diagram.</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>Mga Vim key</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>Vim sa source mode (:w para mag-save, :q para isara ang tab); j/k, gg/G, ]] at / para gumalaw sa reading mode. Wala sa visual editor.</value>
+  </data>
 </root>

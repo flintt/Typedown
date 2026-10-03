@@ -874,4 +874,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>Diagramme joonistava PlantUML-serveri (plantuml-server) aadress. Tühi: plantuml.com. Oma serveriga jääb diagrammide lähtekood sinu juurde.</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>Vimi klahvid</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>Vim lähtekoodi režiimis (:w salvestab, :q sulgeb vahekaardi); j/k, gg/G, ]] ja / lugemisrežiimis liikumiseks. Mitte visuaalses redaktoris.</value>
+  </data>
 </root>

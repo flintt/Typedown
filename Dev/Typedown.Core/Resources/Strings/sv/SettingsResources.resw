@@ -874,4 +874,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>Adress till PlantUML-servern (plantuml-server) som ritar diagrammen. Tomt: plantuml.com. Med en egen server stannar diagrammens källkod hos dig.</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>Vim-tangenter</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>Vim i källkodsläge (:w sparar, :q stänger fliken); j/k, gg/G, ]] och / för att förflytta dig i läsläge. Inte i den visuella redigeraren.</value>
+  </data>
 </root>

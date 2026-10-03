@@ -874,4 +874,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>Διεύθυνση του διακομιστή PlantUML (plantuml-server) που σχεδιάζει τα διαγράμματα. Κενό: plantuml.com. Με δικό σας διακομιστή, ο κώδικας των διαγραμμάτων μένει σε εσάς.</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>Πλήκτρα Vim</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>Vim στη λειτουργία πηγαίου κώδικα (:w αποθήκευση, :q κλείσιμο καρτέλας)· j/k, gg/G, ]] και / για μετακίνηση στη λειτουργία ανάγνωσης. Όχι στον οπτικό επεξεργαστή.</value>
+  </data>
 </root>

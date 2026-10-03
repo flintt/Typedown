@@ -874,4 +874,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>ডায়াগ্ৰাম অংকন কৰা PlantUML চাৰ্ভাৰৰ (plantuml-server) ঠিকনা। খালী: plantuml.com। নিজৰ চাৰ্ভাৰ থাকিলে ডায়াগ্ৰামৰ উৎস আপোনাৰ ওচৰতে থাকে।</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>Vim কী</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>চ'ৰ্চ মোডত Vim (:w য়ে সাঁচে, :q য়ে টেব বন্ধ কৰে); পঢ়া ম'ডত ঘূৰি ফুৰিবলৈ j/k, gg/G, ]] আৰু /। ভিজুৱেল সম্পাদকত নাই।</value>
+  </data>
 </root>

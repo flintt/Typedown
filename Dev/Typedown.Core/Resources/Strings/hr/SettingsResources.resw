@@ -874,4 +874,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>Adresa PlantUML poslužitelja (plantuml-server) koji crta dijagrame. Prazno: plantuml.com. S vlastitim poslužiteljem izvor dijagrama ostaje kod vas.</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>Vim tipke</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>Vim u načinu izvornog koda (:w sprema, :q zatvara karticu); j/k, gg/G, ]] i / za kretanje u načinu čitanja. Ne u vizualnom uređivaču.</value>
+  </data>
 </root>

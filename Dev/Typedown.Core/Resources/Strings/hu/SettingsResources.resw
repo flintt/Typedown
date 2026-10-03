@@ -874,4 +874,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>A diagramokat megrajzoló PlantUML-kiszolgáló (plantuml-server) címe. Üres: plantuml.com. Saját kiszolgálóval a diagramok forrása nálad marad.</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>Vim-billentyűk</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>Vim forrás módban (:w ment, :q bezárja a lapot); j/k, gg/G, ]] és / a mozgáshoz olvasási módban. A vizuális szerkesztőben nem.</value>
+  </data>
 </root>

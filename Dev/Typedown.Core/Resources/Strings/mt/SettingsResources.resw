@@ -874,4 +874,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>L-indirizz tas-server ta' PlantUML (plantuml-server) li jiddisinja d-dijagrammi. Vojt: plantuml.com. B'server tiegħek, is-sors tad-dijagrammi jibqa' għandek.</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>Tasti Vim</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>Vim fil-modalità tas-sors (:w jissejvja, :q jagħlaq it-tab); j/k, gg/G, ]] u / biex tiċċaqlaq fil-modalità ta' qari. Mhux fl-editur viżwali.</value>
+  </data>
 </root>

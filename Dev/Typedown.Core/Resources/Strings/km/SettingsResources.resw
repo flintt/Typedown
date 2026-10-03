@@ -874,4 +874,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>អាសយដ្ឋានម៉ាស៊ីនមេ PlantUML (plantuml-server) ដែលគូរដ្យាក្រាម។ ទទេ៖ plantuml.com។ ជាមួយម៉ាស៊ីនមេផ្ទាល់ខ្លួន កូដប្រភពរបស់ដ្យាក្រាមនៅជាមួយអ្នក។</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>គ្រាប់ចុច Vim</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>Vim ក្នុងរបៀបកូដប្រភព (:w រក្សាទុក, :q បិទផ្ទាំង); j/k, gg/G, ]] និង / ដើម្បីផ្លាស់ទីក្នុងរបៀបអាន។ មិនមែនក្នុងកម្មវិធីកែសម្រួលមើលឃើញទេ។</value>
+  </data>
 </root>

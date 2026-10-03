@@ -874,4 +874,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>Adresa serveru PlantUML (plantuml-server), který kreslí diagramy. Prázdné: plantuml.com. S vlastním serverem zůstane zdroj diagramů u vás.</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>Klávesy Vim</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>Vim v režimu zdrojového kódu (:w uloží, :q zavře kartu); j/k, gg/G, ]] a / pro pohyb v režimu čtení. Ne ve vizuálním editoru.</value>
+  </data>
 </root>

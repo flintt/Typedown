@@ -874,4 +874,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>ਚਿੱਤਰ ਬਣਾਉਣ ਵਾਲੇ PlantUML ਸਰਵਰ (plantuml-server) ਦਾ ਪਤਾ। ਖਾਲੀ: plantuml.com। ਆਪਣੇ ਸਰਵਰ ਨਾਲ ਚਿੱਤਰਾਂ ਦਾ ਸਰੋਤ ਤੁਹਾਡੇ ਕੋਲ ਹੀ ਰਹਿੰਦਾ ਹੈ।</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>Vim ਕੁੰਜੀਆਂ</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>ਸਰੋਤ ਮੋਡ ਵਿੱਚ Vim (:w ਸੰਭਾਲਦਾ ਹੈ, :q ਟੈਬ ਬੰਦ ਕਰਦਾ ਹੈ); ਪੜ੍ਹਨ ਮੋਡ ਵਿੱਚ ਘੁੰਮਣ ਲਈ j/k, gg/G, ]] ਅਤੇ /। ਵਿਜ਼ੂਅਲ ਸੰਪਾਦਕ ਵਿੱਚ ਨਹੀਂ।</value>
+  </data>
 </root>

@@ -874,4 +874,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>ರೇಖಾಚಿತ್ರಗಳನ್ನು ಬಿಡಿಸುವ PlantUML ಸರ್ವರ್‌ನ (plantuml-server) ವಿಳಾಸ. ಖಾಲಿ: plantuml.com. ನಿಮ್ಮದೇ ಸರ್ವರ್ ಇದ್ದರೆ ರೇಖಾಚಿತ್ರಗಳ ಮೂಲ ನಿಮ್ಮ ಬಳಿಯೇ ಇರುತ್ತದೆ.</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>Vim ಕೀಗಳು</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>ಮೂಲ ಮೋಡ್‌ನಲ್ಲಿ Vim (:w ಉಳಿಸುತ್ತದೆ, :q ಟ್ಯಾಬ್ ಮುಚ್ಚುತ್ತದೆ); ಓದುವ ಮೋಡ್‌ನಲ್ಲಿ ಚಲಿಸಲು j/k, gg/G, ]] ಮತ್ತು /. ದೃಶ್ಯ ಸಂಪಾದಕದಲ್ಲಿ ಇಲ್ಲ.</value>
+  </data>
 </root>

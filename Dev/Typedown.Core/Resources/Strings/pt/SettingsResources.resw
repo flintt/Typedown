@@ -874,4 +874,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>Endereço do servidor PlantUML (plantuml-server) que desenha os diagramas. Vazio: plantuml.com. Com um servidor próprio, o código dos diagramas fica com você.</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>Teclas do Vim</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>Vim no modo de código-fonte (:w salva, :q fecha a guia); j/k, gg/G, ]] e / para navegar no modo de leitura. Não no editor visual.</value>
+  </data>
 </root>

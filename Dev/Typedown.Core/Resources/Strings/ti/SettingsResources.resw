@@ -874,4 +874,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>ኣድራሻ ናይቲ ስእላዊ መግለጺታት ዝስእል PlantUML ሰርቨር (plantuml-server)። ባዶ፦ plantuml.com። ብናይ ገዛእ ርእስኹም ሰርቨር ምንጪ ስእላዊ መግለጺታት ምሳኹም ይጸንሕ።</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>መፋትሕ Vim</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>Vim ብምንጪ ኩነታት (:w የዕቅብ፣ :q ነቲ ታብ ይዓጹ)፤ ኣብ ኩነታት ምንባብ ንምንቅስቓስ j/k፣ gg/G፣ ]] ከምኡ'ውን /። ኣብ ናይ ርእይቶ ኣርታዒ ኣይኮነን።</value>
+  </data>
 </root>

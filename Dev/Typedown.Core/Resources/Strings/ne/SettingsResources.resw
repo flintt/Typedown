@@ -874,4 +874,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>रेखाचित्रहरू कोर्ने PlantUML सर्भर (plantuml-server) को ठेगाना। खाली: plantuml.com। आफ्नै सर्भर भए रेखाचित्रहरूको स्रोत तपाईंसँगै रहन्छ।</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>Vim कुञ्जीहरू</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>स्रोत मोडमा Vim (:w ले सेभ गर्छ, :q ले ट्याब बन्द गर्छ); पढ्ने मोडमा घुम्न j/k, gg/G, ]] र /। दृश्य सम्पादकमा होइन।</value>
+  </data>
 </root>

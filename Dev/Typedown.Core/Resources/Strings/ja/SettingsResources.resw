@@ -874,4 +874,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>図を描画する PlantUML サーバー (plantuml-server) のアドレス。空欄: plantuml.com。自前のサーバーなら、図のソースは手元から出ません。</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>Vim キー</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>ソースモードで Vim を使用 (:w で保存、:q でタブを閉じる)。読み取りモードでは j/k、gg/G、]]、/ で移動。ビジュアルエディターでは使えません。</value>
+  </data>
 </root>

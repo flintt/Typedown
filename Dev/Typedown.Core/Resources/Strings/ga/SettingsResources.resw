@@ -874,4 +874,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>Seoladh an fhreastalaí PlantUML (plantuml-server) a tharraingíonn na léaráidí. Folamh: plantuml.com. Le do fhreastalaí féin, fanann foinse na léaráidí agatsa.</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>Eochracha Vim</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>Vim sa mhód foinse (sábhálann :w, dúnann :q an cluaisín); j/k, gg/G, ]] agus / chun bogadh timpeall sa mhód léitheoireachta. Ní san eagarthóir amhairc.</value>
+  </data>
 </root>

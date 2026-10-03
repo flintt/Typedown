@@ -874,4 +874,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>Địa chỉ máy chủ PlantUML (plantuml-server) dùng để vẽ sơ đồ. Để trống: plantuml.com. Với máy chủ riêng, mã nguồn sơ đồ vẫn ở chỗ bạn.</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>Phím Vim</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>Vim ở chế độ mã nguồn (:w lưu, :q đóng tab); j/k, gg/G, ]] và / để di chuyển ở chế độ đọc. Không có trong trình soạn thảo trực quan.</value>
+  </data>
 </root>

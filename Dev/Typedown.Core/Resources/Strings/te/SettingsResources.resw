@@ -874,4 +874,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>రేఖాచిత్రాలను గీసే PlantUML సర్వర్ (plantuml-server) చిరునామా. ఖాళీ: plantuml.com. మీ స్వంత సర్వర్‌తో రేఖాచిత్రాల మూలం మీ వద్దనే ఉంటుంది.</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>Vim కీలు</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>సోర్స్ మోడ్‌లో Vim (:w సేవ్ చేస్తుంది, :q ట్యాబ్‌ను మూసివేస్తుంది); చదివే మోడ్‌లో కదలడానికి j/k, gg/G, ]] మరియు /. విజువల్ ఎడిటర్‌లో కాదు.</value>
+  </data>
 </root>

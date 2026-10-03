@@ -874,4 +874,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>Diagramak marrazten dituen PlantUML zerbitzariaren (plantuml-server) helbidea. Hutsik: plantuml.com. Zure zerbitzari propioarekin, diagramen iturburua zurekin geratzen da.</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>Vim teklak</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>Vim iturburu moduan (:w gordetzen du, :q fitxa ixten du); j/k, gg/G, ]] eta / irakurketa moduan mugitzeko. Ez editore bisualean.</value>
+  </data>
 </root>

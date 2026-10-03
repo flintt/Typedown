@@ -874,4 +874,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>Adresa serverului PlantUML (plantuml-server) care desenează diagramele. Gol: plantuml.com. Cu un server propriu, sursa diagramelor rămâne la tine.</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>Taste Vim</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>Vim în modul sursă (:w salvează, :q închide fila); j/k, gg/G, ]] și / pentru deplasare în modul lectură. Nu și în editorul vizual.</value>
+  </data>
 </root>

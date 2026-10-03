@@ -874,4 +874,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>დიაგრამების დამხატავი PlantUML სერვერის (plantuml-server) მისამართი. ცარიელი: plantuml.com. საკუთარი სერვერით დიაგრამების წყარო თქვენთან რჩება.</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>Vim-ის ღილაკები</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>Vim წყაროს რეჟიმში (:w ინახავს, :q ხურავს ჩანართს); j/k, gg/G, ]] და / კითხვის რეჟიმში გადასაადგილებლად. არა ვიზუალურ რედაქტორში.</value>
+  </data>
 </root>

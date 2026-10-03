@@ -874,4 +874,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>આકૃતિઓ દોરતા PlantUML સર્વર (plantuml-server)નું સરનામું. ખાલી: plantuml.com. તમારા પોતાના સર્વર સાથે આકૃતિઓનો સ્રોત તમારી પાસે જ રહે છે.</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>Vim કી</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>સોર્સ મોડમાં Vim (:w સાચવે છે, :q ટૅબ બંધ કરે છે); વાંચન મોડમાં ફરવા માટે j/k, gg/G, ]] અને /. વિઝ્યુઅલ એડિટરમાં નહીં.</value>
+  </data>
 </root>

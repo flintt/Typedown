@@ -874,4 +874,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>PlantUML serverio (plantuml-server), kuris piešia diagramas, adresas. Tuščia: plantuml.com. Su savo serveriu diagramų šaltinis lieka pas jus.</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>Vim klavišai</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>Vim šaltinio režimu (:w įrašo, :q uždaro kortelę); j/k, gg/G, ]] ir / judėti skaitymo režimu. Ne vaizdiniame redaktoriuje.</value>
+  </data>
 </root>

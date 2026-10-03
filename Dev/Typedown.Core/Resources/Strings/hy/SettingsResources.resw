@@ -874,4 +874,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>Գծապատկերները գծող PlantUML սերվերի (plantuml-server) հասցեն։ Դատարկ՝ plantuml.com։ Սեփական սերվերի դեպքում գծապատկերների աղբյուրը մնում է ձեզ մոտ։</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>Vim ստեղներ</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>Vim աղբյուրի ռեժիմում (:w-ը պահպանում է, :q-ն փակում է ներդիրը)․ j/k, gg/G, ]] և / ընթերցման ռեժիմում տեղաշարժվելու համար։ Ոչ տեսողական խմբագրիչում։</value>
+  </data>
 </root>

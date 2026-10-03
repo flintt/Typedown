@@ -874,4 +874,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>Adres van die PlantUML-bediener (plantuml-server) wat die diagramme teken. Leeg: plantuml.com. Met jou eie bediener bly die diagramme se bron by jou.</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>Vim-sleutels</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>Vim in bronmodus (:w stoor, :q sluit die oortjie); j/k, gg/G, ]] en / om in leesmodus rond te beweeg. Nie in die visuele redigeerder nie.</value>
+  </data>
 </root>
