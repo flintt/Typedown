@@ -38,6 +38,15 @@ namespace Typedown.Core.Controls
                 .Cast<bool>()
                 .StartWith(uiViewModel.FolderSearchOpen)
                 .Subscribe(open => IsSearchPaneOpen = open));
+            // The tabs read their text when the pane loads. Changing the language on the settings page builds a new
+            // main page; a change from another window or the automation API leaves this one, so the tabs follow it
+            // here, once the language has been applied.
+            disposables.Add(Settings.WhenPropertyChanged(nameof(SettingsViewModel.Language))
+                .Subscribe(language => _ = Dispatcher.RunIdleAsync(args =>
+                {
+                    Folder.Content = Locale.GetString("Files");
+                    Toc.Content = Locale.GetString("Outline");
+                })));
         }
 
         private void UpdateSelectedItem(int index)
