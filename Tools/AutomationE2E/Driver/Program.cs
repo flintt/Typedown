@@ -101,9 +101,7 @@ internal static class Program
         try
         {
             var endpointFile = Path.Combine(root, "automation-endpoint.txt");
-            for (var i = 0; i < 300 && !File.Exists(endpointFile); i++) await Task.Delay(100); // the host starting up
-            if (!File.Exists(endpointFile)) throw new InvalidOperationException("the test host never published its endpoint");
-            endpoint = File.ReadAllText(endpointFile).Trim();
+            endpoint = await ReadEndpointFile(endpointFile) ?? throw new InvalidOperationException("the test host never published its endpoint");
 
             using (var probe = await Connect())
             {
@@ -925,6 +923,22 @@ internal static class Program
         Check((int)wholeState["y"]! > 0 && Shown(wholeState), "after a whole load the change is in view too");
     }
 
+    // The endpoint name a starting host writes, or null after 30 s. The host may still have the file open: the read
+    // that came right after File.Exists failed with a sharing violation (Q01, once in a full run).
+    private static async Task<string?> ReadEndpointFile(string path)
+    {
+        for (var i = 0; i < 300; i++)
+        {
+            try
+            {
+                if (File.Exists(path) && File.ReadAllText(path).Trim() is { Length: > 0 } name) return name;
+            }
+            catch (IOException) { }
+            await Task.Delay(100);
+        }
+        return null;
+    }
+
     private static void TypeChar(char ch)
     {
         var inputs = new[] { new INPUT { type = 1, u = new InputUnion { ki = new KEYBDINPUT { wScan = ch, dwFlags = 0x0004 } } }, new INPUT { type = 1, u = new InputUnion { ki = new KEYBDINPUT { wScan = ch, dwFlags = 0x0006 } } } };
@@ -1374,8 +1388,7 @@ internal static class Program
         if (Directory.Exists(root)) Directory.Delete(root, true);
         Directory.CreateDirectory(root);
         var started = Process.Start(new ProcessStartInfo(hostExe, $"--automation-test-root \"{root}\"") { UseShellExecute = true })!;
-        for (var i = 0; i < 300 && !File.Exists(Path.Combine(root, "automation-endpoint.txt")); i++) await Task.Delay(100);
-        endpoint = File.ReadAllText(Path.Combine(root, "automation-endpoint.txt")).Trim();
+        endpoint = await ReadEndpointFile(Path.Combine(root, "automation-endpoint.txt")) ?? throw new CaseFailed("the test host never published its endpoint");
         hostPid = started.Id;
         testRoot = root;
         await Task.Delay(3000);
@@ -1484,8 +1497,7 @@ internal static class Program
         var restarted = Process.Start(new ProcessStartInfo(hostExe, $"--automation-test-root \"{testRoot}\"") { UseShellExecute = true })!;
         hostPid = restarted.Id;
         notes.Add($"restarted pid {hostPid}");
-        for (var i = 0; i < 300 && !File.Exists(Path.Combine(testRoot, "automation-endpoint.txt")); i++) await Task.Delay(100);
-        var restartedEndpoint = File.ReadAllText(Path.Combine(testRoot, "automation-endpoint.txt")).Trim();
+        var restartedEndpoint = await ReadEndpointFile(Path.Combine(testRoot, "automation-endpoint.txt")) ?? throw new CaseFailed("the restarted host never published its endpoint");
         Check(restartedEndpoint == endpoint, $"the restarted host listens on the same endpoint as before ({restartedEndpoint} vs {endpoint})");
         var listenError = Path.Combine(testRoot, "automation-endpoint-error.txt");
         Client? afterClient = null;
