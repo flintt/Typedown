@@ -846,7 +846,8 @@ internal static class Program
         var id = await Open(c, Fixture("pu01.md", "# PU01\n\n```plantuml\nAlice -> Bob: hello\n```\n\nText\n"));
         var windowId = await WindowIdOf(c, id);
         const string script = "(() => { const off = document.querySelector('.ag-plantuml-off'); " +
-            "return { remote: [...document.querySelectorAll('img')].filter(i => (i.src || '').includes('plantuml.com')).length, " +
+            "const img = [...document.querySelectorAll('img')].find(i => (i.src || '').includes('plantuml.com')); " +
+            "return { remote: [...document.querySelectorAll('img')].filter(i => (i.src || '').includes('plantuml.com')).length, src: img ? img.getAttribute('src') : null, " +
             "off: !!off, notice: off ? getComputedStyle(off, '::before').content : null, " +
             // The page's strings under both names: the Windows host answers camel-cased, the stylesheet reads both.
             "strings: ['FirstEditWarning', 'firstEditWarning', 'InputMathFormula', 'inputMathFormula'].map(k => document.documentElement.style.getPropertyValue('--' + k).length) } })()";
@@ -862,6 +863,8 @@ internal static class Program
             var on = await Page();
             notes.Add("on: " + on.ToString(Formatting.None));
             Check((int)on["remote"]! == 1 && !(bool)on["off"]!, "turned on, the diagram is drawn by plantuml.com");
+            // "Alice -> Bob: hello" in PlantUML's hex encoding: the address used to end in "undefined".
+            Check((string?)on["src"] == "https://www.plantuml.com/plantuml/svg/~h416c696365202d3e20426f623a2068656c6c6f", $"the address carries the diagram's text ({on["src"]})");
         }
         finally
         {

@@ -1,16 +1,6 @@
-// import zlib from 'zlib'
 import { toHTML, h } from './snabbdom'
 
 const PLANTUML_URL = 'https://www.plantuml.com/plantuml'
-
-function replaceChar (tableIn, tableOut, char) {
-  const charIndex = tableIn.indexOf(char)
-  return tableOut[charIndex]
-}
-
-function maketrans (tableIn, tableOut, value) {
-  return [...value].map(i => replaceChar(tableIn, tableOut, i)).join('')
-}
 
 export default class Diagram {
   encodedInput = ''
@@ -25,23 +15,12 @@ export default class Diagram {
   }
 
   /**
-   * Encodes a diagram following PlantUML specs
-   *
-   * From https://plantuml.com/text-encoding
-   * 1. Encoded in UTF-8
-   * 2. Compressed using Deflate or Brotli algorithm
-   * 3. Reencoded in ASCII using a transformation close to base64
+   * The diagram's text as PlantUML's hex encoding (https://plantuml.com/text-encoding): "~h" and the UTF-8 bytes in
+   * hex. The deflate encoding this used needed Node's zlib, which a web page does not have; with it commented out the
+   * function returned nothing, the address ended in "undefined" and plantuml.com drew its "bad URL" error instead.
    */
   static encode (value) {
-    const tableIn =
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
-    const tableOut =
-      '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_'
-
-    // const utf8Value = decodeURIComponent(encodeURIComponent(value))
-    // const compressedValue = zlib.deflateSync(utf8Value, { level: 3 })
-    // const base64Value = compressedValue.toString('base64')
-    // return maketrans(tableIn, tableOut, base64Value)
+    return '~h' + [...new TextEncoder().encode(value)].map(b => b.toString(16).padStart(2, '0')).join('')
   }
 
   insertImgElement (container) {
@@ -51,7 +30,7 @@ export default class Diagram {
     if (div === null || !div.tagName) {
       throw new Error('Invalid container: ' + container)
     }
-    const src = `${PLANTUML_URL}/svg/~1${this.encodedInput}`
+    const src = `${PLANTUML_URL}/svg/${this.encodedInput}`
     const node = h('img', { attrs: { src } })
     div.innerHTML = toHTML(node)
   }
