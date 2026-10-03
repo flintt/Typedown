@@ -6,7 +6,20 @@ import 'codemirror/lib/codemirror.css';
 import { getTOC } from "services/common";
 import { minimalChange } from "services/minimalChange";
 import { EXTERNAL_CHANGE_CLASS, EXTERNAL_CHANGE_MS, scrollTargetForChange } from "services/externalChange";
+import { setVimState, vimCommand } from "services/vim";
 require('codemirror/mode/markdown/markdown');
+require('codemirror/keymap/vim');
+require('codemirror/addon/dialog/dialog.css');
+
+// Vim keys (services/vim): :w saves, :q closes the tab, :wq and :x do both - through the application, which asks
+// before closing an unsaved document as it always does.
+const CodeMirrorLib = require('codemirror');
+CodeMirrorLib.commands.save = () => vimCommand('write');
+CodeMirrorLib.Vim.defineEx('quit', 'q', () => vimCommand('quit'));
+CodeMirrorLib.Vim.defineEx('wq', 'wq', () => vimCommand('writeQuit'));
+CodeMirrorLib.Vim.defineEx('xit', 'x', () => vimCommand('writeQuit'));
+
+const VIM_LABELS: Record<string, string> = { normal: 'NORMAL', insert: 'INSERT', replace: 'REPLACE', visual: 'VISUAL', linewise: 'V-LINE', blockwise: 'V-BLOCK' };
 
 interface ICodeMirrorEditor {
     markdown: string
@@ -40,6 +53,24 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
     const markdownRef = useRef('');
     const searchArgRef = useRef<any>();
     const cursorRef = useRef<any>();
+    const vim = !!props.options?.vimMode && !props.options?.readOnly
+    const [vimLabel, setVimLabel] = useState('NORMAL');
+    useEffect(() => {
+        // The mode Vim is in, for the badge and for the host, which must leave Vim's Ctrl keys alone in normal and
+        // visual mode (services/vim).
+        if (!editor || !vim) {
+            setVimState('off')
+            return
+        }
+        setVimState('normal')
+        setVimLabel('NORMAL')
+        const onMode = (e: { mode: string, subMode?: string }) => {
+            setVimState(e.mode === 'visual' ? 'visual' : e.mode as any)
+            setVimLabel(VIM_LABELS[e.mode === 'visual' && e.subMode ? e.subMode : e.mode] ?? e.mode.toUpperCase())
+        }
+        editor.on('vim-mode-change', onMode)
+        return () => editor.off('vim-mode-change', onMode)
+    }, [editor, vim])
 
     const relativeScroll = useCallback((delta: number) => {
         window.scrollBy(0, delta)
@@ -342,11 +373,13 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
                     mode: 'markdown',
                     lineNumbers: true,
                     lineWrapping: true,
-                    readOnly: !!props.options?.readOnly
+                    readOnly: !!props.options?.readOnly,
+                    keyMap: vim ? 'vim' : 'default'
                 }}
                 onChange={handleCodeMirrorContent}
                 onSelection={handleCodeMirrorSelection}
             />
+            {vim && <div className="vim-mode-badge">-- {vimLabel} --</div>}
         </div>
     )
 }

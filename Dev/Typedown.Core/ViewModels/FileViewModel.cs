@@ -479,6 +479,9 @@ namespace Typedown.Core.ViewModels
         /// </summary>
         public Task<bool> SaveToExistingPathAsync() => FilePath == null ? Task.FromResult(false) : Save(false);
 
+        /// <summary>What File > Save does (Vim's :wq waits for it before closing the tab).</summary>
+        public Task<bool> SaveAsync() => Save();
+
         private async Task<bool> Save(bool alert = true)
         {
             var path = FilePath;

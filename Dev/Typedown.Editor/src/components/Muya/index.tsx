@@ -14,6 +14,8 @@ import FormatPicker from 'components/Muya/lib/ui/formatPicker'
 import { createApplicationMenuState } from "services/menuState";
 import { classifyNormalization, extractProtectedPayload } from "services/normalization";
 import { highlightExternalChange, scrollTargetForChange } from "services/externalChange";
+import { setVimState } from "services/vim";
+import { createReadingKeys } from "services/vimReading";
 import 'components/Muya/themes/default.css'
 
 interface IMuyaEditor {
@@ -229,6 +231,20 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         // would grey out the whole document, so reading mode wins.
         editor?.setFocusMode(props.options.focusMode && !props.options.readOnly)
     }, [editor, props.options.focusMode, props.options.readOnly])
+
+    useEffect(() => {
+        // Vim keys move around in reading mode (services/vimReading); the visual editor has none.
+        if (!props.options?.vimMode || !props.options?.readOnly) {
+            setVimState('off')
+            return
+        }
+        setVimState('reading')
+        const listener = createReadingKeys(
+            () => ({ top: () => window.scrollY, by: dy => window.scrollBy(0, dy), to: y => window.scrollTo(0, y), height: () => window.innerHeight }),
+            () => Array.from(document.querySelectorAll<HTMLElement>('#editor h1, #editor h2, #editor h3, #editor h4, #editor h5, #editor h6')))
+        window.addEventListener('keydown', listener, true)
+        return () => window.removeEventListener('keydown', listener, true)
+    }, [props.options?.vimMode, props.options?.readOnly])
 
     useEffect(() => {
         const font = { fontSize: props.options?.fontSize, lineHeight: props.options?.lineHeight }

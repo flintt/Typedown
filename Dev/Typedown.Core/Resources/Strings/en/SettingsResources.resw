@@ -913,4 +913,10 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>Address of the PlantUML server (plantuml-server) that draws the diagrams. Empty: plantuml.com. With a server of your own, the diagrams' source stays with you.</value>
   </data>
+  <data name="Editor.VimMode.Title" xml:space="preserve">
+    <value>Vim keys</value>
+  </data>
+  <data name="Editor.VimMode.Description" xml:space="preserve">
+    <value>Vim in source mode (:w saves, :q closes the tab); j/k, gg/G, ]] and / to move around in reading mode. Not in the visual editor.</value>
+  </data>
 </root>

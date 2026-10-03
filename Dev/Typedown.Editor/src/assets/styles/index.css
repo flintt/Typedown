@@ -1503,3 +1503,17 @@ span.ag-footnote-backlink {
     background-color: rgba(255, 196, 0, 0.25);
   }
 }
+
+/* Vim keys in source mode: the mode Vim is in (services/vim). */
+.vim-mode-badge {
+  position: fixed;
+  right: 16px;
+  bottom: 8px;
+  z-index: 10;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font: 12px/1.6 Consolas, "Cascadia Mono", monospace;
+  color: #abb2bf;
+  background: rgba(40, 44, 52, 0.85);
+  pointer-events: none;
+}

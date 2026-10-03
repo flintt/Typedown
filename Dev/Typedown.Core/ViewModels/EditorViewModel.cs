@@ -103,6 +103,8 @@ namespace Typedown.Core.ViewModels
             EventCenter.GetObservable<EditorEventArgs>("CodeMirrorSelectionChange").Subscribe(x => OnCodeMirrorSelectionChange(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("StateChange").Subscribe(x => OnStateChange(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("OutlineCurrent").Subscribe(x => OnOutlineCurrent(x.Args));
+            EventCenter.GetObservable<EditorEventArgs>("VimState").Subscribe(x => VimState = x.Args?["state"]?.ToString() ?? "off");
+            EventCenter.GetObservable<EditorEventArgs>("VimCommand").Subscribe(x => OnVimCommand(x.Args?["command"]?.ToString()));
             // What the page's scroll hold saw after a load: asked for, ended at, why it stopped, and the viewport
             // it started with — a viewport of no height is a page loaded before its window was there.
             EventCenter.GetObservable<EditorEventArgs>("ScrollSettled").Subscribe(x => Log.Debug($"settle: {x.Args}"));
@@ -163,6 +165,7 @@ namespace Typedown.Core.ViewModels
                 Settings.AutoPairMarkdownSyntax,
                 Settings.RenderPlantUml,
                 Settings.PlantUmlServer,
+                Settings.VimMode,
                 Settings.EditorAreaWidth,
                 Settings.FontFamily,
                 Settings.TextDirection,
@@ -951,6 +954,47 @@ namespace Typedown.Core.ViewModels
         public void SelectAll()
         {
             MarkdownEditor?.PostMessage("SelectAll", null);
+        }
+
+        /// <summary>
+        /// The page's Vim state (Settings > Editor > Vim keys): off, normal, insert, visual, replace, or reading. While
+        /// it is normal, visual or reading the application leaves Vim's Ctrl keys to the page (Utilities/VimKeys).
+        /// </summary>
+        public string VimState { get; private set; } = "off";
+
+        // :w, :q, :wq/:x in source mode; / and n/N in reading mode.
+        private async void OnVimCommand(string command)
+        {
+            try
+            {
+                var app = ServiceProvider.GetService<AppViewModel>();
+                switch (command)
+                {
+                    case "write":
+                        app.FileViewModel.SaveCommand.Execute(Unit.Default);
+                        break;
+                    case "quit":
+                        app.TabsViewModel.CloseActiveTabCommand.Execute(Unit.Default);
+                        break;
+                    case "writeQuit":
+                        if (await app.FileViewModel.SaveAsync())
+                            app.TabsViewModel.CloseActiveTabCommand.Execute(Unit.Default);
+                        break;
+                    case "find":
+                        app.FloatViewModel.SearchCommand.Execute(FloatViewModel.FindReplaceDialogState.Search);
+                        break;
+                    case "findNext":
+                        Find("next");
+                        break;
+                    case "findPrevious":
+                        Find("prev");
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"vim: {command} failed: {ex}");
+            }
         }
 
         public void Find(string action)

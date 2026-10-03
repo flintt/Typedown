@@ -131,6 +131,8 @@ namespace Typedown.Core.ViewModels
         public bool RenderPlantUml { get => GetSettingValue(false); set => SetSettingValue(value); }
         /// <summary>The plantuml-server that draws PlantUML blocks; empty (or not an http(s) address): plantuml.com.</summary>
         public string PlantUmlServer { get => GetSettingValue(""); set => SetSettingValue(value ?? ""); }
+        /// <summary>Vim in source mode, Vim-style moving around in reading mode (Utilities/VimKeys).</summary>
+        public bool VimMode { get => GetSettingValue(false); set => SetSettingValue(value); }
         public string EditorAreaWidth { get => GetSettingValue("1200px"); set => SetSettingValue(value); }
         public string FontFamily { get => GetSettingValue(""); set => SetSettingValue(value); }
         public string TextDirection { get => GetSettingValue("auto"); set => SetSettingValue(value); }
@@ -216,6 +218,7 @@ namespace Typedown.Core.ViewModels
             "AutoPairMarkdownSyntax",
             "RenderPlantUml",
             "PlantUmlServer",
+            "VimMode",
             "EditorAreaWidth",
             "FontFamily",
             "TextDirection",

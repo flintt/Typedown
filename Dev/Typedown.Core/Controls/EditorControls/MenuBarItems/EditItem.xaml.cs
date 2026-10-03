@@ -47,7 +47,7 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
                     new(Mod.Control, Key.A),
                     // new(Mod.None, Key.Delete),
                 };
-                if (handledKey.Contains(new(e.Modifiers, e.Key)))
+                if (handledKey.Contains(new(e.Modifiers, e.Key)) && !VimWants(e))
                 {
                     var editor = this.GetService<IMarkdownEditor>();
                     var focused = FocusManager.GetFocusedElement(XamlRoot);

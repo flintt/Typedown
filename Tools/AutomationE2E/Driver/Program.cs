@@ -144,6 +144,8 @@ internal static class Program
             await Case("IU01 File > Upload local images (PowerShell): each file uploaded once, every use replaced in one undo step, web, missing and code left alone", IU01);
             await Case("IU02 File > Upload local images to an S3 bucket (rclone serve s3): signed PUT, the object reads back, a wrong secret changes nothing, the secret is not stored in plain text", IU02);
             await Case("IN01 several image files dropped at once: each in a paragraph of its own, in the drop's order, one undo step", IN01);
+            await Case("VI01 Vim keys in source mode: real keys edit (dd, A, Esc), Ctrl+V reaches Vim as block visual, u undoes, :w saves", VI01);
+            await Case("VI02 Vim keys in reading mode: G, gg, ]] and Ctrl+D move the page", VI02);
             // Last: it ends the test host.
             await Case("Q01 two windows closed one after the other: the process exits (it stayed, headless)", Q01);
         }
@@ -972,6 +974,111 @@ internal static class Program
         await c.Call("document.undo", new { documentId = id, baseRevision = await Revision(c, id), reveal = "document" });
         await Task.Delay(300);
         Check((string)(await Get(c, id))["text"]! == original, "one undo takes all three out");
+    }
+
+    // Real key presses into the focused page: characters as Unicode input, the rest by virtual key, Ctrl+key as a chord.
+    private static void Keys(params object[] keys)
+    {
+        foreach (var k in keys)
+        {
+            if (k is string text) foreach (var ch in text) TypeChar(ch);
+            else if (k is ushort vk) Send(Key(vk, false), Key(vk, true));
+            else if (k is ValueTuple<string, ushort> chord && chord.Item1 == "ctrl") Send(Key(0x11, false), Key(chord.Item2, false), Key(chord.Item2, true), Key(0x11, true));
+            Thread.Sleep(60);
+        }
+    }
+
+    private static async Task VI01(List<string> notes)
+    {
+        using var c = await Session("e2e VI01");
+        const string original = "# VI01\n\none\ntwo\nthree\n";
+        var path = Fixture("vi01.md", original);
+        var id = await Open(c, path);
+        var windowId = await WindowIdOf(c, id);
+        try
+        {
+            await c.Call("test.settings.set", new { windowId, name = "SourceCode", value = true });
+            await c.Call("test.settings.set", new { windowId, name = "VimMode", value = true });
+            await Task.Delay(800);
+            var window = await WindowOf(windowId, c);
+            await Activate(window);
+            await c.Call("test.editor.focus", new { windowId });
+            await c.Call("test.editor.eval", new { windowId, script = "document.querySelector('.CodeMirror').CodeMirror.focus(), 0" });
+            await Task.Delay(300);
+            async Task<string> Text() { await Task.Delay(500); return (string)(await Get(c, id))["text"]!; }
+            async Task<string?> Badge() => (string?)(await c.Call("test.editor.eval", new { windowId, script = "(document.querySelector('.vim-mode-badge') || {}).textContent || null" }))["result"];
+
+            Check(await Badge() == "-- NORMAL --", $"the badge says normal mode ({await Badge()})");
+            Keys("gg2jdd", "A!", (ushort)0x1B);
+            var edited = await Text();
+            notes.Add("after dd, A!, Esc: " + JsonConvert.SerializeObject(edited));
+            Check(edited == "# VI01\n\ntwo!\nthree\n", "dd deleted the line, A appended, Esc left insert mode");
+
+            // Ctrl+V is the application's paste; with Vim keys in normal mode it is Vim's block visual.
+            Keys("gg", ("ctrl", (ushort)0x56), "jd");
+            var block = await Text();
+            notes.Add("after Ctrl+V j d: " + JsonConvert.SerializeObject(block));
+            Check(block == " VI01\n\ntwo!\nthree\n", "Ctrl+V j d deleted the first column of two lines (block visual)");
+            Keys("u");
+            Check(await Text() == "# VI01\n\ntwo!\nthree\n", "u undid it");
+
+            Keys(":w", (ushort)0x0D);
+            await Task.Delay(800);
+            Check(Disk(path) == "# VI01\n\ntwo!\nthree\n", $"the file holds the text after :w ({JsonConvert.SerializeObject(Disk(path))})");
+            Check((bool)(await Get(c, id))["saved"]!, ":w left the document saved");
+        }
+        finally
+        {
+            await c.Call("test.settings.set", new { windowId, name = "VimMode", value = false });
+            await c.Call("test.settings.set", new { windowId, name = "SourceCode", value = false });
+        }
+    }
+
+    private static async Task VI02(List<string> notes)
+    {
+        using var c = await Session("e2e VI02");
+        var text = new StringBuilder("# VI02\n\n");
+        for (var i = 1; i <= 6; i++)
+        {
+            text.Append($"## Part {i}\n\n");
+            for (var j = 1; j <= 12; j++) text.Append($"Paragraph {i}.{j} of the long document.\n\n");
+        }
+        var id = await Open(c, Fixture("vi02.md", text.ToString()));
+        var windowId = await WindowIdOf(c, id);
+        try
+        {
+            await c.Call("test.settings.set", new { windowId, name = "VimMode", value = true });
+            await c.Call("test.settings.set", new { windowId, name = "ReadOnly", value = true });
+            await Task.Delay(800);
+            var window = await WindowOf(windowId, c);
+            await Activate(window);
+            await c.Call("test.editor.focus", new { windowId });
+            await Task.Delay(300);
+            async Task<JToken> Page() { await Task.Delay(300); return (await c.Call("test.editor.eval", new { windowId, script = "(() => { const h = [...document.querySelectorAll('#editor h2')].find(e => Math.abs(e.getBoundingClientRect().top) < 40); return { y: Math.round(scrollY), h: innerHeight, heading: h ? h.textContent : null } })()" }))["result"]!; }
+
+            Keys("G");
+            var end = await Page();
+            notes.Add("G: " + end.ToString(Formatting.None));
+            Check((int)end["y"]! > 1000, "G goes to the end");
+            Keys("gg");
+            Check((int)(await Page())["y"]! == 0, "gg goes back to the top");
+            Keys("]]");
+            var heading = await Page();
+            notes.Add("]]: " + heading.ToString(Formatting.None));
+            Check((string?)heading["heading"] == "Part 1", "]] brings the next heading to the top");
+            Keys("2]]");
+            Check((string?)(await Page())["heading"] == "Part 3", "2]] two headings on");
+            var before = (int)(await Page())["y"]!;
+            Keys(("ctrl", (ushort)0x44));
+            var half = await Page();
+            notes.Add("Ctrl+D: " + half.ToString(Formatting.None));
+            Check((int)half["y"]! - before > (int)half["h"]! / 3, "Ctrl+D scrolls half a page");
+        }
+        finally
+        {
+            await c.Call("test.settings.set", new { windowId, name = "ReadOnly", value = false });
+            await c.Call("test.settings.set", new { windowId, name = "VimMode", value = false });
+        }
     }
 
     private static async Task IU02(List<string> notes)

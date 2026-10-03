@@ -59,6 +59,7 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             disposables.Add(acc.Register(key, (s, e) =>
             {
                 if (PInvoke.GetForegroundWindow() != ViewModel.MainWindow) return;
+                if (VimWants(e)) return;
                 e.Handled = true;
                 _ = Dispatcher.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => action());
             }));
@@ -75,9 +76,18 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             item.KeyboardAcceleratorTextOverride = acc.GetShortcutKeyText(key);
             disposables.Add(acc.Register(key, (s, e) =>
             {
+                if (VimWants(e)) return;
                 if (handler(item))
                     e.Handled = true;
             }));
+        }
+
+        /// <summary>A key Vim needs right now in the focused editor (Settings > Editor > Vim keys): left to the page.</summary>
+        protected bool VimWants(KeyEventArgs e)
+        {
+            if (ViewModel?.SettingsViewModel?.VimMode != true) return false;
+            if (!VimKeys.EditorWants(ViewModel.EditorViewModel.VimState, e.Modifiers, e.Key)) return false;
+            return FocusManager.GetFocusedElement(XamlRoot) == this.GetService<IMarkdownEditor>();
         }
 
         private bool OnWindowShortcutEvent(MenuFlyoutItem item)

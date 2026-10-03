@@ -428,6 +428,7 @@
     <Compile Include="Services\DocumentEdits.cs" />
     <Compile Include="Services\ImageBatchUpload.cs" />
     <Compile Include="Services\UploadHistory.cs" />
+    <Compile Include="Utilities\VimKeys.cs" />
     <Compile Include="Services\RemoteInvoke.cs" />
     <Compile Include="Services\Transport.cs" />
     <Compile Include="Utilities\CollectionExtensions.cs" />
