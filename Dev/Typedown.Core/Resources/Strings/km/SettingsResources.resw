@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>ការកំណត់រចនាសម្ព័ន្ធ S3 មិនពេញលេញ៖ សូមបំពេញ Endpoint, Bucket, Access Key ID និង Secret Access Key។</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>ប្រវត្តិផ្ទុកឡើង</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>រូបភាពដែលបានផ្ទុកឡើងរួចហើយដោយប្រើការកំណត់រចនាសម្ព័ន្ធដដែល នឹងមិនត្រូវបានផ្ទុកឡើងម្តងទៀតទេ; អាសយដ្ឋានពីមុនរបស់វាត្រូវបានប្រើ (បានចងចាំ {0})។ សម្អាតប្រវត្តិនេះបន្ទាប់ពីលុបឯកសារដែលបានផ្ទុកឡើង។</value>
+  </data>
 </root>

@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>Mae'r cyfluniad S3 yn anghyflawn: llenwch Endpoint, Bucket, Access Key ID a Secret Access Key.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>Hanes uwchlwytho</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>Nid yw delwedd sydd eisoes wedi'i huwchlwytho gyda'r un cyfluniad yn cael ei huwchlwytho eto; defnyddir ei chyfeiriad blaenorol ({0} wedi'u cofio). Cliriwch yr hanes ar ôl dileu ffeiliau a uwchlwythwyd.</value>
+  </data>
 </root>

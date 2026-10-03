@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>Del alligevel</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>{0} af dem var allerede uploadet med denne konfiguration, så deres tidligere adresser blev brugt.</value>
+  </data>
 </root>

@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>Конфигурация S3 неполная: заполните Endpoint, Bucket, Access Key ID и Secret Access Key.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>История загрузок</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>Изображение, уже загруженное с той же конфигурацией, повторно не загружается; используется его прежний адрес (запомнено: {0}). Очистите историю после удаления загруженных файлов.</value>
+  </data>
 </root>

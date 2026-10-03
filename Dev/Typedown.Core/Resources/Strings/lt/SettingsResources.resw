@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>S3 konfigūracija nebaigta: užpildykite Endpoint, Bucket, Access Key ID ir Secret Access Key.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>Įkėlimo istorija</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>Su ta pačia konfigūracija jau įkeltas vaizdas iš naujo neįkeliamas; naudojamas ankstesnis jo adresas (įsiminta: {0}). Ištrynę įkeltus failus, išvalykite istoriją.</value>
+  </data>
 </root>

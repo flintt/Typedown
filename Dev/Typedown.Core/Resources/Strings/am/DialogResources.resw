@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>ቢሆንም አጋራ</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>ከእነዚህ ውስጥ {0} በዚህ አውደ-ቅጥያ ቀደም ብለው ተሰቅለው ስለነበር የቀድሞ አድራሻዎቻቸው ጥቅም ላይ ውለዋል።</value>
+  </data>
 </root>

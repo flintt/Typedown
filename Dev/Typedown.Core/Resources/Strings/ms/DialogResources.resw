@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>Kongsi juga</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>{0} daripadanya telah dimuat naik sebelum ini dengan konfigurasi ini, jadi alamat terdahulunya digunakan.</value>
+  </data>
 </root>

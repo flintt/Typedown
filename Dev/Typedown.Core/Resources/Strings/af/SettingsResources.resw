@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>Die S3-konfigurasie is onvolledig: vul Endpoint, Bucket, Access Key ID en Secret Access Key in.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>Oplaaigeskiedenis</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>'n Prent wat reeds met dieselfde konfigurasie opgelaai is, word nie weer opgelaai nie; sy vorige adres word gebruik ({0} onthou). Vee dit uit nadat jy opgelaaide lêers verwyder het.</value>
+  </data>
 </root>

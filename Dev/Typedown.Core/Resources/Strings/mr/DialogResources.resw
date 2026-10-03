@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>तरीही सामायिक करा</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>त्यापैकी {0} या कॉन्फिगरेशनसह आधीच अपलोड केल्या होत्या, म्हणून त्यांचे आधीचे पत्ते वापरले गेले.</value>
+  </data>
 </root>

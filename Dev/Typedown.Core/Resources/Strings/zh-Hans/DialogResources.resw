@@ -331,4 +331,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>仍然分享</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>其中 {0} 张之前已用此配置上传过，因此沿用了它们之前的地址。</value>
+  </data>
 </root>

@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>Jaga ikkagi</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>{0} neist oli selle konfiguratsiooniga juba varem üles laaditud, seega kasutati nende varasemaid aadresse.</value>
+  </data>
 </root>

@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>Konfigurasi S3 tidak lengkap: isikan Endpoint, Bucket, Access Key ID dan Secret Access Key.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>Sejarah muat naik</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>Imej yang telah dimuat naik dengan konfigurasi yang sama tidak dimuat naik semula; alamat terdahulunya digunakan ({0} diingati). Kosongkan sejarah selepas memadamkan fail yang dimuat naik.</value>
+  </data>
 </root>

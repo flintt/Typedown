@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>S3 રૂપરેખાંકન અધૂરું છે: Endpoint, Bucket, Access Key ID અને Secret Access Key ભરો.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>અપલોડ ઇતિહાસ</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>સમાન રૂપરેખાંકન સાથે પહેલેથી અપલોડ થયેલી ઇમેજ ફરી અપલોડ થતી નથી; તેનું અગાઉનું સરનામું વપરાય છે ({0} યાદ રાખેલ). અપલોડ થયેલી ફાઇલો કાઢી નાખ્યા પછી તેને સાફ કરો.</value>
+  </data>
 </root>

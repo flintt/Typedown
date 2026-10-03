@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>તો પણ શેર કરો</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>તેમાંથી {0} આ રૂપરેખાંકન સાથે પહેલાં અપલોડ થઈ ચૂકી હતી, તેથી તેમના અગાઉના સરનામાં વપરાયા.</value>
+  </data>
 </root>

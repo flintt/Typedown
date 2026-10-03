@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>A configuração do S3 está incompleta: preencha Endpoint, Bucket, Access Key ID e Secret Access Key.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>Histórico de uploads</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>Uma imagem já carregada com a mesma configuração não é carregada novamente; seu endereço anterior é usado ({0} memorizadas). Limpe o histórico depois de excluir arquivos carregados.</value>
+  </data>
 </root>

@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>Бәрібір бөлісу</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>Олардың {0} бұрын осы конфигурациямен кері жүктелген, сондықтан бұрынғы мекенжайлары пайдаланылды.</value>
+  </data>
 </root>

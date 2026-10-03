@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>ብዘየገድስ ኣካፍል</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>ካብኣቶም {0} ቅድሚ ሕጂ ብዚ ኣቃውማ ተሰቒሎም ስለ ዝነበሩ፡ ናይ ቅድሚ ኣድራሻታቶም ተጠቒምና።</value>
+  </data>
 </root>

@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>S3 உள்ளமைவு முழுமையடையவில்லை: Endpoint, Bucket, Access Key ID மற்றும் Secret Access Key ஐ நிரப்பவும்.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>பதிவேற்ற வரலாறு</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>அதே உள்ளமைவுடன் ஏற்கனவே பதிவேற்றப்பட்ட படம் மீண்டும் பதிவேற்றப்படாது; அதன் முந்தைய முகவரி பயன்படுத்தப்படும் ({0} நினைவில் உள்ளன). பதிவேற்றிய கோப்புகளை நீக்கிய பிறகு வரலாற்றை அழிக்கவும்.</value>
+  </data>
 </root>

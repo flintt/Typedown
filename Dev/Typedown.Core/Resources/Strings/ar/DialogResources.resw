@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>المشاركة على أي حال</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>{0} منها سبق رفعها بهذا التكوين، لذا استُخدمت عناوينها السابقة.</value>
+  </data>
 </root>

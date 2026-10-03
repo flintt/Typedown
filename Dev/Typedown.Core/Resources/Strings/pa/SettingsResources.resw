@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>S3 ਸੰਰਚਨਾ ਅਧੂਰੀ ਹੈ: Endpoint, Bucket, Access Key ID ਅਤੇ Secret Access Key ਭਰੋ।</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>ਅੱਪਲੋਡ ਇਤਿਹਾਸ</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>ਉਸੇ ਕੌਨਫਿਗ੍ਰੇਸ਼ਨ ਨਾਲ ਪਹਿਲਾਂ ਹੀ ਅੱਪਲੋਡ ਕੀਤਾ ਚਿੱਤਰ ਦੁਬਾਰਾ ਅੱਪਲੋਡ ਨਹੀਂ ਕੀਤਾ ਜਾਂਦਾ; ਉਸਦਾ ਪਿਛਲਾ ਪਤਾ ਵਰਤਿਆ ਜਾਂਦਾ ਹੈ ({0} ਯਾਦ ਰੱਖੇ ਗਏ)। ਅੱਪਲੋਡ ਕੀਤੀਆਂ ਫ਼ਾਈਲਾਂ ਮਿਟਾਉਣ ਤੋਂ ਬਾਅਦ ਇਤਿਹਾਸ ਸਾਫ਼ ਕਰੋ।</value>
+  </data>
 </root>

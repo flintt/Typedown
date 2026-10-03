@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>ତଥାପି ସେୟାର୍ କରନ୍ତୁ</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>ସେଗୁଡ଼ିକ ମଧ୍ୟରୁ {0}ଟି ଏହି କନଫିଗ୍ରେସନ୍ ସହ ପୂର୍ବରୁ ଅପଲୋଡ୍ ହୋଇସାରିଥିଲା, ତେଣୁ ସେଗୁଡ଼ିକର ପୂର୍ବ ଠିକଣା ବ୍ୟବହାର କରାଗଲା।</value>
+  </data>
 </root>

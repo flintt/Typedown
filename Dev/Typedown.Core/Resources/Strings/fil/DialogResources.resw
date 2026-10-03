@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>Ibahagi pa rin</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>Ang {0} sa mga ito ay na-upload na dati gamit ang configuration na ito, kaya ginamit ang mga dati nilang address.</value>
+  </data>
 </root>

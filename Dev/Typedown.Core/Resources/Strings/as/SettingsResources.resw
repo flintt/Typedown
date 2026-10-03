@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>S3 কনফিগাৰেচন অসম্পূৰ্ণ: Endpoint, Bucket, Access Key ID আৰু Secret Access Key পূৰণ কৰক।</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>আপলোডৰ ইতিহাস</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>একে কনফিগাৰেচনেৰে আগতে আপলোড কৰা ছবি পুনৰ আপলোড কৰা নহয়; ইয়াৰ আগৰ ঠিকনা ব্যৱহাৰ কৰা হয় ({0}টা মনত ৰখা হৈছে)। আপলোড কৰা ফাইল মচাৰ পিছত ইয়াক পৰিষ্কাৰ কৰক।</value>
+  </data>
 </root>

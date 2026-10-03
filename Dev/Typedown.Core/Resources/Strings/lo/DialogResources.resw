@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>ແບ່ງປັນຢູ່ດີ</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>ໃນນັ້ນ {0} ຮູບເຄີຍຖືກອັບໂຫຼດດ້ວຍການຕັ້ງຄ່ານີ້ມາກ່ອນແລ້ວ, ຈຶ່ງໃຊ້ທີ່ຢູ່ເດີມຂອງພວກມັນ.</value>
+  </data>
 </root>

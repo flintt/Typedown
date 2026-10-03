@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>Rhannu beth bynnag</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>Roedd {0} ohonynt wedi'u huwchlwytho o'r blaen gyda'r cyfluniad hwn, felly defnyddiwyd eu cyfeiriadau blaenorol.</value>
+  </data>
 </root>

@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>Deel tog</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>{0} daarvan is reeds voorheen met hierdie konfigurasie opgelaai, dus is hul vorige adresse gebruik.</value>
+  </data>
 </root>

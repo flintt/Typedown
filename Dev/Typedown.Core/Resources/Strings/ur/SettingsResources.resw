@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>S3 ترتیب نامکمل ہے: Endpoint، Bucket، Access Key ID اور Secret Access Key پُر کریں۔</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>اپ لوڈ کی تاریخ</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>اسی کنفیگریشن کے ساتھ پہلے سے اپ لوڈ شدہ تصویر دوبارہ اپ لوڈ نہیں کی جاتی؛ اس کا پچھلا پتہ استعمال ہوتا ہے ({0} یاد رکھی گئیں)۔ اپ لوڈ شدہ فائلیں حذف کرنے کے بعد تاریخ صاف کریں۔</value>
+  </data>
 </root>

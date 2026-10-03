@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>Shiriki hata hivyo</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>{0} kati yake zilikuwa zimepakiwa awali kwa usanidi huu, kwa hivyo anwani zake za awali zilitumika.</value>
+  </data>
 </root>

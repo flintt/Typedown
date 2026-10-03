@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>Condividi comunque</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>{0} erano già state caricate con questa configurazione, quindi sono stati usati i loro indirizzi precedenti.</value>
+  </data>
 </root>

@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>S3-konfigurationen er ufuldstændig: udfyld Endpoint, Bucket, Access Key ID og Secret Access Key.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>Uploadhistorik</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>Et billede, der allerede er uploadet med samme konfiguration, uploades ikke igen; dets tidligere adresse bruges ({0} husket). Ryd historikken efter sletning af uploadede filer.</value>
+  </data>
 </root>

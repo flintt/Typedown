@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>Konfiguracja S3 jest niekompletna: wypełnij Endpoint, Bucket, Access Key ID i Secret Access Key.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>Historia przesyłania</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>Obraz już przesłany z tą samą konfiguracją nie jest przesyłany ponownie; używany jest jego wcześniejszy adres (zapamiętano: {0}). Wyczyść historię po usunięciu przesłanych plików.</value>
+  </data>
 </root>

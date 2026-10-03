@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>그대로 공유</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>그중 {0}개는 이 구성으로 이미 업로드된 적이 있어 이전 주소를 사용했습니다.</value>
+  </data>
 </root>

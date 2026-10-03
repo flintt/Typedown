@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>S3 կոնֆիգուրացիան թերի է․ լրացրեք Endpoint, Bucket, Access Key ID և Secret Access Key։</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>Վերբեռնումների պատմություն</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>Նույն կոնֆիգուրացիայով արդեն վերբեռնված պատկերը կրկին չի վերբեռնվում․ օգտագործվում է դրա նախկին հասցեն ({0} հիշված)։ Մաքրեք պատմությունը վերբեռնված ֆայլերը ջնջելուց հետո։</value>
+  </data>
 </root>

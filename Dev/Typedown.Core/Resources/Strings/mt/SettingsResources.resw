@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>Il-konfigurazzjoni S3 mhix kompluta: imla Endpoint, Bucket, Access Key ID u Secret Access Key.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>Storja tat-tlugħ</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>Immaġni li diġà telgħet bl-istess konfigurazzjoni ma tittellax mill-ġdid; jintuża l-indirizz preċedenti tagħha ({0} mfakkra). Battal l-istorja wara li tħassar fajls li telgħu.</value>
+  </data>
 </root>

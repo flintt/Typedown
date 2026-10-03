@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>ናይ S3 ውቅር ዘይተማልአ እዩ፦ Endpoint፣ Bucket፣ Access Key ID ከምኡ'ውን Secret Access Key ምልኣ።</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>ታሪኽ ምስቃል</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>ብተመሳሳሊ ኣቃውማ ድሮ ዝተሰቐለ ምስሊ ደጊሙ ኣይስቀልን፤ ናይ ቅድሚ ኣድራሻኡ ይጥቀመሉ ({0} ተዘኪሮም)። ዝተሰቐሉ ፋይላት ምስ ሰረዝካ ታሪኽ ኣጽርዮ።</value>
+  </data>
 </root>

@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>S3-määritys on puutteellinen: täytä Endpoint, Bucket, Access Key ID ja Secret Access Key.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>Lataushistoria</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>Samalla määrityksellä jo ladattua kuvaa ei ladata uudelleen; sen aiempaa osoitetta käytetään ({0} muistissa). Tyhjennä historia, kun olet poistanut ladattuja tiedostoja.</value>
+  </data>
 </root>

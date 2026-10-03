@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>S3 구성이 완전하지 않습니다. Endpoint, Bucket, Access Key ID, Secret Access Key를 입력하세요.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>업로드 기록</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>같은 구성으로 이미 업로드된 이미지는 다시 업로드하지 않고 이전 주소를 사용합니다({0}개 기억됨). 업로드한 파일을 삭제한 후에는 기록을 지우세요.</value>
+  </data>
 </root>

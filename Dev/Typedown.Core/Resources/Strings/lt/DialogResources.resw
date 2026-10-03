@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>Vis tiek bendrinti</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>{0} iš jų jau buvo įkelti anksčiau su šia konfigūracija, todėl panaudoti ankstesni jų adresai.</value>
+  </data>
 </root>

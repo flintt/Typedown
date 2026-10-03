@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>Tiri ahakoa</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>Kua tukuatuhia kētia te {0} o ēnei ki tēnei whirihoranga i mua, nā reira i whakamahia ō rātou wāhitau o mua.</value>
+  </data>
 </root>

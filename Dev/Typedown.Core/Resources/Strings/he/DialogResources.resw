@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>שתף בכל זאת</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>{0} מהן כבר הועלו בעבר עם תצורה זו, ולכן נעשה שימוש בכתובות הקודמות שלהן.</value>
+  </data>
 </root>

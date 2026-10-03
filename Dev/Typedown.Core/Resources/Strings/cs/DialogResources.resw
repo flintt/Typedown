@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>Přesto sdílet</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>{0} z nich už bylo dříve nahráno s touto konfigurací, proto byly použity jejich dřívější adresy.</value>
+  </data>
 </root>

@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>S3 कॉन्फिगरेशन अपूर्ण आहे: Endpoint, Bucket, Access Key ID आणि Secret Access Key भरा.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>अपलोड इतिहास</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>त्याच कॉन्फिगरेशनसह आधीच अपलोड केलेली प्रतिमा पुन्हा अपलोड केली जात नाही; तिचा आधीचा पत्ता वापरला जातो ({0} लक्षात ठेवल्या). अपलोड केलेल्या फाइल्स हटवल्यानंतर इतिहास साफ करा.</value>
+  </data>
 </root>

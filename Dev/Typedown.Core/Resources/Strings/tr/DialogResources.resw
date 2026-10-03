@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>Yine de paylaş</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>Bunlardan {0} tanesi bu yapılandırmayla daha önce yüklenmişti, bu yüzden önceki adresleri kullanıldı.</value>
+  </data>
 </root>

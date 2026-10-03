@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>მაინც გაზიარება</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>მათგან {0} უკვე ატვირთული იყო ამ კონფიგურაციით, ამიტომ გამოყენებულია მათი წინა მისამართები.</value>
+  </data>
 </root>

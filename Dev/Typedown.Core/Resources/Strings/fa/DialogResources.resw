@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>به هر حال اشتراک‌گذاری</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>{0} مورد از آن‌ها قبلاً با همین پیکربندی آپلود شده بودند، بنابراین از نشانی‌های قبلی‌شان استفاده شد.</value>
+  </data>
 </root>

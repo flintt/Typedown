@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>Comhroinn mar sin féin</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>Uaslódáladh {0} díobh roimhe seo leis an gcumraíocht seo, mar sin úsáideadh a seoltaí roimhe sin.</value>
+  </data>
 </root>

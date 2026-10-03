@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>Aqsam xorta waħda</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>{0} minnhom kienu diġà telgħu qabel b'din il-konfigurazzjoni, għalhekk intużaw l-indirizzi preċedenti tagħhom.</value>
+  </data>
 </root>

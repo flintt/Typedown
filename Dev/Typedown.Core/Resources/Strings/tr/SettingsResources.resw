@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>S3 yapılandırması eksik: Endpoint, Bucket, Access Key ID ve Secret Access Key alanlarını doldurun.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>Yükleme geçmişi</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>Aynı yapılandırmayla daha önce yüklenmiş bir resim yeniden yüklenmez; önceki adresi kullanılır ({0} kayıtlı). Yüklenen dosyaları sildikten sonra geçmişi temizleyin.</value>
+  </data>
 </root>

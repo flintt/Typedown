@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>S3 konfigurācija nav pilnīga: aizpildiet Endpoint, Bucket, Access Key ID un Secret Access Key.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>Augšupielādes vēsture</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>Attēls, kas jau augšupielādēts ar to pašu konfigurāciju, netiek augšupielādēts atkārtoti; tiek izmantota tā iepriekšējā adrese (atcerēti: {0}). Notīriet vēsturi pēc augšupielādēto failu dzēšanas.</value>
+  </data>
 </root>

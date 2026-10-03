@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>Konfigurimi S3 është i paplotë: plotësoni Endpoint, Bucket, Access Key ID dhe Secret Access Key.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>Historiku i ngarkimeve</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>Një figurë e ngarkuar tashmë me të njëjtin konfigurim nuk ngarkohet përsëri; përdoret adresa e saj e mëparshme ({0} të mbajtura mend). Pastro historikun pas fshirjes së skedarëve të ngarkuar.</value>
+  </data>
 </root>

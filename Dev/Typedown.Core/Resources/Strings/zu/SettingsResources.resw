@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>Ukumiswa kwe-S3 akuphelele: gcwalisa i-Endpoint, i-Bucket, i-Access Key ID ne-Secret Access Key.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>Umlando wokulayisha</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>Isithombe esesilayishwe ngokucushwa okufanayo asilayishwa futhi; kusetshenziswa ikheli laso langaphambilini (kukhunjulwe okungu-{0}). Sula umlando ngemva kokususa amafayela alayishiwe.</value>
+  </data>
 </root>

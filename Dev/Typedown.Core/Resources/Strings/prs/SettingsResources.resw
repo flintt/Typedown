@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>تنظیمات S3 ناقص است: Endpoint، Bucket، Access Key ID و Secret Access Key را وارد کنید.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>تاریخچه ارسال</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>تصویری که قبلاً با همان تنظیمات ارسال شده دوباره ارسال نمی‌شود؛ از آدرس قبلی آن استفاده می‌شود ({0} مورد ذخیره شده). پس از حذف فایل‌های ارسال‌شده، تاریخچه را پاک کنید.</value>
+  </data>
 </root>

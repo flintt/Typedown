@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>Ndaj gjithsesi</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>{0} prej tyre ishin ngarkuar më parë me këtë konfigurim, prandaj u përdorën adresat e tyre të mëparshme.</value>
+  </data>
 </root>

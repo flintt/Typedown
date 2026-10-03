@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>La configuració S3 és incompleta: ompliu Endpoint, Bucket, Access Key ID i Secret Access Key.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>Historial de pujades</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>Una imatge ja pujada amb la mateixa configuració no es torna a pujar; se n'utilitza l'adreça anterior ({0} recordades). Esborra l'historial després d'eliminar fitxers pujats.</value>
+  </data>
 </root>

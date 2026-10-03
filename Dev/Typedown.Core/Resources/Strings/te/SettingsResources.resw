@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>S3 కాన్ఫిగరేషన్ అసంపూర్ణంగా ఉంది: Endpoint, Bucket, Access Key ID మరియు Secret Access Key ని పూరించండి.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>అప్ లోడ్ చరిత్ర</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>అదే కాన్ఫిగరేషన్ తో ఇప్పటికే అప్ లోడ్ చేసిన ఇమేజ్ మళ్లీ అప్ లోడ్ చేయబడదు; దాని పాత చిరునామా ఉపయోగించబడుతుంది ({0} గుర్తుంచుకోబడ్డాయి). అప్ లోడ్ చేసిన ఫైల్ లను తొలగించిన తర్వాత చరిత్రను క్లియర్ చేయండి.</value>
+  </data>
 </root>

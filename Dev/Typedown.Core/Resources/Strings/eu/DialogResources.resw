@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>Partekatu hala ere</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>Horietatik {0} konfigurazio honekin igo ziren lehenago; beraz, haien aurreko helbideak erabili dira.</value>
+  </data>
 </root>

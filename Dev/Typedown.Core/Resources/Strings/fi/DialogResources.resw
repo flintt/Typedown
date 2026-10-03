@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>Jaa silti</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>{0} niistä oli jo ladattu aiemmin tällä määrityksellä, joten niiden aiempia osoitteita käytettiin.</value>
+  </data>
 </root>

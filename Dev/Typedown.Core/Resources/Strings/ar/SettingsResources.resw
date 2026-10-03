@@ -868,4 +868,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>تكوين S3 غير مكتمل: املأ Endpoint وBucket وAccess Key ID وSecret Access Key.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>سجل الرفع</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>لا يُعاد رفع صورة سبق رفعها بالتكوين نفسه، بل يُستخدم عنوانها السابق ({0} محفوظة). امسح السجل بعد حذف الملفات المرفوعة.</value>
+  </data>
 </root>

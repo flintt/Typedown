@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>Udostępnij mimo to</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>{0} z nich przesłano już wcześniej z tą konfiguracją, więc użyto ich wcześniejszych adresów.</value>
+  </data>
 </root>

@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>Cấu hình S3 chưa đầy đủ: hãy điền Endpoint, Bucket, Access Key ID và Secret Access Key.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>Lịch sử tải lên</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>Ảnh đã tải lên bằng cùng cấu hình sẽ không được tải lên lại; địa chỉ cũ của ảnh sẽ được dùng (đã ghi nhớ {0}). Hãy xóa lịch sử sau khi xóa các tệp đã tải lên.</value>
+  </data>
 </root>

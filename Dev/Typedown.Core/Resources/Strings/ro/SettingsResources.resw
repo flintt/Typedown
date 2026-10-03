@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>Configurația S3 este incompletă: completați Endpoint, Bucket, Access Key ID și Secret Access Key.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>Istoricul încărcărilor</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>O imagine deja încărcată cu aceeași configurație nu este încărcată din nou; se folosește adresa ei anterioară ({0} memorate). Goliți istoricul după ce ștergeți fișiere încărcate.</value>
+  </data>
 </root>

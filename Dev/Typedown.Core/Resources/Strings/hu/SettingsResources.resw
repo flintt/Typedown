@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>Az S3-konfiguráció hiányos: töltse ki az Endpoint, Bucket, Access Key ID és Secret Access Key mezőket.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>Feltöltési előzmények</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>Az ugyanazzal a konfigurációval már feltöltött kép nem töltődik fel újra; a korábbi címe lesz használva ({0} megjegyezve). Törölje az előzményeket a feltöltött fájlok törlése után.</value>
+  </data>
 </root>

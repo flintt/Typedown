@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>แชร์ต่อไป</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>ในจำนวนนี้ {0} รูปเคยอัปโหลดด้วยการกำหนดค่านี้แล้ว จึงใช้ที่อยู่เดิมของรูปเหล่านั้น</value>
+  </data>
 </root>

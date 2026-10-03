@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>Konfigurace S3 není úplná: vyplňte Endpoint, Bucket, Access Key ID a Secret Access Key.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>Historie nahrávání</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>Obrázek již nahraný se stejnou konfigurací se znovu nenahrává; použije se jeho dřívější adresa (zapamatováno: {0}). Po odstranění nahraných souborů historii vymažte.</value>
+  </data>
 </root>

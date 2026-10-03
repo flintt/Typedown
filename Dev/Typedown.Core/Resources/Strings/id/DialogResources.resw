@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>Tetap bagikan</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>{0} di antaranya sudah pernah diunggah dengan konfigurasi ini, jadi alamat sebelumnya digunakan.</value>
+  </data>
 </root>

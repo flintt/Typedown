@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>S3 конфигурациясы толық емес: Endpoint, Bucket, Access Key ID және Secret Access Key өрістерін толтырыңыз.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>Кері жүктеу тарихы</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>Сол конфигурациямен бұрын кері жүктелген сурет қайта жүктелмейді; оның бұрынғы мекенжайы пайдаланылады ({0} есте сақталған). Кері жүктелген файлдарды жойғаннан кейін тарихты тазалаңыз.</value>
+  </data>
 </root>

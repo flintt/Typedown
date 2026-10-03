@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>S3 konfiguracija je nepotpuna: popunite Endpoint, Bucket, Access Key ID i Secret Access Key.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>Istorija otpremanja</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>Slika koja je već otpremljena sa istom konfiguracijom ne otprema se ponovo; koristi se njena ranija adresa ({0} zapamćeno). Očistite istoriju nakon brisanja otpremljenih datoteka.</value>
+  </data>
 </root>

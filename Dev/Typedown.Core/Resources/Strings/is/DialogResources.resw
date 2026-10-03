@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>Deila samt</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>Búið var að hlaða {0} þeirra upp áður með þessum stillingum, svo fyrri vistföng þeirra voru notuð.</value>
+  </data>
 </root>

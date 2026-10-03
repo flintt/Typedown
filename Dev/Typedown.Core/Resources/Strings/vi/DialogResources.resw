@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>Vẫn chia sẻ</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>{0} ảnh trong số đó đã được tải lên trước đây bằng cấu hình này, nên địa chỉ cũ của chúng được dùng lại.</value>
+  </data>
 </root>

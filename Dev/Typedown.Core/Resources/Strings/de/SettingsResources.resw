@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>Die S3-Konfiguration ist unvollständig: Füllen Sie Endpoint, Bucket, Access Key ID und Secret Access Key aus.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>Upload-Verlauf</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>Ein bereits mit derselben Konfiguration hochgeladenes Bild wird nicht erneut hochgeladen; seine frühere Adresse wird verwendet ({0} gespeichert). Leeren Sie den Verlauf, nachdem Sie hochgeladene Dateien gelöscht haben.</value>
+  </data>
 </root>

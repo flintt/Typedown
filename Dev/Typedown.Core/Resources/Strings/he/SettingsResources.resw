@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>תצורת S3 אינה שלמה: מלא את Endpoint, Bucket, Access Key ID ו-Secret Access Key.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>היסטוריית העלאות</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>תמונה שכבר הועלתה עם אותה תצורה לא מועלית שוב; נעשה שימוש בכתובת הקודמת שלה ({0} שמורות). נקה את ההיסטוריה לאחר מחיקת קבצים שהועלו.</value>
+  </data>
 </root>

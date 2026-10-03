@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>Konfiguracija S3 ni popolna: izpolnite Endpoint, Bucket, Access Key ID in Secret Access Key.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>Zgodovina nalaganja</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>Slika, ki je bila že naložena z isto konfiguracijo, se ne naloži znova; uporabi se njen prejšnji naslov (zapomnjenih: {0}). Po brisanju naloženih datotek počistite zgodovino.</value>
+  </data>
 </root>

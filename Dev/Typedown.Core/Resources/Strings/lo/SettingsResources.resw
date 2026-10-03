@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>ການຕັ້ງຄ່າ S3 ບໍ່ຄົບຖ້ວນ: ກະລຸນາຕື່ມ Endpoint, Bucket, Access Key ID ແລະ Secret Access Key.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>ປະຫວັດການອັບໂຫຼດ</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>ຮູບພາບທີ່ອັບໂຫຼດດ້ວຍການຕັ້ງຄ່າດຽວກັນແລ້ວຈະບໍ່ຖືກອັບໂຫຼດອີກ; ຈະໃຊ້ທີ່ຢູ່ເດີມຂອງມັນແທນ (ຈື່ໄວ້ {0}). ລ້າງປະຫວັດຫຼັງຈາກລຶບໄຟລ໌ທີ່ອັບໂຫຼດແລ້ວ.</value>
+  </data>
 </root>

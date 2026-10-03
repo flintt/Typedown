@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>S3 कन्फिगरेसन अपूर्ण छ: Endpoint, Bucket, Access Key ID र Secret Access Key भर्नुहोस्।</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>अपलोड इतिहास</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>उही कन्फिगरेसनबाट पहिले नै अपलोड गरिएको छवि फेरि अपलोड गरिँदैन; यसको अघिल्लो ठेगाना प्रयोग गरिन्छ ({0} सम्झिएका)। अपलोड गरिएका फाइलहरू मेटाएपछि इतिहास खाली गर्नुहोस्।</value>
+  </data>
 </root>

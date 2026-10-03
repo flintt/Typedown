@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>Kāore i oti te whirihoranga S3: whakakīia te Endpoint, Bucket, Access Key ID me te Secret Access Key.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>Hītori tukuatu</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>Kāore e tukuatuhia anō he atahanga kua tukuatuhia kētia ki te whirihoranga ōrite; ka whakamahia tōna wāhitau o mua ({0} kua maumaharatia). Ūkuia te hītori i muri i te muku i ngā kōnae kua tukuatuhia.</value>
+  </data>
 </root>

@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>S3 の設定が不完全です: Endpoint、Bucket、Access Key ID、Secret Access Key を入力してください。</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>アップロード履歴</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>同じ設定でアップロード済みの画像は再アップロードされず、以前のアドレスが使用されます (記録数: {0})。アップロードしたファイルを削除したら、履歴をクリアしてください。</value>
+  </data>
 </root>

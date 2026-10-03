@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>S3-konfigurasjonen er ufullstendig: fyll ut Endpoint, Bucket, Access Key ID og Secret Access Key.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>Opplastingshistorikk</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>Et bilde som allerede er lastet opp med samme konfigurasjon, lastes ikke opp på nytt; den tidligere adressen brukes ({0} husket). Tøm historikken etter at du har slettet opplastede filer.</value>
+  </data>
 </root>

@@ -891,4 +891,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>S3 配置不完整：請填寫 Endpoint、Bucket、Access Key ID 和 Secret Access Key。</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>上傳記錄</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>已用相同配置上傳過的圖片不會再次上傳，而是沿用之前的位址（已記錄 {0} 筆）。刪除已上傳的檔案後請清除此記錄。</value>
+  </data>
 </root>

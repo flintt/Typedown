@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>Hindi kumpleto ang S3 configuration: punan ang Endpoint, Bucket, Access Key ID at Secret Access Key.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>History ng pag-upload</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>Hindi na muling ina-upload ang imaheng na-upload na gamit ang parehong configuration; ginagamit ang dati nitong address ({0} ang naaalala). I-clear ito pagkatapos magbura ng mga na-upload na file.</value>
+  </data>
 </root>

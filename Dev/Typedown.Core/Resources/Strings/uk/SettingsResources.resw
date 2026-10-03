@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>Конфігурація S3 неповна: заповніть Endpoint, Bucket, Access Key ID і Secret Access Key.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>Історія завантажень</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>Зображення, уже завантажене з тією самою конфігурацією, повторно не завантажується; використовується його попередня адреса (запам'ятовано: {0}). Очистьте історію після видалення завантажених файлів.</value>
+  </data>
 </root>

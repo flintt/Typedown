@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>എന്തായാലും പങ്കിടുക</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>അവയിൽ {0} എണ്ണം ഈ കോൺഫിഗറേഷൻ ഉപയോഗിച്ച് മുമ്പ് അപ്‌ലോഡ് ചെയ്തിരുന്നതിനാൽ അവയുടെ മുൻ വിലാസങ്ങൾ ഉപയോഗിച്ചു.</value>
+  </data>
 </root>

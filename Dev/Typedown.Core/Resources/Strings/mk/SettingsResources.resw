@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>S3 конфигурацијата е нецелосна: пополнете Endpoint, Bucket, Access Key ID и Secret Access Key.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>Историја на прикачувања</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>Слика што веќе е прикачена со истата конфигурација не се прикачува повторно; се користи нејзината претходна адреса ({0} запаметени). Исчистете ја историјата по бришење прикачени датотеки.</value>
+  </data>
 </root>

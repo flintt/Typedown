@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>S3 konfigurazioa osatu gabe dago: bete Endpoint, Bucket, Access Key ID eta Secret Access Key.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>Igoeren historia</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>Konfigurazio berarekin jada igotako irudia ez da berriro igotzen; haren aurreko helbidea erabiltzen da ({0} gogoratuta). Garbitu historia igotako fitxategiak ezabatu ondoren.</value>
+  </data>
 </root>

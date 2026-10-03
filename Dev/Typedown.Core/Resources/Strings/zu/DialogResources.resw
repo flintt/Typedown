@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>Yabelana noma kunjalo</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>Ezingu-{0} kuzo bezilayishwe ngaphambilini ngalokhu kucushwa, ngakho kusetshenziswe amakheli azo angaphambilini.</value>
+  </data>
 </root>

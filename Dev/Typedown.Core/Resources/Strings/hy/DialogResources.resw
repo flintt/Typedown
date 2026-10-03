@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>Միևնույնն է կիսվել</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>Դրանցից {0}-ը նախկինում արդեն վերբեռնվել էր այս կոնֆիգուրացիայով, ուստի օգտագործվել են դրանց նախկին հասցեները։</value>
+  </data>
 </root>

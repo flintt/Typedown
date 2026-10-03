@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>Η διαμόρφωση S3 είναι ελλιπής: συμπληρώστε Endpoint, Bucket, Access Key ID και Secret Access Key.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>Ιστορικό μεταφορτώσεων</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>Μια εικόνα που έχει ήδη μεταφορτωθεί με την ίδια διαμόρφωση δεν μεταφορτώνεται ξανά· χρησιμοποιείται η προηγούμενη διεύθυνσή της ({0} αποθηκευμένες). Εκκαθαρίστε το ιστορικό αφού διαγράψετε μεταφορτωμένα αρχεία.</value>
+  </data>
 </root>

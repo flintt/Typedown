@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>Megosztás mégis</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>Közülük {0} már korábban fel lett töltve ezzel a konfigurációval, ezért a korábbi címük lett felhasználva.</value>
+  </data>
 </root>

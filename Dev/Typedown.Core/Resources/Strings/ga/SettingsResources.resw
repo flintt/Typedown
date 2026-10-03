@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>Tá cumraíocht S3 neamhiomlán: líon isteach Endpoint, Bucket, Access Key ID agus Secret Access Key.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>Stair uaslódála</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>Ní uaslódáiltear arís íomhá atá uaslódáilte cheana leis an gcumraíocht chéanna; úsáidtear a seoladh roimhe sin ({0} i gcuimhne). Glan an stair tar éis comhaid uaslódáilte a scriosadh.</value>
+  </data>
 </root>

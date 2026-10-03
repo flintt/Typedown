@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>S3 കോൺഫിഗറേഷൻ പൂർണ്ണമല്ല: Endpoint, Bucket, Access Key ID, Secret Access Key എന്നിവ പൂരിപ്പിക്കുക.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>അപ്‌ലോഡ് ചരിത്രം</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>ഒരേ കോൺഫിഗറേഷൻ ഉപയോഗിച്ച് ഇതിനകം അപ്‌ലോഡ് ചെയ്ത ചിത്രം വീണ്ടും അപ്‌ലോഡ് ചെയ്യില്ല; അതിന്റെ മുൻ വിലാസം ഉപയോഗിക്കും ({0} ഓർമ്മിച്ചിരിക്കുന്നു). അപ്‌ലോഡ് ചെയ്ത ഫയലുകൾ ഇല്ലാതാക്കിയ ശേഷം ഇത് മായ്ക്കുക.</value>
+  </data>
 </root>

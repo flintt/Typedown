@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>የS3 ቅንብሩ ያልተሟላ ነው፦ Endpoint፣ Bucket፣ Access Key ID እና Secret Access Key ይሙሉ።</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>የመስቀል ታሪክ</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>በተመሳሳይ አውደ-ቅጥያ አስቀድሞ የተሰቀለ ምስል እንደገና አይሰቀልም፤ የቀድሞ አድራሻው ጥቅም ላይ ይውላል ({0} ተቀምጠዋል)። የተሰቀሉ ፋይሎችን ከሰረዙ በኋላ ያጽዱት።</value>
+  </data>
 </root>

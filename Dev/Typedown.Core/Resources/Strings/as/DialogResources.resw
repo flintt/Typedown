@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>তথাপি ভাগ কৰক</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>সেইবোৰৰ {0}টা এই কনফিগাৰেচনেৰে আগতে আপলোড কৰা হৈছিল, গতিকে সেইবোৰৰ আগৰ ঠিকনা ব্যৱহাৰ কৰা হ'ল।</value>
+  </data>
 </root>

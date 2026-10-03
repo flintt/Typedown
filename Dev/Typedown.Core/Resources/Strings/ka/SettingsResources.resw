@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>S3 კონფიგურაცია არასრულია: შეავსეთ Endpoint, Bucket, Access Key ID და Secret Access Key.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>ატვირთვის ისტორია</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>იმავე კონფიგურაციით უკვე ატვირთული სურათი ხელახლა არ იტვირთება; გამოიყენება მისი წინა მისამართი ({0} დამახსოვრებული). ატვირთული ფაილების წაშლის შემდეგ გაასუფთავეთ ისტორია.</value>
+  </data>
 </root>

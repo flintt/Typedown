@@ -862,4 +862,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>S3 ಕಾನ್ಫಿಗರೇಶನ್ ಅಪೂರ್ಣವಾಗಿದೆ: Endpoint, Bucket, Access Key ID ಮತ್ತು Secret Access Key ಅನ್ನು ಭರ್ತಿ ಮಾಡಿ.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>ಅಪ್ ಲೋಡ್ ಇತಿಹಾಸ</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>ಅದೇ ಕಾನ್ಫಿಗರೇಶನ್‌ನೊಂದಿಗೆ ಈಗಾಗಲೇ ಅಪ್ ಲೋಡ್ ಮಾಡಿದ ಚಿತ್ರವನ್ನು ಮತ್ತೆ ಅಪ್ ಲೋಡ್ ಮಾಡಲಾಗುವುದಿಲ್ಲ; ಅದರ ಹಿಂದಿನ ವಿಳಾಸವನ್ನು ಬಳಸಲಾಗುತ್ತದೆ ({0} ನೆನಪಿನಲ್ಲಿದೆ). ಅಪ್ ಲೋಡ್ ಮಾಡಿದ ಫೈಲ್‌ಗಳನ್ನು ಅಳಿಸಿದ ನಂತರ ಇದನ್ನು ತೆರವುಗೊಳಿಸಿ.</value>
+  </data>
 </root>

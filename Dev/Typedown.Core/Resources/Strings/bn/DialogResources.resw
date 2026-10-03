@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>তবুও শেয়ার করুন</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>এর মধ্যে {0}টি আগেই এই কনফিগারেশন দিয়ে আপলোড করা হয়েছিল, তাই সেগুলোর আগের ঠিকানা ব্যবহার করা হয়েছে।</value>
+  </data>
 </root>

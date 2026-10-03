@@ -326,4 +326,7 @@
   <data name="UploadImages.ShareAnyway" xml:space="preserve">
     <value>پھر بھی شیئر کریں</value>
   </data>
+  <data name="UploadImages.Reused" xml:space="preserve">
+    <value>ان میں سے {0} اس کنفیگریشن کے ساتھ پہلے ہی اپ لوڈ کی جا چکی تھیں، اس لیے ان کے پچھلے پتے استعمال کیے گئے۔</value>
+  </data>
 </root>
