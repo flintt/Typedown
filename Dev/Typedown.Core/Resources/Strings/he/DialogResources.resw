@@ -133,10 +133,6 @@
     <value>אוקיי</value>
     <comment>对话框/确定</comment>
   </data>
-  <data name="ContentCanNotBeBlank" xml:space="preserve">
-    <value>לא ניתן לרוקן תוכן</value>
-    <comment>对话框/内容不能为空</comment>
-  </data>
   <data name="CreateDocErrorTitle" xml:space="preserve">
     <value>יצירת מסמך חדש נכשלה</value>
     <comment>创建文件对话框/新建文档失败</comment>
@@ -160,10 +156,6 @@
   <data name="ExportErrorTitle" xml:space="preserve">
     <value>הייצוא נכשל</value>
     <comment>文件导出对话框/导出失败</comment>
-  </data>
-  <data name="FeedbackTitle" xml:space="preserve">
-    <value>משוב</value>
-    <comment>反馈对话框/反馈</comment>
   </data>
   <data name="ImportErrorTitle" xml:space="preserve">
     <value>הייבוא נכשל</value>
@@ -224,14 +216,6 @@
   <data name="ShortcutKeyIsOccupied" xml:space="preserve">
     <value>מקש הקיצור תפוס</value>
     <comment>快捷键已被占用</comment>
-  </data>
-  <data name="Submit" xml:space="preserve">
-    <value>שלח</value>
-    <comment>反馈对话框/提交</comment>
-  </data>
-  <data name="SubmittedSuccessfully" xml:space="preserve">
-    <value>ההגשה הסתיימה בהצלחה</value>
-    <comment>反馈对话框/提交成功</comment>
   </data>
   <data name="UploadFailedTitle" xml:space="preserve">
     <value>ההעלאה נכשלה</value>

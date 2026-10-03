@@ -80,18 +80,6 @@ namespace Typedown.Core.Utilities
 
         public static string DefaultMarkdwn { get => "\n"; }
 
-        public static async Task<JObject> Post(string url, object obj)
-        {
-            if (!Config.AllowOutboundNetwork)
-                throw new InvalidOperationException("Outbound network is disabled.");
-            var client = new HttpClient();
-            var content = new StringContent(JsonConvert.SerializeObject(obj), Encoding.UTF8, "application/json");
-            var result = await client.PostAsync(url, content);
-            if (result.StatusCode != HttpStatusCode.OK)
-                throw new Exception(result.ReasonPhrase);
-            return JObject.Parse(await result.Content.ReadAsStringAsync());
-        }
-
         public static string GetShortcutKeyText(this ShortcutKey key)
         {
             return string.Join('+', GetShortcutKeyTextList(key));

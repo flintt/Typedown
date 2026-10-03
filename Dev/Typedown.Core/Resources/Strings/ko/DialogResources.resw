@@ -133,10 +133,6 @@
     <value>확인</value>
     <comment>对话框/确定</comment>
   </data>
-  <data name="ContentCanNotBeBlank" xml:space="preserve">
-    <value>내용을 비울 수 없습니다</value>
-    <comment>对话框/内容不能为空</comment>
-  </data>
   <data name="CreateDocErrorTitle" xml:space="preserve">
     <value>새 문서 만들기 실패</value>
     <comment>创建文件对话框/新建文档失败</comment>
@@ -160,10 +156,6 @@
   <data name="ExportErrorTitle" xml:space="preserve">
     <value>내보내기 실패</value>
     <comment>文件导出对话框/导出失败</comment>
-  </data>
-  <data name="FeedbackTitle" xml:space="preserve">
-    <value>피드백</value>
-    <comment>反馈对话框/反馈</comment>
   </data>
   <data name="ImportErrorTitle" xml:space="preserve">
     <value>가져오기 실패</value>
@@ -224,14 +216,6 @@
   <data name="ShortcutKeyIsOccupied" xml:space="preserve">
     <value>바로 가기 키가 사용 중입니다</value>
     <comment>快捷键已被占用</comment>
-  </data>
-  <data name="Submit" xml:space="preserve">
-    <value>제출</value>
-    <comment>反馈对话框/提交</comment>
-  </data>
-  <data name="SubmittedSuccessfully" xml:space="preserve">
-    <value>제출 성공</value>
-    <comment>反馈对话框/提交成功</comment>
   </data>
   <data name="UploadFailedTitle" xml:space="preserve">
     <value>업로드 실패</value>

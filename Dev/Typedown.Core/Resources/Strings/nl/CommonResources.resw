@@ -729,10 +729,6 @@
     <value>Citaat</value>
     <comment>段落/引用</comment>
   </data>
-  <data name="Rating" xml:space="preserve">
-    <value>Beoordeling</value>
-    <comment>反馈/评分</comment>
-  </data>
   <data name="Redo" xml:space="preserve">
     <value>Opnieuw</value>
     <comment>编辑/重做</comment>

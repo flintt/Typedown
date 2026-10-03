@@ -137,18 +137,6 @@
     <value>प्रतिक्रिया पठाउनुहोस्</value>
     <comment>关于/发送反馈</comment>
   </data>
-  <data name="About.SendFeedbackDialog.Contact.Header" xml:space="preserve">
-    <value>सम्पर्क</value>
-    <comment>关于/联系方式</comment>
-  </data>
-  <data name="About.SendFeedbackDialog.Contact.Placeholder" xml:space="preserve">
-    <value>इमेल</value>
-    <comment>关于/Email</comment>
-  </data>
-  <data name="About.SendFeedbackDialog.Content.Placeholder" xml:space="preserve">
-    <value>हामी तपाईंको प्रतिक्रियालाई धेरै गम्भीरतापूर्वक लिन्छौं</value>
-    <comment>关于/我们会非常重视您填写的内容</comment>
-  </data>
   <data name="About.Title" xml:space="preserve">
     <value>को बारे मा</value>
     <comment>关于/关于</comment>

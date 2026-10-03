@@ -729,10 +729,6 @@
     <value>نقل قول</value>
     <comment>段落/引用</comment>
   </data>
-  <data name="Rating" xml:space="preserve">
-    <value>امتیاز</value>
-    <comment>反馈/评分</comment>
-  </data>
   <data name="Redo" xml:space="preserve">
     <value>ازنو</value>
     <comment>编辑/重做</comment>

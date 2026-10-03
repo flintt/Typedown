@@ -133,10 +133,6 @@
     <value>ଠିକ୍‌ ଅଛି</value>
     <comment>对话框/确定</comment>
   </data>
-  <data name="ContentCanNotBeBlank" xml:space="preserve">
-    <value>ବିଷୟବସ୍ତୁ ଖାଲି ହୋଇପାରିବ ନାହିଁ</value>
-    <comment>对话框/内容不能为空</comment>
-  </data>
   <data name="CreateDocErrorTitle" xml:space="preserve">
     <value>ନୂତନ ଦସ୍ତାବିଜ ସୃଷ୍ଟି କରିବାରେ ବିଫଳ ହୋଇଛି</value>
     <comment>创建文件对话框/新建文档失败</comment>
@@ -160,10 +156,6 @@
   <data name="ExportErrorTitle" xml:space="preserve">
     <value>ରପ୍ତାନି ବିଫଳ ହୋଇଛି</value>
     <comment>文件导出对话框/导出失败</comment>
-  </data>
-  <data name="FeedbackTitle" xml:space="preserve">
-    <value>ମତାମତ[ସମ୍ପାଦନା]</value>
-    <comment>反馈对话框/反馈</comment>
   </data>
   <data name="ImportErrorTitle" xml:space="preserve">
     <value>ଆମଦାନୀ ବିଫଳ ହୋଇଛି</value>
@@ -224,14 +216,6 @@
   <data name="ShortcutKeyIsOccupied" xml:space="preserve">
     <value>ସର୍ଟକଟ୍ କୀ ଦଖଲ ହୋଇଛି</value>
     <comment>快捷键已被占用</comment>
-  </data>
-  <data name="Submit" xml:space="preserve">
-    <value>ଜମା କରନ୍ତୁ</value>
-    <comment>反馈对话框/提交</comment>
-  </data>
-  <data name="SubmittedSuccessfully" xml:space="preserve">
-    <value>ଦାଖଲ ସଫଳ ହୋଇଛି</value>
-    <comment>反馈对话框/提交成功</comment>
   </data>
   <data name="UploadFailedTitle" xml:space="preserve">
     <value>ଅପଲୋଡ୍ ବିଫଳ ହୋଇଛି</value>

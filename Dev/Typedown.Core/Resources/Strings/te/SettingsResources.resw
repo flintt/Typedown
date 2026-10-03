@@ -137,18 +137,6 @@
     <value>ఫీడ్ బ్యాక్ పంపండి</value>
     <comment>关于/发送反馈</comment>
   </data>
-  <data name="About.SendFeedbackDialog.Contact.Header" xml:space="preserve">
-    <value>తాకు</value>
-    <comment>关于/联系方式</comment>
-  </data>
-  <data name="About.SendFeedbackDialog.Contact.Placeholder" xml:space="preserve">
-    <value>ఇమెయిల్</value>
-    <comment>关于/Email</comment>
-  </data>
-  <data name="About.SendFeedbackDialog.Content.Placeholder" xml:space="preserve">
-    <value>మీ ఫీడ్ బ్యాక్ ని మేం చాలా సీరియస్ గా తీసుకుంటాం</value>
-    <comment>关于/我们会非常重视您填写的内容</comment>
-  </data>
   <data name="About.Title" xml:space="preserve">
     <value>గురించి</value>
     <comment>关于/关于</comment>

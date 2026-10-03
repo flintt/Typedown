@@ -729,10 +729,6 @@
     <value>மேலாட்சிப்பகுதி</value>
     <comment>段落/引用</comment>
   </data>
-  <data name="Rating" xml:space="preserve">
-    <value>வீத அறுதிப்பாடு</value>
-    <comment>反馈/评分</comment>
-  </data>
   <data name="Redo" xml:space="preserve">
     <value>திரும்பச் செய்</value>
     <comment>编辑/重做</comment>

@@ -137,18 +137,6 @@
     <value>ମତାମତ ପ୍ରେରଣ କରନ୍ତୁ</value>
     <comment>关于/发送反馈</comment>
   </data>
-  <data name="About.SendFeedbackDialog.Contact.Header" xml:space="preserve">
-    <value>ଯୋଗାଯୋଗ କରନ୍ତୁ</value>
-    <comment>关于/联系方式</comment>
-  </data>
-  <data name="About.SendFeedbackDialog.Contact.Placeholder" xml:space="preserve">
-    <value>ଇମେଲ୍</value>
-    <comment>关于/Email</comment>
-  </data>
-  <data name="About.SendFeedbackDialog.Content.Placeholder" xml:space="preserve">
-    <value>ଆମେ ଆପଣଙ୍କ ମତାମତକୁ ବହୁତ ଗମ୍ଭୀରତାର ସହ ନେଉଛୁ</value>
-    <comment>关于/我们会非常重视您填写的内容</comment>
-  </data>
   <data name="About.Title" xml:space="preserve">
     <value>ବିଷୟରେ</value>
     <comment>关于/关于</comment>

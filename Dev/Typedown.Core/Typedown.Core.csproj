@@ -161,9 +161,6 @@
     <Compile Include="Controls\DialogControls\AddUploadConfigDialog.xaml.cs">
       <DependentUpon>AddUploadConfigDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\DialogControls\FeedbackDialog.xaml.cs">
-      <DependentUpon>FeedbackDialog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\DialogControls\InsertTableDialog.xaml.cs">
       <DependentUpon>InsertTableDialog.xaml</DependentUpon>
     </Compile>
@@ -317,7 +314,6 @@
     <Compile Include="Converters\BoolReverseConverter.cs" />
     <Compile Include="Converters\BoolToObjectConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
-    <Compile Include="Converters\ElementThemeConverter.cs" />
     <Compile Include="Converters\EmptyToVisibilityConverter.cs" />
     <Compile Include="Converters\GridLengthToDoubleConverter.cs" />
     <Compile Include="Converters\ShortcutKeyToStringConverter.cs" />
@@ -334,7 +330,6 @@
     <Compile Include="Interfaces\IKeyboardAccelerator.cs" />
     <Compile Include="Interfaces\IMarkdownEditor.cs" />
     <Compile Include="Interfaces\IPowerShellService.cs" />
-    <Compile Include="Interfaces\IWindowPrivate.cs" />
     <Compile Include="Interfaces\IWindowService.cs" />
     <Compile Include="Migrations\20230226122314_InitialCreate.cs" />
     <Compile Include="Migrations\20230226122314_InitialCreate.designer.cs">
@@ -438,7 +433,6 @@
     <Compile Include="Utilities\Common.cs" />
     <Compile Include="Utilities\ControlExtensions.cs" />
     <Compile Include="Utilities\CoreDispatcherExtensions.cs" />
-    <Compile Include="Utilities\ExportMarkdown.cs" />
     <Compile Include="Utilities\FilePickersExtensions.cs" />
     <Compile Include="Utilities\FileTypeHelper.cs" />
     <Compile Include="Utilities\InjectionExtensions.cs" />
@@ -521,10 +515,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\DialogControls\AddUploadConfigDialog.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\DialogControls\FeedbackDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

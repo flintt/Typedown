@@ -133,10 +133,6 @@
     <value>சரி</value>
     <comment>对话框/确定</comment>
   </data>
-  <data name="ContentCanNotBeBlank" xml:space="preserve">
-    <value>உள்ளடக்கம் காலியாக இருக்க முடியாது</value>
-    <comment>对话框/内容不能为空</comment>
-  </data>
   <data name="CreateDocErrorTitle" xml:space="preserve">
     <value>புதிய ஆவணத்தை உருவாக்குவதில் தோல்வியுற்றது</value>
     <comment>创建文件对话框/新建文档失败</comment>
@@ -160,10 +156,6 @@
   <data name="ExportErrorTitle" xml:space="preserve">
     <value>ஏற்றுமதி தோல்வியுற்றது</value>
     <comment>文件导出对话框/导出失败</comment>
-  </data>
-  <data name="FeedbackTitle" xml:space="preserve">
-    <value>பின்னூட்டம்</value>
-    <comment>反馈对话框/反馈</comment>
   </data>
   <data name="ImportErrorTitle" xml:space="preserve">
     <value>இறக்குமதி தோல்வியுற்றது</value>
@@ -224,14 +216,6 @@
   <data name="ShortcutKeyIsOccupied" xml:space="preserve">
     <value>குறுக்குவழி விசை ஆக்கிரமிக்கப்பட்டுள்ளது</value>
     <comment>快捷键已被占用</comment>
-  </data>
-  <data name="Submit" xml:space="preserve">
-    <value>சமர்ப்பிக்க</value>
-    <comment>反馈对话框/提交</comment>
-  </data>
-  <data name="SubmittedSuccessfully" xml:space="preserve">
-    <value>சமர்ப்பிப்பு வெற்றிகரமாக இருந்தது</value>
-    <comment>反馈对话框/提交成功</comment>
   </data>
   <data name="UploadFailedTitle" xml:space="preserve">
     <value>பதிவேற்றம் தோல்வியுற்றது</value>

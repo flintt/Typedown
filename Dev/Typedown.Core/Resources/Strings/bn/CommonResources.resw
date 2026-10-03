@@ -729,10 +729,6 @@
     <value>উদ্ধৃতি</value>
     <comment>段落/引用</comment>
   </data>
-  <data name="Rating" xml:space="preserve">
-    <value>রেটিং</value>
-    <comment>反馈/评分</comment>
-  </data>
   <data name="Redo" xml:space="preserve">
     <value>পুনঃকরণ</value>
     <comment>编辑/重做</comment>

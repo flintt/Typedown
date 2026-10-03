@@ -133,10 +133,6 @@
     <value>ശരി</value>
     <comment>对话框/确定</comment>
   </data>
-  <data name="ContentCanNotBeBlank" xml:space="preserve">
-    <value>ഉള്ളടക്കം ശൂന്യമായിരിക്കാൻ പാടില്ല</value>
-    <comment>对话框/内容不能为空</comment>
-  </data>
   <data name="CreateDocErrorTitle" xml:space="preserve">
     <value>പുതിയ രേഖ സൃഷ്ടിക്കുന്നതിൽ പരാജയപ്പെട്ടു</value>
     <comment>创建文件对话框/新建文档失败</comment>
@@ -160,10 +156,6 @@
   <data name="ExportErrorTitle" xml:space="preserve">
     <value>കയറ്റുമതി പരാജയപ്പെട്ടു</value>
     <comment>文件导出对话框/导出失败</comment>
-  </data>
-  <data name="FeedbackTitle" xml:space="preserve">
-    <value>Feedback</value>
-    <comment>反馈对话框/反馈</comment>
   </data>
   <data name="ImportErrorTitle" xml:space="preserve">
     <value>ഇറക്കുമതി പരാജയപ്പെട്ടു</value>
@@ -224,14 +216,6 @@
   <data name="ShortcutKeyIsOccupied" xml:space="preserve">
     <value>കുറുക്കുവഴി കീ കൈവശമുണ്ട്</value>
     <comment>快捷键已被占用</comment>
-  </data>
-  <data name="Submit" xml:space="preserve">
-    <value>സമർപ്പിക്കുക</value>
-    <comment>反馈对话框/提交</comment>
-  </data>
-  <data name="SubmittedSuccessfully" xml:space="preserve">
-    <value>സമര് പ്പണം വിജയകരം</value>
-    <comment>反馈对话框/提交成功</comment>
   </data>
   <data name="UploadFailedTitle" xml:space="preserve">
     <value>അപ് ലോഡ് പരാജയപ്പെട്ടു</value>

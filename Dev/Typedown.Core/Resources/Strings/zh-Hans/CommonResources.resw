@@ -729,10 +729,6 @@
     <value>引用</value>
     <comment>段落/引用</comment>
   </data>
-  <data name="Rating" xml:space="preserve">
-    <value>评分</value>
-    <comment>反馈/评分</comment>
-  </data>
   <data name="Redo" xml:space="preserve">
     <value>重做</value>
     <comment>编辑/重做</comment>

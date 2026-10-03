@@ -137,18 +137,6 @@
     <value>ഫീഡ് ബാക്ക് അയയ്ക്കുക</value>
     <comment>关于/发送反馈</comment>
   </data>
-  <data name="About.SendFeedbackDialog.Contact.Header" xml:space="preserve">
-    <value>ബന്ധപ്പെടുക</value>
-    <comment>关于/联系方式</comment>
-  </data>
-  <data name="About.SendFeedbackDialog.Contact.Placeholder" xml:space="preserve">
-    <value>ഇ-മെയില്</value>
-    <comment>关于/Email</comment>
-  </data>
-  <data name="About.SendFeedbackDialog.Content.Placeholder" xml:space="preserve">
-    <value>നിങ്ങളുടെ ഫീഡ് ബാക്ക് ഞങ്ങൾ വളരെ ഗൗരവമായി എടുക്കുന്നു</value>
-    <comment>关于/我们会非常重视您填写的内容</comment>
-  </data>
   <data name="About.Title" xml:space="preserve">
     <value>കുറിച്ച്</value>
     <comment>关于/关于</comment>

@@ -729,10 +729,6 @@
     <value>Nukuu</value>
     <comment>段落/引用</comment>
   </data>
-  <data name="Rating" xml:space="preserve">
-    <value>Rating</value>
-    <comment>反馈/评分</comment>
-  </data>
   <data name="Redo" xml:space="preserve">
     <value>Rudia</value>
     <comment>编辑/重做</comment>

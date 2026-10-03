@@ -729,10 +729,6 @@
     <value>Quote</value>
     <comment>段落/引用</comment>
   </data>
-  <data name="Rating" xml:space="preserve">
-    <value>Penarafan</value>
-    <comment>反馈/评分</comment>
-  </data>
   <data name="Redo" xml:space="preserve">
     <value>Buat semula</value>
     <comment>编辑/重做</comment>

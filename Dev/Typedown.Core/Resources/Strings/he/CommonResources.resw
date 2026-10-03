@@ -729,10 +729,6 @@
     <value>הצעת מחיר</value>
     <comment>段落/引用</comment>
   </data>
-  <data name="Rating" xml:space="preserve">
-    <value>דירוג</value>
-    <comment>反馈/评分</comment>
-  </data>
   <data name="Redo" xml:space="preserve">
     <value>ביצוע חוזר</value>
     <comment>编辑/重做</comment>

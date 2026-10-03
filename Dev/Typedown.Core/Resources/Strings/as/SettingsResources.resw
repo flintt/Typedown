@@ -137,18 +137,6 @@
     <value>মতামত প্ৰেৰণ কৰক</value>
     <comment>关于/发送反馈</comment>
   </data>
-  <data name="About.SendFeedbackDialog.Contact.Header" xml:space="preserve">
-    <value>পৰিচয়</value>
-    <comment>关于/联系方式</comment>
-  </data>
-  <data name="About.SendFeedbackDialog.Contact.Placeholder" xml:space="preserve">
-    <value>ইমেইল</value>
-    <comment>关于/Email</comment>
-  </data>
-  <data name="About.SendFeedbackDialog.Content.Placeholder" xml:space="preserve">
-    <value>আমি আপোনাৰ মতামতঅতি গুৰুত্বসহকাৰে লওঁ</value>
-    <comment>关于/我们会非常重视您填写的内容</comment>
-  </data>
   <data name="About.Title" xml:space="preserve">
     <value>সম্পৰ্কে</value>
     <comment>关于/关于</comment>

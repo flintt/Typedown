@@ -68,18 +68,14 @@ namespace Typedown.Core.Utilities
             });
         }
 
+        /// <summary>
+        /// An error worth keeping: written to the local log only. Nothing leaves the machine (the upstream app posted
+        /// these to its own server).
+        /// </summary>
         public static Task Report(string type, string content)
         {
             WriteLocal(type, content);
-            if (!Config.AllowOutboundNetwork)
-                return Task.CompletedTask;
-            return Task.Run(() => Common.Post("https://typedown.ownbox.cn/report", new
-            {
-                version = AboutApp.GetAppVersion(),
-                system = Environment.OSVersion.VersionString,
-                type,
-                content,
-            }));
+            return Task.CompletedTask;
         }
     }
 }

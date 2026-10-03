@@ -137,18 +137,6 @@
     <value>ផ្ញើមតិ</value>
     <comment>关于/发送反馈</comment>
   </data>
-  <data name="About.SendFeedbackDialog.Contact.Header" xml:space="preserve">
-    <value>ទំនាក់ទំនង</value>
-    <comment>关于/联系方式</comment>
-  </data>
-  <data name="About.SendFeedbackDialog.Contact.Placeholder" xml:space="preserve">
-    <value>អ៊ីម៉ែល</value>
-    <comment>关于/Email</comment>
-  </data>
-  <data name="About.SendFeedbackDialog.Content.Placeholder" xml:space="preserve">
-    <value>យើង យក ចិត្ត ទុក ដាក់ នឹង មតិ យោបល់ របស់ អ្នក ខ្លាំង ណាស់</value>
-    <comment>关于/我们会非常重视您填写的内容</comment>
-  </data>
   <data name="About.Title" xml:space="preserve">
     <value>អំពី</value>
     <comment>关于/关于</comment>
