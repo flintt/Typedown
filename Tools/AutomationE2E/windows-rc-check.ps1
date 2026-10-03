@@ -5,8 +5,10 @@
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
 [Console]::OutputEncoding = [Text.Encoding]::UTF8
-# The edition's names (Branding.props): its install folder, exe, CLI and data folder.
-$brand = ([xml](Get-Content (Join-Path $PSScriptRoot '..\..\Branding.props'))).Project.PropertyGroup
+# The edition's names - its install folder, exe, CLI and data folder - from Branding.props beside this script (where the E2E package copies it) or in the repository it belongs to.
+$brandProps = @((Join-Path $PSScriptRoot 'Branding.props'), (Join-Path $PSScriptRoot '..\..\Branding.props')) | Where-Object { Test-Path $_ } | Select-Object -First 1
+if (-not $brandProps) { throw "no Branding.props beside $PSScriptRoot or in its repository: copy it next to this script" }
+$brand = ([xml](Get-Content $brandProps)).Project.PropertyGroup
 $app = Join-Path $env:ProgramFiles $brand.BrandName
 $exe = Join-Path $app ($brand.BrandExeName + '.exe')
 $ctl = Join-Path $app ($brand.BrandCliName + '.exe')

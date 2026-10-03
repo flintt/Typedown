@@ -24,8 +24,12 @@ $out = Join-Path $Artifacts $runId
 New-Item -ItemType Directory -Force $fixtures, $out | Out-Null
 "runId=$runId" | Out-File (Join-Path $out 'run.txt') -Encoding utf8
 
-# The app's exe under the edition's name (Branding.props).
-$exe = Join-Path $TestHost (([xml](Get-Content (Join-Path $PSScriptRoot '..\..\Branding.props'))).Project.PropertyGroup.BrandExeName + '.exe')
+# Branding.props beside this script (where the E2E package copies it) or in the repository it belongs to.
+$brandProps = @((Join-Path $PSScriptRoot 'Branding.props'), (Join-Path $PSScriptRoot '..\..\Branding.props')) | Where-Object { Test-Path $_ } | Select-Object -First 1
+if (-not $brandProps) { throw "no Branding.props beside $PSScriptRoot or in its repository: copy it next to this script" }
+$brand = ([xml](Get-Content $brandProps)).Project.PropertyGroup
+# The app's exe under the edition's name.
+$exe = Join-Path $TestHost ($brand.BrandExeName + '.exe')
 if (-not (Test-Path (Join-Path $TestHost 'automation-test-host.marker'))) { throw "$TestHost is not an automation test host build" }
 $hostProcess = Start-Process -FilePath $exe -ArgumentList @('--automation-test-root', "`"$root`"") -PassThru
 $code = 3
