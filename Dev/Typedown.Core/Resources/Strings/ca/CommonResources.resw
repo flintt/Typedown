@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>Editar aquest document en mode visual pot reescriure part del seu HTML. Per conservar-lo tal com és, editeu-lo en mode font.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>Els diagrames PlantUML estan desactivats (dibuixar-los envia el codi a plantuml.com). Activa'ls a Configuració &gt; Editor.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

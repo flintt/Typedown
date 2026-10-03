@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>Ukuhlela le dokhumenti kumodi ebonakalayo kungabhala kabusha enye ye-HTML yayo. Ukuze uyigcine injalo, yihlele kumodi yomthombo.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>Imidwebo ye-PlantUML ivaliwe (ukudweba kuthumela umthombo ku-plantuml.com). Yivule ku-Izilungiselelo &gt; Isihleli.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

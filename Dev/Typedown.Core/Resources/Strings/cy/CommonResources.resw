@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>Gall golygu'r ddogfen hon yn y modd gweledol ailysgrifennu rhywfaint o'i HTML. I'w chadw'n union fel y mae, golygwch hi yn y modd ffynhonnell.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>Mae diagramau PlantUML i ffwrdd (mae lluniadu'n anfon y ffynhonnell i plantuml.com). Trowch nhw ymlaen yn Gosodiadau &gt; Golygydd.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

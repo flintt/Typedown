@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>ఈ పత్రాన్ని విజువల్ మోడ్‌లో సవరిస్తే దానిలోని కొంత HTML తిరిగి రాయబడవచ్చు. ఉన్నది ఉన్నట్లు ఉంచడానికి సోర్స్ మోడ్‌లో సవరించండి.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>PlantUML రేఖాచిత్రాలు ఆఫ్‌లో ఉన్నాయి (గీయడం మూలాన్ని plantuml.com కి పంపుతుంది). సెట్టింగ్‌లు &gt; ఎడిటర్‌లో ఆన్ చేయండి.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

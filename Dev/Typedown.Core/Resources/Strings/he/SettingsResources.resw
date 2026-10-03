@@ -848,4 +848,12 @@
   <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
     <value>מדגיש לזמן קצר את הטקסט שתוכנית מחוברת שינתה, כדי שתראה מה השתנה.</value>
   </data>
+  <data name="Editor.RenderPlantUml.Title" xml:space="preserve">
+    <value>ציור תרשימי PlantUML</value>
+    <comment>编辑器/绘制 PlantUML 图表</comment>
+  </data>
+  <data name="Editor.RenderPlantUml.Description" xml:space="preserve">
+    <value>שולח את קוד התרשים אל plantuml.com כדי לצייר אותו</value>
+    <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
+  </data>
 </root>

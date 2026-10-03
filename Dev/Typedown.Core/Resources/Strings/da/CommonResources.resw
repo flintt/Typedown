@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>Redigering i visuel tilstand kan omskrive en del af dokumentets HTML. Rediger i kildetilstand for at bevare det uændret.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>PlantUML-diagrammer er slået fra (tegning sender kilden til plantuml.com). Slå dem til under Indstillinger &gt; Editor.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>Om du redigerar dokumentet i visuellt läge kan en del av dess HTML skrivas om. Redigera i källkodsläge för att behålla det exakt som det är.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>PlantUML-diagram är avstängda (ritning skickar källkoden till plantuml.com). Slå på dem under Inställningar &gt; Redigerare.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

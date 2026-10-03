@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>Redaktimi i këtij dokumenti në modalitetin vizual mund të rishkruajë një pjesë të HTML-së së tij. Për ta mbajtur siç është, redaktojeni në modalitetin e burimit.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>Diagramet PlantUML janë të çaktivizuara (vizatimi dërgon burimin te plantuml.com). Aktivizojini te Cilësimet &gt; Redaktori.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

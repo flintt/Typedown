@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>اس دستاویز میں بصری وضع میں ترمیم سے اس کے HTML کا کچھ حصہ دوبارہ لکھا جا سکتا ہے۔ اسے جوں کا توں رکھنے کے لیے ماخذ وضع میں ترمیم کریں۔</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>PlantUML خاکے بند ہیں (بنانے پر ماخذ plantuml.com کو بھیجا جاتا ہے)۔ ترتیبات &gt; مدیر میں آن کریں۔</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

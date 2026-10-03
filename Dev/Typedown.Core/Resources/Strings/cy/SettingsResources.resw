@@ -848,4 +848,12 @@
   <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
     <value>Yn amlygu'n fyr y testun a newidiwyd gan raglen gysylltiedig, fel y gallwch weld beth sydd wedi newid.</value>
   </data>
+  <data name="Editor.RenderPlantUml.Title" xml:space="preserve">
+    <value>Lluniadu diagramau PlantUML</value>
+    <comment>编辑器/绘制 PlantUML 图表</comment>
+  </data>
+  <data name="Editor.RenderPlantUml.Description" xml:space="preserve">
+    <value>Yn anfon ffynhonnell y diagram i plantuml.com i'w luniadu</value>
+    <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
+  </data>
 </root>

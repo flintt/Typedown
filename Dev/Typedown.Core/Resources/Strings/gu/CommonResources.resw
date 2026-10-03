@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>આ દસ્તાવેજને વિઝ્યુઅલ મોડમાં સંપાદિત કરવાથી તેનું કેટલુંક HTML ફરીથી લખાઈ શકે છે. તેને જેમ છે તેમ રાખવા સોર્સ મોડમાં સંપાદિત કરો.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>PlantUML આકૃતિઓ બંધ છે (દોરવાથી સ્રોત plantuml.com પર મોકલાય છે). સેટિંગ્સ &gt; એડિટરમાં ચાલુ કરો.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

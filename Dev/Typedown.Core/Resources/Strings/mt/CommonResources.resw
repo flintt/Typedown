@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>L-editjar ta’ dan id-dokument fil-modalità viżwali jista’ jerġa’ jikteb parti mill-HTML tiegħu. Biex iżżommu eżatt kif inhu, editjah fil-modalità tas-sors.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>Id-dijagrammi PlantUML huma mitfija (id-disinn jibgħat is-sors lil plantuml.com). Ixgħelhom f'Issettjar &gt; Editur.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

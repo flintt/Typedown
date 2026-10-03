@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>D’fhéadfadh cuid den HTML a athscríobh má chuirtear an doiciméad seo in eagar sa mhód amhairc. Chun é a choinneáil díreach mar atá, cuir in eagar sa mhód foinse é.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>Tá léaráidí PlantUML múchta (seolann an tarraingt an fhoinse chuig plantuml.com). Cas air iad i Socruithe &gt; Eagarthóir.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

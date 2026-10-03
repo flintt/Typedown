@@ -226,9 +226,13 @@ class StateRender {
             target.innerHTML = ''
             diagram.drawSVG(target, options)
           } else if (functionType === 'plantuml') {
-            const diagram = render.parse(code)
             target.innerHTML = ''
-            diagram.insertImgElement(target)
+            if (this.muya.options.renderPlantUml) {
+              render.parse(code).insertImgElement(target)
+            } else {
+              // Off (the default): nothing goes to plantuml.com; the block says so (assets/styles/index.css).
+              target.classList.add('ag-plantuml-off')
+            }
           } else if (functionType === 'vega-lite') {
             await render(key, JSON.parse(code), options)
           }

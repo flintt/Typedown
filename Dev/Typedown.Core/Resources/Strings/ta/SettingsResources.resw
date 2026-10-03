@@ -848,4 +848,12 @@
   <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
     <value>இணைக்கப்பட்ட நிரல் மாற்றிய உரையைச் சிறிது நேரம் சிறப்பித்துக் காட்டுகிறது, எது மாறியது என்பதை நீங்கள் பார்க்கலாம்.</value>
   </data>
+  <data name="Editor.RenderPlantUml.Title" xml:space="preserve">
+    <value>PlantUML வரைபடங்களை வரை</value>
+    <comment>编辑器/绘制 PlantUML 图表</comment>
+  </data>
+  <data name="Editor.RenderPlantUml.Description" xml:space="preserve">
+    <value>வரைவதற்கு வரைபடத்தின் மூலத்தை plantuml.com-க்கு அனுப்புகிறது</value>
+    <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
+  </data>
 </root>

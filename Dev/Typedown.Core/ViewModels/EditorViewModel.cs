@@ -161,6 +161,7 @@ namespace Typedown.Core.ViewModels
                 ThemeCss = ThemeFiles.Read(Settings.CustomTheme),
                 Settings.SpellcheckEnabled,
                 Settings.AutoPairMarkdownSyntax,
+                Settings.RenderPlantUml,
                 Settings.EditorAreaWidth,
                 Settings.FontFamily,
                 Settings.TextDirection,

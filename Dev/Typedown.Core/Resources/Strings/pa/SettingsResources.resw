@@ -848,4 +848,12 @@
   <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
     <value>ਜੁੜੇ ਹੋਏ ਪ੍ਰੋਗਰਾਮ ਵੱਲੋਂ ਬਦਲੇ ਗਏ ਟੈਕਸਟ ਨੂੰ ਥੋੜ੍ਹੀ ਦੇਰ ਲਈ ਉਜਾਗਰ ਕਰਦਾ ਹੈ, ਤਾਂ ਜੋ ਤੁਸੀਂ ਦੇਖ ਸਕੋ ਕਿ ਕੀ ਬਦਲਿਆ।</value>
   </data>
+  <data name="Editor.RenderPlantUml.Title" xml:space="preserve">
+    <value>PlantUML ਚਿੱਤਰ ਬਣਾਓ</value>
+    <comment>编辑器/绘制 PlantUML 图表</comment>
+  </data>
+  <data name="Editor.RenderPlantUml.Description" xml:space="preserve">
+    <value>ਚਿੱਤਰ ਬਣਾਉਣ ਲਈ ਇਸਦਾ ਸਰੋਤ plantuml.com ਨੂੰ ਭੇਜਦਾ ਹੈ</value>
+    <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
+  </data>
 </root>

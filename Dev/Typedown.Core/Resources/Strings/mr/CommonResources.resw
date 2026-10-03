@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>हा दस्तऐवज दृश्य मोडमध्ये संपादित केल्यास त्यातील काही HTML पुन्हा लिहिले जाऊ शकते. तसेच ठेवण्यासाठी स्रोत मोडमध्ये संपादित करा.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>PlantUML आकृत्या बंद आहेत (काढताना स्रोत plantuml.com वर पाठवला जातो). सेटिंग्ज &gt; संपादक मध्ये चालू करा.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

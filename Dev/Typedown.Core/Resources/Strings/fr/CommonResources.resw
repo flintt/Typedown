@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>Modifier ce document en mode visuel peut réécrire une partie de son HTML brut. Pour le garder tel quel, modifiez-le en mode source.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>Les diagrammes PlantUML sont désactivés (les dessiner envoie le code à plantuml.com). Activez-les dans Paramètres &gt; Éditeur.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

@@ -883,4 +883,12 @@
   <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
     <value>短暂高亮已连接的程序修改过的文字，让你看清哪里变了。</value>
   </data>
+  <data name="Editor.RenderPlantUml.Title" xml:space="preserve">
+    <value>绘制 PlantUML 图表</value>
+    <comment>编辑器/绘制 PlantUML 图表</comment>
+  </data>
+  <data name="Editor.RenderPlantUml.Description" xml:space="preserve">
+    <value>把图表源码发送到 plantuml.com，由它绘制</value>
+    <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
+  </data>
 </root>

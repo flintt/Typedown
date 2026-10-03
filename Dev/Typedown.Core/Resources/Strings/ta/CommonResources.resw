@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>இந்த ஆவணத்தை காட்சி முறையில் திருத்தினால் அதன் சில HTML மீண்டும் எழுதப்படலாம். உள்ளபடியே வைக்க மூல முறையில் திருத்தவும்.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>PlantUML வரைபடங்கள் முடக்கப்பட்டுள்ளன (வரைய மூலம் plantuml.com-க்கு அனுப்பப்படும்). அமைப்புகள் &gt; திருத்தியில் இயக்கவும்.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

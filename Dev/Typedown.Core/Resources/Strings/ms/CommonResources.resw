@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>Mengedit dokumen ini dalam mod visual mungkin menulis semula sebahagian HTML nya. Untuk mengekalkannya, edit dalam mod sumber.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>Rajah PlantUML dimatikan (melukis menghantar sumber ke plantuml.com). Hidupkan dalam Tetapan &gt; Editor.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

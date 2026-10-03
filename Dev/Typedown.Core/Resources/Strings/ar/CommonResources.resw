@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>قد يؤدي تحرير هذا المستند في الوضع المرئي إلى إعادة كتابة جزء من شيفرة HTML فيه. للحفاظ عليه كما هو، حرّره في وضع المصدر.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>مخططات PlantUML متوقفة (الرسم يرسل المصدر إلى plantuml.com). شغّلها من الإعدادات &gt; المحرر.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

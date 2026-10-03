@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>ਇਸ ਦਸਤਾਵੇਜ਼ ਨੂੰ ਵਿਜ਼ੂਅਲ ਮੋਡ ਵਿੱਚ ਸੋਧਣ ਨਾਲ ਇਸਦਾ ਕੁਝ HTML ਦੁਬਾਰਾ ਲਿਖਿਆ ਜਾ ਸਕਦਾ ਹੈ। ਜਿਉਂ ਦਾ ਤਿਉਂ ਰੱਖਣ ਲਈ ਸਰੋਤ ਮੋਡ ਵਿੱਚ ਸੋਧੋ।</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>PlantUML ਚਿੱਤਰ ਬੰਦ ਹਨ (ਬਣਾਉਣ ਨਾਲ ਸਰੋਤ plantuml.com ਨੂੰ ਭੇਜਿਆ ਜਾਂਦਾ ਹੈ)। ਸੈਟਿੰਗਾਂ &gt; ਸੰਪਾਦਕ ਵਿੱਚ ਚਾਲੂ ਕਰੋ।</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

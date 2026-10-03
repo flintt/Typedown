@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>Visuaalses režiimis muutmine võib osa selle dokumendi HTML-ist ümber kirjutada. Muutmata hoidmiseks muutke seda lähtekoodi režiimis.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>PlantUML-diagrammid on välja lülitatud (joonistamine saadab lähtekoodi saidile plantuml.com). Lülita need sisse: Sätted &gt; Redaktor.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

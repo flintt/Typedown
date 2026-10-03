@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>Mengedit dokumen ini dalam mode visual dapat menulis ulang sebagian HTML-nya. Agar tetap seperti semula, edit dalam mode sumber.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>Diagram PlantUML dinonaktifkan (menggambar mengirim sumbernya ke plantuml.com). Aktifkan di Pengaturan &gt; Editor.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

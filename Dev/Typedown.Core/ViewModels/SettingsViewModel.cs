@@ -123,6 +123,12 @@ namespace Typedown.Core.ViewModels
         /// <summary>Files opened from Explorer / the command line go into a tab of the current window instead of a new window.</summary>
         public bool OpenFilesInNewTab { get => GetSettingValue(true); set => SetSettingValue(value); }
         public bool AutoPairMarkdownSyntax { get => GetSettingValue(true); set => SetSettingValue(value); }
+
+        /// <summary>
+        /// PlantUML blocks are drawn by plantuml.com from their source, so the text leaves the machine: off until the
+        /// person turns it on. Off, a block shows a line saying so instead of the diagram.
+        /// </summary>
+        public bool RenderPlantUml { get => GetSettingValue(false); set => SetSettingValue(value); }
         public string EditorAreaWidth { get => GetSettingValue("1200px"); set => SetSettingValue(value); }
         public string FontFamily { get => GetSettingValue(""); set => SetSettingValue(value); }
         public string TextDirection { get => GetSettingValue("auto"); set => SetSettingValue(value); }
@@ -199,6 +205,7 @@ namespace Typedown.Core.ViewModels
             "CustomCss",
             "SpellcheckEnabled",
             "AutoPairMarkdownSyntax",
+            "RenderPlantUml",
             "EditorAreaWidth",
             "FontFamily",
             "TextDirection",

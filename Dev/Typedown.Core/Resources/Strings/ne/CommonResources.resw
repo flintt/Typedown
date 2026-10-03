@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>यो कागजात दृश्य मोडमा सम्पादन गर्दा यसको केही HTML पुनर्लेखन हुन सक्छ। जस्ताको तस्तै राख्न स्रोत मोडमा सम्पादन गर्नुहोस्।</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>PlantUML रेखाचित्रहरू बन्द छन् (कोर्दा स्रोत plantuml.com मा पठाइन्छ)। सेटिङहरू &gt; सम्पादकमा खोल्नुहोस्।</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

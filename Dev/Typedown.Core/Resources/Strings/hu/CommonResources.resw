@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>A vizuális módban való szerkesztés átírhatja a dokumentum HTML-kódjának egy részét. Ha változatlanul szeretné megtartani, szerkessze forrás módban.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>A PlantUML-diagramok ki vannak kapcsolva (a rajzolás elküldi a forrást a plantuml.com-nak). Kapcsolja be őket a Beállítások &gt; Szerkesztő alatt.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

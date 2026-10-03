@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>Այս փաստաթուղթը տեսողական ռեժիմում խմբագրելը կարող է վերաշարադրել դրա HTML-ի մի մասը։ Անփոփոխ պահելու համար խմբագրեք աղբյուրի ռեժիմում։</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>PlantUML գծապատկերներն անջատված են (գծելը աղբյուրն ուղարկում է plantuml.com)։ Միացրեք դրանք Կարգավորումներ &gt; Խմբագրիչ բաժնում։</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

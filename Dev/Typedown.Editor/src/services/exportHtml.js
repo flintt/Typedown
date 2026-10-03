@@ -103,6 +103,9 @@ class ExportHtml {
           return 'vega-lite'
         }
       })()
+      // Drawing PlantUML off (the default): the export keeps the block as code rather than an image fetched from
+      // plantuml.com with the diagram's source - by the export, and by whoever opens the file.
+      if (functionType === 'plantuml' && !this.options?.renderPlantUml) continue
       const render = RENDER_MAP[functionType]
       const preParent = code.parentNode
       const diagramContainer = document.createElement('div')

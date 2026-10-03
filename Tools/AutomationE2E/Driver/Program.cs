@@ -139,6 +139,7 @@ internal static class Program
             await Case("K02 Ctrl+, twice opens and closes the settings: the caret and the keyboard are where they were", K02);
             await Case("K03 the same with an untitled document (no per-file caret memory)", K03);
             await Case("FS01 in full screen the main page starts at the top edge of the screen", FS01);
+            await Case("PU01 PlantUML is not drawn by default (nothing goes to plantuml.com, the block says so); turned on it is, off again it is not", PU01);
             await Case("RV01 reveal: \"change\" scrolls a change off screen into view, the caret where it was; \"document\" leaves the page", RV01);
             // Last: it ends the test host.
             await Case("Q01 two windows closed one after the other: the process exits (it stayed, headless)", Q01);
@@ -835,6 +836,37 @@ internal static class Program
             notes.Add("after " + after.ToString(Formatting.None));
             Check(!(bool)after["fullScreen"]! && (double)after["mainPageTop"]! == (double)before["mainPageTop"]!, "F11 again leaves full screen, the layout as it was");
         }
+    }
+
+    // PlantUML blocks are drawn by plantuml.com from their source. Off by default (Settings > Editor): no image
+    // pointing there, and the notice in its place; turned on, the image; off again, the notice.
+    private static async Task PU01(List<string> notes)
+    {
+        using var c = await Session("e2e PU01");
+        var id = await Open(c, Fixture("pu01.md", "# PU01\n\n```plantuml\nAlice -> Bob: hello\n```\n\nText\n"));
+        var windowId = await WindowIdOf(c, id);
+        const string script = "(() => { const off = document.querySelector('.ag-plantuml-off'); " +
+            "return { remote: [...document.querySelectorAll('img')].filter(i => (i.src || '').includes('plantuml.com')).length, " +
+            "off: !!off, notice: off ? getComputedStyle(off, '::before').content : null } })()";
+        async Task<JToken> Page() { await Task.Delay(1200); return (await c.Call("test.editor.eval", new { windowId, script }))["result"]!; }
+        var before = await Page();
+        notes.Add("default: " + before.ToString(Formatting.None));
+        Check((int)before["remote"]! == 0, "by default no image points at plantuml.com");
+        Check((bool)before["off"]! && ((string?)before["notice"] ?? "").Contains("PlantUML"), "by default the block shows the notice");
+        try
+        {
+            await c.Call("test.settings.set", new { windowId, name = "RenderPlantUml", value = true });
+            var on = await Page();
+            notes.Add("on: " + on.ToString(Formatting.None));
+            Check((int)on["remote"]! == 1 && !(bool)on["off"]!, "turned on, the diagram is drawn by plantuml.com");
+        }
+        finally
+        {
+            await c.Call("test.settings.set", new { windowId, name = "RenderPlantUml", value = false });
+        }
+        var after = await Page();
+        notes.Add("off again: " + after.ToString(Formatting.None));
+        Check((int)after["remote"]! == 0 && (bool)after["off"]!, "off again, the notice and no image");
     }
 
     // reveal: "change" (spec 2.3): a write scrolls its first changed block into view when it is off screen and leaves

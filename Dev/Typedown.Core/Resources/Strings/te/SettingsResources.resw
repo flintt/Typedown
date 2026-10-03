@@ -848,4 +848,12 @@
   <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
     <value>కనెక్ట్ అయిన ప్రోగ్రామ్ మార్చిన వచనాన్ని కొద్దిసేపు హైలైట్ చేస్తుంది, తద్వారా ఏమి మారిందో మీరు చూడవచ్చు.</value>
   </data>
+  <data name="Editor.RenderPlantUml.Title" xml:space="preserve">
+    <value>PlantUML రేఖాచిత్రాలను గీయండి</value>
+    <comment>编辑器/绘制 PlantUML 图表</comment>
+  </data>
+  <data name="Editor.RenderPlantUml.Description" xml:space="preserve">
+    <value>గీయడానికి రేఖాచిత్రం మూలాన్ని plantuml.com కి పంపుతుంది</value>
+    <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
+  </data>
 </root>

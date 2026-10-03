@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>ଏହି ଡକ୍ୟୁମେଣ୍ଟକୁ ଭିଜୁଆଲ ମୋଡରେ ସମ୍ପାଦନ କଲେ ଏହାର କିଛି HTML ପୁନଃ ଲେଖାଯାଇପାରେ। ଯେମିତି ଅଛି ସେମିତି ରଖିବାକୁ ସୋର୍ସ ମୋଡରେ ସମ୍ପାଦନ କରନ୍ତୁ।</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>PlantUML ଚିତ୍ର ବନ୍ଦ ଅଛି (ଆଙ୍କିବା ଉତ୍ସକୁ plantuml.com କୁ ପଠାଏ)। ସେଟିଂସ &gt; ଏଡିଟରରେ ଚାଲୁ କରନ୍ତୁ।</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

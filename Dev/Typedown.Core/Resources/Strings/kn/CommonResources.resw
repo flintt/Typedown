@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>ಈ ದಾಖಲೆಯನ್ನು ದೃಶ್ಯ ಮೋಡ್‌ನಲ್ಲಿ ಸಂಪಾದಿಸಿದರೆ ಅದರ ಕೆಲವು HTML ಮರುಬರೆಯಲ್ಪಡಬಹುದು. ಇದ್ದಂತೆಯೇ ಇಡಲು ಮೂಲ ಮೋಡ್‌ನಲ್ಲಿ ಸಂಪಾದಿಸಿ.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>PlantUML ರೇಖಾಚಿತ್ರಗಳು ಆಫ್ ಆಗಿವೆ (ಬಿಡಿಸುವಾಗ ಮೂಲವನ್ನು plantuml.com ಗೆ ಕಳುಹಿಸಲಾಗುತ್ತದೆ). ಸೆಟ್ಟಿಂಗ್‌ಗಳು &gt; ಸಂಪಾದಕದಲ್ಲಿ ಆನ್ ಮಾಡಿ.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

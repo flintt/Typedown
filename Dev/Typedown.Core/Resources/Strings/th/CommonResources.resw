@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>การแก้ไขเอกสารนี้ในโหมดภาพอาจเขียน HTML บางส่วนใหม่ หากต้องการคงไว้ตามเดิม ให้แก้ไขในโหมดซอร์ส</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>ปิดแผนภาพ PlantUML อยู่ (การวาดจะส่งซอร์สไปยัง plantuml.com) เปิดได้ที่ การตั้งค่า &gt; ตัวแก้ไข</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

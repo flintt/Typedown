@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>Η επεξεργασία σε οπτική λειτουργία μπορεί να αναδιατυπώσει μέρος του HTML αυτού του εγγράφου. Για να μείνει αμετάβλητο, επεξεργαστείτε το σε λειτουργία πηγαίου κώδικα.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>Τα διαγράμματα PlantUML είναι απενεργοποιημένα (η σχεδίαση στέλνει τον κώδικα στο plantuml.com). Ενεργοποιήστε τα στις Ρυθμίσεις &gt; Επεξεργαστής.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

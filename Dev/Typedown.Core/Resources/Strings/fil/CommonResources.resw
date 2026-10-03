@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>Ang pag-edit ng dokumentong ito sa visual mode ay maaaring muling isulat ang ilan sa HTML nito. Para manatili ito nang eksakto, i-edit ito sa source mode.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>Naka-off ang mga PlantUML diagram (ang pagguhit ay nagpapadala ng source sa plantuml.com). I-on ang mga ito sa Mga Setting &gt; Editor.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

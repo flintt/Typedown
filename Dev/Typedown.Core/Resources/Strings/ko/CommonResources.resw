@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>시각 모드에서 이 문서를 편집하면 원시 HTML 일부가 다시 쓰일 수 있습니다. 그대로 유지하려면 소스 모드에서 편집하세요.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>PlantUML 다이어그램이 꺼져 있습니다(그리려면 소스를 plantuml.com으로 보냅니다). 설정 &gt; 편집기에서 켤 수 있습니다.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

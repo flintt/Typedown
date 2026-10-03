@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>Редактирането във визуален режим може да промени част от HTML кода на документа. За да го запазите непроменен, редактирайте в режим на изходен код.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>PlantUML диаграмите са изключени (рисуването изпраща кода до plantuml.com). Включете ги от Настройки &gt; Редактор.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

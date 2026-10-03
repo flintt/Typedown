@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>Editarea în modul vizual poate rescrie o parte din HTML-ul acestui document. Pentru a-l păstra neschimbat, editați-l în modul sursă.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>Diagramele PlantUML sunt dezactivate (desenarea trimite sursa la plantuml.com). Activați-le în Setări &gt; Editor.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

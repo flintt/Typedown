@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>Om hierdie dokument in visuele modus te redigeer, kan van sy HTML herskryf. Redigeer dit in bronmodus om dit presies so te hou.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>PlantUML-diagramme is af (teken stuur die bron na plantuml.com). Skakel dit aan in Instellings &gt; Redigeerder.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

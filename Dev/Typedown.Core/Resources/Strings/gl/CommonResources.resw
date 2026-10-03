@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>Editar este documento no modo visual pode reescribir parte do seu HTML. Para mantelo tal cal, edítao no modo fonte.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>Os diagramas PlantUML están desactivados (debuxalos envía o código a plantuml.com). Actívaos en Configuración &gt; Editor.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

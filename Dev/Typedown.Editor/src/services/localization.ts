@@ -9,7 +9,8 @@ const names = [
     'ClickToAddAnImage',
     'LoadImageFail',
     'Footnote',
-    'FirstEditWarning'
+    'FirstEditWarning',
+    'PlantUmlOff'
 ]
 
 // These end up as CSS variables the editor's own placeholders read, so they are fetched rather than bound.

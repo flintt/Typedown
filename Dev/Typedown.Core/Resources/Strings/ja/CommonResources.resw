@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>ビジュアルモードでこの文書を編集すると、生の HTML の一部が書き換えられることがあります。そのまま保つには、ソースモードで編集してください。</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>PlantUML 図はオフです（描画するとソースが plantuml.com に送信されます）。設定 &gt; エディターでオンにできます。</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

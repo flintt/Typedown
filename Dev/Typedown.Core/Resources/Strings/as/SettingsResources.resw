@@ -848,4 +848,12 @@
   <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
     <value>সংযুক্ত প্ৰগ্ৰামে সলনি কৰা পাঠ কিছু সময়ৰ বাবে হাইলাইট কৰে, যাতে আপুনি কি সলনি হ'ল দেখিব পাৰে।</value>
   </data>
+  <data name="Editor.RenderPlantUml.Title" xml:space="preserve">
+    <value>PlantUML ডায়াগ্ৰাম অংকন কৰক</value>
+    <comment>编辑器/绘制 PlantUML 图表</comment>
+  </data>
+  <data name="Editor.RenderPlantUml.Description" xml:space="preserve">
+    <value>অংকন কৰিবলৈ ডায়াগ্ৰামৰ উৎস plantuml.com লৈ পঠিয়ায়</value>
+    <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
+  </data>
 </root>

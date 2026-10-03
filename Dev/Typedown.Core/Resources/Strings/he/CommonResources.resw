@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>עריכת המסמך במצב חזותי עלולה לשכתב חלק מקוד ה-HTML שבו. כדי לשמור אותו בדיוק כפי שהוא, ערוך אותו במצב קוד מקור.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>תרשימי PlantUML כבויים (ציור שולח את הקוד אל plantuml.com). אפשר להפעיל אותם בהגדרות &gt; עורך.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

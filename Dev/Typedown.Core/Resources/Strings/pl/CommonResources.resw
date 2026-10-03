@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>Edycja tego dokumentu w trybie wizualnym może zmienić część jego kodu HTML. Aby zachować go bez zmian, edytuj w trybie źródłowym.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>Diagramy PlantUML są wyłączone (rysowanie wysyła kod do plantuml.com). Włącz je w Ustawienia &gt; Edytor.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

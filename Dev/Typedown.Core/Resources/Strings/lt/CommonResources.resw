@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>Redaguojant vaizdiniu režimu gali būti perrašyta dalis šio dokumento HTML. Kad jis liktų nepakitęs, redaguokite šaltinio režimu.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>PlantUML diagramos išjungtos (piešiant šaltinis siunčiamas į plantuml.com). Įjunkite jas skiltyje Nustatymai &gt; Redaktorius.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

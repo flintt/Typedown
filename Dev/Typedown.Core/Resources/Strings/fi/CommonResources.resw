@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>Muokkaaminen visuaalisessa tilassa voi kirjoittaa osan tämän asiakirjan HTML-koodista uudelleen. Säilytä se ennallaan muokkaamalla lähdetilassa.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>PlantUML-kaaviot ovat pois päältä (piirtäminen lähettää lähdekoodin palveluun plantuml.com). Ota ne käyttöön kohdassa Asetukset &gt; Editori.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>ການແກ້ໄຂເອກະສານນີ້ໃນໂໝດພາບອາດຂຽນ HTML ບາງສ່ວນຄືນໃໝ່. ເພື່ອຮັກສາໄວ້ຕາມເດີມ, ໃຫ້ແກ້ໄຂໃນໂໝດຊອດ.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>ແຜນວາດ PlantUML ຖືກປິດ (ການແຕ້ມຈະສົ່ງຕົ້ນສະບັບໄປຫາ plantuml.com). ເປີດໄດ້ໃນ ການຕັ້ງຄ່າ &gt; ຕົວແກ້ໄຂ.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

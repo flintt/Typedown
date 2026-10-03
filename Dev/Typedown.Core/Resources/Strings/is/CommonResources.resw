@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>Breytingar í sjónrænum ham geta endurskrifað hluta af HTML-kóða skjalsins. Til að halda því óbreyttu skaltu breyta því í frumkóðaham.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>Slökkt er á PlantUML-skýringarmyndum (teikning sendir frumkóðann á plantuml.com). Kveiktu á þeim í Stillingar &gt; Ritill.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

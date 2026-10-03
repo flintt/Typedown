@@ -848,4 +848,12 @@
   <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
     <value>ໄຮໄລທ໌ຂໍ້ຄວາມທີ່ໂປຣແກຣມທີ່ເຊື່ອມຕໍ່ປ່ຽນແປງຊົ່ວຄາວ ເພື່ອໃຫ້ທ່ານເຫັນວ່າມີຫຍັງປ່ຽນໄປ.</value>
   </data>
+  <data name="Editor.RenderPlantUml.Title" xml:space="preserve">
+    <value>ແຕ້ມແຜນວາດ PlantUML</value>
+    <comment>编辑器/绘制 PlantUML 图表</comment>
+  </data>
+  <data name="Editor.RenderPlantUml.Description" xml:space="preserve">
+    <value>ສົ່ງຕົ້ນສະບັບຂອງແຜນວາດໄປຫາ plantuml.com ເພື່ອແຕ້ມ</value>
+    <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
+  </data>
 </root>

@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>Bu belgeyi görsel modda düzenlemek HTML kodunun bir kısmını yeniden yazabilir. Olduğu gibi korumak için kaynak modunda düzenleyin.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>PlantUML diyagramları kapalı (çizim, kaynağı plantuml.com'a gönderir). Ayarlar &gt; Düzenleyici'den açabilirsiniz.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

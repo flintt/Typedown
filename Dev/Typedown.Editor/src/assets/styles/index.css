@@ -313,6 +313,14 @@ div.ag-empty {
   font-family: monospace;
 }
 
+/* A PlantUML block while drawing it is off (Settings > Editor): its source would go to plantuml.com. */
+.ag-plantuml-off::before {
+  content: var(--PlantUmlOff);
+  color: var(--editorColor50);
+  font-size: 14px;
+  font-style: italic;
+}
+
 div.ag-math-error,
 span.ag-math>.ag-math-render.ag-math-error {
   color: var(--deleteColor);

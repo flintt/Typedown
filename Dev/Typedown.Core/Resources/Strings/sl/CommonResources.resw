@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>Urejanje tega dokumenta v vizualnem načinu lahko prepiše del njegovega HTML-ja. Da ostane nespremenjen, ga urejajte v načinu izvorne kode.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>Diagrami PlantUML so izklopljeni (risanje pošlje izvorno kodo na plantuml.com). Vklopite jih v Nastavitve &gt; Urejevalnik.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>Rediģēšana vizuālajā režīmā var pārrakstīt daļu šī dokumenta HTML. Lai to saglabātu nemainītu, rediģējiet avota režīmā.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>PlantUML diagrammas ir izslēgtas (zīmēšana nosūta avotu uz plantuml.com). Ieslēdziet tās sadaļā Iestatījumi &gt; Redaktors.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>ការកែសម្រួលឯកសារនេះក្នុងរបៀបមើលឃើញអាចសរសេរ HTML ខ្លះឡើងវិញ។ ដើម្បីរក្សាទុកដដែល សូមកែសម្រួលក្នុងរបៀបកូដប្រភព។</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>ដ្យាក្រាម PlantUML ត្រូវបានបិទ (ការគូរផ្ញើកូដប្រភពទៅ plantuml.com)។ បើកវានៅក្នុង ការកំណត់ &gt; កម្មវិធីកែសម្រួល។</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

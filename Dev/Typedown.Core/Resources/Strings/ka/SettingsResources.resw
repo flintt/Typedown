@@ -848,4 +848,12 @@
   <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
     <value>მოკლე დროით გამოკვეთს ტექსტს, რომელიც დაკავშირებულმა პროგრამამ შეცვალა, რათა დაინახოთ, რა შეიცვალა.</value>
   </data>
+  <data name="Editor.RenderPlantUml.Title" xml:space="preserve">
+    <value>PlantUML დიაგრამების დახატვა</value>
+    <comment>编辑器/绘制 PlantUML 图表</comment>
+  </data>
+  <data name="Editor.RenderPlantUml.Description" xml:space="preserve">
+    <value>დიაგრამის წყაროს აგზავნის plantuml.com-ზე დასახატად</value>
+    <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
+  </data>
 </root>

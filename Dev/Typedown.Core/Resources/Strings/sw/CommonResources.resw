@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>Kuhariri hati hii katika hali ya kuona kunaweza kuandika upya sehemu ya HTML yake. Ili kuiacha kama ilivyo, ihariri katika hali ya chanzo.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>Michoro ya PlantUML imezimwa (kuchora hutuma chanzo kwa plantuml.com). Iwashe katika Mipangilio &gt; Kihariri.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

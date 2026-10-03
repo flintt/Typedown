@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>ഈ പ്രമാണം ദൃശ്യ മോഡിൽ എഡിറ്റ് ചെയ്താൽ അതിലെ ചില HTML മാറ്റിയെഴുതപ്പെടാം. അതേപടി നിലനിർത്താൻ സോഴ്സ് മോഡിൽ എഡിറ്റ് ചെയ്യുക.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>PlantUML ഡയഗ്രാമുകൾ ഓഫാണ് (വരയ്ക്കുമ്പോൾ ഉറവിടം plantuml.com-ലേക്ക് അയയ്ക്കും). ക്രമീകരണങ്ങൾ &gt; എഡിറ്ററിൽ ഓണാക്കുക.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

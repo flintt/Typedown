@@ -848,4 +848,12 @@
   <data name="General.HighlightAutomationChanges.Description" xml:space="preserve">
     <value>បន្លិចមួយរយៈខ្លីនូវអត្ថបទដែលកម្មវិធីដែលបានភ្ជាប់បានផ្លាស់ប្ដូរ ដើម្បីឱ្យអ្នកឃើញអ្វីដែលបានផ្លាស់ប្ដូរ។</value>
   </data>
+  <data name="Editor.RenderPlantUml.Title" xml:space="preserve">
+    <value>គូរដ្យាក្រាម PlantUML</value>
+    <comment>编辑器/绘制 PlantUML 图表</comment>
+  </data>
+  <data name="Editor.RenderPlantUml.Description" xml:space="preserve">
+    <value>ផ្ញើកូដប្រភពរបស់ដ្យាក្រាមទៅ plantuml.com ដើម្បីគូរ</value>
+    <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
+  </data>
 </root>

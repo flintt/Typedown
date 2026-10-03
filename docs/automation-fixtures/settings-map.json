@@ -813,6 +813,12 @@
       ]
     },
     {
+      "reason": "privacy: drawing PlantUML sends the document's diagram source to plantuml.com; only the person turns that on, not a program",
+      "windows": [
+        "RenderPlantUml"
+      ]
+    },
+    {
       "reason": "security: shows the person what a program changed; a program must not be able to hide its own edits",
       "windows": [
         "HighlightAutomationChanges"

@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>ویرایش این سند در حالت دیداری ممکن است بخشی از HTML آن را بازنویسی کند. برای حفظ آن به همین شکل، در حالت منبع ویرایش کنید.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>نمودارهای PlantUML خاموش هستند (رسم، منبع را به plantuml.com می‌فرستد). از تنظیمات &gt; ویرایشگر روشنشان کنید.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

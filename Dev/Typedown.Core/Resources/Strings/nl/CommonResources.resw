@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>Bewerken in de visuele modus kan een deel van de HTML van dit document herschrijven. Bewerk het in de bronmodus om het ongewijzigd te houden.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>PlantUML-diagrammen staan uit (tekenen stuurt de broncode naar plantuml.com). Zet ze aan via Instellingen &gt; Editor.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>

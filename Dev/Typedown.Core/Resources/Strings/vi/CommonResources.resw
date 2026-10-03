@@ -1002,4 +1002,8 @@
   <data name="FirstEditWarning" xml:space="preserve">
     <value>Chỉnh sửa tài liệu này ở chế độ trực quan có thể viết lại một phần HTML của nó. Để giữ nguyên, hãy chỉnh sửa ở chế độ mã nguồn.</value>
   </data>
+  <data name="PlantUmlOff" xml:space="preserve">
+    <value>Sơ đồ PlantUML đang tắt (vẽ sẽ gửi mã nguồn đến plantuml.com). Bật trong Cài đặt &gt; Trình soạn thảo.</value>
+    <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
+  </data>
 </root>
