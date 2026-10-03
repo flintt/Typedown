@@ -147,6 +147,7 @@ internal static class Program
             await Case("VI01 Vim keys in source mode: real keys edit (dd, A, Esc), Ctrl+V reaches Vim as block visual, u undoes, :w saves", VI01);
             await Case("VI02 Vim keys in reading mode: G, gg, ]] and Ctrl+D move the page", VI02);
             await Case("TH01 a custom theme colours the page in visual, reading and source mode, and a change shows at once in each", TH01);
+            await Case("TH02 View > Theme > Reload themes finds a new theme file and a renamed one; the window draws in the custom theme's base whatever the built-in setting says", TH02);
             // Last: it ends the test host.
             await Case("Q01 two windows closed one after the other: the process exits (it stayed, headless)", Q01);
         }
@@ -1151,6 +1152,52 @@ internal static class Program
             await c.Call("test.settings.set", new { windowId, name = "SourceCode", value = false });
             await c.Call("test.settings.set", new { windowId, name = "ReadOnly", value = false });
             await c.Call("test.theme.apply", new { windowId, builtIn = "Default" });
+        }
+    }
+
+    private static async Task TH02(List<string> notes)
+    {
+        using var c = await Session("e2e TH02");
+        var id = await Open(c, Fixture("th02.md", "# TH02\n"));
+        var windowId = await WindowIdOf(c, id);
+        async Task<JToken> Menu(bool reload = false) => await c.Call("test.theme.menu", new { windowId, reload });
+        var folder = (string)(await Menu())["folder"]!;
+        var file = Path.Combine(folder, "th02.css");
+        string Theme(string name) => $"/* Typedown theme\n * name: {name}\n * base: dark\n */\n:root {{ --editorBgColor: #102030; }}\n";
+        async Task<bool> Shows(string name)
+        {
+            for (var i = 0; i < 25; i++)
+            {
+                if (((JArray)(await Menu())["entries"]!).Any(e => (string?)e == name)) return true;
+                await Task.Delay(200);
+            }
+            return false;
+        }
+        try
+        {
+            Directory.CreateDirectory(folder);
+            File.WriteAllText(file, Theme("TH02 One"));
+            Check(!((JArray)(await Menu())["entries"]!).Any(e => (string?)e == "TH02 One"), "the file was added after the menu was built");
+            await Menu(reload: true);
+            Check(await Shows("TH02 One"), "Reload themes lists the new file");
+            File.WriteAllText(file, Theme("TH02 Two"));
+            await Menu(reload: true);
+            Check(await Shows("TH02 Two"), "Reload themes shows a theme's new name");
+            notes.Add("menu: " + (await Menu())["entries"]!.ToString(Formatting.None));
+
+            // The two settings apart: light as the built-in one, a dark custom theme. The window follows the theme
+            // in force (the custom one's base), as the editor does - it used to follow the built-in setting alone.
+            await c.Call("test.settings.set", new { windowId, name = "AppTheme", value = 1 });
+            await c.Call("test.settings.set", new { windowId, name = "CustomTheme", value = "th02" });
+            await Task.Delay(800);
+            var actual = (string?)(await Menu())["actualTheme"];
+            notes.Add($"built-in Light, custom th02 (base dark): window {actual}");
+            Check(actual == "Dark", $"the window draws dark under a dark custom theme ({actual})");
+        }
+        finally
+        {
+            await c.Call("test.theme.apply", new { windowId, builtIn = "Default" });
+            File.Delete(file);
         }
     }
 

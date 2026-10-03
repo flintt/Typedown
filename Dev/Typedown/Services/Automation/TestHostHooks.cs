@@ -267,6 +267,30 @@ namespace Typedown.Services.Automation
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["appTheme"] = app.SettingsViewModel.AppTheme.ToString(), ["actualTheme"] = root?.ActualTheme.ToString() };
                 });
             }));
+            // View > Theme: the entries it shows, after clicking its "Reload themes" item when asked (through the item's
+            // automation peer, as an assistive tool would).
+            methods.Add(new MethodDescriptor("test.theme.menu", null, "test.theme.menu/1", (c, ct) =>
+            {
+                var click = c.Params.OptionalBoolean("reload", false);
+                return Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    Core.Controls.EditorControls.MenuBarItems.ViewItem? view = null;
+                    void Find(global::Windows.UI.Xaml.DependencyObject node)
+                    {
+                        if (view != null || node == null) return;
+                        if (node is Core.Controls.EditorControls.MenuBarItems.ViewItem v) { view = v; return; }
+                        for (var i = 0; i < global::Windows.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(node); i++)
+                            Find(global::Windows.UI.Xaml.Media.VisualTreeHelper.GetChild(node, i));
+                    }
+                    Find(app.XamlRoot?.Content as global::Windows.UI.Xaml.DependencyObject);
+                    if (view == null) throw new AutomationException(AutomationErrorKind.editor_not_ready, "no View menu in this window");
+                    var (entries, reload) = view.ThemeMenu();
+                    if (click && reload != null)
+                        ((global::Windows.UI.Xaml.Automation.Provider.IInvokeProvider)new global::Windows.UI.Xaml.Automation.Peers.MenuFlyoutItemAutomationPeer(reload)).Invoke();
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["entries"] = new Newtonsoft.Json.Linq.JArray(entries), ["reload"] = reload?.Text, ["folder"] = Core.Utilities.ThemeFiles.Folder,
+                        ["actualTheme"] = (app.XamlRoot?.Content as global::Windows.UI.Xaml.FrameworkElement)?.ActualTheme.ToString() };
+                });
+            }));
             methods.Add(new MethodDescriptor("test.images.uploadAll", null, "test.images.uploadAll/1", async (c, ct) =>
                 await await Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), async app =>
                 {

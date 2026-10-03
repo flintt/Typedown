@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Typedown.Core.Utilities;
 using Windows.UI.Xaml.Controls;
@@ -61,6 +62,14 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             });
             ThemeSubMenu.Items.Add(reload);
             UpdateThemeChecks();
+        }
+
+        /// <summary>The theme submenu's entries as shown, and its "Reload themes" item (the automation test host clicks it).</summary>
+        public (IReadOnlyList<string> Entries, MenuFlyoutItem Reload) ThemeMenu()
+        {
+            var entries = ThemeSubMenu?.Items.OfType<MenuFlyoutItem>().Select(x => x.Text).ToList() ?? new List<string>();
+            var reload = ThemeSubMenu?.Items.OfType<MenuFlyoutItem>().LastOrDefault();
+            return (entries, reload);
         }
 
         private async void OnOpenThemeDesigner(object sender, Windows.UI.Xaml.RoutedEventArgs e)
