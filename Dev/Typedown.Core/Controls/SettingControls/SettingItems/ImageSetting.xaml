@@ -165,6 +165,12 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
         </controls:NormalSettingItem>
+        <controls:NormalSettingItem x:Name="UploadHistoryItem" Title="{u:LocaleString Key=View.Image.UploadHistory.Title}" Description="{x:Bind UploadHistoryDescription, Mode=OneWay}">
+            <controls:NormalSettingItem.Icon>
+                <FontIcon Glyph="&#xe81c;"/>
+            </controls:NormalSettingItem.Icon>
+            <Button x:Name="ClearUploadHistoryButton" Content="{u:LocaleString Key=Clear}" Click="OnClearUploadHistoryClick"/>
+        </controls:NormalSettingItem>
         <controls:ButtonSettingItem Title="{u:LocaleString Key=View.Image.UploadConfigs.Title}" Description="{u:LocaleString Key=View.Image.UploadConfigs.Description}" Command="{x:Bind ViewModel.NavigateCommand}" CommandParameter="Settings/ImageUpload">
             <controls:ButtonSettingItem.Icon>
                 <FontIcon Glyph="&#xee71;"/>

@@ -901,4 +901,10 @@
   <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
     <value>The S3 configuration is incomplete: fill in Endpoint, Bucket, Access Key ID and Secret Access Key.</value>
   </data>
+  <data name="View.Image.UploadHistory.Title" xml:space="preserve">
+    <value>Upload history</value>
+  </data>
+  <data name="View.Image.UploadHistory.Description" xml:space="preserve">
+    <value>A picture already uploaded with the same configuration is not uploaded again; its earlier address is used ({0} remembered). Clear it after deleting uploaded files.</value>
+  </data>
 </root>

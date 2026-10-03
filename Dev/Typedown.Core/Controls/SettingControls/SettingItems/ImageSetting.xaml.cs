@@ -29,6 +29,34 @@ namespace Typedown.Core.Controls.SettingControls.SettingItems
 
         private readonly CompositeDisposable disposables = new();
 
+        /// <summary>Settings > Image > Upload history: what it does and how many pictures it holds.</summary>
+        public string UploadHistoryDescription { get; private set; }
+
+        private async void UpdateUploadHistoryDescription()
+        {
+            try
+            {
+                UploadHistoryDescription = string.Format(Locale.GetString("View.Image.UploadHistory.Description"), await Typedown.Core.Services.ImageUpload.History.CountAsync());
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"upload history: {ex.Message}");
+            }
+        }
+
+        private async void OnClearUploadHistoryClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                await Typedown.Core.Services.ImageUpload.History.ClearAsync();
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"upload history: clearing failed: {ex.Message}");
+            }
+            UpdateUploadHistoryDescription();
+        }
+
         public ImageSetting()
         {
             InitializeComponent();
@@ -38,6 +66,7 @@ namespace Typedown.Core.Controls.SettingControls.SettingItems
         {
             disposables.Add(ImageUpload.ImageUploadConfigs.GetCollectionObservable().Subscribe(_ => UpdateUploadConfigOptions()));
             UpdateUploadConfigOptions();
+            UpdateUploadHistoryDescription();
         }
 
         public Visibility IsCopyImagePathSettingItemVisibility(InsertImageAction action)

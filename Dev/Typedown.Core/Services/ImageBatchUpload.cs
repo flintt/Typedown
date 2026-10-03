@@ -31,6 +31,8 @@ namespace Typedown.Core.Services
             /// <summary>Distinct local files the document uses.</summary>
             public int Files { get; set; }
             public int Uploaded { get; set; }
+            /// <summary>Of <see cref="Uploaded"/>: uploaded before with this configuration, the earlier address used.</summary>
+            public int Reused { get; set; }
             /// <summary>References whose address changed in the document.</summary>
             public int Replaced { get; set; }
             public bool NoConfig { get; set; }
@@ -69,7 +71,8 @@ namespace Typedown.Core.Services
         public async Task<Result> RunAsync(IProgress<(int done, int total)> progress, CancellationToken cancellationToken)
         {
             var result = new Result();
-            var config = app.ServiceProvider.GetService<ImageUpload>().DefaultConfig;
+            var upload = app.ServiceProvider.GetService<ImageUpload>();
+            var config = upload.DefaultConfig;
             var tab = app.TabsViewModel.ActiveTab;
             var images = await LocalImagesOfActiveDocumentAsync();
             var files = images.Values.Where(f => f != null).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
@@ -96,10 +99,11 @@ namespace Typedown.Core.Services
                 progress?.Report((i, files.Count));
                 try
                 {
-                    var url = await config.LoadUploadConfig().Upload(app.ServiceProvider, files[i]);
+                    var (url, reused) = await upload.UploadRemembered(config, files[i]);
                     if (string.IsNullOrWhiteSpace(url))
                         throw new InvalidOperationException(Locale.GetDialogString("UploadImages.NoAddress"));
                     uploaded[files[i]] = url.Trim();
+                    if (reused) result.Reused++;
                 }
                 catch (Exception ex)
                 {

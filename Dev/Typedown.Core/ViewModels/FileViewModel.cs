@@ -710,6 +710,8 @@ namespace Typedown.Core.ViewModels
                     return false;
 
                 var summary = string.Format(Locale.GetDialogString(result.Cancelled ? "UploadImages.Cancelled" : "UploadImages.Done"), result.Uploaded, result.Files);
+                if (result.Reused > 0)
+                    summary += " " + string.Format(Locale.GetDialogString("UploadImages.Reused"), result.Reused);
                 object content = summary;
                 if (result.Failures.Count > 0)
                 {

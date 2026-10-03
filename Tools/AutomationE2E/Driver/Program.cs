@@ -883,7 +883,7 @@ internal static class Program
 
     private const string IU01Text = "# IU01\n\n![a](iu01-images/a.png)\n\n![a again](iu01-images/a.png \"title\")\n\n" +
         "![space](<iu01-images/b b.png>)\n\n![encoded](iu01-images/b%20b.png)\n\n![web](https://example.com/x.png)\n\n" +
-        "![missing](iu01-images/missing.png)\n\n<img src=\"iu01-images/a.png\" width=\"10\">\n\n`![code](iu01-images/a.png)`\n\n" +
+        "![missing](iu01-images/missing.png)\n\n![copy](iu01-images/a-copy.png)\n\n<img src=\"iu01-images/a.png\" width=\"10\">\n\n`![code](iu01-images/a.png)`\n\n" +
         "```md\n![fence](iu01-images/a.png)\n```\n";
 
     private static async Task IU01(List<string> notes)
@@ -893,6 +893,8 @@ internal static class Program
         Directory.CreateDirectory(images);
         File.WriteAllBytes(Path.Combine(images, "a.png"), Png(1));
         File.WriteAllBytes(Path.Combine(images, "b b.png"), Png(2));
+        // a.png's picture under another name: the upload history gives it a.png's address.
+        File.WriteAllBytes(Path.Combine(images, "a-copy.png"), Png(1));
         var log = Path.Combine(images, "uploads.log");
         File.Delete(log);
         var id = await Open(c, Path.Combine(Path.GetDirectoryName(images)!, "iu01.md"));
@@ -909,8 +911,8 @@ internal static class Program
         notes.Add("result: " + result.ToString(Formatting.None));
         var uploads = File.Exists(log) ? File.ReadAllLines(log) : new string[0];
         notes.Add("script calls: " + string.Join(" | ", uploads));
-        Check((int)result["Files"]! == 3 && (int)result["Uploaded"]! == 2, "three files are named (one missing), two are uploaded");
-        Check(uploads.Length == 2, $"each file is uploaded once, however often it is used ({uploads.Length} calls)");
+        Check((int)result["Files"]! == 4 && (int)result["Uploaded"]! == 3 && (int)result["Reused"]! == 1, "four files are named (one missing), three get addresses, one of them a.png's");
+        Check(uploads.Length == 2, $"each picture is uploaded once, however often and under whatever name it is used ({uploads.Length} calls)");
         Check(result["Failures"]!.Count() == 1 && (string?)result["Failures"]![0]!["Address"] == "iu01-images/missing.png", "the missing file is the one failure");
         var text = (string)(await Get(c, id))["text"]!;
         notes.Add("text: " + JsonConvert.SerializeObject(text));
@@ -918,6 +920,7 @@ internal static class Program
             .Replace("](iu01-images/a.png", "](https://img.test/a.png")
             .Replace("<iu01-images/b b.png>", "<https://img.test/b-b.png>")
             .Replace("(iu01-images/b%20b.png)", "(https://img.test/b-b.png)")
+            .Replace("(iu01-images/a-copy.png)", "(https://img.test/a.png)")
             .Replace("src=\"iu01-images/a.png\"", "src=\"https://img.test/a.png\"")
             .Replace("`![code](https://img.test/a.png)`", "`![code](iu01-images/a.png)`")
             .Replace("![fence](https://img.test/a.png)", "![fence](iu01-images/a.png)");
@@ -927,8 +930,10 @@ internal static class Program
         await c.Call("document.undo", new { documentId = id, baseRevision = await Revision(c, id), reveal = "document" });
         Check((string)(await Get(c, id))["text"]! == IU01Text, "one undo puts every local path back");
 
-        var none = await c.Call("test.images.uploadAll", new { windowId });
-        Check((int)none["Uploaded"]! == 2, "run again on the restored text, the same two are uploaded");
+        var again = await c.Call("test.images.uploadAll", new { windowId });
+        notes.Add("again: " + again.ToString(Formatting.None));
+        Check((int)again["Uploaded"]! == 3 && (int)again["Reused"]! == 3, "run again on the restored text, every address comes from the history");
+        Check(File.ReadAllLines(log).Length == 2, "and the upload script is not called again");
         await c.Call("document.undo", new { documentId = id, baseRevision = await Revision(c, id), reveal = "document" });
     }
 

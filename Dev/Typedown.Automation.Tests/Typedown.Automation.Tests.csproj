@@ -18,6 +18,7 @@
     <Compile Include="..\Typedown.Core\Utilities\SafeFile.cs" Link="Core\SafeFile.cs" />
     <Compile Include="..\Typedown.Core\Utilities\MarkdownImages.cs" Link="Core\MarkdownImages.cs" />
     <Compile Include="..\Typedown.Core\Services\S3Uploader.cs" Link="Core\S3Uploader.cs" />
+    <Compile Include="..\Typedown.Core\Services\UploadHistory.cs" Link="Core\UploadHistory.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Typedown.Automation\Unix\UnixSocketListener.cs" Link="Unix\UnixSocketListener.cs" />

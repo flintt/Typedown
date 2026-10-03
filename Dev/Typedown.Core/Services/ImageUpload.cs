@@ -106,12 +106,23 @@ namespace Typedown.Core.Services
             }
         }
 
+        /// <summary>What was uploaded with which configuration, for every window (Settings > Image > Upload history).</summary>
+        public static UploadHistory History { get; } = new(System.IO.Path.Combine(Config.GetLocalFolderPath(), "ImageUploadHistory.json"));
+
         public async Task<string> Upload(ImageAction.InsertImageSource source, string filePath)
         {
             if (DefaultConfig is not ImageUploadConfig config)
                 throw new InvalidOperationException(Locale.GetDialogString("UploadImages.NoConfig"));
-            return await config.LoadUploadConfig().Upload(serviceProvider, filePath);
+            return (await UploadRemembered(config, filePath)).url;
         }
+
+        /// <summary>
+        /// The file's address under this configuration: the one it got before (same content, configuration unchanged),
+        /// or a new upload. Test upload does not come here: it always uploads.
+        /// </summary>
+        public Task<(string url, bool reused)> UploadRemembered(ImageUploadConfig config, string filePath) =>
+            History.UploadAsync(UploadHistory.Scope(config.Method.ToString(), config.Config), filePath,
+                () => config.LoadUploadConfig().Upload(serviceProvider, filePath));
 
         public async Task<string> Upload(ImageUploadConfig config, string filePath)
         {
