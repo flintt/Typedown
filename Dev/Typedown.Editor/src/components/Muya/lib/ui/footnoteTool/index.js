@@ -56,7 +56,13 @@ class FootnoteTool extends BaseFloat {
 
   async loadStringResources() {
     const names = ['FootnoteNotFound', 'InputFootnoteDefine', 'Create', 'GoTo']
-    this.stringResources = await remote.getStringResources({ names })
+    const dic = await remote.getStringResources({ names })
+    // Read by camel-cased name below; the Windows host answers with those, the Uno host with the names as asked.
+    this.stringResources = {}
+    for (const name of names) {
+      const camel = name.charAt(0).toLowerCase() + name.slice(1)
+      this.stringResources[camel] = dic[camel] ?? dic[name] ?? ''
+    }
   }
 
   listen() {

@@ -848,13 +848,14 @@ internal static class Program
         const string script = "(() => { const off = document.querySelector('.ag-plantuml-off'); " +
             "return { remote: [...document.querySelectorAll('img')].filter(i => (i.src || '').includes('plantuml.com')).length, " +
             "off: !!off, notice: off ? getComputedStyle(off, '::before').content : null, " +
-            "text: getComputedStyle(document.documentElement).getPropertyValue('--PlantUmlOff').slice(0, 40), first: getComputedStyle(document.documentElement).getPropertyValue('--FirstEditWarning').slice(0, 30), " +
-            "display: off ? getComputedStyle(off).display : null } })()";
+            // The page's strings under both names: the Windows host answers camel-cased, the stylesheet reads both.
+            "strings: ['FirstEditWarning', 'firstEditWarning', 'InputMathFormula', 'inputMathFormula'].map(k => document.documentElement.style.getPropertyValue('--' + k).length) } })()";
         async Task<JToken> Page() { await Task.Delay(1200); return (await c.Call("test.editor.eval", new { windowId, script }))["result"]!; }
         var before = await Page();
         notes.Add("default: " + before.ToString(Formatting.None));
         Check((int)before["remote"]! == 0, "by default no image points at plantuml.com");
         Check((bool)before["off"]! && ((string?)before["notice"] ?? "").Contains("PlantUML"), "by default the block shows the notice");
+        Check(before["strings"]!.All(n => (int)n! > 0), "the page's strings are there under both names (the first-edit notice read one the host never sent)");
         try
         {
             await c.Call("test.settings.set", new { windowId, name = "RenderPlantUml", value = true });
