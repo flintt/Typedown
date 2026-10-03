@@ -424,6 +424,7 @@
     <Compile Include="Services\EventCenter.cs" />
     <Compile Include="Services\ImageAction.cs" />
     <Compile Include="Services\ImageUpload.cs" />
+    <Compile Include="Services\S3Uploader.cs" />
     <Compile Include="Services\RemoteInvoke.cs" />
     <Compile Include="Services\Transport.cs" />
     <Compile Include="Utilities\CollectionExtensions.cs" />
@@ -439,6 +440,7 @@
     <Compile Include="Utilities\Locale.cs" />
     <Compile Include="Utilities\Log.cs" />
     <Compile Include="Utilities\SafeFile.cs" />
+    <Compile Include="Utilities\MarkdownImages.cs" />
     <Compile Include="Utilities\TextFileFormat.cs" />
     <Compile Include="Utilities\ThemeDesignerPage.cs" />
     <Compile Include="Utilities\ThemeFiles.cs" />
