@@ -147,3 +147,10 @@ hp 只能编译、GUI 靠计划任务，所以正确性尽量**抽成不依赖 X
 | R11 | 全文导出/扫描随规模增长 | Muya `dispatchChangeContentChange`(150)；transport.ts 全文 JSON+差分(42)；宿主全文哈希 | 先测清全文导出/统计/大纲/JSON/宿主哈希各阶段 CPU 与分配，缓存未变结果、按块修订增量维护统计与大纲；文档同步与 UI 辅助状态分频（但保存/关闭/切换仍受 R01–R03 约束）；仍达不到目标再评估分块渲染/视口虚拟化（实验分支验 IME/查找/表格/光标/大纲/打印导出）；图表/导出懒加载须证明 WebView2 本地资源与离线可靠 | 固定机器/浏览器/语料/电源；1万/10万/30万/100万字符 + 高密度表格代码公式；报告开/切/键 p50/95/99、长任务、消息数/字节、托管堆/JS 堆；浏览器桩与真实宿主分开测 | 3 天+ |
 
 **硬指标（贯穿三阶段）**：错误文档写入次数=0；持久化失败不得标为成功；恢复测试不得遗漏脏文档。性能用实测基线（输入/打开/切换/保存分位延迟、UI 长任务、每分钟写盘量、DB 大小、目录任务/句柄峰值、多标签总内存）。
+
+## 自动化接口（2026-10-03）
+
+| 事项 | 由来 | 为什么现在不改 | 做法 | 验证 |
+|---|---|---|---|---|
+| `document.open` / `document.create` 带 `reveal: "document"` 不检查 `window.focus` | 规格（a57ec99，2026-09-29）第 1.3 节写的是"`window.focus` 管 `window.focus`、`document.focus` 和任何 `reveal` 请求"。第一版实现（42aedd8，2026-09-30）把检查写在 `RevealChecked` 里，只有写入、撤销和重做用它；`open` 和 `create` 直接调用不检查的 `RevealOf`。测试只覆盖了 `document.replace` 带 reveal 缺 scope 的情况，`open`/`create` 没有测试，同一天 v1 冻结（bbaa20c），缺口跟着冻结了。只有 `document.write` 的程序因此可以把窗口切到前台、抢走焦点。`reveal: "change"`（940aaae）在所有方法上都检查 | 补上检查会让已有调用需要更多 scope，v1 冻结规则第 6.2 节不允许 | 开 `apiVersion: 2` 时 `open`/`create` 改用 `RevealChecked`；v2 的迁移说明写明这一条 | `DocumentMethodsTests`：只有 `document.write` 的会话用 `open`、`create` 带 `reveal: "document"`，得到 `scope_required`（`window.focus`）|
+| 源码模式下的写入一律是 `unknown`，必须 `allowUnknown` | 设计如此：判定"可视编辑器会把正文改写成什么"要用 Muya 解析，源码模式没有 Muya 实例，页面只能回报 `notEvaluated`（`Editor/index.tsx` 的 `describeNormalization`）| 不是缺陷，可以在 v1 内改进：只会让以前被拒的写入通过，属于放宽 | 源码模式下用离屏 Muya（不挂到页面）计算规范化结果后再判定 | E2E：源码模式下默认策略写入普通段落成功，写入会被改写格式的表格仍被拒；RV01 的源码模式一步去掉 `allowUnknown` |
