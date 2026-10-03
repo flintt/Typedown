@@ -183,7 +183,10 @@ $iscc = Find-ISCC
 $stage = Join-Path $repo 'Tools\Installer\publish'
 Remove-Item $stage -Recurse -Force -ErrorAction SilentlyContinue
 New-Item -ItemType Directory -Force $stage | Out-Null
-Copy-Item (Join-Path $published '*') $stage -Recurse -Force
+# Not the MSIX project's own build of the app (win-x64\msixpublish, made beside this one when the package is built
+# here too): 140 MB the installer has no use for.
+Get-ChildItem $published | Where-Object { -not ($_.PSIsContainer -and $_.Name -match '^win-(x64|x86|arm64)$') } |
+    Copy-Item -Destination $stage -Recurse -Force
 # The CLI (and its MCP server) beside the app, on the app's runtime, with the automation documents.
 & (Join-Path $PSScriptRoot 'add-cli.ps1') -AppFolder $stage -RuntimeIdentifier $rid -Configuration $Configuration
 & (Join-Path $PSScriptRoot 'assert-application-build.ps1') -Path $stage
