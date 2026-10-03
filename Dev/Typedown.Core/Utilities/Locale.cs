@@ -217,63 +217,7 @@ namespace Typedown.Core.Utilities
 
         protected override object ProvideValue()
         {
-            var text = Locale.GetString(Key, Source);
-            if (!string.IsNullOrEmpty(text))
-                lock (provided) provided[text] = (Key, Source);
-            return text;
-        }
-
-        // Every text handed out, in every language so far, and the key it came from: what Refresh recognises.
-        private static readonly Dictionary<string, (string Key, Locale.ResourceSource Source)> provided = new();
-
-        // The properties text from here goes into, in this app's XAML.
-        private static readonly Windows.UI.Xaml.DependencyProperty[] TextProperties =
-        {
-            Windows.UI.Xaml.Controls.ContentControl.ContentProperty,
-            Windows.UI.Xaml.Controls.TextBlock.TextProperty,
-            Windows.UI.Xaml.Controls.ToolTipService.ToolTipProperty,
-            Windows.UI.Xaml.Controls.TextBox.PlaceholderTextProperty,
-            Windows.UI.Xaml.Controls.TextBox.HeaderProperty,
-            Windows.UI.Xaml.Controls.ComboBox.PlaceholderTextProperty,
-            Windows.UI.Xaml.Controls.ComboBox.HeaderProperty,
-            Windows.UI.Xaml.Controls.ToggleSwitch.HeaderProperty,
-            Windows.UI.Xaml.Automation.AutomationProperties.NameProperty,
-        };
-
-        /// <summary>
-        /// Puts what an element tree shows from here into the language now applied. The text goes into a property
-        /// once, when the XAML loads: leaving the settings page builds a new main page, so changing the language
-        /// there reaches everything, but a change from elsewhere (another window, the automation API) left the
-        /// main page - the side pane's tabs, the folder and outline pages, the status bar - in the old language.
-        /// A property counts when it holds exactly a text handed out from here; the document is in the editor's
-        /// web page, not in this tree, and a text box's own text is not one of the properties.
-        /// </summary>
-        public static void Refresh(Windows.UI.Xaml.DependencyObject root)
-        {
-            Dictionary<string, (string Key, Locale.ResourceSource Source)> known;
-            lock (provided) known = new(provided);
-            var changed = 0;
-            var pending = new Stack<Windows.UI.Xaml.DependencyObject>();
-            pending.Push(root);
-            while (pending.Count > 0)
-            {
-                var element = pending.Pop();
-                foreach (var property in TextProperties)
-                {
-                    try
-                    {
-                        if (element.ReadLocalValue(property) is string old && known.TryGetValue(old, out var from))
-                        {
-                            var text = Locale.GetString(from.Key, from.Source);
-                            if (!string.IsNullOrEmpty(text) && text != old) { element.SetValue(property, text); changed++; }
-                        }
-                    }
-                    catch (Exception) { /* not a property of this element */ }
-                }
-                var count = Windows.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(element);
-                for (var i = 0; i < count; i++) pending.Push(Windows.UI.Xaml.Media.VisualTreeHelper.GetChild(element, i));
-            }
-            Log.Debug($"language: {changed} text(s) on the page put into the new language");
+            return Locale.GetString(Key, Source);
         }
     }
 }

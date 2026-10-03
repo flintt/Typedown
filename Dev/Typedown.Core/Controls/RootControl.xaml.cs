@@ -37,10 +37,6 @@ namespace Typedown.Core.Controls
             // not catch up is anything a view model holds as a finished string — the view models outlive the
             // navigation — which is why UIViewModel rebuilds the window title on a language change.
             disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.Language)).Subscribe(_ => ReloadSettingsPage()));
-            // A change from elsewhere (another window, the automation API) leaves this window on its main page: what
-            // that page shows from {u:LocaleString} is put into the new language once it has been applied.
-            disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.Language)).Subscribe(_ =>
-                _ = Dispatcher.RunIdleAsync(_ => Utilities.LocaleString.Refresh(this))));
             disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.ShortcutSettings)).Subscribe(_ => RegisterSettingsShortcut()));
             Frame.Navigated += OnFrameNavigated;
             Frame.Navigate(typeof(MainPage), null);
