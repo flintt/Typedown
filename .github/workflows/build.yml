@@ -210,6 +210,14 @@ jobs:
           "cer=$cer" >> $env:GITHUB_OUTPUT
           "password=$password" >> $env:GITHUB_OUTPUT
 
+      # Whether this edition makes a Store upload too (Branding.props).
+      - name: Brand
+        id: brand
+        shell: pwsh
+        run: |
+          $brand = ([xml](Get-Content Branding.props)).Project.PropertyGroup
+          "store=$($brand.BrandStoreUpload)" >> $env:GITHUB_OUTPUT
+
       - name: Restore
         run: >
           msbuild Tools/Typedown.Package/Typedown.Package.wapproj /t:Restore /m
@@ -227,6 +235,26 @@ jobs:
           /p:PackageCertificateKeyFile=${{ steps.cert.outputs.pfx }}
           /p:PackageCertificatePassword=${{ steps.cert.outputs.password }}
           /p:AppxPackageDir=${{ github.workspace }}\AppxPackages\
+
+      # The Microsoft Store upload: the same package, unsigned (the Store signs it), as .msixupload with its symbols.
+      - name: Build Store upload
+        if: steps.brand.outputs.store == 'true' && steps.build.outcome == 'success'
+        run: >
+          msbuild Tools/Typedown.Package/Typedown.Package.wapproj /m
+          /p:Configuration=${{ env.Configuration }} /p:Platform=${{ env.Platform }}
+          /p:AppxBundle=Never
+          /p:UapAppxPackageBuildMode=StoreUpload
+          /p:AppxPackageSigningEnabled=false
+          /p:AppxPackageDir=${{ github.workspace }}\StoreUpload\
+
+      - uses: actions/upload-artifact@v4
+        if: steps.brand.outputs.store == 'true' && steps.build.outcome == 'success'
+        with:
+          name: store-upload-${{ env.Platform }}
+          path: StoreUpload/**/*.msixupload
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
 
       - name: Diagnose MakeAppx failure
         if: steps.build.outcome == 'failure'
@@ -362,7 +390,7 @@ jobs:
           |---|---|
           | `@NAME@-windows-x64-v*.exe` / `-arm64-` | Installer (Inno Setup) for x64 / ARM64 Windows. Installs WebView2 Runtime if missing, registers `.md` associations. |
           | `@NAME@-portable-x64-v*.zip` / `-arm64-` | Portable build – unzip and run `@EXE@.exe`. |
-          | `Typedown.Package_*_x64.msix` / `_ARM64.msix` | MSIX packages for sideloading. |
+          | `@NAME@_*_x64.msix` / `_ARM64.msix` | MSIX packages for sideloading. |
           | `@NAME@-signing-certificate.cer` | Self-signed certificate used to sign the above. To install the MSIX, first import this into **Local Machine → Trusted People** (or Trusted Root). The .exe/.zip run without it (SmartScreen may warn). |
           MD
           sed -i "s/@NAME@/$name/g; s/@EXE@/$exe/g" notes.md

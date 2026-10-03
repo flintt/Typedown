@@ -10,5 +10,8 @@
     <!-- Whether the edition has a Linux build: the automation documents shipped with typedownctl keep their Linux
          parts (between <!- - linux - -> and <!- - /linux - -> markers) only when it does. -->
     <BrandHasLinux>true</BrandHasLinux>
+    <!-- Whether CI also makes the Microsoft Store upload (.msixupload, unsigned: the Store signs it). Only an edition
+         with its own Partner Center identity in the package manifest has a use for it. -->
+    <BrandStoreUpload>false</BrandStoreUpload>
   </PropertyGroup>
 </Project>
