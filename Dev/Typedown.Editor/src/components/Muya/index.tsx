@@ -229,7 +229,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         }
         setVimState('reading')
         const listener = createReadingKeys(
-            () => ({ top: () => window.scrollY, by: dy => window.scrollTo({ top: window.scrollY + dy, behavior: 'instant' as ScrollBehavior }), to: y => window.scrollTo({ top: y, behavior: 'instant' as ScrollBehavior }), height: () => window.innerHeight }),
+            () => ({ top: () => window.scrollY, by: dy => window.scrollTo({ top: window.scrollY + dy, behavior: 'instant' as ScrollBehavior }), to: y => window.scrollTo({ top: Math.min(y, document.documentElement.scrollHeight), behavior: 'instant' as ScrollBehavior }), height: () => window.innerHeight }),
             () => Array.from(document.querySelectorAll<HTMLElement>('#editor h1, #editor h2, #editor h3, #editor h4, #editor h5, #editor h6')))
         window.addEventListener('keydown', listener, true)
         return () => window.removeEventListener('keydown', listener, true)
