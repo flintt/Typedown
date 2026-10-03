@@ -635,6 +635,48 @@ internal static class Program
     private static async Task<IntPtr> WindowOf(string windowId, Client c) =>
         new IntPtr((long)(await c.Call("test.window.handle", new { windowId }))["hwnd"]!);
 
+    /// <summary>
+    /// The entries View > Theme shows on screen, read the way a screen reader reads them: each menu of the menu bar is
+    /// opened until the one holding the theme submenu (automation id ThemeSubMenu), which is opened too; then every
+    /// menu is closed again.
+    /// </summary>
+    private static async Task<List<string>> ShownThemeMenu(IntPtr window)
+    {
+        var root = System.Windows.Automation.AutomationElement.FromHandle(window);
+        var menuItem = new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.MenuItem);
+        var bar = root.FindFirst(System.Windows.Automation.TreeScope.Descendants,
+            new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.MenuBar))
+            ?? throw new CaseFailed("no menu bar in the window");
+        try
+        {
+            foreach (System.Windows.Automation.AutomationElement top in bar.FindAll(System.Windows.Automation.TreeScope.Children, menuItem))
+            {
+                if (!top.TryGetCurrentPattern(System.Windows.Automation.ExpandCollapsePattern.Pattern, out var topPattern)) continue;
+                ((System.Windows.Automation.ExpandCollapsePattern)topPattern).Expand();
+                await Task.Delay(400);
+                var sub = root.FindFirst(System.Windows.Automation.TreeScope.Descendants,
+                    new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.AutomationIdProperty, "ThemeSubMenu"));
+                if (sub == null)
+                {
+                    ((System.Windows.Automation.ExpandCollapsePattern)topPattern).Collapse();
+                    await Task.Delay(200);
+                    continue;
+                }
+                ((System.Windows.Automation.ExpandCollapsePattern)sub.GetCurrentPattern(System.Windows.Automation.ExpandCollapsePattern.Pattern)).Expand();
+                await Task.Delay(500);
+                var names = new List<string>();
+                foreach (System.Windows.Automation.AutomationElement item in root.FindAll(System.Windows.Automation.TreeScope.Descendants, menuItem))
+                    names.Add(item.Current.Name);
+                return names;
+            }
+            throw new CaseFailed("no menu holds the theme submenu");
+        }
+        finally
+        {
+            for (var i = 0; i < 3; i++) { Send(Key(0x1B, false), Key(0x1B, true)); await Task.Delay(150); }
+        }
+    }
+
     private static async Task WaitForNumberBox(IntPtr window, int expected, List<string> notes, string what)
     {
         string seen = "";
@@ -1173,16 +1215,26 @@ internal static class Program
             }
             return false;
         }
+        var window = await WindowOf(windowId, c);
+        await Activate(window);
         try
         {
+            // The submenu drawn once before the files change, as a person who looked at it would have it.
+            notes.Add("shown before: " + string.Join(" | ", await ShownThemeMenu(window)));
             Directory.CreateDirectory(folder);
             File.WriteAllText(file, Theme("TH02 One"));
             Check(!((JArray)(await Menu())["entries"]!).Any(e => (string?)e == "TH02 One"), "the file was added after the menu was built");
             await Menu(reload: true);
             Check(await Shows("TH02 One"), "Reload themes lists the new file");
+            var shownNew = await ShownThemeMenu(window);
+            notes.Add("shown after adding: " + string.Join(" | ", shownNew));
+            Check(shownNew.Contains("TH02 One"), "the menu on screen shows the new theme");
             File.WriteAllText(file, Theme("TH02 Two"));
             await Menu(reload: true);
             Check(await Shows("TH02 Two"), "Reload themes shows a theme's new name");
+            var shownRenamed = await ShownThemeMenu(window);
+            notes.Add("shown after renaming: " + string.Join(" | ", shownRenamed));
+            Check(shownRenamed.Contains("TH02 Two") && !shownRenamed.Contains("TH02 One"), "the menu on screen shows the new name");
             notes.Add("menu: " + (await Menu())["entries"]!.ToString(Formatting.None));
 
             // The two settings apart: light as the built-in one, a dark custom theme. The window follows the theme
