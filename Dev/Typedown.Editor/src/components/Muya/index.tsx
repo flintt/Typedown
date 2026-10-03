@@ -192,7 +192,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             font: JSON.stringify({ fontSize: o?.fontSize, lineHeight: o?.lineHeight }),
             direction: JSON.stringify(o?.textDirection ?? null),
             spellcheck: JSON.stringify(!!o?.spellcheckEnabled),
-            renderPlantUml: JSON.stringify(!!o?.renderPlantUml),
+            renderPlantUml: JSON.stringify([!!o?.renderPlantUml, o?.plantUmlServer ?? '']),
             listIndentation: JSON.stringify(o?.listIndentation ?? null),
             readOnly: JSON.stringify(!!o?.readOnly)
         };
@@ -256,9 +256,11 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     useEffect(() => {
         // PlantUML is drawn by plantuml.com from the block's source: only when the person turned it on. Rendering again
         // draws the blocks shown, or puts the notice back.
+        // The same when the server changes (Settings > Editor > PlantUML server).
         const on = !!props.options?.renderPlantUml
-        applyOnce(editor, 'renderPlantUml', on, () => editor?.setOptions({ renderPlantUml: on }, true))
-    }, [editor, props.options?.renderPlantUml])
+        const server = props.options?.plantUmlServer ?? ''
+        applyOnce(editor, 'renderPlantUml', [on, server], () => editor?.setOptions({ renderPlantUml: on, plantUmlServer: server }, true))
+    }, [editor, props.options?.renderPlantUml, props.options?.plantUmlServer])
 
     useEffect(() => {
         // Muya: 'dfm' = 4-space nested indentation, otherwise the number of spaces after the list marker (1-4).

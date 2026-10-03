@@ -903,4 +903,10 @@
   <data name="View.Image.UploadHistory.Description" xml:space="preserve">
     <value>已用相同配置上传过的图片不会再次上传，而是沿用之前的地址（已记录 {0} 条）。删除已上传的文件后请清除此记录。</value>
   </data>
+  <data name="Editor.PlantUmlServer.Title" xml:space="preserve">
+    <value>PlantUML 服务器</value>
+  </data>
+  <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
+    <value>绘制图表的 PlantUML 服务器（plantuml-server）地址。留空：plantuml.com。使用自己的服务器时，图表源码不会离开你手中。</value>
+  </data>
 </root>

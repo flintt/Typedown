@@ -868,4 +868,10 @@
   <data name="View.Image.UploadHistory.Description" xml:space="preserve">
     <value>ብተመሳሳሊ ኣቃውማ ድሮ ዝተሰቐለ ምስሊ ደጊሙ ኣይስቀልን፤ ናይ ቅድሚ ኣድራሻኡ ይጥቀመሉ ({0} ተዘኪሮም)። ዝተሰቐሉ ፋይላት ምስ ሰረዝካ ታሪኽ ኣጽርዮ።</value>
   </data>
+  <data name="Editor.PlantUmlServer.Title" xml:space="preserve">
+    <value>ናይ PlantUML ሰርቨር</value>
+  </data>
+  <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
+    <value>ኣድራሻ ናይቲ ስእላዊ መግለጺታት ዝስእል PlantUML ሰርቨር (plantuml-server)። ባዶ፦ plantuml.com። ብናይ ገዛእ ርእስኹም ሰርቨር ምንጪ ስእላዊ መግለጺታት ምሳኹም ይጸንሕ።</value>
+  </data>
 </root>

@@ -868,4 +868,10 @@
   <data name="View.Image.UploadHistory.Description" xml:space="preserve">
     <value>Isithombe esesilayishwe ngokucushwa okufanayo asilayishwa futhi; kusetshenziswa ikheli laso langaphambilini (kukhunjulwe okungu-{0}). Sula umlando ngemva kokususa amafayela alayishiwe.</value>
   </data>
+  <data name="Editor.PlantUmlServer.Title" xml:space="preserve">
+    <value>Iseva ye-PlantUML</value>
+  </data>
+  <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
+    <value>Ikheli leseva ye-PlantUML (plantuml-server) edweba imidwebo. Akunalutho: plantuml.com. Ngeseva yakho, umthombo wemidwebo uhlala kuwe.</value>
+  </data>
 </root>

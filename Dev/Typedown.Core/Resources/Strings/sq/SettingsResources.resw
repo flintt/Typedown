@@ -868,4 +868,10 @@
   <data name="View.Image.UploadHistory.Description" xml:space="preserve">
     <value>Një figurë e ngarkuar tashmë me të njëjtin konfigurim nuk ngarkohet përsëri; përdoret adresa e saj e mëparshme ({0} të mbajtura mend). Pastro historikun pas fshirjes së skedarëve të ngarkuar.</value>
   </data>
+  <data name="Editor.PlantUmlServer.Title" xml:space="preserve">
+    <value>Serveri PlantUML</value>
+  </data>
+  <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
+    <value>Adresa e serverit PlantUML (plantuml-server) që vizaton diagramet. Bosh: plantuml.com. Me serverin tuaj, burimi i diagrameve mbetet te ju.</value>
+  </data>
 </root>

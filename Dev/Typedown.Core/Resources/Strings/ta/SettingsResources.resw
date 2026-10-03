@@ -868,4 +868,10 @@
   <data name="View.Image.UploadHistory.Description" xml:space="preserve">
     <value>அதே உள்ளமைவுடன் ஏற்கனவே பதிவேற்றப்பட்ட படம் மீண்டும் பதிவேற்றப்படாது; அதன் முந்தைய முகவரி பயன்படுத்தப்படும் ({0} நினைவில் உள்ளன). பதிவேற்றிய கோப்புகளை நீக்கிய பிறகு வரலாற்றை அழிக்கவும்.</value>
   </data>
+  <data name="Editor.PlantUmlServer.Title" xml:space="preserve">
+    <value>PlantUML சேவையகம்</value>
+  </data>
+  <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
+    <value>வரைபடங்களை வரையும் PlantUML சேவையகத்தின் (plantuml-server) முகவரி. காலி: plantuml.com. உங்கள் சொந்த சேவையகத்துடன் வரைபடங்களின் மூலம் உங்களிடமே இருக்கும்.</value>
+  </data>
 </root>

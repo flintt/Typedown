@@ -868,4 +868,10 @@
   <data name="View.Image.UploadHistory.Description" xml:space="preserve">
     <value>Slika koja je već prenesena s istom konfiguracijom ne prenosi se ponovno; koristi se njezina ranija adresa ({0} zapamćeno). Očistite povijest nakon brisanja prenesenih datoteka.</value>
   </data>
+  <data name="Editor.PlantUmlServer.Title" xml:space="preserve">
+    <value>PlantUML poslužitelj</value>
+  </data>
+  <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
+    <value>Adresa PlantUML poslužitelja (plantuml-server) koji crta dijagrame. Prazno: plantuml.com. S vlastitim poslužiteljem izvor dijagrama ostaje kod vas.</value>
+  </data>
 </root>

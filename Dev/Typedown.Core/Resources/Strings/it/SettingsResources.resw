@@ -868,4 +868,10 @@
   <data name="View.Image.UploadHistory.Description" xml:space="preserve">
     <value>Un'immagine già caricata con la stessa configurazione non viene ricaricata; viene usato il suo indirizzo precedente ({0} memorizzate). Cancella la cronologia dopo aver eliminato file caricati.</value>
   </data>
+  <data name="Editor.PlantUmlServer.Title" xml:space="preserve">
+    <value>Server PlantUML</value>
+  </data>
+  <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
+    <value>Indirizzo del server PlantUML (plantuml-server) che disegna i diagrammi. Vuoto: plantuml.com. Con un server tuo, il sorgente dei diagrammi resta a te.</value>
+  </data>
 </root>

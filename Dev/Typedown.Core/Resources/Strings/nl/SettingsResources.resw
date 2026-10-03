@@ -868,4 +868,10 @@
   <data name="View.Image.UploadHistory.Description" xml:space="preserve">
     <value>Een afbeelding die al met dezelfde configuratie is geüpload, wordt niet opnieuw geüpload; het eerdere adres wordt gebruikt ({0} onthouden). Wis de geschiedenis nadat je geüploade bestanden hebt verwijderd.</value>
   </data>
+  <data name="Editor.PlantUmlServer.Title" xml:space="preserve">
+    <value>PlantUML-server</value>
+  </data>
+  <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
+    <value>Adres van de PlantUML-server (plantuml-server) die de diagrammen tekent. Leeg: plantuml.com. Met een eigen server blijft de broncode van de diagrammen bij jou.</value>
+  </data>
 </root>

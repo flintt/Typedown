@@ -868,4 +868,10 @@
   <data name="View.Image.UploadHistory.Description" xml:space="preserve">
     <value>ਉਸੇ ਕੌਨਫਿਗ੍ਰੇਸ਼ਨ ਨਾਲ ਪਹਿਲਾਂ ਹੀ ਅੱਪਲੋਡ ਕੀਤਾ ਚਿੱਤਰ ਦੁਬਾਰਾ ਅੱਪਲੋਡ ਨਹੀਂ ਕੀਤਾ ਜਾਂਦਾ; ਉਸਦਾ ਪਿਛਲਾ ਪਤਾ ਵਰਤਿਆ ਜਾਂਦਾ ਹੈ ({0} ਯਾਦ ਰੱਖੇ ਗਏ)। ਅੱਪਲੋਡ ਕੀਤੀਆਂ ਫ਼ਾਈਲਾਂ ਮਿਟਾਉਣ ਤੋਂ ਬਾਅਦ ਇਤਿਹਾਸ ਸਾਫ਼ ਕਰੋ।</value>
   </data>
+  <data name="Editor.PlantUmlServer.Title" xml:space="preserve">
+    <value>PlantUML ਸਰਵਰ</value>
+  </data>
+  <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
+    <value>ਚਿੱਤਰ ਬਣਾਉਣ ਵਾਲੇ PlantUML ਸਰਵਰ (plantuml-server) ਦਾ ਪਤਾ। ਖਾਲੀ: plantuml.com। ਆਪਣੇ ਸਰਵਰ ਨਾਲ ਚਿੱਤਰਾਂ ਦਾ ਸਰੋਤ ਤੁਹਾਡੇ ਕੋਲ ਹੀ ਰਹਿੰਦਾ ਹੈ।</value>
+  </data>
 </root>

@@ -868,4 +868,10 @@
   <data name="View.Image.UploadHistory.Description" xml:space="preserve">
     <value>በተመሳሳይ አውደ-ቅጥያ አስቀድሞ የተሰቀለ ምስል እንደገና አይሰቀልም፤ የቀድሞ አድራሻው ጥቅም ላይ ይውላል ({0} ተቀምጠዋል)። የተሰቀሉ ፋይሎችን ከሰረዙ በኋላ ያጽዱት።</value>
   </data>
+  <data name="Editor.PlantUmlServer.Title" xml:space="preserve">
+    <value>PlantUML አገልጋይ</value>
+  </data>
+  <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
+    <value>ንድፎቹን የሚስለው የPlantUML አገልጋይ (plantuml-server) አድራሻ። ባዶ ከሆነ፦ plantuml.com። በራስዎ አገልጋይ የንድፎቹ ምንጭ ከእርስዎ ጋር ይቆያል።</value>
+  </data>
 </root>

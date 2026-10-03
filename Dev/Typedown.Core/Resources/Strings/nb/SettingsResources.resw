@@ -868,4 +868,10 @@
   <data name="View.Image.UploadHistory.Description" xml:space="preserve">
     <value>Et bilde som allerede er lastet opp med samme konfigurasjon, lastes ikke opp på nytt; den tidligere adressen brukes ({0} husket). Tøm historikken etter at du har slettet opplastede filer.</value>
   </data>
+  <data name="Editor.PlantUmlServer.Title" xml:space="preserve">
+    <value>PlantUML-server</value>
+  </data>
+  <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
+    <value>Adressen til PlantUML-serveren (plantuml-server) som tegner diagrammene. Tom: plantuml.com. Med egen server blir kilden til diagrammene hos deg.</value>
+  </data>
 </root>

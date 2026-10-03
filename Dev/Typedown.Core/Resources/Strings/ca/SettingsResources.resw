@@ -868,4 +868,10 @@
   <data name="View.Image.UploadHistory.Description" xml:space="preserve">
     <value>Una imatge ja pujada amb la mateixa configuració no es torna a pujar; se n'utilitza l'adreça anterior ({0} recordades). Esborra l'historial després d'eliminar fitxers pujats.</value>
   </data>
+  <data name="Editor.PlantUmlServer.Title" xml:space="preserve">
+    <value>Servidor PlantUML</value>
+  </data>
+  <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
+    <value>Adreça del servidor PlantUML (plantuml-server) que dibuixa els diagrames. Buit: plantuml.com. Amb un servidor propi, el codi font dels diagrames es queda amb vós.</value>
+  </data>
 </root>

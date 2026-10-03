@@ -868,4 +868,10 @@
   <data name="View.Image.UploadHistory.Description" xml:space="preserve">
     <value>Attēls, kas jau augšupielādēts ar to pašu konfigurāciju, netiek augšupielādēts atkārtoti; tiek izmantota tā iepriekšējā adrese (atcerēti: {0}). Notīriet vēsturi pēc augšupielādēto failu dzēšanas.</value>
   </data>
+  <data name="Editor.PlantUmlServer.Title" xml:space="preserve">
+    <value>PlantUML serveris</value>
+  </data>
+  <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
+    <value>PlantUML servera (plantuml-server) adrese, kas zīmē diagrammas. Tukšs: plantuml.com. Ar savu serveri diagrammu avots paliek pie jums.</value>
+  </data>
 </root>

@@ -868,4 +868,10 @@
   <data name="View.Image.UploadHistory.Description" xml:space="preserve">
     <value>Sama konfiguratsiooniga juba üles laaditud pilti uuesti üles ei laadita; kasutatakse selle varasemat aadressi ({0} meeles). Tühjenda ajalugu pärast üleslaaditud failide kustutamist.</value>
   </data>
+  <data name="Editor.PlantUmlServer.Title" xml:space="preserve">
+    <value>PlantUML-server</value>
+  </data>
+  <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
+    <value>Diagramme joonistava PlantUML-serveri (plantuml-server) aadress. Tühi: plantuml.com. Oma serveriga jääb diagrammide lähtekood sinu juurde.</value>
+  </data>
 </root>

@@ -129,6 +129,8 @@ namespace Typedown.Core.ViewModels
         /// person turns it on. Off, a block shows a line saying so instead of the diagram.
         /// </summary>
         public bool RenderPlantUml { get => GetSettingValue(false); set => SetSettingValue(value); }
+        /// <summary>The plantuml-server that draws PlantUML blocks; empty (or not an http(s) address): plantuml.com.</summary>
+        public string PlantUmlServer { get => GetSettingValue(""); set => SetSettingValue(value ?? ""); }
         public string EditorAreaWidth { get => GetSettingValue("1200px"); set => SetSettingValue(value); }
         public string FontFamily { get => GetSettingValue(""); set => SetSettingValue(value); }
         public string TextDirection { get => GetSettingValue("auto"); set => SetSettingValue(value); }
@@ -213,6 +215,7 @@ namespace Typedown.Core.ViewModels
             "SpellcheckEnabled",
             "AutoPairMarkdownSyntax",
             "RenderPlantUml",
+            "PlantUmlServer",
             "EditorAreaWidth",
             "FontFamily",
             "TextDirection",

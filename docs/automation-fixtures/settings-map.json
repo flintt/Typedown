@@ -813,9 +813,10 @@
       ]
     },
     {
-      "reason": "privacy: drawing PlantUML sends the document's diagram source to plantuml.com; only the person turns that on, not a program",
+      "reason": "privacy: drawing PlantUML sends the document's diagram source to plantuml.com or the server set; only the person turns that on or chooses the server, not a program",
       "windows": [
-        "RenderPlantUml"
+        "RenderPlantUml",
+        "PlantUmlServer"
       ],
       "uno": [
         "RenderPlantUml"

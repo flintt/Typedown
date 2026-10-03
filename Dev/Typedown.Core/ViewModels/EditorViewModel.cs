@@ -162,6 +162,7 @@ namespace Typedown.Core.ViewModels
                 Settings.SpellcheckEnabled,
                 Settings.AutoPairMarkdownSyntax,
                 Settings.RenderPlantUml,
+                Settings.PlantUmlServer,
                 Settings.EditorAreaWidth,
                 Settings.FontFamily,
                 Settings.TextDirection,

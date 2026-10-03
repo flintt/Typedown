@@ -868,4 +868,10 @@
   <data name="View.Image.UploadHistory.Description" xml:space="preserve">
     <value>Obrázok už nahraný s rovnakou konfiguráciou sa znova nenahráva; použije sa jeho predchádzajúca adresa (zapamätané: {0}). Po odstránení nahraných súborov históriu vymažte.</value>
   </data>
+  <data name="Editor.PlantUmlServer.Title" xml:space="preserve">
+    <value>Server PlantUML</value>
+  </data>
+  <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
+    <value>Adresa servera PlantUML (plantuml-server), ktorý kreslí diagramy. Prázdne: plantuml.com. S vlastným serverom zostane zdroj diagramov u vás.</value>
+  </data>
 </root>

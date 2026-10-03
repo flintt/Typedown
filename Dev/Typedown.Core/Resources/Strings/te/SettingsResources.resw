@@ -868,4 +868,10 @@
   <data name="View.Image.UploadHistory.Description" xml:space="preserve">
     <value>అదే కాన్ఫిగరేషన్ తో ఇప్పటికే అప్ లోడ్ చేసిన ఇమేజ్ మళ్లీ అప్ లోడ్ చేయబడదు; దాని పాత చిరునామా ఉపయోగించబడుతుంది ({0} గుర్తుంచుకోబడ్డాయి). అప్ లోడ్ చేసిన ఫైల్ లను తొలగించిన తర్వాత చరిత్రను క్లియర్ చేయండి.</value>
   </data>
+  <data name="Editor.PlantUmlServer.Title" xml:space="preserve">
+    <value>PlantUML సర్వర్</value>
+  </data>
+  <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
+    <value>రేఖాచిత్రాలను గీసే PlantUML సర్వర్ (plantuml-server) చిరునామా. ఖాళీ: plantuml.com. మీ స్వంత సర్వర్‌తో రేఖాచిత్రాల మూలం మీ వద్దనే ఉంటుంది.</value>
+  </data>
 </root>

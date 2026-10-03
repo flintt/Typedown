@@ -868,4 +868,10 @@
   <data name="View.Image.UploadHistory.Description" xml:space="preserve">
     <value>Myndum sem þegar hefur verið hlaðið upp með sömu stillingum er ekki hlaðið upp aftur; fyrra vistfang þeirra er notað ({0} í minni). Hreinsaðu ferilinn eftir að hafa eytt upphlöðnum skrám.</value>
   </data>
+  <data name="Editor.PlantUmlServer.Title" xml:space="preserve">
+    <value>PlantUML-þjónn</value>
+  </data>
+  <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
+    <value>Vistfang PlantUML-þjónsins (plantuml-server) sem teiknar myndirnar. Autt: plantuml.com. Með eigin þjóni helst frumkóði myndanna hjá þér.</value>
+  </data>
 </root>

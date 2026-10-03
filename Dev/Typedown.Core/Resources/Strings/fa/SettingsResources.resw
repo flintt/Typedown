@@ -868,4 +868,10 @@
   <data name="View.Image.UploadHistory.Description" xml:space="preserve">
     <value>تصویری که قبلاً با همان پیکربندی آپلود شده دوباره آپلود نمی‌شود؛ از نشانی قبلی آن استفاده می‌شود ({0} مورد ذخیره شده). پس از حذف فایل‌های آپلودشده، تاریخچه را پاک کنید.</value>
   </data>
+  <data name="Editor.PlantUmlServer.Title" xml:space="preserve">
+    <value>سرور PlantUML</value>
+  </data>
+  <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
+    <value>نشانی سرور PlantUML ‏(plantuml-server) که نمودارها را رسم می‌کند. خالی: plantuml.com. با سرور خودتان، منبع نمودارها نزد خودتان می‌ماند.</value>
+  </data>
 </root>

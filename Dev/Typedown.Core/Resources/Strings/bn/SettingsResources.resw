@@ -868,4 +868,10 @@
   <data name="View.Image.UploadHistory.Description" xml:space="preserve">
     <value>একই কনফিগারেশন দিয়ে আগেই আপলোড করা ছবি আবার আপলোড করা হয় না; এর আগের ঠিকানা ব্যবহার করা হয় ({0}টি মনে রাখা হয়েছে)। আপলোড করা ফাইল মুছে ফেলার পর এটি পরিষ্কার করুন।</value>
   </data>
+  <data name="Editor.PlantUmlServer.Title" xml:space="preserve">
+    <value>PlantUML সার্ভার</value>
+  </data>
+  <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
+    <value>যে PlantUML সার্ভার (plantuml-server) ডায়াগ্রাম আঁকে তার ঠিকানা। খালি: plantuml.com। নিজের সার্ভার থাকলে ডায়াগ্রামের উৎস আপনার কাছেই থাকে।</value>
+  </data>
 </root>

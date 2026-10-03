@@ -868,4 +868,10 @@
   <data name="View.Image.UploadHistory.Description" xml:space="preserve">
     <value>Kāore e tukuatuhia anō he atahanga kua tukuatuhia kētia ki te whirihoranga ōrite; ka whakamahia tōna wāhitau o mua ({0} kua maumaharatia). Ūkuia te hītori i muri i te muku i ngā kōnae kua tukuatuhia.</value>
   </data>
+  <data name="Editor.PlantUmlServer.Title" xml:space="preserve">
+    <value>Tūmau PlantUML</value>
+  </data>
+  <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
+    <value>Te wāhitau o te tūmau PlantUML (plantuml-server) e tuhi ana i ngā hoahoa. Kau: plantuml.com. Mā tōu ake tūmau, ka noho tonu te pūtake o ngā hoahoa ki a koe.</value>
+  </data>
 </root>

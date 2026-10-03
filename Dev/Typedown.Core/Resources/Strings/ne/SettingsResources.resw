@@ -868,4 +868,10 @@
   <data name="View.Image.UploadHistory.Description" xml:space="preserve">
     <value>उही कन्फिगरेसनबाट पहिले नै अपलोड गरिएको छवि फेरि अपलोड गरिँदैन; यसको अघिल्लो ठेगाना प्रयोग गरिन्छ ({0} सम्झिएका)। अपलोड गरिएका फाइलहरू मेटाएपछि इतिहास खाली गर्नुहोस्।</value>
   </data>
+  <data name="Editor.PlantUmlServer.Title" xml:space="preserve">
+    <value>PlantUML सर्भर</value>
+  </data>
+  <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
+    <value>रेखाचित्रहरू कोर्ने PlantUML सर्भर (plantuml-server) को ठेगाना। खाली: plantuml.com। आफ्नै सर्भर भए रेखाचित्रहरूको स्रोत तपाईंसँगै रहन्छ।</value>
+  </data>
 </root>

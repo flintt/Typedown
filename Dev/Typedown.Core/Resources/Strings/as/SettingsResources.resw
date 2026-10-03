@@ -868,4 +868,10 @@
   <data name="View.Image.UploadHistory.Description" xml:space="preserve">
     <value>একে কনফিগাৰেচনেৰে আগতে আপলোড কৰা ছবি পুনৰ আপলোড কৰা নহয়; ইয়াৰ আগৰ ঠিকনা ব্যৱহাৰ কৰা হয় ({0}টা মনত ৰখা হৈছে)। আপলোড কৰা ফাইল মচাৰ পিছত ইয়াক পৰিষ্কাৰ কৰক।</value>
   </data>
+  <data name="Editor.PlantUmlServer.Title" xml:space="preserve">
+    <value>PlantUML চাৰ্ভাৰ</value>
+  </data>
+  <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
+    <value>ডায়াগ্ৰাম অংকন কৰা PlantUML চাৰ্ভাৰৰ (plantuml-server) ঠিকনা। খালী: plantuml.com। নিজৰ চাৰ্ভাৰ থাকিলে ডায়াগ্ৰামৰ উৎস আপোনাৰ ওচৰতে থাকে।</value>
+  </data>
 </root>

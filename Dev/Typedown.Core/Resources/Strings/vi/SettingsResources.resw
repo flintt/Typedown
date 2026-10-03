@@ -868,4 +868,10 @@
   <data name="View.Image.UploadHistory.Description" xml:space="preserve">
     <value>Ảnh đã tải lên bằng cùng cấu hình sẽ không được tải lên lại; địa chỉ cũ của ảnh sẽ được dùng (đã ghi nhớ {0}). Hãy xóa lịch sử sau khi xóa các tệp đã tải lên.</value>
   </data>
+  <data name="Editor.PlantUmlServer.Title" xml:space="preserve">
+    <value>Máy chủ PlantUML</value>
+  </data>
+  <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
+    <value>Địa chỉ máy chủ PlantUML (plantuml-server) dùng để vẽ sơ đồ. Để trống: plantuml.com. Với máy chủ riêng, mã nguồn sơ đồ vẫn ở chỗ bạn.</value>
+  </data>
 </root>

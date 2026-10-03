@@ -868,4 +868,10 @@
   <data name="View.Image.UploadHistory.Description" xml:space="preserve">
     <value>Μια εικόνα που έχει ήδη μεταφορτωθεί με την ίδια διαμόρφωση δεν μεταφορτώνεται ξανά· χρησιμοποιείται η προηγούμενη διεύθυνσή της ({0} αποθηκευμένες). Εκκαθαρίστε το ιστορικό αφού διαγράψετε μεταφορτωμένα αρχεία.</value>
   </data>
+  <data name="Editor.PlantUmlServer.Title" xml:space="preserve">
+    <value>Διακομιστής PlantUML</value>
+  </data>
+  <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
+    <value>Διεύθυνση του διακομιστή PlantUML (plantuml-server) που σχεδιάζει τα διαγράμματα. Κενό: plantuml.com. Με δικό σας διακομιστή, ο κώδικας των διαγραμμάτων μένει σε εσάς.</value>
+  </data>
 </root>

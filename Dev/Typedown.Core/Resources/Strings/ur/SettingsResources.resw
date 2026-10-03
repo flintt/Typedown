@@ -868,4 +868,10 @@
   <data name="View.Image.UploadHistory.Description" xml:space="preserve">
     <value>اسی کنفیگریشن کے ساتھ پہلے سے اپ لوڈ شدہ تصویر دوبارہ اپ لوڈ نہیں کی جاتی؛ اس کا پچھلا پتہ استعمال ہوتا ہے ({0} یاد رکھی گئیں)۔ اپ لوڈ شدہ فائلیں حذف کرنے کے بعد تاریخ صاف کریں۔</value>
   </data>
+  <data name="Editor.PlantUmlServer.Title" xml:space="preserve">
+    <value>PlantUML سرور</value>
+  </data>
+  <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
+    <value>خاکے بنانے والے PlantUML سرور (plantuml-server) کا پتہ۔ خالی: plantuml.com۔ اپنے سرور کے ساتھ خاکوں کا ماخذ آپ کے پاس ہی رہتا ہے۔</value>
+  </data>
 </root>

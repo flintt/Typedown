@@ -868,4 +868,10 @@
   <data name="View.Image.UploadHistory.Description" xml:space="preserve">
     <value>Aynı yapılandırmayla daha önce yüklenmiş bir resim yeniden yüklenmez; önceki adresi kullanılır ({0} kayıtlı). Yüklenen dosyaları sildikten sonra geçmişi temizleyin.</value>
   </data>
+  <data name="Editor.PlantUmlServer.Title" xml:space="preserve">
+    <value>PlantUML sunucusu</value>
+  </data>
+  <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
+    <value>Diyagramları çizen PlantUML sunucusunun (plantuml-server) adresi. Boş: plantuml.com. Kendi sunucunuzla diyagramların kaynağı sizde kalır.</value>
+  </data>
 </root>

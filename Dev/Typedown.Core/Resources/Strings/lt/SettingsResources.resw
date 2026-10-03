@@ -868,4 +868,10 @@
   <data name="View.Image.UploadHistory.Description" xml:space="preserve">
     <value>Su ta pačia konfigūracija jau įkeltas vaizdas iš naujo neįkeliamas; naudojamas ankstesnis jo adresas (įsiminta: {0}). Ištrynę įkeltus failus, išvalykite istoriją.</value>
   </data>
+  <data name="Editor.PlantUmlServer.Title" xml:space="preserve">
+    <value>PlantUML serveris</value>
+  </data>
+  <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
+    <value>PlantUML serverio (plantuml-server), kuris piešia diagramas, adresas. Tuščia: plantuml.com. Su savo serveriu diagramų šaltinis lieka pas jus.</value>
+  </data>
 </root>

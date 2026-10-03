@@ -139,7 +139,7 @@ internal static class Program
             await Case("K02 Ctrl+, twice opens and closes the settings: the caret and the keyboard are where they were", K02);
             await Case("K03 the same with an untitled document (no per-file caret memory)", K03);
             await Case("FS01 in full screen the main page starts at the top edge of the screen", FS01);
-            await Case("PU01 PlantUML is not drawn by default (nothing goes to plantuml.com, the block says so); turned on it is, off again it is not", PU01);
+            await Case("PU01 PlantUML is not drawn by default (nothing goes to plantuml.com, the block says so); turned on it is, by the server set if one is, off again it is not", PU01);
             await Case("RV01 reveal: \"change\" scrolls a change off screen into view, the caret where it was; \"document\" leaves the page", RV01);
             await Case("IU01 File > Upload local images (PowerShell): each file uploaded once, every use replaced in one undo step, web, missing and code left alone", IU01);
             await Case("IU02 File > Upload local images to an S3 bucket (rclone serve s3): signed PUT, the object reads back, a wrong secret changes nothing, the secret is not stored in plain text", IU02);
@@ -868,9 +868,15 @@ internal static class Program
             Check((int)on["remote"]! == 1 && !(bool)on["off"]!, "turned on, the diagram is drawn by plantuml.com");
             // "Alice -> Bob: hello" in PlantUML's hex encoding: the address used to end in "undefined".
             Check((string?)on["src"] == "https://www.plantuml.com/plantuml/svg/~h416c696365202d3e20426f623a2068656c6c6f", $"the address carries the diagram's text ({on["src"]})");
+            // A server of the person's own (Settings > Editor > PlantUML server) draws it instead, at once.
+            await c.Call("test.settings.set", new { windowId, name = "PlantUmlServer", value = "http://127.0.0.1:9/plantuml/" });
+            var own = await Page();
+            notes.Add("own server: " + own.ToString(Formatting.None));
+            Check((string?)own["src"] == "http://127.0.0.1:9/plantuml/svg/~h416c696365202d3e20426f623a2068656c6c6f" && (int)own["remote"]! == 0, $"the address is the server set, nothing goes to plantuml.com ({own["src"]})");
         }
         finally
         {
+            await c.Call("test.settings.set", new { windowId, name = "PlantUmlServer", value = "" });
             await c.Call("test.settings.set", new { windowId, name = "RenderPlantUml", value = false });
         }
         var after = await Page();

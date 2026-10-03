@@ -868,4 +868,10 @@
   <data name="View.Image.UploadHistory.Description" xml:space="preserve">
     <value>Сол конфигурациямен бұрын кері жүктелген сурет қайта жүктелмейді; оның бұрынғы мекенжайы пайдаланылады ({0} есте сақталған). Кері жүктелген файлдарды жойғаннан кейін тарихты тазалаңыз.</value>
   </data>
+  <data name="Editor.PlantUmlServer.Title" xml:space="preserve">
+    <value>PlantUML сервері</value>
+  </data>
+  <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
+    <value>Диаграммаларды салатын PlantUML серверінің (plantuml-server) мекенжайы. Бос: plantuml.com. Өз серверіңізбен диаграммалардың бастапқы коды өзіңізде қалады.</value>
+  </data>
 </root>

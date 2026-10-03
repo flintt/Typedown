@@ -868,4 +868,10 @@
   <data name="View.Image.UploadHistory.Description" xml:space="preserve">
     <value>ସମାନ କନଫିଗ୍ରେସନ୍ ସହ ପୂର୍ବରୁ ଅପଲୋଡ୍ ହୋଇଥିବା ଫଟୋ ପୁଣି ଅପଲୋଡ୍ ହୁଏ ନାହିଁ; ଏହାର ପୂର୍ବ ଠିକଣା ବ୍ୟବହାର ହୁଏ ({0}ଟି ମନେ ରଖାଯାଇଛି)। ଅପଲୋଡ୍ ହୋଇଥିବା ଫାଇଲ୍ ଡିଲିଟ୍ କରିବା ପରେ ଇତିହାସ ସଫା କରନ୍ତୁ।</value>
   </data>
+  <data name="Editor.PlantUmlServer.Title" xml:space="preserve">
+    <value>PlantUML ସର୍ଭର</value>
+  </data>
+  <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
+    <value>ଚିତ୍ର ଆଙ୍କୁଥିବା PlantUML ସର୍ଭରର (plantuml-server) ଠିକଣା। ଖାଲି: plantuml.com। ନିଜ ସର୍ଭର ସହ ଚିତ୍ରର ଉତ୍ସ ଆପଣଙ୍କ ପାଖରେ ରହେ।</value>
+  </data>
 </root>

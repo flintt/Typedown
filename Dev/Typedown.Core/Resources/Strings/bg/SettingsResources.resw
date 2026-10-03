@@ -868,4 +868,10 @@
   <data name="View.Image.UploadHistory.Description" xml:space="preserve">
     <value>Изображение, вече качено със същата конфигурация, не се качва отново; използва се предишният му адрес ({0} запомнени). Изчистете историята след изтриване на качени файлове.</value>
   </data>
+  <data name="Editor.PlantUmlServer.Title" xml:space="preserve">
+    <value>PlantUML сървър</value>
+  </data>
+  <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
+    <value>Адрес на PlantUML сървъра (plantuml-server), който рисува диаграмите. Празно: plantuml.com. Със собствен сървър изходният код на диаграмите остава при вас.</value>
+  </data>
 </root>

@@ -868,4 +868,10 @@
   <data name="View.Image.UploadHistory.Description" xml:space="preserve">
     <value>Նույն կոնֆիգուրացիայով արդեն վերբեռնված պատկերը կրկին չի վերբեռնվում․ օգտագործվում է դրա նախկին հասցեն ({0} հիշված)։ Մաքրեք պատմությունը վերբեռնված ֆայլերը ջնջելուց հետո։</value>
   </data>
+  <data name="Editor.PlantUmlServer.Title" xml:space="preserve">
+    <value>PlantUML սերվեր</value>
+  </data>
+  <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
+    <value>Գծապատկերները գծող PlantUML սերվերի (plantuml-server) հասցեն։ Դատարկ՝ plantuml.com։ Սեփական սերվերի դեպքում գծապատկերների աղբյուրը մնում է ձեզ մոտ։</value>
+  </data>
 </root>

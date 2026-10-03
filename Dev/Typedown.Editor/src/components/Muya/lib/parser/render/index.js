@@ -228,7 +228,7 @@ class StateRender {
           } else if (functionType === 'plantuml') {
             target.innerHTML = ''
             if (this.muya.options.renderPlantUml) {
-              render.parse(code).insertImgElement(target)
+              render.parse(code).insertImgElement(target, this.muya.options.plantUmlServer)
             } else {
               // Off (the default): nothing goes to plantuml.com; the block says so (assets/styles/index.css).
               target.classList.add('ag-plantuml-off')

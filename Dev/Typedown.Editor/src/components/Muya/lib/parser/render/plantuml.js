@@ -1,6 +1,15 @@
 import { toHTML, h } from './snabbdom'
 
-const PLANTUML_URL = 'https://www.plantuml.com/plantuml'
+export const PLANTUML_URL = 'https://www.plantuml.com/plantuml'
+
+/**
+ * The PlantUML server that draws the diagrams (Settings > Editor > PlantUML server): an http(s) address of a
+ * plantuml-server, default plantuml.com. Anything else is the default.
+ */
+export const plantUmlServer = (value) => {
+  const server = (value || '').trim().replace(/\/+$/, '')
+  return /^https?:\/\/[^\s]+$/i.test(server) ? server : PLANTUML_URL
+}
 
 export default class Diagram {
   encodedInput = ''
@@ -23,14 +32,14 @@ export default class Diagram {
     return '~h' + [...new TextEncoder().encode(value)].map(b => b.toString(16).padStart(2, '0')).join('')
   }
 
-  insertImgElement (container) {
+  insertImgElement (container, server) {
     const div = typeof container === 'string'
       ? document.getElementById(container)
       : container
     if (div === null || !div.tagName) {
       throw new Error('Invalid container: ' + container)
     }
-    const src = `${PLANTUML_URL}/svg/${this.encodedInput}`
+    const src = `${plantUmlServer(server)}/svg/${this.encodedInput}`
     const node = h('img', { attrs: { src } })
     div.innerHTML = toHTML(node)
   }

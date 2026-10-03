@@ -868,4 +868,10 @@
   <data name="View.Image.UploadHistory.Description" xml:space="preserve">
     <value>O imagine deja încărcată cu aceeași configurație nu este încărcată din nou; se folosește adresa ei anterioară ({0} memorate). Goliți istoricul după ce ștergeți fișiere încărcate.</value>
   </data>
+  <data name="Editor.PlantUmlServer.Title" xml:space="preserve">
+    <value>Server PlantUML</value>
+  </data>
+  <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
+    <value>Adresa serverului PlantUML (plantuml-server) care desenează diagramele. Gol: plantuml.com. Cu un server propriu, sursa diagramelor rămâne la tine.</value>
+  </data>
 </root>

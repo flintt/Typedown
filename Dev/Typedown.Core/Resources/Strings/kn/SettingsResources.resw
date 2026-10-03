@@ -868,4 +868,10 @@
   <data name="View.Image.UploadHistory.Description" xml:space="preserve">
     <value>ಅದೇ ಕಾನ್ಫಿಗರೇಶನ್‌ನೊಂದಿಗೆ ಈಗಾಗಲೇ ಅಪ್ ಲೋಡ್ ಮಾಡಿದ ಚಿತ್ರವನ್ನು ಮತ್ತೆ ಅಪ್ ಲೋಡ್ ಮಾಡಲಾಗುವುದಿಲ್ಲ; ಅದರ ಹಿಂದಿನ ವಿಳಾಸವನ್ನು ಬಳಸಲಾಗುತ್ತದೆ ({0} ನೆನಪಿನಲ್ಲಿದೆ). ಅಪ್ ಲೋಡ್ ಮಾಡಿದ ಫೈಲ್‌ಗಳನ್ನು ಅಳಿಸಿದ ನಂತರ ಇದನ್ನು ತೆರವುಗೊಳಿಸಿ.</value>
   </data>
+  <data name="Editor.PlantUmlServer.Title" xml:space="preserve">
+    <value>PlantUML ಸರ್ವರ್</value>
+  </data>
+  <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
+    <value>ರೇಖಾಚಿತ್ರಗಳನ್ನು ಬಿಡಿಸುವ PlantUML ಸರ್ವರ್‌ನ (plantuml-server) ವಿಳಾಸ. ಖಾಲಿ: plantuml.com. ನಿಮ್ಮದೇ ಸರ್ವರ್ ಇದ್ದರೆ ರೇಖಾಚಿತ್ರಗಳ ಮೂಲ ನಿಮ್ಮ ಬಳಿಯೇ ಇರುತ್ತದೆ.</value>
+  </data>
 </root>

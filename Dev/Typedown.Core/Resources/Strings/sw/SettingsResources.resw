@@ -868,4 +868,10 @@
   <data name="View.Image.UploadHistory.Description" xml:space="preserve">
     <value>Picha iliyokwisha kupakiwa kwa usanidi uleule haipakiwi tena; anwani yake ya awali hutumika ({0} zimekumbukwa). Futa historia baada ya kufuta faili zilizopakiwa.</value>
   </data>
+  <data name="Editor.PlantUmlServer.Title" xml:space="preserve">
+    <value>Seva ya PlantUML</value>
+  </data>
+  <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
+    <value>Anwani ya seva ya PlantUML (plantuml-server) inayochora michoro. Tupu: plantuml.com. Ukiwa na seva yako mwenyewe, chanzo cha michoro hubaki kwako.</value>
+  </data>
 </root>

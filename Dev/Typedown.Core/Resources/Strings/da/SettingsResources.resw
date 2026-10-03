@@ -868,4 +868,10 @@
   <data name="View.Image.UploadHistory.Description" xml:space="preserve">
     <value>Et billede, der allerede er uploadet med samme konfiguration, uploades ikke igen; dets tidligere adresse bruges ({0} husket). Ryd historikken efter sletning af uploadede filer.</value>
   </data>
+  <data name="Editor.PlantUmlServer.Title" xml:space="preserve">
+    <value>PlantUML-server</value>
+  </data>
+  <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
+    <value>Adresse på den PlantUML-server (plantuml-server), der tegner diagrammerne. Tom: plantuml.com. Med din egen server bliver diagrammernes kilde hos dig.</value>
+  </data>
 </root>

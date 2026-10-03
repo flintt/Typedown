@@ -868,4 +868,10 @@
   <data name="View.Image.UploadHistory.Description" xml:space="preserve">
     <value>Obraz już przesłany z tą samą konfiguracją nie jest przesyłany ponownie; używany jest jego wcześniejszy adres (zapamiętano: {0}). Wyczyść historię po usunięciu przesłanych plików.</value>
   </data>
+  <data name="Editor.PlantUmlServer.Title" xml:space="preserve">
+    <value>Serwer PlantUML</value>
+  </data>
+  <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
+    <value>Adres serwera PlantUML (plantuml-server), który rysuje diagramy. Puste: plantuml.com. Z własnym serwerem kod źródłowy diagramów zostaje u Ciebie.</value>
+  </data>
 </root>

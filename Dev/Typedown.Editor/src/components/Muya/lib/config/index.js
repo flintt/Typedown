@@ -280,6 +280,7 @@ export const MUYA_DEFAULT_OPTION = Object.freeze({
   // NOTE: The browser is not able to correct misspelled words words without a custom
   // implementation like in MarkText.
   spellcheckEnabled: false,
+  plantUmlServer: '',
   // transform the image to local folder, cloud or just return the local path
   imageAction: (path, id, name) => path,
   clipboardFilePath: () => { },

@@ -868,4 +868,10 @@
   <data name="View.Image.UploadHistory.Description" xml:space="preserve">
     <value>સમાન રૂપરેખાંકન સાથે પહેલેથી અપલોડ થયેલી ઇમેજ ફરી અપલોડ થતી નથી; તેનું અગાઉનું સરનામું વપરાય છે ({0} યાદ રાખેલ). અપલોડ થયેલી ફાઇલો કાઢી નાખ્યા પછી તેને સાફ કરો.</value>
   </data>
+  <data name="Editor.PlantUmlServer.Title" xml:space="preserve">
+    <value>PlantUML સર્વર</value>
+  </data>
+  <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
+    <value>આકૃતિઓ દોરતા PlantUML સર્વર (plantuml-server)નું સરનામું. ખાલી: plantuml.com. તમારા પોતાના સર્વર સાથે આકૃતિઓનો સ્રોત તમારી પાસે જ રહે છે.</value>
+  </data>
 </root>

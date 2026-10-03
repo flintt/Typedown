@@ -868,4 +868,10 @@
   <data name="View.Image.UploadHistory.Description" xml:space="preserve">
     <value>Imej yang telah dimuat naik dengan konfigurasi yang sama tidak dimuat naik semula; alamat terdahulunya digunakan ({0} diingati). Kosongkan sejarah selepas memadamkan fail yang dimuat naik.</value>
   </data>
+  <data name="Editor.PlantUmlServer.Title" xml:space="preserve">
+    <value>Pelayan PlantUML</value>
+  </data>
+  <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
+    <value>Alamat pelayan PlantUML (plantuml-server) yang melukis rajah. Kosong: plantuml.com. Dengan pelayan sendiri, sumber rajah kekal pada anda.</value>
+  </data>
 </root>
