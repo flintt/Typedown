@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text;
@@ -11,8 +12,8 @@ namespace Typedown.Utilities
     /// <summary>
     /// OLE drop target for files dragged from Explorer. In the unpackaged build the XAML Islands DragEnter
     /// arrives with an empty DataPackageView (no formats), so Explorer drops were rejected. This wraps the
-    /// drop target XAML registered on the island window: CF_HDROP drops with one Markdown/image file are
-    /// handled here, everything else is forwarded to XAML unchanged (in-app drags keep working).
+    /// drop target XAML registered on the island window: CF_HDROP drops of Markdown and image files (any number;
+    /// other files among them are ignored) are handled here, everything else is forwarded to XAML unchanged (in-app drags keep working).
     /// </summary>
     [ComVisible(true)]
     public sealed class FileDropTarget : IOleDropTarget
@@ -24,7 +25,7 @@ namespace Typedown.Utilities
 
         private readonly MainWindow window;
         private readonly IOleDropTarget inner;
-        private string pendingFile;
+        private List<string> pendingFiles;
 
         private FileDropTarget(MainWindow window, IOleDropTarget inner)
         {
@@ -89,10 +90,10 @@ namespace Typedown.Utilities
 
         public int DragEnter(System.Runtime.InteropServices.ComTypes.IDataObject dataObject, uint keyState, POINTL point, ref uint effect)
         {
-            pendingFile = GetSingleSupportedFile(dataObject);
-            if (pendingFile != null)
+            pendingFiles = GetSupportedFiles(dataObject);
+            if (pendingFiles != null)
             {
-                effect = FileTypeHelper.IsImageFile(pendingFile) ? DROPEFFECT_COPY : DROPEFFECT_LINK;
+                effect = Effect(pendingFiles);
                 return 0;
             }
             return inner != null ? inner.DragEnter(dataObject, keyState, point, ref effect) : SetNone(ref effect);
@@ -100,9 +101,9 @@ namespace Typedown.Utilities
 
         public int DragOver(uint keyState, POINTL point, ref uint effect)
         {
-            if (pendingFile != null)
+            if (pendingFiles != null)
             {
-                effect = FileTypeHelper.IsImageFile(pendingFile) ? DROPEFFECT_COPY : DROPEFFECT_LINK;
+                effect = Effect(pendingFiles);
                 return 0;
             }
             return inner != null ? inner.DragOver(keyState, point, ref effect) : SetNone(ref effect);
@@ -110,9 +111,9 @@ namespace Typedown.Utilities
 
         public int DragLeave()
         {
-            if (pendingFile != null)
+            if (pendingFiles != null)
             {
-                pendingFile = null;
+                pendingFiles = null;
                 return 0;
             }
             return inner?.DragLeave() ?? 0;
@@ -120,20 +121,28 @@ namespace Typedown.Utilities
 
         public int Drop(System.Runtime.InteropServices.ComTypes.IDataObject dataObject, uint keyState, POINTL point, ref uint effect)
         {
-            var file = pendingFile ?? GetSingleSupportedFile(dataObject);
-            pendingFile = null;
-            if (file == null)
+            var files = pendingFiles ?? GetSupportedFiles(dataObject);
+            pendingFiles = null;
+            if (files == null)
                 return inner != null ? inner.Drop(dataObject, keyState, point, ref effect) : SetNone(ref effect);
-            effect = FileTypeHelper.IsImageFile(file) ? DROPEFFECT_COPY : DROPEFFECT_LINK;
-            Log.Debug($"FileDropTarget: drop '{file}'");
-            _ = window.Dispatcher.RunAsync(() =>
+            effect = Effect(files);
+            Log.Debug($"FileDropTarget: drop {files.Count} file(s): {string.Join(", ", files)}");
+            _ = window.Dispatcher.RunAsync(async () =>
             {
-                var app = window.AppViewModel;
-                if (app == null) return;
-                if (FileTypeHelper.IsMarkdownFile(file))
-                    app.FileViewModel.OpenFileCommand.Execute(file);
-                else if (FileTypeHelper.IsImageFile(file))
-                    app.MarkdownEditor?.PostMessage("InsertImage", new { src = file });
+                // async void on the UI thread: nothing above it would catch.
+                try
+                {
+                    var app = window.AppViewModel;
+                    if (app == null) return;
+                    // The pictures into the document the drop was on first; then the Markdown files open.
+                    await app.EditorViewModel.InsertLocalImagesAsync(files.Where(FileTypeHelper.IsImageFile).ToList());
+                    foreach (var file in files.Where(FileTypeHelper.IsMarkdownFile))
+                        app.FileViewModel.OpenFileCommand.Execute(file);
+                }
+                catch (Exception ex)
+                {
+                    Log.Debug($"FileDropTarget: handling the drop failed: {ex}");
+                }
             });
             return 0;
         }
@@ -144,13 +153,16 @@ namespace Typedown.Utilities
             return 0;
         }
 
-        private static string GetSingleSupportedFile(System.Runtime.InteropServices.ComTypes.IDataObject dataObject)
+        private static uint Effect(List<string> files) => files.Any(FileTypeHelper.IsImageFile) ? DROPEFFECT_COPY : DROPEFFECT_LINK;
+
+        /// <summary>The dropped Markdown and image files, in the drop's order; null when there is none.</summary>
+        private static List<string> GetSupportedFiles(System.Runtime.InteropServices.ComTypes.IDataObject dataObject)
         {
             try
             {
-                var files = GetDroppedFiles(dataObject);
-                if (files.Count == 1 && (FileTypeHelper.IsMarkdownFile(files[0]) || FileTypeHelper.IsImageFile(files[0])))
-                    return files[0];
+                var files = GetDroppedFiles(dataObject).Where(f => FileTypeHelper.IsMarkdownFile(f) || FileTypeHelper.IsImageFile(f)).ToList();
+                if (files.Count > 0)
+                    return files;
             }
             catch (Exception ex)
             {

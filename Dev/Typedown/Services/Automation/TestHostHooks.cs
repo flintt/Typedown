@@ -241,6 +241,16 @@ namespace Typedown.Services.Automation
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["id"] = config.Id, ["stored"] = config.Config, ["default"] = upload.DefaultConfig?.Id };
                 });
             }));
+            // What a drop, paste or pick of image files does: each through the local image setting, inserted together.
+            methods.Add(new MethodDescriptor("test.images.insert", null, "test.images.insert/1", async (c, ct) =>
+            {
+                var paths = c.Params.OptionalStringArray("paths") ?? throw Params.Invalid("paths", "required");
+                return await await Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), async app =>
+                {
+                    await app.EditorViewModel.InsertLocalImagesAsync(paths.ToList());
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject();
+                });
+            }));
             methods.Add(new MethodDescriptor("test.images.uploadAll", null, "test.images.uploadAll/1", async (c, ct) =>
                 await await Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), async app =>
                 {

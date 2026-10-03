@@ -493,6 +493,10 @@ class Muya {
     this.contentState.insertImage(imageInfo)
   }
 
+  insertImages(images, afterKey) {
+    this.contentState.insertImages(images, afterKey)
+  }
+
   search(value, opt) {
     const { selectHighlight } = opt
     this.contentState.search(value, opt)

@@ -143,6 +143,7 @@ internal static class Program
             await Case("RV01 reveal: \"change\" scrolls a change off screen into view, the caret where it was; \"document\" leaves the page", RV01);
             await Case("IU01 File > Upload local images (PowerShell): each file uploaded once, every use replaced in one undo step, web, missing and code left alone", IU01);
             await Case("IU02 File > Upload local images to an S3 bucket (rclone serve s3): signed PUT, the object reads back, a wrong secret changes nothing, the secret is not stored in plain text", IU02);
+            await Case("IN01 several image files dropped at once: each in a paragraph of its own, in the drop's order, one undo step", IN01);
             // Last: it ends the test host.
             await Case("Q01 two windows closed one after the other: the process exits (it stayed, headless)", Q01);
         }
@@ -929,6 +930,37 @@ internal static class Program
         var none = await c.Call("test.images.uploadAll", new { windowId });
         Check((int)none["Uploaded"]! == 2, "run again on the restored text, the same two are uploaded");
         await c.Call("document.undo", new { documentId = id, baseRevision = await Revision(c, id), reveal = "document" });
+    }
+
+    private static async Task IN01(List<string> notes)
+    {
+        using var c = await Session("e2e IN01");
+        const string original = "# IN01\n\nEnd\n";
+        var doc = Fixture("in01.md", original);
+        var folder = Path.Combine(Path.GetDirectoryName(doc)!, "in01-images");
+        Directory.CreateDirectory(folder);
+        // Not in alphabetical order, and one name with a space: the order is the drop's.
+        var names = new[] { "z first.png", "a-second.png", "m-third.png" };
+        var paths = names.Select((n, i) => { var p = Path.Combine(folder, n); File.WriteAllBytes(p, Png((byte)(20 + i))); return p; }).ToArray();
+        var id = await Open(c, doc);
+        var windowId = await WindowIdOf(c, id);
+        await c.Call("test.editor.focus", new { windowId });
+        await Task.Delay(500);
+        var before = await Revision(c, id);
+        await c.Call("test.images.insert", new { windowId, paths });
+        string text = "";
+        for (var i = 0; i < 30 && !(text = (string)(await Get(c, id))["text"]!).Contains("m-third"); i++) await Task.Delay(200);
+        notes.Add("text: " + JsonConvert.SerializeObject(text));
+        var paragraphs = text.TrimEnd('\n').Split("\n\n");
+        var images = paragraphs.Select((p, i) => (p, i)).Where(x => x.p.StartsWith("![")).ToList();
+        Check(images.Count == 3 && images.All(x => System.Text.RegularExpressions.Regex.IsMatch(x.p, @"^!\[[^\]]*\]\([^)\s]+\)$")), "three images, each a paragraph of its own and nothing else");
+        Check(images[0].p.StartsWith("![z first]") && images[1].p.StartsWith("![a-second]") && images[2].p.StartsWith("![m-third]"), "in the drop's order, named after their files");
+        Check(images[1].i == images[0].i + 1 && images[2].i == images[1].i + 1, "next to each other");
+        Check(string.Join("\n\n", paragraphs.Where(p => !p.StartsWith("![")).ToArray()) + "\n" == original, "the rest of the document is as it was");
+        notes.Add($"revision {before} -> {await Revision(c, id)}");
+        await c.Call("document.undo", new { documentId = id, baseRevision = await Revision(c, id), reveal = "document" });
+        await Task.Delay(300);
+        Check((string)(await Get(c, id))["text"]! == original, "one undo takes all three out");
     }
 
     private static async Task IU02(List<string> notes)

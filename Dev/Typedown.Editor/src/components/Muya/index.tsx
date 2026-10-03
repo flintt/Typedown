@@ -336,6 +336,11 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         editor?.insertImage(arg)
     }), [editor]);
 
+    useEffect(() => transport.addListener<{ src: string, alt?: string, title?: string }[]>('InsertImages', arg => {
+        if (optionsRef.current?.readOnly) return
+        editor?.insertImages(arg)
+    }), [editor]);
+
     useEffect(() => transport.addListener<{ value: string, opt: unknown }>('Search', (arg) => {
         props.onSearchArgChange(arg)
         setTimeout(() => scrollToElementIfInvisible('.ag-highlight'), 0)

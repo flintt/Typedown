@@ -880,12 +880,9 @@ namespace Typedown.Core.ViewModels
                     }
                     MarkdownEditor?.PostMessage("Paste", new { type, text, html });
                 }
-                else if (await Clipboard.GetFileDropListAsync() is StringCollection files && files.Count == 1)
+                else if (await Clipboard.GetFileDropListAsync() is StringCollection files && files.Count > 0)
                 {
-                    if (FileTypeHelper.IsImageFile(files[0]))
-                    {
-                        MarkdownEditor?.PostMessage("InsertImage", new HtmlImgTag(src: files[0], alt: Path.GetFileNameWithoutExtension(files[0])));
-                    }
+                    await InsertLocalImagesAsync(files.Cast<string>().Where(FileTypeHelper.IsImageFile).ToList());
                 }
                 else if (await Clipboard.GetImageAsync() is IClipboardImage image)
                 {
@@ -900,6 +897,30 @@ namespace Typedown.Core.ViewModels
             {
                 await AppContentDialog.Create(Locale.GetString("Error"), ex.Message, Locale.GetDialogString("Ok")).ShowAsync(AppViewModel.XamlRoot);
             }
+        }
+
+        /// <summary>
+        /// Image files from a drop, a paste or a pick, in their order: each one goes through Settings > Image > Insert
+        /// local image (kept, copied to a folder or uploaded), then all of them are inserted together - one at the
+        /// cursor, several each in a paragraph of its own (one undo step).
+        /// </summary>
+        public async Task InsertLocalImagesAsync(IReadOnlyList<string> files)
+        {
+            if (files == null || files.Count == 0) return;
+            var images = new List<HtmlImgTag>();
+            foreach (var file in files)
+                images.Add(await LocalImageAsync(file));
+            if (images.Count == 1)
+                MarkdownEditor?.PostMessage("InsertImage", images[0]);
+            else
+                MarkdownEditor?.PostMessage("InsertImages", images);
+        }
+
+        /// <summary>One image file after Settings > Image > Insert local image, with its name as the alt text.</summary>
+        public async Task<HtmlImgTag> LocalImageAsync(string file)
+        {
+            var src = await ServiceProvider.GetService<ImageAction>().DoLocalFileAction(file);
+            return new HtmlImgTag(src: src.Replace('\\', '/'), alt: Path.GetFileNameWithoutExtension(file));
         }
 
         public void Copy(string type)

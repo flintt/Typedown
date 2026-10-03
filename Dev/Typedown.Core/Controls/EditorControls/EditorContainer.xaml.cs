@@ -105,18 +105,15 @@ namespace Typedown.Core.Controls
                 {
                     var items = await e.DataView.GetStorageItemsAsync();
                     Log.Debug($"DragEnter: {items.Count} storage item(s): {string.Join(", ", items.Select(x => x.Path))}");
-                    if (items.Count != 1) return;
-                    var item = items.First();
-                    switch (FileTypeHelper.GetFileType(item.Path))
+                    if (items.Any(x => FileTypeHelper.IsImageFile(x.Path)))
                     {
-                        case FileTypeHelper.FileType.Markdown:
-                            e.AcceptedOperation = DataPackageOperation.Link;
-                            e.DragUIOverride.Caption = Locale.GetString("Open");
-                            break;
-                        case FileTypeHelper.FileType.Image:
-                            e.AcceptedOperation = DataPackageOperation.Link;
-                            e.DragUIOverride.Caption = Locale.GetString("InsertImage");
-                            break;
+                        e.AcceptedOperation = DataPackageOperation.Link;
+                        e.DragUIOverride.Caption = Locale.GetString("InsertImage");
+                    }
+                    else if (items.Any(x => FileTypeHelper.IsMarkdownFile(x.Path)))
+                    {
+                        e.AcceptedOperation = DataPackageOperation.Link;
+                        e.DragUIOverride.Caption = Locale.GetString("Open");
                     }
                 }
             }
@@ -136,16 +133,18 @@ namespace Typedown.Core.Controls
             Log.Debug($"Drop: formats=[{string.Join(", ", e.DataView.AvailableFormats)}]");
             if (e.DataView.Contains(StandardDataFormats.StorageItems))
             {
-                var items = await e.DataView.GetStorageItemsAsync();
-                if (items.Count != 1) return;
-                var item = items.First();
-                if (FileTypeHelper.IsEditableTextFile(item.Path))
+                try
                 {
-                    ViewModel.FileViewModel.OpenFileCommand.Execute(item.Path);
+                    var items = await e.DataView.GetStorageItemsAsync();
+                    // The pictures into this document first, in the drop's order; then the text files open.
+                    await ViewModel.EditorViewModel.InsertLocalImagesAsync(items.Select(x => x.Path).Where(FileTypeHelper.IsImageFile).ToList());
+                    foreach (var path in items.Select(x => x.Path).Where(FileTypeHelper.IsEditableTextFile))
+                        ViewModel.FileViewModel.OpenFileCommand.Execute(path);
                 }
-                if (FileTypeHelper.IsImageFile(item.Path))
+                catch (Exception ex)
                 {
-                    ViewModel.MarkdownEditor.PostMessage("InsertImage", new { src = item.Path });
+                    // async void: nothing above it would catch.
+                    Log.Debug($"Drop failed: {ex}");
                 }
             }
         }
