@@ -844,4 +844,22 @@
     <value>Sender diagrammets kilde til plantuml.com for at tegne det</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>Upload med</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>Den uploadkonfiguration, der bruges til indsatte billeder, hvis handling er Upload, og af Fil &gt; Upload lokale billeder</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Mappe i bucket</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>Offentlig URL</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>Adresser i sti-stil (MinIO og visse udbydere)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>S3-konfigurationen er ufuldstændig: udfyld Endpoint, Bucket, Access Key ID og Secret Access Key.</value>
+  </data>
 </root>

@@ -844,4 +844,22 @@
     <value>ለመሳል የንድፉን ምንጭ ወደ plantuml.com ይልካል</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>መስቀያ</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>እርምጃቸው "ምስልን ስቀል" ለሆኑ የገቡ ምስሎች እና በፋይል &gt; የአካባቢ ምስሎችን ስቀል የሚጠቀመው የመስቀያ ቅንብር</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>በbucket ውስጥ ያለ አቃፊ</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>ይፋዊ URL</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>የዱካ-ዘይቤ አድራሻዎች (MinIO እና አንዳንድ አቅራቢዎች)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>የS3 ቅንብሩ ያልተሟላ ነው፦ Endpoint፣ Bucket፣ Access Key ID እና Secret Access Key ይሙሉ።</value>
+  </data>
 </root>

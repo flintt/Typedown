@@ -844,4 +844,22 @@
     <value>कोर्नका लागि रेखाचित्रको स्रोत plantuml.com मा पठाउँछ</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>यसबाट अपलोड गर्नुहोस्</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>"छवि अपलोड गर्नुहोस्" कार्य भएका घुसाइएका छविहरू र फाइल &gt; स्थानीय छविहरू अपलोड गर्नुहोस् का लागि प्रयोग हुने अपलोड कन्फिगरेसन</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Bucket भित्रको फोल्डर</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>सार्वजनिक URL</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>पथ-शैलीका ठेगानाहरू (MinIO र केही प्रदायकहरू)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>S3 कन्फिगरेसन अपूर्ण छ: Endpoint, Bucket, Access Key ID र Secret Access Key भर्नुहोस्।</value>
+  </data>
 </root>

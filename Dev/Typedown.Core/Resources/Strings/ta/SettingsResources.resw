@@ -844,4 +844,22 @@
     <value>வரைவதற்கு வரைபடத்தின் மூலத்தை plantuml.com-க்கு அனுப்புகிறது</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>இதைக் கொண்டு பதிவேற்று</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>செயல் பதிவேற்றம் என உள்ள செருகப்பட்ட படங்களுக்கும், அரம் &gt; உள்ளூர் படங்களைப் பதிவேற்றவும் என்பதற்கும் பயன்படுத்தப்படும் பதிவேற்ற உள்ளமைவு</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Bucket இல் உள்ள கோப்புறை</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>பொது URL</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>பாதை-பாணி முகவரிகள் (MinIO மற்றும் சில வழங்குநர்கள்)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>S3 உள்ளமைவு முழுமையடையவில்லை: Endpoint, Bucket, Access Key ID மற்றும் Secret Access Key ஐ நிரப்பவும்.</value>
+  </data>
 </root>

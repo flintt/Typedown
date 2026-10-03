@@ -844,4 +844,22 @@
     <value>Envía el código del diagrama a plantuml.com para dibujarlo</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>Subir con</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>Configuración de carga que se usa para las imágenes insertadas cuya acción es Subir imagen, y en Archivo &gt; Subir imágenes locales</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Carpeta en el bucket</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>URL pública</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>Direcciones de estilo de ruta (MinIO y algunos proveedores)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>La configuración de S3 está incompleta: rellene Endpoint, Bucket, Access Key ID y Secret Access Key.</value>
+  </data>
 </root>

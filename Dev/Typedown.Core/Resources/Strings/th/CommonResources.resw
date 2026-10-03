@@ -1006,4 +1006,7 @@
     <value>ปิดแผนภาพ PlantUML อยู่ (การวาดจะส่งซอร์สไปยัง plantuml.com) เปิดได้ที่ การตั้งค่า &gt; ตัวแก้ไข</value>
     <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
   </data>
+  <data name="UploadLocalImages" xml:space="preserve">
+    <value>อัปโหลดรูปภาพในเครื่อง</value>
+  </data>
 </root>

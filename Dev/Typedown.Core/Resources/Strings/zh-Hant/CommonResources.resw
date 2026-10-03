@@ -1021,4 +1021,7 @@
     <value>PlantUML 圖表已關閉（繪製會將原始碼傳送到 plantuml.com）。可在 設定 &gt; 編輯器 中開啟。</value>
     <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
   </data>
+  <data name="UploadLocalImages" xml:space="preserve">
+    <value>上傳本地圖片</value>
+  </data>
 </root>

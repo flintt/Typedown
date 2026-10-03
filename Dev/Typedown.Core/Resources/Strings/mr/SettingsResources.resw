@@ -844,4 +844,22 @@
     <value>आकृती काढण्यासाठी तिचा स्रोत plantuml.com वर पाठवते</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>यासह अपलोड करा</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>"प्रतिमा अपलोड करा" ही क्रिया असलेल्या घातलेल्या प्रतिमांसाठी आणि कानस &gt; स्थानिक प्रतिमा अपलोड करा साठी वापरले जाणारे अपलोड कॉन्फिगरेशन</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Bucket मधील फोल्डर</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>सार्वजनिक URL</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>पथ-शैलीचे पत्ते (MinIO आणि काही प्रदाते)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>S3 कॉन्फिगरेशन अपूर्ण आहे: Endpoint, Bucket, Access Key ID आणि Secret Access Key भरा.</value>
+  </data>
 </root>

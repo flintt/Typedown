@@ -844,4 +844,22 @@
     <value>ಬಿಡಿಸಲು ರೇಖಾಚಿತ್ರದ ಮೂಲವನ್ನು plantuml.com ಗೆ ಕಳುಹಿಸುತ್ತದೆ</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>ಇದರೊಂದಿಗೆ ಅಪ್ ಲೋಡ್ ಮಾಡಿ</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>"ಇಮೇಜ್ ಅಪ್ ಲೋಡ್ ಮಾಡಿ" ಕ್ರಿಯೆಯಿರುವ ಸೇರಿಸಿದ ಚಿತ್ರಗಳಿಗೆ ಮತ್ತು ಫೈಲ್ &gt; ಸ್ಥಳೀಯ ಚಿತ್ರಗಳನ್ನು ಅಪ್ ಲೋಡ್ ಮಾಡಿ ಗೆ ಬಳಸುವ ಅಪ್ ಲೋಡ್ ಕಾನ್ಫಿಗರೇಶನ್</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Bucket ನಲ್ಲಿನ ಫೋಲ್ಡರ್</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>ಸಾರ್ವಜನಿಕ URL</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>ಪಾತ್-ಶೈಲಿಯ ವಿಳಾಸಗಳು (MinIO ಮತ್ತು ಕೆಲವು ಪೂರೈಕೆದಾರರು)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>S3 ಕಾನ್ಫಿಗರೇಶನ್ ಅಪೂರ್ಣವಾಗಿದೆ: Endpoint, Bucket, Access Key ID ಮತ್ತು Secret Access Key ಅನ್ನು ಭರ್ತಿ ಮಾಡಿ.</value>
+  </data>
 </root>

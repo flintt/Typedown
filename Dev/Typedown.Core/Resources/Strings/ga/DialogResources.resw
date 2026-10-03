@@ -281,4 +281,49 @@
   <data name="ReloadFromDiskTitle" xml:space="preserve">
     <value>Athraíodh an comhad ar an diosca</value>
   </data>
+  <data name="UploadImages.Title" xml:space="preserve">
+    <value>Uaslódáil íomhánna áitiúla</value>
+  </data>
+  <data name="UploadImages.Progress" xml:space="preserve">
+    <value>Íomhá {0} as {1} á huaslódáil…</value>
+  </data>
+  <data name="UploadImages.Done" xml:space="preserve">
+    <value>Uaslódáladh {0} as {1} íomhá. Díríonn a seoltaí sa doiciméad ar na cóipeanna uaslódáilte anois; cuireann Cealaigh na conairí áitiúla ar ais.</value>
+  </data>
+  <data name="UploadImages.Cancelled" xml:space="preserve">
+    <value>Cealaithe. Uaslódáladh {0} as {1} íomhá, agus athraíodh a seoltaí sa doiciméad.</value>
+  </data>
+  <data name="UploadImages.NotUploaded" xml:space="preserve">
+    <value>Gan athrú:</value>
+  </data>
+  <data name="UploadImages.None" xml:space="preserve">
+    <value>Níl aon íomhánna áitiúla sa doiciméad seo.</value>
+  </data>
+  <data name="UploadImages.NoConfig" xml:space="preserve">
+    <value>Níl aon chumraíocht uaslódála roghnaithe. Roghnaigh ceann faoi Socruithe &gt; Íomhá &gt; Uaslódáil le.</value>
+  </data>
+  <data name="UploadImages.OpenSettings" xml:space="preserve">
+    <value>Oscail socruithe</value>
+  </data>
+  <data name="UploadImages.FileNotFound" xml:space="preserve">
+    <value>Níor aimsíodh an comhad.</value>
+  </data>
+  <data name="UploadImages.NoAddress" xml:space="preserve">
+    <value>Níor thug an uaslódáil seoladh ar ais.</value>
+  </data>
+  <data name="UploadImages.DocumentClosed" xml:space="preserve">
+    <value>Dúnadh an doiciméad le linn na huaslódála.</value>
+  </data>
+  <data name="UploadImages.ApplyFailed" xml:space="preserve">
+    <value>Níorbh fhéidir an doiciméad a athrú. Tá an íomhá ar líne ag</value>
+  </data>
+  <data name="UploadImages.HedgeDocPrompt" xml:space="preserve">
+    <value>Tá {0} íomhá áitiúil sa doiciméad seo. Is comhaid ar an ríomhaire seo iad, mar sin ní fheicfidh léitheoirí an nóta iad. Iad a uaslódáil ar dtús?</value>
+  </data>
+  <data name="UploadImages.UploadFirst" xml:space="preserve">
+    <value>Uaslódáil ar dtús</value>
+  </data>
+  <data name="UploadImages.ShareAnyway" xml:space="preserve">
+    <value>Comhroinn mar sin féin</value>
+  </data>
 </root>

@@ -844,4 +844,22 @@
     <value>Dërgon burimin e diagramit te plantuml.com për ta vizatuar</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>Ngarko me</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>Konfigurimi i ngarkimit që përdoret për figurat e futura veprimi i të cilave është Ngarkim, dhe nga File &gt; Ngarko figurat lokale</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Dosje në bucket</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>URL publike</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>Adresa në stil shtegu (MinIO dhe disa ofrues)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>Konfigurimi S3 është i paplotë: plotësoni Endpoint, Bucket, Access Key ID dhe Secret Access Key.</value>
+  </data>
 </root>

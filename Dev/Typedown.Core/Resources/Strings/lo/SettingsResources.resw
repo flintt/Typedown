@@ -844,4 +844,22 @@
     <value>ສົ່ງຕົ້ນສະບັບຂອງແຜນວາດໄປຫາ plantuml.com ເພື່ອແຕ້ມ</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>ອັບໂຫຼດດ້ວຍ</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>ການຕັ້ງຄ່າການອັບໂຫຼດທີ່ໃຊ້ສຳລັບຮູບພາບທີ່ແຊກເຂົ້າເຊິ່ງມີການດຳເນີນການເປັນ ອັບໂຫຼດຮູບພາບ, ແລະ ໂດຍ ໄຟລ໌ &gt; ອັບໂຫຼດຮູບພາບໃນເຄື່ອງ</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>ໂຟນເດີໃນ bucket</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>URL ສາທາລະນະ</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>ທີ່ຢູ່ແບບເສັ້ນທາງ (MinIO ແລະ ຜູ້ໃຫ້ບໍລິການບາງລາຍ)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>ການຕັ້ງຄ່າ S3 ບໍ່ຄົບຖ້ວນ: ກະລຸນາຕື່ມ Endpoint, Bucket, Access Key ID ແລະ Secret Access Key.</value>
+  </data>
 </root>

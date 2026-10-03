@@ -844,4 +844,22 @@
     <value>다이어그램 소스를 plantuml.com으로 보내 그립니다</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>업로드 방법</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>작업이 업로드인 삽입 이미지와 파일 &gt; 로컬 이미지 업로드에서 사용하는 업로드 구성</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>버킷 내 폴더</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>공개 URL</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>경로 스타일 주소(MinIO 및 일부 공급자)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>S3 구성이 완전하지 않습니다. Endpoint, Bucket, Access Key ID, Secret Access Key를 입력하세요.</value>
+  </data>
 </root>

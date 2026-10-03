@@ -844,4 +844,22 @@
     <value>Ka tukuna te pūtake o te hoahoa ki plantuml.com hei tuhi</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>Tukuatu mā</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>Te whirihoranga tukuatu ka whakamahia mō ngā atahanga kua kōkuhuna ko Tukuatu tō rātou mahi, ā, e Kōnae &gt; Tukuatu atahanga paetata</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Kōpaki i te bucket</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>URL tūmatanui</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>Wāhitau momo ara (MinIO me ētahi kaiwhakarato)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>Kāore i oti te whirihoranga S3: whakakīia te Endpoint, Bucket, Access Key ID me te Secret Access Key.</value>
+  </data>
 </root>

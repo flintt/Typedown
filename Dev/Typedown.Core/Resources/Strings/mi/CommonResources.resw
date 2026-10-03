@@ -1006,4 +1006,7 @@
     <value>Kua weto ngā hoahoa PlantUML (ka tukuna e te tuhi te pūtake ki plantuml.com). Whakakāngia i Tautuhinga &gt; Ētita.</value>
     <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
   </data>
+  <data name="UploadLocalImages" xml:space="preserve">
+    <value>Tukuatu atahanga paetata</value>
+  </data>
 </root>

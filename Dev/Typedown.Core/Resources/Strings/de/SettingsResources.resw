@@ -844,4 +844,22 @@
     <value>Sendet den Quelltext des Diagramms zum Zeichnen an plantuml.com</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>Hochladen mit</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>Die Upload-Konfiguration für eingefügte Bilder mit der Aktion „Bild hochladen“ und für Datei &gt; Lokale Bilder hochladen</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Ordner im Bucket</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>Öffentliche URL</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>Pfadbasierte Adressen (MinIO und einige Anbieter)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>Die S3-Konfiguration ist unvollständig: Füllen Sie Endpoint, Bucket, Access Key ID und Secret Access Key aus.</value>
+  </data>
 </root>

@@ -844,4 +844,22 @@
     <value>Գծապատկերի աղբյուրն ուղարկում է plantuml.com՝ գծելու համար</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>Վերբեռնման կոնֆիգուրացիա</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>Վերբեռնման կոնֆիգուրացիան, որն օգտագործվում է «Վերբեռնել պատկերը» գործողությամբ տեղադրված պատկերների և Ֆայլ &gt; Վերբեռնել տեղային պատկերները հրամանի համար</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Թղթապանակ Bucket-ում</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>Հանրային URL</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>Ուղու ոճի հասցեներ (MinIO և որոշ մատակարարներ)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>S3 կոնֆիգուրացիան թերի է․ լրացրեք Endpoint, Bucket, Access Key ID և Secret Access Key։</value>
+  </data>
 </root>

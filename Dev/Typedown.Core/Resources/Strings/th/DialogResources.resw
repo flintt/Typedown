@@ -281,4 +281,49 @@
   <data name="ReloadFromDiskTitle" xml:space="preserve">
     <value>ไฟล์ถูกแก้ไขบนดิสก์</value>
   </data>
+  <data name="UploadImages.Title" xml:space="preserve">
+    <value>อัปโหลดรูปภาพในเครื่อง</value>
+  </data>
+  <data name="UploadImages.Progress" xml:space="preserve">
+    <value>กำลังอัปโหลดรูปภาพ {0} จาก {1}…</value>
+  </data>
+  <data name="UploadImages.Done" xml:space="preserve">
+    <value>อัปโหลดรูปภาพแล้ว {0} จาก {1} รูป ที่อยู่ของรูปภาพในเอกสารชี้ไปยังสำเนาที่อัปโหลดแล้ว เลิกทำจะคืนพาธในเครื่องกลับมา</value>
+  </data>
+  <data name="UploadImages.Cancelled" xml:space="preserve">
+    <value>ยกเลิกแล้ว อัปโหลดรูปภาพแล้ว {0} จาก {1} รูป และที่อยู่ของรูปภาพในเอกสารถูกเปลี่ยนแล้ว</value>
+  </data>
+  <data name="UploadImages.NotUploaded" xml:space="preserve">
+    <value>ไม่ได้เปลี่ยน:</value>
+  </data>
+  <data name="UploadImages.None" xml:space="preserve">
+    <value>เอกสารนี้ไม่มีรูปภาพในเครื่อง</value>
+  </data>
+  <data name="UploadImages.NoConfig" xml:space="preserve">
+    <value>ยังไม่ได้เลือกการกำหนดค่าการอัปโหลด เลือกได้ที่ การตั้งค่า &gt; ภาพ &gt; อัปโหลดด้วย</value>
+  </data>
+  <data name="UploadImages.OpenSettings" xml:space="preserve">
+    <value>เปิดการตั้งค่า</value>
+  </data>
+  <data name="UploadImages.FileNotFound" xml:space="preserve">
+    <value>ไม่พบไฟล์</value>
+  </data>
+  <data name="UploadImages.NoAddress" xml:space="preserve">
+    <value>การอัปโหลดไม่ได้ส่งที่อยู่กลับมา</value>
+  </data>
+  <data name="UploadImages.DocumentClosed" xml:space="preserve">
+    <value>เอกสารถูกปิดระหว่างการอัปโหลด</value>
+  </data>
+  <data name="UploadImages.ApplyFailed" xml:space="preserve">
+    <value>ไม่สามารถเปลี่ยนเอกสารได้ รูปภาพอยู่ออนไลน์ที่</value>
+  </data>
+  <data name="UploadImages.HedgeDocPrompt" xml:space="preserve">
+    <value>เอกสารนี้มีรูปภาพในเครื่อง {0} รูป รูปภาพเหล่านี้เป็นไฟล์บนคอมพิวเตอร์เครื่องนี้ ผู้อ่านโน้ตจึงมองไม่เห็น อัปโหลดก่อนหรือไม่</value>
+  </data>
+  <data name="UploadImages.UploadFirst" xml:space="preserve">
+    <value>อัปโหลดก่อน</value>
+  </data>
+  <data name="UploadImages.ShareAnyway" xml:space="preserve">
+    <value>แชร์ต่อไป</value>
+  </data>
 </root>

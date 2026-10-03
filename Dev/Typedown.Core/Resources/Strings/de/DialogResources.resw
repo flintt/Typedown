@@ -281,4 +281,49 @@
   <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
     <value>Bisherigen Link verwenden</value>
   </data>
+  <data name="UploadImages.Title" xml:space="preserve">
+    <value>Lokale Bilder hochladen</value>
+  </data>
+  <data name="UploadImages.Progress" xml:space="preserve">
+    <value>Bild {0} von {1} wird hochgeladen…</value>
+  </data>
+  <data name="UploadImages.Done" xml:space="preserve">
+    <value>{0} von {1} Bildern hochgeladen. Ihre Adressen im Dokument verweisen jetzt auf die hochgeladenen Kopien; „Rückgängig machen“ stellt die lokalen Pfade wieder her.</value>
+  </data>
+  <data name="UploadImages.Cancelled" xml:space="preserve">
+    <value>Abgebrochen. {0} von {1} Bildern wurden hochgeladen, und ihre Adressen im Dokument wurden geändert.</value>
+  </data>
+  <data name="UploadImages.NotUploaded" xml:space="preserve">
+    <value>Nicht geändert:</value>
+  </data>
+  <data name="UploadImages.None" xml:space="preserve">
+    <value>Dieses Dokument enthält keine lokalen Bilder.</value>
+  </data>
+  <data name="UploadImages.NoConfig" xml:space="preserve">
+    <value>Keine Upload-Konfiguration ausgewählt. Wählen Sie eine unter Einstellungen &gt; Bild &gt; Hochladen mit.</value>
+  </data>
+  <data name="UploadImages.OpenSettings" xml:space="preserve">
+    <value>Einstellungen öffnen</value>
+  </data>
+  <data name="UploadImages.FileNotFound" xml:space="preserve">
+    <value>Die Datei wurde nicht gefunden.</value>
+  </data>
+  <data name="UploadImages.NoAddress" xml:space="preserve">
+    <value>Der Upload hat keine Adresse zurückgegeben.</value>
+  </data>
+  <data name="UploadImages.DocumentClosed" xml:space="preserve">
+    <value>Das Dokument wurde während des Uploads geschlossen.</value>
+  </data>
+  <data name="UploadImages.ApplyFailed" xml:space="preserve">
+    <value>Das Dokument konnte nicht geändert werden. Das Bild ist online unter</value>
+  </data>
+  <data name="UploadImages.HedgeDocPrompt" xml:space="preserve">
+    <value>Dieses Dokument enthält {0} lokale Bilder. Es sind Dateien auf diesem Computer, daher sehen Leser der Notiz sie nicht. Zuerst hochladen?</value>
+  </data>
+  <data name="UploadImages.UploadFirst" xml:space="preserve">
+    <value>Zuerst hochladen</value>
+  </data>
+  <data name="UploadImages.ShareAnyway" xml:space="preserve">
+    <value>Trotzdem teilen</value>
+  </data>
 </root>

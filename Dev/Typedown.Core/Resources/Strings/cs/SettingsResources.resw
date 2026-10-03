@@ -844,4 +844,22 @@
     <value>Odešle zdroj diagramu na plantuml.com, který ho nakreslí</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>Nahrát pomocí</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>Konfigurace nahrávání použitá pro vložené obrázky s akcí Nahrát a příkazem Soubor &gt; Nahrát místní obrázky</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Složka v bucketu</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>Veřejná URL</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>Adresy ve stylu cesty (MinIO a někteří poskytovatelé)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>Konfigurace S3 není úplná: vyplňte Endpoint, Bucket, Access Key ID a Secret Access Key.</value>
+  </data>
 </root>

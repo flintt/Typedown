@@ -281,4 +281,49 @@
   <data name="ReloadFromDiskTitle" xml:space="preserve">
     <value>ፋይሉ በዲስክ ላይ ተቀይሯል</value>
   </data>
+  <data name="UploadImages.Title" xml:space="preserve">
+    <value>የአካባቢ ምስሎችን ስቀል</value>
+  </data>
+  <data name="UploadImages.Progress" xml:space="preserve">
+    <value>ምስል {0} ከ{1} በመስቀል ላይ…</value>
+  </data>
+  <data name="UploadImages.Done" xml:space="preserve">
+    <value>ከ{1} ምስሎች {0} ተሰቅለዋል። በሰነዱ ውስጥ ያሉት አድራሻዎቻቸው አሁን ወደ ተሰቀሉት ቅጂዎች ያመለክታሉ፤ መቀልበስ የአካባቢ ዱካዎችን ይመልሳል።</value>
+  </data>
+  <data name="UploadImages.Cancelled" xml:space="preserve">
+    <value>ተሰርዟል። ከ{1} ምስሎች {0} ተሰቅለዋል፣ በሰነዱ ውስጥ ያሉት አድራሻዎቻቸውም ተቀይረዋል።</value>
+  </data>
+  <data name="UploadImages.NotUploaded" xml:space="preserve">
+    <value>ያልተቀየሩ:</value>
+  </data>
+  <data name="UploadImages.None" xml:space="preserve">
+    <value>ይህ ሰነድ ምንም የአካባቢ ምስሎች የሉትም።</value>
+  </data>
+  <data name="UploadImages.NoConfig" xml:space="preserve">
+    <value>ምንም የመስቀያ ቅንብር አልተመረጠም። በምርጫዎች &gt; ምስል &gt; መስቀያ ውስጥ አንዱን ይምረጡ።</value>
+  </data>
+  <data name="UploadImages.OpenSettings" xml:space="preserve">
+    <value>ምርጫዎችን ክፈት</value>
+  </data>
+  <data name="UploadImages.FileNotFound" xml:space="preserve">
+    <value>ፋይሉ አልተገኘም።</value>
+  </data>
+  <data name="UploadImages.NoAddress" xml:space="preserve">
+    <value>መስቀሉ አድራሻ አልመለሰም።</value>
+  </data>
+  <data name="UploadImages.DocumentClosed" xml:space="preserve">
+    <value>ሰነዱ በመስቀል ላይ እያለ ተዘግቷል።</value>
+  </data>
+  <data name="UploadImages.ApplyFailed" xml:space="preserve">
+    <value>ሰነዱን መቀየር አልተቻለም። ምስሉ በመስመር ላይ የሚገኘው በ</value>
+  </data>
+  <data name="UploadImages.HedgeDocPrompt" xml:space="preserve">
+    <value>ይህ ሰነድ {0} የአካባቢ ምስሎች አሉት። በዚህ ኮምፒውተር ላይ ያሉ ፋይሎች ስለሆኑ የማስታወሻው አንባቢዎች አያዩዋቸውም። መጀመሪያ ይሰቀሉ?</value>
+  </data>
+  <data name="UploadImages.UploadFirst" xml:space="preserve">
+    <value>መጀመሪያ ስቀል</value>
+  </data>
+  <data name="UploadImages.ShareAnyway" xml:space="preserve">
+    <value>ቢሆንም አጋራ</value>
+  </data>
 </root>

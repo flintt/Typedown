@@ -1006,4 +1006,7 @@
     <value>PlantUML ଚିତ୍ର ବନ୍ଦ ଅଛି (ଆଙ୍କିବା ଉତ୍ସକୁ plantuml.com କୁ ପଠାଏ)। ସେଟିଂସ &gt; ଏଡିଟରରେ ଚାଲୁ କରନ୍ତୁ।</value>
     <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
   </data>
+  <data name="UploadLocalImages" xml:space="preserve">
+    <value>ସ୍ଥାନୀୟ ଫଟୋ ଅପଲୋଡ୍ କରନ୍ତୁ</value>
+  </data>
 </root>

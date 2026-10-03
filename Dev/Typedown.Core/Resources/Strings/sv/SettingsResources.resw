@@ -844,4 +844,22 @@
     <value>Skickar diagrammets källkod till plantuml.com för att rita det</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>Ladda upp med</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>Uppladdningskonfigurationen som används för infogade bilder vars åtgärd är Ladda upp, och av Fil &gt; Ladda upp lokala bilder</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Mapp i bucket</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>Offentlig URL</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>Adresser i sökvägsformat (MinIO och vissa leverantörer)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>S3-konfigurationen är ofullständig: fyll i Endpoint, Bucket, Access Key ID och Secret Access Key.</value>
+  </data>
 </root>

@@ -844,4 +844,22 @@
     <value>আঁকার জন্য ডায়াগ্রামের উৎস plantuml.com-এ পাঠায়</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>আপলোডের মাধ্যম</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>যেসব সন্নিবেশিত ছবির অ্যাকশন "ছবি আপলোড করুন", সেগুলোর জন্য এবং ফাইল &gt; লোকাল ছবি আপলোড করুন দ্বারা ব্যবহৃত আপলোড কনফিগারেশন</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>bucket-এর ভেতরের ফোল্ডার</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>পাবলিক URL</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>পাথ-স্টাইল ঠিকানা (MinIO এবং কিছু প্রদানকারী)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>S3 কনফিগারেশন অসম্পূর্ণ: Endpoint, Bucket, Access Key ID এবং Secret Access Key পূরণ করুন।</value>
+  </data>
 </root>

@@ -281,4 +281,49 @@
   <data name="ReloadFromDiskTitle" xml:space="preserve">
     <value>Il-fajl inbidel fuq id-diska</value>
   </data>
+  <data name="UploadImages.Title" xml:space="preserve">
+    <value>Tella' l-immaġnijiet lokali</value>
+  </data>
+  <data name="UploadImages.Progress" xml:space="preserve">
+    <value>Qed titla' l-immaġni {0} minn {1}…</value>
+  </data>
+  <data name="UploadImages.Done" xml:space="preserve">
+    <value>Telgħu {0} minn {1} immaġnijiet. L-indirizzi tagħhom fid-dokument issa jippuntaw lejn il-kopji li telgħu; il-kmand Erġa jerġa' jdaħħal il-mogħdijiet lokali.</value>
+  </data>
+  <data name="UploadImages.Cancelled" xml:space="preserve">
+    <value>Ikkanċellat. Telgħu {0} minn {1} immaġnijiet, u l-indirizzi tagħhom fid-dokument inbidlu.</value>
+  </data>
+  <data name="UploadImages.NotUploaded" xml:space="preserve">
+    <value>Mhux mibdula:</value>
+  </data>
+  <data name="UploadImages.None" xml:space="preserve">
+    <value>Dan id-dokument m'għandux immaġnijiet lokali.</value>
+  </data>
+  <data name="UploadImages.NoConfig" xml:space="preserve">
+    <value>Ma ntgħażlet l-ebda konfigurazzjoni tat-tlugħ. Agħżel waħda taħt Issettjar &gt; Immaġni &gt; Tella' bi.</value>
+  </data>
+  <data name="UploadImages.OpenSettings" xml:space="preserve">
+    <value>Iftaħ l-issettjar</value>
+  </data>
+  <data name="UploadImages.FileNotFound" xml:space="preserve">
+    <value>Il-fajl ma nstabx.</value>
+  </data>
+  <data name="UploadImages.NoAddress" xml:space="preserve">
+    <value>It-tlugħ ma rritornax indirizz.</value>
+  </data>
+  <data name="UploadImages.DocumentClosed" xml:space="preserve">
+    <value>Id-dokument ingħalaq waqt it-tlugħ.</value>
+  </data>
+  <data name="UploadImages.ApplyFailed" xml:space="preserve">
+    <value>Id-dokument ma setax jinbidel. L-immaġni hija online fuq</value>
+  </data>
+  <data name="UploadImages.HedgeDocPrompt" xml:space="preserve">
+    <value>Dan id-dokument għandu {0} immaġnijiet lokali. Huma fajls fuq dan il-kompjuter, għalhekk il-qarrejja tan-nota ma jarawhomx. Ittellagħhom l-ewwel?</value>
+  </data>
+  <data name="UploadImages.UploadFirst" xml:space="preserve">
+    <value>Tella' l-ewwel</value>
+  </data>
+  <data name="UploadImages.ShareAnyway" xml:space="preserve">
+    <value>Aqsam xorta waħda</value>
+  </data>
 </root>

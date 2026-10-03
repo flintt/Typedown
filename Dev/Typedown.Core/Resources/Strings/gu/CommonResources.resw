@@ -1006,4 +1006,7 @@
     <value>PlantUML આકૃતિઓ બંધ છે (દોરવાથી સ્રોત plantuml.com પર મોકલાય છે). સેટિંગ્સ &gt; એડિટરમાં ચાલુ કરો.</value>
     <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
   </data>
+  <data name="UploadLocalImages" xml:space="preserve">
+    <value>સ્થાનિક ઇમેજો અપલોડ કરો</value>
+  </data>
 </root>

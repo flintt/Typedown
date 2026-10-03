@@ -1006,4 +1006,7 @@
     <value>PlantUML ডায়াগ্রাম বন্ধ আছে (আঁকতে উৎস plantuml.com-এ পাঠানো হয়)। সেটিংস &gt; এডিটর থেকে চালু করুন।</value>
     <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
   </data>
+  <data name="UploadLocalImages" xml:space="preserve">
+    <value>লোকাল ছবি আপলোড করুন</value>
+  </data>
 </root>

@@ -844,4 +844,22 @@
     <value>Диаграмманың бастапқы кодын салу үшін plantuml.com-ға жібереді</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>Кері жүктеу конфигурациясы</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>Әрекеті «Суретті кері жүктеу» болатын кірістірілген суреттер үшін және Файл &gt; Жергілікті суреттерді кері жүктеу арқылы қолданылатын кері жүктеу конфигурациясы</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Bucket ішіндегі қалта</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>Жалпыға ортақ URL</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>Жол стиліндегі мекенжайлар (MinIO және кейбір провайдерлер)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>S3 конфигурациясы толық емес: Endpoint, Bucket, Access Key ID және Secret Access Key өрістерін толтырыңыз.</value>
+  </data>
 </root>

@@ -844,4 +844,22 @@
     <value>Envía o código do diagrama a plantuml.com para debuxalo</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>Cargar con</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>A configuración de carga usada para as imaxes inseridas cuxa acción é Cargar imaxe, e por Ficheiro &gt; Cargar imaxes locais</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Cartafol no bucket</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>URL pública</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>Enderezos de estilo de ruta (MinIO e algúns provedores)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>A configuración de S3 está incompleta: enche Endpoint, Bucket, Access Key ID e Secret Access Key.</value>
+  </data>
 </root>

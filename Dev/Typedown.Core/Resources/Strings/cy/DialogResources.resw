@@ -281,4 +281,49 @@
   <data name="ReloadFromDiskTitle" xml:space="preserve">
     <value>Mae'r ffeil wedi newid ar y ddisg</value>
   </data>
+  <data name="UploadImages.Title" xml:space="preserve">
+    <value>Uwchlwytho delweddau lleol</value>
+  </data>
+  <data name="UploadImages.Progress" xml:space="preserve">
+    <value>Yn uwchlwytho delwedd {0} o {1}…</value>
+  </data>
+  <data name="UploadImages.Done" xml:space="preserve">
+    <value>Cafodd {0} o {1} delwedd eu huwchlwytho. Mae eu cyfeiriadau yn y ddogfen nawr yn pwyntio at y copïau a uwchlwythwyd; mae Datod yn adfer y llwybrau lleol.</value>
+  </data>
+  <data name="UploadImages.Cancelled" xml:space="preserve">
+    <value>Wedi canslo. Cafodd {0} o {1} delwedd eu huwchlwytho, a newidiwyd eu cyfeiriadau yn y ddogfen.</value>
+  </data>
+  <data name="UploadImages.NotUploaded" xml:space="preserve">
+    <value>Heb eu newid:</value>
+  </data>
+  <data name="UploadImages.None" xml:space="preserve">
+    <value>Does dim delweddau lleol yn y ddogfen hon.</value>
+  </data>
+  <data name="UploadImages.NoConfig" xml:space="preserve">
+    <value>Does dim cyfluniad uwchlwytho wedi'i ddewis. Dewiswch un o dan Gosodiadau &gt; Delwedd &gt; Uwchlwytho gyda.</value>
+  </data>
+  <data name="UploadImages.OpenSettings" xml:space="preserve">
+    <value>Agor y gosodiadau</value>
+  </data>
+  <data name="UploadImages.FileNotFound" xml:space="preserve">
+    <value>Ni chafwyd hyd i'r ffeil.</value>
+  </data>
+  <data name="UploadImages.NoAddress" xml:space="preserve">
+    <value>Ni ddychwelodd yr uwchlwythiad gyfeiriad.</value>
+  </data>
+  <data name="UploadImages.DocumentClosed" xml:space="preserve">
+    <value>Caewyd y ddogfen yn ystod yr uwchlwythiad.</value>
+  </data>
+  <data name="UploadImages.ApplyFailed" xml:space="preserve">
+    <value>Nid oedd modd newid y ddogfen. Mae'r ddelwedd ar-lein yn</value>
+  </data>
+  <data name="UploadImages.HedgeDocPrompt" xml:space="preserve">
+    <value>Mae gan y ddogfen hon {0} delwedd leol. Ffeiliau ar y cyfrifiadur hwn ydyn nhw, felly ni fydd darllenwyr y nodyn yn eu gweld. Eu huwchlwytho yn gyntaf?</value>
+  </data>
+  <data name="UploadImages.UploadFirst" xml:space="preserve">
+    <value>Uwchlwytho yn gyntaf</value>
+  </data>
+  <data name="UploadImages.ShareAnyway" xml:space="preserve">
+    <value>Rhannu beth bynnag</value>
+  </data>
 </root>

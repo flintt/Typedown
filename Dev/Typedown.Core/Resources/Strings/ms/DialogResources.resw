@@ -281,4 +281,49 @@
   <data name="ReloadFromDiskTitle" xml:space="preserve">
     <value>Fail telah berubah pada cakera</value>
   </data>
+  <data name="UploadImages.Title" xml:space="preserve">
+    <value>Muat naik imej tempatan</value>
+  </data>
+  <data name="UploadImages.Progress" xml:space="preserve">
+    <value>Memuat naik imej {0} daripada {1}…</value>
+  </data>
+  <data name="UploadImages.Done" xml:space="preserve">
+    <value>{0} daripada {1} imej dimuat naik. Alamatnya dalam dokumen kini menghala ke salinan yang dimuat naik; Buat asal mengembalikan laluan tempatan.</value>
+  </data>
+  <data name="UploadImages.Cancelled" xml:space="preserve">
+    <value>Dibatalkan. {0} daripada {1} imej telah dimuat naik, dan alamatnya dalam dokumen telah diubah.</value>
+  </data>
+  <data name="UploadImages.NotUploaded" xml:space="preserve">
+    <value>Tidak diubah:</value>
+  </data>
+  <data name="UploadImages.None" xml:space="preserve">
+    <value>Dokumen ini tiada imej tempatan.</value>
+  </data>
+  <data name="UploadImages.NoConfig" xml:space="preserve">
+    <value>Tiada konfigurasi muat naik dipilih. Pilih satu di bawah Seting &gt; Imej &gt; Muat naik dengan.</value>
+  </data>
+  <data name="UploadImages.OpenSettings" xml:space="preserve">
+    <value>Buka seting</value>
+  </data>
+  <data name="UploadImages.FileNotFound" xml:space="preserve">
+    <value>Fail tidak ditemui.</value>
+  </data>
+  <data name="UploadImages.NoAddress" xml:space="preserve">
+    <value>Muat naik tidak mengembalikan alamat.</value>
+  </data>
+  <data name="UploadImages.DocumentClosed" xml:space="preserve">
+    <value>Dokumen ditutup semasa muat naik.</value>
+  </data>
+  <data name="UploadImages.ApplyFailed" xml:space="preserve">
+    <value>Dokumen tidak dapat diubah. Imej berada dalam talian di</value>
+  </data>
+  <data name="UploadImages.HedgeDocPrompt" xml:space="preserve">
+    <value>Dokumen ini mempunyai {0} imej tempatan. Imej itu ialah fail pada komputer ini, jadi pembaca nota tidak akan melihatnya. Muat naik dahulu?</value>
+  </data>
+  <data name="UploadImages.UploadFirst" xml:space="preserve">
+    <value>Muat naik dahulu</value>
+  </data>
+  <data name="UploadImages.ShareAnyway" xml:space="preserve">
+    <value>Kongsi juga</value>
+  </data>
 </root>

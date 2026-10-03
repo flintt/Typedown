@@ -1006,4 +1006,7 @@
     <value>PlantUML வரைபடங்கள் முடக்கப்பட்டுள்ளன (வரைய மூலம் plantuml.com-க்கு அனுப்பப்படும்). அமைப்புகள் &gt; திருத்தியில் இயக்கவும்.</value>
     <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
   </data>
+  <data name="UploadLocalImages" xml:space="preserve">
+    <value>உள்ளூர் படங்களைப் பதிவேற்றவும்</value>
+  </data>
 </root>

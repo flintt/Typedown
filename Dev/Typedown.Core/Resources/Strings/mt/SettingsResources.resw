@@ -844,4 +844,22 @@
     <value>Jibgħat is-sors tad-dijagramma lil plantuml.com biex jiddisinjaha</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>Tella' bi</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>Il-konfigurazzjoni tat-tlugħ użata għall-immaġnijiet imdaħħla li l-azzjoni tagħhom hija Tella' l-immaġni, u minn Fajl &gt; Tella' l-immaġnijiet lokali</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Folder fil-bucket</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>URL pubbliku</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>Indirizzi bi stil ta' mogħdija (MinIO u xi fornituri)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>Il-konfigurazzjoni S3 mhix kompluta: imla Endpoint, Bucket, Access Key ID u Secret Access Key.</value>
+  </data>
 </root>

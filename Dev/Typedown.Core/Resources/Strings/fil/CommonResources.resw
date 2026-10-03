@@ -1006,4 +1006,7 @@
     <value>Naka-off ang mga PlantUML diagram (ang pagguhit ay nagpapadala ng source sa plantuml.com). I-on ang mga ito sa Mga Setting &gt; Editor.</value>
     <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
   </data>
+  <data name="UploadLocalImages" xml:space="preserve">
+    <value>Mag-upload ng mga lokal na imahe</value>
+  </data>
 </root>

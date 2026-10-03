@@ -844,4 +844,22 @@
     <value>Nosūta diagrammas avotu uz plantuml.com, lai to uzzīmētu</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>Augšupielādēt ar</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>Augšupielādes konfigurācija, ko izmanto ievietotajiem attēliem ar darbību “Augšupielādēt attēlu” un komandai Fails &gt; Augšupielādēt lokālos attēlus</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Mape Bucket</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>Publiskais URL</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>Ceļa stila adreses (MinIO un daži pakalpojumu sniedzēji)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>S3 konfigurācija nav pilnīga: aizpildiet Endpoint, Bucket, Access Key ID un Secret Access Key.</value>
+  </data>
 </root>

@@ -281,4 +281,49 @@
   <data name="ReloadFromDiskTitle" xml:space="preserve">
     <value>Tệp đã thay đổi trên đĩa</value>
   </data>
+  <data name="UploadImages.Title" xml:space="preserve">
+    <value>Tải lên ảnh cục bộ</value>
+  </data>
+  <data name="UploadImages.Progress" xml:space="preserve">
+    <value>Đang tải lên ảnh {0}/{1}…</value>
+  </data>
+  <data name="UploadImages.Done" xml:space="preserve">
+    <value>Đã tải lên {0}/{1} ảnh. Địa chỉ của chúng trong tài liệu giờ trỏ tới các bản đã tải lên; Hoàn tác sẽ khôi phục đường dẫn cục bộ.</value>
+  </data>
+  <data name="UploadImages.Cancelled" xml:space="preserve">
+    <value>Đã hủy. Đã tải lên {0}/{1} ảnh và địa chỉ của chúng trong tài liệu đã được thay đổi.</value>
+  </data>
+  <data name="UploadImages.NotUploaded" xml:space="preserve">
+    <value>Không thay đổi:</value>
+  </data>
+  <data name="UploadImages.None" xml:space="preserve">
+    <value>Tài liệu này không có ảnh cục bộ.</value>
+  </data>
+  <data name="UploadImages.NoConfig" xml:space="preserve">
+    <value>Chưa chọn cấu hình tải lên. Hãy chọn một cấu hình trong Cài đặt &gt; Ảnh &gt; Tải lên bằng.</value>
+  </data>
+  <data name="UploadImages.OpenSettings" xml:space="preserve">
+    <value>Mở cài đặt</value>
+  </data>
+  <data name="UploadImages.FileNotFound" xml:space="preserve">
+    <value>Không tìm thấy tệp.</value>
+  </data>
+  <data name="UploadImages.NoAddress" xml:space="preserve">
+    <value>Quá trình tải lên không trả về địa chỉ.</value>
+  </data>
+  <data name="UploadImages.DocumentClosed" xml:space="preserve">
+    <value>Tài liệu đã bị đóng trong khi tải lên.</value>
+  </data>
+  <data name="UploadImages.ApplyFailed" xml:space="preserve">
+    <value>Không thể thay đổi tài liệu. Ảnh đã có trực tuyến tại</value>
+  </data>
+  <data name="UploadImages.HedgeDocPrompt" xml:space="preserve">
+    <value>Tài liệu này có {0} ảnh cục bộ. Đó là các tệp trên máy tính này nên người đọc ghi chú sẽ không thấy chúng. Tải chúng lên trước?</value>
+  </data>
+  <data name="UploadImages.UploadFirst" xml:space="preserve">
+    <value>Tải lên trước</value>
+  </data>
+  <data name="UploadImages.ShareAnyway" xml:space="preserve">
+    <value>Vẫn chia sẻ</value>
+  </data>
 </root>

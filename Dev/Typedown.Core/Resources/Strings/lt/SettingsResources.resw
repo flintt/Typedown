@@ -844,4 +844,22 @@
     <value>Siunčia diagramos šaltinį į plantuml.com, kad ją nupieštų</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>Įkelti naudojant</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>Įkėlimo konfigūracija, naudojama įterptiems vaizdams, kurių veiksmas yra Įkelti, ir komandai Failas &gt; Įkelti vietinius vaizdus</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Aplankas bucket'e</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>Viešasis URL</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>Kelio stiliaus adresai (MinIO ir kai kurie teikėjai)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>S3 konfigūracija nebaigta: užpildykite Endpoint, Bucket, Access Key ID ir Secret Access Key.</value>
+  </data>
 </root>

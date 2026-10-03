@@ -844,4 +844,22 @@
     <value>દોરવા માટે આકૃતિનો સ્રોત plantuml.com પર મોકલે છે</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>આના વડે અપલોડ કરો</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>જે દાખલ કરેલી ઇમેજોની ક્રિયા અપલોડ છે તેમના માટે અને ફાઈલ &gt; સ્થાનિક ઇમેજો અપલોડ કરો દ્વારા વપરાતું અપલોડ રૂપરેખાંકન</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Bucket માં ફોલ્ડર</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>સાર્વજનિક URL</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>પાથ-શૈલીના સરનામાં (MinIO અને કેટલાક પ્રદાતાઓ)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>S3 રૂપરેખાંકન અધૂરું છે: Endpoint, Bucket, Access Key ID અને Secret Access Key ભરો.</value>
+  </data>
 </root>

@@ -844,4 +844,22 @@
     <value>Lähettää kaavion lähdekoodin piirrettäväksi palveluun plantuml.com</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>Latausmääritys</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>Latausmääritys, jota käytetään lisätyille kuville, joiden toiminto on Lataa kuva, sekä kohdassa Tiedosto &gt; Lataa paikalliset kuvat</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Kansio bucketissa</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>Julkinen URL</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>Polkutyyliset osoitteet (MinIO ja jotkin palveluntarjoajat)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>S3-määritys on puutteellinen: täytä Endpoint, Bucket, Access Key ID ja Secret Access Key.</value>
+  </data>
 </root>

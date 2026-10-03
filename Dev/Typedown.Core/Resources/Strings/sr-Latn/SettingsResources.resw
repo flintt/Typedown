@@ -844,4 +844,22 @@
     <value>Šalje izvor dijagrama na plantuml.com radi crtanja</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>Otpremi pomoću</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>Konfiguracija otpremanja koja se koristi za umetnute slike čija je radnja „Otpremanje slike”, kao i za Datoteke &gt; Otpremi lokalne slike</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Fascikla u Bucket-u</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>Javni URL</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>Adrese u stilu putanje (MinIO i neki dobavljači)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>S3 konfiguracija je nepotpuna: popunite Endpoint, Bucket, Access Key ID i Secret Access Key.</value>
+  </data>
 </root>

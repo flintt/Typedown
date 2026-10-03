@@ -844,4 +844,22 @@
     <value>Sender diagrammets kilde til plantuml.com for å tegne det</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>Last opp med</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>Opplastingskonfigurasjonen som brukes for innsatte bilder med handlingen Last opp, og av Fil &gt; Last opp lokale bilder</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Mappe i bucket</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>Offentlig URL</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>Adresser i banestil (MinIO og noen leverandører)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>S3-konfigurasjonen er ufullstendig: fyll ut Endpoint, Bucket, Access Key ID og Secret Access Key.</value>
+  </data>
 </root>

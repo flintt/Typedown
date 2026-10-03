@@ -281,4 +281,49 @@
   <data name="ReloadFromDiskTitle" xml:space="preserve">
     <value>Το αρχείο άλλαξε στον δίσκο</value>
   </data>
+  <data name="UploadImages.Title" xml:space="preserve">
+    <value>Μεταφόρτωση τοπικών εικόνων</value>
+  </data>
+  <data name="UploadImages.Progress" xml:space="preserve">
+    <value>Μεταφόρτωση εικόνας {0} από {1}…</value>
+  </data>
+  <data name="UploadImages.Done" xml:space="preserve">
+    <value>Μεταφορτώθηκαν {0} από {1} εικόνες. Οι διευθύνσεις τους στο έγγραφο δείχνουν πλέον στα μεταφορτωμένα αντίγραφα· η Αναίρεση επαναφέρει τις τοπικές διαδρομές.</value>
+  </data>
+  <data name="UploadImages.Cancelled" xml:space="preserve">
+    <value>Ακυρώθηκε. Μεταφορτώθηκαν {0} από {1} εικόνες και οι διευθύνσεις τους στο έγγραφο άλλαξαν.</value>
+  </data>
+  <data name="UploadImages.NotUploaded" xml:space="preserve">
+    <value>Δεν άλλαξαν:</value>
+  </data>
+  <data name="UploadImages.None" xml:space="preserve">
+    <value>Αυτό το έγγραφο δεν έχει τοπικές εικόνες.</value>
+  </data>
+  <data name="UploadImages.NoConfig" xml:space="preserve">
+    <value>Δεν έχει επιλεγεί διαμόρφωση μεταφόρτωσης. Επιλέξτε μία στο Ρυθμίσεις &gt; Εικόνα &gt; Μεταφόρτωση με.</value>
+  </data>
+  <data name="UploadImages.OpenSettings" xml:space="preserve">
+    <value>Άνοιγμα ρυθμίσεων</value>
+  </data>
+  <data name="UploadImages.FileNotFound" xml:space="preserve">
+    <value>Το αρχείο δεν βρέθηκε.</value>
+  </data>
+  <data name="UploadImages.NoAddress" xml:space="preserve">
+    <value>Η μεταφόρτωση δεν επέστρεψε διεύθυνση.</value>
+  </data>
+  <data name="UploadImages.DocumentClosed" xml:space="preserve">
+    <value>Το έγγραφο έκλεισε κατά τη μεταφόρτωση.</value>
+  </data>
+  <data name="UploadImages.ApplyFailed" xml:space="preserve">
+    <value>Δεν ήταν δυνατή η αλλαγή του εγγράφου. Η εικόνα είναι διαθέσιμη στη διεύθυνση</value>
+  </data>
+  <data name="UploadImages.HedgeDocPrompt" xml:space="preserve">
+    <value>Αυτό το έγγραφο έχει {0} τοπικές εικόνες. Είναι αρχεία σε αυτόν τον υπολογιστή, οπότε οι αναγνώστες της σημείωσης δεν θα τις βλέπουν. Να μεταφορτωθούν πρώτα;</value>
+  </data>
+  <data name="UploadImages.UploadFirst" xml:space="preserve">
+    <value>Πρώτα μεταφόρτωση</value>
+  </data>
+  <data name="UploadImages.ShareAnyway" xml:space="preserve">
+    <value>Κοινή χρήση ούτως ή άλλως</value>
+  </data>
 </root>

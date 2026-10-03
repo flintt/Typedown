@@ -844,4 +844,22 @@
     <value>Στέλνει τον κώδικα του διαγράμματος στο plantuml.com για να σχεδιαστεί</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>Μεταφόρτωση με</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>Η διαμόρφωση μεταφόρτωσης που χρησιμοποιείται για εισαγόμενες εικόνες με ενέργεια Μεταφόρτωση και από το Αρχείο &gt; Μεταφόρτωση τοπικών εικόνων</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Φάκελος στο bucket</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>Δημόσια URL</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>Διευθύνσεις τύπου διαδρομής (MinIO και ορισμένοι πάροχοι)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>Η διαμόρφωση S3 είναι ελλιπής: συμπληρώστε Endpoint, Bucket, Access Key ID και Secret Access Key.</value>
+  </data>
 </root>

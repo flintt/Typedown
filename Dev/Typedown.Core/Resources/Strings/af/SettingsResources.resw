@@ -844,4 +844,22 @@
     <value>Stuur die diagram se bron na plantuml.com om dit te teken</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>Laai op met</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>Die oplaaikonfigurasie wat gebruik word vir ingevoegde prente waarvan die aksie Oplaai is, en deur Lêer &gt; Laai plaaslike prente op</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Vouer in bucket</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>Publieke URL</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>Pad-styl-adresse (MinIO en sommige verskaffers)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>Die S3-konfigurasie is onvolledig: vul Endpoint, Bucket, Access Key ID en Secret Access Key in.</value>
+  </data>
 </root>

@@ -844,4 +844,22 @@
     <value>ส่งซอร์สของแผนภาพไปยัง plantuml.com เพื่อวาด</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>อัปโหลดด้วย</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>การกำหนดค่าการอัปโหลดที่ใช้กับรูปภาพที่แทรกซึ่งมีการดำเนินการเป็นอัปโหลด และโดย แฟ้ม &gt; อัปโหลดรูปภาพในเครื่อง</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>โฟลเดอร์ใน bucket</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>URL สาธารณะ</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>ที่อยู่แบบพาธ (MinIO และผู้ให้บริการบางราย)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>การกำหนดค่า S3 ไม่สมบูรณ์: กรอก Endpoint, Bucket, Access Key ID และ Secret Access Key</value>
+  </data>
 </root>

@@ -844,4 +844,22 @@
     <value>Stuurt de broncode van het diagram naar plantuml.com om het te tekenen</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>Uploaden met</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>De uploadconfiguratie die wordt gebruikt voor ingevoegde afbeeldingen met de actie Uploaden, en door Bestand &gt; Lokale afbeeldingen uploaden</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Map in bucket</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>Openbare URL</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>Adressen in padstijl (MinIO en sommige providers)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>De S3-configuratie is onvolledig: vul Endpoint, Bucket, Access Key ID en Secret Access Key in.</value>
+  </data>
 </root>

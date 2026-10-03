@@ -844,4 +844,22 @@
     <value>Seolann sé foinse na léaráide chuig plantuml.com chun í a tharraingt</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>Uaslódáil le</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>An chumraíocht uaslódála a úsáidtear d'íomhánna ionsáite arb é Uaslódáil a ngníomh, agus ag Comhad &gt; Uaslódáil íomhánna áitiúla</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Fillteán sa bhuicéad</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>URL poiblí</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>Seoltaí i stíl conaire (MinIO agus soláthraithe áirithe)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>Tá cumraíocht S3 neamhiomlán: líon isteach Endpoint, Bucket, Access Key ID agus Secret Access Key.</value>
+  </data>
 </root>

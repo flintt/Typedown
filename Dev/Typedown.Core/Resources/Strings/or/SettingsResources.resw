@@ -844,4 +844,22 @@
     <value>ଆଙ୍କିବା ପାଇଁ ଚିତ୍ରର ଉତ୍ସ plantuml.com କୁ ପଠାଏ</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>ଅପଲୋଡ୍ ମାଧ୍ୟମ</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>ଯେଉଁ ସନ୍ନିବେଶିତ ଫଟୋର କାର୍ଯ୍ୟ "ଫଟୋ ଅପଲୋଡ୍ କରନ୍ତୁ", ସେଗୁଡ଼ିକ ପାଇଁ ଏବଂ ଫାଇଲ୍ &gt; ସ୍ଥାନୀୟ ଫଟୋ ଅପଲୋଡ୍ କରନ୍ତୁ ଦ୍ୱାରା ବ୍ୟବହୃତ ଅପଲୋଡ୍ ବିନ୍ୟାସ</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>bucket ଭିତରେ ଫୋଲ୍ଡର୍</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>ସାର୍ବଜନୀନ URL</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>ପାଥ୍-ଶୈଳୀ ଠିକଣା (MinIO ଏବଂ କିଛି ପ୍ରଦାନକାରୀ)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>S3 ବିନ୍ୟାସ ଅସମ୍ପୂର୍ଣ୍ଣ: Endpoint, Bucket, Access Key ID ଏବଂ Secret Access Key ପୂରଣ କରନ୍ତୁ।</value>
+  </data>
 </root>

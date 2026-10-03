@@ -1006,4 +1006,7 @@
     <value>PlantUML 다이어그램이 꺼져 있습니다(그리려면 소스를 plantuml.com으로 보냅니다). 설정 &gt; 편집기에서 켤 수 있습니다.</value>
     <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
   </data>
+  <data name="UploadLocalImages" xml:space="preserve">
+    <value>로컬 이미지 업로드</value>
+  </data>
 </root>

@@ -1005,4 +1005,7 @@
     <value>PlantUML ንድፎች ጠፍተዋል (መሳል ምንጩን ወደ plantuml.com ይልካል)። በቅንብሮች &gt; አርታዒ ውስጥ ያብሯቸው።</value>
     <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
   </data>
+  <data name="UploadLocalImages" xml:space="preserve">
+    <value>የአካባቢ ምስሎችን ስቀል</value>
+  </data>
 </root>

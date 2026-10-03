@@ -844,4 +844,22 @@
     <value>Hutuma chanzo cha mchoro kwa plantuml.com ili kuuchora</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>Pakia kwa kutumia</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>Usanidi wa kupakia unaotumika kwa picha zilizoingizwa ambazo kitendo chake ni Pakia picha, na kwa Faili &gt; Pakia picha za ndani</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Folda katika bucket</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>URL ya umma</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>Anwani za mtindo wa njia (MinIO na baadhi ya watoa huduma)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>Usanidi wa S3 haujakamilika: jaza Endpoint, Bucket, Access Key ID na Secret Access Key.</value>
+  </data>
 </root>

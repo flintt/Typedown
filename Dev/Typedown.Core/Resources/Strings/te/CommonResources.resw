@@ -1006,4 +1006,7 @@
     <value>PlantUML రేఖాచిత్రాలు ఆఫ్‌లో ఉన్నాయి (గీయడం మూలాన్ని plantuml.com కి పంపుతుంది). సెట్టింగ్‌లు &gt; ఎడిటర్‌లో ఆన్ చేయండి.</value>
     <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
   </data>
+  <data name="UploadLocalImages" xml:space="preserve">
+    <value>స్థానిక ఇమేజ్ లను అప్ లోడ్ చేయండి</value>
+  </data>
 </root>

@@ -281,4 +281,49 @@
   <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
     <value>Использовать прежнюю ссылку</value>
   </data>
+  <data name="UploadImages.Title" xml:space="preserve">
+    <value>Загрузить локальные изображения</value>
+  </data>
+  <data name="UploadImages.Progress" xml:space="preserve">
+    <value>Загрузка изображения {0} из {1}…</value>
+  </data>
+  <data name="UploadImages.Done" xml:space="preserve">
+    <value>Загружено изображений: {0} из {1}. Их адреса в документе теперь указывают на загруженные копии; «Отменить» возвращает локальные пути.</value>
+  </data>
+  <data name="UploadImages.Cancelled" xml:space="preserve">
+    <value>Отменено. Загружено изображений: {0} из {1}; их адреса в документе изменены.</value>
+  </data>
+  <data name="UploadImages.NotUploaded" xml:space="preserve">
+    <value>Не изменены:</value>
+  </data>
+  <data name="UploadImages.None" xml:space="preserve">
+    <value>В этом документе нет локальных изображений.</value>
+  </data>
+  <data name="UploadImages.NoConfig" xml:space="preserve">
+    <value>Конфигурация загрузки не выбрана. Выберите её в разделе Настройки &gt; Изображение &gt; Загружать с помощью.</value>
+  </data>
+  <data name="UploadImages.OpenSettings" xml:space="preserve">
+    <value>Открыть настройки</value>
+  </data>
+  <data name="UploadImages.FileNotFound" xml:space="preserve">
+    <value>Файл не найден.</value>
+  </data>
+  <data name="UploadImages.NoAddress" xml:space="preserve">
+    <value>Загрузка не вернула адрес.</value>
+  </data>
+  <data name="UploadImages.DocumentClosed" xml:space="preserve">
+    <value>Документ был закрыт во время загрузки.</value>
+  </data>
+  <data name="UploadImages.ApplyFailed" xml:space="preserve">
+    <value>Не удалось изменить документ. Изображение доступно в сети по адресу</value>
+  </data>
+  <data name="UploadImages.HedgeDocPrompt" xml:space="preserve">
+    <value>В этом документе есть локальные изображения ({0}). Это файлы на этом компьютере, поэтому читатели заметки их не увидят. Сначала загрузить их?</value>
+  </data>
+  <data name="UploadImages.UploadFirst" xml:space="preserve">
+    <value>Сначала загрузить</value>
+  </data>
+  <data name="UploadImages.ShareAnyway" xml:space="preserve">
+    <value>Всё равно поделиться</value>
+  </data>
 </root>

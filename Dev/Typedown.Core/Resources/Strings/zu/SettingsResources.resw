@@ -844,4 +844,22 @@
     <value>Ithumela umthombo womdwebo ku-plantuml.com ukuze uwudwebe</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>Layisha nge</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>Ukumiswa kokulayisha okusetshenziselwa izithombe ezifakiwe isenzo sazo esingu-Layisha, kanye ne-Ifayela &gt; Layisha izithombe zendawo</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Ifolda ku-bucket</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>I-URL yomphakathi</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>Amakheli esitayela sendlela (MinIO nabanye abahlinzeki)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>Ukumiswa kwe-S3 akuphelele: gcwalisa i-Endpoint, i-Bucket, i-Access Key ID ne-Secret Access Key.</value>
+  </data>
 </root>

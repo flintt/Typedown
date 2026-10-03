@@ -844,4 +844,22 @@
     <value>A diagram forrását elküldi a plantuml.com-nak, amely megrajzolja</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>Feltöltés ezzel</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>A feltöltési konfiguráció, amelyet a Feltöltés műveletű beszúrt képekhez, valamint a Fájl &gt; Helyi képek feltöltése parancs használ</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Mappa a bucketben</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>Nyilvános URL</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>Útvonal-stílusú címek (MinIO és egyes szolgáltatók)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>Az S3-konfiguráció hiányos: töltse ki az Endpoint, Bucket, Access Key ID és Secret Access Key mezőket.</value>
+  </data>
 </root>

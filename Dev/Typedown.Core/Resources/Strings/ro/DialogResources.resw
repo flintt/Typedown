@@ -281,4 +281,49 @@
   <data name="ReloadFromDiskTitle" xml:space="preserve">
     <value>Fișierul a fost modificat pe disc</value>
   </data>
+  <data name="UploadImages.Title" xml:space="preserve">
+    <value>Încărcați imaginile locale</value>
+  </data>
+  <data name="UploadImages.Progress" xml:space="preserve">
+    <value>Se încarcă imaginea {0} din {1}…</value>
+  </data>
+  <data name="UploadImages.Done" xml:space="preserve">
+    <value>Au fost încărcate {0} din {1} imagini. Adresele lor din document indică acum copiile încărcate; Desface readuce căile locale.</value>
+  </data>
+  <data name="UploadImages.Cancelled" xml:space="preserve">
+    <value>Anulat. Au fost încărcate {0} din {1} imagini, iar adresele lor din document au fost modificate.</value>
+  </data>
+  <data name="UploadImages.NotUploaded" xml:space="preserve">
+    <value>Nemodificate:</value>
+  </data>
+  <data name="UploadImages.None" xml:space="preserve">
+    <value>Acest document nu are imagini locale.</value>
+  </data>
+  <data name="UploadImages.NoConfig" xml:space="preserve">
+    <value>Nu este aleasă nicio configurație de încărcare. Alegeți una în Setări &gt; Imagine &gt; Încărcare cu.</value>
+  </data>
+  <data name="UploadImages.OpenSettings" xml:space="preserve">
+    <value>Deschideți setările</value>
+  </data>
+  <data name="UploadImages.FileNotFound" xml:space="preserve">
+    <value>Fișierul nu a fost găsit.</value>
+  </data>
+  <data name="UploadImages.NoAddress" xml:space="preserve">
+    <value>Încărcarea nu a returnat nicio adresă.</value>
+  </data>
+  <data name="UploadImages.DocumentClosed" xml:space="preserve">
+    <value>Documentul a fost închis în timpul încărcării.</value>
+  </data>
+  <data name="UploadImages.ApplyFailed" xml:space="preserve">
+    <value>Documentul nu a putut fi modificat. Imaginea este online la</value>
+  </data>
+  <data name="UploadImages.HedgeDocPrompt" xml:space="preserve">
+    <value>Acest document are {0} imagini locale. Sunt fișiere de pe acest computer, așa că cititorii notiței nu le vor vedea. Le încărcați mai întâi?</value>
+  </data>
+  <data name="UploadImages.UploadFirst" xml:space="preserve">
+    <value>Încărcați mai întâi</value>
+  </data>
+  <data name="UploadImages.ShareAnyway" xml:space="preserve">
+    <value>Partajați oricum</value>
+  </data>
 </root>

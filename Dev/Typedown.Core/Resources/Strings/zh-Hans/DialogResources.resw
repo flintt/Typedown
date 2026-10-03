@@ -286,4 +286,49 @@
   <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
     <value>使用旧链接</value>
   </data>
+  <data name="UploadImages.Title" xml:space="preserve">
+    <value>上传本地图片</value>
+  </data>
+  <data name="UploadImages.Progress" xml:space="preserve">
+    <value>正在上传第 {0} 张图片，共 {1} 张…</value>
+  </data>
+  <data name="UploadImages.Done" xml:space="preserve">
+    <value>已上传 {0}/{1} 张图片。文档中这些图片的地址现在指向上传后的副本；撤销可恢复本地路径。</value>
+  </data>
+  <data name="UploadImages.Cancelled" xml:space="preserve">
+    <value>已取消。已上传 {0}/{1} 张图片，文档中这些图片的地址已更改。</value>
+  </data>
+  <data name="UploadImages.NotUploaded" xml:space="preserve">
+    <value>未更改：</value>
+  </data>
+  <data name="UploadImages.None" xml:space="preserve">
+    <value>此文档没有本地图片。</value>
+  </data>
+  <data name="UploadImages.NoConfig" xml:space="preserve">
+    <value>未选择上传配置。请在 设置 &gt; 图片 &gt; 上传方式 中选择一个。</value>
+  </data>
+  <data name="UploadImages.OpenSettings" xml:space="preserve">
+    <value>打开设置</value>
+  </data>
+  <data name="UploadImages.FileNotFound" xml:space="preserve">
+    <value>找不到文件。</value>
+  </data>
+  <data name="UploadImages.NoAddress" xml:space="preserve">
+    <value>上传未返回地址。</value>
+  </data>
+  <data name="UploadImages.DocumentClosed" xml:space="preserve">
+    <value>上传期间文档已关闭。</value>
+  </data>
+  <data name="UploadImages.ApplyFailed" xml:space="preserve">
+    <value>无法更改文档。图片的在线地址为</value>
+  </data>
+  <data name="UploadImages.HedgeDocPrompt" xml:space="preserve">
+    <value>此文档有 {0} 张本地图片。它们是这台电脑上的文件，笔记的读者看不到。先上传它们吗？</value>
+  </data>
+  <data name="UploadImages.UploadFirst" xml:space="preserve">
+    <value>先上传</value>
+  </data>
+  <data name="UploadImages.ShareAnyway" xml:space="preserve">
+    <value>仍然分享</value>
+  </data>
 </root>

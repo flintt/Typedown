@@ -281,4 +281,49 @@
   <data name="ReloadFromDiskTitle" xml:space="preserve">
     <value>ಡಿಸ್ಕ್‌ನಲ್ಲಿ ಫೈಲ್ ಬದಲಾಗಿದೆ</value>
   </data>
+  <data name="UploadImages.Title" xml:space="preserve">
+    <value>ಸ್ಥಳೀಯ ಚಿತ್ರಗಳನ್ನು ಅಪ್ ಲೋಡ್ ಮಾಡಿ</value>
+  </data>
+  <data name="UploadImages.Progress" xml:space="preserve">
+    <value>{1} ರಲ್ಲಿ ಚಿತ್ರ {0} ಅನ್ನು ಅಪ್ ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ…</value>
+  </data>
+  <data name="UploadImages.Done" xml:space="preserve">
+    <value>{1} ರಲ್ಲಿ {0} ಚಿತ್ರಗಳನ್ನು ಅಪ್ ಲೋಡ್ ಮಾಡಲಾಗಿದೆ. ಡಾಕ್ಯುಮೆಂಟ್‌ನಲ್ಲಿನ ಅವುಗಳ ವಿಳಾಸಗಳು ಈಗ ಅಪ್ ಲೋಡ್ ಮಾಡಿದ ಪ್ರತಿಗಳನ್ನು ಸೂಚಿಸುತ್ತವೆ; "ರದ್ದುಮಾಡು" ಸ್ಥಳೀಯ ಪಾತ್‌ಗಳನ್ನು ಮರಳಿ ತರುತ್ತದೆ.</value>
+  </data>
+  <data name="UploadImages.Cancelled" xml:space="preserve">
+    <value>ರದ್ದುಗೊಳಿಸಲಾಗಿದೆ. {1} ರಲ್ಲಿ {0} ಚಿತ್ರಗಳನ್ನು ಅಪ್ ಲೋಡ್ ಮಾಡಲಾಗಿದೆ, ಮತ್ತು ಡಾಕ್ಯುಮೆಂಟ್‌ನಲ್ಲಿನ ಅವುಗಳ ವಿಳಾಸಗಳನ್ನು ಬದಲಾಯಿಸಲಾಗಿದೆ.</value>
+  </data>
+  <data name="UploadImages.NotUploaded" xml:space="preserve">
+    <value>ಬದಲಾಗಿಲ್ಲ:</value>
+  </data>
+  <data name="UploadImages.None" xml:space="preserve">
+    <value>ಈ ಡಾಕ್ಯುಮೆಂಟ್‌ನಲ್ಲಿ ಸ್ಥಳೀಯ ಚಿತ್ರಗಳಿಲ್ಲ.</value>
+  </data>
+  <data name="UploadImages.NoConfig" xml:space="preserve">
+    <value>ಯಾವುದೇ ಅಪ್ ಲೋಡ್ ಕಾನ್ಫಿಗರೇಶನ್ ಆಯ್ಕೆಯಾಗಿಲ್ಲ. ಸೆಟ್ಟಿಂಗ್ ಗಳು &gt; ಚಿತ್ರ &gt; ಇದರೊಂದಿಗೆ ಅಪ್ ಲೋಡ್ ಮಾಡಿ ಅಡಿಯಲ್ಲಿ ಒಂದನ್ನು ಆಯ್ಕೆಮಾಡಿ.</value>
+  </data>
+  <data name="UploadImages.OpenSettings" xml:space="preserve">
+    <value>ಸೆಟ್ಟಿಂಗ್ ಗಳನ್ನು ತೆರೆಯಿರಿ</value>
+  </data>
+  <data name="UploadImages.FileNotFound" xml:space="preserve">
+    <value>ಫೈಲ್ ಕಂಡುಬಂದಿಲ್ಲ.</value>
+  </data>
+  <data name="UploadImages.NoAddress" xml:space="preserve">
+    <value>ಅಪ್ ಲೋಡ್ ಯಾವುದೇ ವಿಳಾಸವನ್ನು ಹಿಂತಿರುಗಿಸಲಿಲ್ಲ.</value>
+  </data>
+  <data name="UploadImages.DocumentClosed" xml:space="preserve">
+    <value>ಅಪ್ ಲೋಡ್ ಸಮಯದಲ್ಲಿ ಡಾಕ್ಯುಮೆಂಟ್ ಅನ್ನು ಮುಚ್ಚಲಾಗಿದೆ.</value>
+  </data>
+  <data name="UploadImages.ApplyFailed" xml:space="preserve">
+    <value>ಡಾಕ್ಯುಮೆಂಟ್ ಅನ್ನು ಬದಲಾಯಿಸಲಾಗಲಿಲ್ಲ. ಚಿತ್ರವು ಈ ವಿಳಾಸದಲ್ಲಿ ಆನ್‌ಲೈನ್‌ನಲ್ಲಿದೆ:</value>
+  </data>
+  <data name="UploadImages.HedgeDocPrompt" xml:space="preserve">
+    <value>ಈ ಡಾಕ್ಯುಮೆಂಟ್‌ನಲ್ಲಿ {0} ಸ್ಥಳೀಯ ಚಿತ್ರಗಳಿವೆ. ಅವು ಈ ಕಂಪ್ಯೂಟರ್‌ನಲ್ಲಿರುವ ಫೈಲ್‌ಗಳು, ಆದ್ದರಿಂದ ಟಿಪ್ಪಣಿಯ ಓದುಗರು ಅವುಗಳನ್ನು ನೋಡುವುದಿಲ್ಲ. ಮೊದಲು ಅವುಗಳನ್ನು ಅಪ್ ಲೋಡ್ ಮಾಡಬೇಕೇ?</value>
+  </data>
+  <data name="UploadImages.UploadFirst" xml:space="preserve">
+    <value>ಮೊದಲು ಅಪ್ ಲೋಡ್ ಮಾಡಿ</value>
+  </data>
+  <data name="UploadImages.ShareAnyway" xml:space="preserve">
+    <value>ಹಾಗಿದ್ದರೂ ಹಂಚಿ</value>
+  </data>
 </root>

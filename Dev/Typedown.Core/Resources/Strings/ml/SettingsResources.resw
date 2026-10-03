@@ -844,4 +844,22 @@
     <value>വരയ്ക്കാൻ ഡയഗ്രാമിന്റെ ഉറവിടം plantuml.com-ലേക്ക് അയയ്ക്കുന്നു</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>ഇതുപയോഗിച്ച് അപ്‌ലോഡ് ചെയ്യുക</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>പ്രവർത്തനം അപ്‌ലോഡ് ആയ ചേർത്ത ചിത്രങ്ങൾക്കും ഫയല് &gt; പ്രാദേശിക ചിത്രങ്ങൾ അപ്‌ലോഡ് ചെയ്യുക എന്നതിനും ഉപയോഗിക്കുന്ന അപ്‌ലോഡ് കോൺഫിഗറേഷൻ</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Bucket-ലെ ഫോൾഡർ</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>പൊതു URL</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>പാത്ത്-ശൈലി വിലാസങ്ങൾ (MinIO-യും ചില ദാതാക്കളും)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>S3 കോൺഫിഗറേഷൻ പൂർണ്ണമല്ല: Endpoint, Bucket, Access Key ID, Secret Access Key എന്നിവ പൂരിപ്പിക്കുക.</value>
+  </data>
 </root>

@@ -281,4 +281,49 @@
   <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
     <value>Utiliser le lien précédent</value>
   </data>
+  <data name="UploadImages.Title" xml:space="preserve">
+    <value>Mettre en ligne les images locales</value>
+  </data>
+  <data name="UploadImages.Progress" xml:space="preserve">
+    <value>Mise en ligne de l'image {0} sur {1}…</value>
+  </data>
+  <data name="UploadImages.Done" xml:space="preserve">
+    <value>{0} images sur {1} mises en ligne. Leurs adresses dans le document pointent désormais vers les copies en ligne ; Annuler rétablit les chemins locaux.</value>
+  </data>
+  <data name="UploadImages.Cancelled" xml:space="preserve">
+    <value>Annulé. {0} images sur {1} ont été mises en ligne et leurs adresses dans le document ont été modifiées.</value>
+  </data>
+  <data name="UploadImages.NotUploaded" xml:space="preserve">
+    <value>Non modifiées :</value>
+  </data>
+  <data name="UploadImages.None" xml:space="preserve">
+    <value>Ce document ne contient aucune image locale.</value>
+  </data>
+  <data name="UploadImages.NoConfig" xml:space="preserve">
+    <value>Aucune configuration de mise en ligne n'est choisie. Choisissez-en une dans Paramètres &gt; Image &gt; Mettre en ligne avec.</value>
+  </data>
+  <data name="UploadImages.OpenSettings" xml:space="preserve">
+    <value>Ouvrir les paramètres</value>
+  </data>
+  <data name="UploadImages.FileNotFound" xml:space="preserve">
+    <value>Le fichier est introuvable.</value>
+  </data>
+  <data name="UploadImages.NoAddress" xml:space="preserve">
+    <value>La mise en ligne n'a renvoyé aucune adresse.</value>
+  </data>
+  <data name="UploadImages.DocumentClosed" xml:space="preserve">
+    <value>Le document a été fermé pendant la mise en ligne.</value>
+  </data>
+  <data name="UploadImages.ApplyFailed" xml:space="preserve">
+    <value>Le document n'a pas pu être modifié. L'image est en ligne à l'adresse</value>
+  </data>
+  <data name="UploadImages.HedgeDocPrompt" xml:space="preserve">
+    <value>Ce document contient {0} images locales. Ce sont des fichiers sur cet ordinateur : les lecteurs de la note ne les verront pas. Les mettre en ligne d'abord ?</value>
+  </data>
+  <data name="UploadImages.UploadFirst" xml:space="preserve">
+    <value>Mettre en ligne d'abord</value>
+  </data>
+  <data name="UploadImages.ShareAnyway" xml:space="preserve">
+    <value>Partager quand même</value>
+  </data>
 </root>

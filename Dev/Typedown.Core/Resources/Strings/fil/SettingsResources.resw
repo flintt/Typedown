@@ -844,4 +844,22 @@
     <value>Ipinapadala ang source ng diagram sa plantuml.com para iguhit ito</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>Mag-upload gamit ang</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>Ang upload configuration na ginagamit para sa mga ipinasok na imahe na ang aksyon ay Upload, at ng Mag-file &gt; Mag-upload ng mga lokal na imahe</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Folder sa bucket</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>Pampublikong URL</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>Mga path-style na address (MinIO at ilang provider)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>Hindi kumpleto ang S3 configuration: punan ang Endpoint, Bucket, Access Key ID at Secret Access Key.</value>
+  </data>
 </root>

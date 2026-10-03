@@ -1006,4 +1006,7 @@
     <value>PlantUML-diagrammen staan uit (tekenen stuurt de broncode naar plantuml.com). Zet ze aan via Instellingen &gt; Editor.</value>
     <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
   </data>
+  <data name="UploadLocalImages" xml:space="preserve">
+    <value>Lokale afbeeldingen uploaden</value>
+  </data>
 </root>

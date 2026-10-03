@@ -1006,4 +1006,7 @@
     <value>Diagramy PlantUML sú vypnuté (kreslenie odosiela zdroj na plantuml.com). Zapnite ich v Nastavenia &gt; Editor.</value>
     <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
   </data>
+  <data name="UploadLocalImages" xml:space="preserve">
+    <value>Nahrať lokálne obrázky</value>
+  </data>
 </root>

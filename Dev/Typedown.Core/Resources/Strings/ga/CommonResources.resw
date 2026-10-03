@@ -1006,4 +1006,7 @@
     <value>Tá léaráidí PlantUML múchta (seolann an tarraingt an fhoinse chuig plantuml.com). Cas air iad i Socruithe &gt; Eagarthóir.</value>
     <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
   </data>
+  <data name="UploadLocalImages" xml:space="preserve">
+    <value>Uaslódáil íomhánna áitiúla</value>
+  </data>
 </root>

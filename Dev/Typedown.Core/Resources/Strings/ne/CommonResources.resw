@@ -1006,4 +1006,7 @@
     <value>PlantUML रेखाचित्रहरू बन्द छन् (कोर्दा स्रोत plantuml.com मा पठाइन्छ)। सेटिङहरू &gt; सम्पादकमा खोल्नुहोस्।</value>
     <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
   </data>
+  <data name="UploadLocalImages" xml:space="preserve">
+    <value>स्थानीय छविहरू अपलोड गर्नुहोस्</value>
+  </data>
 </root>

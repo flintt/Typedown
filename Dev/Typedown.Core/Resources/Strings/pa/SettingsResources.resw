@@ -844,4 +844,22 @@
     <value>ਚਿੱਤਰ ਬਣਾਉਣ ਲਈ ਇਸਦਾ ਸਰੋਤ plantuml.com ਨੂੰ ਭੇਜਦਾ ਹੈ</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>ਇਸ ਨਾਲ ਅੱਪਲੋਡ ਕਰੋ</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>ਉਹ ਅੱਪਲੋਡ ਸੰਰਚਨਾ ਜੋ ਅੱਪਲੋਡ ਕਾਰਵਾਈ ਵਾਲੇ ਪਾਏ ਗਏ ਚਿੱਤਰਾਂ ਲਈ, ਅਤੇ ਫਾਇਲ &gt; ਸਥਾਨਕ ਚਿੱਤਰ ਅੱਪਲੋਡ ਕਰੋ ਦੁਆਰਾ ਵਰਤੀ ਜਾਂਦੀ ਹੈ</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Bucket ਵਿੱਚ ਫੋਲਡਰ</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>ਜਨਤਕ URL</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>ਪਾਥ-ਸ਼ੈਲੀ ਪਤੇ (MinIO ਅਤੇ ਕੁਝ ਪ੍ਰਦਾਤਾ)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>S3 ਸੰਰਚਨਾ ਅਧੂਰੀ ਹੈ: Endpoint, Bucket, Access Key ID ਅਤੇ Secret Access Key ਭਰੋ।</value>
+  </data>
 </root>

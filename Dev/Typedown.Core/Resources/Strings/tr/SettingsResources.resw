@@ -844,4 +844,22 @@
     <value>Diyagramın kaynağını çizmesi için plantuml.com'a gönderir</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>Şununla yükle</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>Eylemi Yükle olan eklenmiş resimler ve Dosya &gt; Yerel resimleri yükle için kullanılan yükleme yapılandırması</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Bucket içindeki klasör</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>Genel URL</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>Yol stili adresler (MinIO ve bazı sağlayıcılar)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>S3 yapılandırması eksik: Endpoint, Bucket, Access Key ID ve Secret Access Key alanlarını doldurun.</value>
+  </data>
 </root>

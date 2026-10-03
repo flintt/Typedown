@@ -844,4 +844,22 @@
     <value>დიაგრამის წყაროს აგზავნის plantuml.com-ზე დასახატად</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>ატვირთვა</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>ატვირთვის კონფიგურაცია, რომელიც გამოიყენება ჩასმული სურათებისთვის, რომელთა მოქმედებაა ატვირთვა, და ბრძანებით ფაილი &gt; ლოკალური სურათების ატვირთვა</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>საქაღალდე bucket-ში</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>საჯარო URL</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>გზის სტილის მისამართები (MinIO და ზოგიერთი პროვაიდერი)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>S3 კონფიგურაცია არასრულია: შეავსეთ Endpoint, Bucket, Access Key ID და Secret Access Key.</value>
+  </data>
 </root>

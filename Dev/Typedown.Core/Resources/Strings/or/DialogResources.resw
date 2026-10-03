@@ -281,4 +281,49 @@
   <data name="ReloadFromDiskTitle" xml:space="preserve">
     <value>ଡିସ୍କରେ ଫାଇଲ୍ ବଦଳିଛି</value>
   </data>
+  <data name="UploadImages.Title" xml:space="preserve">
+    <value>ସ୍ଥାନୀୟ ଫଟୋ ଅପଲୋଡ୍ କରନ୍ତୁ</value>
+  </data>
+  <data name="UploadImages.Progress" xml:space="preserve">
+    <value>{1} ମଧ୍ୟରୁ {0} ନମ୍ବର ଫଟୋ ଅପଲୋଡ୍ ହେଉଛି…</value>
+  </data>
+  <data name="UploadImages.Done" xml:space="preserve">
+    <value>{1} ମଧ୍ୟରୁ {0}ଟି ଫଟୋ ଅପଲୋଡ୍ ହୋଇଛି। ଡକ୍ୟୁମେଣ୍ଟରେ ସେଗୁଡ଼ିକର ଠିକଣା ଏବେ ଅପଲୋଡ୍ ହୋଇଥିବା କପିକୁ ସୂଚାଉଛି; Undo ସ୍ଥାନୀୟ ପାଥଗୁଡ଼ିକୁ ଫେରାଇ ଆଣେ।</value>
+  </data>
+  <data name="UploadImages.Cancelled" xml:space="preserve">
+    <value>ବାତିଲ୍ ହୋଇଛି। {1} ମଧ୍ୟରୁ {0}ଟି ଫଟୋ ଅପଲୋଡ୍ ହୋଇଛି, ଏବଂ ଡକ୍ୟୁମେଣ୍ଟରେ ସେଗୁଡ଼ିକର ଠିକଣା ବଦଳାଯାଇଛି।</value>
+  </data>
+  <data name="UploadImages.NotUploaded" xml:space="preserve">
+    <value>ବଦଳାଯାଇନାହିଁ:</value>
+  </data>
+  <data name="UploadImages.None" xml:space="preserve">
+    <value>ଏହି ଡକ୍ୟୁମେଣ୍ଟରେ କୌଣସି ସ୍ଥାନୀୟ ଫଟୋ ନାହିଁ।</value>
+  </data>
+  <data name="UploadImages.NoConfig" xml:space="preserve">
+    <value>କୌଣସି ଅପଲୋଡ୍ ବିନ୍ୟାସ ବଛାଯାଇନାହିଁ। ସେଟିଂସ &gt; ଫଟୋ &gt; ଅପଲୋଡ୍ ମାଧ୍ୟମ ରେ ଗୋଟିଏ ବାଛନ୍ତୁ।</value>
+  </data>
+  <data name="UploadImages.OpenSettings" xml:space="preserve">
+    <value>ସେଟିଂସ ଖୋଲନ୍ତୁ</value>
+  </data>
+  <data name="UploadImages.FileNotFound" xml:space="preserve">
+    <value>ଫାଇଲ୍ ମିଳିଲା ନାହିଁ।</value>
+  </data>
+  <data name="UploadImages.NoAddress" xml:space="preserve">
+    <value>ଅପଲୋଡ୍ କୌଣସି ଠିକଣା ଫେରାଇଲା ନାହିଁ।</value>
+  </data>
+  <data name="UploadImages.DocumentClosed" xml:space="preserve">
+    <value>ଅପଲୋଡ୍ ସମୟରେ ଡକ୍ୟୁମେଣ୍ଟଟି ବନ୍ଦ ହୋଇଗଲା।</value>
+  </data>
+  <data name="UploadImages.ApplyFailed" xml:space="preserve">
+    <value>ଡକ୍ୟୁମେଣ୍ଟକୁ ବଦଳାଯାଇପାରିଲା ନାହିଁ। ଫଟୋଟି ଅନଲାଇନରେ ଅଛି, ଠିକଣା</value>
+  </data>
+  <data name="UploadImages.HedgeDocPrompt" xml:space="preserve">
+    <value>ଏହି ଡକ୍ୟୁମେଣ୍ଟରେ {0}ଟି ସ୍ଥାନୀୟ ଫଟୋ ଅଛି। ସେଗୁଡ଼ିକ ଏହି କମ୍ପ୍ୟୁଟରର ଫାଇଲ୍, ତେଣୁ ନୋଟର ପାଠକମାନେ ସେଗୁଡ଼ିକୁ ଦେଖିପାରିବେ ନାହିଁ। ପ୍ରଥମେ ସେଗୁଡ଼ିକୁ ଅପଲୋଡ୍ କରିବେ କି?</value>
+  </data>
+  <data name="UploadImages.UploadFirst" xml:space="preserve">
+    <value>ପ୍ରଥମେ ଅପଲୋଡ୍ କରନ୍ତୁ</value>
+  </data>
+  <data name="UploadImages.ShareAnyway" xml:space="preserve">
+    <value>ତଥାପି ସେୟାର୍ କରନ୍ତୁ</value>
+  </data>
 </root>

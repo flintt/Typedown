@@ -1006,4 +1006,7 @@
     <value>PlantUML დიაგრამები გამორთულია (დახატვა წყაროს აგზავნის plantuml.com-ზე). ჩართეთ პარამეტრები &gt; რედაქტორში.</value>
     <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
   </data>
+  <data name="UploadLocalImages" xml:space="preserve">
+    <value>ლოკალური სურათების ატვირთვა</value>
+  </data>
 </root>

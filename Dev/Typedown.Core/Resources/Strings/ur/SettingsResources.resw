@@ -844,4 +844,22 @@
     <value>خاکہ بنانے کے لیے اس کا ماخذ plantuml.com کو بھیجتا ہے</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>اس کے ذریعے اپ لوڈ کریں</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>وہ اپ لوڈ ترتیب جو ان داخل کردہ تصاویر کے لیے استعمال ہوتی ہے جن کی کارروائی اپ لوڈ ہے، اور فائل &gt; مقامی تصاویر اپ لوڈ کریں کے ذریعے</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Bucket میں فولڈر</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>عوامی URL</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>راستے کے انداز کے پتے (MinIO اور کچھ فراہم کنندگان)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>S3 ترتیب نامکمل ہے: Endpoint، Bucket، Access Key ID اور Secret Access Key پُر کریں۔</value>
+  </data>
 </root>

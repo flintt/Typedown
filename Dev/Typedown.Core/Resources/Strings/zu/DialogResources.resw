@@ -281,4 +281,49 @@
   <data name="ReloadFromDiskTitle" xml:space="preserve">
     <value>Ifayela lishintshile kudiski</value>
   </data>
+  <data name="UploadImages.Title" xml:space="preserve">
+    <value>Layisha izithombe zendawo</value>
+  </data>
+  <data name="UploadImages.Progress" xml:space="preserve">
+    <value>Ilayisha isithombe {0} kwezingu-{1}…</value>
+  </data>
+  <data name="UploadImages.Done" xml:space="preserve">
+    <value>Kulayishwe izithombe ezingu-{0} kwezingu-{1}. Amakheli azo kudokhumenti manje akhomba amakhophi alayishiwe; Guqula kubuyisela izindlela zendawo.</value>
+  </data>
+  <data name="UploadImages.Cancelled" xml:space="preserve">
+    <value>Kukhanseliwe. Kulayishwe izithombe ezingu-{0} kwezingu-{1}, futhi amakheli azo kudokhumenti ashintshiwe.</value>
+  </data>
+  <data name="UploadImages.NotUploaded" xml:space="preserve">
+    <value>Akushintshiwe:</value>
+  </data>
+  <data name="UploadImages.None" xml:space="preserve">
+    <value>Le dokhumenti ayinazo izithombe zendawo.</value>
+  </data>
+  <data name="UploadImages.NoConfig" xml:space="preserve">
+    <value>Akukho ukumiswa kokulayisha okukhethiwe. Khetha okukodwa ngaphansi kokuthi Izimiso &gt; Isithombe &gt; Layisha nge.</value>
+  </data>
+  <data name="UploadImages.OpenSettings" xml:space="preserve">
+    <value>Vula izimiso</value>
+  </data>
+  <data name="UploadImages.FileNotFound" xml:space="preserve">
+    <value>Ifayela alitholakalanga.</value>
+  </data>
+  <data name="UploadImages.NoAddress" xml:space="preserve">
+    <value>Ukulayisha akubuyisanga ikheli.</value>
+  </data>
+  <data name="UploadImages.DocumentClosed" xml:space="preserve">
+    <value>Idokhumenti ivaliwe ngesikhathi sokulayisha.</value>
+  </data>
+  <data name="UploadImages.ApplyFailed" xml:space="preserve">
+    <value>Idokhumenti ayikwazanga ukushintshwa. Isithombe sisi-inthanethi ku</value>
+  </data>
+  <data name="UploadImages.HedgeDocPrompt" xml:space="preserve">
+    <value>Le dokhumenti inezithombe zendawo ezingu-{0}. Zingamafayela akule khompyutha, ngakho abafundi benothi ngeke bazibone. Zilayishe kuqala?</value>
+  </data>
+  <data name="UploadImages.UploadFirst" xml:space="preserve">
+    <value>Layisha kuqala</value>
+  </data>
+  <data name="UploadImages.ShareAnyway" xml:space="preserve">
+    <value>Yabelana noma kunjalo</value>
+  </data>
 </root>

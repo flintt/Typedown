@@ -281,4 +281,49 @@
   <data name="ReloadFromDiskTitle" xml:space="preserve">
     <value>Файлът е променен на диска</value>
   </data>
+  <data name="UploadImages.Title" xml:space="preserve">
+    <value>Качване на локалните изображения</value>
+  </data>
+  <data name="UploadImages.Progress" xml:space="preserve">
+    <value>Качване на изображение {0} от {1}…</value>
+  </data>
+  <data name="UploadImages.Done" xml:space="preserve">
+    <value>Качени са {0} от {1} изображения. Адресите им в документа вече сочат към качените копия; „Отменям“ връща локалните пътища.</value>
+  </data>
+  <data name="UploadImages.Cancelled" xml:space="preserve">
+    <value>Отменено. Качени са {0} от {1} изображения и адресите им в документа бяха променени.</value>
+  </data>
+  <data name="UploadImages.NotUploaded" xml:space="preserve">
+    <value>Непроменени:</value>
+  </data>
+  <data name="UploadImages.None" xml:space="preserve">
+    <value>Този документ няма локални изображения.</value>
+  </data>
+  <data name="UploadImages.NoConfig" xml:space="preserve">
+    <value>Не е избрана конфигурация за качване. Изберете такава в Настройки &gt; Изображение &gt; Качване чрез.</value>
+  </data>
+  <data name="UploadImages.OpenSettings" xml:space="preserve">
+    <value>Отваряне на настройките</value>
+  </data>
+  <data name="UploadImages.FileNotFound" xml:space="preserve">
+    <value>Файлът не е намерен.</value>
+  </data>
+  <data name="UploadImages.NoAddress" xml:space="preserve">
+    <value>Качването не върна адрес.</value>
+  </data>
+  <data name="UploadImages.DocumentClosed" xml:space="preserve">
+    <value>Документът беше затворен по време на качването.</value>
+  </data>
+  <data name="UploadImages.ApplyFailed" xml:space="preserve">
+    <value>Документът не можа да бъде променен. Изображението е онлайн на адрес</value>
+  </data>
+  <data name="UploadImages.HedgeDocPrompt" xml:space="preserve">
+    <value>Този документ съдържа {0} локални изображения. Те са файлове на този компютър, така че читателите на бележката няма да ги виждат. Да бъдат ли качени първо?</value>
+  </data>
+  <data name="UploadImages.UploadFirst" xml:space="preserve">
+    <value>Първо качване</value>
+  </data>
+  <data name="UploadImages.ShareAnyway" xml:space="preserve">
+    <value>Споделяне въпреки това</value>
+  </data>
 </root>

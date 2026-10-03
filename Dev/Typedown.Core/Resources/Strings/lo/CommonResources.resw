@@ -1006,4 +1006,7 @@
     <value>ແຜນວາດ PlantUML ຖືກປິດ (ການແຕ້ມຈະສົ່ງຕົ້ນສະບັບໄປຫາ plantuml.com). ເປີດໄດ້ໃນ ການຕັ້ງຄ່າ &gt; ຕົວແກ້ໄຂ.</value>
     <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
   </data>
+  <data name="UploadLocalImages" xml:space="preserve">
+    <value>ອັບໂຫຼດຮູບພາບໃນເຄື່ອງ</value>
+  </data>
 </root>

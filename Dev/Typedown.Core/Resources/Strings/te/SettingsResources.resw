@@ -844,4 +844,22 @@
     <value>గీయడానికి రేఖాచిత్రం మూలాన్ని plantuml.com కి పంపుతుంది</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>దీనితో అప్ లోడ్ చేయండి</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>"ఇమేజ్ అప్ లోడ్ చేయండి" చర్య ఉన్న చొప్పించిన ఇమేజ్ లకు మరియు ఆకురాయి &gt; స్థానిక ఇమేజ్ లను అప్ లోడ్ చేయండి కోసం ఉపయోగించే అప్ లోడ్ కాన్ఫిగరేషన్</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Bucket లోని ఫోల్డర్</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>పబ్లిక్ URL</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>పాత్-శైలి చిరునామాలు (MinIO మరియు కొన్ని ప్రొవైడర్లు)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>S3 కాన్ఫిగరేషన్ అసంపూర్ణంగా ఉంది: Endpoint, Bucket, Access Key ID మరియు Secret Access Key ని పూరించండి.</value>
+  </data>
 </root>

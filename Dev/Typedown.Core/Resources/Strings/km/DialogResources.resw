@@ -281,4 +281,49 @@
   <data name="ReloadFromDiskTitle" xml:space="preserve">
     <value>ឯកសារបានផ្លាស់ប្ដូរនៅលើថាស</value>
   </data>
+  <data name="UploadImages.Title" xml:space="preserve">
+    <value>ផ្ទុករូបភាពមូលដ្ឋានឡើង</value>
+  </data>
+  <data name="UploadImages.Progress" xml:space="preserve">
+    <value>កំពុងផ្ទុករូបភាព {0} នៃ {1} ឡើង…</value>
+  </data>
+  <data name="UploadImages.Done" xml:space="preserve">
+    <value>បានផ្ទុករូបភាព {0} នៃ {1} ឡើង។ អាសយដ្ឋានរបស់វានៅក្នុងឯកសារឥឡូវចង្អុលទៅច្បាប់ចម្លងដែលបានផ្ទុកឡើង; Undo ដាក់ផ្លូវមូលដ្ឋានវិញ។</value>
+  </data>
+  <data name="UploadImages.Cancelled" xml:space="preserve">
+    <value>បានបោះបង់។ រូបភាព {0} នៃ {1} ត្រូវបានផ្ទុកឡើង ហើយអាសយដ្ឋានរបស់វានៅក្នុងឯកសារត្រូវបានផ្លាស់ប្ដូរ។</value>
+  </data>
+  <data name="UploadImages.NotUploaded" xml:space="preserve">
+    <value>មិនបានផ្លាស់ប្ដូរ៖</value>
+  </data>
+  <data name="UploadImages.None" xml:space="preserve">
+    <value>ឯកសារនេះគ្មានរូបភាពមូលដ្ឋានទេ។</value>
+  </data>
+  <data name="UploadImages.NoConfig" xml:space="preserve">
+    <value>មិនទាន់បានជ្រើសរើសការកំណត់រចនាសម្ព័ន្ធផ្ទុកឡើងទេ។ ជ្រើសរើសមួយនៅក្នុង ការកំណត់ &gt; រូបភាព &gt; ផ្ទុកឡើងដោយប្រើ។</value>
+  </data>
+  <data name="UploadImages.OpenSettings" xml:space="preserve">
+    <value>បើកការកំណត់</value>
+  </data>
+  <data name="UploadImages.FileNotFound" xml:space="preserve">
+    <value>រកមិនឃើញឯកសារទេ។</value>
+  </data>
+  <data name="UploadImages.NoAddress" xml:space="preserve">
+    <value>ការផ្ទុកឡើងមិនបានត្រឡប់អាសយដ្ឋានទេ។</value>
+  </data>
+  <data name="UploadImages.DocumentClosed" xml:space="preserve">
+    <value>ឯកសារត្រូវបានបិទអំឡុងពេលផ្ទុកឡើង។</value>
+  </data>
+  <data name="UploadImages.ApplyFailed" xml:space="preserve">
+    <value>មិនអាចផ្លាស់ប្ដូរឯកសារបានទេ។ រូបភាពមាននៅលើបណ្ដាញនៅ</value>
+  </data>
+  <data name="UploadImages.HedgeDocPrompt" xml:space="preserve">
+    <value>ឯកសារនេះមានរូបភាពមូលដ្ឋាន {0}។ ពួកវាជាឯកសារនៅលើកុំព្យូទ័រនេះ ដូច្នេះអ្នកអានកំណត់ចំណាំនឹងមិនឃើញពួកវាទេ។ ផ្ទុកពួកវាឡើងជាមុនសិនទេ?</value>
+  </data>
+  <data name="UploadImages.UploadFirst" xml:space="preserve">
+    <value>ផ្ទុកឡើងជាមុន</value>
+  </data>
+  <data name="UploadImages.ShareAnyway" xml:space="preserve">
+    <value>ចែករំលែកទោះយ៉ាងណាក៏ដោយ</value>
+  </data>
 </root>

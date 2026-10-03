@@ -1006,4 +1006,7 @@
     <value>PlantUML 図はオフです（描画するとソースが plantuml.com に送信されます）。設定 &gt; エディターでオンにできます。</value>
     <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
   </data>
+  <data name="UploadLocalImages" xml:space="preserve">
+    <value>ローカル画像をアップロード</value>
+  </data>
 </root>

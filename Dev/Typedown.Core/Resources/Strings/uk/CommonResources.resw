@@ -1006,4 +1006,7 @@
     <value>Діаграми PlantUML вимкнено (малювання надсилає код на plantuml.com). Увімкніть їх у Налаштування &gt; Редактор.</value>
     <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
   </data>
+  <data name="UploadLocalImages" xml:space="preserve">
+    <value>Завантажити локальні зображення</value>
+  </data>
 </root>

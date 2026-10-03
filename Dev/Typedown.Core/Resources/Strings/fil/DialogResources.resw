@@ -281,4 +281,49 @@
   <data name="ReloadFromDiskTitle" xml:space="preserve">
     <value>Nabago ang file sa disk</value>
   </data>
+  <data name="UploadImages.Title" xml:space="preserve">
+    <value>Mag-upload ng mga lokal na imahe</value>
+  </data>
+  <data name="UploadImages.Progress" xml:space="preserve">
+    <value>Ina-upload ang imahe {0} ng {1}…</value>
+  </data>
+  <data name="UploadImages.Done" xml:space="preserve">
+    <value>Na-upload ang {0} ng {1} na imahe. Ang mga address nila sa dokumento ay tumuturo na ngayon sa mga na-upload na kopya; ibinabalik ng Mag-undo ang mga lokal na path.</value>
+  </data>
+  <data name="UploadImages.Cancelled" xml:space="preserve">
+    <value>Kinansela. Na-upload ang {0} ng {1} na imahe, at binago ang mga address nila sa dokumento.</value>
+  </data>
+  <data name="UploadImages.NotUploaded" xml:space="preserve">
+    <value>Hindi binago:</value>
+  </data>
+  <data name="UploadImages.None" xml:space="preserve">
+    <value>Walang lokal na imahe ang dokumentong ito.</value>
+  </data>
+  <data name="UploadImages.NoConfig" xml:space="preserve">
+    <value>Walang napiling upload configuration. Pumili ng isa sa Mga Setting &gt; Imahe &gt; Mag-upload gamit ang.</value>
+  </data>
+  <data name="UploadImages.OpenSettings" xml:space="preserve">
+    <value>Buksan ang mga setting</value>
+  </data>
+  <data name="UploadImages.FileNotFound" xml:space="preserve">
+    <value>Hindi nakita ang file.</value>
+  </data>
+  <data name="UploadImages.NoAddress" xml:space="preserve">
+    <value>Walang ibinalik na address ang upload.</value>
+  </data>
+  <data name="UploadImages.DocumentClosed" xml:space="preserve">
+    <value>Isinara ang dokumento habang nag-a-upload.</value>
+  </data>
+  <data name="UploadImages.ApplyFailed" xml:space="preserve">
+    <value>Hindi mabago ang dokumento. Online ang imahe sa</value>
+  </data>
+  <data name="UploadImages.HedgeDocPrompt" xml:space="preserve">
+    <value>May {0} lokal na imahe ang dokumentong ito. Mga file ang mga ito sa computer na ito, kaya hindi ito makikita ng mga mambabasa ng note. I-upload muna ang mga ito?</value>
+  </data>
+  <data name="UploadImages.UploadFirst" xml:space="preserve">
+    <value>I-upload muna</value>
+  </data>
+  <data name="UploadImages.ShareAnyway" xml:space="preserve">
+    <value>Ibahagi pa rin</value>
+  </data>
 </root>

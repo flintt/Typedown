@@ -844,4 +844,22 @@
     <value>অংকন কৰিবলৈ ডায়াগ্ৰামৰ উৎস plantuml.com লৈ পঠিয়ায়</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>আপলোডৰ মাধ্যম</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>"ছবি আপলোড কৰক" কাৰ্য থকা সন্নিবিষ্ট ছবিসমূহ আৰু ফাইল &gt; স্থানীয় ছবিসমূহ আপলোড কৰক-ৰ বাবে ব্যৱহৃত আপলোড কনফিগাৰেচন</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Bucket-ৰ ভিতৰৰ ফ'ল্ডাৰ</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>ৰাজহুৱা URL</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>পথ-শৈলীৰ ঠিকনা (MinIO আৰু কিছুমান প্ৰদানকাৰী)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>S3 কনফিগাৰেচন অসম্পূৰ্ণ: Endpoint, Bucket, Access Key ID আৰু Secret Access Key পূৰণ কৰক।</value>
+  </data>
 </root>

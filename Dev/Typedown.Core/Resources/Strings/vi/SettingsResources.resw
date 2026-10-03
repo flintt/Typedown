@@ -844,4 +844,22 @@
     <value>Gửi mã nguồn của sơ đồ đến plantuml.com để vẽ</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>Tải lên bằng</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>Cấu hình tải lên dùng cho ảnh được chèn có hành động là Tải lên hình ảnh, và cho Tệp &gt; Tải lên ảnh cục bộ</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Thư mục trong bucket</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>URL công khai</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>Địa chỉ kiểu đường dẫn (MinIO và một số nhà cung cấp)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>Cấu hình S3 chưa đầy đủ: hãy điền Endpoint, Bucket, Access Key ID và Secret Access Key.</value>
+  </data>
 </root>

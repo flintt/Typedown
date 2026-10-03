@@ -281,4 +281,49 @@
   <data name="ReloadFromDiskTitle" xml:space="preserve">
     <value>A fájl megváltozott a lemezen</value>
   </data>
+  <data name="UploadImages.Title" xml:space="preserve">
+    <value>Helyi képek feltöltése</value>
+  </data>
+  <data name="UploadImages.Progress" xml:space="preserve">
+    <value>{0}/{1}. kép feltöltése…</value>
+  </data>
+  <data name="UploadImages.Done" xml:space="preserve">
+    <value>{1} képből {0} feltöltve. A dokumentumban lévő címük most a feltöltött másolatokra mutat; a Kigombol visszaállítja a helyi elérési utakat.</value>
+  </data>
+  <data name="UploadImages.Cancelled" xml:space="preserve">
+    <value>Megszakítva. {1} képből {0} feltöltődött, és a dokumentumban lévő címük megváltozott.</value>
+  </data>
+  <data name="UploadImages.NotUploaded" xml:space="preserve">
+    <value>Nem változott:</value>
+  </data>
+  <data name="UploadImages.None" xml:space="preserve">
+    <value>Ebben a dokumentumban nincsenek helyi képek.</value>
+  </data>
+  <data name="UploadImages.NoConfig" xml:space="preserve">
+    <value>Nincs kiválasztva feltöltési konfiguráció. Válasszon egyet itt: Beállítások &gt; Kép &gt; Feltöltés ezzel.</value>
+  </data>
+  <data name="UploadImages.OpenSettings" xml:space="preserve">
+    <value>Beállítások megnyitása</value>
+  </data>
+  <data name="UploadImages.FileNotFound" xml:space="preserve">
+    <value>A fájl nem található.</value>
+  </data>
+  <data name="UploadImages.NoAddress" xml:space="preserve">
+    <value>A feltöltés nem adott vissza címet.</value>
+  </data>
+  <data name="UploadImages.DocumentClosed" xml:space="preserve">
+    <value>A dokumentumot bezárták a feltöltés közben.</value>
+  </data>
+  <data name="UploadImages.ApplyFailed" xml:space="preserve">
+    <value>A dokumentumot nem sikerült módosítani. A kép online elérhető itt:</value>
+  </data>
+  <data name="UploadImages.HedgeDocPrompt" xml:space="preserve">
+    <value>Ez a dokumentum {0} helyi képet tartalmaz. Ezek fájlok ezen a számítógépen, így a jegyzet olvasói nem fogják látni őket. Feltölti őket előbb?</value>
+  </data>
+  <data name="UploadImages.UploadFirst" xml:space="preserve">
+    <value>Előbb feltöltés</value>
+  </data>
+  <data name="UploadImages.ShareAnyway" xml:space="preserve">
+    <value>Megosztás mégis</value>
+  </data>
 </root>

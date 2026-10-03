@@ -1006,4 +1006,7 @@
     <value>Diagrami PlantUML so izklopljeni (risanje pošlje izvorno kodo na plantuml.com). Vklopite jih v Nastavitve &gt; Urejevalnik.</value>
     <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
   </data>
+  <data name="UploadLocalImages" xml:space="preserve">
+    <value>Naloži lokalne slike</value>
+  </data>
 </root>

@@ -281,4 +281,49 @@
   <data name="ReloadFromDiskTitle" xml:space="preserve">
     <value>Berkas telah berubah di disk</value>
   </data>
+  <data name="UploadImages.Title" xml:space="preserve">
+    <value>Unggah gambar lokal</value>
+  </data>
+  <data name="UploadImages.Progress" xml:space="preserve">
+    <value>Mengunggah gambar {0} dari {1}…</value>
+  </data>
+  <data name="UploadImages.Done" xml:space="preserve">
+    <value>{0} dari {1} gambar diunggah. Alamatnya di dokumen kini mengarah ke salinan yang diunggah; Urungkan mengembalikan jalur lokal.</value>
+  </data>
+  <data name="UploadImages.Cancelled" xml:space="preserve">
+    <value>Dibatalkan. {0} dari {1} gambar telah diunggah, dan alamatnya di dokumen telah diubah.</value>
+  </data>
+  <data name="UploadImages.NotUploaded" xml:space="preserve">
+    <value>Tidak diubah:</value>
+  </data>
+  <data name="UploadImages.None" xml:space="preserve">
+    <value>Dokumen ini tidak memiliki gambar lokal.</value>
+  </data>
+  <data name="UploadImages.NoConfig" xml:space="preserve">
+    <value>Belum ada konfigurasi unggahan yang dipilih. Pilih satu di Pengaturan &gt; Citra &gt; Unggah dengan.</value>
+  </data>
+  <data name="UploadImages.OpenSettings" xml:space="preserve">
+    <value>Buka pengaturan</value>
+  </data>
+  <data name="UploadImages.FileNotFound" xml:space="preserve">
+    <value>File tidak ditemukan.</value>
+  </data>
+  <data name="UploadImages.NoAddress" xml:space="preserve">
+    <value>Unggahan tidak mengembalikan alamat.</value>
+  </data>
+  <data name="UploadImages.DocumentClosed" xml:space="preserve">
+    <value>Dokumen ditutup selama pengunggahan.</value>
+  </data>
+  <data name="UploadImages.ApplyFailed" xml:space="preserve">
+    <value>Dokumen tidak dapat diubah. Gambar sudah online di</value>
+  </data>
+  <data name="UploadImages.HedgeDocPrompt" xml:space="preserve">
+    <value>Dokumen ini memiliki {0} gambar lokal. Gambar tersebut adalah file di komputer ini, sehingga pembaca catatan tidak akan melihatnya. Unggah terlebih dahulu?</value>
+  </data>
+  <data name="UploadImages.UploadFirst" xml:space="preserve">
+    <value>Unggah dulu</value>
+  </data>
+  <data name="UploadImages.ShareAnyway" xml:space="preserve">
+    <value>Tetap bagikan</value>
+  </data>
 </root>

@@ -1006,4 +1006,7 @@
     <value>PlantUML ഡയഗ്രാമുകൾ ഓഫാണ് (വരയ്ക്കുമ്പോൾ ഉറവിടം plantuml.com-ലേക്ക് അയയ്ക്കും). ക്രമീകരണങ്ങൾ &gt; എഡിറ്ററിൽ ഓണാക്കുക.</value>
     <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
   </data>
+  <data name="UploadLocalImages" xml:space="preserve">
+    <value>പ്രാദേശിക ചിത്രങ്ങൾ അപ്‌ലോഡ് ചെയ്യുക</value>
+  </data>
 </root>

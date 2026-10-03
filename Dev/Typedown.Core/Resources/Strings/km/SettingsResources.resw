@@ -844,4 +844,22 @@
     <value>ផ្ញើកូដប្រភពរបស់ដ្យាក្រាមទៅ plantuml.com ដើម្បីគូរ</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>ផ្ទុកឡើងដោយប្រើ</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>ការកំណត់រចនាសម្ព័ន្ធផ្ទុកឡើងដែលប្រើសម្រាប់រូបភាពដែលបានបញ្ចូលដែលមានសកម្មភាពជាការផ្ទុកឡើង និងដោយ ឯកសារ &gt; ផ្ទុករូបភាពមូលដ្ឋានឡើង</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>ថតនៅក្នុង bucket</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>URL សាធារណៈ</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>អាសយដ្ឋានតាមរចនាប័ទ្មផ្លូវ (MinIO និងអ្នកផ្ដល់សេវាមួយចំនួន)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>ការកំណត់រចនាសម្ព័ន្ធ S3 មិនពេញលេញ៖ សូមបំពេញ Endpoint, Bucket, Access Key ID និង Secret Access Key។</value>
+  </data>
 </root>

@@ -281,4 +281,49 @@
   <data name="ReloadFromDiskTitle" xml:space="preserve">
     <value>Tiedosto on muuttunut levyllä</value>
   </data>
+  <data name="UploadImages.Title" xml:space="preserve">
+    <value>Lataa paikalliset kuvat</value>
+  </data>
+  <data name="UploadImages.Progress" xml:space="preserve">
+    <value>Ladataan kuvaa {0}/{1}…</value>
+  </data>
+  <data name="UploadImages.Done" xml:space="preserve">
+    <value>{0}/{1} kuvaa ladattu. Niiden osoitteet asiakirjassa osoittavat nyt ladattuihin kopioihin; kumoaminen palauttaa paikalliset polut.</value>
+  </data>
+  <data name="UploadImages.Cancelled" xml:space="preserve">
+    <value>Peruttu. {0}/{1} kuvaa ladattiin, ja niiden osoitteet asiakirjassa muutettiin.</value>
+  </data>
+  <data name="UploadImages.NotUploaded" xml:space="preserve">
+    <value>Ei muutettu:</value>
+  </data>
+  <data name="UploadImages.None" xml:space="preserve">
+    <value>Tässä asiakirjassa ei ole paikallisia kuvia.</value>
+  </data>
+  <data name="UploadImages.NoConfig" xml:space="preserve">
+    <value>Latausmääritystä ei ole valittu. Valitse se kohdassa Asetukset &gt; Kuva &gt; Latausmääritys.</value>
+  </data>
+  <data name="UploadImages.OpenSettings" xml:space="preserve">
+    <value>Avaa asetukset</value>
+  </data>
+  <data name="UploadImages.FileNotFound" xml:space="preserve">
+    <value>Tiedostoa ei löytynyt.</value>
+  </data>
+  <data name="UploadImages.NoAddress" xml:space="preserve">
+    <value>Lataus ei palauttanut osoitetta.</value>
+  </data>
+  <data name="UploadImages.DocumentClosed" xml:space="preserve">
+    <value>Asiakirja suljettiin latauksen aikana.</value>
+  </data>
+  <data name="UploadImages.ApplyFailed" xml:space="preserve">
+    <value>Asiakirjaa ei voitu muuttaa. Kuva on verkossa osoitteessa</value>
+  </data>
+  <data name="UploadImages.HedgeDocPrompt" xml:space="preserve">
+    <value>Tässä asiakirjassa on {0} paikallista kuvaa. Ne ovat tämän tietokoneen tiedostoja, joten muistiinpanon lukijat eivät näe niitä. Ladataanko ne ensin?</value>
+  </data>
+  <data name="UploadImages.UploadFirst" xml:space="preserve">
+    <value>Lataa ensin</value>
+  </data>
+  <data name="UploadImages.ShareAnyway" xml:space="preserve">
+    <value>Jaa silti</value>
+  </data>
 </root>

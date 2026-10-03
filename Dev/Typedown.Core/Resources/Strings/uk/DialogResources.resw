@@ -281,4 +281,49 @@
   <data name="ReloadFromDiskTitle" xml:space="preserve">
     <value>Файл змінено на диску</value>
   </data>
+  <data name="UploadImages.Title" xml:space="preserve">
+    <value>Завантажити локальні зображення</value>
+  </data>
+  <data name="UploadImages.Progress" xml:space="preserve">
+    <value>Завантаження зображення {0} з {1}…</value>
+  </data>
+  <data name="UploadImages.Done" xml:space="preserve">
+    <value>Завантажено зображень: {0} з {1}. Їхні адреси в документі тепер вказують на завантажені копії; «Скасувати» повертає локальні шляхи.</value>
+  </data>
+  <data name="UploadImages.Cancelled" xml:space="preserve">
+    <value>Скасовано. Завантажено зображень: {0} з {1}; їхні адреси в документі змінено.</value>
+  </data>
+  <data name="UploadImages.NotUploaded" xml:space="preserve">
+    <value>Не змінено:</value>
+  </data>
+  <data name="UploadImages.None" xml:space="preserve">
+    <value>У цьому документі немає локальних зображень.</value>
+  </data>
+  <data name="UploadImages.NoConfig" xml:space="preserve">
+    <value>Конфігурацію завантаження не вибрано. Виберіть її в розділі Параметри &gt; Образ &gt; Завантажувати за допомогою.</value>
+  </data>
+  <data name="UploadImages.OpenSettings" xml:space="preserve">
+    <value>Відкрити параметри</value>
+  </data>
+  <data name="UploadImages.FileNotFound" xml:space="preserve">
+    <value>Файл не знайдено.</value>
+  </data>
+  <data name="UploadImages.NoAddress" xml:space="preserve">
+    <value>Завантаження не повернуло адресу.</value>
+  </data>
+  <data name="UploadImages.DocumentClosed" xml:space="preserve">
+    <value>Документ було закрито під час завантаження.</value>
+  </data>
+  <data name="UploadImages.ApplyFailed" xml:space="preserve">
+    <value>Не вдалося змінити документ. Зображення доступне онлайн за адресою</value>
+  </data>
+  <data name="UploadImages.HedgeDocPrompt" xml:space="preserve">
+    <value>У цьому документі є локальні зображення ({0}). Це файли на цьому комп'ютері, тому читачі нотатки їх не побачать. Спершу завантажити їх?</value>
+  </data>
+  <data name="UploadImages.UploadFirst" xml:space="preserve">
+    <value>Спершу завантажити</value>
+  </data>
+  <data name="UploadImages.ShareAnyway" xml:space="preserve">
+    <value>Усе одно поділитися</value>
+  </data>
 </root>

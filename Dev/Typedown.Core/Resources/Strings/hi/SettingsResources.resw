@@ -844,4 +844,22 @@
     <value>आरेख बनाने के लिए उसका स्रोत plantuml.com पर भेजता है</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>इससे अपलोड करें</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>वह अपलोड कॉन्फ़िगरेशन जो उन सम्मिलित छवियों के लिए उपयोग होता है जिनकी क्रिया अपलोड है, और रेती &gt; स्थानीय छवियाँ अपलोड करें द्वारा</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Bucket में फ़ोल्डर</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>सार्वजनिक URL</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>पथ-शैली पते (MinIO और कुछ प्रदाता)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>S3 कॉन्फ़िगरेशन अधूरा है: Endpoint, Bucket, Access Key ID और Secret Access Key भरें।</value>
+  </data>
 </root>

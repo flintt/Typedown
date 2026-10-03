@@ -844,4 +844,22 @@
     <value>Надсилає вихідний код діаграми на plantuml.com для малювання</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>Завантажувати за допомогою</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>Конфігурація завантаження для вставлених зображень із дією «Завантажити зображення», а також для Файл &gt; Завантажити локальні зображення</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Папка в Bucket</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>Публічна URL-адреса</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>Адреси у стилі шляху (MinIO і деякі постачальники)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>Конфігурація S3 неповна: заповніть Endpoint, Bucket, Access Key ID і Secret Access Key.</value>
+  </data>
 </root>

@@ -1006,4 +1006,7 @@
     <value>PlantUML-Diagramme sind aus (Zeichnen sendet den Quelltext an plantuml.com). Unter Einstellungen &gt; Editor einschalten.</value>
     <comment>编辑器页面：PlantUML 绘制关闭时代替图表的提示</comment>
   </data>
+  <data name="UploadLocalImages" xml:space="preserve">
+    <value>Lokale Bilder hochladen</value>
+  </data>
 </root>

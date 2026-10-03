@@ -850,4 +850,22 @@
     <value>يرسل مصدر المخطط إلى plantuml.com لرسمه</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>الرفع باستخدام</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>تكوين الرفع المستخدم للصور المدرجة التي يكون إجراؤها هو الرفع، وبواسطة الملف &gt; رفع الصور المحلية</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>المجلد داخل الـ Bucket</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>URL العام</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>عناوين بنمط المسار (MinIO وبعض المزودين)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>تكوين S3 غير مكتمل: املأ Endpoint وBucket وAccess Key ID وSecret Access Key.</value>
+  </data>
 </root>

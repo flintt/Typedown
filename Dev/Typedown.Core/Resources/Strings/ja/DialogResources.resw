@@ -281,4 +281,49 @@
   <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
     <value>以前のリンクを使う</value>
   </data>
+  <data name="UploadImages.Title" xml:space="preserve">
+    <value>ローカル画像をアップロード</value>
+  </data>
+  <data name="UploadImages.Progress" xml:space="preserve">
+    <value>画像 {0} / {1} をアップロード中…</value>
+  </data>
+  <data name="UploadImages.Done" xml:space="preserve">
+    <value>{1} 枚中 {0} 枚の画像をアップロードしました。文書内のアドレスはアップロードしたコピーを指すようになりました。アンドゥでローカルパスに戻せます。</value>
+  </data>
+  <data name="UploadImages.Cancelled" xml:space="preserve">
+    <value>キャンセルしました。{1} 枚中 {0} 枚の画像がアップロードされ、文書内のアドレスが変更されました。</value>
+  </data>
+  <data name="UploadImages.NotUploaded" xml:space="preserve">
+    <value>未変更:</value>
+  </data>
+  <data name="UploadImages.None" xml:space="preserve">
+    <value>この文書にはローカル画像がありません。</value>
+  </data>
+  <data name="UploadImages.NoConfig" xml:space="preserve">
+    <value>アップロード設定が選択されていません。設定 &gt; 画像 &gt; アップロード先 で選択してください。</value>
+  </data>
+  <data name="UploadImages.OpenSettings" xml:space="preserve">
+    <value>設定を開く</value>
+  </data>
+  <data name="UploadImages.FileNotFound" xml:space="preserve">
+    <value>ファイルが見つかりませんでした。</value>
+  </data>
+  <data name="UploadImages.NoAddress" xml:space="preserve">
+    <value>アップロード結果にアドレスが含まれていませんでした。</value>
+  </data>
+  <data name="UploadImages.DocumentClosed" xml:space="preserve">
+    <value>アップロード中に文書が閉じられました。</value>
+  </data>
+  <data name="UploadImages.ApplyFailed" xml:space="preserve">
+    <value>文書を変更できませんでした。画像のオンライン上のアドレス:</value>
+  </data>
+  <data name="UploadImages.HedgeDocPrompt" xml:space="preserve">
+    <value>この文書には {0} 枚のローカル画像があります。これらはこのコンピューター上のファイルのため、ノートの閲覧者には表示されません。先にアップロードしますか?</value>
+  </data>
+  <data name="UploadImages.UploadFirst" xml:space="preserve">
+    <value>先にアップロード</value>
+  </data>
+  <data name="UploadImages.ShareAnyway" xml:space="preserve">
+    <value>そのまま共有</value>
+  </data>
 </root>

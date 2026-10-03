@@ -844,4 +844,22 @@
     <value>Saadab diagrammi lähtekoodi joonistamiseks saidile plantuml.com</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>Üleslaadimise viis</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>Üleslaadimise konfiguratsioon, mida kasutatakse lisatud piltide puhul, mille toiming on Üleslaadimine, ning käsu Fail &gt; Laadi kohalikud pildid üles puhul</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Kaust bucketis</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>Avalik URL</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>Teestiilis aadressid (MinIO ja mõned teenusepakkujad)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>S3 konfiguratsioon on puudulik: täitke Endpoint, Bucket, Access Key ID ja Secret Access Key.</value>
+  </data>
 </root>

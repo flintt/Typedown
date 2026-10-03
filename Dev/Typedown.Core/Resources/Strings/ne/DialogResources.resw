@@ -281,4 +281,49 @@
   <data name="ReloadFromDiskTitle" xml:space="preserve">
     <value>डिस्कमा फाइल बदलिएको छ</value>
   </data>
+  <data name="UploadImages.Title" xml:space="preserve">
+    <value>स्थानीय छविहरू अपलोड गर्नुहोस्</value>
+  </data>
+  <data name="UploadImages.Progress" xml:space="preserve">
+    <value>{1} मध्ये छवि {0} अपलोड हुँदैछ…</value>
+  </data>
+  <data name="UploadImages.Done" xml:space="preserve">
+    <value>{1} मध्ये {0} छविहरू अपलोड भए। कागजातमा तिनका ठेगानाहरूले अब अपलोड गरिएका प्रतिलिपिहरूलाई देखाउँछन्; "पूर्ववत् गर्नुहोस्" ले स्थानीय मार्गहरू फर्काउँछ।</value>
+  </data>
+  <data name="UploadImages.Cancelled" xml:space="preserve">
+    <value>रद्द गरियो। {1} मध्ये {0} छविहरू अपलोड भए, र कागजातमा तिनका ठेगानाहरू परिवर्तन गरिए।</value>
+  </data>
+  <data name="UploadImages.NotUploaded" xml:space="preserve">
+    <value>परिवर्तन नगरिएका:</value>
+  </data>
+  <data name="UploadImages.None" xml:space="preserve">
+    <value>यस कागजातमा कुनै स्थानीय छवि छैन।</value>
+  </data>
+  <data name="UploadImages.NoConfig" xml:space="preserve">
+    <value>कुनै अपलोड कन्फिगरेसन छानिएको छैन। सेटिङ &gt; छवि &gt; यसबाट अपलोड गर्नुहोस् मा एउटा छान्नुहोस्।</value>
+  </data>
+  <data name="UploadImages.OpenSettings" xml:space="preserve">
+    <value>सेटिङ खोल्नुहोस्</value>
+  </data>
+  <data name="UploadImages.FileNotFound" xml:space="preserve">
+    <value>फाइल फेला परेन।</value>
+  </data>
+  <data name="UploadImages.NoAddress" xml:space="preserve">
+    <value>अपलोडले कुनै ठेगाना फर्काएन।</value>
+  </data>
+  <data name="UploadImages.DocumentClosed" xml:space="preserve">
+    <value>अपलोडको क्रममा कागजात बन्द गरियो।</value>
+  </data>
+  <data name="UploadImages.ApplyFailed" xml:space="preserve">
+    <value>कागजात परिवर्तन गर्न सकिएन। छवि यस ठेगानामा अनलाइन छ:</value>
+  </data>
+  <data name="UploadImages.HedgeDocPrompt" xml:space="preserve">
+    <value>यस कागजातमा {0} स्थानीय छविहरू छन्। ती यस कम्प्युटरका फाइलहरू हुन्, त्यसैले नोटका पाठकहरूले ती देख्ने छैनन्। पहिले ती अपलोड गर्ने?</value>
+  </data>
+  <data name="UploadImages.UploadFirst" xml:space="preserve">
+    <value>पहिले अपलोड गर्नुहोस्</value>
+  </data>
+  <data name="UploadImages.ShareAnyway" xml:space="preserve">
+    <value>जे भए पनि साझा गर्नुहोस्</value>
+  </data>
 </root>

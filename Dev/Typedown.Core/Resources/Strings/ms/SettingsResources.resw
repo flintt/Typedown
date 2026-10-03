@@ -844,4 +844,22 @@
     <value>Menghantar sumber rajah ke plantuml.com untuk melukisnya</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>Muat naik dengan</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>Konfigurasi muat naik yang digunakan untuk imej yang disisipkan dengan tindakan Muat naik, dan oleh Fail &gt; Muat naik imej tempatan</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Folder dalam bucket</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>URL awam</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>Alamat gaya laluan (MinIO dan sesetengah penyedia)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>Konfigurasi S3 tidak lengkap: isikan Endpoint, Bucket, Access Key ID dan Secret Access Key.</value>
+  </data>
 </root>

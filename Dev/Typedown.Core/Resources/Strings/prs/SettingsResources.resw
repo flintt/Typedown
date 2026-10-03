@@ -844,4 +844,22 @@
     <value>منبع نمودار را برای رسم به plantuml.com می‌فرستد</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>ارسال با</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>تنظیمات آپلودی که برای تصاویر درج‌شده با عمل ارسال، و توسط پرونده &gt; ارسال تصاویر محلی استفاده می‌شود</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>پوشه در Bucket</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>URL عمومی</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>آدرس‌های مسیرمحور (MinIO و برخی ارائه‌دهندگان)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>تنظیمات S3 ناقص است: Endpoint، Bucket، Access Key ID و Secret Access Key را وارد کنید.</value>
+  </data>
 </root>

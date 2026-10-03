@@ -844,4 +844,22 @@
     <value>Sendir frumkóða myndarinnar á plantuml.com til að teikna hana</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>Hlaða upp með</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>Upphleðslustillingarnar sem notaðar eru fyrir innsettar myndir þar sem aðgerðin er Hlaða upp mynd, og af Skrá &gt; Hlaða upp staðbundnum myndum</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Mappa í bucket</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>Opinber vefslóð</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>Vistföng á slóðarsniði (MinIO og sumar þjónustur)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>S3-stillingarnar eru ófullgerðar: fylltu út Endpoint, Bucket, Access Key ID og Secret Access Key.</value>
+  </data>
 </root>

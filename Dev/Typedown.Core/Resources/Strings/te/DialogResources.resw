@@ -281,4 +281,49 @@
   <data name="ReloadFromDiskTitle" xml:space="preserve">
     <value>డిస్క్‌లో ఫైల్ మారింది</value>
   </data>
+  <data name="UploadImages.Title" xml:space="preserve">
+    <value>స్థానిక ఇమేజ్ లను అప్ లోడ్ చేయండి</value>
+  </data>
+  <data name="UploadImages.Progress" xml:space="preserve">
+    <value>{1} లో ఇమేజ్ {0} ని అప్ లోడ్ చేస్తోంది…</value>
+  </data>
+  <data name="UploadImages.Done" xml:space="preserve">
+    <value>{1} లో {0} ఇమేజ్ లు అప్ లోడ్ అయ్యాయి. డాక్యుమెంట్ లో వాటి చిరునామాలు ఇప్పుడు అప్ లోడ్ చేసిన కాపీలను సూచిస్తాయి; Undo చేస్తే స్థానిక పాత్ లు తిరిగి వస్తాయి.</value>
+  </data>
+  <data name="UploadImages.Cancelled" xml:space="preserve">
+    <value>రద్దు చేయబడింది. {1} లో {0} ఇమేజ్ లు అప్ లోడ్ అయ్యాయి, డాక్యుమెంట్ లో వాటి చిరునామాలు మార్చబడ్డాయి.</value>
+  </data>
+  <data name="UploadImages.NotUploaded" xml:space="preserve">
+    <value>మారలేదు:</value>
+  </data>
+  <data name="UploadImages.None" xml:space="preserve">
+    <value>ఈ డాక్యుమెంట్ లో స్థానిక ఇమేజ్ లు లేవు.</value>
+  </data>
+  <data name="UploadImages.NoConfig" xml:space="preserve">
+    <value>అప్ లోడ్ కాన్ఫిగరేషన్ ఏదీ ఎంచుకోలేదు. సెట్టింగ్ లు &gt; విగ్రహం &gt; దీనితో అప్ లోడ్ చేయండి లో ఒకదాన్ని ఎంచుకోండి.</value>
+  </data>
+  <data name="UploadImages.OpenSettings" xml:space="preserve">
+    <value>సెట్టింగ్ లను తెరవండి</value>
+  </data>
+  <data name="UploadImages.FileNotFound" xml:space="preserve">
+    <value>ఫైల్ కనుగొనబడలేదు.</value>
+  </data>
+  <data name="UploadImages.NoAddress" xml:space="preserve">
+    <value>అప్ లోడ్ చిరునామాను తిరిగి ఇవ్వలేదు.</value>
+  </data>
+  <data name="UploadImages.DocumentClosed" xml:space="preserve">
+    <value>అప్ లోడ్ సమయంలో డాక్యుమెంట్ మూసివేయబడింది.</value>
+  </data>
+  <data name="UploadImages.ApplyFailed" xml:space="preserve">
+    <value>డాక్యుమెంట్ ను మార్చలేకపోయాము. ఇమేజ్ ఈ చిరునామాలో ఆన్ లైన్ లో ఉంది:</value>
+  </data>
+  <data name="UploadImages.HedgeDocPrompt" xml:space="preserve">
+    <value>ఈ డాక్యుమెంట్ లో {0} స్థానిక ఇమేజ్ లు ఉన్నాయి. అవి ఈ కంప్యూటర్ లోని ఫైల్ లు, కాబట్టి నోట్ పాఠకులకు అవి కనిపించవు. ముందుగా వాటిని అప్ లోడ్ చేయాలా?</value>
+  </data>
+  <data name="UploadImages.UploadFirst" xml:space="preserve">
+    <value>ముందుగా అప్ లోడ్ చేయండి</value>
+  </data>
+  <data name="UploadImages.ShareAnyway" xml:space="preserve">
+    <value>అయినా పంచు</value>
+  </data>
 </root>

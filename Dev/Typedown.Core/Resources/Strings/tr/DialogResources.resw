@@ -281,4 +281,49 @@
   <data name="ReloadFromDiskTitle" xml:space="preserve">
     <value>Dosya diskte değişti</value>
   </data>
+  <data name="UploadImages.Title" xml:space="preserve">
+    <value>Yerel resimleri yükle</value>
+  </data>
+  <data name="UploadImages.Progress" xml:space="preserve">
+    <value>Resim yükleniyor: {0}/{1}…</value>
+  </data>
+  <data name="UploadImages.Done" xml:space="preserve">
+    <value>{1} resimden {0} tanesi yüklendi. Belgedeki adresleri artık yüklenen kopyaları gösteriyor; Geri al yerel yolları geri getirir.</value>
+  </data>
+  <data name="UploadImages.Cancelled" xml:space="preserve">
+    <value>İptal edildi. {1} resimden {0} tanesi yüklendi ve belgedeki adresleri değiştirildi.</value>
+  </data>
+  <data name="UploadImages.NotUploaded" xml:space="preserve">
+    <value>Değiştirilmedi:</value>
+  </data>
+  <data name="UploadImages.None" xml:space="preserve">
+    <value>Bu belgede yerel resim yok.</value>
+  </data>
+  <data name="UploadImages.NoConfig" xml:space="preserve">
+    <value>Hiçbir yükleme yapılandırması seçilmedi. Ayarlar &gt; Resim &gt; Şununla yükle bölümünden birini seçin.</value>
+  </data>
+  <data name="UploadImages.OpenSettings" xml:space="preserve">
+    <value>Ayarları aç</value>
+  </data>
+  <data name="UploadImages.FileNotFound" xml:space="preserve">
+    <value>Dosya bulunamadı.</value>
+  </data>
+  <data name="UploadImages.NoAddress" xml:space="preserve">
+    <value>Yükleme bir adres döndürmedi.</value>
+  </data>
+  <data name="UploadImages.DocumentClosed" xml:space="preserve">
+    <value>Yükleme sırasında belge kapatıldı.</value>
+  </data>
+  <data name="UploadImages.ApplyFailed" xml:space="preserve">
+    <value>Belge değiştirilemedi. Resim şu adreste çevrimiçi:</value>
+  </data>
+  <data name="UploadImages.HedgeDocPrompt" xml:space="preserve">
+    <value>Bu belgede {0} yerel resim var. Bunlar bu bilgisayardaki dosyalar olduğundan notu okuyanlar onları göremez. Önce yüklensin mi?</value>
+  </data>
+  <data name="UploadImages.UploadFirst" xml:space="preserve">
+    <value>Önce yükle</value>
+  </data>
+  <data name="UploadImages.ShareAnyway" xml:space="preserve">
+    <value>Yine de paylaş</value>
+  </data>
 </root>

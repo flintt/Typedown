@@ -281,4 +281,49 @@
   <data name="ReloadFromDiskTitle" xml:space="preserve">
     <value>Die lêer het op die skyf verander</value>
   </data>
+  <data name="UploadImages.Title" xml:space="preserve">
+    <value>Laai plaaslike prente op</value>
+  </data>
+  <data name="UploadImages.Progress" xml:space="preserve">
+    <value>Laai tans prent {0} van {1} op…</value>
+  </data>
+  <data name="UploadImages.Done" xml:space="preserve">
+    <value>{0} van {1} prente is opgelaai. Hul adresse in die dokument wys nou na die opgelaaide kopieë; Ontdoen sit die plaaslike paaie terug.</value>
+  </data>
+  <data name="UploadImages.Cancelled" xml:space="preserve">
+    <value>Gekanselleer. {0} van {1} prente is opgelaai, en hul adresse in die dokument is verander.</value>
+  </data>
+  <data name="UploadImages.NotUploaded" xml:space="preserve">
+    <value>Nie verander nie:</value>
+  </data>
+  <data name="UploadImages.None" xml:space="preserve">
+    <value>Hierdie dokument het geen plaaslike prente nie.</value>
+  </data>
+  <data name="UploadImages.NoConfig" xml:space="preserve">
+    <value>Geen oplaaikonfigurasie is gekies nie. Kies een onder Instellings &gt; Beeld &gt; Laai op met.</value>
+  </data>
+  <data name="UploadImages.OpenSettings" xml:space="preserve">
+    <value>Maak instellings oop</value>
+  </data>
+  <data name="UploadImages.FileNotFound" xml:space="preserve">
+    <value>Die lêer is nie gevind nie.</value>
+  </data>
+  <data name="UploadImages.NoAddress" xml:space="preserve">
+    <value>Die oplaai het geen adres teruggegee nie.</value>
+  </data>
+  <data name="UploadImages.DocumentClosed" xml:space="preserve">
+    <value>Die dokument is tydens die oplaai gesluit.</value>
+  </data>
+  <data name="UploadImages.ApplyFailed" xml:space="preserve">
+    <value>Die dokument kon nie verander word nie. Die prent is aanlyn by</value>
+  </data>
+  <data name="UploadImages.HedgeDocPrompt" xml:space="preserve">
+    <value>Hierdie dokument het {0} plaaslike prente. Dit is lêers op hierdie rekenaar, so lesers van die nota sal dit nie sien nie. Laai hulle eers op?</value>
+  </data>
+  <data name="UploadImages.UploadFirst" xml:space="preserve">
+    <value>Laai eers op</value>
+  </data>
+  <data name="UploadImages.ShareAnyway" xml:space="preserve">
+    <value>Deel tog</value>
+  </data>
 </root>

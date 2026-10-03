@@ -844,4 +844,22 @@
     <value>ንምስኣል ምንጪ ናይቲ ስእላዊ መግለጺ ናብ plantuml.com ይሰድድ</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>መስቀሊ</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>ተግባሮም "ምስሊ ኣራግፍ" ንዝኾነ ዝኣተዉ ምስልታትን ብፋይል &gt; ናይ ከባቢ ምስልታት ስቐልን ዝጥቀመሉ ናይ ምስቃል ውቅር</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>ኣብ bucket ዘሎ ፎልደር</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>ህዝባዊ URL</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>ናይ መንገዲ ቅዲ ኣድራሻታት (MinIO ከምኡ'ውን ገለ ኣቕረብቲ)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>ናይ S3 ውቅር ዘይተማልአ እዩ፦ Endpoint፣ Bucket፣ Access Key ID ከምኡ'ውን Secret Access Key ምልኣ።</value>
+  </data>
 </root>

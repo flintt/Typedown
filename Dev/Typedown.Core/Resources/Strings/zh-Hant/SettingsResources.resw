@@ -873,4 +873,22 @@
     <value>將圖表原始碼傳送到 plantuml.com，由其繪製</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
   </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>上傳方式</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>用於插入動作為「上傳圖片」的圖片，以及 檔 &gt; 上傳本地圖片 的上傳配置</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Bucket 中的資料夾</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>公開 URL</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>路徑樣式位址（MinIO 及部分服務商）</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>S3 配置不完整：請填寫 Endpoint、Bucket、Access Key ID 和 Secret Access Key。</value>
+  </data>
 </root>

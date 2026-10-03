@@ -281,4 +281,49 @@
   <data name="ReloadFromDiskTitle" xml:space="preserve">
     <value>Датотеката е променета на дискот</value>
   </data>
+  <data name="UploadImages.Title" xml:space="preserve">
+    <value>Прикачи локални слики</value>
+  </data>
+  <data name="UploadImages.Progress" xml:space="preserve">
+    <value>Се прикачува слика {0} од {1}…</value>
+  </data>
+  <data name="UploadImages.Done" xml:space="preserve">
+    <value>Прикачени се {0} од {1} слики. Нивните адреси во документот сега покажуваат кон прикачените копии; Одменете ги враќа локалните патеки.</value>
+  </data>
+  <data name="UploadImages.Cancelled" xml:space="preserve">
+    <value>Откажано. Прикачени се {0} од {1} слики, а нивните адреси во документот се променети.</value>
+  </data>
+  <data name="UploadImages.NotUploaded" xml:space="preserve">
+    <value>Непроменето:</value>
+  </data>
+  <data name="UploadImages.None" xml:space="preserve">
+    <value>Овој документ нема локални слики.</value>
+  </data>
+  <data name="UploadImages.NoConfig" xml:space="preserve">
+    <value>Не е избрана конфигурација за прикачување. Изберете една во Подесувања &gt; Слика &gt; Прикачи со.</value>
+  </data>
+  <data name="UploadImages.OpenSettings" xml:space="preserve">
+    <value>Отвори подесувања</value>
+  </data>
+  <data name="UploadImages.FileNotFound" xml:space="preserve">
+    <value>Фајлот не е пронајден.</value>
+  </data>
+  <data name="UploadImages.NoAddress" xml:space="preserve">
+    <value>Прикачувањето не врати адреса.</value>
+  </data>
+  <data name="UploadImages.DocumentClosed" xml:space="preserve">
+    <value>Документот беше затворен за време на прикачувањето.</value>
+  </data>
+  <data name="UploadImages.ApplyFailed" xml:space="preserve">
+    <value>Документот не можеше да се промени. Сликата е на интернет на</value>
+  </data>
+  <data name="UploadImages.HedgeDocPrompt" xml:space="preserve">
+    <value>Овој документ има {0} локални слики. Тоа се фајлови на овој компјутер, па читателите на белешката нема да ги видат. Прво да се прикачат?</value>
+  </data>
+  <data name="UploadImages.UploadFirst" xml:space="preserve">
+    <value>Прво прикачи</value>
+  </data>
+  <data name="UploadImages.ShareAnyway" xml:space="preserve">
+    <value>Сепак сподели</value>
+  </data>
 </root>
