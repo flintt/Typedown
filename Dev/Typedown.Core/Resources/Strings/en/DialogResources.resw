@@ -286,4 +286,49 @@
   <data name="HedgeDocShare.UseOldLink" xml:space="preserve">
     <value>Use previous link</value>
   </data>
+  <data name="UploadImages.Title" xml:space="preserve">
+    <value>Upload local images</value>
+  </data>
+  <data name="UploadImages.Progress" xml:space="preserve">
+    <value>Uploading image {0} of {1}…</value>
+  </data>
+  <data name="UploadImages.Done" xml:space="preserve">
+    <value>{0} of {1} images uploaded. Their addresses in the document now point to the uploaded copies; Undo puts the local paths back.</value>
+  </data>
+  <data name="UploadImages.Cancelled" xml:space="preserve">
+    <value>Cancelled. {0} of {1} images were uploaded, and their addresses in the document were changed.</value>
+  </data>
+  <data name="UploadImages.NotUploaded" xml:space="preserve">
+    <value>Not changed:</value>
+  </data>
+  <data name="UploadImages.None" xml:space="preserve">
+    <value>This document has no local images.</value>
+  </data>
+  <data name="UploadImages.NoConfig" xml:space="preserve">
+    <value>No upload configuration is chosen. Choose one under Settings &gt; Image &gt; Upload with.</value>
+  </data>
+  <data name="UploadImages.OpenSettings" xml:space="preserve">
+    <value>Open settings</value>
+  </data>
+  <data name="UploadImages.FileNotFound" xml:space="preserve">
+    <value>The file was not found.</value>
+  </data>
+  <data name="UploadImages.NoAddress" xml:space="preserve">
+    <value>The upload did not return an address.</value>
+  </data>
+  <data name="UploadImages.DocumentClosed" xml:space="preserve">
+    <value>The document was closed during the upload.</value>
+  </data>
+  <data name="UploadImages.ApplyFailed" xml:space="preserve">
+    <value>The document could not be changed. The image is online at</value>
+  </data>
+  <data name="UploadImages.HedgeDocPrompt" xml:space="preserve">
+    <value>This document has {0} local images. They are files on this computer, so readers of the note will not see them. Upload them first?</value>
+  </data>
+  <data name="UploadImages.UploadFirst" xml:space="preserve">
+    <value>Upload first</value>
+  </data>
+  <data name="UploadImages.ShareAnyway" xml:space="preserve">
+    <value>Share anyway</value>
+  </data>
 </root>

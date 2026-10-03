@@ -141,6 +141,8 @@ internal static class Program
             await Case("FS01 in full screen the main page starts at the top edge of the screen", FS01);
             await Case("PU01 PlantUML is not drawn by default (nothing goes to plantuml.com, the block says so); turned on it is, off again it is not", PU01);
             await Case("RV01 reveal: \"change\" scrolls a change off screen into view, the caret where it was; \"document\" leaves the page", RV01);
+            await Case("IU01 File > Upload local images (PowerShell): each file uploaded once, every use replaced in one undo step, web, missing and code left alone", IU01);
+            await Case("IU02 File > Upload local images to an S3 bucket (rclone serve s3): signed PUT, the object reads back, a wrong secret changes nothing, the secret is not stored in plain text", IU02);
             // Last: it ends the test host.
             await Case("Q01 two windows closed one after the other: the process exits (it stayed, headless)", Q01);
         }
@@ -873,6 +875,132 @@ internal static class Program
         var after = await Page();
         notes.Add("off again: " + after.ToString(Formatting.None));
         Check((int)after["remote"]! == 0 && (bool)after["off"]!, "off again, the notice and no image");
+    }
+
+    // A PNG of one pixel; the byte after the signature makes each one different.
+    private static byte[] Png(byte variant) => new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, variant, 1, 2, 3 };
+
+    private const string IU01Text = "# IU01\n\n![a](iu01-images/a.png)\n\n![a again](iu01-images/a.png \"title\")\n\n" +
+        "![space](<iu01-images/b b.png>)\n\n![encoded](iu01-images/b%20b.png)\n\n![web](https://example.com/x.png)\n\n" +
+        "![missing](iu01-images/missing.png)\n\n<img src=\"iu01-images/a.png\" width=\"10\">\n\n`![code](iu01-images/a.png)`\n\n" +
+        "```md\n![fence](iu01-images/a.png)\n```\n";
+
+    private static async Task IU01(List<string> notes)
+    {
+        using var c = await Session("e2e IU01");
+        var images = Path.Combine(Path.GetDirectoryName(Fixture("iu01.md", IU01Text))!, "iu01-images");
+        Directory.CreateDirectory(images);
+        File.WriteAllBytes(Path.Combine(images, "a.png"), Png(1));
+        File.WriteAllBytes(Path.Combine(images, "b b.png"), Png(2));
+        var log = Path.Combine(images, "uploads.log");
+        File.Delete(log);
+        var id = await Open(c, Path.Combine(Path.GetDirectoryName(images)!, "iu01.md"));
+        var windowId = await WindowIdOf(c, id);
+        var script = "function Upload-Image([string]$path) {\n" +
+            $"  Add-Content -LiteralPath '{log}' -Value $path\n" +
+            "  'https://img.test/' + [IO.Path]::GetFileName($path).Replace(' ', '-')\n}\n";
+        var configured = await c.Call("test.images.configure", new { windowId, method = "powershell", config = new { script } });
+        notes.Add("configured: " + configured["id"]);
+        Check((int?)configured["default"] == (int)configured["id"]!, "the new configuration is the one uploads use");
+
+        var before = await Revision(c, id);
+        var result = await c.Call("test.images.uploadAll", new { windowId });
+        notes.Add("result: " + result.ToString(Formatting.None));
+        var uploads = File.Exists(log) ? File.ReadAllLines(log) : new string[0];
+        notes.Add("script calls: " + string.Join(" | ", uploads));
+        Check((int)result["Files"]! == 3 && (int)result["Uploaded"]! == 2, "three files are named (one missing), two are uploaded");
+        Check(uploads.Length == 2, $"each file is uploaded once, however often it is used ({uploads.Length} calls)");
+        Check(result["Failures"]!.Count() == 1 && (string?)result["Failures"]![0]!["Address"] == "iu01-images/missing.png", "the missing file is the one failure");
+        var text = (string)(await Get(c, id))["text"]!;
+        notes.Add("text: " + JsonConvert.SerializeObject(text));
+        var expected = IU01Text
+            .Replace("](iu01-images/a.png", "](https://img.test/a.png")
+            .Replace("<iu01-images/b b.png>", "<https://img.test/b-b.png>")
+            .Replace("(iu01-images/b%20b.png)", "(https://img.test/b-b.png)")
+            .Replace("src=\"iu01-images/a.png\"", "src=\"https://img.test/a.png\"")
+            .Replace("`![code](https://img.test/a.png)`", "`![code](iu01-images/a.png)`")
+            .Replace("![fence](https://img.test/a.png)", "![fence](iu01-images/a.png)");
+        Check(text == expected, "every use of an uploaded file has its new address; the web image, the missing file and the code are as they were");
+        Check(await Revision(c, id) == before + 1, "the addresses changed in one edit");
+
+        await c.Call("document.undo", new { documentId = id, baseRevision = await Revision(c, id), reveal = "document" });
+        Check((string)(await Get(c, id))["text"]! == IU01Text, "one undo puts every local path back");
+
+        var none = await c.Call("test.images.uploadAll", new { windowId });
+        Check((int)none["Uploaded"]! == 2, "run again on the restored text, the same two are uploaded");
+        await c.Call("document.undo", new { documentId = id, baseRevision = await Revision(c, id), reveal = "document" });
+    }
+
+    private static async Task IU02(List<string> notes)
+    {
+        // A bucket server: E2E_S3_ENDPOINT/ACCESS_KEY/SECRET_KEY, or else "rclone serve s3" (E2E_RCLONE, or
+        // E:\tools\rclone\rclone.exe) on a folder of its own, for this case only.
+        var endpoint = Environment.GetEnvironmentVariable("E2E_S3_ENDPOINT");
+        var accessKey = Environment.GetEnvironmentVariable("E2E_S3_ACCESS_KEY") ?? "e2e-access";
+        var secretKey = Environment.GetEnvironmentVariable("E2E_S3_SECRET_KEY") ?? "e2e-secret";
+        Process? server = null;
+        if (endpoint == null)
+        {
+            var rclone = Environment.GetEnvironmentVariable("E2E_RCLONE") ?? @"E:\tools\rclone\rclone.exe";
+            Check(File.Exists(rclone), $"no S3 server: set E2E_S3_ENDPOINT, or E2E_RCLONE to rclone.exe ({rclone} is not there)");
+            var data = Path.Combine(Path.GetTempPath(), "e2e-iu02-" + Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(data);
+            var port = 19000 + Environment.ProcessId % 1000;
+            endpoint = $"http://127.0.0.1:{port}";
+            server = Process.Start(new ProcessStartInfo(rclone, $"serve s3 --auth-key {accessKey},{secretKey} --addr 127.0.0.1:{port} \"{data}\"") { UseShellExecute = false, CreateNoWindow = true })!;
+            await Task.Delay(1500);
+            notes.Add($"rclone serve s3 at {endpoint}, pid {server.Id}");
+        }
+        try { await IU02With(notes, endpoint, accessKey, secretKey); }
+        finally { if (server != null) { try { server.Kill(); } catch { } server.Dispose(); } }
+    }
+
+    private static async Task IU02With(List<string> notes, string endpoint, string accessKey, string secretKey)
+    {
+        var bucket = "e2e-iu02-" + DateTime.UtcNow.ToString("yyyyMMddHHmmss");
+        var target = new Typedown.Core.Services.S3Uploader.Target { Endpoint = endpoint, Bucket = bucket, AccessKey = accessKey, SecretKey = secretKey, PathStyle = true };
+        using var http = new System.Net.Http.HttpClient();
+        async Task<System.Net.Http.HttpResponseMessage> Signed(System.Net.Http.HttpMethod method, Uri url)
+        {
+            var request = new System.Net.Http.HttpRequestMessage(method, url);
+            var amzDate = DateTime.UtcNow.ToString("yyyyMMdd'T'HHmmss'Z'", System.Globalization.CultureInfo.InvariantCulture);
+            const string empty = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
+            var headers = new SortedDictionary<string, string>(StringComparer.Ordinal) { ["host"] = url.Authority, ["x-amz-content-sha256"] = empty, ["x-amz-date"] = amzDate };
+            request.Headers.TryAddWithoutValidation("x-amz-content-sha256", empty);
+            request.Headers.TryAddWithoutValidation("x-amz-date", amzDate);
+            request.Headers.TryAddWithoutValidation("Authorization", Typedown.Core.Services.S3Uploader.Authorization(method.Method, url.AbsolutePath, "", headers, empty, accessKey, secretKey, "us-east-1", "s3", amzDate));
+            return await http.SendAsync(request);
+        }
+        var made = await Signed(System.Net.Http.HttpMethod.Put, new Uri(endpoint.TrimEnd('/') + "/" + bucket));
+        Check(made.IsSuccessStatusCode, $"the bucket is made at {endpoint} ({(int)made.StatusCode})");
+
+        using var c = await Session("e2e IU02");
+        var picture = Png(7);
+        var doc = Fixture("iu02.md", "# IU02\n\n![c](iu02-c.png)\n");
+        File.WriteAllBytes(Path.Combine(Path.GetDirectoryName(doc)!, "iu02-c.png"), picture);
+        var id = await Open(c, doc);
+        var windowId = await WindowIdOf(c, id);
+
+        var wrong = await c.Call("test.images.configure", new { windowId, method = "s3", config = new { endpoint, bucket, accessKey, secretKey = secretKey + "x", pathStyle = true } });
+        var refused = await c.Call("test.images.uploadAll", new { windowId });
+        notes.Add("wrong secret: " + refused.ToString(Formatting.None));
+        Check((int)refused["Uploaded"]! == 0 && ((string?)refused["Failures"]![0]!["Reason"] ?? "").Contains("SignatureDoesNotMatch"), "a wrong secret is refused by the server and reported");
+        Check((string)(await Get(c, id))["text"]! == "# IU02\n\n![c](iu02-c.png)\n", "nothing changed in the document");
+
+        var configured = await c.Call("test.images.configure", new { windowId, method = "s3", config = new { endpoint, bucket, accessKey, secretKey, pathStyle = true, prefix = "img/${year}" } });
+        var stored = (string)configured["stored"]!;
+        notes.Add("stored: " + stored);
+        Check(!stored.Contains("\"" + secretKey + "\"") && stored.Contains("dp1:"), "the secret is stored protected, not in plain text");
+        var result = await c.Call("test.images.uploadAll", new { windowId });
+        notes.Add("result: " + result.ToString(Formatting.None));
+        Check((int)result["Uploaded"]! == 1, "the picture is uploaded");
+        var text = (string)(await Get(c, id))["text"]!;
+        var key = Typedown.Core.Services.S3Uploader.KeyFor(new Typedown.Core.Services.S3Uploader.Target { KeyPrefix = "img/" + DateTime.Now.Year }, "iu02-c.png", picture);
+        var url = Typedown.Core.Services.S3Uploader.ObjectUrl(target, key);
+        notes.Add("text: " + JsonConvert.SerializeObject(text));
+        Check(text == $"# IU02\n\n![c]({url.AbsoluteUri})\n", $"the address is the object's ({url})");
+        var back = await Signed(System.Net.Http.HttpMethod.Get, url);
+        Check(back.IsSuccessStatusCode && (await back.Content.ReadAsByteArrayAsync()).SequenceEqual(picture), "the object reads back with the picture's bytes");
     }
 
     // reveal: "change" (spec 2.3): a write scrolls its first changed block into view when it is off screen and leaves

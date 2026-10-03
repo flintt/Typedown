@@ -207,6 +207,46 @@ namespace Typedown.Services.Automation
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["value"] = Newtonsoft.Json.Linq.JToken.FromObject(property.GetValue(app.SettingsViewModel)) };
                 });
             }));
+
+            // Image upload without its dialogs: an enabled configuration chosen as Settings > Image > Upload with, and
+            // File > Upload local images on the window's active document.
+            methods.Add(new MethodDescriptor("test.images.configure", null, "test.images.configure/1", async (c, ct) =>
+            {
+                var p = c.Params;
+                var method = p.OptionalEnum("method", "powershell", "powershell", "s3");
+                var settings = p.OptionalObject("config") ?? new Newtonsoft.Json.Linq.JObject();
+                return await await Core.Services.AutomationWindows.Registry.OnWindowAsync(p.RequiredString("windowId"), async app =>
+                {
+                    var upload = Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetService<Core.Services.ImageUpload>(app.ServiceProvider);
+                    var config = await upload.AddImageUploadConfig("e2e-" + method, method == "s3" ? Core.Enums.ImageUploadMethod.OSS : Core.Enums.ImageUploadMethod.PowerShell);
+                    config.IsEnable = true;
+                    var model = config.LoadUploadConfig();
+                    if (model is Core.Models.UploadConfigModels.PowerShellModel ps)
+                        ps.Script = (string)settings["script"] ?? ps.Script;
+                    else if (model is Core.Models.UploadConfigModels.OSSConfigModel s3)
+                    {
+                        s3.ServiceURL = (string)settings["endpoint"] ?? "";
+                        s3.RegionEndpoint = (string)settings["region"] ?? "";
+                        s3.BucketName = (string)settings["bucket"] ?? "";
+                        s3.AccessKey = (string)settings["accessKey"] ?? "";
+                        s3.SecretKey = (string)settings["secretKey"] ?? "";
+                        s3.PathStyle = (bool?)settings["pathStyle"] ?? false;
+                        s3.UploadPath = (string)settings["prefix"] ?? "";
+                        s3.ExternalURL = (string)settings["publicUrl"] ?? "";
+                    }
+                    config.StoreUploadConfig(model);
+                    await upload.SaveImageUploadConfig(config);
+                    app.SettingsViewModel.DefaultImageUploadConfigId = config.Id;
+                    // What the configuration holds: the secret must not be there in plain text.
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["id"] = config.Id, ["stored"] = config.Config, ["default"] = upload.DefaultConfig?.Id };
+                });
+            }));
+            methods.Add(new MethodDescriptor("test.images.uploadAll", null, "test.images.uploadAll/1", async (c, ct) =>
+                await await Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), async app =>
+                {
+                    var result = await new Core.Services.ImageBatchUpload(app).RunAsync(null, ct);
+                    return (Newtonsoft.Json.Linq.JToken?)Newtonsoft.Json.Linq.JObject.FromObject(result);
+                })));
         }
 #else
         public static IEditBarriers Barriers => null;

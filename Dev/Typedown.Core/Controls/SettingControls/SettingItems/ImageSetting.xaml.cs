@@ -24,11 +24,8 @@ namespace Typedown.Core.Controls.SettingControls.SettingItems
 
         public ObservableCollection<UploadConfigOption> UploadConfigOptions { get; } = new();
 
-        public UploadConfigOption ClipboardImageUploadConfig { get; set; }
-
-        public UploadConfigOption LocalImageUploadConfig { get; set; }
-
-        public UploadConfigOption WebImageUploadConfig { get; set; }
+        /// <summary>Settings > Image > Upload with: the one configuration every upload uses.</summary>
+        public UploadConfigOption UploadConfig { get; set; }
 
         private readonly CompositeDisposable disposables = new();
 
@@ -48,11 +45,6 @@ namespace Typedown.Core.Controls.SettingControls.SettingItems
             return action == InsertImageAction.CopyToPath ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        public Visibility IsSelectUploadConfigSettingItemVisibility(InsertImageAction action)
-        {
-            return action == InsertImageAction.Upload ? Visibility.Visible : Visibility.Collapsed;
-        }
-
         private readonly CompositeDisposable ImageUploadConfigsDisposables = new();
 
         private async void UpdateUploadConfigOptions()
@@ -67,12 +59,8 @@ namespace Typedown.Core.Controls.SettingControls.SettingItems
                 .ToList(),
                 (a, b) => a.Id == b.Id);
             await Task.Yield();
-            ClipboardImageUploadConfig = UploadConfigOptions.Where(x => x.Id == Settings.InsertClipboardImageUseUploadConfigId).FirstOrDefault() ?? UploadConfigOption.None;
-            LocalImageUploadConfig = UploadConfigOptions.Where(x => x.Id == Settings.InsertLocalImageUseUploadConfigId).FirstOrDefault() ?? UploadConfigOption.None;
-            WebImageUploadConfig = UploadConfigOptions.Where(x => x.Id == Settings.InsertWebImageUseUploadConfigId).FirstOrDefault() ?? UploadConfigOption.None;
-            ImageUploadConfigsDisposables.Add(this.WhenPropertyChanged(nameof(ClipboardImageUploadConfig)).Cast<UploadConfigOption>().Subscribe(x => Settings.InsertClipboardImageUseUploadConfigId = x.Id));
-            ImageUploadConfigsDisposables.Add(this.WhenPropertyChanged(nameof(LocalImageUploadConfig)).Cast<UploadConfigOption>().Subscribe(x => Settings.InsertLocalImageUseUploadConfigId = x.Id));
-            ImageUploadConfigsDisposables.Add(this.WhenPropertyChanged(nameof(WebImageUploadConfig)).Cast<UploadConfigOption>().Subscribe(x => Settings.InsertWebImageUseUploadConfigId = x.Id));
+            UploadConfig = UploadConfigOptions.Where(x => x.Id == Settings.DefaultImageUploadConfigId).FirstOrDefault() ?? UploadConfigOption.None;
+            ImageUploadConfigsDisposables.Add(this.WhenPropertyChanged(nameof(UploadConfig)).Cast<UploadConfigOption>().Where(x => x != null).Subscribe(x => Settings.DefaultImageUploadConfigId = x.Id));
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)

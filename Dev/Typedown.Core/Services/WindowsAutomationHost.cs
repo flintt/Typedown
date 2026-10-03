@@ -28,7 +28,7 @@ namespace Typedown.Core.Services
         public WindowsAutomationHost(string version, IEditBarriers barriers = null)
         {
             Version = version;
-            coordinator = new DocumentEditCoordinator(EditorClassifierVersion, barriers) { Diagnostics = message => Log.Debug("automation: " + message) };
+            coordinator = DocumentEdits.Start(barriers);
         }
 
         public string Version { get; }

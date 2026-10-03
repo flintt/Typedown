@@ -458,7 +458,7 @@
     <comment>图片/Git</comment>
   </data>
   <data name="ImageUpload.Methods.OSS" xml:space="preserve">
-    <value>OSS</value>
+    <value>S3 / R2 / OSS / COS</value>
     <comment>图片/OSS</comment>
   </data>
   <data name="ImageUpload.Methods.PowerShell" xml:space="preserve">
@@ -569,10 +569,6 @@
     <value>Immaġni tal-Klibbord</value>
     <comment>图片/剪贴板图片</comment>
   </data>
-  <data name="View.Image.InsertAction.Clipboard.UseConfig.Title" xml:space="preserve">
-    <value>Konfigurazzjoni tat-tlugħ tal-immaġni tal-klibbord</value>
-    <comment>图片/剪贴板图片使用上传配置</comment>
-  </data>
   <data name="View.Image.InsertAction.Description" xml:space="preserve">
     <value>Azzjoni għall-eżekuzzjoni meta jiddaħħlu stampi</value>
     <comment>图片/当插入图片时执行的操作</comment>
@@ -585,10 +581,6 @@
     <value>Immaġni Lokali</value>
     <comment>图片/本地图片</comment>
   </data>
-  <data name="View.Image.InsertAction.Local.UseConfig.Title" xml:space="preserve">
-    <value>Konfigurazzjoni tat-tlugħ tal-immaġni lokali</value>
-    <comment>图片/本地图片使用上传配置</comment>
-  </data>
   <data name="View.Image.InsertAction.Title" xml:space="preserve">
     <value>Daħħal l-azzjoni tal-immaġni</value>
     <comment>图片/图片插入操作</comment>
@@ -600,10 +592,6 @@
   <data name="View.Image.InsertAction.Web.Title" xml:space="preserve">
     <value>Immaġni tal-Web</value>
     <comment>图片/网络图片</comment>
-  </data>
-  <data name="View.Image.InsertAction.Web.UseConfig.Title" xml:space="preserve">
-    <value>Konfigurazzjoni tat-tlugħ tal-immaġni tal-web</value>
-    <comment>图片/网络图片使用上传配置</comment>
   </data>
   <data name="View.Image.PreferRelativeImagePaths.Description" xml:space="preserve">
     <value>Tippreferi tuża mogħdija relattiva meta ddaħħal l-immaġnijiet</value>

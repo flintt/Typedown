@@ -96,20 +96,20 @@ namespace Typedown.Core.Services
             ImageUploadConfigs.UpdateCollection(newItems, (a, b) => a.Id == b.Id);
         }
 
+        /// <summary>The configuration uploads use (Settings > Image > Upload with), or null when none is chosen and enabled.</summary>
+        public ImageUploadConfig DefaultConfig
+        {
+            get
+            {
+                var id = serviceProvider.GetService<SettingsViewModel>().DefaultImageUploadConfigId;
+                return id.HasValue ? ImageUploadConfigs.FirstOrDefault(x => x.IsEnable && x.Id == id.Value) : null;
+            }
+        }
+
         public async Task<string> Upload(ImageAction.InsertImageSource source, string filePath)
         {
-            var settings = serviceProvider.GetService<SettingsViewModel>();
-            var configId = source switch
-            {
-                ImageAction.InsertImageSource.Clipboard => settings.InsertClipboardImageUseUploadConfigId,
-                ImageAction.InsertImageSource.Local => settings.InsertLocalImageUseUploadConfigId,
-                ImageAction.InsertImageSource.Web => settings.InsertWebImageUseUploadConfigId,
-                _ => throw new NotImplementedException()
-            };
-            if (!configId.HasValue || ImageUploadConfigs.Where(x => x.IsEnable && x.Id == configId.Value).FirstOrDefault() is not ImageUploadConfig config)
-            {
-                throw new InvalidOperationException("Failed to load upload configuration.");
-            }
+            if (DefaultConfig is not ImageUploadConfig config)
+                throw new InvalidOperationException(Locale.GetDialogString("UploadImages.NoConfig"));
             return await config.LoadUploadConfig().Upload(serviceProvider, filePath);
         }
 

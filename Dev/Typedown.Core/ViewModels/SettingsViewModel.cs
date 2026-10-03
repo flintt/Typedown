@@ -166,6 +166,13 @@ namespace Typedown.Core.ViewModels
         public InsertImageAction InsertWebImageAction { get => GetSettingValue(InsertImageAction.None); set => SetSettingValue(value); }
         public string InsertWebImageCopyPath { get => GetSettingValue("./images"); set => SetSettingValue(value); }
         public int? InsertWebImageUseUploadConfigId { get => GetSettingValue<int?>(null); set => SetSettingValue(value); }
+        /// <summary>
+        /// The upload configuration every upload uses (inserted images when their action is Upload, File > Upload local
+        /// images); stored 0 is "none". Until it is chosen, the one an inserted image used before (the three per-source
+        /// settings it replaces).
+        /// </summary>
+        public int? DefaultImageUploadConfigId { get => NoneIsNull(GetSettingValue(InsertClipboardImageUseUploadConfigId ?? InsertLocalImageUseUploadConfigId ?? InsertWebImageUseUploadConfigId)); set => SetSettingValue<int?>(value ?? 0); }
+        private static int? NoneIsNull(int? id) => id == 0 ? null : id;
         public IMarkdownEditor MarkdownEditor => ServiceProvider.GetService<IMarkdownEditor>();
         public string DefaultImageBasePath { get => GetSettingValue(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), Config.AppName)); set => SetSettingValue(value); }
         public bool AutoCopyRelativePathImage { get => GetSettingValue(true); set => SetSettingValue(value); }

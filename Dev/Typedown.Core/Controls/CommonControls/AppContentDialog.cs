@@ -249,13 +249,27 @@ namespace Typedown.Core.Controls
 
         private void SetResult(ContentDialogResult result)
         {
-            this.result.SetResult(result);
+            if (!this.result.TrySetResult(result))
+                return;
             var closingEventArgs = new AppContentDialogClosingEventArgs(result);
             Closing?.Invoke(this, closingEventArgs);
             if (closingEventArgs.Cancel)
                 return;
             Hide();
         }
+
+        /// <summary>
+        /// Closes the dialog as its close button would, without raising CloseButtonClick: ShowAsync returns None. Also
+        /// before the dialog is on screen (still waiting for another dialog), then it is never shown.
+        /// </summary>
+        public void Close()
+        {
+            closeRequested = true;
+            if (result != null && !result.Task.IsCompleted)
+                SetResult(ContentDialogResult.None);
+        }
+
+        private bool closeRequested;
 
         public void Hide()
         {
@@ -275,6 +289,8 @@ namespace Typedown.Core.Controls
             try
             {
                 result = new();
+                if (closeRequested)
+                    return ContentDialogResult.None;
                 grid.Children.Add(this);
                 return await result.Task;
             }

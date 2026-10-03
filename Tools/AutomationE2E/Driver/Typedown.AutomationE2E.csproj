@@ -15,5 +15,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Dev\Typedown.Automation\Typedown.Automation.csproj" />
+    <!-- IU02 makes its bucket and reads the object back with the application's own signing. -->
+    <Compile Include="..\..\..\Dev\Typedown.Core\Services\S3Uploader.cs" Link="S3Uploader.cs" />
   </ItemGroup>
 </Project>

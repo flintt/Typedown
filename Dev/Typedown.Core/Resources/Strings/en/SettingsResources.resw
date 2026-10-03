@@ -498,7 +498,7 @@
     <comment>图片/Git</comment>
   </data>
   <data name="ImageUpload.Methods.OSS" xml:space="preserve">
-    <value>OSS</value>
+    <value>S3 / R2 / OSS / COS</value>
     <comment>图片/OSS</comment>
   </data>
   <data name="ImageUpload.Methods.PowerShell" xml:space="preserve">
@@ -609,10 +609,6 @@
     <value>Clipboard Image</value>
     <comment>图片/剪贴板图片</comment>
   </data>
-  <data name="View.Image.InsertAction.Clipboard.UseConfig.Title" xml:space="preserve">
-    <value>Clipboard image upload configuration</value>
-    <comment>图片/剪贴板图片使用上传配置</comment>
-  </data>
   <data name="View.Image.InsertAction.Description" xml:space="preserve">
     <value>Action to execute when inserting images</value>
     <comment>图片/当插入图片时执行的操作</comment>
@@ -625,10 +621,6 @@
     <value>Local Image</value>
     <comment>图片/本地图片</comment>
   </data>
-  <data name="View.Image.InsertAction.Local.UseConfig.Title" xml:space="preserve">
-    <value>Local image upload configuration</value>
-    <comment>图片/本地图片使用上传配置</comment>
-  </data>
   <data name="View.Image.InsertAction.Title" xml:space="preserve">
     <value>Insert image action</value>
     <comment>图片/图片插入操作</comment>
@@ -640,10 +632,6 @@
   <data name="View.Image.InsertAction.Web.Title" xml:space="preserve">
     <value>Web Image</value>
     <comment>图片/网络图片</comment>
-  </data>
-  <data name="View.Image.InsertAction.Web.UseConfig.Title" xml:space="preserve">
-    <value>Web image upload configuration</value>
-    <comment>图片/网络图片使用上传配置</comment>
   </data>
   <data name="View.Image.PreferRelativeImagePaths.Description" xml:space="preserve">
     <value>Prefer to use relative path when inserting images</value>
@@ -894,5 +882,23 @@
   <data name="Editor.RenderPlantUml.Description" xml:space="preserve">
     <value>Sends the diagram's source to plantuml.com, which draws it</value>
     <comment>编辑器/绘制 PlantUML 图表：说明（源码会发送到 plantuml.com）</comment>
+  </data>
+  <data name="View.Image.UploadWith.Title" xml:space="preserve">
+    <value>Upload with</value>
+  </data>
+  <data name="View.Image.UploadWith.Description" xml:space="preserve">
+    <value>The upload configuration used for inserted images whose action is Upload, and by File &gt; Upload local images</value>
+  </data>
+  <data name="ImageUpload.S3.KeyPrefix" xml:space="preserve">
+    <value>Folder in bucket</value>
+  </data>
+  <data name="ImageUpload.S3.PublicUrl" xml:space="preserve">
+    <value>Public URL</value>
+  </data>
+  <data name="ImageUpload.S3.PathStyle" xml:space="preserve">
+    <value>Path-style addresses (MinIO and some providers)</value>
+  </data>
+  <data name="ImageUpload.S3.Incomplete" xml:space="preserve">
+    <value>The S3 configuration is incomplete: fill in Endpoint, Bucket, Access Key ID and Secret Access Key.</value>
   </data>
 </root>

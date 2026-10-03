@@ -458,7 +458,7 @@
     <comment>图片/Git</comment>
   </data>
   <data name="ImageUpload.Methods.OSS" xml:space="preserve">
-    <value>ওএচএচ</value>
+    <value>S3 / R2 / OSS / COS</value>
     <comment>图片/OSS</comment>
   </data>
   <data name="ImageUpload.Methods.PowerShell" xml:space="preserve">
@@ -569,10 +569,6 @@
     <value>ক্লিপবোৰ্ড ছবি</value>
     <comment>图片/剪贴板图片</comment>
   </data>
-  <data name="View.Image.InsertAction.Clipboard.UseConfig.Title" xml:space="preserve">
-    <value>ক্লিপবোৰ্ড ছবি আপলোড কনফিগাৰেচন</value>
-    <comment>图片/剪贴板图片使用上传配置</comment>
-  </data>
   <data name="View.Image.InsertAction.Description" xml:space="preserve">
     <value>ছবি অন্তৰ্ভুক্ত কৰোঁতে কাৰ্য সম্পাদন কৰিব লাগিব</value>
     <comment>图片/当插入图片时执行的操作</comment>
@@ -585,10 +581,6 @@
     <value>স্থানীয় ছবি</value>
     <comment>图片/本地图片</comment>
   </data>
-  <data name="View.Image.InsertAction.Local.UseConfig.Title" xml:space="preserve">
-    <value>স্থানীয় ছবি আপলোড কনফিগাৰেচন</value>
-    <comment>图片/本地图片使用上传配置</comment>
-  </data>
   <data name="View.Image.InsertAction.Title" xml:space="preserve">
     <value>ছবিৰ কাৰ্য্য অন্তৰ্ভুক্ত কৰক</value>
     <comment>图片/图片插入操作</comment>
@@ -600,10 +592,6 @@
   <data name="View.Image.InsertAction.Web.Title" xml:space="preserve">
     <value>ৱেব ছবি</value>
     <comment>图片/网络图片</comment>
-  </data>
-  <data name="View.Image.InsertAction.Web.UseConfig.Title" xml:space="preserve">
-    <value>ৱেব ছবি আপলোড কনফিগাৰেচন</value>
-    <comment>图片/网络图片使用上传配置</comment>
   </data>
   <data name="View.Image.PreferRelativeImagePaths.Description" xml:space="preserve">
     <value>ছবি অন্তৰ্ভুক্ত কৰোঁতে আপেক্ষিক পথ ব্যৱহাৰ কৰিবলৈ পছন্দ কৰক</value>

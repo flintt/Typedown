@@ -425,6 +425,8 @@
     <Compile Include="Services\ImageAction.cs" />
     <Compile Include="Services\ImageUpload.cs" />
     <Compile Include="Services\S3Uploader.cs" />
+    <Compile Include="Services\DocumentEdits.cs" />
+    <Compile Include="Services\ImageBatchUpload.cs" />
     <Compile Include="Services\RemoteInvoke.cs" />
     <Compile Include="Services\Transport.cs" />
     <Compile Include="Utilities\CollectionExtensions.cs" />

@@ -904,6 +904,7 @@
         "InsertLocalImageUseUploadConfigId",
         "InsertWebImageAction",
         "InsertWebImageUseUploadConfigId",
+        "DefaultImageUploadConfigId",
         "OpenFolderAfterExport"
       ]
     }

@@ -68,6 +68,7 @@ namespace Typedown.Core.ViewModels
         public Command<ExportConfig> ExportCommand { get; } = new();
         public Command<Unit> PrintCommand { get; } = new();
         public Command<Unit> ShareToHedgeDocCommand { get; } = new();
+        public Command<Unit> UploadLocalImagesCommand { get; } = new();
         public Command<Unit> ExitCommand { get; } = new();
 
         private readonly DispatcherTimer saveFileTimer = new();
@@ -103,6 +104,7 @@ namespace Typedown.Core.ViewModels
             ExportCommand.OnExecute.Subscribe(Export);
             PrintCommand.OnExecute.Subscribe(_ => Print());
             ShareToHedgeDocCommand.OnExecute.Subscribe(_ => ShareToHedgeDoc());
+            UploadLocalImagesCommand.OnExecute.Subscribe(async _ => await UploadLocalImages());
             ImportCommand.OnExecute.Subscribe(_ => Import());
             RemoteInvoke.Handle<JToken, bool>("ExportCallback", ExportCallback);
             RemoteInvoke.Handle<JToken, bool>("PrintHTML", PrintHTML);
@@ -602,6 +604,21 @@ namespace Typedown.Core.ViewModels
                     AppViewModel.NavigateCommand.Execute("Settings/Export");
                     return;
                 }
+                // Local pictures are files on this computer: the note's readers would not see them.
+                var localImages = await new ImageBatchUpload(AppViewModel).LocalImagesOfActiveDocumentAsync();
+                if (localImages.Count > 0)
+                {
+                    var upload = await AppContentDialog.Create(
+                        Locale.GetDialogString("HedgeDocShare.ResultTitle"),
+                        string.Format(Locale.GetDialogString("UploadImages.HedgeDocPrompt"), localImages.Count),
+                        Locale.GetString("Cancel"),
+                        Locale.GetDialogString("UploadImages.UploadFirst"),
+                        Locale.GetDialogString("UploadImages.ShareAnyway")).ShowAsync(AppViewModel.XamlRoot);
+                    if (upload == Windows.UI.Xaml.Controls.ContentDialogResult.None)
+                        return;
+                    if (upload == Windows.UI.Xaml.Controls.ContentDialogResult.Primary && !await UploadLocalImages())
+                        return;
+                }
                 await EditorViewModel.FlushContentAsync();
                 var markdown = EditorViewModel.Markdown;
                 var hash = Common.SimpleHash(markdown);
@@ -635,6 +652,89 @@ namespace Typedown.Core.ViewModels
             catch (Exception ex)
             {
                 await AppContentDialog.Create(Locale.GetString("Error"), ex.Message, Locale.GetString("Ok")).ShowAsync(AppViewModel.XamlRoot);
+            }
+        }
+
+        /// <summary>
+        /// File > Upload local images, with a progress dialog that can cancel and a dialog with the result. False when
+        /// nothing was uploaded because there is no configuration or the user cancelled.
+        /// </summary>
+        private async Task<bool> UploadLocalImages()
+        {
+            try
+            {
+                var title = Locale.GetDialogString("UploadImages.Title");
+                var batch = new ImageBatchUpload(AppViewModel);
+                if ((await batch.LocalImagesOfActiveDocumentAsync()).Count == 0)
+                {
+                    await AppContentDialog.Create(title, Locale.GetDialogString("UploadImages.None"), Locale.GetString("Ok")).ShowAsync(AppViewModel.XamlRoot);
+                    return true;
+                }
+                if (ServiceProvider.GetService<ImageUpload>().DefaultConfig == null)
+                {
+                    var open = await AppContentDialog.Create(title, Locale.GetDialogString("UploadImages.NoConfig"), Locale.GetString("Cancel"), Locale.GetDialogString("UploadImages.OpenSettings")).ShowAsync(AppViewModel.XamlRoot);
+                    if (open == Windows.UI.Xaml.Controls.ContentDialogResult.Primary)
+                        AppViewModel.NavigateCommand.Execute("Settings/Image");
+                    return false;
+                }
+
+                var status = new TextBlock { Text = string.Format(Locale.GetDialogString("UploadImages.Progress"), 1, "…"), TextWrapping = TextWrapping.Wrap };
+                var bar = new ProgressBar { IsIndeterminate = true, Margin = new Thickness(0, 12, 0, 0), MinWidth = 320 };
+                var panel = new StackPanel();
+                panel.Children.Add(status);
+                panel.Children.Add(bar);
+                var progressDialog = AppContentDialog.Create(title, panel, Locale.GetString("Cancel"));
+                using var cancel = new CancellationTokenSource();
+                var finished = false;
+                var shown = progressDialog.ShowAsync(AppViewModel.XamlRoot);
+                _ = shown.ContinueWith(_ => { if (!finished) cancel.Cancel(); }, TaskScheduler.FromCurrentSynchronizationContext());
+                var progress = new Progress<(int done, int total)>(p =>
+                {
+                    status.Text = string.Format(Locale.GetDialogString("UploadImages.Progress"), Math.Min(p.done + 1, p.total), p.total);
+                    bar.IsIndeterminate = false;
+                    bar.Maximum = Math.Max(p.total, 1);
+                    bar.Value = p.done;
+                });
+                ImageBatchUpload.Result result;
+                try
+                {
+                    result = await batch.RunAsync(progress, cancel.Token);
+                }
+                finally
+                {
+                    finished = true;
+                    progressDialog.Close();
+                    await shown;
+                }
+                if (result.NoConfig)
+                    return false;
+
+                var summary = string.Format(Locale.GetDialogString(result.Cancelled ? "UploadImages.Cancelled" : "UploadImages.Done"), result.Uploaded, result.Files);
+                object content = summary;
+                if (result.Failures.Count > 0)
+                {
+                    var details = new StackPanel { Spacing = 8 };
+                    details.Children.Add(new TextBlock { Text = summary, TextWrapping = TextWrapping.Wrap });
+                    details.Children.Add(new TextBlock { Text = Locale.GetDialogString("UploadImages.NotUploaded"), TextWrapping = TextWrapping.Wrap });
+                    details.Children.Add(new ScrollViewer
+                    {
+                        MaxHeight = 240,
+                        Content = new TextBlock
+                        {
+                            Text = string.Join("\n", result.Failures.Select(f => $"{f.Address}: {f.Reason}")),
+                            TextWrapping = TextWrapping.Wrap,
+                            IsTextSelectionEnabled = true,
+                        },
+                    });
+                    content = details;
+                }
+                await AppContentDialog.Create(title, content, Locale.GetString("Ok")).ShowAsync(AppViewModel.XamlRoot);
+                return !result.Cancelled;
+            }
+            catch (Exception ex)
+            {
+                await AppContentDialog.Create(Locale.GetString("Error"), ex.Message, Locale.GetString("Ok")).ShowAsync(AppViewModel.XamlRoot);
+                return false;
             }
         }
 
