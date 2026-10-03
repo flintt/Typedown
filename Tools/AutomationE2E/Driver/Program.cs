@@ -146,6 +146,7 @@ internal static class Program
             await Case("IN01 several image files dropped at once: each in a paragraph of its own, in the drop's order, one undo step", IN01);
             await Case("VI01 Vim keys in source mode: real keys edit (dd, A, Esc), Ctrl+V reaches Vim as block visual, u undoes, :w saves", VI01);
             await Case("VI02 Vim keys in reading mode: G, gg, ]] and Ctrl+D move the page", VI02);
+            await Case("TH01 a custom theme colours the page in visual, reading and source mode, and a change shows at once in each", TH01);
             // Last: it ends the test host.
             await Case("Q01 two windows closed one after the other: the process exits (it stayed, headless)", Q01);
         }
@@ -1080,6 +1081,49 @@ internal static class Program
         {
             await c.Call("test.settings.set", new { windowId, name = "ReadOnly", value = false });
             await c.Call("test.settings.set", new { windowId, name = "VimMode", value = false });
+        }
+    }
+
+    private static async Task TH01(List<string> notes)
+    {
+        using var c = await Session("e2e TH01");
+        var id = await Open(c, Fixture("th01.md", "# TH01\n\nText\n"));
+        var windowId = await WindowIdOf(c, id);
+        // The page's background variable, and what the source editor is painted with when it is shown.
+        async Task<JToken> Colours()
+        {
+            await Task.Delay(1200);
+            return (await c.Call("test.editor.eval", new { windowId, script = "(() => { const cm = document.querySelector('.CodeMirror'); return { bg: getComputedStyle(document.documentElement).getPropertyValue('--editorBgColor').trim(), cm: cm ? getComputedStyle(cm).backgroundColor : null, order: [...document.head.querySelectorAll('link[id^=link_style], style[id^=typedown-]')].map(e => e.id) } })()" }))["result"]!;
+        }
+        try
+        {
+            await c.Call("test.settings.set", new { windowId, name = "CustomTheme", value = "sepia" });
+            var visual = await Colours();
+            notes.Add("visual, sepia: " + visual.ToString(Formatting.None));
+            Check((string?)visual["bg"] == "#f4ecd8", $"visual mode has the theme's background ({visual["bg"]})");
+            await c.Call("test.settings.set", new { windowId, name = "ReadOnly", value = true });
+            var reading = await Colours();
+            notes.Add("reading: " + reading.ToString(Formatting.None));
+            Check((string?)reading["bg"] == "#f4ecd8", $"reading mode has it ({reading["bg"]})");
+            await c.Call("test.settings.set", new { windowId, name = "SourceCode", value = true });
+            var source = await Colours();
+            notes.Add("source: " + source.ToString(Formatting.None));
+            Check((string?)source["cm"] == "rgb(244, 236, 216)", $"source mode paints the editor with it ({source["cm"]})");
+            // Changed while in source mode: shown at once, not after the next mode switch.
+            await c.Call("test.settings.set", new { windowId, name = "CustomTheme", value = "solarized-light" });
+            var changed = await Colours();
+            notes.Add("source, solarized-light: " + changed.ToString(Formatting.None));
+            Check((string?)changed["cm"] != "rgb(244, 236, 216)" && (string?)changed["bg"] != "#f4ecd8", "a theme changed in source mode shows at once");
+            await c.Call("test.settings.set", new { windowId, name = "SourceCode", value = false });
+            var back = await Colours();
+            notes.Add("visual again: " + back.ToString(Formatting.None));
+            Check((string?)back["bg"] == (string?)changed["bg"], "back in visual mode the same theme");
+        }
+        finally
+        {
+            await c.Call("test.settings.set", new { windowId, name = "SourceCode", value = false });
+            await c.Call("test.settings.set", new { windowId, name = "ReadOnly", value = false });
+            await c.Call("test.settings.set", new { windowId, name = "CustomTheme", value = "" });
         }
     }
 
