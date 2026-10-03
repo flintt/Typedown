@@ -14,7 +14,9 @@ function getorCreateStyle(id: string) {
         style = document.createElement("link");
         style.rel = "stylesheet";
         style.id = id;
-        document.head.appendChild(style)
+        // Before the custom theme and the user's CSS (components/Editor), which set the same variables and must
+        // come later to win, whichever of them was created first.
+        document.head.insertBefore(style, document.getElementById('typedown-theme-css') ?? document.getElementById('typedown-custom-css'))
     }
     return style;
 }
