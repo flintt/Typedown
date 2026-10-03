@@ -819,7 +819,8 @@
         "PlantUmlServer"
       ],
       "uno": [
-        "RenderPlantUml"
+        "RenderPlantUml",
+        "PlantUmlServer"
       ]
     },
     {
