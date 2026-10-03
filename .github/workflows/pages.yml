@@ -20,6 +20,8 @@ concurrency:
 
 jobs:
   deploy:
+    # Not in a repository that builds only on request (BUILD_ON_PUSH 'false', see build.yml): Typeleaf is private and has no Pages.
+    if: github.event_name != 'push' || vars.BUILD_ON_PUSH != 'false'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
