@@ -67,17 +67,6 @@ const OUTLINE_TOP = 16
 /** Anything that means the reader is moving the page themselves; the scroll hold stops at the first of them. */
 const GIVE_WAY = ['wheel', 'keydown', 'pointerdown', 'touchstart']
 
-/** The style element with this id, appended to the head on first use. */
-const styleElement = (id: string) => {
-    let style = document.getElementById(id) as HTMLStyleElement | null
-    if (!style) {
-        style = document.createElement('style')
-        style.id = id
-        document.head.appendChild(style)
-    }
-    return style
-}
-
 const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     const { onMarkdownChange, onCursorChange, onStateChange, onOutlineCurrent } = props
     const [editor, setEditor] = useState<Muya>();
@@ -596,20 +585,6 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     useEffect(() => {
         document.body.classList.toggle('hide-paragraph-marker', props.options?.showParagraphMarker === false)
     }, [props.options?.showParagraphMarker])
-
-    // A custom theme and the user's own CSS are two style elements, in that order: a theme sets the palette,
-    // and whatever the user writes in the settings still has the last word.
-    useEffect(() => {
-        const css = props.options?.themeCss || ''
-        styleElement('typedown-theme-css').textContent = css
-        // The host paints the body to match the window chrome; a theme that sets its own page colour should win.
-        // Clearing it lets the next ThemeChanged from the host paint it again when the theme is switched off.
-        if (css) document.body.style.backgroundColor = 'var(--editorBgColor)'
-    }, [props.options?.themeCss])
-
-    useEffect(() => {
-        styleElement('typedown-custom-css').textContent = props.options?.customCss || ''
-    }, [props.options?.customCss])
 
     useEffect(() => {
         const readOnly = !!props.options?.readOnly

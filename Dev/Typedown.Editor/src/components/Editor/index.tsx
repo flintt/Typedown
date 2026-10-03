@@ -13,6 +13,17 @@ import { resetUserIntent, takeChangeOrigin } from "services/changeOrigin";
 import { sha256Hex } from "services/sha256";
 import { classifierVersion } from "services/normalization";
 
+/** The style element with this id, appended to the head on first use. */
+const styleElement = (id: string) => {
+    let style = document.getElementById(id) as HTMLStyleElement | null
+    if (!style) {
+        style = document.createElement('style')
+        style.id = id
+        document.head.appendChild(style)
+    }
+    return style
+}
+
 const Editor: React.FC = () => {
     // The document text and cursor live in refs, not React state: a state update per keystroke would commit
     // a React render while the contenteditable has focus, and React then walks the whole editor DOM to
@@ -207,6 +218,21 @@ const Editor: React.FC = () => {
     }, [options])
 
     // The host asks for this before it saves: whatever it holds must be what is on screen.
+    // A custom theme and the user's own CSS are two style elements, in that order: a theme sets the palette,
+    // and whatever the user writes in the settings still has the last word. Here, not in one editor, so they follow
+    // a change in every mode (source mode kept the old theme until the mode was switched).
+    useEffect(() => {
+        const css = options?.themeCss || ''
+        styleElement('typedown-theme-css').textContent = css
+        // The host paints the body to match the window chrome; a theme that sets its own page colour should win.
+        // Clearing it lets the next ThemeChanged from the host paint it again when the theme is switched off.
+        if (css) document.body.style.backgroundColor = 'var(--editorBgColor)'
+    }, [options?.themeCss])
+
+    useEffect(() => {
+        styleElement('typedown-custom-css').textContent = options?.customCss || ''
+    }, [options?.customCss])
+
     useEffect(() => transport.addListener<{ token?: number }>('FlushContent', ({ token }) => {
         flushRef.current?.()
         transport.postMessage('ContentFlushed', { token: token ?? 0, text: markdownRef.current })
