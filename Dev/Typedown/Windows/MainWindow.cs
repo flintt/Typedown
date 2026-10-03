@@ -74,7 +74,14 @@ namespace Typedown.Windows
 
         public void InitializeBinding()
         {
-            disposables.Add(AppViewModel.SettingsViewModel.WhenPropertyChanged(nameof(SettingsViewModel.AppTheme)).Cast<AppTheme>().StartWith(AppViewModel.SettingsViewModel.AppTheme).Subscribe(SetTheme));
+            // The theme in force, as the editor and the panels have it: a custom theme's base, else the built-in setting.
+            // Following the built-in setting alone left the window (its menus) light under a dark custom theme whenever
+            // the two settings disagreed - a theme file whose "base" was edited, or settings written elsewhere.
+            disposables.Add(AppViewModel.SettingsViewModel.WhenPropertyChanged(nameof(SettingsViewModel.AppTheme))
+                .Merge(AppViewModel.SettingsViewModel.WhenPropertyChanged(nameof(SettingsViewModel.CustomTheme)))
+                .Select(_ => AppViewModel.SettingsViewModel.EffectiveTheme)
+                .StartWith(AppViewModel.SettingsViewModel.EffectiveTheme)
+                .Subscribe(SetTheme));
             disposables.Add(AppViewModel.UIViewModel.WhenPropertyChanged(nameof(UIViewModel.MainWindowTitle)).Cast<string>().StartWith(AppViewModel.UIViewModel.MainWindowTitle).Subscribe(SetTitle));
             disposables.Add(AppViewModel.FileViewModel.NewWindowCommand.OnExecute.Subscribe(path => Utilities.Common.OpenNewWindow(new string[] { path }, forceNewWindow: true)));
             disposables.Add(AppViewModel.SettingsViewModel.WhenPropertyChanged(nameof(SettingsViewModel.UseMicaEffect)).Cast<bool>().StartWith(AppViewModel.SettingsViewModel.UseMicaEffect).Subscribe(EnableMicaEffect));
