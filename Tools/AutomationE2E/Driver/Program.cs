@@ -847,7 +847,9 @@ internal static class Program
         var windowId = await WindowIdOf(c, id);
         const string script = "(() => { const off = document.querySelector('.ag-plantuml-off'); " +
             "return { remote: [...document.querySelectorAll('img')].filter(i => (i.src || '').includes('plantuml.com')).length, " +
-            "off: !!off, notice: off ? getComputedStyle(off, '::before').content : null } })()";
+            "off: !!off, notice: off ? getComputedStyle(off, '::before').content : null, " +
+            "text: getComputedStyle(document.documentElement).getPropertyValue('--PlantUmlOff').slice(0, 40), first: getComputedStyle(document.documentElement).getPropertyValue('--FirstEditWarning').slice(0, 30), " +
+            "display: off ? getComputedStyle(off).display : null } })()";
         async Task<JToken> Page() { await Task.Delay(1200); return (await c.Call("test.editor.eval", new { windowId, script }))["result"]!; }
         var before = await Page();
         notes.Add("default: " + before.ToString(Formatting.None));

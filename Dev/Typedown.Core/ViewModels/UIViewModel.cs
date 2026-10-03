@@ -104,8 +104,10 @@ namespace Typedown.Core.ViewModels
             {
                 return args["names"].ToObject<List<string>>().ToDictionary(x => x, x => Locale.GetString(x));
             }
-            catch
+            catch (Exception ex)
             {
+                // The page then shows its placeholders and notices without text: say why.
+                Log.WriteLocal("GetStringResources", ex.ToString());
                 return new Dictionary<string, string>();
             }
         }
