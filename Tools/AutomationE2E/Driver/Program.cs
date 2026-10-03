@@ -977,12 +977,26 @@ internal static class Program
         Check((string)(await Get(c, id))["text"]! == original, "one undo takes all three out");
     }
 
-    // Real key presses into the focused page: characters as Unicode input, the rest by virtual key, Ctrl+key as a chord.
+    /// <summary>Characters sent as Unicode input: what an editor reads as text arrives whatever the keyboard layout or IME.</summary>
+    private sealed record Typed(string Text);
+
+    // Real key presses into the focused page, as a keyboard sends them: each character by its virtual key (with Shift
+    // when the layout needs it), the rest by virtual key, Ctrl+key as a chord. Characters sent as Unicode input
+    // (TypeChar) reach the page's keydown with the wrong key, which reading mode's keys read.
     private static void Keys(params object[] keys)
     {
         foreach (var k in keys)
         {
-            if (k is string text) foreach (var ch in text) TypeChar(ch);
+            if (k is Typed typed) foreach (var ch in typed.Text) TypeChar(ch);
+            else if (k is string text)
+                foreach (var ch in text)
+                {
+                    var scan = VkKeyScanW(ch);
+                    var vk = (ushort)(scan & 0xff);
+                    if ((scan & 0x100) != 0) Send(Key(0x10, false), Key(vk, false), Key(vk, true), Key(0x10, true));
+                    else Send(Key(vk, false), Key(vk, true));
+                    Thread.Sleep(30);
+                }
             else if (k is ushort vk) Send(Key(vk, false), Key(vk, true));
             else if (k is ValueTuple<string, ushort> chord && chord.Item1 == "ctrl") Send(Key(0x11, false), Key(chord.Item2, false), Key(chord.Item2, true), Key(0x11, true));
             Thread.Sleep(60);
@@ -1011,21 +1025,21 @@ internal static class Program
 
             Check(await Badge() == "-- NORMAL --", $"the badge says normal mode ({await Badge()})");
             await c.Call("test.editor.eval", new { windowId, script = "(window.__keys = [], window.addEventListener('keydown', e => window.__keys.push(e.key + (e.ctrlKey ? '^' : '')), true), 0)" });
-            Keys("gg2jdd", "A!", (ushort)0x1B);
+            Keys(new Typed("gg2jdd"), new Typed("A!"), (ushort)0x1B);
             notes.Add("page saw: " + (await c.Call("test.editor.eval", new { windowId, script = "JSON.stringify({ keys: window.__keys, active: document.activeElement && (document.activeElement.tagName + '.' + document.activeElement.className), state: window.__typedownVimWants ? 'loaded' : 'none' })" }))["result"]);
             var edited = await Text();
             notes.Add("after dd, A!, Esc: " + JsonConvert.SerializeObject(edited));
             Check(edited == "# VI01\n\ntwo!\nthree\n", "dd deleted the line, A appended, Esc left insert mode");
 
             // Ctrl+V is the application's paste; with Vim keys in normal mode it is Vim's block visual.
-            Keys("gg", ("ctrl", (ushort)0x56), "jd");
+            Keys(new Typed("gg"), ("ctrl", (ushort)0x56), new Typed("jd"));
             var block = await Text();
             notes.Add("after Ctrl+V j d: " + JsonConvert.SerializeObject(block));
             Check(block == " VI01\n\ntwo!\nthree\n", "Ctrl+V j d deleted the first column of two lines (block visual)");
-            Keys("u");
+            Keys(new Typed("u"));
             Check(await Text() == "# VI01\n\ntwo!\nthree\n", "u undid it");
 
-            Keys(":w", (ushort)0x0D);
+            Keys(new Typed(":w"), (ushort)0x0D);
             await Task.Delay(800);
             Check(Disk(path) == "# VI01\n\ntwo!\nthree\n", $"the file holds the text after :w ({JsonConvert.SerializeObject(Disk(path))})");
             Check((bool)(await Get(c, id))["saved"]!, ":w left the document saved");
@@ -1065,12 +1079,15 @@ internal static class Program
             Check((int)end["y"]! > 1000, "G goes to the end");
             Keys("gg");
             Check((int)(await Page())["y"]! == 0, "gg goes back to the top");
-            Keys("]]");
-            var heading = await Page();
-            notes.Add("]]: " + heading.ToString(Formatting.None));
-            Check((string?)heading["heading"] == "Part 1", "]] brings the next heading to the top");
+            // The document's title is the first heading; Part 1 the second.
             Keys("2]]");
-            Check((string?)(await Page())["heading"] == "Part 3", "2]] two headings on");
+            var heading = await Page();
+            notes.Add("2]]: " + heading.ToString(Formatting.None));
+            Check(((string?)heading["heading"]) is string h1 && h1.EndsWith("Part 1"), "2]] brings the second heading below the top to the top");
+            Keys("2]]");
+            Check(((string?)(await Page())["heading"]) is string h3 && h3.EndsWith("Part 3"), "2]] again: two headings on");
+            Keys("[[");
+            Check(((string?)(await Page())["heading"]) is string h2 && h2.EndsWith("Part 2"), "[[ the previous heading");
             var before = (int)(await Page())["y"]!;
             Keys(("ctrl", (ushort)0x44));
             var half = await Page();
@@ -2004,6 +2021,7 @@ internal static class Program
         if (SendInput((uint)inputs.Length, inputs, Marshal.SizeOf<INPUT>()) != inputs.Length) throw new CaseFailed("SendInput was refused (is the desktop locked?)");
     }
 
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)] private static extern short VkKeyScanW(char ch);
     [StructLayout(LayoutKind.Sequential)] private struct RECT { public int Left, Top, Right, Bottom; }
     [DllImport("user32.dll")] private static extern bool GetWindowRect(IntPtr window, out RECT rect);
     [DllImport("user32.dll")] private static extern bool SetCursorPos(int x, int y);
