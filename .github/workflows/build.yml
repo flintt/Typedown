@@ -247,11 +247,22 @@ jobs:
           /p:AppxPackageSigningEnabled=false
           /p:AppxPackageDir=${{ github.workspace }}\StoreUpload\
 
+      # MSBuild names it <name>.msixupload whatever the platform: version and platform in the name, so the two
+      # platforms' uploads do not overwrite each other where they are downloaded.
+      - name: Name the Store upload
+        if: steps.brand.outputs.store == 'true' && steps.build.outcome == 'success'
+        shell: pwsh
+        run: |
+          $upload = Get-ChildItem StoreUpload -Filter *.msixupload | Select-Object -First 1
+          if (-not $upload) { throw "no .msixupload in StoreUpload" }
+          Rename-Item $upload.FullName ("{0}_{1}_{2}.msixupload" -f $upload.BaseName, "${{ steps.ver.outputs.version }}", "${{ steps.ver.outputs.arch }}")
+          Get-ChildItem StoreUpload -Filter *.msixupload | ForEach-Object { "$($_.Name)  $($_.Length) bytes" }
+
       - uses: actions/upload-artifact@v4
         if: steps.brand.outputs.store == 'true' && steps.build.outcome == 'success'
         with:
           name: store-upload-${{ env.Platform }}
-          path: StoreUpload/**/*.msixupload
+          path: StoreUpload/*.msixupload
           if-no-files-found: error
           compression-level: 0
           retention-days: 30
