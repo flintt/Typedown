@@ -251,6 +251,22 @@ namespace Typedown.Services.Automation
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject();
                 });
             }));
+            // A theme picked as the View menu picks it (a custom theme brings its base light/dark along), and what the
+            // window then draws with.
+            methods.Add(new MethodDescriptor("test.theme.apply", null, "test.theme.apply/1", async (c, ct) =>
+            {
+                var id = c.Params.OptionalString("customTheme") ?? "";
+                var builtIn = c.Params.OptionalEnum("builtIn", "Default", "Default", "Light", "Dark", "Black");
+                return await Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    if (id.Length > 0)
+                        app.SettingsViewModel.ApplyCustomTheme(Core.Utilities.ThemeFiles.Find(id) ?? throw Params.Invalid("customTheme", "unknown"));
+                    else
+                        app.SettingsViewModel.ApplyBuiltInTheme((Core.Enums.AppTheme)System.Enum.Parse(typeof(Core.Enums.AppTheme), builtIn));
+                    var root = app.XamlRoot?.Content as global::Windows.UI.Xaml.FrameworkElement;
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["appTheme"] = app.SettingsViewModel.AppTheme.ToString(), ["actualTheme"] = root?.ActualTheme.ToString() };
+                });
+            }));
             methods.Add(new MethodDescriptor("test.images.uploadAll", null, "test.images.uploadAll/1", async (c, ct) =>
                 await await Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), async app =>
                 {

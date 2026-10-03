@@ -1114,7 +1114,17 @@ internal static class Program
         }
         try
         {
-            await c.Call("test.settings.set", new { windowId, name = "CustomTheme", value = "sepia" });
+            // As the View menu picks a theme: a custom one brings its base (light for both used here), and the window -
+            // its menus included - draws light. Set alone, the setting left the window dark under a light theme.
+            async Task Apply(string theme)
+            {
+                await c.Call("test.theme.apply", new { windowId, customTheme = theme });
+                await Task.Delay(800);
+                var applied = await c.Call("test.theme.apply", new { windowId, customTheme = theme });
+                notes.Add($"{theme}: " + applied.ToString(Formatting.None));
+                Check((string?)applied["appTheme"] == "Light" && (string?)applied["actualTheme"] == "Light", $"the window draws light under {theme} ({applied.ToString(Formatting.None)})");
+            }
+            await Apply("sepia");
             var visual = await Colours();
             notes.Add("visual, sepia: " + visual.ToString(Formatting.None));
             Check((string?)visual["bg"] == "#f4ecd8", $"visual mode has the theme's background ({visual["bg"]})");
@@ -1127,7 +1137,7 @@ internal static class Program
             notes.Add("source: " + source.ToString(Formatting.None));
             Check((string?)source["cm"] == "rgb(244, 236, 216)", $"source mode paints the editor with it ({source["cm"]})");
             // Changed while in source mode: shown at once, not after the next mode switch.
-            await c.Call("test.settings.set", new { windowId, name = "CustomTheme", value = "solarized-light" });
+            await Apply("solarized-light");
             var changed = await Colours();
             notes.Add("source, solarized-light: " + changed.ToString(Formatting.None));
             Check((string?)changed["cm"] != "rgb(244, 236, 216)" && (string?)changed["bg"] != "#f4ecd8", "a theme changed in source mode shows at once");
@@ -1140,7 +1150,7 @@ internal static class Program
         {
             await c.Call("test.settings.set", new { windowId, name = "SourceCode", value = false });
             await c.Call("test.settings.set", new { windowId, name = "ReadOnly", value = false });
-            await c.Call("test.settings.set", new { windowId, name = "CustomTheme", value = "" });
+            await c.Call("test.theme.apply", new { windowId, builtIn = "Default" });
         }
     }
 
