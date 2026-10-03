@@ -849,7 +849,7 @@ internal static class Program
         var id = await Open(c, Fixture("pu01.md", "# PU01\n\n```plantuml\nAlice -> Bob: hello\n```\n\nText\n"));
         var windowId = await WindowIdOf(c, id);
         const string script = "(() => { const off = document.querySelector('.ag-plantuml-off'); " +
-            "const img = [...document.querySelectorAll('img')].find(i => (i.src || '').includes('plantuml.com')); " +
+            "const img = [...document.querySelectorAll('img')].find(i => (i.getAttribute('src') || '').includes('/svg/~h')); " +
             "return { remote: [...document.querySelectorAll('img')].filter(i => (i.src || '').includes('plantuml.com')).length, src: img ? img.getAttribute('src') : null, " +
             "off: !!off, notice: off ? getComputedStyle(off, '::before').content : null, " +
             // The page's strings under both names: the Windows host answers camel-cased, the stylesheet reads both.
