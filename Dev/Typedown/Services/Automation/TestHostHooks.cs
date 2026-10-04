@@ -74,7 +74,7 @@ namespace Typedown.Services.Automation
                 return new Newtonsoft.Json.Linq.JObject { ["windows"] = report, ["files"] = new Newtonsoft.Json.Linq.JArray(files) };
             }));
 
-            // How a window's editor page is drawn, and moving a window to a page (the settings page) of its own.
+            // How a window's editor page is drawn: its font size, line height and text direction, as the page reports them.
             methods.Add(new MethodDescriptor("test.editor.style", null, "test.editor.style/1", async (c, ct) =>
                 await await Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), async app =>
                 {
@@ -110,6 +110,7 @@ namespace Typedown.Services.Automation
                     editor.CoreWebView2.Reload();
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject();
                 })));
+            // The window's native handle (HWND), for UI Automation and window messages from the driver.
             methods.Add(new MethodDescriptor("test.window.handle", null, "test.window.handle/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
                     (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["hwnd"] = app.MainWindow.ToInt64() })));
@@ -161,6 +162,7 @@ namespace Typedown.Services.Automation
                     keptWindows.Add(window);
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject();
                 })));
+            // Moves a window to a page, as its menu would: route "Settings/Editor" opens that settings page, "Main" goes back.
             methods.Add(new MethodDescriptor("test.window.navigate", null, "test.window.navigate/1", (c, ct) =>
             {
                 var route = c.Params.RequiredString("route", allowEmpty: false);
@@ -171,7 +173,7 @@ namespace Typedown.Services.Automation
                 });
             }));
 
-            // Settings across windows (stage 0b): open another window, change a setting in one, read it in another.
+            // Opens another window, as File > New window does, and returns its windowId once it is registered.
             methods.Add(new MethodDescriptor("test.window.open", null, "test.window.open/1", async (c, ct) =>
             {
                 var before = Core.Services.AutomationWindows.Registry.Snapshot().Select(w => w.WindowId).ToList();
@@ -185,6 +187,8 @@ namespace Typedown.Services.Automation
                 }
                 throw new AutomationException(AutomationErrorKind.editor_not_ready, "no new window registered");
             }));
+            // Sets a property of a window's settings view model by name, as its settings page would: also the settings the
+            // automation API does not expose.
             methods.Add(new MethodDescriptor("test.settings.set", null, "test.settings.set/1", (c, ct) =>
             {
                 var p = c.Params;
@@ -197,6 +201,7 @@ namespace Typedown.Services.Automation
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject();
                 });
             }));
+            // Reads a property of a window's settings view model by name.
             methods.Add(new MethodDescriptor("test.settings.get", null, "test.settings.get/1", (c, ct) =>
             {
                 var p = c.Params;
@@ -208,8 +213,8 @@ namespace Typedown.Services.Automation
                 });
             }));
 
-            // Image upload without its dialogs: an enabled configuration chosen as Settings > Image > Upload with, and
-            // File > Upload local images on the window's active document.
+            // Image upload without its dialogs: an enabled configuration (PowerShell or S3), chosen as Settings > Image >
+            // Upload with; returns what was stored, so a test can see that the secret is not there in plain text.
             methods.Add(new MethodDescriptor("test.images.configure", null, "test.images.configure/1", async (c, ct) =>
             {
                 var p = c.Params;
@@ -291,6 +296,7 @@ namespace Typedown.Services.Automation
                         ["actualTheme"] = (app.XamlRoot?.Content as global::Windows.UI.Xaml.FrameworkElement)?.ActualTheme.ToString() };
                 });
             }));
+            // File > Upload local images on the window's active document, without its dialogs; returns the result.
             methods.Add(new MethodDescriptor("test.images.uploadAll", null, "test.images.uploadAll/1", async (c, ct) =>
                 await await Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), async app =>
                 {

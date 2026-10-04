@@ -91,18 +91,21 @@ namespace Typedown.Automation.TestHost
         /// </summary>
         public void AddMethods(MethodTable methods)
         {
+            // Arms a one-shot barrier at a point of the write path (optionally for one document); returns its barrierId.
             methods.Add(new MethodDescriptor("test.barrier.arm", null, "test.barrier.arm/1", (c, _) =>
             {
                 var p = c.Params;
                 var id = Arm(p.RequiredString("point", allowEmpty: false), p.OptionalString("documentId"));
                 return Task.FromResult<JToken?>(new JObject { ["barrierId"] = id });
             }));
+            // Waits until an edit is held at the barrier (hit) or the timeout passes; the held operation's id.
             methods.Add(new MethodDescriptor("test.barrier.waitHit", null, "test.barrier.waitHit/1", async (c, ct) =>
             {
                 var p = c.Params;
                 var (hit, operationId) = await WaitHitAsync(p.RequiredString("barrierId"), TimeSpan.FromMilliseconds(p.OptionalInteger("timeoutMs", 0, 600000) ?? 10000), ct).ConfigureAwait(false);
                 return new JObject { ["hit"] = hit, ["operationId"] = operationId };
             }));
+            // Lets the held edit go on.
             methods.Add(new MethodDescriptor("test.barrier.release", null, "test.barrier.release/1", (c, _) =>
             {
                 Release(c.Params.RequiredString("barrierId"));
