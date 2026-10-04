@@ -4,8 +4,9 @@
     the Build Tools installed.
 
 .DESCRIPTION
-    Three steps: MSBuild builds Dev\Typedown (self-contained, per architecture), the output is copied to
-    Tools\Installer\publish, and ISCC compiles Tools\Installer\Typedown.iss over it. The result is
+    Three steps: MSBuild publishes Dev\Typedown (self-contained, per architecture, precompiled with ReadyToRun
+    as in CI), the output is copied to Tools\Installer\publish, and ISCC compiles Tools\Installer\Typedown.iss
+    over it. -AutomationTestHost only builds (the E2E scripts run the test host from its bin folder). The result is
     Tools\Installer\Output\Typedown-windows-<arch>-v<version>.exe.
 
     Unlike CI it does not sign anything — CI signs with a self-signed certificate the system does not trust
@@ -154,9 +155,16 @@ if (-not $SkipBuild) {
         # Restore,Build as targets in one evaluation misses those imports on a fresh checkout.
         $hostArgs = @()
         if ($AutomationTestHost) { $hostArgs = @('/p:AutomationTestHost=true') }
-        & $msbuild 'Dev\Typedown\Typedown.csproj' /restore /t:Build /m /v:m `
+        # The application is published, as the packaging project does in CI: a release comes out precompiled
+        # (ReadyToRun, Typedown.csproj). The test host is only built - the E2E scripts run it from its bin folder.
+        $target = if ($AutomationTestHost) { '/t:Build' } else { '/t:Publish' }
+        # An array built up, not "if (...) { @(...) }": PowerShell unwraps a one-element array to its string, and
+        # splatting a string passes it character by character.
+        $publishArgs = @()
+        if (-not $AutomationTestHost) { $publishArgs += "/p:PublishDir=$(Join-Path $repo "Dev\Typedown\bin\$Platform\$Configuration\publish")\" }
+        & $msbuild 'Dev\Typedown\Typedown.csproj' /restore $target /m /v:m `
             /p:Configuration=$Configuration /p:Platform=$Platform `
-            /p:ManifestTool=$($sdk.ManifestTool) /p:MakePri=$($sdk.MakePri) @hostArgs
+            /p:ManifestTool=$($sdk.ManifestTool) /p:MakePri=$($sdk.MakePri) @hostArgs @publishArgs
         $buildFailed = $LASTEXITCODE -ne 0
     }
     finally {
@@ -172,7 +180,7 @@ if ($AutomationTestHost) {
     Write-Host "Automation test host: $published"
     return
 }
-$published = Join-Path $repo "Dev\Typedown\bin\$Platform\$Configuration\netcoreapp3.1\$rid"
+$published = Join-Path $repo "Dev\Typedown\bin\$Platform\$Configuration\publish"
 $exe = ([xml](Get-Content (Join-Path $repo 'Branding.props'))).Project.PropertyGroup.BrandExeName + '.exe'
 if (-not (Test-Path (Join-Path $published $exe))) { throw "$exe not found in $published" }
 Write-Host "App: $published"

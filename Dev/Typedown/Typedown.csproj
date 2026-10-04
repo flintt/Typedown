@@ -52,6 +52,15 @@
 		<RuntimeIdentifiers>win10-x86;win-x86</RuntimeIdentifiers>
 	</PropertyGroup>
 
+	<!-- A release is published precompiled (ReadyToRun): the app's own assemblies need no JIT at start. Measured on
+	     hp (x64, 2026-10-04): process start to the document shown 2.89-3.00 s -> 2.40-2.49 s, the app folder
+	     144 -> 152 MB (the .NET runtime ships precompiled already). The packaging project publishes (CI's MSIX,
+	     installer and portable zip); Tools\Installer\build-local.ps1 publishes too. Windows x64 also compiles ARM64.
+	     After the platform groups: the condition needs their RuntimeIdentifier. -->
+	<PropertyGroup Condition="'$(Configuration)' == 'Release' and '$(RuntimeIdentifier)' != ''">
+		<PublishReadyToRun>true</PublishReadyToRun>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="7.0.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.32" />
