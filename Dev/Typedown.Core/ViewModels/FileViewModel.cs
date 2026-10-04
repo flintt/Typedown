@@ -673,7 +673,7 @@ namespace Typedown.Core.ViewModels
                     await AppContentDialog.Create(title, Locale.GetDialogString("UploadImages.None"), Locale.GetString("Ok")).ShowAsync(AppViewModel.XamlRoot);
                     return true;
                 }
-                if (ServiceProvider.GetService<ImageUpload>().DefaultConfig == null)
+                if (await ServiceProvider.GetService<ImageUpload>().GetDefaultConfigAsync() == null)
                 {
                     var open = await AppContentDialog.Create(title, Locale.GetDialogString("UploadImages.NoConfig"), Locale.GetString("Cancel"), Locale.GetDialogString("UploadImages.OpenSettings")).ShowAsync(AppViewModel.XamlRoot);
                     if (open == Windows.UI.Xaml.Controls.ContentDialogResult.Primary)

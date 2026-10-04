@@ -21,10 +21,17 @@ namespace Typedown.Core.Services
         {
             this.serviceProvider = serviceProvider;
             settings.ResetSettingsCommand.OnExecute.Subscribe(async _ => await ResetDefaultConfigs());
-            Initialize(settings);
+            Ready = InitializeAsync(settings);
         }
 
-        private async void Initialize(SettingsViewModel settings)
+        /// <summary>
+        /// Completes once <see cref="ImageUploadConfigs"/> holds what the database has. The service is made for a window
+        /// when it is first asked for, and the list is read in the background then: anything that looks a configuration
+        /// up awaits this, or the first upload after a start (or in a new window) found none and said so.
+        /// </summary>
+        public Task Ready { get; }
+
+        private async Task InitializeAsync(SettingsViewModel settings)
         {
             if (!settings.ImageUploadDatabaseInitialized)
             {
@@ -109,9 +116,17 @@ namespace Typedown.Core.Services
         /// <summary>What was uploaded with which configuration, for every window (Settings > Image > Upload history).</summary>
         public static UploadHistory History { get; } = new(System.IO.Path.Combine(Config.GetLocalFolderPath(), "ImageUploadHistory.json"));
 
+        /// <summary><see cref="DefaultConfig"/> once the configurations have been read (<see cref="Ready"/>).</summary>
+        public async Task<ImageUploadConfig> GetDefaultConfigAsync()
+        {
+            try { await Ready; }
+            catch (Exception ex) { Log.Debug($"image upload: reading the configurations failed: {ex.Message}"); }
+            return DefaultConfig;
+        }
+
         public async Task<string> Upload(ImageAction.InsertImageSource source, string filePath)
         {
-            if (DefaultConfig is not ImageUploadConfig config)
+            if (await GetDefaultConfigAsync() is not ImageUploadConfig config)
                 throw new InvalidOperationException(Locale.GetDialogString("UploadImages.NoConfig"));
             return (await UploadRemembered(config, filePath)).url;
         }

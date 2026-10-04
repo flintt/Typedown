@@ -142,6 +142,7 @@ internal static class Program
             await Case("PU01 PlantUML is not drawn by default (nothing goes to plantuml.com, the block says so); turned on it is, by the server set if one is, off again it is not", PU01);
             await Case("RV01 reveal: \"change\" scrolls a change off screen into view, the caret where it was; \"document\" leaves the page", RV01);
             await Case("IU01 File > Upload local images (PowerShell): each file uploaded once, every use replaced in one undo step, web, missing and code left alone", IU01);
+            await Case("IU03 a window that has not used the upload service yet finds the configuration at once (it said none until the database was read)", IU03);
             await Case("IU02 File > Upload local images to an S3 bucket (rclone serve s3): signed PUT, the object reads back, a wrong secret changes nothing, the secret is not stored in plain text", IU02);
             await Case("IN01 several image files dropped at once: each in a paragraph of its own, in the drop's order, one undo step", IN01);
             await Case("VI01 Vim keys in source mode: real keys edit (dd, A, Esc), Ctrl+V reaches Vim as block visual, u undoes, :w saves", VI01);
@@ -1250,6 +1251,47 @@ internal static class Program
         {
             await c.Call("test.theme.apply", new { windowId, builtIn = "Default" });
             File.Delete(file);
+        }
+    }
+
+    private static async Task IU03(List<string> notes)
+    {
+        using var c = await Session("e2e IU03");
+        var first = (string)((JArray)(await c.Call("window.list"))["windows"]!)[0]!["windowId"]!;
+        var doc = Fixture("iu03.md", "# IU03\n\n![fresh](iu03-images/fresh.png)\n");
+        var folder = Path.Combine(Path.GetDirectoryName(doc)!, "iu03-images");
+        Directory.CreateDirectory(folder);
+        File.WriteAllBytes(Path.Combine(folder, "fresh.png"), Png(33));
+        var log = Path.Combine(folder, "uploads.log");
+        File.Delete(log);
+        var script = "function Upload-Image([string]$path) {\n" + $"  Add-Content -LiteralPath '{log}' -Value $path\n" + "  'https://img.test/fresh.png'\n}\n";
+        await c.Call("test.images.configure", new { windowId = first, method = "powershell", config = new { script } });
+        // A new window has an upload service of its own, which reads the configurations when it is first asked -
+        // as every window does after a restart. Its first upload must find the configuration, not "none".
+        var windowId = (string)(await c.Call("test.window.open"))["windowId"]!;
+        await Task.Delay(1500);
+        var window = await WindowOf(windowId, c);
+        await Activate(window);
+        var id = await Open(c, doc);
+        Check(await WindowIdOf(c, id) == windowId, "the document opened in the new window");
+        await Task.Delay(800);
+        try
+        {
+            var result = await c.Call("test.images.uploadAll", new { windowId });
+            notes.Add("result: " + result.ToString(Formatting.None));
+            Check(!(bool)result["NoConfig"]!, "the first upload in a fresh window found the configuration");
+            Check((int)result["Uploaded"]! == 1, "and uploaded the picture");
+        }
+        finally
+        {
+            try
+            {
+                await c.Call("document.save", new { documentId = id, baseRevision = await Revision(c, id) });
+                await c.Call("document.close", new { documentId = id });
+            }
+            catch (Exception e) { notes.Add("cleanup: " + e.Message); }
+            PostMessage(window, 0x0010, IntPtr.Zero, IntPtr.Zero);
+            await Task.Delay(1000);
         }
     }
 

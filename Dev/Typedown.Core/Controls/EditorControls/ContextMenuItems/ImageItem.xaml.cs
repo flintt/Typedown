@@ -60,6 +60,10 @@ namespace Typedown.Core.Controls.EditorControls.ContextMenuItems
 
         private void UpdateImageUploadConfigItem()
         {
+            // The window's upload service reads its configurations when first asked: the first menu after a start
+            // would list none, so it fills in once they are read.
+            if (!ImageUpload.Ready.IsCompleted)
+                _ = ImageUpload.Ready.ContinueWith(_ => UpdateImageUploadConfigItem(), System.Threading.Tasks.TaskScheduler.FromCurrentSynchronizationContext());
             var configs = ImageUpload.ImageUploadConfigs.Where(x => x.IsEnable).ToList();
             while (UploadSubMenu.Items[1] is not MenuFlyoutSeparator)
                 UploadSubMenu.Items.RemoveAt(1);

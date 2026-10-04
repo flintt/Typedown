@@ -72,7 +72,7 @@ namespace Typedown.Core.Services
         {
             var result = new Result();
             var upload = app.ServiceProvider.GetService<ImageUpload>();
-            var config = upload.DefaultConfig;
+            var config = await upload.GetDefaultConfigAsync();
             var tab = app.TabsViewModel.ActiveTab;
             var images = await LocalImagesOfActiveDocumentAsync();
             var files = images.Values.Where(f => f != null).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
