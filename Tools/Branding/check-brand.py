@@ -133,6 +133,15 @@ scan(os.path.join(ROOT, "Tools/Installer/Typedown.iss"), [(word, "the product's 
 for f in files("Tools/Installer/*.ps1", "Tools/AutomationE2E/*.ps1", ".github/workflows/*.yml"):
     scan(f, [(exe_file, "a program by its file name")], comment="#")
 
+# Typedown itself adds nothing at the edition hook (Dev/Typedown/Edition.cs): an implementation there is an edition's.
+if name == "Typedown":
+    for f in files("Dev/Typedown/Edition.*.cs"):
+        problems.append(f"{rel(f)}: an edition's own code in Typedown - it belongs to the edition that uses it")
+    for f in files("Dev/Typedown/*.cs", "Dev/Typedown/**/*.cs"):
+        code = "\n".join(l for l in read(f).splitlines() if not l.lstrip().startswith("//"))  # not the doc's example
+        if re.search(r"static\s+partial\s+void\s+(RegisterServices|Initialize)\s*\([^)]*\)\s*\{", code):
+            problems.append(f"{rel(f)}: implements the edition hook - Typedown leaves it empty")
+
 if problems:
     print("\n".join(problems))
     print(f"\ncheck-brand: {len(problems)} problem(s); the names belong in Brand.cs, Branding.props, brand.iss and the manifest")

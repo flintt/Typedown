@@ -20,7 +20,9 @@ namespace Typedown
                 RegisterViewModel(builder);
                 RegisterService(builder);
                 RegisterComponent(builder);
+                Edition.Register(builder); // nothing in Typedown (Edition.cs)
                 ServiceProvider = builder.BuildServiceProvider();
+                Edition.Start(ServiceProvider);
             }
         }
 
