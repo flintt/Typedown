@@ -39,8 +39,8 @@ const loadRenderer = async (name) => {
         rendererCache.set(name, m.default)
         break
       case 'mermaid':
-        // Mermaid v11 is loaded as a global UMD script (see public/index.html)
-        // because bundling its UMD build through webpack fails to evaluate over file://.
+        // Mermaid v11 is loaded as a global UMD script because bundling its UMD build through webpack fails to
+        // evaluate over file://. The first look-up of window.mermaid is what loads it (public/lazy-mermaid.js).
         rendererCache.set(name, await waitForGlobal('mermaid'))
         break
       case 'vega-lite':
