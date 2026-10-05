@@ -4,6 +4,7 @@ import { escapeHTML } from '../utils'
 import ExportMarkdown from '../utils/exportMarkdown'
 import marked from '../parser/marked'
 import { sanitize, absoluteImageUrls } from '../utils'
+import { svgImagesAsPng } from 'services/localPaths'
 import { EXPORT_DOMPURIFY_CONFIG } from '../config'
 import remote from 'services/remote/common'
 import { selectionToPlainText } from 'services/plainText'
@@ -245,7 +246,7 @@ const copyCutCtrl = ContentState => {
 
     let htmlData = wrapper.innerHTML
     const textData = this.htmlToMarkdown(htmlData)
-    htmlData = absoluteImageUrls(marked(textData))
+    htmlData = svgImagesAsPng(absoluteImageUrls(marked(textData)))
     // What the selection reads as, without Markdown (services/plainText).
     const plainText = selectionToPlainText()
 
@@ -304,7 +305,7 @@ const copyCutCtrl = ContentState => {
     if (selectedImage) {
       // The picture itself for Word and mail (its Markdown source as HTML showed as text there), the Markdown as text.
       const { token } = selectedImage
-      remote.setClipboard({ type: 'text/html', data: type === 'normal' ? absoluteImageUrls(marked(token.raw)) : '' })
+      remote.setClipboard({ type: 'text/html', data: type === 'normal' ? svgImagesAsPng(absoluteImageUrls(marked(token.raw))) : '' })
       remote.setClipboard({ type: 'text/plain', data: token.raw })
       return
     }

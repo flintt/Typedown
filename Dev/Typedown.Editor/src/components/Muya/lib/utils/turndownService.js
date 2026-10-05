@@ -65,6 +65,19 @@ export const usePluginAddRules = (turndownService, keeps) => {
     }
   })
 
+  // A picture whose address has a space or brackets in it is written ![alt](<a b.png>): turndown's own rule wrote it
+  // bare, which is not a picture in Markdown (a copy of ![pic](<图 片.png>) came out as text).
+  turndownService.addRule('image', {
+    filter: 'img',
+    replacement (content, node) {
+      const alt = (node.getAttribute('alt') || '').replace(/([\[\]\\])/g, '\\$1')
+      const src = node.getAttribute('src') || ''
+      const title = node.getAttribute('title')
+      const address = /[\s()<>]/.test(src) ? `<${src.replace(/[<>]/g, encodeURIComponent)}>` : src
+      return src ? `![${alt}](${address}${title ? ` "${title.replace(/"/g, '\\"')}"` : ''})` : ''
+    }
+  })
+
   turndownService.escape = identity
   turndownService.keep(keeps)
 }

@@ -9,7 +9,8 @@ test('a relative image is at a file:/// address in the copied HTML', () => {
 })
 
 test('names with spaces and #, absolute and network paths', () => {
-  expect(src(absoluteImageUrls('<img src="b%20b.png">', 'C:\\n'))).toEqual(['file:///C:/n/b%20b.png'])
+  expect(src(absoluteImageUrls('<img src="b%20b.png">', 'C:\\n'))).toEqual(['file:///C:/n/b b.png'])
+  expect(src(absoluteImageUrls('<img src="图/流程 图.png">', 'C:\\笔记'))).toEqual(['file:///C:/笔记/图/流程 图.png'])
   expect(src(absoluteImageUrls('<img src="c#1.png">', 'C:\\n'))).toEqual(['file:///C:/n/c%231.png'])
   expect(src(absoluteImageUrls('<img src="D:\\pics\\x.png">', 'C:\\n'))).toEqual(['file:///D:/pics/x.png'])
   expect(src(absoluteImageUrls('<img src="\\\\server\\share\\x.png">', 'C:\\n'))).toEqual(['file://server/share/x.png'])

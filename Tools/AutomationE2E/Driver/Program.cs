@@ -1205,13 +1205,17 @@ internal static class Program
     private static async Task RD01(List<string> notes)
     {
         using var c = await Session("e2e RD01");
-        var path = Fixture("rd01.md", "# RD01 **bold**\n\nAlpha *beta* ![pic](rd01.png).\n");
-        var picture = Path.Combine(Path.GetDirectoryName(path)!, "rd01.png");
+        // A picture in a folder with a Chinese name (Word showed none whose address was percent-encoded) and an SVG (Word
+        // shows no SVG from pasted HTML: it goes in as PNG).
+        var path = Fixture("rd01.md", "# RD01 **bold**\n\nAlpha *beta* ![pic](图片/流程图.png) ![svg](rd01.svg).\n");
+        var picture = Path.Combine(Path.GetDirectoryName(path)!, "图片", "流程图.png");
+        Directory.CreateDirectory(Path.GetDirectoryName(picture)!);
+        File.WriteAllText(Path.Combine(Path.GetDirectoryName(path)!, "rd01.svg"), "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"30\" height=\"20\"><rect width=\"30\" height=\"20\" fill=\"red\"/></svg>");
         // A real picture, drawn in the page (its <img> is what Copy turns into HTML).
         File.WriteAllBytes(picture, Convert.FromBase64String("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=="));
         var id = await Open(c, path);
         var windowId = await WindowIdOf(c, id);
-        async Task Probe(string when) => notes.Add($"basePath {when}: " + (await c.Call("test.editor.eval", new { windowId, script = "String(window.basePath) + ' | ' + document.querySelectorAll('#ag-editor-id img').length + ' img'" }))["result"]);
+        async Task Probe(string when) => notes.Add($"basePath {when}: " + (await c.Call("test.editor.eval", new { windowId, script = "String(window.basePath) + ' | ' + document.querySelectorAll('#ag-editor-id img').length + ' img' + ' | drawn: ' + [...document.querySelectorAll('#ag-editor-id img')].map(i => i.src).join(', ') + ' | failed: ' + [...document.querySelectorAll('#ag-editor-id .ag-image-fail')].map(e => e.getAttribute('data-raw')).join(', ')" }))["result"]);
         await Task.Delay(1000);
         await Probe("after open");
         await TypeInto(c, id, "X");
@@ -1246,7 +1250,7 @@ internal static class Program
             Check((string)(await Get(c, id))["text"]! == edited, "document.redo puts it back");
             await Task.Delay(800);
             await Probe("after the redo");
-            Check(notes[^1].EndsWith(" 1 img") && !notes[^1].Contains("undefined"), "after a redo the picture is still drawn (the page kept the document's folder)");
+            Check(notes[^1].Contains(" 2 img") && !notes[^1].Contains("undefined"), "after a redo the pictures are still drawn (the page kept the document's folder)");
 
             Keys(("ctrl", (ushort)0x41));
             await Task.Delay(500);
@@ -1263,7 +1267,7 @@ internal static class Program
             ((System.Windows.Automation.InvokePattern)plain!.GetCurrentPattern(System.Windows.Automation.InvokePattern.Pattern)).Invoke();
             string? clip = null;
             for (var i = 0; i < 30 && clip?.Contains("Alpha") != true; i++) { await Task.Delay(100); clip = ClipboardText(); }
-            Check(clip == "RD01 bold\n\nAlpha beta pic.X", $"copy as plain text: the text without Markdown (clipboard {JsonConvert.SerializeObject(clip)})");
+            Check(clip == "RD01 bold\n\nAlpha beta pic svg.X", $"copy as plain text: the text without Markdown (clipboard {JsonConvert.SerializeObject(clip)})");
 
             // Copy puts the copy on the clipboard twice: formatted (HTML, for Word and mail) and as Markdown text. The text
             // used to replace the HTML, so Copy was Copy as Markdown.
@@ -1276,9 +1280,10 @@ internal static class Program
             Check(markdown?.Contains("**bold**") == true && markdown.Contains("Alpha *beta*"), "Copy: the text is the Markdown");
             Check(html?.Contains("<strong>bold</strong>") == true, "Copy: the formatted copy (HTML) is there too");
             // Word and mail have no document folder: a relative image showed as an empty frame there.
-            var fileUrl = new Uri(picture).AbsoluteUri;
-            Check(html?.Contains($"src=\"{fileUrl}\"") == true, $"Copy: the picture in the HTML is at its file address ({fileUrl})");
-            Check(markdown?.Contains("![pic](rd01.png)") == true, "Copy: the Markdown keeps the picture as written");
+            var fileUrl = "file:///" + picture.Replace('\\', '/');
+            Check(html?.Contains($"src=\"{fileUrl}\"") == true, $"Copy: the picture in the HTML is at its file address, its name as it is ({fileUrl})");
+            Check(html?.Contains("src=\"data:image/png;base64,") == true && html.Contains("width=\"30\"") && !html.Contains(".svg"), "Copy: the SVG is in the HTML as a PNG of its size");
+            Check(markdown?.Contains("![pic](图片/流程图.png) ![svg](rd01.svg)") == true, "Copy: the Markdown keeps the pictures as written");
 
             // The visual editor keeps its editing commands.
             await c.Call("test.settings.set", new { windowId, name = "ReadOnly", value = false });
@@ -1299,7 +1304,7 @@ internal static class Program
             for (var i = 0; i < 30 && pasted.Split("Alpha").Length < 3; i++) { await Task.Delay(200); pasted = (string)(await Get(c, id))["text"]!; }
             notes.Add("after the paste: " + JsonConvert.SerializeObject(pasted));
             notes.Add("page after the paste: " + (await c.Call("test.editor.eval", new { windowId, script = "document.getElementById('ag-editor-id').innerHTML.replace(/<svg[\\s\\S]*?<\\/svg>/g, '').slice(0, 1500)" }))["result"]);
-            Check(pasted.Split("**bold**").Length == 3 && pasted.Split("Alpha *beta*").Length == 3 && !pasted.Contains('<'),
+            Check(pasted.Split("**bold**").Length == 3 && pasted.Split("Alpha *beta*").Length == 3 && !pasted.Contains("<img") && !pasted.Contains("<h1"),
                 "pasting the copy back gives the Markdown it was copied as");
         }
         finally
