@@ -1286,6 +1286,16 @@ internal static class Program
             Check(html?.Contains($"src=\"{fileUrl}\"") == true, $"Copy: the picture in the HTML is at its file address, its name as it is ({fileUrl})");
             Check(html?.Contains("src=\"data:image/png;base64,") == true && html.Contains("width=\"30\"") && !html.Contains(".svg"), "Copy: the SVG is in the HTML as a PNG of its size");
             Check(markdown?.Contains("![pic](图片/流程图.png) ![svg](rd01.svg) ![sp](<带 空格.png>)") == true, "Copy: the Markdown keeps the pictures as written");
+            // The copy pasted into Word itself, where it is read (only where Word is installed).
+            if (PasteIntoWord(Path.GetDirectoryName(path)!) is { } word)
+            {
+                notes.Add($"Word: {word.shapes} picture(s) pasted, {word.media} embedded; {word.detail}");
+                // All three are pictures in the document (type 3), the SVG at the size it is shown at (30x20 px), not at
+                // its PNG's twice as many pixels. The two PNGs are the same file, which Word embeds once.
+                Check(word.detail == "type 3 0.8x0.8pt, type 3 22.5x15pt, type 3 0.8x0.8pt" && word.media == 2, "Word: every picture of the copy is in the pasted document, the SVG at its size");
+            }
+            else
+                notes.Add("Word: not installed, not tried");
 
             // The visual editor keeps its editing commands.
             await c.Call("test.settings.set", new { windowId, name = "ReadOnly", value = false });
@@ -1400,6 +1410,48 @@ internal static class Program
         {
             await Task.Delay(200);
             for (var i = 0; i < 2; i++) { Send(Key(0x1B, false), Key(0x1B, true)); await Task.Delay(150); }
+        }
+    }
+
+    /// <summary>
+    /// Pastes the clipboard into a new document of a Word of its own (hidden), saves it as .docx in the folder given and
+    /// counts the pictures in it and the picture files embedded in the .docx (a picture Word could not load is none).
+    /// Null where Word is not installed. A Word already running is left alone: when the new instance turns out to be
+    /// that one, only the document made here is closed.
+    /// </summary>
+    private static (int shapes, int media, string detail)? PasteIntoWord(string folder)
+    {
+        var type = Type.GetTypeFromProgID("Word.Application");
+        if (type == null) return null;
+        var before = Process.GetProcessesByName("WINWORD").Select(p => p.Id).ToHashSet();
+        dynamic word = Activator.CreateInstance(type)!;
+        var own = Process.GetProcessesByName("WINWORD").Any(p => !before.Contains(p.Id));
+        dynamic? document = null;
+        try
+        {
+            if (own) word.Visible = false;
+            document = word.Documents.Add();
+            document.Content.Paste();
+            int shapes = document.InlineShapes.Count;
+            var detail = new List<string>();
+            for (var i = 1; i <= shapes; i++)
+            {
+                var shape = document.InlineShapes[i];
+                detail.Add($"type {(int)shape.Type} {(double)shape.Width:0.#}x{(double)shape.Height:0.#}pt");
+            }
+            var file = Path.Combine(folder, "word-paste.docx");
+            document.SaveAs2(file, 16);
+            document.Close(0);
+            document = null;
+            using var zip = System.IO.Compression.ZipFile.OpenRead(file);
+            var media = zip.Entries.Count(e => e.FullName.StartsWith("word/media/"));
+            return (shapes, media, string.Join(", ", detail));
+        }
+        finally
+        {
+            if (document != null) document.Close(0);
+            if (own) word.Quit(0);
+            System.Runtime.InteropServices.Marshal.FinalReleaseComObject(word);
         }
     }
 

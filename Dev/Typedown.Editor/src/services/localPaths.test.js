@@ -1,4 +1,4 @@
-import { absoluteImageUrls } from './localPaths'
+import { absoluteImageUrls, withResolution } from './localPaths'
 
 const src = html => Array.from(new DOMParser().parseFromString(html, 'text/html').querySelectorAll('img')).map(i => i.getAttribute('src'))
 
@@ -21,4 +21,16 @@ test('web, data and file addresses stay; so does a relative one without a docume
   expect(src(absoluteImageUrls(html, 'C:\\n'))).toEqual(['https://e.com/a.png', 'data:image/png;base64,AAAA', 'file:///C:/a.png'])
   expect(src(absoluteImageUrls('<img src="a.png">', ''))).toEqual(['a.png'])
   expect(absoluteImageUrls('<p>no image</p>', 'C:\\n')).toBe('<p>no image</p>')
+})
+
+test('a PNG gets its resolution: a pHYs chunk right after the header, with a valid CRC', () => {
+  // 1x1 PNG
+  const png = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=='
+  const out = Uint8Array.from(atob(withResolution(png, 2).split(',')[1]), c => c.charCodeAt(0))
+  const view = new DataView(out.buffer)
+  expect(String.fromCharCode(...out.subarray(37, 41))).toBe('pHYs')
+  expect(view.getUint32(41)).toBe(7559) // 192 dpi in pixels per metre
+  expect(out[49]).toBe(1)
+  expect(view.getUint32(50)).toBe(0x8fe5f165) // zlib.crc32(b"pHYs" + data), computed apart
+  expect(String.fromCharCode(...out.subarray(58, 62))).toBe('IDAT')
 })

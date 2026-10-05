@@ -56,6 +56,43 @@ export const absoluteImageUrls = (html, basePath = window.basePath) => {
   return wrapper.innerHTML
 }
 
+const crcTable = Array.from({ length: 256 }, (_, n) => {
+  let c = n
+  for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1
+  return c >>> 0
+})
+const crc32 = bytes => {
+  let c = 0xffffffff
+  for (const b of bytes) c = crcTable[(c ^ b) & 0xff] ^ (c >>> 8)
+  return (c ^ 0xffffffff) >>> 0
+}
+
+/**
+ * A PNG data URL with its resolution set to `scale` times 96 dpi (a pHYs chunk after the header): Word sizes a pasted
+ * picture by its resolution and not by the HTML's width and height, so a picture drawn at twice its size for
+ * sharpness came out twice as large.
+ */
+export const withResolution = (dataUrl, scale) => {
+  const bytes = Uint8Array.from(atob(dataUrl.slice(dataUrl.indexOf(',') + 1)), ch => ch.charCodeAt(0))
+  const perMetre = Math.round(scale * 96 / 0.0254)
+  const chunk = new Uint8Array(21)
+  const view = new DataView(chunk.buffer)
+  view.setUint32(0, 9)
+  chunk.set([0x70, 0x48, 0x59, 0x73], 4) // pHYs
+  view.setUint32(8, perMetre)
+  view.setUint32(12, perMetre)
+  chunk[16] = 1 // unit: metre
+  view.setUint32(17, crc32(chunk.subarray(4, 17)))
+  const at = 8 + 25 // signature, then the IHDR chunk (length, type, 13 bytes of data, CRC)
+  const out = new Uint8Array(bytes.length + chunk.length)
+  out.set(bytes.subarray(0, at))
+  out.set(chunk, at)
+  out.set(bytes.subarray(at), at + chunk.length)
+  let binary = ''
+  for (const b of out) binary += String.fromCharCode(b)
+  return 'data:image/png;base64,' + btoa(binary)
+}
+
 /**
  * SVG pictures in a copy's HTML as PNG, embedded: Word does not show an SVG it is given in pasted HTML, wherever it
  * is, but takes a picture inside the HTML (data:). Each is drawn from the picture on the page (already loaded, so no
@@ -81,7 +118,7 @@ export const svgImagesAsPng = (html, page = document) => {
       canvas.width = width * 2
       canvas.height = height * 2
       canvas.getContext('2d').drawImage(source, 0, 0, canvas.width, canvas.height)
-      img.setAttribute('src', canvas.toDataURL('image/png'))
+      img.setAttribute('src', withResolution(canvas.toDataURL('image/png'), 2))
       img.setAttribute('width', String(width))
       img.setAttribute('height', String(height))
     } catch (e) { /* a picture the page may not read stays an address */ }
