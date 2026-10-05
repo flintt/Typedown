@@ -856,10 +856,13 @@ namespace Typedown.Core.ViewModels
             }
             OnMarkdownChange(state.Text);
             contentUpdating = true;
+            // The document's folder too, as Undo sends it: without it the page lost its folder, and every relative picture
+            // stopped loading after a redo.
             MarkdownEditor?.PostMessage("SetMarkdown", new
             {
                 text = state.Text,
                 cursor = state.Cursor,
+                basePath = FileViewModel.ImageBasePath,
                 loadId = NextHistoryLoadId(),
             });
         }

@@ -321,7 +321,8 @@ const Editor: React.FC = () => {
     // Host -> editor: text from the host's own undo history. Reports about the text held before are dropped until the
     // new text is in the editor, which then reports under the given loadId: the host can tell the two apart.
     useEffect(() => transport.addListener<{ text: string, cursor: string, basePath: string, loadId?: number }>('SetMarkdown', ({ text, cursor, basePath, loadId }) => {
-        window.basePath = basePath
+        // Only a message that names the folder changes it (Redo sent none, and every relative picture stopped loading).
+        if (basePath) window.basePath = basePath
         pendingSetRef.current = { loadId }
         setContentFromHost(text, cursor)
     }), [setContentFromHost]);

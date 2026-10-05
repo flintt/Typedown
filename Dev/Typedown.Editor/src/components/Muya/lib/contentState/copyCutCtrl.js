@@ -3,7 +3,7 @@ import { CLASS_OR_ID } from '../config'
 import { escapeHTML } from '../utils'
 import ExportMarkdown from '../utils/exportMarkdown'
 import marked from '../parser/marked'
-import { sanitize } from '../utils'
+import { sanitize, absoluteImageUrls } from '../utils'
 import { EXPORT_DOMPURIFY_CONFIG } from '../config'
 import remote from 'services/remote/common'
 import { selectionToPlainText } from 'services/plainText'
@@ -118,6 +118,21 @@ const copyCutCtrl = ContentState => {
       }
     }
 
+    // A picture is copied as its Markdown source says, not as drawn: one that did not load has no <img> and the
+    // conversion to Markdown dropped it, and a drawn one has the resolved absolute path, which the lookup below did not
+    // always map back (the Markdown then held C:/... for a relative picture). Pictures written as HTML keep that way.
+    for (const placeholder of wrapper.querySelectorAll('span.ag-inline-image')) {
+      const raw = placeholder.getAttribute('data-raw') || ''
+      const match = /^!\[((?:\\.|[^\]\\])*)\]\(\s*(<[^>]*>|[^\s)]+)(?:\s+(?:"([^"]*)"|'([^']*)'))?\s*\)$/.exec(raw)
+      if (!match) continue
+      const img = document.createElement('img')
+      img.setAttribute('alt', match[1].replace(/\\(.)/g, '$1'))
+      img.setAttribute('src', match[2].replace(/^<|>$/g, ''))
+      const title = match[3] ?? match[4]
+      if (title) img.setAttribute('title', title)
+      placeholder.replaceWith(img)
+    }
+
     const images = wrapper.querySelectorAll('span.ag-inline-image img')
     for (const image of images) {
       const src = image.getAttribute('src')
@@ -230,7 +245,7 @@ const copyCutCtrl = ContentState => {
 
     let htmlData = wrapper.innerHTML
     const textData = this.htmlToMarkdown(htmlData)
-    htmlData = marked(textData)
+    htmlData = absoluteImageUrls(marked(textData))
     // What the selection reads as, without Markdown (services/plainText).
     const plainText = selectionToPlainText()
 
@@ -287,8 +302,9 @@ const copyCutCtrl = ContentState => {
     }
     const { selectedImage } = this
     if (selectedImage) {
+      // The picture itself for Word and mail (its Markdown source as HTML showed as text there), the Markdown as text.
       const { token } = selectedImage
-      remote.setClipboard({ type: 'text/html', data: token.raw })
+      remote.setClipboard({ type: 'text/html', data: type === 'normal' ? absoluteImageUrls(marked(token.raw)) : '' })
       remote.setClipboard({ type: 'text/plain', data: token.raw })
       return
     }

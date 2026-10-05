@@ -70,8 +70,10 @@ const expected = [
       await page.evaluate(t => window.__deliver('Copy', { type: t, copyInfo: null }), type);
       await pause(300);
       const clip = await page.evaluate(() => window.__clip);
+      lastHtml = clip.filter(c => c.type === 'text/html').map(c => c.data).pop() ?? null;
       return clip.filter(c => c.type === 'text/plain').map(c => c.data).pop() ?? null;
     };
+    let lastHtml = null;
     const reported = () => page.evaluate(() => window.__last.ReadingSelectionChange?.selected);
 
     await mode(false, false);
@@ -106,6 +108,10 @@ const expected = [
     check('reading mode: SelectAll reports a selection', () => assert.equal(afterAll, true));
     const markdown = await copy('normal');
     check('reading mode: Copy after SelectAll gives the Markdown', () => assert.ok(markdown && markdown.includes('**bold**') && markdown.includes('Last line.'), JSON.stringify(markdown)));
+    // Word and mail have no document folder to resolve a relative image against: they showed an empty frame.
+    const copiedHtml = lastHtml;
+    check('Copy: an image in the HTML is at its file:/// address', () => assert.ok(copiedHtml && copiedHtml.includes('src="file:///tmp/a.png"'), JSON.stringify(copiedHtml)));
+    check('Copy: the Markdown keeps the image as written', () => assert.ok(markdown.includes('](a.png)'), JSON.stringify(markdown)));
     const plain = await copy('copyAsPlainText');
     check('reading mode: copy as plain text', () => assert.equal(plain, expected));
 

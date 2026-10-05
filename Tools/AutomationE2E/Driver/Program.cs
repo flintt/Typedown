@@ -1205,17 +1205,26 @@ internal static class Program
     private static async Task RD01(List<string> notes)
     {
         using var c = await Session("e2e RD01");
-        var id = await Open(c, Fixture("rd01.md", "# RD01 **bold**\n\nAlpha *beta*.\n"));
+        var path = Fixture("rd01.md", "# RD01 **bold**\n\nAlpha *beta* ![pic](rd01.png).\n");
+        var picture = Path.Combine(Path.GetDirectoryName(path)!, "rd01.png");
+        // A real picture, drawn in the page (its <img> is what Copy turns into HTML).
+        File.WriteAllBytes(picture, Convert.FromBase64String("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=="));
+        var id = await Open(c, path);
         var windowId = await WindowIdOf(c, id);
+        async Task Probe(string when) => notes.Add($"basePath {when}: " + (await c.Call("test.editor.eval", new { windowId, script = "String(window.basePath) + ' | ' + document.querySelectorAll('#ag-editor-id img').length + ' img'" }))["result"]);
+        await Task.Delay(1000);
+        await Probe("after open");
         await TypeInto(c, id, "X");
         await WaitForPage(c, id, t => t.Contains('X'), "the keystroke");
         await Task.Delay(500);
         var edited = (string)(await Get(c, id))["text"]!;
+        await Probe("after typing");
         var window = await WindowOf(windowId, c);
         try
         {
             await c.Call("test.settings.set", new { windowId, name = "ReadOnly", value = true });
             await Task.Delay(800);
+            await Probe("in reading mode");
             await Activate(window);
             await c.Call("test.editor.focus", new { windowId });
             await Task.Delay(200);
@@ -1235,6 +1244,9 @@ internal static class Program
             Check(!((string)(await Get(c, id))["text"]!).Contains('X'), "document.undo in reading mode still undoes");
             await c.Call("document.redo", new { documentId = id, baseRevision = await Revision(c, id) });
             Check((string)(await Get(c, id))["text"]! == edited, "document.redo puts it back");
+            await Task.Delay(800);
+            await Probe("after the redo");
+            Check(notes[^1].EndsWith(" 1 img") && !notes[^1].Contains("undefined"), "after a redo the picture is still drawn (the page kept the document's folder)");
 
             Keys(("ctrl", (ushort)0x41));
             await Task.Delay(500);
@@ -1251,7 +1263,7 @@ internal static class Program
             ((System.Windows.Automation.InvokePattern)plain!.GetCurrentPattern(System.Windows.Automation.InvokePattern.Pattern)).Invoke();
             string? clip = null;
             for (var i = 0; i < 30 && clip?.Contains("Alpha") != true; i++) { await Task.Delay(100); clip = ClipboardText(); }
-            Check(clip == "RD01 bold\n\nAlpha beta.X", $"copy as plain text: the text without Markdown (clipboard {JsonConvert.SerializeObject(clip)})");
+            Check(clip == "RD01 bold\n\nAlpha beta pic.X", $"copy as plain text: the text without Markdown (clipboard {JsonConvert.SerializeObject(clip)})");
 
             // Copy puts the copy on the clipboard twice: formatted (HTML, for Word and mail) and as Markdown text. The text
             // used to replace the HTML, so Copy was Copy as Markdown.
@@ -1263,6 +1275,10 @@ internal static class Program
             notes.Add("Copy: text " + JsonConvert.SerializeObject(markdown) + ", HTML " + JsonConvert.SerializeObject(html?.Length > 300 ? html[..300] : html));
             Check(markdown?.Contains("**bold**") == true && markdown.Contains("Alpha *beta*"), "Copy: the text is the Markdown");
             Check(html?.Contains("<strong>bold</strong>") == true, "Copy: the formatted copy (HTML) is there too");
+            // Word and mail have no document folder: a relative image showed as an empty frame there.
+            var fileUrl = new Uri(picture).AbsoluteUri;
+            Check(html?.Contains($"src=\"{fileUrl}\"") == true, $"Copy: the picture in the HTML is at its file address ({fileUrl})");
+            Check(markdown?.Contains("![pic](rd01.png)") == true, "Copy: the Markdown keeps the picture as written");
 
             // The visual editor keeps its editing commands.
             await c.Call("test.settings.set", new { windowId, name = "ReadOnly", value = false });
