@@ -102,6 +102,8 @@ namespace Typedown.Core.ViewModels
             EventCenter.GetObservable<EditorEventArgs>("SelectionChange").Subscribe(x => OnSelectionChange(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("CodeMirrorSelectionChange").Subscribe(x => OnCodeMirrorSelectionChange(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("ReadingSelectionChange").Subscribe(x => OnReadingSelectionChange(x.Args));
+            // A paste the page caught from the browser (its own would put the clipboard's HTML into the document as is).
+            EventCenter.GetObservable<EditorEventArgs>("PasteRequested").Subscribe(x => { if (!Settings.ReadOnly && !Settings.SourceCode) Paste(x.Args?["type"]?.ToString() ?? "normal"); });
             EventCenter.GetObservable<EditorEventArgs>("StateChange").Subscribe(x => OnStateChange(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("OutlineCurrent").Subscribe(x => OnOutlineCurrent(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("VimState").Subscribe(x => VimState = x.Args?["state"]?.ToString() ?? "off");
@@ -886,6 +888,8 @@ namespace Typedown.Core.ViewModels
                 {
                     var text = await Clipboard.GetTextAsync(TextDataFormat.UnicodeText);
                     var html = await Clipboard.GetTextAsync(TextDataFormat.Html);
+                    // Our own copy comes back as the Markdown it was copied as (see OnSetClipboard).
+                    if (lastCopiedText != null && text?.Replace("\r\n", "\n") == lastCopiedText.Replace("\r\n", "\n")) html = "";
                     if (Common.MatchHtmlImg(html) is HtmlImgTag img)
                     {
                         if (UriHelper.IsWebUrl(img.Src))
@@ -950,17 +954,32 @@ namespace Typedown.Core.ViewModels
             MarkdownEditor?.PostMessage("Copy", new { type });
         }
 
+        // The page sets one copy as two calls, the HTML and then the text. Each call used to replace the whole clipboard,
+        // so the text took the HTML away: Copy was the same as Copy as Markdown, and Word got the Markdown source. The
+        // HTML is kept until the text that follows it, and both go on the clipboard together.
+        private string pendingCopyHtml;
+        private DateTime pendingCopyHtmlAt;
+        // What the app last put on the clipboard as text: pasted back into any of its windows, the copy is that text (the
+        // Markdown) as it always was, not its HTML turned back into Markdown.
+        private static string lastCopiedText;
+
         public void OnSetClipboard(JToken arg)
         {
             var type = arg["type"].ToString();
             var data = arg["data"].ToString();
             if (type == "text/plain")
             {
-                Clipboard.SetText(data, TextDataFormat.UnicodeText);
+                var html = pendingCopyHtml != null && DateTime.UtcNow - pendingCopyHtmlAt < TimeSpan.FromSeconds(2) ? pendingCopyHtml : null;
+                pendingCopyHtml = null;
+                Clipboard.SetTextAndHtml(data, html);
+                lastCopiedText = data;
             }
             else if (type == "text/html")
             {
-                Clipboard.SetText(data, TextDataFormat.Html);
+                pendingCopyHtml = data;
+                pendingCopyHtmlAt = DateTime.UtcNow;
+                // HTML with no text after it still reaches the clipboard (an empty one only announces a text-only copy).
+                if (!string.IsNullOrEmpty(data)) Clipboard.SetTextAndHtml(null, data);
             }
         }
 

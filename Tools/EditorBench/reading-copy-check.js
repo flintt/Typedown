@@ -4,7 +4,8 @@
 // `#` in visual mode, a formula three times over, no image, no list numbers. Checked here:
 //  - reading mode: a drag reports a selection (ReadingSelectionChange), a click that clears it reports none;
 //  - reading mode: Ctrl+A and SelectAll select the document (not the page around it); Copy then gives Markdown, copy as plain text the text below;
-//  - visual mode, the caret in the heading (its markers shown): copy as plain text gives the same text.
+//  - visual mode, the caret in the heading (its markers shown): copy as plain text gives the same text;
+//  - a paste the browser would do itself is handed to the host's paste (visual mode) or dropped (reading mode).
 const assert = require('assert/strict');
 const { openEditor } = require('./harness');
 
@@ -120,6 +121,22 @@ const expected = [
     await pause(300);
     const visualPlain = await copy('copyAsPlainText');
     check('visual mode: copy as plain text, the heading\'s markers shown', () => assert.equal(visualPlain, expected));
+
+    // A paste the browser would do itself goes to the host's paste (it put the clipboard's HTML into the document as is).
+    const paste = () => page.evaluate(() => {
+      delete window.__last.PasteRequested;
+      const data = new DataTransfer();
+      data.setData('text/html', '<h1 id="x">Foreign</h1>');
+      data.setData('text/plain', 'Foreign');
+      const event = new ClipboardEvent('paste', { clipboardData: data, bubbles: true, cancelable: true });
+      document.querySelector('#ag-editor-id p').dispatchEvent(event);
+      return { prevented: event.defaultPrevented, requested: window.__last.PasteRequested ?? null };
+    });
+    const visualPaste = await paste();
+    check('visual mode: a browser paste is handed to the host', () => assert.deepEqual(visualPaste, { prevented: true, requested: { type: 'normal' } }));
+    await mode(false, true);
+    const readingPaste = await paste();
+    check('reading mode: a browser paste does nothing', () => assert.deepEqual(readingPaste, { prevented: true, requested: null }));
 
     check('no page errors', () => assert.deepEqual(errors, []));
   } finally {

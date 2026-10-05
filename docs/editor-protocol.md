@@ -82,7 +82,7 @@ sequenceDiagram
 | --- | --- | --- |
 | 页面 → 宿主事件 | 正文和生命周期 | `FileLoaded`, `MarkdownChange`, `ContentFlushed`, `StateChange`, `CursorChange`, `OutlineCurrent` |
 | 页面 → 宿主事件 | 选择和滚动 | `SelectionChange`, `SelectionFormats`, `CodeMirrorSelectionChange`, `ReadingSelectionChange`（阅读模式下有没有选中文字：`{ selected }`，宿主据此启用复制）, `OnScroll`, `ScrollSettled` |
-| 页面 → 宿主命令 | 系统动作 | `OpenURI` |
+| 页面 → 宿主命令 | 系统动作 | `OpenURI`, `PasteRequested`（浏览器自己的粘贴被页面拦下，交给宿主的粘贴） |
 | 页面 → 宿主 invoke | 初始化和系统服务 | `ContentLoaded`, `GetSettings`, `GetCurrentTheme`, `GetStringResources`, `SetClipboard`, `OpenNewWindow`, `UnhandledException` |
 | 页面 → 宿主 invoke | 导入导出工具 | `ExportCallback`, `PrintHTML`, `ResizeTable` |
 | 宿主 → 页面 | 文档和模式 | `LoadFile`, `SetMarkdown`, `FlushContent`, `SettingsChanged`, `RestoreScroll` |

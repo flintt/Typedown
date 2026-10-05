@@ -1253,12 +1253,38 @@ internal static class Program
             for (var i = 0; i < 30 && clip?.Contains("Alpha") != true; i++) { await Task.Delay(100); clip = ClipboardText(); }
             Check(clip == "RD01 bold\n\nAlpha beta.X", $"copy as plain text: the text without Markdown (clipboard {JsonConvert.SerializeObject(clip)})");
 
+            // Copy puts the copy on the clipboard twice: formatted (HTML, for Word and mail) and as Markdown text. The text
+            // used to replace the HTML, so Copy was Copy as Markdown.
+            var again = await ContextMenuAt(c, windowId, window, "#ag-editor-id p");
+            ((System.Windows.Automation.InvokePattern)again["CopyItem"].GetCurrentPattern(System.Windows.Automation.InvokePattern.Pattern)).Invoke();
+            string? markdown = null;
+            for (var i = 0; i < 30 && markdown?.Contains("**bold**") != true; i++) { await Task.Delay(100); markdown = ClipboardText(); }
+            var html = ClipboardHtml();
+            notes.Add("Copy: text " + JsonConvert.SerializeObject(markdown) + ", HTML " + JsonConvert.SerializeObject(html?.Length > 300 ? html[..300] : html));
+            Check(markdown?.Contains("**bold**") == true && markdown.Contains("Alpha *beta*"), "Copy: the text is the Markdown");
+            Check(html?.Contains("<strong>bold</strong>") == true, "Copy: the formatted copy (HTML) is there too");
+
             // The visual editor keeps its editing commands.
             await c.Call("test.settings.set", new { windowId, name = "ReadOnly", value = false });
             await Task.Delay(800);
             var visual = await ContextMenuAt(c, windowId, window, "#ag-editor-id p");
             notes.Add("visual mode menu: " + string.Join(", ", visual.Keys));
             Check(visual.ContainsKey("UndoItem") && visual.ContainsKey("CutItem") && visual.ContainsKey("PasteItem") && visual.ContainsKey("CopyAsPlainTextItem"), "the visual editor's menu has undo, cut, paste and copy as plain text");
+            Send(Key(0x1B, false), Key(0x1B, true));
+            await Task.Delay(300);
+
+            // Pasted back into the document, the copy is the Markdown it was copied as (not its HTML turned back).
+            await Activate(window);
+            await c.Call("test.editor.focus", new { windowId });
+            await Task.Delay(200);
+            Send(Key(0x11, false), Key(0x23, false), Key(0x23, true), Key(0x11, true));
+            Keys((ushort)0x0D, ("ctrl", (ushort)0x56));
+            string pasted = "";
+            for (var i = 0; i < 30 && pasted.Split("Alpha").Length < 3; i++) { await Task.Delay(200); pasted = (string)(await Get(c, id))["text"]!; }
+            notes.Add("after the paste: " + JsonConvert.SerializeObject(pasted));
+            notes.Add("page after the paste: " + (await c.Call("test.editor.eval", new { windowId, script = "document.getElementById('ag-editor-id').innerHTML.replace(/<svg[\\s\\S]*?<\\/svg>/g, '').slice(0, 1500)" }))["result"]);
+            Check(pasted.Split("**bold**").Length == 3 && pasted.Split("Alpha *beta*").Length == 3 && !pasted.Contains('<'),
+                "pasting the copy back gives the Markdown it was copied as");
         }
         finally
         {
@@ -1354,6 +1380,22 @@ internal static class Program
         }
     }
 
+    /// <summary>The clipboard's HTML (the "HTML Format" a formatted copy carries, header included); null when there is none.</summary>
+    private static string? ClipboardHtml()
+    {
+        var format = RegisterClipboardFormat("HTML Format");
+        for (var i = 0; i < 10 && !OpenClipboard(IntPtr.Zero); i++) Thread.Sleep(50);
+        try
+        {
+            var handle = GetClipboardData(format);
+            if (handle == IntPtr.Zero) return null;
+            var pointer = GlobalLock(handle);
+            try { return Marshal.PtrToStringUTF8(pointer); }
+            finally { GlobalUnlock(handle); }
+        }
+        finally { CloseClipboard(); }
+    }
+
     /// <summary>The clipboard's text (CF_UNICODETEXT), line endings as "\n"; null when there is none.</summary>
     private static string? ClipboardText()
     {
@@ -1372,6 +1414,7 @@ internal static class Program
     [DllImport("user32.dll")] private static extern bool SetProcessDpiAwarenessContext(IntPtr context);
     [DllImport("user32.dll", SetLastError = true)] private static extern bool OpenClipboard(IntPtr owner);
     [DllImport("user32.dll")] private static extern bool CloseClipboard();
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)] private static extern uint RegisterClipboardFormat(string name);
     [DllImport("user32.dll")] private static extern IntPtr GetClipboardData(uint format);
     [DllImport("kernel32.dll")] private static extern IntPtr GlobalLock(IntPtr memory);
     [DllImport("kernel32.dll")] private static extern bool GlobalUnlock(IntPtr memory);

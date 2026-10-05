@@ -23,6 +23,9 @@ namespace Typedown.Core.Interfaces
 
         void SetText(string text);
 
+        /// <summary>One copy in two forms: the text, and the same content formatted (HTML) for the programs that take it.</summary>
+        void SetTextAndHtml(string text, string html);
+
         Task<StringCollection> GetFileDropListAsync();
 
         Task SetFileDropListAsync(StringCollection fileDropList);

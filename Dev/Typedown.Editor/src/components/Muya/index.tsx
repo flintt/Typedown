@@ -611,6 +611,24 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         applyOnce(editor, 'readOnly', readOnly, () => editor?.contentState?.render(!readOnly, true))
     }, [editor, props.options?.readOnly])
 
+    // A paste the browser does itself (Ctrl+V reaching the page while the host's shortcut did not take it) put the
+    // clipboard's HTML straight into the document, as foreign elements Muya does not know and never reports: the
+    // document on screen and the text saved parted ways. Every paste goes through the host's (Edit > Paste), which
+    // brings images and files along and hands the page the text and HTML; reading mode takes none.
+    useEffect(() => {
+        if (!editor) return
+        const onPaste = (event: ClipboardEvent) => {
+            const container = editor.container as HTMLElement
+            if (!(event.target instanceof Node) || !container.contains(event.target)) return
+            event.preventDefault()
+            event.stopPropagation()
+            if (optionsRef.current?.readOnly) return
+            transport.postMessage('PasteRequested', { type: 'normal' })
+        }
+        document.addEventListener('paste', onPaste, true)
+        return () => document.removeEventListener('paste', onPaste, true)
+    }, [editor])
+
     // Reading mode has no caret, so Muya reports no selection change, and the host kept Copy disabled whatever
     // the reader selected. Here the page says whether text in the document is selected; the host enables the
     // copy commands by it (EditorViewModel.OnReadingSelectionChange).

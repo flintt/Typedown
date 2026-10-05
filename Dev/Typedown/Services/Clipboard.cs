@@ -77,6 +77,15 @@ namespace Typedown.Services
             return null;
         }
 
+        public void SetTextAndHtml(string text, string html)
+        {
+            var dataPackage = new global::Windows.ApplicationModel.DataTransfer.DataPackage();
+            if (!string.IsNullOrEmpty(text)) dataPackage.SetText(text);
+            // CF_HTML: the fragment with the header Word and the browsers read it by.
+            if (!string.IsNullOrEmpty(html)) dataPackage.SetHtmlFormat(global::Windows.ApplicationModel.DataTransfer.HtmlFormatHelper.CreateHtmlFormat(html));
+            global::Windows.ApplicationModel.DataTransfer.Clipboard.SetContent(dataPackage);
+        }
+
         public void SetText(string text, TextDataFormat format)
         {
             var dataPackage = new global::Windows.ApplicationModel.DataTransfer.DataPackage();
