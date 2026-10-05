@@ -54,6 +54,16 @@ Muya.use(ImageToolbar)
 Muya.use(FrontMenu)
 // The selection format bar: the plugin was never registered, so the host's handler for it never fired.
 Muya.use(FormatPicker)
+/** Selects the document's text (reading mode's select-all). */
+function selectDocument(container: HTMLElement | undefined) {
+    const selection = window.getSelection()
+    if (!container || !selection) return
+    const range = document.createRange()
+    range.selectNodeContents(container)
+    selection.removeAllRanges()
+    selection.addRange(range)
+}
+
 Muya.use(LinkTools, { jumpClick: (linkInfo: { href: string }) => { transport.postMessage('OpenURI', { uri: linkInfo.href }) } })
 Muya.use(TableBarTools)
 Muya.use(FootnoteTool)
@@ -316,6 +326,12 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     }), [editor]);
 
     useEffect(() => transport.addListener('SelectAll', () => {
+        // Reading mode: the page is not editable and never has the focus Muya's select-all asks for, so it
+        // selected nothing (and a copy after it copied nothing). The whole document is selected as text instead.
+        if (optionsRef.current?.readOnly) {
+            selectDocument(editor?.container)
+            return
+        }
         editor?.selectAll()
     }), [editor]);
 
@@ -593,6 +609,41 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         // Re-render so the Markdown markers and the editing affordances of the active block disappear (and come
         // back with the caret when reading mode is switched off) instead of waiting for the next edit.
         applyOnce(editor, 'readOnly', readOnly, () => editor?.contentState?.render(!readOnly, true))
+    }, [editor, props.options?.readOnly])
+
+    // Reading mode has no caret, so Muya reports no selection change, and the host kept Copy disabled whatever
+    // the reader selected. Here the page says whether text in the document is selected; the host enables the
+    // copy commands by it (EditorViewModel.OnReadingSelectionChange).
+    useEffect(() => {
+        if (!editor || !props.options?.readOnly) return
+        let last: boolean | null = null
+        let frame = 0
+        const report = () => {
+            frame = 0
+            const selection = window.getSelection()
+            const container = editor.container as HTMLElement
+            const selected = !!selection && !selection.isCollapsed && selection.rangeCount > 0 &&
+                selection.getRangeAt(0).intersectsNode(container) && selection.toString().trim() !== ''
+            if (selected === last) return
+            last = selected
+            transport.postMessage('ReadingSelectionChange', { selected })
+        }
+        const onChange = () => { if (!frame) frame = requestAnimationFrame(report) }
+        // The browser's own Ctrl+A would select the whole page, the tools around the document included.
+        const onKey = (event: KeyboardEvent) => {
+            if ((event.ctrlKey || event.metaKey) && !event.altKey && !event.shiftKey && event.key.toLowerCase() === 'a') {
+                event.preventDefault()
+                selectDocument(editor.container)
+            }
+        }
+        document.addEventListener('selectionchange', onChange)
+        document.addEventListener('keydown', onKey, true)
+        report()
+        return () => {
+            document.removeEventListener('selectionchange', onChange)
+            document.removeEventListener('keydown', onKey, true)
+            if (frame) cancelAnimationFrame(frame)
+        }
     }, [editor, props.options?.readOnly])
 
     useEffect(() => {

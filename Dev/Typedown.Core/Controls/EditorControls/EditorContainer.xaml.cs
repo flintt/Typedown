@@ -192,5 +192,11 @@ namespace Typedown.Core.Controls
         {
             return isImageFormat && (selection["selectedImage"]?.HasValues ?? false);
         }
+
+        /// <summary>The bold/italic/... row: not in reading mode, where the page refuses every format.</summary>
+        public static bool IsLoadFormatMenu(bool formatIsEnable, bool readOnly) => formatIsEnable && !readOnly;
+
+        /// <summary>Paste as plain text: in the visual editor only (source mode has no paste-as, reading mode no paste).</summary>
+        public static Visibility IsPasteAsVisible(bool sourceCode, bool readOnly) => sourceCode || readOnly ? Visibility.Collapsed : Visibility.Visible;
     }
 }

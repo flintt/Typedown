@@ -148,6 +148,7 @@ internal static class Program
             await Case("VI01 Vim keys in source mode: real keys edit (dd, A, Esc), Ctrl+V reaches Vim as block visual, u undoes, :w saves", VI01);
             await Case("VI02 Vim keys in reading mode: G, gg, ]] and Ctrl+D move the page", VI02);
             await Case("TH01 a custom theme colours the page in visual, reading and source mode, and a change shows at once in each", TH01);
+            await Case("RD01 reading mode: the context menu offers copying and selecting only, Copy works on a selection, copy as plain text leaves the Markdown out, Ctrl+Z changes nothing", RD01);
             await Case("TH02 View > Theme > Reload themes finds a new theme file and a renamed one; the window draws in the custom theme's base whatever the built-in setting says", TH02);
             // Last: it ends the test host.
             await Case("Q01 two windows closed one after the other: the process exits (it stayed, headless)", Q01);
@@ -1197,6 +1198,183 @@ internal static class Program
             await c.Call("test.theme.apply", new { windowId, builtIn = "Default" });
         }
     }
+
+    // Reading mode, as a reader uses it: Ctrl+Z after an edit, Ctrl+A, a right-click on the text, copy as plain text
+    // from the menu. Undo replaced the document from the host's history even there; Copy stayed disabled whatever was
+    // selected (the page reported no selection without a caret); select-all selected nothing.
+    private static async Task RD01(List<string> notes)
+    {
+        using var c = await Session("e2e RD01");
+        var id = await Open(c, Fixture("rd01.md", "# RD01 **bold**\n\nAlpha *beta*.\n"));
+        var windowId = await WindowIdOf(c, id);
+        await TypeInto(c, id, "X");
+        await WaitForPage(c, id, t => t.Contains('X'), "the keystroke");
+        await Task.Delay(500);
+        var edited = (string)(await Get(c, id))["text"]!;
+        var window = await WindowOf(windowId, c);
+        try
+        {
+            await c.Call("test.settings.set", new { windowId, name = "ReadOnly", value = true });
+            await Task.Delay(800);
+            await Activate(window);
+            await c.Call("test.editor.focus", new { windowId });
+            await Task.Delay(200);
+            Keys(("ctrl", (ushort)0x5A));
+            await Task.Delay(1000);
+            Check((string)(await Get(c, id))["text"]! == edited, "Ctrl+Z in reading mode leaves the document as it was");
+            // Edit > Undo, clicked the way a screen reader clicks it: this one went to the history directly.
+            await InvokeMenuBarItem(window, "UndoItem");
+            await Task.Delay(1000);
+            Check((string)(await Get(c, id))["text"]! == edited, "Edit > Undo in reading mode leaves the document as it was");
+            // The keyboard back to the page after the menu bar had it.
+            await Activate(window);
+            await c.Call("test.editor.focus", new { windowId });
+            await Task.Delay(300);
+            // An automation client's undo is a write, which reading mode allows.
+            await c.Call("document.undo", new { documentId = id, baseRevision = await Revision(c, id) });
+            Check(!((string)(await Get(c, id))["text"]!).Contains('X'), "document.undo in reading mode still undoes");
+            await c.Call("document.redo", new { documentId = id, baseRevision = await Revision(c, id) });
+            Check((string)(await Get(c, id))["text"]! == edited, "document.redo puts it back");
+
+            Keys(("ctrl", (ushort)0x41));
+            await Task.Delay(500);
+            var selected = (string?)(await c.Call("test.editor.eval", new { windowId, script = "getSelection().toString()" }))["result"];
+            Check(selected?.Contains("Alpha") == true, $"Ctrl+A selects the document (selected {JsonConvert.SerializeObject(selected)})");
+
+            var menu = await ContextMenuAt(c, windowId, window, "#ag-editor-id p");
+            notes.Add("reading mode menu: " + string.Join(", ", menu.Select(m => m.Key + (m.Value.Current.IsEnabled ? "" : " (disabled)"))));
+            foreach (var editing in new[] { "UndoItem", "CutItem", "PasteItem", "DeleteItem", "MenuFormatItem" })
+                Check(!menu.ContainsKey(editing), $"no {editing} in reading mode");
+            Check(menu.TryGetValue("CopyItem", out var copy) && copy.Current.IsEnabled, "Copy is there and enabled");
+            Check(menu.TryGetValue("SelectAllItem", out _), "Select all is there");
+            Check(menu.TryGetValue("CopyAsPlainTextItem", out var plain) && plain.Current.IsEnabled, "Copy as plain text is there and enabled");
+            ((System.Windows.Automation.InvokePattern)plain!.GetCurrentPattern(System.Windows.Automation.InvokePattern.Pattern)).Invoke();
+            string? clip = null;
+            for (var i = 0; i < 30 && clip?.Contains("Alpha") != true; i++) { await Task.Delay(100); clip = ClipboardText(); }
+            Check(clip == "RD01 bold\n\nAlpha beta.X", $"copy as plain text: the text without Markdown (clipboard {JsonConvert.SerializeObject(clip)})");
+
+            // The visual editor keeps its editing commands.
+            await c.Call("test.settings.set", new { windowId, name = "ReadOnly", value = false });
+            await Task.Delay(800);
+            var visual = await ContextMenuAt(c, windowId, window, "#ag-editor-id p");
+            notes.Add("visual mode menu: " + string.Join(", ", visual.Keys));
+            Check(visual.ContainsKey("UndoItem") && visual.ContainsKey("CutItem") && visual.ContainsKey("PasteItem") && visual.ContainsKey("CopyAsPlainTextItem"), "the visual editor's menu has undo, cut, paste and copy as plain text");
+        }
+        finally
+        {
+            Send(Key(0x1B, false), Key(0x1B, true));
+            await c.Call("test.settings.set", new { windowId, name = "ReadOnly", value = false });
+        }
+    }
+
+    /// <summary>
+    /// Right-clicks the first element matching the selector (a real click, at its left part) and returns the context
+    /// menu's items by automation id (their x:Name), read the way a screen reader reads them. Collapsed items are not
+    /// there. Where the page point is on screen comes from the test host (test.editor.screenPoint), in physical pixels.
+    /// </summary>
+    private static async Task<Dictionary<string, System.Windows.Automation.AutomationElement>> ContextMenuAt(Client c, string windowId, IntPtr window, string selector)
+    {
+        await Activate(window);
+        var at = (await c.Call("test.editor.eval", new { windowId, script = $"(() => {{ const r = document.querySelector({JsonConvert.ToString(selector)}).getBoundingClientRect(); return {{ x: Math.round(r.left + 20), y: Math.round(r.top + r.height / 2) }} }})()" }))["result"]!;
+        var screen = await c.Call("test.editor.screenPoint", new { windowId, x = (int)at["x"]!, y = (int)at["y"]! });
+        // Physical pixels: the driver must not be scaled by Windows (a no-op when it already is DPI-aware).
+        SetProcessDpiAwarenessContext(new IntPtr(-4));
+        SetCursorPos((int)screen["x"]! - 2, (int)screen["y"]!);
+        // As a mouse does it: the pointer moves onto the text (the window's XAML sees it arrive; a cursor that was
+        // only put there opened no menu), then the button goes down and, a moment later, up.
+        for (var i = 0; i < 2; i++)
+        {
+            await Task.Delay(60);
+            Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dx = 1, dy = 0, dwFlags = 0x0001 } } });
+        }
+        await Task.Delay(150);
+        Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0008 } } });
+        await Task.Delay(80);
+        Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0010 } } });
+        var items = new Dictionary<string, System.Windows.Automation.AutomationElement>();
+        var menuItem = new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.MenuItem);
+        for (var i = 0; i < 30 && !items.ContainsKey("SelectAllItem"); i++)
+        {
+            await Task.Delay(100);
+            items.Clear();
+            // The menu may be a popup window of its own: every top-level window of the test host is searched.
+            var roots = new List<System.Windows.Automation.AutomationElement> { System.Windows.Automation.AutomationElement.FromHandle(window) };
+            foreach (System.Windows.Automation.AutomationElement top in System.Windows.Automation.AutomationElement.RootElement.FindAll(System.Windows.Automation.TreeScope.Children,
+                new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ProcessIdProperty, hostPid)))
+                if (top.Current.NativeWindowHandle != window.ToInt32()) roots.Add(top);
+            foreach (var root in roots)
+            {
+                foreach (System.Windows.Automation.AutomationElement item in root.FindAll(System.Windows.Automation.TreeScope.Descendants, menuItem))
+                    if (item.Current.AutomationId is { Length: > 0 } name) items[name] = item;
+                // The format row is a control of its own, not a menu item.
+                if (root.FindFirst(System.Windows.Automation.TreeScope.Descendants, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.AutomationIdProperty, "MenuFormatItem")) is { } format)
+                    items["MenuFormatItem"] = format;
+            }
+        }
+        if (!items.ContainsKey("SelectAllItem"))
+            throw new CaseFailed($"the context menu did not open at {screen.ToString(Formatting.None)} (or has no Select all; found {string.Join(", ", items.Keys)}); screen: {Screenshot("context-menu-" + DateTime.Now.ToString("HHmmss"))}");
+        return items;
+    }
+
+    /// <summary>
+    /// Invokes a menu bar command by its automation id (x:Name): each menu is opened until the one holding it. A
+    /// disabled item is not invoked (UI Automation refuses it), which is fine for a check that it changes nothing.
+    /// </summary>
+    private static async Task InvokeMenuBarItem(IntPtr window, string automationId)
+    {
+        var root = System.Windows.Automation.AutomationElement.FromHandle(window);
+        var menuItem = new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.MenuItem);
+        var bar = root.FindFirst(System.Windows.Automation.TreeScope.Descendants,
+            new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.MenuBar))
+            ?? throw new CaseFailed("no menu bar in the window");
+        try
+        {
+            foreach (System.Windows.Automation.AutomationElement top in bar.FindAll(System.Windows.Automation.TreeScope.Children, menuItem))
+            {
+                if (!top.TryGetCurrentPattern(System.Windows.Automation.ExpandCollapsePattern.Pattern, out var topPattern)) continue;
+                ((System.Windows.Automation.ExpandCollapsePattern)topPattern).Expand();
+                await Task.Delay(400);
+                var item = root.FindFirst(System.Windows.Automation.TreeScope.Descendants,
+                    new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.AutomationIdProperty, automationId));
+                if (item == null)
+                {
+                    ((System.Windows.Automation.ExpandCollapsePattern)topPattern).Collapse();
+                    await Task.Delay(200);
+                    continue;
+                }
+                if (item.Current.IsEnabled) ((System.Windows.Automation.InvokePattern)item.GetCurrentPattern(System.Windows.Automation.InvokePattern.Pattern)).Invoke();
+                return;
+            }
+            throw new CaseFailed($"no menu holds {automationId}");
+        }
+        finally
+        {
+            await Task.Delay(200);
+            for (var i = 0; i < 2; i++) { Send(Key(0x1B, false), Key(0x1B, true)); await Task.Delay(150); }
+        }
+    }
+
+    /// <summary>The clipboard's text (CF_UNICODETEXT), line endings as "\n"; null when there is none.</summary>
+    private static string? ClipboardText()
+    {
+        for (var i = 0; i < 10 && !OpenClipboard(IntPtr.Zero); i++) Thread.Sleep(50);
+        try
+        {
+            var handle = GetClipboardData(13);
+            if (handle == IntPtr.Zero) return null;
+            var pointer = GlobalLock(handle);
+            try { return Marshal.PtrToStringUni(pointer)?.Replace("\r\n", "\n"); }
+            finally { GlobalUnlock(handle); }
+        }
+        finally { CloseClipboard(); }
+    }
+
+    [DllImport("user32.dll")] private static extern bool SetProcessDpiAwarenessContext(IntPtr context);
+    [DllImport("user32.dll", SetLastError = true)] private static extern bool OpenClipboard(IntPtr owner);
+    [DllImport("user32.dll")] private static extern bool CloseClipboard();
+    [DllImport("user32.dll")] private static extern IntPtr GetClipboardData(uint format);
+    [DllImport("kernel32.dll")] private static extern IntPtr GlobalLock(IntPtr memory);
+    [DllImport("kernel32.dll")] private static extern bool GlobalUnlock(IntPtr memory);
 
     private static async Task TH02(List<string> notes)
     {

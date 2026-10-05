@@ -52,6 +52,7 @@ CI 的“Test editor integration”一步运行这些：
 - `mermaid-edit-check.js`: Rapid Mermaid edits used to start overlapping renders against one shared queue.
 - `mermaid-typed-check.js`: A diagram written by hand in visual mode: typing ```mermaid and Enter must give the diagram block with its preview (not a plain code block that only became a diagram after a tab or mode switch reloaded the document), and the caret must be able to leave it - by clicking the paragraph below, which the floating preview used to cover, by clicking above, or with the arrow keys - after which the new diagram is shown.
 - `security-check.js`: Raw HTML and rich renderers belong to Markdown, but they must never become script in the trusted editor page.
+- `reading-copy-check.js`: Copying in reading mode, and copy as plain text.
 - `spec-check.js`: Drives every CommonMark 0.31.2 example through the editor and locks what comes back out.
 <!-- END generated: editor-checks -->
 
@@ -137,6 +138,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | VI01 | Vim keys in source mode: real keys edit (dd, A, Esc), Ctrl+V reaches Vim as block visual, u undoes, :w saves |
 | VI02 | Vim keys in reading mode: G, gg, ]] and Ctrl+D move the page |
 | TH01 | a custom theme colours the page in visual, reading and source mode, and a change shows at once in each |
+| RD01 | reading mode: the context menu offers copying and selecting only, Copy works on a selection, copy as plain text leaves the Markdown out, Ctrl+Z changes nothing |
 | TH02 | View > Theme > Reload themes finds a new theme file and a renamed one; the window draws in the custom theme's base whatever the built-in setting says |
 | Q01 | two windows closed one after the other: the process exits (it stayed, headless) |
 <!-- END generated: e2e-cases -->
@@ -159,6 +161,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | `test.editor.style` | `windowId` | How a window's editor page is drawn: its font size, line height and text direction, as the page reports them. | TestHostHooks.cs |
 | `test.editor.focus` | `windowId` | Keyboard focus into the window's editor page, the way the app itself gives it (the editor control's focus is handed on to the web view) - independent of what a click would land on. | TestHostHooks.cs |
 | `test.editor.eval` | `windowId`, `script` | Runs a script in the window's editor page and returns its JSON result: for diagnosing what the page holds (caret, Muya's state) when a check fails in the real window and not in the page harness. | TestHostHooks.cs |
+| `test.editor.screenPoint` | `x?`, `y?`, `windowId` | Where a point of the editor page (CSS pixels, as getBoundingClientRect gives them) is on the screen, in physical pixels: the page's coordinates are the editor control's (the floating tools are placed by the same mapping), scaled by the window's rasterization scale from its client area. The web view draws into the window without a window or an automation element of its own, so a test that clicks the page has nothing else to measure. | TestHostHooks.cs |
 | `test.editor.reload` | `windowId` | Reloads the window's editor page, as the application does after a page error or a crashed web process. | TestHostHooks.cs |
 | `test.window.handle` | `windowId` | The window's native handle (HWND), for UI Automation and window messages from the driver. | TestHostHooks.cs |
 | `test.window.menuTitles` | `windowId` | The titles of the window's menu bar, as drawn: the menu follows the interface language. | TestHostHooks.cs |

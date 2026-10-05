@@ -17,6 +17,11 @@ namespace Typedown.Services.Automation
 
         private static readonly System.Collections.Generic.List<object> keptWindows = new();
 
+        private struct NativePoint { public int X, Y; }
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern bool ClientToScreen(System.IntPtr window, ref NativePoint point);
+
         public static void AddMethods(MethodTable methods)
         {
             barriers.AddMethods(methods);
@@ -101,6 +106,27 @@ namespace Typedown.Services.Automation
                     var json = await editor.CoreWebView2.ExecuteScriptAsync(c.Params.RequiredString("script"));
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["result"] = Newtonsoft.Json.Linq.JToken.Parse(json) };
                 })));
+            // Where a point of the editor page (CSS pixels, as getBoundingClientRect gives them) is on the screen, in physical
+            // pixels: the page's coordinates are the editor control's (the floating tools are placed by the same mapping),
+            // scaled by the window's rasterization scale from its client area. The web view draws into the window without a
+            // window or an automation element of its own, so a test that clicks the page has nothing else to measure.
+            methods.Add(new MethodDescriptor("test.editor.screenPoint", null, "test.editor.screenPoint/1", (c, ct) =>
+            {
+                var x = (double)(c.Params.OptionalInteger("x") ?? 0);
+                var y = (double)(c.Params.OptionalInteger("y") ?? 0);
+                return Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    var editor = app.MarkdownEditor as global::Windows.UI.Xaml.UIElement
+                        ?? throw new AutomationException(AutomationErrorKind.editor_not_ready, "the window has no editor page (another page is shown)");
+                    var root = app.XamlRoot?.Content as global::Windows.UI.Xaml.UIElement
+                        ?? throw new AutomationException(AutomationErrorKind.editor_not_ready, "the window has no content");
+                    var inRoot = editor.TransformToVisual(root).TransformPoint(new global::Windows.Foundation.Point(x, y));
+                    var scale = app.XamlRoot.RasterizationScale;
+                    var point = new NativePoint { X = (int)System.Math.Round(inRoot.X * scale), Y = (int)System.Math.Round(inRoot.Y * scale) };
+                    ClientToScreen(app.MainWindow, ref point);
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["x"] = point.X, ["y"] = point.Y, ["scale"] = scale };
+                });
+            }));
             // Reloads the window's editor page, as the application does after a page error or a crashed web process.
             methods.Add(new MethodDescriptor("test.editor.reload", null, "test.editor.reload/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>

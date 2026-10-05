@@ -6,6 +6,7 @@ import marked from '../parser/marked'
 import { sanitize } from '../utils'
 import { EXPORT_DOMPURIFY_CONFIG } from '../config'
 import remote from 'services/remote/common'
+import { selectionToPlainText } from 'services/plainText'
 
 const getSanitizeHtml = (markdown, options) => {
   const html = marked(markdown, options)
@@ -56,9 +57,15 @@ const copyCutCtrl = ContentState => {
   ContentState.prototype.getClipBoardData = function () {
     const { start, end } = selection.getCursorRange()
     if (!start || !end) {
-      return { html: '', text: '' }
-    }
-    if (start.key === end.key) {
+      // Reading mode's select-all selects the editor's whole content, which is no cursor range Muya knows; the
+      // copy below works from the page's selection, so it goes on when there is one in the editor.
+      const domSelection = window.getSelection()
+      const inEditor = domSelection && !domSelection.isCollapsed && domSelection.rangeCount > 0 &&
+        this.muya.container.contains(domSelection.getRangeAt(0).commonAncestorContainer)
+      if (!inEditor) {
+        return { html: '', text: '', plainText: '' }
+      }
+    } else if (start.key === end.key) {
       const startBlock = this.getBlock(start.key)
       const { type, text, functionType } = startBlock
       // Fix issue #942
@@ -66,7 +73,8 @@ const copyCutCtrl = ContentState => {
         const selectedText = text.substring(start.offset, end.offset)
         return {
           html: marked(selectedText, this.muya.options),
-          text: selectedText
+          text: selectedText,
+          plainText: selectedText
         }
       }
     }
@@ -223,7 +231,8 @@ const copyCutCtrl = ContentState => {
     let htmlData = wrapper.innerHTML
     const textData = this.htmlToMarkdown(htmlData)
     htmlData = marked(textData)
-    let plainText = window.getSelection().toString();
+    // What the selection reads as, without Markdown (services/plainText).
+    const plainText = selectionToPlainText()
 
     return { html: htmlData, text: textData, plainText }
   }

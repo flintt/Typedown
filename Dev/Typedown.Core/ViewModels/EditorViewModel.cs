@@ -101,6 +101,7 @@ namespace Typedown.Core.ViewModels
             EventCenter.GetObservable<EditorEventArgs>("OnScroll").Subscribe(x => OnScroll(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("SelectionChange").Subscribe(x => OnSelectionChange(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("CodeMirrorSelectionChange").Subscribe(x => OnCodeMirrorSelectionChange(x.Args));
+            EventCenter.GetObservable<EditorEventArgs>("ReadingSelectionChange").Subscribe(x => OnReadingSelectionChange(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("StateChange").Subscribe(x => OnStateChange(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("OutlineCurrent").Subscribe(x => OnOutlineCurrent(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("VimState").Subscribe(x => VimState = x.Args?["state"]?.ToString() ?? "off");
@@ -111,14 +112,19 @@ namespace Typedown.Core.ViewModels
             RemoteInvoke.Handle("GetSettings", GetSettings);
             RemoteInvoke.Handle<JToken>("SetClipboard", OnSetClipboard);
             Settings.WhenPropertyChanged(nameof(Settings.AutoSave)).Subscribe(_ => Settings_AutoSaveChanged(Settings.AutoSave));
+            // A selection belongs to the mode it was made in: the next mode reports its own.
+            Settings.WhenPropertyChanged(nameof(Settings.ReadOnly)).Subscribe(_ => TextSelected = Selected = false);
             // The editor reads the theme as "themeCss"; the setting only holds the file name.
             Settings.WhenPropertyChanged(nameof(Settings.CustomTheme)).Subscribe(_ =>
                 MarkdownEditor?.PostMessage("SettingsChanged", new Dictionary<string, object>() { { "themeCss", ThemeFiles.Read(Settings.CustomTheme) } }));
             this.WhenPropertyChanged(nameof(SearchValue)).Subscribe(_ => SearchValueChanged());
             this.WhenPropertyChanged(nameof(Saved)).Subscribe(_ => SavedOrAutoSavedSuccChanged());
             this.WhenPropertyChanged(nameof(AutoSavedSucc)).Subscribe(_ => SavedOrAutoSavedSuccChanged());
-            UndoCommand.OnExecute.Subscribe(_ => Undo());
-            RedoCommand.OnExecute.Subscribe(_ => Redo());
+            // The reader's undo and redo (context menu, Edit menu, Ctrl+Z/Y) do nothing in reading mode, where the history's
+            // undo replaced the text all the same. An automation client's document.undo still works there, as its
+            // writes do.
+            UndoCommand.OnExecute.Subscribe(_ => { if (!Settings.ReadOnly) Undo(); });
+            RedoCommand.OnExecute.Subscribe(_ => { if (!Settings.ReadOnly) Redo(); });
             FindCommand.OnExecute.Subscribe(x => Find(x));
             PasteCommand.OnExecute.Subscribe(x => Paste(x));
             CutCommand.OnExecute.Subscribe(x => Cut(x));
@@ -261,10 +267,22 @@ namespace Typedown.Core.ViewModels
             SelectionText = arg["selectionText"].ToString();
         }
 
+        /// <summary>
+        /// Reading mode: whether text in the document is selected. Muya reports no selection there (there is no caret),
+        /// so without this the copy commands stayed disabled whatever the reader selected.
+        /// </summary>
+        public void OnReadingSelectionChange(JToken arg)
+        {
+            if (!Settings.ReadOnly) return;
+            TextSelected = Selected = arg?["selected"]?.Value<bool>() ?? false;
+        }
+
         public void UpdateMuyaSelected()
         {
             var formatViewModel = ServiceProvider.GetService<FormatViewModel>();
-            TextSelected = Selection["start"]["offset"].ToString() != Selection["end"]["offset"].ToString();
+            // From one block to another is a selection even where both offsets are equal.
+            TextSelected = Selection["start"]["key"]?.ToString() != Selection["end"]["key"]?.ToString()
+                || Selection["start"]["offset"].ToString() != Selection["end"]["offset"].ToString();
             Selected = TextSelected || formatViewModel.FormatState.Image;
         }
 
