@@ -625,8 +625,35 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             if (optionsRef.current?.readOnly) return
             transport.postMessage('PasteRequested', { type: 'normal' })
         }
+        // Copy and cut the same way: the browser's own copy (Ctrl+C reaching the page) put the page's markup on the
+        // clipboard, with the editor's internal picture addresses Word cannot load and text without the Markdown.
+        const onCopy = (event: ClipboardEvent) => {
+            const container = editor.container as HTMLElement
+            const state = editor.contentState as any
+            // Table cells selected as cells: their own copy (a Markdown table), which nothing called.
+            if (state?.selectedTableCells) {
+                event.preventDefault()
+                event.stopPropagation()
+                state.docCopyHandler()
+                if (event.type === 'cut' && !optionsRef.current?.readOnly) state.docCutHandler()
+                return
+            }
+            const selection = window.getSelection()
+            const text = !!selection && !selection.isCollapsed && selection.rangeCount > 0 && selection.getRangeAt(0).intersectsNode(container)
+            if (!text && !state?.selectedImage) return
+            event.preventDefault()
+            event.stopPropagation()
+            if (event.type === 'cut' && !optionsRef.current?.readOnly) editor.clipboard.cut({ type: 'normal', copyInfo: null })
+            else editor.clipboard.copy({ type: 'normal', copyInfo: null })
+        }
         document.addEventListener('paste', onPaste, true)
-        return () => document.removeEventListener('paste', onPaste, true)
+        document.addEventListener('copy', onCopy, true)
+        document.addEventListener('cut', onCopy, true)
+        return () => {
+            document.removeEventListener('paste', onPaste, true)
+            document.removeEventListener('copy', onCopy, true)
+            document.removeEventListener('cut', onCopy, true)
+        }
     }, [editor])
 
     // Reading mode has no caret, so Muya reports no selection change, and the host kept Copy disabled whatever

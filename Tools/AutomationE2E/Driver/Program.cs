@@ -149,6 +149,7 @@ internal static class Program
             await Case("VI02 Vim keys in reading mode: G, gg, ]] and Ctrl+D move the page", VI02);
             await Case("TH01 a custom theme colours the page in visual, reading and source mode, and a change shows at once in each", TH01);
             await Case("RD01 reading mode: the context menu offers copying and selecting only, Copy works on a selection, copy as plain text leaves the Markdown out, Ctrl+Z changes nothing", RD01);
+            await Case("CP01 Copy pasted into Word: pictures at absolute file:/// addresses, a name and an alt text with brackets, an SVG sized in pt, a JPEG", CP01);
             await Case("TH02 View > Theme > Reload themes finds a new theme file and a renamed one; the window draws in the custom theme's base whatever the built-in setting says", TH02);
             // Last: it ends the test host.
             await Case("Q01 two windows closed one after the other: the process exits (it stayed, headless)", Q01);
@@ -1493,6 +1494,50 @@ internal static class Program
     [DllImport("user32.dll")] private static extern IntPtr GetClipboardData(uint format);
     [DllImport("kernel32.dll")] private static extern IntPtr GlobalLock(IntPtr memory);
     [DllImport("kernel32.dll")] private static extern bool GlobalUnlock(IntPtr memory);
+
+    // A reader's document as it was when Word showed blank frames: pictures written as absolute file:/// addresses (as an
+    // image inserted from a browser cache is), a file name and an alt text with brackets, a graphviz SVG sized in pt.
+    private static async Task CP01(List<string> notes)
+    {
+        using var c = await Session("e2e CP01");
+        var folder = Path.Combine(fixtures, "cp01 图");
+        Directory.CreateDirectory(folder);
+        var png = Path.Combine(folder, "ja-dark[1].png");
+        var svg = Path.Combine(folder, "overall.svg");
+        var jpeg = Path.Combine(folder, "photo.JPEG");
+        using (var bitmap = new System.Drawing.Bitmap(40, 30))
+        {
+            using (var g = System.Drawing.Graphics.FromImage(bitmap)) g.Clear(System.Drawing.Color.Red);
+            bitmap.Save(png, System.Drawing.Imaging.ImageFormat.Png);
+            bitmap.Save(jpeg, System.Drawing.Imaging.ImageFormat.Jpeg);
+        }
+        File.WriteAllText(svg, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n" +
+            "<svg width=\"72pt\" height=\"40pt\" viewBox=\"0.00 0.00 72.00 40.00\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"72\" height=\"40\" fill=\"blue\"/></svg>\n");
+        string Url(string file) => "file:///" + file.Replace('\\', '/');
+        var text = $"PNG\n\n![ja-dark[1]]({Url(png)})\n\nSVG\n\n![overall]({Url(svg)})\n\nJPEG\n\n![photo]({Url(jpeg)})\n\nEND\n";
+        var id = await Open(c, Fixture("cp01.md", text));
+        var windowId = await WindowIdOf(c, id);
+        var window = await WindowOf(windowId, c);
+        await Task.Delay(1500);
+        notes.Add("drawn: " + (await c.Call("test.editor.eval", new { windowId, script = "[...document.querySelectorAll('#ag-editor-id img')].map(i => i.src + ' ' + i.naturalWidth + 'x' + i.naturalHeight).join(' | ') + ' || failed: ' + [...document.querySelectorAll('#ag-editor-id .ag-image-fail')].map(e => e.getAttribute('data-raw')).join(', ')" }))["result"]);
+        await Activate(window);
+        await c.Call("test.editor.focus", new { windowId });
+        await Task.Delay(200);
+        Keys(("ctrl", (ushort)0x41));
+        await Task.Delay(400);
+        Keys(("ctrl", (ushort)0x43));
+        string? html = null;
+        for (var i = 0; i < 30 && html == null; i++) { await Task.Delay(100); html = ClipboardHtml(); }
+        var fragment = html == null ? null : System.Text.RegularExpressions.Regex.Replace(html, "base64,[A-Za-z0-9+/=]{40,}", m => "base64,…(" + m.Value.Length + ")");
+        notes.Add("HTML: " + fragment);
+        notes.Add("text: " + JsonConvert.SerializeObject(ClipboardText()));
+        if (PasteIntoWord(Path.GetDirectoryName(Fixture("cp01-word.txt", ""))!) is { } word)
+        {
+            notes.Add($"Word: {word.shapes} picture(s) pasted, {word.media} embedded; {word.detail}");
+            Check(word.shapes == 3 && word.media == 3, "Word: the PNG, the SVG and the JPEG are all in the pasted document");
+        }
+        else notes.Add("Word: not installed, not tried");
+    }
 
     private static async Task TH02(List<string> notes)
     {

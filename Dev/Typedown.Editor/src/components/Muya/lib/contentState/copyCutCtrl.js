@@ -5,6 +5,7 @@ import ExportMarkdown from '../utils/exportMarkdown'
 import marked from '../parser/marked'
 import { sanitize, absoluteImageUrls } from '../utils'
 import { svgImagesAsPng } from 'services/localPaths'
+import { tokenizer } from '../parser'
 import { EXPORT_DOMPURIFY_CONFIG } from '../config'
 import remote from 'services/remote/common'
 import { selectionToPlainText } from 'services/plainText'
@@ -122,15 +123,18 @@ const copyCutCtrl = ContentState => {
     // A picture is copied as its Markdown source says, not as drawn: one that did not load has no <img> and the
     // conversion to Markdown dropped it, and a drawn one has the resolved absolute path, which the lookup below did not
     // always map back (the Markdown then held C:/... for a relative picture). Pictures written as HTML keep that way.
+    // The source is read by the editor's own parser: a pattern of its own missed an alt text with brackets
+    // (![ja-dark[1]](...)) and a path with a space, and those were copied at the page's address (encoded, with a
+    // ?msec= cache key), which Word could not load.
     for (const placeholder of wrapper.querySelectorAll('span.ag-inline-image')) {
       const raw = placeholder.getAttribute('data-raw') || ''
-      const match = /^!\[((?:\\.|[^\]\\])*)\]\(\s*(<[^>]*>|[^\s)]+)(?:\s+(?:"([^"]*)"|'([^']*)'))?\s*\)$/.exec(raw)
-      if (!match) continue
+      let token = null
+      try { token = tokenizer(raw, { options: this.muya.options })[0] } catch (e) { }
+      if (!token || token.type !== 'image' || token.raw !== raw || !token.src) continue
       const img = document.createElement('img')
-      img.setAttribute('alt', match[1].replace(/\\(.)/g, '$1'))
-      img.setAttribute('src', match[2].replace(/^<|>$/g, ''))
-      const title = match[3] ?? match[4]
-      if (title) img.setAttribute('title', title)
+      img.setAttribute('alt', token.alt || '')
+      img.setAttribute('src', token.src)
+      if (token.title) img.setAttribute('title', token.title)
       placeholder.replaceWith(img)
     }
 

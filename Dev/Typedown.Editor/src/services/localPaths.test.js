@@ -16,8 +16,15 @@ test('names with spaces and #, absolute and network paths', () => {
   expect(src(absoluteImageUrls('<img src="\\\\server\\share\\x.png">', 'C:\\n'))).toEqual(['file://server/share/x.png'])
 })
 
+test('a file address written encoded goes as the path it names', () => {
+  expect(src(absoluteImageUrls('<img src="file:///C:/%E5%9B%BE/a%20b.png">', 'C:\\n'))).toEqual(['file:///C:/图/a b.png'])
+  expect(src(absoluteImageUrls('<img src="file:///home/me/%E5%9B%BE.png">', ''))).toEqual(['file:///home/me/图.png'])
+  expect(src(absoluteImageUrls('<img src="file://server/share/a%20b.png">', ''))).toEqual(['file://server/share/a b.png'])
+  expect(src(absoluteImageUrls('<img src="file:///C:/x/ja-dark[1].png">', ''))).toEqual(['file:///C:/x/ja-dark[1].png'])
+})
+
 test('web, data and file addresses stay; so does a relative one without a document folder', () => {
-  const html = '<img src="https://e.com/a.png"><img src="data:image/png;base64,AAAA"><img src="file:///C:/a.png">'
+  const html = '<img src="https://e.com/a.png"><img src="data:image/png;base64,AAAA"><img src="file:///C:/a.png">' // a file address with nothing to decode stays the same
   expect(src(absoluteImageUrls(html, 'C:\\n'))).toEqual(['https://e.com/a.png', 'data:image/png;base64,AAAA', 'file:///C:/a.png'])
   expect(src(absoluteImageUrls('<img src="a.png">', ''))).toEqual(['a.png'])
   expect(absoluteImageUrls('<p>no image</p>', 'C:\\n')).toBe('<p>no image</p>')

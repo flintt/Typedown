@@ -5,7 +5,8 @@
 //  - reading mode: a drag reports a selection (ReadingSelectionChange), a click that clears it reports none;
 //  - reading mode: Ctrl+A and SelectAll select the document (not the page around it); Copy then gives Markdown, copy as plain text the text below;
 //  - visual mode, the caret in the heading (its markers shown): copy as plain text gives the same text;
-//  - a paste the browser would do itself is handed to the host's paste (visual mode) or dropped (reading mode).
+//  - a paste the browser would do itself is handed to the host's paste (visual mode) or dropped (reading mode);
+//  - a copy the browser would do itself goes through the editor's copy (Markdown and HTML) in both modes.
 const assert = require('assert/strict');
 const { openEditor } = require('./harness');
 
@@ -138,9 +139,29 @@ const expected = [
       document.querySelector('#ag-editor-id p').dispatchEvent(event);
       return { prevented: event.defaultPrevented, requested: window.__last.PasteRequested ?? null };
     });
+    // The browser's own copy (Ctrl+C reaching the page) goes through the editor's copy: Markdown and HTML, not the
+    // page's markup.
+    const nativeCopy = async () => {
+      await page.evaluate(() => { window.__clip = []; });
+      const prevented = await page.evaluate(() => {
+        const range = document.createRange();
+        range.selectNodeContents(document.querySelector('#ag-editor-id p'));
+        getSelection().removeAllRanges(); getSelection().addRange(range);
+        const event = new ClipboardEvent('copy', { clipboardData: new DataTransfer(), bubbles: true, cancelable: true });
+        document.querySelector('#ag-editor-id p').dispatchEvent(event);
+        return event.defaultPrevented;
+      });
+      await pause(300);
+      return { prevented, clip: await page.evaluate(() => window.__clip.filter(c => c.type === 'text/plain').map(c => c.data).pop() ?? null) };
+    };
+    const visualCopy = await nativeCopy();
+    check('visual mode: a browser copy goes through the editor\'s copy', () => assert.ok(visualCopy.prevented && visualCopy.clip && visualCopy.clip.includes('**bold**'), JSON.stringify(visualCopy)));
+
     const visualPaste = await paste();
     check('visual mode: a browser paste is handed to the host', () => assert.deepEqual(visualPaste, { prevented: true, requested: { type: 'normal' } }));
     await mode(false, true);
+    const readingCopy = await nativeCopy();
+    check('reading mode: a browser copy goes through the editor\'s copy', () => assert.ok(readingCopy.prevented && readingCopy.clip && readingCopy.clip.includes('**bold**'), JSON.stringify(readingCopy)));
     const readingPaste = await paste();
     check('reading mode: a browser paste does nothing', () => assert.deepEqual(readingPaste, { prevented: true, requested: null }));
 

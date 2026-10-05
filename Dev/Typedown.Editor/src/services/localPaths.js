@@ -47,6 +47,16 @@ export const absoluteImageUrls = (html, basePath = window.basePath) => {
   for (const img of Array.from(wrapper.querySelectorAll('img'))) {
     const src = img.getAttribute('src') || ''
     const drive = /^[a-zA-Z]:[\\/]/.test(src)
+    // A file address written encoded (file:///C:/%E5%9B%BE...) goes as the path it names: Word does not decode it.
+    if (/^file:\/\//i.test(src)) {
+      let path
+      try { path = decodeURI(src.slice(5)) } catch (e) { continue }
+      if (/^\/\/\/[a-zA-Z]:/.test(path)) path = path.slice(3) // file:///C:/... -> C:/...
+      else if (path.startsWith('///')) path = path.slice(2) // file:///home/... -> /home/...
+      // file://server/share/... stays //server/share/...
+      img.setAttribute('src', toFileUrl(path))
+      continue
+    }
     if (!src || (!drive && /^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(src))) continue
     let local = src
     try { local = decodeURI(src) } catch { /* left as written */ }
@@ -102,7 +112,8 @@ export const withResolution = (dataUrl, scale) => {
 export const svgImagesAsPng = (html, page = document) => {
   if (!html || !/\.svg/i.test(html)) return html
   const drawn = Array.from(page.querySelectorAll('#ag-editor-id img'))
-  const key = src => { try { return decodeURI(src).replace(/\\/g, '/').toLowerCase() } catch { return src.toLowerCase() } }
+  // The page loads a local picture with a ?msec= cache key; the copy has the address as written.
+  const key = src => { const bare = src.replace(/[?#].*$/, ''); try { return decodeURI(bare).replace(/\\/g, '/').toLowerCase() } catch { return bare.toLowerCase() } }
   const wrapper = page.createElement('div')
   wrapper.innerHTML = html
   for (const img of Array.from(wrapper.querySelectorAll('img'))) {
