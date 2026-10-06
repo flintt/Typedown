@@ -336,6 +336,32 @@ namespace Typedown.Services.Automation
                         ["actualTheme"] = (app.XamlRoot?.Content as global::Windows.UI.Xaml.FrameworkElement)?.ActualTheme.ToString() };
                 });
             }));
+            // The colours the side pane marks what is chosen with: every selection indicator drawn in it (the bar under
+            // Files/Outline, the pill of each outline and folder-tree row), by where it is, with its fill.
+            methods.Add(new MethodDescriptor("test.pane.accent", null, "test.pane.accent/1", (c, ct) =>
+                Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    var found = new Newtonsoft.Json.Linq.JArray();
+                    string Where(global::Windows.UI.Xaml.DependencyObject node)
+                    {
+                        for (; node != null; node = global::Windows.UI.Xaml.Media.VisualTreeHelper.GetParent(node))
+                        {
+                            if (node is Core.Controls.SidePanelControls.Pages.TocPage) return "outline";
+                            if (node is Core.Controls.SidePanelControls.Pages.FolderPage) return "folder";
+                            if (node is Microsoft.UI.Xaml.Controls.NavigationViewItem) return "tabs";
+                        }
+                        return "other";
+                    }
+                    void Walk(global::Windows.UI.Xaml.DependencyObject node)
+                    {
+                        if (node is global::Windows.UI.Xaml.Shapes.Shape shape && shape.Name.Contains("SelectionIndicator"))
+                            found.Add(new Newtonsoft.Json.Linq.JObject { ["where"] = Where(node), ["name"] = shape.Name, ["fill"] = (shape.Fill as global::Windows.UI.Xaml.Media.SolidColorBrush)?.Color.ToString() });
+                        for (var i = 0; i < global::Windows.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(node); i++)
+                            Walk(global::Windows.UI.Xaml.Media.VisualTreeHelper.GetChild(node, i));
+                    }
+                    Walk(app.XamlRoot?.Content as global::Windows.UI.Xaml.DependencyObject);
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["indicators"] = found };
+                })));
             // File > Upload local images on the window's active document, without its dialogs; returns the result.
             methods.Add(new MethodDescriptor("test.images.uploadAll", null, "test.images.uploadAll/1", async (c, ct) =>
                 await await Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), async app =>

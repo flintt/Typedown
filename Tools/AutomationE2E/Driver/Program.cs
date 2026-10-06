@@ -153,6 +153,7 @@ internal static partial class Program
             await Case("TH01 a custom theme colours the page in visual, reading and source mode, and a change shows at once in each", TH01);
             await Case("RD01 reading mode: the context menu offers copying and selecting only, Copy works on a selection, copy as plain text leaves the Markdown out, Ctrl+Z changes nothing", RD01);
             await Case("CP01 Copy pasted into Word: pictures at absolute file:/// addresses, a name and an alt text with brackets, an SVG sized in pt, a JPEG", CP01);
+            await Case("TH03 the side pane marks what is chosen (the bar under Files/Outline, the outline's and the folder tree's row pill) in a custom theme's accent, and in the system accent again without one", TH03);
             await Case("TH02 View > Theme > Reload themes finds a new theme file and a renamed one; the window draws in the custom theme's base whatever the built-in setting says", TH02);
             // An edition's own cases (Edition.<name>.cs beside this file, in the edition's repository); none here.
             var editionCases = new List<(string Name, Func<List<string>, Task> Run)>();
@@ -1204,6 +1205,44 @@ internal static partial class Program
             await c.Call("test.settings.set", new { windowId, name = "SourceCode", value = false });
             await c.Call("test.settings.set", new { windowId, name = "ReadOnly", value = false });
             await c.Call("test.theme.apply", new { windowId, builtIn = "Default" });
+        }
+    }
+
+    // The marks of what is chosen in the side pane stayed the system blue under every custom theme: WinUI draws them in
+    // the accent colour it takes from Windows, and only the page was given the theme's accent.
+    private static async Task TH03(List<string> notes)
+    {
+        using var c = await Session("e2e TH03");
+        var id = await Open(c, Fixture("th03.md", "# TH03\n\n## One\n\nText\n\n## Two\n\nMore\n"));
+        var windowId = await WindowIdOf(c, id);
+        const string Dracula = "#FFBD93F9";
+        async Task<List<(string Where, string? Fill)>> Indicators(string page, string when)
+        {
+            await c.Call("window.setView", new { windowId, sidePane = new { open = true, page } });
+            await Task.Delay(1500);
+            var found = ((JArray)(await c.Call("test.pane.accent", new { windowId }))["indicators"]!).Select(x => ((string)x["where"]!, (string?)x["fill"])).ToList();
+            notes.Add($"{when}, {page}: " + string.Join(", ", found.GroupBy(x => x).Select(g => $"{g.Key.Item1} {g.Key.Item2} x{g.Count()}")));
+            return found;
+        }
+        var view = await c.Call("window.getView", new { windowId });
+        try
+        {
+            await c.Call("test.theme.apply", new { windowId, customTheme = "dracula" });
+            foreach (var (page, where) in new[] { ("outline", "outline"), ("files", "folder") })
+            {
+                var marks = await Indicators(page, "dracula");
+                Check(marks.Any(x => x.Where == where), $"the {where} rows have selection pills ({marks.Count} indicators in all)");
+                Check(marks.Where(x => x.Where == where).All(x => x.Fill == Dracula), $"dracula: the {where} rows' pills are its accent");
+                Check(marks.Where(x => x.Where == "tabs").All(x => x.Fill == Dracula), "dracula: the bar under Files/Outline is its accent");
+            }
+            await c.Call("test.theme.apply", new { windowId, builtIn = "Default" });
+            var plain = await Indicators("outline", "default");
+            Check(plain.Any(x => x.Where == "outline") && plain.All(x => x.Fill != Dracula), "no custom theme: the system accent again");
+        }
+        finally
+        {
+            try { await c.Call("test.theme.apply", new { windowId, builtIn = "Default" }); } catch { }
+            try { await c.Call("window.setView", new { windowId, sidePane = new { open = (bool)view["sidePane"]!["open"]!, page = (string)view["sidePane"]!["page"]! } }); } catch { }
         }
     }
 
