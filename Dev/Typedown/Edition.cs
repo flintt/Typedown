@@ -38,5 +38,20 @@ namespace Typedown
             try { Initialize(services); }
             catch (Exception ex) { Log.WriteLocal("EditionInitialize", ex.ToString()); }
         }
+
+#if AUTOMATION_TEST_HOST
+        /// <summary>
+        /// The automation test host's test.edition.set: a name and a value for the edition to act on (a state it would
+        /// otherwise get from outside, so a test can set it). Typedown has nothing to set.
+        /// </summary>
+        static partial void TestSet(string name, string value, ref bool handled);
+
+        internal static bool TrySet(string name, string value)
+        {
+            var handled = false;
+            TestSet(name, value, ref handled);
+            return handled;
+        }
+#endif
     }
 }

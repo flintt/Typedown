@@ -18,7 +18,7 @@ using Typedown.Automation;
 //
 //   Typedown.AutomationE2E --root <test data root> --pid <host process id> --fixtures <dir> --out <result.json>
 
-internal static class Program
+internal static partial class Program
 {
     private sealed class NoHandler : IJsonRpcHandler
     {
@@ -84,6 +84,9 @@ internal static class Program
     private static string endpoint = "";
     private static int hostPid;
     private static string fixtures = "";
+
+    /// <summary>The cases an edition adds, run before the last one (Q01 ends the test host).</summary>
+    static partial void EditionCases(List<(string Name, Func<List<string>, Task> Run)> cases);
 
     private static async Task<int> Main(string[] args)
     {
@@ -151,6 +154,10 @@ internal static class Program
             await Case("RD01 reading mode: the context menu offers copying and selecting only, Copy works on a selection, copy as plain text leaves the Markdown out, Ctrl+Z changes nothing", RD01);
             await Case("CP01 Copy pasted into Word: pictures at absolute file:/// addresses, a name and an alt text with brackets, an SVG sized in pt, a JPEG", CP01);
             await Case("TH02 View > Theme > Reload themes finds a new theme file and a renamed one; the window draws in the custom theme's base whatever the built-in setting says", TH02);
+            // An edition's own cases (Edition.<name>.cs beside this file, in the edition's repository); none here.
+            var editionCases = new List<(string Name, Func<List<string>, Task> Run)>();
+            EditionCases(editionCases);
+            foreach (var (name, run) in editionCases) await Case(name, run);
             // Last: it ends the test host.
             await Case("Q01 two windows closed one after the other: the process exits (it stayed, headless)", Q01);
         }

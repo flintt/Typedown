@@ -65,8 +65,42 @@ namespace Typedown.Core.Utilities
         {
             var themes = new Dictionary<string, CustomTheme>(StringComparer.OrdinalIgnoreCase);
             Collect(BundledFolder, themes);
+            foreach (var folder in AddedFolders) Collect(folder, themes);
             Collect(Folder, themes);
             return themes.Values.OrderBy(x => x.Name, StringComparer.CurrentCultureIgnoreCase).ToList();
+        }
+
+        private static readonly List<string> addedFolders = new();
+
+        private static IReadOnlyList<string> AddedFolders { get { lock (addedFolders) return addedFolders.ToList(); } }
+
+        /// <summary>
+        /// The themes changed beyond the folders' contents: a folder was added or removed (AddFolder, RemoveFolder).
+        /// The theme menus build their lists again.
+        /// </summary>
+        public static event Action Changed;
+
+        /// <summary>
+        /// Themes of a folder of its own that an edition adds (Edition.Initialize), listed between the bundled ones and
+        /// the user's: the user's folder still takes the place of one with the same file name.
+        /// </summary>
+        public static void AddFolder(string folder)
+        {
+            lock (addedFolders)
+            {
+                if (addedFolders.Contains(folder, StringComparer.OrdinalIgnoreCase)) return;
+                addedFolders.Add(folder);
+            }
+            Changed?.Invoke();
+        }
+
+        public static void RemoveFolder(string folder)
+        {
+            lock (addedFolders)
+            {
+                if (addedFolders.RemoveAll(x => string.Equals(x, folder, StringComparison.OrdinalIgnoreCase)) == 0) return;
+            }
+            Changed?.Invoke();
         }
 
         private static void Collect(string folder, Dictionary<string, CustomTheme> themes)

@@ -40,8 +40,27 @@ namespace Typedown.Core.Controls
             Utilities.Common.OpenUrl(Typedown.Automation.Brand.FeedbackUrl);
         }
 
+        /// <summary>
+        /// A section of its own that an edition adds below the rest (set from Edition.Initialize); called each time the
+        /// page is shown. Typedown leaves it null and the page is as it always was.
+        /// </summary>
+        public static System.Func<UIElement> EditionSection { get; set; }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                EditionSectionPresenter.Content = EditionSection?.Invoke();
+            }
+            catch (System.Exception ex)
+            {
+                Utilities.Log.WriteLocal("AboutEditionSection", ex.ToString());
+            }
+        }
+
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
+            EditionSectionPresenter.Content = null;
             Bindings?.StopTracking();
         }
     }

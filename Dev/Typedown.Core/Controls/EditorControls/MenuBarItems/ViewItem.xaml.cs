@@ -13,6 +13,8 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
         public ViewItem()
         {
             InitializeComponent();
+            // The event is static: a closed window's menu must not stay reachable through it.
+            Unloaded += (_, _) => ThemeFiles.Changed -= OnThemesChanged;
         }
 
         /// <summary>The theme entries, so a change can tick the right one without rebuilding the open menu.</summary>
@@ -52,29 +54,35 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             // Picks up a theme that was just added or edited without restarting. The rebuild waits for the click
             // to be over: the menu would otherwise be torn down while it is still on screen.
             var reload = new MenuFlyoutItem { Text = Locale.GetString("View.CustomTheme.Refresh") };
-            reload.Click += (_, _) => _ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () =>
-            {
-                // A submenu that has been on screen keeps drawing the entries it had then, whatever its Items say
-                // later: a new theme file or a new name only appeared once the main page was rebuilt (a visit to
-                // the settings). A fresh submenu in its place draws what is there now.
-                var index = Items.IndexOf(ThemeSubMenu);
-                if (index >= 0)
-                {
-                    // Removed and inserted: the menu bar's flyout follows insertions and removals, not a replacement.
-                    var fresh = new MenuFlyoutSubItem { Text = ThemeSubMenu.Text, Name = nameof(ThemeSubMenu) };
-                    Items.RemoveAt(index);
-                    Items.Insert(index, fresh);
-                    ThemeSubMenu = fresh;
-                }
-                BuildThemeMenu();
-                // Re-apply the current theme too, so edits to the file that is already selected take effect —
-                // the same as the settings page's refresh. Rebuilding the menu alone only picks up added or
-                // renamed theme files, not changes to the CSS of the theme currently in use.
-                Settings?.OnPropertyChanged(nameof(Settings.CustomTheme), null, Settings.CustomTheme);
-            });
+            reload.Click += (_, _) => _ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, RefreshThemeMenu);
             ThemeSubMenu.Items.Add(reload);
             UpdateThemeChecks();
         }
+
+        private void RefreshThemeMenu()
+        {
+            // A submenu that has been on screen keeps drawing the entries it had then, whatever its Items say
+            // later: a new theme file or a new name only appeared once the main page was rebuilt (a visit to
+            // the settings). A fresh submenu in its place draws what is there now.
+            var index = Items.IndexOf(ThemeSubMenu);
+            if (index >= 0)
+            {
+                // Removed and inserted: the menu bar's flyout follows insertions and removals, not a replacement.
+                var fresh = new MenuFlyoutSubItem { Text = ThemeSubMenu.Text, Name = nameof(ThemeSubMenu) };
+                Items.RemoveAt(index);
+                Items.Insert(index, fresh);
+                ThemeSubMenu = fresh;
+            }
+            BuildThemeMenu();
+            // Re-apply the current theme too, so edits to the file that is already selected take effect —
+            // the same as the settings page's refresh. Rebuilding the menu alone only picks up added or
+            // renamed theme files, not changes to the CSS of the theme currently in use.
+            Settings?.OnPropertyChanged(nameof(Settings.CustomTheme), null, Settings.CustomTheme);
+        }
+
+        // A folder of themes added or removed (ThemeFiles.AddFolder/RemoveFolder, by an edition): the menu shows the
+        // themes there are now, as "Reload themes" would.
+        private void OnThemesChanged() => _ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, RefreshThemeMenu);
 
         /// <summary>The theme submenu's entries as shown, and its "Reload themes" item (the automation test host clicks it).</summary>
         public (IReadOnlyList<string> Entries, MenuFlyoutItem Reload) ThemeMenu()
@@ -117,6 +125,8 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
         protected override void OnRegisterShortcut()
         {
             BuildThemeMenu();
+            ThemeFiles.Changed -= OnThemesChanged;
+            ThemeFiles.Changed += OnThemesChanged;
             // Focus and typewriter mode both follow the caret, so they mean nothing in reading mode (which has
             // no caret) or in source mode (which is a plain text editor): grey them out instead of letting them
             // look enabled while doing nothing. The settings themselves are kept for when the mode is left.

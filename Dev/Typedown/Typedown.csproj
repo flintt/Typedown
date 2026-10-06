@@ -89,6 +89,13 @@
 		<Folder Include="Resources\" />
 	</ItemGroup>
 
+	<!-- An edition's own code and files, in Dev/Edition of the edition's repository (with Edition.<name>.cs here, they
+	     are what the edition adds through Edition.cs). Typedown has no such folder: these take nothing. -->
+	<ItemGroup Condition="Exists('..\Edition')">
+		<Compile Include="..\Edition\**\*.cs" Exclude="..\Edition\**\obj\**;..\Edition\**\bin\**" />
+		<None Include="..\Edition\Resources\**" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Link="Resources\Edition\%(RecursiveDir)%(Filename)%(Extension)" />
+	</ItemGroup>
+
 	<ItemGroup>
 		<None Include="Resources\Statics\**" CopyToOutputDirectory="Always" Link="Resources\Statics\%(RecursiveDir)%(Filename)%(Extension)" />
 		<!-- The themes that ship with the app; the themes folder in %LOCALAPPDATA% is added to these at runtime. -->

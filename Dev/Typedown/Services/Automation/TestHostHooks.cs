@@ -127,6 +127,20 @@ namespace Typedown.Services.Automation
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["x"] = point.X, ["y"] = point.Y, ["scale"] = scale };
                 });
             }));
+            // A state an edition takes from outside (Edition.TestSet), set for a test; an error when the edition has no
+            // such name (Typedown has none).
+            methods.Add(new MethodDescriptor("test.edition.set", null, "test.edition.set/1", (c, ct) =>
+            {
+                var name = c.Params.RequiredString("name", allowEmpty: false);
+                var value = c.Params.OptionalString("value") ?? "";
+                var handled = false;
+                return Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    handled = Edition.TrySet(name, value);
+                    if (!handled) throw Params.Invalid("name", "unknown");
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject();
+                });
+            }));
             // Reloads the window's editor page, as the application does after a page error or a crashed web process.
             methods.Add(new MethodDescriptor("test.editor.reload", null, "test.editor.reload/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>

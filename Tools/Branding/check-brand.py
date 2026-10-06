@@ -135,7 +135,7 @@ for f in files("Tools/Installer/*.ps1", "Tools/AutomationE2E/*.ps1", ".github/wo
 
 # Typedown itself adds nothing at the edition hook (Dev/Typedown/Edition.cs): an implementation there is an edition's.
 if name == "Typedown":
-    for f in files("Dev/Typedown/Edition.*.cs"):
+    for f in files("Dev/Typedown/Edition.*.cs", "Tools/AutomationE2E/Driver/Edition.*.cs"):
         problems.append(f"{rel(f)}: an edition's own code in Typedown - it belongs to the edition that uses it")
     for f in files("Dev/Typedown/*.cs", "Dev/Typedown/**/*.cs"):
         code = "\n".join(l for l in read(f).splitlines() if not l.lstrip().startswith("//"))  # not the doc's example
