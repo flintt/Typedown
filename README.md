@@ -15,7 +15,8 @@ Windows 平台的所见即所得 Markdown 编辑器，WinUI 界面，编辑内�
 > A WYSIWYG Markdown editor for Windows (WinUI), forked from [byxiaozhi/Typedown](https://github.com/byxiaozhi/Typedown)
 > and developed further: document tabs, folder-wide search, session restore, HedgeDoc sharing, reading mode, custom
 > themes, and local automation for scripts and AI assistants (a CLI and an MCP server).
-> See the [releases](https://github.com/flintt/Typedown/releases) for what each version changed.
+> See the [releases](https://github.com/flintt/Typedown/releases) for what each version changed. It is also in the
+> Microsoft Store as [Typeleaf](https://apps.microsoft.com/detail/9nxbvhm4k005).
 
 ## 下载
 
@@ -25,7 +26,13 @@ Windows 平台的所见即所得 Markdown 编辑器，WinUI 界面，编辑内�
 |---|---|
 | `Typedown-windows-x64-*.exe` / `-arm64-*.exe` | 安装包，一路下一步即可 |
 | `Typedown-portable-x64-*.zip` / `-arm64-*.zip` | 便携版，解压即用，不写注册表 |
-| `Typedown.Package_*.msix` | MSIX 包；需要先安装同一发布里的 `Typedown-signing-certificate.cer` 到「受信任的根证书颁发机构」 |
+| `Typedown_*_x64.msix` / `_ARM64.msix` | MSIX 包；需要先安装同一发布里的 `Typedown-signing-certificate.cer` 到「受信任的根证书颁发机构」 |
+
+也可以从微软商店安装 **Typeleaf**：本仓库在微软商店上架的版本，由商店安装和自动更新，不用手动导入证书。
+
+<a href="https://apps.microsoft.com/detail/9nxbvhm4k005?referrer=appbadge&mode=direct">
+  <img src="https://get.microsoft.com/images/zh-cn%20dark.svg" width="200" alt="从 Microsoft Store 获取 Typeleaf"/>
+</a>
 
 跨平台（Linux / macOS）请用 Uno 移植版：**[flintt/Typedown-Uno](https://github.com/flintt/Typedown-Uno/releases/latest)**。
 
