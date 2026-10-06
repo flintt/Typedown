@@ -140,6 +140,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | TH01 | a custom theme colours the page in visual, reading and source mode, and a change shows at once in each |
 | RD01 | reading mode: the context menu offers copying and selecting only, Copy works on a selection, copy as plain text leaves the Markdown out, Ctrl+Z changes nothing |
 | CP01 | Copy pasted into Word: pictures at absolute file:/// addresses, a name and an alt text with brackets, an SVG sized in pt, a JPEG |
+| TH03 | the side pane marks what is chosen (the bar under Files/Outline, the outline's and the folder tree's row pill) in a custom theme's accent, and in the system accent again without one |
 | TH02 | View > Theme > Reload themes finds a new theme file and a renamed one; the window draws in the custom theme's base whatever the built-in setting says |
 | Q01 | two windows closed one after the other: the process exits (it stayed, headless) |
 <!-- END generated: e2e-cases -->
@@ -177,6 +178,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | `test.images.insert` | `paths?`, `windowId` | What a drop, paste or pick of image files does: each through the local image setting, inserted together. | TestHostHooks.cs |
 | `test.theme.apply` | `customTheme?`, `builtIn?`, `windowId` | A theme picked as the View menu picks it (a custom theme brings its base light/dark along), and what the window then draws with. | TestHostHooks.cs |
 | `test.theme.menu` | `reload?`, `windowId` | View > Theme: the entries it shows, after clicking its "Reload themes" item when asked (through the item's automation peer, as an assistive tool would). | TestHostHooks.cs |
+| `test.pane.accent` | `windowId` | The colours the side pane marks what is chosen with: every selection indicator drawn in it (the bar under Files/Outline, the pill of each outline and folder-tree row), by where it is, with its fill. | TestHostHooks.cs |
 | `test.images.uploadAll` | `windowId` | File > Upload local images on the window's active document, without its dialogs; returns the result. | TestHostHooks.cs |
 <!-- END generated: test-methods -->
 
