@@ -47,6 +47,31 @@ namespace Typedown.Core.Controls
                     Folder.Content = Locale.GetString("Files");
                     Toc.Content = Locale.GetString("Outline");
                 })));
+            disposables.Add(Settings.WhenPropertyChanged(nameof(SettingsViewModel.CustomTheme))
+                .StartWith(Settings.CustomTheme)
+                .Subscribe(_ => UpdateAccent()));
+        }
+
+        // The marks of what is chosen here - the bar under Files/Outline, the pill beside the current heading in the
+        // outline and beside the open file in the folder tree - are drawn in the accent colour, which WinUI takes
+        // from Windows, not from the custom theme: with any theme they stayed the system blue. A theme with an
+        // accent of its own has it put here, where the Files/Outline bar, the outline and the folder tree all look it up; a
+        // theme without one leaves the system accent. Each window has its own pane and so its own brush.
+        private static readonly string[] AccentKeys = { "NavigationViewSelectionIndicatorForeground", "TreeViewItemSelectionIndicatorForeground" };
+
+        private void UpdateAccent()
+        {
+            var accent = ThemeFiles.Brush(ThemeFiles.Find(Settings?.CustomTheme)?.Accent);
+            foreach (var key in AccentKeys)
+            {
+                if (accent == null) Resources.Remove(key);
+                else Resources[key] = accent;
+            }
+            // What is already on screen looked its brushes up when it was built; flipping the theme and back makes
+            // it look them up again (as in the tab bar).
+            var requested = Root.RequestedTheme;
+            Root.RequestedTheme = Root.ActualTheme == ElementTheme.Dark ? ElementTheme.Light : ElementTheme.Dark;
+            Root.RequestedTheme = requested;
         }
 
         private void UpdateSelectedItem(int index)

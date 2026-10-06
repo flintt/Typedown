@@ -18,7 +18,7 @@
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityReverseConverter" IsReverse="True"/>
         <x:Double x:Key="TopNavigationViewPaneCustomContentMinWidth">0</x:Double>
     </UserControl.Resources>
-    <Grid>
+    <Grid x:Name="Root">
         <muxc:NavigationView 
             x:Name="NavigationView"
             Visibility="{x:Bind IsSearchPaneOpen, Mode=OneWay, Converter={StaticResource BoolToVisibilityReverseConverter}}"
