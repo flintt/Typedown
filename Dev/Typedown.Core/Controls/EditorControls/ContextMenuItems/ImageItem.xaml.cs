@@ -212,7 +212,7 @@ namespace Typedown.Core.Controls.EditorControls.ContextMenuItems
             filePicker.FileTypeChoices.Add(type, new List<string>() { $".{type}" });
             filePicker.SuggestedFileName = ImageAlt;
             filePicker.SetOwnerWindow(ViewModel.MainWindow);
-            var file = await filePicker.PickSaveFileAsync();
+            var file = await FilePickersExtensions.ShowAsync(() => filePicker.PickSaveFileAsync());
             return file?.Path;
         }
 

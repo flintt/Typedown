@@ -66,8 +66,8 @@ namespace Typedown.Core.Controls
                 FileTypeFilter.ToList().ForEach(filePicker.FileTypeFilter.Add);
                 filePicker.SetOwnerWindow(Window);
                 var paths = AllowMultiple
-                    ? (await filePicker.PickMultipleFilesAsync()).Select(f => f.Path).ToList()
-                    : new[] { (await filePicker.PickSingleFileAsync())?.Path }.Where(p => p != null).ToList();
+                    ? ((await FilePickersExtensions.ShowAsync(() => filePicker.PickMultipleFilesAsync()))?.Select(f => f.Path) ?? Enumerable.Empty<string>()).ToList()
+                    : new[] { (await FilePickersExtensions.ShowAsync(() => filePicker.PickSingleFileAsync()))?.Path }.Where(p => p != null).ToList();
                 var isCancel = paths.Count == 0;
                 if (!isCancel) Path = paths[0];
                 Picked?.Invoke(this, new(isCancel, paths.FirstOrDefault(), paths));
@@ -85,7 +85,7 @@ namespace Typedown.Core.Controls
                 var folderPicker = new FolderPicker();
                 folderPicker.SetOwnerWindow(Window);
                 folderPicker.FileTypeFilter.Add("*");
-                var folder = await folderPicker.PickSingleFolderAsync();
+                var folder = await FilePickersExtensions.ShowAsync(() => folderPicker.PickSingleFolderAsync());
                 var isCancel = folder is null;
                 if (!isCancel) Path = folder.Path;
                 Picked?.Invoke(this, new(isCancel, folder?.Path));

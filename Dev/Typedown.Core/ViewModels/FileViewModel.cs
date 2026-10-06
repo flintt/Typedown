@@ -561,7 +561,7 @@ namespace Typedown.Core.ViewModels
                 filePicker.SetOwnerWindow(AppViewModel.MainWindow);
                 filePicker.FileTypeChoices.Add("Markdown Files", FileTypeHelper.Markdown.ToList());
                 filePicker.SuggestedFileName = FileName ?? "untitled";
-                var file = await filePicker.PickSaveFileAsync();
+                var file = await FilePickersExtensions.ShowAsync(() => filePicker.PickSaveFileAsync());
                 if (file != null && !disposables.IsDisposed && FilePath == originalPath && TabsViewModel?.ActiveTab == originalTab)
                 {
                     await EditorViewModel.FlushContentAsync();
@@ -940,7 +940,7 @@ namespace Typedown.Core.ViewModels
             // Default to the document's own name (a PDF of readme.md is offered as readme.pdf), the extension
             // coming from the chosen format; an unsaved document has no name, so fall back to "untitled".
             filePicker.SuggestedFileName = FilePath != null ? Path.GetFileNameWithoutExtension(FilePath) : (FileName ?? "untitled");
-            var file = await filePicker.PickSaveFileAsync();
+            var file = await FilePickersExtensions.ShowAsync(() => filePicker.PickSaveFileAsync());
             if (file == null) return;
             string basePath = null;
             if (config.Type == Enums.ExportType.PDF || config.Type == Enums.ExportType.Image)
@@ -971,7 +971,7 @@ namespace Typedown.Core.ViewModels
             {
                 var filePicker = new FileOpenPicker() { FileTypeFilter = { ".html" } };
                 filePicker.SetOwnerWindow(AppViewModel.MainWindow);
-                var file = await filePicker.PickSingleFileAsync();
+                var file = await FilePickersExtensions.ShowAsync(() => filePicker.PickSingleFileAsync());
                 if (file != null)
                 {
                     var text = await File.ReadAllTextAsync(file.Path);
