@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Vim yn y modd ffynhonnell (:w yn cadw, :q yn cau'r tab); j/k, gg/G, ]] a / i symud o gwmpas yn y modd darllen. Nid yn y golygydd gweledol.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>Agor y ffolder logiau</value>
+  </data>
 </root>

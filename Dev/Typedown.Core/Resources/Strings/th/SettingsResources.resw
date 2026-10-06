@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Vim ในโหมดซอร์ส (:w บันทึก, :q ปิดแท็บ); j/k, gg/G, ]] และ / เพื่อเลื่อนไปมาในโหมดอ่าน ใช้ไม่ได้ในตัวแก้ไขแบบภาพ</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>เปิดโฟลเดอร์บันทึก</value>
+  </data>
 </root>

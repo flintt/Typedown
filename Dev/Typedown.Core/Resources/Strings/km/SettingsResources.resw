@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Vim ក្នុងរបៀបកូដប្រភព (:w រក្សាទុក, :q បិទផ្ទាំង); j/k, gg/G, ]] និង / ដើម្បីផ្លាស់ទីក្នុងរបៀបអាន។ មិនមែនក្នុងកម្មវិធីកែសម្រួលមើលឃើញទេ។</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>បើក​ថត​កំណត់​ហេតុ</value>
+  </data>
 </root>

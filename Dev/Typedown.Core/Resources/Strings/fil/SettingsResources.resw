@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Vim sa source mode (:w para mag-save, :q para isara ang tab); j/k, gg/G, ]] at / para gumalaw sa reading mode. Wala sa visual editor.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>Buksan ang Log Folder</value>
+  </data>
 </root>

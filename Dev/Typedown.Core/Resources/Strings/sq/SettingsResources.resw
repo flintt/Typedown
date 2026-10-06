@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Vim në modalitetin e burimit (:w ruan, :q mbyll skedën); j/k, gg/G, ]] dhe / për lëvizje në modalitetin e leximit. Jo në redaktorin vizual.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>Hap dosjen e regjistrave</value>
+  </data>
 </root>

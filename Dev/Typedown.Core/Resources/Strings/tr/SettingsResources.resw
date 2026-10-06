@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Kaynak modunda Vim (:w kaydeder, :q sekmeyi kapatır); okuma modunda gezinmek için j/k, gg/G, ]] ve /. Görsel düzenleyicide yok.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>Günlük Klasörünü Aç</value>
+  </data>
 </root>

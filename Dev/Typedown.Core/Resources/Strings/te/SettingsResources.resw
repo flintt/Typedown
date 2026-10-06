@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>సోర్స్ మోడ్‌లో Vim (:w సేవ్ చేస్తుంది, :q ట్యాబ్‌ను మూసివేస్తుంది); చదివే మోడ్‌లో కదలడానికి j/k, gg/G, ]] మరియు /. విజువల్ ఎడిటర్‌లో కాదు.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>లాగ్ ఫోల్డర్ తెరవండి</value>
+  </data>
 </root>

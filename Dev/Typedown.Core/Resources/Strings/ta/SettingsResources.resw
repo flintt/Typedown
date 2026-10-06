@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>மூல முறையில் Vim (:w சேமிக்கும், :q தாவலை மூடும்); வாசிப்பு முறையில் நகர j/k, gg/G, ]] மற்றும் /. காட்சி திருத்தியில் இல்லை.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>பதிவுக் கோப்புறையைத் திற</value>
+  </data>
 </root>

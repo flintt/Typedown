@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Vim in modalità sorgente (:w salva, :q chiude la scheda); j/k, gg/G, ]] e / per spostarsi in modalità lettura. Non nell'editor visuale.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>Apri cartella dei log</value>
+  </data>
 </root>

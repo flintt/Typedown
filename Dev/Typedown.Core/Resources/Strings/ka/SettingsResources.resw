@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Vim წყაროს რეჟიმში (:w ინახავს, :q ხურავს ჩანართს); j/k, gg/G, ]] და / კითხვის რეჟიმში გადასაადგილებლად. არა ვიზუალურ რედაქტორში.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>ჟურნალების საქაღალდის გახსნა</value>
+  </data>
 </root>

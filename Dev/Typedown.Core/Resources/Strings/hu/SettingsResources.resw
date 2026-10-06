@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Vim forrás módban (:w ment, :q bezárja a lapot); j/k, gg/G, ]] és / a mozgáshoz olvasási módban. A vizuális szerkesztőben nem.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>Naplómappa megnyitása</value>
+  </data>
 </root>

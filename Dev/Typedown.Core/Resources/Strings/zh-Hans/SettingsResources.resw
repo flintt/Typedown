@@ -915,4 +915,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>源码模式下使用 Vim（:w 保存，:q 关闭标签页）；阅读模式下用 j/k、gg/G、]] 和 / 移动。可视编辑器中不可用。</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>打开日志文件夹</value>
+  </data>
 </root>

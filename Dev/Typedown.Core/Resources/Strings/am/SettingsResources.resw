@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Vim በምንጭ ሁነታ (:w ያስቀምጣል፣ :q ትሩን ይዘጋል)፤ በንባብ ሁኔታ ለመንቀሳቀስ j/k፣ gg/G፣ ]] እና /። በእይታ አርታዒ ውስጥ አይሰራም።</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>የምዝግብ ማስታወሻ አቃፊን ክፈት</value>
+  </data>
 </root>

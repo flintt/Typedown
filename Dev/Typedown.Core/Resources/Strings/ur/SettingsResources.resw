@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>ماخذ وضع میں Vim (:w محفوظ کرتا ہے، :q ٹیب بند کرتا ہے)؛ مطالعہ موڈ میں گھومنے کے لیے j/k، gg/G، ]] اور /۔ بصری ایڈیٹر میں نہیں۔</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>لاگ فولڈر کھولیں</value>
+  </data>
 </root>

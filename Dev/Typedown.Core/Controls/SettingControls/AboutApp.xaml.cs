@@ -40,6 +40,19 @@ namespace Typedown.Core.Controls
             Utilities.Common.OpenUrl(Typedown.Automation.Brand.FeedbackUrl);
         }
 
+        private void OpenLogFolderButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            try
+            {
+                System.IO.Directory.CreateDirectory(Utilities.Log.LogFolder);
+                System.Diagnostics.Process.Start("explorer.exe", $"\"{Utilities.Log.LogFolder}\"");
+            }
+            catch (System.Exception ex)
+            {
+                Utilities.Log.Debug($"about: could not open the log folder: {ex.Message}");
+            }
+        }
+
         /// <summary>
         /// A section of its own that an edition adds below the rest (set from Edition.Initialize); called each time the
         /// page is shown. Typedown leaves it null and the page is as it always was.

@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>ਸਰੋਤ ਮੋਡ ਵਿੱਚ Vim (:w ਸੰਭਾਲਦਾ ਹੈ, :q ਟੈਬ ਬੰਦ ਕਰਦਾ ਹੈ); ਪੜ੍ਹਨ ਮੋਡ ਵਿੱਚ ਘੁੰਮਣ ਲਈ j/k, gg/G, ]] ਅਤੇ /। ਵਿਜ਼ੂਅਲ ਸੰਪਾਦਕ ਵਿੱਚ ਨਹੀਂ।</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>ਲੌਗ ਫੋਲਡਰ ਖੋਲ੍ਹੋ</value>
+  </data>
 </root>

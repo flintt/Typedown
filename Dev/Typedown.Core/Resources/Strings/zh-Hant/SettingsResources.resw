@@ -909,4 +909,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>原始碼模式下使用 Vim（:w 儲存，:q 關閉索引標籤）；閱讀模式下用 j/k、gg/G、]] 和 / 移動。視覺化編輯器中無法使用。</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>開啟記錄檔資料夾</value>
+  </data>
 </root>

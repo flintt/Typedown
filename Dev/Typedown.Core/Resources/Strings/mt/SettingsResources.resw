@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Vim fil-modalità tas-sors (:w jissejvja, :q jagħlaq it-tab); j/k, gg/G, ]] u / biex tiċċaqlaq fil-modalità ta' qari. Mhux fl-editur viżwali.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>Iftaħ il-folder tal-logs</value>
+  </data>
 </root>

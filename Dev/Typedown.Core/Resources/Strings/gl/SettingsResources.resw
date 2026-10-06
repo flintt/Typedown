@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Vim no modo fonte (:w garda, :q pecha a lapela); j/k, gg/G, ]] e / para moverse no modo de lectura. Non no editor visual.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>Abrir o cartafol de rexistros</value>
+  </data>
 </root>

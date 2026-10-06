@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Vim iturburu moduan (:w gordetzen du, :q fitxa ixten du); j/k, gg/G, ]] eta / irakurketa moduan mugitzeko. Ez editore bisualean.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>Ireki erregistroen karpeta</value>
+  </data>
 </root>

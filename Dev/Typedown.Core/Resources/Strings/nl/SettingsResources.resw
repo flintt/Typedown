@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Vim in de bronmodus (:w slaat op, :q sluit het tabblad); j/k, gg/G, ]] en / om te navigeren in de leesmodus. Niet in de visuele editor.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>Logboekmap openen</value>
+  </data>
 </root>

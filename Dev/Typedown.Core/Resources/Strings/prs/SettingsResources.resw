@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Vim در حالت منبع (:w ذخیره می‌کند، :q زبانه را می‌بندد)؛ j/k، gg/G، ]] و / برای جابه‌جایی در حالت خواندن. در ویرایشگر دیداری نیست.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>باز کردن پوشه گزارش‌ها</value>
+  </data>
 </root>

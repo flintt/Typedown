@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Vim v načinu izvorne kode (:w shrani, :q zapre zavihek); j/k, gg/G, ]] in / za premikanje v bralnem načinu. Ne v vizualnem urejevalniku.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>Odpri mapo dnevnikov</value>
+  </data>
 </root>

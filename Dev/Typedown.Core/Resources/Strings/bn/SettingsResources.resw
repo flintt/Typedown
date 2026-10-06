@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>সোর্স মোডে Vim (:w সংরক্ষণ করে, :q ট্যাব বন্ধ করে); পঠন মোডে চলাচলের জন্য j/k, gg/G, ]] এবং /। ভিজ্যুয়াল এডিটরে নয়।</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>লগ ফোল্ডার খুলুন</value>
+  </data>
 </root>

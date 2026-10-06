@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Vim במצב קוד מקור (:w שומר, :q סוגר את הכרטיסייה); j/k,‏ gg/G,‏ ]] ו-/ לניווט במצב קריאה. לא בעורך החזותי.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>פתיחת תיקיית היומנים</value>
+  </data>
 </root>

@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Vim i te aratau pūtake (:w hei tiaki, :q hei kati i te ripa); j/k, gg/G, ]] me / hei neke haere i te aratau pānui. Kāore i te ētita ataata.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>Whakatuwhera te kōpaki rangitaki</value>
+  </data>
 </root>

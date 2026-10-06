@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Vim dalam mode sumber (:w menyimpan, :q menutup tab); j/k, gg/G, ]] dan / untuk berpindah dalam mode baca. Tidak di editor visual.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>Buka Folder Log</value>
+  </data>
 </root>

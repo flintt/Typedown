@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>চ'ৰ্চ মোডত Vim (:w য়ে সাঁচে, :q য়ে টেব বন্ধ কৰে); পঢ়া ম'ডত ঘূৰি ফুৰিবলৈ j/k, gg/G, ]] আৰু /। ভিজুৱেল সম্পাদকত নাই।</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>লগ ফ’ল্ডাৰ খোলক</value>
+  </data>
 </root>

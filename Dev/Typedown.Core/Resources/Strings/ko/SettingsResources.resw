@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>소스 모드에서 Vim 사용(:w 저장, :q 탭 닫기). 읽기 모드에서는 j/k, gg/G, ]], /로 이동합니다. 시각 편집기에서는 사용할 수 없습니다.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>로그 폴더 열기</value>
+  </data>
 </root>

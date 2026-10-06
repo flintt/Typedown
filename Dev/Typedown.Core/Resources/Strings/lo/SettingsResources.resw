@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Vim ໃນໂໝດຊອດ (:w ບັນທຶກ, :q ປິດແຖບ); j/k, gg/G, ]] ແລະ / ເພື່ອເລື່ອນໄປມາໃນໂໝດອ່ານ. ບໍ່ມີໃນຕົວແກ້ໄຂແບບພາບ.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>ເປີດໂຟນເດີບັນທຶກ</value>
+  </data>
 </root>

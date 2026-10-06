@@ -31,8 +31,10 @@
             <HyperlinkButton Content="{x:Bind local:AboutApp.LinkText}" NavigateUri="{x:Bind local:AboutApp.LinkUrl}" />
         </StackPanel>
 
-        <StackPanel Margin="0,8,0,0" Spacing="16">
+        <StackPanel Margin="0,8,0,0" Spacing="8" Orientation="Horizontal">
             <Button MinWidth="100" Name="FeedBackButton" Content="{u:LocaleString Key=About.SendFeedback}" Click="FeedBackButton_Click"/>
+            <!-- The local logs (debug.log and the error reports), to attach to a report. -->
+            <Button MinWidth="100" Name="OpenLogFolderButton" Content="{u:LocaleString Key=About.OpenLogFolder}" Click="OpenLogFolderButton_Click"/>
         </StackPanel>
 
         <!-- What an edition adds to the page (AboutApp.EditionSection); empty unless an edition sets it. -->

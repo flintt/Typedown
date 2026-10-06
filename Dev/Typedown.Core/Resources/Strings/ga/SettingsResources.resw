@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Vim sa mhód foinse (sábhálann :w, dúnann :q an cluaisín); j/k, gg/G, ]] agus / chun bogadh timpeall sa mhód léitheoireachta. Ní san eagarthóir amhairc.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>Oscail an fillteán logaí</value>
+  </data>
 </root>

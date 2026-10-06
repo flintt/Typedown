@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Vim lähdetilassa (:w tallentaa, :q sulkee välilehden); j/k, gg/G, ]] ja / liikkumiseen lukutilassa. Ei visuaalisessa editorissa.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>Avaa lokikansio</value>
+  </data>
 </root>

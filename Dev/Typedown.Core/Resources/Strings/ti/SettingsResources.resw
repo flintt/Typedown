@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Vim ብምንጪ ኩነታት (:w የዕቅብ፣ :q ነቲ ታብ ይዓጹ)፤ ኣብ ኩነታት ምንባብ ንምንቅስቓስ j/k፣ gg/G፣ ]] ከምኡ'ውን /። ኣብ ናይ ርእይቶ ኣርታዒ ኣይኮነን።</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>ናይ መዝገብ ማህደር ክፈት</value>
+  </data>
 </root>

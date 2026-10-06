@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Vim i källkodsläge (:w sparar, :q stänger fliken); j/k, gg/G, ]] och / för att förflytta dig i läsläge. Inte i den visuella redigeraren.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>Öppna loggmappen</value>
+  </data>
 </root>

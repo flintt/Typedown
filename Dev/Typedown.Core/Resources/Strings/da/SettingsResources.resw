@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Vim i kildetilstand (:w gemmer, :q lukker fanen); j/k, gg/G, ]] og / til at bevæge sig rundt i læsetilstand. Ikke i den visuelle editor.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>Åbn logmappe</value>
+  </data>
 </root>

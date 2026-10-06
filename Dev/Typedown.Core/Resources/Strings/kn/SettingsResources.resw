@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>ಮೂಲ ಮೋಡ್‌ನಲ್ಲಿ Vim (:w ಉಳಿಸುತ್ತದೆ, :q ಟ್ಯಾಬ್ ಮುಚ್ಚುತ್ತದೆ); ಓದುವ ಮೋಡ್‌ನಲ್ಲಿ ಚಲಿಸಲು j/k, gg/G, ]] ಮತ್ತು /. ದೃಶ್ಯ ಸಂಪಾದಕದಲ್ಲಿ ಇಲ್ಲ.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>ಲಾಗ್ ಫೋಲ್ಡರ್ ತೆರೆಯಿರಿ</value>
+  </data>
 </root>

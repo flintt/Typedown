@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Vim en modo código fuente (:w guarda, :q cierra la pestaña); j/k, gg/G, ]] y / para desplazarse en modo lectura. No disponible en el editor visual.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>Abrir carpeta de registros</value>
+  </data>
 </root>

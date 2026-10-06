@@ -886,4 +886,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Vim في وضع المصدر (:w للحفظ، :q لإغلاق علامة التبويب)؛ j/k وgg/G و]] و/ للتنقل في وضع القراءة. غير متاح في المحرر المرئي.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>فتح مجلد السجلات</value>
+  </data>
 </root>

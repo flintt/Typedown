@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>സോഴ്സ് മോഡിൽ Vim (:w സേവ് ചെയ്യുന്നു, :q ടാബ് അടയ്ക്കുന്നു); വായനാ മോഡിൽ നീങ്ങാൻ j/k, gg/G, ]], /. ദൃശ്യ എഡിറ്ററിൽ ഇല്ല.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>ലോഗ് ഫോൾഡർ തുറക്കുക</value>
+  </data>
 </root>

@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Vim în modul sursă (:w salvează, :q închide fila); j/k, gg/G, ]] și / pentru deplasare în modul lectură. Nu și în editorul vizual.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>Deschide folderul de jurnale</value>
+  </data>
 </root>

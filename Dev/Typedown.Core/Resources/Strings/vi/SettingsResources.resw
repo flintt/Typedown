@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Vim ở chế độ mã nguồn (:w lưu, :q đóng tab); j/k, gg/G, ]] và / để di chuyển ở chế độ đọc. Không có trong trình soạn thảo trực quan.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>Mở thư mục nhật ký</value>
+  </data>
 </root>

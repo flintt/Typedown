@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Бастапқы код режимінде Vim (:w сақтайды, :q қойындыны жабады); оқу режимінде жылжу үшін j/k, gg/G, ]] және /. Көрнекі редакторда емес.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>Журнал қалтасын ашу</value>
+  </data>
 </root>

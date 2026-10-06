@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>स्रोत मोडमा Vim (:w ले सेभ गर्छ, :q ले ट्याब बन्द गर्छ); पढ्ने मोडमा घुम्न j/k, gg/G, ]] र /। दृश्य सम्पादकमा होइन।</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>लग फोल्डर खोल्नुहोस्</value>
+  </data>
 </root>

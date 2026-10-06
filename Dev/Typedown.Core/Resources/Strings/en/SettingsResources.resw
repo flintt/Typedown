@@ -137,6 +137,10 @@
     <value>Send Feedback</value>
     <comment>关于/发送反馈</comment>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>Open Log Folder</value>
+    <comment>关于/打开日志文件夹</comment>
+  </data>
   <data name="About.Title" xml:space="preserve">
     <value>About</value>
     <comment>关于/关于</comment>

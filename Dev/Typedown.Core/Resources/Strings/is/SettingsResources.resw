@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Vim í frumkóðaham (:w vistar, :q lokar flipanum); j/k, gg/G, ]] og / til að fara um í lestrarham. Ekki í sjónræna ritlinum.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>Opna annálamöppu</value>
+  </data>
 </root>

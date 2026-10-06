@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Vim katika hali ya chanzo (:w huhifadhi, :q hufunga kichupo); j/k, gg/G, ]] na / kusogea katika hali ya kusoma. Si katika kihariri cha kuona.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>Fungua Folda ya Kumbukumbu</value>
+  </data>
 </root>

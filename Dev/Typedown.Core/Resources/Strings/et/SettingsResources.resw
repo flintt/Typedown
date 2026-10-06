@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Vim lähtekoodi režiimis (:w salvestab, :q sulgeb vahekaardi); j/k, gg/G, ]] ja / lugemisrežiimis liikumiseks. Mitte visuaalses redaktoris.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>Ava logikaust</value>
+  </data>
 </root>

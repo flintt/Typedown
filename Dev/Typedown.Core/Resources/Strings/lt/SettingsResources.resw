@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Vim šaltinio režimu (:w įrašo, :q uždaro kortelę); j/k, gg/G, ]] ir / judėti skaitymo režimu. Ne vaizdiniame redaktoriuje.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>Atidaryti žurnalų aplanką</value>
+  </data>
 </root>

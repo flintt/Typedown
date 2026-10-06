@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>ସୋର୍ସ ମୋଡରେ Vim (:w ସେଭ କରେ, :q ଟାବ ବନ୍ଦ କରେ); ପଢ଼ିବା ମୋଡ୍‌ରେ ଘୁଞ୍ଚିବା ପାଇଁ j/k, gg/G, ]] ଏବଂ /। ଭିଜୁଆଲ ଏଡିଟରରେ ନୁହେଁ।</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>ଲଗ୍ ଫୋଲ୍ଡର୍ ଖୋଲନ୍ତୁ</value>
+  </data>
 </root>

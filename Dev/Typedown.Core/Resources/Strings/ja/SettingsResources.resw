@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>ソースモードで Vim を使用 (:w で保存、:q でタブを閉じる)。読み取りモードでは j/k、gg/G、]]、/ で移動。ビジュアルエディターでは使えません。</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>ログ フォルダーを開く</value>
+  </data>
 </root>

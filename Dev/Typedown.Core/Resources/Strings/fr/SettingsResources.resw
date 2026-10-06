@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Vim en mode source (:w enregistre, :q ferme l'onglet) ; j/k, gg/G, ]] et / pour se déplacer en mode lecture. Pas dans l'éditeur visuel.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>Ouvrir le dossier des journaux</value>
+  </data>
 </root>

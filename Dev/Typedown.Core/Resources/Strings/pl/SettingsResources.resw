@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Vim w trybie źródłowym (:w zapisuje, :q zamyka kartę); j/k, gg/G, ]] i / do poruszania się w trybie czytania. Nie w edytorze wizualnym.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>Otwórz folder dzienników</value>
+  </data>
 </root>

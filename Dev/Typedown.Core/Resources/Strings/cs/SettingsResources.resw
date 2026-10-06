@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Vim v režimu zdrojového kódu (:w uloží, :q zavře kartu); j/k, gg/G, ]] a / pro pohyb v režimu čtení. Ne ve vizuálním editoru.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>Otevřít složku protokolů</value>
+  </data>
 </root>

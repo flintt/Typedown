@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Vim в режим на изходен код (:w записва, :q затваря раздела); j/k, gg/G, ]] и / за придвижване в режим на четене. Не и във визуалния редактор.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>Отваряне на папката с журнали</value>
+  </data>
 </root>

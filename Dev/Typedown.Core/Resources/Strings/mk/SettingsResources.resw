@@ -880,4 +880,7 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Vim во режим на изворен код (:w зачувува, :q го затвора јазичето); j/k, gg/G, ]] и / за движење во режим на читање. Не во визуелниот уредувач.</value>
   </data>
+  <data name="About.OpenLogFolder" xml:space="preserve">
+    <value>Отвори ја папката со дневници</value>
+  </data>
 </root>
