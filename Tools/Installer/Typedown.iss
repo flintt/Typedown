@@ -3,7 +3,7 @@
 #ifndef MyArch
   #define MyArch "x64"
 #endif
-#define MyAppVersion "1.3.4"
+#define MyAppVersion "1.3.5"
 #define MyAppAssocName MyAppName + " Markdown"
 #define MyAppAssocKey MyAppName + ".Markdown"
 
