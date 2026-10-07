@@ -53,7 +53,7 @@ namespace Typedown.Core.Controls
             shownPage = e.SourcePageType;
             if (e.SourcePageType != typeof(MainPage) || (from != null && from != typeof(SettingsPage))) return;
             ViewModel.EditorViewModel.FocusWhenLoaded = true;
-            _ = Dispatcher.RunIdleAsync(_ => (ViewModel.MarkdownEditor as Windows.UI.Xaml.Controls.Control)?.Focus(FocusState.Programmatic));
+            _ = Dispatcher.RunIdleAsync(_ => ViewModel.MarkdownEditor?.FocusEditor());
         }
 
         private void ReloadSettingsPage()

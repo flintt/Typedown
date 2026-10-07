@@ -115,8 +115,14 @@ namespace Typedown.Controls
             if (AppViewModel.EditorViewModel.FocusWhenLoaded)
             {
                 AppViewModel.EditorViewModel.FocusWhenLoaded = false;
-                Focus(FocusState.Programmatic);
+                FocusEditor();
             }
+        }
+
+        public void FocusEditor()
+        {
+            Focus(FocusState.Programmatic);
+            WebViewController?.EnsureFocus();
         }
 
         protected override void OnPointerPressed(PointerRoutedEventArgs e)

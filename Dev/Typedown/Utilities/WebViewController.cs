@@ -619,6 +619,18 @@ namespace Typedown.Utilities
             webHasFocus = false;
         }
 
+        /// <summary>
+        /// The page given the keyboard when the container holds the XAML focus and the page does not have it. Focusing
+        /// a control that already has the focus changes nothing - no GettingFocus, no GotFocus - so the hand-over into
+        /// the page never ran: the container could hold the focus from before the page existed (start-up), and the keys
+        /// then went to the XAML island until a click in the text.
+        /// </summary>
+        public void EnsureFocus()
+        {
+            if (CoreWebView2Controller != null && !webHasFocus && Container?.XamlRoot != null && FocusManager.GetFocusedElement(Container.XamlRoot) == Container)
+                MoveFocusIntoCoreWebView(CoreWebView2MoveFocusReason.Programmatic);
+        }
+
         public void MoveFocusIntoCoreWebView(CoreWebView2MoveFocusReason reason)
         {
             try

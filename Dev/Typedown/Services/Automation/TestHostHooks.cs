@@ -94,7 +94,8 @@ namespace Typedown.Services.Automation
                 {
                     var editor = app.MarkdownEditor as global::Windows.UI.Xaml.Controls.Control
                         ?? throw new AutomationException(AutomationErrorKind.editor_not_ready, "the window shows no editor page");
-                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["focused"] = editor.Focus(global::Windows.UI.Xaml.FocusState.Programmatic) };
+                    (editor as Core.Interfaces.IMarkdownEditor)!.FocusEditor();
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["focused"] = editor.FocusState != global::Windows.UI.Xaml.FocusState.Unfocused };
                 })));
             // Runs a script in the window's editor page and returns its JSON result: for diagnosing what the page holds
             // (caret, Muya's state) when a check fails in the real window and not in the page harness.
