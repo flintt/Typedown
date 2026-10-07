@@ -294,9 +294,10 @@ internal static partial class Program
 
         // Rewritten every time: one retry, then taken as it is (the editor's own normalization, as before).
         retries = LogLines("loading the text once more").Count;
-        await c.Call("test.editor.rewriteLoads", new { windowId, count = 2 });
         await c.Call("document.focus", new { documentId = other });
-        await Task.Delay(500);
+        await Task.Delay(1000);
+        // Set once the other document is in: its own load would take the rewrites.
+        await c.Call("test.editor.rewriteLoads", new { windowId, count = 2 });
         await c.Call("document.focus", new { documentId = id });
         await Eventually(async () => LogLines("rewritten again; taken").Count > 0, 6000);
         await Task.Delay(800);
