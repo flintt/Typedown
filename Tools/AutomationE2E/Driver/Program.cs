@@ -1784,18 +1784,23 @@ internal static partial class Program
         // Resize table.
         async Task<List<System.Windows.Automation.AutomationElement>> OpenDialog()
         {
-            // A click in the cell, as a hand does it: the pointer moved there first, then pressed and released.
-            await Activate(window);
-            var at = (await c.Call("test.editor.eval", new { windowId, script = "(() => { const r = document.querySelector('#ag-editor-id table tbody td').getBoundingClientRect(); return { x: Math.round(r.left + r.width / 2), y: Math.round(r.top + r.height / 2) } })()" }))["result"]!;
-            var screen = await c.Call("test.editor.screenPoint", new { windowId, x = (int)at["x"]!, y = (int)at["y"]! });
-            SetProcessDpiAwarenessContext(new IntPtr(-4));
-            SetCursorPos((int)screen["x"]! - 6, (int)screen["y"]!);
-            for (var i = 0; i < 3; i++) { await Task.Delay(60); Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dx = 2, dy = 0, dwFlags = 0x0001 } } }); }
-            Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0002 } } });
-            await Task.Delay(60);
-            Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0004 } } });
-            await Task.Delay(800);
-            var clicked = (bool?)(await c.Call("test.editor.eval", new { windowId, script = "(() => { const b = document.querySelector('[data-label=\"table\"]'); if (!b) return false; b.dispatchEvent(new MouseEvent('click', { bubbles: true })); return true })()" }))["result"];
+            // A click in the cell, as a hand does it: the pointer moved there first, then pressed and released. Tried
+            // again when the toolbar does not show (a first click in a window can go to bringing it forward).
+            bool? clicked = false;
+            for (var attempt = 0; attempt < 3 && clicked != true; attempt++)
+            {
+                await Activate(window);
+                var at = (await c.Call("test.editor.eval", new { windowId, script = "(() => { const r = document.querySelector('#ag-editor-id table tbody td').getBoundingClientRect(); return { x: Math.round(r.left + r.width / 2), y: Math.round(r.top + r.height / 2) } })()" }))["result"]!;
+                var screen = await c.Call("test.editor.screenPoint", new { windowId, x = (int)at["x"]!, y = (int)at["y"]! });
+                SetProcessDpiAwarenessContext(new IntPtr(-4));
+                SetCursorPos((int)screen["x"]! - 6, (int)screen["y"]!);
+                for (var i = 0; i < 3; i++) { await Task.Delay(60); Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dx = 2, dy = 0, dwFlags = 0x0001 } } }); }
+                Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0002 } } });
+                await Task.Delay(60);
+                Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0004 } } });
+                await Task.Delay(800);
+                clicked = (bool?)(await c.Call("test.editor.eval", new { windowId, script = "(() => { const b = document.querySelector('[data-label=\"table\"]'); if (!b) return false; b.dispatchEvent(new MouseEvent('click', { bubbles: true })); return true })()" }))["result"];
+            }
             Check(clicked == true, "the table toolbar has Resize table");
             List<System.Windows.Automation.AutomationElement> boxes = new();
             for (var i = 0; i < 30 && boxes.Count < 2; i++) { await Task.Delay(200); boxes = NumberBoxes(); }
