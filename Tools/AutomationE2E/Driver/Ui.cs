@@ -178,7 +178,7 @@ internal static partial class Program
     }
 
     /// <summary>
-    /// A menu by the names along its path ("文件", "导出", "Word"): each opened in turn, the last one invoked. The names
+    /// A menu by the names along its path ("文件", "导出", "PDF"): each opened in turn, the last one invoked. The names
     /// are the ones shown, in the interface's language.
     /// </summary>
     private static async Task OpenMenu(IntPtr window, params string[] path)
