@@ -193,7 +193,10 @@ namespace Typedown.Core.Controls
             {
                 Tabs.SwitchTabCommand.Execute(tab);
                 // A tab clicked in the strip keeps the keyboard on the tab; the reader came to write in the document.
-                _ = Dispatcher.RunIdleAsync(_ => ViewModel?.MarkdownEditor?.FocusEditor());
+                // Not when the selection moved because a tab was closed: handed over while the next document was
+                // being loaded, the keys disturbed its loading, and the outline stayed on the closed document's
+                // headings (E2E TC02). The keyboard is where it was after a close anyway.
+                if (!closing) _ = Dispatcher.RunIdleAsync(_ => ViewModel?.MarkdownEditor?.FocusEditor());
             }
         }
 
@@ -202,10 +205,16 @@ namespace Typedown.Core.Controls
             ViewModel?.FileViewModel.NewFileCommand.Execute(default);
         }
 
+        private bool closing;
+
         private void OnTabCloseRequested(muxc.TabView sender, muxc.TabViewTabCloseRequestedEventArgs args)
         {
             if (args.Item is DocumentTab tab)
+            {
+                closing = true;
                 Tabs?.CloseTabCommand.Execute(tab);
+                _ = Dispatcher.RunIdleAsync(_ => closing = false);
+            }
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
