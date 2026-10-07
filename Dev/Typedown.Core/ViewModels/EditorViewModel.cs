@@ -339,8 +339,34 @@ namespace Typedown.Core.ViewModels
             }
             if (!FileLoaded)
             {
-                FileLoaded = true;
                 var newText = arg["text"].ToString();
+                if (RewriteLoadsForTest > 0)
+                {
+                    RewriteLoadsForTest--;
+                    newText += "\n| rewritten | by the test host |\n";
+                }
+                // The editor gave back other text than it was given, with nobody having typed: a load meant to keep the
+                // text as it is (blocks not edited keep their source) rewrote it. Seen once on a restored tab - a long
+                // document came back with its tables laid out again and its raw HTML changed - and taken as the file's
+                // own text, so the next save would have written it. Once, the text is loaded again: that took it as it
+                // is. A text the editor rewrites every time is taken as it gives it back (its first edit is announced
+                // on the page, as before).
+                var given = Markdown ?? "";
+                if (!string.Equals(newText, given, StringComparison.Ordinal))
+                {
+                    Log.Debug($"FileLoaded: the editor rewrote the text it was given (load {LoadId}): {RewriteSummary(given, newText)}; "
+                        + $"cursor {(CurrentCursor != null ? "restored" : "none")}, page {PageGeneration}, source mode {Settings.SourceCode}, reading {Settings.ReadOnly}");
+                    if (!string.Equals(retriedLoad, given, StringComparison.Ordinal))
+                    {
+                        retriedLoad = given;
+                        Log.Debug($"FileLoaded: loading the text once more (load {LoadId + 1}), not taking the rewrite");
+                        PostLoadFile(given, CurrentCursor);
+                        return;
+                    }
+                    Log.Debug("FileLoaded: rewritten again; taken as the editor gives it");
+                }
+                retriedLoad = null;
+                FileLoaded = true;
                 var hash = Common.SimpleHash(newText);
                 if (hash != FileHash)
                     Log.Debug($"FileLoaded: editor normalized the text (len {Markdown.Length} -> {newText.Length}, loadId={LoadId})");
@@ -350,6 +376,37 @@ namespace Typedown.Core.ViewModels
                 if (FloatViewModel.FindReplaceDialogOpen > 0)
                     OnSearch();
             }
+        }
+
+        // The text a load was retried with (OnFileLoaded): one retry for each text.
+        private string retriedLoad;
+
+        /// <summary>For the automation test host: the next this many loads come back from the editor rewritten.</summary>
+        public int RewriteLoadsForTest { get; set; }
+
+        /// <summary>
+        /// Where and how much a load rewrote, for the log - not what it says: the lines between the first and the last
+        /// that differ, how many on each side, and how many of those were table rows, HTML, code fences and the rest.
+        /// </summary>
+        internal static string RewriteSummary(string given, string got)
+        {
+            var a = given.Replace("\r\n", "\n").Split('\n');
+            var b = got.Replace("\r\n", "\n").Split('\n');
+            var start = 0;
+            while (start < a.Length && start < b.Length && a[start] == b[start]) start++;
+            var endA = a.Length - 1;
+            var endB = b.Length - 1;
+            while (endA >= start && endB >= start && a[endA] == b[endB]) { endA--; endB--; }
+            var removed = a.Skip(start).Take(endA - start + 1).ToList();
+            var added = b.Skip(start).Take(endB - start + 1).ToList();
+            // The lines on one side only: what the load dropped and what it made up.
+            var changed = removed.Where(l => !added.Contains(l)).Concat(added.Where(l => !removed.Contains(l))).ToList();
+            int Count(Func<string, bool> kind) => changed.Count(kind);
+            var table = Count(l => l.TrimStart().StartsWith("|"));
+            var html = Count(l => System.Text.RegularExpressions.Regex.IsMatch(l, @"<[A-Za-z/!]"));
+            var fence = Count(l => l.TrimStart().StartsWith("```") || l.TrimStart().StartsWith("~~~"));
+            return $"{given.Length} -> {got.Length} chars; lines {start + 1}..{endA + 1} of {a.Length} differ ({removed.Count} given, {added.Count} back, "
+                + $"{changed.Count} on one side only: table {table}, html {html}, fence {fence}, other {changed.Count - table - html - fence})";
         }
 
         public void OnMarkdownChange(JToken arg)

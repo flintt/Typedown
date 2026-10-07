@@ -163,6 +163,7 @@ internal static partial class Program
             await Case("CP01 Copy pasted into Word: pictures at absolute file:/// addresses, a name and an alt text with brackets, an SVG sized in pt, a JPEG", CP01);
             await Case("TH03 the side pane marks what is chosen (the bar under Files/Outline, the outline's and the folder tree's row pill) in a custom theme's accent, and in the system accent again without one", TH03);
             await Case("TH02 View > Theme > Reload themes finds a new theme file and a renamed one; the window draws in the custom theme's base whatever the built-in setting says", TH02);
+            await Case("LD01 a load the editor gives back rewritten is loaded once more and keeps the file's text; one rewritten again is taken after that one retry, not retried without end", LD01);
             // An edition's own cases (Edition.<name>.cs beside this file, in the edition's repository); none here.
             var editionCases = new List<(string Name, Func<List<string>, Task> Run)>();
             EditionCases(editionCases);
@@ -238,6 +239,9 @@ internal static partial class Program
     {
         if (only != null && !only.Any(o => name.StartsWith(o + " "))) return;
         var notes = new List<string>();
+        // A person's mouse or keys a moment ago would be in the case's way: it waits for the desktop to be left alone.
+        var quiet = await WaitForQuietDesktop(1000);
+        if (quiet != null) notes.Add(quiet);
         var watch = Stopwatch.StartNew();
         try
         {
@@ -256,8 +260,51 @@ internal static partial class Program
                 // And the host's threads at that moment: a window's UI thread stuck shows nothing in the log.
                 notes.Add("host dump at the timeout: " + HangDump(name.Split(' ')[0] + "-timeout-" + DateTime.Now.ToString("HHmmss")));
             }
+            else
+            {
+                // Any other failure: the screen and where the keyboard was, for what the case could not say itself.
+                notes.Add("at the failure: " + FailureEvidence(name.Split(' ')[0]));
+            }
             results.Add(new JObject { ["name"] = name, ["passed"] = false, ["ms"] = watch.ElapsedMilliseconds, ["error"] = e is CaseFailed ? e.Message : e.ToString(), ["notes"] = new JArray(notes) });
         }
+    }
+
+    // A restored tab once came back from the editor with a long document rewritten (its tables laid out again, its raw
+    // HTML changed) and the host took that as the file's text. The test host has the next loads come back rewritten.
+    private static async Task LD01(List<string> notes)
+    {
+        using var c = await Session("e2e LD01");
+        var other = await Open(c, Fixture("ld01-other.md", "# other\n"));
+        var windowId = await WindowIdOf(c, other);
+        const string text = "# LD01\n\n|a|b|\n|-|-|\n|1|22|\n\n<div align=\"center\">raw</div>\n";
+        var retries = LogLines("loading the text once more").Count;
+
+        await c.Call("test.editor.rewriteLoads", new { windowId, count = 1 });
+        var id = await Open(c, Fixture("ld01.md", text));
+        string Body(JToken doc) => ((string)doc["text"]!).Replace("\r\n", "\n");
+        JToken doc = await Get(c, id);
+        await Eventually(async () => LogLines("loading the text once more").Count > retries, 5000);
+        await Task.Delay(800);
+        doc = await Get(c, id);
+        notes.Add($"rewritten once: saved={doc["saved"]}, {Body(doc).Length} chars (file {text.Length}); log: {LogLines("the editor rewrote the text it was given").LastOrDefault()?.Trim()}");
+        Check(Body(doc) == text, "rewritten once: the document holds the file's text, not the rewrite");
+        Check((bool)doc["saved"]!, "rewritten once: the document is still saved");
+        Check(LogLines("loading the text once more").Count == retries + 1, "rewritten once: loaded once more");
+        Check(LogLines("the editor rewrote the text it was given").Any(l => l.Contains("table 1,")), "the log says what kind of lines were rewritten (one table row)");
+
+        // Rewritten every time: one retry, then taken as it is (the editor's own normalization, as before).
+        retries = LogLines("loading the text once more").Count;
+        await c.Call("test.editor.rewriteLoads", new { windowId, count = 2 });
+        await c.Call("document.focus", new { documentId = other });
+        await Task.Delay(500);
+        await c.Call("document.focus", new { documentId = id });
+        await Eventually(async () => LogLines("rewritten again; taken").Count > 0, 6000);
+        await Task.Delay(800);
+        doc = await Get(c, id);
+        notes.Add($"rewritten twice: {Body(doc).Length} chars, retries {LogLines("loading the text once more").Count - retries}");
+        Check(LogLines("loading the text once more").Count == retries + 1, "rewritten twice: one retry only");
+        Check(Body(doc).Contains("rewritten"), "rewritten again: taken as the editor gave it");
+        await c.Call("test.editor.rewriteLoads", new { windowId, count = 0 });
     }
 
     // ---- helpers over the API ----

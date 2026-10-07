@@ -150,6 +150,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | CP01 | Copy pasted into Word: pictures at absolute file:/// addresses, a name and an alt text with brackets, an SVG sized in pt, a JPEG |
 | TH03 | the side pane marks what is chosen (the bar under Files/Outline, the outline's and the folder tree's row pill) in a custom theme's accent, and in the system accent again without one |
 | TH02 | View > Theme > Reload themes finds a new theme file and a renamed one; the window draws in the custom theme's base whatever the built-in setting says |
+| LD01 | a load the editor gives back rewritten is loaded once more and keeps the file's text; one rewritten again is taken after that one retry, not retried without end |
 | Q01 | two windows closed one after the other: the process exits (it stayed, headless) |
 <!-- END generated: e2e-cases -->
 
@@ -188,6 +189,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | `test.images.paste` | `path`, `windowId` | A picture file pasted as a bitmap (a screenshot on the clipboard): the clipboard image action's result, the address the editor would insert - without the clipboard itself, which other programs on the machine share. | TestHostHooks.cs |
 | `test.theme.apply` | `customTheme?`, `builtIn?`, `windowId` | A theme picked as the View menu picks it (a custom theme brings its base light/dark along), and what the window then draws with. | TestHostHooks.cs |
 | `test.theme.menu` | `reload?`, `windowId` | View > Theme: the entries it shows, after clicking its "Reload themes" item when asked (through the item's automation peer, as an assistive tool would). | TestHostHooks.cs |
+| `test.editor.rewriteLoads` | `count?`, `windowId` | The next loads of the window's editor come back rewritten, as a load that did not keep the text did once. | TestHostHooks.cs |
 | `test.window.popups` | `windowId` | The popups open in a window (menus, flyouts, a number box's buttons...), by the type of what they show. | TestHostHooks.cs |
 | `test.export.menu` | `windowId` | The entries of a window's File > Export submenu, as shown. | TestHostHooks.cs |
 | `test.pane.accent` | `windowId` | The colours the side pane marks what is chosen with: every selection indicator drawn in it (the bar under Files/Outline, the pill of each outline and folder-tree row), by where it is, with its fill. | TestHostHooks.cs |

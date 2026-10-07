@@ -361,6 +361,16 @@ namespace Typedown.Services.Automation
                         ["actualTheme"] = (app.XamlRoot?.Content as global::Windows.UI.Xaml.FrameworkElement)?.ActualTheme.ToString() };
                 });
             }));
+            // The next loads of the window's editor come back rewritten, as a load that did not keep the text did once.
+            methods.Add(new MethodDescriptor("test.editor.rewriteLoads", null, "test.editor.rewriteLoads/1", (c, ct) =>
+            {
+                var count = (int)(c.Params.OptionalInteger("count") ?? 1);
+                return Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    app.EditorViewModel.RewriteLoadsForTest = count;
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject();
+                });
+            }));
             // The popups open in a window (menus, flyouts, a number box's buttons...), by the type of what they show.
             methods.Add(new MethodDescriptor("test.window.popups", null, "test.window.popups/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
