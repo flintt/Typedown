@@ -141,6 +141,7 @@ internal static partial class Program
             await Case("D01 the window's UI thread runs every callback posted to it, from many threads at once", D01);
             await Case("K02 Ctrl+, twice opens and closes the settings: the caret and the keyboard are where they were", K02);
             await Case("K04 a window just opened takes the keys at once: a letter typed without a click reaches the document", K04);
+            await Case("K05 a new tab (the + button, Ctrl+N) and a tab clicked in the strip take the keys at once, without a click in the text", K05);
             await Case("K03 the same with an untitled document (no per-file caret memory)", K03);
             await Case("FS01 in full screen the main page starts at the top edge of the screen", FS01);
             await Case("FS02 out of full screen the window is dragged by its title bar again at once (with the title row, and in compact mode by the menu row)", FS02);
@@ -847,6 +848,93 @@ internal static partial class Program
             PostMessage(window, 0x0010, IntPtr.Zero, IntPtr.Zero);
             await Task.Delay(1000);
             Check(!IsWindow(window), "the new window closes (no question about saving left on screen)");
+        }
+    }
+
+    // A new tab, from the + button or Ctrl+N, and a tab clicked in the strip left the keyboard on the button or the
+    // tab: the letters typed next went nowhere until a click in the text.
+    private static async Task K05(List<string> notes)
+    {
+        using var c = await Session("e2e K05");
+        var first = await Open(c, Fixture("k05.md", "# K05\n\nText\n"));
+        var windowId = await WindowIdOf(c, first);
+        var window = await WindowOf(windowId, c);
+        async Task<string> Active() => (string)((JArray)(await c.Call("window.list"))["windows"]!).First(w => (string)w["windowId"]! == windowId)["activeDocumentId"]!;
+        async Task<string?> PageHas(string documentId, char ch)
+        {
+            string? text = null;
+            for (var i = 0; i < 30 && text?.Contains(ch) != true; i++) { await Task.Delay(100); text = (string?)(await c.Call("test.editor.pageText", new { documentId }))["text"]; }
+            return text;
+        }
+        void Click(int x, int y) { SetCursorPos(x, y); Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0002 } } }, new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0004 } } }); }
+        System.Windows.Automation.AutomationElement? Find(string automationId) =>
+            System.Windows.Automation.AutomationElement.FromHandle(window).FindFirst(System.Windows.Automation.TreeScope.Descendants,
+                new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.AutomationIdProperty, automationId));
+        var created = new List<string>();
+        try
+        {
+            await TypeInto(c, first, "A");
+            await WaitForPage(c, first, t => t.Contains('A'), "the first letter");
+
+            // Ctrl+N with the caret in the document, as the reader presses it while writing.
+            // N with its scan code, Ctrl down first: the page (Chromium) reads the key from the scan code.
+            Send(Key(0x11, false));
+            await Task.Delay(80);
+            Send(new INPUT { type = 1, u = new InputUnion { ki = new KEYBDINPUT { wVk = 0x4E, wScan = 0x31 } } }, new INPUT { type = 1, u = new InputUnion { ki = new KEYBDINPUT { wVk = 0x4E, wScan = 0x31, dwFlags = 0x0002 } } });
+            await Task.Delay(80);
+            Send(Key(0x11, true));
+            await Task.Delay(1500);
+            var ctrlN = await Active();
+            created.Add(ctrlN);
+            TypeChar('N');
+            var text = await PageHas(ctrlN, 'N');
+            notes.Add("after Ctrl+N: " + JsonConvert.SerializeObject(text));
+            Check(ctrlN != first && text?.Contains('N') == true, "a letter typed after Ctrl+N reaches the new tab");
+
+            // The + button, clicked.
+            var add = Find("AddButton");
+            if (add == null)
+            {
+                var buttons = System.Windows.Automation.AutomationElement.FromHandle(window).FindAll(System.Windows.Automation.TreeScope.Descendants,
+                    new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.Button));
+                throw new CaseFailed("no + button in the tab strip; buttons: " + string.Join(", ", buttons.Cast<System.Windows.Automation.AutomationElement>().Select(x => $"'{x.Current.Name}'/{x.Current.AutomationId}")));
+            }
+            var r = add.Current.BoundingRectangle;
+            Click((int)(r.Left + r.Width / 2), (int)(r.Top + r.Height / 2));
+            await Task.Delay(1500);
+            var plus = await Active();
+            created.Add(plus);
+            TypeChar('P');
+            text = await PageHas(plus, 'P');
+            notes.Add("after +: " + JsonConvert.SerializeObject(text));
+            Check(plus != ctrlN && text?.Contains('P') == true, "a letter typed after the + button reaches the new tab");
+
+            // The first tab, clicked in the strip.
+            var tabs = System.Windows.Automation.AutomationElement.FromHandle(window).FindAll(System.Windows.Automation.TreeScope.Descendants,
+                new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.TabItem));
+            var tab = tabs.Cast<System.Windows.Automation.AutomationElement>().FirstOrDefault(t => t.Current.Name.Contains("k05")) ?? throw new CaseFailed("no k05 tab in the strip");
+            r = tab.Current.BoundingRectangle;
+            Click((int)(r.Left + 20), (int)(r.Top + r.Height / 2));
+            await Task.Delay(1500);
+            Check(await Active() == first, "the click switched to the first tab");
+            TypeChar('T');
+            text = await PageHas(first, 'T');
+            notes.Add("after the tab click: " + JsonConvert.SerializeObject(text));
+            Check(text?.Contains('T') == true, "a letter typed after a tab is clicked reaches its document");
+        }
+        finally
+        {
+            // The new tabs' letters undone and the tabs closed, so nothing asks to be saved later.
+            foreach (var doc in created.Distinct())
+            {
+                try
+                {
+                    for (var i = 0; i < 5 && ((string?)(await Get(c, doc))["text"] ?? "").Trim().Length > 0; i++)
+                        await c.Call("document.undo", new { documentId = doc, baseRevision = await Revision(c, doc), reveal = "document" });
+                    await c.Call("document.close", new { documentId = doc });
+                }
+                catch (Exception ex) { notes.Add("cleanup: " + ex.Message.Split('\n')[0]); }
+            }
         }
     }
 

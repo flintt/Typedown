@@ -128,6 +128,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | D01 | the window's UI thread runs every callback posted to it, from many threads at once |
 | K02 | Ctrl+, twice opens and closes the settings: the caret and the keyboard are where they were |
 | K04 | a window just opened takes the keys at once: a letter typed without a click reaches the document |
+| K05 | a new tab (the + button, Ctrl+N) and a tab clicked in the strip take the keys at once, without a click in the text |
 | K03 | the same with an untitled document (no per-file caret memory) |
 | FS01 | in full screen the main page starts at the top edge of the screen |
 | FS02 | out of full screen the window is dragged by its title bar again at once (with the title row, and in compact mode by the menu row) |
