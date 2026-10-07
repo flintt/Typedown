@@ -42,6 +42,20 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             RegisterWindowShortcut(Settings.ShortcutPrint, PrintItem);
             RegisterWindowShortcut(Settings.ShortcutSettings, SettingItem);
             RegisterWindowShortcut(Settings.ShortcutClose, CloseItem);
+            AddEditionItems();
+        }
+
+        private bool editionItemsAdded;
+
+        // An edition's own entries (EditionHooks.AddFileMenuItems), below Save As; once per menu, as the View menu's.
+        private void AddEditionItems()
+        {
+            if (editionItemsAdded || ViewModel == null) return;
+            editionItemsAdded = true;
+            var index = Items.IndexOf(SaveAsItem);
+            if (index < 0) return;
+            foreach (var item in EditionHooks.FileMenuItems(ViewModel))
+                Items.Insert(++index, item);
         }
 
         private void UpdateOpenRecentItem()

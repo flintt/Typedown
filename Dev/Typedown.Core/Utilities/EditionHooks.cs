@@ -7,8 +7,9 @@ using Windows.UI.Xaml.Controls;
 namespace Typedown.Core.Utilities
 {
     /// <summary>
-    /// Places where an edition (Edition.Initialize) adds to every window: styles for the editor page, entries in the View
-    /// menu, and the word counts the page reports. Typedown itself adds nothing here.
+    /// Places where an edition (Edition.Initialize) adds to every window: styles for the editor page, entries in the File
+    /// and View menus, the word counts the page reports, and the documents read from and written to disk. Typedown itself
+    /// adds nothing here.
     /// </summary>
     public static class EditionHooks
     {
@@ -32,6 +33,7 @@ namespace Typedown.Core.Utilities
         }
 
         private static readonly List<Func<AppViewModel, IEnumerable<MenuFlyoutItemBase>>> viewMenu = new();
+        private static readonly List<Func<AppViewModel, IEnumerable<MenuFlyoutItemBase>>> fileMenu = new();
 
         /// <summary>
         /// Entries for the View menu, below the theme submenu. <paramref name="build"/> makes them for one window when its
@@ -42,10 +44,20 @@ namespace Typedown.Core.Utilities
             lock (viewMenu) viewMenu.Add(build);
         }
 
-        internal static IReadOnlyList<MenuFlyoutItemBase> ViewMenuItems(AppViewModel viewModel)
+        /// <summary>Entries for the File menu, below Save As; made for each window as the View menu's are.</summary>
+        public static void AddFileMenuItems(Func<AppViewModel, IEnumerable<MenuFlyoutItemBase>> build)
+        {
+            lock (fileMenu) fileMenu.Add(build);
+        }
+
+        internal static IReadOnlyList<MenuFlyoutItemBase> ViewMenuItems(AppViewModel viewModel) => MenuItems(viewMenu, viewModel);
+
+        internal static IReadOnlyList<MenuFlyoutItemBase> FileMenuItems(AppViewModel viewModel) => MenuItems(fileMenu, viewModel);
+
+        private static IReadOnlyList<MenuFlyoutItemBase> MenuItems(List<Func<AppViewModel, IEnumerable<MenuFlyoutItemBase>>> menu, AppViewModel viewModel)
         {
             List<Func<AppViewModel, IEnumerable<MenuFlyoutItemBase>>> builders;
-            lock (viewMenu) builders = viewMenu.ToList();
+            lock (menu) builders = menu.ToList();
             var items = new List<MenuFlyoutItemBase>();
             foreach (var build in builders)
             {
@@ -55,7 +67,7 @@ namespace Typedown.Core.Utilities
                 }
                 catch (Exception ex)
                 {
-                    Log.WriteLocal("EditionViewMenu", ex.ToString());
+                    Log.WriteLocal("EditionMenu", ex.ToString());
                 }
             }
             return items;
@@ -66,6 +78,24 @@ namespace Typedown.Core.Utilities
         /// and after its changes. Raised on the window's thread.
         /// </summary>
         public static event Action<WordCountReport> WordCountReported;
+
+        /// <summary>
+        /// A document's text as it is on disk: read when the file was opened, or written by a save. Raised on the window's
+        /// thread, after the file was read or written.
+        /// </summary>
+        public static event Action<DocumentOnDiskReport> DocumentOnDisk;
+
+        internal static void ReportDocumentOnDisk(string path, string text, bool written)
+        {
+            try
+            {
+                DocumentOnDisk?.Invoke(new DocumentOnDiskReport { Path = path, Text = text, Written = written });
+            }
+            catch (Exception ex)
+            {
+                Log.WriteLocal("EditionDocumentOnDisk", ex.ToString());
+            }
+        }
 
         internal static void ReportWordCount(WordCountReport report)
         {
@@ -78,6 +108,17 @@ namespace Typedown.Core.Utilities
                 Log.WriteLocal("EditionWordCount", ex.ToString());
             }
         }
+    }
+
+    /// <summary>A document's text as read from its file or written to it (<see cref="EditionHooks.DocumentOnDisk"/>).</summary>
+    public sealed class DocumentOnDiskReport
+    {
+        public string Path { get; set; }
+
+        public string Text { get; set; }
+
+        /// <summary>Written (a save, an automatic one too) rather than read (the file opened).</summary>
+        public bool Written { get; set; }
     }
 
     /// <summary>A word count the editor page reported (<see cref="EditionHooks.WordCountReported"/>).</summary>

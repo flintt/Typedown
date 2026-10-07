@@ -330,6 +330,7 @@ namespace Typedown.Core.ViewModels
                     startedTab = TabsViewModel.BeginNewTab();
                 var openedAt = System.Diagnostics.Stopwatch.StartNew();
                 var (text, format) = await TextFileFormat.ReadAsync(path);
+                EditionHooks.ReportDocumentOnDisk(path, text, written: false);
                 // Read: the reused tab now holds another document.
                 if (startedTab == null) TabsViewModel?.ActiveTab?.BecomeNewDocument();
                 FileFormat = format;
@@ -459,6 +460,7 @@ namespace Typedown.Core.ViewModels
                 IgnoreOwnFileWrite();
                 await SafeFile.WriteAllBytesAtomicAsync(path, (FileFormat ?? TextFileFormat.Default).GetBytes(text));
                 IgnoreOwnFileWrite();
+                EditionHooks.ReportDocumentOnDisk(path, text, written: true);
                 return true;
             }
             catch (Exception ex)
