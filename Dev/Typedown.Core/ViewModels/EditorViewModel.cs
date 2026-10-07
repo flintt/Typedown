@@ -202,11 +202,14 @@ namespace Typedown.Core.ViewModels
             Log.Debug($"load {LoadId}: {System.IO.Path.GetFileName(FileViewModel.FilePath) ?? "untitled"}, {text?.Length ?? 0} chars, from {Callers()}");
         }
 
+        // The app's own code, by its root namespace (this one's first part).
+        private static readonly string Root = typeof(EditorViewModel).Namespace.Split('.')[0];
+
         // Who asked for a load, for the log: two loads in a row leave the first one's reports dropped as stale.
         private static string Callers()
         {
             var frames = new System.Diagnostics.StackTrace(2, false).GetFrames() ?? new System.Diagnostics.StackFrame[0];
-            return string.Join(" < ", frames.Select(f => f.GetMethod()).Where(m => m != null && m.DeclaringType?.Namespace?.StartsWith("Typedown") == true)
+            return string.Join(" < ", frames.Select(f => f.GetMethod()).Where(m => m != null && m.DeclaringType?.Namespace?.StartsWith(Root) == true)
                 .Take(4).Select(m => $"{m.DeclaringType.Name}.{m.Name}"));
         }
 
