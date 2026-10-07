@@ -675,7 +675,9 @@ internal static partial class Program
                 if (sub == null)
                 {
                     ((System.Windows.Automation.ExpandCollapsePattern)topPattern).Collapse();
-                    await Task.Delay(200);
+                    // A closed menu hands the keyboard back to the editor a moment later (MenuFocus): opened before
+                    // that, the next menu was closed again by it.
+                    await Task.Delay(700);
                     continue;
                 }
                 ((System.Windows.Automation.ExpandCollapsePattern)sub.GetCurrentPattern(System.Windows.Automation.ExpandCollapsePattern.Pattern)).Expand();

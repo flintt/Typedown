@@ -33,13 +33,16 @@ namespace Typedown.Core.Utilities
             {
                 // Unloaded, the presenter no longer knows its window: the one it was shown in, kept from Loaded.
                 if (!(presenter.GetValue(RootProperty) is XamlRoot root)) return;
-                _ = presenter.Dispatcher.RunIdleAsync(_ =>
+                // A moment later, and only if no menu is open by then: going from one menu of the bar to the next closes
+                // one and opens the other, and the keyboard handed to the editor in between closed the new one again.
+                var dispatcher = presenter.Dispatcher;
+                _ = System.Threading.Tasks.Task.Delay(150).ContinueWith(t => _ = dispatcher.RunIdleAsync(_ =>
                 {
                     if (VisualTreeHelper.GetOpenPopupsForXamlRoot(root).Count > 0) return;
                     var focused = FocusManager.GetFocusedElement(root);
                     if (focused != null && !(focused is Microsoft.UI.Xaml.Controls.MenuBarItem) && !(focused is Interfaces.IMarkdownEditor)) return;
                     ((root.Content as FrameworkElement)?.DataContext as AppViewModel)?.MarkdownEditor?.FocusEditor();
-                });
+                }));
             };
         }
     }
