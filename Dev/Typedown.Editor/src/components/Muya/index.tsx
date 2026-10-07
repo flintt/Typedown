@@ -393,6 +393,10 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             contentState.searchMatches.matches = [];
             contentState.render(true);
             props.onSearchArgChange(undefined)
+            // Back from the search with the keyboard in the page: the editor has it, not the body.
+            if (document.hasFocus() && (!document.activeElement || document.activeElement === document.body)) {
+                try { editor.focus() } catch (err) { console.log(err) }
+            }
         }
     }), [editor, props, relativeScroll]);
 
@@ -850,6 +854,19 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         } catch (err) {
             console.log(err)
         }
+    }, [editor])
+
+    // The host hands the page the keyboard (a new tab, the find bar closed, a menu or a dialog gone) while nothing in it
+    // has the focus - the search took it away, or the document was replaced under it: the keys went to the page's body
+    // and nowhere. Then the editor takes it, with its caret where it was.
+    useEffect(() => {
+        if (!editor) return
+        const onFocus = () => {
+            if (document.activeElement && document.activeElement !== document.body) return
+            try { editor.focus() } catch (err) { console.log(err) }
+        }
+        window.addEventListener('focus', onFocus)
+        return () => window.removeEventListener('focus', onFocus)
     }, [editor])
 
     useEffect(() => {

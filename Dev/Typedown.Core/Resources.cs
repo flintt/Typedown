@@ -16,6 +16,7 @@ namespace Typedown.Core
             MergedDictionaries.Add(new() { Source = new("ms-appx:///Typedown.Core/Resources/Styles/ComboBox.xaml") });
             MergedDictionaries.Add(new() { Source = new("ms-appx:///Typedown.Core/Resources/Styles/ContentDialog.xaml") });
             MergedDictionaries.Add(new() { Source = new("ms-appx:///Typedown.Core/Resources/Styles/ToggleSwitch.xaml") });
+            MergedDictionaries.Add(new() { Source = new("ms-appx:///Typedown.Core/Resources/Styles/MenuFlyout.xaml") });
             MergedDictionaries.Add(new() { Source = new("ms-appx:///Typedown.Core/Resources/Converters.xaml") });
         }
     }

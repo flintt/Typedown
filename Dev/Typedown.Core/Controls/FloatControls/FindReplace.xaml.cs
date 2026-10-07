@@ -67,21 +67,15 @@ namespace Typedown.Core.Controls.FloatControls
                 case FloatViewModel.FindReplaceDialogState.Replace:
                     VisualStateManager.GoToState(this, "ReplaceMode", useTransitions && Settings.AnimationEnable);
                     break;
-                default:
-                    // Closed (Esc, its close button) while the keyboard was in it: back to the text. It stayed on the
-                    // closed bar's host, and the letters typed next went nowhere until a click in the document.
-                    if (useTransitions && HasFocusWithin())
-                        _ = Dispatcher.RunIdleAsync(_ => ViewModel?.MarkdownEditor?.FocusEditor());
-                    break;
             }
         }
 
-        private bool HasFocusWithin()
+        // Closed by the reader (Esc, its close button): the keyboard goes back to the text. It stayed on the closed bar's
+        // host, and the letters typed next went nowhere until a click in the document.
+        private void Close()
         {
-            if (XamlRoot == null) return false;
-            for (var node = FocusManager.GetFocusedElement(XamlRoot) as DependencyObject; node != null; node = Windows.UI.Xaml.Media.VisualTreeHelper.GetParent(node))
-                if (node == this) return true;
-            return false;
+            Float.FindReplaceDialogOpen = 0;
+            _ = Dispatcher.RunIdleAsync(_ => ViewModel?.MarkdownEditor?.FocusEditor());
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
@@ -91,10 +85,7 @@ namespace Typedown.Core.Controls.FloatControls
             Bindings?.StopTracking();
         }
 
-        private void OnCloseButtonClick(object sender, RoutedEventArgs e)
-        {
-            Float.FindReplaceDialogOpen = 0;
-        }
+        private void OnCloseButtonClick(object sender, RoutedEventArgs e) => Close();
 
         private void OnReplaceButtonClick(object sender, RoutedEventArgs e)
         {
@@ -121,7 +112,7 @@ namespace Typedown.Core.Controls.FloatControls
         private void OnKeyDown(object sender, KeyRoutedEventArgs e)
         {
             if (e.Key == Windows.System.VirtualKey.Escape)
-                Float.FindReplaceDialogOpen = 0;
+                Close();
         }
 
         private void PostReplaceMessage(bool isSingle)

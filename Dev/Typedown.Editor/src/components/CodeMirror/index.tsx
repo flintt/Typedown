@@ -332,6 +332,17 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
         editor?.focus()
     }, [editor])
 
+    // As in the visual editor: the page given the keyboard with nothing in it focused, the editor takes it.
+    useEffect(() => {
+        if (!editor) return
+        const onFocus = () => {
+            if (document.activeElement && document.activeElement !== document.body) return
+            editor.focus()
+        }
+        window.addEventListener('focus', onFocus)
+        return () => window.removeEventListener('focus', onFocus)
+    }, [editor])
+
     useEffect(() => {
         const onscroll = () => {
             props.scrollTopRef.current = window.scrollY
