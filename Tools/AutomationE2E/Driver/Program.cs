@@ -147,6 +147,7 @@ internal static partial class Program
             await Case("IU01 File > Upload local images (PowerShell): each file uploaded once, every use replaced in one undo step, web, missing and code left alone", IU01);
             await Case("IU03 a window that has not used the upload service yet finds the configuration at once (it said none until the database was read)", IU03);
             await Case("IU02 File > Upload local images to an S3 bucket (rclone serve s3): signed PUT, the object reads back, a wrong secret changes nothing, the secret is not stored in plain text", IU02);
+            await Case("IU04 pictures saved and uploaded under the right names: a pasted screenshot goes up as image.png, a second different picture of the same name is copied as \"name (2)\" and the document says so, a new upload configuration starts enabled", IU04);
             await Case("IN01 several image files dropped at once: each in a paragraph of its own, in the drop's order, one undo step", IN01);
             await Case("VI01 Vim keys in source mode: real keys edit (dd, A, Esc), Ctrl+V reaches Vim as block visual, u undoes, :w saves", VI01);
             await Case("VI02 Vim keys in reading mode: G, gg, ]] and Ctrl+D move the page", VI02);
@@ -998,6 +999,77 @@ internal static partial class Program
         Check((int)again["Uploaded"]! == 3 && (int)again["Reused"]! == 3, "run again on the restored text, every address comes from the history");
         Check(File.ReadAllLines(log).Length == 2, "and the upload script is not called again");
         await c.Call("document.undo", new { documentId = id, baseRevision = await Revision(c, id), reveal = "document" });
+    }
+
+    // A screenshot uploaded went up as "tmpXXXX.tmp" (an S3 object a browser downloads rather than shows); copying a
+    // second, different picture of an existing name saved it as "name (2)" but wrote the first one's name into the
+    // document; and a new upload configuration started switched off, in no menu.
+    private static async Task IU04(List<string> notes)
+    {
+        using var c = await Session("e2e IU04");
+        var doc = Fixture("iu04.md", "# IU04\n");
+        var folder = Path.Combine(Path.GetDirectoryName(doc)!, "iu04");
+        if (Directory.Exists(folder)) Directory.Delete(folder, true);
+        Directory.CreateDirectory(folder);
+        var id = await Open(c, doc);
+        var windowId = await WindowIdOf(c, id);
+        try
+        {
+            // The screenshot: a real PNG, which the clipboard image decodes and encodes again.
+            var shot = Path.Combine(folder, "shot-source.png");
+            using (var bitmap = new System.Drawing.Bitmap(3, 2))
+            {
+                bitmap.SetPixel(1, 1, System.Drawing.Color.Red);
+                bitmap.Save(shot, System.Drawing.Imaging.ImageFormat.Png);
+            }
+            var received = Path.Combine(folder, "received");
+            var log = Path.Combine(folder, "uploads.log");
+            var script = "function Upload-Image([string]$path) {\n" +
+                $"  Add-Content -LiteralPath '{log}' -Value $path\n" +
+                $"  Copy-Item -LiteralPath $path -Destination '{received}'\n" +
+                "  'https://img.test/' + [IO.Path]::GetFileName($path)\n}\n";
+            var configured = await c.Call("test.images.configure", new { windowId, method = "powershell", config = new { script } });
+            notes.Add("configured: " + configured.ToString(Formatting.None));
+
+            await c.Call("test.settings.set", new { windowId, name = "InsertClipboardImageAction", value = "Upload" });
+            var pasted = await c.Call("test.images.paste", new { windowId, path = shot });
+            var called = File.Exists(log) ? File.ReadAllLines(log) : new string[0];
+            notes.Add($"pasted: {pasted.ToString(Formatting.None)}; the script got: {string.Join(" | ", called)}");
+            Check(called.Length == 1 && Path.GetFileName(called[0]) == "image.png", "the pasted screenshot reaches the uploader as image.png");
+            var bytes = File.Exists(received) ? File.ReadAllBytes(received) : new byte[0];
+            Check(bytes.Length > 8 && bytes[0] == 0x89 && bytes[1] == 0x50 && bytes[2] == 0x4E && bytes[3] == 0x47, "and the file is a PNG");
+            Check((string?)pasted["address"] == "https://img.test/image.png", "the address the script returned is the one inserted");
+
+            // Two different pictures both called pic.png, copied into one folder.
+            await c.Call("test.settings.set", new { windowId, name = "InsertLocalImageAction", value = "CopyToPath" });
+            await c.Call("test.settings.set", new { windowId, name = "InsertLocalImageCopyPath", value = "./iu04/copies" });
+            var first = Path.Combine(folder, "one", "pic.png");
+            var second = Path.Combine(folder, "two", "pic.png");
+            Directory.CreateDirectory(Path.GetDirectoryName(first)!);
+            Directory.CreateDirectory(Path.GetDirectoryName(second)!);
+            File.WriteAllBytes(first, Png(1));
+            File.WriteAllBytes(second, Png(2));
+            foreach (var path in new[] { first, second, first })
+            {
+                await c.Call("test.images.insert", new { windowId, paths = new[] { path } });
+                await Task.Delay(800);
+            }
+            var text = (string)(await Get(c, id))["text"]!;
+            notes.Add("text: " + JsonConvert.SerializeObject(text));
+            var copies = Path.Combine(folder, "copies");
+            notes.Add("copies: " + string.Join(", ", Directory.Exists(copies) ? Directory.GetFiles(copies).Select(Path.GetFileName) : new string[0]));
+            Check(File.Exists(Path.Combine(copies, "pic (2).png")) && File.ReadAllBytes(Path.Combine(copies, "pic (2).png")).SequenceEqual(Png(2)), "the second picture is saved as pic (2).png");
+            Check(text.Contains("pic%20(2).png") || text.Contains("pic (2).png"), "and the document points at pic (2).png");
+            Check(System.Text.RegularExpressions.Regex.Matches(text, @"copies/pic\.png").Count == 2, "the first picture, inserted twice, is pic.png both times");
+            Check(Directory.GetFiles(copies).Length == 2, "and is not copied a second time");
+            Check((bool?)configured["enabledOnCreate"] == true, "a new upload configuration starts enabled");
+        }
+        finally
+        {
+            await c.Call("test.settings.set", new { windowId, name = "InsertClipboardImageAction", value = "None" });
+            await c.Call("test.settings.set", new { windowId, name = "InsertLocalImageAction", value = "None" });
+            await c.Call("test.settings.set", new { windowId, name = "InsertLocalImageCopyPath", value = "./images" });
+        }
     }
 
     private static async Task IN01(List<string> notes)

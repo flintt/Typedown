@@ -264,6 +264,7 @@ namespace Typedown.Services.Automation
                 {
                     var upload = Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetService<Core.Services.ImageUpload>(app.ServiceProvider);
                     var config = await upload.AddImageUploadConfig("e2e-" + method, method == "s3" ? Core.Enums.ImageUploadMethod.OSS : Core.Enums.ImageUploadMethod.PowerShell);
+                    var enabledOnCreate = config.IsEnable;
                     config.IsEnable = true;
                     var model = config.LoadUploadConfig();
                     if (model is Core.Models.UploadConfigModels.PowerShellModel ps)
@@ -283,7 +284,7 @@ namespace Typedown.Services.Automation
                     await upload.SaveImageUploadConfig(config);
                     app.SettingsViewModel.DefaultImageUploadConfigId = config.Id;
                     // What the configuration holds: the secret must not be there in plain text.
-                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["id"] = config.Id, ["stored"] = config.Config, ["default"] = upload.DefaultConfig?.Id };
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["id"] = config.Id, ["stored"] = config.Config, ["default"] = upload.DefaultConfig?.Id, ["enabledOnCreate"] = enabledOnCreate };
                 });
             }));
             // What a drop, paste or pick of image files does: each through the local image setting, inserted together.
@@ -294,6 +295,19 @@ namespace Typedown.Services.Automation
                 {
                     await app.EditorViewModel.InsertLocalImagesAsync(paths.ToList());
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject();
+                });
+            }));
+            // A picture file pasted as a bitmap (a screenshot on the clipboard): the clipboard image action's result, the
+            // address the editor would insert - without the clipboard itself, which other programs on the machine share.
+            methods.Add(new MethodDescriptor("test.images.paste", null, "test.images.paste/1", async (c, ct) =>
+            {
+                var path = c.Params.RequiredString("path", allowEmpty: false);
+                var file = await System.WindowsRuntimeSystemExtensions.AsTask(global::Windows.Storage.StorageFile.GetFileFromPathAsync(path));
+                var image = new Utilities.ClipboardImage(global::Windows.Storage.Streams.RandomAccessStreamReference.CreateFromFile(file));
+                return await await Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), async app =>
+                {
+                    var action = Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetService<Core.Services.ImageAction>(app.ServiceProvider);
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["address"] = await action.DoClipboardAction(image) };
                 });
             }));
             // A theme picked as the View menu picks it (a custom theme brings its base light/dark along), and what the

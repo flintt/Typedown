@@ -134,6 +134,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | IU01 | File > Upload local images (PowerShell): each file uploaded once, every use replaced in one undo step, web, missing and code left alone |
 | IU03 | a window that has not used the upload service yet finds the configuration at once (it said none until the database was read) |
 | IU02 | File > Upload local images to an S3 bucket (rclone serve s3): signed PUT, the object reads back, a wrong secret changes nothing, the secret is not stored in plain text |
+| IU04 | pictures saved and uploaded under the right names: a pasted screenshot goes up as image.png, a second different picture of the same name is copied as "name (2)" and the document says so, a new upload configuration starts enabled |
 | IN01 | several image files dropped at once: each in a paragraph of its own, in the drop's order, one undo step |
 | VI01 | Vim keys in source mode: real keys edit (dd, A, Esc), Ctrl+V reaches Vim as block visual, u undoes, :w saves |
 | VI02 | Vim keys in reading mode: G, gg, ]] and Ctrl+D move the page |
@@ -176,6 +177,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | `test.settings.get` | `name`, `windowId` | Reads a property of a window's settings view model by name. | TestHostHooks.cs |
 | `test.images.configure` | `method?`, `config?`, `windowId` | Image upload without its dialogs: an enabled configuration (PowerShell or S3), chosen as Settings > Image > Upload with; returns what was stored, so a test can see that the secret is not there in plain text. | TestHostHooks.cs |
 | `test.images.insert` | `paths?`, `windowId` | What a drop, paste or pick of image files does: each through the local image setting, inserted together. | TestHostHooks.cs |
+| `test.images.paste` | `path`, `windowId` | A picture file pasted as a bitmap (a screenshot on the clipboard): the clipboard image action's result, the address the editor would insert - without the clipboard itself, which other programs on the machine share. | TestHostHooks.cs |
 | `test.theme.apply` | `customTheme?`, `builtIn?`, `windowId` | A theme picked as the View menu picks it (a custom theme brings its base light/dark along), and what the window then draws with. | TestHostHooks.cs |
 | `test.theme.menu` | `reload?`, `windowId` | View > Theme: the entries it shows, after clicking its "Reload themes" item when asked (through the item's automation peer, as an assistive tool would). | TestHostHooks.cs |
 | `test.pane.accent` | `windowId` | The colours the side pane marks what is chosen with: every selection indicator drawn in it (the bar under Files/Outline, the pill of each outline and folder-tree row), by where it is, with its fill. | TestHostHooks.cs |
