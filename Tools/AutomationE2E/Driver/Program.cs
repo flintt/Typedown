@@ -1040,7 +1040,14 @@ internal static partial class Program
                 for (var i = 0; i < 30 && !text.Contains(letter); i++) { await Task.Delay(100); text = await TextOf(doc); }
                 var ok = text.Contains(letter);
                 notes.Add($"{(ok ? "ok  " : "FAIL")} {step}");
-                if (!ok) { failed.Add(step); notes.Add($"     keys went to: {FocusInfo(window)}; screen: {Screenshot("k06-" + letter)}"); }
+                if (!ok)
+                {
+                    failed.Add(step);
+                    string page;
+                    try { page = (await c.Call("test.editor.eval", new { windowId, script = "(() => { const a = document.activeElement; const s = getSelection(); return { hasFocus: document.hasFocus(), active: a ? a.tagName + '.' + (a.className || '').toString().slice(0, 40) + (a.isContentEditable ? ' editable' : '') : null, ranges: s.rangeCount, anchor: s.anchorNode ? (s.anchorNode.nodeName + ':' + (s.anchorNode.textContent || '').slice(0, 20)) : null } })()" }))["result"]!.ToString(Formatting.None); }
+                    catch (Exception ex) { page = ex.Message.Split('\n')[0]; }
+                    notes.Add($"     keys went to: {FocusInfo(window)}; page: {page}; screen: {Screenshot("k06-" + letter)}");
+                }
             }
             catch (Exception ex)
             {
