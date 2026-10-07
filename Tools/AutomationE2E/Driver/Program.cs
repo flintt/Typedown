@@ -663,15 +663,17 @@ internal static partial class Program
         var bar = root.FindFirst(System.Windows.Automation.TreeScope.Descendants,
             new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.MenuBar))
             ?? throw new CaseFailed("no menu bar in the window");
+        var seen = new List<string>();
         try
         {
             foreach (System.Windows.Automation.AutomationElement top in bar.FindAll(System.Windows.Automation.TreeScope.Children, menuItem))
             {
-                if (!top.TryGetCurrentPattern(System.Windows.Automation.ExpandCollapsePattern.Pattern, out var topPattern)) continue;
+                if (!top.TryGetCurrentPattern(System.Windows.Automation.ExpandCollapsePattern.Pattern, out var topPattern)) { seen.Add(top.Current.Name + " (no expand)"); continue; }
                 ((System.Windows.Automation.ExpandCollapsePattern)topPattern).Expand();
                 await Task.Delay(400);
                 var sub = root.FindFirst(System.Windows.Automation.TreeScope.Descendants,
                     new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.AutomationIdProperty, "ThemeSubMenu"));
+                seen.Add($"{top.Current.Name}: {((System.Windows.Automation.ExpandCollapsePattern)topPattern).Current.ExpandCollapseState}, {root.FindAll(System.Windows.Automation.TreeScope.Descendants, menuItem).Count} items");
                 if (sub == null)
                 {
                     ((System.Windows.Automation.ExpandCollapsePattern)topPattern).Collapse();
@@ -687,7 +689,7 @@ internal static partial class Program
                     names.Add(item.Current.Name);
                 return names;
             }
-            throw new CaseFailed("no menu holds the theme submenu");
+            throw new CaseFailed("no menu holds the theme submenu; opened " + string.Join(" | ", seen));
         }
         finally
         {
