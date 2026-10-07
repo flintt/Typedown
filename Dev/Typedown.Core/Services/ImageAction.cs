@@ -94,7 +94,9 @@ namespace Typedown.Core.Services
                 switch (Settings.InsertClipboardImageAction)
                 {
                     case Enums.InsertImageAction.Upload:
-                        result = await Upload(InsertImageSource.Clipboard, image.GetBytes());
+                        // Off the UI thread: GetBytes waits on WinRT calls that complete on the thread it is called from,
+                        // and called from a paste it hung the window for good.
+                        result = await Upload(InsertImageSource.Clipboard, await Task.Run(image.GetBytes));
                         break;
                     default:
                         result = await Task.Run(() => SaveImage(InsertImageSource.Clipboard, image));
