@@ -408,6 +408,16 @@ jobs:
           ls -la dist
           name=$(sed -n 's:.*<BrandName>\(.*\)</BrandName>.*:\1:p' Branding.props)
           exe=$(sed -n 's:.*<BrandExeName>\(.*\)</BrandExeName>.*:\1:p' Branding.props)
+          # The user guide beside the downloads: the copy in the portable zip, which add-cli.ps1 has given the
+          # edition's names.
+          python3 - dist/"$name"-portable-x64-v*.zip "dist/$name-guide-zh-CN.md" <<'PY'
+          import sys, zipfile
+          z = zipfile.ZipFile(sys.argv[1])
+          names = [n for n in z.namelist() if n.replace("\\", "/").lower() == "docs/user-guide.md"]
+          if not names:
+              sys.exit("no docs/user-guide.md in " + sys.argv[1])
+          open(sys.argv[2], "wb").write(z.read(names[0]))
+          PY
           # Release notes = the annotated tag's message (what changed) + the file table below.
           ref=$(gh api "repos/${{ github.repository }}/git/refs/tags/${{ github.ref_name }}")
           if [ "$(jq -r .object.type <<<"$ref")" = "tag" ]; then
@@ -424,6 +434,7 @@ jobs:
           | `@NAME@-windows-x64-v*.exe` / `-arm64-` | Installer (Inno Setup) for x64 / ARM64 Windows. Installs WebView2 Runtime if missing, registers `.md` associations. |
           | `@NAME@-portable-x64-v*.zip` / `-arm64-` | Portable build – unzip and run `@EXE@.exe`. |
           | `@NAME@_*_x64.msix` / `_ARM64.msix` | MSIX packages for sideloading. |
+          | `@NAME@-guide-zh-CN.md` | User guide (Simplified Chinese): files, modes, shortcuts, pictures and picture upload, themes, export. Also in the app folder as `docs\user-guide.md`. |
           | `@NAME@-signing-certificate.cer` | Self-signed certificate used to sign the above. To install the MSIX, first import this into **Local Machine → Trusted People** (or Trusted Root). The .exe/.zip run without it (SmartScreen may warn). |
           MD
           if compgen -G "dist/*.msixupload" >/dev/null; then

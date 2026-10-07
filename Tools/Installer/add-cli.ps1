@@ -91,7 +91,8 @@ else {
     Write-Host "add-cli: $cli.exe runs from the app folder"
 }
 
-# The documents, keeping their relative links: automation.md links the spec, the schema, the examples and the MCP page.
+# The documents, keeping their relative links: the user guide, and automation.md, which links the spec, the schema, the
+# examples and the MCP page.
 $docs = Join-Path $AppFolder 'docs'
 New-Item -ItemType Directory -Force $docs, (Join-Path $docs 'automation-schema'), (Join-Path $docs 'automation-examples') | Out-Null
 # Written for Typedown: under another name they get the edition's names - the product in prose, the CLI, the install
@@ -107,11 +108,14 @@ function Copy-Document([string]$from, [string]$to) {
         $text = $text.Replace('Program Files\Typedown', 'Program Files\' + $brand.BrandName).Replace('Program Files\\Typedown', 'Program Files\\' + $brand.BrandName)
         $text = $text.Replace('claude mcp add typedown', 'claude mcp add ' + $brand.BrandName.ToLowerInvariant()).Replace('"typedown": {', '"' + $brand.BrandName.ToLowerInvariant() + '": {')
         $text = [regex]::Replace($text, '(?<![\w/\\.-])Typedown(?![-_.]\w|\w)', $brand.BrandName)
+        # A folder named after the product inside a path (%LOCALAPPDATA%\Typedown\themes, Pictures\Typedown): the rule
+        # above leaves a name after a backslash alone.
+        $text = [regex]::Replace($text, '(?<=\\)Typedown(?=\\|`)', $brand.BrandName)
     }
     # Windows PowerShell 5.1 reads a script without a BOM as ANSI: keep the source's.
     [IO.File]::WriteAllText($to, $text, (New-Object Text.UTF8Encoding($hasBom)))
 }
-foreach ($name in 'automation.md', 'automation-mcp.md', 'automation-api-spec.md') {
+foreach ($name in 'user-guide.md', 'automation.md', 'automation-mcp.md', 'automation-api-spec.md') {
     Copy-Document (Join-Path $repo "docs\$name") (Join-Path $docs $name)
 }
 Copy-Item (Join-Path $repo 'docs\automation-schema\v1.json') (Join-Path $docs 'automation-schema') -Force
