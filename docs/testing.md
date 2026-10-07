@@ -127,6 +127,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | Q02 | a window closed at once after it opened (its web view still being created): the process lives on |
 | D01 | the window's UI thread runs every callback posted to it, from many threads at once |
 | K02 | Ctrl+, twice opens and closes the settings: the caret and the keyboard are where they were |
+| K04 | a window just opened takes the keys at once: a letter typed without a click reaches the document |
 | K03 | the same with an untitled document (no per-file caret memory) |
 | FS01 | in full screen the main page starts at the top edge of the screen |
 | PU01 | PlantUML is not drawn by default (nothing goes to plantuml.com, the block says so); turned on it is, by the server set if one is, off again it is not |

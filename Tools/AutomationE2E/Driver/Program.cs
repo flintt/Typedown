@@ -140,6 +140,7 @@ internal static partial class Program
             await Case("Q02 a window closed at once after it opened (its web view still being created): the process lives on", Q02);
             await Case("D01 the window's UI thread runs every callback posted to it, from many threads at once", D01);
             await Case("K02 Ctrl+, twice opens and closes the settings: the caret and the keyboard are where they were", K02);
+            await Case("K04 a window just opened takes the keys at once: a letter typed without a click reaches the document", K04);
             await Case("K03 the same with an untitled document (no per-file caret memory)", K03);
             await Case("FS01 in full screen the main page starts at the top edge of the screen", FS01);
             await Case("PU01 PlantUML is not drawn by default (nothing goes to plantuml.com, the block says so); turned on it is, by the server set if one is, off again it is not", PU01);
@@ -802,6 +803,42 @@ internal static partial class Program
     // the settings builds the main page again and reloads the editor page; the caret came back from the per-file memory
     // only (or not at all), and the keyboard was not given back.
     private static Task K02(List<string> notes) => SettingsRoundTrip(notes, untitled: false);
+
+    // A window just opened (the app started, a new window) gave the keyboard to nothing: the first letters went nowhere
+    // until a click in the text. Only coming back from the settings handed it to the editor.
+    private static async Task K04(List<string> notes)
+    {
+        using var c = await Session("e2e K04");
+        var windowId = (string)(await c.Call("test.window.open"))["windowId"]!;
+        var window = await WindowOf(windowId, c);
+        var id = (string)((JArray)(await c.Call("document.list", new { windowId }))["documents"]!)[0]["documentId"]!;
+        try
+        {
+            await c.Call("document.get", new { documentId = id, consistency = "latest" });
+            await Task.Delay(1500);
+            // Brought to the front as the system does for a window that opens - no click inside it, no focus call.
+            await Activate(window);
+            Check(GetForegroundWindow() == window, "the new window is in front");
+            TypeChar('Q');
+            string? text = null;
+            // The window's document asked for anew each time: its untitled document can be replaced as the window settles.
+            async Task<string> Current() => (string)((JArray)(await c.Call("document.list", new { windowId }))["documents"]!)[0]["documentId"]!;
+            for (var i = 0; i < 30 && text?.Contains('Q') != true; i++)
+            {
+                await Task.Delay(100);
+                try { id = await Current(); text = (string?)(await c.Call("test.editor.pageText", new { documentId = id }))["text"]; } catch (Exception ex) { notes.Add("read: " + ex.Message.Split('\n')[0]); }
+            }
+            notes.Add("page text: " + JsonConvert.SerializeObject(text) + (text?.Contains('Q') == true ? "" : "; screen: " + Screenshot("k04-no-key")));
+            Check(text?.Contains('Q') == true, "a letter typed without a click reaches the new window's document");
+        }
+        finally
+        {
+            // The document closed first (an untitled one with a letter in it would ask to be saved), then the window.
+            try { await c.Call("document.close", new { documentId = (string)((JArray)(await c.Call("document.list", new { windowId }))["documents"]!)[0]["documentId"]! }); } catch { }
+            PostMessage(window, 0x0010, IntPtr.Zero, IntPtr.Zero);
+            await Task.Delay(1000);
+        }
+    }
 
     // The same with an untitled document: no file, so no per-file caret memory to come back from.
     private static Task K03(List<string> notes) => SettingsRoundTrip(notes, untitled: true);
