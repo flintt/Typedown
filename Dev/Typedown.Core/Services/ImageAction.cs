@@ -115,47 +115,63 @@ namespace Typedown.Core.Services
 
         public string CopyImage(InsertImageSource source, string sourceFile, string destFolder = null)
         {
-            var fileName = Path.GetFileName(sourceFile);
             destFolder ??= GetDefaultDestFolder(source);
-            var destFilePath = AppViewModel.GetImageAbsolutePath(Path.Combine(destFolder, fileName));
-            for (int i = 2; File.Exists(destFilePath) && !Common.FileContentEqual(destFilePath, sourceFile); i++)
-                destFilePath = AppViewModel.GetImageAbsolutePath(Path.Combine(destFolder, $"{Path.GetFileNameWithoutExtension(destFilePath)} ({i}){Path.GetExtension(destFilePath)}"));
+            var name = UniqueName(destFolder, Path.GetFileName(sourceFile), existing => Common.FileContentEqual(existing, sourceFile));
+            var destFilePath = AppViewModel.GetImageAbsolutePath(Path.Combine(destFolder, name));
             if (!File.Exists(destFilePath))
             {
                 new FileInfo(destFilePath).Directory?.Create();
                 File.Copy(sourceFile, destFilePath);
             }
-            return Path.Combine(destFolder, fileName);
+            return Path.Combine(destFolder, name);
         }
 
         public async Task<string> SaveImage(InsertImageSource source, byte[] bytes, string fileName = null, string destFolder = null)
         {
             fileName ??= $"{Guid.NewGuid()}.{GetImageType(bytes, "png")}";
             destFolder ??= GetDefaultDestFolder(source);
-            var destFilePath = AppViewModel.GetImageAbsolutePath(Path.Combine(destFolder, fileName));
-            for (int i = 2; File.Exists(destFilePath) && !Common.FileContentEqual(destFilePath, bytes); i++)
-                destFilePath = AppViewModel.GetImageAbsolutePath(Path.Combine(destFolder, $"{Path.GetFileNameWithoutExtension(destFilePath)} ({i}){Path.GetExtension(destFilePath)}"));
+            var name = UniqueName(destFolder, fileName, existing => Common.FileContentEqual(existing, bytes));
+            var destFilePath = AppViewModel.GetImageAbsolutePath(Path.Combine(destFolder, name));
             if (!File.Exists(destFilePath))
             {
                 new FileInfo(destFilePath).Directory?.Create();
                 await File.WriteAllBytesAsync(destFilePath, bytes);
             }
-            return Path.Combine(destFolder, fileName);
+            return Path.Combine(destFolder, name);
         }
 
         public string SaveImage(InsertImageSource source, IClipboardImage image, string fileName = null, string destFolder = null)
         {
             fileName ??= $"{Guid.NewGuid()}.png";
             destFolder ??= GetDefaultDestFolder(source);
-            var destFilePath = AppViewModel.GetImageAbsolutePath(Path.Combine(destFolder, fileName));
-            for (int i = 2; File.Exists(destFilePath) && !Common.FileContentEqual(destFilePath, image.GetBytes()); i++)
-                destFilePath = AppViewModel.GetImageAbsolutePath(Path.Combine(destFolder, $"{Path.GetFileNameWithoutExtension(destFilePath)} ({i}){Path.GetExtension(destFilePath)}"));
+            var png = image.GetBytes();
+            var name = UniqueName(destFolder, fileName, existing => Common.FileContentEqual(existing, png));
+            var destFilePath = AppViewModel.GetImageAbsolutePath(Path.Combine(destFolder, name));
             if (!File.Exists(destFilePath))
             {
                 new FileInfo(destFilePath).Directory?.Create();
                 image.SaveAsPng(destFilePath);
             }
-            return Path.Combine(destFolder, fileName);
+            return Path.Combine(destFolder, name);
+        }
+
+        /// <summary>
+        /// The name to save a picture under in a folder: its own, or "name (2).ext", "name (3).ext"... when a different
+        /// picture already has it; a file there with the same content is reused. The document was given the original
+        /// name whatever the file was saved as, so a second, different "截图.png" showed the first one; and each try
+        /// was numbered from the last ("a (2) (3).png").
+        /// </summary>
+        private string UniqueName(string destFolder, string fileName, Func<string, bool> sameContent)
+        {
+            var stem = Path.GetFileNameWithoutExtension(fileName);
+            var ext = Path.GetExtension(fileName);
+            var name = fileName;
+            for (var i = 2; ; i++)
+            {
+                var path = AppViewModel.GetImageAbsolutePath(Path.Combine(destFolder, name));
+                if (!File.Exists(path) || sameContent(path)) return name;
+                name = $"{stem} ({i}){ext}";
+            }
         }
 
         public async Task<byte[]> GetWebImage(Uri uri)
