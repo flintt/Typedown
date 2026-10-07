@@ -114,7 +114,12 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
         private void OnItemInvoked(Microsoft.UI.Xaml.Controls.TreeView sender, Microsoft.UI.Xaml.Controls.TreeViewItemInvokedEventArgs args)
         {
             if (args.InvokedItem is Models.TocTreeItem item && item.TocItem?.Slug != null)
+            {
                 Editor?.JumpBySlug(item.TocItem.Slug);
+                // The reader picked the heading to write there: the keys go to the text, not to the outline (where
+                // they started a search in it). Moving through the outline with the arrows does not come here.
+                _ = Dispatcher.RunIdleAsync(_ => ViewModel?.MarkdownEditor?.FocusEditor());
+            }
         }
 
         private void OnExpandAllClick(object sender, RoutedEventArgs e) => Editor?.Toc?.SetExpandedRecursive(true);

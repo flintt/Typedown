@@ -38,6 +38,30 @@ namespace Typedown.Core.Pages
             disposables.Add(uiViewModel.WhenPropertyChanged(nameof(UIViewModel.IsFullScreen)).Cast<bool>().StartWith(uiViewModel.IsFullScreen).Subscribe(OnFullScreenChanged));
             var settings = AppViewModel.SettingsViewModel;
             disposables.Add(settings.WhenPropertyChanged(nameof(settings.CustomTheme)).StartWith(settings.CustomTheme).Subscribe(_ => UpdateThemeColours()));
+            FocusManager.GettingFocus += OnGettingFocus;
+            disposables.Add(System.Reactive.Disposables.Disposable.Create(() => FocusManager.GettingFocus -= OnGettingFocus));
+        }
+
+        // A menu closed (a command chosen, Esc) gives the focus back to the menu bar, or to nothing: the letters typed
+        // next went nowhere until a click in the text. Once the command has run, the keyboard goes back to the editor
+        // - unless the command put it somewhere on purpose (the find box, a dialog, the settings).
+        private void OnGettingFocus(object sender, GettingFocusEventArgs args)
+        {
+            if (XamlRoot == null || !(args.OldFocusedElement is DependencyObject old) || !IsInMenu(old)) return;
+            if (args.NewFocusedElement is DependencyObject next && !(next is Microsoft.UI.Xaml.Controls.MenuBarItem)) return;
+            if (args.NewFocusedElement is UIElement element && element.XamlRoot != XamlRoot) return;
+            _ = Dispatcher.RunIdleAsync(_ =>
+            {
+                var now = FocusManager.GetFocusedElement(XamlRoot);
+                if (now == null || now is Microsoft.UI.Xaml.Controls.MenuBarItem) AppViewModel?.MarkdownEditor?.FocusEditor();
+            });
+        }
+
+        private static bool IsInMenu(DependencyObject node)
+        {
+            for (; node != null; node = Windows.UI.Xaml.Media.VisualTreeHelper.GetParent(node))
+                if (node is MenuFlyoutPresenter || node is MenuFlyoutItemBase) return true;
+            return false;
         }
 
         /// <summary>
