@@ -292,16 +292,14 @@ internal static partial class Program
         Check(LogLines("loading the text once more").Count == retries + 1, "rewritten once: loaded once more");
         Check(LogLines("the editor rewrote the text it was given").Any(l => l.Contains("table 1,")), "the log says what kind of lines were rewritten (one table row)");
 
-        // Rewritten every time: one retry, then taken as it is (the editor's own normalization, as before).
+        // Rewritten every time: one retry, then taken as it is (the editor's own normalization, as before). A document's
+        // first load is the one checked (a tab switched back to keeps what its first load gave): a new one.
         retries = LogLines("loading the text once more").Count;
-        await c.Call("document.focus", new { documentId = other });
-        await Task.Delay(1000);
-        // Set once the other document is in: its own load would take the rewrites.
         await c.Call("test.editor.rewriteLoads", new { windowId, count = 2 });
-        await c.Call("document.focus", new { documentId = id });
+        var again = await Open(c, Fixture("ld01-again.md", text));
         await Eventually(async () => LogLines("rewritten again; taken").Count > 0, 6000);
         await Task.Delay(800);
-        doc = await Get(c, id);
+        doc = await Get(c, again);
         notes.Add($"rewritten twice: {Body(doc).Length} chars, retries {LogLines("loading the text once more").Count - retries}");
         Check(LogLines("loading the text once more").Count == retries + 1, "rewritten twice: one retry only");
         Check(Body(doc).Contains("rewritten"), "rewritten again: taken as the editor gave it");
