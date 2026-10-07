@@ -40,7 +40,10 @@ namespace Typedown.Core.Utilities
                 {
                     if (VisualTreeHelper.GetOpenPopupsForXamlRoot(root).Count > 0) return;
                     var focused = FocusManager.GetFocusedElement(root);
-                    if (focused != null && !(focused is Microsoft.UI.Xaml.Controls.MenuBarItem) && !(focused is Interfaces.IMarkdownEditor)) return;
+                    // Only from the menu bar or from nowhere: still on the editor (a menu opened by UI Automation leaves
+                    // it there), there is nothing to hand back, and pushing the keys into the page then closed the next
+                    // menu opened.
+                    if (focused != null && !(focused is Microsoft.UI.Xaml.Controls.MenuBarItem)) return;
                     ((root.Content as FrameworkElement)?.DataContext as AppViewModel)?.MarkdownEditor?.FocusEditor();
                 }));
             };
