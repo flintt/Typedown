@@ -834,10 +834,19 @@ internal static partial class Program
         }
         finally
         {
-            // The document closed first (an untitled one with a letter in it would ask to be saved), then the window.
-            try { await c.Call("document.close", new { documentId = (string)((JArray)(await c.Call("document.list", new { windowId }))["documents"]!)[0]["documentId"]! }); } catch { }
+            // The letter undone first: closed with it, the untitled document asked to be saved, and that question stayed on
+            // screen over the window the following cases opened their documents in.
+            try
+            {
+                var doc = (string)((JArray)(await c.Call("document.list", new { windowId }))["documents"]!)[0]["documentId"]!;
+                for (var i = 0; i < 5 && ((string?)(await Get(c, doc))["text"] ?? "").Contains('Q'); i++)
+                    await c.Call("document.undo", new { documentId = doc, baseRevision = await Revision(c, doc), reveal = "document" });
+                notes.Add("left with: " + JsonConvert.SerializeObject((string?)(await Get(c, doc))["text"]));
+            }
+            catch (Exception ex) { notes.Add("undo: " + ex.Message.Split('\n')[0]); }
             PostMessage(window, 0x0010, IntPtr.Zero, IntPtr.Zero);
             await Task.Delay(1000);
+            Check(!IsWindow(window), "the new window closes (no question about saving left on screen)");
         }
     }
 
