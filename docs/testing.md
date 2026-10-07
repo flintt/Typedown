@@ -130,6 +130,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | K04 | a window just opened takes the keys at once: a letter typed without a click reaches the document |
 | K03 | the same with an untitled document (no per-file caret memory) |
 | FS01 | in full screen the main page starts at the top edge of the screen |
+| FS02 | out of full screen the window is dragged by its title bar again at once (with the title row, and in compact mode by the menu row) |
 | PU01 | PlantUML is not drawn by default (nothing goes to plantuml.com, the block says so); turned on it is, by the server set if one is, off again it is not |
 | RV01 | reveal: "change" scrolls a change off screen into view, the caret where it was; "document" leaves the page |
 | IU01 | File > Upload local images (PowerShell): each file uploaded once, every use replaced in one undo step, web, missing and code left alone |

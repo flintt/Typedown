@@ -143,6 +143,7 @@ internal static partial class Program
             await Case("K04 a window just opened takes the keys at once: a letter typed without a click reaches the document", K04);
             await Case("K03 the same with an untitled document (no per-file caret memory)", K03);
             await Case("FS01 in full screen the main page starts at the top edge of the screen", FS01);
+            await Case("FS02 out of full screen the window is dragged by its title bar again at once (with the title row, and in compact mode by the menu row)", FS02);
             await Case("PU01 PlantUML is not drawn by default (nothing goes to plantuml.com, the block says so); turned on it is, by the server set if one is, off again it is not", PU01);
             await Case("RV01 reveal: \"change\" scrolls a change off screen into view, the caret where it was; \"document\" leaves the page", RV01);
             await Case("IU01 File > Upload local images (PowerShell): each file uploaded once, every use replaced in one undo step, web, missing and code left alone", IU01);
@@ -933,6 +934,66 @@ internal static partial class Program
             after = await Layout();
             notes.Add("after " + after.ToString(Formatting.None));
             Check(!(bool)after["fullScreen"]! && (double)after["mainPageTop"]! == (double)before["mainPageTop"]!, "F11 again leaves full screen, the layout as it was");
+        }
+    }
+
+    // After F11 twice the window could not be dragged by its title bar until a menu was opened or the settings were
+    // visited. The drag is tried before full screen too, so a point that is no drag area does not pass for the bug.
+    private static async Task FS02(List<string> notes)
+    {
+        using var c = await Session("e2e FS02");
+        var id = await Open(c, Fixture("fs02.md", "# FS02\n\nText\n"));
+        var windowId = await WindowIdOf(c, id);
+        var window = await WindowOf(windowId, c);
+        async Task<JToken> Layout() => await c.Call("test.window.layout", new { windowId });
+        // Pressed in the title area, moved 80 px right and 50 down, released: how far the window went.
+        async Task<(int dx, int dy)> Drag(bool compact)
+        {
+            await Activate(window);
+            GetWindowRect(window, out var r);
+            // The title row: its middle. Compact (menus in the title row): right of the menus, left of the window buttons.
+            int x = compact ? r.Right - 260 : (r.Left + r.Right) / 2, y = r.Top + (compact ? 16 : 12);
+            SetCursorPos(x, y);
+            await Task.Delay(150);
+            Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0002 } } });
+            for (var i = 1; i <= 10; i++) { await Task.Delay(30); SetCursorPos(x + 8 * i, y + 5 * i); }
+            await Task.Delay(150);
+            Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0004 } } });
+            await Task.Delay(400);
+            GetWindowRect(window, out var after);
+            return (after.Left - r.Left, after.Top - r.Top);
+        }
+        var compactBefore = (bool)(await c.Call("test.settings.get", new { windowId, name = "AppCompactMode" }))["value"]!;
+        try
+        {
+            foreach (var compact in new[] { false, true })
+            {
+                await c.Call("test.settings.set", new { windowId, name = "AppCompactMode", value = compact });
+                // Changed where a person changes it, on the settings page: coming back builds the main page anew, and
+                // the compact menu row's drag areas are laid out when it is built.
+                await c.Call("test.window.navigate", new { windowId, route = "Settings/General" });
+                await Task.Delay(1200);
+                await c.Call("test.window.navigate", new { windowId, route = "Main" });
+                await Task.Delay(1500);
+                var first = await Drag(compact);
+                Check(Math.Abs(first.dx - 80) <= 4 && Math.Abs(first.dy - 50) <= 4, $"{(compact ? "compact" : "title row")}: before full screen the drag moves the window ({first})");
+                await Activate(window);
+                Send(Key(0x7A, false), Key(0x7A, true));
+                JToken state = await Layout();
+                for (var i = 0; i < 30 && !(bool)state["fullScreen"]!; i++) { await Task.Delay(100); state = await Layout(); }
+                await Task.Delay(800);
+                Send(Key(0x7A, false), Key(0x7A, true));
+                for (var i = 0; i < 30 && (bool)state["fullScreen"]!; i++) { await Task.Delay(100); state = await Layout(); }
+                await Task.Delay(800);
+                var second = await Drag(compact);
+                notes.Add($"{(compact ? "compact" : "title row")}: drag before {first}, after F11 twice {second}");
+                if (second.dx == 0 && second.dy == 0) notes.Add("screen: " + Screenshot("fs02-" + (compact ? "compact" : "title")));
+                Check(Math.Abs(second.dx - 80) <= 4 && Math.Abs(second.dy - 50) <= 4, $"{(compact ? "compact" : "title row")}: out of full screen the same drag moves the window ({second})");
+            }
+        }
+        finally
+        {
+            await c.Call("test.settings.set", new { windowId, name = "AppCompactMode", value = compactBefore });
         }
     }
 
