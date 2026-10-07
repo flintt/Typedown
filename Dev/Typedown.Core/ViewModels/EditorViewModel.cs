@@ -394,9 +394,8 @@ namespace Typedown.Core.ViewModels
         public CursorState CurrentCursor { get; internal set; }
 
         /// <summary>
-        /// Set when the window comes back from the settings page: the editor takes the keyboard again once its page has
-        /// loaded. The main page is built anew and the reader was in the document - keys went nowhere until a click,
-        /// and the click moved the caret.
+        /// Set when the window opens and when it comes back from the settings page: the editor takes the keyboard once
+        /// its page has loaded. Keys went nowhere until a click, and the click moved the caret.
         /// </summary>
         public bool FocusWhenLoaded { get; set; }
 

@@ -44,13 +44,14 @@ namespace Typedown.Core.Controls
 
         private Type shownPage;
 
-        // Back from the settings page (its shortcut, the back button): the reader returns to the document, keyboard
-        // included. The editor takes it now, and again once its page has loaded (it usually loads again here).
+        // The window opening, and back from the settings page (its shortcut, the back button): the reader is in the
+        // document, keyboard included. The editor takes it now, and again once its page has loaded. A window just opened
+        // gave it to nothing: the first letters went nowhere until a click in the text.
         private void OnFrameNavigated(object sender, NavigationEventArgs e)
         {
             var from = shownPage;
             shownPage = e.SourcePageType;
-            if (e.SourcePageType != typeof(MainPage) || from != typeof(SettingsPage)) return;
+            if (e.SourcePageType != typeof(MainPage) || (from != null && from != typeof(SettingsPage))) return;
             ViewModel.EditorViewModel.FocusWhenLoaded = true;
             _ = Dispatcher.RunIdleAsync(_ => (ViewModel.MarkdownEditor as Windows.UI.Xaml.Controls.Control)?.Focus(FocusState.Programmatic));
         }
