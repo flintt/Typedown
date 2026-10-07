@@ -56,7 +56,9 @@ namespace Typedown.Core.Services
         {
             using var ctx = await AppDbContext.Create();
             var model = ctx.ImageUploadConfigs;
-            var res = new ImageUploadConfig() { Name = name ?? string.Empty, Method = method };
+            // Enabled from the start: switched off, a new configuration was in neither Settings > Image > Upload with nor
+            // the image's Upload menu, and nothing on its page said why.
+            var res = new ImageUploadConfig() { Name = name ?? string.Empty, Method = method, IsEnable = true };
             await model.AddAsync(res);
             await ctx.SaveChangesAsync();
             await UpdateImageUploadConfigs();
