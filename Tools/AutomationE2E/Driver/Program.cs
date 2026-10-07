@@ -1049,11 +1049,9 @@ internal static partial class Program
             Directory.CreateDirectory(Path.GetDirectoryName(second)!);
             File.WriteAllBytes(first, Png(1));
             File.WriteAllBytes(second, Png(2));
-            foreach (var path in new[] { first, second, first })
-            {
-                await c.Call("test.images.insert", new { windowId, paths = new[] { path } });
-                await Task.Delay(800);
-            }
+            // In one insertion, each in a paragraph of its own (one at a time, each replaced the one before, still selected).
+            await c.Call("test.images.insert", new { windowId, paths = new[] { first, second, first } });
+            await Task.Delay(1000);
             var text = (string)(await Get(c, id))["text"]!;
             notes.Add("text: " + JsonConvert.SerializeObject(text));
             var copies = Path.Combine(folder, "copies");
