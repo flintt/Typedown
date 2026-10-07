@@ -73,10 +73,15 @@ class ExportHtml {
     const mermaid = await loadRenderer('mermaid')
     // The live preview follows the app theme, but HTML export is always light:
     // render with the `default` theme. (Could be made configurable in the future.)
+    // Labels as SVG text rather than HTML inside the SVG when the diagram is to become a picture: a canvas a
+    // drawing with HTML in it was drawn on cannot be read back (the browser's rule), so it could not be saved.
+    const htmlLabels = !this.options?.diagramsAsPictures
     mermaid.initialize({
       startOnLoad: false,
       securityLevel: 'strict',
-      theme: 'default'
+      theme: 'default',
+      htmlLabels,
+      flowchart: { htmlLabels }
     })
     await mermaid.run({ nodes: [...this.exportContainer.querySelectorAll('div.mermaid')] })
   }

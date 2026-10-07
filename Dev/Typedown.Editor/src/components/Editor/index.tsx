@@ -14,6 +14,48 @@ import { sha256Hex } from "services/sha256";
 import { classifierVersion } from "services/normalization";
 
 /** The style element with this id, appended to the head on first use. */
+// Each SVG drawing in the element (a diagram) replaced by a PNG of it, drawn at twice its size on white. The drawing is
+// drawn on its own, with only its own styles: the page's (a dark theme) do not reach it. One that cannot be drawn
+// (a canvas the browser will not read back) is left as it is.
+const diagramsToPictures = async (root: HTMLElement) => {
+    for (const svg of Array.from(root.querySelectorAll('svg'))) {
+        if (svg.parentElement?.closest('svg')) continue
+        try {
+            const box = svg.viewBox?.baseVal
+            const width = box && box.width > 0 ? box.width : parseFloat(svg.getAttribute('width') ?? '')
+            const height = box && box.height > 0 ? box.height : parseFloat(svg.getAttribute('height') ?? '')
+            if (!(width > 0 && height > 0)) continue
+            const copy = svg.cloneNode(true) as SVGSVGElement
+            copy.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+            copy.setAttribute('width', String(width))
+            copy.setAttribute('height', String(height))
+            copy.style.maxWidth = ''
+            const url = URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(copy)], { type: 'image/svg+xml' }))
+            try {
+                const image = new Image()
+                await new Promise((resolve, reject) => { image.onload = resolve; image.onerror = reject; image.src = url })
+                const scale = 2
+                const canvas = document.createElement('canvas')
+                canvas.width = Math.ceil(width * scale)
+                canvas.height = Math.ceil(height * scale)
+                const context = canvas.getContext('2d')!
+                context.fillStyle = '#ffffff'
+                context.fillRect(0, 0, canvas.width, canvas.height)
+                context.drawImage(image, 0, 0, canvas.width, canvas.height)
+                const picture = document.createElement('img')
+                picture.setAttribute('src', canvas.toDataURL('image/png'))
+                picture.setAttribute('width', String(Math.round(width)))
+                picture.setAttribute('alt', 'diagram')
+                svg.replaceWith(picture)
+            } finally {
+                URL.revokeObjectURL(url)
+            }
+        } catch (e) {
+            console.log('a diagram could not be made a picture', e)
+        }
+    }
+}
+
 const styleElement = (id: string) => {
     let style = document.getElementById(id) as HTMLStyleElement | null
     if (!style) {
@@ -94,12 +136,14 @@ const Editor: React.FC = () => {
     }, [describeNormalization])
 
     // Host -> editor: the document rendered as the exports render it (diagrams drawn, math typeset), serialized as XHTML
-    // so that it parses as XML, for a host turning it into another format.
-    useEffect(() => transport.addListener<{ token: number }>('RenderXhtml', async ({ token }) => {
+    // so that it parses as XML, for a host turning it into another format. With diagramsAsPictures each diagram is a
+    // PNG on white (the export's light theme), for a format that cannot show SVG.
+    useEffect(() => transport.addListener<{ token: number, diagramsAsPictures?: boolean }>('RenderXhtml', async ({ token, diagramsAsPictures }) => {
         flushRef.current?.()
         try {
-            const html = await new ExportHtml(markdownRef.current ?? '', { ...optionsRef.current }).renderHtml(undefined)
+            const html = await new ExportHtml(markdownRef.current ?? '', { ...optionsRef.current, diagramsAsPictures }).renderHtml(undefined)
             const body = new DOMParser().parseFromString(`<!DOCTYPE html><html><body>${html}</body></html>`, 'text/html').body
+            if (diagramsAsPictures) await diagramsToPictures(body)
             transport.postMessage('RenderedXhtml', { token, xhtml: new XMLSerializer().serializeToString(body) })
         } catch (e) {
             transport.postMessage('RenderedXhtml', { token, error: String(e) })
