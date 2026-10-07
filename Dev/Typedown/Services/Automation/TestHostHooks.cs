@@ -361,6 +361,14 @@ namespace Typedown.Services.Automation
                         ["actualTheme"] = (app.XamlRoot?.Content as global::Windows.UI.Xaml.FrameworkElement)?.ActualTheme.ToString() };
                 });
             }));
+            // The popups open in a window (menus, flyouts, a number box's buttons...), by the type of what they show.
+            methods.Add(new MethodDescriptor("test.window.popups", null, "test.window.popups/1", (c, ct) =>
+                Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    var open = app.XamlRoot == null ? new System.Collections.Generic.List<string>()
+                        : global::Windows.UI.Xaml.Media.VisualTreeHelper.GetOpenPopupsForXamlRoot(app.XamlRoot).Select(p => p.Child?.GetType().Name ?? "empty").ToList();
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["popups"] = new Newtonsoft.Json.Linq.JArray(open) };
+                })));
             // The entries of a window's File > Export submenu, as shown.
             methods.Add(new MethodDescriptor("test.export.menu", null, "test.export.menu/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
