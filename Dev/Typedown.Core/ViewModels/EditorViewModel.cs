@@ -152,6 +152,7 @@ namespace Typedown.Core.ViewModels
                 await FileViewModel.LoadStartUpMarkdown();
             }
             startupDocumentReady.TrySetResult(true);
+            Log.Debug($"load {LoadId + 1}: the editor page asked for the document again ({System.IO.Path.GetFileName(FileViewModel.FilePath) ?? "untitled"})");
             return new
             {
                 Settings.FocusMode,
@@ -198,6 +199,15 @@ namespace Typedown.Core.ViewModels
             var scrollTop = Settings.RememberCursorPosition ? CursorMemory.GetScroll(FileViewModel.FilePath) : null;
             loadClock = text != null && text.Length > 200000 ? System.Diagnostics.Stopwatch.StartNew() : null;
             MarkdownEditor?.PostMessage("LoadFile", new { text, basePath = FileViewModel.ImageBasePath, cursor, scrollTop, loadId = ++LoadId });
+            Log.Debug($"load {LoadId}: {System.IO.Path.GetFileName(FileViewModel.FilePath) ?? "untitled"}, {text?.Length ?? 0} chars, from {Callers()}");
+        }
+
+        // Who asked for a load, for the log: two loads in a row leave the first one's reports dropped as stale.
+        private static string Callers()
+        {
+            var frames = new System.Diagnostics.StackTrace(2, false).GetFrames() ?? new System.Diagnostics.StackFrame[0];
+            return string.Join(" < ", frames.Select(f => f.GetMethod()).Where(m => m != null && m.DeclaringType?.Namespace?.StartsWith("Typedown") == true)
+                .Take(4).Select(m => $"{m.DeclaringType.Name}.{m.Name}"));
         }
 
         // Scroll offset per file: reading mode has no caret, so this is what brings it back to the same place.
