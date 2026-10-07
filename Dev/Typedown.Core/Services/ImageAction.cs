@@ -200,17 +200,24 @@ namespace Typedown.Core.Services
             return await ServiceProvider.GetService<ImageUpload>().Upload(source, filePath);
         }
 
+        /// <summary>
+        /// A pasted or downloaded picture uploaded: saved first as a file named for its type ("image.png", "image.jpg"),
+        /// in a folder of its own. It went up as Path.GetTempFileName()'s "tmpXXXX.tmp" - an S3 object of that name, sent
+        /// as application/octet-stream, which a browser downloads rather than shows; a script got the .tmp name too.
+        /// </summary>
         public async Task<string> Upload(InsertImageSource source, byte[] bytes)
         {
-            string tmpFile = Path.GetTempFileName();
+            var folder = Path.Combine(Path.GetTempPath(), "image-upload-" + Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(folder);
             try
             {
-                await File.WriteAllBytesAsync(tmpFile, bytes);
-                return await Upload(source, tmpFile);
+                var file = Path.Combine(folder, $"image.{GetImageType(bytes, "png")}");
+                await File.WriteAllBytesAsync(file, bytes);
+                return await Upload(source, file);
             }
             finally
             {
-                File.Delete(tmpFile);
+                try { Directory.Delete(folder, true); } catch { }
             }
         }
 
