@@ -1112,10 +1112,14 @@ internal static partial class Program
                 await Chord(0x46, 0x21);
                 System.Windows.Automation.AutomationElement? input = null;
                 for (var i = 0; i < 20 && input == null; i++) { await Task.Delay(150); input = FindIn(System.Windows.Automation.AutomationElement.FromHandle(window), e => e.Current.ControlType == System.Windows.Automation.ControlType.Edit); }
-                // The close button: the last button in the find bar's row (the row the search box is in).
-                var row = System.Windows.Automation.TreeWalker.ControlViewWalker.GetParent(System.Windows.Automation.TreeWalker.ControlViewWalker.GetParent(input ?? throw new CaseFailed("no search box")));
-                var buttons = row.FindAll(System.Windows.Automation.TreeScope.Descendants, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.Button));
-                ClickElement(buttons[buttons.Count - 1]);
+                // The close button: the rightmost button level with the search box and right of it (the window's own
+                // close button is higher up, in the title row).
+                var box = (input ?? throw new CaseFailed("no search box")).Current.BoundingRectangle;
+                var close = System.Windows.Automation.AutomationElement.FromHandle(window).FindAll(System.Windows.Automation.TreeScope.Descendants, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.Button))
+                    .Cast<System.Windows.Automation.AutomationElement>()
+                    .Where(b => { var r = b.Current.BoundingRectangle; return r.Left >= box.Right && Math.Abs((r.Top + r.Height / 2) - (box.Top + box.Height / 2)) < box.Height; })
+                    .OrderBy(b => b.Current.BoundingRectangle.Left).LastOrDefault() ?? throw new CaseFailed("no close button in the find bar");
+                ClickElement(close);
                 await Task.Delay(1200);
             }, 'H', () => Task.FromResult(main));
 
