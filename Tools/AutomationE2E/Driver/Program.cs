@@ -2098,6 +2098,8 @@ internal static partial class Program
         var windowId = await WindowIdOf(c, id);
         async Task<JToken> Menu(bool reload = false) => await c.Call("test.theme.menu", new { windowId, reload });
         var folder = (string)(await Menu())["folder"]!;
+        // The folder exists once the app has written its example theme there - not always before this case.
+        Directory.CreateDirectory(folder);
         var file = Path.Combine(folder, "th02.css");
         string Theme(string name) => $"/* Typedown theme\n * name: {name}\n * base: dark\n */\n:root {{ --editorBgColor: #102030; }}\n";
         async Task<bool> Shows(string name)
@@ -2143,7 +2145,7 @@ internal static partial class Program
         finally
         {
             await c.Call("test.theme.apply", new { windowId, builtIn = "Default" });
-            File.Delete(file);
+            if (File.Exists(file)) File.Delete(file);
         }
     }
 
