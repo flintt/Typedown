@@ -1794,12 +1794,22 @@ internal static partial class Program
             SetCursorPos((int)(r.Left + r.Width / 2), (int)(r.Top + r.Height / 2));
             await Task.Delay(150);
             Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0002 } } }, new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0004 } } });
-            List<string> after = new();
-            for (var i = 0; i < 30 && !(after.Contains("Alpha two") && !after.Contains("Beta three")); i++) { await Task.Delay(200); after = Outline(); }
-            var active = (string)((JArray)(await c.Call("window.list"))["windows"]!).First(w => (string)w["windowId"]! == windowId)["activeDocumentId"]!;
-            notes.Add($"after closing tc01-b, shown {(active == first ? "tc01-a" : active)}: outline " + string.Join(", ", after));
-            Check(active == first, "tc01-a is shown");
-            Check(after.Contains("Alpha one") && after.Contains("Alpha two") && !after.Contains("Beta three"), "the outline shows tc01-a's headings");
+            // The tab shown next is the window's choice (other cases may have left tabs open): its headings, from its
+            // text, are what the outline must show - and none of the closed document's.
+            var active = "";
+            List<string> headings = new(), names = new();
+            for (var i = 0; i < 30; i++)
+            {
+                await Task.Delay(200);
+                active = (string)((JArray)(await c.Call("window.list"))["windows"]!).First(w => (string)w["windowId"]! == windowId)["activeDocumentId"]!;
+                headings = ((string?)(await Get(c, active))["text"] ?? "").Split('\n').Where(l => l.StartsWith("#")).Select(l => l.TrimStart('#').Trim()).Where(h => h.Length > 0).Take(3).ToList();
+                names = System.Windows.Automation.AutomationElement.FromHandle(window).FindAll(System.Windows.Automation.TreeScope.Descendants, System.Windows.Automation.Condition.TrueCondition)
+                    .Cast<System.Windows.Automation.AutomationElement>().Select(e => e.Current.Name).ToList();
+                if (active != second && headings.All(names.Contains) && !names.Contains("Beta three")) break;
+            }
+            notes.Add($"after closing tc01-b, shown {(active == first ? "tc01-a" : active)} with headings {string.Join(", ", headings)}; outline has them: {headings.All(names.Contains)}, has Beta three: {names.Contains("Beta three")}");
+            Check(active != second, "another tab is shown");
+            Check(headings.All(names.Contains) && !names.Contains("Beta three"), "the outline shows the shown document's headings, not the closed one's");
         }
         finally
         {
@@ -1922,7 +1932,9 @@ internal static partial class Program
         // Again, with a row more, and OK.
         shown = await OpenDialog();
         ((System.Windows.Automation.ValuePattern)shown[0].GetCurrentPattern(System.Windows.Automation.ValuePattern.Pattern)).SetValue("4");
-        await Task.Delay(300);
+        // A number box takes what was typed when it loses the focus: the other box takes it before OK.
+        shown[1].SetFocus();
+        await Task.Delay(400);
         Press("确定", "OK");
         string text = "";
         for (var i = 0; i < 20 && text.Split('\n').Count(l => l.StartsWith("|")) != 5; i++) { await Task.Delay(200); text = (string)(await Get(c, id))["text"]!; }
