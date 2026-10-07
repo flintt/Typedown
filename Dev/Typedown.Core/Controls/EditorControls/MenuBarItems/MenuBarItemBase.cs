@@ -34,6 +34,7 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
                 try
                 {
                     OnRegisterShortcut();
+                    WatchCommands(Items);
                 }
                 catch (Exception ex)
                 {
@@ -43,6 +44,38 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
         }
 
         protected abstract void OnRegisterShortcut();
+
+        private bool watching;
+
+        // A command chosen in a menu left the focus on the menu bar, or on nothing: the letters typed next went nowhere
+        // until a click in the text. Once the command has run, the keyboard goes to the editor - unless the command put
+        // it somewhere on purpose (the find box, a dialog, the settings page) or a menu is open again. Only a chosen
+        // command does this: opening the menus, going from one to the next and Esc are left as they are (handing the
+        // keys over on every closing menu closed the next one opened).
+        private void WatchCommands(System.Collections.Generic.IList<MenuFlyoutItemBase> items)
+        {
+            if (watching && items == Items) return;
+            if (items == Items) watching = true;
+            foreach (var item in items)
+            {
+                if (item is MenuFlyoutSubItem sub) WatchCommands(sub.Items);
+                else if (item is MenuFlyoutItem command) command.Click += OnCommandClick;
+            }
+        }
+
+        private void OnCommandClick(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            var root = XamlRoot;
+            if (root == null) return;
+            var dispatcher = Dispatcher;
+            _ = System.Threading.Tasks.Task.Delay(150).ContinueWith(t => _ = dispatcher.RunIdleAsync(_ =>
+            {
+                if (Windows.UI.Xaml.Media.VisualTreeHelper.GetOpenPopupsForXamlRoot(root).Count > 0) return;
+                var focused = FocusManager.GetFocusedElement(root);
+                if (focused != null && !(focused is muxc.MenuBarItem)) return;
+                ViewModel?.MarkdownEditor?.FocusEditor();
+            }));
+        }
 
         protected void RegisterWindowShortcut(ShortcutKey key, MenuFlyoutItem item)
         {

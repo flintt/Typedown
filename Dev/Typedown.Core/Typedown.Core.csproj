@@ -261,7 +261,6 @@
     <Compile Include="Controls\DialogControls\HedgeDocShareDialog.cs" />
     <Compile Include="Services\HedgeDocService.cs" />
     <Compile Include="Services\HedgeDocShareMemory.cs" />
-    <Compile Include="Utilities\MenuFocus.cs" />
     <Compile Include="Utilities\Secret.cs" />
     <Compile Include="Controls\SettingControls\SettingItems\GeneralSetting.xaml.cs">
       <DependentUpon>GeneralSetting.xaml</DependentUpon>
@@ -782,10 +781,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Resources\Styles\ToggleSwitch.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Resources\Styles\MenuFlyout.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
