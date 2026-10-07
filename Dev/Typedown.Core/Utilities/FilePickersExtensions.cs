@@ -34,8 +34,8 @@ namespace Typedown.Core.Utilities
         /// <summary>
         /// Shows a picker, and when Windows cannot show it (E_FAIL from a second picker asked for while one is still
         /// opening, for instance - a double click on Open) says nothing was picked, with a line in the log. The
-        /// exception went up an async void handler and ended the process with every window in it: twice in a row on
-        /// hp, from File > Open.
+        /// exception went up an async void handler and ended the process with every window in it: twice in a row on a
+        /// test machine, from File > Open.
         /// </summary>
         public static async Task<T> ShowAsync<T>(Func<Windows.Foundation.IAsyncOperation<T>> pick) where T : class
         {
