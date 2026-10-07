@@ -101,7 +101,15 @@ const Editor: React.FC = () => {
         // Muya sets the text direction on each block (a dir attribute), not on the editor: read the first block's.
         const block = document.querySelector('#ag-editor-id > *') || element
         const direction = block ? getComputedStyle(block).direction : null
-        transport.postMessage('EditorStyle', { token, fontSize: style?.fontSize ?? null, lineHeight: style?.lineHeight ?? null, direction })
+        // The first paragraph's own layout (indent, alignment, spacing): what styles for paragraphs do.
+        const paragraph = document.querySelector('#ag-editor-id > p .ag-paragraph-content') as HTMLElement | null
+        const p = paragraph ? getComputedStyle(paragraph) : null
+        const pBlock = paragraph?.parentElement ? getComputedStyle(paragraph.parentElement) : null
+        transport.postMessage('EditorStyle', {
+            token, fontSize: style?.fontSize ?? null, lineHeight: style?.lineHeight ?? null, direction,
+            fontFamily: style?.fontFamily ?? null,
+            paragraph: p ? { textIndent: p.textIndent, textAlign: p.textAlign, marginTop: pBlock?.marginTop ?? null } : null,
+        })
     }), []);
 
     // Host -> editor: answer once the page has drawn twice more (automation awaitPresentation). Two frames, because

@@ -52,6 +52,16 @@ namespace Typedown
             TestSet(name, value, ref handled);
             return handled;
         }
+
+        /// <summary>The automation test host's test.edition.get: a state of the edition's, by name, for a test to check.</summary>
+        static partial void TestGet(string name, ref string value);
+
+        internal static string TryGet(string name)
+        {
+            string value = null;
+            TestGet(name, ref value);
+            return value;
+        }
 #endif
     }
 }
