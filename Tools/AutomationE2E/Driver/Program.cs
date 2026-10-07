@@ -156,6 +156,7 @@ internal static partial class Program
             await Case("VI01 Vim keys in source mode: real keys edit (dd, A, Esc), Ctrl+V reaches Vim as block visual, u undoes, :w saves", VI01);
             await Case("VI02 Vim keys in reading mode: G, gg, ]] and Ctrl+D move the page", VI02);
             await Case("TC01 a tab closed with its x button: the outline shows the headings of the tab shown next", TC01);
+            await Case("TC02 a tab closed while its neighbour is not the tab used last: the outline is the shown tab's, with long documents", TC02);
             await Case("TB01 the table toolbar's Resize table opens with the table's own size; Cancel leaves the table as it was; OK resizes it", TB01);
             await Case("TH01 a custom theme colours the page in visual, reading and source mode, and a change shows at once in each", TH01);
             await Case("RD01 reading mode: the context menu offers copying and selecting only, Copy works on a selection, copy as plain text leaves the Markdown out, Ctrl+Z changes nothing", RD01);
@@ -1799,6 +1800,58 @@ internal static partial class Program
             notes.Add($"after closing tc01-b, shown {(active == first ? "tc01-a" : active)}: outline " + string.Join(", ", after));
             Check(active == first, "tc01-a is shown");
             Check(after.Contains("Alpha one") && after.Contains("Alpha two") && !after.Contains("Beta three"), "the outline shows tc01-a's headings");
+        }
+        finally
+        {
+            try { await c.Call("window.setView", new { windowId, sidePane = new { open = false } }); } catch { }
+        }
+    }
+
+    // Three long documents; the first one clicked, then closed. The tab strip selects its neighbour (B) while the window
+    // goes back to the tab used last (C): two switches in a row, two page loads, and the outline must end up as the
+    // shown document's.
+    private static async Task TC02(List<string> notes)
+    {
+        using var c = await Session("e2e TC02");
+        string Long(string name) => string.Concat(Enumerable.Range(1, 100).Select(i => $"## {name} {i}\n\nText {i} of {name}.\n\n"));
+        var a = await Open(c, Fixture("tc02-a.md", "# Apple\n\n" + Long("Apple")));
+        var b = await Open(c, Fixture("tc02-b.md", "# Banana\n\n" + Long("Banana")));
+        var cc = await Open(c, Fixture("tc02-c.md", "# Cherry\n\n" + Long("Cherry")));
+        var windowId = await WindowIdOf(c, cc);
+        var window = await WindowOf(windowId, c);
+        await c.Call("window.setView", new { windowId, sidePane = new { open = true, page = "outline" } });
+        await Task.Delay(1500);
+        var root = System.Windows.Automation.AutomationElement.FromHandle(window);
+        System.Windows.Automation.AutomationElement Tab(string name) => root.FindAll(System.Windows.Automation.TreeScope.Descendants,
+                new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.TabItem))
+            .Cast<System.Windows.Automation.AutomationElement>().FirstOrDefault(t => t.Current.Name.Contains(name)) ?? throw new CaseFailed($"no {name} tab");
+        void Click(System.Windows.Rect r, double fx = 0.3) { SetCursorPos((int)(r.Left + r.Width * fx), (int)(r.Top + r.Height / 2)); Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0002 } } }, new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0004 } } }); }
+        // The outline's first rows (the tree is virtualized; its top shows which document it is of).
+        string Top() => string.Join(", ", root.FindAll(System.Windows.Automation.TreeScope.Descendants, System.Windows.Automation.Condition.TrueCondition)
+            .Cast<System.Windows.Automation.AutomationElement>().Select(e => e.Current.Name)
+            .Where(n => n.StartsWith("Apple") || n.StartsWith("Banana") || n.StartsWith("Cherry")).Distinct().Take(3));
+        async Task<string> Shown() => (string)((JArray)(await c.Call("window.list"))["windows"]!).First(w => (string)w["windowId"]! == windowId)["activeDocumentId"]!;
+        try
+        {
+            await Activate(window);
+            Click(Tab("tc02-a").Current.BoundingRectangle);
+            await Task.Delay(2000);
+            Check(await Shown() == a, "the click shows tc02-a");
+            notes.Add("tc02-a shown, outline: " + Top());
+            var close = Tab("tc02-a").FindAll(System.Windows.Automation.TreeScope.Descendants, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.Button))
+                .Cast<System.Windows.Automation.AutomationElement>().FirstOrDefault() ?? throw new CaseFailed("no close button");
+            Click(close.Current.BoundingRectangle, 0.5);
+            string shownName = "", top = "";
+            for (var i = 0; i < 40; i++)
+            {
+                await Task.Delay(250);
+                var shown = await Shown();
+                shownName = shown == b ? "Banana" : shown == cc ? "Cherry" : shown == a ? "Apple" : shown;
+                top = Top();
+                if (i > 8 && top.StartsWith(shownName)) break;
+            }
+            notes.Add($"after closing tc02-a: shown {shownName}, outline {top}");
+            Check(top.Length > 0 && top.Split(", ").All(n => n.StartsWith(shownName)), $"the outline is the shown document's ({shownName}: {top})");
         }
         finally
         {

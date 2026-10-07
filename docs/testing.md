@@ -143,6 +143,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | VI01 | Vim keys in source mode: real keys edit (dd, A, Esc), Ctrl+V reaches Vim as block visual, u undoes, :w saves |
 | VI02 | Vim keys in reading mode: G, gg, ]] and Ctrl+D move the page |
 | TC01 | a tab closed with its x button: the outline shows the headings of the tab shown next |
+| TC02 | a tab closed while its neighbour is not the tab used last: the outline is the shown tab's, with long documents |
 | TB01 | the table toolbar's Resize table opens with the table's own size; Cancel leaves the table as it was; OK resizes it |
 | TH01 | a custom theme colours the page in visual, reading and source mode, and a change shows at once in each |
 | RD01 | reading mode: the context menu offers copying and selecting only, Copy works on a selection, copy as plain text leaves the Markdown out, Ctrl+Z changes nothing |
