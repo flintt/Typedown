@@ -394,9 +394,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             contentState.render(true);
             props.onSearchArgChange(undefined)
             // Back from the search with the keyboard in the page: the editor has it, not the body.
-            if (document.hasFocus() && (!document.activeElement || document.activeElement === document.body)) {
-                try { editor.focus() } catch (err) { console.log(err) }
-            }
+            if (document.hasFocus()) restoreEditorFocus(editor)
         }
     }), [editor, props, relativeScroll]);
 
@@ -861,10 +859,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     // and nowhere. Then the editor takes it, with its caret where it was.
     useEffect(() => {
         if (!editor) return
-        const onFocus = () => {
-            if (document.activeElement && document.activeElement !== document.body) return
-            try { editor.focus() } catch (err) { console.log(err) }
-        }
+        const onFocus = () => restoreEditorFocus(editor)
         window.addEventListener('focus', onFocus)
         return () => window.removeEventListener('focus', onFocus)
     }, [editor])
@@ -897,6 +892,28 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         </div>
     )
 
+}
+
+
+/**
+ * The page has the keyboard and nothing in it has the focus (the body has it): the editor takes it. A selection the
+ * reader made in the text is kept - only the focus goes back to the text - and reading mode, where nothing is typed,
+ * is left alone: Muya's focus() puts the caret back and so dropped a selection made to copy from.
+ */
+function restoreEditorFocus(editor: any) {
+    try {
+        if (document.activeElement && document.activeElement !== document.body) return
+        const container = editor?.container as HTMLElement | undefined
+        if (!container || container.getAttribute('contenteditable') !== 'true') return
+        const selection = document.getSelection()
+        if (selection && selection.rangeCount > 0 && !selection.isCollapsed && container.contains(selection.anchorNode)) {
+            container.focus({ preventScroll: true })
+            return
+        }
+        editor.focus()
+    } catch (err) {
+        console.log(err)
+    }
 }
 
 export default MuyaEditor
