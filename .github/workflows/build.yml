@@ -1,8 +1,8 @@
 name: Build
 
-# A repository whose variable BUILD_ON_PUSH is 'false' (Typeleaf: a private repository, where Windows minutes count)
-# builds on a version tag or when run by hand (Actions > Build > Run workflow), not on every push to a branch. The
-# variable is a repository setting, so this file stays the same in every edition.
+# A repository whose variable BUILD_ON_PUSH is 'false' (both editions) builds on a version tag, when run by hand
+# (Actions > Build > Run workflow), for a pull request, or for a push whose last commit message says [ci] - not on
+# every push to a branch. The variable is a repository setting, so this file stays the same in every edition.
 on:
   push:
     branches: [ main, integrate-upstream-prs ]
@@ -19,7 +19,7 @@ permissions:
 jobs:
   strings:
     name: Check translations
-    if: github.event_name != 'push' || github.ref_type == 'tag' || vars.BUILD_ON_PUSH != 'false'
+    if: github.event_name != 'push' || github.ref_type == 'tag' || vars.BUILD_ON_PUSH != 'false' || contains(github.event.head_commit.message, '[ci]')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -29,7 +29,7 @@ jobs:
 
   brand:
     name: Check brand names
-    if: github.event_name != 'push' || github.ref_type == 'tag' || vars.BUILD_ON_PUSH != 'false'
+    if: github.event_name != 'push' || github.ref_type == 'tag' || vars.BUILD_ON_PUSH != 'false' || contains(github.event.head_commit.message, '[ci]')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -40,7 +40,7 @@ jobs:
 
   reliability:
     name: Test persistence and packaging
-    if: github.event_name != 'push' || github.ref_type == 'tag' || vars.BUILD_ON_PUSH != 'false'
+    if: github.event_name != 'push' || github.ref_type == 'tag' || vars.BUILD_ON_PUSH != 'false' || contains(github.event.head_commit.message, '[ci]')
     runs-on: windows-2022
     steps:
       - uses: actions/checkout@v4
@@ -67,7 +67,7 @@ jobs:
     # The tag run is the one that publishes, so the branch run for a version commit is skipped. The explicit
     # marker is for infrastructure-only commits that must update this workflow without rebuilding the app.
     # Tags always build, even if their target commit contains the marker.
-    if: (github.event_name != 'push' || github.ref_type == 'tag' || vars.BUILD_ON_PUSH != 'false') && (github.ref_type == 'tag' || (!startsWith(github.event.head_commit.message, 'Version ') && !contains(github.event.head_commit.message, '[skip app build]')))
+    if: (github.event_name != 'push' || github.ref_type == 'tag' || vars.BUILD_ON_PUSH != 'false' || contains(github.event.head_commit.message, '[ci]')) && (github.ref_type == 'tag' || (!startsWith(github.event.head_commit.message, 'Version ') && !contains(github.event.head_commit.message, '[skip app build]')))
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
