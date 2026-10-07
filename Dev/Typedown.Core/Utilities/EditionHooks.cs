@@ -8,7 +8,7 @@ namespace Typedown.Core.Utilities
 {
     /// <summary>
     /// Places where an edition (Edition.Initialize) adds to every window: styles for the editor page, entries in the File
-    /// and View menus, the word counts the page reports, and the documents read from and written to disk. Typedown itself
+    /// menu, its Export submenu and the View menu, the word counts the page reports, and the documents read from and written to disk. Typedown itself
     /// adds nothing here.
     /// </summary>
     public static class EditionHooks
@@ -34,6 +34,7 @@ namespace Typedown.Core.Utilities
 
         private static readonly List<Func<AppViewModel, IEnumerable<MenuFlyoutItemBase>>> viewMenu = new();
         private static readonly List<Func<AppViewModel, IEnumerable<MenuFlyoutItemBase>>> fileMenu = new();
+        private static readonly List<Func<AppViewModel, IEnumerable<MenuFlyoutItemBase>>> exportMenu = new();
 
         /// <summary>
         /// Entries for the View menu, below the theme submenu. <paramref name="build"/> makes them for one window when its
@@ -49,6 +50,14 @@ namespace Typedown.Core.Utilities
         {
             lock (fileMenu) fileMenu.Add(build);
         }
+
+        /// <summary>Entries for File > Export, after the export configurations; made for each window as the View menu's are.</summary>
+        public static void AddExportMenuItems(Func<AppViewModel, IEnumerable<MenuFlyoutItemBase>> build)
+        {
+            lock (exportMenu) exportMenu.Add(build);
+        }
+
+        internal static IReadOnlyList<MenuFlyoutItemBase> ExportMenuItems(AppViewModel viewModel) => MenuItems(exportMenu, viewModel);
 
         internal static IReadOnlyList<MenuFlyoutItemBase> ViewMenuItems(AppViewModel viewModel) => MenuItems(viewMenu, viewModel);
 

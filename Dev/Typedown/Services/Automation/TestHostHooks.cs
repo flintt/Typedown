@@ -361,6 +361,22 @@ namespace Typedown.Services.Automation
                         ["actualTheme"] = (app.XamlRoot?.Content as global::Windows.UI.Xaml.FrameworkElement)?.ActualTheme.ToString() };
                 });
             }));
+            // The entries of a window's File > Export submenu, as shown.
+            methods.Add(new MethodDescriptor("test.export.menu", null, "test.export.menu/1", (c, ct) =>
+                Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    Core.Controls.EditorControls.MenuBarItems.FileItem? file = null;
+                    void Find(global::Windows.UI.Xaml.DependencyObject node)
+                    {
+                        if (file != null || node == null) return;
+                        if (node is Core.Controls.EditorControls.MenuBarItems.FileItem f) { file = f; return; }
+                        for (var i = 0; i < global::Windows.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(node); i++)
+                            Find(global::Windows.UI.Xaml.Media.VisualTreeHelper.GetChild(node, i));
+                    }
+                    Find(app.XamlRoot?.Content as global::Windows.UI.Xaml.DependencyObject);
+                    if (file == null) throw new AutomationException(AutomationErrorKind.editor_not_ready, "no File menu in this window");
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["entries"] = new Newtonsoft.Json.Linq.JArray(file.ExportMenu()) };
+                })));
             // The colours the side pane marks what is chosen with: every selection indicator drawn in it (the bar under
             // Files/Outline, the pill of each outline and folder-tree row), by where it is, with its fill.
             methods.Add(new MethodDescriptor("test.pane.accent", null, "test.pane.accent/1", (c, ct) =>
