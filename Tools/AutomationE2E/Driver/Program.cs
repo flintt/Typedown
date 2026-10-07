@@ -987,7 +987,26 @@ internal static partial class Program
                 await Task.Delay(800);
                 var second = await Drag(compact);
                 notes.Add($"{(compact ? "compact" : "title row")}: drag before {first}, after F11 twice {second}");
-                if (second.dx == 0 && second.dy == 0) notes.Add("screen: " + Screenshot("fs02-" + (compact ? "compact" : "title")));
+                if (second.dx == 0 && second.dy == 0)
+                {
+                    notes.Add("screen: " + Screenshot("fs02-" + (compact ? "compact" : "title")));
+                    // What lies under the point pressed, and where the window's child windows are.
+                    GetWindowRect(window, out var w);
+                    int px = compact ? w.Right - 260 : (w.Left + w.Right) / 2, py = w.Top + (compact ? 16 : 12);
+                    var under = WindowFromPoint(new POINT { X = px, Y = py });
+                    var cls = new System.Text.StringBuilder(256);
+                    GetClassName(under, cls, 256);
+                    var children = new List<string>();
+                    EnumChildWindows(window, (h, _) =>
+                    {
+                        var n = new System.Text.StringBuilder(256);
+                        GetClassName(h, n, 256);
+                        GetWindowRect(h, out var r);
+                        children.Add($"{n} {h}:{r.Left},{r.Top},{r.Right},{r.Bottom}{(IsWindowVisible(h) ? "" : " hidden")}");
+                        return true;
+                    }, IntPtr.Zero);
+                    notes.Add($"pressed at {px},{py} (window {w.Left},{w.Top},{w.Right},{w.Bottom}): under it {cls} {under}; children: {string.Join(" | ", children)}");
+                }
                 Check(Math.Abs(second.dx - 80) <= 4 && Math.Abs(second.dy - 50) <= 4, $"{(compact ? "compact" : "title row")}: out of full screen the same drag moves the window ({second})");
             }
         }
@@ -2731,6 +2750,11 @@ internal static partial class Program
     [StructLayout(LayoutKind.Sequential)] private struct RECT { public int Left, Top, Right, Bottom; }
     [DllImport("user32.dll")] private static extern bool GetWindowRect(IntPtr window, out RECT rect);
     [DllImport("user32.dll")] private static extern bool SetCursorPos(int x, int y);
+    [StructLayout(LayoutKind.Sequential)] private struct POINT { public int X, Y; }
+    [DllImport("user32.dll")] private static extern IntPtr WindowFromPoint(POINT point);
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)] private static extern int GetClassName(IntPtr window, System.Text.StringBuilder name, int size);
+    private delegate bool EnumWindowsProc(IntPtr window, IntPtr data);
+    [DllImport("user32.dll")] private static extern bool EnumChildWindows(IntPtr parent, EnumWindowsProc callback, IntPtr data);
 
     /// <summary>Waits until the page itself holds text satisfying the condition (test.editor.pageText), bounded.</summary>
     private static async Task<string> WaitForPage(Client c, string documentId, Func<string, bool> condition, string what)
