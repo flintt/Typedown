@@ -190,6 +190,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | `test.theme.apply` | `customTheme?`, `builtIn?`, `windowId` | A theme picked as the View menu picks it (a custom theme brings its base light/dark along), and what the window then draws with. | TestHostHooks.cs |
 | `test.theme.menu` | `reload?`, `windowId` | View > Theme: the entries it shows, after clicking its "Reload themes" item when asked (through the item's automation peer, as an assistive tool would). | TestHostHooks.cs |
 | `test.editor.rewriteLoads` | `count?`, `windowId` | The next loads of the window's editor come back rewritten, as a load that did not keep the text did once. | TestHostHooks.cs |
+| `test.dialog.press` | `button?`, `windowId` | Presses a button of the dialog open in the window (primary, secondary or close), as a click would; the button's text back. A test finding it through UI Automation found the window's own close button first. | TestHostHooks.cs |
 | `test.window.popups` | `windowId` | The popups open in a window (menus, flyouts, a number box's buttons...), by the type of what they show. | TestHostHooks.cs |
 | `test.export.menu` | `windowId` | The entries of a window's File > Export submenu, as shown. | TestHostHooks.cs |
 | `test.pane.accent` | `windowId` | The colours the side pane marks what is chosen with: every selection indicator drawn in it (the bar under Files/Outline, the pill of each outline and folder-tree row), by where it is, with its fill. | TestHostHooks.cs |

@@ -159,25 +159,21 @@ internal static partial class Program
 
     private enum DialogButton { Primary, Secondary, Close }
 
-    // A dialog's buttons by the template's names (Resources/Styles/ContentDialog.xaml), whatever the interface language
-    // calls them; by the names they show where a template has none.
-    private static readonly string[] CloseNames = { "Close", "关闭", "關閉", "閉じる", "Schließen", "Fermer", "Cancel", "取消", "Not now", "以后再说", "以後再說", "今はしない", "Nicht jetzt", "Plus tard" };
-
-    /// <summary>Presses a button of the dialog shown in the window (through UI Automation's invoke, as a click would).</summary>
-    private static async Task PressDialogButton(IntPtr window, DialogButton which, int timeoutMs = 3000)
+    /// <summary>
+    /// Presses a button of the dialog open in the window, as a click would (test.dialog.press: the app finds its own
+    /// dialog - looked for through UI Automation, the window's title bar close button was found first and the window
+    /// closed). Waits for a dialog to be there.
+    /// </summary>
+    private static async Task PressDialogButton(Client c, string windowId, DialogButton which, int timeoutMs = 3000)
     {
-        var id = which switch { DialogButton.Primary => "PrimaryButton", DialogButton.Secondary => "SecondaryButton", _ => "CloseButton" };
-        AutomationElement? button = null;
-        await Eventually(() =>
+        var name = which.ToString().ToLowerInvariant();
+        string? error = null;
+        if (!await Eventually(async () =>
         {
-            button = FindIn(window, id);
-            if (button == null && which == DialogButton.Close)
-                button = AutomationElement.FromHandle(window).FindAll(TreeScope.Descendants, new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.Button))
-                    .Cast<AutomationElement>().FirstOrDefault(b => CloseNames.Contains(b.Current.Name));
-            return Task.FromResult(button != null && !button.Current.BoundingRectangle.IsEmpty);
-        }, timeoutMs, 100);
-        if (button == null) throw new CaseFailed($"no {which} button in a dialog ({FocusInfo(window)})");
-        ((InvokePattern)button.GetCurrentPattern(InvokePattern.Pattern)).Invoke();
+            try { await c.Call("test.dialog.press", new { windowId, button = name }); return true; }
+            catch (JsonRpcRemoteException e) { error = e.Message; return false; }
+        }, timeoutMs, 150))
+            throw new CaseFailed($"no {name} button of a dialog to press: {error}");
         await Task.Delay(300);
     }
 

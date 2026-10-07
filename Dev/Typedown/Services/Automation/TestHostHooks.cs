@@ -371,6 +371,30 @@ namespace Typedown.Services.Automation
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject();
                 });
             }));
+            // Presses a button of the dialog open in the window (primary, secondary or close), as a click would; the
+            // button's text back. A test finding it through UI Automation found the window's own close button first.
+            methods.Add(new MethodDescriptor("test.dialog.press", null, "test.dialog.press/1", (c, ct) =>
+            {
+                var which = c.Params.OptionalEnum("button", "close", "primary", "secondary", "close");
+                return Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    Core.Controls.AppContentDialog? dialog = null;
+                    void Find(global::Windows.UI.Xaml.DependencyObject node)
+                    {
+                        if (node == null) return;
+                        if (node is Core.Controls.AppContentDialog d && d.IsLoaded) dialog = d;
+                        for (var i = 0; i < global::Windows.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(node); i++)
+                            Find(global::Windows.UI.Xaml.Media.VisualTreeHelper.GetChild(node, i));
+                    }
+                    Find(app.XamlRoot?.Content as global::Windows.UI.Xaml.DependencyObject);
+                    if (dialog == null) throw new AutomationException(AutomationErrorKind.editor_not_ready, "no dialog is open in this window");
+                    var button = which == "primary" ? dialog.PrimaryButton : which == "secondary" ? dialog.SecondaryButton : dialog.CloseButton;
+                    if (button == null || button.Visibility != global::Windows.UI.Xaml.Visibility.Visible || !button.IsEnabled)
+                        throw new AutomationException(AutomationErrorKind.editor_not_ready, $"the dialog has no {which} button to press");
+                    ((global::Windows.UI.Xaml.Automation.Provider.IInvokeProvider)new global::Windows.UI.Xaml.Automation.Peers.ButtonAutomationPeer(button)).Invoke();
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["pressed"] = button.Content?.ToString() };
+                });
+            }));
             // The popups open in a window (menus, flyouts, a number box's buttons...), by the type of what they show.
             methods.Add(new MethodDescriptor("test.window.popups", null, "test.window.popups/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
