@@ -97,6 +97,7 @@ namespace Typedown.Core.ViewModels
             EventCenter.GetObservable<EditorEventArgs>("NormalizationReport").Subscribe(x => OnNormalizationReport(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("PresentationFrames").Subscribe(x => { var t = x.Args?["token"]?.Value<int?>() ?? 0; if (framesWaiters.TryGetValue(t, out var w)) w.TrySetResult(true); });
             EventCenter.GetObservable<EditorEventArgs>("EditorStyle").Subscribe(x => { var t = x.Args?["token"]?.Value<int?>() ?? 0; if (styleWaiters.TryGetValue(t, out var w)) w.TrySetResult(x.Args); });
+            EventCenter.GetObservable<EditorEventArgs>("RenderedXhtml").Subscribe(x => { var t = x.Args?["token"]?.Value<int?>() ?? 0; if (xhtmlWaiters.TryGetValue(t, out var w)) w.TrySetResult(x.Args); });
             EventCenter.GetObservable<EditorEventArgs>("CursorChange").Subscribe(x => OnCursorChange(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("OnScroll").Subscribe(x => OnScroll(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("SelectionChange").Subscribe(x => OnSelectionChange(x.Args));
@@ -753,6 +754,32 @@ namespace Typedown.Core.ViewModels
         }
 
         private readonly Dictionary<int, TaskCompletionSource<JToken>> styleWaiters = new();
+        private readonly Dictionary<int, TaskCompletionSource<JToken>> xhtmlWaiters = new();
+
+        /// <summary>
+        /// The document rendered as the exports render it, as the body element of an XHTML document (well-formed XML, in
+        /// the XHTML namespace): for turning it into another format. Null when the page did not answer in time; an
+        /// exception with the page's message when it could not render.
+        /// </summary>
+        public async Task<string> RenderXhtmlAsync(int timeoutMs)
+        {
+            if (MarkdownEditor == null) return null;
+            var token = ++normalizationToken;
+            var waiter = new TaskCompletionSource<JToken>(TaskCreationOptions.RunContinuationsAsynchronously);
+            xhtmlWaiters[token] = waiter;
+            try
+            {
+                MarkdownEditor.PostMessage("RenderXhtml", new { token });
+                if (await Task.WhenAny(waiter.Task, Task.Delay(timeoutMs)) != waiter.Task) return null;
+                var reply = waiter.Task.Result;
+                if (reply?["error"] != null) throw new InvalidOperationException(reply["error"].ToString());
+                return reply?["xhtml"]?.ToString();
+            }
+            finally
+            {
+                xhtmlWaiters.Remove(token);
+            }
+        }
 
         /// <summary>The page's computed font size, line height and direction (automation test host checks).</summary>
         public async Task<JToken> QueryEditorStyleAsync(int timeoutMs)

@@ -93,6 +93,19 @@ const Editor: React.FC = () => {
         return true
     }, [describeNormalization])
 
+    // Host -> editor: the document rendered as the exports render it (diagrams drawn, math typeset), serialized as XHTML
+    // so that it parses as XML, for a host turning it into another format.
+    useEffect(() => transport.addListener<{ token: number }>('RenderXhtml', async ({ token }) => {
+        flushRef.current?.()
+        try {
+            const html = await new ExportHtml(markdownRef.current ?? '', { ...optionsRef.current }).renderHtml(undefined)
+            const body = new DOMParser().parseFromString(`<!DOCTYPE html><html><body>${html}</body></html>`, 'text/html').body
+            transport.postMessage('RenderedXhtml', { token, xhtml: new XMLSerializer().serializeToString(body) })
+        } catch (e) {
+            transport.postMessage('RenderedXhtml', { token, error: String(e) })
+        }
+    }), []);
+
     // Host -> editor: how the editor is drawn right now (the settings it applied), for checking that a setting reached
     // the page and not only the host.
     useEffect(() => transport.addListener<{ token: number }>('QueryEditorStyle', ({ token }) => {
