@@ -218,8 +218,8 @@ const Editor: React.FC = () => {
     }, [options])
 
     // The host asks for this before it saves: whatever it holds must be what is on screen.
-    // A custom theme and the user's own CSS are two style elements, in that order: a theme sets the palette,
-    // and whatever the user writes in the settings still has the last word. Here, not in one editor, so they follow
+    // A custom theme, an edition's own styles and the user's own CSS are three style elements, in that order: a theme
+    // sets the palette, and whatever the user writes in the settings still has the last word. Here, not in one editor, so they follow
     // a change in every mode (source mode kept the old theme until the mode was switched).
     useEffect(() => {
         const css = options?.themeCss || ''
@@ -228,6 +228,10 @@ const Editor: React.FC = () => {
         // Clearing it lets the next ThemeChanged from the host paint it again when the theme is switched off.
         if (css) document.body.style.backgroundColor = 'var(--editorBgColor)'
     }, [options?.themeCss])
+
+    useEffect(() => {
+        styleElement('typedown-edition-css').textContent = options?.editionCss || ''
+    }, [options?.editionCss])
 
     useEffect(() => {
         styleElement('typedown-custom-css').textContent = options?.customCss || ''
@@ -242,7 +246,7 @@ const Editor: React.FC = () => {
         flushRef.current?.()
         // The theme and the user's own CSS style the editor, so the exported file should carry them too —
         // otherwise a document looks different the moment it leaves the app.
-        const styling = [optionsRef.current?.themeCss, optionsRef.current?.customCss].filter(Boolean).join('\n')
+        const styling = [optionsRef.current?.themeCss, optionsRef.current?.editionCss, optionsRef.current?.customCss].filter(Boolean).join('\n')
         const generateOption: any = { printOptimization: false, title, toc: getHtmlToc(getTOC(markdownRef.current ?? '').toc), ...options }
         if (styling) generateOption.extraCss = [generateOption.extraCss, styling].filter(Boolean).join('\n')
         const baseUrl = basePath ? `file:///${basePath.replaceAll('\\', '/')}/` : undefined

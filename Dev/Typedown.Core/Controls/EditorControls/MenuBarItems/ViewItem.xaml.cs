@@ -59,6 +59,20 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             UpdateThemeChecks();
         }
 
+        private bool editionItemsAdded;
+
+        // An edition's own entries (EditionHooks.AddViewMenuItems), below the theme submenu. Once per menu: they are
+        // the window's own, and the menu watches its commands only once.
+        private void AddEditionItems()
+        {
+            if (editionItemsAdded || ViewModel == null) return;
+            editionItemsAdded = true;
+            var index = Items.IndexOf(ThemeSubMenu);
+            if (index < 0) return;
+            foreach (var item in EditionHooks.ViewMenuItems(ViewModel))
+                Items.Insert(++index, item);
+        }
+
         private void RefreshThemeMenu()
         {
             // A submenu that has been on screen keeps drawing the entries it had then, whatever its Items say
@@ -125,6 +139,7 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
         protected override void OnRegisterShortcut()
         {
             BuildThemeMenu();
+            AddEditionItems();
             ThemeFiles.Changed -= OnThemesChanged;
             ThemeFiles.Changed += OnThemesChanged;
             // Focus and typewriter mode both follow the caret, so they mean nothing in reading mode (which has

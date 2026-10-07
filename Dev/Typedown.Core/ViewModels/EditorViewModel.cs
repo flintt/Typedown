@@ -119,6 +119,9 @@ namespace Typedown.Core.ViewModels
             // The editor reads the theme as "themeCss"; the setting only holds the file name.
             Settings.WhenPropertyChanged(nameof(Settings.CustomTheme)).Subscribe(_ =>
                 MarkdownEditor?.PostMessage("SettingsChanged", new Dictionary<string, object>() { { "themeCss", ThemeFiles.Read(Settings.CustomTheme) } }));
+            // An edition's own styles (EditionHooks.EditorCss), changed while the window is open.
+            windowContext = System.Threading.SynchronizationContext.Current;
+            EditionHooks.EditorCssChanged += OnEditionCssChanged;
             this.WhenPropertyChanged(nameof(SearchValue)).Subscribe(_ => SearchValueChanged());
             this.WhenPropertyChanged(nameof(Saved)).Subscribe(_ => SavedOrAutoSavedSuccChanged());
             this.WhenPropertyChanged(nameof(AutoSavedSucc)).Subscribe(_ => SavedOrAutoSavedSuccChanged());
@@ -170,6 +173,7 @@ namespace Typedown.Core.ViewModels
                 Settings.ReadOnly,
                 Settings.CustomCss,
                 ThemeCss = ThemeFiles.Read(Settings.CustomTheme),
+                EditionCss = EditionHooks.EditorCss,
                 Settings.SpellcheckEnabled,
                 Settings.AutoPairMarkdownSyntax,
                 Settings.RenderPlantUml,
@@ -465,6 +469,8 @@ namespace Typedown.Core.ViewModels
             // longer on screen, and every heading in it is a place the editor cannot go.
             if (IsStaleReport(arg)) return;
             ContentState = arg["state"].ToObject<ContentState>();
+            if (ContentState.WordCount != null)
+                EditionHooks.ReportWordCount(new WordCountReport { Editor = this, LoadId = LoadId, Words = ContentState.WordCount.Word, Characters = ContentState.WordCount.Character });
             rebuildingToc = true;
             try
             {
@@ -1095,8 +1101,18 @@ namespace Typedown.Core.ViewModels
             MarkdownEditor?.PostMessage("ScrollTo", new { slug });
         }
 
+        private readonly System.Threading.SynchronizationContext windowContext;
+
+        private void OnEditionCssChanged()
+        {
+            void Apply() => MarkdownEditor?.PostMessage("SettingsChanged", new Dictionary<string, object>() { { "editionCss", EditionHooks.EditorCss } });
+            if (windowContext == null || windowContext == System.Threading.SynchronizationContext.Current) Apply();
+            else windowContext.Post(_ => Apply(), null);
+        }
+
         public void Dispose()
         {
+            EditionHooks.EditorCssChanged -= OnEditionCssChanged;
             disposables.Dispose();
         }
     }
