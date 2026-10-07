@@ -142,6 +142,7 @@ internal static partial class Program
             await Case("K02 Ctrl+, twice opens and closes the settings: the caret and the keyboard are where they were", K02);
             await Case("K04 a window just opened takes the keys at once: a letter typed without a click reaches the document", K04);
             await Case("K05 a new tab (the + button, Ctrl+N) and a tab clicked in the strip take the keys at once, without a click in the text", K05);
+            await Case("K06 after closing a tab, a menu command, a mode switch, an outline jump, closing the find bar or a dialog, and Ctrl+Tab, the keys go to the document without a click", K06);
             await Case("K03 the same with an untitled document (no per-file caret memory)", K03);
             await Case("FS01 in full screen the main page starts at the top edge of the screen", FS01);
             await Case("FS02 out of full screen the window is dragged by its title bar again at once (with the title row, and in compact mode by the menu row)", FS02);
@@ -936,6 +937,215 @@ internal static partial class Program
                 }
                 catch (Exception ex) { notes.Add("cleanup: " + ex.Message.Split('\n')[0]); }
             }
+        }
+    }
+
+    // Everywhere the reader leaves the text for a moment - a tab's close button, a menu, the outline, the find bar, a
+    // dialog - and comes back to write: the letter typed next must reach the document without a click in it. Each
+    // step is tried and recorded; the case fails at the end with the list of those where the letter went nowhere.
+    private static async Task K06(List<string> notes)
+    {
+        using var c = await Session("e2e K06");
+        var main = await Open(c, Fixture("k06.md", "# K06\n\n## Two\n\nText\n"));
+        var windowId = await WindowIdOf(c, main);
+        var window = await WindowOf(windowId, c);
+        var failed = new List<string>();
+        async Task<string> Active() => (string)((JArray)(await c.Call("window.list"))["windows"]!).First(w => (string)w["windowId"]! == windowId)["activeDocumentId"]!;
+        async Task<string> TextOf(string doc) => (string?)(await Get(c, doc))["text"] ?? "";
+        void Click(int x, int y, bool twice = false)
+        {
+            SetCursorPos(x, y);
+            for (var i = 0; i < (twice ? 2 : 1); i++)
+                Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0002 } } }, new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0004 } } });
+        }
+        void ClickElement(System.Windows.Automation.AutomationElement e, bool twice = false)
+        {
+            var r = e.Current.BoundingRectangle;
+            Click((int)(r.Left + r.Width / 2), (int)(r.Top + r.Height / 2), twice);
+        }
+        System.Windows.Automation.AutomationElement? FindIn(System.Windows.Automation.AutomationElement root, Func<System.Windows.Automation.AutomationElement, bool> match)
+        {
+            foreach (System.Windows.Automation.AutomationElement e in root.FindAll(System.Windows.Automation.TreeScope.Descendants, System.Windows.Automation.Condition.TrueCondition))
+                if (match(e)) return e;
+            return null;
+        }
+        // Anywhere in the test host's windows (menus and dialogs are popups of their own).
+        System.Windows.Automation.AutomationElement? FindAnywhere(Func<System.Windows.Automation.AutomationElement, bool> match)
+        {
+            foreach (System.Windows.Automation.AutomationElement top in System.Windows.Automation.AutomationElement.RootElement.FindAll(System.Windows.Automation.TreeScope.Children,
+                new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ProcessIdProperty, hostPid)))
+                if (FindIn(top, match) is { } found) return found;
+            return null;
+        }
+        INPUT Scan(ushort vk, ushort scan, bool up) => new() { type = 1, u = new InputUnion { ki = new KEYBDINPUT { wVk = vk, wScan = scan, dwFlags = up ? 0x0002u : 0u } } };
+        // A top menu of the menu bar (0 File ... 4 View), opened with the mouse, and one of its items clicked.
+        async Task Menu(int index, string itemId)
+        {
+            var file = FindIn(System.Windows.Automation.AutomationElement.FromHandle(window), e => e.Current.AutomationId == "MenuBarFileItem") ?? throw new CaseFailed("no File menu");
+            var bar = System.Windows.Automation.TreeWalker.ControlViewWalker.GetParent(file);
+            var menus = bar.FindAll(System.Windows.Automation.TreeScope.Children, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.MenuItem));
+            // View is the last menu: in source mode Paragraph and Format are hidden and the others move up.
+            ClickElement(menus[index < 0 ? menus.Count + index : index]);
+            System.Windows.Automation.AutomationElement? item = null;
+            for (var i = 0; i < 20 && item == null; i++) { await Task.Delay(150); item = FindAnywhere(e => e.Current.AutomationId == itemId && e.Current.ControlType == System.Windows.Automation.ControlType.MenuItem && !e.Current.IsOffscreen); }
+            if (item == null) throw new CaseFailed($"no menu item {itemId}");
+            await Task.Delay(600); // the menu's opening animation over: a click during it lands on nothing
+            var ir = item.Current.BoundingRectangle;
+            // The pointer moved onto the item and resting there first, as a hand does: a click with no move before it
+            // did not take in the menu's popup.
+            int ix = (int)(ir.Left + ir.Width / 2), iy = (int)(ir.Top + ir.Height / 2);
+            SetCursorPos(ix - 30, iy);
+            for (var i = 1; i <= 6; i++) { await Task.Delay(30); SetCursorPos(ix - 30 + 5 * i, iy); }
+            await Task.Delay(300);
+            Click(ix, iy);
+            await Task.Delay(800);
+            if (FindAnywhere(e => e.Current.AutomationId == itemId && e.Current.ControlType == System.Windows.Automation.ControlType.MenuItem && !e.Current.IsOffscreen) is { } still)
+            {
+                notes.Add($"     {itemId}: the click did not close the menu; toggled instead");
+                if (still.TryGetCurrentPattern(System.Windows.Automation.TogglePattern.Pattern, out var toggle)) ((System.Windows.Automation.TogglePattern)toggle).Toggle();
+                else ((System.Windows.Automation.InvokePattern)still.GetCurrentPattern(System.Windows.Automation.InvokePattern.Pattern)).Invoke();
+                // A checkable item toggled that way leaves its menu open: closed with Esc, as a person closes it.
+                await Task.Delay(300);
+                if (FindAnywhere(e => e.Current.AutomationId == itemId && e.Current.ControlType == System.Windows.Automation.ControlType.MenuItem && !e.Current.IsOffscreen) != null)
+                    Send(Scan(0x1B, 0x01, false), Scan(0x1B, 0x01, true));
+            }
+            await Task.Delay(1200);
+        }
+        // A menu or popup a failed step left open closed, so it does not take the next step's clicks.
+        async Task CloseMenus()
+        {
+            for (var i = 0; i < 2; i++)
+            {
+                Send(Scan(0x1B, 0x01, false), Scan(0x1B, 0x01, true));
+                await Task.Delay(300);
+            }
+        }
+        async Task Chord(ushort vk, ushort scan)
+        {
+            Send(Key(0x11, false));
+            await Task.Delay(80);
+            Send(Scan(vk, scan, false), Scan(vk, scan, true));
+            await Task.Delay(80);
+            Send(Key(0x11, true));
+            await Task.Delay(1200);
+        }
+        // The letter typed with no click, and whether it reached the document that should have it.
+        async Task Probe(string step, char letter, Func<Task<string>> expectedDocument)
+        {
+            try
+            {
+                var doc = await expectedDocument();
+                TypeChar(letter);
+                string text = "";
+                for (var i = 0; i < 30 && !text.Contains(letter); i++) { await Task.Delay(100); text = await TextOf(doc); }
+                var ok = text.Contains(letter);
+                notes.Add($"{(ok ? "ok  " : "FAIL")} {step}");
+                if (!ok) { failed.Add(step); notes.Add($"     keys went to: {FocusInfo(window)}; screen: {Screenshot("k06-" + letter)}"); }
+            }
+            catch (Exception ex)
+            {
+                failed.Add(step);
+                notes.Add($"FAIL {step}: {ex.Message.Split('\n')[0]}");
+            }
+            await Task.Delay(300);
+        }
+        async Task Try(string step, Func<Task> action, char letter, Func<Task<string>> expectedDocument)
+        {
+            await CloseMenus();
+            // Each step from the reader writing in the document: the caret in the text, so one step's outcome is not
+            // the next one's start.
+            try { await c.Call("test.editor.focus", new { windowId }); await Task.Delay(300); } catch { }
+            notes.Add($"     before '{step}': {FocusInfo(window)}");
+            try { await action(); }
+            catch (Exception ex) { failed.Add(step); notes.Add($"FAIL {step} (could not be done): {ex.Message.Split('\n')[0]}"); return; }
+            await Probe(step, letter, expectedDocument);
+        }
+
+        var second = "";
+        try
+        {
+            await TypeInto(c, main, "A");
+            await WaitForPage(c, main, t => t.Contains('A'), "the first letter");
+
+            await Try("a tab closed with its x button", async () =>
+            {
+                second = await Open(c, Fixture("k06b.md", "# K06b\n"));
+                await Task.Delay(1200);
+                var tab = FindIn(System.Windows.Automation.AutomationElement.FromHandle(window), e => e.Current.ControlType == System.Windows.Automation.ControlType.TabItem && e.Current.Name.Contains("k06b")) ?? throw new CaseFailed("no k06b tab");
+                var close = FindIn(tab, e => e.Current.ControlType == System.Windows.Automation.ControlType.Button) ?? throw new CaseFailed("no close button on the tab");
+                ClickElement(close);
+                await Task.Delay(1500);
+                second = "";
+            }, 'Q', () => Task.FromResult(main));
+
+            await Try("Format > Strong from the menu", () => Menu(3, "StrongItem"), 'Z', () => Task.FromResult(main));
+
+            await Try("View > Source code mode from the menu", () => Menu(-1, "SourceCodeModeItem"), 'V', () => Task.FromResult(main));
+            await Try("View > Source code mode again (back to the visual editor)", () => Menu(-1, "SourceCodeModeItem"), 'Y', () => Task.FromResult(main));
+
+            await Try("a heading clicked in the outline", async () =>
+            {
+                await c.Call("window.setView", new { windowId, sidePane = new { open = true, page = "outline" } });
+                await Task.Delay(1500);
+                System.Windows.Automation.AutomationElement? heading = null;
+                for (var i = 0; i < 20 && heading == null; i++) { await Task.Delay(150); heading = FindIn(System.Windows.Automation.AutomationElement.FromHandle(window), e => e.Current.Name == "Two" && e.Current.ControlType != System.Windows.Automation.ControlType.Document); }
+                ClickElement(heading ?? throw new CaseFailed("no Two in the outline"));
+                await Task.Delay(1200);
+            }, 'U', () => Task.FromResult(main));
+
+            await Try("the find bar opened with Ctrl+F and closed with Esc", async () =>
+            {
+                await Chord(0x46, 0x21);
+                Send(Scan(0x1B, 0x01, false), Scan(0x1B, 0x01, true));
+                await Task.Delay(1200);
+            }, 'L', () => Task.FromResult(main));
+
+            await Try("the find bar closed with its close button", async () =>
+            {
+                await Chord(0x46, 0x21);
+                System.Windows.Automation.AutomationElement? input = null;
+                for (var i = 0; i < 20 && input == null; i++) { await Task.Delay(150); input = FindIn(System.Windows.Automation.AutomationElement.FromHandle(window), e => e.Current.ControlType == System.Windows.Automation.ControlType.Edit); }
+                // The close button: the last button in the find bar's row (the row the search box is in).
+                var row = System.Windows.Automation.TreeWalker.ControlViewWalker.GetParent(System.Windows.Automation.TreeWalker.ControlViewWalker.GetParent(input ?? throw new CaseFailed("no search box")));
+                var buttons = row.FindAll(System.Windows.Automation.TreeScope.Descendants, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.Button));
+                ClickElement(buttons[buttons.Count - 1]);
+                await Task.Delay(1200);
+            }, 'H', () => Task.FromResult(main));
+
+            await Try("the save question (Ctrl+W on a changed document) answered Cancel", async () =>
+            {
+                await Chord(0x57, 0x11);
+                System.Windows.Automation.AutomationElement? cancel = null;
+                for (var i = 0; i < 20 && cancel == null; i++) { await Task.Delay(150); cancel = FindAnywhere(e => e.Current.ControlType == System.Windows.Automation.ControlType.Button && (e.Current.Name == "取消" || e.Current.Name == "Cancel")); }
+                ClickElement(cancel ?? throw new CaseFailed("no Cancel in the save question"));
+                await Task.Delay(1200);
+            }, 'G', () => Task.FromResult(main));
+
+            await Try("Ctrl+Tab to the other tab", async () =>
+            {
+                second = await Open(c, Fixture("k06b.md", "# K06b\n"));
+                await Task.Delay(1000);
+                await c.Call("document.focus", new { documentId = second });
+                await TypeInto(c, second, "B");
+                await Task.Delay(500);
+                Send(Key(0x11, false));
+                await Task.Delay(80);
+                Send(Scan(0x09, 0x0F, false), Scan(0x09, 0x0F, true));
+                await Task.Delay(80);
+                Send(Key(0x11, true));
+                await Task.Delay(1500);
+            }, 'M', Active);
+
+            notes.Add("text: " + JsonConvert.SerializeObject(await TextOf(main)));
+            Check(failed.Count == 0, "the letter typed next went nowhere after: " + string.Join("; ", failed));
+        }
+        finally
+        {
+            // Saved, so nothing asks to be saved later.
+            foreach (var doc in new[] { main, second }.Where(d => d.Length > 0))
+                try { await c.Call("document.save", new { documentId = doc }); } catch { }
+            try { await c.Call("window.setView", new { windowId, sidePane = new { open = false } }); } catch { }
+            try { await c.Call("test.settings.set", new { windowId, name = "SourceCode", value = false }); } catch { }
         }
     }
 
@@ -2853,6 +3063,23 @@ internal static partial class Program
     [DllImport("user32.dll", CharSet = CharSet.Unicode)] private static extern int GetClassName(IntPtr window, System.Text.StringBuilder name, int size);
     private delegate bool EnumWindowsProc(IntPtr window, IntPtr data);
     [DllImport("user32.dll")] private static extern bool EnumChildWindows(IntPtr parent, EnumWindowsProc callback, IntPtr data);
+
+    // Which window has the keyboard: the foreground window, its thread's focus window with its parents, by class.
+    private static string FocusInfo(IntPtr window)
+    {
+        var info = new GUITHREADINFO { cbSize = Marshal.SizeOf<GUITHREADINFO>() };
+        var fg = GetForegroundWindow();
+        GetGUIThreadInfo(GetWindowThreadProcessId(fg, out _), ref info);
+        string Name(IntPtr h) { var n = new System.Text.StringBuilder(256); GetClassName(h, n, 256); return n.Length > 0 ? n.ToString() : "-"; }
+        var chain = new List<string>();
+        for (var h = info.hwndFocus; h != IntPtr.Zero && chain.Count < 6; h = GetParent(h)) chain.Add(Name(h));
+        return $"foreground {(fg == window ? "the test window" : Name(fg))}, focus {string.Join(" < ", chain)}";
+    }
+
+    [StructLayout(LayoutKind.Sequential)] private struct GUITHREADINFO { public int cbSize; public uint flags; public IntPtr hwndActive, hwndFocus, hwndCapture, hwndMenuOwner, hwndMoveSize, hwndCaret; public RECT rcCaret; }
+    [DllImport("user32.dll")] private static extern bool GetGUIThreadInfo(uint thread, ref GUITHREADINFO info);
+    [DllImport("user32.dll")] private static extern uint GetWindowThreadProcessId(IntPtr window, out uint process);
+    [DllImport("user32.dll")] private static extern IntPtr GetParent(IntPtr window);
 
     /// <summary>Waits until the page itself holds text satisfying the condition (test.editor.pageText), bounded.</summary>
     private static async Task<string> WaitForPage(Client c, string documentId, Func<string, bool> condition, string what)
