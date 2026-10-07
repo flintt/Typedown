@@ -94,7 +94,9 @@ namespace Typedown.Core.ViewModels
         public FileViewModel(IServiceProvider serviceProvider)
         {
             ServiceProvider = serviceProvider;
-            NewFileCommand.OnExecute.Subscribe(async _ => await NewFileFun());
+            // New, as the reader asks for it (the + button, the menu, Ctrl+N): the keyboard goes to the new document. The
+            // + button kept it, and the letters typed next went nowhere until a click in the text.
+            NewFileCommand.OnExecute.Subscribe(async _ => { await NewFileFun(); MarkdownEditor?.FocusEditor(); });
             OpenFileCommand.OnExecute.Subscribe(async x => await OpenFile(x));
             OpenFolderCommand.OnExecute.Subscribe(async x => await OpenFolder(x));
             SaveAsCommand.OnExecute.Subscribe(async _ => await SaveAs());

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Typedown.Core.Models;
@@ -190,7 +190,11 @@ namespace Typedown.Core.Controls
         {
             if (Tabs == null) return;
             if (TabView.SelectedItem is DocumentTab tab && tab != Tabs.ActiveTab)
+            {
                 Tabs.SwitchTabCommand.Execute(tab);
+                // A tab clicked in the strip keeps the keyboard on the tab; the reader came to write in the document.
+                _ = Dispatcher.RunIdleAsync(_ => ViewModel?.MarkdownEditor?.FocusEditor());
+            }
         }
 
         private void OnAddTabButtonClick(muxc.TabView sender, object args)
