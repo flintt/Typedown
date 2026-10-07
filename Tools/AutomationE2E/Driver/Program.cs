@@ -155,6 +155,7 @@ internal static partial class Program
             await Case("IN01 several image files dropped at once: each in a paragraph of its own, in the drop's order, one undo step", IN01);
             await Case("VI01 Vim keys in source mode: real keys edit (dd, A, Esc), Ctrl+V reaches Vim as block visual, u undoes, :w saves", VI01);
             await Case("VI02 Vim keys in reading mode: G, gg, ]] and Ctrl+D move the page", VI02);
+            await Case("TC01 a tab closed with its x button: the outline shows the headings of the tab shown next", TC01);
             await Case("TB01 the table toolbar's Resize table opens with the table's own size; Cancel leaves the table as it was; OK resizes it", TB01);
             await Case("TH01 a custom theme colours the page in visual, reading and source mode, and a change shows at once in each", TH01);
             await Case("RD01 reading mode: the context menu offers copying and selecting only, Copy works on a selection, copy as plain text leaves the Markdown out, Ctrl+Z changes nothing", RD01);
@@ -1754,6 +1755,54 @@ internal static partial class Program
         {
             try { await c.Call("test.theme.apply", new { windowId, builtIn = "Default" }); } catch { }
             try { await c.Call("window.setView", new { windowId, sidePane = new { open = (bool)view["sidePane"]!["open"]!, page = (string)view["sidePane"]!["page"]! } }); } catch { }
+        }
+    }
+
+    // Closing the shown tab left the outline on the closed document's headings (or empty) instead of the one shown next.
+    private static async Task TC01(List<string> notes)
+    {
+        using var c = await Session("e2e TC01");
+        var first = await Open(c, Fixture("tc01-a.md", "# Alpha one\n\n## Alpha two\n\nText\n"));
+        var second = await Open(c, Fixture("tc01-b.md", "# Beta one\n\n## Beta two\n\n## Beta three\n\nText\n"));
+        var windowId = await WindowIdOf(c, second);
+        var window = await WindowOf(windowId, c);
+        await c.Call("window.setView", new { windowId, sidePane = new { open = true, page = "outline" } });
+        await Task.Delay(1500);
+        List<string> Outline()
+        {
+            var names = new List<string>();
+            foreach (System.Windows.Automation.AutomationElement e in System.Windows.Automation.AutomationElement.FromHandle(window).FindAll(System.Windows.Automation.TreeScope.Descendants, System.Windows.Automation.Condition.TrueCondition))
+            {
+                var n = e.Current.Name;
+                if ((n.StartsWith("Alpha") || n.StartsWith("Beta")) && e.Current.ControlType != System.Windows.Automation.ControlType.Document && !names.Contains(n)) names.Add(n);
+            }
+            return names;
+        }
+        try
+        {
+            var before = Outline();
+            notes.Add("outline with tc01-b shown: " + string.Join(", ", before));
+            Check(before.Contains("Beta three") && !before.Contains("Alpha two"), "the outline shows the shown tab's headings");
+            var tab = System.Windows.Automation.AutomationElement.FromHandle(window).FindAll(System.Windows.Automation.TreeScope.Descendants,
+                new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.TabItem))
+                .Cast<System.Windows.Automation.AutomationElement>().FirstOrDefault(t => t.Current.Name.Contains("tc01-b")) ?? throw new CaseFailed("no tc01-b tab");
+            var close = tab.FindAll(System.Windows.Automation.TreeScope.Descendants, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.Button))
+                .Cast<System.Windows.Automation.AutomationElement>().FirstOrDefault() ?? throw new CaseFailed("no close button on the tab");
+            await Activate(window);
+            var r = close.Current.BoundingRectangle;
+            SetCursorPos((int)(r.Left + r.Width / 2), (int)(r.Top + r.Height / 2));
+            await Task.Delay(150);
+            Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0002 } } }, new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0004 } } });
+            List<string> after = new();
+            for (var i = 0; i < 30 && !(after.Contains("Alpha two") && !after.Contains("Beta three")); i++) { await Task.Delay(200); after = Outline(); }
+            var active = (string)((JArray)(await c.Call("window.list"))["windows"]!).First(w => (string)w["windowId"]! == windowId)["activeDocumentId"]!;
+            notes.Add($"after closing tc01-b, shown {(active == first ? "tc01-a" : active)}: outline " + string.Join(", ", after));
+            Check(active == first, "tc01-a is shown");
+            Check(after.Contains("Alpha one") && after.Contains("Alpha two") && !after.Contains("Beta three"), "the outline shows tc01-a's headings");
+        }
+        finally
+        {
+            try { await c.Call("window.setView", new { windowId, sidePane = new { open = false } }); } catch { }
         }
     }
 
