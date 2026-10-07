@@ -155,6 +155,7 @@ internal static partial class Program
             await Case("IN01 several image files dropped at once: each in a paragraph of its own, in the drop's order, one undo step", IN01);
             await Case("VI01 Vim keys in source mode: real keys edit (dd, A, Esc), Ctrl+V reaches Vim as block visual, u undoes, :w saves", VI01);
             await Case("VI02 Vim keys in reading mode: G, gg, ]] and Ctrl+D move the page", VI02);
+            await Case("TB01 the table toolbar's Resize table opens with the table's own size; Cancel leaves the table as it was; OK resizes it", TB01);
             await Case("TH01 a custom theme colours the page in visual, reading and source mode, and a change shows at once in each", TH01);
             await Case("RD01 reading mode: the context menu offers copying and selecting only, Copy works on a selection, copy as plain text leaves the Markdown out, Ctrl+Z changes nothing", RD01);
             await Case("CP01 Copy pasted into Word: pictures at absolute file:/// addresses, a name and an alt text with brackets, an SVG sized in pt, a JPEG", CP01);
@@ -1754,6 +1755,72 @@ internal static partial class Program
             try { await c.Call("test.theme.apply", new { windowId, builtIn = "Default" }); } catch { }
             try { await c.Call("window.setView", new { windowId, sidePane = new { open = (bool)view["sidePane"]!["open"]!, page = (string)view["sidePane"]!["page"]! } }); } catch { }
         }
+    }
+
+    // Resize table showed 4 rows and 3 columns whatever the table was, and Cancel broke the page's handling of it.
+    private static async Task TB01(List<string> notes)
+    {
+        using var c = await Session("e2e TB01");
+        const string text0 = "# TB01\n\n| a | b |\n| --- | --- |\n| 1 | 2 |\n| 3 | 4 |\n";
+        var id = await Open(c, Fixture("tb01.md", text0));
+        var windowId = await WindowIdOf(c, id);
+        var window = await WindowOf(windowId, c);
+        IEnumerable<System.Windows.Automation.AutomationElement> HostElements(System.Windows.Automation.ControlType type)
+        {
+            foreach (System.Windows.Automation.AutomationElement top in System.Windows.Automation.AutomationElement.RootElement.FindAll(System.Windows.Automation.TreeScope.Children,
+                new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ProcessIdProperty, hostPid)))
+                foreach (System.Windows.Automation.AutomationElement e in top.FindAll(System.Windows.Automation.TreeScope.Descendants, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, type)))
+                    yield return e;
+        }
+        List<System.Windows.Automation.AutomationElement> NumberBoxes() => HostElements(System.Windows.Automation.ControlType.Edit)
+            .Where(e => e.TryGetCurrentPattern(System.Windows.Automation.ValuePattern.Pattern, out _) && !e.Current.IsOffscreen).ToList();
+        string Value(System.Windows.Automation.AutomationElement e) => ((System.Windows.Automation.ValuePattern)e.GetCurrentPattern(System.Windows.Automation.ValuePattern.Pattern)).Current.Value;
+        void Press(string zh, string en)
+        {
+            var button = HostElements(System.Windows.Automation.ControlType.Button).FirstOrDefault(b => b.Current.Name == zh || b.Current.Name == en) ?? throw new CaseFailed($"no {en} button");
+            ((System.Windows.Automation.InvokePattern)button.GetCurrentPattern(System.Windows.Automation.InvokePattern.Pattern)).Invoke();
+        }
+        // The caret in the table's first body cell (the toolbar shows while it is in the table), then the toolbar's
+        // Resize table.
+        async Task<List<System.Windows.Automation.AutomationElement>> OpenDialog()
+        {
+            // A click in the cell, as a hand does it: the pointer moved there first, then pressed and released.
+            await Activate(window);
+            var at = (await c.Call("test.editor.eval", new { windowId, script = "(() => { const r = document.querySelector('#ag-editor-id table tbody td').getBoundingClientRect(); return { x: Math.round(r.left + r.width / 2), y: Math.round(r.top + r.height / 2) } })()" }))["result"]!;
+            var screen = await c.Call("test.editor.screenPoint", new { windowId, x = (int)at["x"]!, y = (int)at["y"]! });
+            SetProcessDpiAwarenessContext(new IntPtr(-4));
+            SetCursorPos((int)screen["x"]! - 6, (int)screen["y"]!);
+            for (var i = 0; i < 3; i++) { await Task.Delay(60); Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dx = 2, dy = 0, dwFlags = 0x0001 } } }); }
+            Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0002 } } });
+            await Task.Delay(60);
+            Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0004 } } });
+            await Task.Delay(800);
+            var clicked = (bool?)(await c.Call("test.editor.eval", new { windowId, script = "(() => { const b = document.querySelector('[data-label=\"table\"]'); if (!b) return false; b.dispatchEvent(new MouseEvent('click', { bubbles: true })); return true })()" }))["result"];
+            Check(clicked == true, "the table toolbar has Resize table");
+            List<System.Windows.Automation.AutomationElement> boxes = new();
+            for (var i = 0; i < 30 && boxes.Count < 2; i++) { await Task.Delay(200); boxes = NumberBoxes(); }
+            Check(boxes.Count >= 2, $"the Resize table dialog shows its two number boxes ({boxes.Count})");
+            return boxes;
+        }
+        var shown = await OpenDialog();
+        var values = shown.Select(Value).ToList();
+        notes.Add("the dialog shows: " + string.Join(", ", values));
+        Check(values.Count >= 2 && values[0].StartsWith("3") && values[1].StartsWith("2"), $"the dialog starts from the table's own size, 3 rows (the header counted) and 2 columns ({string.Join(", ", values)})");
+
+        Press("取消", "Cancel");
+        await Task.Delay(800);
+        var afterCancel = (string)(await Get(c, id))["text"]!;
+        Check(afterCancel == text0, $"Cancel leaves the table as it was ({JsonConvert.SerializeObject(afterCancel)})");
+
+        // Again, with a row more, and OK.
+        shown = await OpenDialog();
+        ((System.Windows.Automation.ValuePattern)shown[0].GetCurrentPattern(System.Windows.Automation.ValuePattern.Pattern)).SetValue("4");
+        await Task.Delay(300);
+        Press("确定", "OK");
+        string text = "";
+        for (var i = 0; i < 20 && text.Split('\n').Count(l => l.StartsWith("|")) != 5; i++) { await Task.Delay(200); text = (string)(await Get(c, id))["text"]!; }
+        notes.Add("after OK: " + JsonConvert.SerializeObject(text));
+        Check(text.Split('\n').Count(l => l.StartsWith("|")) == 5, "OK with 4 rows gives the table a fourth row (5 lines with the delimiter row)");
     }
 
     // Reading mode, as a reader uses it: Ctrl+Z after an edit, Ctrl+A, a right-click on the text, copy as plain text
