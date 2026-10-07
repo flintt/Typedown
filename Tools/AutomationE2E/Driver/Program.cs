@@ -917,10 +917,11 @@ internal static partial class Program
             Click((int)(r.Left + 20), (int)(r.Top + r.Height / 2));
             await Task.Delay(1500);
             Check(await Active() == first, "the click switched to the first tab");
-            TypeChar('T');
-            text = await PageHas(first, 'T');
+            // A letter the document does not hold already ("Text" has a T).
+            TypeChar('J');
+            text = await PageHas(first, 'J');
             notes.Add("after the tab click: " + JsonConvert.SerializeObject(text));
-            Check(text?.Contains('T') == true, "a letter typed after a tab is clicked reaches its document");
+            Check(text?.Contains('J') == true, "a letter typed after a tab is clicked reaches its document");
         }
         finally
         {
