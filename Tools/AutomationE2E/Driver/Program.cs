@@ -1794,6 +1794,14 @@ internal static partial class Program
             SetCursorPos((int)(r.Left + r.Width / 2), (int)(r.Top + r.Height / 2));
             await Task.Delay(150);
             Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0002 } } }, new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0004 } } });
+            await Task.Delay(1000);
+            // With many tabs open (earlier cases leave theirs) the button can be scrolled out of the strip and the click
+            // land on nothing: then it is pressed through UI Automation, as an assistive tool would.
+            if (((JArray)(await c.Call("document.list", new { windowId }))["documents"]!).Any(d => (string)d["documentId"]! == second))
+            {
+                notes.Add("the click missed the close button; invoked");
+                ((System.Windows.Automation.InvokePattern)close.GetCurrentPattern(System.Windows.Automation.InvokePattern.Pattern)).Invoke();
+            }
             // The tab shown next is the window's choice (other cases may have left tabs open): its headings, from its
             // text, are what the outline must show - and none of the closed document's.
             var active = "";
@@ -1851,6 +1859,12 @@ internal static partial class Program
             var close = Tab("tc02-a").FindAll(System.Windows.Automation.TreeScope.Descendants, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.Button))
                 .Cast<System.Windows.Automation.AutomationElement>().FirstOrDefault() ?? throw new CaseFailed("no close button");
             Click(close.Current.BoundingRectangle, 0.5);
+            await Task.Delay(1000);
+            if (((JArray)(await c.Call("document.list", new { windowId }))["documents"]!).Any(d => (string)d["documentId"]! == a))
+            {
+                notes.Add("the click missed the close button; invoked");
+                ((System.Windows.Automation.InvokePattern)close.GetCurrentPattern(System.Windows.Automation.InvokePattern.Pattern)).Invoke();
+            }
             string shownName = "", top = "";
             for (var i = 0; i < 40; i++)
             {
