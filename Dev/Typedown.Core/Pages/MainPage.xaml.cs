@@ -91,7 +91,15 @@ namespace Typedown.Core.Pages
             Grid.SetRow(MenuBarHost, 0);
             MenuBarHost.VerticalAlignment = VerticalAlignment.Stretch;
             MenuBarHost.Background = isFullScreen ? GetOpaqueBackground() : null;
-            MenuBarHost.SetDragEnabled(!isFullScreen);
+            // The drag areas are native windows laid over their elements where those are when the areas are made. Out of
+            // full screen the bar has only just been made visible and the window is still being given its size back:
+            // made now, the areas lay where nothing was, and the window could not be dragged until something laid the
+            // bar out again (a menu opened, the settings visited). They are made once the layout has settled.
+            if (isFullScreen) MenuBarHost.SetDragEnabled(false);
+            else _ = Dispatcher.RunIdleAsync(_ =>
+            {
+                if (!(AppViewModel?.UIViewModel?.IsFullScreen ?? false)) MenuBarHost.SetDragEnabled(true);
+            });
             // While the bar is out the edge strip would only cover the top of its menus.
             if (FullScreenRevealStrip != null) FullScreenRevealStrip.IsHitTestVisible = !menuBarRevealed;
         }

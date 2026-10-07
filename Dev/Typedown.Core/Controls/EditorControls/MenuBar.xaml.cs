@@ -27,7 +27,32 @@ namespace Typedown.Core.Controls
         {
             foreach (var bar in new Windows.UI.Xaml.FrameworkElement[] { LeftDragBar, RightDragBar })
                 if (bar != null && Typedown.XamlUI.XamlWindow.GetDrag(bar) != enabled)
+                {
                     Typedown.XamlUI.XamlWindow.SetDrag(bar, enabled);
+                    if (enabled) EnsureDragWindow(bar);
+                }
+        }
+
+        /// <summary>
+        /// Turned on again (out of full screen), an area got no native window: XamlUI's DragBar makes it when the
+        /// element loads, and an element that stayed loaded never does - the window could not be dragged until the main
+        /// page was built anew (the settings visited). Then it is made here, as DragBar makes it on loading.
+        /// </summary>
+        private static void EnsureDragWindow(Windows.UI.Xaml.FrameworkElement bar)
+        {
+            try
+            {
+                var dragBar = Typedown.XamlUI.DragBar.AttachToFrameworkElement(bar);
+                var flags = System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance;
+                if (dragBar.GetType().GetField("_dragBarWindow", flags)?.GetValue(dragBar) != null) return;
+                dragBar.GetType().GetMethod("CreateDragBarWindow", flags)?.Invoke(dragBar, new object[] { bar });
+                if (dragBar.GetType().GetField("_dragBarWindow", flags)?.GetValue(dragBar) == null)
+                    Utilities.Log.Debug($"drag: no window for {bar.Name} after turning it on again");
+            }
+            catch (Exception ex)
+            {
+                Utilities.Log.Debug($"drag: could not make the window for {bar.Name}: {ex.Message}");
+            }
         }
 
         public void ApplyThemeBrushes(Windows.UI.Xaml.Media.Brush background, Windows.UI.Xaml.Media.Brush foreground)
