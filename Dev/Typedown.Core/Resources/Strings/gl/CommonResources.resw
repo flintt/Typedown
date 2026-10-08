@@ -1009,4 +1009,7 @@
   <data name="UploadLocalImages" xml:space="preserve">
     <value>Cargar imaxes locais</value>
   </data>
+  <data name="Export.Done" xml:space="preserve">
+    <value>Exportado a {0}</value>
+  </data>
 </root>

@@ -1009,4 +1009,7 @@
   <data name="UploadLocalImages" xml:space="preserve">
     <value>อัปโหลดรูปภาพในเครื่อง</value>
   </data>
+  <data name="Export.Done" xml:space="preserve">
+    <value>ส่งออกไปยัง {0} แล้ว</value>
+  </data>
 </root>

@@ -1009,4 +1009,7 @@
   <data name="UploadLocalImages" xml:space="preserve">
     <value>Качване на локалните изображения</value>
   </data>
+  <data name="Export.Done" xml:space="preserve">
+    <value>Експортирано в {0}</value>
+  </data>
 </root>

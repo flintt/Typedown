@@ -1009,4 +1009,7 @@
   <data name="UploadLocalImages" xml:space="preserve">
     <value>ლოკალური სურათების ატვირთვა</value>
   </data>
+  <data name="Export.Done" xml:space="preserve">
+    <value>ექსპორტირებულია: {0}</value>
+  </data>
 </root>

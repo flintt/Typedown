@@ -883,4 +883,16 @@
   <data name="About.OpenLogFolder" xml:space="preserve">
     <value>பதிவுக் கோப்புறையைத் திற</value>
   </data>
+  <data name="Export.AfterExport.Title" xml:space="preserve">
+    <value>ஏற்றுமதிக்குப் பிறகு</value>
+  </data>
+  <data name="Export.AfterExport.Notify" xml:space="preserve">
+    <value>எங்கே சேமிக்கப்பட்டது எனக் காட்டு</value>
+  </data>
+  <data name="Export.AfterExport.OpenFile" xml:space="preserve">
+    <value>கோப்பைத் திற</value>
+  </data>
+  <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
+    <value>அதன் கோப்புறையைத் திற</value>
+  </data>
 </root>

@@ -883,4 +883,16 @@
   <data name="About.OpenLogFolder" xml:space="preserve">
     <value>Öppna loggmappen</value>
   </data>
+  <data name="Export.AfterExport.Title" xml:space="preserve">
+    <value>Efter export</value>
+  </data>
+  <data name="Export.AfterExport.Notify" xml:space="preserve">
+    <value>Visa var den sparades</value>
+  </data>
+  <data name="Export.AfterExport.OpenFile" xml:space="preserve">
+    <value>Öppna filen</value>
+  </data>
+  <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
+    <value>Öppna dess mapp</value>
+  </data>
 </root>

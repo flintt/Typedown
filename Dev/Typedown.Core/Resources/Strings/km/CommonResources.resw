@@ -1009,4 +1009,7 @@
   <data name="UploadLocalImages" xml:space="preserve">
     <value>ផ្ទុករូបភាពមូលដ្ឋានឡើង</value>
   </data>
+  <data name="Export.Done" xml:space="preserve">
+    <value>បាននាំចេញទៅ {0}</value>
+  </data>
 </root>

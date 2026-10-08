@@ -883,4 +883,16 @@
   <data name="About.OpenLogFolder" xml:space="preserve">
     <value>Odpri mapo dnevnikov</value>
   </data>
+  <data name="Export.AfterExport.Title" xml:space="preserve">
+    <value>Po izvozu</value>
+  </data>
+  <data name="Export.AfterExport.Notify" xml:space="preserve">
+    <value>Pokaži, kam je shranjeno</value>
+  </data>
+  <data name="Export.AfterExport.OpenFile" xml:space="preserve">
+    <value>Odpri datoteko</value>
+  </data>
+  <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
+    <value>Odpri njeno mapo</value>
+  </data>
 </root>

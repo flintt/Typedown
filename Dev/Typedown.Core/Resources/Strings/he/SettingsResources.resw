@@ -883,4 +883,16 @@
   <data name="About.OpenLogFolder" xml:space="preserve">
     <value>פתיחת תיקיית היומנים</value>
   </data>
+  <data name="Export.AfterExport.Title" xml:space="preserve">
+    <value>לאחר הייצוא</value>
+  </data>
+  <data name="Export.AfterExport.Notify" xml:space="preserve">
+    <value>הצג היכן נשמר</value>
+  </data>
+  <data name="Export.AfterExport.OpenFile" xml:space="preserve">
+    <value>פתח את הקובץ</value>
+  </data>
+  <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
+    <value>פתח את התיקייה שלו</value>
+  </data>
 </root>

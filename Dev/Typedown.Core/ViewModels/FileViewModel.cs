@@ -790,8 +790,7 @@ namespace Typedown.Core.ViewModels
                 var configId = args["context"]["configId"].ToObject<int>();
                 var config = await ServiceProvider.GetService<IFileExport>().GetExportConfig(configId);
                 await config.LoadExportConfig().Export(ServiceProvider, html, filePath);
-                if (SettingsViewModel.OpenFolderAfterExport)
-                    Common.OpenFileLocation(filePath);
+                Exported(filePath);
                 return true;
             }
             catch (Exception ex)
@@ -977,6 +976,46 @@ namespace Typedown.Core.ViewModels
             }
         }
 
+        /// <summary>
+        /// An export written to <paramref name="filePath"/>: what Settings > Export > After export says - a notice, the
+        /// file or its folder opened, or nothing. Every export format comes here (the edition's too).
+        /// </summary>
+        public void Exported(string filePath)
+        {
+            Log.Debug($"export: written {filePath}, then {SettingsViewModel.AfterExport}");
+            try
+            {
+                switch (SettingsViewModel.AfterExport)
+                {
+                    case Enums.ExportAfterAction.Notify: AppViewModel.UIViewModel.ShowExported(filePath); break;
+                    case Enums.ExportAfterAction.OpenFile: Common.OpenFile(filePath); break;
+                    case Enums.ExportAfterAction.OpenFolder: Common.OpenFileLocation(filePath); break;
+                }
+            }
+            catch (Exception ex)
+            {
+                // No program for the file type, say: the export itself is done, so the notice says where it is.
+                Log.Debug($"export: after export failed: {ex.Message}");
+                AppViewModel.UIViewModel.ShowExported(filePath);
+            }
+        }
+
+        /// <summary>An export with the file already chosen, as after the save dialog (the test host skips the dialog).</summary>
+        public void ExportTo(ExportConfig config, string filePath)
+        {
+            string basePath = null;
+            if (config.Type == Enums.ExportType.PDF || config.Type == Enums.ExportType.Image)
+                basePath = ImageBasePath;
+            MarkdownEditor?.PostMessage("Export", new
+            {
+                type = "export",
+                title = Path.GetFileNameWithoutExtension(filePath),
+                context = new { configId = config.Id, filePath },
+                basePath,
+                options = config.LoadExportConfig()
+            });
+        }
+
         private async Task ExportAsync(ExportConfig config)
         {
             var filePicker = new FileSavePicker();
@@ -987,17 +1026,7 @@ namespace Typedown.Core.ViewModels
             filePicker.SuggestedFileName = FilePath != null ? Path.GetFileNameWithoutExtension(FilePath) : (FileName ?? "untitled");
             var file = await FilePickersExtensions.ShowAsync(() => filePicker.PickSaveFileAsync());
             if (file == null) return;
-            string basePath = null;
-            if (config.Type == Enums.ExportType.PDF || config.Type == Enums.ExportType.Image)
-                basePath = ImageBasePath;
-            MarkdownEditor?.PostMessage("Export", new
-            {
-                type = "export",
-                title = file.DisplayName,
-                context = new { configId = config.Id, filePath = file.Path },
-                basePath,
-                options = config.LoadExportConfig()
-            });
+            ExportTo(config, file.Path);
         }
 
         private void Print()

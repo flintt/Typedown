@@ -908,7 +908,8 @@
         "InsertWebImageUseUploadConfigId",
         "DefaultImageUploadConfigId",
         "VimMode",
-        "OpenFolderAfterExport"
+        "OpenFolderAfterExport",
+        "AfterExport"
       ]
     }
   ]

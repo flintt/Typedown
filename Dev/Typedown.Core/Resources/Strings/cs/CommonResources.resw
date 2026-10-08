@@ -1009,4 +1009,7 @@
   <data name="UploadLocalImages" xml:space="preserve">
     <value>Nahrát místní obrázky</value>
   </data>
+  <data name="Export.Done" xml:space="preserve">
+    <value>Exportováno do {0}</value>
+  </data>
 </root>

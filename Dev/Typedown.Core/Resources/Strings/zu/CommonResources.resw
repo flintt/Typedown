@@ -1009,4 +1009,7 @@
   <data name="UploadLocalImages" xml:space="preserve">
     <value>Layisha izithombe zendawo</value>
   </data>
+  <data name="Export.Done" xml:space="preserve">
+    <value>Kukhishelwe ku-{0}</value>
+  </data>
 </root>

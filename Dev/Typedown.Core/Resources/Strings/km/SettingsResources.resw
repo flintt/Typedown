@@ -883,4 +883,16 @@
   <data name="About.OpenLogFolder" xml:space="preserve">
     <value>បើក​ថត​កំណត់​ហេតុ</value>
   </data>
+  <data name="Export.AfterExport.Title" xml:space="preserve">
+    <value>បន្ទាប់ពីនាំចេញ</value>
+  </data>
+  <data name="Export.AfterExport.Notify" xml:space="preserve">
+    <value>បង្ហាញកន្លែងដែលបានរក្សាទុក</value>
+  </data>
+  <data name="Export.AfterExport.OpenFile" xml:space="preserve">
+    <value>បើកឯកសារ</value>
+  </data>
+  <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
+    <value>បើកថតរបស់វា</value>
+  </data>
 </root>

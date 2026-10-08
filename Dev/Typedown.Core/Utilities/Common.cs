@@ -47,6 +47,12 @@ namespace Typedown.Core.Utilities
             Process.Start("explorer.exe", $"/select, \"{filePath}\"");
         }
 
+        /// <summary>The file opened in the program Windows has for it.</summary>
+        public static void OpenFile(string filePath)
+        {
+            Process.Start(new ProcessStartInfo(filePath) { UseShellExecute = true });
+        }
+
         public static ulong SimpleHash(string str)
         {
             ulong hashedValue = 3074457345618258791ul;

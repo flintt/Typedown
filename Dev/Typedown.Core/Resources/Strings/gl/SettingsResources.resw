@@ -883,4 +883,16 @@
   <data name="About.OpenLogFolder" xml:space="preserve">
     <value>Abrir o cartafol de rexistros</value>
   </data>
+  <data name="Export.AfterExport.Title" xml:space="preserve">
+    <value>Despois de exportar</value>
+  </data>
+  <data name="Export.AfterExport.Notify" xml:space="preserve">
+    <value>Amosar onde se gardou</value>
+  </data>
+  <data name="Export.AfterExport.OpenFile" xml:space="preserve">
+    <value>Abrir o ficheiro</value>
+  </data>
+  <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
+    <value>Abrir o seu cartafol</value>
+  </data>
 </root>

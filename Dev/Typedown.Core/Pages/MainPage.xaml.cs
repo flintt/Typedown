@@ -32,6 +32,25 @@ namespace Typedown.Core.Pages
             revealMenuBarTimer.Tick += OnRevealMenuBarTimerTick;
         }
 
+        private void OnExportNoticeOpenClick(object sender, RoutedEventArgs e) => OpenExported(Common.OpenFile);
+
+        private void OnExportNoticeFolderClick(object sender, RoutedEventArgs e) => OpenExported(Common.OpenFileLocation);
+
+        private void OnExportNoticeCloseClick(object sender, RoutedEventArgs e) => AppViewModel.UIViewModel.HideExported();
+
+        private async void OpenExported(Action<string> open)
+        {
+            var path = AppViewModel.UIViewModel.ExportedPath;
+            AppViewModel.UIViewModel.HideExported();
+            if (path == null) return;
+            try { open(path); }
+            catch (Exception ex)
+            {
+                Log.Debug($"export notice: could not open {path}: {ex.Message}");
+                try { await Controls.AppContentDialog.Create(Locale.GetString("Error"), ex.Message, Locale.GetString("Ok")).ShowAsync(XamlRoot); } catch { }
+            }
+        }
+
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             var uiViewModel = AppViewModel.UIViewModel;

@@ -883,4 +883,16 @@
   <data name="About.OpenLogFolder" xml:space="preserve">
     <value>ჟურნალების საქაღალდის გახსნა</value>
   </data>
+  <data name="Export.AfterExport.Title" xml:space="preserve">
+    <value>ექსპორტის შემდეგ</value>
+  </data>
+  <data name="Export.AfterExport.Notify" xml:space="preserve">
+    <value>ჩვენება, სად შეინახა</value>
+  </data>
+  <data name="Export.AfterExport.OpenFile" xml:space="preserve">
+    <value>ფაილის გახსნა</value>
+  </data>
+  <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
+    <value>მისი საქაღალდის გახსნა</value>
+  </data>
 </root>

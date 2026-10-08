@@ -883,4 +883,16 @@
   <data name="About.OpenLogFolder" xml:space="preserve">
     <value>Відкрити папку журналів</value>
   </data>
+  <data name="Export.AfterExport.Title" xml:space="preserve">
+    <value>Після експорту</value>
+  </data>
+  <data name="Export.AfterExport.Notify" xml:space="preserve">
+    <value>Показати, де збережено</value>
+  </data>
+  <data name="Export.AfterExport.OpenFile" xml:space="preserve">
+    <value>Відкрити файл</value>
+  </data>
+  <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
+    <value>Відкрити його папку</value>
+  </data>
 </root>

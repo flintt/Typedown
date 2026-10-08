@@ -45,6 +45,34 @@ namespace Typedown.Core.ViewModels
 
         public bool IsPrintPreviewOpen { get; private set; }
 
+        /// <summary>The file an export just wrote, while its notice shows (null: no notice).</summary>
+        public string ExportedPath { get; private set; }
+
+        public bool ExportedNoticeOpen => ExportedPath != null;
+
+        public string ExportedNotice => ExportedPath == null ? null : string.Format(Locale.GetString("Export.Done"), ExportedPath);
+
+        private DispatcherTimer exportedTimer;
+
+        /// <summary>A notice that the export is written, with its place and buttons to open it; it goes by itself.</summary>
+        public void ShowExported(string path)
+        {
+            ExportedPath = path;
+            exportedTimer ??= new DispatcherTimer { Interval = TimeSpan.FromSeconds(10) };
+            exportedTimer.Tick -= OnExportedTimerTick;
+            exportedTimer.Tick += OnExportedTimerTick;
+            exportedTimer.Stop();
+            exportedTimer.Start();
+        }
+
+        public void HideExported()
+        {
+            exportedTimer?.Stop();
+            ExportedPath = null;
+        }
+
+        private void OnExportedTimerTick(object sender, object e) => HideExported();
+
 
         /// <summary>Folder-wide search pane in the side bar (Edit → Find → Search in folder, Ctrl+Shift+F).</summary>
         public bool FolderSearchOpen { get; set; }

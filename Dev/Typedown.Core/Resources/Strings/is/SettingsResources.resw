@@ -883,4 +883,16 @@
   <data name="About.OpenLogFolder" xml:space="preserve">
     <value>Opna annálamöppu</value>
   </data>
+  <data name="Export.AfterExport.Title" xml:space="preserve">
+    <value>Eftir útflutning</value>
+  </data>
+  <data name="Export.AfterExport.Notify" xml:space="preserve">
+    <value>Sýna hvar það var vistað</value>
+  </data>
+  <data name="Export.AfterExport.OpenFile" xml:space="preserve">
+    <value>Opna skrána</value>
+  </data>
+  <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
+    <value>Opna möppu hennar</value>
+  </data>
 </root>

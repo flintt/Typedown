@@ -1009,4 +1009,7 @@
   <data name="UploadLocalImages" xml:space="preserve">
     <value>ਸਥਾਨਕ ਚਿੱਤਰ ਅੱਪਲੋਡ ਕਰੋ</value>
   </data>
+  <data name="Export.Done" xml:space="preserve">
+    <value>{0} ਵਿੱਚ ਨਿਰਯਾਤ ਕੀਤਾ ਗਿਆ</value>
+  </data>
 </root>

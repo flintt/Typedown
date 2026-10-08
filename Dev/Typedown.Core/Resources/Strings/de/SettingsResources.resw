@@ -883,4 +883,16 @@
   <data name="About.OpenLogFolder" xml:space="preserve">
     <value>Protokollordner öffnen</value>
   </data>
+  <data name="Export.AfterExport.Title" xml:space="preserve">
+    <value>Nach dem Export</value>
+  </data>
+  <data name="Export.AfterExport.Notify" xml:space="preserve">
+    <value>Speicherort anzeigen</value>
+  </data>
+  <data name="Export.AfterExport.OpenFile" xml:space="preserve">
+    <value>Datei öffnen</value>
+  </data>
+  <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
+    <value>Ordner öffnen</value>
+  </data>
 </root>

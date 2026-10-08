@@ -1009,4 +1009,7 @@
   <data name="UploadLocalImages" xml:space="preserve">
     <value>Hlaða upp staðbundnum myndum</value>
   </data>
+  <data name="Export.Done" xml:space="preserve">
+    <value>Flutt út í {0}</value>
+  </data>
 </root>

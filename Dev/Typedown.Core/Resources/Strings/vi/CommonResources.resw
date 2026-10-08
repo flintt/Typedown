@@ -1009,4 +1009,7 @@
   <data name="UploadLocalImages" xml:space="preserve">
     <value>Tải lên ảnh cục bộ</value>
   </data>
+  <data name="Export.Done" xml:space="preserve">
+    <value>Đã xuất sang {0}</value>
+  </data>
 </root>

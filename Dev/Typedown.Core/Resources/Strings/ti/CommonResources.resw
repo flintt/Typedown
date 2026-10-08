@@ -1008,4 +1008,7 @@
   <data name="UploadLocalImages" xml:space="preserve">
     <value>ናይ ከባቢ ምስልታት ስቐል</value>
   </data>
+  <data name="Export.Done" xml:space="preserve">
+    <value>ናብ {0} ተላኢኹ</value>
+  </data>
 </root>

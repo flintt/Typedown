@@ -883,4 +883,16 @@
   <data name="About.OpenLogFolder" xml:space="preserve">
     <value>लग फोल्डर खोल्नुहोस्</value>
   </data>
+  <data name="Export.AfterExport.Title" xml:space="preserve">
+    <value>निर्यात पछि</value>
+  </data>
+  <data name="Export.AfterExport.Notify" xml:space="preserve">
+    <value>कहाँ सुरक्षित गरियो देखाउनुहोस्</value>
+  </data>
+  <data name="Export.AfterExport.OpenFile" xml:space="preserve">
+    <value>फाइल खोल्नुहोस्</value>
+  </data>
+  <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
+    <value>यसको फोल्डर खोल्नुहोस्</value>
+  </data>
 </root>

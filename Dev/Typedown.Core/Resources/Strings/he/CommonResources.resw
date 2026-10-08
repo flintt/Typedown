@@ -1009,4 +1009,7 @@
   <data name="UploadLocalImages" xml:space="preserve">
     <value>העלה תמונות מקומיות</value>
   </data>
+  <data name="Export.Done" xml:space="preserve">
+    <value>יוצא אל {0}</value>
+  </data>
 </root>

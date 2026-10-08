@@ -1009,4 +1009,7 @@
   <data name="UploadLocalImages" xml:space="preserve">
     <value>പ്രാദേശിക ചിത്രങ്ങൾ അപ്‌ലോഡ് ചെയ്യുക</value>
   </data>
+  <data name="Export.Done" xml:space="preserve">
+    <value>{0} ലേക്ക് എക്സ്പോർട്ട് ചെയ്തു</value>
+  </data>
 </root>

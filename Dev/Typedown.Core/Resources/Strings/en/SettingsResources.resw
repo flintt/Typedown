@@ -923,4 +923,16 @@
   <data name="Editor.VimMode.Description" xml:space="preserve">
     <value>Vim in source mode (:w saves, :q closes the tab); j/k, gg/G, ]] and / to move around in reading mode. Not in the visual editor.</value>
   </data>
+  <data name="Export.AfterExport.Title" xml:space="preserve">
+    <value>After export</value>
+  </data>
+  <data name="Export.AfterExport.Notify" xml:space="preserve">
+    <value>Show where it was saved</value>
+  </data>
+  <data name="Export.AfterExport.OpenFile" xml:space="preserve">
+    <value>Open the file</value>
+  </data>
+  <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
+    <value>Open its folder</value>
+  </data>
 </root>

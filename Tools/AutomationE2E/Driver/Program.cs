@@ -157,6 +157,8 @@ internal static partial class Program
             await Case("VI02 Vim keys in reading mode: G, gg, ]] and Ctrl+D move the page", VI02);
             await Case("TC01 a tab closed with its x button: the outline shows the headings of the tab shown next", TC01);
             await Case("TC02 a tab closed while its neighbour is not the tab used last: the outline is the shown tab's, with long documents", TC02);
+            await Case("SE01 the startup action chosen on the settings page is in the settings file", SE01);
+            await Case("EX02 an export says where it was written, with buttons to open it, and goes when closed; with no action after export, nothing shows", EX02);
             await Case("TB01 the table toolbar's Resize table opens with the table's own size; Cancel leaves the table as it was; OK resizes it", TB01);
             await Case("TH01 a custom theme colours the page in visual, reading and source mode, and a change shows at once in each", TH01);
             await Case("RD01 reading mode: the context menu offers copying and selecting only, Copy works on a selection, copy as plain text leaves the Markdown out, Ctrl+Z changes nothing", RD01);
@@ -2051,6 +2053,130 @@ internal static partial class Program
         finally
         {
             try { await c.Call("window.setView", new { windowId, sidePane = new { open = false } }); } catch { }
+        }
+    }
+
+    // An export that worked said nothing at all: the reader looked for the file to know whether it had.
+    private static async Task EX02(List<string> notes)
+    {
+        using var c = await Session("e2e EX02");
+        var id = await Open(c, Fixture("ex02.md", "# EX02\n\nExported.\n"));
+        var windowId = await WindowIdOf(c, id);
+        var window = await WindowOf(windowId, c);
+        var before = (int)(await c.Call("test.settings.get", new { windowId, name = "AfterExport" }))["value"]!;
+        async Task<string?> Notice() => (string?)(await c.Call("test.export.notice", new { windowId }))["path"];
+        try
+        {
+            notes.Add($"after export at first: {before}");
+            await c.Call("test.settings.set", new { windowId, name = "AfterExport", value = 1 });
+            var path = Path.Combine(testRoot, "ex02.html");
+            if (File.Exists(path)) File.Delete(path);
+            await c.Call("test.export.run", new { windowId, type = "html", path });
+            string? shown = null;
+            for (var i = 0; i < 75 && !(File.Exists(path) && shown == path); i++) { await Task.Delay(200); shown = await Notice(); }
+            var text = (string?)(await c.Call("test.export.notice", new { windowId }))["text"];
+            notes.Add($"written: {File.Exists(path)}; notice: {text}");
+            Check(File.Exists(path), "the export is written");
+            Check(shown == path && text != null && text.Contains(path), "a notice says where");
+            var notice = FindIn(window, "ExportNotice");
+            Check(notice != null && FindIn(window, "ExportNoticeOpen") != null && FindIn(window, "ExportNoticeFolder") != null, "it is on the window, with buttons to open the file and its folder");
+            var close = FindIn(window, "ExportNoticeClose") ?? throw new CaseFailed("no close button on the notice");
+            ((System.Windows.Automation.InvokePattern)close.GetCurrentPattern(System.Windows.Automation.InvokePattern.Pattern)).Invoke();
+            await Task.Delay(500);
+            Check(await Notice() == null && FindIn(window, "ExportNotice") == null, "closed, it is gone");
+
+            await c.Call("test.settings.set", new { windowId, name = "AfterExport", value = 0 });
+            var quiet = Path.Combine(testRoot, "ex02-quiet.html");
+            if (File.Exists(quiet)) File.Delete(quiet);
+            await c.Call("test.export.run", new { windowId, type = "html", path = quiet });
+            for (var i = 0; i < 75 && !File.Exists(quiet); i++) await Task.Delay(200);
+            await Task.Delay(1500);
+            Check(File.Exists(quiet), "with no action the export is still written");
+            Check(await Notice() == null, "and no notice shows");
+        }
+        finally
+        {
+            try { await c.Call("test.settings.set", new { windowId, name = "AfterExport", value = before }); } catch { }
+            try { await c.Call("document.close", new { documentId = id }); } catch { }
+        }
+    }
+
+    // Chosen on Settings > General, the file startup action was not there after the next start (the file had no
+    // FileStartupAction at all), while the theme and font chosen the same day were.
+    private static async Task SE01(List<string> notes)
+    {
+        using var c = await Session("e2e SE01");
+        var windowId = (string)((JArray)(await c.Call("window.list"))["windows"]!)[0]["windowId"]!;
+        var window = await WindowOf(windowId, c);
+        string? Stored()
+        {
+            var file = JObject.Parse(File.ReadAllText(Path.Combine(testRoot, "data", "Settings.json")));
+            return file["FileStartupAction"]?.ToString();
+        }
+        var before = (int)(await c.Call("test.settings.get", new { windowId, name = "FileStartupAction" }))["value"]!;
+        try
+        {
+            await c.Call("test.window.navigate", new { windowId, route = "Settings/General" });
+            await Activate(window);
+            var combo = FindIn(window, "FileStartupAction");
+            if (combo == null)
+            {
+                // Inside the startup action's expander, built only once it is opened.
+                // Its title in either interface language, clicked as a person would (the expander itself has no name).
+                var title = FindNamed(window, "启动操作") ?? FindNamed(window, "Startup");
+                notes.Add("startup action title: " + (title == null ? "not found" : "found"));
+                // The expander is the nearest element above the title that opens and closes.
+                var walker = System.Windows.Automation.TreeWalker.ControlViewWalker;
+                for (var node = title; node != null; node = walker.GetParent(node))
+                {
+                    if (node.TryGetCurrentPattern(System.Windows.Automation.ExpandCollapsePattern.Pattern, out var open))
+                    {
+                        notes.Add($"expander: {node.Current.ControlType.ProgrammaticName} '{node.Current.Name}'");
+                        ((System.Windows.Automation.ExpandCollapsePattern)open).Expand();
+                        break;
+                    }
+                }
+                await Task.Delay(800);
+                var combos = System.Windows.Automation.AutomationElement.FromHandle(window).FindAll(System.Windows.Automation.TreeScope.Descendants,
+                    new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.ComboBox))
+                    .Cast<System.Windows.Automation.AutomationElement>().ToList();
+                notes.Add("combo boxes: " + string.Join(", ", combos.Select(x => $"'{x.Current.AutomationId}'/'{x.Current.Name}'")));
+                // The first one in the expander is the file's (an automation id once the host has it).
+                combo = FindIn(window, "FileStartupAction") ?? combos.FirstOrDefault() ?? throw new CaseFailed("no file startup action box");
+            }
+            ((System.Windows.Automation.ExpandCollapsePattern)combo.GetCurrentPattern(System.Windows.Automation.ExpandCollapsePattern.Pattern)).Expand();
+            await Task.Delay(500);
+            var items = combo.FindAll(System.Windows.Automation.TreeScope.Descendants, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.ListItem))
+                .Cast<System.Windows.Automation.AutomationElement>().ToList();
+            notes.Add("items: " + string.Join(", ", items.Select(i => i.Current.Name)));
+            Check(items.Count == 3, "three file startup actions are offered");
+            // The last one: restore the session (as the reader chose).
+            ((System.Windows.Automation.SelectionItemPattern)items[2].GetCurrentPattern(System.Windows.Automation.SelectionItemPattern.Pattern)).Select();
+            await Task.Delay(300);
+            try { ((System.Windows.Automation.ExpandCollapsePattern)combo.GetCurrentPattern(System.Windows.Automation.ExpandCollapsePattern.Pattern)).Collapse(); } catch { }
+            var model = 0;
+            string? stored = null;
+            for (var i = 0; i < 20; i++)
+            {
+                await Task.Delay(200);
+                model = (int)(await c.Call("test.settings.get", new { windowId, name = "FileStartupAction" }))["value"]!;
+                stored = Stored();
+                if (model == 2 && stored == "2") break;
+            }
+            notes.Add($"after choosing it: settings model {model}, Settings.json {stored ?? "(none)"}");
+            Check(model == 2, "the settings take the choice");
+            Check(stored == "2", "and the settings file holds it");
+
+            // Leaving the settings page (back to the document) keeps it.
+            await c.Call("test.window.navigate", new { windowId, route = "Main" });
+            await Task.Delay(1000);
+            notes.Add("after leaving the settings page: Settings.json " + (Stored() ?? "(none)"));
+            Check(Stored() == "2", "leaving the settings page keeps it in the file");
+        }
+        finally
+        {
+            try { await c.Call("test.window.navigate", new { windowId, route = "Main" }); } catch { }
+            try { await c.Call("test.settings.set", new { windowId, name = "FileStartupAction", value = before }); } catch { }
         }
     }
 

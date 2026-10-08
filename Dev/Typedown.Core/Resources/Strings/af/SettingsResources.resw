@@ -883,4 +883,16 @@
   <data name="About.OpenLogFolder" xml:space="preserve">
     <value>Open loglêergids</value>
   </data>
+  <data name="Export.AfterExport.Title" xml:space="preserve">
+    <value>Ná uitvoer</value>
+  </data>
+  <data name="Export.AfterExport.Notify" xml:space="preserve">
+    <value>Wys waar dit gestoor is</value>
+  </data>
+  <data name="Export.AfterExport.OpenFile" xml:space="preserve">
+    <value>Maak die lêer oop</value>
+  </data>
+  <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
+    <value>Maak sy vouer oop</value>
+  </data>
 </root>

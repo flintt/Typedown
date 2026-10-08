@@ -1009,4 +1009,7 @@
   <data name="UploadLocalImages" xml:space="preserve">
     <value>Uwchlwytho delweddau lleol</value>
   </data>
+  <data name="Export.Done" xml:space="preserve">
+    <value>Wedi'i allforio i {0}</value>
+  </data>
 </root>

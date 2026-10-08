@@ -188,7 +188,13 @@ namespace Typedown.Core.ViewModels
         public bool PreferRelativeImagePaths { get => GetSettingValue(false); set => SetSettingValue(value); }
         public bool AddSymbolBeforeRelativePath { get => GetSettingValue(false); set => SetSettingValue(value); }
         public bool AutoEncodeImageURL { get => GetSettingValue(true); set => SetSettingValue(value); }
+        /// <summary>The switch After export replaced: still read, so whoever had it on keeps the folder opening.</summary>
         public bool OpenFolderAfterExport { get => GetSettingValue(false); set => SetSettingValue(value); }
+        /// <summary>
+        /// Settings > Export > After export: nothing, a notice with the file's place (the default: an export said nothing
+        /// at all once it was written), the file opened, or its folder.
+        /// </summary>
+        public ExportAfterAction AfterExport { get => GetSettingValue(OpenFolderAfterExport ? ExportAfterAction.OpenFolder : ExportAfterAction.Notify); set => SetSettingValue(value); }
         public bool FileExportDatabaseInitialized { get => GetSettingValue(false); set => SetSettingValue(value); }
         public bool ImageUploadDatabaseInitialized { get => GetSettingValue(false); set => SetSettingValue(value); }
         public IServiceProvider ServiceProvider { get; }

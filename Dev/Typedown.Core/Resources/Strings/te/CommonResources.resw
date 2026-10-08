@@ -1009,4 +1009,7 @@
   <data name="UploadLocalImages" xml:space="preserve">
     <value>స్థానిక ఇమేజ్ లను అప్ లోడ్ చేయండి</value>
   </data>
+  <data name="Export.Done" xml:space="preserve">
+    <value>{0} కు ఎగుమతి చేయబడింది</value>
+  </data>
 </root>

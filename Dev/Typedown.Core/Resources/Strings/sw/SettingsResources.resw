@@ -883,4 +883,16 @@
   <data name="About.OpenLogFolder" xml:space="preserve">
     <value>Fungua Folda ya Kumbukumbu</value>
   </data>
+  <data name="Export.AfterExport.Title" xml:space="preserve">
+    <value>Baada ya kuhamisha</value>
+  </data>
+  <data name="Export.AfterExport.Notify" xml:space="preserve">
+    <value>Onyesha mahali ilipohifadhiwa</value>
+  </data>
+  <data name="Export.AfterExport.OpenFile" xml:space="preserve">
+    <value>Fungua faili</value>
+  </data>
+  <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
+    <value>Fungua folda yake</value>
+  </data>
 </root>

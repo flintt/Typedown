@@ -883,4 +883,16 @@
   <data name="About.OpenLogFolder" xml:space="preserve">
     <value>Logboekmap openen</value>
   </data>
+  <data name="Export.AfterExport.Title" xml:space="preserve">
+    <value>Na exporteren</value>
+  </data>
+  <data name="Export.AfterExport.Notify" xml:space="preserve">
+    <value>Tonen waar het is opgeslagen</value>
+  </data>
+  <data name="Export.AfterExport.OpenFile" xml:space="preserve">
+    <value>Het bestand openen</value>
+  </data>
+  <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
+    <value>De map openen</value>
+  </data>
 </root>

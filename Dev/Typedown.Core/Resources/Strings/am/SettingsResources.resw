@@ -883,4 +883,16 @@
   <data name="About.OpenLogFolder" xml:space="preserve">
     <value>የምዝግብ ማስታወሻ አቃፊን ክፈት</value>
   </data>
+  <data name="Export.AfterExport.Title" xml:space="preserve">
+    <value>ከላኩ በኋላ</value>
+  </data>
+  <data name="Export.AfterExport.Notify" xml:space="preserve">
+    <value>የተቀመጠበትን አሳይ</value>
+  </data>
+  <data name="Export.AfterExport.OpenFile" xml:space="preserve">
+    <value>ፋይሉን ክፈት</value>
+  </data>
+  <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
+    <value>አቃፊውን ክፈት</value>
+  </data>
 </root>

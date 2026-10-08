@@ -883,4 +883,16 @@
   <data name="About.OpenLogFolder" xml:space="preserve">
     <value>Deschide folderul de jurnale</value>
   </data>
+  <data name="Export.AfterExport.Title" xml:space="preserve">
+    <value>După export</value>
+  </data>
+  <data name="Export.AfterExport.Notify" xml:space="preserve">
+    <value>Arată unde a fost salvat</value>
+  </data>
+  <data name="Export.AfterExport.OpenFile" xml:space="preserve">
+    <value>Deschide fișierul</value>
+  </data>
+  <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
+    <value>Deschide folderul său</value>
+  </data>
 </root>

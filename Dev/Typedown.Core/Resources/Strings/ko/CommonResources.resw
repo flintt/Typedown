@@ -1009,4 +1009,7 @@
   <data name="UploadLocalImages" xml:space="preserve">
     <value>로컬 이미지 업로드</value>
   </data>
+  <data name="Export.Done" xml:space="preserve">
+    <value>{0}(으)로 내보냈습니다</value>
+  </data>
 </root>

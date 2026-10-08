@@ -883,4 +883,16 @@
   <data name="About.OpenLogFolder" xml:space="preserve">
     <value>Agor y ffolder logiau</value>
   </data>
+  <data name="Export.AfterExport.Title" xml:space="preserve">
+    <value>Ar ôl allforio</value>
+  </data>
+  <data name="Export.AfterExport.Notify" xml:space="preserve">
+    <value>Dangos ble cafodd ei gadw</value>
+  </data>
+  <data name="Export.AfterExport.OpenFile" xml:space="preserve">
+    <value>Agor y ffeil</value>
+  </data>
+  <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
+    <value>Agor ei ffolder</value>
+  </data>
 </root>

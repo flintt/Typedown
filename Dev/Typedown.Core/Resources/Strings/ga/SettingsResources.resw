@@ -883,4 +883,16 @@
   <data name="About.OpenLogFolder" xml:space="preserve">
     <value>Oscail an fillteán logaí</value>
   </data>
+  <data name="Export.AfterExport.Title" xml:space="preserve">
+    <value>Tar éis easpórtála</value>
+  </data>
+  <data name="Export.AfterExport.Notify" xml:space="preserve">
+    <value>Taispeáin cá sábháladh é</value>
+  </data>
+  <data name="Export.AfterExport.OpenFile" xml:space="preserve">
+    <value>Oscail an comhad</value>
+  </data>
+  <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
+    <value>Oscail a fhillteán</value>
+  </data>
 </root>

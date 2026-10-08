@@ -465,6 +465,26 @@ namespace Typedown.Services.Automation
                         : global::Windows.UI.Xaml.Media.VisualTreeHelper.GetOpenPopupsForXamlRoot(app.XamlRoot).Select(p => p.Child?.GetType().Name ?? "empty").ToList();
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["popups"] = new Newtonsoft.Json.Linq.JArray(open) };
                 })));
+            // The window's document exported to a file, as File > Export > <type> with that file picked in the save dialog
+            // (html or pdf: the first export configuration of that type); answers once the export is asked for, not done.
+            methods.Add(new MethodDescriptor("test.export.run", null, "test.export.run/1", (c, ct) =>
+            {
+                var type = c.Params.OptionalEnum("type", "html", "html", "pdf");
+                var path = c.Params.RequiredString("path", allowEmpty: false);
+                return Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    var want = type == "pdf" ? Core.Enums.ExportType.PDF : Core.Enums.ExportType.HTML;
+                    var exports = app.ServiceProvider.GetService(typeof(Core.Interfaces.IFileExport)) as Core.Interfaces.IFileExport;
+                    var config = exports?.ExportConfigs.FirstOrDefault(x => x.Type == want)
+                        ?? throw new AutomationException(AutomationErrorKind.editor_not_ready, $"no {type} export configuration");
+                    app.FileViewModel.ExportTo(config, path);
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["config"] = config.Name };
+                });
+            }));
+            // The notice an export leaves (Settings > Export > After export): the file it names, or null when none shows.
+            methods.Add(new MethodDescriptor("test.export.notice", null, "test.export.notice/1", (c, ct) =>
+                Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                    (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["path"] = app.UIViewModel.ExportedPath, ["text"] = app.UIViewModel.ExportedNotice })));
             // The entries of a window's File > Export submenu, as shown.
             methods.Add(new MethodDescriptor("test.export.menu", null, "test.export.menu/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>

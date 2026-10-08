@@ -883,4 +883,16 @@
   <data name="About.OpenLogFolder" xml:space="preserve">
     <value>Отвори ја папката со дневници</value>
   </data>
+  <data name="Export.AfterExport.Title" xml:space="preserve">
+    <value>По извозот</value>
+  </data>
+  <data name="Export.AfterExport.Notify" xml:space="preserve">
+    <value>Прикажи каде е зачувано</value>
+  </data>
+  <data name="Export.AfterExport.OpenFile" xml:space="preserve">
+    <value>Отвори ја датотеката</value>
+  </data>
+  <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
+    <value>Отвори ја нејзината папка</value>
+  </data>
 </root>

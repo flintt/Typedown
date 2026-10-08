@@ -883,4 +883,16 @@
   <data name="About.OpenLogFolder" xml:space="preserve">
     <value>Buksan ang Log Folder</value>
   </data>
+  <data name="Export.AfterExport.Title" xml:space="preserve">
+    <value>Pagkatapos mag-export</value>
+  </data>
+  <data name="Export.AfterExport.Notify" xml:space="preserve">
+    <value>Ipakita kung saan ito na-save</value>
+  </data>
+  <data name="Export.AfterExport.OpenFile" xml:space="preserve">
+    <value>Buksan ang file</value>
+  </data>
+  <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
+    <value>Buksan ang folder nito</value>
+  </data>
 </root>

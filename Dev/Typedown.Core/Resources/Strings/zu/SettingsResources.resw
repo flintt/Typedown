@@ -883,4 +883,16 @@
   <data name="About.OpenLogFolder" xml:space="preserve">
     <value>Vula Ifolda Yelogi</value>
   </data>
+  <data name="Export.AfterExport.Title" xml:space="preserve">
+    <value>Ngemva kokukhipha</value>
+  </data>
+  <data name="Export.AfterExport.Notify" xml:space="preserve">
+    <value>Bonisa lapho kugcinwe khona</value>
+  </data>
+  <data name="Export.AfterExport.OpenFile" xml:space="preserve">
+    <value>Vula ifayela</value>
+  </data>
+  <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
+    <value>Vula ifolda yalo</value>
+  </data>
 </root>

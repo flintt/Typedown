@@ -883,4 +883,16 @@
   <data name="About.OpenLogFolder" xml:space="preserve">
     <value>Otvoriť priečinok denníkov</value>
   </data>
+  <data name="Export.AfterExport.Title" xml:space="preserve">
+    <value>Po exporte</value>
+  </data>
+  <data name="Export.AfterExport.Notify" xml:space="preserve">
+    <value>Ukázať, kam sa uložil</value>
+  </data>
+  <data name="Export.AfterExport.OpenFile" xml:space="preserve">
+    <value>Otvoriť súbor</value>
+  </data>
+  <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
+    <value>Otvoriť jeho priečinok</value>
+  </data>
 </root>
