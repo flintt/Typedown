@@ -20,7 +20,11 @@ namespace Typedown.Core.Services
         public ImageUpload(IServiceProvider serviceProvider, SettingsViewModel settings)
         {
             this.serviceProvider = serviceProvider;
-            settings.ResetSettingsCommand.OnExecute.Subscribe(async _ => await ResetDefaultConfigs());
+            settings.ResetSettingsCommand.OnExecute.Subscribe(async _ =>
+            {
+                try { await ResetDefaultConfigs(); }
+                catch (Exception ex) { Utilities.Log.WriteLocal("ImageUploadReset", ex.ToString()); }
+            });
             Ready = InitializeAsync(settings);
         }
 
@@ -31,12 +35,21 @@ namespace Typedown.Core.Services
         /// </summary>
         public Task Ready { get; }
 
+        private async Task SeedAsync(SettingsViewModel settings)
+        {
+            await ResetDefaultConfigs();
+            settings.ImageUploadDatabaseInitialized = true;
+        }
+
+        // Written once for all windows, marked once written (see FileExport).
+        private static Task seeding;
+
         private async Task InitializeAsync(SettingsViewModel settings)
         {
             if (!settings.ImageUploadDatabaseInitialized)
             {
-                settings.ImageUploadDatabaseInitialized = true;
-                await ResetDefaultConfigs();
+                seeding ??= SeedAsync(settings);
+                await seeding;
             }
             else
             {
@@ -85,8 +98,9 @@ namespace Typedown.Core.Services
                 await UpdateImageUploadConfigs();
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Utilities.Log.WriteLocal("ImageUploadConfigSave", ex.ToString());
                 return false;
             }
         }

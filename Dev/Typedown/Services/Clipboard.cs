@@ -47,7 +47,7 @@ namespace Typedown.Services
                 storageItems.Add(file);
             }
             dataPackage.SetStorageItems(storageItems);
-            global::Windows.ApplicationModel.DataTransfer.Clipboard.SetContent(dataPackage);
+            SetContent(dataPackage);
         }
 
         public async Task<StringCollection> GetFileDropListAsync()
@@ -77,13 +77,34 @@ namespace Typedown.Services
             return null;
         }
 
+        /// <summary>
+        /// The clipboard written, tried again a few times while another program holds it (CLIPBRD_E_CANT_OPEN: a clipboard
+        /// manager, a remote desktop session reading it): Copy and Cut did nothing then. Throws if it stays held.
+        /// </summary>
+        private static void SetContent(global::Windows.ApplicationModel.DataTransfer.DataPackage dataPackage)
+        {
+            for (var attempt = 1; ; attempt++)
+            {
+                try
+                {
+                    global::Windows.ApplicationModel.DataTransfer.Clipboard.SetContent(dataPackage);
+                    return;
+                }
+                catch (System.Runtime.InteropServices.COMException ex) when (attempt < 6)
+                {
+                    Core.Utilities.Log.Debug($"clipboard: held by another program ({ex.HResult:x8}), attempt {attempt}");
+                    System.Threading.Thread.Sleep(40 * attempt);
+                }
+            }
+        }
+
         public void SetTextAndHtml(string text, string html)
         {
             var dataPackage = new global::Windows.ApplicationModel.DataTransfer.DataPackage();
             if (!string.IsNullOrEmpty(text)) dataPackage.SetText(text);
             // CF_HTML: the fragment with the header Word and the browsers read it by.
             if (!string.IsNullOrEmpty(html)) dataPackage.SetHtmlFormat(global::Windows.ApplicationModel.DataTransfer.HtmlFormatHelper.CreateHtmlFormat(html));
-            global::Windows.ApplicationModel.DataTransfer.Clipboard.SetContent(dataPackage);
+            SetContent(dataPackage);
         }
 
         public void SetText(string text, TextDataFormat format)
@@ -105,14 +126,14 @@ namespace Typedown.Services
                     dataPackage.SetText(text);
                     break;
             }
-            global::Windows.ApplicationModel.DataTransfer.Clipboard.SetContent(dataPackage);
+            SetContent(dataPackage);
         }
 
         public void SetText(string text)
         {
             var dataPackage = new global::Windows.ApplicationModel.DataTransfer.DataPackage();
             dataPackage.SetText(text);
-            global::Windows.ApplicationModel.DataTransfer.Clipboard.SetContent(dataPackage);
+            SetContent(dataPackage);
         }
     }
 }

@@ -1182,8 +1182,20 @@ namespace Typedown.Core.ViewModels
 
         public void OnSetClipboard(JToken arg)
         {
-            var type = arg["type"].ToString();
-            var data = arg["data"].ToString();
+            try
+            {
+                SetClipboard(arg?["type"]?.ToString(), arg?["data"]?.ToString() ?? "");
+            }
+            catch (Exception ex)
+            {
+                // The clipboard held by another program however often it was tried: said, not a copy that did nothing.
+                Log.Debug($"copy: the clipboard could not be written: {ex}");
+                _ = AppContentDialog.Create(Locale.GetString("Error"), ex.Message, Locale.GetString("Ok")).ShowAsync(AppViewModel.XamlRoot);
+            }
+        }
+
+        private void SetClipboard(string type, string data)
+        {
             if (type == "text/plain")
             {
                 var html = pendingCopyHtml != null && DateTime.UtcNow - pendingCopyHtmlAt < TimeSpan.FromSeconds(2) ? pendingCopyHtml : null;

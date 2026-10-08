@@ -19,7 +19,7 @@ namespace Typedown.Core.Interfaces
 
         bool IsPasteEnabled { get; }
 
-        void PasteFromClipboard(string to);
+        System.Threading.Tasks.Task PasteFromClipboardAsync(string to);
 
         bool IsFilenameValid(string sourceFolder, string fileName);
     }

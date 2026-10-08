@@ -29,21 +29,42 @@ namespace Typedown.Services
         {
             ViewModel = viewModel;
             FileConverter = fileConverter;
-            disposables.Add(settings.ResetSettingsCommand.OnExecute.Subscribe(async _ => await ResetDefaultConfigs()));
+            disposables.Add(settings.ResetSettingsCommand.OnExecute.Subscribe(async _ =>
+            {
+                try { await ResetDefaultConfigs(); }
+                catch (Exception ex) { Log.WriteLocal("FileExportReset", ex.ToString()); }
+            }));
             Initialize(settings);
         }
 
+        // The default configurations, written once for all windows; marked written only once they are (marked first, a
+        // failure left the database with none, never tried again).
+        private static Task seeding;
+
         private async void Initialize(SettingsViewModel settings)
         {
-            if (!settings.FileExportDatabaseInitialized)
+            try
             {
-                settings.FileExportDatabaseInitialized = true;
-                await ResetDefaultConfigs();
+                if (!settings.FileExportDatabaseInitialized)
+                {
+                    seeding ??= SeedAsync(settings);
+                    await seeding;
+                }
+                else
+                {
+                    await UpdateExportConfigs();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                await UpdateExportConfigs();
+                Log.WriteLocal("FileExportInitialize", ex.ToString());
             }
+        }
+
+        private async Task SeedAsync(SettingsViewModel settings)
+        {
+            await ResetDefaultConfigs();
+            settings.FileExportDatabaseInitialized = true;
         }
 
         private async Task ResetDefaultConfigs()
@@ -87,8 +108,9 @@ namespace Typedown.Services
                 await UpdateExportConfigs();
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Log.WriteLocal("ExportConfigSave", ex.ToString());
                 return false;
             }
         }

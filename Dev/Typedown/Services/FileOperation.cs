@@ -108,17 +108,27 @@ namespace Typedown.Services
         {
             get
             {
-                var view = global::Windows.ApplicationModel.DataTransfer.Clipboard.GetContent();
-                return view.Contains(global::Windows.ApplicationModel.DataTransfer.StandardDataFormats.StorageItems);
+                // Another program holding the clipboard: nothing to paste now, rather than an exception for the menu.
+                try
+                {
+                    var view = global::Windows.ApplicationModel.DataTransfer.Clipboard.GetContent();
+                    return view.Contains(global::Windows.ApplicationModel.DataTransfer.StandardDataFormats.StorageItems);
+                }
+                catch (Exception ex)
+                {
+                    Log.Debug($"folder paste: the clipboard could not be read: {ex.Message}");
+                    return false;
+                }
             }
         }
 
-        public void PasteFromClipboard(string to)
+        public async System.Threading.Tasks.Task PasteFromClipboardAsync(string to)
         {
             if (IsPasteEnabled)
             {
                 var view = global::Windows.ApplicationModel.DataTransfer.Clipboard.GetContent();
-                var storageItems = view.GetStorageItemsAsync().GetResults();
+                // Awaited: GetResults on the read not finished yet threw ("a method was called at an unexpected time").
+                var storageItems = await view.GetStorageItemsAsync();
                 var files = new StringCollection();
 
                 foreach (var item in storageItems)

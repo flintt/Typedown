@@ -281,6 +281,12 @@ namespace Typedown.Windows
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                // The window stays open (nothing unsaved is lost) and can be closed again; out of the handler it ended
+                // the app with whatever was not saved.
+                Log.WriteLocal("WindowClosing", ex.ToString());
+            }
             finally
             {
                 isClosing = false;

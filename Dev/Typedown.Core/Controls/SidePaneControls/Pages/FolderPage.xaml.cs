@@ -330,28 +330,43 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             Common.OpenFileLocation(item?.FullPath);
         }
 
+        // A file operation that fails (a file gone, the clipboard held by another program) says why, rather than ending
+        // the app (an exception out of a click handler) or doing nothing.
+        private async void Try(string what, Func<System.Threading.Tasks.Task> action)
+        {
+            try
+            {
+                await action();
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"folder pane: {what} failed: {ex}");
+                try { await AppContentDialog.Create(Locale.GetString("Error"), ex.Message, Locale.GetString("Ok")).ShowAsync(XamlRoot); } catch { }
+            }
+        }
+
         private void OnCutClick(object sender, RoutedEventArgs e)
         {
             var item = GetExplorerItemFromMenuFlyoutItem(sender);
-            FileOperation.CutToClipboardAsync(new StringCollection() { item?.FullPath });
+            Try("cut", () => FileOperation.CutToClipboardAsync(new StringCollection() { item?.FullPath }));
         }
 
         private void OnCopyClick(object sender, RoutedEventArgs e)
         {
             var item = GetExplorerItemFromMenuFlyoutItem(sender);
-            FileOperation.CopyToClipboardAsync(new StringCollection() { item?.FullPath });
+            Try("copy", () => FileOperation.CopyToClipboardAsync(new StringCollection() { item?.FullPath }));
         }
 
         private void OnPasteClick(object sender, RoutedEventArgs e)
         {
             var item = GetExplorerItemFromMenuFlyoutItem(sender);
-            FileOperation.PasteFromClipboard(item?.FullPath);
+            Try("paste", () => FileOperation.PasteFromClipboardAsync(item?.FullPath));
         }
 
         private void OnCopyAsPathClick(object sender, RoutedEventArgs e)
         {
             var item = GetExplorerItemFromMenuFlyoutItem(sender);
-            Clipboard.SetText(item?.FullPath);
+            Try("copy as path", () => { Clipboard.SetText(item?.FullPath); return System.Threading.Tasks.Task.CompletedTask; });
         }
 
         private void OnRenameClick(object sender, RoutedEventArgs e)
@@ -403,11 +418,15 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             textblock.Visibility = Visibility.Visible;
             if (source.Task.Result != Path.GetFileName(item.FullPath))
             {
-                var newPath = Path.Combine(Path.GetDirectoryName(item.FullPath), source.Task.Result);
-                if (item.FullPath == ViewModel.FileViewModel.FilePath)
-                    ViewModel.FileViewModel.RenameFile(newPath);
-                else
-                    FileOperation.Rename(item.FullPath, newPath);
+                Try("rename", () =>
+                {
+                    var newPath = Path.Combine(Path.GetDirectoryName(item.FullPath), source.Task.Result);
+                    if (item.FullPath == ViewModel.FileViewModel.FilePath)
+                        ViewModel.FileViewModel.RenameFile(newPath);
+                    else
+                        FileOperation.Rename(item.FullPath, newPath);
+                    return System.Threading.Tasks.Task.CompletedTask;
+                });
                 _ = Dispatcher.RunIdleAsync(() => UpdateSelectedItem(WorkFolderExplorerItem));
             }
         }

@@ -126,10 +126,10 @@ namespace Typedown.Core.ViewModels
             {
                 return;
             }
-            CursorMemory.Flush();
             saveTimerRunning = true;
             try
             {
+                CursorMemory.Flush();
                 if (SettingsViewModel.AutoSave)
                 {
                     EditorViewModel.AutoSavedSucc = await AutoSaveFile();
@@ -143,6 +143,12 @@ namespace Typedown.Core.ViewModels
                 // Background tabs are never auto-saved, so back up their dirty ones every tick regardless of the
                 // active document's auto-save result.
                 await BackupDirtyBackgroundTabsAsync();
+            }
+            catch (Exception ex)
+            {
+                // Every five seconds: a failure is logged and the next tick tries again (out of the timer's handler it
+                // ended the app).
+                Log.Debug($"save timer: {ex}");
             }
             finally
             {
@@ -812,13 +818,21 @@ namespace Typedown.Core.ViewModels
                 return false;
             }
             askToSaveOpened = true;
-            var result = await AppContentDialog.Create(
-                Locale.GetDialogString("AsKToSaveTitle"),
-                Locale.GetDialogString("AsKToSaveContent"),
-                Locale.GetDialogString("Cancel"),
-                Locale.GetDialogString("Save"),
-                Locale.GetDialogString("Don'tSave")).ShowAsync(AppViewModel.XamlRoot);
-            askToSaveOpened = false;
+            ContentDialogResult result;
+            try
+            {
+                result = await AppContentDialog.Create(
+                    Locale.GetDialogString("AsKToSaveTitle"),
+                    Locale.GetDialogString("AsKToSaveContent"),
+                    Locale.GetDialogString("Cancel"),
+                    Locale.GetDialogString("Save"),
+                    Locale.GetDialogString("Don'tSave")).ShowAsync(AppViewModel.XamlRoot);
+            }
+            finally
+            {
+                // Reset whatever happens: left set, no tab and no window could be closed again.
+                askToSaveOpened = false;
+            }
             switch (result)
             {
                 case ContentDialogResult.Primary:
@@ -949,6 +963,21 @@ namespace Typedown.Core.ViewModels
         }
 
         private async void Export(ExportConfig config)
+        {
+            try
+            {
+                await ExportAsync(config);
+            }
+            catch (Exception ex)
+            {
+                // A configuration that cannot be read (its JSON, a bad extension) or a picker that fails: said, not the
+                // app ended.
+                Log.Debug($"export: {ex}");
+                await AppContentDialog.Create(Locale.GetDialogString("ExportErrorTitle"), ex.Message, Locale.GetString("Ok")).ShowAsync(AppViewModel.XamlRoot);
+            }
+        }
+
+        private async Task ExportAsync(ExportConfig config)
         {
             var filePicker = new FileSavePicker();
             filePicker.SetOwnerWindow(AppViewModel.MainWindow);

@@ -84,9 +84,9 @@ namespace Typedown.Core.Controls.EditorControls.ContextMenuItems
                 var fullPath = Path.GetFullPath(Path.Combine(ViewModel.FileViewModel.ImageBasePath, path));
                 Common.OpenFileLocation(fullPath);
             }
-            catch
+            catch (Exception ex)
             {
-
+                ShowError(ex);
             }
         }
 
@@ -104,9 +104,9 @@ namespace Typedown.Core.Controls.EditorControls.ContextMenuItems
                 file = ImageAction.ConvertImagePath(file);
                 ReplaceImage(new(file, ImageAlt, ImageTitle));
             }
-            catch
+            catch (Exception ex)
             {
-
+                ShowError(ex);
             }
         }
 
@@ -129,9 +129,9 @@ namespace Typedown.Core.Controls.EditorControls.ContextMenuItems
                     File.Delete(path);
                 }
             }
-            catch
+            catch (Exception ex)
             {
-
+                ShowError(ex);
             }
         }
 
@@ -169,9 +169,9 @@ namespace Typedown.Core.Controls.EditorControls.ContextMenuItems
                     return;
                 await File.WriteAllBytesAsync(file, bytes);
             }
-            catch
+            catch (Exception ex)
             {
-                // Ignore
+                ShowError(ex);
             }
         }
 
@@ -188,10 +188,18 @@ namespace Typedown.Core.Controls.EditorControls.ContextMenuItems
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                // Ignore
+                ShowError(ex);
             }
+        }
+
+        // A picture operation that failed (the file gone or locked, a folder not writable) says why: these were silent.
+        private async void ShowError(Exception ex)
+        {
+            Log.Debug($"picture menu: {ex}");
+            try { await AppContentDialog.Create(Locale.GetString("Error"), ex.Message, Locale.GetString("Ok")).ShowAsync(XamlRoot); }
+            catch { }
         }
 
         private void ReplaceImage(HtmlImgTag htmlImgTag)
