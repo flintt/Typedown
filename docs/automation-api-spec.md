@@ -295,7 +295,7 @@ MVP 为每个方法定义服务端超时，并在连接断开时取消尚未开�
 
 `includeText: false` 只返回低成本元数据。调用方可用 `include: ["text", "headings"]` 请求正文和标题；每个标题至少返回稳定于该 revision 的顺序、层级、纯文本和 slug。MVP 不在标题结果中混入尚未协商单位的源码偏移。
 
-写方法接受 `normalizationPolicy: "requireKnownSafe" | "allowUnknown"`，默认前者。成功结果包含 `operationId`、`revision`、`contentHash`、`saved` 和 `normalization`，请求了可见呈现时再包含 `presentation`。`normalization` 至少包含 `pendingNormalization`、`sourceHash`、可空的 `normalizedHash`、`reasons`（稳定英文原因数组）和 `classifierVersion`；后台标签尚未经过 Muya 时是 `unknown`、`reasons: ["notEvaluated"]` 和 `normalizedHash: null`，所以只有显式 `allowUnknown` 才能提交。`document.get` 在这个边界仍存在时返回同一组元数据。后台标签第一次可视加载必须在允许用户输入前完成分类；若结果为 `unsafe`，保留权威源文本，并在可视模式顶部显示不阻断的提示（首次可视编辑可能改写部分原始 HTML，需要保持原样请用源码模式）。*（2026-09-30 决定：不阻止进入可视模式，改为修复已知的丢失——代码块信息串与 Tab——并对剩余情况提示。）*写入后在没有用户编辑的情况下，`document.get(consistency: "latest")` 必须逐字返回调用方提交的文本，不能用规范化文本替代它。
+写方法接受 `normalizationPolicy: "requireKnownSafe" | "allowUnknown"`，默认前者。成功结果包含 `operationId`、`revision`、`contentHash`、`saved` 和 `normalization`，请求了可见呈现时再包含 `presentation`。`normalization` 至少包含 `pendingNormalization`、`sourceHash`、可空的 `normalizedHash`、`reasons`（稳定英文原因数组）和 `classifierVersion`；后台标签尚未经过 Muya 时是 `unknown`、`reasons: ["notEvaluated"]` 和 `normalizedHash: null`，所以只有显式 `allowUnknown` 才能提交。`document.get` 在这个边界仍存在时返回同一组元数据。后台标签第一次可视加载必须在允许用户输入前完成分类；若结果为 `unsafe`，保留权威源文本，并在可视模式顶部显示不阻断的提示（首次可视编辑可能改写部分原始 HTML，需要保持原样请用源码模式）。*（2026-09-30 决定：不阻止进入可视模式，改为修复已知的丢失——代码块信息串与 Tab——并对剩余情况提示。）*写入后在没有用户编辑的情况下，`document.get(consistency: "latest")` 必须逐字返回调用方提交的文本，不能用规范化文本替代它。文件打开时同理：文档第一次载入（打开文件、恢复的标签第一次显示）时，编辑器交回的正文若与给它的不同，宿主不把改写结果当作文件的正文，而是用原文再载入一次；第二次仍被改写才按编辑器给出的结果为准（这时首次编辑提示照常出现）。改写的规模和种类（表格行、HTML、代码围栏，不含正文）写入日志。*（2026-10-08：一次会话恢复时整篇文档的表格被重新排版、原始 HTML 被改写，并被当成了文件正文；E2E LD01。）*
 
 `document.replaceText` 使用固定字符串，不使用正则。`find` 不能为空；`expectedCount` 必填，服务端按 ordinal、从左到右、互不重叠地计数，数量不符时返回 `match_count_mismatch` 并保持 revision 不变，数量一致时替换全部匹配项。常见 AI 编辑因此无需计算 Unicode 偏移，同时仍由 `baseRevision` 防止在旧正文上定位。
 
@@ -330,7 +330,7 @@ MVP 为每个方法定义服务端超时，并在连接断开时取消尚未开�
 
 `SourceCode`、`ReadOnly` 更接近窗口/文档显示状态，不作为上述应用级设置直接开放；它们由 3.1 的 `window.setView` 按窗口改变（2026-09-30 实现）。
 
-上表是首批。2026-09-30 起 `settings-map.json` 另外开放 26 个：界面语言 `ui.language`，编辑器（字体、编辑区宽度、Tab 宽度、段落标记、括号/引号/Markdown 符号自动配对），Markdown 输出（表格列对齐、列表缩进、松散列表、去掉代码块多余空行），拼写检查，标签栏、大纲自动展开、字数统计方式，图片相对路径的四个选项，以及紧凑模式、两个 Mica 效果、动画和“关闭窗口后保持运行”。都立即生效，不需要重启。某个平台没有的设置不在它的 `settings.describe` 里，读写时返回 `setting_not_exposed`（`reason: notOnThisPlatform`）；平台有这个设置但不支持某个值时（例如 Windows 的列表缩进没有 `tab`，不支持 Mica 的系统打开 Mica），返回 `setting_invalid` 并说明原因。
+上表是首批。2026-09-30 起 `settings-map.json` 另外开放 26 个：界面语言 `ui.language`，编辑器（字体、编辑区宽度、Tab 宽度、段落标记、括号/引号/Markdown 符号自动配对），Markdown 输出（表格列对齐、列表缩进、松散列表、去掉代码块多余空行），拼写检查，标签栏、大纲自动展开、字数统计方式，图片相对路径的四个选项，以及紧凑模式、两个 Mica 效果、动画和“关闭窗口后保持运行”。都立即生效，不需要重启。“关闭窗口后保持运行”（`app.keepRunning`）的默认值在所有版本都是 `false`（2026-10-08 起；此前打包版默认 `true`）：设置的默认值属于应用行为，不在第 6 节的冻结范围内，`settings.describe` 返回当前的默认值。某个平台没有的设置不在它的 `settings.describe` 里，读写时返回 `setting_not_exposed`（`reason: notOnThisPlatform`）；平台有这个设置但不支持某个值时（例如 Windows 的列表缩进没有 `tab`，不支持 Mica 的系统打开 Mica），返回 `setting_invalid` 并说明原因。
 
 `settings.set` 成功表示运行时模型已应用且设置快照已持久化，返回 `settingsRevision` 和服务端 `operationId`。需要重启的设置由 `settings.describe` 标出，首批默认不开放。调用方请求 `awaitPresentation` 时，才额外返回各窗口和编辑器的近似呈现状态。
 
