@@ -286,7 +286,8 @@ internal static partial class Program
         var logs = Path.Combine(testRoot, "logs");
         var before = Directory.Exists(logs) ? Directory.GetFiles(logs, "*XamlUnhandledException*").Length : 0;
         await c.Call("test.app.throwUnhandled", new { windowId });
-        await Task.Delay(1500);
+        // A process the exception ends takes a few seconds to go (Windows Error Reporting first).
+        await Task.Delay(4000);
         var alive = !Process.GetProcessById(hostPid).HasExited;
         notes.Add($"after an exception out of an event handler: process alive={alive}");
         Check(alive, "an exception out of an event handler does not end the app");
