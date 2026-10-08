@@ -9,8 +9,15 @@ namespace Typedown.Core.Utilities
 {
     public static class Log
     {
-        /// <summary>%LOCALAPPDATA%\Typedown\logs — crash reports are always written here, regardless of network settings.</summary>
-        public static string LogFolder => Path.Combine(Config.LocalAppDataFolder, "logs");
+        /// <summary>
+        /// %LOCALAPPDATA%\Typedown\logs — crash reports are always written here, regardless of network settings. A package
+        /// (the Microsoft Store edition) keeps them in its own folder, beside its settings: Windows 11 redirects a package's
+        /// writes to %LOCALAPPDATA% into the package's private copy, which File Explorer does not see - "Open log folder"
+        /// opened Documents instead.
+        /// </summary>
+        public static string LogFolder => Config.IsPackaged
+            ? Path.Combine(Config.GetLocalFolderPath(), "logs")
+            : Path.Combine(Config.LocalAppDataFolder, "logs");
 
         public static void WriteLocal(string type, string content)
         {
