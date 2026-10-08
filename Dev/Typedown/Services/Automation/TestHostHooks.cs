@@ -465,6 +465,17 @@ namespace Typedown.Services.Automation
                         : global::Windows.UI.Xaml.Media.VisualTreeHelper.GetOpenPopupsForXamlRoot(app.XamlRoot).Select(p => p.Child?.GetType().Name ?? "empty").ToList();
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["popups"] = new Newtonsoft.Json.Linq.JArray(open) };
                 })));
+            // The test host's title marker ("AUTOMATION TEST HOST ·") on (show: true) or off in every window, for
+            // screenshots that are to look like the app.
+            methods.Add(new MethodDescriptor("test.app.titleMarker", null, "test.app.titleMarker/1", (c, ct) =>
+            {
+                Core.ViewModels.UIViewModel.ShowTestHostMarker = c.Params.OptionalBoolean("show", true);
+                return Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    foreach (var vm in Core.ViewModels.AppViewModel.GetInstances()) vm.UIViewModel.RefreshTitle();
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["title"] = app.UIViewModel.MainWindowTitle };
+                });
+            }));
             // The window's active document saved as the path, as File > Save as with that file picked (an untitled one's
             // first save too); the path back, or null when it was not saved.
             methods.Add(new MethodDescriptor("test.file.saveAs", null, "test.file.saveAs/1", async (c, ct) =>

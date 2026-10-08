@@ -161,6 +161,15 @@ namespace Typedown.Core.ViewModels
             });
         }
 
+        /// <summary>
+        /// The test host's title says it is one; screenshots taken with it (Tools/Store, the website) turn that off
+        /// (test.app.titleMarker). Only ever read by the test host.
+        /// </summary>
+        public static bool ShowTestHostMarker { get; set; } = true;
+
+        /// <summary>The title worked out again (after <see cref="ShowTestHostMarker"/> changed).</summary>
+        public void RefreshTitle() => UpdateTitle();
+
         private void UpdateTitle()
         {
             try
@@ -171,7 +180,7 @@ namespace Typedown.Core.ViewModels
                 if (AppViewModel.FileViewModel.FileName != null)
                     title.Append(AppViewModel.FileViewModel.FileName + " - ");
                 title.Append(Config.AppName);
-                if (Config.IsAutomationTestHost)
+                if (Config.IsAutomationTestHost && ShowTestHostMarker)
                     title.Insert(0, "AUTOMATION TEST HOST \u00b7 ");
                 // Reading mode swallows every keystroke, and without a word about it that looks like the editor
                 // has stopped responding. The status bar says so too, but it can be switched off — the title

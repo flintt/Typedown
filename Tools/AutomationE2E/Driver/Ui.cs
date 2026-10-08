@@ -251,6 +251,47 @@ internal static partial class Program
     }
 
     [StructLayout(LayoutKind.Sequential)] private struct LASTINPUTINFO { public uint cbSize; public uint dwTime; }
+    // ---- pictures of a window ----
+
+    [DllImport("dwmapi.dll")] private static extern int DwmGetWindowAttribute(IntPtr window, int attribute, out RECT rect, int size);
+    [DllImport("user32.dll")] private static extern bool PrintWindow(IntPtr window, IntPtr dc, uint flags);
+
+    /// <summary>
+    /// The window alone as a PNG, its visible frame without the invisible resize borders, drawn by the window itself
+    /// (PrintWindow with PW_RENDERFULLCONTENT: the web view and the XAML content too), so windows in front do not matter
+    /// - as Tools/Store/make-screenshots.ps1 takes the Store's pictures. Returns the picture's size.
+    /// </summary>
+    private static (int Width, int Height) WindowPicture(IntPtr window, string path)
+    {
+        GetWindowRect(window, out var outer);
+        if (DwmGetWindowAttribute(window, 9, out var frame, Marshal.SizeOf<RECT>()) != 0) frame = outer;
+        using var bitmap = new System.Drawing.Bitmap(outer.Right - outer.Left, outer.Bottom - outer.Top);
+        using (var g = System.Drawing.Graphics.FromImage(bitmap))
+        {
+            var dc = g.GetHdc();
+            try { PrintWindow(window, dc, 2); } finally { g.ReleaseHdc(dc); }
+        }
+        var crop = new System.Drawing.Rectangle(frame.Left - outer.Left, frame.Top - outer.Top, frame.Right - frame.Left, frame.Bottom - frame.Top);
+        using var picture = bitmap.Clone(crop, bitmap.PixelFormat);
+        Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+        picture.Save(path, System.Drawing.Imaging.ImageFormat.Png);
+        return (crop.Width, crop.Height);
+    }
+
+    /// <summary>The window's visible frame made <paramref name="width"/> x <paramref name="height"/> (window.setView's bounds include the invisible borders).</summary>
+    private static async Task SetVisibleSize(Client c, string windowId, IntPtr window, int width, int height)
+    {
+        int w = width, h = height;
+        for (var i = 0; i < 2; i++)
+        {
+            await c.Call("window.setView", new { windowId, bounds = new { x = 80, y = 40, width = w, height = h } });
+            await Task.Delay(300);
+            if (DwmGetWindowAttribute(window, 9, out var frame, Marshal.SizeOf<RECT>()) != 0) return;
+            w += width - (frame.Right - frame.Left);
+            h += height - (frame.Bottom - frame.Top);
+        }
+    }
+
     [DllImport("user32.dll")] private static extern bool GetLastInputInfo(ref LASTINPUTINFO info);
     [DllImport("user32.dll")] private static extern uint MapVirtualKey(uint code, uint mapType);
     [DllImport("user32.dll")] private static extern IntPtr GetAncestor(IntPtr window, uint flags);
