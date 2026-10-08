@@ -145,7 +145,12 @@ namespace Typedown.Core.ViewModels
         public int TabSize { get => GetSettingValue(4); set => SetSettingValue(value); }
         public bool SpellcheckEnabled { get => GetSettingValue(false); set => SetSettingValue(value); }
         public string SpellcheckLang { get => GetSettingValue(""); set => SetSettingValue(value); }
-        public bool KeepRun { get => GetSettingValue(Config.IsPackaged); set => SetSettingValue(value); }
+        /// <summary>
+        /// Settings > General > Keep running: the process stays after the last window closes, for a faster next start.
+        /// Off unless chosen, in every build (the Store edition had it on by default): a closed app is gone, holds no
+        /// memory and takes its Store update at once. Who set it keeps what they set.
+        /// </summary>
+        public bool KeepRun { get => GetSettingValue(false); set => SetSettingValue(value); }
         /// <summary>
         /// Lets programs running as this user read and edit open documents through the local automation endpoint
         /// (docs/automation-api-spec.md). Off by default; turning it off closes the endpoint and every connection.
