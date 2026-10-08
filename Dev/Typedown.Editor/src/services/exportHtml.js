@@ -83,7 +83,24 @@ class ExportHtml {
       htmlLabels,
       flowchart: { htmlLabels }
     })
-    await mermaid.run({ nodes: [...this.exportContainer.querySelectorAll('div.mermaid')] })
+    // One diagram at a time: a diagram whose text Mermaid cannot read threw (not an Error: an object), the whole render
+    // stopped there - an export failed - and the container it was rendered in stayed at the bottom of the page. One that
+    // fails is kept as its source, in a code block; Mermaid's own leftovers of a failed render go.
+    for (const node of [...this.exportContainer.querySelectorAll('div.mermaid')]) {
+      const source = node.textContent
+      try {
+        await mermaid.run({ nodes: [node] })
+      } catch (err) {
+        console.log('mermaid: a diagram could not be drawn for the export', err && (err.message || err.str || err))
+        const pre = document.createElement('pre')
+        const code = document.createElement('code')
+        code.className = 'language-mermaid'
+        code.textContent = source
+        pre.appendChild(code)
+        node.replaceWith(pre)
+      }
+    }
+    for (const leftover of document.querySelectorAll('body > [id^="dmermaid"], body > svg[id^="mermaid"]')) leftover.remove()
   }
 
   async renderDiagram() {
@@ -211,10 +228,16 @@ class ExportHtml {
     document.body.appendChild(exportContainer)
 
     // render only render the light theme of mermaid and diragram...
-    await this.renderMermaid()
-    await this.renderDiagram()
-    let result = exportContainer.innerHTML
-    exportContainer.remove()
+    // The container goes whatever happens: one left behind showed the rendered document under the editor, in every mode.
+    let result
+    try {
+      await this.renderMermaid()
+      await this.renderDiagram()
+      result = exportContainer.innerHTML
+    } finally {
+      exportContainer.remove()
+      this.exportContainer = null
+    }
 
     // hack to add arrow marker to output html
     const pathes = document.querySelectorAll('path[id^=raphael-marker-]')

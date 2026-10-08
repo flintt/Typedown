@@ -145,8 +145,10 @@ const Editor: React.FC = () => {
             const body = new DOMParser().parseFromString(`<!DOCTYPE html><html><body>${html}</body></html>`, 'text/html').body
             if (diagramsAsPictures) await diagramsToPictures(body)
             transport.postMessage('RenderedXhtml', { token, xhtml: new XMLSerializer().serializeToString(body) })
-        } catch (e) {
-            transport.postMessage('RenderedXhtml', { token, error: String(e) })
+        } catch (e: any) {
+            // What went wrong, readable: a library may throw an object that is not an Error ("[object Object]").
+            const message = e?.message ?? (typeof e === 'object' ? (() => { try { return JSON.stringify(e) } catch { return String(e) } })() : String(e))
+            transport.postMessage('RenderedXhtml', { token, error: message })
         }
     }), []);
 

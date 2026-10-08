@@ -112,6 +112,7 @@ jobs:
           node security-check.js
           node reading-copy-check.js
           node paste-web-check.js
+          node export-mermaid-error-check.js
           node spec-check.js
 
       - uses: actions/upload-artifact@v4
