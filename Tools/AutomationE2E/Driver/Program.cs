@@ -2135,7 +2135,7 @@ internal static partial class Program
                         var body = png;
                         if (path == "/guarded.png" && !referrer.StartsWith(site + "/article/")) { status = "403 Forbidden"; type = "text/plain"; body = Encoding.ASCII.GetBytes("hotlink"); }
                         if (path == "/login.png") { type = "text/html"; body = Encoding.ASCII.GetBytes("<html><body>Please sign in</body></html>"); }
-                        await Task.Delay(400);
+                        await Task.Delay(1500);
                         await stream.WriteAsync(Encoding.ASCII.GetBytes($"HTTP/1.1 {status}\r\nContent-Type: {type}\r\nContent-Length: {body.Length}\r\nConnection: close\r\n\r\n"));
                         await stream.WriteAsync(body);
                     }
@@ -2148,7 +2148,7 @@ internal static partial class Program
         var saved = Path.Combine(testRoot, "wp02-saved");
         foreach (var d in new[] { pictures, saved }) if (Directory.Exists(d)) Directory.Delete(d, true);
         var pictureFolderBefore = (string?)(await c.Call("test.settings.get", new { windowId, name = "DefaultImageBasePath" }))["value"];
-        var id = (string)(await c.Call("document.create", new { text = "# WP02\n\n" }))["documentId"]!;
+        var id = (string)(await c.Call("document.create", new { text = "# WP02\n\n", normalizationPolicy = "allowUnknown" }))["documentId"]!;
         var fragment = $"<p><img src=\"{site}/guarded.png\" alt=\"guarded\"></p><p><img src=\"{site}/login.png\" alt=\"login\"></p>"
             + $"<p><img src=\"{site}/one.png\" alt=\"one\"></p><p><img src=\"{site}/two.png\" alt=\"two\"></p><p><img src=\"{site}/three.png\" alt=\"three\"></p>";
         var html = $"Version:0.9\r\nStartHTML:0\r\nEndHTML:0\r\nStartFragment:0\r\nEndFragment:0\r\nSourceURL:{site}/article/page.html\r\n<html><body><!--StartFragment-->{fragment}<!--EndFragment--></body></html>";
@@ -2173,7 +2173,7 @@ internal static partial class Program
             Check(!text.Contains($"{site}/guarded.png") && served.Any(x => x.StartsWith("/guarded.png referrer=" + site + "/article/page.html")), "the protected picture is fetched with the page as referrer and copied");
             Check(text.Contains($"]({site}/login.png)") && said != null && said.Contains("login.png") && said.Contains("not a picture"), "a page that is not a picture keeps its web address and is said");
             Check(!text.Contains($"{site}/one.png") && !text.Contains($"{site}/two.png") && !text.Contains($"{site}/three.png"), "the others are copied");
-            Check(took < 5, $"five pictures of 0.4 s each are fetched together, not one after another ({took:0.0}s)");
+            Check(took < 5.5, $"five pictures of 1.5 s each are fetched together, not one after another (7.5 s) ({took:0.0}s)");
             var inPictures = Directory.Exists(Path.Combine(pictures, "images")) ? Directory.GetFiles(Path.Combine(pictures, "images")).Length : 0;
             Check(inPictures == 4, $"untitled, its four pictures are in the default picture folder ({inPictures})");
 
