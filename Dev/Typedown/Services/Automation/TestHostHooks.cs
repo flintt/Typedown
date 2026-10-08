@@ -467,15 +467,22 @@ namespace Typedown.Services.Automation
                 })));
             // The window's document exported to a file, as File > Export > <type> with that file picked in the save dialog
             // (html or pdf: the first export configuration of that type); answers once the export is asked for, not done.
-            methods.Add(new MethodDescriptor("test.export.run", null, "test.export.run/1", (c, ct) =>
+            methods.Add(new MethodDescriptor("test.export.run", null, "test.export.run/1", async (c, ct) =>
             {
                 var type = c.Params.OptionalEnum("type", "html", "html", "pdf");
                 var path = c.Params.RequiredString("path", allowEmpty: false);
-                return Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                return await await Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), async app =>
                 {
                     var want = type == "pdf" ? Core.Enums.ExportType.PDF : Core.Enums.ExportType.HTML;
-                    var exports = app.ServiceProvider.GetService(typeof(Core.Interfaces.IFileExport)) as Core.Interfaces.IFileExport;
-                    var config = exports?.ExportConfigs.FirstOrDefault(x => x.Type == want)
+                    var exports = app.ServiceProvider.GetService(typeof(Core.Interfaces.IFileExport)) as Core.Interfaces.IFileExport
+                        ?? throw new AutomationException(AutomationErrorKind.editor_not_ready, "no export service");
+                    // A host just started seeds its configurations a moment after the window opens.
+                    for (var i = 0; i < 50 && !exports.ExportConfigs.Any(x => x.Type == want); i++)
+                    {
+                        await System.Threading.Tasks.Task.Delay(100);
+                        if (i % 10 == 9) await exports.UpdateExportConfigs();
+                    }
+                    var config = exports.ExportConfigs.FirstOrDefault(x => x.Type == want)
                         ?? throw new AutomationException(AutomationErrorKind.editor_not_ready, $"no {type} export configuration");
                     app.FileViewModel.ExportTo(config, path);
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["config"] = config.Name };
