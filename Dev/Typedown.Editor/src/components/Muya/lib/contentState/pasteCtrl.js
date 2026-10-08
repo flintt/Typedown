@@ -15,11 +15,9 @@ const pasteCtrl = ContentState => {
     if (fragmentType === 'p') {
       return 'MERGE'
     } else if (/^h\d/.test(fragmentType)) {
-      if (start.text) {
-        return 'MERGE'
-      } else {
-        return 'NEWLINE'
-      }
+      // A heading is a block of its own: merged into the line the cursor is on, its marker came in as text ("# Title##
+      // Pasted"). The text before the cursor stays; the text after it follows the pasted blocks.
+      return 'NEWLINE'
     } else if (LIST_REG.test(fragmentType)) {
       const listItem = this.getParent(parent)
       const list = listItem && listItem.type === 'li' ? this.getParent(listItem) : null

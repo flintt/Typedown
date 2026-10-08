@@ -333,7 +333,8 @@ internal static partial class Program
             var copied = Directory.Exists(folder) ? Directory.GetFiles(folder).Length : 0;
             notes.Add($"copied: {copied} file(s); served {string.Join(", ", served)}; text: {text.Replace("\n", "\\n")}");
             Check(!text.Contains(site), "with Insert web image copying, no picture is left on the web");
-            Check(copied == 3 && text.Contains("wp01-images/"), "the three pictures are copied beside the document and the document points at them");
+            Check(copied == 3 && text.Contains("](./wp01-images/") && !text.Contains("wp01-images\\"), "the three pictures are copied beside the document and the document points at them, with /");
+            Check(text.StartsWith("# WP01\n\n## Pasted"), "the pasted heading is a block of its own after the document's");
         }
         finally
         {

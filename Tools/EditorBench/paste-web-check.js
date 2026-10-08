@@ -52,6 +52,13 @@ const samples = [
     expect: [/\|\s*:-+\s*\|\s*:-+:\s*\|\s*-+:\s*\|/],
   },
   {
+    name: 'a heading pasted at the end of a heading line is a block of its own',
+    start: '# Title\n',
+    html: `<h2>Pasted</h2><p>after</p>`,
+    expect: ['# Title\n\n## Pasted\n\nafter'],
+    absent: ['Title##'],
+  },
+  {
     name: 'a javascript: address in a late-load attribute is not made a picture address',
     html: `<p>x</p><p><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-original="javascript:window.__typedownXss.push('lazy')" alt="bad"></p><p><img src="missing://x" onerror="window.__typedownXss.push('onerror')" alt="ev"></p>`,
     absent: ['javascript:'],
@@ -65,8 +72,15 @@ const samples = [
     await page.evaluate(() => { window.__typedownXss = []; });
     await mode(false, false);
     for (const sample of samples) {
-      await load('');
+      await load(sample.start || '');
       await pause(300);
+      if (sample.start) {
+        // The cursor at the end of the document's first line, as a person puts it there.
+        const box = await page.evaluate(() => { const r = document.querySelector('#ag-editor-id > *').getBoundingClientRect(); return { x: r.right - 4, y: r.top + r.height / 2 }; });
+        await page.mouse.click(box.x, box.y);
+        await page.keyboard.press('End');
+        await pause(200);
+      }
       await page.evaluate(html => window.__deliver('Paste', { type: 'normal', text: '', html }), sample.html);
       await pause(1200);
       const md = (await flush()).replace(/\r\n/g, '\n');

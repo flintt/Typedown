@@ -79,7 +79,8 @@ namespace Typedown.Core.Services
             }
             if (UriHelper.IsAbsolutePath(result))
                 return new Uri(result).AbsoluteUri;
-            return result;
+            // A path beside the document, written as Markdown writes it: with / (it came back ".\\images\\x.png").
+            return UriHelper.IsWebUrl(result) ? result : result.Replace('\\', '/');
         }
 
         public async Task<string> DoWebFileAction(string src)
