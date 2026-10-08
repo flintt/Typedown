@@ -164,7 +164,7 @@ internal static partial class Program
             await Case("TH03 the side pane marks what is chosen (the bar under Files/Outline, the outline's and the folder tree's row pill) in a custom theme's accent, and in the system accent again without one", TH03);
             await Case("TH02 View > Theme > Reload themes finds a new theme file and a renamed one; the window draws in the custom theme's base whatever the built-in setting says", TH02);
             await Case("WP01 a web page pasted: headings with #, code fenced with its language and without line numbers, Google Docs bold and italic, late-loaded and relative pictures by their real addresses; with Insert web image copying, its pictures are copied beside the document and their addresses replaced", WP01);
-            await Case("ER01 a page message handler that throws stays subscribed and the message still reaches the other handlers; an exception out of an async void method is logged and the app goes on", ER01);
+            await Case("ER01 a page message handler that throws stays subscribed and the message still reaches the other handlers; an exception out of an event handler XAML calls is logged and the app goes on", ER01);
             await Case("LD01 a load the editor gives back rewritten is loaded once more and keeps the file's text; one rewritten again is taken after that one retry, not retried without end", LD01);
             // An edition's own cases (Edition.<name>.cs beside this file, in the edition's repository); none here.
             var editionCases = new List<(string Name, Func<List<string>, Task> Run)>();
@@ -288,8 +288,8 @@ internal static partial class Program
         await c.Call("test.app.throwUnhandled", new { windowId });
         await Task.Delay(1500);
         var alive = !Process.GetProcessById(hostPid).HasExited;
-        notes.Add($"after an exception out of an async void method: process alive={alive}");
-        Check(alive, "an exception out of an async void method does not end the app");
+        notes.Add($"after an exception out of an event handler: process alive={alive}");
+        Check(alive, "an exception out of an event handler does not end the app");
         await c.Call("system.ping");
         var after = Directory.Exists(logs) ? Directory.GetFiles(logs, "*XamlUnhandledException*").Length : 0;
         Check(after > before, "the exception is in the log");

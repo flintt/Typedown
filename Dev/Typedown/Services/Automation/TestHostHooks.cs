@@ -437,12 +437,18 @@ namespace Typedown.Services.Automation
                     }
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["throwing"] = throwing, ["other"] = other };
                 })));
-            // An exception out of an async void method on the window's thread, as a click handler's would be: the process
-            // stays (it ended the app), and the exception is in the log.
+            // An exception out of an event handler XAML calls (a timer's, as a click handler's would be): the process stays
+            // (it ended the app), and the exception is in the log.
             methods.Add(new MethodDescriptor("test.app.throwUnhandled", null, "test.app.throwUnhandled/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
                 {
-                    ThrowLater();
+                    var timer = new global::Windows.UI.Xaml.DispatcherTimer { Interval = System.TimeSpan.FromMilliseconds(50) };
+                    timer.Tick += (_, _) =>
+                    {
+                        timer.Stop();
+                        throw new System.InvalidOperationException("e2e: an exception nothing catches, out of an event handler");
+                    };
+                    timer.Start();
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject();
                 })));
             // The popups open in a window (menus, flyouts, a number box's buttons...), by the type of what they show.
@@ -502,11 +508,6 @@ namespace Typedown.Services.Automation
                     var result = await new Core.Services.ImageBatchUpload(app).RunAsync(null, ct);
                     return (Newtonsoft.Json.Linq.JToken?)Newtonsoft.Json.Linq.JObject.FromObject(result);
                 })));
-        }
-        private static async void ThrowLater()
-        {
-            await System.Threading.Tasks.Task.Delay(50);
-            throw new System.InvalidOperationException("e2e: an exception nothing catches, out of an async void method");
         }
 #else
         public static IEditBarriers Barriers => null;

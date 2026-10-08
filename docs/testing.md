@@ -154,7 +154,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | TH03 | the side pane marks what is chosen (the bar under Files/Outline, the outline's and the folder tree's row pill) in a custom theme's accent, and in the system accent again without one |
 | TH02 | View > Theme > Reload themes finds a new theme file and a renamed one; the window draws in the custom theme's base whatever the built-in setting says |
 | WP01 | a web page pasted: headings with #, code fenced with its language and without line numbers, Google Docs bold and italic, late-loaded and relative pictures by their real addresses; with Insert web image copying, its pictures are copied beside the document and their addresses replaced |
-| ER01 | a page message handler that throws stays subscribed and the message still reaches the other handlers; an exception out of an async void method is logged and the app goes on |
+| ER01 | a page message handler that throws stays subscribed and the message still reaches the other handlers; an exception out of an event handler XAML calls is logged and the app goes on |
 | LD01 | a load the editor gives back rewritten is loaded once more and keeps the file's text; one rewritten again is taken after that one retry, not retried without end |
 | Q01 | two windows closed one after the other: the process exits (it stayed, headless) |
 <!-- END generated: e2e-cases -->
@@ -199,7 +199,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | `test.images.webAction` | `action?`, `path?`, `windowId` | Settings > Image > Insert web image: kept on the web ("none"), copied to a folder ("copy", relative to the document) or uploaded ("upload"). | TestHostHooks.cs |
 | `test.paste.html` | `html`, `text?`, `windowId` | Text and HTML pasted into the window's active document as from the clipboard (the paste after the clipboard is read: the page converts the HTML, then web pictures go as the setting above says); answers once done. | TestHostHooks.cs |
 | `test.events.throwingHandler` | `windowId` | The window's editor messages with a handler that throws on the first one: how many each of two handlers got of two messages (a handler that threw was detached for good, and the message went no further). | TestHostHooks.cs |
-| `test.app.throwUnhandled` | `windowId` | An exception out of an async void method on the window's thread, as a click handler's would be: the process stays (it ended the app), and the exception is in the log. | TestHostHooks.cs |
+| `test.app.throwUnhandled` | `windowId` | An exception out of an event handler XAML calls (a timer's, as a click handler's would be): the process stays (it ended the app), and the exception is in the log. | TestHostHooks.cs |
 | `test.window.popups` | `windowId` | The popups open in a window (menus, flyouts, a number box's buttons...), by the type of what they show. | TestHostHooks.cs |
 | `test.export.menu` | `windowId` | The entries of a window's File > Export submenu, as shown. | TestHostHooks.cs |
 | `test.pane.accent` | `windowId` | The colours the side pane marks what is chosen with: every selection indicator drawn in it (the bar under Files/Outline, the pill of each outline and folder-tree row), by where it is, with its fill. | TestHostHooks.cs |
