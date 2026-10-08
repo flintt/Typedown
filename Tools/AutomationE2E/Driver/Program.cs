@@ -2213,7 +2213,14 @@ internal static partial class Program
             for (var attempt = 0; attempt < 3 && clicked != true; attempt++)
             {
                 await Activate(window);
-                var at = (await c.Call("test.editor.eval", new { windowId, script = "(() => { const r = document.querySelector('#ag-editor-id table tbody td').getBoundingClientRect(); return { x: Math.round(r.left + r.width / 2), y: Math.round(r.top + r.height / 2) } })()" }))["result"]!;
+                // The page may not have drawn the table yet (the eval answers null then): asked again until it has.
+                JToken at = JValue.CreateNull();
+                for (var wait = 0; wait < 25 && at.Type != JTokenType.Object; wait++)
+                {
+                    if (wait > 0) await Task.Delay(200);
+                    at = (await c.Call("test.editor.eval", new { windowId, script = "(() => { const td = document.querySelector('#ag-editor-id table tbody td'); if (!td) return null; const r = td.getBoundingClientRect(); return { x: Math.round(r.left + r.width / 2), y: Math.round(r.top + r.height / 2) } })()" }))["result"] ?? JValue.CreateNull();
+                }
+                if (at.Type != JTokenType.Object) throw new CaseFailed("the table's first cell is not on the page");
                 var screen = await c.Call("test.editor.screenPoint", new { windowId, x = (int)at["x"]!, y = (int)at["y"]! });
                 SetProcessDpiAwarenessContext(new IntPtr(-4));
                 SetCursorPos((int)screen["x"]! - 6, (int)screen["y"]!);
