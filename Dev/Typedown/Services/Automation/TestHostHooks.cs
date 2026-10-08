@@ -465,6 +465,14 @@ namespace Typedown.Services.Automation
                         : global::Windows.UI.Xaml.Media.VisualTreeHelper.GetOpenPopupsForXamlRoot(app.XamlRoot).Select(p => p.Child?.GetType().Name ?? "empty").ToList();
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["popups"] = new Newtonsoft.Json.Linq.JArray(open) };
                 })));
+            // The window's active document saved as the path, as File > Save as with that file picked (an untitled one's
+            // first save too); the path back, or null when it was not saved.
+            methods.Add(new MethodDescriptor("test.file.saveAs", null, "test.file.saveAs/1", async (c, ct) =>
+            {
+                var path = c.Params.RequiredString("path", allowEmpty: false);
+                return await await Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), async app =>
+                    (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["path"] = await app.FileViewModel.SaveAsTo(path) });
+            }));
             // The window's document exported to a file, as File > Export > <type> with that file picked in the save dialog
             // (html or pdf: the first export configuration of that type); answers once the export is asked for, not done.
             methods.Add(new MethodDescriptor("test.export.run", null, "test.export.run/1", async (c, ct) =>

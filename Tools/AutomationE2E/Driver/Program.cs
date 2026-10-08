@@ -158,6 +158,7 @@ internal static partial class Program
             await Case("TC01 a tab closed with its x button: the outline shows the headings of the tab shown next", TC01);
             await Case("TC02 a tab closed while its neighbour is not the tab used last: the outline is the shown tab's, with long documents", TC02);
             await Case("SE01 the startup action chosen on the settings page is in the settings file", SE01);
+            await Case("WP02 pasted web pictures: one behind hotlink protection is fetched with the page as referrer, a page that is not a picture is kept on the web and said, and an untitled document saved into a folder takes its pictures along", WP02);
             await Case("EX02 an export says where it was written, with buttons to open it, and goes when closed; with no action after export, nothing shows", EX02);
             await Case("TB01 the table toolbar's Resize table opens with the table's own size; Cancel leaves the table as it was; OK resizes it", TB01);
             await Case("TH01 a custom theme colours the page in visual, reading and source mode, and a change shows at once in each", TH01);
@@ -2098,6 +2099,100 @@ internal static partial class Program
         {
             try { await c.Call("test.settings.set", new { windowId, name = "AfterExport", value = before }); } catch { }
             try { await c.Call("document.close", new { documentId = id }); } catch { }
+        }
+    }
+
+    // Copy to path seemed not to work: the pictures were fetched one after another (the web addresses showed for many
+    // seconds), with no referrer (a site with hotlink protection refused them, or answered with a page that was saved
+    // as a .png), and an untitled document's pictures stayed in the default picture folder once it was saved elsewhere.
+    private static async Task WP02(List<string> notes)
+    {
+        var png = Convert.FromBase64String("iVBORw0KGgoAAAANSUhEUgAAABAAAAAICAIAAAB/FOjAAAAAE0lEQVR4nGPQqDhBEmIY1UALDQCJj7QBup2ubwAAAABJRU5ErkJggg==");
+        var server = new System.Net.Sockets.TcpListener(System.Net.IPAddress.Loopback, 0);
+        server.Start();
+        var port = ((System.Net.IPEndPoint)server.LocalEndpoint).Port;
+        var site = $"http://127.0.0.1:{port}";
+        var served = new List<string>();
+        var serving = Task.Run(async () =>
+        {
+            while (true)
+            {
+                System.Net.Sockets.TcpClient client;
+                try { client = await server.AcceptTcpClientAsync(); } catch { return; }
+                _ = Task.Run(async () =>
+                {
+                    using (client)
+                    {
+                        var stream = client.GetStream();
+                        var reader = new StreamReader(stream);
+                        var request = await reader.ReadLineAsync() ?? "";
+                        string referrer = "", line;
+                        while (!string.IsNullOrEmpty(line = await reader.ReadLineAsync()))
+                            if (line.StartsWith("Referer:", StringComparison.OrdinalIgnoreCase)) referrer = line.Substring(8).Trim();
+                        var path = request.Split(' ').Skip(1).FirstOrDefault() ?? "";
+                        lock (served) served.Add($"{path} referrer={referrer}");
+                        string status = "200 OK", type = "image/png";
+                        var body = png;
+                        if (path == "/guarded.png" && !referrer.StartsWith(site + "/article/")) { status = "403 Forbidden"; type = "text/plain"; body = Encoding.ASCII.GetBytes("hotlink"); }
+                        if (path == "/login.png") { type = "text/html"; body = Encoding.ASCII.GetBytes("<html><body>Please sign in</body></html>"); }
+                        await Task.Delay(400);
+                        await stream.WriteAsync(Encoding.ASCII.GetBytes($"HTTP/1.1 {status}\r\nContent-Type: {type}\r\nContent-Length: {body.Length}\r\nConnection: close\r\n\r\n"));
+                        await stream.WriteAsync(body);
+                    }
+                });
+            }
+        });
+        using var c = await Session("e2e WP02");
+        var windowId = (string)((JArray)(await c.Call("window.list"))["windows"]!)[0]["windowId"]!;
+        var pictures = Path.Combine(testRoot, "wp02-pictures");
+        var saved = Path.Combine(testRoot, "wp02-saved");
+        foreach (var d in new[] { pictures, saved }) if (Directory.Exists(d)) Directory.Delete(d, true);
+        var pictureFolderBefore = (string?)(await c.Call("test.settings.get", new { windowId, name = "DefaultImageBasePath" }))["value"];
+        var id = (string)(await c.Call("document.create", new { text = "# WP02\n\n" }))["documentId"]!;
+        var fragment = $"<p><img src=\"{site}/guarded.png\" alt=\"guarded\"></p><p><img src=\"{site}/login.png\" alt=\"login\"></p>"
+            + $"<p><img src=\"{site}/one.png\" alt=\"one\"></p><p><img src=\"{site}/two.png\" alt=\"two\"></p><p><img src=\"{site}/three.png\" alt=\"three\"></p>";
+        var html = $"Version:0.9\r\nStartHTML:0\r\nEndHTML:0\r\nStartFragment:0\r\nEndFragment:0\r\nSourceURL:{site}/article/page.html\r\n<html><body><!--StartFragment-->{fragment}<!--EndFragment--></body></html>";
+        try
+        {
+            // An untitled document's pictures go to the default picture folder: one of this run's, not the user's.
+            await c.Call("test.settings.set", new { windowId, name = "DefaultImageBasePath", value = pictures });
+            await c.Call("test.images.webAction", new { windowId, action = "copy", path = "./images" });
+            await c.Call("document.focus", new { documentId = id });
+            await c.Call("test.editor.focus", new { windowId });
+            var started = DateTime.Now;
+            var pasting = c.Call("test.paste.html", new { windowId, html });
+            // The picture that is not one is said in a dialog once the others are in.
+            var (_, said) = await PressDialogButton(c, windowId, DialogButton.Close, 20000);
+            await pasting;
+            var took = (DateTime.Now - started).TotalSeconds;
+            string text = "";
+            await Eventually(async () => (text = (string)(await Get(c, id))["text"]!).Contains("](./images/"), 5000);
+            notes.Add($"took {took:0.0}s; said: {said?.Replace("\n", " | ")}");
+            notes.Add("text: " + text.Replace("\n", "\\n"));
+            notes.Add("served: " + string.Join(", ", served));
+            Check(!text.Contains($"{site}/guarded.png") && served.Any(x => x.StartsWith("/guarded.png referrer=" + site + "/article/page.html")), "the protected picture is fetched with the page as referrer and copied");
+            Check(text.Contains($"]({site}/login.png)") && said != null && said.Contains("login.png") && said.Contains("not a picture"), "a page that is not a picture keeps its web address and is said");
+            Check(!text.Contains($"{site}/one.png") && !text.Contains($"{site}/two.png") && !text.Contains($"{site}/three.png"), "the others are copied");
+            Check(took < 5, $"five pictures of 0.4 s each are fetched together, not one after another ({took:0.0}s)");
+            var inPictures = Directory.Exists(Path.Combine(pictures, "images")) ? Directory.GetFiles(Path.Combine(pictures, "images")).Length : 0;
+            Check(inPictures == 4, $"untitled, its four pictures are in the default picture folder ({inPictures})");
+
+            // Saved into a folder of its own: the pictures come along, so ./images/... still points at them.
+            var file = Path.Combine(saved, "wp02.md");
+            Directory.CreateDirectory(saved);
+            var result = (string?)(await c.Call("test.file.saveAs", new { windowId, path = file }))["path"];
+            var along = Directory.Exists(Path.Combine(saved, "images")) ? Directory.GetFiles(Path.Combine(saved, "images")).Select(Path.GetFileName).ToList() : new List<string?>();
+            var referenced = System.Text.RegularExpressions.Regex.Matches(text, @"\]\(\./images/([^)]+)\)").Select(m => m.Groups[1].Value).ToList();
+            notes.Add($"saved as {result}; images beside it: {string.Join(", ", along)}");
+            Check(result == file && File.Exists(file), "the untitled document is saved where asked");
+            Check(referenced.Count == 4 && referenced.All(r => along.Contains(r)), "every picture it points at is beside it now");
+        }
+        finally
+        {
+            try { await c.Call("test.images.webAction", new { windowId, action = "none" }); } catch { }
+            try { if (pictureFolderBefore != null) await c.Call("test.settings.set", new { windowId, name = "DefaultImageBasePath", value = pictureFolderBefore }); } catch { }
+            try { await c.Call("document.close", new { documentId = id }); } catch { }
+            server.Stop();
         }
     }
 

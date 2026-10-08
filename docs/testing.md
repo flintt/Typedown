@@ -148,6 +148,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | TC01 | a tab closed with its x button: the outline shows the headings of the tab shown next |
 | TC02 | a tab closed while its neighbour is not the tab used last: the outline is the shown tab's, with long documents |
 | SE01 | the startup action chosen on the settings page is in the settings file |
+| WP02 | pasted web pictures: one behind hotlink protection is fetched with the page as referrer, a page that is not a picture is kept on the web and said, and an untitled document saved into a folder takes its pictures along |
 | EX02 | an export says where it was written, with buttons to open it, and goes when closed; with no action after export, nothing shows |
 | TB01 | the table toolbar's Resize table opens with the table's own size; Cancel leaves the table as it was; OK resizes it |
 | TH01 | a custom theme colours the page in visual, reading and source mode, and a change shows at once in each |
@@ -203,6 +204,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | `test.events.throwingHandler` | `windowId` | The window's editor messages with a handler that throws on the first one: how many each of two handlers got of two messages (a handler that threw was detached for good, and the message went no further). | TestHostHooks.cs |
 | `test.app.throwUnhandled` | `windowId` | An exception out of an event handler XAML calls (a timer's, as a click handler's would be): the process stays (it ended the app), and the exception is in the log. | TestHostHooks.cs |
 | `test.window.popups` | `windowId` | The popups open in a window (menus, flyouts, a number box's buttons...), by the type of what they show. | TestHostHooks.cs |
+| `test.file.saveAs` | `path`, `windowId` | The window's active document saved as the path, as File > Save as with that file picked (an untitled one's first save too); the path back, or null when it was not saved. | TestHostHooks.cs |
 | `test.export.run` | `type?`, `path`, `windowId` | The window's document exported to a file, as File > Export > <type> with that file picked in the save dialog (html or pdf: the first export configuration of that type); answers once the export is asked for, not done. | TestHostHooks.cs |
 | `test.export.notice` | `windowId` | The notice an export leaves (Settings > Export > After export): the file it names, or null when none shows. | TestHostHooks.cs |
 | `test.export.menu` | `windowId` | The entries of a window's File > Export submenu, as shown. | TestHostHooks.cs |

@@ -63,16 +63,16 @@ namespace Typedown.Core.Services
         /// A picture on the web as Settings > Image > Insert web image says (kept, copied to a folder or uploaded): its
         /// new address. Throws what went wrong; <see cref="DoWebFileAction"/> says it in a dialog.
         /// </summary>
-        public async Task<string> ProcessWebImageAsync(string src)
+        public async Task<string> ProcessWebImageAsync(string src, Uri page = null)
         {
             var result = src;
             switch (Settings.InsertWebImageAction)
             {
                 case Enums.InsertImageAction.CopyToPath:
-                    result = await SaveImage(InsertImageSource.Web, await GetWebImage(new(src)));
+                    result = await SaveImage(InsertImageSource.Web, await GetWebImage(new(src), page));
                     break;
                 case Enums.InsertImageAction.Upload:
-                    result = await Upload(InsertImageSource.Web, await GetWebImage(new(src)));
+                    result = await Upload(InsertImageSource.Web, await GetWebImage(new(src), page));
                     break;
                 default:
                     return src;
@@ -184,9 +184,31 @@ namespace Typedown.Core.Services
             }
         }
 
-        public async Task<byte[]> GetWebImage(Uri uri)
+        private static readonly System.Net.Http.HttpClient web = new(new System.Net.Http.HttpClientHandler { AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate })
         {
-            return await Task.Run(() => new WebClient().DownloadData(uri));
+            Timeout = TimeSpan.FromSeconds(30),
+        };
+
+        /// <summary>
+        /// A picture on the web, fetched as the browser showing <paramref name="page"/> fetched it: with that page as the
+        /// referrer (else the picture's own site) and a browser's user agent, so a site that refuses pictures asked for
+        /// from elsewhere (hotlink protection) hands it over. Throws when the answer is not a picture - an error page or a
+        /// login page was saved as a .png before.
+        /// </summary>
+        public async Task<byte[]> GetWebImage(Uri uri, Uri page = null)
+        {
+            using var request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Get, uri);
+            request.Headers.TryAddWithoutValidation("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36 Edg/124.0");
+            request.Headers.TryAddWithoutValidation("Accept", "image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8");
+            var referrer = page != null && (page.Scheme == Uri.UriSchemeHttp || page.Scheme == Uri.UriSchemeHttps) ? page : new Uri(uri.GetLeftPart(UriPartial.Authority) + "/");
+            request.Headers.Referrer = referrer;
+            using var response = await web.SendAsync(request).ConfigureAwait(false);
+            if (!response.IsSuccessStatusCode)
+                throw new InvalidDataException($"HTTP {(int)response.StatusCode} {response.ReasonPhrase}");
+            var bytes = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
+            if (GetImageType(bytes, null) == null)
+                throw new InvalidDataException($"not a picture ({response.Content.Headers.ContentType?.MediaType ?? "unknown"}, {bytes.Length} bytes)");
+            return bytes;
         }
 
         public string GetDefaultDestFolder(InsertImageSource source)
@@ -253,9 +275,26 @@ namespace Typedown.Core.Services
         {
             string headerCode = GetHeaderInfo(bytes).ToUpper();
 
-            if (headerCode.StartsWith("FFD8FFE0"))
+            // Every JPEG starts FF D8 FF (E0 JFIF, E1 Exif, DB raw...): only E0 was known, and an Exif photo was "png".
+            if (headerCode.StartsWith("FFD8FF"))
             {
                 return "jpg";
+            }
+            else if (bytes.Length >= 12 && Encoding.ASCII.GetString(bytes, 0, 4) == "RIFF" && Encoding.ASCII.GetString(bytes, 8, 4) == "WEBP")
+            {
+                return "webp";
+            }
+            else if (bytes.Length >= 12 && Encoding.ASCII.GetString(bytes, 4, 4) == "ftyp" && Encoding.ASCII.GetString(bytes, 8, 4) is "avif" or "avis")
+            {
+                return "avif";
+            }
+            else if (headerCode.StartsWith("00000100"))
+            {
+                return "ico";
+            }
+            else if (IsSvg(bytes))
+            {
+                return "svg";
             }
             else if (headerCode.StartsWith("49492A"))
             {
@@ -277,6 +316,44 @@ namespace Typedown.Core.Services
             {
                 return defaultType; //UnKnown
             }
+        }
+
+        private static bool IsSvg(byte[] bytes)
+        {
+            var head = Encoding.UTF8.GetString(bytes, 0, Math.Min(bytes.Length, 1024)).TrimStart('\uFEFF', ' ', '\t', '\r', '\n');
+            return head.StartsWith("<svg", StringComparison.OrdinalIgnoreCase)
+                || (head.StartsWith("<?xml", StringComparison.OrdinalIgnoreCase) && head.IndexOf("<svg", StringComparison.OrdinalIgnoreCase) >= 0);
+        }
+
+        /// <summary>
+        /// The document saved into another folder (an untitled one's first save, or Save as): the pictures it points at
+        /// by relative paths were beside the old place - for an untitled document, the default picture folder - and are
+        /// copied to the same relative places beside the new one, so they still show. Only copied, never overwritten or
+        /// removed; paths leading out of the new folder (..) are left. Returns how many were copied.
+        /// </summary>
+        public static int CopyRelativeImages(string markdown, string fromBase, string toBase)
+        {
+            if (string.IsNullOrEmpty(markdown) || string.IsNullOrEmpty(fromBase) || string.IsNullOrEmpty(toBase)) return 0;
+            fromBase = Path.GetFullPath(fromBase);
+            toBase = Path.GetFullPath(toBase);
+            if (string.Equals(fromBase.TrimEnd('\\'), toBase.TrimEnd('\\'), StringComparison.OrdinalIgnoreCase)) return 0;
+            var copied = 0;
+            foreach (var address in MarkdownImages.Find(markdown).Select(r => r.Address).Distinct())
+            {
+                if (string.IsNullOrEmpty(address) || UriHelper.IsWebUrl(address) || address.StartsWith("data:", StringComparison.OrdinalIgnoreCase)
+                    || address.Contains("://") || UriHelper.IsAbsolutePath(address)) continue;
+                string relative;
+                try { relative = Uri.UnescapeDataString(address.Split('?', '#')[0]).Replace('/', '\\'); }
+                catch { continue; }
+                var source = Path.GetFullPath(Path.Combine(fromBase, relative));
+                var target = Path.GetFullPath(Path.Combine(toBase, relative));
+                if (!target.StartsWith(toBase.TrimEnd('\\') + "\\", StringComparison.OrdinalIgnoreCase)) continue;
+                if (!File.Exists(source) || File.Exists(target)) continue;
+                Directory.CreateDirectory(Path.GetDirectoryName(target));
+                File.Copy(source, target);
+                copied++;
+            }
+            return copied;
         }
 
         public static string GetHeaderInfo(byte[] bytes)

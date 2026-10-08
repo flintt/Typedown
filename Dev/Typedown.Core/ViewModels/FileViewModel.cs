@@ -572,17 +572,50 @@ namespace Typedown.Core.ViewModels
                 filePicker.FileTypeChoices.Add("Markdown Files", FileTypeHelper.Markdown.ToList());
                 filePicker.SuggestedFileName = FileName ?? "untitled";
                 var file = await FilePickersExtensions.ShowAsync(() => filePicker.PickSaveFileAsync());
-                if (file != null && !disposables.IsDisposed && FilePath == originalPath && TabsViewModel?.ActiveTab == originalTab)
+                if (file == null) return null;
+                return await SaveAsToCore(file.Path, originalPath, originalTab);
+            }
+            catch (Exception ex)
+            {
+                await AppContentDialog.Create(Locale.GetString("Error"), ex.Message, Locale.GetString("Ok")).ShowAsync(AppViewModel.XamlRoot);
+                return null;
+            }
+        }
+
+        /// <summary>Save as, with the file already chosen (the test host skips the dialog).</summary>
+        public async Task<string> SaveAsTo(string path)
+        {
+            var originalPath = FilePath;
+            await saveLock.WaitAsync();
+            try
+            {
+                if (disposables.IsDisposed || FilePath != originalPath)
+                    return null;
+                return await SaveAsToCore(path, originalPath, TabsViewModel?.ActiveTab);
+            }
+            finally
+            {
+                saveLock.Release();
+            }
+        }
+
+        private async Task<string> SaveAsToCore(string targetPath, string originalPath, Models.DocumentTab originalTab)
+        {
+            try
+            {
+                if (!disposables.IsDisposed && FilePath == originalPath && TabsViewModel?.ActiveTab == originalTab)
                 {
                     await EditorViewModel.FlushContentAsync();
                     if (disposables.IsDisposed || FilePath != originalPath || TabsViewModel?.ActiveTab != originalTab)
                         return null;
                     var markdown = EditorViewModel.Markdown;
                     var hash = Common.SimpleHash(markdown);
-                    var result = await WriteAllText(file.Path, markdown);
+                    var imagesBefore = ImageBasePath;
+                    var result = await WriteAllText(targetPath, markdown);
                     if (result && !disposables.IsDisposed && FilePath == originalPath)
                     {
-                        FilePath = file.Path;
+                        CopyPicturesAlong(markdown, imagesBefore, Path.GetDirectoryName(targetPath));
+                        FilePath = targetPath;
                         EditorViewModel.FileHash = hash;
                         DiskHash = hash;
                         EditorViewModel.Saved = EditorViewModel.CurrentHash == hash; // CurrentHash tracks the live buffer; avoids an O(n) string compare per save
@@ -592,7 +625,7 @@ namespace Typedown.Core.ViewModels
                             if (TabsViewModel?.ActiveTab is { } savedTab) savedTab.BackupHash = 0;
                         }
                         _ = AccessHistory.RecordFileHistory(FilePath);
-                        return EditorViewModel.Saved ? file.Path : null;
+                        return EditorViewModel.Saved ? targetPath : null;
                     }
                 }
                 return null;
@@ -601,6 +634,21 @@ namespace Typedown.Core.ViewModels
             {
                 await AppContentDialog.Create(Locale.GetString("Error"), ex.Message, Locale.GetString("Ok")).ShowAsync(AppViewModel.XamlRoot);
                 return null;
+            }
+        }
+
+        // Pictures by relative paths (./images/x.png) were beside the old place - for an untitled document, the default
+        // picture folder - and pointed nowhere once it was saved elsewhere: copied along (ImageAction.CopyRelativeImages).
+        private static void CopyPicturesAlong(string markdown, string fromBase, string toBase)
+        {
+            try
+            {
+                var copied = ImageAction.CopyRelativeImages(markdown, fromBase, toBase);
+                if (copied > 0) Log.Debug($"save as: {copied} picture(s) copied from {fromBase} to {toBase}");
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"save as: the pictures could not be copied from {fromBase}: {ex.Message}");
             }
         }
 

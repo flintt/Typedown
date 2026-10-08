@@ -1062,20 +1062,33 @@ namespace Typedown.Core.ViewModels
             await Task.Delay(300);
             await FlushContentAsync(2000);
             var inDocument = MarkdownImages.Find(Markdown ?? "").Select(r => r.Address).ToHashSet();
+            var wanted = addresses.Where(inDocument.Contains).ToList();
+            if (wanted.Count < addresses.Count)
+                Log.Debug($"paste: {addresses.Count - wanted.Count} of the HTML's {addresses.Count} picture address(es) are not in the document (first: {addresses.FirstOrDefault(a => !inDocument.Contains(a))})");
             var action = ServiceProvider.GetService<ImageAction>();
-            var replacements = new Dictionary<string, string>();
-            var failures = new List<string>();
-            foreach (var address in addresses.Where(inDocument.Contains))
+            var page = PageAddress(html);
+            var replacements = new System.Collections.Concurrent.ConcurrentDictionary<string, string>();
+            var failures = new System.Collections.Concurrent.ConcurrentBag<string>();
+            // A few at a time: one after another, a page of pictures kept its web addresses for many seconds.
+            using (var gate = new System.Threading.SemaphoreSlim(4))
             {
-                try
+                await Task.WhenAll(wanted.Select(async address =>
                 {
-                    var local = await action.ProcessWebImageAsync(address);
-                    if (!string.IsNullOrEmpty(local) && local != address) replacements[address] = local;
-                }
-                catch (Exception ex)
-                {
-                    failures.Add($"{address}: {ex.Message}");
-                }
+                    await gate.WaitAsync();
+                    try
+                    {
+                        var local = await action.ProcessWebImageAsync(address, page);
+                        if (!string.IsNullOrEmpty(local) && local != address) replacements[address] = local;
+                    }
+                    catch (Exception ex)
+                    {
+                        failures.Add($"{address}: {ex.Message}");
+                    }
+                    finally
+                    {
+                        gate.Release();
+                    }
+                }));
             }
             Log.Debug($"paste: {addresses.Count} web picture(s) in the HTML, {replacements.Count} fetched, {failures.Count} failed");
             if (replacements.Count > 0)
@@ -1084,12 +1097,20 @@ namespace Typedown.Core.ViewModels
                 {
                     try
                     {
+                        var changed = false;
                         await DocumentEdits.Coordinator.EditAsync(new AutomationDocument(AppViewModel, tab), new Typedown.Automation.EditRequest
                         {
                             BaseRevision = tab.Revision,
-                            Edit = current => MarkdownImages.Replace(current, replacements),
+                            Edit = current =>
+                            {
+                                var next = MarkdownImages.Replace(current, replacements);
+                                changed = next != current;
+                                return next;
+                            },
                             AllowUnknown = true,
                         }, System.Threading.CancellationToken.None);
+                        // Once the pictures were fetched but the document kept their web addresses, and nothing said why.
+                        Log.Debug(changed ? $"paste: {replacements.Count} picture address(es) replaced" : "paste: the pictures' web addresses were no longer in the document; nothing replaced");
                         break;
                     }
                     catch (Typedown.Automation.AutomationException ex) when (ex.Kind == Typedown.Automation.AutomationErrorKind.revision_conflict && attempt < 3)
@@ -1099,7 +1120,7 @@ namespace Typedown.Core.ViewModels
                     catch (Exception ex)
                     {
                         Log.Debug($"paste: the pictures' new addresses were not written: {ex.Message}");
-                        failures.AddRange(replacements.Keys.Select(a => $"{a}: {ex.Message}"));
+                        foreach (var a in replacements.Keys) failures.Add($"{a}: {ex.Message}");
                         break;
                     }
                 }
@@ -1113,6 +1134,13 @@ namespace Typedown.Core.ViewModels
         /// real one (data-original, data-src..., srcset); relative ones made absolute with the page's own address (the
         /// clipboard's SourceURL). Pictures already written into the HTML (data:) are not on the web.
         /// </summary>
+        /// <summary>The address of the page the HTML was copied from (the clipboard's SourceURL), or null.</summary>
+        internal static Uri PageAddress(string html)
+        {
+            var source = System.Text.RegularExpressions.Regex.Match(html ?? "", @"^SourceURL:(\S+)", System.Text.RegularExpressions.RegexOptions.Multiline);
+            return source.Success && Uri.TryCreate(source.Groups[1].Value, UriKind.Absolute, out var page) ? page : null;
+        }
+
         internal static List<string> WebImageAddresses(string html)
         {
             var source = System.Text.RegularExpressions.Regex.Match(html, @"^SourceURL:(\S+)", System.Text.RegularExpressions.RegexOptions.Multiline);
