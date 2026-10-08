@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Typedown.Core.Utilities;
 
@@ -79,17 +80,27 @@ namespace Typedown.Core.Services
             this.path = path ?? throw new ArgumentNullException(nameof(path));
             this.writer = writer ?? ((target, json) => SafeFile.WriteAllTextAtomicAsync(target, json));
             this.onWriteError = onWriteError;
-            values = Load(path);
+            values = Load(path, out var error);
+            LoadError = error;
+            LoadedNames = values.Properties().Select(p => p.Name).ToArray();
         }
 
-        private static JObject Load(string path)
+        /// <summary>The names the file held when the store was made, for the log: a value missing on the next run shows when it went.</summary>
+        public IReadOnlyList<string> LoadedNames { get; }
+
+        /// <summary>Why the file that was there could not be read (null: read, or there was none).</summary>
+        public Exception LoadError { get; }
+
+        private static JObject Load(string path, out Exception error)
         {
+            error = null;
             try
             {
                 return JObject.Parse(File.ReadAllText(path));
             }
-            catch
+            catch (Exception ex)
             {
+                if (File.Exists(path)) error = ex;
                 // A missing or damaged file must not prevent startup. The next successful setting change replaces
                 // it atomically with a valid document; unknown values in a valid old file remain in the JObject.
                 return new JObject();

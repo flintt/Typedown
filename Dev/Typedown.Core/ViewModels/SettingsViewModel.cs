@@ -241,6 +241,15 @@ namespace Typedown.Core.ViewModels
             ServiceProvider = serviceProvider;
             var settingsFile = Path.Combine(Config.GetLocalFolderPath(), "Settings.json");
             settingsStore = JsonSettingsStore.Shared(settingsFile, onWriteError: ex => Utilities.Log.WriteLocal("SettingsSave", ex.ToString()));
+            if (!loggedLoad)
+            {
+                // What the file held at start: with the line each change writes (SetSettingValue), a value missing on
+                // the next run shows when it went.
+                loggedLoad = true;
+                Utilities.Log.Debug(settingsStore.LoadError != null
+                    ? $"settings: Settings.json could not be read: {settingsStore.LoadError.GetType().Name}: {settingsStore.LoadError.Message}"
+                    : $"settings: read {settingsStore.LoadedNames.Count}: {string.Join(", ", settingsStore.LoadedNames)}");
+            }
             // Created with its window, on that window's thread: other windows' changes are applied there.
             windowContext = System.Threading.SynchronizationContext.Current;
             // Window-local settings (modes, layout) are this window's own from now on: it starts from what was saved
@@ -250,6 +259,8 @@ namespace Typedown.Core.ViewModels
             settingsStore.Changed += OnStoreChanged;
             ResetSettingsCommand.OnExecute.Subscribe(_ => ResetSetting());
         }
+
+        private static bool loggedLoad;
 
         private readonly System.Threading.SynchronizationContext windowContext;
 
@@ -304,6 +315,11 @@ namespace Typedown.Core.ViewModels
 
         public void SetSettingValue<T>(T value, [CallerMemberName] string propertyName = null)
         {
+            // Which preference changed, to what: a choice that was gone after an update (the startup action) left no
+            // trace of when it was made or lost. Window state that changes all the time is left out.
+            if (!SettingsScope.IsWindowLocal(propertyName) && !Equals(GetSettingValue<T>(default, propertyName), value))
+                // The value only for choices, switches and numbers: a text setting can be a token or a password.
+                Utilities.Log.Debug($"setting: {propertyName} = {(value is Enum || value is bool || value is int || value is double ? value : "(changed)")}");
             if (windowLocalValues.ContainsKey(propertyName))
                 windowLocalValues[propertyName] = value == null ? null : Newtonsoft.Json.Linq.JToken.FromObject(value);
             settingsStore.Set(propertyName, value, this);
