@@ -372,7 +372,8 @@ namespace Typedown.Services.Automation
                 });
             }));
             // Presses a button of the dialog open in the window (primary, secondary or close), as a click would; the
-            // button's text back. A test finding it through UI Automation found the window's own close button first.
+            // button's text back, with the dialog's title and its message when they are text. A test finding it through
+            // UI Automation found the window's own close button first.
             methods.Add(new MethodDescriptor("test.dialog.press", null, "test.dialog.press/1", (c, ct) =>
             {
                 var which = c.Params.OptionalEnum("button", "close", "primary", "secondary", "close");
@@ -392,7 +393,12 @@ namespace Typedown.Services.Automation
                     if (button == null || button.Visibility != global::Windows.UI.Xaml.Visibility.Visible || !button.IsEnabled)
                         throw new AutomationException(AutomationErrorKind.editor_not_ready, $"the dialog has no {which} button to press");
                     ((global::Windows.UI.Xaml.Automation.Provider.IInvokeProvider)new global::Windows.UI.Xaml.Automation.Peers.ButtonAutomationPeer(button)).Invoke();
-                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["pressed"] = button.Content?.ToString() };
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject
+                    {
+                        ["pressed"] = button.Content?.ToString(),
+                        ["title"] = dialog.Title as string,
+                        ["content"] = dialog.Content as string,
+                    };
                 });
             }));
             // Settings > Image > Insert web image: kept on the web ("none"), copied to a folder ("copy", relative to the

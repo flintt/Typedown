@@ -162,19 +162,21 @@ internal static partial class Program
     /// <summary>
     /// Presses a button of the dialog open in the window, as a click would (test.dialog.press: the app finds its own
     /// dialog - looked for through UI Automation, the window's title bar close button was found first and the window
-    /// closed). Waits for a dialog to be there.
+    /// closed). Waits for a dialog to be there. The dialog's title and message back, when they are text.
     /// </summary>
-    private static async Task PressDialogButton(Client c, string windowId, DialogButton which, int timeoutMs = 3000)
+    private static async Task<(string? Title, string? Content)> PressDialogButton(Client c, string windowId, DialogButton which, int timeoutMs = 3000)
     {
         var name = which.ToString().ToLowerInvariant();
         string? error = null;
+        JToken? pressed = null;
         if (!await Eventually(async () =>
         {
-            try { await c.Call("test.dialog.press", new { windowId, button = name }); return true; }
+            try { pressed = await c.Call("test.dialog.press", new { windowId, button = name }); return true; }
             catch (JsonRpcRemoteException e) { error = e.Message; return false; }
         }, timeoutMs, 150))
             throw new CaseFailed($"no {name} button of a dialog to press: {error}");
         await Task.Delay(300);
+        return ((string?)pressed?["title"], (string?)pressed?["content"]);
     }
 
     /// <summary>
