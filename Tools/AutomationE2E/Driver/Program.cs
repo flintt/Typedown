@@ -1995,6 +1995,11 @@ internal static partial class Program
         System.Windows.Automation.AutomationElement Tab(string name) => root.FindAll(System.Windows.Automation.TreeScope.Descendants,
                 new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.TabItem))
             .Cast<System.Windows.Automation.AutomationElement>().FirstOrDefault(t => t.Current.Name.Contains(name)) ?? throw new CaseFailed($"no {name} tab");
+        void ShowTab(string name)
+        {
+            if (Tab(name).TryGetCurrentPattern(System.Windows.Automation.ScrollItemPattern.Pattern, out var scroll))
+                try { ((System.Windows.Automation.ScrollItemPattern)scroll).ScrollIntoView(); } catch (InvalidOperationException) { }
+        }
         void Click(System.Windows.Rect r, double fx = 0.3) { SetCursorPos((int)(r.Left + r.Width * fx), (int)(r.Top + r.Height / 2)); Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0002 } } }, new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0004 } } }); }
         // The outline's first rows (the tree is virtualized; its top shows which document it is of).
         string Top() => string.Join(", ", root.FindAll(System.Windows.Automation.TreeScope.Descendants, System.Windows.Automation.Condition.TrueCondition)
@@ -2004,6 +2009,10 @@ internal static partial class Program
         try
         {
             await Activate(window);
+            // With many tabs open (the edition's suite leaves more) the strip scrolls: tc02-a brought into view first, or
+            // the click lands beside the window, on the desktop.
+            ShowTab("tc02-a");
+            notes.Add($"tc02-a at {Tab("tc02-a").Current.BoundingRectangle}, window {root.Current.BoundingRectangle}");
             Click(Tab("tc02-a").Current.BoundingRectangle);
             // A window just brought forward through a remote desktop session can take the first click as its activation:
             // once more if the tab did not come up (what is checked here is the outline after the close, below).
@@ -2011,6 +2020,8 @@ internal static partial class Program
             {
                 notes.Add("the first click on tc02-a did not bring it up; clicked again");
                 await Activate(window);
+                ShowTab("tc02-a");
+                notes.Add($"tc02-a at {Tab("tc02-a").Current.BoundingRectangle}");
                 Click(Tab("tc02-a").Current.BoundingRectangle);
                 await Eventually(async () => await Shown() == a, 2000);
             }
