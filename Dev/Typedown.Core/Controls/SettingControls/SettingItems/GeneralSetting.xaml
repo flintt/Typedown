@@ -24,7 +24,7 @@
             </controls:ExpanderSettingItem.Icon>
             <StackPanel>
                 <controls:NormalSettingItem Title="{u:LocaleString Key=File}">
-                    <ComboBox MinWidth="200" ItemsSource="{x:Bind enums:Enumerable.FileStartupActions}" SelectedItem="{Binding SettingsViewModel.FileStartupAction, Mode=TwoWay}">
+                    <ComboBox MinWidth="200" AutomationProperties.AutomationId="FileStartupAction" ItemsSource="{x:Bind enums:Enumerable.FileStartupActions}" SelectedItem="{Binding SettingsViewModel.FileStartupAction, Mode=TwoWay}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <controls:EnumNameBlock Value="{Binding}"/>
@@ -33,7 +33,7 @@
                     </ComboBox>
                 </controls:NormalSettingItem>
                 <controls:NormalSettingItem Title="{u:LocaleString Key=Folder}" BorderBrush="{ThemeResource CardStrokeColorDefault}" BorderThickness="0,1,0,0">
-                    <ComboBox MinWidth="200" ItemsSource="{x:Bind enums:Enumerable.FolderStartupActions}" SelectedItem="{Binding SettingsViewModel.FolderStartupAction, Mode=TwoWay}">
+                    <ComboBox MinWidth="200" AutomationProperties.AutomationId="FolderStartupAction" ItemsSource="{x:Bind enums:Enumerable.FolderStartupActions}" SelectedItem="{Binding SettingsViewModel.FolderStartupAction, Mode=TwoWay}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <controls:EnumNameBlock Value="{Binding}"/>
