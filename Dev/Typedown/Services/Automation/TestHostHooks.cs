@@ -429,11 +429,11 @@ namespace Typedown.Services.Automation
                     var center = Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetService<Core.Services.EventCenter>(app.ServiceProvider);
                     int throwing = 0, other = 0;
                     var name = "E2E.Probe." + System.Guid.NewGuid().ToString("N");
-                    using (center.GetObservable<object>(name).Subscribe(_ => { throwing++; if (throwing == 1) throw new System.InvalidOperationException("e2e: a handler that throws"); }))
-                    using (center.GetObservable<object>(name).Subscribe(_ => other++))
+                    using (System.ObservableExtensions.Subscribe(center.GetObservable<object>(name), _ => { throwing++; if (throwing == 1) throw new System.InvalidOperationException("e2e: a handler that throws"); }))
+                    using (System.ObservableExtensions.Subscribe(center.GetObservable<object>(name), _ => other++))
                     {
-                        try { center.EmitEvent(name, null); } catch (System.Exception ex) { Utilities.Log.Debug($"e2e: the message failed: {ex.Message}"); }
-                        try { center.EmitEvent(name, null); } catch (System.Exception ex) { Utilities.Log.Debug($"e2e: the message failed: {ex.Message}"); }
+                        try { center.EmitEvent(name, null); } catch (System.Exception ex) { Core.Utilities.Log.Debug($"e2e: the message failed: {ex.Message}"); }
+                        try { center.EmitEvent(name, null); } catch (System.Exception ex) { Core.Utilities.Log.Debug($"e2e: the message failed: {ex.Message}"); }
                     }
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["throwing"] = throwing, ["other"] = other };
                 })));
