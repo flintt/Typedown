@@ -75,18 +75,9 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
 
         private void RefreshThemeMenu()
         {
-            // A submenu that has been on screen keeps drawing the entries it had then, whatever its Items say
-            // later: a new theme file or a new name only appeared once the main page was rebuilt (a visit to
-            // the settings). A fresh submenu in its place draws what is there now.
-            var index = Items.IndexOf(ThemeSubMenu);
-            if (index >= 0)
-            {
-                // Removed and inserted: the menu bar's flyout follows insertions and removals, not a replacement.
-                var fresh = new MenuFlyoutSubItem { Text = ThemeSubMenu.Text, Name = nameof(ThemeSubMenu) };
-                Items.RemoveAt(index);
-                Items.Insert(index, fresh);
-                ThemeSubMenu = fresh;
-            }
+            // A fresh submenu in its place (SubMenus): one that has been on screen keeps drawing its old entries.
+            var fresh = new MenuFlyoutSubItem { Text = ThemeSubMenu.Text, Name = nameof(ThemeSubMenu) };
+            if (SubMenus.Replace(Items, ThemeSubMenu, fresh)) ThemeSubMenu = fresh;
             BuildThemeMenu();
             // Re-apply the current theme too, so edits to the file that is already selected take effect —
             // the same as the settings page's refresh. Rebuilding the menu alone only picks up added or

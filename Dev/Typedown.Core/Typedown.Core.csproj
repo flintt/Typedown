@@ -445,6 +445,7 @@
     <Compile Include="Utilities\Locale.cs" />
     <Compile Include="Utilities\Log.cs" />
     <Compile Include="Utilities\SafeFile.cs" />
+    <Compile Include="Utilities\SubMenus.cs" />
     <Compile Include="Utilities\MarkdownImages.cs" />
     <Compile Include="Utilities\TextFileFormat.cs" />
     <Compile Include="Utilities\ThemeDesignerPage.cs" />
