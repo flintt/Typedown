@@ -145,5 +145,11 @@ namespace Typedown.Core.Utilities
         public int Words { get; set; }
 
         public int Characters { get; set; }
+
+        /// <summary>
+        /// The count is of text an automation client wrote (document.replace and the like, an edition's own edits through
+        /// the same path), nobody having typed since: a change in it is not the reader's writing.
+        /// </summary>
+        public bool Automation { get; set; }
     }
 }

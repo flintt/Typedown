@@ -528,7 +528,13 @@ namespace Typedown.Core.ViewModels
             if (IsStaleReport(arg)) return;
             ContentState = arg["state"].ToObject<ContentState>();
             if (ContentState.WordCount != null)
-                EditionHooks.ReportWordCount(new WordCountReport { Editor = this, LoadId = LoadId, Words = ContentState.WordCount.Word, Characters = ContentState.WordCount.Character });
+                EditionHooks.ReportWordCount(new WordCountReport
+                {
+                    Editor = this, LoadId = LoadId, Words = ContentState.WordCount.Word, Characters = ContentState.WordCount.Character,
+                    // The text an automation client wrote, nobody having typed since - or one being applied (its report
+                    // can come before the host commits it).
+                    Automation = holdingReports || (automationText != null && string.Equals(Markdown, automationText, StringComparison.Ordinal)),
+                });
             rebuildingToc = true;
             try
             {
@@ -919,8 +925,12 @@ namespace Typedown.Core.ViewModels
         /// Commits text the page has confirmed for an automation edit: one undo step of its own (the reader's pending
         /// typing is closed first so the two never merge), the unsaved state and the revision.
         /// </summary>
+        // The text the last automation edit left: a word count of it is the client's, not the reader's (WordCountReport.Automation).
+        private string automationText;
+
         public void CommitAutomationText(string text)
         {
+            automationText = text;
             if (!string.Equals(Markdown, text, StringComparison.Ordinal))
                 ServiceProvider.GetService<TabsViewModel>()?.ActiveTab?.NoteTextChanged();
             History.CommitPending();
