@@ -92,14 +92,20 @@ internal static partial class Program
     }
 
     /// <summary>
-    /// A real click at a point on the screen. The point must be in the window: what lies under it otherwise (another
-    /// window over it) is named in the failure, as it is the click's first suspect.
+    /// A real click at a point on the screen. The point must be in the window, or in a popup of its own (a menu is a
+    /// window of its own, in the app's process): what lies under it otherwise (another window over it) is named in the
+    /// failure, as it is the click's first suspect.
     /// </summary>
     private static async Task Click(IntPtr window, int x, int y, Mouse button = Mouse.Left, int clicks = 1)
     {
         await Activate(window);
         var under = WindowFromPoint(new POINT { X = x, Y = y });
-        if (under != window && GetAncestor(under, 2) != window)
+        GetWindowThreadProcessId(window, out var process);
+        GetWindowThreadProcessId(under, out var underProcess);
+        var popup = new System.Text.StringBuilder(256);
+        GetClassName(under, popup, 256);
+        var ownPopup = underProcess == process && popup.ToString() == "Xaml_WindowedPopupClass";
+        if (under != window && GetAncestor(under, 2) != window && !ownPopup)
         {
             var name = new System.Text.StringBuilder(256);
             GetClassName(under, name, 256);
