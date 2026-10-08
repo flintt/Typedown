@@ -39,7 +39,9 @@ try {
 }
 finally {
     # The driver may have restarted the host (R04): stop every test host started from this build.
-    Get-Process Typedown -ErrorAction SilentlyContinue | Where-Object { $_.Path -eq $exe } | Stop-Process -Force -ErrorAction SilentlyContinue
+    # By the test host's own path, whatever its name: an edition's (Typeleaf.exe) was left running when only processes
+    # named Typedown were looked at.
+    Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.Path -eq $exe } | Stop-Process -Force -ErrorAction SilentlyContinue
     Start-Sleep -Milliseconds 500
     $log = Join-Path $root 'logs\debug.log'
     if ($code -ne 0 -and (Test-Path $log)) { Copy-Item $log (Join-Path $out 'debug.log') }

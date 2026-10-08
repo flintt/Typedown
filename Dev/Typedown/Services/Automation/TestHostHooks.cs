@@ -137,7 +137,7 @@ namespace Typedown.Services.Automation
                 var handled = false;
                 return Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
                 {
-                    handled = Edition.TrySet(name, value);
+                    handled = Edition.TrySet(app, name, value);
                     if (!handled) throw Params.Invalid("name", "unknown");
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject();
                 });
@@ -148,7 +148,7 @@ namespace Typedown.Services.Automation
                 var name = c.Params.RequiredString("name", allowEmpty: false);
                 return Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
                 {
-                    var value = Edition.TryGet(name) ?? throw Params.Invalid("name", "unknown");
+                    var value = Edition.TryGet(app, name) ?? throw Params.Invalid("name", "unknown");
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["value"] = value };
                 });
             }));
@@ -421,6 +421,30 @@ namespace Typedown.Services.Automation
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject();
                 });
             }));
+            // The window's editor messages with a handler that throws on the first one: how many each of two handlers got
+            // of two messages (a handler that threw was detached for good, and the message went no further).
+            methods.Add(new MethodDescriptor("test.events.throwingHandler", null, "test.events.throwingHandler/1", (c, ct) =>
+                Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    var center = Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetService<Core.Services.EventCenter>(app.ServiceProvider);
+                    int throwing = 0, other = 0;
+                    var name = "E2E.Probe." + System.Guid.NewGuid().ToString("N");
+                    using (center.GetObservable<object>(name).Subscribe(_ => { throwing++; if (throwing == 1) throw new System.InvalidOperationException("e2e: a handler that throws"); }))
+                    using (center.GetObservable<object>(name).Subscribe(_ => other++))
+                    {
+                        try { center.EmitEvent(name, null); } catch (System.Exception ex) { Utilities.Log.Debug($"e2e: the message failed: {ex.Message}"); }
+                        try { center.EmitEvent(name, null); } catch (System.Exception ex) { Utilities.Log.Debug($"e2e: the message failed: {ex.Message}"); }
+                    }
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["throwing"] = throwing, ["other"] = other };
+                })));
+            // An exception out of an async void method on the window's thread, as a click handler's would be: the process
+            // stays (it ended the app), and the exception is in the log.
+            methods.Add(new MethodDescriptor("test.app.throwUnhandled", null, "test.app.throwUnhandled/1", (c, ct) =>
+                Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    ThrowLater();
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject();
+                })));
             // The popups open in a window (menus, flyouts, a number box's buttons...), by the type of what they show.
             methods.Add(new MethodDescriptor("test.window.popups", null, "test.window.popups/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
@@ -479,10 +503,16 @@ namespace Typedown.Services.Automation
                     return (Newtonsoft.Json.Linq.JToken?)Newtonsoft.Json.Linq.JObject.FromObject(result);
                 })));
         }
+        private static async void ThrowLater()
+        {
+            await System.Threading.Tasks.Task.Delay(50);
+            throw new System.InvalidOperationException("e2e: an exception nothing catches, out of an async void method");
+        }
 #else
         public static IEditBarriers Barriers => null;
 
         public static void AddMethods(MethodTable methods) { }
 #endif
+
     }
 }

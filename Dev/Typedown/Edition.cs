@@ -46,20 +46,30 @@ namespace Typedown
         /// </summary>
         static partial void TestSet(string name, string value, ref bool handled);
 
-        internal static bool TrySet(string name, string value)
+        /// <summary>
+        /// The window test.edition.set or test.edition.get was called for, while the edition handles it: what it acts on
+        /// (an edition looking for "the newest window" itself found one closed but not yet collected).
+        /// </summary>
+        internal static Core.ViewModels.AppViewModel TestWindow { get; private set; }
+
+        internal static bool TrySet(Core.ViewModels.AppViewModel window, string name, string value)
         {
             var handled = false;
-            TestSet(name, value, ref handled);
+            TestWindow = window;
+            try { TestSet(name, value, ref handled); }
+            finally { TestWindow = null; }
             return handled;
         }
 
         /// <summary>The automation test host's test.edition.get: a state of the edition's, by name, for a test to check.</summary>
         static partial void TestGet(string name, ref string value);
 
-        internal static string TryGet(string name)
+        internal static string TryGet(Core.ViewModels.AppViewModel window, string name)
         {
             string value = null;
-            TestGet(name, ref value);
+            TestWindow = window;
+            try { TestGet(name, ref value); }
+            finally { TestWindow = null; }
             return value;
         }
 #endif
