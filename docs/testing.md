@@ -53,6 +53,7 @@ CI 的“Test editor integration”一步运行这些：
 - `mermaid-typed-check.js`: A diagram written by hand in visual mode: typing ```mermaid and Enter must give the diagram block with its preview (not a plain code block that only became a diagram after a tab or mode switch reloaded the document), and the caret must be able to leave it - by clicking the paragraph below, which the floating preview used to cover, by clicking above, or with the arrow keys - after which the new diagram is shown.
 - `security-check.js`: Raw HTML and rich renderers belong to Markdown, but they must never become script in the trusted editor page.
 - `reading-copy-check.js`: Copying in reading mode, and copy as plain text.
+- `paste-web-check.js`: HTML pasted from web pages and online editors, as Windows hands it to the page (Paste: text and HTML; HTML may carry the clipboard's CF_HTML header with the page's SourceURL), through the real paste path: tidied, sanitized, turned into Markdown in the editor's own style.
 - `spec-check.js`: Drives every CommonMark 0.31.2 example through the editor and locks what comes back out.
 <!-- END generated: editor-checks -->
 
@@ -150,6 +151,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | CP01 | Copy pasted into Word: pictures at absolute file:/// addresses, a name and an alt text with brackets, an SVG sized in pt, a JPEG |
 | TH03 | the side pane marks what is chosen (the bar under Files/Outline, the outline's and the folder tree's row pill) in a custom theme's accent, and in the system accent again without one |
 | TH02 | View > Theme > Reload themes finds a new theme file and a renamed one; the window draws in the custom theme's base whatever the built-in setting says |
+| WP01 | a web page pasted: headings with #, code fenced with its language and without line numbers, Google Docs bold and italic, late-loaded and relative pictures by their real addresses; with Insert web image copying, its pictures are copied beside the document and their addresses replaced |
 | LD01 | a load the editor gives back rewritten is loaded once more and keeps the file's text; one rewritten again is taken after that one retry, not retried without end |
 | Q01 | two windows closed one after the other: the process exits (it stayed, headless) |
 <!-- END generated: e2e-cases -->
@@ -191,6 +193,8 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | `test.theme.menu` | `reload?`, `windowId` | View > Theme: the entries it shows, after clicking its "Reload themes" item when asked (through the item's automation peer, as an assistive tool would). | TestHostHooks.cs |
 | `test.editor.rewriteLoads` | `count?`, `windowId` | The next loads of the window's editor come back rewritten, as a load that did not keep the text did once. | TestHostHooks.cs |
 | `test.dialog.press` | `button?`, `windowId` | Presses a button of the dialog open in the window (primary, secondary or close), as a click would; the button's text back. A test finding it through UI Automation found the window's own close button first. | TestHostHooks.cs |
+| `test.images.webAction` | `action?`, `path?`, `windowId` | Settings > Image > Insert web image: kept on the web ("none"), copied to a folder ("copy", relative to the document) or uploaded ("upload"). | TestHostHooks.cs |
+| `test.paste.html` | `html`, `text?`, `windowId` | Text and HTML pasted into the window's active document as from the clipboard (the paste after the clipboard is read: the page converts the HTML, then web pictures go as the setting above says); answers once done. | TestHostHooks.cs |
 | `test.window.popups` | `windowId` | The popups open in a window (menus, flyouts, a number box's buttons...), by the type of what they show. | TestHostHooks.cs |
 | `test.export.menu` | `windowId` | The entries of a window's File > Export submenu, as shown. | TestHostHooks.cs |
 | `test.pane.accent` | `windowId` | The colours the side pane marks what is chosen with: every selection indicator drawn in it (the bar under Files/Outline, the pill of each outline and folder-tree row), by where it is, with its fill. | TestHostHooks.cs |

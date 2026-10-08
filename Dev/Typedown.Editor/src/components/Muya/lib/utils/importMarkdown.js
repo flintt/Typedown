@@ -381,7 +381,12 @@ const importRegister = ContentState => {
     return rootState.children.length ? rootState.children : [this.createBlockP()]
   }
 
-  ContentState.prototype.htmlToMarkdown = (html, keeps = []) => htmlToMarkdown(html, keeps, ContentState.turndownConfig)
+  // The editor's own Markdown style (headings with #, fenced code, its list marker: this.turndownConfig). An arrow
+  // function read ContentState.turndownConfig, which is not there, and turndown fell back on its defaults: a pasted
+  // heading underlined, a pasted code block indented and merged into the paragraph above, lists marked with *.
+  ContentState.prototype.htmlToMarkdown = function (html, keeps = []) {
+    return htmlToMarkdown(html, keeps, this.turndownConfig)
+  }
 
   // turn html to blocks
   ContentState.prototype.html2State = function (html) {

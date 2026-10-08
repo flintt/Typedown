@@ -59,25 +59,34 @@ namespace Typedown.Core.Services
             }
         }
 
+        /// <summary>
+        /// A picture on the web as Settings > Image > Insert web image says (kept, copied to a folder or uploaded): its
+        /// new address. Throws what went wrong; <see cref="DoWebFileAction"/> says it in a dialog.
+        /// </summary>
+        public async Task<string> ProcessWebImageAsync(string src)
+        {
+            var result = src;
+            switch (Settings.InsertWebImageAction)
+            {
+                case Enums.InsertImageAction.CopyToPath:
+                    result = await SaveImage(InsertImageSource.Web, await GetWebImage(new(src)));
+                    break;
+                case Enums.InsertImageAction.Upload:
+                    result = await Upload(InsertImageSource.Web, await GetWebImage(new(src)));
+                    break;
+                default:
+                    return src;
+            }
+            if (UriHelper.IsAbsolutePath(result))
+                return new Uri(result).AbsoluteUri;
+            return result;
+        }
+
         public async Task<string> DoWebFileAction(string src)
         {
             try
             {
-                var result = src;
-                switch (Settings.InsertWebImageAction)
-                {
-                    case Enums.InsertImageAction.CopyToPath:
-                        result = await SaveImage(InsertImageSource.Web, await GetWebImage(new(src)));
-                        break;
-                    case Enums.InsertImageAction.Upload:
-                        result = await Upload(InsertImageSource.Web, await GetWebImage(new(src)));
-                        break;
-                    default:
-                        return src;
-                }
-                if (UriHelper.IsAbsolutePath(result))
-                    return new Uri(result).AbsoluteUri;
-                return result;
+                return await ProcessWebImageAsync(src);
             }
             catch (Exception ex)
             {

@@ -395,6 +395,32 @@ namespace Typedown.Services.Automation
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["pressed"] = button.Content?.ToString() };
                 });
             }));
+            // Settings > Image > Insert web image: kept on the web ("none"), copied to a folder ("copy", relative to the
+            // document) or uploaded ("upload").
+            methods.Add(new MethodDescriptor("test.images.webAction", null, "test.images.webAction/1", (c, ct) =>
+            {
+                var action = c.Params.OptionalEnum("action", "none", "none", "copy", "upload");
+                var path = c.Params.OptionalString("path");
+                return Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    app.SettingsViewModel.InsertWebImageAction = action == "copy" ? Core.Enums.InsertImageAction.CopyToPath
+                        : action == "upload" ? Core.Enums.InsertImageAction.Upload : Core.Enums.InsertImageAction.None;
+                    if (path != null) app.SettingsViewModel.InsertWebImageCopyPath = path;
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject();
+                });
+            }));
+            // Text and HTML pasted into the window's active document as from the clipboard (the paste after the clipboard
+            // is read: the page converts the HTML, then web pictures go as the setting above says); answers once done.
+            methods.Add(new MethodDescriptor("test.paste.html", null, "test.paste.html/1", async (c, ct) =>
+            {
+                var html = c.Params.RequiredString("html", allowEmpty: false);
+                var text = c.Params.OptionalString("text") ?? "";
+                return await await Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), async app =>
+                {
+                    await app.EditorViewModel.PasteTextAsync("normal", text, html);
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject();
+                });
+            }));
             // The popups open in a window (menus, flyouts, a number box's buttons...), by the type of what they show.
             methods.Add(new MethodDescriptor("test.window.popups", null, "test.window.popups/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>

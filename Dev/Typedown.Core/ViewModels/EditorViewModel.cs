@@ -1020,7 +1020,7 @@ namespace Typedown.Core.ViewModels
                         MarkdownEditor?.PostMessage("InsertImage", img);
                         return;
                     }
-                    MarkdownEditor?.PostMessage("Paste", new { type, text, html });
+                    await PasteTextAsync(type, text, html);
                 }
                 else if (await Clipboard.GetFileDropListAsync() is StringCollection files && files.Count > 0)
                 {
@@ -1039,6 +1039,105 @@ namespace Typedown.Core.ViewModels
             {
                 await AppContentDialog.Create(Locale.GetString("Error"), ex.Message, Locale.GetDialogString("Ok")).ShowAsync(AppViewModel.XamlRoot);
             }
+        }
+
+        /// <summary>
+        /// Text or HTML pasted (the page turns HTML into Markdown). With Settings > Image > Insert web image copying or
+        /// uploading, the pictures of pasted HTML go the same way afterwards: the text is in at once, the pictures are
+        /// fetched, and their addresses in the document replaced in one edit on the latest text (typing meanwhile is kept);
+        /// one that fails keeps its web address, all failures said in one dialog. (Only a lone picture was handled; the
+        /// pictures of a pasted web page stayed on the web.)
+        /// </summary>
+        public async Task PasteTextAsync(string type, string text, string html)
+        {
+            var tab = ServiceProvider.GetService<TabsViewModel>()?.ActiveTab;
+            MarkdownEditor?.PostMessage("Paste", new { type, text, html });
+            if (type == "pasteAsPlainText" || string.IsNullOrEmpty(html)) return;
+            if (Settings.InsertWebImageAction != Enums.InsertImageAction.CopyToPath && Settings.InsertWebImageAction != Enums.InsertImageAction.Upload) return;
+            var addresses = WebImageAddresses(html);
+            if (addresses.Count == 0 || tab == null) return;
+            // The page has the text once it has answered a flush.
+            await Task.Delay(300);
+            await FlushContentAsync(2000);
+            var inDocument = MarkdownImages.Find(Markdown ?? "").Select(r => r.Address).ToHashSet();
+            var action = ServiceProvider.GetService<ImageAction>();
+            var replacements = new Dictionary<string, string>();
+            var failures = new List<string>();
+            foreach (var address in addresses.Where(inDocument.Contains))
+            {
+                try
+                {
+                    var local = await action.ProcessWebImageAsync(address);
+                    if (!string.IsNullOrEmpty(local) && local != address) replacements[address] = local;
+                }
+                catch (Exception ex)
+                {
+                    failures.Add($"{address}: {ex.Message}");
+                }
+            }
+            Log.Debug($"paste: {addresses.Count} web picture(s) in the HTML, {replacements.Count} fetched, {failures.Count} failed");
+            if (replacements.Count > 0)
+            {
+                for (var attempt = 1; ; attempt++)
+                {
+                    try
+                    {
+                        await DocumentEdits.Coordinator.EditAsync(new AutomationDocument(AppViewModel, tab), new Typedown.Automation.EditRequest
+                        {
+                            BaseRevision = tab.Revision,
+                            Edit = current => MarkdownImages.Replace(current, replacements),
+                            AllowUnknown = true,
+                        }, System.Threading.CancellationToken.None);
+                        break;
+                    }
+                    catch (Typedown.Automation.AutomationException ex) when (ex.Kind == Typedown.Automation.AutomationErrorKind.revision_conflict && attempt < 3)
+                    {
+                        await Task.Delay(200);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Debug($"paste: the pictures' new addresses were not written: {ex.Message}");
+                        failures.AddRange(replacements.Keys.Select(a => $"{a}: {ex.Message}"));
+                        break;
+                    }
+                }
+            }
+            if (failures.Count > 0)
+                await AppContentDialog.Create(Locale.GetString("Error"), string.Join("\n", failures.Take(10)) + (failures.Count > 10 ? $"\n… +{failures.Count - 10}" : ""), Locale.GetString("Ok")).ShowAsync(AppViewModel.XamlRoot);
+        }
+
+        /// <summary>
+        /// The web addresses of the pictures in pasted HTML: their src, or where a page that loads pictures late keeps the
+        /// real one (data-original, data-src..., srcset); relative ones made absolute with the page's own address (the
+        /// clipboard's SourceURL). Pictures already written into the HTML (data:) are not on the web.
+        /// </summary>
+        internal static List<string> WebImageAddresses(string html)
+        {
+            var source = System.Text.RegularExpressions.Regex.Match(html, @"^SourceURL:(\S+)", System.Text.RegularExpressions.RegexOptions.Multiline);
+            Uri.TryCreate(source.Success ? source.Groups[1].Value : "", UriKind.Absolute, out var baseUri);
+            var found = new List<string>();
+            foreach (System.Text.RegularExpressions.Match img in System.Text.RegularExpressions.Regex.Matches(html, @"<img\b[^>]*>", System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+            {
+                foreach (System.Text.RegularExpressions.Match attr in System.Text.RegularExpressions.Regex.Matches(img.Value,
+                    @"\b(src|data-original|data-actualsrc|data-src|data-lazy-src|data-original-src|srcset|data-srcset)\s*=\s*(""([^""]*)""|'([^']*)')", System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+                {
+                    var value = System.Net.WebUtility.HtmlDecode(attr.Groups[3].Success ? attr.Groups[3].Value : attr.Groups[4].Value);
+                    var candidates = attr.Groups[1].Value.EndsWith("srcset", StringComparison.OrdinalIgnoreCase)
+                        ? value.Split(',').Select(s => s.Trim().Split(' ')[0])
+                        : new[] { value };
+                    foreach (var candidate in candidates.Where(c => c.Length > 0 && !c.StartsWith("data:", StringComparison.OrdinalIgnoreCase)))
+                    {
+                        // As written and as made absolute: the page writes the address it read, and resolves a
+                        // relative one as a browser does.
+                        var given = Uri.TryCreate(candidate, UriKind.Absolute, out var absolute);
+                        if (!given && !(baseUri != null && Uri.TryCreate(baseUri, candidate, out absolute))) continue;
+                        if (absolute.Scheme != Uri.UriSchemeHttp && absolute.Scheme != Uri.UriSchemeHttps) continue;
+                        if (given) found.Add(candidate);
+                        found.Add(absolute.AbsoluteUri);
+                    }
+                }
+            }
+            return found.Distinct().Take(50).ToList();
         }
 
         /// <summary>

@@ -163,6 +163,7 @@ internal static partial class Program
             await Case("CP01 Copy pasted into Word: pictures at absolute file:/// addresses, a name and an alt text with brackets, an SVG sized in pt, a JPEG", CP01);
             await Case("TH03 the side pane marks what is chosen (the bar under Files/Outline, the outline's and the folder tree's row pill) in a custom theme's accent, and in the system accent again without one", TH03);
             await Case("TH02 View > Theme > Reload themes finds a new theme file and a renamed one; the window draws in the custom theme's base whatever the built-in setting says", TH02);
+            await Case("WP01 a web page pasted: headings with #, code fenced with its language and without line numbers, Google Docs bold and italic, late-loaded and relative pictures by their real addresses; with Insert web image copying, its pictures are copied beside the document and their addresses replaced", WP01);
             await Case("LD01 a load the editor gives back rewritten is loaded once more and keeps the file's text; one rewritten again is taken after that one retry, not retried without end", LD01);
             // An edition's own cases (Edition.<name>.cs beside this file, in the edition's repository); none here.
             var editionCases = new List<(string Name, Func<List<string>, Task> Run)>();
@@ -266,6 +267,84 @@ internal static partial class Program
                 notes.Add("at the failure: " + FailureEvidence(name.Split(' ')[0]));
             }
             results.Add(new JObject { ["name"] = name, ["passed"] = false, ["ms"] = watch.ElapsedMilliseconds, ["error"] = e is CaseFailed ? e.Message : e.ToString(), ["notes"] = new JArray(notes) });
+        }
+    }
+
+    // A web page pasted as Windows hands it over (CF_HTML with the page's address), its pictures on a small server here.
+    private static async Task WP01(List<string> notes)
+    {
+        var png = Convert.FromBase64String("iVBORw0KGgoAAAANSUhEUgAAABAAAAAICAIAAAB/FOjAAAAAE0lEQVR4nGPQqDhBEmIY1UALDQCJj7QBup2ubwAAAABJRU5ErkJggg==");
+        var server = new System.Net.Sockets.TcpListener(System.Net.IPAddress.Loopback, 0);
+        server.Start();
+        var port = ((System.Net.IPEndPoint)server.LocalEndpoint).Port;
+        var served = new List<string>();
+        var serving = Task.Run(async () =>
+        {
+            while (true)
+            {
+                System.Net.Sockets.TcpClient client;
+                try { client = await server.AcceptTcpClientAsync(); } catch { return; }
+                using (client)
+                {
+                    var stream = client.GetStream();
+                    var reader = new StreamReader(stream);
+                    var request = await reader.ReadLineAsync() ?? "";
+                    while (!string.IsNullOrEmpty(await reader.ReadLineAsync())) { }
+                    lock (served) served.Add(request);
+                    var header = Encoding.ASCII.GetBytes($"HTTP/1.1 200 OK\r\nContent-Type: image/png\r\nContent-Length: {png.Length}\r\nConnection: close\r\n\r\n");
+                    await stream.WriteAsync(header);
+                    await stream.WriteAsync(png);
+                }
+            }
+        });
+        using var c = await Session("e2e WP01");
+        var file = Fixture("wp01.md", "# WP01\n\n");
+        var folder = Path.Combine(Path.GetDirectoryName(file)!, "wp01-images");
+        if (Directory.Exists(folder)) Directory.Delete(folder, true);
+        var id = await Open(c, file);
+        var windowId = await WindowIdOf(c, id);
+        var site = $"http://127.0.0.1:{port}";
+        var fragment = "<h2>Pasted</h2><p>Some <span style=\"font-weight:700\">bold</span> text.</p>"
+            + "<pre class=\"prettyprint\"><code class=\"language-python\">print(1)\nprint(2)\n</code><ul class=\"pre-numbering\"><li>1</li><li>2</li></ul></pre>"
+            + $"<p><img src=\"{site}/direct.png\" alt=\"direct\"></p>"
+            + $"<p><img src=\"data:image/gif;base64,R0lGODlhAQABAAAAACw=\" data-original=\"{site}/lazy.png\" alt=\"lazy\"></p>"
+            + "<p><img src=\"img/relative.png\" alt=\"relative\"></p>";
+        var html = $"Version:0.9\r\nStartHTML:0\r\nEndHTML:0\r\nStartFragment:0\r\nEndFragment:0\r\nSourceURL:{site}/article/page.html\r\n<html><body><!--StartFragment-->{fragment}<!--EndFragment--></body></html>";
+        try
+        {
+            // Kept on the web: the conversion alone.
+            await c.Call("test.images.webAction", new { windowId, action = "none" });
+            await c.Call("test.editor.focus", new { windowId });
+            await c.Call("test.paste.html", new { windowId, html });
+            string text = "";
+            await Eventually(async () => (text = (string)(await Get(c, id))["text"]!).Contains("relative"), 5000);
+            notes.Add("kept on the web: " + text.Replace("\n", "\\n"));
+            Check(text.Contains("## Pasted"), "a heading is written with #");
+            Check(text.Contains("**bold**"), "bold given by style is bold");
+            Check(text.Contains("```python\nprint(1)\nprint(2)\n```") && !text.Contains("- 1"), "code is fenced with its language, without its line numbers");
+            Check(text.Contains($"]({site}/direct.png)") && text.Contains($"]({site}/lazy.png)") && text.Contains($"]({site}/article/img/relative.png)"), "pictures by their real addresses: the late-loaded one's and the relative one's made absolute");
+
+            // Copied beside the document: the three pictures fetched and their addresses replaced.
+            await c.Call("document.replace", new { documentId = id, baseRevision = await Revision(c, id), text = "# WP01\n\n", reveal = "document", normalizationPolicy = "allowUnknown" });
+            await c.Call("test.images.webAction", new { windowId, action = "copy", path = "./wp01-images" });
+            await c.Call("test.editor.focus", new { windowId });
+            await c.Call("test.paste.html", new { windowId, html });
+            await Eventually(async () => !(text = (string)(await Get(c, id))["text"]!).Contains(site) && text.Contains("relative"), 8000);
+            var copied = Directory.Exists(folder) ? Directory.GetFiles(folder).Length : 0;
+            notes.Add($"copied: {copied} file(s); served {string.Join(", ", served)}; text: {text.Replace("\n", "\\n")}");
+            Check(!text.Contains(site), "with Insert web image copying, no picture is left on the web");
+            Check(copied == 3 && text.Contains("wp01-images/"), "the three pictures are copied beside the document and the document points at them");
+        }
+        finally
+        {
+            try { await c.Call("test.images.webAction", new { windowId, action = "none" }); } catch { }
+            try
+            {
+                await c.Call("document.replace", new { documentId = id, baseRevision = await Revision(c, id), text = "# WP01\n\n", reveal = "document", normalizationPolicy = "allowUnknown" });
+                await c.Call("document.save", new { documentId = id, baseRevision = await Revision(c, id) });
+            }
+            catch { }
+            server.Stop();
         }
     }
 
