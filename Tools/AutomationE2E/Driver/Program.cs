@@ -2078,12 +2078,12 @@ internal static partial class Program
             notes.Add($"written: {File.Exists(path)}; notice: {text}");
             Check(File.Exists(path), "the export is written");
             Check(shown == path && text != null && text.Contains(path), "a notice says where");
-            var notice = FindIn(window, "ExportNotice");
-            Check(notice != null && FindIn(window, "ExportNoticeOpen") != null && FindIn(window, "ExportNoticeFolder") != null, "it is on the window, with buttons to open the file and its folder");
+            // The notice's frame has no automation peer (a Border); its text and buttons do.
+            Check(FindIn(window, "ExportNoticeText") != null && FindIn(window, "ExportNoticeOpen") != null && FindIn(window, "ExportNoticeFolder") != null, "it is on the window, with buttons to open the file and its folder");
             var close = FindIn(window, "ExportNoticeClose") ?? throw new CaseFailed("no close button on the notice");
             ((System.Windows.Automation.InvokePattern)close.GetCurrentPattern(System.Windows.Automation.InvokePattern.Pattern)).Invoke();
             await Task.Delay(500);
-            Check(await Notice() == null && FindIn(window, "ExportNotice") == null, "closed, it is gone");
+            Check(await Notice() == null && FindIn(window, "ExportNoticeText") == null, "closed, it is gone");
 
             await c.Call("test.settings.set", new { windowId, name = "AfterExport", value = 0 });
             var quiet = Path.Combine(testRoot, "ex02-quiet.html");
