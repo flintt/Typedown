@@ -59,6 +59,27 @@ const samples = [
     absent: ['Title##'],
   },
   {
+    name: 'a page whose first block is a picture, pasted at the end of a heading line, starts below the heading',
+    start: '# Title\n',
+    html: `<p><img src="https://example.com/a.png" alt="a"></p><p>after</p>`,
+    expect: ['# Title\n\n![a](https://example.com/a.png)\n\nafter'],
+    absent: ['Title!['],
+  },
+  {
+    name: 'two paragraphs pasted at the end of a heading line start below it',
+    start: '# Title\n',
+    html: `<p>first</p><p>second</p>`,
+    expect: ['# Title\n\nfirst\n\nsecond'],
+    absent: ['Titlefirst'],
+  },
+  {
+    name: 'a few words pasted at the end of a heading line still join the heading',
+    start: '# Title\n',
+    html: `<span>More</span>`,
+    expect: ['# TitleMore'],
+    absent: ['# Title\n\nMore'],
+  },
+  {
     name: 'a javascript: address in a late-load attribute is not made a picture address',
     html: `<p>x</p><p><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" data-original="javascript:window.__typedownXss.push('lazy')" alt="bad"></p><p><img src="missing://x" onerror="window.__typedownXss.push('onerror')" alt="ev"></p>`,
     absent: ['javascript:'],

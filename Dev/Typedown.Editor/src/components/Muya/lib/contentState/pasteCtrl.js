@@ -8,11 +8,14 @@ const LINE_BREAKS_REG = /\n/
 
 const pasteCtrl = ContentState => {
   // check paste type: `MERGE` or `NEWLINE`
-  ContentState.prototype.checkPasteType = function (start, fragment) {
+  ContentState.prototype.checkPasteType = function (start, fragment, fragmentCount = 1) {
     const fragmentType = fragment.type
     const parent = this.getParent(start)
 
     if (fragmentType === 'p') {
+      // Several blocks (a web page) pasted on a heading's line start below it: merged, the page's first paragraph or
+      // picture became part of the heading ("# Title![picture](...)"). A few words pasted into a heading still join it.
+      if (fragmentCount > 1 && parent && /^h\d$/.test(parent.type)) return 'NEWLINE'
       return 'MERGE'
     } else if (/^h\d/.test(fragmentType)) {
       // A heading is a block of its own: merged into the line the cursor is on, its marker came in as text ("# Title##
@@ -443,7 +446,7 @@ const pasteCtrl = ContentState => {
     // Step 2: when insert the fragments, check begin a new block, or insert into pre block.
     const firstFragment = stateFragments[0]
     const tailFragments = stateFragments.slice(1)
-    const pasteType = this.checkPasteType(startBlock, firstFragment)
+    const pasteType = this.checkPasteType(startBlock, firstFragment, stateFragments.length)
 
     const getLastBlock = blocks => {
       const len = blocks.length
