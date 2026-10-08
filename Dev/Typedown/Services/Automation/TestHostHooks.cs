@@ -465,8 +465,8 @@ namespace Typedown.Services.Automation
                         : global::Windows.UI.Xaml.Media.VisualTreeHelper.GetOpenPopupsForXamlRoot(app.XamlRoot).Select(p => p.Child?.GetType().Name ?? "empty").ToList();
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["popups"] = new Newtonsoft.Json.Linq.JArray(open) };
                 })));
-            // The test host's title marker ("AUTOMATION TEST HOST ·") on (show: true) or off in every window, for
-            // screenshots that are to look like the app.
+            // The test host's title markers ("AUTOMATION TEST HOST ·" and the connected client's note) on (show: true)
+            // or off in every window, for screenshots that are to look like the app.
             methods.Add(new MethodDescriptor("test.app.titleMarker", null, "test.app.titleMarker/1", (c, ct) =>
             {
                 Core.ViewModels.UIViewModel.ShowTestHostMarker = c.Params.OptionalBoolean("show", true);

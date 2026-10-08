@@ -162,8 +162,8 @@ namespace Typedown.Core.ViewModels
         }
 
         /// <summary>
-        /// The test host's title says it is one; screenshots taken with it (Tools/Store, the website) turn that off
-        /// (test.app.titleMarker). Only ever read by the test host.
+        /// The test host's title says it is one, and that a client is connected; screenshots taken with it (the
+        /// website) turn both off (test.app.titleMarker). Only ever read by the test host.
         /// </summary>
         public static bool ShowTestHostMarker { get; set; } = true;
 
@@ -188,8 +188,10 @@ namespace Typedown.Core.ViewModels
                 if (SettingsViewModel.ReadOnly)
                     title.Append(" \u00b7 " + Locale.GetString("ReadOnlyMode"));
                 // Automation is visible in the title for the same reason: the status bar can be switched off, the
-                // title cannot, and no client can clear it.
-                if (!string.IsNullOrEmpty(AutomationNotice))
+                // title cannot, and no client can clear it - except in the test host taking screenshots, whose own
+                // driver is the client (test.app.titleMarker).
+                if (Config.IsAutomationTestHost && !ShowTestHostMarker) { }
+                else if (!string.IsNullOrEmpty(AutomationNotice))
                     title.Append(" \u00b7 " + AutomationNotice);
                 else if (AutomationConnected)
                     title.Append(" \u00b7 " + Locale.GetString("AutomationConnected"));
