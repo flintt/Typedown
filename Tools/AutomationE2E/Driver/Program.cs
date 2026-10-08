@@ -2005,7 +2005,15 @@ internal static partial class Program
         {
             await Activate(window);
             Click(Tab("tc02-a").Current.BoundingRectangle);
-            await Task.Delay(2000);
+            // A window just brought forward through a remote desktop session can take the first click as its activation:
+            // once more if the tab did not come up (what is checked here is the outline after the close, below).
+            if (!await Eventually(async () => await Shown() == a, 2000))
+            {
+                notes.Add("the first click on tc02-a did not bring it up; clicked again");
+                await Activate(window);
+                Click(Tab("tc02-a").Current.BoundingRectangle);
+                await Eventually(async () => await Shown() == a, 2000);
+            }
             Check(await Shown() == a, "the click shows tc02-a");
             notes.Add("tc02-a shown, outline: " + Top());
             var close = Tab("tc02-a").FindAll(System.Windows.Automation.TreeScope.Descendants, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.Button))
