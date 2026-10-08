@@ -254,7 +254,9 @@ internal static partial class Program
         {
             // Every case is bounded: a hang is a failure with what it got to, never a run that never ends.
             var run = body(notes);
-            if (await Task.WhenAny(run, Task.Delay(TimeSpan.FromSeconds(120))) != run) throw new CaseFailed("the case did not finish within 120 s");
+            // Pictures in several languages take their time; any other case that runs past two minutes is stuck.
+            var limit = name.StartsWith("SHOT") ? 900 : 120;
+            if (await Task.WhenAny(run, Task.Delay(TimeSpan.FromSeconds(limit))) != run) throw new CaseFailed($"the case did not finish within {limit} s");
             await run;
             results.Add(new JObject { ["name"] = name, ["passed"] = true, ["ms"] = watch.ElapsedMilliseconds, ["notes"] = new JArray(notes) });
         }
