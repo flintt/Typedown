@@ -1009,7 +1009,7 @@
   <data name="UploadLocalImages" xml:space="preserve">
     <value>Жергілікті суреттерді кері жүктеу</value>
   </data>
-  <data name="Export.Done" xml:space="preserve">
+  <data name="ExportedTo" xml:space="preserve">
     <value>{0} ішіне экспортталды</value>
   </data>
 </root>

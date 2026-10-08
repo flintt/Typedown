@@ -1009,7 +1009,7 @@
   <data name="UploadLocalImages" xml:space="preserve">
     <value>உள்ளூர் படங்களைப் பதிவேற்றவும்</value>
   </data>
-  <data name="Export.Done" xml:space="preserve">
+  <data name="ExportedTo" xml:space="preserve">
     <value>{0} க்கு ஏற்றுமதி செய்யப்பட்டது</value>
   </data>
 </root>

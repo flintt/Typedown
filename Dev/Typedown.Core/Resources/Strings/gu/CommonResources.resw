@@ -1009,7 +1009,7 @@
   <data name="UploadLocalImages" xml:space="preserve">
     <value>સ્થાનિક ઇમેજો અપલોડ કરો</value>
   </data>
-  <data name="Export.Done" xml:space="preserve">
+  <data name="ExportedTo" xml:space="preserve">
     <value>{0} માં નિકાસ કર્યું</value>
   </data>
 </root>

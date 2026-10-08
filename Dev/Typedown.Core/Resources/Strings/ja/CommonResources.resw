@@ -1009,7 +1009,7 @@
   <data name="UploadLocalImages" xml:space="preserve">
     <value>ローカル画像をアップロード</value>
   </data>
-  <data name="Export.Done" xml:space="preserve">
+  <data name="ExportedTo" xml:space="preserve">
     <value>{0} にエクスポートしました</value>
   </data>
 </root>

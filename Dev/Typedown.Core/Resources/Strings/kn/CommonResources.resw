@@ -1009,7 +1009,7 @@
   <data name="UploadLocalImages" xml:space="preserve">
     <value>ಸ್ಥಳೀಯ ಚಿತ್ರಗಳನ್ನು ಅಪ್ ಲೋಡ್ ಮಾಡಿ</value>
   </data>
-  <data name="Export.Done" xml:space="preserve">
+  <data name="ExportedTo" xml:space="preserve">
     <value>{0} ಗೆ ರಫ್ತು ಮಾಡಲಾಗಿದೆ</value>
   </data>
 </root>

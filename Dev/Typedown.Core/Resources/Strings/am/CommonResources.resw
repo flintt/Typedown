@@ -1008,7 +1008,7 @@
   <data name="UploadLocalImages" xml:space="preserve">
     <value>የአካባቢ ምስሎችን ስቀል</value>
   </data>
-  <data name="Export.Done" xml:space="preserve">
+  <data name="ExportedTo" xml:space="preserve">
     <value>ወደ {0} ተልኳል</value>
   </data>
 </root>

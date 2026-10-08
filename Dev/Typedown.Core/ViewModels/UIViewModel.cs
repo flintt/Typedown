@@ -50,7 +50,7 @@ namespace Typedown.Core.ViewModels
 
         public bool ExportedNoticeOpen => ExportedPath != null;
 
-        public string ExportedNotice => ExportedPath == null ? null : string.Format(Locale.GetString("Export.Done"), ExportedPath);
+        public string ExportedNotice => ExportedPath == null ? null : string.Format(Locale.GetString("ExportedTo"), ExportedPath);
 
         private DispatcherTimer exportedTimer;
 

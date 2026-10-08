@@ -1028,7 +1028,7 @@
   <data name="UploadLocalImages" xml:space="preserve">
     <value>Upload local images</value>
   </data>
-  <data name="Export.Done" xml:space="preserve">
+  <data name="ExportedTo" xml:space="preserve">
     <value>Exported to {0}</value>
   </data>
 </root>
