@@ -198,7 +198,7 @@ namespace Typedown.Core.Controls.EditorControls.ContextMenuItems
         private async void ShowError(Exception ex)
         {
             Log.Debug($"picture menu: {ex}");
-            try { await AppContentDialog.Create(Locale.GetString("Error"), ex.Message, Locale.GetString("Ok")).ShowAsync(XamlRoot); }
+            try { await AppContentDialog.Create(Locale.GetString("Error"), ex.Message, Locale.GetString("Ok")).ShowAsync(ViewModel?.XamlRoot); }
             catch { }
         }
 
