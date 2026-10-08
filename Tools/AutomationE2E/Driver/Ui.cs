@@ -98,13 +98,22 @@ internal static partial class Program
     /// </summary>
     private static async Task Click(IntPtr window, int x, int y, Mouse button = Mouse.Left, int clicks = 1)
     {
-        await Activate(window);
+        // An open menu is clicked as it is: bringing the window to the front first closed it.
+        bool OwnPopup(IntPtr at)
+        {
+            GetWindowThreadProcessId(window, out var process);
+            GetWindowThreadProcessId(at, out var atProcess);
+            var kind = new System.Text.StringBuilder(256);
+            GetClassName(at, kind, 256);
+            return atProcess == process && kind.ToString() == "Xaml_WindowedPopupClass";
+        }
         var under = WindowFromPoint(new POINT { X = x, Y = y });
-        GetWindowThreadProcessId(window, out var process);
-        GetWindowThreadProcessId(under, out var underProcess);
-        var popup = new System.Text.StringBuilder(256);
-        GetClassName(under, popup, 256);
-        var ownPopup = underProcess == process && popup.ToString() == "Xaml_WindowedPopupClass";
+        var ownPopup = OwnPopup(under);
+        if (!ownPopup)
+        {
+            await Activate(window);
+            under = WindowFromPoint(new POINT { X = x, Y = y });
+        }
         if (under != window && GetAncestor(under, 2) != window && !ownPopup)
         {
             var name = new System.Text.StringBuilder(256);
