@@ -1,4 +1,5 @@
-﻿using Windows.ApplicationModel;
+﻿using Typedown.Core.Utilities;
+using Windows.ApplicationModel;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -33,8 +34,32 @@ namespace Typedown.Core.Controls
             return version + " (" + buildKind + ")";
         }
 
+        /// <summary>
+        /// The ways to give feedback an edition offers instead of the link (set from Edition.Initialize): Send feedback
+        /// opens them as a menu. Typedown leaves it null and the button opens its GitHub issues.
+        /// </summary>
+        public static System.Func<ViewModels.AppViewModel, System.Collections.Generic.IEnumerable<MenuFlyoutItemBase>> FeedbackItems { get; set; }
+
         private void FeedBackButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
+            try
+            {
+                var items = FeedbackItems?.Invoke(this.GetService<ViewModels.AppViewModel>());
+                if (items != null)
+                {
+                    var menu = new MenuFlyout();
+                    foreach (var item in items) menu.Items.Add(item);
+                    if (menu.Items.Count > 0)
+                    {
+                        menu.ShowAt(FeedBackButton);
+                        return;
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Utilities.Log.WriteLocal("AboutFeedback", ex.ToString());
+            }
             // Feedback goes to the edition's GitHub issues, where it reaches the people who build it, rather
             // than the original author's server that the in-app dialog posted to.
             Utilities.Common.OpenUrl(Typedown.Automation.Brand.FeedbackUrl);
