@@ -63,7 +63,13 @@ namespace Typedown
             Log.Debug($"startup: version={Core.Controls.AboutApp.GetAppVersion()} windowsBuild={Config.WindowsBuild} osVersion={Environment.OSVersion.VersionString} mica={Config.IsMicaSupported} packaged={Config.IsPackaged} elevated={IsElevated()} exe={AppDomain.CurrentDomain.BaseDirectory}");
             try
             {
-                global::Windows.UI.Xaml.Application.Current.UnhandledException += (_, e) => Log.WriteLocal("XamlUnhandledException", $"{e.Message}\n{e.Exception}");
+                // Logged and handled: an exception out of a click handler or an async void method ended the process,
+                // with whatever was not saved yet. Out of memory is left to end it.
+                global::Windows.UI.Xaml.Application.Current.UnhandledException += (_, e) =>
+                {
+                    Log.WriteLocal("XamlUnhandledException", $"{e.Message}\n{e.Exception}");
+                    if (e.Exception is not OutOfMemoryException) e.Handled = true;
+                };
             }
             catch (Exception ex)
             {

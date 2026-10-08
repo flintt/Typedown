@@ -6,6 +6,7 @@ import { remote } from "services/remote";
 import transport from "services/transport";
 import './index.scss'
 import ExportHtml from "services/exportHtml";
+import { errorText } from "services/errorText";
 import { htmlToMarkdown } from "services/importHtml";
 import { DEFAULT_TURNDOWN_CONFIG } from "components/Muya/lib/config";
 import { getHtmlToc, getTOC } from "services/common";
@@ -145,10 +146,8 @@ const Editor: React.FC = () => {
             const body = new DOMParser().parseFromString(`<!DOCTYPE html><html><body>${html}</body></html>`, 'text/html').body
             if (diagramsAsPictures) await diagramsToPictures(body)
             transport.postMessage('RenderedXhtml', { token, xhtml: new XMLSerializer().serializeToString(body) })
-        } catch (e: any) {
-            // What went wrong, readable: a library may throw an object that is not an Error ("[object Object]").
-            const message = e?.message ?? (typeof e === 'object' ? (() => { try { return JSON.stringify(e) } catch { return String(e) } })() : String(e))
-            transport.postMessage('RenderedXhtml', { token, error: message })
+        } catch (e) {
+            transport.postMessage('RenderedXhtml', { token, error: errorText(e) })
         }
     }), []);
 
@@ -330,7 +329,17 @@ const Editor: React.FC = () => {
                 console.log('window.print failed, printing the export instead', e)
             }
         }
-        const html = await new ExportHtml(markdownRef.current, { ...optionsRef.current, baseUrl }).generate(generateOption)
+        // A failure is told to the host, which says it: the reader had picked a file and nothing came.
+        let html: string
+        try {
+            html = await new ExportHtml(markdownRef.current, { ...optionsRef.current, baseUrl }).generate(generateOption)
+        } catch (e) {
+            console.log('export failed', e)
+            const error = errorText(e)
+            if (type == 'print') remote.printHTML({ error, context })
+            else remote.exportCallback({ error, context })
+            return
+        }
         if (type == 'print') {
             remote.printHTML({ html, context })
         } else {
@@ -339,7 +348,8 @@ const Editor: React.FC = () => {
     }), []);
 
     useEffect(() => transport.addListener<{ type: string, text: string }>('ImportFile', ({ text }) => {
-        // Imported content is a genuine edit: show it and report it to the host.
+        // Imported content is a genuine edit: show it and report it to the host. (A conversion that throws reaches the
+        // host's log as a page error.)
         const markdown = htmlToMarkdown(text, [], DEFAULT_TURNDOWN_CONFIG)
         onMarkdownChange(markdown)
         setContentVersion(v => v + 1)

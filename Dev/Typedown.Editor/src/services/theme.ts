@@ -3,10 +3,12 @@ import { remote } from 'services/remote';
 
 transport.addListener('ThemeChanged', onThemeChanged)
 
-remote.getCurrentTheme().then(arg => {
-    onThemeChanged(arg);
-    setTimeout(() => remote.contentLoaded(), 0);
-})
+// The host shows the editor once told the content is loaded: told whatever happens to the theme (a theme that could
+// not be read or applied left the editor invisible).
+remote.getCurrentTheme()
+    .then(arg => onThemeChanged(arg))
+    .catch(err => console.log('theme: the current theme could not be applied', err))
+    .finally(() => setTimeout(() => remote.contentLoaded(), 0))
 
 function getorCreateStyle(id: string) {
     let style = document.getElementById(id) as HTMLLinkElement;
@@ -21,7 +23,9 @@ function getorCreateStyle(id: string) {
     return style;
 }
 
-function onThemeChanged({ theme, accentColor, background }: any) {
+function onThemeChanged(arg: any) {
+    let { theme } = arg ?? {};
+    const { accentColor, background } = arg ?? {};
     const editorStyleDocument = getorCreateStyle("link_style_editor");
     const prismjsStyleDocument = getorCreateStyle("link_style_prismjs");
     const codemirrorStyleDocument = getorCreateStyle("link_style_codemirror");

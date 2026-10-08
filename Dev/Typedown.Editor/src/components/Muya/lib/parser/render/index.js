@@ -192,56 +192,56 @@ class StateRender {
     return this.mermaidRenderQueue
   }
 
+  // Called without await: it never rejects. Each renderer is loaded when a diagram of its kind is there, so one that
+  // cannot be loaded leaves only its own diagrams undrawn (loading all four first, one failing left every flowchart,
+  // sequence and Vega-Lite block undrawn and the queue never cleared).
   async renderDiagram() {
     const cache = this.diagramCache
-    if (cache.size) {
-      const RENDER_MAP = {
-        flowchart: await loadRenderer('flowchart'),
-        sequence: await loadRenderer('sequence'),
-        plantuml: await loadRenderer('plantuml'),
-        'vega-lite': await loadRenderer('vega-lite')
+    if (!cache.size) return
+    const entries = [...cache.entries()]
+    this.diagramCache.clear()
+    const NAMES = { flowchart: 'Flow Chart', sequence: 'Sequence', plantuml: 'PlantUML', 'vega-lite': 'Vega-Lite' }
+    const renderers = {}
+    for (const [key, value] of entries) {
+      const target = document.querySelector(key)
+      if (!target) {
+        continue
       }
-
-      for (const [key, value] of cache.entries()) {
-        const target = document.querySelector(key)
-        if (!target) {
-          continue
-        }
-        const { code, functionType } = value
-        const render = RENDER_MAP[functionType]
-        const options = {}
-        if (functionType === 'sequence') {
-          Object.assign(options, { theme: this.muya.options.sequenceTheme })
-        } else if (functionType === 'vega-lite') {
-          Object.assign(options, {
-            actions: false,
-            tooltip: false,
-            renderer: 'svg',
-            theme: window.actualTheme == 'dark' ? 'dark' : 'latimes'
-          })
-        }
-        try {
-          if (functionType === 'flowchart' || functionType === 'sequence') {
-            const diagram = render.parse(code)
-            target.innerHTML = ''
-            diagram.drawSVG(target, options)
-          } else if (functionType === 'plantuml') {
-            target.innerHTML = ''
-            if (this.muya.options.renderPlantUml) {
-              render.parse(code).insertImgElement(target, this.muya.options.plantUmlServer)
-            } else {
-              // Off (the default): nothing goes to plantuml.com; the block says so (assets/styles/index.css).
-              target.classList.add('ag-plantuml-off')
-            }
-          } else if (functionType === 'vega-lite') {
-            await render(key, JSON.parse(code), options)
+      const { code, functionType } = value
+      const options = {}
+      if (functionType === 'sequence') {
+        Object.assign(options, { theme: this.muya.options.sequenceTheme })
+      } else if (functionType === 'vega-lite') {
+        Object.assign(options, {
+          actions: false,
+          tooltip: false,
+          renderer: 'svg',
+          theme: window.actualTheme == 'dark' ? 'dark' : 'latimes'
+        })
+      }
+      try {
+        if (!(functionType in renderers)) renderers[functionType] = await loadRenderer(functionType)
+        const render = renderers[functionType]
+        if (functionType === 'flowchart' || functionType === 'sequence') {
+          const diagram = render.parse(code)
+          target.innerHTML = ''
+          diagram.drawSVG(target, options)
+        } else if (functionType === 'plantuml') {
+          target.innerHTML = ''
+          if (this.muya.options.renderPlantUml) {
+            render.parse(code).insertImgElement(target, this.muya.options.plantUmlServer)
+          } else {
+            // Off (the default): nothing goes to plantuml.com; the block says so (assets/styles/index.css).
+            target.classList.add('ag-plantuml-off')
           }
-        } catch (err) {
-          target.innerHTML = `< Invalid ${functionType === 'flowchart' ? 'Flow Chart' : 'Sequence'} Codes >`
-          target.classList.add(CLASS_OR_ID.AG_MATH_ERROR)
+        } else if (functionType === 'vega-lite') {
+          await render(key, JSON.parse(code), options)
         }
+      } catch (err) {
+        console.log(`diagram: a ${functionType} diagram could not be drawn`, err)
+        target.innerHTML = `< Invalid ${NAMES[functionType] || functionType} Codes >`
+        target.classList.add(CLASS_OR_ID.AG_MATH_ERROR)
       }
-      this.diagramCache.clear()
     }
   }
 

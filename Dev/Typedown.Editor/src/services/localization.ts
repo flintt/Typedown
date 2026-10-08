@@ -30,7 +30,7 @@ const load = () => remote.getStringResources({ names }).then(dic => {
         document.documentElement.style.setProperty(`--${name}`, JSON.stringify(text))
         document.documentElement.style.setProperty(`--${camel(name)}`, JSON.stringify(text))
     }
-});
+}).catch(err => console.log('localization: the editor strings could not be read', err));
 
 load();
 

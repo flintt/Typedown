@@ -78,12 +78,22 @@ function initLoadLanguage(Prism) {
         })
       } else {
         delete Prism.languages[lang]
-        await import('prismjs/components/prism-' + lang)
-        defer.resolve({
-          lang,
-          status: 'loaded'
-        })
-        loadedLanguages.add(lang)
+        // A language whose grammar does not load leaves its block unhighlighted, and the others go on: the promise
+        // for it was never settled, and everything waiting on Promise.all waited for good.
+        try {
+          await import('prismjs/components/prism-' + lang)
+          defer.resolve({
+            lang,
+            status: 'loaded'
+          })
+          loadedLanguages.add(lang)
+        } catch (err) {
+          console.log(`prism: the ${lang} grammar could not be loaded`, err)
+          defer.resolve({
+            lang,
+            status: 'noexist'
+          })
+        }
       }
     })
 

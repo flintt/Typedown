@@ -63,6 +63,16 @@ class ExportHtml {
 
   async renderMermaid() {
     const codes = this.exportContainer.querySelectorAll('code.language-mermaid')
+    // Mermaid is loaded only for a document that has a diagram: one that failed to load stopped every export.
+    if (codes.length === 0) return
+    // Mermaid that cannot be loaded leaves its diagrams as their source, and the rest of the export goes on.
+    let mermaid
+    try {
+      mermaid = await loadRenderer('mermaid')
+    } catch (err) {
+      console.log('export: Mermaid could not be loaded; its diagrams stay code', err)
+      return
+    }
     for (const code of codes) {
       const preEle = code.parentNode
       const mermaidContainer = document.createElement('div')
@@ -70,7 +80,6 @@ class ExportHtml {
       mermaidContainer.classList.add('mermaid')
       preEle.replaceWith(mermaidContainer)
     }
-    const mermaid = await loadRenderer('mermaid')
     // The live preview follows the app theme, but HTML export is always light:
     // render with the `default` theme. (Could be made configurable in the future.)
     // Labels as SVG text rather than HTML inside the SVG when the diagram is to become a picture: a canvas a
@@ -105,13 +114,20 @@ class ExportHtml {
 
   async renderDiagram() {
     const selector = 'code.language-vega-lite, code.language-flowchart, code.language-sequence, code.language-plantuml'
-    const RENDER_MAP = {
-      flowchart: await loadRenderer('flowchart'),
-      sequence: await loadRenderer('sequence'),
-      plantuml: await loadRenderer('plantuml'),
-      'vega-lite': await loadRenderer('vega-lite')
-    }
     const codes = this.exportContainer.querySelectorAll(selector)
+    // Each renderer loaded when a diagram of its kind is there, and one that cannot be loaded leaves only its diagrams
+    // as code: loading all four first, one failing stopped every export, diagrams or not.
+    const renderers = {}
+    const RENDER_MAP = new Proxy({}, { get: (_, type) => renderers[type] })
+    const ensure = async type => {
+      if (!(type in renderers)) {
+        try { renderers[type] = await loadRenderer(type) } catch (err) {
+          console.log(`export: the ${type} renderer could not be loaded`, err)
+          renderers[type] = null
+        }
+      }
+      return renderers[type]
+    }
     for (const code of codes) {
       const rawCode = unescapeHTML(code.innerHTML)
       const functionType = (() => {
@@ -128,6 +144,7 @@ class ExportHtml {
       // Drawing PlantUML off (the default): the export keeps the block as code rather than an image fetched from
       // plantuml.com with the diagram's source - by the export, and by whoever opens the file.
       if (functionType === 'plantuml' && !this.options?.renderPlantUml) continue
+      if (!(await ensure(functionType))) continue
       const render = RENDER_MAP[functionType]
       const preParent = code.parentNode
       const diagramContainer = document.createElement('div')

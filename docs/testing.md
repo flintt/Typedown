@@ -55,6 +55,7 @@ CI 的“Test editor integration”一步运行这些：
 - `reading-copy-check.js`: Copying in reading mode, and copy as plain text.
 - `paste-web-check.js`: HTML pasted from web pages and online editors, as Windows hands it to the page (Paste: text and HTML; HTML may carry the clipboard's CF_HTML header with the page's SourceURL), through the real paste path: tidied, sanitized, turned into Markdown in the editor's own style.
 - `export-mermaid-error-check.js`: A document with a Mermaid diagram whose text Mermaid cannot read, rendered as the exports render it (RenderXhtml, the path of the PDF, HTML and other exports).
+- `renderer-failure-check.js`: What the page does when a part of it fails: a renderer that cannot be loaded (Mermaid's script refused), and an error nothing catches.
 - `spec-check.js`: Drives every CommonMark 0.31.2 example through the editor and locks what comes back out.
 <!-- END generated: editor-checks -->
 

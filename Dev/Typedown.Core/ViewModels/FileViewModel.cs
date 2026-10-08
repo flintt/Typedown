@@ -747,10 +747,21 @@ namespace Typedown.Core.ViewModels
             }
         }
 
+        // The page could not make the export's HTML (a renderer failed): said here, with its reason.
+        private async Task<bool> ShowExportError(JToken args)
+        {
+            var error = args?["error"]?.ToString();
+            if (string.IsNullOrEmpty(error)) return false;
+            Log.Debug($"export: the page could not make the HTML: {error}");
+            await AppContentDialog.Create(Locale.GetDialogString("ExportErrorTitle"), error, Locale.GetString("Ok")).ShowAsync(AppViewModel.XamlRoot);
+            return true;
+        }
+
         private async Task<bool> PrintHTML(JToken args)
         {
             try
             {
+                if (await ShowExportError(args)) return false;
                 var html = args["html"].ToString();
                 var fileExport = ServiceProvider.GetService<IFileExport>();
                 await fileExport.Print(Path.GetDirectoryName(FilePath), html, FileName);
@@ -767,6 +778,7 @@ namespace Typedown.Core.ViewModels
         {
             try
             {
+                if (await ShowExportError(args)) return false;
                 var html = args["html"].ToString();
                 var filePath = args["context"]["filePath"].ToString();
                 var configId = args["context"]["configId"].ToObject<int>();

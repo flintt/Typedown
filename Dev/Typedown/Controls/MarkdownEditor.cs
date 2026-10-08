@@ -84,8 +84,22 @@ namespace Typedown.Controls
 
         private static readonly HashSet<ulong> reported = new();
 
+        // When the page fell over: three times in a minute is a document the visual editor cannot draw, and reloading it
+        // again only fell over again, without end.
+        private readonly Queue<DateTime> crashes = new();
+
         private void OnUnhandledException(string error)
         {
+            var now = DateTime.UtcNow;
+            crashes.Enqueue(now);
+            while (crashes.Count > 0 && now - crashes.Peek() > TimeSpan.FromMinutes(1)) crashes.Dequeue();
+            if (crashes.Count >= 3 && AppViewModel?.SettingsViewModel is { SourceCode: false } settings)
+            {
+                // Source mode does not go through what fell over: the document stays there to be edited.
+                Log.Debug($"editor page: fell over {crashes.Count} times in a minute; reloading in source mode");
+                crashes.Clear();
+                settings.SourceCode = true;
+            }
             CoreWebView2.Reload();
             try
             {
