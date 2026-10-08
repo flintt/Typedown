@@ -1067,6 +1067,7 @@ namespace Typedown.Core.ViewModels
                 Log.Debug($"paste: {addresses.Count - wanted.Count} of the HTML's {addresses.Count} picture address(es) are not in the document (first: {addresses.FirstOrDefault(a => !inDocument.Contains(a))})");
             var action = ServiceProvider.GetService<ImageAction>();
             var page = PageAddress(html);
+            Log.Debug($"paste: {wanted.Count} web picture(s) to fetch; the page they came from: {(page?.Host ?? "not in the clipboard")}");
             var replacements = new System.Collections.Concurrent.ConcurrentDictionary<string, string>();
             var failures = new System.Collections.Concurrent.ConcurrentBag<string>();
             // A few at a time: one after another, a page of pictures kept its web addresses for many seconds.

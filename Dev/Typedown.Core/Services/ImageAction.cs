@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -190,25 +191,40 @@ namespace Typedown.Core.Services
         };
 
         /// <summary>
-        /// A picture on the web, fetched as the browser showing <paramref name="page"/> fetched it: with that page as the
-        /// referrer (else the picture's own site) and a browser's user agent, so a site that refuses pictures asked for
-        /// from elsewhere (hotlink protection) hands it over. Throws when the answer is not a picture - an error page or a
-        /// login page was saved as a .png before.
+        /// A picture on the web, fetched as a browser would, with a browser's user agent. Hotlink protection differs from
+        /// site to site, so the referrer is tried in turn while the server refuses (401/403): the page the picture was
+        /// copied from (<paramref name="page"/>), none, then the picture's own site - cnBeta's pictures came with none or
+        /// the article, and were refused (403) with their own site as referrer, which was tried alone. Throws when the
+        /// answer is not a picture: an error or sign-in page was saved as a .png before.
         /// </summary>
         public async Task<byte[]> GetWebImage(Uri uri, Uri page = null)
         {
-            using var request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Get, uri);
-            request.Headers.TryAddWithoutValidation("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36 Edg/124.0");
-            request.Headers.TryAddWithoutValidation("Accept", "image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8");
-            var referrer = page != null && (page.Scheme == Uri.UriSchemeHttp || page.Scheme == Uri.UriSchemeHttps) ? page : new Uri(uri.GetLeftPart(UriPartial.Authority) + "/");
-            request.Headers.Referrer = referrer;
-            using var response = await web.SendAsync(request).ConfigureAwait(false);
-            if (!response.IsSuccessStatusCode)
-                throw new InvalidDataException($"HTTP {(int)response.StatusCode} {response.ReasonPhrase}");
-            var bytes = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            if (GetImageType(bytes, null) == null)
-                throw new InvalidDataException($"not a picture ({response.Content.Headers.ContentType?.MediaType ?? "unknown"}, {bytes.Length} bytes)");
-            return bytes;
+            var referrers = new List<Uri>();
+            if (page != null && (page.Scheme == Uri.UriSchemeHttp || page.Scheme == Uri.UriSchemeHttps)) referrers.Add(page);
+            referrers.Add(null);
+            referrers.Add(new Uri(uri.GetLeftPart(UriPartial.Authority) + "/"));
+            Exception refused = null;
+            foreach (var referrer in referrers)
+            {
+                using var request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Get, uri);
+                request.Headers.TryAddWithoutValidation("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36 Edg/124.0");
+                request.Headers.TryAddWithoutValidation("Accept", "image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8");
+                if (referrer != null) request.Headers.Referrer = referrer;
+                using var response = await web.SendAsync(request).ConfigureAwait(false);
+                if (response.StatusCode == HttpStatusCode.Forbidden || response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    refused = new InvalidDataException($"HTTP {(int)response.StatusCode} {response.ReasonPhrase}");
+                    continue;
+                }
+                if (!response.IsSuccessStatusCode)
+                    throw new InvalidDataException($"HTTP {(int)response.StatusCode} {response.ReasonPhrase}");
+                var bytes = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
+                if (GetImageType(bytes, null) == null)
+                    throw new InvalidDataException($"not a picture ({response.Content.Headers.ContentType?.MediaType ?? "unknown"}, {bytes.Length} bytes)");
+                if (referrer != referrers[0]) Log.Debug($"web picture: {uri.Host} answered with the referrer {(referrer?.ToString() ?? "none")}");
+                return bytes;
+            }
+            throw refused;
         }
 
         public string GetDefaultDestFolder(InsertImageSource source)
