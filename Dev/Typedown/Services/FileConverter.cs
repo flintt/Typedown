@@ -17,9 +17,7 @@ namespace Typedown.Services
             var tmpFile = Core.Utilities.Common.GetTempFileName(".html");
             try
             {
-                var environment = await WebViewController.EnsureCreateEnvironment();
-                var compositionController = await environment.CreateCoreWebView2CompositionControllerAsync(tmpWindow);
-                var controller = WebViewController.CreateCoreWebView2Controller(compositionController);
+                var controller = await WebViewController.CreateOffscreenController(tmpWindow);
                 try
                 {
                     var coreWebView2 = controller.CoreWebView2;
@@ -86,9 +84,7 @@ namespace Typedown.Services
             var tmpFile = Core.Utilities.Common.GetTempFileName(".html");
             try
             {
-                var environment = await WebViewController.EnsureCreateEnvironment();
-                var compositionController = await environment.CreateCoreWebView2CompositionControllerAsync(tmpWindow);
-                var controller = WebViewController.CreateCoreWebView2Controller(compositionController);
+                var controller = await WebViewController.CreateOffscreenController(tmpWindow);
                 try
                 {
                     var coreWebView2 = controller.CoreWebView2;

@@ -74,7 +74,7 @@
     <!-- Keep the stable package's application ID, executable layout and alias. -->
     <Application
       Id="Cli"
-      Executable="Typedown\typedownctl.exe"
+      Executable="typedownctl.exe"
       EntryPoint="Windows.FullTrustApplication">
       <uap:VisualElements
         DisplayName="typedownctl"
@@ -86,7 +86,7 @@
       <Extensions>
         <uap5:Extension
           Category="windows.appExecutionAlias"
-          Executable="Typedown\typedownctl.exe"
+          Executable="typedownctl.exe"
           EntryPoint="Windows.FullTrustApplication">
           <uap5:AppExecutionAlias>
             <uap5:ExecutionAlias Alias="typedownctl.exe" />

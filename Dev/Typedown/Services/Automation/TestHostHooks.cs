@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Typedown.Automation;
 
 namespace Typedown.Services.Automation
@@ -92,10 +93,10 @@ namespace Typedown.Services.Automation
             methods.Add(new MethodDescriptor("test.editor.focus", null, "test.editor.focus/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
                 {
-                    var editor = app.MarkdownEditor as global::Windows.UI.Xaml.Controls.Control
+                    var editor = app.MarkdownEditor as global::Microsoft.UI.Xaml.Controls.Control
                         ?? throw new AutomationException(AutomationErrorKind.editor_not_ready, "the window shows no editor page");
                     (editor as Core.Interfaces.IMarkdownEditor)!.FocusEditor();
-                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["focused"] = editor.FocusState != global::Windows.UI.Xaml.FocusState.Unfocused };
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["focused"] = editor.FocusState != global::Microsoft.UI.Xaml.FocusState.Unfocused };
                 })));
             // Runs a script in the window's editor page and returns its JSON result: for diagnosing what the page holds
             // (caret, Muya's state) when a check fails in the real window and not in the page harness.
@@ -117,9 +118,9 @@ namespace Typedown.Services.Automation
                 var y = (double)(c.Params.OptionalInteger("y") ?? 0);
                 return Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
                 {
-                    var editor = app.MarkdownEditor as global::Windows.UI.Xaml.UIElement
+                    var editor = app.MarkdownEditor as global::Microsoft.UI.Xaml.UIElement
                         ?? throw new AutomationException(AutomationErrorKind.editor_not_ready, "the window has no editor page (another page is shown)");
-                    var root = app.XamlRoot?.Content as global::Windows.UI.Xaml.UIElement
+                    var root = app.XamlRoot?.Content as global::Microsoft.UI.Xaml.UIElement
                         ?? throw new AutomationException(AutomationErrorKind.editor_not_ready, "the window has no content");
                     var inRoot = editor.TransformToVisual(root).TransformPoint(new global::Windows.Foundation.Point(x, y));
                     var scale = app.XamlRoot.RasterizationScale;
@@ -170,14 +171,14 @@ namespace Typedown.Services.Automation
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
                 {
                     var titles = new Newtonsoft.Json.Linq.JArray();
-                    void Walk(global::Windows.UI.Xaml.DependencyObject node)
+                    void Walk(global::Microsoft.UI.Xaml.DependencyObject node)
                     {
                         // The menus shown: Paragraph and Format are hidden in source mode.
-                        if (node is global::Microsoft.UI.Xaml.Controls.MenuBarItem item && item.Visibility == global::Windows.UI.Xaml.Visibility.Visible) titles.Add(item.Title);
-                        var count = global::Windows.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(node);
-                        for (var i = 0; i < count; i++) Walk(global::Windows.UI.Xaml.Media.VisualTreeHelper.GetChild(node, i));
+                        if (node is global::Microsoft.UI.Xaml.Controls.MenuBarItem item && item.Visibility == global::Microsoft.UI.Xaml.Visibility.Visible) titles.Add(item.Title);
+                        var count = global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(node);
+                        for (var i = 0; i < count; i++) Walk(global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChild(node, i));
                     }
-                    if (app.XamlRoot?.Content is global::Windows.UI.Xaml.DependencyObject root) Walk(root);
+                    if (app.XamlRoot?.Content is global::Microsoft.UI.Xaml.DependencyObject root) Walk(root);
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["titles"] = titles };
                 })));
             // Where the main page starts in its window, and whether the window is in full screen: in full screen nothing may
@@ -185,14 +186,14 @@ namespace Typedown.Services.Automation
             methods.Add(new MethodDescriptor("test.window.layout", null, "test.window.layout/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
                 {
-                    var root = app.XamlRoot?.Content as global::Windows.UI.Xaml.UIElement;
-                    global::Windows.UI.Xaml.FrameworkElement? page = null;
-                    void Walk(global::Windows.UI.Xaml.DependencyObject node)
+                    var root = app.XamlRoot?.Content as global::Microsoft.UI.Xaml.UIElement;
+                    global::Microsoft.UI.Xaml.FrameworkElement? page = null;
+                    void Walk(global::Microsoft.UI.Xaml.DependencyObject node)
                     {
                         if (page != null) return;
                         if (node is Core.Pages.MainPage found) { page = found; return; }
-                        var count = global::Windows.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(node);
-                        for (var i = 0; i < count; i++) Walk(global::Windows.UI.Xaml.Media.VisualTreeHelper.GetChild(node, i));
+                        var count = global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(node);
+                        for (var i = 0; i < count; i++) Walk(global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChild(node, i));
                     }
                     if (root != null) Walk(root);
                     var top = page != null && root != null ? page.TransformToVisual(root).TransformPoint(new global::Windows.Foundation.Point(0, 0)).Y : double.NaN;
@@ -200,15 +201,15 @@ namespace Typedown.Services.Automation
                     {
                         ["fullScreen"] = app.UIViewModel.IsFullScreen,
                         ["mainPageTop"] = top,
-                        ["rootHeight"] = (root as global::Windows.UI.Xaml.FrameworkElement)?.ActualHeight ?? double.NaN,
+                        ["rootHeight"] = (root as global::Microsoft.UI.Xaml.FrameworkElement)?.ActualHeight ?? double.NaN,
                     };
                 })));
             // Holds a window in memory from now on, as anything still referring to it does after it closes:
-            // XamlWindow.AllWindows lists a window until the garbage collector has finalized it, closed or not.
+            // MainWindow.AllWindows lists a window until it has closed; the XAML Islands list kept it until finalized, closed or not.
             methods.Add(new MethodDescriptor("test.window.keep", null, "test.window.keep/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
                 {
-                    var window = global::Typedown.XamlUI.XamlWindow.AllWindows.OfType<Typedown.Windows.MainWindow>().FirstOrDefault(w => w.Handle == app.MainWindow)
+                    var window = Typedown.Windows.MainWindow.AllWindows.FirstOrDefault(w => w.Handle == app.MainWindow)
                         ?? throw new AutomationException(AutomationErrorKind.window_not_found, "no main window with that handle");
                     keptWindows.Add(window);
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject();
@@ -333,7 +334,7 @@ namespace Typedown.Services.Automation
                         app.SettingsViewModel.ApplyCustomTheme(Core.Utilities.ThemeFiles.Find(id) ?? throw Params.Invalid("customTheme", "unknown"));
                     else
                         app.SettingsViewModel.ApplyBuiltInTheme((Core.Enums.AppTheme)System.Enum.Parse(typeof(Core.Enums.AppTheme), builtIn));
-                    var root = app.XamlRoot?.Content as global::Windows.UI.Xaml.FrameworkElement;
+                    var root = app.XamlRoot?.Content as global::Microsoft.UI.Xaml.FrameworkElement;
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["appTheme"] = app.SettingsViewModel.AppTheme.ToString(), ["actualTheme"] = root?.ActualTheme.ToString() };
                 });
             }));
@@ -345,20 +346,20 @@ namespace Typedown.Services.Automation
                 return Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
                 {
                     Core.Controls.EditorControls.MenuBarItems.ViewItem? view = null;
-                    void Find(global::Windows.UI.Xaml.DependencyObject node)
+                    void Find(global::Microsoft.UI.Xaml.DependencyObject node)
                     {
                         if (view != null || node == null) return;
                         if (node is Core.Controls.EditorControls.MenuBarItems.ViewItem v) { view = v; return; }
-                        for (var i = 0; i < global::Windows.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(node); i++)
-                            Find(global::Windows.UI.Xaml.Media.VisualTreeHelper.GetChild(node, i));
+                        for (var i = 0; i < global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(node); i++)
+                            Find(global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChild(node, i));
                     }
-                    Find(app.XamlRoot?.Content as global::Windows.UI.Xaml.DependencyObject);
+                    Find(app.XamlRoot?.Content as global::Microsoft.UI.Xaml.DependencyObject);
                     if (view == null) throw new AutomationException(AutomationErrorKind.editor_not_ready, "no View menu in this window");
                     var (entries, reload) = view.ThemeMenu();
                     if (click && reload != null)
-                        ((global::Windows.UI.Xaml.Automation.Provider.IInvokeProvider)new global::Windows.UI.Xaml.Automation.Peers.MenuFlyoutItemAutomationPeer(reload)).Invoke();
+                        ((global::Microsoft.UI.Xaml.Automation.Provider.IInvokeProvider)new global::Microsoft.UI.Xaml.Automation.Peers.MenuFlyoutItemAutomationPeer(reload)).Invoke();
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["entries"] = new Newtonsoft.Json.Linq.JArray(entries), ["reload"] = reload?.Text, ["folder"] = Core.Utilities.ThemeFiles.Folder,
-                        ["actualTheme"] = (app.XamlRoot?.Content as global::Windows.UI.Xaml.FrameworkElement)?.ActualTheme.ToString() };
+                        ["actualTheme"] = (app.XamlRoot?.Content as global::Microsoft.UI.Xaml.FrameworkElement)?.ActualTheme.ToString() };
                 });
             }));
             // The next loads of the window's editor come back rewritten, as a load that did not keep the text did once.
@@ -380,19 +381,19 @@ namespace Typedown.Services.Automation
                 return Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
                 {
                     Core.Controls.AppContentDialog? dialog = null;
-                    void Find(global::Windows.UI.Xaml.DependencyObject node)
+                    void Find(global::Microsoft.UI.Xaml.DependencyObject node)
                     {
                         if (node == null) return;
                         if (node is Core.Controls.AppContentDialog d && d.IsLoaded) dialog = d;
-                        for (var i = 0; i < global::Windows.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(node); i++)
-                            Find(global::Windows.UI.Xaml.Media.VisualTreeHelper.GetChild(node, i));
+                        for (var i = 0; i < global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(node); i++)
+                            Find(global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChild(node, i));
                     }
-                    Find(app.XamlRoot?.Content as global::Windows.UI.Xaml.DependencyObject);
+                    Find(app.XamlRoot?.Content as global::Microsoft.UI.Xaml.DependencyObject);
                     if (dialog == null) throw new AutomationException(AutomationErrorKind.editor_not_ready, "no dialog is open in this window");
                     var button = which == "primary" ? dialog.PrimaryButton : which == "secondary" ? dialog.SecondaryButton : dialog.CloseButton;
-                    if (button == null || button.Visibility != global::Windows.UI.Xaml.Visibility.Visible || !button.IsEnabled)
+                    if (button == null || button.Visibility != global::Microsoft.UI.Xaml.Visibility.Visible || !button.IsEnabled)
                         throw new AutomationException(AutomationErrorKind.editor_not_ready, $"the dialog has no {which} button to press");
-                    ((global::Windows.UI.Xaml.Automation.Provider.IInvokeProvider)new global::Windows.UI.Xaml.Automation.Peers.ButtonAutomationPeer(button)).Invoke();
+                    ((global::Microsoft.UI.Xaml.Automation.Provider.IInvokeProvider)new global::Microsoft.UI.Xaml.Automation.Peers.ButtonAutomationPeer(button)).Invoke();
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject
                     {
                         ["pressed"] = button.Content?.ToString(),
@@ -448,7 +449,7 @@ namespace Typedown.Services.Automation
             methods.Add(new MethodDescriptor("test.app.throwUnhandled", null, "test.app.throwUnhandled/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
                 {
-                    var timer = new global::Windows.UI.Xaml.DispatcherTimer { Interval = System.TimeSpan.FromMilliseconds(50) };
+                    var timer = new global::Microsoft.UI.Xaml.DispatcherTimer { Interval = System.TimeSpan.FromMilliseconds(50) };
                     timer.Tick += (_, _) =>
                     {
                         timer.Stop();
@@ -462,7 +463,7 @@ namespace Typedown.Services.Automation
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
                 {
                     var open = app.XamlRoot == null ? new System.Collections.Generic.List<string>()
-                        : global::Windows.UI.Xaml.Media.VisualTreeHelper.GetOpenPopupsForXamlRoot(app.XamlRoot).Select(p => p.Child?.GetType().Name ?? "empty").ToList();
+                        : global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetOpenPopupsForXamlRoot(app.XamlRoot).Select(p => p.Child?.GetType().Name ?? "empty").ToList();
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["popups"] = new Newtonsoft.Json.Linq.JArray(open) };
                 })));
             // The test host's title markers ("AUTOMATION TEST HOST ·" and the connected client's note) on (show: true)
@@ -516,14 +517,14 @@ namespace Typedown.Services.Automation
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
                 {
                     Core.Controls.EditorControls.MenuBarItems.FileItem? file = null;
-                    void Find(global::Windows.UI.Xaml.DependencyObject node)
+                    void Find(global::Microsoft.UI.Xaml.DependencyObject node)
                     {
                         if (file != null || node == null) return;
                         if (node is Core.Controls.EditorControls.MenuBarItems.FileItem f) { file = f; return; }
-                        for (var i = 0; i < global::Windows.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(node); i++)
-                            Find(global::Windows.UI.Xaml.Media.VisualTreeHelper.GetChild(node, i));
+                        for (var i = 0; i < global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(node); i++)
+                            Find(global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChild(node, i));
                     }
-                    Find(app.XamlRoot?.Content as global::Windows.UI.Xaml.DependencyObject);
+                    Find(app.XamlRoot?.Content as global::Microsoft.UI.Xaml.DependencyObject);
                     if (file == null) throw new AutomationException(AutomationErrorKind.editor_not_ready, "no File menu in this window");
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["entries"] = new Newtonsoft.Json.Linq.JArray(file.ExportMenu()) };
                 })));
@@ -533,9 +534,9 @@ namespace Typedown.Services.Automation
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
                 {
                     var found = new Newtonsoft.Json.Linq.JArray();
-                    string Where(global::Windows.UI.Xaml.DependencyObject node)
+                    string Where(global::Microsoft.UI.Xaml.DependencyObject node)
                     {
-                        for (; node != null; node = global::Windows.UI.Xaml.Media.VisualTreeHelper.GetParent(node))
+                        for (; node != null; node = global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetParent(node))
                         {
                             if (node is Core.Controls.SidePanelControls.Pages.TocPage) return "outline";
                             if (node is Core.Controls.SidePanelControls.Pages.FolderPage) return "folder";
@@ -543,14 +544,14 @@ namespace Typedown.Services.Automation
                         }
                         return "other";
                     }
-                    void Walk(global::Windows.UI.Xaml.DependencyObject node)
+                    void Walk(global::Microsoft.UI.Xaml.DependencyObject node)
                     {
-                        if (node is global::Windows.UI.Xaml.Shapes.Shape shape && shape.Name.Contains("SelectionIndicator"))
-                            found.Add(new Newtonsoft.Json.Linq.JObject { ["where"] = Where(node), ["name"] = shape.Name, ["fill"] = (shape.Fill as global::Windows.UI.Xaml.Media.SolidColorBrush)?.Color.ToString() });
-                        for (var i = 0; i < global::Windows.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(node); i++)
-                            Walk(global::Windows.UI.Xaml.Media.VisualTreeHelper.GetChild(node, i));
+                        if (node is global::Microsoft.UI.Xaml.Shapes.Shape shape && shape.Name.Contains("SelectionIndicator"))
+                            found.Add(new Newtonsoft.Json.Linq.JObject { ["where"] = Where(node), ["name"] = shape.Name, ["fill"] = (shape.Fill as global::Microsoft.UI.Xaml.Media.SolidColorBrush)?.Color.ToString() });
+                        for (var i = 0; i < global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(node); i++)
+                            Walk(global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChild(node, i));
                     }
-                    Walk(app.XamlRoot?.Content as global::Windows.UI.Xaml.DependencyObject);
+                    Walk(app.XamlRoot?.Content as global::Microsoft.UI.Xaml.DependencyObject);
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["indicators"] = found };
                 })));
             // File > Upload local images on the window's active document, without its dialogs; returns the result.

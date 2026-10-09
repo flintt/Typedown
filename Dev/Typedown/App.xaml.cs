@@ -8,19 +8,30 @@ using System.Threading.Tasks;
 using Typedown.Core;
 using Typedown.Core.Utilities;
 using Typedown.Windows;
-using Typedown.XamlUI;
-using Windows.UI.Core;
-using Windows.UI.Xaml.Markup;
+using Microsoft.UI.Dispatching;
+using Microsoft.UI.Xaml;
 
 namespace Typedown
 {
-    public class App : XamlApplication
+    public partial class App : Application
     {
         // Named after the instance (Config.InstanceName) - the application's own name, or the test host's, which is tied
         // to its data root.
         private static readonly Mutex mutex = new(true, Config.InstanceName + ".Mutex");
 
-        private App(IEnumerable<IXamlMetadataProvider> providers) : base(providers) { }
+        private App()
+        {
+            try
+            {
+                InitializeComponent();
+            }
+            catch (Exception ex)
+            {
+                // Before the XAML exception hook exists: written down here, or a start that fails leaves no trace.
+                Log.WriteLocal("AppConstruct", ex.ToString());
+                throw;
+            }
+        }
 
         public static void Launch()
         {
@@ -52,20 +63,22 @@ namespace Typedown
 
         public static void LaunchNewApplication()
         {
-            var providers = new List<IXamlMetadataProvider>() { new Core.Typedown_Core_XamlTypeInfo.XamlMetaDataProvider() };
-            var xamlApp = new App(providers) { Resources = new Core.Resources() };
-            xamlApp.Run();
+            Start(callback =>
+            {
+                // Awaits come back to the window thread, as they did on XAML Islands' CoreDispatcher.
+                SynchronizationContext.SetSynchronizationContext(new DispatcherQueueSynchronizationContext(DispatcherQueue.GetForCurrentThread()));
+                _ = new App();
+            });
         }
 
-        protected override async void OnLaunched()
+        protected override async void OnLaunched(LaunchActivatedEventArgs launchArgs)
         {
-            base.OnLaunched();
             Log.Debug($"startup: version={Core.Controls.AboutApp.GetAppVersion()} windowsBuild={Config.WindowsBuild} osVersion={Environment.OSVersion.VersionString} mica={Config.IsMicaSupported} packaged={Config.IsPackaged} elevated={IsElevated()} exe={AppDomain.CurrentDomain.BaseDirectory}");
             try
             {
                 // Logged and handled: an exception out of a click handler or an async void method ended the process,
                 // with whatever was not saved yet. Out of memory is left to end it.
-                global::Windows.UI.Xaml.Application.Current.UnhandledException += (_, e) =>
+                Current.UnhandledException += (_, e) =>
                 {
                     Log.WriteLocal("XamlUnhandledException", $"{e.Message}\n{e.Exception}");
                     if (e.Exception is not OutOfMemoryException) e.Handled = true;
@@ -81,13 +94,13 @@ namespace Typedown
                 return;
             }
             var window = new MainWindow();
-            window.Show(ShowWindowCommand.SW_HIDE);
-            ListenPipe(window.Dispatcher);
+            window.Start();
+            ListenPipe(window.DispatcherQueue);
             // Local automation: nothing listens until the setting is turned on (docs/automation-api-spec.md, 5.1).
             Services.Automation.AutomationService.Initialize();
         }
 
-        private static async void ListenPipe(CoreDispatcher dispatcher)
+        private static async void ListenPipe(DispatcherQueue dispatcher)
         {
             while (true)
             {

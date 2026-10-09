@@ -1,0 +1,15 @@
+<Application
+    x:Class="Typedown.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:core="using:Typedown.Core">
+    <!-- Typedown.Core's resources: the WinUI controls' and the app's own styles. Declared here: WinUI 3 neither lets the
+         application's dictionary be replaced in code nor reads one that App.xaml did not make. -->
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <core:Resources />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
