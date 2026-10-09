@@ -7,6 +7,10 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 WINUI_PROJECT = REPOSITORY_ROOT / "Dev" / "Typedown.WinUI" / "Typedown.WinUI.csproj"
 CLI_PROJECT = REPOSITORY_ROOT / "Tools" / "Typedown.Cli" / "Typedown.Cli.csproj"
 MCP_PROJECT = REPOSITORY_ROOT / "Tools" / "Typedown.Mcp" / "Typedown.Mcp.csproj"
+CLI_SOURCE = REPOSITORY_ROOT / "Tools" / "Typedown.Cli" / "Cli.cs"
+UNIX_SOCKET_SOURCE = (
+    REPOSITORY_ROOT / "Dev" / "Typedown.Automation" / "Unix" / "UnixSocketListener.cs"
+)
 
 
 def target_frameworks(path: Path) -> set[str]:
@@ -57,6 +61,31 @@ class PackagePayloadTests(unittest.TestCase):
         self.assertIn("%(_AutomationCliPackageFile.RecursiveDir)", source)
         self.assertIn("Exclude=", source)
         self.assertIn("*.pdb", source)
+
+    def test_winui_packaging_restores_only_the_net10_cli_graph(self) -> None:
+        winui_source = WINUI_PROJECT.read_text(encoding="utf-8")
+        self.assertGreaterEqual(winui_source.count("TypedownWinUIPackaging=true"), 2)
+
+        for project in (CLI_PROJECT, MCP_PROJECT):
+            root = ET.parse(project).getroot()
+            declarations = [
+                (item.attrib.get("Condition", ""), item.text or "")
+                for item in root.findall(".//TargetFrameworks")
+            ]
+            self.assertIn(("'$(TypedownWinUIPackaging)' == 'true'", "net10.0"), declarations)
+            normal = [value for condition, value in declarations if "!= 'true'" in condition]
+            self.assertEqual(normal, ["net10.0;net8.0;netcoreapp3.1"])
+
+    def test_unix_transport_is_explicitly_guarded_from_windows(self) -> None:
+        unix_source = UNIX_SOCKET_SOURCE.read_text(encoding="utf-8")
+        cli_source = CLI_SOURCE.read_text(encoding="utf-8")
+        self.assertIn('[UnsupportedOSPlatform("windows")]', unix_source)
+        self.assertGreaterEqual(cli_source.count("OperatingSystem.IsWindows()"), 2)
+        self.assertEqual(
+            cli_source.count("RuntimeInformation.IsOSPlatform(OSPlatform.Windows)"),
+            1,
+            "The netcoreapp3.1 user-id path still needs its compatible platform check",
+        )
 
     def test_packaging_target_cannot_select_x86(self) -> None:
         source = WINUI_PROJECT.read_text(encoding="utf-8").casefold()

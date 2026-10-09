@@ -146,12 +146,12 @@
       Projects="$(AutomationCliProject)"
       Targets="Restore"
       BuildInParallel="false"
-      Properties="Configuration=$(Configuration);RuntimeIdentifier=$(RuntimeIdentifier);RuntimeIdentifiers=$(RuntimeIdentifier);SelfContained=true" />
+      Properties="Configuration=$(Configuration);RuntimeIdentifier=$(RuntimeIdentifier);RuntimeIdentifiers=$(RuntimeIdentifier);SelfContained=true;TypedownWinUIPackaging=true" />
     <MSBuild
       Projects="$(AutomationCliProject)"
       Targets="Publish"
       BuildInParallel="false"
-      Properties="Configuration=$(Configuration);TargetFramework=$(AutomationCliTargetFramework);RuntimeIdentifier=$(RuntimeIdentifier);RuntimeIdentifiers=$(RuntimeIdentifier);SelfContained=true;PublishSingleFile=false;PublishTrimmed=false;PublishDir=$(AutomationCliPublishDirectory)" />
+      Properties="Configuration=$(Configuration);TargetFramework=$(AutomationCliTargetFramework);RuntimeIdentifier=$(RuntimeIdentifier);RuntimeIdentifiers=$(RuntimeIdentifier);SelfContained=true;PublishSingleFile=false;PublishTrimmed=false;PublishDir=$(AutomationCliPublishDirectory);TypedownWinUIPackaging=true" />
     <ItemGroup>
       <_AutomationCliPackageFile
         Include="$(AutomationCliPublishDirectory)**\*"
