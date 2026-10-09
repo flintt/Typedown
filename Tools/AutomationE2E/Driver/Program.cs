@@ -1132,7 +1132,7 @@ internal static partial class Program
         System.Windows.Automation.AutomationElement? FindIn(System.Windows.Automation.AutomationElement root, Func<System.Windows.Automation.AutomationElement, bool> match)
         {
             foreach (System.Windows.Automation.AutomationElement e in Deep.All(root, System.Windows.Automation.Condition.TrueCondition))
-                if (match(e)) return e;
+                try { if (match(e)) return e; } catch (System.Windows.Automation.ElementNotAvailableException) { }
             return null;
         }
         // Anywhere in the test host's windows (menus and dialogs are popups of their own).
@@ -1940,7 +1940,7 @@ internal static partial class Program
             var names = new List<string>();
             foreach (System.Windows.Automation.AutomationElement e in Deep.All(System.Windows.Automation.AutomationElement.FromHandle(window), System.Windows.Automation.Condition.TrueCondition))
             {
-                var n = e.Current.Name;
+                var n = Deep.Name(e);
                 if ((n.StartsWith("Alpha") || n.StartsWith("Beta")) && e.Current.ControlType != System.Windows.Automation.ControlType.Document && !names.Contains(n)) names.Add(n);
             }
             return names;
@@ -1977,7 +1977,7 @@ internal static partial class Program
                 active = (string)((JArray)(await c.Call("window.list"))["windows"]!).First(w => (string)w["windowId"]! == windowId)["activeDocumentId"]!;
                 headings = ((string?)(await Get(c, active))["text"] ?? "").Split('\n').Where(l => l.StartsWith("#")).Select(l => l.TrimStart('#').Trim()).Where(h => h.Length > 0).Take(3).ToList();
                 names = Deep.All(System.Windows.Automation.AutomationElement.FromHandle(window), System.Windows.Automation.Condition.TrueCondition)
-                    .Cast<System.Windows.Automation.AutomationElement>().Select(e => e.Current.Name).ToList();
+                    .Select(Deep.Name).ToList();
                 if (active != second && headings.All(names.Contains) && !names.Contains("Beta three")) break;
             }
             notes.Add($"after closing tc01-b, shown {(active == first ? "tc01-a" : active)} with headings {string.Join(", ", headings)}; outline has them: {headings.All(names.Contains)}, has Beta three: {names.Contains("Beta three")}");
@@ -2015,7 +2015,7 @@ internal static partial class Program
         void Click(System.Windows.Rect r, double fx = 0.3) { SetCursorPos((int)(r.Left + r.Width * fx), (int)(r.Top + r.Height / 2)); Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0002 } } }, new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0004 } } }); }
         // The outline's first rows (the tree is virtualized; its top shows which document it is of).
         string Top() => string.Join(", ", Deep.All(root, System.Windows.Automation.Condition.TrueCondition)
-            .Cast<System.Windows.Automation.AutomationElement>().Select(e => e.Current.Name)
+            .Select(Deep.Name)
             .Where(n => n.StartsWith("Apple") || n.StartsWith("Banana") || n.StartsWith("Cherry")).Distinct().Take(3));
         async Task<string> Shown() => (string)((JArray)(await c.Call("window.list"))["windows"]!).First(w => (string)w["windowId"]! == windowId)["activeDocumentId"]!;
         try

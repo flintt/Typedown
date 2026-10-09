@@ -28,6 +28,12 @@ internal static class Deep
         return found;
     }
 
+    /// <summary>An element's name, empty when it is gone (a virtualized list drops rows while a whole tree is read).</summary>
+    public static string Name(AutomationElement e)
+    {
+        try { return e.Current.Name ?? ""; } catch (ElementNotAvailableException) { return ""; }
+    }
+
     private static string Id(AutomationElement e)
     {
         try { return string.Join(".", e.GetRuntimeId()); } catch { return System.Guid.NewGuid().ToString(); }
