@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using Typedown.Core.Models;
 using Typedown.Core.Utilities;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Data;
 using muxc = Microsoft.UI.Xaml.Controls;
 
 namespace Typedown.Core.Controls

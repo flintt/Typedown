@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using Windows.Foundation;
-using Windows.UI.Xaml.Shapes;
+using Microsoft.UI.Xaml.Shapes;
 
 namespace Typedown.Core.Interfaces
 {

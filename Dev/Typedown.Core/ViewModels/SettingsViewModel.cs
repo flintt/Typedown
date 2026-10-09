@@ -13,7 +13,7 @@ using Typedown.Core.Enums;
 using Typedown.Core.Interfaces;
 using Typedown.Core.Services;
 using Typedown.Core.Utilities;
-using Windows.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls;
 
 namespace Typedown.Core.ViewModels
 {

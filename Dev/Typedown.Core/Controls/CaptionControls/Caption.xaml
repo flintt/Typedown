@@ -7,7 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls" 
-    xmlns:ui="using:Typedown.XamlUI"
+    xmlns:chrome="using:Typedown.Core.Utilities"
     xmlns:animatedvisuals="using:Microsoft.UI.Xaml.Controls.AnimatedVisuals"
     Loaded="OnLoaded"
     Unloaded="OnUnloaded"
@@ -113,7 +113,7 @@
         <Grid Grid.Column="1">
             <Grid.Style>
                 <Style TargetType="Grid">
-                    <Setter Property="ui:XamlWindow.Drag" Value="True"/>
+                    <Setter Property="chrome:WindowChrome.Drag" Value="True"/>
                 </Style>
             </Grid.Style>
         </Grid>

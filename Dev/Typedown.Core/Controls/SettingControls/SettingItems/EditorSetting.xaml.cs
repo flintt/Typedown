@@ -6,8 +6,8 @@ using Microsoft.Graphics.Canvas.Text;
 using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
 using Windows.Globalization.NumberFormatting;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 
 namespace Typedown.Core.Controls.SettingControls.SettingItems
 {

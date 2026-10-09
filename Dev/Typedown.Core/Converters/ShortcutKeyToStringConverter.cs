@@ -1,7 +1,7 @@
 ﻿using System;
 using Typedown.Core.Models;
 using Typedown.Core.Utilities;
-using Windows.UI.Xaml.Data;
+using Microsoft.UI.Xaml.Data;
 
 namespace Typedown.Core.Converters
 {

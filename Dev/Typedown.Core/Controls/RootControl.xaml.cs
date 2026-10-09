@@ -5,10 +5,10 @@ using System.Reactive.Linq;
 using Typedown.Core.Pages;
 using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media.Animation;
-using Windows.UI.Xaml.Navigation;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media.Animation;
+using Microsoft.UI.Xaml.Navigation;
 
 namespace Typedown.Core.Controls
 {
@@ -25,7 +25,7 @@ namespace Typedown.Core.Controls
             InitializeComponent();
         }
 
-        private void OnLoaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void OnLoaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
         {
             ViewModel.XamlRoot = XamlRoot;
             disposables.Add(ViewModel.NavigateCommand.OnExecute.Subscribe(args => Navigate(args)));
@@ -53,14 +53,14 @@ namespace Typedown.Core.Controls
             shownPage = e.SourcePageType;
             if (e.SourcePageType != typeof(MainPage) || (from != null && from != typeof(SettingsPage))) return;
             ViewModel.EditorViewModel.FocusWhenLoaded = true;
-            _ = Dispatcher.RunIdleAsync(_ => ViewModel.MarkdownEditor?.FocusEditor());
+            _ = DispatcherQueue.RunIdleAsync(_ => ViewModel.MarkdownEditor?.FocusEditor());
         }
 
         private void ReloadSettingsPage()
         {
             if (Frame.SourcePageType != typeof(SettingsPage)) return;
             var route = currentRoute;
-            _ = Dispatcher.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            _ = DispatcherQueue.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
             {
                 try
                 {
@@ -98,12 +98,12 @@ namespace Typedown.Core.Controls
                 if (Frame.SourcePageType != typeof(SettingsPage)) return;
                 if (Utilities.PInvoke.GetForegroundWindow() != ViewModel.MainWindow) return;
                 e.Handled = true;
-                _ = Dispatcher.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => Navigate("Main"));
+                _ = DispatcherQueue.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => Navigate("Main"));
             });
             disposables.Add(settingsShortcut);
         }
 
-        private void OnUnloaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void OnUnloaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
         {
             disposables.Clear();
             Bindings?.StopTracking();
@@ -147,7 +147,7 @@ namespace Typedown.Core.Controls
             return !compactMode || currentPage != typeof(MainPage);
         }
 
-        private void OnClosePrintPreviewClick(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void OnClosePrintPreviewClick(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
         {
             ViewModel?.UIViewModel?.ClosePrintPreview();
         }

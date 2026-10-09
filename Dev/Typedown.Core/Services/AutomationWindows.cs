@@ -17,7 +17,7 @@ namespace Typedown.Core.Services
     {
         public static WindowRegistry<AppViewModel> Registry { get; } = new();
 
-        public static string Register(AppViewModel app, CoreDispatcher dispatcher) => Registry.Register(app, new UiDispatcher(dispatcher));
+        public static string Register(AppViewModel app, Microsoft.UI.Dispatching.DispatcherQueue dispatcher) => Registry.Register(app, new UiDispatcher(dispatcher));
 
         public static void Unregister(AppViewModel app) => Registry.Unregister(app);
 
@@ -30,20 +30,21 @@ namespace Typedown.Core.Services
 
         private sealed class UiDispatcher : IUiDispatcher
         {
-            private readonly CoreDispatcher dispatcher;
+            private readonly Microsoft.UI.Dispatching.DispatcherQueue dispatcher;
 
-            public UiDispatcher(CoreDispatcher dispatcher) => this.dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
+            public UiDispatcher(Microsoft.UI.Dispatching.DispatcherQueue dispatcher) => this.dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
 
             // A dispatcher shut down together with its window may never run the work: callers bound every call with
             // the request's deadline rather than rely on this task completing.
             public Task<T> InvokeAsync<T>(Func<T> work)
             {
                 var done = new TaskCompletionSource<T>(TaskCreationOptions.RunContinuationsAsynchronously);
-                _ = dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                if (!dispatcher.TryEnqueue(() =>
                 {
                     try { done.SetResult(work()); }
                     catch (Exception e) { done.SetException(e); }
-                });
+                }))
+                    done.TrySetCanceled();
                 return done.Task;
             }
         }

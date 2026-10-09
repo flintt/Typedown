@@ -1,5 +1,5 @@
 ﻿using Typedown.Core.ViewModels;
-using Windows.UI.Xaml;
+using Microsoft.UI.Xaml;
 
 namespace Typedown.Core.Controls.EditorControls.MenuBarItems
 {

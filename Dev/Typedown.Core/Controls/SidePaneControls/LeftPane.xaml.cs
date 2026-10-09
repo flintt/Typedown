@@ -4,9 +4,9 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media.Animation;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media.Animation;
 using muxc = Microsoft.UI.Xaml.Controls;
 
 namespace Typedown.Core.Controls
@@ -42,7 +42,7 @@ namespace Typedown.Core.Controls
             // main page; a change from another window or the automation API leaves this one, so the tabs follow it
             // here, once the language has been applied.
             disposables.Add(Settings.WhenPropertyChanged(nameof(SettingsViewModel.Language))
-                .Subscribe(language => _ = Dispatcher.RunIdleAsync(args =>
+                .Subscribe(language => _ = DispatcherQueue.RunIdleAsync(args =>
                 {
                     Folder.Content = Locale.GetString("Files");
                     Toc.Content = Locale.GetString("Outline");

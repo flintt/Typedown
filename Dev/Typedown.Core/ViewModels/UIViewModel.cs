@@ -13,7 +13,7 @@ using Typedown.Core.Utilities;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
-using Windows.UI.Xaml;
+using Microsoft.UI.Xaml;
 
 namespace Typedown.Core.ViewModels
 {
@@ -91,11 +91,12 @@ namespace Typedown.Core.ViewModels
 
         private readonly UISettings uiSettings = new();
 
-        private readonly CoreDispatcher dispatcher;
+        private readonly Microsoft.UI.Dispatching.DispatcherQueue dispatcher;
 
         public UIViewModel(IServiceProvider serviceProvider)
         {
-            dispatcher = CoreApplication.GetCurrentView().CoreWindow.Dispatcher;
+            // The window thread it is made on (each window has its own).
+            dispatcher = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
             ServiceProvider = serviceProvider;
             SearchInFolderCommand.OnExecute.Subscribe(_ =>
             {

@@ -4,11 +4,12 @@ using System.Reactive.Linq;
 using Typedown.Core.Models;
 using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
+using Microsoft.UI;
 using Windows.UI;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
 using muxc = Microsoft.UI.Xaml.Controls;
 
 namespace Typedown.Core.Controls
@@ -175,7 +176,7 @@ namespace Typedown.Core.Controls
         /// The wheel over the tab strip moves between tabs: up goes left, down goes right. The strip scrolls
         /// itself when there are more tabs than fit, which is never what the wheel is wanted for here.
         /// </summary>
-        private void OnPointerWheelChanged(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        private void OnPointerWheelChanged(object sender, Microsoft.UI.Xaml.Input.PointerRoutedEventArgs e)
         {
             if (Tabs == null) return;
             var delta = e.GetCurrentPoint(this).Properties.MouseWheelDelta;
@@ -196,7 +197,7 @@ namespace Typedown.Core.Controls
                 // Not when the selection moved because a tab was closed: handed over while the next document was
                 // being loaded, the keys disturbed its loading, and the outline stayed on the closed document's
                 // headings (E2E TC02). The keyboard is where it was after a close anyway.
-                if (!closing) _ = Dispatcher.RunIdleAsync(_ => ViewModel?.MarkdownEditor?.FocusEditor());
+                if (!closing) _ = DispatcherQueue.RunIdleAsync(_ => ViewModel?.MarkdownEditor?.FocusEditor());
             }
         }
 
@@ -213,7 +214,7 @@ namespace Typedown.Core.Controls
             {
                 closing = true;
                 Tabs?.CloseTabCommand.Execute(tab);
-                _ = Dispatcher.RunIdleAsync(_ => closing = false);
+                _ = DispatcherQueue.RunIdleAsync(_ => closing = false);
             }
         }
 

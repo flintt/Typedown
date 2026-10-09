@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Windows.ApplicationModel.Resources;
-using Windows.ApplicationModel.Resources.Core;
-using Windows.UI.Xaml.Markup;
+using Microsoft.Windows.ApplicationModel.Resources;
+using Microsoft.UI.Xaml.Markup;
 
 namespace Typedown.Core.Utilities
 {
@@ -21,12 +20,16 @@ namespace Typedown.Core.Utilities
 
         private static readonly string assemblyName = typeof(Locale).Assembly.GetName().Name;
 
+        // The app's resources (MRT Core, which WinUI 3 uses in place of UWP's ResourceManager.Current): this library's .resw
+        // files are merged into the app's resources.pri under its assembly name.
+        private static readonly ResourceManager Manager = new();
+
         public static IReadOnlyDictionary<ResourceSource, ResourceMap> ResourcesDictionary = new Dictionary<ResourceSource, ResourceMap>()
         {
-            {ResourceSource.CommonResources,  ResourceManager.Current.MainResourceMap.GetSubtree($"{assemblyName}/" + nameof(ResourceSource.CommonResources))},
-            {ResourceSource.DialogResources,  ResourceManager.Current.MainResourceMap.GetSubtree($"{assemblyName}/" + nameof(ResourceSource.DialogResources))},
-            {ResourceSource.SettingsResources,  ResourceManager.Current.MainResourceMap.GetSubtree($"{assemblyName}/" + nameof(ResourceSource.SettingsResources))},
-            {ResourceSource.Resources,  ResourceManager.Current.MainResourceMap.GetSubtree($"{assemblyName}/" + nameof(ResourceSource.Resources))}
+            {ResourceSource.CommonResources,  Manager.MainResourceMap.GetSubtree($"{assemblyName}/" + nameof(ResourceSource.CommonResources))},
+            {ResourceSource.DialogResources,  Manager.MainResourceMap.GetSubtree($"{assemblyName}/" + nameof(ResourceSource.DialogResources))},
+            {ResourceSource.SettingsResources,  Manager.MainResourceMap.GetSubtree($"{assemblyName}/" + nameof(ResourceSource.SettingsResources))},
+            {ResourceSource.Resources,  Manager.MainResourceMap.GetSubtree($"{assemblyName}/" + nameof(ResourceSource.Resources))}
         };
 
         public static Dictionary<string, string> SupportedLangs { get; } = new()
@@ -133,7 +136,7 @@ namespace Typedown.Core.Utilities
 
         public static string GetLangOptionDisplayName(string key) => LangsOptions[key];
 
-        public static ResourceContext ResourceContext { get; } = new();
+        public static ResourceContext ResourceContext { get; } = Manager.CreateResourceContext();
 
         /// <summary>
         /// Chooses the language the .resw resources are read in. <c>ApplicationLanguages.PrimaryLanguageOverride</c>
@@ -149,25 +152,15 @@ namespace Typedown.Core.Utilities
             var wanted = SupportedLangs.ContainsKey(language ?? "") ? language : null;
             AppliedLanguage ??= wanted ?? string.Empty; // the first application is the one the interface was built with
             Apply(ResourceContext, wanted);
-            try
-            {
-                Apply(ResourceManager.Current.DefaultContext, wanted);
-            }
-            catch (Exception ex)
-            {
-                Log.Debug($"language: default context refused {wanted ?? "(system)"}: {ex.Message}");
-            }
-            Log.Debug($"language: setting={language} applied={wanted ?? "(system)"} resolved={string.Join(",", ResourceContext.Languages)}");
+            Log.Debug($"language: setting={language} applied={wanted ?? "(system)"} resolved={(ResourceContext.QualifierValues.TryGetValue("Language", out var resolved) ? resolved : "")}");
         }
 
         private static void Apply(ResourceContext context, string language)
         {
             try
             {
-                if (language == null)
-                    context.Reset();
-                else
-                    context.QualifierValues["Language"] = language;
+                // MRT Core's context has no Reset: the system's languages are its default.
+                context.QualifierValues["Language"] = language ?? string.Join(";", Windows.Globalization.ApplicationLanguages.Languages);
             }
             catch (Exception ex)
             {
@@ -179,8 +172,8 @@ namespace Typedown.Core.Utilities
         {
             key = key.Replace('.', '/');
             if (source == 0 || !ResourcesDictionary.ContainsKey(source))
-                return ResourcesDictionary.Values.Select(x => x.GetValue(key, ResourceContext)?.ValueAsString).Where(x => !string.IsNullOrEmpty(x)).FirstOrDefault();
-            return ResourcesDictionary[source].GetValue(key, ResourceContext)?.ValueAsString;
+                return ResourcesDictionary.Values.Select(x => x.TryGetValue(key, ResourceContext)?.ValueAsString).Where(x => !string.IsNullOrEmpty(x)).FirstOrDefault();
+            return ResourcesDictionary[source].TryGetValue(key, ResourceContext)?.ValueAsString;
         }
 
         public static string GetDialogString(string key)

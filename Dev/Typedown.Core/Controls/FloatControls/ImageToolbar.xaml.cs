@@ -8,8 +8,8 @@ using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
 using Windows.Foundation;
 using Windows.System;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 
 namespace Typedown.Core.Controls.FloatControls
 {
@@ -89,7 +89,7 @@ namespace Typedown.Core.Controls.FloatControls
         {
             disposables.Add(KeyboardAccelerator.GetObservable().Where(e => e.Key == VirtualKey.Back || e.Key == VirtualKey.Delete).Subscribe(e =>
             {
-                _ = Dispatcher.RunIdleAsync(() => DeleteClick(null, null));
+                _ = DispatcherQueue.RunIdleAsync(() => DeleteClick(null, null));
                 e.Handled = true;
             }));
         }

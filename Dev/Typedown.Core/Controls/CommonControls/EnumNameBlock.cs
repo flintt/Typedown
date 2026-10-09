@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Reflection;
 using Typedown.Core.Utilities;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Data;
 
 namespace Typedown.Core.Controls
 {
