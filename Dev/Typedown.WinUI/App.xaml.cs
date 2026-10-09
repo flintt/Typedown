@@ -1,23 +1,25 @@
 using Microsoft.UI.Xaml;
+using Typedown.WinUI.Windowing;
 
 namespace Typedown.WinUI;
 
 public partial class App : Application
 {
-    private Window? window;
+    private readonly WindowManager windowManager;
 
     public App()
     {
         InitializeComponent();
+        windowManager = new WindowManager(
+            _ => new RootPage(),
+            typeof(App).Assembly.GetName().Name ?? string.Empty);
     }
 
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
-        window = new Window
+        if (windowManager.Count == 0)
         {
-            Title = typeof(App).Assembly.GetName().Name ?? string.Empty,
-            Content = new RootPage()
-        };
-        window.Activate();
+            windowManager.CreateWindow();
+        }
     }
 }

@@ -9,10 +9,9 @@ PROJECT_DIRECTORY = REPOSITORY_ROOT / "Dev" / "Typedown.Core.Net10"
 PROJECT_FILE = PROJECT_DIRECTORY / "Typedown.Core.Net10.csproj"
 
 FORBIDDEN_SOURCE_REFERENCES = (
-    "Windows.UI",
+    "Windows.",
     "Microsoft.UI",
     "Microsoft.Web.WebView2",
-    "Windows.Storage.Pickers",
     "Typedown.XamlUI",
 )
 
@@ -117,8 +116,8 @@ class CoreBoundaryTests(unittest.TestCase):
         sources = compile_sources(self.project)
         self.assertGreaterEqual(
             len(sources),
-            10,
-            "The new Core project should already contain a useful platform-neutral slice",
+            39,
+            "The Core slice must cover at least 39 existing platform-neutral source files",
         )
         violations = []
         for source in sources:
