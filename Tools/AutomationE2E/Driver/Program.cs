@@ -165,6 +165,7 @@ internal static partial class Program
             await Case("RD01 reading mode: the context menu offers copying and selecting only, Copy works on a selection, copy as plain text leaves the Markdown out, Ctrl+Z changes nothing", RD01);
             await Case("CP01 Copy pasted into Word: pictures at absolute file:/// addresses, a name and an alt text with brackets, an SVG sized in pt, a JPEG", CP01);
             await Case("TH03 the side pane marks what is chosen (the bar under Files/Outline, the outline's and the folder tree's row pill) in a custom theme's accent, and in the system accent again without one", TH03);
+            await Case("DM01 the window's top edge is drawn in the app's theme, and a dialog's smoke covers it too: the top row matches the row under it, light and dark", DM01);
             await Case("TH02 View > Theme > Reload themes finds a new theme file and a renamed one; the window draws in the custom theme's base whatever the built-in setting says", TH02);
             await Case("WP01 a web page pasted: headings with #, code fenced with its language and without line numbers, Google Docs bold and italic, late-loaded and relative pictures by their real addresses; with Insert web image copying, its pictures are copied beside the document and their addresses replaced", WP01);
             await Case("ER01 a page message handler that throws stays subscribed and the message still reaches the other handlers; an exception out of an event handler XAML calls is logged and the app goes on", ER01);
@@ -1889,6 +1890,104 @@ internal static partial class Program
 
     // The marks of what is chosen in the side pane stayed the system blue under every custom theme: WinUI draws them in
     // the accent colour it takes from Windows, and only the page was given the theme's accent.
+    /// <summary>
+    /// The window's top pixel row against the content just under it, light and dark, with no dialog and with the save
+    /// question open: the row is the window's own frame on Windows 10 (the content is extended into the title bar), drawn
+    /// by the system in its own theme unless the app says which; a dialog's smoke then stopped one pixel short of the top.
+    /// </summary>
+    private static async Task DM01(List<string> notes)
+    {
+        using var c = await Session("e2e DM01");
+        SetProcessDpiAwarenessContext(new IntPtr(-4));
+        const string text = "# DM01\n";
+        var path = Fixture("dm01.md", text);
+        var id = await Open(c, path);
+        var windowId = await WindowIdOf(c, id);
+        var window = await WindowOf(windowId, c);
+        System.Drawing.Color Pixel(int x, int y)
+        {
+            using var b = new System.Drawing.Bitmap(1, 1);
+            using (var g = System.Drawing.Graphics.FromImage(b)) g.CopyFromScreen(x, y, 0, 0, new System.Drawing.Size(1, 1));
+            return b.GetPixel(0, 0);
+        }
+        string Hex(System.Drawing.Color k) => $"#{k.R:X2}{k.G:X2}{k.B:X2}";
+        // Over a few points along the edge (left of the caption buttons, right of the menu bar's titles).
+        List<string> Mismatches(string when)
+        {
+            DwmGetWindowAttribute(window, 9 /* DWMWA_EXTENDED_FRAME_BOUNDS */, out RECT r, Marshal.SizeOf<RECT>());
+            var wrong = new List<string>();
+            var seen = new List<string>();
+            foreach (var fx in new[] { 0.45, 0.6, 0.7 })
+            {
+                var x = r.Left + (int)((r.Right - r.Left) * fx);
+                var top = Pixel(x, r.Top);
+                var under = Pixel(x, r.Top + 3);
+                seen.Add($"{Hex(top)}/{Hex(under)}");
+                if (Math.Abs(top.R - under.R) + Math.Abs(top.G - under.G) + Math.Abs(top.B - under.B) > 24)
+                    wrong.Add($"{when} at x={x}: top {Hex(top)}, under it {Hex(under)}");
+            }
+            notes.Add($"{when}: top/under " + string.Join(" ", seen));
+            // Where the client area and the content's child windows begin, under the window's top.
+            var origin = new POINT();
+            DmClientToScreen(window, ref origin);
+            var children = new List<string>();
+            EnumChildWindows(window, (child, _) =>
+            {
+                var name = new System.Text.StringBuilder(128);
+                GetClassName(child, name, name.Capacity);
+                GetWindowRect(child, out var cr);
+                children.Add($"{name} top+{cr.Top - r.Top} h{cr.Bottom - cr.Top}");
+                return true;
+            }, IntPtr.Zero);
+            notes.Add($"{when}: frame top {r.Top}, client top+{origin.Y - r.Top}, children: {string.Join(", ", children)}");
+            return wrong;
+        }
+        var failures = new List<string>();
+        try
+        {
+            foreach (var theme in new[] { "light", "dark" })
+            {
+                await SetSetting(c, "appearance.theme", JObject.FromObject(new { kind = "builtIn", id = theme }));
+                await Activate(window);
+                await Task.Delay(1000);
+                failures.AddRange(Mismatches(theme));
+                await TypeInto(c, id, "x");
+                Check(await Eventually(async () => ((string?)(await Get(c, id))["text"] ?? "").Contains('x'), 3000), $"{theme}: the typed x reached the document");
+                await Activate(window);
+                // As K06 types it: Ctrl held, W with its scan code (the editor page reads the scan code).
+                INPUT W(bool up) => new() { type = 1, u = new InputUnion { ki = new KEYBDINPUT { wVk = 0x57, wScan = 0x11, dwFlags = up ? 0x0002u : 0u } } };
+                Send(Key(0x11, false));
+                await Task.Delay(80);
+                Send(W(false), W(true));
+                await Task.Delay(80);
+                Send(Key(0x11, true));
+                var root = System.Windows.Automation.AutomationElement.FromHandle(window);
+                System.Windows.Automation.AutomationElement? cancel = null;
+                for (var i = 0; i < 30 && cancel == null; i++)
+                {
+                    await Task.Delay(150);
+                    cancel = Deep.First(root, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.AutomationIdProperty, "CloseButton"));
+                }
+                if (cancel == null) throw new CaseFailed($"{theme}: Ctrl+W on a changed document showed no save question");
+                await Task.Delay(800); // the smoke fades in
+                failures.AddRange(Mismatches(theme + " with a dialog"));
+                ((System.Windows.Automation.InvokePattern)cancel.GetCurrentPattern(System.Windows.Automation.InvokePattern.Pattern)).Invoke();
+                await Task.Delay(500);
+                Check(((string?)(await Get(c, id))["text"] ?? "").Contains('x'), $"{theme}: Cancel kept the document with its change");
+                await c.Call("document.focus", new { documentId = id });
+                await c.Call("document.replace", new { documentId = id, text, baseRevision = await Revision(c, id), normalizationPolicy = "allowUnknown" });
+                await c.Call("document.save", new { documentId = id });
+            }
+            if (failures.Count > 0)
+                throw new CaseFailed(string.Join("; ", failures) + "; screen: " + Screenshot("DM01-" + DateTime.Now.ToString("HHmmss")));
+        }
+        finally
+        {
+            await SetSetting(c, "appearance.theme", JObject.FromObject(new { kind = "builtIn", id = "system" }));
+            try { await c.Call("document.close", new { documentId = id }); } catch { }
+        }
+    }
+
     private static async Task TH03(List<string> notes)
     {
         using var c = await Session("e2e TH03");
@@ -3699,6 +3798,7 @@ internal static partial class Program
     [DllImport("user32.dll", CharSet = CharSet.Unicode)] private static extern short VkKeyScanW(char ch);
     [StructLayout(LayoutKind.Sequential)] private struct RECT { public int Left, Top, Right, Bottom; }
     [DllImport("user32.dll")] private static extern bool GetWindowRect(IntPtr window, out RECT rect);
+    [DllImport("user32.dll", EntryPoint = "ClientToScreen")] private static extern bool DmClientToScreen(IntPtr window, ref POINT point);
     [DllImport("user32.dll")] private static extern bool SetCursorPos(int x, int y);
     [StructLayout(LayoutKind.Sequential)] private struct POINT { public int X, Y; }
     [DllImport("user32.dll")] private static extern IntPtr WindowFromPoint(POINT point);

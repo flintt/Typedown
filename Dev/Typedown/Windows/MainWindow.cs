@@ -1,4 +1,4 @@
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI;
 using Microsoft.UI.Input;
 using Microsoft.UI.Windowing;
@@ -122,6 +122,7 @@ namespace Typedown.Windows
                 AppWindow.MoveAndResize(new RectInt32(area.X + (area.Width - size.Width) / 2, area.Y + (area.Height - size.Height) / 2, size.Width, size.Height));
             }
             Activate();
+            if (Config.WindowsBuild < 22000) KeepTopEdgeInClientArea();
         }
 
         public void InitializeBinding()
@@ -153,6 +154,10 @@ namespace Typedown.Windows
             rootGrid.RequestedTheme = requested;
             // The caption buttons are the system's: given the content's colours, light or dark.
             var dark = requested == ElementTheme.Dark || (requested == ElementTheme.Default && Application.Current.RequestedTheme == ApplicationTheme.Dark);
+            // The frame the system draws (the top edge on Windows 10, the border on Windows 11) in the same theme, as
+            // XamlUI's window did; it follows the system's theme otherwise.
+            uint darkFrame = dark ? 1u : 0u;
+            PInvoke.DwmSetWindowAttribute(Handle, Config.WindowsBuild >= 18985 ? PInvoke.DwmWindowAttribute.DWMWA_USE_IMMERSIVE_DARK_MODE : (PInvoke.DwmWindowAttribute)19, ref darkFrame, sizeof(uint));
             var bar = AppWindow.TitleBar;
             bar.ButtonBackgroundColor = Colors.Transparent;
             bar.ButtonInactiveBackgroundColor = Colors.Transparent;
@@ -195,13 +200,92 @@ namespace Typedown.Windows
             {
                 SystemBackdrop = enable && Config.IsMicaSupported ? new MicaBackdrop() : null;
                 RootControl.Background = SystemBackdrop != null ? new SolidColorBrush(Colors.Transparent) : null;
+                RootControl.ShowWindowBackground(SystemBackdrop == null);
             }
             catch (Exception ex)
             {
                 Log.WriteLocal("MicaEffect", $"enable={enable} IsMicaSupported={Config.IsMicaSupported} build={Config.WindowsBuild} OS={Environment.OSVersion.VersionString}\n{ex}");
                 SystemBackdrop = null;
                 RootControl.Background = null;
+                RootControl.ShowWindowBackground(true);
             }
+        }
+
+        // ---- the top edge on Windows 10 ----
+
+        private delegate nint SubclassProc(nint hwnd, uint msg, nint wParam, nint lParam, nuint id, nuint data);
+
+        [System.Runtime.InteropServices.DllImport("comctl32.dll")]
+        private static extern bool SetWindowSubclass(nint hwnd, SubclassProc proc, nuint id, nuint data);
+
+        [System.Runtime.InteropServices.DllImport("comctl32.dll")]
+        private static extern nint DefSubclassProc(nint hwnd, uint msg, nint wParam, nint lParam);
+
+        [System.Runtime.InteropServices.DllImport("user32.dll", CharSet = System.Runtime.InteropServices.CharSet.Unicode)]
+        private static extern nint FindWindowEx(nint parent, nint after, string className, string windowName);
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern bool GetClientRect(nint hwnd, out PInvokeRect rect);
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern bool GetWindowRect(nint hwnd, out PInvokeRect rect);
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern bool ScreenToClient(nint hwnd, ref PInvokePoint point);
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern bool SetWindowPos(nint hwnd, nint after, int x, int y, int width, int height, uint flags);
+
+        private struct PInvokeRect { public int Left, Top, Right, Bottom; }
+
+        private struct PInvokePoint { public int X, Y; }
+
+        private SubclassProc topEdgeProc;
+
+        /// <summary>
+        /// On Windows 10 the window lays its content (the DesktopChildSiteBridge child window) one pixel below its top
+        /// and paints that row itself, white whatever the theme: a dialog's smoke stopped short of it and it stayed light
+        /// under a dark theme. XamlUI's window let the content draw the top row too. Here every position the window gives
+        /// its content is taken one pixel up and made one taller (WM_WINDOWPOSCHANGING of the content window), and the
+        /// content is put there once now. Windows 11 draws a border around every window instead, in the frame's theme
+        /// (SetTheme).
+        /// </summary>
+        private void KeepTopEdgeInClientArea()
+        {
+            var bridge = FindWindowEx(Handle, 0, "Microsoft.UI.Content.DesktopChildSiteBridge", null);
+            if (bridge == 0 || topEdgeProc != null) return;
+            topEdgeProc = (hwnd, msg, wParam, lParam, id, data) =>
+            {
+                if (msg == 0x0046 /* WM_WINDOWPOSCHANGING */)
+                {
+                    // WINDOWPOS: hwnd, hwndInsertAfter, x, y, cx, cy, flags.
+                    var flags = (uint)System.Runtime.InteropServices.Marshal.ReadInt32(lParam, 32);
+                    var noMove = (flags & 0x0002) != 0;
+                    var noSize = (flags & 0x0001) != 0;
+                    var y = System.Runtime.InteropServices.Marshal.ReadInt32(lParam, 20);
+                    var cy = System.Runtime.InteropServices.Marshal.ReadInt32(lParam, 28);
+                    if (!noMove && y >= 1 && y <= 2)
+                    {
+                        System.Runtime.InteropServices.Marshal.WriteInt32(lParam, 20, 0);
+                        if (!noSize) System.Runtime.InteropServices.Marshal.WriteInt32(lParam, 28, cy + y);
+                    }
+                    else if (noMove && !noSize && GetClientRect(Handle, out var client) && TopOf(hwnd) == 0 && cy >= client.Bottom - 2 && cy < client.Bottom)
+                        System.Runtime.InteropServices.Marshal.WriteInt32(lParam, 28, client.Bottom);
+                }
+                return DefSubclassProc(hwnd, msg, wParam, lParam);
+            };
+            SetWindowSubclass(bridge, topEdgeProc, 1, 0);
+            if (TopOf(bridge) is var top && top >= 1 && top <= 2 && GetWindowRect(bridge, out var at))
+                // SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOOWNERZORDER: the hook above makes it the top row.
+                SetWindowPos(bridge, 0, 0, top, at.Right - at.Left, at.Bottom - at.Top, 0x0004 | 0x0010 | 0x0200);
+        }
+
+        private int TopOf(nint child)
+        {
+            if (!GetWindowRect(child, out var at)) return -1;
+            var origin = new PInvokePoint { X = at.Left, Y = at.Top };
+            ScreenToClient(Handle, ref origin);
+            return origin.Y;
         }
 
         // ---- the caption areas ----

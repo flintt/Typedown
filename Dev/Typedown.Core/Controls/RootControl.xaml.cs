@@ -25,6 +25,9 @@ namespace Typedown.Core.Controls
             InitializeComponent();
         }
 
+        /// <summary>Whether the theme-coloured window background shows (off while a backdrop shows through instead).</summary>
+        public void ShowWindowBackground(bool show) => WindowBackground.Visibility = show ? Visibility.Visible : Visibility.Collapsed;
+
         private void OnLoaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
         {
             ViewModel.XamlRoot = XamlRoot;

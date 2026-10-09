@@ -33,6 +33,9 @@
             <RowDefinition Height="Auto" MinHeight="{x:Bind local:RootControl.GetCaptionRowMinHeight(ViewModel.UIViewModel.IsFullScreen), Mode=OneWay}"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        <!-- The window's background where no backdrop (Mica) shows through: XamlUI's window drew it in the theme's colour
+             behind the content; a WinUI 3 window is white there. Hidden by the host while a backdrop is on. -->
+        <Border x:Name="WindowBackground" Grid.RowSpan="2" Background="{ThemeResource SolidBackgroundFillColorBaseBrush}"/>
         <local:Caption x:Name="Caption" x:Load="{x:Bind local:RootControl.GetCaptionIsLoad(Settings.AppCompactMode, Frame.SourcePageType, ViewModel.UIViewModel.IsFullScreen), Mode=OneWay}"/>
         <local:GlobalFrame x:Name="Frame" Background="{ThemeResource ContentFrameBackgroundBrush}" Grid.Row="1"/>
         <Grid x:Name="PrintPreviewHost"
