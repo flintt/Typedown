@@ -140,4 +140,26 @@
 		<ProjectReference Include="..\Typedown.Automation.TestHost\Typedown.Automation.TestHost.csproj" />
 		<None Update="automation-test-host.marker" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
 	</ItemGroup>
+	<!-- The automation command line ($(BrandCliName), and "$(BrandCliName) mcp", the MCP server) published with the app,
+	     so the MSIX has it too (the installer and the portable zip get it from add-cli.ps1, which then finds it there).
+	     Published for the app's runtime identifier and framework, self-contained like the app: only the files the app
+	     does not have already are added - the runtime and the shared libraries are the app's - beside the app's exe,
+	     where it starts on the app's runtime. Not for the automation test host, nor with /p:IncludeCli=false. -->
+	<Target Name="PublishCliAlongside" AfterTargets="ComputeResolvedFilesToPublishList"
+	        Condition="'$(RuntimeIdentifier)' != '' and '$(AutomationTestHost)' != 'true' and '$(IncludeCli)' != 'false'">
+		<PropertyGroup>
+			<_CliProject>$(MSBuildThisFileDirectory)..\..\Tools\Typedown.Cli\Typedown.Cli.csproj</_CliProject>
+			<_CliPublishDir>$(MSBuildProjectDirectory)\$(IntermediateOutputPath)cli-publish</_CliPublishDir>
+		</PropertyGroup>
+		<RemoveDir Directories="$(_CliPublishDir)" />
+		<Exec Command="dotnet publish &quot;$(_CliProject)&quot; -f netcoreapp3.1 -r $(RuntimeIdentifier) --self-contained true -c $(Configuration) -o &quot;$(_CliPublishDir)&quot; -nologo -v q" />
+		<ItemGroup>
+			<_CliFile Include="$(_CliPublishDir)\**\*" Exclude="$(_CliPublishDir)\**\*.pdb" />
+			<_CliRelative Include="@(_CliFile->'%(RecursiveDir)%(Filename)%(Extension)')" Source="%(_CliFile.FullPath)" />
+			<_AppRelative Include="@(ResolvedFileToPublish->'%(RelativePath)')" />
+			<_CliRelative Remove="@(_AppRelative)" />
+			<ResolvedFileToPublish Include="%(_CliRelative.Source)" RelativePath="%(_CliRelative.Identity)" CopyToPublishDirectory="PreserveNewest" />
+		</ItemGroup>
+		<Message Importance="high" Text="$(BrandCliName): @(_CliRelative->Count()) file(s) published with the app: @(_CliRelative, ', ')" />
+	</Target>
 </Project>

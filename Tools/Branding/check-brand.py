@@ -51,7 +51,10 @@ for label, value, expected in [
     ("Brand.cs CliName", cs_cli, cli),
     ("brand.iss MyAppName", iss.get("MyAppName"), name),
     ("brand.iss MyAppExeName", iss.get("MyAppExeName"), exe + ".exe"),
-] + [("Package.appxmanifest DisplayName", d, name) for d in display_names]:
+] + [("Package.appxmanifest DisplayName", d, cli if d == cli else name) for d in display_names] + [
+    # The command line's own entry: its exe beside the app's, and the name typed in a terminal.
+    ("Package.appxmanifest execution alias", a, cli + ".exe") for a in re.findall(r'ExecutionAlias Alias="([^"]*)"', manifest)
+] + [("Package.appxmanifest command line Executable", e, cli + ".exe") for e in re.findall(r'Executable="Typedown\\([^"]*)"', manifest)]:
     if value != expected:
         problems.append(f"brand files disagree: {label} is {value!r}, Branding.props says {expected!r}")
 
