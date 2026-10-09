@@ -242,7 +242,7 @@ internal static partial class Program
     /// </summary>
     private static async Task PF02(List<string> notes)
     {
-        var windows = new List<double>(); var shown = new List<double>(); var exits = new List<double>();
+        var windows = new List<double>(); var shown = new List<double>(); var exits = new List<double>(); var gone = new List<double>();
         var left = 0;
         for (var round = 0; round < 3; round++)
         {
@@ -287,6 +287,9 @@ internal static partial class Program
                 var handle = await WindowOf(windowId, c);
                 var closing = Stopwatch.StartNew();
                 PostMessage(handle, 0x0010, IntPtr.Zero, IntPtr.Zero);
+                // What the user sees: the window off the screen (the process may still be tidying up after that).
+                while (IsWindow(handle) && IsWindowVisible(handle) && closing.Elapsed < TimeSpan.FromSeconds(30)) await Task.Delay(2);
+                gone.Add(closing.Elapsed.TotalMilliseconds);
                 if (!host.WaitForExit(30000)) { notes.Add($"round {round}: the host did not exit within 30 s"); host.Kill(); }
                 else exits.Add(closing.Elapsed.TotalMilliseconds);
                 await Task.Delay(3000);
@@ -298,6 +301,7 @@ internal static partial class Program
         }
         Perf(notes, "coldstart.window.median", Median(windows), "ms");
         Perf(notes, "coldstart.document.median", Median(shown), "ms");
+        Perf(notes, "close.windowGone.median", Median(gone), "ms");
         Perf(notes, "exit.median", Median(exits), "ms");
         Perf(notes, "exit.leftoverProcesses", left, "");
         notes.Add("window: " + string.Join(", ", windows.Select(v => $"{v:0}")) + "; document: " + string.Join(", ", shown.Select(v => $"{v:0}")));
