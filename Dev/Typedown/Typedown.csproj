@@ -150,9 +150,12 @@
 		<PropertyGroup>
 			<_CliProject>$(MSBuildThisFileDirectory)..\..\Tools\Typedown.Cli\Typedown.Cli.csproj</_CliProject>
 			<_CliPublishDir>$(MSBuildProjectDirectory)\$(IntermediateOutputPath)cli-publish</_CliPublishDir>
+			<!-- win-x64 rather than win10-x64: the newer SDK the command line's net8.0 references build with does not know
+			     the win10 ones, and both name the same runtime pack (as add-cli.ps1 does). -->
+			<_CliRid>$(RuntimeIdentifier.Replace('win10-', 'win-'))</_CliRid>
 		</PropertyGroup>
 		<RemoveDir Directories="$(_CliPublishDir)" />
-		<Exec Command="dotnet publish &quot;$(_CliProject)&quot; -f netcoreapp3.1 -r $(RuntimeIdentifier) --self-contained true -c $(Configuration) -o &quot;$(_CliPublishDir)&quot; -nologo -v q" />
+		<Exec Command="dotnet publish &quot;$(_CliProject)&quot; -f netcoreapp3.1 -r $(_CliRid) --self-contained true -c $(Configuration) -o &quot;$(_CliPublishDir)&quot; -nologo -v q" />
 		<ItemGroup>
 			<_CliFile Include="$(_CliPublishDir)\**\*" Exclude="$(_CliPublishDir)\**\*.pdb" />
 			<_CliRelative Include="@(_CliFile->'%(RecursiveDir)%(Filename)%(Extension)')" Source="%(_CliFile.FullPath)" />
