@@ -15,7 +15,7 @@ internal static class Program
             var dispatcher = DispatcherQueue.GetForCurrentThread();
             SynchronizationContext.SetSynchronizationContext(
                 new DispatcherQueueSynchronizationContext(dispatcher));
-            _ = new App();
+            new App();
         });
     }
 }
