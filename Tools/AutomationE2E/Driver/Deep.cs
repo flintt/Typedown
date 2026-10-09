@@ -19,8 +19,18 @@ internal static class Deep
 
     public static List<AutomationElement> All(AutomationElement root, Condition condition)
     {
+        // Both, not the walk only when the search finds nothing: the search finds the window's own (Win32) parts, the
+        // title bar's buttons say, and still misses the XAML ones.
         var found = root.FindAll(TreeScope.Descendants, condition).Cast<AutomationElement>().ToList();
-        return found.Count > 0 ? found : Walk(root, condition).ToList();
+        var ids = new HashSet<string>(found.Select(Id));
+        foreach (var e in Walk(root, condition))
+            if (ids.Add(Id(e))) found.Add(e);
+        return found;
+    }
+
+    private static string Id(AutomationElement e)
+    {
+        try { return string.Join(".", e.GetRuntimeId()); } catch { return System.Guid.NewGuid().ToString(); }
     }
 
     private static IEnumerable<AutomationElement> Walk(AutomationElement root, Condition condition)

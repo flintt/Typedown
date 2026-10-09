@@ -825,7 +825,10 @@ internal static partial class Program
     {
         var root = System.Windows.Automation.AutomationElement.FromHandle(window);
         var menuItem = new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.MenuItem);
-        var bar = Deep.First(root, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.MenuBar))
+        var bar = Deep.First(root, new System.Windows.Automation.AndCondition(
+            new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.MenuBar),
+            // Not the window's system menu bar (one item, System), which a WinUI 3 window also shows.
+            new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.FrameworkIdProperty, "XAML")))
             ?? throw new CaseFailed("no menu bar in the window");
         var seen = new List<string>();
         try
@@ -2548,7 +2551,10 @@ internal static partial class Program
     {
         var root = System.Windows.Automation.AutomationElement.FromHandle(window);
         var menuItem = new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.MenuItem);
-        var bar = Deep.First(root, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.MenuBar))
+        var bar = Deep.First(root, new System.Windows.Automation.AndCondition(
+            new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.MenuBar),
+            // Not the window's system menu bar (one item, System), which a WinUI 3 window also shows.
+            new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.FrameworkIdProperty, "XAML")))
             ?? throw new CaseFailed("no menu bar in the window");
         try
         {
