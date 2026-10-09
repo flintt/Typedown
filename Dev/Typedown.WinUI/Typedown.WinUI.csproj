@@ -86,6 +86,11 @@
   <ItemGroup>
     <Content Include="Assets\*.png" />
     <Content Include="Assets\logo.ico" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\Typedown.Core\Resources\Strings\**\*.resw">
+      <Link>Resources\Strings\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>
 

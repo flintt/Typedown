@@ -1,7 +1,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Typedown.Contracts.Editor;
+using Typedown.Contracts.Localization;
 using Typedown.Contracts.Platform;
 using Typedown.Core.Editor;
+using Typedown.Core.Localization;
 using Typedown.Core.Services;
 using Typedown.WinUI.Automation;
 using Typedown.WinUI.Editor;
@@ -25,6 +27,11 @@ internal static class ServiceConfiguration
         services.AddSingleton<WinUIWebViewEnvironmentService>();
         services.AddSingleton(provider => JsonSettingsStore.Shared(
             provider.GetRequiredService<IAppDataPathProvider>().SettingsFilePath));
+        services.AddSingleton<ReswStringCatalog>(_ => new ReswStringCatalog(
+            Path.Combine(AppContext.BaseDirectory, "Resources", "Strings")));
+        services.AddSingleton<WinUIStringLocalizer>();
+        services.AddSingleton<IStringLocalizer>(provider =>
+            provider.GetRequiredService<WinUIStringLocalizer>());
         services.AddSingleton<WinUIAutomationService>();
 
         services.AddScoped<WindowRegistration>();
