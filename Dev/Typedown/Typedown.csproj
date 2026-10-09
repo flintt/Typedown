@@ -40,6 +40,8 @@
 		<PublishTrimmed Condition="'$(TypedownTrim)' != 'true'">false</PublishTrimmed>
 		<PublishTrimmed Condition="'$(TypedownTrim)' == 'true'">true</PublishTrimmed>
 		<TrimMode Condition="'$(TypedownTrim)' == 'true'">partial</TrimMode>
+		<!-- Kept in a trimmed build: the Explorer file drop wraps the window's OLE drop targets (FileDropTarget). -->
+		<BuiltInComInteropSupport>true</BuiltInComInteropSupport>
 		<PublishAot>false</PublishAot>
 		<Version>1.3.7</Version>
 		<!-- Shown as "File description" in Explorer and "Open with", and indexed by Start menu search (upstream #28): a search

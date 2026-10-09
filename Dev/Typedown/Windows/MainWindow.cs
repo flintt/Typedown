@@ -352,6 +352,11 @@ namespace Typedown.Windows
             AppViewModel.MainWindow = Handle;
             Core.Services.AutomationWindows.Register(AppViewModel, DispatcherQueue);
             UpdateCaptionRegions();
+            // Files dragged from Explorer (Markdown opens, pictures go in): the web view over the editor takes such a drop
+            // itself and did nothing with it. The OLE drop targets of the window and its children are wrapped once they
+            // are registered, a moment after the content loads (again later, for one registered late).
+            _ = DispatcherQueue.RunIdleAsync(_ => Utilities.FileDropTarget.Install(this));
+            _ = Task.Delay(2000).ContinueWith(_ => DispatcherQueue.TryEnqueue(() => Utilities.FileDropTarget.Install(this)));
         }
 
         private void OnAppWindowChanged(AppWindow sender, AppWindowChangedEventArgs args)
