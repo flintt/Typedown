@@ -21,6 +21,19 @@ class DependencyInjectionTests(unittest.TestCase):
         }
         self.assertEqual(packages.get("Microsoft.Extensions.DependencyInjection"), "10.0.0")
 
+    def test_winui_host_directly_carries_json_runtime_dependency(self) -> None:
+        root = ElementTree.parse(PROJECT_FILE).getroot()
+        packages = {
+            item.attrib.get("Include"): item.attrib.get("Version")
+            for item in root.findall(".//PackageReference")
+        }
+        self.assertEqual(
+            packages.get("Newtonsoft.Json"),
+            "13.0.3",
+            "The MSIX host must copy Newtonsoft.Json beside Typedown.exe; the "
+            "CLI subdirectory cannot satisfy the host's runtime load.",
+        )
+
     def test_process_composition_root_registers_platform_lifetimes(self) -> None:
         self.assertTrue(COMPOSITION_FILE.exists(), "Missing WinUI process composition root")
         source = COMPOSITION_FILE.read_text(encoding="utf-8")

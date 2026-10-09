@@ -65,6 +65,11 @@ class EditorBridgeTests(unittest.TestCase):
         self.assertIn("--allow-file-access-from-files", environment)
         self.assertIn('Path.Combine(pathProvider.CacheDirectory, "WebView2")', environment)
 
+    def test_debug_build_preserves_the_editor_debugging_endpoint(self) -> None:
+        source = ENVIRONMENT.read_text(encoding="utf-8")
+        self.assertIn("#if MODE_DEBUG", source)
+        self.assertIn('"--remote-debugging-port=9222"', source)
+
     def test_webview_failures_and_disposal_are_observable(self) -> None:
         source = HOST.read_text(encoding="utf-8")
         self.assertIn("NavigationCompleted", source)
@@ -72,6 +77,12 @@ class EditorBridgeTests(unittest.TestCase):
         self.assertIn("EditorBridgeState.Faulted", source)
         self.assertIn("EditorBridgeState.Disposed", source)
         self.assertIn("public void Dispose()", source)
+
+    def test_focus_reaches_the_page_editable_surface(self) -> None:
+        source = HOST.read_text(encoding="utf-8")
+        self.assertIn("webView.Focus(FocusState.Programmatic)", source)
+        self.assertIn("ExecuteScriptAsync", source)
+        self.assertIn("[contenteditable=", source)
 
     def test_each_window_scope_owns_one_editor_host(self) -> None:
         root_page = ROOT_PAGE.read_text(encoding="utf-8")

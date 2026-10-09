@@ -1,6 +1,8 @@
 using System.Runtime.CompilerServices;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Dispatching;
 using Microsoft.Windows.AppLifecycle;
+using Typedown.Contracts.Editor;
 using Typedown.Contracts.Platform;
 using Typedown.WinUI.Windowing;
 
@@ -46,7 +48,8 @@ internal sealed class WinUiAppActivationService : IAppActivationService, IDispos
 
         if (dispatcherQueue.HasThreadAccess)
         {
-            return ValueTask.FromResult(ActivateOnUiThread(request));
+            return new ValueTask<AppActivationResult>(
+                ActivateOnUiThreadAsync(request, cancellationToken));
         }
 
         return new ValueTask<AppActivationResult>(
@@ -83,7 +86,9 @@ internal sealed class WinUiAppActivationService : IAppActivationService, IDispos
         activationBroker.Dispose();
     }
 
-    private AppActivationResult ActivateOnUiThread(AppActivationRequest request)
+    private async Task<AppActivationResult> ActivateOnUiThreadAsync(
+        AppActivationRequest request,
+        CancellationToken cancellationToken)
     {
         WindowSession? target = null;
         if (!request.OpenInNewWindow && request.PreferredWindowId is { } preferredId)
@@ -106,6 +111,27 @@ internal sealed class WinUiAppActivationService : IAppActivationService, IDispos
             target.Window.Activate();
         }
 
+        if (GetDocumentPath(request) is { } documentPath)
+        {
+            try
+            {
+                await target.Services
+                    .GetRequiredService<IEditorDocumentSession>()
+                    .OpenAsync(documentPath, cancellationToken);
+            }
+            catch (Exception exception)
+            {
+                System.Diagnostics.Debug.WriteLine(
+                    $"Opening an activated document failed: {exception}");
+                return new AppActivationResult
+                {
+                    Status = AppActivationStatus.Rejected,
+                    WindowId = target.Context.Id,
+                    ErrorCode = "document_open_failed",
+                };
+            }
+        }
+
         return new AppActivationResult
         {
             Status = AppActivationStatus.Handled,
@@ -120,7 +146,7 @@ internal sealed class WinUiAppActivationService : IAppActivationService, IDispos
         var completion = new TaskCompletionSource<AppActivationResult>(
             TaskCreationOptions.RunContinuationsAsynchronously);
 
-        if (!dispatcherQueue.TryEnqueue(() =>
+        if (!dispatcherQueue.TryEnqueue(async () =>
             {
                 if (cancellationToken.IsCancellationRequested)
                 {
@@ -130,7 +156,8 @@ internal sealed class WinUiAppActivationService : IAppActivationService, IDispos
 
                 try
                 {
-                    completion.TrySetResult(ActivateOnUiThread(request));
+                    completion.TrySetResult(
+                        await ActivateOnUiThreadAsync(request, cancellationToken));
                 }
                 catch (Exception exception)
                 {
@@ -143,5 +170,31 @@ internal sealed class WinUiAppActivationService : IAppActivationService, IDispos
         }
 
         return await completion.Task.WaitAsync(cancellationToken).ConfigureAwait(false);
+    }
+
+    private static string? GetDocumentPath(AppActivationRequest request)
+    {
+        var candidate = request.FilePaths.FirstOrDefault(path =>
+            !string.IsNullOrWhiteSpace(path));
+        if (candidate is null
+            && request.Kind is AppActivationKind.CommandLine
+                or AppActivationKind.Launch)
+        {
+            candidate = request.CommandLineArguments.FirstOrDefault(argument =>
+                !string.IsNullOrWhiteSpace(argument)
+                && !argument.StartsWith('-'));
+        }
+        if (candidate is null)
+        {
+            return null;
+        }
+        try
+        {
+            return Path.GetFullPath(candidate);
+        }
+        catch
+        {
+            return candidate;
+        }
     }
 }

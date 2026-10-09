@@ -1,6 +1,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Typedown.Contracts.Editor;
 using Typedown.Contracts.Platform;
+using Typedown.Core.Editor;
+using Typedown.Core.Services;
 using Typedown.WinUI.Editor;
 using Typedown.WinUI.Windowing;
 
@@ -20,6 +22,8 @@ internal static class ServiceConfiguration
             provider.GetRequiredService<IServiceScopeFactory>(),
             appName));
         services.AddSingleton<WinUIWebViewEnvironmentService>();
+        services.AddSingleton(provider => JsonSettingsStore.Shared(
+            provider.GetRequiredService<IAppDataPathProvider>().SettingsFilePath));
 
         services.AddScoped<WindowRegistration>();
         services.AddScoped<IWindowContext>(
@@ -33,6 +37,9 @@ internal static class ServiceConfiguration
         services.AddScoped<WinUIEditorHost>();
         services.AddScoped<IMarkdownEditorBridge>(
             provider => provider.GetRequiredService<WinUIEditorHost>());
+        services.AddScoped<EditorDocumentSession>();
+        services.AddScoped<IEditorDocumentSession>(
+            provider => provider.GetRequiredService<EditorDocumentSession>());
 
         services.AddTransient<RootPage>();
 

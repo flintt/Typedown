@@ -66,6 +66,24 @@ public sealed class WinUIEditorHost : UserControl, IMarkdownEditorBridge
         if (Volatile.Read(ref isDisposed) == 0)
         {
             webView.Focus(FocusState.Programmatic);
+            if (webView.CoreWebView2 is not null)
+            {
+                _ = FocusEditableSurfaceAsync();
+            }
+        }
+    }
+
+    private async Task FocusEditableSurfaceAsync()
+    {
+        try
+        {
+            await webView.CoreWebView2.ExecuteScriptAsync(
+                "document.querySelector('[contenteditable=\"true\"]')?.focus();");
+        }
+        catch (Exception exception)
+        {
+            System.Diagnostics.Debug.WriteLine(
+                $"Focusing the editor page failed: {exception.Message}");
         }
     }
 

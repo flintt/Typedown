@@ -15,6 +15,9 @@ public sealed class WinUIWebViewEnvironmentService
         // stable host behavior until image requests move to a scoped handler.
         "--disable-web-security",
         "--allow-file-access-from-files",
+#if MODE_DEBUG
+        "--remote-debugging-port=9222",
+#endif
         "--flag-switches-begin",
         "--enable-features=msOverlayScrollbarWinStyle",
         "--flag-switches-end",

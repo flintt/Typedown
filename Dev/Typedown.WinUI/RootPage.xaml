@@ -3,6 +3,12 @@
     x:Class="Typedown.WinUI.RootPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Page.KeyboardAccelerators>
+        <KeyboardAccelerator
+            Key="S"
+            Modifiers="Control"
+            Invoked="OnSaveInvoked" />
+    </Page.KeyboardAccelerators>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <ContentPresenter x:Name="EditorPresenter" />
     </Grid>

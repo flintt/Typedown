@@ -117,6 +117,17 @@ class AppActivationTests(unittest.TestCase):
         self.assertIn("DispatcherQueue", source)
         self.assertNotIn("Process.Start", source)
 
+    def test_launch_arguments_can_open_a_document(self) -> None:
+        source = (ACTIVATION_ROOT / "WinUiAppActivationService.cs").read_text(
+            encoding="utf-8"
+        )
+        self.assertRegex(
+            source,
+            r"request\.Kind\s+is\s+AppActivationKind\.CommandLine\s+or\s+"
+            r"AppActivationKind\.Launch",
+        )
+        self.assertIn("request.CommandLineArguments.FirstOrDefault", source)
+
     def test_app_runs_nonblocking_activation_pump(self) -> None:
         source = APP_FILE.read_text(encoding="utf-8")
         self.assertIn("WinUiAppActivationService", source)
