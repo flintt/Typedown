@@ -345,6 +345,9 @@ internal static partial class Program
         var html = $"Version:0.9\r\nStartHTML:0\r\nEndHTML:0\r\nStartFragment:0\r\nEndFragment:0\r\nSourceURL:{site}/article/page.html\r\n<html><body><!--StartFragment-->{fragment}<!--EndFragment--></body></html>";
         try
         {
+            // The page showing this document before anything is pasted: pasted at once after the open, it landed in the
+            // document the page still held, and the load that followed put "# WP01" back over it (seen on the Win10 PC).
+            await WaitForPage(c, id, t => t.Contains("# WP01"), "the opened document");
             // Kept on the web: the conversion alone.
             await c.Call("test.images.webAction", new { windowId, action = "none" });
             await c.Call("test.editor.focus", new { windowId });
@@ -1269,6 +1272,13 @@ internal static partial class Program
             await Try("the find bar opened with Ctrl+F and closed with Esc", async () =>
             {
                 await Chord(0x46, 0x21);
+                // Esc once the bar has the keys, as a person presses it: sent at once, it could reach the text before
+                // the bar took the focus, and the bar stayed open with the next letter typed into its search box.
+                for (var i = 0; i < 40; i++)
+                {
+                    if (System.Windows.Automation.AutomationElement.FocusedElement?.Current.AutomationId == "TextBoxSearch") break;
+                    await Task.Delay(50);
+                }
                 Send(Scan(0x1B, 0x01, false), Scan(0x1B, 0x01, true));
                 await Task.Delay(1200);
             }, 'L', () => Task.FromResult(main));
@@ -3008,6 +3018,20 @@ internal static partial class Program
         await TypeInto(c, id, "Q");
         var after = await WaitForPage(c, id, t => t.Contains('Q'), "the keystroke");
         var latest = (string)(await Get(c, id))["text"]!;
+        // A latest read is the page's text at that moment. The page may still settle after the keystroke shows (it
+        // did on the Win10 PC, now and then): what differed is noted, and the two are read again together.
+        if (latest != after)
+        {
+            var shorter = Math.Min(latest.Length, after.Length);
+            var at = Enumerable.Range(0, shorter).Where(i => latest[i] != after[i]).DefaultIfEmpty(shorter).First();
+            notes.Add($"latest read and the page differed at {at}: page {JsonConvert.SerializeObject(after.Substring(Math.Max(0, at - 20), Math.Min(60, after.Length - Math.Max(0, at - 20))))}, latest {JsonConvert.SerializeObject(latest.Substring(Math.Max(0, at - 20), Math.Min(60, latest.Length - Math.Max(0, at - 20))))}");
+            for (var i = 0; i < 10 && latest != after; i++)
+            {
+                await Task.Delay(200);
+                latest = (string)(await Get(c, id))["text"]!;
+                after = (string?)(await c.Call("test.editor.pageText", new { documentId = id }))["text"] ?? "";
+            }
+        }
         Check(latest == after, "latest read is what the page holds");
         var lost = keep.Where(k => !latest.Contains(k)).ToList();
         Check(lost.Count == 0, $"every protected payload survives the first edit (lost: {JsonConvert.SerializeObject(lost)}; text {JsonConvert.SerializeObject(latest)})");
