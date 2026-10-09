@@ -93,6 +93,17 @@ internal static partial class Program
         using var c = await Session("e2e PF01");
         SetProcessDpiAwarenessContext(new IntPtr(-4));
 
+        // The editor page of the window started with the host fully loaded first: a host whose window comes up sooner
+        // would otherwise have its first open timed while its page is still starting.
+        var firstWindow = (string)((JArray)(await c.Call("window.list"))["windows"]!)[0]!["windowId"]!;
+        for (var i = 0; i < 300; i++)
+        {
+            try { if ((string?)(await c.Call("test.editor.eval", new { windowId = firstWindow, script = "document.readyState" }))["result"] == "complete") break; }
+            catch (Typedown.Automation.JsonRpcRemoteException) { }
+            await Task.Delay(100);
+        }
+        await Task.Delay(5000);
+
         // Opening: from document.open to the editor showing the document's end.
         var opens = new List<double>();
         string? id = null;
@@ -114,6 +125,24 @@ internal static partial class Program
             opens.Add(watch.Elapsed.TotalMilliseconds);
             // Left open: the editor tidies a table or two of it as it loads, so a close would stop at the save question.
         }
+        // What the page had to lay out, and what the host's log says the page took (from the host posting the document
+        // to the page reporting it loaded): the part of an open that is the editor's, not the host's.
+        var viewport = (await c.Call("test.editor.eval", new { windowId = await WindowIdOf(c, id!), script = "`${innerWidth}x${innerHeight} @${devicePixelRatio}`" }))["result"];
+        notes.Add($"viewport {viewport}");
+        try
+        {
+            using var reader = new StreamReader(new FileStream(Path.Combine(testRoot, "logs", "debug.log"), FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete));
+            var page = reader.ReadToEnd().Split('\n').Where(l => l.Contains("FileLoaded after")).Select(l => System.Text.RegularExpressions.Regex.Match(l, @"after (\d+) ms").Groups[1].Value).ToList();
+            notes.Add("page took (host log): " + string.Join(", ", page));
+            // The host's log around the second open (the first one into a window that already shows a large document).
+            var lines = File.ReadAllLines(Path.Combine(testRoot, "logs", "debug.log"));
+            var from = Array.FindIndex(lines, l => l.Contains("pf01-0.md"));
+            var to = Array.FindIndex(lines, l => l.Contains("pf01-2.md"));
+            if (from >= 0 && to > from)
+                foreach (var l in lines.Skip(from).Take(Math.Min(60, to - from + 1)).Where(l => l.Length > 0 && !l.StartsWith("   at ")))
+                    notes.Add("log: " + (l.Length > 200 ? l.Substring(0, 200) : l));
+        }
+        catch (IOException e) { notes.Add("no host log: " + e.Message); }
         // The first open of a run also starts what later ones find ready: reported apart.
         Perf(notes, "open300k.first", opens[0], "ms");
         Perf(notes, "open300k.median", Median(opens.Skip(1).ToList()), "ms");
