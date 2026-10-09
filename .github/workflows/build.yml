@@ -36,6 +36,8 @@ jobs:
       - uses: actions/checkout@v4
       # The product's names come from the brand files only (Tools/Branding/check-brand.py).
       - run: python3 Tools/Branding/check-brand.py
+      # Keep the side-by-side WinUI migration on its pinned .NET/Windows App SDK baseline while the legacy host remains available.
+      - run: python3 -m unittest discover -s Tests/WinUI.Migration.Tests -p 'test_*.py' -v
       # The case, test.* method and editor check lists of docs/testing.md come from the code (Tools/Docs/testing-index.py).
       - run: python3 Tools/Docs/testing-index.py
       # An edition that keeps a case list of its own (docs/edition-testing.md) checks it the same way.
