@@ -31,6 +31,10 @@ namespace Typedown.Core.Controls
             // outline row kept the system accent under a custom theme. Only these two trees use that key.
             Resources[NavigationAccentKey] = AccentBrush;
             Application.Current.Resources[TreeAccentKey] = AccentBrush;
+            // A row under the pointer or pressed draws its mark from keys of its own (the selected heading turned the
+            // system blue whenever the mouse was over it): the same colour, a little lighter, as WinUI's own are.
+            Application.Current.Resources[TreeAccentKey + "PointerOver"] = AccentPointerOverBrush;
+            Application.Current.Resources[TreeAccentKey + "Pressed"] = AccentPressedBrush;
             Root.ActualThemeChanged += (_, _) => UpdateAccent();
         }
 
@@ -74,6 +78,10 @@ namespace Typedown.Core.Controls
         // Shared by the windows' panes: the custom theme is one setting for all of them, and they share the UI thread.
         private static readonly Microsoft.UI.Xaml.Media.SolidColorBrush AccentBrush = new();
 
+        private static readonly Microsoft.UI.Xaml.Media.SolidColorBrush AccentPointerOverBrush = new() { Opacity = 0.9 };
+
+        private static readonly Microsoft.UI.Xaml.Media.SolidColorBrush AccentPressedBrush = new() { Opacity = 0.8 };
+
         private readonly global::Windows.UI.ViewManagement.UISettings uiSettings = new();
 
         private void UpdateAccent()
@@ -81,7 +89,7 @@ namespace Typedown.Core.Controls
             var custom = ThemeFiles.Brush(ThemeFiles.Find(Settings?.CustomTheme)?.Accent) as Microsoft.UI.Xaml.Media.SolidColorBrush;
             // Without one, the system accent in the shade WinUI gives these marks (AccentFillColorDefault): darker on a
             // light theme, lighter on a dark one.
-            AccentBrush.Color = custom?.Color ?? uiSettings.GetColorValue(Root.ActualTheme == ElementTheme.Dark
+            AccentPointerOverBrush.Color = AccentPressedBrush.Color = AccentBrush.Color = custom?.Color ?? uiSettings.GetColorValue(Root.ActualTheme == ElementTheme.Dark
                 ? global::Windows.UI.ViewManagement.UIColorType.AccentLight2
                 : global::Windows.UI.ViewManagement.UIColorType.AccentDark1);
         }

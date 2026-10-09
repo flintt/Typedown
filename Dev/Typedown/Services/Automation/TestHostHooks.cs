@@ -547,7 +547,24 @@ namespace Typedown.Services.Automation
                     void Walk(global::Microsoft.UI.Xaml.DependencyObject node)
                     {
                         if (node is global::Microsoft.UI.Xaml.Shapes.Shape shape && shape.Name.Contains("SelectionIndicator"))
-                            found.Add(new Newtonsoft.Json.Linq.JObject { ["where"] = Where(node), ["name"] = shape.Name, ["fill"] = (shape.Fill as global::Microsoft.UI.Xaml.Media.SolidColorBrush)?.Color.ToString() });
+                        {
+                            // What a wrong colour comes from: the mark's ancestors, whether its brush is the shared accent
+                            // brush, and the row it belongs to.
+                            var chain = new System.Collections.Generic.List<string>();
+                            string row = null;
+                            for (var up = global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetParent(node); up != null && chain.Count < 8; up = global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetParent(up))
+                            {
+                                chain.Add(up.GetType().Name);
+                                if (row == null && up is global::Microsoft.UI.Xaml.Controls.ContentControl item && item.GetType().Name.EndsWith("Item")) row = item.Content?.ToString() ?? item.DataContext?.ToString();
+                            }
+                            global::Microsoft.UI.Xaml.Application.Current.Resources.TryGetValue("TreeViewItemSelectionIndicatorForeground", out var shared);
+                            found.Add(new Newtonsoft.Json.Linq.JObject
+                            {
+                                ["where"] = Where(node), ["name"] = shape.Name, ["fill"] = (shape.Fill as global::Microsoft.UI.Xaml.Media.SolidColorBrush)?.Color.ToString(),
+                                ["shared"] = ReferenceEquals(shape.Fill, shared), ["opacity"] = shape.Opacity, ["visible"] = shape.Visibility.ToString(),
+                                ["row"] = row, ["chain"] = string.Join(" < ", chain),
+                            });
+                        }
                         for (var i = 0; i < global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(node); i++)
                             Walk(global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChild(node, i));
                     }
