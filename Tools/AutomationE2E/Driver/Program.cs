@@ -176,6 +176,7 @@ internal static partial class Program
             foreach (var (name, run) in editionCases) await Case(name, run);
             // Last: it ends the test host.
             await Case("PF01 measured: a 300 KB document opened, typed into and saved; the memory with two windows", PF01);
+            await Case("PF03 profiled: where the host's CPU goes while it opens 300 KB documents", PF03);
             await Case("PF02 measured: a cold start with a document on the command line, then the window closed", PF02);
             await Case("Q01 two windows closed one after the other: the process exits (it stayed, headless)", Q01);
         }

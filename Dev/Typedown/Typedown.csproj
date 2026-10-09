@@ -68,6 +68,13 @@
 		<PublishReadyToRun>true</PublishReadyToRun>
 	</PropertyGroup>
 
+	<!-- No dynamic PGO (on by default since .NET 8): with the app precompiled, the JIT's profile-guided recompiles of
+	     hot methods were most of the host's CPU while it opened large documents (2.1 s of 3.7 s over six 300 KB opens
+	     on the W10 PC, against 0.5 s without), taken from the editor page drawing them. -->
+	<PropertyGroup>
+		<TieredPGO>false</TieredPGO>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<PackageReference Include="Microsoft.WindowsAppSDK" Version="2.5.1" />
 		<!-- Parts of the SDK the app does not use, left out of the build and every install: the AI and ML runtimes

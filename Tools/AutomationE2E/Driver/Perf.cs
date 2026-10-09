@@ -104,6 +104,31 @@ internal static partial class Program
         }
         await Task.Delay(5000);
 
+        // CPU time across the opens: the host itself and its WebView2 processes apart.
+        (double host, double web) Cpu()
+        {
+            double h = 0, w = 0;
+            foreach (var pid in ProcessTree(hostPid))
+                try { using var p = Process.GetProcessById(pid); var t = p.TotalProcessorTime.TotalMilliseconds; if (pid == hostPid) h += t; else w += t; } catch (ArgumentException) { } catch (InvalidOperationException) { }
+            return (h, w);
+        }
+        // Idle: nothing asked of it for 10 s.
+        var idleStart = Cpu();
+        await Task.Delay(10000);
+        var idleEnd = Cpu();
+        Perf(notes, "idle10s.cpu.host", idleEnd.host - idleStart.host, "ms");
+        Perf(notes, "idle10s.cpu.webview", idleEnd.web - idleStart.web, "ms");
+        var cpuBefore = Cpu();
+        Dictionary<int, (double ms, DateTime start)> Threads()
+        {
+            var d = new Dictionary<int, (double, DateTime)>();
+            using var p = Process.GetProcessById(hostPid);
+            foreach (ProcessThread t in p.Threads)
+                try { d[t.Id] = (t.TotalProcessorTime.TotalMilliseconds, t.StartTime); } catch (InvalidOperationException) { } catch (System.ComponentModel.Win32Exception) { }
+            return d;
+        }
+        var threadsBefore = Threads();
+
         // Opening: from document.open to the editor showing the document's end.
         var opens = new List<double>();
         string? id = null;
@@ -125,6 +150,13 @@ internal static partial class Program
             opens.Add(watch.Elapsed.TotalMilliseconds);
             // Left open: the editor tidies a table or two of it as it loads, so a close would stop at the save question.
         }
+        var cpuAfter = Cpu();
+        var threadsAfter = Threads();
+        var mainThread = threadsAfter.OrderBy(t => t.Value.start).First().Key;
+        foreach (var t in threadsAfter.Select(t => (id: t.Key, ms: t.Value.ms - (threadsBefore.TryGetValue(t.Key, out var b) ? b.ms : 0), t.Value.start)).OrderByDescending(t => t.ms).Take(6))
+            notes.Add($"thread {t.id}{(t.id == mainThread ? " (main)" : "")} started {t.start:HH:mm:ss.fff}: {t.ms:0} ms");
+        Perf(notes, "open300k.cpu.host", cpuAfter.host - cpuBefore.host, "ms");
+        Perf(notes, "open300k.cpu.webview", cpuAfter.web - cpuBefore.web, "ms");
         // What the page had to lay out, and what the host's log says the page took (from the host posting the document
         // to the page reporting it loaded): the part of an open that is the editor's, not the host's.
         var viewport = (await c.Call("test.editor.eval", new { windowId = await WindowIdOf(c, id!), script = "`${innerWidth}x${innerHeight} @${devicePixelRatio}`" }))["result"];
