@@ -95,6 +95,9 @@ class WinUIMigrationArchitectureTests(unittest.TestCase):
         self.assert_single_property("PublishAot", "false")
         self.assert_single_property("PublishTrimmed", "false")
 
+    def test_windows_host_carries_dotnet_runtime_for_clean_machines(self) -> None:
+        self.assert_single_property("SelfContained", "true")
+
     def test_debug_local_uses_self_contained_runtime_without_package_bootstrap(self) -> None:
         groups = [
             group
