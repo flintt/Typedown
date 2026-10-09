@@ -175,6 +175,8 @@ internal static partial class Program
             EditionCases(editionCases);
             foreach (var (name, run) in editionCases) await Case(name, run);
             // Last: it ends the test host.
+            await Case("PF01 measured: a 300 KB document opened, typed into and saved; the memory with two windows", PF01);
+            await Case("PF02 measured: a cold start with a document on the command line, then the window closed", PF02);
             await Case("Q01 two windows closed one after the other: the process exits (it stayed, headless)", Q01);
         }
         catch (Exception e)
@@ -244,8 +246,8 @@ internal static partial class Program
     private static async Task Case(string name, Func<List<string>, Task> body)
     {
         if (only != null && !only.Any(o => name.StartsWith(o + " "))) return;
-        // Pictures (SHOT...) are taken only when asked for by name: never part of a run of every case.
-        if (name.StartsWith("SHOT") && only == null) return;
+        // Pictures (SHOT...) and measurements (PF...) are taken only when asked for by name: never part of a run of every case.
+        if ((name.StartsWith("SHOT") || name.StartsWith("PF")) && only == null) return;
         var notes = new List<string>();
         // A person's mouse or keys a moment ago would be in the case's way: it waits for the desktop to be left alone.
         var quiet = await WaitForQuietDesktop(1000);

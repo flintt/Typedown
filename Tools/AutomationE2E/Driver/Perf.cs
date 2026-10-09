@@ -1,0 +1,219 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
+
+/// <summary>
+/// Measurements, not checks: the same cases run against two test hosts (the XAML Islands host on .NET Core 3.1 and the
+/// WinUI 3 host on .NET 10, both published as a release is) give the numbers the two are compared by. Each number is a
+/// note ("PERF name value unit"); a case fails only when it cannot measure.
+/// </summary>
+internal static partial class Program
+{
+    private static void Perf(List<string> notes, string name, double value, string unit) =>
+        notes.Add(FormattableString.Invariant($"PERF {name} {value:0.#} {unit}"));
+
+    private static double Median(List<double> values) { var s = values.OrderBy(v => v).ToList(); return s.Count == 0 ? double.NaN : s[s.Count / 2]; }
+
+    private static double Percentile(List<double> values, double p) { var s = values.OrderBy(v => v).ToList(); return s.Count == 0 ? double.NaN : s[Math.Min(s.Count - 1, (int)Math.Ceiling(p * s.Count) - 1)]; }
+
+    /// <summary>A document of about 300 KB with what the editor draws: headings, paragraphs, lists, code and tables.</summary>
+    private static string LargeDocument(string marker)
+    {
+        var b = new StringBuilder("# Performance\n\n");
+        for (var i = 1; b.Length < 300_000; i++)
+        {
+            b.Append($"## Section {i}\n\nParagraph {i} with **bold**, *italic*, `code` and a [link](https://example.com/{i}). ");
+            b.Append("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n\n");
+            b.Append($"- item {i}.1\n- item {i}.2\n  - nested {i}\n\n");
+            if (i % 5 == 0) b.Append($"```csharp\nvar x{i} = {i};\nConsole.WriteLine(x{i});\n```\n\n");
+            if (i % 7 == 0) b.Append($"| a | b | c |\n| --- | --- | --- |\n| {i} | {i * 2} | {i * 3} |\n\n");
+        }
+        return b.Append(marker).Append('\n').ToString();
+    }
+
+    // ---- processes: the host and what it started (its WebView2 browser and renderer processes) ----
+
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+    private struct PROCESSENTRY32
+    {
+        public uint dwSize, cntUsage, th32ProcessID; public IntPtr th32DefaultHeapID; public uint th32ModuleID, cntThreads, th32ParentProcessID; public int pcPriClassBase; public uint dwFlags;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)] public string szExeFile;
+    }
+    [DllImport("kernel32.dll", SetLastError = true)] private static extern IntPtr CreateToolhelp32Snapshot(uint flags, uint pid);
+    [DllImport("kernel32.dll", CharSet = CharSet.Unicode)] private static extern bool Process32FirstW(IntPtr snapshot, ref PROCESSENTRY32 entry);
+    [DllImport("kernel32.dll", CharSet = CharSet.Unicode)] private static extern bool Process32NextW(IntPtr snapshot, ref PROCESSENTRY32 entry);
+    [DllImport("kernel32.dll")] private static extern bool CloseHandle(IntPtr handle);
+
+    private static List<int> ProcessTree(int root)
+    {
+        var parents = new Dictionary<int, int>();
+        var snapshot = CreateToolhelp32Snapshot(0x2, 0);
+        try
+        {
+            var entry = new PROCESSENTRY32 { dwSize = (uint)Marshal.SizeOf<PROCESSENTRY32>() };
+            for (var ok = Process32FirstW(snapshot, ref entry); ok; ok = Process32NextW(snapshot, ref entry))
+                parents[(int)entry.th32ProcessID] = (int)entry.th32ParentProcessID;
+        }
+        finally { CloseHandle(snapshot); }
+        var tree = new List<int> { root };
+        for (var i = 0; i < tree.Count; i++)
+            tree.AddRange(parents.Where(p => p.Value == tree[i] && p.Key != tree[i] && !tree.Contains(p.Key)).Select(p => p.Key));
+        return tree;
+    }
+
+    private static (double privateMb, double workingSetMb, int processes) TreeMemory(int root)
+    {
+        double priv = 0, ws = 0; var n = 0;
+        foreach (var pid in ProcessTree(root))
+            try { using var p = Process.GetProcessById(pid); priv += p.PrivateMemorySize64; ws += p.WorkingSet64; n++; } catch (ArgumentException) { } catch (InvalidOperationException) { }
+        return (priv / 1048576, ws / 1048576, n);
+    }
+
+    private static async Task<bool> PageHas(Client c, string documentId, string marker)
+    {
+        try { return ((string?)(await c.Call("test.editor.pageText", new { documentId }))["text"] ?? "").Contains(marker); }
+        catch (Typedown.Automation.JsonRpcRemoteException) { return false; }
+    }
+
+    /// <summary>A large document opened, typed into, saved; the memory with two windows.</summary>
+    private static async Task PF01(List<string> notes)
+    {
+        using var c = await Session("e2e PF01");
+        SetProcessDpiAwarenessContext(new IntPtr(-4));
+
+        // Opening: from document.open to the editor showing the document's end.
+        var opens = new List<double>();
+        string? id = null;
+        for (var round = 0; round < 3; round++)
+        {
+            var marker = $"PF01-END-{round}";
+            var path = Fixture($"pf01-{round}.md", LargeDocument(marker));
+            var watch = Stopwatch.StartNew();
+            id = await Open(c, path);
+            while (!await PageHas(c, id, marker))
+            {
+                if (watch.Elapsed > TimeSpan.FromSeconds(60)) throw new CaseFailed("a 300 KB document was not shown within 60 s");
+                await Task.Delay(20);
+            }
+            opens.Add(watch.Elapsed.TotalMilliseconds);
+            if (round < 2) await c.Call("document.close", new { documentId = id });
+        }
+        Perf(notes, "open300k.median", Median(opens), "ms");
+        notes.Add("open 300 KB: " + string.Join(", ", opens.Select(v => $"{v:0}")));
+
+        // Typing at the end of the large document: a real key to the next revision the API reports.
+        await TypeInto(c, id!, "x");
+        await Task.Delay(1000);
+        var keys = new List<double>();
+        for (var i = 0; i < 25; i++)
+        {
+            var before = await Revision(c, id!);
+            var watch = Stopwatch.StartNew();
+            TypeChar((char)('a' + i % 26));
+            while (await Revision(c, id!) == before)
+            {
+                if (watch.Elapsed > TimeSpan.FromSeconds(5)) throw new CaseFailed($"keystroke {i} made no revision within 5 s");
+                await Task.Delay(2);
+            }
+            keys.Add(watch.Elapsed.TotalMilliseconds);
+            await Task.Delay(120);
+        }
+        Perf(notes, "keystroke300k.median", Median(keys), "ms");
+        Perf(notes, "keystroke300k.p90", Percentile(keys, 0.9), "ms");
+
+        // Saving the large document.
+        var saves = new List<double>();
+        for (var i = 0; i < 5; i++)
+        {
+            await c.Call("document.replace", new { documentId = id, text = LargeDocument($"PF01-SAVE-{i}"), baseRevision = await Revision(c, id!), normalizationPolicy = "allowUnknown" });
+            var watch = Stopwatch.StartNew();
+            await c.Call("document.save", new { documentId = id });
+            saves.Add(watch.Elapsed.TotalMilliseconds);
+        }
+        Perf(notes, "save300k.median", Median(saves), "ms");
+
+        // Memory: this window with the large document and a second window, settled.
+        var second = (string)(await c.Call("test.window.open"))["windowId"]!;
+        await Task.Delay(8000);
+        var (priv, ws, n) = TreeMemory(hostPid);
+        Perf(notes, "memory2windows.private", priv, "MB");
+        Perf(notes, "memory2windows.workingSet", ws, "MB");
+        notes.Add($"{n} processes (the host and its WebView2 processes)");
+        var secondHandle = await WindowOf(second, c);
+        PostMessage(secondHandle, 0x0010, IntPtr.Zero, IntPtr.Zero);
+        await Task.Delay(2000);
+    }
+
+    /// <summary>
+    /// A cold start with a document on the command line, three times, each a fresh host in a fresh folder: to its window,
+    /// and to the document shown in the editor. Then the window closed: until the process exits, and what of it is left.
+    /// </summary>
+    private static async Task PF02(List<string> notes)
+    {
+        var windows = new List<double>(); var shown = new List<double>(); var exits = new List<double>();
+        var left = 0;
+        for (var round = 0; round < 3; round++)
+        {
+            var root = testRoot + $"-pf02-{round}";
+            if (Directory.Exists(root)) Directory.Delete(root, true);
+            Directory.CreateDirectory(root);
+            var marker = $"PF02-END-{round}";
+            var doc = Fixture($"pf02-{round}.md", "# Cold start\n\n" + string.Concat(Enumerable.Range(1, 200).Select(i => $"Line {i} of a small document.\n\n")) + marker + "\n");
+            var watch = Stopwatch.StartNew();
+            using var host = Process.Start(new ProcessStartInfo(hostExe, $"--automation-test-root \"{root}\" \"{doc}\"") { UseShellExecute = true })!;
+            var name = await ReadEndpointFile(Path.Combine(root, "automation-endpoint.txt")) ?? throw new CaseFailed("the host published no endpoint");
+            Client? c = null;
+            for (var i = 0; c == null; i++)
+            {
+                try { c = new Client(name); }
+                catch (Exception) when (i < 100) { await Task.Delay(50); }
+            }
+            using (c)
+            {
+                await Initialize(c, "e2e PF02");
+                string? windowId = null;
+                while (windowId == null)
+                {
+                    var list = (JArray)(await c.Call("window.list"))["windows"]!;
+                    if (list.Count > 0) windowId = (string)list[0]!["windowId"]!;
+                    else await Task.Delay(10);
+                    if (watch.Elapsed > TimeSpan.FromSeconds(60)) throw new CaseFailed("no window within 60 s");
+                }
+                windows.Add(watch.Elapsed.TotalMilliseconds);
+                string? id = null;
+                while (true)
+                {
+                    id ??= ((JArray)(await c.Call("document.list", new { windowId }))["documents"]!)
+                        .FirstOrDefault(d => string.Equals((string?)d["path"], doc, StringComparison.OrdinalIgnoreCase))?["documentId"]?.ToString();
+                    if (id != null && await PageHas(c, id, marker)) break;
+                    if (watch.Elapsed > TimeSpan.FromSeconds(60)) throw new CaseFailed("the document on the command line was not shown within 60 s");
+                    await Task.Delay(10);
+                }
+                shown.Add(watch.Elapsed.TotalMilliseconds);
+                await Task.Delay(3000); // started up fully before it is closed
+                var tree = ProcessTree(host.Id);
+                var handle = await WindowOf(windowId, c);
+                var closing = Stopwatch.StartNew();
+                PostMessage(handle, 0x0010, IntPtr.Zero, IntPtr.Zero);
+                if (!host.WaitForExit(30000)) { notes.Add($"round {round}: the host did not exit within 30 s"); host.Kill(); }
+                else exits.Add(closing.Elapsed.TotalMilliseconds);
+                await Task.Delay(3000);
+                foreach (var pid in tree.Skip(1))
+                    try { using var p = Process.GetProcessById(pid); if (!p.HasExited) { left++; notes.Add($"round {round}: {p.ProcessName} ({pid}) still running 3 s after the host exited"); p.Kill(); } }
+                    catch (ArgumentException) { }
+            }
+            try { Directory.Delete(root, true); } catch (IOException) { } catch (UnauthorizedAccessException) { }
+        }
+        Perf(notes, "coldstart.window.median", Median(windows), "ms");
+        Perf(notes, "coldstart.document.median", Median(shown), "ms");
+        Perf(notes, "exit.median", Median(exits), "ms");
+        Perf(notes, "exit.leftoverProcesses", left, "");
+        notes.Add("window: " + string.Join(", ", windows.Select(v => $"{v:0}")) + "; document: " + string.Join(", ", shown.Select(v => $"{v:0}")));
+    }
+}

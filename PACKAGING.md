@@ -82,14 +82,14 @@ ARM64 把 `-Platform x64` 改为 `-Platform ARM64`。`-SkipBuild` 只适用于�
 
 ## 微软商店上传包
 
-`Branding.props` 的 `BrandStoreUpload` 为 `true` 的版本（Typeleaf），CI 每个平台在旁加载 MSIX 之后再按 `StoreUpload` 模式打一次包：不签名（商店会重新签名），得到 `<BrandName>_<版本>_<平台>.msixupload`（内含 `.msix` 和符号 `.appxsym`），作为 `store-upload-x64` / `store-upload-ARM64` 产物保留 30 天，不进 GitHub Release。在合作伙伴中心的提交里把两个平台的 `.msixupload` 都上传。包身份（`Identity` 的 `Name`、`Publisher`，以及 `PublisherDisplayName`）取自 `Dev/Typedown/Package.appxmanifest`，必须与合作伙伴中心为该名称保留的值一致；版本号的第四段保持 0（商店保留它）。Typedown 本身没有商店身份，`BrandStoreUpload` 为 `false`。
+`Branding.props` 的 `BrandStoreUpload` 为 `true` 的版本（Typeleaf），CI 每个平台在旁加载 MSIX 之后再按 `StoreUpload` 模式打一次包：不签名（商店会重新签名），得到 `<BrandName>_<版本>_<平台>.msixupload`（内含 `.msix`；迁移到单项目 MSIX 后不再带符号包 `.appxsym`：.NET SDK 的 MSBuild 下 MSIX 工具的符号步骤需要 Visual Studio 的 `mspdbcmf.exe`），作为 `store-upload-x64` / `store-upload-ARM64` 产物保留 30 天，不进 GitHub Release。在合作伙伴中心的提交里把两个平台的 `.msixupload` 都上传。包身份（`Identity` 的 `Name`、`Publisher`，以及 `PublisherDisplayName`）取自 `Dev/Typedown/Package.appxmanifest`，必须与合作伙伴中心为该名称保留的值一致；版本号的第四段保持 0（商店保留它）。Typedown 本身没有商店身份，`BrandStoreUpload` 为 `false`。
 
 本机生成（.NET 10 SDK；应用和包是同一个项目 `Dev/Typedown`，单项目 MSIX）：
 
 ```powershell
 dotnet publish Dev\Typedown\Typedown.csproj -c Release -p:Platform=x64 -r win-x64 -p:TypedownTrim=true `
     -p:WindowsPackageType=MSIX -p:GenerateAppxPackageOnBuild=true -p:AppxBundle=Never `
-    -p:UapAppxPackageBuildMode=StoreUpload -p:AppxPackageSigningEnabled=false -p:AppxPackageDir=StoreUpload\
+    -p:UapAppxPackageBuildMode=StoreUpload -p:AppxPackageSigningEnabled=false -p:AppxSymbolPackageEnabled=false -p:AppxPackageDir=StoreUpload\
 ```
 
 不加 `-p:WindowsPackageType=MSIX` 等打包参数时得到的是安装包和便携版用的免安装目录（`-o <目录>`）。

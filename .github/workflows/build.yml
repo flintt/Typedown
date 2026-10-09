@@ -249,7 +249,9 @@ jobs:
           -p:PackageCertificatePassword=${{ steps.cert.outputs.password }}
           -p:AppxPackageDir=${{ github.workspace }}\AppxPackages\
 
-      # The Microsoft Store upload: the same package, unsigned (the Store signs it), as .msixupload with its symbols.
+      # The Microsoft Store upload: the same package, unsigned (the Store signs it), as .msixupload. Without a symbol
+      # package: under the .NET SDK's MSBuild the MSIX tools' symbol step fails (it wants mspdbcmf.exe, a Visual Studio
+      # C++ tool), and the .NET 10 SDK needs MSBuild 18, which the windows-2022 image's Visual Studio does not have.
       - name: Build Store upload
         if: steps.brand.outputs.store == 'true' && steps.build.outcome == 'success'
         run: >
@@ -260,6 +262,7 @@ jobs:
           -p:AppxBundle=Never
           -p:UapAppxPackageBuildMode=StoreUpload
           -p:AppxPackageSigningEnabled=false
+          -p:AppxSymbolPackageEnabled=false
           -p:AppxPackageDir=${{ github.workspace }}\StoreUpload\
 
       # MSBuild names it <name>.msixupload whatever the platform: version and platform in the name, so the two
