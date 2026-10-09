@@ -78,6 +78,54 @@
   </ItemGroup>
 
   <PropertyGroup>
+    <!-- The existing React/Muya build and CI publish here. The host consumes that immutable output. -->
+    <EditorStaticBundleSource>$(MSBuildThisFileDirectory)..\Typedown\Resources\Statics</EditorStaticBundleSource>
+    <EditorStaticBundleTarget>Resources\Statics</EditorStaticBundleTarget>
+  </PropertyGroup>
+
+  <Target
+    Name="RefreshEditorStaticBundle"
+    BeforeTargets="AssignTargetPaths;GetCopyToOutputDirectoryItems;GetPackagingOutputs">
+    <Error
+      Condition="('$(Configuration)' == 'Release' Or '$(Configuration)' == 'Debug_Local') And !Exists('$(EditorStaticBundleSource)\index.html')"
+      Text="The Typedown.Editor static bundle is missing. Build Dev\Typedown.Editor before building Typedown.WinUI." />
+  </Target>
+
+  <!-- Evaluate generated files once per build. A target may run more than once during MSIX publishing. -->
+  <ItemGroup Condition="Exists('$(EditorStaticBundleSource)\index.html')">
+    <Content Include="$(EditorStaticBundleSource)\**\*">
+      <Link>$(EditorStaticBundleTarget)\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <Target
+    Name="CleanEditorStaticBundleOutput"
+    BeforeTargets="_CopyOutOfDateSourceItemsToOutputDirectoryAlways"
+    Condition="'$(OutDir)' != '' And Exists('$(OutDir)$(EditorStaticBundleTarget)')">
+    <RemoveDir Directories="$(OutDir)$(EditorStaticBundleTarget)" />
+  </Target>
+
+  <Target
+    Name="AddEditorStaticBundleToPackagingOutputs"
+    AfterTargets="GetPackagingOutputs"
+    BeforeTargets="_ComputeAppxPackagePayload"
+    Condition="'$(WindowsPackageType)' == 'MSIX' And Exists('$(EditorStaticBundleSource)\index.html')">
+    <ItemGroup>
+      <_EditorStaticBundlePackageFile Include="$(EditorStaticBundleSource)\**\*" />
+      <PackagingOutputs Include="@(_EditorStaticBundlePackageFile)">
+        <TargetPath>Resources\Statics\%(_EditorStaticBundlePackageFile.RecursiveDir)%(_EditorStaticBundlePackageFile.Filename)%(_EditorStaticBundlePackageFile.Extension)</TargetPath>
+        <OutputGroup>CustomOutputGroupForPackaging</OutputGroup>
+        <ProjectName>$(ProjectName)</ProjectName>
+      </PackagingOutputs>
+    </ItemGroup>
+    <Message
+      Importance="high"
+      Text="Typedown.Editor: @(_EditorStaticBundlePackageFile->Count()) file(s) added to the $(RuntimeIdentifier) MSIX payload." />
+  </Target>
+
+  <PropertyGroup>
     <AutomationCliProject>$(MSBuildThisFileDirectory)..\..\Tools\Typedown.Cli\Typedown.Cli.csproj</AutomationCliProject>
     <AutomationCliTargetFramework>net10.0</AutomationCliTargetFramework>
     <AutomationCliPublishDirectory>$(MSBuildProjectDirectory)\$(BaseIntermediateOutputPath)cli-publish\$(Configuration)\$(RuntimeIdentifier)\</AutomationCliPublishDirectory>
