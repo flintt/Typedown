@@ -6,7 +6,6 @@
     <LangVersion>latest</LangVersion>
     <Nullable>disable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
-    <FodyWeaversXml>$(MSBuildThisFileDirectory)..\Typedown.Core\FodyWeavers.xml</FodyWeaversXml>
   </PropertyGroup>
 
   <ItemGroup>

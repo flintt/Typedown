@@ -112,6 +112,21 @@ class CoreBoundaryTests(unittest.TestCase):
             f"Core must not depend on a legacy or UI project: {forbidden!r}",
         )
 
+    def test_fody_configuration_is_local_to_the_parallel_project(self) -> None:
+        packages = {
+            (element.attrib.get("Include") or "").casefold()
+            for element in self.project.iter()
+            if local_name(element.tag) == "PackageReference"
+        }
+        if "propertychanged.fody" not in packages:
+            self.skipTest("The current Core slice does not use PropertyChanged.Fody")
+
+        configuration = PROJECT_DIRECTORY / "FodyWeavers.xml"
+        self.assertTrue(
+            configuration.is_file(),
+            "Fody only loads FodyWeavers.xml from the project directory; a cross-directory property leaves a warning and generates a file during build",
+        )
+
     def test_linked_core_sources_have_no_ui_or_picker_dependencies(self) -> None:
         sources = compile_sources(self.project)
         self.assertGreaterEqual(
