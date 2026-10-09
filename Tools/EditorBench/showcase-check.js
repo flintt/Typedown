@@ -23,9 +23,8 @@ const BROKEN = 'BROKEN-ON-PURPOSE';
 // Each entry: { match: 'text in the block', why: 'reason' }.
 const KNOWN = [];
 // Words the export drops for a reason the check accepts, with the reason: reported, not failed.
-const KNOWN_LOSS = [
-  { words: ['surplus1', 'surplus2'], why: 'cells beyond the header\'s column count are dropped from the table (GFM ignores them when rendering; the export then leaves them out of the text)' },
-];
+// Each entry: { words: ['word', ...], why: 'reason' }.
+const KNOWN_LOSS = [];
 
 /** Line diff (LCS) as unified-style hunks with one line of context. */
 function lineDiff(a, b) {

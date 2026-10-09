@@ -54,6 +54,7 @@ Each section opens with an italic line saying what it checks. Items that this ed
 - `[TOC]` shows as text while you edit. The HTML/PDF export replaces it with a table of contents.
 - `\ce{…}` (mhchem) renders, inline and as a display block, in the editor and in the HTML/PDF export.
 - A reference-style image (`![…][ref]`) appears when the document opens, like an inline one.
+- A table row with more cells than the header widens the table: the header gets empty cells, so the surplus cells are shown and kept (GFM ignores them).
 - An empty `$$` / `$$` pair is not an empty block here. The editor needs at least one character between the lines, so the opening `$$` pairs with the next `$$` line further down. Section 22.8 is written so this is visible: the sentence after the empty pair ends up inside a formula.
 - In section 22, every block marked `BROKEN-ON-PURPOSE` shows an "Invalid … Codes/Formula" notice, and the empty Mermaid block shows "Empty Mermaid Block". The script, `onerror` and `onclick` do not run, and the `<iframe>` is removed.
 
@@ -73,7 +74,7 @@ Until the first edit, the editor writes the file back byte for byte. On the firs
   - The lazy continuation line is written as its own paragraph after the quote.
   - The `*` and `+` lists in section 8 come back loose: the blank line between the two lists moves to between their items.
   - A blank line is inserted after a stray `$$`.
-- **Text is lost** in one case only: cells beyond the header's column count (`surplus1`, `surplus2` in 22.3) are dropped. GFM ignores those cells when rendering, so nothing visible changes, but they disappear from the file after the first edit. The check lists this as a known loss.
+  - The 22.3 table whose row has surplus cells gets two more columns (empty header cells and `---` delimiters), so GFM then shows `surplus1` and `surplus2` as well.
 
 ## Running the check
 
@@ -92,7 +93,7 @@ The check needs the built editor in `Dev/Typedown/Resources/Statics` and Chrome 
 - a block marked `BROKEN-ON-PURPOSE` renders;
 - a local image fails to load or never finishes loading, other than `does-not-exist*`;
 - section 22's script or event handlers run;
-- a word or invisible character from the file is missing from the rewrite (apart from the known table-cell loss);
+- a word or invisible character from the file is missing from the rewrite;
 - the unedited flush differs from the file.
 
 Normalisation differences are printed but do not fail the check.

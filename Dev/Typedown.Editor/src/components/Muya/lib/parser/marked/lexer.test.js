@@ -79,3 +79,26 @@ test('lazy paragraph continuation and inline backticks are not block boundaries'
   expect(tokens[tokens.length - 1].type).toBe('list_end')
   expect(tokens.some(t => t.type === 'heading' || t.type === 'code')).toBe(false)
 })
+
+describe('GFM table rows with more cells than the header', () => {
+  const table = markdown => lex(markdown).find(t => t.type === 'table')
+
+  test.each([
+    ['leading pipes', '| A | B |\n|:--|--:|\n| 1 | 2 | surplus1 | surplus2 |\n| 3 |'],
+    ['no leading pipes', 'A | B\n:-- | --:\n1 | 2 | surplus1 | surplus2\n3']
+  ])('%s: the table widens so the surplus cells are kept', (_name, markdown) => {
+    const { header, align, cells } = table(markdown)
+    expect(header).toEqual(['A', 'B', '', ''])
+    expect(align).toEqual(['left', 'right', null, null])
+    expect(cells).toEqual([['1', '2', 'surplus1', 'surplus2'], ['3', '', '', '']])
+  })
+
+  test.each([
+    ['a trailing pipe without leading pipes', 'A | B\n--- | ---\n1 | 2 |'],
+    ['an empty surplus cell', '| A | B |\n| --- | --- |\n| 1 | 2 | |']
+  ])('%s does not widen the table', (_name, markdown) => {
+    const { header, cells } = table(markdown)
+    expect(header).toEqual(['A', 'B'])
+    expect(cells).toEqual([['1', '2']])
+  })
+})

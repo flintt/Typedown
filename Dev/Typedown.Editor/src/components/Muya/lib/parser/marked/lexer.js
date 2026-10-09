@@ -3,6 +3,31 @@ import options from './options'
 import { splitCells, rtrim, getUniqueId } from './utils'
 
 /**
+ * Splits the body rows of a table token into cells. A row with more cells than the header widens the table: the
+ * header gets empty cells and the new columns no alignment, so the surplus cells stay in the document. GFM drops
+ * them when rendering, and the editor, which writes the table back from its cells, deleted their text with them.
+ * Empty cells past the header's width (a trailing pipe of a table without leading pipes) are dropped as before.
+ */
+const splitTableRows = (item, rows) => {
+  const cells = rows.map(row => splitCells(row))
+  let width = item.header.length
+  for (const row of cells) {
+    let used = row.length
+    while (used > width && row[used - 1] === '') used--
+    width = Math.max(width, used)
+  }
+  while (item.header.length < width) {
+    item.header.push('')
+    item.align.push(null)
+  }
+  item.cells = cells.map(row => {
+    row.splice(width)
+    while (row.length < width) row.push('')
+    return row
+  })
+}
+
+/**
  * Block Lexer
  */
 
@@ -353,9 +378,7 @@ Lexer.prototype.token = function (src, top) {
           }
         }
 
-        for (i = 0; i < item.cells.length; i++) {
-          item.cells[i] = splitCells(item.cells[i], item.header.length)
-        }
+        splitTableRows(item, item.cells)
 
         this.tokens.push(item)
 
@@ -663,11 +686,7 @@ Lexer.prototype.token = function (src, top) {
           }
         }
 
-        for (i = 0; i < item.cells.length; i++) {
-          item.cells[i] = splitCells(
-            item.cells[i].replace(/^ *\| *| *\| *$/g, ''),
-            item.header.length)
-        }
+        splitTableRows(item, item.cells.map(row => row.replace(/^ *\| *| *\| *$/g, '')))
 
         this.tokens.push(item)
 

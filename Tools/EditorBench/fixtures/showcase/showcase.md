@@ -1002,7 +1002,7 @@ Harmless "should not run" HTML. This editor sanitises HTML, so none of these may
 
 ### 22.3 Broken tables
 
-A row with too many cells and a row with too few (GFM ignores the surplus cells, so `surplus1` and `surplus2` are not shown):
+A row with too many cells and a row with too few. GFM ignores the surplus cells, so GitHub does not show `surplus1` and `surplus2`; this editor widens the table to keep them (the header gets two empty cells):
 
 | A | B |
 |---|---|
