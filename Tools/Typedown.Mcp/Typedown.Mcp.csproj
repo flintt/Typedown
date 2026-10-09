@@ -2,7 +2,7 @@
   <!-- The MCP server (stdio) over the local automation API, so AI agents edit open documents through the same
        revision and conflict rules as every other client. It runs as "typedownctl mcp" (Tools/Typedown.Cli). -->
   <PropertyGroup>
-    <TargetFrameworks>net8.0;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net10.0;net8.0;netcoreapp3.1</TargetFrameworks>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
     <RootNamespace>Typedown.Mcp</RootNamespace>

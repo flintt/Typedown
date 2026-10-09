@@ -76,4 +76,49 @@
     <Content Include="Assets\logo.ico" CopyToOutputDirectory="PreserveNewest" />
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>
+
+  <PropertyGroup>
+    <AutomationCliProject>$(MSBuildThisFileDirectory)..\..\Tools\Typedown.Cli\Typedown.Cli.csproj</AutomationCliProject>
+    <AutomationCliTargetFramework>net10.0</AutomationCliTargetFramework>
+    <AutomationCliPublishDirectory>$(MSBuildProjectDirectory)\$(BaseIntermediateOutputPath)cli-publish\$(Configuration)\$(RuntimeIdentifier)\</AutomationCliPublishDirectory>
+  </PropertyGroup>
+
+  <!--
+    The stable MSIX exposes $(BrandCliName).exe from a $(BrandName) subfolder.
+    Publish the CLI for the package's own .NET 10 runtime and architecture, then
+    add every non-symbol output to the single-project MSIX payload.
+  -->
+  <Target
+    Name="PublishAutomationCliForPackaging"
+    AfterTargets="GetPackagingOutputs"
+    BeforeTargets="_ComputeAppxPackagePayload"
+    Condition="'$(WindowsPackageType)' == 'MSIX' and '$(RuntimeIdentifier)' != ''">
+    <RemoveDir Directories="$(AutomationCliPublishDirectory)" />
+    <MSBuild
+      Projects="$(AutomationCliProject)"
+      Targets="Restore"
+      BuildInParallel="false"
+      Properties="Configuration=$(Configuration);RuntimeIdentifier=$(RuntimeIdentifier);RuntimeIdentifiers=$(RuntimeIdentifier);SelfContained=true" />
+    <MSBuild
+      Projects="$(AutomationCliProject)"
+      Targets="Publish"
+      BuildInParallel="false"
+      Properties="Configuration=$(Configuration);TargetFramework=$(AutomationCliTargetFramework);RuntimeIdentifier=$(RuntimeIdentifier);RuntimeIdentifiers=$(RuntimeIdentifier);SelfContained=true;PublishSingleFile=false;PublishTrimmed=false;PublishDir=$(AutomationCliPublishDirectory)" />
+    <ItemGroup>
+      <_AutomationCliPackageFile
+        Include="$(AutomationCliPublishDirectory)**\*"
+        Exclude="$(AutomationCliPublishDirectory)**\*.pdb" />
+      <PackagingOutputs Include="@(_AutomationCliPackageFile)">
+        <TargetPath>$(BrandName)\%(_AutomationCliPackageFile.RecursiveDir)%(_AutomationCliPackageFile.Filename)%(_AutomationCliPackageFile.Extension)</TargetPath>
+        <OutputGroup>CustomOutputGroupForPackaging</OutputGroup>
+        <ProjectName>$(ProjectName)</ProjectName>
+      </PackagingOutputs>
+    </ItemGroup>
+    <Error
+      Condition="!Exists('$(AutomationCliPublishDirectory)$(BrandCliName).exe')"
+      Text="The .NET 10 automation CLI was not published for $(RuntimeIdentifier)." />
+    <Message
+      Importance="high"
+      Text="$(BrandCliName): @(_AutomationCliPackageFile->Count()) file(s) added to the $(RuntimeIdentifier) MSIX payload." />
+  </Target>
 </Project>
