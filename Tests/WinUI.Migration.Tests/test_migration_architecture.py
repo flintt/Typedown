@@ -95,6 +95,18 @@ class WinUIMigrationArchitectureTests(unittest.TestCase):
         self.assert_single_property("PublishAot", "false")
         self.assert_single_property("PublishTrimmed", "false")
 
+    def test_debug_local_uses_self_contained_runtime_without_package_bootstrap(self) -> None:
+        groups = [
+            group
+            for group in self.project.findall("PropertyGroup")
+            if "Debug_Local" in group.attrib.get("Condition", "")
+        ]
+        self.assertEqual(len(groups), 1)
+        group = groups[0]
+        self.assertEqual(group.findtext("WindowsPackageType"), "None")
+        self.assertEqual(group.findtext("WindowsAppSDKSelfContained"), "true")
+        self.assertEqual(group.findtext("WindowsAppSdkBootstrapInitialize"), "false")
+
     def test_targets_supported_windows_architectures(self) -> None:
         declarations = property_values(self.project, "Platforms")
         self.assertTrue(declarations, "Platforms must be declared")

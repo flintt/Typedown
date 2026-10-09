@@ -1,5 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
+using Typedown.Contracts.Editor;
 using Typedown.Contracts.Platform;
+using Typedown.WinUI.Editor;
 using Typedown.WinUI.Windowing;
 
 namespace Typedown.WinUI.Services;
@@ -17,6 +19,7 @@ internal static class ServiceConfiguration
         services.AddSingleton<WindowManager>(provider => new WindowManager(
             provider.GetRequiredService<IServiceScopeFactory>(),
             appName));
+        services.AddSingleton<WinUIWebViewEnvironmentService>();
 
         services.AddScoped<WindowRegistration>();
         services.AddScoped<IWindowContext>(
@@ -27,6 +30,9 @@ internal static class ServiceConfiguration
             provider.GetRequiredService<WindowRegistration>().Window));
         services.AddScoped<IFilePickerService>(provider => new WinUIFilePickerService(
             provider.GetRequiredService<WindowRegistration>().Window));
+        services.AddScoped<WinUIEditorHost>();
+        services.AddScoped<IMarkdownEditorBridge>(
+            provider => provider.GetRequiredService<WinUIEditorHost>());
 
         services.AddTransient<RootPage>();
 

@@ -58,6 +58,7 @@
     <EnableMsixTooling>false</EnableMsixTooling>
     <AppxPackageSigningEnabled>false</AppxPackageSigningEnabled>
     <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+    <WindowsAppSdkBootstrapInitialize>false</WindowsAppSdkBootstrapInitialize>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
