@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Automation;
@@ -13,7 +14,7 @@ internal static class Deep
 {
     public static AutomationElement? First(AutomationElement root, Condition condition)
     {
-        var found = root.FindFirst(TreeScope.Descendants, condition);
+        var found = Retry(() => root.FindFirst(TreeScope.Descendants, condition));
         return found ?? Walk(root, condition).FirstOrDefault();
     }
 
@@ -21,11 +22,22 @@ internal static class Deep
     {
         // Both, not the walk only when the search finds nothing: the search finds the window's own (Win32) parts, the
         // title bar's buttons say, and still misses the XAML ones.
-        var found = root.FindAll(TreeScope.Descendants, condition).Cast<AutomationElement>().ToList();
+        var found = Retry(() => root.FindAll(TreeScope.Descendants, condition).Cast<AutomationElement>().ToList());
         var ids = new HashSet<string>(found.Select(Id));
         foreach (var e in Walk(root, condition))
             if (ids.Add(Id(e))) found.Add(e);
         return found;
+    }
+
+    // A search over a tree that changes under it (a virtualized list dropping rows) can fail with the element gone:
+    // asked again, a few times.
+    private static T Retry<T>(Func<T> search)
+    {
+        for (var i = 0; ; i++)
+        {
+            try { return search(); }
+            catch (ElementNotAvailableException) when (i < 4) { System.Threading.Thread.Sleep(100); }
+        }
     }
 
     /// <summary>An element's name, empty when it is gone (a virtualized list drops rows while a whole tree is read).</summary>
