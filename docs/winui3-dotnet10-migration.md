@@ -4,7 +4,7 @@
 
 **迁移分支**：`migration/winui3-dotnet10`
 
-**目标**：在不改写现有产品行为和用户数据的前提下，以 WinUI 3、Windows App SDK 和 .NET 10 替换旧的 XAML Islands / UWP XAML 宿主；Typedown 完成并通过全部门禁后，再由 Typeleaf 单向合并公共迁移成果。
+**目标**：在不改写现有产品行为和持久化数据格式的前提下，以 WinUI 3、Windows App SDK 和 .NET 10 替换旧的 XAML Islands / UWP XAML 宿主；Typedown 完成并通过全部门禁后，再由 Typeleaf 单向合并公共迁移成果。
 
 ## 1. 范围和不变项
 
@@ -14,7 +14,7 @@
 - 将 `Typedown.Core` 收敛为不依赖 UI 框架的平台中立逻辑层。
 - 把窗口、对话框、文件选择器、剪贴板、拖放、快捷键、WebView2、激活和打包等 Windows 能力迁入 WinUI 宿主。
 - 保留同进程多窗口、多标签、自动保存、备份、文件字节保真、自动化 API、CLI 和 MCP。
-- 保留当前 MSIX、安装器和便携包的升级关系与用户数据位置。
+- 保留安装器和便携包的升级关系与用户数据位置；WinUI MSIX 改用 fork 自有包身份并建立独立的 `ApplicationData` 根目录。
 - 为最终迁移 Typeleaf 保留稳定的 edition 扩展入口。
 
 下列行为在迁移期间保持不变：
@@ -22,10 +22,10 @@
 1. **不更换编辑器内核。** 继续使用当前 React + Muya 页面及其构建产物，不把迁移与 CodeMirror 或其他编辑器替换混在一起。
 2. **不改编辑器协议。** `invoke`、`message`、`diffmsg`、宿主响应和错误响应的名称、字段、大小写与时序保持兼容。
 3. **不改变文档格式。** 编码、BOM、换行符、Markdown 往返、保存前刷新和原子写入的现有语义保持不变。
-4. **不改变用户数据位置和格式。** 迁移后的应用直接读取现有设置、数据库、会话、备份、主题和历史文件。
-5. **不改变产品身份。** 包 Identity、Publisher、应用名、可执行文件名、文件关联和 CLI 别名必须从现有品牌配置与清单继承。
+4. **不改变数据格式。** 设置、数据库、会话、备份、主题和历史文件的格式保持兼容。安装器和便携版继续使用现有数据位置；MSIX 因下述身份变更使用新的 `ApplicationData` 位置。
+5. **产品身份只有一个明确例外。** 应用显示名、可执行文件名、文件关联和 CLI 别名继续从现有品牌配置与清单继承。WinUI MSIX 有意改为 `Name="flintthuang.Typedown"`、`Publisher="CN=1610AF00-8DF9-41AC-B61B-D854FDF5C66B"`、`PublisherDisplayName="flintthuang"`，避免 fork 与原作者商店包互相覆盖、共用数据或以原作者名义发布。旧宿主清单不在本迁移分支中改名。
 6. **不先做 Native AOT。** 第一阶段使用普通 .NET 10 发布；裁剪和 Native AOT 在功能等价后单独评估。
-7. **不提前删除旧宿主。** 旧应用项目与现有 WAP 打包项目保留到新宿主通过完整测试和升级验证。
+7. **不提前删除旧宿主。** 旧应用项目与现有 WAP 打包项目保留到新宿主通过完整测试、安装验证和适用发布形态的升级验证。
 8. **明确支持架构。** 新 WinUI 宿主支持 x64 和 ARM64。x86 从未发布过安装包，本次明确停止支持；旧宿主残留的历史配置不进入迁移构建，并随旧宿主最后一起退出。
 
 迁移提交只处理迁移本身。编辑器功能改进、协议重构、数据库重构和新产品功能应分别立项，避免无法判断回归来自哪一层。
@@ -157,19 +157,19 @@ CLI / MCP -> Typedown.Automation
 
 ### Windows 实测门禁（进入 M4 前）
 
-静态迁移检查只证明工程边界和配置符合预期，不能替代安装后的端到端行为。下表记录 2026-10-09 在 `132e9aba` 上的实测；任何阻断项未通过时，不继续 M4。
+静态迁移检查只证明工程边界和配置符合预期，不能替代安装后的端到端行为。下表记录 2026-10-09 在 HP 构建机和 Windows 10 测试机上的实测；任何阻断项未通过时，不继续 M4。
 
 | ID | 验收项 | 结果 | 证据或当前缺口 |
 | --- | --- | --- | --- |
-| W01 | 构建并检查 x64 MSIX | 通过 | Windows 构建机生成签名 x64 包，0 个错误；解包后有 `Typedown.exe`、`Typedown\typedownctl.exe`、`coreclr.dll`、`Resources\Statics\index.html` 和全部 95 个编辑器资源。缺少符号包工具只影响符号包生成，不影响应用包。 |
-| W02 | 在 Windows 10 安装并启动 | 通过 | 测试机未安装 .NET 10。第一版包暴露运行时缺失并显示框架安装提示；`132e9aba` 改为自包含后，原包 Identity 的 x64 包安装成功，创建 1440×789 的可响应 `Typedown` 窗口并启动 WebView2。 |
-| W03 | 打开 Markdown、显示编辑器、输入并保存 | **阻断** | 页面已导航，但前端在 `GetSettings` 返回前保持空白。当前 WinUI bridge 尚未连接协议会话，没有处理页面的 `invoke` 消息，因此无法输入或保存。需先恢复页面握手和文档闭环。 |
+| W01 | 构建并检查 x64 MSIX | 通过 | HP 使用与新 Publisher 匹配且含 Code Signing EKU 的本地证书生成 `flintthuang.Typedown` x64 包，0 个错误；解包后 Identity、Publisher、显示名、EXE、文件关联和 CLI alias 正确，并含宿主 `Newtonsoft.Json.dll`、`coreclr.dll`、`Typedown\typedownctl.exe`、`Resources\Statics\index.html` 和全部 95 个编辑器资源。缺少符号包工具只影响符号包生成。 |
+| W02 | 在 Windows 10 安装并启动 | 通过 | 测试机未安装 .NET 10；自包含的新身份包安装为 `flintthuang.Typedown_1.3.7.0_x64__9a2b25czy3tfj`，创建 1440×759 的可响应窗口并启动 6 个 WebView2 进程。旧身份测试包已卸载，`flintthuang.Typeleaf` 保持安装。 |
+| W03 | 打开 Markdown、显示编辑器、输入并保存 | 通过 | AUMID 启动传入带 UTF-8 BOM、CRLF 的 Markdown；截图确认正文显示。Debug WebView2 的 DevTools `Input.insertText` 触发实际页面编辑事件，随后 Ctrl+S 将唯一标记写入磁盘，BOM 与 CRLF 均保留。验证任务最终关闭了自己的 Typedown 进程。 |
 | W04 | 二次启动与 `--new-window` 转交 | 通过 | 第二进程退出码为 0，运行进程仍只有一个；同一进程出现两个可见顶层窗口。 |
-| W04-F | 文件关联激活实际打开文件 | **阻断** | 激活 normalizer 保留了文件路径，但当前 WinUI 激活服务只选择或创建窗口，尚未把文件交给文档会话。静态结构检查不能视为文件打开通过。 |
+| W04-F | 文件关联激活实际打开文件 | 通过 | 启动激活参数中的文件路径交给窗口级文档会话；Windows 10 截图显示测试文档标题和正文，后续编辑保存落到该文件。 |
 | W05 | `typedownctl status` 连接运行实例 | **阻断** | 包内执行别名可运行，但命令等待后报告应用未运行或自动化未开启；WinUI 宿主尚未启动和注册自动化服务。 |
-| W06 | Windows 可靠性测试 | 通过 | 自包含打包改动后，`Tests/Typedown.ReliabilityTests` 在 Windows 构建机通过 21/21。 |
+| W06 | Windows 可靠性测试 | 通过 | 自包含打包、身份清单和焦点改动后，`Tests/Typedown.ReliabilityTests` 在 HP 通过 21/21。 |
 
-W03、W04-F、W05 按顺序作为当前迁移工作处理。每一项转为通过时补充测试提交、Windows 配置和实际结果；不能用迁移静态检查替代本表结果。
+W05 是进入 M4 前剩余的实测阻断项。它转为通过时补充测试提交、Windows 配置和实际结果；不能用迁移静态检查替代本表结果。
 
 ### M0：冻结基线和建立迁移门禁
 
@@ -342,32 +342,31 @@ WebView2 宿主职责：
 
 ### M6：打包、升级和发布链迁移
 
-**目标**：让新 WinUI 宿主替代旧可执行文件，同时保持安装升级关系。
+**目标**：让新 WinUI 宿主替代旧可执行文件，以 fork 自有 MSIX 身份完成打包、签名和发布链切换。
 
 工作项：
 
-- 从现有清单继承 MSIX Identity、Publisher、版本、文件关联、显示名、语言和 Store association。
-- 从 `Branding.props` 生成程序集名、可执行文件名、CLI 名和包名。
+- WinUI 清单固定使用 `flintthuang.Typedown` 与 `CN=1610AF00-8DF9-41AC-B61B-D854FDF5C66B`；版本、文件关联、显示名和语言继续继承现有产品约束。
+- 从 `Branding.props` 生成程序集名、可执行文件名、CLI 名和包内布局。
 - 保留 CLI/MCP 的 `appExecutionAlias` 及包内文件布局。
-- 先让现有 WAP 项目可以打包新宿主；单项目 MSIX 只有在输出等价后才能替换 WAP。
+- 旧 WAP 项目和旧身份清单只服务旧宿主，迁移期间保持不动；新 WinUI 单项目 MSIX 输出等价后再切换默认 CI 和发布入口。
 - 安装器和便携包必须包含 Windows App Runtime，或采用经过验证的自包含发布；不能假设目标机器预装运行时。
 - 第一版继续使用 ReadyToRun 或普通发布，不启用 Native AOT 与裁剪。
 - 构建脚本必须拒绝把 AutomationTestHost 当成正式安装包。
 - CI 同时构建 x64、ARM64，并验证包内编辑器、主题、CLI 和许可证文件。
 
-升级测试矩阵：
+安装与升级测试矩阵：
 
-1. 安装当前稳定版并创建设置、数据库记录、标签会话、备份和自定义主题。
-2. 原位安装 WinUI 迁移版。
-3. 验证原有数据全部可读，文件关联和 CLI alias 仍可用。
-4. 编辑并保存已有文档，确认编码、BOM 和换行符未变化。
-5. 卸载/重装时核对用户数据策略与当前版本一致。
-6. 分别验证 MSIX、安装器和便携包的首次启动与升级。
+1. 在干净系统首次安装新身份 WinUI MSIX，验证启动、文件关联和 CLI alias。
+2. 验证新身份包不会覆盖或复用原作者的 `62082Surprise.Typedown` 包及其 `ApplicationData`。
+3. 编辑并保存已有文档，确认编码、BOM 和换行符未变化。
+4. 卸载、重装新身份 MSIX，核对新身份自己的用户数据策略。
+5. 分别验证安装器和便携包的首次启动与现有版本升级；这两种发布形态的数据位置不因 MSIX 身份变化而改变。
 
 完成标准：
 
-- 包 Identity 未变化，现有安装可直接升级。
-- 新包不会建立第二份设置目录或空数据库。
+- 包 Identity 和签名证书主题精确匹配 fork 的新身份，不覆盖原作者商店包。
+- 新 MSIX 建立自己的 `ApplicationData` 根目录；不自动迁移旧身份 GitHub MSIX 的设置和数据库。
 - 三种发布形态均能在干净系统上启动并加载编辑器。
 - 签名、版本和清单检查通过。
 
@@ -379,7 +378,7 @@ Typedown 切换条件：
 
 - M0～M6 的自动检查和人工验收全部通过。
 - 新宿主通过完整 Windows E2E，偶发失败已经定位，不以简单重跑掩盖。
-- 新安装和原位升级均通过。
+- 新身份 MSIX 首次安装，以及安装器和便携版的现有升级路径均通过。
 - 旧宿主只在此时从默认 solution、CI 和打包入口移除。
 - 删除旧宿主前保留清晰的回滚提交点。
 
@@ -412,7 +411,7 @@ Typeleaf 迁移顺序：
 
 ## 8. 数据和设置兼容
 
-迁移版必须继续识别现有数据根目录及下列内容：
+迁移版必须继续识别各发布形态自己的数据根目录及下列内容格式：
 
 | 内容 | 当前名称或位置 | 兼容要求 |
 | --- | --- | --- |
@@ -427,8 +426,8 @@ Typeleaf 迁移顺序：
 
 实现规则：
 
-- 打包版保持现有包 Identity，继续使用同一个 `ApplicationData` 根目录。
-- 非打包版继续使用现有品牌目录，不新建带 `.WinUI` 或版本号的目录。
+- WinUI MSIX 改用 `flintthuang.Typedown` 后会获得新的 `ApplicationData` 根目录。已安装旧身份 GitHub MSIX 的设置不会自动出现；下载量很少，已接受不做数据迁移。
+- 安装器和便携版作为非打包发布继续使用现有品牌目录，不受 MSIX Identity 变化影响，也不新建带 `.WinUI` 或版本号的目录。
 - 自动化测试宿主仍使用隔离数据根，绝不能读写用户正式数据。
 - 设置仍由每个数据文件对应的共享 store 串行写入并使用原子替换。
 - 在迁移完成前不同时更换 Newtonsoft.Json 与 System.Text.Json。若以后更换，需为每个持久化文件建立双向 fixture 测试。
@@ -438,7 +437,7 @@ Typeleaf 迁移顺序：
 
 ## 9. 打包和升级约束
 
-新工程文件可以借鉴单项目 MSIX 的组织方式，但最终发布清单以当前产品清单为准。迁移版不得使用临时测试 Identity 覆盖正式 Identity，也不得把开发证书加入仓库。
+新工程文件可以借鉴单项目 MSIX 的组织方式，最终 WinUI 发布清单以 fork 自有身份为准。测试包和正式包使用同一 Name 与 Publisher；测试时只更换匹配主题名的证书，不得把开发证书或私钥加入仓库。
 
 必须保留：
 
@@ -450,6 +449,15 @@ Typeleaf 迁移顺序：
 - MSIX、安装器、便携包各自的输出和版本校验。
 
 正式切换前对包内容做清单比较。允许变化的项目只有 WinUI 3 / .NET 10 运行时和新宿主文件；用户可见资源、工具和文档缺失均视为失败。
+
+签名处理分为两部分：
+
+- HP 构建机使用主题为 `CN=1610AF00-8DF9-41AC-B61B-D854FDF5C66B` 的本地自签名测试证书。证书只保存在本机证书库，测试机只导入公钥证书。
+- GitHub 仓库当前的 `TYPEDOWN_PFX_BASE64` / `TYPEDOWN_PFX_PASSWORD` 仍对应旧 Publisher，不能给新身份包签名。迁移切换 CI 时，先让工作流从 `Dev/Typedown.WinUI/Package.appxmanifest` 读取 Publisher，再由用户在 GitHub 仓库 **Settings → Secrets and variables → Actions** 执行：
+  1. 准备一张含私钥、允许代码签名且 Subject 精确等于新 Publisher 的 PFX。
+  2. 将 PFX 文件的 Base64 内容写入 `TYPEDOWN_PFX_BASE64`，不要把 PFX 或 Base64 文本提交到仓库。
+  3. 将 PFX 密码写入 `TYPEDOWN_PFX_PASSWORD`。
+  4. 触发一次签名构建，验证工作流读取到的证书 Subject 与清单 Publisher 完全一致，并在干净 Windows 环境安装产物。
 
 ## 10. 测试门禁
 
@@ -496,11 +504,11 @@ Typeleaf 迁移顺序：
 ### 10.5 发布门禁
 
 - MSIX、安装器、便携包均在干净环境启动。
-- 当前稳定版到迁移版的原位升级通过。
-- 版本号、包 Identity、Publisher、架构、签名和清单一致性检查通过。
+- 新身份 MSIX 在干净环境首次安装通过；安装器和便携版的现有升级路径通过。
+- 版本号、`flintthuang.Typedown` Identity、新 Publisher、架构、签名证书主题和清单一致性检查通过。
 - 包内文件清单检查通过，CLI alias 可调用。
 - 启动时间、编辑延迟、保存耗时、两窗口内存和退出后残留进程与基线比较。
-- 任何必跑测试失败、偶发失败未定位或数据升级未验证时，不生成发布候选包。
+- 任何必跑测试失败、偶发失败未定位或适用发布形态的数据升级未验证时，不生成发布候选包。
 
 ### 10.6 Typeleaf 门禁
 
@@ -527,7 +535,7 @@ Typeleaf 在 M7 中先运行全部 Typedown 公共门禁，再运行自己的 ed
 - 运行时不再依赖 `Typedown.XamlUI`、UWP XAML Islands 或 .NET Core 3.1。
 - Core 不引用任何 UI 框架。
 - 当前 Muya 编辑器、自动化 API、CLI/MCP、多窗口、多标签、主题、排版、导出和打印功能等价。
-- 现有设置和数据库无需人工转换即可继续使用。
-- MSIX、安装器和便携包均通过首次安装与升级测试。
+- 设置和数据库格式保持兼容；旧身份 MSIX 数据不自动迁移，安装器和便携版继续使用现有位置。
+- 新身份 MSIX 通过首次安装，安装器和便携包通过首次安装与现有升级测试。
 - 完整自动化、编辑器、可靠性和 Windows E2E 全部通过。
 - Typeleaf 尚未被提前混入；它只在上述条件满足后执行 M7 的单向合并和适配。
