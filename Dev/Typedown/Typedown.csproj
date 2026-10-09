@@ -65,14 +65,14 @@
 	</PropertyGroup>
 
 	<!-- A release is published precompiled (ReadyToRun): the app's own assemblies need no JIT at start. Measured on
-	     hp (x64, 2026-10-04, the XAML Islands host): process start to the document shown 2.89-3.00 s -> 2.40-2.49 s. -->
+	     an x64 PC (2026-10-04, the XAML Islands host): process start to the document shown 2.89-3.00 s -> 2.40-2.49 s. -->
 	<PropertyGroup Condition="'$(Configuration)' == 'Release' and '$(RuntimeIdentifier)' != ''">
 		<PublishReadyToRun>true</PublishReadyToRun>
 	</PropertyGroup>
 
 	<!-- No dynamic PGO (on by default since .NET 8): with the app precompiled, the JIT's profile-guided recompiles of
 	     hot methods were most of the host's CPU while it opened large documents (2.1 s of 3.7 s over six 300 KB opens
-	     on the W10 PC, against 0.5 s without), taken from the editor page drawing them. -->
+	     on a Windows 10 test PC, against 0.5 s without), taken from the editor page drawing them. -->
 	<PropertyGroup>
 		<TieredPGO>false</TieredPGO>
 	</PropertyGroup>

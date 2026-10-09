@@ -15,8 +15,7 @@ CI 的普通分支构建只保留小型 installer artifact；`v*` tag 构建才�
 
 ## 本地依赖
 
-- Visual Studio 2022 或 Build Tools，安装 UWP 和 .NET 桌面构建组件；
-- Windows 10/11 SDK，项目当前目标 SDK 见 `Dev/Typedown/Typedown.csproj`；
+- .NET 10 SDK（应用是 WinUI 3 + .NET 10，单项目构建和打包都用 `dotnet`，不需要 Visual Studio；Windows SDK 构建工具由 NuGet 包提供）；
 - Node.js 20 和 Yarn；
 - Inno Setup 6，仅在生成 `.exe` 安装包时需要；
 - .NET 9 SDK，用于独立可靠性测试。

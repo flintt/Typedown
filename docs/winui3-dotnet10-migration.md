@@ -18,15 +18,15 @@
 - 发布裁剪（`TypedownTrim=true`，CI 与 `build-local.ps1` 默认开）：只裁 WinRT 投影和 .NET 库；EF Core、Newtonsoft、WinRT.Runtime、WinUI 投影、Rx 整体保留；typedownctl 自己的程序集作为裁剪根，共用的运行时文件保留它需要的部分。按名字反射事件（`FromEventPattern(obj, "Name")`）已改为显式 add/remove。
 - 商店上传包（`.msixupload`）不再带符号包：.NET SDK 的 MSBuild 下 MSIX 工具的符号步骤需要 VS 的 `mspdbcmf.exe`，而 .NET 10 SDK 需要 MSBuild 18。
 
-**验证**（w10，Windows 10 19045）：裁剪后的测试宿主跑完整用例（K06 除外，会锁 w10 账户），每次修复后重跑；新增 DM01（顶边与遮罩，亮/暗）、Q01/Q02 检查关闭窗口不留未处理异常、TH03 悬停一行再检查强调色——三者都先在未修复的宿主上确认会失败。可靠性测试 20 通过 1 跳过（仅 Windows 的锁文件用例）。
+**验证**（Windows 10 19045 测试机）：裁剪后的测试宿主跑完整用例（K06 除外，会触发测试账户锁定），每次修复后重跑；新增 DM01（顶边与遮罩，亮/暗）、Q01/Q02 检查关闭窗口不留未处理异常、TH03 悬停一行再检查强调色——三者都先在未修复的宿主上确认会失败。可靠性测试 20 通过 1 跳过（仅 Windows 的锁文件用例）。
 
-**与原版对比**：原版是迁移分支的基点，Typedown main（`f1d437d8`，XAML Islands + .NET Core 3.1）；新版是本分支最终构建（裁剪、不开动态 PGO）。两边都是 Release 发布的测试宿主，用同一份编辑器包（`main.1a969806.js`），在 w10（Windows 10，NUC6）和 hp（Windows 11）上交替运行。
+**与原版对比**：原版是迁移分支的基点，Typedown main（`f1d437d8`，XAML Islands + .NET Core 3.1）；新版是本分支最终构建（裁剪、不开动态 PGO）。两边都是 Release 发布的测试宿主，用同一份编辑器包（`main.1a969806.js`），在一台 Windows 10 测试机（较慢）和一台 Windows 11 机器上交替运行。
 
 功能（同一套 E2E 用例）：
 
 | | 原版 main | 新版 |
 | --- | --- | --- |
-| 全量用例（K06 除外，w10） | 54/56：TH03、DM01 失败（原版本来就有的问题） | 56/56 |
+| 全量用例（K06 除外，Windows 10） | 54/56：TH03、DM01 失败（原版本来就有的问题） | 56/56 |
 | DR01 从资源管理器拖文件到编辑器 | 通过 | 迁移初版失败，补装 OLE 拖放目标后通过 |
 | K06 关标签、菜单命令、切换模式后按键仍进编辑器 | 通过 | 通过 |
 
@@ -34,7 +34,7 @@
 
 性能（PF01/PF02）：
 
-| 项目 | w10 原版 | w10 新版 | hp 原版 | hp 新版 |
+| 项目 | Win10 原版 | Win10 新版 | Win11 原版 | Win11 新版 |
 | --- | --- | --- | --- | --- |
 | 冷启动到窗口（中位数） | 1314–1455 ms | 953–963 ms | 892–939 ms | 729–790 ms |
 | 冷启动到命令行文档显示 | 2876–3473 ms | 2602–2615 ms | 2033–2156 ms | 1551–1775 ms |
@@ -54,7 +54,7 @@
 - 体积：x64 安装包 38 → 48.7 MB，便携包 58 → 66.7 MB，MSIX 57 → 74 MB，主要是随应用携带的 Windows App SDK 运行时（旧版用系统自带的 UWP XAML）。
 - PF01 问页面本身（`textContent`），并在两次打开之间等页面处理完上一份文档；早先每 20 ms 取整页文本或用 `innerText` 的探测会占用被测的绘制时间，那时的数字不可比。
 
-w10 的账户锁定：每启动一次测试宿主（新的 WebView2 数据目录），`msedgewebview2.exe` 就用空密码试一次登录，记一次失败登录：Chromium 以此判断 Windows 账户有没有密码（密码管理器用），结果缓存在数据目录的 `Local State`（`os_password_blank`），所以平常使用只在第一次发生。测试宿主每次用新目录，于是每次启动都记一次；w10 策略 10 分钟 10 次即锁定。新旧版本一样，与 K06 无关（K06 不启动宿主）。hp 的锁定阈值为“从不”。
+测试机的账户锁定：每启动一次测试宿主（新的 WebView2 数据目录），`msedgewebview2.exe` 就用空密码试一次登录，记一次失败登录：Chromium 以此判断 Windows 账户有没有密码（密码管理器用），结果缓存在数据目录的 `Local State`（`os_password_blank`），所以平常使用只在第一次发生。测试宿主每次用新目录，于是每次启动都记一次；测试机策略 10 分钟 10 次即锁定。新旧版本一样，与 K06 无关（K06 不启动宿主）。
 
 **未完成**：Typeleaf 合并；交接文档同步；推送（等用户决定）。
 
@@ -211,17 +211,17 @@ CLI / MCP -> Typedown.Automation
 
 ### Windows 实测门禁（进入 M4 前）
 
-静态迁移检查只证明工程边界和配置符合预期，不能替代安装后的端到端行为。下表记录 2026-10-09 在 HP 构建机和 Windows 10 测试机上的实测；任何阻断项未通过时，不继续 M4。
+静态迁移检查只证明工程边界和配置符合预期，不能替代安装后的端到端行为。下表记录 2026-10-09 在 Windows 11 构建机和 Windows 10 测试机上的实测；任何阻断项未通过时，不继续 M4。
 
 | ID | 验收项 | 结果 | 证据或当前缺口 |
 | --- | --- | --- | --- |
-| W01 | 构建并检查 x64 MSIX | 通过 | HP 使用与新 Publisher 匹配且含 Code Signing EKU 的本地证书生成 `flintthuang.Typedown` x64 包，0 个错误；解包后 Identity、Publisher、显示名、EXE、文件关联和 CLI alias 正确，并含宿主 `Newtonsoft.Json.dll`、`coreclr.dll`、`Typedown\typedownctl.exe`、`Resources\Statics\index.html` 和全部 95 个编辑器资源。缺少符号包工具只影响符号包生成。 |
+| W01 | 构建并检查 x64 MSIX | 通过 | 构建机使用与新 Publisher 匹配且含 Code Signing EKU 的本地证书生成 `flintthuang.Typedown` x64 包，0 个错误；解包后 Identity、Publisher、显示名、EXE、文件关联和 CLI alias 正确，并含宿主 `Newtonsoft.Json.dll`、`coreclr.dll`、`Typedown\typedownctl.exe`、`Resources\Statics\index.html` 和全部 95 个编辑器资源。缺少符号包工具只影响符号包生成。 |
 | W02 | 在 Windows 10 安装并启动 | 通过 | 测试机未安装 .NET 10；自包含的新身份包安装为 `flintthuang.Typedown_1.3.7.0_x64__9a2b25czy3tfj`，创建 1440×759 的可响应窗口并启动 6 个 WebView2 进程。旧身份测试包已卸载，`flintthuang.Typeleaf` 保持安装。 |
 | W03 | 打开 Markdown、显示编辑器、输入并保存 | 通过 | AUMID 启动传入带 UTF-8 BOM、CRLF 的 Markdown；截图确认正文显示。Debug WebView2 的 DevTools `Input.insertText` 触发实际页面编辑事件，随后 Ctrl+S 将唯一标记写入磁盘，BOM 与 CRLF 均保留。验证任务最终关闭了自己的 Typedown 进程。 |
 | W04 | 二次启动与 `--new-window` 转交 | 通过 | 第二进程退出码为 0，运行进程仍只有一个；同一进程出现两个可见顶层窗口。 |
 | W04-F | 文件关联激活实际打开文件 | 通过 | 启动激活参数中的文件路径交给窗口级文档会话；Windows 10 截图显示测试文档标题和正文，后续编辑保存落到该文件。 |
 | W05 | `typedownctl status` 连接运行实例 | 通过 | WinUI 宿主复用当前用户 SID ACL 的安全命名管道，并保持 `AllowLocalAutomation` 默认关闭；测试数据显式开启后，包内 CLI 与 `%LOCALAPPDATA%\Microsoft\WindowsApps\typedownctl.exe` 执行别名均以退出码 0 连接同一实例，返回版本 `1.3.7.0`、1 个窗口和有效活动窗口 ID。当前 M3 smoke 只注册真实可用的 `app.getState`，其余自动化能力仍按 M5 恢复。验证任务最终关闭了自己的 Typedown 进程。 |
-| W06 | Windows 可靠性测试 | 通过 | 自包含打包、身份清单和焦点改动后，`Tests/Typedown.ReliabilityTests` 在 HP 通过 21/21。 |
+| W06 | Windows 可靠性测试 | 通过 | 自包含打包、身份清单和焦点改动后，`Tests/Typedown.ReliabilityTests` 在构建机通过 21/21。 |
 
 W01～W06 已全部通过，可以进入 M4。后续阶段仍须按功能补充自动化方法和 Windows E2E，不能用本表的 M3 smoke 结果替代 M5 的完整自动化验收。
 
@@ -334,7 +334,7 @@ W01～W06 已全部通过，可以进入 M4。后续阶段仍须按功能补充�
 | ID | 工作项 | 状态 | 验证 |
 | --- | --- | --- | --- |
 | M4-L01 | 将现有字符串资源接入新宿主，并建立平台中立的本地化边界 | 通过 | 新检查先在缺少实现时按预期失败；随后链接 74 种语言的 296 个 `.resw` 文件，不复制翻译源文件。Core 目录解析、中文区域映射、英文回退和损坏资源降级测试通过 6/6；WinUI x64 `Debug_Local` 构建 0 警告、0 错误；迁移检查 89/89、可靠性测试 21/21。 |
-| M4-S02 | Root、标题栏、菜单栏和状态栏 | 部分通过 | 已建立窗口级不可变文档状态，接入文件菜单、打开/保存快捷键、文档标题、脏标记及字数/字符数状态栏。新增检查先在旧外壳上按预期失败；迁移检查 93/93、Core 测试 7/7、可靠性测试 21/21，HP x64 `Debug_Local` 构建 0 警告、0 错误。Windows 10 截图确认命令行文档正确显示，中文、窗口标题、页内标题和 `16 词 / 35 字` 状态均正确。实测发现 AppLifecycle 命令行包含宿主 EXE，旧选择逻辑会把它当文档；现已只接受可编辑文本扩展名，并保留不存在文档的显式打开错误。完整旧菜单、自定义标题栏和其余状态控件仍待迁移。 |
+| M4-S02 | Root、标题栏、菜单栏和状态栏 | 部分通过 | 已建立窗口级不可变文档状态，接入文件菜单、打开/保存快捷键、文档标题、脏标记及字数/字符数状态栏。新增检查先在旧外壳上按预期失败；迁移检查 93/93、Core 测试 7/7、可靠性测试 21/21，构建机 x64 `Debug_Local` 构建 0 警告、0 错误。Windows 10 截图确认命令行文档正确显示，中文、窗口标题、页内标题和 `16 词 / 35 字` 状态均正确。实测发现 AppLifecycle 命令行包含宿主 EXE，旧选择逻辑会把它当文档；现已只接受可编辑文本扩展名，并保留不存在文档的显式打开错误。完整旧菜单、自定义标题栏和其余状态控件仍待迁移。 |
 
 推荐顺序：
 
@@ -513,7 +513,7 @@ Typeleaf 迁移顺序：
 
 签名处理分为两部分：
 
-- HP 构建机使用主题为 `CN=1610AF00-8DF9-41AC-B61B-D854FDF5C66B` 的本地自签名测试证书。证书只保存在本机证书库，测试机只导入公钥证书。
+- Windows 11 构建机使用主题为 `CN=1610AF00-8DF9-41AC-B61B-D854FDF5C66B` 的本地自签名测试证书。证书只保存在本机证书库，测试机只导入公钥证书。
 - GitHub 仓库当前的 `TYPEDOWN_PFX_BASE64` / `TYPEDOWN_PFX_PASSWORD` 仍对应旧 Publisher，不能给新身份包签名。迁移切换 CI 时，先让工作流从 `Dev/Typedown.WinUI/Package.appxmanifest` 读取 Publisher，再由用户在 GitHub 仓库 **Settings → Secrets and variables → Actions** 执行：
   1. 准备一张含私钥、允许代码签名且 Subject 精确等于新 Publisher 的 PFX。
   2. 将 PFX 文件的 Base64 内容写入 `TYPEDOWN_PFX_BASE64`，不要把 PFX 或 Base64 文本提交到仓库。
