@@ -141,18 +141,22 @@ const words = text => {
 
     // Pictures: every local one loads except the ones named does-not-exist on purpose.
     // Muya shows a picture that failed to load as a placeholder (span.ag-image-fail with the source in data-raw), not an <img>.
+    // A reference-style picture is its source text (span.ag-image-marked-text) with the <img> after it once loaded.
+    // The pictures load while the page is still busy drawing; wait until each one has loaded or failed.
+    await page.waitForFunction(() => !document.querySelector('#ag-editor-id .ag-image-loading') &&
+      [...document.querySelectorAll('#ag-editor-id .ag-image-marked-text')].every(e => e.classList.contains('ag-image-fail') || e.nextElementSibling?.tagName === 'IMG'),
+    { timeout: 30000, polling: 250 }).catch(() => {});
     const images = await page.evaluate(() => [
       ...[...document.querySelectorAll('#ag-editor-id img')].map(i => ({ src: decodeURIComponent(i.getAttribute('src') || ''), ok: i.complete && i.naturalWidth > 0 })),
       ...[...document.querySelectorAll('#ag-editor-id .ag-image-fail')].map(e => ({ src: e.dataset.raw || e.textContent, ok: false })),
+      ...[...document.querySelectorAll('#ag-editor-id .ag-image-loading')].map(e => ({ src: e.dataset.raw, ok: false, pending: true })),
+      ...[...document.querySelectorAll('#ag-editor-id .ag-image-marked-text')].filter(e => !e.classList.contains('ag-image-fail') && e.nextElementSibling?.tagName !== 'IMG')
+        .map(e => ({ src: e.textContent, ok: false, pending: true })),
     ]);
     const missingOnPurpose = i => /does-not-exist/.test(i.src);
-    // Known issue: a reference-style picture is drawn as failed when the document opens and only appears on the next
-    // render of its paragraph (the async load does not redraw it; inline pictures are redrawn).
-    const referenceImage = i => /^!\[[^\]]*\]\[[^\]]*\]$/.test(i.src);
-    for (const i of images.filter(i => !i.ok && referenceImage(i))) console.log(`known issue, not failed: reference picture ${i.src} shows as failed until its paragraph is rendered again`);
-    const brokenImages = images.filter(i => !i.ok && !missingOnPurpose(i) && !referenceImage(i));
-    console.log(`\nimages: ${images.filter(i => i.ok).length} loaded, ${images.filter(i => !i.ok && missingOnPurpose(i)).length} missing on purpose, ${images.filter(i => !i.ok && referenceImage(i)).length} known issue, ${brokenImages.length} broken`);
-    for (const i of brokenImages) failures.push(`image did not load: ${i.src}`);
+    const brokenImages = images.filter(i => !i.ok && !missingOnPurpose(i));
+    console.log(`\nimages: ${images.filter(i => i.ok).length} loaded, ${images.filter(i => !i.ok && missingOnPurpose(i)).length} missing on purpose, ${brokenImages.length} broken`);
+    for (const i of brokenImages) failures.push(`image ${i.pending ? 'never finished loading' : 'did not load'}: ${i.src}`);
     for (const i of images.filter(i => i.ok && missingOnPurpose(i))) failures.push(`an image missing on purpose loaded: ${i.src}`);
 
     // Section 22's "should not run" HTML: a script, an onerror and an onclick that would each leave a mark.

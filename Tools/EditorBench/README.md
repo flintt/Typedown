@@ -128,6 +128,9 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
 - `mhchem-check.js` — chemistry with mhchem's `\ce`, inline and as a display block, renders in the editor and in
   the exports (RenderXhtml). The extension was imported as its UMD file, which registers `\ce` on the CommonJS
   copy of KaTeX while the editor and the export render with the ES module copy, so every `\ce` was invalid.
+- `reference-image-check.js` — a reference-style picture (`![alt][ref]`) loads when the document opens: its source
+  text is not left marked failed once the picture is drawn, and a reference to a missing file is still marked
+  failed.
 - `export-pdf-check.js` — the exported HTML carries what the PDF is made from: images by absolute path (so
   they survive being opened from a temp file) and KaTeX fonts by real address (so a formula keeps its font).
   A PDF is then produced from that HTML with a document outline, and the outline is checked to have an entry

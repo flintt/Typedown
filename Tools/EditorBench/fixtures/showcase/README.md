@@ -53,7 +53,7 @@ Each section opens with an italic line saying what it checks. Items that this ed
 - The editor shows these as text: backslash hard breaks, lazy quote continuation lines (the editor ends the quote), ordered task lists, and everything in section 20.
 - `[TOC]` shows as text while you edit. The HTML/PDF export replaces it with a table of contents.
 - `\ce{…}` (mhchem) renders, inline and as a display block, in the editor and in the HTML/PDF export.
-- **Known issue:** a reference-style image (`![…][ref]`) shows as failed when the document opens. It appears the next time its paragraph is rendered (for example, after a click or keystroke in it). Inline images appear straight away.
+- A reference-style image (`![…][ref]`) appears when the document opens, like an inline one.
 - An empty `$$` / `$$` pair is not an empty block here. The editor needs at least one character between the lines, so the opening `$$` pairs with the next `$$` line further down. Section 22.8 is written so this is visible: the sentence after the empty pair ends up inside a formula.
 - In section 22, every block marked `BROKEN-ON-PURPOSE` shows an "Invalid … Codes/Formula" notice, and the empty Mermaid block shows "Empty Mermaid Block". The script, `onerror` and `onclick` do not run, and the `<iframe>` is removed.
 
@@ -90,7 +90,7 @@ The check needs the built editor in `Dev/Typedown/Resources/Statics` and Chrome 
 - the page throws an error;
 - a diagram or formula fails, other than those marked `BROKEN-ON-PURPOSE`;
 - a block marked `BROKEN-ON-PURPOSE` renders;
-- a local image fails to load, other than `does-not-exist*` and the known reference-image issue;
+- a local image fails to load or never finishes loading, other than `does-not-exist*`;
 - section 22's script or event handlers run;
 - a word or invisible character from the file is missing from the rewrite (apart from the known table-cell loss);
 - the unedited flush differs from the file.
