@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.Windows.AppLifecycle;
+using Typedown.WinUI.Automation;
 using Typedown.WinUI.Activation;
 using Typedown.WinUI.Services;
 using Typedown.WinUI.Windowing;
@@ -16,6 +17,7 @@ public partial class App : Application
     private readonly CancellationTokenSource activationLifetime = new();
     private readonly ServiceProvider processServices;
     private readonly WindowManager windowManager;
+    private readonly WinUIAutomationService automationService;
     private WinUiAppActivationService? activationService;
 
     public App()
@@ -41,6 +43,8 @@ public partial class App : Application
             ?? throw new InvalidOperationException("The application assembly has no name.");
         processServices = ServiceConfiguration.BuildProcessProvider(appName);
         windowManager = processServices.GetRequiredService<WindowManager>();
+        automationService = processServices
+            .GetRequiredService<WinUIAutomationService>();
     }
 
     protected override void OnLaunched(LaunchActivatedEventArgs args)

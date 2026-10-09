@@ -8,6 +8,7 @@ namespace Typedown.WinUI.Windowing;
 public sealed class WindowManager
 {
     private readonly Dictionary<WindowId, WindowSession> sessions = new();
+    private readonly object sessionsGate = new();
     private readonly DispatcherQueue uiDispatcherQueue;
     private readonly IServiceScopeFactory serviceScopeFactory;
     private readonly string defaultTitle;
@@ -25,9 +26,27 @@ public sealed class WindowManager
                 "WindowManager must be created on the application's UI thread.");
     }
 
-    public int Count => sessions.Count;
+    public int Count
+    {
+        get
+        {
+            lock (sessionsGate)
+            {
+                return sessions.Count;
+            }
+        }
+    }
 
-    public IReadOnlyCollection<WindowSession> Sessions => sessions.Values;
+    public IReadOnlyCollection<WindowSession> Sessions
+    {
+        get
+        {
+            lock (sessionsGate)
+            {
+                return sessions.Values.ToArray();
+            }
+        }
+    }
 
     public WindowSession CreateWindow()
     {
@@ -42,7 +61,10 @@ public sealed class WindowManager
         {
             session = new WindowSession(window, id, serviceScope);
             session.Closed += OnSessionClosed;
-            sessions.Add(id, session);
+            lock (sessionsGate)
+            {
+                sessions.Add(id, session);
+            }
             session.Context.Title = defaultTitle;
             window.Content = session.Services.GetRequiredService<RootPage>();
             window.Activate();
@@ -53,7 +75,10 @@ public sealed class WindowManager
             if (session is not null)
             {
                 session.Closed -= OnSessionClosed;
-                sessions.Remove(id);
+                lock (sessionsGate)
+                {
+                    sessions.Remove(id);
+                }
                 session.AbortCreation();
             }
             else
@@ -69,7 +94,23 @@ public sealed class WindowManager
     public bool TryGetSession(WindowId id, out WindowSession? session)
     {
         EnsureThreadAccess();
-        return sessions.TryGetValue(id, out session);
+        lock (sessionsGate)
+        {
+            return sessions.TryGetValue(id, out session);
+        }
+    }
+
+    internal WindowAutomationSnapshot GetAutomationSnapshot()
+    {
+        lock (sessionsGate)
+        {
+            var active = sessions.Values
+                .Select(session => session.Context)
+                .FirstOrDefault(context => context.IsActive);
+            return new WindowAutomationSnapshot(
+                sessions.Count,
+                active?.Id.Value);
+        }
     }
 
     private void OnSessionClosed(object? sender, EventArgs args)
@@ -81,7 +122,10 @@ public sealed class WindowManager
         }
 
         session.Closed -= OnSessionClosed;
-        sessions.Remove(session.Context.Id);
+        lock (sessionsGate)
+        {
+            sessions.Remove(session.Context.Id);
+        }
     }
 
     private void EnsureThreadAccess()
@@ -93,3 +137,7 @@ public sealed class WindowManager
         }
     }
 }
+
+internal sealed record WindowAutomationSnapshot(
+    int WindowCount,
+    string? ActiveWindowId);

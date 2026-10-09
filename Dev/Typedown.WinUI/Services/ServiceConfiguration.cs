@@ -3,6 +3,7 @@ using Typedown.Contracts.Editor;
 using Typedown.Contracts.Platform;
 using Typedown.Core.Editor;
 using Typedown.Core.Services;
+using Typedown.WinUI.Automation;
 using Typedown.WinUI.Editor;
 using Typedown.WinUI.Windowing;
 
@@ -24,6 +25,7 @@ internal static class ServiceConfiguration
         services.AddSingleton<WinUIWebViewEnvironmentService>();
         services.AddSingleton(provider => JsonSettingsStore.Shared(
             provider.GetRequiredService<IAppDataPathProvider>().SettingsFilePath));
+        services.AddSingleton<WinUIAutomationService>();
 
         services.AddScoped<WindowRegistration>();
         services.AddScoped<IWindowContext>(

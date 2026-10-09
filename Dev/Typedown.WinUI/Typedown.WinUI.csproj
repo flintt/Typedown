@@ -71,8 +71,16 @@
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="2.5.1" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.28000.2705" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <ProjectReference Include="..\Typedown.Automation\Typedown.Automation.csproj" />
     <ProjectReference Include="..\Typedown.Contracts\Typedown.Contracts.csproj" />
     <ProjectReference Include="..\Typedown.Core.Net10\Typedown.Core.Net10.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Reuse the audited current-user-only named pipe while the legacy host remains. -->
+    <Compile
+      Include="..\Typedown\Services\Automation\SecurePipeListener.cs"
+      Link="Automation\SecurePipeListener.cs" />
   </ItemGroup>
 
   <ItemGroup>
