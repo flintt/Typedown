@@ -155,10 +155,15 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | RD01 | reading mode: the context menu offers copying and selecting only, Copy works on a selection, copy as plain text leaves the Markdown out, Ctrl+Z changes nothing |
 | CP01 | Copy pasted into Word: pictures at absolute file:/// addresses, a name and an alt text with brackets, an SVG sized in pt, a JPEG |
 | TH03 | the side pane marks what is chosen (the bar under Files/Outline, the outline's and the folder tree's row pill) in a custom theme's accent, and in the system accent again without one |
+| DR01 | files dragged from Explorer onto the editor: a Markdown file opens, a picture goes into the document |
+| DM01 | the window's top edge is drawn in the app's theme, and a dialog's smoke covers it too: the top row matches the row under it, light and dark |
 | TH02 | View > Theme > Reload themes finds a new theme file and a renamed one; the window draws in the custom theme's base whatever the built-in setting says |
 | WP01 | a web page pasted: headings with #, code fenced with its language and without line numbers, Google Docs bold and italic, late-loaded and relative pictures by their real addresses; with Insert web image copying, its pictures are copied beside the document and their addresses replaced |
 | ER01 | a page message handler that throws stays subscribed and the message still reaches the other handlers; an exception out of an event handler XAML calls is logged and the app goes on |
 | LD01 | a load the editor gives back rewritten is loaded once more and keeps the file's text; one rewritten again is taken after that one retry, not retried without end |
+| PF01 | measured: a 300 KB document opened, typed into and saved; the memory with two windows |
+| PF03 | profiled: where the host's CPU goes while it opens 300 KB documents |
+| PF02 | measured: a cold start with a document on the command line, then the window closed |
 | Q01 | two windows closed one after the other: the process exits (it stayed, headless) |
 <!-- END generated: e2e-cases -->
 
@@ -187,7 +192,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | `test.window.handle` | `windowId` | The window's native handle (HWND), for UI Automation and window messages from the driver. | TestHostHooks.cs |
 | `test.window.menuTitles` | `windowId` | The titles of the window's menu bar, as drawn: the menu follows the interface language. | TestHostHooks.cs |
 | `test.window.layout` | `windowId` | Where the main page starts in its window, and whether the window is in full screen: in full screen nothing may sit above it (a 4 px row of window background did, along the top of the screen). | TestHostHooks.cs |
-| `test.window.keep` | `windowId` | Holds a window in memory from now on, as anything still referring to it does after it closes: XamlWindow.AllWindows lists a window until the garbage collector has finalized it, closed or not. | TestHostHooks.cs |
+| `test.window.keep` | `windowId` | Holds a window in memory from now on, as anything still referring to it does after it closes: MainWindow.AllWindows lists a window until it has closed; the XAML Islands list kept it until finalized, closed or not. | TestHostHooks.cs |
 | `test.window.navigate` | `route`, `windowId` | Moves a window to a page, as its menu would: route "Settings/Editor" opens that settings page, "Main" goes back. | TestHostHooks.cs |
 | `test.window.open` | - | Opens another window, as File > New window does, and returns its windowId once it is registered. | TestHostHooks.cs |
 | `test.settings.set` | `name`, `windowId`, `value` | Sets a property of a window's settings view model by name, as its settings page would: also the settings the automation API does not expose. | TestHostHooks.cs |
