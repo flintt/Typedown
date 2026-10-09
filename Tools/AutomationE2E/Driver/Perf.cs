@@ -148,6 +148,9 @@ internal static partial class Program
                 await Task.Delay(20);
             }
             opens.Add(watch.Elapsed.TotalMilliseconds);
+            // Was the page resized while it drew (a strip above it changing height as the tab came in)?
+            var resized = (await c.Call("test.editor.eval", new { windowId, script = "(() => { const n = window.__pfResizes || 0; window.__pfResizes = 0; if (!window.__pfResizeHooked) { window.__pfResizeHooked = true; addEventListener('resize', () => window.__pfResizes = (window.__pfResizes || 0) + 1) } return `${n} resizes, now ${innerWidth}x${innerHeight}` })()" }))["result"];
+            notes.Add($"open {round}: {resized}");
             // Left open: the editor tidies a table or two of it as it loads, so a close would stop at the save question.
         }
         var cpuAfter = Cpu();
