@@ -128,6 +128,14 @@ class AppActivationTests(unittest.TestCase):
         )
         self.assertIn("request.CommandLineArguments.FirstOrDefault", source)
 
+    def test_command_line_never_opens_the_host_executable_as_a_document(self) -> None:
+        source = (ACTIVATION_ROOT / "WinUiAppActivationService.cs").read_text(
+            encoding="utf-8"
+        )
+
+        self.assertIn("FileTypeHelper.IsEditableTextFile", source)
+        self.assertNotIn("File.Exists", source)
+
     def test_app_runs_nonblocking_activation_pump(self) -> None:
         source = APP_FILE.read_text(encoding="utf-8")
         self.assertIn("WinUiAppActivationService", source)

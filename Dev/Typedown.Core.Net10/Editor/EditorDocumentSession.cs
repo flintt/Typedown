@@ -62,6 +62,8 @@ public sealed class EditorDocumentSession : IEditorDocumentSession
     private bool isDirty;
     private bool pageHasSettings;
     private bool userEdited;
+    private int wordCount;
+    private int characterCount;
     private int loadId;
     private int flushToken;
     private int isDisposed;
@@ -83,6 +85,11 @@ public sealed class EditorDocumentSession : IEditorDocumentSession
         get { lock (stateLock) return filePath; }
     }
 
+    public EditorDocumentState State
+    {
+        get { lock (stateLock) return CreateStateLocked(); }
+    }
+
     public string Text
     {
         get { lock (stateLock) return text; }
@@ -92,6 +99,8 @@ public sealed class EditorDocumentSession : IEditorDocumentSession
     {
         get { lock (stateLock) return isDirty; }
     }
+
+    public event EventHandler<EditorDocumentStateChangedEventArgs>? StateChanged;
 
     public async Task OpenAsync(
         string filePath,
@@ -111,6 +120,7 @@ public sealed class EditorDocumentSession : IEditorDocumentSession
         var loaded = await TextFileFormat.ReadAsync(fullPath);
         cancellationToken.ThrowIfCancellationRequested();
 
+        EditorDocumentState? changedState = null;
         await documentGate.WaitAsync(cancellationToken);
         try
         {
@@ -122,10 +132,13 @@ public sealed class EditorDocumentSession : IEditorDocumentSession
                 text = loaded.Text;
                 isDirty = false;
                 userEdited = false;
+                wordCount = 0;
+                characterCount = 0;
                 if (pageHasSettings && bridge.State == EditorBridgeState.Ready)
                 {
                     pageLoadId = ++loadId;
                 }
+                changedState = CreateStateLocked();
             }
 
             if (pageLoadId is { } currentLoadId)
@@ -143,6 +156,11 @@ public sealed class EditorDocumentSession : IEditorDocumentSession
         finally
         {
             documentGate.Release();
+        }
+
+        if (changedState is not null)
+        {
+            RaiseStateChanged(changedState);
         }
     }
 
@@ -200,6 +218,8 @@ public sealed class EditorDocumentSession : IEditorDocumentSession
             Volatile.Read(ref isDisposed) != 0,
             this);
 
+        EditorDocumentState? changedState = null;
+        bool saved;
         await documentGate.WaitAsync(cancellationToken);
         try
         {
@@ -251,17 +271,32 @@ public sealed class EditorDocumentSession : IEditorDocumentSession
                 if (!string.Equals(text, currentText, StringComparison.Ordinal))
                 {
                     isDirty = true;
-                    return false;
+                    changedState = CreateStateLocked();
+                    saved = false;
                 }
-                isDirty = false;
-                userEdited = false;
-                return true;
+                else
+                {
+                    var wasDirty = isDirty;
+                    isDirty = false;
+                    userEdited = false;
+                    saved = true;
+                    if (wasDirty)
+                    {
+                        changedState = CreateStateLocked();
+                    }
+                }
             }
         }
         finally
         {
             documentGate.Release();
         }
+
+        if (changedState is not null)
+        {
+            RaiseStateChanged(changedState);
+        }
+        return saved;
     }
 
     private void OnRawMessageReceived(
@@ -381,6 +416,7 @@ public sealed class EditorDocumentSession : IEditorDocumentSession
         }
 
         var eventLoadId = payload.Value<int?>("loadId");
+        EditorDocumentState? changedState = null;
         lock (stateLock)
         {
             if (eventLoadId.HasValue && eventLoadId.Value != loadId)
@@ -396,6 +432,7 @@ public sealed class EditorDocumentSession : IEditorDocumentSession
                         text = changedText;
                         isDirty = true;
                         userEdited = true;
+                        changedState = CreateStateLocked();
                     }
                     break;
 
@@ -403,6 +440,21 @@ public sealed class EditorDocumentSession : IEditorDocumentSession
                     if (payload.Value<string>("text") is { } loadedText)
                     {
                         text = loadedText;
+                        changedState = CreateStateLocked();
+                    }
+                    break;
+
+                case "StateChange":
+                    var counts = payload["state"]?["wordCount"];
+                    var words = counts?.Value<int?>("word");
+                    var characters = counts?.Value<int?>("character");
+                    if (words is >= 0 && characters is >= 0
+                        && (wordCount != words.Value
+                            || characterCount != characters.Value))
+                    {
+                        wordCount = words.Value;
+                        characterCount = characters.Value;
+                        changedState = CreateStateLocked();
                     }
                     break;
 
@@ -413,6 +465,7 @@ public sealed class EditorDocumentSession : IEditorDocumentSession
                         text = flushedText;
                         isDirty = true;
                         userEdited = true;
+                        changedState = CreateStateLocked();
                     }
                     var token = payload.Value<int?>("token") ?? 0;
                     if (flushWaiters.TryGetValue(token, out var waiter))
@@ -420,6 +473,41 @@ public sealed class EditorDocumentSession : IEditorDocumentSession
                         waiter.TrySetResult(true);
                     }
                     break;
+            }
+        }
+
+        if (changedState is not null)
+        {
+            RaiseStateChanged(changedState);
+        }
+    }
+
+    private EditorDocumentState CreateStateLocked() => new(
+        filePath,
+        text,
+        isDirty,
+        wordCount,
+        characterCount);
+
+    private void RaiseStateChanged(EditorDocumentState state)
+    {
+        var handlers = StateChanged;
+        if (handlers is null)
+        {
+            return;
+        }
+
+        var args = new EditorDocumentStateChangedEventArgs(state);
+        foreach (EventHandler<EditorDocumentStateChangedEventArgs> handler
+                 in handlers.GetInvocationList())
+        {
+            try
+            {
+                handler(this, args);
+            }
+            catch
+            {
+                // A closing window must not interrupt document synchronization.
             }
         }
     }

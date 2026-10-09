@@ -13,6 +13,68 @@ namespace Typedown.Core.Net10.Tests;
 public sealed class EditorDocumentSessionTests
 {
     [TestMethod]
+    public async Task State_changes_publish_consistent_document_and_editor_counts()
+    {
+        using var files = new TemporaryFiles();
+        var document = files.WriteBytes(
+            "state.md",
+            Encoding.UTF8.GetBytes("# Initial\n"));
+        var bridge = new FakeEditorBridge();
+        using var session = new EditorDocumentSession(
+            bridge,
+            new JsonSettingsStore(files.Paths.SettingsFilePath),
+            files.Paths);
+        var states = new List<EditorDocumentState>();
+        session.StateChanged += (_, args) => states.Add(args.State);
+
+        await session.OpenAsync(document);
+        Assert.AreEqual(document, states[^1].FilePath);
+        Assert.AreEqual("# Initial\n", states[^1].Text);
+        Assert.IsFalse(states[^1].IsDirty);
+
+        bridge.Receive(new
+        {
+            type = "invoke",
+            id = "invoke_0",
+            name = "GetSettings",
+            args = (object?)null,
+        });
+        await bridge.WaitForPostedAsync(message =>
+            message.Value<string>("name") == "invoke_0");
+        bridge.Receive(new
+        {
+            type = "diffmsg",
+            diff = false,
+            name = "MarkdownChange",
+            args = JsonConvert.SerializeObject(new
+            {
+                text = "# Changed\n中文 text\n",
+                loadId = 1,
+            }),
+        });
+        bridge.Receive(new
+        {
+            type = "diffmsg",
+            diff = false,
+            name = "StateChange",
+            args = JsonConvert.SerializeObject(new
+            {
+                state = new
+                {
+                    wordCount = new { word = 4, character = 13 },
+                },
+                loadId = 1,
+            }),
+        });
+
+        Assert.IsTrue(states[^1].IsDirty);
+        Assert.AreEqual("# Changed\n中文 text\n", states[^1].Text);
+        Assert.AreEqual(4, states[^1].WordCount);
+        Assert.AreEqual(13, states[^1].CharacterCount);
+        Assert.AreEqual(states[^1], session.State);
+    }
+
+    [TestMethod]
     public async Task GetSettingsUsesTheOpenedDocumentAndStoredEditorOptions()
     {
         using var files = new TemporaryFiles();
@@ -67,6 +129,8 @@ public sealed class EditorDocumentSessionTests
             bridge,
             new JsonSettingsStore(files.Paths.SettingsFilePath),
             files.Paths);
+        var states = new List<EditorDocumentState>();
+        session.StateChanged += (_, args) => states.Add(args.State);
 
         await session.OpenAsync(document);
         bridge.Receive(new
@@ -91,6 +155,7 @@ public sealed class EditorDocumentSessionTests
         CollectionAssert.AreEqual(expected, await File.ReadAllBytesAsync(document));
         Assert.AreEqual("# Changed\nsecond\n", session.Text);
         Assert.IsFalse(session.IsDirty);
+        Assert.IsFalse(states[^1].IsDirty);
     }
 
     [TestMethod]

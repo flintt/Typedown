@@ -4,6 +4,7 @@ using Microsoft.UI.Dispatching;
 using Microsoft.Windows.AppLifecycle;
 using Typedown.Contracts.Editor;
 using Typedown.Contracts.Platform;
+using Typedown.Core.Utilities;
 using Typedown.WinUI.Windowing;
 
 namespace Typedown.WinUI.Activation;
@@ -181,8 +182,7 @@ internal sealed class WinUiAppActivationService : IAppActivationService, IDispos
                 or AppActivationKind.Launch)
         {
             candidate = request.CommandLineArguments.FirstOrDefault(argument =>
-                !string.IsNullOrWhiteSpace(argument)
-                && !argument.StartsWith('-'));
+                IsCommandLineDocument(argument));
         }
         if (candidate is null)
         {
@@ -195,6 +195,24 @@ internal sealed class WinUiAppActivationService : IAppActivationService, IDispos
         catch
         {
             return candidate;
+        }
+    }
+
+    private static bool IsCommandLineDocument(string? argument)
+    {
+        if (string.IsNullOrWhiteSpace(argument) || argument.StartsWith('-'))
+        {
+            return false;
+        }
+
+        try
+        {
+            var fullPath = Path.GetFullPath(argument);
+            return FileTypeHelper.IsEditableTextFile(fullPath);
+        }
+        catch
+        {
+            return false;
         }
     }
 }
