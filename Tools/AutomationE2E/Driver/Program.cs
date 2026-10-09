@@ -346,7 +346,7 @@ internal static partial class Program
         try
         {
             // The page showing this document before anything is pasted: pasted at once after the open, it landed in the
-            // document the page still held, and the load that followed put "# WP01" back over it (seen on the Win10 PC).
+            // document the page still held, and the load that followed put "# WP01" back over it (seen on Windows 10).
             await WaitForPage(c, id, t => t.Contains("# WP01"), "the opened document");
             // Kept on the web: the conversion alone.
             await c.Call("test.images.webAction", new { windowId, action = "none" });
@@ -3019,7 +3019,7 @@ internal static partial class Program
         var after = await WaitForPage(c, id, t => t.Contains('Q'), "the keystroke");
         var latest = (string)(await Get(c, id))["text"]!;
         // A latest read is the page's text at that moment. The page may still settle after the keystroke shows (it
-        // did on the Win10 PC, now and then): what differed is noted, and the two are read again together.
+        // did on Windows 10, now and then): what differed is noted, and the two are read again together.
         if (latest != after)
         {
             var shorter = Math.Min(latest.Length, after.Length);
