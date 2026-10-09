@@ -1,3 +1,4 @@
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
 using Typedown.Contracts.Platform;
@@ -8,15 +9,15 @@ public sealed class WindowManager
 {
     private readonly Dictionary<WindowId, WindowSession> sessions = new();
     private readonly DispatcherQueue uiDispatcherQueue;
-    private readonly Func<IWindowContext, UIElement> contentFactory;
+    private readonly IServiceScopeFactory serviceScopeFactory;
     private readonly string defaultTitle;
 
     public WindowManager(
-        Func<IWindowContext, UIElement> contentFactory,
+        IServiceScopeFactory serviceScopeFactory,
         string defaultTitle)
     {
-        this.contentFactory = contentFactory
-            ?? throw new ArgumentNullException(nameof(contentFactory));
+        this.serviceScopeFactory = serviceScopeFactory
+            ?? throw new ArgumentNullException(nameof(serviceScopeFactory));
         this.defaultTitle = defaultTitle
             ?? throw new ArgumentNullException(nameof(defaultTitle));
         uiDispatcherQueue = DispatcherQueue.GetForCurrentThread()
@@ -34,22 +35,32 @@ public sealed class WindowManager
 
         var window = new Window();
         var id = new WindowId(Guid.NewGuid().ToString("N"));
-        var session = new WindowSession(window, id);
-        session.Closed += OnSessionClosed;
-        sessions.Add(id, session);
+        var serviceScope = serviceScopeFactory.CreateScope();
+        WindowSession? session = null;
 
         try
         {
+            session = new WindowSession(window, id, serviceScope);
+            session.Closed += OnSessionClosed;
+            sessions.Add(id, session);
             session.Context.Title = defaultTitle;
-            window.Content = contentFactory(session.Context);
+            window.Content = session.Services.GetRequiredService<RootPage>();
             window.Activate();
             return session;
         }
         catch
         {
-            session.Closed -= OnSessionClosed;
-            sessions.Remove(id);
-            session.AbortCreation();
+            if (session is not null)
+            {
+                session.Closed -= OnSessionClosed;
+                sessions.Remove(id);
+                session.AbortCreation();
+            }
+            else
+            {
+                serviceScope.Dispose();
+            }
+
             window.Close();
             throw;
         }
