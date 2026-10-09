@@ -3,7 +3,8 @@
   xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
   xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
-  IgnorableNamespaces="uap rescap">
+  xmlns:uap5="http://schemas.microsoft.com/appx/manifest/uap/windows10/5"
+  IgnorableNamespaces="uap rescap uap5">
 
   <!-- Keep the public Typedown package identity so a later migration can upgrade in place. -->
   <Identity
@@ -46,10 +47,57 @@
           Square310x310Logo="Assets\LargeTile.png" />
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
       </uap:VisualElements>
+      <Extensions>
+        <uap:Extension Category="windows.fileTypeAssociation">
+          <uap:FileTypeAssociation Name="typedown">
+            <uap:SupportedFileTypes>
+              <uap:FileType ContentType="text/markdown">.md</uap:FileType>
+              <uap:FileType ContentType="text/markdown">.markdown</uap:FileType>
+              <uap:FileType ContentType="text/markdown">.mdown</uap:FileType>
+              <uap:FileType ContentType="text/markdown">.mkdn</uap:FileType>
+              <uap:FileType ContentType="text/markdown">.mdtext</uap:FileType>
+              <uap:FileType ContentType="text/markdown">.rmd</uap:FileType>
+              <uap:FileType ContentType="text/markdown">.mkd</uap:FileType>
+              <uap:FileType ContentType="text/markdown">.mdwn</uap:FileType>
+              <uap:FileType ContentType="text/markdown">.mdtxt</uap:FileType>
+              <uap:FileType ContentType="text/plain">.txt</uap:FileType>
+              <uap:FileType ContentType="text/plain">.text</uap:FileType>
+            </uap:SupportedFileTypes>
+            <uap:DisplayName>Typedown</uap:DisplayName>
+            <uap:Logo>Assets\Markdown.png</uap:Logo>
+            <uap:InfoTip>Markdown</uap:InfoTip>
+          </uap:FileTypeAssociation>
+        </uap:Extension>
+      </Extensions>
+    </Application>
+
+    <!-- Keep the stable package's application ID, executable layout and alias. -->
+    <Application
+      Id="Cli"
+      Executable="Typedown\typedownctl.exe"
+      EntryPoint="Windows.FullTrustApplication">
+      <uap:VisualElements
+        DisplayName="typedownctl"
+        Description="Typedown automation command line and MCP server"
+        BackgroundColor="transparent"
+        Square150x150Logo="Assets\Square150x150Logo.png"
+        Square44x44Logo="Assets\Square44x44Logo.png"
+        AppListEntry="none" />
+      <Extensions>
+        <uap5:Extension
+          Category="windows.appExecutionAlias"
+          Executable="Typedown\typedownctl.exe"
+          EntryPoint="Windows.FullTrustApplication">
+          <uap5:AppExecutionAlias>
+            <uap5:ExecutionAlias Alias="typedownctl.exe" />
+          </uap5:AppExecutionAlias>
+        </uap5:Extension>
+      </Extensions>
     </Application>
   </Applications>
 
   <Capabilities>
+    <Capability Name="internetClient" />
     <rescap:Capability Name="runFullTrust" />
   </Capabilities>
 </Package>
