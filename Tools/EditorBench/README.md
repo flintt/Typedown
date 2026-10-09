@@ -125,6 +125,9 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
 - `export-tilde-check.js` — a single `~` is text, not strikethrough: a range like `1~6` or `2~5` (common in
   Chinese) survives export intact, and only `~~text~~` strikes through. The export lexer accepted one tilde,
   so an exported PDF struck through the middle of a number range. Checks the editor render and the export.
+- `mhchem-check.js` — chemistry with mhchem's `\ce`, inline and as a display block, renders in the editor and in
+  the exports (RenderXhtml). The extension was imported as its UMD file, which registers `\ce` on the CommonJS
+  copy of KaTeX while the editor and the export render with the ES module copy, so every `\ce` was invalid.
 - `export-pdf-check.js` — the exported HTML carries what the PDF is made from: images by absolute path (so
   they survive being opened from a temp file) and KaTeX fonts by real address (so a formula keeps its font).
   A PDF is then produced from that HTML with a document outline, and the outline is checked to have an entry

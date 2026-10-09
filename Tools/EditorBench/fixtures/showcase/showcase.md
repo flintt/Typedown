@@ -602,7 +602,13 @@ I = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix},\quad
 |x| = \begin{cases} x & x \ge 0 \\ -x & x < 0 \end{cases}
 $$
 
-Chemistry with the mhchem `\ce` macro (known issue in this editor build: shown as an invalid formula; KaTeX with mhchem, Typora and MathJax-based editors render it): $\ce{2H2 + O2 -> 2H2O}$
+Chemistry with the mhchem `\ce` macro (KaTeX's mhchem extension; this editor, its HTML/PDF export, Typora and MathJax-based editors render it): $\ce{2H2 + O2 -> 2H2O}$
+
+The same macro in a display block:
+
+$$
+\ce{CO2 + C -> 2CO}
+$$
 
 Not maths: the coffee costs $5 and the cake costs $10, so the total is $15.
 

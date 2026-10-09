@@ -20,9 +20,8 @@ const source = fs.readFileSync(file, 'utf8').replace(/\r\n/g, '\n');
 const BROKEN = 'BROKEN-ON-PURPOSE';
 // Blocks that fail in this editor today for a reason outside the document: reported, not failed. If one starts
 // rendering, the check says so, so the entry can go.
-const KNOWN = [
-  { match: '\\ce{', why: 'mhchem (\\ce) is imported but its macros do not reach the KaTeX instance that renders' },
-];
+// Each entry: { match: 'text in the block', why: 'reason' }.
+const KNOWN = [];
 // Words the export drops for a reason the check accepts, with the reason: reported, not failed.
 const KNOWN_LOSS = [
   { words: ['surplus1', 'surplus2'], why: 'cells beyond the header\'s column count are dropped from the table (GFM ignores them when rendering; the export then leaves them out of the text)' },

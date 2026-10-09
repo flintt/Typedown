@@ -1,5 +1,7 @@
 import katex from 'katex'
-import 'katex/dist/contrib/mhchem.min.js'
+// mhchem's \ce, added to the KaTeX imported above: the package's ES module build of the extension extends the
+// ES module KaTeX (its UMD file in dist/ extends the CommonJS copy, which nothing here renders with).
+import 'katex/contrib/mhchem'
 import { CLASS_OR_ID } from '../../../config'
 import { htmlToVNode } from '../snabbdom'
 
