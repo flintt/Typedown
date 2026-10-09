@@ -47,6 +47,13 @@ namespace Typedown.Windows
 
         public RootControl RootControl { get; private set; } = new();
 
+        /// <summary>
+        /// The window's content: a grid around the RootControl, as XamlUI's window had it. AppContentDialog shows itself
+        /// by joining it, over the content; controls find their window's view model through its DataContext
+        /// (InjectionExtensions), and it carries the theme, so a dialog shown in it is themed with the window.
+        /// </summary>
+        private readonly Microsoft.UI.Xaml.Controls.Grid rootGrid = new();
+
         public IServiceProvider ServiceProvider => ServiceScope?.ServiceProvider;
 
         public KeyboardAccelerator KeyboardAccelerator => ServiceProvider?.GetService<IKeyboardAccelerator>() as KeyboardAccelerator;
@@ -90,8 +97,9 @@ namespace Typedown.Windows
 
         private void InitializeComponent()
         {
-            RootControl.DataContext = AppViewModel;
-            Content = RootControl;
+            rootGrid.DataContext = AppViewModel;
+            rootGrid.Children.Add(RootControl);
+            Content = rootGrid;
             RootControl.Loaded += OnLoaded;
             RootControl.LayoutUpdated += (_, _) => UpdateCaptionRegions();
             Activated += OnActivated;
@@ -142,7 +150,7 @@ namespace Typedown.Windows
                 AppTheme.Black => ElementTheme.Dark,
                 _ => ElementTheme.Default,
             };
-            RootControl.RequestedTheme = requested;
+            rootGrid.RequestedTheme = requested;
             // The caption buttons are the system's: given the content's colours, light or dark.
             var dark = requested == ElementTheme.Dark || (requested == ElementTheme.Default && Application.Current.RequestedTheme == ApplicationTheme.Dark);
             var bar = AppWindow.TitleBar;
