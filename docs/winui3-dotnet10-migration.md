@@ -1,8 +1,40 @@
 # Typedown 迁移到 WinUI 3 + .NET 10 执行方案
 
-**文档状态**：执行基线
+**文档状态**：下面第 1–12 节是最初的并行宿主方案，已由“实际执行”一节取代；保留作背景。
 
 **迁移分支**：`migration/winui3-dotnet10`
+
+## 实际执行（2026-10-09 起）
+
+**做法**：原地移植，不再并行宿主。`Dev/Typedown` 与 `Dev/Typedown.Core` 直接改为 WinUI 3（Windows App SDK 2.5.1，自带运行时）+ .NET 10（`net10.0-windows10.0.26100.0`），只保留 x64 / ARM64。`Typedown.WinUI`、`Typedown.Contracts`、`Typedown.Core.Net10` 及其测试、WAP 打包项目 `Tools/Typedown.Package` 都已删除；MSIX 由 `Dev/Typedown` 单项目生成（清单 `Dev/Typedown/Package.appxmanifest`，身份 `flintthuang.Typedown`）。
+
+**移植要点**（行为与旧宿主一致的前提下）：
+
+- 窗口：`Microsoft.UI.Xaml.Window` + `AppWindow`（关闭询问、位置、全屏、置顶、Mica）；标题栏拖动区由 `WindowChrome.Drag` 标记、`InputNonClientPointerSource` 设为 caption 区域。
+- Windows 10 上 WinUI 把内容放在窗口顶边下 1 px 并自己把那一行涂白：内容窗口（`DesktopChildSiteBridge`）每次被摆放时移回顶边（`MainWindow.KeepTopEdgeInClientArea`），对话框遮罩因此盖满窗口；没有 Mica 时窗口底色是主题色（`RootControl.WindowBackground`），框架跟随应用主题（`DWMWA_USE_IMMERSIVE_DARK_MODE`）。
+- 关闭窗口：先移走内容，控件卸载之后再释放窗口的服务（WinUI 在 `Closed` 之后才发 `Unloaded`）。
+- 侧栏选中标记的强调色：一个共享画笔放在应用资源里（含指针悬停、按下两种状态的键）。
+- 依赖：不要 Windows App SDK 的 AI/ML/Widgets/Search（`ExcludeAssets`），不要 System.Reactive 带来的 WPF/WinForms（`DisableTransitiveFrameworkReferences`）。
+- 发布裁剪（`TypedownTrim=true`，CI 与 `build-local.ps1` 默认开）：只裁 WinRT 投影和 .NET 库；EF Core、Newtonsoft、WinRT.Runtime、WinUI 投影、Rx 整体保留；typedownctl 自己的程序集作为裁剪根，共用的运行时文件保留它需要的部分。按名字反射事件（`FromEventPattern(obj, "Name")`）已改为显式 add/remove。
+- 商店上传包（`.msixupload`）不再带符号包：.NET SDK 的 MSBuild 下 MSIX 工具的符号步骤需要 VS 的 `mspdbcmf.exe`，而 .NET 10 SDK 需要 MSBuild 18。
+
+**验证**（w10，Windows 10 19045）：裁剪后的测试宿主跑完整用例（K06 除外，会锁 w10 账户），每次修复后重跑；新增 DM01（顶边与遮罩，亮/暗）、Q01/Q02 检查关闭窗口不留未处理异常、TH03 悬停一行再检查强调色——三者都先在未修复的宿主上确认会失败。可靠性测试 20 通过 1 跳过（仅 Windows 的锁文件用例）。
+
+**与原版对比**（同一提交 `63b3b906` 的 XAML Islands/.NET Core 3.1 宿主 vs 本分支，均为 Release 发布版测试宿主，w10 上测）：
+
+| 项目 | 原版 | WinUI 3 + .NET 10 |
+| --- | --- | --- |
+| 冷启动到窗口（中位数，3 次） | 1500 ms | 1050 ms |
+| 冷启动到命令行文档显示 | 3527 ms | 2703 ms |
+| 关闭窗口到进程退出 | 195 ms | 254 ms |
+| 退出后残留进程 | 0 | 0 |
+| x64 安装包 | 38 MB（v1.3.7 发布） | 48.7 MB |
+| 便携目录压缩 | 58 MB（v1.3.7 发布） | 66.7 MB |
+| x64 MSIX | 57 MB（v1.3.7 发布） | 74 MB |
+
+体积增加主要是随应用携带的 Windows App SDK 运行时（旧版用系统自带的 UWP XAML）。大文档打开、按键延迟、保存与双窗口内存由 PF01 测量，结果待补。
+
+**未完成**：PF01 数据；Typeleaf 合并；交接文档同步。
 
 **目标**：在不改写现有产品行为和持久化数据格式的前提下，以 WinUI 3、Windows App SDK 和 .NET 10 替换旧的 XAML Islands / UWP XAML 宿主；Typedown 完成并通过全部门禁后，再由 Typeleaf 单向合并公共迁移成果。
 

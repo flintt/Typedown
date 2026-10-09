@@ -102,7 +102,7 @@ internal static partial class Program
                 await Task.Delay(20);
             }
             opens.Add(watch.Elapsed.TotalMilliseconds);
-            if (round < 2) await c.Call("document.close", new { documentId = id });
+            // Left open: the editor tidies a table or two of it as it loads, so a close would stop at the save question.
         }
         Perf(notes, "open300k.median", Median(opens), "ms");
         notes.Add("open 300 KB: " + string.Join(", ", opens.Select(v => $"{v:0}")));
@@ -138,7 +138,7 @@ internal static partial class Program
         }
         Perf(notes, "save300k.median", Median(saves), "ms");
 
-        // Memory: this window with the large document and a second window, settled.
+        // Memory: this window with the three large documents and a second window, settled.
         var second = (string)(await c.Call("test.window.open"))["windowId"]!;
         await Task.Delay(8000);
         var (priv, ws, n) = TreeMemory(hostPid);
