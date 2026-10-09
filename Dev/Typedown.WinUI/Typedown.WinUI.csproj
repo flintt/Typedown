@@ -20,8 +20,8 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <StartupObject>Typedown.WinUI.Program</StartupObject>
     <Configurations>Debug;Release;Debug_Local</Configurations>
-    <Platforms>x64;x86;ARM64</Platforms>
-    <RuntimeIdentifiers>win-x64;win-x86;win-arm64</RuntimeIdentifiers>
+    <Platforms>x64;ARM64</Platforms>
+    <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
     <UseRidGraph>true</UseRidGraph>
 
     <Nullable>enable</Nullable>
@@ -41,11 +41,6 @@
   <PropertyGroup Condition="'$(Platform)' == 'x64'">
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <AppxBundlePlatforms>x64</AppxBundlePlatforms>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Platform)' == 'x86'">
-    <RuntimeIdentifier>win-x86</RuntimeIdentifier>
-    <AppxBundlePlatforms>x86</AppxBundlePlatforms>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Platform)' == 'ARM64'">

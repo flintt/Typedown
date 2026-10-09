@@ -26,7 +26,8 @@ class WinUIBuildEntrypointTests(unittest.TestCase):
         )
         self.assertIsNotNone(platform_default, "Platform must have an array default")
         defaults = re.findall(r"[\"'](x64|x86|ARM64)[\"']", platform_default.group(1))
-        self.assertEqual(defaults, ["x64", "x86", "ARM64"])
+        self.assertEqual(defaults, ["x64", "ARM64"])
+        self.assertNotIn('"x86"', self.source)
 
     def test_builds_only_the_new_winui_project(self) -> None:
         normalized = self.source.replace("/", "\\").casefold()

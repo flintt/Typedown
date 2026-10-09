@@ -95,7 +95,7 @@ class WinUIMigrationArchitectureTests(unittest.TestCase):
         self.assert_single_property("PublishAot", "false")
         self.assert_single_property("PublishTrimmed", "false")
 
-    def test_keeps_all_existing_windows_architectures(self) -> None:
+    def test_targets_supported_windows_architectures(self) -> None:
         declarations = property_values(self.project, "Platforms")
         self.assertTrue(declarations, "Platforms must be declared")
         platforms = {
@@ -104,9 +104,10 @@ class WinUIMigrationArchitectureTests(unittest.TestCase):
             for item in declaration.split(";")
             if item.strip()
         }
-        self.assertTrue(
-            {"x64", "x86", "arm64"}.issubset(platforms),
-            f"Platforms must retain x64, x86 and ARM64; found {sorted(platforms)!r}",
+        self.assertEqual(
+            platforms,
+            {"x64", "arm64"},
+            f"Platforms must be exactly x64 and ARM64; found {sorted(platforms)!r}",
         )
 
     def test_keeps_legacy_application_and_packaging_projects(self) -> None:

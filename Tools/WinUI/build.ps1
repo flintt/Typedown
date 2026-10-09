@@ -3,8 +3,8 @@ param(
     [ValidateSet("Debug", "Release", "Debug_Local")]
     [string]$Configuration = "Debug_Local",
 
-    [ValidateSet("x64", "x86", "ARM64")]
-    [string[]]$Platform = @("x64", "x86", "ARM64"),
+    [ValidateSet("x64", "ARM64")]
+    [string[]]$Platform = @("x64", "ARM64"),
 
     [ValidateSet("Auto", "Always", "Never")]
     [string]$Restore = "Auto"
