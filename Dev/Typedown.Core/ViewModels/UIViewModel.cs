@@ -119,7 +119,7 @@ namespace Typedown.Core.ViewModels
             // The title carries a translated word now, so it has to be rebuilt when the language changes —
             // otherwise it keeps the old one while the menus around it have already changed.
             disposables.Add(SettingsViewModel.WhenPropertyChanged(nameof(SettingsViewModel.Language)).Subscribe(_ => UpdateTitle()));
-            disposables.Add(Observable.FromEventPattern(uiSettings, nameof(uiSettings.ColorValuesChanged))
+            disposables.Add(uiSettings.GetColorValuesObservable()
                 .Merge(SettingsViewModel.WhenPropertyChanged(nameof(SettingsViewModel.AppTheme)))
                 .Merge(SettingsViewModel.WhenPropertyChanged(nameof(SettingsViewModel.CustomTheme)))
                 .Subscribe(_ => UpdateActualTheme()));

@@ -11,7 +11,7 @@ namespace Typedown.ReliabilityTests
         [TestMethod]
         public void PackageKeepsExpectedFileAssociationsAndFullTrustCapability()
         {
-            var manifest = XDocument.Load(Path.Combine(Repository.Root, "Tools", "Typedown.Package", "Package.appxmanifest"));
+            var manifest = XDocument.Load(Path.Combine(Repository.Root, "Dev", "Typedown", "Package.appxmanifest"));
             XNamespace foundation = "http://schemas.microsoft.com/appx/manifest/foundation/windows10";
             XNamespace uap = "http://schemas.microsoft.com/appx/manifest/uap/windows10";
             XNamespace rescap = "http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities";
@@ -29,7 +29,7 @@ namespace Typedown.ReliabilityTests
         {
             var application = XDocument.Load(Path.Combine(Repository.Root, "Dev", "Typedown", "Typedown.csproj"));
             var appVersion = application.Descendants().Single(node => node.Name.LocalName == "Version").Value.Trim();
-            var manifest = XDocument.Load(Path.Combine(Repository.Root, "Tools", "Typedown.Package", "Package.appxmanifest"));
+            var manifest = XDocument.Load(Path.Combine(Repository.Root, "Dev", "Typedown", "Package.appxmanifest"));
             var packageVersion = manifest.Descendants().Single(node => node.Name.LocalName == "Identity").Attribute("Version")?.Value;
             var assembly = File.ReadAllText(Path.Combine(Repository.Root, "Dev", "Typedown.Core", "Properties", "AssemblyInfo.cs"));
             var installer = File.ReadAllText(Path.Combine(Repository.Root, "Tools", "Installer", "Typedown.iss"));
@@ -66,7 +66,7 @@ namespace Typedown.ReliabilityTests
                 .Select(match => match.Groups[1].Value).OrderBy(value => value).ToArray();
             var resources = Directory.GetDirectories(Path.Combine(Repository.Root, "Dev", "Typedown.Core", "Resources", "Strings"))
                 .Select(Path.GetFileName).OrderBy(value => value).ToArray();
-            var manifest = XDocument.Load(Path.Combine(Repository.Root, "Tools", "Typedown.Package", "Package.appxmanifest"));
+            var manifest = XDocument.Load(Path.Combine(Repository.Root, "Dev", "Typedown", "Package.appxmanifest"));
             var packaged = manifest.Descendants()
                 .Where(node => node.Name.LocalName == "Resource")
                 .Select(node => (string)node.Attribute("Language"))

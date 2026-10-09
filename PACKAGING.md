@@ -63,7 +63,7 @@ ARM64 把 `-Platform x64` 改为 `-Platform ARM64`。`-SkipBuild` 只适用于�
 | --- | --- |
 | `Dev/Typedown/Typedown.csproj` | `1.3.7` |
 | `Dev/Typedown.Core/Properties/AssemblyInfo.cs` | `1.3.7.0` |
-| `Tools/Typedown.Package/Package.appxmanifest` | `1.3.7.0` |
+| `Dev/Typedown/Package.appxmanifest` | `1.3.7.0` |
 | `Tools/Installer/Typedown.iss` | `1.3.7` |
 
 可靠性测试在所有 CI 构建中检查这四处；tag 构建还会检查 tag 与项目版本是否一致。
@@ -82,17 +82,17 @@ ARM64 把 `-Platform x64` 改为 `-Platform ARM64`。`-SkipBuild` 只适用于�
 
 ## 微软商店上传包
 
-`Branding.props` 的 `BrandStoreUpload` 为 `true` 的版本（Typeleaf），CI 每个平台在旁加载 MSIX 之后再按 `StoreUpload` 模式打一次包：不签名（商店会重新签名），得到 `<BrandName>_<版本>_<平台>.msixupload`（内含 `.msix` 和符号 `.appxsym`），作为 `store-upload-x64` / `store-upload-ARM64` 产物保留 30 天，不进 GitHub Release。在合作伙伴中心的提交里把两个平台的 `.msixupload` 都上传。包身份（`Identity` 的 `Name`、`Publisher`，以及 `PublisherDisplayName`）取自 `Tools/Typedown.Package/Package.appxmanifest`，必须与合作伙伴中心为该名称保留的值一致；版本号的第四段保持 0（商店保留它）。Typedown 本身没有商店身份，`BrandStoreUpload` 为 `false`。
+`Branding.props` 的 `BrandStoreUpload` 为 `true` 的版本（Typeleaf），CI 每个平台在旁加载 MSIX 之后再按 `StoreUpload` 模式打一次包：不签名（商店会重新签名），得到 `<BrandName>_<版本>_<平台>.msixupload`（内含 `.msix` 和符号 `.appxsym`），作为 `store-upload-x64` / `store-upload-ARM64` 产物保留 30 天，不进 GitHub Release。在合作伙伴中心的提交里把两个平台的 `.msixupload` 都上传。包身份（`Identity` 的 `Name`、`Publisher`，以及 `PublisherDisplayName`）取自 `Dev/Typedown/Package.appxmanifest`，必须与合作伙伴中心为该名称保留的值一致；版本号的第四段保持 0（商店保留它）。Typedown 本身没有商店身份，`BrandStoreUpload` 为 `false`。
 
-本机生成（需要 Visual Studio Build Tools 的 MSIX 打包组件）：
+本机生成（.NET 10 SDK；应用和包是同一个项目 `Dev/Typedown`，单项目 MSIX）：
 
 ```powershell
-msbuild Tools\Typedown.Package\Typedown.Package.wapproj /t:Restore /p:Configuration=Release /p:Platform=x64
-msbuild Tools\Typedown.Package\Typedown.Package.wapproj /p:Configuration=Release /p:Platform=x64 `
-    /p:AppxBundle=Never /p:UapAppxPackageBuildMode=StoreUpload /p:AppxPackageSigningEnabled=false /p:AppxPackageDir=StoreUpload\
+dotnet publish Dev\Typedown\Typedown.csproj -c Release -p:Platform=x64 -r win-x64 -p:TypedownTrim=true `
+    -p:WindowsPackageType=MSIX -p:GenerateAppxPackageOnBuild=true -p:AppxBundle=Never `
+    -p:UapAppxPackageBuildMode=StoreUpload -p:AppxPackageSigningEnabled=false -p:AppxPackageDir=StoreUpload\
 ```
 
-SDK 不在 `Program Files` 时，像 `Tools\Installer\build-local.ps1` 那样另传 `/p:ManifestTool=<SDK>\x86\mt.exe /p:MakePri=<SDK>\x64\makepri.exe`。
+不加 `-p:WindowsPackageType=MSIX` 等打包参数时得到的是安装包和便携版用的免安装目录（`-o <目录>`）。
 
 ## 发布前产物检查
 

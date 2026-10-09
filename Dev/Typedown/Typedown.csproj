@@ -85,6 +85,20 @@
 		<PackageReference Include="System.Reactive" Version="6.0.1" />
 	</ItemGroup>
 
+	<!-- A trimmed publish (TypedownTrim=true) trims the WinRT projection and the .NET libraries only: the libraries
+	     that find types and members by reflection at run time are kept whole (EF Core builds its model, Newtonsoft
+	     reads the settings and the automation messages, WinRT.Runtime and the WinUI projection marshal by type, Rx). -->
+	<ItemGroup Condition="'$(TypedownTrim)' == 'true'">
+		<TrimmerRootAssembly Include="Microsoft.EntityFrameworkCore" />
+		<TrimmerRootAssembly Include="Microsoft.EntityFrameworkCore.Relational" />
+		<TrimmerRootAssembly Include="Microsoft.EntityFrameworkCore.Sqlite" />
+		<TrimmerRootAssembly Include="Microsoft.Data.Sqlite" />
+		<TrimmerRootAssembly Include="Newtonsoft.Json" />
+		<TrimmerRootAssembly Include="WinRT.Runtime" />
+		<TrimmerRootAssembly Include="Microsoft.WinUI" />
+		<TrimmerRootAssembly Include="System.Reactive" />
+	</ItemGroup>
+
 	<ItemGroup>
 		<!-- The library is not a package: an MSIX build's packaging properties (given on the command line, so global) are
 		     not passed on to it, or it is packaged too and MakeAppx fails for its missing manifest. -->
@@ -164,6 +178,20 @@
 			<ResolvedFileToPublish Include="%(_CliNew.Source)" RelativePath="%(_CliNew.Identity)" CopyToPublishDirectory="PreserveNewest" />
 		</ItemGroup>
 		<Message Importance="high" Text="$(BrandCliName): @(_CliNew->Count()) file(s) published with the app" />
+	</Target>
+	<!-- typedownctl runs on the app's runtime files: in a trimmed app the trimmer has to see what the CLI uses of them,
+	     or it drops it (System.Console went, and typedownctl did not start). Its own assemblies go into the trim as
+	     roots: kept whole, and everything they reach in the shared libraries is kept. -->
+	<Target Name="TrimWithCli" BeforeTargets="_ComputeAssembliesToPostprocessOnPublish" DependsOnTargets="PublishCliAlongside"
+	        Condition="'$(PublishTrimmed)' == 'true' and '$(RuntimeIdentifier)' != '' and '$(AutomationTestHost)' != 'true' and '$(IncludeCli)' != 'false' and '$(WindowsPackageType)' != 'MSIX'">
+		<ItemGroup>
+			<!-- The CLI's own assemblies, as PublishCliAlongside added them (the files the app did not have). -->
+			<_CliOwnAssembly Include="@(_CliNew->'%(Source)')" Condition="'%(Extension)' == '.dll'" />
+			<ResolvedFileToPublish Remove="@(_CliOwnAssembly)" />
+			<ResolvedFileToPublish Include="@(_CliOwnAssembly)" RelativePath="%(Filename)%(Extension)" AssetType="runtime" PostprocessAssembly="true" CopyToPublishDirectory="PreserveNewest" />
+			<TrimmerRootAssembly Include="@(_CliOwnAssembly->'%(Filename)')" />
+		</ItemGroup>
+		<Message Importance="high" Text="$(BrandCliName): trimmed with the app, rooted at @(_CliOwnAssembly->'%(Filename)', ', ')" />
 	</Target>
 	<Target Name="PackageCliAlongside" AfterTargets="GetPackagingOutputs" BeforeTargets="_ComputeAppxPackagePayload" DependsOnTargets="PublishCli"
 	        Condition="'$(RuntimeIdentifier)' != '' and '$(AutomationTestHost)' != 'true' and '$(IncludeCli)' != 'false' and '$(WindowsPackageType)' == 'MSIX'">
