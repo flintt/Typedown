@@ -6,15 +6,15 @@
   xmlns:uap5="http://schemas.microsoft.com/appx/manifest/uap/windows10/5"
   IgnorableNamespaces="uap rescap uap5">
 
-  <!-- Keep the public Typedown package identity so a later migration can upgrade in place. -->
+  <!-- The fork owns a separate package identity; product-facing names stay Typedown. -->
   <Identity
-    Name="62082Surprise.Typedown"
-    Publisher="CN=70DB4128-9F7D-4D9C-ADFC-7B5988F89237"
+    Name="flintthuang.Typedown"
+    Publisher="CN=1610AF00-8DF9-41AC-B61B-D854FDF5C66B"
     Version="1.3.7.0" />
 
   <Properties>
     <DisplayName>Typedown</DisplayName>
-    <PublisherDisplayName>Surprise</PublisherDisplayName>
+    <PublisherDisplayName>flintthuang</PublisherDisplayName>
     <Description>Typedown Markdown Editor</Description>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>

@@ -14,6 +14,9 @@ UAP = "http://schemas.microsoft.com/appx/manifest/uap/windows10"
 UAP5 = "http://schemas.microsoft.com/appx/manifest/uap/windows10/5"
 RESCAP = "http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
 NS = {"f": FOUNDATION, "uap": UAP, "uap5": UAP5, "rescap": RESCAP}
+EXPECTED_IDENTITY_NAME = "flintthuang.Typedown"
+EXPECTED_PUBLISHER = "CN=1610AF00-8DF9-41AC-B61B-D854FDF5C66B"
+EXPECTED_PUBLISHER_DISPLAY_NAME = "flintthuang"
 
 
 def text_of(root: ET.Element, name: str) -> str:
@@ -42,14 +45,20 @@ class PackageManifestCompatibilityTests(unittest.TestCase):
         cls.project = ET.parse(WINUI_PROJECT).getroot()
         cls.branding = ET.parse(BRANDING).getroot()
 
-    def test_package_identity_remains_upgrade_compatible(self) -> None:
+    def test_winui_package_uses_the_fork_identity(self) -> None:
         current = self.manifest.find("f:Identity", NS)
         stable = self.stable.find("f:Identity", NS)
         self.assertIsNotNone(current)
         self.assertIsNotNone(stable)
-        for attribute in ("Name", "Publisher", "Version"):
-            with self.subTest(attribute=attribute):
-                self.assertEqual(current.get(attribute), stable.get(attribute))
+        self.assertEqual(current.get("Name"), EXPECTED_IDENTITY_NAME)
+        self.assertEqual(current.get("Publisher"), EXPECTED_PUBLISHER)
+        self.assertEqual(current.get("Version"), stable.get("Version"))
+        self.assertEqual(
+            self.manifest.findtext(
+                "f:Properties/f:PublisherDisplayName", namespaces=NS
+            ),
+            EXPECTED_PUBLISHER_DISPLAY_NAME,
+        )
         self.assertNotIn(
             "ProcessorArchitecture",
             current.attrib,
