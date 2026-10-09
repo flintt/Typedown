@@ -74,7 +74,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Typedown.Core\Typedown.Core.csproj" />
+		<!-- The library is not a package: an MSIX build's packaging properties (given on the command line, so global) are
+		     not passed on to it, or it is packaged too and MakeAppx fails for its missing manifest. -->
+		<ProjectReference Include="..\Typedown.Core\Typedown.Core.csproj"
+		                  GlobalPropertiesToRemove="WindowsPackageType;GenerateAppxPackageOnBuild;AppxBundle;UapAppxPackageBuildMode;AppxPackageSigningEnabled;AppxPackageDir;PackageCertificateKeyFile;PackageCertificatePassword" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -128,7 +131,13 @@
 	</PropertyGroup>
 	<Target Name="PublishCli" Condition="'$(RuntimeIdentifier)' != '' and '$(AutomationTestHost)' != 'true' and '$(IncludeCli)' != 'false'">
 		<RemoveDir Directories="$(_CliPublishDir)" />
-		<Exec Command="dotnet publish &quot;$(_CliProject)&quot; -f net10.0 -r $(RuntimeIdentifier) --self-contained true -c $(Configuration) -p:TypedownWinUIPackaging=true -o &quot;$(_CliPublishDir)&quot; -nologo -v q" />
+		<!-- The dotnet running this build (DOTNET_HOST_PATH), not the first on PATH: another SDK's dotnet would load this
+		     SDK's tasks through the environment the build passes on, and fail. -->
+		<PropertyGroup>
+			<_Dotnet Condition="'$(DOTNET_HOST_PATH)' != ''">&quot;$(DOTNET_HOST_PATH)&quot;</_Dotnet>
+			<_Dotnet Condition="'$(DOTNET_HOST_PATH)' == ''">dotnet</_Dotnet>
+		</PropertyGroup>
+		<Exec Command="$(_Dotnet) publish &quot;$(_CliProject)&quot; -f net10.0 -r $(RuntimeIdentifier) --self-contained true -c $(Configuration) -p:TypedownWinUIPackaging=true -o &quot;$(_CliPublishDir)&quot; -nologo -v q" />
 		<ItemGroup>
 			<_CliFile Include="$(_CliPublishDir)\**\*" Exclude="$(_CliPublishDir)\**\*.pdb" />
 			<_CliRelative Include="@(_CliFile->'%(RecursiveDir)%(Filename)%(Extension)')" Source="%(_CliFile.FullPath)" />
