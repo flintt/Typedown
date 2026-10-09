@@ -438,10 +438,14 @@ namespace Typedown.Windows
             checkActiveTimer?.Dispose();
             checkActiveTimer = null;
             if (ServiceScope != null) Core.Services.AutomationWindows.Unregister(AppViewModel);
-            ServiceScope?.Dispose();
-            ServiceScope = null;
+            // The content is taken away first and the scope disposed after it has unloaded: WinUI raises the controls'
+            // Unloaded after Closed, and their handlers still reach the window's services (EditorContainer's editor) -
+            // disposed first, the close ended in an ObjectDisposedException.
+            var scope = ServiceScope;
             RootControl = null;
             Content = null;
+            void Release() { ServiceScope = null; scope?.Dispose(); }
+            if (!DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, Release)) Release();
             disposables.Dispose();
             // Whether this was the last window is read off the open windows, not off the view models (kept by weak
             // references; one not yet collected counted as a live window, and the process stayed headless with the

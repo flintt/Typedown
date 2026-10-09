@@ -7,6 +7,9 @@
     <TargetPlatformVersion>10.0.26100.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.18362.0</TargetPlatformMinVersion>
     <UseWinUI>true</UseWinUI>
+    <!-- System.Reactive asks for the whole Windows desktop framework (WPF and Windows Forms, about 50 MB) on a
+         Windows target; nothing here uses its WPF or Windows Forms schedulers. -->
+    <DisableTransitiveFrameworkReferences>true</DisableTransitiveFrameworkReferences>
     <RootNamespace>Typedown.Core</RootNamespace>
     <AssemblyName>Typedown.Core</AssemblyName>
     <Platforms>x64;ARM64</Platforms>
@@ -26,6 +29,13 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="2.5.1" />
+    <!-- Parts of the SDK the app does not use, left out of the build and every install: the AI and ML runtimes
+         (onnxruntime and DirectML alone are 38 MB), Widgets and Search. The versions are the ones 2.5.1 asks for. -->
+    <PackageReference Include="Microsoft.WindowsAppSDK.AI" Version="2.5.5" ExcludeAssets="all" />
+    <PackageReference Include="Microsoft.WindowsAppSDK.ML" Version="2.1.94" ExcludeAssets="all" />
+    <PackageReference Include="Microsoft.Windows.AI.MachineLearning" Version="2.1.74" ExcludeAssets="all" />
+    <PackageReference Include="Microsoft.WindowsAppSDK.Widgets" Version="2.0.5" ExcludeAssets="all" />
+    <PackageReference Include="Microsoft.WindowsAppSDK.Search" Version="2.5.5" ExcludeAssets="all" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.28000.2705" />
     <PackageReference Include="Microsoft.Graphics.Win2D" Version="1.3.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.0" />

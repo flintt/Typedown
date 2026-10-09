@@ -3525,9 +3525,13 @@ internal static partial class Program
         var opened = (string)(await c.Call("test.window.open"))["windowId"]!;
         var window = await WindowOf(opened, c);
         await Task.Delay(200);
+        var crashesBefore = UnhandledLogs(testRoot);
         PostMessage(window, 0x0010, IntPtr.Zero, IntPtr.Zero);
         for (var i = 0; i < 10 && !host.HasExited; i++) await Task.Delay(500);
         Check(!host.HasExited, "the process lives on after a window was closed while its editor was still being created");
+        var crashes = UnhandledLogs(testRoot).Except(crashesBefore).ToList();
+        foreach (var crash in crashes) notes.Add("unhandled: " + string.Join(" | ", File.ReadLines(crash).Where(l => l.Length > 0).Skip(4).Take(3)));
+        Check(crashes.Count == 0, $"closing the window raised nothing unhandled ({crashes.Count} log(s))");
         using var again = await Session("e2e Q02 after");
         var left = ((JArray)(await again.Call("window.list"))["windows"]!).Count;
         Check(left == 1, $"one window left ({left})");
@@ -3601,8 +3605,19 @@ internal static partial class Program
         var exited = host.WaitForExit(20000);
         if (exited) notes.Add("the process ended");
         else { host.Kill(); host.WaitForExit(10000); }
+        // Closing the windows raised nothing unhandled (a control unloading after its window's services were disposed did).
+        var crashes = UnhandledLogs(testRoot);
+        foreach (var crash in crashes) notes.Add("unhandled: " + string.Join(" | ", File.ReadLines(crash).Where(l => l.Length > 0).Skip(4).Take(3)));
         try { await Task.Delay(1000); Directory.Delete(testRoot, true); } catch (Exception e) { notes.Add("the folder stays: " + e.Message); }
         Check(exited, "the process exits once its last window is closed (it stayed running with no window)");
+        Check(crashes.Count == 0, $"closing the windows raised nothing unhandled ({crashes.Count} log(s))");
+    }
+
+    /// <summary>The unhandled-exception logs the test host wrote under its data folder.</summary>
+    private static List<string> UnhandledLogs(string root)
+    {
+        var logs = Path.Combine(root, "logs");
+        return Directory.Exists(logs) ? Directory.GetFiles(logs, "*UnhandledException*").ToList() : new List<string>();
     }
 
     [DllImport("user32.dll")] private static extern bool PostMessage(IntPtr window, uint message, IntPtr wParam, IntPtr lParam);

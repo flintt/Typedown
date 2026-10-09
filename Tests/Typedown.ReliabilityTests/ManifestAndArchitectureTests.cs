@@ -44,7 +44,7 @@ namespace Typedown.ReliabilityTests
         public void StandaloneThemeDesignerIsCopiedIntoApplicationOutput()
         {
             var project = XDocument.Load(Path.Combine(Repository.Root, "Dev", "Typedown", "Typedown.csproj"));
-            var item = project.Descendants().SingleOrDefault(node => node.Name.LocalName == "None" &&
+            var item = project.Descendants().SingleOrDefault(node => (node.Name.LocalName == "None" || node.Name.LocalName == "Content") &&
                 (((string)node.Attribute("Include")) ?? string.Empty).Replace('/', '\\').EndsWith("Tools\\Themes\\theme-designer.html", StringComparison.OrdinalIgnoreCase));
 
             Assert.IsNotNull(item, "theme-designer.html is not included by the desktop host project");
