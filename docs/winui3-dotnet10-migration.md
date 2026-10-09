@@ -166,10 +166,10 @@ CLI / MCP -> Typedown.Automation
 | W03 | 打开 Markdown、显示编辑器、输入并保存 | 通过 | AUMID 启动传入带 UTF-8 BOM、CRLF 的 Markdown；截图确认正文显示。Debug WebView2 的 DevTools `Input.insertText` 触发实际页面编辑事件，随后 Ctrl+S 将唯一标记写入磁盘，BOM 与 CRLF 均保留。验证任务最终关闭了自己的 Typedown 进程。 |
 | W04 | 二次启动与 `--new-window` 转交 | 通过 | 第二进程退出码为 0，运行进程仍只有一个；同一进程出现两个可见顶层窗口。 |
 | W04-F | 文件关联激活实际打开文件 | 通过 | 启动激活参数中的文件路径交给窗口级文档会话；Windows 10 截图显示测试文档标题和正文，后续编辑保存落到该文件。 |
-| W05 | `typedownctl status` 连接运行实例 | **阻断** | 包内执行别名可运行，但命令等待后报告应用未运行或自动化未开启；WinUI 宿主尚未启动和注册自动化服务。 |
+| W05 | `typedownctl status` 连接运行实例 | 通过 | WinUI 宿主复用当前用户 SID ACL 的安全命名管道，并保持 `AllowLocalAutomation` 默认关闭；测试数据显式开启后，包内 CLI 与 `%LOCALAPPDATA%\Microsoft\WindowsApps\typedownctl.exe` 执行别名均以退出码 0 连接同一实例，返回版本 `1.3.7.0`、1 个窗口和有效活动窗口 ID。当前 M3 smoke 只注册真实可用的 `app.getState`，其余自动化能力仍按 M5 恢复。验证任务最终关闭了自己的 Typedown 进程。 |
 | W06 | Windows 可靠性测试 | 通过 | 自包含打包、身份清单和焦点改动后，`Tests/Typedown.ReliabilityTests` 在 HP 通过 21/21。 |
 
-W05 是进入 M4 前剩余的实测阻断项。它转为通过时补充测试提交、Windows 配置和实际结果；不能用迁移静态检查替代本表结果。
+W01～W06 已全部通过，可以进入 M4。后续阶段仍须按功能补充自动化方法和 Windows E2E，不能用本表的 M3 smoke 结果替代 M5 的完整自动化验收。
 
 ### M0：冻结基线和建立迁移门禁
 
