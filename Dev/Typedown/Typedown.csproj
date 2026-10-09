@@ -20,10 +20,12 @@
 		     code (x:Bind, Fody, EF Core, WinRT projections) and the app crashes at runtime, so keep it off. -->
 		<PublishTrimmed>false</PublishTrimmed>
 		<Version>1.3.7</Version>
-		<!-- Shown as "File description" in Explorer and indexed by Start menu search (upstream #28) -->
-		<AssemblyTitle>$(BrandName) - Lightweight Markdown Editor</AssemblyTitle>
+		<!-- Shown as "File description" in Explorer and "Open with", and indexed by Start menu search (upstream #28): a search
+		     for "markdown" finds the installed app. An MSIX shows its manifest's DisplayName there instead, the Start menu's
+		     name, which stays the product's alone. -->
+		<AssemblyTitle>$(BrandName) - Markdown Editor</AssemblyTitle>
 		<Product>$(BrandName) Markdown Editor</Product>
-		<Description>$(BrandName) - Lightweight Markdown Editor</Description>
+		<Description>$(BrandName) - Markdown Editor</Description>
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 		<Configurations>Debug;Release;Debug_Local</Configurations>
 	</PropertyGroup>
