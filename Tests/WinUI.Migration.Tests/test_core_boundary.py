@@ -122,9 +122,18 @@ class CoreBoundaryTests(unittest.TestCase):
             self.skipTest("The current Core slice does not use PropertyChanged.Fody")
 
         configuration = PROJECT_DIRECTORY / "FodyWeavers.xml"
+        schema = PROJECT_DIRECTORY / "FodyWeavers.xsd"
         self.assertTrue(
             configuration.is_file(),
             "Fody only loads FodyWeavers.xml from the project directory; a cross-directory property leaves a warning and generates a file during build",
+        )
+        self.assertTrue(
+            schema.is_file(),
+            "Fody otherwise generates an untracked schema during the Windows build",
+        )
+        self.assertIn(
+            "FodyWeavers.xsd",
+            configuration.read_text(encoding="utf-8-sig"),
         )
 
     def test_linked_core_sources_have_no_ui_or_picker_dependencies(self) -> None:
