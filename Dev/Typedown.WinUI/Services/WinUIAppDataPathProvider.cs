@@ -17,6 +17,10 @@ internal sealed class WinUIAppDataPathProvider : IAppDataPathProvider
         DatabaseFilePath = Path.Combine(PersistentDataDirectory, "Storage.db");
         BackupDirectory = Path.Combine(PersistentDataDirectory, "Backup");
         ThemesDirectory = Path.Combine(PersistentDataDirectory, "themes");
+        SessionFilePath = Path.Combine(PersistentDataDirectory, "session.json");
+        CursorFilePath = Path.Combine(PersistentDataDirectory, "cursors.json");
+        ImageUploadHistoryFilePath = Path.Combine(PersistentDataDirectory, "ImageUploadHistory.json");
+        HedgeDocSharesFilePath = Path.Combine(PersistentDataDirectory, "hedgedoc-shares.json");
 
         Directory.CreateDirectory(PersistentDataDirectory);
         Directory.CreateDirectory(CacheDirectory);
@@ -35,6 +39,14 @@ internal sealed class WinUIAppDataPathProvider : IAppDataPathProvider
     public string BackupDirectory { get; }
 
     public string ThemesDirectory { get; }
+
+    public string SessionFilePath { get; }
+
+    public string CursorFilePath { get; }
+
+    public string ImageUploadHistoryFilePath { get; }
+
+    public string HedgeDocSharesFilePath { get; }
 
     private static string ResolvePersistentDataDirectory(string appName)
     {

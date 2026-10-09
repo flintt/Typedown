@@ -18,4 +18,12 @@ public interface IAppDataPathProvider
     string BackupDirectory { get; }
 
     string ThemesDirectory { get; }
+
+    string SessionFilePath { get; }
+
+    string CursorFilePath { get; }
+
+    string ImageUploadHistoryFilePath { get; }
+
+    string HedgeDocSharesFilePath { get; }
 }
