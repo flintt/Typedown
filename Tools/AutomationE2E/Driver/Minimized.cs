@@ -80,4 +80,101 @@ internal static partial class Program
         }
         Check(times.Max() < 5000, $"a document opened right after restoring is shown within 5 s ({string.Join(", ", times)} ms)");
     }
+
+    /// <summary>
+    /// MN03: minimized, written to through the API meanwhile, restored the way MN01 restores it (SW_RESTORE, not
+    /// activated): the editor's web view gets its size back - left at the minimized window's 144x0, the page counted
+    /// itself hidden, got no frames and took no document (the next case's loads waited for ever).
+    /// </summary>
+    private static async Task MN03(List<string> notes)
+    {
+        using var c = await Session("e2e MN03");
+        var id = await Open(c, Fixture("mn03.md", "# MN03\n\nbefore\n"));
+        var windowId = await WindowIdOf(c, id);
+        var window = await WindowOf(windowId, c);
+        await Task.Delay(1500);
+        var failures = new List<string>();
+        for (var round = 0; round < 3; round++)
+        {
+            var before = (string?)(await c.Call("test.webview.state", new { windowId }))["viewSize"];
+            ShowWindow(window, 6 /* SW_MINIMIZE */);
+            await Task.Delay(2000);
+            var minimized = (string?)(await c.Call("test.webview.state", new { windowId }))["viewSize"];
+            await c.Call("document.replace", new { documentId = id, text = $"# MN03\n\nwhile minimized {round}\n", baseRevision = await Revision(c, id) });
+            await Task.Delay(2000);
+            ShowWindow(window, 9 /* SW_RESTORE */);
+            await Task.Delay(2000);
+            var after = (string?)(await c.Call("test.webview.state", new { windowId }))["viewSize"];
+            notes.Add($"round {round}: web view {before} -> minimized {minimized} -> restored {after}");
+            if (after != before) failures.Add($"round {round}: {after} after restoring, {before} before");
+            await Activate(window);
+        }
+        Check(failures.Count == 0, "the editor's web view gets its size back after the window is restored: " + string.Join("; ", failures));
+    }
+
+    /// <summary>
+    /// MN04: as a person does it - F11 in and out of full screen, the window minimized with its minimize command and brought
+    /// back as a taskbar click does (the restore command, then the window active): its content gets the window's size back
+    /// and a document opened at once is shown. Restored without being activated (MN03) the content kept the minimized size.
+    /// </summary>
+    private static async Task MN04(List<string> notes)
+    {
+        using var c = await Session("e2e MN04");
+        var id = await Open(c, Fixture("mn04.md", "# MN04\n"));
+        var windowId = await WindowIdOf(c, id);
+        var window = await WindowOf(windowId, c);
+        await Activate(window);
+        await Task.Delay(1000);
+        foreach (var _ in new[] { 1, 2 }) { Send(Key(0x7A, false), Key(0x7A, true)); await Task.Delay(1500); }
+        notes.Add("after F11 twice: " + (string?)(await c.Call("test.webview.state", new { windowId }))["viewSize"]);
+        var failures = new List<string>();
+        for (var round = 0; round < 3; round++)
+        {
+            PostMessage(window, 0x0112 /* WM_SYSCOMMAND */, new IntPtr(0xF020) /* SC_MINIMIZE */, IntPtr.Zero);
+            await Task.Delay(3000);
+            PostMessage(window, 0x0112, new IntPtr(0xF120) /* SC_RESTORE */, IntPtr.Zero);
+            await Task.Delay(300);
+            await Activate(window);
+            await Task.Delay(1500);
+            var size = (string?)(await c.Call("test.webview.state", new { windowId }))["viewSize"];
+            var marker = $"MN04-{round}";
+            var b = await Open(c, Fixture($"mn04-{round}.md", $"# {marker}\n"));
+            var shown = await Eventually(async () => await PageShows(c, windowId, marker), 5000);
+            notes.Add($"round {round}: web view {size}, a document opened shown: {shown}");
+            if (!shown || size == "144x0") failures.Add($"round {round}: {size}, shown {shown}");
+        }
+        Check(failures.Count == 0, "minimized and brought back as a person does, the window works: " + string.Join("; ", failures));
+    }
+
+    /// <summary>
+    /// MN05: after F11 in and out of full screen, the window minimized, and a Markdown file opened from Explorer meanwhile
+    /// (the exe started with the file hands it to the running one, which brings its window back): the window works and
+    /// shows the file.
+    /// </summary>
+    private static async Task MN05(List<string> notes)
+    {
+        using var c = await Session("e2e MN05");
+        var id = await Open(c, Fixture("mn05.md", "# MN05\n"));
+        var windowId = await WindowIdOf(c, id);
+        var window = await WindowOf(windowId, c);
+        await Activate(window);
+        await Task.Delay(1000);
+        foreach (var _ in new[] { 1, 2 }) { Send(Key(0x7A, false), Key(0x7A, true)); await Task.Delay(1500); }
+        var failures = new List<string>();
+        for (var round = 0; round < 3; round++)
+        {
+            PostMessage(window, 0x0112 /* WM_SYSCOMMAND */, new IntPtr(0xF020) /* SC_MINIMIZE */, IntPtr.Zero);
+            await Task.Delay(3000);
+            var marker = $"MN05-{round}";
+            var file = Fixture($"mn05-{round}.md", $"# {marker}\n");
+            // As a double-click in Explorer: the exe with the file, which hands it to the running one.
+            using (var p = Process.Start(new ProcessStartInfo(hostExe, $"--automation-test-root \"{testRoot}\" \"{file}\"") { UseShellExecute = true })) p?.WaitForExit(15000);
+            var shown = await Eventually(async () => await PageShows(c, windowId, marker), 8000);
+            var size = (string?)(await c.Call("test.webview.state", new { windowId }))["viewSize"];
+            notes.Add($"round {round}: web view {size}, the file shown: {shown}, window iconic {IsIconic(window)}");
+            if (!shown || size == "144x0") failures.Add($"round {round}: {size}, shown {shown}");
+            await Activate(window);
+        }
+        Check(failures.Count == 0, "a file opened while the window was minimized brings it back working: " + string.Join("; ", failures));
+    }
 }

@@ -177,12 +177,16 @@ internal static partial class Program
             await Case("FT01 the file tree sorts names as 1.3.7 did", FT01);
             await Case("MN02 a window minimized a while and restored: a document opened at once is shown within 5 s and takes keys", MN02);
             await Case("TH05 the editor follows Dark, Black, Mica off and on, then Light (it stayed dark under a light window)", TH05);
+            await Case("MN03 minimized, written to, restored without activation: the editor's web view gets its size back", MN03);
+            await Case("MN04 F11 in and out of full screen, then minimized and brought back as a person does: the window works", MN04);
+            await Case("MN05 F11 in and out of full screen, minimized, then a file opened from Explorer: the window comes back working", MN05);
             await Case("DP01 the window is per-monitor DPI aware (not stretched, so not blurred, on a scaled screen)", DP01);
             await Case("DR01 files dragged from Explorer onto the editor: a Markdown file opens, a picture goes into the document", DR01);
             await Case("DM01 the window's top edge is drawn in the app's theme, and a dialog's smoke covers it too: the top row matches the row under it, light and dark", DM01);
             await Case("TH02 View > Theme > Reload themes finds a new theme file and a renamed one; the window draws in the custom theme's base whatever the built-in setting says", TH02);
             await Case("WP01 a web page pasted: headings with #, code fenced with its language and without line numbers, Google Docs bold and italic, late-loaded and relative pictures by their real addresses; with Insert web image copying, its pictures are copied beside the document and their addresses replaced", WP01);
             await Case("ER01 a page message handler that throws stays subscribed and the message still reaches the other handlers; an exception out of an event handler XAML calls is logged and the app goes on", ER01);
+            await Case("OL01 tabs switched back and forth, quickly and slowly: every heading with headings under it stays expanded in the outline", OL01);
             await Case("LD01 a load the editor gives back rewritten is loaded once more and keeps the file's text; one rewritten again is taken after that one retry, not retried without end", LD01);
             // An edition's own cases (Edition.<name>.cs beside this file, in the edition's repository); none here.
             var editionCases = new List<(string Name, Func<List<string>, Task> Run)>();
@@ -291,6 +295,7 @@ internal static partial class Program
             {
                 // Any other failure: the screen and where the keyboard was, for what the case could not say itself.
                 notes.Add("at the failure: " + FailureEvidence(name.Split(' ')[0]));
+                try { await DiagnoseWebViews(notes); } catch (Exception d) { notes.Add("no web view diagnosis: " + d.Message.Split('\n')[0]); }
             }
             results.Add(new JObject { ["name"] = name, ["passed"] = false, ["ms"] = watch.ElapsedMilliseconds, ["error"] = e is CaseFailed ? e.Message : e.ToString(), ["notes"] = new JArray(notes) });
         }

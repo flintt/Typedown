@@ -100,6 +100,25 @@ namespace Typedown.Services.Automation
                 })));
             // Runs a script in the window's editor page and returns its JSON result: for diagnosing what the page holds
             // (caret, Muya's state) when a check fails in the real window and not in the page harness.
+            // The web view as the app sees it: whether WinUI counts it visible, suspended, its size, the window's state.
+            methods.Add(new MethodDescriptor("test.webview.state", null, "test.webview.state/1", (c, ct) =>
+                Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    var editor = app.MarkdownEditor as Typedown.Controls.MarkdownEditor;
+                    var view = editor?.WebViewController?.WebView;
+                    var window = Typedown.Windows.MainWindow.GetWindow(editor);
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject
+                    {
+                        ["editorVisibility"] = editor?.Visibility.ToString(),
+                        ["editorLoaded"] = editor?.IsLoaded,
+                        ["viewVisibility"] = view?.Visibility.ToString(),
+                        ["viewSize"] = view == null ? null : $"{view.ActualWidth:0}x{view.ActualHeight:0}",
+                        ["hostVisible"] = editor?.XamlRoot?.IsHostVisible,
+                        ["suspended"] = editor?.CoreWebView2?.IsSuspended,
+                        ["windowVisible"] = window?.AppWindow.IsVisible,
+                        ["presenter"] = (window?.AppWindow.Presenter as Microsoft.UI.Windowing.OverlappedPresenter)?.State.ToString(),
+                    };
+                })));
             methods.Add(new MethodDescriptor("test.editor.eval", null, "test.editor.eval/1", async (c, ct) =>
                 await await Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), async app =>
                 {
@@ -530,6 +549,53 @@ namespace Typedown.Services.Automation
                 })));
             // The colours the side pane marks what is chosen with: every selection indicator drawn in it (the bar under
             // Files/Outline, the pill of each outline and folder-tree row), by where it is, with its fill.
+            // The outline's expansion as the tree holds it (its nodes) and as the model holds it, row by row: the two
+            // disagreeing after a tab switch is how a heading's children came to be hidden with nobody collapsing it.
+            methods.Add(new MethodDescriptor("test.outline.state", null, "test.outline.state/1", (c, ct) =>
+                Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    Core.Controls.SidePanelControls.Pages.TocPage page = null;
+                    void Find(global::Microsoft.UI.Xaml.DependencyObject node)
+                    {
+                        if (page != null || node == null) return;
+                        if (node is Core.Controls.SidePanelControls.Pages.TocPage p) { page = p; return; }
+                        for (var i = 0; i < global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(node); i++)
+                            Find(global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChild(node, i));
+                    }
+                    Find(app.XamlRoot?.Content as global::Microsoft.UI.Xaml.DependencyObject);
+                    var tree = page?.FindName("TreeView") as global::Microsoft.UI.Xaml.Controls.TreeView;
+                    var rows = new Newtonsoft.Json.Linq.JArray();
+                    var nodes = new System.Collections.Generic.Dictionary<Core.Models.TocTreeItem, global::Microsoft.UI.Xaml.Controls.TreeViewNode>();
+                    void Nodes(System.Collections.Generic.IList<global::Microsoft.UI.Xaml.Controls.TreeViewNode> list)
+                    {
+                        foreach (var n in list)
+                        {
+                            if (n.Content is Core.Models.TocTreeItem item) nodes[item] = n;
+                            Nodes(n.Children);
+                        }
+                    }
+                    if (tree != null) Nodes(tree.RootNodes);
+                    void Model(Core.Models.TocTreeItem parent, int depth)
+                    {
+                        foreach (var item in parent.Children)
+                        {
+                            nodes.TryGetValue(item, out var n);
+                            rows.Add(new Newtonsoft.Json.Linq.JObject
+                            {
+                                ["name"] = item.TocItem?.Content, ["depth"] = depth, ["children"] = item.Children.Count,
+                                ["model"] = item.IsExpanded, ["node"] = n == null ? null : (Newtonsoft.Json.Linq.JToken)n.IsExpanded,
+                                ["nodeChildren"] = n?.Children.Count,
+                            });
+                            Model(item, depth + 1);
+                        }
+                    }
+                    var toc = app.EditorViewModel?.Toc;
+                    if (toc != null) Model(toc, 1);
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject
+                    {
+                        ["pane"] = page != null, ["tree"] = tree != null, ["autoExpand"] = app.SettingsViewModel?.TocAutoExpand, ["rows"] = rows,
+                    };
+                })));
             methods.Add(new MethodDescriptor("test.pane.accent", null, "test.pane.accent/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
                 {
