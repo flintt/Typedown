@@ -127,17 +127,19 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
         {
             _ = DispatcherQueue.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () =>
             {
-                if (SyncExpansion()) ScheduleExpansionSync();
+                // Rows just expanded are in the tree's list only after its next layout; selecting one or scrolling to
+                // it before that crashed inside the list. The heading is marked once the expansion has settled.
+                if (SyncExpansion() || syncScheduled)
+                {
+                    unmarkedSlug = slug;
+                    ScheduleExpansionSync();
+                    return;
+                }
                 marking = true;
                 try
                 {
                     var node = FindNode(TreeView.RootNodes, slug);
-                    if (node == null)
-                    {
-                        if (syncScheduled) { unmarkedSlug = slug; return; }
-                        Utilities.Log.Debug($"outline: no row for {slug} in the pane");
-                        return;
-                    }
+                    if (node == null) { Utilities.Log.Debug($"outline: no row for {slug} in the pane"); return; }
                     if (TreeView.SelectedNode != node) TreeView.SelectedNode = node;
                     FindList(TreeView)?.ScrollIntoView(node);
                 }
