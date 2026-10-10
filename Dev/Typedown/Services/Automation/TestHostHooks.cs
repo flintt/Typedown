@@ -677,7 +677,7 @@ namespace Typedown.Services.Automation
                 var parts = new System.Collections.Generic.List<string>();
                 foreach (var kind in new[] { global::Microsoft.UI.Input.NonClientRegionKind.Caption, global::Microsoft.UI.Input.NonClientRegionKind.TopBorder, global::Microsoft.UI.Input.NonClientRegionKind.Passthrough })
                 {
-                    var rects = source.GetRegionRects(kind);
+                    var rects = source.GetRegionRects(kind) ?? System.Array.Empty<global::Windows.Graphics.RectInt32>();
                     parts.Add(kind + ": " + string.Join(" ", rects.Select(r => $"{r.X},{r.Y} {r.Width}x{r.Height}")));
                 }
                 return string.Join("; ", parts);

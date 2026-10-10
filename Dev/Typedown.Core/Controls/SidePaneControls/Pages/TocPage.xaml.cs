@@ -160,7 +160,11 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
                     if (ViewModel?.SettingsViewModel?.TocAutoExpand ?? true) ExpandTo(TreeView.RootNodes, slug);
                     var node = FindNode(TreeView.RootNodes, slug);
                     if (node == null) { Utilities.Log.Debug($"outline: no row for {slug} in the pane"); return; }
-                    if (TreeView.SelectedNode != node) TreeView.SelectedNode = node;
+                    if (TreeView.SelectedNode != node)
+                    {
+                        TreeView.SelectedNode = node;
+                        Utilities.Log.Debug($"outline: marked {(node.Content as Models.TocTreeItem)?.TocItem?.Content} (load {Editor?.LoadId})");
+                    }
                     FindList(TreeView)?.ScrollIntoView(node);
                 }
                 catch (System.Exception ex) { Utilities.Log.Debug($"outline: could not mark {slug}: {ex.Message}"); }
