@@ -26,6 +26,9 @@ internal static partial class Program
         notes.Add($"Table before: {tableBefore}");
         Check(tableBefore == ToggleState.Off, "Table is not checked with the caret in a plain paragraph");
 
+        // Reading the check opened and closed the menus, which took the focus from the editor: back into it first.
+        await ClickEditorText(c, windowId, window, "plain");
+        await Task.Delay(500);
         await InvokeMenuBarItem(window, "TableItem", escapeAfter: false);
         var opened = false;
         for (var i = 0; i < 20 && !opened; i++) { await Task.Delay(150); opened = (bool)(await c.Call("test.dialog.colours", new { windowId }))["open"]!; }
