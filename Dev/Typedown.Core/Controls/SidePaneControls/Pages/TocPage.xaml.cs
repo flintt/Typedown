@@ -23,56 +23,7 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             watched = Editor;
-            if (watched != null)
-            {
-                watched.OutlineHighlighted += OnOutlineHighlighted;
-                watched.PropertyChanged += OnEditorPropertyChanged;
-            }
-            ScheduleExpansionSync();
-        }
-
-        // Another document's outline handed over in one step: its rows come up expanded as its model says.
-        private void OnEditorPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(EditorViewModel.Toc)) ScheduleExpansionSync();
-        }
-
-        private void ScheduleExpansionSync() =>
-            _ = DispatcherQueue.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, SyncExpansion);
-
-        // Whether a heading is expanded is kept twice: on the item model (bound both ways to the row) and on the tree's
-        // own node, and the node is what the tree draws. When the outline was handed over for another tab, a row the
-        // list made late - one below the fold, built after the binding had already given its value - came up with a
-        // fresh node's "collapsed" while its model said expanded, and nothing told the node otherwise: now and then a
-        // heading's children were hidden with nobody having collapsed it (OL01). The nodes are set from the models
-        // once the rows are laid out, a level at a time: a node expanded here makes its children's nodes, which the
-        // next pass sets in turn.
-        private void SyncExpansion()
-        {
-            try
-            {
-                for (var pass = 0; pass < 8; pass++)
-                {
-                    if (!SyncExpansion(TreeView.RootNodes)) return;
-                    TreeView.UpdateLayout();
-                }
-            }
-            catch (System.Exception ex) { Utilities.Log.Debug($"outline: could not set the rows' expansion: {ex.Message}"); }
-        }
-
-        private static bool SyncExpansion(System.Collections.Generic.IList<Microsoft.UI.Xaml.Controls.TreeViewNode> nodes)
-        {
-            var changed = false;
-            foreach (var node in nodes)
-            {
-                if (node.Content is Models.TocTreeItem item && item.Children.Count > 0 && node.IsExpanded != item.IsExpanded)
-                {
-                    node.IsExpanded = item.IsExpanded;
-                    changed = true;
-                }
-                if (SyncExpansion(node.Children)) changed = true;
-            }
-            return changed;
+            if (watched != null) watched.OutlineHighlighted += OnOutlineHighlighted;
         }
 
         // The mark is set on the item model and reaches the row through the IsSelected binding of its
@@ -93,7 +44,6 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
         {
             _ = DispatcherQueue.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () =>
             {
-                SyncExpansion();
                 marking = true;
                 try
                 {
@@ -173,25 +123,13 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             }
         }
 
-        private void OnExpandAllClick(object sender, RoutedEventArgs e)
-        {
-            Editor?.Toc?.SetExpandedRecursive(true);
-            ScheduleExpansionSync();
-        }
+        private void OnExpandAllClick(object sender, RoutedEventArgs e) => Editor?.Toc?.SetExpandedRecursive(true);
 
-        private void OnCollapseAllClick(object sender, RoutedEventArgs e)
-        {
-            Editor?.Toc?.SetExpandedRecursive(false);
-            ScheduleExpansionSync();
-        }
+        private void OnCollapseAllClick(object sender, RoutedEventArgs e) => Editor?.Toc?.SetExpandedRecursive(false);
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
-            if (watched != null)
-            {
-                watched.OutlineHighlighted -= OnOutlineHighlighted;
-                watched.PropertyChanged -= OnEditorPropertyChanged;
-            }
+            if (watched != null) watched.OutlineHighlighted -= OnOutlineHighlighted;
             watched = null;
             list = null;
             Bindings?.StopTracking();

@@ -574,10 +574,7 @@ namespace Typedown.Core.ViewModels
             {
                 rebuildingToc = false;
             }
-            // Raised for every report with a current heading, a kept one following or not: the kept one is often that
-            // same heading, which the call below then takes as already marked and passes over - and the outline just
-            // handed over for another tab was neither marked nor brought to its expansion.
-            if (ContentState.Cur != null)
+            if (ContentState.Cur != null && pendingOutlineSlug == null)
                 OutlineHighlighted?.Invoke(ContentState.Cur.Slug);
             if (pendingOutlineSlug != null)
             {
