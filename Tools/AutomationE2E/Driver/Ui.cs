@@ -117,7 +117,14 @@ internal static partial class Program
             GetClassName(under, name, 256);
             throw new CaseFailed($"the menu item at ({x}, {y}) is not in the test window's process: {name} is there");
         }
-        SetCursorPos(x, y);
+        // Moved there as a mouse moves (SendInput), not placed (SetCursorPos sends no pointer move): a menu item that
+        // had not seen the pointer come in took the press now and then as nothing, and the command did not run.
+        int screenW = GetSystemMetrics(0), screenH = GetSystemMetrics(1);
+        foreach (var dx in new[] { -6, -3, 0 })
+        {
+            Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dx = (x + dx) * 65535 / (screenW - 1), dy = y * 65535 / (screenH - 1), dwFlags = 0x0001 | 0x8000 } } });
+            await Task.Delay(40);
+        }
         await Task.Delay(100);
         Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0002 } } }, new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0004 } } });
     }
