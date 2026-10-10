@@ -56,7 +56,7 @@
 
 **安装包实测**（真实安装，不是测试宿主）：在测试机上从 1.2.30 → 正式版 1.3.7 → 新版覆盖安装，再卸载、重装；构建机上从 1.3.4 覆盖安装。
 
-- 发现一个只在覆盖安装时出现的问题：Inno Setup 只添加、替换文件，旧版本留下的 UWP `resources.pri`（还有 `Typedown.XamlUI.pri`、`Microsoft.UI.Xaml.pri`、`api-ms-win-*.dll` 等）留在程序目录里；WinUI 3 优先从 `resources.pri` 读 XAML 资源，于是新版窗口建不起来（`Caption` 的 InvalidCastException 和 XAML 解析错误），文档打不开、窗口关不掉。全新目录里一切正常，所以所有测试宿主和 hp 上的发布目录都没碰到。
+- 发现一个只在覆盖安装时出现的问题：Inno Setup 只添加、替换文件，旧版本留下的 UWP `resources.pri`（还有 `Typedown.XamlUI.pri`、`Microsoft.UI.Xaml.pri`、`api-ms-win-*.dll` 等）留在程序目录里；WinUI 3 优先从 `resources.pri` 读 XAML 资源，于是新版窗口建不起来（`Caption` 的 InvalidCastException 和 XAML 解析错误），文档打不开、窗口关不掉。全新目录里一切正常，所以所有测试宿主和构建机上的发布目录都没碰到。
 - 修复：安装前清空程序目录里旧版本的文件（`Typedown.iss` 的 `RemovePreviousVersion`，只在目录里有本应用的 exe 时才清；文档、设置、日志不在程序目录）。修复前覆盖安装失败，修复后通过。
 - 修复后的检查：安装文件齐全、不是测试宿主、`.md` 关联指向新程序、卸载项、`typedownctl` 能运行、带文档启动并加载、正常关闭无残留进程、旧版本的数据（设置、历史、主题）原样保留；卸载后程序目录和关联被移除，数据保留。
 
