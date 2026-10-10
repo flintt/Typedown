@@ -49,7 +49,7 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
                 // A node expanded in this pass makes its children's nodes once the tree has laid it out: the next pass
                 // comes after that, from the queue. (Forcing the layout here instead crashed inside the tree while
                 // tabs were switched quickly.)
-                if (SyncExpansion() && pass < 8) { ScheduleExpansionSync(pass + 1); return; }
+                if (SyncExpansion() && pass < 20) { ScheduleExpansionSync(pass + 1); return; }
                 // A heading marked before its row's node existed is marked now that the rows are all there.
                 var slug = unmarkedSlug;
                 unmarkedSlug = null;
@@ -69,7 +69,8 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
         {
             try
             {
-                return SyncExpansion(TreeView.RootNodes);
+                var toc = Editor?.Toc;
+                return toc != null && SyncExpansion(TreeView.RootNodes, toc.Children) != Sync.Done;
             }
             catch (System.Exception ex)
             {
@@ -78,19 +79,34 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             }
         }
 
-        private static bool SyncExpansion(System.Collections.Generic.IList<Microsoft.UI.Xaml.Controls.TreeViewNode> nodes)
+        private enum Sync { Done, Changed, NotReady }
+
+        // Only nodes that are this outline's, level by level: right after the outline is handed over the tree still holds
+        // the previous one's nodes for a moment, and expanding one of those (being torn down) crashed inside the tree.
+        // Until the nodes match the models the pass changes nothing and asks to be run again.
+        private static Sync SyncExpansion(System.Collections.Generic.IList<Microsoft.UI.Xaml.Controls.TreeViewNode> nodes, System.Collections.Generic.IList<Models.TocTreeItem> items)
         {
-            var changed = false;
-            foreach (var node in nodes)
+            if (nodes.Count != items.Count) return Sync.NotReady;
+            for (var i = 0; i < nodes.Count; i++)
+                if (!ReferenceEquals(nodes[i].Content, items[i])) return Sync.NotReady;
+            var result = Sync.Done;
+            for (var i = 0; i < nodes.Count; i++)
             {
-                if (node.Content is Models.TocTreeItem item && item.Children.Count > 0 && node.IsExpanded != item.IsExpanded)
+                var node = nodes[i];
+                var item = items[i];
+                if (item.Children.Count == 0) continue;
+                if (node.IsExpanded != item.IsExpanded)
                 {
                     node.IsExpanded = item.IsExpanded;
-                    changed = true;
+                    result = Sync.Changed;
+                    continue; // its children's nodes come with the next layout
                 }
-                if (SyncExpansion(node.Children)) changed = true;
+                if (!node.IsExpanded) continue;
+                var below = SyncExpansion(node.Children, item.Children);
+                if (below == Sync.NotReady) return Sync.NotReady;
+                if (below == Sync.Changed) result = Sync.Changed;
             }
-            return changed;
+            return result;
         }
 
         // The mark is set on the item model and reaches the row through the IsSelected binding of its
