@@ -47,7 +47,7 @@
         <muxc:NavigationView.MenuItems>
             <muxc:NavigationViewItem Icon="Globe" Content="{u:LocaleString Key=General.Title}" Tag="General"/>
             <muxc:NavigationViewItem Icon="View" Content="{u:LocaleString Key=View.Title}" Tag="View"/>
-            <muxc:NavigationViewItem Icon="Edit" Content="{u:LocaleString Key=Editor.Title}" Tag="Editor"/>
+            <muxc:NavigationViewItem Icon="Edit" Content="{u:LocaleString Key=Editor.Title}" Tag="Editor" AutomationProperties.AutomationId="SettingsNavEditor"/>
             <muxc:NavigationViewItem Content="{u:LocaleString Key=Image.Title}" Tag="Image">
                 <muxc:NavigationViewItem.Icon>
                     <FontIcon Glyph="&#xe91b;"/>

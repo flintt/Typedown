@@ -36,7 +36,7 @@
             <controls:NormalSettingItem.Icon>
                 <FontIcon Glyph="&#xe8d2;"/>
             </controls:NormalSettingItem.Icon>
-            <AutoSuggestBox MinWidth="200"
+            <AutoSuggestBox MinWidth="200" AutomationProperties.AutomationId="FontFamilyBox"
                 Text="{x:Bind Settings.FontFamily, Mode=OneWay}"
                 PlaceholderText="{u:LocaleString Key=Editor.FontFamily.Placeholder}"
                 ItemsSource="{x:Bind FontFamilySuggestions}"
