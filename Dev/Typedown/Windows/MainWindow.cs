@@ -408,6 +408,43 @@ namespace Typedown.Windows
                 WindowService?.RaiseWindowStateChanged(Handle);
             if ((args.DidPositionChange || args.DidSizeChange || args.DidPresenterChange) && (RootControl?.IsLoaded ?? false))
                 SaveWindowPlacementWithOffset();
+            if (args.DidPresenterChange || args.DidSizeChange) ScheduleEditorLayoutCheck();
+        }
+
+        // A window brought back from the taskbar now and then showed a blank editor: the window, its content and the
+        // XAML root had their size back, but the editor and its web view kept the minimized window's 144x0, and the
+        // page, counting itself hidden, drew nothing and took no document (MN02 in a run after full screen; MN03). The
+        // editor's ancestors are told to lay out again when that is seen, after the window changes size or state and
+        // when it is activated.
+        private void ScheduleEditorLayoutCheck()
+        {
+            _ = DispatcherQueue.RunIdleAsync(_ => EnsureEditorLaidOut());
+            _ = Task.Delay(300).ContinueWith(_ => DispatcherQueue.TryEnqueue(EnsureEditorLaidOut));
+        }
+
+        private void EnsureEditorLaidOut()
+        {
+            try
+            {
+                if (AppWindow.Presenter is OverlappedPresenter { State: OverlappedPresenterState.Minimized }) return;
+                if (AppViewModel?.MarkdownEditor is not FrameworkElement editor || !editor.IsLoaded || !IsShown(editor)) return;
+                if (RootControl == null || RootControl.ActualWidth < 200 || RootControl.ActualHeight < 200) return;
+                if (editor.ActualWidth > 0 && editor.ActualHeight > 0 && editor.ActualWidth >= RootControl.ActualWidth / 4) return;
+                Log.Debug($"editor layout: {editor.ActualWidth:0}x{editor.ActualHeight:0} in a {RootControl.ActualWidth:0}x{RootControl.ActualHeight:0} window - laid out again");
+                for (DependencyObject node = editor; node != null; node = VisualTreeHelper.GetParent(node))
+                {
+                    if (node is UIElement element)
+                    {
+                        element.InvalidateMeasure();
+                        element.InvalidateArrange();
+                    }
+                    if (node == RootControl) break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"editor layout: {ex.Message}");
+            }
         }
 
         /// <summary>The window that was most recently active; files opened from the shell land here as tabs.</summary>
@@ -420,6 +457,7 @@ namespace Typedown.Windows
             if (KeyboardAccelerator != null) KeyboardAccelerator.IsEnable = IsActive;
             if (IsActive) LastActive = this;
             micaBackdrop?.SetActive(IsActive);
+            if (IsActive) ScheduleEditorLayoutCheck();
         }
 
         private bool isCloseable = false;
