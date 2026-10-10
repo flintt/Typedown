@@ -2704,9 +2704,13 @@ internal static partial class Program
     /// Invokes a menu bar command by its automation id (x:Name): each menu is opened until the one holding it. A
     /// disabled item is not invoked (UI Automation refuses it), which is fine for a check that it changes nothing.
     /// </summary>
+    /// <summary>Why the last InvokeMenuBarItem did not invoke its item ("disabled", "not found"), or null when it did.</summary>
+    private static string? lastMenuBarItemSkipped;
+
     private static async Task InvokeMenuBarItem(IntPtr window, string automationId, bool escapeAfter = true)
     {
         var invoked = false;
+        lastMenuBarItemSkipped = null;
         var root = System.Windows.Automation.AutomationElement.FromHandle(window);
         var menuItem = new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.MenuItem);
         var bar = Deep.First(root, new System.Windows.Automation.AndCondition(
@@ -2735,8 +2739,10 @@ internal static partial class Program
                     else await ClickInPopup(window, item);
                     invoked = true;
                 }
+                else lastMenuBarItemSkipped = "disabled";
                 return;
             }
+            lastMenuBarItemSkipped = "not found";
             throw new CaseFailed($"no menu holds {automationId}");
         }
         finally

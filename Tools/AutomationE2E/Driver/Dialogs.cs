@@ -25,7 +25,7 @@ internal static partial class Program
             var opened = false;
             for (var attempt = 0; attempt < 2 && !opened; attempt++)
             {
-                if (attempt > 0) notes.Add("the insert-table dialog did not open: Table again");
+                if (attempt > 0) notes.Add($"the insert-table dialog did not open ({lastMenuBarItemSkipped ?? "Table was clicked"}): Table again");
                 await ClickEditorText(c, windowId, window, "Text");
                 await Task.Delay(500);
                 await InvokeMenuBarItem(window, "TableItem", escapeAfter: false);

@@ -33,14 +33,14 @@ internal static partial class Program
         {
             if (attempt > 0)
             {
-                notes.Add("the insert-table dialog did not open: Table again");
+                notes.Add($"the insert-table dialog did not open ({lastMenuBarItemSkipped ?? "Table was clicked"}): Table again");
                 await ClickEditorText(c, windowId, window, "plain");
                 await Task.Delay(500);
             }
             await InvokeMenuBarItem(window, "TableItem", escapeAfter: false);
             for (var i = 0; i < 20 && !opened; i++) { await Task.Delay(150); opened = (bool)(await c.Call("test.dialog.colours", new { windowId }))["open"]!; }
         }
-        Check(opened, "Table opened the insert-table dialog");
+        Check(opened, $"Table opened the insert-table dialog (last try: {lastMenuBarItemSkipped ?? "Table was clicked"})");
         Send(Key(0x1B, false), Key(0x1B, true)); // Esc: the insert-table dialog cancelled
         await Task.Delay(1000);
         var tableAfter = await MenuToggle(window, "TableItem");
