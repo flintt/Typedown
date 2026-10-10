@@ -38,7 +38,8 @@ CloseApplications=yes
 ; Config.InstanceName + ".Mutex" (Dev/Typedown/App.cs)
 AppMutex={#MyAppName}.App.Mutex
 RestartApplications=no
-MinVersion=10.0
+; Windows 10 1903 or later, as the app (Typedown.csproj TargetPlatformMinVersion) and the MSIX require.
+MinVersion=10.0.18362
 VersionInfoVersion={#MyAppVersion}.0
 
 [Languages]
