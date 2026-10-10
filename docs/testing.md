@@ -166,6 +166,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | TH04 | Windows switched between light and dark while the app follows the system: caption buttons readable, editor follows |
 | FT01 | the file tree sorts names as 1.3.7 did |
 | MN02 | a window minimized a while and restored: a document opened at once is shown within 5 s and takes keys |
+| TH05 | the editor follows Dark, Black, Mica off and on, then Light (it stayed dark under a light window) |
 | DP01 | the window is per-monitor DPI aware (not stretched, so not blurred, on a scaled screen) |
 | DR01 | files dragged from Explorer onto the editor: a Markdown file opens, a picture goes into the document |
 | DM01 | the window's top edge is drawn in the app's theme, and a dialog's smoke covers it too: the top row matches the row under it, light and dark |

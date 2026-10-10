@@ -166,6 +166,7 @@ namespace Typedown.Windows
         {
             // The caption buttons are the system's: given the content's colours, light or dark.
             var dark = rootGrid.ActualTheme == ElementTheme.Dark;
+            micaBackdrop?.SetDark(dark);
             // The frame the system draws (the top edge on Windows 10, the border on Windows 11) in the same theme, as
             // XamlUI's window did; it follows the system's theme otherwise.
             uint darkFrame = dark ? 1u : 0u;
@@ -206,17 +207,22 @@ namespace Typedown.Windows
                 presenter.IsAlwaysOnTop = topmost;
         }
 
+        private AppMicaBackdrop micaBackdrop;
+
         private void EnableMicaEffect(bool enable)
         {
             try
             {
-                SystemBackdrop = enable && Config.IsMicaSupported ? new MicaBackdrop() : null;
+                micaBackdrop = enable && Config.IsMicaSupported ? new AppMicaBackdrop(rootGrid.ActualTheme == ElementTheme.Dark) : null;
+                micaBackdrop?.SetActive(IsActive);
+                SystemBackdrop = micaBackdrop;
                 RootControl.Background = SystemBackdrop != null ? new SolidColorBrush(Colors.Transparent) : null;
                 RootControl.ShowWindowBackground(SystemBackdrop == null);
             }
             catch (Exception ex)
             {
                 Log.WriteLocal("MicaEffect", $"enable={enable} IsMicaSupported={Config.IsMicaSupported} build={Config.WindowsBuild} OS={Environment.OSVersion.VersionString}\n{ex}");
+                micaBackdrop = null;
                 SystemBackdrop = null;
                 RootControl.Background = null;
                 RootControl.ShowWindowBackground(true);
@@ -413,6 +419,7 @@ namespace Typedown.Windows
             WindowService?.RaiseWindowIsActivedChanged(Handle);
             if (KeyboardAccelerator != null) KeyboardAccelerator.IsEnable = IsActive;
             if (IsActive) LastActive = this;
+            micaBackdrop?.SetActive(IsActive);
         }
 
         private bool isCloseable = false;

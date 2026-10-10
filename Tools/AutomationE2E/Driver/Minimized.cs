@@ -63,6 +63,16 @@ internal static partial class Program
             while (!await PageShows(c, windowId, marker) && watch.Elapsed < TimeSpan.FromSeconds(30)) await Task.Delay(50);
             times.Add(watch.ElapsedMilliseconds);
             notes.Add($"round {round}: shown after {watch.ElapsedMilliseconds} ms");
+            if (watch.Elapsed >= TimeSpan.FromSeconds(30))
+            {
+                // What the page knows of itself while stuck: visible to it or not, and whether a frame still comes.
+                async Task<string> Eval(string script) { try { return (await c.Call("test.editor.eval", new { windowId, script }))["result"]?.ToString() ?? "null"; } catch (Exception e) { return "error " + e.Message.Split('\n')[0]; } }
+                notes.Add("page: visibilityState " + await Eval("document.visibilityState") + ", hidden " + await Eval("String(document.hidden)") + ", hasFocus " + await Eval("String(document.hasFocus())"));
+                await Eval("(window.__mnFrame = 0, requestAnimationFrame(() => window.__mnFrame = 1), 0)");
+                await Task.Delay(1000);
+                notes.Add("page: a frame came within 1 s: " + await Eval("String(window.__mnFrame)"));
+                notes.Add("window: visible " + IsWindowVisible(window) + ", iconic " + IsIconic(window));
+            }
             await TypeInto(c, b, "k");
             var typed = await Eventually(async () => ((string?)(await Get(c, b))["text"] ?? "").Contains('k'), 3000);
             notes.Add($"round {round}: a key typed reached it: {typed}");
