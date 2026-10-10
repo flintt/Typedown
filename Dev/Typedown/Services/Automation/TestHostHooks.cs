@@ -555,6 +555,26 @@ namespace Typedown.Services.Automation
             // Files/Outline, the pill of each outline and folder-tree row), by where it is, with its fill.
             // The outline's expansion as the tree holds it (its nodes) and as the model holds it, row by row: the two
             // disagreeing after a tab switch is how a heading's children came to be hidden with nobody collapsing it.
+            // The open dialog's colours and the custom theme's, to tell whether the dialog wears the theme.
+            methods.Add(new MethodDescriptor("test.dialog.colours", null, "test.dialog.colours/1", (c, ct) =>
+                Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    Core.Controls.AppContentDialog dialog = null;
+                    if (app.XamlRoot?.Content is global::Microsoft.UI.Xaml.Controls.Panel panel)
+                        dialog = panel.Children.OfType<Core.Controls.AppContentDialog>().LastOrDefault();
+                    string Colour(global::Microsoft.UI.Xaml.Media.Brush brush) => (brush as global::Microsoft.UI.Xaml.Media.SolidColorBrush)?.Color.ToString();
+                    var theme = Core.Utilities.ThemeFiles.Find(app.SettingsViewModel?.CustomTheme);
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject
+                    {
+                        ["open"] = dialog != null,
+                        ["background"] = Colour(dialog?.Background),
+                        ["foreground"] = Colour(dialog?.Foreground),
+                        ["border"] = Colour(dialog?.BorderBrush),
+                        ["theme"] = app.SettingsViewModel?.CustomTheme,
+                        ["themeSurface"] = Colour(Core.Utilities.ThemeFiles.Brush(theme?.Surface) ?? Core.Utilities.ThemeFiles.Brush(theme?.Background)),
+                        ["themeForeground"] = Colour(Core.Utilities.ThemeFiles.Brush(theme?.Foreground) ?? Core.Utilities.ThemeFiles.Readable(theme?.Surface ?? theme?.Background)),
+                    };
+                })));
             methods.Add(new MethodDescriptor("test.outline.state", null, "test.outline.state/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
                 {
