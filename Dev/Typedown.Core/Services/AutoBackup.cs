@@ -50,7 +50,10 @@ namespace Typedown.Core.Services
         {
             try
             {
-                return await File.ReadAllTextAsync(GetBackupFilePath(path, documentId));
+                // No backup is the usual case (the document was saved): asked first rather than read and failed, which
+                // logged a FileNotFoundException for every tab restored at startup.
+                var file = GetBackupFilePath(path, documentId);
+                return File.Exists(file) ? await File.ReadAllTextAsync(file) : null;
             }
             catch
             {
