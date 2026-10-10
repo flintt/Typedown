@@ -4,6 +4,7 @@ using Typedown.Core.Interfaces;
 using Typedown.Core.Models;
 using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using muxc = Microsoft.UI.Xaml.Controls;
@@ -120,7 +121,21 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
         {
             if (ViewModel?.SettingsViewModel?.VimMode != true) return false;
             if (!VimKeys.EditorWants(ViewModel.EditorViewModel.VimState, e.Modifiers, e.Key)) return false;
-            return FocusManager.GetFocusedElement(XamlRoot) == this.GetService<IMarkdownEditor>();
+            return EditorHasFocus();
+        }
+
+        /// <summary>
+        /// The keyboard is in the editor: the focused element is the editor or inside it. On WinUI 3 it is the web view the
+        /// editor holds, not the editor itself (it was the editor on XAML Islands, which hosted the page without a
+        /// control) - asked for the editor alone, every editor shortcut the page does not handle itself did nothing.
+        /// </summary>
+        protected bool EditorHasFocus()
+        {
+            var editor = this.GetService<IMarkdownEditor>() as DependencyObject;
+            if (editor == null || XamlRoot == null) return false;
+            for (var node = FocusManager.GetFocusedElement(XamlRoot) as DependencyObject; node != null; node = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetParent(node))
+                if (node == editor) return true;
+            return false;
         }
 
         private bool OnWindowShortcutEvent(MenuFlyoutItem item)
@@ -134,9 +149,7 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
 
         private bool OnEditorShortcutEvent(MenuFlyoutItem item)
         {
-            var editor = this.GetService<IMarkdownEditor>();
-            var focused = FocusManager.GetFocusedElement(XamlRoot);
-            if (focused != editor)
+            if (!EditorHasFocus())
                 return false;
             _ = DispatcherQueue.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => TriggerMenuFlyoutItem(item));
             return true;
