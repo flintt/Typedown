@@ -162,6 +162,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | MN01 | a minimized window's document is written and saved through the automation API |
 | LK01 | a link to another Markdown file opens it as a tab of the same window when files open in tabs |
 | FL01 | the settings' font family box suggests the installed fonts |
+| FO01 | after another window and back, and after the context menu closed with Esc, the next letter goes into the document |
 | DP01 | the window is per-monitor DPI aware (not stretched, so not blurred, on a scaled screen) |
 | DR01 | files dragged from Explorer onto the editor: a Markdown file opens, a picture goes into the document |
 | DM01 | the window's top edge is drawn in the app's theme, and a dialog's smoke covers it too: the top row matches the row under it, light and dark |
