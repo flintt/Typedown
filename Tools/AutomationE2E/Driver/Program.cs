@@ -2716,7 +2716,7 @@ internal static partial class Program
                 {
                     // A toggle item (the Paragraph menu's Table, Quote) has no Invoke pattern: clicked, as a person does.
                     if (item.TryGetCurrentPattern(System.Windows.Automation.InvokePattern.Pattern, out var invoke)) ((System.Windows.Automation.InvokePattern)invoke).Invoke();
-                    else await Click(window, item);
+                    else await ClickInPopup(window, item);
                     invoked = true;
                 }
                 return;
