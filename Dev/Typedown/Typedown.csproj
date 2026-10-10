@@ -77,6 +77,12 @@
 		<TieredPGO>false</TieredPGO>
 	</PropertyGroup>
 
+	<!-- Text compared and sorted the way Windows does (NLS), as on .NET Core 3.1: .NET 5 and later use ICU, which orders
+	     names with hyphens, apostrophes or underscores differently - the file tree's order changed (FT01). -->
+	<ItemGroup>
+		<RuntimeHostConfigurationOption Include="System.Globalization.UseNls" Value="true" />
+	</ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="Microsoft.WindowsAppSDK" Version="2.5.1" />
 		<!-- Parts of the SDK the app does not use, left out of the build and every install: the AI and ML runtimes
