@@ -40,7 +40,7 @@ dotnet test Tests\Typedown.ReliabilityTests\Typedown.ReliabilityTests.csproj -c 
 
 ## 本地构建
 
-`Tools/Installer/build-local.ps1` 会定位 MSBuild 和 Windows SDK，检查编辑器 bundle 是否比源码新，然后构建自包含应用。只编译应用、不生成安装包：
+`Tools/Installer/build-local.ps1` 会定位 .NET 10 SDK（`PATH` 上的 `dotnet`，或环境变量 `TYPEDOWN_DOTNET` 指定的）和 Inno Setup，检查编辑器 bundle 是否比源码新，然后用 `dotnet publish` 构建自包含应用（带 Windows App SDK 运行时，与 CI 一样 ReadyToRun 预编译并裁剪）。只编译应用、不生成安装包：
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File Tools\Installer\build-local.ps1 -Platform x64 -BuildEditor -NoInstaller
@@ -97,7 +97,7 @@ dotnet publish Dev\Typedown\Typedown.csproj -c Release -p:Platform=x64 -r win-x6
 
 - 安装包、便携版和 MSIX 都包含 `Typedown.exe`、WebView2 loader、SQLite native 库和 `Resources/Statics/index.html`；
 - 文件名、应用“关于”页、程序集、MSIX 和安装程序显示同一版本；
-- 安装器能升级上一稳定版，卸载不会删除用户文档；
+- 安装器能升级上一稳定版（安装前会清掉程序目录里旧版本的文件，用户数据不在程序目录），卸载不会删除用户文档；
 - `.md` 关联正常，`.txt` 和 `.text` 只出现在“打开方式”中；
 - 安装包和 `Typedown.exe` 的签名可检查，MSIX 使用同批 `.cer`；
 - Release 说明和附件属于同一个 tag/commit。
