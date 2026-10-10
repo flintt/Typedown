@@ -87,6 +87,7 @@ namespace Typedown.Windows
             disposables.Add(AppViewModel.SettingsViewModel.WhenPropertyChanged(nameof(SettingsViewModel.Language)).Subscribe(_ => TrySetPrimaryLanguage()));
             Title = Config.AppName;
             ExtendsContentIntoTitleBar = true;
+            SetAppIcon();
             if (AppWindow.Presenter is OverlappedPresenter presenter)
             {
                 presenter.PreferredMinimumWidth = (int)(480 * ScalingFactor);
@@ -208,6 +209,31 @@ namespace Typedown.Windows
                 SystemBackdrop = null;
                 RootControl.Background = null;
                 RootControl.ShowWindowBackground(true);
+            }
+        }
+
+        [System.Runtime.InteropServices.DllImport("kernel32.dll")]
+        private static extern nint GetModuleHandleW(nint name);
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern nint LoadImageW(nint instance, nint name, uint type, int width, int height, uint load);
+
+        /// <summary>
+        /// The exe's own icon on the window: Alt+Tab, the taskbar button and the system menu show it. XamlUI registered
+        /// its window class with it; a WinUI 3 window has no icon unless it is given one. The compiler embeds the
+        /// ApplicationIcon as resource 32512.
+        /// </summary>
+        private void SetAppIcon()
+        {
+            try
+            {
+                var icon = LoadImageW(GetModuleHandleW(0), 32512, 1 /* IMAGE_ICON */, 0, 0, 0x0040 /* LR_DEFAULTSIZE */ | 0x8000 /* LR_SHARED */);
+                if (icon != 0) AppWindow.SetIcon(Microsoft.UI.Win32Interop.GetIconIdFromIcon(icon));
+                else Log.Debug("window icon: the exe has no icon 32512");
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"window icon: {ex.Message}");
             }
         }
 
