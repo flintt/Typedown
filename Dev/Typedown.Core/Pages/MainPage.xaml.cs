@@ -25,11 +25,45 @@ namespace Typedown.Core.Pages
         // The pointer has to rest on the top edge a moment: passing over it on the way to a tab must not reveal.
         private readonly DispatcherTimer revealMenuBarTimer = new() { Interval = TimeSpan.FromMilliseconds(150) };
 
+        // Full screen: where the pointer is, looked at a few times a second. On Windows 11 the content of a full-screen
+        // window starts a pixel below the screen's top edge, and a pointer pushed up against the edge rests on that top
+        // row - where the reveal strip (in the content) never hears of it: the bar came out only when the pointer
+        // happened to stop a pixel or two lower. The screen position decides instead, wherever the content starts.
+        private readonly DispatcherTimer topEdgeTimer = new() { Interval = TimeSpan.FromMilliseconds(100) };
+
+        private int topEdgeTicks;
+
         public MainPage()
         {
             InitializeComponent();
             hideMenuBarTimer.Tick += OnHideMenuBarTimerTick;
             revealMenuBarTimer.Tick += OnRevealMenuBarTimerTick;
+            topEdgeTimer.Tick += OnTopEdgeTimerTick;
+        }
+
+        private void OnTopEdgeTimerTick(object sender, object e)
+        {
+            if (!(AppViewModel?.UIViewModel?.IsFullScreen ?? false)) { topEdgeTimer.Stop(); return; }
+            if (menuBarRevealed) { topEdgeTicks = 0; return; }
+            if (PointerAtTopEdge()) { if (++topEdgeTicks >= 2) { topEdgeTicks = 0; RevealMenuBar(); } }
+            else topEdgeTicks = 0;
+        }
+
+        private bool PointerAtTopEdge()
+        {
+            try
+            {
+                var window = AppViewModel?.MainWindow ?? IntPtr.Zero;
+                if (window == IntPtr.Zero || PInvoke.GetForegroundWindow() != window) return false;
+                PInvoke.GetWindowRect(window, out var rect);
+                PInvoke.GetCursorPos(out var point);
+                return point.X >= rect.left && point.X < rect.right && point.Y >= rect.top && point.Y <= rect.top + 3;
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"full screen: where the pointer is: {ex.Message}");
+                return false;
+            }
         }
 
         private void OnExportNoticeOpenClick(object sender, RoutedEventArgs e) => OpenExported(Common.OpenFile);
@@ -88,6 +122,7 @@ namespace Typedown.Core.Pages
         {
             hideMenuBarTimer.Stop();
             revealMenuBarTimer.Stop();
+            topEdgeTimer.Stop();
             disposables.Clear();
             Bindings?.StopTracking();
         }
@@ -97,6 +132,8 @@ namespace Typedown.Core.Pages
             menuBarRevealed = false;
             hideMenuBarTimer.Stop();
             revealMenuBarTimer.Stop();
+            topEdgeTicks = 0;
+            if (isFullScreen) topEdgeTimer.Start(); else topEdgeTimer.Stop();
             UpdateMenuBarVisibility();
         }
 
@@ -144,7 +181,12 @@ namespace Typedown.Core.Pages
         private void OnRevealMenuBarTimerTick(object sender, object e)
         {
             revealMenuBarTimer.Stop();
-            if (!(AppViewModel?.UIViewModel?.IsFullScreen ?? false)) return;
+            RevealMenuBar();
+        }
+
+        private void RevealMenuBar()
+        {
+            if (!(AppViewModel?.UIViewModel?.IsFullScreen ?? false) || menuBarRevealed) return;
             menuBarRevealed = true;
             UpdateMenuBarVisibility();
             // Watched from now on: see OnHideMenuBarTimerTick.

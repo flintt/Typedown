@@ -150,6 +150,9 @@ internal static partial class Program
             foreach (var m in during.TakeWhile(m => !Tail(m).StartsWith(prefixes[next])))
                 if (Tail(m).StartsWith(prefixes[current]) && Tail(m) != Tail(lastMark)) bad.Add($"round {round}: {Tail(m)}");
             Check(during.Count == 0 || Tail(during.Last()).StartsWith(prefixes[next]), $"round {round}: the outline ends on a heading of {prefixes[next]}");
+            // The document shown is marked once, at the place being read - not first at its caret's heading.
+            var shownMarks = during.Where(m => Tail(m).StartsWith(prefixes[next])).Select(Tail).ToList();
+            if (round > 0 && shownMarks.Count > 1) bad.Add($"round {round}: {prefixes[next]} marked {string.Join(", then ", shownMarks)}");
             current = next;
         }
         Check(bad.Count == 0, $"no other heading of the document being left is marked on a switch ({string.Join("; ", bad)})");

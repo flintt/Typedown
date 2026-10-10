@@ -551,7 +551,8 @@ namespace Typedown.Core.ViewModels
                 }
                 if (ContentState.Cur != null)
                 {
-                    appliedCurSlug = ContentState.Cur.Slug;
+                    // In reading mode the outline follows the page as it is scrolled (OnOutlineCurrent), not the caret.
+                    if (!Settings.ReadOnly) appliedCurSlug = ContentState.Cur.Slug;
                     if (ContentState.Toc.All(x => x.Slug != ContentState.Cur.Slug))
                         Log.Debug($"outline: current heading {ContentState.Cur.Slug} is not among the {ContentState.Toc.Count} entries reported with it");
                     // The mark on the model is for ExpandToSelected; the row itself is marked by the pane, through
@@ -581,7 +582,11 @@ namespace Typedown.Core.ViewModels
             // Raised for every report with a current heading, a kept one following or not: the kept one is often that
             // same heading, which the call below then takes as already marked and passes over - and the outline just
             // handed over for another tab was never marked.
-            if (ContentState.Cur != null)
+            // Not in reading mode, where the outline follows the scrolled page: a report there names the caret's heading,
+            // which a reader scrolling with the wheel has left behind. Every tab switch flushes the page being left, and its
+            // report marked that heading for a moment, then the new document's caret heading, before the place being
+            // read came back (OL02).
+            if (ContentState.Cur != null && !Settings.ReadOnly)
                 OutlineHighlighted?.Invoke(ContentState.Cur.Slug);
             if (pendingOutlineSlug != null)
             {
