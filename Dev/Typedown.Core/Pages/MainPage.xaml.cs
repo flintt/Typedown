@@ -147,11 +147,12 @@ namespace Typedown.Core.Pages
             if (!(AppViewModel?.UIViewModel?.IsFullScreen ?? false)) return;
             menuBarRevealed = true;
             UpdateMenuBarVisibility();
+            // Watched from now on: see OnHideMenuBarTimerTick.
+            hideMenuBarTimer.Start();
         }
 
         private void OnMenuBarPointerEntered(object sender, PointerRoutedEventArgs e)
         {
-            hideMenuBarTimer.Stop();
         }
 
         private void OnMenuBarPointerExited(object sender, PointerRoutedEventArgs e)
@@ -160,12 +161,37 @@ namespace Typedown.Core.Pages
                 hideMenuBarTimer.Start();
         }
 
+        private bool PointerOverMenuBar()
+        {
+            try
+            {
+                var window = AppViewModel?.MainWindow ?? IntPtr.Zero;
+                if (window == IntPtr.Zero || XamlRoot == null || MenuBarHost.Visibility != Visibility.Visible) return false;
+                PInvoke.GetCursorPos(out var point);
+                PInvoke.ScreenToClient(window, ref point);
+                var scale = XamlRoot.RasterizationScale;
+                var top = MenuBarHost.TransformToVisual(null).TransformPoint(new global::Windows.Foundation.Point(0, 0)).Y;
+                var y = point.Y / scale;
+                return y >= top - 1 && y < top + MenuBarHost.ActualHeight;
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"full screen: where the pointer is: {ex.Message}");
+                return false;
+            }
+        }
+
+        // The revealed bar is watched for the pointer rather than told when it leaves: it is revealed under a pointer
+        // that has not moved, so it never heard the pointer come in, and never heard it go - the bar stayed out until
+        // the pointer happened to cross it again (FS03). Every tick it stays while the pointer is over it or a menu of
+        // it is open, and goes otherwise.
         private void OnHideMenuBarTimerTick(object sender, object e)
         {
             if (!menuBarRevealed) { hideMenuBarTimer.Stop(); return; }
             // A menu flyout is open (pointer is in the popup): keep the bar until it closes.
             if (XamlRoot != null && VisualTreeHelper.GetOpenPopupsForXamlRoot(XamlRoot).Any())
                 return;
+            if (PointerOverMenuBar()) return;
             hideMenuBarTimer.Stop();
             menuBarRevealed = false;
             UpdateMenuBarVisibility();

@@ -45,6 +45,7 @@ internal static partial class Program
             int screenW = GetSystemMetrics(0), screenH = GetSystemMetrics(1);
             void MoveTo(int px, int py) => Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dx = px * 65535 / (screenW - 1), dy = py * 65535 / (screenH - 1), dwFlags = 0x0001 | 0x8000 } } });
             var revealed = 0;
+            var hiddenAgain = 0;
             var tries = 10;
             for (var t = 0; t < tries; t++)
             {
@@ -53,6 +54,7 @@ internal static partial class Program
                 MoveTo(x, r.Top + 300);
                 await Task.Delay(900);
                 var hidden = !(bool)(await Layout())["menuBarVisible"]!;
+                if (hidden) hiddenAgain++;
                 // Up to the edge as a hand moves a mouse: a few pixels a step, ending on the top row.
                 for (var y = r.Top + 60; y > r.Top; y -= 6) { MoveTo(x, y); await Task.Delay(15); }
                 MoveTo(x, r.Top);
@@ -64,6 +66,8 @@ internal static partial class Program
                 notes.Add($"try {t} at x={x}: hidden before {hidden}, revealed {shown}; top row: {HitAt(x, r.Top)}, row 1: {HitAt(x, r.Top + 1)}");
             }
             MoveTo((r.Left + r.Right) / 2, r.Top + 300);
+            // Each try starts from a hidden bar: one that stays out after the pointer left would make every later try pass.
+            Check(hiddenAgain == tries, $"the menu bar hides when the pointer moves away ({hiddenAgain} of {tries} tries started hidden)");
             Check(revealed == tries, $"the menu bar is revealed every time the pointer reaches the top edge ({revealed} of {tries})");
         }
         finally
