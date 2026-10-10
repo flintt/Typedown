@@ -26,7 +26,7 @@ internal static partial class Program
         notes.Add($"Table before: {tableBefore}");
         Check(tableBefore == ToggleState.Off, "Table is not checked with the caret in a plain paragraph");
 
-        await InvokeMenuBarItem(window, "TableItem");
+        await InvokeMenuBarItem(window, "TableItem", escapeAfter: false);
         var opened = false;
         for (var i = 0; i < 20 && !opened; i++) { await Task.Delay(150); opened = (bool)(await c.Call("test.dialog.colours", new { windowId }))["open"]!; }
         Check(opened, "Table opened the insert-table dialog");
@@ -38,7 +38,7 @@ internal static partial class Program
 
         await ClickEditorText(c, windowId, window, "plain");
         await Task.Delay(500);
-        await InvokeMenuBarItem(window, "QuoteItem");
+        await InvokeMenuBarItem(window, "QuoteItem", escapeAfter: false);
         await Task.Delay(1200);
         var quote = await MenuToggle(window, "QuoteItem");
         notes.Add($"Quote after it was chosen: {quote}");

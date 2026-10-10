@@ -2688,8 +2688,9 @@ internal static partial class Program
     /// Invokes a menu bar command by its automation id (x:Name): each menu is opened until the one holding it. A
     /// disabled item is not invoked (UI Automation refuses it), which is fine for a check that it changes nothing.
     /// </summary>
-    private static async Task InvokeMenuBarItem(IntPtr window, string automationId)
+    private static async Task InvokeMenuBarItem(IntPtr window, string automationId, bool escapeAfter = true)
     {
+        var invoked = false;
         var root = System.Windows.Automation.AutomationElement.FromHandle(window);
         var menuItem = new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.MenuItem);
         var bar = Deep.First(root, new System.Windows.Automation.AndCondition(
@@ -2711,7 +2712,13 @@ internal static partial class Program
                     await Task.Delay(200);
                     continue;
                 }
-                if (item.Current.IsEnabled) ((System.Windows.Automation.InvokePattern)item.GetCurrentPattern(System.Windows.Automation.InvokePattern.Pattern)).Invoke();
+                if (item.Current.IsEnabled)
+                {
+                    // A toggle item (the Paragraph menu's Table, Quote) has no Invoke pattern: clicked, as a person does.
+                    if (item.TryGetCurrentPattern(System.Windows.Automation.InvokePattern.Pattern, out var invoke)) ((System.Windows.Automation.InvokePattern)invoke).Invoke();
+                    else await Click(window, item);
+                    invoked = true;
+                }
                 return;
             }
             throw new CaseFailed($"no menu holds {automationId}");
@@ -2719,7 +2726,9 @@ internal static partial class Program
         finally
         {
             await Task.Delay(200);
-            for (var i = 0; i < 2; i++) { Send(Key(0x1B, false), Key(0x1B, true)); await Task.Delay(150); }
+            // Menus left open are closed - unless the caller wants what the command opened (a dialog) left alone.
+            if (escapeAfter || !invoked)
+                for (var i = 0; i < 2; i++) { Send(Key(0x1B, false), Key(0x1B, true)); await Task.Delay(150); }
         }
     }
 

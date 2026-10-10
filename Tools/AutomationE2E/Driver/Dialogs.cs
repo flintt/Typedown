@@ -21,7 +21,7 @@ internal static partial class Program
             // The editor focused (the menu's commands act on it only then), then Table: its dialog.
             await ClickEditorText(c, windowId, window, "Text");
             await Task.Delay(500);
-            await InvokeMenuBarItem(window, "TableItem");
+            await InvokeMenuBarItem(window, "TableItem", escapeAfter: false);
             JToken colours = new JObject();
             for (var i = 0; i < 20; i++)
             {
