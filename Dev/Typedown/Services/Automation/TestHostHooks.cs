@@ -221,6 +221,8 @@ namespace Typedown.Services.Automation
                         ["fullScreen"] = app.UIViewModel.IsFullScreen,
                         ["mainPageTop"] = top,
                         ["rootHeight"] = (root as global::Microsoft.UI.Xaml.FrameworkElement)?.ActualHeight ?? double.NaN,
+                        ["menuBarVisible"] = (page?.FindName("MenuBarHost") as global::Microsoft.UI.Xaml.UIElement)?.Visibility == global::Microsoft.UI.Xaml.Visibility.Visible,
+                        ["nonClientRegions"] = NonClientRegions(app),
                     };
                 })));
             // Holds a window in memory from now on, as anything still referring to it does after it closes:
@@ -645,6 +647,26 @@ namespace Typedown.Services.Automation
                     return (Newtonsoft.Json.Linq.JToken?)Newtonsoft.Json.Linq.JObject.FromObject(result);
                 })));
         }
+        // The window's non-client regions (where a pointer goes to the caption and borders, not to the content), in
+        // physical pixels: a region over the top edge in full screen would take the pointer the menu bar is revealed by.
+        private static string NonClientRegions(Core.ViewModels.AppViewModel app)
+        {
+            try
+            {
+                var window = Typedown.Windows.MainWindow.AllWindows.FirstOrDefault(w => w.Handle == app.MainWindow);
+                if (window == null) return "no window";
+                var source = global::Microsoft.UI.Input.InputNonClientPointerSource.GetForWindowId(window.AppWindow.Id);
+                var parts = new System.Collections.Generic.List<string>();
+                foreach (var kind in new[] { global::Microsoft.UI.Input.NonClientRegionKind.Caption, global::Microsoft.UI.Input.NonClientRegionKind.TopBorder, global::Microsoft.UI.Input.NonClientRegionKind.Passthrough })
+                {
+                    var rects = source.GetRegionRects(kind);
+                    parts.Add(kind + ": " + string.Join(" ", rects.Select(r => $"{r.X},{r.Y} {r.Width}x{r.Height}")));
+                }
+                return string.Join("; ", parts);
+            }
+            catch (Exception ex) { return "error: " + ex.Message; }
+        }
+
 #else
         public static IEditBarriers Barriers => null;
 
