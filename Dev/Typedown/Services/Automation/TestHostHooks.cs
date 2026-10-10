@@ -223,6 +223,8 @@ namespace Typedown.Services.Automation
                         ["rootHeight"] = (root as global::Microsoft.UI.Xaml.FrameworkElement)?.ActualHeight ?? double.NaN,
                         ["menuBarVisible"] = (page?.FindName("MenuBarHost") as global::Microsoft.UI.Xaml.UIElement)?.Visibility == global::Microsoft.UI.Xaml.Visibility.Visible,
                         ["nonClientRegions"] = NonClientRegions(app),
+                        ["revealStrip"] = RevealStrip(page),
+                        ["hitAtTop"] = HitAt(root, 0.5),
                     };
                 })));
             // Holds a window in memory from now on, as anything still referring to it does after it closes:
@@ -647,6 +649,22 @@ namespace Typedown.Services.Automation
                     return (Newtonsoft.Json.Linq.JToken?)Newtonsoft.Json.Linq.JObject.FromObject(result);
                 })));
         }
+        // The full-screen strip along the top edge that reveals the menu bar: there, its size and whether it takes the pointer.
+        private static string RevealStrip(global::Microsoft.UI.Xaml.FrameworkElement page)
+        {
+            if (page?.FindName("FullScreenRevealStrip") is not global::Microsoft.UI.Xaml.FrameworkElement strip) return "not loaded";
+            var at = strip.TransformToVisual(null).TransformPoint(new global::Windows.Foundation.Point(0, 0));
+            return $"at {at.X},{at.Y} {strip.ActualWidth}x{strip.ActualHeight}, hit test {strip.IsHitTestVisible}, visible {strip.Visibility}";
+        }
+
+        // The elements under a point of the window's top row, the topmost first, as the pointer finds them.
+        private static string HitAt(global::Microsoft.UI.Xaml.UIElement root, double y)
+        {
+            if (root is not global::Microsoft.UI.Xaml.FrameworkElement fe) return "no root";
+            var found = global::Microsoft.UI.Xaml.Media.VisualTreeHelper.FindElementsInHostCoordinates(new global::Windows.Foundation.Point(fe.ActualWidth / 2, y), root);
+            return string.Join(" | ", found.Take(6).Select(e => e.GetType().Name + (e is global::Microsoft.UI.Xaml.FrameworkElement f && !string.IsNullOrEmpty(f.Name) ? "#" + f.Name : "")));
+        }
+
         // The window's non-client regions (where a pointer goes to the caption and borders, not to the content), in
         // physical pixels: a region over the top edge in full screen would take the pointer the menu bar is revealed by.
         private static string NonClientRegions(Core.ViewModels.AppViewModel app)
