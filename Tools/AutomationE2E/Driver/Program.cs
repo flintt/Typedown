@@ -165,6 +165,7 @@ internal static partial class Program
             await Case("RD01 reading mode: the context menu offers copying and selecting only, Copy works on a selection, copy as plain text leaves the Markdown out, Ctrl+Z changes nothing", RD01);
             await Case("CP01 Copy pasted into Word: pictures at absolute file:/// addresses, a name and an alt text with brackets, an SVG sized in pt, a JPEG", CP01);
             await Case("TH03 the side pane marks what is chosen (the bar under Files/Outline, the outline's and the folder tree's row pill) in a custom theme's accent, and in the system accent again without one", TH03);
+            await Case("DP01 the window is per-monitor DPI aware (not stretched, so not blurred, on a scaled screen)", DP01);
             await Case("DR01 files dragged from Explorer onto the editor: a Markdown file opens, a picture goes into the document", DR01);
             await Case("DM01 the window's top edge is drawn in the app's theme, and a dialog's smoke covers it too: the top row matches the row under it, light and dark", DM01);
             await Case("TH02 View > Theme > Reload themes finds a new theme file and a renamed one; the window draws in the custom theme's base whatever the built-in setting says", TH02);
