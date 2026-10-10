@@ -26,8 +26,9 @@ namespace Typedown.Windows
             configuration = new SystemBackdropConfiguration();
             Apply();
             controller = new MicaController();
-            controller.AddSystemBackdropTarget(connectedTarget);
+            var added = controller.AddSystemBackdropTarget(connectedTarget);
             controller.SetSystemBackdropConfiguration(configuration);
+            Typedown.Core.Utilities.Log.Debug($"mica: connected, target added={added}, supported={MicaController.IsSupported()}, theme={configuration.Theme}, active={configuration.IsInputActive}");
         }
 
         protected override void OnTargetDisconnected(ICompositionSupportsSystemBackdrop disconnectedTarget)
@@ -37,6 +38,15 @@ namespace Typedown.Windows
             controller?.Dispose();
             controller = null;
             configuration = null;
+        }
+
+        /// <summary>
+        /// The window's default configuration (system theme, activation) changed. The base implementation throws
+        /// E_INVALIDARG for a backdrop that drives its own controller (seen on Windows 11 26100 at every theme or
+        /// activation change), and this backdrop takes both from the window itself, so there is nothing to do here.
+        /// </summary>
+        protected override void OnDefaultSystemBackdropConfigurationChanged(ICompositionSupportsSystemBackdrop target, XamlRoot xamlRoot)
+        {
         }
 
         /// <summary>The content's theme changed (the setting, or Windows when the app follows it).</summary>
