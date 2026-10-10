@@ -326,8 +326,11 @@ namespace Typedown.Controls
                         var fullPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(filePath), path));
                         if (File.Exists(fullPath))
                         {
+                            // As a file opened from Explorer: a tab of this window or a window of its own, as the settings
+                            // say ("open files in a new tab"), or the tab it is open in already. The New Window command
+                            // always makes a window, and a link went through it.
                             if (FileTypeHelper.IsMarkdownFile(fullPath))
-                                AppViewModel.FileViewModel.NewWindowCommand.Execute(fullPath);
+                                Utilities.Common.OpenNewWindow(new[] { fullPath });
                             else
                                 Core.Utilities.Common.OpenUrl(fullPath);
                             return;
