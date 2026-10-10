@@ -168,6 +168,7 @@ internal static partial class Program
             await Case("ES01 an editor shortcut only the app carries out (Ctrl+1, Heading 1) works while one types in the editor", ES01);
             await Case("ES02 Ctrl+B on a selection makes it bold, and it stays bold a while later", ES02);
             await Case("TI01 the window carries the app's icon (Alt+Tab, taskbar, system menu)", TI01);
+            await Case("TE01 the restored window resizes from its top edge and top corners", TE01);
             await Case("DP01 the window is per-monitor DPI aware (not stretched, so not blurred, on a scaled screen)", DP01);
             await Case("DR01 files dragged from Explorer onto the editor: a Markdown file opens, a picture goes into the document", DR01);
             await Case("DM01 the window's top edge is drawn in the app's theme, and a dialog's smoke covers it too: the top row matches the row under it, light and dark", DM01);
