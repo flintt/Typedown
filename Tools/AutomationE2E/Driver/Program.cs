@@ -98,7 +98,8 @@ internal static partial class Program
         fixtures = Arg("--fixtures");
         var output = Arg("--out");
         outputDir = Path.GetDirectoryName(Path.GetFullPath(output))!;
-        only = args.Contains("--only") ? Arg("--only").Split(',') : null;
+        // Names, or selectors (@quick, @outline, ...: CaseCatalog), or both.
+        only = args.Contains("--only") ? CaseCatalog.Expand(Arg("--only").Split(',')) : null;
         var started = DateTime.UtcNow;
         var environmentError = (string?)null;
         try
@@ -269,6 +270,7 @@ internal static partial class Program
     private static async Task Case(string name, Func<List<string>, Task> body)
     {
         if (only != null && !only.Any(o => name.StartsWith(o + " "))) return;
+        if (!CaseCatalog.Knows(name)) Console.Error.WriteLine($"note: {name.Split(' ')[0]} has no entry in CaseCatalog.cs (tier, areas)");
         // Pictures (SHOT...) and measurements (PF...) are taken only when asked for by name: never part of a run of every case.
         if ((name.StartsWith("SHOT") || name.StartsWith("PF")) && only == null) return;
         var notes = new List<string>();
