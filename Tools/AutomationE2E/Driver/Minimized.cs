@@ -111,8 +111,11 @@ internal static partial class Program
             await Task.Delay(2000);
             ShowWindow(window, 9 /* SW_RESTORE */);
             await Task.Delay(2000);
-            var after = (string?)(await c.Call("test.webview.state", new { windowId }))["viewSize"];
+            var state = await c.Call("test.webview.state", new { windowId });
+            var after = (string?)state["viewSize"];
             notes.Add($"round {round}: web view {before} -> minimized {minimized} -> restored {after}");
+            // Which size got stuck: the XAML root, the editor, the client area, the content island's window.
+            if (after != before) notes.Add($"round {round} restored: root {state["rootSize"]}, editor {state["editorSize"]}, client {state["clientSize"]}, island window {state["bridgeSize"]}, presenter {state["presenter"]}");
             if (after != before) failures.Add($"round {round}: {after} after restoring, {before} before");
             await Activate(window);
         }

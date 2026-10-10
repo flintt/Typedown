@@ -277,6 +277,15 @@ internal static partial class Program
         // A person's mouse or keys a moment ago would be in the case's way: it waits for the desktop to be left alone.
         var quiet = await WaitForQuietDesktop(1000);
         if (quiet != null) notes.Add(quiet);
+        // A dialog an earlier case left open (an unsaved document's "save?") would hold this case's dialogs back and take
+        // its keys: closed first, and named, so the case that left it can be found.
+        try
+        {
+            using var dialogs = await Session("e2e dialogs").WaitAsync(TimeSpan.FromSeconds(5));
+            var closed = (JArray?)(await dialogs.Call("test.dialogs.dismiss", new { }).WaitAsync(TimeSpan.FromSeconds(10)))["closed"];
+            if (closed != null && closed.Count > 0) notes.Add("closed a dialog an earlier case left open: " + string.Join(", ", closed));
+        }
+        catch (Exception) { /* no test host yet, or one without the hook */ }
         var watch = Stopwatch.StartNew();
         try
         {

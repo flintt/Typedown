@@ -117,6 +117,11 @@ namespace Typedown.Services.Automation
                         ["suspended"] = editor?.CoreWebView2?.IsSuspended,
                         ["windowVisible"] = window?.AppWindow.IsVisible,
                         ["presenter"] = (window?.AppWindow.Presenter as Microsoft.UI.Windowing.OverlappedPresenter)?.State.ToString(),
+                        // Where a size got stuck: the XAML root, the window's client area, the content island's window.
+                        ["rootSize"] = editor?.XamlRoot == null ? null : $"{editor.XamlRoot.Size.Width:0}x{editor.XamlRoot.Size.Height:0}",
+                        ["editorSize"] = editor == null ? null : $"{editor.ActualWidth:0}x{editor.ActualHeight:0}",
+                        ["clientSize"] = window == null ? null : ClientSize(window.Handle),
+                        ["bridgeSize"] = window == null ? null : BridgeSize(window.Handle),
                     };
                 })));
             methods.Add(new MethodDescriptor("test.editor.eval", null, "test.editor.eval/1", async (c, ct) =>
@@ -555,6 +560,31 @@ namespace Typedown.Services.Automation
             // Files/Outline, the pill of each outline and folder-tree row), by where it is, with its fill.
             // The outline's expansion as the tree holds it (its nodes) and as the model holds it, row by row: the two
             // disagreeing after a tab switch is how a heading's children came to be hidden with nobody collapsing it.
+            // Every dialog left open in any window, closed as its close button would: the driver asks before each case, so
+            // one case's prompt (an unsaved document's "save?") does not hold the next cases' dialogs back.
+            methods.Add(new MethodDescriptor("test.dialogs.dismiss", null, "test.dialogs.dismiss/1", async (c, ct) =>
+            {
+                var closed = new Newtonsoft.Json.Linq.JArray();
+                foreach (var window in Typedown.Windows.MainWindow.AllWindows.ToList())
+                {
+                    var done = new System.Threading.Tasks.TaskCompletionSource<bool>();
+                    if (!window.DispatcherQueue.TryEnqueue(() =>
+                    {
+                        try
+                        {
+                            if (window.Content?.XamlRoot?.Content is global::Microsoft.UI.Xaml.Controls.Panel panel)
+                                foreach (var dialog in panel.Children.OfType<Core.Controls.AppContentDialog>().ToList())
+                                {
+                                    lock (closed) closed.Add(dialog.Title?.ToString() ?? dialog.GetType().Name);
+                                    dialog.Close();
+                                }
+                        }
+                        finally { done.TrySetResult(true); }
+                    })) continue;
+                    await System.Threading.Tasks.Task.WhenAny(done.Task, System.Threading.Tasks.Task.Delay(3000));
+                }
+                return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["closed"] = closed };
+            }));
             // The open dialog's colours and the custom theme's, to tell whether the dialog wears the theme.
             methods.Add(new MethodDescriptor("test.dialog.colours", null, "test.dialog.colours/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
@@ -672,6 +702,27 @@ namespace Typedown.Services.Automation
                     return (Newtonsoft.Json.Linq.JToken?)Newtonsoft.Json.Linq.JObject.FromObject(result);
                 })));
         }
+        [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
+        private struct NativeRect { public int Left, Top, Right, Bottom; }
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern bool GetClientRect(nint window, out NativeRect rect);
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern bool GetWindowRect(nint window, out NativeRect rect);
+
+        [System.Runtime.InteropServices.DllImport("user32.dll", CharSet = System.Runtime.InteropServices.CharSet.Unicode)]
+        private static extern nint FindWindowExW(nint parent, nint after, string className, string title);
+
+        private static string ClientSize(nint window) => GetClientRect(window, out var r) ? $"{r.Right - r.Left}x{r.Bottom - r.Top}" : null;
+
+        // The window the content island draws into (Microsoft.UI.Content.DesktopChildSiteBridge), in physical pixels.
+        private static string BridgeSize(nint window)
+        {
+            var bridge = FindWindowExW(window, 0, "Microsoft.UI.Content.DesktopChildSiteBridge", null);
+            return bridge != 0 && GetWindowRect(bridge, out var r) ? $"{r.Right - r.Left}x{r.Bottom - r.Top}" : "none";
+        }
+
         // The full-screen strip along the top edge that reveals the menu bar: there, its size and whether it takes the pointer.
         private static string RevealStrip(global::Microsoft.UI.Xaml.FrameworkElement page)
         {
