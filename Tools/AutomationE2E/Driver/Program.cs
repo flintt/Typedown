@@ -274,7 +274,7 @@ internal static partial class Program
     private static async Task Case(string name, Func<List<string>, Task> body)
     {
         if (only != null && !only.Any(o => name.StartsWith(o + " "))) return;
-        if (!CaseCatalog.Knows(name)) Console.Error.WriteLine($"note: {name.Split(' ')[0]} has no entry in CaseCatalog.cs (tier, areas)");
+        if (!CaseCatalog.Knows(name)) Console.Error.WriteLine($"note: {name.Split(' ')[0]} is missing from CaseCatalog.cs (its tier and areas, or its purpose)");
         currentCase = name.Split(' ')[0];
         // Pictures (SHOT...) and measurements (PF...) are taken only when asked for by name: never part of a run of every case.
         if ((name.StartsWith("SHOT") || name.StartsWith("PF")) && only == null) return;

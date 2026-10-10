@@ -265,6 +265,13 @@ internal static class CaseCatalog
         return names.Distinct().ToArray();
     }
 
-    /// <summary>A case that has no entry here: it runs in full runs, but no selector finds it until it is given one.</summary>
-    public static bool Knows(string caseName) => Cases.ContainsKey(caseName.Split(' ')[0]);
+    /// <summary>
+    /// A case with both its tier and its purpose here. One without runs in full runs, but no selector finds it and the
+    /// test window's title cannot say what it checks: the driver notes it.
+    /// </summary>
+    public static bool Knows(string caseName)
+    {
+        var id = caseName.Split(' ')[0];
+        return Cases.ContainsKey(id) && Purposes.ContainsKey(id);
+    }
 }
