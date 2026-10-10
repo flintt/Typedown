@@ -88,3 +88,39 @@ begin
     Result := (Version <> '') and (Version <> '0.0.0.0');
   end;
 end;
+
+// The previous version's program files go before this one's are copied. Setup only ever added and replaced files, so
+// an update kept every file the old version had and the new one does not: after the move to WinUI 3 the old UWP
+// resources.pri stayed beside the app, WinUI 3 read its XAML resources from it first, and the updated app could not
+// build its window. Only a folder with this app's exe in it is emptied (a custom folder may hold other things); the
+// documents, settings and logs are elsewhere (Documents and LocalAppData), never in the program folder.
+procedure RemovePreviousVersion;
+var
+  Dir: String;
+  Found: TFindRec;
+begin
+  Dir := ExpandConstant('{app}');
+  if not FileExists(AddBackslash(Dir) + '{#MyAppExeName}') then
+    Exit;
+  Log('Removing the previous version''s files from ' + Dir);
+  if FindFirst(AddBackslash(Dir) + '*', Found) then
+  try
+    repeat
+      if (Found.Name <> '.') and (Found.Name <> '..') then
+      begin
+        if Found.Attributes and FILE_ATTRIBUTE_DIRECTORY <> 0 then
+          DelTree(AddBackslash(Dir) + Found.Name, True, True, True)
+        else
+          DeleteFile(AddBackslash(Dir) + Found.Name);
+      end;
+    until not FindNext(Found);
+  finally
+    FindClose(Found);
+  end;
+end;
+
+procedure CurStepChanged(CurStep: TSetupStep);
+begin
+  if CurStep = ssInstall then
+    RemovePreviousVersion;
+end;
