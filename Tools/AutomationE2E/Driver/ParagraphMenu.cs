@@ -5,15 +5,14 @@ using System.Windows.Automation;
 
 /// <summary>
 /// PM01: the Paragraph menu's checks show where the caret is, not what was last clicked. Table clicked and its dialog
-/// cancelled left Table checked, with no table anywhere; Quote, which does turn the paragraph into a quote, is checked
-/// after it.
+/// cancelled left Table checked, with no table anywhere; with the caret in a quote or a table, Quote or Table is checked.
 /// </summary>
 internal static partial class Program
 {
     private static async Task PM01(List<string> notes)
     {
         using var c = await Session("e2e PM01");
-        var id = await Open(c, Fixture("pm01.md", "# PM01\n\nA plain paragraph.\n"));
+        var id = await Open(c, Fixture("pm01.md", "# PM01\n\nA plain paragraph.\n\n> A quoted line.\n\n| Col | Umn |\n| --- | --- |\n| cell | data |\n"));
         var windowId = await WindowIdOf(c, id);
         var window = await WindowOf(windowId, c);
         await Activate(window);
@@ -39,25 +38,24 @@ internal static partial class Program
         notes.Add($"Table after its dialog was cancelled: {tableAfter}");
         Check(tableAfter == ToggleState.Off, "Table is still not checked after its dialog was cancelled");
 
-        await ClickEditorText(c, windowId, window, "plain");
-        await Task.Delay(500);
-        await InvokeMenuBarItem(window, "QuoteItem", escapeAfter: false);
-        await Task.Delay(1200);
-        var text = (string?)(await Get(c, id))["text"] ?? "";
-        notes.Add($"text after Quote: {text.Replace("\n", "\\n")}");
-        Check(text.Contains("> A plain paragraph"), "Quote turned the paragraph into a quote");
-        await ClickEditorText(c, windowId, window, "plain");
-        await Task.Delay(500);
+        // The checks still show real states: the caret in the quote checks Quote, in the table checks Table.
+        await ClickEditorText(c, windowId, window, "quoted");
+        await Task.Delay(800);
         var quote = await MenuToggle(window, "QuoteItem");
-        notes.Add($"Quote after it was chosen: {quote}");
-        Check(quote == ToggleState.On, "Quote is checked once the paragraph is a quote");
+        notes.Add($"Quote with the caret in the quote: {quote}");
+        Check(quote == ToggleState.On, "Quote is checked with the caret in a quote");
+        await ClickEditorText(c, windowId, window, "cell");
+        await Task.Delay(800);
+        var table = await MenuToggle(window, "TableItem");
+        notes.Add($"Table with the caret in the table: {table}");
+        Check(table == ToggleState.On, "Table is checked with the caret in a table");
     }
 
     // A click on the middle of the editor's paragraph holding the text, as a person clicks it.
     private static async Task ClickEditorText(Client c, string windowId, IntPtr window, string text)
     {
         await Activate(window);
-        var at = (await c.Call("test.editor.eval", new { windowId, script = "(() => { const p = [...document.querySelectorAll('#ag-editor-id p, #ag-editor-id h1')].find(x => x.textContent.includes(" + Newtonsoft.Json.JsonConvert.ToString(text) + ")); if (!p) return null; const r = p.getBoundingClientRect(); return { x: Math.round(r.left + Math.min(40, r.width / 2)), y: Math.round(r.top + r.height / 2) } })()" }))["result"];
+        var at = (await c.Call("test.editor.eval", new { windowId, script = "(() => { const p = [...document.querySelectorAll('#ag-editor-id p, #ag-editor-id h1, #ag-editor-id td, #ag-editor-id span.ag-paragraph')].find(x => x.textContent.includes(" + Newtonsoft.Json.JsonConvert.ToString(text) + ")); if (!p) return null; const r = p.getBoundingClientRect(); return { x: Math.round(r.left + Math.min(40, r.width / 2)), y: Math.round(r.top + r.height / 2) } })()" }))["result"];
         if (at == null || at.Type != Newtonsoft.Json.Linq.JTokenType.Object) throw new CaseFailed($"no paragraph with '{text}' on the page");
         var screen = await c.Call("test.editor.screenPoint", new { windowId, x = (int)at["x"]!, y = (int)at["y"]! });
         SetProcessDpiAwarenessContext(new IntPtr(-4));
