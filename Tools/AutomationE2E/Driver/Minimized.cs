@@ -36,7 +36,14 @@ internal static partial class Program
             }
         }
         catch (TimeoutException) { throw new CaseFailed("a write or save to the minimized window's document did not finish within 10 s"); }
-        finally { ShowWindow(window, 9 /* SW_RESTORE */); }
+        finally
+        {
+            // Restored and activated, as a person brings a window back: restored without activation the editor is left
+            // with no size (MN03, a known issue of its own), and every case after this one failed on it.
+            ShowWindow(window, 9 /* SW_RESTORE */);
+            await Activate(window);
+            await Task.Delay(800);
+        }
     }
 
     /// <summary>
