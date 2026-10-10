@@ -43,6 +43,11 @@ internal static partial class Program
         await Task.Delay(500);
         await InvokeMenuBarItem(window, "QuoteItem", escapeAfter: false);
         await Task.Delay(1200);
+        var text = (string?)(await Get(c, id))["text"] ?? "";
+        notes.Add($"text after Quote: {text.Replace("\n", "\\n")}");
+        Check(text.Contains("> A plain paragraph"), "Quote turned the paragraph into a quote");
+        await ClickEditorText(c, windowId, window, "plain");
+        await Task.Delay(500);
         var quote = await MenuToggle(window, "QuoteItem");
         notes.Add($"Quote after it was chosen: {quote}");
         Check(quote == ToggleState.On, "Quote is checked once the paragraph is a quote");
