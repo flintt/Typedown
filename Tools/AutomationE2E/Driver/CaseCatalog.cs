@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 
 /// <summary>
-/// Which cases a run takes when it is asked by selector instead of by name: <c>--only @quick</c>, <c>--only @outline</c>,
-/// or several at once (<c>--only @quick,@menus,DG01</c>). Every case has a tier - quick (often broken before, or in what
+/// Which cases a run takes when it is asked by selector instead of by name: <c>quick</c>, <c>outline</c>, or several at
+/// once with names (<c>quick,menus,DG01</c>; <c>@quick</c> works too when the driver is started directly). Every case has a tier - quick (often broken before, or in what
 /// the WinUI 3 move keeps breaking: focus and keys, window chrome, outline, themes, menus) or full only - and the areas
 /// it touches. A fix runs @quick and the areas of what it changed; a push for CI, a package or a release runs everything.
 /// </summary>
@@ -128,8 +128,11 @@ internal static class CaseCatalog
         var names = new List<string>();
         foreach (var item in selection.Select(s => s.Trim()).Where(s => s.Length > 0))
         {
-            if (!item.StartsWith("@")) { names.Add(item); continue; }
-            var selector = item.Substring(1).ToLowerInvariant();
+            // A selector is @word or a word in lower case (case names are capitals and digits): the scripts hand the
+            // list on through PowerShell, where a word starting with @ is splatting and the list arrived empty.
+            var isSelector = item.StartsWith("@") || item.All(ch => ch >= 'a' && ch <= 'z');
+            if (!isSelector) { names.Add(item); continue; }
+            var selector = item.TrimStart('@').ToLowerInvariant();
             if (selector == "all") return null;
             var chosen = selector == "quick"
                 ? Cases.Where(c => c.Value.Quick).Select(c => c.Key).ToList()
