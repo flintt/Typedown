@@ -27,6 +27,8 @@ namespace Typedown
             // native XAML dispatcher, a stack overflow) leaves no report at all. First-chance logging records
             // every exception as it is thrown, so the last lines of debug.log still say what happened.
             AppDomain.CurrentDomain.FirstChanceException += OnFirstChanceException;
+            // WinUI 3 with its own Main (DISABLE_XAML_GENERATED_MAIN): the WinRT object wrappers are set up first.
+            WinRT.ComWrappersSupport.InitializeComWrappers();
             App.Launch();
         }
 
@@ -36,7 +38,7 @@ namespace Typedown
         {
             // handled exceptions are normal in places (settings file in use, clipboard formats); keep the flood bounded
             if (System.Threading.Interlocked.Increment(ref firstChanceCount) > 200) return;
-            Log.Debug($"exception: {e.Exception.GetType().Name}: {e.Exception.Message}\n{e.Exception.StackTrace}");
+            Log.Debug($"exception: {e.Exception.GetType().Name} (0x{e.Exception.HResult:X8}): {e.Exception.Message}\n{e.Exception.StackTrace}");
         }
 
         private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)

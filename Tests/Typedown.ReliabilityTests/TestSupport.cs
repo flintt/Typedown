@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using System.Text;
+using System.Numerics;
 
 namespace Typedown.ReliabilityTests
 {
@@ -55,8 +56,19 @@ namespace Typedown.Core.Utilities
     {
         public static string SimpleHash2(string value)
         {
-            var bytes = SHA256.HashData(Encoding.UTF8.GetBytes(value ?? string.Empty));
-            return Convert.ToHexString(bytes.AsSpan(0, 8));
+            // Match the stable application's backup-file key exactly. A convenient
+            // test-only hash would make recovery tests pass while naming files the
+            // migrated host can no longer find.
+            var dividend = new BigInteger(MD5.HashData(Encoding.UTF8.GetBytes(value)));
+            const string alphabet = "0123456789abcdefghijklmnopqrstuvwxyz";
+            var builder = new StringBuilder();
+            while (dividend != 0)
+            {
+                dividend = BigInteger.DivRem(dividend, 36, out var remainder);
+                builder.Insert(0, alphabet[Math.Abs((int)remainder)]);
+            }
+            var result = builder.ToString();
+            return result.Substring(0, Math.Min(6, result.Length));
         }
     }
 }

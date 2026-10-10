@@ -261,7 +261,7 @@ namespace Typedown.Core.Services
                 var frames = tabActive ? app.EditorViewModel.AwaitPageFramesAsync(timeoutMs) : Task.FromResult(false);
                 var rendered = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
                 EventHandler<object> onRendering = (sender, e) => rendered.TrySetResult(true);
-                global::Windows.UI.Xaml.Media.CompositionTarget.Rendering += onRendering;
+                global::Microsoft.UI.Xaml.Media.CompositionTarget.Rendering += onRendering;
                 try
                 {
                     await Task.WhenAny(rendered.Task, deadline);
@@ -276,7 +276,7 @@ namespace Typedown.Core.Services
                 }
                 finally
                 {
-                    global::Windows.UI.Xaml.Media.CompositionTarget.Rendering -= onRendering;
+                    global::Microsoft.UI.Xaml.Media.CompositionTarget.Rendering -= onRendering;
                 }
             });
         }

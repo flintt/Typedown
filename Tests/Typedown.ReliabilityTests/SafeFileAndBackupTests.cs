@@ -68,6 +68,20 @@ namespace Typedown.ReliabilityTests
             Assert.IsNull(await backup.GetBackup(document));
         }
 
+        [TestMethod]
+        public void BackupFileNameRemainsCompatibleWithStableBuild()
+        {
+            using var directory = new TestDirectory();
+            var backup = new AutoBackup(directory.Path);
+
+            Assert.AreEqual(
+                "2nfnd9_guide.md",
+                Path.GetFileName(backup.GetBackupFilePath("guide.md")));
+            Assert.AreEqual(
+                "untitled_0123456789abcdef0123456789abcdef.md",
+                Path.GetFileName(backup.GetBackupFilePath(null, "0123456789abcdef0123456789abcdef")));
+        }
+
         private static async Task AssertAtomicWriteFailure(Func<Task> action)
         {
             Exception failure = null;

@@ -3,10 +3,9 @@ using System.Reactive.Disposables;
 using Typedown.Core.Controls.EditorControls.MenuBarItems;
 using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
-using Typedown.XamlUI;
-using Windows.UI.Input;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
+using Microsoft.UI.Input;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 
 namespace Typedown.Core.Controls
 {
@@ -17,50 +16,22 @@ namespace Typedown.Core.Controls
         /// grid carries the visible background, so setting the control's own is not enough.
         /// </summary>
         /// <summary>
-        /// Turns the compact menu bar's window-drag areas on or off. Each drag area is a separate native window laid
-        /// over its element, and it stays where it was when the element is merely collapsed: in full screen the menu
-        /// bar is hidden, the tabs move up into its place, and the drag window left on top of them took every click
-        /// as a title-bar drag - an invisible thing covering the tabs. Full screen has no window to drag, so the areas
-        /// are detached (their native windows destroyed) while it lasts.
+        /// Turns the compact menu bar's window-drag areas on or off. Full screen has no window to drag, and the tabs move
+        /// up into the bar's place there: an area left on would take their clicks as title-bar drags.
         /// </summary>
         public void SetDragEnabled(bool enabled)
         {
-            foreach (var bar in new Windows.UI.Xaml.FrameworkElement[] { LeftDragBar, RightDragBar })
-                if (bar != null && Typedown.XamlUI.XamlWindow.GetDrag(bar) != enabled)
-                {
-                    Typedown.XamlUI.XamlWindow.SetDrag(bar, enabled);
-                    if (enabled) EnsureDragWindow(bar);
-                }
+            foreach (var bar in new FrameworkElement[] { LeftDragBar, RightDragBar })
+                if (bar != null && WindowChrome.GetDrag(bar) != enabled)
+                    WindowChrome.SetDrag(bar, enabled);
         }
 
-        /// <summary>
-        /// Turned on again (out of full screen), an area got no native window: XamlUI's DragBar makes it when the
-        /// element loads, and an element that stayed loaded never does - the window could not be dragged until the main
-        /// page was built anew (the settings visited). Then it is made here, as DragBar makes it on loading.
-        /// </summary>
-        private static void EnsureDragWindow(Windows.UI.Xaml.FrameworkElement bar)
-        {
-            try
-            {
-                var dragBar = Typedown.XamlUI.DragBar.AttachToFrameworkElement(bar);
-                var flags = System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance;
-                if (dragBar.GetType().GetField("_dragBarWindow", flags)?.GetValue(dragBar) != null) return;
-                dragBar.GetType().GetMethod("CreateDragBarWindow", flags)?.Invoke(dragBar, new object[] { bar });
-                if (dragBar.GetType().GetField("_dragBarWindow", flags)?.GetValue(dragBar) == null)
-                    Utilities.Log.Debug($"drag: no window for {bar.Name} after turning it on again");
-            }
-            catch (Exception ex)
-            {
-                Utilities.Log.Debug($"drag: could not make the window for {bar.Name}: {ex.Message}");
-            }
-        }
-
-        public void ApplyThemeBrushes(Windows.UI.Xaml.Media.Brush background, Windows.UI.Xaml.Media.Brush foreground)
+        public void ApplyThemeBrushes(Microsoft.UI.Xaml.Media.Brush background, Microsoft.UI.Xaml.Media.Brush foreground)
         {
             if (RootGrid != null)
             {
                 if (background != null) RootGrid.Background = background;
-                else RootGrid.ClearValue(Windows.UI.Xaml.Controls.Panel.BackgroundProperty);
+                else RootGrid.ClearValue(Microsoft.UI.Xaml.Controls.Panel.BackgroundProperty);
             }
             if (foreground != null) Foreground = foreground;
             else ClearValue(ForegroundProperty);
@@ -86,7 +57,7 @@ namespace Typedown.Core.Controls
             InitializeComponent();
         }
 
-        private void OnSizeChanged(object sender, Windows.UI.Xaml.SizeChangedEventArgs e)
+        private void OnSizeChanged(object sender, Microsoft.UI.Xaml.SizeChangedEventArgs e)
         {
             if (TitleGrid != null)
             {
@@ -121,7 +92,7 @@ namespace Typedown.Core.Controls
             // which reloaded the editor page: a read or a write right then could fail, and two pages talking to the host
             // at once could end the process.
             disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.Language)).Subscribe(_ =>
-                _ = Dispatcher.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, RebuildMenus)));
+                _ = DispatcherQueue.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, RebuildMenus)));
             disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.SourceCode)).Subscribe(_ => ApplyModeToMenus()));
         }
 
@@ -163,11 +134,12 @@ namespace Typedown.Core.Controls
 
         private DateTime prevLeftButtonPressedTime = DateTime.Now;
 
-        private void OnMenuBarPointerEvent(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        private void OnMenuBarPointerEvent(object sender, Microsoft.UI.Xaml.Input.PointerRoutedEventArgs e)
         {
-            if (Settings.AppCompactMode && e.OriginalSource is Grid && XamlWindow.GetWindow(this) is XamlWindow window)
+            var window = WindowChrome.WindowHandleOf(this);
+            if (Settings.AppCompactMode && e.OriginalSource is Grid && window != IntPtr.Zero)
             {
-                _ = Dispatcher.RunIdleAsync(() =>
+                _ = DispatcherQueue.RunIdleAsync(() =>
                 {
                     PInvoke.GetCursorPos(out var point);
                     var packedPoint = (point.Y << 16) + point.X;
@@ -175,14 +147,14 @@ namespace Typedown.Core.Controls
                     if (kind == PointerUpdateKind.LeftButtonPressed)
                     {
                         if ((DateTime.Now - prevLeftButtonPressedTime).TotalMilliseconds < PInvoke.GetDoubleClickTime())
-                            window.PostMessage((uint)PInvoke.WindowMessage.WM_NCLBUTTONDBLCLK, (uint)PInvoke.HitTestFlags.CAPTION, packedPoint);
+                            PInvoke.PostMessage(window, (uint)PInvoke.WindowMessage.WM_NCLBUTTONDBLCLK, (nint)(uint)PInvoke.HitTestFlags.CAPTION, packedPoint);
                         else
-                            window.PostMessage((uint)PInvoke.WindowMessage.WM_NCLBUTTONDOWN, (uint)PInvoke.HitTestFlags.CAPTION, packedPoint);
+                            PInvoke.PostMessage(window, (uint)PInvoke.WindowMessage.WM_NCLBUTTONDOWN, (nint)(uint)PInvoke.HitTestFlags.CAPTION, packedPoint);
                         prevLeftButtonPressedTime = DateTime.Now;
                     }
                     if (kind == PointerUpdateKind.RightButtonReleased)
                     {
-                        window.PostMessage((uint)PInvoke.WindowMessage.WM_NCRBUTTONUP, (uint)PInvoke.HitTestFlags.CAPTION, packedPoint);
+                        PInvoke.PostMessage(window, (uint)PInvoke.WindowMessage.WM_NCRBUTTONUP, (nint)(uint)PInvoke.HitTestFlags.CAPTION, packedPoint);
                     }
                 });
             }

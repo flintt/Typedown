@@ -20,8 +20,8 @@ using Typedown.Core.Utilities;
 using Windows.ApplicationModel.Core;
 using Windows.Storage.Pickers;
 using Windows.System;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 
 namespace Typedown.Core.ViewModels
 {
@@ -79,7 +79,7 @@ namespace Typedown.Core.ViewModels
 
         private FileSystemWatcher fileWatcher;
 
-        private DispatcherQueue dispatcherQueue;
+        private Microsoft.UI.Dispatching.DispatcherQueue dispatcherQueue;
 
         private DateTime ignoreExternalChangeUntil = DateTime.MinValue;
 
@@ -113,11 +113,11 @@ namespace Typedown.Core.ViewModels
             saveFileTimer.Interval = TimeSpan.FromSeconds(5);
             saveFileTimer.Tick += SaveFileTimerTick;
             saveFileTimer.Start();
-            dispatcherQueue = DispatcherQueue.GetForCurrentThread();
+            dispatcherQueue = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
             fileReloadTimer.Interval = TimeSpan.FromMilliseconds(400);
             fileReloadTimer.Tick += FileReloadTimerTick;
             disposables.Add(SettingsViewModel.WhenPropertyChanged(nameof(SettingsViewModel.AutoReload)).Subscribe(_ => StartWatchFile()));
-            _ = CoreApplication.GetCurrentView().CoreWindow.Dispatcher.RunIdleAsync(() => OnStartup());
+            _ = dispatcherQueue.RunIdleAsync(() => OnStartup());
         }
 
         private async void SaveFileTimerTick(object sender, object e)
@@ -316,7 +316,7 @@ namespace Typedown.Core.ViewModels
             {
                 if (TryGetOpenedWindow(path, out var window) && window != AppViewModel.MainWindow)
                 {
-                    _ = AppViewModel.XamlRoot?.Content?.Dispatcher?.RunIdleAsync(() => PInvoke.SetForegroundWindow(window));
+                    _ = AppViewModel.XamlRoot?.Content?.DispatcherQueue?.RunIdleAsync(() => { PInvoke.SetForegroundWindow(window); });
                     return false;
                 }
                 if (!File.Exists(path))
@@ -675,9 +675,9 @@ namespace Typedown.Core.ViewModels
                         Locale.GetString("Cancel"),
                         Locale.GetDialogString("UploadImages.UploadFirst"),
                         Locale.GetDialogString("UploadImages.ShareAnyway")).ShowAsync(AppViewModel.XamlRoot);
-                    if (upload == Windows.UI.Xaml.Controls.ContentDialogResult.None)
+                    if (upload == Microsoft.UI.Xaml.Controls.ContentDialogResult.None)
                         return;
-                    if (upload == Windows.UI.Xaml.Controls.ContentDialogResult.Primary && !await UploadLocalImages())
+                    if (upload == Microsoft.UI.Xaml.Controls.ContentDialogResult.Primary && !await UploadLocalImages())
                         return;
                 }
                 await EditorViewModel.FlushContentAsync();
@@ -698,12 +698,12 @@ namespace Typedown.Core.ViewModels
                         Locale.GetString("Cancel"),
                         Locale.GetDialogString("HedgeDocShare.ReUpload"),
                         Locale.GetDialogString("HedgeDocShare.UseOldLink")).ShowAsync(AppViewModel.XamlRoot);
-                    if (choice == Windows.UI.Xaml.Controls.ContentDialogResult.Secondary)
+                    if (choice == Microsoft.UI.Xaml.Controls.ContentDialogResult.Secondary)
                     {
                         await HedgeDocShareDialog.ShowAsync(AppViewModel.XamlRoot, previousResult, null);
                         return;
                     }
-                    if (choice != Windows.UI.Xaml.Controls.ContentDialogResult.Primary)
+                    if (choice != Microsoft.UI.Xaml.Controls.ContentDialogResult.Primary)
                         return;
                 }
                 var result = await HedgeDocService.ShareAsync(SettingsViewModel.HedgeDocServer, markdown, SettingsViewModel.HedgeDocEmail, SettingsViewModel.HedgeDocPassword, SettingsViewModel.HedgeDocPublishReadOnly);
@@ -734,7 +734,7 @@ namespace Typedown.Core.ViewModels
                 if (await ServiceProvider.GetService<ImageUpload>().GetDefaultConfigAsync() == null)
                 {
                     var open = await AppContentDialog.Create(title, Locale.GetDialogString("UploadImages.NoConfig"), Locale.GetString("Cancel"), Locale.GetDialogString("UploadImages.OpenSettings")).ShowAsync(AppViewModel.XamlRoot);
-                    if (open == Windows.UI.Xaml.Controls.ContentDialogResult.Primary)
+                    if (open == Microsoft.UI.Xaml.Controls.ContentDialogResult.Primary)
                         AppViewModel.NavigateCommand.Execute("Settings/Image");
                     return false;
                 }

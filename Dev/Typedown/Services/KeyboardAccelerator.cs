@@ -7,7 +7,7 @@ using Typedown.Core.Interfaces;
 using Typedown.Core.Models;
 using Typedown.Core.Utilities;
 using Windows.System;
-using Windows.UI.Xaml;
+using Microsoft.UI.Xaml;
 
 namespace Typedown.Services
 {

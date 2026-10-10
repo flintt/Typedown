@@ -40,7 +40,7 @@ namespace Typedown.Core.ViewModels
         /// The outline tree. Replaced whole when a different document arrives, updated in place when the
         /// same document changes: the tree control is bound to it, and taking a document's outline apart
         /// row by row under that control while a second document's arrived is what crashed the process —
-        /// a fail-fast inside Windows.UI.Xaml from the collection-changed handler, in the dump, and a stack
+        /// a fail-fast inside Microsoft.UI.Xaml from the collection-changed handler, in the dump, and a stack
         /// overflow there before that. One document's rows are never removed one at a time any more.
         /// </summary>
         public TocTreeItem Toc { get; private set; } = new();

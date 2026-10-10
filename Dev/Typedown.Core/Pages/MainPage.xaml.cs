@@ -4,10 +4,10 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
 
 namespace Typedown.Core.Pages
 {
@@ -73,8 +73,8 @@ namespace Typedown.Core.Pages
                 var foreground = ThemeFiles.Brush(theme?.Foreground) ?? ThemeFiles.Readable(theme?.Surface ?? theme?.Background);
                 MenuBarHost?.ApplyThemeBrushes(surface, foreground);
                 // A menu row in its own colour needs no line under it (see MenuBar.SetDivider).
-                var panel = ThemeFiles.Brush(theme?.Surface) as Windows.UI.Xaml.Media.SolidColorBrush;
-                var editor = ThemeFiles.Brush(theme?.Background) as Windows.UI.Xaml.Media.SolidColorBrush;
+                var panel = ThemeFiles.Brush(theme?.Surface) as Microsoft.UI.Xaml.Media.SolidColorBrush;
+                var editor = ThemeFiles.Brush(theme?.Background) as Microsoft.UI.Xaml.Media.SolidColorBrush;
                 MenuBarHost?.SetDivider(!(panel != null && editor != null && panel.Color != editor.Color));
                 StatusBar?.ApplyThemeBrushes(surface, foreground);
             }
@@ -115,7 +115,7 @@ namespace Typedown.Core.Pages
             // made now, the areas lay where nothing was, and the window could not be dragged until something laid the
             // bar out again (a menu opened, the settings visited). They are made once the layout has settled.
             if (isFullScreen) MenuBarHost.SetDragEnabled(false);
-            else _ = Dispatcher.RunIdleAsync(_ =>
+            else _ = DispatcherQueue.RunIdleAsync(_ =>
             {
                 if (!(AppViewModel?.UIViewModel?.IsFullScreen ?? false)) MenuBarHost.SetDragEnabled(true);
             });

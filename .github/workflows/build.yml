@@ -147,9 +147,7 @@ jobs:
 
       - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '3.1.x'
-
-      - uses: microsoft/setup-msbuild@v2
+          dotnet-version: '10.0.x'
 
       - name: Read version
         id: ver
@@ -170,7 +168,7 @@ jobs:
             throw "release tag $tag does not match project version $version"
           }
           $fourPart = "$version.0"
-          $manifest = ([xml](Get-Content Tools/Typedown.Package/Package.appxmanifest)).Package.Identity.Version
+          $manifest = ([xml](Get-Content Dev/Typedown/Package.appxmanifest)).Package.Identity.Version
           if ($manifest -ne $fourPart) { throw "MSIX version $manifest does not match $fourPart" }
           $assembly = Get-Content Dev/Typedown.Core/Properties/AssemblyInfo.cs -Raw
           if (-not $assembly.Contains("AssemblyVersion(`"$fourPart`")") -or -not $assembly.Contains("AssemblyFileVersion(`"$fourPart`")")) {
@@ -213,7 +211,7 @@ jobs:
             [IO.File]::WriteAllBytes($cer, $cert.Export([System.Security.Cryptography.X509Certificates.X509ContentType]::Cert))
             Write-Host "Using repository signing certificate: $($cert.Subject)"
           } else {
-            $publisher = ([xml](Get-Content Tools/Typedown.Package/Package.appxmanifest)).Package.Identity.Publisher
+            $publisher = ([xml](Get-Content Dev/Typedown/Package.appxmanifest)).Package.Identity.Publisher
             $cert = New-SelfSignedCertificate -Type Custom -Subject $publisher -KeyUsage DigitalSignature `
               -FriendlyName "Typedown CI" -CertStoreLocation "Cert:\CurrentUser\My" `
               -TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.3", "2.5.29.19={text}")
@@ -234,34 +232,38 @@ jobs:
           $brand = ([xml](Get-Content Branding.props)).Project.PropertyGroup
           "store=$($brand.BrandStoreUpload)" >> $env:GITHUB_OUTPUT
 
-      - name: Restore
-        run: >
-          msbuild Tools/Typedown.Package/Typedown.Package.wapproj /t:Restore /m
-          /p:Configuration=${{ env.Configuration }} /p:Platform=${{ env.Platform }}
-
+      # One project (Dev/Typedown) is the app and its package: published as an MSIX here, unpackaged for the installer
+      # and the portable zip below. Trimmed (TypedownTrim): the WinRT projection and the .NET libraries only.
       - name: Build MSIX
         id: build
         continue-on-error: true
         run: >
-          msbuild Tools/Typedown.Package/Typedown.Package.wapproj /m
-          /p:Configuration=${{ env.Configuration }} /p:Platform=${{ env.Platform }}
-          /p:AppxBundle=Never
-          /p:UapAppxPackageBuildMode=SideloadOnly
-          /p:AppxPackageSigningEnabled=true
-          /p:PackageCertificateKeyFile=${{ steps.cert.outputs.pfx }}
-          /p:PackageCertificatePassword=${{ steps.cert.outputs.password }}
-          /p:AppxPackageDir=${{ github.workspace }}\AppxPackages\
+          dotnet publish Dev/Typedown/Typedown.csproj -nologo
+          -c ${{ env.Configuration }} -p:Platform=${{ env.Platform }} -r win-${{ steps.ver.outputs.arch }}
+          -p:TypedownTrim=true
+          -p:WindowsPackageType=MSIX -p:GenerateAppxPackageOnBuild=true
+          -p:AppxBundle=Never
+          -p:UapAppxPackageBuildMode=SideloadOnly
+          -p:AppxPackageSigningEnabled=true
+          -p:PackageCertificateKeyFile=${{ steps.cert.outputs.pfx }}
+          -p:PackageCertificatePassword=${{ steps.cert.outputs.password }}
+          -p:AppxPackageDir=${{ github.workspace }}\AppxPackages\
 
-      # The Microsoft Store upload: the same package, unsigned (the Store signs it), as .msixupload with its symbols.
+      # The Microsoft Store upload: the same package, unsigned (the Store signs it), as .msixupload. Without a symbol
+      # package: under the .NET SDK's MSBuild the MSIX tools' symbol step fails (it wants mspdbcmf.exe, a Visual Studio
+      # C++ tool), and the .NET 10 SDK needs MSBuild 18, which the windows-2022 image's Visual Studio does not have.
       - name: Build Store upload
         if: steps.brand.outputs.store == 'true' && steps.build.outcome == 'success'
         run: >
-          msbuild Tools/Typedown.Package/Typedown.Package.wapproj /m
-          /p:Configuration=${{ env.Configuration }} /p:Platform=${{ env.Platform }}
-          /p:AppxBundle=Never
-          /p:UapAppxPackageBuildMode=StoreUpload
-          /p:AppxPackageSigningEnabled=false
-          /p:AppxPackageDir=${{ github.workspace }}\StoreUpload\
+          dotnet publish Dev/Typedown/Typedown.csproj -nologo
+          -c ${{ env.Configuration }} -p:Platform=${{ env.Platform }} -r win-${{ steps.ver.outputs.arch }}
+          -p:TypedownTrim=true
+          -p:WindowsPackageType=MSIX -p:GenerateAppxPackageOnBuild=true
+          -p:AppxBundle=Never
+          -p:UapAppxPackageBuildMode=StoreUpload
+          -p:AppxPackageSigningEnabled=false
+          -p:AppxSymbolPackageEnabled=false
+          -p:AppxPackageDir=${{ github.workspace }}\StoreUpload\
 
       # MSBuild names it <name>.msixupload whatever the platform: version and platform in the name, so the two
       # platforms' uploads do not overwrite each other where they are downloaded.
@@ -287,34 +289,29 @@ jobs:
         if: steps.build.outcome == 'failure'
         shell: pwsh
         run: |
-          $map = "Tools/Typedown.Package/obj/${{ env.Platform }}/${{ env.Configuration }}/package.map.txt"
-          if (Test-Path $map) {
-            Write-Host "===== package.map.txt ====="; Get-Content $map
-            $makeappx = Get-ChildItem "C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\makeappx.exe"
-            Push-Location Tools/Typedown.Package
-            & $makeappx pack /v /l /h sha256 /f "obj/${{ env.Platform }}/${{ env.Configuration }}/package.map.txt" /o /p "$env:RUNNER_TEMP\diag.msix"
-            Pop-Location
-          } else { Write-Host "no package.map.txt" ; Get-ChildItem -Recurse Tools/Typedown.Package/obj | Select-Object -First 50 }
+          $map = Get-ChildItem Dev/Typedown/obj -Recurse -Filter package.map.txt | Select-Object -First 1
+          if ($map) { Write-Host "===== $($map.FullName) ====="; Get-Content $map.FullName }
+          else { Write-Host "no package.map.txt"; Get-ChildItem -Recurse Dev/Typedown/obj -Depth 3 | Select-Object -First 50 }
           exit 1
 
-      # The wapproj already published a self-contained app layout; reuse it for the unpackaged installer and portable zip.
-      - name: Locate published app
+      # The unpackaged app for the installer and the portable zip: self-contained with the Windows App SDK runtime,
+      # typedownctl beside it (PublishCliAlongside).
+      - name: Publish app
         id: pub
         shell: pwsh
         run: |
-          $dir = Get-ChildItem Dev/Typedown/bin -Recurse -Directory -Filter msixpublish | Select-Object -First 1
-          if (-not $dir) { throw "msixpublish folder not found" }
+          $dir = Join-Path $env:GITHUB_WORKSPACE 'publish-app'
+          dotnet publish Dev/Typedown/Typedown.csproj -nologo -c ${{ env.Configuration }} -p:Platform=${{ env.Platform }} -r win-${{ steps.ver.outputs.arch }} -p:TypedownTrim=true -o $dir
+          if ($LASTEXITCODE -ne 0) { throw "dotnet publish failed" }
           # The edition's names (Branding.props).
           $brand = ([xml](Get-Content Branding.props)).Project.PropertyGroup
           "exe=$($brand.BrandExeName).exe" >> $env:GITHUB_OUTPUT
           "name=$($brand.BrandName)" >> $env:GITHUB_OUTPUT
-          foreach ($f in "$($brand.BrandExeName).exe","Microsoft.UI.Xaml.dll","Microsoft.Graphics.Canvas.dll","msvcp140_app.dll","vcruntime140_app.dll","e_sqlite3.dll","Resources\Statics\index.html") {
-            if (-not (Test-Path (Join-Path $dir.FullName $f))) { throw "$f missing in $($dir.FullName)" }
+          foreach ($f in "$($brand.BrandExeName).exe","$($brand.BrandCliName).exe","Microsoft.ui.xaml.dll","Microsoft.WindowsAppRuntime.dll","Microsoft.Graphics.Canvas.dll","e_sqlite3.dll","WebView2Loader.dll","Resources\Statics\index.html") {
+            if (-not (Test-Path (Join-Path $dir $f))) { throw "$f missing in $dir" }
           }
-          $arch = "${{ steps.ver.outputs.arch }}"
-          if (-not ((Test-Path "$($dir.FullName)\WebView2Loader.dll") -or (Test-Path "$($dir.FullName)\runtimes\win-$arch\native\WebView2Loader.dll"))) { throw "WebView2Loader.dll missing" }
-          "dir=$($dir.FullName)" >> $env:GITHUB_OUTPUT
-          Write-Host "Published app: $($dir.FullName)"
+          "dir=$dir" >> $env:GITHUB_OUTPUT
+          Write-Host "Published app: $dir"
 
       - name: Sign the app's exe
         shell: pwsh
@@ -334,7 +331,7 @@ jobs:
           # app's runtime) and the automation documents.
           New-Item -ItemType Directory -Force Tools/Installer/publish | Out-Null
           Copy-Item "$pub\*" Tools/Installer/publish -Recurse -Force
-          ./Tools/Installer/add-cli.ps1 -AppFolder Tools/Installer/publish -RuntimeIdentifier "win10-$arch"
+          ./Tools/Installer/add-cli.ps1 -AppFolder Tools/Installer/publish -RuntimeIdentifier "win-$arch"
           ./Tools/Installer/assert-application-build.ps1 -Path Tools/Installer/publish
           # The portable zip is only produced for releases; day-to-day test artifacts stay small.
           if ("${{ github.ref }}".StartsWith("refs/tags/")) {

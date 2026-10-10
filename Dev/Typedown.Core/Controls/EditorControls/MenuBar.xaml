@@ -15,7 +15,7 @@
     SizeChanged="OnSizeChanged"
     xmlns:animatedvisuals="using:Microsoft.UI.Xaml.Controls.AnimatedVisuals" 
     xmlns:converters="using:Typedown.Core.Converters"
-    xmlns:ui="using:Typedown.XamlUI"
+    xmlns:chrome="using:Typedown.Core.Utilities"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
@@ -70,14 +70,14 @@
         <Grid x:Name="LeftDragBar" Grid.Column="0" Height="4" VerticalAlignment="Top" x:Load="{x:Bind Settings.AppCompactMode}">
             <Grid.Style>
                 <Style TargetType="Grid">
-                    <Setter Property="ui:XamlWindow.Drag" Value="True"/>
+                    <Setter Property="chrome:WindowChrome.Drag" Value="True"/>
                 </Style>
             </Grid.Style>
         </Grid>
         <Grid x:Name="RightDragBar" Grid.Column="1" x:Load="{x:Bind Settings.AppCompactMode}">
             <Grid.Style>
                 <Style TargetType="Grid">
-                    <Setter Property="ui:XamlWindow.Drag" Value="True"/>
+                    <Setter Property="chrome:WindowChrome.Drag" Value="True"/>
                 </Style>
             </Grid.Style>
         </Grid>

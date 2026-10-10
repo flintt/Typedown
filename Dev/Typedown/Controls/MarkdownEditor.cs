@@ -17,16 +17,15 @@ using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
 using Typedown.Services;
 using Typedown.Utilities;
-using Typedown.XamlUI;
 using Windows.Foundation;
 using Windows.System;
 using Windows.UI;
 using Windows.UI.ViewManagement;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Shapes;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Shapes;
 
 namespace Typedown.Controls
 {
@@ -52,7 +51,11 @@ namespace Typedown.Controls
 
         private readonly Rectangle dummyRectangle = new();
 
-        private readonly Canvas canvas = new() { Background = new SolidColorBrush(Colors.Transparent) };
+        // Laid over the web view for anchoring flyouts at a point of the page (dummyRectangle); not hit-tested: the web view
+        // under it takes the pointer itself.
+        private readonly Canvas canvas = new() { IsHitTestVisible = false };
+
+        private readonly Grid root = new();
 
         private readonly UISettings uiSettings = new();
 
@@ -63,7 +66,8 @@ namespace Typedown.Controls
             ServiceProvider = serviceProvider;
             Loaded += OnLoaded;
             canvas.Children.Add(dummyRectangle);
-            Content = canvas;
+            root.Children.Add(canvas);
+            Content = root;
             IsTabStop = true;
             disposables.Add(RemoteInvoke.Handle("ContentLoaded", OnContentLoaded));
             disposables.Add(RemoteInvoke.Handle<string>("UnhandledException", OnUnhandledException));
@@ -74,12 +78,12 @@ namespace Typedown.Controls
                 .Merge(AppViewModel.SettingsViewModel.WhenPropertyChanged(nameof(SettingsViewModel.UseMicaEffect)))
                 .Merge(AppViewModel.SettingsViewModel.WhenPropertyChanged(nameof(SettingsViewModel.AppTheme)))
                 .Merge(AppViewModel.SettingsViewModel.WhenPropertyChanged(nameof(SettingsViewModel.CustomTheme)))
-                .Merge(Observable.FromEventPattern(uiSettings, nameof(uiSettings.ColorValuesChanged)))
+                .Merge(uiSettings.GetColorValuesObservable())
                 .Subscribe(_ => OnThemeChanged()));
             // The editor holds a few strings of its own (the placeholders in footnotes, code fences and images),
             // fetched once when it starts. A language change is the one thing that leaves them behind.
             disposables.Add(AppViewModel.SettingsViewModel.WhenPropertyChanged(nameof(SettingsViewModel.Language))
-                .Subscribe(_ => _ = Dispatcher.RunIdleAsync(() => PostMessage("LanguageChanged", null))));
+                .Subscribe(_ => _ = DispatcherQueue.RunIdleAsync(() => PostMessage("LanguageChanged", null))));
         }
 
         private static readonly HashSet<ulong> reported = new();
@@ -119,7 +123,7 @@ namespace Typedown.Controls
         [SuppressPropertyChangedWarnings]
         private void OnThemeChanged()
         {
-            _ = Dispatcher.RunIdleAsync(() => PostMessage("ThemeChanged", ServiceProvider.GetCurrentTheme()));
+            _ = DispatcherQueue.RunIdleAsync(() => PostMessage("ThemeChanged", ServiceProvider.GetCurrentTheme()));
         }
 
         private void OnContentLoaded()
@@ -153,7 +157,7 @@ namespace Typedown.Controls
             if (WebViewController == null)
             {
                 var webViewController = new WebViewController();
-                if (!await webViewController.InitializeAsync(this, XamlWindow.GetWindow(this).XamlSourceHandle))
+                if (!await webViewController.InitializeAsync(root))
                 {
                     webViewController.Dispose();
                     IsEditorLoadFailed = true;
@@ -216,7 +220,7 @@ namespace Typedown.Controls
             {
                 Core.Utilities.Log.Debug($"editor: web view process failed: {args.ProcessFailedKind} {args.Reason} exit={args.ExitCode}");
                 if (args.ProcessFailedKind == CoreWebView2ProcessFailedKind.BrowserProcessExited || args.ProcessFailedKind == CoreWebView2ProcessFailedKind.RenderProcessExited || args.ProcessFailedKind == CoreWebView2ProcessFailedKind.RenderProcessUnresponsive)
-                    _ = Dispatcher.RunIdleAsync(_ => { try { CoreWebView2.Reload(); } catch (Exception ex) { Core.Utilities.Log.Debug($"editor: reload after process failure failed: {ex.Message}"); } });
+                    _ = DispatcherQueue.RunIdleAsync(_ => { try { CoreWebView2.Reload(); } catch (Exception ex) { Core.Utilities.Log.Debug($"editor: reload after process failure failed: {ex.Message}"); } });
             };
 #if DEBUG
             CoreWebView2.AddWebResourceRequestedFilter("http://local-file-access/*", CoreWebView2WebResourceContext.All);
@@ -261,7 +265,7 @@ namespace Typedown.Controls
                 UriHelper.TryGetLocalPath(src, out var path);
                 path = System.IO.Path.Combine(AppViewModel.FileViewModel.ImageBasePath, path);
                 var stream = await Task.Run(() => new MemoryStream(File.ReadAllBytes(path)));
-                args.Response = CoreWebView2.Environment.CreateWebResourceResponse(stream, 200, "OK", null);
+                args.Response = CoreWebView2.Environment.CreateWebResourceResponse(stream.AsRandomAccessStream(), 200, "OK", null);
             }
             catch (Exception)
             {

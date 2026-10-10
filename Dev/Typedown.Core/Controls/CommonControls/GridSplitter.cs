@@ -1,10 +1,10 @@
 ﻿using System;
-using Windows.UI;
+using Microsoft.UI;
 using Windows.UI.Core;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
 
 namespace Typedown.Core.Controls
 {
@@ -40,13 +40,14 @@ namespace Typedown.Core.Controls
             Margin = new Thickness(-4, 0, -4, 0);
             Content = border;
             ManipulationMode = ManipulationModes.TranslateX;
+            // Its own cursor while the pointer is over it (WinUI 3: an element's cursor, no window-wide one to set and reset).
+            ProtectedCursor = Microsoft.UI.Input.InputSystemCursor.Create(Microsoft.UI.Input.InputSystemCursorShape.SizeWestEast);
         }
 
         protected override void OnPointerEntered(PointerRoutedEventArgs e)
         {
             base.OnPointerEntered(e);
             entered = true;
-            Window.Current.CoreWindow.PointerCursor = new(CoreCursorType.SizeWestEast, 1);
 
         }
 
@@ -54,8 +55,6 @@ namespace Typedown.Core.Controls
         {
             base.OnPointerExited(e);
             entered = false;
-            if (!manipulating)
-                Window.Current.CoreWindow.PointerCursor = new(CoreCursorType.Arrow, 1);
         }
 
         protected override void OnManipulationStarted(ManipulationStartedRoutedEventArgs e)
@@ -68,7 +67,7 @@ namespace Typedown.Core.Controls
         protected override void OnManipulationDelta(ManipulationDeltaRoutedEventArgs e)
         {
             base.OnManipulationDelta(e);
-            var scale = Windows.Graphics.Display.DisplayInformation.GetForCurrentView().RawPixelsPerViewPixel;
+            var scale = XamlRoot?.RasterizationScale ?? 1;
             columnWidth += DeltaScale * e.Delta.Translation.X * scale;
             ColumnExpectWidth = Math.Min(Math.Max(ColumnMinWidth, columnWidth), ColumnMaxWidth);
         }
@@ -77,8 +76,6 @@ namespace Typedown.Core.Controls
         {
             base.OnManipulationCompleted(e);
             manipulating = false;
-            if (!entered)
-                Window.Current.CoreWindow.PointerCursor = new(CoreCursorType.Arrow, 1);
         }
 
         public static void OnPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

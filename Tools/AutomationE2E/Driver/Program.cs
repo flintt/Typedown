@@ -165,6 +165,8 @@ internal static partial class Program
             await Case("RD01 reading mode: the context menu offers copying and selecting only, Copy works on a selection, copy as plain text leaves the Markdown out, Ctrl+Z changes nothing", RD01);
             await Case("CP01 Copy pasted into Word: pictures at absolute file:/// addresses, a name and an alt text with brackets, an SVG sized in pt, a JPEG", CP01);
             await Case("TH03 the side pane marks what is chosen (the bar under Files/Outline, the outline's and the folder tree's row pill) in a custom theme's accent, and in the system accent again without one", TH03);
+            await Case("DR01 files dragged from Explorer onto the editor: a Markdown file opens, a picture goes into the document", DR01);
+            await Case("DM01 the window's top edge is drawn in the app's theme, and a dialog's smoke covers it too: the top row matches the row under it, light and dark", DM01);
             await Case("TH02 View > Theme > Reload themes finds a new theme file and a renamed one; the window draws in the custom theme's base whatever the built-in setting says", TH02);
             await Case("WP01 a web page pasted: headings with #, code fenced with its language and without line numbers, Google Docs bold and italic, late-loaded and relative pictures by their real addresses; with Insert web image copying, its pictures are copied beside the document and their addresses replaced", WP01);
             await Case("ER01 a page message handler that throws stays subscribed and the message still reaches the other handlers; an exception out of an event handler XAML calls is logged and the app goes on", ER01);
@@ -174,6 +176,9 @@ internal static partial class Program
             EditionCases(editionCases);
             foreach (var (name, run) in editionCases) await Case(name, run);
             // Last: it ends the test host.
+            await Case("PF01 measured: a 300 KB document opened, typed into and saved; the memory with two windows", PF01);
+            await Case("PF03 profiled: where the host's CPU goes while it opens 300 KB documents", PF03);
+            await Case("PF02 measured: a cold start with a document on the command line, then the window closed", PF02);
             await Case("Q01 two windows closed one after the other: the process exits (it stayed, headless)", Q01);
         }
         catch (Exception e)
@@ -243,8 +248,8 @@ internal static partial class Program
     private static async Task Case(string name, Func<List<string>, Task> body)
     {
         if (only != null && !only.Any(o => name.StartsWith(o + " "))) return;
-        // Pictures (SHOT...) are taken only when asked for by name: never part of a run of every case.
-        if (name.StartsWith("SHOT") && only == null) return;
+        // Pictures (SHOT...) and measurements (PF...) are taken only when asked for by name: never part of a run of every case.
+        if ((name.StartsWith("SHOT") || name.StartsWith("PF")) && only == null) return;
         var notes = new List<string>();
         // A person's mouse or keys a moment ago would be in the case's way: it waits for the desktop to be left alone.
         var quiet = await WaitForQuietDesktop(1000);
@@ -825,8 +830,10 @@ internal static partial class Program
     {
         var root = System.Windows.Automation.AutomationElement.FromHandle(window);
         var menuItem = new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.MenuItem);
-        var bar = root.FindFirst(System.Windows.Automation.TreeScope.Descendants,
-            new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.MenuBar))
+        var bar = Deep.First(root, new System.Windows.Automation.AndCondition(
+            new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.MenuBar),
+            // Not the window's system menu bar (one item, System), which a WinUI 3 window also shows.
+            new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.FrameworkIdProperty, "XAML")))
             ?? throw new CaseFailed("no menu bar in the window");
         var seen = new List<string>();
         try
@@ -836,9 +843,8 @@ internal static partial class Program
                 if (!top.TryGetCurrentPattern(System.Windows.Automation.ExpandCollapsePattern.Pattern, out var topPattern)) { seen.Add(top.Current.Name + " (no expand)"); continue; }
                 ((System.Windows.Automation.ExpandCollapsePattern)topPattern).Expand();
                 await Task.Delay(400);
-                var sub = root.FindFirst(System.Windows.Automation.TreeScope.Descendants,
-                    new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.AutomationIdProperty, "ThemeSubMenu"));
-                seen.Add($"{top.Current.Name}: {((System.Windows.Automation.ExpandCollapsePattern)topPattern).Current.ExpandCollapseState}, {root.FindAll(System.Windows.Automation.TreeScope.Descendants, menuItem).Count} items");
+                var sub = Deep.First(root, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.AutomationIdProperty, "ThemeSubMenu"));
+                seen.Add($"{top.Current.Name}: {((System.Windows.Automation.ExpandCollapsePattern)topPattern).Current.ExpandCollapseState}, {Deep.All(root, menuItem).Count} items");
                 if (sub == null)
                 {
                     ((System.Windows.Automation.ExpandCollapsePattern)topPattern).Collapse();
@@ -850,7 +856,7 @@ internal static partial class Program
                 ((System.Windows.Automation.ExpandCollapsePattern)sub.GetCurrentPattern(System.Windows.Automation.ExpandCollapsePattern.Pattern)).Expand();
                 await Task.Delay(500);
                 var names = new List<string>();
-                foreach (System.Windows.Automation.AutomationElement item in root.FindAll(System.Windows.Automation.TreeScope.Descendants, menuItem))
+                foreach (System.Windows.Automation.AutomationElement item in Deep.All(root, menuItem))
                     names.Add(item.Current.Name);
                 return names;
             }
@@ -870,8 +876,7 @@ internal static partial class Program
             try
             {
                 var root = System.Windows.Automation.AutomationElement.FromHandle(window);
-                var edits = root.FindAll(System.Windows.Automation.TreeScope.Descendants,
-                    new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.Edit));
+                var edits = Deep.All(root, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.Edit));
                 var values = new List<string>();
                 foreach (System.Windows.Automation.AutomationElement edit in edits)
                     if (edit.TryGetCurrentPattern(System.Windows.Automation.ValuePattern.Pattern, out var pattern))
@@ -1038,8 +1043,7 @@ internal static partial class Program
         }
         void Click(int x, int y) { SetCursorPos(x, y); Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0002 } } }, new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0004 } } }); }
         System.Windows.Automation.AutomationElement? Find(string automationId) =>
-            System.Windows.Automation.AutomationElement.FromHandle(window).FindFirst(System.Windows.Automation.TreeScope.Descendants,
-                new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.AutomationIdProperty, automationId));
+            Deep.First(System.Windows.Automation.AutomationElement.FromHandle(window), new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.AutomationIdProperty, automationId));
         var created = new List<string>();
         try
         {
@@ -1065,8 +1069,7 @@ internal static partial class Program
             var add = Find("AddButton");
             if (add == null)
             {
-                var buttons = System.Windows.Automation.AutomationElement.FromHandle(window).FindAll(System.Windows.Automation.TreeScope.Descendants,
-                    new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.Button));
+                var buttons = Deep.All(System.Windows.Automation.AutomationElement.FromHandle(window), new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.Button));
                 throw new CaseFailed("no + button in the tab strip; buttons: " + string.Join(", ", buttons.Cast<System.Windows.Automation.AutomationElement>().Select(x => $"'{x.Current.Name}'/{x.Current.AutomationId}")));
             }
             var r = add.Current.BoundingRectangle;
@@ -1080,8 +1083,7 @@ internal static partial class Program
             Check(plus != ctrlN && text?.Contains('P') == true, "a letter typed after the + button reaches the new tab");
 
             // The first tab, clicked in the strip.
-            var tabs = System.Windows.Automation.AutomationElement.FromHandle(window).FindAll(System.Windows.Automation.TreeScope.Descendants,
-                new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.TabItem));
+            var tabs = Deep.All(System.Windows.Automation.AutomationElement.FromHandle(window), new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.TabItem));
             var tab = tabs.Cast<System.Windows.Automation.AutomationElement>().FirstOrDefault(t => t.Current.Name.Contains("k05")) ?? throw new CaseFailed("no k05 tab in the strip");
             r = tab.Current.BoundingRectangle;
             Click((int)(r.Left + 20), (int)(r.Top + r.Height / 2));
@@ -1134,8 +1136,8 @@ internal static partial class Program
         }
         System.Windows.Automation.AutomationElement? FindIn(System.Windows.Automation.AutomationElement root, Func<System.Windows.Automation.AutomationElement, bool> match)
         {
-            foreach (System.Windows.Automation.AutomationElement e in root.FindAll(System.Windows.Automation.TreeScope.Descendants, System.Windows.Automation.Condition.TrueCondition))
-                if (match(e)) return e;
+            foreach (System.Windows.Automation.AutomationElement e in Deep.All(root, System.Windows.Automation.Condition.TrueCondition))
+                try { if (match(e)) return e; } catch (System.Windows.Automation.ElementNotAvailableException) { }
             return null;
         }
         // Anywhere in the test host's windows (menus and dialogs are popups of their own).
@@ -1291,7 +1293,7 @@ internal static partial class Program
                 // The close button: the rightmost button level with the search box and right of it (the window's own
                 // close button is higher up, in the title row).
                 var box = (input ?? throw new CaseFailed("no search box")).Current.BoundingRectangle;
-                var close = System.Windows.Automation.AutomationElement.FromHandle(window).FindAll(System.Windows.Automation.TreeScope.Descendants, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.Button))
+                var close = Deep.All(System.Windows.Automation.AutomationElement.FromHandle(window), new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.Button))
                     .Cast<System.Windows.Automation.AutomationElement>()
                     .Where(b => { var r = b.Current.BoundingRectangle; return r.Left >= box.Right && Math.Abs((r.Top + r.Height / 2) - (box.Top + box.Height / 2)) < box.Height; })
                     .OrderBy(b => b.Current.BoundingRectangle.Left).LastOrDefault() ?? throw new CaseFailed("no close button in the find bar");
@@ -1892,6 +1894,104 @@ internal static partial class Program
 
     // The marks of what is chosen in the side pane stayed the system blue under every custom theme: WinUI draws them in
     // the accent colour it takes from Windows, and only the page was given the theme's accent.
+    /// <summary>
+    /// The window's top pixel row against the content just under it, light and dark, with no dialog and with the save
+    /// question open: the row is the window's own frame on Windows 10 (the content is extended into the title bar), drawn
+    /// by the system in its own theme unless the app says which; a dialog's smoke then stopped one pixel short of the top.
+    /// </summary>
+    private static async Task DM01(List<string> notes)
+    {
+        using var c = await Session("e2e DM01");
+        SetProcessDpiAwarenessContext(new IntPtr(-4));
+        const string text = "# DM01\n";
+        var path = Fixture("dm01.md", text);
+        var id = await Open(c, path);
+        var windowId = await WindowIdOf(c, id);
+        var window = await WindowOf(windowId, c);
+        System.Drawing.Color Pixel(int x, int y)
+        {
+            using var b = new System.Drawing.Bitmap(1, 1);
+            using (var g = System.Drawing.Graphics.FromImage(b)) g.CopyFromScreen(x, y, 0, 0, new System.Drawing.Size(1, 1));
+            return b.GetPixel(0, 0);
+        }
+        string Hex(System.Drawing.Color k) => $"#{k.R:X2}{k.G:X2}{k.B:X2}";
+        // Over a few points along the edge (left of the caption buttons, right of the menu bar's titles).
+        List<string> Mismatches(string when)
+        {
+            DwmGetWindowAttribute(window, 9 /* DWMWA_EXTENDED_FRAME_BOUNDS */, out RECT r, Marshal.SizeOf<RECT>());
+            var wrong = new List<string>();
+            var seen = new List<string>();
+            foreach (var fx in new[] { 0.45, 0.6, 0.7 })
+            {
+                var x = r.Left + (int)((r.Right - r.Left) * fx);
+                var top = Pixel(x, r.Top);
+                var under = Pixel(x, r.Top + 3);
+                seen.Add($"{Hex(top)}/{Hex(under)}");
+                if (Math.Abs(top.R - under.R) + Math.Abs(top.G - under.G) + Math.Abs(top.B - under.B) > 24)
+                    wrong.Add($"{when} at x={x}: top {Hex(top)}, under it {Hex(under)}");
+            }
+            notes.Add($"{when}: top/under " + string.Join(" ", seen));
+            // Where the client area and the content's child windows begin, under the window's top.
+            var origin = new POINT();
+            DmClientToScreen(window, ref origin);
+            var children = new List<string>();
+            EnumChildWindows(window, (child, _) =>
+            {
+                var name = new System.Text.StringBuilder(128);
+                GetClassName(child, name, name.Capacity);
+                GetWindowRect(child, out var cr);
+                children.Add($"{name} top+{cr.Top - r.Top} h{cr.Bottom - cr.Top}");
+                return true;
+            }, IntPtr.Zero);
+            notes.Add($"{when}: frame top {r.Top}, client top+{origin.Y - r.Top}, children: {string.Join(", ", children)}");
+            return wrong;
+        }
+        var failures = new List<string>();
+        try
+        {
+            foreach (var theme in new[] { "light", "dark" })
+            {
+                await SetSetting(c, "appearance.theme", JObject.FromObject(new { kind = "builtIn", id = theme }));
+                await Activate(window);
+                await Task.Delay(1000);
+                failures.AddRange(Mismatches(theme));
+                await TypeInto(c, id, "x");
+                Check(await Eventually(async () => ((string?)(await Get(c, id))["text"] ?? "").Contains('x'), 3000), $"{theme}: the typed x reached the document");
+                await Activate(window);
+                // As K06 types it: Ctrl held, W with its scan code (the editor page reads the scan code).
+                INPUT W(bool up) => new() { type = 1, u = new InputUnion { ki = new KEYBDINPUT { wVk = 0x57, wScan = 0x11, dwFlags = up ? 0x0002u : 0u } } };
+                Send(Key(0x11, false));
+                await Task.Delay(80);
+                Send(W(false), W(true));
+                await Task.Delay(80);
+                Send(Key(0x11, true));
+                var root = System.Windows.Automation.AutomationElement.FromHandle(window);
+                System.Windows.Automation.AutomationElement? cancel = null;
+                for (var i = 0; i < 30 && cancel == null; i++)
+                {
+                    await Task.Delay(150);
+                    cancel = Deep.First(root, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.AutomationIdProperty, "CloseButton"));
+                }
+                if (cancel == null) throw new CaseFailed($"{theme}: Ctrl+W on a changed document showed no save question");
+                await Task.Delay(800); // the smoke fades in
+                failures.AddRange(Mismatches(theme + " with a dialog"));
+                ((System.Windows.Automation.InvokePattern)cancel.GetCurrentPattern(System.Windows.Automation.InvokePattern.Pattern)).Invoke();
+                await Task.Delay(500);
+                Check(((string?)(await Get(c, id))["text"] ?? "").Contains('x'), $"{theme}: Cancel kept the document with its change");
+                await c.Call("document.focus", new { documentId = id });
+                await c.Call("document.replace", new { documentId = id, text, baseRevision = await Revision(c, id), normalizationPolicy = "allowUnknown" });
+                await c.Call("document.save", new { documentId = id });
+            }
+            if (failures.Count > 0)
+                throw new CaseFailed(string.Join("; ", failures) + "; screen: " + Screenshot("DM01-" + DateTime.Now.ToString("HHmmss")));
+        }
+        finally
+        {
+            await SetSetting(c, "appearance.theme", JObject.FromObject(new { kind = "builtIn", id = "system" }));
+            try { await c.Call("document.close", new { documentId = id }); } catch { }
+        }
+    }
+
     private static async Task TH03(List<string> notes)
     {
         using var c = await Session("e2e TH03");
@@ -1902,7 +2002,23 @@ internal static partial class Program
         {
             await c.Call("window.setView", new { windowId, sidePane = new { open = true, page } });
             await Task.Delay(1500);
-            var found = ((JArray)(await c.Call("test.pane.accent", new { windowId }))["indicators"]!).Select(x => ((string)x["where"]!, (string?)x["fill"])).ToList();
+            // The pointer over a row, as a hand leaves it: a row under the pointer draws its mark from keys of its own
+            // (the selected heading turned the system blue whenever the mouse was over it).
+            if (page == "outline" && Deep.First(System.Windows.Automation.AutomationElement.FromHandle(await WindowOf(windowId, c)),
+                    new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.NameProperty, "One")) is { } row)
+            {
+                SetProcessDpiAwarenessContext(new IntPtr(-4));
+                var r = row.Current.BoundingRectangle;
+                SetCursorPos((int)(r.Left + r.Width / 2) - 3, (int)(r.Top + r.Height / 2));
+                for (var i = 0; i < 3; i++) { await Task.Delay(60); Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dx = 1, dy = 0, dwFlags = 0x0001 } } }); }
+                await Task.Delay(500);
+            }
+            else if (page == "outline") notes.Add($"{when}: no outline row named One to hover");
+            var raw = (JArray)(await c.Call("test.pane.accent", new { windowId }))["indicators"]!;
+            var found = raw.Select(x => ((string)x["where"]!, (string?)x["fill"])).ToList();
+            // Every mark in detail where the colours disagree: what it belongs to and where its brush comes from.
+            if (found.Select(x => x.Item2).Distinct().Count() > 1)
+                foreach (var x in raw) notes.Add($"{when}, {page}: mark {x.ToString(Newtonsoft.Json.Formatting.None)}");
             notes.Add($"{when}, {page}: " + string.Join(", ", found.GroupBy(x => x).Select(g => $"{g.Key.Item1} {g.Key.Item2} x{g.Count()}")));
             return found;
         }
@@ -1941,9 +2057,9 @@ internal static partial class Program
         List<string> Outline()
         {
             var names = new List<string>();
-            foreach (System.Windows.Automation.AutomationElement e in System.Windows.Automation.AutomationElement.FromHandle(window).FindAll(System.Windows.Automation.TreeScope.Descendants, System.Windows.Automation.Condition.TrueCondition))
+            foreach (System.Windows.Automation.AutomationElement e in Deep.All(System.Windows.Automation.AutomationElement.FromHandle(window), System.Windows.Automation.Condition.TrueCondition))
             {
-                var n = e.Current.Name;
+                var n = Deep.Name(e);
                 if ((n.StartsWith("Alpha") || n.StartsWith("Beta")) && e.Current.ControlType != System.Windows.Automation.ControlType.Document && !names.Contains(n)) names.Add(n);
             }
             return names;
@@ -1953,10 +2069,9 @@ internal static partial class Program
             var before = Outline();
             notes.Add("outline with tc01-b shown: " + string.Join(", ", before));
             Check(before.Contains("Beta three") && !before.Contains("Alpha two"), "the outline shows the shown tab's headings");
-            var tab = System.Windows.Automation.AutomationElement.FromHandle(window).FindAll(System.Windows.Automation.TreeScope.Descendants,
-                new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.TabItem))
+            var tab = Deep.All(System.Windows.Automation.AutomationElement.FromHandle(window), new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.TabItem))
                 .Cast<System.Windows.Automation.AutomationElement>().FirstOrDefault(t => t.Current.Name.Contains("tc01-b")) ?? throw new CaseFailed("no tc01-b tab");
-            var close = tab.FindAll(System.Windows.Automation.TreeScope.Descendants, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.Button))
+            var close = Deep.All(tab, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.Button))
                 .Cast<System.Windows.Automation.AutomationElement>().FirstOrDefault() ?? throw new CaseFailed("no close button on the tab");
             await Activate(window);
             var r = close.Current.BoundingRectangle;
@@ -1980,8 +2095,8 @@ internal static partial class Program
                 await Task.Delay(200);
                 active = (string)((JArray)(await c.Call("window.list"))["windows"]!).First(w => (string)w["windowId"]! == windowId)["activeDocumentId"]!;
                 headings = ((string?)(await Get(c, active))["text"] ?? "").Split('\n').Where(l => l.StartsWith("#")).Select(l => l.TrimStart('#').Trim()).Where(h => h.Length > 0).Take(3).ToList();
-                names = System.Windows.Automation.AutomationElement.FromHandle(window).FindAll(System.Windows.Automation.TreeScope.Descendants, System.Windows.Automation.Condition.TrueCondition)
-                    .Cast<System.Windows.Automation.AutomationElement>().Select(e => e.Current.Name).ToList();
+                names = Deep.All(System.Windows.Automation.AutomationElement.FromHandle(window), System.Windows.Automation.Condition.TrueCondition)
+                    .Select(Deep.Name).ToList();
                 if (active != second && headings.All(names.Contains) && !names.Contains("Beta three")) break;
             }
             notes.Add($"after closing tc01-b, shown {(active == first ? "tc01-a" : active)} with headings {string.Join(", ", headings)}; outline has them: {headings.All(names.Contains)}, has Beta three: {names.Contains("Beta three")}");
@@ -2009,8 +2124,7 @@ internal static partial class Program
         await c.Call("window.setView", new { windowId, sidePane = new { open = true, page = "outline" } });
         await Task.Delay(1500);
         var root = System.Windows.Automation.AutomationElement.FromHandle(window);
-        System.Windows.Automation.AutomationElement Tab(string name) => root.FindAll(System.Windows.Automation.TreeScope.Descendants,
-                new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.TabItem))
+        System.Windows.Automation.AutomationElement Tab(string name) => Deep.All(root, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.TabItem))
             .Cast<System.Windows.Automation.AutomationElement>().FirstOrDefault(t => t.Current.Name.Contains(name)) ?? throw new CaseFailed($"no {name} tab");
         void ShowTab(string name)
         {
@@ -2019,8 +2133,8 @@ internal static partial class Program
         }
         void Click(System.Windows.Rect r, double fx = 0.3) { SetCursorPos((int)(r.Left + r.Width * fx), (int)(r.Top + r.Height / 2)); Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0002 } } }, new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0004 } } }); }
         // The outline's first rows (the tree is virtualized; its top shows which document it is of).
-        string Top() => string.Join(", ", root.FindAll(System.Windows.Automation.TreeScope.Descendants, System.Windows.Automation.Condition.TrueCondition)
-            .Cast<System.Windows.Automation.AutomationElement>().Select(e => e.Current.Name)
+        string Top() => string.Join(", ", Deep.All(root, System.Windows.Automation.Condition.TrueCondition)
+            .Select(Deep.Name)
             .Where(n => n.StartsWith("Apple") || n.StartsWith("Banana") || n.StartsWith("Cherry")).Distinct().Take(3));
         async Task<string> Shown() => (string)((JArray)(await c.Call("window.list"))["windows"]!).First(w => (string)w["windowId"]! == windowId)["activeDocumentId"]!;
         try
@@ -2044,8 +2158,8 @@ internal static partial class Program
             }
             Check(await Shown() == a, "the click shows tc02-a");
             notes.Add("tc02-a shown, outline: " + Top());
-            var close = Tab("tc02-a").FindAll(System.Windows.Automation.TreeScope.Descendants, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.Button))
-                .Cast<System.Windows.Automation.AutomationElement>().FirstOrDefault() ?? throw new CaseFailed("no close button");
+            var close = Deep.All(Tab("tc02-a"), new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.Button))
+                .FirstOrDefault() ?? throw new CaseFailed("no close button");
             Click(close.Current.BoundingRectangle, 0.5);
             await Task.Delay(1000);
             if (((JArray)(await c.Call("document.list", new { windowId }))["documents"]!).Any(d => (string)d["documentId"]! == a))
@@ -2250,8 +2364,7 @@ internal static partial class Program
                     }
                 }
                 await Task.Delay(800);
-                var combos = System.Windows.Automation.AutomationElement.FromHandle(window).FindAll(System.Windows.Automation.TreeScope.Descendants,
-                    new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.ComboBox))
+                var combos = Deep.All(System.Windows.Automation.AutomationElement.FromHandle(window), new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.ComboBox))
                     .Cast<System.Windows.Automation.AutomationElement>().ToList();
                 notes.Add("combo boxes: " + string.Join(", ", combos.Select(x => $"'{x.Current.AutomationId}'/'{x.Current.Name}'")));
                 // The first one in the expander is the file's (an automation id once the host has it).
@@ -2259,7 +2372,7 @@ internal static partial class Program
             }
             ((System.Windows.Automation.ExpandCollapsePattern)combo.GetCurrentPattern(System.Windows.Automation.ExpandCollapsePattern.Pattern)).Expand();
             await Task.Delay(500);
-            var items = combo.FindAll(System.Windows.Automation.TreeScope.Descendants, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.ListItem))
+            var items = Deep.All(combo, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.ListItem))
                 .Cast<System.Windows.Automation.AutomationElement>().ToList();
             notes.Add("items: " + string.Join(", ", items.Select(i => i.Current.Name)));
             Check(items.Count == 3, "three file startup actions are offered");
@@ -2305,7 +2418,7 @@ internal static partial class Program
         {
             foreach (System.Windows.Automation.AutomationElement top in System.Windows.Automation.AutomationElement.RootElement.FindAll(System.Windows.Automation.TreeScope.Children,
                 new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ProcessIdProperty, hostPid)))
-                foreach (System.Windows.Automation.AutomationElement e in top.FindAll(System.Windows.Automation.TreeScope.Descendants, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, type)))
+                foreach (System.Windows.Automation.AutomationElement e in Deep.All(top, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, type)))
                     yield return e;
         }
         List<System.Windows.Automation.AutomationElement> NumberBoxes() => HostElements(System.Windows.Automation.ControlType.Edit)
@@ -2537,10 +2650,10 @@ internal static partial class Program
                 if (top.Current.NativeWindowHandle != window.ToInt32()) roots.Add(top);
             foreach (var root in roots)
             {
-                foreach (System.Windows.Automation.AutomationElement item in root.FindAll(System.Windows.Automation.TreeScope.Descendants, menuItem))
+                foreach (System.Windows.Automation.AutomationElement item in Deep.All(root, menuItem))
                     if (item.Current.AutomationId is { Length: > 0 } name) items[name] = item;
                 // The format row is a control of its own, not a menu item.
-                if (root.FindFirst(System.Windows.Automation.TreeScope.Descendants, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.AutomationIdProperty, "MenuFormatItem")) is { } format)
+                if (Deep.First(root, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.AutomationIdProperty, "MenuFormatItem")) is { } format)
                     items["MenuFormatItem"] = format;
             }
         }
@@ -2557,8 +2670,10 @@ internal static partial class Program
     {
         var root = System.Windows.Automation.AutomationElement.FromHandle(window);
         var menuItem = new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.MenuItem);
-        var bar = root.FindFirst(System.Windows.Automation.TreeScope.Descendants,
-            new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.MenuBar))
+        var bar = Deep.First(root, new System.Windows.Automation.AndCondition(
+            new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.MenuBar),
+            // Not the window's system menu bar (one item, System), which a WinUI 3 window also shows.
+            new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.FrameworkIdProperty, "XAML")))
             ?? throw new CaseFailed("no menu bar in the window");
         try
         {
@@ -2567,8 +2682,7 @@ internal static partial class Program
                 if (!top.TryGetCurrentPattern(System.Windows.Automation.ExpandCollapsePattern.Pattern, out var topPattern)) continue;
                 ((System.Windows.Automation.ExpandCollapsePattern)topPattern).Expand();
                 await Task.Delay(400);
-                var item = root.FindFirst(System.Windows.Automation.TreeScope.Descendants,
-                    new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.AutomationIdProperty, automationId));
+                var item = Deep.First(root, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.AutomationIdProperty, automationId));
                 if (item == null)
                 {
                     ((System.Windows.Automation.ExpandCollapsePattern)topPattern).Collapse();
@@ -3431,9 +3545,13 @@ internal static partial class Program
         var opened = (string)(await c.Call("test.window.open"))["windowId"]!;
         var window = await WindowOf(opened, c);
         await Task.Delay(200);
+        var crashesBefore = UnhandledLogs(testRoot);
         PostMessage(window, 0x0010, IntPtr.Zero, IntPtr.Zero);
         for (var i = 0; i < 10 && !host.HasExited; i++) await Task.Delay(500);
         Check(!host.HasExited, "the process lives on after a window was closed while its editor was still being created");
+        var crashes = UnhandledLogs(testRoot).Except(crashesBefore).ToList();
+        foreach (var crash in crashes) notes.Add("unhandled: " + string.Join(" | ", File.ReadLines(crash).Where(l => l.Length > 0).Skip(4).Take(3)));
+        Check(crashes.Count == 0, $"closing the window raised nothing unhandled ({crashes.Count} log(s))");
         using var again = await Session("e2e Q02 after");
         var left = ((JArray)(await again.Call("window.list"))["windows"]!).Count;
         Check(left == 1, $"one window left ({left})");
@@ -3507,8 +3625,19 @@ internal static partial class Program
         var exited = host.WaitForExit(20000);
         if (exited) notes.Add("the process ended");
         else { host.Kill(); host.WaitForExit(10000); }
+        // Closing the windows raised nothing unhandled (a control unloading after its window's services were disposed did).
+        var crashes = UnhandledLogs(testRoot);
+        foreach (var crash in crashes) notes.Add("unhandled: " + string.Join(" | ", File.ReadLines(crash).Where(l => l.Length > 0).Skip(4).Take(3)));
         try { await Task.Delay(1000); Directory.Delete(testRoot, true); } catch (Exception e) { notes.Add("the folder stays: " + e.Message); }
         Check(exited, "the process exits once its last window is closed (it stayed running with no window)");
+        Check(crashes.Count == 0, $"closing the windows raised nothing unhandled ({crashes.Count} log(s))");
+    }
+
+    /// <summary>The unhandled-exception logs the test host wrote under its data folder.</summary>
+    private static List<string> UnhandledLogs(string root)
+    {
+        var logs = Path.Combine(root, "logs");
+        return Directory.Exists(logs) ? Directory.GetFiles(logs, "*UnhandledException*").ToList() : new List<string>();
     }
 
     [DllImport("user32.dll")] private static extern bool PostMessage(IntPtr window, uint message, IntPtr wParam, IntPtr lParam);
@@ -3612,8 +3741,7 @@ internal static partial class Program
         try
         {
             var root = System.Windows.Automation.AutomationElement.FromHandle(window);
-            var button = root.FindFirst(System.Windows.Automation.TreeScope.Descendants,
-                new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.AutomationIdProperty, "PrimaryButton"));
+            var button = Deep.First(root, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.AutomationIdProperty, "PrimaryButton"));
             if (button == null) { lastDialogProblem = "no PrimaryButton under " + window + ": " + Describe(root, 0); return false; }
             ((System.Windows.Automation.InvokePattern)button.GetCurrentPattern(System.Windows.Automation.InvokePattern.Pattern)).Invoke();
             return true;
@@ -3705,6 +3833,7 @@ internal static partial class Program
     [DllImport("user32.dll", CharSet = CharSet.Unicode)] private static extern short VkKeyScanW(char ch);
     [StructLayout(LayoutKind.Sequential)] private struct RECT { public int Left, Top, Right, Bottom; }
     [DllImport("user32.dll")] private static extern bool GetWindowRect(IntPtr window, out RECT rect);
+    [DllImport("user32.dll", EntryPoint = "ClientToScreen")] private static extern bool DmClientToScreen(IntPtr window, ref POINT point);
     [DllImport("user32.dll")] private static extern bool SetCursorPos(int x, int y);
     [StructLayout(LayoutKind.Sequential)] private struct POINT { public int X, Y; }
     [DllImport("user32.dll")] private static extern IntPtr WindowFromPoint(POINT point);

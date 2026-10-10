@@ -10,9 +10,9 @@ using Typedown.Core.Models;
 using Typedown.Core.Controls;
 using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Navigation;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Navigation;
 
 namespace Typedown.Core.Pages.SettingPages
 {
@@ -62,7 +62,7 @@ namespace Typedown.Core.Pages.SettingPages
         {
             // The window's own root: this page is gone by the time the save answers.
             var root = this.GetService<AppViewModel>()?.XamlRoot;
-            _ = Dispatcher.RunIdleAsync(async () =>
+            _ = DispatcherQueue.RunIdleAsync(async () =>
             {
                 // A configuration that could not be saved (the database locked) says so: the edits were lost silently.
                 if (ExportConfig != null && !await ExportService.Value.SaveExportConfig(ExportConfig) && root != null)

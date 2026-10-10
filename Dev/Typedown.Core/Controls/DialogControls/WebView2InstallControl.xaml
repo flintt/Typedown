@@ -5,7 +5,7 @@
     xmlns:local="using:Typedown.Core.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:ui="using:Typedown.XamlUI"
+    xmlns:chrome="using:Typedown.Core.Utilities"
     xmlns:u="using:Typedown.Core.Utilities"
     mc:Ignorable="d"
     Unloaded="OnUnloaded"
@@ -21,7 +21,7 @@
         <StackPanel Grid.RowSpan="3" VerticalAlignment="Top" Orientation="Horizontal" Height="32" Padding="8,0" Spacing="8">
             <StackPanel.Style>
                 <Style TargetType="StackPanel">
-                    <Setter Property="ui:XamlWindow.Drag" Value="True"/>
+                    <Setter Property="chrome:WindowChrome.Drag" Value="True"/>
                 </Style>
             </StackPanel.Style>
         </StackPanel>

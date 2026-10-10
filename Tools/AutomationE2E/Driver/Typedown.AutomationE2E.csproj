@@ -18,4 +18,9 @@
     <!-- IU02 makes its bucket and reads the object back with the application's own signing. -->
     <Compile Include="..\..\..\Dev\Typedown.Core\Services\S3Uploader.cs" Link="S3Uploader.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <!-- PF03: a CPU sample trace of the test host (EventPipe), summarized by the driver itself. -->
+    <PackageReference Include="Microsoft.Diagnostics.NETCore.Client" Version="0.2.553101" />
+    <PackageReference Include="Microsoft.Diagnostics.Tracing.TraceEvent" Version="3.1.19" />
+  </ItemGroup>
 </Project>

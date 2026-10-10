@@ -9,12 +9,12 @@ using Typedown.Core.Models;
 using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
 using Windows.ApplicationModel.DataTransfer;
-using Windows.Devices.Input;
+using Microsoft.UI.Input;
 using Windows.Foundation;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Input;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls.Primitives;
+using Microsoft.UI.Xaml.Input;
 
 namespace Typedown.Core.Controls
 {

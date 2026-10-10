@@ -4,8 +4,8 @@ using Typedown.Core.Interfaces;
 using Typedown.Core.Models;
 using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
 using muxc = Microsoft.UI.Xaml.Controls;
 
 namespace Typedown.Core.Controls.EditorControls.MenuBarItems
@@ -24,11 +24,11 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             Loaded += OnLoaded;
         }
 
-        private void OnLoaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void OnLoaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
         {
             // An exception here runs on the dispatcher with nothing above it to catch it, which on XAML islands
             // takes the process down without a report.
-            _ = Dispatcher.RunIdleAsync(() =>
+            _ = DispatcherQueue.RunIdleAsync(() =>
             {
                 if (!IsLoaded) return;
                 try
@@ -63,14 +63,14 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             }
         }
 
-        private void OnCommandClick(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void OnCommandClick(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
         {
             var root = XamlRoot;
             if (root == null) return;
-            var dispatcher = Dispatcher;
+            var dispatcher = DispatcherQueue;
             _ = System.Threading.Tasks.Task.Delay(150).ContinueWith(t => _ = dispatcher.RunIdleAsync(_ =>
             {
-                if (Windows.UI.Xaml.Media.VisualTreeHelper.GetOpenPopupsForXamlRoot(root).Count > 0) return;
+                if (Microsoft.UI.Xaml.Media.VisualTreeHelper.GetOpenPopupsForXamlRoot(root).Count > 0) return;
                 var focused = FocusManager.GetFocusedElement(root);
                 if (focused != null && !(focused is muxc.MenuBarItem)) return;
                 ViewModel?.MarkdownEditor?.FocusEditor();
@@ -94,7 +94,7 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
                 if (PInvoke.GetForegroundWindow() != ViewModel.MainWindow) return;
                 if (VimWants(e)) return;
                 e.Handled = true;
-                _ = Dispatcher.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => action());
+                _ = DispatcherQueue.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => action());
             }));
         }
 
@@ -128,7 +128,7 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             var focused = PInvoke.GetForegroundWindow();
             if (focused != ViewModel.MainWindow)
                 return false;
-            _ = Dispatcher.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => TriggerMenuFlyoutItem(item));
+            _ = DispatcherQueue.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => TriggerMenuFlyoutItem(item));
             return true;
         }
 
@@ -138,7 +138,7 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             var focused = FocusManager.GetFocusedElement(XamlRoot);
             if (focused != editor)
                 return false;
-            _ = Dispatcher.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => TriggerMenuFlyoutItem(item));
+            _ = DispatcherQueue.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => TriggerMenuFlyoutItem(item));
             return true;
         }
 
@@ -157,7 +157,7 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             }
         }
 
-        private void OnUnloaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void OnUnloaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
         {
             disposables.Clear();
         }

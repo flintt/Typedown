@@ -1,6 +1,6 @@
 ﻿using System.Reactive.Subjects;
 using Windows.Foundation;
-using Windows.UI.Xaml;
+using Microsoft.UI.Xaml;
 
 namespace Typedown.Core.Interfaces
 {

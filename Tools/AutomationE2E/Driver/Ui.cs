@@ -18,13 +18,13 @@ internal static partial class Program
     // ---- finding and waiting ----
 
     private static AutomationElement? FindIn(IntPtr window, string automationId) =>
-        AutomationElement.FromHandle(window).FindFirst(TreeScope.Descendants, new PropertyCondition(AutomationElement.AutomationIdProperty, automationId));
+        Deep.First(AutomationElement.FromHandle(window), new PropertyCondition(AutomationElement.AutomationIdProperty, automationId));
 
     private static AutomationElement? FindNamed(IntPtr window, string name, ControlType? type = null)
     {
         Condition condition = new PropertyCondition(AutomationElement.NameProperty, name);
         if (type != null) condition = new AndCondition(condition, new PropertyCondition(AutomationElement.ControlTypeProperty, type));
-        return AutomationElement.FromHandle(window).FindFirst(TreeScope.Descendants, condition);
+        return Deep.First(AutomationElement.FromHandle(window), condition);
     }
 
     /// <summary>The element once it is there; a failure that says what was waited for when it is not.</summary>

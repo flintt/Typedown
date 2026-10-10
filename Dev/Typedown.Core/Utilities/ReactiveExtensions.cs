@@ -7,8 +7,8 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Data;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Data;
 
 namespace Typedown.Core.Utilities
 {
@@ -38,12 +38,22 @@ namespace Typedown.Core.Utilities
 
         public static IObservable<EventPattern<NotifyCollectionChangedEventArgs>> GetCollectionObservable(this INotifyCollectionChanged collection)
         {
-            return Observable.FromEventPattern<NotifyCollectionChangedEventArgs>(collection, nameof(collection.CollectionChanged));
+            // With the handlers named, not the event by its name: a trimmed build has no metadata to find it by.
+            return Observable.FromEventPattern<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
+                handler => (sender, e) => handler(sender, e), handler => collection.CollectionChanged += handler, handler => collection.CollectionChanged -= handler);
         }
 
         public static IObservable<EventPattern<PropertyChangedEventArgs>> GetPropertyObservable(this INotifyPropertyChanged obj)
         {
-            return Observable.FromEventPattern<PropertyChangedEventArgs>(obj, nameof(obj.PropertyChanged));
+            return Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
+                handler => (sender, e) => handler(sender, e), handler => obj.PropertyChanged += handler, handler => obj.PropertyChanged -= handler);
+        }
+
+        /// <summary>UISettings.ColorValuesChanged (the system's colours or theme changed), raised off the UI thread.</summary>
+        public static IObservable<EventPattern<object>> GetColorValuesObservable(this global::Windows.UI.ViewManagement.UISettings settings)
+        {
+            return Observable.FromEventPattern<global::Windows.Foundation.TypedEventHandler<global::Windows.UI.ViewManagement.UISettings, object>, object>(
+                handler => (sender, e) => handler(sender, e), handler => settings.ColorValuesChanged += handler, handler => settings.ColorValuesChanged -= handler);
         }
 
         private class ValueObject : DependencyObject

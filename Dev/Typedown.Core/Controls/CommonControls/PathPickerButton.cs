@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Typedown.Core.Interfaces;
 using Typedown.Core.Utilities;
 using Windows.Storage.Pickers;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 
 namespace Typedown.Core.Controls
 {

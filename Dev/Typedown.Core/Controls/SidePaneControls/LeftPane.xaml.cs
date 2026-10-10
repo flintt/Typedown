@@ -4,9 +4,9 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media.Animation;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media.Animation;
 using muxc = Microsoft.UI.Xaml.Controls;
 
 namespace Typedown.Core.Controls
@@ -25,6 +25,17 @@ namespace Typedown.Core.Controls
         public LeftPane()
         {
             InitializeComponent();
+            // One brush for the marks, there before any is drawn: a new accent is a new colour of it and reaches every
+            // mark at once. The bar under Files/Outline finds it here; the rows of the outline and the folder tree in the
+            // application's resources - a row WinUI builds (or recycles) away from the pane looks up only those, and one
+            // outline row kept the system accent under a custom theme. Only these two trees use that key.
+            Resources[NavigationAccentKey] = AccentBrush;
+            Application.Current.Resources[TreeAccentKey] = AccentBrush;
+            // A row under the pointer or pressed draws its mark from keys of its own (the selected heading turned the
+            // system blue whenever the mouse was over it): the same colour, a little lighter, as WinUI's own are.
+            Application.Current.Resources[TreeAccentKey + "PointerOver"] = AccentPointerOverBrush;
+            Application.Current.Resources[TreeAccentKey + "Pressed"] = AccentPressedBrush;
+            Root.ActualThemeChanged += (_, _) => UpdateAccent();
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
@@ -42,7 +53,7 @@ namespace Typedown.Core.Controls
             // main page; a change from another window or the automation API leaves this one, so the tabs follow it
             // here, once the language has been applied.
             disposables.Add(Settings.WhenPropertyChanged(nameof(SettingsViewModel.Language))
-                .Subscribe(language => _ = Dispatcher.RunIdleAsync(args =>
+                .Subscribe(language => _ = DispatcherQueue.RunIdleAsync(args =>
                 {
                     Folder.Content = Locale.GetString("Files");
                     Toc.Content = Locale.GetString("Outline");
@@ -50,6 +61,9 @@ namespace Typedown.Core.Controls
             disposables.Add(Settings.WhenPropertyChanged(nameof(SettingsViewModel.CustomTheme))
                 .StartWith(Settings.CustomTheme)
                 .Subscribe(_ => UpdateAccent()));
+            // The system's accent changed (Windows settings): raised off the UI thread.
+            disposables.Add(uiSettings.GetColorValuesObservable()
+                .Subscribe(_ => DispatcherQueue.TryEnqueue(UpdateAccent)));
         }
 
         // The marks of what is chosen here - the bar under Files/Outline, the pill beside the current heading in the
@@ -57,21 +71,27 @@ namespace Typedown.Core.Controls
         // from Windows, not from the custom theme: with any theme they stayed the system blue. A theme with an
         // accent of its own has it put here, where the Files/Outline bar, the outline and the folder tree all look it up; a
         // theme without one leaves the system accent. Each window has its own pane and so its own brush.
-        private static readonly string[] AccentKeys = { "NavigationViewSelectionIndicatorForeground", "TreeViewItemSelectionIndicatorForeground" };
+        private const string NavigationAccentKey = "NavigationViewSelectionIndicatorForeground";
+
+        private const string TreeAccentKey = "TreeViewItemSelectionIndicatorForeground";
+
+        // Shared by the windows' panes: the custom theme is one setting for all of them, and they share the UI thread.
+        private static readonly Microsoft.UI.Xaml.Media.SolidColorBrush AccentBrush = new();
+
+        private static readonly Microsoft.UI.Xaml.Media.SolidColorBrush AccentPointerOverBrush = new() { Opacity = 0.9 };
+
+        private static readonly Microsoft.UI.Xaml.Media.SolidColorBrush AccentPressedBrush = new() { Opacity = 0.8 };
+
+        private readonly global::Windows.UI.ViewManagement.UISettings uiSettings = new();
 
         private void UpdateAccent()
         {
-            var accent = ThemeFiles.Brush(ThemeFiles.Find(Settings?.CustomTheme)?.Accent);
-            foreach (var key in AccentKeys)
-            {
-                if (accent == null) Resources.Remove(key);
-                else Resources[key] = accent;
-            }
-            // What is already on screen looked its brushes up when it was built; flipping the theme and back makes
-            // it look them up again (as in the tab bar).
-            var requested = Root.RequestedTheme;
-            Root.RequestedTheme = Root.ActualTheme == ElementTheme.Dark ? ElementTheme.Light : ElementTheme.Dark;
-            Root.RequestedTheme = requested;
+            var custom = ThemeFiles.Brush(ThemeFiles.Find(Settings?.CustomTheme)?.Accent) as Microsoft.UI.Xaml.Media.SolidColorBrush;
+            // Without one, the system accent in the shade WinUI gives these marks (AccentFillColorDefault): darker on a
+            // light theme, lighter on a dark one.
+            AccentPointerOverBrush.Color = AccentPressedBrush.Color = AccentBrush.Color = custom?.Color ?? uiSettings.GetColorValue(Root.ActualTheme == ElementTheme.Dark
+                ? global::Windows.UI.ViewManagement.UIColorType.AccentLight2
+                : global::Windows.UI.ViewManagement.UIColorType.AccentDark1);
         }
 
         private void UpdateSelectedItem(int index)

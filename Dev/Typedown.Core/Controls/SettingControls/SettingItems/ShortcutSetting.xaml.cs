@@ -9,8 +9,8 @@ using System.Reflection;
 using Typedown.Core.Models;
 using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 
 namespace Typedown.Core.Controls.SettingControls.SettingItems
 {
@@ -41,8 +41,8 @@ namespace Typedown.Core.Controls.SettingControls.SettingItems
             LoadAllShortcutSettingItems();
             disposables.Add(this.Binding(new(nameof(SearchText))).Merge(this.Binding(new(nameof(FliterCategory))))
                 .Throttle(TimeSpan.FromMilliseconds(100))
-                .Subscribe(_ => _ = Dispatcher.RunIdleAsync(() => UpdateFilteredSettingItems())));
-            _ = Dispatcher.RunIdleAsync(() => UpdateFilteredSettingItems());
+                .Subscribe(_ => _ = DispatcherQueue.RunIdleAsync(() => UpdateFilteredSettingItems())));
+            _ = DispatcherQueue.RunIdleAsync(() => UpdateFilteredSettingItems());
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)

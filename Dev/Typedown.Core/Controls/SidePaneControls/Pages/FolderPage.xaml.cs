@@ -13,10 +13,10 @@ using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
 using muxc = Microsoft.UI.Xaml.Controls;
 
 namespace Typedown.Core.Controls.SidePanelControls.Pages
@@ -427,7 +427,7 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
                         FileOperation.Rename(item.FullPath, newPath);
                     return System.Threading.Tasks.Task.CompletedTask;
                 });
-                _ = Dispatcher.RunIdleAsync(() => UpdateSelectedItem(WorkFolderExplorerItem));
+                _ = DispatcherQueue.RunIdleAsync(() => UpdateSelectedItem(WorkFolderExplorerItem));
             }
         }
 
@@ -439,7 +439,7 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             var treeViewItemPointerReleasedEventHandler = new PointerEventHandler(page.OnTreeViewItemPointerReleased);
             grid.AddHandler(PointerPressedEvent, treeViewItemPointerPressedEventHandler, true);
             item.AddHandler(PointerReleasedEvent, treeViewItemPointerReleasedEventHandler, true);
-            var treeViewItemDoubleTappedEventHandler = new Windows.UI.Xaml.Input.DoubleTappedEventHandler(page.OnTreeViewItemDoubleTapped);
+            var treeViewItemDoubleTappedEventHandler = new Microsoft.UI.Xaml.Input.DoubleTappedEventHandler(page.OnTreeViewItemDoubleTapped);
             item.AddHandler(DoubleTappedEvent, treeViewItemDoubleTappedEventHandler, true);
             if (item.DataContext is ExplorerItem explorerItem)
                 page.UpdateSelectedItem(explorerItem);
@@ -455,7 +455,7 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             }
         }
 
-        private static void OnTreeViewItemPointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        private static void OnTreeViewItemPointerPressed(object sender, Microsoft.UI.Xaml.Input.PointerRoutedEventArgs e)
         {
             if ((e.OriginalSource as FrameworkElement).Name != "ExpandCollapseChevron" && (e.OriginalSource as FrameworkElement).GetAncestor<TextBox>() == null)
             {
@@ -473,12 +473,12 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
         // has already replaced the current document and the double click has nothing left to do).
         private System.Threading.CancellationTokenSource pendingSingleClickOpen;
 
-        private async void OnTreeViewItemPointerReleased(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        private async void OnTreeViewItemPointerReleased(object sender, Microsoft.UI.Xaml.Input.PointerRoutedEventArgs e)
         {
             try
             {
                 var kind = e.GetCurrentPoint(sender as UIElement).Properties.PointerUpdateKind;
-                if (kind == Windows.UI.Input.PointerUpdateKind.LeftButtonReleased &&
+                if (kind == Microsoft.UI.Input.PointerUpdateKind.LeftButtonReleased &&
                     (sender as muxc.TreeViewItem).DataContext is ExplorerItem item &&
                     item.Type == ExplorerItem.ExplorerItemType.File && !item.IsNotice &&
                     item.FullPath != ViewModel.FileViewModel.FilePath)
@@ -504,7 +504,7 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             }
         }
 
-        private async void OnTreeViewItemDoubleTapped(object sender, Windows.UI.Xaml.Input.DoubleTappedRoutedEventArgs e)
+        private async void OnTreeViewItemDoubleTapped(object sender, Microsoft.UI.Xaml.Input.DoubleTappedRoutedEventArgs e)
         {
             try
             {

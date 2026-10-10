@@ -18,7 +18,7 @@ Dev/Typedown.Core/Resources/Strings/<language>/
 
 1. `Dev/Typedown.Core/Utilities/Locale.cs` 的 `SupportedLangs`；
 2. `Dev/Typedown.Core/Resources/Strings/` 下的目录；
-3. `Tools/Typedown.Package/Package.appxmanifest` 的 `<Resource Language="…"/>`。
+3. `Dev/Typedown/Package.appxmanifest` 的 `<Resource Language="…"/>`。
 
 可靠性测试会比较这三处。新增语言时必须同时修改，删除语言时也一样。
 

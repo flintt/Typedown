@@ -1,8 +1,8 @@
 ﻿using System;
 using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 
 namespace Typedown.Core.Controls
 {
@@ -12,12 +12,12 @@ namespace Typedown.Core.Controls
         /// Paints this bar from a custom theme. Null puts the colours of the built-in theme back; the inner
         /// grid carries the visible background, so setting the control's own is not enough.
         /// </summary>
-        public void ApplyThemeBrushes(Windows.UI.Xaml.Media.Brush background, Windows.UI.Xaml.Media.Brush foreground)
+        public void ApplyThemeBrushes(Microsoft.UI.Xaml.Media.Brush background, Microsoft.UI.Xaml.Media.Brush foreground)
         {
             if (RootGrid != null)
             {
                 if (background != null) RootGrid.Background = background;
-                else RootGrid.ClearValue(Windows.UI.Xaml.Controls.Panel.BackgroundProperty);
+                else RootGrid.ClearValue(Microsoft.UI.Xaml.Controls.Panel.BackgroundProperty);
             }
             if (foreground != null) Foreground = foreground;
             else ClearValue(ForegroundProperty);

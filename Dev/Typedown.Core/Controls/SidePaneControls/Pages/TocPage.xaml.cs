@@ -1,6 +1,7 @@
 ﻿using Typedown.Core.ViewModels;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Typedown.Core.Utilities;
 
 namespace Typedown.Core.Controls.SidePanelControls.Pages
 {
@@ -36,12 +37,12 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
         // The selection is the tree's alone now. The row used to bind IsSelected both ways to the item model,
         // and the tree, the binding and the model then kept each other informed of every change while the
         // whole outline was being torn down and rebuilt twice per tab switch — twenty quick switches ended
-        // in a stack overflow inside Windows.UI.Xaml. Nothing writes the model's mark back from the tree.
+        // in a stack overflow inside Microsoft.UI.Xaml. Nothing writes the model's mark back from the tree.
         private bool marking;
 
         private void OnOutlineHighlighted(string slug)
         {
-            _ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () =>
+            _ = DispatcherQueue.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () =>
             {
                 marking = true;
                 try
@@ -64,11 +65,11 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
         // the selection has the tree focused, the page marking a heading does not.
         private bool TreeHasFocus()
         {
-            var focused = Windows.UI.Xaml.Input.FocusManager.GetFocusedElement(XamlRoot) as DependencyObject;
+            var focused = Microsoft.UI.Xaml.Input.FocusManager.GetFocusedElement(XamlRoot) as DependencyObject;
             while (focused != null)
             {
                 if (focused == TreeView) return true;
-                focused = Windows.UI.Xaml.Media.VisualTreeHelper.GetParent(focused);
+                focused = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetParent(focused);
             }
             return false;
         }
@@ -98,10 +99,10 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
         private ListView FindList(DependencyObject root)
         {
             if (list != null) return list;
-            var count = Windows.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(root);
+            var count = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(root);
             for (var i = 0; i < count; i++)
             {
-                var child = Windows.UI.Xaml.Media.VisualTreeHelper.GetChild(root, i);
+                var child = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChild(root, i);
                 if (child is ListView lv) return list = lv;
                 var found = FindList(child);
                 if (found != null) return found;
@@ -118,7 +119,7 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
                 Editor?.JumpBySlug(item.TocItem.Slug);
                 // The reader picked the heading to write there: the keys go to the text, not to the outline (where
                 // they started a search in it). Moving through the outline with the arrows does not come here.
-                _ = Dispatcher.RunIdleAsync(_ => ViewModel?.MarkdownEditor?.FocusEditor());
+                _ = DispatcherQueue.RunIdleAsync(_ => ViewModel?.MarkdownEditor?.FocusEditor());
             }
         }
 
