@@ -23,7 +23,117 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             watched = Editor;
-            if (watched != null) watched.OutlineHighlighted += OnOutlineHighlighted;
+            if (watched != null)
+            {
+                watched.OutlineHighlighted += OnOutlineHighlighted;
+                watched.OutlineUpdated += OnOutlineUpdated;
+            }
+            OnOutlineUpdated();
+        }
+
+        // ---- the tree's nodes ----
+        // The tree is given nodes this page makes, not the item models as its ItemsSource. Given the models, the tree made
+        // its own nodes and kept a heading's expansion twice, on its node and (bound both ways) on the model; a row it
+        // made late, below the fold of an outline just handed over for another tab, came up with a fresh node's
+        // "collapsed" while the model said expanded, so a heading's children were hidden now and then with nobody
+        // having collapsed it (OL01). Setting those nodes from outside crashed inside the tree while it was rebuilding.
+        // Here each node is made with its expansion, the reader's expanding and collapsing is copied to the model, and
+        // nothing else writes either.
+
+        private Models.TocTreeItem shownToc;
+
+        private void OnOutlineUpdated()
+        {
+            var toc = Editor?.Toc;
+            try
+            {
+                if (toc == null) { TreeView.RootNodes.Clear(); shownToc = null; return; }
+                if (!ReferenceEquals(toc, shownToc))
+                {
+                    // Another document: its outline in one step.
+                    TreeView.RootNodes.Clear();
+                    foreach (var item in toc.Children) TreeView.RootNodes.Add(MakeNode(item));
+                    shownToc = toc;
+                    return;
+                }
+                // The same document's outline again (an edit): the nodes of headings still there are kept, with their
+                // expansion; those gone are removed and new ones made.
+                Reconcile(TreeView.RootNodes, toc.Children);
+            }
+            catch (System.Exception ex) { Utilities.Log.Debug($"outline: could not show the outline: {ex.Message}"); }
+        }
+
+        private static TreeViewNode MakeNode(Models.TocTreeItem item)
+        {
+            var node = new TreeViewNode { Content = item };
+            foreach (var child in item.Children) node.Children.Add(MakeNode(child));
+            node.IsExpanded = item.IsExpanded;
+            return node;
+        }
+
+        private static void Reconcile(System.Collections.Generic.IList<TreeViewNode> nodes, System.Collections.Generic.IList<Models.TocTreeItem> items)
+        {
+            var wanted = new System.Collections.Generic.HashSet<Models.TocTreeItem>(items, System.Collections.Generic.ReferenceEqualityComparer.Instance);
+            for (var i = nodes.Count - 1; i >= 0; i--)
+                if (!(nodes[i].Content is Models.TocTreeItem had && wanted.Contains(had))) nodes.RemoveAt(i);
+            for (var i = 0; i < items.Count; i++)
+            {
+                var item = items[i];
+                if (i < nodes.Count && ReferenceEquals(nodes[i].Content, item))
+                {
+                    Reconcile(nodes[i].Children, item.Children);
+                    continue;
+                }
+                var at = -1;
+                for (var j = i + 1; j < nodes.Count; j++)
+                    if (ReferenceEquals(nodes[j].Content, item)) { at = j; break; }
+                if (at < 0)
+                {
+                    nodes.Insert(i, MakeNode(item));
+                    continue;
+                }
+                var moved = nodes[at];
+                nodes.RemoveAt(at);
+                nodes.Insert(i, moved);
+                Reconcile(moved.Children, item.Children);
+            }
+        }
+
+        // The reader's expanding and collapsing, kept on the model: a later edit's outline keeps it, and the model is
+        // what expanding to the current heading starts from.
+        private void OnNodeExpanding(TreeView sender, TreeViewExpandingEventArgs args)
+        {
+            if (args.Node?.Content is Models.TocTreeItem item) item.IsExpanded = true;
+        }
+
+        private void OnNodeCollapsed(TreeView sender, TreeViewCollapsedEventArgs args)
+        {
+            if (args.Node?.Content is Models.TocTreeItem item) item.IsExpanded = false;
+        }
+
+        private static void SetExpanded(System.Collections.Generic.IList<TreeViewNode> nodes, bool expanded)
+        {
+            foreach (var node in nodes)
+            {
+                if (node.Children.Count > 0) node.IsExpanded = expanded;
+                if (node.Content is Models.TocTreeItem item) item.IsExpanded = expanded;
+                SetExpanded(node.Children, expanded);
+            }
+        }
+
+        // Every heading above the current one opened (and the current one), as the model's ExpandToSelected did.
+        private static bool ExpandTo(System.Collections.Generic.IList<TreeViewNode> nodes, string slug)
+        {
+            foreach (var node in nodes)
+            {
+                if ((node.Content as Models.TocTreeItem)?.TocItem?.Slug == slug || ExpandTo(node.Children, slug))
+                {
+                    if (node.Children.Count > 0) node.IsExpanded = true;
+                    if (node.Content is Models.TocTreeItem item) item.IsExpanded = true;
+                    return true;
+                }
+            }
+            return false;
         }
 
         // The mark is set on the item model and reaches the row through the IsSelected binding of its
@@ -47,6 +157,7 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
                 marking = true;
                 try
                 {
+                    if (ViewModel?.SettingsViewModel?.TocAutoExpand ?? true) ExpandTo(TreeView.RootNodes, slug);
                     var node = FindNode(TreeView.RootNodes, slug);
                     if (node == null) { Utilities.Log.Debug($"outline: no row for {slug} in the pane"); return; }
                     if (TreeView.SelectedNode != node) TreeView.SelectedNode = node;
@@ -78,7 +189,7 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
         {
             if (marking || !TreeHasFocus()) return;
             foreach (var added in args.AddedItems)
-                if (added is Models.TocTreeItem item && item.TocItem?.Slug != null && item.TocItem.Slug != Editor?.AppliedCurSlug)
+                if (ContentOf(added) is Models.TocTreeItem item && item.TocItem?.Slug != null && item.TocItem.Slug != Editor?.AppliedCurSlug)
                 { Editor?.JumpBySlug(item.TocItem.Slug); return; }
         }
 
@@ -114,7 +225,7 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
         // away) changed nothing, which reads as "single click does not work" (upstream #59, #2). Always jump on click.
         private void OnItemInvoked(Microsoft.UI.Xaml.Controls.TreeView sender, Microsoft.UI.Xaml.Controls.TreeViewItemInvokedEventArgs args)
         {
-            if (args.InvokedItem is Models.TocTreeItem item && item.TocItem?.Slug != null)
+            if (ContentOf(args.InvokedItem) is Models.TocTreeItem item && item.TocItem?.Slug != null)
             {
                 Editor?.JumpBySlug(item.TocItem.Slug);
                 // The reader picked the heading to write there: the keys go to the text, not to the outline (where
@@ -123,14 +234,22 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             }
         }
 
-        private void OnExpandAllClick(object sender, RoutedEventArgs e) => Editor?.Toc?.SetExpandedRecursive(true);
+        // With nodes given to it, the tree hands its nodes to these, not the models.
+        private static object ContentOf(object item) => item is TreeViewNode node ? node.Content : item;
 
-        private void OnCollapseAllClick(object sender, RoutedEventArgs e) => Editor?.Toc?.SetExpandedRecursive(false);
+        private void OnExpandAllClick(object sender, RoutedEventArgs e) => SetExpanded(TreeView.RootNodes, true);
+
+        private void OnCollapseAllClick(object sender, RoutedEventArgs e) => SetExpanded(TreeView.RootNodes, false);
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
-            if (watched != null) watched.OutlineHighlighted -= OnOutlineHighlighted;
+            if (watched != null)
+            {
+                watched.OutlineHighlighted -= OnOutlineHighlighted;
+                watched.OutlineUpdated -= OnOutlineUpdated;
+            }
             watched = null;
+            shownToc = null;
             list = null;
             Bindings?.StopTracking();
         }

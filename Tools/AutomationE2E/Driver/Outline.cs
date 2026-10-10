@@ -75,6 +75,22 @@ internal static partial class Program
                     bad.Add($"round {round} {r["name"]}: model {r["model"]}, node {(r["node"]!.Type == JTokenType.Null ? "none" : r["node"])}, node children {r["nodeChildren"]}/{r["children"]}");
             }
         }
+        // An edit of the shown document: the outline is that document's again, a heading renamed in place.
+        var shownText = System.IO.File.ReadAllText(paths[current]).Replace($"## {prefixes[current]}1.2\n", $"## {prefixes[current]}1.2 renamed\n");
+        await c.Call("document.replace", new { documentId = ids[current], baseRevision = await Revision(c, ids[current]), text = shownText, normalizationPolicy = "allowUnknown" });
+        JArray edited = new();
+        for (var i = 0; i < 40; i++)
+        {
+            edited = (JArray)(await c.Call("test.outline.state", new { windowId }))["rows"]!;
+            if (edited.Any(r => (string?)r["name"] == $"{prefixes[current]}1.2 renamed")) break;
+            await Task.Delay(100);
+        }
+        await Task.Delay(500);
+        edited = (JArray)(await c.Call("test.outline.state", new { windowId }))["rows"]!;
+        notes.Add($"after an edit: {edited.Count} rows, renamed row {(edited.Any(r => (string?)r["name"] == $"{prefixes[current]}1.2 renamed") ? "shown" : "missing")}");
+        Check(edited.Count == 30 && edited.Any(r => (string?)r["name"] == $"{prefixes[current]}1.2 renamed"), "an edited heading is renamed in the outline");
+        foreach (var r in edited.Where(r => (int)r["children"]! > 0 && ((bool)r["model"]! == false || (bool?)r["node"] != true)))
+            bad.Add($"after the edit {r["name"]}: model {r["model"]}, node {r["node"]}");
         notes.Add($"{checkedRounds} rounds checked, {bad.Count} collapsed rows");
         foreach (var b in bad.Take(12)) notes.Add(b);
         Check(bad.Count == 0, "no heading with headings under it is collapsed after a tab switch");

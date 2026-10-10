@@ -519,6 +519,9 @@ namespace Typedown.Core.ViewModels
         /// </summary>
         public event Action<string> OutlineHighlighted;
 
+        /// <summary>Raised when <see cref="Toc"/> has been rebuilt from a report (another document's, or an edit's).</summary>
+        public event Action OutlineUpdated;
+
         public void OnStateChange(JToken arg)
         {
             // Cleared whatever the report describes: it means the editor has answered, and leaving it set
@@ -574,7 +577,11 @@ namespace Typedown.Core.ViewModels
             {
                 rebuildingToc = false;
             }
-            if (ContentState.Cur != null && pendingOutlineSlug == null)
+            OutlineUpdated?.Invoke();
+            // Raised for every report with a current heading, a kept one following or not: the kept one is often that
+            // same heading, which the call below then takes as already marked and passes over - and the outline just
+            // handed over for another tab was never marked.
+            if (ContentState.Cur != null)
                 OutlineHighlighted?.Invoke(ContentState.Cur.Slug);
             if (pendingOutlineSlug != null)
             {
