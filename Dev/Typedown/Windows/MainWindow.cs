@@ -411,39 +411,41 @@ namespace Typedown.Windows
             if (args.DidPresenterChange || args.DidSizeChange) ScheduleEditorLayoutCheck();
         }
 
-        // A window brought back from the taskbar now and then showed a blank editor: the window, its content and the
-        // XAML root had their size back, but the editor and its web view kept the minimized window's 144x0, and the
-        // page, counting itself hidden, drew nothing and took no document (MN02 in a run after full screen; MN03). The
-        // editor's ancestors are told to lay out again when that is seen, after the window changes size or state and
-        // when it is activated.
+        // A window brought back from the taskbar now and then showed a blank editor (MN02 after full screen, MN03): the
+        // window, its content window and XamlRoot.Size were the restored size, but WinUI's own outermost elements (a
+        // ScrollViewer and a Border above our content, which it gives the window's size as a fixed Width and Height)
+        // still said the minimized 144x31, so everything under them - the editor and its web view at 144x0, the page
+        // counting itself hidden and taking no document - was laid out in that. After the window changes size or state
+        // and when it is activated, a fixed size above RootControl that is not the XamlRoot's is set to it.
         private void ScheduleEditorLayoutCheck()
         {
-            _ = DispatcherQueue.RunIdleAsync(_ => EnsureEditorLaidOut());
-            _ = Task.Delay(300).ContinueWith(_ => DispatcherQueue.TryEnqueue(EnsureEditorLaidOut));
+            _ = DispatcherQueue.RunIdleAsync(_ => FixStaleRootSize());
+            _ = Task.Delay(300).ContinueWith(_ => DispatcherQueue.TryEnqueue(FixStaleRootSize));
         }
 
-        private void EnsureEditorLaidOut()
+        private void FixStaleRootSize()
         {
             try
             {
                 if (AppWindow.Presenter is OverlappedPresenter { State: OverlappedPresenterState.Minimized }) return;
-                if (AppViewModel?.MarkdownEditor is not FrameworkElement editor || !editor.IsLoaded || !IsShown(editor)) return;
-                if (RootControl == null || RootControl.ActualWidth < 200 || RootControl.ActualHeight < 200) return;
-                if (editor.ActualWidth > 0 && editor.ActualHeight > 0 && editor.ActualWidth >= RootControl.ActualWidth / 4) return;
-                Log.Debug($"editor layout: {editor.ActualWidth:0}x{editor.ActualHeight:0} in a {RootControl.ActualWidth:0}x{RootControl.ActualHeight:0} window - laid out again");
-                for (DependencyObject node = editor; node != null; node = VisualTreeHelper.GetParent(node))
+                var size = RootControl?.XamlRoot?.Size ?? default;
+                if (RootControl == null || size.Width < 200 || size.Height < 200) return;
+                var above = false;
+                for (DependencyObject node = RootControl; node != null; node = VisualTreeHelper.GetParent(node))
                 {
-                    if (node is UIElement element)
-                    {
-                        element.InvalidateMeasure();
-                        element.InvalidateArrange();
-                    }
-                    if (node == RootControl) break;
+                    if (node == RootControl) { above = true; continue; }
+                    if (!above || node is not FrameworkElement element) continue;
+                    var stale = (!double.IsNaN(element.Width) && Math.Abs(element.Width - size.Width) > 1)
+                        || (!double.IsNaN(element.Height) && Math.Abs(element.Height - size.Height) > 1);
+                    if (!stale) continue;
+                    Log.Debug($"window size: {element.GetType().Name} kept {element.Width:0}x{element.Height:0} in a {size.Width:0}x{size.Height:0} window - set to the window's");
+                    if (!double.IsNaN(element.Width)) element.Width = size.Width;
+                    if (!double.IsNaN(element.Height)) element.Height = size.Height;
                 }
             }
             catch (Exception ex)
             {
-                Log.Debug($"editor layout: {ex.Message}");
+                Log.Debug($"window size: {ex.Message}");
             }
         }
 
