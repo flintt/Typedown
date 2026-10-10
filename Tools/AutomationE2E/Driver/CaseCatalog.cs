@@ -8,9 +8,14 @@ using System.Linq;
 /// the WinUI 3 move keeps breaking: focus and keys, window chrome, outline, themes, menus) or full only - and the areas
 /// it touches. A fix runs @quick and the areas of what it changed; a push for CI, a package or a release runs everything.
 /// </summary>
-internal static class CaseCatalog
+internal static partial class CaseCatalog
 {
     private sealed record Entry(bool Quick, string[] Areas);
+
+    /// <summary>An edition's own cases with their tiers, areas and purposes (Edition.&lt;name&gt;.cs, in the edition's repository).</summary>
+    static partial void EditionCatalog(Dictionary<string, Entry> cases, Dictionary<string, string> purposes);
+
+    static CaseCatalog() => EditionCatalog(Cases, Purposes);
 
     private static Entry Q(params string[] areas) => new(true, areas);
 
@@ -104,27 +109,6 @@ internal static class CaseCatalog
         ["PF03"] = F("perf"),
         ["PF02"] = F("perf"),
         ["Q01"] = F("window"),
-        // An edition's own cases (Edition.<name>.cs in the edition's repository): a name no case has is simply not run.
-        ["TY01"] = F("edition", "menus"),
-        ["TY02"] = Q("edition", "menus"),
-        ["TY03"] = Q("edition", "theme"),
-        ["TY04"] = F("edition"),
-        ["TY05"] = Q("edition"),
-        ["ST01"] = Q("edition", "keys"),
-        ["SP01"] = F("edition"),
-        ["PR01"] = Q("edition"),
-        ["PR02"] = F("edition"),
-        ["PR03"] = F("edition", "export"),
-        ["ST02"] = F("edition", "files"),
-        ["ST03"] = F("edition", "files"),
-        ["SP02"] = F("edition", "theme"),
-        ["SP03"] = F("edition", "theme"),
-        ["PR04"] = F("edition", "window"),
-        ["DU01"] = F("edition"),
-        ["FB01"] = F("edition", "menus"),
-        // Pictures for the website and the Store: taken only when named.
-        ["SHOTS"] = F("edition"),
-        ["SHOTTYPO"] = F("edition"),
     };
 
     // What each case checks, in a few words, shown in the test window's title while it runs (with its name), so whoever
@@ -213,25 +197,6 @@ internal static class CaseCatalog
         ["PF03"] = "性能：打开大文档的 CPU 分布",
         ["PF02"] = "性能：冷启动和关闭",
         ["Q01"] = "两个窗口依次关闭后进程退出",
-        ["TY01"] = "排版预设：字号、行高和中文段落样式",
-        ["TY02"] = "排版预设文件：舒适预设与自己的预设文件夹",
-        ["TY03"] = "排版预设菜单勾选与新增预设出现",
-        ["TY04"] = "修改预设文件后立即生效",
-        ["TY05"] = "默认预设还原原来的字号行高宽度",
-        ["ST01"] = "写作统计：输入计入今日字数",
-        ["SP01"] = "支持者附加内容：价格、购买、感谢",
-        ["PR01"] = "版本历史（专业版）：保存时留版本、可恢复",
-        ["PR02"] = "文档模板（专业版）",
-        ["PR03"] = "导出 Word（专业版）",
-        ["ST02"] = "写作统计文件损坏时另存后重建",
-        ["ST03"] = "关闭前刚输入的统计重启后还在",
-        ["SP02"] = "支持者主题在商店回应前就可用",
-        ["SP03"] = "首次启动时支持者主题的显示",
-        ["PR04"] = "两个窗口的版本历史对比",
-        ["DU01"] = "开发者解锁开关只对开发签名包有效",
-        ["FB01"] = "关于页的发送反馈",
-        ["SHOTS"] = "网站和商店截图（六种语言）",
-        ["SHOTTYPO"] = "排版预设的展示文档截图",
     };
 
     /// <summary>"MN02 最小化后恢复，文档立即显示并能输入": the case's name and what it checks, or null.</summary>
