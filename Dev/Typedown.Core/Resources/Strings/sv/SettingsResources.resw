@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Aktivera glimmerbakgrundseffekten för redigeringsområdets bakgrund</value>
+    <value>Sidofönstret och flikfältet visar glimmereffekten; redigeringsområdet behåller temats enfärgade färg</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Använd glimmermaterial i redigeringsområdet</value>
+    <value>Använd glimmermaterial runt redigeringsområdet</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">

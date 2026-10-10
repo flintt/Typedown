@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Omogućivanje efekta pozadine tinjca za pozadinu područja za uređivanje</value>
+    <value>Bočno okno i traka kartica prikazuju efekt tinjca; područje uređivanja zadržava punu boju teme</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Korištenje materijala tinjca u području za uređivanje</value>
+    <value>Koristi materijal tinjca oko područja uređivanja</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">

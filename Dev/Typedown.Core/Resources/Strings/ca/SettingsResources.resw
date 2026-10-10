@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Habiliteu l'efecte de fons mica per al fons de l'àrea d'edició</value>
+    <value>El panell lateral i la barra de pestanyes mostren l'efecte mica; l'àrea d'edició manté el color sòlid del tema</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Utilitzar material mica a l'àrea d'edició</value>
+    <value>Fes servir el material mica al voltant de l'àrea d'edició</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">

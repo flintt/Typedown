@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>فعال کردن اثر پس زمینه میکا برای زمینه منطقه ویرایش</value>
+    <value>صفحه کناری و نوار زبانه‌ها جلوه میکا را نشان می‌دهند؛ ناحیه ویرایش رنگ یکدست پوسته را حفظ می‌کند</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>استفاده از مواد میکا در منطقه ویرایش</value>
+    <value>استفاده از جنس میکا در اطراف ناحیه ویرایش</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">

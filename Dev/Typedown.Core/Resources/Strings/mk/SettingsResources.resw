@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Овозможи ефект на позадината на mica за позадината на областа за уредување</value>
+    <value>Страничното окно и лентата со картички го прикажуваат ефектот на лискун; областа за уредување ја задржува полната боја на темата</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Користете mica материјал во областа за уредување</value>
+    <value>Користи материјал од лискун околу областа за уредување</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">

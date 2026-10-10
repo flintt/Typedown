@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Gebruik het mica-materiaal in het bewerkingsgebied</value>
+    <value>Het zijpaneel en de tabbalk tonen het mica-effect; het bewerkingsgebied behoudt de effen kleur van het thema</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Het bewerkingsgebied heeft een achtergrondeffect met mica-achtergrond.</value>
+    <value>Mica-materiaal rond het bewerkingsgebied gebruiken</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">

@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Mendayakan kesan latar belakang mica untuk latar kawasan pengeditan</value>
+    <value>Anak tetingkap sisi dan bar tab memaparkan kesan mika; kawasan suntingan mengekalkan warna padu tema</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Menggunakan bahan mica dalam kawasan pengeditan</value>
+    <value>Gunakan bahan mika di sekeliling kawasan suntingan</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">

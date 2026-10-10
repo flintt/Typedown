@@ -686,11 +686,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>开启后编辑区域具有云母背景效果</value>
+    <value>侧栏和标签栏显示云母效果，编辑区保持主题的纯色</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>编辑区域使用云母材质</value>
+    <value>编辑区周围使用云母材质</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
