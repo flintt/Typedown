@@ -36,7 +36,9 @@ namespace Typedown.Utilities
             var themeAccent = Typedown.Core.Utilities.ThemeFiles.Brush(custom?.Accent) as global::Microsoft.UI.Xaml.Media.SolidColorBrush;
             var accentColor = themeAccent?.Color ?? new UISettings().GetColorValue(UIColorType.Accent);
             var solidBackground = isBlack ? Colors.Black : isDarkMode ? Color.FromArgb(0xFF, 0x28, 0x28, 0x28) : Color.FromArgb(0xFF, 0xF9, 0xF9, 0xF9);
-            var background = settings.UseMicaEffect && settings.UseEditorMicaEffect && !isBlack ? Colors.Transparent : solidBackground;
+            // Always the theme's colour: WinUI 3's WebView2 cannot be transparent (it fills what the page leaves clear with a
+            // grey of its own), so the editor's Mica of XamlUI, where the page showed the window through, is not possible.
+            var background = solidBackground;
             return new { theme = isBlack ? "Black" : isDarkMode ? "Dark" : "Light", accentColor, background };
         }
 
