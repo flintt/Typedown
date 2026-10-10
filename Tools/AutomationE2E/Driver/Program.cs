@@ -235,10 +235,14 @@ internal static partial class Program
 
     private static readonly string[] AllScopes = { Scopes.AppRead, Scopes.DocumentRead, Scopes.DocumentWrite, Scopes.DocumentSave, Scopes.WindowFocus, Scopes.SettingsRead, Scopes.SettingsWrite, Scopes.WindowView };
 
+    // The case running now: its name and purpose are the client name the test window's title shows, so whoever
+    // watches the screen sees what the case is checking.
+    private static string? currentCase;
+
     private static Task<JToken> Initialize(Client c, string name) => c.Call("system.initialize", new
     {
         apiVersion = 1,
-        client = new { id = "0f0f0f0f-0000-4000-8000-00000000e2e0", name, version = "1" },
+        client = new { id = "0f0f0f0f-0000-4000-8000-00000000e2e0", name = CaseCatalog.Label(currentCase) ?? name, version = "1" },
         requestedScopes = AllScopes,
     });
 
@@ -271,6 +275,7 @@ internal static partial class Program
     {
         if (only != null && !only.Any(o => name.StartsWith(o + " "))) return;
         if (!CaseCatalog.Knows(name)) Console.Error.WriteLine($"note: {name.Split(' ')[0]} has no entry in CaseCatalog.cs (tier, areas)");
+        currentCase = name.Split(' ')[0];
         // Pictures (SHOT...) and measurements (PF...) are taken only when asked for by name: never part of a run of every case.
         if ((name.StartsWith("SHOT") || name.StartsWith("PF")) && only == null) return;
         var notes = new List<string>();
