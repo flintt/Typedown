@@ -18,6 +18,9 @@ internal static partial class Program
         var window = await WindowOf(windowId, c);
         async Task<JToken> DialogColours()
         {
+            // The editor focused (the menu's commands act on it only then), then Table: its dialog.
+            await ClickEditorText(c, windowId, window, "Text");
+            await Task.Delay(500);
             await InvokeMenuBarItem(window, "TableItem");
             JToken colours = new JObject();
             for (var i = 0; i < 20; i++)
