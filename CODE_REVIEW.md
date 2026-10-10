@@ -1,5 +1,7 @@
 # 代码审查与性能优化（2026-09-18）
 
+> 2026-10 注：本文写于迁移到 WinUI 3 + .NET 10 之前，记录的是当时的状态（.NET Core 3.1、XAML Islands）；现状见 [docs/architecture.md](docs/architecture.md) 和 [docs/winui3-dotnet10-migration.md](docs/winui3-dotnet10-migration.md)。
+
 本轮检查文件保存/恢复/外部重载，以及 WebView2 消息与滚动更新路径；并非全仓库安全审计。未进行 Windows 桌面端性能实测。
 
 ## 已修复
