@@ -431,6 +431,7 @@ namespace Typedown.Windows
                 var size = RootControl?.XamlRoot?.Size ?? default;
                 if (RootControl == null || size.Width < 200 || size.Height < 200) return;
                 var above = false;
+                var fixedAny = false;
                 for (DependencyObject node = RootControl; node != null; node = VisualTreeHelper.GetParent(node))
                 {
                     if (node == RootControl) { above = true; continue; }
@@ -441,7 +442,25 @@ namespace Typedown.Windows
                     Log.Debug($"window size: {element.GetType().Name} kept {element.Width:0}x{element.Height:0} in a {size.Width:0}x{size.Height:0} window - set to the window's");
                     if (!double.IsNaN(element.Width)) element.Width = size.Width;
                     if (!double.IsNaN(element.Height)) element.Height = size.Height;
+                    fixedAny = true;
                 }
+                // A document opened while the content was that small was given the focus while its page counted
+                // itself hidden, and the keys typed next went nowhere. The editor takes it now, unless something else in
+                // the window (the side pane, a box) has it.
+                if (fixedAny && IsActive)
+                    _ = DispatcherQueue.RunIdleAsync(_ =>
+                    {
+                        var focused = Microsoft.UI.Xaml.Input.FocusManager.GetFocusedElement(RootControl.XamlRoot) as DependencyObject;
+                        var editor = AppViewModel?.MarkdownEditor as DependencyObject;
+                        bool inWindow = false, inEditor = false;
+                        for (var node = focused; node != null; node = VisualTreeHelper.GetParent(node))
+                        {
+                            if (node == editor) inEditor = true;
+                            if (node == RootControl) { inWindow = true; break; }
+                        }
+                        // In the editor too: its web view can hold the window's focus while the page in it has none.
+                        if (!inWindow || focused == RootControl || inEditor) AppViewModel?.MarkdownEditor?.FocusEditor();
+                    });
             }
             catch (Exception ex)
             {
