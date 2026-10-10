@@ -79,6 +79,7 @@ internal static partial class Program
                 await Task.Delay(1000);
                 notes.Add("page: a frame came within 1 s: " + await Eval("String(window.__mnFrame)"));
                 notes.Add("window: visible " + IsWindowVisible(window) + ", iconic " + IsIconic(window));
+                try { notes.Add("layout: " + (await c.Call("test.webview.state", new { windowId }))["chain"]); } catch (Exception) { }
             }
             await TypeInto(c, b, "k");
             var typed = await Eventually(async () => ((string?)(await Get(c, b))["text"] ?? "").Contains('k'), 3000);
@@ -115,7 +116,7 @@ internal static partial class Program
             var after = (string?)state["viewSize"];
             notes.Add($"round {round}: web view {before} -> minimized {minimized} -> restored {after}");
             // Which size got stuck: the XAML root, the editor, the client area, the content island's window.
-            if (after != before) notes.Add($"round {round} restored: root {state["rootSize"]}, editor {state["editorSize"]}, client {state["clientSize"]}, island window {state["bridgeSize"]}, presenter {state["presenter"]}");
+            if (after != before) notes.Add($"round {round} restored: root {state["rootSize"]}, editor {state["editorSize"]}, client {state["clientSize"]}, island window {state["bridgeSize"]}, presenter {state["presenter"]}; layout {state["chain"]}");
             if (after != before) failures.Add($"round {round}: {after} after restoring, {before} before");
             await Activate(window);
         }

@@ -122,6 +122,9 @@ namespace Typedown.Services.Automation
                         ["editorSize"] = editor == null ? null : $"{editor.ActualWidth:0}x{editor.ActualHeight:0}",
                         ["clientSize"] = window == null ? null : ClientSize(window.Handle),
                         ["bridgeSize"] = window == null ? null : BridgeSize(window.Handle),
+                        // From the editor up to the root: each element's size, and a width or height set on it, to find
+                        // the one whose layout kept the minimized window's size.
+                        ["chain"] = editor == null ? null : LayoutChain(editor),
                     };
                 })));
             methods.Add(new MethodDescriptor("test.editor.eval", null, "test.editor.eval/1", async (c, ct) =>
@@ -713,6 +716,19 @@ namespace Typedown.Services.Automation
 
         [System.Runtime.InteropServices.DllImport("user32.dll", CharSet = System.Runtime.InteropServices.CharSet.Unicode)]
         private static extern nint FindWindowExW(nint parent, nint after, string className, string title);
+
+        private static string LayoutChain(global::Microsoft.UI.Xaml.FrameworkElement element)
+        {
+            var parts = new System.Collections.Generic.List<string>();
+            for (global::Microsoft.UI.Xaml.DependencyObject node = element; node != null && parts.Count < 30; node = global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetParent(node))
+            {
+                if (node is not global::Microsoft.UI.Xaml.FrameworkElement fe) continue;
+                var set = (double.IsNaN(fe.Width) ? "" : $" W={fe.Width:0}") + (double.IsNaN(fe.Height) ? "" : $" H={fe.Height:0}")
+                    + (fe.Visibility == global::Microsoft.UI.Xaml.Visibility.Visible ? "" : " collapsed");
+                parts.Add($"{fe.GetType().Name}{(string.IsNullOrEmpty(fe.Name) ? "" : "#" + fe.Name)} {fe.ActualWidth:0}x{fe.ActualHeight:0}{set}");
+            }
+            return string.Join(" < ", parts);
+        }
 
         private static string ClientSize(nint window) => GetClientRect(window, out var r) ? $"{r.Right - r.Left}x{r.Bottom - r.Top}" : null;
 
