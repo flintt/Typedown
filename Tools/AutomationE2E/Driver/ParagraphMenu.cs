@@ -68,8 +68,15 @@ internal static partial class Program
         if (at == null || at.Type != Newtonsoft.Json.Linq.JTokenType.Object) throw new CaseFailed($"no paragraph with '{text}' on the page");
         var screen = await c.Call("test.editor.screenPoint", new { windowId, x = (int)at["x"]!, y = (int)at["y"]! });
         SetProcessDpiAwarenessContext(new IntPtr(-4));
-        SetCursorPos((int)screen["x"]!, (int)screen["y"]!);
-        await Task.Delay(150);
+        // Moved there as a mouse moves (SendInput), not placed: a click after SetCursorPos sometimes left the caret where
+        // it was.
+        int x = (int)screen["x"]!, y = (int)screen["y"]!, screenW = GetSystemMetrics(0), screenH = GetSystemMetrics(1);
+        foreach (var dx in new[] { -6, -3, 0 })
+        {
+            Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dx = (x + dx) * 65535 / (screenW - 1), dy = y * 65535 / (screenH - 1), dwFlags = 0x0001 | 0x8000 } } });
+            await Task.Delay(40);
+        }
+        await Task.Delay(100);
         Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0002 } } });
         await Task.Delay(60);
         Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0004 } } });
