@@ -98,8 +98,8 @@ internal static partial class Program
 }
 
 /// <summary>
-/// OL02: two long documents, each scrolled to its middle (the caret left at the top, as a reader scrolling with the wheel
-/// leaves it), switched between: the outline marks the shown document's heading, and while a tab is being left it does
+/// OL02: in reading mode, two long documents, each scrolled to its middle (the caret left at the top, as a reader scrolling
+/// with the wheel leaves it), switched between: the outline marks the shown document's heading, and while a tab is being left it does
 /// not mark another heading of the document being left first. A reader saw the outline jump to some other section of
 /// the previous outline for a moment on every switch.
 /// </summary>
@@ -123,7 +123,8 @@ internal static partial class Program
         var ids = new List<string>();
         foreach (var path in paths) ids.Add(await Open(c, path));
         var windowId = await WindowIdOf(c, ids[0]);
-        await c.Call("window.setView", new { windowId, sidePane = new { open = true, page = "outline" } });
+        // Reading mode: the outline follows the page as it is scrolled (in the other modes it follows the caret).
+        await c.Call("window.setView", new { windowId, mode = "reading", sidePane = new { open = true, page = "outline" } });
         // Each document scrolled to its middle, the caret where it was opened (the top).
         foreach (var i in new[] { 0, 1 })
         {
@@ -152,6 +153,7 @@ internal static partial class Program
             current = next;
         }
         Check(bad.Count == 0, $"no other heading of the document being left is marked on a switch ({string.Join("; ", bad)})");
+        await c.Call("window.setView", new { windowId, mode = "visual" });
     }
 
     // "12:00:00.000 outline: marked Kilo 21 (load 9)" -> "Kilo 21"
