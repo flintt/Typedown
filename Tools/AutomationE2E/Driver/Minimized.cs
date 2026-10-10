@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 /// <summary>
@@ -36,5 +37,37 @@ internal static partial class Program
         }
         catch (TimeoutException) { throw new CaseFailed("a write or save to the minimized window's document did not finish within 10 s"); }
         finally { ShowWindow(window, 9 /* SW_RESTORE */); }
+    }
+
+    /// <summary>
+    /// MN02: minimized a while, then restored: a document opened at once is shown within a few seconds and takes a key.
+    /// In a full run the editor page of a just-restored window did not answer for 17 s and then loaded itself again.
+    /// </summary>
+    private static async Task MN02(List<string> notes)
+    {
+        using var c = await Session("e2e MN02");
+        var id = await Open(c, Fixture("mn02-a.md", "# MN02 A\n"));
+        var windowId = await WindowIdOf(c, id);
+        var window = await WindowOf(windowId, c);
+        await Task.Delay(1500);
+        var times = new List<long>();
+        for (var round = 0; round < 3; round++)
+        {
+            ShowWindow(window, 6 /* SW_MINIMIZE */);
+            await Task.Delay(8000);
+            ShowWindow(window, 9 /* SW_RESTORE */);
+            await Activate(window);
+            var marker = $"MN02-B-{round}";
+            var watch = Stopwatch.StartNew();
+            var b = await Open(c, Fixture($"mn02-b{round}.md", $"# {marker}\n"));
+            while (!await PageShows(c, windowId, marker) && watch.Elapsed < TimeSpan.FromSeconds(30)) await Task.Delay(50);
+            times.Add(watch.ElapsedMilliseconds);
+            notes.Add($"round {round}: shown after {watch.ElapsedMilliseconds} ms");
+            await TypeInto(c, b, "k");
+            var typed = await Eventually(async () => ((string?)(await Get(c, b))["text"] ?? "").Contains('k'), 3000);
+            notes.Add($"round {round}: a key typed reached it: {typed}");
+            Check(watch.Elapsed < TimeSpan.FromSeconds(30) && typed, $"round {round}: the restored window's editor shows the document and takes keys");
+        }
+        Check(times.Max() < 5000, $"a document opened right after restoring is shown within 5 s ({string.Join(", ", times)} ms)");
     }
 }
