@@ -559,14 +559,17 @@ namespace Typedown.Services.Automation
             methods.Add(new MethodDescriptor("test.dialog.colours", null, "test.dialog.colours/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
                 {
-                    Core.Controls.AppContentDialog dialog = null;
-                    if (app.XamlRoot?.Content is global::Microsoft.UI.Xaml.Controls.Panel panel)
-                        dialog = panel.Children.OfType<Core.Controls.AppContentDialog>().LastOrDefault();
+                    // The dialog showing now: loaded and visible. One left in the window's grid after it closed (it is
+                    // taken out only when closed loaded) is counted, not read.
+                    var all = (app.XamlRoot?.Content as global::Microsoft.UI.Xaml.Controls.Panel)?.Children.OfType<Core.Controls.AppContentDialog>().ToList()
+                        ?? new System.Collections.Generic.List<Core.Controls.AppContentDialog>();
+                    var dialog = all.LastOrDefault(d => d.IsLoaded && d.Visibility == global::Microsoft.UI.Xaml.Visibility.Visible);
                     string Colour(global::Microsoft.UI.Xaml.Media.Brush brush) => (brush as global::Microsoft.UI.Xaml.Media.SolidColorBrush)?.Color.ToString();
                     var theme = Core.Utilities.ThemeFiles.Find(app.SettingsViewModel?.CustomTheme);
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject
                     {
                         ["open"] = dialog != null,
+                        ["inGrid"] = all.Count,
                         ["background"] = Colour(dialog?.Background),
                         ["foreground"] = Colour(dialog?.Foreground),
                         ["border"] = Colour(dialog?.BorderBrush),

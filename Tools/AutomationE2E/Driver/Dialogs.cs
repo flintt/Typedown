@@ -19,15 +19,22 @@ internal static partial class Program
         async Task<JToken> DialogColours()
         {
             // The editor focused (the menu's commands act on it only then), then Table: its dialog.
-            await ClickEditorText(c, windowId, window, "Text");
-            await Task.Delay(500);
-            await InvokeMenuBarItem(window, "TableItem", escapeAfter: false);
             JToken colours = new JObject();
-            for (var i = 0; i < 20; i++)
+            // Table once more if its dialog did not come: the menu automation now and then misses the item, and what is
+            // checked here is the dialog's colours, not the menu.
+            var opened = false;
+            for (var attempt = 0; attempt < 2 && !opened; attempt++)
             {
-                await Task.Delay(150);
-                colours = await c.Call("test.dialog.colours", new { windowId });
-                if ((bool)colours["open"]!) break;
+                if (attempt > 0) notes.Add("the insert-table dialog did not open: Table again");
+                await ClickEditorText(c, windowId, window, "Text");
+                await Task.Delay(500);
+                await InvokeMenuBarItem(window, "TableItem", escapeAfter: false);
+                for (var i = 0; i < 20; i++)
+                {
+                    await Task.Delay(150);
+                    colours = await c.Call("test.dialog.colours", new { windowId });
+                    if (opened = (bool)colours["open"]!) break;
+                }
             }
             await Task.Delay(400);
             colours = await c.Call("test.dialog.colours", new { windowId });

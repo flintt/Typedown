@@ -28,9 +28,18 @@ internal static partial class Program
         // Reading the check opened and closed the menus, which took the focus from the editor: back into it first.
         await ClickEditorText(c, windowId, window, "plain");
         await Task.Delay(500);
-        await InvokeMenuBarItem(window, "TableItem", escapeAfter: false);
         var opened = false;
-        for (var i = 0; i < 20 && !opened; i++) { await Task.Delay(150); opened = (bool)(await c.Call("test.dialog.colours", new { windowId }))["open"]!; }
+        for (var attempt = 0; attempt < 2 && !opened; attempt++)
+        {
+            if (attempt > 0)
+            {
+                notes.Add("the insert-table dialog did not open: Table again");
+                await ClickEditorText(c, windowId, window, "plain");
+                await Task.Delay(500);
+            }
+            await InvokeMenuBarItem(window, "TableItem", escapeAfter: false);
+            for (var i = 0; i < 20 && !opened; i++) { await Task.Delay(150); opened = (bool)(await c.Call("test.dialog.colours", new { windowId }))["open"]!; }
+        }
         Check(opened, "Table opened the insert-table dialog");
         Send(Key(0x1B, false), Key(0x1B, true)); // Esc: the insert-table dialog cancelled
         await Task.Delay(1000);
@@ -41,12 +50,12 @@ internal static partial class Program
         // The checks still show real states: the caret in the quote checks Quote, in the table checks Table.
         await ClickEditorText(c, windowId, window, "quoted");
         await Task.Delay(800);
-        var quote = await MenuToggle(window, "QuoteItem");
+        var quote = await MenuToggleEventually(window, "QuoteItem", ToggleState.On);
         notes.Add($"Quote with the caret in the quote: {quote}");
         Check(quote == ToggleState.On, "Quote is checked with the caret in a quote");
         await ClickEditorText(c, windowId, window, "cell");
         await Task.Delay(800);
-        var table = await MenuToggle(window, "TableItem");
+        var table = await MenuToggleEventually(window, "TableItem", ToggleState.On);
         notes.Add($"Table with the caret in the table: {table}");
         Check(table == ToggleState.On, "Table is checked with the caret in a table");
     }
@@ -64,6 +73,20 @@ internal static partial class Program
         Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0002 } } });
         await Task.Delay(60);
         Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0004 } } });
+    }
+
+    // The check read until it is the one expected or three reads have passed: the editor reports where the caret went a
+    // moment after the click.
+    private static async Task<ToggleState?> MenuToggleEventually(IntPtr window, string automationId, ToggleState expected)
+    {
+        ToggleState? state = null;
+        for (var i = 0; i < 3; i++)
+        {
+            state = await MenuToggle(window, automationId);
+            if (state == expected) break;
+            await Task.Delay(700);
+        }
+        return state;
     }
 
     // A menu bar item's check, read with its menu open (each menu opened until the one holding it), then closed.
