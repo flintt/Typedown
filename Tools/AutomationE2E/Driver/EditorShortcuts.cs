@@ -28,4 +28,37 @@ internal static partial class Program
         notes.Add("after Ctrl+1: " + text.Replace("\n", "\\n"));
         Check(ok, "Ctrl+1 made the paragraph a level 1 heading");
     }
+
+    /// <summary>
+    /// ES02: Ctrl+B on a selection while typing makes it bold, and it stays bold (the build where the app missed editor
+    /// shortcuts showed the bold, then lost it a moment later).
+    /// </summary>
+    private static async Task ES02(List<string> notes)
+    {
+        using var c = await Session("e2e ES02");
+        var id = await Open(c, Fixture("es02.md", "first line\n\nsome words\n"));
+        await TypeInto(c, id, "x");
+        Check(await Eventually(async () => ((string?)(await Get(c, id))["text"] ?? "").Contains("wordsx"), 3000), "the typed x reached the paragraph");
+        await Task.Delay(300);
+        // Shift+Home selects the line typed into, then Ctrl+B.
+        Send(Key(0x10, false), Key(0x24, false), Key(0x24, true), Key(0x10, true));
+        await Task.Delay(200);
+        INPUT B(bool up) => new() { type = 1, u = new InputUnion { ki = new KEYBDINPUT { wVk = 0x42, wScan = 0x30, dwFlags = up ? 0x0002u : 0u } } };
+        Send(Key(0x11, false));
+        await Task.Delay(60);
+        Send(B(false), B(true));
+        await Task.Delay(60);
+        Send(Key(0x11, true));
+        string text = "";
+        var bold = await Eventually(async () => (text = (string?)(await Get(c, id))["text"] ?? "").Contains("**some wordsx**"), 4000);
+        notes.Add("after Ctrl+B: " + text.Replace("\n", "\\n"));
+        Check(bold, "Ctrl+B made the selection bold");
+        // Still so a while later, in the document and on the page.
+        await Task.Delay(3000);
+        text = (string?)(await Get(c, id))["text"] ?? "";
+        var page = (string?)(await c.Call("test.editor.pageText", new { documentId = id }))["text"] ?? "";
+        notes.Add("3 s later: " + text.Replace("\n", "\\n") + " | page: " + page.Replace("\n", "\\n"));
+        Check(text.Contains("**some wordsx**"), "the bold is still in the document 3 s later");
+        Check(page.Contains("**some wordsx**"), "the bold is still on the page 3 s later");
+    }
 }
