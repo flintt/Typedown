@@ -1,6 +1,6 @@
 # 待办（按商店评论整理，2026-09-25）
 
-> 2026-10 注：本文写于迁移到 WinUI 3 + .NET 10 之前；其中的编译方式（VS MSBuild）是当时的情况，现行构建见 [PACKAGING.md](../PACKAGING.md)。
+> 2026-10 注：各条目写于迁移到 WinUI 3 + .NET 10 之前，记录的是当时的问题和处理；下面的编译与验证方式已按现在的做法更新。
 
 来源 `docs/store-reviews-2026-09.md`。顺序按"用户损失 × 提及次数 ÷ 成本"排，每条写清怎么验证；没有验证方法的不开工。
 已在 v1.2.26 做掉的不列（大文档性能、阅读模式、大纲跳转与跟随、切换崩溃、多语言）。
@@ -116,8 +116,8 @@
 ## 性能与可靠性审阅（2026-09-27，来源 docs/performance-reliability-review-2026-09-27.md）
 
 基线 `7591897` / v1.2.27。原则同上：每条写清怎么验证，机制性改动**先写"能失败的测试"再动**。
-编译验证走 构建机：`Tools/Installer/build-local.ps1 -NoInstaller`（VS MSBuild 只编不打包，几分钟）。
-构建机 只能编译、GUI 靠计划任务，所以正确性尽量**抽成不依赖 XAML 的可测单元**（假文件系统 / 假时钟 / 可手动完成的刷新任务），既能 构建机 编译也能真跑单测。
+编译验证：`Tools/Installer/build-local.ps1 -NoInstaller`（.NET 10 SDK 的 `dotnet publish`，不需要 Visual Studio；`-AutomationTestHost` 只编测试宿主）。
+界面行为用 `Tools/AutomationE2E` 的端到端用例在真实 Windows 桌面上验证（用例清单见 [testing.md](testing.md)）；逻辑上的正确性仍尽量**抽成不依赖 XAML 的可测单元**（假文件系统 / 假时钟 / 可手动完成的刷新任务），放进 `Tests/Typedown.ReliabilityTests`，任何机器上都能跑。
 
 **先决（阶段一之前）**：抽出不依赖 XAML 的"文档操作协调器"和"保存快照"模型，作为 R01–R04 的测试落点；`WatcherSaveCheck` 的重命名决策抽成共享纯函数（测试不再复制实现）；CI（`.github/workflows/build.yml`）补 `SafeFileCheck` / `WatcherSaveCheck` / C# 测试步骤。
 
