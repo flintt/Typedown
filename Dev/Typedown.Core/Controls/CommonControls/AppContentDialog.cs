@@ -217,9 +217,19 @@ namespace Typedown.Core.Controls
             BackgroundElement.Translation = new Vector3(0, 0, 128);
         }
 
+        private SettingsViewModel watchedSettings;
+
+        // A theme switched while the dialog is open recolours it too.
+        private void OnSettingsChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(SettingsViewModel.CustomTheme)) ApplyThemeColours();
+        }
+
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             ApplyThemeColours();
+            watchedSettings = this.GetService<SettingsViewModel>();
+            if (watchedSettings != null) watchedSettings.PropertyChanged += OnSettingsChanged;
             SetButtonState();
             SetFocusButton();
             SetShadow();
@@ -233,6 +243,8 @@ namespace Typedown.Core.Controls
 
         private async void OnUnloaded(object sender, RoutedEventArgs e)
         {
+            if (watchedSettings != null) watchedSettings.PropertyChanged -= OnSettingsChanged;
+            watchedSettings = null;
             VisualStateManager.GoToState(this, "DialogHidden", true);
             PrimaryButton.Click -= OnPrimaryButtonClick;
             SecondaryButton.Click -= OnSecondaryButtonClick;
