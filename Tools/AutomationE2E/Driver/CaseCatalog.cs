@@ -122,6 +122,9 @@ internal static class CaseCatalog
         ["PR04"] = F("edition", "window"),
         ["DU01"] = F("edition"),
         ["FB01"] = F("edition", "menus"),
+        // Pictures for the website and the Store: taken only when named.
+        ["SHOTS"] = F("edition"),
+        ["SHOTTYPO"] = F("edition"),
     };
 
     // What each case checks, in a few words, shown in the test window's title while it runs (with its name), so whoever
@@ -227,6 +230,8 @@ internal static class CaseCatalog
         ["PR04"] = "两个窗口的版本历史对比",
         ["DU01"] = "开发者解锁开关只对开发签名包有效",
         ["FB01"] = "关于页的发送反馈",
+        ["SHOTS"] = "网站和商店截图（六种语言）",
+        ["SHOTTYPO"] = "排版预设的展示文档截图",
     };
 
     /// <summary>"MN02 最小化后恢复，文档立即显示并能输入": the case's name and what it checks, or null.</summary>
