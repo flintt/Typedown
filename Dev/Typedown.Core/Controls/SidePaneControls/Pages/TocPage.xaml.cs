@@ -37,27 +37,45 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             if (e.PropertyName == nameof(EditorViewModel.Toc)) ScheduleExpansionSync();
         }
 
-        private void ScheduleExpansionSync() =>
-            _ = DispatcherQueue.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, SyncExpansion);
+        private bool syncScheduled;
+
+        private void ScheduleExpansionSync(int pass = 0)
+        {
+            if (syncScheduled) return;
+            syncScheduled = true;
+            _ = DispatcherQueue.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () =>
+            {
+                syncScheduled = false;
+                // A node expanded in this pass makes its children's nodes once the tree has laid it out: the next pass
+                // comes after that, from the queue. (Forcing the layout here instead crashed inside the tree while
+                // tabs were switched quickly.)
+                if (SyncExpansion() && pass < 8) { ScheduleExpansionSync(pass + 1); return; }
+                // A heading marked before its row's node existed is marked now that the rows are all there.
+                var slug = unmarkedSlug;
+                unmarkedSlug = null;
+                if (slug != null) OnOutlineHighlighted(slug);
+            });
+        }
+
+        private string unmarkedSlug;
 
         // Whether a heading is expanded is kept twice: on the item model (bound both ways to the row) and on the tree's
         // own node, and the node is what the tree draws. When the outline was handed over for another tab, a row the
         // list made late - one below the fold, built after the binding had already given its value - came up with a
         // fresh node's "collapsed" while its model said expanded, and nothing told the node otherwise: now and then a
         // heading's children were hidden with nobody having collapsed it (OL01). The nodes are set from the models
-        // once the rows are laid out, a level at a time: a node expanded here makes its children's nodes, which the
-        // next pass sets in turn.
-        private void SyncExpansion()
+        // once the rows are laid out, a level at a time.
+        private bool SyncExpansion()
         {
             try
             {
-                for (var pass = 0; pass < 8; pass++)
-                {
-                    if (!SyncExpansion(TreeView.RootNodes)) return;
-                    TreeView.UpdateLayout();
-                }
+                return SyncExpansion(TreeView.RootNodes);
             }
-            catch (System.Exception ex) { Utilities.Log.Debug($"outline: could not set the rows' expansion: {ex.Message}"); }
+            catch (System.Exception ex)
+            {
+                Utilities.Log.Debug($"outline: could not set the rows' expansion: {ex.Message}");
+                return false;
+            }
         }
 
         private static bool SyncExpansion(System.Collections.Generic.IList<Microsoft.UI.Xaml.Controls.TreeViewNode> nodes)
@@ -93,12 +111,17 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
         {
             _ = DispatcherQueue.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () =>
             {
-                SyncExpansion();
+                if (SyncExpansion()) ScheduleExpansionSync();
                 marking = true;
                 try
                 {
                     var node = FindNode(TreeView.RootNodes, slug);
-                    if (node == null) { Utilities.Log.Debug($"outline: no row for {slug} in the pane"); return; }
+                    if (node == null)
+                    {
+                        if (syncScheduled) { unmarkedSlug = slug; return; }
+                        Utilities.Log.Debug($"outline: no row for {slug} in the pane");
+                        return;
+                    }
                     if (TreeView.SelectedNode != node) TreeView.SelectedNode = node;
                     FindList(TreeView)?.ScrollIntoView(node);
                 }
