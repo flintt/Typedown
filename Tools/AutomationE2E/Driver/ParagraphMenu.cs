@@ -50,6 +50,8 @@ internal static partial class Program
         // The checks still show real states: the caret in the quote checks Quote, in the table checks Table.
         await ClickEditorText(c, windowId, window, "quoted");
         await Task.Delay(800);
+        var caret = (await c.Call("test.editor.eval", new { windowId, script = "(() => { const n = getSelection().anchorNode; const e = n && (n.nodeType === 1 ? n : n.parentElement); return (e && e.closest('blockquote') ? 'in the quote' : 'not in the quote') + ', focus ' + document.hasFocus() + ', in ' + (e ? e.tagName + '.' + e.className : 'nothing') })()" }))["result"];
+        notes.Add($"caret after the click into the quote: {caret}");
         var quote = await MenuToggleEventually(window, "QuoteItem", ToggleState.On);
         notes.Add($"Quote with the caret in the quote: {quote}");
         Check(quote == ToggleState.On, "Quote is checked with the caret in a quote");
