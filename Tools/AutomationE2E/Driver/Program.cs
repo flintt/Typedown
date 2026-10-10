@@ -173,6 +173,7 @@ internal static partial class Program
             await Case("LK01 a link to another Markdown file opens it as a tab of the same window when files open in tabs", LK01);
             await Case("FL01 the settings' font family box suggests the installed fonts", FL01);
             await Case("FO01 after another window and back, and after the context menu closed with Esc, the next letter goes into the document", FO01);
+            await Case("TH04 Windows switched between light and dark while the app follows the system: caption buttons readable, editor follows", TH04);
             await Case("DP01 the window is per-monitor DPI aware (not stretched, so not blurred, on a scaled screen)", DP01);
             await Case("DR01 files dragged from Explorer onto the editor: a Markdown file opens, a picture goes into the document", DR01);
             await Case("DM01 the window's top edge is drawn in the app's theme, and a dialog's smoke covers it too: the top row matches the row under it, light and dark", DM01);

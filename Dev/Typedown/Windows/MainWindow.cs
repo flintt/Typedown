@@ -99,6 +99,7 @@ namespace Typedown.Windows
         private void InitializeComponent()
         {
             rootGrid.DataContext = AppViewModel;
+            rootGrid.ActualThemeChanged += (_, _) => UpdateFrameColors();
             rootGrid.Children.Add(RootControl);
             Content = rootGrid;
             RootControl.Loaded += OnLoaded;
@@ -153,8 +154,18 @@ namespace Typedown.Windows
                 _ => ElementTheme.Default,
             };
             rootGrid.RequestedTheme = requested;
+            UpdateFrameColors();
+        }
+
+        /// <summary>
+        /// The caption buttons and the frame in the content's actual theme: after the theme setting changes, and when
+        /// Windows switches between light and dark while the app follows it (rootGrid's ActualThemeChanged) - set only
+        /// from the setting, the buttons kept the colours of the theme the app started in (a dark X on dark, TH04).
+        /// </summary>
+        private void UpdateFrameColors()
+        {
             // The caption buttons are the system's: given the content's colours, light or dark.
-            var dark = requested == ElementTheme.Dark || (requested == ElementTheme.Default && Application.Current.RequestedTheme == ApplicationTheme.Dark);
+            var dark = rootGrid.ActualTheme == ElementTheme.Dark;
             // The frame the system draws (the top edge on Windows 10, the border on Windows 11) in the same theme, as
             // XamlUI's window did; it follows the system's theme otherwise.
             uint darkFrame = dark ? 1u : 0u;
