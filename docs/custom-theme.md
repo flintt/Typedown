@@ -16,7 +16,7 @@
 
 | 平台 | 路径 |
 |---|---|
-| Windows | `%LOCALAPPDATA%\Typedown\themes\` |
+| Windows | `文档\Typedown\themes\`（即 `%USERPROFILE%\Documents\Typedown\themes\`；MSIX 版在包的 `LocalState\themes\` 里）。设置 → 外观 → **打开主题文件夹** 直接打开它 |
 | Linux | `~/.local/share/Typedown.Uno/themes/` |
 | macOS | `~/Library/Application Support/Typedown.Uno/themes/` |
 

@@ -1,5 +1,7 @@
 # Fork 整合记录：上游 PR 与社区 fork 合并
 
+> 2026-10 注：本文写于迁移到 WinUI 3 + .NET 10 之前；其中的构建方式（wapproj、`Typedown.Package`、.NET Core 3.1）已不再适用，现行做法见 [PACKAGING.md](PACKAGING.md)。
+
 - 整合分支：`integrate-upstream-prs`（基于 `main` = 上游 `main` a1baeae）
 - 日期：2026-09-16
 - 前端 `Dev/Typedown.Editor` 已在 Linux 上 `yarn install && yarn build` 验证通过；C# 部分由 GitHub Actions（`.github/workflows/build.yml`）在 windows-2022 上编译打包，产物已在 Windows 11 26100 上实测可用。

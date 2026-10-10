@@ -1,5 +1,7 @@
 # 从 awarson2233/Typedown 借鉴的改进
 
+> 2026-10 注：宿主后来也迁到了 WinUI 3 + .NET 10（见 [winui3-dotnet10-migration.md](winui3-dotnet10-migration.md)），编辑器内核仍是 Muya；下文“换底座的部分我们不跟”是当时的决定。
+
 对方的 fork（分支 `winui3-migration`）把宿主换成 WinUI 3、把编辑器内核从 Muya 换成 CodeMirror 6。
 换底座的部分我们不跟，但它在工程方法上的几件事与内核无关，可以直接用在现有的 Windows 版上。
 这份文件记录计划与进度；每条做完后在这里打勾并写明落点。
