@@ -289,6 +289,9 @@ internal static partial class Program
             using var dialogs = await Session("e2e dialogs").WaitAsync(TimeSpan.FromSeconds(5));
             var closed = (JArray?)(await dialogs.Call("test.dialogs.dismiss", new { }).WaitAsync(TimeSpan.FromSeconds(10)))["closed"];
             if (closed != null && closed.Count > 0) notes.Add("closed a dialog an earlier case left open: " + string.Join(", ", closed));
+            // The case and its purpose in the test window's title for the whole case (the client name shows only for a
+            // moment, when a document is written).
+            await dialogs.Call("test.app.caseLabel", new { label = CaseCatalog.Label(currentCase) }).WaitAsync(TimeSpan.FromSeconds(10));
         }
         catch (Exception) { /* no test host yet, or one without the hook */ }
         var watch = Stopwatch.StartNew();
