@@ -60,10 +60,10 @@ ARM64 把 `-Platform x64` 改为 `-Platform ARM64`。`-SkipBuild` 只适用于�
 
 | 文件 | 格式 |
 | --- | --- |
-| `Dev/Typedown/Typedown.csproj` | `1.3.7` |
-| `Dev/Typedown.Core/Properties/AssemblyInfo.cs` | `1.3.7.0` |
-| `Dev/Typedown/Package.appxmanifest` | `1.3.7.0` |
-| `Tools/Installer/Typedown.iss` | `1.3.7` |
+| `Dev/Typedown/Typedown.csproj` | `1.3.8` |
+| `Dev/Typedown.Core/Properties/AssemblyInfo.cs` | `1.3.8.0` |
+| `Dev/Typedown/Package.appxmanifest` | `1.3.8.0` |
+| `Tools/Installer/Typedown.iss` | `1.3.8` |
 
 可靠性测试在所有 CI 构建中检查这四处；tag 构建还会检查 tag 与项目版本是否一致。
 
@@ -81,7 +81,7 @@ ARM64 把 `-Platform x64` 改为 `-Platform ARM64`。`-SkipBuild` 只适用于�
 
 ## 微软商店上传包
 
-`Branding.props` 的 `BrandStoreUpload` 为 `true` 的版本（Typeleaf），CI 每个平台在旁加载 MSIX 之后再按 `StoreUpload` 模式打一次包：不签名（商店会重新签名），得到 `<BrandName>_<版本>_<平台>.msixupload`（内含 `.msix`；迁移到单项目 MSIX 后不再带符号包 `.appxsym`：.NET SDK 的 MSBuild 下 MSIX 工具的符号步骤需要 Visual Studio 的 `mspdbcmf.exe`），作为 `store-upload-x64` / `store-upload-ARM64` 产物保留 30 天，不进 GitHub Release。在合作伙伴中心的提交里把两个平台的 `.msixupload` 都上传。包身份（`Identity` 的 `Name`、`Publisher`，以及 `PublisherDisplayName`）取自 `Dev/Typedown/Package.appxmanifest`，必须与合作伙伴中心为该名称保留的值一致；版本号的第四段保持 0（商店保留它）。Typedown 本身没有商店身份，`BrandStoreUpload` 为 `false`。
+`Branding.props` 的 `BrandStoreUpload` 为 `true` 的版本（Typeleaf），CI 每个平台在旁加载 MSIX 之后再按 `StoreUpload` 模式打一次包：不签名（商店会重新签名），得到 `<BrandName>_<版本>_<平台>.msixupload`（内含 `.msix`；迁移到单项目 MSIX 后不再带符号包 `.appxsym`：.NET SDK 的 MSBuild 下 MSIX 工具的符号步骤需要 Visual Studio 的 `mspdbcmf.exe`），作为 `store-upload-x64` / `store-upload-ARM64` 产物交给发布任务，打标签的构建把它们放进 GitHub Release；产物本身只保留 1 天（各产物都是，私有仓库的产物占账户的 Actions 存储额度），手动运行、不打标签的构建要在一天内从运行页面下载。在合作伙伴中心的提交里把两个平台的 `.msixupload` 都上传。包身份（`Identity` 的 `Name`、`Publisher`，以及 `PublisherDisplayName`）取自 `Dev/Typedown/Package.appxmanifest`，必须与合作伙伴中心为该名称保留的值一致；版本号的第四段保持 0（商店保留它）。Typedown 本身没有商店身份，`BrandStoreUpload` 为 `false`。
 
 本机生成（.NET 10 SDK；应用和包是同一个项目 `Dev/Typedown`，单项目 MSIX）：
 
