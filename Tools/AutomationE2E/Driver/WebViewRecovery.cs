@@ -43,17 +43,18 @@ internal static partial class Program
         if (browsers.Count == 0) throw new CaseFailed("no web view browser process under the test host");
         foreach (var pid in browsers)
             try { Process.GetProcessById(pid).Kill(); } catch (Exception ex) { notes.Add($"ending {pid}: {ex.Message}"); }
-        // The page back with the document on it: asked of the page itself, as a reader sees it.
+        // The page back with the document on it: asked of the page itself, as a reader sees it (with the caret in the
+        // heading, its level is shown in it too).
         string? heading = null;
         var clock = Stopwatch.StartNew();
-        while (clock.ElapsedMilliseconds < 20000 && heading != "WV01")
+        while (clock.ElapsedMilliseconds < 20000 && !(heading ?? "").Contains("WV01"))
         {
             await Task.Delay(500);
             try { heading = (string?)(await c.Call("test.editor.eval", new { windowId, script = "document.querySelector('#ag-editor-id h1')?.textContent || ''" }))["result"]; }
             catch (Exception ex) { heading = null; if (clock.ElapsedMilliseconds > 19000) notes.Add("page: " + ex.Message); }
         }
         notes.Add($"after {clock.ElapsedMilliseconds} ms the page shows heading {heading ?? "(no page)"}; new browser processes: {string.Join(", ", WebViewBrowsersOf(hostPid))}");
-        Check(heading == "WV01", "the editor is back with the document after its browser process ended");
+        Check((heading ?? "").Contains("WV01"), "the editor is back with the document after its browser process ended");
         // And it is a working editor: what is typed reaches the document.
         await c.Call("document.replaceText", new { documentId = id, baseRevision = await Revision(c, id), find = "Before the browser went.", replacement = "Before the browser went. After it came back.", expectedCount = 1 });
         await Task.Delay(800);
