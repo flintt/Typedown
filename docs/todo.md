@@ -156,3 +156,12 @@
 |---|---|---|---|---|
 | `document.open` / `document.create` 带 `reveal: "document"` 不检查 `window.focus` | 规格（a57ec99，2026-09-29）第 1.3 节写的是"`window.focus` 管 `window.focus`、`document.focus` 和任何 `reveal` 请求"。第一版实现（42aedd8，2026-09-30）把检查写在 `RevealChecked` 里，只有写入、撤销和重做用它；`open` 和 `create` 直接调用不检查的 `RevealOf`。测试只覆盖了 `document.replace` 带 reveal 缺 scope 的情况，`open`/`create` 没有测试，同一天 v1 冻结（bbaa20c），缺口跟着冻结了。只有 `document.write` 的程序因此可以把窗口切到前台、抢走焦点。`reveal: "change"`（940aaae）在所有方法上都检查 | 补上检查会让已有调用需要更多 scope，v1 冻结规则第 6.2 节不允许 | 开 `apiVersion: 2` 时 `open`/`create` 改用 `RevealChecked`；v2 的迁移说明写明这一条 | `DocumentMethodsTests`：只有 `document.write` 的会话用 `open`、`create` 带 `reveal: "document"`，得到 `scope_required`（`window.focus`）|
 | 源码模式下的写入一律是 `unknown`，必须 `allowUnknown` | 设计如此：判定"可视编辑器会把正文改写成什么"要用 Muya 解析，源码模式没有 Muya 实例，页面只能回报 `notEvaluated`（`Editor/index.tsx` 的 `describeNormalization`）| 不是缺陷，可以在 v1 内改进：只会让以前被拒的写入通过，属于放宽 | 源码模式下用离屏 Muya（不挂到页面）计算规范化结果后再判定 | E2E：源码模式下默认策略写入普通段落成功，写入会被改写格式的表格仍被拒；RV01 的源码模式一步去掉 `allowUnknown` |
+
+## 帮助菜单与使用说明（2026-10-11）
+
+| 事项 | 做法 | 验证 |
+|---|---|---|
+| 菜单栏加"帮助"菜单 | 菜单栏最后加"帮助"，里面两项：<br>- **使用说明**：打开用户使用说明（按界面语言选中文或英文，其他语言用英文）；<br>- **关于**：打开设置的"关于"页。<br>文案进 Locales（`tables/*.json` 生成），各语言都有 | E2E：点"帮助 → 关于"到设置的关于页；点"帮助 → 使用说明"打开对应语言的说明 |
+| 使用说明中英文两份 | 现有 `docs/user-guide.md` 是中文；写一份英文版 `docs/user-guide.en.md`，内容与中文一致，以后两份一起改 | 两份标题结构一致（可加检查：二者的标题层级和数量相同）|
+| 使用说明随程序发布 | 安装程序版、便携版已由 `add-cli.ps1` 放进 `docs\`（按品牌替换名字）；MSIX 包里现在没有，要一起打进去；英文版同样处理 | 三种发布形态的包里都有两份说明；从菜单能打开 |
+| 打开方式 | 用本程序以只读或普通方式打开（不依赖用户装了别的 Markdown 程序）；说明里的相对链接和图片能用 | 打开后标题、图片、链接正常 |
