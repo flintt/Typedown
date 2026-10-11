@@ -147,10 +147,11 @@ if name == "Typedown":
             problems.append(f"{rel(f)}: implements the edition hook - Typedown leaves it empty")
 
 # What only an edition has stays in the edition's repository: its code (Dev/Edition), its Store listing and the
-# scripts that build it (docs/store, Tools/Store), the private build and test scripts (Tools/dev). Typedown is public,
+# scripts that build it (docs/store, Tools/Store), the private build and test scripts (Tools/dev), its own chapter of
+# the user guide (docs/user-guide.edition[.en].md). Typedown is public,
 # and merges go from Typedown to an edition only (docs/editions.md in the edition's repository).
 if name == "Typedown":
-    for private in ("Dev/Edition", "docs/store", "Tools/Store", "Tools/dev"):
+    for private in ("Dev/Edition", "docs/store", "Tools/Store", "Tools/dev", "docs/user-guide.edition.md", "docs/user-guide.edition.en.md"):
         if os.path.exists(os.path.join(ROOT, private)):
             problems.append(f"{private}: an edition's own material in Typedown - it belongs to the edition's repository")
 
