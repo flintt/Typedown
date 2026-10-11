@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Builds the Windows app and packs it into the Inno Setup installer, the same way CI does, on a machine with
     the Build Tools installed.
@@ -136,6 +136,10 @@ if (-not $SkipBuild) {
             & $dotnet build 'Dev\Typedown\Typedown.csproj' -nologo -v m -c $Configuration -p:Platform=$Platform -p:AutomationTestHost=true
         }
         else {
+            # Emptied first: publish only adds, and a checkout the old XAML Islands build also used kept that build's
+            # files beside these - its WebView2 1.0.1661 wrapper among them, which left the installed app without
+            # WebView2 (assert-application-build.ps1 refuses such a folder).
+            Remove-Item (Join-Path $repo "Dev\Typedown\bin\$Platform\$Configuration\publish") -Recurse -Force -ErrorAction SilentlyContinue
             & $dotnet publish 'Dev\Typedown\Typedown.csproj' -nologo -v m -c $Configuration -p:Platform=$Platform -r $rid `
                 -p:TypedownTrim=true -o (Join-Path $repo "Dev\Typedown\bin\$Platform\$Configuration\publish")
         }
