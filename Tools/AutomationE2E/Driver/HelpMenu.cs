@@ -34,7 +34,8 @@ internal static partial class Program
             var text = (string?)(await Get(c, (string)guide["documentId"]!))["text"] ?? "";
             var english = path.EndsWith("user-guide.en.md", StringComparison.OrdinalIgnoreCase);
             notes.Add($"{(english ? "English" : "Chinese")} guide, {text.Length} characters, starts {Newtonsoft.Json.JsonConvert.SerializeObject(text.Split('\n')[0])}");
-            Check(text.Length > 5000 && text.StartsWith(english ? "# Typedown User Guide" : "# Typedown 使用说明"), "the whole guide, in the language of its file");
+            // Under the edition's own name in an edition (the copy has the brand replaced).
+            Check(text.Length > 5000 && System.Text.RegularExpressions.Regex.IsMatch(text, english ? @"^# \w+ User Guide" : @"^# \w+ 使用说明"), "the whole guide, in the language of its file");
 
             await Activate(window);
             await InvokeMenuBarItem(window, "AboutItem");
