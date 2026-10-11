@@ -1012,4 +1012,7 @@
   <data name="ExportedTo" xml:space="preserve">
     <value>{0} লৈ ৰপ্তানি কৰা হ'ল</value>
   </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>ব্যৱহাৰকাৰীৰ নিৰ্দেশিকা</value>
+  </data>
 </root>

@@ -1012,4 +1012,7 @@
   <data name="ExportedTo" xml:space="preserve">
     <value>Kukhishelwe ku-{0}</value>
   </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>Umhlahlandlela womsebenzisi</value>
+  </data>
 </root>

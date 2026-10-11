@@ -1027,4 +1027,7 @@
   <data name="ExportedTo" xml:space="preserve">
     <value>已匯出至 {0}</value>
   </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>使用說明</value>
+  </data>
 </root>

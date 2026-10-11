@@ -1012,4 +1012,7 @@
   <data name="ExportedTo" xml:space="preserve">
     <value>{0} ਵਿੱਚ ਨਿਰਯਾਤ ਕੀਤਾ ਗਿਆ</value>
   </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>ਵਰਤੋਂਕਾਰ ਗਾਈਡ</value>
+  </data>
 </root>

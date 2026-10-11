@@ -1012,4 +1012,7 @@
   <data name="ExportedTo" xml:space="preserve">
     <value>Đã xuất sang {0}</value>
   </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>Hướng dẫn sử dụng</value>
+  </data>
 </root>

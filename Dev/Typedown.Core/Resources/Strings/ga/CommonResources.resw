@@ -1012,4 +1012,7 @@
   <data name="ExportedTo" xml:space="preserve">
     <value>Easpórtáilte go {0}</value>
   </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>Treoir úsáideora</value>
+  </data>
 </root>

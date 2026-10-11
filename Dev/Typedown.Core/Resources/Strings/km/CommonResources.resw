@@ -1012,4 +1012,7 @@
   <data name="ExportedTo" xml:space="preserve">
     <value>បាននាំចេញទៅ {0}</value>
   </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>មគ្គុទ្ទេសក៍អ្នកប្រើ</value>
+  </data>
 </root>

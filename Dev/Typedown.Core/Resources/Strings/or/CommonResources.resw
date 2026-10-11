@@ -1012,4 +1012,7 @@
   <data name="ExportedTo" xml:space="preserve">
     <value>{0} କୁ ରପ୍ତାନି ହେଲା</value>
   </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>ବ୍ୟବହାରକାରୀ ଗାଇଡ୍</value>
+  </data>
 </root>

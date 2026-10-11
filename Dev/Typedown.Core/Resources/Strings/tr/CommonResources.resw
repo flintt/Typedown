@@ -1012,4 +1012,7 @@
   <data name="ExportedTo" xml:space="preserve">
     <value>{0} konumuna aktarıldı</value>
   </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>Kullanım kılavuzu</value>
+  </data>
 </root>

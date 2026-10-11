@@ -1012,4 +1012,7 @@
   <data name="ExportedTo" xml:space="preserve">
     <value>Na-export sa {0}</value>
   </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>Gabay sa paggamit</value>
+  </data>
 </root>

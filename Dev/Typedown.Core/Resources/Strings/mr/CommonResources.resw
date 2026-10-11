@@ -1012,4 +1012,7 @@
   <data name="ExportedTo" xml:space="preserve">
     <value>{0} मध्ये निर्यात केले</value>
   </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>वापरकर्ता मार्गदर्शक</value>
+  </data>
 </root>

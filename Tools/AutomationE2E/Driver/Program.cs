@@ -149,6 +149,7 @@ internal static partial class Program
             await Case("FS03 in full screen the pointer at the top edge reveals the menu bar every time, and it hides when the pointer leaves", FS03);
             await Case("MB01 a menu open while the title bar is clicked or dragged closes: the File menu and the editor's context menu", MB01);
             await Case("SF01 a window opening under the dark theme shows no light frame in its first two seconds on screen", SF01);
+            await Case("HM01 Help > User guide opens the user guide in the interface's language, Help > About the About page", HM01);
             await Case("FS02 out of full screen the window is dragged by its title bar again at once (with the title row, and in compact mode by the menu row)", FS02);
             await Case("PU01 PlantUML is not drawn by default (nothing goes to plantuml.com, the block says so); turned on it is, by the server set if one is, off again it is not", PU01);
             await Case("RV01 reveal: \"change\" scrolls a change off screen into view, the caret where it was; \"document\" leaves the page", RV01);
@@ -168,7 +169,6 @@ internal static partial class Program
             await Case("TH01 a custom theme colours the page in visual, reading and source mode, and a change shows at once in each", TH01);
             await Case("RD01 reading mode: the context menu offers copying and selecting only, Copy works on a selection, copy as plain text leaves the Markdown out, Ctrl+Z changes nothing", RD01);
             await Case("RD02 reading mode: Focus mode and Typewriter mode in the View menu are disabled and drawn fainter than the entries that work, in Dark and Light, whether the menu was opened before or not", RD02);
-            await Case("SF01 a window opening under the dark theme shows no light frame in its first two seconds on screen", SF01);
             await Case("DG02 every diagram of the showcase document, written into a window just opened, is drawn once", DG02);
             await Case("IM01 the showcase's checkerboard, after View > Source mode and back, is drawn and not failed when clicked", IM01);
             await Case("CP01 Copy pasted into Word: pictures at absolute file:/// addresses, a name and an alt text with brackets, an SVG sized in pt, a JPEG", CP01);

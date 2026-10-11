@@ -38,6 +38,8 @@ jobs:
       - run: python3 Tools/Branding/check-brand.py
       # The case, test.* method and editor check lists of docs/testing.md come from the code (Tools/Docs/testing-index.py).
       - run: python3 Tools/Docs/testing-index.py
+      # Help > User guide opens the Chinese or the English guide: the two keep the same sections (user-guide-check.py).
+      - run: python3 Tools/Docs/user-guide-check.py
       # An edition that keeps a case list of its own (docs/edition-testing.md) checks it the same way.
       - run: if [ -f Tools/Docs/edition-testing-index.py ]; then python3 Tools/Docs/edition-testing-index.py; fi
 

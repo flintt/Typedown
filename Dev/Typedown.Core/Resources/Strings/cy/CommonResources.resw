@@ -1012,4 +1012,7 @@
   <data name="ExportedTo" xml:space="preserve">
     <value>Wedi'i allforio i {0}</value>
   </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>Canllaw defnyddiwr</value>
+  </data>
 </root>

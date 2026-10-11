@@ -1012,4 +1012,7 @@
   <data name="ExportedTo" xml:space="preserve">
     <value>به {0} برون‌بری شد</value>
   </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>راهنمای کاربر</value>
+  </data>
 </root>

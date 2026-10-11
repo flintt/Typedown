@@ -1012,4 +1012,7 @@
   <data name="ExportedTo" xml:space="preserve">
     <value>Експортовано до {0}</value>
   </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>Посібник користувача</value>
+  </data>
 </root>
