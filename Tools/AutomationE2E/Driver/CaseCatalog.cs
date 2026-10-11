@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -79,6 +79,7 @@ internal static partial class CaseCatalog
         ["TH01"] = Q("theme"),
         ["RD01"] = Q("keys", "menus", "content"),
         ["RD02"] = Q("menus", "theme"),
+        ["DG02"] = Q("content"),
         ["CP01"] = F("export", "paste"),
         ["TH03"] = Q("theme", "outline"),
         ["ES01"] = Q("keys", "menus"),
@@ -172,6 +173,7 @@ internal static partial class CaseCatalog
         ["TH01"] = "自定义主题在三种模式下生效",
         ["RD01"] = "阅读模式右键菜单只能复制",
         ["RD02"] = "阅读模式下禁用的菜单项显示为灰色",
+        ["DG02"] = "示例文档的每个图表只画一次，不重复出现",
         ["CP01"] = "复制到 Word 的图片和格式",
         ["TH03"] = "侧栏选中标记用主题强调色",
         ["ES01"] = "输入时编辑器快捷键（Ctrl+1）有效",
