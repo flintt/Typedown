@@ -1197,13 +1197,13 @@ internal static partial class Program
             return null;
         }
         INPUT Scan(ushort vk, ushort scan, bool up) => new() { type = 1, u = new InputUnion { ki = new KEYBDINPUT { wVk = vk, wScan = scan, dwFlags = up ? 0x0002u : 0u } } };
-        // A top menu of the menu bar (0 File ... 4 View), opened with the mouse, and one of its items clicked.
+        // A top menu of the menu bar (0 File ... 4 View, 5 Help), opened with the mouse, and one of its items clicked.
         async Task Menu(int index, string itemId)
         {
             var file = FindIn(System.Windows.Automation.AutomationElement.FromHandle(window), e => e.Current.AutomationId == "MenuBarFileItem") ?? throw new CaseFailed("no File menu");
             var bar = System.Windows.Automation.TreeWalker.ControlViewWalker.GetParent(file);
             var menus = bar.FindAll(System.Windows.Automation.TreeScope.Children, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.MenuItem));
-            // View is the last menu: in source mode Paragraph and Format are hidden and the others move up.
+            // View counted from the end (Help is after it): in source mode Paragraph and Format are hidden and the others move up.
             ClickElement(menus[index < 0 ? menus.Count + index : index]);
             System.Windows.Automation.AutomationElement? item = null;
             for (var i = 0; i < 20 && item == null; i++) { await Task.Delay(150); item = FindAnywhere(e => e.Current.AutomationId == itemId && e.Current.ControlType == System.Windows.Automation.ControlType.MenuItem && !e.Current.IsOffscreen); }
@@ -1306,8 +1306,8 @@ internal static partial class Program
 
             await Try("Format > Strong from the menu", () => Menu(3, "StrongItem"), 'Z', () => Task.FromResult(main));
 
-            await Try("View > Source code mode from the menu", () => Menu(-1, "SourceCodeModeItem"), 'V', () => Task.FromResult(main));
-            await Try("View > Source code mode again (back to the visual editor)", () => Menu(-1, "SourceCodeModeItem"), 'Y', () => Task.FromResult(main));
+            await Try("View > Source code mode from the menu", () => Menu(-2, "SourceCodeModeItem"), 'V', () => Task.FromResult(main));
+            await Try("View > Source code mode again (back to the visual editor)", () => Menu(-2, "SourceCodeModeItem"), 'Y', () => Task.FromResult(main));
 
             await Try("a heading clicked in the outline", async () =>
             {
