@@ -837,9 +837,10 @@ namespace Typedown.Core.ViewModels
         /// The document rendered as the exports render it, as the body element of an XHTML document (well-formed XML, in
         /// the XHTML namespace): for turning it into another format. Null when the page did not answer in time; an
         /// exception with the page's message when it could not render. With <paramref name="diagramsAsPictures"/> each
-        /// diagram is a PNG on white (an img with a data: address) instead of an SVG.
+        /// diagram is a PNG on white (an img with a data: address) instead of an SVG; with <paramref name="mathAsTex"/> each
+        /// formula is its TeX (span.math-tex, span.math-tex-display) instead of KaTeX's drawing.
         /// </summary>
-        public async Task<string> RenderXhtmlAsync(int timeoutMs, bool diagramsAsPictures = false)
+        public async Task<string> RenderXhtmlAsync(int timeoutMs, bool diagramsAsPictures = false, bool mathAsTex = false)
         {
             if (MarkdownEditor == null) return null;
             var token = ++normalizationToken;
@@ -847,7 +848,7 @@ namespace Typedown.Core.ViewModels
             xhtmlWaiters[token] = waiter;
             try
             {
-                MarkdownEditor.PostMessage("RenderXhtml", new { token, diagramsAsPictures });
+                MarkdownEditor.PostMessage("RenderXhtml", new { token, diagramsAsPictures, mathAsTex });
                 if (await Task.WhenAny(waiter.Task, Task.Delay(timeoutMs)) != waiter.Task) return null;
                 var reply = waiter.Task.Result;
                 if (reply?["error"] != null) throw new InvalidOperationException(reply["error"].ToString());

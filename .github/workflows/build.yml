@@ -124,6 +124,7 @@ jobs:
           node diagram-picture-check.js
           node table-backspace-check.js
           node xhtml-toc-check.js
+          node xhtml-math-check.js
 
       - uses: actions/upload-artifact@v4
         with:

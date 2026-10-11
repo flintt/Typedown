@@ -142,6 +142,8 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   empty table still becomes a paragraph with Backspace in its first cell.
 - `xhtml-toc-check.js` — the document rendered as XHTML for another format (RenderXhtml) keeps its `[TOC]` line's place
   as an empty `div.table-of-contents`, for the host to fill with that format's own table of contents.
+- `xhtml-math-check.js` — RenderXhtml with mathAsTex writes each formula as its TeX (`span.math-tex`,
+  `span.math-tex-display`) instead of KaTeX's drawing, whose MathML (with the TeX) the sanitizer drops.
 - `export-pdf-check.js` — the exported HTML carries what the PDF is made from: images by absolute path (so
   they survive being opened from a temp file) and KaTeX fonts by real address (so a formula keeps its font).
   A PDF is then produced from that HTML with a document outline, and the outline is checked to have an entry

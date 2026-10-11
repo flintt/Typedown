@@ -11,7 +11,7 @@ import highlightCss from '!!raw-loader!prismjs/themes/prism.css'
 import katexCss from '!!raw-loader!katex/dist/katex.css'
 import footerHeaderCss from '!!raw-loader!../assets/styles/headerFooterStyle.css'
 import { EXPORT_DOMPURIFY_CONFIG } from '../components/Muya/lib/config'
-import { sanitize, unescapeHTML } from '../components/Muya/lib/utils'
+import { sanitize, unescapeHTML, escapeHTML } from '../components/Muya/lib/utils'
 import { validEmoji } from '../components/Muya/lib/ui/emojis'
 import { alias } from '../components/Muya/lib/prism/loadLanguage'
 
@@ -189,6 +189,11 @@ class ExportHtml {
 
   mathRenderer = (math, displayMode) => {
     this.mathRendererCalled = true
+    // mathAsTex: each formula as its TeX, for a host that writes formulas its own way (KaTeX's drawing says nothing a
+    // format can read back, and its MathML - which holds the TeX - does not pass the sanitizer).
+    if (this.options?.mathAsTex) {
+      return `<span class="${displayMode ? 'math-tex-display' : 'math-tex'}">${escapeHTML(math)}</span>`
+    }
 
     try {
       return katex.renderToString(math, {
