@@ -98,8 +98,6 @@ namespace Typedown.Services.Automation
                     (editor as Core.Interfaces.IMarkdownEditor)!.FocusEditor();
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["focused"] = editor.FocusState != global::Microsoft.UI.Xaml.FocusState.Unfocused };
                 })));
-            // Runs a script in the window's editor page and returns its JSON result: for diagnosing what the page holds
-            // (caret, Muya's state) when a check fails in the real window and not in the page harness.
             // The web view as the app sees it: whether WinUI counts it visible, suspended, its size, the window's state.
             methods.Add(new MethodDescriptor("test.webview.state", null, "test.webview.state/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
@@ -127,6 +125,8 @@ namespace Typedown.Services.Automation
                         ["chain"] = editor == null ? null : LayoutChain(editor),
                     };
                 })));
+            // Runs a script in the window's editor page and returns its JSON result: for diagnosing what the page holds
+            // (caret, Muya's state) when a check fails in the real window and not in the page harness.
             methods.Add(new MethodDescriptor("test.editor.eval", null, "test.editor.eval/1", async (c, ct) =>
                 await await Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), async app =>
                 {
@@ -568,10 +568,6 @@ namespace Typedown.Services.Automation
                     if (file == null) throw new AutomationException(AutomationErrorKind.editor_not_ready, "no File menu in this window");
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["entries"] = new Newtonsoft.Json.Linq.JArray(file.ExportMenu()) };
                 })));
-            // The colours the side pane marks what is chosen with: every selection indicator drawn in it (the bar under
-            // Files/Outline, the pill of each outline and folder-tree row), by where it is, with its fill.
-            // The outline's expansion as the tree holds it (its nodes) and as the model holds it, row by row: the two
-            // disagreeing after a tab switch is how a heading's children came to be hidden with nobody collapsing it.
             // Every dialog left open in any window, closed as its close button would: the driver asks before each case, so
             // one case's prompt (an unsaved document's "save?") does not hold the next cases' dialogs back.
             methods.Add(new MethodDescriptor("test.dialogs.dismiss", null, "test.dialogs.dismiss/1", async (c, ct) =>
@@ -620,6 +616,8 @@ namespace Typedown.Services.Automation
                         ["themeForeground"] = Colour(Core.Utilities.ThemeFiles.Brush(theme?.Foreground) ?? Core.Utilities.ThemeFiles.Readable(theme?.Surface ?? theme?.Background)),
                     };
                 })));
+            // The outline's expansion as the tree holds it (its nodes) and as the model holds it, row by row: the two
+            // disagreeing after a tab switch is how a heading's children came to be hidden with nobody collapsing it.
             methods.Add(new MethodDescriptor("test.outline.state", null, "test.outline.state/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
                 {
@@ -692,6 +690,8 @@ namespace Typedown.Services.Automation
                     if (app.XamlRoot?.Content is global::Microsoft.UI.Xaml.DependencyObject root) Walk(root);
                     return (Newtonsoft.Json.Linq.JToken?)found;
                 })));
+            // The colours the side pane marks what is chosen with: every selection indicator drawn in it (the bar under
+            // Files/Outline, the pill of each outline and folder-tree row), by where it is, with its fill.
             methods.Add(new MethodDescriptor("test.pane.accent", null, "test.pane.accent/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
                 {

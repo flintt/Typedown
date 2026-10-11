@@ -135,6 +135,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | K06 | after closing a tab, a menu command, a mode switch, an outline jump, closing the find bar or a dialog, and Ctrl+Tab, the keys go to the document without a click |
 | K03 | the same with an untitled document (no per-file caret memory) |
 | FS01 | in full screen the main page starts at the top edge of the screen |
+| FS03 | in full screen the pointer at the top edge reveals the menu bar every time, and it hides when the pointer leaves |
 | FS02 | out of full screen the window is dragged by its title bar again at once (with the title row, and in compact mode by the menu row) |
 | PU01 | PlantUML is not drawn by default (nothing goes to plantuml.com, the block says so); turned on it is, by the server set if one is, off again it is not |
 | RV01 | reveal: "change" scrolls a change off screen into view, the caret where it was; "document" leaves the page |
@@ -153,6 +154,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | TB01 | the table toolbar's Resize table opens with the table's own size; Cancel leaves the table as it was; OK resizes it |
 | TH01 | a custom theme colours the page in visual, reading and source mode, and a change shows at once in each |
 | RD01 | reading mode: the context menu offers copying and selecting only, Copy works on a selection, copy as plain text leaves the Markdown out, Ctrl+Z changes nothing |
+| RD02 | reading mode: Focus mode and Typewriter mode in the View menu are disabled and drawn fainter than the entries that work, in Dark and Light, whether the menu was opened before or not |
 | CP01 | Copy pasted into Word: pictures at absolute file:/// addresses, a name and an alt text with brackets, an SVG sized in pt, a JPEG |
 | TH03 | the side pane marks what is chosen (the bar under Files/Outline, the outline's and the folder tree's row pill) in a custom theme's accent, and in the system accent again without one |
 | ES01 | an editor shortcut only the app carries out (Ctrl+1, Heading 1) works while one types in the editor |
@@ -167,12 +169,20 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | FT01 | the file tree sorts names as 1.3.7 did |
 | MN02 | a window minimized a while and restored: a document opened at once is shown within 5 s and takes keys |
 | TH05 | the editor follows Dark, Black, Mica off and on, then Light (it stayed dark under a light window) |
+| TH06 | a custom theme switched back to Light or Dark: the editor page, the line beside the side pane, the side pane and the status bar are drawn as before, and the editor is dark under Dark |
+| MN03 | minimized, written to, restored without activation: the editor's web view gets its size back |
+| MN04 | F11 in and out of full screen, then minimized and brought back as a person does: the window works |
+| MN05 | F11 in and out of full screen, minimized, then a file opened from Explorer: the window comes back working |
 | DP01 | the window is per-monitor DPI aware (not stretched, so not blurred, on a scaled screen) |
 | DR01 | files dragged from Explorer onto the editor: a Markdown file opens, a picture goes into the document |
 | DM01 | the window's top edge is drawn in the app's theme, and a dialog's smoke covers it too: the top row matches the row under it, light and dark |
 | TH02 | View > Theme > Reload themes finds a new theme file and a renamed one; the window draws in the custom theme's base whatever the built-in setting says |
 | WP01 | a web page pasted: headings with #, code fenced with its language and without line numbers, Google Docs bold and italic, late-loaded and relative pictures by their real addresses; with Insert web image copying, its pictures are copied beside the document and their addresses replaced |
 | ER01 | a page message handler that throws stays subscribed and the message still reaches the other handlers; an exception out of an event handler XAML calls is logged and the app goes on |
+| DG01 | a dialog wears the custom theme (its surface and text colours), and the system's colours again without it |
+| PM01 | the Paragraph menu's checks follow the caret: Table stays unchecked after its dialog is cancelled, Quote and Table are checked with the caret in a quote and a table |
+| OL02 | two long documents scrolled to their middle, switched between: the outline does not mark another heading of the document being left |
+| OL01 | tabs switched back and forth, quickly and slowly: every heading with headings under it stays expanded in the outline |
 | LD01 | a load the editor gives back rewritten is loaded once more and keeps the file's text; one rewritten again is taken after that one retry, not retried without end |
 | PF01 | measured: a 300 KB document opened, typed into and saved; the memory with two windows |
 | PF03 | profiled: where the host's CPU goes while it opens 300 KB documents |
@@ -197,6 +207,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | `test.backup.run` | - | Backups: one pass now in every window, and what the backup folder holds afterwards. | TestHostHooks.cs |
 | `test.editor.style` | `windowId` | How a window's editor page is drawn: its font size, line height and text direction, as the page reports them. | TestHostHooks.cs |
 | `test.editor.focus` | `windowId` | Keyboard focus into the window's editor page, the way the app itself gives it (the editor control's focus is handed on to the web view) - independent of what a click would land on. | TestHostHooks.cs |
+| `test.webview.state` | `windowId` | The web view as the app sees it: whether WinUI counts it visible, suspended, its size, the window's state. | TestHostHooks.cs |
 | `test.editor.eval` | `windowId`, `script` | Runs a script in the window's editor page and returns its JSON result: for diagnosing what the page holds (caret, Muya's state) when a check fails in the real window and not in the page harness. | TestHostHooks.cs |
 | `test.editor.screenPoint` | `x?`, `y?`, `windowId` | Where a point of the editor page (CSS pixels, as getBoundingClientRect gives them) is on the screen, in physical pixels: the page's coordinates are the editor control's (the floating tools are placed by the same mapping), scaled by the window's rasterization scale from its client area. The web view draws into the window without a window or an automation element of its own, so a test that clicks the page has nothing else to measure. | TestHostHooks.cs |
 | `test.edition.set` | `name`, `value?`, `windowId` | A state an edition takes from outside (Edition.TestSet), set for a test; an error when the edition has no such name (Typedown has none). | TestHostHooks.cs |
@@ -222,11 +233,16 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | `test.events.throwingHandler` | `windowId` | The window's editor messages with a handler that throws on the first one: how many each of two handlers got of two messages (a handler that threw was detached for good, and the message went no further). | TestHostHooks.cs |
 | `test.app.throwUnhandled` | `windowId` | An exception out of an event handler XAML calls (a timer's, as a click handler's would be): the process stays (it ended the app), and the exception is in the log. | TestHostHooks.cs |
 | `test.window.popups` | `windowId` | The popups open in a window (menus, flyouts, a number box's buttons...), by the type of what they show. | TestHostHooks.cs |
+| `test.app.caseLabel` | `label?` | The running E2E case and its purpose, shown in every window's title after the test host's marker (label empty: none). Not tied to a window: a case sets it before it has one. | TestHostHooks.cs |
 | `test.app.titleMarker` | `show?`, `windowId` | The test host's title markers ("AUTOMATION TEST HOST ·" and the connected client's note) on (show: true) or off in every window, for screenshots that are to look like the app. | TestHostHooks.cs |
 | `test.file.saveAs` | `path`, `windowId` | The window's active document saved as the path, as File > Save as with that file picked (an untitled one's first save too); the path back, or null when it was not saved. | TestHostHooks.cs |
 | `test.export.run` | `type?`, `path`, `windowId` | The window's document exported to a file, as File > Export > <type> with that file picked in the save dialog (html or pdf: the first export configuration of that type); answers once the export is asked for, not done. | TestHostHooks.cs |
 | `test.export.notice` | `windowId` | The notice an export leaves (Settings > Export > After export): the file it names, or null when none shows. | TestHostHooks.cs |
 | `test.export.menu` | `windowId` | The entries of a window's File > Export submenu, as shown. | TestHostHooks.cs |
+| `test.dialogs.dismiss` | - | Every dialog left open in any window, closed as its close button would: the driver asks before each case, so one case's prompt (an unsaved document's "save?") does not hold the next cases' dialogs back. | TestHostHooks.cs |
+| `test.dialog.colours` | `windowId` | The open dialog's colours and the custom theme's, to tell whether the dialog wears the theme. | TestHostHooks.cs |
+| `test.outline.state` | `windowId` | The outline's expansion as the tree holds it (its nodes) and as the model holds it, row by row: the two disagreeing after a tab switch is how a heading's children came to be hidden with nobody collapsing it. | TestHostHooks.cs |
+| `test.theme.chrome` | `windowId` | The colours a custom theme changes around the editor, as they are now: the line between the side pane and the editor, the side pane, the menu bar and the status bar. A theme switched off has to put back what the built-in theme draws (TH06). | TestHostHooks.cs |
 | `test.pane.accent` | `windowId` | The colours the side pane marks what is chosen with: every selection indicator drawn in it (the bar under Files/Outline, the pill of each outline and folder-tree row), by where it is, with its fill. | TestHostHooks.cs |
 | `test.images.uploadAll` | `windowId` | File > Upload local images on the window's active document, without its dialogs; returns the result. | TestHostHooks.cs |
 <!-- END generated: test-methods -->
