@@ -136,6 +136,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | K03 | the same with an untitled document (no per-file caret memory) |
 | FS01 | in full screen the main page starts at the top edge of the screen |
 | FS03 | in full screen the pointer at the top edge reveals the menu bar every time, and it hides when the pointer leaves |
+| MB01 | a menu open while the title bar is clicked or dragged closes: the File menu and the editor's context menu |
 | FS02 | out of full screen the window is dragged by its title bar again at once (with the title row, and in compact mode by the menu row) |
 | PU01 | PlantUML is not drawn by default (nothing goes to plantuml.com, the block says so); turned on it is, by the server set if one is, off again it is not |
 | RV01 | reveal: "change" scrolls a change off screen into view, the caret where it was; "document" leaves the page |

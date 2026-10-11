@@ -409,6 +409,19 @@ namespace Typedown.Windows
             if ((args.DidPositionChange || args.DidSizeChange || args.DidPresenterChange) && (RootControl?.IsLoaded ?? false))
                 SaveWindowPlacementWithOffset();
             if (args.DidPresenterChange || args.DidSizeChange) ScheduleEditorLayoutCheck();
+            if (args.DidPositionChange || args.DidSizeChange) CloseOpenMenus();
+        }
+
+        // A menu open while the window is dragged by its title bar or resized stayed where the window had been: WinUI 3
+        // shows menus in windows of their own, which do not follow (the old host closed them on a title-bar click and
+        // laid them out again as the window moved). They are closed, as a click anywhere else closes them (MB01).
+        private void CloseOpenMenus()
+        {
+            var root = RootControl?.XamlRoot;
+            if (root == null) return;
+            foreach (var popup in VisualTreeHelper.GetOpenPopupsForXamlRoot(root))
+                if (popup.Child is Microsoft.UI.Xaml.Controls.MenuFlyoutPresenter or Microsoft.UI.Xaml.Controls.FlyoutPresenter)
+                    popup.IsOpen = false;
         }
 
         // A window brought back from the taskbar now and then showed a blank editor (MN02 after full screen, MN03): the
