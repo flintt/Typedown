@@ -143,11 +143,12 @@ const Editor: React.FC = () => {
 
     // Host -> editor: the document rendered as the exports render it (diagrams drawn, math typeset), serialized as XHTML
     // so that it parses as XML, for a host turning it into another format. With diagramsAsPictures each diagram is a
-    // PNG on white (the export's light theme), for a format that cannot show SVG.
+    // PNG on white (the export's light theme), for a format that cannot show SVG. A [TOC] line is an empty
+    // div.table-of-contents, for the host to fill with that format's own table of contents (it was left out).
     useEffect(() => transport.addListener<{ token: number, diagramsAsPictures?: boolean }>('RenderXhtml', async ({ token, diagramsAsPictures }) => {
         flushRef.current?.()
         try {
-            const html = await new ExportHtml(markdownRef.current ?? '', { ...optionsRef.current, diagramsAsPictures }).renderHtml(undefined)
+            const html = await new ExportHtml(markdownRef.current ?? '', { ...optionsRef.current, diagramsAsPictures }).renderHtml('<div class="table-of-contents"></div>')
             const body = new DOMParser().parseFromString(`<!DOCTYPE html><html><body>${html}</body></html>`, 'text/html').body
             if (diagramsAsPictures) await diagramsToPictures(body)
             transport.postMessage('RenderedXhtml', { token, xhtml: new XMLSerializer().serializeToString(body) })
