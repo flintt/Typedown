@@ -149,11 +149,16 @@ namespace Typedown.Controls
             Focus(FocusState.Pointer);
         }
 
-        private async void OnLoaded(object sender, RoutedEventArgs e)
+        private async void OnLoaded(object sender, RoutedEventArgs e) => await StartAsync();
+
+        // The web view made (again, when the one there lost its browser) and the editor page loaded in it.
+        private async Task StartAsync()
         {
             Opacity = 0;
             IsEditorLoaded = false;
             IsEditorLoadFailed = false;
+            // A web view whose browser process is gone has no core any more: it cannot load a page, only be replaced.
+            if (WebViewController != null && WebViewController.CoreWebView2 == null) DropWebView();
             if (WebViewController == null)
             {
                 var webViewController = new WebViewController();
@@ -192,6 +197,34 @@ namespace Typedown.Controls
             }
         }
 
+        private void DropWebView()
+        {
+            var old = WebViewController;
+            WebViewController = null;
+            old?.Dispose();
+        }
+
+        // The browser process gone: its web view is dead for good (a reload threw, and every later load of the page),
+        // so a new one is made - with a new browser, the environment having let the old one go - and the page loaded
+        // in it brings the document back through the usual start-up handshake.
+        private async void RestartAfterBrowserExited(WebViewController failed)
+        {
+            try
+            {
+                if (disposables.IsDisposed || WebViewController != failed) return;
+                Core.Utilities.Log.Debug("editor: web view browser gone, making a new web view");
+                AppViewModel.EditorViewModel.OnEditorPageNavigating();
+                DropWebView();
+                await StartAsync();
+                Core.Utilities.Log.Debug($"editor: new web view {(IsEditorLoadFailed ? "failed" : "made, page loading")}");
+            }
+            catch (Exception ex)
+            {
+                IsEditorLoadFailed = true;
+                Core.Utilities.Log.Debug($"editor: new web view after the browser exited failed: {ex.Message}");
+            }
+        }
+
         private void OnCoreWebView2Initialized()
         {
             CoreWebView2.Settings.AreBrowserAcceleratorKeysEnabled = false;
@@ -216,11 +249,19 @@ namespace Typedown.Controls
             // The browser process can die under the editor (a GPU driver, a renderer bug). Left alone that is a
             // blank editor until the app is restarted; reloading the page brings the document back through the
             // usual start-up handshake, and the log says what happened.
+            var controller = WebViewController;
+            var environment = CoreWebView2.Environment;
             CoreWebView2.ProcessFailed += (s, args) =>
             {
                 Core.Utilities.Log.Debug($"editor: web view process failed: {args.ProcessFailedKind} {args.Reason} exit={args.ExitCode}");
-                if (args.ProcessFailedKind == CoreWebView2ProcessFailedKind.BrowserProcessExited || args.ProcessFailedKind == CoreWebView2ProcessFailedKind.RenderProcessExited || args.ProcessFailedKind == CoreWebView2ProcessFailedKind.RenderProcessUnresponsive)
-                    _ = DispatcherQueue.RunIdleAsync(_ => { try { CoreWebView2.Reload(); } catch (Exception ex) { Core.Utilities.Log.Debug($"editor: reload after process failure failed: {ex.Message}"); } });
+                // The whole browser gone takes the web view with it: only a new one brings the editor back.
+                if (args.ProcessFailedKind == CoreWebView2ProcessFailedKind.BrowserProcessExited)
+                {
+                    WebViewController.Forget(environment);
+                    DispatcherQueue.TryEnqueue(() => RestartAfterBrowserExited(controller));
+                }
+                else if (args.ProcessFailedKind == CoreWebView2ProcessFailedKind.RenderProcessExited || args.ProcessFailedKind == CoreWebView2ProcessFailedKind.RenderProcessUnresponsive)
+                    _ = DispatcherQueue.RunIdleAsync(_ => { try { CoreWebView2?.Reload(); } catch (Exception ex) { Core.Utilities.Log.Debug($"editor: reload after process failure failed: {ex.Message}"); } });
             };
 #if DEBUG
             CoreWebView2.AddWebResourceRequestedFilter("http://local-file-access/*", CoreWebView2WebResourceContext.All);

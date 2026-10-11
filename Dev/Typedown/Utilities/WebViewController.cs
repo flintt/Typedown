@@ -66,10 +66,17 @@ namespace Typedown.Utilities
         }
 
         // The browser gone (crashed, updated): the next web view starts a new one.
-        private static void OnEnvironmentBrowserProcessExited(CoreWebView2Environment sender, CoreWebView2BrowserProcessExitedEventArgs e)
+        private static void OnEnvironmentBrowserProcessExited(CoreWebView2Environment sender, CoreWebView2BrowserProcessExitedEventArgs e) => Forget(sender);
+
+        /// <summary>
+        /// The environment whose browser is gone let go of, so the next web view starts a new browser - also when a web
+        /// view hears of it (ProcessFailed) before the environment does.
+        /// </summary>
+        public static void Forget(CoreWebView2Environment sender)
         {
+            if (sender == null) return;
             var task = environmentTask;
-            if (task != null && task.IsCompleted && task.Result == sender)
+            if (task != null && task.IsCompletedSuccessfully && task.Result == sender)
             {
                 environmentTask = null;
                 sender.BrowserProcessExited -= OnEnvironmentBrowserProcessExited;

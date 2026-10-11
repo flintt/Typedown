@@ -148,6 +148,7 @@ internal static partial class Program
             await Case("FS01 in full screen the main page starts at the top edge of the screen", FS01);
             await Case("FS03 in full screen the pointer at the top edge reveals the menu bar every time, and it hides when the pointer leaves", FS03);
             await Case("MB01 a menu open while the title bar is clicked or dragged closes: the File menu and the editor's context menu", MB01);
+            await Case("WV01 the editor comes back after its web view's browser process ends: the document on the page again, taking edits", WV01);
             await Case("SF01 a window opening under the dark theme shows no light frame in its first two seconds on screen", SF01);
             await Case("HM01 Help > User guide opens the user guide in the interface's language, Help > About the About page", HM01);
             await Case("FS02 out of full screen the window is dragged by its title bar again at once (with the title row, and in compact mode by the menu row)", FS02);
