@@ -90,6 +90,7 @@ internal static partial class CaseCatalog
         ["FT01"] = F("files"),
         ["MN02"] = Q("window", "keys"),
         ["TH05"] = Q("theme"),
+        ["TH06"] = Q("theme"),
         // Fails as a known issue (restored without activation, the editor has no size): in full runs only.
         ["MN03"] = F("window"),
         ["MN04"] = Q("window"),
@@ -179,6 +180,7 @@ internal static partial class CaseCatalog
         ["FT01"] = "文件树排序与 1.3.7 一致",
         ["MN02"] = "最小化后恢复，文档立即显示并能输入",
         ["TH05"] = "编辑区跟随深色/黑色/云母开关/浅色",
+        ["TH06"] = "自定义主题切回内置主题后外框和编辑区颜色复原",
         ["MN03"] = "最小化时写入，未激活恢复后编辑区尺寸",
         ["MN04"] = "全屏进出后最小化再恢复，窗口正常",
         ["MN05"] = "全屏后最小化，从资源管理器打开文件",

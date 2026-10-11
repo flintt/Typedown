@@ -179,6 +179,7 @@ internal static partial class Program
             await Case("FT01 the file tree sorts names as 1.3.7 did", FT01);
             await Case("MN02 a window minimized a while and restored: a document opened at once is shown within 5 s and takes keys", MN02);
             await Case("TH05 the editor follows Dark, Black, Mica off and on, then Light (it stayed dark under a light window)", TH05);
+            await Case("TH06 a custom theme switched back to Light or Dark: the editor page, the line beside the side pane, the side pane and the status bar are drawn as before, and the editor is dark under Dark", TH06);
             await Case("MN03 minimized, written to, restored without activation: the editor's web view gets its size back", MN03);
             await Case("MN04 F11 in and out of full screen, then minimized and brought back as a person does: the window works", MN04);
             await Case("MN05 F11 in and out of full screen, minimized, then a file opened from Explorer: the window comes back working", MN05);

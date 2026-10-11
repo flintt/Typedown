@@ -665,6 +665,33 @@ namespace Typedown.Services.Automation
                         ["pane"] = page != null, ["tree"] = tree != null, ["autoExpand"] = app.SettingsViewModel?.TocAutoExpand, ["rows"] = rows,
                     };
                 })));
+            // The colours a custom theme changes around the editor, as they are now: the line between the side pane and
+            // the editor, the side pane, the menu bar and the status bar. A theme switched off has to put back what the
+            // built-in theme draws (TH06).
+            methods.Add(new MethodDescriptor("test.theme.chrome", null, "test.theme.chrome/1", (c, ct) =>
+                Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    string Colour(global::Microsoft.UI.Xaml.Media.Brush brush) => brush switch
+                    {
+                        null => "none",
+                        global::Microsoft.UI.Xaml.Media.SolidColorBrush solid => solid.Color.ToString() + (solid.Opacity < 1 ? $"@{solid.Opacity:0.##}" : ""),
+                        _ => brush.GetType().Name,
+                    };
+                    var found = new Newtonsoft.Json.Linq.JObject();
+                    void Walk(global::Microsoft.UI.Xaml.DependencyObject node)
+                    {
+                        if (node is global::Microsoft.UI.Xaml.FrameworkElement fe)
+                        {
+                            if (fe.Name == "SplitterLine" && fe is global::Microsoft.UI.Xaml.Controls.Border line) found["splitter"] = Colour(line.Background);
+                            if (fe is Core.Controls.StatusBar status && status.FindName("RootGrid") is global::Microsoft.UI.Xaml.Controls.Panel statusGrid) found["statusBar"] = Colour(statusGrid.Background);
+                            if (fe is Core.Controls.MenuBar menu && menu.FindName("RootGrid") is global::Microsoft.UI.Xaml.Controls.Panel menuGrid) found["menuBar"] = Colour(menuGrid.Background);
+                            if (fe.Name == "LeftPane" && fe is global::Microsoft.UI.Xaml.Controls.Control pane) { found["sidePane"] = Colour(pane.Background); found["sidePaneText"] = Colour(pane.Foreground); }
+                        }
+                        for (var i = 0; i < global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(node); i++) Walk(global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChild(node, i));
+                    }
+                    if (app.XamlRoot?.Content is global::Microsoft.UI.Xaml.DependencyObject root) Walk(root);
+                    return (Newtonsoft.Json.Linq.JToken?)found;
+                })));
             methods.Add(new MethodDescriptor("test.pane.accent", null, "test.pane.accent/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
                 {
