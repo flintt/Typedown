@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Automation;
@@ -14,7 +14,7 @@ internal static class Deep
 {
     public static AutomationElement? First(AutomationElement root, Condition condition)
     {
-        var found = Retry(() => root.FindFirst(TreeScope.Descendants, condition));
+        var found = Retry(() => Searched(root).Select(part => part.FindFirst(TreeScope.Descendants, condition)).FirstOrDefault(e => e != null));
         return found ?? Walk(root, condition).FirstOrDefault();
     }
 
@@ -22,11 +22,28 @@ internal static class Deep
     {
         // Both, not the walk only when the search finds nothing: the search finds the window's own (Win32) parts, the
         // title bar's buttons say, and still misses the XAML ones.
-        var found = Retry(() => root.FindAll(TreeScope.Descendants, condition).Cast<AutomationElement>().ToList());
+        var found = Retry(() => Searched(root).SelectMany(part => part.FindAll(TreeScope.Descendants, condition).Cast<AutomationElement>()).ToList());
         var ids = new HashSet<string>(found.Select(Id));
         foreach (var e in Walk(root, condition))
             if (ids.Add(Id(e))) found.Add(e);
         return found;
+    }
+
+    // Where UI Automation's own search goes: the root's children one by one, without a web view's window. Searched as a
+    // whole, a window hiding its web view (the settings page shown) took the search into that window's legacy (MSAA)
+    // accessible objects, one of which listed itself among its own descendants: the search never came back (FB01). The
+    // root itself, when it is what is looked for, is matched by the walk.
+    private static IEnumerable<AutomationElement> Searched(AutomationElement root)
+    {
+        AutomationElementCollection children;
+        try { children = root.FindAll(TreeScope.Children, Condition.TrueCondition); } catch { yield break; }
+        foreach (AutomationElement child in children)
+        {
+            string cls;
+            try { cls = child.Current.ClassName ?? ""; } catch { continue; }
+            if (cls.Contains("WebView2") || cls.StartsWith("Chrome_")) continue;
+            yield return child;
+        }
     }
 
     // A search over a tree that changes under it (a virtualized list dropping rows) can fail with the element gone:
