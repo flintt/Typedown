@@ -88,12 +88,22 @@ namespace Typedown.Windows
             Title = Config.AppName;
             ExtendsContentIntoTitleBar = true;
             SetAppIcon();
-            if (AppWindow.Presenter is OverlappedPresenter presenter)
-            {
-                presenter.PreferredMinimumWidth = (int)(480 * ScalingFactor);
-                presenter.PreferredMinimumHeight = (int)(300 * ScalingFactor);
-            }
+            UpdateMinimumSize();
             InitializeComponent();
+        }
+
+        private double minimumSizeScale;
+
+        // The smallest window, 480 x 300 in the monitor's scale. Set again when the window moves to a monitor of another
+        // scale: set once at start, it stayed in the first monitor's (the old host recomputed it on every
+        // WM_GETMINMAXINFO).
+        private void UpdateMinimumSize()
+        {
+            var scale = ScalingFactor;
+            if (scale == minimumSizeScale || AppWindow.Presenter is not OverlappedPresenter presenter) return;
+            presenter.PreferredMinimumWidth = (int)(480 * scale);
+            presenter.PreferredMinimumHeight = (int)(300 * scale);
+            minimumSizeScale = scale;
         }
 
         private void InitializeComponent()
@@ -410,6 +420,7 @@ namespace Typedown.Windows
                 SaveWindowPlacementWithOffset();
             if (args.DidPresenterChange || args.DidSizeChange) ScheduleEditorLayoutCheck();
             if (args.DidPositionChange || args.DidSizeChange) CloseOpenMenus();
+            if (args.DidPositionChange || args.DidSizeChange) UpdateMinimumSize();
         }
 
         // A menu open while the window is dragged by its title bar or resized stayed where the window had been: WinUI 3
