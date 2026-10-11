@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -36,6 +37,14 @@ internal static partial class Program
             notes.Add($"{(english ? "English" : "Chinese")} guide, {text.Length} characters, starts {Newtonsoft.Json.JsonConvert.SerializeObject(text.Split('\n')[0])}");
             // Under the edition's own name in an edition (the copy has the brand replaced).
             Check(text.Length > 5000 && System.Text.RegularExpressions.Regex.IsMatch(text, english ? @"^# \w+ User Guide" : @"^# \w+ 使用说明"), "the whole guide, in the language of its file");
+            // An edition's supplement beside the guide is at the end of the copy opened.
+            var supplement = Path.Combine(Path.GetDirectoryName(hostExe)!, "Resources", "Guide", english ? "user-guide.edition.en.md" : "user-guide.edition.md");
+            if (File.Exists(supplement))
+            {
+                var first = File.ReadAllLines(supplement).First(l => l.StartsWith("#"));
+                notes.Add("supplement: " + first);
+                Check(text.Contains(first) && text.IndexOf(first, StringComparison.Ordinal) > text.Length / 2, "the edition's supplement is at the end of the guide");
+            }
 
             await Activate(window);
             await InvokeMenuBarItem(window, "AboutItem");
