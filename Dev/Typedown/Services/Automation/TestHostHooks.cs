@@ -135,6 +135,14 @@ namespace Typedown.Services.Automation
                     var json = await editor.CoreWebView2.ExecuteScriptAsync(c.Params.RequiredString("script"));
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["result"] = Newtonsoft.Json.Linq.JToken.Parse(json) };
                 })));
+            // The XHTML the editor renders for another format (RenderXhtml with diagrams as pictures and maths as TeX), for a
+            // test to check what such an export receives.
+            methods.Add(new MethodDescriptor("test.editor.xhtml", null, "test.editor.xhtml/1", async (c, ct) =>
+                await await Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), async app =>
+                {
+                    var xhtml = await app.EditorViewModel.RenderXhtmlAsync(60000, diagramsAsPictures: true, mathAsTex: true);
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["xhtml"] = xhtml };
+                })));
             // Where a point of the editor page (CSS pixels, as getBoundingClientRect gives them) is on the screen, in physical
             // pixels: the page's coordinates are the editor control's (the floating tools are placed by the same mapping),
             // scaled by the window's rasterization scale from its client area. The web view draws into the window without a

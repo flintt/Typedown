@@ -62,6 +62,8 @@ CI 的“Test editor integration”一步运行这些：
 - `table-backspace-check.js`: Backspace in a table cell stays in that cell: one Backspace too many after emptying a cell went to the end of the cell before, the next deleted that cell's text and what was typed next landed there - a reader saw "a cell emptied takes no typing" and lost its neighbour's text.
 - `xhtml-toc-check.js`: The document rendered as XHTML for another format (RenderXhtml) keeps the place of its [TOC] line: an empty div.table-of-contents where the table of contents goes, which a host fills with that format's own (Word's).
 - `xhtml-math-check.js`: The document rendered as XHTML for another format (RenderXhtml) with mathAsTex: each formula is its TeX, inline in a span.math-tex and on its own line in a span.math-tex-display, for a host writing formulas its own way (Word's equations).
+- `xhtml-footnote-check.js`: The document rendered as XHTML for another format (RenderXhtml) carries its footnotes as section.footnotes and a.footnote-ref, as the HTML export does: the host sends no footnote option, and the export uses the editor's own default (footnotes on) - [^1] stayed literal Markdown there.
+- `export-anchors-check.js`: The HTML that becomes the PDF must link its contents to the headings the parser actually rendered.
 <!-- END generated: editor-checks -->
 
 ## Windows 端到端测试
@@ -122,6 +124,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | K01 | a font size changed through the API while the reader types: the keys still reach the page |
 | B02 | an open settings page shows a font size changed from elsewhere |
 | F01 | a written document with protected payloads keeps every one of them through a real first keystroke |
+| F02 | the first-edit warning for unsafe HTML stays briefly, then closes by itself |
 | M01 | a written text survives visual, reading and source mode switches byte for byte, then saves exactly |
 | P01 | awaitPresentation: a revealed write in a background tab of a minimized window reports it drawn; it needs reveal |
 | W01 | the editor page reloads after it applied a write and before the commit: nothing is committed, host and page agree |
@@ -220,6 +223,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | `test.editor.focus` | `windowId` | Keyboard focus into the window's editor page, the way the app itself gives it (the editor control's focus is handed on to the web view) - independent of what a click would land on. | TestHostHooks.cs |
 | `test.webview.state` | `windowId` | The web view as the app sees it: whether WinUI counts it visible, suspended, its size, the window's state. | TestHostHooks.cs |
 | `test.editor.eval` | `windowId`, `script` | Runs a script in the window's editor page and returns its JSON result: for diagnosing what the page holds (caret, Muya's state) when a check fails in the real window and not in the page harness. | TestHostHooks.cs |
+| `test.editor.xhtml` | `windowId` | The XHTML the editor renders for another format (RenderXhtml with diagrams as pictures and maths as TeX), for a test to check what such an export receives. | TestHostHooks.cs |
 | `test.editor.screenPoint` | `x?`, `y?`, `windowId` | Where a point of the editor page (CSS pixels, as getBoundingClientRect gives them) is on the screen, in physical pixels: the page's coordinates are the editor control's (the floating tools are placed by the same mapping), scaled by the window's rasterization scale from its client area. The web view draws into the window without a window or an automation element of its own, so a test that clicks the page has nothing else to measure. | TestHostHooks.cs |
 | `test.edition.set` | `name`, `value?`, `windowId` | A state an edition takes from outside (Edition.TestSet), set for a test; an error when the edition has no such name (Typedown has none). | TestHostHooks.cs |
 | `test.edition.get` | `name`, `windowId` | A state of the edition's (Edition.TestGet), as a string; an error when the edition has no such name. | TestHostHooks.cs |
