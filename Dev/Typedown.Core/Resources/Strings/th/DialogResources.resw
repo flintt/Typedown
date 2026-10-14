@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>ในจำนวนนี้ {0} รูปเคยอัปโหลดด้วยการกำหนดค่านี้แล้ว จึงใช้ที่อยู่เดิมของรูปเหล่านั้น</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>ดาวน์โหลด WebView2 Runtime จาก Microsoft</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>ไม่ได้ติดตั้งรันไทม์ โปรแกรมติดตั้งต้องเชื่อมต่ออินเทอร์เน็ต คุณสามารถดาวน์โหลดรันไทม์จาก Microsoft ได้เช่นกัน (มีตัวติดตั้งแบบออฟไลน์ด้วย) ติดตั้งแล้วเริ่มแอปใหม่</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>กำลังติดตั้ง WebView2 Runtime...</value>
+  </data>
 </root>

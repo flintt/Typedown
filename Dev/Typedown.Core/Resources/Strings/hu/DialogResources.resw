@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>Közülük {0} már korábban fel lett töltve ezzel a konfigurációval, ezért a korábbi címük lett felhasználva.</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>WebView2 futtatókörnyezet letöltése a Microsofttól</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>A futtatókörnyezet nem települt. A telepítőnek internetkapcsolat kell; a futtatókörnyezetet a Microsofttól is letöltheti (offline telepítő is van), telepítheti, majd újraindíthatja az alkalmazást.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>A WebView2 futtatókörnyezet telepítése...</value>
+  </data>
 </root>

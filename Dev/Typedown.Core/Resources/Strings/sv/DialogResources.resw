@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>{0} av dem hade redan laddats upp med den här konfigurationen, så deras tidigare adresser användes.</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Ladda ned WebView2 Runtime från Microsoft</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Körningsmiljön installerades inte. Installationen kräver en internetanslutning; du kan också ladda ned körningsmiljön från Microsoft (det finns även ett offlineinstallationsprogram), installera den och starta appen igen.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>Installerar WebView2 Runtime...</value>
+  </data>
 </root>

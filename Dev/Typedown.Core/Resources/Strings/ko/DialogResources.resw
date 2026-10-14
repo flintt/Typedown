@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>그중 {0}개는 이 구성으로 이미 업로드된 적이 있어 이전 주소를 사용했습니다.</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Microsoft에서 WebView2 런타임 다운로드</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>런타임이 설치되지 않았습니다. 설치 프로그램에는 인터넷 연결이 필요합니다. Microsoft에서 런타임(오프라인 설치 프로그램도 있음)을 다운로드하여 설치한 후 앱을 다시 시작할 수도 있습니다.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>WebView2 런타임을 설치하는 중...</value>
+  </data>
 </root>

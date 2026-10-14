@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>{0} από αυτές είχαν ήδη μεταφορτωθεί με αυτήν τη διαμόρφωση, οπότε χρησιμοποιήθηκαν οι προηγούμενες διευθύνσεις τους.</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Λήψη του WebView2 Runtime από τη Microsoft</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Το runtime δεν εγκαταστάθηκε. Η εγκατάσταση χρειάζεται σύνδεση στο διαδίκτυο· μπορείτε επίσης να κατεβάσετε το runtime από τη Microsoft (υπάρχει και πρόγραμμα εγκατάστασης εκτός σύνδεσης), να το εγκαταστήσετε και να ξεκινήσετε ξανά την εφαρμογή.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>Εγκατάσταση του WebView2 Runtime...</value>
+  </data>
 </root>

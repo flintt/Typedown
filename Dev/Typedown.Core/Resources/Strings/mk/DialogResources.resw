@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>{0} од нив веќе беа прикачени порано со оваа конфигурација, па се користени нивните претходни адреси.</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Преземете го WebView2 Runtime од Microsoft</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Runtime не е инсталиран. Инсталацијата бара интернет врска; можете да го преземете runtime и од Microsoft (има и офлајн инсталатор), да го инсталирате и повторно да ја стартувате апликацијата.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>Се инсталира WebView2 Runtime...</value>
+  </data>
 </root>

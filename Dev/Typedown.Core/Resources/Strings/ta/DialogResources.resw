@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>அவற்றில் {0} இந்த உள்ளமைவுடன் ஏற்கனவே பதிவேற்றப்பட்டிருந்ததால், அவற்றின் முந்தைய முகவரிகள் பயன்படுத்தப்பட்டன.</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Microsoft இலிருந்து WebView2 இயக்க நேரத்தைப் பதிவிறக்கவும்</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>இயக்க நேரம் நிறுவப்படவில்லை. அமைவுக்கு இணைய இணைப்பு தேவை; Microsoft இலிருந்து இயக்க நேரத்தைப் பதிவிறக்கவும் முடியும் (ஆஃப்லைன் நிறுவியும் உள்ளது), அதை நிறுவி பயன்பாட்டை மீண்டும் தொடங்கவும்.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>WebView2 இயக்க நேரம் நிறுவப்படுகிறது...</value>
+  </data>
 </root>

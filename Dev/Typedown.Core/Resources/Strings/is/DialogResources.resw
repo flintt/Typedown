@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>Búið var að hlaða {0} þeirra upp áður með þessum stillingum, svo fyrri vistföng þeirra voru notuð.</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Sækja WebView2 Runtime frá Microsoft</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Keyrsluumhverfið var ekki sett upp. Uppsetningin þarf nettengingu; þú getur líka sótt keyrsluumhverfið frá Microsoft (það er líka til uppsetningarforrit án nettengingar), sett það upp og ræst forritið aftur.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>Set upp WebView2 Runtime...</value>
+  </data>
 </root>

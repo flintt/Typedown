@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>{0} daripadanya telah dimuat naik sebelum ini dengan konfigurasi ini, jadi alamat terdahulunya digunakan.</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Muat turun WebView2 Runtime daripada Microsoft</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Masa jalan tidak dipasang. Persediaan memerlukan sambungan Internet; anda juga boleh memuat turun masa jalan daripada Microsoft (terdapat juga pemasang luar talian), memasangnya dan memulakan semula aplikasi.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>Memasang WebView2 Runtime...</value>
+  </data>
 </root>

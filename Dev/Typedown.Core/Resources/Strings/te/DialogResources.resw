@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>వాటిలో {0} ఈ కాన్ఫిగరేషన్ తో ఇంతకుముందే అప్ లోడ్ అయ్యాయి, కాబట్టి వాటి పాత చిరునామాలు ఉపయోగించబడ్డాయి.</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Microsoft నుండి WebView2 రన్‌టైమ్‌ను డౌన్‌లోడ్ చేయండి</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>రన్‌టైమ్ ఇన్‌స్టాల్ కాలేదు. సెటప్‌కు ఇంటర్నెట్ కనెక్షన్ అవసరం; మీరు Microsoft నుండి రన్‌టైమ్‌ను డౌన్‌లోడ్ కూడా చేయవచ్చు (ఆఫ్‌లైన్ ఇన్‌స్టాలర్ కూడా ఉంది), దాన్ని ఇన్‌స్టాల్ చేసి యాప్‌ను మళ్లీ ప్రారంభించండి.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>WebView2 రన్‌టైమ్ ఇన్‌స్టాల్ అవుతోంది...</value>
+  </data>
 </root>

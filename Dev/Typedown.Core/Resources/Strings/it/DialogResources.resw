@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>{0} erano già state caricate con questa configurazione, quindi sono stati usati i loro indirizzi precedenti.</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Scarica il runtime WebView2 da Microsoft</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Il runtime non è stato installato. L'installazione richiede una connessione a Internet; puoi anche scaricare il runtime da Microsoft (esiste anche un programma di installazione offline), installarlo e riavviare l'app.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>Installazione del runtime WebView2...</value>
+  </data>
 </root>

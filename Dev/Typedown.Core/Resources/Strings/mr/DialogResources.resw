@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>त्यापैकी {0} या कॉन्फिगरेशनसह आधीच अपलोड केल्या होत्या, म्हणून त्यांचे आधीचे पत्ते वापरले गेले.</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Microsoft वरून WebView2 रनटाइम डाउनलोड करा</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>रनटाइम इन्स्टॉल झाले नाही. सेटअपला इंटरनेट कनेक्शन लागते; तुम्ही Microsoft वरून रनटाइम डाउनलोडही करू शकता (ऑफलाइन इन्स्टॉलरही आहे), तो इन्स्टॉल करा आणि ॲप पुन्हा सुरू करा.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>WebView2 रनटाइम इन्स्टॉल होत आहे...</value>
+  </data>
 </root>

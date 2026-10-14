@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>ಅವುಗಳಲ್ಲಿ {0} ಅನ್ನು ಈ ಕಾನ್ಫಿಗರೇಶನ್‌ನೊಂದಿಗೆ ಈ ಹಿಂದೆಯೇ ಅಪ್ ಲೋಡ್ ಮಾಡಲಾಗಿತ್ತು, ಆದ್ದರಿಂದ ಅವುಗಳ ಹಿಂದಿನ ವಿಳಾಸಗಳನ್ನು ಬಳಸಲಾಗಿದೆ.</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Microsoft ನಿಂದ WebView2 ರನ್‌ಟೈಮ್ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>ರನ್‌ಟೈಮ್ ಸ್ಥಾಪನೆಯಾಗಲಿಲ್ಲ. ಸೆಟಪ್‌ಗೆ ಇಂಟರ್ನೆಟ್ ಸಂಪರ್ಕ ಬೇಕು; ನೀವು Microsoft ನಿಂದ ರನ್‌ಟೈಮ್ ಡೌನ್‌ಲೋಡ್ ಕೂಡ ಮಾಡಬಹುದು (ಆಫ್‌ಲೈನ್ ಸ್ಥಾಪಕವೂ ಇದೆ), ಅದನ್ನು ಸ್ಥಾಪಿಸಿ ಅಪ್ಲಿಕೇಶನ್ ಮರುಪ್ರಾರಂಭಿಸಿ.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>WebView2 ರನ್‌ಟೈಮ್ ಸ್ಥಾಪಿಸಲಾಗುತ್ತಿದೆ...</value>
+  </data>
 </root>

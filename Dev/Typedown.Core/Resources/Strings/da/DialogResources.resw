@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>{0} af dem var allerede uploadet med denne konfiguration, så deres tidligere adresser blev brugt.</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Download WebView2 Runtime fra Microsoft</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Runtime blev ikke installeret. Installationen kræver en internetforbindelse; du kan også downloade runtime fra Microsoft (der findes også et offlineinstallationsprogram), installere den og starte appen igen.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>Installerer WebView2 Runtime...</value>
+  </data>
 </root>

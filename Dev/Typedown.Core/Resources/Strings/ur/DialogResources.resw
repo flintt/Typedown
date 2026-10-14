@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>ان میں سے {0} اس کنفیگریشن کے ساتھ پہلے ہی اپ لوڈ کی جا چکی تھیں، اس لیے ان کے پچھلے پتے استعمال کیے گئے۔</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Microsoft سے WebView2 رن ٹائم ڈاؤن لوڈ کریں</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>رن ٹائم انسٹال نہیں ہوا۔ سیٹ اپ کو انٹرنیٹ کنکشن درکار ہے؛ آپ Microsoft سے رن ٹائم ڈاؤن لوڈ بھی کر سکتے ہیں (آف لائن انسٹالر بھی موجود ہے)، اسے انسٹال کریں اور ایپ دوبارہ شروع کریں۔</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>WebView2 رن ٹائم انسٹال ہو رہا ہے...</value>
+  </data>
 </root>

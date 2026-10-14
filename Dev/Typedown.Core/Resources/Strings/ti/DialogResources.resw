@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>ካብኣቶም {0} ቅድሚ ሕጂ ብዚ ኣቃውማ ተሰቒሎም ስለ ዝነበሩ፡ ናይ ቅድሚ ኣድራሻታቶም ተጠቒምና።</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>WebView2 Runtime ካብ Microsoft ኣውርድ</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Runtime ኣይተጻዕነን። ምጽዓን ናይ ኢንተርነት ምትእስሳር የድልዮ፤ Runtime ካብ Microsoft ከተውርድ ትኽእል ኢኻ (ካብ መስመር ወጻኢ ዝጽዕን እውን ኣሎ)፣ ጽዒንካ ነቲ መተግበሪ ደጊምካ ጀምሮ።</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>WebView2 Runtime ይጽዓን ኣሎ...</value>
+  </data>
 </root>

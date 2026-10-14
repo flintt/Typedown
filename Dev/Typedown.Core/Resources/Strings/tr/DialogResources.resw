@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>Bunlardan {0} tanesi bu yapılandırmayla daha önce yüklenmişti, bu yüzden önceki adresleri kullanıldı.</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>WebView2 Çalışma Zamanını Microsoft'tan indirin</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Çalışma zamanı yüklenmedi. Kurulum internet bağlantısı gerektirir; çalışma zamanını Microsoft'tan da indirebilir (çevrimdışı yükleyici de vardır), yükleyip uygulamayı yeniden başlatabilirsiniz.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>WebView2 Çalışma Zamanı yükleniyor...</value>
+  </data>
 </root>

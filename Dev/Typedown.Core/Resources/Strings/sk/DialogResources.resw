@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>{0} z nich už bolo predtým nahraných s touto konfiguráciou, preto sa použili ich predchádzajúce adresy.</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Stiahnuť modul runtime WebView2 od Microsoftu</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Modul runtime sa nenainštaloval. Inštalácia vyžaduje pripojenie na internet; modul runtime si môžete stiahnuť aj od Microsoftu (k dispozícii je aj offline inštalátor), nainštalovať ho a aplikáciu spustiť znova.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>Inštaluje sa modul runtime WebView2...</value>
+  </data>
 </root>

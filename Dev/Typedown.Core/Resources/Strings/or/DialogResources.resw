@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>ସେଗୁଡ଼ିକ ମଧ୍ୟରୁ {0}ଟି ଏହି କନଫିଗ୍ରେସନ୍ ସହ ପୂର୍ବରୁ ଅପଲୋଡ୍ ହୋଇସାରିଥିଲା, ତେଣୁ ସେଗୁଡ଼ିକର ପୂର୍ବ ଠିକଣା ବ୍ୟବହାର କରାଗଲା।</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Microsoft ରୁ WebView2 ରନଟାଇମ ଡାଉନଲୋଡ କରନ୍ତୁ</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>ରନଟାଇମ ଇନଷ୍ଟଲ ହୋଇନାହିଁ। ସେଟଅପ ପାଇଁ ଇଣ୍ଟରନେଟ ସଂଯୋଗ ଆବଶ୍ୟକ; ଆପଣ Microsoft ରୁ ରନଟାଇମ ଡାଉନଲୋଡ ମଧ୍ୟ କରିପାରିବେ (ଅଫଲାଇନ ଇନଷ୍ଟଲର ମଧ୍ୟ ଅଛି), ଏହାକୁ ଇନଷ୍ଟଲ କରି ଆପ ପୁଣି ଆରମ୍ଭ କରନ୍ତୁ।</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>WebView2 ରନଟାଇମ ଇନଷ୍ଟଲ ହେଉଛି...</value>
+  </data>
 </root>

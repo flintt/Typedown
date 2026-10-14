@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>{0} מהן כבר הועלו בעבר עם תצורה זו, ולכן נעשה שימוש בכתובות הקודמות שלהן.</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>הורדת זמן הריצה WebView2 מ-Microsoft</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>זמן הריצה לא הותקן. תוכנית ההתקנה זקוקה לחיבור לאינטרנט; אפשר גם להוריד את זמן הריצה מ-Microsoft (יש גם מתקין לא מקוון), להתקין אותו ולהפעיל מחדש את היישום.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>מתקין את זמן הריצה WebView2...</value>
+  </data>
 </root>

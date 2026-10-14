@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>{0} no tiem jau iepriekš bija augšupielādēti ar šo konfigurāciju, tāpēc tika izmantotas to iepriekšējās adreses.</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Lejupielādēt WebView2 izpildlaiku no Microsoft</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Izpildlaiks netika instalēts. Iestatīšanai nepieciešams interneta savienojums; izpildlaiku var arī lejupielādēt no Microsoft (ir pieejams arī bezsaistes instalētājs), instalēt to un restartēt programmu.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>Notiek WebView2 izpildlaika instalēšana...</value>
+  </data>
 </root>

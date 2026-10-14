@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>{0} od njih je već ranije uploadovano s ovom konfiguracijom, pa su korištene njihove ranije adrese.</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Preuzmi WebView2 Runtime s Microsofta</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Runtime nije instaliran. Instalacija zahtijeva internetsku vezu; runtime možete preuzeti i s Microsofta (postoji i offline instalacijski program), instalirati ga i ponovo pokrenuti aplikaciju.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>Instaliranje WebView2 Runtimea...</value>
+  </data>
 </root>

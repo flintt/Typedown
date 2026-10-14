@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>Դրանցից {0}-ը նախկինում արդեն վերբեռնվել էր այս կոնֆիգուրացիայով, ուստի օգտագործվել են դրանց նախկին հասցեները։</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Ներբեռնել WebView2 Runtime-ը Microsoft-ից</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Runtime-ը չտեղադրվեց։ Տեղադրիչին անհրաժեշտ է ինտերնետ կապ. կարող եք նաև ներբեռնել runtime-ը Microsoft-ից (կա նաև անցանց տեղադրիչ), տեղադրել այն և վերագործարկել հավելվածը։</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>WebView2 Runtime-ը տեղադրվում է...</value>
+  </data>
 </root>

@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>{0} ảnh trong số đó đã được tải lên trước đây bằng cấu hình này, nên địa chỉ cũ của chúng được dùng lại.</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Tải WebView2 Runtime từ Microsoft</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Runtime chưa được cài đặt. Trình cài đặt cần kết nối Internet; bạn cũng có thể tải runtime từ Microsoft (có cả bộ cài ngoại tuyến), cài đặt rồi khởi động lại ứng dụng.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>Đang cài đặt WebView2 Runtime...</value>
+  </data>
 </root>

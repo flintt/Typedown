@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>{0} di antaranya sudah pernah diunggah dengan konfigurasi ini, jadi alamat sebelumnya digunakan.</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Unduh WebView2 Runtime dari Microsoft</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Runtime tidak terinstal. Penyiapan memerlukan koneksi internet; Anda juga dapat mengunduh runtime dari Microsoft (tersedia juga penginstal offline), menginstalnya, lalu memulai ulang aplikasi.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>Menginstal WebView2 Runtime...</value>
+  </data>
 </root>

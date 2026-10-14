@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>{0} niistä oli jo ladattu aiemmin tällä määrityksellä, joten niiden aiempia osoitteita käytettiin.</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Lataa WebView2-suorituspalvelu Microsoftilta</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Suorituspalvelua ei asennettu. Asennus vaatii internetyhteyden; voit myös ladata suorituspalvelun Microsoftilta (saatavilla on myös offline-asennusohjelma), asentaa sen ja käynnistää sovelluksen uudelleen.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>Asennetaan WebView2-suorituspalvelua...</value>
+  </data>
 </root>

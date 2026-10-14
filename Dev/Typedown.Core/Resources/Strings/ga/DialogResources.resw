@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>Uaslódáladh {0} díobh roimhe seo leis an gcumraíocht seo, mar sin úsáideadh a seoltaí roimhe sin.</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Íoslódáil WebView2 Runtime ó Microsoft</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Níor suiteáladh an t-am rite. Teastaíonn nasc idirlín ón socrú; is féidir leat an t-am rite a íoslódáil ó Microsoft freisin (tá suiteálaí as líne ann freisin), é a shuiteáil agus an aip a atosú.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>WebView2 Runtime á shuiteáil...</value>
+  </data>
 </root>

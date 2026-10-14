@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>{0} kati yake zilikuwa zimepakiwa awali kwa usanidi huu, kwa hivyo anwani zake za awali zilitumika.</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Pakua WebView2 Runtime kutoka Microsoft</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Runtime haikusakinishwa. Usanidi unahitaji muunganisho wa intaneti; unaweza pia kupakua runtime kutoka Microsoft (kuna pia kisakinishi cha nje ya mtandao), kuisakinisha na kuanzisha programu upya.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>Inasakinisha WebView2 Runtime...</value>
+  </data>
 </root>

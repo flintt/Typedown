@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>{0} dintre ele fuseseră deja încărcate cu această configurație, așa că s-au folosit adresele lor anterioare.</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Descărcați WebView2 Runtime de la Microsoft</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Runtime-ul nu a fost instalat. Programul de instalare are nevoie de conexiune la internet; puteți descărca runtime-ul și de la Microsoft (există și un program de instalare offline), îl instalați și reporniți aplicația.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>Se instalează WebView2 Runtime...</value>
+  </data>
 </root>

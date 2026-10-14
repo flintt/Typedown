@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>{0} مورد از آن‌ها قبلاً با همین تنظیمات ارسال شده بودند، بنابراین از آدرس‌های قبلی‌شان استفاده شد.</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>دانلود WebView2 Runtime از Microsoft</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>زمان اجرا نصب نشد. برنامه نصب به اتصال انترنت نیاز دارد؛ همچنان می‌توانید زمان اجرا را از Microsoft دانلود کنید (نصب‌کننده آفلاین هم موجود است)، آن را نصب کنید و برنامه را دوباره آغاز کنید.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>در حال نصب WebView2 Runtime...</value>
+  </data>
 </root>

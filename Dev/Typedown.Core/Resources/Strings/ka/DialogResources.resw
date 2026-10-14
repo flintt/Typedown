@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>მათგან {0} უკვე ატვირთული იყო ამ კონფიგურაციით, ამიტომ გამოყენებულია მათი წინა მისამართები.</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>WebView2 Runtime-ის ჩამოტვირთვა Microsoft-დან</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Runtime არ დაინსტალირდა. ინსტალერს ინტერნეტ-კავშირი სჭირდება; runtime-ის ჩამოტვირთვა Microsoft-დანაც შეგიძლიათ (არის ოფლაინ ინსტალერიც), დააინსტალირეთ და ხელახლა გაუშვით აპი.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>WebView2 Runtime ინსტალირდება...</value>
+  </data>
 </root>

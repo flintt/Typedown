@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>ਇਨ੍ਹਾਂ ਵਿੱਚੋਂ {0} ਇਸ ਕੌਨਫਿਗ੍ਰੇਸ਼ਨ ਨਾਲ ਪਹਿਲਾਂ ਹੀ ਅੱਪਲੋਡ ਕੀਤੇ ਜਾ ਚੁੱਕੇ ਸਨ, ਇਸ ਲਈ ਉਨ੍ਹਾਂ ਦੇ ਪਿਛਲੇ ਪਤੇ ਵਰਤੇ ਗਏ।</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Microsoft ਤੋਂ WebView2 ਰਨਟਾਈਮ ਡਾਊਨਲੋਡ ਕਰੋ</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>ਰਨਟਾਈਮ ਇੰਸਟਾਲ ਨਹੀਂ ਹੋਇਆ। ਸੈੱਟਅੱਪ ਨੂੰ ਇੰਟਰਨੈੱਟ ਕਨੈਕਸ਼ਨ ਦੀ ਲੋੜ ਹੈ; ਤੁਸੀਂ Microsoft ਤੋਂ ਰਨਟਾਈਮ ਡਾਊਨਲੋਡ ਵੀ ਕਰ ਸਕਦੇ ਹੋ (ਆਫ਼ਲਾਈਨ ਇੰਸਟਾਲਰ ਵੀ ਹੈ), ਇਸਨੂੰ ਇੰਸਟਾਲ ਕਰੋ ਅਤੇ ਐਪ ਮੁੜ ਸ਼ੁਰੂ ਕਰੋ।</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>WebView2 ਰਨਟਾਈਮ ਇੰਸਟਾਲ ਹੋ ਰਿਹਾ ਹੈ...</value>
+  </data>
 </root>

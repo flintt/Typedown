@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>そのうち {0} 枚はこの設定で以前にアップロード済みだったため、以前のアドレスを使用しました。</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Microsoft から WebView2 ランタイムをダウンロード</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>ランタイムはインストールされませんでした。セットアップにはインターネット接続が必要です。Microsoft からランタイム（オフライン インストーラーもあります）をダウンロードしてインストールし、アプリを再起動することもできます。</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>WebView2 ランタイムをインストールしています...</value>
+  </data>
 </root>

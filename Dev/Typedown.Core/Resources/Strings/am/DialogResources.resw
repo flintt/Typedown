@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>ከእነዚህ ውስጥ {0} በዚህ አውደ-ቅጥያ ቀደም ብለው ተሰቅለው ስለነበር የቀድሞ አድራሻዎቻቸው ጥቅም ላይ ውለዋል።</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>WebView2 Runtimeን ከMicrosoft ያውርዱ</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Runtime አልተጫነም። ጫኚው የበይነመረብ ግንኙነት ያስፈልገዋል፤ Runtimeን ከMicrosoft ማውረድም ይችላሉ (ከመስመር ውጭ ጫኚም አለ)፣ ጭነው መተግበሪያውን እንደገና ያስጀምሩ።</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>WebView2 Runtime በመጫን ላይ...</value>
+  </data>
 </root>

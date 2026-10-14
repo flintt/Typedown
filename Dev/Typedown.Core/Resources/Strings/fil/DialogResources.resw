@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>Ang {0} sa mga ito ay na-upload na dati gamit ang configuration na ito, kaya ginamit ang mga dati nilang address.</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>I-download ang WebView2 Runtime mula sa Microsoft</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Hindi na-install ang runtime. Kailangan ng setup ng koneksyon sa internet; maaari mo ring i-download ang runtime mula sa Microsoft (may offline installer din), i-install ito, at simulan muli ang app.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>Ini-install ang WebView2 Runtime...</value>
+  </data>
 </root>

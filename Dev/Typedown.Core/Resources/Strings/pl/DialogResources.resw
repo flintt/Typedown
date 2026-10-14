@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>{0} z nich przesłano już wcześniej z tą konfiguracją, więc użyto ich wcześniejszych adresów.</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Pobierz środowisko uruchomieniowe WebView2 od Microsoft</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Środowisko uruchomieniowe nie zostało zainstalowane. Instalator wymaga połączenia z internetem; możesz też pobrać środowisko od Microsoft (dostępny jest też instalator offline), zainstalować je i ponownie uruchomić aplikację.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>Instalowanie środowiska uruchomieniowego WebView2...</value>
+  </data>
 </root>

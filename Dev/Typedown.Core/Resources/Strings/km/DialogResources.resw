@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>ក្នុងចំណោមនោះ {0} ត្រូវបានផ្ទុកឡើងពីមុនរួចហើយដោយប្រើការកំណត់រចនាសម្ព័ន្ធនេះ ដូច្នេះអាសយដ្ឋានពីមុនរបស់វាត្រូវបានប្រើ។</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>ទាញយក WebView2 Runtime ពី Microsoft</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Runtime មិនត្រូវបានដំឡើងទេ។ កម្មវិធីដំឡើងត្រូវការការតភ្ជាប់អ៊ីនធឺណិត; អ្នកក៏អាចទាញយក runtime ពី Microsoft (មានកម្មវិធីដំឡើងក្រៅបណ្ដាញផងដែរ) ដំឡើងវា ហើយចាប់ផ្ដើមកម្មវិធីឡើងវិញ។</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>កំពុងដំឡើង WebView2 Runtime...</value>
+  </data>
 </root>

@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>{0} neist oli selle konfiguratsiooniga juba varem üles laaditud, seega kasutati nende varasemaid aadresse.</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Laadi WebView2 käituskeskkond alla Microsoftilt</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Käituskeskkonda ei installitud. Häälestus vajab Interneti-ühendust; käituskeskkonna saab alla laadida ka Microsoftilt (saadaval on ka võrguühenduseta installer), selle installida ja rakenduse uuesti käivitada.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>WebView2 käituskeskkonna installimine...</value>
+  </data>
 </root>

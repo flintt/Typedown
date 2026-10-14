@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>{0} iš jų jau buvo įkelti anksčiau su šia konfigūracija, todėl panaudoti ankstesni jų adresai.</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Atsisiųsti WebView2 vykdymo aplinką iš Microsoft</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Vykdymo aplinka nebuvo įdiegta. Diegimo programai reikia interneto ryšio; vykdymo aplinką taip pat galite atsisiųsti iš Microsoft (yra ir neprisijungus veikianti diegimo programa), ją įdiegti ir iš naujo paleisti programą.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>Diegiama WebView2 vykdymo aplinka...</value>
+  </data>
 </root>

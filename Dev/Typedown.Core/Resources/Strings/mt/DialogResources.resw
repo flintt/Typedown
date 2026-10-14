@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>{0} minnhom kienu diġà telgħu qabel b'din il-konfigurazzjoni, għalhekk intużaw l-indirizzi preċedenti tagħhom.</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Niżżel il-WebView2 Runtime minn Microsoft</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Ir-runtime ma ġiex installat. L-installazzjoni teħtieġ konnessjoni tal-internet; tista' wkoll tniżżel ir-runtime minn Microsoft (hemm ukoll installatur offline), tinstallah u terġa' tibda l-app.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>Qed jiġi installat il-WebView2 Runtime...</value>
+  </data>
 </root>

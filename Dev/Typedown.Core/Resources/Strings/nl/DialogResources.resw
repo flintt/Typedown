@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>{0} daarvan waren al eerder met deze configuratie geüpload, dus zijn hun eerdere adressen gebruikt.</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>WebView2 Runtime downloaden van Microsoft</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>De runtime is niet geïnstalleerd. De installatie heeft een internetverbinding nodig; u kunt de runtime ook downloaden van Microsoft (er is ook een offline installatieprogramma), installeren en de app opnieuw starten.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>WebView2 Runtime wordt geïnstalleerd...</value>
+  </data>
 </root>

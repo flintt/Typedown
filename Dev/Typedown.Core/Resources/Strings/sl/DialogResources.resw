@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>{0} od njih je bilo s to konfiguracijo že naloženih prej, zato so bili uporabljeni njihovi prejšnji naslovi.</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Prenesite WebView2 Runtime od Microsofta</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Izvajalno okolje ni bilo nameščeno. Namestitev potrebuje internetno povezavo; izvajalno okolje lahko prenesete tudi od Microsofta (na voljo je tudi namestitveni program brez povezave), ga namestite in znova zaženete aplikacijo.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>Nameščanje WebView2 Runtime...</value>
+  </data>
 </root>
