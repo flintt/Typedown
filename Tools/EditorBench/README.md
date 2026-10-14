@@ -191,6 +191,10 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   counts — measuring up to first paint once had me reporting a win that could not be felt. It switches with
   the text the editor reports back, not the file as written, because that is what the host stores and hands
   over, and anything else is a load of a different document.
+- `codeblock-save-check.js` — code typed into a code block is in the text a save writes while the caret is still in
+  the block, in a short document and in one long enough for the text report to be throttled (FlushContent brings it
+  up to date). A Store review on 1.2.18 lost the code block when Save came straight after it. Fails against a bundle
+  whose flush does nothing.
 - `legacy-issues.js` — the issues reported against the original Typedown, in one run: raw html renders with its
   inline CSS, a code block is in the saved markdown the moment it is typed, a table cell whose text is selected
   and deleted still takes input, PageUp/PageDown keep moving.
