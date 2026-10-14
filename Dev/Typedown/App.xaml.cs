@@ -95,6 +95,8 @@ namespace Typedown
             }
             var window = new MainWindow();
             window.Start();
+            // The runtime installed just now: the install window waited, hidden, for the main window.
+            WebViewInstallWindow.CloseKept();
             ListenPipe(window.DispatcherQueue);
             // Local automation: nothing listens until the setting is turned on (docs/automation-api-spec.md, 5.1).
             Services.Automation.AutomationService.Initialize();

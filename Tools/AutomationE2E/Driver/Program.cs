@@ -151,6 +151,8 @@ internal static partial class Program
             await Case("MB01 a menu open while the title bar is clicked or dragged closes: the File menu and the editor's context menu", MB01);
             await Case("WV01 the editor comes back after its web view's browser process ends: the document on the page again, taking edits", WV01);
             await Case("SF01 a window opening under the dark theme shows no light frame in its first two seconds on screen", SF01);
+            await Case("WV02 without the WebView2 runtime the install window comes up with the download; a setup that installs it goes on to the main window", WV02);
+            await Case("WV03 a setup that did not install the WebView2 runtime brings the install window back saying so; Cancel ends the start", WV03);
             await Case("HM01 Help > User guide opens the user guide in the interface's language, Help > About the About page", HM01);
             await Case("FS02 out of full screen the window is dragged by its title bar again at once (with the title row, and in compact mode by the menu row)", FS02);
             await Case("PU01 PlantUML is not drawn by default (nothing goes to plantuml.com, the block says so); turned on it is, by the server set if one is, off again it is not", PU01);

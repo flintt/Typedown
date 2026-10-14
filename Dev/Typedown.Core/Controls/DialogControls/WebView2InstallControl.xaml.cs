@@ -15,6 +15,13 @@ namespace Typedown.Core.Controls
             this.InitializeComponent();
         }
 
+        /// <summary>Whether the window says the setup ran and did not install the runtime.</summary>
+        public bool IsInstallFailedShown
+        {
+            get => InstallFailedText.Visibility == Visibility.Visible;
+            set => InstallFailedText.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+        }
+
         private void OnCloseButtonClick(object sender, RoutedEventArgs e)
         {
             CloseButtonClick?.Invoke(this, EventArgs.Empty);

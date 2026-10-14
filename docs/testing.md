@@ -1,4 +1,4 @@
-﻿# 测试
+# 测试
 
 Typedown 的测试分几层，越往下越接近真实使用，也越慢、越依赖环境。改动落在哪一层，就至少跑那一层；发布前按 [Windows 真机验证](windows-verification.md) 走一遍。
 
@@ -148,6 +148,8 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | MB01 | a menu open while the title bar is clicked or dragged closes: the File menu and the editor's context menu |
 | WV01 | the editor comes back after its web view's browser process ends: the document on the page again, taking edits |
 | SF01 | a window opening under the dark theme shows no light frame in its first two seconds on screen |
+| WV02 | without the WebView2 runtime the install window comes up with the download; a setup that installs it goes on to the main window |
+| WV03 | a setup that did not install the WebView2 runtime brings the install window back saying so; Cancel ends the start |
 | HM01 | Help > User guide opens the user guide in the interface's language, Help > About the About page |
 | FS02 | out of full screen the window is dragged by its title bar again at once (with the title row, and in compact mode by the menu row) |
 | PU01 | PlantUML is not drawn by default (nothing goes to plantuml.com, the block says so); turned on it is, by the server set if one is, off again it is not |

@@ -245,6 +245,14 @@
     <value>Upload successful</value>
     <comment>上传成功</comment>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Download the WebView2 Runtime from Microsoft</value>
+    <comment>环境检查对话框/链接：从微软网站下载 WebView2 运行时</comment>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>The runtime was not installed. The setup needs an internet connection; you can also download the runtime from Microsoft (there is an offline installer too), install it, and start the app again.</value>
+    <comment>环境检查对话框/安装程序运行后仍未装上：运行时没有装上。安装程序需要联网；也可以从微软网站下载运行时（也有离线安装包），装好后重新启动本程序。</comment>
+  </data>
   <data name="WebView2RuntimeNotInstalledContent" xml:space="preserve">
     <value>You need to install WebView2 runtime to run this software properly.</value>
     <comment>环境检查对话框/您需要安装 WebView2 运行时才能正常运行该软件。</comment>

@@ -902,10 +902,33 @@ namespace Typedown.Services.Automation
             catch (Exception ex) { return "error: " + ex.Message; }
         }
 
+        // For E2E WV02/WV03: a start-up as on a machine without the WebView2 runtime. The environment variable
+        // TYPEDOWN_TEST_WEBVIEW2_MISSING set to "install" has the runtime found again once the setup has run (the start
+        // then goes on to the main window); "fail" never does (the window says so and offers the download). The setup
+        // itself is a stand-in that ends at once, so nothing is installed on the test machine.
+        private static string webView2Missing = Environment.GetEnvironmentVariable("TYPEDOWN_TEST_WEBVIEW2_MISSING");
+
+        public static bool PretendWebView2Missing => webView2Missing == "install" || webView2Missing == "fail";
+
+        public static System.Diagnostics.ProcessStartInfo WebView2SetupStandIn() => PretendWebView2Missing
+            ? new System.Diagnostics.ProcessStartInfo("cmd.exe", webView2Missing == "install" ? "/c exit 0" : "/c exit 1") { UseShellExecute = false, CreateNoWindow = true }
+            : null;
+
+        public static void OnWebView2SetupExited()
+        {
+            if (webView2Missing == "install") webView2Missing = null;
+        }
+
 #else
         public static IEditBarriers Barriers => null;
 
         public static void AddMethods(MethodTable methods) { }
+
+        public static bool PretendWebView2Missing => false;
+
+        public static System.Diagnostics.ProcessStartInfo WebView2SetupStandIn() => null;
+
+        public static void OnWebView2SetupExited() { }
 #endif
 
     }
