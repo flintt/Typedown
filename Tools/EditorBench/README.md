@@ -196,7 +196,10 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   the line the caret is on and leaves the lines around it as paragraphs; it used to join the whole paragraph into
   the heading. A selection made with Shift+Down ends at the start of the next block, and one started at the very end
   of a block begins in the block before: neither block has anything selected and neither is changed (quoting two
-  paragraphs quoted the third, and a heading command on such a selection did nothing). A Store review.
+  paragraphs quoted the third, and a heading command on such a selection did nothing). A list in a selection made
+  into a list gives its items to the new list instead of becoming one item holding the whole list ("1. - a", with
+  the paragraph after it as item 2), and lists of the kind chosen, all of the selection, stop being lists. Two
+  Store reviews (the second: "changing the list format easily turns the text after it into a quote").
 - `codeblock-save-check.js` — code typed into a code block is in the text a save writes while the caret is still in
   the block, in a short document and in one long enough for the text report to be throttled (FlushContent brings it
   up to date). A Store review on 1.2.18 lost the code block when Save came straight after it. Fails against a bundle
