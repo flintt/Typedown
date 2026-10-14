@@ -908,6 +908,33 @@ namespace Typedown.Services.Automation
                         entries.Add(new Newtonsoft.Json.Linq.JObject { ["id"] = id, ["text"] = text, ["path"] = path });
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["entries"] = entries };
                 })));
+            // The favourites: what favorites.json holds (path, folder) and what the window's folder pane shows in its group
+            // (path, whether dimmed as missing; null when the pane is not shown).
+            methods.Add(new MethodDescriptor("test.favorites.state", null, "test.favorites.state/1", (c, ct) =>
+                Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    var stored = new Newtonsoft.Json.Linq.JArray();
+                    foreach (var entry in Core.Services.Favorites.Shared.Items)
+                        stored.Add(new Newtonsoft.Json.Linq.JObject { ["path"] = entry.Path, ["folder"] = entry.Folder });
+                    var page = FindInWindow<Core.Controls.SidePanelControls.Pages.FolderPage>(app);
+                    Newtonsoft.Json.Linq.JArray? pane = null;
+                    if (page != null)
+                    {
+                        pane = new Newtonsoft.Json.Linq.JArray();
+                        foreach (var item in page.FavoriteItems)
+                            pane.Add(new Newtonsoft.Json.Linq.JObject { ["path"] = item.Path, ["missing"] = item.Missing });
+                    }
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["stored"] = stored, ["pane"] = pane };
+                })));
+            // Every favourite taken out (a case starting from none).
+            methods.Add(new MethodDescriptor("test.favorites.clear", null, "test.favorites.clear/1", async (c, ct) =>
+            {
+                var store = Core.Services.Favorites.Shared;
+                await store.LoadAsync();
+                foreach (var entry in store.Items) store.Remove(entry.Path);
+                await store.FlushAsync();
+                return new Newtonsoft.Json.Linq.JObject();
+            }));
             // A folder opened as the folder pane's root, as File > Open folder with that folder picked.
             methods.Add(new MethodDescriptor("test.folder.open", null, "test.folder.open/1", async (c, ct) =>
             {

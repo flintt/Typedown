@@ -189,6 +189,8 @@ namespace Typedown.Core.ViewModels
         /// AccessHistory from the settings file under this name (AccessHistory.RecordSettingName).
         /// </summary>
         public bool RecordRecentFiles { get => GetSettingValue(true); set => SetSettingValue(value); }
+        /// <summary>The folder pane's favourites group is unfolded (a click on its title folds it).</summary>
+        public bool FavoritesExpanded { get => GetSettingValue(true); set => SetSettingValue(value); }
         public bool AppCompactMode { get => GetSettingValue(false); set => SetSettingValue(value); }
         public InsertImageAction InsertClipboardImageAction { get => GetSettingValue(InsertImageAction.None); set => SetSettingValue(value); }
         public string InsertClipboardImageCopyPath { get => GetSettingValue("./images"); set => SetSettingValue(value); }

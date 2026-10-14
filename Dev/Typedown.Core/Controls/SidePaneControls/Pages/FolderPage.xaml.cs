@@ -59,6 +59,11 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             var fileViewModel = FileViewModel;
             fileViewModel.FileOpened += OnFileOpened;
             disposables.Add(System.Reactive.Disposables.Disposable.Create(() => fileViewModel.FileOpened -= OnFileOpened));
+            // The favourites are every window's: a change in another window is shown here on this window's thread.
+            var favorites = Typedown.Core.Services.Favorites.Shared;
+            favorites.Changed += OnFavoritesChanged;
+            disposables.Add(System.Reactive.Disposables.Disposable.Create(() => favorites.Changed -= OnFavoritesChanged));
+            RefreshFavorites();
             UpdateWorkFolder();
             Bindings.Update();
         }
@@ -190,8 +195,99 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             return items;
         }
 
-        /// <summary>The favourite folders, for the root's menu (none until favourites exist).</summary>
-        private IEnumerable<string> FavoriteFolders() => Enumerable.Empty<string>();
+        /// <summary>The favourite folders, for the root's menu.</summary>
+        private static IEnumerable<string> FavoriteFolders() => Typedown.Core.Services.Favorites.Shared.Items.Where(x => x.Folder).Select(x => x.Path);
+
+        // ---- favourites ----
+
+        public System.Collections.ObjectModel.ObservableCollection<PathItem> FavoriteItems { get; } = new();
+
+        public Visibility FavoritesVisibility { get; private set; } = Visibility.Collapsed;
+
+        public Visibility FavoritesListVisibility { get; private set; } = Visibility.Visible;
+
+        public string FavoritesChevron { get; private set; } = "\uE70D";
+
+        private void OnFavoritesChanged() => DispatcherQueue?.TryEnqueue(RefreshFavorites);
+
+        /// <summary>The favourites group made again from the store; the ones not there are dimmed once that is known.</summary>
+        private async void RefreshFavorites()
+        {
+            try
+            {
+                var entries = Typedown.Core.Services.Favorites.Shared.Items;
+                FavoriteItems.Clear();
+                foreach (var entry in entries) FavoriteItems.Add(new PathItem(entry.Path, entry.Folder) { IsFavorite = true });
+                FavoritesVisibility = FavoriteItems.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
+                UpdateFavoritesExpanded();
+                var items = FavoriteItems.ToList();
+                var missing = await PathProbe.MissingAsync(items.Select(x => x.Path));
+                foreach (var item in items) item.Missing = missing.Contains(item.Path);
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"favorites pane: {ex.Message}");
+            }
+        }
+
+        private void UpdateFavoritesExpanded()
+        {
+            var expanded = ViewModel?.SettingsViewModel?.FavoritesExpanded ?? true;
+            FavoritesListVisibility = expanded ? Visibility.Visible : Visibility.Collapsed;
+            FavoritesChevron = expanded ? "\uE70D" : "\uE76C";
+        }
+
+        private void OnFavoritesHeaderClick(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel?.SettingsViewModel is { } settings) settings.FavoritesExpanded = !settings.FavoritesExpanded;
+            UpdateFavoritesExpanded();
+        }
+
+        private async void OnFavoriteClick(object sender, ItemClickEventArgs e)
+        {
+            if (e.ClickedItem is not PathItem item || FileViewModel == null) return;
+            if (item.Folder) await SetRootAsync(item.Path);
+            // As the tree's single click: the file shown in the preview tab.
+            else if (!RecentPaths.Same(item.Path, FileViewModel.FilePath)) await FileViewModel.OpenFile(item.Path, preview: true);
+        }
+
+        private async void OnFavoriteDoubleTapped(object sender, Microsoft.UI.Xaml.Input.DoubleTappedRoutedEventArgs e)
+        {
+            if ((e.OriginalSource as FrameworkElement)?.DataContext is not PathItem item || item.Folder || FileViewModel == null) return;
+            e.Handled = true;
+            await FileViewModel.OpenFile(item.Path, preview: false);
+        }
+
+        private void OnRemoveFavoriteClick(object sender, RoutedEventArgs e)
+        {
+            if ((sender as FrameworkElement)?.DataContext is PathItem item) Typedown.Core.Services.Favorites.Shared.Remove(item.Path);
+        }
+
+        private void OnFavoriteLocationClick(object sender, RoutedEventArgs e)
+        {
+            if ((sender as FrameworkElement)?.DataContext is PathItem item) Common.OpenFileLocation(item.Path);
+        }
+
+        // The tree's "Add to favourites" / "Remove from favourites", worded for the item the menu is open on.
+        private void UpdateFavoriteEntry(object menuFlyout)
+        {
+            if (menuFlyout is not MenuFlyout flyout) return;
+            var item = GetExplorerItemFromMenuFlyout(flyout);
+            var entry = flyout.Items.OfType<MenuFlyoutItem>().FirstOrDefault(x => "Favorite".Equals(x.Tag));
+            if (entry == null || item == null) return;
+            var store = Typedown.Core.Services.Favorites.Shared;
+            var isFavorite = store.Contains(item.FullPath);
+            entry.Text = Locale.GetString(isFavorite ? "Favorites.Remove" : "Favorites.Add");
+            entry.IsEnabled = isFavorite || store.Items.Count < Typedown.Core.Services.FavoritesStore.MaxCount;
+        }
+
+        private void OnToggleFavoriteClick(object sender, RoutedEventArgs e)
+        {
+            var item = GetExplorerItemFromMenuFlyoutItem(sender);
+            if (item == null || item.IsNotice) return;
+            var store = Typedown.Core.Services.Favorites.Shared;
+            if (!store.Remove(item.FullPath)) store.Add(item.FullPath, item.Type == ExplorerItem.ExplorerItemType.Folder);
+        }
 
         /// <summary>The root's menu as it would open now (the automation test host): each entry's id, text and path.</summary>
         public IReadOnlyList<(string Id, string Text, string Path)> RootMenu() =>
@@ -291,6 +387,7 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
         private void OnItemContextFlyoutOpened(object sender, object e)
         {
             SetItemFocusState(sender, true);
+            UpdateFavoriteEntry(sender);
         }
 
         private void OnItemContextFlyoutClosed(object sender, object e)
@@ -511,11 +608,13 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             {
                 Try("rename", () =>
                 {
-                    var newPath = Path.Combine(Path.GetDirectoryName(item.FullPath), source.Task.Result);
-                    if (item.FullPath == ViewModel.FileViewModel.FilePath)
+                    var oldPath = item.FullPath;
+                    var newPath = Path.Combine(Path.GetDirectoryName(oldPath), source.Task.Result);
+                    if (oldPath == ViewModel.FileViewModel.FilePath)
                         ViewModel.FileViewModel.RenameFile(newPath);
-                    else
-                        FileOperation.Rename(item.FullPath, newPath);
+                    else if (FileOperation.Rename(oldPath, newPath))
+                        // Renamed here: a favourite of it (or inside a folder renamed) follows.
+                        Typedown.Core.Services.Favorites.Shared.Rename(oldPath, newPath);
                     return System.Threading.Tasks.Task.CompletedTask;
                 });
                 _ = DispatcherQueue.RunIdleAsync(() => UpdateSelectedItem(WorkFolderExplorerItem));

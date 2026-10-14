@@ -1164,6 +1164,7 @@ namespace Typedown.Core.ViewModels
             var fileOperation = ServiceProvider.GetService<IFileOperation>();
             if (fileOperation.Rename(FilePath, to))
             {
+                Favorites.Shared.Rename(FilePath, to);
                 FilePath = to;
                 return true;
             }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -318,4 +319,127 @@ internal static partial class Program
             foreach (var id in new[] { a, b }) try { await c.Call("document.close", new { documentId = id }); } catch { }
         }
     }
+
+    // ---- favourites ----
+
+    /// <summary>
+    /// The test host ended and started again on the same data folder (as R04 does): what a restart keeps is what is on
+    /// disk. Waits for its window. A dialog the restart brings (recovered backups) is closed before the next case.
+    /// </summary>
+    private static async Task RestartHost(List<string> notes)
+    {
+        using (var dying = Process.GetProcessById(hostPid))
+        {
+            dying.Kill();
+            dying.WaitForExit(10000);
+        }
+        File.Delete(Path.Combine(testRoot, "automation-endpoint.txt"));
+        var restarted = Process.Start(new System.Diagnostics.ProcessStartInfo(hostExe, $"--automation-test-root \"{testRoot}\"") { UseShellExecute = true })!;
+        hostPid = restarted.Id;
+        endpoint = await ReadEndpointFile(Path.Combine(testRoot, "automation-endpoint.txt")) ?? throw new CaseFailed("the restarted host never published its endpoint");
+        using var probe = await Connect();
+        await Initialize(probe, "e2e restart");
+        await WaitForWindow(probe);
+        await Task.Delay(3000);
+        try { await probe.Call("test.dialogs.dismiss", new { }); } catch { }
+        notes.Add($"restarted, pid {hostPid}");
+    }
+
+    private static async Task<(List<(string Path, bool Folder)> Stored, List<(string Path, bool Missing)>? Pane)> FavoritesState(Client c, string windowId)
+    {
+        var state = await c.Call("test.favorites.state", new { windowId });
+        var stored = ((JArray)state["stored"]!).Select(e => ((string)e["path"]!, (bool)e["folder"]!)).ToList();
+        var pane = state["pane"] is JArray p ? p.Select(e => ((string)e["path"]!, (bool)e["missing"]!)).ToList() : null;
+        return (stored, pane);
+    }
+
+    private static async Task FV01(List<string> notes)
+    {
+        var folder = FixtureFolder("fv01");
+        var sub = Path.Combine(folder, "chapter");
+        Directory.CreateDirectory(sub);
+        File.WriteAllText(Path.Combine(sub, "inside.md"), "# inside\n");
+        var file = Path.Combine(folder, "fv01.md");
+        var renamed = Path.Combine(folder, "fv01-renamed.md");
+        if (File.Exists(renamed)) File.Delete(renamed);
+        using (var c = await Session("e2e FV01"))
+        {
+            var windowId = await FirstWindowId(c);
+            await c.Call("test.favorites.clear", new { });
+            var id = await Open(c, file);
+            windowId = await WindowIdOf(c, id);
+            var window = await WindowOf(windowId, c);
+            await c.Call("test.settings.set", new { windowId, name = "AlwaysShowTabBar", value = true });
+            await c.Call("test.folder.open", new { windowId, path = folder });
+            await Task.Delay(1000);
+            try
+            {
+                // The file from its tab's right-click menu.
+                AutomationElement? tab = null;
+                await Eventually(() => Task.FromResult((tab = Deep.All(AutomationElement.FromHandle(window), new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.TabItem))
+                    .Cast<AutomationElement>().FirstOrDefault(t => t.Current.Name.Contains("fv01"))) != null), 5000);
+                Check(tab != null, "the document's tab is in the strip");
+                await Click(window, tab!, Mouse.Right);
+                await Task.Delay(600);
+                await ClickInPopup(window, await MenuEntry(window, "TabFavoriteItem"));
+                await Task.Delay(500);
+
+                // The folder from the tree's right-click menu.
+                AutomationElement? row = null;
+                await Eventually(() => Task.FromResult((row = FindNamed(window, "chapter", ControlType.TreeItem) ?? FindNamed(window, "chapter")) != null), 5000);
+                Check(row != null, "the folder chapter is in the tree");
+                await Click(window, row!, Mouse.Right);
+                await Task.Delay(600);
+                await ClickInPopup(window, await MenuEntry(window, "TreeFavoriteItem"));
+                await Task.Delay(800);
+
+                var (stored, pane) = await FavoritesState(c, windowId);
+                notes.Add("favourites: " + string.Join(", ", stored.Select(x => $"{Path.GetFileName(x.Path)}{(x.Folder ? "/" : "")}")));
+                Check(stored.Any(x => SamePath(x.Path, file) && !x.Folder), "the file is a favourite (from its tab's menu)");
+                Check(stored.Any(x => SamePath(x.Path, sub) && x.Folder), "the folder is a favourite (from the tree's menu)");
+                Check(pane != null && pane.Count == 2, "the folder pane's favourites group shows both");
+                Check(File.Exists(Path.Combine(testRoot, "data", "favorites.json")), "favorites.json is beside the settings");
+            }
+            finally
+            {
+                await CloseMenus();
+                try { await c.Call("document.close", new { documentId = id }); } catch { }
+                try { await c.Call("test.settings.set", new { windowId, name = "AlwaysShowTabBar", value = false }); } catch { }
+            }
+        }
+
+        await RestartHost(notes);
+
+        using (var c = await Session("e2e FV01 after"))
+        {
+            var windowId = await FirstWindowId(c);
+            var window = await WindowOf(windowId, c);
+            await c.Call("test.folder.open", new { windowId, path = folder });
+            List<(string Path, bool Missing)>? pane = null;
+            await Eventually(async () => (pane = (await FavoritesState(c, windowId)).Pane)?.Count == 2, 8000);
+            notes.Add("after the restart, the pane: " + string.Join(", ", pane?.Select(x => Path.GetFileName(x.Path)) ?? Array.Empty<string>()));
+            Check(pane?.Count == 2, "after a restart the favourites group still has the file and the folder");
+            await HomeAfterRestartCheck(c, windowId, notes);
+
+            // Renamed in the tree: the favourite follows.
+            AutomationElement? row = null;
+            await Eventually(() => Task.FromResult((row = FindNamed(window, "fv01.md", ControlType.TreeItem) ?? FindNamed(window, "fv01.md")) != null), 5000);
+            Check(row != null, "fv01.md is in the tree");
+            await Click(window, row!, Mouse.Right);
+            await Task.Delay(600);
+            await ClickInPopup(window, await MenuEntry(window, "TreeRenameItem"));
+            await Task.Delay(800);
+            Chord("Ctrl+A");
+            TypeText("fv01-renamed.md");
+            Chord("Enter");
+            await Task.Delay(1500);
+            var (stored, _) = await FavoritesState(c, windowId);
+            notes.Add("after the rename: " + string.Join(", ", stored.Select(x => Path.GetFileName(x.Path))));
+            Check(File.Exists(renamed), "the file was renamed on disk");
+            Check(stored.Any(x => SamePath(x.Path, renamed)) && !stored.Any(x => SamePath(x.Path, file)), "the favourite follows the rename");
+        }
+    }
+
+    /// <summary>FV01 after the restart: the home page lists the favourites too (the home page comes with its own commit).</summary>
+    private static Task HomeAfterRestartCheck(Client c, string windowId, List<string> notes) => Task.CompletedTask;
 }

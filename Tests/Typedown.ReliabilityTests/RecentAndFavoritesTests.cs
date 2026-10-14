@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Typedown.Core.Services;
 using Typedown.Core.Utilities;
 
 namespace Typedown.ReliabilityTests
@@ -62,5 +63,65 @@ namespace Typedown.ReliabilityTests
             CollectionAssert.AreEquivalent(new[] { P("fast", "gone.md") }, missing.ToArray());
             PathProbe.Forget();
         }
-    }
+    
+        [TestMethod]
+        public async Task FavouritesAreKeptInTheirFileAndReadBack()
+        {
+            using var directory = new TestDirectory();
+            var file = directory.File("favorites.json");
+            var store = new FavoritesStore(file);
+            Assert.IsTrue(store.Add(P("notes", "a.md"), folder: false));
+            Assert.IsTrue(store.Add(P("notes"), folder: true));
+            Assert.IsFalse(store.Add(P("notes", "a.md") , folder: false), "the same file twice");
+            await store.FlushAsync();
+
+            var again = new FavoritesStore(file);
+            await again.LoadAsync();
+            Assert.AreEqual(2, again.Items.Count);
+            Assert.IsTrue(again.Contains(P("notes") + Path.DirectorySeparatorChar));
+            Assert.IsTrue(again.Items.Single(x => x.Folder).Path == P("notes"));
+            Assert.IsTrue(again.Remove(P("notes", "a.md")));
+            await again.FlushAsync();
+            var third = new FavoritesStore(file);
+            await third.LoadAsync();
+            Assert.AreEqual(1, third.Items.Count);
+            Assert.IsTrue(third.Contains(P("notes")));
+        }
+
+        [TestMethod]
+        public void AtMostFiftyFavourites()
+        {
+            using var directory = new TestDirectory();
+            var store = new FavoritesStore(directory.File("favorites.json"));
+            for (var i = 0; i < FavoritesStore.MaxCount; i++) Assert.IsTrue(store.Add(P("f", i + ".md"), false));
+            Assert.IsFalse(store.Add(P("f", "one-more.md"), false));
+            Assert.AreEqual(FavoritesStore.MaxCount, store.Items.Count);
+        }
+
+        [TestMethod]
+        public void ARenameMovesTheFavouriteAndEverythingInARenamedFolder()
+        {
+            using var directory = new TestDirectory();
+            var store = new FavoritesStore(directory.File("favorites.json"));
+            store.Add(P("docs", "a.md"), false);
+            store.Add(P("docs", "sub"), true);
+            store.Add(P("docsother", "b.md"), false);
+            Assert.AreEqual(2, store.Rename(P("docs"), P("papers")));
+            CollectionAssert.AreEquivalent(new[] { P("papers", "a.md"), P("papers", "sub"), P("docsother", "b.md") }, store.Items.Select(x => x.Path).ToArray());
+            Assert.AreEqual(1, store.Rename(P("papers", "a.md"), P("papers", "c.md")));
+            Assert.IsTrue(store.Contains(P("papers", "c.md")));
+        }
+
+        [TestMethod]
+        public async Task AFileThatCannotBeReadIsKeptAsideNotOverwritten()
+        {
+            using var directory = new TestDirectory();
+            var file = directory.File("favorites.json");
+            File.WriteAllText(file, "{ not json");
+            var store = new FavoritesStore(file);
+            await store.LoadAsync();
+            Assert.AreEqual(0, store.Items.Count);
+            Assert.AreEqual("{ not json", File.ReadAllText(file + ".bad"));
+        }
+}
 }

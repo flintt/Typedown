@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Typedown.Core.Models;
@@ -216,6 +217,29 @@ namespace Typedown.Core.Controls
                 Tabs?.CloseTabCommand.Execute(tab);
                 _ = DispatcherQueue.RunIdleAsync(_ => closing = false);
             }
+        }
+
+        // The tab the menu was opened on, and its file.
+        private DocumentTab menuTab;
+
+        private void OnTabContextFlyoutOpening(object sender, object e)
+        {
+            var flyout = (MenuFlyout)sender;
+            menuTab = (flyout.Target as FrameworkElement)?.DataContext as DocumentTab;
+            var item = flyout.Items.OfType<MenuFlyoutItem>().First();
+            var path = menuTab?.FilePath;
+            var store = Services.Favorites.Shared;
+            var isFavorite = !string.IsNullOrEmpty(path) && store.Contains(path);
+            item.Text = Locale.GetString(isFavorite ? "Favorites.Remove" : "Favorites.Add");
+            item.IsEnabled = !string.IsNullOrEmpty(path) && (isFavorite || store.Items.Count < Services.FavoritesStore.MaxCount);
+        }
+
+        private void OnTabFavoriteClick(object sender, RoutedEventArgs e)
+        {
+            var path = menuTab?.FilePath;
+            if (string.IsNullOrEmpty(path)) return;
+            var store = Services.Favorites.Shared;
+            if (!store.Remove(path)) store.Add(path, folder: false);
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)

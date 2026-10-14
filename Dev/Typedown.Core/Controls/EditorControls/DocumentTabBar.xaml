@@ -10,6 +10,12 @@
     Loaded="OnLoaded"
     Unloaded="OnUnloaded"
     mc:Ignorable="d">
+    <UserControl.Resources>
+        <!-- A tab's right-click menu: its file into or out of the favourites (not for an untitled document). -->
+        <MenuFlyout x:Key="TabContextFlyout" Opening="OnTabContextFlyoutOpening">
+            <MenuFlyoutItem AutomationProperties.AutomationId="TabFavoriteItem" Text="Favorite" Click="OnTabFavoriteClick"/>
+        </MenuFlyout>
+    </UserControl.Resources>
     <muxc:TabView
         x:Name="TabView"
         TabItemsSource="{x:Bind Tabs.Tabs, Mode=OneWay}"
@@ -24,7 +30,7 @@
         Background="Transparent">
         <muxc:TabView.TabItemTemplate>
             <DataTemplate x:DataType="models:DocumentTab">
-                <muxc:TabViewItem Header="{x:Bind DisplayTitle, Mode=OneWay}" ToolTipService.ToolTip="{x:Bind ToolTip, Mode=OneWay}" IsClosable="True"/>
+                <muxc:TabViewItem Header="{x:Bind DisplayTitle, Mode=OneWay}" ToolTipService.ToolTip="{x:Bind ToolTip, Mode=OneWay}" IsClosable="True" ContextFlyout="{StaticResource TabContextFlyout}"/>
             </DataTemplate>
         </muxc:TabView.TabItemTemplate>
     </muxc:TabView>

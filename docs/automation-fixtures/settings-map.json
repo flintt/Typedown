@@ -836,6 +836,12 @@
       ]
     },
     {
+      "reason": "layout: whether the folder pane's favourites group is folded; a detail of the pane, not a preference worth a program's change",
+      "windows": [
+        "FavoritesExpanded"
+      ]
+    },
+    {
       "reason": "windowLocal: layout or mode of one window (Core/Services/SettingsScope.cs); becomes a view command, not a setting",
       "windows": [
         "StartupPlacement",

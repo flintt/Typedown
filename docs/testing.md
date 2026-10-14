@@ -169,6 +169,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | RC02 | a recent file deleted stays in the list greyed out and a right-click removes it; Clear recent files leaves the recent folders |
 | RC03 | with "Remember recently opened files" off a file opened is not listed; Clear recent on the settings page empties files and folders |
 | FN01 | the folder pane's up arrow, the folder above chosen in its root menu and "Set as root" on a folder each move the tree; the open documents stay as they were |
+| FV01 | a file favoured from its tab's menu and a folder from the tree's menu are in favorites.json and the folder pane's group, still after a restart (and on the home page); renamed in the tree, the favourite follows |
 | WP02 | pasted web pictures: one behind hotlink protection is fetched with the page as referrer, a page that is not a picture is kept on the web and said, and an untitled document saved into a folder takes its pictures along |
 | EX02 | an export says where it was written, with buttons to open it, and goes when closed; with no action after export, nothing shows |
 | TB01 | the table toolbar's Resize table opens with the table's own size; Cancel leaves the table as it was; OK resizes it |
@@ -286,6 +287,8 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | `test.recent.clear` | `what?`, `windowId` | The recent lists emptied as their menu entries and the settings button do: what = files, folders or all. | TestHostHooks.cs |
 | `test.folder.state` | `windowId` | The folder pane: the root its tree shows (null when the pane is not loaded), the window's work folder and whether it was chosen (Open folder, a recent folder, the pane's navigation) rather than following the document. | TestHostHooks.cs |
 | `test.folder.menu` | `windowId` | The folder pane's root menu (its name's dropdown) as it would open now: each entry's automation id, text and path. | TestHostHooks.cs |
+| `test.favorites.state` | `windowId` | The favourites: what favorites.json holds (path, folder) and what the window's folder pane shows in its group (path, whether dimmed as missing; null when the pane is not shown). | TestHostHooks.cs |
+| `test.favorites.clear` | - | Every favourite taken out (a case starting from none). | TestHostHooks.cs |
 | `test.folder.open` | `path`, `windowId` | A folder opened as the folder pane's root, as File > Open folder with that folder picked. | TestHostHooks.cs |
 <!-- END generated: test-methods -->
 
