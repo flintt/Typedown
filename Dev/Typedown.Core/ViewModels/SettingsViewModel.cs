@@ -191,6 +191,13 @@ namespace Typedown.Core.ViewModels
         public bool RecordRecentFiles { get => GetSettingValue(true); set => SetSettingValue(value); }
         /// <summary>The folder pane's favourites group is unfolded (a click on its title folds it).</summary>
         public bool FavoritesExpanded { get => GetSettingValue(true); set => SetSettingValue(value); }
+        /// <summary>
+        /// Settings > General > On startup: a blank tab shows the home page (recent files and folders, favourites) - at
+        /// start-up with nothing to open, and when the last tab is closed (which then leaves the window open).
+        /// </summary>
+        public bool ShowHomePage { get => GetSettingValue(true); set => SetSettingValue(value); }
+        /// <summary>Settings > General > On startup: a new tab (Ctrl+N, the + button) shows the home page too. Off: it is for writing at once.</summary>
+        public bool ShowHomeOnNewTab { get => GetSettingValue(false); set => SetSettingValue(value); }
         public bool AppCompactMode { get => GetSettingValue(false); set => SetSettingValue(value); }
         public InsertImageAction InsertClipboardImageAction { get => GetSettingValue(InsertImageAction.None); set => SetSettingValue(value); }
         public string InsertClipboardImageCopyPath { get => GetSettingValue("./images"); set => SetSettingValue(value); }

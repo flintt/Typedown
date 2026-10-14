@@ -219,6 +219,22 @@ namespace Typedown.Core.Controls
             }
         }
 
+        /// <summary>The ⌂ button's tooltip: Home and its shortcut.</summary>
+        public string HomeToolTip
+        {
+            get
+            {
+                var key = ViewModel?.SettingsViewModel?.ShortcutHome;
+                var text = key == null ? null : this.GetService<Interfaces.IKeyboardAccelerator>()?.GetShortcutKeyText(key);
+                return string.IsNullOrEmpty(text) ? Locale.GetString("Home") : $"{Locale.GetString("Home")} ({text})";
+            }
+        }
+
+        private void OnHomeButtonClick(object sender, RoutedEventArgs e)
+        {
+            ViewModel?.HomeViewModel.ShowHomeCommand.Execute(default);
+        }
+
         // The tab the menu was opened on, and its file.
         private DocumentTab menuTab;
 

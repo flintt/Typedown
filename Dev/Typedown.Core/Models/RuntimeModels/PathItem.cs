@@ -36,7 +36,7 @@ namespace Typedown.Core.Models
         public double Opacity => Missing ? 0.45 : 1;
 
         /// <summary>A folder or a document (Segoe Fluent Icons).</summary>
-        public string Glyph => Folder ? "" : "";
+        public string Glyph => Folder ? "\uF12B" : "\uE8A5";
 
         public event PropertyChangedEventHandler PropertyChanged;
     }

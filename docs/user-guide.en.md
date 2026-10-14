@@ -28,6 +28,10 @@ This guide covers version 1.3.8. Menu and setting names are given as they appear
 
 **Settings**: Ctrl+, or the gear in the top-right corner of the window.
 
+**Home page**: a blank tab shows the home page: a new document, open a file or a folder, your favourites, and the files and folders you opened recently. Just start typing to write in the blank document. File → Home (Ctrl+Shift+H) or the ⌂ at the left of the tab bar brings it back without closing anything. It can be turned off under Settings → General → Startup.
+
+**Recent files and favourites**: File → Open recent lists files and, in its Folders submenu, folders; right-click an entry to remove it. Right-click a file or folder in the side bar, or a tab, to add it to your favourites, which appear above the file tree. The folder name at the top of the side bar opens a menu to go up a level, to a folder above, or to a favourite or recent folder.
+
 ---
 
 ## 2. Four modes

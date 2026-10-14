@@ -164,12 +164,17 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | VI02 | Vim keys in reading mode: G, gg, ]] and Ctrl+D move the page |
 | TC01 | a tab closed with its x button: the outline shows the headings of the tab shown next |
 | TC02 | a tab closed while its neighbour is not the tab used last: the outline is the shown tab's, with long documents |
-| SE01 | the startup action chosen on the settings page is in the settings file |
+| SE01 | the startup action chosen on the settings page is in the settings file, and so are the two home page switches below it |
 | RC01 | two folders opened, A then B: File > Open recent > Folders lists B then A by name and folder, and choosing A makes it the folder pane's root |
 | RC02 | a recent file deleted stays in the list greyed out and a right-click removes it; Clear recent files leaves the recent folders |
 | RC03 | with "Remember recently opened files" off a file opened is not listed; Clear recent on the settings page empties files and folders |
 | FN01 | the folder pane's up arrow, the folder above chosen in its root menu and "Set as root" on a folder each move the tree; the open documents stay as they were |
 | FV01 | a file favoured from its tab's menu and a folder from the tree's menu are in favorites.json and the folder pane's group, still after a restart (and on the home page); renamed in the tree, the favourite follows |
+| HP01 | a start with the settings as they come shows the home page; a recent file clicked there opens in its tab and the home page goes |
+| HP02 | Ctrl+N and the + button show no home page and the next letter goes into the new document; with "New tabs show the home page" on, Ctrl+N shows it |
+| HP03 | the last tab closed leaves the window with the home page (closed again, the window goes); a session whose files are gone shows it; with the switch off a blank document |
+| HP04 | with files open, File > Home, the home button and Ctrl+Shift+H show the home page in one blank tab, the documents left alone; an automation write into it hides it with the text written |
+| HP05 | the home page hidden by typing, and by its New document button, leaves the keys in the editor |
 | WP02 | pasted web pictures: one behind hotlink protection is fetched with the page as referrer, a page that is not a picture is kept on the web and said, and an untitled document saved into a folder takes its pictures along |
 | EX02 | an export says where it was written, with buttons to open it, and goes when closed; with no action after export, nothing shows |
 | TB01 | the table toolbar's Resize table opens with the table's own size; Cancel leaves the table as it was; OK resizes it |
@@ -289,6 +294,8 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | `test.folder.menu` | `windowId` | The folder pane's root menu (its name's dropdown) as it would open now: each entry's automation id, text and path. | TestHostHooks.cs |
 | `test.favorites.state` | `windowId` | The favourites: what favorites.json holds (path, folder) and what the window's folder pane shows in its group (path, whether dimmed as missing; null when the pane is not shown). | TestHostHooks.cs |
 | `test.favorites.clear` | - | Every favourite taken out (a case starting from none). | TestHostHooks.cs |
+| `test.home.state` | `windowId` | The window's home page: whether it is asked for and shown (the view model and the page on screen), the active tab's document and whether it is blank, and the page's lists (favourites, recent files and folders: path, dimmed, the last change shown). | TestHostHooks.cs |
+| `test.settings.flush` | `windowId` | The settings written to Settings.json now (a case that restarts the host after test.settings.set). | TestHostHooks.cs |
 | `test.folder.open` | `path`, `windowId` | A folder opened as the folder pane's root, as File > Open folder with that folder picked. | TestHostHooks.cs |
 <!-- END generated: test-methods -->
 

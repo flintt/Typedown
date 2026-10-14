@@ -912,6 +912,8 @@
         "AskBeforeReload",
         "FileStartupAction",
         "FolderStartupAction",
+        "ShowHomePage",
+        "ShowHomeOnNewTab",
         "InsertClipboardImageAction",
         "InsertClipboardImageUseUploadConfigId",
         "InsertLocalImageAction",

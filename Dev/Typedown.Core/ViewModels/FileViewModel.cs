@@ -41,6 +41,8 @@ namespace Typedown.Core.ViewModels
 
         public AccessHistory AccessHistory => ServiceProvider.GetService<AccessHistory>();
 
+        public HomeViewModel Home => ServiceProvider.GetService<HomeViewModel>();
+
         public string WorkFolder { get; private set; } = null;
 
         /// <summary>True when the user chose the workspace folder (Open Folder), false when it was restored at startup.</summary>
@@ -101,7 +103,13 @@ namespace Typedown.Core.ViewModels
             ServiceProvider = serviceProvider;
             // New, as the reader asks for it (the + button, the menu, Ctrl+N): the keyboard goes to the new document. The
             // + button kept it, and the letters typed next went nowhere until a click in the text.
-            NewFileCommand.OnExecute.Subscribe(async _ => { await NewFileFun(); MarkdownEditor?.FocusEditor(); });
+            // A new tab is for writing: no home page on it unless Settings > General > On startup asks for one there too.
+            NewFileCommand.OnExecute.Subscribe(async _ =>
+            {
+                await NewFileFun();
+                if (SettingsViewModel.ShowHomeOnNewTab) Home?.Show(); else Home?.Hide();
+                MarkdownEditor?.FocusEditor();
+            });
             OpenFileCommand.OnExecute.Subscribe(async x => await OpenFile(x));
             OpenFolderCommand.OnExecute.Subscribe(async x => await OpenFolder(x));
             SaveAsCommand.OnExecute.Subscribe(async _ => await SaveAs());
@@ -491,8 +499,43 @@ namespace Typedown.Core.ViewModels
             }
         }
 
-        /// <summary>A new untitled document in this window (a new tab, or the pristine blank one), as the New command.</summary>
-        public Task NewDocumentAsync() => NewFileFun();
+        /// <summary>
+        /// A new untitled document in this window (a new tab, or the pristine blank one), as the New command; shown in the
+        /// editor, not under the home page (an automation client's document.create, the home page's own command).
+        /// </summary>
+        public async Task NewDocumentAsync()
+        {
+            await NewFileFun();
+            Home?.Hide();
+        }
+
+        /// <summary>
+        /// The active tab made a new blank document at once (the last tab closed with the home page on): no question, no
+        /// backup looked for - what was there has been saved or let go already.
+        /// </summary>
+        internal void ResetToBlankDocument()
+        {
+            if (TabsViewModel?.ActiveTab is { } tab)
+            {
+                tab.BecomeNewDocument();
+                tab.IsPreview = false;
+                tab.BackupHash = 0;
+                tab.Cursor = null;
+            }
+            FilePath = null;
+            FileFormat = TextFileFormat.Default;
+            DiskHash = 0;
+            EditorViewModel.FileHash = Common.SimpleHash(Common.DefaultMarkdwn);
+            EditorViewModel.Markdown = Common.DefaultMarkdwn;
+            EditorViewModel.CurrentHash = EditorViewModel.FileHash;
+            EditorViewModel.Saved = true;
+            EditorViewModel.AutoSavedSucc = true;
+            EditorViewModel.AutoSaveHeldBack = null;
+            EditorViewModel.FileLoaded = false;
+            EditorViewModel.History.InitHistory(EditorViewModel.Markdown);
+            EditorViewModel.PostLoadFile(EditorViewModel.Markdown);
+            EditionHooks.ReportActivity(ActivityKind.DocumentShown, AppViewModel);
+        }
 
         /// <summary>
         /// Saves the active document to its existing path without any dialog (the automation API's save): false when
@@ -974,6 +1017,9 @@ namespace Typedown.Core.ViewModels
                         break;
                 }
             }
+            // Nothing to show (no file asked for, the session's or the last file gone, a new document): the home page,
+            // when the settings want it. Before the recovery question, which a recovered document then answers.
+            Home?.ShowIfWanted();
             await RecoverUntitledBackupsAsync();
         }
 

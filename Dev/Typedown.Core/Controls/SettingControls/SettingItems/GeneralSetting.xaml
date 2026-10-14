@@ -58,6 +58,13 @@
                         <controls:PathPickerButton Grid.Column="2" Content="{u:LocaleString Key=Browse}" Mode="Folder" Path="{x:Bind Settings.StartupOpenFolder, Mode=TwoWay}"/>
                     </Grid>
                 </controls:NormalSettingItem>
+                <!-- The home page: what a blank tab shows (at start-up, when the last tab is closed), and whether a new tab does too. -->
+                <controls:NormalSettingItem Title="{u:LocaleString Key=General.HomePage.Title}" Description="{u:LocaleString Key=General.HomePage.Description}" BorderBrush="{ThemeResource CardStrokeColorDefault}" BorderThickness="0,1,0,0">
+                    <ToggleSwitch AutomationProperties.AutomationId="ShowHomePage" IsOn="{x:Bind Settings.ShowHomePage, Mode=TwoWay}"/>
+                </controls:NormalSettingItem>
+                <controls:NormalSettingItem Title="{u:LocaleString Key=General.HomeOnNewTab.Title}" Description="{u:LocaleString Key=General.HomeOnNewTab.Description}" BorderBrush="{ThemeResource CardStrokeColorDefault}" BorderThickness="0,1,0,0">
+                    <ToggleSwitch AutomationProperties.AutomationId="ShowHomeOnNewTab" IsOn="{x:Bind Settings.ShowHomeOnNewTab, Mode=TwoWay}"/>
+                </controls:NormalSettingItem>
             </StackPanel>
         </controls:ExpanderSettingItem>
         <controls:NormalSettingItem Title="{u:LocaleString Key=General.AutoSave.Title}" Description="{u:LocaleString Key=General.AutoSave.Description}">

@@ -13,6 +13,7 @@
     mc:Ignorable="d">
     <MenuFlyoutItem x:Name="NewFileItem" Text="{u:LocaleString Key=New}" Command="{x:Bind File.NewFileCommand}"/>
     <MenuFlyoutItem x:Name="NewWindowItem" Text="{u:LocaleString Key=NewWindow}" Command="{x:Bind File.NewWindowCommand}"/>
+    <MenuFlyoutItem x:Name="HomeItem" AutomationProperties.AutomationId="HomeMenuItem" Text="{u:LocaleString Key=Home}" Command="{x:Bind ViewModel.HomeViewModel.ShowHomeCommand}"/>
     <MenuFlyoutSeparator/>
     <MenuFlyoutItem x:Name="OpenFileItem" Text="{u:LocaleString Key=Open}" Command="{x:Bind File.OpenFileCommand}"/>
     <MenuFlyoutItem x:Name="OpenFolderItem" Text="{u:LocaleString Key=OpenFolder}" Command="{x:Bind File.OpenFolderCommand}"/>

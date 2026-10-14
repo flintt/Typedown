@@ -935,6 +935,35 @@ namespace Typedown.Services.Automation
                 await store.FlushAsync();
                 return new Newtonsoft.Json.Linq.JObject();
             }));
+            // The window's home page: whether it is asked for and shown (the view model and the page on screen), the active
+            // tab's document and whether it is blank, and the page's lists (favourites, recent files and folders: path,
+            // dimmed, the last change shown).
+            methods.Add(new MethodDescriptor("test.home.state", null, "test.home.state/1", (c, ct) =>
+                Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    var page = FindInWindow<Core.Controls.HomePage>(app);
+                    var lists = new Newtonsoft.Json.Linq.JObject();
+                    if (page != null)
+                        foreach (var (name, entries) in page.Lists())
+                            lists[name] = new Newtonsoft.Json.Linq.JArray(entries.Select(e => new Newtonsoft.Json.Linq.JObject { ["path"] = e.Path, ["missing"] = e.Missing, ["modified"] = e.Modified }));
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject
+                    {
+                        ["visible"] = app.HomeViewModel.IsVisible,
+                        ["shown"] = page?.Visibility == global::Microsoft.UI.Xaml.Visibility.Visible,
+                        ["activeDocumentId"] = app.TabsViewModel.ActiveTab?.DocumentId,
+                        ["blank"] = app.TabsViewModel.IsActiveTabBlank,
+                        ["tabs"] = app.TabsViewModel.Tabs.Count,
+                        ["lists"] = lists,
+                    };
+                })));
+            // The settings written to Settings.json now (a case that restarts the host after test.settings.set).
+            methods.Add(new MethodDescriptor("test.settings.flush", null, "test.settings.flush/1", async (c, ct) =>
+                await await Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), async app =>
+                {
+                    await app.SettingsViewModel.FlushSettingsAsync();
+                    await Core.Services.Favorites.Shared.FlushAsync();
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject();
+                })));
             // A folder opened as the folder pane's root, as File > Open folder with that folder picked.
             methods.Add(new MethodDescriptor("test.folder.open", null, "test.folder.open/1", async (c, ct) =>
             {

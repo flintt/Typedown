@@ -328,6 +328,14 @@ internal static partial class Program
     /// </summary>
     private static async Task RestartHost(List<string> notes)
     {
+        // What the settings and the favourites hold is written first: a kill gives them no chance to.
+        try
+        {
+            using var pre = await Session("e2e flush");
+            foreach (var w in (JArray)(await pre.Call("window.list"))["windows"]!)
+                await pre.Call("test.settings.flush", new { windowId = (string)w["windowId"]! });
+        }
+        catch (Exception e) { notes.Add("flush before the restart: " + e.Message.Split('\n')[0]); }
         using (var dying = Process.GetProcessById(hostPid))
         {
             dying.Kill();
@@ -440,6 +448,271 @@ internal static partial class Program
         }
     }
 
-    /// <summary>FV01 after the restart: the home page lists the favourites too (the home page comes with its own commit).</summary>
-    private static Task HomeAfterRestartCheck(Client c, string windowId, List<string> notes) => Task.CompletedTask;
+    /// <summary>FV01 after the restart: the home page (shown at start-up by default) lists the favourites too.</summary>
+    private static async Task HomeAfterRestartCheck(Client c, string windowId, List<string> notes)
+    {
+        JToken? state = null;
+        var listed = await Eventually(async () => ((JArray?)(state = await HomeState(c, windowId))["lists"]?["favorites"])?.Count == 2, 6000);
+        notes.Add("home page favourites: " + state?["lists"]?["favorites"]?.ToString(Formatting.None));
+        Check(listed, "after a restart the home page lists the two favourites");
+    }
+
+    // ---- the home page ----
+
+    private static Task<JToken> HomeState(Client c, string windowId) => c.Call("test.home.state", new { windowId });
+
+    private static async Task<bool> HomeShown(Client c, string windowId, bool shown, int timeoutMs = 4000) =>
+        await Eventually(async () =>
+        {
+            var state = await HomeState(c, windowId);
+            return (bool)state["visible"]! == shown && (bool)state["shown"]! == shown;
+        }, timeoutMs);
+
+    private static async Task<List<string>> DocumentsOf(Client c, string windowId) =>
+        ((JArray)(await c.Call("document.list", new { windowId }))["documents"]!).Select(d => (string)d["documentId"]!).ToList();
+
+    private static async Task<string> ActiveOf(Client c, string windowId) =>
+        (string)((JArray)(await c.Call("window.list"))["windows"]!).First(w => (string)w["windowId"]! == windowId)["activeDocumentId"]!;
+
+    /// <summary>An untitled document a case typed into, put back to empty (its undo) and closed, so nothing asks to be saved.</summary>
+    private static async Task UndoAndClose(Client c, string documentId, List<string> notes)
+    {
+        try
+        {
+            for (var i = 0; i < 5 && ((string?)(await Get(c, documentId))["text"] ?? "").Trim().Length > 0; i++)
+                await c.Call("document.undo", new { documentId, baseRevision = await Revision(c, documentId), reveal = "document" });
+            await c.Call("document.close", new { documentId });
+        }
+        catch (Exception e) { notes.Add("cleanup: " + e.Message.Split('\n')[0]); }
+    }
+
+    private static async Task HP01(List<string> notes)
+    {
+        var file = Fixture("hp01.md", "# HP01\n\nOpened from the home page.\n");
+        using (var c = await Session("e2e HP01 before"))
+        {
+            var windowId = await FirstWindowId(c);
+            // The settings as they come (the home page on, nothing opened at start-up), and hp01.md a recent file.
+            await c.Call("test.settings.set", new { windowId, name = "ShowHomePage", value = true });
+            await c.Call("test.settings.set", new { windowId, name = "FileStartupAction", value = 0 });
+            var id = await Open(c, file);
+            await c.Call("document.close", new { documentId = id });
+        }
+        await RestartHost(notes);
+        using (var c = await Session("e2e HP01"))
+        {
+            var windowId = await FirstWindowId(c);
+            var window = await WindowOf(windowId, c);
+            Check(await HomeShown(c, windowId, true, 8000), "a start with the settings as they come shows the home page");
+            var before = await DocumentsOf(c, windowId);
+            AutomationElement? entry = null;
+            await Eventually(() => Task.FromResult((entry = Deep.First(AutomationElement.FromHandle(window), new AndCondition(
+                new PropertyCondition(AutomationElement.NameProperty, "hp01.md"), new PropertyCondition(AutomationElement.HelpTextProperty, file)))) != null), 6000);
+            Check(entry != null, "the home page lists hp01.md among the recent files");
+            await Click(window, entry!);
+            Check(await HomeShown(c, windowId, false), "opening a recent file from the home page hides it");
+            var after = await DocumentsOf(c, windowId);
+            var active = await ActiveOf(c, windowId);
+            var path = (string?)(await c.Call("document.get", new { documentId = active, consistency = "snapshot" }))["path"];
+            notes.Add($"documents {before.Count} -> {after.Count}, active {path}");
+            Check(after.Count == 1 && before.Count == 1, "the file opened in the home page's own tab, no tab added");
+            Check(SamePath(path, file), "the tab shows hp01.md");
+            await c.Call("document.close", new { documentId = active });
+        }
+    }
+
+    private static async Task HP02(List<string> notes)
+    {
+        using var c = await Session("e2e HP02");
+        var first = await Open(c, Fixture("hp02.md", "# HP02\n"));
+        var windowId = await WindowIdOf(c, first);
+        var window = await WindowOf(windowId, c);
+        var created = new List<string>();
+        try
+        {
+            await c.Call("test.settings.set", new { windowId, name = "ShowHomeOnNewTab", value = false });
+            await TypeInto(c, first, "");
+            Chord("Ctrl+N");
+            await Task.Delay(1500);
+            var ctrlN = await ActiveOf(c, windowId);
+            created.Add(ctrlN);
+            Check(ctrlN != first, "Ctrl+N made a new tab");
+            Check(await HomeShown(c, windowId, false, 1500), "Ctrl+N shows no home page");
+            TypeChar('N');
+            await WaitForPage(c, ctrlN, t => t.Contains('N'), "a letter after Ctrl+N");
+
+            await Click(window, await WaitFor(window, "AddButton"));
+            await Task.Delay(1500);
+            var plus = await ActiveOf(c, windowId);
+            created.Add(plus);
+            Check(await HomeShown(c, windowId, false, 1500), "the + button shows no home page");
+            TypeChar('P');
+            await WaitForPage(c, plus, t => t.Contains('P'), "a letter after the + button");
+
+            // "New tabs show the home page" on.
+            await c.Call("test.settings.set", new { windowId, name = "ShowHomeOnNewTab", value = true });
+            await Activate(window);
+            Chord("Ctrl+N");
+            await Task.Delay(1500);
+            var shown = await ActiveOf(c, windowId);
+            created.Add(shown);
+            Check(await HomeShown(c, windowId, true), "with \"New tabs show the home page\" on, Ctrl+N shows it");
+        }
+        finally
+        {
+            try { await c.Call("test.settings.set", new { windowId, name = "ShowHomeOnNewTab", value = false }); } catch { }
+            foreach (var doc in created.Distinct()) await UndoAndClose(c, doc, notes);
+            try { await c.Call("document.close", new { documentId = first }); } catch { }
+        }
+    }
+
+    private static async Task HP03(List<string> notes)
+    {
+        string windowId;
+        using (var c = await Session("e2e HP03"))
+        {
+            windowId = (string)(await c.Call("test.window.open"))["windowId"]!;
+            var window = await WindowOf(windowId, c);
+            await Task.Delay(4000);
+            Check(await HomeShown(c, windowId, true, 6000), "a new window with nothing to open shows the home page");
+            var id = (string)(await c.Call("document.open", new { path = Fixture("hp03.md", "# HP03\n"), windowId, reveal = "document" }))["documentId"]!;
+            Check(await HomeShown(c, windowId, false), "a file opened in it hides the home page");
+            await Activate(window);
+            Chord("Ctrl+W");
+            await Task.Delay(1500);
+            Check(IsWindow(window), "closing the last tab leaves the window open");
+            Check(await HomeShown(c, windowId, true), "closing the last tab shows the home page");
+            Check((await DocumentsOf(c, windowId)).Count == 1, "one tab, the blank one");
+            // Closed there again: the window goes.
+            Chord("Ctrl+W");
+            await Task.Delay(1500);
+            Check(!IsWindow(window), "the last tab closed on the home page closes the window");
+        }
+
+        // The last session's files all gone: the home page. The switch off: a blank document.
+        var gone = Path.Combine(fixtures, "hp03-gone.md");
+        if (File.Exists(gone)) File.Delete(gone);
+        var session = Path.Combine(testRoot, "data", "session.json");
+        using (var c = await Session("e2e HP03 session"))
+        {
+            var w = await FirstWindowId(c);
+            await c.Call("test.settings.set", new { windowId = w, name = "FileStartupAction", value = 2 });
+        }
+        try
+        {
+            File.WriteAllText(session, JsonConvert.SerializeObject(new { Files = new[] { gone }, ActiveIndex = 0, Time = DateTime.UtcNow }));
+            await RestartHost(notes);
+            using (var c = await Session("e2e HP03 restored"))
+            {
+                var w = await FirstWindowId(c);
+                Check(await HomeShown(c, w, true, 8000), "a session whose files are all gone shows the home page");
+                await c.Call("test.settings.set", new { windowId = w, name = "ShowHomePage", value = false });
+            }
+            File.WriteAllText(session, JsonConvert.SerializeObject(new { Files = new[] { gone }, ActiveIndex = 0, Time = DateTime.UtcNow }));
+            await RestartHost(notes);
+            using (var c = await Session("e2e HP03 off"))
+            {
+                var w = await FirstWindowId(c);
+                await Task.Delay(3000);
+                var state = await HomeState(c, w);
+                notes.Add("switch off: " + state.ToString(Formatting.None));
+                Check(!(bool)state["visible"]! && (bool)state["blank"]!, "with the switch off the start shows a blank document");
+            }
+        }
+        finally
+        {
+            using var c = await Session("e2e HP03 restore");
+            var w = await FirstWindowId(c);
+            try { await c.Call("test.settings.set", new { windowId = w, name = "ShowHomePage", value = true }); } catch { }
+            try { await c.Call("test.settings.set", new { windowId = w, name = "FileStartupAction", value = 0 }); } catch { }
+        }
+    }
+
+    private static async Task HP04(List<string> notes)
+    {
+        using var c = await Session("e2e HP04");
+        var a = await Open(c, Fixture("hp04-a.md", "# HP04 a\n"));
+        var windowId = await WindowIdOf(c, a);
+        var b = (string)(await c.Call("document.open", new { path = Fixture("hp04-b.md", "# HP04 b\n"), windowId, reveal = "document" }))["documentId"]!;
+        var window = await WindowOf(windowId, c);
+        string? blank = null;
+        try
+        {
+            var before = await DocumentsOf(c, windowId);
+            // File > Home.
+            await ClickInPopup(window, await MenuEntry(window, "MenuBarFileItem", "HomeMenuItem"));
+            Check(await HomeShown(c, windowId, true), "File > Home shows the home page");
+            blank = await ActiveOf(c, windowId);
+            var withHome = await DocumentsOf(c, windowId);
+            Check(withHome.Count == before.Count + 1 && before.All(withHome.Contains), "in a new tab, the open documents left as they were");
+
+            // The ⌂ button, from another tab: the blank tab is used again.
+            await c.Call("document.focus", new { documentId = a });
+            Check(await HomeShown(c, windowId, false), "another tab: no home page");
+            await Click(window, await WaitFor(window, "HomeButton"));
+            Check(await HomeShown(c, windowId, true), "the ⌂ button shows the home page");
+            Check(await ActiveOf(c, windowId) == blank && (await DocumentsOf(c, windowId)).Count == withHome.Count, "in the blank tab there already");
+
+            // The shortcut.
+            await c.Call("document.focus", new { documentId = b });
+            await Task.Delay(500);
+            await Activate(window);
+            Chord("Ctrl+Shift+H");
+            Check(await HomeShown(c, windowId, true), "Ctrl+Shift+H shows the home page");
+            Check(await ActiveOf(c, windowId) == blank, "the shortcut goes to the same blank tab");
+
+            // An automation write into the home page's document.
+            const string text = "# Written\n\nby a program\n";
+            await c.Call("document.replace", new { documentId = blank, baseRevision = await Revision(c, blank), text, normalizationPolicy = "allowUnknown" });
+            Check(await HomeShown(c, windowId, false), "a write into its document hides the home page");
+            var written = (string?)(await Get(c, blank))["text"];
+            Check(written == text, $"the document holds what was written ({JsonConvert.SerializeObject(written)})");
+        }
+        finally
+        {
+            if (blank != null) await UndoAndClose(c, blank, notes);
+            foreach (var id in new[] { a, b }) try { await c.Call("document.close", new { documentId = id }); } catch { }
+        }
+    }
+
+    private static async Task HP05(List<string> notes)
+    {
+        using var c = await Session("e2e HP05");
+        var a = await Open(c, Fixture("hp05.md", "# HP05\n"));
+        var windowId = await WindowIdOf(c, a);
+        var window = await WindowOf(windowId, c);
+        var made = new List<string>();
+        try
+        {
+            // Shown by the shortcut with the caret in a document: the next letter goes into the blank document and the home page goes.
+            await TypeInto(c, a, "");
+            Chord("Ctrl+Shift+H");
+            Check(await HomeShown(c, windowId, true), "the shortcut shows the home page");
+            var blank = await ActiveOf(c, windowId);
+            made.Add(blank);
+            TypeChar('Q');
+            await WaitForPage(c, blank, t => t.Contains('Q'), "a letter typed on the home page");
+            Check(await HomeShown(c, windowId, false), "typing hides the home page");
+
+            // Shown by the ⌂ button (the keyboard on the button), then New document: the keys go to the editor.
+            await c.Call("test.settings.set", new { windowId, name = "AlwaysShowTabBar", value = true });
+            await Task.Delay(500);
+            await Click(window, await WaitFor(window, "HomeButton"));
+            Check(await HomeShown(c, windowId, true), "the ⌂ button shows the home page");
+            var second = await ActiveOf(c, windowId);
+            made.Add(second);
+            await Click(window, await WaitFor(window, "HomeNewButton"));
+            Check(await HomeShown(c, windowId, false), "New document hides the home page");
+            await Task.Delay(500);
+            TypeChar('W');
+            var text = await WaitForPage(c, second, t => t.Contains('W'), "a letter after New document");
+            notes.Add("after New document: " + JsonConvert.SerializeObject(text));
+        }
+        finally
+        {
+            try { await c.Call("test.settings.set", new { windowId, name = "AlwaysShowTabBar", value = false }); } catch { }
+            foreach (var doc in made.Distinct()) await UndoAndClose(c, doc, notes);
+            try { await c.Call("document.close", new { documentId = a }); } catch { }
+        }
+    }
 }

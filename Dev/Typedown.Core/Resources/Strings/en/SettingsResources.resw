@@ -955,4 +955,20 @@
     <value>Clear</value>
     <comment>设置 → 常规 → 数据：清除最近记录按钮</comment>
   </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Show the home page on a blank tab</value>
+    <comment>设置 → 常规 → 启动时：空白标签显示首页（标题）</comment>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>At startup with nothing to open, and when the last tab is closed: recent files and folders, favourites</value>
+    <comment>设置 → 常规 → 启动时：空白标签显示首页（说明）</comment>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>New tabs show the home page</value>
+    <comment>设置 → 常规 → 启动时：新建标签也显示首页（标题）</comment>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>A new tab (File > New, the + button) shows the home page instead of an empty document</value>
+    <comment>设置 → 常规 → 启动时：新建标签也显示首页（说明）</comment>
+  </data>
 </root>

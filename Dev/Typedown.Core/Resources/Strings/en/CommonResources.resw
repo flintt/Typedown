@@ -1178,4 +1178,40 @@
     <value>Remove from favourites</value>
     <comment>右键菜单：取消收藏</comment>
   </data>
+  <data name="Home" xml:space="preserve">
+    <value>Home</value>
+    <comment>文件 → 首页（菜单项、标签栏 ⌂ 按钮、快捷键名称）</comment>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Start</value>
+    <comment>首页标题</comment>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>New document</value>
+    <comment>首页按钮：新建空白文档</comment>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Open file</value>
+    <comment>首页按钮：打开文件</comment>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Open folder</value>
+    <comment>首页按钮：打开文件夹</comment>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Recent files</value>
+    <comment>首页分组标题：最近文件</comment>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Recent folders</value>
+    <comment>首页分组标题：最近文件夹</comment>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Remove from list</value>
+    <comment>首页右键菜单：从最近列表移除</comment>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Settings</value>
+    <comment>首页底部去设置的链接</comment>
+  </data>
 </root>
