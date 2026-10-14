@@ -922,6 +922,7 @@
         "InsertWebImageUseUploadConfigId",
         "DefaultImageUploadConfigId",
         "VimMode",
+        "ShowBlankLines",
         "OpenFolderAfterExport",
         "AfterExport"
       ]

@@ -362,6 +362,7 @@ class ExportHtml {
       footnote: this.options?.footnote ?? true,
       isGitlabCompatibilityEnabled: this.options?.isGitlabCompatibilityEnabled ?? false,
       baseUrl: this.options?.baseUrl,
+      showBlankLines: !!this.options?.showBlankLines,
       highlight(code, lang) {
         // Language may be undefined (GH#591)
         if (!lang) {

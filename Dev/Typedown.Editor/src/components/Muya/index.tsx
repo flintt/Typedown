@@ -617,6 +617,11 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         document.body.classList.toggle('hide-paragraph-marker', props.options?.showParagraphMarker === false)
     }, [props.options?.showParagraphMarker])
 
+    // Extra blank lines (empty paragraphs) keep their height in reading mode too (assets/styles/index.css).
+    useEffect(() => {
+        document.body.classList.toggle('show-blank-lines', props.options?.showBlankLines === true)
+    }, [props.options?.showBlankLines])
+
     useEffect(() => {
         const readOnly = !!props.options?.readOnly
         document.body.classList.toggle('read-only', readOnly)

@@ -1223,6 +1223,12 @@ body.read-only .ag-container-icon {
   display: none !important;
 }
 
+/* Reading mode leaves an empty paragraph (an extra blank line of the source) without height, as a rendered document
+   would; with the "show extra blank lines" setting it keeps the line it has while editing. */
+body.read-only.show-blank-lines .ag-show-quick-insert-hint p.ag-paragraph > span.ag-paragraph-content:empty::after {
+  display: inline !important;
+}
+
 body.read-only img,
 body.read-only table,
 body.read-only table td,
