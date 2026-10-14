@@ -334,8 +334,10 @@ internal static partial class Program
         {
             // Every case is bounded: a hang is a failure with what it got to, never a run that never ends.
             var run = body(notes);
-            // Pictures in several languages take their time; any other case that runs past two minutes is stuck.
-            var limit = name.StartsWith("SHOT") ? 900 : 120;
+            // Pictures in several languages take their time; RD02 opens six windows in two themes and measures each menu
+            // (about 110 s on its own, so a busy machine took it past two minutes); any other case that runs past two minutes
+            // is stuck.
+            var limit = name.StartsWith("SHOT") ? 900 : name.StartsWith("RD02") ? 300 : 120;
             if (await Task.WhenAny(run, Task.Delay(TimeSpan.FromSeconds(limit))) != run) throw new CaseFailed($"the case did not finish within {limit} s");
             await run;
             results.Add(new JObject { ["name"] = name, ["passed"] = true, ["ms"] = watch.ElapsedMilliseconds, ["notes"] = new JArray(notes) });
