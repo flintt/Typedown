@@ -922,4 +922,10 @@
   <data name="General.HomeOnNewTab.Description" xml:space="preserve">
     <value>Kichupo kipya (Faili &gt; Mpya, kitufe +) kinaonyesha ukurasa wa mwanzo badala ya hati tupu</value>
   </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Onyesha mistari mitupu ya ziada</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Mistari mitupu kati ya aya huchukua nafasi pia katika hali ya kusoma na katika uhamishaji wa HTML na PDF, kama wakati wa kuhariri. Faili lenyewe halibadilishwi</value>
+  </data>
 </root>

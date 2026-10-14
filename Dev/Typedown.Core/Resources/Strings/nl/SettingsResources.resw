@@ -922,4 +922,10 @@
   <data name="General.HomeOnNewTab.Description" xml:space="preserve">
     <value>Een nieuw tabblad (Bestand &gt; Nieuw, de knop +) toont de startpagina in plaats van een leeg document</value>
   </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Extra lege regels tonen</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Lege regels tussen alinea's nemen ook ruimte in in de leesmodus en bij export naar HTML en PDF, zoals tijdens het bewerken. Het bestand zelf verandert niet</value>
+  </data>
 </root>

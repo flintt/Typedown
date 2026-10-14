@@ -922,4 +922,10 @@
   <data name="General.HomeOnNewTab.Description" xml:space="preserve">
     <value>புதிய தாவல் (கோப்பு &gt; புதியது, + பொத்தான்) வெற்று ஆவணத்துக்குப் பதிலாக முகப்புப் பக்கத்தைக் காட்டும்</value>
   </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>கூடுதல் வெற்று வரிகளைக் காட்டு</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>திருத்தும்போது போலவே, படிக்கும் பயன்முறையிலும் HTML, PDF ஏற்றுமதிகளிலும் பத்திகளுக்கு இடையிலான வெற்று வரிகள் இடம் பிடிக்கும். கோப்பு மாறாது</value>
+  </data>
 </root>

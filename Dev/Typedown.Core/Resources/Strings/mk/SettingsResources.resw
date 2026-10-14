@@ -922,4 +922,10 @@
   <data name="General.HomeOnNewTab.Description" xml:space="preserve">
     <value>Ново јазиче (Датотека &gt; Ново, копчето +) ја прикажува почетната страница наместо празен документ</value>
   </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Прикажи дополнителни празни редови</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Празните редови меѓу пасусите заземаат простор и во режимот за читање и при извоз во HTML и PDF, како при уредување. Самата датотека не се менува</value>
+  </data>
 </root>

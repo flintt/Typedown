@@ -922,4 +922,10 @@
   <data name="General.HomeOnNewTab.Description" xml:space="preserve">
     <value>Fitxa berri batek (Fitxategia &gt; Berria, + botoia) hasierako orria erakusten du dokumentu huts baten ordez</value>
   </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Erakutsi lerro huts gehigarriak</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Paragrafoen arteko lerro hutsek irakurketa moduan eta HTML eta PDF esportazioetan ere lekua hartzen dute, editatzean bezala. Fitxategia bera ez da aldatzen</value>
+  </data>
 </root>

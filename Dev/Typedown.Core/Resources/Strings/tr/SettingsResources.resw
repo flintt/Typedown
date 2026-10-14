@@ -922,4 +922,10 @@
   <data name="General.HomeOnNewTab.Description" xml:space="preserve">
     <value>Yeni bir sekme (Dosya &gt; Yeni, + düğmesi) boş belge yerine giriş sayfasını gösterir</value>
   </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Fazladan boş satırları göster</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Paragraflar arasındaki boş satırlar, düzenlerken olduğu gibi okuma modunda ve HTML ile PDF dışa aktarımlarında da yer kaplar. Dosyanın kendisi değişmez</value>
+  </data>
 </root>

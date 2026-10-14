@@ -922,4 +922,10 @@
   <data name="General.HomeOnNewTab.Description" xml:space="preserve">
     <value>כרטיסייה חדשה (קובץ &gt; חדש, הלחצן +) מציגה את דף הבית במקום מסמך ריק</value>
   </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>הצגת שורות ריקות נוספות</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>שורות ריקות בין פסקאות תופסות מקום גם במצב קריאה ובייצוא ל-HTML ול-PDF, כמו בזמן עריכה. הקובץ עצמו אינו משתנה</value>
+  </data>
 </root>

@@ -922,4 +922,10 @@
   <data name="General.HomeOnNewTab.Description" xml:space="preserve">
     <value>Taispeánann cluaisín nua (Comhad &gt; Nua, an cnaipe +) an leathanach baile in ionad doiciméid fholaimh</value>
   </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Taispeáin línte bána breise</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Glacann línte bána idir ailt spás sa mhód léitheoireachta agus in easpórtálacha HTML agus PDF freisin, mar a dhéanann siad agus tú ag eagarthóireacht. Ní athraítear an comhad féin</value>
+  </data>
 </root>

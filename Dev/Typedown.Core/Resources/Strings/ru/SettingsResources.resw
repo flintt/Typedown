@@ -922,4 +922,10 @@
   <data name="General.HomeOnNewTab.Description" xml:space="preserve">
     <value>Новая вкладка (Файл &gt; Создать, кнопка +) показывает главную страницу вместо пустого документа</value>
   </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Показывать лишние пустые строки</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Пустые строки между абзацами занимают место и в режиме чтения, и при экспорте в HTML и PDF, как при редактировании. Сам файл не меняется</value>
+  </data>
 </root>

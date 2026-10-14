@@ -922,4 +922,10 @@
   <data name="General.HomeOnNewTab.Description" xml:space="preserve">
     <value>Нов раздел (Файл &gt; Нов, бутонът +) показва началната страница вместо празен документ</value>
   </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Показване на допълнителните празни редове</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Празните редове между абзаците заемат място и в режима за четене, и при експорт в HTML и PDF, както при редактиране. Самият файл не се променя</value>
+  </data>
 </root>

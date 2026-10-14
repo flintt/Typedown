@@ -922,4 +922,10 @@
   <data name="General.HomeOnNewTab.Description" xml:space="preserve">
     <value>Ithebhu entsha (Ifayela &gt; Okusha, inkinobho ethi +) ibonisa ikhasi lasekhaya esikhundleni sedokhumenti engenalutho</value>
   </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Bonisa imigqa engenalutho eyengeziwe</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Imigqa engenalutho phakathi kwezigaba ithatha isikhala nakwimodi yokufunda nasekuthumeleni ngaphandle kwe-HTML ne-PDF, njengalapho uhlela. Ifayela ngokwalo alishintshi</value>
+  </data>
 </root>

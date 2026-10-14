@@ -922,4 +922,10 @@
   <data name="General.HomeOnNewTab.Description" xml:space="preserve">
     <value>新しいタブ（ファイル &gt; 新規、+ ボタン）で空のドキュメントの代わりにホームを表示します</value>
   </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>余分な空行を表示する</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>段落間の空行が、編集時と同じように閲覧モードや HTML・PDF へのエクスポートでも余白として表示されます。ファイルの内容は変わりません</value>
+  </data>
 </root>

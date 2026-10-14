@@ -922,4 +922,10 @@
   <data name="General.HomeOnNewTab.Description" xml:space="preserve">
     <value>ନୂଆ ଟ୍ୟାବ୍ (ଫାଇଲ୍ &gt; ନୂଆ, + ବଟନ୍) ଖାଲି ଦଲିଲ ବଦଳରେ ହୋମ୍ ପୃଷ୍ଠା ଦେଖାଏ</value>
   </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>ଅତିରିକ୍ତ ଖାଲି ଧାଡ଼ି ଦେଖାନ୍ତୁ</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>ସମ୍ପାଦନା ସମୟ ପରି ପଢ଼ିବା ମୋଡ୍ ଏବଂ HTML ଓ PDF ରପ୍ତାନିରେ ମଧ୍ୟ ଅନୁଚ୍ଛେଦ ମଧ୍ୟରେ ଥିବା ଖାଲି ଧାଡ଼ି ସ୍ଥାନ ନିଏ। ଫାଇଲ୍ ନିଜେ ବଦଳେ ନାହିଁ</value>
+  </data>
 </root>

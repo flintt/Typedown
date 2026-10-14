@@ -922,4 +922,10 @@
   <data name="General.HomeOnNewTab.Description" xml:space="preserve">
     <value>కొత్త ట్యాబ్ (ఫైల్ &gt; కొత్తది, + బటన్) ఖాళీ పత్రానికి బదులు హోమ్ పేజీని చూపుతుంది</value>
   </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>అదనపు ఖాళీ పంక్తులను చూపించు</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>సవరించేటప్పుడు లాగానే చదివే మోడ్‌లో మరియు HTML, PDF ఎగుమతుల్లో కూడా పేరాల మధ్య ఖాళీ పంక్తులు స్థలం తీసుకుంటాయి. ఫైల్ మారదు</value>
+  </data>
 </root>

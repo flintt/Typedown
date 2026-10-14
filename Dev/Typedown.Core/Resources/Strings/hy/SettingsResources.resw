@@ -922,4 +922,10 @@
   <data name="General.HomeOnNewTab.Description" xml:space="preserve">
     <value>Նոր ներդիրը (Ֆայլ &gt; Նոր, + կոճակ) դատարկ փաստաթղթի փոխարեն ցույց է տալիս գլխավոր էջը</value>
   </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Ցույց տալ լրացուցիչ դատարկ տողերը</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Պարբերությունների միջև դատարկ տողերը տեղ են զբաղեցնում նաև ընթերցման ռեժիմում և HTML ու PDF արտահանման մեջ, ինչպես խմբագրելիս։ Ֆայլն ինքը չի փոխվում</value>
+  </data>
 </root>

@@ -922,4 +922,10 @@
   <data name="General.HomeOnNewTab.Description" xml:space="preserve">
     <value>Una nuova scheda (File &gt; Nuovo, il pulsante +) mostra la pagina iniziale invece di un documento vuoto</value>
   </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Mostra le righe vuote aggiuntive</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Le righe vuote tra i paragrafi occupano spazio anche in modalità lettura e nelle esportazioni HTML e PDF, come durante la modifica. Il file non viene modificato</value>
+  </data>
 </root>

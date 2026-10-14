@@ -922,4 +922,10 @@
   <data name="General.HomeOnNewTab.Description" xml:space="preserve">
     <value>Uus vahekaart (Fail &gt; Uus, nupp +) näitab tühja dokumendi asemel avalehte</value>
   </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Näita lisatühje ridu</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Lõikude vahelised tühjad read võtavad ruumi ka lugemisrežiimis ning HTML- ja PDF-ekspordis, nagu redigeerimisel. Faili ennast ei muudeta</value>
+  </data>
 </root>

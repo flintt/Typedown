@@ -922,4 +922,10 @@
   <data name="General.HomeOnNewTab.Description" xml:space="preserve">
     <value>Tab mới (Tệp &gt; Mới, nút +) hiển thị trang chủ thay vì tài liệu trống</value>
   </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Hiển thị các dòng trống thừa</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Các dòng trống giữa các đoạn cũng chiếm chỗ trong chế độ đọc và khi xuất HTML, PDF, giống như lúc chỉnh sửa. Bản thân tệp không thay đổi</value>
+  </data>
 </root>

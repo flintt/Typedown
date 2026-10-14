@@ -922,4 +922,10 @@
   <data name="General.HomeOnNewTab.Description" xml:space="preserve">
     <value>Nová karta (Soubor &gt; Nový, tlačítko +) zobrazí domovskou stránku místo prázdného dokumentu</value>
   </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Zobrazit nadbytečné prázdné řádky</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Prázdné řádky mezi odstavci zabírají místo i v režimu čtení a v exportu do HTML a PDF, stejně jako při úpravách. Samotný soubor se nemění</value>
+  </data>
 </root>

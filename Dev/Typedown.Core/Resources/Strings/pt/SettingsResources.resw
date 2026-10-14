@@ -922,4 +922,10 @@
   <data name="General.HomeOnNewTab.Description" xml:space="preserve">
     <value>Um novo separador (Ficheiro &gt; Novo, o botão +) mostra a página inicial em vez de um documento vazio</value>
   </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Mostrar linhas em branco adicionais</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>As linhas em branco entre parágrafos também ocupam espaço no modo de leitura e nas exportações para HTML e PDF, como durante a edição. O ficheiro em si não é alterado</value>
+  </data>
 </root>

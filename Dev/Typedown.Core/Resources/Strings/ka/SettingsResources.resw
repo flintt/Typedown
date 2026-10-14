@@ -922,4 +922,10 @@
   <data name="General.HomeOnNewTab.Description" xml:space="preserve">
     <value>ახალი ჩანართი (ფაილი &gt; ახალი, ღილაკი +) ცარიელი დოკუმენტის ნაცვლად მთავარ გვერდს აჩვენებს</value>
   </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>დამატებითი ცარიელი ხაზების ჩვენება</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>აბზაცებს შორის ცარიელი ხაზები ადგილს იკავებს კითხვის რეჟიმშიც და HTML და PDF ექსპორტშიც, ისევე როგორც რედაქტირებისას. თავად ფაილი არ იცვლება</value>
+  </data>
 </root>

@@ -922,4 +922,10 @@
   <data name="General.HomeOnNewTab.Description" xml:space="preserve">
     <value>નવી ટૅબ (ફાઇલ &gt; નવું, + બટન) ખાલી દસ્તાવેજને બદલે હોમ પેજ બતાવે છે</value>
   </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>વધારાની ખાલી લીટીઓ બતાવો</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>ફકરાઓ વચ્ચેની ખાલી લીટીઓ સંપાદન વખતેની જેમ વાંચન મોડમાં અને HTML તથા PDF નિકાસમાં પણ જગ્યા રોકે છે. ફાઇલ પોતે બદલાતી નથી</value>
+  </data>
 </root>

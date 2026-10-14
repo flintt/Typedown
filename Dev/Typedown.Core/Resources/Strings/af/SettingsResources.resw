@@ -922,4 +922,10 @@
   <data name="General.HomeOnNewTab.Description" xml:space="preserve">
     <value>'n Nuwe oortjie (Lêer &gt; Nuut, die + knoppie) wys die tuisblad in plaas van 'n leë dokument</value>
   </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Wys ekstra leë reëls</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Leë reëls tussen paragrawe neem ook in leesmodus en in HTML- en PDF-uitvoere plek in, soos tydens redigering. Die lêer self word nie verander nie</value>
+  </data>
 </root>

@@ -922,4 +922,10 @@
   <data name="General.HomeOnNewTab.Description" xml:space="preserve">
     <value>Mae tab newydd (Ffeil &gt; Newydd, y botwm +) yn dangos yr hafan yn lle dogfen wag</value>
   </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Dangos llinellau gwag ychwanegol</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Mae llinellau gwag rhwng paragraffau yn cymryd lle yn y modd darllen ac mewn allforion HTML a PDF hefyd, fel wrth olygu. Nid yw'r ffeil ei hun yn newid</value>
+  </data>
 </root>

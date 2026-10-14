@@ -922,4 +922,10 @@
   <data name="General.HomeOnNewTab.Description" xml:space="preserve">
     <value>Unha lapela nova (Ficheiro &gt; Novo, o botón +) amosa a páxina de inicio en vez dun documento baleiro</value>
   </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Amosar as liñas en branco adicionais</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>As liñas en branco entre parágrafos tamén ocupan espazo no modo de lectura e nas exportacións HTML e PDF, como ao editar. O ficheiro non cambia</value>
+  </data>
 </root>

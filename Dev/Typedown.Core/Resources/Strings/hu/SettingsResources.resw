@@ -922,4 +922,10 @@
   <data name="General.HomeOnNewTab.Description" xml:space="preserve">
     <value>Egy új lap (Fájl &gt; Új, a + gomb) üres dokumentum helyett a kezdőlapot mutatja</value>
   </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>További üres sorok megjelenítése</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>A bekezdések közötti üres sorok olvasási módban, valamint HTML- és PDF-exportáláskor is helyet foglalnak, ahogy szerkesztés közben. Magát a fájlt ez nem módosítja</value>
+  </data>
 </root>

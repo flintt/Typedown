@@ -922,4 +922,10 @@
   <data name="General.HomeOnNewTab.Description" xml:space="preserve">
     <value>Nova kartica (Datoteka &gt; Novo, dugme +) prikazuje početnu stranicu umjesto praznog dokumenta</value>
   </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Prikaži dodatne prazne redove</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Prazni redovi između pasusa zauzimaju prostor i u načinu čitanja te u HTML i PDF izvozu, kao i tokom uređivanja. Sama datoteka se ne mijenja</value>
+  </data>
 </root>

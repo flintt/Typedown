@@ -922,4 +922,10 @@
   <data name="General.HomeOnNewTab.Description" xml:space="preserve">
     <value>Tab baharu (Fail &gt; Baharu, butang +) menunjukkan laman utama dan bukan dokumen kosong</value>
   </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Tunjukkan baris kosong tambahan</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Baris kosong antara perenggan juga mengambil ruang dalam mod baca dan dalam eksport HTML dan PDF, seperti semasa mengedit. Fail itu sendiri tidak diubah</value>
+  </data>
 </root>

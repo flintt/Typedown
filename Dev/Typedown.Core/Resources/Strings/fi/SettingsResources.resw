@@ -922,4 +922,10 @@
   <data name="General.HomeOnNewTab.Description" xml:space="preserve">
     <value>Uusi välilehti (Tiedosto &gt; Uusi, +-painike) näyttää aloitussivun tyhjän tiedoston sijaan</value>
   </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Näytä ylimääräiset tyhjät rivit</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Kappaleiden väliset tyhjät rivit vievät tilaa myös lukutilassa sekä HTML- ja PDF-viennissä, kuten muokatessa. Itse tiedosto ei muutu</value>
+  </data>
 </root>

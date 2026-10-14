@@ -922,4 +922,10 @@
   <data name="General.HomeOnNewTab.Description" xml:space="preserve">
     <value>Жаңа қойынды (Файл &gt; Жаңа, + түймесі) бос құжаттың орнына басты бетті көрсетеді</value>
   </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Қосымша бос жолдарды көрсету</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Абзацтар арасындағы бос жолдар өңдеу кезіндегідей оқу режимінде және HTML мен PDF экспорттарында да орын алады. Файлдың өзі өзгермейді</value>
+  </data>
 </root>

@@ -922,4 +922,10 @@
   <data name="General.HomeOnNewTab.Description" xml:space="preserve">
     <value>Nýr flipi (Skrá &gt; Nýtt, hnappurinn +) sýnir heimasíðuna í stað auðs skjals</value>
   </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Sýna auka auðar línur</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Auðar línur milli efnisgreina taka líka pláss í lestrarham og í HTML- og PDF-útflutningi, eins og við breytingar. Skránni sjálfri er ekki breytt</value>
+  </data>
 </root>

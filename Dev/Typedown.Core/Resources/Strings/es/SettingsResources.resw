@@ -922,4 +922,10 @@
   <data name="General.HomeOnNewTab.Description" xml:space="preserve">
     <value>Una pestaña nueva (Archivo &gt; Nuevo, el botón +) muestra la página de inicio en lugar de un documento vacío</value>
   </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Mostrar las líneas en blanco adicionales</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Las líneas en blanco entre párrafos también ocupan espacio en el modo de lectura y en las exportaciones a HTML y PDF, como al editar. El archivo no cambia</value>
+  </data>
 </root>
