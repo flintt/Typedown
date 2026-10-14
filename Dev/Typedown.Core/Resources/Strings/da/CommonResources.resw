@@ -1096,4 +1096,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>Gemmestatus</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Mapper</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Ingen seneste mapper</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Ryd seneste mapper</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Højreklik eller tryk på Delete for at fjerne den fra listen</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Et niveau op</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Angiv som rod</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Favoritter</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Føj til favoritter</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Fjern fra favoritter</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Nyt dokument</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Åbn fil</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Åbn mappe</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Seneste filer</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Seneste mapper</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Fjern fra listen</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Indstillinger</value>
+  </data>
 </root>

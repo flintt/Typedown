@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Abrir a pasta</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Memorizar ficheiros abertos recentemente</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Os ficheiros e pastas que abre aparecem em Ficheiro &gt; Abrir recente e na página inicial. Desativado, nada de novo é adicionado.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Limpar ficheiros e pastas recentes</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Esvazia as listas de ficheiros e pastas abertos recentemente.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Limpar</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Mostrar a página inicial num separador vazio</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>No arranque sem nada para abrir e ao fechar o último separador: ficheiros e pastas recentes, favoritos</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Novos separadores mostram a página inicial</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Um novo separador (Ficheiro &gt; Novo, o botão +) mostra a página inicial em vez de um documento vazio</value>
+  </data>
 </root>

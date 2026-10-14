@@ -1096,4 +1096,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>Status simpan</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Folder</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Tiada folder terkini</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Kosongkan folder terkini</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Klik kanan atau tekan Delete untuk mengalih keluarnya daripada senarai</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Naik satu aras</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Tetapkan sebagai akar</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Kegemaran</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Tambah ke kegemaran</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Alih keluar daripada kegemaran</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Laman utama</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Mula</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Dokumen baharu</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Buka fail</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Buka folder</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Fail terkini</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Folder terkini</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Alih keluar daripada senarai</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Tetapan</value>
+  </data>
 </root>

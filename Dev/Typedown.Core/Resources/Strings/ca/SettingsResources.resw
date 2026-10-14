@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Obre'n la carpeta</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Recorda els fitxers oberts recentment</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Els fitxers i carpetes que obriu apareixen a Fitxer &gt; Obre recent i a la pàgina d'inici. Desactivat, no s'hi afegeix res de nou.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Esborra els fitxers i carpetes recents</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Buida les llistes de fitxers i carpetes oberts recentment.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Esborra</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Mostra la pàgina d'inici en una pestanya buida</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>En iniciar sense res per obrir i en tancar l'última pestanya: fitxers i carpetes recents, preferits</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Les pestanyes noves mostren la pàgina d'inici</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Una pestanya nova (Fitxer &gt; Nou, el botó +) mostra la pàgina d'inici en lloc d'un document buit</value>
+  </data>
 </root>

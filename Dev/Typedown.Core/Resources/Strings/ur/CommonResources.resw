@@ -1096,4 +1096,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>محفوظ کاری کی حالت</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>فولڈرز</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>کوئی حالیہ فولڈر نہیں</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>حالیہ فولڈرز صاف کریں</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>فہرست سے ہٹانے کے لیے دایاں کلک کریں یا Delete دبائیں</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>ایک درجہ اوپر</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>روٹ کے طور پر سیٹ کریں</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>پسندیدہ</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>پسندیدہ میں شامل کریں</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>پسندیدہ سے ہٹائیں</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>ہوم</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>آغاز</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>نئی دستاویز</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>فائل کھولیں</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>فولڈر کھولیں</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>حالیہ فائلیں</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>حالیہ فولڈرز</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>فہرست سے ہٹائیں</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>ترتیبات</value>
+  </data>
 </root>

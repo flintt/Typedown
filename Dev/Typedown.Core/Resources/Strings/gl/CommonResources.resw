@@ -1096,4 +1096,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>Estado do gardado</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Cartafoles</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Non hai cartafoles recentes</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Borrar os cartafoles recentes</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Fai clic co botón dereito ou preme Supr para quitalo da lista</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Subir un nivel</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Definir como raíz</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Favoritos</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Engadir aos favoritos</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Quitar dos favoritos</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Inicio</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Inicio</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Documento novo</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Abrir ficheiro</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Abrir cartafol</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Ficheiros recentes</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Cartafoles recentes</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Quitar da lista</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Configuración</value>
+  </data>
 </root>

@@ -1096,4 +1096,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>Starea salvării</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Foldere</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Niciun folder recent</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Golește folderele recente</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Clic dreapta sau Delete pentru a-l elimina din listă</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Un nivel mai sus</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Setează ca rădăcină</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Favorite</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Adaugă la favorite</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Elimină din favorite</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Acasă</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Document nou</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Deschide fișier</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Deschide folder</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Fișiere recente</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Foldere recente</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Elimină din listă</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Setări</value>
+  </data>
 </root>

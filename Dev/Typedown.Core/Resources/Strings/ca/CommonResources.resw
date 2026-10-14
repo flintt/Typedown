@@ -1096,4 +1096,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>Estat del desament</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Carpetes</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>No hi ha carpetes recents</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Esborra les carpetes recents</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Feu clic amb el botó dret o premeu Supr per treure-la de la llista</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Un nivell amunt</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Estableix com a arrel</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Preferits</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Afegeix als preferits</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Treu dels preferits</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Inici</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Inici</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Document nou</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Obre un fitxer</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Obre una carpeta</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Fitxers recents</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Carpetes recents</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Treu de la llista</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Configuració</value>
+  </data>
 </root>

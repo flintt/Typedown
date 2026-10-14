@@ -1096,4 +1096,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>Stato del salvataggio</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Cartelle</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Nessuna cartella recente</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Cancella cartelle recenti</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Clic destro o Canc per rimuoverlo da questo elenco</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Livello superiore</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Imposta come radice</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Preferiti</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Aggiungi ai preferiti</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Rimuovi dai preferiti</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Inizio</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Nuovo documento</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Apri file</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Apri cartella</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>File recenti</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Cartelle recenti</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Rimuovi dall'elenco</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Impostazioni</value>
+  </data>
 </root>

@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Abrir su carpeta</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Recordar archivos abiertos recientemente</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Los archivos y carpetas que abres aparecen en Archivo &gt; Abrir reciente y en la página de inicio. Desactivado, no se añade nada nuevo.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Borrar archivos y carpetas recientes</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Vacía las listas de archivos y carpetas abiertos recientemente.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Borrar</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Mostrar la página de inicio en una pestaña vacía</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Al iniciar sin nada que abrir y al cerrar la última pestaña: archivos y carpetas recientes, favoritos</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Las pestañas nuevas muestran la página de inicio</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Una pestaña nueva (Archivo &gt; Nuevo, el botón +) muestra la página de inicio en lugar de un documento vacío</value>
+  </data>
 </root>

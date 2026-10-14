@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>اس کا فولڈر کھولیں</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>حال ہی میں کھولی گئی فائلیں یاد رکھیں</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>آپ کی کھولی گئی فائلیں اور فولڈرز فائل &gt; حالیہ کھولیں اور ہوم پیج پر دکھائے جاتے ہیں۔ بند ہونے پر کچھ نیا شامل نہیں ہوتا۔</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>حالیہ فائلیں اور فولڈرز صاف کریں</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>حال ہی میں کھولی گئی فائلوں اور فولڈرز کی فہرستیں خالی کرتا ہے۔</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>صاف کریں</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>خالی ٹیب پر ہوم پیج دکھائیں</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>شروع کرتے وقت جب کھولنے کو کچھ نہ ہو اور آخری ٹیب بند ہونے پر: حالیہ فائلیں اور فولڈرز، پسندیدہ</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>نئے ٹیب ہوم پیج دکھاتے ہیں</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>نیا ٹیب (فائل &gt; نیا، + بٹن) خالی دستاویز کے بجائے ہوم پیج دکھاتا ہے</value>
+  </data>
 </root>

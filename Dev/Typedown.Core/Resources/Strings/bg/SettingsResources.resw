@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Отваряне на папката му</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Запомняне на скоро отваряните файлове</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Отворените файлове и папки се показват във Файл &gt; Отваряне на скорошни и на началната страница. Когато е изключено, нищо ново не се добавя.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Изчистване на скорошните файлове и папки</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Изпразва списъците на скоро отваряните файлове и папки.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Изчистване</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Показване на началната страница в празен раздел</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>При стартиране без нищо за отваряне и при затваряне на последния раздел: скорошни файлове и папки, любими</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Новите раздели показват началната страница</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Нов раздел (Файл &gt; Нов, бутонът +) показва началната страница вместо празен документ</value>
+  </data>
 </root>

@@ -1096,4 +1096,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>ສະຖານະການບັນທຶກ</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>ໂຟນເດີ</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>ບໍ່ມີໂຟນເດີຫຼ້າສຸດ</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>ລຶບໂຟນເດີຫຼ້າສຸດ</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>ຄລິກຂວາ ຫຼື ກົດ Delete ເພື່ອເອົາອອກຈາກລາຍການ</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>ຂຶ້ນໜຶ່ງລະດັບ</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>ຕັ້ງເປັນຮາກ</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>ລາຍການທີ່ມັກ</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>ເພີ່ມໃສ່ລາຍການທີ່ມັກ</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>ເອົາອອກຈາກລາຍການທີ່ມັກ</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>ໜ້າຫຼັກ</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>ເລີ່ມຕົ້ນ</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>ເອກະສານໃໝ່</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>ເປີດໄຟລ໌</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>ເປີດໂຟນເດີ</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>ໄຟລ໌ຫຼ້າສຸດ</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>ໂຟນເດີຫຼ້າສຸດ</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>ເອົາອອກຈາກລາຍການ</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>ການຕັ້ງຄ່າ</value>
+  </data>
 </root>

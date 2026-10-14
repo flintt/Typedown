@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Buksan ang folder nito</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Tandaan ang mga kamakailang binuksang file</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Ang mga file at folder na binubuksan mo ay nakalista sa File &gt; Buksan ang kamakailan at sa home page. Kapag naka-off, walang bagong idinaragdag.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>I-clear ang mga kamakailang file at folder</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Inaalis ang laman ng mga listahan ng kamakailang binuksang file at folder.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>I-clear</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Ipakita ang home page sa blangkong tab</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Sa pagsisimula nang walang bubuksan at kapag isinara ang huling tab: mga kamakailang file at folder, mga paborito</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Ipinapakita ng mga bagong tab ang home page</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Ang bagong tab (File &gt; Bago, ang + na button) ay nagpapakita ng home page sa halip na blangkong dokumento</value>
+  </data>
 </root>

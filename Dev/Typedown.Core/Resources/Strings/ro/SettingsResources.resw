@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Deschide folderul său</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Memorează fișierele deschise recent</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Fișierele și folderele deschise apar în Fișier &gt; Deschide recente și pe pagina de start. Dezactivat, nu se adaugă nimic nou.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Golește fișierele și folderele recente</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Golește listele fișierelor și folderelor deschise recent.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Golește</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Afișează pagina de start într-o filă goală</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>La pornire fără nimic de deschis și la închiderea ultimei file: fișiere și foldere recente, favorite</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Filele noi afișează pagina de start</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>O filă nouă (Fișier &gt; Nou, butonul +) afișează pagina de start în loc de un document gol</value>
+  </data>
 </root>

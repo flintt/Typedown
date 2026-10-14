@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Buka foldernya</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Ingat file yang baru dibuka</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>File dan folder yang Anda buka tercantum di File &gt; Buka terbaru dan di beranda. Jika nonaktif, tidak ada yang baru ditambahkan.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Hapus file dan folder terbaru</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Mengosongkan daftar file dan folder yang baru dibuka.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Hapus</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Tampilkan beranda pada tab kosong</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Saat memulai tanpa ada yang dibuka dan saat tab terakhir ditutup: file dan folder terbaru, favorit</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Tab baru menampilkan beranda</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Tab baru (File &gt; Baru, tombol +) menampilkan beranda alih-alih dokumen kosong</value>
+  </data>
 </root>

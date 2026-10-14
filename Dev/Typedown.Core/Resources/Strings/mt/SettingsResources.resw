@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Iftaħ il-folder tiegħu</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Ftakar il-fajls miftuħa riċentement</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Il-fajls u l-folders li tiftaħ jidhru f'Fajl &gt; Iftaħ riċenti u fil-paġna ewlenija. Meta mitfi, xejn ġdid ma jiżdied.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Ħassar il-fajls u l-folders riċenti</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Ibattal il-listi tal-fajls u l-folders miftuħa riċentement.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Ħassar</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Uri l-paġna ewlenija f'tab vojta</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Fil-bidu meta ma jkun hemm xejn x'tiftaħ u meta tingħalaq l-aħħar tab: fajls u folders riċenti, favoriti</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>It-tabs il-ġodda juru l-paġna ewlenija</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Tab ġdida (Fajl &gt; Ġdid, il-buttuna +) turi l-paġna ewlenija minflok dokument vojt</value>
+  </data>
 </root>

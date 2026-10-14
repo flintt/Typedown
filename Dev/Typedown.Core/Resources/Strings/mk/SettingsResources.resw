@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Отвори ја нејзината папка</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Памети ги неодамна отворените датотеки</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Отворените датотеки и папки се прикажуваат во Датотека &gt; Отвори неодамнешни и на почетната страница. Кога е исклучено, ништо ново не се додава.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Исчисти ги неодамнешните датотеки и папки</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Ги празни листите на неодамна отворени датотеки и папки.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Исчисти</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Прикажи ја почетната страница во празно јазиче</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>При стартување без ништо за отворање и при затворање на последното јазиче: неодамнешни датотеки и папки, омилени</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Новите јазичиња ја прикажуваат почетната страница</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Ново јазиче (Датотека &gt; Ново, копчето +) ја прикажува почетната страница наместо празен документ</value>
+  </data>
 </root>

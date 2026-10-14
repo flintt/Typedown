@@ -1096,4 +1096,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>Saglabāšanas statuss</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Mapes</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Nav nesen atvērtu mapju</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Notīrīt nesenās mapes</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Ar peles labo pogu vai taustiņu Delete noņemiet no saraksta</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Līmeni augstāk</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Iestatīt kā sakni</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Izlase</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Pievienot izlasei</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Noņemt no izlases</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Sākums</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Sākums</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Jauns dokuments</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Atvērt failu</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Atvērt mapi</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Nesenie faili</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Nesenās mapes</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Noņemt no saraksta</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Iestatījumi</value>
+  </data>
 </root>

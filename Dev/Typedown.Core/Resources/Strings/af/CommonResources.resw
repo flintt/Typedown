@@ -1096,4 +1096,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>Stoorstatus</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Vouers</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Geen onlangse vouers nie</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Vee onlangse vouers uit</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Regsklik of druk Delete om dit van die lys te verwyder</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Een vlak op</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Stel as wortel</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Gunstelinge</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Voeg by gunstelinge</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Verwyder uit gunstelinge</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Tuis</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Begin</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Nuwe dokument</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Maak lêer oop</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Maak vouer oop</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Onlangse lêers</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Onlangse vouers</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Verwyder van lys</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Instellings</value>
+  </data>
 </root>

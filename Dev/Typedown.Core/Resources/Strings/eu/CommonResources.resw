@@ -1096,4 +1096,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>Gordetze-egoera</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Karpetak</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Ez dago azken karpetarik</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Garbitu azken karpetak</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Egin eskuineko klik edo sakatu Delete zerrendatik kentzeko</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Maila bat gora</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Ezarri erro gisa</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Gogokoak</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Gehitu gogokoetara</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Kendu gogokoetatik</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Hasiera</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Hasiera</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Dokumentu berria</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Ireki fitxategia</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Ireki karpeta</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Azken fitxategiak</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Azken karpetak</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Kendu zerrendatik</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Ezarpenak</value>
+  </data>
 </root>

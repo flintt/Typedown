@@ -1111,4 +1111,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>保存狀態</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>資料夾</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>沒有最近的資料夾</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>清除最近的資料夾</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>按右鍵或按 Delete 可將其從清單中移除</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>上一層</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>設為根目錄</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>我的最愛</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>加入我的最愛</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>從我的最愛移除</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>首頁</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>開始</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>新增文件</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>開啟檔案</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>開啟資料夾</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>最近的檔案</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>最近的資料夾</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>從清單中移除</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>設定</value>
+  </data>
 </root>

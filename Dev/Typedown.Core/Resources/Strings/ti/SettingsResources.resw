@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>ማህደሩ ክፈት</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>ብቐረባ ዝተኸፍቱ ፋይላት ዘክር</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>ዝኸፈትካዮም ፋይላትን ማህደራትን ኣብ ፋይል &gt; ናይ ቀረባ ክፈት ከምኡውን ኣብ መበገሲ ገጽ ይዝርዘሩ። ምስ ጠፍአ ሓድሽ ነገር ኣይውሰኽን።</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>ናይ ቀረባ እዋን ፋይላትን ማህደራትን ኣጽሪ</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>ዝርዝራት ብቐረባ ዝተኸፍቱ ፋይላትን ማህደራትን የጽሪ።</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>ኣጽሪ</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>ኣብ ባዶ ቶብ መበገሲ ገጽ ኣርኢ</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>ኣብ ምጅማር ዝኽፈት ነገር ምስ ዘይህሉ ከምኡውን እቲ ናይ መወዳእታ ቶብ ምስ ዝዕጾ፦ ናይ ቀረባ እዋን ፋይላትን ማህደራትን፣ ፍቱዋት</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>ሓደስቲ ቶባት መበገሲ ገጽ የርእዩ</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>ሓድሽ ቶብ (ፋይል &gt; ሓድሽ፣ መጠወቒ +) ኣብ ክንዲ ባዶ ሰነድ መበገሲ ገጽ የርኢ</value>
+  </data>
 </root>

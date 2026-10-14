@@ -1096,4 +1096,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>Statws cadw</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Ffolderi</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Dim ffolderi diweddar</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Clirio ffolderi diweddar</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>De-gliciwch neu pwyswch Delete i'w dynnu o'r rhestr</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Un lefel i fyny</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Gosod fel gwraidd</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Ffefrynnau</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Ychwanegu at ffefrynnau</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Tynnu o ffefrynnau</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Hafan</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Dechrau</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Dogfen newydd</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Agor ffeil</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Agor ffolder</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Ffeiliau diweddar</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Ffolderi diweddar</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Tynnu o'r rhestr</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Gosodiadau</value>
+  </data>
 </root>

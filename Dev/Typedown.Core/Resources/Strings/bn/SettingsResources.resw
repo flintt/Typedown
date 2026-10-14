@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>এর ফোল্ডার খুলুন</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>সম্প্রতি খোলা ফাইল মনে রাখুন</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>আপনার খোলা ফাইল ও ফোল্ডার ফাইল &gt; সাম্প্রতিক খুলুন এবং হোম পেজে দেখা যায়। বন্ধ থাকলে নতুন কিছু যোগ হয় না।</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>সাম্প্রতিক ফাইল ও ফোল্ডার মুছুন</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>সম্প্রতি খোলা ফাইল ও ফোল্ডারের তালিকা খালি করে।</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>মুছুন</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>ফাঁকা ট্যাবে হোম পেজ দেখান</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>শুরুতে খোলার কিছু না থাকলে এবং শেষ ট্যাব বন্ধ করলে: সাম্প্রতিক ফাইল ও ফোল্ডার, প্রিয়</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>নতুন ট্যাব হোম পেজ দেখায়</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>নতুন ট্যাব (ফাইল &gt; নতুন, + বোতাম) ফাঁকা নথির বদলে হোম পেজ দেখায়</value>
+  </data>
 </root>

@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>तिचे फोल्डर उघडा</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>अलीकडे उघडलेल्या फाइल्स लक्षात ठेवा</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>तुम्ही उघडलेल्या फाइल्स आणि फोल्डर फाइल &gt; अलीकडील उघडा आणि होम पेजवर दिसतात. बंद असताना काहीही नवीन जोडले जात नाही.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>अलीकडील फाइल्स आणि फोल्डर साफ करा</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>अलीकडे उघडलेल्या फाइल्स आणि फोल्डरच्या याद्या रिकाम्या करते.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>साफ करा</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>रिक्त टॅबवर होम पेज दाखवा</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>सुरू करताना उघडण्यासारखे काही नसताना आणि शेवटचा टॅब बंद केल्यावर: अलीकडील फाइल्स आणि फोल्डर, आवडते</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>नवीन टॅब होम पेज दाखवतात</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>नवीन टॅब (फाइल &gt; नवीन, + बटण) रिक्त दस्तऐवजाऐवजी होम पेज दाखवतो</value>
+  </data>
 </root>

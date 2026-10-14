@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Відкрити його папку</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Запам'ятовувати нещодавно відкриті файли</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Відкриті файли й теки показуються в «Файл &gt; Відкрити нещодавні» та на головній сторінці. Якщо вимкнено, нові не додаються.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Очистити нещодавні файли й теки</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Очищує списки нещодавно відкритих файлів і тек.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Очистити</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Показувати головну сторінку на порожній вкладці</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Під час запуску, коли нічого відкривати, і після закриття останньої вкладки: нещодавні файли й теки, вибране</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Нові вкладки показують головну сторінку</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Нова вкладка (Файл &gt; Створити, кнопка +) показує головну сторінку замість порожнього документа</value>
+  </data>
 </root>

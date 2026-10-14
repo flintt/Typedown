@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Mappa megnyitása</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Legutóbb megnyitott fájlok megjegyzése</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>A megnyitott fájlok és mappák a Fájl &gt; Legutóbbiak megnyitása menüben és a kezdőlapon jelennek meg. Kikapcsolva semmi új nem kerül be.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Legutóbbi fájlok és mappák törlése</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Kiüríti a legutóbb megnyitott fájlok és mappák listáját.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Törlés</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Kezdőlap megjelenítése üres lapon</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Indításkor, ha nincs mit megnyitni, és az utolsó lap bezárásakor: legutóbbi fájlok és mappák, kedvencek</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Az új lapok a kezdőlapot mutatják</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Egy új lap (Fájl &gt; Új, a + gomb) üres dokumentum helyett a kezdőlapot mutatja</value>
+  </data>
 </root>

@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Odpri njeno mapo</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Zapomni si nedavno odprte datoteke</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Odprte datoteke in mape so navedene v Datoteka &gt; Odpri nedavno in na začetni strani. Ko je izklopljeno, se nič novega ne doda.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Počisti nedavne datoteke in mape</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Izprazni seznama nedavno odprtih datotek in map.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Počisti</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Pokaži začetno stran na prazen zavihek</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Ob zagonu brez česa za odpreti in ob zaprtju zadnjega zavihka: nedavne datoteke in mape, priljubljene</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Novi zavihki pokažejo začetno stran</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Nov zavihek (Datoteka &gt; Novo, gumb +) pokaže začetno stran namesto praznega dokumenta</value>
+  </data>
 </root>

@@ -1095,4 +1095,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>የማስቀመጥ ሁኔታ</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>አቃፊዎች</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>የቅርብ ጊዜ አቃፊዎች የሉም</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>የቅርብ ጊዜ አቃፊዎችን አጽዳ</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>ከዝርዝሩ ለማስወገድ በቀኝ ጠቅ ያድርጉ ወይም Delete ይጫኑ</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>አንድ ደረጃ ወደ ላይ</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>እንደ ስር አዘጋጅ</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>ተወዳጆች</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>ወደ ተወዳጆች አክል</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>ከተወዳጆች አስወግድ</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>መነሻ</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>ጀምር</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>አዲስ ሰነድ</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>ፋይል ክፈት</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>አቃፊ ክፈት</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>የቅርብ ጊዜ ፋይሎች</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>የቅርብ ጊዜ አቃፊዎች</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>ከዝርዝሩ አስወግድ</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>ቅንብሮች</value>
+  </data>
 </root>

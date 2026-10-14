@@ -1096,4 +1096,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>Salvestamise olek</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Kaustad</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Hiljutisi kaustu pole</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Tühjenda hiljutised kaustad</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Paremklõps või Delete eemaldab selle loendist</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Tase üles</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Määra juurkaustaks</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Lemmikud</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Lisa lemmikutesse</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Eemalda lemmikutest</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Avaleht</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Algus</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Uus dokument</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Ava fail</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Ava kaust</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Hiljutised failid</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Hiljutised kaustad</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Eemalda loendist</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Sätted</value>
+  </data>
 </root>

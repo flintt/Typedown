@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>അതിന്റെ ഫോൾഡർ തുറക്കുക</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>അടുത്തിടെ തുറന്ന ഫയലുകൾ ഓർമ്മിക്കുക</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>നിങ്ങൾ തുറക്കുന്ന ഫയലുകളും ഫോൾഡറുകളും ഫയൽ &gt; സമീപകാലം തുറക്കുക എന്നതിലും ഹോം പേജിലും കാണാം. ഓഫ് ആണെങ്കിൽ പുതിയതൊന്നും ചേർക്കില്ല.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>സമീപകാല ഫയലുകളും ഫോൾഡറുകളും മായ്ക്കുക</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>അടുത്തിടെ തുറന്ന ഫയലുകളുടെയും ഫോൾഡറുകളുടെയും പട്ടികകൾ ശൂന്യമാക്കുന്നു.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>മായ്ക്കുക</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>ശൂന്യമായ ടാബിൽ ഹോം പേജ് കാണിക്കുക</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>ആരംഭത്തിൽ തുറക്കാൻ ഒന്നുമില്ലാത്തപ്പോഴും അവസാന ടാബ് അടയ്ക്കുമ്പോഴും: സമീപകാല ഫയലുകൾ, ഫോൾഡറുകൾ, പ്രിയങ്കരങ്ങൾ</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>പുതിയ ടാബുകൾ ഹോം പേജ് കാണിക്കുന്നു</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>പുതിയ ടാബ് (ഫയൽ &gt; പുതിയത്, + ബട്ടൺ) ശൂന്യ പ്രമാണത്തിന് പകരം ഹോം പേജ് കാണിക്കുന്നു</value>
+  </data>
 </root>

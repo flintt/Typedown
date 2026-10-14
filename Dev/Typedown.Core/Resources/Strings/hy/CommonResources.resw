@@ -1096,4 +1096,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>Պահպանման կարգավիճակ</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Թղթապանակներ</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Վերջին թղթապանակներ չկան</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Մաքրել վերջին թղթապանակները</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Սեղմեք աջ կոճակը կամ Delete՝ ցանկից հեռացնելու համար</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Մեկ մակարդակ վեր</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Նշանակել որպես արմատ</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Ընտրյալներ</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Ավելացնել ընտրյալներին</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Հեռացնել ընտրյալներից</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Գլխավոր</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Սկիզբ</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Նոր փաստաթուղթ</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Բացել ֆայլ</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Բացել թղթապանակ</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Վերջին ֆայլեր</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Վերջին թղթապանակներ</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Հեռացնել ցանկից</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Կարգավորումներ</value>
+  </data>
 </root>

@@ -1096,4 +1096,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>저장 상태</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>폴더</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>최근 폴더 없음</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>최근 폴더 지우기</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>마우스 오른쪽 단추를 클릭하거나 Delete 키를 눌러 목록에서 제거</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>상위 폴더로</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>루트로 설정</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>즐겨찾기</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>즐겨찾기에 추가</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>즐겨찾기에서 제거</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>홈</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>시작</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>새 문서</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>파일 열기</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>폴더 열기</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>최근 파일</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>최근 폴더</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>목록에서 제거</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>설정</value>
+  </data>
 </root>

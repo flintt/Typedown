@@ -1096,4 +1096,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>Stav uložení</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Složky</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Žádné nedávné složky</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Vymazat nedávné složky</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Kliknutím pravým tlačítkem nebo klávesou Delete položku odeberete ze seznamu</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>O úroveň výš</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Nastavit jako kořen</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Oblíbené</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Přidat do oblíbených</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Odebrat z oblíbených</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Domů</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Nový dokument</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Otevřít soubor</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Otevřít složku</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Nedávné soubory</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Nedávné složky</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Odebrat ze seznamu</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Nastavení</value>
+  </data>
 </root>

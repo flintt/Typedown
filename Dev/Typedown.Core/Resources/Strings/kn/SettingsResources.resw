@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>ಅದರ ಫೋಲ್ಡರ್ ತೆರೆಯಿರಿ</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>ಇತ್ತೀಚೆಗೆ ತೆರೆದ ಫೈಲ್‌ಗಳನ್ನು ನೆನಪಿಡಿ</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>ನೀವು ತೆರೆಯುವ ಫೈಲ್‌ಗಳು ಮತ್ತು ಫೋಲ್ಡರ್‌ಗಳು ಫೈಲ್ &gt; ಇತ್ತೀಚಿನದನ್ನು ತೆರೆಯಿರಿ ಮತ್ತು ಮುಖಪುಟದಲ್ಲಿ ಕಾಣಿಸುತ್ತವೆ. ಆಫ್ ಆಗಿದ್ದಾಗ ಹೊಸದೇನೂ ಸೇರುವುದಿಲ್ಲ.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>ಇತ್ತೀಚಿನ ಫೈಲ್‌ಗಳು ಮತ್ತು ಫೋಲ್ಡರ್‌ಗಳನ್ನು ತೆರವುಗೊಳಿಸಿ</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>ಇತ್ತೀಚೆಗೆ ತೆರೆದ ಫೈಲ್‌ಗಳು ಮತ್ತು ಫೋಲ್ಡರ್‌ಗಳ ಪಟ್ಟಿಗಳನ್ನು ಖಾಲಿ ಮಾಡುತ್ತದೆ.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>ತೆರವುಗೊಳಿಸಿ</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>ಖಾಲಿ ಟ್ಯಾಬ್‌ನಲ್ಲಿ ಮುಖಪುಟ ತೋರಿಸಿ</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>ಪ್ರಾರಂಭದಲ್ಲಿ ತೆರೆಯಲು ಏನೂ ಇಲ್ಲದಿದ್ದಾಗ ಮತ್ತು ಕೊನೆಯ ಟ್ಯಾಬ್ ಮುಚ್ಚಿದಾಗ: ಇತ್ತೀಚಿನ ಫೈಲ್‌ಗಳು, ಫೋಲ್ಡರ್‌ಗಳು, ಮೆಚ್ಚಿನವು</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>ಹೊಸ ಟ್ಯಾಬ್‌ಗಳು ಮುಖಪುಟ ತೋರಿಸುತ್ತವೆ</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>ಹೊಸ ಟ್ಯಾಬ್ (ಫೈಲ್ &gt; ಹೊಸದು, + ಬಟನ್) ಖಾಲಿ ದಾಖಲೆಯ ಬದಲು ಮುಖಪುಟ ತೋರಿಸುತ್ತದೆ</value>
+  </data>
 </root>

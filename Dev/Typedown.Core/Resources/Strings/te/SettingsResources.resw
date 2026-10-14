@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>దాని ఫోల్డర్‌ను తెరువు</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>ఇటీవల తెరిచిన ఫైల్‌లను గుర్తుంచుకో</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>మీరు తెరిచే ఫైల్‌లు, ఫోల్డర్‌లు ఫైల్ &gt; ఇటీవలివి తెరువు మరియు హోమ్ పేజీలో కనిపిస్తాయి. ఆఫ్‌లో ఉంటే కొత్తవి చేరవు.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>ఇటీవలి ఫైల్‌లు మరియు ఫోల్డర్‌లను క్లియర్ చేయండి</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>ఇటీవల తెరిచిన ఫైల్‌లు, ఫోల్డర్‌ల జాబితాలను ఖాళీ చేస్తుంది.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>క్లియర్ చేయి</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>ఖాళీ ట్యాబ్‌లో హోమ్ పేజీని చూపు</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>ప్రారంభంలో తెరవడానికి ఏమీ లేనప్పుడు మరియు చివరి ట్యాబ్ మూసినప్పుడు: ఇటీవలి ఫైల్‌లు, ఫోల్డర్‌లు, ఇష్టమైనవి</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>కొత్త ట్యాబ్‌లు హోమ్ పేజీని చూపుతాయి</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>కొత్త ట్యాబ్ (ఫైల్ &gt; కొత్తది, + బటన్) ఖాళీ పత్రానికి బదులు హోమ్ పేజీని చూపుతుంది</value>
+  </data>
 </root>

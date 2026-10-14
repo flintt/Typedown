@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Maak sy vouer oop</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Onthou onlangs oopgemaakte lêers</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Lêers en vouers wat jy oopmaak, word onder Lêer &gt; Maak onlangse oop en op die tuisblad gelys. Afgeskakel word niks nuuts bygevoeg nie.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Vee onlangse lêers en vouers uit</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Maak die lyste van onlangs oopgemaakte lêers en vouers leeg.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Vee uit</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Wys die tuisblad op 'n leë oortjie</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>By opstart sonder iets om oop te maak en wanneer die laaste oortjie toegemaak word: onlangse lêers en vouers, gunstelinge</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Nuwe oortjies wys die tuisblad</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>'n Nuwe oortjie (Lêer &gt; Nuut, die + knoppie) wys die tuisblad in plaas van 'n leë dokument</value>
+  </data>
 </root>

@@ -1096,4 +1096,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>Status ng pag-save</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Mga folder</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Walang kamakailang folder</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>I-clear ang mga kamakailang folder</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Mag-right-click o pindutin ang Delete para alisin ito sa listahan</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Isang antas pataas</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Itakda bilang root</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Mga paborito</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Idagdag sa mga paborito</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Alisin sa mga paborito</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Simula</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Bagong dokumento</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Buksan ang file</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Buksan ang folder</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Mga kamakailang file</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Mga kamakailang folder</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Alisin sa listahan</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Mga setting</value>
+  </data>
 </root>

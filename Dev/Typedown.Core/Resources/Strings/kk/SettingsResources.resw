@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Оның қалтасын ашу</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Жақында ашылған файлдарды есте сақтау</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Ашқан файлдар мен қалталар Файл &gt; Соңғыларды ашу мәзірінде және басты бетте көрсетіледі. Өшірулі болса, жаңасы қосылмайды.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Соңғы файлдар мен қалталарды тазалау</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Жақында ашылған файлдар мен қалталар тізімдерін босатады.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Тазалау</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Бос қойындыда басты бетті көрсету</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Іске қосқанда ашатын ештеңе болмаса және соңғы қойынды жабылғанда: соңғы файлдар мен қалталар, таңдаулылар</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Жаңа қойындылар басты бетті көрсетеді</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Жаңа қойынды (Файл &gt; Жаңа, + түймесі) бос құжаттың орнына басты бетті көрсетеді</value>
+  </data>
 </root>

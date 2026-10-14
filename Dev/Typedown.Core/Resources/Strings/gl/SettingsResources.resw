@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Abrir o seu cartafol</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Lembrar os ficheiros abertos recentemente</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Os ficheiros e cartafoles que abres aparecen en Ficheiro &gt; Abrir recente e na páxina de inicio. Desactivado, non se engade nada novo.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Borrar ficheiros e cartafoles recentes</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Baleira as listas de ficheiros e cartafoles abertos recentemente.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Borrar</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Amosar a páxina de inicio nunha lapela baleira</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Ao iniciar sen nada que abrir e ao pechar a última lapela: ficheiros e cartafoles recentes, favoritos</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>As lapelas novas amosan a páxina de inicio</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Unha lapela nova (Ficheiro &gt; Novo, o botón +) amosa a páxina de inicio en vez dun documento baleiro</value>
+  </data>
 </root>

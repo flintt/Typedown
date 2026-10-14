@@ -1096,4 +1096,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>Įrašymo būsena</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Aplankai</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Nėra naujausių aplankų</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Išvalyti naujausius aplankus</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Spustelėkite dešiniuoju mygtuku arba paspauskite Delete, kad pašalintumėte iš sąrašo</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Lygiu aukščiau</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Nustatyti kaip šaknį</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Mėgstami</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Įtraukti į mėgstamus</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Pašalinti iš mėgstamų</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Pradžia</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Pradžia</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Naujas dokumentas</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Atidaryti failą</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Atidaryti aplanką</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Naujausi failai</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Naujausi aplankai</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Pašalinti iš sąrašo</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Nustatymai</value>
+  </data>
 </root>

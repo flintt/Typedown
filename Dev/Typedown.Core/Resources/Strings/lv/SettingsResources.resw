@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Atvērt tā mapi</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Atcerēties nesen atvērtos failus</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Atvērtie faili un mapes tiek rādīti sadaļā Fails &gt; Atvērt nesenos un sākumlapā. Ja izslēgts, nekas jauns netiek pievienots.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Notīrīt nesenos failus un mapes</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Iztukšo nesen atvērto failu un mapju sarakstus.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Notīrīt</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Rādīt sākumlapu tukšā cilnē</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Startējot bez nekā atveramā un aizverot pēdējo cilni: nesenie faili un mapes, izlase</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Jaunās cilnes rāda sākumlapu</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Jauna cilne (Fails &gt; Jauns, poga +) rāda sākumlapu tukša dokumenta vietā</value>
+  </data>
 </root>

@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>ເປີດໂຟນເດີຂອງມັນ</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>ຈື່ໄຟລ໌ທີ່ເປີດຫຼ້າສຸດ</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>ໄຟລ໌ ແລະ ໂຟນເດີທີ່ທ່ານເປີດຈະສະແດງໃນ ໄຟລ໌ &gt; ເປີດຫຼ້າສຸດ ແລະ ໃນໜ້າຫຼັກ. ເມື່ອປິດ ຈະບໍ່ເພີ່ມຫຍັງໃໝ່.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>ລຶບໄຟລ໌ ແລະ ໂຟນເດີຫຼ້າສຸດ</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>ລ້າງລາຍການໄຟລ໌ ແລະ ໂຟນເດີທີ່ເປີດຫຼ້າສຸດ.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>ລຶບ</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>ສະແດງໜ້າຫຼັກໃນແຖບຫວ່າງ</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>ເມື່ອເລີ່ມໂດຍບໍ່ມີຫຍັງຈະເປີດ ແລະ ເມື່ອປິດແຖບສຸດທ້າຍ: ໄຟລ໌ ແລະ ໂຟນເດີຫຼ້າສຸດ, ລາຍການທີ່ມັກ</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>ແຖບໃໝ່ສະແດງໜ້າຫຼັກ</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>ແຖບໃໝ່ (ໄຟລ໌ &gt; ໃໝ່, ປຸ່ມ +) ສະແດງໜ້າຫຼັກແທນເອກະສານຫວ່າງ</value>
+  </data>
 </root>

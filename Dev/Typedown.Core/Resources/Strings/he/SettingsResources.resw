@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>פתח את התיקייה שלו</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>זכור קבצים שנפתחו לאחרונה</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>קבצים ותיקיות שאתה פותח מופיעים בקובץ &gt; פתח אחרונים ובדף הבית. כשהאפשרות כבויה, לא נוסף דבר חדש.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>נקה קבצים ותיקיות אחרונים</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>מרוקן את רשימות הקבצים והתיקיות שנפתחו לאחרונה.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>נקה</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>הצג את דף הבית בכרטיסייה ריקה</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>בהפעלה ללא מה לפתוח ובסגירת הכרטיסייה האחרונה: קבצים ותיקיות אחרונים, מועדפים</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>כרטיסיות חדשות מציגות את דף הבית</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>כרטיסייה חדשה (קובץ &gt; חדש, הלחצן +) מציגה את דף הבית במקום מסמך ריק</value>
+  </data>
 </root>

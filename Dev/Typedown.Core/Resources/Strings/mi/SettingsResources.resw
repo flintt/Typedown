@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Huakina tōna kōpaki</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Maumahara ki ngā kōnae i huakina tata nei</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Ka whakaraupapahia ngā kōnae me ngā kōpaki ka huakina e koe ki Kōnae &gt; Huaki o nā tata nei, ki te whārangi kāinga hoki. Ka whakawetohia, kāore he mea hou e tāpirihia.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Ūkuia ngā kōnae me ngā kōpaki o nā tata nei</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Ka whakawātea i ngā rārangi o ngā kōnae me ngā kōpaki i huakina tata nei.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Ūkuia</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Whakaaturia te whārangi kāinga ki tētahi ripa wātea</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>I te tīmatanga kāore he mea hei huaki, ā, ina katia te ripa whakamutunga: ngā kōnae me ngā kōpaki o nā tata nei, ngā makau</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Ka whakaatu ngā ripa hou i te whārangi kāinga</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Ka whakaatu tētahi ripa hou (Kōnae &gt; Hou, te pātene +) i te whārangi kāinga, kaua he tuhinga wātea</value>
+  </data>
 </root>

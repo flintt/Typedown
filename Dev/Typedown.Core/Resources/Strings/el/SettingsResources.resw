@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Άνοιγμα του φακέλου του</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Απομνημόνευση πρόσφατα ανοιγμένων αρχείων</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Τα αρχεία και οι φάκελοι που ανοίγετε εμφανίζονται στο Αρχείο &gt; Άνοιγμα πρόσφατου και στην αρχική σελίδα. Όταν είναι απενεργοποιημένο, δεν προστίθεται τίποτα νέο.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Απαλοιφή πρόσφατων αρχείων και φακέλων</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Αδειάζει τις λίστες πρόσφατα ανοιγμένων αρχείων και φακέλων.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Απαλοιφή</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Εμφάνιση αρχικής σελίδας σε κενή καρτέλα</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Κατά την εκκίνηση χωρίς κάτι για άνοιγμα και όταν κλείνει η τελευταία καρτέλα: πρόσφατα αρχεία και φάκελοι, αγαπημένα</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Οι νέες καρτέλες εμφανίζουν την αρχική σελίδα</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Μια νέα καρτέλα (Αρχείο &gt; Νέο, το κουμπί +) εμφανίζει την αρχική σελίδα αντί για κενό έγγραφο</value>
+  </data>
 </root>

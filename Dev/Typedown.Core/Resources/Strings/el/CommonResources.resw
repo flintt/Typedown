@@ -1096,4 +1096,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>Κατάσταση αποθήκευσης</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Φάκελοι</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Δεν υπάρχουν πρόσφατοι φάκελοι</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Απαλοιφή πρόσφατων φακέλων</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Δεξί κλικ ή Delete για αφαίρεση από τη λίστα</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Ένα επίπεδο πάνω</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Ορισμός ως ρίζα</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Αγαπημένα</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Προσθήκη στα αγαπημένα</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Αφαίρεση από τα αγαπημένα</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Αρχική</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Έναρξη</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Νέο έγγραφο</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Άνοιγμα αρχείου</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Άνοιγμα φακέλου</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Πρόσφατα αρχεία</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Πρόσφατοι φάκελοι</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Αφαίρεση από τη λίστα</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Ρυθμίσεις</value>
+  </data>
 </root>

@@ -1096,4 +1096,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>Сақтау күйі</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Қалталар</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Соңғы қалталар жоқ</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Соңғы қалталарды тазалау</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Тізімнен алып тастау үшін тінтуірдің оң жағын басыңыз немесе Delete пернесін басыңыз</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Бір деңгей жоғары</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Түбір ретінде орнату</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Таңдаулылар</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Таңдаулыларға қосу</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Таңдаулылардан алып тастау</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Басты бет</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Бастау</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Жаңа құжат</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Файлды ашу</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Қалтаны ашу</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Соңғы файлдар</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Соңғы қалталар</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Тізімнен алып тастау</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Параметрлер</value>
+  </data>
 </root>

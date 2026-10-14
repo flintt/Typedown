@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Klasörünü aç</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Son açılan dosyaları hatırla</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Açtığınız dosya ve klasörler Dosya &gt; Son kullanılanları aç menüsünde ve giriş sayfasında listelenir. Kapalıyken yeni bir şey eklenmez.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Son dosya ve klasörleri temizle</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Son açılan dosya ve klasör listelerini boşaltır.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Temizle</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Boş sekmede giriş sayfasını göster</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Açılacak bir şey olmadan başlatıldığında ve son sekme kapatıldığında: son dosya ve klasörler, sık kullanılanlar</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Yeni sekmeler giriş sayfasını gösterir</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Yeni bir sekme (Dosya &gt; Yeni, + düğmesi) boş belge yerine giriş sayfasını gösterir</value>
+  </data>
 </root>

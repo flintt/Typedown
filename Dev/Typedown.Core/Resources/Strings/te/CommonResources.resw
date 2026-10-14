@@ -1096,4 +1096,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>సేవ్ స్థితి</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>ఫోల్డర్‌లు</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>ఇటీవలి ఫోల్డర్‌లు లేవు</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>ఇటీవలి ఫోల్డర్‌లను క్లియర్ చేయండి</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>జాబితా నుండి తీసివేయడానికి కుడి-క్లిక్ చేయండి లేదా Delete నొక్కండి</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>ఒక స్థాయి పైకి</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>రూట్‌గా సెట్ చేయండి</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>ఇష్టమైనవి</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>ఇష్టమైనవాటికి జోడించండి</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>ఇష్టమైనవాటి నుండి తీసివేయండి</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>హోమ్</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>ప్రారంభం</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>కొత్త పత్రం</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>ఫైల్ తెరువు</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>ఫోల్డర్ తెరువు</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>ఇటీవలి ఫైల్‌లు</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>ఇటీవలి ఫోల్డర్‌లు</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>జాబితా నుండి తీసివేయండి</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>సెట్టింగ్‌లు</value>
+  </data>
 </root>

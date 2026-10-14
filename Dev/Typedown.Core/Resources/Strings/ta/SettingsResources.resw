@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>அதன் கோப்புறையைத் திற</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>சமீபத்தில் திறந்த கோப்புகளை நினைவில் வை</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>நீங்கள் திறக்கும் கோப்புகளும் கோப்புறைகளும் கோப்பு &gt; சமீபத்தியதைத் திற மற்றும் முகப்புப் பக்கத்தில் காட்டப்படும். அணைத்தால் புதியவை சேர்க்கப்படாது.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>சமீபத்திய கோப்புகள் மற்றும் கோப்புறைகளை அழி</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>சமீபத்தில் திறந்த கோப்புகள், கோப்புறைகளின் பட்டியல்களைக் காலியாக்கும்.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>அழி</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>வெற்றுத் தாவலில் முகப்புப் பக்கத்தைக் காட்டு</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>தொடங்கும்போது திறக்க எதுவும் இல்லாதபோதும் கடைசித் தாவலை மூடும்போதும்: சமீபத்திய கோப்புகள், கோப்புறைகள், பிடித்தவை</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>புதிய தாவல்கள் முகப்புப் பக்கத்தைக் காட்டும்</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>புதிய தாவல் (கோப்பு &gt; புதியது, + பொத்தான்) வெற்று ஆவணத்துக்குப் பதிலாக முகப்புப் பக்கத்தைக் காட்டும்</value>
+  </data>
 </root>

@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Agor ei ffolder</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Cofio ffeiliau a agorwyd yn ddiweddar</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Mae'r ffeiliau a'r ffolderi rydych yn eu hagor yn ymddangos yn Ffeil &gt; Agor diweddar ac ar yr hafan. Wedi'i ddiffodd, nid oes dim newydd yn cael ei ychwanegu.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Clirio ffeiliau a ffolderi diweddar</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Yn gwagio rhestrau'r ffeiliau a'r ffolderi a agorwyd yn ddiweddar.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Clirio</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Dangos yr hafan ar dab gwag</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Wrth gychwyn heb ddim i'w agor a phan gaiff y tab olaf ei gau: ffeiliau a ffolderi diweddar, ffefrynnau</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Mae tabiau newydd yn dangos yr hafan</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Mae tab newydd (Ffeil &gt; Newydd, y botwm +) yn dangos yr hafan yn lle dogfen wag</value>
+  </data>
 </root>

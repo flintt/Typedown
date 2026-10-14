@@ -1096,4 +1096,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>Vistunarstaða</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Möppur</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Engar nýlegar möppur</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Hreinsa nýlegar möppur</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Hægrismelltu eða ýttu á Delete til að fjarlægja af listanum</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Eitt stig upp</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Setja sem rót</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Eftirlæti</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Bæta við eftirlæti</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Fjarlægja úr eftirlæti</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Heim</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Byrja</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Nýtt skjal</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Opna skrá</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Opna möppu</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Nýlegar skrár</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Nýlegar möppur</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Fjarlægja af lista</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Stillingar</value>
+  </data>
 </root>

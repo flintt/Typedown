@@ -1096,4 +1096,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>Trạng thái lưu</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Thư mục</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Không có thư mục gần đây</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Xóa thư mục gần đây</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Nhấp chuột phải hoặc nhấn Delete để xóa khỏi danh sách</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Lên một cấp</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Đặt làm gốc</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Yêu thích</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Thêm vào yêu thích</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Xóa khỏi yêu thích</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Trang chủ</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Bắt đầu</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Tài liệu mới</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Mở tệp</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Mở thư mục</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Tệp gần đây</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Thư mục gần đây</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Xóa khỏi danh sách</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Cài đặt</value>
+  </data>
 </root>

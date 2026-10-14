@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Открыть его папку</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Запоминать недавно открытые файлы</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Открытые файлы и папки показываются в меню «Файл &gt; Открыть недавние» и на главной странице. Если выключено, новые не добавляются.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Очистить недавние файлы и папки</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Очищает списки недавно открытых файлов и папок.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Очистить</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Показывать главную страницу на пустой вкладке</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>При запуске, когда нечего открыть, и при закрытии последней вкладки: недавние файлы и папки, избранное</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Новые вкладки показывают главную страницу</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Новая вкладка (Файл &gt; Создать, кнопка +) показывает главную страницу вместо пустого документа</value>
+  </data>
 </root>

@@ -1096,4 +1096,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>सुरक्षित स्थिति</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>फोल्डरहरू</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>हालका फोल्डर छैनन्</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>हालका फोल्डरहरू खाली गर्नुहोस्</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>सूचीबाट हटाउन दायाँ-क्लिक गर्नुहोस् वा Delete थिच्नुहोस्</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>एक तह माथि</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>मूलका रूपमा सेट गर्नुहोस्</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>मनपर्ने</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>मनपर्नेमा थप्नुहोस्</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>मनपर्नेबाट हटाउनुहोस्</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>गृह</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>सुरु</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>नयाँ कागजात</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>फाइल खोल्नुहोस्</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>फोल्डर खोल्नुहोस्</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>हालका फाइलहरू</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>हालका फोल्डरहरू</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>सूचीबाट हटाउनुहोस्</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>सेटिङहरू</value>
+  </data>
 </root>

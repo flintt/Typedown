@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Öppna dess mapp</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Kom ihåg nyligen öppnade filer</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Filer och mappar du öppnar visas under Arkiv &gt; Öppna senaste och på startsidan. Avstängt läggs inget nytt till.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Rensa senaste filer och mappar</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Tömmer listorna över nyligen öppnade filer och mappar.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Rensa</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Visa startsidan på en tom flik</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Vid start utan något att öppna och när den sista fliken stängs: senaste filer och mappar, favoriter</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Nya flikar visar startsidan</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>En ny flik (Arkiv &gt; Nytt, knappen +) visar startsidan i stället för ett tomt dokument</value>
+  </data>
 </root>

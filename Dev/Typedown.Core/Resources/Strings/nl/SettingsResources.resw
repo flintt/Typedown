@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>De map openen</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Recent geopende bestanden onthouden</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Geopende bestanden en mappen staan in Bestand &gt; Recent openen en op de startpagina. Uitgeschakeld wordt er niets nieuws toegevoegd.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Recente bestanden en mappen wissen</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Maakt de lijsten met recent geopende bestanden en mappen leeg.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Wissen</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Startpagina tonen op een leeg tabblad</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Bij het starten zonder iets te openen en bij het sluiten van het laatste tabblad: recente bestanden en mappen, favorieten</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Nieuwe tabbladen tonen de startpagina</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Een nieuw tabblad (Bestand &gt; Nieuw, de knop +) toont de startpagina in plaats van een leeg document</value>
+  </data>
 </root>

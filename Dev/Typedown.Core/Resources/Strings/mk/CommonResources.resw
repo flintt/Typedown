@@ -1096,4 +1096,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>Состојба на зачувување</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Папки</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Нема неодамнешни папки</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Исчисти ги неодамнешните папки</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Десен клик или Delete за да се отстрани од листата</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Едно ниво нагоре</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Постави како корен</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Омилени</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Додај во омилени</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Отстрани од омилени</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Почетна</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Почеток</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Нов документ</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Отвори датотека</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Отвори папка</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Неодамнешни датотеки</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Неодамнешни папки</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Отстрани од листата</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Поставки</value>
+  </data>
 </root>

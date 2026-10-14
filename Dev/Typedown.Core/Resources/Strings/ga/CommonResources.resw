@@ -1096,4 +1096,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>Stádas sábhála</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Fillteáin</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Níl aon fhillteáin le déanaí</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Glan fillteáin le déanaí</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Deaschliceáil nó brúigh Delete chun é a bhaint den liosta</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Leibhéal amháin suas</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Socraigh mar fhréamh</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Ceanáin</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Cuir leis na ceanáin</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Bain de na ceanáin</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Baile</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Tosaigh</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Doiciméad nua</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Oscail comhad</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Oscail fillteán</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Comhaid le déanaí</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Fillteáin le déanaí</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Bain den liosta</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Socruithe</value>
+  </data>
 </root>

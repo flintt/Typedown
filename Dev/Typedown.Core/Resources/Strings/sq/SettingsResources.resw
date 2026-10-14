@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Hap dosjen e tij</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Mbaj mend skedarët e hapur së fundi</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Skedarët dhe dosjet që hap shfaqen te Skedari &gt; Hap të fundit dhe në faqen kryesore. Kur është i çaktivizuar, nuk shtohet asgjë e re.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Pastro skedarët dhe dosjet e fundit</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Zbraz listat e skedarëve dhe dosjeve të hapura së fundi.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Pastro</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Shfaq faqen kryesore në një skedë bosh</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Në nisje pa asgjë për të hapur dhe kur mbyllet skeda e fundit: skedarët dhe dosjet e fundit, të preferuarat</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Skedat e reja shfaqin faqen kryesore</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Një skedë e re (Skedari &gt; I ri, butoni +) shfaq faqen kryesore në vend të një dokumenti bosh</value>
+  </data>
 </root>

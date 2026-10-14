@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Apri la cartella</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Ricorda i file aperti di recente</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>I file e le cartelle aperti compaiono in File &gt; Apri recenti e nella pagina iniziale. Se disattivato, non viene aggiunto nulla di nuovo.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Cancella file e cartelle recenti</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Svuota gli elenchi dei file e delle cartelle aperti di recente.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Cancella</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Mostra la pagina iniziale in una scheda vuota</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>All'avvio senza nulla da aprire e alla chiusura dell'ultima scheda: file e cartelle recenti, preferiti</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Le nuove schede mostrano la pagina iniziale</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Una nuova scheda (File &gt; Nuovo, il pulsante +) mostra la pagina iniziale invece di un documento vuoto</value>
+  </data>
 </root>

@@ -1096,4 +1096,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>Kaydetme durumu</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Klasörler</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Son klasör yok</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Son klasörleri temizle</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Listeden kaldırmak için sağ tıklayın veya Delete tuşuna basın</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Bir üst düzey</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Kök olarak ayarla</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Sık kullanılanlar</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Sık kullanılanlara ekle</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Sık kullanılanlardan kaldır</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Giriş</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Başlangıç</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Yeni belge</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Dosya aç</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Klasör aç</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Son dosyalar</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Son klasörler</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Listeden kaldır</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Ayarlar</value>
+  </data>
 </root>

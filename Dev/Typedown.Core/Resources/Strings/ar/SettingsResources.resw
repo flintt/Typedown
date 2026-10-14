@@ -901,4 +901,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>فتح المجلد الذي يحتويه</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>تذكّر الملفات المفتوحة مؤخرًا</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>تظهر الملفات والمجلدات التي تفتحها في ملف &gt; فتح الحديث وفي الصفحة الرئيسية. عند الإيقاف لا يُضاف شيء جديد.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>مسح الملفات والمجلدات الحديثة</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>يفرغ قوائم الملفات والمجلدات المفتوحة مؤخرًا.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>مسح</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>إظهار الصفحة الرئيسية في علامة تبويب فارغة</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>عند البدء دون شيء لفتحه وعند إغلاق آخر علامة تبويب: الملفات والمجلدات الحديثة، المفضلة</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>علامات التبويب الجديدة تُظهر الصفحة الرئيسية</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>تُظهر علامة التبويب الجديدة (ملف &gt; جديد، الزر +) الصفحة الرئيسية بدلًا من مستند فارغ</value>
+  </data>
 </root>

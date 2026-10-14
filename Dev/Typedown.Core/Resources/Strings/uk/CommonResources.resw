@@ -1096,4 +1096,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>Стан збереження</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Теки</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Немає нещодавніх тек</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Очистити нещодавні теки</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Клацніть правою кнопкою або натисніть Delete, щоб прибрати зі списку</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>На рівень вище</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Зробити кореневою</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Вибране</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Додати до вибраного</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Прибрати з вибраного</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Головна</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Початок</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Новий документ</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Відкрити файл</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Відкрити теку</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Нещодавні файли</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Нещодавні теки</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Прибрати зі списку</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Налаштування</value>
+  </data>
 </root>

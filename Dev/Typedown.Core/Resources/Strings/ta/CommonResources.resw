@@ -1096,4 +1096,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>சேமிப்பு நிலை</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>கோப்புறைகள்</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>சமீபத்திய கோப்புறைகள் இல்லை</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>சமீபத்திய கோப்புறைகளை அழி</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>பட்டியலிலிருந்து நீக்க வலது கிளிக் செய்யவும் அல்லது Delete அழுத்தவும்</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>ஒரு நிலை மேலே</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>மூலமாக அமை</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>பிடித்தவை</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>பிடித்தவையில் சேர்</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>பிடித்தவையிலிருந்து நீக்கு</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>முகப்பு</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>தொடக்கம்</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>புதிய ஆவணம்</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>கோப்பைத் திற</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>கோப்புறையைத் திற</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>சமீபத்திய கோப்புகள்</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>சமீபத்திய கோப்புறைகள்</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>பட்டியலிலிருந்து நீக்கு</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>அமைப்புகள்</value>
+  </data>
 </root>

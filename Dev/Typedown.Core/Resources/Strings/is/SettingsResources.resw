@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Opna möppu hennar</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Muna nýlega opnaðar skrár</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Skrár og möppur sem þú opnar birtast í Skrá &gt; Opna nýlegt og á heimasíðunni. Þegar slökkt er bætist ekkert nýtt við.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Hreinsa nýlegar skrár og möppur</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Tæmir lista yfir nýlega opnaðar skrár og möppur.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Hreinsa</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Sýna heimasíðu á auðum flipa</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Við ræsingu þegar ekkert á að opna og þegar síðasta flipanum er lokað: nýlegar skrár og möppur, eftirlæti</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Nýir flipar sýna heimasíðuna</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Nýr flipi (Skrá &gt; Nýtt, hnappurinn +) sýnir heimasíðuna í stað auðs skjals</value>
+  </data>
 </root>

@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Vula ifolda yalo</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Khumbula amafayela avulwe muva nje</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Amafayela namafolda owavulayo abalwe ku-Ifayela &gt; Vula akamuva nasekhasini lasekhaya. Uma kuvaliwe, akukho okusha okungezwayo.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Sula amafayela namafolda akamuva</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Ithulula uhlu lwamafayela namafolda avulwe muva nje.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Sula</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Bonisa ikhasi lasekhaya kuthebhu engenalutho</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Ekuqaleni lapho kungekho okuvulwayo nalapho ithebhu yokugcina ivalwa: amafayela namafolda akamuva, izintandokazi</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Amathebhu amasha abonisa ikhasi lasekhaya</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Ithebhu entsha (Ifayela &gt; Okusha, inkinobho ethi +) ibonisa ikhasi lasekhaya esikhundleni sedokhumenti engenalutho</value>
+  </data>
 </root>

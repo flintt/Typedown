@@ -1096,4 +1096,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>وضعیت ذخیره</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>پوشه‌ها</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>پوشهٔ اخیر وجود ندارد</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>پاک کردن پوشه‌های اخیر</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>برای حذف از لست، کلیک راست کنید یا Delete را فشار دهید</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>یک سطح بالاتر</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>تعیین به‌حیث ریشه</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>دلخواه‌ها</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>افزودن به دلخواه‌ها</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>حذف از دلخواه‌ها</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>خانه</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>شروع</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>سند جدید</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>باز کردن فایل</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>باز کردن پوشه</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>فایل‌های اخیر</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>پوشه‌های اخیر</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>حذف از لست</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>تنظیمات</value>
+  </data>
 </root>

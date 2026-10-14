@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Otvoriť jeho priečinok</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Pamätať si nedávno otvorené súbory</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Otvorené súbory a priečinky sa zobrazujú v ponuke Súbor &gt; Otvoriť nedávne a na domovskej stránke. Po vypnutí sa nič nové nepridáva.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Vymazať nedávne súbory a priečinky</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Vyprázdni zoznamy nedávno otvorených súborov a priečinkov.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Vymazať</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Zobraziť domovskú stránku na prázdnej karte</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Pri spustení bez ničoho na otvorenie a po zatvorení poslednej karty: nedávne súbory a priečinky, obľúbené</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Nové karty zobrazujú domovskú stránku</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Nová karta (Súbor &gt; Nový, tlačidlo +) zobrazí domovskú stránku namiesto prázdneho dokumentu</value>
+  </data>
 </root>

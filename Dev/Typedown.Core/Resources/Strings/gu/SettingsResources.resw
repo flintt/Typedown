@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>તેનું ફોલ્ડર ખોલો</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>તાજેતરમાં ખોલેલી ફાઇલો યાદ રાખો</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>તમે ખોલેલી ફાઇલો અને ફોલ્ડર ફાઇલ &gt; તાજેતરનું ખોલો અને હોમ પેજ પર દેખાય છે. બંધ હોય ત્યારે કંઈ નવું ઉમેરાતું નથી.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>તાજેતરની ફાઇલો અને ફોલ્ડર સાફ કરો</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>તાજેતરમાં ખોલેલી ફાઇલો અને ફોલ્ડરની સૂચિઓ ખાલી કરે છે.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>સાફ કરો</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>ખાલી ટૅબ પર હોમ પેજ બતાવો</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>શરૂ કરતી વખતે ખોલવા માટે કંઈ ન હોય અને છેલ્લી ટૅબ બંધ થાય ત્યારે: તાજેતરની ફાઇલો અને ફોલ્ડર, મનપસંદ</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>નવી ટૅબ્સ હોમ પેજ બતાવે છે</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>નવી ટૅબ (ફાઇલ &gt; નવું, + બટન) ખાલી દસ્તાવેજને બદલે હોમ પેજ બતાવે છે</value>
+  </data>
 </root>

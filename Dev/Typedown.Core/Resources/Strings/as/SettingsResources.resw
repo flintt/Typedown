@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>ইয়াৰ ফ'ল্ডাৰ খোলক</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>শেহতীয়াকৈ খোলা ফাইল মনত ৰাখক</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>আপুনি খোলা ফাইল আৰু ফ'ল্ডাৰ ফাইল &gt; শেহতীয়া খোলক আৰু হোম পৃষ্ঠাত দেখা যায়। বন্ধ থাকিলে নতুন একো যোগ নহয়।</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>শেহতীয়া ফাইল আৰু ফ'ল্ডাৰ মচক</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>শেহতীয়াকৈ খোলা ফাইল আৰু ফ'ল্ডাৰৰ তালিকা খালী কৰে।</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>মচক</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>খালী টেবত হোম পৃষ্ঠা দেখুৱাওক</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>আৰম্ভ কৰোঁতে খুলিবলৈ একো নাথাকিলে আৰু শেষ টেব বন্ধ কৰিলে: শেহতীয়া ফাইল আৰু ফ'ল্ডাৰ, প্ৰিয়</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>নতুন টেবে হোম পৃষ্ঠা দেখুৱায়</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>নতুন টেবে (ফাইল &gt; নতুন, + বুটাম) খালী নথিৰ সলনি হোম পৃষ্ঠা দেখুৱায়</value>
+  </data>
 </root>

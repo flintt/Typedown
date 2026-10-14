@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>폴더 열기</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>최근에 연 파일 기록</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>연 파일과 폴더가 [파일 &gt; 최근 항목 열기]와 홈에 표시됩니다. 끄면 새 항목이 추가되지 않습니다.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>최근 기록 지우기</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>최근에 연 파일과 폴더 목록을 비웁니다.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>지우기</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>빈 탭에 홈 표시</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>시작할 때 열 항목이 없을 때와 마지막 탭을 닫을 때: 최근 파일과 폴더, 즐겨찾기</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>새 탭에도 홈 표시</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>새 탭(파일 &gt; 새로 만들기, + 단추)에서 빈 문서 대신 홈을 표시합니다</value>
+  </data>
 </root>

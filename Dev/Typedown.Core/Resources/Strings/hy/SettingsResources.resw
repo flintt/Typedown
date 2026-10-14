@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Բացել դրա թղթապանակը</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Հիշել վերջերս բացված ֆայլերը</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Ձեր բացած ֆայլերն ու թղթապանակները ցուցադրվում են Ֆայլ &gt; Բացել վերջինը ցանկում և գլխավոր էջում։ Անջատված վիճակում նոր բան չի ավելացվում։</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Մաքրել վերջին ֆայլերն ու թղթապանակները</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Դատարկում է վերջերս բացված ֆայլերի և թղթապանակների ցանկերը։</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Մաքրել</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Ցույց տալ գլխավոր էջը դատարկ ներդիրում</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Գործարկելիս, երբ բացելու բան չկա, և վերջին ներդիրը փակելիս՝ վերջին ֆայլեր և թղթապանակներ, ընտրյալներ</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Նոր ներդիրները ցույց են տալիս գլխավոր էջը</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Նոր ներդիրը (Ֆայլ &gt; Նոր, + կոճակ) դատարկ փաստաթղթի փոխարեն ցույց է տալիս գլխավոր էջը</value>
+  </data>
 </root>

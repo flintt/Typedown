@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Fungua folda yake</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Kumbuka faili zilizofunguliwa hivi karibuni</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Faili na folda unazofungua zinaonyeshwa katika Faili &gt; Fungua za hivi karibuni na kwenye ukurasa wa mwanzo. Ikizimwa, hakuna jipya linaloongezwa.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Futa faili na folda za hivi karibuni</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Huondoa orodha za faili na folda zilizofunguliwa hivi karibuni.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Futa</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Onyesha ukurasa wa mwanzo kwenye kichupo tupu</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Wakati wa kuanza bila kitu cha kufungua na kichupo cha mwisho kinapofungwa: faili na folda za hivi karibuni, vipendwa</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Vichupo vipya vinaonyesha ukurasa wa mwanzo</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Kichupo kipya (Faili &gt; Mpya, kitufe +) kinaonyesha ukurasa wa mwanzo badala ya hati tupu</value>
+  </data>
 </root>

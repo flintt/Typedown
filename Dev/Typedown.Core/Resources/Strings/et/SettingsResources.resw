@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Ava selle kaust</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Jäta meelde hiljuti avatud failid</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Avatud failid ja kaustad on loetletud menüüs Fail &gt; Ava hiljutine ja avalehel. Väljalülitatuna uusi ei lisata.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Tühjenda hiljutised failid ja kaustad</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Tühjendab hiljuti avatud failide ja kaustade loendid.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Tühjenda</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Näita tühjal vahekaardil avalehte</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Käivitamisel, kui midagi avada pole, ja viimase vahekaardi sulgemisel: hiljutised failid ja kaustad, lemmikud</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Uued vahekaardid näitavad avalehte</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Uus vahekaart (Fail &gt; Uus, nupp +) näitab tühja dokumendi asemel avalehte</value>
+  </data>
 </root>

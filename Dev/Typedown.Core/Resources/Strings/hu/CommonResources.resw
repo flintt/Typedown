@@ -1096,4 +1096,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>Mentés állapota</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Mappák</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Nincsenek legutóbbi mappák</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Legutóbbi mappák törlése</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Jobb kattintással vagy a Delete billentyűvel eltávolíthatja a listából</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Egy szinttel feljebb</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Beállítás gyökérként</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Kedvencek</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Hozzáadás a kedvencekhez</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Eltávolítás a kedvencek közül</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Kezdőlap</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Kezdés</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Új dokumentum</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Fájl megnyitása</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Mappa megnyitása</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Legutóbbi fájlok</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Legutóbbi mappák</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Eltávolítás a listából</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Beállítások</value>
+  </data>
 </root>

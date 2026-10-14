@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Ouvrir son dossier</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Mémoriser les fichiers ouverts récemment</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Les fichiers et dossiers ouverts apparaissent dans Fichier &gt; Ouvrir récent et sur la page d'accueil. Désactivé, rien de nouveau n'est ajouté.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Effacer les fichiers et dossiers récents</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Vide les listes des fichiers et dossiers ouverts récemment.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Effacer</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Afficher la page d'accueil dans un onglet vide</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Au démarrage sans rien à ouvrir, et à la fermeture du dernier onglet : fichiers et dossiers récents, favoris</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Les nouveaux onglets affichent la page d'accueil</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Un nouvel onglet (Fichier &gt; Nouveau, le bouton +) affiche la page d'accueil au lieu d'un document vide</value>
+  </data>
 </root>

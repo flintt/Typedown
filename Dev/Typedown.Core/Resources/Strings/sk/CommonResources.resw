@@ -1096,4 +1096,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>Stav uloženia</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Priečinky</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Žiadne nedávne priečinky</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Vymazať nedávne priečinky</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Kliknutím pravým tlačidlom alebo klávesom Delete položku odstránite zo zoznamu</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>O úroveň vyššie</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Nastaviť ako koreň</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Obľúbené</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Pridať do obľúbených</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Odstrániť z obľúbených</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Domov</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Štart</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Nový dokument</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Otvoriť súbor</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Otvoriť priečinok</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Nedávne súbory</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Nedávne priečinky</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Odstrániť zo zoznamu</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Nastavenia</value>
+  </data>
 </root>

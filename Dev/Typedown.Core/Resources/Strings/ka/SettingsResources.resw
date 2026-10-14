@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>მისი საქაღალდის გახსნა</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>ბოლოს გახსნილი ფაილების დამახსოვრება</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>თქვენ მიერ გახსნილი ფაილები და საქაღალდეები ჩანს მენიუში ფაილი &gt; ბოლოს გახსნილი და მთავარ გვერდზე. გამორთულისას ახალი არაფერი ემატება.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>ბოლო ფაილებისა და საქაღალდეების გასუფთავება</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>ასუფთავებს ბოლოს გახსნილი ფაილებისა და საქაღალდეების სიებს.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>გასუფთავება</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>მთავარი გვერდის ჩვენება ცარიელ ჩანართზე</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>გაშვებისას, როცა გასახსნელი არაფერია, და ბოლო ჩანართის დახურვისას: ბოლო ფაილები და საქაღალდეები, რჩეულები</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>ახალი ჩანართები მთავარ გვერდს აჩვენებს</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>ახალი ჩანართი (ფაილი &gt; ახალი, ღილაკი +) ცარიელი დოკუმენტის ნაცვლად მთავარ გვერდს აჩვენებს</value>
+  </data>
 </root>

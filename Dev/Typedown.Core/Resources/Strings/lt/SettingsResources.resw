@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Atidaryti jo aplanką</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Įsiminti neseniai atidarytus failus</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Atidaryti failai ir aplankai rodomi Failas &gt; Atidaryti naujausius ir pradžios puslapyje. Išjungus nieko naujo nepridedama.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Išvalyti naujausius failus ir aplankus</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Išvalo neseniai atidarytų failų ir aplankų sąrašus.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Išvalyti</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Rodyti pradžios puslapį tuščiame skirtuke</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Paleidžiant, kai nėra ką atidaryti, ir uždarius paskutinį skirtuką: naujausi failai ir aplankai, mėgstami</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Nauji skirtukai rodo pradžios puslapį</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Naujas skirtukas (Failas &gt; Naujas, mygtukas +) rodo pradžios puslapį vietoj tuščio dokumento</value>
+  </data>
 </root>

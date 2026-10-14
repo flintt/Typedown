@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Otvori njenu fasciklu</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Pamti nedavno otvorene datoteke</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Otvorene datoteke i fascikle prikazuju se u Datoteka &gt; Otvori nedavno i na početnoj stranici. Kad je isključeno, ništa novo se ne dodaje.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Obriši nedavne datoteke i fascikle</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Prazni liste nedavno otvorenih datoteka i fascikli.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Obriši</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Prikaži početnu stranicu na praznoj kartici</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Pri pokretanju bez ičega za otvaranje i pri zatvaranju poslednje kartice: nedavne datoteke i fascikle, omiljeno</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Nove kartice prikazuju početnu stranicu</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Nova kartica (Datoteka &gt; Novo, dugme +) prikazuje početnu stranicu umesto praznog dokumenta</value>
+  </data>
 </root>

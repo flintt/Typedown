@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>បើកថតរបស់វា</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>ចងចាំឯកសារដែលបានបើកថ្មីៗ</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>ឯកសារ និងថតដែលអ្នកបើកត្រូវបានបង្ហាញក្នុង ឯកសារ &gt; បើកថ្មីៗ និងនៅលើទំព័រដើម។ ពេលបិទ គ្មានអ្វីថ្មីត្រូវបានបន្ថែមទេ។</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>សម្អាតឯកសារ និងថតថ្មីៗ</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>សម្អាតបញ្ជីឯកសារ និងថតដែលបានបើកថ្មីៗ។</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>សម្អាត</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>បង្ហាញទំព័រដើមលើផ្ទាំងទទេ</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>ពេលចាប់ផ្ដើមដោយគ្មានអ្វីត្រូវបើក និងពេលបិទផ្ទាំងចុងក្រោយ៖ ឯកសារ និងថតថ្មីៗ ចំណូលចិត្ត</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>ផ្ទាំងថ្មីបង្ហាញទំព័រដើម</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>ផ្ទាំងថ្មី (ឯកសារ &gt; ថ្មី ប៊ូតុង +) បង្ហាញទំព័រដើមជំនួសឱ្យឯកសារទទេ</value>
+  </data>
 </root>

@@ -1096,4 +1096,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>Tūnga tiaki</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Ngā kōpaki</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Kāore he kōpaki o nā tata nei</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Ūkuia ngā kōpaki o nā tata nei</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Pāwhiri matau, pēhi rānei i te Delete hei tango i te rārangi</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Kotahi taumata ki runga</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Tautuhi hei pūtake</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Ngā makau</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Tāpiri ki ngā makau</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Tango i ngā makau</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Kāinga</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Tīmatanga</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Tuhinga hou</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Huaki kōnae</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Huaki kōpaki</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Ngā kōnae o nā tata nei</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Ngā kōpaki o nā tata nei</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Tango i te rārangi</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Ngā tautuhinga</value>
+  </data>
 </root>

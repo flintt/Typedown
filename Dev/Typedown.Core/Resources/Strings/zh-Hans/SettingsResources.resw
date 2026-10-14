@@ -930,4 +930,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>打开所在文件夹</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>记录最近打开的文件</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>打开过的文件和文件夹会列在“文件 → 打开最近”和首页里。关闭后不再记录新的。</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>清除最近记录</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>清空最近打开的文件和文件夹列表。</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>清除</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>空白标签显示首页</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>启动时没有要打开的内容、以及关掉最后一个标签时：显示最近的文件和文件夹、收藏</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>新建标签也显示首页</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>新建标签（文件 → 新建、“+”按钮）显示首页，而不是空白文档</value>
+  </data>
 </root>

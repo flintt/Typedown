@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Oscail a fhillteán</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Cuimhnigh ar chomhaid a osclaíodh le déanaí</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Liostaítear na comhaid agus na fillteáin a osclaíonn tú i gComhad &gt; Oscail le déanaí agus ar an leathanach baile. Nuair atá sé múchta, ní chuirtear aon rud nua leis.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Glan comhaid agus fillteáin le déanaí</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Folmhaíonn sé liostaí na gcomhad agus na bhfillteán a osclaíodh le déanaí.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Glan</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Taispeáin an leathanach baile ar chluaisín folamh</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Ag tosú gan aon rud le hoscailt agus nuair a dhúntar an cluaisín deireanach: comhaid agus fillteáin le déanaí, ceanáin</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Taispeánann cluaisíní nua an leathanach baile</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Taispeánann cluaisín nua (Comhad &gt; Nua, an cnaipe +) an leathanach baile in ionad doiciméid fholaimh</value>
+  </data>
 </root>

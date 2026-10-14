@@ -1096,4 +1096,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>ସଞ୍ଚୟ ସ୍ଥିତି</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>ଫୋଲ୍ଡର</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>କୌଣସି ସାମ୍ପ୍ରତିକ ଫୋଲ୍ଡର ନାହିଁ</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>ସାମ୍ପ୍ରତିକ ଫୋଲ୍ଡର ସଫା କରନ୍ତୁ</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>ତାଲିକାରୁ ହଟାଇବାକୁ ଡାହାଣ-କ୍ଲିକ୍ କରନ୍ତୁ କିମ୍ବା Delete ଦବାନ୍ତୁ</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>ଗୋଟିଏ ସ୍ତର ଉପରକୁ</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>ମୂଳ ଭାବେ ସେଟ୍ କରନ୍ତୁ</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>ପ୍ରିୟ</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>ପ୍ରିୟରେ ଯୋଡ଼ନ୍ତୁ</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>ପ୍ରିୟରୁ ହଟାନ୍ତୁ</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>ହୋମ୍</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>ଆରମ୍ଭ</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>ନୂଆ ଦଲିଲ</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>ଫାଇଲ୍ ଖୋଲନ୍ତୁ</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>ଫୋଲ୍ଡର ଖୋଲନ୍ତୁ</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>ସାମ୍ପ୍ରତିକ ଫାଇଲ୍</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>ସାମ୍ପ୍ରତିକ ଫୋଲ୍ଡର</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>ତାଲିକାରୁ ହଟାନ୍ତୁ</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>ସେଟିଂସ୍</value>
+  </data>
 </root>

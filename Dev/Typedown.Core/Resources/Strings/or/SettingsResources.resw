@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>ଏହାର ଫୋଲ୍ଡର ଖୋଲନ୍ତୁ</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>ନିକଟରେ ଖୋଲାଯାଇଥିବା ଫାଇଲ୍ ମନେ ରଖନ୍ତୁ</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>ଆପଣ ଖୋଲିଥିବା ଫାଇଲ୍ ଓ ଫୋଲ୍ଡର ଫାଇଲ୍ &gt; ସାମ୍ପ୍ରତିକ ଖୋଲନ୍ତୁ ଏବଂ ହୋମ୍ ପୃଷ୍ଠାରେ ଦେଖାଯାଏ। ବନ୍ଦ ଥିଲେ କିଛି ନୂଆ ଯୋଡ଼ାଯାଏ ନାହିଁ।</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>ସାମ୍ପ୍ରତିକ ଫାଇଲ୍ ଓ ଫୋଲ୍ଡର ସଫା କରନ୍ତୁ</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>ନିକଟରେ ଖୋଲାଯାଇଥିବା ଫାଇଲ୍ ଓ ଫୋଲ୍ଡରର ତାଲିକା ଖାଲି କରେ।</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>ସଫା କରନ୍ତୁ</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>ଖାଲି ଟ୍ୟାବରେ ହୋମ୍ ପୃଷ୍ଠା ଦେଖାନ୍ତୁ</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>ଆରମ୍ଭରେ ଖୋଲିବାକୁ କିଛି ନଥିଲେ ଏବଂ ଶେଷ ଟ୍ୟାବ୍ ବନ୍ଦ ହେଲେ: ସାମ୍ପ୍ରତିକ ଫାଇଲ୍ ଓ ଫୋଲ୍ଡର, ପ୍ରିୟ</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>ନୂଆ ଟ୍ୟାବ୍ ହୋମ୍ ପୃଷ୍ଠା ଦେଖାଏ</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>ନୂଆ ଟ୍ୟାବ୍ (ଫାଇଲ୍ &gt; ନୂଆ, + ବଟନ୍) ଖାଲି ଦଲିଲ ବଦଳରେ ହୋମ୍ ପୃଷ୍ଠା ଦେଖାଏ</value>
+  </data>
 </root>

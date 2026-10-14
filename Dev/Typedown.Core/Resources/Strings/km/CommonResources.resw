@@ -1096,4 +1096,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>ស្ថានភាពរក្សាទុក</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>ថតឯកសារ</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>គ្មានថតថ្មីៗទេ</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>សម្អាតថតថ្មីៗ</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>ចុចកណ្ដុរស្ដាំ ឬចុច Delete ដើម្បីដកចេញពីបញ្ជី</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>ឡើងមួយកម្រិត</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>កំណត់ជាឫស</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>ចំណូលចិត្ត</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>បន្ថែមទៅចំណូលចិត្ត</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>ដកចេញពីចំណូលចិត្ត</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>ទំព័រដើម</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>ចាប់ផ្ដើម</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>ឯកសារថ្មី</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>បើកឯកសារ</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>បើកថត</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>ឯកសារថ្មីៗ</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>ថតថ្មីៗ</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>ដកចេញពីបញ្ជី</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>ការកំណត់</value>
+  </data>
 </root>

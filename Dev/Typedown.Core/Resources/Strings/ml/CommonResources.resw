@@ -1096,4 +1096,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>സംരക്ഷണ നില</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>ഫോൾഡറുകൾ</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>സമീപകാല ഫോൾഡറുകളില്ല</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>സമീപകാല ഫോൾഡറുകൾ മായ്ക്കുക</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>പട്ടികയിൽ നിന്ന് നീക്കാൻ വലത്-ക്ലിക്ക് ചെയ്യുക അല്ലെങ്കിൽ Delete അമർത്തുക</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>ഒരു നില മുകളിലേക്ക്</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>റൂട്ട് ആയി സജ്ജമാക്കുക</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>പ്രിയങ്കരങ്ങൾ</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>പ്രിയങ്കരങ്ങളിൽ ചേർക്കുക</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>പ്രിയങ്കരങ്ങളിൽ നിന്ന് നീക്കുക</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>ഹോം</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>തുടക്കം</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>പുതിയ പ്രമാണം</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>ഫയൽ തുറക്കുക</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>ഫോൾഡർ തുറക്കുക</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>സമീപകാല ഫയലുകൾ</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>സമീപകാല ഫോൾഡറുകൾ</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>പട്ടികയിൽ നിന്ന് നീക്കുക</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>ക്രമീകരണങ്ങൾ</value>
+  </data>
 </root>

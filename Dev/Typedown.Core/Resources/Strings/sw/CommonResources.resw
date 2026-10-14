@@ -1096,4 +1096,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>Hali ya kuhifadhi</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Folda</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Hakuna folda za hivi karibuni</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Futa folda za hivi karibuni</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Bofya kulia au bonyeza Delete ili kuiondoa kwenye orodha</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Ngazi moja juu</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Weka kama mzizi</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Vipendwa</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Ongeza kwenye vipendwa</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Ondoa kwenye vipendwa</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Mwanzo</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Anza</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Hati mpya</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Fungua faili</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Fungua folda</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Faili za hivi karibuni</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Folda za hivi karibuni</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Ondoa kwenye orodha</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Mipangilio</value>
+  </data>
 </root>

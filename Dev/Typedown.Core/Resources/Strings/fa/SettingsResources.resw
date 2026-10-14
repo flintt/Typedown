@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>باز کردن پوشهٔ آن</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>به خاطر سپردن فایل‌های اخیراً باز شده</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>فایل‌ها و پوشه‌هایی که باز می‌کنید در فایل &gt; باز کردن اخیر و صفحهٔ خانه نمایش داده می‌شوند. در حالت خاموش چیز جدیدی اضافه نمی‌شود.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>پاک کردن فایل‌ها و پوشه‌های اخیر</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>فهرست فایل‌ها و پوشه‌های اخیراً باز شده را خالی می‌کند.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>پاک کردن</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>نمایش صفحهٔ خانه در زبانهٔ خالی</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>هنگام شروع بدون چیزی برای باز کردن و هنگام بستن آخرین زبانه: فایل‌ها و پوشه‌های اخیر، علاقه‌مندی‌ها</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>زبانه‌های جدید صفحهٔ خانه را نشان می‌دهند</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>زبانهٔ جدید (فایل &gt; جدید، دکمهٔ +) به‌جای سند خالی صفحهٔ خانه را نشان می‌دهد</value>
+  </data>
 </root>

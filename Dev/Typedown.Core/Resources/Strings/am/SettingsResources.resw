@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>አቃፊውን ክፈት</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>በቅርቡ የተከፈቱ ፋይሎችን አስታውስ</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>የሚከፍቷቸው ፋይሎች እና አቃፊዎች በፋይል &gt; የቅርብ ጊዜውን ክፈት እና በመነሻ ገጹ ላይ ይዘረዘራሉ። ሲጠፋ ምንም አዲስ አይታከልም።</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>የቅርብ ጊዜ ፋይሎችን እና አቃፊዎችን አጽዳ</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>በቅርቡ የተከፈቱ ፋይሎች እና አቃፊዎች ዝርዝሮችን ባዶ ያደርጋል።</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>አጽዳ</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>በባዶ ትር ላይ መነሻ ገጹን አሳይ</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>ሲጀመር የሚከፈት ነገር ከሌለ እና የመጨረሻው ትር ሲዘጋ፦ የቅርብ ጊዜ ፋይሎች እና አቃፊዎች፣ ተወዳጆች</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>አዲስ ትሮች መነሻ ገጹን ያሳያሉ</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>አዲስ ትር (ፋይል &gt; አዲስ፣ የ+ አዝራር) ከባዶ ሰነድ ይልቅ መነሻ ገጹን ያሳያል</value>
+  </data>
 </root>

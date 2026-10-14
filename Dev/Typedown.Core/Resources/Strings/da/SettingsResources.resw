@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Åbn dens mappe</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Husk senest åbnede filer</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Filer og mapper, du åbner, vises under Filer &gt; Åbn seneste og på startsiden. Slået fra tilføjes intet nyt.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Ryd seneste filer og mapper</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Tømmer listerne over senest åbnede filer og mapper.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Ryd</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Vis startsiden på en tom fane</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Ved opstart uden noget at åbne og når den sidste fane lukkes: seneste filer og mapper, favoritter</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Nye faner viser startsiden</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>En ny fane (Filer &gt; Ny, knappen +) viser startsiden i stedet for et tomt dokument</value>
+  </data>
 </root>

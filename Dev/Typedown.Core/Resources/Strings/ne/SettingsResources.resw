@@ -895,4 +895,31 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>यसको फोल्डर खोल्नुहोस्</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>हालै खोलिएका फाइलहरू सम्झनुहोस्</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>तपाईंले खोलेका फाइल र फोल्डरहरू फाइल &gt; हालको खोल्नुहोस् र गृह पृष्ठमा देखिन्छन्। बन्द हुँदा केही नयाँ थपिँदैन।</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>हालका फाइल र फोल्डरहरू खाली गर्नुहोस्</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>हालै खोलिएका फाइल र फोल्डरहरूको सूची खाली गर्छ।</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>खाली गर्नुहोस्</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>खाली ट्याबमा गृह पृष्ठ देखाउनुहोस्</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>सुरु गर्दा खोल्ने केही नभएमा र अन्तिम ट्याब बन्द गर्दा: हालका फाइल र फोल्डरहरू, मनपर्ने</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>नयाँ ट्याबहरूले गृह पृष्ठ देखाउँछन्</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>नयाँ ट्याब (फाइल &gt; नयाँ, + बटन) ले खाली कागजातको सट्टा गृह पृष्ठ देखाउँछ</value>
+  </data>
 </root>

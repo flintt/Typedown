@@ -1096,4 +1096,58 @@
   <data name="StatusBarItem.SaveState" xml:space="preserve">
     <value>Speicherstatus</value>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Ordner</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Keine zuletzt geöffneten Ordner</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Zuletzt geöffnete Ordner löschen</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Rechtsklick oder Entf entfernt den Eintrag aus dieser Liste</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Eine Ebene höher</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Als Stamm festlegen</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Favoriten</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Zu Favoriten hinzufügen</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Aus Favoriten entfernen</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Neues Dokument</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Datei öffnen</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Ordner öffnen</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Zuletzt geöffnete Dateien</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Zuletzt geöffnete Ordner</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Aus der Liste entfernen</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Einstellungen</value>
+  </data>
 </root>
