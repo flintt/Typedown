@@ -12,7 +12,9 @@
     d:DesignHeight="300"
     d:DesignWidth="400">
 
-    <Grid RowSpacing="8">
+    <!-- A background of its own: the window has no backdrop and no other content to draw one (the main window's
+         RootControl draws its own when there is no Mica). -->
+    <Grid RowSpacing="8" Background="{ThemeResource SolidBackgroundFillColorBaseBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -43,6 +45,16 @@
                     TextWrapping="Wrap"
                     Foreground="{ThemeResource SystemFillColorCriticalBrush}"
                     Text="{u:LocaleString Key=WebView2InstallFailed}"/>
+                <!-- While the setup runs: the window stays on screen (it used to hide), saying so. -->
+                <StackPanel
+                    x:Name="InstallingPanel"
+                    AutomationProperties.AutomationId="WebView2InstallingPanel"
+                    Visibility="Collapsed"
+                    Orientation="Horizontal"
+                    Spacing="8">
+                    <ProgressRing IsActive="True" Width="16" Height="16"/>
+                    <TextBlock VerticalAlignment="Center" Text="{u:LocaleString Key=WebView2Installing}"/>
+                </StackPanel>
                 <HyperlinkButton
                     x:Name="DownloadLink"
                     AutomationProperties.AutomationId="WebView2DownloadLink"
@@ -52,7 +64,7 @@
             </StackPanel>
         </ScrollViewer>
         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="16,0,16,16" Spacing="8" HorizontalAlignment="Right">
-            <Button MinWidth="80" AutomationProperties.AutomationId="WebView2InstallButton" Style="{ThemeResource AccentButtonStyle}" Click="OnInstallButtonClick" Content="{u:LocaleString Key=InstallNow}"/>
+            <Button x:Name="InstallButton" MinWidth="80" AutomationProperties.AutomationId="WebView2InstallButton" Style="{ThemeResource AccentButtonStyle}" Click="OnInstallButtonClick" Content="{u:LocaleString Key=InstallNow}"/>
             <Button MinWidth="80" AutomationProperties.AutomationId="WebView2CancelButton" Click="OnCloseButtonClick" Content="{u:LocaleString Key=Cancel}"/>
         </StackPanel>
     </Grid>

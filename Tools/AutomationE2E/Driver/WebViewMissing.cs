@@ -48,8 +48,31 @@ internal static partial class Program
         throw new CaseFailed($"no {what} within {timeoutMs} ms");
     }
 
-    private static void EndHost(Process host, string root, List<string> notes)
+    /// <summary>What the host wrote of its start: the install window's and the start's lines, and the error files.</summary>
+    private static void HostLogNotes(string root, List<string> notes)
     {
+        var logs = Path.Combine(root, "logs");
+        try
+        {
+            var debug = Path.Combine(logs, "debug.log");
+            if (File.Exists(debug))
+            {
+                using var reader = new StreamReader(new FileStream(debug, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete));
+                foreach (var line in reader.ReadToEnd().Split('\n').Where(l => l.Contains("webview2 setup") || l.Contains("startup") || l.Contains("exception:")).Take(40))
+                    notes.Add("host log: " + line.TrimEnd('\r'));
+            }
+            else notes.Add("host log: no debug.log");
+            if (Directory.Exists(logs))
+                foreach (var file in Directory.GetFiles(logs).Where(f => !f.EndsWith("debug.log")).Take(5))
+                    notes.Add($"host error file {Path.GetFileName(file)}: " + string.Join(" | ", File.ReadAllLines(file).Skip(5).Take(8)));
+        }
+        catch (Exception e) { notes.Add("host log: " + e.Message); }
+    }
+
+    private static void EndHost(Process host, string root, List<string> notes, bool failed)
+    {
+        // A failure's host log goes into the notes first, and its folder is kept.
+        if (failed) { HostLogNotes(root, notes); notes.Add("host folder kept: " + root); }
         try
         {
             if (!host.HasExited)
@@ -60,6 +83,7 @@ internal static partial class Program
         }
         catch (Exception e) { notes.Add("ending the host: " + e.Message); }
         host.Dispose();
+        if (failed) return;
         try { Directory.Delete(root, true); } catch (IOException) { } catch (UnauthorizedAccessException) { }
     }
 
@@ -71,9 +95,12 @@ internal static partial class Program
     private static async Task WV02(List<string> notes)
     {
         var (host, root) = StartHostWithoutWebView2("install", "wv02");
+        var failed = true;
         try
         {
             var window = await WaitForVisibleWindowOf(host, 30000, "install window");
+            await Task.Delay(1000);
+            notes.Add("the install window as it came up: " + Screenshot("WV02-install-window"));
             Check(FindIn(window, "WebView2DownloadLink") != null, "the install window has no download link");
             Check(FindIn(window, "WebView2InstallFailedText") == null, "the install window says the setup failed before it ran");
             Check(!File.Exists(Path.Combine(root, "automation-endpoint.txt")), "the main window started although the runtime is missing");
@@ -94,29 +121,35 @@ internal static partial class Program
             Check(await Eventually(() => Task.FromResult(!IsWindow(window) || !IsWindowVisible(window)), 5000), "the install window is still on screen next to the main window");
             Check(await Eventually(() => Task.FromResult(!IsWindow(window)), 5000), "the install window was hidden but never closed");
             Check(!host.HasExited, "the host exited after the main window came up");
+            failed = false;
         }
-        finally { EndHost(host, root, notes); }
+        finally { EndHost(host, root, notes, failed); }
     }
 
     /// <summary>
-    /// WV03: a setup that did not install the runtime brings the install window back saying so, with the download page;
-    /// Cancel then ends the start, no main window ever.
+    /// WV03: a setup that did not install the runtime leaves the install window on screen saying so, with the download
+    /// page; Cancel then ends the start, no main window ever.
     /// </summary>
     private static async Task WV03(List<string> notes)
     {
         var (host, root) = StartHostWithoutWebView2("fail", "wv03");
+        var failed = true;
         try
         {
             var window = await WaitForVisibleWindowOf(host, 30000, "install window");
+            await Task.Delay(1000);
+            notes.Add("the install window as it came up: " + Screenshot("WV03-install-window"));
             await Click(window, await WaitFor(window, "WebView2InstallButton"));
             await WaitFor(window, "WebView2InstallFailedText", 15000);
-            Check(await Eventually(() => Task.FromResult(IsWindowVisible(window)), 5000), "the install window did not come back after the setup failed");
+            Check(IsWindowVisible(window), "the install window left the screen after the setup failed");
             Check(FindIn(window, "WebView2DownloadLink") != null, "the download link is gone after the setup failed");
             Check(!host.HasExited, "the host ended after the setup failed, without a word");
+            notes.Add("the install window after the setup failed: " + Screenshot("WV03-install-failed"));
             await Click(window, await WaitFor(window, "WebView2CancelButton"));
             Check(host.WaitForExit(15000), "the host did not end after Cancel");
             Check(!File.Exists(Path.Combine(root, "automation-endpoint.txt")), "a main window started without the runtime");
+            failed = false;
         }
-        finally { EndHost(host, root, notes); }
+        finally { EndHost(host, root, notes, failed); }
     }
 }

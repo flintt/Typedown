@@ -89,17 +89,31 @@ namespace Typedown
             {
                 Log.WriteLocal("XamlUnhandledExceptionHook", ex.ToString());
             }
+            var dispatcher = DispatcherQueue.GetForCurrentThread();
             if (!await EnvCheck.EnsureWebView2Installed())
             {
                 Exit();
                 return;
             }
+            // The main window is made on the window thread: after the install window the await is to come back here,
+            // and is put back explicitly if it did not.
+            if (dispatcher != null && !dispatcher.HasThreadAccess)
+            {
+                Log.Debug("startup: the runtime check ended off the window thread; going back to it");
+                dispatcher.TryEnqueue(OpenFirstWindow);
+                return;
+            }
+            OpenFirstWindow();
+        }
+
+        private void OpenFirstWindow()
+        {
             StartupTiming.Reached("runtime checked");
             var window = new MainWindow();
             StartupTiming.Reached("window made");
             window.Start();
             StartupTiming.Reached("window shown");
-            // The runtime installed just now: the install window waited, hidden, for the main window.
+            // The runtime installed just now: the install window waited for the main window.
             WebViewInstallWindow.CloseKept();
             ListenPipe(window.DispatcherQueue);
             // Local automation: nothing listens until the setting is turned on (docs/automation-api-spec.md, 5.1).

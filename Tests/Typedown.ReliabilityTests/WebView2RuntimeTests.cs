@@ -43,8 +43,21 @@ namespace Typedown.ReliabilityTests
             Assert.IsNotNull(failed, "the install window can say the setup did not install the runtime");
             Assert.AreEqual("Collapsed", (string)failed.Attribute("Visibility"), "only after a setup that failed");
             // The E2E case (WV02) finds them by these ids, in any language.
-            foreach (var id in new[] { "WebView2InstallButton", "WebView2CancelButton", "WebView2DownloadLink", "WebView2InstallFailedText" })
+            foreach (var id in new[] { "WebView2InstallButton", "WebView2CancelButton", "WebView2DownloadLink", "WebView2InstallFailedText", "WebView2InstallingPanel" })
                 Assert.IsTrue(xaml.Descendants().Any(node => node.Attributes().Any(a => a.Name.LocalName == "AutomationProperties.AutomationId" && a.Value == id)), id);
+        }
+
+        /// <summary>
+        /// The install window draws a background of its own: it has no backdrop and nothing else under its content, and on
+        /// Windows 10 it came up blank (E2E WV02, WV03).
+        /// </summary>
+        [TestMethod]
+        public void TheInstallWindowContentHasABackground()
+        {
+            var xaml = XDocument.Load(Path.Combine(Repository.Root, "Dev", "Typedown.Core", "Controls", "DialogControls", "WebView2InstallControl.xaml"));
+            var root = xaml.Root.Elements().First();
+            Assert.AreEqual("Grid", root.Name.LocalName);
+            StringAssert.Contains((string)root.Attribute("Background") ?? "", "SolidBackgroundFillColorBaseBrush");
         }
 
         [TestMethod]
@@ -60,7 +73,7 @@ namespace Typedown.ReliabilityTests
         public void TheNewStringsExistInEnglishWithAChineseComment()
         {
             var resw = XDocument.Load(Path.Combine(Repository.Root, "Dev", "Typedown.Core", "Resources", "Strings", "en", "DialogResources.resw"));
-            foreach (var key in new[] { "WebView2DownloadLink", "WebView2InstallFailed" })
+            foreach (var key in new[] { "WebView2DownloadLink", "WebView2InstallFailed", "WebView2Installing" })
             {
                 var data = resw.Descendants("data").SingleOrDefault(node => (string)node.Attribute("name") == key);
                 Assert.IsNotNull(data, key);

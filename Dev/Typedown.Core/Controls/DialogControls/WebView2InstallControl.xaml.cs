@@ -22,6 +22,17 @@ namespace Typedown.Core.Controls
             set => InstallFailedText.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
         }
 
+        /// <summary>The setup running: said in the window, and Install cannot be pressed again meanwhile.</summary>
+        public bool IsInstalling
+        {
+            get => InstallingPanel.Visibility == Visibility.Visible;
+            set
+            {
+                InstallingPanel.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+                InstallButton.IsEnabled = !value;
+            }
+        }
+
         private void OnCloseButtonClick(object sender, RoutedEventArgs e)
         {
             CloseButtonClick?.Invoke(this, EventArgs.Empty);
