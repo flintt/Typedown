@@ -549,6 +549,7 @@ namespace Typedown.Core.ViewModels
                 EditionHooks.ReportWordCount(new WordCountReport
                 {
                     Editor = this, LoadId = LoadId, Words = ContentState.WordCount.Word, Characters = ContentState.WordCount.Character,
+                    Path = AppViewModel?.FileViewModel?.FilePath,
                     // The text an automation client wrote, nobody having typed since - or one being applied (its report
                     // can come before the host commits it).
                     Automation = holdingReports || (automationText != null && string.Equals(Markdown, automationText, StringComparison.Ordinal)),

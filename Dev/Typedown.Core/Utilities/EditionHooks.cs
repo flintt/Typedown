@@ -8,8 +8,9 @@ namespace Typedown.Core.Utilities
 {
     /// <summary>
     /// Places where an edition (Edition.Initialize) adds to every window: styles for the editor page, entries in the File
-    /// menu, its Export submenu and the View menu, the word counts the page reports, and the documents read from and written to disk. Typedown itself
-    /// adds nothing here.
+    /// menu, its Export submenu and the View menu, items in the status bar, the word counts the page reports, the documents
+    /// read from and written to disk, and what happens around the writing (<see cref="Activity"/>). Typedown itself adds
+    /// nothing here.
     /// </summary>
     public static class EditionHooks
     {
@@ -55,6 +56,38 @@ namespace Typedown.Core.Utilities
         public static void AddExportMenuItems(Func<AppViewModel, IEnumerable<MenuFlyoutItemBase>> build)
         {
             lock (exportMenu) exportMenu.Add(build);
+        }
+
+        private static readonly List<Func<AppViewModel, IEnumerable<StatusBarItem>>> statusBar = new();
+
+        /// <summary>
+        /// Items for the status bar, left of the count; made for each window's bar when it first loads (a bar switched off
+        /// and on again is a new one, and asks again). They take part in the bar's layout: on a narrow window they are the
+        /// first to go into its "..." menu, and one with a <see cref="StatusBarItem.Name"/> can be switched off from the
+        /// bar's right-click menu like the bar's own items.
+        /// </summary>
+        public static void AddStatusBarItems(Func<AppViewModel, IEnumerable<StatusBarItem>> build)
+        {
+            lock (statusBar) statusBar.Add(build);
+        }
+
+        internal static IReadOnlyList<StatusBarItem> StatusBarItems(AppViewModel viewModel)
+        {
+            List<Func<AppViewModel, IEnumerable<StatusBarItem>>> builders;
+            lock (statusBar) builders = statusBar.ToList();
+            var items = new List<StatusBarItem>();
+            foreach (var build in builders)
+            {
+                try
+                {
+                    items.AddRange((build(viewModel) ?? Enumerable.Empty<StatusBarItem>()).Where(x => x?.Element != null && !string.IsNullOrEmpty(x.Id)));
+                }
+                catch (Exception ex)
+                {
+                    Log.WriteLocal("EditionStatusBar", ex.ToString());
+                }
+            }
+            return items;
         }
 
         internal static IReadOnlyList<MenuFlyoutItemBase> ExportMenuItems(AppViewModel viewModel) => MenuItems(exportMenu, viewModel);
@@ -192,6 +225,29 @@ namespace Typedown.Core.Utilities
         public bool Written { get; set; }
     }
 
+    /// <summary>
+    /// An item an edition adds to the status bar (<see cref="EditionHooks.AddStatusBarItems"/>). The bar shows it in a
+    /// slot of its own: the element's own Visibility stays the edition's, and an element collapsed there is left out
+    /// altogether (no room taken, no entry in either menu). The element may be loaded and unloaded more than once; what
+    /// it subscribes to is best tied to its Loaded and Unloaded.
+    /// </summary>
+    public sealed class StatusBarItem
+    {
+        /// <summary>A name of its own (not one of the bar's: modes, heading, format, save, count): kept in the hidden items setting, and in automation ids ("StatusItem-" and "Overflow-" with it).</summary>
+        public string Id { get; set; }
+
+        /// <summary>Its entry in the bar's right-click menu, to switch it off and on; null: no entry, always shown.</summary>
+        public string Name { get; set; }
+
+        public Microsoft.UI.Xaml.FrameworkElement Element { get; set; }
+
+        /// <summary>Its entry in the "..." menu when the window is too narrow for it: the text at that moment (null: <see cref="Name"/>).</summary>
+        public Func<string> MenuText { get; set; }
+
+        /// <summary>What that entry does (a click on the item, say); null: no entry in the "..." menu.</summary>
+        public Action Invoke { get; set; }
+    }
+
     /// <summary>A word count the editor page reported (<see cref="EditionHooks.WordCountReported"/>).</summary>
     public sealed class WordCountReport
     {
@@ -207,6 +263,9 @@ namespace Typedown.Core.Utilities
         public int Words { get; set; }
 
         public int Characters { get; set; }
+
+        /// <summary>The document's file, or null for an untitled one.</summary>
+        public string Path { get; set; }
 
         /// <summary>
         /// The count is of text an automation client wrote (document.replace and the like, an edition's own edits through
