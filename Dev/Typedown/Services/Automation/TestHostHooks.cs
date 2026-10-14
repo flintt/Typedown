@@ -756,6 +756,8 @@ namespace Typedown.Services.Automation
                     if (activity.Count > 200) activity.RemoveAt(0);
                 }
             };
+            // The last events EditionHooks.Activity raised, oldest first (kind, mode, document, path, the old path of a
+            // rename); with clear, forgets them after answering (AC01).
             methods.Add(new MethodDescriptor("test.activity.recent", null, "test.activity.recent/1", (c, ct) =>
             {
                 lock (activity)
