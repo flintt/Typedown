@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>Statusa joslā rāda</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Saglabāts</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Nav saglabāts</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Automātiskā saglabāšana apturēta</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Noklikšķiniet, lai saglabātu</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Dokuments ir tukšs, bet fails diskā nav, un neviens labojums to neiztukšoja, tāpēc automātiskā saglabāšana failu nepārrakstīja.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Šo failu nevarēja nolasīt bez zudumiem (kodējums, kas nav UTF-8?), tāpēc automātiskā saglabāšana to nepārraksta. Saglabājiet to paši tikai tad, ja parādītais teksts ir pareizs.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Neizdevās ierakstīt failu: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>Atlasīti {0} no {1} {2}</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Kodējums un rindu beigas</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Pārvērst UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Atvērt vēlreiz ar kodējumu</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Pašreizējais virsraksts</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Saglabāšanas statuss</value>
+  </data>
 </root>

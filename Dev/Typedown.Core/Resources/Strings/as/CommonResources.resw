@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>স্থিতি দণ্ডিকাত দেখুওৱা</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>সংৰক্ষিত</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>সংৰক্ষিত নহয়</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>স্বয়ং সংৰক্ষণ স্থগিত</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>সংৰক্ষণ কৰিবলৈ ক্লিক কৰক</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>নথিখন খালী, কিন্তু ডিস্কত থকা ফাইলটো খালী নহয়, আৰু কোনো সম্পাদনাই ইয়াক খালী কৰা নাই, সেয়ে স্বয়ং সংৰক্ষণে ফাইলটো ওপৰত লিখা নাই।</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>এই ফাইলটো ক্ষতি নোহোৱাকৈ পঢ়িব পৰা নগ’ল (UTF-8 বাদে আন এনক’ডিং?), সেয়ে স্বয়ং সংৰক্ষণে ইয়াক ওপৰত নিলিখে। দেখুওৱা পাঠ শুদ্ধ হ’লেহে নিজে সংৰক্ষণ কৰক।</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>ফাইল লিখাত বিফল: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{1} {2}ৰ ভিতৰত {0} বাছনি কৰা হৈছে</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>এনক’ডিং আৰু শাৰীৰ শেষ</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>UTF-8 লৈ ৰূপান্তৰ কৰক</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>এনক’ডিং বাছি পুনৰ খোলক</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>বৰ্তমানৰ শীৰ্ষক</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>সংৰক্ষণৰ স্থিতি</value>
+  </data>
 </root>

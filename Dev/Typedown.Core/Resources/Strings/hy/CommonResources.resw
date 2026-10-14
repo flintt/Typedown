@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>Կարգավիճակի գոտում ցույց տալ</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Պահպանված է</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Պահպանված չէ</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Ավտոպահպանումը դադարեցված է</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Սեղմեք՝ պահպանելու համար</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Փաստաթուղթը դատարկ է, բայց սկավառակի ֆայլը դատարկ չէ, և ոչ մի խմբագրում այն չի դատարկել, ուստի ավտոպահպանումը ֆայլը չվերագրեց։</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Այս ֆայլը չհաջողվեց կարդալ առանց կորուստի (UTF-8-ից տարբեր կոդավորում՞), ուստի ավտոպահպանումը այն չի վերագրում։ Պահպանեք ինքներդ միայն եթե ցուցադրված տեքստը ճիշտ է։</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Ֆայլի գրումը ձախողվեց՝ {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>Ընտրված է {0}՝ {1} {2}-ից</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Կոդավորում և տողավերջեր</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Փոխարկել UTF-8-ի</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Կրկին բացել կոդավորմամբ</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Ընթացիկ վերնագիր</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Պահպանման կարգավիճակ</value>
+  </data>
 </root>

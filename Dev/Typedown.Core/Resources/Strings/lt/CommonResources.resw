@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>Būsenos juostoje rodoma</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Išsaugota</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Neišsaugota</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Automatinis įrašymas pristabdytas</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Spustelėkite, kad išsaugotumėte</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Dokumentas tuščias, bet failas diske – ne, ir joks taisymas jo neištuštino, todėl automatinis įrašymas failo neperrašė.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Šio failo nepavyko perskaityti be nuostolių (ne UTF-8 koduotė?), todėl automatinis įrašymas jo neperrašo. Išsaugokite patys tik tada, jei rodomas tekstas teisingas.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Nepavyko įrašyti failo: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>Pasirinkta {0} iš {1} {2}</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Koduotė ir eilučių pabaigos</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Konvertuoti į UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Iš naujo atidaryti su koduote</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Dabartinė antraštė</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Įrašymo būsena</value>
+  </data>
 </root>

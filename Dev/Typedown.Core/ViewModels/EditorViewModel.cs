@@ -58,6 +58,13 @@ namespace Typedown.Core.ViewModels
         public bool Saved { get; set; } = true;
         public bool AutoSavedSucc { get; set; } = true;
         public bool DisplaySaved { get; set; } = true;
+
+        /// <summary>
+        /// Why auto-save last left this document unwritten, in words for the reader (the status bar shows it), or null
+        /// when it wrote, or never had to hold back. It held back without a word: the reader saw nothing until the
+        /// file turned out unchanged.
+        /// </summary>
+        public string AutoSaveHeldBack { get; set; }
         public ulong FileHash { get; set; } = Common.SimpleHash(Common.DefaultMarkdwn);
         public ulong CurrentHash { get; set; } = Common.SimpleHash(Common.DefaultMarkdwn);
 

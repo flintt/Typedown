@@ -191,6 +191,11 @@ internal static partial class Program
             await Case("TH07 the settings' and the dialogs' controls (a switch, the accent button, a check box) take a custom theme's accent, with readable text on it, and the system accent again without one", TH07);
             await Case("SB01 the status bar switches modes: its reading button and badge go into reading mode and back to the mode it was entered from (source too), and its mode menu ticks the mode and greys focus and typewriter mode where they do nothing", SB01);
             await Case("SB02 a click on the status bar's count shows the document's numbers on its visible text (words, CJK characters, headings, links, pictures, reading time), and the count it shows can be chosen there", SB02);
+            await Case("SB03 the status bar shows whether the document is saved, and when auto-save holds a file back (one it could not read without loss) it says so and why", SB03);
+            await Case("SB04 a selection shows its count of the whole in the status bar, and the whole count again once it is gone", SB04);
+            await Case("SB05 the status bar shows the file's encoding and line ending: CRLF chosen there is what a save writes, and a GBK file is read again as GB18030 from its menu", SB05);
+            await Case("SB06 the status bar names the heading the caret is under, and a click on it opens the outline", SB06);
+            await Case("SB07 a narrow window puts the status bar items with no room into a \"...\" menu (the heading first, the count stays), and a right-click chooses which items show", SB07);
             await Case("MN03 minimized, written to, restored without activation: the editor's web view gets its size back", MN03);
             await Case("MN04 F11 in and out of full screen, then minimized and brought back as a person does: the window works", MN04);
             await Case("MN05 F11 in and out of full screen, minimized, then a file opened from Explorer: the window comes back working", MN05);

@@ -1090,4 +1090,56 @@
     <value>Status bar shows</value>
     <comment>字数详情：选择状态栏显示字符数还是词数</comment>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Saved</value>
+    <comment>状态栏保存状态：已保存</comment>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Not saved</value>
+    <comment>状态栏保存状态：有未保存的修改</comment>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Auto-save paused</value>
+    <comment>状态栏保存状态：自动保存因故没有写入文件</comment>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Click to save</value>
+    <comment>状态栏保存状态提示：单击保存</comment>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>The document is empty but the file on disk is not, and no edit emptied it, so auto-save did not write over the file.</value>
+    <comment>自动保存暂停原因：编辑器内容为空而磁盘文件不为空</comment>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>This file could not be read without loss (an encoding other than UTF-8?), so auto-save does not write over it. Save it yourself only if the text shown is right.</value>
+    <comment>自动保存暂停原因：文件编码无法无损读取</comment>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Writing the file failed: {0}</value>
+    <comment>自动保存暂停原因：写入失败，{0} 为错误信息</comment>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{0} of {1} {2} selected</value>
+    <comment>状态栏字数：有选区时显示“已选 {0} / 共 {1} {2}”，{0} 选中数，{1} 总数，{2} 单位（字符/词）</comment>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Encoding and line endings</value>
+    <comment>状态栏：文件编码与换行符按钮的提示</comment>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Convert to UTF-8</value>
+    <comment>状态栏编码菜单：按显示的内容改为 UTF-8 保存</comment>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Reopen with encoding</value>
+    <comment>状态栏编码菜单：用其他编码重新读取文件（子菜单）</comment>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Current heading</value>
+    <comment>状态栏右键菜单：显示光标所在标题</comment>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Save status</value>
+    <comment>状态栏右键菜单：显示保存状态</comment>
+  </data>
 </root>

@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>Ka whakaatu te pae tūnga</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Kua tiakina</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Kāore anō kia tiakina</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Kua tatari te tiaki aunoa</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Pāwhiritia kia tiaki</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>He kau te tuhinga engari ehara te kōnae i te kōpae, ā, kāore he whakatika i whakakau, nō reira kāore te tiaki aunoa i tuhirua i te kōnae.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Kāore i taea te pānui i tēnei kōnae me te kore ngaro (he whakawaehere ehara i te UTF-8?), nō reira kāore te tiaki aunoa e tuhirua. Tiakina e koe anake mēnā e tika ana te kuputuhi e whakaaturia ana.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>I rahua te tuhi i te kōnae: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{0} o te {1} {2} kua tīpakonga</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Whakawaehere me ngā mutunga rārangi</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Tahuri ki UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Whakatuwhera anō mā te whakawaehere</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Pane o nāianei</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Tūnga tiaki</value>
+  </data>
 </root>

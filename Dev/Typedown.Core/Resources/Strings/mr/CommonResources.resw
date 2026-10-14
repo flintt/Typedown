@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>स्टेटस बारमध्ये दाखवा</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>जतन केले</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>जतन केलेले नाही</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>स्वयं-जतन थांबवले आहे</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>जतन करण्यासाठी क्लिक करा</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>दस्तऐवज रिकामा आहे पण डिस्कवरील फाइल रिकामी नाही, आणि कोणत्याही संपादनाने ती रिकामी केलेली नाही, म्हणून स्वयं-जतनाने फाइलवर पुन्हा लिहिले नाही.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>ही फाइल नुकसानाशिवाय वाचता आली नाही (UTF-8 व्यतिरिक्त एन्कोडिंग?), म्हणून स्वयं-जतन तिच्यावर पुन्हा लिहित नाही. दाखवलेला मजकूर बरोबर असेल तरच स्वतः जतन करा.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>फाइल लिहिणे अयशस्वी: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{1} {2} पैकी {0} निवडले</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>एन्कोडिंग आणि ओळींचे शेवट</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>UTF-8 मध्ये रूपांतरित करा</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>एन्कोडिंगसह पुन्हा उघडा</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>सध्याचे शीर्षक</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>जतन स्थिती</value>
+  </data>
 </root>

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -39,14 +39,53 @@ namespace Typedown.Core.Utilities
         /// that — along with the shape to write back. Text files with no byte order mark are read as UTF-8, which
         /// is what the app has always done.
         /// </summary>
-        public static async Task<(string Text, TextFileFormat Format)> ReadAsync(string path)
+        public static async Task<(string Text, TextFileFormat Format)> ReadAsync(string path, Encoding encodingWithoutMark = null)
         {
             var bytes = await File.ReadAllBytesAsync(path);
             var (encoding, bomLength) = DetectEncoding(bytes);
+            // The reader's choice for a file with no byte order mark (the status bar's encoding menu): GBK, Big5...
+            if (bomLength == 0 && encodingWithoutMark != null) encoding = encodingWithoutMark;
             var text = encoding.GetString(bytes, bomLength, bytes.Length - bomLength);
             var format = new TextFileFormat(encoding, bomLength > 0, DetectLineEnding(text), !RoundTrips(encoding, bytes, bomLength, text));
             return (Normalize(text), format);
         }
+
+        /// <summary>The encodings a file without a byte order mark can be read in again, by name (code pages registered first).</summary>
+        public static readonly string[] ReopenEncodings = { "utf-8", "gb18030", "big5", "shift_jis", "euc-kr", "windows-1252" };
+
+        public static Encoding EncodingByName(string name)
+        {
+            if (name == "utf-8") return new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            return Encoding.GetEncoding(name);
+        }
+
+        /// <summary>"UTF-8", "UTF-8 BOM", "GB18030", "UTF-16 LE"...: what the status bar shows.</summary>
+        public string EncodingLabel
+        {
+            get
+            {
+                var name = Encoding switch
+                {
+                    UTF8Encoding => "UTF-8",
+                    UnicodeEncoding u => u.GetPreamble() is [0xFE, 0xFF] ? "UTF-16 BE" : "UTF-16 LE",
+                    UTF32Encoding u => u.GetPreamble() is [0, 0, 0xFE, 0xFF] ? "UTF-32 BE" : "UTF-32 LE",
+                    _ => Encoding.WebName.ToUpperInvariant(),
+                };
+                return Encoding is UTF8Encoding && HasByteOrderMark ? name + " BOM" : name;
+            }
+        }
+
+        public string LineEndingLabel => LineEnding == "\r\n" ? "CRLF" : LineEnding == "\r" ? "CR" : "LF";
+
+        /// <summary>This shape written with another line ending.</summary>
+        public TextFileFormat WithLineEnding(string lineEnding) => new(Encoding, HasByteOrderMark, lineEnding, LossyDecode);
+
+        /// <summary>
+        /// This shape turned into UTF-8 (no mark), the line ending kept: what the reader asked for, so the text as shown
+        /// is what is written, and auto-save may write it again.
+        /// </summary>
+        public TextFileFormat AsUtf8() => new(new UTF8Encoding(encoderShouldEmitUTF8Identifier: false), false, LineEnding);
 
         /// <summary>The text as it should hit the disk: the file's own line endings, and its byte order mark.</summary>
         public byte[] GetBytes(string text)

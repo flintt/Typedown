@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>Taispeánann an barra stádais</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Sábháilte</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Gan sábháil</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Sábháil uathoibríoch ar sos</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Cliceáil chun sábháil</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Tá an doiciméad folamh ach níl an comhad ar an diosca, agus níor fholmhaigh aon eagarthóireacht é, mar sin níor scríobh sábháil uathoibríoch thar an gcomhad.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Níorbh fhéidir an comhad seo a léamh gan chaillteanas (ionchódú seachas UTF-8?), mar sin ní scríobhann sábháil uathoibríoch thairis. Sábháil é tú féin ach amháin má tá an téacs a thaispeántar ceart.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Theip ar scríobh an chomhaid: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{0} as {1} {2} roghnaithe</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Ionchódú agus críocha líne</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Tiontaigh go UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Athoscail le hionchódú</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Ceannteideal reatha</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Stádas sábhála</value>
+  </data>
 </root>

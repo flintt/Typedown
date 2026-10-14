@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>Shiriti i gjendjes shfaq</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>U ruajt</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Nuk është ruajtur</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Ruajtja automatike është pezulluar</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Kliko për të ruajtur</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Dokumenti është bosh, por skedari në disk nuk është, dhe asnjë redaktim nuk e boshatisi, prandaj ruajtja automatike nuk e mbishkroi skedarin.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Ky skedar nuk mund të lexohej pa humbje (kodim tjetër nga UTF-8?), prandaj ruajtja automatike nuk e mbishkruan. Ruajeni vetë vetëm nëse teksti i shfaqur është i saktë.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Shkrimi i skedarit dështoi: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{0} nga {1} {2} të përzgjedhura</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Kodimi dhe fundet e rreshtave</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Shndërro në UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Rihap me kodim</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Titulli aktual</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Gjendja e ruajtjes</value>
+  </data>
 </root>

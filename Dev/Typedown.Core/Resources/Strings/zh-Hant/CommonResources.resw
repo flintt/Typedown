@@ -1072,4 +1072,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>狀態列顯示</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>已保存</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>未保存</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>自動保存已暫停</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>按一下即可保存</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>文件內容為空，但磁碟上的檔案不是空的，且並非經由編輯清空，因此自動保存沒有覆寫該檔案。</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>無法無損讀取此檔案（可能不是 UTF-8 編碼），因此自動保存不會覆寫它。只有在顯示的內容正確時才手動保存。</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>寫入檔案失敗：{0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>已選 {0} / 共 {1} {2}</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>編碼與換行字元</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>轉換為 UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>以其他編碼重新開啟</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>目前標題</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>保存狀態</value>
+  </data>
 </root>

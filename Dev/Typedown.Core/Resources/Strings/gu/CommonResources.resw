@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>સ્ટેટસ બારમાં બતાવો</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>સાચવ્યું</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>સાચવ્યું નથી</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>સ્વતઃ સાચવવું થોભાવ્યું</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>સાચવવા માટે ક્લિક કરો</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>દસ્તાવેજ ખાલી છે પણ ડિસ્ક પરની ફાઇલ ખાલી નથી, અને કોઈ ફેરફારે તેને ખાલી કર્યો નથી, તેથી સ્વતઃ સાચવવાએ ફાઇલ પર ફરીથી લખ્યું નથી.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>આ ફાઇલ નુકસાન વિના વાંચી શકાઈ નથી (UTF-8 સિવાયનું એન્કોડિંગ?), તેથી સ્વતઃ સાચવવું તેના પર ફરીથી લખતું નથી. બતાવેલું લખાણ સાચું હોય તો જ જાતે સાચવો.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>ફાઇલ લખવામાં નિષ્ફળ: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{1} {2}માંથી {0} પસંદ કર્યા</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>એન્કોડિંગ અને લાઇનના અંત</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>UTF-8 માં રૂપાંતરિત કરો</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>એન્કોડિંગ સાથે ફરી ખોલો</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>વર્તમાન મથાળું</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>સાચવવાની સ્થિતિ</value>
+  </data>
 </root>

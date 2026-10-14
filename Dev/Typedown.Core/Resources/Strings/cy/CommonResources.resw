@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>Mae’r bar statws yn dangos</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Wedi’i gadw</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Heb ei gadw</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Cadw awtomatig wedi’i oedi</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Cliciwch i gadw</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Mae’r ddogfen yn wag ond nid yw’r ffeil ar y ddisg, ac ni wnaeth unrhyw olygiad ei gwagio, felly ni wnaeth cadw awtomatig drosysgrifo’r ffeil.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Nid oedd modd darllen y ffeil hon heb golled (amgodiad heblaw UTF-8?), felly nid yw cadw awtomatig yn ei throsysgrifo. Cadwch hi eich hun dim ond os yw’r testun a ddangosir yn gywir.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Methwyd ag ysgrifennu’r ffeil: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{0} o {1} {2} wedi’u dewis</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Amgodiad a diwedd llinellau</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Trosi i UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Ailagor gydag amgodiad</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Pennawd cyfredol</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Statws cadw</value>
+  </data>
 </root>

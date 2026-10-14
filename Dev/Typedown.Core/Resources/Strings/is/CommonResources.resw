@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>Stöðustika sýnir</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Vistað</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Ekki vistað</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Sjálfvirk vistun í bið</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Smelltu til að vista</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Skjalið er tómt en skráin á diskinum ekki, og engin breyting tæmdi það, svo sjálfvirk vistun skrifaði ekki yfir skrána.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Ekki tókst að lesa þessa skrá án taps (önnur stafakóðun en UTF-8?), svo sjálfvirk vistun skrifar ekki yfir hana. Vistaðu hana sjálf(ur) aðeins ef textinn sem birtist er réttur.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Ekki tókst að skrifa skrána: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{0} af {1} {2} valin</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Stafakóðun og línuendar</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Umbreyta í UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Opna aftur með stafakóðun</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Núverandi fyrirsögn</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Vistunarstaða</value>
+  </data>
 </root>

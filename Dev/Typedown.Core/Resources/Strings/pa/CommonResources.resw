@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>ਸਥਿਤੀ ਪੱਟੀ ਵਿੱਚ ਦਿਖਾਓ</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>ਸੰਭਾਲਿਆ ਗਿਆ</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>ਸੰਭਾਲਿਆ ਨਹੀਂ ਗਿਆ</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>ਆਟੋ ਸੰਭਾਲ ਰੋਕੀ ਗਈ</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>ਸੰਭਾਲਣ ਲਈ ਕਲਿੱਕ ਕਰੋ</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>ਦਸਤਾਵੇਜ਼ ਖਾਲੀ ਹੈ ਪਰ ਡਿਸਕ ਉੱਤੇ ਫਾਈਲ ਖਾਲੀ ਨਹੀਂ ਹੈ, ਅਤੇ ਕਿਸੇ ਸੋਧ ਨੇ ਇਸਨੂੰ ਖਾਲੀ ਨਹੀਂ ਕੀਤਾ, ਇਸ ਲਈ ਆਟੋ ਸੰਭਾਲ ਨੇ ਫਾਈਲ ਉੱਤੇ ਮੁੜ ਨਹੀਂ ਲਿਖਿਆ।</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>ਇਹ ਫਾਈਲ ਬਿਨਾਂ ਨੁਕਸਾਨ ਦੇ ਪੜ੍ਹੀ ਨਹੀਂ ਜਾ ਸਕੀ (UTF-8 ਤੋਂ ਇਲਾਵਾ ਕੋਈ ਐਨਕੋਡਿੰਗ?), ਇਸ ਲਈ ਆਟੋ ਸੰਭਾਲ ਇਸ ਉੱਤੇ ਮੁੜ ਨਹੀਂ ਲਿਖਦੀ। ਦਿਖਾਇਆ ਟੈਕਸਟ ਸਹੀ ਹੋਵੇ ਤਾਂ ਹੀ ਖੁਦ ਸੰਭਾਲੋ।</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>ਫਾਈਲ ਲਿਖਣਾ ਅਸਫਲ ਰਿਹਾ: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{1} {2} ਵਿੱਚੋਂ {0} ਚੁਣੇ ਗਏ</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>ਐਨਕੋਡਿੰਗ ਅਤੇ ਲਾਈਨ ਦੇ ਅੰਤ</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>UTF-8 ਵਿੱਚ ਬਦਲੋ</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>ਐਨਕੋਡਿੰਗ ਨਾਲ ਮੁੜ ਖੋਲ੍ਹੋ</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>ਮੌਜੂਦਾ ਸਿਰਲੇਖ</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>ਸੰਭਾਲ ਸਥਿਤੀ</value>
+  </data>
 </root>

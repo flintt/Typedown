@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>Egoera-barrak erakusten du</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Gordeta</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Gorde gabe</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Gordetze automatikoa pausatuta</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Egin klik gordetzeko</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Dokumentua hutsik dago, baina diskoko fitxategia ez, eta ez du edizio batek hustu; beraz, gordetze automatikoak ez du fitxategia gainidatzi.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Fitxategi hau ezin izan da galerarik gabe irakurri (UTF-8 ez den kodeketa bat?); beraz, gordetze automatikoak ez du gainidazten. Gorde ezazu zuk zeuk, erakutsitako testua zuzena bada soilik.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Ezin izan da fitxategia idatzi: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{1} {2}(e)tik {0} hautatuta</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Kodeketa eta lerro-amaierak</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Bihurtu UTF-8 formatura</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Ireki berriro kodeketa batekin</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Uneko izenburua</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Gordetze-egoera</value>
+  </data>
 </root>

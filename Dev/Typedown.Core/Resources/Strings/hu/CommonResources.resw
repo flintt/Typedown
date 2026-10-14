@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>Az állapotsor mutatja</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Mentve</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Nincs mentve</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Automatikus mentés szüneteltetve</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Kattintson a mentéshez</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>A dokumentum üres, de a lemezen lévő fájl nem, és egyetlen szerkesztés sem ürítette ki, ezért az automatikus mentés nem írta felül a fájlt.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Ezt a fájlt nem sikerült veszteség nélkül beolvasni (UTF-8-tól eltérő kódolás?), ezért az automatikus mentés nem írja felül. Csak akkor mentse saját maga, ha a megjelenített szöveg helyes.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>A fájl írása sikertelen: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{1} {2} közül {0} kijelölve</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Kódolás és sorvégek</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Átalakítás UTF-8-ra</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Újbóli megnyitás kódolással</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Aktuális címsor</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Mentés állapota</value>
+  </data>
 </root>

@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>Η γραμμή κατάστασης δείχνει</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Αποθηκεύτηκε</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Δεν αποθηκεύτηκε</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Η αυτόματη αποθήκευση σε παύση</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Κάντε κλικ για αποθήκευση</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Το έγγραφο είναι κενό, αλλά το αρχείο στον δίσκο δεν είναι, και καμία επεξεργασία δεν το άδειασε, οπότε η αυτόματη αποθήκευση δεν αντικατέστησε το αρχείο.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Αυτό το αρχείο δεν ήταν δυνατό να διαβαστεί χωρίς απώλειες (κωδικοποίηση διαφορετική από UTF-8;), οπότε η αυτόματη αποθήκευση δεν το αντικαθιστά. Αποθηκεύστε το μόνοι σας μόνο αν το κείμενο που εμφανίζεται είναι σωστό.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Η εγγραφή του αρχείου απέτυχε: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>Επιλέχθηκαν {0} από {1} {2}</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Κωδικοποίηση και τέλη γραμμών</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Μετατροπή σε UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Επανάνοιγμα με κωδικοποίηση</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Τρέχουσα επικεφαλίδα</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Κατάσταση αποθήκευσης</value>
+  </data>
 </root>

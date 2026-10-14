@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>La barre d’état affiche</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Enregistré</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Non enregistré</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Enregistrement automatique en pause</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Cliquer pour enregistrer</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Le document est vide mais le fichier sur le disque ne l’est pas, et aucune modification ne l’a vidé ; l’enregistrement automatique n’a donc pas écrasé le fichier.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Ce fichier n’a pas pu être lu sans perte (un encodage autre que UTF-8 ?) ; l’enregistrement automatique ne l’écrase donc pas. Enregistrez-le vous-même uniquement si le texte affiché est correct.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Échec de l’écriture du fichier : {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{0} sur {1} {2} sélectionnés</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Encodage et fins de ligne</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Convertir en UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Rouvrir avec l’encodage</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Titre actuel</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>État de l’enregistrement</value>
+  </data>
 </root>

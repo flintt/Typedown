@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>Statusbalk toont</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Opgeslagen</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Niet opgeslagen</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Automatisch opslaan gepauzeerd</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Klik om op te slaan</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Het document is leeg, maar het bestand op schijf niet, en geen bewerking heeft het leeggemaakt, dus automatisch opslaan heeft het bestand niet overschreven.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Dit bestand kon niet zonder verlies worden gelezen (een andere codering dan UTF-8?), dus automatisch opslaan overschrijft het niet. Sla het alleen zelf op als de getoonde tekst klopt.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Het bestand kon niet worden geschreven: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{0} van {1} {2} geselecteerd</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Codering en regeleinden</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Converteren naar UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Opnieuw openen met codering</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Huidige kop</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Opslagstatus</value>
+  </data>
 </root>

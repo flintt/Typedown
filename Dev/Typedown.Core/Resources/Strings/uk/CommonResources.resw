@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>У рядку стану</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Збережено</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Не збережено</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Автозбереження призупинено</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Натисніть, щоб зберегти</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Документ порожній, але файл на диску — ні, і жодне редагування його не очистило, тому автозбереження не перезаписало файл.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Цей файл не вдалося прочитати без втрат (кодування, відмінне від UTF-8?), тому автозбереження його не перезаписує. Зберігайте вручну, лише якщо показаний текст правильний.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Не вдалося записати файл: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>Вибрано {0} з {1} {2}</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Кодування та кінці рядків</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Перетворити на UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Відкрити знову з кодуванням</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Поточний заголовок</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Стан збереження</value>
+  </data>
 </root>

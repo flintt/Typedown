@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>Durum çubuğunda gösterilen</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Kaydedildi</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Kaydedilmedi</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Otomatik kaydetme duraklatıldı</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Kaydetmek için tıklayın</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Belge boş ama diskteki dosya boş değil ve hiçbir düzenleme onu boşaltmadı; bu yüzden otomatik kaydetme dosyanın üzerine yazmadı.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Bu dosya kayıpsız okunamadı (UTF-8 dışında bir kodlama mı?); bu yüzden otomatik kaydetme üzerine yazmaz. Yalnızca gösterilen metin doğruysa kendiniz kaydedin.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Dosya yazılamadı: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{1} {2} içinden {0} seçili</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Kodlama ve satır sonları</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>UTF-8’e dönüştür</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Kodlamayla yeniden aç</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Geçerli başlık</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Kaydetme durumu</value>
+  </data>
 </root>

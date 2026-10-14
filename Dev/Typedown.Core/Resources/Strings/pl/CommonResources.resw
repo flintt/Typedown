@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>Pasek stanu pokazuje</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Zapisano</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Nie zapisano</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Automatyczne zapisywanie wstrzymane</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Kliknij, aby zapisać</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Dokument jest pusty, ale plik na dysku nie, i żadna edycja go nie opróżniła, więc automatyczne zapisywanie nie nadpisało pliku.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Tego pliku nie udało się odczytać bez strat (kodowanie inne niż UTF-8?), więc automatyczne zapisywanie go nie nadpisuje. Zapisz go samodzielnie tylko wtedy, gdy wyświetlany tekst jest poprawny.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Nie udało się zapisać pliku: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>Zaznaczono {0} z {1} {2}</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Kodowanie i znaki końca wiersza</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Konwertuj na UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Otwórz ponownie z kodowaniem</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Bieżący nagłówek</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Stan zapisu</value>
+  </data>
 </root>

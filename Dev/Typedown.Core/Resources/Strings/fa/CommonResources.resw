@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>نوار وضعیت نشان می‌دهد</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>ذخیره شد</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>ذخیره نشده</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>ذخیره خودکار متوقف شده</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>برای ذخیره کلیک کنید</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>سند خالی است ولی فایل روی دیسک خالی نیست و هیچ ویرایشی آن را خالی نکرده است، بنابراین ذخیره خودکار فایل را بازنویسی نکرد.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>این فایل بدون از دست رفتن داده خوانده نشد (رمزگذاری‌ای غیر از UTF-8؟)، بنابراین ذخیره خودکار آن را بازنویسی نمی‌کند. فقط اگر متن نمایش‌داده‌شده درست است، خودتان آن را ذخیره کنید.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>نوشتن فایل ناموفق بود: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{0} از {1} {2} انتخاب شده</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>رمزگذاری و پایان خط</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>تبدیل به UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>بازکردن دوباره با رمزگذاری</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>عنوان فعلی</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>وضعیت ذخیره</value>
+  </data>
 </root>

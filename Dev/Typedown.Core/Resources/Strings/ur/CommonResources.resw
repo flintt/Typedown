@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>اسٹیٹس بار میں دکھائیں</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>محفوظ ہو گیا</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>محفوظ نہیں ہوا</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>خودکار محفوظ کاری موقوف ہے</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>محفوظ کرنے کے لیے کلک کریں</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>دستاویز خالی ہے لیکن ڈسک پر موجود فائل خالی نہیں، اور کسی ترمیم نے اسے خالی نہیں کیا، اس لیے خودکار محفوظ کاری نے فائل کو اوور رائٹ نہیں کیا۔</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>یہ فائل نقصان کے بغیر نہیں پڑھی جا سکی (UTF-8 کے علاوہ کوئی انکوڈنگ؟)، اس لیے خودکار محفوظ کاری اسے اوور رائٹ نہیں کرتی۔ صرف تب خود محفوظ کریں جب دکھایا گیا متن درست ہو۔</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>فائل لکھنا ناکام رہا: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{1} {2} میں سے {0} منتخب</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>انکوڈنگ اور سطر کے اختتام</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>UTF-8 میں تبدیل کریں</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>انکوڈنگ کے ساتھ دوبارہ کھولیں</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>موجودہ سرخی</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>محفوظ کاری کی حالت</value>
+  </data>
 </root>

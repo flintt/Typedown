@@ -26,7 +26,11 @@
             <Setter Property="Foreground" Value="{ThemeResource TextFillColorSecondaryBrush}"/>
         </Style>
     </UserControl.Resources>
-    <Grid x:Name="RootGrid" BorderThickness="0,1,0,0" Padding="4,2,4,3" BorderBrush="{ThemeResource CardStrokeColorDefault}">
+    <Grid x:Name="RootGrid" BorderThickness="0,1,0,0" Padding="4,2,4,3" BorderBrush="{ThemeResource CardStrokeColorDefault}" SizeChanged="OnBarSizeChanged">
+        <!-- Right-click: which items the bar shows. -->
+        <Grid.ContextFlyout>
+            <MenuFlyout x:Name="ItemsMenu" Opening="OnItemsMenuOpening"/>
+        </Grid.ContextFlyout>
         <Grid.Background>
             <SolidColorBrush Color="{ThemeResource SolidBackgroundFillColorBase}" Opacity="0.5"/>
         </Grid.Background>
@@ -34,7 +38,7 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Orientation="Horizontal" Spacing="4">
+        <StackPanel x:Name="LeftItems" Orientation="Horizontal" Spacing="4">
             <ToggleButton Padding="6" BorderThickness="0" IsChecked="{x:Bind Settings.SidePaneOpen, Mode=TwoWay}" controls:ToolTip.TextResource="SidePane">
                 <ToggleButton.Resources>
                     <ResourceDictionary>
@@ -80,7 +84,6 @@
                 Padding="6"
                 BorderThickness="0"
                 VerticalAlignment="Stretch"
-                Visibility="{x:Bind WhenEditing(Settings.ReadOnly), Mode=OneWay}"
                 Click="OnEnterReadOnlyClick"
                 AutomationProperties.AutomationId="StatusBarReading"
                 AutomationProperties.Name="{u:LocaleString Key=ReadOnlyMode}">
@@ -111,8 +114,64 @@
                     <TextBlock FontSize="12" Text="{u:LocaleString Key=ReadOnlyMode}"/>
                 </StackPanel>
             </Button>
+            <!-- The heading the caret is under; a click opens the outline. -->
+            <Button
+                x:Name="HeadingButton"
+                Padding="8,2,8,2"
+                BorderThickness="0"
+                VerticalAlignment="Stretch"
+                Visibility="Collapsed"
+                Click="OnHeadingClick"
+                AutomationProperties.AutomationId="StatusBarHeading"
+                controls:ToolTip.TextResource="Outline">
+                <TextBlock x:Name="HeadingText" FontSize="12" MaxWidth="240" TextTrimming="CharacterEllipsis"/>
+            </Button>
         </StackPanel>
-        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+        <StackPanel x:Name="RightItems" Grid.Column="1" Orientation="Horizontal" Spacing="8">
+            <!-- What a narrow window has no room for, in a menu. -->
+            <Button
+                x:Name="OverflowButton"
+                Padding="8,2,8,2"
+                BorderThickness="0"
+                VerticalAlignment="Stretch"
+                Visibility="Collapsed"
+                AutomationProperties.AutomationId="StatusBarOverflow"
+                controls:ToolTip.TextResource="MoreOptions">
+                <FontIcon Glyph="&#xE712;" FontSize="12"/>
+                <Button.Flyout>
+                    <MenuFlyout x:Name="OverflowMenu" Placement="TopEdgeAlignedRight" Opening="OnOverflowMenuOpening"/>
+                </Button.Flyout>
+            </Button>
+            <!-- How the file is written (encoding, line ending); a click changes the line ending, converts the file to
+                 UTF-8, or reads it again in another encoding. -->
+            <Button
+                x:Name="FileFormatButton"
+                Padding="8,2,8,2"
+                BorderThickness="0"
+                VerticalAlignment="Stretch"
+                FontSize="12"
+                AutomationProperties.AutomationId="StatusBarFileFormat"
+                controls:ToolTip.TextResource="Encoding.Tip">
+                <TextBlock Text="{x:Bind FormatText(ViewModel.FileViewModel.FileFormat), Mode=OneWay}"/>
+                <Button.Flyout>
+                    <MenuFlyout x:Name="FileFormatMenu" Placement="TopEdgeAlignedRight" Opening="OnFileFormatMenuOpening"/>
+                </Button.Flyout>
+            </Button>
+            <!-- Whether the document is on disk, and when auto-save held it back, why (in the tip); a click saves it. -->
+            <Button
+                x:Name="SaveStateButton"
+                Padding="8,2,8,2"
+                BorderThickness="0"
+                VerticalAlignment="Stretch"
+                Click="OnSaveStateClick"
+                AutomationProperties.AutomationId="StatusBarSaveState"
+                AutomationProperties.HelpText="{x:Bind SaveStateTip(Editor.Saved, Editor.AutoSaveHeldBack), Mode=OneWay}"
+                ToolTipService.ToolTip="{x:Bind SaveStateTip(Editor.Saved, Editor.AutoSaveHeldBack), Mode=OneWay}">
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                    <FontIcon Glyph="{x:Bind SaveStateGlyph(Editor.Saved, Editor.AutoSaveHeldBack), Mode=OneWay}" FontSize="12"/>
+                    <TextBlock FontSize="12" Text="{x:Bind SaveStateText(Editor.Saved, Editor.AutoSaveHeldBack), Mode=OneWay}"/>
+                </StackPanel>
+            </Button>
             <!-- The count the reader chose (characters or words); a click shows all the document's numbers. -->
             <Button
                 x:Name="WordCountButton"
@@ -123,7 +182,7 @@
                 IsEnabled="{x:Bind ViewModel.MarkdownEditor.IsEditorLoaded, Mode=OneWay}"
                 AutomationProperties.AutomationId="StatusBarWordCount"
                 controls:ToolTip.TextResource="WordCount">
-                <TextBlock Text="{x:Bind CountText(Editor.ContentState, Settings.WordCountMethod), Mode=OneWay}"/>
+                <TextBlock Text="{x:Bind CountText(Editor.ContentState, Settings.WordCountMethod, Editor.SelectionText), Mode=OneWay}"/>
                 <Button.Flyout>
                     <Flyout Placement="TopEdgeAlignedRight" Opening="OnStatsOpening">
                         <StackPanel MinWidth="240" Spacing="10">

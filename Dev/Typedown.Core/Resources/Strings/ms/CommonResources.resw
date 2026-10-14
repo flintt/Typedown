@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>Bar status menunjukkan</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Disimpan</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Belum disimpan</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Simpan automatik dijeda</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Klik untuk simpan</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Dokumen kosong tetapi fail pada cakera tidak, dan tiada suntingan yang mengosongkannya, jadi simpan automatik tidak menulis ganti fail itu.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Fail ini tidak dapat dibaca tanpa kehilangan (pengekodan selain UTF-8?), jadi simpan automatik tidak menulis gantinya. Simpan sendiri hanya jika teks yang dipaparkan betul.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Gagal menulis fail: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{0} daripada {1} {2} dipilih</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Pengekodan dan penghujung baris</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Tukar kepada UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Buka semula dengan pengekodan</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Tajuk semasa</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Status simpan</value>
+  </data>
 </root>

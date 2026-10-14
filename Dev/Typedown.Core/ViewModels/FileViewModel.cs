@@ -270,6 +270,7 @@ namespace Typedown.Core.ViewModels
                 EditorViewModel.CurrentHash = EditorViewModel.FileHash;
                 EditorViewModel.Saved = true;
                 EditorViewModel.AutoSavedSucc = true;
+                EditorViewModel.AutoSaveHeldBack = null;
                 EditorViewModel.FileLoaded = false;
             }
             else
@@ -362,6 +363,7 @@ namespace Typedown.Core.ViewModels
                     EditorViewModel.FileLoaded = true;
                 }
                 EditorViewModel.AutoSavedSucc = true;
+                EditorViewModel.AutoSaveHeldBack = null;
                 EditorViewModel.History.InitHistory(EditorViewModel.Markdown);
                 if (postMessage)
                 {
@@ -451,6 +453,7 @@ namespace Typedown.Core.ViewModels
                     && (!EditorViewModel.FileLoaded || !EditorViewModel.History.Undoable))
                 {
                     Log.Debug($"save skipped: buffer is blank (len={text.Length}) with no undoable edit (loaded={EditorViewModel.FileLoaded} undoable={EditorViewModel.History.Undoable}) while the file has {new FileInfo(path).Length} bytes");
+                    if (!alert) EditorViewModel.AutoSaveHeldBack = Locale.GetString("SaveState.BlankHeldBack");
                     return false;
                 }
                 // A file we could not decode losslessly (a non-UTF-8 file — GBK, Latin-1 — read as UTF-8, so its
@@ -461,16 +464,19 @@ namespace Typedown.Core.ViewModels
                 if (!alert && (FileFormat?.LossyDecode ?? false) && File.Exists(path))
                 {
                     Log.Debug($"auto-save skipped: '{path}' was decoded lossily as {(FileFormat?.Encoding?.WebName ?? "utf-8")}; an automatic overwrite would replace its original bytes");
+                    EditorViewModel.AutoSaveHeldBack = Locale.GetString("SaveState.EncodingHeldBack");
                     return false;
                 }
                 IgnoreOwnFileWrite();
                 await SafeFile.WriteAllBytesAtomicAsync(path, (FileFormat ?? TextFileFormat.Default).GetBytes(text));
                 IgnoreOwnFileWrite();
                 EditionHooks.ReportDocumentOnDisk(path, text, written: true);
+                EditorViewModel.AutoSaveHeldBack = null;
                 return true;
             }
             catch (Exception ex)
             {
+                if (!alert) EditorViewModel.AutoSaveHeldBack = string.Format(Locale.GetString("SaveState.WriteFailed"), ex.Message);
                 if (alert)
                 {
                     await AppContentDialog.Create(Locale.GetDialogString("SaveErrorTitle"), ex.Message, Locale.GetDialogString("Ok")).ShowAsync(AppViewModel.XamlRoot);
@@ -1367,6 +1373,46 @@ namespace Typedown.Core.ViewModels
             }
         }
 
+        /// <summary>
+        /// The file read again in the encoding the reader chose (the status bar's encoding menu) - one with no byte order
+        /// mark, read as UTF-8, that is GBK or Big5. Only a document with nothing unsaved: what was typed would be lost.
+        /// </summary>
+        public async Task<bool> ReopenWithEncodingAsync(string encodingName)
+        {
+            var path = FilePath;
+            if (string.IsNullOrEmpty(path) || !EditorViewModel.Saved || !File.Exists(path)) return false;
+            var (text, format) = await TextFileFormat.ReadAsync(path, TextFileFormat.EncodingByName(encodingName));
+            if (disposables.IsDisposed || FilePath != path || !EditorViewModel.Saved) return false;
+            FileFormat = format;
+            ApplyDiskText(text);
+            return true;
+        }
+
+        /// <summary>The file to be written with this line ending ("\n", "\r\n"): the document turns unsaved.</summary>
+        public void ChangeLineEnding(string lineEnding)
+        {
+            if (FileFormat.LineEnding == lineEnding) return;
+            FileFormat = FileFormat.WithLineEnding(lineEnding);
+            MarkUnsavedFormat();
+        }
+
+        /// <summary>The file to be written as UTF-8 (the text as shown): the document turns unsaved.</summary>
+        public void ConvertToUtf8()
+        {
+            FileFormat = FileFormat.AsUtf8();
+            EditorViewModel.AutoSaveHeldBack = null;
+            MarkUnsavedFormat();
+        }
+
+        // The text is unchanged but the bytes on disk will not be: saved as when the file went missing, so a save (and
+        // auto-save) writes it.
+        private void MarkUnsavedFormat()
+        {
+            if (FilePath == null) return;
+            EditorViewModel.FileHash = EditorViewModel.CurrentHash == 0 ? 1UL : 0UL;
+            EditorViewModel.Saved = false;
+        }
+
         private void ApplyDiskText(string text)
         {
             if (!string.Equals(EditorViewModel.Markdown, text, StringComparison.Ordinal))
@@ -1379,6 +1425,7 @@ namespace Typedown.Core.ViewModels
             EditorViewModel.Saved = true;
             EditorViewModel.FileLoaded = false;
             EditorViewModel.AutoSavedSucc = true;
+            EditorViewModel.AutoSaveHeldBack = null;
             EditorViewModel.History.InitHistory(text);
             AutoBackup.DeleteBackup(FilePath);
             EditorViewModel.PostLoadFile(text);

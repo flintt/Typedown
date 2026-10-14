@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>স্ট্যাটাস বারে দেখাবে</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>সংরক্ষিত</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>সংরক্ষিত নয়</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>স্বয়ংক্রিয় সংরক্ষণ বিরতিতে</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>সংরক্ষণ করতে ক্লিক করুন</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>নথিটি খালি, কিন্তু ডিস্কের ফাইলটি খালি নয়, এবং কোনো সম্পাদনা এটিকে খালি করেনি, তাই স্বয়ংক্রিয় সংরক্ষণ ফাইলটি ওভাররাইট করেনি।</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>এই ফাইলটি ক্ষতি ছাড়া পড়া যায়নি (UTF-8 ছাড়া অন্য এনকোডিং?), তাই স্বয়ংক্রিয় সংরক্ষণ এটি ওভাররাইট করে না। দেখানো লেখা সঠিক হলেই কেবল নিজে সংরক্ষণ করুন।</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>ফাইল লেখা ব্যর্থ হয়েছে: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{1} {2}-এর মধ্যে {0} নির্বাচিত</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>এনকোডিং ও লাইনের শেষ</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>UTF-8-এ রূপান্তর করুন</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>এনকোডিং দিয়ে আবার খুলুন</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>বর্তমান শিরোনাম</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>সংরক্ষণের অবস্থা</value>
+  </data>
 </root>

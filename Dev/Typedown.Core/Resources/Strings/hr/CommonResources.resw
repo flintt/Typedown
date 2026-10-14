@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>Traka stanja prikazuje</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Spremljeno</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Nije spremljeno</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Automatsko spremanje je pauzirano</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Kliknite za spremanje</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Dokument je prazan, ali datoteka na disku nije, i nijedna izmjena ga nije ispraznila, pa automatsko spremanje nije prebrisalo datoteku.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Ova se datoteka nije mogla pročitati bez gubitaka (kodiranje koje nije UTF-8?), pa je automatsko spremanje ne prebrisuje. Spremite je sami samo ako je prikazani tekst ispravan.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Pisanje datoteke nije uspjelo: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>Odabrano {0} od {1} {2}</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Kodiranje i završeci redaka</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Pretvori u UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Ponovno otvori s kodiranjem</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Trenutačni naslov</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Stanje spremanja</value>
+  </data>
 </root>

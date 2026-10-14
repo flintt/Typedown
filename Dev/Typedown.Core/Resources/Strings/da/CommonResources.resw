@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>Statuslinjen viser</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Gemt</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Ikke gemt</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Automatisk gem er sat på pause</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Klik for at gemme</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Dokumentet er tomt, men filen på disken er ikke, og ingen redigering har tømt det, så automatisk gem overskrev ikke filen.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Filen kunne ikke læses uden tab (en anden kodning end UTF-8?), så automatisk gem overskriver den ikke. Gem den kun selv, hvis den viste tekst er korrekt.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Filen kunne ikke skrives: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{0} af {1} {2} valgt</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Kodning og linjeskift</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Konvertér til UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Genåbn med kodning</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Aktuel overskrift</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Gemmestatus</value>
+  </data>
 </root>

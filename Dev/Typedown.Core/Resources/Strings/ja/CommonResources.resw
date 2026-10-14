@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>ステータスバーの表示</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>保存済み</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>未保存</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>自動保存を一時停止中</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>クリックして保存</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>ドキュメントは空ですが、ディスク上のファイルは空ではなく、編集で空にしたものでもないため、自動保存はファイルを上書きしませんでした。</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>このファイルは損失なく読み込めませんでした（UTF-8 以外のエンコーディング？）。そのため自動保存は上書きしません。表示されている内容が正しい場合にのみ、手動で保存してください。</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>ファイルの書き込みに失敗しました: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{1} {2}中 {0} を選択</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>エンコーディングと改行コード</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>UTF-8 に変換</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>エンコーディングを指定して再度開く</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>現在の見出し</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>保存状態</value>
+  </data>
 </root>

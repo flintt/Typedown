@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>Bara de stare afișează</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Salvat</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Nesalvat</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Salvarea automată este întreruptă</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Faceți clic pentru a salva</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Documentul este gol, dar fișierul de pe disc nu este, și nicio editare nu l-a golit, așa că salvarea automată nu a suprascris fișierul.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Acest fișier nu a putut fi citit fără pierderi (o codificare diferită de UTF-8?), așa că salvarea automată nu îl suprascrie. Salvați-l dvs. doar dacă textul afișat este corect.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Scrierea fișierului a eșuat: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{0} din {1} {2} selectate</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Codificare și sfârșituri de linie</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Conversie în UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Redeschide cu codificarea</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Titlul curent</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Starea salvării</value>
+  </data>
 </root>

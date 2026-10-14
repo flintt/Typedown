@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>სტატუსის ზოლში ჩანს</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>შენახულია</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>არ არის შენახული</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>ავტომატური შენახვა შეჩერებულია</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>დააწკაპუნეთ შესანახად</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>დოკუმენტი ცარიელია, მაგრამ დისკზე არსებული ფაილი არა, და არცერთ რედაქტირებას არ დაუცლია, ამიტომ ავტომატურმა შენახვამ ფაილი არ გადააწერა.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>ამ ფაილის დანაკარგის გარეშე წაკითხვა ვერ მოხერხდა (UTF-8-ისგან განსხვავებული კოდირება?), ამიტომ ავტომატური შენახვა მას არ გადააწერს. შეინახეთ ხელით მხოლოდ მაშინ, თუ ნაჩვენები ტექსტი სწორია.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>ფაილის ჩაწერა ვერ მოხერხდა: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>არჩეულია {0} / {1} {2}</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>კოდირება და ხაზის დაბოლოებები</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>UTF-8-ში გადაყვანა</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>ხელახლა გახსნა კოდირებით</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>მიმდინარე სათაური</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>შენახვის სტატუსი</value>
+  </data>
 </root>

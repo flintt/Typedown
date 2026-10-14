@@ -23,6 +23,8 @@ namespace Typedown.Core.ViewModels
         public bool SidePaneOpen { get => GetSettingValue(false); set => SetSettingValue(value); }
         public double SidePaneWidth { get => GetSettingValue(300d); set => SetSettingValue(value); }
         public bool StatusBarOpen { get => GetSettingValue(true); set => SetSettingValue(value); }
+        /// <summary>The status bar's items the reader turned off (its context menu), comma-separated: modes, heading, format, save, count.</summary>
+        public string StatusBarHiddenItems { get => GetSettingValue("format"); set => SetSettingValue(value); }
         public double FindReplaceDialogWidth { get => GetSettingValue(600d); set => SetSettingValue(value); }
         /// <summary>
         /// Source mode shows the raw Markdown, reading mode shows only the rendered document: the two contradict

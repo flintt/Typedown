@@ -113,6 +113,7 @@ namespace Typedown.Core.ViewModels
             tab.DiskHash = FileViewModel.DiskHash;
             tab.Saved = editor.Saved;
             tab.AutoSavedSucc = editor.AutoSavedSucc;
+            tab.AutoSaveHeldBack = editor.AutoSaveHeldBack;
             tab.FileLoaded = editor.FileLoaded;
             tab.Cursor = editor.CurrentCursor;
             tab.History = editor.History;
@@ -222,6 +223,7 @@ namespace Typedown.Core.ViewModels
             editor.CurrentHash = tab.CurrentHash;
             editor.Saved = tab.Saved;
             editor.AutoSavedSucc = tab.AutoSavedSucc;
+            editor.AutoSaveHeldBack = tab.AutoSaveHeldBack;
             // A tab that was shown before keeps its history/hash (the handshake must not reset them); one loaded
             // in the background (session restore) has never been through the editor and still needs it.
             editor.FileLoaded = tab.FileLoaded;

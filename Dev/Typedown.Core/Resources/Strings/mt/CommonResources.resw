@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>L-istrixxa tal-istatus turi</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Issejvjat</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Mhux issejvjat</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Is-sejvjar awtomatiku huwa pawżat</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Ikklikkja biex tissejvja</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Id-dokument huwa vojt iżda l-fajl fuq id-diska mhux, u l-ebda editjar ma vojtah, għalhekk is-sejvjar awtomatiku ma kitibx fuq il-fajl.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Dan il-fajl ma setax jinqara mingħajr telf (kodifikazzjoni oħra minbarra UTF-8?), għalhekk is-sejvjar awtomatiku ma jiktibx fuqu. Issejvjah int biss jekk it-test muri huwa korrett.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Il-kitba tal-fajl falliet: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{0} minn {1} {2} magħżula</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Kodifikazzjoni u truf tal-linji</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Ikkonverti għal UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Erġa’ iftaħ b’kodifikazzjoni</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Intestatura attwali</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Status tas-sejvjar</value>
+  </data>
 </root>

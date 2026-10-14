@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>Bilah status menampilkan</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Disimpan</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Belum disimpan</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Simpan otomatis dijeda</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Klik untuk menyimpan</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Dokumen kosong, tetapi file di disk tidak, dan tidak ada suntingan yang mengosongkannya, jadi simpan otomatis tidak menimpa file.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>File ini tidak dapat dibaca tanpa kehilangan data (encoding selain UTF-8?), jadi simpan otomatis tidak menimpanya. Simpan sendiri hanya jika teks yang ditampilkan sudah benar.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Gagal menulis file: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{0} dari {1} {2} dipilih</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Encoding dan akhir baris</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Konversi ke UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Buka ulang dengan encoding</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Judul saat ini</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Status penyimpanan</value>
+  </data>
 </root>

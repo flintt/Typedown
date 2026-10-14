@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>ଷ୍ଟାଟସ୍ ବାରରେ ଦେଖାନ୍ତୁ</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>ସଞ୍ଚୟ ହୋଇଛି</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>ସଞ୍ଚୟ ହୋଇନାହିଁ</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>ସ୍ୱତଃ ସଞ୍ଚୟ ବିରତ ଅଛି</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>ସଞ୍ଚୟ କରିବାକୁ କ୍ଲିକ୍ କରନ୍ତୁ</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>ଡକ୍ୟୁମେଣ୍ଟ ଖାଲି ଅଛି କିନ୍ତୁ ଡିସ୍କରେ ଥିବା ଫାଇଲ ଖାଲି ନାହିଁ, ଏବଂ କୌଣସି ସମ୍ପାଦନା ଏହାକୁ ଖାଲି କରିନାହିଁ, ତେଣୁ ସ୍ୱତଃ ସଞ୍ଚୟ ଫାଇଲ ଉପରେ ଲେଖିନାହିଁ।</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>ଏହି ଫାଇଲକୁ କ୍ଷତି ବିନା ପଢ଼ିହେଲା ନାହିଁ (UTF-8 ବ୍ୟତୀତ ଅନ୍ୟ ଏନକୋଡିଂ?), ତେଣୁ ସ୍ୱତଃ ସଞ୍ଚୟ ଏହା ଉପରେ ଲେଖେ ନାହିଁ। ଦେଖାଯାଉଥିବା ପାଠ୍ୟ ଠିକ୍ ଥିଲେ ହିଁ ନିଜେ ସଞ୍ଚୟ କରନ୍ତୁ।</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>ଫାଇଲ ଲେଖିବା ବିଫଳ ହେଲା: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{1} {2} ମଧ୍ୟରୁ {0} ଚୟନିତ</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>ଏନକୋଡିଂ ଓ ଧାଡ଼ିର ଶେଷ</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>UTF-8 କୁ ରୂପାନ୍ତର କରନ୍ତୁ</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>ଏନକୋଡିଂ ସହ ପୁଣି ଖୋଲନ୍ତୁ</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>ବର୍ତ୍ତମାନର ଶୀର୍ଷକ</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>ସଞ୍ଚୟ ସ୍ଥିତି</value>
+  </data>
 </root>

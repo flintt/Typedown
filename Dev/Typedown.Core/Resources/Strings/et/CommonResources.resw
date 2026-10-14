@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>Olekuriba näitab</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Salvestatud</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Salvestamata</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Automaatne salvestamine on peatatud</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Klõpsake salvestamiseks</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Dokument on tühi, kuid kettal olev fail ei ole, ja ükski muudatus ei tühjendanud seda, seega automaatne salvestamine faili üle ei kirjutanud.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Seda faili ei saanud kadudeta lugeda (muu kodeering kui UTF-8?), seega automaatne salvestamine seda üle ei kirjuta. Salvestage see ise ainult siis, kui kuvatud tekst on õige.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Faili kirjutamine nurjus: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>Valitud {0} / {1} {2}</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Kodeering ja reavahetused</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Teisenda UTF-8-ks</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Ava uuesti kodeeringuga</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Praegune pealkiri</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Salvestamise olek</value>
+  </data>
 </root>

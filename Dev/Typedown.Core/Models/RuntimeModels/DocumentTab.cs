@@ -1,4 +1,4 @@
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.IO;
 using Typedown.Core.Utilities;
 
@@ -59,6 +59,9 @@ namespace Typedown.Core.Models
         public bool Saved { get; set; } = true;
 
         public bool AutoSavedSucc { get; set; } = true;
+
+        /// <summary>Why auto-save last held this document back (EditorViewModel.AutoSaveHeldBack), or null.</summary>
+        public string AutoSaveHeldBack { get; set; }
 
         public bool FileLoaded { get; set; }
 

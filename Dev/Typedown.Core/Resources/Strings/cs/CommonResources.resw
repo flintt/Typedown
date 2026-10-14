@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>Stavový řádek zobrazuje</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Uloženo</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Neuloženo</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Automatické ukládání pozastaveno</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Kliknutím uložíte</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Dokument je prázdný, ale soubor na disku ne, a žádná úprava ho nevyprázdnila, proto automatické ukládání soubor nepřepsalo.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Tento soubor nešlo přečíst bez ztrát (jiné kódování než UTF-8?), proto ho automatické ukládání nepřepíše. Uložte ho ručně, jen pokud je zobrazený text správný.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Zápis souboru selhal: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>Vybráno {0} z {1} {2}</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Kódování a konce řádků</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Převést na UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Znovu otevřít s kódováním</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Aktuální nadpis</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Stav uložení</value>
+  </data>
 </root>

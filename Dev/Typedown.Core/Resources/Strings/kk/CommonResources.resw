@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>Күй тақтасында көрсетілетіні</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Сақталды</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Сақталмаған</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Автосақтау кідіртілді</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Сақтау үшін басыңыз</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Құжат бос, бірақ дискідегі файл бос емес және оны ешбір өңдеу босатпаған, сондықтан автосақтау файлды қайта жазбады.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Бұл файлды шығынсыз оқу мүмкін болмады (UTF-8 емес кодтау ма?), сондықтан автосақтау оны қайта жазбайды. Көрсетілген мәтін дұрыс болса ғана өзіңіз сақтаңыз.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Файлды жазу сәтсіз аяқталды: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{1} {2} ішінен {0} таңдалды</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Кодтау және жол соңы</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>UTF-8 пішіміне түрлендіру</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Кодтаумен қайта ашу</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Ағымдағы тақырып</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Сақтау күйі</value>
+  </data>
 </root>

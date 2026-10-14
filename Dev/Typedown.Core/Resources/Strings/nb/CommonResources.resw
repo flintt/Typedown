@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>Statuslinjen viser</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Lagret</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Ikke lagret</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Automatisk lagring satt på pause</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Klikk for å lagre</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Dokumentet er tomt, men filen på disken er ikke det, og ingen redigering tømte det, så automatisk lagring overskrev ikke filen.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Denne filen kunne ikke leses uten tap (en annen koding enn UTF-8?), så automatisk lagring overskriver den ikke. Lagre den selv bare hvis teksten som vises er riktig.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Kunne ikke skrive filen: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{0} av {1} {2} valgt</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Koding og linjeskift</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Konverter til UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Åpne på nytt med koding</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Gjeldende overskrift</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Lagringsstatus</value>
+  </data>
 </root>

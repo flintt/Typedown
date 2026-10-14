@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>स्थिति पट्टीमा देखाउने</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>सुरक्षित गरियो</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>सुरक्षित गरिएको छैन</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>स्वतः सुरक्षित रोकिएको छ</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>सुरक्षित गर्न क्लिक गर्नुहोस्</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>कागजात खाली छ तर डिस्कमा रहेको फाइल खाली छैन, र कुनै सम्पादनले यसलाई खाली गरेको होइन, त्यसैले स्वतः सुरक्षितले फाइलमाथि लेखेन।</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>यो फाइल क्षतिबिना पढ्न सकिएन (UTF-8 बाहेकको एन्कोडिङ?), त्यसैले स्वतः सुरक्षितले यसमाथि लेख्दैन। देखाइएको पाठ सही भए मात्र आफैँ सुरक्षित गर्नुहोस्।</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>फाइल लेख्न असफल: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{1} {2} मध्ये {0} चयन गरियो</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>एन्कोडिङ र पङ्क्तिका अन्त्य</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>UTF-8 मा रूपान्तरण गर्नुहोस्</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>एन्कोडिङसहित फेरि खोल्नुहोस्</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>हालको शीर्षक</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>सुरक्षित स्थिति</value>
+  </data>
 </root>

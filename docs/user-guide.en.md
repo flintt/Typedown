@@ -1,4 +1,4 @@
-# Typedown User Guide
+﻿# Typedown User Guide
 
 Typedown is a WYSIWYG Markdown editor for Windows: what you see while you write is the formatted page, and what gets saved is a plain `.md` text file that any editor can open.
 
@@ -47,6 +47,16 @@ In Reading Mode the right-click menu only has copying and Select All:
 - **Copy as Plain Text**: drops the Markdown markup and copies the text as it looks on the page
 
 While editing, the right-click menu also has **Copy as Markdown** (Ctrl+Shift+C), which copies the raw Markdown.
+
+**The status bar** (at the bottom of the window; View → Status Bar turns it on and off):
+
+- **Mode button**: its icon shows the current mode (visual, source code, reading); a click lists the modes. The eye next to it goes into Reading Mode in one click, and the "Reading Mode" label takes you back to the mode you came from (Source Code Mode if that is where you were)
+- **Current heading**: the heading the caret is under; a click opens the outline
+- **Encoding and line endings**: for example "UTF-8 · LF". A click lets you change the line endings (LF / CRLF), convert the file to UTF-8, or reopen a file without a BOM in another encoding such as GB18030 or Big5 (not while there are unsaved changes). Hidden by default: right-click the status bar to show it
+- **Save status**: Saved / Not saved / Auto-save paused. Hover over it to see why auto-save paused (for example, a file that could not be read without loss); a click saves
+- **Word count**: counted on the text you see on the page (no Markdown markup or link addresses; each Han character or kana counts as a word); with a selection it shows the selected part. A click shows the details: characters with and without spaces, CJK characters, paragraphs, headings, images, links and an estimated reading time, and lets you choose whether the status bar shows characters or words
+
+Right-click the status bar to choose which items it shows; in a window too narrow for all of them, the ones that do not fit go into the "..." menu at the right.
 
 ---
 
@@ -329,7 +339,7 @@ Switch themes under **View → Theme**: Light, Dark, Black (OLED), plus several 
 
 - **View → Theme → Custom theme…** opens the theme designer; adjust the colors and export the CSS
 - Put the CSS file in the themes folder (for the installer and portable versions this is `文档\Typedown\themes\`, i.e. `Documents\Typedown\themes\`; the Store version keeps it in its app data under `LocalState\themes\`; **Settings → Appearance → Open the themes folder** opens it directly), then click **View → Theme → Reload themes** and the new theme appears in the menu
-- The accent color set in a theme is also used for the selection marks in the outline and the file tree
+- The accent color set in a theme is also used for the selection marks in the outline and the file tree, and for the switches, buttons and check boxes in the settings and dialogs; a theme without one uses the Windows accent color
 
 ---
 

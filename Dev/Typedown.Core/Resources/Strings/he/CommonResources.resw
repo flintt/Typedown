@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>שורת המצב מציגה</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>נשמר</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>לא נשמר</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>השמירה האוטומטית מושהית</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>לחץ כדי לשמור</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>המסמך ריק אבל הקובץ בדיסק אינו ריק, ואף עריכה לא רוקנה אותו, ולכן השמירה האוטומטית לא דרסה את הקובץ.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>לא ניתן היה לקרוא קובץ זה ללא אובדן (קידוד שאינו UTF-8?), ולכן השמירה האוטומטית לא דורסת אותו. שמור אותו בעצמך רק אם הטקסט המוצג נכון.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>כתיבת הקובץ נכשלה: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>נבחרו {0} מתוך {1} {2}</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>קידוד וסיומי שורות</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>המר ל-UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>פתח מחדש עם קידוד</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>הכותרת הנוכחית</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>מצב השמירה</value>
+  </data>
 </root>

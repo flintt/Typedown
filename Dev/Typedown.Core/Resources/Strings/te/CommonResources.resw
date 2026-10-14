@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>స్టేటస్ బార్‌లో చూపేది</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>సేవ్ చేయబడింది</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>సేవ్ చేయలేదు</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>ఆటో సేవ్ పాజ్ చేయబడింది</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>సేవ్ చేయడానికి క్లిక్ చేయండి</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>పత్రం ఖాళీగా ఉంది, కానీ డిస్క్‌లోని ఫైల్ ఖాళీగా లేదు, ఏ సవరణా దాన్ని ఖాళీ చేయలేదు, కాబట్టి ఆటో సేవ్ ఫైల్‌ను ఓవర్‌రైట్ చేయలేదు.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>ఈ ఫైల్‌ను నష్టం లేకుండా చదవలేకపోయాము (UTF-8 కాని ఎన్‌కోడింగ్?), కాబట్టి ఆటో సేవ్ దాన్ని ఓవర్‌రైట్ చేయదు. చూపిన వచనం సరైనదైతేనే మీరే సేవ్ చేయండి.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>ఫైల్‌ను వ్రాయడం విఫలమైంది: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{1} {2}లో {0} ఎంచుకోబడ్డాయి</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>ఎన్‌కోడింగ్ మరియు పంక్తి ముగింపులు</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>UTF-8కి మార్చు</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>ఎన్‌కోడింగ్‌తో మళ్లీ తెరువు</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>ప్రస్తుత శీర్షిక</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>సేవ్ స్థితి</value>
+  </data>
 </root>

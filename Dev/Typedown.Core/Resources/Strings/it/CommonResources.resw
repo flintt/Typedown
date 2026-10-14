@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>La barra di stato mostra</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Salvato</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Non salvato</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Salvataggio automatico in pausa</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Fai clic per salvare</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Il documento è vuoto ma il file su disco no, e nessuna modifica lo ha svuotato, quindi il salvataggio automatico non ha sovrascritto il file.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Impossibile leggere questo file senza perdite (una codifica diversa da UTF-8?), quindi il salvataggio automatico non lo sovrascrive. Salvalo manualmente solo se il testo mostrato è corretto.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Scrittura del file non riuscita: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{0} di {1} {2} selezionati</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Codifica e fine riga</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Converti in UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Riapri con codifica</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Intestazione corrente</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Stato del salvataggio</value>
+  </data>
 </root>

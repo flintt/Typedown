@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>ແຖບສະຖານະສະແດງ</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>ບັນທຶກແລ້ວ</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>ຍັງບໍ່ໄດ້ບັນທຶກ</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>ການບັນທຶກອັດຕະໂນມັດຢຸດຊົ່ວຄາວ</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>ຄລິກເພື່ອບັນທຶກ</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>ເອກະສານຫວ່າງເປົ່າ ແຕ່ໄຟລ໌ໃນດິສກ໌ບໍ່ຫວ່າງ ແລະ ບໍ່ມີການແກ້ໄຂໃດເຮັດໃຫ້ມັນຫວ່າງ ດັ່ງນັ້ນການບັນທຶກອັດຕະໂນມັດຈຶ່ງບໍ່ໄດ້ຂຽນທັບໄຟລ໌.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>ບໍ່ສາມາດອ່ານໄຟລ໌ນີ້ໂດຍບໍ່ສູນເສຍໄດ້ (ການເຂົ້າລະຫັດອື່ນທີ່ບໍ່ແມ່ນ UTF-8?) ດັ່ງນັ້ນການບັນທຶກອັດຕະໂນມັດຈະບໍ່ຂຽນທັບມັນ. ບັນທຶກເອງສະເພາະເມື່ອຂໍ້ຄວາມທີ່ສະແດງຖືກຕ້ອງ.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>ຂຽນໄຟລ໌ບໍ່ສຳເລັດ: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>ເລືອກ {0} ຈາກ {1} {2}</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>ການເຂົ້າລະຫັດ ແລະ ທ້າຍແຖວ</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>ແປງເປັນ UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>ເປີດຄືນດ້ວຍການເຂົ້າລະຫັດ</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>ຫົວຂໍ້ປັດຈຸບັນ</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>ສະຖານະການບັນທຶກ</value>
+  </data>
 </root>

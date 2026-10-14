@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>La barra d’estat mostra</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Desat</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>No desat</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Desament automàtic en pausa</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Feu clic per desar</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>El document és buit però el fitxer del disc no ho és, i cap edició no l’ha buidat, així que el desament automàtic no ha sobreescrit el fitxer.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Aquest fitxer no s’ha pogut llegir sense pèrdues (una codificació diferent d’UTF-8?), així que el desament automàtic no el sobreescriu. Deseu-lo vosaltres només si el text que es mostra és correcte.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>No s’ha pogut escriure el fitxer: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{0} de {1} {2} seleccionats</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Codificació i finals de línia</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Converteix a UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Torna a obrir amb la codificació</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Encapçalament actual</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Estat del desament</value>
+  </data>
 </root>

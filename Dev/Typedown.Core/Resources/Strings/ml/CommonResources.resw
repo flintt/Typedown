@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>സ്റ്റാറ്റസ് ബാറിൽ കാണിക്കുന്നത്</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>സംരക്ഷിച്ചു</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>സംരക്ഷിച്ചിട്ടില്ല</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>ഓട്ടോ സേവ് താൽക്കാലികമായി നിർത്തി</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>സംരക്ഷിക്കാൻ ക്ലിക്ക് ചെയ്യുക</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>പ്രമാണം ശൂന്യമാണ്, എന്നാൽ ഡിസ്കിലെ ഫയൽ ശൂന്യമല്ല, ഒരു എഡിറ്റും അത് ശൂന്യമാക്കിയിട്ടുമില്ല, അതിനാൽ ഓട്ടോ സേവ് ഫയൽ മാറ്റിയെഴുതിയില്ല.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>ഈ ഫയൽ നഷ്ടമില്ലാതെ വായിക്കാനായില്ല (UTF-8 അല്ലാത്ത എൻകോഡിംഗ്?), അതിനാൽ ഓട്ടോ സേവ് ഇത് മാറ്റിയെഴുതില്ല. കാണിക്കുന്ന വാചകം ശരിയാണെങ്കിൽ മാത്രം സ്വയം സംരക്ഷിക്കുക.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>ഫയൽ എഴുതുന്നത് പരാജയപ്പെട്ടു: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{1} {2}-ൽ {0} തിരഞ്ഞെടുത്തു</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>എൻകോഡിംഗും വരിയുടെ അവസാനങ്ങളും</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>UTF-8 ലേക്ക് മാറ്റുക</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>എൻകോഡിംഗ് ഉപയോഗിച്ച് വീണ്ടും തുറക്കുക</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>നിലവിലെ തലക്കെട്ട്</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>സംരക്ഷണ നില</value>
+  </data>
 </root>

@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>Upau wa hali unaonyesha</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Imehifadhiwa</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Haijahifadhiwa</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Kuhifadhi kiotomatiki kumesitishwa</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Bofya ili kuhifadhi</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Hati ni tupu lakini faili kwenye diski si tupu, na hakuna uhariri ulioifanya tupu, kwa hivyo kuhifadhi kiotomatiki hakukuandika juu ya faili.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Faili hii haikuweza kusomwa bila kupoteza data (usimbaji tofauti na UTF-8?), kwa hivyo kuhifadhi kiotomatiki hakuiandiki juu. Ihifadhi mwenyewe tu ikiwa maandishi yanayoonyeshwa ni sahihi.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Kuandika faili kumeshindwa: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{0} kati ya {1} {2} vimechaguliwa</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Usimbaji na miisho ya mistari</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Geuza kuwa UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Fungua tena kwa usimbaji</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Kichwa cha sasa</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Hali ya kuhifadhi</value>
+  </data>
 </root>

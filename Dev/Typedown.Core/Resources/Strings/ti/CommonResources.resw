@@ -1056,4 +1056,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>ባር ኩነታት ዘርእዮ</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>ተዓቂቡ</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>ኣይተዓቀበን</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>ኣውቶማቲክ ምዕቃብ ተወንዚፉ</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>ንምዕቃብ ጠውቑ</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>እቲ ሰነድ ባዶ እዩ፡ እቲ ኣብ ዲስክ ዘሎ ፋይል ግን ባዶ ኣይኮነን፡ ዝኾነ ምእራም ድማ ባዶ ኣይገበሮን፡ ስለዚ ኣውቶማቲክ ምዕቃብ ነቲ ፋይል ኣይተክኦን።</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>እዚ ፋይል ብዘይ ምጥፋእ ክንበብ ኣይከኣለን (ካብ UTF-8 ዝተፈልየ ኢንኮዲንግ?)፡ ስለዚ ኣውቶማቲክ ምዕቃብ ኣይትክኦን። እቲ ዝርአ ጽሑፍ ቅኑዕ እንተኾይኑ ጥራይ ባዕልኹም ዕቀብዎ።</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>ፋይል ምጽሓፍ ኣይተሳኽዐን፦ {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>ካብ {1} {2} {0} ተመሪጹ</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>ኢንኮዲንግን መወዳእታ መስመራትን</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>ናብ UTF-8 ቀይር</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>ብኢንኮዲንግ እንደገና ክፈት</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>ህሉው ኣርእስቲ</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>ኩነታት ምዕቃብ</value>
+  </data>
 </root>

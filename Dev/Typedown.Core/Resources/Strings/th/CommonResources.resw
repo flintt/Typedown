@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>แถบสถานะแสดง</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>บันทึกแล้ว</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>ยังไม่ได้บันทึก</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>หยุดบันทึกอัตโนมัติชั่วคราว</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>คลิกเพื่อบันทึก</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>เอกสารว่างเปล่า แต่ไฟล์บนดิสก์ไม่ว่าง และไม่มีการแก้ไขใดทำให้ว่าง การบันทึกอัตโนมัติจึงไม่ได้เขียนทับไฟล์</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>ไม่สามารถอ่านไฟล์นี้โดยไม่สูญเสียข้อมูลได้ (การเข้ารหัสอื่นที่ไม่ใช่ UTF-8?) การบันทึกอัตโนมัติจึงไม่เขียนทับไฟล์นี้ บันทึกเองเฉพาะเมื่อข้อความที่แสดงถูกต้องเท่านั้น</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>เขียนไฟล์ไม่สำเร็จ: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>เลือก {0} จาก {1} {2}</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>การเข้ารหัสและการขึ้นบรรทัดใหม่</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>แปลงเป็น UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>เปิดใหม่ด้วยการเข้ารหัส</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>หัวเรื่องปัจจุบัน</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>สถานะการบันทึก</value>
+  </data>
 </root>

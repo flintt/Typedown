@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>स्थिति पट्टी में दिखाएँ</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>सहेजा गया</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>सहेजा नहीं गया</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>स्वतः सहेजना रुका हुआ है</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>सहेजने के लिए क्लिक करें</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>दस्तावेज़ खाली है लेकिन डिस्क पर फ़ाइल खाली नहीं है, और किसी संपादन ने उसे खाली नहीं किया, इसलिए स्वतः सहेजने ने फ़ाइल को अधिलेखित नहीं किया।</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>यह फ़ाइल बिना हानि के पढ़ी नहीं जा सकी (UTF-8 के अलावा कोई एन्कोडिंग?), इसलिए स्वतः सहेजना इसे अधिलेखित नहीं करता। केवल तभी स्वयं सहेजें जब दिखाया गया पाठ सही हो।</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>फ़ाइल लिखना विफल रहा: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{1} {2} में से {0} चयनित</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>एन्कोडिंग और पंक्ति के अंत</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>UTF-8 में बदलें</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>एन्कोडिंग चुनकर फिर से खोलें</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>वर्तमान शीर्षक</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>सहेजने की स्थिति</value>
+  </data>
 </root>

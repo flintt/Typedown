@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>Лентата на състоянието показва</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Записано</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Не е записано</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Автоматичното записване е на пауза</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Щракнете, за да запишете</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Документът е празен, но файлът на диска не е, и никоя редакция не го е изпразнила, затова автоматичното записване не презаписа файла.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Този файл не можа да бъде прочетен без загуби (кодиране, различно от UTF-8?), затова автоматичното записване не го презаписва. Запишете го ръчно само ако показаният текст е правилен.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Записването на файла не бе успешно: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>Избрани {0} от {1} {2}</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Кодиране и край на редовете</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Преобразуване в UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Повторно отваряне с кодиране</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Текущо заглавие</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Състояние на записа</value>
+  </data>
 </root>

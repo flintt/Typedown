@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>ಸ್ಥಿತಿ ಪಟ್ಟಿಯಲ್ಲಿ ತೋರಿಸು</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>ಉಳಿಸಲಾಗಿದೆ</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>ಉಳಿಸಿಲ್ಲ</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>ಸ್ವಯಂ ಉಳಿಕೆಯನ್ನು ವಿರಾಮಗೊಳಿಸಲಾಗಿದೆ</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>ಉಳಿಸಲು ಕ್ಲಿಕ್ ಮಾಡಿ</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>ಡಾಕ್ಯುಮೆಂಟ್ ಖಾಲಿಯಾಗಿದೆ, ಆದರೆ ಡಿಸ್ಕ್‌ನಲ್ಲಿರುವ ಫೈಲ್ ಖಾಲಿಯಾಗಿಲ್ಲ, ಮತ್ತು ಯಾವುದೇ ಸಂಪಾದನೆ ಅದನ್ನು ಖಾಲಿ ಮಾಡಿಲ್ಲ, ಆದ್ದರಿಂದ ಸ್ವಯಂ ಉಳಿಕೆ ಫೈಲ್ ಅನ್ನು ಮೇಲ್ಬರೆಯಲಿಲ್ಲ.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>ಈ ಫೈಲ್ ಅನ್ನು ನಷ್ಟವಿಲ್ಲದೆ ಓದಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ (UTF-8 ಅಲ್ಲದ ಎನ್‌ಕೋಡಿಂಗ್?), ಆದ್ದರಿಂದ ಸ್ವಯಂ ಉಳಿಕೆ ಅದನ್ನು ಮೇಲ್ಬರೆಯುವುದಿಲ್ಲ. ತೋರಿಸಿದ ಪಠ್ಯ ಸರಿಯಾಗಿದ್ದರೆ ಮಾತ್ರ ನೀವೇ ಉಳಿಸಿ.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>ಫೈಲ್ ಬರೆಯುವುದು ವಿಫಲವಾಗಿದೆ: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{1} {2} ಪೈಕಿ {0} ಆಯ್ಕೆಯಾಗಿದೆ</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>ಎನ್‌ಕೋಡಿಂಗ್ ಮತ್ತು ಸಾಲಿನ ಅಂತ್ಯಗಳು</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>UTF-8 ಗೆ ಪರಿವರ್ತಿಸಿ</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>ಎನ್‌ಕೋಡಿಂಗ್‌ನೊಂದಿಗೆ ಮತ್ತೆ ತೆರೆಯಿರಿ</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>ಪ್ರಸ್ತುತ ಶೀರ್ಷಿಕೆ</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>ಉಳಿಕೆ ಸ್ಥಿತಿ</value>
+  </data>
 </root>

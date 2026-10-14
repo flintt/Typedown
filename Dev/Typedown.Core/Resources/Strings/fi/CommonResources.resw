@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>Tilarivillä näytetään</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Tallennettu</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Ei tallennettu</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Automaattinen tallennus keskeytetty</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Tallenna napsauttamalla</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Asiakirja on tyhjä, mutta levyllä oleva tiedosto ei ole, eikä mikään muokkaus tyhjentänyt sitä, joten automaattinen tallennus ei korvannut tiedostoa.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Tätä tiedostoa ei voitu lukea häviöttömästi (muu merkistökoodaus kuin UTF-8?), joten automaattinen tallennus ei korvaa sitä. Tallenna se itse vain, jos näytetty teksti on oikein.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Tiedoston kirjoittaminen epäonnistui: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>Valittu {0} / {1} {2}</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Merkistökoodaus ja rivinvaihdot</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Muunna UTF-8:ksi</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Avaa uudelleen merkistökoodauksella</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Nykyinen otsikko</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Tallennuksen tila</value>
+  </data>
 </root>

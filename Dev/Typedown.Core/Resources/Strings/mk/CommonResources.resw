@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>Лентата на статусот прикажува</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Зачувано</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Не е зачувано</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Автоматското зачувување е паузирано</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Кликнете за да зачувате</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Документот е празен, но датотеката на дискот не е, и ниедно уредување не го испразнило, па автоматското зачувување не ја презапиша датотеката.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Оваа датотека не можеше да се прочита без загуба (кодирање различно од UTF-8?), па автоматското зачувување не ја презапишува. Зачувајте ја сами само ако прикажаниот текст е точен.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Запишувањето на датотеката не успеа: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>Избрани {0} од {1} {2}</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Кодирање и крај на редови</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Претвори во UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Повторно отвори со кодирање</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Тековен наслов</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Состојба на зачувување</value>
+  </data>
 </root>

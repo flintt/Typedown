@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>Statusbalk wys</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Gestoor</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Nie gestoor nie</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Outo-stoor is onderbreek</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Klik om te stoor</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Die dokument is leeg, maar die lêer op skyf is nie, en geen wysiging het dit leeg gemaak nie, dus het outo-stoor nie die lêer oorskryf nie.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Hierdie lêer kon nie sonder verlies gelees word nie (’n ander enkodering as UTF-8?), dus oorskryf outo-stoor dit nie. Stoor dit self slegs as die teks wat gewys word reg is.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Kon nie die lêer skryf nie: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{0} van {1} {2} gekies</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Enkodering en reëleindes</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Skakel om na UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Heropen met enkodering</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Huidige opskrif</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Stoorstatus</value>
+  </data>
 </root>

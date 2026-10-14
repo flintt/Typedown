@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>В строке состояния</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Сохранено</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Не сохранено</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Автосохранение приостановлено</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Нажмите, чтобы сохранить</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Документ пуст, но файл на диске — нет, и ни одна правка его не очистила, поэтому автосохранение не перезаписало файл.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Этот файл не удалось прочитать без потерь (кодировка не UTF-8?), поэтому автосохранение его не перезаписывает. Сохраняйте вручную, только если показанный текст верен.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Не удалось записать файл: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>Выбрано {0} из {1} {2}</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Кодировка и концы строк</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Преобразовать в UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Открыть заново в кодировке</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Текущий заголовок</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Состояние сохранения</value>
+  </data>
 </root>

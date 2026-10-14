@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>Statusleiste zeigt</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Gespeichert</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Nicht gespeichert</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Automatisches Speichern pausiert</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Klicken zum Speichern</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Das Dokument ist leer, die Datei auf dem Datenträger aber nicht, und keine Bearbeitung hat es geleert. Daher hat das automatische Speichern die Datei nicht überschrieben.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Diese Datei konnte nicht verlustfrei gelesen werden (eine andere Codierung als UTF-8?). Daher überschreibt das automatische Speichern sie nicht. Speichern Sie selbst nur, wenn der angezeigte Text stimmt.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Die Datei konnte nicht geschrieben werden: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{0} von {1} {2} ausgewählt</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Codierung und Zeilenenden</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>In UTF-8 konvertieren</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Mit Codierung erneut öffnen</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Aktuelle Überschrift</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Speicherstatus</value>
+  </data>
 </root>

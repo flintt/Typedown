@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>Ipinapakita ng status bar</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Nai-save</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Hindi naka-save</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Naka-pause ang auto save</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>I-click para i-save</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Walang laman ang dokumento pero hindi ang file sa disk, at walang edit na nag-alis ng laman nito, kaya hindi pinatungan ng auto save ang file.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Hindi mabasa ang file na ito nang walang nawawala (encoding na hindi UTF-8?), kaya hindi ito pinapatungan ng auto save. I-save ito nang mano-mano kung tama lang ang ipinapakitang teksto.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Nabigo ang pagsulat ng file: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{0} sa {1} {2} ang napili</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Encoding at line ending</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>I-convert sa UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Buksan muli gamit ang encoding</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Kasalukuyang heading</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Status ng pag-save</value>
+  </data>
 </root>

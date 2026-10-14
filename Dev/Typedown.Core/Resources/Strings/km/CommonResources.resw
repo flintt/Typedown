@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>របារស្ថានភាពបង្ហាញ</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>បានរក្សាទុក</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>មិនទាន់រក្សាទុក</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>ការរក្សាទុកស្វ័យប្រវត្តិត្រូវបានផ្អាក</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>ចុចដើម្បីរក្សាទុក</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>ឯកសារទទេ ប៉ុន្តែឯកសារនៅលើថាសមិនទទេ ហើយគ្មានការកែណាមួយបានធ្វើឱ្យវាទទេទេ ដូច្នេះការរក្សាទុកស្វ័យប្រវត្តិមិនបានសរសេរជាន់ពីលើឯកសារទេ។</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>មិនអាចអានឯកសារនេះដោយគ្មានការបាត់បង់បានទេ (ការអ៊ិនកូដក្រៅពី UTF-8?) ដូច្នេះការរក្សាទុកស្វ័យប្រវត្តិមិនសរសេរជាន់ពីលើវាទេ។ រក្សាទុកវាដោយខ្លួនឯង លុះត្រាតែអត្ថបទដែលបង្ហាញត្រឹមត្រូវ។</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>ការសរសេរឯកសារបានបរាជ័យ៖ {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>បានជ្រើស {0} ក្នុងចំណោម {1} {2}</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>ការអ៊ិនកូដ និងចុងបន្ទាត់</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>បម្លែងទៅ UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>បើកឡើងវិញជាមួយការអ៊ិនកូដ</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>ចំណងជើងបច្ចុប្បន្ន</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>ស្ថានភាពរក្សាទុក</value>
+  </data>
 </root>

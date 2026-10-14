@@ -1057,4 +1057,43 @@
   <data name="Stats.ShownInStatusBar" xml:space="preserve">
     <value>Ibha yesimo ibonisa</value>
   </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Kulondoloziwe</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Akulondoloziwe</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Ukulondoloza okuzenzakalelayo kumisiwe</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Chofoza ukuze ulondoloze</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Idokhumenti ayinalutho kodwa ifayela kudiski linokuthile, futhi akukho ukuhlela okuyenze ayaba nalutho, ngakho ukulondoloza okuzenzakalelayo akuzange kubhale phezu kwefayela.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Leli fayela alikwazanga ukufundwa ngaphandle kokulahlekelwa (ukubhala ngekhodi okungeyona i-UTF-8?), ngakho ukulondoloza okuzenzakalelayo akubhali phezu kwalo. Lilondoloze wena kuphela uma umbhalo oboniswayo ulungile.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Ukubhala ifayela kuhlulekile: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>Kukhethwe {0} kokungu-{1} {2}</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Ukubhala ngekhodi neziphetho zemigqa</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Guqulela ku-UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Vula futhi ngokubhala ngekhodi</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Isihloko samanje</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Isimo sokulondoloza</value>
+  </data>
 </root>
