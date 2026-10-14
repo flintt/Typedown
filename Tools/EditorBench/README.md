@@ -202,7 +202,11 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   paragraphs quoted the third, and a heading command on such a selection did nothing). A list in a selection made
   into a list gives its items to the new list instead of becoming one item holding the whole list ("1. - a", with
   the paragraph after it as item 2), and lists of the kind chosen, all of the selection, stop being lists. Two
-  Store reviews (the second: "changing the list format easily turns the text after it into a quote").
+  Store reviews (the second: "changing the list format easily turns the text after it into a quote"). After every
+  command the page's top-level blocks must be the document's, each once and in order, and a letter typed at the end
+  of the last block on the page must land at the end of the document: a render that replaced the page only up to a
+  stale key drew the block after the selection twice while the Markdown was right. Enter over a keyboard selection
+  shares that render and is checked the same way.
 - `codeblock-save-check.js` — code typed into a code block is in the text a save writes while the caret is still in
   the block, in a short document and in one long enough for the text report to be throttled (FlushContent brings it
   up to date). A Store review on 1.2.18 lost the code block when Save came straight after it. Fails against a bundle
