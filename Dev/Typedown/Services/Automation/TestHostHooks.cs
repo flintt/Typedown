@@ -741,6 +741,63 @@ namespace Typedown.Services.Automation
                     Walk(app.XamlRoot?.Content as global::Microsoft.UI.Xaml.DependencyObject);
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["indicators"] = found };
                 })));
+            // The accent the standard controls draw with, as they draw it: a switch turned on, an accent button (the
+            // dialogs' default button has its style) and a ticked check box are put up in a popup over the window, their
+            // colours read from what WinUI drew, and taken down again. The settings and the dialogs stayed the system
+            // blue under every theme (TH07).
+            methods.Add(new MethodDescriptor("test.theme.controls", null, "test.theme.controls/1", async (c, ct) =>
+                await await Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), async app =>
+                {
+                    string Colour(global::Microsoft.UI.Xaml.Media.Brush brush) => brush switch
+                    {
+                        null => null,
+                        global::Microsoft.UI.Xaml.Media.SolidColorBrush solid => solid.Color.ToString(),
+                        _ => brush.GetType().Name,
+                    };
+                    var toggle = new global::Microsoft.UI.Xaml.Controls.ToggleSwitch { IsOn = true };
+                    var button = new global::Microsoft.UI.Xaml.Controls.Button { Content = "Accent" };
+                    button.Style = (global::Microsoft.UI.Xaml.Style)global::Microsoft.UI.Xaml.Application.Current.Resources["AccentButtonStyle"];
+                    var check = new global::Microsoft.UI.Xaml.Controls.CheckBox { IsChecked = true, Content = "Check" };
+                    var panel = new global::Microsoft.UI.Xaml.Controls.StackPanel { Children = { toggle, button, check } };
+                    var popup = new global::Microsoft.UI.Xaml.Controls.Primitives.Popup { XamlRoot = app.XamlRoot, Child = panel };
+                    popup.IsOpen = true;
+                    try
+                    {
+                        await System.Threading.Tasks.Task.Delay(600, ct);
+                        var parts = new Newtonsoft.Json.Linq.JObject();
+                        void Walk(global::Microsoft.UI.Xaml.DependencyObject node, string owner)
+                        {
+                            if (node is global::Microsoft.UI.Xaml.FrameworkElement fe && !string.IsNullOrEmpty(fe.Name))
+                            {
+                                var fill = node switch
+                                {
+                                    global::Microsoft.UI.Xaml.Shapes.Shape shape => Colour(shape.Fill),
+                                    global::Microsoft.UI.Xaml.Controls.Border border => Colour(border.Background),
+                                    global::Microsoft.UI.Xaml.Controls.Grid grid => Colour(grid.Background),
+                                    global::Microsoft.UI.Xaml.Controls.ContentPresenter presenter => Colour(presenter.Background),
+                                    _ => null,
+                                };
+                                if (fill != null && fe.Opacity > 0) parts[$"{owner}.{fe.Name}"] = fill;
+                            }
+                            for (var i = 0; i < global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(node); i++)
+                                Walk(global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChild(node, i), owner);
+                        }
+                        Walk(toggle, "toggle");
+                        Walk(check, "check");
+                        return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject
+                        {
+                            ["accentBrushes"] = Core.Utilities.AppAccent.BrushCount,
+                            ["current"] = Core.Utilities.AppAccent.Current?.ToString(),
+                            ["button"] = Colour(button.Background),
+                            ["buttonText"] = Colour(button.Foreground),
+                            ["parts"] = parts,
+                        };
+                    }
+                    finally
+                    {
+                        popup.IsOpen = false;
+                    }
+                })));
             // File > Upload local images on the window's active document, without its dialogs; returns the result.
             methods.Add(new MethodDescriptor("test.images.uploadAll", null, "test.images.uploadAll/1", async (c, ct) =>
                 await await Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), async app =>

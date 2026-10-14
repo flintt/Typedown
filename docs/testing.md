@@ -1,4 +1,4 @@
-# 测试
+﻿# 测试
 
 Typedown 的测试分几层，越往下越接近真实使用，也越慢、越依赖环境。改动落在哪一层，就至少跑那一层；发布前按 [Windows 真机验证](windows-verification.md) 走一遍。
 
@@ -185,6 +185,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | MN02 | a window minimized a while and restored: a document opened at once is shown within 5 s and takes keys |
 | TH05 | the editor follows Dark, Black, Mica off and on, then Light (it stayed dark under a light window) |
 | TH06 | a custom theme switched back to Light or Dark: the editor page, the line beside the side pane, the side pane and the status bar are drawn as before, and the editor is dark under Dark |
+| TH07 | the settings' and the dialogs' controls (a switch, the accent button, a check box) take a custom theme's accent, with readable text on it (dark on Gruvbox's yellow), and the system accent again without one |
 | MN03 | minimized, written to, restored without activation: the editor's web view gets its size back |
 | MN04 | F11 in and out of full screen, then minimized and brought back as a person does: the window works |
 | MN05 | F11 in and out of full screen, minimized, then a file opened from Explorer: the window comes back working |
@@ -259,6 +260,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | `test.dialog.colours` | `windowId` | The open dialog's colours and the custom theme's, to tell whether the dialog wears the theme. | TestHostHooks.cs |
 | `test.outline.state` | `windowId` | The outline's expansion as the tree holds it (its nodes) and as the model holds it, row by row: the two disagreeing after a tab switch is how a heading's children came to be hidden with nobody collapsing it. | TestHostHooks.cs |
 | `test.theme.chrome` | `windowId` | The colours a custom theme changes around the editor, as they are now: the line between the side pane and the editor, the side pane, the menu bar and the status bar. A theme switched off has to put back what the built-in theme draws (TH06). | TestHostHooks.cs |
+| `test.theme.controls` | `windowId` | The accent the standard controls draw with, as drawn: a switch turned on, an accent button and a ticked check box put up in a popup over the window, their fills read, the popup taken down (TH07). | TestHostHooks.cs |
 | `test.pane.accent` | `windowId` | The colours the side pane marks what is chosen with: every selection indicator drawn in it (the bar under Files/Outline, the pill of each outline and folder-tree row), by where it is, with its fill. | TestHostHooks.cs |
 | `test.images.uploadAll` | `windowId` | File > Upload local images on the window's active document, without its dialogs; returns the result. | TestHostHooks.cs |
 <!-- END generated: test-methods -->

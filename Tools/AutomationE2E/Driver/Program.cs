@@ -188,6 +188,7 @@ internal static partial class Program
             await Case("MN02 a window minimized a while and restored: a document opened at once is shown within 5 s and takes keys", MN02);
             await Case("TH05 the editor follows Dark, Black, Mica off and on, then Light (it stayed dark under a light window)", TH05);
             await Case("TH06 a custom theme switched back to Light or Dark: the editor page, the line beside the side pane, the side pane and the status bar are drawn as before, and the editor is dark under Dark", TH06);
+            await Case("TH07 the settings' and the dialogs' controls (a switch, the accent button, a check box) take a custom theme's accent, with readable text on it, and the system accent again without one", TH07);
             await Case("MN03 minimized, written to, restored without activation: the editor's web view gets its size back", MN03);
             await Case("MN04 F11 in and out of full screen, then minimized and brought back as a person does: the window works", MN04);
             await Case("MN05 F11 in and out of full screen, minimized, then a file opened from Explorer: the window comes back working", MN05);
@@ -2091,6 +2092,45 @@ internal static partial class Program
         {
             try { await c.Call("test.theme.apply", new { windowId, builtIn = "Default" }); } catch { }
             try { await c.Call("window.setView", new { windowId, sidePane = new { open = (bool)view["sidePane"]!["open"]!, page = (string)view["sidePane"]!["page"]! } }); } catch { }
+        }
+    }
+
+    private static async Task TH07(List<string> notes)
+    {
+        using var c = await Session("e2e TH07");
+        var id = await Open(c, Fixture("th07.md", "# TH07\n\nText\n"));
+        var windowId = await WindowIdOf(c, id);
+        async Task<(string? Button, string? Text, List<string> Toggle, List<string> Check)> Controls(string when)
+        {
+            await Task.Delay(800);
+            var r = await c.Call("test.theme.controls", new { windowId });
+            notes.Add($"{when}: {r.ToString(Newtonsoft.Json.Formatting.None)}");
+            var parts = ((JObject)r["parts"]!).Properties().ToList();
+            return ((string?)r["button"], (string?)r["buttonText"],
+                parts.Where(p => p.Name.StartsWith("toggle.")).Select(p => (string)p.Value!).ToList(),
+                parts.Where(p => p.Name.StartsWith("check.")).Select(p => (string)p.Value!).ToList());
+        }
+        try
+        {
+            const string Dracula = "#FFBD93F9", Gruvbox = "#FFFABD2F";
+            await c.Call("test.theme.apply", new { windowId, customTheme = "dracula" });
+            var dracula = await Controls("dracula");
+            Check(dracula.Button == Dracula, $"dracula: the accent button is its accent ({dracula.Button})");
+            Check(dracula.Toggle.Contains(Dracula), "dracula: the switch turned on is its accent");
+            Check(dracula.Check.Contains(Dracula), "dracula: the ticked check box is its accent");
+            Check(dracula.Text == "#FFFFFFFF", $"dracula: white text on its purple ({dracula.Text})");
+            await c.Call("test.theme.apply", new { windowId, customTheme = "gruvbox-dark" });
+            var gruvbox = await Controls("gruvbox-dark");
+            Check(gruvbox.Button == Gruvbox, $"gruvbox: the accent button is its yellow ({gruvbox.Button})");
+            Check(gruvbox.Text == "#FF000000", $"gruvbox: dark text on its yellow ({gruvbox.Text})");
+            await c.Call("test.theme.apply", new { windowId, builtIn = "Default" });
+            var plain = await Controls("default");
+            Check(plain.Button is not null && plain.Button != Dracula && plain.Button != Gruvbox, $"no custom theme: the system accent again ({plain.Button})");
+            Check(plain.Toggle.Contains(plain.Button!), "no custom theme: the switch is the system accent too");
+        }
+        finally
+        {
+            try { await c.Call("test.theme.apply", new { windowId, builtIn = "Default" }); } catch { }
         }
     }
 

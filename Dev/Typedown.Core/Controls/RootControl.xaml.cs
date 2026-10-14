@@ -41,6 +41,10 @@ namespace Typedown.Core.Controls
             // navigation — which is why UIViewModel rebuilds the window title on a language change.
             disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.Language)).Subscribe(_ => ReloadSettingsPage()));
             disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.ShortcutSettings)).Subscribe(_ => RegisterSettingsShortcut()));
+            // The controls' accent (settings, dialogs) in the custom theme's, as the editor and the side pane have it.
+            disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.CustomTheme))
+                .StartWith(Settings.CustomTheme)
+                .Subscribe(name => AppAccent.Apply(ThemeFiles.Find(name as string)?.Accent)));
             Frame.Navigated += OnFrameNavigated;
             Frame.Navigate(typeof(MainPage), null);
         }
