@@ -175,6 +175,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | HP03 | the last tab closed leaves the window with the home page (closed again, the window goes); a session whose files are gone shows it; with the switch off a blank document |
 | HP04 | with files open, File > Home, the home button and Ctrl+Shift+H show the home page in one blank tab, the documents left alone; an automation write into it hides it with the text written |
 | HP05 | the home page hidden by typing, and by its New document button, leaves the keys in the editor |
+| HP06 | letters, Enter and an input method's text typed at once after Ctrl+Shift+H all reach the home page's document in order, a new paragraph at the Enter; the next key goes to the editor |
 | WP02 | pasted web pictures: one behind hotlink protection is fetched with the page as referrer, a page that is not a picture is kept on the web and said, and an untitled document saved into a folder takes its pictures along |
 | EX02 | an export says where it was written, with buttons to open it, and goes when closed; with no action after export, nothing shows |
 | TB01 | the table toolbar's Resize table opens with the table's own size; Cancel leaves the table as it was; OK resizes it |

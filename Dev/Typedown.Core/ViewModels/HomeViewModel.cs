@@ -102,12 +102,21 @@ namespace Typedown.Core.ViewModels
             Update();
         }
 
+        // True from the moment the home page is asked for until its tab is there: the page is shown (and takes the
+        // keyboard) at once, so keys typed right after the shortcut do not go to the document being left.
+        private bool opening;
+
+        /// <summary>The home page is shown but its blank tab is still being made (typing waits for it).</summary>
+        public bool IsOpening => opening;
+
         private async Task ShowHomeAsync()
         {
             try
             {
                 var tabs = Tabs;
                 if (tabs == null) return;
+                opening = true;
+                Update();
                 if (!ActiveIsBlank)
                 {
                     // A blank tab there already is used; otherwise a new one. The open documents are left as they are.
@@ -123,6 +132,14 @@ namespace Typedown.Core.ViewModels
             catch (Exception ex)
             {
                 Log.Debug($"home: {ex.Message}");
+            }
+            finally
+            {
+                if (opening)
+                {
+                    opening = false;
+                    Update();
+                }
             }
         }
 
@@ -144,7 +161,7 @@ namespace Typedown.Core.ViewModels
             // Written in, a file opened in it: the home page does not come back on this document (an undo to empty
             // leaves the reader in the editor).
             if (tab != null && tab.ShowHome && !blank) tab.ShowHome = false;
-            IsVisible = tab != null && tab.ShowHome && blank;
+            IsVisible = opening || (tab != null && tab.ShowHome && blank);
         }
 
         public void Dispose()

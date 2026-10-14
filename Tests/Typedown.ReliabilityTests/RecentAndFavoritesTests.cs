@@ -123,5 +123,13 @@ namespace Typedown.ReliabilityTests
             Assert.AreEqual(0, store.Items.Count);
             Assert.AreEqual("{ not json", File.ReadAllText(file + ".bad"));
         }
+
+        [TestMethod]
+        public void TypingOnTheHomePageKeepsEnterAsAParagraphAndDropsTab()
+        {
+            Assert.AreEqual("ab\n\ncd中文", TypedText.AsDocumentText("ab\rcd中文", sourceMode: false));
+            Assert.AreEqual("ab\ncd", TypedText.AsDocumentText("ab\r\ncd", sourceMode: true));
+            Assert.AreEqual("ab", TypedText.AsDocumentText("a\tb", sourceMode: false));
+        }
 }
 }
