@@ -191,6 +191,12 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   counts — measuring up to first paint once had me reporting a win that could not be felt. It switches with
   the text the editor reports back, not the file as written, because that is what the host stores and hands
   over, and anything else is a load of a different document.
+- `paragraph-command-check.js` — paragraph commands (the Paragraph menu, its shortcuts, the block menu) change what
+  is selected and nothing around it. A heading made in a paragraph of several lines (single line breaks) takes only
+  the line the caret is on and leaves the lines around it as paragraphs; it used to join the whole paragraph into
+  the heading. A selection made with Shift+Down ends at the start of the next block, and one started at the very end
+  of a block begins in the block before: neither block has anything selected and neither is changed (quoting two
+  paragraphs quoted the third, and a heading command on such a selection did nothing). A Store review.
 - `codeblock-save-check.js` — code typed into a code block is in the text a save writes while the caret is still in
   the block, in a short document and in one long enough for the text report to be throttled (FlushContent brings it
   up to date). A Store review on 1.2.18 lost the code block when Save came straight after it. Fails against a bundle
