@@ -201,6 +201,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | ED01 | in the visual editor Ctrl+Shift+Right selects by words and Ctrl+Shift+Down to the end of the paragraph, Ctrl+Left/Right move without selecting, Ctrl+F opens the find bar, and the wheel scrolls the page |
 | ED02 | Shift+Enter and Alt+Enter in a table cell put a line break in that cell |
 | BL01 | blank lines survive a visual edit and a save: 1 at the start, 2, 4, 2, 3, 5 and 2 between blocks, 1 at the end |
+| BL02 | Settings > Editor > "Show extra blank lines": on, empty lines keep their height in reading mode and an HTML export; off (the default), both collapse them as before |
 | MN03 | minimized, written to, restored without activation: the editor's web view gets its size back |
 | MN04 | F11 in and out of full screen, then minimized and brought back as a person does: the window works |
 | MN05 | F11 in and out of full screen, minimized, then a file opened from Explorer: the window comes back working |

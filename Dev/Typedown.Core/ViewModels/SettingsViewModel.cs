@@ -47,6 +47,11 @@ namespace Typedown.Core.ViewModels
         public string ListIndentation { get => GetSettingValue("1"); set => SetSettingValue(value); }
         /// <summary>Pad table cells so columns line up in the source (upstream #24/#70 ask for a way to turn this off).</summary>
         public bool TableAlignColumns { get => GetSettingValue(true); set => SetSettingValue(value); }
+        /// <summary>
+        /// Extra blank lines (shown as empty paragraphs) keep a line's height in reading mode and in HTML and PDF exports
+        /// too, as they do while editing (todo S8). Display only: the file is written the same either way.
+        /// </summary>
+        public bool ShowBlankLines { get => GetSettingValue(false); set => SetSettingValue(value); }
         /// <summary>Show the paragraph type marker ("P", "H1"...) left of the active block (upstream #45).</summary>
         public bool ShowParagraphMarker { get => GetSettingValue(true); set => SetSettingValue(value); }
         /// <summary>
@@ -240,6 +245,7 @@ namespace Typedown.Core.ViewModels
             "PreferLooseListItem",
             "ListIndentation",
             "TableAlignColumns",
+            "ShowBlankLines",
             "ShowParagraphMarker",
             "ReadOnly",
             "CustomCss",

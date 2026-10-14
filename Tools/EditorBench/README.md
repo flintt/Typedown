@@ -90,6 +90,10 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   list item; types one key in visual mode on a sample of them; and pins what an edit of the blank lines saves
   (Enter adds an empty paragraph, two lines; Backspace in one removes it, and the run is then written the ordinary
   way). It failed on 679 of 1053 documents before the change.
+- `blanklines-show-check.js` — the "show extra blank lines" setting (Settings > Editor, `showBlankLines`, off by
+  default). An empty paragraph has a line's height while editing; reading mode and the HTML/PDF export collapsed it
+  (`<p></p>`). With the setting on it keeps that height in reading mode and is exported as `<p><br></p>`; off, both are
+  as before; the text handed back is the same either way. Before the setting the "on" half failed.
 - `style-check.js` — lays out `style-fixture.md` (headings, lists, tables, code, quote, maths, footnote, raw
   html) and measures every element: position, size, font, weight, colour, background. A block passes if it is
   within 2px of where it was and within 1px of its size; fonts and colours must match exactly. `--update`

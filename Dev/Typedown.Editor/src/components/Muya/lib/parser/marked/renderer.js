@@ -130,6 +130,9 @@ Renderer.prototype.listitem = function (text, checked) {
 }
 
 Renderer.prototype.paragraph = function (text) {
+  // An empty paragraph is an extra blank line of the source (or an empty line the reader made with Enter). With the
+  // "show extra blank lines" setting it keeps a line's height, as it has in the editor; otherwise it collapses.
+  if (text === '' && this.options.showBlankLines) return '<p><br></p>\n'
   return '<p>' + text + '</p>\n'
 }
 
