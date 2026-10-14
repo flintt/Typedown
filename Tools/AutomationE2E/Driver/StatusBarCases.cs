@@ -219,7 +219,7 @@ internal static partial class Program
             ?? throw new CaseFailed($"no {automationId}");
         try
         {
-            await c.Call("window.setView", new { windowId, statusBar = true, mode = "visual", bounds = new { width = 1400 } });
+            await c.Call("window.setView", new { windowId, statusBar = true, mode = "visual", bounds = new { x = 20, y = 20, width = 1400, height = 800 } });
             await c.Call("test.settings.set", new { windowId, name = "StatusBarHiddenItems", value = "" });
             await Task.Delay(1200);
             var shown = BarText(window, "StatusBarFileFormat");
@@ -274,7 +274,7 @@ internal static partial class Program
         var view = await c.Call("window.getView", new { windowId });
         try
         {
-            await c.Call("window.setView", new { windowId, statusBar = true, mode = "visual", bounds = new { width = 1400 }, sidePane = new { open = false, page = "files" } });
+            await c.Call("window.setView", new { windowId, statusBar = true, mode = "visual", bounds = new { x = 20, y = 20, width = 1400, height = 800 }, sidePane = new { open = false, page = "files" } });
             await ClickEditorText(c, windowId, window, "text two");
             await Task.Delay(1200);
             var heading = BarText(window, "StatusBarHeading");
@@ -304,7 +304,7 @@ internal static partial class Program
             Deep.First(AutomationElement.FromHandle(window), new PropertyCondition(AutomationElement.AutomationIdProperty, automationId)) is { } e && !e.Current.IsOffscreen && e.Current.BoundingRectangle.Width > 0;
         try
         {
-            await c.Call("window.setView", new { windowId, statusBar = true, mode = "visual", bounds = new { width = 1400 } });
+            await c.Call("window.setView", new { windowId, statusBar = true, mode = "visual", bounds = new { x = 20, y = 20, width = 1400, height = 800 } });
             await c.Call("test.settings.set", new { windowId, name = "StatusBarHiddenItems", value = "" });
             await ClickEditorText(c, windowId, window, "text");
             await Task.Delay(1200);
@@ -322,7 +322,7 @@ internal static partial class Program
             Send(Key(0x1B, false), Key(0x1B, true));
             await Task.Delay(400);
             // Right-click: the count turned off.
-            await c.Call("window.setView", new { windowId, bounds = new { width = 1400 } });
+            await c.Call("window.setView", new { windowId, bounds = new { x = 20, y = 20, width = 1400, height = 800 } });
             await Task.Delay(1200);
             await Click(window, Deep.First(AutomationElement.FromHandle(window), new PropertyCondition(AutomationElement.AutomationIdProperty, "StatusBarWordCount"))!, Mouse.Right);
             await Task.Delay(700);
