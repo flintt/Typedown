@@ -93,8 +93,8 @@ namespace Typedown.Core.Utilities
         private static readonly List<Func<AppViewModel, IEnumerable<HomeSection>>> homeSections = new();
 
         /// <summary>
-        /// Sections for the home page, after its own (favourites, recent files and folders) and before its line of
-        /// shortcuts; made for each window's home page when it first loads (a page made again - back from the settings
+        /// Sections for the home page, under its New and Open buttons and above its own lists (favourites, recent files
+        /// and folders), so they are in view without scrolling; made for each window's home page when it first loads (a page made again - back from the settings
         /// page - asks again), in the order the builders were added.
         /// </summary>
         public static void AddHomeSections(Func<AppViewModel, IEnumerable<HomeSection>> build)
@@ -288,8 +288,9 @@ namespace Typedown.Core.Utilities
 
     /// <summary>
     /// A section an edition adds to the home page (<see cref="EditionHooks.AddHomeSections"/>): a heading of the page's
-    /// own style over the element. The element may be loaded and unloaded more than once (the home page hides and shows);
-    /// what it subscribes to is best tied to its Loaded and Unloaded.
+    /// own style over the element, under the page's buttons. The element's own Visibility stays the edition's: collapsed,
+    /// the whole section goes, heading and all. The element may be loaded and unloaded more than once (the home page
+    /// hides and shows); what it subscribes to is best tied to its Loaded and Unloaded.
     /// </summary>
     public sealed class HomeSection
     {

@@ -118,6 +118,10 @@
                     </Button>
                 </StackPanel>
 
+                <!-- An edition's own sections (EditionHooks), under the buttons: in view without scrolling, however long the
+                     recent lists are. -->
+                <StackPanel x:Name="EditionSections"/>
+
                 <StackPanel x:Name="FavoritesSection" Visibility="Collapsed">
                     <TextBlock Style="{StaticResource SectionTitleStyle}" Text="{u:LocaleString Key=Favorites.Title}"/>
                     <ListView x:Name="FavoritesList" AutomationProperties.AutomationId="HomeFavorites" Style="{StaticResource HomeListStyle}"
@@ -134,9 +138,6 @@
                     <ListView x:Name="RecentFoldersList" AutomationProperties.AutomationId="HomeRecentFolders" Style="{StaticResource HomeListStyle}"
                               ItemsSource="{x:Bind RecentFolders}" ItemTemplate="{StaticResource FolderEntryTemplate}" ItemClick="OnEntryClick"/>
                 </StackPanel>
-
-                <!-- An edition's own sections (EditionHooks), after the page's own. -->
-                <StackPanel x:Name="EditionSections"/>
 
                 <StackPanel Orientation="Horizontal" Spacing="16" Margin="0,24,0,0" Opacity="0.75">
                     <TextBlock x:Name="ShortcutHints" VerticalAlignment="Center" TextWrapping="Wrap" FontSize="12"/>

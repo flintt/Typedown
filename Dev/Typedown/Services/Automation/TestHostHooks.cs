@@ -937,7 +937,7 @@ namespace Typedown.Services.Automation
             }));
             // The window's home page: whether it is asked for and shown (the view model and the page on screen), the active
             // tab's document and whether it is blank, the page's lists (favourites, recent files and folders: path,
-            // dimmed, the last change shown) and the ids of an edition's sections on it.
+            // dimmed, the last change shown) and the ids of an edition's sections shown on it (a collapsed one is not).
             methods.Add(new MethodDescriptor("test.home.state", null, "test.home.state/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
                 {

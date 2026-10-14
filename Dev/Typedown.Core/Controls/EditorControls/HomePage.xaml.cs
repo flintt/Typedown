@@ -223,14 +223,20 @@ namespace Typedown.Core.Controls
                 Microsoft.UI.Xaml.Automation.AutomationProperties.SetAutomationId(panel, "HomeSection-" + section.Id);
                 if (!string.IsNullOrEmpty(section.Title))
                     panel.Children.Add(new TextBlock { Text = section.Title, Style = (Style)Resources["SectionTitleStyle"] });
-                panel.Children.Add(section.Element);
+                var element = section.Element;
+                panel.Children.Add(element);
+                // The element collapsed (by the edition): the section goes whole, its heading with it.
+                void Follow() => panel.Visibility = element.Visibility;
+                element.RegisterPropertyChangedCallback(VisibilityProperty, (_, _) => Follow());
+                Follow();
                 EditionSections.Children.Add(panel);
             }
         }
 
-        /// <summary>The ids of the edition's sections on the page (the automation test host).</summary>
+        /// <summary>The ids of the edition's sections shown on the page (the automation test host): a collapsed one is not.</summary>
         public IReadOnlyList<string> EditionSectionIds() =>
-            EditionSections.Children.OfType<FrameworkElement>().Select(x => Microsoft.UI.Xaml.Automation.AutomationProperties.GetAutomationId(x)).ToList();
+            EditionSections.Children.OfType<FrameworkElement>().Where(x => x.Visibility == Visibility.Visible)
+                .Select(x => Microsoft.UI.Xaml.Automation.AutomationProperties.GetAutomationId(x)).ToList();
 
         // ---- commands ----
 
