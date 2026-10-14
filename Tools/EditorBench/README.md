@@ -140,6 +140,9 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
 - `table-backspace-check.js` — Backspace in a table cell stays in that cell: one too many after emptying a cell went on
   into the cell before (or out of the table into the heading above), deleted its text, and the typing landed there. An
   empty table still becomes a paragraph with Backspace in its first cell.
+- `table-cell-check.js` — a table cell emptied by selecting its text and deleting it, or typed over, takes what is
+  typed next; Shift+Enter and Alt+Enter put a line break (`<br/>`) in the cell, which shows as a second line and is
+  written back as it was loaded. Two Store reviews (the emptied cell, and "Alt+Enter as in Excel" for a second line).
 - `xhtml-toc-check.js` — the document rendered as XHTML for another format (RenderXhtml) keeps its `[TOC]` line's place
   as an empty `div.table-of-contents`, for the host to fill with that format's own table of contents.
 - `xhtml-math-check.js` — RenderXhtml with mathAsTex writes each formula as its TeX (`span.math-tex`,
