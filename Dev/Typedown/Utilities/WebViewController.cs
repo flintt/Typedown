@@ -35,6 +35,7 @@ namespace Typedown.Utilities
                 WebView = new WebView2 { DefaultBackgroundColor = Colors.Transparent };
                 host.Children.Insert(0, WebView);
                 await WebView.EnsureCoreWebView2Async(environment);
+                StartupTiming.Reached("web view ready");
                 return WebView.CoreWebView2 != null;
             }
             catch (Exception ex)
@@ -59,6 +60,7 @@ namespace Typedown.Utilities
                 Directory.CreateDirectory(userDataFolder);
                 environmentTask = task = CoreWebView2Environment.CreateWithOptionsAsync(null, userDataFolder, options).AsTask();
                 var environment = await task;
+                StartupTiming.Reached("web view environment");
                 environment.BrowserProcessExited += OnEnvironmentBrowserProcessExited;
                 return environment;
             }

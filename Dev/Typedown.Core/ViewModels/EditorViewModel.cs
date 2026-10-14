@@ -375,6 +375,8 @@ namespace Typedown.Core.ViewModels
             if (awaitingNewPage) Log.Debug($"editor: load {LoadId} confirmed by the page being replaced, not counted");
             else ConfirmedLoadId = LoadId;
             CompleteReloadWaiter(arg);
+            // The document on the page and taking keys: the end of the start (todo #16).
+            StartupTiming.Reached("document shown", last: true);
             if (loadClock != null)
             {
                 Log.Debug($"FileLoaded after {loadClock.ElapsedMilliseconds} ms in the editor");
