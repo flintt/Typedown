@@ -113,7 +113,8 @@ namespace Typedown.Core.Utilities
         /// </summary>
         public static event Action<ActivityReport> Activity;
 
-        internal static void ReportActivity(ActivityKind kind, AppViewModel window, string oldPath = null)
+        /// <summary>Raises <see cref="Activity"/> with the window's document and mode (public: the window itself is in the app project).</summary>
+        public static void ReportActivity(ActivityKind kind, AppViewModel window, string oldPath = null)
         {
             if (Activity == null || window == null) return;
             try
