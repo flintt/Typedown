@@ -91,6 +91,14 @@
 
 | 保存在同步盘旁生成 tmp/~RF 文件 | 已做：改用 File.Move 原子替换（不再有 ~RF 备份文件）；临时文件是隐藏+临时属性的点文件，同步盘会跳过；仅在替换的瞬间存在 |
 
+## 偶发启动崩溃：创建第一个窗口时（2026-10-14 发现）
+
+在 Windows 11 的构建机上，测试主机启动时偶发直接退出（2026-10-14 两次，同一版本再启动则正常；Windows 10 测试机上未出现）：Microsoft.UI.Input.dll 10.0.27200.1054 中 0xc0000409（FAST_FAIL_FATAL_APP_EXIT，参数 0x8000ffff E_UNEXPECTED）。栈：App.OnLaunched → new MainWindow → DirectUI::Window 构造 → DesktopWindowImpl::OnCreate → DesktopWindowXamlSource/XamlIsland 初始化 → CXamlIslandRoot::InitializeCommon → Microsoft_UI_Input!InitializeDirectManipulationHookInProc → 主动终止。debug.log 只到 "startup: main"。崩溃时还没有执行我们的窗口代码。
+
+| 做法 | 验证 | 成本 |
+|---|---|---|
+| 先查 Windows App SDK 的已知问题和更新版本（输入站点 / DirectManipulation 初始化失败）；在构建机上开 WER LocalDumps 收集完整转储（两份在构建机 CrashDumps：Typedown.exe.51804.dmp 及 19:44 Typeleaf.exe 的），对照 WinAppSDK 私有符号或提交给微软；评估启动失败时自动重试一次创建窗口是否可行 | 构建机上连续启动测试主机 50 次统计崩溃率；升级或规避后再测 | 中 |
+
 ## 标签加载期间按键丢失（2026-10-14 发现）
 
 新建标签（Ctrl+N、"+"、文件 → 首页、⌂、自动化接口 document.create）和切换标签（单击、Ctrl+Tab）时，宿主先换掉当前标签，编辑器页面要过一会儿才收到新文档；这期间按的键落在页面里还显示着的旧文档上，随后被丢掉：
