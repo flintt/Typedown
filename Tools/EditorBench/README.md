@@ -66,18 +66,19 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   first must equal `spec-known.json`, the recorded behaviour of this editor. Muya is not a CommonMark renderer,
   so the baseline records what we do, not what the spec says; its point is that no editor change can quietly
   alter the document model of 652 documents. `--update` re-records, `--section <name>` or example numbers narrow
-  the run. Three examples still do not survive a second import; they are marked in the baseline and are left
+  the run. Two examples still do not survive a second import; they are marked in the baseline and are left
   alone on purpose, because none of them loses text and each settles after one more round:
 
   - **7 (Tabs)** `-\t\tfoo` — tabs indenting content into a code block inside a list item. Everyday tab use is
     fine (tab-indented nested lists, `-` followed by a tab, a tab-indented second paragraph all round-trip with
     the tabs turned into spaces, once). Fixing this one means expanding tabs by column width in the parser,
     which touches every indentation decision there is.
-  - **96 (Setext headings)** `---` used as a rule with a setext underline on the next line. The writing itself is
-    ambiguous — the spec uses it to probe that boundary — so changing it means re-deciding what those three
-    dashes mean.
   - **117 (Indented code blocks)** an indented code block padded with blank lines; one leading blank line is
     dropped. The code itself is untouched.
+
+  Example 96 (`---`, `Foo`, `---`, `Bar` ...) is read as front matter holding `Foo`: a document that opens with
+  `---`, lines and a closing `---` is a front matter header, as Hugo and Jekyll read it, also with no
+  blank line after it.
 - `style-check.js` — lays out `style-fixture.md` (headings, lists, tables, code, quote, maths, footnote, raw
   html) and measures every element: position, size, font, weight, colour, background. A block passes if it is
   within 2px of where it was and within 1px of its size; fonts and colours must match exactly. `--update`
@@ -128,6 +129,9 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
 - `mhchem-check.js` — chemistry with mhchem's `\ce`, inline and as a display block, renders in the editor and in
   the exports (RenderXhtml). The extension was imported as its UMD file, which registers `\ce` on the CommonJS
   copy of KaTeX while the editor and the export render with the ES module copy, so every `\ce` was invalid.
+- `math-color-check.js` — colours written as MathJax and LaTeX's xcolor take them (`\color{rgb(0,0,0)}`,
+  `\textcolor[RGB]{0,0,255}{x}`, `\colorbox{rgba(...)}`) render in the editor and in the exports; KaTeX reads only
+  names and #hex and refused the whole formula. The document keeps what was typed.
 - `reference-image-check.js` — a reference-style picture (`![alt][ref]`) loads when the document opens: its source
   text is not left marked failed once the picture is drawn, and a reference to a missing file is still marked
   failed.
