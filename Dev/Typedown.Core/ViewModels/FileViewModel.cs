@@ -107,10 +107,8 @@ namespace Typedown.Core.ViewModels
             NewFileCommand.OnExecute.Subscribe(async _ =>
             {
                 await NewFileFun();
-                // With the home page shown, it takes the keyboard itself and hands typing on once the new document is
-                // in the page (HomePage); otherwise the new document takes it at once (K05).
-                if (SettingsViewModel.ShowHomeOnNewTab) Home?.Show();
-                else { Home?.Hide(); MarkdownEditor?.FocusEditor(); }
+                if (SettingsViewModel.ShowHomeOnNewTab) Home?.Show(); else Home?.Hide();
+                MarkdownEditor?.FocusEditor();
             });
             OpenFileCommand.OnExecute.Subscribe(async x => await OpenFile(x));
             OpenFolderCommand.OnExecute.Subscribe(async x => await OpenFolder(x));

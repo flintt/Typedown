@@ -93,15 +93,6 @@
     <Grid x:Name="Root" Background="{ThemeResource SolidBackgroundFillColorTertiaryBrush}">
         <!-- A custom theme's background over the system's (set from code; empty without one). -->
         <Border x:Name="ThemeLayer"/>
-        <!-- Where the keyboard is while the home page shows: what is typed (an input method's text too, Enter as a new
-             line) collects here and goes into the blank document once the editor has it (HomePage.HandOn). Not seen;
-             Tab leaves it for the page's buttons. -->
-        <TextBox x:Name="TypingSink" AutomationProperties.AutomationId="HomeTypingSink" AutomationProperties.AccessibilityView="Raw"
-                 Width="1" Height="1" MinWidth="0" MinHeight="0" Padding="0" BorderThickness="0" Opacity="0"
-                 HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40,90,0,0"
-                 AcceptsReturn="True" IsSpellCheckEnabled="False" IsTextPredictionEnabled="False"
-                 TextChanged="OnSinkTextChanged" Paste="OnSinkPaste"
-                 TextCompositionStarted="OnSinkCompositionStarted" TextCompositionEnded="OnSinkCompositionEnded"/>
         <ScrollViewer x:Name="Scroller" HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Auto">
             <StackPanel MaxWidth="760" Margin="32,32,32,24" HorizontalAlignment="Stretch">
                 <TextBlock Text="{u:LocaleString Key=HomePage.Title}" FontSize="28" FontWeight="SemiBold" Margin="0,0,0,16"/>

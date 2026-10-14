@@ -89,14 +89,6 @@ namespace Typedown.Core.Controls
             {
                 Visibility = Visibility.Visible;
                 Refresh();
-                // The keyboard to the page itself: what is typed now is handed on to the editor once the blank document
-                // is in it (see OnCharacterReceived). Left in the editor, keys typed before the page had the new document
-                // went into the document shown before, or were replaced by the load (E2E HP05). At start-up the editor
-                // takes the keyboard back once its page has loaded with the document, which is then safe.
-                DispatcherQueue?.TryEnqueue(() =>
-                {
-                    if (Visibility == Visibility.Visible && !HasKeyboard()) TypingSink.Focus(FocusState.Programmatic);
-                });
                 return;
             }
             var hadKeyboard = HasKeyboard();
@@ -112,98 +104,12 @@ namespace Typedown.Core.Controls
             return false;
         }
 
-        // Typing on the home page writes in its blank document. The keyboard is in TypingSink (a hidden text box, so an
-        // input method composes there as in any text box); what it takes - letters, a committed composition, Enter - is
-        // kept, and once the editor has the document (its load confirmed) it goes in through the host's paste path at
-        // the caret, as one edit, and the editor takes the keyboard: what is typed next goes to it directly. The text
-        // changing hides the page. A key typed with a button or a list entry of the page focused is kept the same way
-        // (a space there is that control's own).
         private void OnCharacterReceived(UIElement sender, CharacterReceivedRoutedEventArgs e)
         {
-            var focused = XamlRoot == null ? null : FocusManager.GetFocusedElement(XamlRoot);
-            if (focused == TypingSink || char.IsControl(e.Character)) return;
-            if (e.Character == ' ' && focused is Microsoft.UI.Xaml.Controls.Primitives.ButtonBase or ListViewItem) return;
+            if (char.IsControl(e.Character) || e.Character == ' ') return;
             e.Handled = true;
-            pending.Append(e.Character);
-            HandOn();
-        }
-
-        private bool composing;
-
-        private void OnSinkCompositionStarted(TextBox sender, TextCompositionStartedEventArgs args) => composing = true;
-
-        private void OnSinkCompositionEnded(TextBox sender, TextCompositionEndedEventArgs args)
-        {
-            composing = false;
-            TakeSinkText();
-        }
-
-        // Taken as it arrives, except during an input method's composition (its text is not written yet).
-        private void OnSinkTextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (!composing) TakeSinkText();
-        }
-
-        private void TakeSinkText()
-        {
-            var text = TypingSink.Text;
-            if (string.IsNullOrEmpty(text)) return;
-            TypingSink.Text = string.Empty;
-            pending.Append(text);
-            HandOn();
-        }
-
-        // Ctrl+V (Ctrl+Shift+V: as plain text) in the sink: pasted into the document as the editor pastes, once it has
-        // the document (the window's paste shortcut only acts with the keyboard in the editor).
-        private void OnSinkPaste(object sender, TextControlPasteEventArgs e)
-        {
-            e.Handled = true;
-            _ = PasteIntoDocumentAsync(PInvoke.GetIsKeyDown(Windows.System.VirtualKey.Shift) ? "pasteAsPlainText" : "normal");
-        }
-
-        private async Task PasteIntoDocumentAsync(string type)
-        {
-            if (ViewModel?.EditorViewModel is not { } editor) return;
-            // What was typed before the paste goes in first.
-            while (handingOn) await Task.Delay(20);
-            for (var i = 0; i < 150 && Home?.IsOpening == true; i++) await Task.Delay(20);
-            await editor.WaitForLoadAsync(3000);
-            editor.PasteCommand.Execute(type);
+            Home?.Hide();
             ViewModel?.MarkdownEditor?.FocusEditor();
-        }
-
-        private readonly System.Text.StringBuilder pending = new();
-
-        private bool handingOn;
-
-        private async void HandOn()
-        {
-            if (handingOn) return;
-            handingOn = true;
-            try
-            {
-                var editor = ViewModel?.EditorViewModel;
-                if (editor == null) return;
-                // The blank tab first (File > Home, the shortcut: the page shows before its tab is made), then its load.
-                for (var i = 0; i < 150 && Home?.IsOpening == true; i++) await Task.Delay(20);
-                if (!await editor.WaitForLoadAsync(3000))
-                    Log.Debug("home page: the editor did not confirm its document within 3 s; the typing goes in anyway");
-                // Whatever came in while waiting goes in with it, in order.
-                var text = TypedText.AsDocumentText(pending.ToString(), ViewModel.SettingsViewModel.SourceCode);
-                pending.Clear();
-                if (text.Length > 0) await editor.PasteTextAsync("normal", text, string.Empty);
-                ViewModel?.MarkdownEditor?.FocusEditor();
-            }
-            catch (Exception ex)
-            {
-                Log.Debug($"home page: the typing did not go in: {ex.Message}");
-            }
-            finally
-            {
-                handingOn = false;
-            }
-            // Typed in the moment before the editor took the keyboard.
-            if (pending.Length > 0) HandOn();
         }
 
         private void OnListsChanged() => DispatcherQueue?.TryEnqueue(() =>
