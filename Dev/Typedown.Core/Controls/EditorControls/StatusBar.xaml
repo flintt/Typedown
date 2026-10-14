@@ -15,6 +15,16 @@
     d:DesignWidth="400">
     <UserControl.Resources>
         <converters:BoolToObjectConverter x:Key="SidePaneIconConverter" TrueValue="&#xea49;" FalseValue="&#xea5b;"/>
+        <!-- The bar's own buttons: no fill until the pointer is over them, as the side pane switch. -->
+        <SolidColorBrush x:Key="ButtonBackground" Color="{ThemeResource SubtleFillColorTransparent}"/>
+        <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="{ThemeResource SubtleFillColorSecondary}"/>
+        <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="{ThemeResource SubtleFillColorTertiary}"/>
+        <SolidColorBrush x:Key="ButtonForeground" Color="{ThemeResource TextFillColorSecondary}"/>
+        <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="{ThemeResource TextFillColorPrimary}"/>
+        <SolidColorBrush x:Key="ButtonForegroundPressed" Color="{ThemeResource TextFillColorSecondary}"/>
+        <Style x:Key="StatsLabelStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{ThemeResource TextFillColorSecondaryBrush}"/>
+        </Style>
     </UserControl.Resources>
     <Grid x:Name="RootGrid" BorderThickness="0,1,0,0" Padding="4,2,4,3" BorderBrush="{ThemeResource CardStrokeColorDefault}">
         <Grid.Background>
@@ -44,6 +54,38 @@
                 </ToggleButton.Resources>
                 <FontIcon Glyph="{x:Bind Settings.SidePaneOpen, Converter={StaticResource SidePaneIconConverter}, Mode=OneWay}" FontSize="14"/>
             </ToggleButton>
+            <!-- The mode the document is in (visual, source, reading) as its icon; a click lists the modes to switch. -->
+            <Button
+                x:Name="ModeButton"
+                Padding="6"
+                BorderThickness="0"
+                VerticalAlignment="Stretch"
+                AutomationProperties.AutomationId="StatusBarModes"
+                AutomationProperties.Name="{u:LocaleString Key=View}"
+                controls:ToolTip.TextResource="View">
+                <FontIcon Glyph="{x:Bind ModeGlyph(Settings.ReadOnly, Settings.SourceCode), Mode=OneWay}" FontSize="14"/>
+                <Button.Flyout>
+                    <MenuFlyout Placement="TopEdgeAlignedLeft" Opening="OnModeMenuOpening">
+                        <ToggleMenuFlyoutItem x:Name="StatusSourceCodeItem" Text="{u:LocaleString Key=SourceCodeMode}" IsChecked="{x:Bind Settings.SourceCode, Mode=TwoWay}"/>
+                        <ToggleMenuFlyoutItem x:Name="StatusReadOnlyItem" Text="{u:LocaleString Key=ReadOnlyMode}" IsChecked="{x:Bind Settings.ReadOnly, Mode=TwoWay}"/>
+                        <MenuFlyoutSeparator/>
+                        <ToggleMenuFlyoutItem x:Name="StatusFocusItem" Text="{u:LocaleString Key=FocusMode}" IsChecked="{x:Bind Settings.FocusMode, Mode=TwoWay}" IsEnabled="{x:Bind CaretModes(Settings.ReadOnly, Settings.SourceCode), Mode=OneWay}"/>
+                        <ToggleMenuFlyoutItem x:Name="StatusTypewriterItem" Text="{u:LocaleString Key=TypewriterMode}" IsChecked="{x:Bind Settings.Typewriter, Mode=TwoWay}" IsEnabled="{x:Bind CaretModes(Settings.ReadOnly, Settings.SourceCode), Mode=OneWay}"/>
+                    </MenuFlyout>
+                </Button.Flyout>
+            </Button>
+            <!-- One click into reading mode; the badge below takes its place there and is the way back. -->
+            <Button
+                x:Name="ReadingButton"
+                Padding="6"
+                BorderThickness="0"
+                VerticalAlignment="Stretch"
+                Visibility="{x:Bind WhenEditing(Settings.ReadOnly), Mode=OneWay}"
+                Click="OnEnterReadOnlyClick"
+                AutomationProperties.AutomationId="StatusBarReading"
+                AutomationProperties.Name="{u:LocaleString Key=ReadOnlyMode}">
+                <FontIcon Glyph="&#xE890;" FontSize="14"/>
+            </Button>
             <!-- Reading mode ignores every keystroke; say so where it can be seen, and let the label switch it off. -->
             <Button
                 x:Name="ReadOnlyBadge"
@@ -52,6 +94,7 @@
                 BorderThickness="0"
                 VerticalAlignment="Stretch"
                 Click="OnLeaveReadOnlyClick"
+                AutomationProperties.AutomationId="StatusBarReadOnlyBadge"
                 controls:ToolTip.TextResource="ReadOnlyMode">
                 <Button.Resources>
                     <ResourceDictionary>
@@ -70,39 +113,38 @@
             </Button>
         </StackPanel>
         <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
-            <Grid>
-                <ComboBox SelectedIndex="{x:Bind Settings.WordCountMethod, Mode=TwoWay}" MinWidth="80" VerticalAlignment="Stretch" Foreground="{ThemeResource TextFillColorSecondary}" local:ToolTip.TextResource="WordCount" IsEnabled="{x:Bind ViewModel.MarkdownEditor.IsEditorLoaded, Mode=OneWay}">
-                    <ComboBox.Resources>
-                        <ResourceDictionary>
-                            <SolidColorBrush x:Key="ComboBoxBackground" Color="{ThemeResource SubtleFillColorTransparent}"/>
-                            <SolidColorBrush x:Key="ComboBoxBackgroundPointerOver" Color="{ThemeResource SubtleFillColorSecondary}"/>
-                            <SolidColorBrush x:Key="ComboBoxBackgroundPressed" Color="{ThemeResource SubtleFillColorTertiary}"/>
-                            <SolidColorBrush x:Key="ComboBoxBackgroundDisabled" Color="{ThemeResource SubtleFillColorDisabled}"/>
-                            <SolidColorBrush x:Key="ComboBoxDropDownGlyphForeground" Color="Transparent"/>
-                            <SolidColorBrush x:Key="ComboBoxDropDownGlyphForegroundDisabled" Color="Transparent"/>
-                            <SolidColorBrush x:Key="ComboBoxDropDownGlyphForegroundFocused" Color="Transparent"/>
-                            <SolidColorBrush x:Key="ComboBoxDropDownGlyphForegroundFocusedPressed" Color="Transparent"/>
-                            <Thickness x:Key="ComboBoxPadding">8,0,0,0</Thickness>
-                            <Thickness x:Key="ComboBoxBorderThemeThickness">0</Thickness>
-                            <x:Double x:Key="ControlContentThemeFontSize">12</x:Double>
-                            <x:Double x:Key="ComboBoxMinHeight">0</x:Double>
-                        </ResourceDictionary>
-                    </ComboBox.Resources>
-                    <ComboBoxItem>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{x:Bind Editor.ContentState.WordCount.Character, Mode=OneWay}" />
-                            <TextBlock Margin="4,0,0,0" Text="{x:Bind CharacterUnit(Editor.ContentState.WordCount.Character), Mode=OneWay}"/>
+            <!-- The count the reader chose (characters or words); a click shows all the document's numbers. -->
+            <Button
+                x:Name="WordCountButton"
+                Padding="8,2,8,2"
+                BorderThickness="0"
+                VerticalAlignment="Stretch"
+                FontSize="12"
+                IsEnabled="{x:Bind ViewModel.MarkdownEditor.IsEditorLoaded, Mode=OneWay}"
+                AutomationProperties.AutomationId="StatusBarWordCount"
+                controls:ToolTip.TextResource="WordCount">
+                <TextBlock Text="{x:Bind CountText(Editor.ContentState, Settings.WordCountMethod), Mode=OneWay}"/>
+                <Button.Flyout>
+                    <Flyout Placement="TopEdgeAlignedRight" Opening="OnStatsOpening">
+                        <StackPanel MinWidth="240" Spacing="10">
+                            <Grid x:Name="StatsGrid" ColumnSpacing="24" RowSpacing="4">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                            </Grid>
+                            <TextBlock Text="{u:LocaleString Key=Stats.Note}" TextWrapping="Wrap" MaxWidth="260" HorizontalAlignment="Left" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                            <StackPanel Spacing="2">
+                                <TextBlock Text="{u:LocaleString Key=Stats.ShownInStatusBar}" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                                <StackPanel Orientation="Horizontal" Spacing="12">
+                                    <RadioButton x:Name="ShowCharacters" GroupName="StatusCount" MinWidth="0" Content="{u:LocaleString Key=Characters}" Checked="OnCountMethodChecked"/>
+                                    <RadioButton x:Name="ShowWords" GroupName="StatusCount" MinWidth="0" Content="{u:LocaleString Key=Words}" Checked="OnCountMethodChecked"/>
+                                </StackPanel>
+                            </StackPanel>
                         </StackPanel>
-                    </ComboBoxItem>
-                    <ComboBoxItem>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{x:Bind Editor.ContentState.WordCount.Word, Mode=OneWay}" />
-                            <TextBlock Margin="4,0,0,0" Text="{x:Bind WordUnit(Editor.ContentState.WordCount.Word), Mode=OneWay}"/>
-                        </StackPanel>
-                    </ComboBoxItem>
-                </ComboBox>
-                <FontIcon Glyph="&#xec8f;" FontSize="10" IsHitTestVisible="False" VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="{ThemeResource ComboBoxDropDownGlyphForeground}" Margin="0,0,8,0"/>
-            </Grid>
+                    </Flyout>
+                </Button.Flyout>
+            </Button>
         </StackPanel>
     </Grid>
 </UserControl>

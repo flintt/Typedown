@@ -386,10 +386,11 @@ namespace Typedown.Core.Services
                 var modeChanged = change.Mode != null && change.Mode != ReadView(app).Mode;
                 if (modeChanged)
                 {
-                    // Setting one on turns the other off (SettingsViewModel); visual turns both off.
+                    // Setting one on turns the other off (SettingsViewModel); visual turns both off, reading first: leaving it
+                    // puts back source mode when reading was entered from there.
                     if (change.Mode == "source") settings.SourceCode = true;
                     else if (change.Mode == "reading") settings.ReadOnly = true;
-                    else { settings.SourceCode = false; settings.ReadOnly = false; }
+                    else { settings.ReadOnly = false; settings.SourceCode = false; }
                 }
                 if (change.SidePanePage != null) settings.SidePaneIndex = change.SidePanePage == "outline" ? 1 : 0;
                 if (change.SidePaneOpen is bool open) settings.SidePaneOpen = open;

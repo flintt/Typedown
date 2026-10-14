@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>მომხმარებლის სახელმძღვანელო</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>სიმბოლოები (ჰარის გარეშე)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>სიმბოლოები (ჰარით)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK სიმბოლოები</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>სიტყვები</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>არა-CJK სიტყვები</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>აბზაცები</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>სათაურები</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>სურათები</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>ბმულები</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>კითხვის დრო</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>დაახლ. {0} წთ</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>წუთზე ნაკლები</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>დათვლილია ხილულ ტექსტზე. კოდის ბლოკები და ფორმულები კითხვის დროში არ ითვლება.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>სტატუსის ზოლში ჩანს</value>
+  </data>
 </root>

@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>Umhlahlandlela womsebenzisi</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Izinhlamvu (ngaphandle kwezikhala)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Izinhlamvu (nezikhala)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>Izinhlamvu ze-CJK</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Amagama</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Amagama angewona e-CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Izigaba</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Izihloko</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Izithombe</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Izixhumanisi</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Isikhathi sokufunda</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Cishe imizuzu engu-{0}</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Ngaphansi komzuzu</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Kubalwe embhalweni obonakalayo. Amabhulokhi ekhodi namafomula awafakwa esikhathini sokufunda.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Ibha yesimo ibonisa</value>
+  </data>
 </root>

@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>Gebruikersgids</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Karakters (sonder spasies)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Karakters (met spasies)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK-karakters</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Woorde</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Nie-CJK-woorde</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Paragrawe</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Opskrifte</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Beelde</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Skakels</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Leestyd</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Ongeveer {0} min</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Minder as ’n minuut</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Getel op die sigbare teks. Kodeblokke en formules tel nie by die leestyd nie.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Statusbalk wys</value>
+  </data>
 </root>

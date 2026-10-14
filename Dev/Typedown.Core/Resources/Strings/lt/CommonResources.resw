@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>Naudotojo vadovas</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Simboliai (be tarpų)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Simboliai (su tarpais)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK simboliai</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Žodžiai</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Ne CJK žodžiai</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Pastraipos</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Antraštės</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Paveikslėliai</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Saitai</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Skaitymo laikas</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Apie {0} min.</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Mažiau nei minutė</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Skaičiuojamas matomas tekstas. Kodo blokai ir formulės į skaitymo laiką neįtraukiami.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Būsenos juostoje rodoma</value>
+  </data>
 </root>

@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>Uživatelská příručka</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Znaky (bez mezer)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Znaky (s mezerami)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>Znaky CJK</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Slova</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Slova mimo CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Odstavce</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Nadpisy</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Obrázky</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Odkazy</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Doba čtení</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Asi {0} min</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Méně než minuta</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Počítáno z viditelného textu. Bloky kódu a vzorce se do doby čtení nezapočítávají.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Stavový řádek zobrazuje</value>
+  </data>
 </root>

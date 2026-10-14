@@ -100,6 +100,8 @@ internal static partial class CaseCatalog
         ["TH05"] = Q("theme"),
         ["TH06"] = Q("theme"),
         ["TH07"] = Q("theme"),
+        ["SB01"] = Q("menus"),
+        ["SB02"] = F("content"),
         // Fails as a known issue (restored without activation, the editor has no size): in full runs only.
         ["MN03"] = F("window"),
         ["MN04"] = Q("window"),
@@ -199,6 +201,8 @@ internal static partial class CaseCatalog
         ["TH05"] = "编辑区跟随深色/黑色/云母开关/浅色",
         ["TH06"] = "自定义主题切回内置主题后外框和编辑区颜色复原",
         ["TH07"] = "设置和对话框的控件用主题强调色",
+        ["SB01"] = "状态栏切换阅读/源码模式并回到原模式",
+        ["SB02"] = "单击字数弹出详细统计",
         ["MN03"] = "最小化时写入，未激活恢复后编辑区尺寸",
         ["MN04"] = "全屏进出后最小化再恢复，窗口正常",
         ["MN05"] = "全屏后最小化，从资源管理器打开文件",

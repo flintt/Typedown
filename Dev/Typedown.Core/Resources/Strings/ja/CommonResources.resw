@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>使い方ガイド</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>文字数（スペースなし）</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>文字数（スペースを含む）</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK 文字</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>単語数</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>CJK 以外の単語</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>段落</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>見出し</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>画像</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>リンク</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>読了時間</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>約 {0} 分</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>1 分未満</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>表示されている本文で集計しています。コードブロックと数式は読了時間に含まれません。</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>ステータスバーの表示</value>
+  </data>
 </root>

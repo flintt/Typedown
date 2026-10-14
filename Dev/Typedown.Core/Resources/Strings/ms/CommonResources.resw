@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>Panduan pengguna</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Aksara (tanpa ruang)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Aksara (dengan ruang)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>Aksara CJK</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Perkataan</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Perkataan bukan CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Perenggan</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Tajuk</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Imej</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Pautan</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Masa membaca</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Kira-kira {0} min</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Kurang daripada seminit</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Dikira pada teks yang kelihatan. Blok kod dan formula tidak dikira dalam masa membaca.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Bar status menunjukkan</value>
+  </data>
 </root>

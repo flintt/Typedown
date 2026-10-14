@@ -1030,4 +1030,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>使用說明</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>字元（不含空格）</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>字元（含空格）</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>中日韓文字</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>字詞數</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>非中日韓字詞數</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>段落</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>標題</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>圖片</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>連結</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>閱讀時間</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>約 {0} 分鐘</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>不到 1 分鐘</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>依可見內文統計；程式碼區塊和公式不計入閱讀時間。</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>狀態列顯示</value>
+  </data>
 </root>

@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>ବ୍ୟବହାରକାରୀ ଗାଇଡ୍</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>ଅକ୍ଷର (ସ୍ପେସ୍ ବିନା)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>ଅକ୍ଷର (ସ୍ପେସ୍ ସହ)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK ଅକ୍ଷର</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>ଶବ୍ଦ</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>CJK ବ୍ୟତୀତ ଶବ୍ଦ</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>ଅନୁଚ୍ଛେଦ</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>ଶୀର୍ଷକ</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>ଛବି</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>ଲିଙ୍କ</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>ପଢ଼ିବା ସମୟ</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>ପ୍ରାୟ {0} ମିନିଟ୍</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>ଏକ ମିନିଟ୍‌ରୁ କମ୍</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>ଦୃଶ୍ୟମାନ ପାଠ୍ୟ ଉପରେ ଗଣନା କରାଯାଇଛି। କୋଡ୍ ବ୍ଲକ୍ ଓ ସୂତ୍ର ପଢ଼ିବା ସମୟରେ ଗଣାଯାଏ ନାହିଁ।</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>ଷ୍ଟାଟସ୍ ବାରରେ ଦେଖାନ୍ତୁ</value>
+  </data>
 </root>

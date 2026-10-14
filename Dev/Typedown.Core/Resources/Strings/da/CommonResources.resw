@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>Brugervejledning</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Tegn (uden mellemrum)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Tegn (med mellemrum)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK-tegn</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Ord</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Ikke-CJK-ord</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Afsnit</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Overskrifter</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Billeder</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Links</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Læsetid</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Ca. {0} min</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Under et minut</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Optalt på den synlige tekst. Kodeblokke og formler indgår ikke i læsetiden.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Statuslinjen viser</value>
+  </data>
 </root>

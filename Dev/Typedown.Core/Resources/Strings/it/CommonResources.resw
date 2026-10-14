@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>Guida per l'utente</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Caratteri (spazi esclusi)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Caratteri (spazi inclusi)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>Caratteri CJK</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Parole</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Parole non CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Paragrafi</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Intestazioni</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Immagini</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Collegamenti</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Tempo di lettura</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Circa {0} min</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Meno di un minuto</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Conteggio sul testo visibile. Blocchi di codice e formule non rientrano nel tempo di lettura.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>La barra di stato mostra</value>
+  </data>
 </root>

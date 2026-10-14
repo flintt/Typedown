@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>คู่มือผู้ใช้</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>อักขระ (ไม่รวมช่องว่าง)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>อักขระ (รวมช่องว่าง)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>อักขระ CJK</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>คำ</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>คำที่ไม่ใช่ CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>ย่อหน้า</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>หัวเรื่อง</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>รูปภาพ</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>ลิงก์</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>เวลาอ่าน</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>ประมาณ {0} นาที</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>ไม่ถึง 1 นาที</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>นับจากข้อความที่มองเห็น บล็อกโค้ดและสูตรไม่นับรวมในเวลาอ่าน</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>แถบสถานะแสดง</value>
+  </data>
 </root>

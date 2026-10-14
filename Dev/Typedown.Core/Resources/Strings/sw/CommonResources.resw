@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>Mwongozo wa mtumiaji</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Vibambo (bila nafasi)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Vibambo (pamoja na nafasi)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>Vibambo vya CJK</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Maneno</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Maneno yasiyo ya CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Aya</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Vichwa</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Picha</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Viungo</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Muda wa kusoma</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Takriban dak {0}</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Chini ya dakika moja</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Imehesabiwa kwenye maandishi yanayoonekana. Vizuizi vya msimbo na fomula havijumuishwi katika muda wa kusoma.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Upau wa hali unaonyesha</value>
+  </data>
 </root>

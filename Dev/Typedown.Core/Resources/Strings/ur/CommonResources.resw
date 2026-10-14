@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>صارف گائیڈ</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>حروف (خالی جگہ کے بغیر)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>حروف (خالی جگہ سمیت)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK حروف</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>الفاظ</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>غیر CJK الفاظ</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>پیراگراف</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>سرخیاں</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>تصاویر</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>روابط</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>پڑھنے کا وقت</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>تقریباً {0} منٹ</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>ایک منٹ سے کم</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>نظر آنے والے متن پر گنا گیا ہے۔ کوڈ بلاکس اور فارمولے پڑھنے کے وقت میں شامل نہیں ہیں۔</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>اسٹیٹس بار میں دکھائیں</value>
+  </data>
 </root>

@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>Erabiltzailearen gida</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Karaktereak (zuriunerik gabe)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Karaktereak (zuriuneekin)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK karaktereak</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Hitzak</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>CJK ez diren hitzak</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Paragrafoak</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Izenburuak</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Irudiak</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Estekak</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Irakurketa-denbora</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>{0} min inguru</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Minutu bat baino gutxiago</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Testu ikusgaian zenbatua. Kode-blokeak eta formulak ez dira irakurketa-denboran sartzen.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Egoera-barrak erakusten du</value>
+  </data>
 </root>

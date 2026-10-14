@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>Guia de l'usuari</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Caràcters (sense espais)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Caràcters (amb espais)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>Caràcters CJK</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Paraules</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Paraules no CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Paràgrafs</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Encapçalaments</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Imatges</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Enllaços</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Temps de lectura</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Uns {0} min</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Menys d’un minut</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Comptat sobre el text visible. Els blocs de codi i les fórmules no compten per al temps de lectura.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>La barra d’estat mostra</value>
+  </data>
 </root>

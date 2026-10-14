@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>ഉപയോക്തൃ ഗൈഡ്</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>അക്ഷരങ്ങൾ (സ്പേസ് ഇല്ലാതെ)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>അക്ഷരങ്ങൾ (സ്പേസ് ഉൾപ്പെടെ)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK അക്ഷരങ്ങൾ</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>വാക്കുകൾ</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>CJK അല്ലാത്ത വാക്കുകൾ</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>ഖണ്ഡികകൾ</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>തലക്കെട്ടുകൾ</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>ചിത്രങ്ങൾ</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>ലിങ്കുകൾ</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>വായനാ സമയം</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>ഏകദേശം {0} മിനിറ്റ്</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>ഒരു മിനിറ്റിൽ താഴെ</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>ദൃശ്യമായ വാചകത്തിൽ എണ്ണിയത്. കോഡ് ബ്ലോക്കുകളും സൂത്രവാക്യങ്ങളും വായനാ സമയത്തിൽ ഉൾപ്പെടുന്നില്ല.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>സ്റ്റാറ്റസ് ബാറിൽ കാണിക്കുന്നത്</value>
+  </data>
 </root>

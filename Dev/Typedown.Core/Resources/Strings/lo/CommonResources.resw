@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>ຄູ່ມືຜູ້ໃຊ້</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>ຕົວອັກສອນ (ບໍ່ລວມຍະຫວ່າງ)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>ຕົວອັກສອນ (ລວມຍະຫວ່າງ)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>ຕົວອັກສອນ CJK</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>ຄຳ</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>ຄຳທີ່ບໍ່ແມ່ນ CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>ຫຍໍ້ໜ້າ</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>ຫົວຂໍ້</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>ຮູບພາບ</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>ລິ້ງ</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>ເວລາອ່ານ</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>ປະມານ {0} ນາທີ</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>ບໍ່ເຖິງໜຶ່ງນາທີ</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>ນັບຈາກຂໍ້ຄວາມທີ່ເບິ່ງເຫັນ. ບລັອກໂຄດ ແລະ ສູດ ບໍ່ນັບລວມໃນເວລາອ່ານ.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>ແຖບສະຖານະສະແດງ</value>
+  </data>
 </root>

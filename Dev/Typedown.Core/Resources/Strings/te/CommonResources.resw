@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>వినియోగదారు గైడ్</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>అక్షరాలు (ఖాళీలు లేకుండా)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>అక్షరాలు (ఖాళీలతో)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK అక్షరాలు</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>పదాలు</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>CJK కాని పదాలు</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>పేరాలు</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>శీర్షికలు</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>చిత్రాలు</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>లింక్‌లు</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>చదివే సమయం</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>సుమారు {0} నిమి</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>ఒక నిమిషం కంటే తక్కువ</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>కనిపించే వచనంపై లెక్కించబడింది. కోడ్ బ్లాక్‌లు మరియు సూత్రాలు చదివే సమయంలో లెక్కించబడవు.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>స్టేటస్ బార్‌లో చూపేది</value>
+  </data>
 </root>

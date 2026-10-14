@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>Hướng dẫn sử dụng</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Ký tự (không tính khoảng trắng)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Ký tự (tính khoảng trắng)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>Ký tự CJK</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Từ</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Từ ngoài CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Đoạn văn</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Tiêu đề</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Hình ảnh</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Liên kết</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Thời gian đọc</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Khoảng {0} phút</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Dưới một phút</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Đếm trên phần văn bản hiển thị. Khối mã và công thức không tính vào thời gian đọc.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Thanh trạng thái hiển thị</value>
+  </data>
 </root>

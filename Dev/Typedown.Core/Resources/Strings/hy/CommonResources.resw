@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>Օգտագործողի ուղեցույց</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Նիշեր (առանց բացատների)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Նիշեր (բացատներով)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK նիշեր</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Բառեր</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Ոչ CJK բառեր</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Պարբերություններ</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Վերնագրեր</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Պատկերներ</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Հղումներ</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Ընթերցման ժամանակ</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Մոտ {0} րոպե</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Մեկ րոպեից պակաս</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Հաշվված է տեսանելի տեքստով։ Կոդի բլոկները և բանաձևերը չեն մտնում ընթերցման ժամանակի մեջ։</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Կարգավիճակի գոտում ցույց տալ</value>
+  </data>
 </root>

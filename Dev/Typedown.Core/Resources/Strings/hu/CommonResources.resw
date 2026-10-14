@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>Felhasználói útmutató</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Karakterek (szóközök nélkül)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Karakterek (szóközökkel)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK-karakterek</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Szavak</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Nem CJK-szavak</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Bekezdések</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Címsorok</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Képek</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Hivatkozások</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Olvasási idő</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Kb. {0} perc</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Egy percnél kevesebb</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>A látható szöveg alapján számolva. A kódblokkok és a képletek nem számítanak bele az olvasási időbe.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Az állapotsor mutatja</value>
+  </data>
 </root>

@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>Ghidul utilizatorului</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Caractere (fără spații)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Caractere (cu spații)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>Caractere CJK</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Cuvinte</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Cuvinte non-CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Paragrafe</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Titluri</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Imagini</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Linkuri</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Timp de citire</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Circa {0} min</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Sub un minut</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Numărat pe textul vizibil. Blocurile de cod și formulele nu intră în timpul de citire.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Bara de stare afișează</value>
+  </data>
 </root>

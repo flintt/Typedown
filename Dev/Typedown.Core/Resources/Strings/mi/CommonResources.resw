@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>Aratohu kaiwhakamahi</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Ngā pūāhua (kāore he mokowā)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Ngā pūāhua (me ngā mokowā)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>Ngā pūāhua CJK</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Ngā kupu</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Ngā kupu ehara i te CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Ngā kōwae</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Ngā pane</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Ngā atahanga</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Ngā hononga</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Wā pānui</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Tata ki te {0} meneti</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Iti iho i te meneti</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>I tatauria i runga i te kuputuhi e kitea ana. Kāore ngā paraka waehere me ngā tātai i te wā pānui.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Ka whakaatu te pae tūnga</value>
+  </data>
 </root>

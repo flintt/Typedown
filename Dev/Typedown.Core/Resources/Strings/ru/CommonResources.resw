@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>Руководство пользователя</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Символы (без пробелов)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Символы (с пробелами)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>Символы CJK</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Слова</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Слова не CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Абзацы</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Заголовки</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Изображения</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Ссылки</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Время чтения</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Около {0} мин</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Меньше минуты</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Подсчёт по видимому тексту. Блоки кода и формулы не входят во время чтения.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>В строке состояния</value>
+  </data>
 </root>

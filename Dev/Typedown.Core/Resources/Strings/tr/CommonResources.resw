@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>Kullanım kılavuzu</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Karakter (boşluksuz)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Karakter (boşluklu)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK karakterleri</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Kelime</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>CJK dışı kelime</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Paragraf</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Başlık</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Resim</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Bağlantı</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Okuma süresi</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Yaklaşık {0} dk</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Bir dakikadan az</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Görünen metin üzerinden sayılır. Kod blokları ve formüller okuma süresine dahil edilmez.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Durum çubuğunda gösterilen</value>
+  </data>
 </root>

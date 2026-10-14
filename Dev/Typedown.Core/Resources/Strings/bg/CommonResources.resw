@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>Ръководство за потребителя</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Знаци (без интервали)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Знаци (с интервали)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK знаци</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Думи</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Думи извън CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Абзаци</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Заглавия</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Изображения</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Връзки</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Време за четене</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Около {0} мин</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Под минута</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Преброено по видимия текст. Кодовите блокове и формулите не влизат във времето за четене.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Лентата на състоянието показва</value>
+  </data>
 </root>

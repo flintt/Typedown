@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>Uputstvo za korisnike</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Znakovi (bez razmaka)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Znakovi (sa razmacima)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK znakovi</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Reči</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Reči van CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Pasusi</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Naslovi</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Slike</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Veze</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Vreme čitanja</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Oko {0} min</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Manje od minuta</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Broji se vidljivi tekst. Blokovi koda i formule ne ulaze u vreme čitanja.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Statusna traka prikazuje</value>
+  </data>
 </root>

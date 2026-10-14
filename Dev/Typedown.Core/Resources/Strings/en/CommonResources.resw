@@ -1034,4 +1034,60 @@
   <data name="UserGuide" xml:space="preserve">
     <value>User guide</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Characters (no spaces)</value>
+    <comment>字数详情：不含空格的字符数</comment>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Characters (with spaces)</value>
+    <comment>字数详情：含空格的字符数</comment>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK characters</value>
+    <comment>字数详情：中日韩文字（汉字、假名、谚文）个数</comment>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Words</value>
+    <comment>字数详情：词数（一个汉字或假名算一个词）</comment>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Non-CJK words</value>
+    <comment>字数详情：中日韩以外文字的词数</comment>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Paragraphs</value>
+    <comment>字数详情：段落数</comment>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Headings</value>
+    <comment>字数详情：标题数</comment>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Images</value>
+    <comment>字数详情：图片数</comment>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Links</value>
+    <comment>字数详情：链接数</comment>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Reading time</value>
+    <comment>字数详情：阅读时间估计</comment>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>About {0} min</value>
+    <comment>字数详情：阅读时间，{0} 为分钟数</comment>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Under a minute</value>
+    <comment>字数详情：阅读时间不到一分钟</comment>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Counted on the visible text. Code blocks and formulas are not part of the reading time.</value>
+    <comment>字数详情底部说明</comment>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Status bar shows</value>
+    <comment>字数详情：选择状态栏显示字符数还是词数</comment>
+  </data>
 </root>

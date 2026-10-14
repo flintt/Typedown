@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>ಬಳಕೆದಾರ ಮಾರ್ಗದರ್ಶಿ</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>ಅಕ್ಷರಗಳು (ಸ್ಪೇಸ್ ಇಲ್ಲದೆ)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>ಅಕ್ಷರಗಳು (ಸ್ಪೇಸ್ ಸಹಿತ)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK ಅಕ್ಷರಗಳು</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>ಪದಗಳು</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>CJK ಅಲ್ಲದ ಪದಗಳು</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>ಪ್ಯಾರಾಗ್ರಾಫ್‌ಗಳು</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>ಶೀರ್ಷಿಕೆಗಳು</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>ಚಿತ್ರಗಳು</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>ಲಿಂಕ್‌ಗಳು</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>ಓದುವ ಸಮಯ</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>ಸುಮಾರು {0} ನಿಮಿಷ</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>ಒಂದು ನಿಮಿಷಕ್ಕಿಂತ ಕಡಿಮೆ</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>ಕಾಣುವ ಪಠ್ಯದ ಮೇಲೆ ಎಣಿಸಲಾಗಿದೆ. ಕೋಡ್ ಬ್ಲಾಕ್‌ಗಳು ಮತ್ತು ಸೂತ್ರಗಳು ಓದುವ ಸಮಯದಲ್ಲಿ ಸೇರುವುದಿಲ್ಲ.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>ಸ್ಥಿತಿ ಪಟ್ಟಿಯಲ್ಲಿ ತೋರಿಸು</value>
+  </data>
 </root>

@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>دليل المستخدم</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>الأحرف (بدون مسافات)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>الأحرف (مع المسافات)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>أحرف CJK</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>الكلمات</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>كلمات غير CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>الفقرات</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>العناوين</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>الصور</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>الروابط</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>وقت القراءة</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>حوالي {0} د</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>أقل من دقيقة</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>يُحسب على النص المرئي. لا تدخل كتل التعليمات البرمجية والصيغ في وقت القراءة.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>يعرض شريط الحالة</value>
+  </data>
 </root>

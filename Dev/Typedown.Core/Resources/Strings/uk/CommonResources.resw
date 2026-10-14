@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>Посібник користувача</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Символи (без пробілів)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Символи (з пробілами)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>Символи CJK</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Слова</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Слова не CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Абзаци</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Заголовки</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Зображення</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Посилання</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Час читання</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Близько {0} хв</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Менше хвилини</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Підраховано за видимим текстом. Блоки коду та формули не входять у час читання.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>У рядку стану</value>
+  </data>
 </root>

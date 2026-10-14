@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>Canllaw defnyddiwr</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Nodau (heb fylchau)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Nodau (gyda bylchau)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>Nodau CJK</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Geiriau</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Geiriau nad ydynt yn CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Paragraffau</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Penawdau</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Delweddau</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Dolenni</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Amser darllen</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Tua {0} mun</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Llai na munud</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Wedi’i gyfrif ar y testun gweladwy. Nid yw blociau cod a fformiwlâu yn rhan o’r amser darllen.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Mae’r bar statws yn dangos</value>
+  </data>
 </root>

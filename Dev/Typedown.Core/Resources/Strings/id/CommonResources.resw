@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>Panduan pengguna</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Karakter (tanpa spasi)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Karakter (dengan spasi)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>Karakter CJK</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Kata</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Kata non-CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Paragraf</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Judul</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Gambar</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Tautan</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Waktu baca</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Sekitar {0} mnt</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Kurang dari semenit</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Dihitung dari teks yang terlihat. Blok kode dan rumus tidak termasuk dalam waktu baca.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Bilah status menampilkan</value>
+  </data>
 </root>

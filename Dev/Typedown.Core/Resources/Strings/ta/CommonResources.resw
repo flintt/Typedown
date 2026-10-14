@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>பயனர் வழிகாட்டி</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>எழுத்துகள் (இடைவெளி இல்லாமல்)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>எழுத்துகள் (இடைவெளியுடன்)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK எழுத்துகள்</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>சொற்கள்</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>CJK அல்லாத சொற்கள்</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>பத்திகள்</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>தலைப்புகள்</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>படங்கள்</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>இணைப்புகள்</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>படிக்கும் நேரம்</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>சுமார் {0} நிமி</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>ஒரு நிமிடத்திற்குள்</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>தெரியும் உரையின் அடிப்படையில் கணக்கிடப்பட்டது. குறியீட்டுத் தொகுதிகளும் சூத்திரங்களும் படிக்கும் நேரத்தில் சேர்க்கப்படுவதில்லை.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>நிலைப் பட்டியில் காட்டுவது</value>
+  </data>
 </root>

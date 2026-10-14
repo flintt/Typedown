@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>उपयोगकर्ता मार्गदर्शिका</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>वर्ण (रिक्त स्थान के बिना)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>वर्ण (रिक्त स्थान सहित)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK वर्ण</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>शब्द</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>गैर-CJK शब्द</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>अनुच्छेद</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>शीर्षक</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>चित्र</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>लिंक</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>पढ़ने का समय</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>लगभग {0} मिनट</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>एक मिनट से कम</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>दिखाई देने वाले पाठ पर गिना गया। कोड ब्लॉक और सूत्र पढ़ने के समय में नहीं गिने जाते।</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>स्थिति पट्टी में दिखाएँ</value>
+  </data>
 </root>

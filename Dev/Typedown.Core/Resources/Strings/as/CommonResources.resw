@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>ব্যৱহাৰকাৰীৰ নিৰ্দেশিকা</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>বৰ্ণ (খালী ঠাই বাদে)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>বৰ্ণ (খালী ঠাইসহ)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK বৰ্ণ</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>শব্দ</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>CJK-বহিৰ্ভূত শব্দ</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>অনুচ্ছেদ</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>শীৰ্ষক</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>ছবি</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>লিংক</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>পঢ়াৰ সময়</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>প্ৰায় {0} মিনিট</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>এক মিনিটতকৈ কম</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>দৃশ্যমান পাঠৰ ওপৰত গণনা কৰা হৈছে। ক’ড ব্লক আৰু সূত্ৰ পঢ়াৰ সময়ত ধৰা নহয়।</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>স্থিতি দণ্ডিকাত দেখুওৱা</value>
+  </data>
 </root>

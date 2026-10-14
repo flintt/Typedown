@@ -185,7 +185,9 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | MN02 | a window minimized a while and restored: a document opened at once is shown within 5 s and takes keys |
 | TH05 | the editor follows Dark, Black, Mica off and on, then Light (it stayed dark under a light window) |
 | TH06 | a custom theme switched back to Light or Dark: the editor page, the line beside the side pane, the side pane and the status bar are drawn as before, and the editor is dark under Dark |
-| TH07 | the settings' and the dialogs' controls (a switch, the accent button, a check box) take a custom theme's accent, with readable text on it (dark on Gruvbox's yellow), and the system accent again without one |
+| TH07 | the settings' and the dialogs' controls (a switch, the accent button, a check box) take a custom theme's accent, with readable text on it (black on Dracula's light purple, white on Solarized's blue), and the system accent again without one |
+| SB01 | the status bar switches modes: its reading button and badge go into reading mode and back to the mode it was entered from (source too), and its mode menu ticks the mode and greys focus and typewriter mode where they do nothing |
+| SB02 | a click on the status bar's count shows the document's numbers on its visible text (words, CJK characters, headings, links, pictures, reading time), and the count it shows can be chosen there |
 | MN03 | minimized, written to, restored without activation: the editor's web view gets its size back |
 | MN04 | F11 in and out of full screen, then minimized and brought back as a person does: the window works |
 | MN05 | F11 in and out of full screen, minimized, then a file opened from Explorer: the window comes back working |

@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>راهنمای کاربر</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>حروف (بدون فاصله)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>حروف (با فاصله)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>حروف CJK</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>کلمات</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>کلمات غیر CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>پاراگراف‌ها</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>عنوان‌ها</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>تصاویر</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>لینک‌ها</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>زمان خواندن</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>حدود {0} دقیقه</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>کمتر از یک دقیقه</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>بر اساس متن قابل دید شمرده شده است. بلاک‌های کد و فرمول‌ها در زمان خواندن حساب نمی‌شوند.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>نوار وضعیت نشان می‌دهد</value>
+  </data>
 </root>

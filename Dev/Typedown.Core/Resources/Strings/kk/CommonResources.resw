@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>Пайдаланушы нұсқаулығы</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Таңбалар (бос орынсыз)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Таңбалар (бос орынмен)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK таңбалары</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Сөздер</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>CJK емес сөздер</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Абзацтар</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Тақырыптар</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Суреттер</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Сілтемелер</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Оқу уақыты</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Шамамен {0} мин</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Бір минуттан аз</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Көрінетін мәтін бойынша саналды. Код блоктары мен формулалар оқу уақытына кірмейді.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Күй тақтасында көрсетілетіні</value>
+  </data>
 </root>

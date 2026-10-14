@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>Kasutusjuhend</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Märgid (tühikuteta)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Märgid (tühikutega)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK-märgid</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Sõnad</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Mitte-CJK sõnad</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Lõigud</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Pealkirjad</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Pildid</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Lingid</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Lugemisaeg</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Umbes {0} min</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Alla minuti</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Loendatud nähtavast tekstist. Koodiplokid ja valemid lugemisaja hulka ei kuulu.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Olekuriba näitab</value>
+  </data>
 </root>

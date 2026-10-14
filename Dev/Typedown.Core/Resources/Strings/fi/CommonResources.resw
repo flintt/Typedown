@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>Käyttöopas</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Merkit (ilman välilyöntejä)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Merkit (välilyönteineen)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK-merkit</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Sanat</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Muut kuin CJK-sanat</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Kappaleet</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Otsikot</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Kuvat</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Linkit</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Lukuaika</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Noin {0} min</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Alle minuutti</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Laskettu näkyvästä tekstistä. Koodilohkot ja kaavat eivät sisälly lukuaikaan.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Tilarivillä näytetään</value>
+  </data>
 </root>

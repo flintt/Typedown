@@ -52,7 +52,23 @@ namespace Typedown.Core.ViewModels
         /// with <see cref="SourceCode"/>; focus and typewriter mode follow the caret and are ignored while it
         /// is on (the menu greys them out).
         /// </summary>
-        public bool ReadOnly { get => GetSettingValue(false); set { SetSettingValue(value); if (value && SourceCode) SourceCode = false; } }
+        public bool ReadOnly
+        {
+            get => GetSettingValue(false);
+            set
+            {
+                // Leaving reading mode goes back to the mode it was entered from: source mode, which reading turned off,
+                // is turned on again. Held for this run only.
+                if (value && !ReadOnly) sourceCodeBeforeReading = SourceCode;
+                var back = !value && ReadOnly && sourceCodeBeforeReading;
+                if (!value) sourceCodeBeforeReading = false;
+                SetSettingValue(value);
+                if (value && SourceCode) SourceCode = false;
+                if (back && !SourceCode) SourceCode = true;
+            }
+        }
+
+        private bool sourceCodeBeforeReading;
         /// <summary>Outline: expand collapsed sections automatically to reveal the current heading (upstream #35).</summary>
         public bool TocAutoExpand { get => GetSettingValue(true); set => SetSettingValue(value); }
         /// <summary>Reopen documents at the last caret position (upstream #50).</summary>

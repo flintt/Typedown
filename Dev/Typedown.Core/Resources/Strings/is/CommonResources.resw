@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>Notendahandbók</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Stafir (án bila)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Stafir (með bilum)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK-stafir</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Orð</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Orð utan CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Málsgreinar</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Fyrirsagnir</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Myndir</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Tenglar</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Lestrartími</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Um {0} mín.</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Innan við mínúta</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Talið í sýnilega textanum. Kóðablokkir og formúlur teljast ekki með í lestrartíma.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Stöðustika sýnir</value>
+  </data>
 </root>

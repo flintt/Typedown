@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>사용자 가이드</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>문자(공백 제외)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>문자(공백 포함)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>한중일 문자</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>단어</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>한중일 외 단어</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>문단</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>제목</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>이미지</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>링크</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>읽는 시간</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>약 {0}분</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>1분 미만</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>보이는 본문 기준으로 계산합니다. 코드 블록과 수식은 읽는 시간에 포함되지 않습니다.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>상태 표시줄 표시</value>
+  </data>
 </root>

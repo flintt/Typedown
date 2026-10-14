@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>Упатство за корисникот</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Знаци (без празни места)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Знаци (со празни места)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK знаци</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Зборови</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Зборови надвор од CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Пасуси</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Наслови</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Слики</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Врски</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Време за читање</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Околу {0} мин</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Помалку од минута</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Се брои видливиот текст. Блоковите код и формулите не влегуваат во времето за читање.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Лентата на статусот прикажува</value>
+  </data>
 </root>

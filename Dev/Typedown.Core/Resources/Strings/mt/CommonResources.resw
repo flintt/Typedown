@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>Gwida għall-utent</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Karattri (mingħajr spazji)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Karattri (bl-ispazji)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>Karattri CJK</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Kliem</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Kliem mhux CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Paragrafi</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Intestaturi</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Immaġni</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Links</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Ħin tal-qari</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Madwar {0} min</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Inqas minn minuta</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Magħdud fuq it-test viżibbli. Il-blokki tal-kodiċi u l-formuli ma jingħaddux fil-ħin tal-qari.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>L-istrixxa tal-istatus turi</value>
+  </data>
 </root>

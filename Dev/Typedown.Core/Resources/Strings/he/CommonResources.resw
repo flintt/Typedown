@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>מדריך למשתמש</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>תווים (ללא רווחים)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>תווים (כולל רווחים)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>תווי CJK</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>מילים</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>מילים שאינן CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>פסקאות</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>כותרות</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>תמונות</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>קישורים</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>זמן קריאה</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>כ-{0} דק׳</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>פחות מדקה</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>נספר לפי הטקסט הגלוי. בלוקי קוד ונוסחאות אינם נכללים בזמן הקריאה.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>שורת המצב מציגה</value>
+  </data>
 </root>

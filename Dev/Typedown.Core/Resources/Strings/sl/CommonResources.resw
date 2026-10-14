@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>Uporabniški priročnik</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Znaki (brez presledkov)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Znaki (s presledki)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>Znaki CJK</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Besede</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Besede zunaj CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Odstavki</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Naslovi</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Slike</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Povezave</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Čas branja</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Približno {0} min</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Manj kot minuta</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Šteto na vidnem besedilu. Bloki kode in formule niso del časa branja.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Vrstica stanja prikazuje</value>
+  </data>
 </root>

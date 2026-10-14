@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>Gabay sa paggamit</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Mga karakter (walang espasyo)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Mga karakter (may espasyo)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>Mga CJK na karakter</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Mga salita</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Mga salitang hindi CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Mga talata</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Mga heading</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Mga larawan</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Mga link</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Oras ng pagbasa</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Mga {0} min</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Wala pang isang minuto</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Binilang sa nakikitang teksto. Hindi kasama sa oras ng pagbasa ang mga code block at formula.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Ipinapakita ng status bar</value>
+  </data>
 </root>

@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>Udhëzuesi i përdoruesit</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Karaktere (pa hapësira)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Karaktere (me hapësira)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>Karaktere CJK</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Fjalë</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Fjalë jo-CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Paragrafë</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Tituj</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Imazhe</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Lidhje</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Koha e leximit</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Rreth {0} min</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Më pak se një minutë</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Numëruar mbi tekstin e dukshëm. Blloqet e kodit dhe formulat nuk hyjnë në kohën e leximit.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Shiriti i gjendjes shfaq</value>
+  </data>
 </root>

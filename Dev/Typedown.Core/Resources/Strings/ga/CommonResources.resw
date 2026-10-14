@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>Treoir úsáideora</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Carachtair (gan spásanna)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Carachtair (le spásanna)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>Carachtair CJK</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Focail</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Focail neamh-CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Míreanna</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Ceannteidil</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Íomhánna</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Naisc</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Am léitheoireachta</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Thart ar {0} nóim</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Níos lú ná nóiméad</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Áirithe ar an téacs infheicthe. Ní chuirtear bloic chóid ná foirmlí san áireamh san am léitheoireachta.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Taispeánann an barra stádais</value>
+  </data>
 </root>

@@ -1014,4 +1014,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>የተጠቃሚ መመሪያ</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>ቁምፊዎች (ያለ ክፍተት)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>ቁምፊዎች (ከክፍተት ጋር)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK ቁምፊዎች</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>ቃላት</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>CJK ያልሆኑ ቃላት</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>አንቀጾች</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>ርዕሶች</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>ምስሎች</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>አገናኞች</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>የንባብ ጊዜ</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>{0} ደቂቃ ገደማ</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>ከአንድ ደቂቃ በታች</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>በሚታየው ጽሑፍ ላይ ተቆጥሯል። የኮድ ብሎኮች እና ቀመሮች በንባብ ጊዜ ውስጥ አይካተቱም።</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>የሁኔታ አሞሌ የሚያሳየው</value>
+  </data>
 </root>

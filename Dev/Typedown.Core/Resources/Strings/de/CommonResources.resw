@@ -1015,4 +1015,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>Benutzerhandbuch</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Zeichen (ohne Leerzeichen)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Zeichen (mit Leerzeichen)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK-Zeichen</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Wörter</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Nicht-CJK-Wörter</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Absätze</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Überschriften</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Bilder</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Links</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Lesezeit</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Etwa {0} Min.</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Unter einer Minute</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Gezählt wird der sichtbare Text. Codeblöcke und Formeln zählen nicht zur Lesezeit.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Statusleiste zeigt</value>
+  </data>
 </root>

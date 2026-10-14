@@ -1014,4 +1014,46 @@
   <data name="UserGuide" xml:space="preserve">
     <value>መምርሒ ተጠቃሚ</value>
   </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>ፊደላት (ብዘይ ባዶ ቦታ)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>ፊደላት (ምስ ባዶ ቦታ)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK ፊደላት</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>ቃላት</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>ዘይ CJK ቃላት</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>ሕጡባት</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>ኣርእስታት</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>ምስልታት</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>መላግቦታት</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>ግዜ ንባብ</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>ዳርጋ {0} ደቒቕ</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>ትሕቲ ሓደ ደቒቕ</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>ኣብቲ ዝርአ ጽሑፍ ተቖጺሩ። ብሎካት ኮድን ቀመራትን ኣብ ግዜ ንባብ ኣይእተዉን።</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>ባር ኩነታት ዘርእዮ</value>
+  </data>
 </root>
