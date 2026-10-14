@@ -147,6 +147,9 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
 - `table-backspace-check.js` — Backspace in a table cell stays in that cell: one too many after emptying a cell went on
   into the cell before (or out of the table into the heading above), deleted its text, and the typing landed there. An
   empty table still becomes a paragraph with Backspace in its first cell.
+- `table-cell-check.js` — a table cell emptied by selecting its text and deleting it, or typed over, takes what is
+  typed next; Shift+Enter and Alt+Enter put a line break (`<br/>`) in the cell, which shows as a second line and is
+  written back as it was loaded. Two Store reviews (the emptied cell, and "Alt+Enter as in Excel" for a second line).
 - `xhtml-toc-check.js` — the document rendered as XHTML for another format (RenderXhtml) keeps its `[TOC]` line's place
   as an empty `div.table-of-contents`, for the host to fill with that format's own table of contents.
 - `xhtml-math-check.js` — RenderXhtml with mathAsTex writes each formula as its TeX (`span.math-tex`,
@@ -198,6 +201,23 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   counts — measuring up to first paint once had me reporting a win that could not be felt. It switches with
   the text the editor reports back, not the file as written, because that is what the host stores and hands
   over, and anything else is a load of a different document.
+- `paragraph-command-check.js` — paragraph commands (the Paragraph menu, its shortcuts, the block menu) change what
+  is selected and nothing around it. A heading made in a paragraph of several lines (single line breaks) takes only
+  the line the caret is on and leaves the lines around it as paragraphs; it used to join the whole paragraph into
+  the heading. A selection made with Shift+Down ends at the start of the next block, and one started at the very end
+  of a block begins in the block before: neither block has anything selected and neither is changed (quoting two
+  paragraphs quoted the third, and a heading command on such a selection did nothing). A list in a selection made
+  into a list gives its items to the new list instead of becoming one item holding the whole list ("1. - a", with
+  the paragraph after it as item 2), and lists of the kind chosen, all of the selection, stop being lists. Two
+  Store reviews (the second: "changing the list format easily turns the text after it into a quote"). After every
+  command the page's top-level blocks must be the document's, each once and in order, and a letter typed at the end
+  of the last block on the page must land at the end of the document: a render that replaced the page only up to a
+  stale key drew the block after the selection twice while the Markdown was right. Enter over a keyboard selection
+  shares that render and is checked the same way.
+- `codeblock-save-check.js` — code typed into a code block is in the text a save writes while the caret is still in
+  the block, in a short document and in one long enough for the text report to be throttled (FlushContent brings it
+  up to date). A Store review on 1.2.18 lost the code block when Save came straight after it. Fails against a bundle
+  whose flush does nothing.
 - `legacy-issues.js` — the issues reported against the original Typedown, in one run: raw html renders with its
   inline CSS, a code block is in the saved markdown the moment it is typed, a table cell whose text is selected
   and deleted still takes input, PageUp/PageDown keep moving.
