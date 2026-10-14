@@ -15,7 +15,9 @@ internal static class Deep
     public static AutomationElement? First(AutomationElement root, Condition condition)
     {
         var found = Retry(() => Searched(root).Select(part => part.FindFirst(TreeScope.Descendants, condition)).FirstOrDefault(e => e != null));
-        return found ?? Walk(root, condition).FirstOrDefault();
+        found ??= Walk(root, condition).FirstOrDefault();
+        ReleaseNow();
+        return found;
     }
 
     public static List<AutomationElement> All(AutomationElement root, Condition condition)
@@ -26,7 +28,19 @@ internal static class Deep
         var ids = new HashSet<string>(found.Select(Id));
         foreach (var e in Walk(root, condition))
             if (ids.Add(Id(e))) found.Add(e);
+        ReleaseNow();
         return found;
+    }
+
+    // The elements a search went through and the caller does not keep, let go of now, while what they stand for is still
+    // on screen. Left to a later collection, UI Automation released them into the test host after a case had closed tabs
+    // or windows, and a release reaching an automation peer already gone crashed the host (uiautomationcore's
+    // ~ProviderInfo on a freed provider, fail-fast 0xc0000409: every case after it timed out).
+    private static void ReleaseNow()
+    {
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+        GC.Collect();
     }
 
     // Where UI Automation's own search goes: the root's children one by one, without a web view's window. Searched as a
