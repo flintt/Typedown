@@ -42,6 +42,30 @@ internal static partial class Program
         return folder;
     }
 
+    /// <summary>
+    /// A row of the folder pane's file tree by its name - in the tree itself (automation id TreeView), not the
+    /// favourites group above it, which can list the same name (FV01 right-clicked the favourite and got its menu).
+    /// </summary>
+    private static AutomationElement? TreeRow(IntPtr window, string name)
+    {
+        var tree = FindIn(window, "TreeView");
+        if (tree == null)
+        {
+            // No automation id on the tree: any row of that name not inside the favourites list.
+            var favorites = FindIn(window, "FavoritesList");
+            foreach (AutomationElement candidate in Deep.All(AutomationElement.FromHandle(window), new PropertyCondition(AutomationElement.NameProperty, name)))
+            {
+                var inside = false;
+                for (var node = TreeWalker.ControlViewWalker.GetParent(candidate); node != null && !inside; node = TreeWalker.ControlViewWalker.GetParent(node))
+                    inside = favorites != null && Automation.Compare(node, favorites);
+                if (!inside) return candidate;
+            }
+            return null;
+        }
+        return Deep.First(tree, new AndCondition(new PropertyCondition(AutomationElement.NameProperty, name), new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.TreeItem)))
+            ?? Deep.First(tree, new PropertyCondition(AutomationElement.NameProperty, name));
+    }
+
     /// <summary>The folder pane's state (test.folder.state): the root it shows and the window's work folder.</summary>
     private static async Task<JToken> FolderState(Client c, string windowId) => await c.Call("test.folder.state", new { windowId });
 
@@ -300,7 +324,7 @@ internal static partial class Program
             await c.Call("test.folder.open", new { windowId, path = two });
             Check(await RootIs(two), "back at two");
             AutomationElement? row = null;
-            await Eventually(() => Task.FromResult((row = FindNamed(window, "three", ControlType.TreeItem) ?? FindNamed(window, "three")) != null), 5000);
+            await Eventually(() => Task.FromResult((row = TreeRow(window, "three")) != null), 5000);
             Check(row != null, "the folder three is in the tree");
             await Click(window, row!, Mouse.Right);
             await Task.Delay(600);
@@ -394,7 +418,7 @@ internal static partial class Program
 
                 // The folder from the tree's right-click menu.
                 AutomationElement? row = null;
-                await Eventually(() => Task.FromResult((row = FindNamed(window, "chapter", ControlType.TreeItem) ?? FindNamed(window, "chapter")) != null), 5000);
+                await Eventually(() => Task.FromResult((row = TreeRow(window, "chapter")) != null), 5000);
                 Check(row != null, "the folder chapter is in the tree");
                 await Click(window, row!, Mouse.Right);
                 await Task.Delay(600);
@@ -431,7 +455,7 @@ internal static partial class Program
 
             // Renamed in the tree: the favourite follows.
             AutomationElement? row = null;
-            await Eventually(() => Task.FromResult((row = FindNamed(window, "fv01.md", ControlType.TreeItem) ?? FindNamed(window, "fv01.md")) != null), 5000);
+            await Eventually(() => Task.FromResult((row = TreeRow(window, "fv01.md")) != null), 5000);
             Check(row != null, "fv01.md is in the tree");
             await Click(window, row!, Mouse.Right);
             await Task.Delay(600);

@@ -50,6 +50,7 @@ namespace Typedown.Core.Controls
             // A letter typed while one of the page's buttons or lists has the keyboard: the page goes and the editor takes
             // the keys from now on (that letter itself is not typed: it went to the button).
             AddHandler(CharacterReceivedEvent, new TypedEventHandler<UIElement, CharacterReceivedRoutedEventArgs>(OnCharacterReceived), true);
+            AddHandler(KeyDownEvent, new KeyEventHandler(OnKeyDown), true);
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
@@ -89,6 +90,14 @@ namespace Typedown.Core.Controls
             {
                 Visibility = Visibility.Visible;
                 Refresh();
+                // The keyboard to the page itself: what is typed now is handed on to the editor once the blank document
+                // is in it (see OnCharacterReceived). Left in the editor, keys typed before the page had the new document
+                // went into the document shown before, or were replaced by the load (E2E HP05). At start-up the editor
+                // takes the keyboard back once its page has loaded with the document, which is then safe.
+                DispatcherQueue?.TryEnqueue(() =>
+                {
+                    if (Visibility == Visibility.Visible && !HasKeyboard()) Focus(FocusState.Programmatic);
+                });
                 return;
             }
             var hadKeyboard = HasKeyboard();
@@ -104,13 +113,101 @@ namespace Typedown.Core.Controls
             return false;
         }
 
+        // Typing on the home page writes in its blank document: each character is kept, and once the editor has the
+        // document (its load confirmed) the editor takes the keyboard and the characters are typed into it again, in
+        // order. The first of them changes the document, which hides the page. A space on a button or a list entry is
+        // that control's own.
         private void OnCharacterReceived(UIElement sender, CharacterReceivedRoutedEventArgs e)
         {
-            if (char.IsControl(e.Character) || e.Character == ' ') return;
+            if (char.IsControl(e.Character)) return;
+            if (e.Character == ' ' && FocusManager.GetFocusedElement(XamlRoot) is Microsoft.UI.Xaml.Controls.Primitives.ButtonBase or ListViewItem) return;
             e.Handled = true;
-            Home?.Hide();
-            ViewModel?.MarkdownEditor?.FocusEditor();
+            pending.Append(e.Character);
+            HandOn();
         }
+
+        // Ctrl+V (Ctrl+Shift+V: as plain text) on the home page: pasted into its document, as in the editor. The
+        // window's paste shortcut only acts with the keyboard in the editor.
+        private void OnKeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key != Windows.System.VirtualKey.V) return;
+            var ctrl = PInvoke.GetIsKeyDown(Windows.System.VirtualKey.Control);
+            if (!ctrl) return;
+            var shift = PInvoke.GetIsKeyDown(Windows.System.VirtualKey.Shift);
+            e.Handled = true;
+            _ = PasteIntoDocumentAsync(shift ? "pasteAsPlainText" : "normal");
+        }
+
+        private async Task PasteIntoDocumentAsync(string type)
+        {
+            if (ViewModel?.EditorViewModel is not { } editor) return;
+            await editor.WaitForLoadAsync(3000);
+            ViewModel?.MarkdownEditor?.FocusEditor();
+            await Task.Delay(100);
+            editor.PasteCommand.Execute(type);
+        }
+
+        private readonly System.Text.StringBuilder pending = new();
+
+        private bool handingOn;
+
+        private async void HandOn()
+        {
+            if (handingOn) return;
+            handingOn = true;
+            try
+            {
+                if (ViewModel?.EditorViewModel is { } editor && !await editor.WaitForLoadAsync(3000))
+                    Log.Debug("home page: the editor did not confirm its document within 3 s; typing handed on anyway");
+                ViewModel?.MarkdownEditor?.FocusEditor();
+                // The web view takes the keyboard a moment after it is asked to.
+                await Task.Delay(120);
+                var text = pending.ToString();
+                pending.Clear();
+                if (text.Length > 0 && !TypeText(text)) Log.Debug($"home page: {text.Length} typed character(s) could not be handed on");
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"home page: typing not handed on: {ex.Message}");
+            }
+            finally
+            {
+                handingOn = false;
+            }
+            // Typed while this was waiting, with the page still holding the keyboard.
+            if (pending.Length > 0) HandOn();
+        }
+
+        // Characters typed again as the keyboard types them (KEYEVENTF_UNICODE), into whatever has the keyboard now.
+        private static bool TypeText(string text)
+        {
+            var inputs = new INPUT[text.Length * 2];
+            for (var i = 0; i < text.Length; i++)
+            {
+                inputs[2 * i] = new INPUT { type = 1, u = new InputUnion { ki = new KEYBDINPUT { wScan = text[i], dwFlags = 0x0004 } } };
+                inputs[2 * i + 1] = new INPUT { type = 1, u = new InputUnion { ki = new KEYBDINPUT { wScan = text[i], dwFlags = 0x0004 | 0x0002 } } };
+            }
+            return SendInput((uint)inputs.Length, inputs, System.Runtime.InteropServices.Marshal.SizeOf<INPUT>()) == inputs.Length;
+        }
+
+        [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
+        private struct INPUT { public uint type; public InputUnion u; }
+
+        [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Explicit)]
+        private struct InputUnion
+        {
+            [System.Runtime.InteropServices.FieldOffset(0)] public MOUSEINPUT mi;
+            [System.Runtime.InteropServices.FieldOffset(0)] public KEYBDINPUT ki;
+        }
+
+        [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
+        private struct MOUSEINPUT { public int dx, dy; public uint mouseData, dwFlags, time; public IntPtr dwExtraInfo; }
+
+        [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
+        private struct KEYBDINPUT { public ushort wVk, wScan; public uint dwFlags, time; public IntPtr dwExtraInfo; }
+
+        [System.Runtime.InteropServices.DllImport("user32.dll", SetLastError = true)]
+        private static extern uint SendInput(uint count, INPUT[] inputs, int size);
 
         private void OnListsChanged() => DispatcherQueue?.TryEnqueue(() =>
         {

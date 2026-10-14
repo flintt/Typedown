@@ -115,8 +115,10 @@ namespace Typedown.Core.ViewModels
                     if (blank != null) await tabs.SwitchTo(blank);
                     else await File.NewDocumentAsync();
                 }
+                // The keyboard goes to the home page (HomePage takes it when shown), not to the editor: the blank
+                // document may still be on its way to the page, and keys typed into the page before it arrives went
+                // into the document shown before (or were lost when the load replaced them). The page hands them on.
                 Show();
-                MarkdownEditor?.FocusEditor();
             }
             catch (Exception ex)
             {

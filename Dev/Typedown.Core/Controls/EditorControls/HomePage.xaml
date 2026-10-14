@@ -9,6 +9,8 @@
     xmlns:u="using:Typedown.Core.Utilities"
     AutomationProperties.AutomationId="HomePage"
     Visibility="Collapsed"
+    IsTabStop="True"
+    UseSystemFocusVisuals="False"
     Loaded="OnLoaded"
     Unloaded="OnUnloaded"
     mc:Ignorable="d">

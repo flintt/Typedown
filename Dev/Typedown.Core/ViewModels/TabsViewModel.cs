@@ -250,8 +250,8 @@ namespace Typedown.Core.ViewModels
                     if (string.IsNullOrEmpty(FileViewModel.FilePath)) FileViewModel.AutoBackup.DeleteBackup(null, tab.DocumentId);
                     EditorViewModel.Saved = true;
                     FileViewModel.ResetToBlankDocument();
+                    // The home page takes the keyboard and hands typing on to the blank document once it is loaded.
                     home.Show();
-                    MarkdownEditor?.FocusEditor();
                     return true;
                 }
                 // Closing the only document closes the window (the window's own close flow asks to save).
