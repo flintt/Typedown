@@ -73,6 +73,7 @@ namespace Typedown
 
         protected override async void OnLaunched(LaunchActivatedEventArgs launchArgs)
         {
+            StartupTiming.Reached("launched");
             Log.Debug($"startup: version={Core.Controls.AboutApp.GetAppVersion()} windowsBuild={Config.WindowsBuild} osVersion={Environment.OSVersion.VersionString} mica={Config.IsMicaSupported} packaged={Config.IsPackaged} elevated={IsElevated()} exe={AppDomain.CurrentDomain.BaseDirectory}");
             try
             {
@@ -93,8 +94,11 @@ namespace Typedown
                 Exit();
                 return;
             }
+            StartupTiming.Reached("runtime checked");
             var window = new MainWindow();
+            StartupTiming.Reached("window made");
             window.Start();
+            StartupTiming.Reached("window shown");
             // The runtime installed just now: the install window waited, hidden, for the main window.
             WebViewInstallWindow.CloseKept();
             ListenPipe(window.DispatcherQueue);

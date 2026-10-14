@@ -128,6 +128,7 @@ namespace Typedown.Controls
 
         private void OnContentLoaded()
         {
+            Core.Utilities.StartupTiming.Reached("editor page loaded");
             Opacity = 1;
             IsEditorLoaded = true;
             if (AppViewModel.EditorViewModel.FocusWhenLoaded)
@@ -154,6 +155,8 @@ namespace Typedown.Controls
         // The web view made (again, when the one there lost its browser) and the editor page loaded in it.
         private async Task StartAsync()
         {
+            // The web view is made only now, once the window's content is laid out (todo #16).
+            Core.Utilities.StartupTiming.Reached("editor control loaded");
             Opacity = 0;
             IsEditorLoaded = false;
             IsEditorLoadFailed = false;

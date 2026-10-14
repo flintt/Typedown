@@ -22,6 +22,8 @@ namespace Typedown
             Core.Config.UseAutomationTestHost(at >= 0 && at + 1 < args.Length ? args[at + 1]
                 : System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Typedown-AutomationTests", "manual"));
 #endif
+            // The start's stages go to debug.log from here (todo #16); this one is the .NET runtime's own start.
+            StartupTiming.Reached("main");
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
             // A crash that kills the process without reaching the handlers above (an exception escaping into the
             // native XAML dispatcher, a stack overflow) leaves no report at all. First-chance logging records
