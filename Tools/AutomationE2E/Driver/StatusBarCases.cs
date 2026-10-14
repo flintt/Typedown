@@ -230,8 +230,11 @@ internal static partial class Program
             await Task.Delay(800);
             var crlf = BarText(window, "StatusBarFileFormat");
             Check(crlf.Contains("CRLF"), $"CRLF chosen ({crlf})");
-            await Click(window, Find("StatusBarSaveState"));
-            await Task.Delay(1500);
+            var saveState = Find("StatusBarSaveState");
+            notes.Add($"save state before the click: '{saveState.Current.HelpText}', at {saveState.Current.BoundingRectangle}");
+            await Click(window, saveState);
+            // A save flushes the page first: give it time, in a long run too.
+            for (var i = 0; i < 30 && !System.Text.Encoding.ASCII.GetString(File.ReadAllBytes(path)).Contains("\r\n"); i++) await Task.Delay(200);
             var bytes = File.ReadAllBytes(path);
             notes.Add($"after CRLF and a save: {bytes.Length} bytes, {System.Text.Encoding.ASCII.GetString(bytes).Split("\r\n").Length - 1} CRLF");
             Check(System.Text.Encoding.ASCII.GetString(bytes).Contains("line one\r\nline two\r\n"), "the save wrote CRLF");
