@@ -108,6 +108,7 @@ internal static partial class CaseCatalog
         ["SB06"] = F("outline"),
         ["SB07"] = Q("window"),
         ["AC01"] = F("edition"),
+        ["KY01"] = Q("keys"),
         // Fails as a known issue (restored without activation, the editor has no size): in full runs only.
         ["MN03"] = F("window"),
         ["MN04"] = Q("window"),
@@ -215,6 +216,7 @@ internal static partial class CaseCatalog
         ["SB06"] = "状态栏显示当前标题，单击打开大纲",
         ["SB07"] = "窄窗口时状态栏收纳到“…”，右键选择显示项",
         ["AC01"] = "版本扩展能收到写作相关事件（切换文档、模式、撤销、窗口失焦、改名）",
+        ["KY01"] = "Ctrl 与字母同时到达时撤销/重做仍走宿主；在别处松开的 Ctrl 不会卡住",
         ["MN03"] = "最小化时写入，未激活恢复后编辑区尺寸",
         ["MN04"] = "全屏进出后最小化再恢复，窗口正常",
         ["MN05"] = "全屏后最小化，从资源管理器打开文件",
