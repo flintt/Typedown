@@ -127,6 +127,7 @@ jobs:
           node xhtml-math-check.js
           node xhtml-footnote-check.js
           node export-anchors-check.js
+          node wordcount-mode-check.js
 
       - uses: actions/upload-artifact@v4
         with:
