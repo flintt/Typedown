@@ -92,7 +92,9 @@ namespace Typedown.Core.ViewModels
         }
 
         /// <summary>True when the active tab is a pristine untitled document that a new/open action may reuse.</summary>
-        public bool IsActiveTabBlank => FileViewModel.FilePath == null && EditorViewModel.Saved && EditorViewModel.CurrentHash == Common.SimpleHash(Common.DefaultMarkdwn);
+        public bool IsActiveTabBlank => FileViewModel.FilePath == null && EditorViewModel.Saved
+            // The editor may give an empty document back as it likes (a line break, none): still nothing in it.
+            && (EditorViewModel.CurrentHash == Common.SimpleHash(Common.DefaultMarkdwn) || string.IsNullOrWhiteSpace(EditorViewModel.Markdown));
 
         /// <summary>
         /// Single-click open navigates within the current tab: it may replace the active document whenever it has no
@@ -239,6 +241,19 @@ namespace Typedown.Core.ViewModels
             if (tab == null || !Tabs.Contains(tab)) return false;
             if (Tabs.Count == 1)
             {
+                // With the home page on (Settings > General > On startup), the last document closed leaves a blank tab
+                // with the home page; closed there too, the window goes.
+                var home = ServiceProvider.GetService<HomeViewModel>();
+                if (ServiceProvider.GetService<SettingsViewModel>().ShowHomePage && home != null && !home.IsVisible)
+                {
+                    if (!await FileViewModel.AskToSave()) return false;
+                    if (string.IsNullOrEmpty(FileViewModel.FilePath)) FileViewModel.AutoBackup.DeleteBackup(null, tab.DocumentId);
+                    EditorViewModel.Saved = true;
+                    FileViewModel.ResetToBlankDocument();
+                    home.Show();
+                    MarkdownEditor?.FocusEditor();
+                    return true;
+                }
                 // Closing the only document closes the window (the window's own close flow asks to save).
                 FileViewModel.ExitCommand.Execute(default);
                 return true;

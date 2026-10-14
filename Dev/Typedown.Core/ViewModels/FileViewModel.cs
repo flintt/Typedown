@@ -41,6 +41,8 @@ namespace Typedown.Core.ViewModels
 
         public AccessHistory AccessHistory => ServiceProvider.GetService<AccessHistory>();
 
+        public HomeViewModel Home => ServiceProvider.GetService<HomeViewModel>();
+
         public string WorkFolder { get; private set; } = null;
 
         /// <summary>True when the user chose the workspace folder (Open Folder), false when it was restored at startup.</summary>
@@ -61,7 +63,12 @@ namespace Typedown.Core.ViewModels
         public Command<string> OpenFileCommand { get; } = new();
         public Command<string> OpenFolderCommand { get; } = new();
         public Command<Unit> NewFolderCommand { get; } = new();
+        /// <summary>File > Open recent > Clear recent files: the files only (the folders have their own entry).</summary>
         public Command<Unit> ClearHistoryCommand { get; } = new();
+        /// <summary>File > Open recent > Folders > Clear recent folders.</summary>
+        public Command<Unit> ClearFolderHistoryCommand { get; } = new();
+        /// <summary>Settings > General > Data > Clear recent: files and folders.</summary>
+        public Command<Unit> ClearAllHistoryCommand { get; } = new();
         public Command<Unit> SaveCommand { get; } = new();
         public Command<Unit> SaveAsCommand { get; } = new();
         public Command<Unit> ImportCommand { get; } = new();
@@ -96,13 +103,22 @@ namespace Typedown.Core.ViewModels
             ServiceProvider = serviceProvider;
             // New, as the reader asks for it (the + button, the menu, Ctrl+N): the keyboard goes to the new document. The
             // + button kept it, and the letters typed next went nowhere until a click in the text.
-            NewFileCommand.OnExecute.Subscribe(async _ => { await NewFileFun(); MarkdownEditor?.FocusEditor(); });
+            // A new tab is for writing: no home page on it unless Settings > General > On startup asks for one there too.
+            NewFileCommand.OnExecute.Subscribe(async _ =>
+            {
+                await NewFileFun();
+                if (SettingsViewModel.ShowHomeOnNewTab) Home?.Show(); else Home?.Hide();
+                MarkdownEditor?.FocusEditor();
+            });
             OpenFileCommand.OnExecute.Subscribe(async x => await OpenFile(x));
             OpenFolderCommand.OnExecute.Subscribe(async x => await OpenFolder(x));
             SaveAsCommand.OnExecute.Subscribe(async _ => await SaveAs());
             SaveCommand.OnExecute.Subscribe(async _ => await Save());
             ExitCommand.OnExecute.Subscribe(_ => Exit());
-            ClearHistoryCommand.OnExecute.Subscribe(x => { _ = AccessHistory.ClearHistory(); });
+            // "Clear recent files" cleared the folders too, which it does not say: each list has its own entry now.
+            ClearHistoryCommand.OnExecute.Subscribe(x => { _ = AccessHistory.ClearFileHistory(); });
+            ClearFolderHistoryCommand.OnExecute.Subscribe(x => { _ = AccessHistory.ClearFolderHistory(); });
+            ClearAllHistoryCommand.OnExecute.Subscribe(x => { _ = AccessHistory.ClearHistory(); });
             ExportCommand.OnExecute.Subscribe(Export);
             PrintCommand.OnExecute.Subscribe(_ => Print());
             ShareToHedgeDocCommand.OnExecute.Subscribe(_ => ShareToHedgeDoc());
@@ -321,11 +337,10 @@ namespace Typedown.Core.ViewModels
                     _ = AppViewModel.XamlRoot?.Content?.DispatcherQueue?.RunIdleAsync(() => { PInvoke.SetForegroundWindow(window); });
                     return false;
                 }
+                // A recent file that is not there stays in the list (greyed out): a network drive or a USB stick may only
+                // be unplugged. The reader removes it if it is gone for good.
                 if (!File.Exists(path))
-                {
-                    _ = AccessHistory.RemoveFileHistory(path);
                     throw new FileNotFoundException("File does not exist.");
-                }
                 // Tabs: an already open file just becomes active; anything else opens beside the current document
                 // (reusing a pristine untitled tab), so the old document never needs a save prompt here.
                 if (TabsViewModel?.FindByPath(path) is DocumentTab existing)
@@ -394,10 +409,7 @@ namespace Typedown.Core.ViewModels
             try
             {
                 if (!Directory.Exists(folderPath))
-                {
-                    _ = AccessHistory.RemoveFolderHistory(folderPath);
                     throw new FileNotFoundException("Folder does not exist.");
-                }
                 WorkFolder = folderPath;
                 _ = AccessHistory.RecordFolderHistory(folderPath);
                 return true;
@@ -487,8 +499,43 @@ namespace Typedown.Core.ViewModels
             }
         }
 
-        /// <summary>A new untitled document in this window (a new tab, or the pristine blank one), as the New command.</summary>
-        public Task NewDocumentAsync() => NewFileFun();
+        /// <summary>
+        /// A new untitled document in this window (a new tab, or the pristine blank one), as the New command; shown in the
+        /// editor, not under the home page (an automation client's document.create, the home page's own command).
+        /// </summary>
+        public async Task NewDocumentAsync()
+        {
+            await NewFileFun();
+            Home?.Hide();
+        }
+
+        /// <summary>
+        /// The active tab made a new blank document at once (the last tab closed with the home page on): no question, no
+        /// backup looked for - what was there has been saved or let go already.
+        /// </summary>
+        internal void ResetToBlankDocument()
+        {
+            if (TabsViewModel?.ActiveTab is { } tab)
+            {
+                tab.BecomeNewDocument();
+                tab.IsPreview = false;
+                tab.BackupHash = 0;
+                tab.Cursor = null;
+            }
+            FilePath = null;
+            FileFormat = TextFileFormat.Default;
+            DiskHash = 0;
+            EditorViewModel.FileHash = Common.SimpleHash(Common.DefaultMarkdwn);
+            EditorViewModel.Markdown = Common.DefaultMarkdwn;
+            EditorViewModel.CurrentHash = EditorViewModel.FileHash;
+            EditorViewModel.Saved = true;
+            EditorViewModel.AutoSavedSucc = true;
+            EditorViewModel.AutoSaveHeldBack = null;
+            EditorViewModel.FileLoaded = false;
+            EditorViewModel.History.InitHistory(EditorViewModel.Markdown);
+            EditorViewModel.PostLoadFile(EditorViewModel.Markdown);
+            EditionHooks.ReportActivity(ActivityKind.DocumentShown, AppViewModel);
+        }
 
         /// <summary>
         /// Saves the active document to its existing path without any dialog (the automation API's save): false when
@@ -970,6 +1017,9 @@ namespace Typedown.Core.ViewModels
                         break;
                 }
             }
+            // Nothing to show (no file asked for, the session's or the last file gone, a new document): the home page,
+            // when the settings want it. Before the recovery question, which a recovered document then answers.
+            Home?.ShowIfWanted();
             await RecoverUntitledBackupsAsync();
         }
 
@@ -1160,6 +1210,7 @@ namespace Typedown.Core.ViewModels
             var fileOperation = ServiceProvider.GetService<IFileOperation>();
             if (fileOperation.Rename(FilePath, to))
             {
+                Favorites.Shared.Rename(FilePath, to);
                 FilePath = to;
                 return true;
             }

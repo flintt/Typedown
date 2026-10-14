@@ -183,6 +183,21 @@ namespace Typedown.Core.ViewModels
         public FileStartupAction FileStartupAction { get => GetSettingValue(FileStartupAction.None); set => SetSettingValue(value); }
         public FolderStartupAction FolderStartupAction { get => GetSettingValue(FolderStartupAction.OpenLast); set => SetSettingValue(value); }
         public string StartupOpenFolder { get => GetSettingValue(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)); set => SetSettingValue(value); }
+        /// <summary>
+        /// Settings > General > Data: the files and folders opened are remembered (File > Open recent, the home page, the
+        /// last folder at start-up). Off, nothing new is recorded; what is there stays until it is cleared. Read by
+        /// AccessHistory from the settings file under this name (AccessHistory.RecordSettingName).
+        /// </summary>
+        public bool RecordRecentFiles { get => GetSettingValue(true); set => SetSettingValue(value); }
+        /// <summary>The folder pane's favourites group is unfolded (a click on its title folds it).</summary>
+        public bool FavoritesExpanded { get => GetSettingValue(true); set => SetSettingValue(value); }
+        /// <summary>
+        /// Settings > General > On startup: a blank tab shows the home page (recent files and folders, favourites) - at
+        /// start-up with nothing to open, and when the last tab is closed (which then leaves the window open).
+        /// </summary>
+        public bool ShowHomePage { get => GetSettingValue(true); set => SetSettingValue(value); }
+        /// <summary>Settings > General > On startup: a new tab (Ctrl+N, the + button) shows the home page too. Off: it is for writing at once.</summary>
+        public bool ShowHomeOnNewTab { get => GetSettingValue(false); set => SetSettingValue(value); }
         public bool AppCompactMode { get => GetSettingValue(false); set => SetSettingValue(value); }
         public InsertImageAction InsertClipboardImageAction { get => GetSettingValue(InsertImageAction.None); set => SetSettingValue(value); }
         public string InsertClipboardImageCopyPath { get => GetSettingValue("./images"); set => SetSettingValue(value); }

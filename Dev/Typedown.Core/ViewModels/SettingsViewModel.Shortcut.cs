@@ -16,6 +16,11 @@ namespace Typedown.Core.ViewModels
         [Locale("File", "Open")]
         public ShortcutKey ShortcutOpenFile { get => GetSettingValue<ShortcutKey>(new(Mod.Control, Key.O)); set => SetSettingValue(value); }
 
+        // Ctrl+Shift+H: free in the app, the editor page and Vim keys (Ctrl+H is Replace); Alt+Home was the browsers' key,
+        // but a swallowed Home leaves a lone Alt, which opens the menu bar.
+        [Locale("File", "Home")]
+        public ShortcutKey ShortcutHome { get => GetSettingValue<ShortcutKey>(new(Mod.Control | Mod.Shift, Key.H)); set => SetSettingValue(value); }
+
         [Locale("File", "OpenFolder")]
         public ShortcutKey ShortcutOpenFolder { get => GetSettingValue<ShortcutKey>(null); set => SetSettingValue(value); }
 

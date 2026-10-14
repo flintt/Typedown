@@ -10,6 +10,12 @@
     Loaded="OnLoaded"
     Unloaded="OnUnloaded"
     mc:Ignorable="d">
+    <UserControl.Resources>
+        <!-- A tab's right-click menu: its file into or out of the favourites (not for an untitled document). -->
+        <MenuFlyout x:Key="TabContextFlyout" Opening="OnTabContextFlyoutOpening">
+            <MenuFlyoutItem AutomationProperties.AutomationId="TabFavoriteItem" Text="Favorite" Click="OnTabFavoriteClick"/>
+        </MenuFlyout>
+    </UserControl.Resources>
     <muxc:TabView
         x:Name="TabView"
         TabItemsSource="{x:Bind Tabs.Tabs, Mode=OneWay}"
@@ -22,9 +28,18 @@
         CanDragTabs="False"
         IsAddTabButtonVisible="True"
         Background="Transparent">
+        <!-- The home page (File > Home), at the strip's left: the open documents stay as they are. -->
+        <muxc:TabView.TabStripHeader>
+            <Button x:Name="HomeButton" AutomationProperties.AutomationId="HomeButton" Width="32" Height="28" Margin="4,0,0,0" Padding="0"
+                    Background="Transparent" BorderThickness="0" VerticalAlignment="Center"
+                    ToolTipService.ToolTip="{x:Bind HomeToolTip, Mode=OneWay}" AutomationProperties.Name="{x:Bind HomeToolTip, Mode=OneWay}"
+                    Click="OnHomeButtonClick">
+                <FontIcon FontSize="14" Glyph="&#xe80f;"/>
+            </Button>
+        </muxc:TabView.TabStripHeader>
         <muxc:TabView.TabItemTemplate>
             <DataTemplate x:DataType="models:DocumentTab">
-                <muxc:TabViewItem Header="{x:Bind DisplayTitle, Mode=OneWay}" ToolTipService.ToolTip="{x:Bind ToolTip, Mode=OneWay}" IsClosable="True"/>
+                <muxc:TabViewItem Header="{x:Bind DisplayTitle, Mode=OneWay}" ToolTipService.ToolTip="{x:Bind ToolTip, Mode=OneWay}" IsClosable="True" ContextFlyout="{StaticResource TabContextFlyout}"/>
             </DataTemplate>
         </muxc:TabView.TabItemTemplate>
     </muxc:TabView>

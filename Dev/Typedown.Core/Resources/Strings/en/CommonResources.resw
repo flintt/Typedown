@@ -1142,4 +1142,76 @@
     <value>Save status</value>
     <comment>状态栏右键菜单：显示保存状态</comment>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Folders</value>
+    <comment>打开最近 → 文件夹（子菜单）</comment>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>No recent folders</value>
+    <comment>打开最近 → 文件夹：没有最近文件夹</comment>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Clear recent folders</value>
+    <comment>打开最近 → 文件夹：清除最近文件夹</comment>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Right-click or press Delete to remove it from this list</value>
+    <comment>最近列表条目的悬停提示：右键或按 Delete 从列表移除</comment>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Up one level</value>
+    <comment>文件栏：上一级文件夹（按钮提示和菜单项）</comment>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Set as root</value>
+    <comment>文件栏：文件夹右键菜单“设为根目录”</comment>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Favourites</value>
+    <comment>文件栏/首页：收藏分组标题</comment>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Add to favourites</value>
+    <comment>右键菜单：收藏（文件树、标签、首页）</comment>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Remove from favourites</value>
+    <comment>右键菜单：取消收藏</comment>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Home</value>
+    <comment>文件 → 首页（菜单项、标签栏 ⌂ 按钮、快捷键名称）</comment>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Start</value>
+    <comment>首页标题</comment>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>New document</value>
+    <comment>首页按钮：新建空白文档</comment>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Open file</value>
+    <comment>首页按钮：打开文件</comment>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Open folder</value>
+    <comment>首页按钮：打开文件夹</comment>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Recent files</value>
+    <comment>首页分组标题：最近文件</comment>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Recent folders</value>
+    <comment>首页分组标题：最近文件夹</comment>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Remove from list</value>
+    <comment>首页右键菜单：从最近列表移除</comment>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Settings</value>
+    <comment>首页底部去设置的链接</comment>
+  </data>
 </root>

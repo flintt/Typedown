@@ -74,6 +74,12 @@ namespace Typedown.Core.Models
         /// <summary>Content hash last written to this tab's crash backup, so an unchanged background tab is not re-backed each tick.</summary>
         public ulong BackupHash { get; set; }
 
+        /// <summary>
+        /// The home page asked for on this tab (HomeViewModel): shown while the tab is a blank document, given up for good
+        /// once something is written in it or a file opened in it.
+        /// </summary>
+        public bool ShowHome { get; set; }
+
         /// <summary>Opened by a single click in the file tree: the next single-click open replaces this tab (VS Code style).</summary>
         public bool IsPreview { get; set; }
 

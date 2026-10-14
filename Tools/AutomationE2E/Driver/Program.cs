@@ -166,7 +166,17 @@ internal static partial class Program
             await Case("VI02 Vim keys in reading mode: G, gg, ]] and Ctrl+D move the page", VI02);
             await Case("TC01 a tab closed with its x button: the outline shows the headings of the tab shown next", TC01);
             await Case("TC02 a tab closed while its neighbour is not the tab used last: the outline is the shown tab's, with long documents", TC02);
-            await Case("SE01 the startup action chosen on the settings page is in the settings file", SE01);
+            await Case("SE01 the startup action chosen on the settings page is in the settings file, and so are the two home page switches below it", SE01);
+            await Case("RC01 two folders opened, A then B: File > Open recent > Folders lists B then A by name and folder, and choosing A makes it the folder pane's root", RC01);
+            await Case("RC02 a recent file deleted stays in the list greyed out and a right-click removes it; Clear recent files leaves the recent folders", RC02);
+            await Case("RC03 with \"Remember recently opened files\" off a file opened is not listed; Clear recent on the settings page empties files and folders", RC03);
+            await Case("FN01 the folder pane's up arrow, the folder above chosen in its root menu and \"Set as root\" on a folder each move the tree; the open documents stay as they were", FN01);
+            await Case("FV01 a file favoured from its tab's menu and a folder from the tree's menu are in favorites.json and the folder pane's group, still after a restart (and on the home page); renamed in the tree, the favourite follows", FV01);
+            await Case("HP01 a start with the settings as they come shows the home page; a recent file clicked there opens in its tab and the home page goes", HP01);
+            await Case("HP02 Ctrl+N and the + button show no home page and the next letter goes into the new document; with \"New tabs show the home page\" on, Ctrl+N shows it", HP02);
+            await Case("HP03 the last tab closed leaves the window with the home page (closed again, the window goes); a session whose files are gone shows it; with the switch off a blank document", HP03);
+            await Case("HP04 with files open, File > Home, the home button and Ctrl+Shift+H show the home page in one blank tab, the documents left alone; an automation write into it hides it with the text written", HP04);
+            await Case("HP05 the home page hidden by typing, and by its New document button, leaves the keys in the editor", HP05);
             await Case("WP02 pasted web pictures: one behind hotlink protection is fetched with the page as referrer, a page that is not a picture is kept on the web and said, and an untitled document saved into a folder takes its pictures along", WP02);
             await Case("EX02 an export says where it was written, with buttons to open it, and goes when closed; with no action after export, nothing shows", EX02);
             await Case("TB01 the table toolbar's Resize table opens with the table's own size; Cancel leaves the table as it was; OK resizes it", TB01);
@@ -2497,6 +2507,26 @@ internal static partial class Program
             notes.Add($"after choosing it: settings model {model}, Settings.json {stored ?? "(none)"}");
             Check(model == 2, "the settings take the choice");
             Check(stored == "2", "and the settings file holds it");
+
+            // The two home page switches below the startup rows: each turned and back, the file following.
+            foreach (var name in new[] { "ShowHomePage", "ShowHomeOnNewTab" })
+            {
+                var was = (bool)(await c.Call("test.settings.get", new { windowId, name }))["value"]!;
+                var toggle = FindIn(window, name) ?? throw new CaseFailed($"no {name} switch in the startup expander");
+                foreach (var want in new[] { !was, was })
+                {
+                    ((System.Windows.Automation.TogglePattern)toggle.GetCurrentPattern(System.Windows.Automation.TogglePattern.Pattern)).Toggle();
+                    string? inFile = null;
+                    for (var i = 0; i < 20; i++)
+                    {
+                        await Task.Delay(200);
+                        inFile = JObject.Parse(File.ReadAllText(Path.Combine(testRoot, "data", "Settings.json")))[name]?.ToString();
+                        if (inFile != null && bool.Parse(inFile) == want) break;
+                    }
+                    notes.Add($"{name} turned to {want}: Settings.json {inFile ?? "(none)"}");
+                    Check(inFile != null && bool.Parse(inFile) == want, $"the settings file holds {name} = {want}");
+                }
+            }
 
             // Leaving the settings page (back to the document) keeps it.
             await c.Call("test.window.navigate", new { windowId, route = "Main" });
