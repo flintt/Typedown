@@ -141,8 +141,9 @@ namespace Typedown.Core.Utilities
 
         /// <summary>
         /// What happens around the writing, as it happens: a window activated or left, the mode changed, another document
-        /// shown, a document saved under a new name, a paste, an undo or a redo. Only the event, for an edition to make
-        /// something of (a timeline of a writing day); raised on the window's thread.
+        /// shown, a document saved under a new name, a paste, an undo or a redo, the page scrolled (at most once every ten
+        /// seconds a window). Only the event, for an edition to make something of (a timeline of a writing day); raised on
+        /// the window's thread.
         /// </summary>
         public static event Action<ActivityReport> Activity;
 
@@ -185,7 +186,13 @@ namespace Typedown.Core.Utilities
         }
     }
 
-    public enum ActivityKind { WindowActivated, WindowDeactivated, ModeChanged, DocumentShown, DocumentRenamed, Pasted, Undone, Redone }
+    public enum ActivityKind
+    {
+        WindowActivated, WindowDeactivated, ModeChanged, DocumentShown, DocumentRenamed, Pasted, Undone, Redone,
+
+        /// <summary>The page moved: raised at most once every ten seconds a window, a sign that someone is there.</summary>
+        Scrolled,
+    }
 
     /// <summary>One event of <see cref="EditionHooks.Activity"/>, with the window's document and mode as they are after it.</summary>
     public sealed class ActivityReport

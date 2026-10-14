@@ -258,6 +258,7 @@ namespace Typedown.Core.ViewModels
 
         private void OnScroll(JToken arg)
         {
+            ReportScrolled(arg);
             if (!FileLoaded || string.IsNullOrEmpty(FileViewModel.FilePath)) return;
             var scrollY = arg["scrollY"]?.Value<double?>();
             if (scrollY == null) return;
@@ -275,6 +276,29 @@ namespace Typedown.Core.ViewModels
                 lastLoggedScroll = scrollY.Value;
                 Log.Debug($"scroll: {scrollY.Value:0}");
             }
+        }
+
+        // Where the page was at the last scroll report, and when the last Scrolled was told (Environment.TickCount64).
+        private double heartbeatScroll = double.NaN;
+        private long lastScrollHeartbeat = long.MinValue;
+
+        /// <summary>
+        /// The page of the current load moved (scrolled by the reader, or by the caret following the typing): told to an
+        /// edition as <see cref="ActivityKind.Scrolled"/>, at most once every ten seconds - a sign that someone is at the
+        /// window, not every scroll event. A report whose position did not change (the page's height did) is no move.
+        /// </summary>
+        private void ReportScrolled(JToken arg)
+        {
+            var y = arg?["scrollY"]?.Value<double?>();
+            var id = arg?["loadId"];
+            if (y == null || !FileLoaded || id == null || id.Type != JTokenType.Integer || id.Value<int>() != LoadId) return;
+            var moved = !double.IsNaN(heartbeatScroll) && Math.Abs(y.Value - heartbeatScroll) >= 1;
+            heartbeatScroll = y.Value;
+            if (!moved) return;
+            var now = Environment.TickCount64;
+            if (lastScrollHeartbeat != long.MinValue && now - lastScrollHeartbeat < 10000) return;
+            lastScrollHeartbeat = now;
+            EditionHooks.ReportActivity(ActivityKind.Scrolled, AppViewModel);
         }
 
         private bool IsStaleReport(JToken arg)

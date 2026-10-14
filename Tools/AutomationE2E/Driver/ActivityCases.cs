@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 
 /// <summary>
 /// AC01: what an edition hears of around the writing (EditionHooks.Activity): another document shown, the mode changed,
-/// an undo, the window left and come back to, a document saved under a new name.
+/// an undo, the window left and come back to, a document saved under a new name, the page scrolled.
 /// </summary>
 internal static partial class Program
 {
@@ -59,6 +59,25 @@ internal static partial class Program
             Check(events.Count(e => (string?)e["kind"] == "Undone") >= 2, "an undo by Ctrl+Z and one by Edit > Undo");
             Check(Has("WindowDeactivated") && Has("WindowActivated"), "the window left and come back to");
             Check(Has("DocumentRenamed", e => ((string?)e["oldPath"] ?? "").EndsWith("ac01-a.md") && ((string?)e["path"] ?? "").EndsWith("ac01-renamed.md")), "saved under a new name, with the old one");
+
+            // A long document scrolled: a Scrolled event (at most one every ten seconds a window, so moved again until it comes).
+            var longText = "# AC01 long\n\n" + string.Concat(Enumerable.Range(1, 200).Select(i => $"Paragraph {i} of a long document.\n\n"));
+            var longId = await Open(c, Fixture("ac01-long.md", longText));
+            await c.Call("document.focus", new { documentId = longId });
+            await Activate(window);
+            await Task.Delay(800);
+            await c.Call("test.activity.recent", new { clear = true });
+            var scrolled = false;
+            for (var i = 0; i < 14 && !scrolled; i++)
+            {
+                await c.Call("test.editor.eval", new { windowId, script = $"window.scrollTo(0, {(i % 2 == 0 ? 2400 : 1200)}); window.scrollY" });
+                await Task.Delay(1000);
+                scrolled = ((JArray)(await c.Call("test.activity.recent"))["events"]!).Any(e => (string?)e["kind"] == "Scrolled" && ((string?)e["path"] ?? "").EndsWith("ac01-long.md"));
+            }
+            var scrolls = ((JArray)(await c.Call("test.activity.recent"))["events"]!).Count(e => (string?)e["kind"] == "Scrolled");
+            notes.Add($"scrolled events over the scrolling: {scrolls}");
+            Check(scrolled, "the page scrolled is heard of, with its document");
+            Check(scrolls <= 2, "and not at every scroll event (at most one every ten seconds)");
         }
         finally
         {
