@@ -107,6 +107,97 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             UpdateSelectedItem(WorkFolderExplorerItem);
         }
 
+        // ---- the root: up, the folders above, favourite and recent folders, Open folder ----
+
+        /// <summary>The folder has one above it (the up arrow is enabled).</summary>
+        public static bool HasParent(string path) => RecentPaths.Ancestors(path).Count > 0;
+
+        /// <summary>
+        /// The tree rooted at <paramref name="folder"/>, chosen as Open folder chooses one (and remembered as a recent
+        /// folder). The open tabs are not touched: only the tree moves.
+        /// </summary>
+        public async System.Threading.Tasks.Task<bool> SetRootAsync(string folder)
+        {
+            if (FileViewModel == null || string.IsNullOrEmpty(folder)) return false;
+            if (!await FileViewModel.OpenFolder(folder)) return false;
+            // The work folder may be the same path as before while the tree was following the document: looked at again.
+            if (WorkFolderExplorerItem != null)
+            {
+                UpdateWorkFolder();
+                UpdateSelectedItem(WorkFolderExplorerItem);
+            }
+            return true;
+        }
+
+        private async void OnFolderUpClick(object sender, RoutedEventArgs e)
+        {
+            var parent = RecentPaths.Ancestors(WorkFolderExplorerItem?.FullPath).FirstOrDefault();
+            if (parent != null) await SetRootAsync(parent);
+        }
+
+        private async void OnSetAsRootClick(object sender, RoutedEventArgs e)
+        {
+            var item = GetExplorerItemFromMenuFlyoutItem(sender);
+            if (item?.Type == ExplorerItem.ExplorerItemType.Folder) await SetRootAsync(item.FullPath);
+        }
+
+        private void OnFolderRootMenuOpening(object sender, object e)
+        {
+            var menu = (MenuFlyout)sender;
+            menu.Items.Clear();
+            foreach (var item in RootMenuItems()) menu.Items.Add(item);
+        }
+
+        /// <summary>The root's menu, built each time it opens: what is above, what was chosen before, and Open folder.</summary>
+        private List<MenuFlyoutItemBase> RootMenuItems()
+        {
+            var items = new List<MenuFlyoutItemBase>();
+            var root = WorkFolderExplorerItem?.FullPath;
+            MenuFlyoutItem Entry(string text, string id, string path, string glyph, Action click)
+            {
+                var item = new MenuFlyoutItem { Text = text, Icon = new FontIcon { Glyph = glyph } };
+                Microsoft.UI.Xaml.Automation.AutomationProperties.SetAutomationId(item, id);
+                if (path != null)
+                {
+                    ToolTipService.SetToolTip(item, path);
+                    Microsoft.UI.Xaml.Automation.AutomationProperties.SetHelpText(item, path);
+                }
+                item.Click += (s, e) => click();
+                return item;
+            }
+            void Section(IEnumerable<string> paths, string idPrefix, string glyph, Func<string, string> text)
+            {
+                var list = paths.Where(p => !string.IsNullOrEmpty(p) && !RecentPaths.Same(p, root)).Take(10).ToList();
+                if (list.Count == 0) return;
+                if (items.Count > 0) items.Add(new MenuFlyoutSeparator());
+                for (var i = 0; i < list.Count; i++)
+                {
+                    var path = list[i];
+                    items.Add(Entry(text(path), idPrefix + i, path, glyph, () => _ = SetRootAsync(path)));
+                }
+            }
+            var ancestors = RecentPaths.Ancestors(root);
+            if (ancestors.Count > 0)
+            {
+                items.Add(Entry(Locale.GetString("FolderPane.Up"), "FolderNav-Up", ancestors[0], "\uE74A", () => _ = SetRootAsync(ancestors[0])));
+                // The folders above, nearest first: a breadcrumb folded into the menu (the pane is too narrow for one).
+                Section(ancestors, "FolderNav-Ancestor-", "\uE8B7", RecentPaths.Name);
+            }
+            Section(FavoriteFolders(), "FolderNav-Favorite-", "\uE734", RecentPaths.Label);
+            Section(this.GetService<Typedown.Core.Services.AccessHistory>()?.FolderRecentlyOpened ?? new List<string>(), "FolderNav-Recent-", "\uE81C", RecentPaths.Label);
+            if (items.Count > 0) items.Add(new MenuFlyoutSeparator());
+            items.Add(Entry(Locale.GetString("OpenFolder") + "…", "FolderNav-OpenFolder", null, "\uE838", () => FileViewModel?.OpenFolderCommand.Execute(null)));
+            return items;
+        }
+
+        /// <summary>The favourite folders, for the root's menu (none until favourites exist).</summary>
+        private IEnumerable<string> FavoriteFolders() => Enumerable.Empty<string>();
+
+        /// <summary>The root's menu as it would open now (the automation test host): each entry's id, text and path.</summary>
+        public IReadOnlyList<(string Id, string Text, string Path)> RootMenu() =>
+            RootMenuItems().OfType<MenuFlyoutItem>()
+                .Select(x => (Microsoft.UI.Xaml.Automation.AutomationProperties.GetAutomationId(x), x.Text, Microsoft.UI.Xaml.Automation.AutomationProperties.GetHelpText(x))).ToList();
+
         public static Visibility RevealVisibility(string filePath, string root)
         {
             return !string.IsNullOrEmpty(filePath) && !IsInsideFolder(filePath, root ?? "") ? Visibility.Visible : Visibility.Collapsed;

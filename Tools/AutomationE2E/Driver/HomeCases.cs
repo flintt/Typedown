@@ -249,4 +249,73 @@ internal static partial class Program
             try { await c.Call("test.settings.set", new { windowId, name = "RecordRecentFiles", value = true }); } catch { }
         }
     }
+
+    // ---- the folder pane's navigation ----
+
+    private static async Task FN01(List<string> notes)
+    {
+        using var c = await Session("e2e FN01");
+        // fixtures/fn01/one/two, with a Markdown file in each and the tree rooted at "two".
+        var top = FixtureFolder("fn01");
+        var one = Path.Combine(top, "one");
+        var two = Path.Combine(one, "two");
+        Directory.CreateDirectory(two);
+        File.WriteAllText(Path.Combine(one, "one.md"), "# one\n");
+        File.WriteAllText(Path.Combine(two, "two.md"), "# two\n");
+        Directory.CreateDirectory(Path.Combine(two, "three"));
+        File.WriteAllText(Path.Combine(two, "three", "three.md"), "# three\n");
+        var a = await Open(c, Fixture("fn01-a.md", "# FN01 a\n"));
+        var b = await Open(c, Fixture("fn01-b.md", "# FN01 b\n"));
+        var windowId = await WindowIdOf(c, b);
+        var window = await WindowOf(windowId, c);
+        async Task<List<string>> Documents() =>
+            ((JArray)(await c.Call("document.list", new { windowId }))["documents"]!).Select(d => (string)d["documentId"]!).ToList();
+        async Task<string> Active() =>
+            (string)((JArray)(await c.Call("window.list"))["windows"]!).First(w => (string)w["windowId"]! == windowId)["activeDocumentId"]!;
+        async Task<bool> RootIs(string folder) => await Eventually(async () => SamePath((string?)(await FolderState(c, windowId))["root"], folder), 5000);
+        var docsBefore = await Documents();
+        var activeBefore = await Active();
+        try
+        {
+            Check((bool)(await c.Call("test.folder.open", new { windowId, path = two }))["opened"]!, "the folder opens");
+            Check(await RootIs(two), "the tree is rooted at two");
+
+            // The up arrow.
+            await Click(window, await WaitFor(window, "FolderUpButton"));
+            Check(await RootIs(one), "the up arrow goes to one");
+
+            // The root's menu: the folders above it, the drive last.
+            var menu = ((JArray)(await c.Call("test.folder.menu", new { windowId }))["entries"]!).ToList();
+            notes.Add("root menu: " + string.Join(", ", menu.Select(e => $"{e["id"]}={e["text"]}")));
+            Check(menu.Any(e => (string)e["id"]! == "FolderNav-Ancestor-0" && SamePath((string?)e["path"], top)), "the menu's first folder above is fn01");
+            Check(menu.Any(e => (string)e["id"]! == "FolderNav-OpenFolder"), "the menu offers Open folder");
+            await Click(window, await WaitFor(window, "FolderRootButton"));
+            await Task.Delay(600);
+            var ancestor = await MenuEntry(window, "FolderNav-Ancestor-0");
+            await ClickInPopup(window, ancestor);
+            Check(await RootIs(top), "choosing the folder above in the menu makes it the root");
+
+            // Back to two, then "Set as root" on its subfolder "three" in the tree.
+            await c.Call("test.folder.open", new { windowId, path = two });
+            Check(await RootIs(two), "back at two");
+            AutomationElement? row = null;
+            await Eventually(() => Task.FromResult((row = FindNamed(window, "three", ControlType.TreeItem) ?? FindNamed(window, "three")) != null), 5000);
+            Check(row != null, "the folder three is in the tree");
+            await Click(window, row!, Mouse.Right);
+            await Task.Delay(600);
+            await ClickInPopup(window, await MenuEntry(window, "FolderSetAsRoot"));
+            Check(await RootIs(Path.Combine(two, "three")), "Set as root on three makes it the root");
+
+            var docsAfter = await Documents();
+            var activeAfter = await Active();
+            notes.Add($"documents before {docsBefore.Count}, after {docsAfter.Count}");
+            Check(docsBefore.SequenceEqual(docsAfter), "the open documents are the same ones");
+            Check(activeAfter == activeBefore, "the active document did not change");
+        }
+        finally
+        {
+            await CloseMenus();
+            foreach (var id in new[] { a, b }) try { await c.Call("document.close", new { documentId = id }); } catch { }
+        }
+    }
 }

@@ -897,6 +897,17 @@ namespace Typedown.Services.Automation
                         ["paneOpen"] = app.SettingsViewModel.SidePaneOpen,
                     };
                 })));
+            // The folder pane's root menu (its name's dropdown) as it would open now: each entry's automation id, text and path.
+            methods.Add(new MethodDescriptor("test.folder.menu", null, "test.folder.menu/1", (c, ct) =>
+                Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    var page = FindInWindow<Core.Controls.SidePanelControls.Pages.FolderPage>(app)
+                        ?? throw new AutomationException(AutomationErrorKind.editor_not_ready, "the folder pane is not shown");
+                    var entries = new Newtonsoft.Json.Linq.JArray();
+                    foreach (var (id, text, path) in page.RootMenu())
+                        entries.Add(new Newtonsoft.Json.Linq.JObject { ["id"] = id, ["text"] = text, ["path"] = path });
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["entries"] = entries };
+                })));
             // A folder opened as the folder pane's root, as File > Open folder with that folder picked.
             methods.Add(new MethodDescriptor("test.folder.open", null, "test.folder.open/1", async (c, ct) =>
             {

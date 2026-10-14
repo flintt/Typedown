@@ -168,6 +168,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | RC01 | two folders opened, A then B: File > Open recent > Folders lists B then A by name and folder, and choosing A makes it the folder pane's root |
 | RC02 | a recent file deleted stays in the list greyed out and a right-click removes it; Clear recent files leaves the recent folders |
 | RC03 | with "Remember recently opened files" off a file opened is not listed; Clear recent on the settings page empties files and folders |
+| FN01 | the folder pane's up arrow, the folder above chosen in its root menu and "Set as root" on a folder each move the tree; the open documents stay as they were |
 | WP02 | pasted web pictures: one behind hotlink protection is fetched with the page as referrer, a page that is not a picture is kept on the web and said, and an untitled document saved into a folder takes its pictures along |
 | EX02 | an export says where it was written, with buttons to open it, and goes when closed; with no action after export, nothing shows |
 | TB01 | the table toolbar's Resize table opens with the table's own size; Cancel leaves the table as it was; OK resizes it |
@@ -284,6 +285,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | `test.recent.menu` | `windowId` | The entries of a window's File > Open recent menu as it builds them: kind (file, folder), text, path and whether the entry is greyed out (its file or folder is not there, looked at afresh). | TestHostHooks.cs |
 | `test.recent.clear` | `what?`, `windowId` | The recent lists emptied as their menu entries and the settings button do: what = files, folders or all. | TestHostHooks.cs |
 | `test.folder.state` | `windowId` | The folder pane: the root its tree shows (null when the pane is not loaded), the window's work folder and whether it was chosen (Open folder, a recent folder, the pane's navigation) rather than following the document. | TestHostHooks.cs |
+| `test.folder.menu` | `windowId` | The folder pane's root menu (its name's dropdown) as it would open now: each entry's automation id, text and path. | TestHostHooks.cs |
 | `test.folder.open` | `path`, `windowId` | A folder opened as the folder pane's root, as File > Open folder with that folder picked. | TestHostHooks.cs |
 <!-- END generated: test-methods -->
 

@@ -1158,4 +1158,12 @@
     <value>Right-click or press Delete to remove it from this list</value>
     <comment>最近列表条目的悬停提示：右键或按 Delete 从列表移除</comment>
   </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Up one level</value>
+    <comment>文件栏：上一级文件夹（按钮提示和菜单项）</comment>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Set as root</value>
+    <comment>文件栏：文件夹右键菜单“设为根目录”</comment>
+  </data>
 </root>
