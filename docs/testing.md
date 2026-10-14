@@ -194,7 +194,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | SB06 | the status bar names the heading the caret is under, and a click on it opens the outline |
 | SB07 | a narrow window puts the status bar items with no room into a "..." menu (the heading first, the count stays), and a right-click chooses which items show |
 | AC01 | an edition hears of what happens around the writing: a document shown, the mode changed, an undo, the window left and come back to, a save under a new name |
-| KY01 | Ctrl+Z and Ctrl+Y are the host's undo and redo however close Ctrl and the letter come, in the visual editor and in source mode, and a Ctrl let go in another window is not still down when the window comes back |
+| KY01 | Ctrl+Z and Ctrl+Y are the host's undo and redo however close Ctrl and the letter come, in the visual editor and in source mode |
 | MN03 | minimized, written to, restored without activation: the editor's web view gets its size back |
 | MN04 | F11 in and out of full screen, then minimized and brought back as a person does: the window works |
 | MN05 | F11 in and out of full screen, minimized, then a file opened from Explorer: the window comes back working |
