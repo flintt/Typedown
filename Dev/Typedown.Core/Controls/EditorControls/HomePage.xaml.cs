@@ -212,11 +212,25 @@ namespace Typedown.Core.Controls
 
         private bool editionSectionsAdded;
 
-        // An edition's own sections, once per page (none in Typedown itself).
+        // An edition's own sections (EditionHooks.AddHomeSections), once per page; there are none without an edition.
         private void AddEditionSections()
         {
+            if (editionSectionsAdded || ViewModel == null) return;
             editionSectionsAdded = true;
+            foreach (var section in EditionHooks.HomeSections(ViewModel))
+            {
+                var panel = new StackPanel();
+                Microsoft.UI.Xaml.Automation.AutomationProperties.SetAutomationId(panel, "HomeSection-" + section.Id);
+                if (!string.IsNullOrEmpty(section.Title))
+                    panel.Children.Add(new TextBlock { Text = section.Title, Style = (Style)Resources["SectionTitleStyle"] });
+                panel.Children.Add(section.Element);
+                EditionSections.Children.Add(panel);
+            }
         }
+
+        /// <summary>The ids of the edition's sections on the page (the automation test host).</summary>
+        public IReadOnlyList<string> EditionSectionIds() =>
+            EditionSections.Children.OfType<FrameworkElement>().Select(x => Microsoft.UI.Xaml.Automation.AutomationProperties.GetAutomationId(x)).ToList();
 
         // ---- commands ----
 

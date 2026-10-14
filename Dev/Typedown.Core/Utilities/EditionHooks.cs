@@ -8,7 +8,7 @@ namespace Typedown.Core.Utilities
 {
     /// <summary>
     /// Places where an edition (Edition.Initialize) adds to every window: styles for the editor page, entries in the File
-    /// menu, its Export submenu and the View menu, items in the status bar, the word counts the page reports, the documents
+    /// menu, its Export submenu and the View menu, items in the status bar, sections of the home page, the word counts the page reports, the documents
     /// read from and written to disk, and what happens around the writing (<see cref="Activity"/>). Typedown itself adds
     /// nothing here.
     /// </summary>
@@ -88,6 +88,37 @@ namespace Typedown.Core.Utilities
                 }
             }
             return items;
+        }
+
+        private static readonly List<Func<AppViewModel, IEnumerable<HomeSection>>> homeSections = new();
+
+        /// <summary>
+        /// Sections for the home page, after its own (favourites, recent files and folders) and before its line of
+        /// shortcuts; made for each window's home page when it first loads (a page made again - back from the settings
+        /// page - asks again), in the order the builders were added.
+        /// </summary>
+        public static void AddHomeSections(Func<AppViewModel, IEnumerable<HomeSection>> build)
+        {
+            lock (homeSections) homeSections.Add(build);
+        }
+
+        internal static IReadOnlyList<HomeSection> HomeSections(AppViewModel viewModel)
+        {
+            List<Func<AppViewModel, IEnumerable<HomeSection>>> builders;
+            lock (homeSections) builders = homeSections.ToList();
+            var sections = new List<HomeSection>();
+            foreach (var build in builders)
+            {
+                try
+                {
+                    sections.AddRange((build(viewModel) ?? Enumerable.Empty<HomeSection>()).Where(x => x?.Element != null && !string.IsNullOrEmpty(x.Id)));
+                }
+                catch (Exception ex)
+                {
+                    Log.WriteLocal("EditionHomeSection", ex.ToString());
+                }
+            }
+            return sections;
         }
 
         internal static IReadOnlyList<MenuFlyoutItemBase> ExportMenuItems(AppViewModel viewModel) => MenuItems(exportMenu, viewModel);
@@ -253,6 +284,22 @@ namespace Typedown.Core.Utilities
 
         /// <summary>What that entry does (a click on the item, say); null: no entry in the "..." menu.</summary>
         public Action Invoke { get; set; }
+    }
+
+    /// <summary>
+    /// A section an edition adds to the home page (<see cref="EditionHooks.AddHomeSections"/>): a heading of the page's
+    /// own style over the element. The element may be loaded and unloaded more than once (the home page hides and shows);
+    /// what it subscribes to is best tied to its Loaded and Unloaded.
+    /// </summary>
+    public sealed class HomeSection
+    {
+        /// <summary>A name of its own: in the section's automation id ("HomeSection-" with it).</summary>
+        public string Id { get; set; }
+
+        /// <summary>The heading above it; null or empty: none.</summary>
+        public string Title { get; set; }
+
+        public Microsoft.UI.Xaml.FrameworkElement Element { get; set; }
     }
 
     /// <summary>A word count the editor page reported (<see cref="EditionHooks.WordCountReported"/>).</summary>
