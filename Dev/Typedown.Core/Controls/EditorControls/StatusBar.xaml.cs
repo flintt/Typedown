@@ -35,7 +35,7 @@ namespace Typedown.Core.Controls
             this.InitializeComponent();
             // Switching the status bar off and on again builds a new control, which knows nothing of the
             // theme that was applied to the old one — so it asks for the colours itself when it loads.
-            Loaded += (_, _) => { ApplyCurrentTheme(); UpdateReadingTip(); FollowHeadings(Editor); WatchForLayout(); };
+            Loaded += (_, _) => { ApplyCurrentTheme(); UpdateReadingTip(); FollowHeadings(Editor); AddEditionItems(); WatchForLayout(); };
         }
 
         private void ApplyCurrentTheme()
@@ -266,8 +266,37 @@ namespace Typedown.Core.Controls
 
         private static readonly string[] ItemNames = { "modes", "heading", "format", "save", "count" };
 
-        // The first to go when the bar is too narrow; the count stays.
+        // The first to go when the bar is too narrow; the count stays. An edition's items go before all of these.
         private static readonly string[] SqueezeOrder = { "heading", "format", "save", "modes" };
+
+        // An edition's items (EditionHooks.AddStatusBarItems), each in a slot of the bar's own left of the count: the
+        // bar shows and hides the slot, the element's own Visibility stays the edition's.
+        private System.Collections.Generic.List<(StatusBarItem Item, Border Slot)> editionItems;
+
+        private void AddEditionItems()
+        {
+            if (editionItems != null || ViewModel == null) return;
+            editionItems = new();
+            foreach (var item in EditionHooks.StatusBarItems(ViewModel))
+            {
+                if (ItemNames.Contains(item.Id) || editionItems.Any(x => x.Item.Id == item.Id)) continue;
+                var slot = new Border { Child = item.Element, VerticalAlignment = VerticalAlignment.Stretch };
+                // Its width or presence changed (its text, the edition showing or hiding it): laid out again.
+                item.Element.SizeChanged += (_, _) => LayOutItemsSoon();
+                item.Element.RegisterPropertyChangedCallback(VisibilityProperty, (_, _) => LayOutItemsSoon());
+                RightItems.Children.Insert(RightItems.Children.IndexOf(WordCountButton), slot);
+                editionItems.Add((item, slot));
+            }
+        }
+
+        private System.Collections.Generic.IReadOnlyList<(StatusBarItem Item, Border Slot)> EditionList =>
+            (System.Collections.Generic.IReadOnlyList<(StatusBarItem Item, Border Slot)>)editionItems ?? System.Array.Empty<(StatusBarItem Item, Border Slot)>();
+
+        // An edition's item it shows itself (collapsed: as if it were not there).
+        private static bool Present(StatusBarItem item) => item.Element.Visibility == Visibility.Visible;
+
+        private System.Collections.Generic.IEnumerable<string> EditionIds =>
+            editionItems?.Where(x => x.Item.Name != null).Select(x => x.Item.Id) ?? Enumerable.Empty<string>();
 
         private readonly System.Collections.Generic.HashSet<string> squeezed = new();
 
@@ -279,13 +308,23 @@ namespace Typedown.Core.Controls
             "heading" => new FrameworkElement[] { HeadingButton },
             "format" => new FrameworkElement[] { FileFormatButton },
             "save" => new FrameworkElement[] { SaveStateButton },
-            _ => new FrameworkElement[] { WordCountButton },
+            "count" => new FrameworkElement[] { WordCountButton },
+            _ => editionItems?.Where(x => x.Item.Id == item).Select(x => (FrameworkElement)x.Slot).ToArray() ?? new FrameworkElement[0],
         };
 
-        private bool Chosen(string item) =>
-            !(Settings?.StatusBarHiddenItems ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).Contains(item);
+        private string[] HiddenItems() => (Settings?.StatusBarHiddenItems ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
-        private bool Wanted(string item) => Chosen(item) && (item != "heading" || headingAvailable);
+        private bool Chosen(string item) => !HiddenItems().Contains(item);
+
+        private bool Wanted(string item) => Chosen(item) && (item != "heading" || headingAvailable) && (EditionItem(item) is not { } edition || Present(edition));
+
+        private StatusBarItem EditionItem(string id)
+        {
+            if (editionItems != null)
+                foreach (var (item, _) in editionItems)
+                    if (item.Id == id) return item;
+            return null;
+        }
 
         private System.ComponentModel.INotifyPropertyChanged watchedSettings, watchedEditor, watchedFile;
 
@@ -325,7 +364,8 @@ namespace Typedown.Core.Controls
         {
             if (Settings == null || RootGrid == null) return;
             squeezed.Clear();
-            foreach (var item in ItemNames)
+            var editionNames = editionItems?.Select(x => x.Item.Id).ToArray() ?? new string[0];
+            foreach (var item in ItemNames.Concat(editionNames))
                 foreach (var element in ElementsOf(item))
                     element.Visibility = Wanted(item) && (element != ReadingButton || !Settings.ReadOnly) ? Visibility.Visible : Visibility.Collapsed;
             OverflowButton.Visibility = Visibility.Collapsed;
@@ -336,7 +376,7 @@ namespace Typedown.Core.Controls
                 element.Measure(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
                 return element.DesiredSize.Width;
             }
-            foreach (var item in SqueezeOrder)
+            foreach (var item in editionNames.Concat(SqueezeOrder))
             {
                 if (Width(LeftItems) + Width(RightItems) + 16 <= available) break;
                 if (!Wanted(item)) continue;
@@ -387,21 +427,42 @@ namespace Typedown.Core.Controls
             }
             if (squeezed.Contains("heading"))
                 OverflowMenu.Items.Add(Entry("OverflowHeading", HeadingText.Text, () => OnHeadingClick(this, null)));
+            foreach (var (item, _) in EditionList)
+            {
+                if (!squeezed.Contains(item.Id) || item.Invoke == null) continue;
+                string text;
+                try { text = item.MenuText?.Invoke() ?? item.Name; }
+                catch (Exception ex) { Log.WriteLocal("EditionStatusBar", ex.ToString()); text = item.Name; }
+                if (string.IsNullOrEmpty(text)) continue;
+                OverflowMenu.Items.Add(Entry("Overflow-" + item.Id, text, () =>
+                {
+                    try { item.Invoke(); }
+                    catch (Exception ex) { Log.WriteLocal("EditionStatusBar", ex.ToString()); }
+                }));
+            }
         }
 
         /// <summary>Right-click on the bar: each item, ticked when it shows.</summary>
         private void OnItemsMenuOpening(object sender, object e)
         {
             ItemsMenu.Items.Clear();
-            foreach (var (item, key) in new[] { ("modes", "View"), ("heading", "StatusBarItem.CurrentHeading"), ("format", "Encoding.Tip"), ("save", "StatusBarItem.SaveState"), ("count", "WordCount") })
+            var entries = new[] { ("modes", Locale.GetString("View")), ("heading", Locale.GetString("StatusBarItem.CurrentHeading")), ("format", Locale.GetString("Encoding.Tip")), ("save", Locale.GetString("StatusBarItem.SaveState")) }.ToList();
+            // An edition's named items, where they are on the bar: before the count.
+            foreach (var (edition, _) in EditionList)
+                if (edition.Name != null && Present(edition)) entries.Add((edition.Id, edition.Name));
+            entries.Add(("count", Locale.GetString("WordCount")));
+            foreach (var (item, text) in entries)
             {
-                var toggle = new ToggleMenuFlyoutItem { Text = Locale.GetString(key), IsChecked = Chosen(item) };
+                var toggle = new ToggleMenuFlyoutItem { Text = text, IsChecked = Chosen(item) };
                 Microsoft.UI.Xaml.Automation.AutomationProperties.SetAutomationId(toggle, "StatusItem-" + item);
                 toggle.Click += (s, _) =>
                 {
                     if (Settings == null) return;
-                    var hidden = ItemNames.Where(x => x == item ? !((ToggleMenuFlyoutItem)s).IsChecked : !Chosen(x));
-                    Settings.StatusBarHiddenItems = string.Join(",", hidden);
+                    // The hidden ones kept, an edition's not listed now (not bought, say) among them.
+                    var known = ItemNames.Concat(EditionIds).ToList();
+                    var hidden = known.Where(x => x == item ? !((ToggleMenuFlyoutItem)s).IsChecked : !Chosen(x))
+                        .Concat(HiddenItems().Where(x => !known.Contains(x)));
+                    Settings.StatusBarHiddenItems = string.Join(",", hidden.Distinct());
                 };
                 ItemsMenu.Items.Add(toggle);
             }
