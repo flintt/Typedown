@@ -61,7 +61,12 @@ namespace Typedown.Core.ViewModels
         public Command<string> OpenFileCommand { get; } = new();
         public Command<string> OpenFolderCommand { get; } = new();
         public Command<Unit> NewFolderCommand { get; } = new();
+        /// <summary>File > Open recent > Clear recent files: the files only (the folders have their own entry).</summary>
         public Command<Unit> ClearHistoryCommand { get; } = new();
+        /// <summary>File > Open recent > Folders > Clear recent folders.</summary>
+        public Command<Unit> ClearFolderHistoryCommand { get; } = new();
+        /// <summary>Settings > General > Data > Clear recent: files and folders.</summary>
+        public Command<Unit> ClearAllHistoryCommand { get; } = new();
         public Command<Unit> SaveCommand { get; } = new();
         public Command<Unit> SaveAsCommand { get; } = new();
         public Command<Unit> ImportCommand { get; } = new();
@@ -102,7 +107,10 @@ namespace Typedown.Core.ViewModels
             SaveAsCommand.OnExecute.Subscribe(async _ => await SaveAs());
             SaveCommand.OnExecute.Subscribe(async _ => await Save());
             ExitCommand.OnExecute.Subscribe(_ => Exit());
-            ClearHistoryCommand.OnExecute.Subscribe(x => { _ = AccessHistory.ClearHistory(); });
+            // "Clear recent files" cleared the folders too, which it does not say: each list has its own entry now.
+            ClearHistoryCommand.OnExecute.Subscribe(x => { _ = AccessHistory.ClearFileHistory(); });
+            ClearFolderHistoryCommand.OnExecute.Subscribe(x => { _ = AccessHistory.ClearFolderHistory(); });
+            ClearAllHistoryCommand.OnExecute.Subscribe(x => { _ = AccessHistory.ClearHistory(); });
             ExportCommand.OnExecute.Subscribe(Export);
             PrintCommand.OnExecute.Subscribe(_ => Print());
             ShareToHedgeDocCommand.OnExecute.Subscribe(_ => ShareToHedgeDoc());
@@ -321,11 +329,10 @@ namespace Typedown.Core.ViewModels
                     _ = AppViewModel.XamlRoot?.Content?.DispatcherQueue?.RunIdleAsync(() => { PInvoke.SetForegroundWindow(window); });
                     return false;
                 }
+                // A recent file that is not there stays in the list (greyed out): a network drive or a USB stick may only
+                // be unplugged. The reader removes it if it is gone for good.
                 if (!File.Exists(path))
-                {
-                    _ = AccessHistory.RemoveFileHistory(path);
                     throw new FileNotFoundException("File does not exist.");
-                }
                 // Tabs: an already open file just becomes active; anything else opens beside the current document
                 // (reusing a pristine untitled tab), so the old document never needs a save prompt here.
                 if (TabsViewModel?.FindByPath(path) is DocumentTab existing)
@@ -394,10 +401,7 @@ namespace Typedown.Core.ViewModels
             try
             {
                 if (!Directory.Exists(folderPath))
-                {
-                    _ = AccessHistory.RemoveFolderHistory(folderPath);
                     throw new FileNotFoundException("Folder does not exist.");
-                }
                 WorkFolder = folderPath;
                 _ = AccessHistory.RecordFolderHistory(folderPath);
                 return true;

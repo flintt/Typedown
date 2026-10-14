@@ -1142,4 +1142,20 @@
     <value>Save status</value>
     <comment>状态栏右键菜单：显示保存状态</comment>
   </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Folders</value>
+    <comment>打开最近 → 文件夹（子菜单）</comment>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>No recent folders</value>
+    <comment>打开最近 → 文件夹：没有最近文件夹</comment>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Clear recent folders</value>
+    <comment>打开最近 → 文件夹：清除最近文件夹</comment>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Right-click or press Delete to remove it from this list</value>
+    <comment>最近列表条目的悬停提示：右键或按 Delete 从列表移除</comment>
+  </data>
 </root>

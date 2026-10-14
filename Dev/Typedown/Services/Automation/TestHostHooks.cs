@@ -831,6 +831,79 @@ namespace Typedown.Services.Automation
                     var result = await new Core.Services.ImageBatchUpload(app).RunAsync(null, ct);
                     return (Newtonsoft.Json.Linq.JToken?)Newtonsoft.Json.Linq.JObject.FromObject(result);
                 })));
+            AddHomeMethods(methods);
+        }
+
+        // The first element of the type in the window's tree (a menu bar item, the folder pane, the home page).
+        private static T? FindInWindow<T>(Core.ViewModels.AppViewModel app) where T : class
+        {
+            T? found = null;
+            void Walk(global::Microsoft.UI.Xaml.DependencyObject node)
+            {
+                if (found != null || node == null) return;
+                if (node is T hit) { found = hit; return; }
+                for (var i = 0; i < global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(node); i++)
+                    Walk(global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChild(node, i));
+            }
+            Walk(app.XamlRoot?.Content as global::Microsoft.UI.Xaml.DependencyObject);
+            return found;
+        }
+
+        // Recent files and folders, favourites, the folder pane's root and the home page (docs/todo.md, 2026-10-14).
+        private static void AddHomeMethods(MethodTable methods)
+        {
+            // The entries of a window's File > Open recent menu as it builds them: kind (file, folder), text, path and
+            // whether the entry is greyed out (its file or folder is not there, looked at afresh).
+            methods.Add(new MethodDescriptor("test.recent.menu", null, "test.recent.menu/1", async (c, ct) =>
+                await await Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), async app =>
+                {
+                    Core.Utilities.PathProbe.Forget();
+                    var file = FindInWindow<Core.Controls.EditorControls.MenuBarItems.FileItem>(app)
+                        ?? throw new AutomationException(AutomationErrorKind.editor_not_ready, "no File menu in this window");
+                    var entries = new Newtonsoft.Json.Linq.JArray();
+                    foreach (var (kind, text, path, missing) in await file.RecentMenuAsync())
+                        entries.Add(new Newtonsoft.Json.Linq.JObject { ["kind"] = kind, ["text"] = text, ["path"] = path, ["missing"] = missing });
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["entries"] = entries };
+                })));
+            // The recent lists emptied as their menu entries and the settings button do: what = files, folders or all.
+            methods.Add(new MethodDescriptor("test.recent.clear", null, "test.recent.clear/1", async (c, ct) =>
+            {
+                var what = c.Params.OptionalEnum("what", "all", "all", "files", "folders");
+                return await await Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), async app =>
+                {
+                    var history = app.ServiceProvider.GetService(typeof(Core.Services.AccessHistory)) as Core.Services.AccessHistory
+                        ?? throw new AutomationException(AutomationErrorKind.editor_not_ready, "no history service");
+                    if (what != "folders") await history.ClearFileHistory();
+                    if (what != "files") await history.ClearFolderHistory();
+                    Core.Utilities.PathProbe.Forget();
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject
+                    {
+                        ["files"] = new Newtonsoft.Json.Linq.JArray(history.FileRecentlyOpened),
+                        ["folders"] = new Newtonsoft.Json.Linq.JArray(history.FolderRecentlyOpened),
+                    };
+                });
+            }));
+            // The folder pane: the root its tree shows (null when the pane is not loaded), the window's work folder and
+            // whether it was chosen (Open folder, a recent folder, the pane's navigation) rather than following the document.
+            methods.Add(new MethodDescriptor("test.folder.state", null, "test.folder.state/1", (c, ct) =>
+                Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    var page = FindInWindow<Core.Controls.SidePanelControls.Pages.FolderPage>(app);
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject
+                    {
+                        ["root"] = page?.WorkFolderExplorerItem?.FullPath,
+                        ["workFolder"] = app.FileViewModel.WorkFolder,
+                        ["explicit"] = app.FileViewModel.WorkFolderIsExplicit,
+                        ["paneOpen"] = app.SettingsViewModel.SidePaneOpen,
+                    };
+                })));
+            // A folder opened as the folder pane's root, as File > Open folder with that folder picked.
+            methods.Add(new MethodDescriptor("test.folder.open", null, "test.folder.open/1", async (c, ct) =>
+            {
+                var path = c.Params.RequiredString("path", allowEmpty: false);
+                return await await Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), async app =>
+                    (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["opened"] = await app.FileViewModel.OpenFolder(path) });
+            }));
         }
         [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
         private struct NativeRect { public int Left, Top, Right, Bottom; }

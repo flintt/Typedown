@@ -139,6 +139,18 @@
         </controls:ButtonSettingItem>
 
         <TextBlock Text="{u:LocaleString Key=General.Data}" Margin="0,16,0,4"/>
+        <controls:NormalSettingItem Title="{u:LocaleString Key=General.RecordRecent.Title}" Description="{u:LocaleString Key=General.RecordRecent.Description}">
+            <controls:NormalSettingItem.Icon>
+                <FontIcon Glyph="&#xe81c;"/>
+            </controls:NormalSettingItem.Icon>
+            <ToggleSwitch AutomationProperties.AutomationId="RecordRecentFiles" IsOn="{x:Bind Settings.RecordRecentFiles, Mode=TwoWay}"/>
+        </controls:NormalSettingItem>
+        <controls:NormalSettingItem Title="{u:LocaleString Key=General.ClearRecent.Title}" Description="{u:LocaleString Key=General.ClearRecent.Description}">
+            <controls:NormalSettingItem.Icon>
+                <FontIcon Glyph="&#xe74d;"/>
+            </controls:NormalSettingItem.Icon>
+            <Button MinWidth="120" AutomationProperties.AutomationId="ClearRecentHistory" Command="{x:Bind ViewModel.FileViewModel.ClearAllHistoryCommand}" Content="{u:LocaleString Key=General.ClearRecent.Button}"/>
+        </controls:NormalSettingItem>
         <controls:NormalSettingItem Title="{u:LocaleString Key=General.RestoreDefault.Title}" Description="{u:LocaleString Key=General.RestoreDefault.Description}">
             <controls:NormalSettingItem.Icon>
                 <FontIcon Glyph="&#xebc4;"/>

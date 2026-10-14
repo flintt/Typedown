@@ -167,6 +167,9 @@ internal static partial class Program
             await Case("TC01 a tab closed with its x button: the outline shows the headings of the tab shown next", TC01);
             await Case("TC02 a tab closed while its neighbour is not the tab used last: the outline is the shown tab's, with long documents", TC02);
             await Case("SE01 the startup action chosen on the settings page is in the settings file", SE01);
+            await Case("RC01 two folders opened, A then B: File > Open recent > Folders lists B then A by name and folder, and choosing A makes it the folder pane's root", RC01);
+            await Case("RC02 a recent file deleted stays in the list greyed out and a right-click removes it; Clear recent files leaves the recent folders", RC02);
+            await Case("RC03 with \"Remember recently opened files\" off a file opened is not listed; Clear recent on the settings page empties files and folders", RC03);
             await Case("WP02 pasted web pictures: one behind hotlink protection is fetched with the page as referrer, a page that is not a picture is kept on the web and said, and an untitled document saved into a folder takes its pictures along", WP02);
             await Case("EX02 an export says where it was written, with buttons to open it, and goes when closed; with no action after export, nothing shows", EX02);
             await Case("TB01 the table toolbar's Resize table opens with the table's own size; Cancel leaves the table as it was; OK resizes it", TB01);

@@ -935,4 +935,24 @@
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Open its folder</value>
   </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Remember recently opened files</value>
+    <comment>设置 → 常规 → 数据：记录最近打开的文件（开关标题）</comment>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Files and folders you open are listed in File &gt; Open recent and on the home page. Turned off, nothing new is added.</value>
+    <comment>设置 → 常规 → 数据：记录最近打开的文件（说明）</comment>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Clear recent files and folders</value>
+    <comment>设置 → 常规 → 数据：清除最近记录（标题）</comment>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Empties the lists of recently opened files and folders.</value>
+    <comment>设置 → 常规 → 数据：清除最近记录（说明）</comment>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Clear</value>
+    <comment>设置 → 常规 → 数据：清除最近记录按钮</comment>
+  </data>
 </root>

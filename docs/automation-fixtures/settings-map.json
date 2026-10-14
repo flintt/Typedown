@@ -824,6 +824,12 @@
       ]
     },
     {
+      "reason": "privacy: whether the files and folders opened are remembered; only the person decides that, not a program",
+      "windows": [
+        "RecordRecentFiles"
+      ]
+    },
+    {
       "reason": "security: shows the person what a program changed; a program must not be able to hide its own edits",
       "windows": [
         "HighlightAutomationChanges"

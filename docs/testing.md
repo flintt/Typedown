@@ -165,6 +165,9 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | TC01 | a tab closed with its x button: the outline shows the headings of the tab shown next |
 | TC02 | a tab closed while its neighbour is not the tab used last: the outline is the shown tab's, with long documents |
 | SE01 | the startup action chosen on the settings page is in the settings file |
+| RC01 | two folders opened, A then B: File > Open recent > Folders lists B then A by name and folder, and choosing A makes it the folder pane's root |
+| RC02 | a recent file deleted stays in the list greyed out and a right-click removes it; Clear recent files leaves the recent folders |
+| RC03 | with "Remember recently opened files" off a file opened is not listed; Clear recent on the settings page empties files and folders |
 | WP02 | pasted web pictures: one behind hotlink protection is fetched with the page as referrer, a page that is not a picture is kept on the web and said, and an untitled document saved into a folder takes its pictures along |
 | EX02 | an export says where it was written, with buttons to open it, and goes when closed; with no action after export, nothing shows |
 | TB01 | the table toolbar's Resize table opens with the table's own size; Cancel leaves the table as it was; OK resizes it |
@@ -278,6 +281,10 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | `test.activity.recent` | `clear?` | The last events EditionHooks.Activity raised, oldest first (kind, mode, document, path, the old path of a rename); with clear, forgets them after answering (AC01). | TestHostHooks.cs |
 | `test.theme.controls` | `windowId` | The accent the standard controls draw with, as they draw it: a switch turned on, an accent button (the dialogs' default button has its style) and a ticked check box are put up in a popup over the window, their colours read from what WinUI drew, and taken down again. The settings and the dialogs stayed the system blue under every theme (TH07). | TestHostHooks.cs |
 | `test.images.uploadAll` | `windowId` | File > Upload local images on the window's active document, without its dialogs; returns the result. | TestHostHooks.cs |
+| `test.recent.menu` | `windowId` | The entries of a window's File > Open recent menu as it builds them: kind (file, folder), text, path and whether the entry is greyed out (its file or folder is not there, looked at afresh). | TestHostHooks.cs |
+| `test.recent.clear` | `what?`, `windowId` | The recent lists emptied as their menu entries and the settings button do: what = files, folders or all. | TestHostHooks.cs |
+| `test.folder.state` | `windowId` | The folder pane: the root its tree shows (null when the pane is not loaded), the window's work folder and whether it was chosen (Open folder, a recent folder, the pane's navigation) rather than following the document. | TestHostHooks.cs |
+| `test.folder.open` | `path`, `windowId` | A folder opened as the folder pane's root, as File > Open folder with that folder picked. | TestHostHooks.cs |
 <!-- END generated: test-methods -->
 
 屏障的位置（`test.barrier.arm` 的 `point`）：`beforeFlushReply`、`afterEditorMutationBeforeReport`、`beforeSaveCommit`，定义在 `Dev/Typedown.Automation/DocumentEdit.cs`。一个屏障只拦一次；没人放行的屏障 60 秒后自己放行，所以失败的用例不会把测试宿主卡住。

@@ -16,10 +16,18 @@
     <MenuFlyoutSeparator/>
     <MenuFlyoutItem x:Name="OpenFileItem" Text="{u:LocaleString Key=Open}" Command="{x:Bind File.OpenFileCommand}"/>
     <MenuFlyoutItem x:Name="OpenFolderItem" Text="{u:LocaleString Key=OpenFolder}" Command="{x:Bind File.OpenFolderCommand}"/>
-    <MenuFlyoutSubItem x:Name="OpenRecentSubMenu" Text="{u:LocaleString Key=OpenRecent}" Loaded="OnOpenRecentSubMenuLoaded">
+    <!-- The recent files (name and folder; the path in the tooltip), then the recent folders in a submenu of their own.
+         Each list is cleared by its own entry; a right-click or Delete on an entry takes that one out. -->
+    <MenuFlyoutSubItem x:Name="OpenRecentSubMenu" AutomationProperties.AutomationId="OpenRecentSubMenu" Text="{u:LocaleString Key=OpenRecent}" Loaded="OnOpenRecentSubMenuLoaded">
         <MenuFlyoutItem x:Name="NoRecentFilesItem" Text="{u:LocaleString Key=NoRecentFiles}" IsEnabled="False"/>
         <MenuFlyoutSeparator/>
-        <MenuFlyoutItem x:Name="ClearRecentFilesItem" Text="{u:LocaleString Key=ClearRecentFiles}" Command="{x:Bind File.ClearHistoryCommand}"/>
+        <MenuFlyoutSubItem x:Name="OpenRecentFoldersSubMenu" AutomationProperties.AutomationId="OpenRecentFoldersSubMenu" Text="{u:LocaleString Key=Recent.Folders}" Loaded="OnOpenRecentSubMenuLoaded">
+            <MenuFlyoutItem x:Name="NoRecentFoldersItem" Text="{u:LocaleString Key=Recent.NoFolders}" IsEnabled="False"/>
+            <MenuFlyoutSeparator/>
+            <MenuFlyoutItem x:Name="ClearRecentFoldersItem" AutomationProperties.AutomationId="ClearRecentFoldersItem" Text="{u:LocaleString Key=Recent.ClearFolders}" Command="{x:Bind File.ClearFolderHistoryCommand}"/>
+        </MenuFlyoutSubItem>
+        <MenuFlyoutSeparator/>
+        <MenuFlyoutItem x:Name="ClearRecentFilesItem" AutomationProperties.AutomationId="ClearRecentFilesItem" Text="{u:LocaleString Key=ClearRecentFiles}" Command="{x:Bind File.ClearHistoryCommand}"/>
     </MenuFlyoutSubItem>
     <MenuFlyoutSeparator/>
     <MenuFlyoutItem x:Name="SaveItem" Text="{u:LocaleString Key=Save}" Command="{x:Bind File.SaveCommand}"/>
