@@ -497,8 +497,11 @@ namespace Typedown.Windows
 
         private void OnActivated(object sender, WindowActivatedEventArgs e)
         {
+            var wasActive = IsActive;
             IsActive = e.WindowActivationState != WindowActivationState.Deactivated;
             WindowService?.RaiseWindowIsActivedChanged(Handle);
+            if (IsActive != wasActive)
+                Typedown.Core.Utilities.EditionHooks.ReportActivity(IsActive ? Typedown.Core.Utilities.ActivityKind.WindowActivated : Typedown.Core.Utilities.ActivityKind.WindowDeactivated, AppViewModel);
             if (KeyboardAccelerator != null) KeyboardAccelerator.IsEnable = IsActive;
             if (IsActive) LastActive = this;
             micaBackdrop?.SetActive(IsActive);

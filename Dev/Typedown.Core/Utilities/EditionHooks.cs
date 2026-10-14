@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Typedown.Core.ViewModels;
@@ -106,6 +106,38 @@ namespace Typedown.Core.Utilities
             }
         }
 
+        /// <summary>
+        /// What happens around the writing, as it happens: a window activated or left, the mode changed, another document
+        /// shown, a document saved under a new name, a paste, an undo or a redo. Only the event, for an edition to make
+        /// something of (a timeline of a writing day); raised on the window's thread.
+        /// </summary>
+        public static event Action<ActivityReport> Activity;
+
+        internal static void ReportActivity(ActivityKind kind, AppViewModel window, string oldPath = null)
+        {
+            if (Activity == null || window == null) return;
+            try
+            {
+                var settings = window.SettingsViewModel;
+                Activity.Invoke(new ActivityReport
+                {
+                    Kind = kind,
+                    At = DateTime.Now,
+                    Editor = window.EditorViewModel,
+                    DocumentId = window.TabsViewModel?.ActiveTab?.DocumentId,
+                    Path = window.FileViewModel?.FilePath,
+                    OldPath = oldPath,
+                    Mode = settings == null ? null : settings.ReadOnly ? "reading" : settings.SourceCode ? "source" : "visual",
+                    FocusMode = settings?.FocusMode ?? false,
+                    Typewriter = settings?.Typewriter ?? false,
+                });
+            }
+            catch (Exception ex)
+            {
+                Log.WriteLocal("EditionActivity", ex.ToString());
+            }
+        }
+
         internal static void ReportWordCount(WordCountReport report)
         {
             try
@@ -117,6 +149,35 @@ namespace Typedown.Core.Utilities
                 Log.WriteLocal("EditionWordCount", ex.ToString());
             }
         }
+    }
+
+    public enum ActivityKind { WindowActivated, WindowDeactivated, ModeChanged, DocumentShown, DocumentRenamed, Pasted, Undone, Redone }
+
+    /// <summary>One event of <see cref="EditionHooks.Activity"/>, with the window's document and mode as they are after it.</summary>
+    public sealed class ActivityReport
+    {
+        public ActivityKind Kind { get; set; }
+
+        public DateTime At { get; set; }
+
+        /// <summary>The window's editor (as in <see cref="WordCountReport.Editor"/>).</summary>
+        public object Editor { get; set; }
+
+        /// <summary>The document shown in the window: its id stays with it through a rename.</summary>
+        public string DocumentId { get; set; }
+
+        /// <summary>Its file, or null for an untitled one.</summary>
+        public string Path { get; set; }
+
+        /// <summary>For <see cref="ActivityKind.DocumentRenamed"/>: the file it had before (null when it was untitled).</summary>
+        public string OldPath { get; set; }
+
+        /// <summary>visual, source or reading.</summary>
+        public string Mode { get; set; }
+
+        public bool FocusMode { get; set; }
+
+        public bool Typewriter { get; set; }
     }
 
     /// <summary>A document's text as read from its file or written to it (<see cref="EditionHooks.DocumentOnDisk"/>).</summary>

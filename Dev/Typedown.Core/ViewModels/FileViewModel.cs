@@ -286,6 +286,7 @@ namespace Typedown.Core.ViewModels
             {
                 EditorViewModel.PostLoadFile(EditorViewModel.Markdown);
             }
+            EditionHooks.ReportActivity(ActivityKind.DocumentShown, AppViewModel);
         }
 
         /// <param name="preview">Single-click open from the file tree: reuse the current preview tab instead of adding one.</param>
@@ -373,6 +374,7 @@ namespace Typedown.Core.ViewModels
                 if (TabsViewModel != null)
                     TabsViewModel.ActiveTab.IsPreview = preview;
                 FileOpened?.Invoke(path, preview);
+                EditionHooks.ReportActivity(ActivityKind.DocumentShown, AppViewModel);
                 // Opening a large document is the one place where the host's own work is worth timing: the
                 // editor reports back when it has the text, and the gap between the two is the page's share.
                 if (text.Length > 200000)
@@ -631,6 +633,8 @@ namespace Typedown.Core.ViewModels
                             if (TabsViewModel?.ActiveTab is { } savedTab) savedTab.BackupHash = 0;
                         }
                         _ = AccessHistory.RecordFileHistory(FilePath);
+                        if (!string.Equals(originalPath, targetPath, StringComparison.OrdinalIgnoreCase))
+                            EditionHooks.ReportActivity(ActivityKind.DocumentRenamed, AppViewModel, originalPath);
                         return EditorViewModel.Saved ? targetPath : null;
                     }
                 }

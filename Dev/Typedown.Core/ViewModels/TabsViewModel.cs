@@ -194,6 +194,7 @@ namespace Typedown.Core.ViewModels
             {
                 switching = false;
             }
+            EditionHooks.ReportActivity(ActivityKind.DocumentShown, FileViewModel.AppViewModel);
             await FileViewModel.CheckExternalChangeAfterSwitch();
         }
 

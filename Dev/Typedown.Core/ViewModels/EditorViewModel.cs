@@ -140,6 +140,9 @@ namespace Typedown.Core.ViewModels
             // writes do.
             UndoCommand.OnExecute.Subscribe(_ => { if (!Settings.ReadOnly) Undo(); });
             RedoCommand.OnExecute.Subscribe(_ => { if (!Settings.ReadOnly) Redo(); });
+            // The mode for an edition's activity (EditionHooks.Activity).
+            foreach (var mode in new[] { nameof(Settings.ReadOnly), nameof(Settings.SourceCode), nameof(Settings.FocusMode), nameof(Settings.Typewriter) })
+                Settings.WhenPropertyChanged(mode).Subscribe(_ => EditionHooks.ReportActivity(ActivityKind.ModeChanged, AppViewModel));
             FindCommand.OnExecute.Subscribe(x => Find(x));
             PasteCommand.OnExecute.Subscribe(x => Paste(x));
             CutCommand.OnExecute.Subscribe(x => Cut(x));
@@ -971,6 +974,7 @@ namespace Typedown.Core.ViewModels
             {
                 return;
             }
+            EditionHooks.ReportActivity(ActivityKind.Undone, AppViewModel);
             OnMarkdownChange(state.Text);
             contentUpdating = true;
             MarkdownEditor?.PostMessage("SetMarkdown", new
@@ -989,6 +993,7 @@ namespace Typedown.Core.ViewModels
             {
                 return;
             }
+            EditionHooks.ReportActivity(ActivityKind.Redone, AppViewModel);
             OnMarkdownChange(state.Text);
             contentUpdating = true;
             // The document's folder too, as Undo sends it: without it the page lost its folder, and every relative picture
@@ -1054,6 +1059,7 @@ namespace Typedown.Core.ViewModels
                     var src = await ServiceProvider.GetService<ImageAction>().DoClipboardAction(image);
                     src = src.Replace('\\', '/');
                     MarkdownEditor?.PostMessage("InsertImage", new HtmlImgTag(src));
+                    EditionHooks.ReportActivity(ActivityKind.Pasted, AppViewModel);
 
                 }
             }
@@ -1074,6 +1080,7 @@ namespace Typedown.Core.ViewModels
         {
             var tab = ServiceProvider.GetService<TabsViewModel>()?.ActiveTab;
             MarkdownEditor?.PostMessage("Paste", new { type, text, html });
+            EditionHooks.ReportActivity(ActivityKind.Pasted, AppViewModel);
             if (type == "pasteAsPlainText" || string.IsNullOrEmpty(html)) return;
             if (Settings.InsertWebImageAction != Enums.InsertImageAction.CopyToPath && Settings.InsertWebImageAction != Enums.InsertImageAction.Upload) return;
             var addresses = WebImageAddresses(html);

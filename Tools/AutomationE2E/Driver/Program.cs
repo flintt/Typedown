@@ -196,6 +196,7 @@ internal static partial class Program
             await Case("SB05 the status bar shows the file's encoding and line ending: CRLF chosen there is what a save writes, and a GBK file is read again as GB18030 from its menu", SB05);
             await Case("SB06 the status bar names the heading the caret is under, and a click on it opens the outline", SB06);
             await Case("SB07 a narrow window puts the status bar items with no room into a \"...\" menu (the heading first, the count stays), and a right-click chooses which items show", SB07);
+            await Case("AC01 an edition hears of what happens around the writing: a document shown, the mode changed, an undo, the window left and come back to, a save under a new name", AC01);
             await Case("MN03 minimized, written to, restored without activation: the editor's web view gets its size back", MN03);
             await Case("MN04 F11 in and out of full screen, then minimized and brought back as a person does: the window works", MN04);
             await Case("MN05 F11 in and out of full screen, minimized, then a file opened from Explorer: the window comes back working", MN05);

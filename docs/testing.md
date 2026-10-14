@@ -193,6 +193,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | SB05 | the status bar shows the file's encoding and line ending: CRLF chosen there is what a save writes, and a GBK file is read again as GB18030 from its menu |
 | SB06 | the status bar names the heading the caret is under, and a click on it opens the outline |
 | SB07 | a narrow window puts the status bar items with no room into a "..." menu (the heading first, the count stays), and a right-click chooses which items show |
+| AC01 | an edition hears of what happens around the writing (EditionHooks.Activity): a document shown, the mode changed, an undo, the window left and come back to, a save under a new name |
 | MN03 | minimized, written to, restored without activation: the editor's web view gets its size back |
 | MN04 | F11 in and out of full screen, then minimized and brought back as a person does: the window works |
 | MN05 | F11 in and out of full screen, minimized, then a file opened from Explorer: the window comes back working |
@@ -268,6 +269,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | `test.outline.state` | `windowId` | The outline's expansion as the tree holds it (its nodes) and as the model holds it, row by row: the two disagreeing after a tab switch is how a heading's children came to be hidden with nobody collapsing it. | TestHostHooks.cs |
 | `test.theme.chrome` | `windowId` | The colours a custom theme changes around the editor, as they are now: the line between the side pane and the editor, the side pane, the menu bar and the status bar. A theme switched off has to put back what the built-in theme draws (TH06). | TestHostHooks.cs |
 | `test.theme.controls` | `windowId` | The accent the standard controls draw with, as drawn: a switch turned on, an accent button and a ticked check box put up in a popup over the window, their fills read, the popup taken down (TH07). | TestHostHooks.cs |
+| `test.activity.recent` | `clear` (optional) | The last events EditionHooks.Activity raised, oldest first: kind, mode, document, path, the old path of a rename (AC01). | TestHostHooks.cs |
 | `test.pane.accent` | `windowId` | The colours the side pane marks what is chosen with: every selection indicator drawn in it (the bar under Files/Outline, the pill of each outline and folder-tree row), by where it is, with its fill. | TestHostHooks.cs |
 | `test.images.uploadAll` | `windowId` | File > Upload local images on the window's active document, without its dialogs; returns the result. | TestHostHooks.cs |
 <!-- END generated: test-methods -->

@@ -741,6 +741,30 @@ namespace Typedown.Services.Automation
                     Walk(app.XamlRoot?.Content as global::Microsoft.UI.Xaml.DependencyObject);
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["indicators"] = found };
                 })));
+            // The last events an edition hears of around the writing (EditionHooks.Activity), oldest first: kind, mode,
+            // document and path (AC01).
+            var activity = new System.Collections.Generic.List<Newtonsoft.Json.Linq.JObject>();
+            Core.Utilities.EditionHooks.Activity += report =>
+            {
+                lock (activity)
+                {
+                    activity.Add(new Newtonsoft.Json.Linq.JObject
+                    {
+                        ["kind"] = report.Kind.ToString(), ["mode"] = report.Mode, ["documentId"] = report.DocumentId,
+                        ["path"] = report.Path, ["oldPath"] = report.OldPath, ["focus"] = report.FocusMode, ["typewriter"] = report.Typewriter,
+                    });
+                    if (activity.Count > 200) activity.RemoveAt(0);
+                }
+            };
+            methods.Add(new MethodDescriptor("test.activity.recent", null, "test.activity.recent/1", (c, ct) =>
+            {
+                lock (activity)
+                {
+                    var all = new Newtonsoft.Json.Linq.JArray(activity.ToArray());
+                    if (c.Params.OptionalBoolean("clear", false)) activity.Clear();
+                    return System.Threading.Tasks.Task.FromResult((Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["events"] = all });
+                }
+            }));
             // The accent the standard controls draw with, as they draw it: a switch turned on, an accent button (the
             // dialogs' default button has its style) and a ticked check box are put up in a popup over the window, their
             // colours read from what WinUI drew, and taken down again. The settings and the dialogs stayed the system
