@@ -113,6 +113,9 @@ namespace Typedown.Core.ViewModels
             // A paste the page caught from the browser (its own would put the clipboard's HTML into the document as is).
             EventCenter.GetObservable<EditorEventArgs>("PasteRequested").Subscribe(x => { if (!Settings.ReadOnly && !Settings.SourceCode) Paste(x.Args?["type"]?.ToString() ?? "normal"); });
             EventCenter.GetObservable<EditorEventArgs>("StateChange").Subscribe(x => OnStateChange(x.Args));
+            // The browser's own undo or redo in the page (the host's shortcut swallows the key when it takes it).
+            EventCenter.GetObservable<EditorEventArgs>("NativeHistory").Subscribe(x =>
+                EditionHooks.ReportActivity(x.Args?["redo"]?.Value<bool>() == true ? ActivityKind.Redone : ActivityKind.Undone, AppViewModel));
             EventCenter.GetObservable<EditorEventArgs>("OutlineCurrent").Subscribe(x => OnOutlineCurrent(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("VimState").Subscribe(x => VimState = x.Args?["state"]?.ToString() ?? "off");
             EventCenter.GetObservable<EditorEventArgs>("VimCommand").Subscribe(x => OnVimCommand(x.Args?["command"]?.ToString()));

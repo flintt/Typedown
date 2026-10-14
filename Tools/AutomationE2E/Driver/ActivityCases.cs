@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -25,11 +25,23 @@ internal static partial class Program
             await c.Call("document.focus", new { documentId = first });
             await c.Call("window.setView", new { windowId, mode = "reading" });
             await c.Call("window.setView", new { windowId, mode = "visual" });
-            await ClickEditorText(c, windowId, window, "Some text");
-            TypeChar('Q');
-            await Task.Delay(800);
+            await TypeInto(c, first, "Q");
+            await WaitForPage(c, first, t => t.Contains('Q'), "the keystroke");
+            await Task.Delay(500);
+            await Activate(window);
+            await c.Call("test.editor.focus", new { windowId });
+            await Task.Delay(200);
             Keys(("ctrl", (ushort)0x5A));
-            await Task.Delay(800);
+            await Task.Delay(1000);
+            notes.Add($"after Ctrl+Z: '{((string?)(await Get(c, first))["text"] ?? "").Replace("\n", "\\n")}'");
+            async Task<int> Undos() => ((JArray)(await c.Call("test.activity.recent"))["events"]!).Count(e => (string?)e["kind"] == "Undone");
+            notes.Add($"undo events after Ctrl+Z: {await Undos()}");
+            await TypeInto(c, first, "W");
+            await WaitForPage(c, first, t => t.Contains('W'), "the keystroke");
+            await Task.Delay(500);
+            await InvokeMenuBarItem(window, "UndoItem");
+            await Task.Delay(1000);
+            notes.Add($"undo events after Edit > Undo: {await Undos()}; text '{((string?)(await Get(c, first))["text"] ?? "").Replace("\n", "\\n")}'");
             // Another window over it, then back.
             other = (string)(await c.Call("test.window.open"))["windowId"]!;
             await Task.Delay(1500);
@@ -44,7 +56,7 @@ internal static partial class Program
             bool Has(string kind, Func<JObject, bool>? also = null) => events.Any(e => (string?)e["kind"] == kind && (also == null || also(e)));
             Check(Has("DocumentShown", e => ((string?)e["path"] ?? "").EndsWith("ac01-b.md")) && Has("DocumentShown", e => ((string?)e["path"] ?? "").EndsWith("ac01-a.md")), "a document opened and one switched back to are shown");
             Check(Has("ModeChanged", e => (string?)e["mode"] == "reading") && Has("ModeChanged", e => (string?)e["mode"] == "visual"), "into reading mode and out");
-            Check(Has("Undone"), "an undo");
+            Check(events.Count(e => (string?)e["kind"] == "Undone") >= 2, "an undo by Ctrl+Z and one by Edit > Undo");
             Check(Has("WindowDeactivated") && Has("WindowActivated"), "the window left and come back to");
             Check(Has("DocumentRenamed", e => ((string?)e["oldPath"] ?? "").EndsWith("ac01-a.md") && ((string?)e["path"] ?? "").EndsWith("ac01-renamed.md")), "saved under a new name, with the old one");
         }

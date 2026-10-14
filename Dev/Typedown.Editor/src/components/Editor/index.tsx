@@ -1,4 +1,4 @@
-import { setScrollLoadId } from 'services/scrollbar'
+﻿import { setScrollLoadId } from 'services/scrollbar'
 import CodeMirror from "components/CodeMirror";
 import MuyaEditor from "components/Muya";
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -171,6 +171,17 @@ const Editor: React.FC = () => {
 
     // Host -> editor: how the editor is drawn right now (the settings it applied), for checking that a setting reached
     // the page and not only the host.
+    // An undo or redo the browser made itself (Ctrl+Z the host's shortcut did not take): the host hears of it for an
+    // edition's activity, as it hears of its own.
+    useEffect(() => {
+        const onBeforeInput = (e: InputEvent) => {
+            if (e.inputType === 'historyUndo' || e.inputType === 'historyRedo')
+                transport.postMessage('NativeHistory', { redo: e.inputType === 'historyRedo' })
+        }
+        document.addEventListener('beforeinput', onBeforeInput, true)
+        return () => document.removeEventListener('beforeinput', onBeforeInput, true)
+    }, [])
+
     useEffect(() => transport.addListener<{ token: number }>('QueryEditorStyle', ({ token }) => {
         const element = document.querySelector('#ag-editor-id') || document.querySelector('.CodeMirror')
         const style = element ? getComputedStyle(element) : null
