@@ -154,6 +154,7 @@
             </Button>
             <!-- Jump the tree to the folder of the current document when it lives somewhere else. -->
             <Button Grid.Column="2" Width="32" Height="28" Style="{ThemeResource EllipsisIconButtonStyle}" Click="OnRevealCurrentFileClick"
+                    AutomationProperties.AutomationId="FolderRevealButton"
                     ToolTipService.ToolTip="{u:LocaleString Key=FolderPane.RevealCurrentFile}"
                     Visibility="{x:Bind local:FolderPage.RevealVisibility(FileViewModel.FilePath, WorkFolderExplorerItem.FullPath), Mode=OneWay}">
                 <FontIcon FontSize="12" Glyph="&#xe8b7;"/>

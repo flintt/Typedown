@@ -344,6 +344,38 @@ internal static partial class Program
         }
     }
 
+    /// <summary>
+    /// FN02: with a folder opened (so the tree no longer follows the document), the button beside the root's name that
+    /// shows for a document outside the tree moves the tree to that document's folder. It did nothing: the opened
+    /// folder won over the button.
+    /// </summary>
+    private static async Task FN02(List<string> notes)
+    {
+        using var c = await Session("e2e FN02");
+        var folder = FixtureFolder("fn02");
+        Directory.CreateDirectory(folder);
+        File.WriteAllText(Path.Combine(folder, "inside.md"), "# inside\n");
+        var path = Fixture("fn02-outside.md", "# FN02 outside\n");
+        var a = await Open(c, path);
+        var windowId = await WindowIdOf(c, a);
+        var window = await WindowOf(windowId, c);
+        async Task<bool> RootIs(string f) => await Eventually(async () => SamePath((string?)(await FolderState(c, windowId))["root"], f), 5000);
+        try
+        {
+            Check((bool)(await c.Call("test.folder.open", new { windowId, path = folder }))["opened"]!, "the folder opens");
+            Check(await RootIs(folder), "the tree is rooted at the opened folder");
+            await Click(window, await WaitFor(window, "FolderRevealButton"));
+            var moved = await RootIs(Path.GetDirectoryName(path)!);
+            notes.Add($"root after the click: {(await FolderState(c, windowId))["root"]}");
+            Check(moved, "the click moves the tree to the document's folder");
+            await WaitGone(window, "FolderRevealButton");
+        }
+        finally
+        {
+            try { await c.Call("document.close", new { documentId = a }); } catch { }
+        }
+    }
+
     // ---- favourites ----
 
     /// <summary>
