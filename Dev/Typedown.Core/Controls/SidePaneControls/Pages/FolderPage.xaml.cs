@@ -104,12 +104,22 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             RevealActiveFile();
         }
 
-        private void OnRevealCurrentFileClick(object sender, RoutedEventArgs e)
+        private async void OnRevealCurrentFileClick(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(FileViewModel?.FilePath)) return;
-            stickyRoot = Path.GetDirectoryName(FileViewModel.FilePath);
-            UpdateWorkFolder();
-            UpdateSelectedItem(WorkFolderExplorerItem);
+            var folder = Path.GetDirectoryName(FileViewModel.FilePath);
+            // A folder that was opened wins over the sticky root, so the button moves it as "Set as root" would;
+            // only setting the sticky root left the tree where it was.
+            if (FileViewModel.WorkFolderIsExplicit)
+            {
+                if (!await SetRootAsync(folder)) return;
+            }
+            else
+            {
+                stickyRoot = folder;
+                UpdateWorkFolder();
+            }
+            RevealActiveFile();
         }
 
         // ---- the root: up, the folders above, favourite and recent folders, Open folder ----
