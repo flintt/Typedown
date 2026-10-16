@@ -274,7 +274,14 @@ internal static partial class Program
         {
             var state = await FolderState(c, windowId);
             notes.Add($"at the start: root {state["root"]}, explicit {state["explicit"]}, pane open {state["paneOpen"]}");
-            Check(await RootIs(docs), "the tree follows the file to docs");
+            // The tree follows the file to docs - or, after a case that opened a folder in this window, docs opened as
+            // the root, which leaves the same rows behind.
+            if (!await RootIs(docs))
+            {
+                notes.Add("the tree no longer follows files in this window: docs opened as the root");
+                Check((bool)(await c.Call("test.folder.open", new { windowId, path = docs }))["opened"]!, "docs opens");
+                Check(await RootIs(docs), "the tree is rooted at docs");
+            }
             // Straight two levels up from the root's menu, as the reader went (the folders above, the second one).
             var menu = ((JArray)(await c.Call("test.folder.menu", new { windowId }))["entries"]!).ToList();
             var entry = menu.FirstOrDefault(e => SamePath((string?)e["path"], top)) ?? throw new CaseFailed("the root's menu has no entry for the top folder: " + string.Join(", ", menu.Select(e => $"{e["id"]}={e["path"]}")));

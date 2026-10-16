@@ -70,6 +70,8 @@ export class InputHold {
     hold(id: number) {
         note(`hold ${id} (latest ${this.latest}, active ${this.active}, composing ${this.composing}, can ${this.env.canHold()})`);
         if (id <= this.latest) return;
+        // A test showing what is lost without the hold turns it off (test.editor.eval).
+        if ((window as any).__inputHoldDisabled) { this.latest = id; return }
         if (this.active) this.freeze();
         this.latest = id;
         if (!this.env.canHold()) return;
