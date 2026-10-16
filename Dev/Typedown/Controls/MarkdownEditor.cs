@@ -144,15 +144,7 @@ namespace Typedown.Controls
 
         public void FocusEditor()
         {
-            // The keyboard in the web view already (Ctrl+N pressed in the text): asking for it again moved the focus out to
-            // this control and back, and a key pressed in between was lost (E2E TL01: the Enter typed just after Ctrl+N).
-            // The page hands it to its editor instead.
             Core.Utilities.Log.Debug($"focus: FocusEditor, web view {WebViewController?.WebView?.FocusState}");
-            if (IsEditorLoaded && WebViewController?.WebView is { } webView && webView.FocusState != FocusState.Unfocused)
-            {
-                PostMessage("TakeKeyboard", null);
-                return;
-            }
             Focus(FocusState.Programmatic);
             WebViewController?.EnsureFocus();
         }
