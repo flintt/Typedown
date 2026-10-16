@@ -169,6 +169,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | RC02 | a recent file deleted stays in the list greyed out and a right-click removes it; Clear recent files leaves the recent folders |
 | RC03 | with "Remember recently opened files" off a file opened is not listed; Clear recent on the settings page empties files and folders |
 | FN01 | the folder pane's up arrow, the folder above chosen in its root menu and "Set as root" on a folder each move the tree; the open documents stay as they were |
+| FN02 | with a folder opened, the button beside the root's name moves the tree to the folder of a document outside it |
 | FV01 | a file favoured from its tab's menu and a folder from the tree's menu are in favorites.json and the folder pane's group, still after a restart (and on the home page); renamed in the tree, the favourite follows |
 | HP01 | a start with the settings as they come shows the home page; a recent file clicked there opens in its tab and the home page goes |
 | HP02 | Ctrl+N and the + button show no home page and the next letter goes into the new document; with "New tabs show the home page" on, Ctrl+N shows it |
