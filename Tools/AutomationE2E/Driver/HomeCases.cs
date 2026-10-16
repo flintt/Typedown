@@ -377,8 +377,9 @@ internal static partial class Program
     }
 
     /// <summary>
-    /// FW01: an open document renamed outside the app is followed by its window (the tab's path becomes the new name), also
-    /// after the app itself renamed it once (the folder pane's Rename): the watcher must move to the new name each time.
+    /// FW01: an open document, saved, then renamed outside the app is followed by its window (the tab's path becomes the new
+    /// name), also after the app itself renamed it once (the folder pane's Rename) and it was saved again: the watcher must
+    /// move to the new name each time.
     /// </summary>
     private static async Task FW01(List<string> notes)
     {
@@ -396,8 +397,15 @@ internal static partial class Program
             for (var i = 0; i < 25 && !string.Equals(path, expected, StringComparison.OrdinalIgnoreCase); i++) { await Task.Delay(200); path = (string?)(await Get(c, id))["path"]; }
             return path;
         }
+        async Task Save(string text)
+        {
+            await c.Call("document.replace", new { documentId = id, baseRevision = await Revision(c, id), text, reveal = "document", normalizationPolicy = "allowUnknown" });
+            await c.Call("document.save", new { documentId = id, baseRevision = await Revision(c, id) });
+        }
         try
         {
+            // Saved first, as one does: a save replaces the file (a new file moved over it), which the watcher sees too.
+            await Save("# FW01\n\none\n");
             await Task.Delay(1500);
             var outside1 = Path.Combine(folder, "fw01-outside.md");
             File.Move(first, outside1);
@@ -409,6 +417,9 @@ internal static partial class Program
             Check((bool?)(await c.Call("test.file.rename", new { windowId, path = inApp }))["renamed"] == true, "renamed in the app");
             path = await PathAfter(inApp);
             Check(SamePath(path, inApp), "renamed in the app, the window has the new name");
+            // Saved again, and renamed outside at once: the app ignores its own write for a moment, and a rename then was
+            // ignored too, for good - the window kept a name the file no longer had.
+            await Save("# FW01\n\ntwo\n");
             var outside2 = Path.Combine(folder, "fw01-outside-again.md");
             File.Move(inApp, outside2);
             path = await PathAfter(outside2);
