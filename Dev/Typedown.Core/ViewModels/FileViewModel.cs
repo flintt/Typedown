@@ -1300,13 +1300,13 @@ namespace Typedown.Core.ViewModels
 
         private void OnDiskFileRenamed(object sender, RenamedEventArgs e)
         {
-            // Our own write, in progress: the rename is part of the atomic replace, not the user's doing.
-            if (DateTime.UtcNow < ignoreExternalChangeUntil)
-                return;
             dispatcherQueue?.TryEnqueue(() =>
             {
-                if (disposables.IsDisposed || DateTime.UtcNow < ignoreExternalChangeUntil)
+                if (disposables.IsDisposed)
                     return;
+                // The document itself given another name: followed even just after our own write. The atomic replace
+                // never renames the document to a name of its own (only to a save artifact, ~RF….TMP), and a rename
+                // ignored here was ignored for good - the window kept a name the file no longer had.
                 if (!string.IsNullOrEmpty(FilePath) &&
                     string.Equals(e.OldFullPath, FilePath, StringComparison.OrdinalIgnoreCase) &&
                     !string.IsNullOrEmpty(e.FullPath) &&
@@ -1318,6 +1318,9 @@ namespace Typedown.Core.ViewModels
                     EditionHooks.ReportActivity(ActivityKind.DocumentRenamed, AppViewModel, oldPath);
                     return;
                 }
+                // Our own write, in progress: the rename is part of the atomic replace, not the user's doing.
+                if (DateTime.UtcNow < ignoreExternalChangeUntil)
+                    return;
                 ScheduleReloadFromDisk();
             });
         }
