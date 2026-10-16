@@ -201,4 +201,93 @@ internal static partial class Program
             try { await c.Call("document.close", new { documentId = doc }); } catch { }
         }
     }
+    /// <summary>
+    /// FT04: what a reader did (2026-10-17): a file opened in top/Repo/docs (a folder of forty files), the tree following
+    /// it to docs, and at once the root two levels up (the start-up's last folder, 2 ms later in their log); Repo
+    /// expanded there, docs was shown as a file. Again with the two roots set straight after each other, and with time
+    /// between them. Run on its own: the tree must still follow the file (no folder opened before in the window).
+    /// </summary>
+    private static async Task FT04(List<string> notes)
+    {
+        using var c = await Session("e2e FT04");
+        var top = Path.Combine(fixtures, "ft04");
+        if (Directory.Exists(top)) Directory.Delete(top, true);
+        var repo = Path.Combine(top, "Repo");
+        var docs = Path.Combine(repo, "docs");
+        Directory.CreateDirectory(docs);
+        for (var i = 0; i < 40; i++) File.WriteAllText(Path.Combine(docs, $"{i:00}-spec.md"), $"# spec {i}\n");
+        foreach (var name in new[] { "alpha", "beta", "deno", "zeta" })
+        {
+            Directory.CreateDirectory(Path.Combine(repo, name));
+            File.WriteAllText(Path.Combine(repo, name, "x.md"), "# x\n");
+        }
+        foreach (var name in new[] { "Books", "Notes" })
+        {
+            Directory.CreateDirectory(Path.Combine(top, name));
+            File.WriteAllText(Path.Combine(top, name, "y.md"), "# y\n");
+        }
+        var doc = await Open(c, Path.Combine(docs, "01-spec.md"));
+        var windowId = await WindowIdOf(c, doc);
+        var window = await WindowOf(windowId, c);
+        async Task<bool> RootIs(string folder) => await Eventually(async () => SamePath((string?)(await FolderState(c, windowId))["root"], folder), 5000);
+
+        List<(string Name, bool Leaf, AutomationElement Row)> Rows() =>
+            Deep.All(AutomationElement.FromHandle(window), new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.TreeItem))
+                .Cast<AutomationElement>()
+                .Select(e =>
+                {
+                    var leaf = !e.TryGetCurrentPattern(ExpandCollapsePattern.Pattern, out var p)
+                        || ((ExpandCollapsePattern)p).Current.ExpandCollapseState == ExpandCollapseState.LeafNode;
+                    var text = e.FindFirst(TreeScope.Descendants, new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.Text));
+                    return (text?.Current.Name ?? e.Current.Name, leaf, e);
+                }).ToList();
+
+        // Repo expanded (as the reader clicked its arrow) and its rows read: docs and the other folders must expand.
+        async Task CheckRepo(string what)
+        {
+            Check(await Eventually(async () => { await Task.CompletedTask; return Rows().Any(r => r.Name == "Repo"); }, 5000), $"{what}: Repo is listed");
+            var repoRow = Rows().First(r => r.Name == "Repo").Row;
+            var pattern = (ExpandCollapsePattern)repoRow.GetCurrentPattern(ExpandCollapsePattern.Pattern);
+            if (pattern.Current.ExpandCollapseState != ExpandCollapseState.Expanded) pattern.Expand();
+            List<(string Name, bool Leaf, AutomationElement Row)> rows = new();
+            for (var i = 0; i < 30; i++)
+            {
+                await Task.Delay(200);
+                rows = Rows();
+                if (rows.Any(r => r.Name == "docs") && rows.Where(r => r.Name is "docs" or "alpha" or "beta" or "deno" or "zeta").All(r => !r.Leaf)) break;
+            }
+            var wrong = rows.Where(r => r.Name is "docs" or "alpha" or "beta" or "deno" or "zeta" or "Books" or "Notes" or "Repo" && r.Leaf).Select(r => r.Name).ToList();
+            notes.Add($"{what}: {string.Join(", ", rows.Select(r => r.Name + (r.Leaf ? "(leaf)" : "")))}");
+            Check(rows.Any(r => r.Name == "docs"), $"{what}: docs is listed under Repo");
+            Check(wrong.Count == 0, $"{what}: every folder row expands; shown as a file: {string.Join(", ", wrong)}");
+            pattern.Collapse();
+            await Task.Delay(300);
+        }
+
+        try
+        {
+            var state = await FolderState(c, windowId);
+            notes.Add($"at the start: root {state["root"]}, explicit {state["explicit"]}, pane open {state["paneOpen"]}");
+            Check(await RootIs(docs), "the tree follows the file to docs");
+            // At once two levels up, as the start-up's last folder came 2 ms after the file.
+            Check((bool)(await c.Call("test.folder.open", new { windowId, path = top }))["opened"]!, "the top folder opens");
+            Check(await RootIs(top), "the tree is rooted two levels up");
+            await CheckRepo("straight after the file");
+
+            for (var round = 1; round <= 3; round++)
+            {
+                // docs as the root and its forty files shown, then the top at once, or after a moment.
+                Check((bool)(await c.Call("test.folder.open", new { windowId, path = docs }))["opened"]!, "docs opens");
+                Check(await RootIs(docs), "rooted at docs");
+                if (round == 2) await Task.Delay(1500);
+                Check((bool)(await c.Call("test.folder.open", new { windowId, path = top }))["opened"]!, "the top opens");
+                Check(await RootIs(top), "rooted at the top");
+                await CheckRepo($"round {round}{(round == 2 ? " (docs shown first)" : "")}");
+            }
+        }
+        finally
+        {
+            try { await c.Call("document.close", new { documentId = doc }); } catch { }
+        }
+    }
 }

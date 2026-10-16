@@ -203,7 +203,9 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
         done()
     }), [editor, props.options?.readOnly]);
 
+    // The keyboard to the editor, unless the page is holding keys for a document on its way (services/inputHold.ts).
     useEffect(() => transport.addListener('TakeKeyboard', () => {
+        if (document.activeElement?.hasAttribute('data-input-hold')) return
         if (editor && !editor.hasFocus()) editor.focus()
     }), [editor]);
 
