@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 
 /// <summary>
 /// AC01: what an edition hears of around the writing (EditionHooks.Activity): another document shown, the mode changed,
-/// an undo, the window left and come back to, a document saved under a new name, the page scrolled.
+/// an undo, the window left and come back to, a document saved under a new name and then renamed, the page scrolled.
 /// </summary>
 internal static partial class Program
 {
@@ -59,6 +59,17 @@ internal static partial class Program
             Check(events.Count(e => (string?)e["kind"] == "Undone") >= 2, "an undo by Ctrl+Z and one by Edit > Undo");
             Check(Has("WindowDeactivated") && Has("WindowActivated"), "the window left and come back to");
             Check(Has("DocumentRenamed", e => ((string?)e["oldPath"] ?? "").EndsWith("ac01-a.md") && ((string?)e["path"] ?? "").EndsWith("ac01-renamed.md")), "saved under a new name, with the old one");
+
+            // Its file renamed as the folder pane renames the open document: the same event, the old file gone.
+            var moved = Path.Combine(fixtures, "ac01-moved.md");
+            if (File.Exists(moved)) File.Delete(moved);
+            await c.Call("test.activity.recent", new { clear = true });
+            var renameAnswer = await c.Call("test.file.rename", new { windowId, path = moved });
+            await Task.Delay(800);
+            var afterRename = ((JArray)(await c.Call("test.activity.recent"))["events"]!).Cast<JObject>().ToList();
+            notes.Add($"renamed: {renameAnswer["renamed"]}; events: " + string.Join(", ", afterRename.Select(e => $"{e["kind"]}({Path.GetFileName((string?)e["oldPath"] ?? "")} -> {Path.GetFileName((string?)e["path"] ?? "")})")));
+            Check((bool?)renameAnswer["renamed"] == true && File.Exists(moved) && !File.Exists(renamed), "the file renamed");
+            Check(afterRename.Any(e => (string?)e["kind"] == "DocumentRenamed" && ((string?)e["oldPath"] ?? "").EndsWith("ac01-renamed.md") && ((string?)e["path"] ?? "").EndsWith("ac01-moved.md")), "a rename is heard of as the document renamed, with the old name");
 
             // A long document scrolled: a Scrolled event (at most one every ten seconds a window, so moved again until it comes).
             var longText = "# AC01 long\n\n" + string.Concat(Enumerable.Range(1, 200).Select(i => $"Paragraph {i} of a long document.\n\n"));

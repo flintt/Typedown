@@ -1208,10 +1208,12 @@ namespace Typedown.Core.ViewModels
             if (!File.Exists(FilePath))
                 return false;
             var fileOperation = ServiceProvider.GetService<IFileOperation>();
-            if (fileOperation.Rename(FilePath, to))
+            var oldPath = FilePath;
+            if (fileOperation.Rename(oldPath, to))
             {
-                Favorites.Shared.Rename(FilePath, to);
+                Favorites.Shared.Rename(oldPath, to);
                 FilePath = to;
+                EditionHooks.ReportActivity(ActivityKind.DocumentRenamed, AppViewModel, oldPath);
                 return true;
             }
             return false;
@@ -1310,8 +1312,10 @@ namespace Typedown.Core.ViewModels
                     !string.IsNullOrEmpty(e.FullPath) &&
                     !LooksLikeSaveArtifact(e.FullPath))
                 {
+                    var oldPath = FilePath;
                     FilePath = e.FullPath;
                     _ = AccessHistory.RecordFileHistory(FilePath);
+                    EditionHooks.ReportActivity(ActivityKind.DocumentRenamed, AppViewModel, oldPath);
                     return;
                 }
                 ScheduleReloadFromDisk();

@@ -623,8 +623,11 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
                     if (oldPath == ViewModel.FileViewModel.FilePath)
                         ViewModel.FileViewModel.RenameFile(newPath);
                     else if (FileOperation.Rename(oldPath, newPath))
+                    {
                         // Renamed here: a favourite of it (or inside a folder renamed) follows.
                         Typedown.Core.Services.Favorites.Shared.Rename(oldPath, newPath);
+                        EditionHooks.ReportPathRenamed(oldPath, newPath);
+                    }
                     return System.Threading.Tasks.Task.CompletedTask;
                 });
                 _ = DispatcherQueue.RunIdleAsync(() => UpdateSelectedItem(WorkFolderExplorerItem));
@@ -795,6 +798,13 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
                     var collection = new StringCollection();
                     items.ToList().ForEach(x => collection.Add(x.Path));
                     page.FileOperation.Move(collection, target.FullPath);
+                    // Each one moved (gone from where it was, there under its name): said, as a rename.
+                    foreach (var moved in collection)
+                    {
+                        var to = Path.Combine(target.FullPath, Path.GetFileName(moved.TrimEnd('\\', '/')));
+                        if (!File.Exists(moved) && !Directory.Exists(moved) && (File.Exists(to) || Directory.Exists(to)))
+                            EditionHooks.ReportPathRenamed(moved, to);
+                    }
                 }
             }
             catch (Exception ex)
