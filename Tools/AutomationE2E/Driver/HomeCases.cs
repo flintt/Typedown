@@ -409,7 +409,6 @@ internal static partial class Program
             Check((bool?)(await c.Call("test.file.rename", new { windowId, path = inApp }))["renamed"] == true, "renamed in the app");
             path = await PathAfter(inApp);
             Check(SamePath(path, inApp), "renamed in the app, the window has the new name");
-            await Task.Delay(1500);
             var outside2 = Path.Combine(folder, "fw01-outside-again.md");
             File.Move(inApp, outside2);
             path = await PathAfter(outside2);
