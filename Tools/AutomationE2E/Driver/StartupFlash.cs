@@ -95,6 +95,12 @@ internal static partial class Program
                 var id = (string)w["windowId"]!;
                 try { notes.Add($"page of {(id == windowId ? "the new window" : id)}: {(await c.Call("test.editor.eval", new { windowId = id, script = themeState }))["result"]}"); }
                 catch (Exception e) { notes.Add($"page of {id}: {e.Message}"); }
+                try
+                {
+                    var state = await c.Call("test.webview.state", new { windowId = id });
+                    notes.Add($"paint of {(id == windowId ? "the new window" : id)}: editor op {state["editorOpacity"]}, web view {state["viewColour"]}; {state["paint"]}");
+                }
+                catch (Exception e) { notes.Add($"paint of {id}: {e.Message}"); }
             }
             var light = samples.Where(s => s.Light > 150).ToList();
             notes.Add($"on screen {appeared} ms after the call; {samples.Count} samples, lightest {samples.Max(s => s.Light):0}; " +

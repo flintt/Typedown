@@ -123,6 +123,11 @@ namespace Typedown.Services.Automation
                         // From the editor up to the root: each element's size, and a width or height set on it, to find
                         // the one whose layout kept the minimized window's size.
                         ["chain"] = editor == null ? null : LayoutChain(editor),
+                        // What is painted where the editor is: its opacity, the web view's own colour, each element up to
+                        // the root with an opacity or a background, and what shares the editor's panel (over it or under).
+                        ["editorOpacity"] = editor?.Opacity,
+                        ["viewColour"] = view?.DefaultBackgroundColor.ToString(),
+                        ["paint"] = editor == null ? null : PaintChain(editor),
                     };
                 })));
             // Runs a script in the window's editor page and returns its JSON result: for diagnosing what the page holds
@@ -992,6 +997,37 @@ namespace Typedown.Services.Automation
 
         [System.Runtime.InteropServices.DllImport("user32.dll", CharSet = System.Runtime.InteropServices.CharSet.Unicode)]
         private static extern nint FindWindowExW(nint parent, nint after, string className, string title);
+
+        /// <summary>
+        /// From an element up to the root: each one that is not fully opaque or paints a background (its colour and
+        /// opacity), and the other children of the element's own panel - where a light layer over or under the editor
+        /// would show.
+        /// </summary>
+        private static string PaintChain(Microsoft.UI.Xaml.FrameworkElement element)
+        {
+            static string Brush(Microsoft.UI.Xaml.Media.Brush b) => b switch
+            {
+                null => null,
+                Microsoft.UI.Xaml.Media.SolidColorBrush solid => $"{solid.Color}@{solid.Opacity:0.##}",
+                _ => b.GetType().Name,
+            };
+            static string Background(Microsoft.UI.Xaml.DependencyObject d) => d switch
+            {
+                Microsoft.UI.Xaml.Controls.Panel panel => Brush(panel.Background),
+                Microsoft.UI.Xaml.Controls.Control control => Brush(control.Background),
+                Microsoft.UI.Xaml.Controls.Border border => Brush(border.Background),
+                _ => null,
+            };
+            static string Name(Microsoft.UI.Xaml.FrameworkElement e) => e.GetType().Name + (string.IsNullOrEmpty(e.Name) ? "" : "#" + e.Name);
+            var parts = new System.Collections.Generic.List<string>();
+            if (Microsoft.UI.Xaml.Media.VisualTreeHelper.GetParent(element) is Microsoft.UI.Xaml.Controls.Panel own)
+                foreach (var child in own.Children.OfType<Microsoft.UI.Xaml.FrameworkElement>())
+                    parts.Add($"[{(child == element ? "this" : Name(child))} {child.Visibility} op {child.Opacity:0.##} bg {Background(child) ?? "-"}]");
+            for (Microsoft.UI.Xaml.DependencyObject d = element; d != null; d = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetParent(d))
+                if (d is Microsoft.UI.Xaml.FrameworkElement e && (e.Opacity < 1 || Background(e) != null))
+                    parts.Add($"{Name(e)} op {e.Opacity:0.##} bg {Background(e) ?? "-"}");
+            return string.Join(" < ", parts);
+        }
 
         private static string LayoutChain(global::Microsoft.UI.Xaml.FrameworkElement element)
         {
