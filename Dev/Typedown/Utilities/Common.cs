@@ -23,14 +23,6 @@ namespace Typedown.Utilities
 
         public static int GetLowWord(IntPtr p) => (int)(p.ToInt64() & 0xFFFF);
 
-        /// <summary>The editor page's colour in the current theme (black, dark grey or light grey).</summary>
-        public static Color GetThemeBackground(this IServiceProvider provider)
-        {
-            var isDarkMode = provider.GetService<UIViewModel>().ActualTheme == ElementTheme.Dark;
-            var isBlack = provider.GetService<SettingsViewModel>().EffectiveTheme == Typedown.Core.Enums.AppTheme.Black;
-            return isBlack ? Colors.Black : isDarkMode ? Color.FromArgb(0xFF, 0x28, 0x28, 0x28) : Color.FromArgb(0xFF, 0xF9, 0xF9, 0xF9);
-        }
-
         public static object GetCurrentTheme(this IServiceProvider provider)
         {
             var ui = provider.GetService<UIViewModel>();
@@ -43,7 +35,7 @@ namespace Typedown.Utilities
             // global:: — inside Typedown.* a plain "Windows." binds to Typedown.Windows, the app's own namespace.
             var themeAccent = Typedown.Core.Utilities.ThemeFiles.Brush(custom?.Accent) as global::Microsoft.UI.Xaml.Media.SolidColorBrush;
             var accentColor = themeAccent?.Color ?? new UISettings().GetColorValue(UIColorType.Accent);
-            var solidBackground = provider.GetThemeBackground();
+            var solidBackground = isBlack ? Colors.Black : isDarkMode ? Color.FromArgb(0xFF, 0x28, 0x28, 0x28) : Color.FromArgb(0xFF, 0xF9, 0xF9, 0xF9);
             // Always the theme's colour: WinUI 3's WebView2 cannot be transparent (it fills what the page leaves clear with a
             // grey of its own), so the editor's Mica of XamlUI, where the page showed the window through, is not possible.
             var background = solidBackground;
