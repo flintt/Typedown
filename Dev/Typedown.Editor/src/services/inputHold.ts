@@ -24,6 +24,14 @@ export interface InputHoldEnv {
 
 interface Segment { hold: number; text: string }
 
+// The last few things the hold did, for a test that fails to say what happened (read with test.editor.eval).
+const trace: string[] = [];
+const note = (what: string) => {
+    trace.push(`${Math.round(performance.now())} ${what}`);
+    if (trace.length > 40) trace.shift();
+};
+(window as any).__inputHoldTrace = trace;
+
 export class InputHold {
     /** The newest hold the host asked for. */
     latest = 0;
@@ -51,6 +59,7 @@ export class InputHold {
 
     /** The host is about to show another document (HoldInput). */
     hold(id: number) {
+        note(`hold ${id} (latest ${this.latest}, active ${this.active}, composing ${this.composing}, can ${this.env.canHold()})`);
         if (id <= this.latest) return;
         if (this.active) this.freeze();
         this.latest = id;
@@ -69,6 +78,7 @@ export class InputHold {
 
     /** The document of this hold is in the editor and confirmed to the host. */
     loaded(hold: number | undefined) {
+        note(`loaded ${hold} (latest ${this.latest}, active ${this.active}, box ${JSON.stringify(this.sink?.value ?? '')}, waiting ${this.segments.length})`);
         if (typeof hold !== 'number') return;
         // Earlier holds whose documents never came (skipped, or superseded) give their text to this one rather than lose it.
         const text = this.take(s => s.hold <= hold);
@@ -79,6 +89,7 @@ export class InputHold {
 
     /** The host will send no document for this hold: what was typed for it goes to the document shown. */
     release(hold: number, loadPending: boolean) {
+        note(`release ${hold} (load pending ${loadPending})`);
         if (loadPending) return;
         this.loaded(hold);
     }
@@ -137,6 +148,7 @@ export class InputHold {
         // One after another, in the order typed: a later text never overtakes an earlier one still going in.
         this.delivering = this.delivering.then(async () => {
             try {
+                note(`insert ${JSON.stringify(text)} focus ${focus}`);
                 if (text) await this.env.insert(text);
             } catch (e) {
                 console.log('typed text could not go in', e);

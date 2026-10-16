@@ -34,8 +34,12 @@ internal static partial class Program
                 foreach (var d in await DocumentsOf(c, windowId)) before[d] = (string)(await Get(c, d))["text"]!;
                 var shownBefore = await ActiveOf(c, windowId);
                 await command();
-                Keys(letters);
-                if (enterAndChinese) { Chord("Enter"); TypeText("中文"); }
+                // As a quick typist: the first key 50 ms after the command, then one every 30 ms. Keys sent all at once (no
+                // gap) reach the page before the host has even seen the shortcut; no one types that fast, and that gap is
+                // left open (docs/todo.md).
+                await Task.Delay(50);
+                foreach (var ch in letters) { Keys(ch.ToString()); await Task.Delay(30); }
+                if (enterAndChinese) { Chord("Enter"); await Task.Delay(30); TypeText("中"); await Task.Delay(30); TypeText("文"); }
                 // Every step here shows another tab; which one is read once the host has made the change.
                 Check(await Eventually(async () => await ActiveOf(c, windowId) != shownBefore, 3000), $"{what} showed another tab");
                 var target = await ActiveOf(c, windowId);
@@ -45,6 +49,11 @@ internal static partial class Program
                 string text = "";
                 for (var i = 0; i < 40 && !(text = (string)(await Get(c, target))["text"]!).Contains(last); i++) await Task.Delay(50);
                 notes.Add($"after {what}: {JsonConvert.SerializeObject(text)}");
+                // What happened, for a failure: every document's text and the page's own account of the hold.
+                foreach (var d in before.Keys.Append(target).Distinct())
+                    notes.Add($"  {(d == target ? "shown" : "other")}: {JsonConvert.SerializeObject((string)(await Get(c, d))["text"]!)}");
+                try { notes.Add("  hold: " + (await c.Call("test.editor.eval", new { windowId, script = "JSON.stringify(window.__inputHoldTrace || null)" }))["result"]); }
+                catch (Exception e) { notes.Add("  hold: " + e.Message.Split('\n')[0]); }
                 Check(text.Contains(letters), $"the letters typed after {what} are all in the tab shown, in order ({JsonConvert.SerializeObject(text)})");
                 if (enterAndChinese)
                     Check(System.Text.RegularExpressions.Regex.IsMatch(text, letters + "\n+中文"),

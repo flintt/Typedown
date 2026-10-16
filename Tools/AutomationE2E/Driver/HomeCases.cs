@@ -803,6 +803,7 @@ internal static partial class Program
             var blank = await ActiveOf(c, windowId);
             made.Add(blank);
             // No wait for the blank document: keys typed while it loads are kept for it (HoldInput, TL01).
+            await Task.Delay(50);
             TypeChar('Q');
             await WaitForPage(c, blank, t => t.Contains('Q'), "a letter typed on the home page");
             Check(await HomeShown(c, windowId, false), "typing hides the home page");

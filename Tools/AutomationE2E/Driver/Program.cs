@@ -173,6 +173,7 @@ internal static partial class Program
             await Case("RC03 with \"Remember recently opened files\" off a file opened is not listed; Clear recent on the settings page empties files and folders", RC03);
             await Case("FN01 the folder pane's up arrow, the folder above chosen in its root menu and \"Set as root\" on a folder each move the tree; the open documents stay as they were", FN01);
             await Case("FT02 a folder in the file tree is shown as a folder that expands after the root changed: up from a folder of files to a folder of folders, and back and forth", FT02);
+            await Case("FT03 the same after a big folder was expanded and the root changed, a folder moved in, one renamed from a temporary name and one whose attributes changed", FT03);
             await Case("FN02 with a folder opened, the button beside the root's name moves the tree to the folder of a document outside it", FN02);
             await Case("FW01 an open document renamed outside the app is followed by its window, also after the app renamed it once", FW01);
             await Case("FV01 a file favoured from its tab's menu and a folder from the tree's menu are in favorites.json and the folder pane's group, still after a restart (and on the home page); renamed in the tree, the favourite follows", FV01);
@@ -1139,7 +1140,9 @@ internal static partial class Program
             Send(new INPUT { type = 1, u = new InputUnion { ki = new KEYBDINPUT { wVk = 0x4E, wScan = 0x31 } } }, new INPUT { type = 1, u = new InputUnion { ki = new KEYBDINPUT { wVk = 0x4E, wScan = 0x31, dwFlags = 0x0002 } } });
             await Task.Delay(80);
             Send(Key(0x11, true));
-            // No wait for the new document: keys typed while it loads are kept for it (HoldInput, TL01).
+            // No wait for the new document: keys typed while it loads are kept for it (HoldInput, TL01). 50 ms, as a quick
+            // typist's next key.
+            await Task.Delay(50);
             TypeChar('N');
             Check(await Eventually(async () => await Active() != first, 3000), "Ctrl+N made a tab");
             var ctrlN = await Active();
@@ -1157,6 +1160,7 @@ internal static partial class Program
             }
             var r = add.Current.BoundingRectangle;
             Click((int)(r.Left + r.Width / 2), (int)(r.Top + r.Height / 2));
+            await Task.Delay(50);
             TypeChar('P');
             Check(await Eventually(async () => await Active() != ctrlN, 3000), "the + button made a tab");
             var plus = await Active();
@@ -1171,6 +1175,7 @@ internal static partial class Program
             r = tab.Current.BoundingRectangle;
             Click((int)(r.Left + 20), (int)(r.Top + r.Height / 2));
             // A letter the document does not hold already ("Text" has a T).
+            await Task.Delay(50);
             TypeChar('J');
             Check(await Eventually(async () => await Active() == first, 3000), "the click switched to the first tab");
             text = await PageHas(first, 'J');

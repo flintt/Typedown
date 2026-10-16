@@ -171,6 +171,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | RC03 | with "Remember recently opened files" off a file opened is not listed; Clear recent on the settings page empties files and folders |
 | FN01 | the folder pane's up arrow, the folder above chosen in its root menu and "Set as root" on a folder each move the tree; the open documents stay as they were |
 | FT02 | a folder in the file tree is shown as a folder that expands after the root changed: up from a folder of files to a folder of folders, and back and forth |
+| FT03 | the same after a big folder was expanded and the root changed, a folder moved in, one renamed from a temporary name and one whose attributes changed |
 | FN02 | with a folder opened, the button beside the root's name moves the tree to the folder of a document outside it |
 | FW01 | an open document renamed outside the app is followed by its window, also after the app renamed it once |
 | FV01 | a file favoured from its tab's menu and a folder from the tree's menu are in favorites.json and the folder pane's group, still after a restart (and on the home page); renamed in the tree, the favourite follows |
