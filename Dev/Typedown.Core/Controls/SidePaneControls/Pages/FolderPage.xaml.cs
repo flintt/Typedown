@@ -380,7 +380,9 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
         {
             if (item == null || FileViewModel == null)
                 return;
-            item.IsSelected = FileViewModel.FilePath == item.FullPath;
+            // Files only: a folder's row was never bound to this, and a folder clicked stays as the tree selected it.
+            if (item.Type == ExplorerItem.ExplorerItemType.File)
+                item.IsSelected = FileViewModel.FilePath == item.FullPath;
             foreach (var next in item.Children)
                 UpdateSelectedItem(next);
         }
@@ -634,6 +636,21 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             }
         }
 
+        internal static string GlyphOf(ExplorerItem.ExplorerItemType type) =>
+            type == ExplorerItem.ExplorerItemType.Folder ? "\uF12B" : "\uE8A5";
+
+        // A row reused for another item: its menu is that item's (a folder's or a file's).
+        internal static void OnTreeViewItemDataContextChanged(FrameworkElement sender, DataContextChangedEventArgs e)
+        {
+            if (sender is muxc.TreeViewItem item && item.GetAncestor<FolderPage>() is FolderPage page) page.ApplyMenu(item);
+        }
+
+        private void ApplyMenu(muxc.TreeViewItem item)
+        {
+            var folder = (item.DataContext as ExplorerItem)?.Type == ExplorerItem.ExplorerItemType.Folder;
+            item.ContextFlyout = Resources[folder ? "FolderContextFlyout" : "FileContextFlyout"] as Microsoft.UI.Xaml.Controls.Primitives.FlyoutBase;
+        }
+
         internal static void OnTreeViewItemLoaded(object sender, RoutedEventArgs e)
         {
             if (sender is not muxc.TreeViewItem item || !item.IsLoaded || VisualTreeHelper.GetChild(item, 0) is not UIElement grid || item.GetAncestor<FolderPage>() is not FolderPage page)
@@ -644,6 +661,7 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             item.AddHandler(PointerReleasedEvent, treeViewItemPointerReleasedEventHandler, true);
             var treeViewItemDoubleTappedEventHandler = new Microsoft.UI.Xaml.Input.DoubleTappedEventHandler(page.OnTreeViewItemDoubleTapped);
             item.AddHandler(DoubleTappedEvent, treeViewItemDoubleTappedEventHandler, true);
+            page.ApplyMenu(item);
             if (item.DataContext is ExplorerItem explorerItem)
                 page.UpdateSelectedItem(explorerItem);
 
@@ -820,14 +838,4 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
         }
     }
 
-    class ExplorerItemTemplateSelector : DataTemplateSelector
-    {
-        public DataTemplate FolderTemplate { get; set; }
-        public DataTemplate FileTemplate { get; set; }
-
-        protected override DataTemplate SelectTemplateCore(object item)
-        {
-            return item is ExplorerItem explorerItem && explorerItem.Type == ExplorerItem.ExplorerItemType.Folder ? FolderTemplate : FileTemplate;
-        }
-    }
 }

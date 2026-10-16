@@ -67,10 +67,14 @@
             <MenuFlyoutItem Text="{u:LocaleString Key=CopyAsPath}" Click="OnCopyAsPathClick"/>
         </MenuFlyout>
 
-        <DataTemplate x:Key="FolderTemplate" x:DataType="models:ExplorerItem">
-            <muxc:TreeViewItem ItemsSource="{Binding Children}" IsExpanded="{Binding IsExpanded, Mode=TwoWay}" HasUnrealizedChildren="{Binding HasChildren, Mode=OneWay}" 
-                               ContextFlyout="{StaticResource FolderContextFlyout}" BorderThickness="1" Margin="-1" 
+        <!-- One template for folders and files: the tree reuses rows, and a row made for a file and reused for a folder
+             kept the file's template - no arrow, a folder that looked like a file and would not open (E2E FT04, FT03).
+             What differs (the icon, the menu) follows the row's item as it changes. A file has no children, so no arrow. -->
+        <DataTemplate x:Key="ExplorerItemTemplate" x:DataType="models:ExplorerItem">
+            <muxc:TreeViewItem ItemsSource="{Binding Children}" IsExpanded="{Binding IsExpanded, Mode=TwoWay}"
+                               IsSelected="{Binding IsSelected, Mode=TwoWay}" BorderThickness="1" Margin="-1"
                                Loaded="{x:Bind local:FolderPage.OnTreeViewItemLoaded}"
+                               DataContextChanged="{x:Bind local:FolderPage.OnTreeViewItemDataContextChanged}"
                                CanDrag="True" DragStarting="{x:Bind local:FolderPage.OnItemDragStarting}" DragOver="{x:Bind local:FolderPage.OnItemDragOver}" 
                                Background="Transparent" AllowDrop="True" Drop="{x:Bind local:FolderPage.OnFolderItemDrop}">
                 <Grid ColumnSpacing="8" Height="32">
@@ -78,26 +82,8 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <FontIcon FontSize="14" Glyph="&#xf12b;" VerticalAlignment="Center"/>
+                    <FontIcon FontSize="14" Glyph="{x:Bind local:FolderPage.GlyphOf(Type), Mode=OneWay}" VerticalAlignment="Center"/>
                     <TextBlock x:Name="NameTextBlock" Grid.Column="1" Text="{Binding Name, Mode=OneWay}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="0,0,0,1"/>
-                    <ContentPresenter Grid.Column="1" x:Name="TextBoxContainer" VerticalAlignment="Center"/>
-                </Grid>
-            </muxc:TreeViewItem>
-        </DataTemplate>
-
-        <DataTemplate x:Key="FileTemplate" x:DataType="models:ExplorerItem">
-            <muxc:TreeViewItem ContextFlyout="{StaticResource FileContextFlyout}" BorderThickness="1" Margin="-1" 
-                               Loaded="{x:Bind local:FolderPage.OnTreeViewItemLoaded}"
-                               IsSelected="{Binding IsSelected, Mode=TwoWay}"
-                               CanDrag="True" DragStarting="{x:Bind local:FolderPage.OnItemDragStarting}" DragOver="{x:Bind local:FolderPage.OnItemDragOver}" 
-                               Background="Transparent" AllowDrop="True" Drop="{x:Bind local:FolderPage.OnFolderItemDrop}">
-                <Grid ColumnSpacing="8" Height="32">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <FontIcon FontSize="14" Glyph="&#xe8a5;" VerticalAlignment="Center"/>
-                    <TextBlock x:Name="NameTextBlock" Grid.Column="1" Text="{Binding Name, Mode=OneWay}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
                     <ContentPresenter Grid.Column="1" x:Name="TextBoxContainer" VerticalAlignment="Center"/>
                 </Grid>
             </muxc:TreeViewItem>
@@ -108,10 +94,6 @@
             <MenuFlyoutItem Text="{u:LocaleString Key=OpenFileLocation}" Click="OnFavoriteLocationClick"/>
         </MenuFlyout>
 
-        <local:ExplorerItemTemplateSelector 
-            x:Key="ExplorerItemTemplateSelector"
-            FolderTemplate="{StaticResource FolderTemplate}"
-            FileTemplate="{StaticResource FileTemplate}" />
     </Page.Resources>
 
     <Grid>
@@ -205,7 +187,7 @@
             AllowDrop="False"
             DataContext="{x:Bind WorkFolderExplorerItem, Mode=OneWay}"
             ItemsSource="{x:Bind WorkFolderExplorerItem.Children, Mode=OneWay}" 
-            ItemTemplateSelector="{StaticResource ExplorerItemTemplateSelector}" 
+            ItemTemplate="{StaticResource ExplorerItemTemplate}" 
             ContextFlyout="{StaticResource TreeViewContextFlyout}">
             <muxc:TreeView.ItemContainerTransitions>
                 <TransitionCollection>
