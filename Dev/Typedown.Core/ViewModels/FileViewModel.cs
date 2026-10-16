@@ -335,9 +335,8 @@ namespace Typedown.Core.ViewModels
             folderPath ??= await AppViewModel.MainWindow.PickMarkdownFolderAsync();
             if (folderPath == null)
                 return false;
-            if (!await LoadFolder(folderPath))
+            if (!await LoadFolder(folderPath, explicitRoot: true))
                 return false;
-            WorkFolderIsExplicit = true;
             SettingsViewModel.SidePaneOpen = true;
             SettingsViewModel.SidePaneIndex = 0;
             return true;
@@ -420,12 +419,16 @@ namespace Typedown.Core.ViewModels
             }
         }
 
-        private async Task<bool> LoadFolder(string folderPath)
+        private async Task<bool> LoadFolder(string folderPath, bool explicitRoot = false)
         {
             try
             {
                 if (!Directory.Exists(folderPath))
                     throw new FileNotFoundException("Folder does not exist.");
+                // Opened by the reader: said before the folder changes, which the file tree follows at once. Set after, the
+                // tree first stayed with the document (not yet the reader's folder), then moved only when something else
+                // asked again - the root changed twice in 2 ms, or not at all with the folder pane already open.
+                if (explicitRoot) WorkFolderIsExplicit = true;
                 WorkFolder = folderPath;
                 _ = AccessHistory.RecordFolderHistory(folderPath);
                 return true;
