@@ -77,6 +77,8 @@ namespace Typedown.Services
             if (registeredDictionary.TryGetValue(new(modifiers, key), out var actions))
                 foreach (var action in actions)
                     action(this, eventArgs);
+            // A key taken as a shortcut never reaches the page: said in the log, so one taken by mistake can be found.
+            if (eventArgs.Handled) Core.Utilities.Log.Debug($"keys: {modifiers}+{key} taken as a shortcut ({args.flags})");
             return eventArgs.Handled;
         }
 
