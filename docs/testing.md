@@ -142,6 +142,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | K02 | Ctrl+, twice opens and closes the settings: the caret and the keyboard are where they were |
 | K04 | a window just opened takes the keys at once: a letter typed without a click reaches the document |
 | K05 | a new tab (the + button, Ctrl+N) and a tab clicked in the strip take the keys at once, without a click in the text |
+| TL01 | keys typed at once after Ctrl+N, a tab clicked, Ctrl+Tab, the + button and Ctrl+Shift+H go into the tab shown, in order, Enter and Chinese text too; the document left is unchanged |
 | K06 | after closing a tab, a menu command, a mode switch, an outline jump, closing the find bar or a dialog, and Ctrl+Tab, the keys go to the document without a click |
 | K03 | the same with an untitled document (no per-file caret memory) |
 | FS01 | in full screen the main page starts at the top edge of the screen |
@@ -169,6 +170,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | RC02 | a recent file deleted stays in the list greyed out and a right-click removes it; Clear recent files leaves the recent folders |
 | RC03 | with "Remember recently opened files" off a file opened is not listed; Clear recent on the settings page empties files and folders |
 | FN01 | the folder pane's up arrow, the folder above chosen in its root menu and "Set as root" on a folder each move the tree; the open documents stay as they were |
+| FT02 | a folder in the file tree is shown as a folder that expands after the root changed: up from a folder of files to a folder of folders, and back and forth |
 | FN02 | with a folder opened, the button beside the root's name moves the tree to the folder of a document outside it |
 | FW01 | an open document renamed outside the app is followed by its window, also after the app renamed it once |
 | FV01 | a file favoured from its tab's menu and a folder from the tree's menu are in favorites.json and the folder pane's group, still after a restart (and on the home page); renamed in the tree, the favourite follows |

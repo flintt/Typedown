@@ -174,27 +174,36 @@ namespace Typedown.Core.ViewModels
         public async Task SwitchTo(DocumentTab tab)
         {
             if (tab == null || tab == ActiveTab || !Tabs.Contains(tab)) return;
-            // Bring the outgoing document's latest edits in and let its pending change reports resolve before we
-            // snapshot it and load the next one. Without this a throttled MarkdownChange for the tab being left
-            // can arrive after the switch and land on the tab now shown — one document's text crossing into
-            // another. Flushing captures the accurate text and drains those reports first.
-            await EditorViewModel.FlushContentAsync();
-            // Looked at again after the wait: the tab may have been shown in the meantime. Closing a tab removes it from
-            // the strip, the strip selects the neighbour and asks for it here, and the close then shows that very tab
-            // itself - loaded twice, the first load's reports were dropped as stale and the page, given the same text
-            // again, did not report it again: the outline stayed on the closed document (E2E TC02).
-            if (tab == ActiveTab || !Tabs.Contains(tab)) return;
-            switching = true;
+            // Keys typed from here on are for the tab switched to, not the one being left (see HoldInput).
+            var hold = EditorViewModel.HoldInput();
             try
             {
-                SnapshotActive();
-                previousTab = ActiveTab;
-                ActiveTab = tab;
-                Restore(tab);
+                // Bring the outgoing document's latest edits in and let its pending change reports resolve before we
+                // snapshot it and load the next one. Without this a throttled MarkdownChange for the tab being left
+                // can arrive after the switch and land on the tab now shown — one document's text crossing into
+                // another. Flushing captures the accurate text and drains those reports first.
+                await EditorViewModel.FlushBeforeTabChangeAsync();
+                // Looked at again after the wait: the tab may have been shown in the meantime. Closing a tab removes it from
+                // the strip, the strip selects the neighbour and asks for it here, and the close then shows that very tab
+                // itself - loaded twice, the first load's reports were dropped as stale and the page, given the same text
+                // again, did not report it again: the outline stayed on the closed document (E2E TC02).
+                if (tab == ActiveTab || !Tabs.Contains(tab)) return;
+                switching = true;
+                try
+                {
+                    SnapshotActive();
+                    previousTab = ActiveTab;
+                    ActiveTab = tab;
+                    Restore(tab);
+                }
+                finally
+                {
+                    switching = false;
+                }
             }
             finally
             {
-                switching = false;
+                EditorViewModel.ReleaseInput(hold);
             }
             EditionHooks.ReportActivity(ActivityKind.DocumentShown, FileViewModel.AppViewModel);
             await FileViewModel.CheckExternalChangeAfterSwitch();

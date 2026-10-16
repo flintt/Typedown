@@ -802,10 +802,7 @@ internal static partial class Program
             Check(await HomeShown(c, windowId, true), "the shortcut shows the home page");
             var blank = await ActiveOf(c, windowId);
             made.Add(blank);
-            // The new blank document given time to reach the page first, as K05 waits after Ctrl+N: keys typed while a
-            // new tab's document is still loading go to the page's previous document and are lost (a tab-loading race of
-            // its own, not the home page's).
-            await Task.Delay(1500);
+            // No wait for the blank document: keys typed while it loads are kept for it (HoldInput, TL01).
             TypeChar('Q');
             await WaitForPage(c, blank, t => t.Contains('Q'), "a letter typed on the home page");
             Check(await HomeShown(c, windowId, false), "typing hides the home page");

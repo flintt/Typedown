@@ -9,7 +9,8 @@ import ExportHtml from "services/exportHtml";
 import { errorText } from "services/errorText";
 import { htmlToMarkdown } from "services/importHtml";
 import { DEFAULT_TURNDOWN_CONFIG } from "components/Muya/lib/config";
-import { resetUserIntent, takeChangeOrigin } from "services/changeOrigin";
+import { noteUserIntent, resetUserIntent, takeChangeOrigin } from "services/changeOrigin";
+import { InputHold } from "services/inputHold";
 import { sha256Hex } from "services/sha256";
 import { classifierVersion } from "services/normalization";
 import { applyHostBackground } from "services/theme";
@@ -105,12 +106,18 @@ const Editor: React.FC = () => {
     // then leaves the file looking modified without an edit. The timers are only fallbacks.
     const fileLoadPending = useRef<{ armed: boolean, timer?: number }>()
 
+    // What is typed while a tab's document is on its way (services/inputHold.ts), and the hold the document shown was for.
+    const holdRef = useRef<InputHold>()
+    const appliedHoldRef = useRef<number>()
+
     const flushFileLoaded = useCallback(() => {
         const pending = fileLoadPending.current
         if (!pending) return
         clearTimeout(pending.timer)
         fileLoadPending.current = undefined
         transport.postMessage('FileLoaded', { text: markdownRef.current, loadId: loadIdRef.current })
+        // The host has the document as loaded; what was typed for it goes in now, as the reader's edit.
+        holdRef.current?.loaded(appliedHoldRef.current)
     }, [])
 
     const OnFileLoaded = useCallback(() => {
@@ -338,7 +345,10 @@ const Editor: React.FC = () => {
         styleElement('typedown-custom-css').textContent = options?.customCss || ''
     }, [options?.customCss])
 
-    useEffect(() => transport.addListener<{ token?: number }>('FlushContent', ({ token }) => {
+    // Before a tab change the host flushes; text typed for the document shown a moment ago goes in first, so the tab
+    // being left keeps it.
+    useEffect(() => transport.addListener<{ token?: number }>('FlushContent', async ({ token }) => {
+        await holdRef.current?.settled()
         flushRef.current?.()
         transport.postMessage('ContentFlushed', { token: token ?? 0, text: markdownRef.current })
     }), []);
@@ -396,13 +406,24 @@ const Editor: React.FC = () => {
     // the tab shortcut sent five hundred of them in a few seconds; every one was rendered in turn, the host
     // dropped their reports as stale, and the reader waited a minute for the last to come round. Only the
     // load the host still wants can matter, and the host's stale-report rule already says which that is.
-    const pendingLoadRef = useRef<{ text: string, basePath: string, cursor?: any, scrollTop?: number | null, loadId?: number } | null>(null)
+    const pendingLoadRef = useRef<{ text: string, basePath: string, cursor?: any, scrollTop?: number | null, loadId?: number, hold?: number } | null>(null)
+
+    if (!holdRef.current) holdRef.current = new InputHold({
+        // Keys that are not text are not kept: reading mode, and Vim's commands in source mode.
+        canHold: () => { const o = optionsRef.current; return !!o && !o.readOnly && !(o.sourceCode && o.vimMode) },
+        insert: text => new Promise<void>(done => { noteUserIntent(); transport.emitLocal('InsertTyped', { text, done }) }),
+        focusEditor: () => transport.emitLocal('TakeKeyboard', {}),
+        idle: () => pendingLoadRef.current == null && !fileLoadPending.current,
+    })
+    useEffect(() => transport.addListener<{ hold: number }>('HoldInput', ({ hold }) => holdRef.current?.hold(hold)), []);
+    useEffect(() => transport.addListener<{ hold: number }>('ReleaseInput', ({ hold }) =>
+        holdRef.current?.release(hold, pendingLoadRef.current != null || !!fileLoadPending.current)), []);
     // A load older than the one the page holds is stale: the page asked for its document (getSettings) while the
     // host was posting one - a window recovering untitled backups at startup did both within a millisecond - and
     // the host's answer, the newer load, came first. Taking the older one after it left the page reporting a load
     // the host had dropped, and nothing the page said was heard again (R04).
     const isStaleLoad = (loadId?: number) => typeof loadId === 'number' && typeof loadIdRef.current === 'number' && loadId < loadIdRef.current
-    useEffect(() => transport.addListener<{ text: string, basePath: string, cursor?: any, scrollTop?: number | null, loadId?: number }>('LoadFile', (load) => {
+    useEffect(() => transport.addListener<{ text: string, basePath: string, cursor?: any, scrollTop?: number | null, loadId?: number, hold?: number }>('LoadFile', (load) => {
         if (isStaleLoad(load.loadId)) return
         // A load replaces whatever an automation edit was applying (the host restoring it, or a tab switch): that
         // edit's outcome is unknown to the host, which then restores from its own copy.
@@ -418,9 +439,10 @@ const Editor: React.FC = () => {
             const pending = pendingLoadRef.current
             pendingLoadRef.current = null
             if (!pending || isStaleLoad(pending.loadId)) return
-            const { text, basePath, cursor, scrollTop, loadId } = pending
+            const { text, basePath, cursor, scrollTop, loadId, hold } = pending
             window.basePath = basePath
             loadIdRef.current = loadId
+            appliedHoldRef.current = hold
             setScrollLoadId(loadId)
             OnFileLoaded();
             setContentFromHost(text, cursor ?? undefined, scrollTop)

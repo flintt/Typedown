@@ -197,6 +197,16 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
         editor?.replaceSelection(text)
     }), [editor]);
 
+    // Text typed while this document was on its way (services/inputHold.ts), in at the caret.
+    useEffect(() => transport.addListener<{ text: string, done: () => void }>('InsertTyped', ({ text, done }) => {
+        if (editor && !props.options?.readOnly) editor.replaceSelection(text.replace(/\r\n?/g, '\n'))
+        done()
+    }), [editor, props.options?.readOnly]);
+
+    useEffect(() => transport.addListener('TakeKeyboard', () => {
+        if (editor && !editor.hasFocus()) editor.focus()
+    }), [editor]);
+
     useEffect(() => transport.addListener('DeleteSelection', () => {
         editor?.replaceSelection('')
     }), [editor]);

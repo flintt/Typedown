@@ -105,6 +105,8 @@ export default {
   removeListener: <T>(eventName: string, listener: Listener<T>) => transport.removeListener(eventName, listener),
   removeAllListener: (eventName: string) => transport.removeAllListeners(eventName),
   postMessageNoDiff: (name: string, args: unknown) => postMessage({ type: 'message', name, args }),
+  /** A message from the page to its own listeners, as if the host had sent it. */
+  emitLocal: (name: string, args: unknown) => transport.emit(name, args),
   postMessage: postMessageDiff,
 };
 

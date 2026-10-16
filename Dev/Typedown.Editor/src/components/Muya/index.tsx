@@ -362,6 +362,18 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         editor?.clipboard.paste(arg)
     }), [editor]);
 
+    // Text typed while this document was on its way (services/inputHold.ts), in at the caret as a plain paste is: Enter
+    // a new paragraph.
+    useEffect(() => transport.addListener<{ text: string, done: () => void }>('InsertTyped', ({ text, done }) => {
+        if (!editor || optionsRef.current?.readOnly) { done(); return }
+        const paragraphs = text.replace(/\r\n?/g, '\n').replace(/\n/g, '\n\n')
+        Promise.resolve((editor as any).contentState.pasteHandler('normal', paragraphs, ''))
+            .catch((err: unknown) => console.log('typed text could not go in', err))
+            .finally(() => { (editor as any).flushContentChange?.(); done() })
+    }), [editor]);
+
+    useEffect(() => transport.addListener('TakeKeyboard', () => { if (editor) restoreEditorFocus(editor) }), [editor]);
+
     useEffect(() => transport.addListener<string>('InsertTable', arg => {
         if (optionsRef.current?.readOnly) return
         editor?.createTable(arg)

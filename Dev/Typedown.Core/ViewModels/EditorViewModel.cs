@@ -223,7 +223,7 @@ namespace Typedown.Core.ViewModels
             CurrentCursor = cursor as CursorState;
             var scrollTop = Settings.RememberCursorPosition ? CursorMemory.GetScroll(FileViewModel.FilePath) : null;
             loadClock = text != null && text.Length > 200000 ? System.Diagnostics.Stopwatch.StartNew() : null;
-            MarkdownEditor?.PostMessage("LoadFile", new { text, basePath = FileViewModel.ImageBasePath, cursor, scrollTop, loadId = ++LoadId });
+            MarkdownEditor?.PostMessage("LoadFile", new { text, basePath = FileViewModel.ImageBasePath, cursor, scrollTop, loadId = ++LoadId, hold = inputHold });
             Log.Debug($"load {LoadId}: {System.IO.Path.GetFileName(FileViewModel.FilePath) ?? "untitled"}, {text?.Length ?? 0} chars, from {Callers()}");
         }
 
@@ -726,9 +726,36 @@ namespace Typedown.Core.ViewModels
         /// flush), false when it did not answer within <paramref name="timeoutMs"/> — a caller deciding whether it
         /// is safe to close or replace a document without asking must not treat a timeout as "content is current".
         /// </summary>
-        public async Task<bool> FlushContentAsync(int timeoutMs = 500)
+        private int inputHold;
+
+        /// <summary>
+        /// Another document is about to be shown (a tab made or switched to): called first, before anything that waits. The
+        /// page keeps what the reader types from now on and puts it into the document this hold is for once that is in
+        /// the editor (each load names the newest hold); until then nothing typed reaches the document being left.
+        /// </summary>
+        public int HoldInput()
         {
-            if (MarkdownEditor == null || !FileLoaded) return true;
+            MarkdownEditor?.PostMessage("HoldInput", new { hold = ++inputHold });
+            return inputHold;
+        }
+
+        /// <summary>
+        /// The tab change of this hold is over. If it showed no other document after all (the tab was shown already, a
+        /// save was refused), what was typed goes into the document shown.
+        /// </summary>
+        public void ReleaseInput(int hold) => MarkdownEditor?.PostMessage("ReleaseInput", new { hold });
+
+        /// <summary>
+        /// The flush before a tab change. The page answers it once the document still on its way in (a tab switched to a
+        /// moment ago) has what was typed for it, so that is what the tab keeps; that can take a long document's showing,
+        /// hence the longer wait while the current load is unconfirmed.
+        /// </summary>
+        public Task<bool> FlushBeforeTabChangeAsync() =>
+            FlushContentAsync(ConfirmedLoadId != LoadId ? 4500 : 500, evenIfNotLoaded: true);
+
+        public async Task<bool> FlushContentAsync(int timeoutMs = 500, bool evenIfNotLoaded = false)
+        {
+            if (MarkdownEditor == null || (!FileLoaded && !evenIfNotLoaded)) return true;
             var token = ++flushToken;
             var waiter = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
             lock (flushWaiters) flushWaiters[token] = waiter;

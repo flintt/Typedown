@@ -265,6 +265,22 @@ namespace Typedown.Core.ViewModels
 
         private async Task NewFileFun(bool postMessage = true, bool inNewTab = true)
         {
+            // Keys typed from here on are for the new document (see HoldInput); the document left keeps its latest edits,
+            // as on a tab switch.
+            var hold = postMessage ? EditorViewModel.HoldInput() : 0;
+            try
+            {
+                if (postMessage) await EditorViewModel.FlushBeforeTabChangeAsync();
+                await NewFileCore(postMessage, inNewTab);
+            }
+            finally
+            {
+                if (hold != 0) EditorViewModel.ReleaseInput(hold);
+            }
+        }
+
+        private async Task NewFileCore(bool postMessage, bool inNewTab)
+        {
             // Tabs (upstream #73): a new document opens in its own tab unless the current one is a pristine untitled tab.
             if (inNewTab && TabsViewModel != null && !TabsViewModel.IsActiveTabBlank)
                 TabsViewModel.BeginNewTab();

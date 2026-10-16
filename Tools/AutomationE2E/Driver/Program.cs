@@ -144,6 +144,7 @@ internal static partial class Program
             await Case("K02 Ctrl+, twice opens and closes the settings: the caret and the keyboard are where they were", K02);
             await Case("K04 a window just opened takes the keys at once: a letter typed without a click reaches the document", K04);
             await Case("K05 a new tab (the + button, Ctrl+N) and a tab clicked in the strip take the keys at once, without a click in the text", K05);
+            await Case("TL01 keys typed at once after Ctrl+N, a tab clicked, Ctrl+Tab, the + button and Ctrl+Shift+H go into the tab shown, in order, Enter and Chinese text too; the document left is unchanged", TL01);
             await Case("K06 after closing a tab, a menu command, a mode switch, an outline jump, closing the find bar or a dialog, and Ctrl+Tab, the keys go to the document without a click", K06);
             await Case("K03 the same with an untitled document (no per-file caret memory)", K03);
             await Case("FS01 in full screen the main page starts at the top edge of the screen", FS01);
@@ -171,6 +172,7 @@ internal static partial class Program
             await Case("RC02 a recent file deleted stays in the list greyed out and a right-click removes it; Clear recent files leaves the recent folders", RC02);
             await Case("RC03 with \"Remember recently opened files\" off a file opened is not listed; Clear recent on the settings page empties files and folders", RC03);
             await Case("FN01 the folder pane's up arrow, the folder above chosen in its root menu and \"Set as root\" on a folder each move the tree; the open documents stay as they were", FN01);
+            await Case("FT02 a folder in the file tree is shown as a folder that expands after the root changed: up from a folder of files to a folder of folders, and back and forth", FT02);
             await Case("FN02 with a folder opened, the button beside the root's name moves the tree to the folder of a document outside it", FN02);
             await Case("FW01 an open document renamed outside the app is followed by its window, also after the app renamed it once", FW01);
             await Case("FV01 a file favoured from its tab's menu and a folder from the tree's menu are in favorites.json and the folder pane's group, still after a restart (and on the home page); renamed in the tree, the favourite follows", FV01);
@@ -1137,10 +1139,11 @@ internal static partial class Program
             Send(new INPUT { type = 1, u = new InputUnion { ki = new KEYBDINPUT { wVk = 0x4E, wScan = 0x31 } } }, new INPUT { type = 1, u = new InputUnion { ki = new KEYBDINPUT { wVk = 0x4E, wScan = 0x31, dwFlags = 0x0002 } } });
             await Task.Delay(80);
             Send(Key(0x11, true));
-            await Task.Delay(1500);
+            // No wait for the new document: keys typed while it loads are kept for it (HoldInput, TL01).
+            TypeChar('N');
+            Check(await Eventually(async () => await Active() != first, 3000), "Ctrl+N made a tab");
             var ctrlN = await Active();
             created.Add(ctrlN);
-            TypeChar('N');
             var text = await PageHas(ctrlN, 'N');
             notes.Add("after Ctrl+N: " + JsonConvert.SerializeObject(text));
             Check(ctrlN != first && text?.Contains('N') == true, "a letter typed after Ctrl+N reaches the new tab");
@@ -1154,10 +1157,10 @@ internal static partial class Program
             }
             var r = add.Current.BoundingRectangle;
             Click((int)(r.Left + r.Width / 2), (int)(r.Top + r.Height / 2));
-            await Task.Delay(1500);
+            TypeChar('P');
+            Check(await Eventually(async () => await Active() != ctrlN, 3000), "the + button made a tab");
             var plus = await Active();
             created.Add(plus);
-            TypeChar('P');
             text = await PageHas(plus, 'P');
             notes.Add("after +: " + JsonConvert.SerializeObject(text));
             Check(plus != ctrlN && text?.Contains('P') == true, "a letter typed after the + button reaches the new tab");
@@ -1167,10 +1170,9 @@ internal static partial class Program
             var tab = tabs.Cast<System.Windows.Automation.AutomationElement>().FirstOrDefault(t => t.Current.Name.Contains("k05")) ?? throw new CaseFailed("no k05 tab in the strip");
             r = tab.Current.BoundingRectangle;
             Click((int)(r.Left + 20), (int)(r.Top + r.Height / 2));
-            await Task.Delay(1500);
-            Check(await Active() == first, "the click switched to the first tab");
             // A letter the document does not hold already ("Text" has a T).
             TypeChar('J');
+            Check(await Eventually(async () => await Active() == first, 3000), "the click switched to the first tab");
             text = await PageHas(first, 'J');
             notes.Add("after the tab click: " + JsonConvert.SerializeObject(text));
             Check(text?.Contains('J') == true, "a letter typed after a tab is clicked reaches its document");
