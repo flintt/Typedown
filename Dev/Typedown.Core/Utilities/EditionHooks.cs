@@ -172,11 +172,31 @@ namespace Typedown.Core.Utilities
 
         /// <summary>
         /// What happens around the writing, as it happens: a window activated or left, the mode changed, another document
-        /// shown, a document saved under a new name, a paste, an undo or a redo, the page scrolled (at most once every ten
-        /// seconds a window). Only the event, for an edition to make something of (a timeline of a writing day); raised on
-        /// the window's thread.
+        /// shown, a document saved under a new name or its file renamed (in the folder pane, or outside the app while
+        /// open), a paste, an undo or a redo, the page scrolled (at most once every ten seconds a window). Only the event,
+        /// for an edition to make something of (a timeline of a writing day); raised on the window's thread.
         /// </summary>
         public static event Action<ActivityReport> Activity;
+
+        /// <summary>
+        /// A file or folder that is not the window's document renamed or moved in the folder pane (the window's document
+        /// renamed is <see cref="ActivityKind.DocumentRenamed"/>): its old path and its new one. Raised on the window's
+        /// thread, after the move.
+        /// </summary>
+        public static event Action<string, string> PathRenamed;
+
+        public static void ReportPathRenamed(string oldPath, string newPath)
+        {
+            if (string.IsNullOrEmpty(oldPath) || string.IsNullOrEmpty(newPath)) return;
+            try
+            {
+                PathRenamed?.Invoke(oldPath, newPath);
+            }
+            catch (Exception ex)
+            {
+                Log.WriteLocal("EditionPathRenamed", ex.ToString());
+            }
+        }
 
         /// <summary>Raises <see cref="Activity"/> with the window's document and mode (public: the window itself is in the app project).</summary>
         public static void ReportActivity(ActivityKind kind, AppViewModel window, string oldPath = null)
@@ -241,7 +261,10 @@ namespace Typedown.Core.Utilities
         /// <summary>Its file, or null for an untitled one.</summary>
         public string Path { get; set; }
 
-        /// <summary>For <see cref="ActivityKind.DocumentRenamed"/>: the file it had before (null when it was untitled).</summary>
+        /// <summary>
+        /// For <see cref="ActivityKind.DocumentRenamed"/>: the file it had before (null when it was untitled). Saved under
+        /// a new name, that file is still there; renamed, it is not.
+        /// </summary>
         public string OldPath { get; set; }
 
         /// <summary>visual, source or reading.</summary>

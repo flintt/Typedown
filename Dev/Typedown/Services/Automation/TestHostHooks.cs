@@ -533,6 +533,14 @@ namespace Typedown.Services.Automation
                 return await await Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), async app =>
                     (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["path"] = await app.FileViewModel.SaveAsTo(path) });
             }));
+            // The window's active document's file renamed to the path, as Rename in the folder pane does for the open
+            // document; answers whether it was renamed.
+            methods.Add(new MethodDescriptor("test.file.rename", null, "test.file.rename/1", (c, ct) =>
+            {
+                var path = c.Params.RequiredString("path", allowEmpty: false);
+                return Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                    (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["renamed"] = app.FileViewModel.RenameFile(path) });
+            }));
             // The window's document exported to a file, as File > Export > <type> with that file picked in the save dialog
             // (html or pdf: the first export configuration of that type); answers once the export is asked for, not done.
             methods.Add(new MethodDescriptor("test.export.run", null, "test.export.run/1", async (c, ct) =>

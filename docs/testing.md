@@ -206,7 +206,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | SB05 | the status bar shows the file's encoding and line ending: CRLF chosen there is what a save writes, and a GBK file is read again as GB18030 from its menu |
 | SB06 | the status bar names the heading the caret is under, and a click on it opens the outline |
 | SB07 | a narrow window puts the status bar items with no room into a "..." menu (the heading first, the count stays), and a right-click chooses which items show |
-| AC01 | an edition hears of what happens around the writing: a document shown, the mode changed, an undo, the window left and come back to, a save under a new name, the page scrolled (not at every scroll event) |
+| AC01 | an edition hears of what happens around the writing: a document shown, the mode changed, an undo, the window left and come back to, a save under a new name and a rename, the page scrolled (not at every scroll event) |
 | KY01 | Ctrl+Z and Ctrl+Y are the host's undo and redo however close Ctrl and the letter come, in the visual editor and in source mode |
 | ED01 | in the visual editor Ctrl+Shift+Right selects by words and Ctrl+Shift+Down to the end of the paragraph, Ctrl+Left/Right move without selecting, Ctrl+F opens the find bar, and the wheel scrolls the page |
 | ED02 | Shift+Enter and Alt+Enter in a table cell put a line break in that cell |
@@ -279,6 +279,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | `test.app.caseLabel` | `label?` | The running E2E case and its purpose, shown in every window's title after the test host's marker (label empty: none). Not tied to a window: a case sets it before it has one. | TestHostHooks.cs |
 | `test.app.titleMarker` | `show?`, `windowId` | The test host's title markers ("AUTOMATION TEST HOST ·" and the connected client's note) on (show: true) or off in every window, for screenshots that are to look like the app. | TestHostHooks.cs |
 | `test.file.saveAs` | `path`, `windowId` | The window's active document saved as the path, as File > Save as with that file picked (an untitled one's first save too); the path back, or null when it was not saved. | TestHostHooks.cs |
+| `test.file.rename` | `path`, `windowId` | The window's active document's file renamed to the path, as Rename in the folder pane does for the open document; answers whether it was renamed. | TestHostHooks.cs |
 | `test.export.run` | `type?`, `path`, `windowId` | The window's document exported to a file, as File > Export > <type> with that file picked in the save dialog (html or pdf: the first export configuration of that type); answers once the export is asked for, not done. | TestHostHooks.cs |
 | `test.export.notice` | `windowId` | The notice an export leaves (Settings > Export > After export): the file it names, or null when none shows. | TestHostHooks.cs |
 | `test.export.menu` | `windowId` | The entries of a window's File > Export submenu, as shown. | TestHostHooks.cs |
