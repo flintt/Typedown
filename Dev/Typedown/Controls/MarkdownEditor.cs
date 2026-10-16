@@ -123,11 +123,7 @@ namespace Typedown.Controls
         [SuppressPropertyChangedWarnings]
         private void OnThemeChanged()
         {
-            _ = DispatcherQueue.RunIdleAsync(() =>
-            {
-                if (WebViewController?.WebView is { } webView) webView.DefaultBackgroundColor = ServiceProvider.GetThemeBackground();
-                PostMessage("ThemeChanged", ServiceProvider.GetCurrentTheme());
-            });
+            _ = DispatcherQueue.RunIdleAsync(() => PostMessage("ThemeChanged", ServiceProvider.GetCurrentTheme()));
         }
 
         private void OnContentLoaded()
@@ -169,7 +165,7 @@ namespace Typedown.Controls
             if (WebViewController == null)
             {
                 var webViewController = new WebViewController();
-                if (!await webViewController.InitializeAsync(root, ServiceProvider.GetThemeBackground()))
+                if (!await webViewController.InitializeAsync(root))
                 {
                     webViewController.Dispose();
                     IsEditorLoadFailed = true;

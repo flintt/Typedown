@@ -51,7 +51,7 @@ namespace Typedown.Controls
                 if (webViewController != null)
                     return;
                 var controller = new WebViewController();
-                if (!await controller.InitializeAsync((Grid)Content, Colors.White))
+                if (!await controller.InitializeAsync((Grid)Content))
                 {
                     controller.Dispose();
                     return;

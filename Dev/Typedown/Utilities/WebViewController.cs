@@ -25,19 +25,14 @@ namespace Typedown.Utilities
 
         public CoreWebView2 CoreWebView2 => WebView?.CoreWebView2;
 
-        /// <summary>
-        /// The web view put first in <paramref name="host"/> (under anything laid over it), its core ready, in the colour
-        /// given: WinUI 3's WebView2 cannot be transparent and filled what the page had not painted with a light grey of
-        /// its own - a light frame as a dark window's editor came up, and a light page under dark-theme text after its
-        /// browser process had ended and come back.
-        /// </summary>
-        public async Task<bool> InitializeAsync(Panel host, global::Windows.UI.Color background)
+        /// <summary>The web view put first in <paramref name="host"/> (under anything laid over it), its core ready.</summary>
+        public async Task<bool> InitializeAsync(Panel host)
         {
             try
             {
                 Container = host;
                 var environment = await EnsureCreateEnvironment();
-                WebView = new WebView2 { DefaultBackgroundColor = background };
+                WebView = new WebView2 { DefaultBackgroundColor = Colors.Transparent };
                 host.Children.Insert(0, WebView);
                 await WebView.EnsureCoreWebView2Async(environment);
                 StartupTiming.Reached("web view ready");

@@ -23,19 +23,6 @@ namespace Typedown.Utilities
 
         public static int GetLowWord(IntPtr p) => (int)(p.ToInt64() & 0xFFFF);
 
-        /// <summary>
-        /// The editor page's colour in the theme the settings ask for (black, dark grey or light grey), read from the
-        /// settings at once: the window's ActualTheme follows a moment later, and a new window's web view, made before
-        /// that, took the light colour in a dark window.
-        /// </summary>
-        public static Color GetThemeBackground(this IServiceProvider provider)
-        {
-            var theme = provider.GetService<SettingsViewModel>().EffectiveTheme;
-            if (theme == Typedown.Core.Enums.AppTheme.Black) return Colors.Black;
-            var dark = theme == Typedown.Core.Enums.AppTheme.Default ? Application.Current.RequestedTheme == ApplicationTheme.Dark : theme != Typedown.Core.Enums.AppTheme.Light;
-            return dark ? Color.FromArgb(0xFF, 0x28, 0x28, 0x28) : Color.FromArgb(0xFF, 0xF9, 0xF9, 0xF9);
-        }
-
         public static object GetCurrentTheme(this IServiceProvider provider)
         {
             var ui = provider.GetService<UIViewModel>();
