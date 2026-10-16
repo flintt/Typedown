@@ -376,6 +376,52 @@ internal static partial class Program
         }
     }
 
+    /// <summary>
+    /// FW01: an open document renamed outside the app is followed by its window (the tab's path becomes the new name), also
+    /// after the app itself renamed it once (the folder pane's Rename): the watcher must move to the new name each time.
+    /// </summary>
+    private static async Task FW01(List<string> notes)
+    {
+        using var c = await Session("e2e FW01");
+        var folder = FixtureFolder("fw01");
+        Directory.CreateDirectory(folder);
+        foreach (var f in Directory.GetFiles(folder)) File.Delete(f);
+        var first = Path.Combine(folder, "fw01.md");
+        File.WriteAllText(first, "# FW01\n");
+        var id = await Open(c, first);
+        var windowId = await WindowIdOf(c, id);
+        async Task<string?> PathAfter(string expected)
+        {
+            string? path = null;
+            for (var i = 0; i < 25 && !string.Equals(path, expected, StringComparison.OrdinalIgnoreCase); i++) { await Task.Delay(200); path = (string?)(await Get(c, id))["path"]; }
+            return path;
+        }
+        try
+        {
+            await Task.Delay(1500);
+            var outside1 = Path.Combine(folder, "fw01-outside.md");
+            File.Move(first, outside1);
+            var path = await PathAfter(outside1);
+            notes.Add("after the first outside rename: " + Path.GetFileName(path ?? "(none)"));
+            Check(SamePath(path, outside1), "renamed outside, the window follows");
+
+            var inApp = Path.Combine(folder, "fw01-in-app.md");
+            Check((bool?)(await c.Call("test.file.rename", new { windowId, path = inApp }))["renamed"] == true, "renamed in the app");
+            path = await PathAfter(inApp);
+            Check(SamePath(path, inApp), "renamed in the app, the window has the new name");
+            await Task.Delay(1500);
+            var outside2 = Path.Combine(folder, "fw01-outside-again.md");
+            File.Move(inApp, outside2);
+            path = await PathAfter(outside2);
+            notes.Add("after the in-app rename and another outside: " + Path.GetFileName(path ?? "(none)"));
+            Check(SamePath(path, outside2), "renamed outside after an in-app rename, the window follows");
+        }
+        finally
+        {
+            try { await c.Call("document.close", new { documentId = id }); } catch { }
+        }
+    }
+
     // ---- favourites ----
 
     /// <summary>

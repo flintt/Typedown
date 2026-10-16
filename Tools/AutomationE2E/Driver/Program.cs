@@ -172,6 +172,7 @@ internal static partial class Program
             await Case("RC03 with \"Remember recently opened files\" off a file opened is not listed; Clear recent on the settings page empties files and folders", RC03);
             await Case("FN01 the folder pane's up arrow, the folder above chosen in its root menu and \"Set as root\" on a folder each move the tree; the open documents stay as they were", FN01);
             await Case("FN02 with a folder opened, the button beside the root's name moves the tree to the folder of a document outside it", FN02);
+            await Case("FW01 an open document renamed outside the app is followed by its window, also after the app renamed it once", FW01);
             await Case("FV01 a file favoured from its tab's menu and a folder from the tree's menu are in favorites.json and the folder pane's group, still after a restart (and on the home page); renamed in the tree, the favourite follows", FV01);
             await Case("HP01 a start with the settings as they come shows the home page; a recent file clicked there opens in its tab and the home page goes", HP01);
             await Case("HP02 Ctrl+N and the + button show no home page and the next letter goes into the new document; with \"New tabs show the home page\" on, Ctrl+N shows it", HP02);
