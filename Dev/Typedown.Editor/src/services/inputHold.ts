@@ -28,9 +28,18 @@ interface Segment { hold: number; text: string }
 const trace: string[] = [];
 const note = (what: string) => {
     trace.push(`${Math.round(performance.now())} ${what}`);
-    if (trace.length > 40) trace.shift();
+    if (trace.length > 120) trace.shift();
 };
 (window as any).__inputHoldTrace = trace;
+const where = (e: EventTarget | null) => {
+    const el = e as HTMLElement | null;
+    return el ? `${el.tagName?.toLowerCase()}${el.id ? '#' + el.id : ''}${el.hasAttribute?.('data-input-hold') ? '[hold]' : ''}${el.className && typeof el.className === 'string' ? '.' + el.className.split(' ')[0] : ''}` : 'none';
+};
+// Where each key and each focus change went, for the same purpose.
+document.addEventListener('keydown', e => note(`key ${e.key} -> ${where(document.activeElement)}`), true);
+document.addEventListener('focusin', e => note(`focus in ${where(e.target)}`), true);
+window.addEventListener('blur', () => note('window blur'));
+window.addEventListener('focus', () => note('window focus'));
 
 export class InputHold {
     /** The newest hold the host asked for. */

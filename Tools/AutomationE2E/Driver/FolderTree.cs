@@ -226,6 +226,11 @@ internal static partial class Program
             Directory.CreateDirectory(Path.Combine(top, name));
             File.WriteAllText(Path.Combine(top, name, "y.md"), "# y\n");
         }
+        // The folder pane open, as the reader had it, before the file (the tree is made with the pane).
+        var firstWindow = await FirstWindowId(c);
+        await c.Call("test.settings.set", new { windowId = firstWindow, name = "SidePaneIndex", value = 0 });
+        await c.Call("test.settings.set", new { windowId = firstWindow, name = "SidePaneOpen", value = true });
+        await Task.Delay(500);
         var doc = await Open(c, Path.Combine(docs, "01-spec.md"));
         var windowId = await WindowIdOf(c, doc);
         var window = await WindowOf(windowId, c);
