@@ -69,6 +69,10 @@ namespace Typedown.Controls
             root.Children.Add(canvas);
             Content = root;
             IsTabStop = true;
+            // Where the keyboard goes when it leaves or comes to the editor, in the log: a key lost in between shows up
+            // there (E2E TL01).
+            LosingFocus += (_, e) => Core.Utilities.Log.Debug($"focus: from the editor ({e.OldFocusedElement?.GetType().Name}) to {e.NewFocusedElement?.GetType().Name} '{(e.NewFocusedElement as FrameworkElement)?.Name}', {e.FocusState}");
+            GettingFocus += (_, e) => Core.Utilities.Log.Debug($"focus: to the editor ({e.NewFocusedElement?.GetType().Name}) from {e.OldFocusedElement?.GetType().Name} '{(e.OldFocusedElement as FrameworkElement)?.Name}', {e.FocusState}");
             disposables.Add(RemoteInvoke.Handle("ContentLoaded", OnContentLoaded));
             disposables.Add(RemoteInvoke.Handle<string>("UnhandledException", OnUnhandledException));
             disposables.Add(RemoteInvoke.Handle("GetCurrentTheme", () => ServiceProvider.GetCurrentTheme()));
