@@ -93,11 +93,19 @@
 
 ## 偶发启动崩溃：创建第一个窗口时（2026-10-14 发现）
 
-在 Windows 11 的构建机上，测试主机启动时偶发直接退出（2026-10-14 两次，同一版本再启动则正常；Windows 10 测试机上未出现）：Microsoft.UI.Input.dll 10.0.27200.1054 中 0xc0000409（FAST_FAIL_FATAL_APP_EXIT，参数 0x8000ffff E_UNEXPECTED）。栈：App.OnLaunched → new MainWindow → DirectUI::Window 构造 → DesktopWindowImpl::OnCreate → DesktopWindowXamlSource/XamlIsland 初始化 → CXamlIslandRoot::InitializeCommon → Microsoft_UI_Input!InitializeDirectManipulationHookInProc → 主动终止。debug.log 只到 "startup: main"。崩溃时还没有执行我们的窗口代码。
+在构建机（Windows 10 19045，起初误记为 Windows 11）上，测试主机启动时偶发直接退出（2026-10-14 两次，同一版本再启动则正常；Windows 10 测试机上未出现）：Microsoft.UI.Input.dll 10.0.27200.1054 中 0xc0000409（FAST_FAIL_FATAL_APP_EXIT，参数 0x8000ffff E_UNEXPECTED）。栈：App.OnLaunched → new MainWindow → DirectUI::Window 构造 → DesktopWindowImpl::OnCreate → DesktopWindowXamlSource/XamlIsland 初始化 → CXamlIslandRoot::InitializeCommon → Microsoft_UI_Input!InitializeDirectManipulationHookInProc → 主动终止。debug.log 只到 "startup: main"。崩溃时还没有执行我们的窗口代码。
 
 | 做法 | 验证 | 成本 |
 |---|---|---|
 | 先查 Windows App SDK 的已知问题和更新版本（输入站点 / DirectManipulation 初始化失败）；在构建机上开 WER LocalDumps 收集完整转储（两份在构建机 CrashDumps：Typedown.exe.51804.dmp 及 19:44 Typeleaf.exe 的），对照 WinAppSDK 私有符号或提交给微软；评估启动失败时自动重试一次创建窗口是否可行 | 构建机上连续启动测试主机 50 次统计崩溃率；升级或规避后再测 | 中 |
+
+**2026-10-16 排查**：
+- 构建机应用程序日志里，新版自 10-09 起只有这两次（10-14 16:38 Typedown、19:44 Typeleaf），其余日子数百次启动都正常。
+- 两次的情形不同：16:38 是 R04 杀掉宿主后立即在同一数据目录重启（转储 pid 51804 即重启的进程）；19:44 是一轮测试的第一次启动，距上一轮结束约半小时。两次前后都没有会话切换、锁屏或系统事件。
+- 转储里没有第三方输入钩子 DLL（网上同类崩溃有因第三方焦点钩子引起的），只有 NVIDIA 显卡驱动和 NVIDIA 截屏组件 nvspcap64。
+- Windows App SDK 2.5.1 已是最新稳定版，没有可升级的修复。
+- 测试机上用 launch-loop.ps1 连续启动 100 次（50 次全新目录、50 次杀掉后立即重启）：100 次都正常出窗口，0 次崩溃。
+- 下一步：等构建机空闲时在构建机上跑同样的 100 次；仍复现不出则把崩溃信息报给 Windows App SDK，不阻塞发布。
 
 ## 标签加载期间按键丢失（2026-10-14 发现）
 
