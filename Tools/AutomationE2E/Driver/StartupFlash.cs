@@ -46,9 +46,23 @@ internal static partial class Program
             }
             if (shown == IntPtr.Zero) throw new CaseFailed("no new window came on screen");
             var appeared = clock.ElapsedMilliseconds;
+            {
+                var all = new List<string>();
+                EnumWindows((h, _) =>
+                {
+                    GetWindowThreadProcessId(h, out var pid);
+                    if (pid == hostPid && IsWindowVisible(h)) { var t = new System.Text.StringBuilder(200); GetWindowText(h, t, t.Capacity); GetWindowRect(h, out var rr); all.Add($"{h.ToInt64():x}{(h == shown ? "*" : "")}{(before.Contains(h) ? " before" : "")} {rr.Right - rr.Left}x{rr.Bottom - rr.Top} '{t.ToString().Split(" - ")[0]}'"); }
+                    return true;
+                }, IntPtr.Zero);
+                notes.Add("the host's windows when one came up (* taken as the new one): " + string.Join("; ", all));
+            }
             // Five points of the client area (the middle and around it), physical pixels on the screen.
             SetProcessDpiAwarenessContext(new IntPtr(-4));
             var samples = new List<(long At, double Light)>();
+            // What lay under the middle of the window and what was in front, per sample: the screen is read where the
+            // window is, so another window over it would be measured instead.
+            var covered = new List<(long At, IntPtr Over, IntPtr Front)>();
+            string Title(IntPtr h) { var t = new System.Text.StringBuilder(200); GetWindowText(h, t, t.Capacity); return h == shown ? "the new window" : $"{h.ToInt64():x} '{t}'"; }
             var sampling = System.Diagnostics.Stopwatch.StartNew();
             while (sampling.ElapsedMilliseconds < 2000)
             {
@@ -67,13 +81,26 @@ internal static partial class Program
                         }
                     }
                     samples.Add((sampling.ElapsedMilliseconds, lightest));
+                    var over = GetAncestor(WindowFromPoint(new POINT { X = (r.Left + r.Right) / 2, Y = (r.Top + r.Bottom) / 2 }), 2);
+                    if (over != shown) covered.Add((sampling.ElapsedMilliseconds, over, GetForegroundWindow()));
                 }
                 await Task.Delay(10);
             }
             windowId = (string?)(await opening)["windowId"];
+            // What each window's page was told and paints: the page's colour comes with the host's theme message, its
+            // text from the theme's style sheet - a light page with light text means the two disagreed.
+            const string themeState = "JSON.stringify({ body: getComputedStyle(document.body).backgroundColor, bodyStyle: document.body.style.backgroundColor, theme: document.documentElement.style.getPropertyValue('--actualTheme'), sheet: (document.getElementById('link_style_editor') || {}).href, text: getComputedStyle(document.body).color })";
+            foreach (var w in (JArray)(await c.Call("window.list"))["windows"]!)
+            {
+                var id = (string)w["windowId"]!;
+                try { notes.Add($"page of {(id == windowId ? "the new window" : id)}: {(await c.Call("test.editor.eval", new { windowId = id, script = themeState }))["result"]}"); }
+                catch (Exception e) { notes.Add($"page of {id}: {e.Message}"); }
+            }
             var light = samples.Where(s => s.Light > 150).ToList();
             notes.Add($"on screen {appeared} ms after the call; {samples.Count} samples, lightest {samples.Max(s => s.Light):0}; " +
                 string.Join(" ", samples.Where((_, i) => i % 6 == 0).Take(20).Select(s => $"{s.At}:{s.Light:0}")));
+            if (covered.Count > 0)
+                notes.Add($"the new window was not on top in {covered.Count} samples, from {covered[0].At} ms: over it {Title(covered[0].Over)}, in front {Title(covered[0].Front)}");
             Check(light.Count == 0, $"the dark window showed a light frame {light.Count} times in its first two seconds (first at {light.FirstOrDefault().At} ms, {light.FirstOrDefault().Light:0})");
         }
         finally

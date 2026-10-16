@@ -40,6 +40,17 @@ internal static partial class Program
         }
     }
 
+    /// <summary>
+    /// The automation id of what has the keyboard, or null. Read while the focus moves (from the editor's page to a box of
+    /// the window), the element can be gone before it is read: UI Automation then throws, which is "not there yet".
+    /// </summary>
+    private static string? FocusedAutomationId()
+    {
+        try { return System.Windows.Automation.AutomationElement.FocusedElement?.Current.AutomationId; }
+        catch (System.Windows.Automation.ElementNotAvailableException) { return null; }
+        catch (System.Runtime.InteropServices.COMException) { return null; }
+    }
+
     private static async Task WaitGone(IntPtr window, string automationId, int timeoutMs = 5000)
     {
         var clock = Stopwatch.StartNew();

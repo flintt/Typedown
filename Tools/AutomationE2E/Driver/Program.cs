@@ -1358,7 +1358,7 @@ internal static partial class Program
                 // the bar took the focus, and the bar stayed open with the next letter typed into its search box.
                 for (var i = 0; i < 40; i++)
                 {
-                    if (System.Windows.Automation.AutomationElement.FocusedElement?.Current.AutomationId == "TextBoxSearch") break;
+                    if (FocusedAutomationId() == "TextBoxSearch") break;
                     await Task.Delay(50);
                 }
                 Send(Scan(0x1B, 0x01, false), Scan(0x1B, 0x01, true));
