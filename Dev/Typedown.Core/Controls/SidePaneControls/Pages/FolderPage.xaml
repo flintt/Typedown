@@ -25,31 +25,20 @@
             <Setter Property="MinHeight" Value="0"/>
         </Style>
 
-        <MenuFlyout x:Key="FolderContextFlyout" Opened="OnItemContextFlyoutOpened" Closed="OnItemContextFlyoutClosed">
-            <MenuFlyoutItem Text="{u:LocaleString Key=NewFile}" Click="OnNewFileClick"/>
-            <MenuFlyoutItem Text="{u:LocaleString Key=NewFolder}" Click="OnNewFolderClick"/>
+        <!-- A row's menu, for a folder or a file: the entries of the other kind (Tag) are hidden as it opens. One menu, set
+             by the row's template, so a reused row never shows the wrong one. -->
+        <MenuFlyout x:Key="ItemContextFlyout" Opening="OnItemContextFlyoutOpening" Opened="OnItemContextFlyoutOpened" Closed="OnItemContextFlyoutClosed">
+            <MenuFlyoutItem Tag="File" Text="{u:LocaleString Key=Open}" Click="OnOpenClick"/>
+            <MenuFlyoutItem Tag="File" Text="{u:LocaleString Key=OpenInNewWindow}" Click="OnOpenInNewWindowClick"/>
+            <MenuFlyoutItem Tag="Folder" Text="{u:LocaleString Key=NewFile}" Click="OnNewFileClick"/>
+            <MenuFlyoutItem Tag="Folder" Text="{u:LocaleString Key=NewFolder}" Click="OnNewFolderClick"/>
             <MenuFlyoutItem Text="{u:LocaleString Key=OpenFileLocation}" Click="OnOpenFileLocationClick"/>
-            <MenuFlyoutItem Text="{u:LocaleString Key=FolderPane.SetAsRoot}" AutomationProperties.AutomationId="FolderSetAsRoot" Click="OnSetAsRootClick"/>
+            <MenuFlyoutItem Tag="Folder" Text="{u:LocaleString Key=FolderPane.SetAsRoot}" AutomationProperties.AutomationId="FolderSetAsRoot" Click="OnSetAsRootClick"/>
             <MenuFlyoutItem Tag="Favorite" AutomationProperties.AutomationId="TreeFavoriteItem" Text="{u:LocaleString Key=Favorites.Add}" Click="OnToggleFavoriteClick"/>
             <MenuFlyoutSeparator/>
             <MenuFlyoutItem Text="{u:LocaleString Key=Cut}" Click="OnCutClick"/>
             <MenuFlyoutItem Text="{u:LocaleString Key=Copy}" Click="OnCopyClick"/>
-            <MenuFlyoutItem Text="{u:LocaleString Key=Paste}" Click="OnPasteClick"/>
-            <MenuFlyoutSeparator/>
-            <MenuFlyoutItem Text="{u:LocaleString Key=CopyAsPath}" Click="OnCopyAsPathClick"/>
-            <MenuFlyoutSeparator/>
-            <MenuFlyoutItem Text="{u:LocaleString Key=Rename}" AutomationProperties.AutomationId="TreeRenameItem" Click="OnRenameClick"/>
-            <MenuFlyoutItem Text="{u:LocaleString Key=Delete}" Click="OnDeleteClick"/>
-        </MenuFlyout>
-
-        <MenuFlyout x:Key="FileContextFlyout" Opened="OnItemContextFlyoutOpened" Closed="OnItemContextFlyoutClosed">
-            <MenuFlyoutItem Text="{u:LocaleString Key=Open}" Click="OnOpenClick"/>
-            <MenuFlyoutItem Text="{u:LocaleString Key=OpenInNewWindow}" Click="OnOpenInNewWindowClick"/>
-            <MenuFlyoutItem Text="{u:LocaleString Key=OpenFileLocation}" Click="OnOpenFileLocationClick"/>
-            <MenuFlyoutItem Tag="Favorite" AutomationProperties.AutomationId="TreeFavoriteItem" Text="{u:LocaleString Key=Favorites.Add}" Click="OnToggleFavoriteClick"/>
-            <MenuFlyoutSeparator/>
-            <MenuFlyoutItem Text="{u:LocaleString Key=Cut}" Click="OnCutClick"/>
-            <MenuFlyoutItem Text="{u:LocaleString Key=Copy}" Click="OnCopyClick"/>
+            <MenuFlyoutItem Tag="Folder" Text="{u:LocaleString Key=Paste}" Click="OnPasteClick"/>
             <MenuFlyoutSeparator/>
             <MenuFlyoutItem Text="{u:LocaleString Key=CopyAsPath}" Click="OnCopyAsPathClick"/>
             <MenuFlyoutSeparator/>
@@ -69,12 +58,12 @@
 
         <!-- One template for folders and files: the tree reuses rows, and a row made for a file and reused for a folder
              kept the file's template - no arrow, a folder that looked like a file and would not open (E2E FT04, FT03).
-             What differs (the icon, the menu) follows the row's item as it changes. A file has no children, so no arrow. -->
+             What differs (the icon, the menu's entries) follows the row's item. A file has no children, so no arrow. -->
         <DataTemplate x:Key="ExplorerItemTemplate" x:DataType="models:ExplorerItem">
             <muxc:TreeViewItem ItemsSource="{Binding Children}" IsExpanded="{Binding IsExpanded, Mode=TwoWay}"
                                IsSelected="{Binding IsSelected, Mode=TwoWay}" BorderThickness="1" Margin="-1"
+                               ContextFlyout="{StaticResource ItemContextFlyout}"
                                Loaded="{x:Bind local:FolderPage.OnTreeViewItemLoaded}"
-                               DataContextChanged="{x:Bind local:FolderPage.OnTreeViewItemDataContextChanged}"
                                CanDrag="True" DragStarting="{x:Bind local:FolderPage.OnItemDragStarting}" DragOver="{x:Bind local:FolderPage.OnItemDragOver}" 
                                Background="Transparent" AllowDrop="True" Drop="{x:Bind local:FolderPage.OnFolderItemDrop}">
                 <Grid ColumnSpacing="8" Height="32">
