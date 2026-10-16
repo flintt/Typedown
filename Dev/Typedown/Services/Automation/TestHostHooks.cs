@@ -25,6 +25,12 @@ namespace Typedown.Services.Automation
 
         public static void AddMethods(MethodTable methods)
         {
+            // Where the keyboard goes, in the log: a key lost between two controls shows up here (E2E TL01).
+            Microsoft.UI.Xaml.Input.FocusManager.GotFocus += (_, e) =>
+            {
+                var element = e.NewFocusedElement as Microsoft.UI.Xaml.FrameworkElement;
+                Core.Utilities.Log.Debug($"focus: {e.NewFocusedElement?.GetType().Name} '{element?.Name}' {(element != null ? Microsoft.UI.Xaml.Automation.AutomationProperties.GetAutomationId(element) : "")}");
+            };
             barriers.AddMethods(methods);
             // What the page itself holds right now - lets a test wait for real input to arrive instead of sleeping.
             methods.Add(new MethodDescriptor("test.editor.pageText", null, "test.editor.pageText/1", async (c, ct) =>

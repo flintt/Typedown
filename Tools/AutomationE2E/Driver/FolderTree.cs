@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Automation;
+using Newtonsoft.Json.Linq;
 
 /// <summary>
 /// FT02: a folder in the file tree is shown as a folder after the tree's root changed. A reader saw a folder listed as a
@@ -274,8 +275,12 @@ internal static partial class Program
             var state = await FolderState(c, windowId);
             notes.Add($"at the start: root {state["root"]}, explicit {state["explicit"]}, pane open {state["paneOpen"]}");
             Check(await RootIs(docs), "the tree follows the file to docs");
-            // At once two levels up, as the start-up's last folder came 2 ms after the file.
-            Check((bool)(await c.Call("test.folder.open", new { windowId, path = top }))["opened"]!, "the top folder opens");
+            // Straight two levels up from the root's menu, as the reader went (the folders above, the second one).
+            var menu = ((JArray)(await c.Call("test.folder.menu", new { windowId }))["entries"]!).ToList();
+            var entry = menu.FirstOrDefault(e => SamePath((string?)e["path"], top)) ?? throw new CaseFailed("the root's menu has no entry for the top folder: " + string.Join(", ", menu.Select(e => $"{e["id"]}={e["path"]}")));
+            await Click(window, await WaitFor(window, "FolderRootButton"));
+            await Task.Delay(600);
+            await ClickInPopup(window, await MenuEntry(window, (string)entry["id"]!));
             Check(await RootIs(top), "the tree is rooted two levels up");
             await CheckRepo("straight after the file");
 

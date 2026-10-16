@@ -28,6 +28,14 @@ namespace Typedown.Core.Models
 
         public ObservableCollection<ExplorerItem> Children { get; } = new();
 
+        /// <summary>
+        /// The folder has rows to show under it. Its row's arrow follows this: the tree made a folder's row with the
+        /// arrow it had then and did not add one when the folder's entries came in afterwards - a folder listed while
+        /// its parent was being expanded (read in the background, slower on a synced drive) stayed without an arrow,
+        /// a folder looking like a file that would not open (E2E FT04).
+        /// </summary>
+        public bool HasChildren { get; private set; }
+
         [OnChangedMethod(nameof(OnComparerChanged))]
         public Comparer<ExplorerItem> Comparer { get; set; } = new DefaultComparer();
 
@@ -58,6 +66,7 @@ namespace Typedown.Core.Models
         public ExplorerItem(FileViewModel viewModel)
         {
             ViewModel = viewModel;
+            Children.CollectionChanged += (_, _) => HasChildren = Children.Count > 0;
         }
 
         /// <summary>True for a row that only carries a message, such as "this folder has too many items".</summary>

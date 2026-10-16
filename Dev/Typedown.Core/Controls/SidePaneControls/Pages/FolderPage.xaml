@@ -68,7 +68,7 @@
         </MenuFlyout>
 
         <DataTemplate x:Key="FolderTemplate" x:DataType="models:ExplorerItem">
-            <muxc:TreeViewItem ItemsSource="{Binding Children}" IsExpanded="{Binding IsExpanded, Mode=TwoWay}" 
+            <muxc:TreeViewItem ItemsSource="{Binding Children}" IsExpanded="{Binding IsExpanded, Mode=TwoWay}" HasUnrealizedChildren="{Binding HasChildren, Mode=OneWay}" 
                                ContextFlyout="{StaticResource FolderContextFlyout}" BorderThickness="1" Margin="-1" 
                                Loaded="{x:Bind local:FolderPage.OnTreeViewItemLoaded}"
                                CanDrag="True" DragStarting="{x:Bind local:FolderPage.OnItemDragStarting}" DragOver="{x:Bind local:FolderPage.OnItemDragOver}" 
