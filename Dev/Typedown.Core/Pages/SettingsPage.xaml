@@ -14,7 +14,7 @@
     Loaded="OnLoaded"
     Unloaded="OnUnloaded"
     mc:Ignorable="d">
-    <muxc:NavigationView x:Name="NavigationView" IsSettingsVisible="False" IsBackButtonVisible="Collapsed" SelectionChanged="OnNavigationViewSelectionChanged">
+    <muxc:NavigationView x:Name="NavigationView" IsSettingsVisible="False" IsBackButtonVisible="Collapsed" SelectionChanged="OnNavigationViewSelectionChanged" BackRequested="OnBackRequested">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="LayoutStates">
                 <VisualState x:Name="Small">
@@ -70,6 +70,13 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid x:Name="FrameHeader" MaxWidth="1200">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <!-- In compact mode, where the window has no caption, the empty part of this row is where it is dragged
+                     (SettingsPage.ApplyCompact); the caption buttons sit over its right end. -->
+                <Grid x:Name="HeaderDrag" Grid.Column="1" Background="Transparent"/>
                 <muxc:BreadcrumbBar x:Name="BreadcrumbBar" ItemsSource="{x:Bind BreadcrumbBarItems}" ItemClicked="OnBreadcrumbBarItemClicked">
                     <muxc:BreadcrumbBar.Resources>
                         <SolidColorBrush x:Key="BreadcrumbBarNormalForegroundBrush" Color="{ThemeResource TextFillColorSecondary}"/>

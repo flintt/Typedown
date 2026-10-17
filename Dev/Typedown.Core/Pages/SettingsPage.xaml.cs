@@ -55,6 +55,24 @@ namespace Typedown.Core.Pages
         private void OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
             VisualStateManager.GoToState(this, ActualWidth.GetBreakPointValue("Large", "Medium", "Small"), false);
+            ApplyCompact();
+        }
+
+        // In compact mode the window has no caption (RootControl): the settings start at its top, in their own colours,
+        // as the main page starts with its menu bar. Their way back is the pane's back button, and the empty part of the
+        // header row is where the window is dragged. Narrow, the back button sits beside the pane's menu button, so the
+        // header moves over by one more button.
+        private void ApplyCompact()
+        {
+            var compact = Settings?.AppCompactMode ?? false;
+            NavigationView.IsBackButtonVisible = compact ? muxc.NavigationViewBackButtonVisible.Visible : muxc.NavigationViewBackButtonVisible.Collapsed;
+            WindowChrome.SetDrag(HeaderDrag, compact);
+            FrameHeader.Padding = new Thickness(compact && ActualWidth.GetBreakPointValue(false, false, true) ? 40 : 0, 0, 0, 0);
+        }
+
+        private void OnBackRequested(muxc.NavigationView sender, muxc.NavigationViewBackRequestedEventArgs args)
+        {
+            if (ViewModel?.GoBackCommand.IsExecutable == true) ViewModel.GoBackCommand.Execute(null);
         }
 
         private void OnNavigated(object sender, NavigationEventArgs e)
@@ -96,6 +114,11 @@ namespace Typedown.Core.Pages
             // The settings are a page of their own, so they have to take the theme from the settings as well:
             // opening them under a custom theme would otherwise drop back to the built-in colours.
             disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.CustomTheme)).StartWith(Settings.CustomTheme).Subscribe(_ => UpdateThemeColours()));
+            disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.AppCompactMode)).Subscribe(_ => ApplyCompact()));
+            disposables.Add(ViewModel.GoBackCommand.WhenPropertyChanged(nameof(ViewModel.GoBackCommand.IsExecutable))
+                .StartWith(ViewModel.GoBackCommand.IsExecutable)
+                .Subscribe(_ => NavigationView.IsBackEnabled = ViewModel.GoBackCommand.IsExecutable));
+            ApplyCompact();
         }
 
         /// <summary>

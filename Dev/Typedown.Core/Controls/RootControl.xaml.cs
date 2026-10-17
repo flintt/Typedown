@@ -65,9 +65,8 @@ namespace Typedown.Core.Controls
             _ = DispatcherQueue.RunIdleAsync(_ => ViewModel.MarkdownEditor?.FocusEditor());
         }
 
-        // The caption row in the custom theme's colours, as the page under it: the settings' own page colour there (the
-        // caption is the settings' top row in compact mode), the menu row's panel colour over the main page. It was the
-        // window's white over a Sepia page.
+        // The caption row in the custom theme's colours, as the page under it: the settings' own page colour there, the
+        // menu row's panel colour over the main page. It was the window's white over a Sepia page.
         private void UpdateCaptionTheme()
         {
             if (Caption == null) return;
@@ -171,13 +170,19 @@ namespace Typedown.Core.Controls
             Effect = SlideNavigationTransitionEffect.FromRight
         } : new SuppressNavigationTransitionInfo();
 
-        public static double GetCaptionRowMinHeight(bool isFullScreen) => isFullScreen ? 0 : 4;
+        // The 4 px the compact main page's menu bar covers; the compact settings start at the window's top, where the strip
+        // showed the window's own colour over the theme's.
+        public static double GetCaptionRowMinHeight(bool isFullScreen, bool compactMode, Type currentPage) =>
+            isFullScreen || (compactMode && currentPage != typeof(MainPage)) ? 0 : 4;
 
+        // No caption in compact mode, on any page: the main page's menu bar is its top row, and the settings have their
+        // back button in their pane and their empty top as the caption (SettingsPage) - a caption of their own was a
+        // title bar the main page does not have, in the window's colours.
         public static bool GetCaptionIsLoad(bool compactMode, Type currentPage, bool isFullScreen)
         {
             if (isFullScreen && currentPage == typeof(MainPage))
                 return false;
-            return !compactMode || currentPage != typeof(MainPage);
+            return !compactMode;
         }
 
         private void OnClosePrintPreviewClick(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
