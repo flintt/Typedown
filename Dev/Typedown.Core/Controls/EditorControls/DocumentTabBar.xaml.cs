@@ -198,15 +198,28 @@ namespace Typedown.Core.Controls
                 // Not when the selection moved because a tab was closed: handed over while the next document was
                 // being loaded, the keys disturbed its loading, and the outline stayed on the closed document's
                 // headings (E2E TC02). The keyboard is where it was after a close anyway.
-                // Right after the click is done with, not once the window is idle: with a long document coming in, idle
-                // was 600 ms away and the keys typed meanwhile went to the tab and were lost (E2E TL01).
-                if (!closing) DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, () => ViewModel?.MarkdownEditor?.FocusEditor());
+                // At once, before the switch's work on this thread: handed back once the window was idle (or even next in
+                // its queue), a long document coming in kept it busy for some 600 ms and the keys typed meanwhile went to
+                // the tab and were lost (E2E TL01). Once more after the click is done with, should the tab have taken the
+                // keyboard back - only then: moving it while the reader types loses a key.
+                if (!closing)
+                {
+                    ViewModel?.MarkdownEditor?.FocusEditor();
+                    DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, () =>
+                    {
+                        if (XamlRoot != null && Microsoft.UI.Xaml.Input.FocusManager.GetFocusedElement(XamlRoot) is not Microsoft.UI.Xaml.Controls.WebView2)
+                            ViewModel?.MarkdownEditor?.FocusEditor();
+                    });
+                }
             }
         }
 
         private void OnAddTabButtonClick(muxc.TabView sender, object args)
         {
             ViewModel?.FileViewModel.NewFileCommand.Execute(default);
+            // The keyboard off the + button at once (the command gives it to the editor only once the new document is
+            // there): the letters typed meanwhile went to the button (E2E K05). The page holds them for the new tab.
+            ViewModel?.MarkdownEditor?.FocusEditor();
         }
 
         private bool closing;
