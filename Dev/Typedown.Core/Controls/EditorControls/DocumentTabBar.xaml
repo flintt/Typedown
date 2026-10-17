@@ -39,7 +39,10 @@
         </muxc:TabView.TabStripHeader>
         <muxc:TabView.TabItemTemplate>
             <DataTemplate x:DataType="models:DocumentTab">
-                <muxc:TabViewItem Header="{x:Bind DisplayTitle, Mode=OneWay}" ToolTipService.ToolTip="{x:Bind ToolTip, Mode=OneWay}" IsClosable="True" ContextFlyout="{StaticResource TabContextFlyout}"/>
+                <!-- A tab clicked leaves the keyboard in the document (AllowFocusOnInteraction): taken by the tab, it came back
+                     only once the window's thread was free, and with a long document coming in the keys typed meanwhile were
+                     lost (E2E TL01). The keyboard still reaches the tabs with Tab. -->
+                <muxc:TabViewItem Header="{x:Bind DisplayTitle, Mode=OneWay}" ToolTipService.ToolTip="{x:Bind ToolTip, Mode=OneWay}" IsClosable="True" ContextFlyout="{StaticResource TabContextFlyout}" AllowFocusOnInteraction="False"/>
             </DataTemplate>
         </muxc:TabView.TabItemTemplate>
     </muxc:TabView>
