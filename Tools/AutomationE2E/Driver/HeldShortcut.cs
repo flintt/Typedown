@@ -21,21 +21,22 @@ internal static partial class Program
         {
             await TypeInto(c, id, "");
             await Task.Delay(500);
-            // Held for two seconds: the comma's key down sent again and again, as the system repeats it, no key up between.
-            // Which page is shown is read all along: the end alone could be the settings after any odd number of trips.
+            // Held for six seconds - a trip in or out takes a second or more, the main page made again - the comma's key down
+            // sent again and again, as the system repeats it, no key up between. Which page is shown is read all along: the
+            // end alone could be the settings after any odd number of trips. A page on its way in ("other") is no trip.
             var pages = new List<string>();
             var holding = true;
             var watch = Task.Run(async () =>
             {
                 while (holding)
                 {
-                    try { var p = await Page(); if (pages.Count == 0 || pages[^1] != p) pages.Add(p); } catch { }
+                    try { var p = await Page(); if (p != "other" && (pages.Count == 0 || pages[^1] != p)) pages.Add(p); } catch { }
                     await Task.Delay(40);
                 }
             });
             Send(Key(0x11, false));
             await Task.Delay(80);
-            for (var i = 0; i < 60; i++)
+            for (var i = 0; i < 180; i++)
             {
                 Send(Comma(false));
                 await Task.Delay(33);
@@ -43,7 +44,7 @@ internal static partial class Program
             Send(Comma(true));
             await Task.Delay(80);
             Send(Key(0x11, true));
-            await Task.Delay(2000);
+            await Task.Delay(3000);
             holding = false;
             await watch;
             var held = await Page();
