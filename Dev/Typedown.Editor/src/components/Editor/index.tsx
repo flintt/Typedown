@@ -105,6 +105,8 @@ const Editor: React.FC = () => {
     // applied the new text — not from a fixed delay, which a large document or a slow first render overruns and
     // then leaves the file looking modified without an edit. The timers are only fallbacks.
     const fileLoadPending = useRef<{ armed: boolean, timer?: number }>()
+    // The text the host last put in the editor (a load, or text from its history) - what FileLoaded compares with.
+    const givenTextRef = useRef<string>()
 
     // What is typed while a tab's document is on its way (services/inputHold.ts), and the hold the document shown was for.
     const holdRef = useRef<InputHold>()
@@ -115,7 +117,14 @@ const Editor: React.FC = () => {
         if (!pending) return
         clearTimeout(pending.timer)
         fileLoadPending.current = undefined
-        transport.postMessage('FileLoaded', { text: markdownRef.current, loadId: loadIdRef.current })
+        // The host only needs the text back when the editor changed it. Comparing here costs about nothing; sending a
+        // long document back (its JSON, and the host parsing and comparing it) cost 20-40 ms on a 300 KB text. `same`
+        // says the page holds exactly the text that came with this load id, which the host still has.
+        const text = markdownRef.current
+        const given = givenTextRef.current
+        transport.postMessage('FileLoaded', typeof given === 'string' && text === given
+            ? { same: true, loadId: loadIdRef.current }
+            : { text, loadId: loadIdRef.current })
         // The host has the document as loaded; what was typed for it goes in now, as the reader's edit.
         holdRef.current?.loaded(appliedHoldRef.current)
     }, [])
@@ -319,6 +328,8 @@ const Editor: React.FC = () => {
     const setContentFromHost = useCallback((markdown: string, cursor?: any, scrollTop?: number | null, local = false) => {
         localChangeRef.current = local
         markdownRef.current = markdown
+        // An automation edit is not a load: it has no FileLoaded, and a load is refused while one is applied.
+        if (!local) givenTextRef.current = markdown
         cursorRef.current = cursor
         scrollFromHostRef.current = typeof scrollTop === 'number'
         muyaScrollTopRef.current = typeof scrollTop === 'number' ? scrollTop : 0

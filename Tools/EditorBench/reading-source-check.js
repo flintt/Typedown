@@ -44,11 +44,12 @@ const server = http.createServer((req, res) => {
    await pause();
  };
  const flush = async () => {
-   return page.evaluate(() => {
+   await page.evaluate(() => {
      delete window.__last.ContentFlushed;
      window.__deliver('FlushContent', { token: 42 });
-     return window.__last.ContentFlushed.text;
    });
+   await page.waitForFunction(() => window.__last.ContentFlushed);
+   return page.evaluate(() => window.__last.ContentFlushed.text);
  };
  const source = () => page.evaluate(() => document.querySelector('.CodeMirror').CodeMirror.getValue());
  const fixtures = [markdown, tableAfterParagraph, markdown.replace('说明\n```', '说明\n\n```'), 'Title\n=====\n\n* a   \n* b', '', 'no final newline'];
@@ -111,7 +112,8 @@ const server = http.createServer((req, res) => {
    window.__deliver('LoadFile', {text, loadId:100, basePath:'/tmp'});
  }, markdown);
  await page.waitForFunction(() => window.__last.FileLoaded?.loadId === 100);
- assert.equal(await page.evaluate(() => window.__last.FileLoaded.text), markdown);
+ // The text unchanged: FileLoaded says so (`same`) instead of sending it back.
+ assert.deepEqual(await page.evaluate(() => [window.__last.FileLoaded.same, 'text' in window.__last.FileLoaded]), [true, false]);
  assert.equal(await flush(), markdown);
 
  // A throttled edit must reach the host before the visual editor is unmounted.

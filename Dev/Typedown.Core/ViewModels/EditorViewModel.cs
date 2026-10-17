@@ -176,6 +176,7 @@ namespace Typedown.Core.ViewModels
             }
             startupDocumentReady.TrySetResult(true);
             Log.Debug($"load {LoadId + 1}: the editor page asked for the document again ({System.IO.Path.GetFileName(FileViewModel.FilePath) ?? "untitled"})");
+            loadText = Markdown;
             return new
             {
                 Settings.FocusMode,
@@ -223,6 +224,7 @@ namespace Typedown.Core.ViewModels
             CurrentCursor = cursor as CursorState;
             var scrollTop = Settings.RememberCursorPosition ? CursorMemory.GetScroll(FileViewModel.FilePath) : null;
             loadClock = text != null && text.Length > 200000 ? System.Diagnostics.Stopwatch.StartNew() : null;
+            loadText = text;
             MarkdownEditor?.PostMessage("LoadFile", new { text, basePath = FileViewModel.ImageBasePath, cursor, scrollTop, loadId = ++LoadId, hold = inputHold });
             Log.Debug($"load {LoadId}: {System.IO.Path.GetFileName(FileViewModel.FilePath) ?? "untitled"}, {text?.Length ?? 0} chars, from {Callers()}");
         }
@@ -391,7 +393,7 @@ namespace Typedown.Core.ViewModels
             }
             if (!FileLoaded)
             {
-                var newText = arg["text"].ToString();
+                var newText = KeptAsGiven(arg) ? loadText : arg["text"].ToString();
                 if (RewriteLoadsForTest > 0)
                 {
                     RewriteLoadsForTest--;
@@ -429,6 +431,15 @@ namespace Typedown.Core.ViewModels
                     OnSearch();
             }
         }
+
+        // The text sent with the newest load id (a load, the page asking for its document, text from the history).
+        // FileLoaded leaves the text out when the page holds exactly the text it was given (`same`): a long document
+        // sent back and parsed only to be found equal cost 20-40 ms. A report for an older load id is dropped as
+        // stale, so the one that is taken always means this text.
+        private string loadText;
+
+        /// <summary>The page's FileLoaded says it holds the text that came with its load id, unchanged.</summary>
+        private static bool KeptAsGiven(JToken arg) => arg?["same"]?.Type == JTokenType.Boolean && arg["same"].Value<bool>();
 
         // The text a load was retried with (OnFileLoaded): one retry for each text.
         private string retriedLoad;
@@ -1033,6 +1044,7 @@ namespace Typedown.Core.ViewModels
         {
             if (MarkdownEditor == null) return null;
             var loadId = ++LoadId;
+            loadText = text;
             var waiter = new TaskCompletionSource<string>(TaskCreationOptions.RunContinuationsAsynchronously);
             reloadWaiters[loadId] = waiter;
             try
@@ -1051,7 +1063,8 @@ namespace Typedown.Core.ViewModels
         {
             var id = arg?["loadId"];
             if (id == null || id.Type != JTokenType.Integer) return;
-            if (reloadWaiters.TryGetValue(id.Value<int>(), out var waiter)) waiter.TrySetResult(arg["text"]?.ToString());
+            // Only a report for the newest load gets here (IsStaleReport), the load loadText was sent with.
+            if (reloadWaiters.TryGetValue(id.Value<int>(), out var waiter)) waiter.TrySetResult(KeptAsGiven(arg) ? loadText : arg["text"]?.ToString());
         }
 
         /// <summary>
@@ -1090,7 +1103,7 @@ namespace Typedown.Core.ViewModels
                 text = state.Text,
                 cursor = state.Cursor,
                 basePath = FileViewModel.ImageBasePath,
-                loadId = NextHistoryLoadId(),
+                loadId = NextHistoryLoadId(state.Text),
             });
         }
 
@@ -1111,7 +1124,7 @@ namespace Typedown.Core.ViewModels
                 text = state.Text,
                 cursor = state.Cursor,
                 basePath = FileViewModel.ImageBasePath,
-                loadId = NextHistoryLoadId(),
+                loadId = NextHistoryLoadId(state.Text),
             });
         }
 
@@ -1120,8 +1133,10 @@ namespace Typedown.Core.ViewModels
         /// then carries the old id and is dropped, instead of writing the text just undone back over the history.
         /// SetMarkdown has no FileLoaded handshake, so the new id counts as confirmed at once.
         /// </summary>
-        private int NextHistoryLoadId()
+        private int NextHistoryLoadId(string text)
         {
+            // A load still on its way in the page is answered under this id, with this text (see loadText).
+            loadText = text;
             ConfirmedLoadId = ++LoadId;
             return LoadId;
         }
