@@ -41,9 +41,9 @@ namespace Typedown.Core.Controls
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             Bindings.Update();
-            // The + button too leaves the keyboard in the document (see the tabs' AllowFocusOnInteraction).
-            foreach (var button in Descendants(TabView).OfType<Button>().Where(b => b.Name == "AddButton" || Microsoft.UI.Xaml.Automation.AutomationProperties.GetAutomationId(b) == "AddButton"))
-                button.AllowFocusOnInteraction = false;
+            // The + button too leaves the keyboard in the document (see the tabs' AllowFocusOnInteraction). It is made with
+            // the strip's template, which may come after this: looked for again as the strip lays itself out, until found.
+            if (!KeepAddButtonOffFocus()) TabView.LayoutUpdated += OnStripLayoutUpdated;
             var settings = ViewModel?.SettingsViewModel;
             if (settings != null)
                 disposables.Add(settings.WhenPropertyChanged(nameof(settings.CustomTheme)).StartWith(settings.CustomTheme).Subscribe(_ => UpdateThemeColours()));
@@ -219,6 +219,19 @@ namespace Typedown.Core.Controls
                     });
                 }
             }
+        }
+
+        private bool KeepAddButtonOffFocus()
+        {
+            var buttons = Descendants(TabView).OfType<Button>().Where(b => b.Name == "AddButton" || Microsoft.UI.Xaml.Automation.AutomationProperties.GetAutomationId(b) == "AddButton").ToList();
+            foreach (var button in buttons) button.AllowFocusOnInteraction = false;
+            if (buttons.Count > 0) Log.Debug($"tabs: the + button leaves the keyboard where it is ({buttons.Count})");
+            return buttons.Count > 0;
+        }
+
+        private void OnStripLayoutUpdated(object sender, object e)
+        {
+            if (KeepAddButtonOffFocus()) TabView.LayoutUpdated -= OnStripLayoutUpdated;
         }
 
         private static IEnumerable<DependencyObject> Descendants(DependencyObject root)
