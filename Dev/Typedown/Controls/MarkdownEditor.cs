@@ -197,7 +197,7 @@ namespace Typedown.Controls
             if (opening.Visibility != Visibility.Visible)
             {
                 openingShownAt = DateTime.UtcNow;
-                openingText.Text = Locale.GetString("Editor.Opening");
+                openingText.Text = Locale.GetString("EditorOpening");
                 var theme = ThemeFiles.Find(AppViewModel.SettingsViewModel.CustomTheme);
                 var foreground = theme == null ? null : (ThemeFiles.Brush(theme.Foreground) ?? ThemeFiles.Readable(theme.Background));
                 if (foreground != null) openingText.Foreground = foreground; else openingText.ClearValue(Microsoft.UI.Xaml.Controls.TextBlock.ForegroundProperty);

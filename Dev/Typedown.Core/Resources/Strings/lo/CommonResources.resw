@@ -1150,7 +1150,7 @@
   <data name="HomePage.Settings" xml:space="preserve">
     <value>ການຕັ້ງຄ່າ</value>
   </data>
-  <data name="Editor.Opening" xml:space="preserve">
+  <data name="EditorOpening" xml:space="preserve">
     <value>ກຳລັງເປີດ…</value>
   </data>
 </root>

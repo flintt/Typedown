@@ -1150,7 +1150,7 @@
   <data name="HomePage.Settings" xml:space="preserve">
     <value>సెట్టింగ్‌లు</value>
   </data>
-  <data name="Editor.Opening" xml:space="preserve">
+  <data name="EditorOpening" xml:space="preserve">
     <value>తెరుస్తోంది…</value>
   </data>
 </root>

@@ -1092,7 +1092,7 @@
   <data name="HomePage.Settings" xml:space="preserve">
     <value>Definições</value>
   </data>
-  <data name="Editor.Opening" xml:space="preserve">
+  <data name="EditorOpening" xml:space="preserve">
     <value>A abrir…</value>
   </data>
 </root>

@@ -1165,7 +1165,7 @@
   <data name="HomePage.Settings" xml:space="preserve">
     <value>设置</value>
   </data>
-  <data name="Editor.Opening" xml:space="preserve">
+  <data name="EditorOpening" xml:space="preserve">
     <value>正在打开…</value>
   </data>
 </root>

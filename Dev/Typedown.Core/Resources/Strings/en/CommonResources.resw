@@ -1158,7 +1158,7 @@
     <value>Right-click or press Delete to remove it from this list</value>
     <comment>最近列表条目的悬停提示：右键或按 Delete 从列表移除</comment>
   </data>
-  <data name="Editor.Opening" xml:space="preserve">
+  <data name="EditorOpening" xml:space="preserve">
     <value>Opening…</value>
     <comment>编辑区：长文档正在打开（渲染完成前盖在编辑区上的提示）</comment>
   </data>
