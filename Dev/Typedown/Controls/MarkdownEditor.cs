@@ -157,7 +157,7 @@ namespace Typedown.Controls
             {
                 var theme = Newtonsoft.Json.Linq.JObject.FromObject(ServiceProvider.GetCurrentTheme());
                 var bg = theme["background"];
-                root.Background = new Microsoft.UI.Xaml.Media.SolidColorBrush(Windows.UI.Color.FromArgb(
+                root.Background = new Microsoft.UI.Xaml.Media.SolidColorBrush(global::Windows.UI.Color.FromArgb(
                     (byte)(bg?["A"] ?? bg?["a"] ?? 255), (byte)(bg?["R"] ?? bg?["r"] ?? 0), (byte)(bg?["G"] ?? bg?["g"] ?? 0), (byte)(bg?["B"] ?? bg?["b"] ?? 0)));
             }
             catch (Exception ex)
