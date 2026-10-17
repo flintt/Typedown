@@ -199,7 +199,9 @@ namespace Typedown.Controls
                 var theme = ThemeFiles.Find(AppViewModel.SettingsViewModel.CustomTheme);
                 var foreground = theme == null ? null : (ThemeFiles.Brush(theme.Foreground) ?? ThemeFiles.Readable(theme.Background));
                 if (foreground != null) openingText.Foreground = foreground; else openingText.ClearValue(Microsoft.UI.Xaml.Controls.TextBlock.ForegroundProperty);
-                opening.Background = root.Background;
+                // The page's own colour under every theme: the control's is set under a custom theme only, and a clear one
+                // showed the page beneath - the document being left, or nothing yet.
+                opening.Background = new Microsoft.UI.Xaml.Media.SolidColorBrush(ServiceProvider.GetPageBackground());
                 opening.Visibility = Visibility.Visible;
             }
             // Looked at again until the load is confirmed, so the ten seconds can end it.

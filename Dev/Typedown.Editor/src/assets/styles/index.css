@@ -1524,25 +1524,3 @@ span.ag-footnote-backlink {
   background: rgba(40, 44, 52, 0.85);
   pointer-events: none;
 }
-
-/* The first screen of a long document while the editor builds it (services/loadPreview.ts): over the page, in the
-   editor's colours and measures, taking no clicks. */
-#td-load-preview {
-  position: fixed;
-  inset: 0;
-  z-index: 30;
-  overflow: hidden;
-  pointer-events: none;
-  /* The page's own colour as the body has it: the host's under the app's themes, a custom theme's when it paints the
-     page (light.theme.css's own grey is not quite the host's). */
-  background-color: inherit;
-  color: var(--editorColor);
-}
-
-#td-load-preview .td-load-preview-page {
-  max-width: var(--editorAreaWidth);
-  min-width: 400px;
-  margin: 0 auto;
-  padding: 20px 50px 100px 50px;
-  box-sizing: border-box;
-}

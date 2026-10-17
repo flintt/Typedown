@@ -11,7 +11,6 @@ import { htmlToMarkdown } from "services/importHtml";
 import { DEFAULT_TURNDOWN_CONFIG } from "components/Muya/lib/config";
 import { noteUserIntent, onUserIntent, resetUserIntent, takeChangeOrigin } from "services/changeOrigin";
 import { InputHold } from "services/inputHold";
-import { afterPaint, hideLoadPreview, PREVIEW_FROM_CHARS, showLoadPreview } from "services/loadPreview";
 import { sha256Hex } from "services/sha256";
 import { classifierVersion } from "services/normalization";
 import { applyHostBackground } from "services/theme";
@@ -125,8 +124,6 @@ const Editor: React.FC = () => {
         // says the page holds exactly the text that came with this load id, which the host still has.
         const text = markdownRef.current
         const given = givenTextRef.current
-        // The editor shows the document now: its preview (services/loadPreview) goes.
-        hideLoadPreview()
         transport.postMessage('FileLoaded', typeof given === 'string' && text === given
             ? { same: true, loadId: loadIdRef.current }
             : { text, loadId: loadIdRef.current })
@@ -354,29 +351,12 @@ const Editor: React.FC = () => {
 
     useEffect(() => {
         remote.getSettings().then(({ markdown, basePath, cursor, scrollTop, loadId, ...opt }: any) => {
-            const apply = () => {
-                window.basePath = basePath
-                loadIdRef.current = loadId
-                setScrollLoadId(loadId)
-                setOptions(opt)
-                OnFileLoaded();
-                setContentFromHost(markdown, cursor ?? undefined, scrollTop)
-            }
-            // A long document (the start-up restoring a tab) is shown first as its first screen, in the theme's colours
-            // and the editor's measures - set here, as the effects below set them only once the options are in - and
-            // built once that has been painted (services/loadPreview).
-            if (!opt.sourceCode && typeof markdown === 'string' && markdown.length >= PREVIEW_FROM_CHARS) {
-                styleElement('typedown-theme-css').textContent = opt.themeCss || ''
-                if (opt.themeCss) document.body.style.backgroundColor = 'var(--editorBgColor)'
-                if (opt.editorAreaWidth) document.body.style.setProperty('--editorAreaWidth', opt.editorAreaWidth)
-                if (opt.fontFamily) document.body.style.setProperty('--editorFontFamily', opt.fontFamily)
-                if (showLoadPreview(markdown, cursor, opt)) {
-                    transport.postMessage('LoadPreviewShown', { loadId })
-                    afterPaint(apply)
-                    return
-                }
-            }
-            apply()
+            window.basePath = basePath
+            loadIdRef.current = loadId
+            setScrollLoadId(loadId)
+            setOptions(opt)
+            OnFileLoaded();
+            setContentFromHost(markdown, cursor ?? undefined, scrollTop)
         })
     }, [OnFileLoaded, setContentFromHost]);
 
@@ -495,16 +475,8 @@ const Editor: React.FC = () => {
         }
         const scheduled = pendingLoadRef.current != null
         pendingLoadRef.current = load
-        // A long document is shown first as its first screen, and built once that has been painted (services/
-        // loadPreview); one kept from before (Muya's keptDocuments) comes back at once and needs none. The newest load
-        // is the one previewed.
-        const previewed = !optionsRef.current?.sourceCode && typeof load.text === 'string' && load.text.length >= PREVIEW_FROM_CHARS
-            && !(window as any).__typedownKeptDocuments?.has?.(load.text) && showLoadPreview(load.text, load.cursor)
-        if (previewed) transport.postMessage('LoadPreviewShown', { loadId: load.loadId })
-        else hideLoadPreview()
         if (scheduled) return
-        const run = (go: () => void) => previewed ? afterPaint(go) : requestAnimationFrame(go)
-        run(() => {
+        requestAnimationFrame(() => {
             const pending = pendingLoadRef.current
             pendingLoadRef.current = null
             if (!pending || isStaleLoad(pending.loadId)) return

@@ -276,7 +276,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         };
         (window as any).__typedownPendingNormalization = pendingNormalization
         // For Tools/EditorBench: how many documents are kept, and a way to drop them.
-        const keptHook = { size: () => keptRef.current.size, clear: () => keptRef.current.clear(), has: (text: string) => keptRef.current.has(text) };
+        const keptHook = { size: () => keptRef.current.size, clear: () => keptRef.current.clear() };
         (window as any).__typedownKeptDocuments = keptHook
         // For Tools/EditorBench: the same classifier, to judge what a real edit did.
         ;(window as any).__typedownNormalization = { classifyNormalization, extractProtectedPayload }
