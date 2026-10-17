@@ -108,6 +108,9 @@
 - 下一步：等构建机空闲时在构建机上跑同样的 100 次；仍复现不出则把崩溃信息报给 Windows App SDK，不阻塞发布。
 
 **2026-10-17 构建机上复现**：同一测试主机在构建机上连续启动 120 次，崩溃 86 次（后 20 次全崩），崩溃点相同（Microsoft.UI.Input.dll 偏移 0x26419，约 3.5–4 秒，debug.log 只到 "startup: main"）；测试机上同一构建 0 次。未锁屏；停不掉的无窗口 Typedown 进程是 WER 收集转储时的影子进程（父进程即崩溃进程），停掉其余残留后照样 20/20 崩溃，排除残留实例。网上同类报告（PowerToys、Files 等 WinUI 3 应用）有卸载第三方输入设备驱动后恢复的个例。**影响发布**：等用户确认构建机近期装过的输入相关软件、能否重启，以及试用安装版能否打开。
+- 当时装在构建机上的 Typeleaf 试用包 1.3.9.16 同样崩溃（10-17 08:33、08:34），而它 06:45–07:10 启动多次都正常：构建机在 07:10 之后进入某种状态，此后新启动的 WinUI 3 进程全部崩溃，已运行的不受影响。
+- 转储（cdb，公有符号）：Microsoft_UI_Input!InputSiteHwndWinRT::WndProcStatic_NoLock 第 499 行 FailFast_Unexpected（E_UNEXPECTED），在 InputSiteHwndWinRT::CreateHwnd 的 WM_NCCREATE/WM_CREATE 里，由 ContentIslandStatics::Create ← CXamlIslandRoot::InitializeCommon ← DesktopWindowXamlSource 初始化调起；进程内没有第三方 DLL。崩溃前约 3 秒停顿。
+- **重启构建机后连续启动 100 次：0 次崩溃**（重启前 120 次崩 86 次）。结论：系统状态问题（疑与输入相关的会话进程有关：ctfmon、TabTip、dwm 都是 10-12 21:17 重启的，之后才出现这类崩溃），不是程序缺陷；仍值得报给 Windows App SDK。可考虑：启动时若上次在建窗口前崩溃，提示用户重启电脑（待定）。
 
 ## ✅ SF01 偶发失败：取样点落在首页的白字上（2026-10-16 查明并修好）
 
