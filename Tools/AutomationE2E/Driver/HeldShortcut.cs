@@ -22,6 +22,17 @@ internal static partial class Program
             await TypeInto(c, id, "");
             await Task.Delay(500);
             // Held for two seconds: the comma's key down sent again and again, as the system repeats it, no key up between.
+            // Which page is shown is read all along: the end alone could be the settings after any odd number of trips.
+            var pages = new List<string>();
+            var holding = true;
+            var watch = Task.Run(async () =>
+            {
+                while (holding)
+                {
+                    try { var p = await Page(); if (pages.Count == 0 || pages[^1] != p) pages.Add(p); } catch { }
+                    await Task.Delay(40);
+                }
+            });
             Send(Key(0x11, false));
             await Task.Delay(80);
             for (var i = 0; i < 60; i++)
@@ -33,9 +44,11 @@ internal static partial class Program
             await Task.Delay(80);
             Send(Key(0x11, true));
             await Task.Delay(2000);
+            holding = false;
+            await watch;
             var held = await Page();
-            notes.Add($"after Ctrl+, held for 2 s: page {held}");
-            Check(held == "settings", $"Ctrl+, held opens the settings once and stays there ({held})");
+            notes.Add($"while Ctrl+, was held and after: {string.Join(" > ", pages)}; now {held}");
+            Check(held == "settings" && pages.Count <= 2, $"Ctrl+, held opens the settings once and stays there ({string.Join(" > ", pages)})");
             await CtrlComma();
             await Task.Delay(2000);
             var again = await Page();
