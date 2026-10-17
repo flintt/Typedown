@@ -164,3 +164,17 @@ test('settled waits for text still waiting for its document', async () => {
     await waiting;
     expect(inserted).toEqual(['abc']);
 });
+
+test('text typed outside the page (the tab strip) joins the hold, or goes in at once when nothing is held', async () => {
+    const { hold, inserted } = setup();
+    hold.hold(1);
+    type('a');
+    hold.typedElsewhere('b');
+    type('c');
+    hold.loaded(1);
+    await hold.settled();
+    expect(inserted).toEqual(['abc']);
+    hold.typedElsewhere('d');
+    await hold.settled();
+    expect(inserted).toEqual(['abc', 'd']);
+});

@@ -82,6 +82,16 @@ export class InputHold {
         this.start();
     }
 
+    /**
+     * Text typed while the keyboard was outside the page (the tab strip just clicked): it belongs where the next keys go -
+     * the hold's text box while held, at the editor's caret otherwise.
+     */
+    typedElsewhere(text: string) {
+        note(`typed elsewhere ${JSON.stringify(text)} (active ${this.active})`);
+        if (this.active && this.sink) this.sink.value += text;
+        else this.deliver(text, false);
+    }
+
     /** Whether text is waiting for the document of this hold (its load must not be skipped for a newer one). */
     hasTextFor(hold: number | undefined) {
         return typeof hold === 'number' && this.segments.some(s => s.hold === hold && s.text.length > 0);

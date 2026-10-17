@@ -27,6 +27,10 @@ namespace Typedown.Core.Controls
         public DocumentTabBar()
         {
             InitializeComponent();
+            // Typing that reaches the strip just after a tab or the + button was clicked is for the document: the strip
+            // has the keyboard until the editor gets it back, and with a long document coming in that took some 600 ms
+            // (the window's thread busy). Passed on in order to the page, which keeps it for the document shown next.
+            TabView.CharacterReceived += OnStripCharacterReceived;
             // handledEventsToo: once there are more tabs than fit, the strip's own scroll viewer takes the
             // wheel and marks it handled, so a plain handler never sees it and the wheel only slid the strip
             // sideways instead of moving between tabs.
@@ -193,6 +197,7 @@ namespace Typedown.Core.Controls
             if (Tabs == null) return;
             if (TabView.SelectedItem is DocumentTab tab && tab != Tabs.ActiveTab)
             {
+                if (!closing) handedOverAt = DateTime.UtcNow;
                 Tabs.SwitchTabCommand.Execute(tab);
                 // A tab clicked in the strip keeps the keyboard on the tab; the reader came to write in the document.
                 // Not when the selection moved because a tab was closed: handed over while the next document was
@@ -214,8 +219,20 @@ namespace Typedown.Core.Controls
             }
         }
 
+        private DateTime handedOverAt = DateTime.MinValue;
+
+        private void OnStripCharacterReceived(UIElement sender, Microsoft.UI.Xaml.Input.CharacterReceivedRoutedEventArgs e)
+        {
+            if (DateTime.UtcNow - handedOverAt > TimeSpan.FromSeconds(3)) return;
+            var ch = e.Character;
+            if (ch != '\r' && char.IsControl(ch)) return;
+            e.Handled = true;
+            ViewModel?.MarkdownEditor?.PostMessage("TypedElsewhere", new { text = ch == '\r' ? "\n" : ch.ToString() });
+        }
+
         private void OnAddTabButtonClick(muxc.TabView sender, object args)
         {
+            handedOverAt = DateTime.UtcNow;
             ViewModel?.FileViewModel.NewFileCommand.Execute(default);
             // The keyboard off the + button at once (the command gives it to the editor only once the new document is
             // there): the letters typed meanwhile went to the button (E2E K05). The page holds them for the new tab.

@@ -416,6 +416,7 @@ const Editor: React.FC = () => {
         idle: () => pendingLoadRef.current == null && !fileLoadPending.current,
     })
     useEffect(() => transport.addListener<{ hold: number }>('HoldInput', ({ hold }) => holdRef.current?.hold(hold)), []);
+    useEffect(() => transport.addListener<{ text: string }>('TypedElsewhere', ({ text }) => holdRef.current?.typedElsewhere(text)), []);
     useEffect(() => transport.addListener<{ hold: number }>('ReleaseInput', ({ hold }) =>
         holdRef.current?.release(hold, pendingLoadRef.current != null || !!fileLoadPending.current)), []);
     // A load older than the one the page holds is stale: the page asked for its document (getSettings) while the
