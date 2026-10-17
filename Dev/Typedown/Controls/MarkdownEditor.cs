@@ -211,10 +211,11 @@ namespace Typedown.Controls
         }
 
         // The page hidden or shown: only the web view, over the control's own colour (UpdateBackdrop). Hiding the whole
-        // control showed what lay behind it.
+        // control showed what lay behind it. Collapsed, not transparent: WinUI 3's web view fills what its page has not
+        // painted yet with a light grey of its own, and at opacity 0 that still came through (E2E SF01, 83% light).
         private void ShowPage(bool shown)
         {
-            if (WebViewController?.WebView is { } webView) webView.Opacity = shown ? 1 : 0;
+            if (WebViewController?.WebView is { } webView) webView.Visibility = shown ? Visibility.Visible : Visibility.Collapsed;
         }
 
         [SuppressPropertyChangedWarnings]
