@@ -18,6 +18,11 @@ namespace Typedown.Core.Services
             public CursorState Cursor { get; set; }
             /// <summary>Vertical scroll offset (px); the only position reading mode has, since it never moves a caret.</summary>
             public double? ScrollY { get; set; }
+            /// <summary>
+            /// The block at the top of the window with the offset (the page's own JSON: its text, its height, how far
+            /// through): what the next load puts back where it was, the page's preview first (services/loadPreview).
+            /// </summary>
+            public string ScrollAnchor { get; set; }
             public DateTime Time { get; set; }
         }
 
@@ -60,8 +65,8 @@ namespace Typedown.Core.Services
             {
                 EnsureLoaded();
                 var key = Normalize(path);
-                var scroll = entries.TryGetValue(key, out var existing) ? existing.ScrollY : null;
-                entries[key] = new Entry { Cursor = cursor, ScrollY = scroll, Time = DateTime.UtcNow };
+                entries.TryGetValue(key, out var existing);
+                entries[key] = new Entry { Cursor = cursor, ScrollY = existing?.ScrollY, ScrollAnchor = existing?.ScrollAnchor, Time = DateTime.UtcNow };
                 dirty = true;
             }
         }
@@ -76,7 +81,18 @@ namespace Typedown.Core.Services
             }
         }
 
-        public static void SetScroll(string path, double scrollY)
+        /// <summary>The block at the top of the window kept with the offset (see <see cref="Entry.ScrollAnchor"/>), or null.</summary>
+        public static string GetScrollAnchor(string path)
+        {
+            if (string.IsNullOrEmpty(path)) return null;
+            lock (sync)
+            {
+                EnsureLoaded();
+                return entries.TryGetValue(Normalize(path), out var entry) ? entry.ScrollAnchor : null;
+            }
+        }
+
+        public static void SetScroll(string path, double scrollY, string anchor = null)
         {
             if (string.IsNullOrEmpty(path)) return;
             lock (sync)
@@ -84,7 +100,7 @@ namespace Typedown.Core.Services
                 EnsureLoaded();
                 var key = Normalize(path);
                 var cursor = entries.TryGetValue(key, out var existing) ? existing.Cursor : null;
-                entries[key] = new Entry { Cursor = cursor, ScrollY = scrollY, Time = DateTime.UtcNow };
+                entries[key] = new Entry { Cursor = cursor, ScrollY = scrollY, ScrollAnchor = anchor, Time = DateTime.UtcNow };
                 dirty = true;
             }
         }

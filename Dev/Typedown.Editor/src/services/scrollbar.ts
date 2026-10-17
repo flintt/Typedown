@@ -1,3 +1,4 @@
+import { readScrollAnchor } from './loadPreview'
 import transport from "./transport"
 
 // The load the page is showing. A report without one comes from a page that has not been given a document
@@ -15,7 +16,9 @@ const postScrollState = () => {
         maximumX: document.body.scrollWidth - window.innerWidth,
         maximumY: document.body.scrollHeight - window.innerHeight,
         scrollX: window.scrollX,
-        scrollY: window.scrollY
+        scrollY: window.scrollY,
+        // The block at the top of the window, kept with the offset: what the next load puts back (services/loadPreview).
+        anchor: readScrollAnchor()
     })
 }
 

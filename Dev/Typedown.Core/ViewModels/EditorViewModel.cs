@@ -100,6 +100,8 @@ namespace Typedown.Core.ViewModels
             EventCenter.GetObservable<EditorEventArgs>("MarkdownChange").Subscribe(x => OnMarkdownChange(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("ContentFlushed").Subscribe(x => OnContentFlushed(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("FileLoaded").Subscribe(x => OnFileLoaded(x.Args));
+            // The page shows a long document's first screen while it builds it (services/loadPreview): no "Opening…" over it.
+            EventCenter.GetObservable<EditorEventArgs>("LoadPreviewShown").Subscribe(x => { if (x.Args?["loadId"]?.Value<int?>() == LoadId) LongLoadPending = false; });
             EventCenter.GetObservable<EditorEventArgs>("DocumentEditApplied").Subscribe(x => OnDocumentEditApplied(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("NormalizationReport").Subscribe(x => OnNormalizationReport(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("PresentationFrames").Subscribe(x => { var t = x.Args?["token"]?.Value<int?>() ?? 0; if (framesWaiters.TryGetValue(t, out var w)) w.TrySetResult(true); });
@@ -213,13 +215,14 @@ namespace Typedown.Core.ViewModels
                 // across sessions, and whether or not the document has a file. At start-up there is none yet.
                 Cursor = CurrentCursor ?? (Settings.RememberCursorPosition ? CursorMemory.Get(FileViewModel.FilePath) : null),
                 ScrollTop = Settings.RememberCursorPosition ? CursorMemory.GetScroll(FileViewModel.FilePath) : null,
+                ScrollAnchor = Settings.RememberCursorPosition ? ScrollAnchorOf(FileViewModel.FilePath) : null,
                 LoadId = NoteLoad(Markdown),
             };
         }
 
         /// <summary>
-        /// Documents this long take the page a noticeable while to draw: the editor says it is opening them. A reader saw
-        /// a blank start-up with 20,000 characters (50,000 before).
+        /// Documents this long take the page a noticeable while to draw: the editor says it is opening them, where the page
+        /// shows no first screen of its own (services/loadPreview). A reader saw a blank start-up with 20,000 characters.
         /// </summary>
         public const int LongDocumentChars = 10000;
 
@@ -242,9 +245,10 @@ namespace Typedown.Core.ViewModels
             // Another document, or this one again from its start: the caret it comes with (if any) is the current one.
             CurrentCursor = cursor as CursorState;
             var scrollTop = Settings.RememberCursorPosition ? CursorMemory.GetScroll(FileViewModel.FilePath) : null;
+            var scrollAnchor = Settings.RememberCursorPosition ? ScrollAnchorOf(FileViewModel.FilePath) : null;
             loadClock = text != null && text.Length > 200000 ? System.Diagnostics.Stopwatch.StartNew() : null;
             loadText = text;
-            MarkdownEditor?.PostMessage("LoadFile", new { text, basePath = FileViewModel.ImageBasePath, cursor, scrollTop, loadId = NoteLoad(text), hold = inputHold });
+            MarkdownEditor?.PostMessage("LoadFile", new { text, basePath = FileViewModel.ImageBasePath, cursor, scrollTop, scrollAnchor, loadId = NoteLoad(text), hold = inputHold });
             Log.Debug($"load {LoadId}: {System.IO.Path.GetFileName(FileViewModel.FilePath) ?? "untitled"}, {text?.Length ?? 0} chars, from {Callers()}");
         }
 
@@ -257,6 +261,14 @@ namespace Typedown.Core.ViewModels
             var frames = new System.Diagnostics.StackTrace(2, false).GetFrames() ?? new System.Diagnostics.StackFrame[0];
             return string.Join(" < ", frames.Select(f => f.GetMethod()).Where(m => m != null && m.DeclaringType?.Namespace?.StartsWith(Root) == true)
                 .Take(4).Select(m => $"{m.DeclaringType.Name}.{m.Name}"));
+        }
+
+        // The block at the top of the window when the file was left, as the page gave it; null if none or unreadable.
+        private static JToken ScrollAnchorOf(string path)
+        {
+            var json = CursorMemory.GetScrollAnchor(path);
+            if (string.IsNullOrEmpty(json)) return null;
+            try { return JObject.Parse(json); } catch { return null; }
         }
 
         // Scroll offset per file: reading mode has no caret, so this is what brings it back to the same place.
@@ -291,7 +303,8 @@ namespace Typedown.Core.ViewModels
             var id = arg["loadId"];
             if (id == null || id.Type != JTokenType.Integer || id.Value<int>() != LoadId) return;
             LastScrollY = scrollY.Value;
-            CursorMemory.SetScroll(FileViewModel.FilePath, scrollY.Value);
+            var anchor = arg["anchor"];
+            CursorMemory.SetScroll(FileViewModel.FilePath, scrollY.Value, anchor is JObject ? anchor.ToString(Newtonsoft.Json.Formatting.None) : null);
             // Every 500px, not every event: enough to see in the log that the page moved, and how far.
             if (double.IsNaN(lastLoggedScroll) || Math.Abs(scrollY.Value - lastLoggedScroll) >= 500)
             {

@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { ScrollAnchor, scrollForAnchor } from "services/loadPreview";
 import transport from "services/transport";
 import Muya from 'components/Muya/lib'
 import TablePicker from 'components/Muya/lib/ui/tablePicker'
@@ -31,6 +32,8 @@ interface IMuyaEditor {
     scrollTopRef: React.MutableRefObject<number>
     /** True when scrollTopRef holds a remembered offset from the host for this load: restore it instead of chasing the caret. */
     scrollFromHostRef?: React.MutableRefObject<boolean>
+    /** The block that was at the top of the window when the document was left: put back there rather than by offset. */
+    scrollAnchorRef?: React.MutableRefObject<ScrollAnchor | null>
     /** True when the new markdown is an edit of the text shown (automation): only the changed blocks are replaced. */
     localChangeRef?: React.MutableRefObject<boolean>
     scrollToChangeRef?: React.MutableRefObject<boolean>
@@ -308,7 +311,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         };
         (window as any).__typedownPendingNormalization = pendingNormalization
         // For Tools/EditorBench: how many documents are kept, and a way to drop them.
-        const keptHook = { size: () => keptRef.current.size, clear: () => keptRef.current.clear() };
+        const keptHook = { size: () => keptRef.current.size, clear: () => keptRef.current.clear(), has: (text: string) => keptRef.current.has(text) };
         (window as any).__typedownKeptDocuments = keptHook
         // For Tools/EditorBench: the same classifier, to judge what a real edit did.
         ;(window as any).__typedownNormalization = { classifyNormalization, extractProtectedPayload }
@@ -1057,8 +1060,12 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         // page's own scroll events in between (the old document gone, the new one not laid out) would overwrite it.
         const scrollTop = props.scrollTopRef.current
         const keepScroll = !!props.scrollFromHostRef?.current
+        const anchor = props.scrollAnchorRef?.current ?? null
+        if (props.scrollAnchorRef) props.scrollAnchorRef.current = null
         const loaded = () => {
-            settleScroll(scrollTop, keepScroll)
+            // The block that was at the top of the window back at the height it was, where the preview showed it; the
+            // offset alone where it is not found (the document changed meanwhile).
+            settleScroll(keepScroll ? scrollForAnchor(anchor) ?? scrollTop : scrollTop, keepScroll)
             props.onContentApplied?.()
         }
         // A kept document goes back in as it was left, and everything after it happens as after a new build: the caret

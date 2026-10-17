@@ -75,6 +75,11 @@ export class KeptDocuments<T extends { text: string }> {
         return this.items.splice(index, 1)[0]
     }
 
+    /** A document is kept with this text (it may still not be one that can be shown). */
+    has(text: string): boolean {
+        return this.items.some(i => i.text === text)
+    }
+
     clear() {
         this.items = []
     }
