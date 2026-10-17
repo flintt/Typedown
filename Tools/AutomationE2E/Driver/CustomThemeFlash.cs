@@ -96,7 +96,9 @@ internal static partial class Program
             Check(backText != null && backText < 400, $"leaving the settings, the document is there at once ({backText} ms)");
 
             // A window opening with the long document, as the start-up restores its tabs (or Explorer opens it).
-            var opened = await c.Call("test.window.open", new { path = file });
+            // Another file of the same text: a file open already is shown in its window, not opened in a new one.
+            var second = Fixture("sf02-second.md", text);
+            var opened = await c.Call("test.window.open", new { path = second });
             otherWindow = (string)opened["windowId"]!;
             otherHandle = await WindowOf(otherWindow, c);
             var (open, openText) = await WatchTheme(otherHandle, 4000);

@@ -56,7 +56,7 @@
             Style="{ThemeResource EllipsisIconButtonStyle}" 
             Command="{x:Bind ViewModel.NavigateCommand}" 
             CommandParameter="Settings/General"
-            x:Load="{x:Bind Settings.AppCompactMode.Equals(x:False)}">
+            x:Load="{x:Bind Settings.AppCompactMode.Equals(x:False), Mode=OneWay}">
             <Viewbox Width="16" Height="16">
                 <muxc:AnimatedIcon x:Name="Icon_Setting">
                     <muxc:AnimatedIcon.Source>
@@ -68,14 +68,14 @@
                 </muxc:AnimatedIcon>
             </Viewbox>
         </Button>
-        <Grid x:Name="LeftDragBar" Grid.Column="0" Height="4" VerticalAlignment="Top" x:Load="{x:Bind Settings.AppCompactMode}">
+        <Grid x:Name="LeftDragBar" Grid.Column="0" Height="4" VerticalAlignment="Top" x:Load="{x:Bind Settings.AppCompactMode, Mode=OneWay}">
             <Grid.Style>
                 <Style TargetType="Grid">
                     <Setter Property="chrome:WindowChrome.Drag" Value="True"/>
                 </Style>
             </Grid.Style>
         </Grid>
-        <Grid x:Name="RightDragBar" Grid.Column="1" x:Load="{x:Bind Settings.AppCompactMode}">
+        <Grid x:Name="RightDragBar" Grid.Column="1" x:Load="{x:Bind Settings.AppCompactMode, Mode=OneWay}">
             <Grid.Style>
                 <Style TargetType="Grid">
                     <Setter Property="chrome:WindowChrome.Drag" Value="True"/>

@@ -981,6 +981,22 @@ namespace Typedown.Services.Automation
                     await Core.Services.Favorites.Shared.FlushAsync();
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject();
                 })));
+            // Where the content starts below the window's top row, in the window's coordinates: the main page's menu bar
+            // row's bottom, or the top of the page the frame shows (the settings, under their caption). E2E CM01.
+            methods.Add(new MethodDescriptor("test.layout.contentTop", null, "test.layout.contentTop/1", (c, ct) =>
+                Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    var root = app.XamlRoot?.Content as global::Microsoft.UI.Xaml.UIElement;
+                    double Bottom(global::Microsoft.UI.Xaml.FrameworkElement e) => e.TransformToVisual(root).TransformPoint(new global::Windows.Foundation.Point(0, e.ActualHeight)).Y;
+                    double Top(global::Microsoft.UI.Xaml.FrameworkElement e) => e.TransformToVisual(root).TransformPoint(new global::Windows.Foundation.Point(0, 0)).Y;
+                    var menuBar = FindInWindow<Core.Controls.MenuBar>(app);
+                    var settings = FindInWindow<Core.Pages.SettingsPage>(app);
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject
+                    {
+                        ["page"] = settings != null ? "settings" : menuBar != null ? "main" : "other",
+                        ["contentTop"] = settings != null ? Top(settings) : menuBar != null ? Bottom(menuBar) : -1,
+                    };
+                })));
             // A folder opened as the folder pane's root, as File > Open folder with that folder picked.
             methods.Add(new MethodDescriptor("test.folder.open", null, "test.folder.open/1", async (c, ct) =>
             {

@@ -31,15 +31,23 @@ namespace Typedown.Core.Controls
             UpdateBackButtonState(ViewModel.GoBackCommand.IsExecutable, false);
             // In compact mode the main page has no caption: its menu bar is the top row, 40 high. The settings' caption is
             // as high, so leaving or entering the settings moves nothing below it (32 high, the page jumped by 8 px).
-            disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.AppCompactMode))
-                .Subscribe(_ => CaptionWrapper.Height = Settings.AppCompactMode ? 40 : 32));
-            CaptionWrapper.Height = Settings.AppCompactMode ? 40 : 32;
+            // It looks like that row too: the title in the middle, no icon - not a caption the main page does not have.
+            disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.AppCompactMode)).Subscribe(_ => ApplyCompact()));
+            ApplyCompact();
         }
 
         private void UpdateBackButtonState(bool canGoBack, bool useTransitions = true)
         {
             if (IsLoaded)
                 VisualStateManager.GoToState(this, canGoBack ? "BackVisible" : "BackCollapsed", useTransitions && Settings.AnimationEnable);
+        }
+
+        private void ApplyCompact()
+        {
+            var compact = Settings.AppCompactMode;
+            CaptionWrapper.Height = compact ? 40 : 32;
+            Logo.Visibility = compact ? Visibility.Collapsed : Visibility.Visible;
+            TitleText.HorizontalAlignment = compact ? HorizontalAlignment.Center : HorizontalAlignment.Left;
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)

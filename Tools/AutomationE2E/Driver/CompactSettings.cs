@@ -19,26 +19,31 @@ internal static partial class Program
         var windowId = await WindowIdOf(c, id);
         var window = await WindowOf(windowId, c);
         var compactBefore = (bool)(await c.Call("test.settings.get", new { windowId, name = "AppCompactMode" }))["value"]!;
-        AutomationElement Root() => AutomationElement.FromHandle(window);
-        double? MenuBarBottom() => Deep.All(Root(), new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.MenuBar))
-            .Cast<AutomationElement>().Select(e => (double?)e.Current.BoundingRectangle.Bottom).FirstOrDefault();
-        double? SettingsTop() => Deep.All(Root(), new PropertyCondition(AutomationElement.AutomationIdProperty, "NavigationView"))
-            .Cast<AutomationElement>().Select(e => (double?)e.Current.BoundingRectangle.Top).FirstOrDefault();
         try
         {
             await c.Call("test.settings.set", new { windowId, name = "AppCompactMode", value = true });
             await TypeInto(c, id, "");
             await Task.Delay(1500);
             await c.Call("test.editor.eval", new { windowId, script = "window.__cm01 = 'kept'; 'ok'" });
-            var menuBottom = MenuBarBottom();
+            async Task<(string Page, double Top)> ContentTop()
+            {
+                var r = await c.Call("test.layout.contentTop", new { windowId });
+                return ((string)r["page"]!, (double)r["contentTop"]!);
+            }
+            var (mainPage, menuBottomTop) = await ContentTop();
+            double? menuBottom = mainPage == "main" ? menuBottomTop : null;
+            var editorShot = Screenshot("cm01-editor");
             await CtrlComma();
             await Task.Delay(2000);
-            var settingsTop = SettingsTop();
+            var (settingsPage, settingsTopValue) = await ContentTop();
+            double? settingsTop = settingsPage == "settings" ? settingsTopValue : null;
+            var settingsShot = Screenshot("cm01-settings");
             await CtrlComma();
             await Task.Delay(2000);
-            var menuBottomAfter = MenuBarBottom();
+            var (afterPage, afterTop) = await ContentTop();
+            double? menuBottomAfter = afterPage == "main" ? afterTop : null;
             var mark = (string?)(await c.Call("test.editor.eval", new { windowId, script = "String(window.__cm01)" }))["result"];
-            notes.Add($"menu bar bottom {menuBottom}, the settings' top {settingsTop}, menu bar bottom after {menuBottomAfter}; page mark {mark}");
+            notes.Add($"content top in the window: main page (menu bar row bottom) {menuBottom}, the settings' top {settingsTop}, menu bar bottom after {menuBottomAfter}; page mark {mark}; screens {editorShot} {settingsShot}");
             Check(menuBottom != null && settingsTop != null, "the menu bar and the settings were found");
             Check(Math.Abs((menuBottom ?? 0) - (settingsTop ?? -100)) <= 1, $"the settings start where the main page's top row ends ({settingsTop} vs {menuBottom})");
             Check(menuBottomAfter != null && Math.Abs(menuBottomAfter.Value - (menuBottom ?? 0)) <= 1, "back from the settings, the menu bar is where it was");
