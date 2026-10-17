@@ -59,15 +59,17 @@ namespace Typedown.Core.Pages
         }
 
         // In compact mode the window has no caption (RootControl): the settings start at its top, in their own colours,
-        // as the main page starts with its menu bar. Their way back is the pane's back button, and the empty part of the
-        // header row is where the window is dragged. Narrow, the back button sits beside the pane's menu button, so the
-        // header moves over by one more button.
+        // as the main page starts with its menu bar. Their way back is the pane's back button; the strip along the top, as
+        // high as that menu row, is where the window is dragged, the page's title below it. The strip leaves out the
+        // pane's buttons at its left: the back button, and narrow, the menu button beside it.
         private void ApplyCompact()
         {
             var compact = Settings?.AppCompactMode ?? false;
             NavigationView.IsBackButtonVisible = compact ? muxc.NavigationViewBackButtonVisible.Visible : muxc.NavigationViewBackButtonVisible.Collapsed;
-            WindowChrome.SetDrag(HeaderDrag, compact);
-            FrameHeader.Padding = new Thickness(compact && ActualWidth.GetBreakPointValue(false, false, true) ? 40 : 0, 0, 0, 0);
+            TopDrag.Visibility = compact ? Visibility.Visible : Visibility.Collapsed;
+            TopDrag.Margin = new Thickness(ActualWidth.GetBreakPointValue(48, 48, 88), 0, 0, 0);
+            WindowChrome.SetDrag(TopDrag, compact);
+            ContentFrameWrapper.Padding = new Thickness(0, compact ? TopDrag.Height : 0, 0, 0);
         }
 
         private void OnBackRequested(muxc.NavigationView sender, muxc.NavigationViewBackRequestedEventArgs args)

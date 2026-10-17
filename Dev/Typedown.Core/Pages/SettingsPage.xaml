@@ -14,6 +14,7 @@
     Loaded="OnLoaded"
     Unloaded="OnUnloaded"
     mc:Ignorable="d">
+    <Grid>
     <muxc:NavigationView x:Name="NavigationView" IsSettingsVisible="False" IsBackButtonVisible="Collapsed" SelectionChanged="OnNavigationViewSelectionChanged" BackRequested="OnBackRequested">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="LayoutStates">
@@ -70,13 +71,6 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid x:Name="FrameHeader" MaxWidth="1200">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <!-- In compact mode, where the window has no caption, the empty part of this row is where it is dragged
-                     (SettingsPage.ApplyCompact); the caption buttons sit over its right end. -->
-                <Grid x:Name="HeaderDrag" Grid.Column="1" Background="Transparent"/>
                 <muxc:BreadcrumbBar x:Name="BreadcrumbBar" ItemsSource="{x:Bind BreadcrumbBarItems}" ItemClicked="OnBreadcrumbBarItemClicked">
                     <muxc:BreadcrumbBar.Resources>
                         <SolidColorBrush x:Key="BreadcrumbBarNormalForegroundBrush" Color="{ThemeResource TextFillColorSecondary}"/>
@@ -99,4 +93,9 @@
             </ScrollViewer>
         </Grid>
     </muxc:NavigationView>
+        <!-- In compact mode, where the window has no caption: the strip along the top, as high as the main page's menu
+             row, is where the window is dragged - all of it but the pane's buttons at its left (SettingsPage.ApplyCompact).
+             The caption buttons sit over its right end. -->
+        <Grid x:Name="TopDrag" Height="40" VerticalAlignment="Top" Background="Transparent" Visibility="Collapsed"/>
+    </Grid>
 </Page>
