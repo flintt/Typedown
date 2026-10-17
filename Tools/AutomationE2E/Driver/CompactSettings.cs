@@ -7,7 +7,7 @@ using System.Windows.Automation;
 /// <summary>
 /// CM01: in compact mode the settings have no title bar of their own, as the main page has none: they start at the
 /// window's top, in a custom theme's colours there too, the window is dragged by the empty part of their header and
-/// their way back is the back button in their pane - which goes back to the editor page as it was (a mark left in it
+/// their way back is the back button in their pane, the page's title below a strip along the top that drags the window - which goes back to the editor page as it was (a mark left in it
 /// is still there: leaving the settings once loaded the page again, the whole document drawn once more). A reader saw
 /// a caption in the window's white over a Sepia page, unlike the editor view.
 /// </summary>
@@ -70,26 +70,37 @@ internal static partial class Program
             Check(settingsTop != null && settingsTop <= 1, $"the settings start at the window's top, no title bar above them ({settingsTop})");
             Check(sepiaRow >= 60, $"under Sepia the settings' top row is the page's colour, not the window's ({sepiaRow:0}%)");
 
-            // Dragged by the empty part of the header, right of the page's title and left of the caption buttons.
-            GetWindowRect(window, out var before);
-            int px = before.Left + (before.Right - before.Left) * 6 / 10, py = before.Top + 20;
+            // The page's title below the top strip - not against the window's top - and level with the pane's items, the
+            // back button above them.
+            var back = await WaitFor(window, "NavigationViewBackButton", 5000);
+            var title = await WaitFor(window, "BreadcrumbBar", 5000);
+            var backBottom = back.Current.BoundingRectangle.Bottom;
+            var titleTop = title.Current.BoundingRectangle.Top;
+            notes.Add($"back button bottom {backBottom}, the page's title top {titleTop}");
+            Check(titleTop >= backBottom - 2, $"the page's title is below the top strip ({titleTop} vs the back button's bottom {backBottom})");
+
+            // The whole top strip drags the window: over the pane, right of the back button, and over the page.
             int screenW = GetSystemMetrics(0), screenH = GetSystemMetrics(1);
             INPUT MoveTo(int x, int y) => new() { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dx = x * 65535 / (screenW - 1), dy = y * 65535 / (screenH - 1), dwFlags = 0x0001 | 0x8000 } } };
-            await Activate(window);
-            Send(MoveTo(px, py));
-            await Task.Delay(150);
-            Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0002 } } });
-            for (var step = 1; step <= 8; step++) { await Task.Delay(30); Send(MoveTo(px + step * 10, py + step * 5)); }
-            await Task.Delay(150);
-            Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0004 } } });
-            await Task.Delay(500);
-            GetWindowRect(window, out var after);
-            notes.Add($"dragged from ({px}, {py}) by (80, 40): the window moved by ({after.Left - before.Left}, {after.Top - before.Top})");
-            Check(Math.Abs(after.Left - before.Left - 80) <= 8 && Math.Abs(after.Top - before.Top - 40) <= 8, $"the settings' header drags the window ({after.Left - before.Left}, {after.Top - before.Top})");
+            foreach (var (name, share) in new[] { ("over the pane", 0.12), ("over the page", 0.6) })
+            {
+                GetWindowRect(window, out var before);
+                int px = before.Left + (int)((before.Right - before.Left) * share), py = before.Top + 20;
+                await Activate(window);
+                Send(MoveTo(px, py));
+                await Task.Delay(150);
+                Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0002 } } });
+                for (var step = 1; step <= 8; step++) { await Task.Delay(30); Send(MoveTo(px + step * 10, py + step * 5)); }
+                await Task.Delay(150);
+                Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0004 } } });
+                await Task.Delay(500);
+                GetWindowRect(window, out var after);
+                notes.Add($"dragged {name} from ({px}, {py}) by (80, 40): the window moved by ({after.Left - before.Left}, {after.Top - before.Top})");
+                Check(Math.Abs(after.Left - before.Left - 80) <= 8 && Math.Abs(after.Top - before.Top - 40) <= 8, $"the top strip {name} drags the window ({after.Left - before.Left}, {after.Top - before.Top})");
+            }
 
             // Back by the pane's back button.
-            var back = await WaitFor(window, "NavigationViewBackButton", 5000);
-            await Click(window, back);
+            await Click(window, await WaitFor(window, "NavigationViewBackButton", 5000));
             await Task.Delay(2000);
             var (afterPage, afterTop) = await ContentTop();
             double? menuBottomAfter = afterPage == "main" ? afterTop : null;
