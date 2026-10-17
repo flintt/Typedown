@@ -140,7 +140,8 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | Q02 | a window closed at once after it opened (its web view still being created): the process lives on |
 | D01 | the window's UI thread runs every callback posted to it, from many threads at once |
 | K02 | Ctrl+, twice opens and closes the settings: the caret and the keyboard are where they were |
-| CM01 | in compact mode the settings start where the main page's top row ends, and leaving them keeps the editor page (nothing drawn again) |
+| CM01 | in compact mode the settings have no title bar: they start at the window's top, their top strip drags the window, their back button goes back to the editor page as it was |
+| SH01 | Ctrl+, held down opens the settings once - no going in and out until the app hangs and falls over - and types no comma |
 | K04 | a window just opened takes the keys at once: a letter typed without a click reaches the document |
 | K05 | a new tab (the + button, Ctrl+N) and a tab clicked in the strip take the keys at once, without a click in the text |
 | TL01 | keys typed at once after Ctrl+N, a tab clicked, Ctrl+Tab, the + button, Ctrl+Shift+H and a long document's tab clicked go into the tab shown, in order, Enter and Chinese text too; the document left is unchanged |
