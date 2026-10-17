@@ -130,6 +130,8 @@ namespace Typedown.Core.Controls
                 if (Frame.SourcePageType != typeof(SettingsPage)) return;
                 if (Utilities.PInvoke.GetForegroundWindow() != ViewModel.MainWindow) return;
                 e.Handled = true;
+                // Held, the key comes again and again: once per press, or the settings went in and out until it hung.
+                if (e.IsRepeat) return;
                 _ = DispatcherQueue.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => Navigate("Main"));
             });
             disposables.Add(settingsShortcut);

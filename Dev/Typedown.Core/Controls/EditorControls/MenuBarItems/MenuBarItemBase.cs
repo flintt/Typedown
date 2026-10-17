@@ -78,9 +78,10 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             }));
         }
 
-        protected void RegisterWindowShortcut(ShortcutKey key, MenuFlyoutItem item)
+        /// <param name="once">Once per press: the key held (repeated by the system) does nothing more, and is not typed.</param>
+        protected void RegisterWindowShortcut(ShortcutKey key, MenuFlyoutItem item, bool once = false)
         {
-            RegisterMenuItemShortcut(OnWindowShortcutEvent, key, item);
+            RegisterMenuItemShortcut(OnWindowShortcutEvent, key, item, once);
         }
 
         /// <summary>
@@ -92,7 +93,7 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             var acc = this.GetService<IKeyboardAccelerator>();
             disposables.Add(acc.Register(key, (s, e) =>
             {
-                if (PInvoke.GetForegroundWindow() != ViewModel.MainWindow) return;
+                if (ViewModel == null || PInvoke.GetForegroundWindow() != ViewModel.MainWindow) return;
                 if (VimWants(e)) return;
                 e.Handled = true;
                 _ = DispatcherQueue.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => action());
@@ -104,12 +105,17 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             RegisterMenuItemShortcut(OnEditorShortcutEvent, key, item);
         }
 
-        private void RegisterMenuItemShortcut(Func<MenuFlyoutItem, bool> handler, ShortcutKey key, MenuFlyoutItem item)
+        private void RegisterMenuItemShortcut(Func<MenuFlyoutItem, bool> handler, ShortcutKey key, MenuFlyoutItem item, bool once = false)
         {
             var acc = this.GetService<IKeyboardAccelerator>();
             item.KeyboardAcceleratorTextOverride = acc.GetShortcutKeyText(key);
             disposables.Add(acc.Register(key, (s, e) =>
             {
+                if (once && e.IsRepeat)
+                {
+                    if (ViewModel != null && PInvoke.GetForegroundWindow() == ViewModel.MainWindow) e.Handled = true;
+                    return;
+                }
                 if (VimWants(e)) return;
                 if (handler(item))
                     e.Handled = true;
@@ -140,6 +146,9 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
 
         private bool OnWindowShortcutEvent(MenuFlyoutItem item)
         {
+            // A menu bar on its way out (the main page made again while a key is held) has no window any more.
+            if (ViewModel == null || !IsLoaded)
+                return false;
             var focused = PInvoke.GetForegroundWindow();
             if (focused != ViewModel.MainWindow)
                 return false;

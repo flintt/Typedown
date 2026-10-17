@@ -44,7 +44,7 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             RegisterWindowShortcut(Settings.ShortcutSaveAs, SaveAsItem);
             RegisterWindowShortcut(Settings.ShortcutExportSettings, ExportSettingsItem);
             RegisterWindowShortcut(Settings.ShortcutPrint, PrintItem);
-            RegisterWindowShortcut(Settings.ShortcutSettings, SettingItem);
+            RegisterWindowShortcut(Settings.ShortcutSettings, SettingItem, once: true);
             RegisterWindowShortcut(Settings.ShortcutClose, CloseItem);
             AddEditionItems();
         }

@@ -50,6 +50,8 @@ namespace Typedown.Services
             {
                 PInvoke.UnhookWindowsHookEx(hHook);
                 hHook = IntPtr.Zero;
+                // Keys let go while unhooked are never seen going up: none is taken for held when hooked again.
+                keysDown.Clear();
             }
         }
 
@@ -61,17 +63,28 @@ namespace Typedown.Services
                 if (msg == PInvoke.WindowMessage.WM_KEYDOWN || msg == PInvoke.WindowMessage.WM_SYSKEYDOWN)
                 {
                     var args = (PInvoke.KBDLLHOOKSTRUCT)Marshal.PtrToStructure(lParam, typeof(PInvoke.KBDLLHOOKSTRUCT));
-                    if (OnKeyBoardEvent(args)) return 1;
+                    // A key already down is the system repeating it while it is held: said so, for the shortcuts that
+                    // must run once per press (the settings' toggle, which held went in and out until the app fell over).
+                    var repeat = !keysDown.Add(args.vkCode);
+                    if (OnKeyBoardEvent(args, repeat)) return 1;
+                }
+                else if (msg == PInvoke.WindowMessage.WM_KEYUP || msg == PInvoke.WindowMessage.WM_SYSKEYUP)
+                {
+                    var args = (PInvoke.KBDLLHOOKSTRUCT)Marshal.PtrToStructure(lParam, typeof(PInvoke.KBDLLHOOKSTRUCT));
+                    keysDown.Remove(args.vkCode);
                 }
             }
             return PInvoke.CallNextHookEx(hHook, code, wParam, lParam);
         }
 
-        private bool OnKeyBoardEvent(PInvoke.KBDLLHOOKSTRUCT args)
+        // The keys pressed and not let go yet, by the hook's own count (key down, key up).
+        private readonly System.Collections.Generic.HashSet<uint> keysDown = new();
+
+        private bool OnKeyBoardEvent(PInvoke.KBDLLHOOKSTRUCT args, bool repeat)
         {
             var key = (VirtualKey)args.vkCode;
             var modifiers = GetVirtualKeyModifiers();
-            var eventArgs = new KeyEventArgs(key, modifiers);
+            var eventArgs = new KeyEventArgs(key, modifiers) { IsRepeat = repeat };
             foreach (var action in globalRegistered)
                 action(this, eventArgs);
             if (registeredDictionary.TryGetValue(new(modifiers, key), out var actions))
