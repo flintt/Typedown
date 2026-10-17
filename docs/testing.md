@@ -307,6 +307,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | `test.favorites.clear` | - | Every favourite taken out (a case starting from none). | TestHostHooks.cs |
 | `test.home.state` | `windowId` | The window's home page: whether it is asked for and shown (the view model and the page on screen), the active tab's document and whether it is blank, the page's lists (favourites, recent files and folders: path, dimmed, the last change shown) and the ids of an edition's sections shown on it (a collapsed one is not). | TestHostHooks.cs |
 | `test.settings.flush` | `windowId` | The settings written to Settings.json now (a case that restarts the host after test.settings.set). | TestHostHooks.cs |
+| `test.layout.contentTop` | `windowId` | Where the content starts below the window's top row, in the window's coordinates: the main page's menu bar row's bottom, or the top of the page the frame shows (the settings, under their caption). E2E CM01. | TestHostHooks.cs |
 | `test.folder.open` | `path`, `windowId` | A folder opened as the folder pane's root, as File > Open folder with that folder picked. | TestHostHooks.cs |
 <!-- END generated: test-methods -->
 
