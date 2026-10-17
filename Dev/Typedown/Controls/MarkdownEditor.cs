@@ -215,7 +215,9 @@ namespace Typedown.Controls
         [SuppressPropertyChangedWarnings]
         private void OnThemeChanged()
         {
-            UpdateBackdrop();
+            // Windows' colour changes come on a thread of their own: the control is touched on the UI thread only. Set from
+            // there, it threw, and the throw ended the subscription - the page never heard of a theme change again (TH04-06).
+            DispatcherQueue.TryEnqueue(UpdateBackdrop);
             _ = DispatcherQueue.RunIdleAsync(() => PostMessage("ThemeChanged", ServiceProvider.GetCurrentTheme()));
         }
 
