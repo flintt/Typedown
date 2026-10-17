@@ -56,11 +56,11 @@ sequenceDiagram
     participant E as Editor page
     H->>E: LoadFile(text, basePath, cursor, scrollTop, loadId)
     E->>E: 应用正文并等待首个内容报告
-    E->>H: FileLoaded(text, loadId)
+    E->>H: FileLoaded(same | text, loadId)
     E->>H: MarkdownChange / StateChange / CursorChange (..., loadId)
 ```
 
-每次宿主加载文档都会递增 `loadId`。页面在所有文档相关报告中回传该值；宿主只接受当前值。快速切换时页面把同一帧内积压的 `LoadFile` 合并为最后一个。`FileLoaded.text` 是页面实际载入的 Markdown，用于建立已保存基线；不能用固定延迟猜测页面是否完成，也不能在握手过程中格式化源码。
+每次宿主加载文档都会递增 `loadId`。页面在所有文档相关报告中回传该值；宿主只接受当前值。快速切换时页面把同一帧内积压的 `LoadFile` 合并为最后一个。`FileLoaded` 报告页面实际载入的 Markdown，用于建立已保存基线：与该 `loadId` 收到的正文逐字相同时只发 `same: true`、不带正文（宿主用自己发出的那份；长文档回传一次要 20-40 ms），不同时才带 `text`，宿主据此记录改写并重载一次；不能用固定延迟猜测页面是否完成，也不能在握手过程中格式化源码。
 
 保存、导出或关闭前，宿主发送：
 

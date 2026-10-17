@@ -30,7 +30,7 @@ const server = http.createServer((req, res) => {
       window.__deliver=(n,a)=>ls.forEach(l=>l({data:JSON.stringify({name:n,args:a})}));
       const apply=(m)=>{if(typeof m.args!=='string')return null;const o=window.__prev[m.name]||'';const v=m.diff?o.slice(0,m.start)+m.args+o.slice(m.end):m.args;window.__prev[m.name]=v;try{return JSON.parse(v)}catch(e){return v}};
       const resp={GetSettings:${JSON.stringify(settings)},GetCurrentTheme:{theme:'Light',accentColor:{r:0,g:120,b:212,a:1},background:{R:249,G:249,B:249,A:1}},ContentLoaded:'',GetStringResources:{}};
-      window.chrome={webview:{addEventListener:(t,l)=>ls.push(l),dispatchEvent:(e)=>ls.forEach(l=>l(e)),postMessage:(raw)=>{const m=JSON.parse(raw);window.__marks[m.name]=1;if(m.name==='FileLoaded'){const a=apply(m);if(a&&a.text!==undefined)window.__loaded=a.text;}
+      window.chrome={webview:{addEventListener:(t,l)=>ls.push(l),dispatchEvent:(e)=>ls.forEach(l=>l(e)),postMessage:(raw)=>{const m=JSON.parse(raw);window.__marks[m.name]=1;if(m.name==='FileLoaded'){const a=apply(m);if(a)window.__loaded=a.same===true?${JSON.stringify(settings.markdown)}:a.text;}
         if(m.type==='invoke'){setTimeout(()=>window.__deliver(m.id,{code:0,data:m.name in resp?resp[m.name]:null}),0);}}}}})()`);
     await page.goto(`http://127.0.0.1:${port}/index.html`, { waitUntil: 'load' });
     await page.waitForFunction(() => window.__marks.FileLoaded, { timeout: 60000 });
