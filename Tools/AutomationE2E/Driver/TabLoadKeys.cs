@@ -17,7 +17,10 @@ internal static partial class Program
     {
         using var c = await Session("e2e TL01");
         var a = await Open(c, Fixture("tl01-a.md", "# TL01 A\n\nalpha\n"));
-        var b = await Open(c, Fixture("tl01-b.md", "# TL01 B\n\nbeta\n"));
+        // B is long (some 300,000 characters): shown again it takes the page a while, and keys typed meanwhile are what the
+        // hold keeps. A short document is in the page before a quick typist's first key, hold or not.
+        var bText = "# TL01 B\n\nbeta\n\n" + string.Concat(Enumerable.Range(0, 3000).Select(i => $"## Part {i}\n\nParagraph {i} of the long document, with a few words to make it long enough to take a while.\n\n"));
+        var b = await Open(c, Fixture("tl01-b.md", bText));
         var windowId = await WindowIdOf(c, a);
         var window = await WindowOf(windowId, c);
         var made = new List<string>();
@@ -34,37 +37,45 @@ internal static partial class Program
                 foreach (var d in await DocumentsOf(c, windowId)) before[d] = (string)(await Get(c, d))["text"]!;
                 var shownBefore = await ActiveOf(c, windowId);
                 await command();
-                // As a quick typist: the first key 150 ms after the command, then one every 40 ms. Keys sent with no gap
-                // reach the page before the host has seen the shortcut (a gap the hold leaves open, docs/todo.md), and
-                // within some 50 ms of a sent Ctrl+N the letters and Enter did not reach the page at all.
+                // As a quick typist: the first key 150 ms after the command, then one every 60 ms. The letters go in as
+                // characters, past any input method: with a Chinese one on (the W10 PC has one), Enter commits letters
+                // being composed instead of making a paragraph, and the next letters wait in a composition - lost to the
+                // case, not to the app. Keys sent with no gap reach the page before the host has seen the shortcut (a gap
+                // the hold leaves open, docs/todo.md).
                 await Task.Delay(150);
-                foreach (var ch in letters) { Keys(ch.ToString()); await Task.Delay(40); }
-                if (enterAndChinese) { Chord("Enter"); await Task.Delay(40); TypeText("中"); await Task.Delay(40); TypeText("文"); }
+                foreach (var ch in letters) { TypeText(ch.ToString()); await Task.Delay(60); }
+                if (enterAndChinese) { Chord("Enter"); await Task.Delay(60); TypeText("中"); await Task.Delay(60); TypeText("文"); }
                 // Every step here shows another tab; which one is read once the host has made the change.
                 Check(await Eventually(async () => await ActiveOf(c, windowId) != shownBefore, 3000), $"{what} showed another tab");
                 var target = await ActiveOf(c, windowId);
                 if (!before.ContainsKey(target)) made.Add(target);
                 var last = enterAndChinese ? "中文" : letters;
-                await WaitForPage(c, target, t => t.Contains(last), $"what was typed after {what}");
+                try { await WaitForPage(c, target, t => t.Contains(last), $"what was typed after {what}"); }
+                catch (CaseFailed)
+                {
+                    try { notes.Add($"  hold, {what}: " + (await c.Call("test.editor.eval", new { windowId, script = "JSON.stringify(window.__inputHoldTrace || null)" }))["result"]); } catch { }
+                    throw;
+                }
                 string text = "";
                 for (var i = 0; i < 40 && !(text = (string)(await Get(c, target))["text"]!).Contains(last); i++) await Task.Delay(50);
-                notes.Add($"after {what}: {JsonConvert.SerializeObject(text)}");
+                string Short(string t) => JsonConvert.SerializeObject(t.Length > 60 ? t[..40] + "…" + t[^15..] : t) + (t.Length > 60 ? $" ({t.Length} chars)" : "");
+                notes.Add($"after {what}: {Short(text)}");
                 // What happened, for a failure: every document's text and the page's own account of the hold.
                 foreach (var d in before.Keys.Append(target).Distinct())
-                    notes.Add($"  {(d == target ? "shown" : "other")}: {JsonConvert.SerializeObject((string)(await Get(c, d))["text"]!)}");
+                    notes.Add($"  {(d == target ? "shown" : "other")}: {Short((string)(await Get(c, d))["text"]!)}");
                 try { notes.Add("  hold: " + (await c.Call("test.editor.eval", new { windowId, script = "JSON.stringify(window.__inputHoldTrace || null)" }))["result"]); }
                 catch (Exception e) { notes.Add("  hold: " + e.Message.Split('\n')[0]); }
-                Check(text.Contains(letters), $"the letters typed after {what} are all in the tab shown, in order ({JsonConvert.SerializeObject(text)})");
+                Check(text.Contains(letters), $"the letters typed after {what} are all in the tab shown, in order ({Short(text)})");
                 if (enterAndChinese)
                     Check(System.Text.RegularExpressions.Regex.IsMatch(text, letters + "\n+中文"),
-                        $"after {what} the Enter is a new paragraph and the Chinese text follows it ({JsonConvert.SerializeObject(text)})");
+                        $"after {what} the Enter is a new paragraph and the Chinese text follows it ({Short(text)})");
                 if (before.TryGetValue(target, out var was))
-                    Check(text.Length == was.Length + letters.Length, $"after {what} only the letters were added to the tab shown ({JsonConvert.SerializeObject(was)} -> {JsonConvert.SerializeObject(text)})");
+                    Check(text.Length == was.Length + letters.Length, $"after {what} only the letters were added to the tab shown ({Short(was)} -> {Short(text)})");
                 foreach (var (d, t) in before)
                     if (d != target)
                     {
                         var now = (string)(await Get(c, d))["text"]!;
-                        Check(now == t, $"after {what} the document left is unchanged ({JsonConvert.SerializeObject(t)} -> {JsonConvert.SerializeObject(now)})");
+                        Check(now == t, $"after {what} the document left is unchanged ({Short(t)} -> {Short(now)})");
                     }
             }
 
@@ -87,7 +98,7 @@ internal static partial class Program
             {
                 try
                 {
-                    var original = doc == a ? "# TL01 A\n\nalpha\n" : "# TL01 B\n\nbeta\n";
+                    var original = doc == a ? "# TL01 A\n\nalpha\n" : bText;
                     for (var i = 0; i < 5 && (string)(await Get(c, doc))["text"]! != original; i++)
                         await c.Call("document.undo", new { documentId = doc, baseRevision = await Revision(c, doc), reveal = "document" });
                     await c.Call("document.close", new { documentId = doc });

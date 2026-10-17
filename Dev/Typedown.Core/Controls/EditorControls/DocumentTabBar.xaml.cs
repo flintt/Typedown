@@ -198,7 +198,9 @@ namespace Typedown.Core.Controls
                 // Not when the selection moved because a tab was closed: handed over while the next document was
                 // being loaded, the keys disturbed its loading, and the outline stayed on the closed document's
                 // headings (E2E TC02). The keyboard is where it was after a close anyway.
-                if (!closing) _ = DispatcherQueue.RunIdleAsync(_ => ViewModel?.MarkdownEditor?.FocusEditor());
+                // Right after the click is done with, not once the window is idle: with a long document coming in, idle
+                // was 600 ms away and the keys typed meanwhile went to the tab and were lost (E2E TL01).
+                if (!closing) DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, () => ViewModel?.MarkdownEditor?.FocusEditor());
             }
         }
 
