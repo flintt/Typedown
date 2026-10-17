@@ -73,6 +73,17 @@ namespace Typedown.Controls
             // there (E2E TL01).
             LosingFocus += (_, e) => Core.Utilities.Log.Debug($"focus: from the editor ({e.OldFocusedElement?.GetType().Name}) to {e.NewFocusedElement?.GetType().Name} '{(e.NewFocusedElement as FrameworkElement)?.Name}', {e.FocusState}");
             GettingFocus += (_, e) => Core.Utilities.Log.Debug($"focus: to the editor ({e.NewFocusedElement?.GetType().Name}) from {e.OldFocusedElement?.GetType().Name} '{(e.OldFocusedElement as FrameworkElement)?.Name}', {e.FocusState}");
+            // Characters that reach this control instead of the page: the keyboard was given to the web view, but it takes
+            // it only through the window's thread, busy for a while after a tab with a long document was clicked; typed
+            // meanwhile, they came here and were lost (E2E TL01). Passed on in order to the page, which keeps them for
+            // the document shown. Once the page has the keyboard, typing goes to it directly and never comes here.
+            CharacterReceived += (_, e) =>
+            {
+                var ch = e.Character;
+                if (!IsEditorLoaded || (ch != '\r' && char.IsControl(ch))) return;
+                e.Handled = true;
+                PostMessage("TypedElsewhere", new { text = ch == '\r' ? "\n" : ch.ToString() });
+            };
             disposables.Add(RemoteInvoke.Handle("ContentLoaded", OnContentLoaded));
             disposables.Add(RemoteInvoke.Handle<string>("UnhandledException", OnUnhandledException));
             disposables.Add(RemoteInvoke.Handle("GetCurrentTheme", () => ServiceProvider.GetCurrentTheme()));
