@@ -63,6 +63,14 @@ internal static partial class Program
         return (frames, textAt);
     }
 
+    // Frames after the theme's colour first covered most of the window in which it no longer does: the window going black
+    // or white (the web view shown before its page painted) between the theme's colour and the document.
+    private static int LeftTheTheme(List<(long At, double Light, double AppDark, double Theme, double Text)> frames)
+    {
+        var first = frames.FindIndex(f => f.Theme >= 50);
+        return first < 0 ? 0 : frames.Skip(first).Count(f => f.Theme < 40);
+    }
+
     private static string Describe(List<(long At, double Light, double AppDark, double Theme, double Text)> frames) =>
         string.Join(" ", frames.Where((_, i) => i % Math.Max(1, frames.Count / 8) == 0)
             .Select(f => $"{f.At}:L{f.Light:0}/D{f.AppDark:0}/T{f.Theme:0}/x{f.Text:0.0}"));
@@ -90,9 +98,9 @@ internal static partial class Program
             await Task.Delay(2000);
             await CtrlComma();
             var (back, backText) = await WatchTheme(window, 2500);
-            var flashBack = back.Count(f => f.Light > 25 || f.AppDark > 25);
+            var flashBack = back.Count(f => f.Light > 25 || f.AppDark > 25) + LeftTheTheme(back);
             notes.Add($"leaving the settings: {back.Count} frames, text at {backText} ms; {Describe(back)}");
-            Check(flashBack == 0, $"leaving the settings shows no light or app-dark frame ({flashBack} of {back.Count})");
+            Check(flashBack == 0, $"leaving the settings shows no light, app-dark or other frame once in the theme's colour ({flashBack} of {back.Count})");
             Check(backText != null && backText < 400, $"leaving the settings, the document is there at once ({backText} ms)");
 
             // A window opening with the long document, as the start-up restores its tabs (or Explorer opens it).
@@ -102,9 +110,9 @@ internal static partial class Program
             otherWindow = (string)opened["windowId"]!;
             otherHandle = await WindowOf(otherWindow, c);
             var (open, openText) = await WatchTheme(otherHandle, 4000);
-            var flashOpen = open.Count(f => f.Light > 25 || f.AppDark > 25);
+            var flashOpen = open.Count(f => f.Light > 25 || f.AppDark > 25) + LeftTheTheme(open);
             notes.Add($"a window opening with it: {open.Count} frames, text at {openText} ms; {Describe(open)}");
-            Check(flashOpen == 0, $"the window opening with the long document shows no light or app-dark frame ({flashOpen} of {open.Count})");
+            Check(flashOpen == 0, $"the window opening with the long document shows no light, app-dark or other frame once in the theme's colour ({flashOpen} of {open.Count})");
         }
         finally
         {
