@@ -160,6 +160,18 @@ namespace Typedown.Controls
             WebViewController?.EnsureFocus();
         }
 
+        public void FocusEditorInPlace()
+        {
+            if (IsEditorLoaded && XamlRoot != null && WebViewController?.WebView is { } webView
+                && Microsoft.UI.Xaml.Input.FocusManager.GetFocusedElement(XamlRoot) == webView)
+            {
+                Core.Utilities.Log.Debug("focus: the web view has the keyboard; the page gives it to its editor");
+                PostMessage("TakeKeyboard", null);
+                return;
+            }
+            FocusEditor();
+        }
+
         protected override void OnPointerPressed(PointerRoutedEventArgs e)
         {
             base.OnPointerPressed(e);

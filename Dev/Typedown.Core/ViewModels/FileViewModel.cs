@@ -108,7 +108,7 @@ namespace Typedown.Core.ViewModels
             {
                 await NewFileFun();
                 if (SettingsViewModel.ShowHomeOnNewTab) Home?.Show(); else Home?.Hide();
-                MarkdownEditor?.FocusEditor();
+                MarkdownEditor?.FocusEditorInPlace();
             });
             OpenFileCommand.OnExecute.Subscribe(async x => await OpenFile(x));
             OpenFolderCommand.OnExecute.Subscribe(async x => await OpenFolder(x));
