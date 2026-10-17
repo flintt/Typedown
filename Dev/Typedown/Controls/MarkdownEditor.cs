@@ -59,6 +59,12 @@ namespace Typedown.Controls
 
         private readonly UISettings uiSettings = new();
 
+        // Over the page while a long document is being drawn (EditorViewModel.LongLoadPending): the theme's colour, a ring
+        // and "Opening…", instead of an empty page for a second or more.
+        private readonly Microsoft.UI.Xaml.Controls.Grid opening = new() { Visibility = Visibility.Collapsed, IsHitTestVisible = false };
+        private readonly Microsoft.UI.Xaml.Controls.TextBlock openingText = new() { HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 12, 0, 0) };
+        private Microsoft.UI.Dispatching.DispatcherQueueTimer openingDelay;
+
         private readonly CompositeDisposable disposables = new();
 
         public MarkdownEditor(IServiceProvider serviceProvider)
@@ -67,6 +73,13 @@ namespace Typedown.Controls
             Loaded += OnLoaded;
             canvas.Children.Add(dummyRectangle);
             root.Children.Add(canvas);
+            var openingContent = new StackPanel { HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
+            openingContent.Children.Add(new Microsoft.UI.Xaml.Controls.ProgressRing { IsActive = true, Width = 28, Height = 28 });
+            openingContent.Children.Add(openingText);
+            opening.Children.Add(openingContent);
+            root.Children.Add(opening);
+            // Above the web view, which is added to the same grid later.
+            Canvas.SetZIndex(opening, 10);
             Content = root;
             IsTabStop = true;
             // Where the keyboard goes when it leaves or comes to the editor, in the log: a key lost in between shows up
@@ -84,6 +97,7 @@ namespace Typedown.Controls
                 e.Handled = true;
                 PostMessage("TypedElsewhere", new { text = ch == '\r' ? "\n" : ch.ToString() });
             };
+            disposables.Add(AppViewModel.EditorViewModel.WhenPropertyChanged(nameof(EditorViewModel.LongLoadPending)).Subscribe(_ => UpdateOpening()));
             disposables.Add(RemoteInvoke.Handle("ContentLoaded", OnContentLoaded));
             disposables.Add(RemoteInvoke.Handle<string>("UnhandledException", OnUnhandledException));
             disposables.Add(RemoteInvoke.Handle("GetCurrentTheme", () => ServiceProvider.GetCurrentTheme()));
@@ -135,16 +149,85 @@ namespace Typedown.Controls
             }
         }
 
+        // The control's own colour is the page's (the theme's, a custom theme's own): while the page is hidden - loading,
+        // or its document still being drawn - that is what shows, not the window's light grey behind it.
+        private void UpdateBackdrop()
+        {
+            try
+            {
+                var theme = Newtonsoft.Json.Linq.JObject.FromObject(ServiceProvider.GetCurrentTheme());
+                var bg = theme["background"];
+                root.Background = new Microsoft.UI.Xaml.Media.SolidColorBrush(Windows.UI.Color.FromArgb(
+                    (byte)(bg?["A"] ?? bg?["a"] ?? 255), (byte)(bg?["R"] ?? bg?["r"] ?? 0), (byte)(bg?["G"] ?? bg?["g"] ?? 0), (byte)(bg?["B"] ?? bg?["b"] ?? 0)));
+            }
+            catch (Exception ex)
+            {
+                Core.Utilities.Log.Debug($"editor: backdrop not set: {ex.Message}");
+            }
+        }
+
+        // Shown once a long load has taken a moment (a short one never flashes it), gone when the page confirms it, and in
+        // any case after ten seconds.
+        private void UpdateOpening()
+        {
+            openingDelay?.Stop();
+            if (!AppViewModel.EditorViewModel.LongLoadPending)
+            {
+                opening.Visibility = Visibility.Collapsed;
+                return;
+            }
+            openingDelay ??= DispatcherQueue.CreateTimer();
+            openingDelay.IsRepeating = false;
+            openingDelay.Interval = TimeSpan.FromMilliseconds(150);
+            openingDelay.Tick += OnOpeningDelay;
+            openingDelay.Start();
+        }
+
+        private DateTime openingShownAt;
+
+        private void OnOpeningDelay(Microsoft.UI.Dispatching.DispatcherQueueTimer timer, object args)
+        {
+            timer.Tick -= OnOpeningDelay;
+            if (!AppViewModel.EditorViewModel.LongLoadPending) return;
+            if (opening.Visibility == Visibility.Visible && DateTime.UtcNow - openingShownAt > TimeSpan.FromSeconds(10))
+            {
+                opening.Visibility = Visibility.Collapsed;
+                return;
+            }
+            if (opening.Visibility != Visibility.Visible)
+            {
+                openingShownAt = DateTime.UtcNow;
+                openingText.Text = Locale.GetString("Editor.Opening");
+                var theme = ThemeFiles.Find(AppViewModel.SettingsViewModel.CustomTheme);
+                var foreground = theme == null ? null : (ThemeFiles.Brush(theme.Foreground) ?? ThemeFiles.Readable(theme.Background));
+                if (foreground != null) openingText.Foreground = foreground; else openingText.ClearValue(Microsoft.UI.Xaml.Controls.TextBlock.ForegroundProperty);
+                opening.Background = root.Background;
+                opening.Visibility = Visibility.Visible;
+            }
+            // Looked at again until the load is confirmed, so the ten seconds can end it.
+            timer.Interval = TimeSpan.FromMilliseconds(500);
+            timer.Tick += OnOpeningDelay;
+            timer.Start();
+        }
+
+        // The page hidden or shown: only the web view, over the control's own colour (UpdateBackdrop). Hiding the whole
+        // control showed what lay behind it.
+        private void ShowPage(bool shown)
+        {
+            if (WebViewController?.WebView is { } webView) webView.Opacity = shown ? 1 : 0;
+        }
+
         [SuppressPropertyChangedWarnings]
         private void OnThemeChanged()
         {
+            UpdateBackdrop();
             _ = DispatcherQueue.RunIdleAsync(() => PostMessage("ThemeChanged", ServiceProvider.GetCurrentTheme()));
         }
 
         private void OnContentLoaded()
         {
             Core.Utilities.StartupTiming.Reached("editor page loaded");
-            Opacity = 1;
+            ShowPage(true);
             IsEditorLoaded = true;
             if (AppViewModel.EditorViewModel.FocusWhenLoaded)
             {
@@ -183,9 +266,25 @@ namespace Typedown.Controls
         // The web view made (again, when the one there lost its browser) and the editor page loaded in it.
         private async Task StartAsync()
         {
+            // Back in a window with its page as it was (leaving the settings rebuilds the main page, which takes the editor
+            // out and puts it back): nothing to load again. Loading the page again drew the whole document once more - on a
+            // long one a second or more over a light page - and lost the documents it kept for a switch back. Settings
+            // changed meanwhile reached the page as they were made (SettingsChanged, LanguageChanged, ThemeChanged).
+            if (IsEditorLoaded && WebViewController?.CoreWebView2 != null)
+            {
+                Core.Utilities.Log.Debug("editor: back in a window, the page kept");
+                ShowPage(true);
+                if (AppViewModel.EditorViewModel.FocusWhenLoaded)
+                {
+                    AppViewModel.EditorViewModel.FocusWhenLoaded = false;
+                    FocusEditor();
+                }
+                return;
+            }
             // The web view is made only now, once the window's content is laid out (todo #16).
             Core.Utilities.StartupTiming.Reached("editor control loaded");
-            Opacity = 0;
+            UpdateBackdrop();
+            ShowPage(false);
             IsEditorLoaded = false;
             IsEditorLoadFailed = false;
             // A web view whose browser process is gone has no core any more: it cannot load a page, only be replaced.
@@ -208,6 +307,7 @@ namespace Typedown.Controls
                 try
                 {
                     WebViewController = webViewController;
+                    ShowPage(false);
                     OnCoreWebView2Initialized();
                 }
                 catch

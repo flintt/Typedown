@@ -1150,4 +1150,7 @@
   <data name="HomePage.Settings" xml:space="preserve">
     <value>Gosodiadau</value>
   </data>
+  <data name="Editor.Opening" xml:space="preserve">
+    <value>Yn agor…</value>
+  </data>
 </root>

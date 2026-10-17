@@ -1150,4 +1150,7 @@
   <data name="HomePage.Settings" xml:space="preserve">
     <value>ସେଟିଂସ୍</value>
   </data>
+  <data name="Editor.Opening" xml:space="preserve">
+    <value>ଖୋଲୁଛି…</value>
+  </data>
 </root>

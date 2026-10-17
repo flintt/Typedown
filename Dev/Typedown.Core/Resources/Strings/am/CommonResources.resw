@@ -1149,4 +1149,7 @@
   <data name="HomePage.Settings" xml:space="preserve">
     <value>ቅንብሮች</value>
   </data>
+  <data name="Editor.Opening" xml:space="preserve">
+    <value>በመክፈት ላይ…</value>
+  </data>
 </root>

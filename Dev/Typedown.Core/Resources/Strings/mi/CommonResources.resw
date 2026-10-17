@@ -1150,4 +1150,7 @@
   <data name="HomePage.Settings" xml:space="preserve">
     <value>Ngā tautuhinga</value>
   </data>
+  <data name="Editor.Opening" xml:space="preserve">
+    <value>E whakatuwhera ana…</value>
+  </data>
 </root>

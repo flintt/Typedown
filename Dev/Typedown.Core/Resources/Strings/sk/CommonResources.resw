@@ -1150,4 +1150,7 @@
   <data name="HomePage.Settings" xml:space="preserve">
     <value>Nastavenia</value>
   </data>
+  <data name="Editor.Opening" xml:space="preserve">
+    <value>Otvára sa…</value>
+  </data>
 </root>

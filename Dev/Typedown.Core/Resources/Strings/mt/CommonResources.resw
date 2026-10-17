@@ -1150,4 +1150,7 @@
   <data name="HomePage.Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
+  <data name="Editor.Opening" xml:space="preserve">
+    <value>Qed jinfetaħ…</value>
+  </data>
 </root>

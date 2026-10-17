@@ -39,6 +39,11 @@ namespace Typedown.Utilities
             // Always the theme's colour: WinUI 3's WebView2 cannot be transparent (it fills what the page leaves clear with a
             // grey of its own), so the editor's Mica of XamlUI, where the page showed the window through, is not possible.
             var background = solidBackground;
+            // A custom theme's page colour from the first frame: the page painted the app theme's (light) colour until
+            // the theme's CSS came with its settings, a light flash over a dark theme on every load (startup, leaving
+            // the settings).
+            if (Typedown.Core.Utilities.ThemeFiles.Brush(custom?.Background) is global::Microsoft.UI.Xaml.Media.SolidColorBrush customBackground)
+                background = customBackground.Color;
             return new { theme = isBlack ? "Black" : isDarkMode ? "Dark" : "Light", accentColor, background };
         }
 

@@ -1150,4 +1150,7 @@
   <data name="HomePage.Settings" xml:space="preserve">
     <value>அமைப்புகள்</value>
   </data>
+  <data name="Editor.Opening" xml:space="preserve">
+    <value>திறக்கிறது…</value>
+  </data>
 </root>

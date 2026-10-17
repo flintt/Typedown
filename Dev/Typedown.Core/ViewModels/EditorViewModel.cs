@@ -213,8 +213,24 @@ namespace Typedown.Core.ViewModels
                 // across sessions, and whether or not the document has a file. At start-up there is none yet.
                 Cursor = CurrentCursor ?? (Settings.RememberCursorPosition ? CursorMemory.Get(FileViewModel.FilePath) : null),
                 ScrollTop = Settings.RememberCursorPosition ? CursorMemory.GetScroll(FileViewModel.FilePath) : null,
-                LoadId = ++LoadId,
+                LoadId = NoteLoad(Markdown),
             };
+        }
+
+        /// <summary>Documents this long take the page a noticeable while to draw: the editor says it is opening them.</summary>
+        public const int LongDocumentChars = 50000;
+
+        /// <summary>
+        /// A long document is on its way into the page and not yet confirmed loaded (FileLoaded): the editor shows that it
+        /// is opening over the theme's colour instead of an empty page.
+        /// </summary>
+        public bool LongLoadPending { get; private set; }
+
+        // The next load's id, noting whether it is a long document.
+        private int NoteLoad(string text)
+        {
+            LongLoadPending = (text?.Length ?? 0) >= LongDocumentChars;
+            return ++LoadId;
         }
 
         /// <summary>Pushes a whole document into the editor (see <see cref="LoadId"/>).</summary>
@@ -225,7 +241,7 @@ namespace Typedown.Core.ViewModels
             var scrollTop = Settings.RememberCursorPosition ? CursorMemory.GetScroll(FileViewModel.FilePath) : null;
             loadClock = text != null && text.Length > 200000 ? System.Diagnostics.Stopwatch.StartNew() : null;
             loadText = text;
-            MarkdownEditor?.PostMessage("LoadFile", new { text, basePath = FileViewModel.ImageBasePath, cursor, scrollTop, loadId = ++LoadId, hold = inputHold });
+            MarkdownEditor?.PostMessage("LoadFile", new { text, basePath = FileViewModel.ImageBasePath, cursor, scrollTop, loadId = NoteLoad(text), hold = inputHold });
             Log.Debug($"load {LoadId}: {System.IO.Path.GetFileName(FileViewModel.FilePath) ?? "untitled"}, {text?.Length ?? 0} chars, from {Callers()}");
         }
 
@@ -382,7 +398,11 @@ namespace Typedown.Core.ViewModels
             // The page being replaced still answers a load sent while it goes (the file opened meanwhile); only the
             // new page, once it has asked for its settings, can confirm what it shows.
             if (awaitingNewPage) Log.Debug($"editor: load {LoadId} confirmed by the page being replaced, not counted");
-            else ConfirmedLoadId = LoadId;
+            else
+            {
+                ConfirmedLoadId = LoadId;
+                LongLoadPending = false;
+            }
             CompleteReloadWaiter(arg);
             // The document on the page and taking keys: the end of the start (todo #16).
             StartupTiming.Reached("document shown", last: true);

@@ -1150,4 +1150,7 @@
   <data name="HomePage.Settings" xml:space="preserve">
     <value>تنظیمات</value>
   </data>
+  <data name="Editor.Opening" xml:space="preserve">
+    <value>در حال باز کردن…</value>
+  </data>
 </root>
