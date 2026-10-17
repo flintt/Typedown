@@ -46,7 +46,7 @@ npm run check:source                          # 自动化写入依赖的源码�
 CI 的“Test editor integration”一步运行这些：
 
 <!-- BEGIN generated: editor-checks -->
-- `handshake-check.js`: Verifies the LoadFile -> FileLoaded handshake: FileLoaded must report the original source (`same: true` without the text when unchanged, the text when the editor rewrote it) and the load's id, nothing for a superseded load may leak through, and no MarkdownChange precedes FileLoaded.
+- `handshake-check.js`: Verifies the LoadFile -> FileLoaded handshake: FileLoaded must report the original source and the load's id, nothing for a superseded load may leak through, and no MarkdownChange precedes FileLoaded.
 - `reading-source-check.js`: Regression (source-text mapping stability): viewing a document must never rewrite its source.
 - `mermaid-lazy-check.js`: mermaid.min.js (3.5 MB) loads only when a document draws a diagram (public/lazy-mermaid.js): a document without one never requests it, a document with one requests it exactly once and the diagram is drawn.
 - `mermaid-edit-check.js`: Rapid Mermaid edits used to start overlapping renders against one shared queue.
