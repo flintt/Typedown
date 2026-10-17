@@ -151,6 +151,7 @@ class Muya {
       this.dispatchChangeContentChange()
       return
     }
+    this.contentChangeDue = true
     this.contentChangeTimer = setTimeout(() => {
       this.lastContentChangeAt = Date.now()
       this.dispatchChangeContentChange()
@@ -165,6 +166,8 @@ class Muya {
   }
 
   dispatchChangeContentChange = () => {
+    // Whether a throttled report is still to come (the page keeps no document whose last report is not its state).
+    this.contentChangeDue = false
     try {
       const { markdown, cursor } = this.getMarkdownAndCursor()
       const wordCount = this.getWordCountThrottled(markdown)
@@ -289,6 +292,12 @@ class Muya {
       }, 0)
       return
     }
+    this.placeLoadCursor(afterCursor)
+  }
+
+  // The second half of a load shown with afterCursor (setMarkdown, showDocument): the caret, then the page's part,
+  // then the report, in the next frame.
+  placeLoadCursor(afterCursor) {
     // The caret this load decided on. If the reader put it somewhere else in between (a click on the new
     // document), theirs stays, as it did when the click could only be handled after the load.
     const loadCursor = this.contentState.cursor
@@ -316,6 +325,54 @@ class Muya {
     } else {
       this.loadCursorFrame = requestAnimationFrame(step)
     }
+  }
+
+  /**
+   * Takes the document shown out of the editor whole - its blocks, its caret and its root element with everything in
+   * it - for showDocument to put back later instead of parsing and drawing its text again (the page keeps the last
+   * long documents a tab switch left, components/Muya/index.tsx). The editor gets an empty root of the same kind; the
+   * caller shows another document in it at once. Swapping the root is one removal and one insertion for the browser,
+   * as cheap as emptying it: taking the blocks out of it one by one cost half as much again on a long document.
+   */
+  takeDocument() {
+    const { contentState } = this
+    const { stateRender } = contentState
+    const root = stateRender.container
+    const empty = root.cloneNode(false)
+    root.replaceWith(empty)
+    stateRender.setContainer(empty)
+    this.eventCenter.dispatch('rootChange', empty)
+    return { blocks: contentState.blocks, cursor: contentState.cursor, root }
+  }
+
+  /** Whether a root taken out by takeDocument is the same element as the one shown, but for what it holds. */
+  canShowDocument(kept) {
+    return kept.root.cloneNode(false).isEqualNode(this.contentState.stateRender.container.cloneNode(false))
+  }
+
+  /**
+   * Shows a document taken out by takeDocument, as setMarkdown with afterCursor shows a newly built one: the elements
+   * go in now, the caret, afterCursor and the report follow in the next frame. The caller has made sure the document
+   * is drawn as a new build of its text would draw it now (the same text, caret and settings).
+   */
+  showDocument(kept, afterCursor) {
+    this.cancelLoadCursor()
+    const { contentState } = this
+    const { stateRender } = contentState
+    contentState.blocks = kept.blocks
+    contentState.blockCache = null
+    contentState.cursor = kept.cursor
+    stateRender.collectLabels(kept.blocks)
+    contentState.setNextRenderRange()
+    stateRender.container.replaceWith(kept.root)
+    stateRender.setContainer(kept.root)
+    this.eventCenter.dispatch('rootChange', kept.root)
+    stateRender.codeCache.clear()
+    // As render does for a whole new document whose caret comes later (contentState.render, cursorLater).
+    const sel = document.getSelection()
+    if (sel && sel.rangeCount && this.container.contains(sel.anchorNode)) sel.removeAllRanges()
+    contentState.postRender()
+    this.placeLoadCursor(afterCursor)
   }
 
   /** Whether a load's caret is still to be placed (setMarkdown with afterCursor). */
@@ -584,6 +641,8 @@ class Muya {
   }
 
   invalidateImageCache() {
+    // Pictures are to be loaded again: a document kept out of the editor still shows the old ones.
+    this.imageEpoch = (this.imageEpoch || 0) + 1
     this.contentState.stateRender.invalidateImageCache()
     this.contentState.render(true)
   }
