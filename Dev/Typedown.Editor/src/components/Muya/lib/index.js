@@ -256,7 +256,17 @@ class Muya {
     return this.contentState.getMarkdownAndCodeMirrorCursor()
   }
 
-  setMarkdown(markdown, cursor, isRenderCursor = true) {
+  // afterCursor: place the caret in the next frame instead of now, then call afterCursor (the page puts the scroll
+  // position back there), then report the load. Placing the caret makes the browser lay the whole new document out
+  // at once - on a long document over a second - and in the same task as building it that was one block of two or
+  // three seconds in which the page could not take a key or the focus. Split, the browser handles input between the
+  // two. A newer document arriving the same way before that frame cancels it: its caret and its scroll position
+  // are the ones that count. One set at once (Muya.setCursor) only takes the caret over; the page's part of the
+  // earlier load still runs, or that load would never be reported.
+  /** @param {(() => void) | null} [afterCursor] */
+  setMarkdown(markdown, cursor, isRenderCursor = true, afterCursor = null) {
+    const later = isRenderCursor && typeof afterCursor === 'function'
+    if (later) this.cancelLoadCursor()
     let newMarkdown = markdown
     let isValid = false
     if (cursor && cursor.anchor && cursor.focus) {
@@ -272,10 +282,52 @@ class Muya {
     this.contentState.importCursor(cursor && isValid)
     // A whole new document: the one on screen has nothing in common with it, so throw it away rather than
     // diff against it (see StateRender.render).
-    this.contentState.render(isRenderCursor, false, true)
-    setTimeout(() => {
-      this.dispatchLoadChange()
-    }, 0)
+    this.contentState.render(isRenderCursor, false, true, later)
+    if (!later) {
+      setTimeout(() => {
+        this.dispatchLoadChange()
+      }, 0)
+      return
+    }
+    // The caret this load decided on. If the reader put it somewhere else in between (a click on the new
+    // document), theirs stays, as it did when the click could only be handled after the load.
+    const loadCursor = this.contentState.cursor
+    const step = () => {
+      this.cancelLoadCursor()
+      try {
+        if (this.contentState.cursor === loadCursor) this.contentState.setCursor()
+      } catch (err) {
+        console.log(err)
+      }
+      try {
+        afterCursor()
+      } catch (err) {
+        console.log(err)
+      }
+      // After the caret is placed: the report reads it from the page's selection.
+      setTimeout(() => {
+        this.dispatchLoadChange()
+      }, 0)
+    }
+    // A frame, so the scroll position is put back before the new document is first painted. A page that is
+    // not shown gets no frames; it takes the next task instead.
+    if (document.hidden) {
+      this.loadCursorTimer = setTimeout(step, 0)
+    } else {
+      this.loadCursorFrame = requestAnimationFrame(step)
+    }
+  }
+
+  /** Whether a load's caret is still to be placed (setMarkdown with afterCursor). */
+  get loadCursorPending() {
+    return !!(this.loadCursorFrame || this.loadCursorTimer)
+  }
+
+  cancelLoadCursor() {
+    if (this.loadCursorFrame) cancelAnimationFrame(this.loadCursorFrame)
+    clearTimeout(this.loadCursorTimer)
+    this.loadCursorFrame = 0
+    this.loadCursorTimer = 0
   }
 
   /** The keys of the top-level blocks shown now that differ from oldBlocks (what an automation edit changed). */
@@ -611,6 +663,7 @@ class Muya {
 
   destroy() {
     clearTimeout(this.wordCountTimer)
+    this.cancelLoadCursor()
     // this.quickInsert.destroy()
     // this.tablePicker.destroy()
     this.contentState.clear()

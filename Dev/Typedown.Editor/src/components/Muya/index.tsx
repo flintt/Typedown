@@ -732,8 +732,8 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     }, [props.options?.fontFamily])
 
     // Content is applied after every font/direction/padding/CSS-variable effect above so that the render's
-    // synchronous selection placement forces exactly one layout; style changes after the render would make
-    // the following focus() force a second full layout of the document.
+    // selection placement (in the frame after it) forces exactly one layout; style changes after the render
+    // would make the following focus() force a second full layout of the document.
     useEffect(() => {
         cursorRef.current = props.cursor
     }, [props.cursor])
@@ -830,14 +830,15 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         if (props.localChangeRef) props.localChangeRef.current = false
         const scrollToChange = !!props.scrollToChangeRef?.current
         if (props.scrollToChangeRef) props.scrollToChangeRef.current = false
-        if (importedRef.current && markdownRef.current === props.markdown) { props.onContentApplied?.(); return }
+        // A load whose caret is still to be placed reports itself applied once it is (see below), not before.
+        if (importedRef.current && markdownRef.current === props.markdown) { if (!editor.loadCursorPending) props.onContentApplied?.(); return }
         // After an actual edit the host may hand the exported text back. Reuse the
         // existing model when it already matches, avoiding another load and caret scroll.
         if (editor.getMarkdown() === props.markdown) {
             markdownRef.current = props.markdown
             importedRef.current = { source: props.markdown, normalized: props.markdown }
             showFirstEditWarning(false)
-            props.onContentApplied?.()
+            if (!editor.loadCursorPending) props.onContentApplied?.()
             return
         }
         markdownRef.current = props.markdown
@@ -846,7 +847,16 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         // browser keeps what is on screen in place when blocks above it change. Otherwise, a whole new document.
         const blocksBefore = local ? editor.contentState.blocks : null
         const replacedLocally = !!local && editor.replaceMarkdownLocally(props.markdown)
-        if (!replacedLocally) editor.setMarkdown(props.markdown, cursorRef.current)
+        // A whole new document is built now; its caret is placed, the page put back where it was left and the load
+        // reported applied in the next frame (Muya.setMarkdown says why). Where to put it back is taken now: the
+        // page's own scroll events in between (the old document gone, the new one not laid out) would overwrite it.
+        const scrollTop = props.scrollTopRef.current
+        const keepScroll = !!props.scrollFromHostRef?.current
+        const loaded = () => {
+            settleScroll(scrollTop, keepScroll)
+            props.onContentApplied?.()
+        }
+        if (!replacedLocally) editor.setMarkdown(props.markdown, cursorRef.current, true, blocksBefore ? null : loaded)
         if (blocksBefore && props.options?.highlightAutomationChanges !== false)
             highlightExternalChange(editor.changedBlockKeys(blocksBefore).map((key: string) => document.getElementById(key)))
         ;(window as any).__typedownLastApply = replacedLocally ? 'local' : 'whole'
@@ -870,8 +880,13 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             if (props.scrollFromHostRef) props.scrollFromHostRef.current = false
             if (changeY !== null) window.scrollTo(window.scrollX, changeY)
         }
-        else if (changeY !== null) settleScroll(changeY, true)
-        else settleScroll(props.scrollTopRef.current, !!props.scrollFromHostRef?.current)
+        // An automation edit that had to be applied as a whole new document: at once, as before.
+        else if (blocksBefore) {
+            if (changeY !== null) settleScroll(changeY, true)
+            else settleScroll(scrollTop, keepScroll)
+        }
+        // A plain load: `loaded` above runs once its caret is placed.
+        else return
         props.onContentApplied?.()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [editor, props.markdown, props.contentVersion, props.scrollTopRef, settleScroll, markLongDocument, showFirstEditWarning])
