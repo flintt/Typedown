@@ -73,7 +73,10 @@ namespace Typedown.Services
                     }
                     else
                         prevDic[msg.Name] = msg.Args.ToString();
-                    EventCenter.EmitEvent(msg.Name, new EditorEventArgs(msg.Name, JToken.Parse(prevDic[msg.Name])));
+                    // Handed on as text: a handler reads it once, into a token tree (Args) or straight into its own
+                    // types. The state report was read into a tree and then from the tree into its types - twice over
+                    // for every report, which with a long outline was most of what a report cost here.
+                    EventCenter.EmitEvent(msg.Name, new EditorEventArgs(msg.Name, prevDic[msg.Name]));
                     break;
             }
         }

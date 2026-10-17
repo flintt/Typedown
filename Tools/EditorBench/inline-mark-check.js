@@ -20,7 +20,7 @@ const server = http.createServer((req, res) => {
     const apply=(m)=>{if(typeof m.args!=='string')return null;const o=window.__prev[m.name];const v=m.diff?o.slice(0,m.start)+m.args+o.slice(m.end):m.args;window.__prev[m.name]=v;try{return JSON.parse(v)}catch(e){return null}};
     const resp={GetSettings:${JSON.stringify(settings)},GetCurrentTheme:{theme:'Light',accentColor:{r:0,g:120,b:212,a:1},background:{R:249,G:249,B:249,A:1}},ContentLoaded:'',GetStringResources:{}};
     window.chrome={webview:{addEventListener:(t,l)=>ls.push(l),dispatchEvent:(e)=>ls.forEach(l=>l(e)),postMessage:(raw)=>{const m=JSON.parse(raw);window.__marks[m.name]=1;
-      if(m.name==='StateChange'){const a=apply(m);if(a&&a.state)window.__state=a.state;}
+      if(m.name==='StateChange'){const a=apply(m);if(a&&a.state){if(a.tocUnchanged&&window.__state)a.state.toc=window.__state.toc;window.__state=a.state;}}
       if(m.name==='FileLoaded'){const a=apply(m);if(a)window.__loaded=a.text;}
       if(m.name==='MarkdownChange'){const a=apply(m);if(a)window.__md=a.text;}
       if(m.type==='invoke'&&m.name==='ExportCallback'){window.__export=m.args;}
