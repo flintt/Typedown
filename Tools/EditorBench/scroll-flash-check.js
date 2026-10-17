@@ -75,15 +75,20 @@ while (markdown.length < chars) markdown += section(++n) + '\n\n';
   await page.evaluate((text, scrollTop) => {
     window.__samples = [];
     const start = performance.now();
+    // Sampled once each frame is done, which is what was painted: read inside a frame callback, the sample ran
+    // before the page's own callbacks of that frame - the load puts the page back in one - and read the page
+    // where it was before them, a flash nobody saw. Proved still to catch a real one: with the first scrollTo
+    // held back 50 ms it reports FLASH (first laid-out frame at 0).
+    const next = () => requestAnimationFrame(() => setTimeout(tick, 0));
     const tick = () => {
       window.__samples.push([Math.round(performance.now() - start), Math.round(window.scrollY), Math.round(document.documentElement.scrollHeight)]);
-      if (performance.now() - start < 6000) requestAnimationFrame(tick);
+      if (performance.now() - start < 6000) next();
     };
     window.__msgs.length = 0;
     // With the caret the host remembers for the tab, at the top of the document — where it usually is,
     // and where the page was seen to end up a moment after landing at the offset.
     window.__deliver('LoadFile', { text, basePath: '/tmp', scrollTop, loadId: 2, cursor: { anchor: { line: 0, ch: 0 }, focus: { line: 0, ch: 0 } } });
-    requestAnimationFrame(tick);
+    next();
   }, markdown, scrollTarget);
 
   await new Promise(r => setTimeout(r, 7000));
