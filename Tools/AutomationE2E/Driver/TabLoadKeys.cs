@@ -33,7 +33,7 @@ internal static partial class Program
 
             // Each step: what every open document holds before it, the command and the keys straight after it, then the
             // letters in the tab now shown (the page and the host both) and nothing else changed anywhere.
-            async Task Step(string what, Func<Task> command, string letters, bool enterAndChinese = false)
+            async Task Step(string what, Func<Task> command, string letters, bool enterAndChinese = false, int firstKeyMs = 150)
             {
                 var before = new Dictionary<string, string>();
                 foreach (var d in await DocumentsOf(c, windowId)) before[d] = (string)(await Get(c, d))["text"]!;
@@ -44,7 +44,7 @@ internal static partial class Program
                 // being composed instead of making a paragraph, and the next letters wait in a composition - lost to the
                 // case, not to the app. Keys sent with no gap reach the page before the host has seen the shortcut (a gap
                 // the hold leaves open, docs/todo.md).
-                await Task.Delay(150);
+                await Task.Delay(firstKeyMs);
                 foreach (var ch in letters) { TypeText(ch.ToString()); await Task.Delay(60); }
                 if (enterAndChinese) { Chord("Enter"); await Task.Delay(60); TypeText("中"); await Task.Delay(60); TypeText("文"); }
                 // Every step here shows another tab; which one is read once the host has made the change.
@@ -88,7 +88,10 @@ internal static partial class Program
                     .Cast<AutomationElement>().FirstOrDefault(t => t.Current.Name.Contains("tl01-b")) ?? throw new CaseFailed("no tl01-b tab in the strip");
                 var r = tab.Current.BoundingRectangle;
                 await Click(window, (int)(r.Left + 20), (int)(r.Top + r.Height / 2));
-            }, "kz");
+            }, "kz", firstKeyMs: 400);
+            // (400 ms after a click on the long document's tab: before that the web view has not taken the keyboard
+            // back - the window's thread busy with the document - and characters sent as Unicode input were lost
+            // before any part of the app saw them, 1 run in 3; see docs/todo.md.)
             await Step("Ctrl+Tab", () => { Chord("Ctrl+Tab"); return Task.CompletedTask; }, "mw");
             await Step("the + button", async () => await Click(window, await WaitFor(window, "AddButton")), "pv");
             await Step("Ctrl+Shift+H", () => { Chord("Ctrl+Shift+H"); return Task.CompletedTask; }, "hj");
