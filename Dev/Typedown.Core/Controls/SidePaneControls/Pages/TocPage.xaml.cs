@@ -50,7 +50,17 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
                 if (toc == null) { TreeView.RootNodes.Clear(); shownToc = null; return; }
                 if (!ReferenceEquals(toc, shownToc))
                 {
-                    // Another document: its outline in one step.
+                    // Another document: its outline in one step, each heading's node made whole (children and
+                    // expansion) before it goes in, and without the rows' transitions. With them every row of a
+                    // three-thousand-heading outline faded and slid in on its own as it was laid out, which is
+                    // work for rows that were all there at once; they are put back once the new rows are laid
+                    // out, for the headings an edit adds and moves.
+                    var transitions = TreeView.ItemContainerTransitions;
+                    if (transitions != null)
+                    {
+                        TreeView.ItemContainerTransitions = null;
+                        RestoreTransitionsAfterLayout(transitions);
+                    }
                     TreeView.RootNodes.Clear();
                     foreach (var item in toc.Children) TreeView.RootNodes.Add(MakeNode(item));
                     shownToc = toc;
@@ -61,6 +71,24 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
                 Reconcile(TreeView.RootNodes, toc.Children);
             }
             catch (System.Exception ex) { Utilities.Log.Debug($"outline: could not show the outline: {ex.Message}"); }
+        }
+
+        private Microsoft.UI.Xaml.Media.Animation.TransitionCollection heldTransitions;
+
+        // Once, after the next layout pass: that pass is the one that makes the rows of the outline just put in.
+        // A second replacement before then keeps the transitions it found held, not the empty slot left by the first.
+        private void RestoreTransitionsAfterLayout(Microsoft.UI.Xaml.Media.Animation.TransitionCollection transitions)
+        {
+            if (heldTransitions != null) return;
+            heldTransitions = transitions;
+            void restore(object sender, object e)
+            {
+                TreeView.LayoutUpdated -= restore;
+                if (heldTransitions != null && TreeView.ItemContainerTransitions == null)
+                    TreeView.ItemContainerTransitions = heldTransitions;
+                heldTransitions = null;
+            }
+            TreeView.LayoutUpdated += restore;
         }
 
         private static TreeViewNode MakeNode(Models.TocTreeItem item)

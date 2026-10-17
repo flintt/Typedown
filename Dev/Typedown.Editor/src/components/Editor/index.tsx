@@ -277,9 +277,26 @@ const Editor: React.FC = () => {
     // the host cannot tell a report about the document just left from one about the document now shown, and
     // a quick switch left it holding the previous document's outline — headings that are not in the
     // document on screen, which it then tried to scroll to.
+    // The outline goes only when it is not the one this load last sent: a document with three thousand headings
+    // made every report (a keystroke, a caret move) some 176 KB, which the host read in full and turned into its
+    // outline again each time, a few tens of milliseconds a report, for an outline nobody had changed. A report
+    // without it says `tocUnchanged`, and the host keeps the outline it holds. The first report of each load always
+    // carries it - the host keeps one outline per load and drops reports of any other load - and an outline counts
+    // as sent only once it has been.
+    const sentTocRef = useRef<{ loadId?: number, toc: string } | null>(null)
     const onStateChange = useCallback((state: any) => {
         if (fileLoadPending.current && !fileLoadPending.current.armed) return
-        transport.postMessage('StateChange', { state, loadId: loadIdRef.current, muya: true })
+        const loadId = loadIdRef.current
+        const toc = JSON.stringify(state?.toc ?? null)
+        const sent = sentTocRef.current
+        if (sent && sent.loadId === loadId && sent.toc === toc) {
+            const rest = { ...state }
+            delete rest.toc
+            transport.postMessage('StateChange', { state: rest, tocUnchanged: true, loadId, muya: true })
+            return
+        }
+        transport.postMessage('StateChange', { state, loadId, muya: true })
+        sentTocRef.current = { loadId, toc }
     }, [])
 
     // Which heading the reader has scrolled to, in reading mode. Deliberately not part of the state report:

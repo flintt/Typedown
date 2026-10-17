@@ -112,7 +112,7 @@ namespace Typedown.Core.ViewModels
             EventCenter.GetObservable<EditorEventArgs>("ReadingSelectionChange").Subscribe(x => OnReadingSelectionChange(x.Args));
             // A paste the page caught from the browser (its own would put the clipboard's HTML into the document as is).
             EventCenter.GetObservable<EditorEventArgs>("PasteRequested").Subscribe(x => { if (!Settings.ReadOnly && !Settings.SourceCode) Paste(x.Args?["type"]?.ToString() ?? "normal"); });
-            EventCenter.GetObservable<EditorEventArgs>("StateChange").Subscribe(x => OnStateChange(x.Args));
+            EventCenter.GetObservable<EditorEventArgs>("StateChange").Subscribe(x => OnStateChange(StateReport.Read(x)));
             // An undo or redo the page did not make itself (the browser's, CodeMirror's): the host's history makes it, as
             // the shortcut does (and not in reading mode).
             EventCenter.GetObservable<EditorEventArgs>("HistoryRequested").Subscribe(x =>
@@ -305,7 +305,13 @@ namespace Typedown.Core.ViewModels
         private bool IsStaleReport(JToken arg)
         {
             var id = arg?["loadId"];
-            if (id == null || id.Type != JTokenType.Integer || id.Value<int>() == LoadId) return false;
+            if (id == null || id.Type != JTokenType.Integer) return false;
+            return IsStaleReport(id.Value<int>());
+        }
+
+        private bool IsStaleReport(int? id)
+        {
+            if (id == null || id == LoadId) return false;
             Log.Debug($"Editor report dropped: loadId={id} current={LoadId}");
             return true;
         }
@@ -566,16 +572,49 @@ namespace Typedown.Core.ViewModels
         /// <summary>Raised when <see cref="Toc"/> has been rebuilt from a report (another document's, or an edit's).</summary>
         public event Action OutlineUpdated;
 
-        public void OnStateChange(JToken arg)
+        /// <summary>
+        /// The page's state report, read straight from its text into these types. It used to be read into a token
+        /// tree and then from the tree into a <see cref="ContentState"/>: with an outline of three thousand headings
+        /// that was most of the 17-30 ms a report cost here, for every report.
+        /// </summary>
+        public sealed class StateReport
         {
+            public ContentState State { get; set; }
+
+            public int? LoadId { get; set; }
+
+            /// <summary>
+            /// The page left the outline out because it is the one it last sent for this load (it sends it at least
+            /// once per load); the outline already held stands.
+            /// </summary>
+            public bool TocUnchanged { get; set; }
+
+            public static StateReport Read(EditorEventArgs e) =>
+                e.Text != null ? Newtonsoft.Json.JsonConvert.DeserializeObject<StateReport>(e.Text) : e.Args?.ToObject<StateReport>();
+        }
+
+        public void OnStateChange(JToken arg) => OnStateChange(arg?.ToObject<StateReport>());
+
+        public void OnStateChange(StateReport report)
+        {
+            if (report == null) return;
             // Cleared whatever the report describes: it means the editor has answered, and leaving it set
             // would keep the next real edit out of the undo history.
             contentUpdating = false;
             // A report describes the document that was loaded when it was made. Switch tabs quickly and the
             // previous document's report arrives after the new one is open: its outline is of a document no
             // longer on screen, and every heading in it is a place the editor cannot go.
-            if (IsStaleReport(arg)) return;
-            ContentState = arg["state"].ToObject<ContentState>();
+            if (IsStaleReport(report.LoadId)) return;
+            var state = report.State ?? new ContentState();
+            // An outline left out is the one this load's earlier report carried: the same list is kept, and the tree
+            // made from it is not made again. The page always sends it in the first report of a load, so there is one
+            // here for this load; if there is not (a report lost on the way), an empty outline is shown rather than
+            // another document's, until the page sends one.
+            var tocKept = report.TocUnchanged && tocLoadId == LoadId && ContentState?.Toc != null;
+            if (report.TocUnchanged && !tocKept)
+                Log.Debug($"outline: a report of load {LoadId} left its outline out, and none is held for that load");
+            state.Toc = tocKept ? ContentState.Toc : state.Toc ?? new List<TocItem>();
+            ContentState = state;
             if (ContentState.WordCount != null)
                 EditionHooks.ReportWordCount(new WordCountReport
                 {
@@ -604,7 +643,11 @@ namespace Typedown.Core.ViewModels
                     // the tree's own selection, when OutlineHighlighted is raised below.
                     ContentState.Toc.ForEach(x => x.IsSelected = x.Slug == ContentState.Cur.Slug);
                 }
-                if (tocLoadId == LoadId)
+                if (tocKept)
+                {
+                    // The tree already holds this outline; only the mark above has moved.
+                }
+                else if (tocLoadId == LoadId)
                 {
                     Toc.UpdateChildren(ContentState.Toc);
                 }
@@ -623,7 +666,10 @@ namespace Typedown.Core.ViewModels
             {
                 rebuildingToc = false;
             }
-            OutlineUpdated?.Invoke();
+            // Only when the tree was made again: with the outline kept there is nothing new for the pane to show, and
+            // going over three thousand rows to find that out was a cost of every keystroke.
+            if (!tocKept)
+                OutlineUpdated?.Invoke();
             // Raised for every report with a current heading, a kept one following or not: the kept one is often that
             // same heading, which the call below then takes as already marked and passes over - and the outline just
             // handed over for another tab was never marked.
