@@ -35,16 +35,25 @@ namespace Typedown.Utilities
             // global:: — inside Typedown.* a plain "Windows." binds to Typedown.Windows, the app's own namespace.
             var themeAccent = Typedown.Core.Utilities.ThemeFiles.Brush(custom?.Accent) as global::Microsoft.UI.Xaml.Media.SolidColorBrush;
             var accentColor = themeAccent?.Color ?? new UISettings().GetColorValue(UIColorType.Accent);
-            var solidBackground = isBlack ? Colors.Black : isDarkMode ? Color.FromArgb(0xFF, 0x28, 0x28, 0x28) : Color.FromArgb(0xFF, 0xF9, 0xF9, 0xF9);
-            // Always the theme's colour: WinUI 3's WebView2 cannot be transparent (it fills what the page leaves clear with a
-            // grey of its own), so the editor's Mica of XamlUI, where the page showed the window through, is not possible.
-            var background = solidBackground;
-            // A custom theme's page colour from the first frame: the page painted the app theme's (light) colour until
-            // the theme's CSS came with its settings, a light flash over a dark theme on every load (startup, leaving
-            // the settings).
+            return new { theme = isBlack ? "Black" : isDarkMode ? "Dark" : "Light", accentColor, background = provider.GetPageBackground() };
+        }
+
+        /// <summary>
+        /// The editor page's colour: the theme's own. WinUI 3's WebView2 cannot be transparent (it fills what the page leaves
+        /// clear with a grey of its own), so the editor's Mica of XamlUI, where the page showed the window through, is not
+        /// possible. A custom theme's page colour from the first frame: the page painted the app theme's (light) colour
+        /// until the theme's CSS came with its settings, a light flash over a dark theme on every load (startup, leaving
+        /// the settings). The web view is given it too, for what shows before the page has painted anything.
+        /// </summary>
+        public static Color GetPageBackground(this IServiceProvider provider)
+        {
+            var ui = provider.GetService<UIViewModel>();
+            var settings = provider.GetService<SettingsViewModel>();
+            var custom = Typedown.Core.Utilities.ThemeFiles.Find(settings.CustomTheme);
             if (Typedown.Core.Utilities.ThemeFiles.Brush(custom?.Background) is global::Microsoft.UI.Xaml.Media.SolidColorBrush customBackground)
-                background = customBackground.Color;
-            return new { theme = isBlack ? "Black" : isDarkMode ? "Dark" : "Light", accentColor, background };
+                return customBackground.Color;
+            return settings.EffectiveTheme == Typedown.Core.Enums.AppTheme.Black ? Colors.Black
+                : ui.ActualTheme == ElementTheme.Dark ? Color.FromArgb(0xFF, 0x28, 0x28, 0x28) : Color.FromArgb(0xFF, 0xF9, 0xF9, 0xF9);
         }
 
         public static bool GetUseLightTheme()

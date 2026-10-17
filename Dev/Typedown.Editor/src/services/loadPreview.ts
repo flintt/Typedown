@@ -10,8 +10,12 @@
 // Only the common Markdown is drawn as such: headings, paragraphs, lists, quotes, fences, rules, emphasis, code and
 // links. Anything else shows as its text: a table as its rows, raw HTML without its tags, a picture not at all.
 
-/** Documents this long get a preview: shorter ones are built before the reader can tell (EditorViewModel's figure). */
-export const PREVIEW_FROM_CHARS = 50000
+/**
+ * Documents this long get a preview: shorter ones are built before the reader can tell. A reader saw a blank at
+ * start-up with 20,000 characters; the preview itself is a screen's worth whatever the length, and the one frame it
+ * waits for costs nothing beside the build it covers.
+ */
+export const PREVIEW_FROM_CHARS = 10000
 
 const escape = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 

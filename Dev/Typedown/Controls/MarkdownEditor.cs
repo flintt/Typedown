@@ -158,6 +158,10 @@ namespace Typedown.Controls
             var custom = ThemeFiles.Find(AppViewModel.SettingsViewModel.CustomTheme);
             if (ThemeFiles.Brush(custom?.Background) is Microsoft.UI.Xaml.Media.SolidColorBrush brush) root.Background = brush;
             else root.ClearValue(Microsoft.UI.Xaml.Controls.Panel.BackgroundProperty);
+            // What the web view shows where its page has painted nothing yet - the moment it is shown, before the page's
+            // first frame - is its default colour: the page's own. Transparent, it showed black or its own white there,
+            // between the theme's colour before and the document after (a Sepia start-up went Sepia, black, document).
+            if (WebViewController?.WebView is { } webView) webView.DefaultBackgroundColor = ServiceProvider.GetPageBackground();
         }
 
         // Shown once a long load has taken a moment (a short one never flashes it), gone when the page confirms it, and in
@@ -304,6 +308,7 @@ namespace Typedown.Controls
                 try
                 {
                     WebViewController = webViewController;
+                    UpdateBackdrop();
                     ShowPage(false);
                     OnCoreWebView2Initialized();
                 }
