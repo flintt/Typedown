@@ -18,8 +18,10 @@ internal static partial class Program
         using var c = await Session("e2e TL01");
         var a = await Open(c, Fixture("tl01-a.md", "# TL01 A\n\nalpha\n"));
         // B is long (some 300,000 characters): shown again it takes the page a while, and keys typed meanwhile are what the
-        // hold keeps. A short document is in the page before a quick typist's first key, hold or not.
-        var bText = "# TL01 B\n\nbeta\n\n" + string.Concat(Enumerable.Range(0, 3000).Select(i => $"## Part {i}\n\nParagraph {i} of the long document, with a few words to make it long enough to take a while.\n\n"));
+        // hold keeps. A short document is in the page before a quick typist's first key, hold or not. Few headings: with
+        // thousands the outline kept the window's thread busy for half a second, and the keyboard reached the page only
+        // after it - another matter (docs/todo.md).
+        var bText = "# TL01 B\n\nbeta\n\n" + string.Concat(Enumerable.Range(0, 3000).Select(i => (i % 1000 == 0 ? $"## Part {i / 1000}\n\n" : "") + $"Paragraph {i} of the long document, with a few words to make it long enough to take a while.\n\n"));
         var b = await Open(c, Fixture("tl01-b.md", bText));
         var windowId = await WindowIdOf(c, a);
         var window = await WindowOf(windowId, c);
