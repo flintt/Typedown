@@ -9,7 +9,7 @@ import ExportHtml from "services/exportHtml";
 import { errorText } from "services/errorText";
 import { htmlToMarkdown } from "services/importHtml";
 import { DEFAULT_TURNDOWN_CONFIG } from "components/Muya/lib/config";
-import { noteUserIntent, resetUserIntent, takeChangeOrigin } from "services/changeOrigin";
+import { noteUserIntent, onUserIntent, resetUserIntent, takeChangeOrigin } from "services/changeOrigin";
 import { InputHold } from "services/inputHold";
 import { sha256Hex } from "services/sha256";
 import { classifierVersion } from "services/normalization";
@@ -87,6 +87,8 @@ const Editor: React.FC = () => {
     const markdownRef = useRef<string>();
     // Reporting the text is throttled while typing; this runs it now (see Muya's flushContentChange).
     const flushRef = useRef<(() => void) | null>(null);
+    // Finishes a load whose caret is placed in the next frame (Muya, finishLoadNow) at once.
+    const finishLoadRef = useRef<(() => void) | null>(null);
     const cursorRef = useRef<any>();
     const [contentVersion, setContentVersion] = useState(0);
     const [options, setOptions] = useState<any>();
@@ -128,6 +130,16 @@ const Editor: React.FC = () => {
         // The host has the document as loaded; what was typed for it goes in now, as the reader's edit.
         holdRef.current?.loaded(appliedHoldRef.current)
     }, [])
+
+    // The reader about to edit while a load is still being reported (its caret placed in the next frame, its first
+    // report not in yet): the load is finished and reported first, with the text as loaded. Otherwise the edit was the
+    // first report after the load, taken for the load's own text: the host saw the editor "rewrite" the document and
+    // loaded it again over what was just pasted or typed (E2E WP01, FO01 in a full run).
+    useEffect(() => onUserIntent(() => {
+        if (!fileLoadPending.current) return
+        finishLoadRef.current?.()
+        if (fileLoadPending.current?.armed) flushRef.current?.()
+    }), []);
 
     const OnFileLoaded = useCallback(() => {
         clearTimeout(fileLoadPending.current?.timer)
@@ -555,6 +567,7 @@ const Editor: React.FC = () => {
                 localChangeRef={localChangeRef}
                 scrollToChangeRef={scrollToChangeRef}
                 flushRef={flushRef}
+                finishLoadRef={finishLoadRef}
                 onMarkdownChange={onMarkdownChange}
                 onContentApplied={onContentApplied}
                 onStateChange={onStateChange}

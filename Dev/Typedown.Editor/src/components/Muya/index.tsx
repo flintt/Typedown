@@ -37,6 +37,8 @@ interface IMuyaEditor {
     onMarkdownChange: (markdown: string) => void
     /** The shell puts a function here that reports the current text at once, for saves and exports. */
     flushRef?: React.MutableRefObject<(() => void) | null>
+    /** Set to what finishes a load whose caret is still to come, now (Muya.finishLoadNow). */
+    finishLoadRef?: React.MutableRefObject<(() => void) | null>
     /** Fired once host content has been pushed into the editor (see the FileLoaded handshake in Editor). */
     onContentApplied?: () => void
     onCursorChange: (cursor: any) => void
@@ -681,6 +683,15 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             if (props.flushRef?.current === flush) props.flushRef.current = null
         }
     }, [editor, props.flushRef])
+
+    useEffect(() => {
+        if (!editor || !props.finishLoadRef) return
+        const finish = () => editor.finishLoadNow()
+        props.finishLoadRef.current = finish
+        return () => {
+            if (props.finishLoadRef?.current === finish) props.finishLoadRef.current = null
+        }
+    }, [editor, props.finishLoadRef])
 
     useEffect(() => {
         const ele = document.getElementById('editor');

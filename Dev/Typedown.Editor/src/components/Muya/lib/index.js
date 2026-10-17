@@ -303,6 +303,7 @@ class Muya {
     const loadCursor = this.contentState.cursor
     const step = () => {
       this.cancelLoadCursor()
+      this.loadCursorStep = null
       try {
         if (this.contentState.cursor === loadCursor) this.contentState.setCursor()
       } catch (err) {
@@ -320,11 +321,21 @@ class Muya {
     }
     // A frame, so the scroll position is put back before the new document is first painted. A page that is
     // not shown gets no frames; it takes the next task instead.
+    this.loadCursorStep = step
     if (document.hidden) {
       this.loadCursorTimer = setTimeout(step, 0)
     } else {
       this.loadCursorFrame = requestAnimationFrame(step)
     }
+  }
+
+  /**
+   * The second half of a load (placeLoadCursor) now rather than in the next frame: the reader is about to edit the new
+   * document, and the edit must come after the load is placed and reported, not be taken for part of it.
+   */
+  finishLoadNow() {
+    const step = this.loadCursorStep
+    if (step && this.loadCursorPending) step()
   }
 
   /**
@@ -381,6 +392,7 @@ class Muya {
   }
 
   cancelLoadCursor() {
+    this.loadCursorStep = null
     if (this.loadCursorFrame) cancelAnimationFrame(this.loadCursorFrame)
     clearTimeout(this.loadCursorTimer)
     this.loadCursorFrame = 0
