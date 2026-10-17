@@ -16,6 +16,8 @@ import { classifyNormalization, extractProtectedPayload } from "services/normali
 import { highlightExternalChange, scrollTargetForChange } from "services/externalChange";
 import { setVimState } from "services/vim";
 import { createReadingKeys } from "services/vimReading";
+import { KeptDocuments, blockCaretKey, caretKey, isForward, markedAt, sameLines } from "services/keptDocuments";
+import { CURSOR_ANCHOR_DNA, CURSOR_FOCUS_DNA } from 'components/Muya/lib/config'
 import 'components/Muya/themes/default.css'
 
 interface IMuyaEditor {
@@ -68,6 +70,45 @@ Muya.use(LinkTools, { jumpClick: (linkInfo: { href: string }) => { transport.pos
 Muya.use(TableBarTools)
 Muya.use(FootnoteTool)
 
+// Keeping documents a tab switch left (see the content effect). Only long ones: a short document is built again in a
+// few milliseconds and keeping it would be risk for nothing. Two at most and 600,000 characters in all, because a kept
+// document holds all its elements: measured (Tools/EditorBench/switch-ab.js, Edge), Tools/EditorBench/doc300k.md
+// (300,000 characters, 180,000 nodes) held about 80 MB of the page's memory and 9 MB of its script heap, a plainer
+// 325,000-character document (54,000 nodes) about 20 MB. Two is what switching back and forth between two or three
+// long tabs needs; a third pushes the oldest out.
+const KEEP_FROM_CHARS = 50000
+const KEEP_DOCUMENTS = 2
+const KEEP_CHARS = 600000
+const DIAGRAM_TYPES = new Set(['mermaid', 'flowchart', 'sequence', 'plantuml', 'vega-lite'])
+const hasDiagram = (blocks: any[]): boolean => blocks.some(b => DIAGRAM_TYPES.has(b.functionType) || (b.children?.length && hasDiagram(b.children)))
+// Keys that move the caret or the page and change nothing in the document.
+const MOVING_KEYS = new Set(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Home', 'End', 'PageUp', 'PageDown', 'Shift', 'Control', 'Alt', 'Meta', 'CapsLock', 'Escape'])
+
+/** What is known of the document shown, to tell whether it may be kept when a tab switch replaces it. */
+interface ShownDocument {
+    text: string
+    /** Its source and Muya's export of it (importedRef) and whether the first-edit notice was shown for it. */
+    imported: { source: string, normalized: string }
+    warn: boolean
+    /** Everything the drawing depends on besides the text and the caret, as it was when the document was built. */
+    renderKey: string
+    /** The caret the host gave with the text, and where the build put it in the blocks. */
+    loadCaret: { given: string, at: string }
+    blockCount: number
+    /** Nothing has been done to it but moving the caret and the page. */
+    pristine: boolean
+    /** The caret its last report gave the host, and where it was in the blocks then. */
+    reported: { caret: string, at: string } | null
+}
+
+/** Anything done to the document shown other than moving the caret or the page: it is not kept when left. */
+const markEdited = (shown: React.MutableRefObject<ShownDocument | null>) => { if (shown.current) shown.current.pristine = false }
+
+interface KeptDocument extends ShownDocument {
+    cursorAt: string
+    kept: { blocks: any[], cursor: any, root: HTMLElement }
+}
+
 const STANDAR_Y = 320
 // Where a heading goes when it is chosen in the outline: at the top, a line's breathing room below the
 // edge. The caret's 320 put it a third of the way down, and the reader then saw the section before it
@@ -101,6 +142,8 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     }, [])
     const searchArgRef = useRef<any>();
     const cursorRef = useRef<any>();
+    const shownRef = useRef<ShownDocument | null>(null)
+    const keptRef = useRef(new KeptDocuments<KeptDocument>(KEEP_DOCUMENTS, KEEP_CHARS))
     const optionsRef = useRef<any>(props.options);
     // The heading the outline was last told about in reading mode, and the moment until which a jump the
     // reader asked for stands: the jump's own scroll must not be re-read as the reader moving on.
@@ -168,6 +211,8 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     useEffect(() => {
         markdownRef.current = ''
         importedRef.current = undefined
+        shownRef.current = null
+        keptRef.current.clear()
     }, [editor])
 
     useEffect(() => {
@@ -185,6 +230,11 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     // Two things it left behind are worth keeping, because both are right on their own: StateRender renders
     // into its own container rather than looking its root up in the document, and the setters below only
     // push a setting that has actually changed instead of re-rendering the whole document each time.
+    //
+    // What is kept now (keepShown, takeKept below) is not an editor: the one editor stays the only one, and a long
+    // document left by a tab switch is kept as inert parts - its blocks, its caret and its elements, out of the
+    // page - that nothing listens to, renders into or reports from. Switching back to it with the same text puts
+    // them back into the one editor, and from there the load goes on exactly as a new build's would.
 
     // Several of Muya's setters re-render the whole document, which is fine once and wasteful every time
     // after: the editor remembers what has been applied to it, so a setting is only pushed when it changed.
@@ -223,12 +273,17 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
                 : { ...classifyNormalization(markdownRef.current, markdownRef.current), normalized: markdownRef.current }
         };
         (window as any).__typedownPendingNormalization = pendingNormalization
+        // For Tools/EditorBench: how many documents are kept, and a way to drop them.
+        const keptHook = { size: () => keptRef.current.size, clear: () => keptRef.current.clear() };
+        (window as any).__typedownKeptDocuments = keptHook
         // For Tools/EditorBench: the same classifier, to judge what a real edit did.
         ;(window as any).__typedownNormalization = { classifyNormalization, extractProtectedPayload }
         setEditor(muya)
         return () => {
             // Source mode has no Muya: a hook left behind would describe the document as it was when Muya went.
             if ((window as any).__typedownPendingNormalization === pendingNormalization) delete (window as any).__typedownPendingNormalization
+            if ((window as any).__typedownKeptDocuments === keptHook) delete (window as any).__typedownKeptDocuments
+            keptHook.clear()
             muya.destroy()
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -310,31 +365,37 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
 
     useEffect(() => transport.addListener('UpdateParagraph', type => {
         if (optionsRef.current?.readOnly) return
+        markEdited(shownRef)
         editor?.updateParagraph(type)
     }), [editor]);
 
     useEffect(() => transport.addListener('InsertParagraph', pos => {
         if (optionsRef.current?.readOnly) return
+        markEdited(shownRef)
         editor?.insertParagraph(pos, '', true)
     }), [editor]);
 
     useEffect(() => transport.addListener('DeleteParagraph', () => {
         if (optionsRef.current?.readOnly) return
+        markEdited(shownRef)
         editor?.deleteParagraph()
     }), [editor]);
 
     useEffect(() => transport.addListener('Duplicate', () => {
         if (optionsRef.current?.readOnly) return
+        markEdited(shownRef)
         editor?.duplicate()
     }), [editor]);
 
     useEffect(() => transport.addListener('Format', type => {
         if (optionsRef.current?.readOnly) return
+        markEdited(shownRef)
         editor?.format(type)
     }), [editor]);
 
     useEffect(() => transport.addListener('DeleteSelection', () => {
         if (optionsRef.current?.readOnly) return
+        markEdited(shownRef)
         editor?.delete()
     }), [editor]);
 
@@ -354,11 +415,13 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
 
     useEffect(() => transport.addListener<any>('Cut', arg => {
         if (optionsRef.current?.readOnly) return
+        markEdited(shownRef)
         editor?.clipboard.cut(arg)
     }), [editor]);
 
     useEffect(() => transport.addListener<any>('Paste', arg => {
         if (optionsRef.current?.readOnly) return
+        markEdited(shownRef)
         editor?.clipboard.paste(arg)
     }), [editor]);
 
@@ -366,6 +429,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     // a new paragraph.
     useEffect(() => transport.addListener<{ text: string, done: () => void }>('InsertTyped', ({ text, done }) => {
         if (!editor || optionsRef.current?.readOnly) { done(); return }
+        markEdited(shownRef)
         const paragraphs = text.replace(/\r\n?/g, '\n').replace(/\n/g, '\n\n')
         Promise.resolve((editor as any).contentState.pasteHandler('normal', paragraphs, ''))
             .catch((err: unknown) => console.log('typed text could not go in', err))
@@ -376,16 +440,19 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
 
     useEffect(() => transport.addListener<string>('InsertTable', arg => {
         if (optionsRef.current?.readOnly) return
+        markEdited(shownRef)
         editor?.createTable(arg)
     }), [editor]);
 
     useEffect(() => transport.addListener<string>('InsertImage', arg => {
         if (optionsRef.current?.readOnly) return
+        markEdited(shownRef)
         editor?.insertImage(arg)
     }), [editor]);
 
     useEffect(() => transport.addListener<{ src: string, alt?: string, title?: string }[]>('InsertImages', arg => {
         if (optionsRef.current?.readOnly) return
+        markEdited(shownRef)
         editor?.insertImages(arg)
     }), [editor]);
 
@@ -400,6 +467,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     }), [editor, scrollToElementIfInvisible]);
 
     useEffect(() => transport.addListener<{ value: string, opt: unknown }>('Replace', ({ value, opt }) => {
+        markEdited(shownRef)
         editor?.replace(value, opt)
     }), [editor, scrollToElement]);
 
@@ -498,9 +566,12 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         const root = editor.container?.querySelector?.('#ag-editor-id') || document.getElementById('ag-editor-id')
         const sizes = typeof ResizeObserver === 'function' && root ? new ResizeObserver(onScroll) : null
         if (root) sizes?.observe(root)
+        // A tab switch to or from a kept document swaps the root element (Muya.takeDocument): the one shown is watched.
+        const offRoot = editor.on('rootChange', (next: Element) => { if (sizes) { sizes.disconnect(); sizes.observe(next) } })
         frame = requestAnimationFrame(anchor)
         return () => {
             window.removeEventListener('scroll', onScroll)
+            offRoot()
             sizes?.disconnect()
             if (frame) cancelAnimationFrame(frame)
             readingSlugRef.current = null
@@ -588,6 +659,11 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         const text = imported && markdown === imported.normalized ? imported.source : markdown
         markdownRef.current = text;
         markLongDocument()
+        const shown = shownRef.current
+        if (shown) {
+            if (!imported || markdown !== imported.normalized) shown.pristine = false
+            shown.reported = { caret: caretKey(cursor), at: blockCaretKey((editor as any).contentState.cursor) }
+        }
 
         // 同步内容与光标
         onMarkdownChange(text)
@@ -685,6 +761,33 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             document.removeEventListener('paste', onPaste, true)
             document.removeEventListener('copy', onCopy, true)
             document.removeEventListener('cut', onCopy, true)
+        }
+    }, [editor])
+
+    // What the reader does to the document in the page itself (typing, pasting, dropping, the editor's own tools)
+    // makes the document shown one that is not kept when a tab switch replaces it. Moving the caret or the page does not.
+    useEffect(() => {
+        if (!editor) return
+        const container = editor.container as HTMLElement
+        const edited = () => markEdited(shownRef)
+        const onKey = (event: KeyboardEvent) => {
+            if (MOVING_KEYS.has(event.key) && !event.altKey) return
+            if ((event.ctrlKey || event.metaKey) && !event.altKey && event.key.toLowerCase() === 'c') return
+            if (optionsRef.current?.readOnly) return
+            markEdited(shownRef)
+        }
+        // The tools Muya puts beside the document (the paragraph menu, table, picture and link tools, the pickers).
+        const onPointer = (event: Event) => {
+            if (event.target instanceof Element && event.target.closest('.ag-float-container, .ag-front-icon')) markEdited(shownRef)
+        }
+        const kinds = ['beforeinput', 'input', 'compositionstart', 'paste', 'drop', 'cut', 'dragstart']
+        for (const kind of kinds) container.addEventListener(kind, edited, true)
+        document.addEventListener('keydown', onKey, true)
+        document.addEventListener('pointerdown', onPointer, true)
+        return () => {
+            for (const kind of kinds) container.removeEventListener(kind, edited, true)
+            document.removeEventListener('keydown', onKey, true)
+            document.removeEventListener('pointerdown', onPointer, true)
         }
     }, [editor])
 
@@ -824,6 +927,59 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         go()
     }), [settleScroll]);
 
+    // Everything a document's drawing depends on besides its text and its caret: the settings (fonts, reading mode,
+    // direction, diagrams, the CSS...), the folder pictures are found in, the theme and the pictures' freshness.
+    const renderKey = () => JSON.stringify([props.options ?? null, window.basePath ?? null, window.actualTheme ?? null, (editor as any)?.imageEpoch ?? 0])
+
+    // A long document a tab switch replaces is kept, built - its blocks, its caret, its elements - when it is drawn
+    // exactly as a new build of its text would draw it, and only then: nothing has been done to it but moving the
+    // caret and the page (no typing, no edit from the host, nothing Muya reports as changed), its last report is its
+    // state (no report on its way, the caret where that report put it), nothing is selected or highlighted in it,
+    // no table tool bar is drawn, no picture is still loading and it has no diagram, whose drawing comes later and
+    // would be lost while it is out.
+    const keepShown = () => {
+        const shown = shownRef.current
+        shownRef.current = null
+        const muya = editor as any
+        if (!muya || !shown || !shown.pristine || !shown.reported) return
+        if (muya.loadCursorPending || muya.contentChangeDue) return
+        const { contentState } = muya
+        const root = contentState.stateRender.container as HTMLElement | null
+        if (!root || importedRef.current?.source !== shown.text || markdownRef.current !== shown.text) return
+        if (contentState.blocks.length !== shown.blockCount) return
+        const cursorAt = blockCaretKey(contentState.cursor)
+        if (cursorAt !== shown.reported.at) return
+        if (contentState.searchMatches?.matches?.length || contentState.selectedImage || contentState.selectedTableCells || contentState.selectedBlock) return
+        // A table's tool bar: a new build draws one on every table while the caret is in a cell (renderContainerBlock),
+        // the editor only on the table the caret went into - and one is left on the others when the caret came with
+        // the load. A document with one in it is not drawn as a new build would draw it.
+        if (root.querySelector('.ag-image-loading, .ag-tool-table')) return
+        keptRef.current.put({ ...shown, cursorAt, kept: muya.takeDocument() })
+    }
+
+    // The kept document with this text, when showing it is showing what a new build would: the same settings, and a
+    // caret that the build would put where the kept one is. Either the very caret this document was built with and has
+    // not left, or the caret it last reported (in lines of Muya's export) when the build would put that caret in the
+    // same place: the text and the export agree line for line up to the line after the caret, and the caret sits where
+    // nothing moves it (addCursorToMarkdown moves one off a blank line, a fence, a table edge, a list or heading marker).
+    const takeKept = (text: string, cursor: any) => {
+        const kept = keptRef.current.take(text)
+        if (!kept || kept.renderKey !== renderKey()) return null
+        if (!(editor as any).canShowDocument(kept.kept) || kept.kept.root.querySelector('.ag-image-loading')) return null
+        const given = caretKey(cursor)
+        if (given === kept.loadCaret.given && kept.cursorAt === kept.loadCaret.at) return kept
+        if (!kept.reported || given !== kept.reported.caret || !isForward(cursor)) return null
+        if (kept.text !== kept.imported.normalized && sameLines(kept.text, kept.imported.normalized) <= Math.max(cursor.anchor.line, cursor.focus.line) + 1) return null
+        const marked = markedAt(text, cursor, CURSOR_ANCHOR_DNA, CURSOR_FOCUS_DNA)
+        if (marked === null) return null
+        try {
+            if ((editor as any).contentState.addCursorToMarkdown(text, cursor).markdown !== marked) return null
+        } catch {
+            return null
+        }
+        return kept
+    }
+
     useEffect(() => {
         if (!editor) return
         const local = props.localChangeRef?.current
@@ -837,10 +993,16 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         if (editor.getMarkdown() === props.markdown) {
             markdownRef.current = props.markdown
             importedRef.current = { source: props.markdown, normalized: props.markdown }
+            shownRef.current = null
             showFirstEditWarning(false)
             if (!editor.loadCursorPending) props.onContentApplied?.()
             return
         }
+        // A whole new document: the one shown may be kept for a switch back (keepShown), and the one coming may be one
+        // kept (takeKept).
+        if (!local) keepShown()
+        else shownRef.current = null
+        const kept = local ? null : takeKept(props.markdown, cursorRef.current)
         markdownRef.current = props.markdown
         markLongDocument(props.markdown)
         // An automation edit keeps the blocks it did not change, with the reader's cursor and scroll position; the
@@ -856,6 +1018,19 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             settleScroll(scrollTop, keepScroll)
             props.onContentApplied?.()
         }
+        // A kept document goes back in as it was left, and everything after it happens as after a new build: the caret
+        // and the page in the next frame, then the report, the handshake and the outline.
+        if (kept) {
+            editor.showDocument(kept.kept, loaded)
+            ;(window as any).__typedownLastApply = 'kept'
+            importedRef.current = kept.imported
+            showFirstEditWarning(kept.warn)
+            shownRef.current = {
+                text: kept.text, imported: kept.imported, warn: kept.warn, renderKey: kept.renderKey, loadCaret: kept.loadCaret,
+                blockCount: kept.blockCount, pristine: true, reported: null,
+            }
+            return
+        }
         if (!replacedLocally) editor.setMarkdown(props.markdown, cursorRef.current, true, blocksBefore ? null : loaded)
         if (blocksBefore && props.options?.highlightAutomationChanges !== false)
             highlightExternalChange(editor.changedBlockKeys(blocksBefore).map((key: string) => document.getElementById(key)))
@@ -863,7 +1038,15 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         importedRef.current = { source: props.markdown, normalized: editor.getMarkdown() }
         // Text the first visual edit would change in a way that loses something (today: some raw HTML) gets a notice
         // that does not block editing; source mode keeps it exactly.
-        showFirstEditWarning(classifyNormalization(props.markdown, importedRef.current.normalized).pendingNormalization === 'unsafe')
+        const warn = classifyNormalization(props.markdown, importedRef.current.normalized).pendingNormalization === 'unsafe'
+        showFirstEditWarning(warn)
+        // What a later switch away needs to know to keep this document (keepShown).
+        const { contentState } = editor as any
+        shownRef.current = !blocksBefore && props.markdown.length >= KEEP_FROM_CHARS && !hasDiagram(contentState.blocks) ? {
+            text: props.markdown, imported: importedRef.current, warn, renderKey: renderKey(),
+            loadCaret: { given: caretKey(cursorRef.current), at: blockCaretKey(contentState.cursor) },
+            blockCount: contentState.blocks.length, pristine: true, reported: null,
+        } : null
         // reveal: "change": the first changed block into view unless the reader can already see it. Measured in page
         // coordinates against where the page is (a local edit) or is about to be put back (a whole new document).
         let changeY: number | null = null
