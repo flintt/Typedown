@@ -45,6 +45,7 @@ namespace Typedown.Core.Controls
             disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.CustomTheme))
                 .StartWith(Settings.CustomTheme)
                 .Subscribe(name => AppAccent.Apply(ThemeFiles.Find(name as string)?.Accent)));
+            disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.CustomTheme)).Subscribe(_ => UpdateCaptionTheme()));
             Frame.Navigated += OnFrameNavigated;
             Frame.Navigate(typeof(MainPage), null);
         }
@@ -58,10 +59,35 @@ namespace Typedown.Core.Controls
         {
             var from = shownPage;
             shownPage = e.SourcePageType;
+            UpdateCaptionTheme();
             if (e.SourcePageType != typeof(MainPage) || (from != null && from != typeof(SettingsPage))) return;
             ViewModel.EditorViewModel.FocusWhenLoaded = true;
             _ = DispatcherQueue.RunIdleAsync(_ => ViewModel.MarkdownEditor?.FocusEditor());
         }
+
+        // The caption row in the custom theme's colours, as the page under it: the settings' own page colour there (the
+        // caption is the settings' top row in compact mode), the menu row's panel colour over the main page. It was the
+        // window's white over a Sepia page.
+        private void UpdateCaptionTheme()
+        {
+            if (Caption == null) return;
+            try
+            {
+                var theme = ThemeFiles.Find(Settings?.CustomTheme);
+                var background = shownPage == typeof(MainPage)
+                    ? ThemeFiles.Brush(theme?.Surface) ?? ThemeFiles.Brush(theme?.Background)
+                    : ThemeFiles.Brush(theme?.Background) ?? ThemeFiles.Brush(theme?.Surface);
+                var foreground = ThemeFiles.Brush(theme?.Foreground) ?? ThemeFiles.Readable(theme?.Surface ?? theme?.Background);
+                Caption.ApplyThemeBrushes(background, foreground);
+            }
+            catch (Exception ex)
+            {
+                Utilities.Log.Debug($"caption theme: {ex.Message}");
+            }
+        }
+
+        // The caption is made again each time it comes back (x:Load), clear: it takes the colours as it loads.
+        private void OnCaptionLoaded(object sender, RoutedEventArgs e) => UpdateCaptionTheme();
 
         private void ReloadSettingsPage()
         {
