@@ -140,6 +140,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | Q02 | a window closed at once after it opened (its web view still being created): the process lives on |
 | D01 | the window's UI thread runs every callback posted to it, from many threads at once |
 | K02 | Ctrl+, twice opens and closes the settings: the caret and the keyboard are where they were |
+| CM01 | in compact mode the settings start where the main page's top row ends, and leaving them keeps the editor page (nothing drawn again) |
 | K04 | a window just opened takes the keys at once: a letter typed without a click reaches the document |
 | K05 | a new tab (the + button, Ctrl+N) and a tab clicked in the strip take the keys at once, without a click in the text |
 | TL01 | keys typed at once after Ctrl+N, a tab clicked, Ctrl+Tab, the + button, Ctrl+Shift+H and a long document's tab clicked go into the tab shown, in order, Enter and Chinese text too; the document left is unchanged |
@@ -150,6 +151,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | MB01 | a menu open while the title bar is clicked or dragged closes: the File menu and the editor's context menu |
 | WV01 | the editor comes back after its web view's browser process ends: the document on the page again, taking edits |
 | SF01 | a window opening under the dark theme shows no light frame in its first two seconds on screen |
+| SF02 | a long document under a dark custom theme (Dracula): leaving the settings and a window opening with it show the theme's colour, never light or the app's dark colour |
 | WV02 | without the WebView2 runtime the install window comes up with the download; a setup that installs it goes on to the main window |
 | WV03 | a setup that did not install the WebView2 runtime leaves the install window saying so, with the download; Cancel ends the start |
 | HM01 | Help > User guide opens the user guide in the interface's language, Help > About the About page |
@@ -267,7 +269,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | `test.window.layout` | `windowId` | Where the main page starts in its window, and whether the window is in full screen: in full screen nothing may sit above it (a 4 px row of window background did, along the top of the screen). | TestHostHooks.cs |
 | `test.window.keep` | `windowId` | Holds a window in memory from now on, as anything still referring to it does after it closes: MainWindow.AllWindows lists a window until it has closed; the XAML Islands list kept it until finalized, closed or not. | TestHostHooks.cs |
 | `test.window.navigate` | `route`, `windowId` | Moves a window to a page, as its menu would: route "Settings/Editor" opens that settings page, "Main" goes back. | TestHostHooks.cs |
-| `test.window.open` | - | Opens another window, as File > New window does, and returns its windowId once it is registered. | TestHostHooks.cs |
+| `test.window.open` | `path?` | Opens another window, as File > New window does, and returns its windowId once it is registered. | TestHostHooks.cs |
 | `test.settings.set` | `name`, `windowId`, `value` | Sets a property of a window's settings view model by name, as its settings page would: also the settings the automation API does not expose. | TestHostHooks.cs |
 | `test.settings.get` | `name`, `windowId` | Reads a property of a window's settings view model by name. | TestHostHooks.cs |
 | `test.images.configure` | `method?`, `config?`, `windowId` | Image upload without its dialogs: an enabled configuration (PowerShell or S3), chosen as Settings > Image > Upload with; returns what was stored, so a test can see that the secret is not there in plain text. | TestHostHooks.cs |

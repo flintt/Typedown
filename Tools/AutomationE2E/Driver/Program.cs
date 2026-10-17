@@ -142,6 +142,7 @@ internal static partial class Program
             await Case("Q02 a window closed at once after it opened (its web view still being created): the process lives on", Q02);
             await Case("D01 the window's UI thread runs every callback posted to it, from many threads at once", D01);
             await Case("K02 Ctrl+, twice opens and closes the settings: the caret and the keyboard are where they were", K02);
+            await Case("CM01 in compact mode the settings start where the main page's top row ends, and leaving them keeps the editor page (nothing drawn again)", CM01);
             await Case("K04 a window just opened takes the keys at once: a letter typed without a click reaches the document", K04);
             await Case("K05 a new tab (the + button, Ctrl+N) and a tab clicked in the strip take the keys at once, without a click in the text", K05);
             await Case("TL01 keys typed at once after Ctrl+N, a tab clicked, Ctrl+Tab, the + button, Ctrl+Shift+H and a long document's tab clicked go into the tab shown, in order, Enter and Chinese text too; the document left is unchanged", TL01);
@@ -152,6 +153,7 @@ internal static partial class Program
             await Case("MB01 a menu open while the title bar is clicked or dragged closes: the File menu and the editor's context menu", MB01);
             await Case("WV01 the editor comes back after its web view's browser process ends: the document on the page again, taking edits", WV01);
             await Case("SF01 a window opening under the dark theme shows no light frame in its first two seconds on screen", SF01);
+            await Case("SF02 a long document under a dark custom theme (Dracula): leaving the settings and a window opening with it show the theme's colour, never light or the app's dark colour", SF02);
             await Case("WV02 without the WebView2 runtime the install window comes up with the download; a setup that installs it goes on to the main window", WV02);
             await Case("WV03 a setup that did not install the WebView2 runtime leaves the install window saying so, with the download; Cancel ends the start", WV03);
             await Case("HM01 Help > User guide opens the user guide in the interface's language, Help > About the About page", HM01);

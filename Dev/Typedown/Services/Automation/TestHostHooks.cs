@@ -275,7 +275,9 @@ namespace Typedown.Services.Automation
             {
                 var before = Core.Services.AutomationWindows.Registry.Snapshot().Select(w => w.WindowId).ToList();
                 var first = Core.Services.AutomationWindows.Registry.Snapshot().First();
-                await Core.Services.AutomationWindows.Registry.OnWindowAsync(first.WindowId, _ => Utilities.Common.OpenNewWindow(new string[0], forceNewWindow: true));
+                // With a file, the window opens with it as one opened from Explorer or restored at start-up does.
+                var path = c.Params.OptionalString("path", allowEmpty: false);
+                await Core.Services.AutomationWindows.Registry.OnWindowAsync(first.WindowId, _ => Utilities.Common.OpenNewWindow(path != null ? new[] { path } : new string[0], forceNewWindow: true));
                 for (var i = 0; i < 200; i++)
                 {
                     var added = Core.Services.AutomationWindows.Registry.Snapshot().FirstOrDefault(w => !before.Contains(w.WindowId));
