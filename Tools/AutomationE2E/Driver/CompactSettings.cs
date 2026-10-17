@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 using System.Windows.Automation;
 
 /// <summary>
-/// CM01: in compact mode the settings line up with the main page and leaving them keeps the editor page. The main page
-/// has no caption there (its menu bar is the top row); the settings had a 32 px caption, so everything below moved by
-/// 8 px on the way in and back. Leaving the settings also loaded the editor page again - the whole document drawn once
-/// more over a light page - which a mark left in the page shows: it is still there afterwards.
+/// CM01: in compact mode the settings have no title bar of their own, as the main page has none: they start at the
+/// window's top, in a custom theme's colours there too, the window is dragged by the empty part of their header and
+/// their way back is the back button in their pane - which goes back to the editor page as it was (a mark left in it
+/// is still there: leaving the settings once loaded the page again, the whole document drawn once more). A reader saw
+/// a caption in the window's white over a Sepia page, unlike the editor view.
 /// </summary>
 internal static partial class Program
 {
@@ -57,31 +58,45 @@ internal static partial class Program
             var (mainPage, menuBottomTop) = await ContentTop();
             double? menuBottom = mainPage == "main" ? menuBottomTop : null;
             var editorShot = Screenshot("cm01-editor");
+            // Under a custom theme: the top row is the page's colour - Sepia's (Tools/Themes/generate.py).
+            await c.Call("test.settings.set", new { windowId, name = "CustomTheme", value = "sepia" });
             await CtrlComma();
             await Task.Delay(2000);
             var (settingsPage, settingsTopValue) = await ContentTop();
             double? settingsTop = settingsPage == "settings" ? settingsTopValue : null;
+            var sepiaRow = TopRowShare(window, (0xf4, 0xec, 0xd8));
             var settingsShot = Screenshot("cm01-settings");
-            await CtrlComma();
+            notes.Add($"content top in the window: main page (menu bar row bottom) {menuBottom}, the settings' top {settingsTop}; under Sepia {sepiaRow:0}% of the top row in the page's colour; screens {editorShot} {settingsShot}");
+            Check(settingsTop != null && settingsTop <= 1, $"the settings start at the window's top, no title bar above them ({settingsTop})");
+            Check(sepiaRow >= 60, $"under Sepia the settings' top row is the page's colour, not the window's ({sepiaRow:0}%)");
+
+            // Dragged by the empty part of the header, right of the page's title and left of the caption buttons.
+            GetWindowRect(window, out var before);
+            int px = before.Left + (before.Right - before.Left) * 6 / 10, py = before.Top + 20;
+            int screenW = GetSystemMetrics(0), screenH = GetSystemMetrics(1);
+            INPUT MoveTo(int x, int y) => new() { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dx = x * 65535 / (screenW - 1), dy = y * 65535 / (screenH - 1), dwFlags = 0x0001 | 0x8000 } } };
+            await Activate(window);
+            Send(MoveTo(px, py));
+            await Task.Delay(150);
+            Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0002 } } });
+            for (var step = 1; step <= 8; step++) { await Task.Delay(30); Send(MoveTo(px + step * 10, py + step * 5)); }
+            await Task.Delay(150);
+            Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0004 } } });
+            await Task.Delay(500);
+            GetWindowRect(window, out var after);
+            notes.Add($"dragged from ({px}, {py}) by (80, 40): the window moved by ({after.Left - before.Left}, {after.Top - before.Top})");
+            Check(Math.Abs(after.Left - before.Left - 80) <= 8 && Math.Abs(after.Top - before.Top - 40) <= 8, $"the settings' header drags the window ({after.Left - before.Left}, {after.Top - before.Top})");
+
+            // Back by the pane's back button.
+            var back = await WaitFor(window, "NavigationViewBackButton", 5000);
+            await Click(window, back);
             await Task.Delay(2000);
             var (afterPage, afterTop) = await ContentTop();
             double? menuBottomAfter = afterPage == "main" ? afterTop : null;
-            // Under a custom theme the settings' top row is the page's colour, the caption buttons on it - it was the
-            // window's white over a Sepia page. Sepia's page colour (Tools/Themes/generate.py).
-            await c.Call("test.settings.set", new { windowId, name = "CustomTheme", value = "sepia" });
-            await CtrlComma();
-            await Task.Delay(2000);
-            var sepiaRow = TopRowShare(window, (0xf4, 0xec, 0xd8));
-            var sepiaShot = Screenshot("cm01-sepia-settings");
-            await CtrlComma();
-            await Task.Delay(2000);
-            notes.Add($"settings under Sepia: {sepiaRow:0}% of the top row in the page's colour; screen {sepiaShot}");
-            Check(sepiaRow >= 60, $"under Sepia the settings' top row is the page's colour, not the window's ({sepiaRow:0}%)");
             var mark = (string?)(await c.Call("test.editor.eval", new { windowId, script = "String(window.__cm01)" }))["result"];
-            notes.Add($"content top in the window: main page (menu bar row bottom) {menuBottom}, the settings' top {settingsTop}, menu bar bottom after {menuBottomAfter}; page mark {mark}; screens {editorShot} {settingsShot}");
-            Check(menuBottom != null && settingsTop != null, "the menu bar and the settings were found");
-            Check(Math.Abs((menuBottom ?? 0) - (settingsTop ?? -100)) <= 1, $"the settings start where the main page's top row ends ({settingsTop} vs {menuBottom})");
-            Check(menuBottomAfter != null && Math.Abs(menuBottomAfter.Value - (menuBottom ?? 0)) <= 1, "back from the settings, the menu bar is where it was");
+            notes.Add($"back: page {afterPage}, menu bar bottom {menuBottomAfter}; page mark {mark}");
+            Check(menuBottom != null, "the main page's menu bar was found");
+            Check(menuBottomAfter != null && Math.Abs(menuBottomAfter.Value - (menuBottom ?? 0)) <= 1, "the back button goes back to the main page, its menu bar where it was");
             Check(mark == "kept", $"leaving the settings kept the editor page (mark {mark})");
             // And the document is still there to type into.
             TypeChar('Q');
