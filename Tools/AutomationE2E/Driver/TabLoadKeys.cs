@@ -22,8 +22,7 @@ internal static partial class Program
         // C is long (some 280,000 characters), reached with Ctrl+Tab from B: shown again it takes the page a while, and the
         // keys typed meanwhile are what the hold keeps (without it they were lost). A short document is in the page
         // before a quick typist's first key, hold or not. Few headings: thousands kept the window's thread busy building
-        // the outline, another matter (docs/todo.md). Clicked rather than reached by keys, a long document's tab lost
-        // the keys typed as the window got the keyboard back - also in the todo; the click here is on short B.
+        // the outline, another matter (docs/todo.md). Its tab is clicked at the end too.
         var cText = "# TL01 C\n\ngamma\n\n" + string.Concat(Enumerable.Range(0, 3000).Select(i => (i % 1000 == 0 ? $"## Part {i / 1000}\n\n" : "") + $"Paragraph {i} of the long document, with a few words to make it long enough to take a while.\n\n"));
         var cDoc = await Open(c, Fixture("tl01-c.md", cText));
         var windowId = await WindowIdOf(c, a);
@@ -95,6 +94,15 @@ internal static partial class Program
             await Step("Ctrl+Tab", () => { Chord("Ctrl+Tab"); return Task.CompletedTask; }, "mw");
             await Step("the + button", async () => await Click(window, await WaitFor(window, "AddButton")), "pv");
             await Step("Ctrl+Shift+H", () => { Chord("Ctrl+Shift+H"); return Task.CompletedTask; }, "hj");
+            // The long document's tab clicked: the tab no longer takes the keyboard, so what is typed stays in the page and
+            // is held for it.
+            await Step("the long document's tab clicked", async () =>
+            {
+                var tab = Deep.All(AutomationElement.FromHandle(window), new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.TabItem))
+                    .Cast<AutomationElement>().FirstOrDefault(t => t.Current.Name.Contains("tl01-c")) ?? throw new CaseFailed("no tl01-c tab in the strip");
+                var r = tab.Current.BoundingRectangle;
+                await Click(window, (int)(r.Left + 20), (int)(r.Top + r.Height / 2));
+            }, "qu");
         }
         finally
         {
