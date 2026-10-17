@@ -149,21 +149,15 @@ namespace Typedown.Controls
             }
         }
 
-        // The control's own colour is the page's (the theme's, a custom theme's own): while the page is hidden - loading,
-        // or its document still being drawn - that is what shows, not the window's light grey behind it.
+        // The control's own colour under a custom theme is the theme's page colour: while the page is hidden - loading, or
+        // its document still being drawn - that is what shows, not the window's light grey behind it. Under the app's own
+        // themes it stays clear, showing the window's colour as before: read from the app's light or dark state, it was
+        // light for a dark window just opened, whose state had not caught up yet (E2E SF01).
         private void UpdateBackdrop()
         {
-            try
-            {
-                var theme = Newtonsoft.Json.Linq.JObject.FromObject(ServiceProvider.GetCurrentTheme());
-                var bg = theme["background"];
-                root.Background = new Microsoft.UI.Xaml.Media.SolidColorBrush(global::Windows.UI.Color.FromArgb(
-                    (byte)(bg?["A"] ?? bg?["a"] ?? 255), (byte)(bg?["R"] ?? bg?["r"] ?? 0), (byte)(bg?["G"] ?? bg?["g"] ?? 0), (byte)(bg?["B"] ?? bg?["b"] ?? 0)));
-            }
-            catch (Exception ex)
-            {
-                Core.Utilities.Log.Debug($"editor: backdrop not set: {ex.Message}");
-            }
+            var custom = ThemeFiles.Find(AppViewModel.SettingsViewModel.CustomTheme);
+            if (ThemeFiles.Brush(custom?.Background) is Microsoft.UI.Xaml.Media.SolidColorBrush brush) root.Background = brush;
+            else root.ClearValue(Microsoft.UI.Xaml.Controls.Panel.BackgroundProperty);
         }
 
         // Shown once a long load has taken a moment (a short one never flashes it), gone when the page confirms it, and in
