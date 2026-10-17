@@ -17,16 +17,19 @@ internal static partial class Program
     {
         using var c = await Session("e2e TL01");
         var a = await Open(c, Fixture("tl01-a.md", "# TL01 A\n\nalpha\n"));
-        // B is long (some 300,000 characters): shown again it takes the page a while, and keys typed meanwhile are what the
-        // hold keeps. A short document is in the page before a quick typist's first key, hold or not. Few headings: with
-        // thousands the outline kept the window's thread busy for half a second, and the keyboard reached the page only
-        // after it - another matter (docs/todo.md).
-        var bText = "# TL01 B\n\nbeta\n\n" + string.Concat(Enumerable.Range(0, 3000).Select(i => (i % 1000 == 0 ? $"## Part {i / 1000}\n\n" : "") + $"Paragraph {i} of the long document, with a few words to make it long enough to take a while.\n\n"));
+        var bText = "# TL01 B\n\nbeta\n";
         var b = await Open(c, Fixture("tl01-b.md", bText));
+        // C is long (some 280,000 characters), reached with Ctrl+Tab from B: shown again it takes the page a while, and the
+        // keys typed meanwhile are what the hold keeps (without it they were lost). A short document is in the page
+        // before a quick typist's first key, hold or not. Few headings: thousands kept the window's thread busy building
+        // the outline, another matter (docs/todo.md). Clicked rather than reached by keys, a long document's tab lost
+        // the keys typed as the window got the keyboard back - also in the todo; the click here is on short B.
+        var cText = "# TL01 C\n\ngamma\n\n" + string.Concat(Enumerable.Range(0, 3000).Select(i => (i % 1000 == 0 ? $"## Part {i / 1000}\n\n" : "") + $"Paragraph {i} of the long document, with a few words to make it long enough to take a while.\n\n"));
+        var cDoc = await Open(c, Fixture("tl01-c.md", cText));
         var windowId = await WindowIdOf(c, a);
         var window = await WindowOf(windowId, c);
         var made = new List<string>();
-        var files = new[] { a, b };
+        var files = new[] { a, b, cDoc };
         try
         {
             await TypeInto(c, a, "");
@@ -88,10 +91,7 @@ internal static partial class Program
                     .Cast<AutomationElement>().FirstOrDefault(t => t.Current.Name.Contains("tl01-b")) ?? throw new CaseFailed("no tl01-b tab in the strip");
                 var r = tab.Current.BoundingRectangle;
                 await Click(window, (int)(r.Left + 20), (int)(r.Top + r.Height / 2));
-            }, "kz", firstKeyMs: 400);
-            // (400 ms after a click on the long document's tab: before that the web view has not taken the keyboard
-            // back - the window's thread busy with the document - and characters sent as Unicode input were lost
-            // before any part of the app saw them, 1 run in 3; see docs/todo.md.)
+            }, "kz");
             await Step("Ctrl+Tab", () => { Chord("Ctrl+Tab"); return Task.CompletedTask; }, "mw");
             await Step("the + button", async () => await Click(window, await WaitFor(window, "AddButton")), "pv");
             await Step("Ctrl+Shift+H", () => { Chord("Ctrl+Shift+H"); return Task.CompletedTask; }, "hj");
@@ -103,7 +103,7 @@ internal static partial class Program
             {
                 try
                 {
-                    var original = doc == a ? "# TL01 A\n\nalpha\n" : bText;
+                    var original = doc == a ? "# TL01 A\n\nalpha\n" : doc == b ? bText : cText;
                     for (var i = 0; i < 5 && (string)(await Get(c, doc))["text"]! != original; i++)
                         await c.Call("document.undo", new { documentId = doc, baseRevision = await Revision(c, doc), reveal = "document" });
                     await c.Call("document.close", new { documentId = doc });
