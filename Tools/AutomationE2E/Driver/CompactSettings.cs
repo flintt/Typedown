@@ -38,6 +38,8 @@ internal static partial class Program
         var window = await WindowOf(windowId, c);
         var compactBefore = (bool)(await c.Call("test.settings.get", new { windowId, name = "AppCompactMode" }))["value"]!;
         var themeBefore = (string?)(await c.Call("test.settings.get", new { windowId, name = "CustomTheme" }))["value"];
+        // Where the window was: the drags below move it, and the cases after this one click at points in it.
+        GetWindowRect(window, out var placed);
         try
         {
             await c.Call("test.settings.set", new { windowId, name = "AppCompactMode", value = true });
@@ -117,6 +119,7 @@ internal static partial class Program
         {
             try { await c.Call("test.settings.set", new { windowId, name = "AppCompactMode", value = compactBefore }); } catch { }
             try { await c.Call("test.settings.set", new { windowId, name = "CustomTheme", value = themeBefore ?? "" }); } catch { }
+            MbSetWindowPos(window, IntPtr.Zero, placed.Left, placed.Top, 0, 0, 0x0001 | 0x0004 | 0x0010); // SWP_NOSIZE | NOZORDER | NOACTIVATE
             try
             {
                 for (var i = 0; i < 3 && ((string?)(await Get(c, id))["text"] ?? "").Contains('Q'); i++)
