@@ -173,7 +173,9 @@ class ContentState {
     this.resizeLineNumber()
   }
 
-  render(isRenderCursor = true, clearCache = false, fresh = false) {
+  // cursorLater: the caller places the caret itself in a later task (Muya.setMarkdown on a whole new document), so
+  // the caret is not set here, and the editor is not blurred either - that would take the focus from it.
+  render(isRenderCursor = true, clearCache = false, fresh = false, cursorLater = false) {
     const { blocks, searchMatches: { matches, index } } = this
     const activeBlocks = this.getActiveBlocks()
     if (clearCache) {
@@ -185,7 +187,14 @@ class ContentState {
     this.setNextRenderRange()
     this.stateRender.collectLabels(blocks)
     this.stateRender.render(blocks, activeBlocks, matches, fresh)
-    if (isRenderCursor) {
+    if (cursorLater) {
+      // The old document's caret went with its elements, and the selection is left collapsed on the editor itself
+      // until the new one is placed. With it there the browser's next style pass over a long document took a second
+      // and a half instead of a tenth (measured, 3000 headings); with no selection at all it is the tenth. Only a
+      // selection in the editor: one in a text box elsewhere (the input hold's) is not ours to drop.
+      const sel = document.getSelection()
+      if (sel && sel.rangeCount && this.muya.container.contains(sel.anchorNode)) sel.removeAllRanges()
+    } else if (isRenderCursor) {
       this.setCursor()
     } else {
       this.muya.blur()
