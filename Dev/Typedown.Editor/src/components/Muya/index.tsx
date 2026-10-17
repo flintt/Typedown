@@ -128,17 +128,49 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     // Import/export normalizes Markdown. Keep the original text while the document
     // still exports to its initial value, including after an undo back to that value.
     const importedRef = useRef<{ source: string, normalized: string }>();
-    const [firstEditWarning, setFirstEditWarning] = useState(false)
+    // The notice is put in and taken out by hand, not through React state: a React commit while the editor has the
+    // focus walks the whole document to save and put back the selection (react-dom's getSelectionInformation), and
+    // on a document with diagrams - thousands of SVG elements - that took over a second, once as the notice came with
+    // the load and again as it went ten seconds later.
+    const warningSlotRef = useRef<HTMLDivElement>(null)
+    const firstEditWarningRef = useRef(false)
+    const readOnlyRef = useRef(!!props.options?.readOnly)
     const firstEditWarningTimerRef = useRef<number | null>(null)
+    const drawFirstEditWarningRef = useRef<() => void>(() => { })
     const showFirstEditWarning = useCallback((show: boolean) => {
         if (firstEditWarningTimerRef.current !== null) window.clearTimeout(firstEditWarningTimerRef.current)
         firstEditWarningTimerRef.current = null
-        setFirstEditWarning(show)
+        firstEditWarningRef.current = show
+        drawFirstEditWarningRef.current()
         if (show) firstEditWarningTimerRef.current = window.setTimeout(() => {
             firstEditWarningTimerRef.current = null
-            setFirstEditWarning(false)
+            firstEditWarningRef.current = false
+            drawFirstEditWarningRef.current()
         }, 10000)
     }, [])
+    drawFirstEditWarningRef.current = () => {
+        const slot = warningSlotRef.current
+        if (!slot) return
+        const show = firstEditWarningRef.current && !readOnlyRef.current
+        if (show === !!slot.firstElementChild) return
+        if (!show) { slot.replaceChildren(); return }
+        const notice = document.createElement('div')
+        notice.className = 'td-first-edit-warning'
+        notice.setAttribute('role', 'status')
+        const text = document.createElement('span')
+        text.className = 'td-first-edit-warning-text'
+        const close = document.createElement('button')
+        close.className = 'td-first-edit-warning-close'
+        close.setAttribute('aria-label', 'Close')
+        close.textContent = '×'
+        close.addEventListener('click', () => showFirstEditWarning(false))
+        notice.append(text, close)
+        slot.append(notice)
+    }
+    useEffect(() => {
+        readOnlyRef.current = !!props.options?.readOnly
+        drawFirstEditWarningRef.current()
+    }, [props.options?.readOnly])
     useEffect(() => () => {
         if (firstEditWarningTimerRef.current !== null) window.clearTimeout(firstEditWarningTimerRef.current)
     }, [])
@@ -1120,13 +1152,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         }}>
             {/* A wrapper that always exists: Muya replaces #editor's node, so React must never insert next to it -
                 inserting the notice before #editor threw and took the whole page down. */}
-            <div className="td-first-edit-warning-slot">
-                {firstEditWarning && !props.options?.readOnly &&
-                    <div className="td-first-edit-warning" role="status">
-                        <span className="td-first-edit-warning-text" />
-                        <button className="td-first-edit-warning-close" aria-label="Close" onClick={() => showFirstEditWarning(false)}>×</button>
-                    </div>}
-            </div>
+            <div className="td-first-edit-warning-slot" ref={warningSlotRef} />
             <div id="editor" />
         </div>
     )
