@@ -22,8 +22,14 @@ internal static partial class Program
         try
         {
             await c.Call("test.settings.set", new { windowId, name = "AppCompactMode", value = true });
+            // As a reader turns it on: in the settings, then back to the main page, which is made in compact mode.
             await TypeInto(c, id, "");
+            await CtrlComma();
             await Task.Delay(1500);
+            await CtrlComma();
+            await Task.Delay(2000);
+            await TypeInto(c, id, "");
+            await Task.Delay(1000);
             await c.Call("test.editor.eval", new { windowId, script = "window.__cm01 = 'kept'; 'ok'" });
             async Task<(string Page, double Top)> ContentTop()
             {
