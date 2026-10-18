@@ -928,4 +928,10 @@
   <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
     <value>აბზაცებს შორის ცარიელი ხაზები ადგილს იკავებს კითხვის რეჟიმშიც და HTML და PDF ექსპორტშიც, ისევე როგორც რედაქტირებისას. თავად ფაილი არ იცვლება</value>
   </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>გრძელი დოკუმენტების თანდათანობითი დახატვა</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>გრძელი დოკუმენტი იხსნება იმ ადგილას, სადაც დატოვეთ, დანარჩენი კი ფონზე იხატება. გამორთეთ ეს, თუ გრძელი დოკუმენტის გახსნისას რამე არასწორად ჩანს: მაშინ ის ერთბაშად დაიხატება</value>
+  </data>
 </root>

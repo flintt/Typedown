@@ -928,4 +928,10 @@
   <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
     <value>Ang mga blangkong linya sa pagitan ng mga talata ay kumukuha rin ng espasyo sa reading mode at sa mga HTML at PDF export, gaya habang nag-e-edit. Hindi binabago ang file mismo</value>
   </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Iguhit nang paunti-unti ang mahahabang dokumento</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Bumubukas ang mahabang dokumento sa lugar kung saan mo ito iniwan, at ang natitira ay iginuguhit sa background. I-off ito kung may mukhang mali habang bumubukas ang mahabang dokumento: iguguhit ito nang buo nang minsanan</value>
+  </data>
 </root>

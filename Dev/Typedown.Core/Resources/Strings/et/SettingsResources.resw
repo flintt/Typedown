@@ -928,4 +928,10 @@
   <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
     <value>Lõikude vahelised tühjad read võtavad ruumi ka lugemisrežiimis ning HTML- ja PDF-ekspordis, nagu redigeerimisel. Faili ennast ei muudeta</value>
   </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Joonista pikad dokumendid järk-järgult</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Pikk dokument avaneb kohas, kuhu selle jätsite, ja ülejäänu joonistatakse taustal. Lülitage see välja, kui pika dokumendi avamisel näib midagi valesti olevat: siis joonistatakse see korraga</value>
+  </data>
 </root>

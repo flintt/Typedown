@@ -928,4 +928,10 @@
   <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
     <value>Las líneas en blanco entre párrafos también ocupan espacio en el modo de lectura y en las exportaciones a HTML y PDF, como al editar. El archivo no cambia</value>
   </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Dibujar documentos largos progresivamente</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Un documento largo se abre en el punto donde lo dejó y el resto se dibuja en segundo plano. Desactívelo si algo no se ve bien mientras se abre un documento largo: entonces se dibuja todo de una vez</value>
+  </data>
 </root>

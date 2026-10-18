@@ -928,4 +928,10 @@
   <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
     <value>บรรทัดว่างระหว่างย่อหน้าจะกินพื้นที่ในโหมดอ่านและในการส่งออก HTML และ PDF ด้วย เหมือนขณะแก้ไข ตัวไฟล์ไม่เปลี่ยนแปลง</value>
   </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>วาดเอกสารยาวทีละส่วน</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>เอกสารยาวจะเปิดที่ตำแหน่งที่คุณค้างไว้ และส่วนที่เหลือจะวาดในเบื้องหลัง ปิดตัวเลือกนี้หากมีบางอย่างดูผิดปกติขณะเปิดเอกสารยาว: เอกสารจะถูกวาดทั้งหมดในครั้งเดียว</value>
+  </data>
 </root>

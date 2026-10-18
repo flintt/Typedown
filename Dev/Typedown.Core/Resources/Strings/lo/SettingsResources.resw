@@ -928,4 +928,10 @@
   <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
     <value>ແຖວຫວ່າງລະຫວ່າງວັກກໍໃຊ້ພື້ນທີ່ໃນໂໝດອ່ານ ແລະ ໃນການສົ່ງອອກ HTML ແລະ PDF ຄືກັບຕອນແກ້ໄຂ. ໄຟລ໌ເອງບໍ່ປ່ຽນແປງ</value>
   </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>ແຕ້ມເອກະສານຍາວເທື່ອລະໜ້ອຍ</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>ເອກະສານຍາວຈະເປີດຢູ່ບ່ອນທີ່ທ່ານປະໄວ້ ແລະ ສ່ວນທີ່ເຫຼືອຈະຖືກແຕ້ມຢູ່ເບື້ອງຫຼັງ. ປິດອັນນີ້ຖ້າມີບາງຢ່າງເບິ່ງຄືບໍ່ຖືກຕ້ອງໃນຂະນະທີ່ເອກະສານຍາວກຳລັງເປີດ: ຈາກນັ້ນມັນຈະຖືກແຕ້ມທັງໝົດໃນຄັ້ງດຽວ</value>
+  </data>
 </root>

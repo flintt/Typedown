@@ -928,4 +928,10 @@
   <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
     <value>എഡിറ്റ് ചെയ്യുമ്പോഴെന്നപോലെ വായനാ മോഡിലും HTML, PDF എക്സ്പോർട്ടുകളിലും ഖണ്ഡികകൾക്കിടയിലെ ശൂന്യ വരികൾ ഇടം എടുക്കുന്നു. ഫയൽ തന്നെ മാറുന്നില്ല</value>
   </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>നീളമുള്ള പ്രമാണങ്ങൾ ഘട്ടംഘട്ടമായി വരയ്ക്കുക</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>നീളമുള്ള പ്രമാണം നിങ്ങൾ വിട്ടുപോയ സ്ഥലത്തുതന്നെ തുറക്കുന്നു, ബാക്കി പശ്ചാത്തലത്തിൽ വരയ്ക്കുന്നു. നീളമുള്ള പ്രമാണം തുറക്കുമ്പോൾ എന്തെങ്കിലും തെറ്റായി തോന്നിയാൽ ഇത് ഓഫ് ചെയ്യുക: അപ്പോൾ അത് ഒറ്റയടിക്ക് വരയ്ക്കും</value>
+  </data>
 </root>

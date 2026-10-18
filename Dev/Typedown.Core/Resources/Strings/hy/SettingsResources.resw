@@ -928,4 +928,10 @@
   <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
     <value>Պարբերությունների միջև դատարկ տողերը տեղ են զբաղեցնում նաև ընթերցման ռեժիմում և HTML ու PDF արտահանման մեջ, ինչպես խմբագրելիս։ Ֆայլն ինքը չի փոխվում</value>
   </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Երկար փաստաթղթերը պատկերել աստիճանաբար</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Երկար փաստաթուղթը բացվում է այնտեղ, որտեղ թողել եք, իսկ մնացածը պատկերվում է հետին պլանում։ Անջատեք սա, եթե երկար փաստաթղթի բացման ժամանակ ինչ-որ բան սխալ է թվում․ այդ դեպքում այն կպատկերվի միանգամից</value>
+  </data>
 </root>

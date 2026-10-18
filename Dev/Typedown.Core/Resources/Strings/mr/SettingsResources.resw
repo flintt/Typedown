@@ -928,4 +928,10 @@
   <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
     <value>परिच्छेदांमधील रिकाम्या ओळी संपादन करतानाप्रमाणे वाचन मोडमध्ये आणि HTML व PDF निर्यातीतही जागा घेतात. फाइल स्वतः बदलत नाही</value>
   </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>लांब दस्तऐवज टप्प्याटप्प्याने काढा</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>लांब दस्तऐवज तुम्ही जिथे सोडला होता तिथून उघडतो आणि उरलेला भाग पार्श्वभूमीत काढला जातो. लांब दस्तऐवज उघडताना काही चुकीचे दिसल्यास हे बंद करा: मग तो एकाच वेळी काढला जाईल</value>
+  </data>
 </root>

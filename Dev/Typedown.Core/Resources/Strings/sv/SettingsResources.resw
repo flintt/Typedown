@@ -928,4 +928,10 @@
   <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
     <value>Tomma rader mellan stycken tar plats även i läsläget och vid export till HTML och PDF, precis som när du redigerar. Själva filen ändras inte</value>
   </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Rita långa dokument stegvis</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Ett långt dokument öppnas där du lämnade det, och resten ritas i bakgrunden. Stäng av detta om något ser fel ut medan ett långt dokument öppnas: då ritas det på en gång</value>
+  </data>
 </root>

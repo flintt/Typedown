@@ -757,6 +757,14 @@
     <value>Empty lines between paragraphs take up space in reading mode and in HTML and PDF exports too, as they do while editing. The file itself is not changed</value>
     <comment>编辑器/保留多余空行说明：段落之间多出的空行在阅读模式和 HTML、PDF 导出中也留出空白，与编辑时一致，文件内容不变</comment>
   </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Draw long documents progressively</value>
+    <comment>编辑器/分段渲染长文档</comment>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>A long document opens at the place you left it, and the rest is drawn in the background. Turn this off if something looks wrong while a long document is opening: it is then drawn all at once</value>
+    <comment>编辑器/分段渲染长文档说明：长文档打开时先显示上次阅读的位置，其余部分在后台补齐；若打开长文档时出现异常，可关闭此项，改为一次渲染整篇</comment>
+  </data>
   <data name="Editor.ShowParagraphMarker.Title" xml:space="preserve">
     <value>Paragraph marker</value>
     <comment>编辑器/段落标记</comment>

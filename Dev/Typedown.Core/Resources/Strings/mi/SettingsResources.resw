@@ -928,4 +928,10 @@
   <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
     <value>Ka whai wāhi anō ngā rārangi wātea i waenga i ngā kōwae i te aratau pānui me ngā kaweake HTML me PDF, pērā i te wā whakatika. Kāore te kōnae tonu e huri</value>
   </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Tuhia haere ngā tuhinga roa</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Ka tuwhera tētahi tuhinga roa ki te wāhi i waiho ai e koe, ā, ka tuhia te toenga ki muri. Whakawetohia tēnei mēnā he hē te āhua o tētahi mea i te wā e tuwhera ana tētahi tuhinga roa: kātahi ka tuhia katoatia i te wā kotahi</value>
+  </data>
 </root>

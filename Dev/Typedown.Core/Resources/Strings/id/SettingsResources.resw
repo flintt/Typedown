@@ -928,4 +928,10 @@
   <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
     <value>Baris kosong di antara paragraf juga mengambil ruang di mode baca serta ekspor HTML dan PDF, seperti saat mengedit. File itu sendiri tidak diubah</value>
   </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Gambar dokumen panjang secara bertahap</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Dokumen panjang terbuka di tempat Anda meninggalkannya, dan sisanya digambar di latar belakang. Matikan ini jika ada yang tampak salah saat dokumen panjang dibuka: dokumen lalu digambar sekaligus</value>
+  </data>
 </root>

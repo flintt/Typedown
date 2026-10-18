@@ -928,4 +928,10 @@
   <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
     <value>បន្ទាត់ទទេរវាងកថាខណ្ឌក៏យកកន្លែងក្នុងរបៀបអាន និងក្នុងការនាំចេញ HTML និង PDF ដូចពេលកែសម្រួលដែរ។ ឯកសារខ្លួនឯងមិនផ្លាស់ប្តូរទេ</value>
   </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>គូរឯកសារវែងៗបន្តិចម្តងៗ</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>ឯកសារវែងបើកនៅកន្លែងដែលអ្នកបានទុកវា ហើយផ្នែកដែលនៅសល់ត្រូវបានគូរនៅផ្ទៃខាងក្រោយ។ បិទមុខងារនេះ ប្រសិនបើមានអ្វីមើលទៅខុស ពេលឯកសារវែងកំពុងបើក៖ ពេលនោះវានឹងត្រូវគូរទាំងស្រុងក្នុងពេលតែមួយ</value>
+  </data>
 </root>

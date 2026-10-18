@@ -928,4 +928,10 @@
   <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
     <value>Auðar línur milli efnisgreina taka líka pláss í lestrarham og í HTML- og PDF-útflutningi, eins og við breytingar. Skránni sjálfri er ekki breytt</value>
   </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Teikna löng skjöl smám saman</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Langt skjal opnast þar sem þú skildir við það og afgangurinn er teiknaður í bakgrunni. Slökktu á þessu ef eitthvað lítur rangt út á meðan langt skjal opnast: þá er það teiknað allt í einu</value>
+  </data>
 </root>

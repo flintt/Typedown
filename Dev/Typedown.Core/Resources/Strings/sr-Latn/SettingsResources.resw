@@ -928,4 +928,10 @@
   <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
     <value>Prazni redovi između pasusa zauzimaju prostor i u režimu čitanja i pri izvozu u HTML i PDF, kao i tokom uređivanja. Sama datoteka se ne menja</value>
   </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Postepeno iscrtavaj duge dokumente</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Dugi dokument se otvara na mestu gde ste ga ostavili, a ostatak se iscrtava u pozadini. Isključite ovo ako nešto izgleda pogrešno dok se dugi dokument otvara: tada se iscrtava odjednom</value>
+  </data>
 </root>

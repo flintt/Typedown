@@ -928,4 +928,10 @@
   <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
     <value>Абзацтар арасындағы бос жолдар өңдеу кезіндегідей оқу режимінде және HTML мен PDF экспорттарында да орын алады. Файлдың өзі өзгермейді</value>
   </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Ұзын құжаттарды біртіндеп салу</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Ұзын құжат сіз қалдырған жерде ашылады, ал қалғаны фондық режимде салынады. Ұзын құжат ашылып жатқанда бірдеңе дұрыс көрінбесе, мұны өшіріңіз: сонда ол бірден толық салынады</value>
+  </data>
 </root>

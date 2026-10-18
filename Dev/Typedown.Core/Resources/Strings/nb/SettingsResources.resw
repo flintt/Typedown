@@ -928,4 +928,10 @@
   <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
     <value>Tomme linjer mellom avsnitt tar også plass i lesemodus og i HTML- og PDF-eksport, slik de gjør under redigering. Selve filen endres ikke</value>
   </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Tegn lange dokumenter gradvis</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Et langt dokument åpnes der du forlot det, og resten tegnes i bakgrunnen. Slå av dette hvis noe ser feil ut mens et langt dokument åpnes: da tegnes det hele på én gang</value>
+  </data>
 </root>

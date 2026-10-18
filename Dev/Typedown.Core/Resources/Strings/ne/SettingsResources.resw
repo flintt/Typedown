@@ -928,4 +928,10 @@
   <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
     <value>अनुच्छेदहरूबीचका खाली पङ्क्तिहरूले सम्पादन गर्दाझैँ पढ्ने मोड र HTML तथा PDF निर्यातमा पनि ठाउँ लिन्छन्। फाइल आफैँ परिवर्तन हुँदैन</value>
   </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>लामो कागजात क्रमशः कोर्नुहोस्</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>लामो कागजात तपाईंले छाडेकै ठाउँबाट खुल्छ, र बाँकी भाग पृष्ठभूमिमा कोरिन्छ। लामो कागजात खुल्दा केही गलत देखिएमा यो बन्द गर्नुहोस्: त्यसपछि सबै एकैपटक कोरिन्छ</value>
+  </data>
 </root>

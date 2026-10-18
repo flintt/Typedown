@@ -928,4 +928,10 @@
   <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
     <value>Leë reëls tussen paragrawe neem ook in leesmodus en in HTML- en PDF-uitvoere plek in, soos tydens redigering. Die lêer self word nie verander nie</value>
   </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Teken lang dokumente geleidelik</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>'n Lang dokument maak oop waar jy dit gelos het, en die res word in die agtergrond geteken. Skakel dit af as iets verkeerd lyk terwyl 'n lang dokument oopmaak: dit word dan alles op een slag geteken</value>
+  </data>
 </root>

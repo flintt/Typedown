@@ -1149,7 +1149,8 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         let anchorLeaf: string | null = null
         let picked = { how: 'none', index: -1 }
         const startedAt = performance.now()
-        const progressive = props.markdown.length >= PREVIEW_FROM_CHARS && !(window as any).__typedownProgressiveOff ? {
+        // Off in the settings (Editor > Draw long documents progressively), or by a test: all at once, as before.
+        const progressive = props.markdown.length >= PREVIEW_FROM_CHARS && props.options?.progressiveRendering !== false && !(window as any).__typedownProgressiveOff ? {
             pick: (blocks: any[], cursorIndex: number) => {
                 const found = anchor ? findAnchorBlock(blocks, anchor) : null
                 if (found) { anchorLeaf = found.leafKey; picked = { how: 'anchor', index: found.index }; return found.index }

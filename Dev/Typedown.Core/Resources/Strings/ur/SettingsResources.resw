@@ -928,4 +928,10 @@
   <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
     <value>پیراگرافوں کے درمیان خالی سطریں ترمیم کی طرح پڑھنے کے موڈ اور HTML اور PDF برآمدات میں بھی جگہ لیتی ہیں۔ فائل خود تبدیل نہیں ہوتی</value>
   </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>طویل دستاویزات بتدریج بنائیں</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>طویل دستاویز وہیں سے کھلتی ہے جہاں آپ نے اسے چھوڑا تھا، اور باقی حصہ پس منظر میں بنتا ہے۔ اگر طویل دستاویز کھلتے وقت کچھ غلط لگے تو اسے بند کریں: پھر وہ ایک ہی بار میں بنے گی</value>
+  </data>
 </root>

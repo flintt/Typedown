@@ -161,6 +161,18 @@ const pending = () => !!window.__typedownMuya?.renderPending;
     const top = await p.evaluate(b => document.getElementById('ag-editor-id').children[b].getBoundingClientRect().top, placed.block);
     check(drawn === true && Math.abs(top - placed.top) <= 2, `back in it, drawn a part at a time and the paragraph at its height (${drawn}, ${top} vs ${placed.top})`);
   }
+  {
+    // Off in the settings (Editor > Draw long documents progressively): all at once, as before; on again, a part at a time.
+    await p.evaluate(() => window.__deliver('SettingsChanged', { progressiveRendering: false }));
+    await new Promise(r => setTimeout(r, 300));
+    await load(p, doc + '\nOff\n', 16, anchor, 99999);
+    const off = await p.evaluate(() => window.__typedownLastProgressive);
+    await p.evaluate(() => window.__deliver('SettingsChanged', { progressiveRendering: true }));
+    await new Promise(r => setTimeout(r, 300));
+    await load(p, doc + '\nOn\n', 17, anchor, 99999);
+    const on = await p.evaluate(() => window.__typedownLastProgressive);
+    check(off === false && on === true, `the setting turns drawing a part at a time off and on (off: ${off}, on: ${on})`);
+  }
   const errors = await p.evaluate(() => (window.__pageErrors || []).length);
   console.log(ok ? 'OK: a long document is drawn from where the reader was, and whole before anything works on it' : 'FAILED');
   await browser.close(); server.close(); process.exit(ok ? 0 : 1);

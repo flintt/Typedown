@@ -196,6 +196,7 @@ namespace Typedown.Core.ViewModels
                 Settings.ListIndentation,
                 Settings.TableAlignColumns,
                 Settings.ShowBlankLines,
+                Settings.ProgressiveRendering,
                 Settings.ShowParagraphMarker,
                 Settings.ReadOnly,
                 Settings.CustomCss,

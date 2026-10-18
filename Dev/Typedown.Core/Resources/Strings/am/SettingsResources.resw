@@ -928,4 +928,10 @@
   <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
     <value>በአንቀጾች መካከል ያሉ ባዶ መስመሮች ልክ በማረም ጊዜ እንደሚያደርጉት በንባብ ሁነታ እና በHTML እና PDF ወደ ውጭ መላኪያዎች ውስጥም ቦታ ይይዛሉ። ፋይሉ ራሱ አይለወጥም</value>
   </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>ረጅም ሰነዶችን ቀስ በቀስ ይሳሉ</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>ረጅም ሰነድ በተዉት ቦታ ይከፈታል፣ የቀረው ደግሞ ከበስተጀርባ ይሳላል። ረጅም ሰነድ ሲከፈት የሆነ ነገር ትክክል ካልመሰለ ይህን ያጥፉ፤ ከዚያ ሰነዱ በአንድ ጊዜ ይሳላል</value>
+  </data>
 </root>

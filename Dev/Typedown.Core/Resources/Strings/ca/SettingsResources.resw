@@ -928,4 +928,10 @@
   <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
     <value>Les línies en blanc entre paràgrafs també ocupen espai en el mode de lectura i en les exportacions HTML i PDF, com mentre s'edita. El fitxer no canvia</value>
   </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Dibuixa els documents llargs progressivament</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Un document llarg s'obre al punt on el vau deixar i la resta es dibuixa en segon pla. Desactiveu-ho si alguna cosa no es veu bé mentre s'obre un document llarg: aleshores es dibuixa tot alhora</value>
+  </data>
 </root>

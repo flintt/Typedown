@@ -928,4 +928,10 @@
   <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
     <value>Paragraflar arasındaki boş satırlar, düzenlerken olduğu gibi okuma modunda ve HTML ile PDF dışa aktarımlarında da yer kaplar. Dosyanın kendisi değişmez</value>
   </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Uzun belgeleri aşamalı olarak çiz</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Uzun bir belge kaldığınız yerden açılır ve geri kalanı arka planda çizilir. Uzun bir belge açılırken bir şey yanlış görünürse bunu kapatın: belge o zaman tek seferde çizilir</value>
+  </data>
 </root>

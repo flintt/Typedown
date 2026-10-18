@@ -928,4 +928,10 @@
   <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
     <value>שורות ריקות בין פסקאות תופסות מקום גם במצב קריאה ובייצוא ל-HTML ול-PDF, כמו בזמן עריכה. הקובץ עצמו אינו משתנה</value>
   </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>ציור הדרגתי של מסמכים ארוכים</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>מסמך ארוך נפתח במקום שבו השארת אותו, והשאר מצויר ברקע. כבה אפשרות זו אם משהו נראה שגוי בזמן שמסמך ארוך נפתח: אז הוא יצויר כולו בבת אחת</value>
+  </data>
 </root>

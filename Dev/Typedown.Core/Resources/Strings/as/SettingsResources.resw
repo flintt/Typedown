@@ -928,4 +928,10 @@
   <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
     <value>সম্পাদনা কৰাৰ সময়ৰ দৰে পঢ়া ম'ড আৰু HTML আৰু PDF ৰপ্তানিতো অনুচ্ছেদৰ মাজৰ খালী শাৰীয়ে ঠাই লয়। ফাইলটো নিজে সলনি নহয়</value>
   </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>দীঘলীয়া নথি ক্ৰমান্বয়ে অংকন কৰক</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>দীঘলীয়া নথি আপুনি এৰি থোৱা ঠাইতে খোল খায়, বাকী অংশ পটভূমিত অংকন হয়। দীঘলীয়া নথি খোলোঁতে কিবা ভুল যেন লাগিলে এইটো বন্ধ কৰক: তেতিয়া ই এবাৰতে অংকন হ'ব</value>
+  </data>
 </root>

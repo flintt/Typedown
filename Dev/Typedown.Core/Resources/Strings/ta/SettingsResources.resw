@@ -928,4 +928,10 @@
   <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
     <value>திருத்தும்போது போலவே, படிக்கும் பயன்முறையிலும் HTML, PDF ஏற்றுமதிகளிலும் பத்திகளுக்கு இடையிலான வெற்று வரிகள் இடம் பிடிக்கும். கோப்பு மாறாது</value>
   </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>நீண்ட ஆவணங்களைப் படிப்படியாக வரை</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>நீண்ட ஆவணம் நீங்கள் விட்ட இடத்திலேயே திறக்கும், மீதமுள்ளவை பின்னணியில் வரையப்படும். நீண்ட ஆவணம் திறக்கும்போது ஏதாவது தவறாகத் தெரிந்தால் இதை முடக்கவும்: அப்போது அது ஒரே முறையில் வரையப்படும்</value>
+  </data>
 </root>

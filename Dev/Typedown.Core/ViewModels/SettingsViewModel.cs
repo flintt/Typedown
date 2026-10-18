@@ -52,6 +52,12 @@ namespace Typedown.Core.ViewModels
         /// too, as they do while editing (todo S8). Display only: the file is written the same either way.
         /// </summary>
         public bool ShowBlankLines { get => GetSettingValue(false); set => SetSettingValue(value); }
+
+        /// <summary>
+        /// A long document is drawn a part at a time: where the reader left it first, the rest while the page is idle. Off,
+        /// it is drawn all at once as before - for a document that looks wrong while it is coming.
+        /// </summary>
+        public bool ProgressiveRendering { get => GetSettingValue(true); set => SetSettingValue(value); }
         /// <summary>Show the paragraph type marker ("P", "H1"...) left of the active block (upstream #45).</summary>
         public bool ShowParagraphMarker { get => GetSettingValue(true); set => SetSettingValue(value); }
         /// <summary>
@@ -261,6 +267,7 @@ namespace Typedown.Core.ViewModels
             "ListIndentation",
             "TableAlignColumns",
             "ShowBlankLines",
+            "ProgressiveRendering",
             "ShowParagraphMarker",
             "ReadOnly",
             "CustomCss",

@@ -928,4 +928,10 @@
   <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
     <value>Празните редови меѓу пасусите заземаат простор и во режимот за читање и при извоз во HTML и PDF, како при уредување. Самата датотека не се менува</value>
   </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Постепено исцртувај долги документи</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Долгиот документ се отвора таму каде што сте го оставиле, а остатокот се исцртува во позадина. Исклучете го ова ако нешто изгледа погрешно додека се отвора долг документ: тогаш тој се исцртува одеднаш</value>
+  </data>
 </root>

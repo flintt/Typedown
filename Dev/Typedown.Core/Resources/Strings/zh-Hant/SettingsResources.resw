@@ -957,4 +957,10 @@
   <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
     <value>段落之間多出的空行在閱讀模式和 HTML、PDF 匯出中也留出空白，與編輯時一致。檔案內容不變</value>
   </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>分段繪製長文件</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>長文件開啟時先顯示上次閱讀的位置，其餘部分在背景補齊。若開啟長文件時顯示異常，可關閉此項，改為一次繪製整篇</value>
+  </data>
 </root>

@@ -928,4 +928,10 @@
   <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
     <value>Οι κενές γραμμές μεταξύ παραγράφων καταλαμβάνουν χώρο και στη λειτουργία ανάγνωσης και στις εξαγωγές HTML και PDF, όπως κατά την επεξεργασία. Το ίδιο το αρχείο δεν αλλάζει</value>
   </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Σταδιακή σχεδίαση μεγάλων εγγράφων</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Ένα μεγάλο έγγραφο ανοίγει στο σημείο όπου το αφήσατε και το υπόλοιπο σχεδιάζεται στο παρασκήνιο. Απενεργοποιήστε το αν κάτι δεν φαίνεται σωστό ενώ ανοίγει ένα μεγάλο έγγραφο: τότε σχεδιάζεται ολόκληρο με τη μία</value>
+  </data>
 </root>

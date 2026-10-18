@@ -928,4 +928,10 @@
   <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
     <value>단락 사이의 빈 줄이 편집할 때처럼 읽기 모드와 HTML·PDF 내보내기에서도 공간을 차지합니다. 파일 자체는 바뀌지 않습니다</value>
   </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>긴 문서를 단계적으로 그리기</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>긴 문서는 마지막으로 보던 위치에서 열리고 나머지는 백그라운드에서 그려집니다. 긴 문서를 여는 동안 표시가 이상하면 이 옵션을 끄세요. 그러면 문서 전체를 한 번에 그립니다</value>
+  </data>
 </root>

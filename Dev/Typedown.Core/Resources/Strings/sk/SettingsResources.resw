@@ -928,4 +928,10 @@
   <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
     <value>Prázdne riadky medzi odsekmi zaberajú miesto aj v režime čítania a v exporte do HTML a PDF, rovnako ako pri úpravách. Samotný súbor sa nemení</value>
   </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Vykresľovať dlhé dokumenty postupne</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Dlhý dokument sa otvorí na mieste, kde ste ho opustili, a zvyšok sa vykreslí na pozadí. Vypnite to, ak pri otváraní dlhého dokumentu niečo nevyzerá správne: potom sa vykreslí celý naraz</value>
+  </data>
 </root>

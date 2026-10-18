@@ -928,4 +928,10 @@
   <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
     <value>Baris kosong antara perenggan juga mengambil ruang dalam mod baca dan dalam eksport HTML dan PDF, seperti semasa mengedit. Fail itu sendiri tidak diubah</value>
   </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Lukis dokumen panjang secara beransur-ansur</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Dokumen panjang dibuka di tempat anda meninggalkannya, dan selebihnya dilukis di latar belakang. Matikan ini jika sesuatu kelihatan salah semasa dokumen panjang dibuka: ia kemudian dilukis sekali gus</value>
+  </data>
 </root>

@@ -928,4 +928,10 @@
   <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
     <value>Lege regels tussen alinea's nemen ook ruimte in in de leesmodus en bij export naar HTML en PDF, zoals tijdens het bewerken. Het bestand zelf verandert niet</value>
   </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Lange documenten geleidelijk weergeven</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Een lang document opent op de plek waar u het verliet en de rest wordt op de achtergrond weergegeven. Schakel dit uit als er iets niet goed lijkt terwijl een lang document opent: het wordt dan in één keer weergegeven</value>
+  </data>
 </root>

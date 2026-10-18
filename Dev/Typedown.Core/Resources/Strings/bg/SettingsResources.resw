@@ -928,4 +928,10 @@
   <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
     <value>Празните редове между абзаците заемат място и в режима за четене, и при експорт в HTML и PDF, както при редактиране. Самият файл не се променя</value>
   </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Постепенно изобразяване на дълги документи</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Дългият документ се отваря там, където сте го оставили, а останалото се изобразява на заден план. Изключете това, ако нещо изглежда нередно при отваряне на дълъг документ: тогава той се изобразява наведнъж</value>
+  </data>
 </root>
