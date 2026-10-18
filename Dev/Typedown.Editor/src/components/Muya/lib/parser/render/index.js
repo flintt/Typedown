@@ -524,8 +524,17 @@ class StateRender {
     const before = first.getBoundingClientRect().top
     return () => {
       if (!first.isConnected) return
-      const moved = first.getBoundingClientRect().top - before
-      if (Math.abs(moved) >= 0.5) window.scrollBy(0, moved)
+      // The page scrolls by whole pixels and the blocks' heights have fractions: what a scroll leaves over is carried
+      // to the next, or a few dozen slices added up to pixels and the window crept (JU01 saw it move by two).
+      const moved = first.getBoundingClientRect().top - before + (state.carry || 0)
+      const by = Math.round(moved)
+      if (by) {
+        const from = window.scrollY
+        window.scrollBy(0, by)
+        state.carry = moved - (window.scrollY - from)
+      } else {
+        state.carry = moved
+      }
     }
   }
 
