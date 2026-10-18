@@ -185,13 +185,15 @@ internal static partial class Program
             try { await c.Call("document.close", new { documentId = plain }); } catch { }
 
             // The watch sees a move when there is one: the page moved 120 px and back while it watches.
+            await Activate(window);
+            await Task.Delay(300);
             watch = WatchForJumps(window, 2500);
             await Task.Delay(600);
-            await Eval("window.scrollBy(0, 120); 'ok'");
+            var down = await Eval("(() => { const y = window.scrollY; window.scrollBy(0, 120); return y + ' > ' + window.scrollY })()");
             await Task.Delay(500);
-            await Eval("window.scrollBy(0, -120); 'ok'");
+            var up = await Eval("(() => { const y = window.scrollY; window.scrollBy(0, -120); return y + ' > ' + window.scrollY })()");
             var control = await watch;
-            notes.Add($"control (the page moved 120 px and back): moved {control.Moved} of {control.Frames} frames {control.Detail}");
+            notes.Add($"control (the page moved 120 px and back: {down}, {up}): moved {control.Moved} of {control.Frames} frames {control.Detail}");
             Check(control.Moved >= 3, $"the watch sees the page move when it does ({control.Moved} frames)");
 
             // The old way, for the record: the static preview, then the whole document at once.
