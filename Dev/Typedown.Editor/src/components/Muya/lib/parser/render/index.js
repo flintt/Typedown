@@ -198,17 +198,36 @@ class StateRender {
   // Called without await: it never rejects. Each renderer is loaded when a diagram of its kind is there, so one that
   // cannot be loaded leaves only its own diagrams undrawn (loading all four first, one failing left every flowchart,
   // sequence and Vega-Lite block undrawn and the queue never cleared).
+  // Guards an async draw against a library call that never settles (webfontloader is meant to time out and call its
+  // own `inactive` fallback, but something about this page - layout, timing, or a progressive draw continuing under
+  // it - has left the sequence diagram's font wait hanging indefinitely): a `for` loop awaiting each diagram in turn
+  // would otherwise be stuck there forever, leaving it and every diagram after it in the same batch empty for good.
+  diagramTimeout(result, ms = 8000) {
+    // flowchart.js's drawSVG draws synchronously and returns nothing; sequence's returns a promise. Promise.resolve
+    // makes either safe to race against the timeout.
+    return new Promise((resolve, reject) => {
+      const timer = setTimeout(() => reject(new Error(`timed out after ${ms} ms`)), ms)
+      Promise.resolve(result).then(v => { clearTimeout(timer); resolve(v) }, e => { clearTimeout(timer); reject(e) })
+    })
+  }
+
   async renderDiagram() {
     const cache = this.diagramCache
     if (!cache.size) return
     const entries = [...cache.entries()]
     this.diagramCache.clear()
     const NAMES = { flowchart: 'Flow Chart', sequence: 'Sequence', plantuml: 'PlantUML', 'vega-lite': 'Vega-Lite' }
+    // The promise, not its result: concurrent entries of the same kind (several diagrams in one batch) share the one
+    // load instead of racing to start it each.
     const renderers = {}
-    for (const [key, value] of entries) {
+    // In parallel, not one after another: a flowchart or sequence diagram stuck in its font wait (diagramTimeout,
+    // below) used to hold up every other diagram in the same batch behind it in a `for` loop, each then needing its
+    // own wait in turn - enough diagrams at once ran well past how long a reader (or a test) waits for the document
+    // to settle.
+    await Promise.all(entries.map(async ([key, value]) => {
       const target = document.querySelector(key)
       if (!target) {
-        continue
+        return
       }
       const { code, functionType } = value
       const options = {}
@@ -223,8 +242,8 @@ class StateRender {
         })
       }
       try {
-        if (!(functionType in renderers)) renderers[functionType] = await loadRenderer(functionType)
-        const render = renderers[functionType]
+        if (!(functionType in renderers)) renderers[functionType] = loadRenderer(functionType)
+        const render = await renderers[functionType]
         if (functionType === 'flowchart' || functionType === 'sequence') {
           const diagram = render.parse(code)
           // A container of its own for each drawing, in place of whatever the block held. The sequence library waits
@@ -232,10 +251,23 @@ class StateRender {
           // diagrams draws a block again while the other renderers load) added one more to the same block - ten copies
           // of the showcase's sequence diagram (DG02). A drawing that ends after a newer one began now lands in a
           // container no longer on the page.
-          const drawing = document.createElement('div')
-          drawing.className = 'ag-diagram-drawing'
-          target.replaceChildren(drawing)
-          await diagram.drawSVG(drawing, options)
+          // One retry, a fresh container each time: a timed-out first attempt (diagramTimeout) is retried once before
+          // giving up - the same "another chance" that a document rendered more than once used to give it by accident
+          // (the comment above once described exactly that, before drawing a part at a time stopped doing it).
+          let lastErr
+          for (let attempt = 0; attempt < 3; attempt++) {
+            const drawing = document.createElement('div')
+            drawing.className = 'ag-diagram-drawing'
+            target.replaceChildren(drawing)
+            try {
+              await this.diagramTimeout(diagram.drawSVG(drawing, options))
+              lastErr = null
+              break
+            } catch (err) {
+              lastErr = err
+            }
+          }
+          if (lastErr) throw lastErr
         } else if (functionType === 'plantuml') {
           target.innerHTML = ''
           if (this.muya.options.renderPlantUml) {
@@ -245,14 +277,14 @@ class StateRender {
             target.classList.add('ag-plantuml-off')
           }
         } else if (functionType === 'vega-lite') {
-          await render(key, JSON.parse(code), options)
+          await this.diagramTimeout(render(key, JSON.parse(code), options))
         }
       } catch (err) {
         console.log(`diagram: a ${functionType} diagram could not be drawn`, err)
         target.innerHTML = `< Invalid ${NAMES[functionType] || functionType} Codes >`
         target.classList.add(CLASS_OR_ID.AG_MATH_ERROR)
       }
-    }
+    }))
   }
 
   // `fresh` means the whole document is being replaced (a new file, not an edit). Diffing the outgoing
@@ -423,6 +455,10 @@ class StateRender {
         if (state.hi < blocks.length) this.drawMore(state, 'below', 4)
         if (state.lo > 0) this.drawMore(state, 'above', 4)
       } while ((state.lo > 0 || state.hi < blocks.length) && performance.now() < until)
+      // Once for the whole slice, not once per few blocks (drawMore does not call these itself - see its comment).
+      this.renderMermaid()
+      this.renderDiagram()
+      this.codeCache.clear()
       // The room for what is left is only written every so often, not every slice: writing it resizes a pseudo-element
       // that can be thousands of pixels tall on a live, visible, scrolling page, and on a document of many small blocks
       // (a reader's pasted page) that forced a full-page reflow on every slice and took ten times as long to draw as
@@ -569,9 +605,11 @@ class StateRender {
         }
       }
     }
-    this.renderMermaid()
-    this.renderDiagram()
-    this.codeCache.clear()
+    // Not here: Mermaid and the other diagram renderers are stateful libraries, not meant to be called again before
+    // the call before them is done (Mermaid's own mermaidRenderQueue says so) - called after every few blocks, as a
+    // slice draws many, they overlapped and a sequence or vega-lite diagram some slice away was left empty or stuck
+    // on "Loading…" forever, the overlapping call's library having moved its state on under it. One call after the
+    // whole slice (the step, or completeRender) is both correct and far cheaper.
   }
 
   finishProgressive(state) {
@@ -595,6 +633,9 @@ class StateRender {
     const keep = this.keepInPlace(state)
     if (state.hi < state.blocks.length) this.drawMore(state, 'below', state.blocks.length - state.hi)
     if (state.lo > 0) this.drawMore(state, 'above', state.lo)
+    this.renderMermaid()
+    this.renderDiagram()
+    this.codeCache.clear()
     this.clearRoom(state)
     keep()
     this.finishProgressive(state)
