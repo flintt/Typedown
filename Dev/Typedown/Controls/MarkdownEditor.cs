@@ -176,7 +176,7 @@ namespace Typedown.Controls
             }
             openingDelay ??= DispatcherQueue.CreateTimer();
             openingDelay.IsRepeating = false;
-            openingDelay.Interval = TimeSpan.FromMilliseconds(150);
+            openingDelay.Interval = TimeSpan.FromMilliseconds(AppViewModel.EditorViewModel.LongLoadDelay);
             openingDelay.Tick += OnOpeningDelay;
             openingDelay.Start();
         }
@@ -195,6 +195,8 @@ namespace Typedown.Controls
             if (opening.Visibility != Visibility.Visible)
             {
                 openingShownAt = DateTime.UtcNow;
+                AppViewModel.EditorViewModel.OpeningShown++;
+                Core.Utilities.Log.Debug($"editor: \"Opening…\" shown for load {AppViewModel.EditorViewModel.LoadId}");
                 openingText.Text = Locale.GetString("EditorOpening");
                 var theme = ThemeFiles.Find(AppViewModel.SettingsViewModel.CustomTheme);
                 var foreground = theme == null ? null : (ThemeFiles.Brush(theme.Foreground) ?? ThemeFiles.Readable(theme.Background));

@@ -997,6 +997,15 @@ namespace Typedown.Services.Automation
                         ["contentTop"] = settings != null ? Top(settings) : menuBar != null ? Bottom(menuBar) : -1,
                     };
                 })));
+            // How many times the window said "Opening…" over its editor, and how many long loads it had (JU01: a switch
+            // between long documents does not say it).
+            methods.Add(new MethodDescriptor("test.editor.opening", null, "test.editor.opening/1", (c, ct) =>
+                Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                    (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject
+                    {
+                        ["shown"] = app.EditorViewModel.OpeningShown,
+                        ["loads"] = app.EditorViewModel.OpeningLoads,
+                    })));
             // A folder opened as the folder pane's root, as File > Open folder with that folder picked.
             methods.Add(new MethodDescriptor("test.folder.open", null, "test.folder.open/1", async (c, ct) =>
             {

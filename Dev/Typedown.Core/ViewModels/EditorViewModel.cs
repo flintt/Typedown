@@ -217,7 +217,7 @@ namespace Typedown.Core.ViewModels
                 Cursor = CurrentCursor ?? (Settings.RememberCursorPosition ? CursorMemory.Get(FileViewModel.FilePath) : null),
                 ScrollTop = Settings.RememberCursorPosition ? CursorMemory.GetScroll(FileViewModel.FilePath) : null,
                 ScrollAnchor = Settings.RememberCursorPosition ? ScrollAnchorOf(FileViewModel.FilePath) : null,
-                LoadId = NoteLoad(Markdown),
+                LoadId = NoteLoad(Markdown, pageEmpty: true),
             };
         }
 
@@ -233,12 +233,28 @@ namespace Typedown.Core.ViewModels
         /// </summary>
         public bool LongLoadPending { get; private set; }
 
-        // The next load's id, noting whether it is a long document.
-        private int NoteLoad(string text)
+        /// <summary>
+        /// How long a long load runs before "Opening…" shows (ms). The page asking for its document (start-up, the page
+        /// loaded again) has nothing on it yet: soon. A tab switch keeps the document left on the page until the new one
+        /// takes its place, and that is a few hundred milliseconds: only a load that really hangs says so. It flashed up
+        /// on every switch between two long documents.
+        /// </summary>
+        public int LongLoadDelay { get; private set; } = 150;
+
+        // The next load's id, noting whether it is a long document and whether the page has anything on it meanwhile.
+        private int NoteLoad(string text, bool pageEmpty = false)
         {
+            LongLoadDelay = pageEmpty ? 150 : 600;
             LongLoadPending = (text?.Length ?? 0) >= LongDocumentChars;
+            if (LongLoadPending) OpeningLoads++;
             return ++LoadId;
         }
+
+        /// <summary>For tests: how many times "Opening…" was shown (MarkdownEditor counts it).</summary>
+        public int OpeningShown { get; set; }
+
+        /// <summary>For tests: how many long loads there were.</summary>
+        public int OpeningLoads { get; private set; }
 
         /// <summary>Pushes a whole document into the editor (see <see cref="LoadId"/>).</summary>
         public void PostLoadFile(string text, object cursor = null)
