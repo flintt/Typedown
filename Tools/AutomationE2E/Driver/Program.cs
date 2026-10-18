@@ -144,6 +144,7 @@ internal static partial class Program
             await Case("K02 Ctrl+, twice opens and closes the settings: the caret and the keyboard are where they were", K02);
             await Case("CM01 in compact mode the settings have no title bar: they start at the window's top, their top strip drags the window, their back button goes back to the editor page as it was", CM01);
             await Case("SH01 Ctrl+, held down opens the settings once - no going in and out until the app hangs and falls over - and types no comma", SH01);
+            await Case("JU01 a long document comes back where it was without the page moving - switched back to in its tab, and opened in a window of its own as the start-up restores it", JU01);
             await Case("K04 a window just opened takes the keys at once: a letter typed without a click reaches the document", K04);
             await Case("K05 a new tab (the + button, Ctrl+N) and a tab clicked in the strip take the keys at once, without a click in the text", K05);
             await Case("TL01 keys typed at once after Ctrl+N, a tab clicked, Ctrl+Tab, the + button, Ctrl+Shift+H and a long document's tab clicked go into the tab shown, in order, Enter and Chinese text too; the document left is unchanged", TL01);
