@@ -142,6 +142,25 @@ const pending = () => !!window.__typedownMuya?.renderPending;
     check(drawn === true, `back in it, it is drawn a part at a time from that block (${drawn})`);
     check(Math.abs(top - codeAnchor.top) <= 2, `the code block is back at its height (${top} vs ${codeAnchor.top})`);
   }
+  {
+    // The place as the page reports it, over paragraphs: each has an icon drawn before it ("P"), not in the document -
+    // the place was never found while its text was read with the icon's.
+    await load(p, doc, 13);
+    await p.waitForFunction(() => !window.__typedownMuya?.renderPending, { timeout: 120000 });
+    await p.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight * 0.55));
+    await new Promise(r => setTimeout(r, 500));
+    const report = await p.evaluate(() => [...window.__msgs].reverse().find(m => m.name === 'OnScroll' && m.args.anchor)?.args);
+    const placed = report && report.anchor;
+    check(placed && /^Paragraph \d+ of Prog/.test(placed.text), `over paragraphs, the place's text is the document's, not the icon's (${JSON.stringify(placed && placed.text.slice(0, 30))})`);
+    await load(p, long('Other3'), 14);
+    await p.evaluate(() => window.__typedownKeptDocuments && window.__typedownKeptDocuments.clear());
+    await load(p, doc, 15, placed, report.scrollY);
+    const drawn = await p.evaluate(() => window.__typedownLastProgressive);
+    await p.waitForFunction(() => !window.__typedownMuya?.renderPending, { timeout: 120000 });
+    await new Promise(r => setTimeout(r, 500));
+    const top = await p.evaluate(b => document.getElementById('ag-editor-id').children[b].getBoundingClientRect().top, placed.block);
+    check(drawn === true && Math.abs(top - placed.top) <= 2, `back in it, drawn a part at a time and the paragraph at its height (${drawn}, ${top} vs ${placed.top})`);
+  }
   const errors = await p.evaluate(() => (window.__pageErrors || []).length);
   console.log(ok ? 'OK: a long document is drawn from where the reader was, and whole before anything works on it' : 'FAILED');
   await browser.close(); server.close(); process.exit(ok ? 0 : 1);

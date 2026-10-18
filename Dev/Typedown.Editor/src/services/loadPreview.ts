@@ -78,10 +78,19 @@ export interface ScrollAnchor {
     block?: number
 }
 
-/** The start of an element's text (`max` characters), read text node by text node: a long code block is not read whole. */
+/**
+ * The start of an element's text (`max` characters), read text node by text node: a long code block is not read whole.
+ * What the editor draws besides the text is left out - a block's icon ("P", "H₂") is not editable and not in the
+ * document: with it every paragraph's text started "PP…" on the page and "P…" in the document, and no place was found.
+ */
 export const textStart = (element: Element, max = 80): string => {
     let text = ''
-    const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT)
+    const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, {
+        acceptNode: node => {
+            const decoration = node.parentElement?.closest('[contenteditable="false"]')
+            return decoration && element.contains(decoration) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT
+        },
+    })
     while (text.length < max * 2 && walker.nextNode()) text += walker.currentNode.nodeValue ?? ''
     return text.replace(/\s+/g, ' ').trim().slice(0, max)
 }
