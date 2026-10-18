@@ -156,6 +156,16 @@ class ContentState {
   }
 
   setCursor() {
+    // A caret in a part of the document not drawn yet (renderProgressive): put on the page once its block is drawn -
+    // and the rest is drawn before anything the reader does, so it is there before their first key. The model has it
+    // already: what the editor reports (the text and the caret's line) is read from the model, not the page.
+    const { start, end } = this.cursor || {}
+    const root = this.muya.container
+    const progressive = this.stateRender.progressive
+    if (progressive && root && ((start && !root.querySelector(`#${start.key}`)) || (end && !root.querySelector(`#${end.key}`)))) {
+      progressive.cursorPending = true
+      return
+    }
     selection.setCursorRange(this.cursor)
   }
 
@@ -175,7 +185,9 @@ class ContentState {
 
   // cursorLater: the caller places the caret itself in a later task (Muya.setMarkdown on a whole new document), so
   // the caret is not set here, and the editor is not blurred either - that would take the focus from it.
-  render(isRenderCursor = true, clearCache = false, fresh = false, cursorLater = false) {
+  // progressive (a whole new document only): { center: the top-level block to draw first, done: once all is drawn } -
+  // the document is drawn a part at a time (StateRender.renderProgressive).
+  render(isRenderCursor = true, clearCache = false, fresh = false, cursorLater = false, progressive = null) {
     const { blocks, searchMatches: { matches, index } } = this
     const activeBlocks = this.getActiveBlocks()
     if (clearCache) {
@@ -186,7 +198,14 @@ class ContentState {
     })
     this.setNextRenderRange()
     this.stateRender.collectLabels(blocks)
-    this.stateRender.render(blocks, activeBlocks, matches, fresh)
+    if (fresh && progressive) {
+      this.stateRender.renderProgressive(blocks, activeBlocks, matches, progressive.center, () => {
+        this.postRender()
+        progressive.done && progressive.done()
+      })
+    } else {
+      this.stateRender.render(blocks, activeBlocks, matches, fresh)
+    }
     if (cursorLater) {
       // The old document's caret went with its elements, and the selection is left collapsed on the editor itself
       // until the new one is placed. With it there the browser's next style pass over a long document took a second

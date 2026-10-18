@@ -1,6 +1,37 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { ScrollAnchor, scrollForAnchor } from "services/loadPreview";
-import transport from "services/transport";
+import { anchorKey, PREVIEW_FROM_CHARS, ScrollAnchor, scrollForAnchor } from "services/loadPreview";
+
+/**
+ * The block of a new document's model the scroll anchor names (services/loadPreview): the top-level block's index, to
+ * draw first, and the key of the block whose text it is, to put back at the anchor's height. Looked for from where
+ * the page was through the document; null if not there.
+ */
+function findAnchorBlock(blocks: any[], anchor: ScrollAnchor): { index: number, leafKey: string } | null {
+    const key = anchorKey(anchor.text ?? '').slice(0, 40)
+    if (key.length < 4) return null
+    const leafIn = (block: any): string | null => {
+        if (typeof block?.text === 'string' && block.text.length) {
+            const text = anchorKey(block.text)
+            const n = Math.min(key.length, text.length)
+            if (n >= 4 && key.slice(0, n) === text.slice(0, n)) return block.key
+        }
+        for (const child of block?.children ?? []) {
+            const found = leafIn(child)
+            if (found) return found
+        }
+        return null
+    }
+    const from = Math.max(0, Math.min(blocks.length - 1, Math.round((anchor.at ?? 0) * blocks.length)))
+    for (let d = 0; d < blocks.length; d++) {
+        for (const index of d === 0 ? [from] : [from + d, from - d]) {
+            if (index < 0 || index >= blocks.length) continue
+            const leafKey = leafIn(blocks[index])
+            if (leafKey) return { index, leafKey }
+        }
+    }
+    return null
+}
+import transport, { beforeHostMessage } from "services/transport";
 import Muya from 'components/Muya/lib'
 import TablePicker from 'components/Muya/lib/ui/tablePicker'
 import CodePicker from 'components/Muya/lib/ui/codePicker'
@@ -325,6 +356,29 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    // A document drawn a part at a time is drawn to the end before anything works on its elements: the reader pressing,
+    // clicking, pasting or copying in the page (not the scrollbar, nor the wheel - reading goes on while it is drawn),
+    // and every command from the host but those that only set what the page looks like or replace the document.
+    useEffect(() => {
+        if (!editor) return
+        const muya = editor as any
+        const finish = (e: Event) => {
+            if (!muya.renderPending) return
+            if (e.type === 'mousedown' && e.target === document.documentElement) return
+            muya.completeRender()
+        }
+        const events = ['keydown', 'mousedown', 'paste', 'cut', 'copy', 'compositionstart', 'dragstart', 'drop', 'contextmenu']
+        for (const type of events) document.addEventListener(type, finish, true)
+        const passive = new Set(['LoadFile', 'SetMarkdown', 'HoldInput', 'ReleaseInput', 'ThemeChanged', 'SettingsChanged', 'LanguageChanged',
+            'OnScroll', 'RestoreScroll', 'FlushContent', 'QueryNormalization', 'QueryEditorStyle', 'AwaitPresentation'])
+        const hook = (name: string) => { if (muya.renderPending && !passive.has(name) && !name.startsWith('invoke_')) muya.completeRender() }
+        beforeHostMessage.add(hook)
+        return () => {
+            for (const type of events) document.removeEventListener(type, finish, true)
+            beforeHostMessage.delete(hook)
+        }
+    }, [editor])
 
     useEffect(() => {
         editor && Object.assign(editor.options, props.options)
@@ -893,9 +947,15 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     // hold is still putting the page back to its own offset: two holds then pull the page to two places
     // every frame until the older one's budget runs out. It is ended here before the next one begins.
     const holdStopRef = useRef<() => void>(() => { })
-    const settleScroll = useCallback((scrollTop: number, keepScroll: boolean) => {
+    // `to` is an offset, or where to be found anew each time: a document drawn a part at a time grows above the window
+    // as it is drawn, and the block that was at the top of the window moves down with it (the offset that puts it back
+    // changes; the browser's scroll anchoring keeps it in view meanwhile).
+    const settleScroll = useCallback((to: number | (() => number | null), keepScroll: boolean) => {
         holdStopRef.current()
         holdStopRef.current = () => { }
+        let last = typeof to === 'function' ? (to() ?? 0) : to
+        const target = () => typeof to === 'function' ? (last = to() ?? last) : to
+        const scrollTop = last
         window.scrollTo(window.scrollX, scrollTop)
         if (!keepScroll) scrollToCursorIfInvisible()
         // One flag for everything that puts the page back, the frame-by-frame hold and the delayed second
@@ -924,16 +984,16 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             // at no width, absurdly tall, before the window arrives. An offset applied then lands somewhere
             // near the start once the real layout comes, and the browser keeps that content in view — the
             // page was at the top after leaving the settings, every time. Such frames do not count.
-            const tall = () => window.innerHeight > 0 && document.documentElement.scrollHeight >= scrollTop + window.innerHeight
+            const tall = () => window.innerHeight > 0 && document.documentElement.scrollHeight >= target() + window.innerHeight
             // The knock arrives as a scroll event, so answer it there as well as on the next frame:
             // during the layout a frame can be a hundred milliseconds long, and that is a hundred
             // milliseconds of looking at the top of the document. Correcting puts scrollY back where it
             // belongs, so the event this fires in turn finds nothing to do.
-            const putBack = () => { if (!done && !yielded && Math.abs(window.scrollY - scrollTop) > 2) window.scrollTo(window.scrollX, scrollTop) }
+            const putBack = () => { if (!done && !yielded && Math.abs(window.scrollY - target()) > 2) window.scrollTo(window.scrollX, target()) }
             const stop = (why: string) => {
                 done = true; window.removeEventListener('scroll', putBack); for (const e of GIVE_WAY) window.removeEventListener(e, giveWay)
                 // What the hold saw, for the host's log: the only way to tell from a machine one cannot watch.
-                transport.postMessage('ScrollSettled', { asked: scrollTop, at: Math.round(window.scrollY), why, framesLeft: frames, capLeft: cap, innerHeight: window.innerHeight, scrollHeight: document.documentElement.scrollHeight, startedAt })
+                transport.postMessage('ScrollSettled', { asked: Math.round(target()), at: Math.round(window.scrollY), why, framesLeft: frames, capLeft: cap, innerHeight: window.innerHeight, scrollHeight: document.documentElement.scrollHeight, startedAt })
             }
             const hold = () => {
                 if (done) return
@@ -951,7 +1011,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         }
         setTimeout(() => {
             if (!yielded) {
-                window.scrollTo(window.scrollX, scrollTop)
+                window.scrollTo(window.scrollX, target())
                 if (!keepScroll) scrollToCursorIfInvisible()
             }
             // The hold above decides for itself when it is over; ending it here ended it after six frames,
@@ -987,6 +1047,8 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         const shown = shownRef.current
         shownRef.current = null
         const muya = editor as any
+        // A document still being drawn a part at a time is kept as far as it got, and drawn on when it is back
+        // (Muya.takeDocument, showDocument): switching between long documents should not wait for one to finish.
         if (!muya || !shown || !shown.pristine || !shown.reported) return
         if (muya.loadCursorPending || muya.contentChangeDue) return
         const { contentState } = muya
@@ -1062,10 +1124,29 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         const keepScroll = !!props.scrollFromHostRef?.current
         const anchor = props.scrollAnchorRef?.current ?? null
         if (props.scrollAnchorRef) props.scrollAnchorRef.current = null
+        // A long document is drawn a part at a time (docs/todo.md, "方案 A"): first the block that was at the top of the
+        // window when it was left (its scroll anchor), or the caret's; the rest while the page is idle. Not where only an
+        // offset says where the page was (no anchor yet): an offset means something only with the whole document laid out.
+        let anchorLeaf: string | null = null
+        const progressive = props.markdown.length >= PREVIEW_FROM_CHARS && !(window as any).__typedownProgressiveOff ? {
+            pick: (blocks: any[], cursorIndex: number) => {
+                const found = anchor ? findAnchorBlock(blocks, anchor) : null
+                if (found) { anchorLeaf = found.leafKey; return found.index }
+                if (keepScroll && scrollTop > 0) return -1
+                return cursorIndex >= 0 ? cursorIndex : 0
+            },
+            done: () => { (window as any).__typedownProgressiveDone = performance.now() },
+        } : null
         const loaded = () => {
-            // The block that was at the top of the window back at the height it was, where the preview showed it; the
-            // offset alone where it is not found (the document changed meanwhile).
-            settleScroll(keepScroll ? scrollForAnchor(anchor) ?? scrollTop : scrollTop, keepScroll)
+            // The block that was at the top of the window back at the height it was; drawn a part at a time, followed as
+            // the document grows above it. The offset alone where it is not found (the document changed meanwhile).
+            const leaf = anchorLeaf
+            const at = anchor
+            if (keepScroll && at && leaf) settleScroll(() => {
+                const element = document.getElementById(leaf)
+                return element ? Math.max(0, window.scrollY + element.getBoundingClientRect().top - at.top) : null
+            }, keepScroll)
+            else settleScroll(keepScroll ? scrollForAnchor(anchor) ?? scrollTop : scrollTop, keepScroll)
             props.onContentApplied?.()
         }
         // A kept document goes back in as it was left, and everything after it happens as after a new build: the caret
@@ -1081,7 +1162,8 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             }
             return
         }
-        if (!replacedLocally) editor.setMarkdown(props.markdown, cursorRef.current, true, blocksBefore ? null : loaded)
+        if (!replacedLocally) editor.setMarkdown(props.markdown, cursorRef.current, true, blocksBefore ? null : loaded, blocksBefore ? null : progressive)
+        ;(window as any).__typedownLastProgressive = !blocksBefore && !replacedLocally && (editor as any).renderPending
         if (blocksBefore && props.options?.highlightAutomationChanges !== false)
             highlightExternalChange(editor.changedBlockKeys(blocksBefore).map((key: string) => document.getElementById(key)))
         ;(window as any).__typedownLastApply = replacedLocally ? 'local' : 'whole'

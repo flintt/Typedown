@@ -11,8 +11,12 @@ interface IMessage {
   args: unknown;
 }
 
+/** Run with each message from the host before its listeners: the editor finishes drawing a document first (Muya). */
+export const beforeHostMessage = new Set<(name: string) => void>();
+
 window.chrome.webview.addEventListener<string>("message", ({ data }) => {
   const { name, args } = JSON.parse(data) as IMessage
+  beforeHostMessage.forEach(hook => { try { hook(name) } catch (err) { console.log(err) } });
   transport.emit(name, args);
 });
 

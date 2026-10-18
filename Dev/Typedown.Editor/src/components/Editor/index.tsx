@@ -80,6 +80,11 @@ const styleElement = (id: string) => {
     return style
 }
 
+// The static first screen (services/loadPreview) only where the editor draws a document all at once: drawn a part at a
+// time (Muya's progressive drawing, on unless a test turns it off), the editor's own first screen comes nearly as soon,
+// and a preview of a different make in front of it moved as the editor took over.
+const previewWhileBuilding = () => !!(window as any).__typedownProgressiveOff
+
 const Editor: React.FC = () => {
     // The document text and cursor live in refs, not React state: a state update per keystroke would commit
     // a React render while the contenteditable has focus, and React then walks the whole editor DOM to
@@ -369,7 +374,7 @@ const Editor: React.FC = () => {
             // A long document (the start-up restoring a tab) is shown first as its first screen, in the theme's colours
             // and the editor's measures - set here, as the effects below set them only once the options are in - and
             // built once that has been painted (services/loadPreview).
-            if (!opt.sourceCode && typeof markdown === 'string' && markdown.length >= PREVIEW_FROM_CHARS) {
+            if (previewWhileBuilding() && !opt.sourceCode && typeof markdown === 'string' && markdown.length >= PREVIEW_FROM_CHARS) {
                 styleElement('typedown-theme-css').textContent = opt.themeCss || ''
                 if (opt.themeCss) document.body.style.backgroundColor = 'var(--editorBgColor)'
                 if (opt.editorAreaWidth) document.body.style.setProperty('--editorAreaWidth', opt.editorAreaWidth)
@@ -502,7 +507,7 @@ const Editor: React.FC = () => {
         // A long document is shown first as its first screen, and built once that has been painted (services/
         // loadPreview); one kept from before (Muya's keptDocuments) comes back at once and needs none. The newest load
         // is the one previewed.
-        const previewed = !optionsRef.current?.sourceCode && typeof load.text === 'string' && load.text.length >= PREVIEW_FROM_CHARS
+        const previewed = previewWhileBuilding() && !optionsRef.current?.sourceCode && typeof load.text === 'string' && load.text.length >= PREVIEW_FROM_CHARS
             && !(window as any).__typedownKeptDocuments?.has?.(load.text) && showLoadPreview(load.text, load.cursor, undefined, load.scrollAnchor)
         if (previewed) transport.postMessage('LoadPreviewShown', { loadId: load.loadId })
         else hideLoadPreview()

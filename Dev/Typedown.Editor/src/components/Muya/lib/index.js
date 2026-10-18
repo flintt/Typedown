@@ -217,7 +217,11 @@ class Muya {
   }
 
   dispatchSelectionChange = (fromLoad = false) => {
-    const selection = this.contentState.selectionChange()
+    // A caret still waiting for its block to be drawn (renderProgressive) is not on the page: the model's is reported
+    // (a copy: selectionChange writes into what it is given).
+    const { cursor, stateRender } = this.contentState
+    const waiting = stateRender.progressive && stateRender.progressive.cursorPending && cursor
+    const selection = this.contentState.selectionChange(waiting ? { start: { ...cursor.start }, end: { ...cursor.end } } : undefined)
     if (fromLoad) selection.fromLoad = true
     this.eventCenter.dispatch('selectionChange', selection)
   }
@@ -266,8 +270,13 @@ class Muya {
   // two. A newer document arriving the same way before that frame cancels it: its caret and its scroll position
   // are the ones that count. One set at once (Muya.setCursor) only takes the caret over; the page's part of the
   // earlier load still runs, or that load would never be reported.
-  /** @param {(() => void) | null} [afterCursor] */
-  setMarkdown(markdown, cursor, isRenderCursor = true, afterCursor = null) {
+  /**
+   * progressive: draw a long document a part at a time - { pick(blocks, cursorIndex): the top-level block to draw
+   * first, or -1 for all at once; done(): once the whole document is drawn } (StateRender.renderProgressive).
+   * @param {(() => void) | null} [afterCursor]
+   * @param {{ pick: (blocks: any[], cursorIndex: number) => number, done?: () => void } | null} [progressive]
+   */
+  setMarkdown(markdown, cursor, isRenderCursor = true, afterCursor = null, progressive = null) {
     const later = isRenderCursor && typeof afterCursor === 'function'
     if (later) this.cancelLoadCursor()
     let newMarkdown = markdown
@@ -283,9 +292,26 @@ class Muya {
     }
     this.contentState.importMarkdown(newMarkdown)
     this.contentState.importCursor(cursor && isValid)
+    // Where to start drawing: what the caller picks, the caret's block in mind (both have to be on the page at once).
+    let draw = null
+    if (progressive && typeof progressive.pick === 'function') {
+      const { blocks } = this.contentState
+      let cursorIndex = -1
+      try {
+        const start = this.contentState.cursor && this.contentState.getBlock(this.contentState.cursor.start.key)
+        const top = start && this.contentState.findOutMostBlock(start)
+        cursorIndex = top ? blocks.indexOf(top) : -1
+      } catch (err) {
+        console.log(err)
+      }
+      const center = progressive.pick(blocks, cursorIndex)
+      // The caret may be far from it (the reader scrolled without clicking): it goes on the page with its block.
+      if (center >= 0) draw = { center, done: progressive.done }
+    }
     // A whole new document: the one on screen has nothing in common with it, so throw it away rather than
     // diff against it (see StateRender.render).
-    this.contentState.render(isRenderCursor, false, true, later)
+    this.contentState.render(isRenderCursor, false, true, later, draw)
+    if (!draw && progressive && progressive.done) setTimeout(() => progressive.done(), 0)
     if (!later) {
       setTimeout(() => {
         this.dispatchLoadChange()
@@ -293,6 +319,21 @@ class Muya {
       return
     }
     this.placeLoadCursor(afterCursor)
+  }
+
+  /** Part of the document is still to be drawn (setMarkdown's progressive). */
+  get renderPending() {
+    return !!this.contentState.stateRender.progressive
+  }
+
+  /** Draws the rest of a document drawn a part at a time, now. */
+  completeRender() {
+    this.contentState.stateRender.completeRender()
+  }
+
+  /** Stops drawing the rest of the document (it is being replaced or put away). */
+  cancelProgressiveRender() {
+    this.contentState.stateRender.cancelProgressive()
   }
 
   // The second half of a load shown with afterCursor (setMarkdown, showDocument): the caret, then the page's part,
@@ -349,11 +390,13 @@ class Muya {
     const { contentState } = this
     const { stateRender } = contentState
     const root = stateRender.container
+    // Put away half drawn (drawn a part at a time): how far it got goes with it, and showDocument carries on.
+    const progressive = stateRender.suspendProgressive()
     const empty = root.cloneNode(false)
     root.replaceWith(empty)
     stateRender.setContainer(empty)
     this.eventCenter.dispatch('rootChange', empty)
-    return { blocks: contentState.blocks, cursor: contentState.cursor, root }
+    return { blocks: contentState.blocks, cursor: contentState.cursor, root, progressive }
   }
 
   /** Whether a root taken out by takeDocument is the same element as the one shown, but for what it holds. */
@@ -375,10 +418,13 @@ class Muya {
     contentState.cursor = kept.cursor
     stateRender.collectLabels(kept.blocks)
     contentState.setNextRenderRange()
+    stateRender.cancelProgressive()
     stateRender.container.replaceWith(kept.root)
     stateRender.setContainer(kept.root)
     this.eventCenter.dispatch('rootChange', kept.root)
     stateRender.codeCache.clear()
+    // Put away half drawn: the rest is drawn from where it stopped (the caret waits for its block as on a load).
+    stateRender.resumeProgressive(kept.progressive)
     // As render does for a whole new document whose caret comes later (contentState.render, cursorLater).
     const sel = document.getSelection()
     if (sel && sel.rangeCount && this.container.contains(sel.anchorNode)) sel.removeAllRanges()

@@ -29,6 +29,9 @@ class StateRender {
     this.renderingTable = null
     this.renderingRowContainer = null
     this.container = null
+    // A whole document drawn a part at a time (renderProgressive): which top-level blocks are on the page, and the
+    // timer drawing the rest. Null when the whole document is on the page.
+    this.progressive = null
   }
 
   setContainer(container) {
@@ -257,6 +260,9 @@ class StateRender {
   // a tab switch: reading the old tree back with toVNode and deleting it node by node. Drop it in one go
   // instead and let the patch below build the new tree into an empty element.
   render(blocks, activeBlocks, matches, fresh = false) {
+    // A new document replaces whatever was still being drawn; anything else is drawn over the whole document.
+    if (fresh) this.cancelProgressive()
+    else this.completeRender()
     const selector = `div#${CLASS_OR_ID.AG_EDITOR_ID}`
     const children = blocks.map(block => {
       return this.renderBlock(null, block, activeBlocks, matches, true)
@@ -286,6 +292,7 @@ class StateRender {
    * replaceMarkdownLocally). The new blocks go before beforeKey's element, or at the end.
    */
   replaceBlocks(removedKeys, blocks, beforeKey, activeBlocks, matches) {
+    this.completeRender()
     const root = this.container || document.querySelector(`div#${CLASS_OR_ID.AG_EDITOR_ID}`)
     const byId = key => root.querySelector(`#${key}`)
     if (blocks.length) {
@@ -306,6 +313,7 @@ class StateRender {
 
   // Only render the blocks which you updated
   partialRender(blocks, activeBlocks, matches, startKey, endKey) {
+    this.completeRender()
     const cursorOutMostBlock = activeBlocks[activeBlocks.length - 1]
     // If cursor is not in render blocks, need to render cursor block independently
     const needRenderCursorBlock = blocks.indexOf(cursorOutMostBlock) === -1
@@ -355,6 +363,7 @@ class StateRender {
    * @param {array} matches
    */
   singleRender(block, activeBlocks, matches) {
+    this.completeRender()
     const selector = `#${block.key}`
     const newVdom = this.renderBlock(null, block, activeBlocks, matches, true)
     const rootDom = (this.container || document).querySelector(selector)
@@ -363,6 +372,136 @@ class StateRender {
     this.renderMermaid()
     this.renderDiagram()
     this.codeCache.clear()
+  }
+
+  /**
+   * Draws a new document a part at a time (docs/todo.md, "方案 A"): the top-level blocks around `center` at once, the
+   * rest above and below in small slices while the page is otherwise idle, so the reader sees and can use the part of
+   * a long document they are at long before the whole of it would have been drawn. Everything that works on the page's
+   * elements - an edit's redraw, the caret, a search - first draws what is left (completeRender), so the page is only
+   * ever partly drawn while nobody does anything with it. Blocks inserted above the window keep it still (the
+   * browser's scroll anchoring). `done` runs once the whole document is on the page, whichever way it got there.
+   */
+  renderProgressive(blocks, activeBlocks, matches, center, done) {
+    this.cancelProgressive()
+    const rootDom = this.container || document.querySelector(`div#${CLASS_OR_ID.AG_EDITOR_ID}`)
+    const before = 30
+    const after = 70
+    const lo = Math.max(0, center - before)
+    const hi = Math.min(blocks.length, center + after)
+    rootDom.id = CLASS_OR_ID.AG_EDITOR_ID
+    rootDom.innerHTML = this.blocksHtml(blocks.slice(lo, hi), activeBlocks, matches)
+    this.renderMermaid()
+    this.renderDiagram()
+    this.codeCache.clear()
+    const state = { blocks, activeBlocks, matches, lo, hi, root: rootDom, timer: null, done, slices: 0, startedAt: performance.now() }
+    this.progressive = state
+    if (lo === 0 && hi === blocks.length) return this.finishProgressive(state)
+    this.scheduleProgressive(state)
+  }
+
+  // The next slice in a moment: below, then above, for about a frame's worth of time, then the page's turn again.
+  scheduleProgressive(state) {
+    const blocks = state.blocks
+    const step = () => {
+      state.timer = null
+      if (this.progressive !== state) return
+      const until = performance.now() + (window.__typedownProgressiveSliceMs ?? 12)
+      do {
+        if (state.hi < blocks.length) this.drawMore(state, 'below', 20)
+        if (state.lo > 0) this.drawMore(state, 'above', 20)
+      } while ((state.lo > 0 || state.hi < blocks.length) && performance.now() < until)
+      state.slices++
+      if (state.lo > 0 || state.hi < blocks.length) state.timer = setTimeout(step, window.__typedownProgressiveDelayMs ?? 0)
+      else this.finishProgressive(state)
+    }
+    clearTimeout(state.timer)
+    state.timer = setTimeout(step, window.__typedownProgressiveDelayMs ?? 0)
+  }
+
+  /**
+   * Stops drawing and hands over how far it got, for a document put away half drawn (Muya.takeDocument): its elements
+   * go with it, and resumeProgressive carries on where it stopped once it is shown again.
+   */
+  suspendProgressive() {
+    const state = this.progressive
+    if (!state) return null
+    clearTimeout(state.timer)
+    state.timer = null
+    this.progressive = null
+    return state
+  }
+
+  /** Carries on drawing a document put back half drawn (Muya.showDocument), on the root it is drawn in. */
+  resumeProgressive(state) {
+    if (!state || (state.lo === 0 && state.hi === state.blocks.length)) return
+    this.cancelProgressive()
+    state.root = this.container || state.root
+    this.progressive = state
+    this.scheduleProgressive(state)
+  }
+
+  blocksHtml(blocks, activeBlocks, matches) {
+    return toHTML(h('section', blocks.map(block => this.renderBlock(null, block, activeBlocks, matches, true))))
+      .replace(/^<section>([\s\S]*?)<\/section>$/, '$1')
+  }
+
+  // The next `count` blocks on one side of what is drawn.
+  drawMore(state, side, count) {
+    const { blocks, activeBlocks, matches, root } = state
+    if (side === 'below') {
+      const to = Math.min(blocks.length, state.hi + count)
+      root.insertAdjacentHTML('beforeend', this.blocksHtml(blocks.slice(state.hi, to), activeBlocks, matches))
+      state.hi = to
+    } else {
+      const from = Math.max(0, state.lo - count)
+      root.insertAdjacentHTML('afterbegin', this.blocksHtml(blocks.slice(from, state.lo), activeBlocks, matches))
+      state.lo = from
+    }
+    // The caret waiting for its block (ContentState.setCursor), on the page as soon as the block is.
+    if (state.cursorPending) {
+      const { start, end } = this.muya.contentState.cursor || {}
+      if (start && end && root.querySelector(`#${start.key}`) && root.querySelector(`#${end.key}`)) {
+        state.cursorPending = false
+        try {
+          this.muya.contentState.setCursor()
+        } catch (err) {
+          console.log(err)
+        }
+      }
+    }
+    this.renderMermaid()
+    this.renderDiagram()
+    this.codeCache.clear()
+  }
+
+  finishProgressive(state) {
+    if (this.progressive === state) this.progressive = null
+    clearTimeout(state.timer)
+    ;(window.__typedownProgressiveLog = window.__typedownProgressiveLog || []).push({ slices: state.slices, ms: Math.round(performance.now() - state.startedAt), blocks: state.blocks.length })
+    try {
+      state.done && state.done()
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  /** Draws at once whatever of the document is not on the page yet. */
+  completeRender() {
+    const state = this.progressive
+    if (!state) return
+    clearTimeout(state.timer)
+    if (state.hi < state.blocks.length) this.drawMore(state, 'below', state.blocks.length - state.hi)
+    if (state.lo > 0) this.drawMore(state, 'above', state.lo)
+    this.finishProgressive(state)
+  }
+
+  /** Stops drawing the document (another takes its place): what is on the page stays as it is. */
+  cancelProgressive() {
+    const state = this.progressive
+    if (!state) return
+    clearTimeout(state.timer)
+    this.progressive = null
   }
 
   invalidateImageCache() {

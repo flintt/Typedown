@@ -70,6 +70,8 @@ const check = (ok, what) => { console.log(`  ${ok ? 'ok  ' : 'FAIL'} ${what}`); 
       const until = async f => { for (let i = 0; i < 4000 && !f(); i++) await new Promise(r => setTimeout(r, 5)); };
       const got = n => window.__msgs.filter(m => m.name === n && m.args && m.args.loadId === id);
       await until(() => got('FileLoaded').length && got('StateChange').length && got('CursorChange').length);
+      // A long document drawn a part at a time (Muya's renderProgressive) is compared once it is all drawn.
+      await until(() => !(window.__typedownMuya && window.__typedownMuya.renderPending));
       await new Promise(r => setTimeout(r, 1200));
       const root = document.querySelector('#ag-editor-id');
       const ids = new Map();
