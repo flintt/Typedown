@@ -152,6 +152,23 @@ internal static partial class Program
             Check(tab.Moved == 0, $"switched back to, the page does not move once its text is there ({tab.Moved} frames moved: {tab.Detail})");
             Check(SameTop(before, tabTop), $"switched back to, the top of the window is what it was ({before} / {tabTop})");
 
+            // Back and forth between the two long documents, nothing changed in them: no "Opening…" over the page, which
+            // shows the document left until the next takes its place. It flashed up on every switch.
+            async Task<(int Shown, int Loads)> Opening()
+            {
+                var o = await c.Call("test.editor.opening", new { windowId });
+                return ((int)o["shown"]!, (int)o["loads"]!);
+            }
+            var openingBefore = await Opening();
+            for (var i = 0; i < 4; i++)
+            {
+                await c.Call("document.focus", new { documentId = i % 2 == 0 ? b : a });
+                await Task.Delay(1500);
+            }
+            var openingAfter = await Opening();
+            notes.Add($"four switches between the two: \"Opening…\" shown {openingAfter.Shown - openingBefore.Shown} times over {openingAfter.Loads - openingBefore.Loads} long loads");
+            Check(openingAfter.Loads - openingBefore.Loads >= 4 && openingAfter.Shown == openingBefore.Shown, $"switching between long documents does not say it is opening ({openingAfter.Shown - openingBefore.Shown} of {openingAfter.Loads - openingBefore.Loads})");
+
             // The watch sees a move when there is one: the page moved 120 px and back while it watches.
             watch = WatchForJumps(window, 2500);
             await Task.Delay(600);
