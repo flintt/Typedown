@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { anchorKey, PREVIEW_FROM_CHARS, ScrollAnchor, scrollForAnchor } from "services/loadPreview";
+import { anchorKey, PREVIEW_FROM_CHARS, ScrollAnchor, scrollForAnchor, startsAlike } from "services/loadPreview";
 
 /**
  * The block of a new document's model the scroll anchor names (services/loadPreview): the top-level block's index, to
@@ -7,13 +7,29 @@ import { anchorKey, PREVIEW_FROM_CHARS, ScrollAnchor, scrollForAnchor } from "se
  * the page was through the document; null if not there.
  */
 function findAnchorBlock(blocks: any[], anchor: ScrollAnchor): { index: number, leafKey: string } | null {
+    // By its place among the top-level blocks, when the text there still starts as it did (the document unchanged).
+    if (typeof anchor.block === 'number' && anchor.block >= 0 && anchor.block < blocks.length) {
+        const block = blocks[anchor.block]
+        let text = ''
+        const collect = (b: any) => {
+            if (text.length >= 160) return
+            // Raw HTML is compared as the text it shows (a reader's document pasted from the web: most of it HTML).
+            // Joined as the page joins them (a code block: its language, then its code, nothing between).
+            if (typeof b?.text === 'string') text += b.text.replace(/<[^>]*>/g, ' ').replace(/&nbsp;|&#160;/g, ' ').replace(/&[a-z]+;/g, '')
+            for (const child of b?.children ?? []) collect(child)
+        }
+        collect(block)
+        if (!anchor.text || startsAlike(anchor.text, text)) return { index: anchor.block, leafKey: block.key }
+    }
     const key = anchorKey(anchor.text ?? '').slice(0, 40)
     if (key.length < 4) return null
     const leafIn = (block: any): string | null => {
         if (typeof block?.text === 'string' && block.text.length) {
             const text = anchorKey(block.text)
             const n = Math.min(key.length, text.length)
-            if (n >= 4 && key.slice(0, n) === text.slice(0, n)) return block.key
+            // The whole of one in the other's start, and not a few letters only (a code block's language, "bash", started
+            // the anchor of every code block after it).
+            if (n >= Math.min(key.length, 12) && key.slice(0, n) === text.slice(0, n)) return block.key
         }
         for (const child of block?.children ?? []) {
             const found = leafIn(child)
@@ -1018,7 +1034,6 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             // The hold above decides for itself when it is over; ending it here ended it after six frames,
             // whatever its budget said. The reader's own movement still ends everything at once.
             if (!keepScroll) giveWay()
-            if (props.scrollFromHostRef) props.scrollFromHostRef.current = false
             search(searchArgRef.current)
         }, 100);
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -1123,6 +1138,9 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         // page's own scroll events in between (the old document gone, the new one not laid out) would overwrite it.
         const scrollTop = props.scrollTopRef.current
         const keepScroll = !!props.scrollFromHostRef?.current
+        // Taken now, for this load: cleared by the timer of the load before, a load following within a tenth of a second
+        // (a quick tab switch) lost the place it was to go back to and was put where its caret is instead.
+        if (props.scrollFromHostRef) props.scrollFromHostRef.current = false
         const anchor = props.scrollAnchorRef?.current ?? null
         if (props.scrollAnchorRef) props.scrollAnchorRef.current = null
         // A long document is drawn a part at a time (docs/todo.md, "方案 A"): first the block that was at the top of the
@@ -1168,9 +1186,9 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         }
         if (!replacedLocally) editor.setMarkdown(props.markdown, cursorRef.current, true, blocksBefore ? null : loaded, blocksBefore ? null : progressive)
         ;(window as any).__typedownLastProgressive = !blocksBefore && !replacedLocally && (editor as any).renderPending
-        // Its first part on the screen, the host takes away its "Opening…" (it waited for the load to be reported, which
-        // comes later, and covered what was already there to see).
-        if ((window as any).__typedownLastProgressive) {
+        // On the screen - its first part, or the whole of a document that fits in one go - the host takes away its
+        // "Opening…" (it waited for the load to be reported, which comes later, and covered what was already there to see).
+        if (!blocksBefore && !replacedLocally && props.markdown.length >= PREVIEW_FROM_CHARS) {
             const shownLoad = currentLoadId()
             requestAnimationFrame(() => transport.postMessage('LoadPreviewShown', { loadId: shownLoad }))
         }

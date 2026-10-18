@@ -65,7 +65,33 @@ export const previewStart = (lines: string[], line: number): number => {
  * with its next load: the preview puts that block there, and so does the editor once the document is built - the two
  * meet, where the editor's own scroll offset and a preview from the caret did not.
  */
-export interface ScrollAnchor { text: string, top: number, at: number }
+export interface ScrollAnchor {
+    text: string
+    top: number
+    at: number
+    /**
+     * Which top-level block of the document it is (0 the first), `top` and `text` then that block's: a code block,
+     * a table or a diagram is found by its place, where the start of its text says nothing of the line at the top of
+     * the window (a reader's 1.5 million characters of commands and output: no anchor was ever found). The text checks
+     * that the document is still the one the place was taken in.
+     */
+    block?: number
+}
+
+/** The start of an element's text (`max` characters), read text node by text node: a long code block is not read whole. */
+export const textStart = (element: Element, max = 80): string => {
+    let text = ''
+    const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT)
+    while (text.length < max * 2 && walker.nextNode()) text += walker.currentNode.nodeValue ?? ''
+    return text.replace(/\s+/g, ' ').trim().slice(0, max)
+}
+
+/** Whether two texts start alike, as compared for an anchor (the shorter's start in the other's). */
+export const startsAlike = (a: string, b: string): boolean => {
+    const x = anchorKey(a), y = anchorKey(b)
+    const n = Math.min(12, x.length, y.length)
+    return n >= 4 && (y.startsWith(x.slice(0, n)) || x.startsWith(y.slice(0, n)))
+}
 
 /** Text as both the page's blocks and the Markdown source can be compared by: no Markdown marks, spaces, or case. */
 export const anchorKey = (s: string): string =>
@@ -249,13 +275,18 @@ export function readScrollAnchor(): ScrollAnchor | null {
     if (!editor) return null
     const box = editor.getBoundingClientRect()
     const x = box.left + Math.min(box.width / 2, 300)
+    // A document drawn a part at a time has the blocks before the part not on the page yet: its place counts them.
+    const drawnFrom = (window as any).__typedownMuya?.contentState?.stateRender?.progressive?.lo ?? 0
     for (const y of [2, 16, 40, 80, 140]) {
-        const block = document.elementFromPoint(x, y)?.closest('.ag-paragraph') as HTMLElement | null
-        if (!block || !editor.contains(block)) continue
-        const text = (block.textContent ?? '').replace(/\s+/g, ' ').trim().slice(0, 80)
-        if (anchorKey(text).length < 4) continue
+        let block = document.elementFromPoint(x, y) as HTMLElement | null
+        while (block && block.parentElement !== editor) block = block.parentElement
+        if (!block) continue
+        const text = textStart(block)
         const height = document.documentElement.scrollHeight
-        return { text, top: Math.round(block.getBoundingClientRect().top), at: height > 0 ? Math.round(window.scrollY / height * 1000) / 1000 : 0 }
+        return {
+            text, top: Math.round(block.getBoundingClientRect().top), at: height > 0 ? Math.round(window.scrollY / height * 1000) / 1000 : 0,
+            block: drawnFrom + Array.prototype.indexOf.call(editor.children, block),
+        }
     }
     return null
 }
@@ -267,7 +298,13 @@ export function readScrollAnchor(): ScrollAnchor | null {
 export function scrollForAnchor(anchor: ScrollAnchor | null | undefined): number | null {
     const key = anchorKey(anchor?.text ?? '').slice(0, 40)
     const editor = document.getElementById('ag-editor-id')
-    if (!anchor || key.length < 4 || !editor) return null
+    if (!anchor || !editor) return null
+    // By its place among the top-level blocks, the document drawn whole; checked by its text.
+    if (typeof anchor.block === 'number') {
+        const element = editor.children[anchor.block]
+        if (element && (!anchor.text || startsAlike(anchor.text, textStart(element)))) return Math.max(0, window.scrollY + element.getBoundingClientRect().top - anchor.top)
+    }
+    if (key.length < 4) return null
     const blocks = editor.querySelectorAll<HTMLElement>('.ag-paragraph')
     const matches = (k: number) => {
         const text = anchorKey(blocks[k].textContent ?? '')

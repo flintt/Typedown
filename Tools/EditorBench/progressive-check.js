@@ -119,6 +119,29 @@ const pending = () => !!window.__typedownMuya?.renderPending;
     check(was && how === 'kept' && (back.match(/Paragraph \d+ of Prog/g) || []).length === 3000, `left half drawn, it is kept as far as it got: back at once, and drawn on to the whole (${how})`);
     check(back === whole + '\nLeave\n'.replace(/\n/g, '') || (back.match(/Paragraph \d+ of Prog/g) || []).length === 3000, 'the document drawn on after coming back is whole');
   }
+  {
+    // The top of the window inside a long code block (commands and their output, as a reader's document is): the place
+    // is taken by the top-level block, so it is found again - the start of a code block's text says nothing of the line
+    // at the top of the window, and an anchor by text was never found there.
+    await p.evaluate(() => { window.__typedownProgressiveDelayMs = 0; window.__typedownProgressiveSliceMs = 12 });
+    const code = '# Code\n\n' + Array.from({ length: 300 }, (_, i) => `## Step ${i}\n\nRun these on router ${i}:\n\n\`\`\`bash\n` + Array.from({ length: 40 }, (_, k) => `Router${i}(config)# interface gi0/${k}\n ip address 10.${i % 250}.${k}.1 255.255.255.0`).join('\n') + '\n\`\`\`\n\n').join('');
+    await load(p, code, 10);
+    await p.waitForFunction(() => !window.__typedownMuya?.renderPending, { timeout: 120000 });
+    await p.evaluate(() => { const blocks = document.querySelectorAll('#ag-editor-id > pre'); const b = blocks[Math.floor(blocks.length * 0.6)]; window.scrollTo(0, window.scrollY + b.getBoundingClientRect().top + 300) });
+    await new Promise(r => setTimeout(r, 500));
+    const report = await p.evaluate(() => [...window.__msgs].reverse().find(m => m.name === 'OnScroll' && m.args.anchor)?.args);
+    const codeAnchor = report && report.anchor;
+    check(codeAnchor && typeof codeAnchor.block === 'number' && codeAnchor.top < -100 && /Router\d+\(config\)/.test(codeAnchor.text), `in a long code block, the place is its top-level block (${JSON.stringify(codeAnchor)})`);
+    await load(p, long('Other2'), 11);
+    await p.evaluate(() => window.__typedownKeptDocuments && window.__typedownKeptDocuments.clear());
+    await load(p, code, 12, codeAnchor, report.scrollY);
+    const drawn = await p.evaluate(() => window.__typedownLastProgressive);
+    await p.waitForFunction(() => !window.__typedownMuya?.renderPending, { timeout: 120000 });
+    await new Promise(r => setTimeout(r, 500));
+    const top = await p.evaluate(b => document.getElementById('ag-editor-id').children[b].getBoundingClientRect().top, codeAnchor.block);
+    check(drawn === true, `back in it, it is drawn a part at a time from that block (${drawn})`);
+    check(Math.abs(top - codeAnchor.top) <= 2, `the code block is back at its height (${top} vs ${codeAnchor.top})`);
+  }
   const errors = await p.evaluate(() => (window.__pageErrors || []).length);
   console.log(ok ? 'OK: a long document is drawn from where the reader was, and whole before anything works on it' : 'FAILED');
   await browser.close(); server.close(); process.exit(ok ? 0 : 1);

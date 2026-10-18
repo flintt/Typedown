@@ -396,6 +396,7 @@ class StateRender {
     this.codeCache.clear()
     const state = { blocks, activeBlocks, matches, lo, hi, root: rootDom, timer: null, done, slices: 0, startedAt: performance.now() }
     this.progressive = state
+    this.holdAnchoring(true)
     if (lo === 0 && hi === blocks.length) return this.finishProgressive(state)
     // The rest only once this part is on the screen: drawn before the first paint, it held that paint back. A page not
     // shown (a window minimized) has no frames: the rest goes on at once.
@@ -413,10 +414,14 @@ class StateRender {
       state.timer = null
       if (this.progressive !== state) return
       const until = performance.now() + (window.__typedownProgressiveSliceMs ?? 12)
+      const keep = this.keepInPlace(state)
+      // A few blocks at a time, the clock read after each few: twenty code blocks of forty lines each, highlighted,
+      // took half a second, and no frame was drawn in it.
       do {
-        if (state.hi < blocks.length) this.drawMore(state, 'below', 20)
-        if (state.lo > 0) this.drawMore(state, 'above', 20)
+        if (state.hi < blocks.length) this.drawMore(state, 'below', 4)
+        if (state.lo > 0) this.drawMore(state, 'above', 4)
       } while ((state.lo > 0 || state.hi < blocks.length) && performance.now() < until)
+      keep()
       state.slices++
       if (state.lo > 0 || state.hi < blocks.length) state.timer = setTimeout(step, window.__typedownProgressiveDelayMs ?? 0)
       else this.finishProgressive(state)
@@ -435,6 +440,7 @@ class StateRender {
     clearTimeout(state.timer)
     state.timer = null
     this.progressive = null
+    this.holdAnchoring(false)
     return state
   }
 
@@ -444,6 +450,7 @@ class StateRender {
     this.cancelProgressive()
     state.root = this.container || state.root
     this.progressive = state
+    this.holdAnchoring(true)
     this.scheduleProgressive(state)
   }
 
@@ -483,6 +490,7 @@ class StateRender {
 
   finishProgressive(state) {
     if (this.progressive === state) this.progressive = null
+    if (!this.progressive) this.holdAnchoring(false)
     clearTimeout(state.timer)
     ;(window.__typedownProgressiveLog = window.__typedownProgressiveLog || []).push({ slices: state.slices, ms: Math.round(performance.now() - state.startedAt), blocks: state.blocks.length })
     try {
@@ -497,9 +505,34 @@ class StateRender {
     const state = this.progressive
     if (!state) return
     clearTimeout(state.timer)
+    const keep = this.keepInPlace(state)
     if (state.hi < state.blocks.length) this.drawMore(state, 'below', state.blocks.length - state.hi)
     if (state.lo > 0) this.drawMore(state, 'above', state.lo)
+    keep()
     this.finishProgressive(state)
+  }
+
+  /**
+   * What is in the window stays where it is while blocks go in above it: the first block drawn so far is measured
+   * before and after, and the page scrolled by what it moved. The browser's own scroll anchoring did not hold it (a
+   * long code block across the top of the window drifted thousands of pixels as the blocks above it came), and is off
+   * meanwhile (holdAnchoring) so the two do not both move the page. Measured once a slice, not once a block.
+   */
+  keepInPlace(state) {
+    const first = state.lo > 0 ? state.root.firstElementChild : null
+    if (!first) return () => {}
+    const before = first.getBoundingClientRect().top
+    return () => {
+      if (!first.isConnected) return
+      const moved = first.getBoundingClientRect().top - before
+      if (Math.abs(moved) >= 0.5) window.scrollBy(0, moved)
+    }
+  }
+
+  // The browser's scroll anchoring off while a document is drawn a part at a time (keepInPlace does its work), on after.
+  holdAnchoring(hold) {
+    const element = document.scrollingElement || document.documentElement
+    if (element) element.style.overflowAnchor = hold ? 'none' : ''
   }
 
   /** Stops drawing the document (another takes its place): what is on the page stays as it is. */
@@ -508,6 +541,7 @@ class StateRender {
     if (!state) return
     clearTimeout(state.timer)
     this.progressive = null
+    this.holdAnchoring(false)
   }
 
   invalidateImageCache() {
