@@ -397,7 +397,13 @@ class StateRender {
     const state = { blocks, activeBlocks, matches, lo, hi, root: rootDom, timer: null, done, slices: 0, startedAt: performance.now() }
     this.progressive = state
     if (lo === 0 && hi === blocks.length) return this.finishProgressive(state)
-    this.scheduleProgressive(state)
+    // The rest only once this part is on the screen: drawn before the first paint, it held that paint back. A page not
+    // shown (a window minimized) has no frames: the rest goes on at once.
+    if (document.hidden) return this.scheduleProgressive(state)
+    state.timer = -1
+    requestAnimationFrame(() => {
+      if (this.progressive === state && state.timer === -1) this.scheduleProgressive(state)
+    })
   }
 
   // The next slice in a moment: below, then above, for about a frame's worth of time, then the page's turn again.

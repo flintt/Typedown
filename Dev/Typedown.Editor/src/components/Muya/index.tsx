@@ -32,6 +32,7 @@ function findAnchorBlock(blocks: any[], anchor: ScrollAnchor): { index: number, 
     return null
 }
 import transport, { beforeHostMessage } from "services/transport";
+import { currentLoadId } from "services/scrollbar";
 import Muya from 'components/Muya/lib'
 import TablePicker from 'components/Muya/lib/ui/tablePicker'
 import CodePicker from 'components/Muya/lib/ui/codePicker'
@@ -1164,6 +1165,12 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         }
         if (!replacedLocally) editor.setMarkdown(props.markdown, cursorRef.current, true, blocksBefore ? null : loaded, blocksBefore ? null : progressive)
         ;(window as any).__typedownLastProgressive = !blocksBefore && !replacedLocally && (editor as any).renderPending
+        // Its first part on the screen, the host takes away its "Opening…" (it waited for the load to be reported, which
+        // comes later, and covered what was already there to see).
+        if ((window as any).__typedownLastProgressive) {
+            const shownLoad = currentLoadId()
+            requestAnimationFrame(() => transport.postMessage('LoadPreviewShown', { loadId: shownLoad }))
+        }
         if (blocksBefore && props.options?.highlightAutomationChanges !== false)
             highlightExternalChange(editor.changedBlockKeys(blocksBefore).map((key: string) => document.getElementById(key)))
         ;(window as any).__typedownLastApply = replacedLocally ? 'local' : 'whole'

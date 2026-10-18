@@ -169,7 +169,7 @@ const importRegister = ContentState => {
                   // if the status is `loaded`, indicated that it's a new loaded language
                   const needRender = infoList.some(({ status }) => status === 'loaded')
                   if (needRender) {
-                    this.render()
+                    this.redrawCodeOf(lang)
                   }
                 })
                 .catch(err => {

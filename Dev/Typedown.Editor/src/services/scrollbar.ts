@@ -7,6 +7,8 @@ import transport from "./transport"
 // navigates the page again, always came back at the top.
 let loadId: number | undefined
 export const setScrollLoadId = (id: number | undefined) => { loadId = id }
+/** The load the page is showing (or about to). */
+export const currentLoadId = () => loadId
 
 const postScrollState = () => {
     transport.postMessage('OnScroll', {

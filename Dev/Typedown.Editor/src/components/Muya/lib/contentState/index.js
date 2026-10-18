@@ -221,6 +221,36 @@ class ContentState {
     this.postRender()
   }
 
+  /**
+   * The code blocks in `lang` on the page drawn again, now that its highlighting is loaded (importMarkdown). It drew
+   * the whole document again: on every start with code in it, a second full drawing of the document - and a document
+   * being drawn a part at a time drawn to its end at once. A block not on the page yet is highlighted as it is drawn.
+   */
+  redrawCodeOf(lang) {
+    const root = this.muya.container
+    if (!root) return
+    const activeBlocks = this.getActiveBlocks()
+    const { matches } = this.searchMatches
+    const hasLang = block => (block.type === 'pre' && block.lang === lang) || (block.children || []).some(hasLang)
+    let caretBlock = null
+    try {
+      caretBlock = this.cursor && this.findOutMostBlock(this.getBlock(this.cursor.start.key))
+    } catch (err) {
+      caretBlock = null
+    }
+    let caretRedrawn = false
+    for (const block of this.blocks) {
+      if (!hasLang(block)) continue
+      const element = root.querySelector(`#${block.key}`)
+      if (!element) continue
+      element.outerHTML = this.stateRender.blocksHtml([block], activeBlocks, matches)
+      if (block === caretBlock) caretRedrawn = true
+    }
+    this.stateRender.codeCache.clear()
+    this.postRender()
+    if (caretRedrawn && root.contains(document.activeElement)) this.setCursor()
+  }
+
   partialRender(isRenderCursor = true) {
     const { blocks, searchMatches: { matches, index } } = this
     const activeBlocks = this.getActiveBlocks()
