@@ -423,7 +423,14 @@ class StateRender {
         if (state.hi < blocks.length) this.drawMore(state, 'below', 4)
         if (state.lo > 0) this.drawMore(state, 'above', 4)
       } while ((state.lo > 0 || state.hi < blocks.length) && performance.now() < until)
-      this.estimateRest(state)
+      // The room for what is left is only written every so often, not every slice: writing it resizes a pseudo-element
+      // that can be thousands of pixels tall on a live, visible, scrolling page, and on a document of many small blocks
+      // (a reader's pasted page) that forced a full-page reflow on every slice and took ten times as long to draw as
+      // the whole document at once - the estimate itself (read-only) costs nothing like that.
+      const now = performance.now()
+      const writeRoom = state.lo === 0 && state.hi === blocks.length || now - (state.roomWrittenAt ?? -Infinity) >= 100
+      if (writeRoom) state.roomWrittenAt = now
+      this.estimateRest(state, writeRoom)
       keep()
       state.slices++
       if (state.lo > 0 || state.hi < blocks.length) state.timer = setTimeout(step, window.__typedownProgressiveDelayMs ?? 0)
@@ -472,7 +479,7 @@ class StateRender {
    * by the block), and dragging the scroll bar follows the hand. The guess is a height per character of what is drawn,
    * made again as more is.
    */
-  estimateRest(state) {
+  estimateRest(state, write = true) {
     const { blocks, root } = state
     if (!state.chars) {
       const count = block => {
@@ -500,8 +507,10 @@ class StateRender {
       for (let i = from; i < to; i++) h += perBlock + state.chars[i] * perChar
       return Math.round(h)
     }
-    root.style.setProperty('--td-room-above', `${room(0, state.lo)}px`)
-    root.style.setProperty('--td-room-below', `${room(state.hi, blocks.length)}px`)
+    if (write) {
+      root.style.setProperty('--td-room-above', `${room(0, state.lo)}px`)
+      root.style.setProperty('--td-room-below', `${room(state.hi, blocks.length)}px`)
+    }
   }
 
   clearRoom(state) {
