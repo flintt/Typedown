@@ -1149,6 +1149,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         let anchorLeaf: string | null = null
         let picked = { how: 'none', index: -1 }
         const startedAt = performance.now()
+        const drawingLoad = currentLoadId()
         // Off in the settings (Editor > Draw long documents progressively), or by a test: all at once, as before.
         const progressive = props.markdown.length >= PREVIEW_FROM_CHARS && props.options?.progressiveRendering !== false && !(window as any).__typedownProgressiveOff ? {
             pick: (blocks: any[], cursorIndex: number) => {
@@ -1158,7 +1159,13 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
                 picked = { how: 'caret', index: cursorIndex >= 0 ? cursorIndex : 0 }
                 return cursorIndex >= 0 ? cursorIndex : 0
             },
-            done: () => { (window as any).__typedownProgressiveDone = performance.now() },
+            done: () => {
+                (window as any).__typedownProgressiveDone = performance.now()
+                // How long the rest took, for the host's log.
+                const log = (window as any).__typedownProgressiveLog || []
+                const last = log[log.length - 1]
+                transport.postMessage('LoadDrawnWhole', { loadId: drawingLoad, ms: Math.round(performance.now() - startedAt), slices: last ? last.slices : 0 })
+            },
         } : null
         const loaded = () => {
             // The block that was at the top of the window back at the height it was; drawn a part at a time, followed as

@@ -55,7 +55,7 @@ const pending = () => !!window.__typedownMuya?.renderPending;
   // Where the page is to be: a block two thirds of the way through, 120 px down the window.
   const anchor = { text: 'Paragraph 2000 of Prog, with a few words', top: 120, at: 0.66 };
   // Each frame: is the anchor's block on the page, and where.
-  await p.evaluate(() => { window.__frames = []; const tick = () => { if (window.__watch) window.__frames.push({ t: performance.now() - window.__t0, top: eval(window.__watch), pending: !!window.__typedownMuya?.renderPending }); requestAnimationFrame(tick) }; requestAnimationFrame(tick) });
+  await p.evaluate(() => { window.__frames = []; const tick = () => { if (window.__watch) window.__frames.push({ t: performance.now() - window.__t0, top: eval(window.__watch), pending: !!window.__typedownMuya?.renderPending, height: document.documentElement.scrollHeight }); requestAnimationFrame(tick) }; requestAnimationFrame(tick) });
   await p.evaluate(src => { window.__watch = src }, topOf(anchor.text));
   await load(p, doc, 3, anchor, 99999);
   const firstShown = await p.evaluate(() => window.__frames.find(f => f.top != null && Math.abs(f.top - 120) <= 2)?.t);
@@ -71,6 +71,12 @@ const pending = () => !!window.__typedownMuya?.renderPending;
   check(firstShown != null && firstShown < doneAt * 0.6, `the anchor's block is shown at its height well before the whole document is drawn (${Math.round(firstShown)} vs ${Math.round(doneAt)} ms)`);
   check(drawnWhilePending >= 3, `the page draws frames while the rest is being drawn (${drawnWhilePending})`);
   check(worst <= 2, `the anchor's block stays where it is while the rest is drawn above and below it (worst ${worst.toFixed(1)} px off)`);
+  // The scroll bar holds still: the page is about as tall from its first frame as at the end (the room kept for what is
+  // not drawn yet), not growing as the rest comes.
+  const heights = shown.filter(f => f.pending).map(f => f.height);
+  const finalHeight = frames[frames.length - 1].height;
+  const spread = heights.length ? Math.max(...heights.map(h => Math.abs(h - finalHeight) / finalHeight)) : 0;
+  check(heights.length > 0 && spread <= 0.15, `the page is about as tall while the rest is drawn as at the end (off by ${(spread * 100).toFixed(1)}% at most, ${heights.length} frames)`);
   const text = await p.evaluate(() => document.getElementById('ag-editor-id').textContent);
   check(text === whole, `drawn a part at a time, the document is the same as drawn at once (${text.length} vs ${whole.length} characters)`);
 
@@ -81,6 +87,31 @@ const pending = () => !!window.__typedownMuya?.renderPending;
     const was = await p.evaluate(pending);
     return was;
   };
+  {
+    // Scrolling while it is drawn follows the hand: 40 px a frame moves what is in the window by 40 px, every frame -
+    // the blocks going in above are not felt.
+    const was = await again(3.5, 'Drag'); // between the loads before and after it: a lower id is a stale load
+    const steps = await p.evaluate(() => new Promise(done => {
+      const ref = () => { const e = document.elementFromPoint(400, 300)?.closest('#ag-editor-id > *'); return e }
+      // The reader's own move (the scroll bar pressed, the wheel): the page is no longer held where it was put back.
+      window.dispatchEvent(new WheelEvent('wheel', { deltaY: 40 }))
+      const out = []; let n = 0; let el = ref(); let top = el && el.getBoundingClientRect().top
+      const tick = () => {
+        window.scrollBy(0, 40)
+        requestAnimationFrame(() => {
+          if (el && el.isConnected) { const now = el.getBoundingClientRect().top; out.push(Math.round(top - now)); top = now }
+          else { el = ref(); top = el && el.getBoundingClientRect().top }
+          if (++n < 20 && window.__typedownMuya?.renderPending) tick(); else done({ out, pending: !!window.__typedownMuya?.renderPending })
+        })
+      }
+      tick()
+    }));
+    const off = steps.out.filter(d => Math.abs(d - 40) > 2);
+    check(was && steps.out.length >= 8 && off.length === 0, `scrolling while it is drawn moves the page by what was scrolled, every frame (${steps.out.join(' ')})`);
+    await p.evaluate(() => window.__typedownMuya?.completeRender());
+    const tall = await p.evaluate(() => { const e = document.getElementById('ag-editor-id'); return [Math.round(e.lastElementChild.getBoundingClientRect().bottom - e.firstElementChild.getBoundingClientRect().top), Math.round(e.getBoundingClientRect().height)] });
+    check(Math.abs(tall[0] - tall[1]) < 200, `once all is drawn, no room is left over (${tall[0]} of blocks, ${tall[1]} in all)`);
+  }
   {
     const was = await again(4, 'Key');
     await p.keyboard.type('Z');

@@ -398,6 +398,8 @@ class StateRender {
     this.progressive = state
     this.holdAnchoring(true)
     if (lo === 0 && hi === blocks.length) return this.finishProgressive(state)
+    this.estimateRest(state)
+    this.watchForBlank(state)
     // The rest only once this part is on the screen: drawn before the first paint, it held that paint back. A page not
     // shown (a window minimized) has no frames: the rest goes on at once.
     if (document.hidden) return this.scheduleProgressive(state)
@@ -421,6 +423,7 @@ class StateRender {
         if (state.hi < blocks.length) this.drawMore(state, 'below', 4)
         if (state.lo > 0) this.drawMore(state, 'above', 4)
       } while ((state.lo > 0 || state.hi < blocks.length) && performance.now() < until)
+      this.estimateRest(state)
       keep()
       state.slices++
       if (state.lo > 0 || state.hi < blocks.length) state.timer = setTimeout(step, window.__typedownProgressiveDelayMs ?? 0)
@@ -451,12 +454,86 @@ class StateRender {
     state.root = this.container || state.root
     this.progressive = state
     this.holdAnchoring(true)
+    this.estimateRest(state)
+    this.watchForBlank(state)
     this.scheduleProgressive(state)
   }
 
   blocksHtml(blocks, activeBlocks, matches) {
     return toHTML(h('section', blocks.map(block => this.renderBlock(null, block, activeBlocks, matches, true))))
       .replace(/^<section>([\s\S]*?)<\/section>$/, '$1')
+  }
+
+  /**
+   * The part not drawn yet takes the room it will need, as blank above and below what is drawn (the root's ::before and
+   * ::after, assets/styles/index.css: not elements, so the blocks are still the root's children one for one): the
+   * document is about as tall from the start as when it is all drawn. The scroll bar then neither shrinks nor wanders
+   * while the rest comes, a block going in only replaces its own room (the window moves by what the guess was off, not
+   * by the block), and dragging the scroll bar follows the hand. The guess is a height per character of what is drawn,
+   * made again as more is.
+   */
+  estimateRest(state) {
+    const { blocks, root } = state
+    if (!state.chars) {
+      const count = block => {
+        let n = 0
+        const walk = b => {
+          if (typeof b.text === 'string') n += b.text.length + 1
+          if (b.children) b.children.forEach(walk)
+        }
+        walk(block)
+        return n
+      }
+      state.chars = blocks.map(count)
+    }
+    const first = root.firstElementChild
+    const last = root.lastElementChild
+    if (!first || !last) return
+    const drawnHeight = last.getBoundingClientRect().bottom - first.getBoundingClientRect().top
+    let drawnChars = 0
+    for (let i = state.lo; i < state.hi; i++) drawnChars += state.chars[i]
+    // A block has a height of its own (margins) besides its text's: half of it per block, the other half per character.
+    const perBlock = drawnHeight / (state.hi - state.lo) / 2
+    const perChar = drawnChars > 0 ? drawnHeight / 2 / drawnChars : 0
+    const room = (from, to) => {
+      let h = 0
+      for (let i = from; i < to; i++) h += perBlock + state.chars[i] * perChar
+      return Math.round(h)
+    }
+    root.style.setProperty('--td-room-above', `${room(0, state.lo)}px`)
+    root.style.setProperty('--td-room-below', `${room(state.hi, blocks.length)}px`)
+  }
+
+  clearRoom(state) {
+    state.root.style.removeProperty('--td-room-above')
+    state.root.style.removeProperty('--td-room-below')
+  }
+
+  // The reader going where nothing is drawn yet (the scroll bar dragged far): the rest at once, not a blank page. Only a
+  // move of the reader's own counts (the wheel, the scroll bar): the page put back where it was left scrolls too, with
+  // the room above still in the window for a moment, and that drew it all at once on every load.
+  watchForBlank(state) {
+    let reader = false
+    const arm = e => { if (e.type === 'wheel' || e.target === document.documentElement) reader = true }
+    const stop = () => {
+      window.removeEventListener('scroll', check)
+      window.removeEventListener('wheel', arm, true)
+      window.removeEventListener('pointerdown', arm, true)
+    }
+    const check = () => {
+      if (this.progressive !== state) return stop()
+      if (!reader) return
+      const first = state.root.firstElementChild
+      const last = state.root.lastElementChild
+      if (!first || !last) return
+      if ((state.lo > 0 && first.getBoundingClientRect().top > 0) || (state.hi < state.blocks.length && last.getBoundingClientRect().bottom < window.innerHeight)) {
+        stop()
+        this.completeRender()
+      }
+    }
+    window.addEventListener('scroll', check, { passive: true })
+    window.addEventListener('wheel', arm, { capture: true, passive: true })
+    window.addEventListener('pointerdown', arm, true)
   }
 
   // The next `count` blocks on one side of what is drawn.
@@ -489,6 +566,7 @@ class StateRender {
   }
 
   finishProgressive(state) {
+    this.clearRoom(state)
     if (this.progressive === state) this.progressive = null
     if (!this.progressive) this.holdAnchoring(false)
     clearTimeout(state.timer)
@@ -508,6 +586,7 @@ class StateRender {
     const keep = this.keepInPlace(state)
     if (state.hi < state.blocks.length) this.drawMore(state, 'below', state.blocks.length - state.hi)
     if (state.lo > 0) this.drawMore(state, 'above', state.lo)
+    this.clearRoom(state)
     keep()
     this.finishProgressive(state)
   }
@@ -550,6 +629,7 @@ class StateRender {
     if (!state) return
     clearTimeout(state.timer)
     this.progressive = null
+    this.clearRoom(state)
     this.holdAnchoring(false)
   }
 
