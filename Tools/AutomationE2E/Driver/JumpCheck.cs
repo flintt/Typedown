@@ -152,22 +152,35 @@ internal static partial class Program
             Check(tab.Moved == 0, $"switched back to, the page does not move once its text is there ({tab.Moved} frames moved: {tab.Detail})");
             Check(SameTop(before, tabTop), $"switched back to, the top of the window is what it was ({before} / {tabTop})");
 
-            // Back and forth between the two long documents, nothing changed in them: no "Opening…" over the page, which
-            // shows the document left until the next takes its place. It flashed up on every switch.
+            // Back and forth between two documents like a reader's (one of 30,000 characters with diagrams and code, one of
+            // 11,000 plain), nothing changed in them: no "Opening…" over the page, which shows the document left until the
+            // next takes its place. It flashed up on every switch - neither is kept (too short, diagrams), and drawing the
+            // first part with its diagrams takes longer than the 150 ms it waited.
             async Task<(int Shown, int Loads)> Opening()
             {
                 var o = await c.Call("test.editor.opening", new { windowId });
                 return ((int)o["shown"]!, (int)o["loads"]!);
             }
+            var rich = await Open(c, Fixture("ju01-rich.md", "# JU01 rich\n\n" + string.Concat(Enumerable.Range(0, 60).Select(i =>
+                $"## Section {i}\n\nSome text for section {i}, a few lines of it to read before the picture.\n\n"
+                + (i % 4 == 0 ? $"```mermaid\ngraph TD\n  A{i}[Start {i}] --> B{i}{{Choice}}\n  B{i} -->|yes| C{i}[One]\n  B{i} -->|no| D{i}[Two]\n  C{i} --> E{i}[End]\n  D{i} --> E{i}\n```\n\n" : "")
+                + (i % 3 == 1 ? $"```python\ndef f{i}(x):\n    return x * {i}\n```\n\n" : "")
+                + (i % 5 == 2 ? $"```js\nconst v{i} = [{i}, {i + 1}].map(n => n * 2);\n```\n\n" : "")
+                + string.Concat(Enumerable.Range(0, 3).Select(k => $"Paragraph {k} of section {i}: " + string.Join(" ", Enumerable.Repeat("words", 12 + (i + k) % 9)) + ".\n\n"))))));
+            var plain = await Open(c, Fixture("ju01-plain.md", "# JU01 plain\n\n" + string.Concat(Enumerable.Range(0, 180).Select(i => $"Line {i} of the plain document, with some words in it to read.\n\n"))));
+            await c.Call("document.focus", new { documentId = rich });
+            await Task.Delay(2500);
             var openingBefore = await Opening();
-            for (var i = 0; i < 4; i++)
+            for (var i = 0; i < 6; i++)
             {
-                await c.Call("document.focus", new { documentId = i % 2 == 0 ? b : a });
+                await c.Call("document.focus", new { documentId = i % 2 == 0 ? plain : rich });
                 await Task.Delay(1500);
             }
             var openingAfter = await Opening();
-            notes.Add($"four switches between the two: \"Opening…\" shown {openingAfter.Shown - openingBefore.Shown} times over {openingAfter.Loads - openingBefore.Loads} long loads");
-            Check(openingAfter.Loads - openingBefore.Loads >= 4 && openingAfter.Shown == openingBefore.Shown, $"switching between long documents does not say it is opening ({openingAfter.Shown - openingBefore.Shown} of {openingAfter.Loads - openingBefore.Loads})");
+            notes.Add($"six switches between a document with diagrams and a plain one: \"Opening…\" shown {openingAfter.Shown - openingBefore.Shown} times over {openingAfter.Loads - openingBefore.Loads} long loads");
+            Check(openingAfter.Loads - openingBefore.Loads >= 6 && openingAfter.Shown == openingBefore.Shown, $"switching between long documents does not say it is opening ({openingAfter.Shown - openingBefore.Shown} of {openingAfter.Loads - openingBefore.Loads})");
+            try { await c.Call("document.close", new { documentId = rich }); } catch { }
+            try { await c.Call("document.close", new { documentId = plain }); } catch { }
 
             // The watch sees a move when there is one: the page moved 120 px and back while it watches.
             watch = WatchForJumps(window, 2500);
