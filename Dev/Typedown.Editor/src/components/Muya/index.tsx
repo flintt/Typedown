@@ -1129,11 +1129,14 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         // window when it was left (its scroll anchor), or the caret's; the rest while the page is idle. Not where only an
         // offset says where the page was (no anchor yet): an offset means something only with the whole document laid out.
         let anchorLeaf: string | null = null
+        let picked = { how: 'none', index: -1 }
+        const startedAt = performance.now()
         const progressive = props.markdown.length >= PREVIEW_FROM_CHARS && !(window as any).__typedownProgressiveOff ? {
             pick: (blocks: any[], cursorIndex: number) => {
                 const found = anchor ? findAnchorBlock(blocks, anchor) : null
-                if (found) { anchorLeaf = found.leafKey; return found.index }
-                if (keepScroll && scrollTop > 0) return -1
+                if (found) { anchorLeaf = found.leafKey; picked = { how: 'anchor', index: found.index }; return found.index }
+                if (keepScroll && scrollTop > 0) { picked = { how: anchor ? 'anchor not found, offset' : 'offset, no anchor', index: -1 }; return -1 }
+                picked = { how: 'caret', index: cursorIndex >= 0 ? cursorIndex : 0 }
                 return cursorIndex >= 0 ? cursorIndex : 0
             },
             done: () => { (window as any).__typedownProgressiveDone = performance.now() },
@@ -1170,6 +1173,16 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         if ((window as any).__typedownLastProgressive) {
             const shownLoad = currentLoadId()
             requestAnimationFrame(() => transport.postMessage('LoadPreviewShown', { loadId: shownLoad }))
+        }
+        // How a long document was drawn, for the host's log: the only way to tell from a machine one cannot watch.
+        if (!blocksBefore && !replacedLocally && props.markdown.length >= PREVIEW_FROM_CHARS) {
+            const drawnLoad = currentLoadId()
+            const part = (window as any).__typedownLastProgressive
+            const blocks = (editor as any).contentState?.blocks?.length ?? 0
+            requestAnimationFrame(() => transport.postMessage('LoadDrawn', {
+                loadId: drawnLoad, chars: props.markdown.length, blocks, progressive: !!part, how: picked.how, center: picked.index,
+                anchor: anchor ? anchor.text.slice(0, 40) : null, firstPaintMs: Math.round(performance.now() - startedAt),
+            }))
         }
         if (blocksBefore && props.options?.highlightAutomationChanges !== false)
             highlightExternalChange(editor.changedBlockKeys(blocksBefore).map((key: string) => document.getElementById(key)))

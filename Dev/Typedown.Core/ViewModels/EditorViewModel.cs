@@ -104,6 +104,8 @@ namespace Typedown.Core.ViewModels
             // where it is drawn at once): no "Opening…" over it from then on.
             EventCenter.GetObservable<EditorEventArgs>("LoadPreviewShown").Subscribe(x => { if (x.Args?["loadId"]?.Value<int?>() == LoadId) LongLoadPending = false; });
             EventCenter.GetObservable<EditorEventArgs>("DocumentEditApplied").Subscribe(x => OnDocumentEditApplied(x.Args));
+            // How the page drew a long document (a part at a time or all at once, from what), for the log.
+            EventCenter.GetObservable<EditorEventArgs>("LoadDrawn").Subscribe(x => Log.Debug($"load {x.Args?["loadId"]}: drawn {((bool?)x.Args?["progressive"] == true ? "a part at a time" : "all at once")} ({x.Args?["how"]}, block {x.Args?["center"]} of {x.Args?["blocks"]}, {x.Args?["chars"]} chars), first paint after {x.Args?["firstPaintMs"]} ms; anchor {x.Args?["anchor"]}"));
             EventCenter.GetObservable<EditorEventArgs>("NormalizationReport").Subscribe(x => OnNormalizationReport(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("PresentationFrames").Subscribe(x => { var t = x.Args?["token"]?.Value<int?>() ?? 0; if (framesWaiters.TryGetValue(t, out var w)) w.TrySetResult(true); });
             EventCenter.GetObservable<EditorEventArgs>("EditorStyle").Subscribe(x => { var t = x.Args?["token"]?.Value<int?>() ?? 0; if (styleWaiters.TryGetValue(t, out var w)) w.TrySetResult(x.Args); });
