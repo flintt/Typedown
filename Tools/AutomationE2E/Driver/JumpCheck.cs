@@ -89,7 +89,9 @@ internal static partial class Program
             if (rows.Length != final.Length) continue;
             var (shift, atZero, best) = ShiftOf(rows, final);
             // The final picture moved: nearly the same rows, shifted - not another picture (the document switched from).
-            if (shift != 0 && best < 3 && atZero > best * 1.5 + 0.5) moved.Add($"{at}ms:{shift * 2}px");
+            // By more than one row of two pixels: a frame a pixel or two off (the page's whole-pixel scrolling against
+            // blocks of fractional heights) is not a jump anyone sees, and the watch reads rows two pixels apart anyway.
+            if (Math.Abs(shift) > 1 && best < 3 && atZero > best * 1.5 + 0.5) moved.Add($"{at}ms:{shift * 2}px");
         }
         return (moved.Count, frames.Count - first, frames[first].At, moved.Count == 0 ? "" : string.Join(" ", moved.Take(12)));
     }
