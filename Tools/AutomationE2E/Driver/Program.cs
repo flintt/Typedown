@@ -1189,17 +1189,26 @@ internal static partial class Program
         }
         finally
         {
-            // The new tabs' letters undone and the tabs closed, so nothing asks to be saved later.
-            foreach (var doc in created.Distinct())
+            // Every letter undone first (an untitled document closed through document.close while still modified -
+            // even by a letter since undone - asked to save and that question stayed on screen over the window the
+            // following cases opened their documents in, K04's comment on the same thing): then the whole window
+            // closed at once, tabs and all, so nothing of this case is left for the next one to find.
+            foreach (var doc in created.Append(first).Distinct())
             {
                 try
                 {
-                    for (var i = 0; i < 5 && ((string?)(await Get(c, doc))["text"] ?? "").Trim().Length > 0; i++)
+                    for (var i = 0; i < 5; i++)
+                    {
+                        var left = (string?)(await Get(c, doc))["text"] ?? "";
+                        if (!left.Contains('A') && !left.Contains('J')) break;
                         await c.Call("document.undo", new { documentId = doc, baseRevision = await Revision(c, doc), reveal = "document" });
-                    await c.Call("document.close", new { documentId = doc });
+                    }
                 }
                 catch (Exception ex) { notes.Add("cleanup: " + ex.Message.Split('\n')[0]); }
             }
+            PostMessage(window, 0x0010, IntPtr.Zero, IntPtr.Zero);
+            await Task.Delay(1000);
+            if (IsWindow(window)) notes.Add("cleanup: the window did not close");
         }
     }
 
@@ -1334,8 +1343,22 @@ internal static partial class Program
         var second = "";
         try
         {
+            // Deep in a run of many cases, a window opened with "reveal" can take a moment to actually become the
+            // active tab (one left open by an earlier case, found again rather than a fresh one, say): the view
+            // model says it is active before the keyboard is really given to its web view (every other step in this
+            // case waits on test.editor.focus first for the same reason - see Try below).
+            await Eventually(async () => await Active() == main, 3000);
+            try { await c.Call("test.editor.focus", new { windowId }); await Task.Delay(300); } catch { }
             await TypeInto(c, main, "A");
-            await WaitForPage(c, main, t => t.Contains('A'), "the first letter");
+            try { await WaitForPage(c, main, t => t.Contains('A'), "the first letter"); }
+            catch (CaseFailed)
+            {
+                string page;
+                try { page = (await c.Call("test.editor.eval", new { windowId, script = "(() => { const a = document.activeElement; const s = getSelection(); return { hasFocus: document.hasFocus(), active: a ? a.tagName + '.' + (a.className || '').toString().slice(0, 40) + (a.isContentEditable ? ' editable' : '') : null, ranges: s.rangeCount, anchor: s.anchorNode ? (s.anchorNode.nodeName + ':' + (s.anchorNode.textContent || '').slice(0, 20)) : null } })()" }))["result"]!.ToString(Formatting.None); }
+                catch (Exception pex) { page = pex.Message.Split('\n')[0]; }
+                notes.Add($"     the first letter: keys went to: {FocusInfo(window)}; page: {page}");
+                throw;
+            }
 
             await Try("a tab closed with its x button", async () =>
             {
@@ -1422,11 +1445,14 @@ internal static partial class Program
         }
         finally
         {
-            // Saved, so nothing asks to be saved later.
+            // Saved, so nothing asks to be saved later; then closed, so no window or tab of this case is left for the
+            // next one to find (document.close on the last document of a window closes the window with it).
             foreach (var doc in new[] { main, second }.Where(d => d.Length > 0))
                 try { await c.Call("document.save", new { documentId = doc }); } catch { }
             try { await c.Call("window.setView", new { windowId, sidePane = new { open = false } }); } catch { }
             try { await c.Call("test.settings.set", new { windowId, name = "SourceCode", value = false }); } catch { }
+            foreach (var doc in new[] { main, second }.Where(d => d.Length > 0))
+                try { await c.Call("document.close", new { documentId = doc }); } catch { }
         }
     }
 
@@ -3331,7 +3357,9 @@ internal static partial class Program
             script = "!!document.querySelector('.td-first-edit-warning')"
         }))["result"] ?? false;
 
-        Check(await Warning(), "unsafe raw HTML shows the first-edit warning");
+        // Drawn straight into the DOM, not from React state (docs/todo.md): on a busy main thread (many windows
+        // already open, as deep in the full suite) it can be a moment behind the page's own load.
+        Check(await Eventually(Warning, 3000, 100), "unsafe raw HTML shows the first-edit warning");
         await Task.Delay(5000);
         Check(await Warning(), "the warning remains visible long enough to read");
         await Task.Delay(6000);
