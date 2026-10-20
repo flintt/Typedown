@@ -96,6 +96,27 @@ internal static partial class Program
         return (moved.Count, frames.Count - first, frames[first].At, moved.Count == 0 ? "" : string.Join(" ", moved.Take(12)));
     }
 
+    // For diagnosing a jump: the OS window's own rect, and the page's scrollY/scrollHeight/innerHeight, sampled every
+    // 100 ms for a while - says whether a late jump is the OS window resizing under the page or something else.
+    private static async Task<string> WatchWindowGeometry(Client c, string windowId)
+    {
+        var samples = new List<string>();
+        var sw = System.Diagnostics.Stopwatch.StartNew();
+        while (sw.ElapsedMilliseconds < 2500)
+        {
+            try
+            {
+                var handle = await WindowOf(windowId, c);
+                GetWindowRect(handle, out var r);
+                var page = await c.Call("test.editor.eval", new { windowId, script = "JSON.stringify({y: window.scrollY, h: document.documentElement.scrollHeight, ih: window.innerHeight})" });
+                samples.Add($"{sw.ElapsedMilliseconds}:{r.Right - r.Left}x{r.Bottom - r.Top}/{page["result"]}");
+            }
+            catch (Exception ex) { samples.Add($"{sw.ElapsedMilliseconds}:err({ex.Message.Split('\n')[0]})"); }
+            await Task.Delay(100);
+        }
+        return string.Join(" ", samples);
+    }
+
     // The editor's block at the top of the window: the start of its text and its height.
     private const string TopBlockScript = "(()=>{const e=document.getElementById('ag-editor-id');if(!e)return 'none';const r=e.getBoundingClientRect();const x=r.left+Math.min(r.width/2,300);for(const y of [2,16,40,80]){const b=document.elementFromPoint(x,y)?.closest('.ag-paragraph');if(b&&e.contains(b))return JSON.stringify({text:(b.textContent||'').replace(/\\s+/g,' ').trim().slice(0,40),top:Math.round(b.getBoundingClientRect().top)})}return 'none'})()";
 
@@ -222,10 +243,12 @@ internal static partial class Program
             var opened = await c.Call("test.window.open", new { path = aPath });
             other = (string)opened["windowId"]!;
             var otherWindow = await WindowOf(other, c);
+            var startWindowWatch = WatchWindowGeometry(c, other);
             var start = await WatchForJumps(otherWindow, 5000);
             await WhollyDrawn(other);
             var startTop = await Eval(TopBlockScript, other);
-            notes.Add($"a window opening with it: {start.Frames} frames from the text at {start.TextAt} ms, moved {start.Moved} {start.Detail}; top before {before}, after {startTop}");
+            var geometry = await startWindowWatch;
+            notes.Add($"a window opening with it: {start.Frames} frames from the text at {start.TextAt} ms, moved {start.Moved} {start.Detail}; top before {before}, after {startTop}; window size/scroll over time: {geometry}");
             Check(start.TextAt != null, "the document was seen in the new window");
             Check(start.Moved == 0, $"opened in a window of its own, the page does not move once its text is there ({start.Moved} frames moved: {start.Detail})");
             Check(SameTop(before, startTop), $"opened in a window of its own, the top of the window is what it was ({before} / {startTop})");
