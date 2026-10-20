@@ -1133,6 +1133,7 @@ internal static partial class Program
         System.Windows.Automation.AutomationElement? Find(string automationId) =>
             Deep.First(System.Windows.Automation.AutomationElement.FromHandle(window), new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.AutomationIdProperty, automationId));
         var created = new List<string>();
+        var passed = false;
         try
         {
             await TypeInto(c, first, "A");
@@ -1186,29 +1187,25 @@ internal static partial class Program
             text = await PageHas(first, 'J');
             notes.Add("after the tab click: " + JsonConvert.SerializeObject(text));
             Check(text?.Contains('J') == true, "a letter typed after a tab is clicked reaches its document");
+            passed = true;
         }
         finally
         {
-            // Every letter undone first (an untitled document closed through document.close while still modified -
-            // even by a letter since undone - asked to save and that question stayed on screen over the window the
-            // following cases opened their documents in, K04's comment on the same thing): then the whole window
-            // closed at once, tabs and all, so nothing of this case is left for the next one to find.
+            // This case's own documents only, each undone back to what it was saved as and then closed (document.close
+            // never asks; it refuses a changed document). Not the window: it can be one an earlier case left open, with
+            // documents of that case still changed on purpose, and closing it asked to save them.
+            var left = new List<string>();
             foreach (var doc in created.Append(first).Distinct())
             {
                 try
                 {
-                    for (var i = 0; i < 5; i++)
-                    {
-                        var left = (string?)(await Get(c, doc))["text"] ?? "";
-                        if (!left.Contains('A') && !left.Contains('J')) break;
+                    for (var i = 0; i < 5 && !(bool)(await Get(c, doc))["saved"]!; i++)
                         await c.Call("document.undo", new { documentId = doc, baseRevision = await Revision(c, doc), reveal = "document" });
-                    }
+                    await c.Call("document.close", new { documentId = doc });
                 }
-                catch (Exception ex) { notes.Add("cleanup: " + ex.Message.Split('\n')[0]); }
+                catch (Exception ex) { left.Add(doc); notes.Add("cleanup: " + ex.Message.Split('\n')[0]); }
             }
-            PostMessage(window, 0x0010, IntPtr.Zero, IntPtr.Zero);
-            await Task.Delay(1000);
-            if (IsWindow(window)) notes.Add("cleanup: the window did not close");
+            if (passed && left.Count > 0) throw new CaseFailed($"this case's documents are all closed at the end ({left.Count} left)");
         }
     }
 
@@ -1445,8 +1442,8 @@ internal static partial class Program
         }
         finally
         {
-            // Saved, so nothing asks to be saved later; then closed, so no window or tab of this case is left for the
-            // next one to find (document.close on the last document of a window closes the window with it).
+            // Saved, so nothing asks to be saved later; then closed, so no tab of this case is left for the next one to
+            // find (a window's last document closed is replaced by an empty one: the window stays).
             foreach (var doc in new[] { main, second }.Where(d => d.Length > 0))
                 try { await c.Call("document.save", new { documentId = doc }); } catch { }
             try { await c.Call("window.setView", new { windowId, sidePane = new { open = false } }); } catch { }
