@@ -117,6 +117,25 @@ internal static partial class Program
         return string.Join(" ", samples);
     }
 
+    // For diagnosing a jump on a tab switch (no OS window resize involved): the page's scrollY/scrollHeight/innerHeight
+    // and the render-pending flag, sampled every 20 ms - fine enough to catch a jump that lasts only a frame or two.
+    private static async Task<string> WatchScrollGeometry(Client c, string windowId, int ms)
+    {
+        var samples = new List<string>();
+        var sw = System.Diagnostics.Stopwatch.StartNew();
+        while (sw.ElapsedMilliseconds < ms)
+        {
+            try
+            {
+                var page = await c.Call("test.editor.eval", new { windowId, script = "JSON.stringify({y: window.scrollY, h: document.documentElement.scrollHeight, ih: window.innerHeight, p: !!window.__typedownMuya?.renderPending})" });
+                samples.Add($"{sw.ElapsedMilliseconds}:{page["result"]}");
+            }
+            catch (Exception ex) { samples.Add($"{sw.ElapsedMilliseconds}:err({ex.Message.Split('\n')[0]})"); }
+            await Task.Delay(20);
+        }
+        return string.Join(" ", samples);
+    }
+
     // The editor's block at the top of the window: the start of its text and its height.
     private const string TopBlockScript = "(()=>{const e=document.getElementById('ag-editor-id');if(!e)return 'none';const r=e.getBoundingClientRect();const x=r.left+Math.min(r.width/2,300);for(const y of [2,16,40,80]){const b=document.elementFromPoint(x,y)?.closest('.ag-paragraph');if(b&&e.contains(b))return JSON.stringify({text:(b.textContent||'').replace(/\\s+/g,' ').trim().slice(0,40),top:Math.round(b.getBoundingClientRect().top)})}return 'none'})()";
 
@@ -165,12 +184,15 @@ internal static partial class Program
             // In its tab.
             var before = await LeaveAHalfWay();
             var watch = WatchForJumps(window, 4000);
+            var scrollWatch = WatchScrollGeometry(c, windowId, 2500);
             await Task.Delay(150);
             await c.Call("document.focus", new { documentId = a });
             var tab = await watch;
+            var geometryNotes = await scrollWatch;
             await WhollyDrawn();
             var tabTop = await Eval(TopBlockScript);
             notes.Add($"switched back: {tab.Frames} frames from the text at {tab.TextAt} ms, moved {tab.Moved} {tab.Detail}; top before {before}, after {tabTop}");
+            if (tab.Moved > 0) notes.Add($"switched back, scrollY/scrollHeight over time: {geometryNotes}");
             Check(before != "none" && tab.TextAt != null, "the document was seen coming back");
             Check(tab.Moved == 0, $"switched back to, the page does not move once its text is there ({tab.Moved} frames moved: {tab.Detail})");
             Check(SameTop(before, tabTop), $"switched back to, the top of the window is what it was ({before} / {tabTop})");
