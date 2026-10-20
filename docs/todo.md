@@ -156,8 +156,7 @@ showcase.md 这类含原始 HTML、GFM 扩展语法的文档，只要有任何�
 长文档背景补全阶段画 `sequence` 代码块（js-sequence-diagrams，Snap.svg）时，字体加载等待（webfontloader）偶尔不触发 `active`/`inactive` 任何一个回调，Promise 永不 settle。已加超时（8s）+ 最多 3 次重试（0133e983），showcase-check.js 多次测试里偶尔（约 1/4 次）仍然超时；同一问题（flowchart.js）已经另外查明是我自己加的超时包装对同步返回值调用了 `.then()`，已修好且稳定。
 
 - 已排除：和"补全期间是否还在写预留空间/纠正滚动"无关（关掉那部分机制问题照样复现）；和"多个图表并发互相干扰"无关（sequence 单独一个、什么都不画也会偶发超时）；和重试次数关系不大（2→4 次没有明显改善）。
-- 怀疑方向未验证：webfontloader 内部的字体检测本身要靠 setTimeout/rAF 轮询，补全期间主线程持续被 setTimeout(0) 的小任务占用，可能让它的轮询被挤掉；或者这就是本机无头 Chrome 测试环境本身的字体 CDN 可用性问题，不一定在真实 WebView2 里出现——还没有在 hp 实机上用含 sequence 图的长文档验证过。
-- 下一步：先在 hp 实机上复现（比本机无头浏览器更接近真实环境），再决定要不要继续深挖，或者给 sequence 单独加一个"超时后换个更简单的渲染方式"的兜底。
+- 2026-10-20 已在 hp 实机（真实 WebView2，DG02 用例，showcase.md）验证：15 轮（5 次调用 × 内部 3 轮）全部正常，sequence 块每次都是 `svg 1014x286 shapes 20`，没有一次空/超时。结论：本机无头 Chrome 测试环境里约 1/4 的偶发超时是测试环境本身的问题（字体 CDN 可用性/webfontloader 在 headless Chrome 下的行为），不是真实 WebView2 里的 bug，不再继续深挖；已加的 8s 超时 + 3 次重试作为兜底保留即可。
 
 ## ✅ 标签加载期间按键丢失（2026-10-14 发现；2026-10-17 已做）
 
