@@ -184,7 +184,12 @@ internal static partial class Program
             try { await c.Call("document.close", new { documentId = rich }); } catch { }
             try { await c.Call("document.close", new { documentId = plain }); } catch { }
 
-            // The watch sees a move when there is one: the page moved 120 px and back while it watches.
+            // The watch sees a move when there is one: the page moved 120 px and back while it watches. Which tab
+            // closing the active one left showing is not the point here - a known, fully drawn, tall document is, so
+            // there is text in the window to see move (or not) and enough of it to scroll 120 px by.
+            await c.Call("document.focus", new { documentId = a });
+            await Task.Delay(800);
+            await WhollyDrawn();
             await Activate(window);
             await Task.Delay(300);
             watch = WatchForJumps(window, 2500);
