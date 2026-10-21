@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>Dún gan fiafraí faoi shábháil: tagann doiciméid nach bhfuil sábháilte ar ais mar a bhí siad, fós gan sábháil, le cluaisíní an tseisiúin dheireanaigh</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Taispeáin marcanna Markdown i gcónaí</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Taispeáin na marcanna Markdown (**, #, seoladh naisc) i ngach alt, ní hamháin san áit a bhfuil an cúrsóir</value>
+  </data>
 </root>

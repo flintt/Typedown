@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>Փակել առանց պահպանելու հարցի. չպահպանված փաստաթղթերը վերադառնում են նույնությամբ, դեռևս չպահպանված, վերջին նստաշրջանի ներդիրներով</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Միշտ ցուցադրել Markdown նշանները</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Ցուցադրել Markdown նշանները (**, #, հղման հասցեն) յուրաքանչյուր պարբերությունում, ոչ միայն այնտեղ, որտեղ կուրսորն է</value>
+  </data>
 </root>

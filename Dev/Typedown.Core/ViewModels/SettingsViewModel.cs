@@ -54,6 +54,8 @@ namespace Typedown.Core.ViewModels
         /// too, as they do while editing (todo S8). Display only: the file is written the same either way.
         /// </summary>
         public bool ShowBlankLines { get => GetSettingValue(false); set => SetSettingValue(value); }
+        /// <summary>The visual editor shows the Markdown marks (**, #, a link's address) everywhere, not only where the caret is.</summary>
+        public bool ShowMarkdownMarks { get => GetSettingValue(false); set => SetSettingValue(value); }
 
         /// <summary>
         /// A long document is drawn a part at a time: where the reader left it first, the rest while the page is idle. Off,
@@ -274,6 +276,7 @@ namespace Typedown.Core.ViewModels
             "ListIndentation",
             "TableAlignColumns",
             "ShowBlankLines",
+            "ShowMarkdownMarks",
             "ProgressiveRendering",
             "ShowParagraphMarker",
             "ReadOnly",

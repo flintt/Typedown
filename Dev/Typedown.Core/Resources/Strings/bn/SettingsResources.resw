@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>সংরক্ষণ করতে না জিজ্ঞাসা করে বন্ধ করুন: সংরক্ষিত না হওয়া নথিগুলি যেমন ছিল তেমনই, এখনও সংরক্ষিত না হয়ে, শেষ সেশনের ট্যাবসহ ফিরে আসবে</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>সবসময় Markdown চিহ্ন দেখান</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>শুধু কার্সরের জায়গায় নয়, প্রতিটি অনুচ্ছেদে Markdown চিহ্ন (**, #, লিঙ্কের ঠিকানা) দেখান</value>
+  </data>
 </root>

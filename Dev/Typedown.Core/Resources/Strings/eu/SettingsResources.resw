@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>Itxi gordetzeko galdetu gabe: gorde gabeko dokumentuak zeuden bezala itzuliko dira, oraindik gorde gabe, azken saioko fitxekin</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Erakutsi beti Markdown markak</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Erakutsi Markdown markak (**, #, esteka baten helbidea) paragrafo guztietan, ez kurtsorea dagoen tokian bakarrik</value>
+  </data>
 </root>

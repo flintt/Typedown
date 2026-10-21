@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>סגירה בלי לשאול על שמירה: מסמכים שלא נשמרו חוזרים כפי שהיו, עדיין לא שמורים, עם הכרטיסיות מההפעלה האחרונה</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>הצגת סימני Markdown תמיד</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>הצגת סימני Markdown (**, #, כתובת של קישור) בכל פסקה, לא רק היכן שנמצא הסמן</value>
+  </data>
 </root>

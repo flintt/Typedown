@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>ସେଭ୍ କରିବାକୁ ନପଚାରି ବନ୍ଦ କରନ୍ତୁ: ସେଭ୍ ହୋଇନଥିବା ଡକ୍ୟୁମେଣ୍ଟଗୁଡ଼ିକ ଯେପରି ଥିଲା ସେପରି, ଏବେ ବି ସେଭ୍ ନହୋଇ, ଶେଷ ସେସନର ଟ୍ୟାବ୍ ସହିତ ଫେରିଆସେ</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>ସର୍ବଦା Markdown ଚିହ୍ନ ଦେଖାନ୍ତୁ</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>କେବଳ କର୍ସର ଥିବା ସ୍ଥାନରେ ନୁହେଁ, ପ୍ରତ୍ୟେକ ଅନୁଚ୍ଛେଦରେ Markdown ଚିହ୍ନ (**, #, ଲିଙ୍କର ଠିକଣା) ଦେଖାନ୍ତୁ</value>
+  </data>
 </root>

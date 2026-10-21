@@ -975,4 +975,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>關閉時不再詢問是否儲存：未儲存的文件下次開啟時原樣還原，仍標示為未儲存，並還原上次開啟的分頁</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>一律顯示 Markdown 標記</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>在每個段落都顯示 Markdown 標記（**、#、連結位址），而不只是游標所在的地方</value>
+  </data>
 </root>

@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>Затваряне без въпрос за записване: незаписаните документи се връщат такива, каквито са били, все още незаписани, с разделите от предишната сесия</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Винаги показвай Markdown знаците</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Показване на Markdown знаците (**, #, адреса на връзка) във всеки абзац, а не само там, където е курсорът</value>
+  </data>
 </root>

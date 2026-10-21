@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>Sluiten zonder te vragen om op te slaan: niet-opgeslagen documenten komen terug zoals ze waren, nog steeds niet opgeslagen, met de tabbladen van de vorige sessie</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Markdown-tekens altijd tonen</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>De Markdown-tekens (**, #, het adres van een koppeling) in elke alinea tonen, niet alleen waar de cursor staat</value>
+  </data>
 </root>

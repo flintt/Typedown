@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>સાચવવાનું પૂછ્યા વિના બંધ કરો: ન સાચવેલા દસ્તાવેજો જેવા હતા તેવા, હજુ પણ ન સાચવેલા, છેલ્લા સત્રના ટૅબ્સ સાથે પાછા આવે છે</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>હંમેશાં Markdown ચિહ્નો બતાવો</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>ફક્ત કર્સર હોય ત્યાં જ નહીં, દરેક ફકરામાં Markdown ચિહ્નો (**, #, લિંકનું સરનામું) બતાવો</value>
+  </data>
 </root>

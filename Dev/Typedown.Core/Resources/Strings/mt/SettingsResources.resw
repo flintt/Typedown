@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>Agħlaq mingħajr ma tistaqsi biex tissejvja: id-dokumenti mhux salvati jerġgħu lura kif kienu, għadhom mhux salvati, bit-tabs tal-aħħar sessjoni</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Uri dejjem is-sinjali tal-Markdown</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Uri s-sinjali tal-Markdown (**, #, l-indirizz ta' link) f'kull paragrafu, mhux biss fejn hemm il-kursur</value>
+  </data>
 </root>

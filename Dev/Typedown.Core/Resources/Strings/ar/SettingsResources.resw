@@ -952,4 +952,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>الإغلاق دون السؤال عن الحفظ: تعود المستندات غير المحفوظة كما كانت، وتبقى غير محفوظة، مع علامات تبويب الجلسة السابقة</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>إظهار علامات Markdown دائمًا</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>إظهار علامات Markdown (**، #، عنوان الرابط) في كل فقرة، وليس فقط حيث يوجد المؤشر</value>
+  </data>
 </root>

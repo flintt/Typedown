@@ -981,4 +981,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>关闭时不再询问是否保存：未保存的文档下次打开时原样恢复，仍标记为未保存，并恢复上次打开的标签页</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>一直显示 Markdown 标记</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>在每个段落都显示 Markdown 标记（**、#、链接地址），而不只是光标所在的地方</value>
+  </data>
 </root>

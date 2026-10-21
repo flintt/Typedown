@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>Luk uden at spørge om at gemme: ikke-gemte dokumenter kommer tilbage, som de var, stadig ikke gemt, med fanerne fra sidste session</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Vis altid Markdown-tegn</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Vis Markdown-tegnene (**, #, et links adresse) i alle afsnit, ikke kun hvor markøren er</value>
+  </data>
 </root>

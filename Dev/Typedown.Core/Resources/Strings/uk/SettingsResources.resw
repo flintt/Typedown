@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>Закривати без запитання про збереження: незбережені документи повернуться такими, якими були, досі незбереженими, разом із вкладками останнього сеансу</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Завжди показувати розмітку Markdown</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Показувати знаки розмітки Markdown (**, #, адресу посилання) в усіх абзацах, а не лише там, де курсор</value>
+  </data>
 </root>

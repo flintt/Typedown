@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>保存するか確認せずに閉じます。未保存の文書は前回のタブとともに、未保存のままそのまま復元されます</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Markdown 記号を常に表示</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Markdown 記号 (**、#、リンクのアドレス) をカーソルのある場所だけでなく、すべての段落で表示します</value>
+  </data>
 </root>

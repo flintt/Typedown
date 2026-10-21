@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>Vala ngaphandle kokubuza ukulondoloza: amadokhumenti angagciniwe abuya njengoba ayenjalo, esengagciniwe, namathebhu eseshini edlule</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Bonisa njalo izimpawu ze-Markdown</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Bonisa izimpawu ze-Markdown (**, #, ikheli lesixhumanisi) kuyo yonke indima, hhayi lapho kukhona khona ikhesa kuphela</value>
+  </data>
 </root>

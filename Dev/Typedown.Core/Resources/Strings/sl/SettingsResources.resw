@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>Zapri brez vprašanja o shranjevanju: neshranjeni dokumenti se vrnejo takšni, kot so bili, še vedno neshranjeni, z zavihki zadnje seje</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Vedno prikaži oznake Markdown</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Prikaži oznake Markdown (**, #, naslov povezave) v vsakem odstavku, ne le tam, kjer je kazalec</value>
+  </data>
 </root>

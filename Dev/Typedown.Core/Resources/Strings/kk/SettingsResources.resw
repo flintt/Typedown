@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>Сақтау туралы сұрамай жабу: сақталмаған құжаттар соңғы сеанстың қойындыларымен бірге бұрынғыдай, әлі сақталмаған күйде қайтады</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Markdown белгілерін әрдайым көрсету</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Markdown белгілерін (**, #, сілтеме мекенжайы) тек курсор тұрған жерде емес, әр азат жолда көрсету</value>
+  </data>
 </root>

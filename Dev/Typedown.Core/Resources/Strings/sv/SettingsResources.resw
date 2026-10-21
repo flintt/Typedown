@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>Stäng utan att fråga om att spara: osparade dokument kommer tillbaka som de var, fortfarande osparade, med flikarna från förra sessionen</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Visa alltid Markdown-tecken</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Visa Markdown-tecknen (**, #, en länks adress) i varje stycke, inte bara där markören är</value>
+  </data>
 </root>

@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>Fechar sem perguntar se quer guardar: os documentos não guardados voltam como estavam, ainda não guardados, com os separadores da última sessão</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Mostrar sempre as marcas de Markdown</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Mostrar as marcas de Markdown (**, #, o endereço de uma ligação) em todos os parágrafos, não apenas onde está o cursor</value>
+  </data>
 </root>

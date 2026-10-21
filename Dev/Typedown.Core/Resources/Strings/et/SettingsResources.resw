@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>Sulge salvestamist küsimata: salvestamata dokumendid tulevad tagasi sellisena, nagu nad olid, endiselt salvestamata, eelmise seansi vahekaartidega</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Näita alati Markdowni märke</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Näita Markdowni märke (**, #, lingi aadress) igas lõigus, mitte ainult kursori kohal</value>
+  </data>
 </root>

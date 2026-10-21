@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>Fermer sans demander d'enregistrer : les documents non enregistrés reviennent tels quels, toujours non enregistrés, avec les onglets de la dernière session</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Toujours afficher les marques Markdown</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Afficher les marques Markdown (**, #, l'adresse d'un lien) dans chaque paragraphe, pas seulement là où se trouve le curseur</value>
+  </data>
 </root>

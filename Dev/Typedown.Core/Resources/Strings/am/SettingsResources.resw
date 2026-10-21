@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>ለማስቀመጥ ሳይጠየቅ ዝጋ፦ ያልተቀመጡ ሰነዶች እንደነበሩ፣ አሁንም ሳይቀመጡ፣ ከቀደመው ክፍለ ጊዜ ትሮች ጋር ይመለሳሉ</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>የMarkdown ምልክቶችን ሁልጊዜ አሳይ</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>የMarkdown ምልክቶችን (**፣ #፣ የአገናኝ አድራሻ) ጠቋሚው ባለበት ብቻ ሳይሆን በእያንዳንዱ አንቀጽ አሳይ</value>
+  </data>
 </root>

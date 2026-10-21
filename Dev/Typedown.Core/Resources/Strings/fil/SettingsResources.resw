@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>Isara nang hindi nagtatanong na mag-save: babalik ang mga hindi na-save na dokumento gaya ng dati, hindi pa rin na-save, kasama ang mga tab ng huling session</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Palaging ipakita ang mga marka ng Markdown</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Ipakita ang mga marka ng Markdown (**, #, ang address ng isang link) sa bawat talata, hindi lang kung nasaan ang cursor</value>
+  </data>
 </root>

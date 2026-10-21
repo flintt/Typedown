@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>បិទដោយមិនសួររក្សាទុក៖ ឯកសារដែលមិនទាន់រក្សាទុកនឹងត្រឡប់មកវិញដូចដើម នៅតែមិនទាន់រក្សាទុក ជាមួយផ្ទាំងនៃវគ្គចុងក្រោយ</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>បង្ហាញសញ្ញា Markdown ជានិច្ច</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>បង្ហាញសញ្ញា Markdown (**, #, អាសយដ្ឋានតំណ) នៅគ្រប់កថាខណ្ឌ មិនមែនតែកន្លែងដែលមានទស្សន៍ទ្រនិចទេ</value>
+  </data>
 </root>

@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>Aizvērt, nejautājot par saglabāšanu: nesaglabātie dokumenti atgriežas tādi, kādi bija, joprojām nesaglabāti, ar pēdējās sesijas cilnēm</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Vienmēr rādīt Markdown zīmes</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Rādīt Markdown zīmes (**, #, saites adresi) katrā rindkopā, ne tikai tur, kur ir kursors</value>
+  </data>
 </root>

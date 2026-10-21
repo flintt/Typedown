@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>Zavřít bez dotazu na uložení: neuložené dokumenty se vrátí tak, jak byly, stále neuložené, s kartami z poslední relace</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Vždy zobrazovat značky Markdownu</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Zobrazovat značky Markdownu (**, #, adresu odkazu) v každém odstavci, nejen tam, kde je kurzor</value>
+  </data>
 </root>

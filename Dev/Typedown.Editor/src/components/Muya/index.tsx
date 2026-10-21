@@ -866,6 +866,12 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         document.body.classList.toggle('show-blank-lines', props.options?.showBlankLines === true)
     }, [props.options?.showBlankLines])
 
+    // Settings > Editor > Always show Markdown marks: the marks shown everywhere as they are in the block with the caret
+    // (assets/styles/index.css), no block drawn again.
+    useEffect(() => {
+        document.body.classList.toggle('show-markdown-marks', props.options?.showMarkdownMarks === true)
+    }, [props.options?.showMarkdownMarks])
+
     useEffect(() => {
         const readOnly = !!props.options?.readOnly
         document.body.classList.toggle('read-only', readOnly)

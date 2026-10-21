@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>সংৰক্ষণৰ বাবে নুসুধাকৈ বন্ধ কৰক: সংৰক্ষণ নকৰা নথিসমূহ আগৰ দৰেই, এতিয়াও সংৰক্ষণ নকৰাকৈ, শেষ অধিবেশনৰ টেবসমূহৰ সৈতে উভতি আহিব</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Markdown চিহ্নসমূহ সদায় দেখুৱাওক</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>কাৰ্ছৰ থকা ঠাইতে নহয়, প্ৰতিটো অনুচ্ছেদত Markdown চিহ্নসমূহ (**, #, লিংকৰ ঠিকনা) দেখুৱাওক</value>
+  </data>
 </root>

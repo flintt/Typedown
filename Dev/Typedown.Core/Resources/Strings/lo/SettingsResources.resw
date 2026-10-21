@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>ປິດໂດຍບໍ່ຖາມໃຫ້ບັນທຶກ: ເອກະສານທີ່ບໍ່ໄດ້ບັນທຶກຈະກັບມາຄືເກົ່າ, ຍັງບໍ່ໄດ້ບັນທຶກ, ພ້ອມກັບແຖບຂອງເຊສຊັນສຸດທ້າຍ</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>ສະແດງເຄື່ອງໝາຍ Markdown ສະເໝີ</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>ສະແດງເຄື່ອງໝາຍ Markdown (**, #, ທີ່ຢູ່ຂອງລິ້ງ) ໃນທຸກຫຍໍ້ໜ້າ, ບໍ່ແມ່ນສະເພາະບ່ອນທີ່ມີຕົວກະພິບ</value>
+  </data>
 </root>

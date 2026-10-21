@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>ਸੰਭਾਲਣ ਲਈ ਪੁੱਛੇ ਬਿਨਾਂ ਬੰਦ ਕਰੋ: ਅਣਸੰਭਾਲੇ ਦਸਤਾਵੇਜ਼ ਜਿਵੇਂ ਸਨ ਉਵੇਂ, ਅਜੇ ਵੀ ਅਣਸੰਭਾਲੇ, ਪਿਛਲੇ ਸੈਸ਼ਨ ਦੀਆਂ ਟੈਬਾਂ ਨਾਲ ਵਾਪਸ ਆਉਂਦੇ ਹਨ</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Markdown ਨਿਸ਼ਾਨ ਹਮੇਸ਼ਾ ਦਿਖਾਓ</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>ਸਿਰਫ਼ ਕਰਸਰ ਵਾਲੀ ਥਾਂ ਨਹੀਂ, ਹਰ ਪੈਰੇ ਵਿੱਚ Markdown ਨਿਸ਼ਾਨ (**, #, ਲਿੰਕ ਦਾ ਪਤਾ) ਦਿਖਾਓ</value>
+  </data>
 </root>

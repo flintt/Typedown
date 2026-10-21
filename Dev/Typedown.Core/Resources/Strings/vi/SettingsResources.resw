@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>Đóng mà không hỏi lưu: các tài liệu chưa lưu sẽ quay lại như cũ, vẫn chưa lưu, cùng các tab của phiên trước</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Luôn hiện ký hiệu Markdown</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Hiện các ký hiệu Markdown (**, #, địa chỉ của liên kết) ở mọi đoạn, không chỉ nơi có con trỏ</value>
+  </data>
 </root>

@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>Κλείσιμο χωρίς ερώτηση για αποθήκευση: τα μη αποθηκευμένα έγγραφα επιστρέφουν όπως ήταν, ακόμη μη αποθηκευμένα, με τις καρτέλες της τελευταίας συνεδρίας</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Πάντα εμφάνιση σημείων Markdown</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Εμφάνιση των σημείων Markdown (**, #, η διεύθυνση ενός συνδέσμου) σε κάθε παράγραφο, όχι μόνο εκεί που βρίσκεται ο δρομέας</value>
+  </data>
 </root>

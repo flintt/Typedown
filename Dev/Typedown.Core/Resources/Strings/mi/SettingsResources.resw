@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>Katia me te kore e pātai kia tiakina: ka hoki mai ngā tuhinga kāore anō kia tiakina pērā i mua, kāore tonu i tiakina, me ngā ripa o te wāhanga whakamutunga</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Whakaaturia tonutia ngā tohu Markdown</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Whakaaturia ngā tohu Markdown (**, #, te wāhitau o tētahi hono) i ia kōwae, kaua ko te wāhi anake kei reira te pehu</value>
+  </data>
 </root>

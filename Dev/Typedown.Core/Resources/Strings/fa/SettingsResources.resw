@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>بستن بدون پرسیدن برای ذخیره: اسناد ذخیره‌نشده همان‌طور که بودند، همچنان ذخیره‌نشده، با زبانه‌های نشست قبلی بازمی‌گردند</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>همیشه نشانه‌های Markdown را نشان بده</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>نشانه‌های Markdown (**، #، نشانی یک پیوند) را در همهٔ بندها نشان بده، نه فقط جایی که مکان‌نما هست</value>
+  </data>
 </root>

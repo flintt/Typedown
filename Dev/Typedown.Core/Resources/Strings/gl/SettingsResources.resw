@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>Pechar sen preguntar se gardar: os documentos sen gardar volven tal como estaban, aínda sen gardar, coas lapelas da última sesión</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Amosar sempre as marcas de Markdown</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Amosar as marcas de Markdown (**, #, o enderezo dunha ligazón) en cada parágrafo, non só onde está o cursor</value>
+  </data>
 </root>

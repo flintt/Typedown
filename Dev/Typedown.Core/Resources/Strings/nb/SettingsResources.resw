@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>Lukk uten å spørre om lagring: ulagrede dokumenter kommer tilbake slik de var, fortsatt ulagret, med fanene fra forrige økt</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Vis alltid Markdown-tegn</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Vis Markdown-tegnene (**, #, adressen til en lenke) i alle avsnitt, ikke bare der markøren er</value>
+  </data>
 </root>

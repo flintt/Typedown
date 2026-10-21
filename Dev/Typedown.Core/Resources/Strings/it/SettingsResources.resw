@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>Chiudi senza chiedere di salvare: i documenti non salvati tornano com'erano, ancora non salvati, con le schede dell'ultima sessione</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Mostra sempre i segni Markdown</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Mostra i segni Markdown (**, #, l'indirizzo di un collegamento) in ogni paragrafo, non solo dove si trova il cursore</value>
+  </data>
 </root>

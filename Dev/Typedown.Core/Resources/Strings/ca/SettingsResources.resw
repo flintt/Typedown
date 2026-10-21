@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>Tanca sense preguntar si cal desar: els documents no desats tornen tal com eren, encara sense desar, amb les pestanyes de l'última sessió</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Mostra sempre les marques de Markdown</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Mostra les marques de Markdown (**, #, l'adreça d'un enllaç) a cada paràgraf, no només on és el cursor</value>
+  </data>
 </root>

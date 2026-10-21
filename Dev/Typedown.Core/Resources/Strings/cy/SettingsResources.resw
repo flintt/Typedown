@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>Cau heb ofyn am gadw: daw dogfennau heb eu cadw yn ôl fel yr oeddent, yn dal heb eu cadw, gyda thabiau'r sesiwn olaf</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Dangos marciau Markdown bob amser</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Dangos y marciau Markdown (**, #, cyfeiriad dolen) ym mhob paragraff, nid dim ond lle mae'r cyrchwr</value>
+  </data>
 </root>

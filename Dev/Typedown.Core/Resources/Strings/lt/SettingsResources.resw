@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>Uždaryti neklausiant dėl įrašymo: neįrašyti dokumentai grįžta tokie, kokie buvo, vis dar neįrašyti, su paskutinės sesijos skirtukais</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Visada rodyti Markdown žymes</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Rodyti Markdown žymes (**, #, nuorodos adresą) kiekvienoje pastraipoje, ne tik ten, kur yra žymeklis</value>
+  </data>
 </root>

@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>저장 여부를 묻지 않고 닫습니다. 저장하지 않은 문서는 지난 세션의 탭과 함께 저장되지 않은 상태 그대로 돌아옵니다</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Markdown 기호 항상 표시</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Markdown 기호(**, #, 링크 주소)를 커서가 있는 곳뿐 아니라 모든 단락에 표시합니다</value>
+  </data>
 </root>

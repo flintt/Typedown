@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>ಉಳಿಸಲು ಕೇಳದೆ ಮುಚ್ಚಿ: ಉಳಿಸದ ಡಾಕ್ಯುಮೆಂಟ್‌ಗಳು ಹಿಂದಿನಂತೆಯೇ, ಇನ್ನೂ ಉಳಿಸದೆ, ಕೊನೆಯ ಸೆಷನ್‌ನ ಟ್ಯಾಬ್‌ಗಳೊಂದಿಗೆ ಮರಳುತ್ತವೆ</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Markdown ಗುರುತುಗಳನ್ನು ಯಾವಾಗಲೂ ತೋರಿಸಿ</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>ಕರ್ಸರ್ ಇರುವಲ್ಲಿ ಮಾತ್ರವಲ್ಲ, ಪ್ರತಿ ಪ್ಯಾರಾಗ್ರಾಫ್‌ನಲ್ಲಿ Markdown ಗುರುತುಗಳನ್ನು (**, #, ಲಿಂಕ್‌ನ ವಿಳಾಸ) ತೋರಿಸಿ</value>
+  </data>
 </root>

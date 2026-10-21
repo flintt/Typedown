@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>Funga bila kuuliza kuhifadhi: hati ambazo hazijahifadhiwa zinarudi kama zilivyokuwa, bado hazijahifadhiwa, pamoja na vichupo vya kipindi kilichopita</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Onyesha alama za Markdown kila wakati</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Onyesha alama za Markdown (**, #, anwani ya kiungo) katika kila aya, si tu mahali kishale kilipo</value>
+  </data>
 </root>

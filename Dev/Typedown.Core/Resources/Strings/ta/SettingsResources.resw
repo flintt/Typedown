@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>சேமிக்கக் கேட்காமல் மூடு: சேமிக்காத ஆவணங்கள் இருந்தபடியே, இன்னும் சேமிக்கப்படாமல், கடைசி அமர்வின் தாவல்களுடன் திரும்பும்</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Markdown குறிகளை எப்போதும் காட்டு</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>சுட்டி உள்ள இடத்தில் மட்டுமல்ல, ஒவ்வொரு பத்தியிலும் Markdown குறிகளை (**, #, இணைப்பின் முகவரி) காட்டு</value>
+  </data>
 </root>

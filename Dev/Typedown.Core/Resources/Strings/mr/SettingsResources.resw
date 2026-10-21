@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>जतन करण्यास न विचारता बंद करा: जतन न केलेले दस्तऐवज होते तसेच, अजूनही जतन न केलेले, मागील सत्राच्या टॅबसह परत येतात</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Markdown चिन्हे नेहमी दाखवा</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>फक्त कर्सर असलेल्या ठिकाणी नव्हे, प्रत्येक परिच्छेदात Markdown चिन्हे (**, #, दुव्याचा पत्ता) दाखवा</value>
+  </data>
 </root>

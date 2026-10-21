@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>Loka án þess að spyrja um vistun: óvistuð skjöl koma aftur eins og þau voru, enn óvistuð, með flipum síðustu lotu</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Sýna alltaf Markdown-merki</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Sýna Markdown-merkin (**, #, slóð tengils) í hverri málsgrein, ekki aðeins þar sem bendillinn er</value>
+  </data>
 </root>

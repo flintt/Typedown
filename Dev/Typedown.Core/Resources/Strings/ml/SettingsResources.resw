@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>സംരക്ഷിക്കാൻ ചോദിക്കാതെ അടയ്ക്കുക: സംരക്ഷിക്കാത്ത പ്രമാണങ്ങൾ അതേപടി, ഇപ്പോഴും സംരക്ഷിക്കാതെ, കഴിഞ്ഞ സെഷനിലെ ടാബുകൾക്കൊപ്പം തിരിച്ചുവരും</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Markdown അടയാളങ്ങൾ എപ്പോഴും കാണിക്കുക</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>കഴ്‌സർ ഉള്ളിടത്ത് മാത്രമല്ല, എല്ലാ ഖണ്ഡികയിലും Markdown അടയാളങ്ങൾ (**, #, ലിങ്കിന്റെ വിലാസം) കാണിക്കുക</value>
+  </data>
 </root>

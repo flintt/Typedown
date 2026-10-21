@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>Bezárás mentési kérdés nélkül: a nem mentett dokumentumok változatlanul, továbbra is mentetlenül térnek vissza az előző munkamenet lapjaival</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Markdown-jelölések mindig látszanak</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>A Markdown-jelölések (**, #, egy hivatkozás címe) megjelenítése minden bekezdésben, nem csak ott, ahol a kurzor van</value>
+  </data>
 </root>

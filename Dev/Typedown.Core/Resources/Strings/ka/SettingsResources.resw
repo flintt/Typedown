@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>დახურვა შენახვის კითხვის გარეშე: შეუნახავი დოკუმენტები ბრუნდება ისე, როგორც იყო, ისევ შეუნახავი, ბოლო სესიის ჩანართებთან ერთად</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Markdown-ის ნიშნების ყოველთვის ჩვენება</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Markdown-ის ნიშნების (**, #, ბმულის მისამართი) ჩვენება ყველა აბზაცში და არა მხოლოდ იქ, სადაც კურსორია</value>
+  </data>
 </root>

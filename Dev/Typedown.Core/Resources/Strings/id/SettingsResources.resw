@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>Tutup tanpa menanyakan untuk menyimpan: dokumen yang belum disimpan kembali seperti semula, tetap belum disimpan, bersama tab sesi terakhir</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Selalu tampilkan tanda Markdown</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Tampilkan tanda Markdown (**, #, alamat tautan) di setiap paragraf, tidak hanya di tempat kursor berada</value>
+  </data>
 </root>

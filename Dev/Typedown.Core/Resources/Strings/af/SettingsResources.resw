@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>Sluit sonder om te vra om te stoor: ongestoorde dokumente kom terug soos hulle was, steeds ongestoor, met die vorige sessie se oortjies</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Wys altyd Markdown-merke</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Wys die Markdown-merke (**, #, 'n skakel se adres) in elke paragraaf, nie net waar die wyser is nie</value>
+  </data>
 </root>

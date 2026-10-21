@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>Mbyll pa pyetur për ruajtje: dokumentet e paruajtura kthehen siç ishin, ende të paruajtura, me skedat e sesionit të fundit</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Shfaq gjithmonë shenjat e Markdown</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Shfaq shenjat e Markdown (**, #, adresën e një lidhjeje) në çdo paragraf, jo vetëm aty ku është kursori</value>
+  </data>
 </root>

@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>సేవ్ చేయమని అడగకుండా మూసివేయి: సేవ్ చేయని పత్రాలు ఉన్నట్లుగానే, ఇంకా సేవ్ చేయకుండా, చివరి సెషన్ ట్యాబ్‌లతో తిరిగి వస్తాయి</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Markdown గుర్తులను ఎల్లప్పుడూ చూపించు</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>కర్సర్ ఉన్నచోట మాత్రమే కాకుండా, ప్రతి పేరాలో Markdown గుర్తులను (**, #, లింక్ చిరునామా) చూపించు</value>
+  </data>
 </root>

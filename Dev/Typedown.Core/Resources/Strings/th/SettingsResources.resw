@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>ปิดโดยไม่ถามให้บันทึก: เอกสารที่ยังไม่ได้บันทึกจะกลับมาเหมือนเดิม ยังไม่ได้บันทึก พร้อมแท็บของเซสชันล่าสุด</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>แสดงเครื่องหมาย Markdown เสมอ</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>แสดงเครื่องหมาย Markdown (**, #, ที่อยู่ของลิงก์) ในทุกย่อหน้า ไม่ใช่แค่ตำแหน่งที่มีเคอร์เซอร์</value>
+  </data>
 </root>

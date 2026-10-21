@@ -946,4 +946,10 @@
   <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
     <value>محفوظ کرنے کا پوچھے بغیر بند کریں: غیر محفوظ دستاویزات جیسی تھیں ویسی ہی، اب بھی غیر محفوظ، پچھلے سیشن کے ٹیبز کے ساتھ واپس آتی ہیں</value>
   </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Markdown کے نشانات ہمیشہ دکھائیں</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>صرف کرسر والی جگہ پر نہیں، ہر پیراگراف میں Markdown کے نشانات (**، #، لنک کا پتہ) دکھائیں</value>
+  </data>
 </root>
