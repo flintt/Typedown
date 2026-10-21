@@ -239,6 +239,7 @@ internal static partial class Program
             await Case("OL01 tabs switched back and forth, quickly and slowly: every heading with headings under it stays expanded in the outline", OL01);
             await Case("LD01 a load the editor gives back rewritten is loaded once more and keeps the file's text; one rewritten again is taken after that one retry, not retried without end", LD01);
             await Case("NV01 the editor page is never taken to another address: a script sending it to a web site is refused, and the document is still there", NV01);
+            await Case("VM01 Vim's search in source mode on a long document: / and the letters typed after it go into the search box, nothing into the document, and Enter goes to the match", VM01);
             // An edition's own cases (Edition.<name>.cs beside this file, in the edition's repository); none here.
             var editionCases = new List<(string Name, Func<List<string>, Task> Run)>();
             EditionCases(editionCases);
@@ -548,6 +549,63 @@ internal static partial class Program
         }
         finally
         {
+            try { await c.Call("document.close", new { documentId = id }); } catch { }
+        }
+    }
+
+    // A reader with Vim keys searched a long document in source mode (/ and a word): the letters did not show in the search
+    // box and acted as Vim commands instead (t, f, i, a), one of them throwing in the page. Real keys here (Vim reads
+    // keys, not characters typed), on a document about as long as the showcase, with a US English keyboard: a Chinese
+    // input method takes / and letters into its composition, and Vim sees nothing at all (the reader's was English).
+    private static async Task VM01(List<string> notes)
+    {
+        using var c = await Session("e2e VM01");
+        var text = "# VM01\n\n" + string.Concat(Enumerable.Range(0, 220).Select(i =>
+            $"## Section {i}\n\nSome text for section {i}, a few words to read: alpha beta gamma delta.\n\n"
+            + (i % 3 == 0 ? $"| a | b |\n| --- | --- |\n| {i} | **{i + 1}** |\n\n" : "")
+            + (i % 4 == 1 ? $"```js\nconst v{i} = {i};\n```\n\n" : "")
+            + (i == 180 ? "The needle is here.\n\n" : "")));
+        var id = await Open(c, Fixture("vm01.md", text));
+        var windowId = await WindowIdOf(c, id);
+        var window = await WindowOf(windowId, c);
+        async Task<string> Eval(string script) => (string?)(await c.Call("test.editor.eval", new { windowId, script }))["result"] ?? "";
+        var errors = LogLines("page error").Count;
+        var keyboard = IntPtr.Zero;
+        try
+        {
+            await c.Call("test.settings.set", new { windowId, name = "VimMode", value = true });
+            await c.Call("test.settings.set", new { windowId, name = "SourceCode", value = true });
+            Check(await Eventually(async () => await Eval("String(!!document.querySelector('.CodeMirror'))") == "true", 10000), "source mode is on");
+            await Activate(window);
+            await c.Call("test.editor.focus", new { windowId });
+            await Task.Delay(800);
+            keyboard = UseEnglishKeyboard();
+            await Task.Delay(500);
+            notes.Add($"keyboard {keyboard.ToInt64():x} -> US English; keys go to {FocusInfo(window)}");
+            Chord("Esc");
+            await Task.Delay(300);
+            Chord("Slash");
+            await Task.Delay(400);
+            foreach (var key in "needle") { Chord(key.ToString()); await Task.Delay(120); }
+            await Task.Delay(500);
+            var box = await Eval("(() => { const i = document.querySelector('.CodeMirror-dialog input'); const a = document.activeElement; return JSON.stringify({ box: i ? i.value : null, active: a ? a.tagName + '.' + String(a.className).slice(0, 40) : null }) })()");
+            notes.Add("after / and needle: " + box);
+            var typed = ((string)(await Get(c, id))["text"]!).Replace("\r\n", "\n");
+            Check(box.Contains("\"box\":\"needle\""), $"the letters are in the search box ({box})");
+            Check(typed == text, "nothing went into the document");
+            Chord("Enter");
+            await Task.Delay(800);
+            var line = await Eval("(() => { const cm = document.querySelector('.CodeMirror').CodeMirror; return cm.getLine(cm.getCursor().line) })()");
+            notes.Add("the caret's line after Enter: " + JsonConvert.SerializeObject(line));
+            Check(line.Contains("needle"), "Enter goes to the match");
+            Check(LogLines("page error").Count == errors, "no page error: " + LogLines("page error").Skip(errors).FirstOrDefault()?.Trim());
+        }
+        finally
+        {
+            try { Chord("Esc"); } catch { }
+            if (keyboard != IntPtr.Zero) UseKeyboard(keyboard);
+            try { await c.Call("test.settings.set", new { windowId, name = "SourceCode", value = false }); } catch { }
+            try { await c.Call("test.settings.set", new { windowId, name = "VimMode", value = false }); } catch { }
             try { await c.Call("document.close", new { documentId = id }); } catch { }
         }
     }
@@ -4092,6 +4150,30 @@ internal static partial class Program
     [DllImport("user32.dll")] private static extern bool EnumChildWindows(IntPtr parent, EnumWindowsProc callback, IntPtr data);
 
     // Which window has the keyboard: the foreground window, its thread's focus window with its parents, by class.
+    // The window with the keyboard (the web view's, another process's thread): its input language switched to US English,
+    // the one it had given back. A case that sends keys one by one (not characters) needs it - a Chinese input method on
+    // the test machine took them into its composition.
+    private static IntPtr FocusedWindow()
+    {
+        var info = new GUITHREADINFO { cbSize = Marshal.SizeOf<GUITHREADINFO>() };
+        var fg = GetForegroundWindow();
+        GetGUIThreadInfo(GetWindowThreadProcessId(fg, out _), ref info);
+        return info.hwndFocus != IntPtr.Zero ? info.hwndFocus : fg;
+    }
+
+    private static IntPtr UseEnglishKeyboard()
+    {
+        var target = FocusedWindow();
+        var was = GetKeyboardLayout(GetWindowThreadProcessId(target, out _));
+        PostMessage(target, 0x0050, IntPtr.Zero, LoadKeyboardLayout("00000409", 0));
+        return was;
+    }
+
+    private static void UseKeyboard(IntPtr layout) => PostMessage(FocusedWindow(), 0x0050, IntPtr.Zero, layout);
+
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)] private static extern IntPtr LoadKeyboardLayout(string id, uint flags);
+    [DllImport("user32.dll")] private static extern IntPtr GetKeyboardLayout(uint thread);
+
     private static string FocusInfo(IntPtr window)
     {
         var info = new GUITHREADINFO { cbSize = Marshal.SizeOf<GUITHREADINFO>() };

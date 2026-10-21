@@ -168,6 +168,8 @@ internal static partial class Program
         ["Ctrl"] = 0x11, ["Shift"] = 0x10, ["Alt"] = 0x12, ["Win"] = 0x5B, ["Enter"] = 0x0D, ["Esc"] = 0x1B, ["Tab"] = 0x09,
         ["Space"] = 0x20, ["Back"] = 0x08, ["Delete"] = 0x2E, ["Home"] = 0x24, ["End"] = 0x23, ["PageUp"] = 0x21, ["PageDown"] = 0x22,
         ["Left"] = 0x25, ["Up"] = 0x26, ["Right"] = 0x27, ["Down"] = 0x28, ["Insert"] = 0x2D,
+        // The / key (US layout), as Vim's search reads it: a key, not a character typed (VK_OEM_2).
+        ["Slash"] = 0xBF,
     };
 
     /// <summary>
