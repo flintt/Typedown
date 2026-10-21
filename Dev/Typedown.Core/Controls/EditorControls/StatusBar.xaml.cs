@@ -376,15 +376,24 @@ namespace Typedown.Core.Controls
                 element.Measure(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
                 return element.DesiredSize.Width;
             }
+            var measured = "";
             foreach (var item in editionNames.Concat(SqueezeOrder))
             {
-                if (Width(LeftItems) + Width(RightItems) + 16 <= available) break;
+                double left = Width(LeftItems), right = Width(RightItems);
+                if (measured.Length == 0) measured = $"left {left:0} + right {right:0}";
+                if (left + right + 16 <= available) break;
                 if (!Wanted(item)) continue;
                 squeezed.Add(item);
                 foreach (var element in ElementsOf(item)) element.Visibility = Visibility.Collapsed;
                 OverflowButton.Visibility = Visibility.Visible;
             }
+            // What the bar measured and left out, once each time it changes: a bar that kept an item it had no room for
+            // (ST06 on a screen at 200%) is otherwise only a screenshot.
+            var note = $"status bar: {available:0} wide, {measured}, squeezed: {(squeezed.Count == 0 ? "none" : string.Join(", ", squeezed))}";
+            if (note != lastLayoutNote) Log.Debug(lastLayoutNote = note);
         }
+
+        private string lastLayoutNote;
 
         /// <summary>The items the width left out, as menu entries doing what a click on them does.</summary>
         private void OnOverflowMenuOpening(object sender, object e)
