@@ -379,9 +379,19 @@ namespace Typedown.Controls
             CoreWebView2.NewWindowRequested += OnNewWindowRequested;
             // The editor page is loaded again (leaving the settings page, a page error, a crashed web process): until
             // the new page confirms a load, what the host knows the old page confirmed says nothing about it.
+            // Anywhere else, never: a link whose click the page did not take for itself (raw HTML in reading mode) took
+            // the whole editor to the site, over every tab of the window, with no way back. A link the reader clicked
+            // opens as a link from the page does; anything else (a script, a refresh in pasted HTML) is only refused.
             CoreWebView2.NavigationStarting += (s, args) =>
             {
-                if (IsEditorPage(args.Uri)) AppViewModel.EditorViewModel.OnEditorPageNavigating();
+                if (IsEditorPage(args.Uri))
+                {
+                    AppViewModel.EditorViewModel.OnEditorPageNavigating();
+                    return;
+                }
+                args.Cancel = true;
+                Core.Utilities.Log.Debug($"editor: navigation away from the editor page refused ({(args.IsUserInitiated ? "a click" : "not the reader's")}): {args.Uri}");
+                if (args.IsUserInitiated) OpenNewWindow(args.Uri);
             };
             // The browser process can die under the editor (a GPU driver, a renderer bug). Left alone that is a
             // blank editor until the app is restarted; reloading the page brings the document back through the

@@ -238,6 +238,7 @@ internal static partial class Program
             await Case("OL02 two long documents scrolled to their middle, switched between: the outline does not mark another heading of the document being left", OL02);
             await Case("OL01 tabs switched back and forth, quickly and slowly: every heading with headings under it stays expanded in the outline", OL01);
             await Case("LD01 a load the editor gives back rewritten is loaded once more and keeps the file's text; one rewritten again is taken after that one retry, not retried without end", LD01);
+            await Case("NV01 the editor page is never taken to another address: a script sending it to a web site is refused, and the document is still there", NV01);
             // An edition's own cases (Edition.<name>.cs beside this file, in the edition's repository); none here.
             var editionCases = new List<(string Name, Func<List<string>, Task> Run)>();
             EditionCases(editionCases);
@@ -513,6 +514,42 @@ internal static partial class Program
         Check(LogLines("loading the text once more").Count == retries + 1, "rewritten twice: one retry only");
         Check(Body(doc).Contains("rewritten"), "rewritten again: taken as the editor gave it");
         await c.Call("test.editor.rewriteLoads", new { windowId, count = 0 });
+    }
+
+    // A link the page did not take for itself (raw HTML in reading mode, once) took the whole editor to the site, over
+    // every tab of the window, with no way back. Not a click here (that opens the reader's browser): a script sending the
+    // page away, which the host refuses the same way, and says so in its log.
+    private static async Task NV01(List<string> notes)
+    {
+        using var c = await Session("e2e NV01");
+        const string text = "# NV01\n\nText that stays.\n\n<p><a href=\"https://example.com/nv01\">a link in raw HTML</a></p>\n";
+        var id = await Open(c, Fixture("nv01.md", text));
+        var windowId = await WindowIdOf(c, id);
+        async Task<string> Eval(string script) => (string?)(await c.Call("test.editor.eval", new { windowId, script }))["result"] ?? "";
+        await WaitForPage(c, id, t => t.Contains("Text that stays"), "the document");
+        var refused = LogLines("navigation away from the editor page refused").Count;
+        var page = await Eval("location.href");
+        try
+        {
+            await Eval("setTimeout(() => location.assign('https://example.com/nv01-script'), 0); 'sent'");
+            await Task.Delay(2500);
+            string after, shown;
+            try
+            {
+                after = await Eval("location.href");
+                shown = await Eval("(document.getElementById('ag-editor-id') || {}).innerText || ''");
+            }
+            catch (Exception ex) { after = shown = "no editor page: " + ex.Message.Split('\n')[0]; }
+            notes.Add($"page {page} -> {after}; log: {LogLines("navigation away from the editor page refused").LastOrDefault()?.Trim()}");
+            Check(after == page, $"the page is still the editor ({after})");
+            Check(shown.Contains("Text that stays"), "the document is still on the page");
+            Check(LogLines("navigation away from the editor page refused").Count > refused, "the log says a navigation was refused");
+            Check(((string)(await Get(c, id))["text"]!).Replace("\r\n", "\n") == text, "the document is unchanged");
+        }
+        finally
+        {
+            try { await c.Call("document.close", new { documentId = id }); } catch { }
+        }
     }
 
     // ---- helpers over the API ----

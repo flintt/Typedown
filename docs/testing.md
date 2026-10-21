@@ -236,6 +236,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | OL02 | two long documents scrolled to their middle, switched between: the outline does not mark another heading of the document being left |
 | OL01 | tabs switched back and forth, quickly and slowly: every heading with headings under it stays expanded in the outline |
 | LD01 | a load the editor gives back rewritten is loaded once more and keeps the file's text; one rewritten again is taken after that one retry, not retried without end |
+| NV01 | the editor page is never taken to another address: a script sending it to a web site is refused, and the document is still there |
 | PF01 | measured: a 300 KB document opened, typed into and saved; the memory with two windows |
 | PF03 | profiled: where the host's CPU goes while it opens 300 KB documents |
 | PF02 | measured: a cold start with a document on the command line, then the window closed |
