@@ -426,7 +426,15 @@ class StateRender {
     this.renderMermaid()
     this.renderDiagram()
     this.codeCache.clear()
-    const state = { blocks, activeBlocks, matches, lo, hi, root: rootDom, timer: null, done, slices: 0, startedAt: performance.now() }
+    // Laid out for real until the whole document is in, not as the 50 px a long document's block off screen stands for
+    // (content-visibility, assets/styles/index.css): the page is still at the top when the place to go back to is
+    // measured, and the blocks around it, sized for real only once scrolled to, came out taller than that in the
+    // very frame they were first drawn - the page was drawn 76 px off before it was put right (JU01).
+    // Through the attribute, not element.style: a style changed through the CSSOM and then removed came back as an
+    // empty style="" when the page was read as HTML (a kept document then differed from a new build of it).
+    const pinned = Array.from(rootDom.children, element => [element, element.getAttribute('style')])
+    for (const [element, was] of pinned) element.setAttribute('style', (was ? was.replace(/;?\s*$/, '; ') : '') + 'content-visibility: visible')
+    const state = { blocks, activeBlocks, matches, lo, hi, root: rootDom, timer: null, done, slices: 0, startedAt: performance.now(), pinned }
     this.progressive = state
     this.holdAnchoring(true)
     if (lo === 0 && hi === blocks.length) return this.finishProgressive(state)
@@ -552,6 +560,11 @@ class StateRender {
   clearRoom(state) {
     state.root.style.removeProperty('--td-room-above')
     state.root.style.removeProperty('--td-room-below')
+    if (state.pinned) for (const [element, was] of state.pinned) {
+      if (was === null) element.removeAttribute('style')
+      else element.setAttribute('style', was)
+    }
+    state.pinned = null
   }
 
   // The reader going where nothing is drawn yet (the scroll bar dragged far): the rest at once, not a blank page. Only a
