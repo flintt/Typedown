@@ -241,7 +241,7 @@ internal static partial class Program
             await Case("NV01 the editor page is never taken to another address: a script sending it to a web site is refused, and the document is still there", NV01);
             await Case("VM01 Vim's search in source mode on a long document: / and the letters typed after it go into the search box, nothing into the document, and Enter goes to the match", VM01);
             await Case("KU01 Keep unsaved changes when closing: every window closes without asking, the app exits, and started again it has the titled and the untitled document back as they were, unsaved, without a recovery question", KU01);
-            await Case("SP01 the side pane on the right (Settings > View): right of the document, which is not mirrored; its splitter dragged left widens it; off, it is on the left again", SP01);
+            await Case("PS01 the side pane on the right (Settings > View): right of the document, which is not mirrored; its splitter dragged left widens it; off, it is on the left again", PS01);
             // An edition's own cases (Edition.<name>.cs beside this file, in the edition's repository); none here.
             var editionCases = new List<(string Name, Func<List<string>, Task> Run)>();
             EditionCases(editionCases);
@@ -629,10 +629,10 @@ internal static partial class Program
     // A reader asked for the side pane on the right. The main grid's columns are mirrored (FlowDirection), the pane and the
     // document themselves are not: the document must still read left to right, and the splitter must still widen the
     // pane when dragged away from it - now to the left.
-    private static async Task SP01(List<string> notes)
+    private static async Task PS01(List<string> notes)
     {
-        using var c = await Session("e2e SP01");
-        var id = await Open(c, Fixture("sp01.md", "# SP01 heading\n\nSome text on the left of the page.\n"));
+        using var c = await Session("e2e PS01");
+        var id = await Open(c, Fixture("ps01.md", "# PS01 heading\n\nSome text on the left of the page.\n"));
         var windowId = await WindowIdOf(c, id);
         var window = await WindowOf(windowId, c);
         async Task<JToken> Setting(string name) => (await c.Call("test.settings.get", new { windowId, name }))["value"]!;
