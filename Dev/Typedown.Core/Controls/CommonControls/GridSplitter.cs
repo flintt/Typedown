@@ -68,7 +68,9 @@ namespace Typedown.Core.Controls
         {
             base.OnManipulationDelta(e);
             var scale = XamlRoot?.RasterizationScale ?? 1;
-            columnWidth += DeltaScale * e.Delta.Translation.X * scale;
+            // The move on screen: with the pane on the right (the layout mirrored) a drag to the left widens it.
+            var direction = FlowDirection == FlowDirection.RightToLeft ? -1 : 1;
+            columnWidth += direction * DeltaScale * e.Delta.Translation.X * scale;
             ColumnExpectWidth = Math.Min(Math.Max(ColumnMinWidth, columnWidth), ColumnMaxWidth);
         }
 

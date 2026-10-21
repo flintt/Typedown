@@ -140,17 +140,28 @@ internal static partial class Program
         Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0002 } } }, new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0004 } } });
     }
 
-    /// <summary>A press at one point, a move to another in steps, and the release there.</summary>
+    /// <summary>
+    /// A press at one point, a move to another in steps, and the release there - moved as a mouse moves (SendInput):
+    /// a cursor only placed (SetCursorPos) sends no pointer moves, and a splitter dragged that way did not move.
+    /// </summary>
     private static async Task Drag(IntPtr window, (int X, int Y) from, (int X, int Y) to, int steps = 12)
     {
         await Activate(window);
-        SetCursorPos(from.X, from.Y);
+        int screenW = GetSystemMetrics(0), screenH = GetSystemMetrics(1);
+        void MoveTo(int x, int y) => Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dx = x * 65535 / (screenW - 1), dy = y * 65535 / (screenH - 1), dwFlags = 0x0001 | 0x8000 } } });
+        foreach (var dx in new[] { 6, 3, 0 })
+        {
+            MoveTo(from.X + dx, from.Y);
+            await Task.Delay(40);
+        }
+        await Task.Delay(100);
         Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0002 } } });
         for (var i = 1; i <= steps; i++)
         {
-            SetCursorPos(from.X + (to.X - from.X) * i / steps, from.Y + (to.Y - from.Y) * i / steps);
-            await Task.Delay(15);
+            MoveTo(from.X + (to.X - from.X) * i / steps, from.Y + (to.Y - from.Y) * i / steps);
+            await Task.Delay(25);
         }
+        await Task.Delay(100);
         Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0004 } } });
     }
 
