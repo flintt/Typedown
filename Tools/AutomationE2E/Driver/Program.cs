@@ -648,10 +648,14 @@ internal static partial class Program
             GetWindowRect(window, out var w);
             var middle = (w.Left + w.Right) / 2;
             var pane = Find("NavigationView")?.Current.BoundingRectangle;
-            var heading = Deep.First(System.Windows.Automation.AutomationElement.FromHandle(window), new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.NameProperty, "SP01 heading"))?.Current.BoundingRectangle;
-            notes.Add($"window {w.Left}..{w.Right}; pane {pane}; heading {heading}");
+            // Where the heading's first letter is on screen, from the test host's own mapping of the page: a mirrored
+            // editor puts the page's left edge on the right.
+            var at = (await c.Call("test.editor.eval", new { windowId, script = "(() => { const r = document.querySelector('#ag-editor-id h1').getBoundingClientRect(); return { x: Math.round(r.left + 4), y: Math.round(r.top + r.height / 2) } })()" }))["result"]!;
+            var screen = await c.Call("test.editor.screenPoint", new { windowId, x = (int)at["x"]!, y = (int)at["y"]! });
+            var headingLeft = (int)screen["x"]!;
+            notes.Add($"window {w.Left}..{w.Right}; pane {pane}; heading starts at {headingLeft} (page {at["x"]})");
             Check(pane != null && pane.Value.Left > middle, "the side pane is on the right of the window");
-            Check(heading != null && heading.Value.Left < pane!.Value.Left && heading.Value.Left < middle, "the document reads left to right: its heading starts at the left, not mirrored");
+            Check(headingLeft < pane!.Value.Left && headingLeft < middle, "the document reads left to right: its heading starts at the left, not mirrored");
 
             // The splitter is the pane's left edge: dragged 120 pixels further left, the pane is wider.
             var edge = (int)pane!.Value.Left - 2;
