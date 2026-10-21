@@ -14,7 +14,10 @@ export const beginRules = {
 export const inlineRules = {
   strong: /^(\*\*|__)(?=\S)([\s\S]*?[^\s\\])(\\*)\1(?!(\*|_))/, // can nest
   em: /^(\*|_)(?=\S)([\s\S]*?[^\s\*\\])(\\*)\1(?!\1)/, // can nest
-  inline_code: /^(`{1,3})([^`]+?|.{2,})\1/,
+  // CommonMark: the run of backticks it opens with, up to the next run of exactly as many (backticks of other lengths
+  // inside it are its text). `.{2,}` took everything up to the line's last matching run: `` a`b `` and ``` a``b ``` in
+  // one sentence came out as one code span.
+  inline_code: /^(`+)([^`]|[^`][\s\S]*?[^`])\1(?!`)/,
   image: /^(\!\[)(.*?)(\\*)\]\((.*)(\\*)\)/,
   link: /^(\[)((?:\[[^\]]*\]|[^\[\]]|\](?=[^\[]*\]))*?)(\\*)\]\((.*)(\\*)\)/, // can nest
   emoji: /^(:)([a-z_\d+-]+?)\1/,
