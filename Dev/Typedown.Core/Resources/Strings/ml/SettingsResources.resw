@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>നീളമുള്ള പ്രമാണം നിങ്ങൾ വിട്ടുപോയ സ്ഥലത്തുതന്നെ തുറക്കുന്നു, ബാക്കി പശ്ചാത്തലത്തിൽ വരയ്ക്കുന്നു. നീളമുള്ള പ്രമാണം തുറക്കുമ്പോൾ എന്തെങ്കിലും തെറ്റായി തോന്നിയാൽ ഇത് ഓഫ് ചെയ്യുക: അപ്പോൾ അത് ഒറ്റയടിക്ക് വരയ്ക്കും</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>വലതുവശത്ത് സൈഡ് ബാർ</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>ഡോക്യുമെന്റിന്റെ ഇടതുവശത്തിന് പകരം വലതുവശത്ത് സൈഡ് ബാർ കാണിക്കുക</value>
+  </data>
 </root>

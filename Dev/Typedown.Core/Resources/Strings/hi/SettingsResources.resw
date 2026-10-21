@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>लंबा दस्तावेज़ वहीं से खुलता है जहाँ आपने उसे छोड़ा था, और बाकी हिस्सा पृष्ठभूमि में बनता है। लंबा दस्तावेज़ खुलते समय कुछ गलत दिखे तो इसे बंद करें: तब पूरा दस्तावेज़ एक साथ बनेगा</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>दाईं ओर साइड बार</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>दस्तावेज़ के बाईं ओर के बजाय दाईं ओर साइड बार दिखाएँ</value>
+  </data>
 </root>

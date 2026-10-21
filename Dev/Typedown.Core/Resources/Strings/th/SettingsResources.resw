@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>เอกสารยาวจะเปิดที่ตำแหน่งที่คุณค้างไว้ และส่วนที่เหลือจะวาดในเบื้องหลัง ปิดตัวเลือกนี้หากมีบางอย่างดูผิดปกติขณะเปิดเอกสารยาว: เอกสารจะถูกวาดทั้งหมดในครั้งเดียว</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>แถบด้านข้างทางขวา</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>แสดงแถบด้านข้างทางขวาของเอกสารแทนทางซ้าย</value>
+  </data>
 </root>

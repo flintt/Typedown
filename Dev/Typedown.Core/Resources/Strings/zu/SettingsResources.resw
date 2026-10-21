@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>Idokhumenti ende ivuleka lapho uyishiye khona, bese okusele kudwetshwa ngemuva. Vala lokhu uma okuthile kubukeka kungalungile ngenkathi idokhumenti ende ivuleka: izodwetshwa yonke ngasikhathi sinye</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Ibha eseceleni ngakwesokudla</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Bonisa ibha eseceleni ngakwesokudla kwedokhumenti esikhundleni sangakwesobunxele</value>
+  </data>
 </root>

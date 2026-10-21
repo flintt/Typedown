@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>Ett långt dokument öppnas där du lämnade det, och resten ritas i bakgrunden. Stäng av detta om något ser fel ut medan ett långt dokument öppnas: då ritas det på en gång</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Sidofält till höger</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Visa sidofältet till höger om dokumentet i stället för till vänster</value>
+  </data>
 </root>

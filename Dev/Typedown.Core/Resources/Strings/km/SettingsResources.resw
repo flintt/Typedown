@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>ឯកសារវែងបើកនៅកន្លែងដែលអ្នកបានទុកវា ហើយផ្នែកដែលនៅសល់ត្រូវបានគូរនៅផ្ទៃខាងក្រោយ។ បិទមុខងារនេះ ប្រសិនបើមានអ្វីមើលទៅខុស ពេលឯកសារវែងកំពុងបើក៖ ពេលនោះវានឹងត្រូវគូរទាំងស្រុងក្នុងពេលតែមួយ</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>របារចំហៀងនៅខាងស្តាំ</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>បង្ហាញរបារចំហៀងនៅខាងស្តាំឯកសារ ជំនួសឱ្យខាងឆ្វេង</value>
+  </data>
 </root>

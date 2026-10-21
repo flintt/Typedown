@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>מסמך ארוך נפתח במקום שבו השארת אותו, והשאר מצויר ברקע. כבה אפשרות זו אם משהו נראה שגוי בזמן שמסמך ארוך נפתח: אז הוא יצויר כולו בבת אחת</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>סרגל צד בצד ימין</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>הצגת סרגל הצד מימין למסמך במקום משמאל</value>
+  </data>
 </root>

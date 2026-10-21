@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>Dugi dokument otvara se na mjestu gdje ste ga ostavili, a ostatak se iscrtava u pozadini. Isključite ovo ako nešto izgleda pogrešno dok se dugi dokument otvara: tada se iscrtava odjednom</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Bočna traka s desne strane</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Prikaži bočnu traku s desne strane dokumenta umjesto s lijeve</value>
+  </data>
 </root>

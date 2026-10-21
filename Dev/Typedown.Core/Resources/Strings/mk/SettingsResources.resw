@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>Долгиот документ се отвора таму каде што сте го оставиле, а остатокот се исцртува во позадина. Исклучете го ова ако нешто изгледа погрешно додека се отвора долг документ: тогаш тој се исцртува одеднаш</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Странична лента десно</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Прикажи ја страничната лента десно од документот наместо лево</value>
+  </data>
 </root>

@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>Bumubukas ang mahabang dokumento sa lugar kung saan mo ito iniwan, at ang natitira ay iginuguhit sa background. I-off ito kung may mukhang mali habang bumubukas ang mahabang dokumento: iguguhit ito nang buo nang minsanan</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Side bar sa kanan</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Ipakita ang side bar sa kanan ng dokumento sa halip na sa kaliwa</value>
+  </data>
 </root>

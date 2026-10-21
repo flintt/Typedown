@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>நீண்ட ஆவணம் நீங்கள் விட்ட இடத்திலேயே திறக்கும், மீதமுள்ளவை பின்னணியில் வரையப்படும். நீண்ட ஆவணம் திறக்கும்போது ஏதாவது தவறாகத் தெரிந்தால் இதை முடக்கவும்: அப்போது அது ஒரே முறையில் வரையப்படும்</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>வலதுபுறத்தில் பக்கப்பட்டி</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>ஆவணத்தின் இடதுபுறத்திற்குப் பதிலாக வலதுபுறத்தில் பக்கப்பட்டியைக் காட்டு</value>
+  </data>
 </root>

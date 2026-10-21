@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>Pitkä asiakirja avautuu kohdasta, johon jätit sen, ja loput piirretään taustalla. Poista tämä käytöstä, jos jokin näyttää väärältä pitkän asiakirjan avautuessa: silloin se piirretään kerralla</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Sivupalkki oikealla</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Näytä sivupalkki asiakirjan oikealla puolella vasemman sijaan</value>
+  </data>
 </root>

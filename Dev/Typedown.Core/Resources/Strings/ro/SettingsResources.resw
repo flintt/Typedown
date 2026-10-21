@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>Un document lung se deschide acolo unde l-ați lăsat, iar restul este desenat în fundal. Dezactivați această opțiune dacă ceva pare greșit în timp ce se deschide un document lung: atunci va fi desenat dintr-odată</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Bara laterală în dreapta</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Afișează bara laterală în dreapta documentului în loc de stânga</value>
+  </data>
 </root>

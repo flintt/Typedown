@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>長いドキュメントは前回の位置で開き、残りはバックグラウンドで描画されます。長いドキュメントを開くときに表示がおかしい場合はオフにしてください。その場合は全体を一度に描画します</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>サイドバーを右側に表示</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>サイドバーを文書の左側ではなく右側に表示します</value>
+  </data>
 </root>

@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>Um documento longo abre no ponto onde você o deixou, e o resto é desenhado em segundo plano. Desative isto se algo parecer errado enquanto um documento longo é aberto: ele será então desenhado de uma só vez</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Barra lateral à direita</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Mostrar a barra lateral à direita do documento em vez de à esquerda</value>
+  </data>
 </root>

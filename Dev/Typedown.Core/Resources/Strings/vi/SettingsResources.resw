@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>Tài liệu dài mở tại vị trí bạn rời đi, phần còn lại được vẽ trong nền. Tắt tùy chọn này nếu có gì đó trông không đúng khi tài liệu dài đang mở: khi đó tài liệu được vẽ toàn bộ một lần</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Thanh bên ở bên phải</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Hiển thị thanh bên ở bên phải tài liệu thay vì bên trái</value>
+  </data>
 </root>

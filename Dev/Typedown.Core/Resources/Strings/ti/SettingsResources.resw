@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>ነዊሕ ሰነድ ኣብቲ ዝገደፍካዮ ቦታ ይኽፈት፣ እቲ ዝተረፈ ድማ ኣብ ድሕሪት ይስኣል። ነዊሕ ሰነድ ክኽፈት ከሎ ገለ ነገር ጌጋ እንተመሲሉ ነዚ ኣጥፍኦ፤ ሽዑ ብሓንሳብ ምሉእ ይስኣል</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>ናይ ጎኒ ባር ብየማን</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>ናይ ጎኒ ባር ኣብ ክንዲ ጸጋም ናይቲ ሰነድ ብየማን ኣርኢ</value>
+  </data>
 </root>

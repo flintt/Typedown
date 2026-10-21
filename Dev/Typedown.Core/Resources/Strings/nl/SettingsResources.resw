@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>Een lang document opent op de plek waar u het verliet en de rest wordt op de achtergrond weergegeven. Schakel dit uit als er iets niet goed lijkt terwijl een lang document opent: het wordt dan in één keer weergegeven</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Zijbalk rechts</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>De zijbalk rechts van het document tonen in plaats van links</value>
+  </data>
 </root>

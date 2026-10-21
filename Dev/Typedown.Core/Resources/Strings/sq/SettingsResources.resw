@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>Një dokument i gjatë hapet aty ku e latë, dhe pjesa tjetër vizatohet në sfond. Çaktivizojeni këtë nëse diçka duket gabim ndërsa hapet një dokument i gjatë: atëherë ai vizatohet i gjithi njëherësh</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Shiriti anësor djathtas</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Shfaq shiritin anësor në të djathtë të dokumentit në vend të së majtës</value>
+  </data>
 </root>

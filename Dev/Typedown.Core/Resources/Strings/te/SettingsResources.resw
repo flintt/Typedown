@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>పొడవైన పత్రం మీరు వదిలిన చోటే తెరుచుకుంటుంది, మిగిలిన భాగం నేపథ్యంలో గీయబడుతుంది. పొడవైన పత్రం తెరుచుకునేటప్పుడు ఏదైనా తప్పుగా కనిపిస్తే దీన్ని ఆఫ్ చేయండి: అప్పుడు అది ఒకేసారి గీయబడుతుంది</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>కుడివైపు సైడ్ బార్</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>పత్రానికి ఎడమవైపు బదులు కుడివైపు సైడ్ బార్‌ను చూపించు</value>
+  </data>
 </root>

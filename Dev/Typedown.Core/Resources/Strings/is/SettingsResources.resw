@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>Langt skjal opnast þar sem þú skildir við það og afgangurinn er teiknaður í bakgrunni. Slökktu á þessu ef eitthvað lítur rangt út á meðan langt skjal opnast: þá er það teiknað allt í einu</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Hliðarstika til hægri</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Sýna hliðarstikuna hægra megin við skjalið í stað vinstra megin</value>
+  </data>
 </root>

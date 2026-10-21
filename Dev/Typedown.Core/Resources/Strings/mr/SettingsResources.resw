@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>लांब दस्तऐवज तुम्ही जिथे सोडला होता तिथून उघडतो आणि उरलेला भाग पार्श्वभूमीत काढला जातो. लांब दस्तऐवज उघडताना काही चुकीचे दिसल्यास हे बंद करा: मग तो एकाच वेळी काढला जाईल</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>उजवीकडे साइड बार</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>दस्तऐवजाच्या डावीकडे ऐवजी उजवीकडे साइड बार दाखवा</value>
+  </data>
 </root>

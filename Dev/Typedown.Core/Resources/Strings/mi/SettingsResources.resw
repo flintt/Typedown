@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>Ka tuwhera tētahi tuhinga roa ki te wāhi i waiho ai e koe, ā, ka tuhia te toenga ki muri. Whakawetohia tēnei mēnā he hē te āhua o tētahi mea i te wā e tuwhera ana tētahi tuhinga roa: kātahi ka tuhia katoatia i te wā kotahi</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Pae taha ki matau</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Whakaaturia te pae taha ki te taha matau o te tuhinga, kaua ki te taha mauī</value>
+  </data>
 </root>

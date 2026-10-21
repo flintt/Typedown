@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>Ein langes Dokument öffnet sich an der Stelle, an der Sie es verlassen haben, der Rest wird im Hintergrund dargestellt. Schalten Sie dies aus, wenn beim Öffnen eines langen Dokuments etwas nicht stimmt: Es wird dann auf einmal dargestellt</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Seitenleiste rechts</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Die Seitenleiste rechts statt links vom Dokument anzeigen</value>
+  </data>
 </root>

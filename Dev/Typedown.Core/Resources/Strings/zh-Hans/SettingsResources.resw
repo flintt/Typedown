@@ -969,4 +969,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>长文档打开时先显示上次阅读的位置，其余部分在后台补齐。若打开长文档时显示异常，可关闭此项，改为一次渲染整篇</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>侧栏显示在右侧</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>把侧栏显示在文档右侧，而不是左侧</value>
+  </data>
 </root>

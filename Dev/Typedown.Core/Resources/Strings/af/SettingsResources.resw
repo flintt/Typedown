@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>'n Lang dokument maak oop waar jy dit gelos het, en die res word in die agtergrond geteken. Skakel dit af as iets verkeerd lyk terwyl 'n lang dokument oopmaak: dit word dan alles op een slag geteken</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Sybalk aan die regterkant</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Wys die sybalk regs van die dokument in plaas van links</value>
+  </data>
 </root>

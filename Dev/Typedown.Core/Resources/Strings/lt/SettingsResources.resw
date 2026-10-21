@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>Ilgas dokumentas atsidaro ten, kur jį palikote, o likusi dalis piešiama fone. Išjunkite tai, jei atidarant ilgą dokumentą kas nors atrodo netinkamai: tada jis bus nupieštas iš karto</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Šoninė juosta dešinėje</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Rodyti šoninę juostą dokumento dešinėje, o ne kairėje</value>
+  </data>
 </root>

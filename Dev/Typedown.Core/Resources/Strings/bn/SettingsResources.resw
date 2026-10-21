@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>দীর্ঘ নথি যেখানে রেখেছিলেন সেখান থেকেই খোলে, বাকিটা পটভূমিতে আঁকা হয়। দীর্ঘ নথি খোলার সময় কিছু ভুল মনে হলে এটি বন্ধ করুন: তখন পুরোটা একবারে আঁকা হবে</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>ডানদিকে সাইড বার</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>নথির বাঁদিকের পরিবর্তে ডানদিকে সাইড বার দেখান</value>
+  </data>
 </root>

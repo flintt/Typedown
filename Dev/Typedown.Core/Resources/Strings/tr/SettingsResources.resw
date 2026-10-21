@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>Uzun bir belge kaldığınız yerden açılır ve geri kalanı arka planda çizilir. Uzun bir belge açılırken bir şey yanlış görünürse bunu kapatın: belge o zaman tek seferde çizilir</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Kenar çubuğu sağda</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Kenar çubuğunu belgenin solu yerine sağında göster</value>
+  </data>
 </root>

@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>ረጅም ሰነድ በተዉት ቦታ ይከፈታል፣ የቀረው ደግሞ ከበስተጀርባ ይሳላል። ረጅም ሰነድ ሲከፈት የሆነ ነገር ትክክል ካልመሰለ ይህን ያጥፉ፤ ከዚያ ሰነዱ በአንድ ጊዜ ይሳላል</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>የጎን አሞሌ በቀኝ</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>የጎን አሞሌውን ከሰነዱ በግራ ፋንታ በቀኝ አሳይ</value>
+  </data>
 </root>

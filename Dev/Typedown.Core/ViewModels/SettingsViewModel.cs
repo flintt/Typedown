@@ -22,6 +22,8 @@ namespace Typedown.Core.ViewModels
         public PInvoke.WINDOWPLACEMENT? StartupPlacement { get => GetSettingValue<PInvoke.WINDOWPLACEMENT?>(null); set => SetSettingValue(value); }
         public bool SidePaneOpen { get => GetSettingValue(false); set => SetSettingValue(value); }
         public double SidePaneWidth { get => GetSettingValue(300d); set => SetSettingValue(value); }
+        /// <summary>The side pane (files, outline) on the right of the document instead of the left.</summary>
+        public bool SidePaneOnRight { get => GetSettingValue(false); set => SetSettingValue(value); }
         public bool StatusBarOpen { get => GetSettingValue(true); set => SetSettingValue(value); }
         /// <summary>The status bar's items the reader turned off (its context menu), comma-separated: modes, heading, format, save, count.</summary>
         public string StatusBarHiddenItems { get => GetSettingValue("format"); set => SetSettingValue(value); }

@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>ເອກະສານຍາວຈະເປີດຢູ່ບ່ອນທີ່ທ່ານປະໄວ້ ແລະ ສ່ວນທີ່ເຫຼືອຈະຖືກແຕ້ມຢູ່ເບື້ອງຫຼັງ. ປິດອັນນີ້ຖ້າມີບາງຢ່າງເບິ່ງຄືບໍ່ຖືກຕ້ອງໃນຂະນະທີ່ເອກະສານຍາວກຳລັງເປີດ: ຈາກນັ້ນມັນຈະຖືກແຕ້ມທັງໝົດໃນຄັ້ງດຽວ</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>ແຖບດ້ານຂ້າງຢູ່ເບື້ອງຂວາ</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>ສະແດງແຖບດ້ານຂ້າງຢູ່ເບື້ອງຂວາຂອງເອກະສານແທນເບື້ອງຊ້າຍ</value>
+  </data>
 </root>

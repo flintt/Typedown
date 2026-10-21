@@ -20,7 +20,9 @@
         <SolidColorBrush x:Key="MicaContentBackgroundBrush" Color="{ThemeResource LayerFillColorDefault}"/>
         <SolidColorBrush x:Key="SolidContentBackgroundBrush" Color="{ThemeResource SolidBackgroundFillColorTertiary}"/>
     </UserControl.Resources>
-    <Grid Background="{ThemeResource SolidBackgroundFillColorTertiary}" x:Name="MainContentGrid">
+    <!-- The side pane on the right (Settings > View): the columns mirrored, the pane and the document themselves not. -->
+    <Grid Background="{ThemeResource SolidBackgroundFillColorTertiary}" x:Name="MainContentGrid"
+          FlowDirection="{x:Bind local:MainContent.PaneSide(Settings.SidePaneOnRight), Mode=OneWay}">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="SidePaneStates">
                 <VisualStateGroup.Transitions>
@@ -75,9 +77,10 @@
         </Grid.ColumnDefinitions>
         <local:LeftPane 
             x:Name="LeftPane" 
+            FlowDirection="LeftToRight"
             x:Load="{x:Bind IsLeftPaneLoad, Mode=OneWay}" 
             RenderTransform="{StaticResource LeftPaneTransform}"/>
-        <Grid Grid.Column="2">
+        <Grid Grid.Column="2" FlowDirection="LeftToRight">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>

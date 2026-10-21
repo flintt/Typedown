@@ -240,6 +240,7 @@ internal static partial class Program
             await Case("LD01 a load the editor gives back rewritten is loaded once more and keeps the file's text; one rewritten again is taken after that one retry, not retried without end", LD01);
             await Case("NV01 the editor page is never taken to another address: a script sending it to a web site is refused, and the document is still there", NV01);
             await Case("VM01 Vim's search in source mode on a long document: / and the letters typed after it go into the search box, nothing into the document, and Enter goes to the match", VM01);
+            await Case("SP01 the side pane on the right (Settings > View): right of the document, which is not mirrored; its splitter dragged left widens it; off, it is on the left again", SP01);
             // An edition's own cases (Edition.<name>.cs beside this file, in the edition's repository); none here.
             var editionCases = new List<(string Name, Func<List<string>, Task> Run)>();
             EditionCases(editionCases);
@@ -620,6 +621,57 @@ internal static partial class Program
             if (keyboard != IntPtr.Zero) UseKeyboard(keyboard);
             try { await c.Call("test.settings.set", new { windowId, name = "SourceCode", value = false }); } catch { }
             try { await c.Call("test.settings.set", new { windowId, name = "VimMode", value = false }); } catch { }
+            try { await c.Call("document.close", new { documentId = id }); } catch { }
+        }
+    }
+
+    // A reader asked for the side pane on the right. The main grid's columns are mirrored (FlowDirection), the pane and the
+    // document themselves are not: the document must still read left to right, and the splitter must still widen the
+    // pane when dragged away from it - now to the left.
+    private static async Task SP01(List<string> notes)
+    {
+        using var c = await Session("e2e SP01");
+        var id = await Open(c, Fixture("sp01.md", "# SP01 heading\n\nSome text on the left of the page.\n"));
+        var windowId = await WindowIdOf(c, id);
+        var window = await WindowOf(windowId, c);
+        async Task<JToken> Setting(string name) => (await c.Call("test.settings.get", new { windowId, name }))["value"]!;
+        System.Windows.Automation.AutomationElement? Find(string automationId) =>
+            Deep.First(System.Windows.Automation.AutomationElement.FromHandle(window), new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.AutomationIdProperty, automationId));
+        var widthBefore = (double)await Setting("SidePaneWidth");
+        try
+        {
+            await c.Call("window.setView", new { windowId, bounds = new { x = 20, y = 20, width = 1400, height = 800 }, sidePane = new { open = true } });
+            await c.Call("test.settings.set", new { windowId, name = "SidePaneWidth", value = 300.0 });
+            await c.Call("test.settings.set", new { windowId, name = "SidePaneOnRight", value = true });
+            await Task.Delay(1500);
+            GetWindowRect(window, out var w);
+            var middle = (w.Left + w.Right) / 2;
+            var pane = Find("NavigationView")?.Current.BoundingRectangle;
+            var heading = Deep.First(System.Windows.Automation.AutomationElement.FromHandle(window), new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.NameProperty, "SP01 heading"))?.Current.BoundingRectangle;
+            notes.Add($"window {w.Left}..{w.Right}; pane {pane}; heading {heading}");
+            Check(pane != null && pane.Value.Left > middle, "the side pane is on the right of the window");
+            Check(heading != null && heading.Value.Left < pane!.Value.Left && heading.Value.Left < middle, "the document reads left to right: its heading starts at the left, not mirrored");
+
+            // The splitter is the pane's left edge: dragged 120 pixels further left, the pane is wider.
+            var edge = (int)pane!.Value.Left - 2;
+            var y = (int)(pane.Value.Top + pane.Value.Height / 2);
+            await Drag(window, (edge, y), (edge - 120, y));
+            await Task.Delay(800);
+            var widened = (double)await Setting("SidePaneWidth");
+            notes.Add($"width 300 -> {widened}");
+            Check(widened > 340, $"dragged to the left, the pane is wider ({widened})");
+
+            await c.Call("test.settings.set", new { windowId, name = "SidePaneOnRight", value = false });
+            await Task.Delay(1200);
+            var back = Find("NavigationView")?.Current.BoundingRectangle;
+            notes.Add($"off: pane {back}");
+            Check(back != null && back.Value.Right < middle, "off, the side pane is on the left again");
+        }
+        finally
+        {
+            try { await c.Call("test.settings.set", new { windowId, name = "SidePaneOnRight", value = false }); } catch { }
+            try { await c.Call("test.settings.set", new { windowId, name = "SidePaneWidth", value = widthBefore }); } catch { }
+            try { await c.Call("window.setView", new { windowId, sidePane = new { open = false } }); } catch { }
             try { await c.Call("document.close", new { documentId = id }); } catch { }
         }
     }

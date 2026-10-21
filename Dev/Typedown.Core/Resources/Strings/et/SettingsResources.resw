@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>Pikk dokument avaneb kohas, kuhu selle jätsite, ja ülejäänu joonistatakse taustal. Lülitage see välja, kui pika dokumendi avamisel näib midagi valesti olevat: siis joonistatakse see korraga</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Külgriba paremal</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Kuva külgriba dokumendist paremal, mitte vasakul</value>
+  </data>
 </root>

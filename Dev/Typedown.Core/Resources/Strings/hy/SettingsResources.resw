@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>Երկար փաստաթուղթը բացվում է այնտեղ, որտեղ թողել եք, իսկ մնացածը պատկերվում է հետին պլանում։ Անջատեք սա, եթե երկար փաստաթղթի բացման ժամանակ ինչ-որ բան սխալ է թվում․ այդ դեպքում այն կպատկերվի միանգամից</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Կողային վահանակը աջ կողմում</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Ցուցադրել կողային վահանակը փաստաթղթի աջ կողմում՝ ձախի փոխարեն</value>
+  </data>
 </root>

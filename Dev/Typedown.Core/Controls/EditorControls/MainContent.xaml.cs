@@ -93,6 +93,8 @@ namespace Typedown.Core.Controls
             Bindings?.StopTracking();
         }
 
+        public static FlowDirection PaneSide(bool right) => right ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
+
         public static bool IsTabBarLoad(int tabCount, bool alwaysShow) => alwaysShow || tabCount > 1;
 
         public static double GetColumnWidthNegative(GridLength length)

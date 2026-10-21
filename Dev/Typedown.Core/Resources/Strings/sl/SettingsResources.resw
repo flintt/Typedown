@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>Dolg dokument se odpre na mestu, kjer ste ga pustili, preostanek pa se izriše v ozadju. To izklopite, če med odpiranjem dolgega dokumenta kaj ni videti prav: takrat se izriše naenkrat</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Stranska vrstica na desni</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Prikaži stransko vrstico desno od dokumenta namesto levo</value>
+  </data>
 </root>

@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>긴 문서는 마지막으로 보던 위치에서 열리고 나머지는 백그라운드에서 그려집니다. 긴 문서를 여는 동안 표시가 이상하면 이 옵션을 끄세요. 그러면 문서 전체를 한 번에 그립니다</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>사이드바를 오른쪽에</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>사이드바를 문서 왼쪽 대신 오른쪽에 표시합니다</value>
+  </data>
 </root>

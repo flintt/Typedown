@@ -669,6 +669,12 @@
     <value>Show Side Bar</value>
     <comment>视图/显示侧栏</comment>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Side Bar on the Right</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Show the side bar on the right of the document instead of the left</value>
+  </data>
   <data name="View.StatusBarOpen.Description" xml:space="preserve">
     <value>Choose whether to display the bottom status bar</value>
     <comment>视图/选择是否显示底部状态栏</comment>

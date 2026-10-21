@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>Et langt dokument åpnes der du forlot det, og resten tegnes i bakgrunnen. Slå av dette hvis noe ser feil ut mens et langt dokument åpnes: da tegnes det hele på én gang</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Sidepanel til høyre</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Vis sidepanelet til høyre for dokumentet i stedet for til venstre</value>
+  </data>
 </root>

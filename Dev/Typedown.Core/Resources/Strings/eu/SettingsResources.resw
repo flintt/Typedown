@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>Dokumentu luzea utzi zenuen tokian irekitzen da, eta gainerakoa atzeko planoan marrazten da. Desaktibatu hau dokumentu luze bat irekitzean zerbait gaizki ikusten bada: orduan dena batera marrazten da</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Alboko barra eskuinean</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Erakutsi alboko barra dokumentuaren eskuinean, ezkerrean beharrean</value>
+  </data>
 </root>

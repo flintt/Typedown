@@ -940,4 +940,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>يُفتح المستند الطويل عند الموضع الذي تركته فيه، ويُعرض الباقي في الخلفية. أوقف هذا الخيار إذا بدا شيء غير صحيح أثناء فتح مستند طويل: سيُعرض حينها دفعة واحدة</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>الشريط الجانبي على اليمين</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>إظهار الشريط الجانبي على يمين المستند بدلاً من يساره</value>
+  </data>
 </root>

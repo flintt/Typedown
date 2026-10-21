@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>લાંબો દસ્તાવેજ તમે જ્યાં છોડ્યો હતો ત્યાંથી ખૂલે છે, અને બાકીનો ભાગ પૃષ્ઠભૂમિમાં દોરાય છે. લાંબો દસ્તાવેજ ખૂલતી વખતે કંઈક ખોટું લાગે તો આ બંધ કરો: ત્યારે તે એક સાથે દોરાશે</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>જમણી બાજુએ સાઇડ બાર</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>દસ્તાવેજની ડાબી બાજુને બદલે જમણી બાજુએ સાઇડ બાર બતાવો</value>
+  </data>
 </root>

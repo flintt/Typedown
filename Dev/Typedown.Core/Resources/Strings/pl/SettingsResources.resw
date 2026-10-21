@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>Długi dokument otwiera się w miejscu, w którym go zostawiono, a reszta jest rysowana w tle. Wyłącz to, jeśli coś wygląda nieprawidłowo podczas otwierania długiego dokumentu: wtedy zostanie narysowany od razu w całości</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Pasek boczny po prawej</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Pokazuj pasek boczny po prawej stronie dokumentu zamiast po lewej</value>
+  </data>
 </root>

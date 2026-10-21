@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>Un documento longo ábrese no punto onde o deixou e o resto debúxase en segundo plano. Desactíveo se algo non se ve ben mentres se abre un documento longo: entón debúxase todo dunha vez</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Barra lateral á dereita</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Amosar a barra lateral á dereita do documento en vez de á esquerda</value>
+  </data>
 </root>

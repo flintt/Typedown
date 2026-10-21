@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>Ұзын құжат сіз қалдырған жерде ашылады, ал қалғаны фондық режимде салынады. Ұзын құжат ашылып жатқанда бірдеңе дұрыс көрінбесе, мұны өшіріңіз: сонда ол бірден толық салынады</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Бүйірлік жолақ оң жақта</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Бүйірлік жолақты құжаттың сол жағының орнына оң жағында көрсету</value>
+  </data>
 </root>

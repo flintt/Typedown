@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>سند طولانی در همان جایی باز می‌شود که آن را گذاشته بودید و باقی آن در پس‌زمینه نمایش داده می‌شود. اگر هنگام باز شدن سند طولانی چیزی درست معلوم نمی‌شود، این گزینه را خاموش کنید: آنگاه کل سند یک‌باره نمایش داده می‌شود</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>نوار کناری در سمت راست</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>نمایش نوار کناری در سمت راست سند به جای سمت چپ</value>
+  </data>
 </root>

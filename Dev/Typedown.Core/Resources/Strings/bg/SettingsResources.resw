@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>Дългият документ се отваря там, където сте го оставили, а останалото се изобразява на заден план. Изключете това, ако нещо изглежда нередно при отваряне на дълъг документ: тогава той се изобразява наведнъж</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Странична лента вдясно</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Показване на страничната лента вдясно от документа вместо вляво</value>
+  </data>
 </root>

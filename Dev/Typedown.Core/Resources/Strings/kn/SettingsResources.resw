@@ -934,4 +934,10 @@
   <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
     <value>ಉದ್ದದ ದಾಖಲೆ ನೀವು ಬಿಟ್ಟ ಸ್ಥಳದಲ್ಲೇ ತೆರೆಯುತ್ತದೆ, ಉಳಿದದ್ದು ಹಿನ್ನೆಲೆಯಲ್ಲಿ ಚಿತ್ರಿಸಲಾಗುತ್ತದೆ. ಉದ್ದದ ದಾಖಲೆ ತೆರೆಯುವಾಗ ಏನಾದರೂ ತಪ್ಪಾಗಿ ಕಂಡರೆ ಇದನ್ನು ಆಫ್ ಮಾಡಿ: ಆಗ ಅದು ಒಮ್ಮೆಲೇ ಚಿತ್ರಿಸಲಾಗುತ್ತದೆ</value>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>ಬಲಭಾಗದಲ್ಲಿ ಸೈಡ್ ಬಾರ್</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>ಡಾಕ್ಯುಮೆಂಟ್‌ನ ಎಡಭಾಗದ ಬದಲು ಬಲಭಾಗದಲ್ಲಿ ಸೈಡ್ ಬಾರ್ ತೋರಿಸಿ</value>
+  </data>
 </root>
