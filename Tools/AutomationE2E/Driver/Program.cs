@@ -532,6 +532,10 @@ internal static partial class Program
         var page = await Eval("location.href");
         try
         {
+            // Sent through test.editor.eval, it counts as the reader's (WebView2 runs the script with a user gesture): the
+            // host opens it as a link - which the test host keeps instead of opening a browser (test.links.opened).
+            async Task<JArray> Opened() => (JArray)(await c.Call("test.links.opened", new { }))["links"]!;
+            var openedBefore = (await Opened()).Count;
             await Eval("setTimeout(() => location.assign('https://example.com/nv01-script'), 0); 'sent'");
             await Task.Delay(2500);
             string after, shown;
@@ -545,6 +549,9 @@ internal static partial class Program
             Check(after == page, $"the page is still the editor ({after})");
             Check(shown.Contains("Text that stays"), "the document is still on the page");
             Check(LogLines("navigation away from the editor page refused").Count > refused, "the log says a navigation was refused");
+            var opened = (await Opened()).Skip(openedBefore).Select(x => (string?)x).ToList();
+            notes.Add("opened as links: " + string.Join(", ", opened));
+            Check(opened.Contains("https://example.com/nv01-script"), "the address is opened as a link would be (in the browser; kept instead, in a test host)");
             Check(((string)(await Get(c, id))["text"]!).Replace("\r\n", "\n") == text, "the document is unchanged");
         }
         finally
@@ -578,7 +585,14 @@ internal static partial class Program
             Check(await Eventually(async () => await Eval("String(!!document.querySelector('.CodeMirror'))") == "true", 10000), "source mode is on");
             await Activate(window);
             await c.Call("test.editor.focus", new { windowId });
-            await Task.Delay(800);
+            await Task.Delay(500);
+            // A click in the middle of the text as well: in a full run a Chromium window of another case's was in front
+            // and took the keys (the case alone passed).
+            GetWindowRect(window, out var rect);
+            SetCursorPos((rect.Left + rect.Right) / 2, (rect.Top + rect.Bottom) / 2);
+            Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0002 } } }, new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0004 } } });
+            await Task.Delay(500);
+            Check(GetForegroundWindow() == window, "the test window is in front for the keys: " + FocusInfo(window));
             keyboard = UseEnglishKeyboard();
             await Task.Delay(500);
             notes.Add($"keyboard {keyboard.ToInt64():x} -> US English; keys go to {FocusInfo(window)}");

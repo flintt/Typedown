@@ -23,10 +23,25 @@ namespace Typedown.Services.Automation
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         private static extern bool ClientToScreen(System.IntPtr window, ref NativePoint point);
 
+        private static readonly System.Collections.Generic.List<string> openedLinks = new();
+
         public static void AddMethods(MethodTable methods)
         {
 
             barriers.AddMethods(methods);
+            // A test host opens no browser and no other program for a link: a browser that came up (a navigation the host
+            // refused and opened as a link, NV01) was in front of the next case's window and took its keys.
+            Core.Utilities.Common.OpenUrlOverride = url =>
+            {
+                lock (openedLinks) openedLinks.Add(url);
+                Core.Utilities.Log.Debug($"test host: not opened (a test host opens no links): {url}");
+                return true;
+            };
+            // What the app would have opened as links since the test host started (a browser, a file's own program).
+            methods.Add(new MethodDescriptor("test.links.opened", null, "test.links.opened/1", (c, ct) =>
+            {
+                lock (openedLinks) return System.Threading.Tasks.Task.FromResult<Newtonsoft.Json.Linq.JToken?>(new Newtonsoft.Json.Linq.JObject { ["links"] = new Newtonsoft.Json.Linq.JArray(openedLinks.ToArray()) });
+            }));
             // What the page itself holds right now - lets a test wait for real input to arrive instead of sleeping.
             methods.Add(new MethodDescriptor("test.editor.pageText", null, "test.editor.pageText/1", async (c, ct) =>
             {

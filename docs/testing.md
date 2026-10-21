@@ -256,6 +256,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | `test.barrier.arm` | `point`, `documentId?` | Arms a one-shot barrier at a point of the write path (optionally for one document); returns its barrierId. | EditBarriers.cs |
 | `test.barrier.waitHit` | `barrierId`, `timeoutMs?` | Waits until an edit is held at the barrier (hit) or the timeout passes; the held operation's id. | EditBarriers.cs |
 | `test.barrier.release` | `barrierId` | Lets the held edit go on. | EditBarriers.cs |
+| `test.links.opened` | - | What the app would have opened as links since the test host started (a browser, a file's own program). | TestHostHooks.cs |
 | `test.editor.pageText` | `documentId` | What the page itself holds right now - lets a test wait for real input to arrive instead of sleeping. | TestHostHooks.cs |
 | `test.dispatcher.stress` | `windowId`, `threads?`, `posts?` | The window's UI thread runs every callback posted to it, from any number of threads at once. Its dispatcher numbered posts with a plain increment: two threads could take the same number, and one callback was dropped - an await continuation that never ran (E2E C01 hung a minute with the UI thread idle). | TestHostHooks.cs |
 | `test.backup.run` | - | Backups: one pass now in every window, and what the backup folder holds afterwards. | TestHostHooks.cs |

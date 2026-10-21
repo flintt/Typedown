@@ -35,8 +35,12 @@ namespace Typedown.Core.Utilities
         // does not take - a link with a query came out with ^ in it.
         public static void OpenUrl(string url)
         {
+            if (OpenUrlOverride?.Invoke(url) == true) return;
             Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
         }
+
+        /// <summary>The test host's (Services/Automation/TestHostHooks): what would have opened is kept, and no browser comes up over the cases.</summary>
+        public static Func<string, bool> OpenUrlOverride;
 
         public static void OpenFileLocation(string filePath)
         {
