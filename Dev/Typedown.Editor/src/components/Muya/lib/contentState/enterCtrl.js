@@ -333,27 +333,41 @@ const enterCtrl = ContentState => {
       const rowContainer = this.getBlock(row.parent)
       const table = this.closest(rowContainer, 'table')
 
+      // Ctrl+Enter: out of the table, into a new paragraph after it (in the app the host's Insert paragraph after takes
+      // the key first and does the same).
       if (
         (isOsx && event.metaKey) ||
         (!isOsx && event.ctrlKey)
       ) {
-        const nextRow = this.createRow(row, false)
-        if (rowContainer.type === 'thead') {
-          let tBody = this.getBlock(rowContainer.nextSibling)
-          if (!tBody) {
-            tBody = this.createBlock('tbody')
-            this.appendChild(table, tBody)
-          }
-          if (tBody.children.length) {
-            this.insertBefore(nextRow, tBody.children[0])
-          } else {
-            this.appendChild(tBody, nextRow)
-          }
-        } else {
-          this.insertAfter(nextRow, row)
+        const figure = this.getBlock(table.parent)
+        const paragraph = this.createBlockP()
+        this.insertAfter(paragraph, figure)
+        const key = paragraph.children[0].key
+        this.cursor = {
+          start: { key, offset: 0 },
+          end: { key, offset: 0 }
         }
-        table.row++
+        return this.partialRender()
       }
+
+      // Enter: a new row below this one, the caret in its first cell, as a reader asked (it went to the next row, out
+      // of the table from the last). The arrow keys still go from row to row.
+      const nextRow = this.createRow(row, false)
+      if (rowContainer.type === 'thead') {
+        let tBody = this.getBlock(rowContainer.nextSibling)
+        if (!tBody) {
+          tBody = this.createBlock('tbody')
+          this.appendChild(table, tBody)
+        }
+        if (tBody.children.length) {
+          this.insertBefore(nextRow, tBody.children[0])
+        } else {
+          this.appendChild(tBody, nextRow)
+        }
+      } else {
+        this.insertAfter(nextRow, row)
+      }
+      table.row++
 
       const { key } = getFirstBlockInNextRow(row)
       const offset = 0

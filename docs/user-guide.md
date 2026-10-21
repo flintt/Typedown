@@ -80,6 +80,7 @@ F11 全屏。
 | 有序列表 / 无序列表 / 任务列表 | Ctrl+Shift+[ / Ctrl+Shift+] / Ctrl+Shift+X |
 | 引用 / 代码块 / 公式块 / 表格 | Ctrl+Shift+Q / Ctrl+Shift+K / Ctrl+Shift+M / Ctrl+Shift+T |
 | 在前面 / 后面插入段落 | Ctrl+Shift+Enter / Ctrl+Enter |
+| 表格：下方加一行 / 单元格内换行 / 跳出表格 | Enter / Shift+Enter 或 Alt+Enter / Ctrl+Enter |
 | 查找 / 替换 / 查找下一个 | Ctrl+F / Ctrl+H / F3 |
 | 粘贴为纯文本 | Ctrl+Shift+V |
 | 打印 | Alt+Shift+P |

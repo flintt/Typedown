@@ -80,6 +80,7 @@ In visual editing, typing Markdown syntax turns into formatting right away: `## 
 | Numbered list / bullets / task list | Ctrl+Shift+[ / Ctrl+Shift+] / Ctrl+Shift+X |
 | Quote / code block / math block / table | Ctrl+Shift+Q / Ctrl+Shift+K / Ctrl+Shift+M / Ctrl+Shift+T |
 | Insert paragraph before / after | Ctrl+Shift+Enter / Ctrl+Enter |
+| Table: add a row below / line break in a cell / leave the table | Enter / Shift+Enter or Alt+Enter / Ctrl+Enter |
 | Find / replace / find next | Ctrl+F / Ctrl+H / F3 |
 | Paste as plain text | Ctrl+Shift+V |
 | Print | Alt+Shift+P |
