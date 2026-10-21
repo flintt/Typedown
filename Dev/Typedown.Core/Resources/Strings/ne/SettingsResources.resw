@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>कागजातको बायाँको सट्टा दायाँतिर साइड बार देखाउनुहोस्</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>बन्द गर्दा सुरक्षित नगरिएका परिवर्तनहरू राख्नुहोस्</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>सुरक्षित गर्न नसोधी बन्द गर्नुहोस्: सुरक्षित नगरिएका कागजातहरू जस्ता थिए त्यस्तै, अझै सुरक्षित नगरिएका, अघिल्लो सत्रका ट्याबहरूसँग फर्किन्छन्</value>
+  </data>
 </root>

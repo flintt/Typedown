@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>Бүйірлік жолақты құжаттың сол жағының орнына оң жағында көрсету</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Жапқанда сақталмаған өзгерістерді сақтау</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Сақтау туралы сұрамай жабу: сақталмаған құжаттар соңғы сеанстың қойындыларымен бірге бұрынғыдай, әлі сақталмаған күйде қайтады</value>
+  </data>
 </root>

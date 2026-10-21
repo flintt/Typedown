@@ -297,6 +297,10 @@ namespace Typedown.Core.ViewModels
             // throttle would otherwise still read as saved, and the window would close without asking about it.
             // If the editor did not answer, treat the active document as dirty rather than closing it silently.
             var flushed = await EditorViewModel.FlushContentAsync();
+            // Kept instead of asked about (Settings > Keep unsaved changes when closing): every unsaved document backed up
+            // as it is now - and asked about after all when one could not be, or the editor did not answer.
+            if (flushed && ServiceProvider.GetService<SettingsViewModel>().KeepUnsavedOnClose && await FileViewModel.KeepUnsavedAsync())
+                return true;
             foreach (var tab in Tabs.ToList())
             {
                 var dirty = tab == ActiveTab ? (!EditorViewModel.Saved || !flushed) : !tab.Saved;

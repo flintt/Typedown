@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>ສະແດງແຖບດ້ານຂ້າງຢູ່ເບື້ອງຂວາຂອງເອກະສານແທນເບື້ອງຊ້າຍ</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>ເກັບການປ່ຽນແປງທີ່ບໍ່ໄດ້ບັນທຶກໄວ້ເມື່ອປິດ</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>ປິດໂດຍບໍ່ຖາມໃຫ້ບັນທຶກ: ເອກະສານທີ່ບໍ່ໄດ້ບັນທຶກຈະກັບມາຄືເກົ່າ, ຍັງບໍ່ໄດ້ບັນທຶກ, ພ້ອມກັບແຖບຂອງເຊສຊັນສຸດທ້າຍ</value>
+  </data>
 </root>

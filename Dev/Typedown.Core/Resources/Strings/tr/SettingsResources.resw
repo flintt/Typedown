@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>Kenar çubuğunu belgenin solu yerine sağında göster</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Kapatırken kaydedilmemiş değişiklikleri koru</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Kaydetmeyi sormadan kapat: kaydedilmemiş belgeler, son oturumun sekmeleriyle birlikte, hâlâ kaydedilmemiş olarak olduğu gibi geri gelir</value>
+  </data>
 </root>

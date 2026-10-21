@@ -240,6 +240,7 @@ internal static partial class Program
             await Case("LD01 a load the editor gives back rewritten is loaded once more and keeps the file's text; one rewritten again is taken after that one retry, not retried without end", LD01);
             await Case("NV01 the editor page is never taken to another address: a script sending it to a web site is refused, and the document is still there", NV01);
             await Case("VM01 Vim's search in source mode on a long document: / and the letters typed after it go into the search box, nothing into the document, and Enter goes to the match", VM01);
+            await Case("KU01 Keep unsaved changes when closing: every window closes without asking, the app exits, and started again it has the titled and the untitled document back as they were, unsaved, without a recovery question", KU01);
             await Case("SP01 the side pane on the right (Settings > View): right of the document, which is not mirrored; its splitter dragged left widens it; off, it is on the left again", SP01);
             // An edition's own cases (Edition.<name>.cs beside this file, in the edition's repository); none here.
             var editionCases = new List<(string Name, Func<List<string>, Task> Run)>();
@@ -4054,28 +4055,7 @@ internal static partial class Program
             dying.WaitForExit(10000);
         }
         notes.Add("killed");
-        File.Delete(Path.Combine(testRoot, "automation-endpoint.txt"));
-        // Shell-started: a child started directly would inherit this driver's redirected output, and the script
-        // running the driver would then wait for the test host to exit before it could finish.
-        var restarted = Process.Start(new ProcessStartInfo(hostExe, $"--automation-test-root \"{testRoot}\"") { UseShellExecute = true })!;
-        hostPid = restarted.Id;
-        notes.Add($"restarted pid {hostPid}");
-        var restartedEndpoint = await ReadEndpointFile(Path.Combine(testRoot, "automation-endpoint.txt")) ?? throw new CaseFailed("the restarted host never published its endpoint");
-        Check(restartedEndpoint == endpoint, $"the restarted host listens on the same endpoint as before ({restartedEndpoint} vs {endpoint})");
-        var listenError = Path.Combine(testRoot, "automation-endpoint-error.txt");
-        Client? afterClient = null;
-        for (var i = 0; i < 30 && afterClient == null; i++)
-        {
-            if (File.Exists(listenError)) throw new CaseFailed("the restarted host could not listen: " + File.ReadAllText(listenError));
-            try { afterClient = await Connect(); }
-            catch (TimeoutException) { }
-        }
-        if (afterClient == null) throw new CaseFailed("the restarted host never accepted a connection");
-        using var after = afterClient;
-        notes.Add("connected");
-        await Initialize(after, "e2e R04 after");
-        await WaitForWindow(after);
-        notes.Add("window up");
+        using var after = await StartHostAgain(notes, "e2e R04 after");
         // The recovery question: answered as a person would, with Enter (Recover is the default button).
         JArray documents = new();
         for (var i = 0; i < 60; i++)
@@ -4099,6 +4079,100 @@ internal static partial class Program
         Check(await TextOf(reopened) == "# T\n\nedited, not saved\n", "the titled document recovers its unsaved text");
         Check(Disk(titled) == "# T\n\nsaved\n", "and its file was never written");
         notes.Add($"recovered {u1[..6]} {u2[..6]} and {Path.GetFileName(titled)}");
+    }
+
+    /// <summary>
+    /// The test host started again on the same test root, after it was killed or exited (R04, KU01): connected, the
+    /// session initialized and its first window up. The endpoint file of the one before is deleted first.
+    /// </summary>
+    private static async Task<Client> StartHostAgain(List<string> notes, string session)
+    {
+        File.Delete(Path.Combine(testRoot, "automation-endpoint.txt"));
+        // Shell-started: a child started directly would inherit this driver's redirected output, and the script
+        // running the driver would then wait for the test host to exit before it could finish.
+        var restarted = Process.Start(new ProcessStartInfo(hostExe, $"--automation-test-root \"{testRoot}\"") { UseShellExecute = true })!;
+        hostPid = restarted.Id;
+        notes.Add($"restarted pid {hostPid}");
+        var restartedEndpoint = await ReadEndpointFile(Path.Combine(testRoot, "automation-endpoint.txt")) ?? throw new CaseFailed("the restarted host never published its endpoint");
+        Check(restartedEndpoint == endpoint, $"the restarted host listens on the same endpoint as before ({restartedEndpoint} vs {endpoint})");
+        var listenError = Path.Combine(testRoot, "automation-endpoint-error.txt");
+        Client? client = null;
+        for (var i = 0; i < 30 && client == null; i++)
+        {
+            if (File.Exists(listenError)) throw new CaseFailed("the restarted host could not listen: " + File.ReadAllText(listenError));
+            try { client = await Connect(); }
+            catch (TimeoutException) { }
+        }
+        if (client == null) throw new CaseFailed("the restarted host never accepted a connection");
+        notes.Add("connected");
+        await Initialize(client, session);
+        await WaitForWindow(client);
+        notes.Add("window up");
+        return client;
+    }
+
+    // A reader asked to close with documents unsaved and find them again on the next start, as Notepad++ does (Settings >
+    // Keep unsaved changes when closing). Closed, not killed: every window closes without asking, the app exits, and
+    // started again it has the titled document's edit and the untitled document back, both still unsaved, without a
+    // recovery question.
+    private static async Task KU01(List<string> notes)
+    {
+        var titled = Fixture("ku01.md", "# KU01\n\nsaved\n");
+        string t, u;
+        using (var c = await Session("e2e KU01 before"))
+        {
+            t = await Open(c, titled);
+            var windowId = await WindowIdOf(c, t);
+            await c.Call("test.settings.set", new { windowId, name = "KeepUnsavedOnClose", value = true });
+            await c.Call("document.replace", new { documentId = t, baseRevision = await Revision(c, t), text = "# KU01\n\nedited, not saved\n", normalizationPolicy = "allowUnknown" });
+            u = (string)(await c.Call("document.create", new { text = "# KU01 untitled\n\nkept too\n", reveal = "document", normalizationPolicy = "allowUnknown" }))["documentId"]!;
+            await c.Call("document.focus", new { documentId = t });
+            notes.Add($"t={t[..6]} u={u[..6]}");
+            // Every window closed as a person closes it, the titled document's last (its tabs are the session kept).
+            var windows = ((JArray)(await c.Call("window.list"))["windows"]!).Select(w => (string)w["windowId"]!).ToList();
+            var last = windowId;
+            foreach (var w in windows.Where(w => w != last).Append(last))
+            {
+                var handle = await WindowOf(w, c);
+                PostMessage(handle, 0x0010, IntPtr.Zero, IntPtr.Zero);
+                for (var i = 0; i < 40 && IsWindow(handle); i++) await Task.Delay(250);
+                Check(!IsWindow(handle), "a window closes without asking about its unsaved documents");
+            }
+        }
+        using (var host = Process.GetProcessById(hostPid))
+            Check(host.WaitForExit(20000), "the app exits once its windows are closed");
+        notes.Add("closed, exited");
+
+        using var after = await StartHostAgain(notes, "e2e KU01 after");
+        JArray documents = new();
+        JToken? kept = null, untitled = null;
+        // Without answering anything: no recovery question may stand between the start and the documents.
+        for (var i = 0; i < 60 && (kept == null || untitled == null); i++)
+        {
+            documents = (JArray)(await after.Call("document.list"))["documents"]!;
+            kept = documents.FirstOrDefault(d => string.Equals((string?)d["path"], titled, StringComparison.OrdinalIgnoreCase));
+            untitled = documents.FirstOrDefault(d => (string)d["documentId"]! == u);
+            if (kept == null || untitled == null) await Task.Delay(250);
+        }
+        notes.Add("after the start: " + string.Join(", ", documents.Select(d => $"{(string?)d["path"] ?? "untitled"} saved={d["saved"]}")));
+        Check(kept != null, "the titled document is open again (its tab came back)");
+        Check(untitled != null, "the untitled document is open again, with its id");
+        var keptId = (string)kept!["documentId"]!;
+        async Task<string> TextOf(string id) => ((string)(await Get(after, id))["text"]!).Replace("\r\n", "\n");
+        try
+        {
+            Check(await TextOf(keptId) == "# KU01\n\nedited, not saved\n" && !(bool)kept["saved"]!, "the titled document has its unsaved edit, still unsaved");
+            Check(await TextOf(u) == "# KU01 untitled\n\nkept too\n" && !(bool)untitled!["saved"]!, "the untitled document has its text, still unsaved");
+            Check(Disk(titled) == "# KU01\n\nsaved\n", "and the file was never written");
+        }
+        finally
+        {
+            // Nothing of this case left for the next ones: the setting off, the file as it was, the untitled one emptied.
+            var windowId = await WindowIdOf(after, keptId);
+            try { await after.Call("test.settings.set", new { windowId, name = "KeepUnsavedOnClose", value = false }); } catch { }
+            try { await after.Call("document.replace", new { documentId = keptId, baseRevision = await Revision(after, keptId), text = "# KU01\n\nsaved\n", normalizationPolicy = "allowUnknown" }); await after.Call("document.save", new { documentId = keptId }); await after.Call("document.close", new { documentId = keptId }); } catch (Exception ex) { notes.Add("cleanup titled: " + ex.Message.Split('\n')[0]); }
+            try { await after.Call("document.replace", new { documentId = u, baseRevision = await Revision(after, u), text = "\n", normalizationPolicy = "allowUnknown" }); await after.Call("document.close", new { documentId = u }); } catch (Exception ex) { notes.Add("cleanup untitled: " + ex.Message.Split('\n')[0]); }
+        }
     }
 
     /// <summary>

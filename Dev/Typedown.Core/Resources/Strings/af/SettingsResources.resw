@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>Wys die sybalk regs van die dokument in plaas van links</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Hou ongestoorde veranderinge by sluit</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Sluit sonder om te vra om te stoor: ongestoorde dokumente kom terug soos hulle was, steeds ongestoor, met die vorige sessie se oortjies</value>
+  </data>
 </root>

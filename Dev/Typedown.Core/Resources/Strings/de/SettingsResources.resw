@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>Die Seitenleiste rechts statt links vom Dokument anzeigen</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Nicht gespeicherte Änderungen beim Schließen behalten</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Ohne Rückfrage zum Speichern schließen: nicht gespeicherte Dokumente kommen unverändert und weiterhin ungespeichert mit den Tabs der letzten Sitzung zurück</value>
+  </data>
 </root>

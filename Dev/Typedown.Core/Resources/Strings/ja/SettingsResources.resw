@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>サイドバーを文書の左側ではなく右側に表示します</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>閉じるときに未保存の変更を保持する</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>保存するか確認せずに閉じます。未保存の文書は前回のタブとともに、未保存のままそのまま復元されます</value>
+  </data>
 </root>

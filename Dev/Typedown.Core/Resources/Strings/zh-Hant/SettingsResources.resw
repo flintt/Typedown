@@ -969,4 +969,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>將側欄顯示在文件右側，而不是左側</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>關閉時保留未儲存的修改</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>關閉時不再詢問是否儲存：未儲存的文件下次開啟時原樣還原，仍標示為未儲存，並還原上次開啟的分頁</value>
+  </data>
 </root>

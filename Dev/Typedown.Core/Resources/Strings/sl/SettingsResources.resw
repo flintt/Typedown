@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>Prikaži stransko vrstico desno od dokumenta namesto levo</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Ob zapiranju obdrži neshranjene spremembe</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Zapri brez vprašanja o shranjevanju: neshranjeni dokumenti se vrnejo takšni, kot so bili, še vedno neshranjeni, z zavihki zadnje seje</value>
+  </data>
 </root>

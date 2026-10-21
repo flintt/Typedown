@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>De zijbalk rechts van het document tonen in plaats van links</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Niet-opgeslagen wijzigingen bewaren bij sluiten</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Sluiten zonder te vragen om op te slaan: niet-opgeslagen documenten komen terug zoals ze waren, nog steeds niet opgeslagen, met de tabbladen van de vorige sessie</value>
+  </data>
 </root>

@@ -168,6 +168,11 @@ namespace Typedown.Core.ViewModels
         public string FontFamily { get => GetSettingValue(""); set => SetSettingValue(value); }
         public string TextDirection { get => GetSettingValue("auto"); set => SetSettingValue(value); }
         public bool AutoSave { get => GetSettingValue(false); set => SetSettingValue(value); }
+        /// <summary>
+        /// A window closes without asking about unsaved documents: they are kept (backed up) and come back as they were,
+        /// still unsaved, the next time - with the last session's tabs.
+        /// </summary>
+        public bool KeepUnsavedOnClose { get => GetSettingValue(false); set => SetSettingValue(value); }
         public bool AutoReload { get => GetSettingValue(true); set => SetSettingValue(value); }
         public bool AskBeforeReload { get => GetSettingValue(true); set => SetSettingValue(value); }
         public AppTheme AppTheme { get => GetSettingValue(AppTheme.Default); set => SetSettingValue(value); }

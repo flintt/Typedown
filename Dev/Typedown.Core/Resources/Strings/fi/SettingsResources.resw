@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>Näytä sivupalkki asiakirjan oikealla puolella vasemman sijaan</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Säilytä tallentamattomat muutokset suljettaessa</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Sulje kysymättä tallentamisesta: tallentamattomat asiakirjat palaavat ennallaan, yhä tallentamattomina, edellisen istunnon välilehtien kanssa</value>
+  </data>
 </root>

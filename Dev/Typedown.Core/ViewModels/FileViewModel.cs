@@ -194,6 +194,23 @@ namespace Typedown.Core.ViewModels
             return ok;
         }
 
+        /// <summary>
+        /// Every unsaved document backed up now, for a window closing that keeps them (Settings > Keep unsaved changes when
+        /// closing): true when each one is on disk as it is - the next start brings them back - false when one is not.
+        /// </summary>
+        public async Task<bool> KeepUnsavedAsync()
+        {
+            var ok = await AutoBackupFile();
+            await BackupDirtyBackgroundTabsAsync();
+            var tabs = TabsViewModel;
+            if (tabs != null)
+                foreach (var tab in tabs.Tabs)
+                    if (tab != tabs.ActiveTab && !tab.Saved && !string.IsNullOrWhiteSpace(tab.Markdown) && tab.BackupHash != tab.CurrentHash)
+                        ok = false;
+            Log.Debug($"keep unsaved on close: {(ok ? "every unsaved document backed up" : "one could not be backed up; asking")}");
+            return ok;
+        }
+
         /// <summary>Whether the save timer is in a tick (a tick that never finishes stops all later backups).</summary>
         public bool SaveTimerBusy => saveTimerRunning;
 
@@ -444,6 +461,8 @@ namespace Typedown.Core.ViewModels
         {
             string text = await AutoBackup.GetBackup(path);
             if (text == null || Common.SimpleHash(text) == fileHash) return null;
+            // Kept on purpose when the window closed (Settings > Keep unsaved changes when closing): back without asking.
+            if (SettingsViewModel.KeepUnsavedOnClose) return text;
             var dialog = AppContentDialog.Create();
             dialog.Title = Locale.GetDialogString("RecoverTitle");
             dialog.Content = Locale.GetDialogString("RecoverContent");
@@ -1020,7 +1039,9 @@ namespace Typedown.Core.ViewModels
             }
             else
             {
-                switch (SettingsViewModel.FileStartupAction)
+                // Documents kept when the window closed (Settings > Keep unsaved changes when closing) come back with the
+                // tabs they were in, whatever the start-up setting says.
+                switch (SettingsViewModel.KeepUnsavedOnClose ? Enums.FileStartupAction.RestoreSession : SettingsViewModel.FileStartupAction)
                 {
                     case Enums.FileStartupAction.OpenLast:
                         await AccessHistory.EnsureInitialized();
@@ -1044,6 +1065,17 @@ namespace Typedown.Core.ViewModels
 
         private static bool untitledRecoveryDone;
 
+        private async Task<bool> AskToRecover()
+        {
+            var dialog = AppContentDialog.Create();
+            dialog.Title = Locale.GetDialogString("RecoverTitle");
+            dialog.Content = Locale.GetDialogString("RecoverContent");
+            dialog.PrimaryButtonText = Locale.GetDialogString("Recover");
+            dialog.SecondaryButtonText = Locale.GetDialogString("Delete");
+            dialog.DefaultButton = ContentDialogButton.Primary;
+            return await dialog.ShowAsync(AppViewModel.XamlRoot) == ContentDialogResult.Primary;
+        }
+
         /// <summary>
         /// Untitled documents the last run left unsaved (it crashed, or was killed) come back as tabs of the first window,
         /// each with its own document id - once per process, after asking. Recover reopens them; Delete throws them away.
@@ -1054,13 +1086,7 @@ namespace Typedown.Core.ViewModels
             untitledRecoveryDone = true;
             var backups = AutoBackup.UntitledBackups();
             if (backups.Count == 0) return;
-            var dialog = AppContentDialog.Create();
-            dialog.Title = Locale.GetDialogString("RecoverTitle");
-            dialog.Content = Locale.GetDialogString("RecoverContent");
-            dialog.PrimaryButtonText = Locale.GetDialogString("Recover");
-            dialog.SecondaryButtonText = Locale.GetDialogString("Delete");
-            dialog.DefaultButton = ContentDialogButton.Primary;
-            if (await dialog.ShowAsync(AppViewModel.XamlRoot) != ContentDialogResult.Primary)
+            if (!SettingsViewModel.KeepUnsavedOnClose && !await AskToRecover())
             {
                 foreach (var (documentId, _) in backups) AutoBackup.DeleteBackup(null, documentId);
                 return;

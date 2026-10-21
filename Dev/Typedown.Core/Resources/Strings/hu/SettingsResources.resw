@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>Az oldalsáv megjelenítése a dokumentum jobb oldalán a bal helyett</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Nem mentett módosítások megtartása bezáráskor</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Bezárás mentési kérdés nélkül: a nem mentett dokumentumok változatlanul, továbbra is mentetlenül térnek vissza az előző munkamenet lapjaival</value>
+  </data>
 </root>

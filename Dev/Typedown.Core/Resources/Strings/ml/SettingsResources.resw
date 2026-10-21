@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>ഡോക്യുമെന്റിന്റെ ഇടതുവശത്തിന് പകരം വലതുവശത്ത് സൈഡ് ബാർ കാണിക്കുക</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>അടയ്ക്കുമ്പോൾ സംരക്ഷിക്കാത്ത മാറ്റങ്ങൾ സൂക്ഷിക്കുക</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>സംരക്ഷിക്കാൻ ചോദിക്കാതെ അടയ്ക്കുക: സംരക്ഷിക്കാത്ത പ്രമാണങ്ങൾ അതേപടി, ഇപ്പോഴും സംരക്ഷിക്കാതെ, കഴിഞ്ഞ സെഷനിലെ ടാബുകൾക്കൊപ്പം തിരിച്ചുവരും</value>
+  </data>
 </root>

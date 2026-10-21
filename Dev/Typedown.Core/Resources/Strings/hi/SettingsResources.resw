@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>दस्तावेज़ के बाईं ओर के बजाय दाईं ओर साइड बार दिखाएँ</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>बंद करते समय बिना सहेजे परिवर्तन रखें</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>सहेजने के लिए पूछे बिना बंद करें: बिना सहेजे दस्तावेज़ जैसे थे वैसे ही, अब भी बिना सहेजे, पिछले सत्र के टैब के साथ वापस आते हैं</value>
+  </data>
 </root>

@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>ਦਸਤਾਵੇਜ਼ ਦੇ ਖੱਬੇ ਪਾਸੇ ਦੀ ਬਜਾਏ ਸੱਜੇ ਪਾਸੇ ਸਾਈਡ ਬਾਰ ਦਿਖਾਓ</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>ਬੰਦ ਕਰਨ ਵੇਲੇ ਅਣਸੰਭਾਲੀਆਂ ਤਬਦੀਲੀਆਂ ਰੱਖੋ</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>ਸੰਭਾਲਣ ਲਈ ਪੁੱਛੇ ਬਿਨਾਂ ਬੰਦ ਕਰੋ: ਅਣਸੰਭਾਲੇ ਦਸਤਾਵੇਜ਼ ਜਿਵੇਂ ਸਨ ਉਵੇਂ, ਅਜੇ ਵੀ ਅਣਸੰਭਾਲੇ, ਪਿਛਲੇ ਸੈਸ਼ਨ ਦੀਆਂ ਟੈਬਾਂ ਨਾਲ ਵਾਪਸ ਆਉਂਦੇ ਹਨ</value>
+  </data>
 </root>

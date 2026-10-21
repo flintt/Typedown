@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>Afișează bara laterală în dreapta documentului în loc de stânga</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Păstrează modificările nesalvate la închidere</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Închide fără a întreba de salvare: documentele nesalvate revin așa cum erau, tot nesalvate, cu filele ultimei sesiuni</value>
+  </data>
 </root>

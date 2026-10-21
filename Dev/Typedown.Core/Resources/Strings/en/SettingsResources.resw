@@ -373,6 +373,12 @@
     <value>Automatically save when the file is modified</value>
     <comment>通用/打开后应用会在文件发生修改时自动保存</comment>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Keep Unsaved Changes When Closing</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Close without asking to save: unsaved documents come back as they were, still unsaved, with the last session's tabs</value>
+  </data>
   <data name="General.AutoSave.Title" xml:space="preserve">
     <value>Auto save</value>
     <comment>通用/自动保存</comment>

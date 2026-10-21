@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>Prikaži bočnu traku desno od dokumenta umesto levo</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Zadrži nesačuvane izmene pri zatvaranju</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Zatvori bez pitanja za čuvanje: nesačuvani dokumenti vraćaju se kakvi su bili, i dalje nesačuvani, sa karticama iz poslednje sesije</value>
+  </data>
 </root>

@@ -238,6 +238,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | LD01 | a load the editor gives back rewritten is loaded once more and keeps the file's text; one rewritten again is taken after that one retry, not retried without end |
 | NV01 | the editor page is never taken to another address: a script sending it to a web site is refused, and the document is still there |
 | VM01 | Vim's search in source mode on a long document: / and the letters typed after it go into the search box, nothing into the document, and Enter goes to the match |
+| KU01 | Keep unsaved changes when closing: every window closes without asking, the app exits, and started again it has the titled and the untitled document back as they were, unsaved, without a recovery question |
 | SP01 | the side pane on the right (Settings > View): right of the document, which is not mirrored; its splitter dragged left widens it; off, it is on the left again |
 | PF01 | measured: a 300 KB document opened, typed into and saved; the memory with two windows |
 | PF03 | profiled: where the host's CPU goes while it opens 300 KB documents |

@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>Shfaq shiritin anësor në të djathtë të dokumentit në vend të së majtës</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Mbaj ndryshimet e paruajtura gjatë mbylljes</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Mbyll pa pyetur për ruajtje: dokumentet e paruajtura kthehen siç ishin, ende të paruajtura, me skedat e sesionit të fundit</value>
+  </data>
 </root>

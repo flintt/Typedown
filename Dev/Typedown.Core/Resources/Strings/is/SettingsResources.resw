@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>Sýna hliðarstikuna hægra megin við skjalið í stað vinstra megin</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Halda óvistuðum breytingum við lokun</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Loka án þess að spyrja um vistun: óvistuð skjöl koma aftur eins og þau voru, enn óvistuð, með flipum síðustu lotu</value>
+  </data>
 </root>

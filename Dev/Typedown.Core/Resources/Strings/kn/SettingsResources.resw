@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>ಡಾಕ್ಯುಮೆಂಟ್‌ನ ಎಡಭಾಗದ ಬದಲು ಬಲಭಾಗದಲ್ಲಿ ಸೈಡ್ ಬಾರ್ ತೋರಿಸಿ</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>ಮುಚ್ಚುವಾಗ ಉಳಿಸದ ಬದಲಾವಣೆಗಳನ್ನು ಇರಿಸಿ</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>ಉಳಿಸಲು ಕೇಳದೆ ಮುಚ್ಚಿ: ಉಳಿಸದ ಡಾಕ್ಯುಮೆಂಟ್‌ಗಳು ಹಿಂದಿನಂತೆಯೇ, ಇನ್ನೂ ಉಳಿಸದೆ, ಕೊನೆಯ ಸೆಷನ್‌ನ ಟ್ಯಾಬ್‌ಗಳೊಂದಿಗೆ ಮರಳುತ್ತವೆ</value>
+  </data>
 </root>

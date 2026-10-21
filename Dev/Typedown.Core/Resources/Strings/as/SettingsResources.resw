@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>নথিৰ বাওঁফালৰ সলনি সোঁফালে কাষৰ বাৰ দেখুৱাওক</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>বন্ধ কৰোঁতে সংৰক্ষণ নকৰা সলনিসমূহ ৰাখক</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>সংৰক্ষণৰ বাবে নুসুধাকৈ বন্ধ কৰক: সংৰক্ষণ নকৰা নথিসমূহ আগৰ দৰেই, এতিয়াও সংৰক্ষণ নকৰাকৈ, শেষ অধিবেশনৰ টেবসমূহৰ সৈতে উভতি আহিব</value>
+  </data>
 </root>

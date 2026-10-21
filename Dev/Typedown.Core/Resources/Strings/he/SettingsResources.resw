@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>הצגת סרגל הצד מימין למסמך במקום משמאל</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>שמירת שינויים שלא נשמרו בעת סגירה</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>סגירה בלי לשאול על שמירה: מסמכים שלא נשמרו חוזרים כפי שהיו, עדיין לא שמורים, עם הכרטיסיות מההפעלה האחרונה</value>
+  </data>
 </root>

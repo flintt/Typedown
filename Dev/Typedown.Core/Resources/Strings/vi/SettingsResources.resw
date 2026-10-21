@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>Hiển thị thanh bên ở bên phải tài liệu thay vì bên trái</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Giữ thay đổi chưa lưu khi đóng</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Đóng mà không hỏi lưu: các tài liệu chưa lưu sẽ quay lại như cũ, vẫn chưa lưu, cùng các tab của phiên trước</value>
+  </data>
 </root>

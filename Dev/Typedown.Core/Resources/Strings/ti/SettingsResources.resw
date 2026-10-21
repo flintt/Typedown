@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>ናይ ጎኒ ባር ኣብ ክንዲ ጸጋም ናይቲ ሰነድ ብየማን ኣርኢ</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>ክትዓጹ ከለኻ ዘይተዓቀቡ ለውጥታት ሓዝ</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>ንምዕቃብ ከይሓተትካ ዕጾ፦ ዘይተዓቀቡ ሰነዳት ከምቲ ዝነበርዎ፣ ገና ዘይተዓቀቡ፣ ምስ ትሮታት ናይ ዝሓለፈ ክፍለ ግዜ ይምለሱ</value>
+  </data>
 </root>

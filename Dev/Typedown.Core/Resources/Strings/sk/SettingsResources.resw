@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>Zobraziť bočný panel vpravo od dokumentu namiesto vľavo</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Pri zatvorení zachovať neuložené zmeny</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Zatvoriť bez otázky na uloženie: neuložené dokumenty sa vrátia tak, ako boli, stále neuložené, s kartami z poslednej relácie</value>
+  </data>
 </root>

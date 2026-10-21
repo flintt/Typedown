@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>Показывать боковую панель справа от документа, а не слева</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Сохранять несохранённые изменения при закрытии</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Закрывать без вопроса о сохранении: несохранённые документы вернутся такими, какими были, по-прежнему несохранёнными, вместе с вкладками последнего сеанса</value>
+  </data>
 </root>

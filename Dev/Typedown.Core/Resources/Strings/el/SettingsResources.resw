@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>Εμφάνιση της πλευρικής γραμμής στα δεξιά του εγγράφου αντί για τα αριστερά</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Διατήρηση μη αποθηκευμένων αλλαγών κατά το κλείσιμο</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Κλείσιμο χωρίς ερώτηση για αποθήκευση: τα μη αποθηκευμένα έγγραφα επιστρέφουν όπως ήταν, ακόμη μη αποθηκευμένα, με τις καρτέλες της τελευταίας συνεδρίας</value>
+  </data>
 </root>

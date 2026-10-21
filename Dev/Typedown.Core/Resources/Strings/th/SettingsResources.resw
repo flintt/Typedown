@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>แสดงแถบด้านข้างทางขวาของเอกสารแทนทางซ้าย</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>เก็บการเปลี่ยนแปลงที่ยังไม่ได้บันทึกเมื่อปิด</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>ปิดโดยไม่ถามให้บันทึก: เอกสารที่ยังไม่ได้บันทึกจะกลับมาเหมือนเดิม ยังไม่ได้บันทึก พร้อมแท็บของเซสชันล่าสุด</value>
+  </data>
 </root>

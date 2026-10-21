@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>Vis sidepanelet til højre for dokumentet i stedet for til venstre</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Behold ikke-gemte ændringer ved lukning</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Luk uden at spørge om at gemme: ikke-gemte dokumenter kommer tilbage, som de var, stadig ikke gemt, med fanerne fra sidste session</value>
+  </data>
 </root>

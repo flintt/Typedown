@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>Tampilkan bilah samping di sebelah kanan dokumen, bukan di kiri</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Simpan perubahan yang belum disimpan saat menutup</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Tutup tanpa menanyakan untuk menyimpan: dokumen yang belum disimpan kembali seperti semula, tetap belum disimpan, bersama tab sesi terakhir</value>
+  </data>
 </root>

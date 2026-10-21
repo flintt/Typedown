@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>పత్రానికి ఎడమవైపు బదులు కుడివైపు సైడ్ బార్‌ను చూపించు</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>మూసివేసేటప్పుడు సేవ్ చేయని మార్పులను ఉంచు</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>సేవ్ చేయమని అడగకుండా మూసివేయి: సేవ్ చేయని పత్రాలు ఉన్నట్లుగానే, ఇంకా సేవ్ చేయకుండా, చివరి సెషన్ ట్యాబ్‌లతో తిరిగి వస్తాయి</value>
+  </data>
 </root>

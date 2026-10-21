@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>Dangos y bar ochr i'r dde o'r ddogfen yn lle i'r chwith</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Cadw newidiadau heb eu cadw wrth gau</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Cau heb ofyn am gadw: daw dogfennau heb eu cadw yn ôl fel yr oeddent, yn dal heb eu cadw, gyda thabiau'r sesiwn olaf</value>
+  </data>
 </root>

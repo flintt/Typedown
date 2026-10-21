@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>Whakaaturia te pae taha ki te taha matau o te tuhinga, kaua ki te taha mauī</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Puritia ngā panoni kāore anō kia tiakina ina katia</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Katia me te kore e pātai kia tiakina: ka hoki mai ngā tuhinga kāore anō kia tiakina pērā i mua, kāore tonu i tiakina, me ngā ripa o te wāhanga whakamutunga</value>
+  </data>
 </root>

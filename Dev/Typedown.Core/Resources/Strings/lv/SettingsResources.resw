@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>Rādīt sānjoslu dokumenta labajā pusē, nevis kreisajā</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Aizverot saglabāt nesaglabātās izmaiņas</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Aizvērt, nejautājot par saglabāšanu: nesaglabātie dokumenti atgriežas tādi, kādi bija, joprojām nesaglabāti, ar pēdējās sesijas cilnēm</value>
+  </data>
 </root>

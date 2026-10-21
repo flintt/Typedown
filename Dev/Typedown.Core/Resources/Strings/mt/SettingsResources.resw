@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>Uri l-bar tal-ġenb fuq il-lemin tad-dokument minflok fuq ix-xellug</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Żomm il-bidliet mhux salvati meta tagħlaq</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Agħlaq mingħajr ma tistaqsi biex tissejvja: id-dokumenti mhux salvati jerġgħu lura kif kienu, għadhom mhux salvati, bit-tabs tal-aħħar sessjoni</value>
+  </data>
 </root>

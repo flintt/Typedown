@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>Прикажи ја страничната лента десно од документот наместо лево</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Задржи ги незачуваните промени при затворање</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Затвори без прашање за зачувување: незачуваните документи се враќаат какви што биле, сè уште незачувани, со картичките од последната сесија</value>
+  </data>
 </root>

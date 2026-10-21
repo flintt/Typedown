@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>Mostrar la barra lateral a la derecha del documento en lugar de a la izquierda</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Conservar los cambios sin guardar al cerrar</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Cerrar sin preguntar si se desea guardar: los documentos sin guardar vuelven tal como estaban, aún sin guardar, con las pestañas de la última sesión</value>
+  </data>
 </root>

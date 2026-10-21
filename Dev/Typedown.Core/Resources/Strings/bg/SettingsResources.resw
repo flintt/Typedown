@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>Показване на страничната лента вдясно от документа вместо вляво</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Запазване на незаписаните промени при затваряне</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Затваряне без въпрос за записване: незаписаните документи се връщат такива, каквито са били, все още незаписани, с разделите от предишната сесия</value>
+  </data>
 </root>

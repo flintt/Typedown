@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>Onyesha upau wa pembeni upande wa kulia wa hati badala ya kushoto</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Hifadhi mabadiliko ambayo hayajahifadhiwa wakati wa kufunga</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Funga bila kuuliza kuhifadhi: hati ambazo hazijahifadhiwa zinarudi kama zilivyokuwa, bado hazijahifadhiwa, pamoja na vichupo vya kipindi kilichopita</value>
+  </data>
 </root>

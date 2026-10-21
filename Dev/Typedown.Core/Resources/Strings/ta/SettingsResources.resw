@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>ஆவணத்தின் இடதுபுறத்திற்குப் பதிலாக வலதுபுறத்தில் பக்கப்பட்டியைக் காட்டு</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>மூடும்போது சேமிக்காத மாற்றங்களை வைத்திரு</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>சேமிக்கக் கேட்காமல் மூடு: சேமிக்காத ஆவணங்கள் இருந்தபடியே, இன்னும் சேமிக்கப்படாமல், கடைசி அமர்வின் தாவல்களுடன் திரும்பும்</value>
+  </data>
 </root>

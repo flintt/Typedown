@@ -940,4 +940,10 @@
   <data name="View.SidePaneOnRight.Description" xml:space="preserve">
     <value>Bonisa ibha eseceleni ngakwesokudla kwedokhumenti esikhundleni sangakwesobunxele</value>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Gcina izinguquko ezingagciniwe lapho uvala</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Vala ngaphandle kokubuza ukulondoloza: amadokhumenti angagciniwe abuya njengoba ayenjalo, esengagciniwe, namathebhu eseshini edlule</value>
+  </data>
 </root>
