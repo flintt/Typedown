@@ -1,15 +1,17 @@
 // First real visual edit: what does Muya's serialization do to a document once the reader types into it?
 //
 // Until the first edit the editor hands back the loaded source untouched (source-stability-check.js). The first
-// real edit makes Muya's whole export the document text. The editor predicts that rewrite before it happens
+// real edit rewrites at most Muya's whole export into the document text - the source is kept where the edit was not
+// (services/sourceMerge, source-keep-check.js), the export where that does not read back. The editor predicts that
+// most before it happens
 // (window.__typedownPendingNormalization, services/normalization.ts), and automation writes are gated on the
 // prediction. This check holds the prediction to what actually happens:
 //
 //   1. load the fixture with a paragraph "EDITHERE" appended, in source mode;
 //   2. switch to visual mode and read the prediction and Muya's export;
 //   3. click at the end of "EDITHERE" and type "X" on the keyboard;
-//   4. flush: the text must be the export with "EDITHERE" -> "EDITHEREX", nothing else, and the prediction
-//      afterwards must be "none".
+//   4. flush: the text must be the source or the export with "EDITHERE" -> "EDITHEREX", nothing else, Muya must
+//      read it back as that export, and the prediction afterwards must be "none".
 //
 // The verdict of every fixture (none / unknown / unsafe, with reasons) is kept in first-edit-known.json. A fixture
 // whose verdict gets worse fails the check; one that gets better asks for the baseline to be updated. "unsafe"
@@ -38,6 +40,7 @@ const anchor = 'EDITHERE';
 (async () => {
   const { page, errors, mode, flush, load, pause, close } = await openEditor();
   const failures = [], improved = [], results = {};
+  let keptSource = 0;
   try {
     for (const [name, text] of selected) {
       const before = failures.length;
@@ -73,6 +76,8 @@ const anchor = 'EDITHERE';
           }
           return null;
         }, anchor);
+        // A long document is drawn a part at a time: its last paragraph is on the page once all of it is.
+        await page.waitForFunction(() => !(window.__typedownMuya && window.__typedownMuya.renderPending), { timeout: 60000 });
         let point = await locate();
         for (let tries = 0; point && !point.inside && tries < 3; tries++) {
           await page.mouse.click(point.x, point.y);
@@ -100,7 +105,11 @@ const anchor = 'EDITHERE';
 
         const actual = await flush();
         const expected = exported.replace(anchor, anchor + 'X');
-        if (actual !== expected) fail(`the edit did more than the prediction said: ${firstDifference(expected, actual)}`);
+        const kept = loaded.replace(anchor, anchor + 'X');
+        if (actual !== expected && actual !== kept) fail(`the edit did more than the prediction said: ${firstDifference(expected, actual)}`);
+        else if (actual === kept && kept !== expected) keptSource++;
+        const readBack = await page.evaluate(t => window.__typedownMuya.normalizeMarkdown(t), actual);
+        if (readBack !== expected) fail(`the text does not read back as the export: ${firstDifference(expected, readBack)}`);
         const after = await page.evaluate(() => window.__typedownPendingNormalization());
         if (after?.pendingNormalization !== 'none') fail(`after the edit the prediction is ${after?.pendingNormalization}, not none`);
 
@@ -131,7 +140,7 @@ const anchor = 'EDITHERE';
   const counts = {};
   for (const r of Object.values(results)) counts[r.pendingNormalization] = (counts[r.pendingNormalization] || 0) + 1;
   const unsafe = Object.entries(results).filter(([, r]) => r.pendingNormalization === 'unsafe');
-  console.log(`verdicts: ${JSON.stringify(counts)}`);
+  console.log(`verdicts: ${JSON.stringify(counts)}; the source kept where not edited in ${keptSource} of ${selected.length}`);
   if (unsafe.length) console.log(`unsafe (a first keystroke would lose text):\n  ${unsafe.map(([n, r]) => `${n}: ${r.reasons.join(',')}`).join('\n  ')}`);
   if (update && !failures.length) {
     fs.writeFileSync(knownFile, JSON.stringify(only ? { ...known, ...results } : results, null, 2) + '\n');

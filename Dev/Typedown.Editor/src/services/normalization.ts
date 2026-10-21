@@ -2,9 +2,10 @@
 //
 // Muya imports Markdown into its own model and exports a normalized serialization. Until the first real edit the
 // editor maps that normalized text back to the original source (`importedRef` in components/Muya), so an unedited
-// document round-trips exactly. The first real edit makes the whole normalized serialization the document text.
-// `source` vs `normalized` therefore predicts that first-edit rewrite, and automation writes are gated on it
-// (docs/automation-api-spec.md, section 2.2):
+// document round-trips exactly. A real edit keeps the source where it did not edit (services/sourceMerge) when the
+// merge reads back exactly; otherwise - and for documents past the merge's length - it makes the whole normalized
+// serialization the document text. `source` vs `normalized` therefore predicts the most a first edit can rewrite,
+// and automation writes are gated on it (docs/automation-api-spec.md, section 2.2):
 //
 //   none            - identical.
 //   knownFormatting - only transforms on a proven whitelist, with every protected payload intact. The whitelist is

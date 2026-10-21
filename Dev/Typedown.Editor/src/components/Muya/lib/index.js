@@ -241,6 +241,15 @@ class Muya {
     return new ExportMarkdown(blocks, listIndentation, isGitlabCompatibilityEnabled, { alignTableColumns: tableAlignColumns !== false }).generate();
   }
 
+  /** A text as the editor writes it back: read into a model of its own and exported, the document shown untouched. */
+  normalizeMarkdown(markdown) {
+    if (!this.contentState) return markdown
+    const blocks = this.contentState.markdownToState(markdown)
+    const { isGitlabCompatibilityEnabled, listIndentation } = this.contentState
+    const { tableAlignColumns } = this.options
+    return new ExportMarkdown(blocks, listIndentation, isGitlabCompatibilityEnabled, { alignTableColumns: tableAlignColumns !== false }).generate()
+  }
+
   getTOC() {
     return this.contentState.getTOC()
   }

@@ -62,6 +62,7 @@ import FrontMenu from 'components/Muya/lib/ui/frontMenu'
 import FormatPicker from 'components/Muya/lib/ui/formatPicker'
 import { createApplicationMenuState } from "services/menuState";
 import { classifyNormalization, extractProtectedPayload } from "services/normalization";
+import { alignment, cursorIn, mergeSource, splitLines } from "services/sourceMerge";
 import { highlightExternalChange, scrollTargetForChange } from "services/externalChange";
 import { setVimState } from "services/vim";
 import { createReadingKeys } from "services/vimReading";
@@ -136,6 +137,42 @@ const DIAGRAM_TYPES = new Set(['mermaid', 'flowchart', 'sequence', 'plantuml', '
 const hasDiagram = (blocks: any[]): boolean => blocks.some(b => DIAGRAM_TYPES.has(b.functionType) || (b.children?.length && hasDiagram(b.children)))
 // Keys that move the caret or the page and change nothing in the document.
 const MOVING_KEYS = new Set(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Home', 'End', 'PageUp', 'PageDown', 'Shift', 'Control', 'Alt', 'Meta', 'CapsLock', 'Escape'])
+
+// The reader's own text kept where they did not edit (services/sourceMerge): one edit made the whole of Muya's export
+// the document, and a version history or a diff showed nearly every line changed. Used only when Muya reads the result
+// back as exactly what it would have written (normalizeMarkdown), else its export as before. Up to this length: reading
+// back a document of 300,000 characters takes about 200 ms, too long for every change while typing.
+const KEEP_SOURCE_UP_TO = 150000
+const sourceLines = new WeakMap<object, { source: string[], base: string[], toSource: Int32Array }>()
+const sourceKept = { kept: 0, fellBack: 0, last: '' };
+(window as any).__typedownSourceKept = sourceKept
+
+function keptSource(muya: any, imported: { source: string, normalized: string }, markdown: string): string {
+    if (imported.source === imported.normalized || imported.source.length > KEEP_SOURCE_UP_TO || !muya?.normalizeMarkdown) return markdown
+    let lines = sourceLines.get(imported)
+    if (!lines) {
+        const source = splitLines(imported.source), base = splitLines(imported.normalized)
+        lines = { source, base, toSource: alignment(base, source) }
+        sourceLines.set(imported, lines)
+    }
+    let merged: string | null
+    try {
+        merged = mergeSource(lines.source, lines.base, splitLines(markdown), lines.toSource)
+        if (merged == null) return markdown
+        if (muya.normalizeMarkdown(merged) !== markdown) {
+            sourceKept.fellBack++
+            sourceKept.last = 'fell back: the merge did not read back as the export'
+            return markdown
+        }
+    } catch (e) {
+        sourceKept.fellBack++
+        sourceKept.last = 'fell back: ' + (e as Error).message
+        return markdown
+    }
+    sourceKept.kept++
+    sourceKept.last = 'kept'
+    return merged
+}
 
 /** What is known of the document shown, to tell whether it may be kept when a tab switch replaces it. */
 interface ShownDocument {
@@ -764,7 +801,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
 
     useEffect(() => editor?.on('contentChange', ({ markdown, wordCount, cursor, toc: { toc, cur } }: any) => {
         const imported = importedRef.current
-        const text = imported && markdown === imported.normalized ? imported.source : markdown
+        const text = !imported ? markdown : markdown === imported.normalized ? imported.source : keptSource(editor, imported, markdown)
         markdownRef.current = text;
         markLongDocument()
         const shown = shownRef.current
@@ -774,8 +811,10 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         }
 
         // 同步内容与光标
+        // The caret as a line and column of the text the host holds (the source, where it was kept), not of Muya's
+        // export: the host puts it back by that text's lines (a reload, an automation edit).
         onMarkdownChange(text)
-        onCursorChange(cursor)
+        onCursorChange(text === markdown ? cursor : cursorIn(markdown, text, cursor))
 
         // StateChange 必须在 onMarkdownChange、onCursorChange 之后发送，否则会导致编辑器内容/光标不同步
         onStateChange({ wordCount, toc, cur })
