@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -91,10 +91,26 @@ namespace Typedown.Core.Controls.SettingControls.SettingItems
             var builtInCount = Enums.Enumerable.AppThemes.Count;
             var index = ThemeBox.SelectedIndex;
             if (index < 0) return;
-            if (index < builtInCount)
-                Settings.ApplyBuiltInTheme(Enums.Enumerable.AppThemes[index]);
-            else if (index - builtInCount < themes.Count)
-                Settings.ApplyCustomTheme(themes[index - builtInCount]);
+            void Apply()
+            {
+                if (index < builtInCount)
+                    Settings.ApplyBuiltInTheme(Enums.Enumerable.AppThemes[index]);
+                else if (index - builtInCount < themes.Count)
+                    Settings.ApplyCustomTheme(themes[index - builtInCount]);
+            }
+            // Once its list has closed: the theme changed while the list was still closing left the drop-down undrawn
+            // (from a dark theme to Light it was gone from the page until clicked; TX01).
+            if (!ThemeBox.IsDropDownOpen)
+            {
+                Apply();
+                return;
+            }
+            void Closed(object s, object a)
+            {
+                ThemeBox.DropDownClosed -= Closed;
+                DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, Apply);
+            }
+            ThemeBox.DropDownClosed += Closed;
         }
 
         /// <summary>Opens the document that explains the theme format, which ships next to the app.</summary>
