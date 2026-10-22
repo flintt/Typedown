@@ -1544,6 +1544,27 @@ span.ag-footnote-backlink {
   pointer-events: none;
 }
 
+/* Vim's command line (/ ? : in source mode): at the bottom of the window, as Vim has it. It was at the bottom of the
+   editor, which is the whole document: once the search moved the page as it was typed (incremental search), what was
+   typed was out of sight at the end of the document. */
+.CodeMirror-dialog.CodeMirror-dialog-bottom {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 11;
+  padding: 4px 16px;
+  border-top: 1px solid var(--editorColor10, rgba(0, 0, 0, 0.1));
+  background: var(--editorBgColor, #fff);
+  color: var(--editorColor, inherit);
+  font: 13px/1.6 Consolas, "Cascadia Mono", monospace;
+}
+
+.CodeMirror-dialog.CodeMirror-dialog-bottom input {
+  color: inherit;
+  font: inherit;
+}
+
 /* The first screen of a long document while the editor builds it (services/loadPreview.ts): over the page, in the
    editor's colours and measures, taking no clicks. */
 #td-load-preview {
