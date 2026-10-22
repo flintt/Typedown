@@ -1592,12 +1592,17 @@ span.ag-footnote-backlink {
 #ag-editor-id::before {
   content: '';
   display: block;
+  /* The properties are registered as not inherited (parser/render/index.js), so a change of them on the root restyles
+     the root and these two, not the whole document under it: written every 100 ms while a long document is drawn, it
+     was four fifths of the time (1.5 MB of HTML-heavy blocks: 84 blocks drawn in 5 s). */
+  --td-room-above: inherit;
   height: var(--td-room-above, 0px);
 }
 
 #ag-editor-id::after {
   content: '';
   display: block;
+  --td-room-below: inherit;
   height: var(--td-room-below, 0px);
 }
 

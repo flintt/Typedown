@@ -9,6 +9,15 @@ import renderBlock from './renderBlock'
 let mermaidRenderId = 0
 const MERMAID_RENDER_CACHE_LIMIT = 32
 
+// The room kept for the part of a document not drawn yet (estimateRest), as properties not inherited: written on the
+// root, they restyle only it and its ::before and ::after (which take them explicitly, assets/styles/index.css). As
+// plain custom properties every element of the document was restyled each time.
+try {
+  for (const name of ['--td-room-above', '--td-room-below']) window.CSS?.registerProperty?.({ name, syntax: '<length>', inherits: false, initialValue: '0px' })
+} catch (err) {
+  // Registered already (a second bundle on the page), or not supported: inherited, as before.
+}
+
 class StateRender {
   constructor(muya) {
     this.muya = muya
