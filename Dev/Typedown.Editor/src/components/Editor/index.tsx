@@ -92,7 +92,7 @@ const Editor: React.FC = () => {
     // replacements (LoadFile/SetMarkdown/ImportFile) bump `contentVersion` to push new text into the editor.
     const markdownRef = useRef<string>();
     // Reporting the text is throttled while typing; this runs it now (see Muya's flushContentChange).
-    const flushRef = useRef<(() => void) | null>(null);
+    const flushRef = useRef<((opts?: { ifPending?: boolean }) => void) | null>(null);
     // Finishes a load whose caret is placed in the next frame (Muya, finishLoadNow) at once.
     const finishLoadRef = useRef<(() => void) | null>(null);
     const cursorRef = useRef<any>();
@@ -418,7 +418,9 @@ const Editor: React.FC = () => {
     // being left keeps it.
     useEffect(() => transport.addListener<{ token?: number }>('FlushContent', async ({ token }) => {
         await holdRef.current?.settled()
-        flushRef.current?.()
+        // Once the load is reported, only a report still due: the last one is the text on screen otherwise, and a long
+        // document is not written out again (closing its tab waited seconds for it). Before that, the full report.
+        flushRef.current?.(fileLoadPending.current ? undefined : { ifPending: true })
         transport.postMessage('ContentFlushed', { token: token ?? 0, text: markdownRef.current })
     }), []);
 

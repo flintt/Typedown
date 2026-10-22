@@ -88,7 +88,7 @@ interface IMuyaEditor {
     scrollToChangeRef?: React.MutableRefObject<boolean>
     onMarkdownChange: (markdown: string) => void
     /** The shell puts a function here that reports the current text at once, for saves and exports. */
-    flushRef?: React.MutableRefObject<(() => void) | null>
+    flushRef?: React.MutableRefObject<((opts?: { ifPending?: boolean }) => void) | null>
     /** Set to what finishes a load whose caret is still to come, now (Muya.finishLoadNow). */
     finishLoadRef?: React.MutableRefObject<(() => void) | null>
     /** Fired once host content has been pushed into the editor (see the FileLoaded handshake in Editor). */
@@ -794,8 +794,12 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         // class it does not know about.
         const root = document.getElementById('editor')
         if (!root) return
+        // Either measure: by its length when the document comes in, and the same again on every report after - by
+        // the blocks alone, a 1.5 MB document of 3000 blocks lost the class on its first report and was laid out whole
+        // after every slice drawn, half a second each, for minutes (a tab closed meanwhile waited for them).
         const blocks = (editor as any)?.contentState?.blocks?.length ?? 0
-        const long = markdown != null ? markdown.length > longDocumentChars : blocks > longDocumentBlocks
+        const length = markdown ?? markdownRef.current ?? ''
+        const long = length.length > longDocumentChars || (markdown == null && blocks > longDocumentBlocks)
         root.classList.toggle('ag-long-document', long)
     }, [editor])
 
@@ -822,7 +826,8 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
 
     useEffect(() => {
         if (!editor || !props.flushRef) return
-        const flush = () => editor.flushContentChange()
+        // ifPending: only a report still due (the host's FlushContent once the load is reported).
+        const flush = (opts?: { ifPending?: boolean }) => opts?.ifPending ? (editor as any).flushPendingContentChange() : editor.flushContentChange()
         props.flushRef.current = flush
         return () => {
             if (props.flushRef?.current === flush) props.flushRef.current = null

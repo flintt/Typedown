@@ -165,6 +165,13 @@ class Muya {
     this.dispatchChangeContentChange()
   }
 
+  /// Runs the pending report now if there is one. With none pending the last report is the text on screen already
+  /// (every edit reports through dispatchChange): the document is not written out again - a long one took seconds, and
+  /// closing its tab waited for it with the document still on screen.
+  flushPendingContentChange = () => {
+    if (this.contentChangeDue) this.flushContentChange()
+  }
+
   dispatchChangeContentChange = () => {
     // Whether a throttled report is still to come (the page keeps no document whose last report is not its state).
     this.contentChangeDue = false
