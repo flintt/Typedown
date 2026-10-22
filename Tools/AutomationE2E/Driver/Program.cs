@@ -4130,7 +4130,7 @@ internal static partial class Program
         GetWindowRect(window, out var placed);
         try
         {
-            foreach (var width in new[] { 640, 900 })
+            foreach (var width in new[] { 900, 640 })
             {
                 await c.Call("window.setView", new { windowId, bounds = new { x = 40, y = 40, width, height = 700 } });
                 await c.Call("test.window.navigate", new { windowId, route = "Settings/Editor" });

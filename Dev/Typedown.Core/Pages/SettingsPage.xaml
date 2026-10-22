@@ -15,7 +15,9 @@
     Unloaded="OnUnloaded"
     mc:Ignorable="d">
     <Grid>
-    <muxc:NavigationView x:Name="NavigationView" IsSettingsVisible="False" IsBackButtonVisible="Collapsed" SelectionChanged="OnNavigationViewSelectionChanged" BackRequested="OnBackRequested">
+    <!-- On the page's root, where VisualStateManager.GoToState(page) looks for them: on the NavigationView inside it (since
+         the grid was put around it for the drag strip) they were never found, and the narrow layouts' margins never set -
+         the items reached under the scroll bar. -->
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="LayoutStates">
                 <VisualState x:Name="Small">
@@ -41,6 +43,7 @@
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
+    <muxc:NavigationView x:Name="NavigationView" IsSettingsVisible="False" IsBackButtonVisible="Collapsed" SelectionChanged="OnNavigationViewSelectionChanged" BackRequested="OnBackRequested">
         <muxc:NavigationView.Resources>
             <SolidColorBrush x:Key="NavigationViewContentBackground" Color="Transparent"/>
             <SolidColorBrush x:Key="NavigationViewContentGridBorderBrush" Color="Transparent"/>
