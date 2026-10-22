@@ -4136,6 +4136,10 @@ internal static partial class Program
             await Task.Delay(1500);
             notes.Add("the window: " + Screenshot("pp01-window"));
             notes.Add("stylesheets: " + (await c.Call("test.editor.eval", new { windowId, script = "[...document.querySelectorAll('link[rel=stylesheet],style')].map(e => (e.id || e.tagName) + '[' + (e.media || 'all') + '] ' + (e.href ? e.href.split('/').slice(-3).join('/') : e.textContent.length + ' chars') + (e.textContent && e.textContent.includes('ff79c6') ? ' (has ff79c6)' : '')).join(' | ')" }))["result"]);
+            // Where the web view is on screen (physical pixels): the preview is drawn over it, whatever the window's size.
+            var view = await c.Call("test.editor.eval", new { windowId, script = "[innerWidth, innerHeight]" });
+            var topLeft = await c.Call("test.editor.screenPoint", new { windowId, x = 0, y = 0 });
+            var bottomRight = await c.Call("test.editor.screenPoint", new { windowId, x = (int)view["result"]![0]!, y = (int)view["result"]![1]! });
             await Activate(window);
             await c.Call("test.editor.focus", new { windowId });
             await Task.Delay(300);
@@ -4146,8 +4150,9 @@ internal static partial class Program
             // The page's margins in the preview: the band at its top (the date and the title printed in it) and the strip
             // right of the text - they were the web view's colour, the theme's (Dracula's dark), around the white page.
             SetProcessDpiAwarenessContext(new IntPtr(-4));
-            GetWindowRect(window, out var w);
+            var w = (Left: (int)topLeft["x"]!, Top: (int)topLeft["y"]!, Right: (int)bottomRight["x"]!, Bottom: (int)bottomRight["y"]!);
             int width = w.Right - w.Left, height = w.Bottom - w.Top;
+            notes.Add($"the web view on screen: {w.Left},{w.Top} - {w.Right},{w.Bottom}");
             double Dark(int left, int top, int right, int bottom)
             {
                 using var shot = new System.Drawing.Bitmap(right - left, bottom - top);
@@ -4162,8 +4167,10 @@ internal static partial class Program
                     }
                 return all == 0 ? 0 : dark * 100.0 / all;
             }
-            var band = Dark(w.Left + (int)(width * 0.40), w.Top + (int)(height * 0.12), w.Right - (int)(width * 0.08), w.Top + (int)(height * 0.16));
-            var strip = Dark(w.Right - (int)(width * 0.07), w.Top + (int)(height * 0.30), w.Right - (int)(width * 0.045), w.Top + (int)(height * 0.70));
+            // The preview is right of the print dialog (about the web view's left 30%); its scroll bar and a dimmed frame take
+            // the web view's last 40 or so pixels.
+            var band = Dark(w.Left + (int)(width * 0.40), w.Top + 8, w.Right - (int)(width * 0.06), w.Top + 40);
+            var strip = Dark(w.Right - 70, w.Top + (int)(height * 0.30), w.Right - 46, w.Top + (int)(height * 0.70));
             notes.Add($"dark in the preview's top margin {band:0}%, in its right margin {strip:0}%");
             Check(band < 30 && strip < 10, $"the preview's margins are white, not the theme's colour (top {band:0}% dark, right {strip:0}%)");
             Chord("Esc");
