@@ -176,6 +176,8 @@ namespace Typedown.Core.ViewModels
             if (tab == null || tab == ActiveTab || !Tabs.Contains(tab)) return;
             // Keys typed from here on are for the tab switched to, not the one being left (see HoldInput).
             var hold = EditorViewModel.HoldInput();
+            // A very long document left: out of sight at once, not while the page puts it away.
+            var shown = EditorViewModel.CoverIfLong();
             try
             {
                 // Bring the outgoing document's latest edits in and let its pending change reports resolve before we
@@ -204,6 +206,8 @@ namespace Typedown.Core.ViewModels
             finally
             {
                 EditorViewModel.ReleaseInput(hold);
+                // Shown meanwhile, or nothing loaded after all: not covered.
+                EditorViewModel.UncoverIfStill(shown);
             }
             EditionHooks.ReportActivity(ActivityKind.DocumentShown, FileViewModel.AppViewModel);
             await FileViewModel.CheckExternalChangeAfterSwitch();
@@ -268,7 +272,13 @@ namespace Typedown.Core.ViewModels
                 return true;
             }
             if (tab != ActiveTab) await SwitchTo(tab);
-            if (!await FileViewModel.AskToSave()) return false;
+            // Covered only when nothing is to be asked (a question about saving is about what is on the page).
+            var shown = EditorViewModel.Saved ? EditorViewModel.CoverIfLong() : EditorViewModel.LoadId;
+            if (!await FileViewModel.AskToSave())
+            {
+                EditorViewModel.UncoverIfStill(shown);
+                return false;
+            }
             // Closed on purpose: an untitled document's backup must not come back at the next start.
             if (string.IsNullOrEmpty(FileViewModel.FilePath)) FileViewModel.AutoBackup.DeleteBackup(null, tab.DocumentId);
             // Saved or explicitly discarded: nothing in the editor needs to survive.

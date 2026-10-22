@@ -64,6 +64,10 @@ namespace Typedown.Controls
         private readonly Microsoft.UI.Xaml.Controls.Grid opening = new() { Visibility = Visibility.Collapsed, IsHitTestVisible = false };
         private readonly Microsoft.UI.Xaml.Controls.TextBlock openingText = new() { HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 12, 0, 0) };
         private Microsoft.UI.Dispatching.DispatcherQueueTimer openingDelay;
+        private readonly StackPanel openingContent;
+        // The cover over a very long document being left (EditorViewModel.LeavingCover): the same layer, its colour only.
+        private bool covering;
+        private Microsoft.UI.Dispatching.DispatcherQueueTimer coverLimit;
 
         private readonly CompositeDisposable disposables = new();
 
@@ -73,7 +77,7 @@ namespace Typedown.Controls
             Loaded += OnLoaded;
             canvas.Children.Add(dummyRectangle);
             root.Children.Add(canvas);
-            var openingContent = new StackPanel { HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
+            openingContent = new StackPanel { HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
             openingContent.Children.Add(new Microsoft.UI.Xaml.Controls.ProgressRing { IsActive = true, Width = 28, Height = 28 });
             openingContent.Children.Add(openingText);
             opening.Children.Add(openingContent);
@@ -98,6 +102,7 @@ namespace Typedown.Controls
                 PostMessage("TypedElsewhere", new { text = ch == '\r' ? "\n" : ch.ToString() });
             };
             disposables.Add(AppViewModel.EditorViewModel.WhenPropertyChanged(nameof(EditorViewModel.LongLoadPending)).Subscribe(_ => UpdateOpening()));
+            disposables.Add(AppViewModel.EditorViewModel.WhenPropertyChanged(nameof(EditorViewModel.LeavingCover)).Subscribe(_ => UpdateCover()));
             disposables.Add(RemoteInvoke.Handle("ContentLoaded", OnContentLoaded));
             disposables.Add(RemoteInvoke.Handle<string>("UnhandledException", OnUnhandledException));
             disposables.Add(RemoteInvoke.Handle("GetCurrentTheme", () => ServiceProvider.GetCurrentTheme()));
@@ -171,7 +176,9 @@ namespace Typedown.Controls
             openingDelay?.Stop();
             if (!AppViewModel.EditorViewModel.LongLoadPending)
             {
-                opening.Visibility = Visibility.Collapsed;
+                // The cover over a document left stays until the next one is on the page.
+                if (!covering) opening.Visibility = Visibility.Collapsed;
+                else openingContent.Visibility = Visibility.Collapsed;
                 return;
             }
             openingDelay ??= DispatcherQueue.CreateTimer();
@@ -179,6 +186,41 @@ namespace Typedown.Controls
             openingDelay.Interval = TimeSpan.FromMilliseconds(AppViewModel.EditorViewModel.LongLoadDelay);
             openingDelay.Tick += OnOpeningDelay;
             openingDelay.Start();
+        }
+
+        // At once, in the page's colour, nothing on it ("Opening…" follows as for any long load); gone when the next document
+        // is on the page, and in any case after ten seconds.
+        private void UpdateCover()
+        {
+            if (AppViewModel.EditorViewModel.LeavingCover)
+            {
+                covering = true;
+                if (opening.Visibility != Visibility.Visible)
+                {
+                    openingContent.Visibility = Visibility.Collapsed;
+                    opening.Background = new Microsoft.UI.Xaml.Media.SolidColorBrush(ServiceProvider.GetPageBackground());
+                    opening.Visibility = Visibility.Visible;
+                }
+                coverLimit ??= DispatcherQueue.CreateTimer();
+                coverLimit.IsRepeating = false;
+                coverLimit.Interval = TimeSpan.FromSeconds(10);
+                coverLimit.Tick -= OnCoverLimit;
+                coverLimit.Tick += OnCoverLimit;
+                coverLimit.Start();
+                return;
+            }
+            coverLimit?.Stop();
+            if (!covering) return;
+            covering = false;
+            // "Opening…" taken over meanwhile (a long document coming): it stays, with its ring and text.
+            if (openingContent.Visibility != Visibility.Visible) opening.Visibility = Visibility.Collapsed;
+        }
+
+        private void OnCoverLimit(Microsoft.UI.Dispatching.DispatcherQueueTimer timer, object args)
+        {
+            if (!covering) return;
+            covering = false;
+            if (openingContent.Visibility != Visibility.Visible) opening.Visibility = Visibility.Collapsed;
         }
 
         private DateTime openingShownAt;
@@ -192,8 +234,9 @@ namespace Typedown.Controls
                 opening.Visibility = Visibility.Collapsed;
                 return;
             }
-            if (opening.Visibility != Visibility.Visible)
+            if (opening.Visibility != Visibility.Visible || openingContent.Visibility != Visibility.Visible)
             {
+                openingContent.Visibility = Visibility.Visible;
                 openingShownAt = DateTime.UtcNow;
                 AppViewModel.EditorViewModel.OpeningShown++;
                 Core.Utilities.Log.Debug($"editor: \"Opening…\" shown for load {AppViewModel.EditorViewModel.LoadId}");

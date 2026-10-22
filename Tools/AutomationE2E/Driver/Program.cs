@@ -241,6 +241,7 @@ internal static partial class Program
             await Case("NV01 the editor page is never taken to another address: a script sending it to a web site is refused, and the document is still there", NV01);
             await Case("VM01 Vim's search in source mode on a long document: / and the letters typed after it go into the search box, nothing into the document, and Enter goes to the match", VM01);
             await Case("TX01 Settings > Appearance: the theme chosen in its own drop-down, from Dark and from Dracula to Light, leaves the drop-down drawn", TX01);
+            await Case("CV01 a very long document left (a tab switched to, the tab closed) is covered at once and uncovered when the next is on the page; a close cancelled at the save question covers nothing", CV01);
             await Case("XF01 a file changed outside: unchanged here, it is offered again and reloaded; with changes here, Keep keeps them; without asking, reloaded at once; a tab in the background asks when shown; deleted, the document turns unsaved", EX01);
             await Case("SS01 the settings in a narrow window: the items end left of the scroll bar, not under it", SS01);
             await Case("LS01 the interface language changed in the settings' General section, which was reached from Help > About: the settings are built again on General, not on About", LS01);
@@ -4117,6 +4118,57 @@ internal static partial class Program
         await WaitForWindow(client);
         notes.Add("window up");
         return client;
+    }
+
+    // Leaving a very long document: the page took half a second and more to put it away, the old document still on
+    // screen (and scrollable) meanwhile. Covered at once in the page's colour, uncovered when the next one is there.
+    private static async Task CV01(List<string> notes)
+    {
+        using var c = await Session("e2e CV01");
+        var longText = "# CV01 long\n\n" + string.Concat(Enumerable.Range(0, 2600).Select(i => $"Paragraph {i}: " + string.Join(" ", Enumerable.Repeat("words", 15)) + ".\n\n"));
+        var small = await Open(c, Fixture("cv01-small.md", "# CV01 small\n\nshort\n"));
+        var windowId = await WindowIdOf(c, small);
+        var big = await Open(c, Fixture("cv01-long.md", longText));
+        async Task<JToken> State() => await c.Call("test.webview.state", new { windowId });
+        async Task<(bool Seen, int Shown)> Watch(Func<Task> leave)
+        {
+            var before = (int)(await State())["coversShown"]!;
+            var seen = false;
+            var leaving = leave();
+            while (!leaving.IsCompleted)
+            {
+                if ((bool?)(await State())["leavingCover"] == true) seen = true;
+                await Task.Delay(15);
+            }
+            await leaving;
+            return (seen, (int)(await State())["coversShown"]! - before);
+        }
+        try
+        {
+            await Task.Delay(3000);
+            notes.Add($"the long document: {longText.Length} chars");
+            var (seen, shown) = await Watch(() => c.Call("document.focus", new { documentId = small }));
+            await Task.Delay(800);
+            var after = await State();
+            notes.Add($"switched away: seen {seen}, covers {shown}, covered after {after["leavingCover"]}");
+            Check(shown == 1, "switched away from the long document, the page is covered once");
+            Check((bool?)after["leavingCover"] == false, "and uncovered once the next document is on the page");
+            Check(((string?)(await Get(c, small))["text"] ?? "").Contains("short"), "the next document is the one shown");
+
+            // Closed: covered too (it is saved: nothing to ask).
+            await c.Call("document.focus", new { documentId = big });
+            await Task.Delay(2500);
+            (seen, shown) = await Watch(() => c.Call("document.close", new { documentId = big }));
+            await Task.Delay(800);
+            notes.Add($"closed: covers {shown}, covered after {(await State())["leavingCover"]}");
+            Check(shown == 1 && (bool?)(await State())["leavingCover"] == false, "closed, it is covered once and uncovered after");
+            big = null;
+        }
+        finally
+        {
+            if (big != null) try { await c.Call("document.close", new { documentId = big }); } catch { }
+            try { await c.Call("document.close", new { documentId = small }); } catch { }
+        }
     }
 
     // The document's file written by another program while it is open: what the window does with each of the cases a

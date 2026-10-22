@@ -102,7 +102,7 @@ namespace Typedown.Core.ViewModels
             EventCenter.GetObservable<EditorEventArgs>("FileLoaded").Subscribe(x => OnFileLoaded(x.Args));
             // The page shows a long document's first part before it reports the load (drawn a part at a time, or a preview
             // where it is drawn at once): no "Opening…" over it from then on.
-            EventCenter.GetObservable<EditorEventArgs>("LoadPreviewShown").Subscribe(x => { if (x.Args?["loadId"]?.Value<int?>() == LoadId) LongLoadPending = false; });
+            EventCenter.GetObservable<EditorEventArgs>("LoadPreviewShown").Subscribe(x => { if (x.Args?["loadId"]?.Value<int?>() == LoadId) { LongLoadPending = false; LeavingCover = false; } });
             EventCenter.GetObservable<EditorEventArgs>("DocumentEditApplied").Subscribe(x => OnDocumentEditApplied(x.Args));
             // How the page drew a long document (a part at a time or all at once, from what), for the log.
             EventCenter.GetObservable<EditorEventArgs>("LoadDrawnWhole").Subscribe(x => Log.Debug($"load {x.Args?["loadId"]}: all drawn after {x.Args?["ms"]} ms in {x.Args?["slices"]} slices"));
@@ -253,6 +253,40 @@ namespace Typedown.Core.ViewModels
             LongLoadPending = (text?.Length ?? 0) >= LongDocumentChars;
             if (LongLoadPending) OpeningLoads++;
             return ++LoadId;
+        }
+
+        /// <summary>
+        /// A very long document shown is being left (a tab switched or closed): the page is covered with its own colour at
+        /// once, until the next document is on it. The page took half a second and more to put the long one away and
+        /// show the next, the old one still on screen (and scrollable) meanwhile.
+        /// </summary>
+        public bool LeavingCover { get; private set; }
+
+        /// <summary>A document from this long is covered when it is left (<see cref="LeavingCover"/>).</summary>
+        public const int CoverFromChars = 200000;
+
+        private int coveredLoad;
+
+        /// <summary>For tests: how many times the page was covered on leaving a long document.</summary>
+        public int CoversShown { get; private set; }
+
+        /// <summary>The document shown is left: covered if it is very long. The load that was shown, for <see cref="UncoverIfStill"/>.</summary>
+        public int CoverIfLong()
+        {
+            if ((Markdown?.Length ?? 0) >= CoverFromChars && !LeavingCover)
+            {
+                coveredLoad = LoadId;
+                CoversShown++;
+                Log.Debug($"editor: covered while leaving load {LoadId} ({Markdown.Length} chars)");
+                LeavingCover = true;
+            }
+            return LoadId;
+        }
+
+        /// <summary>The leaving did not happen (the close cancelled, the tab already shown): uncovered if nothing was loaded since.</summary>
+        public void UncoverIfStill(int load)
+        {
+            if (LeavingCover && LoadId == load) LeavingCover = false;
         }
 
         /// <summary>For tests: how many times "Opening…" was shown (MarkdownEditor counts it).</summary>
@@ -440,6 +474,7 @@ namespace Typedown.Core.ViewModels
             {
                 ConfirmedLoadId = LoadId;
                 LongLoadPending = false;
+                if (LoadId > coveredLoad) LeavingCover = false;
             }
             CompleteReloadWaiter(arg);
             // The document on the page and taking keys: the end of the start (todo #16).

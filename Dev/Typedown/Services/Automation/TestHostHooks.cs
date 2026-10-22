@@ -124,6 +124,8 @@ namespace Typedown.Services.Automation
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject
                     {
                         ["editorVisibility"] = editor?.Visibility.ToString(),
+                        ["leavingCover"] = app.EditorViewModel?.LeavingCover,
+                        ["coversShown"] = app.EditorViewModel?.CoversShown,
                         ["editorLoaded"] = editor?.IsLoaded,
                         ["viewVisibility"] = view?.Visibility.ToString(),
                         ["viewSize"] = view == null ? null : $"{view.ActualWidth:0}x{view.ActualHeight:0}",
