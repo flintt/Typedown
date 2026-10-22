@@ -794,13 +794,27 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         // class it does not know about.
         const root = document.getElementById('editor')
         if (!root) return
-        // Either measure: by its length when the document comes in, and the same again on every report after - by
-        // the blocks alone, a 1.5 MB document of 3000 blocks lost the class on its first report and was laid out whole
-        // after every slice drawn, half a second each, for minutes (a tab closed meanwhile waited for them).
+        // By its length when the document comes in; after that by its blocks, and by its length too while it is still
+        // drawn a part at a time: by the blocks alone, a 1.5 MB document of 3000 blocks lost the class on its first
+        // report and was laid out whole after every part drawn, half a second each and growing, for minutes (a tab
+        // closed meanwhile waited for them). Once drawn the blocks alone again: kept by its length, a document switched
+        // back to was laid out from the stand-ins' 50 px and moved as the real heights came in (JU01).
         const blocks = (editor as any)?.contentState?.blocks?.length ?? 0
-        const length = markdown ?? markdownRef.current ?? ''
-        const long = length.length > longDocumentChars || (markdown == null && blocks > longDocumentBlocks)
+        const drawing = !!(editor as any)?.contentState?.stateRender?.progressive
+        const long = markdown != null
+            ? markdown.length > longDocumentChars
+            : blocks > longDocumentBlocks || (drawing && (markdownRef.current ?? '').length > longDocumentChars)
+        if (root.classList.contains('ag-long-document') === long) return
+        // The blocks off screen change from their stand-ins' height to their own, or back: the block at the top of the
+        // window stays where it is (taken off once drawn whole, a code block read far down went 276,000 px away).
+        const editorElement = document.getElementById('ag-editor-id')
+        const top = editorElement ? Array.from(editorElement.children).find(e => e.getBoundingClientRect().bottom > 0) : null
+        const before = top?.getBoundingClientRect().top
         root.classList.toggle('ag-long-document', long)
+        if (top && before != null && top.isConnected) {
+            const moved = top.getBoundingClientRect().top - before
+            if (Math.abs(moved) >= 1) window.scrollBy(0, moved)
+        }
     }, [editor])
 
     useEffect(() => editor?.on('contentChange', ({ markdown, wordCount, cursor, toc: { toc, cur } }: any) => {
@@ -1211,6 +1225,8 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             },
             done: () => {
                 (window as any).__typedownProgressiveDone = performance.now()
+                // Drawn whole: the long-document class by its blocks again (markLongDocument).
+                markLongDocument()
                 // How long the rest took, for the host's log.
                 const log = (window as any).__typedownProgressiveLog || []
                 const last = log[log.length - 1]

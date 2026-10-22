@@ -1,7 +1,9 @@
-// A long document keeps the long-document class (#editor.ag-long-document: what is off screen is not laid out) after
-// it is edited. It was given by the document's length when it came in and taken away again on its first report, where
-// only the number of blocks counted: a 1.5 MB document of 3000 blocks was laid out whole after every part drawn, half a
-// second each and growing, and closing its tab waited behind them. A short document does not get the class.
+// A document long by its length keeps the long-document class (#editor.ag-long-document: what is off screen is not
+// laid out) while it is still drawn a part at a time, after its first report too. It was given by the length when the
+// document came in and taken away on the first report, where only the blocks counted: a 1.5 MB document of 3000
+// blocks was laid out whole after every part drawn, half a second each and growing, and closing its tab waited behind
+// them. Once drawn whole, the blocks decide again: kept by its length, a document switched back to was laid out from
+// the stand-ins' heights and moved as the real ones came in (E2E JU01). A short document does not get the class.
 //
 //   node long-document-class-check.js
 const { openEditor } = require('./harness');
@@ -16,19 +18,22 @@ const short = '# Short\n\nA few words.\n';
   const failures = [];
   const check = (ok, what) => { console.log(`${ok ? 'PASS' : 'FAIL'} ${what}`); if (!ok) failures.push(what); };
   const marked = () => page.evaluate(() => document.getElementById('editor').classList.contains('ag-long-document'));
+  const drawing = () => page.evaluate(() => !!window.__typedownMuya.contentState.stateRender.progressive);
   try {
     await mode(false, false);
+    // Slow enough parts that the document is still being drawn a while after it is reported loaded.
+    await page.evaluate(() => { window.__typedownProgressiveDelayMs = 150; window.__typedownProgressiveSliceMs = 1; });
     console.log(`long document: ${long.length} characters`);
     await load(long);
-    check(await marked(), 'the long document is marked when it comes in');
-    await page.click('#ag-editor-id > p');
-    await page.keyboard.type('x');
-    await new Promise(r => setTimeout(r, 800));
-    check(await marked(), 'and still after an edit (its first report)');
-    await load(short);
-    await page.click('#ag-editor-id > p:last-of-type');
-    await page.keyboard.type('y');
+    // load() returns on FileLoaded, which the page sends with its first report.
+    await new Promise(r => setTimeout(r, 1500));
+    check(await drawing(), 'it is still being drawn after its first report (the case this checks)');
+    check(await marked(), 'and still marked, while it is drawn');
+    await page.evaluate(() => { window.__typedownProgressiveDelayMs = 0; window.__typedownProgressiveSliceMs = 50; });
+    await page.waitForFunction(() => !window.__typedownMuya.contentState.stateRender.progressive, { timeout: 60000 });
     await new Promise(r => setTimeout(r, 300));
+    check(!(await marked()), 'drawn whole, it is decided by its blocks again (under 6,000: not marked)');
+    await load(short);
     check(!(await marked()), 'a short document is not marked');
     if (errors.length) failures.push(`page errors: ${errors.join(' | ')}`);
   } finally {
