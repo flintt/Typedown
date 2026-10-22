@@ -1579,3 +1579,8 @@ span.ag-footnote-backlink {
   display: block;
   height: var(--td-room-below, 0px);
 }
+
+/* An ordered list numbered 1) 2) (the item's delimiter is kept in data-marker): the number as written, not 1. */
+#ag-editor-id li.ag-order-list-item[data-marker=")"]::marker {
+  content: counter(list-item) ") ";
+}

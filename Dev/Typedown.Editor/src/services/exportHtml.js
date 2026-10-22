@@ -551,6 +551,9 @@ class ExportHtml {
     .markdown-body ul ul ol {
       list-style-type: decimal;
     }
+    .markdown-body ol[data-delimiter=")"] > li::marker {
+      content: counter(list-item) ") ";
+    }
   </style>
   <style>${exportStyle}</style>
   ${extraCss ? `<style>${extraCss}</style>` : ''}

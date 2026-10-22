@@ -175,6 +175,8 @@ Parser.prototype.tok = function () {
       let body = ''
       let taskList = false
       const { ordered, start } = this.token
+      // 1) rather than 1.: the delimiter of its first item (another delimiter starts another list).
+      const delimiter = ordered ? this.peek().bulletMarkerOrDelimiter : undefined
 
       while (this.next().type !== 'list_end') {
         if (this.token.checked !== undefined) {
@@ -184,7 +186,7 @@ Parser.prototype.tok = function () {
         body += this.tok()
       }
 
-      return this.renderer.list(body, ordered, start, taskList)
+      return this.renderer.list(body, ordered, start, taskList, delimiter)
     }
     case 'list_item_start': {
       let body = ''
