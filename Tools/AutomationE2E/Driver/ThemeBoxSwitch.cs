@@ -57,9 +57,10 @@ internal static partial class Program
                 // As a reader does it: the drop-down opened with a click, Light (the second item) clicked in its list.
                 var (bx, by) = CenterOf(box);
                 await Click(window, bx, by);
-                await Task.Delay(800);
-                var items = Deep.All(AutomationElement.RootElement, new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.ListItem))
-                    .Cast<AutomationElement>().Where(e => { GetWindowThreadProcessId(window, out var a); return e.Current.ProcessId == (int)a; }).ToList();
+                // The list opens with an animation: its items are where they are drawn once it has settled.
+                await Task.Delay(1500);
+                // The list's items are the drop-down's own in the automation tree (drawn in a popup window of their own).
+                var items = Deep.All(box, new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.ListItem)).Cast<AutomationElement>().ToList();
                 notes.Add($"{from}: items {string.Join(", ", items.Select(i => i.Current.Name))}");
                 if (items.Count < 2) throw new CaseFailed("the theme list did not open");
                 await ClickInPopup(window, items[1]);
@@ -74,6 +75,7 @@ internal static partial class Program
                     notes.Add($"{from}: after {dumpAfter.ToString(Newtonsoft.Json.Formatting.None)}");
                 }
                 notes.Add($"{from} -> Light (AppTheme {theme}): box drawn {before:0}% before, {after:0}% after; {beforeShot} {afterShot}; screen {Screenshot($"tx01-{from}")}");
+                Check((int)theme == 1, $"from {from}, Light is the theme picked ({theme})");
                 Check(after >= 3, $"from {from} to Light, the theme drop-down is still drawn ({after:0}% of it differs from the page)");
                 await c.Call("test.window.navigate", new { windowId, route = "Main" });
                 await Task.Delay(800);
