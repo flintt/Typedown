@@ -240,6 +240,7 @@ internal static partial class Program
             await Case("LD01 a load the editor gives back rewritten is loaded once more and keeps the file's text; one rewritten again is taken after that one retry, not retried without end", LD01);
             await Case("NV01 the editor page is never taken to another address: a script sending it to a web site is refused, and the document is still there", NV01);
             await Case("VM01 Vim's search in source mode on a long document: / and the letters typed after it go into the search box, nothing into the document, and Enter goes to the match", VM01);
+            await Case("LS01 the interface language changed in the settings' General section, which was reached from Help > About: the settings are built again on General, not on About", LS01);
             await Case("KU01 Keep unsaved changes when closing: every window closes without asking, the app exits, and started again it has the titled and the untitled document back as they were, unsaved, without a recovery question", KU01);
             await Case("PS01 the side pane on the right (Settings > View): right of the document, which is not mirrored; its splitter dragged left widens it; off, it is on the left again", PS01);
             // An edition's own cases (Edition.<name>.cs beside this file, in the edition's repository); none here.
@@ -4119,6 +4120,38 @@ internal static partial class Program
     // Keep unsaved changes when closing). Closed, not killed: every window closes without asking, the app exits, and
     // started again it has the titled document's edit and the untitled document back, both still unsaved, without a
     // recovery question.
+    // The settings opened on About (Help > About), the reader moves to General and changes the interface language there:
+    // the settings page is built again in the new language - on General, where the reader was. It went back to About,
+    // the section the settings had been opened on.
+    private static async Task LS01(List<string> notes)
+    {
+        using var c = await Session("e2e LS01");
+        var id = await Open(c, Fixture("ls01.md", "# LS01\n"));
+        var windowId = await WindowIdOf(c, id);
+        var window = await WindowOf(windowId, c);
+        var language = (string)(await c.Call("test.settings.get", new { windowId, name = "Language" }))["value"]!;
+        try
+        {
+            await c.Call("test.window.navigate", new { windowId, route = "Settings/About" });
+            await Task.Delay(800);
+            await c.Call("test.window.navigate", new { windowId, route = "Settings/General" });
+            await WaitFor(window, "KeepUnsavedOnCloseToggle");
+            var other = language == "ja" ? "en" : "ja";
+            await c.Call("test.settings.set", new { windowId, name = "Language", value = other });
+            await Task.Delay(2000);
+            var general = FindIn(window, "KeepUnsavedOnCloseToggle") != null;
+            notes.Add($"language {language} -> {other}; General shown after: {general}");
+            Check(general, "the settings are built again on General, where the language was changed");
+        }
+        finally
+        {
+            await c.Call("test.settings.set", new { windowId, name = "Language", value = language });
+            await Task.Delay(1000);
+            await c.Call("test.window.navigate", new { windowId, route = "Main" });
+            try { await c.Call("document.close", new { documentId = id }); } catch { }
+        }
+    }
+
     private static async Task KU01(List<string> notes)
     {
         var titled = Fixture("ku01.md", "# KU01\n\nsaved\n");

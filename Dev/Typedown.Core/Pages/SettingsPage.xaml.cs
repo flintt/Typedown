@@ -45,6 +45,9 @@ namespace Typedown.Core.Pages
             }
         }
 
+        /// <summary>The section shown now, by its route name (null when it has none).</summary>
+        public string ShownSection => Route.GetSettingsPageName(ContentFrame.SourcePageType);
+
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);

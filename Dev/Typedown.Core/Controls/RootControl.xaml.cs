@@ -91,7 +91,10 @@ namespace Typedown.Core.Controls
         private void ReloadSettingsPage()
         {
             if (Frame.SourcePageType != typeof(SettingsPage)) return;
-            var route = currentRoute;
+            // Built again on the section the reader is in, not the one the settings were opened on (Help > About,
+            // then General: the language changed there went back to About).
+            var shown = (Frame.Content as SettingsPage)?.ShownSection;
+            var route = shown != null ? "Settings/" + shown : currentRoute;
             _ = DispatcherQueue.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
             {
                 try
