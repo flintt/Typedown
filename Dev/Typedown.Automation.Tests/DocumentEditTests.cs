@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -176,6 +176,20 @@ namespace Typedown.Automation.Tests
             Assert.Equal(AutomationErrorKind.content_not_roundtrippable, await Fails(doc, Replace(0, "```ts {x}\n```\n", allowUnknown: true)));
             Assert.Equal(("# base\n", 0L), (doc.PageText, doc.Revision));
             Assert.Contains("restore", doc.Calls);
+        }
+
+        [Fact]
+        public async Task The_readers_own_action_goes_in_even_where_the_first_visual_edit_would_change_it()
+        {
+            // A version restored, a document from a template: the reader's own text, not a client's (AllowUnsafe is never
+            // set from the API). It was refused, and a version with such text could not be restored at all.
+            var doc = new FakeDocument { Page = c => FakeDocument.Classified(c, PendingNormalization.Unsafe, "fence-lost") };
+            var request = Replace(0, "  ```\n   aaa\n  ```\n", allowUnknown: true);
+            request.AllowUnsafe = true;
+            var result = await coordinator.EditAsync(doc, request, CancellationToken.None);
+            Assert.Equal(("  ```\n   aaa\n  ```\n", 1L), (doc.Text, doc.Revision));
+            Assert.Equal(PendingNormalization.Unsafe, result.Normalization.Pending);
+            Assert.DoesNotContain("restore", doc.Calls);
         }
 
         [Theory]
