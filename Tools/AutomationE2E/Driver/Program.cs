@@ -242,7 +242,7 @@ internal static partial class Program
             await Case("VM01 Vim's search in source mode on a long document: / and the letters typed after it go into the search box, nothing into the document, and Enter goes to the match", VM01);
             await Case("TX01 Settings > Appearance: the theme chosen in its own drop-down, from Dark and from Dracula to Light, leaves the drop-down drawn", TX01);
             await Case("CV01 a very long document left (a tab switched to, the tab closed) is covered at once and uncovered when the next is on the page; a close cancelled at the save question covers nothing", CV01);
-            await Case("XF01 a file changed outside: unchanged here, it is offered again and reloaded; with changes here, Keep keeps them; without asking, reloaded at once; a tab in the background asks when shown; deleted, the document turns unsaved", EX01);
+            await Case("XF01 a file changed outside: unchanged here, it is offered again and reloaded; with changes here, Keep keeps them; without asking, reloaded at once; a tab in the background asks when shown; deleted, the document turns unsaved", XF01);
             await Case("SS01 the settings in a narrow window: the items end left of the scroll bar, not under it", SS01);
             await Case("LS01 the interface language changed in the settings' General section, which was reached from Help > About: the settings are built again on General, not on About", LS01);
             await Case("KU01 Keep unsaved changes when closing: every window closes without asking, the app exits, and started again it has the titled and the untitled document back as they were, unsaved, without a recovery question", KU01);
@@ -4228,8 +4228,10 @@ internal static partial class Program
             await Task.Delay(800);
             File.WriteAllText(bPath, "# XF01 B\n\nchanged while away\n");
             await Task.Delay(1500);
-            await c.Call("document.focus", new { documentId = b });
+            // Shown: the switch asks before it is done (document.focus answers once the question has been).
+            var focusing = Task.Run(() => c.Call("document.focus", new { documentId = b }));
             (title, content) = await PressDialogButton(c, windowId, DialogButton.Primary, 8000);
+            await focusing;
             notes.Add($"background tab: '{title}'");
             Check((await TextWhen(b, t => t.Contains("changed while away"))).Contains("changed while away"), "a tab changed in the background is offered again when shown, and reloaded");
 
