@@ -924,6 +924,10 @@
         "DefaultImageUploadConfigId",
         "VimMode",
         "ShowBlankLines",
+        "ShowMarkdownMarks",
+        "ProgressiveRendering",
+        "KeepUnsavedOnClose",
+        "SidePaneOnRight",
         "OpenFolderAfterExport",
         "AfterExport"
       ]
