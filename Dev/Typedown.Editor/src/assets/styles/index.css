@@ -1400,6 +1400,20 @@ span.ag-footnote-backlink {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
+  /* The accent (the system's, or a custom theme's: links, a quote's bar, ticked boxes) is set on the page by the host;
+     printed, a plain blue as the light theme's links have it, not the screen's accent. */
+  :root {
+    --themeColor: rgb(9, 105, 218) !important;
+    --themeColor10: rgba(9, 105, 218, .1) !important;
+    --themeColor20: rgba(9, 105, 218, .2) !important;
+    --themeColor30: rgba(9, 105, 218, .3) !important;
+    --themeColor40: rgba(9, 105, 218, .4) !important;
+    --themeColor50: rgba(9, 105, 218, .5) !important;
+    --themeColor60: rgba(9, 105, 218, .6) !important;
+    --themeColor70: rgba(9, 105, 218, .7) !important;
+    --themeColor80: rgba(9, 105, 218, .8) !important;
+    --themeColor90: rgba(9, 105, 218, .9) !important;
+  }
   html, body, #editor, #ag-editor-id {
     background: #fff !important;
     color: #1a1a1a !important;

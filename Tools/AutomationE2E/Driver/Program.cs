@@ -241,6 +241,7 @@ internal static partial class Program
             await Case("NV01 the editor page is never taken to another address: a script sending it to a web site is refused, and the document is still there", NV01);
             await Case("VM01 Vim's search in source mode on a long document: / and the letters typed after it go into the search box, nothing into the document, and Enter goes to the match", VM01);
             await Case("TX01 Settings > Appearance: the theme chosen in its own drop-down, from Dark and from Dracula to Light, leaves the drop-down drawn", TX01);
+            await Case("PP01 the print preview under a dark custom theme (Dracula): screenshots of the window and the preview, for a person to see", PP01);
             await Case("CV01 a very long document left (a tab switched to, the tab closed) is covered at once and uncovered when the next is on the page; a close cancelled at the save question covers nothing", CV01);
             await Case("XF01 a file changed outside: unchanged here, it is offered again and reloaded; with changes here, Keep keeps them; without asking, reloaded at once; a tab in the background asks when shown; deleted, the document turns unsaved", XF01);
             await Case("SS01 the settings in a narrow window: the items end left of the scroll bar, not under it", SS01);
@@ -4118,6 +4119,39 @@ internal static partial class Program
         await WaitForWindow(client);
         notes.Add("window up");
         return client;
+    }
+
+    // The real print preview (the web view's own, File > Print: Alt+Shift+P) under Dracula: what the reader sees, as screenshots - a
+    // headless browser's print media was measured before, and the reader still saw the theme's colours.
+    private static async Task PP01(List<string> notes)
+    {
+        using var c = await Session("e2e PP01");
+        var id = await Open(c, Fixture("pp01.md", "# PP01 heading\n\nSome **text** with a [link](https://example.com) and `inline code`.\n\n> A quotation.\n\n- [x] a ticked task\n- [ ] an open one\n\n```js\nconst answer = 42; // a comment\nfunction f(x) { return x * 2 }\n```\n\n| a | b |\n|---|---|\n| 1 | 2 |\n"));
+        var windowId = await WindowIdOf(c, id);
+        var window = await WindowOf(windowId, c);
+        var theme = (string?)(await c.Call("test.settings.get", new { windowId, name = "CustomTheme" }))["value"];
+        try
+        {
+            await c.Call("test.settings.set", new { windowId, name = "CustomTheme", value = "dracula" });
+            await Task.Delay(1500);
+            notes.Add("the window: " + Screenshot("pp01-window"));
+            notes.Add("stylesheets: " + (await c.Call("test.editor.eval", new { windowId, script = "[...document.querySelectorAll('link[rel=stylesheet],style')].map(e => (e.id || e.tagName) + '[' + (e.media || 'all') + '] ' + (e.href ? e.href.split('/').slice(-3).join('/') : e.textContent.length + ' chars') + (e.textContent && e.textContent.includes('ff79c6') ? ' (has ff79c6)' : '')).join(' | ')" }))["result"]);
+            await Activate(window);
+            await c.Call("test.editor.focus", new { windowId });
+            await Task.Delay(300);
+            Chord("Alt+Shift+P");
+            await Task.Delay(5000);
+            notes.Add("the print preview: " + Screenshot("pp01-preview"));
+            Chord("Esc");
+            await Task.Delay(1500);
+            Check(false, "screenshots taken (this case is for a person to look at)");
+        }
+        finally
+        {
+            try { Chord("Esc"); } catch { }
+            await c.Call("test.settings.set", new { windowId, name = "CustomTheme", value = theme ?? "" });
+            try { await c.Call("document.close", new { documentId = id }); } catch { }
+        }
     }
 
     // Leaving a very long document: the page took half a second and more to put it away, the old document still on
