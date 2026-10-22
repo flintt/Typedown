@@ -25,5 +25,11 @@ namespace Typedown.Core.Interfaces
         /// focus out and back in made the input method drop the characters typed straight after (E2E TL01, a new tab).
         /// </summary>
         void FocusEditorInPlace();
+
+        /// <summary>
+        /// The page is printed (true) or no longer (false): around the page the print preview shows the web view's own
+        /// colour, which is the theme's page colour so a theme change does not flash - white while printing.
+        /// </summary>
+        void SetPrinting(bool printing);
     }
 }

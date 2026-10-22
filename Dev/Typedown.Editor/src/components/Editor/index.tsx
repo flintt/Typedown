@@ -442,6 +442,10 @@ const Editor: React.FC = () => {
             // out and lay every block out; the editor loses focus first so no block is the active one.
             try {
                 (document.activeElement as HTMLElement | null)?.blur?.()
+                // The margins around the printed page white (the host's web view colour, the theme's otherwise), and
+                // the theme's again once the print preview is closed.
+                await remote.printing({ printing: true }).catch(() => false)
+                window.addEventListener('afterprint', () => { remote.printing({ printing: false }).catch(() => false) }, { once: true })
                 await new Promise(r => requestAnimationFrame(() => r(null)))
                 window.print()
                 return

@@ -126,6 +126,12 @@ namespace Typedown.Core.ViewModels
             ImportCommand.OnExecute.Subscribe(_ => Import());
             RemoteInvoke.Handle<JToken, bool>("ExportCallback", ExportCallback);
             RemoteInvoke.Handle<JToken, bool>("PrintHTML", PrintHTML);
+            // The page printing itself (window.print) and done: the print preview's margins white meanwhile.
+            RemoteInvoke.Handle<JToken, bool>("Printing", args =>
+            {
+                MarkdownEditor?.SetPrinting(args?["printing"]?.Value<bool>() == true);
+                return true;
+            });
             saveFileTimer.Interval = TimeSpan.FromSeconds(5);
             saveFileTimer.Tick += SaveFileTimerTick;
             saveFileTimer.Start();

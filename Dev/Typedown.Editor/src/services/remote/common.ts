@@ -1,4 +1,4 @@
-import { remoteFunction } from '../transport'
+﻿import { remoteFunction } from '../transport'
 
 const remote = {
     getCurrentTheme: remoteFunction<undefined, string>('GetCurrentTheme'),
@@ -6,6 +6,9 @@ const remote = {
     // An export's HTML, or why it could not be made (the host says it).
     exportCallback: remoteFunction<{ html?: string, error?: string, context: unknown }, boolean>('ExportCallback', 0),
     printHTML: remoteFunction<{ html?: string, error?: string, context: unknown }, boolean>('PrintHTML', 0),
+    // This page about to be printed (true), or the print preview closed (false): the host makes the margins around
+    // the printed page white meanwhile (they were the web view's colour, the theme's).
+    printing: remoteFunction<{ printing: boolean }, boolean>('Printing'),
     // No time limit: the host answers when the reader closes its dialog, however long that takes (after 30 s the
     // answer went nowhere and OK resized nothing).
     resizeTable: remoteFunction<{ rows: number, columns: number }, { rows: number, columns: number } | null>('ResizeTable', 0),

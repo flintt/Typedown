@@ -166,7 +166,19 @@ namespace Typedown.Controls
             // What the web view shows where its page has painted nothing yet - the moment it is shown, before the page's
             // first frame - is its default colour: the page's own. Transparent, it showed black or its own white there,
             // between the theme's colour before and the document after (a Sepia start-up went Sepia, black, document).
-            if (WebViewController?.WebView is { } webView) webView.DefaultBackgroundColor = ServiceProvider.GetPageBackground();
+            if (WebViewController?.WebView is { } webView) webView.DefaultBackgroundColor = printing ? Microsoft.UI.Colors.White : ServiceProvider.GetPageBackground();
+        }
+
+        // Printed: the print preview's margins are the web view's own colour (the theme's, above) - a dark theme's around
+        // the white page. White while the page is printed, the theme's again after.
+        private bool printing;
+
+        public void SetPrinting(bool printing)
+        {
+            if (this.printing == printing) return;
+            this.printing = printing;
+            Core.Utilities.Log.Debug($"editor: printing {(printing ? "starts" : "ends")}");
+            UpdateBackdrop();
         }
 
         // Shown once a long load has taken a moment (a short one never flashes it), gone when the page confirms it, and in
