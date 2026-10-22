@@ -18,6 +18,14 @@ try {
   // Registered already (a second bundle on the page), or not supported: inherited, as before.
 }
 
+// How long a slice of a document drawn a part at a time may take: short while the reader is at the keys, the mouse or
+// the wheel (a frame's worth, so what they do is answered at once), longer when they are not - each slice also costs a
+// layout and a paint of its own, and 1.5 MB of HTML-heavy blocks took 38 s in 12 ms slices, 23 s in 40 ms ones.
+let lastInputAt = -Infinity
+for (const type of ['keydown', 'pointerdown', 'pointermove', 'wheel', 'touchstart', 'compositionstart'])
+  window.addEventListener(type, () => { lastInputAt = performance.now() }, { capture: true, passive: true })
+const sliceBudget = () => performance.now() - lastInputAt < 1000 ? 12 : 40
+
 class StateRender {
   constructor(muya) {
     this.muya = muya
@@ -464,7 +472,7 @@ class StateRender {
     const step = () => {
       state.timer = null
       if (this.progressive !== state) return
-      const until = performance.now() + (window.__typedownProgressiveSliceMs ?? 12)
+      const until = performance.now() + (window.__typedownProgressiveSliceMs ?? sliceBudget())
       const keep = this.keepInPlace(state)
       // A few blocks at a time, the clock read after each few: twenty code blocks of forty lines each, highlighted,
       // took half a second, and no frame was drawn in it.
@@ -533,6 +541,8 @@ class StateRender {
    * made again as more is.
    */
   estimateRest(state, write = true) {
+    // Measuring is a layout of the page: not done for an estimate that would not be written (most slices).
+    if (!write) return
     const { blocks, root } = state
     if (!state.chars) {
       const count = block => {

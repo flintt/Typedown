@@ -241,6 +241,7 @@ internal static partial class Program
             await Case("NV01 the editor page is never taken to another address: a script sending it to a web site is refused, and the document is still there", NV01);
             await Case("VM01 Vim's search in source mode on a long document: / and the letters typed after it go into the search box, nothing into the document, and Enter goes to the match", VM01);
             await Case("TX01 Settings > Appearance: the theme chosen in its own drop-down, from Dark and from Dracula to Light, leaves the drop-down drawn", TX01);
+            await Case("XF01 a file changed outside: unchanged here, it is offered again and reloaded; with changes here, Keep keeps them; without asking, reloaded at once; a tab in the background asks when shown; deleted, the document turns unsaved", EX01);
             await Case("SS01 the settings in a narrow window: the items end left of the scroll bar, not under it", SS01);
             await Case("LS01 the interface language changed in the settings' General section, which was reached from Help > About: the settings are built again on General, not on About", LS01);
             await Case("KU01 Keep unsaved changes when closing: every window closes without asking, the app exits, and started again it has the titled and the untitled document back as they were, unsaved, without a recovery question", KU01);
@@ -4116,6 +4117,88 @@ internal static partial class Program
         await WaitForWindow(client);
         notes.Add("window up");
         return client;
+    }
+
+    // The document's file written by another program while it is open: what the window does with each of the cases a
+    // reader meets (Settings > General: Reload when the file changes, Ask before reloading).
+    private static async Task XF01(List<string> notes)
+    {
+        using var c = await Session("e2e XF01");
+        var aPath = Fixture("xf01-a.md", "# XF01 A\n\none\n");
+        var a = await Open(c, aPath);
+        var windowId = await WindowIdOf(c, a);
+        async Task<JToken> Setting(string name) => (await c.Call("test.settings.get", new { windowId, name }))["value"]!;
+        async Task Set(string name, object value) => await c.Call("test.settings.set", new { windowId, name, value });
+        async Task<string> TextOf(string id) => (string)(await Get(c, id))["text"]!;
+        async Task<bool> SavedOf(string id) => (bool)(await Get(c, id))["saved"]!;
+        async Task<string> TextWhen(string id, Func<string, bool> ok) { var t = await TextOf(id); for (var i = 0; i < 25 && !ok(t); i++) { await Task.Delay(200); t = await TextOf(id); } return t; }
+        var autoReload = await Setting("AutoReload");
+        var askBefore = await Setting("AskBeforeReload");
+        string? b = null, other = null;
+        try
+        {
+            await Set("AutoReload", true);
+            await Set("AskBeforeReload", true);
+            await Task.Delay(500);
+
+            // Unchanged here: asked, reloaded.
+            File.WriteAllText(aPath, "# XF01 A\n\ntwo\n");
+            var (title, content) = await PressDialogButton(c, windowId, DialogButton.Primary, 6000);
+            notes.Add($"unchanged here: '{title}' / '{content}'");
+            var reloaded = await TextWhen(a, t => t.Contains("two"));
+            Check(reloaded.Contains("two") && await SavedOf(a), "unchanged here, the file changed outside is offered and reloaded, saved");
+
+            // Changed here too: asked (what is unsaved would go), Keep keeps it.
+            await c.Call("document.replace", new { documentId = a, baseRevision = await Revision(c, a), text = "# XF01 A\n\nmine\n", normalizationPolicy = "allowUnknown" });
+            await Task.Delay(500);
+            File.WriteAllText(aPath, "# XF01 A\n\nthree\n");
+            (title, content) = await PressDialogButton(c, windowId, DialogButton.Close, 6000);
+            notes.Add($"changed here: '{title}' / '{content}'");
+            await Task.Delay(500);
+            Check((await TextOf(a)).Contains("mine") && !await SavedOf(a), "with changes here, Keep keeps them, unsaved");
+            // Saved over the file, so it closes without asking.
+            await c.Call("document.save", new { documentId = a, baseRevision = await Revision(c, a) });
+            await Task.Delay(1200);
+
+            // Without asking: reloaded at once, no dialog.
+            await Set("AskBeforeReload", false);
+            File.WriteAllText(aPath, "# XF01 A\n\nfour\n");
+            var quiet = await TextWhen(a, t => t.Contains("four"));
+            string? asked = null;
+            try { asked = (string?)(await c.Call("test.dialog.press", new { windowId, button = "close" }))["title"]; } catch (JsonRpcRemoteException) { }
+            Check(quiet.Contains("four") && asked == null, $"without asking, reloaded at once and nothing asked ({asked})");
+            await Set("AskBeforeReload", true);
+
+            // A tab in the background: asked when it is shown again.
+            var bPath = Fixture("xf01-b.md", "# XF01 B\n\nfirst\n");
+            b = await Open(c, bPath);
+            other = await Open(c, Fixture("xf01-c.md", "# XF01 C\n"));
+            await Task.Delay(800);
+            File.WriteAllText(bPath, "# XF01 B\n\nchanged while away\n");
+            await Task.Delay(1500);
+            await c.Call("document.focus", new { documentId = b });
+            (title, content) = await PressDialogButton(c, windowId, DialogButton.Primary, 8000);
+            notes.Add($"background tab: '{title}'");
+            Check((await TextWhen(b, t => t.Contains("changed while away"))).Contains("changed while away"), "a tab changed in the background is offered again when shown, and reloaded");
+
+            // Deleted outside: the document turns unsaved (what it holds is no longer on disk).
+            await c.Call("document.focus", new { documentId = a });
+            await Task.Delay(800);
+            File.Delete(aPath);
+            var unsaved = false;
+            for (var i = 0; i < 25 && !unsaved; i++) { await Task.Delay(200); unsaved = !await SavedOf(a); }
+            Check(unsaved && (await TextOf(a)).Contains("four"), "deleted outside, the document keeps its text and turns unsaved");
+            // Back on disk, so it closes without asking.
+            await c.Call("document.save", new { documentId = a, baseRevision = await Revision(c, a) });
+        }
+        finally
+        {
+            try { await c.Call("test.dialogs.dismiss"); } catch { }
+            await Set("AutoReload", autoReload);
+            await Set("AskBeforeReload", askBefore);
+            foreach (var id in new[] { other, b, a })
+                if (id != null) try { await c.Call("document.close", new { documentId = id }); } catch { }
+        }
     }
 
     // A narrow window (the settings' small and medium layouts): the scroll bar is drawn over the content, and the items

@@ -25,8 +25,20 @@ const postScrollState = () => {
 }
 
 let pendingFrame: number | undefined
+let pendingTimer: number | undefined
+// While a long document is drawn a part at a time the page grows (and is kept in place) every frame: a report each time
+// found the block at the top of the window and laid the page out for it - seconds over a 1.5 MB document. Then at most
+// one every quarter of a second; the last one comes when the drawing ends (the page's height changes with it).
+const DRAWING_REPORT_MS = 250
 const scheduleScrollState = () => {
-    if (pendingFrame !== undefined) return
+    if (pendingFrame !== undefined || pendingTimer !== undefined) return
+    if ((window as any).__typedownMuya?.contentState?.stateRender?.progressive) {
+        pendingTimer = window.setTimeout(() => {
+            pendingTimer = undefined
+            postScrollState()
+        }, DRAWING_REPORT_MS)
+        return
+    }
     pendingFrame = requestAnimationFrame(() => {
         pendingFrame = undefined
         postScrollState()

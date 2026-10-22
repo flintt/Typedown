@@ -788,6 +788,8 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     // away from the pointer. Documents this side of three hundred thousand characters open in about a second
     // and type in under twenty milliseconds anyway, so they keep an exact scrollbar instead.
     const longDocumentChars = 300000
+    // Kept by its length once drawn whole too (see markLongDocument).
+    const keepLongDocumentChars = 1000000
 
     const markLongDocument = useCallback((markdown?: string) => {
         // On the wrapper, not on the editor element itself: rendering patches that element and would strip a
@@ -801,9 +803,13 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         // back to was laid out from the stand-ins' 50 px and moved as the real heights came in (JU01).
         const blocks = (editor as any)?.contentState?.blocks?.length ?? 0
         const drawing = !!(editor as any)?.contentState?.stateRender?.progressive
+        // A very long one keeps it once drawn too: taken off, the whole page was laid out at once (1.5 MB of HTML-heavy
+        // blocks: the page stood still for 10 s as the drawing ended), and every scroll and keystroke after laid out
+        // more than the class saves. Below that, the exact layout once drawn (JU01).
+        const length = (markdownRef.current ?? '').length
         const long = markdown != null
             ? markdown.length > longDocumentChars
-            : blocks > longDocumentBlocks || (drawing && (markdownRef.current ?? '').length > longDocumentChars)
+            : blocks > longDocumentBlocks || (length > longDocumentChars && (drawing || length > keepLongDocumentChars))
         if (root.classList.contains('ag-long-document') === long) return
         // The blocks off screen change from their stand-ins' height to their own, or back: the block at the top of the
         // window stays where it is (taken off once drawn whole, a code block read far down went 276,000 px away).
