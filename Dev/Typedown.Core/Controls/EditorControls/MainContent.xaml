@@ -112,7 +112,7 @@
                         <FontIcon Glyph="&#xE711;" FontSize="12"/>
                     </Button>
                 </Grid>
-                <ScrollViewer Grid.Row="1" x:Name="EditionPanelScroller" HorizontalScrollMode="Disabled" HorizontalScrollBarVisibility="Disabled" Padding="16,0,16,16"/>
+                <ScrollViewer Grid.Row="1" x:Name="EditionPanelScroller" HorizontalScrollMode="Disabled" HorizontalScrollBarVisibility="Disabled" Padding="16,0,28,16"/>
             </Grid>
         </Grid>
         <Border 

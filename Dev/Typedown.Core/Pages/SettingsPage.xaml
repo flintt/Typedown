@@ -20,14 +20,14 @@
             <VisualStateGroup x:Name="LayoutStates">
                 <VisualState x:Name="Small">
                     <VisualState.Setters>
-                        <Setter Target="ContentFrame.Margin" Value="16,8,16,16"/>
+                        <Setter Target="ContentFrame.Margin" Value="16,8,28,16"/>
                         <Setter Target="FrameHeader.Margin" Value="48,0,16,0"/>
                         <Setter Target="ContentFrameWrapper.RowSpacing" Value="8"/>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="Medium">
                     <VisualState.Setters>
-                        <Setter Target="ContentFrame.Margin" Value="16,8,16,16"/>
+                        <Setter Target="ContentFrame.Margin" Value="16,8,28,16"/>
                         <Setter Target="FrameHeader.Margin" Value="16,0,16,0"/>
                         <Setter Target="ContentFrameWrapper.RowSpacing" Value="8"/>
                     </VisualState.Setters>
@@ -86,6 +86,8 @@
                     </muxc:BreadcrumbBar.ItemTemplate>
                 </muxc:BreadcrumbBar>
             </Grid>
+            <!-- The narrow layouts keep room on the right for the scroll bar, which is drawn over the content: the items
+                 went under it. -->
             <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
                 <Grid>
                     <controls:GlobalFrame x:Name="ContentFrame" MaxWidth="1200"/>

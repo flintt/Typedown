@@ -241,6 +241,7 @@ internal static partial class Program
             await Case("NV01 the editor page is never taken to another address: a script sending it to a web site is refused, and the document is still there", NV01);
             await Case("VM01 Vim's search in source mode on a long document: / and the letters typed after it go into the search box, nothing into the document, and Enter goes to the match", VM01);
             await Case("TX01 Settings > Appearance: the theme chosen in its own drop-down, from Dark and from Dracula to Light, leaves the drop-down drawn", TX01);
+            await Case("SS01 the settings in a narrow window: the items end left of the scroll bar, not under it", SS01);
             await Case("LS01 the interface language changed in the settings' General section, which was reached from Help > About: the settings are built again on General, not on About", LS01);
             await Case("KU01 Keep unsaved changes when closing: every window closes without asking, the app exits, and started again it has the titled and the untitled document back as they were, unsaved, without a recovery question", KU01);
             await Case("PS01 the side pane on the right (Settings > View): right of the document, which is not mirrored; its splitter dragged left widens it; off, it is on the left again", PS01);
@@ -4115,6 +4116,50 @@ internal static partial class Program
         await WaitForWindow(client);
         notes.Add("window up");
         return client;
+    }
+
+    // A narrow window (the settings' small and medium layouts): the scroll bar is drawn over the content, and the items
+    // went under it - their right edge, the boxes and switches there, behind the bar.
+    private static async Task SS01(List<string> notes)
+    {
+        SetProcessDpiAwarenessContext(new IntPtr(-4));
+        using var c = await Session("e2e SS01");
+        var id = await Open(c, Fixture("ss01.md", "# SS01\n"));
+        var windowId = await WindowIdOf(c, id);
+        var window = await WindowOf(windowId, c);
+        GetWindowRect(window, out var placed);
+        try
+        {
+            foreach (var width in new[] { 640, 900 })
+            {
+                await c.Call("window.setView", new { windowId, bounds = new { x = 40, y = 40, width, height = 700 } });
+                await c.Call("test.window.navigate", new { windowId, route = "Settings/Editor" });
+                var box = await WaitFor(window, "FontFamilyBox", 5000);
+                await Task.Delay(800);
+                // The page that scrolls (the font box's parent in the automation tree: a setting's card has no peer), and
+                // how far from its right edge the box ends: its card's own padding, then the room left for the scroll bar
+                // (16 px, drawn over the page's right edge when shown).
+                System.Windows.Rect? viewer = null;
+                for (var node = System.Windows.Automation.TreeWalker.RawViewWalker.GetParent(box); node != null && viewer == null; node = System.Windows.Automation.TreeWalker.RawViewWalker.GetParent(node))
+                    if (node.TryGetCurrentPattern(System.Windows.Automation.ScrollPattern.Pattern, out _)) viewer = node.Current.BoundingRectangle;
+                var scale = GetDpiForWindow(window) / 96.0;
+                // The page may be wider than the window shows (a narrow one): its right edge, or the window's inside border.
+                GetWindowRect(window, out var shown);
+                var edge = viewer == null ? 0 : Math.Min(viewer.Value.Right, shown.Right - 8 * scale);
+                var room = viewer == null ? -1 : (edge - box.Current.BoundingRectangle.Right) / scale;
+                notes.Add($"{width}: page {viewer}, font box {box.Current.BoundingRectangle}, room right of the box {room:0.#} px");
+                Check(viewer != null, $"{width}: the page that scrolls is found");
+                Check(room >= 24, $"{width}: the box ends {room:0.#} px from the page's right edge, clear of the scroll bar's 16 px");
+                await c.Call("test.window.navigate", new { windowId, route = "Main" });
+                await Task.Delay(500);
+            }
+        }
+        finally
+        {
+            try { await c.Call("test.window.navigate", new { windowId, route = "Main" }); } catch { }
+            await c.Call("window.setView", new { windowId, bounds = new { x = placed.Left, y = placed.Top, width = placed.Right - placed.Left, height = placed.Bottom - placed.Top } });
+            try { await c.Call("document.close", new { documentId = id }); } catch { }
+        }
     }
 
     // A reader asked to close with documents unsaved and find them again on the next start, as Notepad++ does (Settings >
