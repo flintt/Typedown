@@ -802,6 +802,60 @@ namespace Typedown.Services.Automation
             // dialogs' default button has its style) and a ticked check box are put up in a popup over the window, their
             // colours read from what WinUI drew, and taken down again. The settings and the dialogs stayed the system
             // blue under every theme (TH07).
+            // How an element of the window is drawn, by its x:Name: it and every element under it, with what decides whether
+            // it shows (its opacity and its composition visual's, visibility, size, theme, colours). For a control seen
+            // gone from the page while still there (TX01).
+            methods.Add(new MethodDescriptor("test.element.dump", null, "test.element.dump/1", (c, ct) =>
+            {
+                var name = c.Params.RequiredString("name", allowEmpty: false);
+                return Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    string Colour(global::Microsoft.UI.Xaml.Media.Brush brush) => brush switch
+                    {
+                        null => null,
+                        global::Microsoft.UI.Xaml.Media.SolidColorBrush solid => solid.Color.ToString() + (solid.Opacity < 1 ? "@" + solid.Opacity : ""),
+                        _ => brush.GetType().Name,
+                    };
+                    global::Microsoft.UI.Xaml.FrameworkElement Find(global::Microsoft.UI.Xaml.DependencyObject node)
+                    {
+                        if (node is global::Microsoft.UI.Xaml.FrameworkElement fe && fe.Name == name) return fe;
+                        for (var i = 0; i < global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(node); i++)
+                            if (Find(global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChild(node, i)) is { } found) return found;
+                        return null;
+                    }
+                    var root = app.XamlRoot?.Content ?? throw new AutomationException(AutomationErrorKind.editor_not_ready, "the window has no content");
+                    var element = Find(root) ?? throw Params.Invalid("name", "not in the window");
+                    var lines = new Newtonsoft.Json.Linq.JArray();
+                    void Walk(global::Microsoft.UI.Xaml.DependencyObject node, int depth)
+                    {
+                        if (node is global::Microsoft.UI.Xaml.FrameworkElement fe)
+                        {
+                            var visual = global::Microsoft.UI.Xaml.Hosting.ElementCompositionPreview.GetElementVisual(fe);
+                            var brush = fe switch
+                            {
+                                global::Microsoft.UI.Xaml.Controls.Control control => $"fg {Colour(control.Foreground)} bg {Colour(control.Background)}",
+                                global::Microsoft.UI.Xaml.Controls.Border border => $"bg {Colour(border.Background)} line {Colour(border.BorderBrush)}",
+                                global::Microsoft.UI.Xaml.Controls.Panel panel => $"bg {Colour(panel.Background)}",
+                                global::Microsoft.UI.Xaml.Controls.TextBlock text => $"fg {Colour(text.Foreground)} '{text.Text}'",
+                                global::Microsoft.UI.Xaml.Controls.ContentPresenter presenter => $"fg {Colour(presenter.Foreground)} bg {Colour(presenter.Background)}",
+                                global::Microsoft.UI.Xaml.Shapes.Shape shape => $"fill {Colour(shape.Fill)} stroke {Colour(shape.Stroke)}",
+                                _ => "",
+                            };
+                            lines.Add($"{new string(' ', depth * 2)}{fe.GetType().Name}#{fe.Name} op {fe.Opacity} visual op {visual.Opacity} {fe.Visibility} {fe.ActualWidth:0}x{fe.ActualHeight:0} theme {fe.ActualTheme}/{fe.RequestedTheme} {brush}");
+                        }
+                        if (depth < 14)
+                            for (var i = 0; i < global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(node); i++)
+                                Walk(global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChild(node, i), depth + 1);
+                    }
+                    Walk(element, 0);
+                    var states = new Newtonsoft.Json.Linq.JArray();
+                    if (global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(element) > 0
+                        && global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChild(element, 0) is global::Microsoft.UI.Xaml.FrameworkElement templateRoot)
+                        foreach (var group in global::Microsoft.UI.Xaml.VisualStateManager.GetVisualStateGroups(templateRoot))
+                            states.Add($"{group.Name}: {group.CurrentState?.Name}");
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["tree"] = lines, ["states"] = states };
+                });
+            }));
             methods.Add(new MethodDescriptor("test.theme.controls", null, "test.theme.controls/1", async (c, ct) =>
                 await await Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), async app =>
                 {

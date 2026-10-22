@@ -52,6 +52,7 @@ internal static partial class Program
                 var box = await WaitFor(window, "ThemeBox");
                 await Task.Delay(1200);
                 var before = DrawnShare(box.Current.BoundingRectangle, out var beforeShot);
+                var dumpBefore = await c.Call("test.element.dump", new { windowId, name = "ThemeBox" });
 
                 // As a reader does it: the drop-down opened with a click, Light (the second item) clicked in its list.
                 var (bx, by) = CenterOf(box);
@@ -66,6 +67,12 @@ internal static partial class Program
                 box = await WaitFor(window, "ThemeBox");
                 var after = DrawnShare(box.Current.BoundingRectangle, out var afterShot);
                 var theme = await Get("AppTheme");
+                if (after < 3)
+                {
+                    var dumpAfter = await c.Call("test.element.dump", new { windowId, name = "ThemeBox" });
+                    notes.Add($"{from}: before {dumpBefore.ToString(Newtonsoft.Json.Formatting.None)}");
+                    notes.Add($"{from}: after {dumpAfter.ToString(Newtonsoft.Json.Formatting.None)}");
+                }
                 notes.Add($"{from} -> Light (AppTheme {theme}): box drawn {before:0}% before, {after:0}% after; {beforeShot} {afterShot}; screen {Screenshot($"tx01-{from}")}");
                 Check(after >= 3, $"from {from} to Light, the theme drop-down is still drawn ({after:0}% of it differs from the page)");
                 await c.Call("test.window.navigate", new { windowId, route = "Main" });
