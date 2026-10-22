@@ -925,11 +925,11 @@ span.ag-warn.ag-emoji-marked-text {
   vertical-align: middle;
 }
 
-/* Settings > Editor > Always show Markdown marks: the marks of every block shown as the block with the caret shows them.
+/* Settings > Editor > Always show Markdown marks: while editing (not in reading mode), the marks of every block shown as the block with the caret shows them.
    Not the source of what is drawn instead, nor its marks (a formula, ruby text, an emoji, an HTML entity): that would
    be there twice. */
-body.show-markdown-marks #ag-editor-id .ag-hide:not(.ag-math, .ag-math-marker, .ag-ruby, .ag-emoji-marker, .ag-emoji-marked-text, .ag-html-escape),
-body.show-markdown-marks #ag-editor-id .ag-hide:not(.ag-math, .ag-math-marker, .ag-ruby, .ag-emoji-marker, .ag-emoji-marked-text, .ag-html-escape) :is(.ag-highlight, .ag-selection) {
+body.show-markdown-marks:not(.read-only) #ag-editor-id .ag-hide:not(.ag-math, .ag-math-marker, .ag-ruby, .ag-emoji-marker, .ag-emoji-marked-text, .ag-html-escape),
+body.show-markdown-marks:not(.read-only) #ag-editor-id .ag-hide:not(.ag-math, .ag-math-marker, .ag-ruby, .ag-emoji-marker, .ag-emoji-marked-text, .ag-html-escape) :is(.ag-highlight, .ag-selection) {
   display: inline;
   width: auto;
   height: auto;
@@ -940,7 +940,7 @@ body.show-markdown-marks #ag-editor-id .ag-hide:not(.ag-math, .ag-math-marker, .
 }
 
 /* The space after a heading's # was pulled in under the hidden mark: with the mark shown it is a space again. */
-body.show-markdown-marks #ag-editor-id .ag-header-tight-space {
+body.show-markdown-marks:not(.read-only) #ag-editor-id .ag-header-tight-space {
   margin-left: 0;
 }
 

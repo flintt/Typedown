@@ -1,7 +1,7 @@
 // The "always show Markdown marks" setting (Settings > Editor, `showMarkdownMarks`): the marks of every block - the
 // heading's #, the ** of bold, the backticks of code, a link's brackets and address - are shown as the block with the
 // caret shows them, not only there. What is drawn in place of its source (a formula, an emoji) is not shown twice.
-// Off, the default, a block without the caret hides its marks as before. The text handed back is the same either way.
+// Reading mode hides them either way. Off, the default, a block without the caret hides its marks as before. The text handed back is the same either way.
 //
 //   node markdown-marks-check.js
 const { openEditor } = require('./harness');
@@ -43,6 +43,14 @@ const doc = '# Heading\n\nSome **bold** and `code` and a [link](https://example.
       }
       check(w.drawn === 0, `${state}: a formula's and an emoji's source are not shown beside what is drawn`);
       check(await flush() === doc, `${state}: the text handed back is the document`);
+      if (on) {
+        // Reading mode reads the document, not its source: no marks there.
+        await mode(false, true);
+        const reading = await widths();
+        console.log(`reading: ${JSON.stringify(reading)}`);
+        check(reading.heading === 0 && reading.inline === 0 && reading.drawn === 0, `${state}: in reading mode the marks are hidden`);
+        await mode(false, false);
+      }
     }
     if (errors.length) failures.push(`page errors: ${errors.join(' | ')}`);
   } finally {
