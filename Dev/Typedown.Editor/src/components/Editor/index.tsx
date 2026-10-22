@@ -75,6 +75,8 @@ const styleElement = (id: string) => {
     if (!style) {
         style = document.createElement('style')
         style.id = id
+        // A custom theme's colours are the screen's: printed, the light theme's (services/theme.ts).
+        if (id === 'typedown-theme-css') style.media = 'screen'
         document.head.appendChild(style)
     }
     return style
