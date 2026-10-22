@@ -901,18 +901,23 @@ namespace Typedown.Core.ViewModels
         /// hence the longer wait while the current load is unconfirmed.
         /// </summary>
         public Task<bool> FlushBeforeTabChangeAsync() =>
-            FlushContentAsync(ConfirmedLoadId != LoadId ? 4500 : 500, evenIfNotLoaded: true);
+            FlushContentAsync(ConfirmedLoadId != LoadId ? 4500 : null, evenIfNotLoaded: true);
 
-        public async Task<bool> FlushContentAsync(int timeoutMs = 500, bool evenIfNotLoaded = false)
+        public async Task<bool> FlushContentAsync(int? timeoutMs = null, bool evenIfNotLoaded = false)
         {
             if (MarkdownEditor == null || (!FileLoaded && !evenIfNotLoaded)) return true;
+            // A very long document: the page may still be busy with it a moment after it is shown (on a slower PC a
+            // 280,000-character document did not answer in half a second, and its close asked to save a document
+            // nobody had changed). Longer for it; half a second for the others, as before.
+            var wait = timeoutMs ?? ((Markdown?.Length ?? 0) >= CoverFromChars ? 3000 : 500);
             var token = ++flushToken;
             var waiter = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
             lock (flushWaiters) flushWaiters[token] = waiter;
             try
             {
                 MarkdownEditor.PostMessage("FlushContent", new { token });
-                var finished = await Task.WhenAny(waiter.Task, Task.Delay(timeoutMs));
+                var finished = await Task.WhenAny(waiter.Task, Task.Delay(wait));
+                if (finished != waiter.Task) Log.Debug($"editor: flush {token} not answered in {wait} ms (load {LoadId}, {Markdown?.Length ?? 0} chars)");
                 return finished == waiter.Task && waiter.Task.Result;
             }
             finally
