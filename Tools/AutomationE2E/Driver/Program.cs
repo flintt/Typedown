@@ -241,7 +241,7 @@ internal static partial class Program
             await Case("NV01 the editor page is never taken to another address: a script sending it to a web site is refused, and the document is still there", NV01);
             await Case("VM01 Vim's search in source mode on a long document: / and the letters typed after it go into the search box, nothing into the document, and Enter goes to the match", VM01);
             await Case("TX01 Settings > Appearance: the theme chosen in its own drop-down, from Dark and from Dracula to Light, leaves the drop-down drawn", TX01);
-            await Case("PP01 the print preview under a dark custom theme (Dracula): screenshots of the window and the preview, for a person to see", PP01);
+            await Case("PP01 the print preview under a dark custom theme (Dracula): the page and its margins white, the theme's colour back after", PP01);
             await Case("CV01 a very long document left (a tab switched to, the tab closed) is covered at once and uncovered when the next is on the page; a close cancelled at the save question covers nothing", CV01);
             await Case("XF01 a file changed outside: unchanged here, it is offered again and reloaded; with changes here, Keep keeps them; without asking, reloaded at once; a tab in the background asks when shown; deleted, the document turns unsaved", XF01);
             await Case("SS01 the settings in a narrow window: the items end left of the scroll bar, not under it", SS01);
@@ -4142,9 +4142,33 @@ internal static partial class Program
             Chord("Alt+Shift+P");
             await Task.Delay(5000);
             notes.Add("the print preview: " + Screenshot("pp01-preview"));
+            Check(LogLines("editor: printing starts").Count > 0, "the host was told the page is printed");
+            // The page's margins in the preview: the band at its top (the date and the title printed in it) and the strip
+            // right of the text - they were the web view's colour, the theme's (Dracula's dark), around the white page.
+            SetProcessDpiAwarenessContext(new IntPtr(-4));
+            GetWindowRect(window, out var w);
+            int width = w.Right - w.Left, height = w.Bottom - w.Top;
+            double Dark(int left, int top, int right, int bottom)
+            {
+                using var shot = new System.Drawing.Bitmap(right - left, bottom - top);
+                using (var g = System.Drawing.Graphics.FromImage(shot)) g.CopyFromScreen(left, top, 0, 0, shot.Size);
+                int dark = 0, all = 0;
+                for (var x = 0; x < shot.Width; x += 3)
+                    for (var y = 0; y < shot.Height; y += 3)
+                    {
+                        var p = shot.GetPixel(x, y);
+                        all++;
+                        if (0.299 * p.R + 0.587 * p.G + 0.114 * p.B < 100) dark++;
+                    }
+                return all == 0 ? 0 : dark * 100.0 / all;
+            }
+            var band = Dark(w.Left + (int)(width * 0.40), w.Top + (int)(height * 0.12), w.Right - (int)(width * 0.08), w.Top + (int)(height * 0.16));
+            var strip = Dark(w.Right - (int)(width * 0.07), w.Top + (int)(height * 0.30), w.Right - (int)(width * 0.045), w.Top + (int)(height * 0.70));
+            notes.Add($"dark in the preview's top margin {band:0}%, in its right margin {strip:0}%");
+            Check(band < 30 && strip < 10, $"the preview's margins are white, not the theme's colour (top {band:0}% dark, right {strip:0}%)");
             Chord("Esc");
             await Task.Delay(1500);
-            Check(false, "screenshots taken (this case is for a person to look at)");
+            Check(LogLines("editor: printing ends").Count > 0, "and told when the preview closed, the theme's colour back");
         }
         finally
         {
