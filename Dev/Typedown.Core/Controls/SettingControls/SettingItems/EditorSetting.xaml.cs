@@ -42,6 +42,9 @@ namespace Typedown.Core.Controls.SettingControls.SettingItems
             }
         });
 
+        /// <summary>The font families installed on this machine, sorted (an edition's font fields offer them too).</summary>
+        public static IReadOnlyList<string> InstalledFontFamilies => installedFontFamilies.Value;
+
         public ObservableCollection<string> FontFamilySuggestions { get; } = new();
 
         public static Dictionary<string, string> TextDirectionOptions { get; } = new()

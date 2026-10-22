@@ -85,8 +85,35 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
             <local:DocumentTabBar x:Name="DocumentTabBar" x:Load="{x:Bind local:MainContent.IsTabBarLoad(ViewModel.TabsViewModel.Tabs.Count, Settings.AlwaysShowTabBar), Mode=OneWay}"/>
             <local:EditorContainer Grid.Row="1" />
+            <!-- An edition's panel beside the document (EditionHooks.ShowSidePanel): none in Typedown itself. -->
+            <Grid x:Name="EditionPanelHost" Grid.Column="1" Grid.RowSpan="2" Visibility="Collapsed"
+                  AutomationProperties.AutomationId="EditionPanel"
+                  BorderThickness="1,0,0,0" BorderBrush="{ThemeResource CardStrokeColorDefault}"
+                  Background="{ThemeResource SolidBackgroundFillColorSecondary}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid Padding="16,8,8,8" ColumnSpacing="8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock x:Name="EditionPanelTitle" VerticalAlignment="Center" Style="{ThemeResource BodyStrongTextBlockStyle}" TextTrimming="CharacterEllipsis"/>
+                    <Button x:Name="EditionPanelClose" Grid.Column="1" Click="OnEditionPanelClose"
+                            AutomationProperties.AutomationId="EditionPanelClose"
+                            Background="Transparent" BorderThickness="0" Padding="8">
+                        <FontIcon Glyph="&#xE711;" FontSize="12"/>
+                    </Button>
+                </Grid>
+                <ScrollViewer Grid.Row="1" x:Name="EditionPanelScroller" HorizontalScrollMode="Disabled" HorizontalScrollBarVisibility="Disabled" Padding="16,0,16,16"/>
+            </Grid>
         </Grid>
         <Border 
             x:Name="SplitterLine" Grid.Column="1" Width="1" 

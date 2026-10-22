@@ -9,8 +9,8 @@ namespace Typedown.Core.Utilities
     /// <summary>
     /// Places where an edition (Edition.Initialize) adds to every window: styles for the editor page, entries in the File
     /// menu, its Export submenu and the View menu, items in the status bar, sections of the home page, the word counts the page reports, the documents
-    /// read from and written to disk, and what happens around the writing (<see cref="Activity"/>). Typedown itself adds
-    /// nothing here.
+    /// read from and written to disk, what happens around the writing (<see cref="Activity"/>) and a panel beside the
+    /// document (<see cref="ShowSidePanel"/>). Typedown itself adds nothing here.
     /// </summary>
     public static class EditionHooks
     {
@@ -89,6 +89,41 @@ namespace Typedown.Core.Utilities
             }
             return items;
         }
+
+        private static readonly System.Runtime.CompilerServices.ConditionalWeakTable<AppViewModel, SidePanel> sidePanels = new();
+
+        /// <summary>
+        /// A panel of the edition's beside the document in one window (one at a time: another shown in its place), with its
+        /// title and a close button above it. The content is made for that window; the panel stays while the window does
+        /// (back from the settings page, it is there again) until closed - by its button, or <see cref="CloseSidePanel"/>.
+        /// </summary>
+        public static void ShowSidePanel(AppViewModel app, SidePanel panel)
+        {
+            if (app == null || panel == null) return;
+            if (sidePanels.TryGetValue(app, out var shown) && shown != panel)
+            {
+                sidePanels.Remove(app);
+                try { shown.Closed?.Invoke(); } catch (Exception ex) { Log.WriteLocal("EditionSidePanel", ex.ToString()); }
+            }
+            sidePanels.AddOrUpdate(app, panel);
+            SidePanelChanged?.Invoke(app);
+        }
+
+        /// <summary>The window's panel taken away, if it is the one with this id; its <see cref="SidePanel.Closed"/> is called.</summary>
+        public static void CloseSidePanel(AppViewModel app, string id)
+        {
+            if (app == null || !sidePanels.TryGetValue(app, out var shown) || shown.Id != id) return;
+            sidePanels.Remove(app);
+            SidePanelChanged?.Invoke(app);
+            try { shown.Closed?.Invoke(); } catch (Exception ex) { Log.WriteLocal("EditionSidePanel", ex.ToString()); }
+        }
+
+        /// <summary>The id of the panel shown in the window, or null.</summary>
+        public static string SidePanelShown(AppViewModel app) => app != null && sidePanels.TryGetValue(app, out var shown) ? shown.Id : null;
+
+        internal static SidePanel SidePanelOf(AppViewModel app) => app != null && sidePanels.TryGetValue(app, out var shown) ? shown : null;
+
+        internal static event Action<AppViewModel> SidePanelChanged;
 
         private static readonly List<Func<AppViewModel, IEnumerable<HomeSection>>> homeSections = new();
 
@@ -350,5 +385,17 @@ namespace Typedown.Core.Utilities
         /// the same path), nobody having typed since: a change in it is not the reader's writing.
         /// </summary>
         public bool Automation { get; set; }
+    }
+
+    /// <summary>An edition's panel beside the document (<see cref="EditionHooks.ShowSidePanel"/>).</summary>
+    public sealed class SidePanel
+    {
+        public string Id { get; init; }
+        public string Title { get; init; }
+        public Microsoft.UI.Xaml.UIElement Content { get; init; }
+        /// <summary>Its width in view pixels.</summary>
+        public double Width { get; init; } = 340;
+        /// <summary>Called when it is closed or another takes its place.</summary>
+        public Action Closed { get; init; }
     }
 }
