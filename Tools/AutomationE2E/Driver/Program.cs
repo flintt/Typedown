@@ -4146,7 +4146,6 @@ internal static partial class Program
             Chord("Alt+Shift+P");
             await Task.Delay(5000);
             notes.Add("the print preview: " + Screenshot("pp01-preview"));
-            Check(LogLines("editor: printing starts").Count > 0, "the host was told the page is printed");
             // The page's margins in the preview: the band at its top (the date and the title printed in it) and the strip
             // right of the text - they were the web view's colour, the theme's (Dracula's dark), around the white page.
             SetProcessDpiAwarenessContext(new IntPtr(-4));
@@ -4173,6 +4172,7 @@ internal static partial class Program
             var strip = Dark(w.Right - 70, w.Top + (int)(height * 0.30), w.Right - 46, w.Top + (int)(height * 0.70));
             notes.Add($"dark in the preview's top margin {band:0}%, in its right margin {strip:0}%");
             Check(band < 30 && strip < 10, $"the preview's margins are white, not the theme's colour (top {band:0}% dark, right {strip:0}%)");
+            Check(LogLines("editor: printing starts").Count > 0, "the host was told the page is printed");
             Chord("Esc");
             await Task.Delay(1500);
             Check(LogLines("editor: printing ends").Count > 0, "and told when the preview closed, the theme's colour back");
