@@ -379,3 +379,10 @@ Typeleaf 的增量方向：现有 Pro 历史先补“命名保留版本”和“
 | 2 接入（原型已达标，排在这次发版之后） | 从 Muya 块树生成 pretext 输入（照顾隐藏标记、软换行、代码块 inline-flex 不折叠边距、空段落、表格列宽估计）；estimateRest 对能算的块用 pretext、其余照旧；超过 1000 块时屏幕外占位（contain-intrinsic-size 50px）也改用 pretext 高度；空闲时分批 prepare | EditorBench scroll-height-check／progressive-check 量跳动；w10 实测 demo1 滚动条跳动 |
 
 风险：字体描述须与 CSS 完全一致；1.0 刚发、接口在变、单人维护——接入时锁定版本。
+
+## 2026-10-23 查到未修
+
+| 事项 | 现象 | 来源 | 验证 |
+|---|---|---|---|
+| 长文档渲染中跳到标题，落点随后被甩开 | 30 万字文档还在分批渲染时点大纲跳到后面的标题，先落对，约 0.5 s 后一次移动把它甩出 8.8 万 px（旧估算路径，与 pretext 无关） | pretext 子代理在 vm103 的 heading-jump-check 中发现 | heading-jump-check / HJ02 的旧估算一侧，渲染中跳转后 1 s 内落点 ≤ 50 px |
+| 重启后窗口右下偏 24 px | 测试中强制结束再启动，每次窗口往右下偏 24 px，累计后状态栏落到任务栏下（SB01/SB02 曾因此失败，SR01 现已复位窗口）；正常关闭再打开是否也偏未查 | SR01 记录的前后位置 | 正常关闭、重开 3 次，窗口位置不变 |
