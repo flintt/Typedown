@@ -1225,9 +1225,20 @@ export default class HeightPredictor {
       }
       // What is at the top of the window stays where it is as blocks above it change size: the browser's scroll anchoring
       // did not hold it (a block read 1M characters in moved by a thousand pixels as those above were refined).
-      const keep = rules.length ? keepTop(root, job) : null
+      // The browser's scroll anchoring off meanwhile, so it and keepTop do not both move the page.
+      const keep = rules.length ? keepTop(root) : null
+      const scroller = document.scrollingElement || document.documentElement
+      const anchoring = scroller.style.overflowAnchor
+      if (keep) scroller.style.overflowAnchor = 'none'
       this.addRules(rules)
-      if (keep) keep()
+      if (keep) {
+        keep()
+        // The padding keep() set (--td-room-fraction) laid out now, while anchoring is still off: left to the next frame,
+        // the browser's anchoring took that fraction of a pixel for a move of the blocks and scrolled the page by a whole
+        // pixel to undo it (jitter-check: the text moved by 1 px, 3 times, after a 1M document was drawn).
+        void root.offsetHeight
+        scroller.style.overflowAnchor = anchoring
+      }
       account('refine', stepStarted, rules.length)
       if (i < blocks.length) idle(step, { timeout: 1000 })
       else finished()
@@ -1308,9 +1319,9 @@ function outwards(n, from) {
   return order
 }
 
-// The top-level block at the top of the window, and a function that scrolls the page by however far it has moved - the
-// fraction of a pixel a scroll cannot take carried to the next (`carrier.carry`), or many small moves add up.
-function keepTop(root, carrier) {
+// The top-level block at the top of the window, and a function that puts it back where it was: the page scrolled by whole
+// pixels, the fraction a scroll cannot take left in the padding above the blocks (--td-room-fraction).
+function keepTop(root) {
   const r = root.getBoundingClientRect()
   const hit = document.elementFromPoint(r.left + Math.min(r.width / 2, 200), Math.max(1, Math.min(window.innerHeight - 1, 60)))
   const el = hit && hit.closest ? hit.closest('#ag-editor-id > *') : null
@@ -1318,10 +1329,18 @@ function keepTop(root, carrier) {
   const before = el.getBoundingClientRect().top
   return () => {
     if (!el.isConnected) return
-    const moved = el.getBoundingClientRect().top - before + (carrier.carry || 0)
+    // Whole pixels by scrolling, the fraction left in the padding above the blocks (--td-room-fraction), as StateRender's
+    // keepInPlace does while drawn: carried to the next step instead, the text sat up to half a pixel off and back again
+    // as the steps went on (jitter-check: 3 moves of 0.6 px once a 1M document was drawn).
+    const fraction = parseFloat(root.style.getPropertyValue('--td-room-fraction')) || 0
+    const moved = el.getBoundingClientRect().top - before
     const from = window.scrollY
-    if (Math.round(moved)) window.scrollBy(0, Math.round(moved))
-    carrier.carry = moved - (window.scrollY - from)
+    const by = Math.ceil(moved - fraction)
+    if (by) window.scrollBy(0, by)
+    let next = fraction - moved + (window.scrollY - from)
+    // A scroll that did not go as far as asked (the end of the page): the rest stays as it is.
+    if (next < 0 || next >= 2) next = fraction
+    if (Math.abs(next - fraction) > 0.0005) root.style.setProperty('--td-room-fraction', `${Math.round(next * 10000) / 10000}px`)
   }
 }
 
