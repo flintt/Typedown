@@ -78,12 +78,13 @@ internal static partial class Program
             var alone = results[0];
             var small = results[1];
             Check(small.Content >= 0 && alone.Content >= 0, "the active document came on screen at all");
-            // The others not waited for: on screen about as soon as when it is the only one.
-            Check(small.Content - small.Window <= alone.Content - alone.Window + 700, $"with {heavy.Length - 1} heavy tabs more the active document is on screen about as soon as alone ({small.Content - small.Window} ms after the window, alone {alone.Content - alone.Window} ms)");
+            // The others not waited for: on screen about as soon as when it is the only one. Timed from the process's
+            // start: when the automation API first lists the window varies by seconds from run to run (1.9 s, 3.2 s).
+            Check(small.Content <= alone.Content + 700, $"with {heavy.Length - 1} heavy tabs more the active document is on screen about as soon as alone ({small.Content} ms from the start, alone {alone.Content} ms)");
             // The tabs at once, before the page is up: 2.6 s after the window on w10 while they came with the active file.
-            Check(small.Tabs >= 0 && small.Tabs - small.Window <= 1000, $"the {heavy.Length} tabs are in the strip within 1 s of the window ({small.Tabs - small.Window} ms)");
+            Check(small.Tabs >= 0 && small.Tabs <= alone.Content, $"the {heavy.Length} tabs are in the strip before the page is up ({small.Tabs} ms from the start; a document on screen at {alone.Content} ms)");
             var heavyOne = results[2];
-            Check(heavyOne.Content >= 0 && heavyOne.Content - heavyOne.Window <= 6000, $"the active heavy document's top is on screen within 6 s of the window ({heavyOne.Content - heavyOne.Window} ms)");
+            Check(heavyOne.Content >= 0 && heavyOne.Content <= 9000, $"the active heavy document's top is on screen within 9 s of the start ({heavyOne.Content} ms)");
         }
         finally
         {
