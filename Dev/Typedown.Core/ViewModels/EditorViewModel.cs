@@ -664,11 +664,15 @@ namespace Typedown.Core.ViewModels
         /// somebody choosing it, and jumping there would send the editor a scroll it did not ask for — which
         /// in reading mode, where the outline follows the page, is a loop: the page scrolls, reports a
         /// heading, gets scrolled to it, reports again. The page then twitches with nobody touching it.
+        /// Kept with the load whose outline it is marked in: the page numbers its blocks from the start each time it is
+        /// loaded (start-up, leaving the settings), so the document shown again names the very key marked for the load
+        /// before. Taken for "marked already", that heading was never marked in the new outline, and in reading mode the
+        /// outline showed nothing until the reader scrolled to another heading.
         /// </summary>
-        private string appliedCurSlug;
+        private readonly OutlineMark outlineMark = new OutlineMark();
 
         /// <summary>The heading the outline currently marks, so a selection landing on it again is not a jump.</summary>
-        public string AppliedCurSlug => appliedCurSlug;
+        public string AppliedCurSlug => outlineMark.Slug;
 
         /// <summary>
         /// True while the outline is being rebuilt from a report. The tree is bound to the collection being
@@ -681,6 +685,8 @@ namespace Typedown.Core.ViewModels
         /// <summary>A heading the page reported before there was an outline to mark it in.</summary>
         private string pendingOutlineSlug;
         private JToken pendingOutlineWhere;
+        // The load it was named for: kept for that load's outline only, not marked in the next load's.
+        private int pendingOutlineLoad;
 
         /// <summary>
         /// Raised with the slug of the heading just marked in the outline. The outline pane brings that row
@@ -735,6 +741,8 @@ namespace Typedown.Core.ViewModels
                 Log.Debug($"outline: a report of load {LoadId} left its outline out, and none is held for that load");
             state.Toc = tocKept ? ContentState.Toc : state.Toc ?? new List<TocItem>();
             ContentState = state;
+            // Another load's outline comes with nothing marked yet; the same load's (an edit) keeps its mark.
+            outlineMark.OutlineOf(LoadId);
             if (ContentState.WordCount != null)
                 EditionHooks.ReportWordCount(new WordCountReport
                 {
@@ -756,7 +764,7 @@ namespace Typedown.Core.ViewModels
                 if (ContentState.Cur != null)
                 {
                     // In reading mode the outline follows the page as it is scrolled (OnOutlineCurrent), not the caret.
-                    if (!Settings.ReadOnly) appliedCurSlug = ContentState.Cur.Slug;
+                    if (!Settings.ReadOnly) outlineMark.Set(ContentState.Cur.Slug);
                     if (ContentState.Toc.All(x => x.Slug != ContentState.Cur.Slug))
                         Log.Debug($"outline: current heading {ContentState.Cur.Slug} is not among the {ContentState.Toc.Count} entries reported with it");
                     // The mark on the model is for ExpandToSelected; the row itself is marked by the pane, through
@@ -805,7 +813,7 @@ namespace Typedown.Core.ViewModels
                 var where = pendingOutlineWhere;
                 pendingOutlineSlug = null;
                 pendingOutlineWhere = null;
-                OnOutlineCurrent(new JObject { ["slug"] = slug, ["where"] = where, ["loadId"] = LoadId });
+                OnOutlineCurrent(new JObject { ["slug"] = slug, ["where"] = where, ["loadId"] = pendingOutlineLoad });
             }
         }
 
@@ -821,33 +829,29 @@ namespace Typedown.Core.ViewModels
             if (IsStaleReport(arg)) return;
             var slug = arg["slug"]?.ToString();
             if (string.IsNullOrEmpty(slug)) return;
-            if (ContentState?.Toc == null)
-            {
-                // The page reports where it is as soon as it has laid the document out, which is before the
-                // first state report has reached here — there is no outline yet to mark. Dropping it left the
-                // highlight blank until the reader happened to scroll to a different heading, because the
-                // page only reports a heading when it changes. Keep it for the outline to arrive.
-                pendingOutlineSlug = slug;
-                pendingOutlineWhere = arg["where"];
-                Log.Debug($"outline: heading {slug} arrived before the outline; kept for when it does");
-                return;
-            }
-            if (appliedCurSlug == slug) return;
-            var match = ContentState.Toc.FirstOrDefault(x => x.Slug == slug);
             var where = arg["where"];
             var at = where == null ? "" : where["jump"] != null ? $" [jumped to it, scrollY={where["y"]}]" : $" [scrollY={where["y"]}, heading {where["index"]}/{where["of"]} at {where["top"]}]";
-            if (match == null)
+            var match = ContentState?.Toc?.FirstOrDefault(x => x.Slug == slug);
+            var verdict = outlineMark.Named(LoadId, slug, match != null);
+            if (verdict == OutlineNamed.Already) return;
+            if (verdict == OutlineNamed.Keep)
             {
+                // The page reports where it is as soon as it has laid the document out, which is before the
+                // first state report has reached here — there is no outline yet to mark, or only another load's.
+                // Dropping it left the highlight blank until the reader happened to scroll to a different heading,
+                // because the page only reports a heading when it changes. Keep it for the outline to arrive.
+                // Not marked in another load's outline either, even where that one has a heading by the same key (a
+                // page loaded again numbers its blocks alike): that outline is about to be replaced, unmarked.
                 // The document was rebuilt (a reload, a switch back to this tab) and the page named a heading
-                // by its new key before the outline with the new keys got here. Marking "none of these" left
-                // the outline blank; the report is kept for the outline that is on its way, like one that
-                // arrives before any outline at all.
+                // by its new key before the outline with the new keys got here: kept the same way.
                 pendingOutlineSlug = slug;
                 pendingOutlineWhere = where;
-                Log.Debug($"outline: heading {slug} is not among the {ContentState.Toc.Count} entries{at}; kept for the next outline");
+                pendingOutlineLoad = LoadId;
+                Log.Debug(ContentState?.Toc == null ? $"outline: heading {slug} arrived before the outline; kept for when it does"
+                    : outlineMark.Load != LoadId ? $"outline: heading {slug} arrived before load {LoadId}'s outline{at}; kept for it"
+                    : $"outline: heading {slug} is not among the {ContentState.Toc.Count} entries{at}; kept for the next outline");
                 return;
             }
-            appliedCurSlug = slug;
             Log.Debug($"outline: now on {match.Content}{at}");
             rebuildingToc = true;
             try

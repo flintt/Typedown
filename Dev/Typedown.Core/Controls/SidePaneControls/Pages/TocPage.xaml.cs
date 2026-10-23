@@ -29,6 +29,10 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
                 watched.OutlineUpdated += OnOutlineUpdated;
             }
             OnOutlineUpdated();
+            // The heading marked while the pane was away (closed, or the window's page rebuilt): its rows are made anew here
+            // and nothing marked them until the editor named a heading again - in reading mode, not before the reader
+            // scrolled to another one.
+            if (Editor?.AppliedCurSlug is string slug) OnOutlineHighlighted(slug);
         }
 
         // ---- the tree's nodes ----
