@@ -25,6 +25,7 @@
     "last 2 edge versions"
   ],
   "dependencies": {
+    "@chenglou/pretext": "1.0.0",
     "@marktext/file-icons": "^1.0.6",
     "classnames": "^2.3.1",
     "codemirror": "^5.65.1",
