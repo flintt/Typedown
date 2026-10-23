@@ -192,7 +192,7 @@
 	</Target>
 	<!-- In an MSIX too, when it is trimmed: the trimmer only sees what is published, and the CLI's needs must be in it (the
 	     trimmed MSIX's typedownctl did not start, TextWriter.Synchronized gone - 1.4.0.9 on w10). PackageCliAlongside then
-	     has the rest, if anything. -->
+	     is for an MSIX not trimmed only (both put the CLI's files in: APPX1101, two files of one name). -->
 	<Target Name="PublishCliAlongside" AfterTargets="ComputeResolvedFilesToPublishList" DependsOnTargets="PublishCli"
 	        Condition="'$(RuntimeIdentifier)' != '' and '$(AutomationTestHost)' != 'true' and '$(IncludeCli)' != 'false' and ('$(WindowsPackageType)' != 'MSIX' or '$(PublishTrimmed)' == 'true')">
 		<ItemGroup>
@@ -217,7 +217,7 @@
 		<Message Importance="high" Text="$(BrandCliName): trimmed with the app, rooted at @(_CliOwnAssembly->'%(Filename)', ', ')" />
 	</Target>
 	<Target Name="PackageCliAlongside" AfterTargets="GetPackagingOutputs" BeforeTargets="_ComputeAppxPackagePayload" DependsOnTargets="PublishCli"
-	        Condition="'$(RuntimeIdentifier)' != '' and '$(AutomationTestHost)' != 'true' and '$(IncludeCli)' != 'false' and '$(WindowsPackageType)' == 'MSIX'">
+	        Condition="'$(RuntimeIdentifier)' != '' and '$(AutomationTestHost)' != 'true' and '$(IncludeCli)' != 'false' and '$(WindowsPackageType)' == 'MSIX' and '$(PublishTrimmed)' != 'true'">
 		<ItemGroup>
 			<_AppPackaged Include="@(PackagingOutputs->'%(TargetPath)')" />
 			<_CliNew Include="@(_CliRelative)" Exclude="@(_AppPackaged)" />
