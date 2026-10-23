@@ -368,3 +368,14 @@
 | 中 | 增加代码块和长表格折叠，并恢复它们及大纲的折叠状态；阅读位置继续复用 `CursorMemory`。参考 [Shazao v0.6.6](https://github.com/yakoye/Shazao-markdown/releases/tag/v0.6.6) | 已有光标与纵向滚动位置记忆，不必重做 | 重启后恢复同一文档的视图状态；原文变化或缓存损坏时安全回退；折叠不影响导出 |
 
 Typeleaf 的增量方向：现有 Pro 历史先补“命名保留版本”和“任意两个版本比较”（参考 [Shazao v0.6.2](https://github.com/yakoye/Shazao-markdown/releases/tag/v0.6.2)）；支持者写作统计补按文档统计；多章节合并导出 Word／PDF 可作为新的 Pro 能力。这些方向已在 Typeleaf 的 `docs/todo.md` 中列出，具体排期与权益以该版本的决策为准。源码／预览分栏、大纲与文件树同时显示、可视编辑代码块行号继续沿用上文 #19、#23、#21，不重复立项。Word 导入和 EPUB 导出投入较大，先收集真实样本文档与需求再决定。
+
+## 长文档占位高度用 pretext 预测（2026-10-23 评估）
+
+**依据**：长文档分批渲染时，还没画出的块按字数估占位高度（`parser/render/index.js` 的 estimateRest），真实高度一到滚动条就跳。评估 [chenglou/pretext](https://github.com/chenglou/pretext)（MIT，1.0.0，约 41 KB gzip）：在无头 Chromium、Linux 字体、100 万字中英日韩混合文档上，每 100 个块的高度误差中位数 1 px（现估算 415 px），最大累计偏差 1.3k px（现 4.5k px）；首次测量每 100 万字 0.7–1.3 秒，换宽度重排 4 ms。算不了表格、图片、公式、mermaid、HTML 块、正在编辑显示标记的块，这些仍用现估算。排版预设、Word 导出用不上它。
+
+| 步骤 | 做法 | 验证 |
+|---|---|---|
+| 1 小原型（进行中） | 不改编辑器：在 w10 真实程序里注入 pretext，按真实字体和编辑器样式预测已画出块的高度，与实际高度、现估算三方对比 | 中英文真实长文档（含 demo1）每块误差分布；Windows 字体（雅黑、Segoe）下准确度 |
+| 2 接入（原型达标才做） | estimateRest 对能算的块用 pretext、其余照旧；空闲时分批 prepare；可选按块写 contain-intrinsic-size | EditorBench scroll-height-check／progressive-check 量跳动；w10 实测 demo1 滚动条跳动 |
+
+风险：字体描述须与 CSS 完全一致；1.0 刚发、接口在变、单人维护——接入时锁定版本。
