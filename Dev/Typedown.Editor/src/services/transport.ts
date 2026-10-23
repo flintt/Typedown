@@ -14,11 +14,17 @@ interface IMessage {
 /** Run with each message from the host before its listeners: the editor finishes drawing a document first (Muya). */
 export const beforeHostMessage = new Set<(name: string) => void>();
 
-window.chrome.webview.addEventListener<string>("message", ({ data }) => {
-  const { name, args } = JSON.parse(data) as IMessage
+const receive = (name: string, args: unknown) => {
   beforeHostMessage.forEach(hook => { try { hook(name) } catch (err) { console.log(err) } });
   transport.emit(name, args);
+};
+window.chrome.webview.addEventListener<string>("message", ({ data }) => {
+  const { name, args } = JSON.parse(data) as IMessage
+  receive(name, args);
 });
+// For checks in the real app (Tools/AutomationE2E HJ02): a message as the host sends it - the outline's jump to a heading
+// (EditorViewModel.JumpBySlug posts ScrollTo) - where no host call sends it on its own.
+(window as any).__typedownReceive = receive;
 
 const prevMap = new Map<string, string>();
 // Only idempotent state notifications may be skipped. Commands such as OpenURI
