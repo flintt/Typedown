@@ -24,14 +24,25 @@ $out = Join-Path $Artifacts $runId
 New-Item -ItemType Directory -Force $fixtures, $out | Out-Null
 "runId=$runId" | Out-File (Join-Path $out 'run.txt') -Encoding utf8
 
-# Branding.props beside this script (where the E2E package copies it) or in the repository it belongs to.
-$brandProps = @((Join-Path $PSScriptRoot 'Branding.props'), (Join-Path $PSScriptRoot '..\..\Branding.props')) | Where-Object { Test-Path $_ } | Select-Object -First 1
-if (-not $brandProps) { throw "no Branding.props beside $PSScriptRoot or in its repository: copy it next to this script" }
-$brand = ([xml](Get-Content $brandProps)).Project.PropertyGroup
-# The app's exe under the edition's name.
-$exe = Join-Path $TestHost ($brand.BrandExeName + '.exe')
-if (-not (Test-Path (Join-Path $TestHost 'automation-test-host.marker'))) { throw "$TestHost is not an automation test host build" }
-$hostProcess = Start-Process -FilePath $exe -ArgumentList @('--automation-test-root', "`"$root`"") -PassThru
+# Anything wrong before the driver starts (no Branding.props, the test host of another edition, its exe missing) ends
+# the run at once, said in driver.log, with done.txt written: without it start-interactive.ps1 waited its whole timeout
+# and reported nobody logged on.
+try {
+    # Branding.props beside this script (where the E2E package copies it) or in the repository it belongs to.
+    $brandProps = @((Join-Path $PSScriptRoot 'Branding.props'), (Join-Path $PSScriptRoot '..\..\Branding.props')) | Where-Object { Test-Path $_ } | Select-Object -First 1
+    if (-not $brandProps) { throw "no Branding.props beside $PSScriptRoot or in its repository: copy it next to this script" }
+    $brand = ([xml](Get-Content $brandProps)).Project.PropertyGroup
+    # The app's exe under the edition's name.
+    $exe = Join-Path $TestHost ($brand.BrandExeName + '.exe')
+    if (-not (Test-Path $exe)) { throw "no $($brand.BrandExeName).exe in $TestHost - the test host of another edition than this script's ($brandProps)?" }
+    if (-not (Test-Path (Join-Path $TestHost 'automation-test-host.marker'))) { throw "$TestHost is not an automation test host build" }
+    $hostProcess = Start-Process -FilePath $exe -ArgumentList @('--automation-test-root', "`"$root`"") -PassThru
+}
+catch {
+    "ENVIRONMENT ERROR: $($_.Exception.Message)" | Out-File (Join-Path $out 'driver.log') -Encoding utf8
+    "exit=3" | Out-File (Join-Path $out 'done.txt') -Encoding utf8
+    exit 3
+}
 $code = 3
 try {
     & dotnet (Join-Path $Driver 'Typedown.AutomationE2E.dll') --root $root --pid $hostProcess.Id --exe $exe --fixtures $fixtures --out (Join-Path $out 'result.json') $(if ($Only) { '--only'; $Only }) *> (Join-Path $out 'driver.log')
