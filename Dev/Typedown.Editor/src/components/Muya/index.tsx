@@ -196,7 +196,7 @@ const markEdited = (shown: React.MutableRefObject<ShownDocument | null>) => { if
 
 interface KeptDocument extends ShownDocument {
     cursorAt: string
-    kept: { blocks: any[], cursor: any, root: HTMLElement }
+    kept: { blocks: any[], cursor: any, root: HTMLElement, progressive?: any }
 }
 
 const STANDAR_Y = 320
@@ -791,7 +791,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     // Kept by its length once drawn whole too (see markLongDocument).
     const keepLongDocumentChars = 1000000
 
-    const markLongDocument = useCallback((markdown?: string) => {
+    const markLongDocument = useCallback((markdown?: string, keptBlocks?: number) => {
         // On the wrapper, not on the editor element itself: rendering patches that element and would strip a
         // class it does not know about.
         const root = document.getElementById('editor')
@@ -807,9 +807,15 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         // blocks: the page stood still for 10 s as the drawing ended), and every scroll and keystroke after laid out
         // more than the class saves. Below that, the exact layout once drawn (JU01).
         const length = (markdownRef.current ?? '').length
-        const long = markdown != null
-            ? markdown.length > longDocumentChars
-            : blocks > longDocumentBlocks || (length > longDocumentChars && (drawing || length > keepLongDocumentChars))
+        // A kept document coming back drawn whole (`keptBlocks`): as it was when it was drawn whole. By its length it got the
+        // class for a moment and lost it again a fraction of a second later; its blocks, laid out without the class, had no
+        // remembered size, so those it skipped stood at the 50 px stand-in meanwhile - on Windows the first block at the
+        // top of the window did, and the text under it jumped by 24 px when the class went (JT01).
+        const long = keptBlocks != null && markdown != null
+            ? keptBlocks > longDocumentBlocks || markdown.length > keepLongDocumentChars
+            : markdown != null
+                ? markdown.length > longDocumentChars
+                : blocks > longDocumentBlocks || (length > longDocumentChars && (drawing || length > keepLongDocumentChars))
         if (root.classList.contains('ag-long-document') === long) return
         // The blocks off screen change from their stand-ins' height to their own, or back: the block at the top of the
         // window stays where it is (taken off once drawn whole, a code block read far down went 276,000 px away).
@@ -1198,7 +1204,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         else shownRef.current = null
         const kept = local ? null : takeKept(props.markdown, cursorRef.current)
         markdownRef.current = props.markdown
-        markLongDocument(props.markdown)
+        markLongDocument(props.markdown, kept && !kept.kept.progressive ? kept.kept.blocks.length : undefined)
         // An automation edit keeps the blocks it did not change, with the reader's cursor and scroll position; the
         // browser keeps what is on screen in place when blocks above it change. Otherwise, a whole new document.
         const blocksBefore = local ? editor.contentState.blocks : null

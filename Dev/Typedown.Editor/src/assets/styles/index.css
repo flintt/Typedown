@@ -1611,6 +1611,10 @@ span.ag-footnote-backlink {
      was four fifths of the time (1.5 MB of HTML-heavy blocks: 84 blocks drawn in 5 s). */
   --td-room-above: inherit;
   height: var(--td-room-above, 0px);
+  /* The fraction of a pixel the page cannot scroll by (parser/render/index.js keepInPlace): a padding, as tall as asked -
+     the height above is laid out to whole pixels where the blocks are past the long-document size. */
+  --td-room-fraction: inherit;
+  padding-top: var(--td-room-fraction, 0px);
 }
 
 #ag-editor-id::after {
