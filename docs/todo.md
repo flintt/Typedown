@@ -375,7 +375,7 @@ Typeleaf 的增量方向：现有 Pro 历史先补“命名保留版本”和“
 
 | 步骤 | 做法 | 验证 |
 |---|---|---|
-| 1 小原型（进行中） | 不改编辑器：在 w10 真实程序里注入 pretext，按真实字体和编辑器样式预测已画出块的高度，与实际高度、现估算三方对比 | 中英文真实长文档（含 demo1）每块误差分布；Windows 字体（雅黑、Segoe）下准确度 |
-| 2 接入（原型达标才做） | estimateRest 对能算的块用 pretext、其余照旧；空闲时分批 prepare；可选按块写 contain-intrinsic-size | EditorBench scroll-height-check／progressive-check 量跳动；w10 实测 demo1 滚动条跳动 |
+| 1 小原型（已做 2026-10-23，分支 proto/pretext-heights f560a951，用例 PX01） | 不改编辑器：在 w10 真实程序里注入 pretext，按真实字体和编辑器样式预测已画出块的高度，与实际高度、现估算三方对比 | 结果：30 万／100 万字中英日韩混排，两种宽度下 100% 的块误差 ≤1px（最大 0.2px），累计偏差 16–52px；现估算每块中位误差 14–32px、累计偏差 2300–21000px（代码块、表格最差）。w10 上 100 万字 prepare 0.48 s、layout 24 ms、换宽 14 ms。算不了：图片、图表、独立公式；撑高行的 sup/kbd/脚注各差 1–6px；嵌套引用差 8px。表格列宽本次从页面读，接入时须自估 |
+| 2 接入（原型已达标，排在这次发版之后） | 从 Muya 块树生成 pretext 输入（照顾隐藏标记、软换行、代码块 inline-flex 不折叠边距、空段落、表格列宽估计）；estimateRest 对能算的块用 pretext、其余照旧；超过 1000 块时屏幕外占位（contain-intrinsic-size 50px）也改用 pretext 高度；空闲时分批 prepare | EditorBench scroll-height-check／progressive-check 量跳动；w10 实测 demo1 滚动条跳动 |
 
 风险：字体描述须与 CSS 完全一致；1.0 刚发、接口在变、单人维护——接入时锁定版本。
