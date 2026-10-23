@@ -22,6 +22,14 @@ import { tokenizer } from '../'
  * caller: any failure is the same null.
  */
 
+// Where the time goes, per phase (ms and how many), for checks in the real app (Tools/AutomationE2E HJ01/HJ02 read it).
+const stats = window.__typedownPretextStats = window.__typedownPretextStats || {}
+const account = (name, started, count = 1) => {
+  const s = stats[name] || (stats[name] = { ms: 0, n: 0 })
+  s.ms = Math.round((s.ms + performance.now() - started) * 10) / 10
+  s.n += count
+}
+
 // pretext, loaded on first use (it is only for long documents). Null until loaded, or if it failed to load.
 let pretext = null
 let pretextLoading = null
@@ -270,10 +278,16 @@ export default class HeightPredictor {
       }
       if (!missing) continue
       this.fontsLoading++
-      document.fonts.load(font, sample).catch(() => {}).then(() => {
+      // Not waited for past a few seconds: a load that never ends must not keep the predictions off for good.
+      let over = false
+      const done = () => {
+        if (over) return
+        over = true
         this.fontsLoading--
         this.fontsArrived()
-      })
+      }
+      setTimeout(done, 3000)
+      document.fonts.load(font, sample).catch(() => {}).then(done)
     }
   }
 
@@ -334,6 +348,7 @@ export default class HeightPredictor {
     }
     entry = { generation: env.generation, tree, memo: null }
     this.trees.set(block, entry)
+    account('predict', started)
     if (tree) this.stats.prepared++
     else this.stats.unsupported++
     this.stats.prepareMs += performance.now() - started
@@ -536,6 +551,7 @@ export default class HeightPredictor {
       this.chains.set(p.key, p.chain)
     }
     // Next to the root, so it inherits what the root does; out again at once (nothing else runs in between).
+    const probed = performance.now()
     root.parentNode.insertBefore(probe, root.nextSibling)
     const fonts = new Set()
     try {
@@ -549,6 +565,7 @@ export default class HeightPredictor {
     } finally {
       probe.remove()
     }
+    account('styleProbe', probed, made.length)
     this.loadFonts(fonts)
   }
 
@@ -856,6 +873,7 @@ export default class HeightPredictor {
    */
   quick(state, env) {
     if (state.quickWidth === env.width && state.quickGeneration === env.generation) return state.quickLines
+    const started = performance.now()
     if (!this.canvas) this.canvas = document.createElement('canvas').getContext('2d')
     const s = getComputedStyle(env.root)
     this.canvas.font = fontOf(s)
@@ -905,6 +923,7 @@ export default class HeightPredictor {
     state.quickWidth = env.width
     state.quickGeneration = env.generation
     state.fitted = null
+    account('quick', started, state.blocks.length)
     return lines
   }
 
@@ -920,6 +939,7 @@ export default class HeightPredictor {
     const x = this.quick(state, env)
     const made = this.stats.prepared + this.stats.unsupported
     if (state.fitted && state.fittedAt === made) return state.fitted
+    const fitStarted = performance.now()
     const { blocks } = state
     const kinds = state.quickKinds
     const sums = new Map()
@@ -961,6 +981,7 @@ export default class HeightPredictor {
     }
     state.fitted = fitted
     state.fittedAt = made
+    account('fit', fitStarted)
     return fitted
   }
 
@@ -1010,6 +1031,7 @@ export default class HeightPredictor {
    * on.
    */
   room(state, env, guess, measureEdges = true) {
+    const roomStarted = performance.now()
     const { blocks, lo, hi, root } = state
     const counted = { predicted: 0, fitted: 0, guessed: 0 }
     const fitted = this.fit(state, env)
@@ -1065,6 +1087,7 @@ export default class HeightPredictor {
       for (let i = hi; i < blocks.length; i++) add(i)
       below = y + collapseList(pending) - mb
     }
+    account('room', roomStarted)
     return { above: Math.max(0, above), below: Math.max(0, below), counted }
   }
 
@@ -1106,6 +1129,16 @@ export default class HeightPredictor {
   }
 
   addRules(rules) {
+    if (!rules.length) return
+    const started = performance.now()
+    try {
+      this.writeRules(rules)
+    } finally {
+      account('rules', started, rules.length)
+    }
+  }
+
+  writeRules(rules) {
     // Rules for blocks long gone pile up over many documents: past a limit they all go (a block still on the page then
     // stands at the style sheet's size until it is ruled again).
     if (this.ruled.size > 60000) this.clearRules()
@@ -1141,7 +1174,7 @@ export default class HeightPredictor {
   ruleRest(blocks, root) {
     this.lastRuled = { blocks, root }
     if (this.resting) this.resting.stop = true
-    const job = { stop: false }
+    const job = { stop: false, started: performance.now() }
     this.resting = job
     let i = 0
     const idle = window.requestIdleCallback
@@ -1156,8 +1189,14 @@ export default class HeightPredictor {
       if (log && log.restDoneAt === undefined) log.restDoneAt = performance.now()
     }
     const step = deadline => {
-      if (job.stop || !root.isConnected) return
-      if (!this.ready()) return idle(step, { timeout: 1000 })
+      if (job.stop) return
+      if (!root.isConnected) return finished()
+      if (!this.ready()) {
+        // Not ready for ten seconds (pretext not there, fonts never coming): given up, the guesses stay.
+        if (performance.now() - job.started > 10000) return finished()
+        return idle(step, { timeout: 1000 })
+      }
+      const stepStarted = performance.now()
       let env
       try {
         env = this.environment(root)
@@ -1169,9 +1208,11 @@ export default class HeightPredictor {
       // Blocks guessed while drawn (or ruled for another width or other styles) predicted and ruled again: in the page's
       // idle time, or a few milliseconds' worth when it has had none for a second. One style sheet change per step.
       const until = performance.now() + (deadline.didTimeout ? 6 : Math.max(0, deadline.timeRemaining() - 1))
+      // Those around the window first, outwards from the block at its top.
+      if (!job.order) job.order = outwards(blocks.length, topIndex(root))
       const rules = []
       while (i < blocks.length && performance.now() < until) {
-        const block = blocks[i++]
+        const block = blocks[job.order[i++]]
         if (this.ruled.get(block.key) === sig) continue
         const text = this.ruleText(block, env, null, -1, true)
         if (text) rules.push(text)
@@ -1181,6 +1222,7 @@ export default class HeightPredictor {
       const keep = rules.length ? keepTop(root, job) : null
       this.addRules(rules)
       if (keep) keep()
+      account('refine', stepStarted, rules.length)
       if (i < blocks.length) idle(step, { timeout: 1000 })
       else finished()
     }
@@ -1201,6 +1243,32 @@ const PRIOR = {
   p: [6, -2], ul: [6, -2], ol: [12, 4], blockquote: [28, 20], hr: [8, 0],
   h1: [32, 16], h2: [24, 8], h3: [21, 5], h4: [18, 2], h5: [16, 0], h6: [13, -3],
   pre: [30, -23], 'figure:table': [40, 20, 1.5], figure: [10, 2], other: [10, 2]
+}
+
+// The index of the top-level block at the top of the window (its place among the root's elements: the whole document
+// is drawn when this is asked), or 0.
+function topIndex(root) {
+  const kids = root.children
+  let lo = 0
+  let hi = kids.length - 1
+  if (hi < 0) return 0
+  while (lo < hi) {
+    const mid = (lo + hi) >> 1
+    if (kids[mid].getBoundingClientRect().bottom <= 0) lo = mid + 1
+    else hi = mid
+  }
+  return lo
+}
+
+// 0..n-1 outwards from `from`: from, from+1, from-1, from+2, ...
+function outwards(n, from) {
+  const order = new Int32Array(n)
+  let k = 0
+  for (let d = 0; k < n; d++) {
+    if (from + d < n) order[k++] = from + d
+    if (d > 0 && from - d >= 0 && k < n) order[k++] = from - d
+  }
+  return order
 }
 
 // The top-level block at the top of the window, and a function that scrolls the page by however far it has moved - the

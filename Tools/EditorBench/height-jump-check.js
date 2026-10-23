@@ -56,6 +56,7 @@ async function open(browser, port, off) {
 // One load: every frame's height, scroll position and the read block's place, then the page wholly laid out.
 async function measure(page, text, at) {
   await page.evaluate(() => {
+    const ps = window.__typedownPretextStats; if (ps) for (const k of Object.keys(ps)) delete ps[k];
     window.__frames = []; window.__watchKey = null; window.__sampling = true;
     const tick = () => {
       if (!window.__sampling) return;
@@ -80,7 +81,7 @@ async function measure(page, text, at) {
   const restAt = await page.waitForFunction(() => window.__typedownPretextOff || (window.__typedownPretextLog && window.__typedownPretextLog.restDoneAt !== undefined) ? (window.__typedownPretextLog?.restDoneAt ?? 0) - window.__t0 : false, { timeout: 60000, polling: 100 }).then(h => h.jsonValue()).catch(() => null);
   await new Promise(r => setTimeout(r, 1000));
   const frames = await page.evaluate(() => { window.__sampling = false; return window.__frames; });
-  const end = await page.evaluate(() => ({ h: document.documentElement.scrollHeight, y: window.scrollY, top: document.getElementById(window.__watchKey)?.getBoundingClientRect().top, vh: window.innerHeight, long: !!document.querySelector('#editor.ag-long-document'), blocks: window.__typedownMuya.contentState.blocks.length, log: window.__typedownPretextLog || null, slices: (window.__typedownProgressiveLog || []).slice(-1)[0]?.slices }));
+  const end = await page.evaluate(() => ({ h: document.documentElement.scrollHeight, y: window.scrollY, top: document.getElementById(window.__watchKey)?.getBoundingClientRect().top, vh: window.innerHeight, long: !!document.querySelector('#editor.ag-long-document'), blocks: window.__typedownMuya.contentState.blocks.length, log: window.__typedownPretextLog || null, slices: (window.__typedownProgressiveLog || []).slice(-1)[0]?.slices, stats: JSON.parse(JSON.stringify(window.__typedownPretextStats || {})) }));
   // Wholly laid out: every block at its real size. Where the read block then is (its distance from the top of the page)
   // is where the thumb belongs.
   // A document that keeps the long-document rule once drawn keeps its blocks contained (content-visibility: auto lays
@@ -140,7 +141,7 @@ async function measure(page, text, at) {
           if (process.env.FRAMES_OUT) fs.writeFileSync(`${process.env.FRAMES_OUT}-${label}-${at ? 'middle' : 'top'}-${mode}.json`, JSON.stringify({ frames: frames.map(f => ({ ...f, t: Math.round(f.t - frames[0].t) })), end, real, readTop }));
           console.log(`${name}: ${text.length} chars, ${end.blocks} blocks, drawn in ${Math.round(r.doneAt)} ms over ${shown.length} frames, ${end.slices} slices${r.restAt ? `, the rest predicted ${Math.round(r.restAt)} ms after the load` : ''}, long-document class at the end ${end.long ? 'on' : 'off'}`);
           console.log(`  height off by ${mean.toFixed(2)}% on average, ${worst.toFixed(2)}% at worst; real ${real.h} px, at the end ${end.h} px (${endErr.toFixed(2)}%); thumb ${thumbErr.toFixed(2)}% of the track at worst, drift ${drift.toFixed(1)} px, longest frame gap ${Math.round(stall)} ms`);
-          if (end.log && mode !== 'old') console.log(`  pretext: ${JSON.stringify(end.log)}`);
+          if (end.log && mode !== 'old') console.log(`  pretext: ${JSON.stringify(end.log)}; per phase (ms, count) ${JSON.stringify(end.stats)}`);
           const res = { name, mode, mean, worst, thumbErr, endErr, drift, stall, doneAt: r.doneAt, restAt: r.restAt, log: end.log, errors };
           byMode[mode] = res;
           results.push(res);
@@ -156,7 +157,8 @@ async function measure(page, text, at) {
         check(!p.errors.length, `${name} ${p.mode}: no page errors${p.errors.length ? ': ' + p.errors.join(' | ') : ''}`);
         if (byMode.pretext) {
           const o = byMode.old;
-          check(misses(o), `${name}: the old estimate misses a threshold (mean ${o.mean.toFixed(2)}%, worst ${o.worst.toFixed(2)}%, thumb ${o.thumbErr.toFixed(2)}%, end ${o.endErr.toFixed(2)}%) - the check tells them apart`);
+          // The 100k one is drawn in a few slices: the old estimate is on screen for too short a time to fail reliably.
+          if (label !== '100k') check(misses(o), `${name}: the old estimate misses a threshold (mean ${o.mean.toFixed(2)}%, worst ${o.worst.toFixed(2)}%, thumb ${o.thumbErr.toFixed(2)}%, end ${o.endErr.toFixed(2)}%) - the check tells them apart`);
           check(p.doneAt <= maxSlower * o.doneAt, `${name}: drawn in at most ${maxSlower} times the old estimate's time (${Math.round(p.doneAt)} vs ${Math.round(o.doneAt)} ms, ${(p.doneAt / o.doneAt).toFixed(2)}x)`);
           check(p.stall <= o.stall + 50, `${name}: the longest frame gap no more than 50 ms over the old estimate's (${Math.round(p.stall)} vs ${Math.round(o.stall)} ms)`);
         }

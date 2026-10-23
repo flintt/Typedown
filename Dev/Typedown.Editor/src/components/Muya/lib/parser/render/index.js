@@ -26,11 +26,9 @@ let lastInputAt = -Infinity
 for (const type of ['keydown', 'pointerdown', 'pointermove', 'wheel', 'touchstart', 'compositionstart'])
   window.addEventListener(type, () => { lastInputAt = performance.now() }, { capture: true, passive: true })
 const sliceBudget = () => performance.now() - lastInputAt < 1000 ? 12 : 40
-// Predicting a document's heights (predictHeights.js): a few milliseconds before the first slice for the blocks drawn
-// next, then this share of each slice (the rest in idle time, and once drawn). None: the guess from the blocks' text
-// (predictHeights fit) is as close while drawn, and every share of a slice made the drawing slower (vm103, 1M
-// characters: 8% of each slice 1.37 times the old estimate's time, 4% 1.32, none 1.15-1.23).
-const HEIGHTS_FIRST_MS = 8
+// The share of each drawing slice spent predicting a document's heights (predictHeights.js). None: the guess from the
+// blocks' text (predictHeights fit) is as close while drawn, and every share of a slice made the drawing slower (vm103,
+// 1M characters: 8% of each slice 1.37 times the old estimate's time, 4% 1.32, none 1.15-1.23).
 const HEIGHTS_SLICE_SHARE = 0
 
 class StateRender {
@@ -471,10 +469,11 @@ class StateRender {
     window.__typedownPretextLog = { blocks: blocks.length, prepareMs: 0 }
     this.holdAnchoring(true)
     if (lo === 0 && hi === blocks.length) return this.finishProgressive(state)
-    // The blocks drawn next predicted before the room is first written (a few milliseconds; where pretext is there), the
-    // rest while the page is idle and in a small share of each slice (prepareHeights).
-    this.prepareHeights(state, 0, HEIGHTS_FIRST_MS)
-    this.idleHeights(state)
+    // Nothing predicted while it is drawn: the room and the size rules are the guess from the blocks' text
+    // (predictHeights quick and fit), the predictions come once it is drawn (ruleRest), those around the window first.
+    // Predicted before and while it is drawn - even 8 ms before the first slice and the page's idle moments between
+    // slices - the first predictions' warming up (reading styles, pretext's first measurements) made a 100k document take
+    // twice as long to draw on Windows.
     this.estimateRest(state)
     this.watchForBlank(state)
     // The rest only once this part is on the screen: drawn before the first paint, it held that paint back. A page not
@@ -685,17 +684,6 @@ class StateRender {
       log.predicted = (log.predicted || 0) + count
       log.stats = this.heights.stats
     }
-  }
-
-  // The rest predicted while the page is idle - never in the drawing's time - until the drawing ends (then ruleRest).
-  idleHeights(state) {
-    if (!window.requestIdleCallback || !HeightPredictor.enabled()) return
-    const step = deadline => {
-      if (this.progressive !== state) return
-      this.prepareHeights(state, performance.now() + Math.max(0, deadline.timeRemaining() - 1))
-      if (state.heightsAt < (state.heightsPlan ? state.heightsPlan.length : 1)) window.requestIdleCallback(step)
-    }
-    window.requestIdleCallback(step)
   }
 
   // The size rules of the blocks a slice drew, written together: one change of the style sheet a slice.

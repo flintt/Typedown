@@ -52,7 +52,7 @@ internal static partial class Program
 
     // Started before a load: every frame's height, scroll position, the read block's place and whether the drawing is
     // still going, until stopped.
-    private const string HjStartScript = @"(()=>{window.__hj={frames:[],key:null,on:true};const tick=()=>{const s=window.__hj;if(!s||!s.on)return;const el=s.key?document.getElementById(s.key):null;s.frames.push([performance.now(),document.documentElement.scrollHeight,window.scrollY,el?el.getBoundingClientRect().top:null,!!(window.__typedownMuya&&window.__typedownMuya.renderPending)]);requestAnimationFrame(tick)};requestAnimationFrame(tick);return 'ok'})()";
+    private const string HjStartScript = @"(()=>{const ps=window.__typedownPretextStats;if(ps)for(const k of Object.keys(ps))delete ps[k];window.__hj={frames:[],key:null,on:true};const tick=()=>{const s=window.__hj;if(!s||!s.on)return;const el=s.key?document.getElementById(s.key):null;s.frames.push([performance.now(),document.documentElement.scrollHeight,window.scrollY,el?el.getBoundingClientRect().top:null,!!(window.__typedownMuya&&window.__typedownMuya.renderPending)]);requestAnimationFrame(tick)};requestAnimationFrame(tick);return 'ok'})()";
 
     // Once drawn (and the blocks guessed while drawn predicted, ruleRest): the frames summed up against the page wholly
     // laid out (forced here; synchronous - the evaluation is not awaited). `readTop`: where the read block is meant to be
@@ -63,14 +63,17 @@ const st=document.createElement('style');st.id='hj01-real';st.textContent='#ag-e
 const realH=document.documentElement.scrollHeight;const el=s.key?document.getElementById(s.key):null;const abs=el?el.getBoundingClientRect().top+scrollY:0;st.remove();
 const shown=fr.filter(f=>f[3]!==null);const readTop=" + (readTop?.ToString() ?? "null") + @"??(shown.length?shown[0][3]:0);
 const thumbReal=Math.max(0,abs-readTop)/Math.max(1,realH-vh);const log=window.__typedownPretextLog||null;
-let worst=0,w=0,span=0,thumb=0,drift=0,gap=0,prev=null,pend=0;const t0=shown.length?shown[0][0]:0;
+let worst=0,w=0,span=0,thumb=0,drift=0,driftDrawing=0,driftAt=null,gap=0,prev=null,pend=0;const t0=shown.length?shown[0][0]:0;
 for(const f of shown){const err=Math.abs(f[1]-realH)/realH*100;if(f[4]){pend++;worst=Math.max(worst,err);if(prev){w+=err*(f[0]-prev[0]);span+=f[0]-prev[0];gap=Math.max(gap,f[0]-prev[0])}}
-const th=f[1]>vh?f[2]/(f[1]-vh):0;if(" + (readTop.HasValue ? "true" : "false") + @")thumb=Math.max(thumb,Math.abs(th-thumbReal)*100);if(f[0]>t0+50)drift=Math.max(drift,Math.abs(f[3]-readTop));prev=f}
+const th=f[1]>vh?f[2]/(f[1]-vh):0;if(" + (readTop.HasValue ? "true" : "false") + @")thumb=Math.max(thumb,Math.abs(th-thumbReal)*100);if(f[0]>t0+50){const d=Math.abs(f[3]-readTop);if(d>drift){drift=d;driftAt=Math.round(f[0]-t0)}if(f[4])driftDrawing=Math.max(driftDrawing,d)}prev=f}
 const r=x=>x===null?null:Math.round(x*100)/100;const pl=(window.__typedownProgressiveLog||[]).slice(-1)[0]||{};
-return JSON.stringify({frames:shown.length,drawingFrames:pend,drawnMs:pl.ms??null,slices:pl.slices??null,mean:r(span?w/span:worst),worst:r(worst),thumb:r(thumb),drift:r(drift),maxGapMs:Math.round(gap),endH:end.h,realH,end:r(Math.abs(end.h-realH)/realH*100),longAtEnd:end.long,blocks:window.__typedownMuya.contentState.blocks.length,prepareMs:log?log.prepareMs:null,restMs:log&&log.restDoneAt!==undefined?Math.round(log.restDoneAt-t0):null})})()";
+return JSON.stringify({frames:shown.length,drawingFrames:pend,drawnMs:pl.ms??null,slices:pl.slices??null,mean:r(span?w/span:worst),worst:r(worst),thumb:r(thumb),drift:r(drift),driftDrawing:r(driftDrawing),driftAtMs:driftAt,maxGapMs:Math.round(gap),endH:end.h,realH,end:r(Math.abs(end.h-realH)/realH*100),longAtEnd:end.long,blocks:window.__typedownMuya.contentState.blocks.length,prepareMs:log?log.prepareMs:null,restMs:log&&log.restDoneAt!==undefined?Math.round(log.restDoneAt-t0):null,stats:window.__typedownPretextStats||null})})()";
 
     // Drawn, and (with predictions) the blocks only guessed while drawn predicted too.
-    private const string HjSettledScript = "String(!!window.__typedownMuya && !window.__typedownMuya.renderPending && (!!window.__typedownPretextOff || !!(window.__typedownPretextLog && window.__typedownPretextLog.restDoneAt !== undefined)))";
+    private const string HjSettledScript = "String(!!window.__typedownMuya && !window.__typedownMuya.renderPending && (!!window.__typedownPretextOff || !!(window.__typedownPretextLog && window.__typedownPretextLog.restDoneAt !== undefined) || window.__typedownMuya.contentState.stateRender.heights.resting === null))";
+    private const string HjPendingScript = "String(!!window.__typedownMuya && !window.__typedownMuya.renderPending)";
+    // What the page was doing when it did not settle.
+    private const string HjStateScript = "JSON.stringify({pending:!!window.__typedownMuya?.renderPending,log:window.__typedownPretextLog||null,resting:!!window.__typedownMuya?.contentState.stateRender.heights.resting,fontsLoading:window.__typedownMuya?.contentState.stateRender.heights.fontsLoading,stats:window.__typedownPretextStats||null})";
 
     private static async Task HJ01(List<string> notes)
     {
@@ -202,8 +205,13 @@ return JSON.stringify({frames:shown.length,drawingFrames:pend,drawnMs:pl.ms??nul
                     opened.Add(id);
                     // As soon as its first part is there: a heading three quarters down, not drawn yet.
                     await Eventually(async () => await Eval("String(!!(window.__typedownMuya && window.__typedownMuya.contentState.blocks.length > 50 && document.getElementById('ag-editor-id')?.children.length > 0))") == "true", 30000, 20);
+                    await Eval("(()=>{const ps=window.__typedownPretextStats;if(ps)for(const k of Object.keys(ps))delete ps[k];return 'ok'})()");
                     var drawing = await Jump($"{tag} while drawn", 0.75);
-                    if (!await Eventually(async () => await Eval(HjSettledScript) == "true", 60000, 200)) throw new CaseFailed($"{tag}: not drawn within 60 s");
+                    var completed = await Eventually(async () => await Eval(HjPendingScript) == "true", 60000, 200);
+                    Check(completed, $"{tag}: the drawing completes after the jump ({(completed ? "yes" : await Eval(HjStateScript))})");
+                    if (!completed) throw new CaseFailed($"{tag}: not drawn within 60 s: {await Eval(HjStateScript)}");
+                    if (!await Eventually(async () => await Eval(HjSettledScript) == "true", 30000, 200)) notes.Add($"{tag}: the guessed blocks not all predicted within 30 s: {await Eval(HjStateScript)}");
+                    drawing["stats"] = JToken.Parse(await Eval("JSON.stringify(window.__typedownPretextStats||null)"));
                     var drawn = await Jump($"{tag} once drawn", 0.45);
                     results[$"{tag} drawing"] = drawing;
                     results[$"{tag} drawn"] = drawn;
