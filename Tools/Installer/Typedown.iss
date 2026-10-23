@@ -3,7 +3,7 @@
 #ifndef MyArch
   #define MyArch "x64"
 #endif
-; A trial build passes its own (/DMyAppVersion=1.4.0.13, build-local.ps1 -Version) with /DMyFileVersion.
+; A trial build passes its own (/DMyAppVersion=1.4.0.13, build-local.ps1 -TrialVersion) with /DMyFileVersion.
 #ifndef MyAppVersion
   #define MyAppVersion "1.3.8"
 #endif

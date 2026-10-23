@@ -37,7 +37,7 @@ param(
     [string]$Label,
     # A trial's own version (1.4.0.13): the app and the installer carry it instead of the csproj's release number,
     # the same number its MSIX gets, so the two files of one trial say the same.
-    [ValidatePattern('^\d+\.\d+\.\d+\.\d+$')][string]$Version,
+    [ValidatePattern('^\d+\.\d+\.\d+\.\d+$')][string]$TrialVersion,
     # Rebuilds the editor bundle first (needs node and Dev\Typedown.Editor\node_modules).
     [switch]$BuildEditor,
     # Builds the automation test host instead (the app with test.* methods and edit barriers, its own data root) into
@@ -101,10 +101,10 @@ $version = ([xml](Get-Content 'Dev\Typedown\Typedown.csproj')).Project.PropertyG
     Where-Object { $_ } | Select-Object -First 1
 $versionArgs = @()
 $isccVersion = @()
-if ($Version) {
-    $version = $Version
-    $versionArgs = @("-p:Version=$Version")
-    $isccVersion = @("/DMyFileVersion=$Version")
+if ($TrialVersion) {
+    $version = $TrialVersion
+    $versionArgs = @("-p:Version=$TrialVersion")
+    $isccVersion = @("/DMyFileVersion=$TrialVersion")
 }
 $arch = $Platform.ToLowerInvariant()
 Write-Host "Typedown $version  $Platform  $Configuration"
