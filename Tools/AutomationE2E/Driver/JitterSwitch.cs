@@ -37,40 +37,61 @@ internal static partial class Program
         var window = await WindowOf(windowId, c);
         async Task<bool> Pending() => (bool?)(await c.Call("test.editor.eval", new { windowId, script = "!!(window.__typedownMuya&&window.__typedownMuya.renderPending)" }))["result"] == true;
         async Task Drawn(int seconds) { for (var i = 0; i < seconds * 4 && await Pending(); i++) await Task.Delay(250); }
-        await Drawn(90);
-        // Read far down, as the reader had it (60% of the way).
-        await c.Call("test.editor.eval", new { windowId, script = "window.scrollTo(0, Math.round(document.documentElement.scrollHeight * 0.6)); 'ok'" });
-        await Task.Delay(1500);
         var other = await Open(c, shortPath);
-        await Task.Delay(3000);
+        await Task.Delay(2000);
         var dir = Path.Combine(outputDir, "jt02");
         Directory.CreateDirectory(dir);
         var results = new List<(string Label, JObject Page, ScreenMoves Screen)>();
+        // One switch from the short document to the long one, watched for 6 s from just before it.
+        async Task Watch(string label, string? keep)
+        {
+            await c.Call("test.editor.eval", new { windowId, script = JtStartScript });
+            await c.Call("test.editor.eval", new { windowId, script = JtMessagesScript });
+            using var stop = new CancellationTokenSource();
+            var shots = Task.Run(() => WatchScreen(window, stop.Token, keep == null ? null : Path.Combine(dir, keep)));
+            await Task.Delay(100);
+            await c.Call("document.focus", new { documentId = heavy });
+            await Task.Delay(6000);
+            stop.Cancel();
+            var screen = await shots;
+            var page = JObject.Parse((string?)(await c.Call("test.editor.eval", new { windowId, script = JtStopScript }))["result"] ?? "{}");
+            var said = (string?)(await c.Call("test.editor.eval", new { windowId, script = "JSON.stringify(window.__jtSaid||[])" }))["result"];
+            notes.Add($"{label}: screen {screen}; page {page.ToString(Newtonsoft.Json.Formatting.None)}; the page told the host (ms from the switch; frame gaps over 100 ms as gap): {said}");
+            results.Add((label, page, screen));
+        }
         try
         {
             foreach (var predict in new[] { false, true })
             {
+                var on = predict ? "on" : "off";
                 await c.Call("test.settings.set", new { windowId, name = "PredictHeights", value = predict });
                 await Task.Delay(500);
-                for (var round = 1; round <= 3; round++)
+                // Where the reader had it on hp: from a quarter of the way to the end (scrollY 90,000-386,000 of 400,000).
+                foreach (var at in new[] { 0.25, 0.6, 0.95 })
                 {
-                    var label = $"predict {(predict ? "on" : "off")}, round {round}";
-                    await c.Call("test.editor.eval", new { windowId, script = JtStartScript });
-                    await c.Call("test.editor.eval", new { windowId, script = JtMessagesScript });
-                    using var stop = new CancellationTokenSource();
-                    var shots = Task.Run(() => WatchScreen(window, stop.Token, round == 1 ? Path.Combine(dir, (predict ? "on" : "off")) : null));
-                    await Task.Delay(100);
                     await c.Call("document.focus", new { documentId = heavy });
-                    await Task.Delay(6000);
-                    stop.Cancel();
-                    var screen = await shots;
-                    var page = JObject.Parse((string?)(await c.Call("test.editor.eval", new { windowId, script = JtStopScript }))["result"] ?? "{}");
-                    var said = (string?)(await c.Call("test.editor.eval", new { windowId, script = "JSON.stringify(window.__jtSaid||[])" }))["result"];
-                    notes.Add($"{label}: screen {screen}; page {page.ToString(Newtonsoft.Json.Formatting.None)}; the page told the host (ms from the switch; frame gaps over 100 ms as gap): {said}");
-                    results.Add((label, page, screen));
+                    await Task.Delay(1000);
+                    await Drawn(90);
+                    await c.Call("test.editor.eval", new { windowId, script = $"window.scrollTo(0, Math.round(document.documentElement.scrollHeight * {at.ToString(System.Globalization.CultureInfo.InvariantCulture)})); 'ok'" });
+                    await Task.Delay(1500);
                     await c.Call("document.focus", new { documentId = other });
                     await Task.Delay(3000);
+                    for (var round = 1; round <= 2; round++)
+                    {
+                        await Watch($"predict {on}, at {at:P0}, round {round}", round == 1 ? $"{on}-{at * 100:0}" : null);
+                        await c.Call("document.focus", new { documentId = other });
+                        await Task.Delay(3000);
+                    }
                 }
+                // Left before it was all drawn and switched back to (load 3 on hp was left 5 s in, still drawing).
+                await c.Call("document.focus", new { documentId = heavy });
+                await Task.Delay(2500);
+                var drawing = await Pending();
+                await c.Call("document.focus", new { documentId = other });
+                await Task.Delay(3000);
+                await Watch($"predict {on}, left still drawing ({(drawing ? "it was" : "it was NOT")}) and back", $"{on}-unfinished");
+                await c.Call("document.focus", new { documentId = other });
+                await Task.Delay(3000);
             }
         }
         finally
