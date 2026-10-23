@@ -190,13 +190,19 @@ export default class HeightPredictor {
       // Style elements coming and going in the head, the body's and the page's own style and classes: the styles read so
       // far are read again, and only if one of them changed do the predictions start over (a library putting its own
       // style element in, the scroll anchoring held off while a document is drawn, changes none of them).
+      // An attribute written again as it was is no change: the page sets the reader's settings on the body and the page
+      // again on every document it shows, and each time all the styles were read again, inside the new document's
+      // drawing (w10: 160-208 element kinds, 40-75 ms, 300k drawn from the top in 1.6 times the old estimate's time).
       const ours = node => node.nodeType === 1 && node.hasAttribute && node.hasAttribute('data-td-heights')
+      const changed = r => r.type !== 'attributes' || r.oldValue !== r.target.getAttribute(r.attributeName)
       new MutationObserver(records => {
-        if (records.some(r => !(r.type === 'childList' && [...r.addedNodes, ...r.removedNodes].every(ours)))) this.checkStyles()
-      }).observe(document.head, { childList: true, subtree: true, characterData: true, attributes: true })
-      const attrs = new MutationObserver(() => this.checkStyles())
+        if (records.some(r => changed(r) && !(r.type === 'childList' && [...r.addedNodes, ...r.removedNodes].every(ours)))) this.checkStyles()
+      }).observe(document.head, { childList: true, subtree: true, characterData: true, attributes: true, attributeOldValue: true })
+      const attrs = new MutationObserver(records => {
+        if (records.some(changed)) this.checkStyles()
+      })
       for (const el of [document.documentElement, document.body]) {
-        if (el) attrs.observe(el, { attributes: true, attributeFilter: ['style', 'class'] })
+        if (el) attrs.observe(el, { attributes: true, attributeFilter: ['style', 'class'], attributeOldValue: true })
       }
       if (document.fonts) {
         // A font the blocks are drawn in arriving: everything measured in its stand-in is measured again.
@@ -210,11 +216,13 @@ export default class HeightPredictor {
     }
   }
 
-  // The styles read so far read again (in a moment, once for all the changes of the moment); any different, all start over.
+  // The styles read so far read again (once for all the changes of the moment, when the page is next idle - not inside a
+  // document being shown or drawn); any different, all start over.
   checkStyles() {
     if (this.checking) return
     this.checking = true
-    Promise.resolve().then(() => {
+    const later = window.requestIdleCallback ? cb => window.requestIdleCallback(cb, { timeout: 1000 }) : cb => setTimeout(cb, 50)
+    later(() => {
       this.checking = false
       const root = this.observed
       if (!this.styles.size || !root || !root.isConnected || !root.parentNode) return
