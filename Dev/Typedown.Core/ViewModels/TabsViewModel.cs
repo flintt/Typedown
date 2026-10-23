@@ -31,7 +31,18 @@ namespace Typedown.Core.ViewModels
 
         public ObservableCollection<DocumentTab> Tabs { get; } = new();
 
-        public DocumentTab ActiveTab { get; private set; }
+        public DocumentTab ActiveTab
+        {
+            get => activeTab;
+            // Every tab put on screen, by whatever path, makes a switch asked for before it stale (SwitchTo).
+            private set { activeTab = value; showRequests++; }
+        }
+
+        private DocumentTab activeTab;
+
+        // Asks to show a tab (SwitchTo) and tabs shown (ActiveTab), counted: a switch that waited (its flush) while a later
+        // one was asked for or another tab was shown gives way to it.
+        private int showRequests;
 
         public Command<DocumentTab> SwitchTabCommand { get; } = new();
 
@@ -191,6 +202,7 @@ namespace Typedown.Core.ViewModels
                 }
                 if (tab == ActiveTab || !Tabs.Contains(tab)) return;
             }
+            var request = ++showRequests;
             // Keys typed from here on are for the tab switched to, not the one being left (see HoldInput).
             var hold = EditorViewModel.HoldInput();
             // A very long document left: out of sight at once, not while the page puts it away.
@@ -207,6 +219,10 @@ namespace Typedown.Core.ViewModels
                 // itself - loaded twice, the first load's reports were dropped as stale and the page, given the same text
                 // again, did not report it again: the outline stayed on the closed document (E2E TC02).
                 if (tab == ActiveTab || !Tabs.Contains(tab)) return;
+                // Something later meanwhile: a file opened right after a tab was closed was shown, and then the strip's
+                // switch to the closed tab's neighbour (asked for as the tab went) came out of its wait and put that
+                // neighbour back over it (HJ02/HJ03 on w10, 2026-10-24). The last one asked for is the one shown.
+                if (request != showRequests) return;
                 switching = true;
                 try
                 {

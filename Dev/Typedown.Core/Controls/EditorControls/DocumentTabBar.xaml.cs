@@ -199,6 +199,14 @@ namespace Typedown.Core.Controls
         private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (Tabs == null) return;
+            // The selection moved because the selected tab went (closed): which tab is shown then is the close's to decide
+            // (TabsViewModel.CloseTab shows the neighbour itself). Asked for here as well, the switch could come after a
+            // file opened at once had been shown, and put the neighbour back over it (TC03; HJ02/HJ03 on w10).
+            if (e.RemovedItems.Any(x => x is DocumentTab gone && !Tabs.Tabs.Contains(gone)))
+            {
+                if (TabView.SelectedItem != Tabs.ActiveTab) TabView.SelectedItem = Tabs.ActiveTab;
+                return;
+            }
             if (TabView.SelectedItem is DocumentTab tab && tab != Tabs.ActiveTab)
             {
                 if (!closing) handedOverAt = DateTime.UtcNow;
