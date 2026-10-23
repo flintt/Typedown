@@ -32,6 +32,10 @@ internal static partial class Program
             await Eval(page);
             var started = JObject.Parse(await Eval($"JSON.stringify(window.__hjJump({at.ToString(System.Globalization.CultureInfo.InvariantCulture)}))"));
             if (!(bool)started["ok"]!) return started;
+            // The heading chosen (after the load has placed its caret): the host makes the jump, as an outline click does.
+            string slug = "";
+            if (!await Eventually(async () => (slug = await Eval("window.__hjj && window.__hjj.hostJumps ? window.__hjj.slug : ''")) != "", 30000, 20)) throw new CaseFailed($"{tag}: no heading chosen within 30 s ({await Eval("JSON.stringify(window.__hjj || null)")})");
+            await c.Call("test.outline.jump", new { windowId, slug });
             if (!await Eventually(async () => await Eval("String(!!(window.__hjj && window.__hjj.done))") == "true", 60000, 200)) throw new CaseFailed($"{tag}: the jump was not watched to its end within 60 s");
             return JObject.Parse(await Eval("JSON.stringify(window.__hjSummary())"));
         }

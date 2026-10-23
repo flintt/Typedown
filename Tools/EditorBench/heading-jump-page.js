@@ -35,7 +35,9 @@
     const slug = blocks[i].key;
     const s = { slug, index: i, frames: [], t0: performance.now(), wasDrawing: !!muya.renderPending, done: false };
     window.__hjj = s;
-    (window.__typedownReceive || window.__deliver)('ScrollTo', { slug });
+    // In the app the host makes the jump (the E2E driver asks it once `slug` is here): s.posted set when it is made.
+    const deliver = window.__typedownReceive || window.__deliver;
+    if (deliver) { deliver('ScrollTo', { slug }); s.posted = 0 } else s.hostJumps = true;
     const first = document.getElementById(slug);
     s.right = first ? first.getBoundingClientRect().top : null;
     let quietSince = null;
