@@ -59,6 +59,26 @@ internal static partial class Program
                 try { await c.Call("document.close", new { documentId = id }); } catch { }
                 opened.Remove(id);
             }
+            // A long document not kept (over 600k characters) switched back to: it is drawn again from where it was read,
+            // and the load holds the page there for up to 40 frames once it can - pulling an outline jump made in that
+            // time back to the old place, as the delayed scroll did on 300k. Its own estimate leaves up to about 900 px
+            // here (the placeholder heights), so the bound is 2000 px: a pull back is tens of thousands.
+            {
+                var id = await Open(c, Fixture("hj03-1m.md", Resource("mixed-1m.md.gz", true)));
+                opened.Add(id);
+                if (!await Eventually(async () => await Eval("String(!!window.__typedownMuya && !window.__typedownMuya.renderPending)") == "true", 60000, 200)) throw new CaseFailed("1m: not drawn within 60 s");
+                await Eval("window.scrollTo(0, document.documentElement.scrollHeight * 0.3); 'ok'");
+                await Task.Delay(1500);
+                await c.Call("document.focus", new { documentId = small });
+                await Task.Delay(1500);
+                await c.Call("document.focus", new { documentId = id });
+                await Eventually(async () => await Eval("String(!!(window.__typedownMuya && window.__typedownMuya.renderPending && document.getElementById('ag-editor-id')?.children.length > 0))") == "true", 30000, 20);
+                var back = await Jump("1m switched back to, while drawn", 0.85);
+                results.Add(("1m switched back to, while drawn", back));
+                notes.Add($"1m switched back to, while drawn: {back.ToString(Newtonsoft.Json.Formatting.None)}");
+                try { await c.Call("document.close", new { documentId = id }); } catch { }
+                opened.Remove(id);
+            }
         }
         finally
         {
@@ -68,7 +88,7 @@ internal static partial class Program
         foreach (var (tag, r) in results)
         {
             Check((bool)r["ok"]!, $"{tag}: the jump happened ({r["why"]})");
-            if ((bool)r["ok"]!) Check((double)r["endOff"]! <= 50, $"{tag}: the heading ends within 50 px of its place ({r["endOff"]} px, {r["moves"]} moves)");
+            if ((bool)r["ok"]!) Check((double)r["endOff"]! <= (tag.StartsWith("1m") ? 2000 : 50), $"{tag}: the heading ends within {(tag.StartsWith("1m") ? 2000 : 50)} px of its place ({r["endOff"]} px, {r["moves"]} moves)");
         }
     }
 }
