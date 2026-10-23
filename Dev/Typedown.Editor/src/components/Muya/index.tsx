@@ -497,6 +497,11 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     }, [editor, props.options?.listIndentation])
 
     useEffect(() => transport.addListener<{ slug: string }>('ScrollTo', ({ slug }) => {
+        // The reader went somewhere: whatever still puts the page back where the load left it (settleScroll's hold and
+        // its delayed second go) gives way, as to the reader's own move. Jumped to while a long document was still drawn,
+        // the heading landed right, and the load's delayed go - held back by the drawing the jump finished - put the page
+        // back at the top half a second later (300k: 88,648 px away, heading-jump-check).
+        holdStopRef.current('jumped')
         scrollToElement(`#${slug}`, OUTLINE_TOP)
         // The reader chose this heading, so this is the one the outline marks — also at the end of the
         // document, where the page cannot scroll far enough to bring it to the top and reading the top
@@ -1039,7 +1044,8 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     // The hold of the load before this one. Switching tabs quickly starts a new load while the previous
     // hold is still putting the page back to its own offset: two holds then pull the page to two places
     // every frame until the older one's budget runs out. It is ended here before the next one begins.
-    const holdStopRef = useRef<() => void>(() => { })
+    // Also ended by the outline's jump (ScrollTo): the page then belongs where the reader asked for, not to the load.
+    const holdStopRef = useRef<(why?: string) => void>(() => { })
     // `to` is an offset, or where to be found anew each time: a document drawn a part at a time grows above the window
     // as it is drawn, and the block that was at the top of the window moves down with it (the offset that puts it back
     // changes; the browser's scroll anchoring keeps it in view meanwhile).
@@ -1057,6 +1063,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         let yielded = false
         const giveWay = () => { yielded = true; for (const e of GIVE_WAY) window.removeEventListener(e, giveWay) }
         for (const e of GIVE_WAY) window.addEventListener(e, giveWay, { once: true, passive: true })
+        holdStopRef.current = giveWay
         // Laying a long document out goes on for a while after the first paint, and the page can be put
         // back to the top by that work with nobody scrolling it — which is what made switching tabs show
         // the top of the document for a moment. Keep putting it back until the layout has settled, or
@@ -1100,7 +1107,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             }
             window.addEventListener('scroll', putBack, { passive: true })
             requestAnimationFrame(hold)
-            holdStopRef.current = () => { if (!done) stop('replaced') }
+            holdStopRef.current = (why = 'replaced') => { giveWay(); if (!done) stop(why) }
         }
         setTimeout(() => {
             if (!yielded) {

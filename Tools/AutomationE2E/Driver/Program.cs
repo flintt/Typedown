@@ -188,6 +188,7 @@ internal static partial class Program
             await Case("SR01 a cold start bringing the last session back: the active document on screen within seconds of the window, the other tabs not waited for", SR01);
             await Case("JT01 switching between long documents the text in the window stays still - no block moving by half a pixel or more from frame to frame, while drawn or after", JT01);
             await Case("WD01 the window comes back where it was after the process ends, closed or killed, and another window opens set off from it", WD01);
+            await Case("HJ03 the outline's jump to a heading far down lands and stays there - while a long document is still drawn and once it is", HJ03);
             await Case("HP04 with files open, File > Home, the home button and Ctrl+Shift+H show the home page in one blank tab, the documents left alone; an automation write into it hides it with the text written", HP04);
             await Case("HP05 the home page hidden by typing, and by its New document button, leaves the keys in the editor", HP05);
             await Case("WP02 pasted web pictures: one behind hotlink protection is fetched with the page as referrer, a page that is not a picture is kept on the web and said, and an untitled document saved into a folder takes its pictures along", WP02);
