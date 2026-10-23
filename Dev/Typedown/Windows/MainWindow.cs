@@ -401,7 +401,7 @@ namespace Typedown.Windows
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            SaveWindowPlacementWithOffset(false);
+            SaveWindowPlacementSoon(false);
             AppViewModel.MainWindow = Handle;
             Core.Services.AutomationWindows.Register(AppViewModel, DispatcherQueue);
             UpdateCaptionRegions();
@@ -417,7 +417,7 @@ namespace Typedown.Windows
             if (args.DidPresenterChange || args.DidSizeChange)
                 WindowService?.RaiseWindowStateChanged(Handle);
             if ((args.DidPositionChange || args.DidSizeChange || args.DidPresenterChange) && (RootControl?.IsLoaded ?? false))
-                SaveWindowPlacementWithOffset();
+                SaveWindowPlacementSoon();
             if (args.DidPresenterChange || args.DidSizeChange) ScheduleEditorLayoutCheck();
             if (args.DidPositionChange || args.DidSizeChange) CloseOpenMenus();
             if (args.DidPositionChange || args.DidSizeChange) UpdateMinimumSize();
@@ -608,7 +608,10 @@ namespace Typedown.Windows
 
         private bool isPlacementSaving = false;
 
-        private async void SaveWindowPlacementWithOffset(bool throttle = true)
+        // Saved where the window really is: a process ended without the close (killed, crashed, the system shut down
+        // with it open) came back 8 px lower right each time when a moved window saved itself 8 px off for the next
+        // one. The next window is set off as it opens instead (ShowWindowWithSavedPlacement).
+        private async void SaveWindowPlacementSoon(bool throttle = true)
         {
             if (!isPlacementSaving && !isCloseable && !isClosing && AppWindow.Presenter.Kind != AppWindowPresenterKind.FullScreen)
             {
@@ -616,7 +619,7 @@ namespace Typedown.Windows
                 try
                 {
                     if (throttle) await Task.Delay(100);
-                    await DispatcherQueue.RunAsync(() => this.TrySaveWindowPlacement(new(8, 8)));
+                    await DispatcherQueue.RunAsync(() => this.TrySaveWindowPlacement());
                 }
                 finally
                 {

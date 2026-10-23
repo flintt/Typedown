@@ -61,17 +61,11 @@ namespace Typedown.Utilities
             return Application.Current.RequestedTheme == ApplicationTheme.Light;
         }
 
-        public static void TrySaveWindowPlacement(this MainWindow window, Point offset = default)
+        public static void TrySaveWindowPlacement(this MainWindow window)
         {
             if (window.Handle == IntPtr.Zero)
                 return;
             PInvoke.GetWindowPlacement(window.Handle, out var placement);
-            var rawX = (int)(offset.X * window.ScalingFactor);
-            var rawY = (int)(offset.Y * window.ScalingFactor);
-            placement.rcNormalPosition.left += rawX;
-            placement.rcNormalPosition.top += rawY;
-            placement.rcNormalPosition.right += rawX;
-            placement.rcNormalPosition.bottom += rawY;
             window.AppViewModel.SettingsViewModel.StartupPlacement = placement;
         }
 
@@ -81,6 +75,15 @@ namespace Typedown.Utilities
             if (!placement.HasValue)
                 return false;
             var value = placement.Value;
+            // Another window open already: this one 8 px lower right of the place saved, not on top of it.
+            if (MainWindow.AllWindows.Any(w => w != window && !w.IsGoingAway))
+            {
+                var step = (int)(8 * window.ScalingFactor);
+                value.rcNormalPosition.left += step;
+                value.rcNormalPosition.top += step;
+                value.rcNormalPosition.right += step;
+                value.rcNormalPosition.bottom += step;
+            }
             if (value.showCmd != PInvoke.ShowWindowCommand.ShowMaximized)
                 value.showCmd = PInvoke.ShowWindowCommand.Normal;
             PInvoke.SetWindowPlacement(window.Handle, ref value);
