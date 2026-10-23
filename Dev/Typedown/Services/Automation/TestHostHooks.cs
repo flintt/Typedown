@@ -703,6 +703,8 @@ namespace Typedown.Services.Automation
                                 ["name"] = item.TocItem?.Content, ["depth"] = depth, ["children"] = item.Children.Count,
                                 ["model"] = item.IsExpanded, ["node"] = n == null ? null : (Newtonsoft.Json.Linq.JToken)n.IsExpanded,
                                 ["nodeChildren"] = n?.Children.Count,
+                                // Marked as the current heading: in the model, and in the tree the pane shows (OL03).
+                                ["selected"] = item.TocItem?.IsSelected == true, ["marked"] = n != null && tree.SelectedNode == n,
                             });
                             Model(item, depth + 1);
                         }
