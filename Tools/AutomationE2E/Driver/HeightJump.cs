@@ -275,7 +275,9 @@ return JSON.stringify({frames:shown.length,drawingFrames:pend,drawnMs:pl.ms??nul
                     var id = await Open(c, Fixture($"hj02-{label}-{mode}.md", text));
                     opened.Add(id);
                     // As soon as its first part is there: a heading three quarters down, not drawn yet.
-                    await Eventually(async () => await Eval("String(!!(window.__typedownMuya && window.__typedownMuya.contentState.blocks.length > 50 && document.getElementById('ag-editor-id')?.children.length > 0))") == "true", 30000, 20);
+                    // Not there within 30 s (once, late in a run of heavy cases): said as that, not as a jump finding no heading.
+                    if (!await Eventually(async () => await Eval("String(!!(window.__typedownMuya && window.__typedownMuya.contentState.blocks.length > 50 && document.getElementById('ag-editor-id')?.children.length > 0))") == "true", 30000, 20))
+                        throw new CaseFailed($"{tag}: the document was not on screen within 30 s of its open");
                     await Eval("(()=>{const ps=window.__typedownPretextStats;if(ps)for(const k of Object.keys(ps))delete ps[k];return 'ok'})()");
                     var drawing = await Jump($"{tag} while drawn", 0.75);
                     var completed = await Eventually(async () => await Eval(HjPendingScript) == "true", 60000, 200);
