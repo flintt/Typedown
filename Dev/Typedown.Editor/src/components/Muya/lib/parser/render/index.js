@@ -498,7 +498,11 @@ class StateRender {
       const sliceStarted = performance.now()
       const drawnBefore = state.hi - state.lo
       const until = sliceStarted + budget
-      const keep = this.keepInPlace(state)
+      // The window not wholly within what is drawn (the page put by a script where the rest is still to come, or the
+      // drawing near its edge): the blocks drawn into it are laid out for real in this slice (pinInView), and the window
+      // held still by a block in it, not by the first block drawn (keepInPlace).
+      const near = this.windowUncovered(state)
+      const keep = this.keepInPlace(state, near ? this.blockInWindow(state.root) : null)
       // A small share of the slice predicts the heights of what is drawn next (predictHeights.js; the rest of them in
       // the page's idle time): predicting them all first, in slices of their own, made 300k characters take 2.7 times as
       // long to draw on Windows.
@@ -512,6 +516,7 @@ class StateRender {
         if (state.lo > 0) this.drawMore(state, 'above', 4)
       } while ((state.lo > 0 || state.hi < blocks.length) && performance.now() < until)
       this.flushHeightRules(state)
+      if (near) this.pinInView(state)
       // Once for the whole slice, not once per few blocks (drawMore does not call these itself - see its comment).
       this.renderMermaid()
       this.renderDiagram()
@@ -711,6 +716,7 @@ class StateRender {
       else element.setAttribute('style', was)
     }
     state.pinned = null
+    state.pinnedSet = null
   }
 
   // The reader going where nothing is drawn yet (the scroll bar dragged far): the rest at once, not a blank page. Only a
@@ -853,6 +859,67 @@ class StateRender {
       else hi = mid
     }
     return kids[lo]
+  }
+
+  /**
+   * Whether the window, and a window's height above and below it, is not wholly within the part drawn so far. Read at
+   * the start of a slice, before anything goes in (the page laid out already: no layout of its own); the edge drawn to
+   * last is all it reads.
+   */
+  windowUncovered(state) {
+    const { root, blocks } = state
+    const h = window.innerHeight
+    if (state.lo > 0) {
+      const first = root.firstElementChild
+      if (first && first.getBoundingClientRect().top > -h) return true
+    }
+    if (state.hi < blocks.length) {
+      const last = root.lastElementChild
+      if (last && last.getBoundingClientRect().bottom < 2 * h) return true
+    }
+    return false
+  }
+
+  // The top-level block at the top of the window if one is drawn there, or null.
+  blockInWindow(root) {
+    const el = this.blockAtTop(root)
+    if (!el) return null
+    const r = el.getBoundingClientRect()
+    return r.bottom > 0 && r.top < window.innerHeight ? el : null
+  }
+
+  /**
+   * The blocks in the window and half a window's height around it laid out for real now (pinned, content-visibility
+   * visible, until the whole document is drawn - as the part drawn first): past the long-document size a block drawn
+   * there was laid out at the size given it off screen in the frame it came, and at its own only a frame or more later,
+   * moving the text below it (JT01, w10: 395 px in a document of HTML blocks put at a place not drawn yet).
+   */
+  pinInView(state) {
+    const kids = state.root.children
+    if (!kids.length) return
+    const h = window.innerHeight
+    if (!state.pinned) state.pinned = []
+    if (!state.pinnedSet) state.pinnedSet = new WeakSet(state.pinned.map(([element]) => element))
+    let lo = 0
+    let hi = kids.length - 1
+    while (lo < hi) {
+      const mid = (lo + hi) >> 1
+      if (kids[mid].getBoundingClientRect().bottom <= -h / 2) lo = mid + 1
+      else hi = mid
+    }
+    // All read first, then all written: one layout.
+    const pin = []
+    for (let k = lo; k < kids.length; k++) {
+      const element = kids[k]
+      if (element.getBoundingClientRect().top >= h * 1.5) break
+      if (!state.pinnedSet.has(element)) pin.push(element)
+    }
+    for (const element of pin) {
+      const was = element.getAttribute('style')
+      state.pinned.push([element, was])
+      state.pinnedSet.add(element)
+      element.setAttribute('style', (was ? was.replace(/;?\s*$/, '; ') : '') + 'content-visibility: visible')
+    }
   }
 
   keepInPlace(state, anchor = null) {
