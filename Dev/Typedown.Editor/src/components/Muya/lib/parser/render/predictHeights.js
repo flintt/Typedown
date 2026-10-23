@@ -1320,13 +1320,15 @@ function outwards(n, from) {
 }
 
 // The top-level block at the top of the window, and a function that puts it back where it was: the page scrolled by whole
-// pixels, the fraction a scroll cannot take left in the padding above the blocks (--td-room-fraction).
+// pixels, the fraction a scroll cannot take left in the padding above the blocks (--td-room-fraction). The block is found
+// by its place among the root's children (the first whose bottom is in the window), not by what is under a point of the
+// window: a point between two blocks (their margins) hit the root itself, nothing was kept, and the outline's jump just
+// made was thrown 55 px off by the first blocks refined above it (HJ02, Windows).
 function keepTop(root) {
-  const r = root.getBoundingClientRect()
-  const hit = document.elementFromPoint(r.left + Math.min(r.width / 2, 200), Math.max(1, Math.min(window.innerHeight - 1, 60)))
-  const el = hit && hit.closest ? hit.closest('#ag-editor-id > *') : null
-  if (!el || el.parentNode !== root) return null
+  if (!root.children.length) return null
+  const el = root.children[topIndex(root)]
   const before = el.getBoundingClientRect().top
+  if (before >= window.innerHeight) return null
   return () => {
     if (!el.isConnected) return
     // Whole pixels by scrolling, the fraction left in the padding above the blocks (--td-room-fraction), as StateRender's
