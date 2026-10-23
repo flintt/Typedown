@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { afterOnScreen, anchorKey, PREVIEW_FROM_CHARS, ScrollAnchor, scrollForAnchor, startsAlike } from "services/loadPreview";
+import { anchorKey, PREVIEW_FROM_CHARS, ScrollAnchor, scrollForAnchor, startsAlike } from "services/loadPreview";
 
 /**
  * The block of a new document's model the scroll anchor names (services/loadPreview): the top-level block's index, to
@@ -1270,8 +1270,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         } : null
         // On the screen where it was left - its first part, or the whole of a document that fits in one go - the host takes
         // away its "Opening…" (it waited for the load to be reported, which comes later, and covered what was already
-        // there to see). Only once the page is put back and that is on the screen, two frames on: told before the
-        // frame was painted, the cover went and the document left showed again for 30-60 ms (JT02); told before the
+        // there to see). Only once the page is put back and that frame painted: told before the frame was painted, the cover went and the document left showed again for 30-60 ms (JT02); told before the
         // page was put back, its first frame, drawn where the page was, showed (JU01, a window opening with it).
         let reportShown: { loadId: number | undefined } | null = null
         const loaded = () => {
@@ -1285,8 +1284,10 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             }, keepScroll)
             else settleScroll(keepScroll ? scrollForAnchor(anchor) ?? scrollTop : scrollTop, keepScroll)
             if (reportShown !== null) {
+                // From the frame it is put back in (this runs in its callbacks), the first task after that frame was
+                // painted: two frames on, the slices drawing the rest kept the cover up 0.7 s longer.
                 const shown = reportShown
-                afterOnScreen(() => transport.postMessage('LoadPreviewShown', shown))
+                setTimeout(() => transport.postMessage('LoadPreviewShown', shown), 0)
             }
             props.onContentApplied?.()
         }

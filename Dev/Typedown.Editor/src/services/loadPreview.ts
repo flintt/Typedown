@@ -266,15 +266,6 @@ export function hideLoadPreview() {
 export const isLoadPreviewShown = () => !!document.getElementById(PREVIEW_ID)
 
 /**
- * Runs `then` once what is on the page now is on the screen: two frames on. In the next frame's own callbacks the
- * page has not been painted yet, and the host taking its cover ("Opening…") away from there showed the document left
- * for a frame or two (30-60 ms, JT02) before the new one came.
- */
-export function afterOnScreen(then: () => void) {
-    requestAnimationFrame(() => requestAnimationFrame(then))
-}
-
-/**
  * Runs `then` once the browser has painted what is on the page now: the frame after the next one has begun (a frame's
  * own callbacks run before its paint, so the work would have held the paint back).
  */
