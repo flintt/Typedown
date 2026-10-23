@@ -732,6 +732,7 @@ class StateRender {
     }
     const check = () => {
       if (this.progressive !== state) return stop()
+      this.pinOnScroll(state)
       if (!reader) return
       const first = state.root.firstElementChild
       const last = state.root.lastElementChild
@@ -889,14 +890,26 @@ class StateRender {
   }
 
   /**
-   * The blocks in the window and half a window's height around it laid out for real now (pinned, content-visibility
+   * The page scrolled while a document is drawn (the reader, the load putting it back, a script): the blocks it brought
+   * into the window pinned at once (pinInView), the window held by a block in it as they change size. Drawn off screen
+   * and scrolled to, a block stood at the size given it off screen for seconds on w10 before it was laid out, and the
+   * text below it moved then (JT01: 140 px, a document of HTML blocks scrolled to its middle while drawn).
+   */
+  pinOnScroll(state) {
+    const anchor = this.blockInWindow(state.root)
+    const keep = anchor ? this.keepInPlace(state, anchor) : null
+    if (this.pinInView(state) && keep) keep()
+  }
+
+  /**
+   * The blocks in the window and a window's height around it laid out for real now (pinned, content-visibility
    * visible, until the whole document is drawn - as the part drawn first): past the long-document size a block drawn
    * there was laid out at the size given it off screen in the frame it came, and at its own only a frame or more later,
    * moving the text below it (JT01, w10: 395 px in a document of HTML blocks put at a place not drawn yet).
    */
   pinInView(state) {
     const kids = state.root.children
-    if (!kids.length) return
+    if (!kids.length) return 0
     const h = window.innerHeight
     if (!state.pinned) state.pinned = []
     if (!state.pinnedSet) state.pinnedSet = new WeakSet(state.pinned.map(([element]) => element))
@@ -904,14 +917,14 @@ class StateRender {
     let hi = kids.length - 1
     while (lo < hi) {
       const mid = (lo + hi) >> 1
-      if (kids[mid].getBoundingClientRect().bottom <= -h / 2) lo = mid + 1
+      if (kids[mid].getBoundingClientRect().bottom <= -h) lo = mid + 1
       else hi = mid
     }
     // All read first, then all written: one layout.
     const pin = []
     for (let k = lo; k < kids.length; k++) {
       const element = kids[k]
-      if (element.getBoundingClientRect().top >= h * 1.5) break
+      if (element.getBoundingClientRect().top >= h * 2) break
       if (!state.pinnedSet.has(element)) pin.push(element)
     }
     for (const element of pin) {
@@ -920,6 +933,7 @@ class StateRender {
       state.pinnedSet.add(element)
       element.setAttribute('style', (was ? was.replace(/;?\s*$/, '; ') : '') + 'content-visibility: visible')
     }
+    return pin.length
   }
 
   keepInPlace(state, anchor = null) {
