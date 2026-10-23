@@ -12,6 +12,10 @@ internal static partial class Program
     // Switching to a long document read far down from a short one, as the reader does: what the screen shows frame by
     // frame, taken from the screen itself (not only what the page says of its blocks), with predicting the layout off
     // and on. Reported (hp, 2026-10-24): from showcase back to demo1, demo1 still shook while drawn.
+    // What the page tells the host while the long document comes, and when (from the switch), with the frames the page
+    // went without for more than 100 ms: where the time between the cover and the document on the screen goes.
+    private const string JtMessagesScript = @"(()=>{const w=window.chrome.webview;if(!w.__jtWrapped){const o=w.postMessage.bind(w);w.postMessage=m=>{try{const s=window.__jtSaid;if(s&&s.length<60){const n=JSON.parse(m).name;if(n&&!/^(OnScroll|SelectionChange|SelectionFormats|invoke)$/.test(n))s.push([Math.round(performance.now()-window.__jtAt),n])}}catch(e){}return o(m)};w.__jtWrapped=true}window.__jtSaid=[];window.__jtAt=performance.now();let last=performance.now();const tick=()=>{const now=performance.now();if(now-window.__jtAt>6000)return;if(now-last>100&&window.__jtSaid.length<60)window.__jtSaid.push([Math.round(last-window.__jtAt),'gap '+Math.round(now-last)]);last=now;requestAnimationFrame(tick)};requestAnimationFrame(tick);return 'ok'})()";
+
     private static async Task JT02(List<string> notes)
     {
         SetProcessDpiAwarenessContext(new IntPtr(-4));
@@ -52,6 +56,7 @@ internal static partial class Program
                 {
                     var label = $"predict {(predict ? "on" : "off")}, round {round}";
                     await c.Call("test.editor.eval", new { windowId, script = JtStartScript });
+                    await c.Call("test.editor.eval", new { windowId, script = JtMessagesScript });
                     using var stop = new CancellationTokenSource();
                     var shots = Task.Run(() => WatchScreen(window, stop.Token, round == 1 ? Path.Combine(dir, (predict ? "on" : "off")) : null));
                     await Task.Delay(100);
@@ -60,7 +65,8 @@ internal static partial class Program
                     stop.Cancel();
                     var screen = await shots;
                     var page = JObject.Parse((string?)(await c.Call("test.editor.eval", new { windowId, script = JtStopScript }))["result"] ?? "{}");
-                    notes.Add($"{label}: screen {screen}; page {page.ToString(Newtonsoft.Json.Formatting.None)}");
+                    var said = (string?)(await c.Call("test.editor.eval", new { windowId, script = "JSON.stringify(window.__jtSaid||[])" }))["result"];
+                    notes.Add($"{label}: screen {screen}; page {page.ToString(Newtonsoft.Json.Formatting.None)}; the page told the host (ms from the switch; frame gaps over 100 ms as gap): {said}");
                     results.Add((label, page, screen));
                     await c.Call("document.focus", new { documentId = other });
                     await Task.Delay(3000);
