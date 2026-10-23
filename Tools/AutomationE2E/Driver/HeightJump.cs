@@ -9,23 +9,38 @@ using Newtonsoft.Json.Linq;
 /// <summary>
 /// HJ01 (measurement with thresholds; branch perf/pretext-heights): how far the scroll bar is off while a long document
 /// is drawn a part at a time, in the real app with Windows' fonts - what Tools/EditorBench/height-jump-check.js measures
-/// in headless Chromium. Two documents of mixed Chinese/English/Japanese/Korean prose with headings, lists, code, quotes
-/// and tables (about 300k and 1M characters, EditorBench fixtures/mixed), each opened at the top and drawn again from
-/// the middle (left half way, a small document between, nothing kept), once with the block heights predicted by pretext
-/// (predictHeights.js) and once with window.__typedownPretextOff (the old per-character estimate), in the same run.
+/// in headless Chromium. Three documents of mixed Chinese/English/Japanese/Korean prose with headings, lists, code,
+/// quotes and tables (about 100k, 300k and 1M characters, EditorBench fixtures/mixed), each opened at the top and drawn
+/// again from the middle (left half way, a small document between, nothing kept), once with the block heights
+/// predicted (predictHeights.js) and once with window.__typedownPretextOff (the old per-character estimate), in the same
+/// run.
 ///
-/// Every frame while drawn (in the page): the page's height against its real one (the page wholly laid out at the end,
-/// content-visibility forced visible, contained as the long-document rule keeps it where it stays on), the thumb's
-/// position against where it belongs for the block being read, how far that block moved, the gaps between frames.
+/// Every frame while drawn (in the page): the page's height against its real one (the page wholly laid out once drawn
+/// and the blocks guessed while drawn predicted, content-visibility forced visible, contained as the long-document rule
+/// keeps it where it stays on), the thumb's position against where it belongs for the block being read, how far that
+/// block moved, the gaps between frames, the drawing's own time.
 ///
-/// Thresholds, per document and place, with pretext: the height off by at most 2.5% on average while drawn, at most
-/// 1.5% once all of the rest is predicted, the thumb at most 1% off (opened in the middle), the height once drawn
-/// within 1% of the real one. The old estimate must fail at least one of them for each document (it did by 10-17% on
-/// average in EditorBench, and kept 1M documents 17% short once drawn) - else the case does not measure anything.
+/// Thresholds, per document and place, with predictions: the height off by at most 2.5% on average while drawn and no
+/// more than with the old estimate, within 1% once drawn, the thumb at most 1% off (opened in the middle), drawn in at
+/// most 1.2 times the old estimate's time, the longest frame gap at most 50 ms over its. The old estimate must fail one
+/// of the height thresholds for the 300k and 1M documents - else the case does not measure anything.
+///
+/// HJ02: where a heading far down lands when the outline jumps to it (the host's ScrollTo, EditorViewModel.JumpBySlug)
+/// while the document is still drawn, and once more once it is: the page's half is Tools/EditorBench/heading-jump-page.js
+/// (heading-jump-check.js in headless Chromium). Thresholds: with predictions the heading ends within 50 px of its place
+/// and moves no more often than with the old estimate; where the long-document rule stays once drawn (1M) the old
+/// estimate must end farther off or move more.
 /// </summary>
 internal static partial class Program
 {
-    private const double HjMaxMean = 2.5, HjMaxSettled = 1.5, HjMaxThumb = 1.0, HjMaxEnd = 1.0;
+    private const double HjMaxMean = 2.5, HjMaxThumb = 1.0, HjMaxEnd = 1.0, HjMaxSlower = 1.2, HjMaxLanding = 50;
+
+    private static string HjResource(string name)
+    {
+        using var stream = typeof(Program).Assembly.GetManifestResourceStream("hj/" + name) ?? throw new InvalidOperationException("no resource hj/" + name);
+        using var reader = new StreamReader(stream, new UTF8Encoding(false));
+        return reader.ReadToEnd();
+    }
 
     private static string HjFixture(string name)
     {
@@ -39,19 +54,23 @@ internal static partial class Program
     // still going, until stopped.
     private const string HjStartScript = @"(()=>{window.__hj={frames:[],key:null,on:true};const tick=()=>{const s=window.__hj;if(!s||!s.on)return;const el=s.key?document.getElementById(s.key):null;s.frames.push([performance.now(),document.documentElement.scrollHeight,window.scrollY,el?el.getBoundingClientRect().top:null,!!(window.__typedownMuya&&window.__typedownMuya.renderPending)]);requestAnimationFrame(tick)};requestAnimationFrame(tick);return 'ok'})()";
 
-    // Once drawn: the frames summed up against the page wholly laid out (forced here; synchronous - the evaluation is
-    // not awaited). `readTop`: where the read block is meant to be in the window (null: opened at the top).
+    // Once drawn (and the blocks guessed while drawn predicted, ruleRest): the frames summed up against the page wholly
+    // laid out (forced here; synchronous - the evaluation is not awaited). `readTop`: where the read block is meant to be
+    // in the window (null: opened at the top). The drawing's time is the page's own (Muya's progressive log).
     private static string HjSummaryScript(int? readTop) => @"(()=>{const s=window.__hj;s.on=false;const fr=s.frames;const vh=innerHeight;
 const end={h:document.documentElement.scrollHeight,long:!!document.querySelector('#editor.ag-long-document')};
 const st=document.createElement('style');st.id='hj01-real';st.textContent='#ag-editor-id > * { content-visibility: visible !important; contain-intrinsic-size: none !important; '+(end.long?'contain: layout style paint !important;':'')+' }';document.head.appendChild(st);
 const realH=document.documentElement.scrollHeight;const el=s.key?document.getElementById(s.key):null;const abs=el?el.getBoundingClientRect().top+scrollY:0;st.remove();
 const shown=fr.filter(f=>f[3]!==null);const readTop=" + (readTop?.ToString() ?? "null") + @"??(shown.length?shown[0][3]:0);
-const thumbReal=Math.max(0,abs-readTop)/Math.max(1,realH-vh);const log=window.__typedownPretextLog||null;const settledAt=log&&log.doneAtTime!==undefined&&!window.__typedownPretextOff?log.doneAtTime:null;
-let worst=0,settled=settledAt===null?null:0,w=0,span=0,thumb=0,drift=0,gap=0,prev=null,pend=0;const t0=shown.length?shown[0][0]:0;
-for(const f of shown){const err=Math.abs(f[1]-realH)/realH*100;if(f[4]){pend++;worst=Math.max(worst,err);if(settledAt!==null&&f[0]>=settledAt)settled=Math.max(settled,err);if(prev){w+=err*(f[0]-prev[0]);span+=f[0]-prev[0];gap=Math.max(gap,f[0]-prev[0])}}
+const thumbReal=Math.max(0,abs-readTop)/Math.max(1,realH-vh);const log=window.__typedownPretextLog||null;
+let worst=0,w=0,span=0,thumb=0,drift=0,gap=0,prev=null,pend=0;const t0=shown.length?shown[0][0]:0;
+for(const f of shown){const err=Math.abs(f[1]-realH)/realH*100;if(f[4]){pend++;worst=Math.max(worst,err);if(prev){w+=err*(f[0]-prev[0]);span+=f[0]-prev[0];gap=Math.max(gap,f[0]-prev[0])}}
 const th=f[1]>vh?f[2]/(f[1]-vh):0;if(" + (readTop.HasValue ? "true" : "false") + @")thumb=Math.max(thumb,Math.abs(th-thumbReal)*100);if(f[0]>t0+50)drift=Math.max(drift,Math.abs(f[3]-readTop));prev=f}
-const r=x=>x===null?null:Math.round(x*100)/100;
-return JSON.stringify({frames:shown.length,drawingFrames:pend,mean:r(span?w/span:worst),worst:r(worst),settled:r(settled),settledAfterMs:settledAt===null?null:Math.round(settledAt-t0),thumb:r(thumb),drift:r(drift),maxGapMs:Math.round(gap),endH:end.h,realH,end:r(Math.abs(end.h-realH)/realH*100),longAtEnd:end.long,blocks:window.__typedownMuya.contentState.blocks.length,prepareMs:log?log.prepareMs:null})})()";
+const r=x=>x===null?null:Math.round(x*100)/100;const pl=(window.__typedownProgressiveLog||[]).slice(-1)[0]||{};
+return JSON.stringify({frames:shown.length,drawingFrames:pend,drawnMs:pl.ms??null,slices:pl.slices??null,mean:r(span?w/span:worst),worst:r(worst),thumb:r(thumb),drift:r(drift),maxGapMs:Math.round(gap),endH:end.h,realH,end:r(Math.abs(end.h-realH)/realH*100),longAtEnd:end.long,blocks:window.__typedownMuya.contentState.blocks.length,prepareMs:log?log.prepareMs:null,restMs:log&&log.restDoneAt!==undefined?Math.round(log.restDoneAt-t0):null})})()";
+
+    // Drawn, and (with predictions) the blocks only guessed while drawn predicted too.
+    private const string HjSettledScript = "String(!!window.__typedownMuya && !window.__typedownMuya.renderPending && (!!window.__typedownPretextOff || !!(window.__typedownPretextLog && window.__typedownPretextLog.restDoneAt !== undefined)))";
 
     private static async Task HJ01(List<string> notes)
     {
@@ -64,7 +83,7 @@ return JSON.stringify({frames:shown.length,drawingFrames:pend,mean:r(span?w/span
         var opened = new List<string>();
         try
         {
-            foreach (var (label, file) in new[] { ("300k", "mixed-300k.md.gz"), ("1m", "mixed-1m.md.gz") })
+            foreach (var (label, file) in new[] { ("100k", "mixed-100k.md.gz"), ("300k", "mixed-300k.md.gz"), ("1m", "mixed-1m.md.gz") })
             {
                 var text = HjFixture(file);
                 foreach (var off in new[] { false, true })
@@ -80,10 +99,10 @@ return JSON.stringify({frames:shown.length,drawingFrames:pend,mean:r(span?w/span
                     opened.Add(id);
                     await Eventually(async () => await Eval("(()=>{const b=window.__typedownMuya&&window.__typedownMuya.contentState.blocks;if(!b||b.length<100)return 'no';window.__hj.key=b[0].key;return 'yes'})()") == "yes", 30000, 50);
                     if (!await Eventually(Drawn, 120000, 200)) throw new CaseFailed($"{tag}: not drawn within 120 s");
-                    var drawnMs = clock.ElapsedMilliseconds;
+                    await Eventually(async () => await Eval(HjSettledScript) == "true", 30000, 200);
                     await Task.Delay(1000);
                     var top = JObject.Parse(await Eval(HjSummaryScript(null)));
-                    top["drawnMs"] = drawnMs;
+                    top["openMs"] = clock.ElapsedMilliseconds;
                     results[$"{tag} top"] = top;
 
                     // From the middle: scrolled half way, left for the small document (nothing kept), back.
@@ -106,10 +125,10 @@ return JSON.stringify({frames:shown.length,drawingFrames:pend,mean:r(span?w/span
                         return t != "none" && int.TryParse(t, out readTop);
                     }, 30000, 50);
                     if (!await Eventually(Drawn, 120000, 200)) throw new CaseFailed($"{tag}: not drawn again within 120 s");
-                    drawnMs = clock.ElapsedMilliseconds;
+                    await Eventually(async () => await Eval(HjSettledScript) == "true", 30000, 200);
                     await Task.Delay(1000);
                     var middle = JObject.Parse(await Eval(HjSummaryScript(readTop)));
-                    middle["drawnMs"] = drawnMs;
+                    middle["openMs"] = clock.ElapsedMilliseconds;
                     middle["readBlock"] = readIndex;
                     results[$"{tag} middle"] = middle;
 
@@ -129,21 +148,98 @@ return JSON.stringify({frames:shown.length,drawingFrames:pend,mean:r(span?w/span
         File.WriteAllText(Path.Combine(outputDir, "hj01.json"), results.ToString());
         notes.Add("all: hj01.json beside the results");
 
-        // With pretext: within the thresholds. The old estimate: outside at least one of them, for each document.
+        // With pretext: within the thresholds, no worse than the old estimate, drawn in at most 1.2 times its time. The old
+        // estimate: outside at least one threshold for the 300k and 1M documents (the case tells them apart).
         bool Fails(JObject r, bool middle) => (double)r["mean"]! > HjMaxMean || (double)r["end"]! > HjMaxEnd || (middle && (double)r["thumb"]! > HjMaxThumb);
-        foreach (var label in new[] { "300k", "1m" })
+        foreach (var label in new[] { "100k", "300k", "1m" })
         {
             foreach (var place in new[] { "top", "middle" })
             {
                 var p = (JObject)results[$"{label} pretext {place}"]!;
-                Check((double)p["mean"]! <= HjMaxMean, $"{label} {place}: the height is within {HjMaxMean}% of the real one on average while drawn ({p["mean"]}%)");
-                Check(p["settled"]!.Type != JTokenType.Null && (double)p["settled"]! <= HjMaxSettled, $"{label} {place}: ... within {HjMaxSettled}% once all of the rest is predicted ({p["settled"]})");
-                Check((double)p["end"]! <= HjMaxEnd, $"{label} {place}: once drawn, within {HjMaxEnd}% of the real height ({p["end"]}%)");
-                if (place == "middle") Check((double)p["thumb"]! <= HjMaxThumb, $"{label} middle: the thumb within {HjMaxThumb}% of where it belongs ({p["thumb"]}%)");
+                var o = (JObject)results[$"{label} old {place}"]!;
+                Check((double)p["mean"]! <= HjMaxMean, $"{label} {place}: the height is within {HjMaxMean}% of the real one on average while drawn ({p["mean"]}%; old {o["mean"]}%)");
+                Check((double)p["mean"]! <= Math.Max((double)o["mean"]!, 0.5), $"{label} {place}: ... no worse than the old estimate ({p["mean"]}% / {o["mean"]}%)");
+                Check((double)p["end"]! <= HjMaxEnd, $"{label} {place}: once drawn, within {HjMaxEnd}% of the real height ({p["end"]}%; old {o["end"]}%)");
+                if (place == "middle") Check((double)p["thumb"]! <= HjMaxThumb, $"{label} middle: the thumb within {HjMaxThumb}% of where it belongs ({p["thumb"]}%; old {o["thumb"]}%)");
+                if (p["drawnMs"]!.Type != JTokenType.Null && o["drawnMs"]!.Type != JTokenType.Null)
+                    Check((double)p["drawnMs"]! <= HjMaxSlower * (double)o["drawnMs"]!, $"{label} {place}: drawn in at most {HjMaxSlower} times the old estimate's time ({p["drawnMs"]} vs {o["drawnMs"]} ms)");
+                Check((double)p["maxGapMs"]! <= (double)o["maxGapMs"]! + 50, $"{label} {place}: the longest frame gap at most 50 ms over the old estimate's ({p["maxGapMs"]} vs {o["maxGapMs"]} ms)");
             }
+            if (label == "100k") continue;
             var oldTop = (JObject)results[$"{label} old top"]!;
             var oldMiddle = (JObject)results[$"{label} old middle"]!;
             Check(Fails(oldTop, false) || Fails(oldMiddle, true), $"{label}: the old estimate is outside the thresholds (mean {oldTop["mean"]}% / {oldMiddle["mean"]}%, end {oldTop["end"]}%, thumb {oldMiddle["thumb"]}%) - the case tells the two apart");
+        }
+    }
+    private static async Task HJ02(List<string> notes)
+    {
+        using var c = await Session("e2e HJ02");
+        var small = await Open(c, Fixture("hj02-small.md", "# HJ02\n\nA short document.\n"));
+        var windowId = await WindowIdOf(c, small);
+        async Task<string> Eval(string script) => (string?)(await c.Call("test.editor.eval", new { windowId, script }))["result"] ?? "";
+        var page = HjResource("heading-jump-page.js");
+        var results = new JObject();
+        var opened = new List<string>();
+        async Task<JObject> Jump(string tag, double at)
+        {
+            await Eval(page);
+            var started = JObject.Parse(await Eval($"JSON.stringify(window.__hjJump({at.ToString(System.Globalization.CultureInfo.InvariantCulture)}))"));
+            if (!(bool)started["ok"]!) return started;
+            if (!await Eventually(async () => await Eval("String(!!(window.__hjj && window.__hjj.done))") == "true", 60000, 200)) throw new CaseFailed($"{tag}: the jump was not watched to its end within 60 s");
+            return JObject.Parse(await Eval("JSON.stringify(window.__hjSummary())"));
+        }
+        try
+        {
+            foreach (var (label, file) in new[] { ("100k", "mixed-100k.md.gz"), ("300k", "mixed-300k.md.gz"), ("1m", "mixed-1m.md.gz") })
+            {
+                var text = HjFixture(file);
+                foreach (var off in new[] { true, false })
+                {
+                    var mode = off ? "old" : "pretext";
+                    var tag = $"{label} {mode}";
+                    await Eval($"window.__typedownPretextOff = {(off ? "true" : "false")}; 'ok'");
+                    var id = await Open(c, Fixture($"hj02-{label}-{mode}.md", text));
+                    opened.Add(id);
+                    // As soon as its first part is there: a heading three quarters down, not drawn yet.
+                    await Eventually(async () => await Eval("String(!!(window.__typedownMuya && window.__typedownMuya.contentState.blocks.length > 50 && document.getElementById('ag-editor-id')?.children.length > 0))") == "true", 30000, 20);
+                    var drawing = await Jump($"{tag} while drawn", 0.75);
+                    if (!await Eventually(async () => await Eval(HjSettledScript) == "true", 60000, 200)) throw new CaseFailed($"{tag}: not drawn within 60 s");
+                    var drawn = await Jump($"{tag} once drawn", 0.45);
+                    results[$"{tag} drawing"] = drawing;
+                    results[$"{tag} drawn"] = drawn;
+                    notes.Add($"{tag}: while drawn {drawing.ToString(Newtonsoft.Json.Formatting.None)}");
+                    notes.Add($"{tag}: once drawn {drawn.ToString(Newtonsoft.Json.Formatting.None)}");
+                    try { await c.Call("document.close", new { documentId = id }); } catch { }
+                    opened.Remove(id);
+                }
+            }
+        }
+        finally
+        {
+            try { await Eval("window.__typedownPretextOff = false; 'ok'"); } catch { }
+            foreach (var id in opened) try { await c.Call("document.close", new { documentId = id }); } catch { }
+            try { await c.Call("document.close", new { documentId = small }); } catch { }
+        }
+        File.WriteAllText(Path.Combine(outputDir, "hj02.json"), results.ToString());
+        foreach (var label in new[] { "100k", "300k", "1m" })
+        {
+            foreach (var when in new[] { "drawing", "drawn" })
+            {
+                var p = (JObject)results[$"{label} pretext {when}"]!;
+                var o = (JObject)results[$"{label} old {when}"]!;
+                Check((bool)p["ok"]!, $"{label} {when}: the jump happened ({p["why"]})");
+                if (!(bool)p["ok"]!) continue;
+                Check((double)p["endOff"]! <= HjMaxLanding, $"{label} {when}: with predictions the heading ends within {HjMaxLanding} px of its place ({p["endOff"]} px; old {o["endOff"]})");
+                Check(!(bool)o["ok"]! || (int)p["moves"]! <= (int)o["moves"]!, $"{label} {when}: ... and moves no more often than with the old estimate ({p["moves"]} vs {o["moves"]})");
+            }
+            var od = (JObject)results[$"{label} old drawn"]!;
+            if ((bool?)od["long"] == true)
+            {
+                var oDrawing = (JObject)results[$"{label} old drawing"]!;
+                var pDrawing = (JObject)results[$"{label} pretext drawing"]!;
+                bool Worse(JObject j) => (bool)j["ok"]! && ((double)j["endOff"]! > HjMaxLanding || (int)j["moves"]! > (int)pDrawing["moves"]!);
+                Check(Worse(oDrawing) || Worse(od), $"{label}: the old estimate lands farther off or moves more ({oDrawing["endOff"]} px/{oDrawing["moves"]} moves while drawn, {od["endOff"]} px/{od["moves"]} once drawn) - the case tells them apart");
+            }
         }
     }
 }

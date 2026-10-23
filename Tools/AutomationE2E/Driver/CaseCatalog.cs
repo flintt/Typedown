@@ -163,6 +163,7 @@ internal static partial class CaseCatalog
         ["PF01"] = F("perf"),
         ["PF03"] = F("perf"),
         ["HJ01"] = F("perf"),
+        ["HJ02"] = F("perf"),
         ["PF02"] = F("perf"),
         ["Q01"] = F("window"),
     };
@@ -307,6 +308,7 @@ internal static partial class CaseCatalog
         ["PF01"] = "性能：打开、输入、保存 300KB",
         ["PF03"] = "性能：打开大文档的 CPU 分布",
         ["HJ01"] = "测量：长文档分批绘制时滚动条跳动（pretext 预测块高 vs 旧按字数估算，同一次运行；Windows 字体），pretext 须达阈值、旧估算须不达",
+        ["HJ02"] = "测量：长文档分批绘制中和画完后，大纲跳到远处标题的落点与跳动次数（pretext vs 旧估算），pretext 须在 50px 内且不多跳",
         ["PF02"] = "性能：冷启动和关闭",
         ["Q01"] = "两个窗口依次关闭后进程退出",
     };
