@@ -25,6 +25,7 @@ try {
 let lastInputAt = -Infinity
 for (const type of ['keydown', 'pointerdown', 'pointermove', 'wheel', 'touchstart', 'compositionstart'])
   window.addEventListener(type, () => { lastInputAt = performance.now() }, { capture: true, passive: true })
+const isLongDocument = () => !!document.getElementById('editor')?.classList.contains('ag-long-document')
 const sliceBudget = () => performance.now() - lastInputAt < 1000 ? 12 : 40
 // The share of each drawing slice spent predicting a document's heights (predictHeights.js). None: the guess from the
 // blocks' text (predictHeights fit) is as close while drawn, and every share of a slice made the drawing slower (vm103,
@@ -869,6 +870,8 @@ class StateRender {
    */
   windowUncovered(state) {
     const { root, blocks } = state
+    // Only past the long-document size are blocks off screen not laid out (content-visibility): below it nothing to do.
+    if (!isLongDocument()) return false
     const h = window.innerHeight
     if (state.lo > 0) {
       const first = root.firstElementChild
@@ -896,6 +899,7 @@ class StateRender {
    * text below it moved then (JT01: 140 px, a document of HTML blocks scrolled to its middle while drawn).
    */
   pinOnScroll(state) {
+    if (!isLongDocument()) return
     const anchor = this.blockInWindow(state.root)
     const keep = anchor ? this.keepInPlace(state, anchor) : null
     if (this.pinInView(state) && keep) keep()
