@@ -913,27 +913,34 @@ class StateRender {
     const h = window.innerHeight
     if (!state.pinned) state.pinned = []
     if (!state.pinnedSet) state.pinnedSet = new WeakSet(state.pinned.map(([element]) => element))
-    let lo = 0
-    let hi = kids.length - 1
-    while (lo < hi) {
-      const mid = (lo + hi) >> 1
-      if (kids[mid].getBoundingClientRect().bottom <= -h) lo = mid + 1
-      else hi = mid
+    let count = 0
+    // Again while what was pinned brings more in: a block of HTML guessed at 181 px and laid out at 24 pulled the
+    // blocks after it into the window, at their own guessed sizes (w10).
+    for (let pass = 0; pass < 3; pass++) {
+      let lo = 0
+      let hi = kids.length - 1
+      while (lo < hi) {
+        const mid = (lo + hi) >> 1
+        if (kids[mid].getBoundingClientRect().bottom <= -h) lo = mid + 1
+        else hi = mid
+      }
+      // All read first, then all written: one layout a pass.
+      const pin = []
+      for (let k = lo; k < kids.length; k++) {
+        const element = kids[k]
+        if (element.getBoundingClientRect().top >= h * 2) break
+        if (!state.pinnedSet.has(element)) pin.push(element)
+      }
+      if (!pin.length) break
+      for (const element of pin) {
+        const was = element.getAttribute('style')
+        state.pinned.push([element, was])
+        state.pinnedSet.add(element)
+        element.setAttribute('style', (was ? was.replace(/;?\s*$/, '; ') : '') + 'content-visibility: visible')
+      }
+      count += pin.length
     }
-    // All read first, then all written: one layout.
-    const pin = []
-    for (let k = lo; k < kids.length; k++) {
-      const element = kids[k]
-      if (element.getBoundingClientRect().top >= h * 2) break
-      if (!state.pinnedSet.has(element)) pin.push(element)
-    }
-    for (const element of pin) {
-      const was = element.getAttribute('style')
-      state.pinned.push([element, was])
-      state.pinnedSet.add(element)
-      element.setAttribute('style', (was ? was.replace(/;?\s*$/, '; ') : '') + 'content-visibility: visible')
-    }
-    return pin.length
+    return count
   }
 
   keepInPlace(state, anchor = null) {
