@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>Показване на Markdown знаците (**, #, адреса на връзка) във всеки абзац, а не само там, където е курсорът</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Предвиждане на оформлението на дълги документи (експериментално)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Докато дълъг документ се изобразява на части, височината на още непоказаното се изчислява от текста, вместо да се оценява, така че лентата за превъртане и преходите от структурата са по-точни. Експериментално</value>
+  </data>
 </root>

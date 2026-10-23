@@ -260,6 +260,8 @@ internal static partial class Program
             // Last: it ends the test host.
             await Case("PF01 measured: a 300 KB document opened, typed into and saved; the memory with two windows", PF01);
             await Case("PF03 profiled: where the host's CPU goes while it opens 300 KB documents", PF03);
+            await Case("HJ01 measured: the scroll bar while a long document is drawn - predicted heights (pretext) against the old estimate, with Windows' fonts", HJ01);
+            await Case("HJ02 measured: where a heading far down lands when the outline jumps to it while a long document is drawn, and once drawn - predicted heights against the old estimate", HJ02);
             await Case("PF02 measured: a cold start with a document on the command line, then the window closed", PF02);
             await Case("Q01 two windows closed one after the other: the process exits (it stayed, headless)", Q01);
         }
@@ -337,7 +339,7 @@ internal static partial class Program
         if (!CaseCatalog.Knows(name)) Console.Error.WriteLine($"note: {name.Split(' ')[0]} is missing from CaseCatalog.cs (its tier and areas, or its purpose)");
         currentCase = name.Split(' ')[0];
         // Pictures (SHOT...) and measurements (PF...) are taken only when asked for by name: never part of a run of every case.
-        if ((name.StartsWith("SHOT") || name.StartsWith("PF")) && only == null) return;
+        if ((name.StartsWith("SHOT") || name.StartsWith("PF") || name.StartsWith("HJ")) && only == null) return;
         var notes = new List<string>();
         // A person's mouse or keys a moment ago would be in the case's way: it waits for the desktop to be left alone.
         var quiet = await WaitForQuietDesktop(1000);
@@ -362,7 +364,7 @@ internal static partial class Program
             // Pictures in several languages take their time; RD02 opens six windows in two themes and measures each menu
             // (about 110 s on its own, so a busy machine took it past two minutes); any other case that runs past two minutes
             // is stuck.
-            var limit = name.StartsWith("SHOT") ? 900 : name.StartsWith("RD02") ? 300 : 120;
+            var limit = name.StartsWith("SHOT") ? 900 : name.StartsWith("RD02") ? 300 : name.StartsWith("HJ01") ? 600 : name.StartsWith("HJ02") ? 360 : 120;
             if (await Task.WhenAny(run, Task.Delay(TimeSpan.FromSeconds(limit))) != run) throw new CaseFailed($"the case did not finish within {limit} s");
             await run;
             results.Add(new JObject { ["name"] = name, ["passed"] = true, ["ms"] = watch.ElapsedMilliseconds, ["notes"] = new JArray(notes) });

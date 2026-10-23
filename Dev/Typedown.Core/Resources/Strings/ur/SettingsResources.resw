@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>صرف کرسر والی جگہ پر نہیں، ہر پیراگراف میں Markdown کے نشانات (**، #، لنک کا پتہ) دکھائیں</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>طویل دستاویزات کی ترتیب کا پیشگی اندازہ (تجرباتی)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>جب طویل دستاویز حصوں میں بنائی جاتی ہے، تو ابھی نہ دکھائے گئے حصے کی اونچائی اندازے کے بجائے متن سے شمار کی جاتی ہے، تاکہ اسکرول بار اور خاکے سے چھلانگیں زیادہ درست ہوں۔ تجرباتی</value>
+  </data>
 </root>

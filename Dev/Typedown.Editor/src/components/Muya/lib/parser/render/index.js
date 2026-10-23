@@ -5,6 +5,7 @@ import { patch, toVNode, toHTML, h } from './snabbdom'
 import { beginRules } from '../rules'
 import renderInlines from './renderInlines'
 import renderBlock from './renderBlock'
+import HeightPredictor, { account } from './predictHeights'
 
 let mermaidRenderId = 0
 const MERMAID_RENDER_CACHE_LIMIT = 32
@@ -24,7 +25,12 @@ try {
 let lastInputAt = -Infinity
 for (const type of ['keydown', 'pointerdown', 'pointermove', 'wheel', 'touchstart', 'compositionstart'])
   window.addEventListener(type, () => { lastInputAt = performance.now() }, { capture: true, passive: true })
+const isLongDocument = () => !!document.getElementById('editor')?.classList.contains('ag-long-document')
 const sliceBudget = () => performance.now() - lastInputAt < 1000 ? 12 : 40
+// The share of each drawing slice spent predicting a document's heights (predictHeights.js). None: the guess from the
+// blocks' text (predictHeights fit) is as close while drawn, and every share of a slice made the drawing slower (vm103,
+// 1M characters: 8% of each slice 1.37 times the old estimate's time, 4% 1.32, none 1.15-1.23).
+const HEIGHTS_SLICE_SHARE = 0
 
 class StateRender {
   constructor(muya) {
@@ -49,10 +55,15 @@ class StateRender {
     // A whole document drawn a part at a time (renderProgressive): which top-level blocks are on the page, and the
     // timer drawing the rest. Null when the whole document is on the page.
     this.progressive = null
+    // The heights of a long document's blocks not drawn yet, predicted from their text (predictHeights.js).
+    this.heights = new HeightPredictor(this)
   }
 
   setContainer(container) {
     this.container = container
+    // The fonts a long document's blocks are drawn in asked for early (predictHeights.js), so the first one opened can
+    // have its heights predicted without waiting for them.
+    this.heights.warm(container)
   }
 
   // collect link reference definition
@@ -454,10 +465,19 @@ class StateRender {
     // empty style="" when the page was read as HTML (a kept document then differed from a new build of it).
     const pinned = Array.from(rootDom.children, element => [element, element.getAttribute('style')])
     for (const [element, was] of pinned) element.setAttribute('style', (was ? was.replace(/;?\s*$/, '; ') : '') + 'content-visibility: visible')
-    const state = { blocks, activeBlocks, matches, lo, hi, root: rootDom, timer: null, done, slices: 0, startedAt: performance.now(), pinned }
+    const state = { blocks, activeBlocks, matches, lo, hi, root: rootDom, timer: null, done, slices: 0, startedAt: performance.now(), pinned, heightsAt: 0, heightsPlan: null, heightsGeneration: -1, ruleQueue: [] }
     this.progressive = state
+    // Loads pretext if not yet. What the predictions cost and when they were all in, for the checks (EditorBench
+    // height-jump-check.js) and DevTools.
+    this.heights.ready()
+    window.__typedownPretextLog = { blocks: blocks.length, prepareMs: 0 }
     this.holdAnchoring(true)
     if (lo === 0 && hi === blocks.length) return this.finishProgressive(state)
+    // Nothing predicted while it is drawn: the room and the size rules are the guess from the blocks' text
+    // (predictHeights quick and fit), the predictions come once it is drawn (ruleRest), those around the window first.
+    // Predicted before and while it is drawn - even 8 ms before the first slice and the page's idle moments between
+    // slices - the first predictions' warming up (reading styles, pretext's first measurements) made a 100k document take
+    // twice as long to draw on Windows.
     this.estimateRest(state)
     this.watchForBlank(state)
     // The rest only once this part is on the screen: drawn before the first paint, it held that paint back. A page not
@@ -475,14 +495,29 @@ class StateRender {
     const step = () => {
       state.timer = null
       if (this.progressive !== state) return
-      const until = performance.now() + (window.__typedownProgressiveSliceMs ?? sliceBudget())
-      const keep = this.keepInPlace(state)
+      const budget = window.__typedownProgressiveSliceMs ?? sliceBudget()
+      const sliceStarted = performance.now()
+      const drawnBefore = state.hi - state.lo
+      const until = sliceStarted + budget
+      // The window not wholly within what is drawn (the page put by a script where the rest is still to come, or the
+      // drawing near its edge): the blocks drawn into it are laid out for real in this slice (pinInView), and the window
+      // held still by a block in it, not by the first block drawn (keepInPlace).
+      const near = this.windowUncovered(state)
+      const keep = this.keepInPlace(state, near ? this.blockInWindow(state.root) : null)
+      // A small share of the slice predicts the heights of what is drawn next (predictHeights.js; the rest of them in
+      // the page's idle time): predicting them all first, in slices of their own, made 300k characters take 2.7 times as
+      // long to draw on Windows.
+      this.heightsEnvironment(state)
+      const share = window.__typedownHeightsShare ?? HEIGHTS_SLICE_SHARE
+      if (share > 0) this.prepareHeights(state, performance.now() + budget * share)
       // A few blocks at a time, the clock read after each few: twenty code blocks of forty lines each, highlighted,
       // took half a second, and no frame was drawn in it.
       do {
         if (state.hi < blocks.length) this.drawMore(state, 'below', 4)
         if (state.lo > 0) this.drawMore(state, 'above', 4)
       } while ((state.lo > 0 || state.hi < blocks.length) && performance.now() < until)
+      this.flushHeightRules(state)
+      if (near) this.pinInView(state)
       // Once for the whole slice, not once per few blocks (drawMore does not call these itself - see its comment).
       this.renderMermaid()
       this.renderDiagram()
@@ -491,11 +526,22 @@ class StateRender {
       // that can be thousands of pixels tall on a live, visible, scrolling page, and on a document of many small blocks
       // (a reader's pasted page) that forced a full-page reflow on every slice and took ten times as long to draw as
       // the whole document at once - the estimate itself (read-only) costs nothing like that.
+      // Where the heights are predicted or guessed from predictions (predictHeights.js) the room is written every slice,
+      // worked out from them with nothing on the page measured: the blocks just drawn stand at the size given them (off
+      // screen, the long-document rule) and the room shrinks by as much in the same frame - written only every 100 ms,
+      // the page grew by what a few slices drew and shrank back, the scroll bar's thumb pulsing.
       const now = performance.now()
       const writeRoom = state.lo === 0 && state.hi === blocks.length || now - (state.roomWrittenAt ?? -Infinity) >= 100
       if (writeRoom) state.roomWrittenAt = now
-      this.estimateRest(state, writeRoom)
+      // With the heights predicted or guessed from the blocks' text, nothing on the page is read for it at all - not even
+      // the margins at the edges (as read when the drawing began): read after a slice's blocks went in, they were styled
+      // there and then, inside the slice, and on Windows the slices drew half as many blocks each.
+      if (state.heightsEnv && state.guess) this.estimateRest(state, true, false, false)
+      else this.estimateRest(state, writeRoom)
       keep()
+      // How many blocks each slice draws, and in how long (window.__typedownPretextStats: 'slice'), either way.
+      account('slice', sliceStarted)
+      account('sliceBlocks', performance.now(), state.hi - state.lo - drawnBefore)
       state.slices++
       if (state.lo > 0 || state.hi < blocks.length) state.timer = setTimeout(step, window.__typedownProgressiveDelayMs ?? 0)
       else this.finishProgressive(state)
@@ -543,8 +589,9 @@ class StateRender {
    * by the block), and dragging the scroll bar follows the hand. The guess is a height per character of what is drawn,
    * made again as more is.
    */
-  estimateRest(state, write = true) {
-    // Measuring is a layout of the page: not done for an estimate that would not be written (most slices).
+  estimateRest(state, write = true, measure = true, edges = measure) {
+    // Measuring is a layout of the page: not done for an estimate that would not be written (most slices), nor where the
+    // rest is all predicted (`measure` false: the per-character guess as last measured, for what cannot be predicted).
     if (!write) return
     const { blocks, root } = state
     if (!state.chars) {
@@ -562,21 +609,104 @@ class StateRender {
     const first = root.firstElementChild
     const last = root.lastElementChild
     if (!first || !last) return
-    const drawnHeight = last.getBoundingClientRect().bottom - first.getBoundingClientRect().top
-    let drawnChars = 0
-    for (let i = state.lo; i < state.hi; i++) drawnChars += state.chars[i]
-    // A block has a height of its own (margins) besides its text's: half of it per block, the other half per character.
-    const perBlock = drawnHeight / (state.hi - state.lo) / 2
-    const perChar = drawnChars > 0 ? drawnHeight / 2 / drawnChars : 0
+    if (measure || !state.guess) {
+      const drawnHeight = last.getBoundingClientRect().bottom - first.getBoundingClientRect().top
+      let drawnChars = 0
+      for (let i = state.lo; i < state.hi; i++) drawnChars += state.chars[i]
+      // A block has a height of its own (margins) besides its text's: half of it per block, the other half per character.
+      state.guess = { perBlock: drawnHeight / (state.hi - state.lo) / 2, perChar: drawnChars > 0 ? drawnHeight / 2 / drawnChars : 0, drawnHeight }
+    }
+    const { perBlock, perChar } = state.guess
     const room = (from, to) => {
       let h = 0
       for (let i = from; i < to; i++) h += perBlock + state.chars[i] * perChar
       return Math.round(h)
     }
-    if (write) {
-      root.style.setProperty('--td-room-above', `${room(0, state.lo)}px`)
-      root.style.setProperty('--td-room-below', `${room(state.hi, blocks.length)}px`)
+    let above = null
+    let below = null
+    // Where pretext has laid a block out (predictHeights.js), its predicted height; the per-character guess for the
+    // rest, and for all of it where pretext cannot be used (not loaded, fonts still loading, turned off by a test).
+    const env = measure ? this.heightsEnvironment(state) : state.heightsEnv
+    if (env) {
+      try {
+        const r = this.heights.room(state, env, i => perBlock + state.chars[i] * perChar, edges)
+        above = Math.round(r.above)
+        below = Math.round(r.below)
+        state.heightsCounted = r.counted
+      } catch (err) {
+        console.log(err)
+      }
     }
+    if (above === null) above = room(0, state.lo)
+    if (below === null) below = room(state.hi, blocks.length)
+    if (write) {
+      root.style.setProperty('--td-room-above', `${above}px`)
+      root.style.setProperty('--td-room-below', `${below}px`)
+    }
+  }
+
+  /**
+   * The environment heights are predicted for now (predictHeights.js), or null where they are not predicted (pretext
+   * not loaded or turned off, fonts still loading). Its width or styles changed since the last time: the predictions
+   * start over, and the size rules already written for blocks drawn off screen are written again.
+   */
+  heightsEnvironment(state) {
+    state.heightsEnv = null
+    if (!this.heights.ready()) return null
+    let env
+    try {
+      env = this.heights.environment(state.root)
+    } catch (err) {
+      return null
+    }
+    // Every document drawn a part at a time (from 10,000 characters); the size rules for blocks drawn off screen only
+    // past the long-document size (#editor.ag-long-document), where blocks off screen are not laid out.
+    if (!(env.width > 0)) return null
+    // For drawMore, which must not read the page's layout itself (after every few blocks: a layout of the whole page each).
+    state.heightsEnv = env
+    if (state.heightsGeneration !== env.generation) {
+      state.heightsGeneration = env.generation
+      state.heightsAt = 0
+    }
+    return env
+  }
+
+  /**
+   * Predicts the heights of blocks not drawn yet until `until` (performance.now()), or for `ms` from when the page's
+   * environment is read: in the order predictHeights' plan gives (what is drawn next first, a sample spread over the
+   * document for the guess of the rest, then outwards as the drawing goes).
+   */
+  prepareHeights(state, until, ms) {
+    const env = this.heightsEnvironment(state)
+    if (!env) return
+    if (ms) until = performance.now() + ms
+    const { blocks } = state
+    const plan = state.heightsPlan || (state.heightsPlan = this.heights.plan(state))
+    const started = performance.now()
+    let count = 0
+    while (state.heightsAt < plan.length && performance.now() < until) {
+      const i = plan[state.heightsAt++]
+      if (i >= state.lo && i < state.hi) continue
+      this.heights.box(blocks[i], env, true)
+      count++
+    }
+    const log = window.__typedownPretextLog
+    if (log && count) {
+      log.prepareMs = Math.round((log.prepareMs + performance.now() - started) * 10) / 10
+      log.predicted = (log.predicted || 0) + count
+      log.stats = this.heights.stats
+    }
+  }
+
+  // The size rules of the blocks a slice drew, written together: one change of the style sheet a slice.
+  flushHeightRules(state) {
+    if (!state.ruleQueue.length) return
+    try {
+      this.heights.addRules(state.ruleQueue)
+    } catch (err) {
+      console.log(err)
+    }
+    state.ruleQueue = []
   }
 
   clearRoom(state) {
@@ -587,6 +717,7 @@ class StateRender {
       else element.setAttribute('style', was)
     }
     state.pinned = null
+    state.pinnedSet = null
   }
 
   // The reader going where nothing is drawn yet (the scroll bar dragged far): the rest at once, not a blank page. Only a
@@ -602,6 +733,7 @@ class StateRender {
     }
     const check = () => {
       if (this.progressive !== state) return stop()
+      this.pinOnScroll(state)
       if (!reader) return
       const first = state.root.firstElementChild
       const last = state.root.lastElementChild
@@ -619,6 +751,24 @@ class StateRender {
   // The next `count` blocks on one side of what is drawn.
   drawMore(state, side, count) {
     const { blocks, activeBlocks, matches, root } = state
+    // In a document past the long-document size, a block drawn off screen is not laid out (content-visibility): it
+    // stands at the size predicted or guessed for it (predictHeights.js), not at the style sheet's 50 px: queued here,
+    // written with the slice's others before the page is next laid out (flushHeightRules). The environment as the slice
+    // found it (heightsEnvironment: drawMore must not read the page's layout).
+    const env = state.heightsEnv
+    if (env && env.contained) {
+      const from = side === 'below' ? state.hi : Math.max(0, state.lo - count)
+      const to = side === 'below' ? Math.min(blocks.length, state.hi + count) : state.lo
+      // Predicted where it is, else the guess from the predictions so far (refined once drawn): nothing predicted here.
+      try {
+        for (let i = from; i < to; i++) {
+          const text = this.heights.ruleText(blocks[i], env, state, i)
+          if (text) state.ruleQueue.push(text)
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    }
     if (side === 'below') {
       const to = Math.min(blocks.length, state.hi + count)
       root.insertAdjacentHTML('beforeend', this.blocksHtml(blocks.slice(state.hi, to), activeBlocks, matches))
@@ -654,6 +804,16 @@ class StateRender {
     const keep = state.root.isConnected ? this.keepInPlace(state, this.blockAtTop(state.root)) : () => {}
     this.clearRoom(state)
     keep()
+    // Blocks drawn without a predicted size (drawn at once, or before fonts or pretext were there), or with one for
+    // another width or other styles: theirs in idle time, now that the browser's scroll anchoring keeps the page still
+    // as they change size off screen.
+    if (HeightPredictor.enabled()) {
+      try {
+        this.heights.ruleRest(state.blocks, state.root)
+      } catch (err) {
+        console.log(err)
+      }
+    }
     if (this.progressive === state) this.progressive = null
     if (!this.progressive) this.holdAnchoring(false)
     clearTimeout(state.timer)
@@ -671,8 +831,10 @@ class StateRender {
     if (!state) return
     clearTimeout(state.timer)
     const keep = this.keepInPlace(state)
+    this.heightsEnvironment(state)
     if (state.hi < state.blocks.length) this.drawMore(state, 'below', state.blocks.length - state.hi)
     if (state.lo > 0) this.drawMore(state, 'above', state.lo)
+    this.flushHeightRules(state)
     this.renderMermaid()
     this.renderDiagram()
     this.codeCache.clear()
@@ -699,6 +861,90 @@ class StateRender {
       else hi = mid
     }
     return kids[lo]
+  }
+
+  /**
+   * Whether the window, and a window's height above and below it, is not wholly within the part drawn so far. Read at
+   * the start of a slice, before anything goes in (the page laid out already: no layout of its own); the edge drawn to
+   * last is all it reads.
+   */
+  windowUncovered(state) {
+    const { root, blocks } = state
+    // Only past the long-document size are blocks off screen not laid out (content-visibility): below it nothing to do.
+    if (!isLongDocument()) return false
+    const h = window.innerHeight
+    if (state.lo > 0) {
+      const first = root.firstElementChild
+      if (first && first.getBoundingClientRect().top > -h) return true
+    }
+    if (state.hi < blocks.length) {
+      const last = root.lastElementChild
+      if (last && last.getBoundingClientRect().bottom < 2 * h) return true
+    }
+    return false
+  }
+
+  // The top-level block at the top of the window if one is drawn there, or null.
+  blockInWindow(root) {
+    const el = this.blockAtTop(root)
+    if (!el) return null
+    const r = el.getBoundingClientRect()
+    return r.bottom > 0 && r.top < window.innerHeight ? el : null
+  }
+
+  /**
+   * The page scrolled while a document is drawn (the reader, the load putting it back, a script): the blocks it brought
+   * into the window pinned at once (pinInView), the window held by a block in it as they change size. Drawn off screen
+   * and scrolled to, a block stood at the size given it off screen for seconds on w10 before it was laid out, and the
+   * text below it moved then (JT01: 140 px, a document of HTML blocks scrolled to its middle while drawn).
+   */
+  pinOnScroll(state) {
+    if (!isLongDocument()) return
+    const anchor = this.blockInWindow(state.root)
+    const keep = anchor ? this.keepInPlace(state, anchor) : null
+    if (this.pinInView(state) && keep) keep()
+  }
+
+  /**
+   * The blocks in the window and a window's height around it laid out for real now (pinned, content-visibility
+   * visible, until the whole document is drawn - as the part drawn first): past the long-document size a block drawn
+   * there was laid out at the size given it off screen in the frame it came, and at its own only a frame or more later,
+   * moving the text below it (JT01, w10: 395 px in a document of HTML blocks put at a place not drawn yet).
+   */
+  pinInView(state) {
+    const kids = state.root.children
+    if (!kids.length) return 0
+    const h = window.innerHeight
+    if (!state.pinned) state.pinned = []
+    if (!state.pinnedSet) state.pinnedSet = new WeakSet(state.pinned.map(([element]) => element))
+    let count = 0
+    // Again while what was pinned brings more in: a block of HTML guessed at 181 px and laid out at 24 pulled the
+    // blocks after it into the window, at their own guessed sizes (w10).
+    for (let pass = 0; pass < 3; pass++) {
+      let lo = 0
+      let hi = kids.length - 1
+      while (lo < hi) {
+        const mid = (lo + hi) >> 1
+        if (kids[mid].getBoundingClientRect().bottom <= -h) lo = mid + 1
+        else hi = mid
+      }
+      // All read first, then all written: one layout a pass.
+      const pin = []
+      for (let k = lo; k < kids.length; k++) {
+        const element = kids[k]
+        if (element.getBoundingClientRect().top >= h * 2) break
+        if (!state.pinnedSet.has(element)) pin.push(element)
+      }
+      if (!pin.length) break
+      for (const element of pin) {
+        const was = element.getAttribute('style')
+        state.pinned.push([element, was])
+        state.pinnedSet.add(element)
+        element.setAttribute('style', (was ? was.replace(/;?\s*$/, '; ') : '') + 'content-visibility: visible')
+      }
+      count += pin.length
+    }
+    return count
   }
 
   keepInPlace(state, anchor = null) {

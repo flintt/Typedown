@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>Wys die Markdown-merke (**, #, 'n skakel se adres) in elke paragraaf, nie net waar die wyser is nie</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Voorspel die uitleg van lang dokumente (eksperimenteel)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Terwyl 'n lang dokument in dele geteken word, word die hoogte van wat nog nie gewys word nie uit die teks bereken in plaas van geskat, sodat die rolstaaf en spronge vanaf die uiteensetting akkurater is. Eksperimenteel</value>
+  </data>
 </root>

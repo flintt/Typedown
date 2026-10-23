@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>Hiện các ký hiệu Markdown (**, #, địa chỉ của liên kết) ở mọi đoạn, không chỉ nơi có con trỏ</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Dự đoán bố cục của tài liệu dài (thử nghiệm)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Khi một tài liệu dài được vẽ theo từng phần, chiều cao của phần chưa hiển thị được tính từ văn bản thay vì ước lượng, nhờ đó thanh cuộn và các lần nhảy từ dàn ý chính xác hơn. Thử nghiệm</value>
+  </data>
 </root>

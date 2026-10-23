@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>Markdown 記号 (**、#、リンクのアドレス) をカーソルのある場所だけでなく、すべての段落で表示します</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>長いドキュメントのレイアウトを予測する（試験的）</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>長いドキュメントを段階的に描画する間、まだ表示されていない部分の高さを推定ではなくテキストから計算するため、スクロールバーやアウトラインからのジャンプがより正確になります。試験的な機能です</value>
+  </data>
 </root>

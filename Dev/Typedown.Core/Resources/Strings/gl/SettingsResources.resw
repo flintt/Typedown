@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>Amosar as marcas de Markdown (**, #, o enderezo dunha ligazón) en cada parágrafo, non só onde está o cursor</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Prever a disposición dos documentos longos (experimental)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Mentres un documento longo se debuxa por partes, a altura do que aínda non se mostra calcúlase a partir do texto en lugar de estimarse, de xeito que a barra de desprazamento e os saltos desde o esquema son máis precisos. Experimental</value>
+  </data>
 </root>

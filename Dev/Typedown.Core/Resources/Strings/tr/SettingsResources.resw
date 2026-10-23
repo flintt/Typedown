@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>Markdown işaretlerini (**, #, bir bağlantının adresi) yalnızca imlecin olduğu yerde değil, her paragrafta göster</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Uzun belgelerin düzenini önceden hesapla (deneysel)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Uzun bir belge parça parça çizilirken henüz gösterilmeyen kısmın yüksekliği tahmin edilmek yerine metinden hesaplanır; böylece kaydırma çubuğu ve ana hattan atlamalar daha doğru olur. Deneysel</value>
+  </data>
 </root>

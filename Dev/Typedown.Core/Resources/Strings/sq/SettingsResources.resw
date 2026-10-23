@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>Shfaq shenjat e Markdown (**, #, adresën e një lidhjeje) në çdo paragraf, jo vetëm aty ku është kursori</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Parashiko faqosjen e dokumenteve të gjata (eksperimentale)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Ndërsa një dokument i gjatë vizatohet me pjesë, lartësia e asaj që ende nuk shfaqet llogaritet nga teksti në vend që të vlerësohet, kështu që shiriti i rrëshqitjes dhe kërcimet nga skica janë më të sakta. Eksperimentale</value>
+  </data>
 </root>

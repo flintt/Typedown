@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>Markdown-ის ნიშნების (**, #, ბმულის მისამართი) ჩვენება ყველა აბზაცში და არა მხოლოდ იქ, სადაც კურსორია</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>გრძელი დოკუმენტების განლაგების წინასწარ გამოთვლა (ექსპერიმენტული)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>როცა გრძელი დოკუმენტი ნაწილ-ნაწილ იხატება, ჯერ არნაჩვენები ნაწილის სიმაღლე ტექსტიდან გამოითვლება და არა მიახლოებით, ამიტომ გადახვევის ზოლი და მონახაზიდან გადასვლები უფრო ზუსტია. ექსპერიმენტული</value>
+  </data>
 </root>

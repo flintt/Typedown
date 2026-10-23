@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>Die Markdown-Zeichen (**, #, die Adresse eines Links) in jedem Absatz anzeigen, nicht nur dort, wo der Cursor steht</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Layout langer Dokumente vorausberechnen (experimentell)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Während ein langes Dokument in Teilen gezeichnet wird, wird die Höhe des noch nicht Angezeigten aus dem Text berechnet statt geschätzt, sodass die Bildlaufleiste und Sprünge aus der Gliederung genauer sind. Experimentell</value>
+  </data>
 </root>

@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>Pokazuj znaczniki Markdown (**, #, adres łącza) w każdym akapicie, nie tylko tam, gdzie jest kursor</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Przewiduj układ długich dokumentów (eksperymentalne)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Podczas rysowania długiego dokumentu częściami wysokość tego, co nie jest jeszcze wyświetlane, jest obliczana na podstawie tekstu zamiast szacowana, dzięki czemu pasek przewijania i przeskoki z konspektu są dokładniejsze. Eksperymentalne</value>
+  </data>
 </root>

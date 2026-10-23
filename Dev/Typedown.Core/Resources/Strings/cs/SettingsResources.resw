@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>Zobrazovat značky Markdownu (**, #, adresu odkazu) v každém odstavci, nejen tam, kde je kurzor</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Předvídat rozvržení dlouhých dokumentů (experimentální)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Zatímco se dlouhý dokument vykresluje po částech, výška toho, co ještě není zobrazeno, se místo odhadu vypočítá z textu, takže posuvník a skoky z osnovy jsou přesnější. Experimentální</value>
+  </data>
 </root>

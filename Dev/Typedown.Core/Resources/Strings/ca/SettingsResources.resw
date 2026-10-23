@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>Mostra les marques de Markdown (**, #, l'adreça d'un enllaç) a cada paràgraf, no només on és el cursor</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Preveu la disposició dels documents llargs (experimental)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Mentre un document llarg es dibuixa per parts, l'alçada del que encara no es mostra es calcula a partir del text en lloc d'estimar-se, de manera que la barra de desplaçament i els salts des de l'esquema són més precisos. Experimental</value>
+  </data>
 </root>

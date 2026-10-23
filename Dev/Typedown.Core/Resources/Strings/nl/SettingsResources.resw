@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>De Markdown-tekens (**, #, het adres van een koppeling) in elke alinea tonen, niet alleen waar de cursor staat</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Indeling van lange documenten voorspellen (experimenteel)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Terwijl een lang document in delen wordt getekend, wordt de hoogte van wat nog niet wordt getoond uit de tekst berekend in plaats van geschat, zodat de schuifbalk en sprongen vanuit het overzicht nauwkeuriger zijn. Experimenteel</value>
+  </data>
 </root>

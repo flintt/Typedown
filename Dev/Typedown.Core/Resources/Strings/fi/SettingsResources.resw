@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>Näytä Markdown-merkinnät (**, #, linkin osoite) jokaisessa kappaleessa, ei vain kohdistimen kohdalla</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Ennakoi pitkien asiakirjojen asettelu (kokeellinen)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Kun pitkää asiakirjaa piirretään osissa, vielä näyttämättömän osan korkeus lasketaan tekstistä arvioinnin sijaan, joten vierityspalkki ja siirtymät jäsennyksestä ovat tarkempia. Kokeellinen</value>
+  </data>
 </root>

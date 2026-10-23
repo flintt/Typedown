@@ -926,6 +926,7 @@
         "ShowBlankLines",
         "ShowMarkdownMarks",
         "ProgressiveRendering",
+        "PredictHeights",
         "KeepUnsavedOnClose",
         "SidePaneOnRight",
         "OpenFolderAfterExport",

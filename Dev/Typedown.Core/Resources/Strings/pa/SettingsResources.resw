@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>ਸਿਰਫ਼ ਕਰਸਰ ਵਾਲੀ ਥਾਂ ਨਹੀਂ, ਹਰ ਪੈਰੇ ਵਿੱਚ Markdown ਨਿਸ਼ਾਨ (**, #, ਲਿੰਕ ਦਾ ਪਤਾ) ਦਿਖਾਓ</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>ਲੰਬੇ ਦਸਤਾਵੇਜ਼ਾਂ ਦਾ ਖਾਕਾ ਪਹਿਲਾਂ ਹੀ ਅੰਦਾਜ਼ਾ ਲਗਾਓ (ਪ੍ਰਯੋਗਾਤਮਕ)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>ਜਦੋਂ ਲੰਬਾ ਦਸਤਾਵੇਜ਼ ਹਿੱਸਿਆਂ ਵਿੱਚ ਬਣਾਇਆ ਜਾਂਦਾ ਹੈ, ਤਾਂ ਹਾਲੇ ਨਾ ਦਿਖਾਏ ਗਏ ਹਿੱਸੇ ਦੀ ਉਚਾਈ ਅੰਦਾਜ਼ੇ ਦੀ ਬਜਾਏ ਲਿਖਤ ਤੋਂ ਗਿਣੀ ਜਾਂਦੀ ਹੈ, ਜਿਸ ਨਾਲ ਸਕ੍ਰੋਲ ਬਾਰ ਅਤੇ ਰੂਪ-ਰੇਖਾ ਤੋਂ ਛਾਲਾਂ ਵਧੇਰੇ ਸਹੀ ਹੁੰਦੀਆਂ ਹਨ। ਪ੍ਰਯੋਗਾਤਮਕ</value>
+  </data>
 </root>

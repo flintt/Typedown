@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>Markdown белгілерін (**, #, сілтеме мекенжайы) тек курсор тұрған жерде емес, әр азат жолда көрсету</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Ұзын құжаттардың орналасуын алдын ала есептеу (тәжірибелік)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Ұзын құжат бөлік-бөлігімен салынып жатқанда, әлі көрсетілмеген бөліктің биіктігі шамаланбай, мәтіннен есептеледі, сондықтан айналдыру жолағы мен құрылымнан өту дәлірек болады. Тәжірибелік</value>
+  </data>
 </root>

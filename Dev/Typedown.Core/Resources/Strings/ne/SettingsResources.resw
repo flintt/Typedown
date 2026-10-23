@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>कर्सर भएको ठाउँमा मात्र होइन, हरेक अनुच्छेदमा Markdown चिह्नहरू (**, #, लिङ्कको ठेगाना) देखाउनुहोस्</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>लामो कागजातहरूको लेआउट पहिल्यै अनुमान गर्नुहोस् (प्रयोगात्मक)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>लामो कागजात भाग-भाग गरी कोरिँदै गर्दा, अझै नदेखाइएको भागको उचाइ अनुमान गर्नुको सट्टा पाठबाट गणना गरिन्छ, जसले स्क्रोल बार र रूपरेखाबाट हुने उफ्राइ अझ सटीक बनाउँछ। प्रयोगात्मक</value>
+  </data>
 </root>

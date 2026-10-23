@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>Whakaaturia ngā tohu Markdown (**, #, te wāhitau o tētahi hono) i ia kōwae, kaua ko te wāhi anake kei reira te pehu</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Matapae i te takotoranga o ngā tuhinga roa (whakamātau)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>I te wā e tuhia ana he tuhinga roa i ōna wāhanga, ka tātaihia te teitei o ngā wāhanga kāore anō kia whakaaturia mai i te kuputuhi, kaua e whakatau tata, kia tika ake ai te pae panuku me ngā peke mai i te whakarāpopototanga. Whakamātau</value>
+  </data>
 </root>

@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>ສະແດງເຄື່ອງໝາຍ Markdown (**, #, ທີ່ຢູ່ຂອງລິ້ງ) ໃນທຸກຫຍໍ້ໜ້າ, ບໍ່ແມ່ນສະເພາະບ່ອນທີ່ມີຕົວກະພິບ</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>ຄາດຄະເນໂຄງຮ່າງຂອງເອກະສານຍາວ (ທົດລອງ)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>ໃນຂະນະທີ່ເອກະສານຍາວຖືກແຕ້ມເປັນສ່ວນໆ, ຄວາມສູງຂອງສ່ວນທີ່ຍັງບໍ່ໄດ້ສະແດງຈະຖືກຄິດໄລ່ຈາກຂໍ້ຄວາມແທນການປະມານ, ເຮັດໃຫ້ແຖບເລື່ອນ ແລະ ການໂດດຈາກໂຄງຮ່າງຖືກຕ້ອງກວ່າ. ທົດລອງ</value>
+  </data>
 </root>

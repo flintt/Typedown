@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>הצגת סימני Markdown (**, #, כתובת של קישור) בכל פסקה, לא רק היכן שנמצא הסמן</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>חיזוי הפריסה של מסמכים ארוכים (ניסיוני)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>בזמן שמסמך ארוך מצויר בחלקים, הגובה של מה שעוד לא מוצג מחושב מהטקסט במקום להיות מוערך, כך שסרגל הגלילה והקפיצות מתוך המתאר מדויקים יותר. ניסיוני</value>
+  </data>
 </root>

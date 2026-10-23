@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>কাৰ্ছৰ থকা ঠাইতে নহয়, প্ৰতিটো অনুচ্ছেদত Markdown চিহ্নসমূহ (**, #, লিংকৰ ঠিকনা) দেখুৱাওক</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>দীঘলীয়া নথিৰ বিন্যাস আগতীয়াকৈ নিৰ্ণয় কৰক (পৰীক্ষামূলক)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>দীঘলীয়া নথি অংশ অংশকৈ অঁকাৰ সময়ত, এতিয়াও নেদেখুওৱা অংশৰ উচ্চতা অনুমান নকৰি পাঠৰ পৰা গণনা কৰা হয়, যাতে স্ক্ৰ'ল বাৰ আৰু ৰূপৰেখাৰ পৰা জঁপিয়াই যোৱা অধিক সঠিক হয়। পৰীক্ষামূলক</value>
+  </data>
 </root>

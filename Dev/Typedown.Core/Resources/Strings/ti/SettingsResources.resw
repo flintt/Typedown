@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>ምልክታት Markdown (**፣ #፣ ኣድራሻ መላግቦ) ኣብቲ ጠቋሚ ዘለዎ ጥራይ ዘይኮነ ኣብ ነፍሲ ወከፍ ሕጡብ ኣርኢ</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>ኣቀማምጣ ነዋሕቲ ሰነዳት ኣቐዲምካ ግመት (ፈተነ)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>ነዊሕ ሰነድ ብክፋላት ክስኣል ከሎ፡ ቁመት እቲ ገና ዘይተራእየ ክፋል ብግምት ዘይኮነስ ካብቲ ጽሑፍ ይሕሰብ፡ ስለዚ መሸብለሊ ባርን ካብ ትሕዝቶ ምዝላልን ዝያዳ ልክዕ ይኸውን። ፈተነ</value>
+  </data>
 </root>

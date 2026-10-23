@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>Uri s-sinjali tal-Markdown (**, #, l-indirizz ta' link) f'kull paragrafu, mhux biss fejn hemm il-kursur</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Bassar it-tqassim ta' dokumenti twal (sperimentali)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Waqt li dokument twil jinġibed f'partijiet, l-għoli ta' dak li għadu ma jidhirx jiġi kkalkulat mit-test minflok ma jiġi stmat, sabiex il-bar tal-iscroll u l-qbiż mill-iskema jkunu aktar preċiżi. Sperimentali</value>
+  </data>
 </root>

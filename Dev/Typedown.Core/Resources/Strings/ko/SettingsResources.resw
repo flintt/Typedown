@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>Markdown 기호(**, #, 링크 주소)를 커서가 있는 곳뿐 아니라 모든 단락에 표시합니다</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>긴 문서의 레이아웃 예측(실험적)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>긴 문서를 나누어 그리는 동안 아직 표시되지 않은 부분의 높이를 추정하지 않고 텍스트로 계산하므로 스크롤 막대와 개요에서의 이동이 더 정확해집니다. 실험적 기능</value>
+  </data>
 </root>
