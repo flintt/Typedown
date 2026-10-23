@@ -87,7 +87,7 @@ return JSON.stringify({frames:shown.length,drawingFrames:pend,drawnMs:pl.ms??nul
         var opened = new List<string>();
         // A drawing's time on the W10 PC varies by a fifth and more from one drawing to the next (300k from the top, the
         // old estimate: 576, 604 and 798 ms in one run; the first drawing of the run 2023 ms): each document is drawn three
-        // times in each mode and place, and the medians compared.
+        // times in each mode and place, the modes taking turns, and the medians compared.
         var drawnSamples = new Dictionary<string, List<double>>();
         void Sample(string key, JToken? ms)
         {
@@ -110,13 +110,17 @@ return JSON.stringify({frames:shown.length,drawingFrames:pend,drawnMs:pl.ms??nul
             foreach (var (label, file) in new[] { ("100k", "mixed-100k.md.gz"), ("300k", "mixed-300k.md.gz"), ("1m", "mixed-1m.md.gz") })
             {
                 var text = HjFixture(file);
+                var ids = new Dictionary<string, string>();
                 foreach (var off in new[] { false, true })
                 {
                     var mode = off ? "old" : "pretext";
                     var tag = $"{label} {mode}";
                     await Eval($"window.__typedownPretextOff = {(off ? "true" : "false")}; 'ok'");
 
-                    // At the top: opened anew.
+                    // At the top: opened anew - from the small document, nothing kept (the other mode's document, of the
+                    // same text, is still open: left for this one, it was kept and this one shown from it, not drawn).
+                    await c.Call("document.focus", new { documentId = small });
+                    if (!await Eventually(Drawn, 30000, 200)) throw new CaseFailed($"{tag}: the small document not drawn");
                     await Eval("window.__typedownKeptDocuments && window.__typedownKeptDocuments.clear(); 'ok'");
                     await Eval(HjStartScript);
                     var clock = System.Diagnostics.Stopwatch.StartNew();
@@ -159,27 +163,39 @@ return JSON.stringify({frames:shown.length,drawingFrames:pend,drawnMs:pl.ms??nul
                     Sample($"{tag} top", top["drawnMs"]);
                     Sample($"{tag} middle", middle["drawnMs"]);
 
-                    // Drawn twice more from the top and twice from the middle (left for the small document, nothing kept,
-                    // back), for the drawing's time only.
-                    foreach (var (place, share) in new[] { ("top", 0.0), ("top", 0.0), ("middle", 0.5), ("middle", 0.5) })
-                    {
-                        await Eval($"window.scrollTo(0, document.documentElement.scrollHeight * {share.ToString(System.Globalization.CultureInfo.InvariantCulture)}); 'ok'");
-                        await Task.Delay(1200);
-                        await c.Call("document.focus", new { documentId = small });
-                        if (!await Eventually(Drawn, 30000, 200)) throw new CaseFailed($"{tag}: the small document not drawn");
-                        await Task.Delay(500);
-                        await Eval("window.__typedownKeptDocuments && window.__typedownKeptDocuments.clear(); window.__typedownProgressiveLog = []; 'ok'");
-                        await c.Call("document.focus", new { documentId = id });
-                        if (!await Eventually(async () => await Eval("String(!!window.__typedownMuya && !window.__typedownMuya.renderPending && (window.__typedownProgressiveLog || []).length > 0)") == "true", 120000, 200)) throw new CaseFailed($"{tag}: not drawn again from the {place} within 120 s");
-                        await Eventually(async () => await Eval(HjSettledScript) == "true", 30000, 200);
-                        await Task.Delay(500);
-                        Sample($"{tag} {place}", JToken.Parse(await Eval("JSON.stringify(((window.__typedownProgressiveLog || []).slice(-1)[0] || {}).ms ?? null)")));
-                    }
-
-                    try { await c.Call("document.close", new { documentId = id }); } catch { }
-                    opened.Remove(id);
+                    ids[mode] = id;
                     notes.Add($"{tag}: top {top.ToString(Newtonsoft.Json.Formatting.None)}");
                     notes.Add($"{tag}: middle {middle.ToString(Newtonsoft.Json.Formatting.None)}");
+                }
+
+                // Each drawn twice more from the middle and twice from the top, for the drawing's time only: the two modes
+                // taking turns (left for the small document, nothing kept, back) - one mode's drawings all after the
+                // other's, the machine doing other things meanwhile showed as a difference between them (100k from the
+                // middle: 380 against 260 ms; taking turns, 220 against 239). The document left goes first to where its
+                // next drawing starts.
+                var plan = new[] { ("pretext", "middle"), ("old", "middle"), ("pretext", "middle"), ("old", "middle"), ("pretext", "top"), ("old", "top"), ("pretext", "top"), ("old", "top") };
+                var shown = "old";
+                for (var k = 0; k < plan.Length; k++)
+                {
+                    var (mode, place) = plan[k];
+                    var next = plan.Skip(k).Where(p => p.Item1 == shown).Select(p => p.Item2).FirstOrDefault() ?? "middle";
+                    await Eval($"window.scrollTo(0, document.documentElement.scrollHeight * {(next == "top" ? "0" : "0.5")}); 'ok'");
+                    await Task.Delay(1200);
+                    await c.Call("document.focus", new { documentId = small });
+                    if (!await Eventually(Drawn, 30000, 200)) throw new CaseFailed($"{label}: the small document not drawn");
+                    await Task.Delay(500);
+                    await Eval($"window.__typedownPretextOff = {(mode == "old" ? "true" : "false")}; window.__typedownKeptDocuments && window.__typedownKeptDocuments.clear(); window.__typedownProgressiveLog = []; 'ok'");
+                    await c.Call("document.focus", new { documentId = ids[mode] });
+                    if (!await Eventually(async () => await Eval("String(!!window.__typedownMuya && !window.__typedownMuya.renderPending && (window.__typedownProgressiveLog || []).length > 0)") == "true", 120000, 200)) throw new CaseFailed($"{label} {mode}: not drawn again from the {place} within 120 s");
+                    await Eventually(async () => await Eval(HjSettledScript) == "true", 30000, 200);
+                    await Task.Delay(500);
+                    Sample($"{label} {mode} {place}", JToken.Parse(await Eval("JSON.stringify(((window.__typedownProgressiveLog || []).slice(-1)[0] || {}).ms ?? null)")));
+                    shown = mode;
+                }
+                foreach (var id in ids.Values)
+                {
+                    try { await c.Call("document.close", new { documentId = id }); } catch { }
+                    opened.Remove(id);
                 }
             }
         }
@@ -209,7 +225,10 @@ return JSON.stringify({frames:shown.length,drawingFrames:pend,drawnMs:pl.ms??nul
                 if (place == "middle") Check((double)p["thumb"]! <= HjMaxThumb, $"{label} middle: the thumb within {HjMaxThumb}% of where it belongs ({p["thumb"]}%; old {o["thumb"]}%)");
                 if (Median($"{label} pretext {place}") is double pm && Median($"{label} old {place}") is double om)
                     Check(pm <= HjMaxSlower * om, $"{label} {place}: drawn in at most {HjMaxSlower} times the old estimate's time (medians of {drawnSamples[$"{label} pretext {place}"].Count}: {pm} vs {om} ms)");
-                Check((double)p["maxGapMs"]! <= (double)o["maxGapMs"]! + 50, $"{label} {place}: the longest frame gap at most 50 ms over the old estimate's ({p["maxGapMs"]} vs {o["maxGapMs"]} ms)");
+                // A drawing within one frame has no gap between frames (0): nothing to compare a gap with.
+                if ((int)o["drawingFrames"]! >= 2)
+                    Check((double)p["maxGapMs"]! <= (double)o["maxGapMs"]! + 50, $"{label} {place}: the longest frame gap at most 50 ms over the old estimate's ({p["maxGapMs"]} vs {o["maxGapMs"]} ms)");
+                else notes.Add($"{label} {place}: the longest frame gap not compared - the old estimate's drawing was within one frame ({p["maxGapMs"]} ms with predictions)");
             }
             if (label == "100k") continue;
             var oldTop = (JObject)results[$"{label} old top"]!;
