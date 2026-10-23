@@ -365,7 +365,7 @@ namespace Typedown.Core.ViewModels
             return true;
         }
 
-        private async Task<bool> LoadFile(string path, bool skipSavedCheck = false, bool postMessage = true, bool preview = false, Task<(string Text, TextFileFormat Format, ulong Hash)> read = null)
+        private async Task<bool> LoadFile(string path, bool skipSavedCheck = false, bool postMessage = true, bool preview = false)
         {
             DocumentTab startedTab = null;
             try
@@ -390,15 +390,14 @@ namespace Typedown.Core.ViewModels
                 if (TabsViewModel != null && !(preview ? TabsViewModel.CanReuseActiveTabForPreview : TabsViewModel.IsActiveTabBlank))
                     startedTab = TabsViewModel.BeginNewTab();
                 var openedAt = System.Diagnostics.Stopwatch.StartNew();
-                // Read beforehand off the window's thread (the session's active document, while the page starts), or now.
-                var (text, format, readHash) = read != null ? await read : await ReadWithHash(path, hash: false);
+                var (text, format) = await TextFileFormat.ReadAsync(path);
                 EditionHooks.ReportDocumentOnDisk(path, text, written: false);
                 // Read: the reused tab now holds another document.
                 if (startedTab == null) TabsViewModel?.ActiveTab?.BecomeNewDocument();
                 FileFormat = format;
                 var readMs = openedAt.ElapsedMilliseconds;
                 EditorViewModel.FirstStart = false;
-                EditorViewModel.FileHash = read != null ? readHash : Common.SimpleHash(text);
+                EditorViewModel.FileHash = Common.SimpleHash(text);
                 DiskHash = EditorViewModel.FileHash;
                 FilePath = path;
                 _ = AccessHistory.RecordFileHistory(FilePath);
@@ -441,12 +440,6 @@ namespace Typedown.Core.ViewModels
                 await AppContentDialog.Create(Locale.GetDialogString("ReadErrorTitle"), ex.Message, Locale.GetDialogString("Ok")).ShowAsync(AppViewModel.XamlRoot);
                 return false;
             }
-        }
-
-        private static async Task<(string Text, TextFileFormat Format, ulong Hash)> ReadWithHash(string path, bool hash)
-        {
-            var (text, format) = await TextFileFormat.ReadAsync(path);
-            return (text, format, hash ? Common.SimpleHash(text) : 0);
         }
 
         private async Task<bool> LoadFolder(string folderPath, bool explicitRoot = false)
@@ -1016,9 +1009,6 @@ namespace Typedown.Core.ViewModels
             var files = session.Files.Where(f => !TryGetOpenedWindow(f, out _)).ToList();
             if (files.Count == 0) return false;
             var activeFile = session.ActiveIndex < session.Files.Count && files.Contains(session.Files[session.ActiveIndex]) ? session.Files[session.ActiveIndex] : files[0];
-            // Read, decoded and hashed off the window's thread: on it, a 1.5 MB active document held the editor control's
-            // creation back by 0.66 s on w10 (SR01).
-            var read = Task.Run(() => ReadWithHash(activeFile, hash: true));
             // The tabs first, nothing read: they show at once, whatever reading the files waits for (on w10 the strip
             // came only with the active file read, 2.6 s after the window). The active document goes into the pristine
             // untitled tab, which stays where the active file is in the list.
@@ -1037,7 +1027,7 @@ namespace Typedown.Core.ViewModels
             try
             {
                 // No tab is opened here: LoadFile reuses the pristine untitled one.
-                loaded = await LoadFile(activeFile, true, false, read: read);
+                loaded = await LoadFile(activeFile, true, false);
             }
             catch (Exception ex)
             {
