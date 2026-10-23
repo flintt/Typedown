@@ -1285,9 +1285,10 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             else settleScroll(keepScroll ? scrollForAnchor(anchor) ?? scrollTop : scrollTop, keepScroll)
             if (reportShown !== null) {
                 // From the frame it is put back in (this runs in its callbacks), the first task after that frame was
-                // painted: two frames on, the slices drawing the rest kept the cover up 0.7 s longer.
+                // painted - before the first slice drawing the rest: after it, or two frames on, the cover stayed up
+                // 0.2-0.7 s longer.
                 const shown = reportShown
-                setTimeout(() => transport.postMessage('LoadPreviewShown', shown), 0)
+                ;(editor as any).afterThisFrame(() => transport.postMessage('LoadPreviewShown', shown))
             }
             props.onContentApplied?.()
         }

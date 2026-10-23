@@ -342,6 +342,17 @@ class Muya {
     return !!this.contentState.stateRender.progressive
   }
 
+  /**
+   * Runs `then` in the first task after the frame now coming is painted: before the first slice of a document drawn a
+   * part at a time (that slice was queued first, and held a task queued now back by a slice's worth, ~200 ms), else
+   * as the next task.
+   */
+  afterThisFrame(then) {
+    const state = this.contentState.stateRender.progressive
+    if (state && state.slices === 0) (state.beforeFirstSlice || (state.beforeFirstSlice = [])).push(then)
+    else setTimeout(then, 0)
+  }
+
   /** Draws the rest of a document drawn a part at a time, now. */
   completeRender() {
     this.contentState.stateRender.completeRender()

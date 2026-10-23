@@ -495,6 +495,18 @@ class StateRender {
     const step = () => {
       state.timer = null
       if (this.progressive !== state) return
+      // Waiting for the frame the drawing began in to be painted (Muya.afterThisFrame): before this slice, not after it.
+      if (state.beforeFirstSlice) {
+        const hooks = state.beforeFirstSlice
+        state.beforeFirstSlice = null
+        for (const hook of hooks) {
+          try {
+            hook()
+          } catch (err) {
+            console.log(err)
+          }
+        }
+      }
       const budget = window.__typedownProgressiveSliceMs ?? sliceBudget()
       const sliceStarted = performance.now()
       const drawnBefore = state.hi - state.lo
