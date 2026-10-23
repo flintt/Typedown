@@ -52,7 +52,7 @@ internal static partial class Program
 
     // Started before a load: every frame's height, scroll position, the read block's place and whether the drawing is
     // still going, until stopped.
-    private const string HjStartScript = @"(()=>{const ps=window.__typedownPretextStats;if(ps)for(const k of Object.keys(ps))delete ps[k];window.__hj={frames:[],key:null,on:true};const tick=()=>{const s=window.__hj;if(!s||!s.on)return;const el=s.key?document.getElementById(s.key):null;s.frames.push([performance.now(),document.documentElement.scrollHeight,window.scrollY,el?el.getBoundingClientRect().top:null,!!(window.__typedownMuya&&window.__typedownMuya.renderPending)]);requestAnimationFrame(tick)};requestAnimationFrame(tick);return 'ok'})()";
+    private const string HjStartScript = @"(()=>{const ps=window.__typedownPretextStats;if(ps)for(const k of Object.keys(ps))delete ps[k];window.__typedownProgressiveLog=[];window.__hj={frames:[],key:null,on:true};const tick=()=>{const s=window.__hj;if(!s||!s.on)return;const el=s.key?document.getElementById(s.key):null;s.frames.push([performance.now(),document.documentElement.scrollHeight,window.scrollY,el?el.getBoundingClientRect().top:null,!!(window.__typedownMuya&&window.__typedownMuya.renderPending)]);requestAnimationFrame(tick)};requestAnimationFrame(tick);return 'ok'})()";
 
     // Once drawn (and the blocks guessed while drawn predicted, ruleRest): the frames summed up against the page wholly
     // laid out (forced here; synchronous - the evaluation is not awaited). `readTop`: where the read block is meant to be

@@ -58,20 +58,24 @@
   window.__hjSummary = () => {
     const s = window.__hjj;
     if (s.result) return s.result;
-    const tops = s.frames.filter(f => f[1] !== null);
+    const target = 16;
+    let tops = s.frames.filter(f => f[1] !== null);
+    // The host made the jump (E2E): the frames watched before it landed are where the page was, not moves after it.
+    const landed = s.hostJumps ? tops.findIndex(f => Math.abs(f[1] - target) <= 2) : -1;
+    const before = landed > 0 ? landed : 0;
+    if (before) tops = tops.slice(before);
     let moves = 0;
     const moved = [];
     for (let k = 1; k < tops.length; k++) {
       const d = tops[k][1] - tops[k - 1][1];
       if (Math.abs(d) > 1) { moves++; if (moved.length < 8) moved.push([tops[k][0], Math.round(d), 'scrollY ' + tops[k - 1][3] + '>' + tops[k][3], tops[k][2] ? 'drawing' : 'drawn']); }
     }
-    const target = 16;
     const end = tops.length ? tops[tops.length - 1][1] : null;
     return {
       ok: true, index: s.index, wasDrawing: s.wasDrawing, rightAfter: s.right === null ? null : Math.round(s.right - target),
       firstFrame: tops.length ? Math.round(tops[0][1] - target) : null, endOff: end === null ? null : Math.round(Math.abs(end - target)),
       long: !!document.querySelector('#editor.ag-long-document'), worstOff: tops.length ? Math.round(Math.max(...tops.map(f => Math.abs(f[1] - target)))) : null,
-      missingFrames: s.frames.length - tops.length, moves, moved, watchedMs: s.frames.length ? s.frames[s.frames.length - 1][0] : 0,
+      missingFrames: s.frames.length - before - tops.length, beforeJump: before, moves, moved, watchedMs: s.frames.length ? s.frames[s.frames.length - 1][0] : 0,
       drawnAtMs: (s.frames.find(f => !f[2]) || [null])[0],
     };
   };
