@@ -1,10 +1,11 @@
-// The page's half of heading-jump-check.js and of the E2E case HJ02 (embedded there): defines window.__hjJump(at) - the
-// host's outline jump (ScrollTo) to the first heading from `at` (a share of the blocks) on that is not on the page yet,
-// then every frame where it is, until the drawing is done, the blocks guessed while drawn are predicted too (the
-// pretext log's restDoneAt) and a second more - and window.__hjSummary(). Synchronous (the E2E driver does not await).
+// The page's half of heading-jump-check.js and of the E2E cases HJ02/HJ03 (embedded there): defines window.__hjJump(at) - the host's outline jump (ScrollTo) to the first
+// heading from `at` (a share of the blocks) on that is not on the page yet - then, every frame, where that heading is,
+// until the drawing is done, the blocks guessed while drawn are predicted too (the pretext
+// log's restDoneAt), and a second more (at least a second after the jump) - and window.__hjSummary().
+// Synchronous (an E2E driver need not await it).
 (() => {
   // The jump waits for the load to have put the page where it belongs (its caret placed, Muya loadCursorPending): a jump
-  // before that was undone by the load's own scroll to the top (a 100k document's heading ended 23,714 px off).
+  // before that was undone by the load's own scroll to the top.
   window.__hjJump = at => {
     const muya = window.__typedownMuya;
     const blocks = muya && muya.contentState.blocks;
@@ -35,18 +36,20 @@
     const slug = blocks[i].key;
     const s = { slug, index: i, frames: [], t0: performance.now(), wasDrawing: !!muya.renderPending, done: false, restFrom: (window.__typedownPretextLog || {}).restDoneAt };
     window.__hjj = s;
-    window.__typedownReceive('ScrollTo', { slug });
+    // In the app the host makes the jump (the E2E driver asks it once `slug` is here): s.posted set when it is made.
+    const deliver = window.__typedownReceive || window.__deliver;
+    if (deliver) { deliver('ScrollTo', { slug }); s.posted = 0 } else s.hostJumps = true;
     const first = document.getElementById(slug);
     s.right = first ? first.getBoundingClientRect().top : null;
     let quietSince = null;
     const tick = () => {
       const el = document.getElementById(slug);
       const now = performance.now() - s.t0;
-      s.frames.push([Math.round(now), el ? Math.round(el.getBoundingClientRect().top * 10) / 10 : null]);
+      s.frames.push([Math.round(now), el ? Math.round(el.getBoundingClientRect().top * 10) / 10 : null, !!muya.renderPending, Math.round(window.scrollY)]);
       const log = window.__typedownPretextLog || {};
       const rested = window.__typedownPretextOff || (log.restDoneAt !== undefined && log.restDoneAt !== s.restFrom) || muya.contentState.stateRender.heights.resting === null;
       if (!muya.renderPending && rested) { if (quietSince === null) quietSince = now } else quietSince = null;
-      if ((quietSince !== null && now - quietSince > 1000) || now > 20000) { s.done = true; return }
+      if ((quietSince !== null && now - quietSince > 1000 && now > 1500) || now > 20000) { s.done = true; return }
       requestAnimationFrame(tick);
     };
     requestAnimationFrame(tick);
@@ -60,14 +63,16 @@
     const moved = [];
     for (let k = 1; k < tops.length; k++) {
       const d = tops[k][1] - tops[k - 1][1];
-      if (Math.abs(d) > 1) { moves++; if (moved.length < 8) moved.push([tops[k][0], Math.round(d)]); }
+      if (Math.abs(d) > 1) { moves++; if (moved.length < 8) moved.push([tops[k][0], Math.round(d), 'scrollY ' + tops[k - 1][3] + '>' + tops[k][3], tops[k][2] ? 'drawing' : 'drawn']); }
     }
     const target = 16;
     const end = tops.length ? tops[tops.length - 1][1] : null;
     return {
       ok: true, index: s.index, wasDrawing: s.wasDrawing, rightAfter: s.right === null ? null : Math.round(s.right - target),
       firstFrame: tops.length ? Math.round(tops[0][1] - target) : null, endOff: end === null ? null : Math.round(Math.abs(end - target)),
-      long: !!document.querySelector('#editor.ag-long-document'), worstOff: tops.length ? Math.round(Math.max(...tops.map(f => Math.abs(f[1] - target)))) : null, moves, moved, watchedMs: s.frames.length ? s.frames[s.frames.length - 1][0] : 0,
+      long: !!document.querySelector('#editor.ag-long-document'), worstOff: tops.length ? Math.round(Math.max(...tops.map(f => Math.abs(f[1] - target)))) : null,
+      missingFrames: s.frames.length - tops.length, moves, moved, watchedMs: s.frames.length ? s.frames[s.frames.length - 1][0] : 0,
+      drawnAtMs: (s.frames.find(f => !f[2]) || [null])[0],
     };
   };
   return 'ok';

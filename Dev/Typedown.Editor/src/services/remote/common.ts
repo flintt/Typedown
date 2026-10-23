@@ -1,4 +1,4 @@
-﻿import { remoteFunction } from '../transport'
+import { remoteFunction } from '../transport'
 
 const remote = {
     getCurrentTheme: remoteFunction<undefined, string>('GetCurrentTheme'),

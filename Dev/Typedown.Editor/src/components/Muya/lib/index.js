@@ -411,6 +411,7 @@ class Muya {
     const empty = root.cloneNode(false)
     // The room it keeps for its rest goes with it, not to the next document's root.
     empty.style.removeProperty('--td-room-above')
+    empty.style.removeProperty('--td-room-fraction')
     empty.style.removeProperty('--td-room-below')
     if (!empty.getAttribute('style')) empty.removeAttribute('style')
     root.replaceWith(empty)
@@ -425,6 +426,7 @@ class Muya {
     const shell = root => {
       const copy = root.cloneNode(false)
       copy.style.removeProperty('--td-room-above')
+      copy.style.removeProperty('--td-room-fraction')
       copy.style.removeProperty('--td-room-below')
       if (!copy.getAttribute('style')) copy.removeAttribute('style')
       return copy

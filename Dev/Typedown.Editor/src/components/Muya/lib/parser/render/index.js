@@ -14,7 +14,7 @@ const MERMAID_RENDER_CACHE_LIMIT = 32
 // root, they restyle only it and its ::before and ::after (which take them explicitly, assets/styles/index.css). As
 // plain custom properties every element of the document was restyled each time.
 try {
-  for (const name of ['--td-room-above', '--td-room-below']) window.CSS?.registerProperty?.({ name, syntax: '<length>', inherits: false, initialValue: '0px' })
+  for (const name of ['--td-room-above', '--td-room-below', '--td-room-fraction']) window.CSS?.registerProperty?.({ name, syntax: '<length>', inherits: false, initialValue: '0px' })
 } catch (err) {
   // Registered already (a second bundle on the page), or not supported: inherited, as before.
 }
@@ -450,6 +450,9 @@ class StateRender {
     const hi = Math.min(blocks.length, center + after)
     rootDom.id = CLASS_OR_ID.AG_EDITOR_ID
     rootDom.innerHTML = this.blocksHtml(blocks.slice(lo, hi), activeBlocks, matches)
+    // The fraction of a pixel the document before was moved by (keepInPlace): it stays after a drawing (taken away, the
+    // text would move by it once more), not into a new one.
+    rootDom.style.removeProperty('--td-room-fraction')
     this.renderMermaid()
     this.renderDiagram()
     this.codeCache.clear()
@@ -787,7 +790,12 @@ class StateRender {
   }
 
   finishProgressive(state) {
+    // The blocks drawn first lose their pin (content-visibility visible) and are laid out as the rest from here on - on
+    // their own, to whole pixels past the long-document size: what is in the window is held where it is meanwhile
+    // (vm103: the text moved by a pixel as the drawing ended).
+    const keep = state.root.isConnected ? this.keepInPlace(state, this.blockAtTop(state.root)) : () => {}
     this.clearRoom(state)
+    keep()
     // Blocks drawn without a predicted size (drawn at once, or before fonts or pretext were there), or with one for
     // another width or other styles: theirs in idle time, now that the browser's scroll anchoring keeps the page still
     // as they change size off screen.
@@ -833,23 +841,41 @@ class StateRender {
    * long code block across the top of the window drifted thousands of pixels as the blocks above it came), and is off
    * meanwhile (holdAnchoring) so the two do not both move the page. Measured once a slice, not once a block.
    */
-  keepInPlace(state) {
-    const first = state.lo > 0 ? state.root.firstElementChild : null
+  // The top-level block at the top of the window (the first whose bottom is in it), or null.
+  blockAtTop(root) {
+    const kids = root.children
+    let lo = 0
+    let hi = kids.length - 1
+    if (hi < 0) return null
+    while (lo < hi) {
+      const mid = (lo + hi) >> 1
+      if (kids[mid].getBoundingClientRect().bottom <= 0) lo = mid + 1
+      else hi = mid
+    }
+    return kids[lo]
+  }
+
+  keepInPlace(state, anchor = null) {
+    const first = anchor || (state.lo > 0 ? state.root.firstElementChild : null)
     if (!first) return () => {}
     const before = first.getBoundingClientRect().top
     return () => {
       if (!first.isConnected) return
-      // The page scrolls by whole pixels and the blocks' heights have fractions: what a scroll leaves over is carried
-      // to the next, or a few dozen slices added up to pixels and the window crept (JU01 saw it move by two).
-      const moved = first.getBoundingClientRect().top - before + (state.carry || 0)
-      const by = Math.round(moved)
-      if (by) {
-        const from = window.scrollY
-        window.scrollBy(0, by)
-        state.carry = moved - (window.scrollY - from)
-      } else {
-        state.carry = moved
-      }
+      // The page scrolls by whole pixels and the blocks' heights have fractions. What a scroll leaves over goes into a
+      // padding above the blocks (--td-room-fraction, between 0 and 1 px), so the text in the window ends every slice
+      // exactly where it was: carried to the next slice instead (JU01: dozens of slices added up to pixels), it sat up to
+      // half a pixel off and back again, slice after slice - on Windows the text shook (JT01: 19 moves of 0.7-0.9 px).
+      // The height above (--td-room-above) cannot take it: past the long-document size it is laid out to whole pixels.
+      const root = state.root
+      const fraction = parseFloat(root.style.getPropertyValue('--td-room-fraction')) || 0
+      const moved = first.getBoundingClientRect().top - before
+      const from = window.scrollY
+      const by = Math.ceil(moved - fraction)
+      if (by) window.scrollBy(0, by)
+      let next = fraction - moved + (window.scrollY - from)
+      // A scroll that did not go as far as asked (the end of the page): the rest stays as it is.
+      if (next < 0 || next >= 2) next = fraction
+      if (Math.abs(next - fraction) > 0.0005) root.style.setProperty('--td-room-fraction', `${Math.round(next * 10000) / 10000}px`)
     }
   }
 

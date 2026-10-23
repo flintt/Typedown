@@ -196,7 +196,7 @@ const markEdited = (shown: React.MutableRefObject<ShownDocument | null>) => { if
 
 interface KeptDocument extends ShownDocument {
     cursorAt: string
-    kept: { blocks: any[], cursor: any, root: HTMLElement }
+    kept: { blocks: any[], cursor: any, root: HTMLElement, progressive?: any }
 }
 
 const STANDAR_Y = 320
@@ -497,6 +497,11 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     }, [editor, props.options?.listIndentation])
 
     useEffect(() => transport.addListener<{ slug: string }>('ScrollTo', ({ slug }) => {
+        // The reader went somewhere: whatever still puts the page back where the load left it (settleScroll's hold and
+        // its delayed second go) gives way, as to the reader's own move. Jumped to while a long document was still drawn,
+        // the heading landed right, and the load's delayed go - held back by the drawing the jump finished - put the page
+        // back at the top half a second later (300k: 88,648 px away, heading-jump-check).
+        holdStopRef.current('jumped')
         scrollToElement(`#${slug}`, OUTLINE_TOP)
         // A long document's blocks around the heading only guessed so far (drawn off screen: parser/render
         // predictHeights.js) predicted now, and the page put at the heading again: refined later, they moved it.
@@ -799,7 +804,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     // Kept by its length once drawn whole too (see markLongDocument).
     const keepLongDocumentChars = 1000000
 
-    const markLongDocument = useCallback((markdown?: string) => {
+    const markLongDocument = useCallback((markdown?: string, keptBlocks?: number) => {
         // On the wrapper, not on the editor element itself: rendering patches that element and would strip a
         // class it does not know about.
         const root = document.getElementById('editor')
@@ -815,9 +820,15 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         // blocks: the page stood still for 10 s as the drawing ended), and every scroll and keystroke after laid out
         // more than the class saves. Below that, the exact layout once drawn (JU01).
         const length = (markdownRef.current ?? '').length
-        const long = markdown != null
-            ? markdown.length > longDocumentChars
-            : blocks > longDocumentBlocks || (length > longDocumentChars && (drawing || length > keepLongDocumentChars))
+        // A kept document coming back drawn whole (`keptBlocks`): as it was when it was drawn whole. By its length it got the
+        // class for a moment and lost it again a fraction of a second later; its blocks, laid out without the class, had no
+        // remembered size, so those it skipped stood at the 50 px stand-in meanwhile - on Windows the first block at the
+        // top of the window did, and the text under it jumped by 24 px when the class went (JT01).
+        const long = keptBlocks != null && markdown != null
+            ? keptBlocks > longDocumentBlocks || markdown.length > keepLongDocumentChars
+            : markdown != null
+                ? markdown.length > longDocumentChars
+                : blocks > longDocumentBlocks || (length > longDocumentChars && (drawing || length > keepLongDocumentChars))
         if (root.classList.contains('ag-long-document') === long) return
         // The blocks off screen change from their stand-ins' height to their own, or back: the block at the top of the
         // window stays where it is (taken off once drawn whole, a code block read far down went 276,000 px away).
@@ -1041,7 +1052,8 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     // The hold of the load before this one. Switching tabs quickly starts a new load while the previous
     // hold is still putting the page back to its own offset: two holds then pull the page to two places
     // every frame until the older one's budget runs out. It is ended here before the next one begins.
-    const holdStopRef = useRef<() => void>(() => { })
+    // Also ended by the outline's jump (ScrollTo): the page then belongs where the reader asked for, not to the load.
+    const holdStopRef = useRef<(why?: string) => void>(() => { })
     // `to` is an offset, or where to be found anew each time: a document drawn a part at a time grows above the window
     // as it is drawn, and the block that was at the top of the window moves down with it (the offset that puts it back
     // changes; the browser's scroll anchoring keeps it in view meanwhile).
@@ -1059,6 +1071,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         let yielded = false
         const giveWay = () => { yielded = true; for (const e of GIVE_WAY) window.removeEventListener(e, giveWay) }
         for (const e of GIVE_WAY) window.addEventListener(e, giveWay, { once: true, passive: true })
+        holdStopRef.current = giveWay
         // Laying a long document out goes on for a while after the first paint, and the page can be put
         // back to the top by that work with nobody scrolling it — which is what made switching tabs show
         // the top of the document for a moment. Keep putting it back until the layout has settled, or
@@ -1102,7 +1115,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             }
             window.addEventListener('scroll', putBack, { passive: true })
             requestAnimationFrame(hold)
-            holdStopRef.current = () => { if (!done) stop('replaced') }
+            holdStopRef.current = (why = 'replaced') => { giveWay(); if (!done) stop(why) }
         }
         setTimeout(() => {
             if (!yielded) {
@@ -1206,7 +1219,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         else shownRef.current = null
         const kept = local ? null : takeKept(props.markdown, cursorRef.current)
         markdownRef.current = props.markdown
-        markLongDocument(props.markdown)
+        markLongDocument(props.markdown, kept && !kept.kept.progressive ? kept.kept.blocks.length : undefined)
         // An automation edit keeps the blocks it did not change, with the reader's cursor and scroll position; the
         // browser keeps what is on screen in place when blocks above it change. Otherwise, a whole new document.
         const blocksBefore = local ? editor.contentState.blocks : null

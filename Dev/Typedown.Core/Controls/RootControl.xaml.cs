@@ -31,6 +31,10 @@ namespace Typedown.Core.Controls
         private void OnLoaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
         {
             ViewModel.XamlRoot = XamlRoot;
+            // The last session's tabs and active document, while the editor's page starts: begun here, before the main
+            // page is built - queued after it, it came 0.7 s after the window on w10. Its tabs go in before anything is
+            // read (FileViewModel.RestoreSession), so the strip is there with the page's first frame.
+            ViewModel.EditorViewModel.BeginStartupLoad();
             disposables.Add(ViewModel.NavigateCommand.OnExecute.Subscribe(args => Navigate(args)));
             RegisterSettingsShortcut();
             // The settings are the one page you are looking at when you change the language, so they are built

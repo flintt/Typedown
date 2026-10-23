@@ -172,14 +172,30 @@ namespace Typedown.Core.ViewModels
         /// </summary>
         public Task StartupDocumentReady => startupDocumentReady.Task;
 
+        private Task startupLoad;
+
+        /// <summary>
+        /// The last session brought back as soon as the window is up (RootControl), not when the page first asks for its
+        /// document: the tabs show while the page is still starting, and the active document is ready when it asks.
+        /// Only for a session restore - the other starts may post to the page, which is not there yet.
+        /// </summary>
+        public void BeginStartupLoad()
+        {
+            if (!FirstStart || startupLoad != null || !FileViewModel.StartsWithSession) return;
+            FirstStart = false;
+            Log.Debug("startup: the last session restored before the page asks");
+            startupLoad = FileViewModel.LoadStartUpMarkdown();
+        }
+
         public async Task<object> GetSettings()
         {
             awaitingNewPage = false;
             if (FirstStart)
             {
                 FirstStart = false;
-                await FileViewModel.LoadStartUpMarkdown();
+                startupLoad = FileViewModel.LoadStartUpMarkdown();
             }
+            if (startupLoad != null) await startupLoad;
             startupDocumentReady.TrySetResult(true);
             Log.Debug($"load {LoadId + 1}: the editor page asked for the document again ({System.IO.Path.GetFileName(FileViewModel.FilePath) ?? "untitled"})");
             loadText = Markdown;

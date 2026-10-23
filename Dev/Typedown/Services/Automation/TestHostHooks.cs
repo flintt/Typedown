@@ -657,6 +657,16 @@ namespace Typedown.Services.Automation
                         ["themeForeground"] = Colour(Core.Utilities.ThemeFiles.Brush(theme?.Foreground) ?? Core.Utilities.ThemeFiles.Readable(theme?.Surface ?? theme?.Background)),
                     };
                 })));
+            // The jump a click on an outline heading makes (EditorViewModel.JumpBySlug), to the heading block `slug` (HJ03).
+            methods.Add(new MethodDescriptor("test.outline.jump", null, "test.outline.jump/1", (c, ct) =>
+            {
+                var slug = c.Params.RequiredString("slug", allowEmpty: false);
+                return Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    app.EditorViewModel.JumpBySlug(slug);
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject();
+                });
+            }));
             // The outline's expansion as the tree holds it (its nodes) and as the model holds it, row by row: the two
             // disagreeing after a tab switch is how a heading's children came to be hidden with nobody collapsing it.
             methods.Add(new MethodDescriptor("test.outline.state", null, "test.outline.state/1", (c, ct) =>

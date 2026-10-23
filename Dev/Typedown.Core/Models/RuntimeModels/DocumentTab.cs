@@ -50,6 +50,12 @@ namespace Typedown.Core.Models
 
         public string Markdown { get; set; }
 
+        /// <summary>
+        /// A tab of the last session not read yet (only its file is known): the start shows the active document first and
+        /// reads these after it (FileViewModel.LoadIntoTab), or when one is switched to first.
+        /// </summary>
+        public bool Pending { get; set; }
+
         public ulong CurrentHash { get; set; }
 
         public ulong FileHash { get; set; }
