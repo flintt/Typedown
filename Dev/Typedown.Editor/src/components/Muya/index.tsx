@@ -1268,6 +1268,12 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
                 transport.postMessage('LoadDrawnWhole', { loadId: drawingLoad, ms: Math.round(performance.now() - startedAt), slices: last ? last.slices : 0 })
             },
         } : null
+        // On the screen where it was left - its first part, or the whole of a document that fits in one go - the host takes
+        // away its "Opening…" (it waited for the load to be reported, which comes later, and covered what was already
+        // there to see). Only once the page is put back and that is on the screen, two frames on: told before the
+        // frame was painted, the cover went and the document left showed again for 30-60 ms (JT02); told before the
+        // page was put back, its first frame, drawn where the page was, showed (JU01, a window opening with it).
+        let reportShown: { loadId: number | undefined } | null = null
         const loaded = () => {
             // The block that was at the top of the window back at the height it was; drawn a part at a time, followed as
             // the document grows above it. The offset alone where it is not found (the document changed meanwhile).
@@ -1278,6 +1284,10 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
                 return element ? Math.max(0, window.scrollY + element.getBoundingClientRect().top - at.top) : null
             }, keepScroll)
             else settleScroll(keepScroll ? scrollForAnchor(anchor) ?? scrollTop : scrollTop, keepScroll)
+            if (reportShown !== null) {
+                const shown = reportShown
+                afterOnScreen(() => transport.postMessage('LoadPreviewShown', shown))
+            }
             props.onContentApplied?.()
         }
         // A kept document goes back in as it was left, and everything after it happens as after a new build: the caret
@@ -1293,15 +1303,9 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             }
             return
         }
+        if (!blocksBefore && !replacedLocally && props.markdown.length >= PREVIEW_FROM_CHARS) reportShown = { loadId: currentLoadId() }
         if (!replacedLocally) editor.setMarkdown(props.markdown, cursorRef.current, true, blocksBefore ? null : loaded, blocksBefore ? null : progressive)
         ;(window as any).__typedownLastProgressive = !blocksBefore && !replacedLocally && (editor as any).renderPending
-        // On the screen - its first part, or the whole of a document that fits in one go - the host takes away its
-        // "Opening…" (it waited for the load to be reported, which comes later, and covered what was already there to see).
-        // Only once it is on the screen, not merely on the page: the document left showed again in between (JT02).
-        if (!blocksBefore && !replacedLocally && props.markdown.length >= PREVIEW_FROM_CHARS) {
-            const shownLoad = currentLoadId()
-            afterOnScreen(() => transport.postMessage('LoadPreviewShown', { loadId: shownLoad }))
-        }
         // How a long document was drawn, for the host's log: the only way to tell from a machine one cannot watch.
         if (!blocksBefore && !replacedLocally && props.markdown.length >= PREVIEW_FROM_CHARS) {
             const drawnLoad = currentLoadId()
