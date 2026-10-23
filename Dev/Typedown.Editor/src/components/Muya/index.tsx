@@ -328,6 +328,9 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
 
     useEffect(() => {
         optionsRef.current = props.options
+        // Editor > Predict the layout of long documents (off by default): read by HeightPredictor.enabled() for the
+        // documents drawn from now on. A page given no such option (the checks' own host) predicts.
+        ;(window as any).__typedownPredictHeights = props.options?.predictHeights
     }, [props.options])
 
     useEffect(() => {

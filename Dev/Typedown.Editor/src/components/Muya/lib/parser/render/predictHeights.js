@@ -165,8 +165,9 @@ export default class HeightPredictor {
     this.stats = { prepared: 0, unsupported: 0, prepareMs: 0, chars: 0, failed: 0 }
   }
 
+  // The setting off (the app's default) or a test's switch (__typedownPretextOff): the estimate from the text's length.
   static enabled() {
-    return !window.__typedownPretextOff
+    return !window.__typedownPretextOff && window.__typedownPredictHeights !== false
   }
 
   /** Whether predictions can be made now: pretext is loaded and the page's fonts are. Starts loading it otherwise. */

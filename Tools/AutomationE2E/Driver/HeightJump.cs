@@ -82,6 +82,8 @@ return JSON.stringify({frames:shown.length,drawingFrames:pend,drawnMs:pl.ms??nul
         var small = await Open(c, Fixture("hj01-small.md", "# HJ01\n\nA short document to switch to.\n"));
         var windowId = await WindowIdOf(c, small);
         async Task<string> Eval(string script) => (string?)(await c.Call("test.editor.eval", new { windowId, script }))["result"] ?? "";
+        // The prediction is a setting, off by default (Editor > Predict the layout of long documents): on for the case.
+        await c.Call("test.settings.set", new { windowId, name = "PredictHeights", value = true });
         async Task<bool> Drawn() => await Eval("String(!!window.__typedownMuya && !window.__typedownMuya.renderPending && document.getElementById('ag-editor-id')?.children.length > 0)") == "true";
         var results = new JObject();
         var opened = new List<string>();
@@ -202,6 +204,7 @@ return JSON.stringify({frames:shown.length,drawingFrames:pend,drawnMs:pl.ms??nul
         finally
         {
             try { await Eval("window.__typedownPretextOff = false; 'ok'"); } catch { }
+            try { await c.Call("test.settings.set", new { windowId, name = "PredictHeights", value = false }); } catch { }
             foreach (var id in opened) try { await c.Call("document.close", new { documentId = id }); } catch { }
             try { await c.Call("document.close", new { documentId = small }); } catch { }
         }
@@ -242,6 +245,8 @@ return JSON.stringify({frames:shown.length,drawingFrames:pend,drawnMs:pl.ms??nul
         var small = await Open(c, Fixture("hj02-small.md", "# HJ02\n\nA short document.\n"));
         var windowId = await WindowIdOf(c, small);
         async Task<string> Eval(string script) => (string?)(await c.Call("test.editor.eval", new { windowId, script }))["result"] ?? "";
+        // The prediction is a setting, off by default (Editor > Predict the layout of long documents): on for the case.
+        await c.Call("test.settings.set", new { windowId, name = "PredictHeights", value = true });
         var page = HjResource("heading-jump-page.js");
         var results = new JObject();
         var opened = new List<string>();
@@ -291,6 +296,7 @@ return JSON.stringify({frames:shown.length,drawingFrames:pend,drawnMs:pl.ms??nul
         finally
         {
             try { await Eval("window.__typedownPretextOff = false; 'ok'"); } catch { }
+            try { await c.Call("test.settings.set", new { windowId, name = "PredictHeights", value = false }); } catch { }
             foreach (var id in opened) try { await c.Call("document.close", new { documentId = id }); } catch { }
             try { await c.Call("document.close", new { documentId = small }); } catch { }
         }
