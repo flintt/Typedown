@@ -110,6 +110,27 @@ internal static partial class Program
         var clock = Stopwatch.StartNew();
         var restarted = Process.Start(new ProcessStartInfo(hostExe, $"--automation-test-root \"{testRoot}\"") { UseShellExecute = true })!;
         hostPid = restarted.Id;
+        // The tabs as the strip shows them (UI Automation), not as the automation API lists them: that waits for the
+        // page's startup document, and gave the page's time for the strip's.
+        long strip = -1;
+        var stripWatch = Task.Run(async () =>
+        {
+            while (clock.ElapsedMilliseconds < 30000 && strip < 0)
+            {
+                try
+                {
+                    restarted.Refresh();
+                    var handle = restarted.MainWindowHandle;
+                    if (handle != IntPtr.Zero)
+                    {
+                        var items = Deep.All(System.Windows.Automation.AutomationElement.FromHandle(handle), new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.TabItem));
+                        if (items.Count >= tabs) strip = clock.ElapsedMilliseconds;
+                    }
+                }
+                catch (Exception) { }
+                await Task.Delay(100);
+            }
+        });
         var shots = Task.Run(async () =>
         {
             foreach (var at in new[] { 1000, 2000, 4000, 8000 })
@@ -150,8 +171,9 @@ internal static partial class Program
             await Task.Delay(150);
         }
         await shots;
-        notes.Add($"{label}: endpoint {published} ms, window {window} ms, all {tabs} tabs {all} ms, active document on screen {content} ms; last state {last.ToString(Formatting.None)}");
+        await stripWatch;
+        notes.Add($"{label}: endpoint {published} ms, window {window} ms, {tabs} tabs in the strip {strip} ms (listed {all} ms), active document on screen {content} ms; last state {last.ToString(Formatting.None)}");
         try { await c.Call("test.dialogs.dismiss", new { }); } catch { }
-        return (window, all, content);
+        return (window, strip, content);
     }
 }
