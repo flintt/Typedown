@@ -10,12 +10,29 @@ using Newtonsoft.Json.Linq;
 internal static partial class Program
 {
     // A cold start bringing the last session back: how long the window shows an empty tab before the active document is
-    // on screen. Reported: with a long document among the tabs the window stood blank for a long time.
+    // on screen. Reported: with heavy documents among the tabs (showcase, demo1) the window stood blank for a long time.
+    // demo1 is the reader's own document, not in the repository: used when the test machine has a copy
+    // (C:\e2e\private\demo1.md, E:\src\private\demo1.md); without it the 1M mixed one is the heavy active document.
     private static async Task SR01(List<string> notes)
     {
         var first = Fixture("sr01-a.md", "# SR01 first\n\nA short document.\n");
-        var big = Fixture("sr01-big.md", "# SR01 big\n\n" + string.Concat(Enumerable.Range(0, 3200).Select(i => $"Paragraph {i}: " + string.Join(" ", Enumerable.Repeat("words", 15)) + ".\n\n")));
         var last = Fixture("sr01-c.md", "# SR01 last\n\nA short document.\n");
+        string Embedded(string name, bool gz)
+        {
+            using var stream = typeof(Program).Assembly.GetManifestResourceStream(name) ?? throw new CaseFailed("no resource " + name);
+            using var input = gz ? (Stream)new System.IO.Compression.GZipStream(stream, System.IO.Compression.CompressionMode.Decompress) : stream;
+            using var reader = new StreamReader(input, new System.Text.UTF8Encoding(false));
+            return reader.ReadToEnd();
+        }
+        var showcase = Fixture("sr01-showcase.md", Embedded("showcase.md", false));
+        var mixed300k = Fixture("sr01-mixed-300k.md", Embedded("hj/mixed-300k.md.gz", true));
+        var mixed1m = Fixture("sr01-mixed-1m.md", Embedded("hj/mixed-1m.md.gz", true));
+        var demoCopy = new[] { @"C:\e2e\private\demo1.md", @"E:\src\private\demo1.md" }.FirstOrDefault(File.Exists);
+        string? demo1 = null;
+        if (demoCopy != null) { demo1 = Path.Combine(fixtures, "sr01-demo1.md"); File.Copy(demoCopy, demo1, true); }
+        notes.Add(demo1 != null ? $"demo1 from {demoCopy} ({new FileInfo(demo1).Length / 1024} KB)" : "no demo1 copy on this machine: the 1M mixed document instead");
+        var heavy = new[] { first, showcase, demo1, mixed300k, mixed1m, last }.Where(f => f != null).Select(f => f!).ToArray();
+        var heavyActive = demo1 ?? mixed1m;
         var session = Path.Combine(testRoot, "data", "session.json");
         using (var c = await Session("e2e SR01"))
         {
@@ -25,19 +42,40 @@ internal static partial class Program
         try
         {
             var results = new List<(string Label, long Window, long Tabs, long Content)>();
-            foreach (var (active, heading, label) in new[] { (2, "SR01 last", "small-active"), (1, "SR01 big", "big-active") })
+            // The same start with the active document alone: what a start costs anyway, the others' share left out.
+            foreach (var (files, active, label) in new[] { (new[] { last }, last, "alone"), (heavy, last, "small-active"), (heavy, heavyActive, "heavy-active") })
             {
-                File.WriteAllText(session, JsonConvert.SerializeObject(new { Files = new[] { first, big, last }, ActiveIndex = active, Time = DateTime.UtcNow }));
-                var (window, tabs, content) = await ColdStart(notes, label, heading, 3);
+                File.WriteAllText(session, JsonConvert.SerializeObject(new { Files = files, ActiveIndex = Array.IndexOf(files, active), Time = DateTime.UtcNow }));
+                var (window, tabs, content) = await ColdStart(notes, label, active, files.Length);
                 results.Add((label, window, tabs, content));
+                if (label != "small-active") continue;
+                // The others there and read: one switched to shows its own text, a tab not shown has its file's text.
+                using var c = await Session("e2e SR01 tabs");
+                var w = await FirstWindowId(c);
+                var docs = (JArray)(await c.Call("document.list", new { windowId = w }))["documents"]!;
+                notes.Add("tabs: " + string.Join(", ", docs.Select(d => Path.GetFileName((string?)d["path"] ?? "") + ((bool?)d["active"] == true ? " (active)" : ""))));
+                Check(docs.Select(d => Path.GetFileName((string?)d["path"] ?? "")).SequenceEqual(heavy.Select(Path.GetFileName)), $"the {heavy.Length} tabs in their order");
+                var firstDoc = docs.First(d => ((string?)d["path"] ?? "").EndsWith("sr01-a.md"));
+                var firstText = (string?)(await c.Call("document.get", new { documentId = (string)firstDoc["documentId"]! }))["text"] ?? "";
+                Check(firstText.Replace("\r\n", "\n") == File.ReadAllText(first).Replace("\r\n", "\n"), $"a tab not shown has its file's text ({firstText.Length} chars)");
+                var showDoc = docs.First(d => ((string?)d["path"] ?? "").EndsWith("sr01-showcase.md"));
+                await c.Call("document.focus", new { documentId = (string)showDoc["documentId"]! });
+                var shown = false;
+                for (var i = 0; i < 60 && !shown; i++)
+                {
+                    await Task.Delay(250);
+                    try { shown = (string?)(await c.Call("window.list"))["windows"]![0]!["activeDocumentId"] == (string)showDoc["documentId"]! && (int?)(await c.Call("test.editor.eval", new { windowId = w, script = "document.querySelectorAll('#ag-editor-id > *').length" }))["result"] > 20; } catch { }
+                }
+                Check(shown, "switched to, showcase shows its own text");
             }
-            notes.Add("restore lines: " + string.Join(" | ", LogLines("RestoreSession").TakeLast(4)));
-            var small = results[0];
-            Check(small.Content >= 0, "the active short document came on screen at all");
-            // From the window shown to its active document readable: the other documents' loading is not to be waited for.
-            Check(small.Content - small.Window <= 3000, $"the active short document is on screen within 3 s of the window ({small.Content - small.Window} ms; window {small.Window} ms, all tabs {small.Tabs} ms)");
-            var bigOne = results[1];
-            Check(bigOne.Content >= 0 && bigOne.Content - bigOne.Window <= 5000, $"the active long document's top is on screen within 5 s of the window ({bigOne.Content - bigOne.Window} ms)");
+            notes.Add("restore lines: " + string.Join(" | ", LogLines("RestoreSession").TakeLast(6)));
+            var alone = results[0];
+            var small = results[1];
+            Check(small.Content >= 0 && alone.Content >= 0, "the active document came on screen at all");
+            // The others not waited for: on screen about as soon as when it is the only one.
+            Check(small.Content - small.Window <= alone.Content - alone.Window + 700, $"with {heavy.Length - 1} heavy tabs more the active document is on screen about as soon as alone ({small.Content - small.Window} ms after the window, alone {alone.Content - alone.Window} ms)");
+            var heavyOne = results[2];
+            Check(heavyOne.Content >= 0 && heavyOne.Content - heavyOne.Window <= 6000, $"the active heavy document's top is on screen within 6 s of the window ({heavyOne.Content - heavyOne.Window} ms)");
         }
         finally
         {
@@ -49,9 +87,10 @@ internal static partial class Program
 
     /// <summary>
     /// The host killed and started again, timed from its start: the window listed, the tabs all there, and the active
-    /// document's heading laid out and the editor shown (not hidden, not covered). Screens at 1, 2, 4 and 8 s.
+    /// document the expected one with its text laid out in the window and the editor shown (not hidden, not covered).
+    /// Screens at 1, 2, 4 and 8 s.
     /// </summary>
-    private static async Task<(long Window, long Tabs, long Content)> ColdStart(List<string> notes, string label, string heading, int tabs)
+    private static async Task<(long Window, long Tabs, long Content)> ColdStart(List<string> notes, string label, string activePath, int tabs)
     {
         try
         {
@@ -94,11 +133,15 @@ internal static partial class Program
                     var windowId = (string)windows[0]["windowId"]!;
                     if (window < 0) window = clock.ElapsedMilliseconds;
                     if (all < 0 && (await DocumentsOf(c, windowId)).Count >= tabs) all = clock.ElapsedMilliseconds;
-                    var shown = (string?)(await c.Call("test.editor.eval", new { windowId, script = "(() => { const h = document.querySelector('#ag-editor-id h1'); const r = h && h.getBoundingClientRect(); return h && r.height > 0 && r.bottom > 0 && r.top < innerHeight ? h.textContent : '' })()" }))["result"] ?? "";
+                    // The active document the expected one, and text of it laid out in the window.
+                    var activeId = (string?)windows[0]["activeDocumentId"];
+                    var docs = (JArray)(await c.Call("document.list", new { windowId }))["documents"]!;
+                    var isActive = docs.Any(d => (string?)d["documentId"] == activeId && string.Equals(Path.GetFileName((string?)d["path"] ?? ""), Path.GetFileName(activePath), StringComparison.OrdinalIgnoreCase));
+                    var text = (bool?)(await c.Call("test.editor.eval", new { windowId, script = "[...document.querySelectorAll('#ag-editor-id > *')].slice(0, 40).some(e => { const r = e.getBoundingClientRect(); return r.height > 0 && r.bottom > 0 && r.top < innerHeight && e.textContent.trim().length > 0 })" }))["result"] == true;
                     last = await c.Call("test.webview.state", new { windowId });
                     var app = last["app"] ?? last;
                     var visible = (string?)app["editorVisibility"] != "Collapsed" && (string?)app["viewVisibility"] != "Collapsed" && (bool?)app["leavingCover"] != true && ((double?)app["editorOpacity"] ?? 1) > 0.99;
-                    if (shown.Contains(heading) && visible) content = clock.ElapsedMilliseconds;
+                    if (isActive && text && visible) content = clock.ElapsedMilliseconds;
                 }
             }
             catch (Exception) { }
