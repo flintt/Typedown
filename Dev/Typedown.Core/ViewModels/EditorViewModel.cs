@@ -215,6 +215,7 @@ namespace Typedown.Core.ViewModels
                 Settings.ShowBlankLines,
                 Settings.ShowMarkdownMarks,
                 Settings.ProgressiveRendering,
+                Settings.PredictHeights,
                 Settings.ShowParagraphMarker,
                 Settings.ReadOnly,
                 Settings.CustomCss,

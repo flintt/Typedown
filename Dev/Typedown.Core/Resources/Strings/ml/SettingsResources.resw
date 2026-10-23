@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>കഴ്‌സർ ഉള്ളിടത്ത് മാത്രമല്ല, എല്ലാ ഖണ്ഡികയിലും Markdown അടയാളങ്ങൾ (**, #, ലിങ്കിന്റെ വിലാസം) കാണിക്കുക</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>നീണ്ട പ്രമാണങ്ങളുടെ ലേഔട്ട് മുൻകൂട്ടി കണക്കാക്കുക (പരീക്ഷണാത്മകം)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>നീണ്ട പ്രമാണം ഭാഗങ്ങളായി വരയ്ക്കുമ്പോൾ, ഇതുവരെ കാണിക്കാത്ത ഭാഗത്തിന്റെ ഉയരം ഊഹിക്കുന്നതിനു പകരം വാചകത്തിൽ നിന്ന് കണക്കാക്കുന്നു, അതിനാൽ സ്ക്രോൾ ബാറും രൂപരേഖയിൽ നിന്നുള്ള ചാട്ടങ്ങളും കൂടുതൽ കൃത്യമാകും. പരീക്ഷണാത്മകം</value>
+  </data>
 </root>

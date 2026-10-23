@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>Bonisa izimpawu ze-Markdown (**, #, ikheli lesixhumanisi) kuyo yonke indima, hhayi lapho kukhona khona ikhesa kuphela</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Bikezela ukwakheka kwemibhalo emide (okokuhlola)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Ngenkathi umbhalo omude udwetshwa ngezingxenye, ukuphakama kwalokho okungakaboniswa kubalwa embhalweni esikhundleni sokulinganiselwa, ngakho ibha yokuskrola nokweqa kusuka kuhlaka kunembe kakhulu. Okokuhlola</value>
+  </data>
 </root>

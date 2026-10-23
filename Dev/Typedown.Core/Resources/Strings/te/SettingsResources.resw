@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>కర్సర్ ఉన్నచోట మాత్రమే కాకుండా, ప్రతి పేరాలో Markdown గుర్తులను (**, #, లింక్ చిరునామా) చూపించు</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>పొడవైన పత్రాల లేఅవుట్‌ను ముందుగానే అంచనా వేయండి (ప్రయోగాత్మకం)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>పొడవైన పత్రం భాగాలుగా గీయబడుతున్నప్పుడు, ఇంకా చూపని భాగం ఎత్తు అంచనా వేయడానికి బదులుగా వచనం నుండి లెక్కించబడుతుంది, కాబట్టి స్క్రోల్ బార్ మరియు రూపురేఖ నుండి దూకడం మరింత ఖచ్చితంగా ఉంటాయి. ప్రయోగాత్మకం</value>
+  </data>
 </root>

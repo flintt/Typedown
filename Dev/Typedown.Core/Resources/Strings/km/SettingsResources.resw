@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>បង្ហាញសញ្ញា Markdown (**, #, អាសយដ្ឋានតំណ) នៅគ្រប់កថាខណ្ឌ មិនមែនតែកន្លែងដែលមានទស្សន៍ទ្រនិចទេ</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>ទស្សន៍ទាយប្លង់នៃឯកសារវែង (សាកល្បង)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>ពេលឯកសារវែងត្រូវបានគូរជាផ្នែកៗ កម្ពស់នៃផ្នែកដែលមិនទាន់បង្ហាញ ត្រូវបានគណនាពីអត្ថបទជំនួសឱ្យការប៉ាន់ស្មាន ដូច្នេះរបាររំកិល និងការលោតពីគ្រោង មានភាពត្រឹមត្រូវជាងមុន។ សាកល្បង</value>
+  </data>
 </root>

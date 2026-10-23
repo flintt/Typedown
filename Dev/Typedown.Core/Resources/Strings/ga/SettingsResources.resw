@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>Taispeáin na marcanna Markdown (**, #, seoladh naisc) i ngach alt, ní hamháin san áit a bhfuil an cúrsóir</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Tuar leagan amach doiciméad fada (turgnamhach)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Fad atá doiciméad fada á tharraingt ina chodanna, ríomhtar airde an mhéid nach dtaispeántar fós ón téacs in ionad é a mheas, ionas go mbíonn an barra scrollaithe agus na léimeanna ón imlíne níos cruinne. Turgnamhach</value>
+  </data>
 </root>

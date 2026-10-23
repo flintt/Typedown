@@ -783,6 +783,14 @@
     <value>A long document opens at the place you left it, and the rest is drawn in the background. Turn this off if something looks wrong while a long document is opening: it is then drawn all at once</value>
     <comment>编辑器/分段渲染长文档说明：长文档打开时先显示上次阅读的位置，其余部分在后台补齐；若打开长文档时出现异常，可关闭此项，改为一次渲染整篇</comment>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Predict the layout of long documents (experimental)</value>
+    <comment>编辑器/预测长文档排版（实验性）</comment>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>While a long document is drawn in parts, the height of what is not shown yet is worked out from its text instead of estimated, so the scroll bar and jumps from the outline are more accurate. Experimental</value>
+    <comment>编辑器/预测长文档排版说明：长文档分段渲染时，按文字排版算出尚未显示部分的高度，而不是估算，滚动条和大纲跳转更准确。实验性功能</comment>
+  </data>
   <data name="Editor.ShowParagraphMarker.Title" xml:space="preserve">
     <value>Paragraph marker</value>
     <comment>编辑器/段落标记</comment>

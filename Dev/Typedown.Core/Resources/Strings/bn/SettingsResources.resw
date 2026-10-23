@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>শুধু কার্সরের জায়গায় নয়, প্রতিটি অনুচ্ছেদে Markdown চিহ্ন (**, #, লিঙ্কের ঠিকানা) দেখান</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>দীর্ঘ নথির বিন্যাস আগেই নির্ণয় করুন (পরীক্ষামূলক)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>দীর্ঘ নথি অংশে অংশে আঁকার সময়, এখনও না দেখানো অংশের উচ্চতা অনুমান না করে লেখা থেকে হিসাব করা হয়, ফলে স্ক্রলবার ও রূপরেখা থেকে লাফ আরও নির্ভুল হয়। পরীক্ষামূলক</value>
+  </data>
 </root>

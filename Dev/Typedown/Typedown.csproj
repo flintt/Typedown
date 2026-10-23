@@ -190,8 +190,11 @@
 		</ItemGroup>
 		<Error Condition="!Exists('$(_CliPublishDir)\$(BrandCliName).exe')" Text="$(BrandCliName) was not published for $(RuntimeIdentifier)." />
 	</Target>
+	<!-- In an MSIX too, when it is trimmed: the trimmer only sees what is published, and the CLI's needs must be in it (the
+	     trimmed MSIX's typedownctl did not start, TextWriter.Synchronized gone - 1.4.0.9 on w10). PackageCliAlongside then
+	     is for an MSIX not trimmed only (both put the CLI's files in: APPX1101, two files of one name). -->
 	<Target Name="PublishCliAlongside" AfterTargets="ComputeResolvedFilesToPublishList" DependsOnTargets="PublishCli"
-	        Condition="'$(RuntimeIdentifier)' != '' and '$(AutomationTestHost)' != 'true' and '$(IncludeCli)' != 'false' and '$(WindowsPackageType)' != 'MSIX'">
+	        Condition="'$(RuntimeIdentifier)' != '' and '$(AutomationTestHost)' != 'true' and '$(IncludeCli)' != 'false' and ('$(WindowsPackageType)' != 'MSIX' or '$(PublishTrimmed)' == 'true')">
 		<ItemGroup>
 			<_AppRelative Include="@(ResolvedFileToPublish->'%(RelativePath)')" />
 			<_CliNew Include="@(_CliRelative)" Exclude="@(_AppRelative)" />
@@ -203,7 +206,7 @@
 	     or it drops it (System.Console went, and typedownctl did not start). Its own assemblies go into the trim as
 	     roots: kept whole, and everything they reach in the shared libraries is kept. -->
 	<Target Name="TrimWithCli" BeforeTargets="_ComputeAssembliesToPostprocessOnPublish" DependsOnTargets="PublishCliAlongside"
-	        Condition="'$(PublishTrimmed)' == 'true' and '$(RuntimeIdentifier)' != '' and '$(AutomationTestHost)' != 'true' and '$(IncludeCli)' != 'false' and '$(WindowsPackageType)' != 'MSIX'">
+	        Condition="'$(PublishTrimmed)' == 'true' and '$(RuntimeIdentifier)' != '' and '$(AutomationTestHost)' != 'true' and '$(IncludeCli)' != 'false'">
 		<ItemGroup>
 			<!-- The CLI's own assemblies, as PublishCliAlongside added them (the files the app did not have). -->
 			<_CliOwnAssembly Include="@(_CliNew->'%(Source)')" Condition="'%(Extension)' == '.dll'" />
@@ -214,7 +217,7 @@
 		<Message Importance="high" Text="$(BrandCliName): trimmed with the app, rooted at @(_CliOwnAssembly->'%(Filename)', ', ')" />
 	</Target>
 	<Target Name="PackageCliAlongside" AfterTargets="GetPackagingOutputs" BeforeTargets="_ComputeAppxPackagePayload" DependsOnTargets="PublishCli"
-	        Condition="'$(RuntimeIdentifier)' != '' and '$(AutomationTestHost)' != 'true' and '$(IncludeCli)' != 'false' and '$(WindowsPackageType)' == 'MSIX'">
+	        Condition="'$(RuntimeIdentifier)' != '' and '$(AutomationTestHost)' != 'true' and '$(IncludeCli)' != 'false' and '$(WindowsPackageType)' == 'MSIX' and '$(PublishTrimmed)' != 'true'">
 		<ItemGroup>
 			<_AppPackaged Include="@(PackagingOutputs->'%(TargetPath)')" />
 			<_CliNew Include="@(_CliRelative)" Exclude="@(_AppPackaged)" />

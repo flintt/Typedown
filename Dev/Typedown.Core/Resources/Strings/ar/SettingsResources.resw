@@ -958,4 +958,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>إظهار علامات Markdown (**، #، عنوان الرابط) في كل فقرة، وليس فقط حيث يوجد المؤشر</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>توقّع تخطيط المستندات الطويلة (تجريبي)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>أثناء رسم مستند طويل على أجزاء، يُحسب ارتفاع ما لم يُعرض بعد من نصه بدلاً من تقديره، فيصبح شريط التمرير والانتقال من المخطط أدق. تجريبي</value>
+  </data>
 </root>

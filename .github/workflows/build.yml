@@ -52,7 +52,7 @@ jobs:
 
       - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: '10.0.x'
 
       - name: Run reliability tests
         run: dotnet test Tests/Typedown.ReliabilityTests/Typedown.ReliabilityTests.csproj --configuration Release --results-directory Tests/Typedown.ReliabilityTests/TestResults --logger "trx;LogFileName=reliability.trx"

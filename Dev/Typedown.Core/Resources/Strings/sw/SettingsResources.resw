@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>Onyesha alama za Markdown (**, #, anwani ya kiungo) katika kila aya, si tu mahali kishale kilipo</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Tabiri mpangilio wa hati ndefu (majaribio)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Hati ndefu inapochorwa kwa sehemu, urefu wa sehemu ambayo bado haijaonyeshwa hukokotolewa kutoka kwa maandishi badala ya kukadiriwa, hivyo upau wa kusogeza na kuruka kutoka kwa muhtasari kunakuwa sahihi zaidi. Majaribio</value>
+  </data>
 </root>

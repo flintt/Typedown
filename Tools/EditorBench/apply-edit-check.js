@@ -82,6 +82,10 @@ const sha = text => crypto.createHash('sha256').update(text, 'utf8').digest('hex
     ];
     for (const [name, before, edit] of visualDocs) {
       await load(before);
+      // A load puts the page back where it was, and once more a tenth of a second later (settleScroll's timer); a
+      // reader's wheel, key or click stops that, a script's scrollIntoView does not, and the timer firing after it put
+      // the page at the top again: the click below then went to another block. A page timer due later runs after it.
+      await page.evaluate(() => new Promise(r => setTimeout(r, 200)));
       // The reader's cursor near the end, scrolled there.
       await page.evaluate(() => {
         const blocks = document.querySelectorAll('#ag-editor-id > *');

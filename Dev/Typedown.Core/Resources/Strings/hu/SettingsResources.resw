@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>A Markdown-jelölések (**, #, egy hivatkozás címe) megjelenítése minden bekezdésben, nem csak ott, ahol a kurzor van</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Hosszú dokumentumok elrendezésének előrejelzése (kísérleti)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Amíg egy hosszú dokumentum részenként rajzolódik ki, a még nem látható rész magasságát a program a szövegből számítja ki becslés helyett, így a görgetősáv és a vázlatból történő ugrás pontosabb. Kísérleti</value>
+  </data>
 </root>

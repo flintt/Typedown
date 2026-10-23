@@ -41,7 +41,13 @@ return ok1 && ok2 && ok3 ? 0 : 1;
 // What Log.cs needs from the app, standing in for it.
 namespace Typedown.Core
 {
-    public static class Config { public static string LocalAppDataFolder { get; set; } }
+    public static class Config
+    {
+        public static string LocalAppDataFolder { get; set; }
+        // Not a package here: Log keeps its logs under LocalAppDataFolder.
+        public static bool IsPackaged => false;
+        public static string GetLocalFolderPath() => throw new NotSupportedException();
+    }
 }
 namespace Typedown.Core.Controls
 {

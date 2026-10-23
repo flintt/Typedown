@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>Erakutsi Markdown markak (**, #, esteka baten helbidea) paragrafo guztietan, ez kurtsorea dagoen tokian bakarrik</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Aurreikusi dokumentu luzeen diseinua (esperimentala)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Dokumentu luze bat zatika marrazten den bitartean, oraindik erakusten ez denaren altuera testutik kalkulatzen da, kalkulu hurbila egin beharrean; horrela, korritze-barra eta eskemako jauziak zehatzagoak dira. Esperimentala</value>
+  </data>
 </root>

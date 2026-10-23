@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>Ipakita ang mga marka ng Markdown (**, #, ang address ng isang link) sa bawat talata, hindi lang kung nasaan ang cursor</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Hulaan ang layout ng mahahabang dokumento (eksperimental)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Habang iginuguhit nang paisa-isang bahagi ang mahabang dokumento, kinukuwenta mula sa teksto ang taas ng hindi pa ipinapakita sa halip na tantiyahin, kaya mas tumpak ang scroll bar at ang mga pagtalon mula sa outline. Eksperimental</value>
+  </data>
 </root>
