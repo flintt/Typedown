@@ -35,6 +35,9 @@ param(
     [switch]$NoInstaller,
     # What to show in About instead of "local.<commit>"; empty keeps whatever the file already says.
     [string]$Label,
+    # A trial's own version (1.4.0.13): the app and the installer carry it instead of the csproj's release number,
+    # the same number its MSIX gets, so the two files of one trial say the same.
+    [ValidatePattern('^\d+\.\d+\.\d+\.\d+$')][string]$Version,
     # Rebuilds the editor bundle first (needs node and Dev\Typedown.Editor\node_modules).
     [switch]$BuildEditor,
     # Builds the automation test host instead (the app with test.* methods and edit barriers, its own data root) into
@@ -96,6 +99,13 @@ if ($newestSource -and $newestSource.LastWriteTimeUtc -gt $builtAt) {
 
 $version = ([xml](Get-Content 'Dev\Typedown\Typedown.csproj')).Project.PropertyGroup.Version |
     Where-Object { $_ } | Select-Object -First 1
+$versionArgs = @()
+$isccVersion = @()
+if ($Version) {
+    $version = $Version
+    $versionArgs = @("-p:Version=$Version")
+    $isccVersion = @("/DMyFileVersion=$Version")
+}
 $arch = $Platform.ToLowerInvariant()
 Write-Host "Typedown $version  $Platform  $Configuration"
 
@@ -141,7 +151,7 @@ if (-not $SkipBuild) {
             # WebView2 (assert-application-build.ps1 refuses such a folder).
             Remove-Item (Join-Path $repo "Dev\Typedown\bin\$Platform\$Configuration\publish") -Recurse -Force -ErrorAction SilentlyContinue
             & $dotnet publish 'Dev\Typedown\Typedown.csproj' -nologo -v m -c $Configuration -p:Platform=$Platform -r $rid `
-                -p:TypedownTrim=true -o (Join-Path $repo "Dev\Typedown\bin\$Platform\$Configuration\publish")
+                -p:TypedownTrim=true @versionArgs -o (Join-Path $repo "Dev\Typedown\bin\$Platform\$Configuration\publish")
         }
         $buildFailed = $LASTEXITCODE -ne 0
     }
@@ -175,7 +185,7 @@ Get-ChildItem $published | Where-Object { -not ($_.PSIsContainer -and $_.Name -m
 & (Join-Path $PSScriptRoot 'add-cli.ps1') -AppFolder $stage -RuntimeIdentifier $rid -Configuration $Configuration
 & (Join-Path $PSScriptRoot 'assert-application-build.ps1') -Path $stage
 
-& $iscc /DMyAppVersion=$version /DMyArch=$arch 'Tools\Installer\Typedown.iss' | Select-String -Pattern 'error|Successful compile' | ForEach-Object { $_.Line }
+& $iscc /DMyAppVersion=$version @isccVersion /DMyArch=$arch 'Tools\Installer\Typedown.iss' | Select-String -Pattern 'error|Successful compile' | ForEach-Object { $_.Line }
 if ($LASTEXITCODE -ne 0) { throw "ISCC failed" }
 
 $setup = Get-ChildItem 'Tools\Installer\Output\*.exe' | Sort-Object LastWriteTime -Descending | Select-Object -First 1

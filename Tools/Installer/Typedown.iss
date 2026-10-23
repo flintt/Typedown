@@ -3,7 +3,13 @@
 #ifndef MyArch
   #define MyArch "x64"
 #endif
-#define MyAppVersion "1.3.8"
+; A trial build passes its own (/DMyAppVersion=1.4.0.13, build-local.ps1 -Version) with /DMyFileVersion.
+#ifndef MyAppVersion
+  #define MyAppVersion "1.3.8"
+#endif
+#ifndef MyFileVersion
+  #define MyFileVersion MyAppVersion + ".0"
+#endif
 #define MyAppAssocName MyAppName + " Markdown"
 #define MyAppAssocKey MyAppName + ".Markdown"
 
@@ -40,7 +46,7 @@ AppMutex={#MyAppName}.App.Mutex
 RestartApplications=no
 ; Windows 10 1903 or later, as the app (Typedown.csproj TargetPlatformMinVersion) and the MSIX require.
 MinVersion=10.0.18362
-VersionInfoVersion={#MyAppVersion}.0
+VersionInfoVersion={#MyFileVersion}
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
