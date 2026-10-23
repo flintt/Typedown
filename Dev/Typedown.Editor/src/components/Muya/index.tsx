@@ -498,6 +498,14 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
 
     useEffect(() => transport.addListener<{ slug: string }>('ScrollTo', ({ slug }) => {
         scrollToElement(`#${slug}`, OUTLINE_TOP)
+        // A long document's blocks around the heading only guessed so far (drawn off screen: parser/render
+        // predictHeights.js) predicted now, and the page put at the heading again: refined later, they moved it.
+        try {
+            const stateRender = (editor as any)?.contentState?.stateRender
+            if (stateRender?.heights?.settleAround(slug, stateRender.container)) scrollToElement(`#${slug}`, OUTLINE_TOP)
+        } catch (err) {
+            console.log(err)
+        }
         // The reader chose this heading, so this is the one the outline marks — also at the end of the
         // document, where the page cannot scroll far enough to bring it to the top and reading the top
         // would name the section before it.

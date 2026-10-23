@@ -324,11 +324,17 @@ export default class HeightPredictor {
     const editor = document.getElementById('editor')
     const contained = !!(editor && editor.classList.contains('ag-long-document'))
     // The reader's font settings are on an element above the root (components/Muya/index.tsx), seen by nothing above:
-    // the root's own font, read each time, tells.
-    const s = getComputedStyle(root)
-    const font = `${fontOf(s)}/${s.lineHeight}/${s.letterSpacing}`
-    if (this.rootFont !== undefined && this.rootFont !== font) this.restyled()
-    this.rootFont = font
+    // the root's own font tells - read at most once a second (reading it right after a slice's blocks went in styled them
+    // there and then, inside the slice: on Windows the slices drew half as many blocks each).
+    const now = performance.now()
+    if (!(now - (this.rootFontAt ?? -Infinity) < 1000) || this.observed !== this.rootFontRoot) {
+      this.rootFontAt = now
+      this.rootFontRoot = root
+      const s = getComputedStyle(root)
+      const font = `${fontOf(s)}/${s.lineHeight}/${s.letterSpacing}`
+      if (this.rootFont !== undefined && this.rootFont !== font) this.restyled()
+      this.rootFont = font
+    }
     return { width, contained, generation: this.generation, root }
   }
 
@@ -1229,6 +1235,37 @@ export default class HeightPredictor {
     idle(step, { timeout: 1000 })
   }
 
+  /**
+   * The blocks around one the page is about to be put at (the outline's jump: Muya index.tsx ScrollTo) predicted and
+   * ruled now, where only guessed: those above it within a few screens decide where it lands, and refined later they
+   * moved it. Returns whether anything changed (the caller puts the page at it again).
+   */
+  settleAround(key, root, above = 40, below = 10) {
+    const last = this.lastRuled
+    if (!last || last.root !== root || !this.ready()) return false
+    let env
+    try {
+      env = this.environment(root)
+    } catch (err) {
+      return false
+    }
+    if (!env.contained || !(env.width > 0)) return false
+    const blocks = last.blocks
+    const i = blocks.findIndex(b => b.key === key)
+    if (i < 0) return false
+    const started = performance.now()
+    const sig = `${env.width}|${env.generation}`
+    const rules = []
+    for (let k = Math.max(0, i - above); k < Math.min(blocks.length, i + below); k++) {
+      if (this.ruled.get(blocks[k].key) === sig) continue
+      const text = this.ruleText(blocks[k], env, null, -1, true)
+      if (text) rules.push(text)
+    }
+    this.addRules(rules)
+    account('settleAround', started, rules.length)
+    return rules.length > 0
+  }
+
   clearRules() {
     for (const sheet of this.sheets) sheet.remove()
     this.sheets = []
@@ -1328,4 +1365,4 @@ export function stack(boxes, pendingBefore = []) {
   return { any, firstTop, firstInline, firstMt, lead, end: y, trail: pending, tops }
 }
 
-export { collapseList, loadPretext }
+export { collapseList, loadPretext, account }

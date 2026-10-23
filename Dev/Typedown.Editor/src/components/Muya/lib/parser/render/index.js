@@ -5,7 +5,7 @@ import { patch, toVNode, toHTML, h } from './snabbdom'
 import { beginRules } from '../rules'
 import renderInlines from './renderInlines'
 import renderBlock from './renderBlock'
-import HeightPredictor from './predictHeights'
+import HeightPredictor, { account } from './predictHeights'
 
 let mermaidRenderId = 0
 const MERMAID_RENDER_CACHE_LIMIT = 32
@@ -492,7 +492,9 @@ class StateRender {
       state.timer = null
       if (this.progressive !== state) return
       const budget = window.__typedownProgressiveSliceMs ?? sliceBudget()
-      const until = performance.now() + budget
+      const sliceStarted = performance.now()
+      const drawnBefore = state.hi - state.lo
+      const until = sliceStarted + budget
       const keep = this.keepInPlace(state)
       // A small share of the slice predicts the heights of what is drawn next (predictHeights.js; the rest of them in
       // the page's idle time): predicting them all first, in slices of their own, made 300k characters take 2.7 times as
@@ -522,14 +524,15 @@ class StateRender {
       const now = performance.now()
       const writeRoom = state.lo === 0 && state.hi === blocks.length || now - (state.roomWrittenAt ?? -Infinity) >= 100
       if (writeRoom) state.roomWrittenAt = now
-      // With the heights predicted or guessed from the blocks' text, nothing on the page is measured for it at all (a
-      // layout of the page every 100 ms otherwise) but the margins at the edges, read every second.
-      if (state.heightsEnv && state.guess) {
-        const edges = now - (state.edgesAt ?? -Infinity) >= 1000
-        if (edges) state.edgesAt = now
-        this.estimateRest(state, true, false, edges)
-      } else this.estimateRest(state, writeRoom)
+      // With the heights predicted or guessed from the blocks' text, nothing on the page is read for it at all - not even
+      // the margins at the edges (as read when the drawing began): read after a slice's blocks went in, they were styled
+      // there and then, inside the slice, and on Windows the slices drew half as many blocks each.
+      if (state.heightsEnv && state.guess) this.estimateRest(state, true, false, false)
+      else this.estimateRest(state, writeRoom)
       keep()
+      // How many blocks each slice draws, and in how long (window.__typedownPretextStats: 'slice'), either way.
+      account('slice', sliceStarted)
+      account('sliceBlocks', performance.now(), state.hi - state.lo - drawnBefore)
       state.slices++
       if (state.lo > 0 || state.hi < blocks.length) state.timer = setTimeout(step, window.__typedownProgressiveDelayMs ?? 0)
       else this.finishProgressive(state)
