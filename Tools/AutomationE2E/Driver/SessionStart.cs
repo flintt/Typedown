@@ -34,9 +34,15 @@ internal static partial class Program
         var heavy = new[] { first, showcase, demo1, mixed300k, mixed1m, last }.Where(f => f != null).Select(f => f!).ToArray();
         var heavyActive = demo1 ?? mixed1m;
         var session = Path.Combine(testRoot, "data", "session.json");
+        // Where the window was: put back at the end. Restarted, it came back elsewhere and the cases after found their
+        // status bar under the taskbar (SB01, SB02).
+        SetProcessDpiAwarenessContext(new IntPtr(-4));
+        RECT placed;
         using (var c = await Session("e2e SR01"))
         {
             var w = await FirstWindowId(c);
+            GetWindowRect(await WindowOf(w, c), out placed);
+            notes.Add($"the window before: {placed.Left},{placed.Top} {placed.Right - placed.Left}x{placed.Bottom - placed.Top}");
             await c.Call("test.settings.set", new { windowId = w, name = "FileStartupAction", value = 2 });
         }
         try
@@ -84,6 +90,15 @@ internal static partial class Program
             using var c = await Session("e2e SR01 restore");
             var w = await FirstWindowId(c);
             try { await c.Call("test.settings.set", new { windowId = w, name = "FileStartupAction", value = 0 }); } catch { }
+            try
+            {
+                var window = await WindowOf(w, c);
+                GetWindowRect(window, out var now);
+                notes.Add($"the window after the restarts: {now.Left},{now.Top} {now.Right - now.Left}x{now.Bottom - now.Top}");
+                if (now.Left != placed.Left || now.Top != placed.Top || now.Right != placed.Right || now.Bottom != placed.Bottom)
+                    MbSetWindowPos(window, IntPtr.Zero, placed.Left, placed.Top, placed.Right - placed.Left, placed.Bottom - placed.Top, 0x0004 | 0x0010);
+            }
+            catch (Exception e) { notes.Add("the window not put back: " + e.Message.Split('\n')[0]); }
         }
     }
 
