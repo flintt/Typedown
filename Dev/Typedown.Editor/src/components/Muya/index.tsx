@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { anchorKey, PREVIEW_FROM_CHARS, ScrollAnchor, scrollForAnchor, startsAlike } from "services/loadPreview";
+import { afterOnScreen, anchorKey, PREVIEW_FROM_CHARS, ScrollAnchor, scrollForAnchor, startsAlike } from "services/loadPreview";
 
 /**
  * The block of a new document's model the scroll anchor names (services/loadPreview): the top-level block's index, to
@@ -1297,9 +1297,10 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         ;(window as any).__typedownLastProgressive = !blocksBefore && !replacedLocally && (editor as any).renderPending
         // On the screen - its first part, or the whole of a document that fits in one go - the host takes away its
         // "Opening…" (it waited for the load to be reported, which comes later, and covered what was already there to see).
+        // Only once it is on the screen, not merely on the page: the document left showed again in between (JT02).
         if (!blocksBefore && !replacedLocally && props.markdown.length >= PREVIEW_FROM_CHARS) {
             const shownLoad = currentLoadId()
-            requestAnimationFrame(() => transport.postMessage('LoadPreviewShown', { loadId: shownLoad }))
+            afterOnScreen(() => transport.postMessage('LoadPreviewShown', { loadId: shownLoad }))
         }
         // How a long document was drawn, for the host's log: the only way to tell from a machine one cannot watch.
         if (!blocksBefore && !replacedLocally && props.markdown.length >= PREVIEW_FROM_CHARS) {

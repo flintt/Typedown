@@ -382,7 +382,8 @@ const Editor: React.FC = () => {
                 if (opt.editorAreaWidth) document.body.style.setProperty('--editorAreaWidth', opt.editorAreaWidth)
                 if (opt.fontFamily) document.body.style.setProperty('--editorFontFamily', opt.fontFamily)
                 if (showLoadPreview(markdown, cursor, opt, scrollAnchor)) {
-                    transport.postMessage('LoadPreviewShown', { loadId })
+                    // Once painted, before the build (queued first): two frames on would be after the build.
+                    afterPaint(() => transport.postMessage('LoadPreviewShown', { loadId }))
                     afterPaint(apply)
                     return
                 }
@@ -517,7 +518,7 @@ const Editor: React.FC = () => {
         // is the one previewed.
         const previewed = previewWhileBuilding() && !optionsRef.current?.sourceCode && typeof load.text === 'string' && load.text.length >= PREVIEW_FROM_CHARS
             && !(window as any).__typedownKeptDocuments?.has?.(load.text) && showLoadPreview(load.text, load.cursor, undefined, load.scrollAnchor)
-        if (previewed) transport.postMessage('LoadPreviewShown', { loadId: load.loadId })
+        if (previewed) afterPaint(() => transport.postMessage('LoadPreviewShown', { loadId: load.loadId }))
         else hideLoadPreview()
         if (scheduled) return
         const run = (go: () => void) => previewed ? afterPaint(go) : requestAnimationFrame(go)
