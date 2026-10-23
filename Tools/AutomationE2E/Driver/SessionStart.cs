@@ -56,7 +56,7 @@ internal static partial class Program
                 notes.Add("tabs: " + string.Join(", ", docs.Select(d => Path.GetFileName((string?)d["path"] ?? "") + ((bool?)d["active"] == true ? " (active)" : ""))));
                 Check(docs.Select(d => Path.GetFileName((string?)d["path"] ?? "")).SequenceEqual(heavy.Select(Path.GetFileName)), $"the {heavy.Length} tabs in their order");
                 var firstDoc = docs.First(d => ((string?)d["path"] ?? "").EndsWith("sr01-a.md"));
-                var firstText = (string?)(await c.Call("document.get", new { documentId = (string)firstDoc["documentId"]! }))["text"] ?? "";
+                var firstText = (string?)(await Get(c, (string)firstDoc["documentId"]!))["text"] ?? "";
                 Check(firstText.Replace("\r\n", "\n") == File.ReadAllText(first).Replace("\r\n", "\n"), $"a tab not shown has its file's text ({firstText.Length} chars)");
                 var showDoc = docs.First(d => ((string?)d["path"] ?? "").EndsWith("sr01-showcase.md"));
                 await c.Call("document.focus", new { documentId = (string)showDoc["documentId"]! });

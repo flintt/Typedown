@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
+using Typedown.Core.Controls;
 using Typedown.Core.Interfaces;
 using Typedown.Core.Models;
 using Typedown.Core.Services;
@@ -174,6 +175,22 @@ namespace Typedown.Core.ViewModels
         public async Task SwitchTo(DocumentTab tab)
         {
             if (tab == null || tab == ActiveTab || !Tabs.Contains(tab)) return;
+            // A tab of the last session not read yet: read now (asked about a backup if it has one).
+            if (tab.Pending)
+            {
+                try
+                {
+                    await FileViewModel.LoadIntoTab(tab, mayAsk: true);
+                }
+                catch (Exception ex)
+                {
+                    Log.Debug($"tabs: {tab.FilePath} could not be read: {ex.Message}");
+                    Tabs.Remove(tab);
+                    await AppContentDialog.Create(Locale.GetDialogString("ReadErrorTitle"), ex.Message, Locale.GetDialogString("Ok")).ShowAsync(FileViewModel.AppViewModel.XamlRoot);
+                    return;
+                }
+                if (tab == ActiveTab || !Tabs.Contains(tab)) return;
+            }
             // Keys typed from here on are for the tab switched to, not the one being left (see HoldInput).
             var hold = EditorViewModel.HoldInput();
             // A very long document left: out of sight at once, not while the page puts it away.
@@ -269,6 +286,12 @@ namespace Typedown.Core.ViewModels
                 }
                 // Closing the only document closes the window (the window's own close flow asks to save).
                 FileViewModel.ExitCommand.Execute(default);
+                return true;
+            }
+            // A session tab never read: nothing in it to ask about or show.
+            if (tab.Pending && tab != ActiveTab)
+            {
+                Tabs.Remove(tab);
                 return true;
             }
             if (tab != ActiveTab) await SwitchTo(tab);

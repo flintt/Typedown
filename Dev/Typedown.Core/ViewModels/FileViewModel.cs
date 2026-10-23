@@ -997,37 +997,116 @@ namespace Typedown.Core.ViewModels
 
         /// <summary>
         /// Reopens the documents of the last session as tabs (only for the first window, before the editor is up).
-        /// Each file is loaded into the editor state in turn (no message: the editor gets the active document from
-        /// GetSettings); the previously active tab is switched to at the end. Returns false when nothing was restored.
+        /// The active one is loaded into the editor state (no message: the editor gets it from GetSettings); the others
+        /// come back as tabs not read yet, read after the page has its document (<see cref="SessionLoaded"/>) or when
+        /// switched to. Every file was read first, one after another, and the page waited for them all: a blank window
+        /// for seconds with long documents among the tabs (E2E SR01). Returns false when nothing was restored.
         /// </summary>
         private async Task<bool> RestoreSession()
         {
             var session = SessionMemory.Load();
             if (session == null || TabsViewModel == null) return false;
-            var opened = 0;
-            foreach (var file in session.Files)
+            var files = session.Files.Where(f => !TryGetOpenedWindow(f, out _)).ToList();
+            if (files.Count == 0) return false;
+            var activeFile = session.ActiveIndex < session.Files.Count && files.Contains(session.Files[session.ActiveIndex]) ? session.Files[session.ActiveIndex] : files[0];
+            var loaded = false;
+            try
             {
-                if (TryGetOpenedWindow(file, out _)) continue;
+                // No tab is opened here: LoadFile reuses the pristine untitled one.
+                loaded = await LoadFile(activeFile, true, false);
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"RestoreSession: {activeFile}: {ex.Message}");
+            }
+            var activeTab = loaded ? TabsViewModel.ActiveTab : null;
+            var at = 0;
+            foreach (var file in files)
+            {
+                if (activeTab != null && file == activeFile) { at = TabsViewModel.Tabs.IndexOf(activeTab) + 1; continue; }
+                if (TabsViewModel.FindByPath(file) != null) continue;
+                TabsViewModel.Tabs.Insert(Math.Min(at++, TabsViewModel.Tabs.Count), new DocumentTab { FilePath = file, Pending = true });
+            }
+            if (activeTab == null)
+            {
+                // The active one could not be read: the first of the others instead.
+                var first = TabsViewModel.Tabs.FirstOrDefault(t => t.Pending);
+                if (first == null) return false;
+                await TabsViewModel.SwitchTo(first);
+            }
+            var pending = TabsViewModel.Tabs.Count(t => t.Pending);
+            Log.Debug($"RestoreSession: {TabsViewModel.Tabs.Count} tab(s), active={TabsViewModel.ActiveTab?.FilePath}, {pending} to read after it");
+            if (pending > 0) sessionLoading = ReadPendingTabsAsync();
+            return true;
+        }
+
+        private Task sessionLoading = Task.CompletedTask;
+
+        /// <summary>The last session's other tabs read (or given up on): automation waits for it, as for the startup document.</summary>
+        public Task SessionLoaded => sessionLoading;
+
+        // After the page has had its document: the reply to GetSettings goes out first.
+        private async Task ReadPendingTabsAsync()
+        {
+            await Task.Delay(200);
+            var clock = System.Diagnostics.Stopwatch.StartNew();
+            foreach (var tab in TabsViewModel.Tabs.Where(t => t.Pending).ToList())
+            {
                 try
                 {
-                    // No tab is opened here: LoadFile adds one itself whenever the active document is not a
-                    // pristine untitled one. Starting a tab first only meant it saw the previous document still
-                    // loaded, opened a second tab for the file and left the first as a copy of its predecessor —
-                    // two documents came back as three, one of them twice.
-                    if (await LoadFile(file, true, false)) opened++;
+                    await LoadIntoTab(tab, mayAsk: false);
                 }
                 catch (Exception ex)
                 {
-                    Log.Debug($"RestoreSession: {file}: {ex.Message}");
+                    Log.Debug($"RestoreSession: {tab.FilePath}: {ex.Message} (read when switched to)");
                 }
             }
-            if (opened == 0) return false;
-            var active = TabsViewModel.FindByPath(session.ActiveIndex < session.Files.Count ? session.Files[session.ActiveIndex] : null);
-            if (active != null && active != TabsViewModel.ActiveTab)
-                await TabsViewModel.SwitchTo(active);
-            Log.Debug($"RestoreSession: {opened} tab(s), active={TabsViewModel.ActiveTab?.FilePath}");
+            Log.Debug($"RestoreSession: the other tabs read in {clock.ElapsedMilliseconds} ms");
+        }
+
+        /// <summary>
+        /// Reads a session tab's file into the tab itself, the editor untouched (it shows another document). A backup that
+        /// differs is taken without asking when unsaved changes are kept on close; otherwise it is asked about only with
+        /// <paramref name="mayAsk"/> (the tab being switched to) - false: the tab stays not read. Throws when the file
+        /// cannot be read.
+        /// </summary>
+        public async Task<bool> LoadIntoTab(DocumentTab tab, bool mayAsk)
+        {
+            if (tab == null || !tab.Pending) return true;
+            var path = tab.FilePath;
+            if (!File.Exists(path)) throw new FileNotFoundException("File does not exist.", path);
+            var (text, format) = await TextFileFormat.ReadAsync(path);
+            var fileHash = Common.SimpleHash(text);
+            string markdown = text;
+            var backup = await AutoBackup.GetBackup(path);
+            if (backup != null && Common.SimpleHash(backup) != fileHash)
+            {
+                if (SettingsViewModel.KeepUnsavedOnClose) markdown = backup;
+                else if (!mayAsk) return false;
+                else markdown = await CheckBackup(path, fileHash) ?? text;
+            }
+            // Read meanwhile (switched to while this one was reading): that one counts.
+            if (!tab.Pending) return true;
+            EditionHooks.ReportDocumentOnDisk(path, text, written: false);
+            tab.FileFormat = format;
+            tab.Markdown = markdown;
+            tab.FileHash = fileHash;
+            tab.DiskHash = fileHash;
+            tab.CurrentHash = Common.SimpleHash(markdown);
+            tab.Saved = tab.CurrentHash == fileHash;
+            tab.AutoSavedSucc = true;
+            tab.AutoSaveHeldBack = null;
+            // As LoadFile leaves the editor: a backup taken counts as loaded (its history is the backup's).
+            tab.FileLoaded = !tab.Saved;
+            tab.History.InitHistory(markdown);
+            tab.IsDirty = !tab.Saved;
+            tab.Pending = false;
             return true;
         }
+
+        /// <summary>The window's start brings the last session back (no file asked for on the command line).</summary>
+        public bool StartsWithSession => string.IsNullOrEmpty(CommandLine.GetOpenFilePath(AppViewModel.CommandLineArgs))
+            && (SettingsViewModel.KeepUnsavedOnClose || SettingsViewModel.FileStartupAction == Enums.FileStartupAction.RestoreSession);
 
         public async Task LoadStartUpMarkdown()
         {

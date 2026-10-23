@@ -48,6 +48,8 @@ namespace Typedown.Core.Controls
             disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.CustomTheme)).Subscribe(_ => UpdateCaptionTheme()));
             Frame.Navigated += OnFrameNavigated;
             Frame.Navigate(typeof(MainPage), null);
+            // The last session's tabs and active document, while the editor's page starts (after this first frame).
+            DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, () => ViewModel.EditorViewModel.BeginStartupLoad());
         }
 
         private Type shownPage;

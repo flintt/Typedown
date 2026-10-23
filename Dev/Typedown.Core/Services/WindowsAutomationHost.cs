@@ -51,6 +51,10 @@ namespace Typedown.Core.Services
             if (!ready.IsCompleted) Log.Debug($"automation: window {windowId} waits for its startup document");
             if (await Task.WhenAny(ready, Task.Delay(StartupTimeoutMs)) != ready)
                 throw new AutomationException(AutomationErrorKind.editor_not_ready, "The window has not finished starting.");
+            // The last session's other tabs read too: their text is what a client asks for.
+            var session = app.FileViewModel.SessionLoaded;
+            if (!session.IsCompleted && await Task.WhenAny(session, Task.Delay(StartupTimeoutMs)) != session)
+                throw new AutomationException(AutomationErrorKind.editor_not_ready, "The window has not finished reading its last session's documents.");
             return await work(app);
         }));
 
