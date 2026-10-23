@@ -49,7 +49,7 @@ namespace Typedown.Core.Controls
             Frame.Navigated += OnFrameNavigated;
             Frame.Navigate(typeof(MainPage), null);
             // The last session's tabs and active document, while the editor's page starts (after this first frame).
-            DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, () => ViewModel.EditorViewModel.BeginStartupLoad());
+            DispatcherQueue.TryEnqueue(() => ViewModel.EditorViewModel.BeginStartupLoad());
         }
 
         private Type shownPage;

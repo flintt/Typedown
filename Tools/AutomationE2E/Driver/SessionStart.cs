@@ -68,12 +68,14 @@ internal static partial class Program
                 }
                 Check(shown, "switched to, showcase shows its own text");
             }
-            notes.Add("restore lines: " + string.Join(" | ", LogLines("RestoreSession").TakeLast(6)));
+            notes.Add("restore lines: " + string.Join(" | ", LogLines("RestoreSession").Concat(LogLines("startup:")).Concat(LogLines("asked for the document")).OrderBy(l => l).TakeLast(12)));
             var alone = results[0];
             var small = results[1];
             Check(small.Content >= 0 && alone.Content >= 0, "the active document came on screen at all");
             // The others not waited for: on screen about as soon as when it is the only one.
             Check(small.Content - small.Window <= alone.Content - alone.Window + 700, $"with {heavy.Length - 1} heavy tabs more the active document is on screen about as soon as alone ({small.Content - small.Window} ms after the window, alone {alone.Content - alone.Window} ms)");
+            // The tabs at once, before the page is up: 2.6 s after the window on w10 while they came with the active file.
+            Check(small.Tabs >= 0 && small.Tabs - small.Window <= 1000, $"the {heavy.Length} tabs are in the strip within 1 s of the window ({small.Tabs - small.Window} ms)");
             var heavyOne = results[2];
             Check(heavyOne.Content >= 0 && heavyOne.Content - heavyOne.Window <= 6000, $"the active heavy document's top is on screen within 6 s of the window ({heavyOne.Content - heavyOne.Window} ms)");
         }

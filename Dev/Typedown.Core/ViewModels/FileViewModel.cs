@@ -1009,6 +1009,20 @@ namespace Typedown.Core.ViewModels
             var files = session.Files.Where(f => !TryGetOpenedWindow(f, out _)).ToList();
             if (files.Count == 0) return false;
             var activeFile = session.ActiveIndex < session.Files.Count && files.Contains(session.Files[session.ActiveIndex]) ? session.Files[session.ActiveIndex] : files[0];
+            // The tabs first, nothing read: they show at once, whatever reading the files waits for (on w10 the strip
+            // came only with the active file read, 2.6 s after the window). The active document goes into the pristine
+            // untitled tab, which stays where the active file is in the list.
+            var blank = TabsViewModel.ActiveTab;
+            var before = true;
+            foreach (var file in files)
+            {
+                if (file == activeFile) { before = false; continue; }
+                if (TabsViewModel.FindByPath(file) != null) continue;
+                var placeholder = new DocumentTab { FilePath = file, Pending = true };
+                if (before) TabsViewModel.Tabs.Insert(Math.Max(0, TabsViewModel.Tabs.IndexOf(blank)), placeholder);
+                else TabsViewModel.Tabs.Add(placeholder);
+            }
+            Log.Debug($"RestoreSession: {TabsViewModel.Tabs.Count} tab(s) shown, reading {Path.GetFileName(activeFile)}");
             var loaded = false;
             try
             {
@@ -1020,13 +1034,8 @@ namespace Typedown.Core.ViewModels
                 Log.Debug($"RestoreSession: {activeFile}: {ex.Message}");
             }
             var activeTab = loaded ? TabsViewModel.ActiveTab : null;
-            var at = 0;
-            foreach (var file in files)
-            {
-                if (activeTab != null && file == activeFile) { at = TabsViewModel.Tabs.IndexOf(activeTab) + 1; continue; }
-                if (TabsViewModel.FindByPath(file) != null) continue;
-                TabsViewModel.Tabs.Insert(Math.Min(at++, TabsViewModel.Tabs.Count), new DocumentTab { FilePath = file, Pending = true });
-            }
+            if (activeTab == null && TabsViewModel.Tabs.Contains(blank) && TabsViewModel.Tabs.Count > 1)
+                TabsViewModel.Tabs.Remove(blank);
             if (activeTab == null)
             {
                 // The active one could not be read: the first of the others instead.
