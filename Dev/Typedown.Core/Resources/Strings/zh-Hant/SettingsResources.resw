@@ -981,4 +981,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>在每個段落都顯示 Markdown 標記（**、#、連結位址），而不只是游標所在的地方</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>預測長文件排版（實驗性）</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>長文件分段轉譯時，依文字排版算出尚未顯示部分的高度，而不是估算，捲軸和大綱跳轉更準確。實驗性功能</value>
+  </data>
 </root>

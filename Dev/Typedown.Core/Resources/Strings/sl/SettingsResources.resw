@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>Prikaži oznake Markdown (**, #, naslov povezave) v vsakem odstavku, ne le tam, kjer je kazalec</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Predvidevanje postavitve dolgih dokumentov (preizkusno)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Medtem ko se dolg dokument izrisuje po delih, se višina še neprikazanega dela izračuna iz besedila namesto ocenjuje, zato sta drsni trak in skoki iz orisa natančnejša. Preizkusno</value>
+  </data>
 </root>

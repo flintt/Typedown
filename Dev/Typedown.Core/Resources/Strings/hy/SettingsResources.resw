@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>Ցուցադրել Markdown նշանները (**, #, հղման հասցեն) յուրաքանչյուր պարբերությունում, ոչ միայն այնտեղ, որտեղ կուրսորն է</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Կանխատեսել երկար փաստաթղթերի դասավորությունը (փորձնական)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Երբ երկար փաստաթուղթը նկարվում է մաս առ մաս, դեռ չցուցադրված մասի բարձրությունը հաշվարկվում է տեքստից՝ գնահատելու փոխարեն, ուստի ոլորման գոտին և ուրվագծից անցումները ավելի ճշգրիտ են։ Փորձնական</value>
+  </data>
 </root>

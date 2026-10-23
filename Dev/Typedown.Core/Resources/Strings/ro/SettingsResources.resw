@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>Afișează marcajele Markdown (**, #, adresa unui link) în fiecare paragraf, nu doar acolo unde este cursorul</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Prezice aspectul documentelor lungi (experimental)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>În timp ce un document lung este desenat pe părți, înălțimea a ceea ce nu este încă afișat se calculează din text în loc să fie estimată, astfel încât bara de derulare și salturile din schiță sunt mai precise. Experimental</value>
+  </data>
 </root>

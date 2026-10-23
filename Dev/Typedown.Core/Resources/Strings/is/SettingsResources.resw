@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>Sýna Markdown-merkin (**, #, slóð tengils) í hverri málsgrein, ekki aðeins þar sem bendillinn er</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Spá fyrir um umbrot langra skjala (tilraun)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Á meðan langt skjal er teiknað í hlutum er hæð þess sem ekki er enn sýnt reiknuð út frá textanum í stað þess að vera áætluð, svo skrunstikan og stökk úr efnisyfirlitinu verða nákvæmari. Tilraun</value>
+  </data>
 </root>

@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>Vis Markdown-tegnene (**, #, et links adresse) i alle afsnit, ikke kun hvor markøren er</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Forudsig layoutet af lange dokumenter (eksperimentel)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Mens et langt dokument tegnes i dele, beregnes højden af det, der endnu ikke vises, ud fra teksten i stedet for at blive anslået, så rullepanelet og spring fra dispositionen bliver mere præcise. Eksperimentel</value>
+  </data>
 </root>

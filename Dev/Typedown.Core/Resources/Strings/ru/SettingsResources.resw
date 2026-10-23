@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>Показывать знаки разметки Markdown (**, #, адрес ссылки) во всех абзацах, а не только там, где находится курсор</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Предсказывать разметку длинных документов (экспериментально)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Пока длинный документ отрисовывается частями, высота ещё не показанного рассчитывается по тексту, а не оценивается, поэтому полоса прокрутки и переходы из структуры точнее. Экспериментально</value>
+  </data>
 </root>

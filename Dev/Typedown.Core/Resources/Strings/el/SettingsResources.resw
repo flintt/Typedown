@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>Εμφάνιση των σημείων Markdown (**, #, η διεύθυνση ενός συνδέσμου) σε κάθε παράγραφο, όχι μόνο εκεί που βρίσκεται ο δρομέας</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Πρόβλεψη διάταξης μεγάλων εγγράφων (πειραματικό)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Ενώ ένα μεγάλο έγγραφο σχεδιάζεται τμηματικά, το ύψος όσων δεν εμφανίζονται ακόμη υπολογίζεται από το κείμενο αντί να εκτιμάται, ώστε η γραμμή κύλισης και τα άλματα από τη διάρθρωση να είναι πιο ακριβή. Πειραματικό</value>
+  </data>
 </root>

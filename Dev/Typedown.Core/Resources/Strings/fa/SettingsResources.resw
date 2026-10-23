@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>نشانه‌های Markdown (**، #، نشانی یک پیوند) را در همهٔ بندها نشان بده، نه فقط جایی که مکان‌نما هست</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>پیش‌بینی چیدمان سندهای طولانی (آزمایشی)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>هنگامی که یک سند طولانی بخش به بخش رسم می‌شود، ارتفاع بخش‌هایی که هنوز نمایش داده نشده‌اند به‌جای تخمین، از روی متن محاسبه می‌شود تا نوار پیمایش و پرش از طرح کلی دقیق‌تر باشند. آزمایشی</value>
+  </data>
 </root>

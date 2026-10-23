@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>କେବଳ କର୍ସର ଥିବା ସ୍ଥାନରେ ନୁହେଁ, ପ୍ରତ୍ୟେକ ଅନୁଚ୍ଛେଦରେ Markdown ଚିହ୍ନ (**, #, ଲିଙ୍କର ଠିକଣା) ଦେଖାନ୍ତୁ</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>ଲମ୍ବା ଦଲିଲର ଲେଆଉଟ୍ ପୂର୍ବାନୁମାନ କରନ୍ତୁ (ପରୀକ୍ଷାମୂଳକ)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>ଏକ ଲମ୍ବା ଦଲିଲ ଭାଗ ଭାଗ କରି ଆଙ୍କିବା ସମୟରେ, ଏପର୍ଯ୍ୟନ୍ତ ଦେଖାଯାଇନଥିବା ଅଂଶର ଉଚ୍ଚତା ଅନୁମାନ ବଦଳରେ ଲେଖାରୁ ଗଣନା କରାଯାଏ, ଫଳରେ ସ୍କ୍ରୋଲ୍ ବାର୍ ଏବଂ ରୂପରେଖାରୁ ଡେଇଁବା ଅଧିକ ସଠିକ୍ ହୁଏ। ପରୀକ୍ଷାମୂଳକ</value>
+  </data>
 </root>

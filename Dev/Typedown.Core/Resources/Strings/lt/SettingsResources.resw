@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>Rodyti Markdown žymes (**, #, nuorodos adresą) kiekvienoje pastraipoje, ne tik ten, kur yra žymeklis</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Numatyti ilgų dokumentų išdėstymą (eksperimentinė)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Kol ilgas dokumentas piešiamas dalimis, dar nerodomos dalies aukštis apskaičiuojamas iš teksto, o ne įvertinamas apytiksliai, todėl slinkties juosta ir šuoliai iš struktūros yra tikslesni. Eksperimentinė</value>
+  </data>
 </root>

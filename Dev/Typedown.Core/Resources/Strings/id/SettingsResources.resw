@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>Tampilkan tanda Markdown (**, #, alamat tautan) di setiap paragraf, tidak hanya di tempat kursor berada</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Prediksi tata letak dokumen panjang (eksperimental)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Saat dokumen panjang digambar per bagian, tinggi bagian yang belum ditampilkan dihitung dari teksnya, bukan diperkirakan, sehingga bilah gulir dan lompatan dari kerangka lebih akurat. Eksperimental</value>
+  </data>
 </root>

@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>Prikaži Markdown oznake (**, #, adresu veze) u svakom pasusu, ne samo tamo gde je kursor</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Predviđanje rasporeda dugih dokumenata (eksperimentalno)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Dok se dugačak dokument iscrtava u delovima, visina onoga što još nije prikazano izračunava se iz teksta umesto da se procenjuje, pa su traka za pomeranje i skokovi iz strukture tačniji. Eksperimentalno</value>
+  </data>
 </root>

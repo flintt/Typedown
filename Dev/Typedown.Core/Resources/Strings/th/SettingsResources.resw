@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>แสดงเครื่องหมาย Markdown (**, #, ที่อยู่ของลิงก์) ในทุกย่อหน้า ไม่ใช่แค่ตำแหน่งที่มีเคอร์เซอร์</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>คาดการณ์เค้าโครงของเอกสารยาว (ทดลอง)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>ขณะที่เอกสารยาวถูกวาดทีละส่วน ความสูงของส่วนที่ยังไม่แสดงจะคำนวณจากข้อความแทนการประมาณ ทำให้แถบเลื่อนและการข้ามจากเค้าร่างแม่นยำขึ้น ทดลอง</value>
+  </data>
 </root>

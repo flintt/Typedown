@@ -62,6 +62,13 @@ namespace Typedown.Core.ViewModels
         /// it is drawn all at once as before - for a document that looks wrong while it is coming.
         /// </summary>
         public bool ProgressiveRendering { get => GetSettingValue(true); set => SetSettingValue(value); }
+
+        /// <summary>
+        /// While a long document is drawn a part at a time, the parts not drawn yet are given the height their text lays out
+        /// to (pretext, predictHeights.js) rather than one estimated from its length: the scroll bar and the outline's jumps
+        /// are where they belong sooner. Experimental, off by default.
+        /// </summary>
+        public bool PredictHeights { get => GetSettingValue(false); set => SetSettingValue(value); }
         /// <summary>Show the paragraph type marker ("P", "H1"...) left of the active block (upstream #45).</summary>
         public bool ShowParagraphMarker { get => GetSettingValue(true); set => SetSettingValue(value); }
         /// <summary>
@@ -278,6 +285,7 @@ namespace Typedown.Core.ViewModels
             "ShowBlankLines",
             "ShowMarkdownMarks",
             "ProgressiveRendering",
+            "PredictHeights",
             "ShowParagraphMarker",
             "ReadOnly",
             "CustomCss",

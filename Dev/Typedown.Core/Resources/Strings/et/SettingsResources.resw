@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>Näita Markdowni märke (**, #, lingi aadress) igas lõigus, mitte ainult kursori kohal</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Ennusta pikkade dokumentide paigutust (katseline)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Kui pikka dokumenti joonistatakse osade kaupa, arvutatakse veel kuvamata osa kõrgus teksti põhjal, mitte ei hinnata, nii et kerimisriba ja liigendusest hüpped on täpsemad. Katseline</value>
+  </data>
 </root>

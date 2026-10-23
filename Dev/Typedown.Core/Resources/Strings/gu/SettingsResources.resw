@@ -952,4 +952,10 @@
   <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
     <value>ફક્ત કર્સર હોય ત્યાં જ નહીં, દરેક ફકરામાં Markdown ચિહ્નો (**, #, લિંકનું સરનામું) બતાવો</value>
   </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>લાંબા દસ્તાવેજોનું લેઆઉટ અગાઉથી ગણો (પ્રાયોગિક)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>લાંબો દસ્તાવેજ ભાગોમાં દોરાતો હોય ત્યારે, હજી ન બતાવેલા ભાગની ઊંચાઈ અંદાજવાને બદલે લખાણ પરથી ગણવામાં આવે છે, જેથી સ્ક્રોલ બાર અને રૂપરેખામાંથી કૂદકા વધુ સચોટ બને. પ્રાયોગિક</value>
+  </data>
 </root>
