@@ -116,7 +116,7 @@ function Get-LocalLabel {
     try {
         $commit = (git rev-parse --short HEAD 2>$null)
         if ($LASTEXITCODE -ne 0 -or -not $commit) { return "local.$(Get-Date -Format yyyyMMdd.HHmm)" }
-        $dirty = (git status --porcelain 2>$null | Measure-Object).Count -gt 0
+        $dirty = (git status --porcelain --untracked-files=no 2>$null | Measure-Object).Count -gt 0
         return "local.$commit" + $(if ($dirty) { '+dirty' } else { '' })
     }
     catch {
