@@ -98,11 +98,14 @@ return JSON.stringify({frames:shown.length,drawingFrames:pend,drawnMs:pl.ms??nul
         {
             // The first long document of the run drawn once before anything is measured: the page's code and pretext warm.
             {
-                var warm = await Open(c, Fixture("hj01-warm.md", HjFixture("mixed-100k.md.gz")));
+                // Not the measured text: a document of the same text closed is kept by the page, and the next one opened
+                // with it was shown from there, not drawn.
+                var warm = await Open(c, Fixture("hj01-warm.md", "# Warm-up\n\n" + HjFixture("mixed-100k.md.gz")));
                 await Eventually(async () => await Eval(HjPendingScript) == "true", 60000, 200);
                 await Task.Delay(1500);
                 try { await c.Call("document.close", new { documentId = warm }); } catch { }
                 await Task.Delay(500);
+                await Eval("window.__typedownKeptDocuments && window.__typedownKeptDocuments.clear(); 'ok'");
             }
             foreach (var (label, file) in new[] { ("100k", "mixed-100k.md.gz"), ("300k", "mixed-300k.md.gz"), ("1m", "mixed-1m.md.gz") })
             {
@@ -114,6 +117,7 @@ return JSON.stringify({frames:shown.length,drawingFrames:pend,drawnMs:pl.ms??nul
                     await Eval($"window.__typedownPretextOff = {(off ? "true" : "false")}; 'ok'");
 
                     // At the top: opened anew.
+                    await Eval("window.__typedownKeptDocuments && window.__typedownKeptDocuments.clear(); 'ok'");
                     await Eval(HjStartScript);
                     var clock = System.Diagnostics.Stopwatch.StartNew();
                     var id = await Open(c, Fixture($"hj01-{label}-{mode}.md", text));
