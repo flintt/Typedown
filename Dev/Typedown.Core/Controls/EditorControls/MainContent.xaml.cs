@@ -113,6 +113,17 @@ namespace Typedown.Core.Controls
                 if (foreground != null) LeftPane.Foreground = foreground;
                 else LeftPane.ClearValue(Control.ForegroundProperty);
             }
+            // An edition's panel beside the document: coloured as the side pane is.
+            var panelForeground = ThemeFiles.Brush(theme?.Foreground) ?? ThemeFiles.Readable(theme?.Surface ?? theme?.Background);
+            if (surface != null) EditionPanelHost.Background = surface;
+            else EditionPanelHost.Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent);
+            foreach (var target in new Control[] { EditionPanelScroller, EditionPanelClose })
+            {
+                if (panelForeground != null) target.Foreground = panelForeground;
+                else target.ClearValue(Control.ForegroundProperty);
+            }
+            if (panelForeground != null) EditionPanelTitle.Foreground = panelForeground;
+            else EditionPanelTitle.ClearValue(TextBlock.ForegroundProperty);
         }
 
         [SuppressPropertyChangedWarnings]
