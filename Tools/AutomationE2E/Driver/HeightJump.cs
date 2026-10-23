@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
@@ -22,7 +23,7 @@ using Newtonsoft.Json.Linq;
 ///
 /// Thresholds, per document and place, with predictions: the height off by at most 2.5% on average while drawn and no
 /// more than with the old estimate, within 1% once drawn, the thumb at most 1% off (opened in the middle), drawn in at
-/// most 1.2 times the old estimate's time, the longest frame gap at most 50 ms over its. The old estimate must fail one
+/// most 1.2 times the old estimate's time (the medians of three drawings each), the longest frame gap at most 50 ms over its. The old estimate must fail one
 /// of the height thresholds for the 300k and 1M documents - else the case does not measure anything.
 ///
 /// HJ02: where a heading far down lands when the outline jumps to it (the host's ScrollTo, EditorViewModel.JumpBySlug)
@@ -84,8 +85,25 @@ return JSON.stringify({frames:shown.length,drawingFrames:pend,drawnMs:pl.ms??nul
         async Task<bool> Drawn() => await Eval("String(!!window.__typedownMuya && !window.__typedownMuya.renderPending && document.getElementById('ag-editor-id')?.children.length > 0)") == "true";
         var results = new JObject();
         var opened = new List<string>();
+        // A drawing's time on the W10 PC varies by a fifth and more from one drawing to the next (300k from the top, the
+        // old estimate: 576, 604 and 798 ms in one run; the first drawing of the run 2023 ms): each document is drawn three
+        // times in each mode and place, and the medians compared.
+        var drawnSamples = new Dictionary<string, List<double>>();
+        void Sample(string key, JToken? ms)
+        {
+            if (ms == null || ms.Type == JTokenType.Null) return;
+            (drawnSamples.TryGetValue(key, out var l) ? l : drawnSamples[key] = new List<double>()).Add((double)ms);
+        }
         try
         {
+            // The first long document of the run drawn once before anything is measured: the page's code and pretext warm.
+            {
+                var warm = await Open(c, Fixture("hj01-warm.md", HjFixture("mixed-100k.md.gz")));
+                await Eventually(async () => await Eval(HjPendingScript) == "true", 60000, 200);
+                await Task.Delay(1500);
+                try { await c.Call("document.close", new { documentId = warm }); } catch { }
+                await Task.Delay(500);
+            }
             foreach (var (label, file) in new[] { ("100k", "mixed-100k.md.gz"), ("300k", "mixed-300k.md.gz"), ("1m", "mixed-1m.md.gz") })
             {
                 var text = HjFixture(file);
@@ -134,6 +152,25 @@ return JSON.stringify({frames:shown.length,drawingFrames:pend,drawnMs:pl.ms??nul
                     middle["openMs"] = clock.ElapsedMilliseconds;
                     middle["readBlock"] = readIndex;
                     results[$"{tag} middle"] = middle;
+                    Sample($"{tag} top", top["drawnMs"]);
+                    Sample($"{tag} middle", middle["drawnMs"]);
+
+                    // Drawn twice more from the top and twice from the middle (left for the small document, nothing kept,
+                    // back), for the drawing's time only.
+                    foreach (var (place, share) in new[] { ("top", 0.0), ("top", 0.0), ("middle", 0.5), ("middle", 0.5) })
+                    {
+                        await Eval($"window.scrollTo(0, document.documentElement.scrollHeight * {share.ToString(System.Globalization.CultureInfo.InvariantCulture)}); 'ok'");
+                        await Task.Delay(1200);
+                        await c.Call("document.focus", new { documentId = small });
+                        if (!await Eventually(Drawn, 30000, 200)) throw new CaseFailed($"{tag}: the small document not drawn");
+                        await Task.Delay(500);
+                        await Eval("window.__typedownKeptDocuments && window.__typedownKeptDocuments.clear(); window.__typedownProgressiveLog = []; 'ok'");
+                        await c.Call("document.focus", new { documentId = id });
+                        if (!await Eventually(async () => await Eval("String(!!window.__typedownMuya && !window.__typedownMuya.renderPending && (window.__typedownProgressiveLog || []).length > 0)") == "true", 120000, 200)) throw new CaseFailed($"{tag}: not drawn again from the {place} within 120 s");
+                        await Eventually(async () => await Eval(HjSettledScript) == "true", 30000, 200);
+                        await Task.Delay(500);
+                        Sample($"{tag} {place}", JToken.Parse(await Eval("JSON.stringify(((window.__typedownProgressiveLog || []).slice(-1)[0] || {}).ms ?? null)")));
+                    }
 
                     try { await c.Call("document.close", new { documentId = id }); } catch { }
                     opened.Remove(id);
@@ -148,6 +185,8 @@ return JSON.stringify({frames:shown.length,drawingFrames:pend,drawnMs:pl.ms??nul
             foreach (var id in opened) try { await c.Call("document.close", new { documentId = id }); } catch { }
             try { await c.Call("document.close", new { documentId = small }); } catch { }
         }
+        double? Median(string key) => drawnSamples.TryGetValue(key, out var l) && l.Count > 0 ? l.OrderBy(x => x).ElementAt(l.Count / 2) : null;
+        foreach (var (key, l) in drawnSamples) notes.Add($"{key}: drawn in {string.Join(", ", l)} ms, median {Median(key)}");
         File.WriteAllText(Path.Combine(outputDir, "hj01.json"), results.ToString());
         notes.Add("all: hj01.json beside the results");
 
@@ -164,8 +203,8 @@ return JSON.stringify({frames:shown.length,drawingFrames:pend,drawnMs:pl.ms??nul
                 Check((double)p["mean"]! <= Math.Max((double)o["mean"]!, 0.5), $"{label} {place}: ... no worse than the old estimate ({p["mean"]}% / {o["mean"]}%)");
                 Check((double)p["end"]! <= HjMaxEnd, $"{label} {place}: once drawn, within {HjMaxEnd}% of the real height ({p["end"]}%; old {o["end"]}%)");
                 if (place == "middle") Check((double)p["thumb"]! <= HjMaxThumb, $"{label} middle: the thumb within {HjMaxThumb}% of where it belongs ({p["thumb"]}%; old {o["thumb"]}%)");
-                if (p["drawnMs"]!.Type != JTokenType.Null && o["drawnMs"]!.Type != JTokenType.Null)
-                    Check((double)p["drawnMs"]! <= HjMaxSlower * (double)o["drawnMs"]!, $"{label} {place}: drawn in at most {HjMaxSlower} times the old estimate's time ({p["drawnMs"]} vs {o["drawnMs"]} ms)");
+                if (Median($"{label} pretext {place}") is double pm && Median($"{label} old {place}") is double om)
+                    Check(pm <= HjMaxSlower * om, $"{label} {place}: drawn in at most {HjMaxSlower} times the old estimate's time (medians of {drawnSamples[$"{label} pretext {place}"].Count}: {pm} vs {om} ms)");
                 Check((double)p["maxGapMs"]! <= (double)o["maxGapMs"]! + 50, $"{label} {place}: the longest frame gap at most 50 ms over the old estimate's ({p["maxGapMs"]} vs {o["maxGapMs"]} ms)");
             }
             if (label == "100k") continue;
