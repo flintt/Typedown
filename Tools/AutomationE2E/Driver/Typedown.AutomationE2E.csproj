@@ -25,5 +25,7 @@
     <!-- The document with every kind of block the editor draws (Tools/EditorBench), for cases that need it all at once. -->
     <EmbeddedResource Include="..\..\EditorBench\fixtures\showcase\showcase.md" LogicalName="showcase.md" />
     <EmbeddedResource Include="..\..\EditorBench\fixtures\showcase\images\*" LogicalName="showcase-images/%(Filename)%(Extension)" />
+    <!-- HJ01: the long mixed documents of EditorBench's height-jump-check (gzipped). -->
+    <EmbeddedResource Include="..\..\EditorBench\fixtures\mixed\*.gz" LogicalName="hj/%(Filename)%(Extension)" />
   </ItemGroup>
 </Project>

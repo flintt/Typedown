@@ -162,6 +162,7 @@ internal static partial class CaseCatalog
         ["TX01"] = F("theme"),
         ["PF01"] = F("perf"),
         ["PF03"] = F("perf"),
+        ["HJ01"] = F("perf"),
         ["PF02"] = F("perf"),
         ["Q01"] = F("window"),
     };
@@ -305,6 +306,7 @@ internal static partial class CaseCatalog
         ["KU01"] = "关闭时保留未保存的修改：关窗口不询问，应用退出，重启后有标题和未命名文档原样回来，仍未保存，不弹恢复询问",
         ["PF01"] = "性能：打开、输入、保存 300KB",
         ["PF03"] = "性能：打开大文档的 CPU 分布",
+        ["HJ01"] = "测量：长文档分批绘制时滚动条跳动（pretext 预测块高 vs 旧按字数估算，同一次运行；Windows 字体），pretext 须达阈值、旧估算须不达",
         ["PF02"] = "性能：冷启动和关闭",
         ["Q01"] = "两个窗口依次关闭后进程退出",
     };
