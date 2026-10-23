@@ -847,111 +847,260 @@ export default class HeightPredictor {
     return widest
   }
 
+  // ---- a quick guess for the blocks not predicted yet ----
+
   /**
-   * The room the blocks not drawn yet take, above and below what is drawn ([lo, hi) of the blocks): each block as
-   * predicted where it is prepared, as `guess(i)` (the per-character estimate, margins in it) where not; the margins
-   * between them collapsing as on the page. Above: from the top of the first block's margin to where the first drawn
-   * block's margin starts; below: from the end of the last drawn block's margin on.
+   * Per block, about how many lines its text takes - each line of each text in it its characters' width (narrow and
+   * wide ones, measured once in the root's font) over the root's width - and its kind (its type, a code block's kind).
+   * One pass over the characters, no tokenizing: about 10 ms for 1M characters. Counted once per drawing and width.
    */
-  room(state, env, guess) {
-    const { blocks, lo, hi, root } = state
-    const counted = { predicted: 0, guessed: 0 }
-    const predicted = new Array(blocks.length)
-    // The guess for a block not predicted yet: a plane through the height against the block's narrow and its wide
-    // characters (Chinese, Japanese, Korean: twice as wide), fitted to the sample predicted first, spread over the whole
-    // document (every `stride`th block, prepareHeights) - where there are enough of them; else the caller's (from what
-    // is drawn).
-    const stride = state.heightsStride || 0
-    const wide = state.chars ? this.wideChars(state) : null
-    const sums = new Float64Array(9) // n, l, w, ll, lw, ww, h, lh, wh
-    const each = (from, to) => {
-      for (let i = from; i < to; i++) {
-        const b = this.box(blocks[i], env)
-        if (!b) continue
-        const box = env.contained ? { h: b.hC, mt: b.mtC, mb: b.mbC, inline: b.inline, through: false } : b
-        predicted[i] = box
-        if (stride && i % stride === 0 && wide) {
-          const w = wide[i]
-          const l = state.chars[i] - w
-          const h = box.h + (box.inline ? box.mt + box.mb : Math.max(box.mt, box.mb))
-          sums[0]++; sums[1] += l; sums[2] += w; sums[3] += l * l; sums[4] += l * w; sums[5] += w * w; sums[6] += h; sums[7] += l * h; sums[8] += w * h
+  quick(state, env) {
+    if (state.quickWidth === env.width && state.quickGeneration === env.generation) return state.quickLines
+    if (!this.canvas) this.canvas = document.createElement('canvas').getContext('2d')
+    const s = getComputedStyle(env.root)
+    this.canvas.font = fontOf(s)
+    const sample = 'The quick brown fox jumps over the lazy dog, 1234567890.'
+    const narrow = this.canvas.measureText(sample).width / sample.length || 8
+    const wide = this.canvas.measureText('\u4e2d\u6587\u5b57').width / 3 || 16
+    const width = Math.max(50, env.width)
+    const kinds = state.quickKinds || (state.quickKinds = new Uint8Array(state.blocks.length))
+    const lines = new Float32Array(state.blocks.length)
+    const kindIds = this.kindIds || (this.kindIds = new Map())
+    const lh = state.quickLineHeight = px(s.lineHeight) || px(s.fontSize) * 1.6 || 25
+    // Lines of a text, each as wide as its characters, over the root's width.
+    const textLines = t => {
+      let n = 0
+      let w = 0
+      for (let k = 0; k <= t.length; k++) {
+        const code = k < t.length ? t.charCodeAt(k) : 10
+        if (code === 10) {
+          n += Math.max(1, Math.ceil(w / width))
+          w = 0
+        } else if (code >= 0x1100 && !(code >= 0xd800 && code < 0xe000)) w += wide
+        else if (code < 0xdc00 || code >= 0xe000) w += narrow
+      }
+      return n
+    }
+    const linesOf = b => {
+      // A table's rows side by side: each row as many lines as its fullest cell.
+      if (b.type === 'tr') return Math.max(1, ...b.children.map(linesOf))
+      // Only the leaves' text: a container's own (empty) text is no line.
+      if (b.children && b.children.length) {
+        let n = 0
+        for (const c of b.children) n += linesOf(c)
+        return n
+      }
+      return typeof b.text === 'string' && b.type !== 'input' ? textLines(b.text) : 0
+    }
+    state.blocks.forEach((block, i) => {
+      // In the root's line heights (a code block's lines are a little shorter): a guess in pixels, which a fit made from
+      // blocks of one kind carries to another better than a count of lines.
+      lines[i] = linesOf(block) * lh * (block.type === 'pre' ? 0.85 : 1)
+      const kind = block.type === 'pre' || block.type === 'figure' ? `${block.type}:${block.functionType}` : block.type
+      let id = kindIds.get(kind)
+      if (id === undefined) kindIds.set(kind, id = Math.min(255, kindIds.size))
+      kinds[i] = id
+    })
+    state.quickLines = lines
+    state.quickWidth = env.width
+    state.quickGeneration = env.generation
+    state.fitted = null
+    return lines
+  }
+
+  /**
+   * The guess for blocks not predicted: per kind of block, its quick height (lines in the root's line height) plus an
+   * offset - its margins, padding, a heading's taller lines - for its slot (for the room) and its content height (for
+   * its size rule). The offsets start from what they are in the editor's own styles (PRIOR, measured on the mixed and
+   * showcase documents, scaled to the root's line height) and move to what the predicted blocks of that kind show as
+   * they come in; a table's rows (taller than a line by their padding) also get a slope from enough of them. Made again
+   * whenever more blocks are predicted.
+   */
+  fit(state, env) {
+    const x = this.quick(state, env)
+    const made = this.stats.prepared + this.stats.unsupported
+    if (state.fitted && state.fittedAt === made) return state.fitted
+    const { blocks } = state
+    const kinds = state.quickKinds
+    const sums = new Map()
+    for (let i = 0; i < blocks.length; i++) {
+      const b = this.box(blocks[i], env)
+      if (!b) continue
+      const box = env.contained ? { h: b.hC, mt: b.mtC, mb: b.mbC, inline: b.inline } : b
+      const slot = box.h + (box.inline ? box.mt + box.mb : Math.max(box.mt, box.mb))
+      let a = sums.get(kinds[i])
+      if (!a) sums.set(kinds[i], a = { n: 0, slot: 0, content: 0, x: 0, xx: 0, xs: 0 })
+      a.n++
+      a.slot += slot - x[i]
+      a.content += b.hC - b.ptb - x[i]
+      a.x += x[i]
+      a.xx += x[i] * x[i]
+      a.xs += x[i] * slot
+    }
+    const scale = (state.quickLineHeight || 25.6) / 25.6
+    const fitted = new Map()
+    for (const [kind, id] of this.kindIds) {
+      const prior = PRIOR[kind] || PRIOR[kind.replace(/:.*/, '')] || PRIOR.other
+      const a = sums.get(id) || { n: 0, slot: 0, content: 0 }
+      const w = 2
+      let slope = prior[2] || 1
+      let slotOffset = (a.slot + w * prior[0] * scale) / (a.n + w)
+      let contentOffset = (a.content + w * prior[1] * scale) / (a.n + w)
+      if (prior[2] && a.n >= 4) {
+        // A table: height against its quick height, straight through its own.
+        const d = a.n * a.xx - a.x * a.x
+        const sumSlot = a.slot + a.x
+        const k = d > 1e-9 ? (a.n * a.xs - a.x * sumSlot) / d : 0
+        if (k > 0.7 && k < 3) {
+          slope = k
+          slotOffset = (sumSlot - k * a.x) / a.n
+          contentOffset = slotOffset - (a.slot - a.content) / a.n
         }
       }
+      fitted.set(id, { slope, slot: slotOffset, content: contentOffset })
     }
-    each(0, lo)
-    each(hi, blocks.length)
-    let calibrated = guess
-    const fit = sums[0] >= Math.min(96, (state.heightsSampleSize || 64) / 2) ? fitPlane(sums) : null
-    if (fit) calibrated = i => fit[0] + fit[1] * (state.chars[i] - wide[i]) + fit[2] * wide[i]
-    const boxOf = i => {
-      if (predicted[i]) {
-        counted.predicted++
-        return predicted[i]
+    state.fitted = fitted
+    state.fittedAt = made
+    return fitted
+  }
+
+  // The guess for block i: its slot (for the room) and its content height (for its size rule).
+  guess(state, env, i) {
+    const fitted = this.fit(state, env)
+    const f = fitted.get(state.quickKinds[i])
+    if (!f) return null
+    const x = state.quickLines[i] * f.slope
+    return { slot: Math.max(0, x + f.slot), content: Math.max(0, x + f.content) }
+  }
+
+  /**
+   * The order blocks are predicted in: those next to what is drawn first (drawn next), then a sample spread over the
+   * whole document (taken in an order that spreads any first part of it too: the bits of the count reversed) for the
+   * guess (fit), then outwards from what is drawn, as the drawing goes.
+   */
+  plan(state) {
+    const { blocks, lo, hi } = state
+    const n = blocks.length
+    const order = []
+    const seen = new Uint8Array(n)
+    const take = i => {
+      if (i >= 0 && i < n && !seen[i]) {
+        seen[i] = 1
+        order.push(i)
       }
-      counted.guessed++
-      return { h: calibrated(i), mt: 0, mb: 0, inline: false, through: false }
     }
-    // The drawn blocks' own margins at the edges (one in a line of its own, inline-level, has its margins in it).
+    for (let k = 0; k < 12; k++) { take(hi + k); take(lo - 1 - k) }
+    const bits = Math.max(4, Math.min(7, Math.round(Math.log2(Math.max(16, n / 16)))))
+    const stride = Math.max(1, Math.floor(n / (1 << bits)))
+    for (let k = 0; k < 1 << bits; k++) {
+      let r = 0
+      for (let b = 0; b < bits; b++) r |= ((k >> b) & 1) << (bits - 1 - b)
+      take(r * stride)
+    }
+    for (let k = 0; hi + k < n || lo - 1 - k >= 0; k++) { take(hi + k); take(lo - 1 - k) }
+    for (let i = lo; i < hi; i++) take(i)
+    return order
+  }
+
+  /**
+   * The room the blocks not drawn yet take, above and below what is drawn ([lo, hi) of the blocks): each block as
+   * predicted where it is, as the fitted guess where not (or `guess(i)`, the per-character estimate from what is drawn,
+   * before there is a fit); the margins between them collapsing as on the page. Above: from the top of the first
+   * block's margin to where the first drawn block's margin starts; below: from the end of the last drawn block's margin
+   * on.
+   */
+  room(state, env, guess, measureEdges = true) {
+    const { blocks, lo, hi, root } = state
+    const counted = { predicted: 0, fitted: 0, guessed: 0 }
+    const fitted = this.fit(state, env)
+    const x = state.quickLines
+    const kinds = state.quickKinds
+    // Stacked as stack() does, one block at a time and nothing kept: this runs every slice of a drawing.
+    let y = 0
+    let pending = []
+    const add = i => {
+      const b = this.box(blocks[i], env)
+      let h, mt, mb, inline
+      if (b) {
+        counted.predicted++
+        if (env.contained) { h = b.hC; mt = b.mtC; mb = b.mbC } else { h = b.h; mt = b.mt; mb = b.mb }
+        inline = b.inline
+        if (!inline && b.through && !env.contained) { pending.push(mt, mb); return }
+      } else {
+        const f = fitted && fitted.get(kinds[i])
+        if (f) counted.fitted++
+        else counted.guessed++
+        h = f ? Math.max(0, x[i] * f.slope + f.slot) : guess(i)
+        mt = mb = 0
+        inline = false
+      }
+      if (inline) {
+        y += collapseList(pending) + mt + h + mb
+        pending = []
+      } else {
+        pending.push(mt)
+        y += collapseList(pending) + h
+        pending = [mb]
+      }
+    }
+    // The drawn blocks' own margins at the edges (one in a line of its own, inline-level, has its margins in it): read
+    // from the page where it is laid out anyway (`measureEdges`), as last read otherwise.
     const edge = (el, side) => {
       if (!el) return 0
-      const s = getComputedStyle(el)
-      return /^inline/.test(s.display) ? 0 : px(side === 'top' ? s.marginTop : s.marginBottom)
+      const st = getComputedStyle(el)
+      return /^inline/.test(st.display) ? 0 : px(side === 'top' ? st.marginTop : st.marginBottom)
     }
+    if (measureEdges || !state.edges) state.edges = { top: edge(root.firstElementChild, 'top'), bottom: edge(root.lastElementChild, 'bottom') }
     let above = 0
     if (lo > 0) {
-      const boxes = []
-      for (let i = 0; i < lo; i++) boxes.push(boxOf(i))
-      const s = stack(boxes)
-      const mt = edge(root.firstElementChild, 'top')
-      above = s.end + collapseList([...s.trail, mt]) - mt
+      for (let i = 0; i < lo; i++) add(i)
+      const mt = state.edges.top
+      above = y + collapseList([...pending, mt]) - mt
     }
     let below = 0
     if (hi < blocks.length) {
-      const boxes = []
-      for (let i = hi; i < blocks.length; i++) boxes.push(boxOf(i))
-      const mb = edge(root.lastElementChild, 'bottom')
-      const s = stack(boxes, [mb])
-      below = s.end + collapseList(s.trail) - mb
+      const mb = state.edges.bottom
+      y = 0
+      pending = [mb]
+      for (let i = hi; i < blocks.length; i++) add(i)
+      below = y + collapseList(pending) - mb
     }
     return { above: Math.max(0, above), below: Math.max(0, below), counted }
   }
 
-  // Per block, how many of its characters are wide ones (East Asian: from Hangul Jamo on, U+1100), counted once.
-  wideChars(state) {
-    if (state.wide) return state.wide
-    const count = block => {
-      let n = 0
-      const walk = b => {
-        if (typeof b.text === 'string') {
-          const t = b.text
-          for (let k = 0; k < t.length; k++) if (t.charCodeAt(k) >= 0x1100 && !(t.charCodeAt(k) >= 0xd800 && t.charCodeAt(k) < 0xe000)) n++
-        }
-        if (b.children) b.children.forEach(walk)
-      }
-      walk(block)
-      return n
-    }
-    state.wide = state.blocks.map(count)
-    return state.wide
-  }
 
   // ---- rules for a long document's blocks drawn off screen ----
 
-  /** Whether the block's size rule is written for the environment as it is. */
+  /** Whether the block's size rule is written from its prediction for the environment as it is. */
   isRuled(block, env) {
     return this.ruled.get(block.key) === `${env.width}|${env.generation}`
   }
 
-  /** Gives the blocks their predicted size while not laid out (contain-intrinsic-size), where predicted. */
+  /**
+   * The size rule for a block drawn off screen (contain-intrinsic-size): from its prediction where it is predicted
+   * (`build`: predict it now where not), else from the fitted guess (block `i` of the drawing `state`; refined once
+   * drawn, ruleRest), else none. Remembers which it was.
+   */
+  ruleText(block, env, state = null, i = -1, build = false) {
+    const box = this.box(block, env, build)
+    if (box) {
+      this.ruled.set(block.key, `${env.width}|${env.generation}`)
+      return ruleFor(block.key, box.hC - box.ptb)
+    }
+    if (!state || i < 0 || this.has(block, env)) return null
+    const g = this.guess(state, env, i)
+    if (!g) return null
+    this.ruled.set(block.key, 'guess')
+    return ruleFor(block.key, g.content)
+  }
+
+  /** Gives the blocks their predicted size while not laid out (contain-intrinsic-size), predicting them where not yet. */
   rule(blocks, env) {
     if (!env.contained) return
     const rules = []
-    const sig = `${env.width}|${env.generation}`
     for (const block of blocks) {
-      const box = this.box(block, env, true)
-      if (!box) continue
-      this.ruled.set(block.key, sig)
-      rules.push(ruleFor(block.key, box))
+      const text = this.ruleText(block, env, null, -1, true)
+      if (text) rules.push(text)
     }
     this.addRules(rules)
   }
@@ -1001,6 +1150,11 @@ export default class HeightPredictor {
         const end = performance.now() + 8
         cb({ timeRemaining: () => Math.max(0, end - performance.now()) })
       }, 50)
+    const finished = () => {
+      if (this.resting === job) this.resting = null
+      const log = window.__typedownPretextLog
+      if (log && log.restDoneAt === undefined) log.restDoneAt = performance.now()
+    }
     const step = deadline => {
       if (job.stop || !root.isConnected) return
       if (!this.ready()) return idle(step, { timeout: 1000 })
@@ -1008,21 +1162,27 @@ export default class HeightPredictor {
       try {
         env = this.environment(root)
       } catch (err) {
-        return
+        return finished()
       }
-      if (!env.contained || !(env.width > 0)) return
+      if (!env.contained || !(env.width > 0)) return finished()
       const sig = `${env.width}|${env.generation}`
-      const some = []
-      while (i < blocks.length && deadline.timeRemaining() > 2) {
+      // Blocks guessed while drawn (or ruled for another width or other styles) predicted and ruled again: in the page's
+      // idle time, or a few milliseconds' worth when it has had none for a second. One style sheet change per step.
+      const until = performance.now() + (deadline.didTimeout ? 6 : Math.max(0, deadline.timeRemaining() - 1))
+      const rules = []
+      while (i < blocks.length && performance.now() < until) {
         const block = blocks[i++]
-        if (this.ruled.get(block.key) !== sig) some.push(block)
-        if (some.length >= 8) {
-          this.rule(some.splice(0), env)
-        }
+        if (this.ruled.get(block.key) === sig) continue
+        const text = this.ruleText(block, env, null, -1, true)
+        if (text) rules.push(text)
       }
-      if (some.length) this.rule(some, env)
+      // What is at the top of the window stays where it is as blocks above it change size: the browser's scroll anchoring
+      // did not hold it (a block read 1M characters in moved by a thousand pixels as those above were refined).
+      const keep = rules.length ? keepTop(root, job) : null
+      this.addRules(rules)
+      if (keep) keep()
       if (i < blocks.length) idle(step, { timeout: 1000 })
-      else if (this.resting === job) this.resting = null
+      else finished()
     }
     idle(step, { timeout: 1000 })
   }
@@ -1034,30 +1194,34 @@ export default class HeightPredictor {
   }
 }
 
-// The block's content height as it stands contained: what contain-intrinsic-size gives (its padding and border on top).
-const ruleFor = (key, box) => `#editor.ag-long-document #ag-editor-id>#${key}{contain-intrinsic-size:auto ${Math.max(0, Math.round((box.hC - box.ptb) * 100) / 100)}px}`
-
-// Least squares for h = a + b l + c w from the sums (n, l, w, ll, lw, ww, h, lh, wh); null where the sample cannot tell
-// (too alike, or a negative part): the guess then stays the caller's.
-function fitPlane(S) {
-  const [n, l, w, ll, lw, ww, h, lh, wh] = S
-  const det3 = (a, b, c, d, e, f, g, i, j) => a * (e * j - f * i) - b * (d * j - f * g) + c * (d * i - e * g)
-  const D = det3(n, l, w, l, ll, lw, w, lw, ww)
-  if (Math.abs(D) > 1e-9) {
-    const a = det3(h, l, w, lh, ll, lw, wh, lw, ww) / D
-    const b = det3(n, h, w, l, lh, lw, w, wh, ww) / D
-    const c = det3(n, l, h, l, ll, lh, w, lw, wh) / D
-    if (a >= 0 && b >= 0 && c >= 0 && isFinite(a + b + c)) return [a, b, c]
-  }
-  // One slope for every character.
-  const C = l + w
-  const CC = ll + 2 * lw + ww
-  const CH = lh + wh
-  const d = n * CC - C * C
-  if (d <= 0) return null
-  const slope = Math.max(0, (n * CH - C * h) / d)
-  return [Math.max(0, (h - slope * C) / n), slope, slope]
+// Offsets from a block's quick height (lines in the root's line height of 25.6 px) to its slot and its content height,
+// in the editor's own styles: measured over the mixed 300k document and the showcase. A table also has a slope (its
+// rows are taller than lines by their padding).
+const PRIOR = {
+  p: [6, -2], ul: [6, -2], ol: [12, 4], blockquote: [28, 20], hr: [8, 0],
+  h1: [32, 16], h2: [24, 8], h3: [21, 5], h4: [18, 2], h5: [16, 0], h6: [13, -3],
+  pre: [30, -23], 'figure:table': [40, 20, 1.5], figure: [10, 2], other: [10, 2]
 }
+
+// The top-level block at the top of the window, and a function that scrolls the page by however far it has moved - the
+// fraction of a pixel a scroll cannot take carried to the next (`carrier.carry`), or many small moves add up.
+function keepTop(root, carrier) {
+  const r = root.getBoundingClientRect()
+  const hit = document.elementFromPoint(r.left + Math.min(r.width / 2, 200), Math.max(1, Math.min(window.innerHeight - 1, 60)))
+  const el = hit && hit.closest ? hit.closest('#ag-editor-id > *') : null
+  if (!el || el.parentNode !== root) return null
+  const before = el.getBoundingClientRect().top
+  return () => {
+    if (!el.isConnected) return
+    const moved = el.getBoundingClientRect().top - before + (carrier.carry || 0)
+    const from = window.scrollY
+    if (Math.round(moved)) window.scrollBy(0, Math.round(moved))
+    carrier.carry = moved - (window.scrollY - from)
+  }
+}
+
+// The block's content height as it stands contained: what contain-intrinsic-size gives (its padding and border on top).
+const ruleFor = (key, height) => `#editor.ag-long-document #ag-editor-id>#${key}{contain-intrinsic-size:auto ${Math.max(0, Math.round(height * 100) / 100)}px}`
 
 /**
  * Boxes stacked as blocks stack: margins between them collapsing, through an empty one too; an inline-level box (a code
