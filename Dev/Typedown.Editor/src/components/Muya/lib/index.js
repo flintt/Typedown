@@ -663,9 +663,10 @@ class Muya {
     return document.activeElement === this.container
   }
 
-  focus() {
+  // options: as HTMLElement.focus's ({ preventScroll }).
+  focus(options) {
     this.contentState.setCursor()
-    this.container.focus()
+    this.container.focus(options)
   }
 
   blur(isRemoveAllRange = false, unSelect = false) {

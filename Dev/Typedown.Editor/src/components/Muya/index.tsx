@@ -594,7 +594,11 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             .finally(() => { (editor as any).flushContentChange?.(); done() })
     }), [editor]);
 
-    useEffect(() => transport.addListener('TakeKeyboard', () => { if (editor) restoreEditorFocus(editor) }), [editor]);
+    // Whether a load is still putting the page back where the document was left (settleScroll's hold): the focus given
+    // back then must not scroll to the caret (a tab switched back to, read past its caret: the page showed the caret's
+    // place for a frame before the hold put it back - 9,000 px on w10, HJ01).
+    const loadHoldingRef = useRef(false)
+    useEffect(() => transport.addListener('TakeKeyboard', () => { if (editor) restoreEditorFocus(editor, loadHoldingRef.current) }), [editor]);
 
     useEffect(() => transport.addListener<string>('InsertTable', arg => {
         if (optionsRef.current?.readOnly) return
@@ -645,7 +649,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             contentState.render(true);
             props.onSearchArgChange(undefined)
             // Back from the search with the keyboard in the page: the editor has it, not the body.
-            if (document.hasFocus()) restoreEditorFocus(editor)
+            if (document.hasFocus()) restoreEditorFocus(editor, loadHoldingRef.current)
         }
     }), [editor, props, relativeScroll]);
 
@@ -1099,7 +1103,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             // belongs, so the event this fires in turn finds nothing to do.
             const putBack = () => { if (!done && !yielded && Math.abs(window.scrollY - target()) > 2) window.scrollTo(window.scrollX, target()) }
             const stop = (why: string) => {
-                done = true; window.removeEventListener('scroll', putBack); for (const e of GIVE_WAY) window.removeEventListener(e, giveWay)
+                done = true; loadHoldingRef.current = false; window.removeEventListener('scroll', putBack); for (const e of GIVE_WAY) window.removeEventListener(e, giveWay)
                 // What the hold saw, for the host's log: the only way to tell from a machine one cannot watch.
                 transport.postMessage('ScrollSettled', { asked: Math.round(target()), at: Math.round(window.scrollY), why, framesLeft: frames, capLeft: cap, innerHeight: window.innerHeight, scrollHeight: document.documentElement.scrollHeight, startedAt })
             }
@@ -1114,6 +1118,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
                 requestAnimationFrame(hold)
             }
             window.addEventListener('scroll', putBack, { passive: true })
+            loadHoldingRef.current = true
             requestAnimationFrame(hold)
             holdStopRef.current = (why = 'replaced') => { giveWay(); if (!done) stop(why) }
         }
@@ -1358,7 +1363,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     // and nowhere. Then the editor takes it, with its caret where it was.
     useEffect(() => {
         if (!editor) return
-        const onFocus = () => restoreEditorFocus(editor)
+        const onFocus = () => restoreEditorFocus(editor, loadHoldingRef.current)
         window.addEventListener('focus', onFocus)
         return () => window.removeEventListener('focus', onFocus)
     }, [editor])
@@ -1393,7 +1398,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
  * reader made in the text is kept - only the focus goes back to the text - and reading mode, where nothing is typed,
  * is left alone: Muya's focus() puts the caret back and so dropped a selection made to copy from.
  */
-function restoreEditorFocus(editor: any) {
+function restoreEditorFocus(editor: any, keepPlace = false) {
     try {
         if (document.activeElement && document.activeElement !== document.body) return
         const container = editor?.container as HTMLElement | undefined
@@ -1403,7 +1408,7 @@ function restoreEditorFocus(editor: any) {
             container.focus({ preventScroll: true })
             return
         }
-        editor.focus()
+        editor.focus(keepPlace ? { preventScroll: true } : undefined)
     } catch (err) {
         console.log(err)
     }
