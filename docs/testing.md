@@ -12,8 +12,6 @@ Typedown 的测试分几层，越往下越接近真实使用，也越慢、越�
 | 发布候选检查 | `Tools/AutomationE2E/windows-rc-check.ps1` | 已安装的程序：直接客户端、`typedownctl`、`typedownctl mcp`、安装目录里的示例 | 装好待发布版本的 Windows | 否 |
 | 人工验证 | [windows-verification.md](windows-verification.md) | 自动测试覆盖不到的：安装升级、文件锁、输入法、真实文件 | Windows | 否 |
 
-`Tests/Typedown.Test`、`Tests/Typedown.UITest`、`Tests/Typedown.Universal.Test` 是上游留下的 .NET Core 3.1 项目，目前不维护，也不在 CI 里运行。
-
 Uno 版（Typedown-Uno 仓库）有自己的检查脚本，见那边的 `docs/testing.md`；两边共用的自动化等价场景在 `Tools/AutomationE2E/equivalence`。
 
 ## 单元测试
