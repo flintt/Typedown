@@ -25,6 +25,7 @@ gate "the Chinese and English user guides match" python3 Tools/Docs/user-guide-c
 [ -f Tools/Docs/edition-testing-index.py ] && gate "the edition's case list" python3 Tools/Docs/edition-testing-index.py
 [ -f Tools/Store/check-theme-count.py ] && gate "the texts count the supporter themes there are" python3 Tools/Store/check-theme-count.py
 [ -f Tools/Translations/check-edition.py ] && gate "the edition's feature texts" python3 Tools/Translations/check-edition.py
+[ -f Tools/Sync/core-sync.py ] && gate "each new commit is either common or the edition's own (core-sync gate)" python3 Tools/Sync/core-sync.py gate
 gate "automation unit tests" "$DOTNET" test Dev/Typedown.Automation.Tests/Typedown.Automation.Tests.csproj -nologo -v q
 [ -f Tests/Typeleaf.WordExportTests/Typeleaf.WordExportTests.csproj ] && gate "Word export tests" "$DOTNET" test Tests/Typeleaf.WordExportTests/Typeleaf.WordExportTests.csproj -nologo -v q
 if [ ${#failed[@]} -gt 0 ]; then echo "${#failed[@]} gate(s) failed: ${failed[*]}"; exit 1; fi
