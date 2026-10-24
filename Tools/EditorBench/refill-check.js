@@ -41,7 +41,19 @@ const doc = Array.from({ length: 2940 }, (_, i) => block(i)).join('');
   // With "wheel": the reader turns the wheel while it draws, a notch every 400 ms for 8 s (down, down, up, up).
   if (args.includes('wheel')) { await page.mouse.move(640, 400); await page.evaluate(() => { window.__wheeling = true }); for (let i = 0; i < 20; i++) { await page.mouse.wheel({ deltaY: i % 4 < 2 ? 120 : -120 }); await new Promise(r => setTimeout(r, 400)); } await page.evaluate(() => { window.__wheeling = false }); }
   if (trace) { await new Promise(r => setTimeout(r, 1500)); await page.tracing.start({ path: trace, categories: ['devtools.timeline', 'disabled-by-default-devtools.timeline', 'blink'] }); await new Promise(r => setTimeout(r, 4000)); await page.tracing.stop(); }
+  // With "jumptest": the page moved 100,000 px up by a script 2 s in, nobody at it - the drawing must report it (DrawJump).
+  let jumpReport = null;
+  if (args.includes('jumptest')) {
+    await new Promise(r => setTimeout(r, 2000));
+    jumpReport = await page.evaluate(async () => { const pending = !!window.__typedownMuya?.renderPending; window.scrollTo(0, Math.max(0, window.scrollY - 100000)); await new Promise(r => setTimeout(r, 300)); return { pending, reports: window.__msgs.filter(m => m.name === 'DrawJump').map(m => m.args) } });
+  }
   await page.waitForFunction(() => !window.__typedownMuya?.renderPending, { timeout: 180000, polling: 500 });
+  if (args.includes('jumptest')) {
+    // Reported first; the load's hold may put the page back after it (reported in turn).
+    const ok = jumpReport.reports.length >= 1 && jumpReport.reports[0].dy < -90000;
+    console.log((ok ? 'PASS' : 'FAIL') + ' the jump made while drawing (' + (jumpReport.pending ? 'still drawing' : 'drawn already') + ') is reported: ' + JSON.stringify(jumpReport.reports.slice(0, 2)));
+    if (!ok) process.exitCode = 1;
+  }
   const total = Date.now() - t1;
   if (prof) { const { profile } = await cdp.send('Profiler.stop'); fs.writeFileSync(prof, JSON.stringify(profile)); }
   const r = await page.evaluate(() => { const g = [...window.__gaps].sort((a, b) => a - b); const q = p => Math.round(g[Math.min(g.length - 1, Math.floor(g.length * p))]); const w = [...(window.__wgaps || [])].sort((a, b) => a - b); const wq = p => w.length ? Math.round(w[Math.min(w.length - 1, Math.floor(w.length * p))]) : null; return { wheelFrames: w.length, wheelP50: wq(0.5), wheelP90: wq(0.9), frames: g.length, p50: q(0.5), p90: q(0.9), max: Math.round(g[g.length - 1] || 0), stats: window.__typedownPretextStats, log: (window.__typedownProgressiveLog || []).slice(-1)[0], blocks: document.getElementById('ag-editor-id').children.length } });

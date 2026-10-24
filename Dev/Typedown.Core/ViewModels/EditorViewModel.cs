@@ -132,6 +132,8 @@ namespace Typedown.Core.ViewModels
             // What the page's scroll hold saw after a load: asked for, ended at, why it stopped, and the viewport
             // it started with — a viewport of no height is a page loaded before its window was there.
             EventCenter.GetObservable<EditorEventArgs>("ScrollSettled").Subscribe(x => Log.Debug($"settle: {x.Args}"));
+            // The page going far with nobody at it while a long document is drawn, and what the drawing knew then.
+            EventCenter.GetObservable<EditorEventArgs>("DrawJump").Subscribe(x => Log.Debug($"draw jump: {x.Args?.ToString(Newtonsoft.Json.Formatting.None)}"));
             // An error in the page nobody caught (a listener, a promise): in the log, where the next one is looked for.
             EventCenter.GetObservable<EditorEventArgs>("PageError").Subscribe(x => Log.Debug($"page error: {x.Args}"));
             RemoteInvoke.Handle("GetSettings", GetSettings);

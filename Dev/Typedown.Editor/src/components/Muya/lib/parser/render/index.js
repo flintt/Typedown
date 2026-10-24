@@ -6,6 +6,7 @@ import { beginRules } from '../rules'
 import renderInlines from './renderInlines'
 import renderBlock from './renderBlock'
 import HeightPredictor, { account } from './predictHeights'
+import transport from 'services/transport'
 
 let mermaidRenderId = 0
 const MERMAID_RENDER_CACHE_LIMIT = 32
@@ -782,8 +783,35 @@ class StateRender {
       window.removeEventListener('wheel', arm, true)
       window.removeEventListener('pointerdown', arm, true)
     }
+    // The page going more than two windows' height in one go with nobody at it, while it is drawn: reported to the host's
+    // log with what the drawing knew then (hp, Typeleaf 1.4.0.12: demo1 back at its end, nothing touched, the page went
+    // 100,000 px up 6 s later; w10 never showed it).
+    let lastY = window.scrollY
+    const watchJump = () => {
+      const y = window.scrollY
+      const dy = y - lastY
+      lastY = y
+      // Not the load putting the page back where it was (at once, and held for a moment after: settleScroll).
+      if (performance.now() - state.startedAt < 1500) return
+      if (Math.abs(dy) <= 2 * window.innerHeight || performance.now() - lastScrollInputAt < 500 || scrollDragging) return
+      try {
+        const root = state.root
+        const inWindow = this.blockAtTop(root)
+        transport.postMessage('DrawJump', {
+          dy: Math.round(dy), y: Math.round(y), ms: Math.round(performance.now() - state.startedAt), slices: state.slices,
+          lo: state.lo, hi: state.hi, n: state.blocks.length, scrollHeight: document.documentElement.scrollHeight, innerHeight: window.innerHeight,
+          roomAbove: getComputedStyle(root).getPropertyValue('--td-room-above').trim(), fraction: root.style.getPropertyValue('--td-room-fraction'),
+          first: root.firstElementChild ? `${root.firstElementChild.id}@${Math.round(root.firstElementChild.getBoundingClientRect().top)}` : null,
+          window: inWindow ? `${inWindow.id}@${Math.round(inWindow.getBoundingClientRect().top)}` : null,
+          lastKeep: state.lastKeep || null, pinned: state.pinned ? state.pinned.length : 0, reader
+        })
+      } catch (err) {
+        console.log(err)
+      }
+    }
     const check = () => {
       if (this.progressive !== state) return stop()
+      watchJump()
       this.pinOnScroll(state)
       if (!reader) return
       const first = state.root.firstElementChild
@@ -1018,6 +1046,7 @@ class StateRender {
       const from = window.scrollY
       const by = Math.ceil(moved - fraction)
       if (by) window.scrollBy(0, by)
+      state.lastKeep = { at: Math.round(performance.now() - state.startedAt), by, moved: Math.round(moved), anchor: first.id, top: Math.round(before) }
       let next = fraction - moved + (window.scrollY - from)
       // A scroll that did not go as far as asked (the end of the page): the rest stays as it is.
       if (next < 0 || next >= 2) next = fraction
