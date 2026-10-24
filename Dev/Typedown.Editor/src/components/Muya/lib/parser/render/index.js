@@ -25,6 +25,20 @@ try {
 let lastInputAt = -Infinity
 for (const type of ['keydown', 'pointerdown', 'pointermove', 'wheel', 'touchstart', 'compositionstart'])
   window.addEventListener(type, () => { lastInputAt = performance.now() }, { capture: true, passive: true })
+// The reader moving the page (the wheel, a key, the scroll bar dragged): while they do, the drawing waits - unless the
+// window is in the part not drawn yet - and goes on once they stop for a moment. A slice, 30-60 ms of the page's time
+// with its layout, between every two frames made scrolling a long document drawn back from far down stick at 5-7
+// frames a second on w10 (JT03).
+let lastScrollInputAt = -Infinity
+let scrollDragging = false
+const scrolledByReader = () => { lastScrollInputAt = performance.now() }
+window.addEventListener('wheel', scrolledByReader, { capture: true, passive: true })
+window.addEventListener('keydown', event => { if (/^(PageUp|PageDown|ArrowUp|ArrowDown|Home|End| )$/.test(event.key)) scrolledByReader() }, { capture: true, passive: true })
+window.addEventListener('pointerdown', event => { if (event.clientX >= document.documentElement.clientWidth) { scrollDragging = true; scrolledByReader() } }, { capture: true, passive: true })
+window.addEventListener('pointerup', () => { if (scrollDragging) { scrollDragging = false; scrolledByReader() } }, { capture: true, passive: true })
+window.addEventListener('scroll', () => { if (scrollDragging) scrolledByReader() }, { passive: true })
+const READER_SCROLL_PAUSE_MS = 150
+const readerScrolling = () => scrollDragging || performance.now() - lastScrollInputAt < READER_SCROLL_PAUSE_MS
 const isLongDocument = () => !!document.getElementById('editor')?.classList.contains('ag-long-document')
 const sliceBudget = () => performance.now() - lastInputAt < 1000 ? 12 : 40
 // The share of each drawing slice spent predicting a document's heights (predictHeights.js). None: the guess from the
@@ -515,7 +529,14 @@ class StateRender {
       // drawing near its edge): the blocks drawn into it are laid out for real in this slice (pinInView), and the window
       // held still by a block in it, not by the first block drawn (keepInPlace).
       const near = this.windowUncovered(state)
+      // The reader is scrolling and what they scroll through is drawn: the page is theirs until they stop.
+      if (!near && readerScrolling() && !window.__typedownProgressiveNoPause) {
+        account('slicePaused', sliceStarted)
+        state.timer = setTimeout(step, 50)
+        return
+      }
       const keep = this.keepInPlace(state, near ? this.blockInWindow(state.root) : null)
+      account('sliceMeasure', sliceStarted)
       // A small share of the slice predicts the heights of what is drawn next (predictHeights.js; the rest of them in
       // the page's idle time): predicting them all first, in slices of their own, made 300k characters take 2.7 times as
       // long to draw on Windows.
@@ -524,12 +545,19 @@ class StateRender {
       if (share > 0) this.prepareHeights(state, performance.now() + budget * share)
       // A few blocks at a time, the clock read after each few: twenty code blocks of forty lines each, highlighted,
       // took half a second, and no frame was drawn in it.
+      const drawStarted = performance.now()
       do {
         if (state.hi < blocks.length) this.drawMore(state, 'below', 4)
         if (state.lo > 0) this.drawMore(state, 'above', 4)
       } while ((state.lo > 0 || state.hi < blocks.length) && performance.now() < until)
+      account('sliceDraw', drawStarted)
+      const afterStarted = performance.now()
       this.flushHeightRules(state)
-      if (near) this.pinInView(state)
+      // The blocks around the window laid out for real every slice, not only when the window is at the edge of what is
+      // drawn: one left to the browser's content-visibility near the window was laid out at its own size in one frame
+      // and at the size given it in the next, and the page jumped by the difference and back, frame after frame, for a
+      // second or two (w10 at hp's 1402 x 1070 with the outline open, reading mode: 26-161 px; seen on hp).
+      this.pinInView(state)
       // Once for the whole slice, not once per few blocks (drawMore does not call these itself - see its comment).
       this.renderMermaid()
       this.renderDiagram()
@@ -550,7 +578,10 @@ class StateRender {
       // there and then, inside the slice, and on Windows the slices drew half as many blocks each.
       if (state.heightsEnv && state.guess) this.estimateRest(state, true, false, false)
       else this.estimateRest(state, writeRoom)
+      account('sliceAfter', afterStarted)
+      const keepStarted = performance.now()
       keep()
+      account('sliceKeep', keepStarted)
       // How many blocks each slice draws, and in how long (window.__typedownPretextStats: 'slice'), either way.
       account('slice', sliceStarted)
       account('sliceBlocks', performance.now(), state.hi - state.lo - drawnBefore)
