@@ -957,7 +957,7 @@ class StateRender {
   }
 
   /**
-   * The blocks in the window and a window's height around it laid out for real now (pinned, content-visibility
+   * The blocks in the window, two windows' height above it and three below laid out for real now (pinned, content-visibility
    * visible, until the whole document is drawn - as the part drawn first): past the long-document size a block drawn
    * there was laid out at the size given it off screen in the frame it came, and at its own only a frame or more later,
    * moving the text below it (JT01, w10: 395 px in a document of HTML blocks put at a place not drawn yet).
@@ -969,6 +969,9 @@ class StateRender {
     if (!state.pinned) state.pinned = []
     if (!state.pinnedSet) state.pinnedSet = new WeakSet(state.pinned.map(([element]) => element))
     let count = 0
+    // Wider than the window and one around it: the browser lays out a content-visibility block somewhat before it comes
+    // near, and one just past a window's height above, at its own size in one frame and its guessed size in the next,
+    // still moved the page (JT02, reading mode at hp's window: 52 px and back).
     // Again while what was pinned brings more in: a block of HTML guessed at 181 px and laid out at 24 pulled the
     // blocks after it into the window, at their own guessed sizes (w10).
     for (let pass = 0; pass < 3; pass++) {
@@ -976,14 +979,14 @@ class StateRender {
       let hi = kids.length - 1
       while (lo < hi) {
         const mid = (lo + hi) >> 1
-        if (kids[mid].getBoundingClientRect().bottom <= -h) lo = mid + 1
+        if (kids[mid].getBoundingClientRect().bottom <= -2 * h) lo = mid + 1
         else hi = mid
       }
       // All read first, then all written: one layout a pass.
       const pin = []
       for (let k = lo; k < kids.length; k++) {
         const element = kids[k]
-        if (element.getBoundingClientRect().top >= h * 2) break
+        if (element.getBoundingClientRect().top >= h * 3) break
         if (!state.pinnedSet.has(element)) pin.push(element)
       }
       if (!pin.length) break
