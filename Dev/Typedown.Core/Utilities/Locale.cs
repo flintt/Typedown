@@ -158,7 +158,7 @@ namespace Typedown.Core.Utilities
         {
             var wanted = SupportedLangs.ContainsKey(language ?? "") ? language : null;
             AppliedLanguage ??= wanted ?? string.Empty; // the first application is the one the interface was built with
-            try { Culture = wanted != null ? System.Globalization.CultureInfo.GetCultureInfo(wanted) : System.Globalization.CultureInfo.CurrentCulture; }
+            try { Culture = wanted != null ? FormatCulture.For(wanted) : System.Globalization.CultureInfo.CurrentCulture; }
             catch (System.Globalization.CultureNotFoundException) { Culture = System.Globalization.CultureInfo.CurrentCulture; }
             Apply(ResourceContext, wanted);
             Log.Debug($"language: setting={language} applied={wanted ?? "(system)"} resolved={(ResourceContext.QualifierValues.TryGetValue("Language", out var resolved) ? resolved : "")}");
