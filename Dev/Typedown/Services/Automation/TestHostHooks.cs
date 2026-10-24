@@ -239,6 +239,21 @@ namespace Typedown.Services.Automation
                     if (app.XamlRoot?.Content is global::Microsoft.UI.Xaml.DependencyObject root) Walk(root);
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["titles"] = titles };
                 })));
+            // The texts the status bar shows (its save state among them), in the order of the visual tree.
+            methods.Add(new MethodDescriptor("test.window.statusTexts", null, "test.window.statusTexts/1", (c, ct) =>
+                Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    var texts = new Newtonsoft.Json.Linq.JArray();
+                    void Walk(global::Microsoft.UI.Xaml.DependencyObject node, bool inBar)
+                    {
+                        inBar |= node is Core.Controls.StatusBar;
+                        if (inBar && node is global::Microsoft.UI.Xaml.Controls.TextBlock block && !string.IsNullOrEmpty(block.Text)) texts.Add(block.Text);
+                        var count = global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(node);
+                        for (var i = 0; i < count; i++) Walk(global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChild(node, i), inBar);
+                    }
+                    if (app.XamlRoot?.Content is global::Microsoft.UI.Xaml.DependencyObject root) Walk(root, false);
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["texts"] = texts };
+                })));
             // Where the main page starts in its window, and whether the window is in full screen: in full screen nothing may
             // sit above it (a 4 px row of window background did, along the top of the screen).
             methods.Add(new MethodDescriptor("test.window.layout", null, "test.window.layout/1", (c, ct) =>

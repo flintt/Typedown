@@ -855,6 +855,14 @@ internal static partial class Program
             for (var i = 0; i < 40 && (menuAfter == menuBefore || menuAfter == ""); i++) { await Task.Delay(250); try { menuAfter = await Menu(); } catch (JsonRpcRemoteException) { } }
             notes.Add($"menu: {menuBefore} -> {menuAfter}");
             Check(menuAfter != menuBefore && menuAfter != "", $"the menu bar follows the language ({menuBefore} -> {menuAfter})");
+            // So does the status bar: its save state stayed in the language it was built in ("已保存" in an English window).
+            async Task<string> Status() => string.Join(" | ", ((JArray)(await c.Call("test.window.statusTexts", new { windowId }))["texts"]!).Select(t => (string)t!));
+            // Saved or not, in the new language.
+            var states = language == "ja" ? new[] { "保存済み", "未保存", "自動保存を一時停止中" } : new[] { "Saved", "Not saved", "Auto-save paused" };
+            var status = "";
+            for (var i = 0; i < 40 && !states.Any(status.Split(" | ").Contains); i++) { await Task.Delay(250); try { status = await Status(); } catch (JsonRpcRemoteException) { } }
+            notes.Add("status bar: " + status);
+            Check(states.Any(status.Split(" | ").Contains), $"the status bar follows the language: its save state is in {language} ({status})");
             // Menus made again in source mode still follow it: the language is changed back while the window is in source
             // mode, and Paragraph and Format stay hidden; back in visual mode all five are there.
             async Task<int> MenuCount() => ((JArray)(await c.Call("test.window.menuTitles", new { windowId }))["titles"]!).Count;
