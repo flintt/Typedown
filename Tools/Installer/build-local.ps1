@@ -38,6 +38,8 @@ param(
     # A trial's own version (1.4.0.13): the app and the installer carry it instead of the csproj's release number,
     # the same number its MSIX gets, so the two files of one trial say the same.
     [ValidatePattern('^\d+\.\d+\.\d+\.\d+$')][string]$TrialVersion,
+    # A release: About shows no label, as CI's build of a release tag. Only from a clean checkout, never a trial.
+    [switch]$Release,
     # Rebuilds the editor bundle first (needs node and Dev\Typedown.Editor\node_modules).
     [switch]$BuildEditor,
     # Builds the automation test host instead (the app with test.* methods and edit barriers, its own data root) into
@@ -106,12 +108,17 @@ if ($TrialVersion) {
     $versionArgs = @("-p:Version=$TrialVersion")
     $isccVersion = @("/DMyFileVersion=$TrialVersion")
 }
+if ($Release) {
+    if ($TrialVersion -or $Label -or $AutomationTestHost) { throw '-Release builds the release itself: no -TrialVersion, -Label or -AutomationTestHost' }
+    if ((git status --porcelain --untracked-files=no 2>$null | Measure-Object).Count -gt 0) { throw '-Release needs a clean checkout' }
+}
 $arch = $Platform.ToLowerInvariant()
 Write-Host "Typedown $version  $Platform  $Configuration"
 
 # About shows this next to the version. CI stamps its run and commit here, so a local build says where it came
 # from too rather than carrying whatever label the repository was committed with.
 function Get-LocalLabel {
+    if ($Release) { return '' }
     if ($Label) { return $Label }
     try {
         $commit = (git rev-parse --short HEAD 2>$null)
