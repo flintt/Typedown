@@ -130,7 +130,7 @@
     <comment>对话框/取消</comment>
   </data>
   <data name="Confirm" xml:space="preserve">
-    <value>ЖАҚСЫ</value>
+    <value>Жарайды</value>
     <comment>对话框/确定</comment>
   </data>
   <data name="CreateDocErrorTitle" xml:space="preserve">
@@ -267,7 +267,7 @@
     <value>Алдыңғы сілтемені пайдалану</value>
   </data>
   <data name="Keep" xml:space="preserve">
-    <value>Сақтау</value>
+    <value>Қалдыру</value>
   </data>
   <data name="Reload" xml:space="preserve">
     <value>Қайта жүктеу</value>

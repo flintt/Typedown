@@ -1,0 +1,4862 @@
+{
+ "_about": "Translations known to be wrong (a word translated by its dictionary sense: About as \"approximately\", Save as \"rescue\", Table as \"desk\", Off as \"Close\"...). check.py --strict fails when a language has one of these again. Put right on 2026-10-24 (Tools/Translations/apply.py --replace).",
+ "af": {
+  "View": [
+   "Bekyk"
+  ],
+  "Export": [
+   "Uitvoer"
+  ],
+  "Import": [
+   "Invoer"
+  ],
+  "Open": [
+   "Oop"
+  ],
+  "Outline": [
+   "Buitelyn"
+  ],
+  "On": [
+   "Op"
+  ],
+  "Off": [
+   "Sluit"
+  ],
+  "FocusMode": [
+   "Fokus af"
+  ],
+  "Editor.Title": [
+   "Redakteur"
+  ],
+  "Strikethrough": [
+   "Deurslag"
+  ],
+  "Clear": [
+   "Duidelik"
+  ],
+  "Confirm": [
+   "OUKEI"
+  ],
+  "Add": [
+   "Voeg"
+  ]
+ },
+ "am": {
+  "Close": [
+   "አቅርቡ"
+  ],
+  "Off": [
+   "አቅርቡ"
+  ],
+  "Replace": [
+   "ምትኬ"
+  ],
+  "Undo": [
+   "አሻሽል"
+  ],
+  "Edit": [
+   "አስረጅ"
+  ],
+  "Saved": [
+   "ዳነ"
+  ],
+  "Quote": [
+   "ጠቅ ያድርጉ"
+  ],
+  "Restore": [
+   "ይመልከቱ"
+  ],
+  "Recover": [
+   "ይመልከቱ"
+  ],
+  "Zoom": [
+   "አቅርበው"
+  ],
+  "Paste": [
+   "ፓስተር"
+  ],
+  "Strong": [
+   "ደፋር"
+  ]
+ },
+ "ar": {
+  "Import": [
+   "المستند"
+  ],
+  "On": [
+   "على"
+  ],
+  "Off": [
+   "أغلق"
+  ],
+  "SaveAs": [
+   "حفظ ك"
+  ],
+  "OpenRecent": [
+   "الأخير المفتوح"
+  ],
+  "Highlight": [
+   "تسليط الضوء"
+  ],
+  "Dark": [
+   "الوضع الداكن"
+  ],
+  "Strikethrough": [
+   "خط النص السطري"
+  ]
+ },
+ "as": {
+  "Close": [
+   "ওচৰ"
+  ],
+  "Off": [
+   "ওচৰ"
+  ],
+  "SaveAs": [
+   "সংৰক্ষণ কৰক"
+  ]
+ },
+ "bg": {
+  "About.Title": [
+   "За"
+  ],
+  "Export": [
+   "Износ"
+  ],
+  "Paragraph": [
+   "Параграф"
+  ],
+  "Edit": [
+   "Редактирам"
+  ],
+  "Open": [
+   "Отворя"
+  ],
+  "Save": [
+   "Спасявам"
+  ],
+  "Close": [
+   "Затварям"
+  ],
+  "Find": [
+   "Намирам"
+  ],
+  "Replace": [
+   "Заменям"
+  ],
+  "Outline": [
+   "Очертание"
+  ],
+  "Copy": [
+   "Копирам"
+  ],
+  "Paste": [
+   "Тесто"
+  ],
+  "Cut": [
+   "Режа"
+  ],
+  "Undo": [
+   "Отменям"
+  ],
+  "Redo": [
+   "Ремонтирам"
+  ],
+  "Strong": [
+   "Безочлив"
+  ],
+  "Table": [
+   "Маса"
+  ],
+  "Print": [
+   "Печатам"
+  ],
+  "Import": [
+   "Внос"
+  ],
+  "Delete": [
+   "Изтривам"
+  ],
+  "On": [
+   "На"
+  ],
+  "Off": [
+   "Затварям"
+  ],
+  "Saved": [
+   "Записани"
+  ],
+  "FocusMode": [
+   "Режим на фокусиране"
+  ],
+  "Light": [
+   "Светлина"
+  ],
+  "Dark": [
+   "Тъмен"
+  ],
+  "Restore": [
+   "Възстановявам"
+  ],
+  "Recover": [
+   "Възстановявам"
+  ],
+  "Highlight": [
+   "Подчертавам"
+  ],
+  "Back": [
+   "Гръб"
+  ],
+  "Update": [
+   "Актуализирам"
+  ],
+  "Underline": [
+   "Подчертавам"
+  ],
+  "Duplicate": [
+   "Дубликат"
+  ],
+  "Clear": [
+   "Ясен"
+  ],
+  "Create": [
+   "Създавам"
+  ],
+  "Add": [
+   "Добавям"
+  ]
+ },
+ "bn": {
+  "Export": [
+   "রপ্তানি"
+  ],
+  "Import": [
+   "আমদানি"
+  ],
+  "On": [
+   "On"
+  ],
+  "Dark": [
+   "অদৃশ্য"
+  ],
+  "Image": [
+   "প্রতিচ্ছবি"
+  ],
+  "Strong": [
+   "স্থূল"
+  ],
+  "OpenRecent": [
+   "উন্মুক্ত সাম্প্রতিক"
+  ]
+ },
+ "bs": {
+  "About.Title": [
+   "Otprilike"
+  ],
+  "Edit": [
+   "Uređivati"
+  ],
+  "File": [
+   "Fajl"
+  ],
+  "Open": [
+   "Otvarati"
+  ],
+  "Save": [
+   "Spasiti"
+  ],
+  "Close": [
+   "Blizak"
+  ],
+  "Find": [
+   "Naći"
+  ],
+  "Replace": [
+   "Zamijeniti"
+  ],
+  "Outline": [
+   "Outline"
+  ],
+  "Copy": [
+   "Kopirati"
+  ],
+  "Cut": [
+   "Rezati"
+  ],
+  "Undo": [
+   "Poništiti"
+  ],
+  "Redo": [
+   "Redo"
+  ],
+  "Strong": [
+   "Hrabar"
+  ],
+  "Table": [
+   "Stol"
+  ],
+  "Heading": [
+   "Smjer"
+  ],
+  "Print": [
+   "Štampanja"
+  ],
+  "Search": [
+   "Tražiti"
+  ],
+  "Delete": [
+   "Izbrisati"
+  ],
+  "On": [
+   "Na"
+  ],
+  "Off": [
+   "Blizak"
+  ],
+  "Saved": [
+   "Sačuvana"
+  ],
+  "Light": [
+   "Svjetlo"
+  ],
+  "Dark": [
+   "Mračan"
+  ],
+  "Editor.Title": [
+   "Urednik"
+  ],
+  "Restore": [
+   "Obnoviti"
+  ],
+  "Recover": [
+   "Obnoviti"
+  ],
+  "Back": [
+   "Leđa"
+  ],
+  "Stop": [
+   "Zaustaviti"
+  ],
+  "Strikethrough": [
+   "Strikethrough"
+  ],
+  "Clear": [
+   "Čisto"
+  ],
+  "Create": [
+   "Kreirati"
+  ],
+  "Add": [
+   "Dodati"
+  ],
+  "NewFile": [
+   "Novi fajl"
+  ],
+  "Characters": [
+   "Karaktera"
+  ]
+ },
+ "ca": {
+  "About.Title": [
+   "Sobre"
+  ],
+  "Help": [
+   "Ajudar"
+  ],
+  "Save": [
+   "Salvar"
+  ],
+  "Close": [
+   "Tancar"
+  ],
+  "Find": [
+   "Trobar"
+  ],
+  "Replace": [
+   "Reemplaçar"
+  ],
+  "Outline": [
+   "Contorn"
+  ],
+  "Copy": [
+   "Copiar"
+  ],
+  "Paste": [
+   "Enganxar"
+  ],
+  "Cut": [
+   "Tallar"
+  ],
+  "Undo": [
+   "Desfer"
+  ],
+  "Redo": [
+   "Refer"
+  ],
+  "Strong": [
+   "Atrevit"
+  ],
+  "Quote": [
+   "Citar"
+  ],
+  "Import": [
+   "Importació"
+  ],
+  "Search": [
+   "Buscar"
+  ],
+  "Delete": [
+   "Esborrar"
+  ],
+  "On": [
+   "Sobre"
+  ],
+  "Off": [
+   "Tancar"
+  ],
+  "Saved": [
+   "Salvat"
+  ],
+  "Files": [
+   "ﬁtxers"
+  ],
+  "Light": [
+   "Llum"
+  ],
+  "FocusMode": [
+   "Mode d'enfocament"
+  ],
+  "Feedback": [
+   "Retroalimentació"
+  ],
+  "Back": [
+   "Esquena"
+  ],
+  "Stop": [
+   "Parar"
+  ],
+  "Strikethrough": [
+   "Vaga"
+  ],
+  "Underline": [
+   "Subratllar"
+  ],
+  "Rename": [
+   "Rebatejar"
+  ],
+  "Clear": [
+   "Clar"
+  ],
+  "Confirm": [
+   "D'ACORD"
+  ],
+  "Add": [
+   "Sumar"
+  ],
+  "Highlight": [
+   "Remarcar"
+  ],
+  "Export": [
+   "Exportar"
+  ],
+  "Edit": [
+   "Editar"
+  ],
+  "Open": [
+   "Obrir"
+  ],
+  "Print": [
+   "Imprimir"
+  ],
+  "Create": [
+   "Crear"
+  ]
+ },
+ "cs": {
+  "About.Title": [
+   "Asi"
+  ],
+  "View": [
+   "Pohled"
+  ],
+  "Export": [
+   "Vývoz"
+  ],
+  "Help": [
+   "Pomoc"
+  ],
+  "Open": [
+   "Otevřený"
+  ],
+  "Paste": [
+   "Pasta"
+  ],
+  "Cut": [
+   "Řezat"
+  ],
+  "Undo": [
+   "Odčinit"
+  ],
+  "Redo": [
+   "Předělat"
+  ],
+  "Table": [
+   "Stůl"
+  ],
+  "Image": [
+   "Obraz"
+  ],
+  "Quote": [
+   "Citát"
+  ],
+  "Print": [
+   "Tisknout"
+  ],
+  "Import": [
+   "Dovoz"
+  ],
+  "Search": [
+   "Hledání"
+  ],
+  "Delete": [
+   "Vymazat"
+  ],
+  "On": [
+   "Na"
+  ],
+  "Off": [
+   "Zavřít"
+  ],
+  "FocusMode": [
+   "Detailní režim"
+  ],
+  "Light": [
+   "Světlo"
+  ],
+  "Dark": [
+   "Temný"
+  ],
+  "Back": [
+   "Hřbet"
+  ],
+  "Clear": [
+   "Jasný"
+  ],
+  "Create": [
+   "Vytvářet"
+  ],
+  "Underline": [
+   "Podtrhnout"
+  ],
+  "Update": [
+   "Aktualizace"
+  ],
+  "Website": [
+   "Internetová stránka"
+  ],
+  "Duplicate": [
+   "Duplikát"
+  ]
+ },
+ "cy": {
+  "Help": [
+   "Helpu"
+  ],
+  "Save": [
+   "Achub"
+  ],
+  "Find": [
+   "Ffeindio"
+  ],
+  "Copy": [
+   "Copi"
+  ],
+  "Redo": [
+   "Redo"
+  ],
+  "Undo": [
+   "Datod"
+  ],
+  "Strong": [
+   "Hy"
+  ],
+  "Table": [
+   "Bwrdd"
+  ],
+  "Quote": [
+   "Dyfynnu"
+  ],
+  "On": [
+   "Ar"
+  ],
+  "Off": [
+   "Cau"
+  ],
+  "MenuBar": [
+   "Bar Bwydlen"
+  ],
+  "Back": [
+   "Cefn"
+  ],
+  "Stop": [
+   "Peidio"
+  ],
+  "Strikethrough": [
+   "Strikethrough"
+  ],
+  "Confirm": [
+   "OCÊ"
+  ],
+  "Add": [
+   "Adio"
+  ],
+  "Characters": [
+   "Cymeriadau"
+  ],
+  "Outline": [
+   "Amlinellu"
+  ]
+ },
+ "da": {
+  "About.Title": [
+   "Omtrent"
+  ],
+  "View": [
+   "Udsigt"
+  ],
+  "Paragraph": [
+   "Stk."
+  ],
+  "Edit": [
+   "Redigere"
+  ],
+  "Open": [
+   "Åben"
+  ],
+  "Save": [
+   "Spare"
+  ],
+  "Close": [
+   "Lukke"
+  ],
+  "Find": [
+   "Finde"
+  ],
+  "Replace": [
+   "Erstatte"
+  ],
+  "Outline": [
+   "Skitsere"
+  ],
+  "Copy": [
+   "Eksemplar"
+  ],
+  "Paste": [
+   "Indsætte"
+  ],
+  "Cut": [
+   "Skære"
+  ],
+  "Undo": [
+   "Fortryde"
+  ],
+  "Redo": [
+   "Redo"
+  ],
+  "Strong": [
+   "Modig"
+  ],
+  "Code": [
+   "Kodeks"
+  ],
+  "Table": [
+   "Bord"
+  ],
+  "Quote": [
+   "Citere"
+  ],
+  "Print": [
+   "Trykke"
+  ],
+  "Search": [
+   "Søge"
+  ],
+  "Delete": [
+   "Slette"
+  ],
+  "On": [
+   "På"
+  ],
+  "Off": [
+   "Lukke"
+  ],
+  "Files": [
+   "ﬁler"
+  ],
+  "Editor.Title": [
+   "Redaktør"
+  ],
+  "Restore": [
+   "Genskabe"
+  ],
+  "Recover": [
+   "Genskabe"
+  ],
+  "Highlight": [
+   "Fremhæve"
+  ],
+  "Zoom": [
+   "Zoome"
+  ],
+  "Back": [
+   "Ryg"
+  ],
+  "Update": [
+   "Opdatering"
+  ],
+  "Underline": [
+   "Understrege"
+  ],
+  "Duplicate": [
+   "Multiplicere"
+  ],
+  "Clear": [
+   "Tydelig"
+  ],
+  "Cancel": [
+   "Aflyse"
+  ],
+  "Create": [
+   "Skabe"
+  ],
+  "Add": [
+   "Tilføje"
+  ],
+  "Website": [
+   "Hjemmeside"
+  ],
+  "Export": [
+   "Eksport"
+  ],
+  "Import": [
+   "Import"
+  ]
+ },
+ "de": {
+  "On": [
+   "An"
+  ],
+  "Off": [
+   "Schließen"
+  ],
+  "Light": [
+   "Licht"
+  ]
+ },
+ "el": {
+  "About.Title": [
+   "Περίπου"
+  ],
+  "View": [
+   "Άποψη"
+  ],
+  "Open": [
+   "Ανοίγω"
+  ],
+  "Save": [
+   "Σώζω"
+  ],
+  "Close": [
+   "Κλείνω"
+  ],
+  "Find": [
+   "Βρίσκω"
+  ],
+  "Replace": [
+   "Αντικαθιστώ"
+  ],
+  "Outline": [
+   "Περιγραφή"
+  ],
+  "Copy": [
+   "Αντίγραφο"
+  ],
+  "Paste": [
+   "Πάστα"
+  ],
+  "Cut": [
+   "Κόβω"
+  ],
+  "Undo": [
+   "Καταστρέφω"
+  ],
+  "Redo": [
+   "Ξανακάνω"
+  ],
+  "Strong": [
+   "Τολμηρός"
+  ],
+  "Table": [
+   "Τραπέζι"
+  ],
+  "Quote": [
+   "Παραθέτω"
+  ],
+  "Print": [
+   "Τυπώνω"
+  ],
+  "Delete": [
+   "Διαγράφω"
+  ],
+  "Font": [
+   "Κολυμβήθρα"
+  ],
+  "New": [
+   "Νέος"
+  ],
+  "On": [
+   "Επί"
+  ],
+  "Off": [
+   "Κλείνω"
+  ],
+  "Editor.Title": [
+   "Συντάκτης"
+  ],
+  "Light": [
+   "Φως"
+  ],
+  "Dark": [
+   "Σκοτεινός"
+  ],
+  "Restore": [
+   "Αποκαθιστώ"
+  ],
+  "Recover": [
+   "Αποκαθιστώ"
+  ],
+  "Highlight": [
+   "Επισημάνετε"
+  ],
+  "Words": [
+   "Λόγια"
+  ],
+  "Zoom": [
+   "Μεγένθυνση"
+  ],
+  "Feedback": [
+   "Ανάδραση"
+  ],
+  "Back": [
+   "Πλάτη"
+  ],
+  "Stop": [
+   "Σταμάτα"
+  ],
+  "Update": [
+   "Ενημερώνω"
+  ],
+  "Underline": [
+   "Υπογραμμίζω"
+  ],
+  "Duplicate": [
+   "Αντίγραφο"
+  ],
+  "Rename": [
+   "Μετονομάζω"
+  ],
+  "Clear": [
+   "Σαφής"
+  ],
+  "Cancel": [
+   "Ακυρώνω"
+  ],
+  "Create": [
+   "Δημιουργώ"
+  ],
+  "Add": [
+   "Προσθέτω"
+  ],
+  "OpenRecent": [
+   "Ανοίξτε τα Πρόσφατα"
+  ]
+ },
+ "en": {
+  "Off": [
+   "Close"
+  ]
+ },
+ "es": {
+  "Outline": [
+   "Contorno"
+  ],
+  "On": [
+   "Encendido"
+  ],
+  "Off": [
+   "Cerrar"
+  ]
+ },
+ "et": {
+  "About.Title": [
+   "Umbes"
+  ],
+  "Export": [
+   "Eksportima"
+  ],
+  "Theme": [
+   "Theme"
+  ],
+  "Edit": [
+   "Toimetama"
+  ],
+  "Open": [
+   "Avama"
+  ],
+  "Save": [
+   "Salvestama"
+  ],
+  "Close": [
+   "Sulgema"
+  ],
+  "Find": [
+   "Leidma"
+  ],
+  "Replace": [
+   "Asendama"
+  ],
+  "Copy": [
+   "Koopia"
+  ],
+  "Cut": [
+   "Lõigata"
+  ],
+  "Undo": [
+   "Võta"
+  ],
+  "Redo": [
+   "Tee"
+  ],
+  "Strong": [
+   "Julge"
+  ],
+  "Table": [
+   "Laud"
+  ],
+  "Image": [
+   "Piltide"
+  ],
+  "Print": [
+   "Trükkima"
+  ],
+  "Import": [
+   "Importima"
+  ],
+  "Delete": [
+   "Kustutama"
+  ],
+  "Off": [
+   "Sulgema"
+  ],
+  "Editor.Title": [
+   "Toimetaja"
+  ],
+  "Light": [
+   "Valgus"
+  ],
+  "Restore": [
+   "Taastada"
+  ],
+  "Recover": [
+   "Taastada"
+  ],
+  "Highlight": [
+   "Rõhutada"
+  ],
+  "Update": [
+   "Uuendama"
+  ],
+  "Rename": [
+   "Ümber nimetada"
+  ],
+  "Clear": [
+   "Selge"
+  ],
+  "Cancel": [
+   "Tühistama"
+  ],
+  "Create": [
+   "Looma"
+  ],
+  "Add": [
+   "Lisama"
+  ],
+  "FocusMode": [
+   "Fookuse režiim"
+  ],
+  "Line": [
+   "Liin"
+  ],
+  "Duplicate": [
+   "Dubleerida"
+  ],
+  "Files": [
+   "Faile"
+  ],
+  "Characters": [
+   "Märki"
+  ],
+  "Paragraph": [
+   "Lõike"
+  ]
+ },
+ "eu": {
+  "About.Title": [
+   "Zerbaiti buruz"
+  ],
+  "File": [
+   "Artxiboa"
+  ],
+  "Files": [
+   "Artxiboak"
+  ],
+  "NewFile": [
+   "Artxibo berria"
+  ],
+  "Save": [
+   "Salbatu"
+  ],
+  "Paste": [
+   "Pegar"
+  ],
+  "Redo": [
+   "Berregite"
+  ],
+  "Strong": [
+   "Ausarta"
+  ],
+  "Table": [
+   "Mahaia"
+  ],
+  "Quote": [
+   "Zitatu"
+  ],
+  "Print": [
+   "Iritzi"
+  ],
+  "Import": [
+   "Inportazioa"
+  ],
+  "Font": [
+   "Iturria"
+  ],
+  "On": [
+   "En"
+  ],
+  "Off": [
+   "Itxi"
+  ],
+  "FocusMode": [
+   "Ikuspuntua"
+  ],
+  "StatusBar": [
+   "Estatu barra"
+  ],
+  "Restore": [
+   "Zaharberritzea"
+  ],
+  "Recover": [
+   "Zaharberritzea"
+  ],
+  "Feedback": [
+   "Atzera-alimentazioa"
+  ],
+  "Stop": [
+   "Geldialdia"
+  ],
+  "Rename": [
+   "Berregokitu"
+  ],
+  "Clear": [
+   "Argi"
+  ],
+  "Outline": [
+   "Kontornoa"
+  ],
+  "SourceCodeMode": [
+   "Kode-mota iturria"
+  ],
+  "Lines": [
+   "Lineak"
+  ]
+ },
+ "fa": {
+  "About.Title": [
+   "مورد"
+  ],
+  "View": [
+   "مشاهده"
+  ],
+  "Export": [
+   "صادرات"
+  ],
+  "Import": [
+   "واردات"
+  ],
+  "Help": [
+   "کمک"
+  ],
+  "Open": [
+   "باز"
+  ],
+  "Close": [
+   "نزدیک"
+  ],
+  "Find": [
+   "پیدا کردن"
+  ],
+  "Outline": [
+   "برون نما"
+  ],
+  "Strong": [
+   "جسورانه"
+  ],
+  "On": [
+   "در"
+  ],
+  "Off": [
+   "نزدیک"
+  ],
+  "Light": [
+   "نور"
+  ],
+  "Dark": [
+   "تاریک"
+  ],
+  "Stop": [
+   "بایست"
+  ],
+  "Update": [
+   "روز رسانی"
+  ],
+  "Strikethrough": [
+   "Strikethrough"
+  ],
+  "Underline": [
+   "آندرلاین"
+  ],
+  "Rename": [
+   "نام"
+  ],
+  "Clear": [
+   "روشن"
+  ],
+  "Files": [
+   "فایل"
+  ],
+  "Duplicate": [
+   "تکراری"
+  ]
+ },
+ "fi": {
+  "About.Title": [
+   "Noin"
+  ],
+  "Export": [
+   "Vienti"
+  ],
+  "Edit": [
+   "Muokata"
+  ],
+  "Help": [
+   "Apua"
+  ],
+  "Open": [
+   "Avata"
+  ],
+  "Save": [
+   "Säästää"
+  ],
+  "Close": [
+   "Sulkea"
+  ],
+  "Find": [
+   "Löytää"
+  ],
+  "Replace": [
+   "Korvata"
+  ],
+  "Outline": [
+   "Hahmotella"
+  ],
+  "Copy": [
+   "Kopioida"
+  ],
+  "Paste": [
+   "Tahna"
+  ],
+  "Cut": [
+   "Leikata"
+  ],
+  "Undo": [
+   "Kumota"
+  ],
+  "Redo": [
+   "Uusia"
+  ],
+  "Strong": [
+   "Rohkea"
+  ],
+  "Quote": [
+   "Siteerata"
+  ],
+  "Table": [
+   "Pöytä"
+  ],
+  "Print": [
+   "Vedos"
+  ],
+  "Import": [
+   "Tuoda"
+  ],
+  "Search": [
+   "Etsiä"
+  ],
+  "Delete": [
+   "Poistaa"
+  ],
+  "On": [
+   "Päälle"
+  ],
+  "Off": [
+   "Sulkea"
+  ],
+  "Saved": [
+   "Pelastettu"
+  ],
+  "FocusMode": [
+   "Tarkastelutila"
+  ],
+  "Light": [
+   "Valo"
+  ],
+  "Restore": [
+   "Palauttaa"
+  ],
+  "Recover": [
+   "Palauttaa"
+  ],
+  "Highlight": [
+   "Korostaa"
+  ],
+  "Zoom": [
+   "Zoomata"
+  ],
+  "Back": [
+   "Selkä"
+  ],
+  "Stop": [
+   "Seis"
+  ],
+  "Update": [
+   "Päivittää"
+  ],
+  "Underline": [
+   "Alleviivata"
+  ],
+  "Duplicate": [
+   "Kaksoiskappale"
+  ],
+  "Rename": [
+   "Nimetä uudelleen"
+  ],
+  "Clear": [
+   "Selvä"
+  ],
+  "Cancel": [
+   "Perua"
+  ],
+  "Confirm": [
+   "OKEI"
+  ],
+  "Create": [
+   "Luoda"
+  ],
+  "Add": [
+   "Lisätä"
+  ],
+  "HomePage.NewDocument": [
+   "Uusi tiedosto"
+  ],
+  "Characters": [
+   "Merkkiä"
+  ],
+  "Math": [
+   "Matikka"
+  ]
+ },
+ "fil": {
+  "View": [
+   "Tingnan ang"
+  ],
+  "Export": [
+   "I-export ang"
+  ],
+  "File": [
+   "Mag-file"
+  ],
+  "Open": [
+   "Buksan ang"
+  ],
+  "Save": [
+   "Mag-ipon"
+  ],
+  "Close": [
+   "Isara ang"
+  ],
+  "Find": [
+   "Hanapin ang"
+  ],
+  "Replace": [
+   "Palitan ang"
+  ],
+  "Strong": [
+   "Matapang na"
+  ],
+  "Delete": [
+   "Tanggalin ang"
+  ],
+  "New": [
+   "Bagong"
+  ],
+  "OpenRecent": [
+   "Buksan ang Kamakailang"
+  ],
+  "On": [
+   "Sa"
+  ],
+  "Off": [
+   "Isara ang"
+  ],
+  "Editor.Title": [
+   "Patnugot"
+  ],
+  "Light": [
+   "Liwanag"
+  ],
+  "Characters": [
+   "Mga Tauhan"
+  ],
+  "Stop": [
+   "Tigilan mo na"
+  ],
+  "Highlight": [
+   "I-highlight ang"
+  ],
+  "Underline": [
+   "Salungguhitan ang"
+  ],
+  "Clear": [
+   "Malinaw na"
+  ],
+  "Confirm": [
+   "ok na"
+  ],
+  "Create": [
+   "Lumikha ng"
+  ],
+  "Add": [
+   "Magdagdag ng"
+  ],
+  "Duplicate": [
+   "Duplo"
+  ]
+ },
+ "fr": {
+  "About.Title": [
+   "À propos de"
+  ],
+  "On": [
+   "Sur"
+  ],
+  "Off": [
+   "Fermer"
+  ],
+  "Table": [
+   "Table"
+  ],
+  "Light": [
+   "Lumière"
+  ],
+  "OpenRecent": [
+   "Ouvrir récemment"
+  ],
+  "Highlight": [
+   "Mettre en évidence"
+  ],
+  "Underline": [
+   "Souligner"
+  ]
+ },
+ "ga": {
+  "View": [
+   "Féach"
+  ],
+  "Open": [
+   "Oscailte"
+  ],
+  "Copy": [
+   "Cóip"
+  ],
+  "Undo": [
+   "Gan amhras"
+  ],
+  "Redo": [
+   "Redo"
+  ],
+  "On": [
+   "Ar aghaidh"
+  ],
+  "Off": [
+   "Dún"
+  ],
+  "OpenRecent": [
+   "Oscailte le déanaí"
+  ],
+  "Highlight": [
+   "Buaicphointe"
+  ],
+  "Strikethrough": [
+   "Strikethrough"
+  ],
+  "Add": [
+   "Cuir"
+  ],
+  "Restore": [
+   "Athchóiriú"
+  ],
+  "Recover": [
+   "Athchóiriú"
+  ],
+  "Update": [
+   "Nuashonrú"
+  ]
+ },
+ "gl": {
+  "About.Title": [
+   "Sobre"
+  ],
+  "Export": [
+   "Exportación"
+  ],
+  "Theme": [
+   "Temática"
+  ],
+  "Help": [
+   "Axudas"
+  ],
+  "Open": [
+   "Apertas"
+  ],
+  "Find": [
+   "Atopar"
+  ],
+  "Replace": [
+   "Substitución"
+  ],
+  "Outline": [
+   "Contorno"
+  ],
+  "Copy": [
+   "Copia"
+  ],
+  "Paste": [
+   "Pasta"
+  ],
+  "Cut": [
+   "Corte"
+  ],
+  "Redo": [
+   "Redo"
+  ],
+  "Strong": [
+   "Atrevido"
+  ],
+  "Quote": [
+   "Citas"
+  ],
+  "Import": [
+   "Importación"
+  ],
+  "Search": [
+   "Busca"
+  ],
+  "New": [
+   "Novidades"
+  ],
+  "OpenRecent": [
+   "Aberto recente"
+  ],
+  "On": [
+   "On"
+  ],
+  "Off": [
+   "Pechar"
+  ],
+  "Saved": [
+   "Gardar"
+  ],
+  "Light": [
+   "Luz"
+  ],
+  "Dark": [
+   "Escuras"
+  ],
+  "General.Title": [
+   "Xerais"
+  ],
+  "Characters": [
+   "Personaxes"
+  ],
+  "Strikethrough": [
+   "Folgoso"
+  ],
+  "Underline": [
+   "Subliñar"
+  ],
+  "Cancel": [
+   "Cancelación"
+  ],
+  "Update": [
+   "Actualización"
+  ],
+  "FocusMode": [
+   "Modo foco"
+  ]
+ },
+ "gu": {
+  "About.Title": [
+   "લગભગ"
+  ],
+  "Open": [
+   "સાફ"
+  ],
+  "Table": [
+   "મેજ"
+  ],
+  "On": [
+   "પર"
+  ],
+  "Off": [
+   "બંધ કરો"
+  ],
+  "Light": [
+   "દીપ"
+  ],
+  "General.Title": [
+   "સામાન્યName"
+  ],
+  "Window": [
+   "બારી"
+  ]
+ },
+ "he": {
+  "About.Title": [
+   "על"
+  ],
+  "View": [
+   "נוף"
+  ],
+  "Format": [
+   "תבנית"
+  ],
+  "Open": [
+   "פתוח"
+  ],
+  "Save": [
+   "שמר"
+  ],
+  "Replace": [
+   "להחליף"
+  ],
+  "Close": [
+   "קרוב"
+  ],
+  "Outline": [
+   "מיתאר"
+  ],
+  "Copy": [
+   "עותק"
+  ],
+  "Cut": [
+   "חתך"
+  ],
+  "Undo": [
+   "לבטל"
+  ],
+  "Strong": [
+   "נועז"
+  ],
+  "Table": [
+   "שולחן"
+  ],
+  "Quote": [
+   "הצעת מחיר"
+  ],
+  "Print": [
+   "הדפיס"
+  ],
+  "Delete": [
+   "למחוק"
+  ],
+  "On": [
+   "הלאה"
+  ],
+  "Off": [
+   "קרוב"
+  ],
+  "Saved": [
+   "הציל"
+  ],
+  "MenuBar": [
+   "התפריטים"
+  ],
+  "Light": [
+   "אור"
+  ],
+  "Dark": [
+   "חשוך"
+  ],
+  "Restore": [
+   "לשחזר"
+  ],
+  "Recover": [
+   "לשחזר"
+  ],
+  "Highlight": [
+   "לסמן"
+  ],
+  "Back": [
+   "גב"
+  ],
+  "Stop": [
+   "עצר"
+  ],
+  "Update": [
+   "עדכון"
+  ],
+  "Website": [
+   "אתר אישי"
+  ],
+  "Rename": [
+   "לשנות"
+  ],
+  "Clear": [
+   "צלול"
+  ],
+  "Cancel": [
+   "ביטל"
+  ],
+  "Confirm": [
+   "אוקיי"
+  ],
+  "Create": [
+   "יצר"
+  ]
+ },
+ "hi": {
+  "About.Title": [
+   "करीबन"
+  ],
+  "View": [
+   "देखना"
+  ],
+  "Export": [
+   "निर्यात"
+  ],
+  "Theme": [
+   "विषय"
+  ],
+  "Edit": [
+   "संपादन करना"
+  ],
+  "File": [
+   "रेती"
+  ],
+  "Help": [
+   "मदद"
+  ],
+  "Open": [
+   "खोलना"
+  ],
+  "Save": [
+   "रक्षा कर"
+  ],
+  "Close": [
+   "बंद करना"
+  ],
+  "Find": [
+   "खोज"
+  ],
+  "Outline": [
+   "आकार"
+  ],
+  "Copy": [
+   "प्रतिलिपि"
+  ],
+  "Paste": [
+   "लेई"
+  ],
+  "Cut": [
+   "कटौती"
+  ],
+  "Undo": [
+   "खोलना"
+  ],
+  "Strong": [
+   "स्पष्ट"
+  ],
+  "Table": [
+   "मेज़"
+  ],
+  "Image": [
+   "प्रतिबिंब"
+  ],
+  "Print": [
+   "छापना"
+  ],
+  "Window": [
+   "खिड़की"
+  ],
+  "Search": [
+   "ढूँढ"
+  ],
+  "Delete": [
+   "मिटाना"
+  ],
+  "On": [
+   "पर"
+  ],
+  "Off": [
+   "बंद करना"
+  ],
+  "Light": [
+   "प्रकाश"
+  ],
+  "Dark": [
+   "अंधेरा"
+  ],
+  "Restore": [
+   "पुनर्स्थापित करना"
+  ],
+  "Recover": [
+   "पुनर्स्थापित करना"
+  ],
+  "Highlight": [
+   "मुख्य आकर्षण"
+  ],
+  "Back": [
+   "पीठ"
+  ],
+  "Stop": [
+   "रुको"
+  ],
+  "Update": [
+   "आधुनिकीकरणअ"
+  ],
+  "Strikethrough": [
+   "हड़ताल के माध्यम से"
+  ],
+  "Underline": [
+   "रेखांकित करना"
+  ],
+  "Duplicate": [
+   "प्रतिलिपि"
+  ],
+  "Rename": [
+   "पुनर्नामित"
+  ],
+  "Clear": [
+   "स्पष्ट"
+  ],
+  "Cancel": [
+   "रद्द करना"
+  ],
+  "Create": [
+   "बनाना"
+  ],
+  "Add": [
+   "जोड़ना"
+  ],
+  "Feedback": [
+   "प्रतिपुष्टि"
+  ],
+  "View.Title": [
+   "उपस्थिति"
+  ]
+ },
+ "hr": {
+  "About.Title": [
+   "O"
+  ],
+  "View": [
+   "Pogled"
+  ],
+  "Export": [
+   "Izvoz"
+  ],
+  "Edit": [
+   "Urediti"
+  ],
+  "Settings": [
+   "Postavkama"
+  ],
+  "Open": [
+   "Otvoren"
+  ],
+  "Save": [
+   "Spasiti"
+  ],
+  "Close": [
+   "Blizak"
+  ],
+  "Find": [
+   "Naći"
+  ],
+  "Replace": [
+   "Nadomjestiti"
+  ],
+  "Outline": [
+   "Kontura"
+  ],
+  "Copy": [
+   "Kopija"
+  ],
+  "Paste": [
+   "Pasta"
+  ],
+  "Cut": [
+   "Rezati"
+  ],
+  "Undo": [
+   "Poništiti"
+  ],
+  "Redo": [
+   "Ponoviti"
+  ],
+  "Strong": [
+   "Odvažan"
+  ],
+  "Code": [
+   "Zakonik"
+  ],
+  "Table": [
+   "Stol"
+  ],
+  "Quote": [
+   "Citirati"
+  ],
+  "Print": [
+   "Otisak"
+  ],
+  "Import": [
+   "Uvoz"
+  ],
+  "Delete": [
+   "Izbrisati"
+  ],
+  "Font": [
+   "Krstionica"
+  ],
+  "On": [
+   "Na"
+  ],
+  "Off": [
+   "Blizak"
+  ],
+  "Saved": [
+   "Spremljeni"
+  ],
+  "Files": [
+   "Datotekama"
+  ],
+  "Light": [
+   "Svjetlo"
+  ],
+  "Dark": [
+   "Mračan"
+  ],
+  "Editor.Title": [
+   "Urednik"
+  ],
+  "Restore": [
+   "Vratiti"
+  ],
+  "Recover": [
+   "Vratiti"
+  ],
+  "Highlight": [
+   "Osvijetliti"
+  ],
+  "Back": [
+   "Leđa"
+  ],
+  "Stop": [
+   "Prestati"
+  ],
+  "Update": [
+   "Ažurirati"
+  ],
+  "Underline": [
+   "Podvući"
+  ],
+  "Clear": [
+   "Jasan"
+  ],
+  "Cancel": [
+   "Otkazati"
+  ],
+  "Create": [
+   "Stvoriti"
+  ],
+  "Add": [
+   "Dodati"
+  ],
+  "Characters": [
+   "Znakova"
+  ],
+  "Heading": [
+   "Zaglavlje"
+  ],
+  "Search": [
+   "Pretraživanje"
+  ],
+  "New": [
+   "Nov"
+  ]
+ },
+ "hu": {
+  "About.Title": [
+   "Körülbelül"
+  ],
+  "Export": [
+   "Kivitel"
+  ],
+  "Edit": [
+   "Szerkeszt"
+  ],
+  "Help": [
+   "Segítség"
+  ],
+  "Open": [
+   "Nyitott"
+  ],
+  "Save": [
+   "Megment"
+  ],
+  "Close": [
+   "Bezár"
+  ],
+  "Find": [
+   "Talál"
+  ],
+  "Replace": [
+   "Helyettesít"
+  ],
+  "Copy": [
+   "Másolat"
+  ],
+  "Paste": [
+   "Paszta"
+  ],
+  "Cut": [
+   "Vág"
+  ],
+  "Undo": [
+   "Kigombol"
+  ],
+  "Redo": [
+   "Újra kifest"
+  ],
+  "Strong": [
+   "Merész"
+  ],
+  "Table": [
+   "Asztal"
+  ],
+  "Quote": [
+   "Idéz"
+  ],
+  "Print": [
+   "Nyomtat"
+  ],
+  "Import": [
+   "Importál"
+  ],
+  "Delete": [
+   "Töröl"
+  ],
+  "On": [
+   "Ra"
+  ],
+  "Off": [
+   "Bezár"
+  ],
+  "Saved": [
+   "Mentett"
+  ],
+  "Files": [
+   "Fájlokat"
+  ],
+  "Light": [
+   "Fény"
+  ],
+  "Restore": [
+   "Visszaad"
+  ],
+  "Recover": [
+   "Visszaad"
+  ],
+  "Highlight": [
+   "Kiemel"
+  ],
+  "Words": [
+   "Szöveg"
+  ],
+  "Zoom": [
+   "Búg"
+  ],
+  "Feedback": [
+   "Visszacsatolás"
+  ],
+  "Back": [
+   "Hát"
+  ],
+  "Stop": [
+   "Állj"
+  ],
+  "Update": [
+   "Frissít"
+  ],
+  "Underline": [
+   "Aláhúz"
+  ],
+  "Duplicate": [
+   "Ismétlődő"
+  ],
+  "Rename": [
+   "Átnevez"
+  ],
+  "Clear": [
+   "Világos"
+  ],
+  "Cancel": [
+   "Érvénytelenít"
+  ],
+  "Confirm": [
+   "OKÉ"
+  ],
+  "Create": [
+   "Alkot"
+  ],
+  "Add": [
+   "Hozzáad"
+  ],
+  "OpenRecent": [
+   "A Legutóbbi megnyitása"
+  ],
+  "Math": [
+   "Matek"
+  ]
+ },
+ "hy": {
+  "View": [
+   "Դիտել"
+  ],
+  "Export": [
+   "Արտադրություն"
+  ],
+  "Paragraph": [
+   "Երեւան"
+  ],
+  "Open": [
+   "Բաց"
+  ],
+  "Save": [
+   "Խնայել"
+  ],
+  "SaveAs": [
+   "Save As"
+  ],
+  "Close": [
+   "Փակ"
+  ],
+  "Outline": [
+   "Ելակետ"
+  ],
+  "Paste": [
+   "Պաստա"
+  ],
+  "Undo": [
+   "Ունդո"
+  ],
+  "Redo": [
+   "Ռեդո"
+  ],
+  "Strong": [
+   "Բոլդ"
+  ],
+  "Emphasis": [
+   "Իտալիկ"
+  ],
+  "Table": [
+   "Սեղան"
+  ],
+  "Import": [
+   "Ներմուծում"
+  ],
+  "Window": [
+   "Վինդոուզ"
+  ],
+  "On": [
+   "On"
+  ],
+  "Off": [
+   "Փակ"
+  ],
+  "Saved": [
+   "Փրկված"
+  ],
+  "MenuBar": [
+   "Մենյու Բար"
+  ],
+  "Light": [
+   "Լույս"
+  ],
+  "Dark": [
+   "Դարակ"
+  ],
+  "General.Title": [
+   "Գեներալ"
+  ],
+  "Math": [
+   "Մատեն"
+  ],
+  "Characters": [
+   "Կերպարներ"
+  ],
+  "Zoom": [
+   "Զովք"
+  ],
+  "Back": [
+   "Հետույք"
+  ],
+  "Line": [
+   "Նախագիծ"
+  ],
+  "Strikethrough": [
+   "Ստրայդթրոու"
+  ],
+  "Clear": [
+   "Քլիր"
+  ],
+  "Create": [
+   "Ստեղծագործել"
+  ],
+  "OpenRecent": [
+   "Բաց վերջին"
+  ],
+  "TypewriterMode": [
+   "Typewriter Mode"
+  ]
+ },
+ "id": {
+  "About.Title": [
+   "Sekitar"
+  ],
+  "View": [
+   "Melihat"
+  ],
+  "Edit": [
+   "Mengedit"
+  ],
+  "File": [
+   "Arsip"
+  ],
+  "Help": [
+   "Tolong"
+  ],
+  "Find": [
+   "Menemukan"
+  ],
+  "Replace": [
+   "Mengganti"
+  ],
+  "Outline": [
+   "Garis"
+  ],
+  "Copy": [
+   "Menyalin"
+  ],
+  "Paste": [
+   "Pasta"
+  ],
+  "Cut": [
+   "Memotong"
+  ],
+  "Undo": [
+   "Buka"
+  ],
+  "Redo": [
+   "Mengulang"
+  ],
+  "Strong": [
+   "Berani"
+  ],
+  "Table": [
+   "Meja"
+  ],
+  "Image": [
+   "Citra"
+  ],
+  "Print": [
+   "Mencetak"
+  ],
+  "Import": [
+   "Mengimpor"
+  ],
+  "Search": [
+   "Mencari"
+  ],
+  "Delete": [
+   "Menghapus"
+  ],
+  "On": [
+   "Di atas"
+  ],
+  "Off": [
+   "Tutup"
+  ],
+  "Light": [
+   "Ringan"
+  ],
+  "View.Title": [
+   "Rupa"
+  ],
+  "Restore": [
+   "Mengembalikan"
+  ],
+  "Recover": [
+   "Mengembalikan"
+  ],
+  "Highlight": [
+   "Menyoroti"
+  ],
+  "Back": [
+   "Belakang"
+  ],
+  "Stop": [
+   "Stop"
+  ],
+  "Keep": [
+   "Simpan"
+  ],
+  "Update": [
+   "Pemutakhiran"
+  ],
+  "Underline": [
+   "Menggarisbawahi"
+  ],
+  "Hyperlink": [
+   "Tautan super"
+  ],
+  "Clear": [
+   "Jelas"
+  ],
+  "Cancel": [
+   "Membatalkan"
+  ],
+  "Confirm": [
+   "OKE"
+  ],
+  "Create": [
+   "Menciptakan"
+  ]
+ },
+ "is": {
+  "About.Title": [
+   "Um"
+  ],
+  "View": [
+   "Útsýni"
+  ],
+  "Export": [
+   "Útflutningur"
+  ],
+  "Edit": [
+   "Klippa"
+  ],
+  "Help": [
+   "Hjálpa"
+  ],
+  "Open": [
+   "Opinn"
+  ],
+  "Save": [
+   "Spara"
+  ],
+  "Outline": [
+   "Ágrip"
+  ],
+  "Copy": [
+   "Afrit"
+  ],
+  "Paste": [
+   "Klístur"
+  ],
+  "Cut": [
+   "Skera"
+  ],
+  "Redo": [
+   "Endurgera"
+  ],
+  "Strong": [
+   "Djarfur"
+  ],
+  "Code": [
+   "Kóða"
+  ],
+  "Table": [
+   "Borð"
+  ],
+  "Image": [
+   "Ímynd"
+  ],
+  "Import": [
+   "Innflutningur"
+  ],
+  "On": [
+   "Á"
+  ],
+  "Off": [
+   "Loka"
+  ],
+  "Saved": [
+   "Vistuð"
+  ],
+  "MenuBar": [
+   "Valmynd Bar"
+  ],
+  "Editor.Title": [
+   "Ritstjóri"
+  ],
+  "Light": [
+   "Ljós"
+  ],
+  "Dark": [
+   "Dökkur"
+  ],
+  "General.Title": [
+   "Almennur"
+  ],
+  "Highlight": [
+   "Hápunktur"
+  ],
+  "Feedback": [
+   "Afturverkun"
+  ],
+  "Back": [
+   "Bak"
+  ],
+  "Stop": [
+   "Stoppa"
+  ],
+  "Clear": [
+   "Skýr"
+  ],
+  "Cancel": [
+   "Afturkalla"
+  ],
+  "Confirm": [
+   "ÓKEI"
+  ],
+  "Create": [
+   "Skapa"
+  ],
+  "Duplicate": [
+   "Afrit"
+  ],
+  "FocusMode": [
+   "Fókushamur"
+  ],
+  "SidePane": [
+   "Hliðarslá"
+  ]
+ },
+ "it": {
+  "About.Title": [
+   "Informazioni su"
+  ],
+  "On": [
+   "Acceso"
+  ],
+  "Off": [
+   "Chiudi"
+  ],
+  "FocusMode": [
+   "Modalità di messa a fuoco"
+  ],
+  "Heading": [
+   "Intestazione"
+  ]
+ },
+ "ja": {
+  "Off": [
+   "閉じる"
+  ],
+  "Delete": [
+   "Delete"
+  ],
+  "Undo": [
+   "アンドゥ"
+  ],
+  "Light": [
+   "明るい"
+  ]
+ },
+ "ka": {
+  "About.Title": [
+   "მომხმარებლის"
+  ],
+  "Redo": [
+   "რედო"
+  ],
+  "Strong": [
+   "თამამი"
+  ],
+  "Emphasis": [
+   "Italic"
+  ],
+  "Table": [
+   "მაგიდა"
+  ],
+  "Heading": [
+   "სასაქონლო"
+  ],
+  "On": [
+   "წლის"
+  ],
+  "Off": [
+   "დახურვა"
+  ],
+  "Light": [
+   "მსუბუქი"
+  ],
+  "View.Title": [
+   "მოვლენები"
+  ],
+  "SelectAll": [
+   "ყველას მონიშნა"
+  ]
+ },
+ "kk": {
+  "About.Title": [
+   "Шамамен"
+  ],
+  "Paragraph": [
+   "Еже"
+  ],
+  "Outline": [
+   "Контур"
+  ],
+  "Redo": [
+   "Редо"
+  ],
+  "Emphasis": [
+   "Италич"
+  ],
+  "On": [
+   "On"
+  ],
+  "Off": [
+   "Жабу"
+  ],
+  "TypewriterMode": [
+   "Жазу жазуының режімі"
+  ],
+  "Light": [
+   "Жарық"
+  ],
+  "Dark": [
+   "Қараңғы"
+  ],
+  "Keep": [
+   "Сақтау"
+  ],
+  "Lines": [
+   "Сызықтар"
+  ],
+  "Strikethrough": [
+   "Strikethrough"
+  ],
+  "Underline": [
+   "Асты сызылсын"
+  ],
+  "Confirm": [
+   "ЖАҚСЫ"
+  ]
+ },
+ "km": {
+  "Paste": [
+   "អតីតកាល"
+  ],
+  "Strong": [
+   "ក្លាហាន"
+  ],
+  "Heading": [
+   "៣. តម្រង់"
+  ],
+  "On": [
+   "នៅ លើ"
+  ],
+  "Copy": [
+   "ចម្លងទុក"
+  ]
+ },
+ "kn": {
+  "About.Title": [
+   "ನಮ್ಮ ಬಗ್ಗೆ"
+  ],
+  "SaveAs": [
+   "As ಉಳಿಸು"
+  ],
+  "Redo": [
+   "ಮತ್ತೆ ನೋಡಿ"
+  ],
+  "Table": [
+   "ಮೇಜು"
+  ],
+  "Off": [
+   "ಮುಚ್ಚು"
+  ],
+  "Light": [
+   "ಬೆಳಕು"
+  ],
+  "Strong": [
+   "Bold"
+  ]
+ },
+ "ko": {
+  "About.Title": [
+   "약"
+  ],
+  "On": [
+   "켜기"
+  ],
+  "Off": [
+   "닫기"
+  ],
+  "Duplicate": [
+   "중복"
+  ],
+  "OpenRecent": [
+   "최근에 열기"
+  ]
+ },
+ "lo": {
+  "Save": [
+   "ຊ່ວຍປະຢັດ"
+  ],
+  "Paragraph": [
+   "ຫຍໍ້"
+  ],
+  "NewFile": [
+   "ໂປຣໄຟລ໌ໃຫມ່"
+  ],
+  "On": [
+   "On"
+  ],
+  "Saved": [
+   "ເກັບຮັກສາໄວ້"
+  ]
+ },
+ "lt": {
+  "Paragraph": [
+   "Dalies"
+  ],
+  "Open": [
+   "Atidaryta"
+  ],
+  "Save": [
+   "Taupyti"
+  ],
+  "Outline": [
+   "Struktūros"
+  ],
+  "Copy": [
+   "Kopija"
+  ],
+  "Strong": [
+   "Drąsus"
+  ],
+  "Table": [
+   "Stalas"
+  ],
+  "Print": [
+   "Atspausti"
+  ],
+  "On": [
+   "Ant"
+  ],
+  "Off": [
+   "Uždaryti"
+  ],
+  "OpenRecent": [
+   "Atidaryti naujausią"
+  ],
+  "FocusMode": [
+   "Fokusavimo režimas"
+  ],
+  "Files": [
+   "Failus"
+  ],
+  "Light": [
+   "Šviesa"
+  ],
+  "Dark": [
+   "Tamsus"
+  ],
+  "View.Title": [
+   "Veidas"
+  ],
+  "Characters": [
+   "Simbolių"
+  ],
+  "Feedback": [
+   "Atsiliepimus"
+  ],
+  "Back": [
+   "Nugara"
+  ],
+  "Stop": [
+   "Sustoti, sustok"
+  ],
+  "Strikethrough": [
+   "Perbraukti"
+  ],
+  "Underline": [
+   "Pabrėžti"
+  ],
+  "Duplicate": [
+   "Pasikartojančius"
+  ],
+  "Clear": [
+   "Aiškus"
+  ],
+  "Confirm": [
+   "GERAI"
+  ],
+  "Editor.Title": [
+   "Redaktorius"
+  ]
+ },
+ "lv": {
+  "Export": [
+   "Eksporta"
+  ],
+  "Format": [
+   "Formātā"
+  ],
+  "Help": [
+   "Palīgā"
+  ],
+  "Settings": [
+   "Iestatījumus"
+  ],
+  "Open": [
+   "Atvērts"
+  ],
+  "Save": [
+   "Glābt"
+  ],
+  "Copy": [
+   "Kopija"
+  ],
+  "Cut": [
+   "Griezt"
+  ],
+  "Redo": [
+   "Atcelt"
+  ],
+  "Strong": [
+   "Treknrakstā"
+  ],
+  "Emphasis": [
+   "Slīprakstu"
+  ],
+  "Table": [
+   "Galds"
+  ],
+  "Image": [
+   "Attēlu"
+  ],
+  "Quote": [
+   "Citēt"
+  ],
+  "Import": [
+   "Importa"
+  ],
+  "Font": [
+   "Fontu"
+  ],
+  "Heading": [
+   "Virsraksta"
+  ],
+  "Off": [
+   "Aizvērt"
+  ],
+  "Saved": [
+   "Glābts"
+  ],
+  "Files": [
+   "Failus"
+  ],
+  "View.Title": [
+   "Izskatu"
+  ],
+  "Math": [
+   "Matemātikas"
+  ],
+  "Words": [
+   "Vārdiem"
+  ],
+  "Zoom": [
+   "Tālummaiņas"
+  ],
+  "Back": [
+   "Mugura"
+  ],
+  "Stop": [
+   "Apstājieties"
+  ],
+  "Underline": [
+   "Pasvītrojumu"
+  ],
+  "Clear": [
+   "Dzidrs"
+  ],
+  "Confirm": [
+   "LABI"
+  ],
+  "Create": [
+   "Radīt"
+  ],
+  "FocusMode": [
+   "Fokusa režīms"
+  ],
+  "Outline": [
+   "Struktūras"
+  ]
+ },
+ "mi": {
+  "About.Title": [
+   "Mō"
+  ],
+  "On": [
+   "WHAKAKĀ"
+  ],
+  "Off": [
+   "Katia"
+  ],
+  "Import": [
+   "TUKU MAI"
+  ]
+ },
+ "mk": {
+  "About.Title": [
+   "За тоа."
+  ],
+  "View": [
+   "Погледајте"
+  ],
+  "Help": [
+   "Помош."
+  ],
+  "Open": [
+   "Отвори го."
+  ],
+  "Save": [
+   "Спасете"
+  ],
+  "SaveAs": [
+   "Спасете како"
+  ],
+  "Find": [
+   "Најди го."
+  ],
+  "Replace": [
+   "Заменете го"
+  ],
+  "Outline": [
+   "Утврдено."
+  ],
+  "Paste": [
+   "Паста"
+  ],
+  "Cut": [
+   "Исечи го."
+  ],
+  "Redo": [
+   "Редо."
+  ],
+  "Strong": [
+   "Смел."
+  ],
+  "Emphasis": [
+   "Италијански"
+  ],
+  "Table": [
+   "Маса"
+  ],
+  "Print": [
+   "Отпечаток"
+  ],
+  "Heading": [
+   "Тргнавме."
+  ],
+  "On": [
+   "На"
+  ],
+  "Off": [
+   "Затвори"
+  ],
+  "Saved": [
+   "Зачуван."
+  ],
+  "SidePane": [
+   "Сиде Бар"
+  ],
+  "Light": [
+   "Светло."
+  ],
+  "Dark": [
+   "Темно."
+  ],
+  "General.Title": [
+   "Генерале."
+  ],
+  "Restore": [
+   "Вратете се."
+  ],
+  "Recover": [
+   "Вратете се."
+  ],
+  "Math": [
+   "Математика."
+  ],
+  "Back": [
+   "Назад."
+  ],
+  "Stop": [
+   "Застани."
+  ],
+  "Strikethrough": [
+   "Заштитување"
+  ],
+  "Underline": [
+   "Подвлечи се."
+  ],
+  "Search": [
+   "Пребарајте"
+  ],
+  "Delete": [
+   "Избришете"
+  ],
+  "SelectAll": [
+   "Одбере сите"
+  ],
+  "NewFile": [
+   "Ново досие"
+  ],
+  "Files": [
+   "Досиеја"
+  ],
+  "Highlight": [
+   "Истакнете го"
+  ],
+  "Characters": [
+   "Карактери"
+  ]
+ },
+ "ml": {
+  "Save": [
+   "രക്ഷിക്കുക"
+  ],
+  "SaveAs": [
+   "As സംരക്ഷിക്കുക"
+  ],
+  "Saved": [
+   "രക്ഷപെട്ടു"
+  ],
+  "Table": [
+   "മേശ"
+  ],
+  "On": [
+   "ഓൺ."
+  ],
+  "Off": [
+   "അടയ്ക്കുക"
+  ],
+  "Light": [
+   "വെളിച്ചം"
+  ],
+  "Dark": [
+   "അന്ധകാരം"
+  ],
+  "Edit": [
+   "സംശോധനം"
+  ],
+  "Theme": [
+   "പ്രമേയം"
+  ]
+ },
+ "mr": {
+  "About.Title": [
+   "सुमारे"
+  ],
+  "Edit": [
+   "संकलन करणे"
+  ],
+  "File": [
+   "कानस"
+  ],
+  "Open": [
+   "उघडणे"
+  ],
+  "Save": [
+   "बचत करणे"
+  ],
+  "SaveAs": [
+   "सेव्ह एएस"
+  ],
+  "Close": [
+   "मिटणे"
+  ],
+  "Find": [
+   "आढळणे"
+  ],
+  "Copy": [
+   "कॉपी करणे"
+  ],
+  "Cut": [
+   "कापणे"
+  ],
+  "Undo": [
+   "Undo"
+  ],
+  "Redo": [
+   "Redo"
+  ],
+  "Code": [
+   "संहिता"
+  ],
+  "Quote": [
+   "भाव सांगणे"
+  ],
+  "Search": [
+   "शोधणे"
+  ],
+  "On": [
+   "वर"
+  ],
+  "Off": [
+   "मिटणे"
+  ],
+  "Saved": [
+   "वाचविले"
+  ],
+  "NewFile": [
+   "नई फाइल"
+  ],
+  "MenuBar": [
+   "Menu Bar"
+  ],
+  "Light": [
+   "उजेड"
+  ],
+  "Dark": [
+   "अंधार"
+  ],
+  "TypewriterMode": [
+   "Typewriter Mode"
+  ]
+ },
+ "ms": {
+  "Help": [
+   "Membantu"
+  ],
+  "Open": [
+   "Terbuka"
+  ],
+  "Find": [
+   "Mencari"
+  ],
+  "Replace": [
+   "Menggantikan"
+  ],
+  "Outline": [
+   "Menggariskan"
+  ],
+  "Copy": [
+   "Menyalin"
+  ],
+  "Cut": [
+   "Memotong"
+  ],
+  "Undo": [
+   "Membatalkan"
+  ],
+  "Strong": [
+   "Berani"
+  ],
+  "Quote": [
+   "Quote"
+  ],
+  "Print": [
+   "Cetakan"
+  ],
+  "Delete": [
+   "Menghapuskan"
+  ],
+  "On": [
+   "Pada"
+  ],
+  "Off": [
+   "Tutup"
+  ],
+  "Light": [
+   "Cahaya"
+  ],
+  "Restore": [
+   "Ambil semula"
+  ],
+  "Recover": [
+   "Ambil semula"
+  ],
+  "Highlight": [
+   "Menyerlahkan"
+  ],
+  "Update": [
+   "Kemaskini terakhir"
+  ],
+  "Underline": [
+   "Gariskan"
+  ],
+  "Clear": [
+   "Jelas"
+  ],
+  "Create": [
+   "Mencipta"
+  ],
+  "Add": [
+   "Menambah"
+  ],
+  "Settings": [
+   "Seting"
+  ],
+  "Lines": [
+   "Garisan"
+  ],
+  "Strikethrough": [
+   "Strikethrough"
+  ]
+ },
+ "mt": {
+  "View": [
+   "Tara"
+  ],
+  "Export": [
+   "Esportazzjoni"
+  ],
+  "Edit": [
+   "Teditja"
+  ],
+  "Open": [
+   "Miftuħa"
+  ],
+  "Save": [
+   "Tissejvja"
+  ],
+  "Close": [
+   "Qrib"
+  ],
+  "Find": [
+   "Issib"
+  ],
+  "Outline": [
+   "Profil"
+  ],
+  "Copy": [
+   "Kopja"
+  ],
+  "Cut": [
+   "Maqtugħa"
+  ],
+  "Undo": [
+   "Erġa"
+  ],
+  "Print": [
+   "Tipprintja"
+  ],
+  "Import": [
+   "Importazzjoni"
+  ],
+  "Search": [
+   "Tiftix"
+  ],
+  "Delete": [
+   "Tħassar"
+  ],
+  "On": [
+   "Fuq"
+  ],
+  "Off": [
+   "Qrib"
+  ],
+  "Light": [
+   "Dawl"
+  ],
+  "Highlight": [
+   "Aċċenn"
+  ],
+  "Strikethrough": [
+   "Ingassa"
+  ],
+  "Clear": [
+   "Ċara"
+  ],
+  "Create": [
+   "Toħloq"
+  ],
+  "Restore": [
+   "Restawr"
+  ],
+  "Recover": [
+   "Restawr"
+  ]
+ },
+ "nb": {
+  "View": [
+   "Utsikt"
+  ],
+  "Open": [
+   "Åpen"
+  ],
+  "Close": [
+   "Lukke"
+  ],
+  "Find": [
+   "Finne"
+  ],
+  "Replace": [
+   "Erstatte"
+  ],
+  "Outline": [
+   "Omriss"
+  ],
+  "Copy": [
+   "Kopi"
+  ],
+  "Paste": [
+   "Lime inn"
+  ],
+  "Cut": [
+   "Klippe"
+  ],
+  "Table": [
+   "Bord"
+  ],
+  "Quote": [
+   "Sitere"
+  ],
+  "Print": [
+   "Trykke"
+  ],
+  "Search": [
+   "Søke"
+  ],
+  "Delete": [
+   "Slette"
+  ],
+  "Off": [
+   "Lukke"
+  ],
+  "SidePane": [
+   "Side Bar"
+  ],
+  "Editor.Title": [
+   "Redaktør"
+  ],
+  "Restore": [
+   "Gjenopprette"
+  ],
+  "Recover": [
+   "Gjenopprette"
+  ],
+  "Highlight": [
+   "Høydepunkt"
+  ],
+  "Zoom": [
+   "Zoome"
+  ],
+  "Underline": [
+   "Understreke"
+  ],
+  "Clear": [
+   "Klar"
+  ],
+  "Cancel": [
+   "Annullere"
+  ],
+  "Create": [
+   "Skape"
+  ],
+  "Add": [
+   "Tilføye"
+  ],
+  "Export": [
+   "Eksport"
+  ],
+  "Edit": [
+   "Redigere"
+  ],
+  "Update": [
+   "Oppdatering"
+  ]
+ },
+ "ne": {
+  "About.Title": [
+   "को बारे मा"
+  ],
+  "Help": [
+   "मद्दत गर्नुहोस्"
+  ],
+  "On": [
+   "मा"
+  ],
+  "Off": [
+   "बन्द गर्नुहोस्"
+  ],
+  "Save": [
+   "बचत गर्नुहोस्"
+  ],
+  "SaveAs": [
+   "यस रूपमा बचत गर्नुहोस्"
+  ]
+ },
+ "nl": {
+  "Off": [
+   "Sluiten"
+  ],
+  "Duplicate": [
+   "Dupliceer"
+  ],
+  "Rename": [
+   "Hernoemen"
+  ],
+  "Characters": [
+   "Karakters"
+  ]
+ },
+ "or": {
+  "Edit": [
+   "[ସମ୍ପାଦନା]"
+  ],
+  "Export": [
+   "ରପ୍ତାନି[ସମ୍ପାଦନା]"
+  ],
+  "Paragraph": [
+   "ଅନୁଚ୍ଛେଦ[ସମ୍ପାଦନା]"
+  ],
+  "Outline": [
+   "ରୂପରେଖ[ସମ୍ପାଦନା]"
+  ],
+  "Table": [
+   "ସାରଣୀ[ସମ୍ପାଦନା]"
+  ],
+  "Open": [
+   "ଖୋଲା ଅଛି"
+  ],
+  "Delete": [
+   "ବିଲୋପ ହୋଇଛି"
+  ],
+  "Quote": [
+   "ଉଦାହରଣ ଦିଅନ୍ତୁ"
+  ],
+  "On": [
+   "ଏହା ଉପରେ"
+  ],
+  "Off": [
+   "ବନ୍ଦ କରନ୍ତୁ"
+  ],
+  "Help": [
+   "ସାହାଯ୍ୟ କରନ୍ତୁ"
+  ]
+ },
+ "pa": {
+  "Off": [
+   "ਬੰਦ ਕਰੋ"
+  ],
+  "Heading": [
+   "Heading"
+  ],
+  "Light": [
+   "ਰੋਸ਼ਨੀ"
+  ],
+  "Dark": [
+   "ਹਨੇਰਾ"
+  ],
+  "Undo": [
+   "ਵਾਪਿਸ"
+  ]
+ },
+ "pl": {
+  "About.Title": [
+   "Około"
+  ],
+  "On": [
+   "Na"
+  ],
+  "Off": [
+   "Zamykać"
+  ],
+  "Edit": [
+   "Redagować"
+  ],
+  "Open": [
+   "Otwierać"
+  ],
+  "Save": [
+   "Zapisać"
+  ],
+  "Close": [
+   "Zamykać"
+  ],
+  "Find": [
+   "Znaleźć"
+  ],
+  "Replace": [
+   "Zastąpić"
+  ],
+  "Copy": [
+   "Kopiować"
+  ],
+  "Paste": [
+   "Wklejać"
+  ],
+  "Cut": [
+   "Ciąć"
+  ],
+  "Undo": [
+   "Cofnąć"
+  ],
+  "Redo": [
+   "Ponowić"
+  ],
+  "Strong": [
+   "Śmiały"
+  ],
+  "Table": [
+   "Stół"
+  ],
+  "Print": [
+   "Drukować"
+  ],
+  "Search": [
+   "Szukać"
+  ],
+  "Delete": [
+   "Usunąć"
+  ],
+  "Theme": [
+   "Kompozycja"
+  ],
+  "FocusMode": [
+   "Tryb ostrości"
+  ],
+  "Editor.Title": [
+   "Redaktor"
+  ],
+  "Light": [
+   "Światło"
+  ],
+  "Restore": [
+   "Przywrócić"
+  ],
+  "Recover": [
+   "Przywrócić"
+  ],
+  "Highlight": [
+   "Wyróżnić"
+  ],
+  "Zoom": [
+   "Powiększenia"
+  ],
+  "Feedback": [
+   "Sprzężenie zwrotne"
+  ],
+  "Rename": [
+   "Przemianować"
+  ],
+  "Clear": [
+   "Jasny"
+  ],
+  "Create": [
+   "Tworzyć"
+  ],
+  "Add": [
+   "Dodawać"
+  ],
+  "Underline": [
+   "Podkreślać"
+  ],
+  "Duplicate": [
+   "Duplikat"
+  ],
+  "Characters": [
+   "Znaków"
+  ],
+  "Outline": [
+   "Zarys"
+  ],
+  "Stop": [
+   "Zatrzymać"
+  ]
+ },
+ "prs": {
+  "Export": [
+   "صادرات"
+  ],
+  "Import": [
+   "واردات"
+  ],
+  "Paste": [
+   "خمیر کردن"
+  ],
+  "Undo": [
+   "باز کردن"
+  ],
+  "Redo": [
+   "از سر بازنش"
+  ],
+  "Strong": [
+   "جسورانه"
+  ],
+  "Emphasis": [
+   "ایتالیا"
+  ],
+  "On": [
+   "در"
+  ],
+  "Off": [
+   "بستن"
+  ],
+  "General.Title": [
+   "جنرال"
+  ],
+  "Light": [
+   "نور"
+  ],
+  "Dark": [
+   "تاریک"
+  ],
+  "View": [
+   "مشاهده"
+  ]
+ },
+ "pt": {
+  "On": [
+   "Ligado"
+  ],
+  "Off": [
+   "Desligado"
+  ],
+  "HomePage.OpenFile": [
+   "Abrir ficheiro"
+  ],
+  "HomePage.RecentFiles": [
+   "Ficheiros recentes"
+  ],
+  "Confirm": [
+   "OKEY"
+  ],
+  "Restore": [
+   "Restaurar padrões"
+  ],
+  "Underline": [
+   "Sublinhar"
+  ],
+  "Find": [
+   "Encontrar"
+  ]
+ },
+ "ro": {
+  "View": [
+   "Vedere"
+  ],
+  "Save": [
+   "Salva"
+  ],
+  "Find": [
+   "Găsi"
+  ],
+  "Replace": [
+   "Înlocui"
+  ],
+  "Outline": [
+   "Contur"
+  ],
+  "Copy": [
+   "Copie"
+  ],
+  "Paste": [
+   "Pastă"
+  ],
+  "Cut": [
+   "Tăia"
+  ],
+  "Undo": [
+   "Desface"
+  ],
+  "Redo": [
+   "Refacere"
+  ],
+  "Strong": [
+   "Îndrăzneț"
+  ],
+  "Table": [
+   "Masă"
+  ],
+  "Heading": [
+   "Rubrica"
+  ],
+  "Print": [
+   "Tipări"
+  ],
+  "Import": [
+   "Importa"
+  ],
+  "On": [
+   "Pe"
+  ],
+  "Off": [
+   "Închide"
+  ],
+  "FocusMode": [
+   "Mod focalizare"
+  ],
+  "Light": [
+   "Lumină"
+  ],
+  "View.Title": [
+   "Apariție"
+  ],
+  "Restore": [
+   "Restaura"
+  ],
+  "Recover": [
+   "Restaura"
+  ],
+  "Highlight": [
+   "Evidenția"
+  ],
+  "Back": [
+   "Spate"
+  ],
+  "Stop": [
+   "Opreşte-te"
+  ],
+  "Update": [
+   "Actualiza"
+  ],
+  "Strikethrough": [
+   "Tăiere cu o linie"
+  ],
+  "Clear": [
+   "Clar"
+  ],
+  "Cancel": [
+   "Anula"
+  ],
+  "Create": [
+   "Crea"
+  ],
+  "Add": [
+   "Adăuga"
+  ],
+  "Files": [
+   "Fişierele"
+  ],
+  "Export": [
+   "Export"
+  ],
+  "Math": [
+   "Matematica"
+  ]
+ },
+ "ru": {
+  "On": [
+   "Включено"
+  ],
+  "Off": [
+   "Закрыть"
+  ],
+  "Outline": [
+   "Контур"
+  ],
+  "Light": [
+   "Свет"
+  ],
+  "Dark": [
+   "Темный"
+  ],
+  "OpenRecent": [
+   "Открыть недавно"
+  ],
+  "Line": [
+   "Строки"
+  ],
+  "Lines": [
+   "Строка"
+  ],
+  "Strikethrough": [
+   "Не удалено"
+  ],
+  "Paragraph": [
+   "Параграф"
+  ],
+  "Zoom": [
+   "Масштабировать"
+  ],
+  "MenuBar": [
+   "Меню"
+  ]
+ },
+ "sk": {
+  "About.Title": [
+   "O"
+  ],
+  "View": [
+   "Pohľad"
+  ],
+  "Export": [
+   "Vývoz"
+  ],
+  "Help": [
+   "Pomoc"
+  ],
+  "Open": [
+   "Otvorený"
+  ],
+  "Save": [
+   "Zachrániť"
+  ],
+  "Cut": [
+   "Rezať"
+  ],
+  "Undo": [
+   "Odčiniť"
+  ],
+  "Strong": [
+   "Smelý"
+  ],
+  "Table": [
+   "Stôl"
+  ],
+  "Image": [
+   "Obraz"
+  ],
+  "Quote": [
+   "Citát"
+  ],
+  "On": [
+   "Na"
+  ],
+  "Off": [
+   "Zavrieť"
+  ],
+  "FocusMode": [
+   "Režim zaostrenia"
+  ],
+  "StatusBar": [
+   "Stavovom"
+  ],
+  "Light": [
+   "Svetlo"
+  ],
+  "Back": [
+   "Chrbát"
+  ],
+  "Clear": [
+   "Jasný"
+  ],
+  "Add": [
+   "Sčítať"
+  ],
+  "Underline": [
+   "Podčiarknuť"
+  ]
+ },
+ "sl": {
+  "About.Title": [
+   "Približno"
+  ],
+  "Edit": [
+   "Urediti"
+  ],
+  "Open": [
+   "Odprt"
+  ],
+  "Save": [
+   "Shraniti"
+  ],
+  "Close": [
+   "Blizu"
+  ],
+  "Find": [
+   "Najti"
+  ],
+  "Replace": [
+   "Zamenjati"
+  ],
+  "Copy": [
+   "Kopirati"
+  ],
+  "Paste": [
+   "Prilepiti"
+  ],
+  "Cut": [
+   "Rezati"
+  ],
+  "Undo": [
+   "Razveljaviti"
+  ],
+  "Strong": [
+   "Smel"
+  ],
+  "Table": [
+   "Miza"
+  ],
+  "Image": [
+   "Podoba"
+  ],
+  "Quote": [
+   "Narekovaj"
+  ],
+  "Print": [
+   "Tiskati"
+  ],
+  "Delete": [
+   "Izbrisati"
+  ],
+  "On": [
+   "Na"
+  ],
+  "Off": [
+   "Blizu"
+  ],
+  "Saved": [
+   "Shranjene"
+  ],
+  "FocusMode": [
+   "Način izostritve"
+  ],
+  "Light": [
+   "Luč"
+  ],
+  "Dark": [
+   "Temen"
+  ],
+  "Restore": [
+   "Obnoviti"
+  ],
+  "Recover": [
+   "Obnoviti"
+  ],
+  "Highlight": [
+   "Poudariti"
+  ],
+  "Math": [
+   "Matematike"
+  ],
+  "Back": [
+   "Hrbet"
+  ],
+  "Stop": [
+   "Ustavi se"
+  ],
+  "Update": [
+   "Posodobitev"
+  ],
+  "Strikethrough": [
+   "Prečlev"
+  ],
+  "Clear": [
+   "Jasen"
+  ],
+  "Cancel": [
+   "Odpovedati"
+  ],
+  "Create": [
+   "Ustvariti"
+  ],
+  "Add": [
+   "Dodati"
+  ],
+  "Duplicate": [
+   "Dvojnik"
+  ]
+ },
+ "sq": {
+  "Paste": [
+   "Ngjitës"
+  ],
+  "Strong": [
+   "E guximshme"
+  ],
+  "Table": [
+   "Tavolinë"
+  ],
+  "Heading": [
+   "Drejtimi"
+  ],
+  "Font": [
+   "Gërmat"
+  ],
+  "On": [
+   "Në"
+  ],
+  "Off": [
+   "Mbylle"
+  ],
+  "Light": [
+   "Dritë"
+  ],
+  "Dark": [
+   "Errësirë"
+  ],
+  "General.Title": [
+   "Gjeneral"
+  ],
+  "Editor.Title": [
+   "Modifikues"
+  ],
+  "Characters": [
+   "Personazhet"
+  ],
+  "Strikethrough": [
+   "Goditje"
+  ],
+  "Clear": [
+   "E qartë"
+  ],
+  "Back": [
+   "Mbrapa."
+  ],
+  "Stop": [
+   "Ndalo."
+  ],
+  "Files": [
+   "File"
+  ],
+  "File": [
+   "File"
+  ],
+  "NewFile": [
+   "File i ri"
+  ],
+  "OpenRecent": [
+   "E hapur së fundmi"
+  ],
+  "Delete": [
+   "Elemino"
+  ]
+ },
+ "sr-Latn": {
+  "About.Title": [
+   "O"
+  ],
+  "Theme": [
+   "Temu"
+  ],
+  "Paragraph": [
+   "Pasusa"
+  ],
+  "File": [
+   "Datoteke"
+  ],
+  "Open": [
+   "Otvorite"
+  ],
+  "Close": [
+   "Zatvorite"
+  ],
+  "Find": [
+   "Pronaжi"
+  ],
+  "Outline": [
+   "Strukture"
+  ],
+  "Copy": [
+   "Kopiranja"
+  ],
+  "Paste": [
+   "Nalepite"
+  ],
+  "Undo": [
+   "Opozovete"
+  ],
+  "Code": [
+   "Šifru"
+  ],
+  "Table": [
+   "Stol"
+  ],
+  "Quote": [
+   "Ponude"
+  ],
+  "Search": [
+   "Pretrage"
+  ],
+  "Delete": [
+   "Izbrišete"
+  ],
+  "On": [
+   "Na"
+  ],
+  "Off": [
+   "Zatvorite"
+  ],
+  "Saved": [
+   "Sačuvane"
+  ],
+  "Light": [
+   "Svetlo"
+  ],
+  "Dark": [
+   "Mraиno"
+  ],
+  "Restore": [
+   "Vratite"
+  ],
+  "Recover": [
+   "Vratite"
+  ],
+  "Words": [
+   "Reиi"
+  ],
+  "Stop": [
+   "Prestani"
+  ],
+  "Duplicate": [
+   "Duplirane"
+  ],
+  "Rename": [
+   "Preimenujete"
+  ],
+  "Clear": [
+   "Opozovite izbor"
+  ],
+  "Create": [
+   "Kreirate"
+  ],
+  "Add": [
+   "Dodati"
+  ],
+  "Characters": [
+   "Znakova"
+  ],
+  "Print": [
+   "Štampanje"
+  ],
+  "Lines": [
+   "Redove"
+  ]
+ },
+ "sv": {
+  "View": [
+   "Utsikt"
+  ],
+  "Close": [
+   "Stänga"
+  ],
+  "Find": [
+   "Hitta"
+  ],
+  "Replace": [
+   "Ersätta"
+  ],
+  "Outline": [
+   "Kontur"
+  ],
+  "Copy": [
+   "Kopia"
+  ],
+  "Paste": [
+   "Klistra"
+  ],
+  "Cut": [
+   "Skära"
+  ],
+  "Redo": [
+   "Göra om"
+  ],
+  "Strong": [
+   "Djärv"
+  ],
+  "Table": [
+   "Bord"
+  ],
+  "Quote": [
+   "Citera"
+  ],
+  "Print": [
+   "Trycka"
+  ],
+  "Search": [
+   "Söka"
+  ],
+  "Off": [
+   "Stänga"
+  ],
+  "Saved": [
+   "Räddad"
+  ],
+  "SidePane": [
+   "Sidostång"
+  ],
+  "Files": [
+   "ﬁler"
+  ],
+  "Editor.Title": [
+   "Redaktör"
+  ],
+  "Light": [
+   "Ljus"
+  ],
+  "Dark": [
+   "Mörk"
+  ],
+  "Restore": [
+   "Återställa"
+  ],
+  "Recover": [
+   "Återställa"
+  ],
+  "Highlight": [
+   "Höjdpunkt"
+  ],
+  "Zoom": [
+   "Zooma"
+  ],
+  "Stop": [
+   "Stanna"
+  ],
+  "Underline": [
+   "Understryka"
+  ],
+  "Clear": [
+   "Klar"
+  ],
+  "Cancel": [
+   "Annullera"
+  ],
+  "Confirm": [
+   "OKEJ"
+  ],
+  "Add": [
+   "Addera"
+  ],
+  "Lines": [
+   "Linjer"
+  ],
+  "Export": [
+   "Export"
+  ],
+  "Import": [
+   "Import"
+  ]
+ },
+ "sw": {
+  "View": [
+   "Mwoneko"
+  ],
+  "Help": [
+   "Kusaidia"
+  ],
+  "Settings": [
+   "Vipimo"
+  ],
+  "Find": [
+   "Kupata"
+  ],
+  "Search": [
+   "Tafutiza"
+  ],
+  "Strong": [
+   "Kolevu"
+  ],
+  "On": [
+   "Kwenye"
+  ],
+  "Off": [
+   "Funga"
+  ],
+  "StatusBar": [
+   "Hali Bar"
+  ],
+  "SidePane": [
+   "Baa ya upande"
+  ],
+  "Light": [
+   "Mwanga"
+  ],
+  "Strikethrough": [
+   "Mgomo"
+  ],
+  "Rename": [
+   "Jina lake"
+  ],
+  "Clear": [
+   "Wazi"
+  ],
+  "Confirm": [
+   "Sawa kabisa"
+  ]
+ },
+ "ta": {
+  "View": [
+   "நோக்கு"
+  ],
+  "Export": [
+   "ஏற்றுமதிப்பண்டம்"
+  ],
+  "Theme": [
+   "ஆய்வுப்பொருள்"
+  ],
+  "Paragraph": [
+   "ஏட்டின் ஒருபத்தி"
+  ],
+  "Edit": [
+   "பதிப்பி"
+  ],
+  "File": [
+   "அரம்"
+  ],
+  "Open": [
+   "திறந்த வெளியிடம்"
+  ],
+  "Save": [
+   "கெலிப்புத்தடங்கல்"
+  ],
+  "SaveAs": [
+   "சேமிக்கவும்"
+  ],
+  "Close": [
+   "அடைப்பு"
+  ],
+  "Find": [
+   "கண்டுபிடிப்பு"
+  ],
+  "Replace": [
+   "பின்னுற்றிடங் கொள்"
+  ],
+  "Copy": [
+   "சரிபடிவம்"
+  ],
+  "Paste": [
+   "கூழ்"
+  ],
+  "Cut": [
+   "தறிப்பு"
+  ],
+  "Undo": [
+   "கெடு"
+  ],
+  "Redo": [
+   "திரும்பச் செய்"
+  ],
+  "Strong": [
+   "துணிவுள்ள"
+  ],
+  "Code": [
+   "சட்டத்தொகுப்பேடு"
+  ],
+  "Table": [
+   "மேசை"
+  ],
+  "Image": [
+   "உருவம்"
+  ],
+  "Quote": [
+   "மேலாட்சிப்பகுதி"
+  ],
+  "Print": [
+   "அச்சு"
+  ],
+  "Import": [
+   "உட்பொருள்"
+  ],
+  "Window": [
+   "பலகணி"
+  ],
+  "Search": [
+   "தேட்டம்"
+  ],
+  "Delete": [
+   "தீங்கான"
+  ],
+  "New": [
+   "புது"
+  ],
+  "OpenRecent": [
+   "திறந்த சமீபத்திய"
+  ],
+  "On": [
+   "மேல்"
+  ],
+  "Off": [
+   "அடைப்பு"
+  ],
+  "Saved": [
+   "சேமிக்க"
+  ]
+ },
+ "te": {
+  "View": [
+   "దృశ్యం"
+  ],
+  "Edit": [
+   "[మార్చు]"
+  ],
+  "File": [
+   "ఆకురాయి"
+  ],
+  "Help": [
+   "సహాయం చేయు"
+  ],
+  "Open": [
+   "బహిరంగ"
+  ],
+  "Save": [
+   "కాపాడు"
+  ],
+  "Close": [
+   "దగ్గర"
+  ],
+  "Outline": [
+   "ఆకారం"
+  ],
+  "Copy": [
+   "ప్రతి"
+  ],
+  "Table": [
+   "బల్ల"
+  ],
+  "Image": [
+   "విగ్రహం"
+  ],
+  "Delete": [
+   "పరిహరించు"
+  ],
+  "OpenRecent": [
+   "ఓపెన్ రీసెంట్"
+  ],
+  "On": [
+   "మీద"
+  ],
+  "Off": [
+   "దగ్గర"
+  ]
+ },
+ "th": {
+  "About.Title": [
+   "ประมาณ"
+  ],
+  "View": [
+   "ทิวทัศน์"
+  ],
+  "Theme": [
+   "หัวข้อ"
+  ],
+  "File": [
+   "แฟ้ม"
+  ],
+  "Files": [
+   "แฟ้ม"
+  ],
+  "Save": [
+   "ประหยัด"
+  ],
+  "Find": [
+   "หา"
+  ],
+  "Replace": [
+   "แทน"
+  ],
+  "Copy": [
+   "ลอก"
+  ],
+  "Paste": [
+   "แปะ"
+  ],
+  "Undo": [
+   "แก้"
+  ],
+  "Redo": [
+   "ทำ ซ้ำ"
+  ],
+  "Strong": [
+   "กล้า"
+  ],
+  "Table": [
+   "โต๊ะ"
+  ],
+  "Quote": [
+   "อ้าง"
+  ],
+  "Search": [
+   "ค้น"
+  ],
+  "Heading": [
+   "หัว เรื่อง"
+  ],
+  "On": [
+   "บน"
+  ],
+  "Editor.Title": [
+   "บรรณาธิการ"
+  ],
+  "Light": [
+   "แสง"
+  ],
+  "Restore": [
+   "ซ่อมแซม"
+  ],
+  "Recover": [
+   "ซ่อมแซม"
+  ],
+  "Words": [
+   "นิรุกติ"
+  ],
+  "Feedback": [
+   "การตอบสนอง"
+  ],
+  "Line": [
+   "สาย"
+  ],
+  "Inline": [
+   "แบบ อิน ไลน์"
+  ],
+  "Clear": [
+   "ใส"
+  ],
+  "Confirm": [
+   "ตกลง, ได้"
+  ]
+ },
+ "ti": {
+  "Close": [
+   "ቀሪብካ"
+  ],
+  "Off": [
+   "ቀሪብካ"
+  ],
+  "Save": [
+   "ኣድሕን"
+  ],
+  "Saved": [
+   "ዝደሓነ"
+  ],
+  "General.Title": [
+   "ጀነራል"
+  ]
+ },
+ "tr": {
+  "Export": [
+   "Ihracat"
+  ],
+  "Import": [
+   "Ithalat"
+  ],
+  "Edit": [
+   "Düzenlemek"
+  ],
+  "Open": [
+   "Açık"
+  ],
+  "Save": [
+   "Kurtarmak"
+  ],
+  "Close": [
+   "Kapatmak"
+  ],
+  "Find": [
+   "Bulmak"
+  ],
+  "Replace": [
+   "Değiştirmek"
+  ],
+  "Copy": [
+   "Kopya etmek"
+  ],
+  "Paste": [
+   "Yapıştırmak"
+  ],
+  "Cut": [
+   "Kesmek"
+  ],
+  "Undo": [
+   "Geri almak"
+  ],
+  "Table": [
+   "Masa"
+  ],
+  "Print": [
+   "Yazdırmak"
+  ],
+  "Search": [
+   "Aramak"
+  ],
+  "Delete": [
+   "Silmek"
+  ],
+  "On": [
+   "Üzerinde"
+  ],
+  "Off": [
+   "Kapatmak"
+  ],
+  "Light": [
+   "Işık"
+  ],
+  "Restore": [
+   "Geri yüklemek"
+  ],
+  "Recover": [
+   "Geri yüklemek"
+  ],
+  "Highlight": [
+   "Vurgulamak"
+  ],
+  "Zoom": [
+   "Yakınlaştırmak"
+  ],
+  "Feedback": [
+   "Geri besleme"
+  ],
+  "Stop": [
+   "Durmak"
+  ],
+  "Update": [
+   "Güncelleştirmek"
+  ],
+  "Underline": [
+   "Altını çizmek"
+  ],
+  "Duplicate": [
+   "Yinelenen"
+  ],
+  "Clear": [
+   "Berrak"
+  ],
+  "Confirm": [
+   "TAMAM"
+  ],
+  "Create": [
+   "Yaratmak"
+  ],
+  "Add": [
+   "Eklemek"
+  ],
+  "Files": [
+   "Dosyaları"
+  ],
+  "Website": [
+   "İnternet Sitesi"
+  ]
+ },
+ "uk": {
+  "About.Title": [
+   "Про"
+  ],
+  "Open": [
+   "Відкривати"
+  ],
+  "Save": [
+   "Рятувати"
+  ],
+  "Paste": [
+   "Па́ста"
+  ],
+  "Cut": [
+   "Різати"
+  ],
+  "Table": [
+   "Стіл"
+  ],
+  "Image": [
+   "Образ"
+  ],
+  "Quote": [
+   "Пропонування"
+  ],
+  "Print": [
+   "Друкувати"
+  ],
+  "Search": [
+   "Шукати"
+  ],
+  "On": [
+   "На"
+  ],
+  "Off": [
+   "Закрити"
+  ],
+  "Saved": [
+   "Збережені"
+  ],
+  "FocusMode": [
+   "Режим фокусування"
+  ],
+  "Math": [
+   "Математики"
+  ],
+  "Characters": [
+   "Символів"
+  ],
+  "Zoom": [
+   "Масштабування"
+  ],
+  "Back": [
+   "Задній"
+  ],
+  "Update": [
+   "Оновлювати"
+  ],
+  "Line": [
+   "Лінія"
+  ],
+  "Lines": [
+   "Лінії"
+  ],
+  "Underline": [
+   "Підкреслювати"
+  ],
+  "Clear": [
+   "Ясний"
+  ],
+  "Confirm": [
+   "ГАРАЗД"
+  ],
+  "Create": [
+   "Творити"
+  ]
+ },
+ "ur": {
+  "About.Title": [
+   "تقریباً"
+  ],
+  "View": [
+   "منظر"
+  ],
+  "Export": [
+   "برآمد"
+  ],
+  "Theme": [
+   "موضوع"
+  ],
+  "Format": [
+   "وضع"
+  ],
+  "Save": [
+   "بچانا"
+  ],
+  "Find": [
+   "پانا"
+  ],
+  "Code": [
+   "ضابطہ"
+  ],
+  "Table": [
+   "میز"
+  ],
+  "Image": [
+   "روپ"
+  ],
+  "Quote": [
+   "اشارہ"
+  ],
+  "Print": [
+   "چھاپنا"
+  ],
+  "Delete": [
+   "مٹانا"
+  ],
+  "On": [
+   "پر"
+  ],
+  "Off": [
+   "بند کرنا"
+  ],
+  "Files": [
+   "مسلیں"
+  ],
+  "Light": [
+   "روشنی"
+  ],
+  "Dark": [
+   "اندھیرا"
+  ],
+  "Close": [
+   "بند کرنا"
+  ],
+  "Open": [
+   "کھولنا"
+  ],
+  "Cut": [
+   "کاٹنا"
+  ],
+  "Strong": [
+   "جلی"
+  ]
+ },
+ "vi": {
+  "About.Title": [
+   "Về"
+  ],
+  "View": [
+   "Cảnh"
+  ],
+  "Export": [
+   "Xuất khẩu"
+  ],
+  "Theme": [
+   "Đề tài"
+  ],
+  "Edit": [
+   "Biên tập"
+  ],
+  "Save": [
+   "Cứu"
+  ],
+  "Find": [
+   "Tìm thấy"
+  ],
+  "Outline": [
+   "Đường nét"
+  ],
+  "Copy": [
+   "Bản sao"
+  ],
+  "Redo": [
+   "Redo"
+  ],
+  "Strong": [
+   "Dũng cảm"
+  ],
+  "Table": [
+   "Bàn"
+  ],
+  "Import": [
+   "Nhập khẩu"
+  ],
+  "On": [
+   "Trên"
+  ],
+  "Off": [
+   "Đóng"
+  ],
+  "Saved": [
+   "Lưu"
+  ],
+  "FocusMode": [
+   "Chế độ lấy nét"
+  ],
+  "Editor.Title": [
+   "Biên tập viên"
+  ],
+  "Light": [
+   "Ánh sáng"
+  ],
+  "View.Title": [
+   "Bề ngoài"
+  ],
+  "Highlight": [
+   "Nổi bật"
+  ],
+  "Zoom": [
+   "Zoom"
+  ],
+  "Back": [
+   "Lưng"
+  ],
+  "Inline": [
+   "Inline"
+  ],
+  "Hyperlink": [
+   "Siêu kết nối"
+  ],
+  "Duplicate": [
+   "Bản sao"
+  ],
+  "Rename": [
+   "Rename"
+  ],
+  "Clear": [
+   "Trong"
+  ],
+  "Website": [
+   "Trang mạng"
+  ],
+  "Font": [
+   "Phông"
+  ]
+ },
+ "zh-Hant": {
+  "File": [
+   "檔"
+  ],
+  "Files": [
+   "檔"
+  ],
+  "NewFile": [
+   "新建檔"
+  ],
+  "Settings": [
+   "設置"
+  ],
+  "Open": [
+   "打開"
+  ],
+  "Save": [
+   "保存"
+  ],
+  "SaveAs": [
+   "另存為"
+  ],
+  "Find": [
+   "查找"
+  ],
+  "Replace": [
+   "替換"
+  ],
+  "Paste": [
+   "粘貼"
+  ],
+  "Cut": [
+   "剪切"
+  ],
+  "Undo": [
+   "撤銷"
+  ],
+  "Strong": [
+   "加粗"
+  ],
+  "Code": [
+   "代碼"
+  ],
+  "Image": [
+   "圖像"
+  ],
+  "Import": [
+   "導入"
+  ],
+  "Search": [
+   "搜索"
+  ],
+  "Font": [
+   "字體"
+  ],
+  "New": [
+   "新建"
+  ],
+  "NewWindow": [
+   "新建視窗"
+  ],
+  "OpenRecent": [
+   "打開最近"
+  ],
+  "Saved": [
+   "已保存"
+  ],
+  "SaveState.Saved": [
+   "已保存"
+  ],
+  "SaveState.Unsaved": [
+   "未保存"
+  ],
+  "MenuBar": [
+   "功能表欄"
+  ],
+  "General.Title": [
+   "常規"
+  ],
+  "Feedback": [
+   "反饋"
+  ],
+  "Underline": [
+   "下劃線"
+  ],
+  "Create": [
+   "創建"
+  ],
+  "Add": [
+   "添加"
+  ],
+  "Help": [
+   "説明"
+  ],
+  "Highlight": [
+   "高亮"
+  ],
+  "Inline": [
+   "內聯"
+  ],
+  "Toc": [
+   "內容目錄"
+  ]
+ },
+ "zu": {
+  "About.Title": [
+   "Nge"
+  ],
+  "Theme": [
+   "Indikimba"
+  ],
+  "Format": [
+   "Hlela"
+  ],
+  "Undo": [
+   "Guqula"
+  ],
+  "On": [
+   "Ku"
+  ],
+  "Off": [
+   "Vala"
+  ],
+  "Underline": [
+   "Gcizelela"
+  ],
+  "Search": [
+   "Hlola"
+  ],
+  "Light": [
+   "Ukukhanya"
+  ],
+  "Dark": [
+   "Ubumnyama"
+  ]
+ }
+}

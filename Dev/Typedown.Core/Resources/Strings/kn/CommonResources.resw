@@ -546,7 +546,7 @@
     <comment>了解更多</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>ಬೆಳಕು</value>
+    <value>ತಿಳಿ</value>
     <comment>应用主题/浅色</comment>
   </data>
   <data name="Line" xml:space="preserve">
@@ -654,7 +654,7 @@
     <comment>未设置</comment>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>ಮುಚ್ಚು</value>
+    <value>ಆಫ್</value>
     <comment>开关/关</comment>
   </data>
   <data name="Ok" xml:space="preserve">
@@ -730,7 +730,7 @@
     <comment>段落/引用</comment>
   </data>
   <data name="Redo" xml:space="preserve">
-    <value>ಮತ್ತೆ ನೋಡಿ</value>
+    <value>ಮತ್ತೆ ಮಾಡು</value>
     <comment>编辑/重做</comment>
   </data>
   <data name="RemoveColumn" xml:space="preserve">
@@ -770,7 +770,7 @@
     <comment>文件/保存</comment>
   </data>
   <data name="SaveAs" xml:space="preserve">
-    <value>As ಉಳಿಸು</value>
+    <value>ಹೀಗೆ ಉಳಿಸಿ</value>
     <comment>文件/另存为</comment>
   </data>
   <data name="Saved" xml:space="preserve">
@@ -826,11 +826,11 @@
     <comment>格式/删除线</comment>
   </data>
   <data name="Strong" xml:space="preserve">
-    <value>Bold</value>
+    <value>ದಪ್ಪ</value>
     <comment>格式/加粗</comment>
   </data>
   <data name="Table" xml:space="preserve">
-    <value>ಮೇಜು</value>
+    <value>ಕೋಷ್ಟಕ</value>
     <comment>段落/表格</comment>
   </data>
   <data name="TaskList" xml:space="preserve">
