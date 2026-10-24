@@ -167,6 +167,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | VI02 | Vim keys in reading mode: G, gg, ]] and Ctrl+D move the page |
 | TC01 | a tab closed with its x button: the outline shows the headings of the tab shown next |
 | TC02 | a tab closed while its neighbour is not the tab used last: the outline is the shown tab's, with long documents |
+| TC03 | a long document's tab closed and another file opened right after: the file opened is the one shown |
 | SE01 | the startup action chosen on the settings page is in the settings file, and so are the two home page switches below it |
 | RC01 | two folders opened, A then B: File > Open recent > Folders lists B then A by name and folder, and choosing A makes it the folder pane's root |
 | RC02 | a recent file deleted stays in the list greyed out and a right-click removes it; Clear recent files leaves the recent folders |
@@ -181,6 +182,12 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | HP01 | a start with the settings as they come shows the home page; a recent file clicked there opens in its tab and the home page goes |
 | HP02 | Ctrl+N and the + button show no home page and the next letter goes into the new document; with "New tabs show the home page" on, Ctrl+N shows it |
 | HP03 | the last tab closed leaves the window with the home page (closed again, the window goes); a session whose files are gone shows it; with the switch off a blank document |
+| SR01 | a cold start bringing the last session back: the active document on screen within seconds of the window, the other tabs not waited for |
+| JT01 | switching between long documents the text in the window stays still - no block moving by half a pixel or more from frame to frame, while drawn or after |
+| JT02 | back to a long document from a short one - read a quarter, 60% and 95% of the way down, and left while still drawn - the screen goes from the cover to it without the short one again, and its text stays still frame by frame; predicting the layout off and on, in visual and in reading mode |
+| JT03 | back to a long document read far down: while the blocks above are drawn back and the reader turns the wheel, the frames come at most 50 ms apart in the middle and a notch reaches the next frame within 100 ms |
+| WD01 | the window comes back where it was after the process ends, closed or killed, and another window opens set off from it |
+| HJ03 | the outline's jump to a heading far down lands and stays there - while a long document is still drawn and once it is |
 | HP04 | with files open, File > Home, the home button and Ctrl+Shift+H show the home page in one blank tab, the documents left alone; an automation write into it hides it with the text written |
 | HP05 | the home page hidden by typing, and by its New document button, leaves the keys in the editor |
 | WP02 | pasted web pictures: one behind hotlink protection is fetched with the page as referrer, a page that is not a picture is kept on the web and said, and an untitled document saved into a folder takes its pictures along |
@@ -232,16 +239,23 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | DG01 | a dialog wears the custom theme (its surface and text colours), and the system's colours again without it |
 | PM01 | the Paragraph menu's checks follow the caret: Table stays unchecked after its dialog is cancelled, Quote and Table are checked with the caret in a quote and a table |
 | OL02 | two long documents scrolled to their middle, switched between: the outline does not mark another heading of the document being left |
+| OL03 | the outline marks the heading being read as soon as the page is shown again (back from the settings), without a scroll |
 | OL01 | tabs switched back and forth, quickly and slowly: every heading with headings under it stays expanded in the outline |
 | LD01 | a load the editor gives back rewritten is loaded once more and keeps the file's text; one rewritten again is taken after that one retry, not retried without end |
 | NV01 | the editor page is never taken to another address: a script sending it to a web site is refused, and the document is still there |
 | VM01 | Vim's search in source mode on a long document: / and the letters typed after it go into the search box, nothing into the document, and Enter goes to the match |
 | TX01 | Settings > Appearance: the theme chosen in its own drop-down, from Dark and from Dracula to Light, leaves the drop-down drawn |
+| PP01 | the print preview under a dark custom theme (Dracula): the page and its margins white, the theme's colour back after |
+| CV01 | a very long document left (a tab switched to, the tab closed) is covered at once and uncovered when the next is on the page; a close cancelled at the save question covers nothing |
+| XF01 | a file changed outside: unchanged here, it is offered again and reloaded; with changes here, Keep keeps them; without asking, reloaded at once; a tab in the background asks when shown; deleted, the document turns unsaved |
+| SS01 | the settings in a narrow window: the items end left of the scroll bar, not under it |
 | LS01 | the interface language changed in the settings' General section, which was reached from Help > About: the settings are built again on General, not on About |
 | KU01 | Keep unsaved changes when closing: every window closes without asking, the app exits, and started again it has the titled and the untitled document back as they were, unsaved, without a recovery question |
 | PS01 | the side pane on the right (Settings > View): right of the document, which is not mirrored; its splitter dragged left widens it; off, it is on the left again |
 | PF01 | measured: a 300 KB document opened, typed into and saved; the memory with two windows |
 | PF03 | profiled: where the host's CPU goes while it opens 300 KB documents |
+| HJ01 | measured: the scroll bar while a long document is drawn - predicted heights (pretext) against the old estimate, with Windows' fonts |
+| HJ02 | measured: where a heading far down lands when the outline jumps to it while a long document is drawn, and once drawn - predicted heights against the old estimate |
 | PF02 | measured: a cold start with a document on the command line, then the window closed |
 | Q01 | two windows closed one after the other: the process exits (it stayed, headless) |
 <!-- END generated: e2e-cases -->

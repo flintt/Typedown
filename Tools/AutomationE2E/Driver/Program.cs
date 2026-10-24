@@ -189,7 +189,7 @@ internal static partial class Program
             await Case("SR01 a cold start bringing the last session back: the active document on screen within seconds of the window, the other tabs not waited for", SR01);
             await Case("JT01 switching between long documents the text in the window stays still - no block moving by half a pixel or more from frame to frame, while drawn or after", JT01);
             await Case("JT02 back to a long document from a short one - read a quarter, 60% and 95% of the way down, and left while still drawn - the screen goes from the cover to it without the short one again, and its text stays still frame by frame; predicting the layout off and on, in visual and in reading mode", JT02);
-            await Case("JT03 back to a long document read far down: while the blocks above are drawn back the page keeps drawing frames (median gap 50 ms at most) and a wheel notch is on the screen within 100 ms", JT03);
+            await Case("JT03 back to a long document read far down: while the blocks above are drawn back and the reader turns the wheel, the frames come at most 50 ms apart in the middle and a notch reaches the next frame within 100 ms", JT03);
             await Case("WD01 the window comes back where it was after the process ends, closed or killed, and another window opens set off from it", WD01);
             await Case("HJ03 the outline's jump to a heading far down lands and stays there - while a long document is still drawn and once it is", HJ03);
             await Case("HP04 with files open, File > Home, the home button and Ctrl+Shift+H show the home page in one blank tab, the documents left alone; an automation write into it hides it with the text written", HP04);

@@ -540,7 +540,10 @@ class StateRender {
         state.timer = setTimeout(step, 50)
         return
       }
-      const keep = this.keepInPlace(state, near ? this.blockInWindow(state.root) : null)
+      // Held by a block in the window, not by the first block drawn: the blocks around the window are pinned every
+      // slice (below), and those between the first block and the window changing size moved the window's text when the
+      // first block was what was held (JT02: 46-139 px, and 1 px).
+      const keep = this.keepInPlace(state, near || isLongDocument() ? this.blockInWindow(state.root) : null)
       account('sliceMeasure', sliceStarted)
       // A small share of the slice predicts the heights of what is drawn next (predictHeights.js; the rest of them in
       // the page's idle time): predicting them all first, in slices of their own, made 300k characters take 2.7 times as
@@ -562,7 +565,7 @@ class StateRender {
       // drawn: one left to the browser's content-visibility near the window was laid out at its own size in one frame
       // and at the size given it in the next, and the page jumped by the difference and back, frame after frame, for a
       // second or two (w10 at hp's 1402 x 1070 with the outline open, reading mode: 26-161 px; seen on hp).
-      this.pinInView(state)
+      if (near || isLongDocument()) this.pinInView(state)
       // Once for the whole slice, not once per few blocks (drawMore does not call these itself - see its comment).
       this.renderMermaid()
       this.renderDiagram()
