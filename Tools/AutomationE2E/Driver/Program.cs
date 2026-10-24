@@ -158,6 +158,7 @@ internal static partial class Program
             await Case("SF02 a long document under a dark custom theme (Dracula): leaving the settings and a window opening with it show the theme's colour, never light or the app's dark colour", SF02);
             await Case("WV02 without the WebView2 runtime the install window comes up with the download; a setup that installs it goes on to the main window", WV02);
             await Case("WV03 a setup that did not install the WebView2 runtime leaves the install window saying so, with the download; Cancel ends the start", WV03);
+            await Case("LG01 after the language is changed through the API, no Chinese or Japanese is left on the main window, the home page or the settings page", LG01);
             await Case("HM01 Help > User guide opens the user guide in the interface's language, Help > About the About page", HM01);
             await Case("FS02 out of full screen the window is dragged by its title bar again at once (with the title row, and in compact mode by the menu row)", FS02);
             await Case("PU01 PlantUML is not drawn by default (nothing goes to plantuml.com, the block says so); turned on it is, by the server set if one is, off again it is not", PU01);
@@ -855,6 +856,8 @@ internal static partial class Program
             for (var i = 0; i < 40 && (menuAfter == menuBefore || menuAfter == ""); i++) { await Task.Delay(250); try { menuAfter = await Menu(); } catch (JsonRpcRemoteException) { } }
             notes.Add($"menu: {menuBefore} -> {menuAfter}");
             Check(menuAfter != menuBefore && menuAfter != "", $"the menu bar follows the language ({menuBefore} -> {menuAfter})");
+            // All of them: the menus made again left Help out.
+            Check(menuAfter.Split(' ').Length == menuBefore.Split(' ').Length, $"the menu bar keeps its {menuBefore.Split(' ').Length} menus ({menuBefore} -> {menuAfter})");
             // So does the status bar: its save state stayed in the language it was built in ("已保存" in an English window).
             async Task<string> Status() => string.Join(" | ", ((JArray)(await c.Call("test.window.statusTexts", new { windowId }))["texts"]!).Select(t => (string)t!));
             // Saved or not, in the new language.
