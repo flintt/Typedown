@@ -64,6 +64,8 @@ CI 的“Test editor integration”一步运行这些：
 - `xhtml-footnote-check.js`: The document rendered as XHTML for another format (RenderXhtml) carries its footnotes as section.footnotes and a.footnote-ref, as the HTML export does: the host sends no footnote option, and the export uses the editor's own default (footnotes on) - [^1] stayed literal Markdown there.
 - `export-anchors-check.js`: The HTML that becomes the PDF must link its contents to the headings the parser actually rendered.
 - `wordcount-mode-check.js`: The word count is the same in the visual editor and in source mode: source mode counted every character and split words at spaces only, so a mode switch moved the count with nothing written, and what follows the count's changes as edits took the jump for writing.
+- `blank-jump-check.js`: The reader scrolls up into the part not drawn yet while a long document is still drawn (back at its end, as a tab switched back to): the rest is drawn at once (completeRender), and the window must then show what the reader scrolled to - not jump 100,000 px on (hp, 1.4.0: a 1.5 MB document back at its end, the wheel turned up 18,000 px, the page went from 371k to 272k 5 ms after the drawing ended, and was put back there on every later switch).
+- `jt04-drift-check.js`: A long document switched back to near its end, nobody at it while the rest is drawn above (a part at a time): the block at the top of the window stays where it is, frame after frame, for 15 s (Automation JT04: 2 px at most).
 <!-- END generated: editor-checks -->
 
 ## Windows 端到端测试
