@@ -39,6 +39,11 @@ window.addEventListener('pointerup', () => { if (scrollDragging) { scrollDraggin
 window.addEventListener('scroll', () => { if (scrollDragging) scrolledByReader() }, { passive: true })
 const READER_SCROLL_PAUSE_MS = 150
 const readerScrolling = () => scrollDragging || performance.now() - lastScrollInputAt < READER_SCROLL_PAUSE_MS
+// A block pinned while a long document is drawn: never skipped (content-visibility visible), and contained as one not
+// skipped under content-visibility auto is (layout, style and paint: its children's margins stay inside it) - pinned
+// with visible alone, a block already in the window lost that, its margins collapsed through it and the text in the
+// window moved by them (JT02, reading mode: 46 px).
+const PINNED = 'content-visibility: visible; contain: layout style paint'
 const isLongDocument = () => !!document.getElementById('editor')?.classList.contains('ag-long-document')
 const sliceBudget = () => performance.now() - lastInputAt < 1000 ? 12 : 40
 // The share of each drawing slice spent predicting a document's heights (predictHeights.js). None: the guess from the
@@ -478,7 +483,7 @@ class StateRender {
     // Through the attribute, not element.style: a style changed through the CSSOM and then removed came back as an
     // empty style="" when the page was read as HTML (a kept document then differed from a new build of it).
     const pinned = Array.from(rootDom.children, element => [element, element.getAttribute('style')])
-    for (const [element, was] of pinned) element.setAttribute('style', (was ? was.replace(/;?\s*$/, '; ') : '') + 'content-visibility: visible')
+    for (const [element, was] of pinned) element.setAttribute('style', (was ? was.replace(/;?\s*$/, '; ') : '') + PINNED)
     const state = { blocks, activeBlocks, matches, lo, hi, root: rootDom, timer: null, done, slices: 0, startedAt: performance.now(), pinned, heightsAt: 0, heightsPlan: null, heightsGeneration: -1, ruleQueue: [] }
     this.progressive = state
     // Loads pretext if not yet. What the predictions cost and when they were all in, for the checks (EditorBench
@@ -983,7 +988,7 @@ class StateRender {
         const was = element.getAttribute('style')
         state.pinned.push([element, was])
         state.pinnedSet.add(element)
-        element.setAttribute('style', (was ? was.replace(/;?\s*$/, '; ') : '') + 'content-visibility: visible')
+        element.setAttribute('style', (was ? was.replace(/;?\s*$/, '; ') : '') + PINNED)
       }
       count += pin.length
     }
