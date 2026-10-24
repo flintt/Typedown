@@ -142,6 +142,8 @@ jobs:
           node xhtml-footnote-check.js
           node export-anchors-check.js
           node wordcount-mode-check.js
+          node blank-jump-check.js
+          node jt04-drift-check.js
 
       - uses: actions/upload-artifact@v4
         with:
