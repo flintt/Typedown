@@ -4,13 +4,13 @@
     python3 Tools/Translations/check.py            # summary, one line per language
     python3 Tools/Translations/check.py de ja      # the missing keys of those languages
     python3 Tools/Translations/check.py --missing  # every language's missing keys
-    python3 Tools/Translations/check.py --strict   # exit 1 if any language has a gap (CI)
+    python3 Tools/Translations/check.py --strict   # exit 1 if any language has a gap or a known mistranslation (CI)
 
 Strings live in Dev/Typedown.Core/Resources/Strings/<lang>/<file>.resw. A key that a
 language does not have falls back to the project's default language at runtime, so a gap
 shows up as a mixed-language interface rather than an error.
 """
-import os, re, sys
+import html, json, os, re, sys
 
 ROOT = os.path.join(os.path.dirname(__file__), '..', '..', 'Dev', 'Typedown.Core', 'Resources', 'Strings')
 FILES = ['CommonResources.resw', 'DialogResources.resw', 'SettingsResources.resw', 'Resources.resw']
@@ -50,12 +50,38 @@ def main():
                     print(f"    {f.replace('Resources.resw',''):9} {key} = {reference[f][key]}")
     incomplete = [r for r in rows if r[0] < 1]
     print(f"\n{len(rows) - len(incomplete)}/{len(rows)} complete; {len(incomplete)} with gaps")
-    if '--strict' in sys.argv and incomplete:
+    wrong = mistranslations(langs)
+    for line in wrong:
+        print("WRONG " + line)
+    print(f"{len(wrong)} known mistranslation(s)")
+    if '--strict' in sys.argv and (incomplete or wrong):
         # A gap is not an error at runtime — the key falls back to English — so nothing fails until someone
         # sees one English line in their own language. This is what makes it fail earlier.
-        print("run with --missing to see them, and add them to every language before merging")
+        if incomplete:
+            print("run with --missing to see them, and add them to every language before merging")
+        if wrong:
+            print("put them right with Tools/Translations/apply.py --replace")
         return 1
     return 0
+
+
+def mistranslations(langs):
+    """A word translated by its dictionary sense, back again: the values Tools/Translations/mistranslations.json
+    lists for a key, and a switch's Off that says Close (most languages had it, from an English "Close")."""
+    path = os.path.join(os.path.dirname(__file__), 'mistranslations.json')
+    known = json.load(open(path, encoding='utf-8')) if os.path.exists(path) else {}
+    found = []
+    for lang in langs:
+        values = {}
+        for f in FILES:
+            values.update({k: html.unescape(v).strip() for k, v in entries(lang, f).items()})
+        for key, bad in known.get(lang, {}).items():
+            if values.get(key) in [b.strip() for b in bad]:
+                found.append(f"{lang} {key} = {values[key]} (a known mistranslation)")
+        # Thai, Lao, Khmer and Bengali say off and close with one word (ปิด, ປິດ, បិទ, বন্ধ), as Windows' own switches do.
+        if lang not in ('th', 'lo', 'km', 'bn') and values.get('Off') and values.get('Off') == values.get('Close'):
+            found.append(f"{lang} Off = {values['Off']}, the same as Close: a switch's off, not closing")
+    return found
 
 
 if __name__ == '__main__':

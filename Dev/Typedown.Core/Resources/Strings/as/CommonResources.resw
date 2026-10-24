@@ -198,7 +198,7 @@
     <comment>点击添加一张图片</comment>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>ওচৰ</value>
+    <value>বন্ধ কৰক</value>
     <comment>文件/关闭</comment>
   </data>
   <data name="Code" xml:space="preserve">
@@ -654,7 +654,7 @@
     <comment>未设置</comment>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>ওচৰ</value>
+    <value>অফ</value>
     <comment>开关/关</comment>
   </data>
   <data name="Ok" xml:space="preserve">
@@ -770,7 +770,7 @@
     <comment>文件/保存</comment>
   </data>
   <data name="SaveAs" xml:space="preserve">
-    <value>সংৰক্ষণ কৰক</value>
+    <value>হিচাপে সংৰক্ষণ কৰক</value>
     <comment>文件/另存为</comment>
   </data>
   <data name="Saved" xml:space="preserve">

@@ -654,7 +654,7 @@
     <comment>未设置</comment>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Close</value>
+    <value>Off</value>
     <comment>开关/关</comment>
   </data>
   <data name="Ok" xml:space="preserve">
