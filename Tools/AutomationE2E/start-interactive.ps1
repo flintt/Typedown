@@ -52,5 +52,20 @@ $exit = [int]((Get-Content (Join-Path $run.FullName 'done.txt')) -replace 'exit=
 Write-Output "artifacts: $($run.FullName)"
 exit $exit
 } finally {
+    schtasks /End /TN $task 2>&1 | Out-Null
     schtasks /Delete /TN $task /F 2>&1 | Out-Null
+    # Ending the task does not end what it started: after a timeout the run's PowerShell, the driver and the test host
+    # went on and ran into the next run (2026-10-24). Only this run's own: the PowerShell running the script, and what
+    # runs from the driver's and the test host's folders (the driver itself runs as dotnet <its dll>).
+    $driverDll = Join-Path $Driver 'Typedown.AutomationE2E.dll'
+    $folders = @($Driver, $TestHost) | Where-Object { $_ } | ForEach-Object { [IO.Path]::GetFullPath($_).TrimEnd('\') + '\' }
+    Get-CimInstance Win32_Process | Where-Object {
+        $path = $_.ExecutablePath
+        ($_.CommandLine -and (($_.Name -eq 'powershell.exe' -and $_.CommandLine.Contains($script)) -or
+            ($_.Name -eq 'dotnet.exe' -and $_.CommandLine.Contains($driverDll)))) -or
+        ($path -and @($folders | Where-Object { $path.StartsWith($_, [StringComparison]::OrdinalIgnoreCase) }).Count)
+    } | ForEach-Object {
+        Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue
+        Write-Output "stopped what the run left going: $($_.Name) $($_.ProcessId)"
+    }
 }
