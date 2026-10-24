@@ -9,6 +9,9 @@
 # Word export) where they exist.
 cd "$(dirname "$0")/../.." || exit 2
 DOTNET=${DOTNET:-$(command -v dotnet || echo "$HOME/.dotnet/dotnet")}
+# No build server outlives the run: one that did (VBCSCompiler) kept the lock this was run under for good, and the
+# next runs waited on it forever (2026-10-24).
+export MSBUILDDISABLENODEREUSE=1 DOTNET_CLI_USE_MSBUILD_SERVER=0 UseSharedCompilation=false
 failed=()
 gate() {
   local name=$1; shift
