@@ -200,6 +200,34 @@ interface KeptDocument extends ShownDocument {
     kept: { blocks: any[], cursor: any, root: HTMLElement, progressive?: any }
 }
 
+/**
+ * The top-level block at the top of the window (the first whose bottom is in it), and a function that scrolls the page
+ * by what it moved since: for a change above it that the browser's scroll anchoring may not make up for (it is off while
+ * a long document is drawn a part at a time). `who` names the scroll for the page's log of its own (scrollWriters).
+ */
+function holdWindowBlock(who: string): () => void {
+    const kids = document.getElementById('ag-editor-id')?.children
+    if (!kids || !kids.length) return () => { }
+    let lo = 0
+    let hi = kids.length - 1
+    while (lo < hi) {
+        const mid = (lo + hi) >> 1
+        if (kids[mid].getBoundingClientRect().bottom <= 0) lo = mid + 1
+        else hi = mid
+    }
+    const block = kids[lo]
+    if (block.getBoundingClientRect().bottom <= 0) return () => { }
+    const before = block.getBoundingClientRect().top
+    return () => {
+        if (!block.isConnected) return
+        const moved = block.getBoundingClientRect().top - before
+        if (Math.abs(moved) < 1) return
+        const from = window.scrollY
+        window.scrollBy(0, moved)
+        noteScroll(who, from)
+    }
+}
+
 const STANDAR_Y = 320
 // Where a heading goes when it is chosen in the outline: at the top, a line's breathing room below the
 // edge. The caret's 320 put it a third of the way down, and the reader then saw the section before it
@@ -242,7 +270,17 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         if (!slot) return
         const show = firstEditWarningRef.current && !readOnlyRef.current
         if (show === !!slot.firstElementChild) return
-        if (!show) { slot.replaceChildren(); return }
+        // The notice takes its height above the document: coming or going with the page scrolled down, the block at the
+        // top of the window is held where it is. The browser's scroll anchoring would, but it is off while a long
+        // document is drawn a part at a time, and the notice going 10 s after the load moved the text in the window up
+        // by its height (JT04, w10: 33 px, a 1.5 MB document back at its end). At the top of the page it pushes the
+        // document down, as it always did.
+        const hold = window.scrollY > 0 ? holdWindowBlock('first-edit notice') : null
+        if (!show) {
+            slot.replaceChildren()
+            hold?.()
+            return
+        }
         const notice = document.createElement('div')
         notice.className = 'td-first-edit-warning'
         notice.setAttribute('role', 'status')
@@ -255,6 +293,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         close.addEventListener('click', () => showFirstEditWarning(false))
         notice.append(text, close)
         slot.append(notice)
+        hold?.()
     }
     useEffect(() => {
         readOnlyRef.current = !!props.options?.readOnly
@@ -847,18 +886,9 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         if (root.classList.contains('ag-long-document') === long) return
         // The blocks off screen change from their stand-ins' height to their own, or back: the block at the top of the
         // window stays where it is (taken off once drawn whole, a code block read far down went 276,000 px away).
-        const editorElement = document.getElementById('ag-editor-id')
-        const top = editorElement ? Array.from(editorElement.children).find(e => e.getBoundingClientRect().bottom > 0) : null
-        const before = top?.getBoundingClientRect().top
+        const hold = holdWindowBlock('long-document class')
         root.classList.toggle('ag-long-document', long)
-        if (top && before != null && top.isConnected) {
-            const moved = top.getBoundingClientRect().top - before
-            if (Math.abs(moved) >= 1) {
-                const from = window.scrollY
-                window.scrollBy(0, moved)
-                noteScroll('long-document class', from)
-            }
-        }
+        hold()
     }, [editor])
 
     useEffect(() => editor?.on('contentChange', ({ markdown, wordCount, cursor, toc: { toc, cur } }: any) => {
