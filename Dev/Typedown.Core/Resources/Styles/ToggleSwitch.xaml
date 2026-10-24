@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary 
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
-  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:u="using:Typedown.Core.Utilities">
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Default">
             <x:Double x:Key="ToggleSwitchOnStrokeThickness">0</x:Double>
@@ -224,6 +225,8 @@
     <Style TargetType="ToggleSwitch" BasedOn="{StaticResource DefaultToggleSwitchStyle}" />
 
     <Style x:Key="DefaultToggleSwitchStyle" TargetType="ToggleSwitch">
+        <!-- The On/Off words in the interface's language, not the system's (LocaleSwitch). -->
+        <Setter Property="u:LocaleSwitch.Words" Value="True" />
         <Setter Property="Foreground" Value="{ThemeResource ToggleSwitchContentForeground}" />
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="VerticalAlignment" Value="Center" />
