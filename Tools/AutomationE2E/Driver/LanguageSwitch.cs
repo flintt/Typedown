@@ -45,6 +45,16 @@ internal static partial class Program
             var made = await Texts("made in Chinese", true);
             notes.Add($"the new window in Chinese: {made.Count} texts, e.g. " + string.Join("; ", made.Take(3)));
             Check(made.Count > 5, "the new window was made in Chinese (else nothing could be left behind)");
+            // Its switches say 开/关 in the interface's language, not the system's (w10 is an English Windows: WinUI's own
+            // words were "On"/"Off" there, "开" in the English windows of a Chinese one).
+            await c.Call("test.window.navigate", new { windowId, route = "Settings" });
+            await Task.Delay(2500);
+            var words = ((JArray)(await c.Call("test.window.texts", new { windowId }))["texts"]!).Select(t => (string)t["text"]!).ToList();
+            var switches = words.Count(w => w is "开" or "关");
+            notes.Add($"the settings' switches in Chinese: {switches} say 开/关, {words.Count(w => w is "On" or "Off")} On/Off");
+            Check(switches > 0 && !words.Any(w => w is "On" or "Off"), "the switches say 开/关 in a Chinese window, whatever the system's language");
+            await c.Call("test.window.navigate", new { windowId, route = "Main" });
+            await Task.Delay(800);
 
             await SetSetting(c, "ui.language", "en");
             var menu = "";
