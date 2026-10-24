@@ -154,6 +154,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | SF02 | a long document under a dark custom theme (Dracula): leaving the settings and a window opening with it show the theme's colour, never light or the app's dark colour |
 | WV02 | without the WebView2 runtime the install window comes up with the download; a setup that installs it goes on to the main window |
 | WV03 | a setup that did not install the WebView2 runtime leaves the install window saying so, with the download; Cancel ends the start |
+| LG01 | after the language is changed through the API, no Chinese or Japanese is left on the main window, the home page or the settings page |
 | HM01 | Help > User guide opens the user guide in the interface's language, Help > About the About page |
 | FS02 | out of full screen the window is dragged by its title bar again at once (with the title row, and in compact mode by the menu row) |
 | PU01 | PlantUML is not drawn by default (nothing goes to plantuml.com, the block says so); turned on it is, by the server set if one is, off again it is not |
@@ -287,6 +288,8 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | `test.editor.reload` | `windowId` | Reloads the window's editor page, as the application does after a page error or a crashed web process. | TestHostHooks.cs |
 | `test.window.handle` | `windowId` | The window's native handle (HWND), for UI Automation and window messages from the driver. | TestHostHooks.cs |
 | `test.window.menuTitles` | `windowId` | The titles of the window's menu bar, as drawn: the menu follows the interface language. | TestHostHooks.cs |
+| `test.window.texts` | `windowId` | Every text the window's own controls show (not the editor page's): what a reader sees of the interface, to find words left in another language. Collapsed parts are left out. | TestHostHooks.cs |
+| `test.window.statusTexts` | `windowId` | The texts the status bar shows (its save state among them), in the order of the visual tree. | TestHostHooks.cs |
 | `test.window.layout` | `windowId` | Where the main page starts in its window, and whether the window is in full screen: in full screen nothing may sit above it (a 4 px row of window background did, along the top of the screen). | TestHostHooks.cs |
 | `test.window.keep` | `windowId` | Holds a window in memory from now on, as anything still referring to it does after it closes: MainWindow.AllWindows lists a window until it has closed; the XAML Islands list kept it until finalized, closed or not. | TestHostHooks.cs |
 | `test.window.navigate` | `route`, `windowId` | Moves a window to a page, as its menu would: route "Settings/Editor" opens that settings page, "Main" goes back. | TestHostHooks.cs |
@@ -314,10 +317,12 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | `test.export.menu` | `windowId` | The entries of a window's File > Export submenu, as shown. | TestHostHooks.cs |
 | `test.dialogs.dismiss` | - | Every dialog left open in any window, closed as its close button would: the driver asks before each case, so one case's prompt (an unsaved document's "save?") does not hold the next cases' dialogs back. | TestHostHooks.cs |
 | `test.dialog.colours` | `windowId` | The open dialog's colours and the custom theme's, to tell whether the dialog wears the theme. | TestHostHooks.cs |
+| `test.outline.jump` | `slug`, `windowId` | The jump a click on an outline heading makes (EditorViewModel.JumpBySlug), to the heading block `slug` (HJ03). | TestHostHooks.cs |
 | `test.outline.state` | `windowId` | The outline's expansion as the tree holds it (its nodes) and as the model holds it, row by row: the two disagreeing after a tab switch is how a heading's children came to be hidden with nobody collapsing it. | TestHostHooks.cs |
 | `test.theme.chrome` | `windowId` | The colours a custom theme changes around the editor, as they are now: the line between the side pane and the editor, the side pane, the menu bar and the status bar. A theme switched off has to put back what the built-in theme draws (TH06). | TestHostHooks.cs |
 | `test.pane.accent` | `windowId` | The colours the side pane marks what is chosen with: every selection indicator drawn in it (the bar under Files/Outline, the pill of each outline and folder-tree row), by where it is, with its fill. | TestHostHooks.cs |
 | `test.activity.recent` | `clear?` | The last events EditionHooks.Activity raised, oldest first (kind, mode, document, path, the old path of a rename); with clear, forgets them after answering (AC01). | TestHostHooks.cs |
+| `test.element.dump` | `name`, `windowId` | How an element of the window is drawn, by its x:Name: it and every element under it, with what decides whether it shows (its opacity and its composition visual's, visibility, size, theme, colours). For a control seen gone from the page while still there (TX01). | TestHostHooks.cs |
 | `test.theme.controls` | `windowId` | The accent the standard controls draw with, as they draw it: a switch turned on, an accent button (the dialogs' default button has its style) and a ticked check box are put up in a popup over the window, their colours read from what WinUI drew, and taken down again. The settings and the dialogs stayed the system blue under every theme (TH07). | TestHostHooks.cs |
 | `test.images.uploadAll` | `windowId` | File > Upload local images on the window's active document, without its dialogs; returns the result. | TestHostHooks.cs |
 | `test.recent.menu` | `windowId` | The entries of a window's File > Open recent menu as it builds them: kind (file, folder), text, path and whether the entry is greyed out (its file or folder is not there, looked at afresh). | TestHostHooks.cs |

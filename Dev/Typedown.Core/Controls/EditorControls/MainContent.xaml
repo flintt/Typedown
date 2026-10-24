@@ -91,7 +91,7 @@
             </Grid.ColumnDefinitions>
             <local:DocumentTabBar x:Name="DocumentTabBar" x:Load="{x:Bind local:MainContent.IsTabBarLoad(ViewModel.TabsViewModel.Tabs.Count, Settings.AlwaysShowTabBar), Mode=OneWay}"/>
             <local:EditorContainer Grid.Row="1" />
-            <!-- An edition's panel beside the document (EditionHooks.ShowSidePanel): none in Typedown itself. On the
+            <!-- An edition's panel beside the document (EditionHooks.ShowSidePanel): none in the open-source edition itself. On the
                  window's colour as the side pane is (a custom theme's surface, UpdateThemeColours), not a grey of its own. -->
             <Grid x:Name="EditionPanelHost" Grid.Column="1" Grid.RowSpan="2" Visibility="Collapsed"
                   AutomationProperties.AutomationId="EditionPanel"

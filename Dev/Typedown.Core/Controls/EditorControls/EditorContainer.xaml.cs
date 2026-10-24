@@ -59,6 +59,22 @@ namespace Typedown.Core.Controls
             disposables.Add(Editor.EventCenter.GetObservable<EditorEventArgs>("OnScroll")
                 .Subscribe(x => ScrollState = x.Args.ToObject<ScrollState>()));
             UpdateFindReplaceState(Float.FindReplaceDialogOpen, false);
+            // The home page reads its words when it is built ({u:LocaleString}, its dates): after the language changed from
+            // another window or the automation API it stayed in the old one. A new one takes its place, as it was.
+            disposables.Add(Settings.WhenPropertyChanged(nameof(SettingsViewModel.Language)).Subscribe(_ =>
+                _ = DispatcherQueue.RunIdleAsync(_ => RebuildHome())));
+        }
+
+        private void RebuildHome()
+        {
+            if (HomeView?.Parent is not Panel parent) return;
+            var at = parent.Children.IndexOf(HomeView);
+            if (at < 0) return;
+            var fresh = new HomePage { AllowDrop = true };
+            fresh.DragEnter += OnDragEnter;
+            fresh.Drop += OnDrop;
+            parent.Children[at] = fresh;
+            HomeView = fresh;
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)

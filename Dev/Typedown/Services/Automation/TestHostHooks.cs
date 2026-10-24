@@ -239,6 +239,34 @@ namespace Typedown.Services.Automation
                     if (app.XamlRoot?.Content is global::Microsoft.UI.Xaml.DependencyObject root) Walk(root);
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["titles"] = titles };
                 })));
+            // Every text the window's own controls show (not the editor page's): what a reader sees of the interface, to find
+            // words left in another language. Collapsed parts are left out.
+            methods.Add(new MethodDescriptor("test.window.texts", null, "test.window.texts/1", (c, ct) =>
+                Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    var texts = new Newtonsoft.Json.Linq.JArray();
+                    void Add(string? text, string where) { if (!string.IsNullOrWhiteSpace(text)) texts.Add(new Newtonsoft.Json.Linq.JObject { ["text"] = text, ["where"] = where }); }
+                    string Where(global::Microsoft.UI.Xaml.DependencyObject node)
+                    {
+                        var names = new System.Collections.Generic.List<string>();
+                        for (var n = node; n != null && names.Count < 4; n = global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetParent(n))
+                            if (n is global::Microsoft.UI.Xaml.FrameworkElement f && (!string.IsNullOrEmpty(f.Name) || n is global::Microsoft.UI.Xaml.Controls.UserControl))
+                                names.Add(string.IsNullOrEmpty(f.Name) ? f.GetType().Name : f.Name);
+                        return string.Join(" < ", names);
+                    }
+                    void Walk(global::Microsoft.UI.Xaml.DependencyObject node)
+                    {
+                        if (node is global::Microsoft.UI.Xaml.UIElement e && e.Visibility != global::Microsoft.UI.Xaml.Visibility.Visible) return;
+                        if (node is global::Microsoft.UI.Xaml.Controls.WebView2) return;
+                        if (node is global::Microsoft.UI.Xaml.Controls.TextBlock block) Add(block.Text, Where(node));
+                        else if (node is global::Microsoft.UI.Xaml.Controls.MenuBarItem item) Add(item.Title, Where(node));
+                        else if (node is global::Microsoft.UI.Xaml.Controls.TextBox box) Add(box.PlaceholderText, Where(node) + " (placeholder)");
+                        var count = global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(node);
+                        for (var i = 0; i < count; i++) Walk(global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChild(node, i));
+                    }
+                    if (app.XamlRoot?.Content is global::Microsoft.UI.Xaml.DependencyObject root) Walk(root);
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["texts"] = texts };
+                })));
             // The texts the status bar shows (its save state among them), in the order of the visual tree.
             methods.Add(new MethodDescriptor("test.window.statusTexts", null, "test.window.statusTexts/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
@@ -827,10 +855,6 @@ namespace Typedown.Services.Automation
                     return System.Threading.Tasks.Task.FromResult((Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["events"] = all });
                 }
             }));
-            // The accent the standard controls draw with, as they draw it: a switch turned on, an accent button (the
-            // dialogs' default button has its style) and a ticked check box are put up in a popup over the window, their
-            // colours read from what WinUI drew, and taken down again. The settings and the dialogs stayed the system
-            // blue under every theme (TH07).
             // How an element of the window is drawn, by its x:Name: it and every element under it, with what decides whether
             // it shows (its opacity and its composition visual's, visibility, size, theme, colours). For a control seen
             // gone from the page while still there (TX01).
@@ -885,6 +909,10 @@ namespace Typedown.Services.Automation
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["tree"] = lines, ["states"] = states };
                 });
             }));
+            // The accent the standard controls draw with, as they draw it: a switch turned on, an accent button (the
+            // dialogs' default button has its style) and a ticked check box are put up in a popup over the window, their
+            // colours read from what WinUI drew, and taken down again. The settings and the dialogs stayed the system
+            // blue under every theme (TH07).
             methods.Add(new MethodDescriptor("test.theme.controls", null, "test.theme.controls/1", async (c, ct) =>
                 await await Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), async app =>
                 {

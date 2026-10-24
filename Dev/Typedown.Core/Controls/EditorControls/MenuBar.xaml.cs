@@ -107,6 +107,8 @@ namespace Typedown.Core.Controls
                 items.Add(new ParagraphItem());
                 items.Add(new FormatItem());
                 items.Add(new ViewItem());
+                // As MenuBar.xaml has them: Help was left out, and a window whose language changed lost its Help menu.
+                items.Add(new HelpItem());
                 ApplyModeToMenus();
             }
             catch (Exception ex)

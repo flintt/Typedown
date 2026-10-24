@@ -172,13 +172,7 @@ namespace Typedown.Core.Controls
         }
 
         /// <summary>"14:05" today, "Mon 14:05" this week, the date before that.</summary>
-        private static string Modified(DateTime time)
-        {
-            var now = DateTime.Now;
-            if (time.Date == now.Date) return time.ToString("t");
-            if ((now.Date - time.Date).TotalDays < 7) return time.ToString("ddd t");
-            return time.ToString("d");
-        }
+        private static string Modified(DateTime time) => RecentTime.Format(time, DateTime.Now, Locale.Culture);
 
         // The page's shortcuts, as they are set now.
         private string Hints()

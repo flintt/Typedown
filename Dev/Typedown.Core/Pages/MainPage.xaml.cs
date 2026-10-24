@@ -91,6 +91,19 @@ namespace Typedown.Core.Pages
             disposables.Add(uiViewModel.WhenPropertyChanged(nameof(UIViewModel.IsFullScreen)).Cast<bool>().StartWith(uiViewModel.IsFullScreen).Subscribe(OnFullScreenChanged));
             var settings = AppViewModel.SettingsViewModel;
             disposables.Add(settings.WhenPropertyChanged(nameof(settings.CustomTheme)).StartWith(settings.CustomTheme).Subscribe(_ => UpdateThemeColours()));
+            // The status bar reads its words when it is built ({u:LocaleString}) and its save state when that changes:
+            // after the language was changed from another window or the automation API it went on saying "已保存"
+            // in an English window. It is built again, as switching it off and on does, once the language is applied.
+            disposables.Add(settings.WhenPropertyChanged(nameof(settings.Language)).Subscribe(_ =>
+                _ = DispatcherQueue.RunIdleAsync(_ => RebuildStatusBar())));
+        }
+
+        private void RebuildStatusBar()
+        {
+            if (StatusBar == null || !AppViewModel.SettingsViewModel.StatusBarOpen) return;
+            UnloadObject(StatusBar);
+            FindName(nameof(StatusBar));
+            UpdateThemeColours();
         }
 
         /// <summary>

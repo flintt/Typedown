@@ -147,10 +147,19 @@ namespace Typedown.Core.Utilities
         /// <summary>The language the interface was actually built with, so the settings can say when it moved on.</summary>
         public static string AppliedLanguage { get; private set; }
 
+        /// <summary>
+        /// How dates and times are written: in the interface's language when the reader chose one, so an English window
+        /// does not say "周五 9:32"; in the system's regional format when the interface follows the system, as Windows
+        /// itself does.
+        /// </summary>
+        public static System.Globalization.CultureInfo Culture { get; private set; } = System.Globalization.CultureInfo.CurrentCulture;
+
         public static void ApplyLanguage(string language)
         {
             var wanted = SupportedLangs.ContainsKey(language ?? "") ? language : null;
             AppliedLanguage ??= wanted ?? string.Empty; // the first application is the one the interface was built with
+            try { Culture = wanted != null ? System.Globalization.CultureInfo.GetCultureInfo(wanted) : System.Globalization.CultureInfo.CurrentCulture; }
+            catch (System.Globalization.CultureNotFoundException) { Culture = System.Globalization.CultureInfo.CurrentCulture; }
             Apply(ResourceContext, wanted);
             Log.Debug($"language: setting={language} applied={wanted ?? "(system)"} resolved={(ResourceContext.QualifierValues.TryGetValue("Language", out var resolved) ? resolved : "")}");
         }
