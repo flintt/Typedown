@@ -69,6 +69,7 @@ import { createReadingKeys } from "services/vimReading";
 import { KeptDocuments, blockCaretKey, caretKey, isForward, markedAt, sameLines } from "services/keptDocuments";
 import { CURSOR_ANCHOR_DNA, CURSOR_FOCUS_DNA } from 'components/Muya/lib/config'
 import 'components/Muya/themes/default.css'
+import { noteScroll } from 'services/scrollWriters'
 
 interface IMuyaEditor {
     markdown: string
@@ -275,7 +276,9 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     const lastSelectionRef = useRef('')
 
     const relativeScroll = useCallback((delta: number) => {
+        const from = window.scrollY
         window.scrollBy(0, delta)
+        noteScroll('relative', from)
     }, [])
 
     const scrollToElement = useCallback((selector, offset = STANDAR_Y) => {
@@ -455,7 +458,12 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         }
         setVimState('reading')
         const listener = createReadingKeys(
-            () => ({ top: () => window.scrollY, by: dy => window.scrollTo({ top: window.scrollY + dy, behavior: 'instant' as ScrollBehavior }), to: y => window.scrollTo({ top: Math.min(y, document.documentElement.scrollHeight), behavior: 'instant' as ScrollBehavior }), height: () => window.innerHeight }),
+            () => ({
+                top: () => window.scrollY,
+                by: dy => { const from = window.scrollY; window.scrollTo({ top: window.scrollY + dy, behavior: 'instant' as ScrollBehavior }); noteScroll('vim keys', from) },
+                to: y => { const from = window.scrollY; window.scrollTo({ top: Math.min(y, document.documentElement.scrollHeight), behavior: 'instant' as ScrollBehavior }); noteScroll('vim keys', from) },
+                height: () => window.innerHeight
+            }),
             () => Array.from(document.querySelectorAll<HTMLElement>('#editor h1, #editor h2, #editor h3, #editor h4, #editor h5, #editor h6')))
         window.addEventListener('keydown', listener, true)
         return () => window.removeEventListener('keydown', listener, true)
@@ -845,7 +853,11 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         root.classList.toggle('ag-long-document', long)
         if (top && before != null && top.isConnected) {
             const moved = top.getBoundingClientRect().top - before
-            if (Math.abs(moved) >= 1) window.scrollBy(0, moved)
+            if (Math.abs(moved) >= 1) {
+                const from = window.scrollY
+                window.scrollBy(0, moved)
+                noteScroll('long-document class', from)
+            }
         }
     }, [editor])
 
@@ -1070,7 +1082,9 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         let last = typeof to === 'function' ? (to() ?? 0) : to
         const target = () => typeof to === 'function' ? (last = to() ?? last) : to
         const scrollTop = last
+        const settleFrom = window.scrollY
         window.scrollTo(window.scrollX, scrollTop)
+        noteScroll('settle', settleFrom)
         if (!keepScroll) scrollToCursorIfInvisible()
         // One flag for everything that puts the page back, the frame-by-frame hold and the delayed second
         // go alike: the moment the reader moves the page, none of them may touch it again. The delayed one
@@ -1104,7 +1118,12 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             // during the layout a frame can be a hundred milliseconds long, and that is a hundred
             // milliseconds of looking at the top of the document. Correcting puts scrollY back where it
             // belongs, so the event this fires in turn finds nothing to do.
-            const putBack = () => { if (!done && !yielded && Math.abs(window.scrollY - target()) > 2) window.scrollTo(window.scrollX, target()) }
+            const putBack = () => {
+                if (done || yielded || Math.abs(window.scrollY - target()) <= 2) return
+                const from = window.scrollY
+                window.scrollTo(window.scrollX, target())
+                noteScroll('settle hold', from)
+            }
             const stop = (why: string) => {
                 done = true; loadHoldingRef.current = false; window.removeEventListener('scroll', putBack); for (const e of GIVE_WAY) window.removeEventListener(e, giveWay)
                 // What the hold saw, for the host's log: the only way to tell from a machine one cannot watch.
@@ -1127,7 +1146,9 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         }
         setTimeout(() => {
             if (!yielded) {
+                const from = window.scrollY
                 window.scrollTo(window.scrollX, target())
+                noteScroll('settle later', from)
                 if (!keepScroll) scrollToCursorIfInvisible()
             }
             // The hold above decides for itself when it is over; ending it here ended it after six frames,
@@ -1347,7 +1368,11 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         }
         if (replacedLocally) {
             if (props.scrollFromHostRef) props.scrollFromHostRef.current = false
-            if (changeY !== null) window.scrollTo(window.scrollX, changeY)
+            if (changeY !== null) {
+                const from = window.scrollY
+                window.scrollTo(window.scrollX, changeY)
+                noteScroll('edit applied', from)
+            }
         }
         // An automation edit that had to be applied as a whole new document: at once, as before.
         else if (blocksBefore) {

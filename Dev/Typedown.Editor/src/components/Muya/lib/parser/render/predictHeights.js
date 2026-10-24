@@ -1,5 +1,6 @@
 import { CLASS_OR_ID } from '../../config'
 import { tokenizer } from '../'
+import { noteScroll } from 'services/scrollWriters'
 
 /**
  * How tall a top-level block will be once drawn, before it is: for a long document drawn a part at a time
@@ -1347,7 +1348,10 @@ function keepTop(root) {
     const moved = el.getBoundingClientRect().top - before
     const from = window.scrollY
     const by = Math.ceil(moved - fraction)
-    if (by) window.scrollBy(0, by)
+    if (by) {
+      window.scrollBy(0, by)
+      noteScroll('keepTop', from)
+    }
     let next = fraction - moved + (window.scrollY - from)
     // A scroll that did not go as far as asked (the end of the page): the rest stays as it is.
     if (next < 0 || next >= 2) next = fraction
