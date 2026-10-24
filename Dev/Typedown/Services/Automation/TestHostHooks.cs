@@ -855,10 +855,6 @@ namespace Typedown.Services.Automation
                     return System.Threading.Tasks.Task.FromResult((Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["events"] = all });
                 }
             }));
-            // The accent the standard controls draw with, as they draw it: a switch turned on, an accent button (the
-            // dialogs' default button has its style) and a ticked check box are put up in a popup over the window, their
-            // colours read from what WinUI drew, and taken down again. The settings and the dialogs stayed the system
-            // blue under every theme (TH07).
             // How an element of the window is drawn, by its x:Name: it and every element under it, with what decides whether
             // it shows (its opacity and its composition visual's, visibility, size, theme, colours). For a control seen
             // gone from the page while still there (TX01).
@@ -913,6 +909,10 @@ namespace Typedown.Services.Automation
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["tree"] = lines, ["states"] = states };
                 });
             }));
+            // The accent the standard controls draw with, as they draw it: a switch turned on, an accent button (the
+            // dialogs' default button has its style) and a ticked check box are put up in a popup over the window, their
+            // colours read from what WinUI drew, and taken down again. The settings and the dialogs stayed the system
+            // blue under every theme (TH07).
             methods.Add(new MethodDescriptor("test.theme.controls", null, "test.theme.controls/1", async (c, ct) =>
                 await await Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), async app =>
                 {

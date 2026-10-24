@@ -43,6 +43,19 @@ jobs:
       # An edition that keeps a case list of its own (docs/edition-testing.md) checks it the same way.
       - run: if [ -f Tools/Docs/edition-testing-index.py ]; then python3 Tools/Docs/edition-testing-index.py; fi
 
+  unit:
+    name: Automation unit tests
+    if: github.event_name != 'push' || github.ref_type == 'tag' || vars.BUILD_ON_PUSH != 'false' || contains(github.event.head_commit.message, '[ci]')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      # The protocol, the CLI, MCP and the plain-.NET rules of Typedown.Core linked in (the outline's mark, the home
+      # page's times): they run on Linux in seconds, and were run by hand only - when someone remembered.
+      - run: dotnet test Dev/Typedown.Automation.Tests/Typedown.Automation.Tests.csproj --configuration Release
+
   reliability:
     name: Test persistence and packaging
     if: github.event_name != 'push' || github.ref_type == 'tag' || vars.BUILD_ON_PUSH != 'false' || contains(github.event.head_commit.message, '[ci]')
