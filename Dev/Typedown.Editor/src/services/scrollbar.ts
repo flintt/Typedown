@@ -1,5 +1,6 @@
 import { readScrollAnchor } from './loadPreview'
 import transport from "./transport"
+import { noteScroll } from "./scrollWriters"
 
 // The load the page is showing. A report without one comes from a page that has not been given a document
 // yet — a freshly navigated page reports its empty body's first layout as "scrolled to 0", and the host
@@ -52,6 +53,9 @@ addEventListener('resize', scheduleScrollState)
 
 transport.addListener<{ scrollX: number, scrollY: number }>('OnScroll', ({ scrollX, scrollY }) => {
     const equals = (a: number, b: number) => Math.abs(a - b) < 1
-    if (!equals(scrollX, window.scrollX) || !equals(scrollY, window.scrollY))
+    if (!equals(scrollX, window.scrollX) || !equals(scrollY, window.scrollY)) {
+        const from = window.scrollY
         window.scrollTo(scrollX, scrollY)
+        noteScroll('host scroll bar', from)
+    }
 })

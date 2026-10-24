@@ -7,6 +7,7 @@ import renderInlines from './renderInlines'
 import renderBlock from './renderBlock'
 import HeightPredictor, { account } from './predictHeights'
 import transport from 'services/transport'
+import { noteScroll, recentScrolls } from 'services/scrollWriters'
 
 let mermaidRenderId = 0
 const MERMAID_RENDER_CACHE_LIMIT = 32
@@ -45,6 +46,8 @@ const readerScrolling = () => scrollDragging || performance.now() - lastScrollIn
 // with visible alone, a block already in the window lost that, its margins collapsed through it and the text in the
 // window moved by them (JT02, reading mode: 46 px).
 const PINNED = 'content-visibility: visible; contain: layout style paint'
+// How long after a long document is drawn whole a jump of the page with nobody at it is still reported (DrawJump).
+const WATCH_AFTER_DRAWN_MS = 5000
 const isLongDocument = () => !!document.getElementById('editor')?.classList.contains('ag-long-document')
 const sliceBudget = () => performance.now() - lastInputAt < 1000 ? 12 : 40
 // The share of each drawing slice spent predicting a document's heights (predictHeights.js). None: the guess from the
@@ -783,9 +786,11 @@ class StateRender {
       window.removeEventListener('wheel', arm, true)
       window.removeEventListener('pointerdown', arm, true)
     }
-    // The page going more than two windows' height in one go with nobody at it, while it is drawn: reported to the host's
-    // log with what the drawing knew then (hp, Typeleaf 1.4.0.12: demo1 back at its end, nothing touched, the page went
-    // 100,000 px up 6 s later; w10 never showed it).
+    // The page going more than two windows' height in one go with nobody at it, while it is drawn and for a few seconds
+    // after: reported to the host's log with what the drawing knew then and the page's own scrolls just before
+    // (services/scrollWriters). hp, 1.4.0.12: a 1.5 MB document back at its end, nothing touched, the page went 100,000 px
+    // up 6 s later; w10 never showed it. hp, 1.4.0: 98,600 px up just after it was drawn whole - when the report had
+    // stopped watching.
     let lastY = window.scrollY
     const watchJump = () => {
       const y = window.scrollY
@@ -794,6 +799,10 @@ class StateRender {
       // Not the load putting the page back where it was (at once, and held for a moment after: settleScroll).
       if (performance.now() - state.startedAt < 1500) return
       if (Math.abs(dy) <= 2 * window.innerHeight || performance.now() - lastScrollInputAt < 500 || scrollDragging) return
+      const writers = recentScrolls(1000)
+      // The reader dragging the host's own scroll bar (the page's is hidden): theirs, not a jump.
+      const last = writers[writers.length - 1]
+      if (last && last.who === 'host scroll bar' && last.ago < 200 && Math.abs(last.to - y) <= 1) return
       try {
         const root = state.root
         const inWindow = this.blockAtTop(root)
@@ -803,14 +812,22 @@ class StateRender {
           roomAbove: getComputedStyle(root).getPropertyValue('--td-room-above').trim(), fraction: root.style.getPropertyValue('--td-room-fraction'),
           first: root.firstElementChild ? `${root.firstElementChild.id}@${Math.round(root.firstElementChild.getBoundingClientRect().top)}` : null,
           window: inWindow ? `${inWindow.id}@${Math.round(inWindow.getBoundingClientRect().top)}` : null,
-          lastKeep: state.lastKeep || null, pinned: state.pinned ? state.pinned.length : 0, reader
+          lastKeep: state.lastKeep || null, pinned: state.pinned ? state.pinned.length : 0, reader,
+          afterDrawn: state.finishedAt != null ? Math.round(performance.now() - state.finishedAt) : null,
+          anchoring: (document.scrollingElement || document.documentElement).style.overflowAnchor || 'auto', writers
         })
       } catch (err) {
         console.log(err)
       }
     }
     const check = () => {
-      if (this.progressive !== state) return stop()
+      if (this.progressive !== state) {
+        // Drawn whole: still watched for a jump for a few seconds (what runs as the drawing ends - the last keep, the
+        // rules for the rest, the long-document class - may move the page), as long as no other document took its place.
+        if (state.finishedAt != null && !this.progressive && performance.now() - state.finishedAt < WATCH_AFTER_DRAWN_MS &&
+          this.muya?.contentState?.blocks === state.blocks && state.root.isConnected) return watchJump()
+        return stop()
+      }
       watchJump()
       this.pinOnScroll(state)
       if (!reader) return
@@ -877,6 +894,7 @@ class StateRender {
   }
 
   finishProgressive(state) {
+    state.finishedAt = performance.now()
     // The blocks drawn first lose their pin (content-visibility visible) and are laid out as the rest from here on - on
     // their own, to whole pixels past the long-document size: what is in the window is held where it is meanwhile
     // (vm103: the text moved by a pixel as the drawing ended).
@@ -1045,7 +1063,10 @@ class StateRender {
       const moved = first.getBoundingClientRect().top - before
       const from = window.scrollY
       const by = Math.ceil(moved - fraction)
-      if (by) window.scrollBy(0, by)
+      if (by) {
+        window.scrollBy(0, by)
+        noteScroll('keep', from)
+      }
       state.lastKeep = { at: Math.round(performance.now() - state.startedAt), by, moved: Math.round(moved), anchor: first.id, top: Math.round(before) }
       let next = fraction - moved + (window.scrollY - from)
       // A scroll that did not go as far as asked (the end of the page): the rest stays as it is.
