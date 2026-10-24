@@ -93,7 +93,7 @@ internal static partial class Program
                     await Task.Delay(3000);
                     for (var round = 1; round <= 2; round++)
                     {
-                        await Watch($"predict {on}, at {at:P0}, round {round}", round == 1 ? $"{on.Replace(", ", "-")}-{at * 100:0}" : null);
+                        await Watch($"predict {on}, at {at:P0}, round {round}", $"{on.Replace(", ", "-")}-{at * 100:0}-{round}");
                         await c.Call("document.focus", new { documentId = other });
                         await Task.Delay(3000);
                     }
@@ -161,6 +161,10 @@ internal static partial class Program
             if (spread / band < 1) continue; // blank
             var still = Diff(0);
             if (still < 0.5) { stillBand = true; continue; }
+            // A band that barely changed (a line a pixel off) is not lined up with another place: in a page of like lines
+            // (demo1's "switchport ..." lines, 46 px apart at 200%) it matched one three lines away (w10: -140 px for a
+            // line 1 px higher; hp: +46 px again and again, the page's own blocks never moving).
+            if (still < 3) continue;
             var best = 0; var bestD = still;
             for (var s = -h / 3; s <= h / 3; s++) { var d = Diff(s); if (d < bestD) { bestD = d; best = s; } }
             if (Math.Abs(best) > 2 && bestD < still * 0.25 && bestD < 2) moved ??= best;
