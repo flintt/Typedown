@@ -42,6 +42,7 @@ internal static partial class Program
         var dir = Path.Combine(outputDir, "jt02");
         Directory.CreateDirectory(dir);
         var results = new List<(string Label, JObject Page, ScreenMoves Screen)>();
+        GetWindowRect(window, out var normal);
         // One switch from the short document to the long one, watched for 6 s from just before it.
         async Task Watch(string label, string? keep)
         {
@@ -61,9 +62,23 @@ internal static partial class Program
         }
         try
         {
+            // In reading mode too: the reader's demo1 was open in it (hp, 1.4.0.13: back from showcase, the page jumped up
+            // and down 3-4 times by 40-55 px while drawn).
+            // And at the reader's window on hp (1402 x 1070) with the outline open: only there did the page jump while
+            // drawn (w10, reading mode: by 26-161 px and back, frame after frame).
+            foreach (var (mode, hpWindow) in new[] { ("visual", false), ("reading", false), ("reading", true) })
             foreach (var predict in new[] { false, true })
             {
-                var on = predict ? "on" : "off";
+                var on = (mode == "reading" ? "reading, " : "") + (hpWindow ? "hp window, " : "") + (predict ? "on" : "off");
+                await c.Call("document.focus", new { documentId = heavy });
+                await Task.Delay(500);
+                if (hpWindow)
+                {
+                    MbSetWindowPos(window, IntPtr.Zero, 40, 20, 1402, 1070, 0x0004 | 0x0010);
+                    await c.Call("window.setView", new { windowId, sidePane = new { open = true, page = "outline" } });
+                    await Task.Delay(1000);
+                }
+                await c.Call("window.setView", new { windowId, mode });
                 await c.Call("test.settings.set", new { windowId, name = "PredictHeights", value = predict });
                 await Task.Delay(500);
                 // Where the reader had it on hp: from a quarter of the way to the end (scrollY 90,000-386,000 of 400,000).
@@ -78,7 +93,7 @@ internal static partial class Program
                     await Task.Delay(3000);
                     for (var round = 1; round <= 2; round++)
                     {
-                        await Watch($"predict {on}, at {at:P0}, round {round}", round == 1 ? $"{on}-{at * 100:0}" : null);
+                        await Watch($"predict {on}, at {at:P0}, round {round}", round == 1 ? $"{on.Replace(", ", "-")}-{at * 100:0}" : null);
                         await c.Call("document.focus", new { documentId = other });
                         await Task.Delay(3000);
                     }
@@ -89,7 +104,7 @@ internal static partial class Program
                 var drawing = await Pending();
                 await c.Call("document.focus", new { documentId = other });
                 await Task.Delay(3000);
-                await Watch($"predict {on}, left still drawing ({(drawing ? "it was" : "it was NOT")}) and back", $"{on}-unfinished");
+                await Watch($"predict {on}, left still drawing ({(drawing ? "it was" : "it was NOT")}) and back", $"{on.Replace(", ", "-")}-unfinished");
                 await c.Call("document.focus", new { documentId = other });
                 await Task.Delay(3000);
             }
@@ -97,6 +112,8 @@ internal static partial class Program
         finally
         {
             try { await c.Call("test.settings.set", new { windowId, name = "PredictHeights", value = false }); } catch { }
+            try { await c.Call("document.focus", new { documentId = heavy }); await c.Call("window.setView", new { windowId, mode = "visual", sidePane = new { open = false } }); } catch { }
+            try { MbSetWindowPos(window, IntPtr.Zero, normal.Left, normal.Top, normal.Right - normal.Left, normal.Bottom - normal.Top, 0x0004 | 0x0010); } catch { }
             foreach (var d in new[] { heavy, other }) try { await c.Call("document.close", new { documentId = d }); } catch { }
         }
         foreach (var (label, page, screen) in results)
@@ -122,6 +139,33 @@ internal static partial class Program
         var sorted = rows.OrderBy(v => v).ToArray();
         var middle = sorted[sorted.Length / 2];
         return rows.Count(v => Math.Abs(v - middle) > 4) < rows.Length / 20;
+    }
+
+    // Between two frames that do not line up as a whole: a quarter of the picture (top to bottom) that lines up with the
+    // frame before at a shift of more than 2 px while another quarter is unchanged where it was - a part of the page
+    // that jumped. The shift, or null. A quarter of plain background lines up with anything: it must hold text.
+    private static int? PartShift(double[] rows, double[] last, int h)
+    {
+        var band = h / 4;
+        int? moved = null; var stillBand = false;
+        for (var b = 0; b < 4; b++)
+        {
+            int from = b * band, to = from + band;
+            double Diff(int s)
+            {
+                double d = 0; int n = 0;
+                for (var y = Math.Max(from, s); y < Math.Min(to, h + s); y++) { d += Math.Abs(rows[y] - last[y - s]); n++; }
+                return n > band / 2 ? d / n : double.MaxValue;
+            }
+            double spread = 0; for (var y = from + 1; y < to; y++) spread += Math.Abs(rows[y] - rows[y - 1]);
+            if (spread / band < 1) continue; // blank
+            var still = Diff(0);
+            if (still < 0.5) { stillBand = true; continue; }
+            var best = 0; var bestD = still;
+            for (var s = -h / 3; s <= h / 3; s++) { var d = Diff(s); if (d < bestD) { bestD = d; best = s; } }
+            if (Math.Abs(best) > 2 && bestD < still * 0.25 && bestD < 2) moved ??= best;
+        }
+        return stillBand ? moved : null;
     }
 
     private static ScreenMoves WatchScreen(IntPtr window, CancellationToken stop, string? keep)
@@ -171,7 +215,16 @@ internal static partial class Program
             {
                 double Diff(int s) => DiffTo(last, s);
                 var still = Diff(0);
-                if (still > 0.5)
+                // From or to the cover (a page of one colour and "Opening…"), nothing is lined up: its one line of text
+                // lines up with any other line somewhere, and a page that came after it read as moved (w10: -116 px,
+                // reading mode, the page then showing a picture's empty frame).
+                if (still > 0.5 && (Covered(rows) || Covered(last)))
+                {
+                    replaced++;
+                    if (events.Count < 30) events.Add($"{at}ms new({still:0.#})");
+                    if (keep != null) bitmap.Save(Path.Combine(keep, $"{frames:000}-{at}.png"), System.Drawing.Imaging.ImageFormat.Png);
+                }
+                else if (still > 0.5)
                 {
                     var best = 0; var bestD = still;
                     for (var s = -h / 3; s <= h / 3; s++) { var d = Diff(s); if (d < bestD) { bestD = d; best = s; } }
@@ -179,6 +232,13 @@ internal static partial class Program
                     {
                         moves++; maxShift = Math.Max(maxShift, Math.Abs(best));
                         if (events.Count < 30) events.Add($"{at}ms {(best > 0 ? "+" : "")}{best}px");
+                    }
+                    else if (PartShift(rows, last, h) is { } part)
+                    {
+                        // Not the whole picture: a part of it moved and the rest stayed (the blocks below a place that
+                        // changed height, the text above it still) - as much a jump to the reader as the whole moving.
+                        moves++; maxShift = Math.Max(maxShift, Math.Abs(part));
+                        if (events.Count < 30) events.Add($"{at}ms part {(part > 0 ? "+" : "")}{part}px");
                     }
                     else
                     {
