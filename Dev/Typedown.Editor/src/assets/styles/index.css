@@ -1486,11 +1486,18 @@ span.ag-footnote-backlink {
 }
 
 /* Notice that the first visual edit may rewrite part of this document (components/Muya: firstEditWarning). It stays
-   at the top while scrolling and never blocks editing. */
+   at the top while scrolling and never blocks editing. It lies over the page, taking no room of its own (the slot is
+   0 px tall): it is told a frame after the document is on the screen, and coming or going it moves nothing - taking
+   room it pushed the document down then (and up again 10 s later). */
 .td-first-edit-warning-slot {
   position: sticky;
   top: 0;
   z-index: 20;
+  height: 0;
+}
+
+.td-first-edit-warning-slot > .td-first-edit-warning {
+  box-shadow: var(--floatShadow);
 }
 
 .td-first-edit-warning {

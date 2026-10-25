@@ -1418,17 +1418,27 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             highlightExternalChange(editor.changedBlockKeys(blocksBefore).map((key: string) => document.getElementById(key)))
         ;(window as any).__typedownLastApply = replacedLocally ? 'local' : 'whole'
         importedRef.current = { source: props.markdown, normalized: editor.getMarkdown() }
-        // Text the first visual edit would change in a way that loses something (today: some raw HTML) gets a notice
-        // that does not block editing; source mode keeps it exactly.
-        const warn = classifyNormalization(props.markdown, importedRef.current.normalized).pendingNormalization === 'unsafe'
-        showFirstEditWarning(warn)
         // What a later switch away needs to know to keep this document (keepShown).
         const { contentState } = editor as any
-        shownRef.current = !blocksBefore && props.markdown.length >= KEEP_FROM_CHARS && !hasDiagram(contentState.blocks) ? {
-            text: props.markdown, imported: importedRef.current, warn, renderKey: renderKey(),
+        const imported = importedRef.current
+        const shown: ShownDocument | null = !blocksBefore && props.markdown.length >= KEEP_FROM_CHARS && !hasDiagram(contentState.blocks) ? {
+            text: props.markdown, imported, warn: false, renderKey: renderKey(),
             loadCaret: { given: caretKey(cursorRef.current), at: blockCaretKey(contentState.cursor) },
             blockCount: contentState.blocks.length, pristine: true, reported: null,
         } : null
+        shownRef.current = shown
+        // Text the first visual edit would change in a way that loses something (today: some raw HTML) gets a notice
+        // that does not block editing; source mode keeps it exactly. Told once the document is on the screen, not before:
+        // working it out took a quarter of a second for a 1.5 MB document, in the task that puts it on the screen (LT01).
+        // The notice lies over the top of the page (assets/styles/index.css), so coming a frame later moves nothing.
+        showFirstEditWarning(false)
+        const markdown = props.markdown
+        requestAnimationFrame(() => setTimeout(() => {
+            if (importedRef.current !== imported) return
+            const warn = classifyNormalization(markdown, imported.normalized).pendingNormalization === 'unsafe'
+            if (shown) shown.warn = warn
+            showFirstEditWarning(warn)
+        }, 0))
         // reveal: "change": the first changed block into view unless the reader can already see it. Measured in page
         // coordinates against where the page is (a local edit) or is about to be put back (a whole new document).
         let changeY: number | null = null
