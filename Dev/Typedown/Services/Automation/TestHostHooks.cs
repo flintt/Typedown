@@ -636,6 +636,11 @@ namespace Typedown.Services.Automation
             methods.Add(new MethodDescriptor("test.export.notice", null, "test.export.notice/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
                     (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["path"] = app.UIViewModel.ExportedPath, ["text"] = app.UIViewModel.ExportedNotice })));
+            // The card that the first visual edit may rewrite part of the document shown (FirstEditNotice): its text and the
+            // load it is for, or null text when none shows.
+            methods.Add(new MethodDescriptor("test.editor.firstEditNotice", null, "test.editor.firstEditNotice/1", (c, ct) =>
+                Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                    (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["text"] = app.UIViewModel.FirstEditNotice, ["loadId"] = app.UIViewModel.FirstEditNoticeLoad, ["currentLoadId"] = app.EditorViewModel.LoadId })));
             // The entries of a window's File > Export submenu, as shown.
             methods.Add(new MethodDescriptor("test.export.menu", null, "test.export.menu/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>

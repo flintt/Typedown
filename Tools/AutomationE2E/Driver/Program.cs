@@ -3544,20 +3544,32 @@ internal static partial class Program
         // CommonMark example 31: Muya rewrites the entity in this HTML block on the first visual edit.
         var id = await Open(c, Fixture("f02.md", "<a href=\"&ouml;&ouml;.html\">\n\nEDITHERE\n"));
         var windowId = await WindowIdOf(c, id);
-        async Task<bool> Warning() => (bool?)(await c.Call("test.editor.eval", new
+        // The window's own card (FirstEditNotice, like the export's), not anything in the page: the page works it out a
+        // frame after the document is on the screen and tells the host, for the load it is about.
+        async Task<bool> Warning()
+        {
+            var card = await c.Call("test.editor.firstEditNotice", new { windowId });
+            return card["text"]?.Type == Newtonsoft.Json.Linq.JTokenType.String && (int?)card["loadId"] == (int?)card["currentLoadId"];
+        }
+        async Task<bool> InPage() => (bool?)(await c.Call("test.editor.eval", new
         {
             windowId,
-            script = "!!document.querySelector('.td-first-edit-warning')"
+            script = "!!document.querySelector('.td-first-edit-warning, .td-first-edit-warning-slot')"
         }))["result"] ?? false;
 
-        // Drawn straight into the DOM, not from React state (docs/todo.md): on a busy main thread (many windows
-        // already open, as deep in the full suite) it can be a moment behind the page's own load.
-        Check(await Eventually(Warning, 3000, 100), "unsafe raw HTML shows the first-edit warning");
+        Check(await Eventually(Warning, 3000, 100), "unsafe raw HTML shows the first-edit warning (the window's card)");
+        Check(!await InPage(), "nothing of it is in the page");
         await Task.Delay(5000);
         Check(await Warning(), "the warning remains visible long enough to read");
         await Task.Delay(6000);
         Check(!await Warning(), "the warning closes after about 10 seconds without a click");
         notes.Add("warning was visible after 5 seconds and gone after 11 seconds");
+        // It is for its document only: back to it, it shows again; another document shown, it goes at once.
+        var other = await Open(c, Fixture("f02-other.md", "# F02 other\n\nplain text\n"));
+        await c.Call("document.focus", new { documentId = id });
+        Check(await Eventually(Warning, 3000, 100), "back to the document, the card shows again");
+        await c.Call("document.focus", new { documentId = other });
+        Check(await Eventually(async () => !await Warning(), 1000, 50), "another document shown, the card goes at once (it is never over another document)");
     }
 
     private static async Task M01(List<string> notes)

@@ -259,9 +259,10 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
 - `room-style-check.js` — the room a long document drawn a part at a time keeps for its rest is written into rules for
   the root's ::before and ::after (parser/render/roomStyle.js), never on the root: a change of the root's own style
   restyled every block under it, 35-60 ms a write on 2,900 blocks (LT01: slices of 80-250 ms instead of 40).
-- `notice-move-check.js` — the notice that the first visual edit may rewrite part of a document lies over the top of the
-  page and takes no room: it is worked out a frame after the document is on the screen (a quarter of a second for 1.5 MB,
-  once in the task that put it there), and coming or going it moves nothing.
+- `notice-host-check.js` — the notice that the first visual edit may rewrite part of a document is the host's card
+  (FirstEditNotice, like the export's), nothing in the page: the page tells the host once per load, after the document is
+  on the screen, with the text it has for it; it says it is gone in reading mode; a document with nothing to lose gets none;
+  the document never moves for it.
 - `search-race-check.js` — Enter in the find bar (`Find`) right behind the last letters (`Search`), all in one task after
   a shorter prefix was searched on its own: the step works on the matches of the text in the bar. The prefix's search was
   done again after the last one (its React effect, flushed late), and the step went to one of its matches (w10, LT01).

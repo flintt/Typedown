@@ -1485,54 +1485,6 @@ span.ag-footnote-backlink {
   #ag-editor-id h1, #ag-editor-id h2, #ag-editor-id h3 { break-after: avoid; }
 }
 
-/* Notice that the first visual edit may rewrite part of this document (components/Muya: firstEditWarning). It stays
-   at the top while scrolling and never blocks editing. It lies over the page, taking no room of its own (the slot is
-   0 px tall): it is told a frame after the document is on the screen, and coming or going it moves nothing - taking
-   room it pushed the document down then (and up again 10 s later). */
-.td-first-edit-warning-slot {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  height: 0;
-}
-
-.td-first-edit-warning-slot > .td-first-edit-warning {
-  box-shadow: var(--floatShadow);
-}
-
-.td-first-edit-warning {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  margin: 0 auto;
-  max-width: var(--editorAreaWidth);
-  padding: 6px 10px;
-  font-size: 13px;
-  line-height: 1.5;
-  color: var(--editorColor);
-  background: var(--floatBgColor);
-  border: 1px solid var(--floatBorderColor);
-  border-radius: 4px;
-}
-
-.td-first-edit-warning-text {
-  flex: 1;
-}
-
-.td-first-edit-warning-text::before {
-  content: var(--FirstEditWarning);
-}
-
-.td-first-edit-warning-close {
-  border: none;
-  background: transparent;
-  color: inherit;
-  cursor: pointer;
-  font-size: 16px;
-  line-height: 1;
-  padding: 0 2px;
-}
-
 /* What a connected program just changed (automation writes; Editor/CodeMirror and Muya apply it). A short fade, so the
    reader sees where the text moved under them; the "highlight changes made by automation" setting turns it off. */
 .td-external-change {

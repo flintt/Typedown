@@ -62,7 +62,7 @@ const doc = Array.from({ length: N }, (_, i) => block(i)).join('') + (args.inclu
   await page.waitForFunction(() => window.__msgs.some(m => m.name === 'FileLoaded' && m.args.loadId === 6), { timeout: 60000 });
   await new Promise(r => setTimeout(r, 500));
   // Every frame from the load on: the block at the top of the window 300 ms after the first part is drawn (as JT04 takes
-  // it), then its top whenever it moves; and when the first-edit notice comes and goes.
+  // it), then its top whenever it moves; and when the first-edit notice comes and goes (the page telling the host).
   await page.evaluate(ms => {
     const s = window.__jh = { rec: [], ref: null, t0: performance.now(), notes: [] };
     const topBlock = () => { const root = document.getElementById('ag-editor-id'); if (!root) return null; const kids = root.children; let lo = 0, hi = kids.length - 1; while (lo < hi) { const m = (lo + hi) >> 1; if (kids[m].getBoundingClientRect().bottom <= 0) lo = m + 1; else hi = m } for (let k = lo; k < kids.length; k++) { const e = kids[k]; if (e.id && e.textContent.trim()) return e } return null };
@@ -71,7 +71,8 @@ const doc = Array.from({ length: N }, (_, i) => block(i)).join('') + (args.inclu
       const now = Math.round(performance.now() - s.t0);
       if (now > ms + 3000) return;
       const y = Math.round(window.scrollY), h = document.documentElement.scrollHeight;
-      { const w = document.querySelector('.td-first-edit-warning'); if (!!w !== !!s.notice) { s.notes.push([now, w ? Math.round(w.getBoundingClientRect().height) : 0, y, h]) } s.notice = w }
+      // The notice is the host's card now (the page says FirstEditNotice): shown for this load or not.
+      { let n = null; for (let k = window.__msgs.length - 1; k >= 0; k--) if (window.__msgs[k].name === 'FirstEditNotice') { n = window.__msgs[k]; break } const w = !!(n && n.args && n.args.show && n.args.loadId === 7); if (w !== !!s.notice) { s.notes.push([now, w ? 1 : 0, y, h]) } s.notice = w }
       if (drawnAt === null && window.__msgs.some(m => m.name === 'FileLoaded' && m.args.loadId === 7)) drawnAt = now;
       if (!s.ref) { if (drawnAt !== null && now > drawnAt + 300) { const e = topBlock(); if (e) s.ref = { id: e.id, top: Math.round(e.getBoundingClientRect().top), y, h, at: now } } }
       else if (now - s.ref.at <= ms) {

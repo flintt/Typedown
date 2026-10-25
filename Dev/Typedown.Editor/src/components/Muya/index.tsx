@@ -245,14 +245,14 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     // Import/export normalizes Markdown. Keep the original text while the document
     // still exports to its initial value, including after an undo back to that value.
     const importedRef = useRef<{ source: string, normalized: string }>();
-    // The notice is put in and taken out by hand, not through React state: a React commit while the editor has the
-    // focus walks the whole document to save and put back the selection (react-dom's getSelectionInformation), and
-    // on a document with diagrams - thousands of SVG elements - that took over a second, once as the notice came with
-    // the load and again as it went ten seconds later.
-    const warningSlotRef = useRef<HTMLDivElement>(null)
+    // The notice that the first visual edit may rewrite part of this document is the host's: a card over the window,
+    // as the one an export leaves (FirstEditNotice, Typedown.Core MainPage), never in the page - in it, it pushed the
+    // document down as it came and up as it went, or lay over its first line. The page says when it is to show and when
+    // not, for the load it is about; the host shows it only while that load is the document shown.
     const firstEditWarningRef = useRef(false)
     const readOnlyRef = useRef(!!props.options?.readOnly)
     const firstEditWarningTimerRef = useRef<number | null>(null)
+    const firstEditToldRef = useRef<{ show: boolean, loadId: number | undefined } | null>(null)
     const drawFirstEditWarningRef = useRef<() => void>(() => { })
     const showFirstEditWarning = useCallback((show: boolean) => {
         if (firstEditWarningTimerRef.current !== null) window.clearTimeout(firstEditWarningTimerRef.current)
@@ -266,34 +266,17 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         }, 10000)
     }, [])
     drawFirstEditWarningRef.current = () => {
-        const slot = warningSlotRef.current
-        if (!slot) return
         const show = firstEditWarningRef.current && !readOnlyRef.current
-        if (show === !!slot.firstElementChild) return
-        // The notice takes its height above the document: coming or going with the page scrolled down, the block at the
-        // top of the window is held where it is. The browser's scroll anchoring would, but it is off while a long
-        // document is drawn a part at a time, and the notice going 10 s after the load moved the text in the window up
-        // by its height (JT04, w10: 33 px, a 1.5 MB document back at its end). At the top of the page it pushes the
-        // document down, as it always did.
-        const hold = window.scrollY > 0 ? holdWindowBlock('first-edit notice') : null
-        if (!show) {
-            slot.replaceChildren()
-            hold?.()
-            return
-        }
-        const notice = document.createElement('div')
-        notice.className = 'td-first-edit-warning'
-        notice.setAttribute('role', 'status')
-        const text = document.createElement('span')
-        text.className = 'td-first-edit-warning-text'
-        const close = document.createElement('button')
-        close.className = 'td-first-edit-warning-close'
-        close.setAttribute('aria-label', 'Close')
-        close.textContent = '×'
-        close.addEventListener('click', () => showFirstEditWarning(false))
-        notice.append(text, close)
-        slot.append(notice)
-        hold?.()
+        const loadId = currentLoadId()
+        const told = firstEditToldRef.current
+        // Shown: once for the load. Gone: only if it was shown (the host takes it away by itself when another document is
+        // shown, so a load that never showed it says nothing).
+        if (show ? told?.show && told.loadId === loadId : !told?.show) return
+        firstEditToldRef.current = { show, loadId }
+        // The text as the page has it (localization.ts): the host shows its own copy of the same string, this is for its log.
+        let text = ''
+        try { text = JSON.parse(getComputedStyle(document.documentElement).getPropertyValue('--FirstEditWarning') || '""') } catch { text = '' }
+        transport.postMessage('FirstEditNotice', { show, loadId, text: show ? text : '' })
     }
     useEffect(() => {
         readOnlyRef.current = !!props.options?.readOnly
@@ -1539,9 +1522,6 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             lineHeight: props.options?.lineHeight,
             fontFamily: props.options?.fontFamily ? `${props.options.fontFamily}, "Open Sans", "Segoe UI", sans-serif` : undefined
         }}>
-            {/* A wrapper that always exists: Muya replaces #editor's node, so React must never insert next to it -
-                inserting the notice before #editor threw and took the whole page down. */}
-            <div className="td-first-edit-warning-slot" ref={warningSlotRef} />
             <div id="editor" />
         </div>
     )

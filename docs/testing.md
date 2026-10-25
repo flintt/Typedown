@@ -318,6 +318,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | `test.file.rename` | `path`, `windowId` | The window's active document's file renamed to the path, as Rename in the folder pane does for the open document; answers whether it was renamed. | TestHostHooks.cs |
 | `test.export.run` | `type?`, `path`, `windowId` | The window's document exported to a file, as File > Export > <type> with that file picked in the save dialog (html or pdf: the first export configuration of that type); answers once the export is asked for, not done. | TestHostHooks.cs |
 | `test.export.notice` | `windowId` | The notice an export leaves (Settings > Export > After export): the file it names, or null when none shows. | TestHostHooks.cs |
+| `test.editor.firstEditNotice` | `windowId` | The card that the first visual edit may rewrite part of the document shown (FirstEditNotice): its text and the load it is for, or null text when none shows. | TestHostHooks.cs |
 | `test.export.menu` | `windowId` | The entries of a window's File > Export submenu, as shown. | TestHostHooks.cs |
 | `test.dialogs.dismiss` | - | Every dialog left open in any window, closed as its close button would: the driver asks before each case, so one case's prompt (an unsaved document's "save?") does not hold the next cases' dialogs back. | TestHostHooks.cs |
 | `test.dialog.colours` | `windowId` | The open dialog's colours and the custom theme's, to tell whether the dialog wears the theme. | TestHostHooks.cs |

@@ -133,6 +133,17 @@ namespace Typedown.Core.ViewModels
             // it started with — a viewport of no height is a page loaded before its window was there.
             EventCenter.GetObservable<EditorEventArgs>("ScrollSettled").Subscribe(x => Log.Debug($"settle: {x.Args}"));
             // The page going far with nobody at it while a long document is drawn, and what the drawing knew then.
+            // The page: the first visual edit of this load may rewrite part of it (or no longer: 10 s gone, reading mode).
+            // Shown only for the load on screen; a later load has taken the card away already (NoteLoad).
+            EventCenter.GetObservable<EditorEventArgs>("FirstEditNotice").Subscribe(x =>
+            {
+                var load = x.Args?["loadId"]?.Value<int?>();
+                var ui = ServiceProvider.GetService<UIViewModel>();
+                if (ui == null) return;
+                if ((bool?)x.Args?["show"] == true) { if (load == LoadId) ui.ShowFirstEditNotice(LoadId); }
+                else if (load == null || load == ui.FirstEditNoticeLoad) ui.HideFirstEditNotice();
+            });
+            EventCenter.GetObservable<EditorEventArgs>("FindHold").Subscribe(x => Log.Debug($"find hold: the match's block left the window, put back: {x.Args?.ToString(Newtonsoft.Json.Formatting.None)}"));
             EventCenter.GetObservable<EditorEventArgs>("DrawJump").Subscribe(x => Log.Debug($"draw jump: {x.Args?.ToString(Newtonsoft.Json.Formatting.None)}"));
             // An error in the page nobody caught (a listener, a promise): in the log, where the next one is looked for.
             EventCenter.GetObservable<EditorEventArgs>("PageError").Subscribe(x => Log.Debug($"page error: {x.Args}"));
@@ -268,6 +279,8 @@ namespace Typedown.Core.ViewModels
         // The next load's id, noting whether it is a long document and whether the page has anything on it meanwhile.
         private int NoteLoad(string text, bool pageEmpty = false)
         {
+            // Another document, or this one again: a first-edit notice was for the load before (the page says again if so).
+            ServiceProvider.GetService<UIViewModel>()?.HideFirstEditNotice();
             LongLoadDelay = pageEmpty ? 150 : 600;
             LongLoadPending = (text?.Length ?? 0) >= LongDocumentChars;
             if (LongLoadPending) OpeningLoads++;

@@ -35,7 +35,8 @@ namespace Typedown.Core.ViewModels
         {
             get => activeTab;
             // Every tab put on screen, by whatever path, makes a switch asked for before it stale (SwitchTo).
-            private set { activeTab = value; showRequests++; }
+            // A first-edit notice is for the document it was said for: not over another one, nor over the home page.
+            private set { activeTab = value; showRequests++; ServiceProvider.GetService<UIViewModel>()?.HideFirstEditNotice(); }
         }
 
         private DocumentTab activeTab;

@@ -73,6 +73,26 @@ namespace Typedown.Core.ViewModels
 
         private void OnExportedTimerTick(object sender, object e) => HideExported();
 
+        /// <summary>
+        /// The notice that the first visual edit may rewrite part of the document shown (the page works out whether, and
+        /// says so with FirstEditNotice): shown as a card over the window like the export's, for that load only - taken
+        /// away when another document is shown or this one closed. Null: no notice. The page takes it away after 10 s.
+        /// </summary>
+        public string FirstEditNotice { get; private set; }
+
+        public bool FirstEditNoticeOpen => FirstEditNotice != null;
+
+        /// <summary>The load the notice is for (EditorViewModel.LoadId).</summary>
+        public int FirstEditNoticeLoad { get; private set; }
+
+        public void ShowFirstEditNotice(int loadId)
+        {
+            FirstEditNoticeLoad = loadId;
+            FirstEditNotice = Locale.GetString("FirstEditWarning");
+        }
+
+        public void HideFirstEditNotice() => FirstEditNotice = null;
+
 
         /// <summary>Folder-wide search pane in the side bar (Edit → Find → Search in folder, Ctrl+Shift+F).</summary>
         public bool FolderSearchOpen { get; set; }
