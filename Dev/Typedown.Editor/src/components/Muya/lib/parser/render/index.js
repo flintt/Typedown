@@ -54,20 +54,21 @@ const FIRST_BELOW_BLOCKS = 70
 const FIRST_ABOVE_CHARS = 8000
 const FIRST_BELOW_CHARS = 16000
 const FIRST_MIN_BLOCKS = 8
-// What a jump (jumpProgressive) draws at once.
-const JUMP_FIRST = { above: 3000, below: 8000 }
+// What a jump (jumpProgressive) draws at once: about a window's worth around the block gone to - the rest comes in the
+// slices right after (w10, LT01: Enter in the find bar and Ctrl+End 0.7-1 s with 8 blocks and more on each side).
+const JUMP_FIRST = { above: 4000, below: 4000, min: 2 }
 const textLength = block => {
   let n = typeof block.text === 'string' ? block.text.length + 1 : 0
   if (block.children) for (const child of block.children) n += textLength(child)
   return n
 }
 // The index past the last block drawn first on one side of `center` (step 1: below, from center; -1: above, the first).
-function edgeOf(blocks, center, step, maxBlocks, maxChars) {
+function edgeOf(blocks, center, step, maxBlocks, maxChars, minBlocks = FIRST_MIN_BLOCKS) {
   let chars = 0
   let n = 0
   let i = step > 0 ? center : center - 1
   while (i >= 0 && i < blocks.length && n < maxBlocks) {
-    if (n >= FIRST_MIN_BLOCKS && chars >= maxChars) break
+    if (n >= minBlocks && chars >= maxChars) break
     chars += textLength(blocks[i])
     n++
     i += step
@@ -496,8 +497,8 @@ class StateRender {
     // A screen or two around the block to start from: up to 30 blocks above it and 70 below, fewer where their text is
     // long - 70 blocks of raw HTML tables are 37,000 characters, five screens, and drawing and laying them out was a third
     // of the time before a 1.5 MB document was first on the screen (LT01), and all of a jump's (jumpProgressive).
-    const lo = edgeOf(blocks, center, -1, FIRST_ABOVE_BLOCKS, first ? first.above : FIRST_ABOVE_CHARS)
-    const hi = edgeOf(blocks, center, 1, FIRST_BELOW_BLOCKS, first ? first.below : FIRST_BELOW_CHARS)
+    const lo = edgeOf(blocks, center, -1, FIRST_ABOVE_BLOCKS, first ? first.above : FIRST_ABOVE_CHARS, first ? first.min : FIRST_MIN_BLOCKS)
+    const hi = edgeOf(blocks, center, 1, FIRST_BELOW_BLOCKS, first ? first.below : FIRST_BELOW_CHARS, first ? first.min : FIRST_MIN_BLOCKS)
     rootDom.id = CLASS_OR_ID.AG_EDITOR_ID
     rootDom.innerHTML = this.blocksHtml(blocks.slice(lo, hi), activeBlocks, matches)
     // The fraction of a pixel the document before was moved by (keepInPlace): it stays after a drawing (taken away, the
