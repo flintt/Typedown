@@ -256,3 +256,6 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
 - `html-source-check.js` — the source of a raw HTML block is highlighted only while the caret is in it (hidden otherwise,
   the preview standing for it); out of it, it is its plain text, and a search match in it is still marked. Highlighting
   every hidden source was 60% of drawing LT01's document (20 MB of HTML for the page, 430,000 elements).
+- `room-style-check.js` — the room a long document drawn a part at a time keeps for its rest is written into rules for
+  the root's ::before and ::after (parser/render/roomStyle.js), never on the root: a change of the root's own style
+  restyled every block under it, 35-60 ms a write on 2,900 blocks (LT01: slices of 80-250 ms instead of 40).

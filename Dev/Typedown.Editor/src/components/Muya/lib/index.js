@@ -419,12 +419,8 @@ class Muya {
     const root = stateRender.container
     // Put away half drawn (drawn a part at a time): how far it got goes with it, and showDocument carries on.
     const progressive = stateRender.suspendProgressive()
+    // The room it keeps for its rest goes with it (roomStyle.js keeps it by root), not to the next document's root.
     const empty = root.cloneNode(false)
-    // The room it keeps for its rest goes with it, not to the next document's root.
-    empty.style.removeProperty('--td-room-above')
-    empty.style.removeProperty('--td-room-fraction')
-    empty.style.removeProperty('--td-room-below')
-    if (!empty.getAttribute('style')) empty.removeAttribute('style')
     root.replaceWith(empty)
     stateRender.setContainer(empty)
     this.eventCenter.dispatch('rootChange', empty)
@@ -433,16 +429,8 @@ class Muya {
 
   /** Whether a root taken out by takeDocument is the same element as the one shown, but for what it holds. */
   canShowDocument(kept) {
-    // The room a half-drawn document keeps for its rest (StateRender.estimateRest) is its own, not a difference.
-    const shell = root => {
-      const copy = root.cloneNode(false)
-      copy.style.removeProperty('--td-room-above')
-      copy.style.removeProperty('--td-room-fraction')
-      copy.style.removeProperty('--td-room-below')
-      if (!copy.getAttribute('style')) copy.removeAttribute('style')
-      return copy
-    }
-    return shell(kept.root).isEqualNode(shell(this.contentState.stateRender.container))
+    // The room a half-drawn document keeps for its rest (StateRender.estimateRest) is not on the root (roomStyle.js).
+    return kept.root.cloneNode(false).isEqualNode(this.contentState.stateRender.container.cloneNode(false))
   }
 
   /**

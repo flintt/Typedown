@@ -8,18 +8,10 @@ import renderBlock from './renderBlock'
 import HeightPredictor, { account } from './predictHeights'
 import transport from 'services/transport'
 import { noteScroll, recentScrolls } from 'services/scrollWriters'
+import { getRoom, setRoom, showRoom } from './roomStyle'
 
 let mermaidRenderId = 0
 const MERMAID_RENDER_CACHE_LIMIT = 32
-
-// The room kept for the part of a document not drawn yet (estimateRest), as properties not inherited: written on the
-// root, they restyle only it and its ::before and ::after (which take them explicitly, assets/styles/index.css). As
-// plain custom properties every element of the document was restyled each time.
-try {
-  for (const name of ['--td-room-above', '--td-room-below', '--td-room-fraction']) window.CSS?.registerProperty?.({ name, syntax: '<length>', inherits: false, initialValue: '0px' })
-} catch (err) {
-  // Registered already (a second bundle on the page), or not supported: inherited, as before.
-}
 
 // How long a slice of a document drawn a part at a time may take: short while the reader is at the keys, the mouse or
 // the wheel (a frame's worth, so what they do is answered at once), longer when they are not - each slice also costs a
@@ -84,6 +76,8 @@ class StateRender {
 
   setContainer(container) {
     this.container = container
+    // The room kept for the rest of a document drawn a part at a time is this root's from now on (roomStyle.js).
+    showRoom(container)
     // The fonts a long document's blocks are drawn in asked for early (predictHeights.js), so the first one opened can
     // have its heights predicted without waiting for them.
     this.heights.warm(container)
@@ -476,7 +470,7 @@ class StateRender {
     rootDom.innerHTML = this.blocksHtml(blocks.slice(lo, hi), activeBlocks, matches)
     // The fraction of a pixel the document before was moved by (keepInPlace): it stays after a drawing (taken away, the
     // text would move by it once more), not into a new one.
-    rootDom.style.removeProperty('--td-room-fraction')
+    setRoom(rootDom, 'fraction', null)
     this.renderMermaid()
     this.renderDiagram()
     this.codeCache.clear()
@@ -695,8 +689,8 @@ class StateRender {
     if (above === null) above = room(0, state.lo)
     if (below === null) below = room(state.hi, blocks.length)
     if (write) {
-      root.style.setProperty('--td-room-above', `${above}px`)
-      root.style.setProperty('--td-room-below', `${below}px`)
+      setRoom(root, 'above', `${above}px`)
+      setRoom(root, 'below', `${below}px`)
     }
   }
 
@@ -765,8 +759,8 @@ class StateRender {
   }
 
   clearRoom(state) {
-    state.root.style.removeProperty('--td-room-above')
-    state.root.style.removeProperty('--td-room-below')
+    setRoom(state.root, 'above', null)
+    setRoom(state.root, 'below', null)
     if (state.pinned) for (const [element, was] of state.pinned) {
       if (was === null) element.removeAttribute('style')
       else element.setAttribute('style', was)
@@ -809,7 +803,7 @@ class StateRender {
         transport.postMessage('DrawJump', {
           dy: Math.round(dy), y: Math.round(y), ms: Math.round(performance.now() - state.startedAt), slices: state.slices,
           lo: state.lo, hi: state.hi, n: state.blocks.length, scrollHeight: document.documentElement.scrollHeight, innerHeight: window.innerHeight,
-          roomAbove: getComputedStyle(root).getPropertyValue('--td-room-above').trim(), fraction: root.style.getPropertyValue('--td-room-fraction'),
+          roomAbove: getRoom(root, 'above'), fraction: getRoom(root, 'fraction'),
           first: root.firstElementChild ? `${root.firstElementChild.id}@${Math.round(root.firstElementChild.getBoundingClientRect().top)}` : null,
           window: inWindow ? `${inWindow.id}@${Math.round(inWindow.getBoundingClientRect().top)}` : null,
           lastKeep: state.lastKeep || null, pinned: state.pinned ? state.pinned.length : 0, reader,
@@ -1054,12 +1048,12 @@ class StateRender {
     return () => {
       if (!first.isConnected) return
       // The page scrolls by whole pixels and the blocks' heights have fractions. What a scroll leaves over goes into a
-      // padding above the blocks (--td-room-fraction, between 0 and 1 px), so the text in the window ends every slice
+      // padding above the blocks (the room's fraction, roomStyle.js: between 0 and 1 px), so the text in the window ends every slice
       // exactly where it was: carried to the next slice instead (JU01: dozens of slices added up to pixels), it sat up to
       // half a pixel off and back again, slice after slice - on Windows the text shook (JT01: 19 moves of 0.7-0.9 px).
-      // The height above (--td-room-above) cannot take it: past the long-document size it is laid out to whole pixels.
+      // The height above (the room above) cannot take it: past the long-document size it is laid out to whole pixels.
       const root = state.root
-      const fraction = parseFloat(root.style.getPropertyValue('--td-room-fraction')) || 0
+      const fraction = parseFloat(getRoom(root, 'fraction')) || 0
       const moved = first.getBoundingClientRect().top - before
       const from = window.scrollY
       const by = Math.ceil(moved - fraction)
@@ -1071,7 +1065,7 @@ class StateRender {
       let next = fraction - moved + (window.scrollY - from)
       // A scroll that did not go as far as asked (the end of the page): the rest stays as it is.
       if (next < 0 || next >= 2) next = fraction
-      if (Math.abs(next - fraction) > 0.0005) root.style.setProperty('--td-room-fraction', `${Math.round(next * 10000) / 10000}px`)
+      if (Math.abs(next - fraction) > 0.0005) setRoom(root, 'fraction', `${Math.round(next * 10000) / 10000}px`)
     }
   }
 

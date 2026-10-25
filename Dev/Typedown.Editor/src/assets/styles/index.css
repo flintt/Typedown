@@ -1602,26 +1602,18 @@ span.ag-footnote-backlink {
 }
 
 /* The room a document drawn a part at a time keeps for what is not drawn yet, above and below what is (Muya's
-   StateRender.estimateRest): pseudo-elements, so the blocks stay the root's children one for one. */
+   StateRender.estimateRest): pseudo-elements, so the blocks stay the root's children one for one. Their height (and the
+   fraction of a pixel the page cannot scroll by, as the padding above, keepInPlace) is written into rules of a style
+   sheet of its own (parser/render/roomStyle.js), not on the root: a change of the root's own style restyled every block
+   under it. */
 #ag-editor-id::before {
   content: '';
   display: block;
-  /* The properties are registered as not inherited (parser/render/index.js), so a change of them on the root restyles
-     the root and these two, not the whole document under it: written every 100 ms while a long document is drawn, it
-     was four fifths of the time (1.5 MB of HTML-heavy blocks: 84 blocks drawn in 5 s). */
-  --td-room-above: inherit;
-  height: var(--td-room-above, 0px);
-  /* The fraction of a pixel the page cannot scroll by (parser/render/index.js keepInPlace): a padding, as tall as asked -
-     the height above is laid out to whole pixels where the blocks are past the long-document size. */
-  --td-room-fraction: inherit;
-  padding-top: var(--td-room-fraction, 0px);
 }
 
 #ag-editor-id::after {
   content: '';
   display: block;
-  --td-room-below: inherit;
-  height: var(--td-room-below, 0px);
 }
 
 /* An ordered list numbered 1) 2) (the item's delimiter is kept in data-marker): the number as written, not 1. */
