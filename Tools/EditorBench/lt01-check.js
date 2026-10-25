@@ -4,7 +4,8 @@
 // end right after opening (Ctrl+F in the page, then the host's find bar: SearchOpenChange, a Search for each letter
 // typed, Enter = Find next). Each opening is fresh: another document first, then the long one. The limits are LT01's.
 //
-//   node lt01-check.js [--only open,end,search] [--width 1280 --height 900] [--prof name]
+//   node lt01-check.js [--only open,end,search] [--width 1280 --height 900] [--reading] [--prof name]
+//   --reading: in reading mode (JT02/JT03 drew the same document in reading mode at 1402 x 1070)
 //   --prof name: a CPU profile of the run to name.cpuprofile (prof-summary.js reads it)
 //   --trace name: a DevTools performance trace of the run to name.json (layout and style passes, with their sizes)
 'use strict';
@@ -17,6 +18,7 @@ const arg = (name, def) => { const i = args.indexOf('--' + name); return i >= 0 
 const only = (arg('only', 'open,end,search')).split(',');
 const width = Number(arg('width', 1280)), height = Number(arg('height', 900));
 const prof = arg('prof', null);
+const reading = args.includes('--reading');
 const trace = arg('trace', null);
 const LIMIT = { first: 1500, whole: 10000, gap: 200, end: 1000, search: 1000 };
 const HANG_MS = 60000;
@@ -26,7 +28,7 @@ const server = http.createServer((req, res) => { let p = decodeURIComponent(req.
 async function open(browser, port) {
   const page = await browser.newPage(); await page.setViewport({ width, height });
   // LT01 turns height prediction off (test.settings.set PredictHeights false).
-  const settings = { fontSize: 16, lineHeight: 1.6, editorAreaWidth: '900px', tabSize: 4, textDirection: 'auto', preferLooseListItem: true, listIndentation: '1', tableAlignColumns: false, markdown: '# start\n', basePath: '/tmp', loadId: 1, predictHeights: false };
+  const settings = { fontSize: 16, lineHeight: 1.6, editorAreaWidth: '900px', tabSize: 4, textDirection: 'auto', preferLooseListItem: true, listIndentation: '1', tableAlignColumns: false, markdown: '# start\n', basePath: '/tmp', loadId: 1, predictHeights: false, readOnly: reading };
   await page.evaluateOnNewDocument(`(()=>{const ls=[];window.__msgs=[];window.__deliver=(n,a)=>ls.forEach(l=>l({data:JSON.stringify({name:n,args:a})}));const resp={GetSettings:${JSON.stringify(settings)},GetCurrentTheme:{theme:'Light',accentColor:{r:0,g:120,b:212,a:1},background:{R:249,G:249,B:249,A:1}},ContentLoaded:'',GetStringResources:{}};const prev={};window.chrome={webview:{addEventListener:(t,l)=>ls.push(l),postMessage:(raw)=>{const m=JSON.parse(raw);if(m.type==='diffmsg'){const full=m.diff?prev[m.name].slice(0,m.start)+m.args+prev[m.name].slice(m.end):m.args;prev[m.name]=full;m.args=m.name==='MarkdownChange'?null:JSON.parse(full);}m.at=performance.now();if(window.__msgs.length>200)window.__msgs.splice(0,100);window.__msgs.push(m);if(m.type==='invoke'){setTimeout(()=>window.__deliver(m.id,{code:0,data:m.name in resp?resp[m.name]:null}),0);}}}}})()`);
   await page.goto(`http://127.0.0.1:${port}/index.html`, { waitUntil: 'load' });
   await page.waitForFunction(() => window.__msgs.some(m => m.name === 'FileLoaded'), { timeout: 60000 });
@@ -105,15 +107,19 @@ const focusEditor = p => p.evaluate(() => { const e = document.getElementById('a
     const end = await until(p, onScreen, endText, from, 30000);
     console.log(`Ctrl+End ${drawing ? 'while drawing' : '(already drawn)'}: the last line on screen in ${fmt(end)}`);
     check(drawing && end <= LIMIT.end, `Ctrl+End right after opening shows the last line within ${LIMIT.end} ms (${fmt(end)})`);
+    // The caret where Ctrl+End puts it: at the end of the last line.
+    const caret = await evalOr(p, last => { const s = getSelection(); const b = s.anchorNode && (s.anchorNode.nodeType === 1 ? s.anchorNode : s.anchorNode.parentElement).closest('#ag-editor-id > *'); return { last: !!b && b === document.getElementById('ag-editor-id').lastElementChild && b.textContent.includes(last), atEnd: s.isCollapsed && s.anchorOffset === (s.anchorNode.textContent || '').length } }, endText);
+    if (!reading) check(!!caret && caret.last && caret.atEnd, `and the caret is at the end of the last line (${JSON.stringify(caret)})`);
   }
   if (only.includes('search')) {
     await fresh(p, text);
     await focusEditor(p);
     const drawing = await p.evaluate(() => !!window.__typedownMuya?.renderPending);
     const from = Date.now();
-    // Ctrl+F reaches the page as a key before the host opens its find bar; then the bar posts a Search for each letter
-    // typed (EditorViewModel.SearchValueChanged) and Find next for Enter (FindReplace.OnTextBoxSearchKeyDown).
-    await p.keyboard.down('Control'); await p.keyboard.press('f'); await p.keyboard.up('Control');
+    // Ctrl+F: the host takes the F (its keyboard hook swallows a shortcut it knows), the page sees the Ctrl going down and
+    // up; then the find bar posts a Search for each letter typed (EditorViewModel.SearchValueChanged) and Find next for
+    // Enter (FindReplace.OnTextBoxSearchKeyDown).
+    await p.keyboard.down('Control'); await p.keyboard.up('Control');
     await evalOr(p, () => window.__deliver('SearchOpenChange', { open: 1 }));
     await new Promise(r => setTimeout(r, 300));
     const opt = { searchIsCaseSensitive: false, searchIsWholeWord: false, searchIsRegexp: false, selection: { anchor: null, focus: null } };
@@ -127,7 +133,14 @@ const focusEditor = p => p.evaluate(() => { const e = document.getElementById('a
     const found = await until(p, onScreen, word, typed, 30000);
     console.log(`search for "${word}" ${drawing ? 'while drawing' : '(already drawn)'}: on screen ${fmt(found)} after Enter (${fmt(found + typed - from)} after Ctrl+F)`);
     check(drawing && found <= LIMIT.search, `a search right after opening shows a word near the end within ${LIMIT.search} ms of Enter (${fmt(found)})`);
+    // Marked as the match chosen, in the window.
+    const mark = await evalOr(p, () => { const m = document.querySelector('#ag-editor-id .ag-highlight'); if (!m) return null; const r = m.getBoundingClientRect(); return { text: m.textContent, inWindow: r.bottom > 0 && r.top < innerHeight } });
+    check(!!mark && mark.text.toLowerCase() === word.toLowerCase() && mark.inWindow, `it is marked as the match, in the window (${JSON.stringify(mark)})`);
+    // The bar closed: the marks go, the caret is left on the match.
+    const closed = Date.now();
     await evalOr(p, () => window.__deliver('SearchOpenChange', { open: 0 }));
+    const gone = await until(p, () => !document.querySelector('#ag-editor-id .ag-highlight, #ag-editor-id .ag-selection'), null, closed, 10000);
+    check(gone <= LIMIT.search, `closing the search takes its marks away within ${LIMIT.search} ms (${fmt(gone)})`);
   }
   if (trace) { await p.tracing.stop(); console.log(`trace: ${trace}.json`); }
   if (prof) {

@@ -222,6 +222,60 @@ class ContentState {
   }
 
   /**
+   * Where a search's marks and the caret are now, for renderSearch after a change: the keys of the blocks with marks
+   * (`keys`), and those of the match chosen and the caret (`urgent`: drawn again at once).
+   */
+  searchKeys() {
+    const { matches, index } = this.searchMatches
+    const keys = new Set()
+    for (const m of matches) keys.add(m.key)
+    const urgent = []
+    if (matches[index]) urgent.push(matches[index].key)
+    const { start, end } = this.cursor || {}
+    if (start) urgent.push(start.key)
+    if (end) urgent.push(end.key)
+    for (const key of urgent) keys.add(key)
+    return { keys, urgent }
+  }
+
+  /**
+   * After a search, a step to the next match or the search closed: draws again the top-level blocks that had marks or the
+   * caret before (`before`, searchKeys) and those that have them now, not the whole document - which also drew what was
+   * left of a long document drawn a part at a time first, and for a search typed into a long document did both for every
+   * letter (LT01: the page stopped answering for minutes). The match chosen, if not drawn yet, is drawn first, from there
+   * (StateRender.jumpProgressive). The blocks with the match chosen and the caret, before and now, are drawn at once (a
+   * mark left on one would be scrolled to), the others around the window too, the rest in idle time (redrawBlocks).
+   */
+  renderSearch(before, isRenderCursor = true) {
+    const { blocks, searchMatches: { matches, index } } = this
+    matches.forEach((m, i) => {
+      m.active = i === index
+    })
+    const topOf = key => {
+      const block = key && this.getBlock(key)
+      return block ? this.findOutMostBlock(block) : null
+    }
+    const after = this.searchKeys()
+    const tops = new Set()
+    for (const key of [...before.keys, ...after.keys]) {
+      const top = topOf(key)
+      if (top) tops.add(top)
+    }
+    const now = [...before.urgent, ...after.urgent].map(topOf).filter(Boolean)
+    const active = matches[index]
+    const activeTop = active ? topOf(active.key) : null
+    if (activeTop && this.stateRender.progressive) this.stateRender.jumpProgressive(blocks.indexOf(activeTop))
+    this.setNextRenderRange()
+    this.stateRender.redrawBlocks([...tops], now)
+    if (isRenderCursor) {
+      this.setCursor()
+    } else {
+      this.muya.blur()
+    }
+    this.postRender()
+  }
+
+  /**
    * The code blocks in `lang` on the page drawn again, now that its highlighting is loaded (importMarkdown). It drew
    * the whole document again: on every start with code in it, a second full drawing of the document - and a document
    * being drawn a part at a time drawn to its end at once. A block not on the page yet is highlighted as it is drawn.

@@ -338,6 +338,7 @@ class StateRender {
   // instead and let the patch below build the new tree into an empty element.
   render(blocks, activeBlocks, matches, fresh = false) {
     // A new document replaces whatever was still being drawn; anything else is drawn over the whole document.
+    this.dropRedraws()
     if (fresh) this.cancelProgressive()
     else this.completeRender()
     const selector = `div#${CLASS_OR_ID.AG_EDITOR_ID}`
@@ -461,6 +462,7 @@ class StateRender {
    */
   renderProgressive(blocks, activeBlocks, matches, center, done) {
     this.cancelProgressive()
+    this.dropRedraws()
     const rootDom = this.container || document.querySelector(`div#${CLASS_OR_ID.AG_EDITOR_ID}`)
     const before = 30
     const after = 70
@@ -840,7 +842,12 @@ class StateRender {
 
   // The next `count` blocks on one side of what is drawn.
   drawMore(state, side, count) {
-    const { blocks, activeBlocks, matches, root } = state
+    const { blocks, root } = state
+    // The caret and the search as they are now, not as when the drawing began: a search while a document is drawn marks
+    // the blocks still to come as they are drawn (only those on the page are drawn again for it, redrawBlocks).
+    const contentState = this.muya.contentState
+    const activeBlocks = contentState ? contentState.getActiveBlocks() : state.activeBlocks
+    const matches = contentState ? contentState.searchMatches.matches : state.matches
     // In a document past the long-document size, a block drawn off screen is not laid out (content-visibility): it
     // stands at the size predicted or guessed for it (predictHeights.js), not at the style sheet's 50 px: queued here,
     // written with the slice's others before the page is next laid out (flushHeightRules). The environment as the slice
@@ -1073,6 +1080,106 @@ class StateRender {
   holdAnchoring(hold) {
     const element = document.scrollingElement || document.documentElement
     if (element) element.style.overflowAnchor = hold ? 'none' : ''
+  }
+
+  /**
+   * The reader going to a part of a document drawn a part at a time that is not drawn yet (Ctrl+End, a search's match far
+   * down): the drawing starts again from the top-level block at `index` - the blocks around it at once, the rest in slices
+   * above and below it, as when a document is opened there - instead of the whole document being drawn first (LT01, a
+   * 1.5 MB document of raw HTML: Ctrl+End 7 s on w10, a search hung the page). What was drawn elsewhere goes; it is drawn
+   * again in its turn. False where there is nothing to do: all drawn, or the block drawn already.
+   */
+  jumpProgressive(index) {
+    const state = this.progressive
+    if (!state || !(index >= 0 && index < state.blocks.length) || (index >= state.lo && index < state.hi)) return false
+    const contentState = this.muya.contentState
+    this.renderProgressive(state.blocks, contentState.getActiveBlocks(), contentState.searchMatches.matches, index, state.done)
+    return true
+  }
+
+  /**
+   * Draws these top-level blocks again where they are on the page, with the caret and the search as they are now (a
+   * search's marks, the caret moved to a match): at once those within a few windows' height of the one shown and those
+   * in `now`, the others in the page's idle time - a search for one letter marks most blocks of a long document, and
+   * drawing them all again at once took as long as drawing the document. A block not on the page is left alone: it is
+   * drawn as things are when its turn comes (drawMore).
+   */
+  redrawBlocks(blocks, now = []) {
+    const root = this.container
+    if (!root) return
+    const queue = this.redrawQueue || (this.redrawQueue = new Set())
+    const urgent = new Set(now)
+    // The blocks from two windows' height above the one shown to three below (one layout, read before anything changes).
+    const kids = root.children
+    const h = window.innerHeight
+    const near = new Set()
+    if (kids.length) {
+      let lo = 0
+      let hi = kids.length - 1
+      while (lo < hi) {
+        const mid = (lo + hi) >> 1
+        if (kids[mid].getBoundingClientRect().bottom <= -2 * h) lo = mid + 1
+        else hi = mid
+      }
+      for (let k = lo; k < kids.length; k++) {
+        if (kids[k].getBoundingClientRect().top >= 3 * h) break
+        near.add(kids[k].id)
+      }
+    }
+    const draw = []
+    for (const block of blocks) {
+      if (urgent.has(block) || near.has(block.key)) {
+        draw.push(block)
+        queue.delete(block)
+      } else queue.add(block)
+    }
+    this.redrawNow(draw)
+    if (queue.size && !this.redrawTimer) this.redrawTimer = setTimeout(() => this.redrawIdle(), 0)
+  }
+
+  redrawNow(blocks) {
+    const root = this.container
+    if (!root || !blocks.length) return
+    const contentState = this.muya.contentState
+    const activeBlocks = contentState.getActiveBlocks()
+    const { matches } = contentState.searchMatches
+    let drawn = 0
+    for (const block of blocks) {
+      const element = root.querySelector(`#${block.key}`)
+      if (!element || element.parentElement !== root) continue
+      patch(toVNode(element), this.renderBlock(null, block, activeBlocks, matches, true))
+      drawn++
+    }
+    if (!drawn) return
+    this.renderMermaid()
+    this.renderDiagram()
+    this.codeCache.clear()
+  }
+
+  // The rest of redrawBlocks' blocks, a slice at a time, as the rest of a document is drawn (scheduleProgressive).
+  redrawIdle() {
+    this.redrawTimer = null
+    const queue = this.redrawQueue
+    if (!queue || !queue.size) return
+    const until = performance.now() + sliceBudget()
+    const batch = []
+    for (const block of queue) {
+      batch.push(block)
+      queue.delete(block)
+      if (batch.length >= 4) {
+        this.redrawNow(batch.splice(0))
+        if (performance.now() >= until) break
+      }
+    }
+    this.redrawNow(batch)
+    if (queue.size) this.redrawTimer = setTimeout(() => this.redrawIdle(), 0)
+  }
+
+  // A whole new document: nothing of the one before is drawn again.
+  dropRedraws() {
+    if (this.redrawQueue) this.redrawQueue.clear()
+    clearTimeout(this.redrawTimer)
+    this.redrawTimer = null
   }
 
   /** Stops drawing the document (another takes its place): what is on the page stays as it is. */

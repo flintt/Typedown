@@ -465,12 +465,29 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         const finish = (e: Event) => {
             if (!muya.renderPending) return
             if (e.type === 'mousedown' && e.target === document.documentElement) return
+            if (e.type === 'keydown') {
+                const key = e as KeyboardEvent
+                // A modifier pressed alone does nothing to the page: the Ctrl of a shortcut the host takes (Ctrl+F: the key
+                // itself never reaches the page) drew the whole of a 1.5 MB document first, and the page stopped answering
+                // (LT01).
+                if (/^(Control|Shift|Alt|Meta|CapsLock|AltGraph)$/.test(key.key)) return
+                // Ctrl+End, Ctrl+Home: that end of the document drawn first, the caret there, the rest drawn on from there
+                // (Muya.goToEdge) - not all of it first (LT01: 7 s on w10).
+                if ((key.ctrlKey || key.metaKey) && !key.shiftKey && !key.altKey && (key.key === 'End' || key.key === 'Home') &&
+                    muya.goToEdge(key.key === 'End')) {
+                    e.preventDefault()
+                    return
+                }
+            }
             muya.completeRender()
         }
         const events = ['keydown', 'mousedown', 'paste', 'cut', 'copy', 'compositionstart', 'dragstart', 'drop', 'contextmenu']
         for (const type of events) document.addEventListener(type, finish, true)
+        // A search, a step to its next match and the search bar opening or closing draw only the blocks they change, and the
+        // match chosen first where it is not drawn yet (ContentState.renderSearch).
         const passive = new Set(['LoadFile', 'SetMarkdown', 'HoldInput', 'ReleaseInput', 'ThemeChanged', 'SettingsChanged', 'LanguageChanged',
-            'OnScroll', 'RestoreScroll', 'FlushContent', 'QueryNormalization', 'QueryEditorStyle', 'AwaitPresentation'])
+            'OnScroll', 'RestoreScroll', 'FlushContent', 'QueryNormalization', 'QueryEditorStyle', 'AwaitPresentation',
+            'Search', 'Find', 'SearchOpenChange'])
         const hook = (name: string) => { if (muya.renderPending && !passive.has(name) && !name.startsWith('invoke_')) muya.completeRender() }
         beforeHostMessage.add(hook)
         return () => {
@@ -668,20 +685,45 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         editor?.insertImages(arg)
     }), [editor]);
 
+    // The find bar sends a search for every letter typed: those that came while the page was busy are one search, the last
+    // (on a long document each was a search of the whole text and, for a match not drawn yet, the drawing started again
+    // there - LT01). A step to the next match, a replace or the bar closing does the search waiting first.
+    const pendingSearchRef = useRef<{ timer: number, run: () => void } | null>(null)
+    const runPendingSearch = useCallback(() => {
+        const pending = pendingSearchRef.current
+        if (!pending) return
+        pendingSearchRef.current = null
+        window.clearTimeout(pending.timer)
+        pending.run()
+    }, [])
+    useEffect(() => () => { runPendingSearch() }, [runPendingSearch])
+
     useEffect(() => transport.addListener<{ value: string, opt: unknown }>('Search', (arg) => {
-        props.onSearchArgChange(arg)
-        setTimeout(() => scrollToElementIfInvisible('.ag-highlight'), 0)
+        const run = () => {
+            props.onSearchArgChange(arg)
+            setTimeout(() => scrollToElementIfInvisible('.ag-highlight'), 0)
+        }
+        const pending = pendingSearchRef.current
+        if (pending) {
+            pending.run = run
+            return
+        }
+        const entry = { timer: 0, run }
+        entry.timer = window.setTimeout(() => { if (pendingSearchRef.current === entry) { pendingSearchRef.current = null; entry.run() } }, 0)
+        pendingSearchRef.current = entry
     }), [editor, props, scrollToElementIfInvisible]);
 
     useEffect(() => transport.addListener<{ action: string }>('Find', ({ action }) => {
+        runPendingSearch()
         editor?.find(action)
         setTimeout(() => scrollToElementIfInvisible('.ag-highlight'), 0)
-    }), [editor, scrollToElementIfInvisible]);
+    }), [editor, scrollToElementIfInvisible, runPendingSearch]);
 
     useEffect(() => transport.addListener<{ value: string, opt: unknown }>('Replace', ({ value, opt }) => {
+        runPendingSearch()
         markEdited(shownRef)
         editor?.replace(value, opt)
-    }), [editor, scrollToElement]);
+    }), [editor, scrollToElement, runPendingSearch]);
 
     useEffect(() => {
         setMarginTop(currentMarginTop => {
@@ -692,16 +734,19 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     }, [props.searchOpen, relativeScroll])
 
     useEffect(() => transport.addListener<{ open: number }>('SearchOpenChange', ({ open }) => {
+        runPendingSearch()
         if (open == 0 && editor) {
             const { contentState } = editor as any;
+            const before = contentState.searchKeys();
             contentState.setCursorToHighlight();
             contentState.searchMatches.matches = [];
-            contentState.render(true);
+            // The blocks that had marks drawn again, not the whole document (ContentState.renderSearch).
+            contentState.renderSearch(before, true);
             props.onSearchArgChange(undefined)
             // Back from the search with the keyboard in the page: the editor has it, not the body.
             if (document.hasFocus()) restoreEditorFocus(editor, loadHoldingRef.current)
         }
-    }), [editor, props, relativeScroll]);
+    }), [editor, props, relativeScroll, runPendingSearch]);
 
     useEffect(() => transport.addListener<Record<string, unknown>>('SettingsChanged', (newOptions) => {
         for (const name in newOptions) {

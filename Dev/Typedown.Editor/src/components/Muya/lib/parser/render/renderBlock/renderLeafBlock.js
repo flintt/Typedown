@@ -53,6 +53,26 @@ const getHighlightHtml = (text, highlights, escape = false, handleLineEnding = f
   return escapeHTML(code)
 }
 
+// A search's matches by the block they are in, made once per search: looked for block by block, a search for one letter
+// in a long document (100,000 matches and more) cost every block drawn a pass over all of them.
+let indexedMatches = null
+let indexedLength = -1
+let matchesByKey = null
+const highlightsOf = (matches, key) => {
+  if (!matches.length) return matches
+  if (matches !== indexedMatches || matches.length !== indexedLength) {
+    matchesByKey = new Map()
+    for (const m of matches) {
+      const list = matchesByKey.get(m.key)
+      if (list) list.push(m)
+      else matchesByKey.set(m.key, [m])
+    }
+    indexedMatches = matches
+    indexedLength = matches.length
+  }
+  return matchesByKey.get(key) || []
+}
+
 const hasReferenceToken = tokens => {
   let result = false
   const travel = tokens => {
@@ -75,7 +95,7 @@ export default function renderLeafBlock (parent, block, activeBlocks, matches, u
   const { cursor } = this.muya.contentState
   let selector = this.getSelector(block, activeBlocks)
   // highlight search key in block
-  const highlights = matches.filter(m => m.key === block.key)
+  const highlights = highlightsOf(matches, block.key)
   const {
     text,
     type,

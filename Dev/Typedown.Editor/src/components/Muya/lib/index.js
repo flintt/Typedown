@@ -697,8 +697,10 @@ class Muya {
 
   search(value, opt) {
     const { selectHighlight } = opt
+    const before = this.contentState.searchKeys()
     this.contentState.search(value, opt)
-    this.contentState.render(!!selectHighlight)
+    // Only the blocks whose marks or caret changed are drawn again (ContentState.renderSearch).
+    this.contentState.renderSearch(before, !!selectHighlight)
     return this.contentState.searchMatches
   }
 
@@ -710,9 +712,36 @@ class Muya {
   }
 
   find(action/* pre or next */) {
+    const before = this.contentState.searchKeys()
     this.contentState.find(action)
-    this.contentState.render(false)
+    this.contentState.renderSearch(before, false)
     return this.contentState.searchMatches
+  }
+
+  /**
+   * Ctrl+End or Ctrl+Home (`end` false) while a document is drawn a part at a time and that end of it is not drawn yet:
+   * the caret goes there and the drawing starts again from there (StateRender.jumpProgressive), rather than the whole
+   * document being drawn first (LT01, a 1.5 MB document of raw HTML: 7 s on w10). False where the browser can do it as
+   * usual (all drawn, or that end drawn already).
+   */
+  goToEdge(end) {
+    const { contentState } = this
+    const { stateRender, blocks } = contentState
+    const state = stateRender.progressive
+    if (!state || !blocks.length) return false
+    const index = end ? blocks.length - 1 : 0
+    if (index >= state.lo && index < state.hi) return false
+    const leaf = end ? contentState.lastInDescendant(blocks[index]) : contentState.firstInDescendant(blocks[index])
+    const readOnly = !!this.options.readOnly
+    if (!readOnly && leaf) {
+      const offset = end ? (leaf.text || '').length : 0
+      contentState.cursor = { start: { key: leaf.key, offset }, end: { key: leaf.key, offset } }
+    }
+    stateRender.jumpProgressive(index)
+    if (!readOnly && leaf) contentState.setCursor()
+    const scroller = document.scrollingElement || document.documentElement
+    window.scrollTo(0, end ? scroller.scrollHeight : 0)
+    return true
   }
 
   on(event, listener) {
