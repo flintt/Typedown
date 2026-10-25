@@ -5,6 +5,7 @@
 // typed, Enter = Find next). Each opening is fresh: another document first, then the long one. The limits are LT01's.
 //
 //   node lt01-check.js [--only open,end,search] [--width 1280 --height 900] [--reading] [--prof name]
+//   --typing ms: between the letters of the search (90, as LT01's keys come)
 //   --reading: in reading mode (JT02/JT03 drew the same document in reading mode at 1402 x 1070)
 //   --prof name: a CPU profile of the run to name.cpuprofile (prof-summary.js reads it)
 //   --trace name: a DevTools performance trace of the run to name.json (layout and style passes, with their sizes)
@@ -19,6 +20,7 @@ const only = (arg('only', 'open,end,search')).split(',');
 const width = Number(arg('width', 1280)), height = Number(arg('height', 900));
 const prof = arg('prof', null);
 const reading = args.includes('--reading');
+const typingMs = Number(arg('typing', 90));
 const trace = arg('trace', null);
 const LIMIT = { first: 1500, whole: 10000, gap: 200, end: 1000, search: 1000 };
 const HANG_MS = 60000;
@@ -57,15 +59,30 @@ async function until(p, test, a, from, limit) {
 }
 
 let loadId = 10;
-async function fresh(p, text) {
+async function fresh(p) {
   await p.evaluate((id) => window.__deliver('LoadFile', { text: '# other\n', basePath: '/tmp', cursor: null, scrollTop: 0, scrollAnchor: null, loadId: id, hold: 0 }), ++loadId);
   await p.waitForFunction(id => window.__msgs.some(m => m.name === 'FileLoaded' && m.args.loadId === id), { timeout: 60000 }, loadId);
   await new Promise(r => setTimeout(r, 300));
   // Frames from the moment it is sent: the longest gap, once text is on screen.
   await p.evaluate(() => { const f = window.__ltFrames = { max: 0, over: 0, last: 0, on: false, from: 0 }; const tick = t => { if (f.on) { const g = t - f.last; if (g > f.max) f.max = g; if (g > 200) f.over++ } f.last = t; requestAnimationFrame(tick) }; requestAnimationFrame(tick) });
+  // Sent from inside the page, as the host's message arrives there (the text put in the page beforehand: passing 1.5 MB
+  // through the DevTools protocol each time counted its own transfer). Its text on screen: the first frame that has it,
+  // timed in the page from the moment the message is handed to it - the page's part of LT01's first screen, not the host's
+  // reading and sending of the file.
   const from = Date.now();
-  await p.evaluate((text, id) => window.__deliver('LoadFile', { text, basePath: '/tmp', cursor: null, scrollTop: 0, scrollAnchor: null, loadId: id, hold: 0 }), text, ++loadId);
-  const first = await until(p, onScreen, null, from, 10000);
+  await p.evaluate(id => {
+    const t0 = performance.now();
+    window.__ltFirst = null;
+    const look = () => {
+      const blocks = window.__typedownMuya?.contentState?.blocks?.length || 0;
+      const on = blocks > 1000 && Array.from(document.querySelectorAll('#ag-editor-id > *')).some(b => { const r = b.getBoundingClientRect(); return r.bottom > 0 && r.top < innerHeight && b.textContent.trim().length > 0 });
+      if (on) window.__ltFirst = performance.now() - t0; else if (performance.now() - t0 < 10000) requestAnimationFrame(look);
+    };
+    requestAnimationFrame(look);
+    window.__deliver('LoadFile', { text: window.__lt01Text, basePath: '/tmp', cursor: null, scrollTop: 0, scrollAnchor: null, loadId: id, hold: 0 });
+  }, ++loadId);
+  await until(p, () => window.__ltFirst != null, null, from, 10000);
+  const first = (await evalOr(p, () => window.__ltFirst)) ?? Infinity;
   return { from, first };
 }
 const focusEditor = p => p.evaluate(() => { const e = document.getElementById('ag-editor-id'); e && e.focus({ preventScroll: true }) });
@@ -78,6 +95,7 @@ const focusEditor = p => p.evaluate(() => { const e = document.getElementById('a
   let ok = true; const check = (c, label) => { console.log((c ? 'PASS' : 'FAIL') + ' ' + label); ok = ok && c; };
   const fmt = ms => Number.isFinite(ms) ? `${Math.round(ms)} ms` : 'never (hung or over the wait)';
   const p = await open(browser, port);
+  await p.evaluate(t => { window.__lt01Text = t }, text);
   const cdp = await p.target().createCDPSession();
   if (prof) { await cdp.send('Profiler.enable'); await cdp.send('Profiler.setSamplingInterval', { interval: 200 }); await cdp.send('Profiler.start'); }
   if (trace) await p.tracing.start({ path: `${trace}.json`, categories: ['devtools.timeline', 'disabled-by-default-devtools.timeline', 'blink', 'v8.execute'] });
@@ -85,7 +103,7 @@ const focusEditor = p => p.evaluate(() => { const e = document.getElementById('a
 
   if (only.includes('open')) {
     await p.evaluate(() => { for (const k of Object.keys(window.__typedownPretextStats || {})) delete window.__typedownPretextStats[k] });
-    const { from, first } = await fresh(p, text);
+    const { from, first } = await fresh(p);
     await p.evaluate(() => { window.__ltFrames.on = true; window.__ltFrames.last = performance.now() });
     const blocks = await p.evaluate(() => window.__typedownMuya?.contentState?.blocks?.length);
     const whole = await until(p, () => !window.__typedownMuya?.renderPending, null, from, 120000);
@@ -99,7 +117,7 @@ const focusEditor = p => p.evaluate(() => { const e = document.getElementById('a
     check(gaps.max <= LIMIT.gap, `while it is drawn no frame gap over ${LIMIT.gap} ms (longest ${gaps.max} ms, ${gaps.over} over)`);
   }
   if (only.includes('end')) {
-    await fresh(p, text);
+    await fresh(p);
     await focusEditor(p);
     const drawing = await p.evaluate(() => !!window.__typedownMuya?.renderPending);
     const from = Date.now();
@@ -112,9 +130,15 @@ const focusEditor = p => p.evaluate(() => { const e = document.getElementById('a
     if (!reading) check(!!caret && caret.last && caret.atEnd, `and the caret is at the end of the last line (${JSON.stringify(caret)})`);
   }
   if (only.includes('search')) {
-    await fresh(p, text);
+    await fresh(p);
     await focusEditor(p);
     const drawing = await p.evaluate(() => !!window.__typedownMuya?.renderPending);
+    // What each search, step and new start of the drawing costs the page (printed with the result).
+    await p.evaluate(() => {
+      const m = window.__typedownMuya; const sr = m.contentState.stateRender; const log = window.__ltSearchLog = [];
+      const wrap = (o, name) => { const f = o[name]; o[name] = function (...a) { const t = performance.now(); try { return f.apply(this, a) } finally { log.push(`${name} ${typeof a[0] === 'string' ? a[0] : ''} ${Math.round(performance.now() - t)}`) } } };
+      wrap(m, 'search'); wrap(m, 'find'); wrap(sr, 'jumpProgressive'); wrap(sr, 'redrawIdle'); wrap(m.contentState, 'search'); wrap(sr, 'redrawNow');
+    });
     const from = Date.now();
     // Ctrl+F: the host takes the F (its keyboard hook swallows a shortcut it knows), the page sees the Ctrl going down and
     // up; then the find bar posts a Search for each letter typed (EditorViewModel.SearchValueChanged) and Find next for
@@ -123,14 +147,26 @@ const focusEditor = p => p.evaluate(() => { const e = document.getElementById('a
     await evalOr(p, () => window.__deliver('SearchOpenChange', { open: 1 }));
     await new Promise(r => setTimeout(r, 300));
     const opt = { searchIsCaseSensitive: false, searchIsWholeWord: false, searchIsRegexp: false, selection: { anchor: null, focus: null } };
+    // Typed as LT01 types it (real keys, about 90 ms apart): the bar posts a Search per letter.
     for (let i = 1; i <= word.length; i++) {
       // Posted without waiting for the page, as the host does; a page that is busy gets them queued.
       p.evaluate((value, opt) => window.__deliver('Search', { value, opt }), word.slice(0, i), opt).catch(() => {});
-      await new Promise(r => setTimeout(r, 15));
+      await new Promise(r => setTimeout(r, typingMs));
     }
-    p.evaluate(() => window.__deliver('Find', { action: 'next' })).catch(() => {});
+    // Enter: Find next. When the page itself first shows the word in the window, timed in the page from that message.
+    p.evaluate(word => {
+      const t0 = performance.now(); window.__ltFound = null;
+      const look = () => {
+        const on = Array.from(document.querySelectorAll('#ag-editor-id > *')).some(b => { const r = b.getBoundingClientRect(); return r.bottom > 0 && r.top < innerHeight && b.textContent.includes(word) });
+        if (on) window.__ltFound = performance.now() - t0; else if (performance.now() - t0 < 30000) requestAnimationFrame(look);
+      };
+      window.__deliver('Find', { action: 'next' });
+      requestAnimationFrame(look);
+    }, word).catch(() => {});
     const typed = Date.now();
     const found = await until(p, onScreen, word, typed, 30000);
+    console.log(`  page: ${(await evalOr(p, () => window.__ltSearchLog.filter(l => !/^redrawIdle .* [0-9]$/.test(l)).join(', ')))}`);
+    console.log(`  in the page: the word in the window ${fmt(await evalOr(p, () => window.__ltFound ?? Infinity))} after Find reached it`);
     console.log(`search for "${word}" ${drawing ? 'while drawing' : '(already drawn)'}: on screen ${fmt(found)} after Enter (${fmt(found + typed - from)} after Ctrl+F)`);
     check(drawing && found <= LIMIT.search, `a search right after opening shows a word near the end within ${LIMIT.search} ms of Enter (${fmt(found)})`);
     // Marked as the match chosen, in the window.
