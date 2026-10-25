@@ -703,11 +703,23 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     }, [])
     useEffect(() => () => { runPendingSearch() }, [runPendingSearch])
 
+    // For the checks (LT01 reads it after its search): when each search message came, how long the page took over it, and
+    // how many matches it found - whether a slow search is the page's or the messages', on a machine one cannot watch.
+    const noteSearch = useCallback((name: string, came: number) => {
+        const log = ((window as any).__typedownSearchLog ||= []) as any[]
+        log.push({ name, came: Math.round(came), ms: Math.round(performance.now() - came), matches: (editor as any)?.contentState?.searchMatches?.matches?.length ?? null, pending: !!(editor as any)?.renderPending })
+        if (log.length > 60) log.splice(0, log.length - 60)
+    }, [editor])
+
     useEffect(() => transport.addListener<{ value: string, opt: unknown }>('Search', (arg) => {
+        const came = performance.now()
+        noteSearch('Search came', came)
         // Searched here, not only through the state the bar's text is kept in: through it alone the search came after a
         // Find that followed it at once, and the step went to the next match of the search before.
         const run = () => {
+            const started = performance.now()
             search(arg)
+            noteSearch('Search', started)
             props.onSearchArgChange(arg)
             setTimeout(() => scrollToElementIfInvisible('.ag-highlight'), 0)
         }
@@ -719,15 +731,17 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         const entry = { timer: 0, run }
         entry.timer = window.setTimeout(() => { if (pendingSearchRef.current === entry) { pendingSearchRef.current = null; entry.run() } }, 0)
         pendingSearchRef.current = entry
-    }), [editor, props, scrollToElementIfInvisible, search]);
+    }), [editor, props, scrollToElementIfInvisible, search, noteSearch]);
 
     useEffect(() => transport.addListener<{ action: string }>('Find', ({ action }) => {
+        const came = performance.now()
         runPendingSearch()
         editor?.find(action)
         // Into the window now, in the frame the match is drawn in (a long document's match not drawn before is drawn by
         // the step itself, ContentState.renderSearch), not a task later behind the drawing's next slice.
         scrollToElementIfInvisible('.ag-highlight')
-    }), [editor, scrollToElementIfInvisible, runPendingSearch]);
+        noteSearch('Find', came)
+    }), [editor, scrollToElementIfInvisible, runPendingSearch, noteSearch]);
 
     useEffect(() => transport.addListener<{ value: string, opt: unknown }>('Replace', ({ value, opt }) => {
         runPendingSearch()

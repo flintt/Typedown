@@ -875,6 +875,8 @@ namespace Typedown.Core.ViewModels
         {
             if (string.IsNullOrEmpty(SearchValue))
                 SearchValue = null;
+            // When each search went to the page (its length only, not the text): LT01 compares these with the page's account.
+            Log.Debug($"search: posted, {SearchValue?.Length ?? 0} letters");
             MarkdownEditor?.PostMessage("Search", new
             {
                 value = SearchValue,
@@ -1573,6 +1575,7 @@ namespace Typedown.Core.ViewModels
             }
             else
             {
+                Log.Debug($"search: find {action} posted");
                 MarkdownEditor?.PostMessage("Find", new { action });
             }
         }

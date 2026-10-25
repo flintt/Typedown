@@ -5,6 +5,8 @@
 // typed, Enter = Find next). Each opening is fresh: another document first, then the long one. The limits are LT01's.
 //
 //   node lt01-check.js [--only open,end,search] [--width 1280 --height 900] [--reading] [--prof name]
+//   --slow N: the page's CPU N times slower (DevTools throttling), for a machine slower than this one (the W10 PC is
+//             about 2-3 times slower)
 //   --typing ms: between the letters of the search (90, as LT01's keys come)
 //   --reading: in reading mode (JT02/JT03 drew the same document in reading mode at 1402 x 1070)
 //   --prof name: a CPU profile of the run to name.cpuprofile (prof-summary.js reads it)
@@ -21,6 +23,7 @@ const width = Number(arg('width', 1280)), height = Number(arg('height', 900));
 const prof = arg('prof', null);
 const reading = args.includes('--reading');
 const typingMs = Number(arg('typing', 90));
+const slowRate = Number(arg('slow', 1));
 const trace = arg('trace', null);
 const LIMIT = { first: 1500, whole: 10000, gap: 200, end: 1000, search: 1000 };
 const HANG_MS = 60000;
@@ -97,6 +100,7 @@ const focusEditor = p => p.evaluate(() => { const e = document.getElementById('a
   const p = await open(browser, port);
   await p.evaluate(t => { window.__lt01Text = t }, text);
   const cdp = await p.target().createCDPSession();
+  if (slowRate > 1) await cdp.send('Emulation.setCPUThrottlingRate', { rate: slowRate });
   if (prof) { await cdp.send('Profiler.enable'); await cdp.send('Profiler.setSamplingInterval', { interval: 200 }); await cdp.send('Profiler.start'); }
   if (trace) await p.tracing.start({ path: `${trace}.json`, categories: ['devtools.timeline', 'disabled-by-default-devtools.timeline', 'blink', 'v8.execute'] });
   console.log(`document: ${text.length} characters, word "${word}", last line "${endText}…", window ${width}x${height}`);

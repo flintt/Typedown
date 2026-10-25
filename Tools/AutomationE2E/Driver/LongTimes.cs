@@ -100,6 +100,10 @@ internal static partial class Program
         TypeText(word);
         Keys((ushort)0x0D); // Enter: to the first match
         var found = await Until(async () => await Eval(Shown(word)) == "true", 30_000);
+        // The page's own account of the search (components/Muya window.__typedownSearchLog): when each message came (page
+        // clock, ms), how long the page took over it and how many matches - whether the wait was the page's or the messages'.
+        var searchLog = await Eval("JSON.stringify({ now: Math.round(performance.now()), log: window.__typedownSearchLog || [] })");
+        notes.Add($"search, the page's account (now = when the word was seen + one eval): {searchLog}");
         Keys((ushort)0x1B); // Esc
         notes.Add($"search for \"{word}\" {(searching ? "while drawing" : "(already drawn)")}: on screen in {(double.IsInfinity(found) ? "over 30 s" : $"{found:0} ms")}");
         await Close(heavy);
