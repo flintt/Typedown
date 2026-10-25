@@ -356,10 +356,14 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         }
     }, [editor, relativeScroll])
 
-    // The search last done, so the effect below does not do the same one again (a Search message does it at once).
-    const searchedArgRef = useRef<any>()
+    // The searches a Search message brought: done by its listener, at once, never again by the effect below. The effect
+    // came late for one (React runs it after the next update), did the search for an earlier, shorter text after the last
+    // one, and a Find right behind stepped through that text's matches (w10, LT01: Enter went to one of six near the top,
+    // the word near the end never came on screen).
+    const fromMessageRef = useRef(new WeakSet<object>())
+    // The last search a Search message asked for: a Find steps through its matches, whatever else was searched since.
+    const lastSearchRef = useRef<any>()
     const search = useCallback(arg => {
-        searchedArgRef.current = arg
         if (arg?.value != "" && arg?.opt?.selection && editor) {
             const { value, opt } = arg
             const selection = opt.selection.start ? opt.selection : undefined
@@ -387,7 +391,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     }, [editor])
 
     useEffect(() => {
-        if (props.searchArg !== undefined && props.searchArg === searchedArgRef.current) return
+        if (props.searchArg && typeof props.searchArg === 'object' && fromMessageRef.current.has(props.searchArg)) return
         search(props.searchArg)
     }, [editor, props.searchArg, search])
 
@@ -714,6 +718,8 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     useEffect(() => transport.addListener<{ value: string, opt: unknown }>('Search', (arg) => {
         const came = performance.now()
         noteSearch('Search came', came)
+        if (arg && typeof arg === 'object') fromMessageRef.current.add(arg)
+        lastSearchRef.current = arg
         // Searched here, not only through the state the bar's text is kept in: through it alone the search came after a
         // Find that followed it at once, and the step went to the next match of the search before.
         const run = () => {
@@ -736,12 +742,17 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     useEffect(() => transport.addListener<{ action: string }>('Find', ({ action }) => {
         const came = performance.now()
         runPendingSearch()
+        // The matches stepped through are those of the text in the bar: searched again first if anything else was
+        // searched since (an option changed, a search done for the host's own reasons).
+        const last = lastSearchRef.current
+        const matches = (editor as any)?.contentState?.searchMatches
+        if (last?.value && matches && matches.value !== last.value) search(last)
         editor?.find(action)
         // Into the window now, in the frame the match is drawn in (a long document's match not drawn before is drawn by
         // the step itself, ContentState.renderSearch), not a task later behind the drawing's next slice.
         scrollToElementIfInvisible('.ag-highlight')
         noteSearch('Find', came)
-    }), [editor, scrollToElementIfInvisible, runPendingSearch, noteSearch]);
+    }), [editor, scrollToElementIfInvisible, runPendingSearch, noteSearch, search]);
 
     useEffect(() => transport.addListener<{ value: string, opt: unknown }>('Replace', ({ value, opt }) => {
         runPendingSearch()
@@ -767,6 +778,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             // The blocks that had marks drawn again, not the whole document (ContentState.renderSearch).
             contentState.renderSearch(before, true);
             props.onSearchArgChange(undefined)
+            lastSearchRef.current = undefined
             // Back from the search with the keyboard in the page: the editor has it, not the body.
             if (document.hasFocus()) restoreEditorFocus(editor, loadHoldingRef.current)
         }
