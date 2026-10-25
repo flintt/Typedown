@@ -241,7 +241,8 @@ export default function renderLeafBlock (parent, block, activeBlocks, matches, u
 
     // transform alias to original language
     const transformedLang = transformAliasToOrigin([lang])[0]
-    if (transformedLang && /\S/.test(code) && loadedLanguages.has(transformedLang)) {
+    // A raw HTML block's source while the caret is not in it: hidden, so not highlighted (renderContainerBlock).
+    if (!this.plainHtmlSource && transformedLang && /\S/.test(code) && loadedLanguages.has(transformedLang)) {
       const wrapper = document.createElement('div')
       wrapper.classList.add(`language-${transformedLang}`)
       wrapper.innerHTML = code

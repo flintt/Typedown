@@ -253,3 +253,6 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   screen, drawn whole, the longest frame gap meanwhile, Ctrl+End right after opening, and a search for a word near the
   end right after opening (the host's find bar: `SearchOpenChange`, a `Search` per letter, `Find` next). LT01's limits.
   The local machine is not the W10 PC: compare runs with each other.
+- `html-source-check.js` — the source of a raw HTML block is highlighted only while the caret is in it (hidden otherwise,
+  the preview standing for it); out of it, it is its plain text, and a search match in it is still marked. Highlighting
+  every hidden source was 60% of drawing LT01's document (20 MB of HTML for the page, 430,000 elements).

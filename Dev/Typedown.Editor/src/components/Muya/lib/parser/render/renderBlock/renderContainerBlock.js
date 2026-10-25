@@ -49,7 +49,15 @@ export default function renderContainerBlock (parent, block, activeBlocks, match
     this.renderingRowContainer = block
   }
 
+  // The source of a raw HTML block is on the page only while the caret is in it (ag-active; the preview stands for it
+  // otherwise, assets/styles/index.css): out of it, its text is not highlighted. Highlighting it was most of what drawing
+  // a document of raw HTML cost (a 1.5 MB one: 60% of the time it took, LT01). The caret going in or out draws the
+  // block again (its active class), and with that, highlighted or not.
+  const htmlSource = type === 'pre' && functionType === 'html'
+  const wasPlain = this.plainHtmlSource
+  if (htmlSource) this.plainHtmlSource = !selector.includes(`.${CLASS_OR_ID.AG_ACTIVE}`)
   const children = block.children.map(child => this.renderBlock(block, child, activeBlocks, matches, useCache))
+  if (htmlSource) this.plainHtmlSource = wasPlain
   const data = {
     attrs: {},
     dataset: {}
