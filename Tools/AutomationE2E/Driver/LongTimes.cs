@@ -33,9 +33,10 @@ internal static partial class Program
         if (privateCopy != null) File.Copy(privateCopy, heavyPath, true);
         var text = File.ReadAllText(heavyPath);
         notes.Add($"long: {(privateCopy != null ? "the private copy" : "mixed 1M")} ({new FileInfo(heavyPath).Length / 1024} KB)");
-        // A word found once in the document, in its last twentieth: what the search below is for.
-        var counts = Regex.Matches(text, @"[A-Za-z][A-Za-z0-9]{7,}").GroupBy(m => m.Value).ToDictionary(g => g.Key, g => g.Count());
-        var word = Regex.Matches(text.Substring(text.Length * 19 / 20), @"[A-Za-z][A-Za-z0-9]{7,}").Select(m => m.Value).FirstOrDefault(w => counts[w] == 1)
+        // A word found once in the document, in its last twentieth, ignoring case and as part of a longer word as the find
+        // bar does: what the search below is for ("Multiple" was once in exact case, six times as the bar counts, and Enter
+        // went to the first of the six, at the top).
+        var word = Regex.Matches(text.Substring(text.Length * 19 / 20), @"[A-Za-z][A-Za-z0-9]{7,}").Select(m => m.Value).FirstOrDefault(w => Regex.Matches(text, Regex.Escape(w), RegexOptions.IgnoreCase).Count == 1)
             ?? throw new CaseFailed("no word found once in the document's last twentieth");
 
         var other = await Open(c, Fixture("lt01-other.md", "# other\n"));
