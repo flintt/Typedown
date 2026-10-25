@@ -262,3 +262,6 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
 - `notice-move-check.js` — the notice that the first visual edit may rewrite part of a document lies over the top of the
   page and takes no room: it is worked out a frame after the document is on the screen (a quarter of a second for 1.5 MB,
   once in the task that put it there), and coming or going it moves nothing.
+- `search-race-check.js` — Enter in the find bar (`Find`) right behind the last letters (`Search`), all in one task after
+  a shorter prefix was searched on its own: the step works on the matches of the text in the bar. The prefix's search was
+  done again after the last one (its React effect, flushed late), and the step went to one of its matches (w10, LT01).
