@@ -247,3 +247,9 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
 - `scroll-restore-check.js` — a load that carries `scrollTop` (remembered offset, read-only mode) lands at that offset instead of at the caret; a load without it starts at the top.
 - `export-check.js '"md..."'` — run the HTML export pipeline and print the body (upstream #48 emphasis case by default).
 - `scrollup-check.js` — Up arrow must scroll the caret back into view (upstream #51).
+- `lt01-check.js [--only open,end,search] [--prof name] [--trace name]` — LT01 (Tools/AutomationE2E LongTimes.cs) in the
+  page alone, on a document made by `gen-lt01.js` in the shape of the 1.5 MB one LT01 was reported with (2,900 top-level
+  blocks, dense in raw HTML: tables, styled divs, `<details>`, runs of span-styled lines; no real text): its text on
+  screen, drawn whole, the longest frame gap meanwhile, Ctrl+End right after opening, and a search for a word near the
+  end right after opening (the host's find bar: `SearchOpenChange`, a `Search` per letter, `Find` next). LT01's limits.
+  The local machine is not the W10 PC: compare runs with each other.
