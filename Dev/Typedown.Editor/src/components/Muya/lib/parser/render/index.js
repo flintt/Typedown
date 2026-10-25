@@ -47,6 +47,34 @@ const sliceBudget = () => performance.now() - lastInputAt < 1000 ? 12 : 40
 // 1M characters: 8% of each slice 1.37 times the old estimate's time, 4% 1.32, none 1.15-1.23).
 const HEIGHTS_SLICE_SHARE = 0
 
+// The part of a document drawn first (renderProgressive): blocks above and below the one to start from, as many as these
+// allow - the count, or their text's length once past a few blocks.
+const FIRST_ABOVE_BLOCKS = 30
+const FIRST_BELOW_BLOCKS = 70
+const FIRST_ABOVE_CHARS = 8000
+const FIRST_BELOW_CHARS = 16000
+const FIRST_MIN_BLOCKS = 8
+// What a jump (jumpProgressive) draws at once.
+const JUMP_FIRST = { above: 3000, below: 8000 }
+const textLength = block => {
+  let n = typeof block.text === 'string' ? block.text.length + 1 : 0
+  if (block.children) for (const child of block.children) n += textLength(child)
+  return n
+}
+// The index past the last block drawn first on one side of `center` (step 1: below, from center; -1: above, the first).
+function edgeOf(blocks, center, step, maxBlocks, maxChars) {
+  let chars = 0
+  let n = 0
+  let i = step > 0 ? center : center - 1
+  while (i >= 0 && i < blocks.length && n < maxBlocks) {
+    if (n >= FIRST_MIN_BLOCKS && chars >= maxChars) break
+    chars += textLength(blocks[i])
+    n++
+    i += step
+  }
+  return step > 0 ? i : i + 1
+}
+
 class StateRender {
   constructor(muya) {
     this.muya = muya
@@ -460,14 +488,16 @@ class StateRender {
    * ever partly drawn while nobody does anything with it. Blocks inserted above the window keep it still (the
    * browser's scroll anchoring). `done` runs once the whole document is on the page, whichever way it got there.
    */
-  renderProgressive(blocks, activeBlocks, matches, center, done) {
+  // first: how much to draw at once around `center` ({ above, below } in characters of text; see edgeOf).
+  renderProgressive(blocks, activeBlocks, matches, center, done, first = null) {
     this.cancelProgressive()
     this.dropRedraws()
     const rootDom = this.container || document.querySelector(`div#${CLASS_OR_ID.AG_EDITOR_ID}`)
-    const before = 30
-    const after = 70
-    const lo = Math.max(0, center - before)
-    const hi = Math.min(blocks.length, center + after)
+    // A screen or two around the block to start from: up to 30 blocks above it and 70 below, fewer where their text is
+    // long - 70 blocks of raw HTML tables are 37,000 characters, five screens, and drawing and laying them out was a third
+    // of the time before a 1.5 MB document was first on the screen (LT01), and all of a jump's (jumpProgressive).
+    const lo = edgeOf(blocks, center, -1, FIRST_ABOVE_BLOCKS, first ? first.above : FIRST_ABOVE_CHARS)
+    const hi = edgeOf(blocks, center, 1, FIRST_BELOW_BLOCKS, first ? first.below : FIRST_BELOW_CHARS)
     rootDom.id = CLASS_OR_ID.AG_EDITOR_ID
     rootDom.innerHTML = this.blocksHtml(blocks.slice(lo, hi), activeBlocks, matches)
     // The fraction of a pixel the document before was moved by (keepInPlace): it stays after a drawing (taken away, the
@@ -1093,7 +1123,9 @@ class StateRender {
     const state = this.progressive
     if (!state || !(index >= 0 && index < state.blocks.length) || (index >= state.lo && index < state.hi)) return false
     const contentState = this.muya.contentState
-    this.renderProgressive(state.blocks, contentState.getActiveBlocks(), contentState.searchMatches.matches, index, state.done)
+    // Less at once than for a document opened there: the reader waits for the window's worth, and the rest follows in
+    // slices as soon as it is on the screen.
+    this.renderProgressive(state.blocks, contentState.getActiveBlocks(), contentState.searchMatches.matches, index, state.done, JUMP_FIRST)
     return true
   }
 
