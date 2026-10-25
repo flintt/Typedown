@@ -33,8 +33,10 @@ console.log(`${N} blocks, ${doc.length} characters`);
   const browser = await puppeteer.launch({ executablePath: process.env.CHROME || '/opt/google/chrome/chrome', headless: 'new', args: ['--no-sandbox'] });
   const page = await browser.newPage(); await page.setViewport({ width: 1402, height: Number(process.env.HEIGHT || 1287) });
   const settings = { fontSize: 16, lineHeight: 1.6, editorAreaWidth: '1200px', tabSize: 4, textDirection: 'auto', preferLooseListItem: true, listIndentation: '1', tableAlignColumns: false, markdown: '# start\n', basePath: '/tmp', loadId: 1 };
-  // Slices drawn slowly, so the reader gets there while most of the document is still to come.
-  await page.evaluateOnNewDocument(`window.__typedownProgressiveDelayMs=${Number(process.env.DELAY || 40)}`);
+  // Slices drawn slowly, so the reader gets there while most of the document is still to come: a pause between slices
+  // and a few blocks a slice (the shortest slice the drawing takes). With the slice's own length the document was drawn
+  // whole in under 2.5 s once drawing got faster (2026-10-25), before the reader got there, half the runs.
+  await page.evaluateOnNewDocument(`window.__typedownProgressiveDelayMs=${Number(process.env.DELAY || 40)};window.__typedownProgressiveSliceMs=${Number(process.env.SLICE || 1)}`);
   // "nopredict": the layout not predicted (the app's default), the heights guessed from the blocks' text.
   if (args.includes('nopredict')) await page.evaluateOnNewDocument('window.__typedownPretextOff=true');
   await page.evaluateOnNewDocument(`(()=>{const ls=[];window.__msgs=[];window.__deliver=(n,a)=>ls.forEach(l=>l({data:JSON.stringify({name:n,args:a})}));const resp={GetSettings:${JSON.stringify(settings)},GetCurrentTheme:{theme:'Light',accentColor:{r:0,g:120,b:212,a:1},background:{R:249,G:249,B:249,A:1}},ContentLoaded:'',GetStringResources:{}};const prev={};window.chrome={webview:{addEventListener:(t,l)=>ls.push(l),postMessage:(raw)=>{const m=JSON.parse(raw);if(m.type==='diffmsg'){const full=m.diff?prev[m.name].slice(0,m.start)+m.args+prev[m.name].slice(m.end):m.args;prev[m.name]=full;m.args=JSON.parse(full);}m.at=performance.now();window.__msgs.push(m);if(m.type==='invoke'){setTimeout(()=>window.__deliver(m.id,{code:0,data:m.name in resp?resp[m.name]:null}),0);}}}}})()`);
