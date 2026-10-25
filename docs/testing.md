@@ -191,6 +191,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | JT03 | back to a long document read far down: while the blocks above are drawn back and the reader turns the wheel, the frames come at most 50 ms apart in the middle and a notch reaches the next frame within 100 ms |
 | JT04 | back to a long document left at its very end, after 3 s, 60 s, or 90 s with the window minimized, nothing touched: the block in the window stays there for 15 s; or the wheel turned up: the page goes up a few blocks a notch, no further; predicting the layout on and off, at the reader's window and settings |
 | WD01 | the window comes back where it was after the process ends, closed or killed, and another window opens set off from it |
+| LT01 | a long document opened: its text on screen within 1.5 s, drawn whole within 10 s, the page never more than 200 ms without a frame meanwhile, and Ctrl+End or a search right after opening shows the end within 1 s |
 | HJ03 | the outline's jump to a heading far down lands and stays there - while a long document is still drawn and once it is |
 | HP04 | with files open, File > Home, the home button and Ctrl+Shift+H show the home page in one blank tab, the documents left alone; an automation write into it hides it with the text written |
 | HP05 | the home page hidden by typing, and by its New document button, leaves the keys in the editor |
