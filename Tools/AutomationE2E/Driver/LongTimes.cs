@@ -58,16 +58,19 @@ internal static partial class Program
         var lastLine = text.TrimEnd().Split('\n').Last(l => l.Trim().Length > 0).Trim().TrimStart('#', '-', '*', '>', ' ', '|');
         var endText = lastLine.Length > 20 ? lastLine.Substring(0, 20) : lastLine;
 
+        // The clock for "opened" starts as the document is asked for, not before the case's own pause: started before it, the
+        // first screen counted 500 ms of the case's own waiting and the round trip of document.focus (2026-10-25).
+        Stopwatch opened = new();
         async Task<string> Fresh()
         {
             await c.Call("document.focus", new { documentId = other });
             await Task.Delay(500);
+            opened.Restart();
             return await Open(c, heavyPath);
         }
         async Task Close(string id) { try { await c.Call("document.close", new { documentId = id }); } catch { } await Task.Delay(1000); }
 
         // 1. Opened and left alone: on screen, drawn whole, and the longest the page stopped drawing frames meanwhile.
-        var opened = Stopwatch.StartNew();
         var heavy = await Fresh();
         var first = double.IsInfinity(await Until(async () => await Eval(OnScreen) == "true", 10_000)) ? double.PositiveInfinity : opened.Elapsed.TotalMilliseconds;
         await Eval(frames);
