@@ -59,7 +59,7 @@ internal static partial class Program
         var found = false;
         for (var i = 0; i < 40 && !found; i++)
         {
-            found = System.Windows.Automation.AutomationElement.FocusedElement?.Current.AutomationId == "TextBoxSearch";
+            found = FocusedAutomationId() == "TextBoxSearch";
             if (!found) await Task.Delay(50);
         }
         Check(found, "Ctrl+F in the editor opens the find bar with the keyboard in its search box");

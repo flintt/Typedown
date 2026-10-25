@@ -6,9 +6,9 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media;
 
 namespace Typedown.Core.Controls
 {
@@ -37,6 +37,40 @@ namespace Typedown.Core.Controls
             disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.UseEditorMicaEffect)).Cast<bool>().StartWith(Settings.UseEditorMicaEffect).Subscribe(x => UpdateBackground(x)));
             disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.CustomTheme)).StartWith(Settings.CustomTheme).Subscribe(_ => UpdateThemeColours()));
             UpdateSidePaneState(Settings.SidePaneOpen, false);
+            EditionHooks.SidePanelChanged += OnEditionPanelChanged;
+            disposables.Add(Disposable.Create(() => EditionHooks.SidePanelChanged -= OnEditionPanelChanged));
+            ShowEditionPanel();
+        }
+
+        // An edition's panel shown or closed for this window: the host takes it (on the window's own thread).
+        private void OnEditionPanelChanged(AppViewModel app)
+        {
+            if (app != ViewModel) return;
+            if (DispatcherQueue.HasThreadAccess) ShowEditionPanel();
+            else DispatcherQueue.TryEnqueue(ShowEditionPanel);
+        }
+
+        private void ShowEditionPanel()
+        {
+            var panel = EditionHooks.SidePanelOf(ViewModel);
+            if (panel?.Content == null)
+            {
+                EditionPanelScroller.Content = null;
+                EditionPanelHost.Visibility = Visibility.Collapsed;
+                return;
+            }
+            // Another window's panel content cannot be in this one: the edition makes one per window.
+            if ((panel.Content as FrameworkElement)?.Parent is ContentControl owner && owner != EditionPanelScroller) owner.Content = null;
+            EditionPanelTitle.Text = panel.Title ?? "";
+            EditionPanelHost.Width = panel.Width;
+            EditionPanelScroller.Content = panel.Content;
+            EditionPanelHost.Visibility = Visibility.Visible;
+        }
+
+        private void OnEditionPanelClose(object sender, RoutedEventArgs e)
+        {
+            var panel = EditionHooks.SidePanelOf(ViewModel);
+            if (panel != null) EditionHooks.CloseSidePanel(ViewModel, panel.Id);
         }
 
         private void UpdateSidePaneState(bool sidePaneOpen, bool useTransitions = true)
@@ -79,6 +113,17 @@ namespace Typedown.Core.Controls
                 if (foreground != null) LeftPane.Foreground = foreground;
                 else LeftPane.ClearValue(Control.ForegroundProperty);
             }
+            // An edition's panel beside the document: coloured as the side pane is.
+            var panelForeground = ThemeFiles.Brush(theme?.Foreground) ?? ThemeFiles.Readable(theme?.Surface ?? theme?.Background);
+            if (surface != null) EditionPanelHost.Background = surface;
+            else EditionPanelHost.Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent);
+            foreach (var target in new Control[] { EditionPanelScroller, EditionPanelClose })
+            {
+                if (panelForeground != null) target.Foreground = panelForeground;
+                else target.ClearValue(Control.ForegroundProperty);
+            }
+            if (panelForeground != null) EditionPanelTitle.Foreground = panelForeground;
+            else EditionPanelTitle.ClearValue(TextBlock.ForegroundProperty);
         }
 
         [SuppressPropertyChangedWarnings]
@@ -92,6 +137,8 @@ namespace Typedown.Core.Controls
             disposables.Clear();
             Bindings?.StopTracking();
         }
+
+        public static FlowDirection PaneSide(bool right) => right ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
 
         public static bool IsTabBarLoad(int tabCount, bool alwaysShow) => alwaysShow || tabCount > 1;
 

@@ -270,7 +270,7 @@
     <comment>编辑/剪切</comment>
   </data>
   <data name="Dark" xml:space="preserve">
-    <value>Қараңғы</value>
+    <value>Күңгірт</value>
     <comment>应用主题/深色</comment>
   </data>
   <data name="Data" xml:space="preserve">
@@ -322,7 +322,7 @@
     <comment>嵌入链接</comment>
   </data>
   <data name="Emphasis" xml:space="preserve">
-    <value>Италич</value>
+    <value>Курсив</value>
     <comment>格式/斜体</comment>
   </data>
   <data name="Enable" xml:space="preserve">
@@ -546,7 +546,7 @@
     <comment>了解更多</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Жарық</value>
+    <value>Ашық</value>
     <comment>应用主题/浅色</comment>
   </data>
   <data name="Line" xml:space="preserve">
@@ -558,7 +558,7 @@
     <comment>设置/行高</comment>
   </data>
   <data name="Lines" xml:space="preserve">
-    <value>Сызықтар</value>
+    <value>Жолдар</value>
     <comment>行(复数)</comment>
   </data>
   <data name="LinkReference" xml:space="preserve">
@@ -654,7 +654,7 @@
     <comment>未设置</comment>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Жабу</value>
+    <value>Өшірулі</value>
     <comment>开关/关</comment>
   </data>
   <data name="Ok" xml:space="preserve">
@@ -662,7 +662,7 @@
     <comment>对话框/确定</comment>
   </data>
   <data name="On" xml:space="preserve">
-    <value>On</value>
+    <value>Қосулы</value>
     <comment>开关/开</comment>
   </data>
   <data name="Open" xml:space="preserve">
@@ -698,11 +698,11 @@
     <comment>段落/有序列表</comment>
   </data>
   <data name="Outline" xml:space="preserve">
-    <value>Контур</value>
+    <value>Құрылым</value>
     <comment>侧栏/大纲</comment>
   </data>
   <data name="Paragraph" xml:space="preserve">
-    <value>Еже</value>
+    <value>Абзац</value>
     <comment>段落</comment>
   </data>
   <data name="Paste" xml:space="preserve">
@@ -730,7 +730,7 @@
     <comment>段落/引用</comment>
   </data>
   <data name="Redo" xml:space="preserve">
-    <value>Редо</value>
+    <value>Қайталау</value>
     <comment>编辑/重做</comment>
   </data>
   <data name="RemoveColumn" xml:space="preserve">
@@ -822,7 +822,7 @@
     <comment>停止操作</comment>
   </data>
   <data name="Strikethrough" xml:space="preserve">
-    <value>Strikethrough</value>
+    <value>Сызылған</value>
     <comment>格式/删除线</comment>
   </data>
   <data name="Strong" xml:space="preserve">
@@ -858,11 +858,11 @@
     <comment>转换为</comment>
   </data>
   <data name="TypewriterMode" xml:space="preserve">
-    <value>Жазу жазуының режімі</value>
+    <value>Жазу машинасы режимі</value>
     <comment>视图/打字机模式</comment>
   </data>
   <data name="Underline" xml:space="preserve">
-    <value>Асты сызылсын</value>
+    <value>Асты сызылған</value>
     <comment>格式/下划线</comment>
   </data>
   <data name="Undo" xml:space="preserve">
@@ -1011,5 +1011,146 @@
   </data>
   <data name="ExportedTo" xml:space="preserve">
     <value>{0} ішіне экспортталды</value>
+  </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>Пайдаланушы нұсқаулығы</value>
+  </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Таңбалар (бос орынсыз)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Таңбалар (бос орынмен)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK таңбалары</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Сөздер</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>CJK емес сөздер</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Абзацтар</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Тақырыптар</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Суреттер</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Сілтемелер</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Оқу уақыты</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Шамамен {0} мин</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Бір минуттан аз</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Көрінетін мәтін бойынша саналды. Код блоктары мен формулалар оқу уақытына кірмейді.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Күй тақтасында көрсетілетіні</value>
+  </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Сақталды</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Сақталмаған</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Автосақтау кідіртілді</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Сақтау үшін басыңыз</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Құжат бос, бірақ дискідегі файл бос емес және оны ешбір өңдеу босатпаған, сондықтан автосақтау файлды қайта жазбады.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Бұл файлды шығынсыз оқу мүмкін болмады (UTF-8 емес кодтау ма?), сондықтан автосақтау оны қайта жазбайды. Көрсетілген мәтін дұрыс болса ғана өзіңіз сақтаңыз.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Файлды жазу сәтсіз аяқталды: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{1} {2} ішінен {0} таңдалды</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Кодтау және жол соңы</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>UTF-8 пішіміне түрлендіру</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Кодтаумен қайта ашу</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Ағымдағы тақырып</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Сақтау күйі</value>
+  </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Қалталар</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Соңғы қалталар жоқ</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Соңғы қалталарды тазалау</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Тізімнен алып тастау үшін тінтуірдің оң жағын басыңыз немесе Delete пернесін басыңыз</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Бір деңгей жоғары</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Түбір ретінде орнату</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Таңдаулылар</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Таңдаулыларға қосу</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Таңдаулылардан алып тастау</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Басты бет</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Бастау</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Жаңа құжат</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Файлды ашу</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Қалтаны ашу</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Соңғы файлдар</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Соңғы қалталар</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Тізімнен алып тастау</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Параметрлер</value>
+  </data>
+  <data name="EditorOpening" xml:space="preserve">
+    <value>Ашылуда…</value>
   </data>
 </root>

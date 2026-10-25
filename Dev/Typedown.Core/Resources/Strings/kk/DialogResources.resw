@@ -130,7 +130,7 @@
     <comment>对话框/取消</comment>
   </data>
   <data name="Confirm" xml:space="preserve">
-    <value>ЖАҚСЫ</value>
+    <value>Жарайды</value>
     <comment>对话框/确定</comment>
   </data>
   <data name="CreateDocErrorTitle" xml:space="preserve">
@@ -267,7 +267,7 @@
     <value>Алдыңғы сілтемені пайдалану</value>
   </data>
   <data name="Keep" xml:space="preserve">
-    <value>Сақтау</value>
+    <value>Қалдыру</value>
   </data>
   <data name="Reload" xml:space="preserve">
     <value>Қайта жүктеу</value>
@@ -328,5 +328,14 @@
   </data>
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>Олардың {0} бұрын осы конфигурациямен кері жүктелген, сондықтан бұрынғы мекенжайлары пайдаланылды.</value>
+  </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>WebView2 Runtime-ты Microsoft сайтынан жүктеп алу</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Орындау ортасы орнатылмады. Орнатушыға интернет байланысы қажет; орындау ортасын Microsoft сайтынан да жүктеп алуға болады (офлайн орнатушы да бар), оны орнатып, қолданбаны қайта іске қосыңыз.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>WebView2 Runtime орнатылуда...</value>
   </data>
 </root>

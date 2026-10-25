@@ -130,7 +130,7 @@
     <comment>对话框/取消</comment>
   </data>
   <data name="Confirm" xml:space="preserve">
-    <value>OUKEI</value>
+    <value>OK</value>
     <comment>对话框/确定</comment>
   </data>
   <data name="CreateDocErrorTitle" xml:space="preserve">
@@ -328,5 +328,14 @@
   </data>
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>{0} daarvan is reeds voorheen met hierdie konfigurasie opgelaai, dus is hul vorige adresse gebruik.</value>
+  </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Laai WebView2 Runtime van Microsoft af</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Die looptyd is nie geïnstalleer nie. Die opstelling het 'n internetverbinding nodig; jy kan ook die looptyd van Microsoft aflaai (daar is ook 'n vanlyn-installeerder), dit installeer en die toep weer begin.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>Installeer tans WebView2 Runtime...</value>
   </data>
 </root>

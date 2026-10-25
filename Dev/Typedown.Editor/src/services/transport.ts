@@ -11,9 +11,16 @@ interface IMessage {
   args: unknown;
 }
 
+/** Run with each message from the host before its listeners: the editor finishes drawing a document first (Muya). */
+export const beforeHostMessage = new Set<(name: string) => void>();
+
+const receive = (name: string, args: unknown) => {
+  beforeHostMessage.forEach(hook => { try { hook(name) } catch (err) { console.log(err) } });
+  transport.emit(name, args);
+};
 window.chrome.webview.addEventListener<string>("message", ({ data }) => {
   const { name, args } = JSON.parse(data) as IMessage
-  transport.emit(name, args);
+  receive(name, args);
 });
 
 const prevMap = new Map<string, string>();
@@ -105,6 +112,8 @@ export default {
   removeListener: <T>(eventName: string, listener: Listener<T>) => transport.removeListener(eventName, listener),
   removeAllListener: (eventName: string) => transport.removeAllListeners(eventName),
   postMessageNoDiff: (name: string, args: unknown) => postMessage({ type: 'message', name, args }),
+  /** A message from the page to its own listeners, as if the host had sent it. */
+  emitLocal: (name: string, args: unknown) => transport.emit(name, args),
   postMessage: postMessageDiff,
 };
 

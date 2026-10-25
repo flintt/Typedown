@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>সম্পাদনা এলাকার পটভূমির জন্য মাইকা ব্যাকগ্রাউন্ড প্রভাব সক্ষম করুন</value>
+    <value>পার্শ্ব প্যানেল ও ট্যাব বারে মাইকা প্রভাব দেখায়; সম্পাদনা এলাকা থিমের কঠিন রং রাখে</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>সম্পাদনা এলাকায় মাইকা উপাদান ব্যবহার করুন</value>
+    <value>সম্পাদনা এলাকার চারপাশে মাইকা উপাদান ব্যবহার করুন</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>এর ফোল্ডার খুলুন</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>সম্প্রতি খোলা ফাইল মনে রাখুন</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>আপনার খোলা ফাইল ও ফোল্ডার ফাইল &gt; সাম্প্রতিক খুলুন এবং হোম পেজে দেখা যায়। বন্ধ থাকলে নতুন কিছু যোগ হয় না।</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>সাম্প্রতিক ফাইল ও ফোল্ডার মুছুন</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>সম্প্রতি খোলা ফাইল ও ফোল্ডারের তালিকা খালি করে।</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>মুছুন</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>ফাঁকা ট্যাবে হোম পেজ দেখান</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>শুরুতে খোলার কিছু না থাকলে এবং শেষ ট্যাব বন্ধ করলে: সাম্প্রতিক ফাইল ও ফোল্ডার, প্রিয়</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>নতুন ট্যাব হোম পেজ দেখায়</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>নতুন ট্যাব (ফাইল &gt; নতুন, + বোতাম) ফাঁকা নথির বদলে হোম পেজ দেখায়</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>অতিরিক্ত ফাঁকা লাইন দেখান</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>সম্পাদনার সময়ের মতো পড়ার মোডে এবং HTML ও PDF রপ্তানিতেও অনুচ্ছেদের মাঝের ফাঁকা লাইন জায়গা নেয়। ফাইলটি নিজে পরিবর্তিত হয় না</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>দীর্ঘ নথি ধাপে ধাপে আঁকুন</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>দীর্ঘ নথি যেখানে রেখেছিলেন সেখান থেকেই খোলে, বাকিটা পটভূমিতে আঁকা হয়। দীর্ঘ নথি খোলার সময় কিছু ভুল মনে হলে এটি বন্ধ করুন: তখন পুরোটা একবারে আঁকা হবে</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>ডানদিকে সাইড বার</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>নথির বাঁদিকের পরিবর্তে ডানদিকে সাইড বার দেখান</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>বন্ধ করার সময় সংরক্ষিত না হওয়া পরিবর্তন রাখুন</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>সংরক্ষণ করতে না জিজ্ঞাসা করে বন্ধ করুন: সংরক্ষিত না হওয়া নথিগুলি যেমন ছিল তেমনই, এখনও সংরক্ষিত না হয়ে, শেষ সেশনের ট্যাবসহ ফিরে আসবে</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>সবসময় Markdown চিহ্ন দেখান</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>শুধু কার্সরের জায়গায় নয়, প্রতিটি অনুচ্ছেদে Markdown চিহ্ন (**, #, লিঙ্কের ঠিকানা) দেখান</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>দীর্ঘ নথির বিন্যাস আগেই নির্ণয় করুন (পরীক্ষামূলক)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>দীর্ঘ নথি অংশে অংশে আঁকার সময়, এখনও না দেখানো অংশের উচ্চতা অনুমান না করে লেখা থেকে হিসাব করা হয়, ফলে স্ক্রলবার ও রূপরেখা থেকে লাফ আরও নির্ভুল হয়। পরীক্ষামূলক</value>
   </data>
 </root>

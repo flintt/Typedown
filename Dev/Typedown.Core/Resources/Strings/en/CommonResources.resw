@@ -654,7 +654,7 @@
     <comment>未设置</comment>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Close</value>
+    <value>Off</value>
     <comment>开关/关</comment>
   </data>
   <data name="Ok" xml:space="preserve">
@@ -1030,5 +1030,192 @@
   </data>
   <data name="ExportedTo" xml:space="preserve">
     <value>Exported to {0}</value>
+  </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>User guide</value>
+  </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Characters (no spaces)</value>
+    <comment>字数详情：不含空格的字符数</comment>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Characters (with spaces)</value>
+    <comment>字数详情：含空格的字符数</comment>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK characters</value>
+    <comment>字数详情：中日韩文字（汉字、假名、谚文）个数</comment>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Words</value>
+    <comment>字数详情：词数（一个汉字或假名算一个词）</comment>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Non-CJK words</value>
+    <comment>字数详情：中日韩以外文字的词数</comment>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Paragraphs</value>
+    <comment>字数详情：段落数</comment>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Headings</value>
+    <comment>字数详情：标题数</comment>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Images</value>
+    <comment>字数详情：图片数</comment>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Links</value>
+    <comment>字数详情：链接数</comment>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Reading time</value>
+    <comment>字数详情：阅读时间估计</comment>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>About {0} min</value>
+    <comment>字数详情：阅读时间，{0} 为分钟数</comment>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Under a minute</value>
+    <comment>字数详情：阅读时间不到一分钟</comment>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Counted on the visible text. Code blocks and formulas are not part of the reading time.</value>
+    <comment>字数详情底部说明</comment>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Status bar shows</value>
+    <comment>字数详情：选择状态栏显示字符数还是词数</comment>
+  </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Saved</value>
+    <comment>状态栏保存状态：已保存</comment>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Not saved</value>
+    <comment>状态栏保存状态：有未保存的修改</comment>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Auto-save paused</value>
+    <comment>状态栏保存状态：自动保存因故没有写入文件</comment>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Click to save</value>
+    <comment>状态栏保存状态提示：单击保存</comment>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>The document is empty but the file on disk is not, and no edit emptied it, so auto-save did not write over the file.</value>
+    <comment>自动保存暂停原因：编辑器内容为空而磁盘文件不为空</comment>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>This file could not be read without loss (an encoding other than UTF-8?), so auto-save does not write over it. Save it yourself only if the text shown is right.</value>
+    <comment>自动保存暂停原因：文件编码无法无损读取</comment>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Writing the file failed: {0}</value>
+    <comment>自动保存暂停原因：写入失败，{0} 为错误信息</comment>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{0} of {1} {2} selected</value>
+    <comment>状态栏字数：有选区时显示“已选 {0} / 共 {1} {2}”，{0} 选中数，{1} 总数，{2} 单位（字符/词）</comment>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Encoding and line endings</value>
+    <comment>状态栏：文件编码与换行符按钮的提示</comment>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Convert to UTF-8</value>
+    <comment>状态栏编码菜单：按显示的内容改为 UTF-8 保存</comment>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Reopen with encoding</value>
+    <comment>状态栏编码菜单：用其他编码重新读取文件（子菜单）</comment>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Current heading</value>
+    <comment>状态栏右键菜单：显示光标所在标题</comment>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Save status</value>
+    <comment>状态栏右键菜单：显示保存状态</comment>
+  </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Folders</value>
+    <comment>打开最近 → 文件夹（子菜单）</comment>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>No recent folders</value>
+    <comment>打开最近 → 文件夹：没有最近文件夹</comment>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Clear recent folders</value>
+    <comment>打开最近 → 文件夹：清除最近文件夹</comment>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Right-click or press Delete to remove it from this list</value>
+    <comment>最近列表条目的悬停提示：右键或按 Delete 从列表移除</comment>
+  </data>
+  <data name="EditorOpening" xml:space="preserve">
+    <value>Opening…</value>
+    <comment>编辑区：长文档正在打开（渲染完成前盖在编辑区上的提示）</comment>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Up one level</value>
+    <comment>文件栏：上一级文件夹（按钮提示和菜单项）</comment>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Set as root</value>
+    <comment>文件栏：文件夹右键菜单“设为根目录”</comment>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Favourites</value>
+    <comment>文件栏/首页：收藏分组标题</comment>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Add to favourites</value>
+    <comment>右键菜单：收藏（文件树、标签、首页）</comment>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Remove from favourites</value>
+    <comment>右键菜单：取消收藏</comment>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Home</value>
+    <comment>文件 → 首页（菜单项、标签栏 ⌂ 按钮、快捷键名称）</comment>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Start</value>
+    <comment>首页标题</comment>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>New document</value>
+    <comment>首页按钮：新建空白文档</comment>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Open file</value>
+    <comment>首页按钮：打开文件</comment>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Open folder</value>
+    <comment>首页按钮：打开文件夹</comment>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Recent files</value>
+    <comment>首页分组标题：最近文件</comment>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Recent folders</value>
+    <comment>首页分组标题：最近文件夹</comment>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Remove from list</value>
+    <comment>首页右键菜单：从最近列表移除</comment>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Settings</value>
+    <comment>首页底部去设置的链接</comment>
   </data>
 </root>

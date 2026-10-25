@@ -8,28 +8,13 @@ namespace Typedown.Core.Utilities
 {
     public static class FilePickersExtensions
     {
-        [ComImport]
-        [Guid("3E68D4BD-7135-4D10-8018-9FB6D9F33FA1")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        private interface IInitializeWithWindow
-        {
-            void Initialize(IntPtr hwnd);
-        }
+        // A desktop window's picker is told its owner through IInitializeWithWindow; on .NET 5+ a projected WinRT object is
+        // no longer cast to a COM interface with "as", and CsWinRT's helper does the QueryInterface.
+        public static void SetOwnerWindow(this FileOpenPicker picker, nint hWnd) => WinRT.Interop.InitializeWithWindow.Initialize(picker, hWnd);
 
-        public static void SetOwnerWindow(this FileOpenPicker picker, nint hWnd)
-        {
-            (picker as object as IInitializeWithWindow).Initialize(hWnd);
-        }
+        public static void SetOwnerWindow(this FileSavePicker picker, nint hWnd) => WinRT.Interop.InitializeWithWindow.Initialize(picker, hWnd);
 
-        public static void SetOwnerWindow(this FileSavePicker picker, nint hWnd)
-        {
-            (picker as object as IInitializeWithWindow).Initialize(hWnd);
-        }
-
-        public static void SetOwnerWindow(this FolderPicker picker, nint hWnd)
-        {
-            (picker as object as IInitializeWithWindow).Initialize(hWnd);
-        }
+        public static void SetOwnerWindow(this FolderPicker picker, nint hWnd) => WinRT.Interop.InitializeWithWindow.Initialize(picker, hWnd);
 
         /// <summary>
         /// Shows a picker, and when Windows cannot show it (E_FAIL from a second picker asked for while one is still

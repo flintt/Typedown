@@ -130,7 +130,7 @@
     <comment>对话框/取消</comment>
   </data>
   <data name="Confirm" xml:space="preserve">
-    <value>OKEY</value>
+    <value>OK</value>
     <comment>对话框/确定</comment>
   </data>
   <data name="CreateDocErrorTitle" xml:space="preserve">
@@ -328,5 +328,14 @@
   </data>
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>{0} delas já tinham sido carregadas antes com esta configuração, então seus endereços anteriores foram usados.</value>
+  </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Baixar o WebView2 Runtime da Microsoft</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>O runtime não foi instalado. O instalador precisa de conexão com a Internet; você também pode baixar o runtime da Microsoft (há um instalador offline), instalá-lo e iniciar o aplicativo novamente.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>Instalando o WebView2 Runtime...</value>
   </data>
 </root>

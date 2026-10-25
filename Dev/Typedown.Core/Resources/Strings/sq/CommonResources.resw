@@ -146,7 +146,7 @@
     <comment>自动</comment>
   </data>
   <data name="Back" xml:space="preserve">
-    <value>Mbrapa.</value>
+    <value>Mbrapa</value>
     <comment>返回</comment>
   </data>
   <data name="Browse" xml:space="preserve">
@@ -174,7 +174,7 @@
     <comment>字符(单数)</comment>
   </data>
   <data name="Characters" xml:space="preserve">
-    <value>Personazhet</value>
+    <value>Karaktere</value>
     <comment>字符(复数)</comment>
   </data>
   <data name="Chart" xml:space="preserve">
@@ -182,7 +182,7 @@
     <comment>图表</comment>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>E qartë</value>
+    <value>Pastro</value>
     <comment>清除</comment>
   </data>
   <data name="ClearFormat" xml:space="preserve">
@@ -270,7 +270,7 @@
     <comment>编辑/剪切</comment>
   </data>
   <data name="Dark" xml:space="preserve">
-    <value>Errësirë</value>
+    <value>E errët</value>
     <comment>应用主题/深色</comment>
   </data>
   <data name="Data" xml:space="preserve">
@@ -350,11 +350,11 @@
     <comment>应用程序反馈</comment>
   </data>
   <data name="File" xml:space="preserve">
-    <value>File</value>
+    <value>Skedar</value>
     <comment>文件(单数)</comment>
   </data>
   <data name="Files" xml:space="preserve">
-    <value>File</value>
+    <value>Skedarët</value>
     <comment>文件(复数)</comment>
   </data>
   <data name="Find" xml:space="preserve">
@@ -386,7 +386,7 @@
     <comment>文件夹</comment>
   </data>
   <data name="Font" xml:space="preserve">
-    <value>Gërmat</value>
+    <value>Shkronja</value>
     <comment>设置/字体</comment>
   </data>
   <data name="FontSize" xml:space="preserve">
@@ -418,7 +418,7 @@
     <comment>转到</comment>
   </data>
   <data name="Heading" xml:space="preserve">
-    <value>Drejtimi</value>
+    <value>Titull</value>
     <comment>段落/标题</comment>
   </data>
   <data name="Heading1" xml:space="preserve">
@@ -546,7 +546,7 @@
     <comment>了解更多</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Dritë</value>
+    <value>E çelët</value>
     <comment>应用主题/浅色</comment>
   </data>
   <data name="Line" xml:space="preserve">
@@ -618,7 +618,7 @@
     <comment>文件/新建</comment>
   </data>
   <data name="NewFile" xml:space="preserve">
-    <value>File i ri</value>
+    <value>Skedar i ri</value>
     <comment>文件浏览框/新建文件</comment>
   </data>
   <data name="NewFolder" xml:space="preserve">
@@ -654,7 +654,7 @@
     <comment>未设置</comment>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Mbylle</value>
+    <value>Joaktiv</value>
     <comment>开关/关</comment>
   </data>
   <data name="Ok" xml:space="preserve">
@@ -662,7 +662,7 @@
     <comment>对话框/确定</comment>
   </data>
   <data name="On" xml:space="preserve">
-    <value>Në</value>
+    <value>Aktiv</value>
     <comment>开关/开</comment>
   </data>
   <data name="Open" xml:space="preserve">
@@ -686,7 +686,7 @@
     <comment>文件/在新窗口中打开</comment>
   </data>
   <data name="OpenRecent" xml:space="preserve">
-    <value>E hapur së fundmi</value>
+    <value>Hap të fundit</value>
     <comment>文件/打开最近</comment>
   </data>
   <data name="OpenSourceSoftware" xml:space="preserve">
@@ -706,7 +706,7 @@
     <comment>段落</comment>
   </data>
   <data name="Paste" xml:space="preserve">
-    <value>Ngjitës</value>
+    <value>Ngjit</value>
     <comment>编辑/粘贴</comment>
   </data>
   <data name="PasteAsPlainText" xml:space="preserve">
@@ -818,19 +818,19 @@
     <comment>状态栏</comment>
   </data>
   <data name="Stop" xml:space="preserve">
-    <value>Ndalo.</value>
+    <value>Ndalo</value>
     <comment>停止操作</comment>
   </data>
   <data name="Strikethrough" xml:space="preserve">
-    <value>Goditje</value>
+    <value>I vijëzuar</value>
     <comment>格式/删除线</comment>
   </data>
   <data name="Strong" xml:space="preserve">
-    <value>E guximshme</value>
+    <value>Të trasha</value>
     <comment>格式/加粗</comment>
   </data>
   <data name="Table" xml:space="preserve">
-    <value>Tavolinë</value>
+    <value>Tabelë</value>
     <comment>段落/表格</comment>
   </data>
   <data name="TaskList" xml:space="preserve">
@@ -1011,5 +1011,146 @@
   </data>
   <data name="ExportedTo" xml:space="preserve">
     <value>U eksportua te {0}</value>
+  </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>Udhëzuesi i përdoruesit</value>
+  </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Karaktere (pa hapësira)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Karaktere (me hapësira)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>Karaktere CJK</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Fjalë</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Fjalë jo-CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Paragrafë</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Tituj</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Imazhe</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Lidhje</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Koha e leximit</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Rreth {0} min</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Më pak se një minutë</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Numëruar mbi tekstin e dukshëm. Blloqet e kodit dhe formulat nuk hyjnë në kohën e leximit.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Shiriti i gjendjes shfaq</value>
+  </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>U ruajt</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Nuk është ruajtur</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Ruajtja automatike është pezulluar</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Kliko për të ruajtur</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Dokumenti është bosh, por skedari në disk nuk është, dhe asnjë redaktim nuk e boshatisi, prandaj ruajtja automatike nuk e mbishkroi skedarin.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Ky skedar nuk mund të lexohej pa humbje (kodim tjetër nga UTF-8?), prandaj ruajtja automatike nuk e mbishkruan. Ruajeni vetë vetëm nëse teksti i shfaqur është i saktë.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Shkrimi i skedarit dështoi: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{0} nga {1} {2} të përzgjedhura</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Kodimi dhe fundet e rreshtave</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Shndërro në UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Rihap me kodim</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Titulli aktual</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Gjendja e ruajtjes</value>
+  </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Dosjet</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Asnjë dosje e fundit</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Pastro dosjet e fundit</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Kliko me të djathtën ose shtyp Delete për ta hequr nga lista</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Një nivel lart</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Vendose si rrënjë</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Të preferuarat</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Shto te të preferuarat</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Hiq nga të preferuarat</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Kreu</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Fillimi</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Dokument i ri</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Hap skedar</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Hap dosje</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Skedarët e fundit</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Dosjet e fundit</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Hiq nga lista</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Cilësimet</value>
+  </data>
+  <data name="EditorOpening" xml:space="preserve">
+    <value>Po hapet…</value>
   </data>
 </root>

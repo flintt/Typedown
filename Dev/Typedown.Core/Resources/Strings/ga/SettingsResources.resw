@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Cumasaigh an éifeacht chúlra mica do chúlra an limistéir eagarthóireachta</value>
+    <value>Taispeánann an phána taobh agus an barra cluaisíní an éifeacht mica; coinníonn an limistéar eagarthóireachta dath soladach an téama</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Bain úsáid as ábhar mica sa réimse eagarthóireachta</value>
+    <value>Úsáid ábhar mica timpeall an limistéir eagarthóireachta</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Oscail a fhillteán</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Cuimhnigh ar chomhaid a osclaíodh le déanaí</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Liostaítear na comhaid agus na fillteáin a osclaíonn tú i gComhad &gt; Oscail le déanaí agus ar an leathanach baile. Nuair atá sé múchta, ní chuirtear aon rud nua leis.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Glan comhaid agus fillteáin le déanaí</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Folmhaíonn sé liostaí na gcomhad agus na bhfillteán a osclaíodh le déanaí.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Glan</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Taispeáin an leathanach baile ar chluaisín folamh</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Ag tosú gan aon rud le hoscailt agus nuair a dhúntar an cluaisín deireanach: comhaid agus fillteáin le déanaí, ceanáin</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Taispeánann cluaisíní nua an leathanach baile</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Taispeánann cluaisín nua (Comhad &gt; Nua, an cnaipe +) an leathanach baile in ionad doiciméid fholaimh</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Taispeáin línte bána breise</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Glacann línte bána idir ailt spás sa mhód léitheoireachta agus in easpórtálacha HTML agus PDF freisin, mar a dhéanann siad agus tú ag eagarthóireacht. Ní athraítear an comhad féin</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Tarraing doiciméid fhada de réir a chéile</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Osclaíonn doiciméad fada san áit ar fhág tú é, agus tarraingítear an chuid eile sa chúlra. Múch é seo má bhíonn cuma mhícheart ar rud éigin agus doiciméad fada á oscailt: tarraingítear ansin é ar fad in éineacht</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Barra taoibh ar dheis</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Taispeáin an barra taoibh ar dheis an doiciméid in ionad ar chlé</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Coinnigh athruithe nach bhfuil sábháilte agus á dhúnadh</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Dún gan fiafraí faoi shábháil: tagann doiciméid nach bhfuil sábháilte ar ais mar a bhí siad, fós gan sábháil, le cluaisíní an tseisiúin dheireanaigh</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Taispeáin marcanna Markdown i gcónaí</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Taispeáin na marcanna Markdown (**, #, seoladh naisc) i ngach alt, ní hamháin san áit a bhfuil an cúrsóir</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Tuar leagan amach doiciméad fada (turgnamhach)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Fad atá doiciméad fada á tharraingt ina chodanna, ríomhtar airde an mhéid nach dtaispeántar fós ón téacs in ionad é a mheas, ionas go mbíonn an barra scrollaithe agus na léimeanna ón imlíne níos cruinne. Turgnamhach</value>
   </data>
 </root>

@@ -138,7 +138,7 @@
     <comment>关于/发送反馈</comment>
   </data>
   <data name="About.Title" xml:space="preserve">
-    <value>को बारे मा</value>
+    <value>बारेमा</value>
     <comment>关于/关于</comment>
   </data>
   <data name="Editor.AutoPairBracket.Description" xml:space="preserve">
@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>सम्पादन क्षेत्र पृष्ठभूमिका लागि अभ्रक पृष्ठभूमि प्रभाव सक्षम पार्नुहोस्</value>
+    <value>छेउको फलक र ट्याब बारले माइका प्रभाव देखाउँछन्; सम्पादन क्षेत्रले थिमको ठोस रङ राख्छ</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>सम्पादन क्षेत्रमा अभ्रक सामग्री प्रयोग गर्नुहोस्</value>
+    <value>सम्पादन क्षेत्र वरिपरि माइका सामग्री प्रयोग गर्नुहोस्</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>यसको फोल्डर खोल्नुहोस्</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>हालै खोलिएका फाइलहरू सम्झनुहोस्</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>तपाईंले खोलेका फाइल र फोल्डरहरू फाइल &gt; हालको खोल्नुहोस् र गृह पृष्ठमा देखिन्छन्। बन्द हुँदा केही नयाँ थपिँदैन।</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>हालका फाइल र फोल्डरहरू खाली गर्नुहोस्</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>हालै खोलिएका फाइल र फोल्डरहरूको सूची खाली गर्छ।</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>खाली गर्नुहोस्</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>खाली ट्याबमा गृह पृष्ठ देखाउनुहोस्</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>सुरु गर्दा खोल्ने केही नभएमा र अन्तिम ट्याब बन्द गर्दा: हालका फाइल र फोल्डरहरू, मनपर्ने</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>नयाँ ट्याबहरूले गृह पृष्ठ देखाउँछन्</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>नयाँ ट्याब (फाइल &gt; नयाँ, + बटन) ले खाली कागजातको सट्टा गृह पृष्ठ देखाउँछ</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>थप खाली पङ्क्तिहरू देखाउनुहोस्</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>अनुच्छेदहरूबीचका खाली पङ्क्तिहरूले सम्पादन गर्दाझैँ पढ्ने मोड र HTML तथा PDF निर्यातमा पनि ठाउँ लिन्छन्। फाइल आफैँ परिवर्तन हुँदैन</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>लामो कागजात क्रमशः कोर्नुहोस्</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>लामो कागजात तपाईंले छाडेकै ठाउँबाट खुल्छ, र बाँकी भाग पृष्ठभूमिमा कोरिन्छ। लामो कागजात खुल्दा केही गलत देखिएमा यो बन्द गर्नुहोस्: त्यसपछि सबै एकैपटक कोरिन्छ</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>दायाँतिर साइड बार</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>कागजातको बायाँको सट्टा दायाँतिर साइड बार देखाउनुहोस्</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>बन्द गर्दा सुरक्षित नगरिएका परिवर्तनहरू राख्नुहोस्</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>सुरक्षित गर्न नसोधी बन्द गर्नुहोस्: सुरक्षित नगरिएका कागजातहरू जस्ता थिए त्यस्तै, अझै सुरक्षित नगरिएका, अघिल्लो सत्रका ट्याबहरूसँग फर्किन्छन्</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Markdown चिह्नहरू सधैँ देखाउनुहोस्</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>कर्सर भएको ठाउँमा मात्र होइन, हरेक अनुच्छेदमा Markdown चिह्नहरू (**, #, लिङ्कको ठेगाना) देखाउनुहोस्</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>लामो कागजातहरूको लेआउट पहिल्यै अनुमान गर्नुहोस् (प्रयोगात्मक)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>लामो कागजात भाग-भाग गरी कोरिँदै गर्दा, अझै नदेखाइएको भागको उचाइ अनुमान गर्नुको सट्टा पाठबाट गणना गरिन्छ, जसले स्क्रोल बार र रूपरेखाबाट हुने उफ्राइ अझ सटीक बनाउँछ। प्रयोगात्मक</value>
   </data>
 </root>

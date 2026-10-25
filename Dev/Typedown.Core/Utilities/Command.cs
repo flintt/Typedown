@@ -4,7 +4,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Windows.Input;
-using Windows.UI.Xaml.Markup;
+using Microsoft.UI.Xaml.Markup;
 
 namespace Typedown.Core.Utilities
 {

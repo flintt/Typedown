@@ -138,7 +138,7 @@
     <comment>关于/发送反馈</comment>
   </data>
   <data name="About.Title" xml:space="preserve">
-    <value>تقریباً</value>
+    <value>کے بارے میں</value>
     <comment>关于/关于</comment>
   </data>
   <data name="Editor.AutoPairBracket.Description" xml:space="preserve">
@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>ایڈیٹنگ ایریا پس منظر کے لئے مائکا پس منظر اثر کو فعال کریں</value>
+    <value>سائیڈ پین اور ٹیب بار میکا اثر دکھاتے ہیں؛ ترمیمی جگہ تھیم کا ٹھوس رنگ برقرار رکھتی ہے</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>ایڈیٹنگ ایریا میں مائکا مواد استعمال کریں</value>
+    <value>ترمیمی جگہ کے ارد گرد میکا مواد استعمال کریں</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>اس کا فولڈر کھولیں</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>حال ہی میں کھولی گئی فائلیں یاد رکھیں</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>آپ کی کھولی گئی فائلیں اور فولڈرز فائل &gt; حالیہ کھولیں اور ہوم پیج پر دکھائے جاتے ہیں۔ بند ہونے پر کچھ نیا شامل نہیں ہوتا۔</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>حالیہ فائلیں اور فولڈرز صاف کریں</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>حال ہی میں کھولی گئی فائلوں اور فولڈرز کی فہرستیں خالی کرتا ہے۔</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>صاف کریں</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>خالی ٹیب پر ہوم پیج دکھائیں</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>شروع کرتے وقت جب کھولنے کو کچھ نہ ہو اور آخری ٹیب بند ہونے پر: حالیہ فائلیں اور فولڈرز، پسندیدہ</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>نئے ٹیب ہوم پیج دکھاتے ہیں</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>نیا ٹیب (فائل &gt; نیا، + بٹن) خالی دستاویز کے بجائے ہوم پیج دکھاتا ہے</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>اضافی خالی سطریں دکھائیں</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>پیراگرافوں کے درمیان خالی سطریں ترمیم کی طرح پڑھنے کے موڈ اور HTML اور PDF برآمدات میں بھی جگہ لیتی ہیں۔ فائل خود تبدیل نہیں ہوتی</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>طویل دستاویزات بتدریج بنائیں</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>طویل دستاویز وہیں سے کھلتی ہے جہاں آپ نے اسے چھوڑا تھا، اور باقی حصہ پس منظر میں بنتا ہے۔ اگر طویل دستاویز کھلتے وقت کچھ غلط لگے تو اسے بند کریں: پھر وہ ایک ہی بار میں بنے گی</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>دائیں جانب سائیڈ بار</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>دستاویز کے بائیں کے بجائے دائیں جانب سائیڈ بار دکھائیں</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>بند کرتے وقت غیر محفوظ تبدیلیاں برقرار رکھیں</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>محفوظ کرنے کا پوچھے بغیر بند کریں: غیر محفوظ دستاویزات جیسی تھیں ویسی ہی، اب بھی غیر محفوظ، پچھلے سیشن کے ٹیبز کے ساتھ واپس آتی ہیں</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Markdown کے نشانات ہمیشہ دکھائیں</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>صرف کرسر والی جگہ پر نہیں، ہر پیراگراف میں Markdown کے نشانات (**، #، لنک کا پتہ) دکھائیں</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>طویل دستاویزات کی ترتیب کا پیشگی اندازہ (تجرباتی)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>جب طویل دستاویز حصوں میں بنائی جاتی ہے، تو ابھی نہ دکھائے گئے حصے کی اونچائی اندازے کے بجائے متن سے شمار کی جاتی ہے، تاکہ اسکرول بار اور خاکے سے چھلانگیں زیادہ درست ہوں۔ تجرباتی</value>
   </data>
 </root>

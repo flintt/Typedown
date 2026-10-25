@@ -138,7 +138,7 @@
     <comment>关于/发送反馈</comment>
   </data>
   <data name="About.Title" xml:space="preserve">
-    <value>Nge</value>
+    <value>Mayelana</value>
     <comment>关于/关于</comment>
   </data>
   <data name="Editor.AutoPairBracket.Description" xml:space="preserve">
@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Vumela umphumela wesizinda se-mica wesizinda sendawo yokuhlela</value>
+    <value>Ifasitela eliseceleni nebha yamathebhu kubonisa umphumela we-mica; indawo yokuhlela igcina umbala oqinile wetimu</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Sebenzisa izinto ze-mica endaweni yokuhlela</value>
+    <value>Sebenzisa izinto ze-mica ezungeze indawo yokuhlela</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Vula ifolda yalo</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Khumbula amafayela avulwe muva nje</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Amafayela namafolda owavulayo abalwe ku-Ifayela &gt; Vula akamuva nasekhasini lasekhaya. Uma kuvaliwe, akukho okusha okungezwayo.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Sula amafayela namafolda akamuva</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Ithulula uhlu lwamafayela namafolda avulwe muva nje.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Sula</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Bonisa ikhasi lasekhaya kuthebhu engenalutho</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Ekuqaleni lapho kungekho okuvulwayo nalapho ithebhu yokugcina ivalwa: amafayela namafolda akamuva, izintandokazi</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Amathebhu amasha abonisa ikhasi lasekhaya</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Ithebhu entsha (Ifayela &gt; Okusha, inkinobho ethi +) ibonisa ikhasi lasekhaya esikhundleni sedokhumenti engenalutho</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Bonisa imigqa engenalutho eyengeziwe</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Imigqa engenalutho phakathi kwezigaba ithatha isikhala nakwimodi yokufunda nasekuthumeleni ngaphandle kwe-HTML ne-PDF, njengalapho uhlela. Ifayela ngokwalo alishintshi</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Dweba amadokhumenti amade kancane kancane</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Idokhumenti ende ivuleka lapho uyishiye khona, bese okusele kudwetshwa ngemuva. Vala lokhu uma okuthile kubukeka kungalungile ngenkathi idokhumenti ende ivuleka: izodwetshwa yonke ngasikhathi sinye</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Ibha eseceleni ngakwesokudla</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Bonisa ibha eseceleni ngakwesokudla kwedokhumenti esikhundleni sangakwesobunxele</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Gcina izinguquko ezingagciniwe lapho uvala</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Vala ngaphandle kokubuza ukulondoloza: amadokhumenti angagciniwe abuya njengoba ayenjalo, esengagciniwe, namathebhu eseshini edlule</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Bonisa njalo izimpawu ze-Markdown</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Bonisa izimpawu ze-Markdown (**, #, ikheli lesixhumanisi) kuyo yonke indima, hhayi lapho kukhona khona ikhesa kuphela</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Bikezela ukwakheka kwemibhalo emide (okokuhlola)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Ngenkathi umbhalo omude udwetshwa ngezingxenye, ukuphakama kwalokho okungakaboniswa kubalwa embhalweni esikhundleni sokulinganiselwa, ngakho ibha yokuskrola nokweqa kusuka kuhlaka kunembe kakhulu. Okokuhlola</value>
   </data>
 </root>

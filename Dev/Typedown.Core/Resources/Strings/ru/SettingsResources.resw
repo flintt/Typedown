@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Включите эффект фона из мика для области редактирования</value>
+    <value>Боковая панель и панель вкладок показывают эффект «Слюда»; область редактирования сохраняет сплошной цвет темы</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Используйте материал из мика в области редактирования</value>
+    <value>Использовать материал «Слюда» вокруг области редактирования</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Открыть его папку</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Запоминать недавно открытые файлы</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Открытые файлы и папки показываются в меню «Файл &gt; Открыть недавние» и на главной странице. Если выключено, новые не добавляются.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Очистить недавние файлы и папки</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Очищает списки недавно открытых файлов и папок.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Очистить</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Показывать главную страницу на пустой вкладке</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>При запуске, когда нечего открыть, и при закрытии последней вкладки: недавние файлы и папки, избранное</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Новые вкладки показывают главную страницу</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Новая вкладка (Файл &gt; Создать, кнопка +) показывает главную страницу вместо пустого документа</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Показывать лишние пустые строки</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Пустые строки между абзацами занимают место и в режиме чтения, и при экспорте в HTML и PDF, как при редактировании. Сам файл не меняется</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Постепенно отрисовывать длинные документы</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Длинный документ открывается там, где вы его оставили, а остальное отрисовывается в фоновом режиме. Отключите это, если при открытии длинного документа что-то выглядит неправильно: тогда он будет отрисован целиком сразу</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Боковая панель справа</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Показывать боковую панель справа от документа, а не слева</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Сохранять несохранённые изменения при закрытии</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Закрывать без вопроса о сохранении: несохранённые документы вернутся такими, какими были, по-прежнему несохранёнными, вместе с вкладками последнего сеанса</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Всегда показывать разметку Markdown</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Показывать знаки разметки Markdown (**, #, адрес ссылки) во всех абзацах, а не только там, где находится курсор</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Предсказывать разметку длинных документов (экспериментально)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Пока длинный документ отрисовывается частями, высота ещё не показанного рассчитывается по тексту, а не оценивается, поэтому полоса прокрутки и переходы из структуры точнее. Экспериментально</value>
   </data>
 </root>

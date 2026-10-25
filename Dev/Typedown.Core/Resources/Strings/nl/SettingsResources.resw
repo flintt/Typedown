@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Gebruik het mica-materiaal in het bewerkingsgebied</value>
+    <value>Het zijpaneel en de tabbalk tonen het mica-effect; het bewerkingsgebied behoudt de effen kleur van het thema</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Het bewerkingsgebied heeft een achtergrondeffect met mica-achtergrond.</value>
+    <value>Mica-materiaal rond het bewerkingsgebied gebruiken</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>De map openen</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Recent geopende bestanden onthouden</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Geopende bestanden en mappen staan in Bestand &gt; Recent openen en op de startpagina. Uitgeschakeld wordt er niets nieuws toegevoegd.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Recente bestanden en mappen wissen</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Maakt de lijsten met recent geopende bestanden en mappen leeg.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Wissen</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Startpagina tonen op een leeg tabblad</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Bij het starten zonder iets te openen en bij het sluiten van het laatste tabblad: recente bestanden en mappen, favorieten</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Nieuwe tabbladen tonen de startpagina</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Een nieuw tabblad (Bestand &gt; Nieuw, de knop +) toont de startpagina in plaats van een leeg document</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Extra lege regels tonen</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Lege regels tussen alinea's nemen ook ruimte in in de leesmodus en bij export naar HTML en PDF, zoals tijdens het bewerken. Het bestand zelf verandert niet</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Lange documenten geleidelijk weergeven</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Een lang document opent op de plek waar u het verliet en de rest wordt op de achtergrond weergegeven. Schakel dit uit als er iets niet goed lijkt terwijl een lang document opent: het wordt dan in één keer weergegeven</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Zijbalk rechts</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>De zijbalk rechts van het document tonen in plaats van links</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Niet-opgeslagen wijzigingen bewaren bij sluiten</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Sluiten zonder te vragen om op te slaan: niet-opgeslagen documenten komen terug zoals ze waren, nog steeds niet opgeslagen, met de tabbladen van de vorige sessie</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Markdown-tekens altijd tonen</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>De Markdown-tekens (**, #, het adres van een koppeling) in elke alinea tonen, niet alleen waar de cursor staat</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Indeling van lange documenten voorspellen (experimenteel)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Terwijl een lang document in delen wordt getekend, wordt de hoogte van wat nog niet wordt getoond uit de tekst berekend in plaats van geschat, zodat de schuifbalk en sprongen vanuit het overzicht nauwkeuriger zijn. Experimenteel</value>
   </data>
 </root>

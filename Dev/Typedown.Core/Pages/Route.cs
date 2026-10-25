@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Typedown.Core.Pages.SettingPages;
 
 namespace Typedown.Core.Pages
@@ -26,5 +27,10 @@ namespace Typedown.Core.Pages
             "View" => typeof(ViewPage),
             _ => null
         };
+
+        /// <summary>The name a settings section is reached by (the reverse of <see cref="GetSettingsPageType"/>), or null.</summary>
+        public static string GetSettingsPageName(Type type) =>
+            new[] { "About", "Editor", "ExportConfig", "Export", "General", "Image", "ImageUpload", "Shortcut", "UploadConfig", "View" }
+                .FirstOrDefault(name => GetSettingsPageType(name) == type);
     }
 }

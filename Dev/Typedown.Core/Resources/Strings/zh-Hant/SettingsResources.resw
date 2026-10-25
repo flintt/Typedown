@@ -430,7 +430,7 @@
     <comment>通用/启动操作</comment>
   </data>
   <data name="General.Title" xml:space="preserve">
-    <value>常規</value>
+    <value>一般</value>
     <comment>通用/常规</comment>
   </data>
   <data name="Image.InsertActions.CopyToPath" xml:space="preserve">
@@ -662,11 +662,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>開啟后編輯區域具有雲母背景效果</value>
+    <value>側欄和標籤列顯示雲母效果，編輯區保持主題的純色</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>編輯區域使用雲母材質</value>
+    <value>編輯區周圍使用雲母材質</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -923,5 +923,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>開啟所在資料夾</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>記錄最近開啟的檔案</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>開啟過的檔案和資料夾會列在「檔案 → 開啟最近」和首頁中。關閉後不再記錄新的項目。</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>清除最近記錄</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>清空最近開啟的檔案和資料夾清單。</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>清除</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>空白索引標籤顯示首頁</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>啟動時沒有要開啟的內容，以及關閉最後一個索引標籤時：顯示最近的檔案和資料夾、我的最愛</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>新索引標籤也顯示首頁</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>新索引標籤（檔案 → 新增、「+」按鈕）顯示首頁，而不是空白文件</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>保留多餘空行（顯示為空白）</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>段落之間多出的空行在閱讀模式和 HTML、PDF 匯出中也留出空白，與編輯時一致。檔案內容不變</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>分段繪製長文件</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>長文件開啟時先顯示上次閱讀的位置，其餘部分在背景補齊。若開啟長文件時顯示異常，可關閉此項，改為一次繪製整篇</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>側欄顯示在右側</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>將側欄顯示在文件右側，而不是左側</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>關閉時保留未儲存的修改</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>關閉時不再詢問是否儲存：未儲存的文件下次開啟時原樣還原，仍標示為未儲存，並還原上次開啟的分頁</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>一律顯示 Markdown 標記</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>在每個段落都顯示 Markdown 標記（**、#、連結位址），而不只是游標所在的地方</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>預測長文件排版（實驗性）</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>長文件分段轉譯時，依文字排版算出尚未顯示部分的高度，而不是估算，捲軸和大綱跳轉更準確。實驗性功能</value>
   </data>
 </root>

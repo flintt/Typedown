@@ -182,7 +182,7 @@
     <comment>打开文件对话框/读取失败</comment>
   </data>
   <data name="Recover" xml:space="preserve">
-    <value>Zaharberritzea</value>
+    <value>Leheneratu</value>
     <comment>恢复文件对话框/恢复</comment>
   </data>
   <data name="RecoverContent" xml:space="preserve">
@@ -202,7 +202,7 @@
     <comment>确定恢复应用默认设置？</comment>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Salbatu</value>
+    <value>Gorde</value>
     <comment>文件保存对话框/保存</comment>
   </data>
   <data name="SaveErrorTitle" xml:space="preserve">
@@ -328,5 +328,14 @@
   </data>
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>Horietatik {0} konfigurazio honekin igo ziren lehenago; beraz, haien aurreko helbideak erabili dira.</value>
+  </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Deskargatu WebView2 Runtime Microsoft-etik</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Exekuzio-ingurunea ez da instalatu. Instalatzaileak Interneteko konexioa behar du; exekuzio-ingurunea Microsoft-etik ere deskarga dezakezu (lineaz kanpoko instalatzailea ere badago), instalatu eta aplikazioa berrabiarazi.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>WebView2 Runtime instalatzen...</value>
   </data>
 </root>

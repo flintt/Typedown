@@ -20,8 +20,8 @@ using Typedown.Core.Utilities;
 using Windows.ApplicationModel.Core;
 using Windows.Storage.Pickers;
 using Windows.System;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 
 namespace Typedown.Core.ViewModels
 {
@@ -40,6 +40,8 @@ namespace Typedown.Core.ViewModels
         public RemoteInvoke RemoteInvoke => ServiceProvider.GetService<RemoteInvoke>();
 
         public AccessHistory AccessHistory => ServiceProvider.GetService<AccessHistory>();
+
+        public HomeViewModel Home => ServiceProvider.GetService<HomeViewModel>();
 
         public string WorkFolder { get; private set; } = null;
 
@@ -61,7 +63,12 @@ namespace Typedown.Core.ViewModels
         public Command<string> OpenFileCommand { get; } = new();
         public Command<string> OpenFolderCommand { get; } = new();
         public Command<Unit> NewFolderCommand { get; } = new();
+        /// <summary>File > Open recent > Clear recent files: the files only (the folders have their own entry).</summary>
         public Command<Unit> ClearHistoryCommand { get; } = new();
+        /// <summary>File > Open recent > Folders > Clear recent folders.</summary>
+        public Command<Unit> ClearFolderHistoryCommand { get; } = new();
+        /// <summary>Settings > General > Data > Clear recent: files and folders.</summary>
+        public Command<Unit> ClearAllHistoryCommand { get; } = new();
         public Command<Unit> SaveCommand { get; } = new();
         public Command<Unit> SaveAsCommand { get; } = new();
         public Command<Unit> ImportCommand { get; } = new();
@@ -79,7 +86,7 @@ namespace Typedown.Core.ViewModels
 
         private FileSystemWatcher fileWatcher;
 
-        private DispatcherQueue dispatcherQueue;
+        private Microsoft.UI.Dispatching.DispatcherQueue dispatcherQueue;
 
         private DateTime ignoreExternalChangeUntil = DateTime.MinValue;
 
@@ -96,13 +103,22 @@ namespace Typedown.Core.ViewModels
             ServiceProvider = serviceProvider;
             // New, as the reader asks for it (the + button, the menu, Ctrl+N): the keyboard goes to the new document. The
             // + button kept it, and the letters typed next went nowhere until a click in the text.
-            NewFileCommand.OnExecute.Subscribe(async _ => { await NewFileFun(); MarkdownEditor?.FocusEditor(); });
+            // A new tab is for writing: no home page on it unless Settings > General > On startup asks for one there too.
+            NewFileCommand.OnExecute.Subscribe(async _ =>
+            {
+                await NewFileFun();
+                if (SettingsViewModel.ShowHomeOnNewTab) Home?.Show(); else Home?.Hide();
+                MarkdownEditor?.FocusEditorInPlace();
+            });
             OpenFileCommand.OnExecute.Subscribe(async x => await OpenFile(x));
             OpenFolderCommand.OnExecute.Subscribe(async x => await OpenFolder(x));
             SaveAsCommand.OnExecute.Subscribe(async _ => await SaveAs());
             SaveCommand.OnExecute.Subscribe(async _ => await Save());
             ExitCommand.OnExecute.Subscribe(_ => Exit());
-            ClearHistoryCommand.OnExecute.Subscribe(x => { _ = AccessHistory.ClearHistory(); });
+            // "Clear recent files" cleared the folders too, which it does not say: each list has its own entry now.
+            ClearHistoryCommand.OnExecute.Subscribe(x => { _ = AccessHistory.ClearFileHistory(); });
+            ClearFolderHistoryCommand.OnExecute.Subscribe(x => { _ = AccessHistory.ClearFolderHistory(); });
+            ClearAllHistoryCommand.OnExecute.Subscribe(x => { _ = AccessHistory.ClearHistory(); });
             ExportCommand.OnExecute.Subscribe(Export);
             PrintCommand.OnExecute.Subscribe(_ => Print());
             ShareToHedgeDocCommand.OnExecute.Subscribe(_ => ShareToHedgeDoc());
@@ -110,14 +126,20 @@ namespace Typedown.Core.ViewModels
             ImportCommand.OnExecute.Subscribe(_ => Import());
             RemoteInvoke.Handle<JToken, bool>("ExportCallback", ExportCallback);
             RemoteInvoke.Handle<JToken, bool>("PrintHTML", PrintHTML);
+            // The page printing itself (window.print) and done: the print preview's margins white meanwhile.
+            RemoteInvoke.Handle<JToken, bool>("Printing", args =>
+            {
+                MarkdownEditor?.SetPrinting(args?["printing"]?.Value<bool>() == true);
+                return true;
+            });
             saveFileTimer.Interval = TimeSpan.FromSeconds(5);
             saveFileTimer.Tick += SaveFileTimerTick;
             saveFileTimer.Start();
-            dispatcherQueue = DispatcherQueue.GetForCurrentThread();
+            dispatcherQueue = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
             fileReloadTimer.Interval = TimeSpan.FromMilliseconds(400);
             fileReloadTimer.Tick += FileReloadTimerTick;
             disposables.Add(SettingsViewModel.WhenPropertyChanged(nameof(SettingsViewModel.AutoReload)).Subscribe(_ => StartWatchFile()));
-            _ = CoreApplication.GetCurrentView().CoreWindow.Dispatcher.RunIdleAsync(() => OnStartup());
+            _ = dispatcherQueue.RunIdleAsync(() => OnStartup());
         }
 
         private async void SaveFileTimerTick(object sender, object e)
@@ -175,6 +197,23 @@ namespace Typedown.Core.ViewModels
         {
             var ok = await AutoBackupFile();
             await BackupDirtyBackgroundTabsAsync();
+            return ok;
+        }
+
+        /// <summary>
+        /// Every unsaved document backed up now, for a window closing that keeps them (Settings > Keep unsaved changes when
+        /// closing): true when each one is on disk as it is - the next start brings them back - false when one is not.
+        /// </summary>
+        public async Task<bool> KeepUnsavedAsync()
+        {
+            var ok = await AutoBackupFile();
+            await BackupDirtyBackgroundTabsAsync();
+            var tabs = TabsViewModel;
+            if (tabs != null)
+                foreach (var tab in tabs.Tabs)
+                    if (tab != tabs.ActiveTab && !tab.Saved && !string.IsNullOrWhiteSpace(tab.Markdown) && tab.BackupHash != tab.CurrentHash)
+                        ok = false;
+            Log.Debug($"keep unsaved on close: {(ok ? "every unsaved document backed up" : "one could not be backed up; asking")}");
             return ok;
         }
 
@@ -249,6 +288,22 @@ namespace Typedown.Core.ViewModels
 
         private async Task NewFileFun(bool postMessage = true, bool inNewTab = true)
         {
+            // Keys typed from here on are for the new document (see HoldInput); the document left keeps its latest edits,
+            // as on a tab switch.
+            var hold = postMessage ? EditorViewModel.HoldInput() : 0;
+            try
+            {
+                if (postMessage) await EditorViewModel.FlushBeforeTabChangeAsync();
+                await NewFileCore(postMessage, inNewTab);
+            }
+            finally
+            {
+                if (hold != 0) EditorViewModel.ReleaseInput(hold);
+            }
+        }
+
+        private async Task NewFileCore(bool postMessage, bool inNewTab)
+        {
             // Tabs (upstream #73): a new document opens in its own tab unless the current one is a pristine untitled tab.
             if (inNewTab && TabsViewModel != null && !TabsViewModel.IsActiveTabBlank)
                 TabsViewModel.BeginNewTab();
@@ -270,6 +325,7 @@ namespace Typedown.Core.ViewModels
                 EditorViewModel.CurrentHash = EditorViewModel.FileHash;
                 EditorViewModel.Saved = true;
                 EditorViewModel.AutoSavedSucc = true;
+                EditorViewModel.AutoSaveHeldBack = null;
                 EditorViewModel.FileLoaded = false;
             }
             else
@@ -285,6 +341,7 @@ namespace Typedown.Core.ViewModels
             {
                 EditorViewModel.PostLoadFile(EditorViewModel.Markdown);
             }
+            EditionHooks.ReportActivity(ActivityKind.DocumentShown, AppViewModel);
         }
 
         /// <param name="preview">Single-click open from the file tree: reuse the current preview tab instead of adding one.</param>
@@ -301,9 +358,8 @@ namespace Typedown.Core.ViewModels
             folderPath ??= await AppViewModel.MainWindow.PickMarkdownFolderAsync();
             if (folderPath == null)
                 return false;
-            if (!await LoadFolder(folderPath))
+            if (!await LoadFolder(folderPath, explicitRoot: true))
                 return false;
-            WorkFolderIsExplicit = true;
             SettingsViewModel.SidePaneOpen = true;
             SettingsViewModel.SidePaneIndex = 0;
             return true;
@@ -316,14 +372,13 @@ namespace Typedown.Core.ViewModels
             {
                 if (TryGetOpenedWindow(path, out var window) && window != AppViewModel.MainWindow)
                 {
-                    _ = AppViewModel.XamlRoot?.Content?.Dispatcher?.RunIdleAsync(() => PInvoke.SetForegroundWindow(window));
+                    _ = AppViewModel.XamlRoot?.Content?.DispatcherQueue?.RunIdleAsync(() => { PInvoke.SetForegroundWindow(window); });
                     return false;
                 }
+                // A recent file that is not there stays in the list (greyed out): a network drive or a USB stick may only
+                // be unplugged. The reader removes it if it is gone for good.
                 if (!File.Exists(path))
-                {
-                    _ = AccessHistory.RemoveFileHistory(path);
                     throw new FileNotFoundException("File does not exist.");
-                }
                 // Tabs: an already open file just becomes active; anything else opens beside the current document
                 // (reusing a pristine untitled tab), so the old document never needs a save prompt here.
                 if (TabsViewModel?.FindByPath(path) is DocumentTab existing)
@@ -362,6 +417,7 @@ namespace Typedown.Core.ViewModels
                     EditorViewModel.FileLoaded = true;
                 }
                 EditorViewModel.AutoSavedSucc = true;
+                EditorViewModel.AutoSaveHeldBack = null;
                 EditorViewModel.History.InitHistory(EditorViewModel.Markdown);
                 if (postMessage)
                 {
@@ -371,6 +427,7 @@ namespace Typedown.Core.ViewModels
                 if (TabsViewModel != null)
                     TabsViewModel.ActiveTab.IsPreview = preview;
                 FileOpened?.Invoke(path, preview);
+                EditionHooks.ReportActivity(ActivityKind.DocumentShown, AppViewModel);
                 // Opening a large document is the one place where the host's own work is worth timing: the
                 // editor reports back when it has the text, and the gap between the two is the page's share.
                 if (text.Length > 200000)
@@ -385,15 +442,16 @@ namespace Typedown.Core.ViewModels
             }
         }
 
-        private async Task<bool> LoadFolder(string folderPath)
+        private async Task<bool> LoadFolder(string folderPath, bool explicitRoot = false)
         {
             try
             {
                 if (!Directory.Exists(folderPath))
-                {
-                    _ = AccessHistory.RemoveFolderHistory(folderPath);
                     throw new FileNotFoundException("Folder does not exist.");
-                }
+                // Opened by the reader: said before the folder changes, which the file tree follows at once. Set after, the
+                // tree first stayed with the document (not yet the reader's folder), then moved only when something else
+                // asked again - the root changed twice in 2 ms, or not at all with the folder pane already open.
+                if (explicitRoot) WorkFolderIsExplicit = true;
                 WorkFolder = folderPath;
                 _ = AccessHistory.RecordFolderHistory(folderPath);
                 return true;
@@ -409,6 +467,8 @@ namespace Typedown.Core.ViewModels
         {
             string text = await AutoBackup.GetBackup(path);
             if (text == null || Common.SimpleHash(text) == fileHash) return null;
+            // Kept on purpose when the window closed (Settings > Keep unsaved changes when closing): back without asking.
+            if (SettingsViewModel.KeepUnsavedOnClose) return text;
             var dialog = AppContentDialog.Create();
             dialog.Title = Locale.GetDialogString("RecoverTitle");
             dialog.Content = Locale.GetDialogString("RecoverContent");
@@ -451,6 +511,7 @@ namespace Typedown.Core.ViewModels
                     && (!EditorViewModel.FileLoaded || !EditorViewModel.History.Undoable))
                 {
                     Log.Debug($"save skipped: buffer is blank (len={text.Length}) with no undoable edit (loaded={EditorViewModel.FileLoaded} undoable={EditorViewModel.History.Undoable}) while the file has {new FileInfo(path).Length} bytes");
+                    if (!alert) EditorViewModel.AutoSaveHeldBack = Locale.GetString("SaveState.BlankHeldBack");
                     return false;
                 }
                 // A file we could not decode losslessly (a non-UTF-8 file — GBK, Latin-1 — read as UTF-8, so its
@@ -461,16 +522,19 @@ namespace Typedown.Core.ViewModels
                 if (!alert && (FileFormat?.LossyDecode ?? false) && File.Exists(path))
                 {
                     Log.Debug($"auto-save skipped: '{path}' was decoded lossily as {(FileFormat?.Encoding?.WebName ?? "utf-8")}; an automatic overwrite would replace its original bytes");
+                    EditorViewModel.AutoSaveHeldBack = Locale.GetString("SaveState.EncodingHeldBack");
                     return false;
                 }
                 IgnoreOwnFileWrite();
                 await SafeFile.WriteAllBytesAtomicAsync(path, (FileFormat ?? TextFileFormat.Default).GetBytes(text));
                 IgnoreOwnFileWrite();
                 EditionHooks.ReportDocumentOnDisk(path, text, written: true);
+                EditorViewModel.AutoSaveHeldBack = null;
                 return true;
             }
             catch (Exception ex)
             {
+                if (!alert) EditorViewModel.AutoSaveHeldBack = string.Format(Locale.GetString("SaveState.WriteFailed"), ex.Message);
                 if (alert)
                 {
                     await AppContentDialog.Create(Locale.GetDialogString("SaveErrorTitle"), ex.Message, Locale.GetDialogString("Ok")).ShowAsync(AppViewModel.XamlRoot);
@@ -479,8 +543,43 @@ namespace Typedown.Core.ViewModels
             }
         }
 
-        /// <summary>A new untitled document in this window (a new tab, or the pristine blank one), as the New command.</summary>
-        public Task NewDocumentAsync() => NewFileFun();
+        /// <summary>
+        /// A new untitled document in this window (a new tab, or the pristine blank one), as the New command; shown in the
+        /// editor, not under the home page (an automation client's document.create, the home page's own command).
+        /// </summary>
+        public async Task NewDocumentAsync()
+        {
+            await NewFileFun();
+            Home?.Hide();
+        }
+
+        /// <summary>
+        /// The active tab made a new blank document at once (the last tab closed with the home page on): no question, no
+        /// backup looked for - what was there has been saved or let go already.
+        /// </summary>
+        internal void ResetToBlankDocument()
+        {
+            if (TabsViewModel?.ActiveTab is { } tab)
+            {
+                tab.BecomeNewDocument();
+                tab.IsPreview = false;
+                tab.BackupHash = 0;
+                tab.Cursor = null;
+            }
+            FilePath = null;
+            FileFormat = TextFileFormat.Default;
+            DiskHash = 0;
+            EditorViewModel.FileHash = Common.SimpleHash(Common.DefaultMarkdwn);
+            EditorViewModel.Markdown = Common.DefaultMarkdwn;
+            EditorViewModel.CurrentHash = EditorViewModel.FileHash;
+            EditorViewModel.Saved = true;
+            EditorViewModel.AutoSavedSucc = true;
+            EditorViewModel.AutoSaveHeldBack = null;
+            EditorViewModel.FileLoaded = false;
+            EditorViewModel.History.InitHistory(EditorViewModel.Markdown);
+            EditorViewModel.PostLoadFile(EditorViewModel.Markdown);
+            EditionHooks.ReportActivity(ActivityKind.DocumentShown, AppViewModel);
+        }
 
         /// <summary>
         /// Saves the active document to its existing path without any dialog (the automation API's save): false when
@@ -625,6 +724,8 @@ namespace Typedown.Core.ViewModels
                             if (TabsViewModel?.ActiveTab is { } savedTab) savedTab.BackupHash = 0;
                         }
                         _ = AccessHistory.RecordFileHistory(FilePath);
+                        if (!string.Equals(originalPath, targetPath, StringComparison.OrdinalIgnoreCase))
+                            EditionHooks.ReportActivity(ActivityKind.DocumentRenamed, AppViewModel, originalPath);
                         return EditorViewModel.Saved ? targetPath : null;
                     }
                 }
@@ -675,9 +776,9 @@ namespace Typedown.Core.ViewModels
                         Locale.GetString("Cancel"),
                         Locale.GetDialogString("UploadImages.UploadFirst"),
                         Locale.GetDialogString("UploadImages.ShareAnyway")).ShowAsync(AppViewModel.XamlRoot);
-                    if (upload == Windows.UI.Xaml.Controls.ContentDialogResult.None)
+                    if (upload == Microsoft.UI.Xaml.Controls.ContentDialogResult.None)
                         return;
-                    if (upload == Windows.UI.Xaml.Controls.ContentDialogResult.Primary && !await UploadLocalImages())
+                    if (upload == Microsoft.UI.Xaml.Controls.ContentDialogResult.Primary && !await UploadLocalImages())
                         return;
                 }
                 await EditorViewModel.FlushContentAsync();
@@ -698,12 +799,12 @@ namespace Typedown.Core.ViewModels
                         Locale.GetString("Cancel"),
                         Locale.GetDialogString("HedgeDocShare.ReUpload"),
                         Locale.GetDialogString("HedgeDocShare.UseOldLink")).ShowAsync(AppViewModel.XamlRoot);
-                    if (choice == Windows.UI.Xaml.Controls.ContentDialogResult.Secondary)
+                    if (choice == Microsoft.UI.Xaml.Controls.ContentDialogResult.Secondary)
                     {
                         await HedgeDocShareDialog.ShowAsync(AppViewModel.XamlRoot, previousResult, null);
                         return;
                     }
-                    if (choice != Windows.UI.Xaml.Controls.ContentDialogResult.Primary)
+                    if (choice != Microsoft.UI.Xaml.Controls.ContentDialogResult.Primary)
                         return;
                 }
                 var result = await HedgeDocService.ShareAsync(SettingsViewModel.HedgeDocServer, markdown, SettingsViewModel.HedgeDocEmail, SettingsViewModel.HedgeDocPassword, SettingsViewModel.HedgeDocPublishReadOnly);
@@ -734,7 +835,7 @@ namespace Typedown.Core.ViewModels
                 if (await ServiceProvider.GetService<ImageUpload>().GetDefaultConfigAsync() == null)
                 {
                     var open = await AppContentDialog.Create(title, Locale.GetDialogString("UploadImages.NoConfig"), Locale.GetString("Cancel"), Locale.GetDialogString("UploadImages.OpenSettings")).ShowAsync(AppViewModel.XamlRoot);
-                    if (open == Windows.UI.Xaml.Controls.ContentDialogResult.Primary)
+                    if (open == Microsoft.UI.Xaml.Controls.ContentDialogResult.Primary)
                         AppViewModel.NavigateCommand.Execute("Settings/Image");
                     return false;
                 }
@@ -896,37 +997,125 @@ namespace Typedown.Core.ViewModels
 
         /// <summary>
         /// Reopens the documents of the last session as tabs (only for the first window, before the editor is up).
-        /// Each file is loaded into the editor state in turn (no message: the editor gets the active document from
-        /// GetSettings); the previously active tab is switched to at the end. Returns false when nothing was restored.
+        /// The active one is loaded into the editor state (no message: the editor gets it from GetSettings); the others
+        /// come back as tabs not read yet, read after the page has its document (<see cref="SessionLoaded"/>) or when
+        /// switched to. Every file was read first, one after another, and the page waited for them all: a blank window
+        /// for seconds with long documents among the tabs (E2E SR01). Returns false when nothing was restored.
         /// </summary>
         private async Task<bool> RestoreSession()
         {
             var session = SessionMemory.Load();
             if (session == null || TabsViewModel == null) return false;
-            var opened = 0;
-            foreach (var file in session.Files)
+            var files = session.Files.Where(f => !TryGetOpenedWindow(f, out _)).ToList();
+            if (files.Count == 0) return false;
+            var activeFile = session.ActiveIndex < session.Files.Count && files.Contains(session.Files[session.ActiveIndex]) ? session.Files[session.ActiveIndex] : files[0];
+            // The tabs first, nothing read: they show at once, whatever reading the files waits for (on w10 the strip
+            // came only with the active file read, 2.6 s after the window). The active document goes into the pristine
+            // untitled tab, which stays where the active file is in the list.
+            var blank = TabsViewModel.ActiveTab;
+            var before = true;
+            foreach (var file in files)
             {
-                if (TryGetOpenedWindow(file, out _)) continue;
+                if (file == activeFile) { before = false; continue; }
+                if (TabsViewModel.FindByPath(file) != null) continue;
+                var placeholder = new DocumentTab { FilePath = file, Pending = true };
+                if (before) TabsViewModel.Tabs.Insert(Math.Max(0, TabsViewModel.Tabs.IndexOf(blank)), placeholder);
+                else TabsViewModel.Tabs.Add(placeholder);
+            }
+            Log.Debug($"RestoreSession: {TabsViewModel.Tabs.Count} tab(s) shown, reading {Path.GetFileName(activeFile)}");
+            var loaded = false;
+            try
+            {
+                // No tab is opened here: LoadFile reuses the pristine untitled one.
+                loaded = await LoadFile(activeFile, true, false);
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"RestoreSession: {activeFile}: {ex.Message}");
+            }
+            var activeTab = loaded ? TabsViewModel.ActiveTab : null;
+            if (activeTab == null && TabsViewModel.Tabs.Contains(blank) && TabsViewModel.Tabs.Count > 1)
+                TabsViewModel.Tabs.Remove(blank);
+            if (activeTab == null)
+            {
+                // The active one could not be read: the first of the others instead.
+                var first = TabsViewModel.Tabs.FirstOrDefault(t => t.Pending);
+                if (first == null) return false;
+                await TabsViewModel.SwitchTo(first);
+            }
+            var pending = TabsViewModel.Tabs.Count(t => t.Pending);
+            Log.Debug($"RestoreSession: {TabsViewModel.Tabs.Count} tab(s), active={TabsViewModel.ActiveTab?.FilePath}, {pending} to read after it");
+            if (pending > 0) sessionLoading = ReadPendingTabsAsync();
+            return true;
+        }
+
+        private Task sessionLoading = Task.CompletedTask;
+
+        /// <summary>The last session's other tabs read (or given up on): automation waits for it, as for the startup document.</summary>
+        public Task SessionLoaded => sessionLoading;
+
+        // After the page has had its document: the reply to GetSettings goes out first.
+        private async Task ReadPendingTabsAsync()
+        {
+            await Task.Delay(200);
+            var clock = System.Diagnostics.Stopwatch.StartNew();
+            foreach (var tab in TabsViewModel.Tabs.Where(t => t.Pending).ToList())
+            {
                 try
                 {
-                    // No tab is opened here: LoadFile adds one itself whenever the active document is not a
-                    // pristine untitled one. Starting a tab first only meant it saw the previous document still
-                    // loaded, opened a second tab for the file and left the first as a copy of its predecessor —
-                    // two documents came back as three, one of them twice.
-                    if (await LoadFile(file, true, false)) opened++;
+                    await LoadIntoTab(tab, mayAsk: false);
                 }
                 catch (Exception ex)
                 {
-                    Log.Debug($"RestoreSession: {file}: {ex.Message}");
+                    Log.Debug($"RestoreSession: {tab.FilePath}: {ex.Message} (read when switched to)");
                 }
             }
-            if (opened == 0) return false;
-            var active = TabsViewModel.FindByPath(session.ActiveIndex < session.Files.Count ? session.Files[session.ActiveIndex] : null);
-            if (active != null && active != TabsViewModel.ActiveTab)
-                await TabsViewModel.SwitchTo(active);
-            Log.Debug($"RestoreSession: {opened} tab(s), active={TabsViewModel.ActiveTab?.FilePath}");
+            Log.Debug($"RestoreSession: the other tabs read in {clock.ElapsedMilliseconds} ms");
+        }
+
+        /// <summary>
+        /// Reads a session tab's file into the tab itself, the editor untouched (it shows another document). A backup that
+        /// differs is taken without asking when unsaved changes are kept on close; otherwise it is asked about only with
+        /// <paramref name="mayAsk"/> (the tab being switched to) - false: the tab stays not read. Throws when the file
+        /// cannot be read.
+        /// </summary>
+        public async Task<bool> LoadIntoTab(DocumentTab tab, bool mayAsk)
+        {
+            if (tab == null || !tab.Pending) return true;
+            var path = tab.FilePath;
+            if (!File.Exists(path)) throw new FileNotFoundException("File does not exist.", path);
+            var (text, format) = await TextFileFormat.ReadAsync(path);
+            var fileHash = Common.SimpleHash(text);
+            string markdown = text;
+            var backup = await AutoBackup.GetBackup(path);
+            if (backup != null && Common.SimpleHash(backup) != fileHash)
+            {
+                if (SettingsViewModel.KeepUnsavedOnClose) markdown = backup;
+                else if (!mayAsk) return false;
+                else markdown = await CheckBackup(path, fileHash) ?? text;
+            }
+            // Read meanwhile (switched to while this one was reading): that one counts.
+            if (!tab.Pending) return true;
+            EditionHooks.ReportDocumentOnDisk(path, text, written: false);
+            tab.FileFormat = format;
+            tab.Markdown = markdown;
+            tab.FileHash = fileHash;
+            tab.DiskHash = fileHash;
+            tab.CurrentHash = Common.SimpleHash(markdown);
+            tab.Saved = tab.CurrentHash == fileHash;
+            tab.AutoSavedSucc = true;
+            tab.AutoSaveHeldBack = null;
+            // As LoadFile leaves the editor: a backup taken counts as loaded (its history is the backup's).
+            tab.FileLoaded = !tab.Saved;
+            tab.History.InitHistory(markdown);
+            tab.IsDirty = !tab.Saved;
+            tab.Pending = false;
             return true;
         }
+
+        /// <summary>The window's start brings the last session back (no file asked for on the command line).</summary>
+        public bool StartsWithSession => string.IsNullOrEmpty(CommandLine.GetOpenFilePath(AppViewModel.CommandLineArgs))
+            && (SettingsViewModel.KeepUnsavedOnClose || SettingsViewModel.FileStartupAction == Enums.FileStartupAction.RestoreSession);
 
         public async Task LoadStartUpMarkdown()
         {
@@ -944,7 +1133,9 @@ namespace Typedown.Core.ViewModels
             }
             else
             {
-                switch (SettingsViewModel.FileStartupAction)
+                // Documents kept when the window closed (Settings > Keep unsaved changes when closing) come back with the
+                // tabs they were in, whatever the start-up setting says.
+                switch (SettingsViewModel.KeepUnsavedOnClose ? Enums.FileStartupAction.RestoreSession : SettingsViewModel.FileStartupAction)
                 {
                     case Enums.FileStartupAction.OpenLast:
                         await AccessHistory.EnsureInitialized();
@@ -960,10 +1151,24 @@ namespace Typedown.Core.ViewModels
                         break;
                 }
             }
+            // Nothing to show (no file asked for, the session's or the last file gone, a new document): the home page,
+            // when the settings want it. Before the recovery question, which a recovered document then answers.
+            Home?.ShowIfWanted();
             await RecoverUntitledBackupsAsync();
         }
 
         private static bool untitledRecoveryDone;
+
+        private async Task<bool> AskToRecover()
+        {
+            var dialog = AppContentDialog.Create();
+            dialog.Title = Locale.GetDialogString("RecoverTitle");
+            dialog.Content = Locale.GetDialogString("RecoverContent");
+            dialog.PrimaryButtonText = Locale.GetDialogString("Recover");
+            dialog.SecondaryButtonText = Locale.GetDialogString("Delete");
+            dialog.DefaultButton = ContentDialogButton.Primary;
+            return await dialog.ShowAsync(AppViewModel.XamlRoot) == ContentDialogResult.Primary;
+        }
 
         /// <summary>
         /// Untitled documents the last run left unsaved (it crashed, or was killed) come back as tabs of the first window,
@@ -975,13 +1180,7 @@ namespace Typedown.Core.ViewModels
             untitledRecoveryDone = true;
             var backups = AutoBackup.UntitledBackups();
             if (backups.Count == 0) return;
-            var dialog = AppContentDialog.Create();
-            dialog.Title = Locale.GetDialogString("RecoverTitle");
-            dialog.Content = Locale.GetDialogString("RecoverContent");
-            dialog.PrimaryButtonText = Locale.GetDialogString("Recover");
-            dialog.SecondaryButtonText = Locale.GetDialogString("Delete");
-            dialog.DefaultButton = ContentDialogButton.Primary;
-            if (await dialog.ShowAsync(AppViewModel.XamlRoot) != ContentDialogResult.Primary)
+            if (!SettingsViewModel.KeepUnsavedOnClose && !await AskToRecover())
             {
                 foreach (var (documentId, _) in backups) AutoBackup.DeleteBackup(null, documentId);
                 return;
@@ -1148,9 +1347,12 @@ namespace Typedown.Core.ViewModels
             if (!File.Exists(FilePath))
                 return false;
             var fileOperation = ServiceProvider.GetService<IFileOperation>();
-            if (fileOperation.Rename(FilePath, to))
+            var oldPath = FilePath;
+            if (fileOperation.Rename(oldPath, to))
             {
+                Favorites.Shared.Rename(oldPath, to);
                 FilePath = to;
+                EditionHooks.ReportActivity(ActivityKind.DocumentRenamed, AppViewModel, oldPath);
                 return true;
             }
             return false;
@@ -1237,22 +1439,27 @@ namespace Typedown.Core.ViewModels
 
         private void OnDiskFileRenamed(object sender, RenamedEventArgs e)
         {
-            // Our own write, in progress: the rename is part of the atomic replace, not the user's doing.
-            if (DateTime.UtcNow < ignoreExternalChangeUntil)
-                return;
             dispatcherQueue?.TryEnqueue(() =>
             {
-                if (disposables.IsDisposed || DateTime.UtcNow < ignoreExternalChangeUntil)
+                if (disposables.IsDisposed)
                     return;
+                // The document itself given another name: followed even just after our own write. The atomic replace
+                // never renames the document to a name of its own (only to a save artifact, ~RF….TMP), and a rename
+                // ignored here was ignored for good - the window kept a name the file no longer had.
                 if (!string.IsNullOrEmpty(FilePath) &&
                     string.Equals(e.OldFullPath, FilePath, StringComparison.OrdinalIgnoreCase) &&
                     !string.IsNullOrEmpty(e.FullPath) &&
                     !LooksLikeSaveArtifact(e.FullPath))
                 {
+                    var oldPath = FilePath;
                     FilePath = e.FullPath;
                     _ = AccessHistory.RecordFileHistory(FilePath);
+                    EditionHooks.ReportActivity(ActivityKind.DocumentRenamed, AppViewModel, oldPath);
                     return;
                 }
+                // Our own write, in progress: the rename is part of the atomic replace, not the user's doing.
+                if (DateTime.UtcNow < ignoreExternalChangeUntil)
+                    return;
                 ScheduleReloadFromDisk();
             });
         }
@@ -1367,6 +1574,46 @@ namespace Typedown.Core.ViewModels
             }
         }
 
+        /// <summary>
+        /// The file read again in the encoding the reader chose (the status bar's encoding menu) - one with no byte order
+        /// mark, read as UTF-8, that is GBK or Big5. Only a document with nothing unsaved: what was typed would be lost.
+        /// </summary>
+        public async Task<bool> ReopenWithEncodingAsync(string encodingName)
+        {
+            var path = FilePath;
+            if (string.IsNullOrEmpty(path) || !EditorViewModel.Saved || !File.Exists(path)) return false;
+            var (text, format) = await TextFileFormat.ReadAsync(path, TextFileFormat.EncodingByName(encodingName));
+            if (disposables.IsDisposed || FilePath != path || !EditorViewModel.Saved) return false;
+            FileFormat = format;
+            ApplyDiskText(text);
+            return true;
+        }
+
+        /// <summary>The file to be written with this line ending ("\n", "\r\n"): the document turns unsaved.</summary>
+        public void ChangeLineEnding(string lineEnding)
+        {
+            if (FileFormat.LineEnding == lineEnding) return;
+            FileFormat = FileFormat.WithLineEnding(lineEnding);
+            MarkUnsavedFormat();
+        }
+
+        /// <summary>The file to be written as UTF-8 (the text as shown): the document turns unsaved.</summary>
+        public void ConvertToUtf8()
+        {
+            FileFormat = FileFormat.AsUtf8();
+            EditorViewModel.AutoSaveHeldBack = null;
+            MarkUnsavedFormat();
+        }
+
+        // The text is unchanged but the bytes on disk will not be: saved as when the file went missing, so a save (and
+        // auto-save) writes it.
+        private void MarkUnsavedFormat()
+        {
+            if (FilePath == null) return;
+            EditorViewModel.FileHash = EditorViewModel.CurrentHash == 0 ? 1UL : 0UL;
+            EditorViewModel.Saved = false;
+        }
+
         private void ApplyDiskText(string text)
         {
             if (!string.Equals(EditorViewModel.Markdown, text, StringComparison.Ordinal))
@@ -1379,6 +1626,7 @@ namespace Typedown.Core.ViewModels
             EditorViewModel.Saved = true;
             EditorViewModel.FileLoaded = false;
             EditorViewModel.AutoSavedSucc = true;
+            EditorViewModel.AutoSaveHeldBack = null;
             EditorViewModel.History.InitHistory(text);
             AutoBackup.DeleteBackup(FilePath);
             EditorViewModel.PostLoadFile(text);

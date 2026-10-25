@@ -3,8 +3,8 @@ using System.Linq;
 using System.Reactive.Linq;
 using Typedown.Core.Models;
 using Typedown.Core.Utilities;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 
 namespace Typedown.Core.Controls
 {

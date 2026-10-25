@@ -8,8 +8,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 
 namespace Typedown.Core.Controls
 {
@@ -46,7 +46,7 @@ namespace Typedown.Core.Controls
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            _ = Dispatcher.RunIdleAsync(() => SearchTextBox.Focus(FocusState.Programmatic));
+            _ = DispatcherQueue.RunIdleAsync(() => SearchTextBox.Focus(FocusState.Programmatic));
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)

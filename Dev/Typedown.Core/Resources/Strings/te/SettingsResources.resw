@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>ఎడిటింగ్ ఏరియా బ్యాక్ గ్రౌండ్ కొరకు మైకా బ్యాక్ గ్రౌండ్ ఎఫెక్ట్ ని ఎనేబుల్ చేయండి</value>
+    <value>పక్క పేన్ మరియు ట్యాబ్ బార్ మైకా ప్రభావాన్ని చూపుతాయి; సవరణ ప్రాంతం థీమ్ యొక్క ఘన రంగును ఉంచుతుంది</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>ఎడిటింగ్ ప్రాంతంలో మైకా మెటీరియల్ ఉపయోగించండి</value>
+    <value>సవరణ ప్రాంతం చుట్టూ మైకా మెటీరియల్‌ను ఉపయోగించండి</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>దాని ఫోల్డర్‌ను తెరువు</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>ఇటీవల తెరిచిన ఫైల్‌లను గుర్తుంచుకో</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>మీరు తెరిచే ఫైల్‌లు, ఫోల్డర్‌లు ఫైల్ &gt; ఇటీవలివి తెరువు మరియు హోమ్ పేజీలో కనిపిస్తాయి. ఆఫ్‌లో ఉంటే కొత్తవి చేరవు.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>ఇటీవలి ఫైల్‌లు మరియు ఫోల్డర్‌లను క్లియర్ చేయండి</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>ఇటీవల తెరిచిన ఫైల్‌లు, ఫోల్డర్‌ల జాబితాలను ఖాళీ చేస్తుంది.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>క్లియర్ చేయి</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>ఖాళీ ట్యాబ్‌లో హోమ్ పేజీని చూపు</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>ప్రారంభంలో తెరవడానికి ఏమీ లేనప్పుడు మరియు చివరి ట్యాబ్ మూసినప్పుడు: ఇటీవలి ఫైల్‌లు, ఫోల్డర్‌లు, ఇష్టమైనవి</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>కొత్త ట్యాబ్‌లు హోమ్ పేజీని చూపుతాయి</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>కొత్త ట్యాబ్ (ఫైల్ &gt; కొత్తది, + బటన్) ఖాళీ పత్రానికి బదులు హోమ్ పేజీని చూపుతుంది</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>అదనపు ఖాళీ పంక్తులను చూపించు</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>సవరించేటప్పుడు లాగానే చదివే మోడ్‌లో మరియు HTML, PDF ఎగుమతుల్లో కూడా పేరాల మధ్య ఖాళీ పంక్తులు స్థలం తీసుకుంటాయి. ఫైల్ మారదు</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>పొడవైన పత్రాలను క్రమంగా గీయండి</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>పొడవైన పత్రం మీరు వదిలిన చోటే తెరుచుకుంటుంది, మిగిలిన భాగం నేపథ్యంలో గీయబడుతుంది. పొడవైన పత్రం తెరుచుకునేటప్పుడు ఏదైనా తప్పుగా కనిపిస్తే దీన్ని ఆఫ్ చేయండి: అప్పుడు అది ఒకేసారి గీయబడుతుంది</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>కుడివైపు సైడ్ బార్</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>పత్రానికి ఎడమవైపు బదులు కుడివైపు సైడ్ బార్‌ను చూపించు</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>మూసివేసేటప్పుడు సేవ్ చేయని మార్పులను ఉంచు</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>సేవ్ చేయమని అడగకుండా మూసివేయి: సేవ్ చేయని పత్రాలు ఉన్నట్లుగానే, ఇంకా సేవ్ చేయకుండా, చివరి సెషన్ ట్యాబ్‌లతో తిరిగి వస్తాయి</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Markdown గుర్తులను ఎల్లప్పుడూ చూపించు</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>కర్సర్ ఉన్నచోట మాత్రమే కాకుండా, ప్రతి పేరాలో Markdown గుర్తులను (**, #, లింక్ చిరునామా) చూపించు</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>పొడవైన పత్రాల లేఅవుట్‌ను ముందుగానే అంచనా వేయండి (ప్రయోగాత్మకం)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>పొడవైన పత్రం భాగాలుగా గీయబడుతున్నప్పుడు, ఇంకా చూపని భాగం ఎత్తు అంచనా వేయడానికి బదులుగా వచనం నుండి లెక్కించబడుతుంది, కాబట్టి స్క్రోల్ బార్ మరియు రూపురేఖ నుండి దూకడం మరింత ఖచ్చితంగా ఉంటాయి. ప్రయోగాత్మకం</value>
   </data>
 </root>

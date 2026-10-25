@@ -1,20 +1,39 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Typedown.Core.Models;
 using Typedown.Core.Utilities;
 
 namespace Typedown.Core.Services
 {
+    /// <summary>
+    /// The files and folders opened recently (File > Open recent, the home page, "open the last folder" at start-up), kept
+    /// in the database. One instance for all windows: the lists are snapshots replaced whole, so a window on another
+    /// thread reads them without a lock, and <see cref="Changed"/> tells each window to read them again.
+    /// </summary>
     public class AccessHistory
     {
-        public ObservableCollection<string> FileRecentlyOpened { get; } = new();
+        /// <summary>How many of each the lists hold (the menu and the home page show fewer).</summary>
+        public const int ListCount = 15;
 
-        public ObservableCollection<string> FolderRecentlyOpened { get; } = new();
+        /// <summary>How many rows of each kind the database keeps; older ones go when a new one is recorded.</summary>
+        public const int KeepRows = 100;
+
+        private volatile IReadOnlyList<string> files = Array.Empty<string>();
+
+        private volatile IReadOnlyList<string> folders = Array.Empty<string>();
+
+        /// <summary>The files opened recently, the latest first.</summary>
+        public IReadOnlyList<string> FileRecentlyOpened => files;
+
+        /// <summary>The folders opened recently (the folder pane's root), the latest first.</summary>
+        public IReadOnlyList<string> FolderRecentlyOpened => folders;
+
+        /// <summary>A list changed. Raised on whichever thread made the change: a window hands it to its own.</summary>
+        public event Action Changed;
 
         private readonly TaskCompletionSource<bool> initializedTask = new();
 
@@ -27,8 +46,25 @@ namespace Typedown.Core.Services
             _ = UpdateRecentlyOpened();
         }
 
+        /// <summary>
+        /// Settings > General > Data > Remember recently opened files: off, nothing new is recorded (what is there stays
+        /// until it is cleared). Read from the settings file each time, as every window shares it.
+        /// </summary>
+        public static bool RecordingEnabled
+        {
+            get
+            {
+                try { return JsonSettingsStore.Shared(Path.Combine(Config.GetLocalFolderPath(), "Settings.json")).Get(RecordSettingName, true); }
+                catch { return true; }
+            }
+        }
+
+        /// <summary>The setting behind <see cref="RecordingEnabled"/> (SettingsViewModel.RecordRecentFiles).</summary>
+        public const string RecordSettingName = "RecordRecentFiles";
+
         public async Task RecordFileHistory(string filePath)
         {
+            if (string.IsNullOrEmpty(filePath) || !RecordingEnabled) return;
             await recordLock.WaitAsync();
             try
             {
@@ -42,66 +78,54 @@ namespace Typedown.Core.Services
                 else
                     await model.AddAsync(new FileAccessHistory() { FilePath = filePath, AccessTime = DateTime.Now });
                 await ctx.SaveChangesAsync();
+                // Only the latest rows are kept: the lists show a few, and an old path says where someone was.
+                var excess = await model.OrderByDescending(x => x.AccessTime).Skip(KeepRows).ToListAsync();
+                if (excess.Count > 0)
+                {
+                    model.RemoveRange(excess);
+                    await ctx.SaveChangesAsync();
+                }
             }
             finally
             {
                 recordLock.Release();
             }
-            await UpdateFileRecentlyOpened(filePath, CollectionChangeAction.Add);
+            await ReloadFiles();
         }
 
         public async Task RemoveFileHistory(string filePath)
         {
-            using var ctx = await AppDbContext.Create();
-            var model = ctx.FileAccessHistories;
-            model.RemoveRange(model.Where(x => x.FilePath == filePath));
-            await ctx.SaveChangesAsync();
-            await UpdateFileRecentlyOpened(filePath, CollectionChangeAction.Remove);
+            using (var ctx = await AppDbContext.Create())
+            {
+                var model = ctx.FileAccessHistories;
+                model.RemoveRange(model.Where(x => x.FilePath == filePath));
+                await ctx.SaveChangesAsync();
+            }
+            await ReloadFiles();
         }
 
         public async Task ClearFileHistory()
         {
-            using var ctx = await AppDbContext.Create();
-            var model = ctx.FileAccessHistories;
-            model.RemoveRange(model);
-            await ctx.SaveChangesAsync();
-            await UpdateFileRecentlyOpened(string.Empty, CollectionChangeAction.Refresh);
+            using (var ctx = await AppDbContext.Create())
+            {
+                var model = ctx.FileAccessHistories;
+                model.RemoveRange(model);
+                await ctx.SaveChangesAsync();
+            }
+            await ReloadFiles();
         }
 
-        private async Task UpdateFileRecentlyOpened(string filePath, CollectionChangeAction action)
+        // The list read again from the database, which is what every change writes to first.
+        private async Task ReloadFiles()
         {
             using var ctx = await AppDbContext.Create();
-            var model = ctx.FileAccessHistories;
-            var maxCount = 10;
-            switch (action)
-            {
-                case CollectionChangeAction.Add:
-                    FileRecentlyOpened.Remove(filePath);
-                    FileRecentlyOpened.Insert(0, filePath);
-                    break;
-                case CollectionChangeAction.Remove:
-                    FileRecentlyOpened.Remove(filePath);
-                    break;
-                case CollectionChangeAction.Refresh:
-                    FileRecentlyOpened.Clear();
-                    break;
-            }
-            while (FileRecentlyOpened.Count > maxCount)
-            {
-                FileRecentlyOpened.RemoveAt(FileRecentlyOpened.Count - 1);
-            }
-            if (FileRecentlyOpened.Count < maxCount)
-            {
-                await foreach (var item in model.OrderByDescending(x => x.AccessTime).Take(maxCount).AsAsyncEnumerable())
-                {
-                    if (!FileRecentlyOpened.Contains(item.FilePath))
-                        FileRecentlyOpened.Add(item.FilePath);
-                }
-            }
+            files = await ctx.FileAccessHistories.OrderByDescending(x => x.AccessTime).Take(ListCount).Select(x => x.FilePath).ToListAsync();
+            RaiseChanged();
         }
 
         public async Task RecordFolderHistory(string folderPath)
         {
+            if (string.IsNullOrEmpty(folderPath) || !RecordingEnabled) return;
             await recordLock.WaitAsync();
             try
             {
@@ -114,61 +138,58 @@ namespace Typedown.Core.Services
                 else
                     await model.AddAsync(new FolderAccessHistory() { FolderPath = folderPath, AccessTime = DateTime.Now });
                 await ctx.SaveChangesAsync();
+                var excess = await model.OrderByDescending(x => x.AccessTime).Skip(KeepRows).ToListAsync();
+                if (excess.Count > 0)
+                {
+                    model.RemoveRange(excess);
+                    await ctx.SaveChangesAsync();
+                }
             }
             finally
             {
                 recordLock.Release();
             }
-            await UpdateFolderRecentlyOpened(folderPath, CollectionChangeAction.Add);
+            await ReloadFolders();
         }
 
         public async Task RemoveFolderHistory(string folderPath)
         {
-            using var ctx = await AppDbContext.Create();
-            var model = ctx.FolderAccessHistories;
-            model.RemoveRange(model.Where(x => x.FolderPath == folderPath));
-            await ctx.SaveChangesAsync();
-            await UpdateFolderRecentlyOpened(folderPath, CollectionChangeAction.Remove);
+            using (var ctx = await AppDbContext.Create())
+            {
+                var model = ctx.FolderAccessHistories;
+                model.RemoveRange(model.Where(x => x.FolderPath == folderPath));
+                await ctx.SaveChangesAsync();
+            }
+            await ReloadFolders();
         }
 
         public async Task ClearFolderHistory()
         {
-            using var ctx = await AppDbContext.Create();
-            var model = ctx.FolderAccessHistories;
-            model.RemoveRange(model);
-            await ctx.SaveChangesAsync();
-            await UpdateFolderRecentlyOpened(string.Empty, CollectionChangeAction.Refresh);
+            using (var ctx = await AppDbContext.Create())
+            {
+                var model = ctx.FolderAccessHistories;
+                model.RemoveRange(model);
+                await ctx.SaveChangesAsync();
+            }
+            await ReloadFolders();
         }
 
-        private async Task UpdateFolderRecentlyOpened(string folderPath, CollectionChangeAction action)
+        private async Task ReloadFolders()
         {
             using var ctx = await AppDbContext.Create();
-            var model = ctx.FolderAccessHistories;
-            var maxCount = 10;
-            switch (action)
+            folders = await ctx.FolderAccessHistories.OrderByDescending(x => x.AccessTime).Take(ListCount).Select(x => x.FolderPath).ToListAsync();
+            RaiseChanged();
+        }
+
+        private void RaiseChanged()
+        {
+            try
             {
-                case CollectionChangeAction.Add:
-                    FolderRecentlyOpened.Remove(folderPath);
-                    FolderRecentlyOpened.Insert(0, folderPath);
-                    break;
-                case CollectionChangeAction.Remove:
-                    FolderRecentlyOpened.Remove(folderPath);
-                    break;
-                case CollectionChangeAction.Refresh:
-                    FolderRecentlyOpened.Clear();
-                    break;
+                Changed?.Invoke();
             }
-            while (FolderRecentlyOpened.Count > maxCount)
+            catch (Exception ex)
             {
-                FolderRecentlyOpened.RemoveAt(FolderRecentlyOpened.Count - 1);
-            }
-            if (FolderRecentlyOpened.Count < maxCount)
-            {
-                await foreach (var item in model.OrderByDescending(x => x.AccessTime).Take(maxCount).AsAsyncEnumerable())
-                {
-                    if (!FolderRecentlyOpened.Contains(item.FolderPath))
-                        FolderRecentlyOpened.Add(item.FolderPath);
-                }
+                Log.Debug($"AccessHistory.Changed: {ex.Message}");
             }
         }
 
@@ -176,9 +197,7 @@ namespace Typedown.Core.Services
         {
             try
             {
-                var updateFileTask = UpdateFileRecentlyOpened(string.Empty, CollectionChangeAction.Refresh);
-                var updateFolderTask = UpdateFolderRecentlyOpened(string.Empty, CollectionChangeAction.Refresh);
-                await Task.WhenAll(updateFileTask, updateFolderTask);
+                await Task.WhenAll(ReloadFiles(), ReloadFolders());
             }
             catch (Exception ex)
             {
@@ -197,6 +216,7 @@ namespace Typedown.Core.Services
             await initializedTask.Task;
         }
 
+        /// <summary>Both lists emptied (Settings > General > Data > Clear recent).</summary>
         public async Task ClearHistory()
         {
             await ClearFileHistory();

@@ -138,7 +138,7 @@
     <comment>关于/发送反馈</comment>
   </data>
   <data name="About.Title" xml:space="preserve">
-    <value>ประมาณ</value>
+    <value>เกี่ยวกับ</value>
     <comment>关于/关于</comment>
   </data>
   <data name="Editor.AutoPairBracket.Description" xml:space="preserve">
@@ -238,7 +238,7 @@
     <comment>编辑器/默认缩进</comment>
   </data>
   <data name="Editor.Title" xml:space="preserve">
-    <value>บรรณาธิการ</value>
+    <value>ตัวแก้ไข</value>
     <comment>编辑器/编辑器</comment>
   </data>
   <data name="Export.AddConfig.Description" xml:space="preserve">
@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>เปิดใช้งานเอฟเฟ็กต์พื้นหลังไมกาสําหรับพื้นหลังพื้นที่แก้ไข</value>
+    <value>บานหน้าต่างด้านข้างและแถบแท็บแสดงเอฟเฟกต์ไมกา พื้นที่แก้ไขยังคงใช้สีทึบของธีม</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>ใช้วัสดุไมกาในพื้นที่แก้ไข</value>
+    <value>ใช้วัสดุไมกาบริเวณรอบพื้นที่แก้ไข</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>เปิดโฟลเดอร์ของไฟล์</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>จดจำไฟล์ที่เปิดล่าสุด</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>ไฟล์และโฟลเดอร์ที่คุณเปิดจะแสดงใน ไฟล์ &gt; เปิดล่าสุด และในหน้าแรก เมื่อปิดไว้จะไม่เพิ่มรายการใหม่</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>ล้างไฟล์และโฟลเดอร์ล่าสุด</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>ล้างรายการไฟล์และโฟลเดอร์ที่เปิดล่าสุด</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>ล้าง</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>แสดงหน้าแรกในแท็บว่าง</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>เมื่อเริ่มโปรแกรมโดยไม่มีอะไรให้เปิด และเมื่อปิดแท็บสุดท้าย: ไฟล์และโฟลเดอร์ล่าสุด รายการโปรด</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>แท็บใหม่แสดงหน้าแรก</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>แท็บใหม่ (ไฟล์ &gt; ใหม่, ปุ่ม +) แสดงหน้าแรกแทนเอกสารว่าง</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>แสดงบรรทัดว่างส่วนเกิน</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>บรรทัดว่างระหว่างย่อหน้าจะกินพื้นที่ในโหมดอ่านและในการส่งออก HTML และ PDF ด้วย เหมือนขณะแก้ไข ตัวไฟล์ไม่เปลี่ยนแปลง</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>วาดเอกสารยาวทีละส่วน</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>เอกสารยาวจะเปิดที่ตำแหน่งที่คุณค้างไว้ และส่วนที่เหลือจะวาดในเบื้องหลัง ปิดตัวเลือกนี้หากมีบางอย่างดูผิดปกติขณะเปิดเอกสารยาว: เอกสารจะถูกวาดทั้งหมดในครั้งเดียว</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>แถบด้านข้างทางขวา</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>แสดงแถบด้านข้างทางขวาของเอกสารแทนทางซ้าย</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>เก็บการเปลี่ยนแปลงที่ยังไม่ได้บันทึกเมื่อปิด</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>ปิดโดยไม่ถามให้บันทึก: เอกสารที่ยังไม่ได้บันทึกจะกลับมาเหมือนเดิม ยังไม่ได้บันทึก พร้อมแท็บของเซสชันล่าสุด</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>แสดงเครื่องหมาย Markdown เสมอ</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>แสดงเครื่องหมาย Markdown (**, #, ที่อยู่ของลิงก์) ในทุกย่อหน้า ไม่ใช่แค่ตำแหน่งที่มีเคอร์เซอร์</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>คาดการณ์เค้าโครงของเอกสารยาว (ทดลอง)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>ขณะที่เอกสารยาวถูกวาดทีละส่วน ความสูงของส่วนที่ยังไม่แสดงจะคำนวณจากข้อความแทนการประมาณ ทำให้แถบเลื่อนและการข้ามจากเค้าร่างแม่นยำขึ้น ทดลอง</value>
   </data>
 </root>

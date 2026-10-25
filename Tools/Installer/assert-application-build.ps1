@@ -14,10 +14,12 @@ if ($found) {
     $list = ($found | ForEach-Object { $_.FullName }) -join "`n  "
     throw "Refusing to package an automation test host build. Found:`n  $list"
 }
-# Files of the WinUI 3 build in this XAML Islands one: a publish folder that build had written to before kept them.
-$stray = @('Microsoft.WinUI.dll', 'Microsoft.WindowsAppRuntime.dll', 'Microsoft.WindowsAppRuntime.Bootstrap.dll') |
+# Files of the old XAML Islands build, or of WebView2's WinForms/WPF package, in a WinUI 3 build: a publish folder the
+# old build had written to before kept them, and its Microsoft.Web.WebView2.Core.dll (1.0.1661, a .NET wrapper) took the
+# place of the one WinUI's WebView2 needs - the installed app found no WebView2, and its install window failed to load.
+$stray = @('Typedown.XamlUI.dll', 'Microsoft.Web.WebView2.WinForms.dll', 'Microsoft.Web.WebView2.Wpf.dll') |
     ForEach-Object { Get-ChildItem $Path -Recurse -File -Filter $_ -ErrorAction SilentlyContinue } |
-    ForEach-Object { $_.FullName.Substring($Path.Length).TrimStart('\\') }
+    ForEach-Object { $_.FullName.Substring($Path.Length).TrimStart('\') }
 if ($stray) { throw "Refusing to package files of another build (the publish folder was not emptied):`n  $($stray -join "`n  ")" }
 
 # The test host's methods must not be in an application build's binaries either (spec 5.1: not only hidden at run

@@ -138,7 +138,7 @@
     <comment>关于/发送反馈</comment>
   </data>
   <data name="About.Title" xml:space="preserve">
-    <value>Omtrent</value>
+    <value>Om</value>
     <comment>关于/关于</comment>
   </data>
   <data name="Editor.AutoPairBracket.Description" xml:space="preserve">
@@ -238,7 +238,7 @@
     <comment>编辑器/默认缩进</comment>
   </data>
   <data name="Editor.Title" xml:space="preserve">
-    <value>Redaktør</value>
+    <value>Editor</value>
     <comment>编辑器/编辑器</comment>
   </data>
   <data name="Export.AddConfig.Description" xml:space="preserve">
@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Aktivere glimmerbaggrundseffekten for baggrunden i redigeringsområdet</value>
+    <value>Sidepanelet og fanelinjen viser glimmereffekten; redigeringsområdet beholder temaets ensfarvede baggrund</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Brug glimmermateriale i redigeringsområdet</value>
+    <value>Brug glimmermateriale omkring redigeringsområdet</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Åbn dens mappe</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Husk senest åbnede filer</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Filer og mapper, du åbner, vises under Filer &gt; Åbn seneste og på startsiden. Slået fra tilføjes intet nyt.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Ryd seneste filer og mapper</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Tømmer listerne over senest åbnede filer og mapper.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Ryd</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Vis startsiden på en tom fane</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Ved opstart uden noget at åbne og når den sidste fane lukkes: seneste filer og mapper, favoritter</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Nye faner viser startsiden</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>En ny fane (Filer &gt; Ny, knappen +) viser startsiden i stedet for et tomt dokument</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Vis ekstra tomme linjer</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Tomme linjer mellem afsnit fylder også i læsetilstand og i HTML- og PDF-eksport, som de gør under redigering. Selve filen ændres ikke</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Tegn lange dokumenter gradvist</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Et langt dokument åbner, hvor du forlod det, og resten tegnes i baggrunden. Slå dette fra, hvis noget ser forkert ud, mens et langt dokument åbner: så tegnes det hele på én gang</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Sidepanel til højre</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Vis sidepanelet til højre for dokumentet i stedet for til venstre</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Behold ikke-gemte ændringer ved lukning</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Luk uden at spørge om at gemme: ikke-gemte dokumenter kommer tilbage, som de var, stadig ikke gemt, med fanerne fra sidste session</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Vis altid Markdown-tegn</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Vis Markdown-tegnene (**, #, et links adresse) i alle afsnit, ikke kun hvor markøren er</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Forudsig layoutet af lange dokumenter (eksperimentel)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Mens et langt dokument tegnes i dele, beregnes højden af det, der endnu ikke vises, ud fra teksten i stedet for at blive anslået, så rullepanelet og spring fra dispositionen bliver mere præcise. Eksperimentel</value>
   </data>
 </root>

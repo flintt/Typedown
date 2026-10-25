@@ -98,6 +98,7 @@ internal static partial class Program
         fixtures = Arg("--fixtures");
         var output = Arg("--out");
         outputDir = Path.GetDirectoryName(Path.GetFullPath(output))!;
+        // Names, or selectors (@quick, @outline, ...: CaseCatalog), or both.
         only = args.Contains("--only") ? CaseCatalog.Expand(Arg("--only").Split(',')) : null;
         var started = DateTime.UtcNow;
         var environmentError = (string?)null;
@@ -141,11 +142,24 @@ internal static partial class Program
             await Case("Q02 a window closed at once after it opened (its web view still being created): the process lives on", Q02);
             await Case("D01 the window's UI thread runs every callback posted to it, from many threads at once", D01);
             await Case("K02 Ctrl+, twice opens and closes the settings: the caret and the keyboard are where they were", K02);
+            await Case("CM01 in compact mode the settings have no title bar: they start at the window's top, their top strip drags the window, their back button goes back to the editor page as it was", CM01);
+            await Case("SH01 Ctrl+, held down opens the settings once - no going in and out until the app hangs and falls over - and types no comma", SH01);
+            await Case("JU01 a long document comes back where it was without the page moving - switched back to in its tab, and opened in a window of its own as the start-up restores it", JU01);
             await Case("K04 a window just opened takes the keys at once: a letter typed without a click reaches the document", K04);
             await Case("K05 a new tab (the + button, Ctrl+N) and a tab clicked in the strip take the keys at once, without a click in the text", K05);
+            await Case("TL01 keys typed at once after Ctrl+N, a tab clicked, Ctrl+Tab, the + button, Ctrl+Shift+H and a long document's tab clicked go into the tab shown, in order, Enter and Chinese text too; the document left is unchanged", TL01);
             await Case("K06 after closing a tab, a menu command, a mode switch, an outline jump, closing the find bar or a dialog, and Ctrl+Tab, the keys go to the document without a click", K06);
             await Case("K03 the same with an untitled document (no per-file caret memory)", K03);
             await Case("FS01 in full screen the main page starts at the top edge of the screen", FS01);
+            await Case("FS03 in full screen the pointer at the top edge reveals the menu bar every time, and it hides when the pointer leaves", FS03);
+            await Case("MB01 a menu open while the title bar is clicked or dragged closes: the File menu and the editor's context menu", MB01);
+            await Case("WV01 the editor comes back after its web view's browser process ends: the document on the page again, taking edits", WV01);
+            await Case("SF01 a window opening under the dark theme shows no light frame in its first two seconds on screen", SF01);
+            await Case("SF02 a long document under a dark custom theme (Dracula): leaving the settings and a window opening with it show the theme's colour, never light or the app's dark colour", SF02);
+            await Case("WV02 without the WebView2 runtime the install window comes up with the download; a setup that installs it goes on to the main window", WV02);
+            await Case("WV03 a setup that did not install the WebView2 runtime leaves the install window saying so, with the download; Cancel ends the start", WV03);
+            await Case("LG01 after the language is changed through the API, no Chinese or Japanese is left on the main window, the home page or the settings page", LG01);
+            await Case("HM01 Help > User guide opens the user guide in the interface's language, Help > About the About page", HM01);
             await Case("FS02 out of full screen the window is dragged by its title bar again at once (with the title row, and in compact mode by the menu row)", FS02);
             await Case("PU01 PlantUML is not drawn by default (nothing goes to plantuml.com, the block says so); turned on it is, by the server set if one is, off again it is not", PU01);
             await Case("RV01 reveal: \"change\" scrolls a change off screen into view, the caret where it was; \"document\" leaves the page", RV01);
@@ -158,38 +172,102 @@ internal static partial class Program
             await Case("VI02 Vim keys in reading mode: G, gg, ]] and Ctrl+D move the page", VI02);
             await Case("TC01 a tab closed with its x button: the outline shows the headings of the tab shown next", TC01);
             await Case("TC02 a tab closed while its neighbour is not the tab used last: the outline is the shown tab's, with long documents", TC02);
-            await Case("SE01 the startup action chosen on the settings page is in the settings file", SE01);
+            await Case("TC03 a long document's tab closed and another file opened right after: the file opened is the one shown", TC03);
+            await Case("SE01 the startup action chosen on the settings page is in the settings file, and so are the two home page switches below it", SE01);
+            await Case("RC01 two folders opened, A then B: File > Open recent > Folders lists B then A by name and folder, and choosing A makes it the folder pane's root", RC01);
+            await Case("RC02 a recent file deleted stays in the list greyed out and a right-click removes it; Clear recent files leaves the recent folders", RC02);
+            await Case("RC03 with \"Remember recently opened files\" off a file opened is not listed; Clear recent on the settings page empties files and folders", RC03);
+            await Case("FN01 the folder pane's up arrow, the folder above chosen in its root menu and \"Set as root\" on a folder each move the tree; the open documents stay as they were", FN01);
+            await Case("FT02 a folder in the file tree is shown as a folder that expands after the root changed: up from a folder of files to a folder of folders, and back and forth", FT02);
+            await Case("FT03 the same after a big folder was expanded and the root changed, a folder moved in, one renamed from a temporary name and one whose attributes changed", FT03);
+            await Case("FT04 a file opened in Repo/docs (the tree following it there) and the root set at once two levels up: Repo expanded shows docs as a folder", FT04);
+            await Case("FN02 with a folder opened, the button beside the root's name moves the tree to the folder of a document outside it", FN02);
+            await Case("FW01 an open document renamed outside the app is followed by its window, also after the app renamed it once", FW01);
+            await Case("FV01 a file favoured from its tab's menu and a folder from the tree's menu are in favorites.json and the folder pane's group, still after a restart (and on the home page); renamed in the tree, the favourite follows", FV01);
+            await Case("HP01 a start with the settings as they come shows the home page; a recent file clicked there opens in its tab and the home page goes", HP01);
+            await Case("HP02 Ctrl+N and the + button show no home page and the next letter goes into the new document; with \"New tabs show the home page\" on, Ctrl+N shows it", HP02);
+            await Case("HP03 the last tab closed leaves the window with the home page (closed again, the window goes); a session whose files are gone shows it; with the switch off a blank document", HP03);
+            await Case("SR01 a cold start bringing the last session back: the active document on screen within seconds of the window, the other tabs not waited for", SR01);
+            await Case("JT01 switching between long documents the text in the window stays still - no block moving by half a pixel or more from frame to frame, while drawn or after", JT01);
+            await Case("JT02 back to a long document from a short one - read a quarter, 60% and 95% of the way down, and left while still drawn - the screen goes from the cover to it without the short one again, and its text stays still frame by frame; predicting the layout off and on, in visual and in reading mode", JT02);
+            await Case("JT03 back to a long document read far down: while the blocks above are drawn back and the reader turns the wheel, the frames come at most 50 ms apart in the middle and a notch reaches the next frame within 100 ms", JT03);
+            await Case("JT04 back to a long document left at its very end, after 3 s, 60 s, or 90 s with the window minimized, nothing touched: the block in the window stays there for 15 s; or the wheel turned up: the page goes up a few blocks a notch, no further; predicting the layout on and off, at the reader's window and settings", JT04);
+            await Case("WD01 the window comes back where it was after the process ends, closed or killed, and another window opens set off from it", WD01);
+            await Case("HJ03 the outline's jump to a heading far down lands and stays there - while a long document is still drawn and once it is", HJ03);
+            await Case("HP04 with files open, File > Home, the home button and Ctrl+Shift+H show the home page in one blank tab, the documents left alone; an automation write into it hides it with the text written", HP04);
+            await Case("HP05 the home page hidden by typing, and by its New document button, leaves the keys in the editor", HP05);
             await Case("WP02 pasted web pictures: one behind hotlink protection is fetched with the page as referrer, a page that is not a picture is kept on the web and said, and an untitled document saved into a folder takes its pictures along", WP02);
             await Case("EX02 an export says where it was written, with buttons to open it, and goes when closed; with no action after export, nothing shows", EX02);
             await Case("TB01 the table toolbar's Resize table opens with the table's own size; Cancel leaves the table as it was; OK resizes it", TB01);
             await Case("TH01 a custom theme colours the page in visual, reading and source mode, and a change shows at once in each", TH01);
             await Case("RD01 reading mode: the context menu offers copying and selecting only, Copy works on a selection, copy as plain text leaves the Markdown out, Ctrl+Z changes nothing", RD01);
             await Case("RD02 reading mode: Focus mode and Typewriter mode in the View menu are disabled and drawn fainter than the entries that work, in Dark and Light, whether the menu was opened before or not", RD02);
-            await Case("SF01 a window opening under the dark theme shows no light frame in its first two seconds on screen", SF01);
             await Case("DG02 every diagram of the showcase document, written into a window just opened, is drawn once", DG02);
             await Case("IM01 the showcase's checkerboard, after View > Source mode and back, is drawn and not failed when clicked", IM01);
             await Case("CP01 Copy pasted into Word: pictures at absolute file:/// addresses, a name and an alt text with brackets, an SVG sized in pt, a JPEG", CP01);
             await Case("TH03 the side pane marks what is chosen (the bar under Files/Outline, the outline's and the folder tree's row pill) in a custom theme's accent, and in the system accent again without one", TH03);
+            await Case("ES01 an editor shortcut only the app carries out (Ctrl+1, Heading 1) works while one types in the editor", ES01);
+            await Case("ES02 Ctrl+B on a selection makes it bold, and it stays bold a while later", ES02);
+            await Case("TI01 the window carries the app's icon (Alt+Tab, taskbar, system menu)", TI01);
+            await Case("TE01 the restored window resizes from its top edge and top corners", TE01);
+            await Case("MN01 a minimized window's document is written and saved through the automation API", MN01);
+            await Case("LK01 a link to another Markdown file opens it as a tab of the same window when files open in tabs", LK01);
+            await Case("FL01 the settings' font family box suggests the installed fonts", FL01);
+            await Case("FO01 after another window and back, and after the context menu closed with Esc, the next letter goes into the document", FO01);
+            await Case("TH04 Windows switched between light and dark while the app follows the system: caption buttons readable, editor follows", TH04);
+            await Case("FT01 the file tree sorts names as 1.3.7 did", FT01);
+            await Case("MN02 a window minimized a while and restored: a document opened at once is shown within 5 s and takes keys", MN02);
+            await Case("TH05 the editor follows Dark, Black, Mica off and on, then Light (it stayed dark under a light window)", TH05);
             await Case("TH06 a custom theme switched back to Light or Dark: the editor page, the line beside the side pane, the side pane and the status bar are drawn as before, and the editor is dark under Dark", TH06);
+            await Case("TH07 the settings' and the dialogs' controls (a switch, the accent button, a check box) take a custom theme's accent, with readable text on it, and the system accent again without one", TH07);
+            await Case("SB01 the status bar switches modes: its reading button and badge go into reading mode and back to the mode it was entered from (source too), and its mode menu ticks the mode and greys focus and typewriter mode where they do nothing", SB01);
+            await Case("SB02 a click on the status bar's count shows the document's numbers on its visible text (words, CJK characters, headings, links, pictures, reading time), and the count it shows can be chosen there", SB02);
+            await Case("SB03 the status bar shows whether the document is saved, and when auto-save holds a file back (one it could not read without loss) it says so and why", SB03);
+            await Case("SB04 a selection shows its count of the whole in the status bar, and the whole count again once it is gone", SB04);
+            await Case("SB05 the status bar shows the file's encoding and line ending: CRLF chosen there is what a save writes, and a GBK file is read again as GB18030 from its menu", SB05);
+            await Case("SB06 the status bar names the heading the caret is under, and a click on it opens the outline", SB06);
+            await Case("SB07 a narrow window puts the status bar items with no room into a \"...\" menu (the heading first, the count stays), and a right-click chooses which items show", SB07);
+            await Case("AC01 an edition hears of what happens around the writing: a document shown, the mode changed, an undo, the window left and come back to, a save under a new name and a rename, the page scrolled (not at every scroll event)", AC01);
             await Case("KY01 Ctrl+Z and Ctrl+Y are the host's undo and redo however close Ctrl and the letter come, in the visual editor and in source mode", KY01);
             await Case("ED01 in the visual editor Ctrl+Shift+Right selects by words and Ctrl+Shift+Down to the end of the paragraph, Ctrl+Left/Right move without selecting, Ctrl+F opens the find bar, and the wheel scrolls the page", ED01);
             await Case("ED02 Shift+Enter and Alt+Enter in a table cell put a line break in that cell", ED02);
             await Case("BL01 blank lines survive a visual edit and a save: 1 at the start, 2, 4, 2, 3, 5 and 2 between blocks, 1 at the end", BL01);
+            await Case("BL02 Settings > Editor > \"Show extra blank lines\": on, empty lines keep their height in reading mode and an HTML export; off (the default), both collapse them as before", BL02);
+            await Case("MN03 minimized, written to, restored without activation: the editor's web view gets its size back", MN03);
+            await Case("MN04 F11 in and out of full screen, then minimized and brought back as a person does: the window works", MN04);
+            await Case("MN05 F11 in and out of full screen, minimized, then a file opened from Explorer: the window comes back working", MN05);
+            await Case("DP01 the window is per-monitor DPI aware (not stretched, so not blurred, on a scaled screen)", DP01);
+            await Case("DR01 files dragged from Explorer onto the editor: a Markdown file opens, a picture goes into the document", DR01);
+            await Case("DM01 the window's top edge is drawn in the app's theme, and a dialog's smoke covers it too: the top row matches the row under it, light and dark", DM01);
             await Case("TH02 View > Theme > Reload themes finds a new theme file and a renamed one; the window draws in the custom theme's base whatever the built-in setting says", TH02);
             await Case("WP01 a web page pasted: headings with #, code fenced with its language and without line numbers, Google Docs bold and italic, late-loaded and relative pictures by their real addresses; with Insert web image copying, its pictures are copied beside the document and their addresses replaced", WP01);
             await Case("ER01 a page message handler that throws stays subscribed and the message still reaches the other handlers; an exception out of an event handler XAML calls is logged and the app goes on", ER01);
             await Case("DG01 a dialog wears the custom theme (its surface and text colours), and the system's colours again without it", DG01);
             await Case("PM01 the Paragraph menu's checks follow the caret: Table stays unchecked after its dialog is cancelled, Quote and Table are checked with the caret in a quote and a table", PM01);
             await Case("OL02 two long documents scrolled to their middle, switched between: the outline does not mark another heading of the document being left", OL02);
+            await Case("OL03 the outline marks the heading being read as soon as the page is shown again (back from the settings), without a scroll", OL03);
+            await Case("OL01 tabs switched back and forth, quickly and slowly: every heading with headings under it stays expanded in the outline", OL01);
             await Case("LD01 a load the editor gives back rewritten is loaded once more and keeps the file's text; one rewritten again is taken after that one retry, not retried without end", LD01);
+            await Case("NV01 the editor page is never taken to another address: a script sending it to a web site is refused, and the document is still there", NV01);
+            await Case("VM01 Vim's search in source mode on a long document: / and the letters typed after it go into the search box, nothing into the document, and Enter goes to the match", VM01);
+            await Case("TX01 Settings > Appearance: the theme chosen in its own drop-down, from Dark and from Dracula to Light, leaves the drop-down drawn", TX01);
+            await Case("PP01 the print preview under a dark custom theme (Dracula): the page and its margins white, the theme's colour back after", PP01);
+            await Case("CV01 a very long document left (a tab switched to, the tab closed) is covered at once and uncovered when the next is on the page; a close cancelled at the save question covers nothing", CV01);
+            await Case("XF01 a file changed outside: unchanged here, it is offered again and reloaded; with changes here, Keep keeps them; without asking, reloaded at once; a tab in the background asks when shown; deleted, the document turns unsaved", XF01);
+            await Case("SS01 the settings in a narrow window: the items end left of the scroll bar, not under it", SS01);
+            await Case("LS01 the interface language changed in the settings' General section, which was reached from Help > About: the settings are built again on General, not on About", LS01);
+            await Case("KU01 Keep unsaved changes when closing: every window closes without asking, the app exits, and started again it has the titled and the untitled document back as they were, unsaved, without a recovery question", KU01);
+            await Case("PS01 the side pane on the right (Settings > View): right of the document, which is not mirrored; its splitter dragged left widens it; off, it is on the left again", PS01);
             // An edition's own cases (Edition.<name>.cs beside this file, in the edition's repository); none here.
             var editionCases = new List<(string Name, Func<List<string>, Task> Run)>();
             EditionCases(editionCases);
             foreach (var (name, run) in editionCases) await Case(name, run);
-            // Measured, and last: they start and end test hosts of their own (only when named, as in the WinUI 3 build).
-            await Case("PF01 measured: a 300 KB document opened, typed into and saved; the memory with two windows", PF01);
-            await Case("PF02 measured: a cold start with a document on the command line, then the window closed", PF02);
             // Last: it ends the test host.
+            await Case("PF01 measured: a 300 KB document opened, typed into and saved; the memory with two windows", PF01);
+            await Case("PF03 profiled: where the host's CPU goes while it opens 300 KB documents", PF03);
+            await Case("HJ01 measured: the scroll bar while a long document is drawn - predicted heights (pretext) against the old estimate, with Windows' fonts", HJ01);
+            await Case("HJ02 measured: where a heading far down lands when the outline jumps to it while a long document is drawn, and once drawn - predicted heights against the old estimate", HJ02);
+            await Case("PF02 measured: a cold start with a document on the command line, then the window closed", PF02);
             await Case("Q01 two windows closed one after the other: the process exits (it stayed, headless)", Q01);
         }
         catch (Exception e)
@@ -224,10 +302,14 @@ internal static partial class Program
 
     private static readonly string[] AllScopes = { Scopes.AppRead, Scopes.DocumentRead, Scopes.DocumentWrite, Scopes.DocumentSave, Scopes.WindowFocus, Scopes.SettingsRead, Scopes.SettingsWrite, Scopes.WindowView };
 
+    // The case running now: its name and purpose are the client name the test window's title shows, so whoever
+    // watches the screen sees what the case is checking.
+    private static string? currentCase;
+
     private static Task<JToken> Initialize(Client c, string name) => c.Call("system.initialize", new
     {
         apiVersion = 1,
-        client = new { id = "0f0f0f0f-0000-4000-8000-00000000e2e0", name, version = "1" },
+        client = new { id = "0f0f0f0f-0000-4000-8000-00000000e2e0", name = CaseCatalog.Label(currentCase) ?? name, version = "1" },
         requestedScopes = AllScopes,
     });
 
@@ -259,29 +341,35 @@ internal static partial class Program
     private static async Task Case(string name, Func<List<string>, Task> body)
     {
         if (only != null && !only.Any(o => name.StartsWith(o + " "))) return;
-        // Pictures (SHOT...) are taken only when asked for by name: never part of a run of every case.
-        if ((name.StartsWith("SHOT") || name.StartsWith("PF")) && only == null) return;
+        if (!CaseCatalog.Knows(name)) Console.Error.WriteLine($"note: {name.Split(' ')[0]} is missing from CaseCatalog.cs (its tier and areas, or its purpose)");
+        currentCase = name.Split(' ')[0];
+        // Pictures (SHOT...) and measurements (PF...) are taken only when asked for by name: never part of a run of every case.
+        if ((name.StartsWith("SHOT") || name.StartsWith("PF") || name.StartsWith("HJ")) && only == null) return;
         var notes = new List<string>();
         // A person's mouse or keys a moment ago would be in the case's way: it waits for the desktop to be left alone.
         var quiet = await WaitForQuietDesktop(1000);
         if (quiet != null) notes.Add(quiet);
-        // Dialogs left open closed, and the case and its purpose in the test window's title for the whole case.
+        // A dialog an earlier case left open (an unsaved document's "save?") would hold this case's dialogs back and take
+        // its keys: closed first, and named, so the case that left it can be found.
         try
         {
-            using var labeller = await Session("e2e label").WaitAsync(TimeSpan.FromSeconds(5));
-            // A dialog an earlier case left open holds every click back: closed first, and noted.
-            var closed = (JArray?)(await labeller.Call("test.dialogs.dismiss", new { }).WaitAsync(TimeSpan.FromSeconds(10)))["closed"];
+            using var dialogs = await Session("e2e dialogs").WaitAsync(TimeSpan.FromSeconds(5));
+            var closed = (JArray?)(await dialogs.Call("test.dialogs.dismiss", new { }).WaitAsync(TimeSpan.FromSeconds(10)))["closed"];
             if (closed != null && closed.Count > 0) notes.Add("closed a dialog an earlier case left open: " + string.Join(", ", closed));
-            await labeller.Call("test.app.caseLabel", new { label = CaseCatalog.Label(name.Split(' ')[0]) }).WaitAsync(TimeSpan.FromSeconds(10));
+            // The case and its purpose in the test window's title for the whole case (the client name shows only for a
+            // moment, when a document is written).
+            await dialogs.Call("test.app.caseLabel", new { label = CaseCatalog.Label(currentCase) }).WaitAsync(TimeSpan.FromSeconds(10));
         }
-        catch (Exception) { /* no test host yet, or one without the hooks */ }
+        catch (Exception) { /* no test host yet, or one without the hook */ }
         var watch = Stopwatch.StartNew();
         try
         {
             // Every case is bounded: a hang is a failure with what it got to, never a run that never ends.
             var run = body(notes);
-            // Pictures in several languages take their time; any other case that runs past two minutes is stuck.
-            var limit = name.StartsWith("SHOT") ? 900 : 120;
+            // Pictures in several languages take their time; RD02 opens six windows in two themes and measures each menu
+            // (about 110 s on its own, so a busy machine took it past two minutes); any other case that runs past two minutes
+            // is stuck.
+            var limit = name.StartsWith("SHOT") ? 900 : name.StartsWith("RD02") ? 300 : name.StartsWith("HJ01") ? 600 : name.StartsWith("HJ02") ? 360 : name.StartsWith("JT02") ? 1800 : name.StartsWith("JT03") ? 1200 : name.StartsWith("JT04") ? 900 : 120;
             if (await Task.WhenAny(run, Task.Delay(TimeSpan.FromSeconds(limit))) != run) throw new CaseFailed($"the case did not finish within {limit} s");
             await run;
             results.Add(new JObject { ["name"] = name, ["passed"] = true, ["ms"] = watch.ElapsedMilliseconds, ["notes"] = new JArray(notes) });
@@ -299,6 +387,7 @@ internal static partial class Program
             {
                 // Any other failure: the screen and where the keyboard was, for what the case could not say itself.
                 notes.Add("at the failure: " + FailureEvidence(name.Split(' ')[0]));
+                try { await DiagnoseWebViews(notes); } catch (Exception d) { notes.Add("no web view diagnosis: " + d.Message.Split('\n')[0]); }
             }
             results.Add(new JObject { ["name"] = name, ["passed"] = false, ["ms"] = watch.ElapsedMilliseconds, ["error"] = e is CaseFailed ? e.Message : e.ToString(), ["notes"] = new JArray(notes) });
         }
@@ -446,6 +535,168 @@ internal static partial class Program
         Check(LogLines("loading the text once more").Count == retries + 1, "rewritten twice: one retry only");
         Check(Body(doc).Contains("rewritten"), "rewritten again: taken as the editor gave it");
         await c.Call("test.editor.rewriteLoads", new { windowId, count = 0 });
+    }
+
+    // A link the page did not take for itself (raw HTML in reading mode, once) took the whole editor to the site, over
+    // every tab of the window, with no way back. Not a click here (that opens the reader's browser): a script sending the
+    // page away, which the host refuses the same way, and says so in its log.
+    private static async Task NV01(List<string> notes)
+    {
+        using var c = await Session("e2e NV01");
+        const string text = "# NV01\n\nText that stays.\n\n<p><a href=\"https://example.com/nv01\">a link in raw HTML</a></p>\n";
+        var id = await Open(c, Fixture("nv01.md", text));
+        var windowId = await WindowIdOf(c, id);
+        async Task<string> Eval(string script) => (string?)(await c.Call("test.editor.eval", new { windowId, script }))["result"] ?? "";
+        await WaitForPage(c, id, t => t.Contains("Text that stays"), "the document");
+        var refused = LogLines("navigation away from the editor page refused").Count;
+        var page = await Eval("location.href");
+        try
+        {
+            // Sent through test.editor.eval, it counts as the reader's (WebView2 runs the script with a user gesture): the
+            // host opens it as a link - which the test host keeps instead of opening a browser (test.links.opened).
+            async Task<JArray> Opened() => (JArray)(await c.Call("test.links.opened", new { }))["links"]!;
+            var openedBefore = (await Opened()).Count;
+            await Eval("setTimeout(() => location.assign('https://example.com/nv01-script'), 0); 'sent'");
+            await Task.Delay(2500);
+            string after, shown;
+            try
+            {
+                after = await Eval("location.href");
+                shown = await Eval("(document.getElementById('ag-editor-id') || {}).innerText || ''");
+            }
+            catch (Exception ex) { after = shown = "no editor page: " + ex.Message.Split('\n')[0]; }
+            notes.Add($"page {page} -> {after}; log: {LogLines("navigation away from the editor page refused").LastOrDefault()?.Trim()}");
+            Check(after == page, $"the page is still the editor ({after})");
+            Check(shown.Contains("Text that stays"), "the document is still on the page");
+            Check(LogLines("navigation away from the editor page refused").Count > refused, "the log says a navigation was refused");
+            var opened = (await Opened()).Skip(openedBefore).Select(x => (string?)x).ToList();
+            notes.Add("opened as links: " + string.Join(", ", opened));
+            Check(opened.Contains("https://example.com/nv01-script"), "the address is opened as a link would be (in the browser; kept instead, in a test host)");
+            Check(((string)(await Get(c, id))["text"]!).Replace("\r\n", "\n") == text, "the document is unchanged");
+        }
+        finally
+        {
+            try { await c.Call("document.close", new { documentId = id }); } catch { }
+        }
+    }
+
+    // A reader with Vim keys searched a long document in source mode (/ and a word): the letters did not show in the search
+    // box and acted as Vim commands instead (t, f, i, a), one of them throwing in the page. Real keys here (Vim reads
+    // keys, not characters typed), on a document about as long as the showcase, with a US English keyboard: a Chinese
+    // input method takes / and letters into its composition, and Vim sees nothing at all (the reader's was English).
+    private static async Task VM01(List<string> notes)
+    {
+        using var c = await Session("e2e VM01");
+        var text = "# VM01\n\n" + string.Concat(Enumerable.Range(0, 220).Select(i =>
+            $"## Section {i}\n\nSome text for section {i}, a few words to read: alpha beta gamma delta.\n\n"
+            + (i % 3 == 0 ? $"| a | b |\n| --- | --- |\n| {i} | **{i + 1}** |\n\n" : "")
+            + (i % 4 == 1 ? $"```js\nconst v{i} = {i};\n```\n\n" : "")
+            + (i == 180 ? "The needle is here.\n\n" : "")));
+        var id = await Open(c, Fixture("vm01.md", text));
+        var windowId = await WindowIdOf(c, id);
+        var window = await WindowOf(windowId, c);
+        async Task<string> Eval(string script) => (string?)(await c.Call("test.editor.eval", new { windowId, script }))["result"] ?? "";
+        var errors = LogLines("page error").Count;
+        var keyboard = IntPtr.Zero;
+        try
+        {
+            await c.Call("test.settings.set", new { windowId, name = "VimMode", value = true });
+            await c.Call("test.settings.set", new { windowId, name = "SourceCode", value = true });
+            Check(await Eventually(async () => await Eval("String(!!document.querySelector('.CodeMirror'))") == "true", 10000), "source mode is on");
+            await Activate(window);
+            await c.Call("test.editor.focus", new { windowId });
+            await Task.Delay(500);
+            // A click in the middle of the text as well: in a full run a Chromium window of another case's was in front
+            // and took the keys (the case alone passed).
+            GetWindowRect(window, out var rect);
+            SetCursorPos((rect.Left + rect.Right) / 2, (rect.Top + rect.Bottom) / 2);
+            Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0002 } } }, new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0004 } } });
+            await Task.Delay(500);
+            Check(GetForegroundWindow() == window, "the test window is in front for the keys: " + FocusInfo(window));
+            keyboard = UseEnglishKeyboard();
+            await Task.Delay(500);
+            notes.Add($"keyboard {keyboard.ToInt64():x} -> US English; keys go to {FocusInfo(window)}");
+            Chord("Esc");
+            await Task.Delay(300);
+            Chord("Slash");
+            await Task.Delay(400);
+            foreach (var key in "needle") { Chord(key.ToString()); await Task.Delay(120); }
+            await Task.Delay(500);
+            var box = await Eval("(() => { const i = document.querySelector('.CodeMirror-dialog input'); const a = document.activeElement; return JSON.stringify({ box: i ? i.value : null, active: a ? a.tagName + '.' + String(a.className).slice(0, 40) : null }) })()");
+            notes.Add("after / and needle: " + box);
+            var typed = ((string)(await Get(c, id))["text"]!).Replace("\r\n", "\n");
+            Check(box.Contains("\"box\":\"needle\""), $"the letters are in the search box ({box})");
+            Check(typed == text, "nothing went into the document");
+            Chord("Enter");
+            await Task.Delay(800);
+            var line = await Eval("(() => { const cm = document.querySelector('.CodeMirror').CodeMirror; return cm.getLine(cm.getCursor().line) })()");
+            notes.Add("the caret's line after Enter: " + JsonConvert.SerializeObject(line));
+            Check(line.Contains("needle"), "Enter goes to the match");
+            Check(LogLines("page error").Count == errors, "no page error: " + LogLines("page error").Skip(errors).FirstOrDefault()?.Trim());
+        }
+        finally
+        {
+            try { Chord("Esc"); } catch { }
+            if (keyboard != IntPtr.Zero) UseKeyboard(keyboard);
+            try { await c.Call("test.settings.set", new { windowId, name = "SourceCode", value = false }); } catch { }
+            try { await c.Call("test.settings.set", new { windowId, name = "VimMode", value = false }); } catch { }
+            try { await c.Call("document.close", new { documentId = id }); } catch { }
+        }
+    }
+
+    // A reader asked for the side pane on the right. The main grid's columns are mirrored (FlowDirection), the pane and the
+    // document themselves are not: the document must still read left to right, and the splitter must still widen the
+    // pane when dragged away from it - now to the left.
+    private static async Task PS01(List<string> notes)
+    {
+        using var c = await Session("e2e PS01");
+        var id = await Open(c, Fixture("ps01.md", "# PS01 heading\n\nSome text on the left of the page.\n"));
+        var windowId = await WindowIdOf(c, id);
+        var window = await WindowOf(windowId, c);
+        async Task<JToken> Setting(string name) => (await c.Call("test.settings.get", new { windowId, name }))["value"]!;
+        System.Windows.Automation.AutomationElement? Find(string automationId) =>
+            Deep.First(System.Windows.Automation.AutomationElement.FromHandle(window), new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.AutomationIdProperty, automationId));
+        var widthBefore = (double)await Setting("SidePaneWidth");
+        try
+        {
+            await c.Call("window.setView", new { windowId, bounds = new { x = 20, y = 20, width = 1400, height = 800 }, sidePane = new { open = true } });
+            await c.Call("test.settings.set", new { windowId, name = "SidePaneWidth", value = 300.0 });
+            await c.Call("test.settings.set", new { windowId, name = "SidePaneOnRight", value = true });
+            await Task.Delay(1500);
+            GetWindowRect(window, out var w);
+            var middle = (w.Left + w.Right) / 2;
+            var pane = Find("NavigationView")?.Current.BoundingRectangle;
+            // Where the heading's first letter is on screen, from the test host's own mapping of the page: a mirrored
+            // editor puts the page's left edge on the right.
+            var at = (await c.Call("test.editor.eval", new { windowId, script = "(() => { const r = document.querySelector('#ag-editor-id h1').getBoundingClientRect(); return { x: Math.round(r.left + 4), y: Math.round(r.top + r.height / 2) } })()" }))["result"]!;
+            var screen = await c.Call("test.editor.screenPoint", new { windowId, x = (int)at["x"]!, y = (int)at["y"]! });
+            var headingLeft = (int)screen["x"]!;
+            notes.Add($"window {w.Left}..{w.Right}; pane {pane}; heading starts at {headingLeft} (page {at["x"]})");
+            Check(pane != null && pane.Value.Left > middle, "the side pane is on the right of the window");
+            Check(headingLeft < pane!.Value.Left && headingLeft < middle, "the document reads left to right: its heading starts at the left, not mirrored");
+
+            // The splitter is the pane's left edge: dragged 120 pixels further left, the pane is wider.
+            var edge = (int)pane!.Value.Left - 2;
+            var y = (int)(pane.Value.Top + pane.Value.Height / 2);
+            await Drag(window, (edge, y), (edge - 120, y));
+            await Task.Delay(800);
+            var widened = (double)await Setting("SidePaneWidth");
+            notes.Add($"width 300 -> {widened}");
+            Check(widened > 340, $"dragged to the left, the pane is wider ({widened})");
+
+            await c.Call("test.settings.set", new { windowId, name = "SidePaneOnRight", value = false });
+            await Task.Delay(1200);
+            var back = Find("NavigationView")?.Current.BoundingRectangle;
+            notes.Add($"off: pane {back}");
+            Check(back != null && back.Value.Right < middle, "off, the side pane is on the left again");
+        }
+        finally
+        {
+            try { await c.Call("test.settings.set", new { windowId, name = "SidePaneOnRight", value = false }); } catch { }
+            try { await c.Call("test.settings.set", new { windowId, name = "SidePaneWidth", value = widthBefore }); } catch { }
+            try { await c.Call("window.setView", new { windowId, sidePane = new { open = false } }); } catch { }
+            try { await c.Call("document.close", new { documentId = id }); } catch { }
+        }
     }
 
     // ---- helpers over the API ----
@@ -607,19 +858,30 @@ internal static partial class Program
             for (var i = 0; i < 40 && (menuAfter == menuBefore || menuAfter == ""); i++) { await Task.Delay(250); try { menuAfter = await Menu(); } catch (JsonRpcRemoteException) { } }
             notes.Add($"menu: {menuBefore} -> {menuAfter}");
             Check(menuAfter != menuBefore && menuAfter != "", $"the menu bar follows the language ({menuBefore} -> {menuAfter})");
+            // All of them: the menus made again left Help out.
+            Check(menuAfter.Split(' ').Length == menuBefore.Split(' ').Length, $"the menu bar keeps its {menuBefore.Split(' ').Length} menus ({menuBefore} -> {menuAfter})");
+            // So does the status bar: its save state stayed in the language it was built in ("已保存" in an English window).
+            async Task<string> Status() => string.Join(" | ", ((JArray)(await c.Call("test.window.statusTexts", new { windowId }))["texts"]!).Select(t => (string)t!));
+            // Saved or not, in the new language.
+            var states = language == "ja" ? new[] { "保存済み", "未保存", "自動保存を一時停止中" } : new[] { "Saved", "Not saved", "Auto-save paused" };
+            var status = "";
+            for (var i = 0; i < 40 && !states.Any(status.Split(" | ").Contains); i++) { await Task.Delay(250); try { status = await Status(); } catch (JsonRpcRemoteException) { } }
+            notes.Add("status bar: " + status);
+            Check(states.Any(status.Split(" | ").Contains), $"the status bar follows the language: its save state is in {language} ({status})");
             // Menus made again in source mode still follow it: the language is changed back while the window is in source
-            // mode, and Paragraph and Format stay hidden; back in visual mode all five are there.
+            // mode, and Paragraph and Format stay hidden; back in visual mode all six are there.
             async Task<int> MenuCount() => ((JArray)(await c.Call("test.window.menuTitles", new { windowId }))["titles"]!).Count;
             await c.Call("window.setView", new { windowId, mode = "source" });
             await Set("ui.language", original["ui.language"]!);
             var menuBack = "";
-            // In source mode the bar shows three of the five titles: "back" is no longer the other language's menu.
+            // In source mode the bar shows four of the six titles: "back" is no longer the other language's menu.
             for (var i = 0; i < 40 && (menuBack == menuAfter || menuBack == ""); i++) { await Task.Delay(250); try { menuBack = await Menu(); } catch (JsonRpcRemoteException) { } }
             var inSource = await MenuCount();
             await c.Call("window.setView", new { windowId, mode = "visual" });
             var inVisual = 0;
-            for (var i = 0; i < 20 && inVisual != 5; i++) { await Task.Delay(150); inVisual = await MenuCount(); }
-            Check(menuBack != menuAfter && menuBack != "" && inSource == 3 && inVisual == 5,
+            // Help included: the counts were 3 and 5 while the menus made again left it out.
+            for (var i = 0; i < 20 && inVisual != 6; i++) { await Task.Delay(150); inVisual = await MenuCount(); }
+            Check(menuBack != menuAfter && menuBack != "" && inSource == 4 && inVisual == 6,
                 $"menus made again in source mode: {inSource} shown ({menuBack}); in visual mode {inVisual}");
             var tab = (int)original["editor.tabSize"]! == 2 ? 4 : 2;
             await Set("editor.tabSize", tab);
@@ -851,8 +1113,10 @@ internal static partial class Program
     {
         var root = System.Windows.Automation.AutomationElement.FromHandle(window);
         var menuItem = new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.MenuItem);
-        var bar = root.FindFirst(System.Windows.Automation.TreeScope.Descendants,
-            new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.MenuBar))
+        var bar = Deep.First(root, new System.Windows.Automation.AndCondition(
+            new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.MenuBar),
+            // Not the window's system menu bar (one item, System), which a WinUI 3 window also shows.
+            new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.FrameworkIdProperty, "XAML")))
             ?? throw new CaseFailed("no menu bar in the window");
         var seen = new List<string>();
         try
@@ -862,9 +1126,8 @@ internal static partial class Program
                 if (!top.TryGetCurrentPattern(System.Windows.Automation.ExpandCollapsePattern.Pattern, out var topPattern)) { seen.Add(top.Current.Name + " (no expand)"); continue; }
                 ((System.Windows.Automation.ExpandCollapsePattern)topPattern).Expand();
                 await Task.Delay(400);
-                var sub = root.FindFirst(System.Windows.Automation.TreeScope.Descendants,
-                    new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.AutomationIdProperty, "ThemeSubMenu"));
-                seen.Add($"{top.Current.Name}: {((System.Windows.Automation.ExpandCollapsePattern)topPattern).Current.ExpandCollapseState}, {root.FindAll(System.Windows.Automation.TreeScope.Descendants, menuItem).Count} items");
+                var sub = Deep.First(root, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.AutomationIdProperty, "ThemeSubMenu"));
+                seen.Add($"{top.Current.Name}: {((System.Windows.Automation.ExpandCollapsePattern)topPattern).Current.ExpandCollapseState}, {Deep.All(root, menuItem).Count} items");
                 if (sub == null)
                 {
                     ((System.Windows.Automation.ExpandCollapsePattern)topPattern).Collapse();
@@ -876,7 +1139,7 @@ internal static partial class Program
                 ((System.Windows.Automation.ExpandCollapsePattern)sub.GetCurrentPattern(System.Windows.Automation.ExpandCollapsePattern.Pattern)).Expand();
                 await Task.Delay(500);
                 var names = new List<string>();
-                foreach (System.Windows.Automation.AutomationElement item in root.FindAll(System.Windows.Automation.TreeScope.Descendants, menuItem))
+                foreach (System.Windows.Automation.AutomationElement item in Deep.All(root, menuItem))
                     names.Add(item.Current.Name);
                 return names;
             }
@@ -896,8 +1159,7 @@ internal static partial class Program
             try
             {
                 var root = System.Windows.Automation.AutomationElement.FromHandle(window);
-                var edits = root.FindAll(System.Windows.Automation.TreeScope.Descendants,
-                    new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.Edit));
+                var edits = Deep.All(root, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.Edit));
                 var values = new List<string>();
                 foreach (System.Windows.Automation.AutomationElement edit in edits)
                     if (edit.TryGetCurrentPattern(System.Windows.Automation.ValuePattern.Pattern, out var pattern))
@@ -1064,9 +1326,9 @@ internal static partial class Program
         }
         void Click(int x, int y) { SetCursorPos(x, y); Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0002 } } }, new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0004 } } }); }
         System.Windows.Automation.AutomationElement? Find(string automationId) =>
-            System.Windows.Automation.AutomationElement.FromHandle(window).FindFirst(System.Windows.Automation.TreeScope.Descendants,
-                new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.AutomationIdProperty, automationId));
+            Deep.First(System.Windows.Automation.AutomationElement.FromHandle(window), new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.AutomationIdProperty, automationId));
         var created = new List<string>();
+        var passed = false;
         try
         {
             await TypeInto(c, first, "A");
@@ -1079,10 +1341,13 @@ internal static partial class Program
             Send(new INPUT { type = 1, u = new InputUnion { ki = new KEYBDINPUT { wVk = 0x4E, wScan = 0x31 } } }, new INPUT { type = 1, u = new InputUnion { ki = new KEYBDINPUT { wVk = 0x4E, wScan = 0x31, dwFlags = 0x0002 } } });
             await Task.Delay(80);
             Send(Key(0x11, true));
-            await Task.Delay(1500);
+            // No wait for the new document: keys typed while it loads are kept for it (HoldInput, TL01). 50 ms, as a quick
+            // typist's next key.
+            await Task.Delay(50);
+            TypeChar('N');
+            Check(await Eventually(async () => await Active() != first, 3000), "Ctrl+N made a tab");
             var ctrlN = await Active();
             created.Add(ctrlN);
-            TypeChar('N');
             var text = await PageHas(ctrlN, 'N');
             notes.Add("after Ctrl+N: " + JsonConvert.SerializeObject(text));
             Check(ctrlN != first && text?.Contains('N') == true, "a letter typed after Ctrl+N reaches the new tab");
@@ -1091,47 +1356,51 @@ internal static partial class Program
             var add = Find("AddButton");
             if (add == null)
             {
-                var buttons = System.Windows.Automation.AutomationElement.FromHandle(window).FindAll(System.Windows.Automation.TreeScope.Descendants,
-                    new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.Button));
+                var buttons = Deep.All(System.Windows.Automation.AutomationElement.FromHandle(window), new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.Button));
                 throw new CaseFailed("no + button in the tab strip; buttons: " + string.Join(", ", buttons.Cast<System.Windows.Automation.AutomationElement>().Select(x => $"'{x.Current.Name}'/{x.Current.AutomationId}")));
             }
             var r = add.Current.BoundingRectangle;
             Click((int)(r.Left + r.Width / 2), (int)(r.Top + r.Height / 2));
-            await Task.Delay(1500);
+            await Task.Delay(50);
+            TypeChar('P');
+            Check(await Eventually(async () => await Active() != ctrlN, 3000), "the + button made a tab");
             var plus = await Active();
             created.Add(plus);
-            TypeChar('P');
             text = await PageHas(plus, 'P');
             notes.Add("after +: " + JsonConvert.SerializeObject(text));
             Check(plus != ctrlN && text?.Contains('P') == true, "a letter typed after the + button reaches the new tab");
 
             // The first tab, clicked in the strip.
-            var tabs = System.Windows.Automation.AutomationElement.FromHandle(window).FindAll(System.Windows.Automation.TreeScope.Descendants,
-                new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.TabItem));
+            var tabs = Deep.All(System.Windows.Automation.AutomationElement.FromHandle(window), new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.TabItem));
             var tab = tabs.Cast<System.Windows.Automation.AutomationElement>().FirstOrDefault(t => t.Current.Name.Contains("k05")) ?? throw new CaseFailed("no k05 tab in the strip");
             r = tab.Current.BoundingRectangle;
             Click((int)(r.Left + 20), (int)(r.Top + r.Height / 2));
-            await Task.Delay(1500);
-            Check(await Active() == first, "the click switched to the first tab");
             // A letter the document does not hold already ("Text" has a T).
+            await Task.Delay(50);
             TypeChar('J');
+            Check(await Eventually(async () => await Active() == first, 3000), "the click switched to the first tab");
             text = await PageHas(first, 'J');
             notes.Add("after the tab click: " + JsonConvert.SerializeObject(text));
             Check(text?.Contains('J') == true, "a letter typed after a tab is clicked reaches its document");
+            passed = true;
         }
         finally
         {
-            // The new tabs' letters undone and the tabs closed, so nothing asks to be saved later.
-            foreach (var doc in created.Distinct())
+            // This case's own documents only, each undone back to what it was saved as and then closed (document.close
+            // never asks; it refuses a changed document). Not the window: it can be one an earlier case left open, with
+            // documents of that case still changed on purpose, and closing it asked to save them.
+            var left = new List<string>();
+            foreach (var doc in created.Append(first).Distinct())
             {
                 try
                 {
-                    for (var i = 0; i < 5 && ((string?)(await Get(c, doc))["text"] ?? "").Trim().Length > 0; i++)
+                    for (var i = 0; i < 5 && !(bool)(await Get(c, doc))["saved"]!; i++)
                         await c.Call("document.undo", new { documentId = doc, baseRevision = await Revision(c, doc), reveal = "document" });
                     await c.Call("document.close", new { documentId = doc });
                 }
-                catch (Exception ex) { notes.Add("cleanup: " + ex.Message.Split('\n')[0]); }
+                catch (Exception ex) { left.Add(doc); notes.Add("cleanup: " + ex.Message.Split('\n')[0]); }
             }
+            if (passed && left.Count > 0) throw new CaseFailed($"this case's documents are all closed at the end ({left.Count} left)");
         }
     }
 
@@ -1160,8 +1429,8 @@ internal static partial class Program
         }
         System.Windows.Automation.AutomationElement? FindIn(System.Windows.Automation.AutomationElement root, Func<System.Windows.Automation.AutomationElement, bool> match)
         {
-            foreach (System.Windows.Automation.AutomationElement e in root.FindAll(System.Windows.Automation.TreeScope.Descendants, System.Windows.Automation.Condition.TrueCondition))
-                if (match(e)) return e;
+            foreach (System.Windows.Automation.AutomationElement e in Deep.All(root, System.Windows.Automation.Condition.TrueCondition))
+                try { if (match(e)) return e; } catch (System.Windows.Automation.ElementNotAvailableException) { }
             return null;
         }
         // Anywhere in the test host's windows (menus and dialogs are popups of their own).
@@ -1173,13 +1442,13 @@ internal static partial class Program
             return null;
         }
         INPUT Scan(ushort vk, ushort scan, bool up) => new() { type = 1, u = new InputUnion { ki = new KEYBDINPUT { wVk = vk, wScan = scan, dwFlags = up ? 0x0002u : 0u } } };
-        // A top menu of the menu bar (0 File ... 4 View), opened with the mouse, and one of its items clicked.
+        // A top menu of the menu bar (0 File ... 4 View, 5 Help), opened with the mouse, and one of its items clicked.
         async Task Menu(int index, string itemId)
         {
             var file = FindIn(System.Windows.Automation.AutomationElement.FromHandle(window), e => e.Current.AutomationId == "MenuBarFileItem") ?? throw new CaseFailed("no File menu");
             var bar = System.Windows.Automation.TreeWalker.ControlViewWalker.GetParent(file);
             var menus = bar.FindAll(System.Windows.Automation.TreeScope.Children, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.MenuItem));
-            // View is the last menu: in source mode Paragraph and Format are hidden and the others move up.
+            // View counted from the end (Help is after it): in source mode Paragraph and Format are hidden and the others move up.
             ClickElement(menus[index < 0 ? menus.Count + index : index]);
             System.Windows.Automation.AutomationElement? item = null;
             for (var i = 0; i < 20 && item == null; i++) { await Task.Delay(150); item = FindAnywhere(e => e.Current.AutomationId == itemId && e.Current.ControlType == System.Windows.Automation.ControlType.MenuItem && !e.Current.IsOffscreen); }
@@ -1266,8 +1535,22 @@ internal static partial class Program
         var second = "";
         try
         {
+            // Deep in a run of many cases, a window opened with "reveal" can take a moment to actually become the
+            // active tab (one left open by an earlier case, found again rather than a fresh one, say): the view
+            // model says it is active before the keyboard is really given to its web view (every other step in this
+            // case waits on test.editor.focus first for the same reason - see Try below).
+            await Eventually(async () => await Active() == main, 3000);
+            try { await c.Call("test.editor.focus", new { windowId }); await Task.Delay(300); } catch { }
             await TypeInto(c, main, "A");
-            await WaitForPage(c, main, t => t.Contains('A'), "the first letter");
+            try { await WaitForPage(c, main, t => t.Contains('A'), "the first letter"); }
+            catch (CaseFailed)
+            {
+                string page;
+                try { page = (await c.Call("test.editor.eval", new { windowId, script = "(() => { const a = document.activeElement; const s = getSelection(); return { hasFocus: document.hasFocus(), active: a ? a.tagName + '.' + (a.className || '').toString().slice(0, 40) + (a.isContentEditable ? ' editable' : '') : null, ranges: s.rangeCount, anchor: s.anchorNode ? (s.anchorNode.nodeName + ':' + (s.anchorNode.textContent || '').slice(0, 20)) : null } })()" }))["result"]!.ToString(Formatting.None); }
+                catch (Exception pex) { page = pex.Message.Split('\n')[0]; }
+                notes.Add($"     the first letter: keys went to: {FocusInfo(window)}; page: {page}");
+                throw;
+            }
 
             await Try("a tab closed with its x button", async () =>
             {
@@ -1282,8 +1565,8 @@ internal static partial class Program
 
             await Try("Format > Strong from the menu", () => Menu(3, "StrongItem"), 'Z', () => Task.FromResult(main));
 
-            await Try("View > Source code mode from the menu", () => Menu(-1, "SourceCodeModeItem"), 'V', () => Task.FromResult(main));
-            await Try("View > Source code mode again (back to the visual editor)", () => Menu(-1, "SourceCodeModeItem"), 'Y', () => Task.FromResult(main));
+            await Try("View > Source code mode from the menu", () => Menu(-2, "SourceCodeModeItem"), 'V', () => Task.FromResult(main));
+            await Try("View > Source code mode again (back to the visual editor)", () => Menu(-2, "SourceCodeModeItem"), 'Y', () => Task.FromResult(main));
 
             await Try("a heading clicked in the outline", async () =>
             {
@@ -1302,7 +1585,7 @@ internal static partial class Program
                 // the bar took the focus, and the bar stayed open with the next letter typed into its search box.
                 for (var i = 0; i < 40; i++)
                 {
-                    if (System.Windows.Automation.AutomationElement.FocusedElement?.Current.AutomationId == "TextBoxSearch") break;
+                    if (FocusedAutomationId() == "TextBoxSearch") break;
                     await Task.Delay(50);
                 }
                 Send(Scan(0x1B, 0x01, false), Scan(0x1B, 0x01, true));
@@ -1317,7 +1600,7 @@ internal static partial class Program
                 // The close button: the rightmost button level with the search box and right of it (the window's own
                 // close button is higher up, in the title row).
                 var box = (input ?? throw new CaseFailed("no search box")).Current.BoundingRectangle;
-                var close = System.Windows.Automation.AutomationElement.FromHandle(window).FindAll(System.Windows.Automation.TreeScope.Descendants, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.Button))
+                var close = Deep.All(System.Windows.Automation.AutomationElement.FromHandle(window), new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.Button))
                     .Cast<System.Windows.Automation.AutomationElement>()
                     .Where(b => { var r = b.Current.BoundingRectangle; return r.Left >= box.Right && Math.Abs((r.Top + r.Height / 2) - (box.Top + box.Height / 2)) < box.Height; })
                     .OrderBy(b => b.Current.BoundingRectangle.Left).LastOrDefault() ?? throw new CaseFailed("no close button in the find bar");
@@ -1354,11 +1637,14 @@ internal static partial class Program
         }
         finally
         {
-            // Saved, so nothing asks to be saved later.
+            // Saved, so nothing asks to be saved later; then closed, so no tab of this case is left for the next one to
+            // find (a window's last document closed is replaced by an empty one: the window stays).
             foreach (var doc in new[] { main, second }.Where(d => d.Length > 0))
                 try { await c.Call("document.save", new { documentId = doc }); } catch { }
             try { await c.Call("window.setView", new { windowId, sidePane = new { open = false } }); } catch { }
             try { await c.Call("test.settings.set", new { windowId, name = "SourceCode", value = false }); } catch { }
+            foreach (var doc in new[] { main, second }.Where(d => d.Length > 0))
+                try { await c.Call("document.close", new { documentId = doc }); } catch { }
         }
     }
 
@@ -1918,6 +2204,104 @@ internal static partial class Program
 
     // The marks of what is chosen in the side pane stayed the system blue under every custom theme: WinUI draws them in
     // the accent colour it takes from Windows, and only the page was given the theme's accent.
+    /// <summary>
+    /// The window's top pixel row against the content just under it, light and dark, with no dialog and with the save
+    /// question open: the row is the window's own frame on Windows 10 (the content is extended into the title bar), drawn
+    /// by the system in its own theme unless the app says which; a dialog's smoke then stopped one pixel short of the top.
+    /// </summary>
+    private static async Task DM01(List<string> notes)
+    {
+        using var c = await Session("e2e DM01");
+        SetProcessDpiAwarenessContext(new IntPtr(-4));
+        const string text = "# DM01\n";
+        var path = Fixture("dm01.md", text);
+        var id = await Open(c, path);
+        var windowId = await WindowIdOf(c, id);
+        var window = await WindowOf(windowId, c);
+        System.Drawing.Color Pixel(int x, int y)
+        {
+            using var b = new System.Drawing.Bitmap(1, 1);
+            using (var g = System.Drawing.Graphics.FromImage(b)) g.CopyFromScreen(x, y, 0, 0, new System.Drawing.Size(1, 1));
+            return b.GetPixel(0, 0);
+        }
+        string Hex(System.Drawing.Color k) => $"#{k.R:X2}{k.G:X2}{k.B:X2}";
+        // Over a few points along the edge (left of the caption buttons, right of the menu bar's titles).
+        List<string> Mismatches(string when)
+        {
+            DwmGetWindowAttribute(window, 9 /* DWMWA_EXTENDED_FRAME_BOUNDS */, out RECT r, Marshal.SizeOf<RECT>());
+            var wrong = new List<string>();
+            var seen = new List<string>();
+            foreach (var fx in new[] { 0.45, 0.6, 0.7 })
+            {
+                var x = r.Left + (int)((r.Right - r.Left) * fx);
+                var top = Pixel(x, r.Top);
+                var under = Pixel(x, r.Top + 3);
+                seen.Add($"{Hex(top)}/{Hex(under)}");
+                if (Math.Abs(top.R - under.R) + Math.Abs(top.G - under.G) + Math.Abs(top.B - under.B) > 24)
+                    wrong.Add($"{when} at x={x}: top {Hex(top)}, under it {Hex(under)}");
+            }
+            notes.Add($"{when}: top/under " + string.Join(" ", seen));
+            // Where the client area and the content's child windows begin, under the window's top.
+            var origin = new POINT();
+            DmClientToScreen(window, ref origin);
+            var children = new List<string>();
+            EnumChildWindows(window, (child, _) =>
+            {
+                var name = new System.Text.StringBuilder(128);
+                GetClassName(child, name, name.Capacity);
+                GetWindowRect(child, out var cr);
+                children.Add($"{name} top+{cr.Top - r.Top} h{cr.Bottom - cr.Top}");
+                return true;
+            }, IntPtr.Zero);
+            notes.Add($"{when}: frame top {r.Top}, client top+{origin.Y - r.Top}, children: {string.Join(", ", children)}");
+            return wrong;
+        }
+        var failures = new List<string>();
+        try
+        {
+            foreach (var theme in new[] { "light", "dark" })
+            {
+                await SetSetting(c, "appearance.theme", JObject.FromObject(new { kind = "builtIn", id = theme }));
+                await Activate(window);
+                await Task.Delay(1000);
+                failures.AddRange(Mismatches(theme));
+                await TypeInto(c, id, "x");
+                Check(await Eventually(async () => ((string?)(await Get(c, id))["text"] ?? "").Contains('x'), 3000), $"{theme}: the typed x reached the document");
+                await Activate(window);
+                // As K06 types it: Ctrl held, W with its scan code (the editor page reads the scan code).
+                INPUT W(bool up) => new() { type = 1, u = new InputUnion { ki = new KEYBDINPUT { wVk = 0x57, wScan = 0x11, dwFlags = up ? 0x0002u : 0u } } };
+                Send(Key(0x11, false));
+                await Task.Delay(80);
+                Send(W(false), W(true));
+                await Task.Delay(80);
+                Send(Key(0x11, true));
+                var root = System.Windows.Automation.AutomationElement.FromHandle(window);
+                System.Windows.Automation.AutomationElement? cancel = null;
+                for (var i = 0; i < 30 && cancel == null; i++)
+                {
+                    await Task.Delay(150);
+                    cancel = Deep.First(root, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.AutomationIdProperty, "CloseButton"));
+                }
+                if (cancel == null) throw new CaseFailed($"{theme}: Ctrl+W on a changed document showed no save question");
+                await Task.Delay(800); // the smoke fades in
+                failures.AddRange(Mismatches(theme + " with a dialog"));
+                ((System.Windows.Automation.InvokePattern)cancel.GetCurrentPattern(System.Windows.Automation.InvokePattern.Pattern)).Invoke();
+                await Task.Delay(500);
+                Check(((string?)(await Get(c, id))["text"] ?? "").Contains('x'), $"{theme}: Cancel kept the document with its change");
+                await c.Call("document.focus", new { documentId = id });
+                await c.Call("document.replace", new { documentId = id, text, baseRevision = await Revision(c, id), normalizationPolicy = "allowUnknown" });
+                await c.Call("document.save", new { documentId = id });
+            }
+            if (failures.Count > 0)
+                throw new CaseFailed(string.Join("; ", failures) + "; screen: " + Screenshot("DM01-" + DateTime.Now.ToString("HHmmss")));
+        }
+        finally
+        {
+            await SetSetting(c, "appearance.theme", JObject.FromObject(new { kind = "builtIn", id = "system" }));
+            try { await c.Call("document.close", new { documentId = id }); } catch { }
+        }
+    }
+
     private static async Task TH03(List<string> notes)
     {
         using var c = await Session("e2e TH03");
@@ -1940,7 +2324,11 @@ internal static partial class Program
                 await Task.Delay(500);
             }
             else if (page == "outline") notes.Add($"{when}: no outline row named One to hover");
-            var found = ((JArray)(await c.Call("test.pane.accent", new { windowId }))["indicators"]!).Select(x => ((string)x["where"]!, (string?)x["fill"])).ToList();
+            var raw = (JArray)(await c.Call("test.pane.accent", new { windowId }))["indicators"]!;
+            var found = raw.Select(x => ((string)x["where"]!, (string?)x["fill"])).ToList();
+            // Every mark in detail where the colours disagree: what it belongs to and where its brush comes from.
+            if (found.Select(x => x.Item2).Distinct().Count() > 1)
+                foreach (var x in raw) notes.Add($"{when}, {page}: mark {x.ToString(Newtonsoft.Json.Formatting.None)}");
             notes.Add($"{when}, {page}: " + string.Join(", ", found.GroupBy(x => x).Select(g => $"{g.Key.Item1} {g.Key.Item2} x{g.Count()}")));
             return found;
         }
@@ -1966,6 +2354,47 @@ internal static partial class Program
         }
     }
 
+    private static async Task TH07(List<string> notes)
+    {
+        using var c = await Session("e2e TH07");
+        var id = await Open(c, Fixture("th07.md", "# TH07\n\nText\n"));
+        var windowId = await WindowIdOf(c, id);
+        async Task<(string? Button, string? Text, List<string> Toggle, List<string> Check)> Controls(string when)
+        {
+            await Task.Delay(800);
+            var r = await c.Call("test.theme.controls", new { windowId });
+            notes.Add($"{when}: {r.ToString(Newtonsoft.Json.Formatting.None)}");
+            var parts = ((JObject)r["parts"]!).Properties().ToList();
+            return ((string?)r["button"], (string?)r["buttonText"],
+                parts.Where(p => p.Name.StartsWith("toggle.")).Select(p => (string)p.Value!).ToList(),
+                parts.Where(p => p.Name.StartsWith("check.")).Select(p => (string)p.Value!).ToList());
+        }
+        try
+        {
+            // Text on the accent is black or white, whichever reads on it: black on Dracula's light purple, white on
+            // Solarized's blue.
+            const string Dracula = "#FFBD93F9", Solarized = "#FF268BD2";
+            await c.Call("test.theme.apply", new { windowId, customTheme = "dracula" });
+            var dracula = await Controls("dracula");
+            Check(dracula.Button == Dracula, $"dracula: the accent button is its accent ({dracula.Button})");
+            Check(dracula.Toggle.Contains(Dracula), "dracula: the switch turned on is its accent");
+            Check(dracula.Check.Contains(Dracula), "dracula: the ticked check box is its accent");
+            Check(dracula.Text == "#FF000000", $"dracula: black text on its light purple ({dracula.Text})");
+            await c.Call("test.theme.apply", new { windowId, customTheme = "solarized-light" });
+            var solarized = await Controls("solarized-light");
+            Check(solarized.Button == Solarized, $"solarized-light: the accent button is its blue ({solarized.Button})");
+            Check(solarized.Text == "#FFFFFFFF", $"solarized-light: white text on its blue ({solarized.Text})");
+            await c.Call("test.theme.apply", new { windowId, builtIn = "Default" });
+            var plain = await Controls("default");
+            Check(plain.Button is not null && plain.Button != Dracula && plain.Button != Solarized, $"no custom theme: the system accent again ({plain.Button})");
+            Check(plain.Toggle.Contains(plain.Button!), "no custom theme: the switch is the system accent too");
+        }
+        finally
+        {
+            try { await c.Call("test.theme.apply", new { windowId, builtIn = "Default" }); } catch { }
+        }
+    }
+
     // Closing the shown tab left the outline on the closed document's headings (or empty) instead of the one shown next.
     private static async Task TC01(List<string> notes)
     {
@@ -1979,9 +2408,9 @@ internal static partial class Program
         List<string> Outline()
         {
             var names = new List<string>();
-            foreach (System.Windows.Automation.AutomationElement e in System.Windows.Automation.AutomationElement.FromHandle(window).FindAll(System.Windows.Automation.TreeScope.Descendants, System.Windows.Automation.Condition.TrueCondition))
+            foreach (System.Windows.Automation.AutomationElement e in Deep.All(System.Windows.Automation.AutomationElement.FromHandle(window), System.Windows.Automation.Condition.TrueCondition))
             {
-                var n = e.Current.Name;
+                var n = Deep.Name(e);
                 if ((n.StartsWith("Alpha") || n.StartsWith("Beta")) && e.Current.ControlType != System.Windows.Automation.ControlType.Document && !names.Contains(n)) names.Add(n);
             }
             return names;
@@ -1991,10 +2420,9 @@ internal static partial class Program
             var before = Outline();
             notes.Add("outline with tc01-b shown: " + string.Join(", ", before));
             Check(before.Contains("Beta three") && !before.Contains("Alpha two"), "the outline shows the shown tab's headings");
-            var tab = System.Windows.Automation.AutomationElement.FromHandle(window).FindAll(System.Windows.Automation.TreeScope.Descendants,
-                new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.TabItem))
+            var tab = Deep.All(System.Windows.Automation.AutomationElement.FromHandle(window), new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.TabItem))
                 .Cast<System.Windows.Automation.AutomationElement>().FirstOrDefault(t => t.Current.Name.Contains("tc01-b")) ?? throw new CaseFailed("no tc01-b tab");
-            var close = tab.FindAll(System.Windows.Automation.TreeScope.Descendants, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.Button))
+            var close = Deep.All(tab, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.Button))
                 .Cast<System.Windows.Automation.AutomationElement>().FirstOrDefault() ?? throw new CaseFailed("no close button on the tab");
             await Activate(window);
             var r = close.Current.BoundingRectangle;
@@ -2018,8 +2446,8 @@ internal static partial class Program
                 await Task.Delay(200);
                 active = (string)((JArray)(await c.Call("window.list"))["windows"]!).First(w => (string)w["windowId"]! == windowId)["activeDocumentId"]!;
                 headings = ((string?)(await Get(c, active))["text"] ?? "").Split('\n').Where(l => l.StartsWith("#")).Select(l => l.TrimStart('#').Trim()).Where(h => h.Length > 0).Take(3).ToList();
-                names = System.Windows.Automation.AutomationElement.FromHandle(window).FindAll(System.Windows.Automation.TreeScope.Descendants, System.Windows.Automation.Condition.TrueCondition)
-                    .Cast<System.Windows.Automation.AutomationElement>().Select(e => e.Current.Name).ToList();
+                names = Deep.All(System.Windows.Automation.AutomationElement.FromHandle(window), System.Windows.Automation.Condition.TrueCondition)
+                    .Select(Deep.Name).ToList();
                 if (active != second && headings.All(names.Contains) && !names.Contains("Beta three")) break;
             }
             notes.Add($"after closing tc01-b, shown {(active == first ? "tc01-a" : active)} with headings {string.Join(", ", headings)}; outline has them: {headings.All(names.Contains)}, has Beta three: {names.Contains("Beta three")}");
@@ -2047,8 +2475,7 @@ internal static partial class Program
         await c.Call("window.setView", new { windowId, sidePane = new { open = true, page = "outline" } });
         await Task.Delay(1500);
         var root = System.Windows.Automation.AutomationElement.FromHandle(window);
-        System.Windows.Automation.AutomationElement Tab(string name) => root.FindAll(System.Windows.Automation.TreeScope.Descendants,
-                new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.TabItem))
+        System.Windows.Automation.AutomationElement Tab(string name) => Deep.All(root, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.TabItem))
             .Cast<System.Windows.Automation.AutomationElement>().FirstOrDefault(t => t.Current.Name.Contains(name)) ?? throw new CaseFailed($"no {name} tab");
         void ShowTab(string name)
         {
@@ -2057,8 +2484,8 @@ internal static partial class Program
         }
         void Click(System.Windows.Rect r, double fx = 0.3) { SetCursorPos((int)(r.Left + r.Width * fx), (int)(r.Top + r.Height / 2)); Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0002 } } }, new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0004 } } }); }
         // The outline's first rows (the tree is virtualized; its top shows which document it is of).
-        string Top() => string.Join(", ", root.FindAll(System.Windows.Automation.TreeScope.Descendants, System.Windows.Automation.Condition.TrueCondition)
-            .Cast<System.Windows.Automation.AutomationElement>().Select(e => e.Current.Name)
+        string Top() => string.Join(", ", Deep.All(root, System.Windows.Automation.Condition.TrueCondition)
+            .Select(Deep.Name)
             .Where(n => n.StartsWith("Apple") || n.StartsWith("Banana") || n.StartsWith("Cherry")).Distinct().Take(3));
         async Task<string> Shown() => (string)((JArray)(await c.Call("window.list"))["windows"]!).First(w => (string)w["windowId"]! == windowId)["activeDocumentId"]!;
         try
@@ -2082,8 +2509,8 @@ internal static partial class Program
             }
             Check(await Shown() == a, "the click shows tc02-a");
             notes.Add("tc02-a shown, outline: " + Top());
-            var close = Tab("tc02-a").FindAll(System.Windows.Automation.TreeScope.Descendants, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.Button))
-                .Cast<System.Windows.Automation.AutomationElement>().FirstOrDefault() ?? throw new CaseFailed("no close button");
+            var close = Deep.All(Tab("tc02-a"), new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.Button))
+                .FirstOrDefault() ?? throw new CaseFailed("no close button");
             Click(close.Current.BoundingRectangle, 0.5);
             await Task.Delay(1000);
             if (((JArray)(await c.Call("document.list", new { windowId }))["documents"]!).Any(d => (string)d["documentId"]! == a))
@@ -2288,8 +2715,7 @@ internal static partial class Program
                     }
                 }
                 await Task.Delay(800);
-                var combos = System.Windows.Automation.AutomationElement.FromHandle(window).FindAll(System.Windows.Automation.TreeScope.Descendants,
-                    new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.ComboBox))
+                var combos = Deep.All(System.Windows.Automation.AutomationElement.FromHandle(window), new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.ComboBox))
                     .Cast<System.Windows.Automation.AutomationElement>().ToList();
                 notes.Add("combo boxes: " + string.Join(", ", combos.Select(x => $"'{x.Current.AutomationId}'/'{x.Current.Name}'")));
                 // The first one in the expander is the file's (an automation id once the host has it).
@@ -2297,7 +2723,7 @@ internal static partial class Program
             }
             ((System.Windows.Automation.ExpandCollapsePattern)combo.GetCurrentPattern(System.Windows.Automation.ExpandCollapsePattern.Pattern)).Expand();
             await Task.Delay(500);
-            var items = combo.FindAll(System.Windows.Automation.TreeScope.Descendants, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.ListItem))
+            var items = Deep.All(combo, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.ListItem))
                 .Cast<System.Windows.Automation.AutomationElement>().ToList();
             notes.Add("items: " + string.Join(", ", items.Select(i => i.Current.Name)));
             Check(items.Count == 3, "three file startup actions are offered");
@@ -2317,6 +2743,26 @@ internal static partial class Program
             notes.Add($"after choosing it: settings model {model}, Settings.json {stored ?? "(none)"}");
             Check(model == 2, "the settings take the choice");
             Check(stored == "2", "and the settings file holds it");
+
+            // The two home page switches below the startup rows: each turned and back, the file following.
+            foreach (var name in new[] { "ShowHomePage", "ShowHomeOnNewTab" })
+            {
+                var was = (bool)(await c.Call("test.settings.get", new { windowId, name }))["value"]!;
+                var toggle = FindIn(window, name) ?? throw new CaseFailed($"no {name} switch in the startup expander");
+                foreach (var want in new[] { !was, was })
+                {
+                    ((System.Windows.Automation.TogglePattern)toggle.GetCurrentPattern(System.Windows.Automation.TogglePattern.Pattern)).Toggle();
+                    string? inFile = null;
+                    for (var i = 0; i < 20; i++)
+                    {
+                        await Task.Delay(200);
+                        inFile = JObject.Parse(File.ReadAllText(Path.Combine(testRoot, "data", "Settings.json")))[name]?.ToString();
+                        if (inFile != null && bool.Parse(inFile) == want) break;
+                    }
+                    notes.Add($"{name} turned to {want}: Settings.json {inFile ?? "(none)"}");
+                    Check(inFile != null && bool.Parse(inFile) == want, $"the settings file holds {name} = {want}");
+                }
+            }
 
             // Leaving the settings page (back to the document) keeps it.
             await c.Call("test.window.navigate", new { windowId, route = "Main" });
@@ -2343,7 +2789,7 @@ internal static partial class Program
         {
             foreach (System.Windows.Automation.AutomationElement top in System.Windows.Automation.AutomationElement.RootElement.FindAll(System.Windows.Automation.TreeScope.Children,
                 new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ProcessIdProperty, hostPid)))
-                foreach (System.Windows.Automation.AutomationElement e in top.FindAll(System.Windows.Automation.TreeScope.Descendants, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, type)))
+                foreach (System.Windows.Automation.AutomationElement e in Deep.All(top, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, type)))
                     yield return e;
         }
         List<System.Windows.Automation.AutomationElement> NumberBoxes() => HostElements(System.Windows.Automation.ControlType.Edit)
@@ -2575,10 +3021,10 @@ internal static partial class Program
                 if (top.Current.NativeWindowHandle != window.ToInt32()) roots.Add(top);
             foreach (var root in roots)
             {
-                foreach (System.Windows.Automation.AutomationElement item in root.FindAll(System.Windows.Automation.TreeScope.Descendants, menuItem))
+                foreach (System.Windows.Automation.AutomationElement item in Deep.All(root, menuItem))
                     if (item.Current.AutomationId is { Length: > 0 } name) items[name] = item;
                 // The format row is a control of its own, not a menu item.
-                if (root.FindFirst(System.Windows.Automation.TreeScope.Descendants, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.AutomationIdProperty, "MenuFormatItem")) is { } format)
+                if (Deep.First(root, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.AutomationIdProperty, "MenuFormatItem")) is { } format)
                     items["MenuFormatItem"] = format;
             }
         }
@@ -3103,7 +3549,9 @@ internal static partial class Program
             script = "!!document.querySelector('.td-first-edit-warning')"
         }))["result"] ?? false;
 
-        Check(await Warning(), "unsafe raw HTML shows the first-edit warning");
+        // Drawn straight into the DOM, not from React state (docs/todo.md): on a busy main thread (many windows
+        // already open, as deep in the full suite) it can be a moment behind the page's own load.
+        Check(await Eventually(Warning, 3000, 100), "unsafe raw HTML shows the first-edit warning");
         await Task.Delay(5000);
         Check(await Warning(), "the warning remains visible long enough to read");
         await Task.Delay(6000);
@@ -3505,9 +3953,13 @@ internal static partial class Program
         var opened = (string)(await c.Call("test.window.open"))["windowId"]!;
         var window = await WindowOf(opened, c);
         await Task.Delay(200);
+        var crashesBefore = UnhandledLogs(testRoot);
         PostMessage(window, 0x0010, IntPtr.Zero, IntPtr.Zero);
         for (var i = 0; i < 10 && !host.HasExited; i++) await Task.Delay(500);
         Check(!host.HasExited, "the process lives on after a window was closed while its editor was still being created");
+        var crashes = UnhandledLogs(testRoot).Except(crashesBefore).ToList();
+        foreach (var crash in crashes) notes.Add("unhandled: " + string.Join(" | ", File.ReadLines(crash).Where(l => l.Length > 0).Skip(4).Take(3)));
+        Check(crashes.Count == 0, $"closing the window raised nothing unhandled ({crashes.Count} log(s))");
         using var again = await Session("e2e Q02 after");
         var left = ((JArray)(await again.Call("window.list"))["windows"]!).Count;
         Check(left == 1, $"one window left ({left})");
@@ -3581,8 +4033,19 @@ internal static partial class Program
         var exited = host.WaitForExit(20000);
         if (exited) notes.Add("the process ended");
         else { host.Kill(); host.WaitForExit(10000); }
+        // Closing the windows raised nothing unhandled (a control unloading after its window's services were disposed did).
+        var crashes = UnhandledLogs(testRoot);
+        foreach (var crash in crashes) notes.Add("unhandled: " + string.Join(" | ", File.ReadLines(crash).Where(l => l.Length > 0).Skip(4).Take(3)));
         try { await Task.Delay(1000); Directory.Delete(testRoot, true); } catch (Exception e) { notes.Add("the folder stays: " + e.Message); }
         Check(exited, "the process exits once its last window is closed (it stayed running with no window)");
+        Check(crashes.Count == 0, $"closing the windows raised nothing unhandled ({crashes.Count} log(s))");
+    }
+
+    /// <summary>The unhandled-exception logs the test host wrote under its data folder.</summary>
+    private static List<string> UnhandledLogs(string root)
+    {
+        var logs = Path.Combine(root, "logs");
+        return Directory.Exists(logs) ? Directory.GetFiles(logs, "*UnhandledException*").ToList() : new List<string>();
     }
 
     [DllImport("user32.dll")] private static extern bool PostMessage(IntPtr window, uint message, IntPtr wParam, IntPtr lParam);
@@ -3625,28 +4088,7 @@ internal static partial class Program
             dying.WaitForExit(10000);
         }
         notes.Add("killed");
-        File.Delete(Path.Combine(testRoot, "automation-endpoint.txt"));
-        // Shell-started: a child started directly would inherit this driver's redirected output, and the script
-        // running the driver would then wait for the test host to exit before it could finish.
-        var restarted = Process.Start(new ProcessStartInfo(hostExe, $"--automation-test-root \"{testRoot}\"") { UseShellExecute = true })!;
-        hostPid = restarted.Id;
-        notes.Add($"restarted pid {hostPid}");
-        var restartedEndpoint = await ReadEndpointFile(Path.Combine(testRoot, "automation-endpoint.txt")) ?? throw new CaseFailed("the restarted host never published its endpoint");
-        Check(restartedEndpoint == endpoint, $"the restarted host listens on the same endpoint as before ({restartedEndpoint} vs {endpoint})");
-        var listenError = Path.Combine(testRoot, "automation-endpoint-error.txt");
-        Client? afterClient = null;
-        for (var i = 0; i < 30 && afterClient == null; i++)
-        {
-            if (File.Exists(listenError)) throw new CaseFailed("the restarted host could not listen: " + File.ReadAllText(listenError));
-            try { afterClient = await Connect(); }
-            catch (TimeoutException) { }
-        }
-        if (afterClient == null) throw new CaseFailed("the restarted host never accepted a connection");
-        using var after = afterClient;
-        notes.Add("connected");
-        await Initialize(after, "e2e R04 after");
-        await WaitForWindow(after);
-        notes.Add("window up");
+        using var after = await StartHostAgain(notes, "e2e R04 after");
         // The recovery question: answered as a person would, with Enter (Recover is the default button).
         JArray documents = new();
         for (var i = 0; i < 60; i++)
@@ -3673,6 +4115,375 @@ internal static partial class Program
     }
 
     /// <summary>
+    /// The test host started again on the same test root, after it was killed or exited (R04, KU01): connected, the
+    /// session initialized and its first window up. The endpoint file of the one before is deleted first.
+    /// </summary>
+    private static async Task<Client> StartHostAgain(List<string> notes, string session)
+    {
+        File.Delete(Path.Combine(testRoot, "automation-endpoint.txt"));
+        // Shell-started: a child started directly would inherit this driver's redirected output, and the script
+        // running the driver would then wait for the test host to exit before it could finish.
+        var restarted = Process.Start(new ProcessStartInfo(hostExe, $"--automation-test-root \"{testRoot}\"") { UseShellExecute = true })!;
+        hostPid = restarted.Id;
+        notes.Add($"restarted pid {hostPid}");
+        var restartedEndpoint = await ReadEndpointFile(Path.Combine(testRoot, "automation-endpoint.txt")) ?? throw new CaseFailed("the restarted host never published its endpoint");
+        Check(restartedEndpoint == endpoint, $"the restarted host listens on the same endpoint as before ({restartedEndpoint} vs {endpoint})");
+        var listenError = Path.Combine(testRoot, "automation-endpoint-error.txt");
+        Client? client = null;
+        for (var i = 0; i < 30 && client == null; i++)
+        {
+            if (File.Exists(listenError)) throw new CaseFailed("the restarted host could not listen: " + File.ReadAllText(listenError));
+            try { client = await Connect(); }
+            catch (TimeoutException) { }
+        }
+        if (client == null) throw new CaseFailed("the restarted host never accepted a connection");
+        notes.Add("connected");
+        await Initialize(client, session);
+        await WaitForWindow(client);
+        notes.Add("window up");
+        return client;
+    }
+
+    // The real print preview (the web view's own, File > Print: Alt+Shift+P) under Dracula: what the reader sees, as screenshots - a
+    // headless browser's print media was measured before, and the reader still saw the theme's colours.
+    private static async Task PP01(List<string> notes)
+    {
+        using var c = await Session("e2e PP01");
+        var id = await Open(c, Fixture("pp01.md", "# PP01 heading\n\nSome **text** with a [link](https://example.com) and `inline code`.\n\n> A quotation.\n\n- [x] a ticked task\n- [ ] an open one\n\n```js\nconst answer = 42; // a comment\nfunction f(x) { return x * 2 }\n```\n\n| a | b |\n|---|---|\n| 1 | 2 |\n"));
+        var windowId = await WindowIdOf(c, id);
+        var window = await WindowOf(windowId, c);
+        var theme = (string?)(await c.Call("test.settings.get", new { windowId, name = "CustomTheme" }))["value"];
+        try
+        {
+            await c.Call("test.settings.set", new { windowId, name = "CustomTheme", value = "dracula" });
+            await Task.Delay(1500);
+            notes.Add("the window: " + Screenshot("pp01-window"));
+            notes.Add("stylesheets: " + (await c.Call("test.editor.eval", new { windowId, script = "[...document.querySelectorAll('link[rel=stylesheet],style')].map(e => (e.id || e.tagName) + '[' + (e.media || 'all') + '] ' + (e.href ? e.href.split('/').slice(-3).join('/') : e.textContent.length + ' chars') + (e.textContent && e.textContent.includes('ff79c6') ? ' (has ff79c6)' : '')).join(' | ')" }))["result"]);
+            // Where the web view is on screen (physical pixels): the preview is drawn over it, whatever the window's size.
+            var view = await c.Call("test.editor.eval", new { windowId, script = "[innerWidth, innerHeight]" });
+            var topLeft = await c.Call("test.editor.screenPoint", new { windowId, x = 0, y = 0 });
+            var bottomRight = await c.Call("test.editor.screenPoint", new { windowId, x = (int)view["result"]![0]!, y = (int)view["result"]![1]! });
+            await Activate(window);
+            await c.Call("test.editor.focus", new { windowId });
+            await Task.Delay(300);
+            Chord("Alt+Shift+P");
+            await Task.Delay(5000);
+            notes.Add("the print preview: " + Screenshot("pp01-preview"));
+            // The page's margins in the preview: the band at its top (the date and the title printed in it) and the strip
+            // right of the text - they were the web view's colour, the theme's (Dracula's dark), around the white page.
+            SetProcessDpiAwarenessContext(new IntPtr(-4));
+            var w = (Left: (int)topLeft["x"]!, Top: (int)topLeft["y"]!, Right: (int)bottomRight["x"]!, Bottom: (int)bottomRight["y"]!);
+            int width = w.Right - w.Left, height = w.Bottom - w.Top;
+            notes.Add($"the web view on screen: {w.Left},{w.Top} - {w.Right},{w.Bottom}");
+            double Dark(int left, int top, int right, int bottom)
+            {
+                using var shot = new System.Drawing.Bitmap(right - left, bottom - top);
+                using (var g = System.Drawing.Graphics.FromImage(shot)) g.CopyFromScreen(left, top, 0, 0, shot.Size);
+                int dark = 0, all = 0;
+                for (var x = 0; x < shot.Width; x += 3)
+                    for (var y = 0; y < shot.Height; y += 3)
+                    {
+                        var p = shot.GetPixel(x, y);
+                        all++;
+                        if (0.299 * p.R + 0.587 * p.G + 0.114 * p.B < 100) dark++;
+                    }
+                return all == 0 ? 0 : dark * 100.0 / all;
+            }
+            // The preview is right of the print dialog (about the web view's left 30%); its scroll bar and a dimmed frame take
+            // the web view's last 40 or so pixels.
+            var band = Dark(w.Left + (int)(width * 0.40), w.Top + 8, w.Right - (int)(width * 0.06), w.Top + 40);
+            var strip = Dark(w.Right - 70, w.Top + (int)(height * 0.30), w.Right - 46, w.Top + (int)(height * 0.70));
+            notes.Add($"dark in the preview's top margin {band:0}%, in its right margin {strip:0}%");
+            Check(band < 30 && strip < 10, $"the preview's margins are white, not the theme's colour (top {band:0}% dark, right {strip:0}%)");
+            Check(LogLines("editor: printing starts").Count > 0, "the host was told the page is printed");
+            Chord("Esc");
+            await Task.Delay(1500);
+            Check(LogLines("editor: printing ends").Count > 0, "and told when the preview closed, the theme's colour back");
+        }
+        finally
+        {
+            try { Chord("Esc"); } catch { }
+            await c.Call("test.settings.set", new { windowId, name = "CustomTheme", value = theme ?? "" });
+            try { await c.Call("document.close", new { documentId = id }); } catch { }
+        }
+    }
+
+    // Leaving a very long document: the page took half a second and more to put it away, the old document still on
+    // screen (and scrollable) meanwhile. Covered at once in the page's colour, uncovered when the next one is there.
+    private static async Task CV01(List<string> notes)
+    {
+        using var c = await Session("e2e CV01");
+        var longText = "# CV01 long\n\n" + string.Concat(Enumerable.Range(0, 2600).Select(i => $"Paragraph {i}: " + string.Join(" ", Enumerable.Repeat("words", 15)) + ".\n\n"));
+        var small = await Open(c, Fixture("cv01-small.md", "# CV01 small\n\nshort\n"));
+        var windowId = await WindowIdOf(c, small);
+        var big = await Open(c, Fixture("cv01-long.md", longText));
+        async Task<JToken> State() => await c.Call("test.webview.state", new { windowId });
+        async Task<(bool Seen, int Shown)> Watch(Func<Task> leave)
+        {
+            var before = (int)(await State())["coversShown"]!;
+            var seen = false;
+            var leaving = leave();
+            while (!leaving.IsCompleted)
+            {
+                if ((bool?)(await State())["leavingCover"] == true) seen = true;
+                await Task.Delay(15);
+            }
+            await leaving;
+            return (seen, (int)(await State())["coversShown"]! - before);
+        }
+        try
+        {
+            await Task.Delay(3000);
+            notes.Add($"the long document: {longText.Length} chars");
+            var (seen, shown) = await Watch(() => c.Call("document.focus", new { documentId = small }));
+            await Task.Delay(800);
+            var after = await State();
+            notes.Add($"switched away: seen {seen}, covers {shown}, covered after {after["leavingCover"]}");
+            Check(shown == 1, "switched away from the long document, the page is covered once");
+            Check((bool?)after["leavingCover"] == false, "and uncovered once the next document is on the page");
+            Check(((string?)(await Get(c, small))["text"] ?? "").Contains("short"), "the next document is the one shown");
+
+            // Closed: covered too (it is saved: nothing to ask).
+            await c.Call("document.focus", new { documentId = big });
+            await Task.Delay(2500);
+            (seen, shown) = await Watch(() => c.Call("document.close", new { documentId = big }));
+            await Task.Delay(800);
+            notes.Add($"closed: covers {shown}, covered after {(await State())["leavingCover"]}");
+            Check(shown == 1 && (bool?)(await State())["leavingCover"] == false, "closed, it is covered once and uncovered after");
+            big = null;
+        }
+        finally
+        {
+            if (big != null) try { await c.Call("document.close", new { documentId = big }); } catch { }
+            try { await c.Call("document.close", new { documentId = small }); } catch { }
+        }
+    }
+
+    // The document's file written by another program while it is open: what the window does with each of the cases a
+    // reader meets (Settings > General: Reload when the file changes, Ask before reloading).
+    private static async Task XF01(List<string> notes)
+    {
+        using var c = await Session("e2e XF01");
+        var aPath = Fixture("xf01-a.md", "# XF01 A\n\none\n");
+        var a = await Open(c, aPath);
+        var windowId = await WindowIdOf(c, a);
+        async Task<JToken> Setting(string name) => (await c.Call("test.settings.get", new { windowId, name }))["value"]!;
+        async Task Set(string name, object value) => await c.Call("test.settings.set", new { windowId, name, value });
+        async Task<string> TextOf(string id) => (string)(await Get(c, id))["text"]!;
+        async Task<bool> SavedOf(string id) => (bool)(await Get(c, id))["saved"]!;
+        async Task<string> TextWhen(string id, Func<string, bool> ok) { var t = await TextOf(id); for (var i = 0; i < 25 && !ok(t); i++) { await Task.Delay(200); t = await TextOf(id); } return t; }
+        var autoReload = await Setting("AutoReload");
+        var askBefore = await Setting("AskBeforeReload");
+        string? b = null, other = null;
+        try
+        {
+            await Set("AutoReload", true);
+            await Set("AskBeforeReload", true);
+            await Task.Delay(500);
+
+            // Unchanged here: asked, reloaded.
+            File.WriteAllText(aPath, "# XF01 A\n\ntwo\n");
+            var (title, content) = await PressDialogButton(c, windowId, DialogButton.Primary, 6000);
+            notes.Add($"unchanged here: '{title}' / '{content}'");
+            var reloaded = await TextWhen(a, t => t.Contains("two"));
+            Check(reloaded.Contains("two") && await SavedOf(a), "unchanged here, the file changed outside is offered and reloaded, saved");
+
+            // Changed here too: asked (what is unsaved would go), Keep keeps it.
+            await c.Call("document.replace", new { documentId = a, baseRevision = await Revision(c, a), text = "# XF01 A\n\nmine\n", normalizationPolicy = "allowUnknown" });
+            await Task.Delay(500);
+            File.WriteAllText(aPath, "# XF01 A\n\nthree\n");
+            (title, content) = await PressDialogButton(c, windowId, DialogButton.Close, 6000);
+            notes.Add($"changed here: '{title}' / '{content}'");
+            await Task.Delay(500);
+            Check((await TextOf(a)).Contains("mine") && !await SavedOf(a), "with changes here, Keep keeps them, unsaved");
+            // Saved over the file, so it closes without asking.
+            await c.Call("document.save", new { documentId = a, baseRevision = await Revision(c, a) });
+            await Task.Delay(1200);
+
+            // Without asking: reloaded at once, no dialog.
+            await Set("AskBeforeReload", false);
+            File.WriteAllText(aPath, "# XF01 A\n\nfour\n");
+            var quiet = await TextWhen(a, t => t.Contains("four"));
+            string? asked = null;
+            try { asked = (string?)(await c.Call("test.dialog.press", new { windowId, button = "close" }))["title"]; } catch (JsonRpcRemoteException) { }
+            Check(quiet.Contains("four") && asked == null, $"without asking, reloaded at once and nothing asked ({asked})");
+            await Set("AskBeforeReload", true);
+
+            // A tab in the background: asked when it is shown again.
+            var bPath = Fixture("xf01-b.md", "# XF01 B\n\nfirst\n");
+            b = await Open(c, bPath);
+            other = await Open(c, Fixture("xf01-c.md", "# XF01 C\n"));
+            await Task.Delay(800);
+            File.WriteAllText(bPath, "# XF01 B\n\nchanged while away\n");
+            await Task.Delay(1500);
+            // Shown: the switch asks before it is done (document.focus answers once the question has been).
+            var focusing = Task.Run(() => c.Call("document.focus", new { documentId = b }));
+            (title, content) = await PressDialogButton(c, windowId, DialogButton.Primary, 8000);
+            await focusing;
+            notes.Add($"background tab: '{title}'");
+            Check((await TextWhen(b, t => t.Contains("changed while away"))).Contains("changed while away"), "a tab changed in the background is offered again when shown, and reloaded");
+
+            // Deleted outside: the document turns unsaved (what it holds is no longer on disk).
+            await c.Call("document.focus", new { documentId = a });
+            await Task.Delay(800);
+            File.Delete(aPath);
+            var unsaved = false;
+            for (var i = 0; i < 25 && !unsaved; i++) { await Task.Delay(200); unsaved = !await SavedOf(a); }
+            Check(unsaved && (await TextOf(a)).Contains("four"), "deleted outside, the document keeps its text and turns unsaved");
+            // Back on disk, so it closes without asking.
+            await c.Call("document.save", new { documentId = a, baseRevision = await Revision(c, a) });
+        }
+        finally
+        {
+            try { await c.Call("test.dialogs.dismiss"); } catch { }
+            await Set("AutoReload", autoReload);
+            await Set("AskBeforeReload", askBefore);
+            foreach (var id in new[] { other, b, a })
+                if (id != null) try { await c.Call("document.close", new { documentId = id }); } catch { }
+        }
+    }
+
+    // A narrow window (the settings' small and medium layouts): the scroll bar is drawn over the content, and the items
+    // went under it - their right edge, the boxes and switches there, behind the bar.
+    private static async Task SS01(List<string> notes)
+    {
+        SetProcessDpiAwarenessContext(new IntPtr(-4));
+        using var c = await Session("e2e SS01");
+        var id = await Open(c, Fixture("ss01.md", "# SS01\n"));
+        var windowId = await WindowIdOf(c, id);
+        var window = await WindowOf(windowId, c);
+        GetWindowRect(window, out var placed);
+        try
+        {
+            foreach (var width in new[] { 900, 640 })
+            {
+                await c.Call("window.setView", new { windowId, bounds = new { x = 40, y = 40, width, height = 700 } });
+                await c.Call("test.window.navigate", new { windowId, route = "Settings/Editor" });
+                var box = await WaitFor(window, "FontFamilyBox", 5000);
+                await Task.Delay(800);
+                // The page that scrolls (the font box's parent in the automation tree: a setting's card has no peer), and
+                // how far from its right edge the box ends: its card's own padding, then the room left for the scroll bar
+                // (16 px, drawn over the page's right edge when shown).
+                System.Windows.Rect? viewer = null;
+                for (var node = System.Windows.Automation.TreeWalker.RawViewWalker.GetParent(box); node != null && viewer == null; node = System.Windows.Automation.TreeWalker.RawViewWalker.GetParent(node))
+                    if (node.TryGetCurrentPattern(System.Windows.Automation.ScrollPattern.Pattern, out _)) viewer = node.Current.BoundingRectangle;
+                var scale = GetDpiForWindow(window) / 96.0;
+                // The page may be wider than the window shows (a narrow one): its right edge, or the window's inside border.
+                GetWindowRect(window, out var shown);
+                var edge = viewer == null ? 0 : Math.Min(viewer.Value.Right, shown.Right - 8 * scale);
+                var room = viewer == null ? -1 : (edge - box.Current.BoundingRectangle.Right) / scale;
+                notes.Add($"{width}: page {viewer}, font box {box.Current.BoundingRectangle}, room right of the box {room:0.#} px");
+                Check(viewer != null, $"{width}: the page that scrolls is found");
+                Check(room >= 24, $"{width}: the box ends {room:0.#} px from the page's right edge, clear of the scroll bar's 16 px");
+                await c.Call("test.window.navigate", new { windowId, route = "Main" });
+                await Task.Delay(500);
+            }
+        }
+        finally
+        {
+            try { await c.Call("test.window.navigate", new { windowId, route = "Main" }); } catch { }
+            await c.Call("window.setView", new { windowId, bounds = new { x = placed.Left, y = placed.Top, width = placed.Right - placed.Left, height = placed.Bottom - placed.Top } });
+            try { await c.Call("document.close", new { documentId = id }); } catch { }
+        }
+    }
+
+    // A reader asked to close with documents unsaved and find them again on the next start, as Notepad++ does (Settings >
+    // Keep unsaved changes when closing). Closed, not killed: every window closes without asking, the app exits, and
+    // started again it has the titled document's edit and the untitled document back, both still unsaved, without a
+    // recovery question.
+    // The settings opened on About (Help > About), the reader moves to General and changes the interface language there:
+    // the settings page is built again in the new language - on General, where the reader was. It went back to About,
+    // the section the settings had been opened on.
+    private static async Task LS01(List<string> notes)
+    {
+        using var c = await Session("e2e LS01");
+        var id = await Open(c, Fixture("ls01.md", "# LS01\n"));
+        var windowId = await WindowIdOf(c, id);
+        var window = await WindowOf(windowId, c);
+        var language = (string)(await c.Call("test.settings.get", new { windowId, name = "Language" }))["value"]!;
+        try
+        {
+            await c.Call("test.window.navigate", new { windowId, route = "Settings/About" });
+            await Task.Delay(800);
+            await c.Call("test.window.navigate", new { windowId, route = "Settings/General" });
+            await WaitFor(window, "KeepUnsavedOnCloseToggle");
+            var other = language == "ja" ? "en" : "ja";
+            await c.Call("test.settings.set", new { windowId, name = "Language", value = other });
+            await Task.Delay(2000);
+            var general = FindIn(window, "KeepUnsavedOnCloseToggle") != null;
+            notes.Add($"language {language} -> {other}; General shown after: {general}");
+            Check(general, "the settings are built again on General, where the language was changed");
+        }
+        finally
+        {
+            await c.Call("test.settings.set", new { windowId, name = "Language", value = language });
+            await Task.Delay(1000);
+            await c.Call("test.window.navigate", new { windowId, route = "Main" });
+            try { await c.Call("document.close", new { documentId = id }); } catch { }
+        }
+    }
+
+    private static async Task KU01(List<string> notes)
+    {
+        var titled = Fixture("ku01.md", "# KU01\n\nsaved\n");
+        string t, u;
+        using (var c = await Session("e2e KU01 before"))
+        {
+            t = await Open(c, titled);
+            var windowId = await WindowIdOf(c, t);
+            await c.Call("test.settings.set", new { windowId, name = "KeepUnsavedOnClose", value = true });
+            await c.Call("document.replace", new { documentId = t, baseRevision = await Revision(c, t), text = "# KU01\n\nedited, not saved\n", normalizationPolicy = "allowUnknown" });
+            u = (string)(await c.Call("document.create", new { text = "# KU01 untitled\n\nkept too\n", reveal = "document", normalizationPolicy = "allowUnknown" }))["documentId"]!;
+            await c.Call("document.focus", new { documentId = t });
+            notes.Add($"t={t[..6]} u={u[..6]}");
+            // Every window closed as a person closes it, the titled document's last (its tabs are the session kept).
+            var windows = ((JArray)(await c.Call("window.list"))["windows"]!).Select(w => (string)w["windowId"]!).ToList();
+            var last = windowId;
+            foreach (var w in windows.Where(w => w != last).Append(last))
+            {
+                var handle = await WindowOf(w, c);
+                PostMessage(handle, 0x0010, IntPtr.Zero, IntPtr.Zero);
+                for (var i = 0; i < 40 && IsWindow(handle); i++) await Task.Delay(250);
+                Check(!IsWindow(handle), "a window closes without asking about its unsaved documents");
+            }
+        }
+        using (var host = Process.GetProcessById(hostPid))
+            Check(host.WaitForExit(20000), "the app exits once its windows are closed");
+        notes.Add("closed, exited");
+
+        using var after = await StartHostAgain(notes, "e2e KU01 after");
+        JArray documents = new();
+        JToken? kept = null, untitled = null;
+        // Without answering anything: no recovery question may stand between the start and the documents.
+        for (var i = 0; i < 60 && (kept == null || untitled == null); i++)
+        {
+            documents = (JArray)(await after.Call("document.list"))["documents"]!;
+            kept = documents.FirstOrDefault(d => string.Equals((string?)d["path"], titled, StringComparison.OrdinalIgnoreCase));
+            untitled = documents.FirstOrDefault(d => (string)d["documentId"]! == u);
+            if (kept == null || untitled == null) await Task.Delay(250);
+        }
+        notes.Add("after the start: " + string.Join(", ", documents.Select(d => $"{(string?)d["path"] ?? "untitled"} saved={d["saved"]}")));
+        Check(kept != null, "the titled document is open again (its tab came back)");
+        Check(untitled != null, "the untitled document is open again, with its id");
+        var keptId = (string)kept!["documentId"]!;
+        async Task<string> TextOf(string id) => ((string)(await Get(after, id))["text"]!).Replace("\r\n", "\n");
+        try
+        {
+            Check(await TextOf(keptId) == "# KU01\n\nedited, not saved\n" && !(bool)kept["saved"]!, "the titled document has its unsaved edit, still unsaved");
+            Check(await TextOf(u) == "# KU01 untitled\n\nkept too\n" && !(bool)untitled!["saved"]!, "the untitled document has its text, still unsaved");
+            Check(Disk(titled) == "# KU01\n\nsaved\n", "and the file was never written");
+        }
+        finally
+        {
+            // Nothing of this case left for the next ones: the setting off, the file as it was, the untitled one emptied.
+            var windowId = await WindowIdOf(after, keptId);
+            try { await after.Call("test.settings.set", new { windowId, name = "KeepUnsavedOnClose", value = false }); } catch { }
+            try { await after.Call("document.replace", new { documentId = keptId, baseRevision = await Revision(after, keptId), text = "# KU01\n\nsaved\n", normalizationPolicy = "allowUnknown" }); await after.Call("document.save", new { documentId = keptId }); await after.Call("document.close", new { documentId = keptId }); } catch (Exception ex) { notes.Add("cleanup titled: " + ex.Message.Split('\n')[0]); }
+            try { await after.Call("document.replace", new { documentId = u, baseRevision = await Revision(after, u), text = "\n", normalizationPolicy = "allowUnknown" }); await after.Call("document.close", new { documentId = u }); } catch (Exception ex) { notes.Add("cleanup untitled: " + ex.Message.Split('\n')[0]); }
+        }
+    }
+
+    /// <summary>
     /// Answers the app's dialog with its primary button, through UI Automation - the button a person would press.
     /// (A key press does not reach a XAML dialog while keyboard focus is outside the XAML island.) True when a dialog
     /// was answered.
@@ -3686,8 +4497,7 @@ internal static partial class Program
         try
         {
             var root = System.Windows.Automation.AutomationElement.FromHandle(window);
-            var button = root.FindFirst(System.Windows.Automation.TreeScope.Descendants,
-                new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.AutomationIdProperty, "PrimaryButton"));
+            var button = Deep.First(root, new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.AutomationIdProperty, "PrimaryButton"));
             if (button == null) { lastDialogProblem = "no PrimaryButton under " + window + ": " + Describe(root, 0); return false; }
             ((System.Windows.Automation.InvokePattern)button.GetCurrentPattern(System.Windows.Automation.InvokePattern.Pattern)).Invoke();
             return true;
@@ -3779,6 +4589,7 @@ internal static partial class Program
     [DllImport("user32.dll", CharSet = CharSet.Unicode)] private static extern short VkKeyScanW(char ch);
     [StructLayout(LayoutKind.Sequential)] private struct RECT { public int Left, Top, Right, Bottom; }
     [DllImport("user32.dll")] private static extern bool GetWindowRect(IntPtr window, out RECT rect);
+    [DllImport("user32.dll", EntryPoint = "ClientToScreen")] private static extern bool DmClientToScreen(IntPtr window, ref POINT point);
     [DllImport("user32.dll")] private static extern bool SetCursorPos(int x, int y);
     [StructLayout(LayoutKind.Sequential)] private struct POINT { public int X, Y; }
     [DllImport("user32.dll")] private static extern IntPtr WindowFromPoint(POINT point);
@@ -3787,6 +4598,30 @@ internal static partial class Program
     [DllImport("user32.dll")] private static extern bool EnumChildWindows(IntPtr parent, EnumWindowsProc callback, IntPtr data);
 
     // Which window has the keyboard: the foreground window, its thread's focus window with its parents, by class.
+    // The window with the keyboard (the web view's, another process's thread): its input language switched to US English,
+    // the one it had given back. A case that sends keys one by one (not characters) needs it - a Chinese input method on
+    // the test machine took them into its composition.
+    private static IntPtr FocusedWindow()
+    {
+        var info = new GUITHREADINFO { cbSize = Marshal.SizeOf<GUITHREADINFO>() };
+        var fg = GetForegroundWindow();
+        GetGUIThreadInfo(GetWindowThreadProcessId(fg, out _), ref info);
+        return info.hwndFocus != IntPtr.Zero ? info.hwndFocus : fg;
+    }
+
+    private static IntPtr UseEnglishKeyboard()
+    {
+        var target = FocusedWindow();
+        var was = GetKeyboardLayout(GetWindowThreadProcessId(target, out _));
+        PostMessage(target, 0x0050, IntPtr.Zero, LoadKeyboardLayout("00000409", 0));
+        return was;
+    }
+
+    private static void UseKeyboard(IntPtr layout) => PostMessage(FocusedWindow(), 0x0050, IntPtr.Zero, layout);
+
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)] private static extern IntPtr LoadKeyboardLayout(string id, uint flags);
+    [DllImport("user32.dll")] private static extern IntPtr GetKeyboardLayout(uint thread);
+
     private static string FocusInfo(IntPtr window)
     {
         var info = new GUITHREADINFO { cbSize = Marshal.SizeOf<GUITHREADINFO>() };

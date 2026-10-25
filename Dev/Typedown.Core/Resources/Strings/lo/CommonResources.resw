@@ -618,7 +618,7 @@
     <comment>文件/新建</comment>
   </data>
   <data name="NewFile" xml:space="preserve">
-    <value>ໂປຣໄຟລ໌ໃຫມ່</value>
+    <value>ໄຟລ໌ໃໝ່</value>
     <comment>文件浏览框/新建文件</comment>
   </data>
   <data name="NewFolder" xml:space="preserve">
@@ -662,7 +662,7 @@
     <comment>对话框/确定</comment>
   </data>
   <data name="On" xml:space="preserve">
-    <value>On</value>
+    <value>ເປີດ</value>
     <comment>开关/开</comment>
   </data>
   <data name="Open" xml:space="preserve">
@@ -702,7 +702,7 @@
     <comment>侧栏/大纲</comment>
   </data>
   <data name="Paragraph" xml:space="preserve">
-    <value>ຫຍໍ້</value>
+    <value>ວັກ</value>
     <comment>段落</comment>
   </data>
   <data name="Paste" xml:space="preserve">
@@ -774,7 +774,7 @@
     <comment>文件/另存为</comment>
   </data>
   <data name="Saved" xml:space="preserve">
-    <value>ເກັບຮັກສາໄວ້</value>
+    <value>ບັນທຶກແລ້ວ</value>
     <comment>文件/已保存</comment>
   </data>
   <data name="SaveImageAs" xml:space="preserve">
@@ -1011,5 +1011,146 @@
   </data>
   <data name="ExportedTo" xml:space="preserve">
     <value>ສົ່ງອອກໄປທີ່ {0} ແລ້ວ</value>
+  </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>ຄູ່ມືຜູ້ໃຊ້</value>
+  </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>ຕົວອັກສອນ (ບໍ່ລວມຍະຫວ່າງ)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>ຕົວອັກສອນ (ລວມຍະຫວ່າງ)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>ຕົວອັກສອນ CJK</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>ຄຳ</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>ຄຳທີ່ບໍ່ແມ່ນ CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>ຫຍໍ້ໜ້າ</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>ຫົວຂໍ້</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>ຮູບພາບ</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>ລິ້ງ</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>ເວລາອ່ານ</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>ປະມານ {0} ນາທີ</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>ບໍ່ເຖິງໜຶ່ງນາທີ</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>ນັບຈາກຂໍ້ຄວາມທີ່ເບິ່ງເຫັນ. ບລັອກໂຄດ ແລະ ສູດ ບໍ່ນັບລວມໃນເວລາອ່ານ.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>ແຖບສະຖານະສະແດງ</value>
+  </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>ບັນທຶກແລ້ວ</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>ຍັງບໍ່ໄດ້ບັນທຶກ</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>ການບັນທຶກອັດຕະໂນມັດຢຸດຊົ່ວຄາວ</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>ຄລິກເພື່ອບັນທຶກ</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>ເອກະສານຫວ່າງເປົ່າ ແຕ່ໄຟລ໌ໃນດິສກ໌ບໍ່ຫວ່າງ ແລະ ບໍ່ມີການແກ້ໄຂໃດເຮັດໃຫ້ມັນຫວ່າງ ດັ່ງນັ້ນການບັນທຶກອັດຕະໂນມັດຈຶ່ງບໍ່ໄດ້ຂຽນທັບໄຟລ໌.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>ບໍ່ສາມາດອ່ານໄຟລ໌ນີ້ໂດຍບໍ່ສູນເສຍໄດ້ (ການເຂົ້າລະຫັດອື່ນທີ່ບໍ່ແມ່ນ UTF-8?) ດັ່ງນັ້ນການບັນທຶກອັດຕະໂນມັດຈະບໍ່ຂຽນທັບມັນ. ບັນທຶກເອງສະເພາະເມື່ອຂໍ້ຄວາມທີ່ສະແດງຖືກຕ້ອງ.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>ຂຽນໄຟລ໌ບໍ່ສຳເລັດ: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>ເລືອກ {0} ຈາກ {1} {2}</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>ການເຂົ້າລະຫັດ ແລະ ທ້າຍແຖວ</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>ແປງເປັນ UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>ເປີດຄືນດ້ວຍການເຂົ້າລະຫັດ</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>ຫົວຂໍ້ປັດຈຸບັນ</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>ສະຖານະການບັນທຶກ</value>
+  </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>ໂຟນເດີ</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>ບໍ່ມີໂຟນເດີຫຼ້າສຸດ</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>ລຶບໂຟນເດີຫຼ້າສຸດ</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>ຄລິກຂວາ ຫຼື ກົດ Delete ເພື່ອເອົາອອກຈາກລາຍການ</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>ຂຶ້ນໜຶ່ງລະດັບ</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>ຕັ້ງເປັນຮາກ</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>ລາຍການທີ່ມັກ</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>ເພີ່ມໃສ່ລາຍການທີ່ມັກ</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>ເອົາອອກຈາກລາຍການທີ່ມັກ</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>ໜ້າຫຼັກ</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>ເລີ່ມຕົ້ນ</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>ເອກະສານໃໝ່</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>ເປີດໄຟລ໌</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>ເປີດໂຟນເດີ</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>ໄຟລ໌ຫຼ້າສຸດ</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>ໂຟນເດີຫຼ້າສຸດ</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>ເອົາອອກຈາກລາຍການ</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>ການຕັ້ງຄ່າ</value>
+  </data>
+  <data name="EditorOpening" xml:space="preserve">
+    <value>ກຳລັງເປີດ…</value>
   </data>
 </root>

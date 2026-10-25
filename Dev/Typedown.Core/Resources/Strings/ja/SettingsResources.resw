@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>編集エリアの背景に雲母の背景効果を有効にする</value>
+    <value>サイドペインとタブバーにマイカ効果を表示し、編集エリアはテーマの単色のままにします</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>編集エリアで雲母素材を使用する</value>
+    <value>編集エリアの周囲にマイカ素材を使用する</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>保存先のフォルダーを開く</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>最近開いたファイルを記録する</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>開いたファイルとフォルダーが「ファイル &gt; 最近開いたもの」とホームに表示されます。オフにすると新しい項目は追加されません。</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>最近の履歴をクリア</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>最近開いたファイルとフォルダーの一覧を空にします。</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>クリア</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>空のタブにホームを表示</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>起動時に開くものがないときと、最後のタブを閉じたとき：最近のファイルとフォルダー、お気に入り</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>新しいタブにもホームを表示</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>新しいタブ（ファイル &gt; 新規、+ ボタン）で空のドキュメントの代わりにホームを表示します</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>余分な空行を表示する</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>段落間の空行が、編集時と同じように閲覧モードや HTML・PDF へのエクスポートでも余白として表示されます。ファイルの内容は変わりません</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>長いドキュメントを段階的に描画する</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>長いドキュメントは前回の位置で開き、残りはバックグラウンドで描画されます。長いドキュメントを開くときに表示がおかしい場合はオフにしてください。その場合は全体を一度に描画します</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>サイドバーを右側に表示</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>サイドバーを文書の左側ではなく右側に表示します</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>閉じるときに未保存の変更を保持する</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>保存するか確認せずに閉じます。未保存の文書は前回のタブとともに、未保存のままそのまま復元されます</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Markdown 記号を常に表示</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Markdown 記号 (**、#、リンクのアドレス) をカーソルのある場所だけでなく、すべての段落で表示します</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>長いドキュメントのレイアウトを予測する（試験的）</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>長いドキュメントを段階的に描画する間、まだ表示されていない部分の高さを推定ではなくテキストから計算するため、スクロールバーやアウトラインからのジャンプがより正確になります。試験的な機能です</value>
   </data>
 </root>

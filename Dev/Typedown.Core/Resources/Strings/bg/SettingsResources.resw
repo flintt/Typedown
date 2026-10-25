@@ -138,7 +138,7 @@
     <comment>关于/发送反馈</comment>
   </data>
   <data name="About.Title" xml:space="preserve">
-    <value>За</value>
+    <value>Относно</value>
     <comment>关于/关于</comment>
   </data>
   <data name="Editor.AutoPairBracket.Description" xml:space="preserve">
@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Разрешаване на фоновия ефект на слюдата за фона на областта за редактиране</value>
+    <value>Страничният панел и лентата с раздели показват ефекта „слюда“; областта за редактиране запазва плътния цвят на темата</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Използване на слюден материал в областта за редактиране</value>
+    <value>Използване на материал „слюда“ около областта за редактиране</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Отваряне на папката му</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Запомняне на скоро отваряните файлове</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Отворените файлове и папки се показват във Файл &gt; Отваряне на скорошни и на началната страница. Когато е изключено, нищо ново не се добавя.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Изчистване на скорошните файлове и папки</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Изпразва списъците на скоро отваряните файлове и папки.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Изчистване</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Показване на началната страница в празен раздел</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>При стартиране без нищо за отваряне и при затваряне на последния раздел: скорошни файлове и папки, любими</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Новите раздели показват началната страница</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Нов раздел (Файл &gt; Нов, бутонът +) показва началната страница вместо празен документ</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Показване на допълнителните празни редове</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Празните редове между абзаците заемат място и в режима за четене, и при експорт в HTML и PDF, както при редактиране. Самият файл не се променя</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Постепенно изобразяване на дълги документи</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Дългият документ се отваря там, където сте го оставили, а останалото се изобразява на заден план. Изключете това, ако нещо изглежда нередно при отваряне на дълъг документ: тогава той се изобразява наведнъж</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Странична лента вдясно</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Показване на страничната лента вдясно от документа вместо вляво</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Запазване на незаписаните промени при затваряне</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Затваряне без въпрос за записване: незаписаните документи се връщат такива, каквито са били, все още незаписани, с разделите от предишната сесия</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Винаги показвай Markdown знаците</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Показване на Markdown знаците (**, #, адреса на връзка) във всеки абзац, а не само там, където е курсорът</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Предвиждане на оформлението на дълги документи (експериментално)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Докато дълъг документ се изобразява на части, височината на още непоказаното се изчислява от текста, вместо да се оценява, така че лентата за превъртане и преходите от структурата са по-точни. Експериментално</value>
   </data>
 </root>

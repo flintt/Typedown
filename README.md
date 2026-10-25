@@ -59,41 +59,39 @@ Windows 平台的所见即所得 Markdown 编辑器，WinUI 界面，编辑内�
 维护者文档：[当前架构](docs/architecture.md) · [WebView 消息协议](docs/editor-protocol.md) · [本地化规范](docs/localization.md) · [打包与发布](PACKAGING.md) · [Windows 真机验证](docs/windows-verification.md)
 
 ### 1. Prerequisites
-[Visual Studio 2022](https://visualstudio.microsoft.com/vs/) with the following individual components:
-  - .NET Core 3.1 SDK
-  - Git for Windows
+- [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) on Windows 10 (1903 or later) or Windows 11
+- Git for Windows
+- [Node.js](https://nodejs.org/) 20 with [yarn](https://yarnpkg.com/)
+- Optional: Visual Studio 2026 (or another editor) for working on the C# code; [Inno Setup 6](https://jrsoftware.org/isinfo.php) for the installer
 
-[Node.js](https://nodejs.org/) with the following global packages:
-  - [yarn](https://yarnpkg.com/)
+The app is WinUI 3 (Windows App SDK, carried with the app) on .NET 10, for x64 and ARM64.
 
 ### 2. Clone the repository
 ```ps
 git clone https://github.com/flintt/Typedown
 ```
 
-This will create a local copy of the repository.
-
-### 3. Build the project
-First go to the directory `Typedown\Dev\Typedown.Editor` and run `yarn && yarn build`
-
+### 3. Build the editor
 ```ps
 cd Typedown\Dev\Typedown.Editor
-yarn && yarn build
+yarn install --frozen-lockfile
+node scripts\copy-mermaid.js
+yarn build
 ```
-![20240319232236_rec_](https://github.com/byxiaozhi/Typedown/assets/31278216/3f038707-9311-4aad-846b-a22e8bad6857)
+The editor is built into `Dev\Typedown\Resources\Statics`, where the app loads it from.
 
-After finishing the compilation of `Typedown.Editor`, you can see the generated product in the directory `Typedown\Dev\Typedown\Resources\Statics`.
+### 4. Build and run the app
+```ps
+cd Typedown
+dotnet build Dev\Typedown\Typedown.csproj -c Debug_Local -p:Platform=x64
+Dev\Typedown\bin\x64\Debug_Local\net10.0-windows10.0.26100.0\win-x64\Typedown.exe
+```
+Configurations:
+- Debug: the editor is loaded from http://localhost:3000 (run `yarn start` in `Dev\Typedown.Editor` as well)
+- Debug_Local: the editor is loaded from the built bundle (`Dev\Typedown\Resources\Statics`)
+- Release: what is released
 
-Then use VisualStudio 2022 to open `Typedown\Typedown.sln`, right-click on the Typedown project and select Set as Startup Project.
-
-In the top pane, select the solution configuration you want to build in, the difference between these configurations is as follows
-- Debug: The `Typedown.Editor` will be accessed using the http://localhost:3000 address, to use this configuration you need to also start the Typedown.Editor project using yarn start in the Typedown\Dev\Typedown.Editor directory.
-- Debug_Local: The `Typedown.Editor` will be accessed using the compiled product (Typedown\Dev\Typedown\Resources\Statics)
-- Release: Used when releasing a project
-
-Then select the platform you want to build on (x64, x86, or arm64) and click Run!
-
-![20240319232529_rec_](https://github.com/byxiaozhi/Typedown/assets/31278216/50ef6e56-b177-49b0-b361-83659d25a40e)
+The installer, the portable folder and the MSIX: see [PACKAGING.md](PACKAGING.md) (`Tools\Installer\build-local.ps1` builds the installer the way CI does).
 
 ### Contributors
 Want to contribute? Open an [issue](https://github.com/flintt/Typedown/issues) describing what you intend to

@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add" xml:space="preserve">
-    <value>Voeg</value>
+    <value>Voeg by</value>
     <comment>添加</comment>
   </data>
   <data name="AlignCenter" xml:space="preserve">
@@ -182,7 +182,7 @@
     <comment>图表</comment>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Duidelik</value>
+    <value>Maak skoon</value>
     <comment>清除</comment>
   </data>
   <data name="ClearFormat" xml:space="preserve">
@@ -334,7 +334,7 @@
     <comment>错误</comment>
   </data>
   <data name="Export" xml:space="preserve">
-    <value>Uitvoer</value>
+    <value>Voer uit</value>
     <comment>文件/导出</comment>
   </data>
   <data name="ExportSettings" xml:space="preserve">
@@ -378,7 +378,7 @@
     <comment>Flow Chart</comment>
   </data>
   <data name="FocusMode" xml:space="preserve">
-    <value>Fokus af</value>
+    <value>Fokusmodus</value>
     <comment>视图/专注模式</comment>
   </data>
   <data name="Folder" xml:space="preserve">
@@ -474,7 +474,7 @@
     <comment>图片上传设置</comment>
   </data>
   <data name="Import" xml:space="preserve">
-    <value>Invoer</value>
+    <value>Voer in</value>
     <comment>文件/导入</comment>
   </data>
   <data name="IncreaseHeadingLevel" xml:space="preserve">
@@ -654,7 +654,7 @@
     <comment>未设置</comment>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Sluit</value>
+    <value>Af</value>
     <comment>开关/关</comment>
   </data>
   <data name="Ok" xml:space="preserve">
@@ -662,11 +662,11 @@
     <comment>对话框/确定</comment>
   </data>
   <data name="On" xml:space="preserve">
-    <value>Op</value>
+    <value>Aan</value>
     <comment>开关/开</comment>
   </data>
   <data name="Open" xml:space="preserve">
-    <value>Oop</value>
+    <value>Maak oop</value>
     <comment>文件/打开</comment>
   </data>
   <data name="OpenFileLocation" xml:space="preserve">
@@ -698,7 +698,7 @@
     <comment>段落/有序列表</comment>
   </data>
   <data name="Outline" xml:space="preserve">
-    <value>Buitelyn</value>
+    <value>Oorsig</value>
     <comment>侧栏/大纲</comment>
   </data>
   <data name="Paragraph" xml:space="preserve">
@@ -822,7 +822,7 @@
     <comment>停止操作</comment>
   </data>
   <data name="Strikethrough" xml:space="preserve">
-    <value>Deurslag</value>
+    <value>Deurhaal</value>
     <comment>格式/删除线</comment>
   </data>
   <data name="Strong" xml:space="preserve">
@@ -894,7 +894,7 @@
     <comment>Vega Chart</comment>
   </data>
   <data name="View" xml:space="preserve">
-    <value>Bekyk</value>
+    <value>Aansig</value>
     <comment>查看</comment>
   </data>
   <data name="Website" xml:space="preserve">
@@ -1011,5 +1011,146 @@
   </data>
   <data name="ExportedTo" xml:space="preserve">
     <value>Uitgevoer na {0}</value>
+  </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>Gebruikersgids</value>
+  </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Karakters (sonder spasies)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Karakters (met spasies)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK-karakters</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Woorde</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Nie-CJK-woorde</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Paragrawe</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Opskrifte</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Beelde</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Skakels</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Leestyd</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Ongeveer {0} min</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Minder as ’n minuut</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Getel op die sigbare teks. Kodeblokke en formules tel nie by die leestyd nie.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Statusbalk wys</value>
+  </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Gestoor</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Nie gestoor nie</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Outo-stoor is onderbreek</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Klik om te stoor</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Die dokument is leeg, maar die lêer op skyf is nie, en geen wysiging het dit leeg gemaak nie, dus het outo-stoor nie die lêer oorskryf nie.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Hierdie lêer kon nie sonder verlies gelees word nie (’n ander enkodering as UTF-8?), dus oorskryf outo-stoor dit nie. Stoor dit self slegs as die teks wat gewys word reg is.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Kon nie die lêer skryf nie: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{0} van {1} {2} gekies</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Enkodering en reëleindes</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Skakel om na UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Heropen met enkodering</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Huidige opskrif</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Stoorstatus</value>
+  </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Vouers</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Geen onlangse vouers nie</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Vee onlangse vouers uit</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Regsklik of druk Delete om dit van die lys te verwyder</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Een vlak op</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Stel as wortel</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Gunstelinge</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Voeg by gunstelinge</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Verwyder uit gunstelinge</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Tuis</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Begin</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Nuwe dokument</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Maak lêer oop</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Maak vouer oop</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Onlangse lêers</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Onlangse vouers</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Verwyder van lys</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Instellings</value>
+  </data>
+  <data name="EditorOpening" xml:space="preserve">
+    <value>Word oopgemaak…</value>
   </data>
 </root>

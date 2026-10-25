@@ -34,7 +34,7 @@ Typedown 可以让**本机上以你的身份运行的程序**读取和编辑已�
 
 ## 命令行：typedownctl
 
-Windows 安装版把 `typedownctl.exe` 装在 Typedown 的安装目录里（默认 `C:\Program Files\Typedown\typedownctl.exe`），这些说明文档装在它旁边的 `docs` 文件夹。<!-- linux -->Linux 版（deb 包）的命令是 `typedownctl`（`/usr/bin/typedownctl`），文档在 `/opt/typedown/docs`。<!-- /linux -->
+Windows 安装版和便携版把 `typedownctl.exe` 放在 `Typedown.exe` 旁边（安装版默认 `C:\Program Files\Typedown\typedownctl.exe`），这些说明文档装在它旁边的 `docs` 文件夹；MSIX 包（含 Microsoft Store 版）装好后在终端里直接输入 `typedownctl`。<!-- linux -->Linux 版（deb 包）的命令是 `typedownctl`（`/usr/bin/typedownctl`），文档在 `/opt/typedown/docs`。<!-- /linux -->
 
 ```
 typedownctl status
@@ -67,5 +67,4 @@ v1 接口已经冻结：v1 内只会新增方法和可选参数，不会删除�
 
 ## 目前的限制
 
-- 微软商店版（MSIX）不带 `typedownctl`。
 - 保存、撤销和重做只作用于窗口当前显示的文档；后台标签先用 `document.focus` 切过去。

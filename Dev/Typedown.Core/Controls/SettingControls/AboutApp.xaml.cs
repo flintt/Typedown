@@ -1,7 +1,7 @@
 ﻿using Typedown.Core.Utilities;
 using Windows.ApplicationModel;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 
 namespace Typedown.Core.Controls
 {
@@ -40,7 +40,7 @@ namespace Typedown.Core.Controls
         /// </summary>
         public static System.Func<ViewModels.AppViewModel, System.Collections.Generic.IEnumerable<MenuFlyoutItemBase>> FeedbackItems { get; set; }
 
-        private void FeedBackButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void FeedBackButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
         {
             try
             {
@@ -65,7 +65,7 @@ namespace Typedown.Core.Controls
             Utilities.Common.OpenUrl(Typedown.Automation.Brand.FeedbackUrl);
         }
 
-        private void OpenLogFolderButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void OpenLogFolderButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
         {
             try
             {

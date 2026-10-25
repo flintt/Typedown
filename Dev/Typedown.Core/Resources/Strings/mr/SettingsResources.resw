@@ -138,7 +138,7 @@
     <comment>关于/发送反馈</comment>
   </data>
   <data name="About.Title" xml:space="preserve">
-    <value>सुमारे</value>
+    <value>बद्दल</value>
     <comment>关于/关于</comment>
   </data>
   <data name="Editor.AutoPairBracket.Description" xml:space="preserve">
@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>संपादन क्षेत्राच्या पार्श्वभूमीसाठी अभ्रक पार्श्वभूमी प्रभाव सक्षम करा</value>
+    <value>बाजूचे उपखंड आणि टॅब बार मायका प्रभाव दाखवतात; संपादन क्षेत्र थीमचा घन रंग कायम ठेवते</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>संपादन क्षेत्रात अभ्रक सामग्रीचा वापर करा</value>
+    <value>संपादन क्षेत्राभोवती मायका साहित्य वापरा</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>तिचे फोल्डर उघडा</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>अलीकडे उघडलेल्या फाइल्स लक्षात ठेवा</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>तुम्ही उघडलेल्या फाइल्स आणि फोल्डर फाइल &gt; अलीकडील उघडा आणि होम पेजवर दिसतात. बंद असताना काहीही नवीन जोडले जात नाही.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>अलीकडील फाइल्स आणि फोल्डर साफ करा</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>अलीकडे उघडलेल्या फाइल्स आणि फोल्डरच्या याद्या रिकाम्या करते.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>साफ करा</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>रिक्त टॅबवर होम पेज दाखवा</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>सुरू करताना उघडण्यासारखे काही नसताना आणि शेवटचा टॅब बंद केल्यावर: अलीकडील फाइल्स आणि फोल्डर, आवडते</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>नवीन टॅब होम पेज दाखवतात</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>नवीन टॅब (फाइल &gt; नवीन, + बटण) रिक्त दस्तऐवजाऐवजी होम पेज दाखवतो</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>अतिरिक्त रिकाम्या ओळी दाखवा</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>परिच्छेदांमधील रिकाम्या ओळी संपादन करतानाप्रमाणे वाचन मोडमध्ये आणि HTML व PDF निर्यातीतही जागा घेतात. फाइल स्वतः बदलत नाही</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>लांब दस्तऐवज टप्प्याटप्प्याने काढा</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>लांब दस्तऐवज तुम्ही जिथे सोडला होता तिथून उघडतो आणि उरलेला भाग पार्श्वभूमीत काढला जातो. लांब दस्तऐवज उघडताना काही चुकीचे दिसल्यास हे बंद करा: मग तो एकाच वेळी काढला जाईल</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>उजवीकडे साइड बार</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>दस्तऐवजाच्या डावीकडे ऐवजी उजवीकडे साइड बार दाखवा</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>बंद करताना जतन न केलेले बदल ठेवा</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>जतन करण्यास न विचारता बंद करा: जतन न केलेले दस्तऐवज होते तसेच, अजूनही जतन न केलेले, मागील सत्राच्या टॅबसह परत येतात</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Markdown चिन्हे नेहमी दाखवा</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>फक्त कर्सर असलेल्या ठिकाणी नव्हे, प्रत्येक परिच्छेदात Markdown चिन्हे (**, #, दुव्याचा पत्ता) दाखवा</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>लांब दस्तऐवजांची मांडणी आधीच मोजा (प्रायोगिक)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>लांब दस्तऐवज भागांमध्ये काढला जात असताना, अद्याप न दाखवलेल्या भागाची उंची अंदाजाऐवजी मजकुरावरून मोजली जाते, त्यामुळे स्क्रोल बार आणि रूपरेषेतून उडी अधिक अचूक होतात. प्रायोगिक</value>
   </data>
 </root>

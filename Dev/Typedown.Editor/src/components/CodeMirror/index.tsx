@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+﻿import React, { useCallback, useEffect, useRef, useState } from "react";
 import transport from "services/transport";
 import { matchString } from 'services/common'
 import { UnControlled as CodeMirror } from 'react-codemirror2';
@@ -195,6 +195,18 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
 
     useEffect(() => transport.addListener<{ text: string }>('Paste', ({ text }) => {
         editor?.replaceSelection(text)
+    }), [editor]);
+
+    // Text typed while this document was on its way (services/inputHold.ts), in at the caret.
+    useEffect(() => transport.addListener<{ text: string, done: () => void }>('InsertTyped', ({ text, done }) => {
+        if (editor && !props.options?.readOnly) editor.replaceSelection(text.replace(/\r\n?/g, '\n'))
+        done()
+    }), [editor, props.options?.readOnly]);
+
+    // The keyboard to the editor, unless the page is holding keys for a document on its way (services/inputHold.ts).
+    useEffect(() => transport.addListener('TakeKeyboard', () => {
+        if (document.activeElement?.hasAttribute('data-input-hold')) return
+        if (editor && !editor.hasFocus()) editor.focus()
     }), [editor]);
 
     useEffect(() => transport.addListener('DeleteSelection', () => {

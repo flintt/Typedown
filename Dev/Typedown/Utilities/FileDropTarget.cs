@@ -127,7 +127,7 @@ namespace Typedown.Utilities
                 return inner != null ? inner.Drop(dataObject, keyState, point, ref effect) : SetNone(ref effect);
             effect = Effect(files);
             Log.Debug($"FileDropTarget: drop {files.Count} file(s): {string.Join(", ", files)}");
-            _ = window.Dispatcher.RunAsync(async () =>
+            _ = window.DispatcherQueue.RunAsync(async () =>
             {
                 // async void on the UI thread: nothing above it would catch.
                 try

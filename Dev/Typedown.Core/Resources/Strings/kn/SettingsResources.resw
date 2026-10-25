@@ -138,7 +138,7 @@
     <comment>关于/发送反馈</comment>
   </data>
   <data name="About.Title" xml:space="preserve">
-    <value>ನಮ್ಮ ಬಗ್ಗೆ</value>
+    <value>ಕುರಿತು</value>
     <comment>关于/关于</comment>
   </data>
   <data name="Editor.AutoPairBracket.Description" xml:space="preserve">
@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>ಎಡಿಟಿಂಗ್ ಪ್ರದೇಶದ ಹಿನ್ನೆಲೆಗಾಗಿ ಮೈಕಾ ಹಿನ್ನೆಲೆ ಪರಿಣಾಮವನ್ನು ಕ್ರಿಯಾತ್ಮಕಗೊಳಿಸಿ</value>
+    <value>ಪಕ್ಕದ ಫಲಕ ಮತ್ತು ಟ್ಯಾಬ್ ಬಾರ್ ಮೈಕಾ ಪರಿಣಾಮವನ್ನು ತೋರಿಸುತ್ತವೆ; ಸಂಪಾದನಾ ಪ್ರದೇಶವು ಥೀಮ್‌ನ ಘನ ಬಣ್ಣವನ್ನು ಉಳಿಸಿಕೊಳ್ಳುತ್ತದೆ</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>ಎಡಿಟಿಂಗ್ ಪ್ರದೇಶದಲ್ಲಿ ಮೈಕಾ ಮೆಟೀರಿಯಲ್ ಬಳಸಿ</value>
+    <value>ಸಂಪಾದನಾ ಪ್ರದೇಶದ ಸುತ್ತ ಮೈಕಾ ವಸ್ತುವನ್ನು ಬಳಸಿ</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>ಅದರ ಫೋಲ್ಡರ್ ತೆರೆಯಿರಿ</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>ಇತ್ತೀಚೆಗೆ ತೆರೆದ ಫೈಲ್‌ಗಳನ್ನು ನೆನಪಿಡಿ</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>ನೀವು ತೆರೆಯುವ ಫೈಲ್‌ಗಳು ಮತ್ತು ಫೋಲ್ಡರ್‌ಗಳು ಫೈಲ್ &gt; ಇತ್ತೀಚಿನದನ್ನು ತೆರೆಯಿರಿ ಮತ್ತು ಮುಖಪುಟದಲ್ಲಿ ಕಾಣಿಸುತ್ತವೆ. ಆಫ್ ಆಗಿದ್ದಾಗ ಹೊಸದೇನೂ ಸೇರುವುದಿಲ್ಲ.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>ಇತ್ತೀಚಿನ ಫೈಲ್‌ಗಳು ಮತ್ತು ಫೋಲ್ಡರ್‌ಗಳನ್ನು ತೆರವುಗೊಳಿಸಿ</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>ಇತ್ತೀಚೆಗೆ ತೆರೆದ ಫೈಲ್‌ಗಳು ಮತ್ತು ಫೋಲ್ಡರ್‌ಗಳ ಪಟ್ಟಿಗಳನ್ನು ಖಾಲಿ ಮಾಡುತ್ತದೆ.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>ತೆರವುಗೊಳಿಸಿ</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>ಖಾಲಿ ಟ್ಯಾಬ್‌ನಲ್ಲಿ ಮುಖಪುಟ ತೋರಿಸಿ</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>ಪ್ರಾರಂಭದಲ್ಲಿ ತೆರೆಯಲು ಏನೂ ಇಲ್ಲದಿದ್ದಾಗ ಮತ್ತು ಕೊನೆಯ ಟ್ಯಾಬ್ ಮುಚ್ಚಿದಾಗ: ಇತ್ತೀಚಿನ ಫೈಲ್‌ಗಳು, ಫೋಲ್ಡರ್‌ಗಳು, ಮೆಚ್ಚಿನವು</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>ಹೊಸ ಟ್ಯಾಬ್‌ಗಳು ಮುಖಪುಟ ತೋರಿಸುತ್ತವೆ</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>ಹೊಸ ಟ್ಯಾಬ್ (ಫೈಲ್ &gt; ಹೊಸದು, + ಬಟನ್) ಖಾಲಿ ದಾಖಲೆಯ ಬದಲು ಮುಖಪುಟ ತೋರಿಸುತ್ತದೆ</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>ಹೆಚ್ಚುವರಿ ಖಾಲಿ ಸಾಲುಗಳನ್ನು ತೋರಿಸಿ</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>ಸಂಪಾದಿಸುವಾಗಿನಂತೆ ಓದುವ ಮೋಡ್‌ನಲ್ಲಿ ಮತ್ತು HTML ಹಾಗೂ PDF ರಫ್ತುಗಳಲ್ಲೂ ಪ್ಯಾರಾಗಳ ನಡುವಿನ ಖಾಲಿ ಸಾಲುಗಳು ಜಾಗ ಪಡೆಯುತ್ತವೆ. ಫೈಲ್ ಸ್ವತಃ ಬದಲಾಗುವುದಿಲ್ಲ</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>ಉದ್ದದ ದಾಖಲೆಗಳನ್ನು ಹಂತ ಹಂತವಾಗಿ ಚಿತ್ರಿಸಿ</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>ಉದ್ದದ ದಾಖಲೆ ನೀವು ಬಿಟ್ಟ ಸ್ಥಳದಲ್ಲೇ ತೆರೆಯುತ್ತದೆ, ಉಳಿದದ್ದು ಹಿನ್ನೆಲೆಯಲ್ಲಿ ಚಿತ್ರಿಸಲಾಗುತ್ತದೆ. ಉದ್ದದ ದಾಖಲೆ ತೆರೆಯುವಾಗ ಏನಾದರೂ ತಪ್ಪಾಗಿ ಕಂಡರೆ ಇದನ್ನು ಆಫ್ ಮಾಡಿ: ಆಗ ಅದು ಒಮ್ಮೆಲೇ ಚಿತ್ರಿಸಲಾಗುತ್ತದೆ</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>ಬಲಭಾಗದಲ್ಲಿ ಸೈಡ್ ಬಾರ್</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>ಡಾಕ್ಯುಮೆಂಟ್‌ನ ಎಡಭಾಗದ ಬದಲು ಬಲಭಾಗದಲ್ಲಿ ಸೈಡ್ ಬಾರ್ ತೋರಿಸಿ</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>ಮುಚ್ಚುವಾಗ ಉಳಿಸದ ಬದಲಾವಣೆಗಳನ್ನು ಇರಿಸಿ</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>ಉಳಿಸಲು ಕೇಳದೆ ಮುಚ್ಚಿ: ಉಳಿಸದ ಡಾಕ್ಯುಮೆಂಟ್‌ಗಳು ಹಿಂದಿನಂತೆಯೇ, ಇನ್ನೂ ಉಳಿಸದೆ, ಕೊನೆಯ ಸೆಷನ್‌ನ ಟ್ಯಾಬ್‌ಗಳೊಂದಿಗೆ ಮರಳುತ್ತವೆ</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Markdown ಗುರುತುಗಳನ್ನು ಯಾವಾಗಲೂ ತೋರಿಸಿ</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>ಕರ್ಸರ್ ಇರುವಲ್ಲಿ ಮಾತ್ರವಲ್ಲ, ಪ್ರತಿ ಪ್ಯಾರಾಗ್ರಾಫ್‌ನಲ್ಲಿ Markdown ಗುರುತುಗಳನ್ನು (**, #, ಲಿಂಕ್‌ನ ವಿಳಾಸ) ತೋರಿಸಿ</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>ದೀರ್ಘ ದಾಖಲೆಗಳ ವಿನ್ಯಾಸವನ್ನು ಮುಂಚಿತವಾಗಿ ಅಂದಾಜಿಸಿ (ಪ್ರಾಯೋಗಿಕ)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>ದೀರ್ಘ ದಾಖಲೆಯನ್ನು ಭಾಗಗಳಾಗಿ ಚಿತ್ರಿಸುವಾಗ, ಇನ್ನೂ ತೋರಿಸದ ಭಾಗದ ಎತ್ತರವನ್ನು ಅಂದಾಜಿನ ಬದಲು ಪಠ್ಯದಿಂದ ಲೆಕ್ಕಹಾಕಲಾಗುತ್ತದೆ, ಇದರಿಂದ ಸ್ಕ್ರಾಲ್ ಬಾರ್ ಮತ್ತು ರೂಪರೇಖೆಯಿಂದ ಜಿಗಿತಗಳು ಹೆಚ್ಚು ನಿಖರವಾಗುತ್ತವೆ. ಪ್ರಾಯೋಗಿಕ</value>
   </data>
 </root>

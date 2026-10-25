@@ -686,11 +686,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>开启后编辑区域具有云母背景效果</value>
+    <value>侧栏和标签栏显示云母效果，编辑区保持主题的纯色</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>编辑区域使用云母材质</value>
+    <value>编辑区周围使用云母材质</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -929,5 +929,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>打开所在文件夹</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>记录最近打开的文件</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>打开过的文件和文件夹会列在“文件 → 打开最近”和首页里。关闭后不再记录新的。</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>清除最近记录</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>清空最近打开的文件和文件夹列表。</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>清除</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>空白标签显示首页</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>启动时没有要打开的内容、以及关掉最后一个标签时：显示最近的文件和文件夹、收藏</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>新建标签也显示首页</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>新建标签（文件 → 新建、“+”按钮）显示首页，而不是空白文档</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>保留多余空行（显示为空白）</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>段落之间多出的空行在阅读模式和 HTML、PDF 导出中也留出空白，与编辑时一致。文件内容不变</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>分段渲染长文档</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>长文档打开时先显示上次阅读的位置，其余部分在后台补齐。若打开长文档时显示异常，可关闭此项，改为一次渲染整篇</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>侧栏显示在右侧</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>把侧栏显示在文档右侧，而不是左侧</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>关闭时保留未保存的修改</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>关闭时不再询问是否保存：未保存的文档下次打开时原样恢复，仍标记为未保存，并恢复上次打开的标签页</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>一直显示 Markdown 标记</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>在每个段落都显示 Markdown 标记（**、#、链接地址），而不只是光标所在的地方</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>预测长文档排版（实验性）</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>长文档分段渲染时，按文字排版算出尚未显示部分的高度，而不是估算，滚动条和大纲跳转更准确。实验性功能</value>
   </data>
 </root>

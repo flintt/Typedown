@@ -202,7 +202,7 @@
     <comment>确定恢复应用默认设置？</comment>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>ኣድሕን</value>
+    <value>ዓቅብ</value>
     <comment>文件保存对话框/保存</comment>
   </data>
   <data name="SaveErrorTitle" xml:space="preserve">
@@ -328,5 +328,14 @@
   </data>
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>ካብኣቶም {0} ቅድሚ ሕጂ ብዚ ኣቃውማ ተሰቒሎም ስለ ዝነበሩ፡ ናይ ቅድሚ ኣድራሻታቶም ተጠቒምና።</value>
+  </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>WebView2 Runtime ካብ Microsoft ኣውርድ</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Runtime ኣይተጻዕነን። ምጽዓን ናይ ኢንተርነት ምትእስሳር የድልዮ፤ Runtime ካብ Microsoft ከተውርድ ትኽእል ኢኻ (ካብ መስመር ወጻኢ ዝጽዕን እውን ኣሎ)፣ ጽዒንካ ነቲ መተግበሪ ደጊምካ ጀምሮ።</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>WebView2 Runtime ይጽዓን ኣሎ...</value>
   </data>
 </root>

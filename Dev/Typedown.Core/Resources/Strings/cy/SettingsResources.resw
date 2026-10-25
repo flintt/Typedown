@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Galluogi effaith cefndir Mica ar gyfer cefndir yr ardal olygu</value>
+    <value>Mae'r cwarel ochr a'r bar tabiau yn dangos effaith mica; mae'r ardal olygu yn cadw lliw solet y thema</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Defnyddiwch ddeunydd mica yn yr ardal olygu</value>
+    <value>Defnyddio deunydd mica o amgylch yr ardal olygu</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Agor ei ffolder</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Cofio ffeiliau a agorwyd yn ddiweddar</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Mae'r ffeiliau a'r ffolderi rydych yn eu hagor yn ymddangos yn Ffeil &gt; Agor diweddar ac ar yr hafan. Wedi'i ddiffodd, nid oes dim newydd yn cael ei ychwanegu.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Clirio ffeiliau a ffolderi diweddar</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Yn gwagio rhestrau'r ffeiliau a'r ffolderi a agorwyd yn ddiweddar.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Clirio</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Dangos yr hafan ar dab gwag</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Wrth gychwyn heb ddim i'w agor a phan gaiff y tab olaf ei gau: ffeiliau a ffolderi diweddar, ffefrynnau</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Mae tabiau newydd yn dangos yr hafan</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Mae tab newydd (Ffeil &gt; Newydd, y botwm +) yn dangos yr hafan yn lle dogfen wag</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Dangos llinellau gwag ychwanegol</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Mae llinellau gwag rhwng paragraffau yn cymryd lle yn y modd darllen ac mewn allforion HTML a PDF hefyd, fel wrth olygu. Nid yw'r ffeil ei hun yn newid</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Llunio dogfennau hir yn raddol</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Mae dogfen hir yn agor lle gadawoch hi, a chaiff y gweddill ei lunio yn y cefndir. Diffoddwch hyn os yw rhywbeth yn edrych yn anghywir wrth i ddogfen hir agor: yna caiff ei llunio i gyd ar unwaith</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Bar ochr ar y dde</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Dangos y bar ochr i'r dde o'r ddogfen yn lle i'r chwith</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Cadw newidiadau heb eu cadw wrth gau</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Cau heb ofyn am gadw: daw dogfennau heb eu cadw yn ôl fel yr oeddent, yn dal heb eu cadw, gyda thabiau'r sesiwn olaf</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Dangos marciau Markdown bob amser</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Dangos y marciau Markdown (**, #, cyfeiriad dolen) ym mhob paragraff, nid dim ond lle mae'r cyrchwr</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Rhagfynegi cynllun dogfennau hir (arbrofol)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Tra bo dogfen hir yn cael ei llunio fesul rhan, mae uchder yr hyn nad yw'n cael ei ddangos eto yn cael ei gyfrifo o'r testun yn lle ei amcangyfrif, felly mae'r bar sgrolio a'r neidiau o'r amlinelliad yn fwy cywir. Arbrofol</value>
   </data>
 </root>

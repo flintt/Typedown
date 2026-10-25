@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
+using Typedown.Core.Controls;
 using Typedown.Core.Interfaces;
 using Typedown.Core.Models;
 using Typedown.Core.Services;
@@ -30,7 +31,18 @@ namespace Typedown.Core.ViewModels
 
         public ObservableCollection<DocumentTab> Tabs { get; } = new();
 
-        public DocumentTab ActiveTab { get; private set; }
+        public DocumentTab ActiveTab
+        {
+            get => activeTab;
+            // Every tab put on screen, by whatever path, makes a switch asked for before it stale (SwitchTo).
+            private set { activeTab = value; showRequests++; }
+        }
+
+        private DocumentTab activeTab;
+
+        // Asks to show a tab (SwitchTo) and tabs shown (ActiveTab), counted: a switch that waited (its flush) while a later
+        // one was asked for or another tab was shown gives way to it.
+        private int showRequests;
 
         public Command<DocumentTab> SwitchTabCommand { get; } = new();
 
@@ -92,7 +104,9 @@ namespace Typedown.Core.ViewModels
         }
 
         /// <summary>True when the active tab is a pristine untitled document that a new/open action may reuse.</summary>
-        public bool IsActiveTabBlank => FileViewModel.FilePath == null && EditorViewModel.Saved && EditorViewModel.CurrentHash == Common.SimpleHash(Common.DefaultMarkdwn);
+        public bool IsActiveTabBlank => FileViewModel.FilePath == null && EditorViewModel.Saved
+            // The editor may give an empty document back as it likes (a line break, none): still nothing in it.
+            && (EditorViewModel.CurrentHash == Common.SimpleHash(Common.DefaultMarkdwn) || string.IsNullOrWhiteSpace(EditorViewModel.Markdown));
 
         /// <summary>
         /// Single-click open navigates within the current tab: it may replace the active document whenever it has no
@@ -113,6 +127,7 @@ namespace Typedown.Core.ViewModels
             tab.DiskHash = FileViewModel.DiskHash;
             tab.Saved = editor.Saved;
             tab.AutoSavedSucc = editor.AutoSavedSucc;
+            tab.AutoSaveHeldBack = editor.AutoSaveHeldBack;
             tab.FileLoaded = editor.FileLoaded;
             tab.Cursor = editor.CurrentCursor;
             tab.History = editor.History;
@@ -171,28 +186,63 @@ namespace Typedown.Core.ViewModels
         public async Task SwitchTo(DocumentTab tab)
         {
             if (tab == null || tab == ActiveTab || !Tabs.Contains(tab)) return;
-            // Bring the outgoing document's latest edits in and let its pending change reports resolve before we
-            // snapshot it and load the next one. Without this a throttled MarkdownChange for the tab being left
-            // can arrive after the switch and land on the tab now shown — one document's text crossing into
-            // another. Flushing captures the accurate text and drains those reports first.
-            await EditorViewModel.FlushContentAsync();
-            // Looked at again after the wait: the tab may have been shown in the meantime. Closing a tab removes it from
-            // the strip, the strip selects the neighbour and asks for it here, and the close then shows that very tab
-            // itself - loaded twice, the first load's reports were dropped as stale and the page, given the same text
-            // again, did not report it again: the outline stayed on the closed document (E2E TC02).
-            if (tab == ActiveTab || !Tabs.Contains(tab)) return;
-            switching = true;
+            // A tab of the last session not read yet: read now (asked about a backup if it has one).
+            if (tab.Pending)
+            {
+                try
+                {
+                    await FileViewModel.LoadIntoTab(tab, mayAsk: true);
+                }
+                catch (Exception ex)
+                {
+                    Log.Debug($"tabs: {tab.FilePath} could not be read: {ex.Message}");
+                    Tabs.Remove(tab);
+                    await AppContentDialog.Create(Locale.GetDialogString("ReadErrorTitle"), ex.Message, Locale.GetDialogString("Ok")).ShowAsync(FileViewModel.AppViewModel.XamlRoot);
+                    return;
+                }
+                if (tab == ActiveTab || !Tabs.Contains(tab)) return;
+            }
+            var request = ++showRequests;
+            // Keys typed from here on are for the tab switched to, not the one being left (see HoldInput).
+            var hold = EditorViewModel.HoldInput();
+            // A very long document left: out of sight at once, not while the page puts it away.
+            var shown = EditorViewModel.CoverIfLong();
             try
             {
-                SnapshotActive();
-                previousTab = ActiveTab;
-                ActiveTab = tab;
-                Restore(tab);
+                // Bring the outgoing document's latest edits in and let its pending change reports resolve before we
+                // snapshot it and load the next one. Without this a throttled MarkdownChange for the tab being left
+                // can arrive after the switch and land on the tab now shown — one document's text crossing into
+                // another. Flushing captures the accurate text and drains those reports first.
+                await EditorViewModel.FlushBeforeTabChangeAsync();
+                // Looked at again after the wait: the tab may have been shown in the meantime. Closing a tab removes it from
+                // the strip, the strip selects the neighbour and asks for it here, and the close then shows that very tab
+                // itself - loaded twice, the first load's reports were dropped as stale and the page, given the same text
+                // again, did not report it again: the outline stayed on the closed document (E2E TC02).
+                if (tab == ActiveTab || !Tabs.Contains(tab)) return;
+                // Something later meanwhile: a file opened right after a tab was closed was shown, and then the strip's
+                // switch to the closed tab's neighbour (asked for as the tab went) came out of its wait and put that
+                // neighbour back over it (HJ02/HJ03 on w10, 2026-10-24). The last one asked for is the one shown.
+                if (request != showRequests) return;
+                switching = true;
+                try
+                {
+                    SnapshotActive();
+                    previousTab = ActiveTab;
+                    ActiveTab = tab;
+                    Restore(tab);
+                }
+                finally
+                {
+                    switching = false;
+                }
             }
             finally
             {
-                switching = false;
+                EditorViewModel.ReleaseInput(hold);
+                // Shown meanwhile, or nothing loaded after all: not covered.
+                EditorViewModel.UncoverIfStill(shown);
             }
+            EditionHooks.ReportActivity(ActivityKind.DocumentShown, FileViewModel.AppViewModel);
             await FileViewModel.CheckExternalChangeAfterSwitch();
         }
 
@@ -222,6 +272,7 @@ namespace Typedown.Core.ViewModels
             editor.CurrentHash = tab.CurrentHash;
             editor.Saved = tab.Saved;
             editor.AutoSavedSucc = tab.AutoSavedSucc;
+            editor.AutoSaveHeldBack = tab.AutoSaveHeldBack;
             // A tab that was shown before keeps its history/hash (the handshake must not reset them); one loaded
             // in the background (session restore) has never been through the editor and still needs it.
             editor.FileLoaded = tab.FileLoaded;
@@ -236,12 +287,37 @@ namespace Typedown.Core.ViewModels
             if (tab == null || !Tabs.Contains(tab)) return false;
             if (Tabs.Count == 1)
             {
+                // With the home page on (Settings > General > On startup), the last document closed leaves a blank tab
+                // with the home page; closed there too, the window goes.
+                var home = ServiceProvider.GetService<HomeViewModel>();
+                if (ServiceProvider.GetService<SettingsViewModel>().ShowHomePage && home != null && !home.IsVisible)
+                {
+                    if (!await FileViewModel.AskToSave()) return false;
+                    if (string.IsNullOrEmpty(FileViewModel.FilePath)) FileViewModel.AutoBackup.DeleteBackup(null, tab.DocumentId);
+                    EditorViewModel.Saved = true;
+                    FileViewModel.ResetToBlankDocument();
+                    home.Show();
+                    MarkdownEditor?.FocusEditor();
+                    return true;
+                }
                 // Closing the only document closes the window (the window's own close flow asks to save).
                 FileViewModel.ExitCommand.Execute(default);
                 return true;
             }
+            // A session tab never read: nothing in it to ask about or show.
+            if (tab.Pending && tab != ActiveTab)
+            {
+                Tabs.Remove(tab);
+                return true;
+            }
             if (tab != ActiveTab) await SwitchTo(tab);
-            if (!await FileViewModel.AskToSave()) return false;
+            // Covered only when nothing is to be asked (a question about saving is about what is on the page).
+            var shown = EditorViewModel.Saved ? EditorViewModel.CoverIfLong() : EditorViewModel.LoadId;
+            if (!await FileViewModel.AskToSave())
+            {
+                EditorViewModel.UncoverIfStill(shown);
+                return false;
+            }
             // Closed on purpose: an untitled document's backup must not come back at the next start.
             if (string.IsNullOrEmpty(FileViewModel.FilePath)) FileViewModel.AutoBackup.DeleteBackup(null, tab.DocumentId);
             // Saved or explicitly discarded: nothing in the editor needs to survive.
@@ -270,6 +346,10 @@ namespace Typedown.Core.ViewModels
             // throttle would otherwise still read as saved, and the window would close without asking about it.
             // If the editor did not answer, treat the active document as dirty rather than closing it silently.
             var flushed = await EditorViewModel.FlushContentAsync();
+            // Kept instead of asked about (Settings > Keep unsaved changes when closing): every unsaved document backed up
+            // as it is now - and asked about after all when one could not be, or the editor did not answer.
+            if (flushed && ServiceProvider.GetService<SettingsViewModel>().KeepUnsavedOnClose && await FileViewModel.KeepUnsavedAsync())
+                return true;
             foreach (var tab in Tabs.ToList())
             {
                 var dirty = tab == ActiveTab ? (!EditorViewModel.Saved || !flushed) : !tab.Saved;

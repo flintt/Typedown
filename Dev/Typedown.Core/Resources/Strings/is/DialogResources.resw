@@ -126,11 +126,11 @@
     <comment>未保存对话框/是否要保存更改？</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Afturkalla</value>
+    <value>Hætta við</value>
     <comment>对话框/取消</comment>
   </data>
   <data name="Confirm" xml:space="preserve">
-    <value>ÓKEI</value>
+    <value>Í lagi</value>
     <comment>对话框/确定</comment>
   </data>
   <data name="CreateDocErrorTitle" xml:space="preserve">
@@ -202,7 +202,7 @@
     <comment>确定恢复应用默认设置？</comment>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Spara</value>
+    <value>Vista</value>
     <comment>文件保存对话框/保存</comment>
   </data>
   <data name="SaveErrorTitle" xml:space="preserve">
@@ -328,5 +328,14 @@
   </data>
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>Búið var að hlaða {0} þeirra upp áður með þessum stillingum, svo fyrri vistföng þeirra voru notuð.</value>
+  </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Sækja WebView2 Runtime frá Microsoft</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Keyrsluumhverfið var ekki sett upp. Uppsetningin þarf nettengingu; þú getur líka sótt keyrsluumhverfið frá Microsoft (það er líka til uppsetningarforrit án nettengingar), sett það upp og ræst forritið aftur.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>Set upp WebView2 Runtime...</value>
   </data>
 </root>

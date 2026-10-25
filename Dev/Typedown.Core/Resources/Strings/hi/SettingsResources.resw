@@ -138,7 +138,7 @@
     <comment>关于/发送反馈</comment>
   </data>
   <data name="About.Title" xml:space="preserve">
-    <value>करीबन</value>
+    <value>के बारे में</value>
     <comment>关于/关于</comment>
   </data>
   <data name="Editor.AutoPairBracket.Description" xml:space="preserve">
@@ -634,7 +634,7 @@
     <comment>视图/显示状态栏</comment>
   </data>
   <data name="View.Title" xml:space="preserve">
-    <value>उपस्थिति</value>
+    <value>रूप</value>
     <comment>视图/外观</comment>
   </data>
   <data name="View.Topmost.Description" xml:space="preserve">
@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>संपादन क्षेत्र पृष्ठभूमि के लिए अभ्रक पृष्ठभूमि प्रभाव सक्षम करें</value>
+    <value>साइड फलक और टैब बार माइका प्रभाव दिखाते हैं; संपादन क्षेत्र थीम का ठोस रंग बनाए रखता है</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>संपादन क्षेत्र में अभ्रक सामग्री का उपयोग करें</value>
+    <value>संपादन क्षेत्र के आसपास माइका सामग्री का उपयोग करें</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>उसका फ़ोल्डर खोलें</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>हाल में खोली गई फ़ाइलें याद रखें</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>आपकी खोली गई फ़ाइलें और फ़ोल्डर फ़ाइल &gt; हाल का खोलें और होम पेज पर दिखते हैं। बंद होने पर कुछ नया नहीं जुड़ता।</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>हाल की फ़ाइलें और फ़ोल्डर साफ़ करें</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>हाल में खोली गई फ़ाइलों और फ़ोल्डरों की सूचियाँ खाली करता है।</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>साफ़ करें</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>खाली टैब पर होम पेज दिखाएँ</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>शुरू करते समय जब खोलने को कुछ न हो और अंतिम टैब बंद होने पर: हाल की फ़ाइलें और फ़ोल्डर, पसंदीदा</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>नए टैब होम पेज दिखाते हैं</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>नया टैब (फ़ाइल &gt; नया, + बटन) खाली दस्तावेज़ के बजाय होम पेज दिखाता है</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>अतिरिक्त खाली पंक्तियाँ दिखाएँ</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>अनुच्छेदों के बीच की खाली पंक्तियाँ संपादन की तरह पढ़ने के मोड और HTML व PDF निर्यात में भी जगह लेती हैं। फ़ाइल स्वयं नहीं बदलती</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>लंबे दस्तावेज़ धीरे-धीरे बनाएँ</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>लंबा दस्तावेज़ वहीं से खुलता है जहाँ आपने उसे छोड़ा था, और बाकी हिस्सा पृष्ठभूमि में बनता है। लंबा दस्तावेज़ खुलते समय कुछ गलत दिखे तो इसे बंद करें: तब पूरा दस्तावेज़ एक साथ बनेगा</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>दाईं ओर साइड बार</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>दस्तावेज़ के बाईं ओर के बजाय दाईं ओर साइड बार दिखाएँ</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>बंद करते समय बिना सहेजे परिवर्तन रखें</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>सहेजने के लिए पूछे बिना बंद करें: बिना सहेजे दस्तावेज़ जैसे थे वैसे ही, अब भी बिना सहेजे, पिछले सत्र के टैब के साथ वापस आते हैं</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Markdown चिह्न हमेशा दिखाएँ</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>केवल कर्सर वाली जगह नहीं, हर अनुच्छेद में Markdown चिह्न (**, #, लिंक का पता) दिखाएँ</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>लंबे दस्तावेज़ों का लेआउट पहले से आँकें (प्रायोगिक)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>जब कोई लंबा दस्तावेज़ हिस्सों में बनाया जाता है, तो अभी न दिखाए गए हिस्से की ऊँचाई अनुमान के बजाय पाठ से गणना की जाती है, जिससे स्क्रॉल बार और रूपरेखा से छलांग अधिक सटीक होती है। प्रायोगिक</value>
   </data>
 </root>

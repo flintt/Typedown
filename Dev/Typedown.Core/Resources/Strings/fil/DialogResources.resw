@@ -130,7 +130,7 @@
     <comment>对话框/取消</comment>
   </data>
   <data name="Confirm" xml:space="preserve">
-    <value>ok na</value>
+    <value>OK</value>
     <comment>对话框/确定</comment>
   </data>
   <data name="CreateDocErrorTitle" xml:space="preserve">
@@ -142,7 +142,7 @@
     <comment>创建文件夹对话框/新建文件夹失败</comment>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Tanggalin ang</value>
+    <value>Tanggalin</value>
     <comment>恢复文件对话框/删除</comment>
   </data>
   <data name="Don'tSave" xml:space="preserve">
@@ -202,7 +202,7 @@
     <comment>确定恢复应用默认设置？</comment>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Mag-ipon</value>
+    <value>I-save</value>
     <comment>文件保存对话框/保存</comment>
   </data>
   <data name="SaveErrorTitle" xml:space="preserve">
@@ -328,5 +328,14 @@
   </data>
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>Ang {0} sa mga ito ay na-upload na dati gamit ang configuration na ito, kaya ginamit ang mga dati nilang address.</value>
+  </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>I-download ang WebView2 Runtime mula sa Microsoft</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Hindi na-install ang runtime. Kailangan ng setup ng koneksyon sa internet; maaari mo ring i-download ang runtime mula sa Microsoft (may offline installer din), i-install ito, at simulan muli ang app.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>Ini-install ang WebView2 Runtime...</value>
   </data>
 </root>

@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>{0} منها سبق رفعها بهذا التكوين، لذا استُخدمت عناوينها السابقة.</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>تنزيل وقت تشغيل WebView2 من Microsoft</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>لم يتم تثبيت وقت التشغيل. يحتاج برنامج الإعداد إلى اتصال بالإنترنت؛ يمكنك أيضًا تنزيل وقت التشغيل من Microsoft (يتوفر أيضًا مثبت دون اتصال)، ثم تثبيته وإعادة تشغيل التطبيق.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>جارٍ تثبيت وقت تشغيل WebView2...</value>
+  </data>
 </root>

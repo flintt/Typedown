@@ -198,11 +198,11 @@
     <comment>点击添加一张图片</comment>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>அடைப்பு</value>
+    <value>மூடு</value>
     <comment>文件/关闭</comment>
   </data>
   <data name="Code" xml:space="preserve">
-    <value>சட்டத்தொகுப்பேடு</value>
+    <value>குறியீடு</value>
     <comment>代码</comment>
   </data>
   <data name="CodeFences" xml:space="preserve">
@@ -214,7 +214,7 @@
     <comment>插入表格/列数</comment>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>சரிபடிவம்</value>
+    <value>நகலெடு</value>
     <comment>编辑/复制</comment>
   </data>
   <data name="CopyAsHTMLCode" xml:space="preserve">
@@ -266,7 +266,7 @@
     <comment>自定义快捷键</comment>
   </data>
   <data name="Cut" xml:space="preserve">
-    <value>தறிப்பு</value>
+    <value>வெட்டு</value>
     <comment>编辑/剪切</comment>
   </data>
   <data name="Dark" xml:space="preserve">
@@ -302,7 +302,7 @@
     <comment>段落/重复</comment>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>பதிப்பி</value>
+    <value>திருத்து</value>
     <comment>编辑</comment>
   </data>
   <data name="EditImage" xml:space="preserve">
@@ -334,7 +334,7 @@
     <comment>错误</comment>
   </data>
   <data name="Export" xml:space="preserve">
-    <value>ஏற்றுமதிப்பண்டம்</value>
+    <value>ஏற்றுமதி</value>
     <comment>文件/导出</comment>
   </data>
   <data name="ExportSettings" xml:space="preserve">
@@ -350,7 +350,7 @@
     <comment>应用程序反馈</comment>
   </data>
   <data name="File" xml:space="preserve">
-    <value>அரம்</value>
+    <value>கோப்பு</value>
     <comment>文件(单数)</comment>
   </data>
   <data name="Files" xml:space="preserve">
@@ -358,7 +358,7 @@
     <comment>文件(复数)</comment>
   </data>
   <data name="Find" xml:space="preserve">
-    <value>கண்டுபிடிப்பு</value>
+    <value>கண்டுபிடி</value>
     <comment>编辑/查找和替换/查找</comment>
   </data>
   <data name="FindAndReplace" xml:space="preserve">
@@ -462,7 +462,7 @@
     <comment>格式/超链接</comment>
   </data>
   <data name="Image" xml:space="preserve">
-    <value>உருவம்</value>
+    <value>படம்</value>
     <comment>格式/图像</comment>
   </data>
   <data name="ImageAlt" xml:space="preserve">
@@ -474,7 +474,7 @@
     <comment>图片上传设置</comment>
   </data>
   <data name="Import" xml:space="preserve">
-    <value>உட்பொருள்</value>
+    <value>இறக்குமதி</value>
     <comment>文件/导入</comment>
   </data>
   <data name="IncreaseHeadingLevel" xml:space="preserve">
@@ -614,7 +614,7 @@
     <comment>名称不能为空</comment>
   </data>
   <data name="New" xml:space="preserve">
-    <value>புது</value>
+    <value>புதியது</value>
     <comment>文件/新建</comment>
   </data>
   <data name="NewFile" xml:space="preserve">
@@ -654,7 +654,7 @@
     <comment>未设置</comment>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>அடைப்பு</value>
+    <value>முடக்கு</value>
     <comment>开关/关</comment>
   </data>
   <data name="Ok" xml:space="preserve">
@@ -662,11 +662,11 @@
     <comment>对话框/确定</comment>
   </data>
   <data name="On" xml:space="preserve">
-    <value>மேல்</value>
+    <value>இயக்கு</value>
     <comment>开关/开</comment>
   </data>
   <data name="Open" xml:space="preserve">
-    <value>திறந்த வெளியிடம்</value>
+    <value>திற</value>
     <comment>文件/打开</comment>
   </data>
   <data name="OpenFileLocation" xml:space="preserve">
@@ -686,7 +686,7 @@
     <comment>文件/在新窗口中打开</comment>
   </data>
   <data name="OpenRecent" xml:space="preserve">
-    <value>திறந்த சமீபத்திய</value>
+    <value>சமீபத்தியதைத் திற</value>
     <comment>文件/打开最近</comment>
   </data>
   <data name="OpenSourceSoftware" xml:space="preserve">
@@ -702,11 +702,11 @@
     <comment>侧栏/大纲</comment>
   </data>
   <data name="Paragraph" xml:space="preserve">
-    <value>ஏட்டின் ஒருபத்தி</value>
+    <value>பத்தி</value>
     <comment>段落</comment>
   </data>
   <data name="Paste" xml:space="preserve">
-    <value>கூழ்</value>
+    <value>ஒட்டு</value>
     <comment>编辑/粘贴</comment>
   </data>
   <data name="PasteAsPlainText" xml:space="preserve">
@@ -722,15 +722,15 @@
     <comment>PlantUML Diagram</comment>
   </data>
   <data name="Print" xml:space="preserve">
-    <value>அச்சு</value>
+    <value>அச்சிடு</value>
     <comment>文件/打印</comment>
   </data>
   <data name="Quote" xml:space="preserve">
-    <value>மேலாட்சிப்பகுதி</value>
+    <value>மேற்கோள்</value>
     <comment>段落/引用</comment>
   </data>
   <data name="Redo" xml:space="preserve">
-    <value>திரும்பச் செய்</value>
+    <value>மீண்டும் செய்</value>
     <comment>编辑/重做</comment>
   </data>
   <data name="RemoveColumn" xml:space="preserve">
@@ -746,7 +746,7 @@
     <comment>文件/重命名</comment>
   </data>
   <data name="Replace" xml:space="preserve">
-    <value>பின்னுற்றிடங் கொள்</value>
+    <value>மாற்று</value>
     <comment>编辑/查找和替换/替换</comment>
   </data>
   <data name="ReplaceAll" xml:space="preserve">
@@ -770,11 +770,11 @@
     <comment>文件/保存</comment>
   </data>
   <data name="SaveAs" xml:space="preserve">
-    <value>சேமிக்கவும்</value>
+    <value>இவ்வாறு சேமி</value>
     <comment>文件/另存为</comment>
   </data>
   <data name="Saved" xml:space="preserve">
-    <value>சேமிக்க</value>
+    <value>சேமிக்கப்பட்டது</value>
     <comment>文件/已保存</comment>
   </data>
   <data name="SaveImageAs" xml:space="preserve">
@@ -782,7 +782,7 @@
     <comment>图片另存为</comment>
   </data>
   <data name="Search" xml:space="preserve">
-    <value>தேட்டம்</value>
+    <value>தேடு</value>
     <comment>搜索</comment>
   </data>
   <data name="SelectAll" xml:space="preserve">
@@ -826,11 +826,11 @@
     <comment>格式/删除线</comment>
   </data>
   <data name="Strong" xml:space="preserve">
-    <value>துணிவுள்ள</value>
+    <value>தடித்த</value>
     <comment>格式/加粗</comment>
   </data>
   <data name="Table" xml:space="preserve">
-    <value>மேசை</value>
+    <value>அட்டவணை</value>
     <comment>段落/表格</comment>
   </data>
   <data name="TaskList" xml:space="preserve">
@@ -838,7 +838,7 @@
     <comment>段落/任务列表</comment>
   </data>
   <data name="Theme" xml:space="preserve">
-    <value>ஆய்வுப்பொருள்</value>
+    <value>தீம்</value>
     <comment>应用程序主题</comment>
   </data>
   <data name="Title" xml:space="preserve">
@@ -866,7 +866,7 @@
     <comment>格式/下划线</comment>
   </data>
   <data name="Undo" xml:space="preserve">
-    <value>கெடு</value>
+    <value>செயல்தவிர்</value>
     <comment>编辑/撤销</comment>
   </data>
   <data name="UnorderedList" xml:space="preserve">
@@ -894,7 +894,7 @@
     <comment>Vega Chart</comment>
   </data>
   <data name="View" xml:space="preserve">
-    <value>நோக்கு</value>
+    <value>காட்சி</value>
     <comment>查看</comment>
   </data>
   <data name="Website" xml:space="preserve">
@@ -906,7 +906,7 @@
     <comment>编辑/查找和替换/选项/全字匹配</comment>
   </data>
   <data name="Window" xml:space="preserve">
-    <value>பலகணி</value>
+    <value>சாளரம்</value>
     <comment>窗口</comment>
   </data>
   <data name="Word" xml:space="preserve">
@@ -1011,5 +1011,146 @@
   </data>
   <data name="ExportedTo" xml:space="preserve">
     <value>{0} க்கு ஏற்றுமதி செய்யப்பட்டது</value>
+  </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>பயனர் வழிகாட்டி</value>
+  </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>எழுத்துகள் (இடைவெளி இல்லாமல்)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>எழுத்துகள் (இடைவெளியுடன்)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK எழுத்துகள்</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>சொற்கள்</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>CJK அல்லாத சொற்கள்</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>பத்திகள்</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>தலைப்புகள்</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>படங்கள்</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>இணைப்புகள்</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>படிக்கும் நேரம்</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>சுமார் {0} நிமி</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>ஒரு நிமிடத்திற்குள்</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>தெரியும் உரையின் அடிப்படையில் கணக்கிடப்பட்டது. குறியீட்டுத் தொகுதிகளும் சூத்திரங்களும் படிக்கும் நேரத்தில் சேர்க்கப்படுவதில்லை.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>நிலைப் பட்டியில் காட்டுவது</value>
+  </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>சேமிக்கப்பட்டது</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>சேமிக்கப்படவில்லை</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>தானியங்கு சேமிப்பு இடைநிறுத்தப்பட்டது</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>சேமிக்க கிளிக் செய்யவும்</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>ஆவணம் காலியாக உள்ளது, ஆனால் வட்டிலுள்ள கோப்பு காலியாக இல்லை, எந்தத் திருத்தமும் அதைக் காலியாக்கவில்லை, எனவே தானியங்கு சேமிப்பு கோப்பை மேலெழுதவில்லை.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>இந்தக் கோப்பை இழப்பின்றிப் படிக்க முடியவில்லை (UTF-8 அல்லாத குறியாக்கம்?), எனவே தானியங்கு சேமிப்பு அதை மேலெழுதாது. காட்டப்படும் உரை சரியாக இருந்தால் மட்டும் நீங்களே சேமிக்கவும்.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>கோப்பை எழுத முடியவில்லை: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{1} {2} இல் {0} தேர்ந்தெடுக்கப்பட்டது</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>குறியாக்கம் மற்றும் வரி முடிவுகள்</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>UTF-8 ஆக மாற்று</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>குறியாக்கத்துடன் மீண்டும் திற</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>தற்போதைய தலைப்பு</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>சேமிப்பு நிலை</value>
+  </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>கோப்புறைகள்</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>சமீபத்திய கோப்புறைகள் இல்லை</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>சமீபத்திய கோப்புறைகளை அழி</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>பட்டியலிலிருந்து நீக்க வலது கிளிக் செய்யவும் அல்லது Delete அழுத்தவும்</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>ஒரு நிலை மேலே</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>மூலமாக அமை</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>பிடித்தவை</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>பிடித்தவையில் சேர்</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>பிடித்தவையிலிருந்து நீக்கு</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>முகப்பு</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>தொடக்கம்</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>புதிய ஆவணம்</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>கோப்பைத் திற</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>கோப்புறையைத் திற</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>சமீபத்திய கோப்புகள்</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>சமீபத்திய கோப்புறைகள்</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>பட்டியலிலிருந்து நீக்கு</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>அமைப்புகள்</value>
+  </data>
+  <data name="EditorOpening" xml:space="preserve">
+    <value>திறக்கிறது…</value>
   </data>
 </root>

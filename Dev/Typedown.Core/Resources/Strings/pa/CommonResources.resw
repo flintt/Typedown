@@ -270,7 +270,7 @@
     <comment>编辑/剪切</comment>
   </data>
   <data name="Dark" xml:space="preserve">
-    <value>ਹਨੇਰਾ</value>
+    <value>ਗੂੜ੍ਹਾ</value>
     <comment>应用主题/深色</comment>
   </data>
   <data name="Data" xml:space="preserve">
@@ -418,7 +418,7 @@
     <comment>转到</comment>
   </data>
   <data name="Heading" xml:space="preserve">
-    <value>Heading</value>
+    <value>ਸਿਰਲੇਖ</value>
     <comment>段落/标题</comment>
   </data>
   <data name="Heading1" xml:space="preserve">
@@ -546,7 +546,7 @@
     <comment>了解更多</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>ਰੋਸ਼ਨੀ</value>
+    <value>ਹਲਕਾ</value>
     <comment>应用主题/浅色</comment>
   </data>
   <data name="Line" xml:space="preserve">
@@ -654,7 +654,7 @@
     <comment>未设置</comment>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>ਬੰਦ ਕਰੋ</value>
+    <value>ਬੰਦ</value>
     <comment>开关/关</comment>
   </data>
   <data name="Ok" xml:space="preserve">
@@ -866,7 +866,7 @@
     <comment>格式/下划线</comment>
   </data>
   <data name="Undo" xml:space="preserve">
-    <value>ਵਾਪਿਸ</value>
+    <value>ਵਾਪਸ ਕਰੋ</value>
     <comment>编辑/撤销</comment>
   </data>
   <data name="UnorderedList" xml:space="preserve">
@@ -1011,5 +1011,146 @@
   </data>
   <data name="ExportedTo" xml:space="preserve">
     <value>{0} ਵਿੱਚ ਨਿਰਯਾਤ ਕੀਤਾ ਗਿਆ</value>
+  </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>ਵਰਤੋਂਕਾਰ ਗਾਈਡ</value>
+  </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>ਅੱਖਰ (ਖਾਲੀ ਥਾਂ ਤੋਂ ਬਿਨਾਂ)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>ਅੱਖਰ (ਖਾਲੀ ਥਾਂ ਸਮੇਤ)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK ਅੱਖਰ</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>ਸ਼ਬਦ</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>ਗੈਰ-CJK ਸ਼ਬਦ</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>ਪੈਰ੍ਹੇ</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>ਸਿਰਲੇਖ</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>ਚਿੱਤਰ</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>ਲਿੰਕ</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>ਪੜ੍ਹਨ ਦਾ ਸਮਾਂ</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>ਲਗਭਗ {0} ਮਿੰਟ</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>ਇੱਕ ਮਿੰਟ ਤੋਂ ਘੱਟ</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>ਦਿਖਾਈ ਦੇਣ ਵਾਲੇ ਟੈਕਸਟ ਉੱਤੇ ਗਿਣਿਆ ਗਿਆ। ਕੋਡ ਬਲਾਕ ਅਤੇ ਫਾਰਮੂਲੇ ਪੜ੍ਹਨ ਦੇ ਸਮੇਂ ਵਿੱਚ ਸ਼ਾਮਲ ਨਹੀਂ ਹਨ।</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>ਸਥਿਤੀ ਪੱਟੀ ਵਿੱਚ ਦਿਖਾਓ</value>
+  </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>ਸੰਭਾਲਿਆ ਗਿਆ</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>ਸੰਭਾਲਿਆ ਨਹੀਂ ਗਿਆ</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>ਆਟੋ ਸੰਭਾਲ ਰੋਕੀ ਗਈ</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>ਸੰਭਾਲਣ ਲਈ ਕਲਿੱਕ ਕਰੋ</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>ਦਸਤਾਵੇਜ਼ ਖਾਲੀ ਹੈ ਪਰ ਡਿਸਕ ਉੱਤੇ ਫਾਈਲ ਖਾਲੀ ਨਹੀਂ ਹੈ, ਅਤੇ ਕਿਸੇ ਸੋਧ ਨੇ ਇਸਨੂੰ ਖਾਲੀ ਨਹੀਂ ਕੀਤਾ, ਇਸ ਲਈ ਆਟੋ ਸੰਭਾਲ ਨੇ ਫਾਈਲ ਉੱਤੇ ਮੁੜ ਨਹੀਂ ਲਿਖਿਆ।</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>ਇਹ ਫਾਈਲ ਬਿਨਾਂ ਨੁਕਸਾਨ ਦੇ ਪੜ੍ਹੀ ਨਹੀਂ ਜਾ ਸਕੀ (UTF-8 ਤੋਂ ਇਲਾਵਾ ਕੋਈ ਐਨਕੋਡਿੰਗ?), ਇਸ ਲਈ ਆਟੋ ਸੰਭਾਲ ਇਸ ਉੱਤੇ ਮੁੜ ਨਹੀਂ ਲਿਖਦੀ। ਦਿਖਾਇਆ ਟੈਕਸਟ ਸਹੀ ਹੋਵੇ ਤਾਂ ਹੀ ਖੁਦ ਸੰਭਾਲੋ।</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>ਫਾਈਲ ਲਿਖਣਾ ਅਸਫਲ ਰਿਹਾ: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{1} {2} ਵਿੱਚੋਂ {0} ਚੁਣੇ ਗਏ</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>ਐਨਕੋਡਿੰਗ ਅਤੇ ਲਾਈਨ ਦੇ ਅੰਤ</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>UTF-8 ਵਿੱਚ ਬਦਲੋ</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>ਐਨਕੋਡਿੰਗ ਨਾਲ ਮੁੜ ਖੋਲ੍ਹੋ</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>ਮੌਜੂਦਾ ਸਿਰਲੇਖ</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>ਸੰਭਾਲ ਸਥਿਤੀ</value>
+  </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>ਫੋਲਡਰ</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>ਕੋਈ ਹਾਲੀਆ ਫੋਲਡਰ ਨਹੀਂ</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>ਹਾਲੀਆ ਫੋਲਡਰ ਸਾਫ਼ ਕਰੋ</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>ਸੂਚੀ ਵਿੱਚੋਂ ਹਟਾਉਣ ਲਈ ਸੱਜਾ-ਕਲਿੱਕ ਕਰੋ ਜਾਂ Delete ਦਬਾਓ</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>ਇੱਕ ਪੱਧਰ ਉੱਪਰ</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>ਰੂਟ ਵਜੋਂ ਸੈੱਟ ਕਰੋ</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>ਮਨਪਸੰਦ</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>ਮਨਪਸੰਦ ਵਿੱਚ ਸ਼ਾਮਲ ਕਰੋ</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>ਮਨਪਸੰਦ ਵਿੱਚੋਂ ਹਟਾਓ</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>ਹੋਮ</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>ਸ਼ੁਰੂਆਤ</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>ਨਵਾਂ ਦਸਤਾਵੇਜ਼</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>ਫ਼ਾਈਲ ਖੋਲ੍ਹੋ</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>ਫੋਲਡਰ ਖੋਲ੍ਹੋ</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>ਹਾਲੀਆ ਫ਼ਾਈਲਾਂ</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>ਹਾਲੀਆ ਫੋਲਡਰ</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>ਸੂਚੀ ਵਿੱਚੋਂ ਹਟਾਓ</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>ਸੈਟਿੰਗਾਂ</value>
+  </data>
+  <data name="EditorOpening" xml:space="preserve">
+    <value>ਖੋਲ੍ਹਿਆ ਜਾ ਰਿਹਾ ਹੈ…</value>
   </data>
 </root>

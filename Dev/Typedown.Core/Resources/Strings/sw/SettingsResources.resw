@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Washa athari ya usuli wa mica kwa usuli wa eneo la uhariri</value>
+    <value>Kidirisha cha pembeni na upau wa vichupo huonyesha athari ya mika; eneo la kuhariri hubaki na rangi thabiti ya mandhari</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Tumia vifaa vya mica katika eneo la uhariri</value>
+    <value>Tumia nyenzo ya mika kuzunguka eneo la kuhariri</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Fungua folda yake</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Kumbuka faili zilizofunguliwa hivi karibuni</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Faili na folda unazofungua zinaonyeshwa katika Faili &gt; Fungua za hivi karibuni na kwenye ukurasa wa mwanzo. Ikizimwa, hakuna jipya linaloongezwa.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Futa faili na folda za hivi karibuni</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Huondoa orodha za faili na folda zilizofunguliwa hivi karibuni.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Futa</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Onyesha ukurasa wa mwanzo kwenye kichupo tupu</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Wakati wa kuanza bila kitu cha kufungua na kichupo cha mwisho kinapofungwa: faili na folda za hivi karibuni, vipendwa</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Vichupo vipya vinaonyesha ukurasa wa mwanzo</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Kichupo kipya (Faili &gt; Mpya, kitufe +) kinaonyesha ukurasa wa mwanzo badala ya hati tupu</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Onyesha mistari mitupu ya ziada</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Mistari mitupu kati ya aya huchukua nafasi pia katika hali ya kusoma na katika uhamishaji wa HTML na PDF, kama wakati wa kuhariri. Faili lenyewe halibadilishwi</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Chora hati ndefu hatua kwa hatua</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Hati ndefu hufunguka mahali ulipoiacha, na sehemu iliyobaki huchorwa chinichini. Zima hii ikiwa kitu kinaonekana si sawa wakati hati ndefu inafunguka: kisha itachorwa yote kwa mara moja</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Upau wa pembeni upande wa kulia</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Onyesha upau wa pembeni upande wa kulia wa hati badala ya kushoto</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Hifadhi mabadiliko ambayo hayajahifadhiwa wakati wa kufunga</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Funga bila kuuliza kuhifadhi: hati ambazo hazijahifadhiwa zinarudi kama zilivyokuwa, bado hazijahifadhiwa, pamoja na vichupo vya kipindi kilichopita</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Onyesha alama za Markdown kila wakati</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Onyesha alama za Markdown (**, #, anwani ya kiungo) katika kila aya, si tu mahali kishale kilipo</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Tabiri mpangilio wa hati ndefu (majaribio)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Hati ndefu inapochorwa kwa sehemu, urefu wa sehemu ambayo bado haijaonyeshwa hukokotolewa kutoka kwa maandishi badala ya kukadiriwa, hivyo upau wa kusogeza na kuruka kutoka kwa muhtasari kunakuwa sahihi zaidi. Majaribio</value>
   </data>
 </root>

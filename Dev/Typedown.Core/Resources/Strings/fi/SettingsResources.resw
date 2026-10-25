@@ -138,7 +138,7 @@
     <comment>关于/发送反馈</comment>
   </data>
   <data name="About.Title" xml:space="preserve">
-    <value>Noin</value>
+    <value>Tietoja</value>
     <comment>关于/关于</comment>
   </data>
   <data name="Editor.AutoPairBracket.Description" xml:space="preserve">
@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Ota kiilletaustatehoste käyttöön muokkausalueen taustalle</value>
+    <value>Sivupaneeli ja välilehtipalkki näyttävät kiille-efektin; muokkausalue säilyttää teeman tasaisen värin</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Käytä kiillemateriaalia muokkausalueella</value>
+    <value>Käytä kiillemateriaalia muokkausalueen ympärillä</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Avaa sen kansio</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Muista viimeksi avatut tiedostot</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Avaamasi tiedostot ja kansiot näkyvät kohdassa Tiedosto &gt; Avaa viimeaikainen ja aloitussivulla. Pois päältä uusia ei lisätä.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Tyhjennä viimeaikaiset tiedostot ja kansiot</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Tyhjentää viimeksi avattujen tiedostojen ja kansioiden luettelot.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Tyhjennä</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Näytä aloitussivu tyhjällä välilehdellä</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Käynnistettäessä, kun avattavaa ei ole, ja viimeisen välilehden sulkeutuessa: viimeaikaiset tiedostot ja kansiot, suosikit</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Uudet välilehdet näyttävät aloitussivun</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Uusi välilehti (Tiedosto &gt; Uusi, +-painike) näyttää aloitussivun tyhjän tiedoston sijaan</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Näytä ylimääräiset tyhjät rivit</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Kappaleiden väliset tyhjät rivit vievät tilaa myös lukutilassa sekä HTML- ja PDF-viennissä, kuten muokatessa. Itse tiedosto ei muutu</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Piirrä pitkät asiakirjat vähitellen</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Pitkä asiakirja avautuu kohdasta, johon jätit sen, ja loput piirretään taustalla. Poista tämä käytöstä, jos jokin näyttää väärältä pitkän asiakirjan avautuessa: silloin se piirretään kerralla</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Sivupalkki oikealla</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Näytä sivupalkki asiakirjan oikealla puolella vasemman sijaan</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Säilytä tallentamattomat muutokset suljettaessa</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Sulje kysymättä tallentamisesta: tallentamattomat asiakirjat palaavat ennallaan, yhä tallentamattomina, edellisen istunnon välilehtien kanssa</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Näytä Markdown-merkinnät aina</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Näytä Markdown-merkinnät (**, #, linkin osoite) jokaisessa kappaleessa, ei vain kohdistimen kohdalla</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Ennakoi pitkien asiakirjojen asettelu (kokeellinen)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Kun pitkää asiakirjaa piirretään osissa, vielä näyttämättömän osan korkeus lasketaan tekstistä arvioinnin sijaan, joten vierityspalkki ja siirtymät jäsennyksestä ovat tarkempia. Kokeellinen</value>
   </data>
 </root>

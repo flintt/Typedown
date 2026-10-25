@@ -546,7 +546,7 @@
     <comment>了解更多</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>દીપ</value>
+    <value>આછો</value>
     <comment>应用主题/浅色</comment>
   </data>
   <data name="Line" xml:space="preserve">
@@ -654,7 +654,7 @@
     <comment>未设置</comment>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>બંધ કરો</value>
+    <value>બંધ</value>
     <comment>开关/关</comment>
   </data>
   <data name="Ok" xml:space="preserve">
@@ -662,11 +662,11 @@
     <comment>对话框/确定</comment>
   </data>
   <data name="On" xml:space="preserve">
-    <value>પર</value>
+    <value>ચાલુ</value>
     <comment>开关/开</comment>
   </data>
   <data name="Open" xml:space="preserve">
-    <value>સાફ</value>
+    <value>ખોલો</value>
     <comment>文件/打开</comment>
   </data>
   <data name="OpenFileLocation" xml:space="preserve">
@@ -830,7 +830,7 @@
     <comment>格式/加粗</comment>
   </data>
   <data name="Table" xml:space="preserve">
-    <value>મેજ</value>
+    <value>કોષ્ટક</value>
     <comment>段落/表格</comment>
   </data>
   <data name="TaskList" xml:space="preserve">
@@ -906,7 +906,7 @@
     <comment>编辑/查找和替换/选项/全字匹配</comment>
   </data>
   <data name="Window" xml:space="preserve">
-    <value>બારી</value>
+    <value>વિન્ડો</value>
     <comment>窗口</comment>
   </data>
   <data name="Word" xml:space="preserve">
@@ -1011,5 +1011,146 @@
   </data>
   <data name="ExportedTo" xml:space="preserve">
     <value>{0} માં નિકાસ કર્યું</value>
+  </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>વપરાશકર્તા માર્ગદર્શિકા</value>
+  </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>અક્ષરો (જગ્યા વગર)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>અક્ષરો (જગ્યા સાથે)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK અક્ષરો</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>શબ્દો</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>CJK સિવાયના શબ્દો</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>ફકરા</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>મથાળાં</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>છબીઓ</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>લિંક્સ</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>વાંચન સમય</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>આશરે {0} મિનિટ</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>એક મિનિટથી ઓછું</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>દેખાતા લખાણ પરથી ગણતરી કરી છે. કોડ બ્લોક અને સૂત્રો વાંચન સમયમાં ગણાતાં નથી.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>સ્ટેટસ બારમાં બતાવો</value>
+  </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>સાચવ્યું</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>સાચવ્યું નથી</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>સ્વતઃ સાચવવું થોભાવ્યું</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>સાચવવા માટે ક્લિક કરો</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>દસ્તાવેજ ખાલી છે પણ ડિસ્ક પરની ફાઇલ ખાલી નથી, અને કોઈ ફેરફારે તેને ખાલી કર્યો નથી, તેથી સ્વતઃ સાચવવાએ ફાઇલ પર ફરીથી લખ્યું નથી.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>આ ફાઇલ નુકસાન વિના વાંચી શકાઈ નથી (UTF-8 સિવાયનું એન્કોડિંગ?), તેથી સ્વતઃ સાચવવું તેના પર ફરીથી લખતું નથી. બતાવેલું લખાણ સાચું હોય તો જ જાતે સાચવો.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>ફાઇલ લખવામાં નિષ્ફળ: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{1} {2}માંથી {0} પસંદ કર્યા</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>એન્કોડિંગ અને લાઇનના અંત</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>UTF-8 માં રૂપાંતરિત કરો</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>એન્કોડિંગ સાથે ફરી ખોલો</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>વર્તમાન મથાળું</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>સાચવવાની સ્થિતિ</value>
+  </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>ફોલ્ડર</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>કોઈ તાજેતરના ફોલ્ડર નથી</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>તાજેતરના ફોલ્ડર સાફ કરો</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>સૂચિમાંથી દૂર કરવા જમણું-ક્લિક કરો અથવા Delete દબાવો</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>એક સ્તર ઉપર</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>રૂટ તરીકે સેટ કરો</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>મનપસંદ</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>મનપસંદમાં ઉમેરો</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>મનપસંદમાંથી દૂર કરો</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>હોમ</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>શરૂઆત</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>નવો દસ્તાવેજ</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>ફાઇલ ખોલો</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>ફોલ્ડર ખોલો</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>તાજેતરની ફાઇલો</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>તાજેતરના ફોલ્ડર</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>સૂચિમાંથી દૂર કરો</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>સેટિંગ્સ</value>
+  </data>
+  <data name="EditorOpening" xml:space="preserve">
+    <value>ખોલી રહ્યા છીએ…</value>
   </data>
 </root>

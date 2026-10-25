@@ -214,7 +214,7 @@
     <comment>插入表格/列数</comment>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>ចម្លងទុក</value>
+    <value>ចម្លង</value>
     <comment>编辑/复制</comment>
   </data>
   <data name="CopyAsHTMLCode" xml:space="preserve">
@@ -418,7 +418,7 @@
     <comment>转到</comment>
   </data>
   <data name="Heading" xml:space="preserve">
-    <value>៣. តម្រង់</value>
+    <value>ចំណងជើង</value>
     <comment>段落/标题</comment>
   </data>
   <data name="Heading1" xml:space="preserve">
@@ -662,7 +662,7 @@
     <comment>对话框/确定</comment>
   </data>
   <data name="On" xml:space="preserve">
-    <value>នៅ លើ</value>
+    <value>បើក</value>
     <comment>开关/开</comment>
   </data>
   <data name="Open" xml:space="preserve">
@@ -706,7 +706,7 @@
     <comment>段落</comment>
   </data>
   <data name="Paste" xml:space="preserve">
-    <value>អតីតកាល</value>
+    <value>បិទភ្ជាប់</value>
     <comment>编辑/粘贴</comment>
   </data>
   <data name="PasteAsPlainText" xml:space="preserve">
@@ -826,7 +826,7 @@
     <comment>格式/删除线</comment>
   </data>
   <data name="Strong" xml:space="preserve">
-    <value>ក្លាហាន</value>
+    <value>ដិត</value>
     <comment>格式/加粗</comment>
   </data>
   <data name="Table" xml:space="preserve">
@@ -1011,5 +1011,146 @@
   </data>
   <data name="ExportedTo" xml:space="preserve">
     <value>បាននាំចេញទៅ {0}</value>
+  </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>មគ្គុទ្ទេសក៍អ្នកប្រើ</value>
+  </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>តួអក្សរ (គ្មានដកឃ្លា)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>តួអក្សរ (មានដកឃ្លា)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>តួអក្សរ CJK</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>ពាក្យ</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>ពាក្យមិនមែន CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>កថាខណ្ឌ</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>ចំណងជើង</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>រូបភាព</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>តំណ</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>រយៈពេលអាន</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>ប្រហែល {0} នាទី</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>តិចជាងមួយនាទី</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>រាប់លើអត្ថបទដែលមើលឃើញ។ ប្លុកកូដ និងរូបមន្ត មិនរាប់បញ្ចូលក្នុងរយៈពេលអានទេ។</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>របារស្ថានភាពបង្ហាញ</value>
+  </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>បានរក្សាទុក</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>មិនទាន់រក្សាទុក</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>ការរក្សាទុកស្វ័យប្រវត្តិត្រូវបានផ្អាក</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>ចុចដើម្បីរក្សាទុក</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>ឯកសារទទេ ប៉ុន្តែឯកសារនៅលើថាសមិនទទេ ហើយគ្មានការកែណាមួយបានធ្វើឱ្យវាទទេទេ ដូច្នេះការរក្សាទុកស្វ័យប្រវត្តិមិនបានសរសេរជាន់ពីលើឯកសារទេ។</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>មិនអាចអានឯកសារនេះដោយគ្មានការបាត់បង់បានទេ (ការអ៊ិនកូដក្រៅពី UTF-8?) ដូច្នេះការរក្សាទុកស្វ័យប្រវត្តិមិនសរសេរជាន់ពីលើវាទេ។ រក្សាទុកវាដោយខ្លួនឯង លុះត្រាតែអត្ថបទដែលបង្ហាញត្រឹមត្រូវ។</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>ការសរសេរឯកសារបានបរាជ័យ៖ {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>បានជ្រើស {0} ក្នុងចំណោម {1} {2}</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>ការអ៊ិនកូដ និងចុងបន្ទាត់</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>បម្លែងទៅ UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>បើកឡើងវិញជាមួយការអ៊ិនកូដ</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>ចំណងជើងបច្ចុប្បន្ន</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>ស្ថានភាពរក្សាទុក</value>
+  </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>ថតឯកសារ</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>គ្មានថតថ្មីៗទេ</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>សម្អាតថតថ្មីៗ</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>ចុចកណ្ដុរស្ដាំ ឬចុច Delete ដើម្បីដកចេញពីបញ្ជី</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>ឡើងមួយកម្រិត</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>កំណត់ជាឫស</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>ចំណូលចិត្ត</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>បន្ថែមទៅចំណូលចិត្ត</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>ដកចេញពីចំណូលចិត្ត</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>ទំព័រដើម</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>ចាប់ផ្ដើម</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>ឯកសារថ្មី</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>បើកឯកសារ</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>បើកថត</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>ឯកសារថ្មីៗ</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>ថតថ្មីៗ</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>ដកចេញពីបញ្ជី</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>ការកំណត់</value>
+  </data>
+  <data name="EditorOpening" xml:space="preserve">
+    <value>កំពុងបើក…</value>
   </data>
 </root>

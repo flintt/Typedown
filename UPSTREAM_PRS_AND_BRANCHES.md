@@ -1,5 +1,7 @@
 # Typedown 上游 PR 与分支分析
 
+> 2026-10 注：本文写于迁移到 WinUI 3 + .NET 10 之前，“main 是 .NET Core 3.1”等描述是当时的状态；现状见 [docs/architecture.md](docs/architecture.md)。
+
 - 上游仓库：https://github.com/byxiaozhi/Typedown
 - 统计时间：2026-09-16
 - 上游 **没有任何 tag / release**，所有发布走微软商店。

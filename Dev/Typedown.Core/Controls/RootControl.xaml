@@ -30,10 +30,13 @@
         <Grid.RowDefinitions>
             <!-- 4 px above the main page in compact mode, where the menu bar (moved up 4 px) covers it; nothing covers it in
                  full screen, where it was a strip of window background along the top of the screen. -->
-            <RowDefinition Height="Auto" MinHeight="{x:Bind local:RootControl.GetCaptionRowMinHeight(ViewModel.UIViewModel.IsFullScreen), Mode=OneWay}"/>
+            <RowDefinition Height="Auto" MinHeight="{x:Bind local:RootControl.GetCaptionRowMinHeight(ViewModel.UIViewModel.IsFullScreen, Settings.AppCompactMode, Frame.SourcePageType), Mode=OneWay}"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <local:Caption x:Name="Caption" x:Load="{x:Bind local:RootControl.GetCaptionIsLoad(Settings.AppCompactMode, Frame.SourcePageType, ViewModel.UIViewModel.IsFullScreen), Mode=OneWay}"/>
+        <!-- The window's background where no backdrop (Mica) shows through: XamlUI's window drew it in the theme's colour
+             behind the content; a WinUI 3 window is white there. Hidden by the host while a backdrop is on. -->
+        <Border x:Name="WindowBackground" Grid.RowSpan="2" Background="{ThemeResource SolidBackgroundFillColorBaseBrush}"/>
+        <local:Caption x:Name="Caption" Loaded="OnCaptionLoaded" x:Load="{x:Bind local:RootControl.GetCaptionIsLoad(Settings.AppCompactMode, Frame.SourcePageType, ViewModel.UIViewModel.IsFullScreen), Mode=OneWay}"/>
         <local:GlobalFrame x:Name="Frame" Background="{ThemeResource ContentFrameBackgroundBrush}" Grid.Row="1"/>
         <Grid x:Name="PrintPreviewHost"
               Grid.Row="1"

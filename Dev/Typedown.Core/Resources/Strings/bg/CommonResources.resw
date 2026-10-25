@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add" xml:space="preserve">
-    <value>Добавям</value>
+    <value>Добавяне</value>
     <comment>添加</comment>
   </data>
   <data name="AlignCenter" xml:space="preserve">
@@ -146,7 +146,7 @@
     <comment>自动</comment>
   </data>
   <data name="Back" xml:space="preserve">
-    <value>Гръб</value>
+    <value>Назад</value>
     <comment>返回</comment>
   </data>
   <data name="Browse" xml:space="preserve">
@@ -182,7 +182,7 @@
     <comment>图表</comment>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Ясен</value>
+    <value>Изчистване</value>
     <comment>清除</comment>
   </data>
   <data name="ClearFormat" xml:space="preserve">
@@ -198,7 +198,7 @@
     <comment>点击添加一张图片</comment>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>Затварям</value>
+    <value>Затваряне</value>
     <comment>文件/关闭</comment>
   </data>
   <data name="Code" xml:space="preserve">
@@ -214,7 +214,7 @@
     <comment>插入表格/列数</comment>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>Копирам</value>
+    <value>Копиране</value>
     <comment>编辑/复制</comment>
   </data>
   <data name="CopyAsHTMLCode" xml:space="preserve">
@@ -250,7 +250,7 @@
     <comment>操作/复制到路径</comment>
   </data>
   <data name="Create" xml:space="preserve">
-    <value>Създавам</value>
+    <value>Създаване</value>
     <comment>创建</comment>
   </data>
   <data name="CtrlAndClickOpenLink" xml:space="preserve">
@@ -266,11 +266,11 @@
     <comment>自定义快捷键</comment>
   </data>
   <data name="Cut" xml:space="preserve">
-    <value>Режа</value>
+    <value>Изрязване</value>
     <comment>编辑/剪切</comment>
   </data>
   <data name="Dark" xml:space="preserve">
-    <value>Тъмен</value>
+    <value>Тъмна</value>
     <comment>应用主题/深色</comment>
   </data>
   <data name="Data" xml:space="preserve">
@@ -298,11 +298,11 @@
     <comment>删除表格</comment>
   </data>
   <data name="Duplicate" xml:space="preserve">
-    <value>Дубликат</value>
+    <value>Дублиране</value>
     <comment>段落/重复</comment>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Редактирам</value>
+    <value>Редактиране</value>
     <comment>编辑</comment>
   </data>
   <data name="EditImage" xml:space="preserve">
@@ -334,7 +334,7 @@
     <comment>错误</comment>
   </data>
   <data name="Export" xml:space="preserve">
-    <value>Износ</value>
+    <value>Експортиране</value>
     <comment>文件/导出</comment>
   </data>
   <data name="ExportSettings" xml:space="preserve">
@@ -358,7 +358,7 @@
     <comment>文件(复数)</comment>
   </data>
   <data name="Find" xml:space="preserve">
-    <value>Намирам</value>
+    <value>Намиране</value>
     <comment>编辑/查找和替换/查找</comment>
   </data>
   <data name="FindAndReplace" xml:space="preserve">
@@ -378,7 +378,7 @@
     <comment>Flow Chart</comment>
   </data>
   <data name="FocusMode" xml:space="preserve">
-    <value>Режим на фокусиране</value>
+    <value>Режим на концентрация</value>
     <comment>视图/专注模式</comment>
   </data>
   <data name="Folder" xml:space="preserve">
@@ -450,7 +450,7 @@
     <comment>应用程序帮助</comment>
   </data>
   <data name="Highlight" xml:space="preserve">
-    <value>Подчертавам</value>
+    <value>Осветяване</value>
     <comment>格式/高亮</comment>
   </data>
   <data name="HorizontalLine" xml:space="preserve">
@@ -474,7 +474,7 @@
     <comment>图片上传设置</comment>
   </data>
   <data name="Import" xml:space="preserve">
-    <value>Внос</value>
+    <value>Импортиране</value>
     <comment>文件/导入</comment>
   </data>
   <data name="IncreaseHeadingLevel" xml:space="preserve">
@@ -546,7 +546,7 @@
     <comment>了解更多</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Светлина</value>
+    <value>Светла</value>
     <comment>应用主题/浅色</comment>
   </data>
   <data name="Line" xml:space="preserve">
@@ -654,7 +654,7 @@
     <comment>未设置</comment>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Затварям</value>
+    <value>Изкл.</value>
     <comment>开关/关</comment>
   </data>
   <data name="Ok" xml:space="preserve">
@@ -662,11 +662,11 @@
     <comment>对话框/确定</comment>
   </data>
   <data name="On" xml:space="preserve">
-    <value>На</value>
+    <value>Вкл.</value>
     <comment>开关/开</comment>
   </data>
   <data name="Open" xml:space="preserve">
-    <value>Отворя</value>
+    <value>Отваряне</value>
     <comment>文件/打开</comment>
   </data>
   <data name="OpenFileLocation" xml:space="preserve">
@@ -698,15 +698,15 @@
     <comment>段落/有序列表</comment>
   </data>
   <data name="Outline" xml:space="preserve">
-    <value>Очертание</value>
+    <value>Структура</value>
     <comment>侧栏/大纲</comment>
   </data>
   <data name="Paragraph" xml:space="preserve">
-    <value>Параграф</value>
+    <value>Абзац</value>
     <comment>段落</comment>
   </data>
   <data name="Paste" xml:space="preserve">
-    <value>Тесто</value>
+    <value>Поставяне</value>
     <comment>编辑/粘贴</comment>
   </data>
   <data name="PasteAsPlainText" xml:space="preserve">
@@ -722,7 +722,7 @@
     <comment>PlantUML Diagram</comment>
   </data>
   <data name="Print" xml:space="preserve">
-    <value>Печатам</value>
+    <value>Печат</value>
     <comment>文件/打印</comment>
   </data>
   <data name="Quote" xml:space="preserve">
@@ -730,7 +730,7 @@
     <comment>段落/引用</comment>
   </data>
   <data name="Redo" xml:space="preserve">
-    <value>Ремонтирам</value>
+    <value>Повторение</value>
     <comment>编辑/重做</comment>
   </data>
   <data name="RemoveColumn" xml:space="preserve">
@@ -746,7 +746,7 @@
     <comment>文件/重命名</comment>
   </data>
   <data name="Replace" xml:space="preserve">
-    <value>Заменям</value>
+    <value>Замяна</value>
     <comment>编辑/查找和替换/替换</comment>
   </data>
   <data name="ReplaceAll" xml:space="preserve">
@@ -758,7 +758,7 @@
     <comment>表格/调整表格大小</comment>
   </data>
   <data name="Restore" xml:space="preserve">
-    <value>Възстановявам</value>
+    <value>Възстановяване</value>
     <comment>还原默认设置</comment>
   </data>
   <data name="Rows" xml:space="preserve">
@@ -774,7 +774,7 @@
     <comment>文件/另存为</comment>
   </data>
   <data name="Saved" xml:space="preserve">
-    <value>Записани</value>
+    <value>Записано</value>
     <comment>文件/已保存</comment>
   </data>
   <data name="SaveImageAs" xml:space="preserve">
@@ -826,11 +826,11 @@
     <comment>格式/删除线</comment>
   </data>
   <data name="Strong" xml:space="preserve">
-    <value>Безочлив</value>
+    <value>Получер</value>
     <comment>格式/加粗</comment>
   </data>
   <data name="Table" xml:space="preserve">
-    <value>Маса</value>
+    <value>Таблица</value>
     <comment>段落/表格</comment>
   </data>
   <data name="TaskList" xml:space="preserve">
@@ -862,11 +862,11 @@
     <comment>视图/打字机模式</comment>
   </data>
   <data name="Underline" xml:space="preserve">
-    <value>Подчертавам</value>
+    <value>Подчертаване</value>
     <comment>格式/下划线</comment>
   </data>
   <data name="Undo" xml:space="preserve">
-    <value>Отменям</value>
+    <value>Отмяна</value>
     <comment>编辑/撤销</comment>
   </data>
   <data name="UnorderedList" xml:space="preserve">
@@ -874,7 +874,7 @@
     <comment>段落/无序列表</comment>
   </data>
   <data name="Update" xml:space="preserve">
-    <value>Актуализирам</value>
+    <value>Актуализиране</value>
     <comment>应用程序更新</comment>
   </data>
   <data name="UploadImage" xml:space="preserve">
@@ -1011,5 +1011,146 @@
   </data>
   <data name="ExportedTo" xml:space="preserve">
     <value>Експортирано в {0}</value>
+  </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>Ръководство за потребителя</value>
+  </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Знаци (без интервали)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Знаци (с интервали)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK знаци</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Думи</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Думи извън CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Абзаци</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Заглавия</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Изображения</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Връзки</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Време за четене</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Около {0} мин</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Под минута</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Преброено по видимия текст. Кодовите блокове и формулите не влизат във времето за четене.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Лентата на състоянието показва</value>
+  </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Записано</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Не е записано</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Автоматичното записване е на пауза</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Щракнете, за да запишете</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Документът е празен, но файлът на диска не е, и никоя редакция не го е изпразнила, затова автоматичното записване не презаписа файла.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Този файл не можа да бъде прочетен без загуби (кодиране, различно от UTF-8?), затова автоматичното записване не го презаписва. Запишете го ръчно само ако показаният текст е правилен.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Записването на файла не бе успешно: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>Избрани {0} от {1} {2}</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Кодиране и край на редовете</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Преобразуване в UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Повторно отваряне с кодиране</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Текущо заглавие</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Състояние на записа</value>
+  </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Папки</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Няма скорошни папки</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Изчистване на скорошните папки</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Щракнете с десния бутон или натиснете Delete, за да го премахнете от списъка</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Едно ниво нагоре</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Задаване като корен</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Любими</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Добавяне към любими</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Премахване от любими</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Начало</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Начало</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Нов документ</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Отваряне на файл</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Отваряне на папка</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Скорошни файлове</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Скорошни папки</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Премахване от списъка</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="EditorOpening" xml:space="preserve">
+    <value>Отваряне…</value>
   </data>
 </root>

@@ -5,10 +5,10 @@ using System.Reactive.Linq;
 using Typedown.Core.Pages;
 using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media.Animation;
-using Windows.UI.Xaml.Navigation;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media.Animation;
+using Microsoft.UI.Xaml.Navigation;
 
 namespace Typedown.Core.Controls
 {
@@ -25,9 +25,16 @@ namespace Typedown.Core.Controls
             InitializeComponent();
         }
 
-        private void OnLoaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        /// <summary>Whether the theme-coloured window background shows (off while a backdrop shows through instead).</summary>
+        public void ShowWindowBackground(bool show) => WindowBackground.Visibility = show ? Visibility.Visible : Visibility.Collapsed;
+
+        private void OnLoaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
         {
             ViewModel.XamlRoot = XamlRoot;
+            // The last session's tabs and active document, while the editor's page starts: begun here, before the main
+            // page is built - queued after it, it came 0.7 s after the window on w10. Its tabs go in before anything is
+            // read (FileViewModel.RestoreSession), so the strip is there with the page's first frame.
+            ViewModel.EditorViewModel.BeginStartupLoad();
             disposables.Add(ViewModel.NavigateCommand.OnExecute.Subscribe(args => Navigate(args)));
             RegisterSettingsShortcut();
             // The settings are the one page you are looking at when you change the language, so they are built
@@ -38,6 +45,11 @@ namespace Typedown.Core.Controls
             // navigation — which is why UIViewModel rebuilds the window title on a language change.
             disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.Language)).Subscribe(_ => ReloadSettingsPage()));
             disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.ShortcutSettings)).Subscribe(_ => RegisterSettingsShortcut()));
+            // The controls' accent (settings, dialogs) in the custom theme's, as the editor and the side pane have it.
+            disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.CustomTheme))
+                .StartWith(Settings.CustomTheme)
+                .Subscribe(name => AppAccent.Apply(ThemeFiles.Find(name as string)?.Accent)));
+            disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.CustomTheme)).Subscribe(_ => UpdateCaptionTheme()));
             Frame.Navigated += OnFrameNavigated;
             Frame.Navigate(typeof(MainPage), null);
         }
@@ -51,16 +63,43 @@ namespace Typedown.Core.Controls
         {
             var from = shownPage;
             shownPage = e.SourcePageType;
+            UpdateCaptionTheme();
             if (e.SourcePageType != typeof(MainPage) || (from != null && from != typeof(SettingsPage))) return;
             ViewModel.EditorViewModel.FocusWhenLoaded = true;
-            _ = Dispatcher.RunIdleAsync(_ => ViewModel.MarkdownEditor?.FocusEditor());
+            _ = DispatcherQueue.RunIdleAsync(_ => ViewModel.MarkdownEditor?.FocusEditor());
         }
+
+        // The caption row in the custom theme's colours, as the page under it: the settings' own page colour there, the
+        // menu row's panel colour over the main page. It was the window's white over a Sepia page.
+        private void UpdateCaptionTheme()
+        {
+            if (Caption == null) return;
+            try
+            {
+                var theme = ThemeFiles.Find(Settings?.CustomTheme);
+                var background = shownPage == typeof(MainPage)
+                    ? ThemeFiles.Brush(theme?.Surface) ?? ThemeFiles.Brush(theme?.Background)
+                    : ThemeFiles.Brush(theme?.Background) ?? ThemeFiles.Brush(theme?.Surface);
+                var foreground = ThemeFiles.Brush(theme?.Foreground) ?? ThemeFiles.Readable(theme?.Surface ?? theme?.Background);
+                Caption.ApplyThemeBrushes(background, foreground);
+            }
+            catch (Exception ex)
+            {
+                Utilities.Log.Debug($"caption theme: {ex.Message}");
+            }
+        }
+
+        // The caption is made again each time it comes back (x:Load), clear: it takes the colours as it loads.
+        private void OnCaptionLoaded(object sender, RoutedEventArgs e) => UpdateCaptionTheme();
 
         private void ReloadSettingsPage()
         {
             if (Frame.SourcePageType != typeof(SettingsPage)) return;
-            var route = currentRoute;
-            _ = Dispatcher.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            // Built again on the section the reader is in, not the one the settings were opened on (Help > About,
+            // then General: the language changed there went back to About).
+            var shown = (Frame.Content as SettingsPage)?.ShownSection;
+            var route = shown != null ? "Settings/" + shown : currentRoute;
+            _ = DispatcherQueue.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
             {
                 try
                 {
@@ -98,12 +137,14 @@ namespace Typedown.Core.Controls
                 if (Frame.SourcePageType != typeof(SettingsPage)) return;
                 if (Utilities.PInvoke.GetForegroundWindow() != ViewModel.MainWindow) return;
                 e.Handled = true;
-                _ = Dispatcher.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => Navigate("Main"));
+                // Held, the key comes again and again: once per press, or the settings went in and out until it hung.
+                if (e.IsRepeat) return;
+                _ = DispatcherQueue.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => Navigate("Main"));
             });
             disposables.Add(settingsShortcut);
         }
 
-        private void OnUnloaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void OnUnloaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
         {
             disposables.Clear();
             Bindings?.StopTracking();
@@ -138,16 +179,22 @@ namespace Typedown.Core.Controls
             Effect = SlideNavigationTransitionEffect.FromRight
         } : new SuppressNavigationTransitionInfo();
 
-        public static double GetCaptionRowMinHeight(bool isFullScreen) => isFullScreen ? 0 : 4;
+        // The 4 px the compact main page's menu bar covers; the compact settings start at the window's top, where the strip
+        // showed the window's own colour over the theme's.
+        public static double GetCaptionRowMinHeight(bool isFullScreen, bool compactMode, Type currentPage) =>
+            isFullScreen || (compactMode && currentPage != typeof(MainPage)) ? 0 : 4;
 
+        // No caption in compact mode, on any page: the main page's menu bar is its top row, and the settings have their
+        // back button in their pane and their empty top as the caption (SettingsPage) - a caption of their own was a
+        // title bar the main page does not have, in the window's colours.
         public static bool GetCaptionIsLoad(bool compactMode, Type currentPage, bool isFullScreen)
         {
             if (isFullScreen && currentPage == typeof(MainPage))
                 return false;
-            return !compactMode || currentPage != typeof(MainPage);
+            return !compactMode;
         }
 
-        private void OnClosePrintPreviewClick(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void OnClosePrintPreviewClick(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
         {
             ViewModel?.UIViewModel?.ClosePrintPreview();
         }

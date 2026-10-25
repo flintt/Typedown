@@ -198,7 +198,7 @@
     <comment>点击添加一张图片</comment>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>አቅርቡ</value>
+    <value>ዝጋ</value>
     <comment>文件/关闭</comment>
   </data>
   <data name="Code" xml:space="preserve">
@@ -302,7 +302,7 @@
     <comment>段落/重复</comment>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>አስረጅ</value>
+    <value>አርትዕ</value>
     <comment>编辑</comment>
   </data>
   <data name="EditImage" xml:space="preserve">
@@ -654,7 +654,7 @@
     <comment>未设置</comment>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>አቅርቡ</value>
+    <value>ጠፍቷል</value>
     <comment>开关/关</comment>
   </data>
   <data name="Ok" xml:space="preserve">
@@ -702,7 +702,7 @@
     <comment>段落</comment>
   </data>
   <data name="Paste" xml:space="preserve">
-    <value>ፓስተር</value>
+    <value>ለጥፍ</value>
     <comment>编辑/粘贴</comment>
   </data>
   <data name="PasteAsPlainText" xml:space="preserve">
@@ -722,7 +722,7 @@
     <comment>文件/打印</comment>
   </data>
   <data name="Quote" xml:space="preserve">
-    <value>ጠቅ ያድርጉ</value>
+    <value>ጥቅስ</value>
     <comment>段落/引用</comment>
   </data>
   <data name="Redo" xml:space="preserve">
@@ -742,7 +742,7 @@
     <comment>文件/重命名</comment>
   </data>
   <data name="Replace" xml:space="preserve">
-    <value>ምትኬ</value>
+    <value>ተካ</value>
     <comment>编辑/查找和替换/替换</comment>
   </data>
   <data name="ReplaceAll" xml:space="preserve">
@@ -754,7 +754,7 @@
     <comment>表格/调整表格大小</comment>
   </data>
   <data name="Restore" xml:space="preserve">
-    <value>ይመልከቱ</value>
+    <value>እነበረበት መልስ</value>
     <comment>还原默认设置</comment>
   </data>
   <data name="Rows" xml:space="preserve">
@@ -770,7 +770,7 @@
     <comment>文件/另存为</comment>
   </data>
   <data name="Saved" xml:space="preserve">
-    <value>ዳነ</value>
+    <value>ተቀምጧል</value>
     <comment>文件/已保存</comment>
   </data>
   <data name="SaveImageAs" xml:space="preserve">
@@ -822,7 +822,7 @@
     <comment>格式/删除线</comment>
   </data>
   <data name="Strong" xml:space="preserve">
-    <value>ደፋር</value>
+    <value>ደማቅ</value>
     <comment>格式/加粗</comment>
   </data>
   <data name="Table" xml:space="preserve">
@@ -862,7 +862,7 @@
     <comment>格式/下划线</comment>
   </data>
   <data name="Undo" xml:space="preserve">
-    <value>አሻሽል</value>
+    <value>ቀልብስ</value>
     <comment>编辑/撤销</comment>
   </data>
   <data name="UnorderedList" xml:space="preserve">
@@ -922,7 +922,7 @@
     <comment>YAML Front Matter</comment>
   </data>
   <data name="Zoom" xml:space="preserve">
-    <value>አቅርበው</value>
+    <value>አጉላ</value>
     <comment>字体缩放</comment>
   </data>
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
@@ -1010,5 +1010,146 @@
   </data>
   <data name="ExportedTo" xml:space="preserve">
     <value>ወደ {0} ተልኳል</value>
+  </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>የተጠቃሚ መመሪያ</value>
+  </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>ቁምፊዎች (ያለ ክፍተት)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>ቁምፊዎች (ከክፍተት ጋር)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK ቁምፊዎች</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>ቃላት</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>CJK ያልሆኑ ቃላት</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>አንቀጾች</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>ርዕሶች</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>ምስሎች</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>አገናኞች</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>የንባብ ጊዜ</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>{0} ደቂቃ ገደማ</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>ከአንድ ደቂቃ በታች</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>በሚታየው ጽሑፍ ላይ ተቆጥሯል። የኮድ ብሎኮች እና ቀመሮች በንባብ ጊዜ ውስጥ አይካተቱም።</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>የሁኔታ አሞሌ የሚያሳየው</value>
+  </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>ተቀምጧል</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>አልተቀመጠም</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>ራስ-ሰር ማስቀመጥ ቆሟል</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>ለማስቀመጥ ጠቅ ያድርጉ</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>ሰነዱ ባዶ ነው፣ ነገር ግን በዲስኩ ላይ ያለው ፋይል ባዶ አይደለም፤ ምንም አርትዖት ባዶ አላደረገውም፤ ስለዚህ ራስ-ሰር ማስቀመጥ ፋይሉን አልተካም።</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>ይህ ፋይል ያለ ጉድለት ሊነበብ አልቻለም (ከUTF-8 ውጭ የሆነ ኢንኮዲንግ?)፣ ስለዚህ ራስ-ሰር ማስቀመጥ አይተካውም። የሚታየው ጽሑፍ ትክክል ከሆነ ብቻ እራስዎ ያስቀምጡት።</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>ፋይሉን መጻፍ አልተሳካም፦ {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>ከ{1} {2} {0} ተመርጠዋል</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>ኢንኮዲንግ እና የመስመር መጨረሻዎች</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>ወደ UTF-8 ቀይር</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>በኢንኮዲንግ እንደገና ክፈት</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>የአሁኑ ርዕስ</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>የማስቀመጥ ሁኔታ</value>
+  </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>አቃፊዎች</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>የቅርብ ጊዜ አቃፊዎች የሉም</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>የቅርብ ጊዜ አቃፊዎችን አጽዳ</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>ከዝርዝሩ ለማስወገድ በቀኝ ጠቅ ያድርጉ ወይም Delete ይጫኑ</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>አንድ ደረጃ ወደ ላይ</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>እንደ ስር አዘጋጅ</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>ተወዳጆች</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>ወደ ተወዳጆች አክል</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>ከተወዳጆች አስወግድ</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>መነሻ</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>ጀምር</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>አዲስ ሰነድ</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>ፋይል ክፈት</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>አቃፊ ክፈት</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>የቅርብ ጊዜ ፋይሎች</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>የቅርብ ጊዜ አቃፊዎች</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>ከዝርዝሩ አስወግድ</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>ቅንብሮች</value>
+  </data>
+  <data name="EditorOpening" xml:space="preserve">
+    <value>በመክፈት ላይ…</value>
   </data>
 </root>

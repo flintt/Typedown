@@ -1027,4 +1027,145 @@
   <data name="ExportedTo" xml:space="preserve">
     <value>已导出到 {0}</value>
   </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>使用说明</value>
+  </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>字符（不含空格）</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>字符（含空格）</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>中日韩文字</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>词数</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>非中日韩词数</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>段落</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>标题</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>图片</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>链接</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>阅读时间</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>约 {0} 分钟</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>不到 1 分钟</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>按可见正文统计；代码块和公式不计入阅读时间。</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>状态栏显示</value>
+  </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>已保存</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>未保存</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>自动保存已暂停</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>单击保存</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>文档内容为空，但磁盘上的文件不为空，且不是由编辑清空的，因此自动保存没有覆盖该文件。</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>无法无损读取此文件（可能不是 UTF-8 编码），因此自动保存不会覆盖它。只有在显示的内容正确时才手动保存。</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>写入文件失败：{0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>已选 {0} / 共 {1} {2}</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>编码与换行符</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>转换为 UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>以其他编码重新打开</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>当前标题</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>保存状态</value>
+  </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>文件夹</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>无最近文件夹</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>清除最近文件夹</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>右键或按 Delete 可将其从列表中移除</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>上一级</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>设为根目录</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>收藏</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>加入收藏</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>取消收藏</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>首页</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>开始</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>新建文档</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>打开文件</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>打开文件夹</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>最近文件</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>最近文件夹</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>从列表中移除</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="EditorOpening" xml:space="preserve">
+    <value>正在打开…</value>
+  </data>
 </root>

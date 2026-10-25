@@ -1,0 +1,14 @@
+﻿<local:MenuBarItemBase
+    Title="{u:LocaleString Key=Help}"
+    x:Class="Typedown.Core.Controls.EditorControls.MenuBarItems.HelpItem"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Typedown.Core.Controls.EditorControls.MenuBarItems"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:u="using:Typedown.Core.Utilities"
+    mc:Ignorable="d">
+    <MenuFlyoutItem x:Name="UserGuideItem" Text="{u:LocaleString Key=UserGuide}" Click="OnUserGuideClick"/>
+    <MenuFlyoutSeparator/>
+    <MenuFlyoutItem x:Name="AboutItem" Text="{u:LocaleString Key=About.Title}" Click="OnAboutClick"/>
+</local:MenuBarItemBase>

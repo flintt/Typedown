@@ -46,6 +46,22 @@ function onThemeChanged(arg: any) {
     editorStyleDocument.href = `theme/editor/${theme}.theme.css`
     prismjsStyleDocument.href = `theme/prismjs/${theme}.theme.css`
     codemirrorStyleDocument.href = `theme/codemirror/${theme}.theme.css`
+    // Paper is white: printed (and in the print preview) the light theme's colours, whatever the theme on screen. The
+    // screen's theme - this one and a custom theme's CSS (components/Editor) - is for the screen only; the light one
+    // is always there for print. The page's colours went onto the white paper as they were: pale text, a dark theme's
+    // code colours.
+    for (const [name, link] of [['editor', editorStyleDocument], ['prismjs', prismjsStyleDocument], ['codemirror', codemirrorStyleDocument]] as const) {
+        link.media = 'screen'
+        let print = document.getElementById(`link_print_${name}`) as HTMLLinkElement | null
+        if (!print) {
+            print = document.createElement('link')
+            print.rel = 'stylesheet'
+            print.id = `link_print_${name}`
+            print.media = 'print'
+            print.href = `theme/${name}/light.theme.css`
+            link.after(print)
+        }
+    }
 
     const themeColorAlphas = [10, 20, 30, 40, 50, 60, 70, 80, 90]
     const { r, g, b, a } = accentColor

@@ -182,7 +182,7 @@
     <comment>图表</comment>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>ใส</value>
+    <value>ล้าง</value>
     <comment>清除</comment>
   </data>
   <data name="ClearFormat" xml:space="preserve">
@@ -214,7 +214,7 @@
     <comment>插入表格/列数</comment>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>ลอก</value>
+    <value>คัดลอก</value>
     <comment>编辑/复制</comment>
   </data>
   <data name="CopyAsHTMLCode" xml:space="preserve">
@@ -346,19 +346,19 @@
     <comment>文件/导出/导出为PDF</comment>
   </data>
   <data name="Feedback" xml:space="preserve">
-    <value>การตอบสนอง</value>
+    <value>คำติชม</value>
     <comment>应用程序反馈</comment>
   </data>
   <data name="File" xml:space="preserve">
-    <value>แฟ้ม</value>
+    <value>ไฟล์</value>
     <comment>文件(单数)</comment>
   </data>
   <data name="Files" xml:space="preserve">
-    <value>แฟ้ม</value>
+    <value>ไฟล์</value>
     <comment>文件(复数)</comment>
   </data>
   <data name="Find" xml:space="preserve">
-    <value>หา</value>
+    <value>ค้นหา</value>
     <comment>编辑/查找和替换/查找</comment>
   </data>
   <data name="FindAndReplace" xml:space="preserve">
@@ -418,7 +418,7 @@
     <comment>转到</comment>
   </data>
   <data name="Heading" xml:space="preserve">
-    <value>หัว เรื่อง</value>
+    <value>หัวเรื่อง</value>
     <comment>段落/标题</comment>
   </data>
   <data name="Heading1" xml:space="preserve">
@@ -482,7 +482,7 @@
     <comment>段落/提升标题级别</comment>
   </data>
   <data name="Inline" xml:space="preserve">
-    <value>แบบ อิน ไลน์</value>
+    <value>อินไลน์</value>
     <comment>内联</comment>
   </data>
   <data name="InlineCode" xml:space="preserve">
@@ -546,11 +546,11 @@
     <comment>了解更多</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>แสง</value>
+    <value>สว่าง</value>
     <comment>应用主题/浅色</comment>
   </data>
   <data name="Line" xml:space="preserve">
-    <value>สาย</value>
+    <value>บรรทัด</value>
     <comment>行(单数)</comment>
   </data>
   <data name="LineHeight" xml:space="preserve">
@@ -662,7 +662,7 @@
     <comment>对话框/确定</comment>
   </data>
   <data name="On" xml:space="preserve">
-    <value>บน</value>
+    <value>เปิด</value>
     <comment>开关/开</comment>
   </data>
   <data name="Open" xml:space="preserve">
@@ -706,7 +706,7 @@
     <comment>段落</comment>
   </data>
   <data name="Paste" xml:space="preserve">
-    <value>แปะ</value>
+    <value>วาง</value>
     <comment>编辑/粘贴</comment>
   </data>
   <data name="PasteAsPlainText" xml:space="preserve">
@@ -726,11 +726,11 @@
     <comment>文件/打印</comment>
   </data>
   <data name="Quote" xml:space="preserve">
-    <value>อ้าง</value>
+    <value>อ้างอิง</value>
     <comment>段落/引用</comment>
   </data>
   <data name="Redo" xml:space="preserve">
-    <value>ทำ ซ้ำ</value>
+    <value>ทำซ้ำ</value>
     <comment>编辑/重做</comment>
   </data>
   <data name="RemoveColumn" xml:space="preserve">
@@ -746,7 +746,7 @@
     <comment>文件/重命名</comment>
   </data>
   <data name="Replace" xml:space="preserve">
-    <value>แทน</value>
+    <value>แทนที่</value>
     <comment>编辑/查找和替换/替换</comment>
   </data>
   <data name="ReplaceAll" xml:space="preserve">
@@ -758,7 +758,7 @@
     <comment>表格/调整表格大小</comment>
   </data>
   <data name="Restore" xml:space="preserve">
-    <value>ซ่อมแซม</value>
+    <value>คืนค่า</value>
     <comment>还原默认设置</comment>
   </data>
   <data name="Rows" xml:space="preserve">
@@ -782,7 +782,7 @@
     <comment>图片另存为</comment>
   </data>
   <data name="Search" xml:space="preserve">
-    <value>ค้น</value>
+    <value>ค้นหา</value>
     <comment>搜索</comment>
   </data>
   <data name="SelectAll" xml:space="preserve">
@@ -826,11 +826,11 @@
     <comment>格式/删除线</comment>
   </data>
   <data name="Strong" xml:space="preserve">
-    <value>กล้า</value>
+    <value>ตัวหนา</value>
     <comment>格式/加粗</comment>
   </data>
   <data name="Table" xml:space="preserve">
-    <value>โต๊ะ</value>
+    <value>ตาราง</value>
     <comment>段落/表格</comment>
   </data>
   <data name="TaskList" xml:space="preserve">
@@ -838,7 +838,7 @@
     <comment>段落/任务列表</comment>
   </data>
   <data name="Theme" xml:space="preserve">
-    <value>หัวข้อ</value>
+    <value>ธีม</value>
     <comment>应用程序主题</comment>
   </data>
   <data name="Title" xml:space="preserve">
@@ -866,7 +866,7 @@
     <comment>格式/下划线</comment>
   </data>
   <data name="Undo" xml:space="preserve">
-    <value>แก้</value>
+    <value>เลิกทำ</value>
     <comment>编辑/撤销</comment>
   </data>
   <data name="UnorderedList" xml:space="preserve">
@@ -894,7 +894,7 @@
     <comment>Vega Chart</comment>
   </data>
   <data name="View" xml:space="preserve">
-    <value>ทิวทัศน์</value>
+    <value>มุมมอง</value>
     <comment>查看</comment>
   </data>
   <data name="Website" xml:space="preserve">
@@ -918,7 +918,7 @@
     <comment>字数</comment>
   </data>
   <data name="Words" xml:space="preserve">
-    <value>นิรุกติ</value>
+    <value>คำ</value>
     <comment>词(复数)</comment>
   </data>
   <data name="YAMLFrontMatter" xml:space="preserve">
@@ -1011,5 +1011,146 @@
   </data>
   <data name="ExportedTo" xml:space="preserve">
     <value>ส่งออกไปยัง {0} แล้ว</value>
+  </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>คู่มือผู้ใช้</value>
+  </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>อักขระ (ไม่รวมช่องว่าง)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>อักขระ (รวมช่องว่าง)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>อักขระ CJK</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>คำ</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>คำที่ไม่ใช่ CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>ย่อหน้า</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>หัวเรื่อง</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>รูปภาพ</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>ลิงก์</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>เวลาอ่าน</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>ประมาณ {0} นาที</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>ไม่ถึง 1 นาที</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>นับจากข้อความที่มองเห็น บล็อกโค้ดและสูตรไม่นับรวมในเวลาอ่าน</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>แถบสถานะแสดง</value>
+  </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>บันทึกแล้ว</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>ยังไม่ได้บันทึก</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>หยุดบันทึกอัตโนมัติชั่วคราว</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>คลิกเพื่อบันทึก</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>เอกสารว่างเปล่า แต่ไฟล์บนดิสก์ไม่ว่าง และไม่มีการแก้ไขใดทำให้ว่าง การบันทึกอัตโนมัติจึงไม่ได้เขียนทับไฟล์</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>ไม่สามารถอ่านไฟล์นี้โดยไม่สูญเสียข้อมูลได้ (การเข้ารหัสอื่นที่ไม่ใช่ UTF-8?) การบันทึกอัตโนมัติจึงไม่เขียนทับไฟล์นี้ บันทึกเองเฉพาะเมื่อข้อความที่แสดงถูกต้องเท่านั้น</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>เขียนไฟล์ไม่สำเร็จ: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>เลือก {0} จาก {1} {2}</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>การเข้ารหัสและการขึ้นบรรทัดใหม่</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>แปลงเป็น UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>เปิดใหม่ด้วยการเข้ารหัส</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>หัวเรื่องปัจจุบัน</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>สถานะการบันทึก</value>
+  </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>โฟลเดอร์</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>ไม่มีโฟลเดอร์ล่าสุด</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>ล้างโฟลเดอร์ล่าสุด</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>คลิกขวาหรือกด Delete เพื่อนำออกจากรายการ</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>ขึ้นหนึ่งระดับ</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>ตั้งเป็นราก</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>รายการโปรด</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>เพิ่มในรายการโปรด</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>นำออกจากรายการโปรด</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>หน้าแรก</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>เริ่มต้น</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>เอกสารใหม่</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>เปิดไฟล์</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>เปิดโฟลเดอร์</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>ไฟล์ล่าสุด</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>โฟลเดอร์ล่าสุด</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>นำออกจากรายการ</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>การตั้งค่า</value>
+  </data>
+  <data name="EditorOpening" xml:space="preserve">
+    <value>กำลังเปิด…</value>
   </data>
 </root>

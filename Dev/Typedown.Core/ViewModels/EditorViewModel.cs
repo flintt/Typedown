@@ -40,7 +40,7 @@ namespace Typedown.Core.ViewModels
         /// The outline tree. Replaced whole when a different document arrives, updated in place when the
         /// same document changes: the tree control is bound to it, and taking a document's outline apart
         /// row by row under that control while a second document's arrived is what crashed the process —
-        /// a fail-fast inside Windows.UI.Xaml from the collection-changed handler, in the dump, and a stack
+        /// a fail-fast inside Microsoft.UI.Xaml from the collection-changed handler, in the dump, and a stack
         /// overflow there before that. One document's rows are never removed one at a time any more.
         /// </summary>
         public TocTreeItem Toc { get; private set; } = new();
@@ -58,6 +58,13 @@ namespace Typedown.Core.ViewModels
         public bool Saved { get; set; } = true;
         public bool AutoSavedSucc { get; set; } = true;
         public bool DisplaySaved { get; set; } = true;
+
+        /// <summary>
+        /// Why auto-save last left this document unwritten, in words for the reader (the status bar shows it), or null
+        /// when it wrote, or never had to hold back. It held back without a word: the reader saw nothing until the
+        /// file turned out unchanged.
+        /// </summary>
+        public string AutoSaveHeldBack { get; set; }
         public ulong FileHash { get; set; } = Common.SimpleHash(Common.DefaultMarkdwn);
         public ulong CurrentHash { get; set; } = Common.SimpleHash(Common.DefaultMarkdwn);
 
@@ -93,7 +100,13 @@ namespace Typedown.Core.ViewModels
             EventCenter.GetObservable<EditorEventArgs>("MarkdownChange").Subscribe(x => OnMarkdownChange(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("ContentFlushed").Subscribe(x => OnContentFlushed(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("FileLoaded").Subscribe(x => OnFileLoaded(x.Args));
+            // The page shows a long document's first part before it reports the load (drawn a part at a time, or a preview
+            // where it is drawn at once): no "Opening…" over it from then on.
+            EventCenter.GetObservable<EditorEventArgs>("LoadPreviewShown").Subscribe(x => { if (x.Args?["loadId"]?.Value<int?>() == LoadId) { LongLoadPending = false; LeavingCover = false; } });
             EventCenter.GetObservable<EditorEventArgs>("DocumentEditApplied").Subscribe(x => OnDocumentEditApplied(x.Args));
+            // How the page drew a long document (a part at a time or all at once, from what), for the log.
+            EventCenter.GetObservable<EditorEventArgs>("LoadDrawnWhole").Subscribe(x => Log.Debug($"load {x.Args?["loadId"]}: all drawn after {x.Args?["ms"]} ms in {x.Args?["slices"]} slices"));
+            EventCenter.GetObservable<EditorEventArgs>("LoadDrawn").Subscribe(x => Log.Debug($"load {x.Args?["loadId"]}: drawn {((bool?)x.Args?["progressive"] == true ? "a part at a time" : "all at once")} ({x.Args?["how"]}, block {x.Args?["center"]} of {x.Args?["blocks"]}, {x.Args?["chars"]} chars), first paint after {x.Args?["firstPaintMs"]} ms; anchor {x.Args?["anchor"]}"));
             EventCenter.GetObservable<EditorEventArgs>("NormalizationReport").Subscribe(x => OnNormalizationReport(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("PresentationFrames").Subscribe(x => { var t = x.Args?["token"]?.Value<int?>() ?? 0; if (framesWaiters.TryGetValue(t, out var w)) w.TrySetResult(true); });
             EventCenter.GetObservable<EditorEventArgs>("EditorStyle").Subscribe(x => { var t = x.Args?["token"]?.Value<int?>() ?? 0; if (styleWaiters.TryGetValue(t, out var w)) w.TrySetResult(x.Args); });
@@ -105,7 +118,7 @@ namespace Typedown.Core.ViewModels
             EventCenter.GetObservable<EditorEventArgs>("ReadingSelectionChange").Subscribe(x => OnReadingSelectionChange(x.Args));
             // A paste the page caught from the browser (its own would put the clipboard's HTML into the document as is).
             EventCenter.GetObservable<EditorEventArgs>("PasteRequested").Subscribe(x => { if (!Settings.ReadOnly && !Settings.SourceCode) Paste(x.Args?["type"]?.ToString() ?? "normal"); });
-            EventCenter.GetObservable<EditorEventArgs>("StateChange").Subscribe(x => OnStateChange(x.Args));
+            EventCenter.GetObservable<EditorEventArgs>("StateChange").Subscribe(x => OnStateChange(StateReport.Read(x)));
             // An undo or redo the page did not make itself (the browser's, CodeMirror's): the host's history makes it, as
             // the shortcut does (and not in reading mode).
             EventCenter.GetObservable<EditorEventArgs>("HistoryRequested").Subscribe(x =>
@@ -119,6 +132,8 @@ namespace Typedown.Core.ViewModels
             // What the page's scroll hold saw after a load: asked for, ended at, why it stopped, and the viewport
             // it started with — a viewport of no height is a page loaded before its window was there.
             EventCenter.GetObservable<EditorEventArgs>("ScrollSettled").Subscribe(x => Log.Debug($"settle: {x.Args}"));
+            // The page going far with nobody at it while a long document is drawn, and what the drawing knew then.
+            EventCenter.GetObservable<EditorEventArgs>("DrawJump").Subscribe(x => Log.Debug($"draw jump: {x.Args?.ToString(Newtonsoft.Json.Formatting.None)}"));
             // An error in the page nobody caught (a listener, a promise): in the log, where the next one is looked for.
             EventCenter.GetObservable<EditorEventArgs>("PageError").Subscribe(x => Log.Debug($"page error: {x.Args}"));
             RemoteInvoke.Handle("GetSettings", GetSettings);
@@ -140,6 +155,9 @@ namespace Typedown.Core.ViewModels
             // writes do.
             UndoCommand.OnExecute.Subscribe(_ => { if (!Settings.ReadOnly) Undo(); });
             RedoCommand.OnExecute.Subscribe(_ => { if (!Settings.ReadOnly) Redo(); });
+            // The mode for an edition's activity (EditionHooks.Activity).
+            foreach (var mode in new[] { nameof(Settings.ReadOnly), nameof(Settings.SourceCode), nameof(Settings.FocusMode), nameof(Settings.Typewriter) })
+                Settings.WhenPropertyChanged(mode).Subscribe(_ => EditionHooks.ReportActivity(ActivityKind.ModeChanged, AppViewModel));
             FindCommand.OnExecute.Subscribe(x => Find(x));
             PasteCommand.OnExecute.Subscribe(x => Paste(x));
             CutCommand.OnExecute.Subscribe(x => Cut(x));
@@ -156,16 +174,33 @@ namespace Typedown.Core.ViewModels
         /// </summary>
         public Task StartupDocumentReady => startupDocumentReady.Task;
 
+        private Task startupLoad;
+
+        /// <summary>
+        /// The last session brought back as soon as the window is up (RootControl), not when the page first asks for its
+        /// document: the tabs show while the page is still starting, and the active document is ready when it asks.
+        /// Only for a session restore - the other starts may post to the page, which is not there yet.
+        /// </summary>
+        public void BeginStartupLoad()
+        {
+            if (!FirstStart || startupLoad != null || !FileViewModel.StartsWithSession) return;
+            FirstStart = false;
+            Log.Debug("startup: the last session restored before the page asks");
+            startupLoad = FileViewModel.LoadStartUpMarkdown();
+        }
+
         public async Task<object> GetSettings()
         {
             awaitingNewPage = false;
             if (FirstStart)
             {
                 FirstStart = false;
-                await FileViewModel.LoadStartUpMarkdown();
+                startupLoad = FileViewModel.LoadStartUpMarkdown();
             }
+            if (startupLoad != null) await startupLoad;
             startupDocumentReady.TrySetResult(true);
             Log.Debug($"load {LoadId + 1}: the editor page asked for the document again ({System.IO.Path.GetFileName(FileViewModel.FilePath) ?? "untitled"})");
+            loadText = Markdown;
             return new
             {
                 Settings.FocusMode,
@@ -179,6 +214,10 @@ namespace Typedown.Core.ViewModels
                 Settings.PreferLooseListItem,
                 Settings.ListIndentation,
                 Settings.TableAlignColumns,
+                Settings.ShowBlankLines,
+                Settings.ShowMarkdownMarks,
+                Settings.ProgressiveRendering,
+                Settings.PredictHeights,
                 Settings.ShowParagraphMarker,
                 Settings.ReadOnly,
                 Settings.CustomCss,
@@ -201,9 +240,79 @@ namespace Typedown.Core.ViewModels
                 // across sessions, and whether or not the document has a file. At start-up there is none yet.
                 Cursor = CurrentCursor ?? (Settings.RememberCursorPosition ? CursorMemory.Get(FileViewModel.FilePath) : null),
                 ScrollTop = Settings.RememberCursorPosition ? CursorMemory.GetScroll(FileViewModel.FilePath) : null,
-                LoadId = ++LoadId,
+                ScrollAnchor = Settings.RememberCursorPosition ? ScrollAnchorOf(FileViewModel.FilePath) : null,
+                LoadId = NoteLoad(Markdown, pageEmpty: true),
             };
         }
+
+        /// <summary>
+        /// Documents this long take the page a noticeable while to draw: the editor says it is opening them, where the page
+        /// shows no first screen of its own (services/loadPreview). A reader saw a blank start-up with 20,000 characters.
+        /// </summary>
+        public const int LongDocumentChars = 10000;
+
+        /// <summary>
+        /// A long document is on its way into the page and not yet confirmed loaded (FileLoaded): the editor shows that it
+        /// is opening over the theme's colour instead of an empty page.
+        /// </summary>
+        public bool LongLoadPending { get; private set; }
+
+        /// <summary>
+        /// How long a long load runs before "Opening…" shows (ms). The page asking for its document (start-up, the page
+        /// loaded again) has nothing on it yet: soon. A tab switch keeps the document left on the page until the new one
+        /// takes its place, and that is a few hundred milliseconds: only a load that really hangs says so. It flashed up
+        /// on every switch between two long documents.
+        /// </summary>
+        public int LongLoadDelay { get; private set; } = 150;
+
+        // The next load's id, noting whether it is a long document and whether the page has anything on it meanwhile.
+        private int NoteLoad(string text, bool pageEmpty = false)
+        {
+            LongLoadDelay = pageEmpty ? 150 : 600;
+            LongLoadPending = (text?.Length ?? 0) >= LongDocumentChars;
+            if (LongLoadPending) OpeningLoads++;
+            return ++LoadId;
+        }
+
+        /// <summary>
+        /// A very long document shown is being left (a tab switched or closed): the page is covered with its own colour at
+        /// once, until the next document is on it. The page took half a second and more to put the long one away and
+        /// show the next, the old one still on screen (and scrollable) meanwhile.
+        /// </summary>
+        public bool LeavingCover { get; private set; }
+
+        /// <summary>A document from this long is covered when it is left (<see cref="LeavingCover"/>).</summary>
+        public const int CoverFromChars = 200000;
+
+        private int coveredLoad;
+
+        /// <summary>For tests: how many times the page was covered on leaving a long document.</summary>
+        public int CoversShown { get; private set; }
+
+        /// <summary>The document shown is left: covered if it is very long. The load that was shown, for <see cref="UncoverIfStill"/>.</summary>
+        public int CoverIfLong()
+        {
+            if ((Markdown?.Length ?? 0) >= CoverFromChars && !LeavingCover)
+            {
+                coveredLoad = LoadId;
+                CoversShown++;
+                Log.Debug($"editor: covered while leaving load {LoadId} ({Markdown.Length} chars)");
+                LeavingCover = true;
+            }
+            return LoadId;
+        }
+
+        /// <summary>The leaving did not happen (the close cancelled, the tab already shown): uncovered if nothing was loaded since.</summary>
+        public void UncoverIfStill(int load)
+        {
+            if (LeavingCover && LoadId == load) LeavingCover = false;
+        }
+
+        /// <summary>For tests: how many times "Opening…" was shown (MarkdownEditor counts it).</summary>
+        public int OpeningShown { get; set; }
+
+        /// <summary>For tests: how many long loads there were.</summary>
+        public int OpeningLoads { get; private set; }
 
         /// <summary>Pushes a whole document into the editor (see <see cref="LoadId"/>).</summary>
         public void PostLoadFile(string text, object cursor = null)
@@ -211,8 +320,10 @@ namespace Typedown.Core.ViewModels
             // Another document, or this one again from its start: the caret it comes with (if any) is the current one.
             CurrentCursor = cursor as CursorState;
             var scrollTop = Settings.RememberCursorPosition ? CursorMemory.GetScroll(FileViewModel.FilePath) : null;
+            var scrollAnchor = Settings.RememberCursorPosition ? ScrollAnchorOf(FileViewModel.FilePath) : null;
             loadClock = text != null && text.Length > 200000 ? System.Diagnostics.Stopwatch.StartNew() : null;
-            MarkdownEditor?.PostMessage("LoadFile", new { text, basePath = FileViewModel.ImageBasePath, cursor, scrollTop, loadId = ++LoadId });
+            loadText = text;
+            MarkdownEditor?.PostMessage("LoadFile", new { text, basePath = FileViewModel.ImageBasePath, cursor, scrollTop, scrollAnchor, loadId = NoteLoad(text), hold = inputHold });
             Log.Debug($"load {LoadId}: {System.IO.Path.GetFileName(FileViewModel.FilePath) ?? "untitled"}, {text?.Length ?? 0} chars, from {Callers()}");
         }
 
@@ -225,6 +336,14 @@ namespace Typedown.Core.ViewModels
             var frames = new System.Diagnostics.StackTrace(2, false).GetFrames() ?? new System.Diagnostics.StackFrame[0];
             return string.Join(" < ", frames.Select(f => f.GetMethod()).Where(m => m != null && m.DeclaringType?.Namespace?.StartsWith(Root) == true)
                 .Take(4).Select(m => $"{m.DeclaringType.Name}.{m.Name}"));
+        }
+
+        // The block at the top of the window when the file was left, as the page gave it; null if none or unreadable.
+        private static JToken ScrollAnchorOf(string path)
+        {
+            var json = CursorMemory.GetScrollAnchor(path);
+            if (string.IsNullOrEmpty(json)) return null;
+            try { return JObject.Parse(json); } catch { return null; }
         }
 
         // Scroll offset per file: reading mode has no caret, so this is what brings it back to the same place.
@@ -248,6 +367,7 @@ namespace Typedown.Core.ViewModels
 
         private void OnScroll(JToken arg)
         {
+            ReportScrolled(arg);
             if (!FileLoaded || string.IsNullOrEmpty(FileViewModel.FilePath)) return;
             var scrollY = arg["scrollY"]?.Value<double?>();
             if (scrollY == null) return;
@@ -258,7 +378,8 @@ namespace Typedown.Core.ViewModels
             var id = arg["loadId"];
             if (id == null || id.Type != JTokenType.Integer || id.Value<int>() != LoadId) return;
             LastScrollY = scrollY.Value;
-            CursorMemory.SetScroll(FileViewModel.FilePath, scrollY.Value);
+            var anchor = arg["anchor"];
+            CursorMemory.SetScroll(FileViewModel.FilePath, scrollY.Value, anchor is JObject ? anchor.ToString(Newtonsoft.Json.Formatting.None) : null);
             // Every 500px, not every event: enough to see in the log that the page moved, and how far.
             if (double.IsNaN(lastLoggedScroll) || Math.Abs(scrollY.Value - lastLoggedScroll) >= 500)
             {
@@ -267,10 +388,39 @@ namespace Typedown.Core.ViewModels
             }
         }
 
+        // Where the page was at the last scroll report, and when the last Scrolled was told (Environment.TickCount64).
+        private double heartbeatScroll = double.NaN;
+        private long lastScrollHeartbeat = long.MinValue;
+
+        /// <summary>
+        /// The page of the current load moved (scrolled by the reader, or by the caret following the typing): told to an
+        /// edition as <see cref="ActivityKind.Scrolled"/>, at most once every ten seconds - a sign that someone is at the
+        /// window, not every scroll event. A report whose position did not change (the page's height did) is no move.
+        /// </summary>
+        private void ReportScrolled(JToken arg)
+        {
+            var y = arg?["scrollY"]?.Value<double?>();
+            var id = arg?["loadId"];
+            if (y == null || !FileLoaded || id == null || id.Type != JTokenType.Integer || id.Value<int>() != LoadId) return;
+            var moved = !double.IsNaN(heartbeatScroll) && Math.Abs(y.Value - heartbeatScroll) >= 1;
+            heartbeatScroll = y.Value;
+            if (!moved) return;
+            var now = Environment.TickCount64;
+            if (lastScrollHeartbeat != long.MinValue && now - lastScrollHeartbeat < 10000) return;
+            lastScrollHeartbeat = now;
+            EditionHooks.ReportActivity(ActivityKind.Scrolled, AppViewModel);
+        }
+
         private bool IsStaleReport(JToken arg)
         {
             var id = arg?["loadId"];
-            if (id == null || id.Type != JTokenType.Integer || id.Value<int>() == LoadId) return false;
+            if (id == null || id.Type != JTokenType.Integer) return false;
+            return IsStaleReport(id.Value<int>());
+        }
+
+        private bool IsStaleReport(int? id)
+        {
+            if (id == null || id == LoadId) return false;
             Log.Debug($"Editor report dropped: loadId={id} current={LoadId}");
             return true;
         }
@@ -339,8 +489,15 @@ namespace Typedown.Core.ViewModels
             // The page being replaced still answers a load sent while it goes (the file opened meanwhile); only the
             // new page, once it has asked for its settings, can confirm what it shows.
             if (awaitingNewPage) Log.Debug($"editor: load {LoadId} confirmed by the page being replaced, not counted");
-            else ConfirmedLoadId = LoadId;
+            else
+            {
+                ConfirmedLoadId = LoadId;
+                LongLoadPending = false;
+                if (LoadId > coveredLoad) LeavingCover = false;
+            }
             CompleteReloadWaiter(arg);
+            // The document on the page and taking keys: the end of the start (todo #16).
+            StartupTiming.Reached("document shown", last: true);
             if (loadClock != null)
             {
                 Log.Debug($"FileLoaded after {loadClock.ElapsedMilliseconds} ms in the editor");
@@ -348,7 +505,7 @@ namespace Typedown.Core.ViewModels
             }
             if (!FileLoaded)
             {
-                var newText = arg["text"].ToString();
+                var newText = KeptAsGiven(arg) ? loadText : arg["text"].ToString();
                 if (RewriteLoadsForTest > 0)
                 {
                     RewriteLoadsForTest--;
@@ -386,6 +543,15 @@ namespace Typedown.Core.ViewModels
                     OnSearch();
             }
         }
+
+        // The text sent with the newest load id (a load, the page asking for its document, text from the history).
+        // FileLoaded leaves the text out when the page holds exactly the text it was given (`same`): a long document
+        // sent back and parsed only to be found equal cost 20-40 ms. A report for an older load id is dropped as
+        // stale, so the one that is taken always means this text.
+        private string loadText;
+
+        /// <summary>The page's FileLoaded says it holds the text that came with its load id, unchanged.</summary>
+        private static bool KeptAsGiven(JToken arg) => arg?["same"]?.Type == JTokenType.Boolean && arg["same"].Value<bool>();
 
         // The text a load was retried with (OnFileLoaded): one retry for each text.
         private string retriedLoad;
@@ -501,11 +667,15 @@ namespace Typedown.Core.ViewModels
         /// somebody choosing it, and jumping there would send the editor a scroll it did not ask for — which
         /// in reading mode, where the outline follows the page, is a loop: the page scrolls, reports a
         /// heading, gets scrolled to it, reports again. The page then twitches with nobody touching it.
+        /// Kept with the load whose outline it is marked in: the page numbers its blocks from the start each time it is
+        /// loaded (start-up, leaving the settings), so the document shown again names the very key marked for the load
+        /// before. Taken for "marked already", that heading was never marked in the new outline, and in reading mode the
+        /// outline showed nothing until the reader scrolled to another heading.
         /// </summary>
-        private string appliedCurSlug;
+        private readonly OutlineMark outlineMark = new OutlineMark();
 
         /// <summary>The heading the outline currently marks, so a selection landing on it again is not a jump.</summary>
-        public string AppliedCurSlug => appliedCurSlug;
+        public string AppliedCurSlug => outlineMark.Slug;
 
         /// <summary>
         /// True while the outline is being rebuilt from a report. The tree is bound to the collection being
@@ -518,6 +688,8 @@ namespace Typedown.Core.ViewModels
         /// <summary>A heading the page reported before there was an outline to mark it in.</summary>
         private string pendingOutlineSlug;
         private JToken pendingOutlineWhere;
+        // The load it was named for: kept for that load's outline only, not marked in the next load's.
+        private int pendingOutlineLoad;
 
         /// <summary>
         /// Raised with the slug of the heading just marked in the outline. The outline pane brings that row
@@ -526,20 +698,59 @@ namespace Typedown.Core.ViewModels
         /// </summary>
         public event Action<string> OutlineHighlighted;
 
-        public void OnStateChange(JToken arg)
+        /// <summary>Raised when <see cref="Toc"/> has been rebuilt from a report (another document's, or an edit's).</summary>
+        public event Action OutlineUpdated;
+
+        /// <summary>
+        /// The page's state report, read straight from its text into these types. It used to be read into a token
+        /// tree and then from the tree into a <see cref="ContentState"/>: with an outline of three thousand headings
+        /// that was most of the 17-30 ms a report cost here, for every report.
+        /// </summary>
+        public sealed class StateReport
         {
+            public ContentState State { get; set; }
+
+            public int? LoadId { get; set; }
+
+            /// <summary>
+            /// The page left the outline out because it is the one it last sent for this load (it sends it at least
+            /// once per load); the outline already held stands.
+            /// </summary>
+            public bool TocUnchanged { get; set; }
+
+            public static StateReport Read(EditorEventArgs e) =>
+                e.Text != null ? Newtonsoft.Json.JsonConvert.DeserializeObject<StateReport>(e.Text) : e.Args?.ToObject<StateReport>();
+        }
+
+        public void OnStateChange(JToken arg) => OnStateChange(arg?.ToObject<StateReport>());
+
+        public void OnStateChange(StateReport report)
+        {
+            if (report == null) return;
             // Cleared whatever the report describes: it means the editor has answered, and leaving it set
             // would keep the next real edit out of the undo history.
             contentUpdating = false;
             // A report describes the document that was loaded when it was made. Switch tabs quickly and the
             // previous document's report arrives after the new one is open: its outline is of a document no
             // longer on screen, and every heading in it is a place the editor cannot go.
-            if (IsStaleReport(arg)) return;
-            ContentState = arg["state"].ToObject<ContentState>();
+            if (IsStaleReport(report.LoadId)) return;
+            var state = report.State ?? new ContentState();
+            // An outline left out is the one this load's earlier report carried: the same list is kept, and the tree
+            // made from it is not made again. The page always sends it in the first report of a load, so there is one
+            // here for this load; if there is not (a report lost on the way), an empty outline is shown rather than
+            // another document's, until the page sends one.
+            var tocKept = report.TocUnchanged && tocLoadId == LoadId && ContentState?.Toc != null;
+            if (report.TocUnchanged && !tocKept)
+                Log.Debug($"outline: a report of load {LoadId} left its outline out, and none is held for that load");
+            state.Toc = tocKept ? ContentState.Toc : state.Toc ?? new List<TocItem>();
+            ContentState = state;
+            // Another load's outline comes with nothing marked yet; the same load's (an edit) keeps its mark.
+            outlineMark.OutlineOf(LoadId);
             if (ContentState.WordCount != null)
                 EditionHooks.ReportWordCount(new WordCountReport
                 {
                     Editor = this, LoadId = LoadId, Words = ContentState.WordCount.Word, Characters = ContentState.WordCount.Character,
+                    Path = AppViewModel?.FileViewModel?.FilePath,
                     // The text an automation client wrote, nobody having typed since - or one being applied (its report
                     // can come before the host commits it).
                     Automation = holdingReports || (automationText != null && string.Equals(Markdown, automationText, StringComparison.Ordinal)),
@@ -556,14 +767,18 @@ namespace Typedown.Core.ViewModels
                 if (ContentState.Cur != null)
                 {
                     // In reading mode the outline follows the page as it is scrolled (OnOutlineCurrent), not the caret.
-                    if (!Settings.ReadOnly) appliedCurSlug = ContentState.Cur.Slug;
+                    if (!Settings.ReadOnly) outlineMark.Set(ContentState.Cur.Slug);
                     if (ContentState.Toc.All(x => x.Slug != ContentState.Cur.Slug))
                         Log.Debug($"outline: current heading {ContentState.Cur.Slug} is not among the {ContentState.Toc.Count} entries reported with it");
                     // The mark on the model is for ExpandToSelected; the row itself is marked by the pane, through
                     // the tree's own selection, when OutlineHighlighted is raised below.
                     ContentState.Toc.ForEach(x => x.IsSelected = x.Slug == ContentState.Cur.Slug);
                 }
-                if (tocLoadId == LoadId)
+                if (tocKept)
+                {
+                    // The tree already holds this outline; only the mark above has moved.
+                }
+                else if (tocLoadId == LoadId)
                 {
                     Toc.UpdateChildren(ContentState.Toc);
                 }
@@ -582,11 +797,18 @@ namespace Typedown.Core.ViewModels
             {
                 rebuildingToc = false;
             }
+            // Only when the tree was made again: with the outline kept there is nothing new for the pane to show, and
+            // going over three thousand rows to find that out was a cost of every keystroke.
+            if (!tocKept)
+                OutlineUpdated?.Invoke();
+            // Raised for every report with a current heading, a kept one following or not: the kept one is often that
+            // same heading, which the call below then takes as already marked and passes over - and the outline just
+            // handed over for another tab was never marked.
             // Not in reading mode, where the outline follows the scrolled page: a report there names the caret's heading,
             // which a reader scrolling with the wheel has left behind. Every tab switch flushes the page being left, and its
             // report marked that heading for a moment, then the new document's caret heading, before the place being
             // read came back (OL02).
-            if (ContentState.Cur != null && pendingOutlineSlug == null && !Settings.ReadOnly)
+            if (ContentState.Cur != null && !Settings.ReadOnly)
                 OutlineHighlighted?.Invoke(ContentState.Cur.Slug);
             if (pendingOutlineSlug != null)
             {
@@ -594,7 +816,7 @@ namespace Typedown.Core.ViewModels
                 var where = pendingOutlineWhere;
                 pendingOutlineSlug = null;
                 pendingOutlineWhere = null;
-                OnOutlineCurrent(new JObject { ["slug"] = slug, ["where"] = where, ["loadId"] = LoadId });
+                OnOutlineCurrent(new JObject { ["slug"] = slug, ["where"] = where, ["loadId"] = pendingOutlineLoad });
             }
         }
 
@@ -610,33 +832,29 @@ namespace Typedown.Core.ViewModels
             if (IsStaleReport(arg)) return;
             var slug = arg["slug"]?.ToString();
             if (string.IsNullOrEmpty(slug)) return;
-            if (ContentState?.Toc == null)
-            {
-                // The page reports where it is as soon as it has laid the document out, which is before the
-                // first state report has reached here — there is no outline yet to mark. Dropping it left the
-                // highlight blank until the reader happened to scroll to a different heading, because the
-                // page only reports a heading when it changes. Keep it for the outline to arrive.
-                pendingOutlineSlug = slug;
-                pendingOutlineWhere = arg["where"];
-                Log.Debug($"outline: heading {slug} arrived before the outline; kept for when it does");
-                return;
-            }
-            if (appliedCurSlug == slug) return;
-            var match = ContentState.Toc.FirstOrDefault(x => x.Slug == slug);
             var where = arg["where"];
             var at = where == null ? "" : where["jump"] != null ? $" [jumped to it, scrollY={where["y"]}]" : $" [scrollY={where["y"]}, heading {where["index"]}/{where["of"]} at {where["top"]}]";
-            if (match == null)
+            var match = ContentState?.Toc?.FirstOrDefault(x => x.Slug == slug);
+            var verdict = outlineMark.Named(LoadId, slug, match != null);
+            if (verdict == OutlineNamed.Already) return;
+            if (verdict == OutlineNamed.Keep)
             {
+                // The page reports where it is as soon as it has laid the document out, which is before the
+                // first state report has reached here — there is no outline yet to mark, or only another load's.
+                // Dropping it left the highlight blank until the reader happened to scroll to a different heading,
+                // because the page only reports a heading when it changes. Keep it for the outline to arrive.
+                // Not marked in another load's outline either, even where that one has a heading by the same key (a
+                // page loaded again numbers its blocks alike): that outline is about to be replaced, unmarked.
                 // The document was rebuilt (a reload, a switch back to this tab) and the page named a heading
-                // by its new key before the outline with the new keys got here. Marking "none of these" left
-                // the outline blank; the report is kept for the outline that is on its way, like one that
-                // arrives before any outline at all.
+                // by its new key before the outline with the new keys got here: kept the same way.
                 pendingOutlineSlug = slug;
                 pendingOutlineWhere = where;
-                Log.Debug($"outline: heading {slug} is not among the {ContentState.Toc.Count} entries{at}; kept for the next outline");
+                pendingOutlineLoad = LoadId;
+                Log.Debug(ContentState?.Toc == null ? $"outline: heading {slug} arrived before the outline; kept for when it does"
+                    : outlineMark.Load != LoadId ? $"outline: heading {slug} arrived before load {LoadId}'s outline{at}; kept for it"
+                    : $"outline: heading {slug} is not among the {ContentState.Toc.Count} entries{at}; kept for the next outline");
                 return;
             }
-            appliedCurSlug = slug;
             Log.Debug($"outline: now on {match.Content}{at}");
             rebuildingToc = true;
             try
@@ -681,16 +899,48 @@ namespace Typedown.Core.ViewModels
         /// flush), false when it did not answer within <paramref name="timeoutMs"/> — a caller deciding whether it
         /// is safe to close or replace a document without asking must not treat a timeout as "content is current".
         /// </summary>
-        public async Task<bool> FlushContentAsync(int timeoutMs = 500)
+        private int inputHold;
+
+        /// <summary>
+        /// Another document is about to be shown (a tab made or switched to): called first, before anything that waits. The
+        /// page keeps what the reader types from now on and puts it into the document this hold is for once that is in
+        /// the editor (each load names the newest hold); until then nothing typed reaches the document being left.
+        /// </summary>
+        public int HoldInput()
         {
-            if (MarkdownEditor == null || !FileLoaded) return true;
+            MarkdownEditor?.PostMessage("HoldInput", new { hold = ++inputHold });
+            return inputHold;
+        }
+
+        /// <summary>
+        /// The tab change of this hold is over. If it showed no other document after all (the tab was shown already, a
+        /// save was refused), what was typed goes into the document shown.
+        /// </summary>
+        public void ReleaseInput(int hold) => MarkdownEditor?.PostMessage("ReleaseInput", new { hold });
+
+        /// <summary>
+        /// The flush before a tab change. The page answers it once the document still on its way in (a tab switched to a
+        /// moment ago) has what was typed for it, so that is what the tab keeps; that can take a long document's showing,
+        /// hence the longer wait while the current load is unconfirmed.
+        /// </summary>
+        public Task<bool> FlushBeforeTabChangeAsync() =>
+            FlushContentAsync(ConfirmedLoadId != LoadId ? 4500 : null, evenIfNotLoaded: true);
+
+        public async Task<bool> FlushContentAsync(int? timeoutMs = null, bool evenIfNotLoaded = false)
+        {
+            if (MarkdownEditor == null || (!FileLoaded && !evenIfNotLoaded)) return true;
+            // A very long document: the page may still be busy with it a moment after it is shown (on a slower PC a
+            // 280,000-character document did not answer in half a second, and its close asked to save a document
+            // nobody had changed). Longer for it; half a second for the others, as before.
+            var wait = timeoutMs ?? ((Markdown?.Length ?? 0) >= CoverFromChars ? 3000 : 500);
             var token = ++flushToken;
             var waiter = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
             lock (flushWaiters) flushWaiters[token] = waiter;
             try
             {
                 MarkdownEditor.PostMessage("FlushContent", new { token });
-                var finished = await Task.WhenAny(waiter.Task, Task.Delay(timeoutMs));
+                var finished = await Task.WhenAny(waiter.Task, Task.Delay(wait));
+                if (finished != waiter.Task) Log.Debug($"editor: flush {token} not answered in {wait} ms (load {LoadId}, {Markdown?.Length ?? 0} chars)");
                 return finished == waiter.Task && waiter.Task.Result;
             }
             finally
@@ -837,9 +1087,10 @@ namespace Typedown.Core.ViewModels
         /// The document rendered as the exports render it, as the body element of an XHTML document (well-formed XML, in
         /// the XHTML namespace): for turning it into another format. Null when the page did not answer in time; an
         /// exception with the page's message when it could not render. With <paramref name="diagramsAsPictures"/> each
-        /// diagram is a PNG on white (an img with a data: address) instead of an SVG.
+        /// diagram is a PNG on white (an img with a data: address) instead of an SVG; with <paramref name="mathAsTex"/> each
+        /// formula is its TeX (span.math-tex, span.math-tex-display) instead of KaTeX's drawing.
         /// </summary>
-        public async Task<string> RenderXhtmlAsync(int timeoutMs, bool diagramsAsPictures = false)
+        public async Task<string> RenderXhtmlAsync(int timeoutMs, bool diagramsAsPictures = false, bool mathAsTex = false)
         {
             if (MarkdownEditor == null) return null;
             var token = ++normalizationToken;
@@ -847,7 +1098,7 @@ namespace Typedown.Core.ViewModels
             xhtmlWaiters[token] = waiter;
             try
             {
-                MarkdownEditor.PostMessage("RenderXhtml", new { token, diagramsAsPictures });
+                MarkdownEditor.PostMessage("RenderXhtml", new { token, diagramsAsPictures, mathAsTex });
                 if (await Task.WhenAny(waiter.Task, Task.Delay(timeoutMs)) != waiter.Task) return null;
                 var reply = waiter.Task.Result;
                 if (reply?["error"] != null) throw new InvalidOperationException(reply["error"].ToString());
@@ -914,6 +1165,7 @@ namespace Typedown.Core.ViewModels
         {
             if (MarkdownEditor == null) return null;
             var loadId = ++LoadId;
+            loadText = text;
             var waiter = new TaskCompletionSource<string>(TaskCreationOptions.RunContinuationsAsynchronously);
             reloadWaiters[loadId] = waiter;
             try
@@ -932,7 +1184,8 @@ namespace Typedown.Core.ViewModels
         {
             var id = arg?["loadId"];
             if (id == null || id.Type != JTokenType.Integer) return;
-            if (reloadWaiters.TryGetValue(id.Value<int>(), out var waiter)) waiter.TrySetResult(arg["text"]?.ToString());
+            // Only a report for the newest load gets here (IsStaleReport), the load loadText was sent with.
+            if (reloadWaiters.TryGetValue(id.Value<int>(), out var waiter)) waiter.TrySetResult(KeptAsGiven(arg) ? loadText : arg["text"]?.ToString());
         }
 
         /// <summary>
@@ -963,6 +1216,7 @@ namespace Typedown.Core.ViewModels
             {
                 return;
             }
+            EditionHooks.ReportActivity(ActivityKind.Undone, AppViewModel);
             OnMarkdownChange(state.Text);
             contentUpdating = true;
             MarkdownEditor?.PostMessage("SetMarkdown", new
@@ -970,7 +1224,7 @@ namespace Typedown.Core.ViewModels
                 text = state.Text,
                 cursor = state.Cursor,
                 basePath = FileViewModel.ImageBasePath,
-                loadId = NextHistoryLoadId(),
+                loadId = NextHistoryLoadId(state.Text),
             });
         }
 
@@ -981,6 +1235,7 @@ namespace Typedown.Core.ViewModels
             {
                 return;
             }
+            EditionHooks.ReportActivity(ActivityKind.Redone, AppViewModel);
             OnMarkdownChange(state.Text);
             contentUpdating = true;
             // The document's folder too, as Undo sends it: without it the page lost its folder, and every relative picture
@@ -990,7 +1245,7 @@ namespace Typedown.Core.ViewModels
                 text = state.Text,
                 cursor = state.Cursor,
                 basePath = FileViewModel.ImageBasePath,
-                loadId = NextHistoryLoadId(),
+                loadId = NextHistoryLoadId(state.Text),
             });
         }
 
@@ -999,8 +1254,10 @@ namespace Typedown.Core.ViewModels
         /// then carries the old id and is dropped, instead of writing the text just undone back over the history.
         /// SetMarkdown has no FileLoaded handshake, so the new id counts as confirmed at once.
         /// </summary>
-        private int NextHistoryLoadId()
+        private int NextHistoryLoadId(string text)
         {
+            // A load still on its way in the page is answered under this id, with this text (see loadText).
+            loadText = text;
             ConfirmedLoadId = ++LoadId;
             return LoadId;
         }
@@ -1046,6 +1303,7 @@ namespace Typedown.Core.ViewModels
                     var src = await ServiceProvider.GetService<ImageAction>().DoClipboardAction(image);
                     src = src.Replace('\\', '/');
                     MarkdownEditor?.PostMessage("InsertImage", new HtmlImgTag(src));
+                    EditionHooks.ReportActivity(ActivityKind.Pasted, AppViewModel);
 
                 }
             }
@@ -1066,6 +1324,7 @@ namespace Typedown.Core.ViewModels
         {
             var tab = ServiceProvider.GetService<TabsViewModel>()?.ActiveTab;
             MarkdownEditor?.PostMessage("Paste", new { type, text, html });
+            EditionHooks.ReportActivity(ActivityKind.Pasted, AppViewModel);
             if (type == "pasteAsPlainText" || string.IsNullOrEmpty(html)) return;
             if (Settings.InsertWebImageAction != Enums.InsertImageAction.CopyToPath && Settings.InsertWebImageAction != Enums.InsertImageAction.Upload) return;
             var addresses = WebImageAddresses(html);

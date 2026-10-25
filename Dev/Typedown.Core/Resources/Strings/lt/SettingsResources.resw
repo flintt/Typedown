@@ -238,7 +238,7 @@
     <comment>编辑器/默认缩进</comment>
   </data>
   <data name="Editor.Title" xml:space="preserve">
-    <value>Redaktorius</value>
+    <value>Rengyklė</value>
     <comment>编辑器/编辑器</comment>
   </data>
   <data name="Export.AddConfig.Description" xml:space="preserve">
@@ -634,7 +634,7 @@
     <comment>视图/显示状态栏</comment>
   </data>
   <data name="View.Title" xml:space="preserve">
-    <value>Veidas</value>
+    <value>Išvaizda</value>
     <comment>视图/外观</comment>
   </data>
   <data name="View.Topmost.Description" xml:space="preserve">
@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Žėručio fono efekto įgalinimas redagavimo srities fone</value>
+    <value>Šoninis skydelis ir skirtukų juosta rodo žėručio efektą; redagavimo sritis išlaiko vientisą temos spalvą</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Žėručio medžiagos naudojimas redagavimo srityje</value>
+    <value>Naudoti žėručio medžiagą aplink redagavimo sritį</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Atidaryti jo aplanką</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Įsiminti neseniai atidarytus failus</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Atidaryti failai ir aplankai rodomi Failas &gt; Atidaryti naujausius ir pradžios puslapyje. Išjungus nieko naujo nepridedama.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Išvalyti naujausius failus ir aplankus</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Išvalo neseniai atidarytų failų ir aplankų sąrašus.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Išvalyti</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Rodyti pradžios puslapį tuščiame skirtuke</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Paleidžiant, kai nėra ką atidaryti, ir uždarius paskutinį skirtuką: naujausi failai ir aplankai, mėgstami</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Nauji skirtukai rodo pradžios puslapį</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Naujas skirtukas (Failas &gt; Naujas, mygtukas +) rodo pradžios puslapį vietoj tuščio dokumento</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Rodyti papildomas tuščias eilutes</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Tuščios eilutės tarp pastraipų užima vietą ir skaitymo režimu bei eksportuojant į HTML ir PDF, kaip ir redaguojant. Pats failas nekeičiamas</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Ilgus dokumentus piešti palaipsniui</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Ilgas dokumentas atsidaro ten, kur jį palikote, o likusi dalis piešiama fone. Išjunkite tai, jei atidarant ilgą dokumentą kas nors atrodo netinkamai: tada jis bus nupieštas iš karto</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Šoninė juosta dešinėje</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Rodyti šoninę juostą dokumento dešinėje, o ne kairėje</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Uždarant išlaikyti neįrašytus pakeitimus</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Uždaryti neklausiant dėl įrašymo: neįrašyti dokumentai grįžta tokie, kokie buvo, vis dar neįrašyti, su paskutinės sesijos skirtukais</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Visada rodyti Markdown žymes</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Rodyti Markdown žymes (**, #, nuorodos adresą) kiekvienoje pastraipoje, ne tik ten, kur yra žymeklis</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Numatyti ilgų dokumentų išdėstymą (eksperimentinė)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Kol ilgas dokumentas piešiamas dalimis, dar nerodomos dalies aukštis apskaičiuojamas iš teksto, o ne įvertinamas apytiksliai, todėl slinkties juosta ir šuoliai iš struktūros yra tikslesni. Eksperimentinė</value>
   </data>
 </root>

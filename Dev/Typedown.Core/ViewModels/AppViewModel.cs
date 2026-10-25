@@ -7,8 +7,8 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using Typedown.Core.Interfaces;
 using Typedown.Core.Utilities;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 
 namespace Typedown.Core.ViewModels
 {
@@ -31,6 +31,8 @@ namespace Typedown.Core.ViewModels
         public UIViewModel UIViewModel => ServiceProvider.GetService<UIViewModel>();
 
         public TabsViewModel TabsViewModel => ServiceProvider.GetService<TabsViewModel>();
+
+        public HomeViewModel HomeViewModel => ServiceProvider.GetService<HomeViewModel>();
 
         public IReadOnlyList<Frame> FrameStack { get; set; } = new List<Frame>();
 

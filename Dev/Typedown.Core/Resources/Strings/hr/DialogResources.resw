@@ -126,7 +126,7 @@
     <comment>未保存对话框/是否要保存更改？</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Otkazati</value>
+    <value>Odustani</value>
     <comment>对话框/取消</comment>
   </data>
   <data name="Confirm" xml:space="preserve">
@@ -142,7 +142,7 @@
     <comment>创建文件夹对话框/新建文件夹失败</comment>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Izbrisati</value>
+    <value>Izbriši</value>
     <comment>恢复文件对话框/删除</comment>
   </data>
   <data name="Don'tSave" xml:space="preserve">
@@ -182,7 +182,7 @@
     <comment>打开文件对话框/读取失败</comment>
   </data>
   <data name="Recover" xml:space="preserve">
-    <value>Vratiti</value>
+    <value>Vrati</value>
     <comment>恢复文件对话框/恢复</comment>
   </data>
   <data name="RecoverContent" xml:space="preserve">
@@ -202,7 +202,7 @@
     <comment>确定恢复应用默认设置？</comment>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Spasiti</value>
+    <value>Spremi</value>
     <comment>文件保存对话框/保存</comment>
   </data>
   <data name="SaveErrorTitle" xml:space="preserve">
@@ -328,5 +328,14 @@
   </data>
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>{0} od njih već je prije preneseno s ovom konfiguracijom, pa su upotrijebljene njihove ranije adrese.</value>
+  </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Preuzmi WebView2 Runtime s Microsofta</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Runtime nije instaliran. Instalacija zahtijeva internetsku vezu; runtime možete preuzeti i s Microsofta (postoji i izvanmrežni instalacijski program), instalirati ga i ponovno pokrenuti aplikaciju.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>Instaliranje WebView2 Runtimea...</value>
   </data>
 </root>

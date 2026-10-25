@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>সম্পাদনা ক্ষেত্ৰৰ পৃষ্ঠভূমিৰ বাবে মাইকা পৃষ্ঠভূমিৰ প্ৰভাৱ সক্ষম কৰক</value>
+    <value>কাষৰ পেন আৰু টেব বাৰত মাইকা প্ৰভাৱ দেখুৱায়; সম্পাদনা অঞ্চলে থীমৰ নিৰেট ৰং ৰাখে</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>সম্পাদনা স্থানত মাইকা সামগ্ৰী ব্যৱহাৰ কৰক</value>
+    <value>সম্পাদনা অঞ্চলৰ চাৰিওফালে মাইকা সামগ্ৰী ব্যৱহাৰ কৰক</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>ইয়াৰ ফ'ল্ডাৰ খোলক</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>শেহতীয়াকৈ খোলা ফাইল মনত ৰাখক</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>আপুনি খোলা ফাইল আৰু ফ'ল্ডাৰ ফাইল &gt; শেহতীয়া খোলক আৰু হোম পৃষ্ঠাত দেখা যায়। বন্ধ থাকিলে নতুন একো যোগ নহয়।</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>শেহতীয়া ফাইল আৰু ফ'ল্ডাৰ মচক</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>শেহতীয়াকৈ খোলা ফাইল আৰু ফ'ল্ডাৰৰ তালিকা খালী কৰে।</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>মচক</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>খালী টেবত হোম পৃষ্ঠা দেখুৱাওক</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>আৰম্ভ কৰোঁতে খুলিবলৈ একো নাথাকিলে আৰু শেষ টেব বন্ধ কৰিলে: শেহতীয়া ফাইল আৰু ফ'ল্ডাৰ, প্ৰিয়</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>নতুন টেবে হোম পৃষ্ঠা দেখুৱায়</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>নতুন টেবে (ফাইল &gt; নতুন, + বুটাম) খালী নথিৰ সলনি হোম পৃষ্ঠা দেখুৱায়</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>অতিৰিক্ত খালী শাৰী দেখুৱাওক</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>সম্পাদনা কৰাৰ সময়ৰ দৰে পঢ়া ম'ড আৰু HTML আৰু PDF ৰপ্তানিতো অনুচ্ছেদৰ মাজৰ খালী শাৰীয়ে ঠাই লয়। ফাইলটো নিজে সলনি নহয়</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>দীঘলীয়া নথি ক্ৰমান্বয়ে অংকন কৰক</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>দীঘলীয়া নথি আপুনি এৰি থোৱা ঠাইতে খোল খায়, বাকী অংশ পটভূমিত অংকন হয়। দীঘলীয়া নথি খোলোঁতে কিবা ভুল যেন লাগিলে এইটো বন্ধ কৰক: তেতিয়া ই এবাৰতে অংকন হ'ব</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>সোঁফালে কাষৰ বাৰ</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>নথিৰ বাওঁফালৰ সলনি সোঁফালে কাষৰ বাৰ দেখুৱাওক</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>বন্ধ কৰোঁতে সংৰক্ষণ নকৰা সলনিসমূহ ৰাখক</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>সংৰক্ষণৰ বাবে নুসুধাকৈ বন্ধ কৰক: সংৰক্ষণ নকৰা নথিসমূহ আগৰ দৰেই, এতিয়াও সংৰক্ষণ নকৰাকৈ, শেষ অধিবেশনৰ টেবসমূহৰ সৈতে উভতি আহিব</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Markdown চিহ্নসমূহ সদায় দেখুৱাওক</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>কাৰ্ছৰ থকা ঠাইতে নহয়, প্ৰতিটো অনুচ্ছেদত Markdown চিহ্নসমূহ (**, #, লিংকৰ ঠিকনা) দেখুৱাওক</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>দীঘলীয়া নথিৰ বিন্যাস আগতীয়াকৈ নিৰ্ণয় কৰক (পৰীক্ষামূলক)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>দীঘলীয়া নথি অংশ অংশকৈ অঁকাৰ সময়ত, এতিয়াও নেদেখুওৱা অংশৰ উচ্চতা অনুমান নকৰি পাঠৰ পৰা গণনা কৰা হয়, যাতে স্ক্ৰ'ল বাৰ আৰু ৰূপৰেখাৰ পৰা জঁপিয়াই যোৱা অধিক সঠিক হয়। পৰীক্ষামূলক</value>
   </data>
 </root>

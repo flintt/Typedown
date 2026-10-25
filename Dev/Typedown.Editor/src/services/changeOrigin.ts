@@ -20,8 +20,22 @@ const inputEvents = ['keydown', 'beforeinput', 'paste', 'cut', 'drop', 'composit
 
 let armed = false;
 
+const beforeIntent = new Set<() => void>();
+
+/**
+ * Called before the reader's action edits (and before it is armed): the page finishes a load still being reported
+ * there, so the edit is never taken for the load's own text (components/Editor/index.tsx).
+ */
+export function onUserIntent(callback: () => void): () => void {
+    beforeIntent.add(callback);
+    return () => { beforeIntent.delete(callback) };
+}
+
 /** Records that the reader did something that may edit the document. */
 export function noteUserIntent() {
+    for (const callback of beforeIntent) {
+        try { callback() } catch (e) { console.log(e) }
+    }
     armed = true;
 }
 

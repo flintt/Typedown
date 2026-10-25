@@ -270,7 +270,7 @@
     <comment>编辑/剪切</comment>
   </data>
   <data name="Dark" xml:space="preserve">
-    <value>Темный</value>
+    <value>Тёмная</value>
     <comment>应用主题/深色</comment>
   </data>
   <data name="Data" xml:space="preserve">
@@ -546,11 +546,11 @@
     <comment>了解更多</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Свет</value>
+    <value>Светлая</value>
     <comment>应用主题/浅色</comment>
   </data>
   <data name="Line" xml:space="preserve">
-    <value>Строки</value>
+    <value>Строка</value>
     <comment>行(单数)</comment>
   </data>
   <data name="LineHeight" xml:space="preserve">
@@ -558,7 +558,7 @@
     <comment>设置/行高</comment>
   </data>
   <data name="Lines" xml:space="preserve">
-    <value>Строка</value>
+    <value>Строки</value>
     <comment>行(复数)</comment>
   </data>
   <data name="LinkReference" xml:space="preserve">
@@ -582,7 +582,7 @@
     <comment>窗口/最大化</comment>
   </data>
   <data name="MenuBar" xml:space="preserve">
-    <value>Меню</value>
+    <value>Строка меню</value>
     <comment>菜单栏</comment>
   </data>
   <data name="Mermaid" xml:space="preserve">
@@ -654,7 +654,7 @@
     <comment>未设置</comment>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Закрыть</value>
+    <value>Выкл.</value>
     <comment>开关/关</comment>
   </data>
   <data name="Ok" xml:space="preserve">
@@ -662,7 +662,7 @@
     <comment>对话框/确定</comment>
   </data>
   <data name="On" xml:space="preserve">
-    <value>Включено</value>
+    <value>Вкл.</value>
     <comment>开关/开</comment>
   </data>
   <data name="Open" xml:space="preserve">
@@ -686,7 +686,7 @@
     <comment>文件/在新窗口中打开</comment>
   </data>
   <data name="OpenRecent" xml:space="preserve">
-    <value>Открыть недавно</value>
+    <value>Открыть последние</value>
     <comment>文件/打开最近</comment>
   </data>
   <data name="OpenSourceSoftware" xml:space="preserve">
@@ -698,11 +698,11 @@
     <comment>段落/有序列表</comment>
   </data>
   <data name="Outline" xml:space="preserve">
-    <value>Контур</value>
+    <value>Структура</value>
     <comment>侧栏/大纲</comment>
   </data>
   <data name="Paragraph" xml:space="preserve">
-    <value>Параграф</value>
+    <value>Абзац</value>
     <comment>段落</comment>
   </data>
   <data name="Paste" xml:space="preserve">
@@ -822,7 +822,7 @@
     <comment>停止操作</comment>
   </data>
   <data name="Strikethrough" xml:space="preserve">
-    <value>Не удалено</value>
+    <value>Зачёркнутый</value>
     <comment>格式/删除线</comment>
   </data>
   <data name="Strong" xml:space="preserve">
@@ -926,7 +926,7 @@
     <comment>YAML Front Matter</comment>
   </data>
   <data name="Zoom" xml:space="preserve">
-    <value>Масштабировать</value>
+    <value>Масштаб</value>
     <comment>字体缩放</comment>
   </data>
   <data name="FullScreen" xml:space="preserve">
@@ -1011,5 +1011,146 @@
   </data>
   <data name="ExportedTo" xml:space="preserve">
     <value>Экспортировано в {0}</value>
+  </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>Руководство пользователя</value>
+  </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Символы (без пробелов)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Символы (с пробелами)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>Символы CJK</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Слова</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Слова не CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Абзацы</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Заголовки</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Изображения</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Ссылки</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Время чтения</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Около {0} мин</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Меньше минуты</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Подсчёт по видимому тексту. Блоки кода и формулы не входят во время чтения.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>В строке состояния</value>
+  </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Сохранено</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Не сохранено</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Автосохранение приостановлено</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Нажмите, чтобы сохранить</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Документ пуст, но файл на диске — нет, и ни одна правка его не очистила, поэтому автосохранение не перезаписало файл.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Этот файл не удалось прочитать без потерь (кодировка не UTF-8?), поэтому автосохранение его не перезаписывает. Сохраняйте вручную, только если показанный текст верен.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Не удалось записать файл: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>Выбрано {0} из {1} {2}</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Кодировка и концы строк</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Преобразовать в UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Открыть заново в кодировке</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Текущий заголовок</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Состояние сохранения</value>
+  </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Папки</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Нет недавних папок</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Очистить недавние папки</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Щёлкните правой кнопкой или нажмите Delete, чтобы убрать из списка</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>На уровень выше</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Сделать корневой</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Избранное</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Добавить в избранное</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Убрать из избранного</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Главная</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Начало</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Новый документ</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Открыть файл</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Открыть папку</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Недавние файлы</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Недавние папки</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Убрать из списка</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Параметры</value>
+  </data>
+  <data name="EditorOpening" xml:space="preserve">
+    <value>Открытие…</value>
   </data>
 </root>

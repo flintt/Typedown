@@ -93,13 +93,18 @@ async function openEditor({ browserArgs = [] } = {}) {
     await page.waitForFunction(source => source ? !!document.querySelector('.CodeMirror') : !document.querySelector('.CodeMirror') && !!document.querySelector('#ag-editor-id'), { timeout: 60000 }, sourceCode);
     await pause();
   };
-  const flush = () => page.evaluate(() => {
-    delete window.__last.ContentFlushed;
-    window.__deliver('FlushContent', { token: 42 });
-    return window.__last.ContentFlushed.text;
-  });
+  // The page answers FlushContent once typing held for a loading tab has gone in (an await), not in the same task.
+  const flush = async () => {
+    await page.evaluate(() => {
+      delete window.__last.ContentFlushed;
+      window.__deliver('FlushContent', { token: 42 });
+    });
+    await page.waitForFunction(() => window.__last.ContentFlushed, { timeout: 30000 });
+    return page.evaluate(() => window.__last.ContentFlushed.text);
+  };
   let loadId = 1;
-  /** LoadFile as the host sends it; resolves with the text FileLoaded reported. */
+  /** LoadFile as the host sends it; resolves with the text FileLoaded reported - as the host reads it: `same` (the page
+   *  holds what it was given, and leaves the text out) means the text sent. */
   const load = async text => {
     const id = ++loadId;
     await page.evaluate(({ text, id }) => {
@@ -108,7 +113,7 @@ async function openEditor({ browserArgs = [] } = {}) {
       window.__deliver('LoadFile', { text, loadId: id, basePath: '/tmp' });
     }, { text, id });
     await page.waitForFunction(id => window.__last.FileLoaded?.loadId === id, { timeout: 60000 }, id);
-    return page.evaluate(() => window.__last.FileLoaded.text);
+    return page.evaluate(text => window.__last.FileLoaded.same === true ? text : window.__last.FileLoaded.text, text);
   };
   return { page, errors, mode, flush, load, pause, close };
 }

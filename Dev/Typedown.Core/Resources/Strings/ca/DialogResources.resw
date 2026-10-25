@@ -130,7 +130,7 @@
     <comment>对话框/取消</comment>
   </data>
   <data name="Confirm" xml:space="preserve">
-    <value>D'ACORD</value>
+    <value>D'acord</value>
     <comment>对话框/确定</comment>
   </data>
   <data name="CreateDocErrorTitle" xml:space="preserve">
@@ -142,7 +142,7 @@
     <comment>创建文件夹对话框/新建文件夹失败</comment>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Esborrar</value>
+    <value>Suprimeix</value>
     <comment>恢复文件对话框/删除</comment>
   </data>
   <data name="Don'tSave" xml:space="preserve">
@@ -202,7 +202,7 @@
     <comment>确定恢复应用默认设置？</comment>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Salvar</value>
+    <value>Desa</value>
     <comment>文件保存对话框/保存</comment>
   </data>
   <data name="SaveErrorTitle" xml:space="preserve">
@@ -328,5 +328,14 @@
   </data>
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>{0} ja s'havien pujat abans amb aquesta configuració, així que s'han fet servir les seves adreces anteriors.</value>
+  </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Baixa el WebView2 Runtime de Microsoft</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>El runtime no s'ha instal·lat. L'instal·lador necessita connexió a Internet; també podeu baixar el runtime de Microsoft (també hi ha un instal·lador sense connexió), instal·lar-lo i tornar a iniciar l'aplicació.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>S'està instal·lant el WebView2 Runtime...</value>
   </data>
 </root>

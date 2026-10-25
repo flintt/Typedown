@@ -138,7 +138,7 @@
     <comment>关于/发送反馈</comment>
   </data>
   <data name="About.Title" xml:space="preserve">
-    <value>Umbes</value>
+    <value>Teave</value>
     <comment>关于/关于</comment>
   </data>
   <data name="Editor.AutoPairBracket.Description" xml:space="preserve">
@@ -238,7 +238,7 @@
     <comment>编辑器/默认缩进</comment>
   </data>
   <data name="Editor.Title" xml:space="preserve">
-    <value>Toimetaja</value>
+    <value>Redaktor</value>
     <comment>编辑器/编辑器</comment>
   </data>
   <data name="Export.AddConfig.Description" xml:space="preserve">
@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Vilgukivi taustaefekti lubamine redigeerimisala tausta jaoks</value>
+    <value>Külgpaan ja vahekaardiriba näitavad vilgukiviefekti; redigeerimisala säilitab kujunduse ühtlase värvi</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Vilgukivi materjali kasutamine redigeerimisalal</value>
+    <value>Kasuta vilgukivimaterjali redigeerimisala ümber</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Ava selle kaust</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Jäta meelde hiljuti avatud failid</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Avatud failid ja kaustad on loetletud menüüs Fail &gt; Ava hiljutine ja avalehel. Väljalülitatuna uusi ei lisata.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Tühjenda hiljutised failid ja kaustad</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Tühjendab hiljuti avatud failide ja kaustade loendid.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Tühjenda</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Näita tühjal vahekaardil avalehte</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Käivitamisel, kui midagi avada pole, ja viimase vahekaardi sulgemisel: hiljutised failid ja kaustad, lemmikud</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Uued vahekaardid näitavad avalehte</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Uus vahekaart (Fail &gt; Uus, nupp +) näitab tühja dokumendi asemel avalehte</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Näita lisatühje ridu</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Lõikude vahelised tühjad read võtavad ruumi ka lugemisrežiimis ning HTML- ja PDF-ekspordis, nagu redigeerimisel. Faili ennast ei muudeta</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Joonista pikad dokumendid järk-järgult</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Pikk dokument avaneb kohas, kuhu selle jätsite, ja ülejäänu joonistatakse taustal. Lülitage see välja, kui pika dokumendi avamisel näib midagi valesti olevat: siis joonistatakse see korraga</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Külgriba paremal</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Kuva külgriba dokumendist paremal, mitte vasakul</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Säilita sulgemisel salvestamata muudatused</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Sulge salvestamist küsimata: salvestamata dokumendid tulevad tagasi sellisena, nagu nad olid, endiselt salvestamata, eelmise seansi vahekaartidega</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Näita alati Markdowni märke</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Näita Markdowni märke (**, #, lingi aadress) igas lõigus, mitte ainult kursori kohal</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Ennusta pikkade dokumentide paigutust (katseline)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Kui pikka dokumenti joonistatakse osade kaupa, arvutatakse veel kuvamata osa kõrgus teksti põhjal, mitte ei hinnata, nii et kerimisriba ja liigendusest hüpped on täpsemad. Katseline</value>
   </data>
 </root>

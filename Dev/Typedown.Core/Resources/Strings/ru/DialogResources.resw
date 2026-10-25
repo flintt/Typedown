@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>{0} из них уже загружались ранее с этой конфигурацией, поэтому использованы их прежние адреса.</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Скачать среду выполнения WebView2 с сайта Microsoft</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Среда выполнения не установлена. Установщику нужно подключение к интернету; можно также скачать среду выполнения с сайта Microsoft (есть и автономный установщик), установить её и перезапустить приложение.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>Установка среды выполнения WebView2...</value>
+  </data>
 </root>

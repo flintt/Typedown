@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Düzenleme alanı arka planı için mika arka plan efektini etkinleştirin</value>
+    <value>Yan bölme ve sekme çubuğu mika efektini gösterir; düzenleme alanı temanın düz rengini korur</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Düzenleme alanında mika malzemesi kullanın</value>
+    <value>Düzenleme alanının çevresinde mika malzemesi kullan</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Klasörünü aç</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Son açılan dosyaları hatırla</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Açtığınız dosya ve klasörler Dosya &gt; Son kullanılanları aç menüsünde ve giriş sayfasında listelenir. Kapalıyken yeni bir şey eklenmez.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Son dosya ve klasörleri temizle</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Son açılan dosya ve klasör listelerini boşaltır.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Temizle</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Boş sekmede giriş sayfasını göster</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Açılacak bir şey olmadan başlatıldığında ve son sekme kapatıldığında: son dosya ve klasörler, sık kullanılanlar</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Yeni sekmeler giriş sayfasını gösterir</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Yeni bir sekme (Dosya &gt; Yeni, + düğmesi) boş belge yerine giriş sayfasını gösterir</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Fazladan boş satırları göster</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Paragraflar arasındaki boş satırlar, düzenlerken olduğu gibi okuma modunda ve HTML ile PDF dışa aktarımlarında da yer kaplar. Dosyanın kendisi değişmez</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Uzun belgeleri aşamalı olarak çiz</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Uzun bir belge kaldığınız yerden açılır ve geri kalanı arka planda çizilir. Uzun bir belge açılırken bir şey yanlış görünürse bunu kapatın: belge o zaman tek seferde çizilir</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Kenar çubuğu sağda</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Kenar çubuğunu belgenin solu yerine sağında göster</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Kapatırken kaydedilmemiş değişiklikleri koru</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Kaydetmeyi sormadan kapat: kaydedilmemiş belgeler, son oturumun sekmeleriyle birlikte, hâlâ kaydedilmemiş olarak olduğu gibi geri gelir</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Markdown işaretlerini her zaman göster</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Markdown işaretlerini (**, #, bir bağlantının adresi) yalnızca imlecin olduğu yerde değil, her paragrafta göster</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Uzun belgelerin düzenini önceden hesapla (deneysel)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Uzun bir belge parça parça çizilirken henüz gösterilmeyen kısmın yüksekliği tahmin edilmek yerine metinden hesaplanır; böylece kaydırma çubuğu ve ana hattan atlamalar daha doğru olur. Deneysel</value>
   </data>
 </root>

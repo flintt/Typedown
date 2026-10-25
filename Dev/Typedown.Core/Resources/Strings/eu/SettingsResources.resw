@@ -138,7 +138,7 @@
     <comment>关于/发送反馈</comment>
   </data>
   <data name="About.Title" xml:space="preserve">
-    <value>Zerbaiti buruz</value>
+    <value>Honi buruz</value>
     <comment>关于/关于</comment>
   </data>
   <data name="Editor.AutoPairBracket.Description" xml:space="preserve">
@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Mica funtsaren efektua edizio-eremuaren funtserako gaitzea</value>
+    <value>Alboko panelak eta fitxa-barrak mika efektua erakusten dute; edizio-eremuak gaiaren kolore solidoa mantentzen du</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Edizio-eremuan mica-materiala erabili</value>
+    <value>Erabili mika materiala edizio-eremuaren inguruan</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Ireki haren karpeta</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Gogoratu azken aldian irekitako fitxategiak</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Irekitako fitxategiak eta karpetak Fitxategia &gt; Ireki azkenak atalean eta hasierako orrian agertzen dira. Desaktibatuta, ez da ezer berririk gehitzen.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Garbitu azken fitxategiak eta karpetak</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Azken aldian irekitako fitxategien eta karpeten zerrendak husten ditu.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Garbitu</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Erakutsi hasierako orria fitxa huts batean</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Abiaraztean ezer irekitzeko ez dagoenean eta azken fitxa ixtean: azken fitxategiak eta karpetak, gogokoak</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Fitxa berriek hasierako orria erakusten dute</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Fitxa berri batek (Fitxategia &gt; Berria, + botoia) hasierako orria erakusten du dokumentu huts baten ordez</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Erakutsi lerro huts gehigarriak</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Paragrafoen arteko lerro hutsek irakurketa moduan eta HTML eta PDF esportazioetan ere lekua hartzen dute, editatzean bezala. Fitxategia bera ez da aldatzen</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Marraztu dokumentu luzeak pixkanaka</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Dokumentu luzea utzi zenuen tokian irekitzen da, eta gainerakoa atzeko planoan marrazten da. Desaktibatu hau dokumentu luze bat irekitzean zerbait gaizki ikusten bada: orduan dena batera marrazten da</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Alboko barra eskuinean</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Erakutsi alboko barra dokumentuaren eskuinean, ezkerrean beharrean</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Gorde gabeko aldaketak mantendu ixtean</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Itxi gordetzeko galdetu gabe: gorde gabeko dokumentuak zeuden bezala itzuliko dira, oraindik gorde gabe, azken saioko fitxekin</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Erakutsi beti Markdown markak</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Erakutsi Markdown markak (**, #, esteka baten helbidea) paragrafo guztietan, ez kurtsorea dagoen tokian bakarrik</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Aurreikusi dokumentu luzeen diseinua (esperimentala)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Dokumentu luze bat zatika marrazten den bitartean, oraindik erakusten ez denaren altuera testutik kalkulatzen da, kalkulu hurbila egin beharrean; horrela, korritze-barra eta eskemako jauziak zehatzagoak dira. Esperimentala</value>
   </data>
 </root>

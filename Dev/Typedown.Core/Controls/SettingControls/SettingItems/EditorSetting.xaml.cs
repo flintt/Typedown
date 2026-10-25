@@ -6,8 +6,8 @@ using Microsoft.Graphics.Canvas.Text;
 using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
 using Windows.Globalization.NumberFormatting;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 
 namespace Typedown.Core.Controls.SettingControls.SettingItems
 {
@@ -41,6 +41,9 @@ namespace Typedown.Core.Controls.SettingControls.SettingItems
                 return new List<string>();
             }
         });
+
+        /// <summary>The font families installed on this machine, sorted (an edition's font fields offer them too).</summary>
+        public static IReadOnlyList<string> InstalledFontFamilies => installedFontFamilies.Value;
 
         public ObservableCollection<string> FontFamilySuggestions { get; } = new();
 

@@ -238,7 +238,7 @@
     <comment>编辑器/默认缩进</comment>
   </data>
   <data name="Editor.Title" xml:space="preserve">
-    <value>Redakteur</value>
+    <value>Redigeerder</value>
     <comment>编辑器/编辑器</comment>
   </data>
   <data name="Export.AddConfig.Description" xml:space="preserve">
@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Aktiveer die mika-agtergrondeffek vir die redigeringsarea-agtergrond</value>
+    <value>Die sypaneel en oortjiebalk wys die mika-effek; die redigeerarea behou die tema se soliede kleur</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Gebruik mika-materiaal in die redigeringsarea</value>
+    <value>Gebruik mika-materiaal rondom die redigeerarea</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Maak sy vouer oop</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Onthou onlangs oopgemaakte lêers</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Lêers en vouers wat jy oopmaak, word onder Lêer &gt; Maak onlangse oop en op die tuisblad gelys. Afgeskakel word niks nuuts bygevoeg nie.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Vee onlangse lêers en vouers uit</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Maak die lyste van onlangs oopgemaakte lêers en vouers leeg.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Vee uit</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Wys die tuisblad op 'n leë oortjie</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>By opstart sonder iets om oop te maak en wanneer die laaste oortjie toegemaak word: onlangse lêers en vouers, gunstelinge</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Nuwe oortjies wys die tuisblad</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>'n Nuwe oortjie (Lêer &gt; Nuut, die + knoppie) wys die tuisblad in plaas van 'n leë dokument</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Wys ekstra leë reëls</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Leë reëls tussen paragrawe neem ook in leesmodus en in HTML- en PDF-uitvoere plek in, soos tydens redigering. Die lêer self word nie verander nie</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Teken lang dokumente geleidelik</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>'n Lang dokument maak oop waar jy dit gelos het, en die res word in die agtergrond geteken. Skakel dit af as iets verkeerd lyk terwyl 'n lang dokument oopmaak: dit word dan alles op een slag geteken</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Sybalk aan die regterkant</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Wys die sybalk regs van die dokument in plaas van links</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Hou ongestoorde veranderinge by sluit</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Sluit sonder om te vra om te stoor: ongestoorde dokumente kom terug soos hulle was, steeds ongestoor, met die vorige sessie se oortjies</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Wys altyd Markdown-merke</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Wys die Markdown-merke (**, #, 'n skakel se adres) in elke paragraaf, nie net waar die wyser is nie</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Voorspel die uitleg van lang dokumente (eksperimenteel)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Terwyl 'n lang dokument in dele geteken word, word die hoogte van wat nog nie gewys word nie uit die teks bereken in plaas van geskat, sodat die rolstaaf en spronge vanaf die uiteensetting akkurater is. Eksperimenteel</value>
   </data>
 </root>

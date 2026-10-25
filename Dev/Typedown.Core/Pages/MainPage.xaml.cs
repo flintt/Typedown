@@ -4,10 +4,10 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
 
 namespace Typedown.Core.Pages
 {
@@ -25,11 +25,45 @@ namespace Typedown.Core.Pages
         // The pointer has to rest on the top edge a moment: passing over it on the way to a tab must not reveal.
         private readonly DispatcherTimer revealMenuBarTimer = new() { Interval = TimeSpan.FromMilliseconds(150) };
 
+        // Full screen: where the pointer is, looked at a few times a second. On Windows 11 the content of a full-screen
+        // window starts a pixel below the screen's top edge, and a pointer pushed up against the edge rests on that top
+        // row - where the reveal strip (in the content) never hears of it: the bar came out only when the pointer
+        // happened to stop a pixel or two lower. The screen position decides instead, wherever the content starts.
+        private readonly DispatcherTimer topEdgeTimer = new() { Interval = TimeSpan.FromMilliseconds(100) };
+
+        private int topEdgeTicks;
+
         public MainPage()
         {
             InitializeComponent();
             hideMenuBarTimer.Tick += OnHideMenuBarTimerTick;
             revealMenuBarTimer.Tick += OnRevealMenuBarTimerTick;
+            topEdgeTimer.Tick += OnTopEdgeTimerTick;
+        }
+
+        private void OnTopEdgeTimerTick(object sender, object e)
+        {
+            if (!(AppViewModel?.UIViewModel?.IsFullScreen ?? false)) { topEdgeTimer.Stop(); return; }
+            if (menuBarRevealed) { topEdgeTicks = 0; return; }
+            if (PointerAtTopEdge()) { if (++topEdgeTicks >= 2) { topEdgeTicks = 0; RevealMenuBar(); } }
+            else topEdgeTicks = 0;
+        }
+
+        private bool PointerAtTopEdge()
+        {
+            try
+            {
+                var window = AppViewModel?.MainWindow ?? IntPtr.Zero;
+                if (window == IntPtr.Zero || PInvoke.GetForegroundWindow() != window) return false;
+                PInvoke.GetWindowRect(window, out var rect);
+                PInvoke.GetCursorPos(out var point);
+                return point.X >= rect.left && point.X < rect.right && point.Y >= rect.top && point.Y <= rect.top + 3;
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"full screen: where the pointer is: {ex.Message}");
+                return false;
+            }
         }
 
         private void OnExportNoticeOpenClick(object sender, RoutedEventArgs e) => OpenExported(Common.OpenFile);
@@ -57,6 +91,19 @@ namespace Typedown.Core.Pages
             disposables.Add(uiViewModel.WhenPropertyChanged(nameof(UIViewModel.IsFullScreen)).Cast<bool>().StartWith(uiViewModel.IsFullScreen).Subscribe(OnFullScreenChanged));
             var settings = AppViewModel.SettingsViewModel;
             disposables.Add(settings.WhenPropertyChanged(nameof(settings.CustomTheme)).StartWith(settings.CustomTheme).Subscribe(_ => UpdateThemeColours()));
+            // The status bar reads its words when it is built ({u:LocaleString}) and its save state when that changes:
+            // after the language was changed from another window or the automation API it went on saying "已保存"
+            // in an English window. It is built again, as switching it off and on does, once the language is applied.
+            disposables.Add(settings.WhenPropertyChanged(nameof(settings.Language)).Subscribe(_ =>
+                _ = DispatcherQueue.RunIdleAsync(_ => RebuildStatusBar())));
+        }
+
+        private void RebuildStatusBar()
+        {
+            if (StatusBar == null || !AppViewModel.SettingsViewModel.StatusBarOpen) return;
+            UnloadObject(StatusBar);
+            FindName(nameof(StatusBar));
+            UpdateThemeColours();
         }
 
         /// <summary>
@@ -73,8 +120,8 @@ namespace Typedown.Core.Pages
                 var foreground = ThemeFiles.Brush(theme?.Foreground) ?? ThemeFiles.Readable(theme?.Surface ?? theme?.Background);
                 MenuBarHost?.ApplyThemeBrushes(surface, foreground);
                 // A menu row in its own colour needs no line under it (see MenuBar.SetDivider).
-                var panel = ThemeFiles.Brush(theme?.Surface) as Windows.UI.Xaml.Media.SolidColorBrush;
-                var editor = ThemeFiles.Brush(theme?.Background) as Windows.UI.Xaml.Media.SolidColorBrush;
+                var panel = ThemeFiles.Brush(theme?.Surface) as Microsoft.UI.Xaml.Media.SolidColorBrush;
+                var editor = ThemeFiles.Brush(theme?.Background) as Microsoft.UI.Xaml.Media.SolidColorBrush;
                 MenuBarHost?.SetDivider(!(panel != null && editor != null && panel.Color != editor.Color));
                 StatusBar?.ApplyThemeBrushes(surface, foreground);
             }
@@ -88,6 +135,7 @@ namespace Typedown.Core.Pages
         {
             hideMenuBarTimer.Stop();
             revealMenuBarTimer.Stop();
+            topEdgeTimer.Stop();
             disposables.Clear();
             Bindings?.StopTracking();
         }
@@ -97,6 +145,8 @@ namespace Typedown.Core.Pages
             menuBarRevealed = false;
             hideMenuBarTimer.Stop();
             revealMenuBarTimer.Stop();
+            topEdgeTicks = 0;
+            if (isFullScreen) topEdgeTimer.Start(); else topEdgeTimer.Stop();
             UpdateMenuBarVisibility();
         }
 
@@ -115,7 +165,7 @@ namespace Typedown.Core.Pages
             // made now, the areas lay where nothing was, and the window could not be dragged until something laid the
             // bar out again (a menu opened, the settings visited). They are made once the layout has settled.
             if (isFullScreen) MenuBarHost.SetDragEnabled(false);
-            else _ = Dispatcher.RunIdleAsync(_ =>
+            else _ = DispatcherQueue.RunIdleAsync(_ =>
             {
                 if (!(AppViewModel?.UIViewModel?.IsFullScreen ?? false)) MenuBarHost.SetDragEnabled(true);
             });
@@ -144,14 +194,20 @@ namespace Typedown.Core.Pages
         private void OnRevealMenuBarTimerTick(object sender, object e)
         {
             revealMenuBarTimer.Stop();
-            if (!(AppViewModel?.UIViewModel?.IsFullScreen ?? false)) return;
+            RevealMenuBar();
+        }
+
+        private void RevealMenuBar()
+        {
+            if (!(AppViewModel?.UIViewModel?.IsFullScreen ?? false) || menuBarRevealed) return;
             menuBarRevealed = true;
             UpdateMenuBarVisibility();
+            // Watched from now on: see OnHideMenuBarTimerTick.
+            hideMenuBarTimer.Start();
         }
 
         private void OnMenuBarPointerEntered(object sender, PointerRoutedEventArgs e)
         {
-            hideMenuBarTimer.Stop();
         }
 
         private void OnMenuBarPointerExited(object sender, PointerRoutedEventArgs e)
@@ -160,12 +216,37 @@ namespace Typedown.Core.Pages
                 hideMenuBarTimer.Start();
         }
 
+        private bool PointerOverMenuBar()
+        {
+            try
+            {
+                var window = AppViewModel?.MainWindow ?? IntPtr.Zero;
+                if (window == IntPtr.Zero || XamlRoot == null || MenuBarHost.Visibility != Visibility.Visible) return false;
+                PInvoke.GetCursorPos(out var point);
+                PInvoke.ScreenToClient(window, ref point);
+                var scale = XamlRoot.RasterizationScale;
+                var top = MenuBarHost.TransformToVisual(null).TransformPoint(new global::Windows.Foundation.Point(0, 0)).Y;
+                var y = point.Y / scale;
+                return y >= top - 1 && y < top + MenuBarHost.ActualHeight;
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"full screen: where the pointer is: {ex.Message}");
+                return false;
+            }
+        }
+
+        // The revealed bar is watched for the pointer rather than told when it leaves: it is revealed under a pointer
+        // that has not moved, so it never heard the pointer come in, and never heard it go - the bar stayed out until
+        // the pointer happened to cross it again (FS03). Every tick it stays while the pointer is over it or a menu of
+        // it is open, and goes otherwise.
         private void OnHideMenuBarTimerTick(object sender, object e)
         {
             if (!menuBarRevealed) { hideMenuBarTimer.Stop(); return; }
             // A menu flyout is open (pointer is in the popup): keep the bar until it closes.
             if (XamlRoot != null && VisualTreeHelper.GetOpenPopupsForXamlRoot(XamlRoot).Any())
                 return;
+            if (PointerOverMenuBar()) return;
             hideMenuBarTimer.Stop();
             menuBarRevealed = false;
             UpdateMenuBarVisibility();

@@ -202,7 +202,7 @@
     <comment>确定恢复应用默认设置？</comment>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>ຊ່ວຍປະຢັດ</value>
+    <value>ບັນທຶກ</value>
     <comment>文件保存对话框/保存</comment>
   </data>
   <data name="SaveErrorTitle" xml:space="preserve">
@@ -328,5 +328,14 @@
   </data>
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>ໃນນັ້ນ {0} ຮູບເຄີຍຖືກອັບໂຫຼດດ້ວຍການຕັ້ງຄ່ານີ້ມາກ່ອນແລ້ວ, ຈຶ່ງໃຊ້ທີ່ຢູ່ເດີມຂອງພວກມັນ.</value>
+  </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>ດາວໂຫຼດ WebView2 Runtime ຈາກ Microsoft</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>ບໍ່ໄດ້ຕິດຕັ້ງລັນທາມ. ໂປຣແກຣມຕິດຕັ້ງຕ້ອງເຊື່ອມຕໍ່ອິນເຕີເນັດ; ທ່ານສາມາດດາວໂຫຼດລັນທາມຈາກ Microsoft ໄດ້ເຊັ່ນກັນ (ມີຕົວຕິດຕັ້ງແບບອອບລາຍນຳ), ຕິດຕັ້ງແລ້ວເປີດແອັບຄືນໃໝ່.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>ກຳລັງຕິດຕັ້ງ WebView2 Runtime...</value>
   </data>
 </root>

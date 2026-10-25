@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add" xml:space="preserve">
-    <value>Sčítať</value>
+    <value>Pridať</value>
     <comment>添加</comment>
   </data>
   <data name="AlignCenter" xml:space="preserve">
@@ -146,7 +146,7 @@
     <comment>自动</comment>
   </data>
   <data name="Back" xml:space="preserve">
-    <value>Chrbát</value>
+    <value>Späť</value>
     <comment>返回</comment>
   </data>
   <data name="Browse" xml:space="preserve">
@@ -182,7 +182,7 @@
     <comment>图表</comment>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Jasný</value>
+    <value>Vymazať</value>
     <comment>清除</comment>
   </data>
   <data name="ClearFormat" xml:space="preserve">
@@ -266,7 +266,7 @@
     <comment>自定义快捷键</comment>
   </data>
   <data name="Cut" xml:space="preserve">
-    <value>Rezať</value>
+    <value>Vystrihnúť</value>
     <comment>编辑/剪切</comment>
   </data>
   <data name="Dark" xml:space="preserve">
@@ -334,7 +334,7 @@
     <comment>错误</comment>
   </data>
   <data name="Export" xml:space="preserve">
-    <value>Vývoz</value>
+    <value>Exportovať</value>
     <comment>文件/导出</comment>
   </data>
   <data name="ExportSettings" xml:space="preserve">
@@ -378,7 +378,7 @@
     <comment>Flow Chart</comment>
   </data>
   <data name="FocusMode" xml:space="preserve">
-    <value>Režim zaostrenia</value>
+    <value>Režim sústredenia</value>
     <comment>视图/专注模式</comment>
   </data>
   <data name="Folder" xml:space="preserve">
@@ -446,7 +446,7 @@
     <comment>段落/六级标题</comment>
   </data>
   <data name="Help" xml:space="preserve">
-    <value>Pomoc</value>
+    <value>Pomocník</value>
     <comment>应用程序帮助</comment>
   </data>
   <data name="Highlight" xml:space="preserve">
@@ -462,7 +462,7 @@
     <comment>格式/超链接</comment>
   </data>
   <data name="Image" xml:space="preserve">
-    <value>Obraz</value>
+    <value>Obrázok</value>
     <comment>格式/图像</comment>
   </data>
   <data name="ImageAlt" xml:space="preserve">
@@ -546,7 +546,7 @@
     <comment>了解更多</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Svetlo</value>
+    <value>Svetlý</value>
     <comment>应用主题/浅色</comment>
   </data>
   <data name="Line" xml:space="preserve">
@@ -654,7 +654,7 @@
     <comment>未设置</comment>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Zavrieť</value>
+    <value>Vypnuté</value>
     <comment>开关/关</comment>
   </data>
   <data name="Ok" xml:space="preserve">
@@ -662,11 +662,11 @@
     <comment>对话框/确定</comment>
   </data>
   <data name="On" xml:space="preserve">
-    <value>Na</value>
+    <value>Zapnuté</value>
     <comment>开关/开</comment>
   </data>
   <data name="Open" xml:space="preserve">
-    <value>Otvorený</value>
+    <value>Otvoriť</value>
     <comment>文件/打开</comment>
   </data>
   <data name="OpenFileLocation" xml:space="preserve">
@@ -726,7 +726,7 @@
     <comment>文件/打印</comment>
   </data>
   <data name="Quote" xml:space="preserve">
-    <value>Citát</value>
+    <value>Citácia</value>
     <comment>段落/引用</comment>
   </data>
   <data name="Redo" xml:space="preserve">
@@ -814,7 +814,7 @@
     <comment>视图/源代码模式</comment>
   </data>
   <data name="StatusBar" xml:space="preserve">
-    <value>Stavovom</value>
+    <value>Stavový riadok</value>
     <comment>状态栏</comment>
   </data>
   <data name="Stop" xml:space="preserve">
@@ -826,11 +826,11 @@
     <comment>格式/删除线</comment>
   </data>
   <data name="Strong" xml:space="preserve">
-    <value>Smelý</value>
+    <value>Tučné</value>
     <comment>格式/加粗</comment>
   </data>
   <data name="Table" xml:space="preserve">
-    <value>Stôl</value>
+    <value>Tabuľka</value>
     <comment>段落/表格</comment>
   </data>
   <data name="TaskList" xml:space="preserve">
@@ -862,11 +862,11 @@
     <comment>视图/打字机模式</comment>
   </data>
   <data name="Underline" xml:space="preserve">
-    <value>Podčiarknuť</value>
+    <value>Podčiarknutie</value>
     <comment>格式/下划线</comment>
   </data>
   <data name="Undo" xml:space="preserve">
-    <value>Odčiniť</value>
+    <value>Späť</value>
     <comment>编辑/撤销</comment>
   </data>
   <data name="UnorderedList" xml:space="preserve">
@@ -894,7 +894,7 @@
     <comment>Vega Chart</comment>
   </data>
   <data name="View" xml:space="preserve">
-    <value>Pohľad</value>
+    <value>Zobraziť</value>
     <comment>查看</comment>
   </data>
   <data name="Website" xml:space="preserve">
@@ -1011,5 +1011,146 @@
   </data>
   <data name="ExportedTo" xml:space="preserve">
     <value>Exportované do {0}</value>
+  </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>Používateľská príručka</value>
+  </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Znaky (bez medzier)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Znaky (s medzerami)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>Znaky CJK</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Slová</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Slová mimo CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Odseky</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Nadpisy</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Obrázky</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Odkazy</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Čas čítania</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Asi {0} min</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Menej ako minúta</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Počítané z viditeľného textu. Bloky kódu a vzorce sa do času čítania nezapočítavajú.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Stavový riadok zobrazuje</value>
+  </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Uložené</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Neuložené</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Automatické ukladanie pozastavené</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Kliknutím uložíte</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Dokument je prázdny, ale súbor na disku nie, a žiadna úprava ho nevyprázdnila, preto automatické ukladanie súbor neprepísalo.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Tento súbor sa nepodarilo prečítať bez strát (iné kódovanie ako UTF-8?), preto ho automatické ukladanie neprepíše. Uložte ho ručne, len ak je zobrazený text správny.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Zápis súboru zlyhal: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>Vybrané {0} z {1} {2}</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Kódovanie a konce riadkov</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Previesť na UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Znova otvoriť s kódovaním</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Aktuálny nadpis</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Stav uloženia</value>
+  </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Priečinky</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Žiadne nedávne priečinky</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Vymazať nedávne priečinky</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Kliknutím pravým tlačidlom alebo klávesom Delete položku odstránite zo zoznamu</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>O úroveň vyššie</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Nastaviť ako koreň</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Obľúbené</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Pridať do obľúbených</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Odstrániť z obľúbených</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Domov</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Štart</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Nový dokument</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Otvoriť súbor</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Otvoriť priečinok</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Nedávne súbory</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Nedávne priečinky</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Odstrániť zo zoznamu</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Nastavenia</value>
+  </data>
+  <data name="EditorOpening" xml:space="preserve">
+    <value>Otvára sa…</value>
   </data>
 </root>

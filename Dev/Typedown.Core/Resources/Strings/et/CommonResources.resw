@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add" xml:space="preserve">
-    <value>Lisama</value>
+    <value>Lisa</value>
     <comment>添加</comment>
   </data>
   <data name="AlignCenter" xml:space="preserve">
@@ -174,7 +174,7 @@
     <comment>字符(单数)</comment>
   </data>
   <data name="Characters" xml:space="preserve">
-    <value>Märki</value>
+    <value>Märgid</value>
     <comment>字符(复数)</comment>
   </data>
   <data name="Chart" xml:space="preserve">
@@ -182,7 +182,7 @@
     <comment>图表</comment>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Selge</value>
+    <value>Tühjenda</value>
     <comment>清除</comment>
   </data>
   <data name="ClearFormat" xml:space="preserve">
@@ -198,7 +198,7 @@
     <comment>点击添加一张图片</comment>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>Sulgema</value>
+    <value>Sulge</value>
     <comment>文件/关闭</comment>
   </data>
   <data name="Code" xml:space="preserve">
@@ -214,7 +214,7 @@
     <comment>插入表格/列数</comment>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>Koopia</value>
+    <value>Kopeeri</value>
     <comment>编辑/复制</comment>
   </data>
   <data name="CopyAsHTMLCode" xml:space="preserve">
@@ -250,7 +250,7 @@
     <comment>操作/复制到路径</comment>
   </data>
   <data name="Create" xml:space="preserve">
-    <value>Looma</value>
+    <value>Loo</value>
     <comment>创建</comment>
   </data>
   <data name="CtrlAndClickOpenLink" xml:space="preserve">
@@ -266,7 +266,7 @@
     <comment>自定义快捷键</comment>
   </data>
   <data name="Cut" xml:space="preserve">
-    <value>Lõigata</value>
+    <value>Lõika</value>
     <comment>编辑/剪切</comment>
   </data>
   <data name="Dark" xml:space="preserve">
@@ -298,11 +298,11 @@
     <comment>删除表格</comment>
   </data>
   <data name="Duplicate" xml:space="preserve">
-    <value>Dubleerida</value>
+    <value>Dubleeri</value>
     <comment>段落/重复</comment>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Toimetama</value>
+    <value>Redigeeri</value>
     <comment>编辑</comment>
   </data>
   <data name="EditImage" xml:space="preserve">
@@ -334,7 +334,7 @@
     <comment>错误</comment>
   </data>
   <data name="Export" xml:space="preserve">
-    <value>Eksportima</value>
+    <value>Ekspordi</value>
     <comment>文件/导出</comment>
   </data>
   <data name="ExportSettings" xml:space="preserve">
@@ -354,11 +354,11 @@
     <comment>文件(单数)</comment>
   </data>
   <data name="Files" xml:space="preserve">
-    <value>Faile</value>
+    <value>Failid</value>
     <comment>文件(复数)</comment>
   </data>
   <data name="Find" xml:space="preserve">
-    <value>Leidma</value>
+    <value>Otsi</value>
     <comment>编辑/查找和替换/查找</comment>
   </data>
   <data name="FindAndReplace" xml:space="preserve">
@@ -378,7 +378,7 @@
     <comment>Flow Chart</comment>
   </data>
   <data name="FocusMode" xml:space="preserve">
-    <value>Fookuse režiim</value>
+    <value>Keskendumisrežiim</value>
     <comment>视图/专注模式</comment>
   </data>
   <data name="Folder" xml:space="preserve">
@@ -450,7 +450,7 @@
     <comment>应用程序帮助</comment>
   </data>
   <data name="Highlight" xml:space="preserve">
-    <value>Rõhutada</value>
+    <value>Esiletõst</value>
     <comment>格式/高亮</comment>
   </data>
   <data name="HorizontalLine" xml:space="preserve">
@@ -462,7 +462,7 @@
     <comment>格式/超链接</comment>
   </data>
   <data name="Image" xml:space="preserve">
-    <value>Piltide</value>
+    <value>Pilt</value>
     <comment>格式/图像</comment>
   </data>
   <data name="ImageAlt" xml:space="preserve">
@@ -474,7 +474,7 @@
     <comment>图片上传设置</comment>
   </data>
   <data name="Import" xml:space="preserve">
-    <value>Importima</value>
+    <value>Impordi</value>
     <comment>文件/导入</comment>
   </data>
   <data name="IncreaseHeadingLevel" xml:space="preserve">
@@ -546,11 +546,11 @@
     <comment>了解更多</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Valgus</value>
+    <value>Hele</value>
     <comment>应用主题/浅色</comment>
   </data>
   <data name="Line" xml:space="preserve">
-    <value>Liin</value>
+    <value>Joon</value>
     <comment>行(单数)</comment>
   </data>
   <data name="LineHeight" xml:space="preserve">
@@ -654,7 +654,7 @@
     <comment>未设置</comment>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Sulgema</value>
+    <value>Väljas</value>
     <comment>开关/关</comment>
   </data>
   <data name="Ok" xml:space="preserve">
@@ -666,7 +666,7 @@
     <comment>开关/开</comment>
   </data>
   <data name="Open" xml:space="preserve">
-    <value>Avama</value>
+    <value>Ava</value>
     <comment>文件/打开</comment>
   </data>
   <data name="OpenFileLocation" xml:space="preserve">
@@ -702,7 +702,7 @@
     <comment>侧栏/大纲</comment>
   </data>
   <data name="Paragraph" xml:space="preserve">
-    <value>Lõike</value>
+    <value>Lõik</value>
     <comment>段落</comment>
   </data>
   <data name="Paste" xml:space="preserve">
@@ -722,7 +722,7 @@
     <comment>PlantUML Diagram</comment>
   </data>
   <data name="Print" xml:space="preserve">
-    <value>Trükkima</value>
+    <value>Prindi</value>
     <comment>文件/打印</comment>
   </data>
   <data name="Quote" xml:space="preserve">
@@ -730,7 +730,7 @@
     <comment>段落/引用</comment>
   </data>
   <data name="Redo" xml:space="preserve">
-    <value>Tee</value>
+    <value>Tee uuesti</value>
     <comment>编辑/重做</comment>
   </data>
   <data name="RemoveColumn" xml:space="preserve">
@@ -742,11 +742,11 @@
     <comment>表格/删除行</comment>
   </data>
   <data name="Rename" xml:space="preserve">
-    <value>Ümber nimetada</value>
+    <value>Nimeta ümber</value>
     <comment>文件/重命名</comment>
   </data>
   <data name="Replace" xml:space="preserve">
-    <value>Asendama</value>
+    <value>Asenda</value>
     <comment>编辑/查找和替换/替换</comment>
   </data>
   <data name="ReplaceAll" xml:space="preserve">
@@ -758,7 +758,7 @@
     <comment>表格/调整表格大小</comment>
   </data>
   <data name="Restore" xml:space="preserve">
-    <value>Taastada</value>
+    <value>Taasta</value>
     <comment>还原默认设置</comment>
   </data>
   <data name="Rows" xml:space="preserve">
@@ -826,11 +826,11 @@
     <comment>格式/删除线</comment>
   </data>
   <data name="Strong" xml:space="preserve">
-    <value>Julge</value>
+    <value>Paks</value>
     <comment>格式/加粗</comment>
   </data>
   <data name="Table" xml:space="preserve">
-    <value>Laud</value>
+    <value>Tabel</value>
     <comment>段落/表格</comment>
   </data>
   <data name="TaskList" xml:space="preserve">
@@ -838,7 +838,7 @@
     <comment>段落/任务列表</comment>
   </data>
   <data name="Theme" xml:space="preserve">
-    <value>Theme</value>
+    <value>Teema</value>
     <comment>应用程序主题</comment>
   </data>
   <data name="Title" xml:space="preserve">
@@ -866,7 +866,7 @@
     <comment>格式/下划线</comment>
   </data>
   <data name="Undo" xml:space="preserve">
-    <value>Võta</value>
+    <value>Võta tagasi</value>
     <comment>编辑/撤销</comment>
   </data>
   <data name="UnorderedList" xml:space="preserve">
@@ -874,7 +874,7 @@
     <comment>段落/无序列表</comment>
   </data>
   <data name="Update" xml:space="preserve">
-    <value>Uuendama</value>
+    <value>Värskenda</value>
     <comment>应用程序更新</comment>
   </data>
   <data name="UploadImage" xml:space="preserve">
@@ -1011,5 +1011,146 @@
   </data>
   <data name="ExportedTo" xml:space="preserve">
     <value>Eksporditud asukohta {0}</value>
+  </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>Kasutusjuhend</value>
+  </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Märgid (tühikuteta)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Märgid (tühikutega)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK-märgid</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Sõnad</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Mitte-CJK sõnad</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Lõigud</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Pealkirjad</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Pildid</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Lingid</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Lugemisaeg</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Umbes {0} min</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Alla minuti</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Loendatud nähtavast tekstist. Koodiplokid ja valemid lugemisaja hulka ei kuulu.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Olekuriba näitab</value>
+  </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Salvestatud</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Salvestamata</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Automaatne salvestamine on peatatud</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Klõpsake salvestamiseks</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Dokument on tühi, kuid kettal olev fail ei ole, ja ükski muudatus ei tühjendanud seda, seega automaatne salvestamine faili üle ei kirjutanud.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Seda faili ei saanud kadudeta lugeda (muu kodeering kui UTF-8?), seega automaatne salvestamine seda üle ei kirjuta. Salvestage see ise ainult siis, kui kuvatud tekst on õige.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Faili kirjutamine nurjus: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>Valitud {0} / {1} {2}</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Kodeering ja reavahetused</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Teisenda UTF-8-ks</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Ava uuesti kodeeringuga</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Praegune pealkiri</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Salvestamise olek</value>
+  </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Kaustad</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Hiljutisi kaustu pole</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Tühjenda hiljutised kaustad</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Paremklõps või Delete eemaldab selle loendist</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Tase üles</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Määra juurkaustaks</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Lemmikud</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Lisa lemmikutesse</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Eemalda lemmikutest</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Avaleht</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Algus</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Uus dokument</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Ava fail</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Ava kaust</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Hiljutised failid</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Hiljutised kaustad</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Eemalda loendist</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Sätted</value>
+  </data>
+  <data name="EditorOpening" xml:space="preserve">
+    <value>Avamine…</value>
   </data>
 </root>

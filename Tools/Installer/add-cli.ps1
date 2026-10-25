@@ -4,7 +4,9 @@
     app folder about to be packaged. Called by build-local.ps1 and the CI packaging step.
 
 .DESCRIPTION
-    typedownctl is built for netcoreapp3.1, self-contained, for the app's own runtime identifier: its runtime files
+    The app's own publish already puts typedownctl beside it (Dev\Typedown\Typedown.csproj, PublishCliAlongside); then
+    it is only checked to start, and the documents are added. Otherwise:
+    typedownctl is built for net10.0, self-contained, for the app's own runtime identifier: its runtime files
     are the ones the app already carries, so the installer grows by a few hundred KB instead of a second runtime.
     Every file the CLI brings is checked against the app folder:
       - not there yet: copied;
@@ -17,7 +19,7 @@
     documents go to <app>\docs with their relative links intact.
 
 .EXAMPLE
-    powershell -ExecutionPolicy Bypass -File Tools\Installer\add-cli.ps1 -AppFolder Tools\Installer\publish -RuntimeIdentifier win10-x64
+    powershell -ExecutionPolicy Bypass -File Tools\Installer\add-cli.ps1 -AppFolder Tools\Installer\publish -RuntimeIdentifier win-x64
 #>
 [CmdletBinding()]
 param(
@@ -35,46 +37,49 @@ $appExe = $brand.BrandExeName + '.exe'
 $cli = $brand.BrandCliName
 if (-not (Test-Path (Join-Path $AppFolder $appExe))) { throw "add-cli: no $appExe in $AppFolder" }
 
-$out = Join-Path ([IO.Path]::GetTempPath()) ("$cli-" + [Guid]::NewGuid().ToString('N'))
-# The portable identifier (win-x64 for the app's win10-x64): the project also targets net8.0, which no longer knows
-# the version-specific ones, and both name the same runtime pack - the file comparison below proves it.
 $rid = $RuntimeIdentifier -replace '^win10-', 'win-'
-Write-Host "add-cli: publishing $cli for netcoreapp3.1 / $rid"
-& dotnet publish (Join-Path $repo 'Tools\Typedown.Cli\Typedown.Cli.csproj') -f netcoreapp3.1 -r $rid `
-    --self-contained true -c $Configuration -o $out -nologo -v q
-if ($LASTEXITCODE -ne 0) { throw "add-cli: dotnet publish failed" }
-
-function Get-AssemblyVersion([string]$file) {
-    try { [Reflection.AssemblyName]::GetAssemblyName($file).Version.ToString() } catch { $null }
+if (Test-Path (Join-Path $AppFolder "$cli.exe")) {
+    Write-Host "add-cli: $cli.exe is in the app folder already (published with the app)"
 }
+else {
+    $out = Join-Path ([IO.Path]::GetTempPath()) ("$cli-" + [Guid]::NewGuid().ToString('N'))
+    Write-Host "add-cli: publishing $cli for net10.0 / $rid"
+    & dotnet publish (Join-Path $repo 'Tools\Typedown.Cli\Typedown.Cli.csproj') -f net10.0 -r $rid `
+        --self-contained true -c $Configuration -p:TypedownWinUIPackaging=true -o $out -nologo -v q
+    if ($LASTEXITCODE -ne 0) { throw "add-cli: dotnet publish failed" }
 
-$shared = @('Typedown.Automation.dll', 'Newtonsoft.Json.dll')
-$added = 0; $same = 0; $kept = 0
-try {
-    foreach ($file in Get-ChildItem $out -Recurse -File) {
-        $relative = $file.FullName.Substring($out.Length).TrimStart('\', '/')
-        if ($relative -like '*.pdb') { continue }
-        $target = Join-Path $AppFolder $relative
-        if (-not (Test-Path $target)) {
-            New-Item -ItemType Directory -Force (Split-Path $target) | Out-Null
-            Copy-Item $file.FullName $target
-            $added++
-            continue
-        }
-        if ((Get-FileHash $file.FullName).Hash -eq (Get-FileHash $target).Hash) { $same++; continue }
-        if ($shared -contains $file.Name) {
-            $mine = Get-AssemblyVersion $file.FullName
-            $theirs = Get-AssemblyVersion $target
-            if ($mine -and $mine -eq $theirs) { $kept++; continue }
-            throw "add-cli: $relative is version $mine for $cli but $theirs in the app"
-        }
-        throw "add-cli: $cli would replace the app's $relative with a different file - the runtime $cli was built for is not the app's. Build both with the same .NET SDK."
+    function Get-AssemblyVersion([string]$file) {
+        try { [Reflection.AssemblyName]::GetAssemblyName($file).Version.ToString() } catch { $null }
     }
+
+    $shared = @('Typedown.Automation.dll', 'Newtonsoft.Json.dll')
+    $added = 0; $same = 0; $kept = 0
+    try {
+        foreach ($file in Get-ChildItem $out -Recurse -File) {
+            $relative = $file.FullName.Substring($out.Length).TrimStart('\', '/')
+            if ($relative -like '*.pdb') { continue }
+            $target = Join-Path $AppFolder $relative
+            if (-not (Test-Path $target)) {
+                New-Item -ItemType Directory -Force (Split-Path $target) | Out-Null
+                Copy-Item $file.FullName $target
+                $added++
+                continue
+            }
+            if ((Get-FileHash $file.FullName).Hash -eq (Get-FileHash $target).Hash) { $same++; continue }
+            if ($shared -contains $file.Name) {
+                $mine = Get-AssemblyVersion $file.FullName
+                $theirs = Get-AssemblyVersion $target
+                if ($mine -and $mine -eq $theirs) { $kept++; continue }
+                throw "add-cli: $relative is version $mine for $cli but $theirs in the app"
+            }
+            throw "add-cli: $cli would replace the app's $relative with a different file - the runtime $cli was built for is not the app's. Build both with the same .NET SDK."
+        }
+    }
+    finally {
+        Remove-Item $out -Recurse -Force -ErrorAction SilentlyContinue
+    }
+    Write-Host "add-cli: $added file(s) added, $same already there and identical, $kept shared librar(ies) kept from the app"
 }
-finally {
-    Remove-Item $out -Recurse -Force -ErrorAction SilentlyContinue
-}
-Write-Host "add-cli: $added file(s) added, $same already there and identical, $kept shared librar(ies) kept from the app"
 
 # It has to start on the app's runtime, from the app folder - where this machine can run it: an ARM64 build made on an
 # x64 machine (CI builds both there) cannot start, and the release build stopped here. The file checks above hold for

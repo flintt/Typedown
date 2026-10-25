@@ -184,7 +184,18 @@ const arrowCtrl = ContentState => {
     ) {
       event.preventDefault()
       event.stopPropagation()
-      if (!preBlock) return
+      if (!preBlock) {
+        // Up on the first line of the document: to its start, as in any text box (it did nothing). A heading's start is
+        // after its # marks, which are part of its text: typed before them, the heading became a paragraph.
+        if (event.key !== EVENT_KEYS.ArrowUp) return
+        const lineStart = block.functionType === 'atxLine' ? (/^ {0,3}#{1,6}(?:[ \t]+|$)/.exec(block.text) || [''])[0].length : 0
+        if (start.offset <= lineStart) return
+        this.cursor = {
+          start: { key: start.key, offset: lineStart },
+          end: { key: start.key, offset: lineStart }
+        }
+        return this.partialRender()
+      }
       const key = preBlock.key
       const offset = preBlock.text.length
       this.cursor = {

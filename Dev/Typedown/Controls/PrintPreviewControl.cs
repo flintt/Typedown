@@ -3,11 +3,13 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using Typedown.Utilities;
-using Typedown.XamlUI;
 using Windows.UI;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media;
+
+using Microsoft.UI;
+using Typedown.Core.Utilities;
 
 namespace Typedown.Controls
 {
@@ -49,8 +51,7 @@ namespace Typedown.Controls
                 if (webViewController != null)
                     return;
                 var controller = new WebViewController();
-                var parentHWnd = XamlWindow.GetWindow(this).XamlSourceHandle;
-                if (!await controller.InitializeAsync(this, parentHWnd))
+                if (!await controller.InitializeAsync((Grid)Content))
                 {
                     controller.Dispose();
                     return;
@@ -73,7 +74,7 @@ namespace Typedown.Controls
                     string message = null;
                     try { message = args.TryGetWebMessageAsString(); } catch { }
                     // Not from inside the browser's own callback: closing the preview disposes this web view.
-                    if (message == "afterprint") _ = Dispatcher.RunIdleAsync(_ => PrintDismissed?.Invoke());
+                    if (message == "afterprint") _ = DispatcherQueue.RunIdleAsync(_ => PrintDismissed?.Invoke());
                 };
                 tempFile = Core.Utilities.Common.GetTempFileName(".html");
                 File.WriteAllText(tempFile, html);
@@ -83,7 +84,7 @@ namespace Typedown.Controls
                 coreWebView2.ProcessFailed += (s, args) =>
                 {
                     Core.Utilities.Log.Debug($"print preview: web view process failed: {args.ProcessFailedKind} {args.Reason} exit={args.ExitCode}");
-                    _ = Dispatcher.RunIdleAsync(_ => PrintFailed?.Invoke($"{args.ProcessFailedKind}: {args.Reason}"));
+                    _ = DispatcherQueue.RunIdleAsync(_ => PrintFailed?.Invoke($"{args.ProcessFailedKind}: {args.Reason}"));
                 };
                 coreWebView2.Navigate(tempFile);
                 await navigationCompletedTaskSource.Task;

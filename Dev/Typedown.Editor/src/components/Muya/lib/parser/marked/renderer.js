@@ -107,10 +107,12 @@ Renderer.prototype.hr = function () {
   return this.options.xhtml ? '<hr/>\n' : '<hr>\n'
 }
 
-Renderer.prototype.list = function (body, ordered, start, taskList) {
+Renderer.prototype.list = function (body, ordered, start, taskList, delimiter) {
   const type = ordered ? 'ol' : 'ul'
   const startatt = (ordered && start !== 1) ? (' start="' + start + '"') : ''
-  return '<' + type + startatt + '>\n' + body + '</' + type + '>\n'
+  // Numbered 1) 2): HTML has no such list type, the styles (and the Word export) read the attribute.
+  const delimiteratt = (ordered && delimiter === ')') ? ' data-delimiter=")"' : ''
+  return '<' + type + startatt + delimiteratt + '>\n' + body + '</' + type + '>\n'
 }
 
 Renderer.prototype.listitem = function (text, checked) {
@@ -130,6 +132,9 @@ Renderer.prototype.listitem = function (text, checked) {
 }
 
 Renderer.prototype.paragraph = function (text) {
+  // An empty paragraph is an extra blank line of the source (or an empty line the reader made with Enter). With the
+  // "show extra blank lines" setting it keeps a line's height, as it has in the editor; otherwise it collapses.
+  if (text === '' && this.options.showBlankLines) return '<p><br></p>\n'
   return '<p>' + text + '</p>\n'
 }
 

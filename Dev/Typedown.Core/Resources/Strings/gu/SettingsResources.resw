@@ -138,7 +138,7 @@
     <comment>关于/发送反馈</comment>
   </data>
   <data name="About.Title" xml:space="preserve">
-    <value>લગભગ</value>
+    <value>વિશે</value>
     <comment>关于/关于</comment>
   </data>
   <data name="Editor.AutoPairBracket.Description" xml:space="preserve">
@@ -414,7 +414,7 @@
     <comment>通用/启动操作</comment>
   </data>
   <data name="General.Title" xml:space="preserve">
-    <value>સામાન્યName</value>
+    <value>સામાન્ય</value>
     <comment>通用/常规</comment>
   </data>
   <data name="Image.InsertActions.CopyToPath" xml:space="preserve">
@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>સંપાદન વિસ્તાર પાશ્વભાગ માટે અબરખના પાશ્વ ભાગ અસરને સક્રિય કરો</value>
+    <value>બાજુની તકતી અને ટૅબ બાર માઇકા અસર બતાવે છે; સંપાદન વિસ્તાર થીમનો ઘન રંગ જાળવે છે</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>અબરખની સામગ્રીને સંપાદન વિસ્તારમાં વાપરો</value>
+    <value>સંપાદન વિસ્તારની આસપાસ માઇકા સામગ્રીનો ઉપયોગ કરો</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>તેનું ફોલ્ડર ખોલો</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>તાજેતરમાં ખોલેલી ફાઇલો યાદ રાખો</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>તમે ખોલેલી ફાઇલો અને ફોલ્ડર ફાઇલ &gt; તાજેતરનું ખોલો અને હોમ પેજ પર દેખાય છે. બંધ હોય ત્યારે કંઈ નવું ઉમેરાતું નથી.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>તાજેતરની ફાઇલો અને ફોલ્ડર સાફ કરો</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>તાજેતરમાં ખોલેલી ફાઇલો અને ફોલ્ડરની સૂચિઓ ખાલી કરે છે.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>સાફ કરો</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>ખાલી ટૅબ પર હોમ પેજ બતાવો</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>શરૂ કરતી વખતે ખોલવા માટે કંઈ ન હોય અને છેલ્લી ટૅબ બંધ થાય ત્યારે: તાજેતરની ફાઇલો અને ફોલ્ડર, મનપસંદ</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>નવી ટૅબ્સ હોમ પેજ બતાવે છે</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>નવી ટૅબ (ફાઇલ &gt; નવું, + બટન) ખાલી દસ્તાવેજને બદલે હોમ પેજ બતાવે છે</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>વધારાની ખાલી લીટીઓ બતાવો</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>ફકરાઓ વચ્ચેની ખાલી લીટીઓ સંપાદન વખતેની જેમ વાંચન મોડમાં અને HTML તથા PDF નિકાસમાં પણ જગ્યા રોકે છે. ફાઇલ પોતે બદલાતી નથી</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>લાંબા દસ્તાવેજો ધીમે ધીમે દોરો</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>લાંબો દસ્તાવેજ તમે જ્યાં છોડ્યો હતો ત્યાંથી ખૂલે છે, અને બાકીનો ભાગ પૃષ્ઠભૂમિમાં દોરાય છે. લાંબો દસ્તાવેજ ખૂલતી વખતે કંઈક ખોટું લાગે તો આ બંધ કરો: ત્યારે તે એક સાથે દોરાશે</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>જમણી બાજુએ સાઇડ બાર</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>દસ્તાવેજની ડાબી બાજુને બદલે જમણી બાજુએ સાઇડ બાર બતાવો</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>બંધ કરતી વખતે ન સાચવેલા ફેરફારો રાખો</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>સાચવવાનું પૂછ્યા વિના બંધ કરો: ન સાચવેલા દસ્તાવેજો જેવા હતા તેવા, હજુ પણ ન સાચવેલા, છેલ્લા સત્રના ટૅબ્સ સાથે પાછા આવે છે</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>હંમેશાં Markdown ચિહ્નો બતાવો</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>ફક્ત કર્સર હોય ત્યાં જ નહીં, દરેક ફકરામાં Markdown ચિહ્નો (**, #, લિંકનું સરનામું) બતાવો</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>લાંબા દસ્તાવેજોનું લેઆઉટ અગાઉથી ગણો (પ્રાયોગિક)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>લાંબો દસ્તાવેજ ભાગોમાં દોરાતો હોય ત્યારે, હજી ન બતાવેલા ભાગની ઊંચાઈ અંદાજવાને બદલે લખાણ પરથી ગણવામાં આવે છે, જેથી સ્ક્રોલ બાર અને રૂપરેખામાંથી કૂદકા વધુ સચોટ બને. પ્રાયોગિક</value>
   </data>
 </root>

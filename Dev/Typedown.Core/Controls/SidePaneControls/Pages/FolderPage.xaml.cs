@@ -13,10 +13,10 @@ using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
 using muxc = Microsoft.UI.Xaml.Controls;
 
 namespace Typedown.Core.Controls.SidePanelControls.Pages
@@ -59,6 +59,11 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             var fileViewModel = FileViewModel;
             fileViewModel.FileOpened += OnFileOpened;
             disposables.Add(System.Reactive.Disposables.Disposable.Create(() => fileViewModel.FileOpened -= OnFileOpened));
+            // The favourites are every window's: a change in another window is shown here on this window's thread.
+            var favorites = Typedown.Core.Services.Favorites.Shared;
+            favorites.Changed += OnFavoritesChanged;
+            disposables.Add(System.Reactive.Disposables.Disposable.Create(() => favorites.Changed -= OnFavoritesChanged));
+            RefreshFavorites();
             UpdateWorkFolder();
             Bindings.Update();
         }
@@ -99,13 +104,205 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             RevealActiveFile();
         }
 
-        private void OnRevealCurrentFileClick(object sender, RoutedEventArgs e)
+        private async void OnRevealCurrentFileClick(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(FileViewModel?.FilePath)) return;
-            stickyRoot = Path.GetDirectoryName(FileViewModel.FilePath);
-            UpdateWorkFolder();
-            UpdateSelectedItem(WorkFolderExplorerItem);
+            var folder = Path.GetDirectoryName(FileViewModel.FilePath);
+            // A folder that was opened wins over the sticky root, so the button moves it as "Set as root" would;
+            // only setting the sticky root left the tree where it was.
+            if (FileViewModel.WorkFolderIsExplicit)
+            {
+                if (!await SetRootAsync(folder)) return;
+            }
+            else
+            {
+                stickyRoot = folder;
+                UpdateWorkFolder();
+            }
+            RevealActiveFile();
         }
+
+        // ---- the root: up, the folders above, favourite and recent folders, Open folder ----
+
+        /// <summary>The folder has one above it (the up arrow is enabled).</summary>
+        public static bool HasParent(string path) => RecentPaths.Ancestors(path).Count > 0;
+
+        /// <summary>
+        /// The tree rooted at <paramref name="folder"/>, chosen as Open folder chooses one (and remembered as a recent
+        /// folder). The open tabs are not touched: only the tree moves.
+        /// </summary>
+        public async System.Threading.Tasks.Task<bool> SetRootAsync(string folder)
+        {
+            if (FileViewModel == null || string.IsNullOrEmpty(folder)) return false;
+            if (!await FileViewModel.OpenFolder(folder)) return false;
+            // The work folder may be the same path as before while the tree was following the document: looked at again.
+            if (WorkFolderExplorerItem != null)
+            {
+                UpdateWorkFolder();
+                UpdateSelectedItem(WorkFolderExplorerItem);
+            }
+            return true;
+        }
+
+        private async void OnFolderUpClick(object sender, RoutedEventArgs e)
+        {
+            var parent = RecentPaths.Ancestors(WorkFolderExplorerItem?.FullPath).FirstOrDefault();
+            if (parent != null) await SetRootAsync(parent);
+        }
+
+        private async void OnSetAsRootClick(object sender, RoutedEventArgs e)
+        {
+            var item = GetExplorerItemFromMenuFlyoutItem(sender);
+            if (item?.Type == ExplorerItem.ExplorerItemType.Folder) await SetRootAsync(item.FullPath);
+        }
+
+        private void OnFolderRootMenuOpening(object sender, object e)
+        {
+            var menu = (MenuFlyout)sender;
+            menu.Items.Clear();
+            foreach (var item in RootMenuItems()) menu.Items.Add(item);
+        }
+
+        /// <summary>The root's menu, built each time it opens: what is above, what was chosen before, and Open folder.</summary>
+        private List<MenuFlyoutItemBase> RootMenuItems()
+        {
+            var items = new List<MenuFlyoutItemBase>();
+            var root = WorkFolderExplorerItem?.FullPath;
+            MenuFlyoutItem Entry(string text, string id, string path, string glyph, Action click)
+            {
+                var item = new MenuFlyoutItem { Text = text, Icon = new FontIcon { Glyph = glyph } };
+                Microsoft.UI.Xaml.Automation.AutomationProperties.SetAutomationId(item, id);
+                if (path != null)
+                {
+                    ToolTipService.SetToolTip(item, path);
+                    Microsoft.UI.Xaml.Automation.AutomationProperties.SetHelpText(item, path);
+                }
+                item.Click += (s, e) => click();
+                return item;
+            }
+            void Section(IEnumerable<string> paths, string idPrefix, string glyph, Func<string, string> text)
+            {
+                var list = paths.Where(p => !string.IsNullOrEmpty(p) && !RecentPaths.Same(p, root)).Take(10).ToList();
+                if (list.Count == 0) return;
+                if (items.Count > 0) items.Add(new MenuFlyoutSeparator());
+                for (var i = 0; i < list.Count; i++)
+                {
+                    var path = list[i];
+                    items.Add(Entry(text(path), idPrefix + i, path, glyph, () => _ = SetRootAsync(path)));
+                }
+            }
+            var ancestors = RecentPaths.Ancestors(root);
+            if (ancestors.Count > 0)
+            {
+                items.Add(Entry(Locale.GetString("FolderPane.Up"), "FolderNav-Up", ancestors[0], "\uE74A", () => _ = SetRootAsync(ancestors[0])));
+                // The folders above, nearest first: a breadcrumb folded into the menu (the pane is too narrow for one).
+                Section(ancestors, "FolderNav-Ancestor-", "\uE8B7", RecentPaths.Name);
+            }
+            Section(FavoriteFolders(), "FolderNav-Favorite-", "\uE734", RecentPaths.Label);
+            Section(this.GetService<Typedown.Core.Services.AccessHistory>()?.FolderRecentlyOpened ?? new List<string>(), "FolderNav-Recent-", "\uE81C", RecentPaths.Label);
+            if (items.Count > 0) items.Add(new MenuFlyoutSeparator());
+            items.Add(Entry(Locale.GetString("OpenFolder") + "…", "FolderNav-OpenFolder", null, "\uE838", () => FileViewModel?.OpenFolderCommand.Execute(null)));
+            return items;
+        }
+
+        /// <summary>The favourite folders, for the root's menu.</summary>
+        private static IEnumerable<string> FavoriteFolders() => Typedown.Core.Services.Favorites.Shared.Items.Where(x => x.Folder).Select(x => x.Path);
+
+        // ---- favourites ----
+
+        public System.Collections.ObjectModel.ObservableCollection<PathItem> FavoriteItems { get; } = new();
+
+        public Visibility FavoritesVisibility { get; private set; } = Visibility.Collapsed;
+
+        public Visibility FavoritesListVisibility { get; private set; } = Visibility.Visible;
+
+        public string FavoritesChevron { get; private set; } = "\uE70D";
+
+        private void OnFavoritesChanged() => DispatcherQueue?.TryEnqueue(RefreshFavorites);
+
+        /// <summary>The favourites group made again from the store; the ones not there are dimmed once that is known.</summary>
+        private async void RefreshFavorites()
+        {
+            try
+            {
+                var entries = Typedown.Core.Services.Favorites.Shared.Items;
+                FavoriteItems.Clear();
+                foreach (var entry in entries) FavoriteItems.Add(new PathItem(entry.Path, entry.Folder) { IsFavorite = true });
+                FavoritesVisibility = FavoriteItems.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
+                UpdateFavoritesExpanded();
+                var items = FavoriteItems.ToList();
+                var missing = await PathProbe.MissingAsync(items.Select(x => x.Path));
+                foreach (var item in items) item.Missing = missing.Contains(item.Path);
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"favorites pane: {ex.Message}");
+            }
+        }
+
+        private void UpdateFavoritesExpanded()
+        {
+            var expanded = ViewModel?.SettingsViewModel?.FavoritesExpanded ?? true;
+            FavoritesListVisibility = expanded ? Visibility.Visible : Visibility.Collapsed;
+            FavoritesChevron = expanded ? "\uE70D" : "\uE76C";
+        }
+
+        private void OnFavoritesHeaderClick(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel?.SettingsViewModel is { } settings) settings.FavoritesExpanded = !settings.FavoritesExpanded;
+            UpdateFavoritesExpanded();
+        }
+
+        private async void OnFavoriteClick(object sender, ItemClickEventArgs e)
+        {
+            if (e.ClickedItem is not PathItem item || FileViewModel == null) return;
+            if (item.Folder) await SetRootAsync(item.Path);
+            // As the tree's single click: the file shown in the preview tab.
+            else if (!RecentPaths.Same(item.Path, FileViewModel.FilePath)) await FileViewModel.OpenFile(item.Path, preview: true);
+        }
+
+        private async void OnFavoriteDoubleTapped(object sender, Microsoft.UI.Xaml.Input.DoubleTappedRoutedEventArgs e)
+        {
+            if ((e.OriginalSource as FrameworkElement)?.DataContext is not PathItem item || item.Folder || FileViewModel == null) return;
+            e.Handled = true;
+            await FileViewModel.OpenFile(item.Path, preview: false);
+        }
+
+        private void OnRemoveFavoriteClick(object sender, RoutedEventArgs e)
+        {
+            if ((sender as FrameworkElement)?.DataContext is PathItem item) Typedown.Core.Services.Favorites.Shared.Remove(item.Path);
+        }
+
+        private void OnFavoriteLocationClick(object sender, RoutedEventArgs e)
+        {
+            if ((sender as FrameworkElement)?.DataContext is PathItem item) Common.OpenFileLocation(item.Path);
+        }
+
+        // The tree's "Add to favourites" / "Remove from favourites", worded for the item the menu is open on.
+        private void UpdateFavoriteEntry(object menuFlyout)
+        {
+            if (menuFlyout is not MenuFlyout flyout) return;
+            var item = GetExplorerItemFromMenuFlyout(flyout);
+            var entry = flyout.Items.OfType<MenuFlyoutItem>().FirstOrDefault(x => "Favorite".Equals(x.Tag));
+            if (entry == null || item == null) return;
+            var store = Typedown.Core.Services.Favorites.Shared;
+            var isFavorite = store.Contains(item.FullPath);
+            entry.Text = Locale.GetString(isFavorite ? "Favorites.Remove" : "Favorites.Add");
+            entry.IsEnabled = isFavorite || store.Items.Count < Typedown.Core.Services.FavoritesStore.MaxCount;
+        }
+
+        private void OnToggleFavoriteClick(object sender, RoutedEventArgs e)
+        {
+            var item = GetExplorerItemFromMenuFlyoutItem(sender);
+            if (item == null || item.IsNotice) return;
+            var store = Typedown.Core.Services.Favorites.Shared;
+            if (!store.Remove(item.FullPath)) store.Add(item.FullPath, item.Type == ExplorerItem.ExplorerItemType.Folder);
+        }
+
+        /// <summary>The root's menu as it would open now (the automation test host): each entry's id, text and path.</summary>
+        public IReadOnlyList<(string Id, string Text, string Path)> RootMenu() =>
+            RootMenuItems().OfType<MenuFlyoutItem>()
+                .Select(x => (Microsoft.UI.Xaml.Automation.AutomationProperties.GetAutomationId(x), x.Text, Microsoft.UI.Xaml.Automation.AutomationProperties.GetHelpText(x))).ToList();
 
         public static Visibility RevealVisibility(string filePath, string root)
         {
@@ -183,7 +380,9 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
         {
             if (item == null || FileViewModel == null)
                 return;
-            item.IsSelected = FileViewModel.FilePath == item.FullPath;
+            // Files only: a folder's row was never bound to this, and a folder clicked stays as the tree selected it.
+            if (item.Type == ExplorerItem.ExplorerItemType.File)
+                item.IsSelected = FileViewModel.FilePath == item.FullPath;
             foreach (var next in item.Children)
                 UpdateSelectedItem(next);
         }
@@ -197,9 +396,22 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             // Keep the XAML bindings, templates and flyouts for the next load.
         }
 
+        // The menu shows a folder's entries or a file's, by the row it opens on.
+        private void OnItemContextFlyoutOpening(object sender, object e)
+        {
+            var flyout = sender as MenuFlyout;
+            var item = (flyout?.Target as FrameworkElement)?.DataContext as ExplorerItem ?? GetExplorerItemFromMenuFlyout(sender);
+            if (flyout == null || item == null) return;
+            var kind = item.Type == ExplorerItem.ExplorerItemType.Folder ? "Folder" : "File";
+            foreach (var entry in flyout.Items)
+                if (entry.Tag is "Folder" or "File")
+                    entry.Visibility = (string)entry.Tag == kind ? Visibility.Visible : Visibility.Collapsed;
+        }
+
         private void OnItemContextFlyoutOpened(object sender, object e)
         {
             SetItemFocusState(sender, true);
+            UpdateFavoriteEntry(sender);
         }
 
         private void OnItemContextFlyoutClosed(object sender, object e)
@@ -420,16 +632,24 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             {
                 Try("rename", () =>
                 {
-                    var newPath = Path.Combine(Path.GetDirectoryName(item.FullPath), source.Task.Result);
-                    if (item.FullPath == ViewModel.FileViewModel.FilePath)
+                    var oldPath = item.FullPath;
+                    var newPath = Path.Combine(Path.GetDirectoryName(oldPath), source.Task.Result);
+                    if (oldPath == ViewModel.FileViewModel.FilePath)
                         ViewModel.FileViewModel.RenameFile(newPath);
-                    else
-                        FileOperation.Rename(item.FullPath, newPath);
+                    else if (FileOperation.Rename(oldPath, newPath))
+                    {
+                        // Renamed here: a favourite of it (or inside a folder renamed) follows.
+                        Typedown.Core.Services.Favorites.Shared.Rename(oldPath, newPath);
+                        EditionHooks.ReportPathRenamed(oldPath, newPath);
+                    }
                     return System.Threading.Tasks.Task.CompletedTask;
                 });
-                _ = Dispatcher.RunIdleAsync(() => UpdateSelectedItem(WorkFolderExplorerItem));
+                _ = DispatcherQueue.RunIdleAsync(() => UpdateSelectedItem(WorkFolderExplorerItem));
             }
         }
+
+        internal static string GlyphOf(ExplorerItem.ExplorerItemType type) =>
+            type == ExplorerItem.ExplorerItemType.Folder ? "\uF12B" : "\uE8A5";
 
         internal static void OnTreeViewItemLoaded(object sender, RoutedEventArgs e)
         {
@@ -439,7 +659,7 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             var treeViewItemPointerReleasedEventHandler = new PointerEventHandler(page.OnTreeViewItemPointerReleased);
             grid.AddHandler(PointerPressedEvent, treeViewItemPointerPressedEventHandler, true);
             item.AddHandler(PointerReleasedEvent, treeViewItemPointerReleasedEventHandler, true);
-            var treeViewItemDoubleTappedEventHandler = new Windows.UI.Xaml.Input.DoubleTappedEventHandler(page.OnTreeViewItemDoubleTapped);
+            var treeViewItemDoubleTappedEventHandler = new Microsoft.UI.Xaml.Input.DoubleTappedEventHandler(page.OnTreeViewItemDoubleTapped);
             item.AddHandler(DoubleTappedEvent, treeViewItemDoubleTappedEventHandler, true);
             if (item.DataContext is ExplorerItem explorerItem)
                 page.UpdateSelectedItem(explorerItem);
@@ -455,7 +675,7 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             }
         }
 
-        private static void OnTreeViewItemPointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        private static void OnTreeViewItemPointerPressed(object sender, Microsoft.UI.Xaml.Input.PointerRoutedEventArgs e)
         {
             if ((e.OriginalSource as FrameworkElement).Name != "ExpandCollapseChevron" && (e.OriginalSource as FrameworkElement).GetAncestor<TextBox>() == null)
             {
@@ -473,12 +693,12 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
         // has already replaced the current document and the double click has nothing left to do).
         private System.Threading.CancellationTokenSource pendingSingleClickOpen;
 
-        private async void OnTreeViewItemPointerReleased(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        private async void OnTreeViewItemPointerReleased(object sender, Microsoft.UI.Xaml.Input.PointerRoutedEventArgs e)
         {
             try
             {
                 var kind = e.GetCurrentPoint(sender as UIElement).Properties.PointerUpdateKind;
-                if (kind == Windows.UI.Input.PointerUpdateKind.LeftButtonReleased &&
+                if (kind == Microsoft.UI.Input.PointerUpdateKind.LeftButtonReleased &&
                     (sender as muxc.TreeViewItem).DataContext is ExplorerItem item &&
                     item.Type == ExplorerItem.ExplorerItemType.File && !item.IsNotice &&
                     item.FullPath != ViewModel.FileViewModel.FilePath)
@@ -504,7 +724,7 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             }
         }
 
-        private async void OnTreeViewItemDoubleTapped(object sender, Windows.UI.Xaml.Input.DoubleTappedRoutedEventArgs e)
+        private async void OnTreeViewItemDoubleTapped(object sender, Microsoft.UI.Xaml.Input.DoubleTappedRoutedEventArgs e)
         {
             try
             {
@@ -595,6 +815,13 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
                     var collection = new StringCollection();
                     items.ToList().ForEach(x => collection.Add(x.Path));
                     page.FileOperation.Move(collection, target.FullPath);
+                    // Each one moved (gone from where it was, there under its name): said, as a rename.
+                    foreach (var moved in collection)
+                    {
+                        var to = Path.Combine(target.FullPath, Path.GetFileName(moved.TrimEnd('\\', '/')));
+                        if (!File.Exists(moved) && !Directory.Exists(moved) && (File.Exists(to) || Directory.Exists(to)))
+                            EditionHooks.ReportPathRenamed(moved, to);
+                    }
                 }
             }
             catch (Exception ex)
@@ -610,14 +837,4 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
         }
     }
 
-    class ExplorerItemTemplateSelector : DataTemplateSelector
-    {
-        public DataTemplate FolderTemplate { get; set; }
-        public DataTemplate FileTemplate { get; set; }
-
-        protected override DataTemplate SelectTemplateCore(object item)
-        {
-            return item is ExplorerItem explorerItem && explorerItem.Type == ExplorerItem.ExplorerItemType.Folder ? FolderTemplate : FileTemplate;
-        }
-    }
 }

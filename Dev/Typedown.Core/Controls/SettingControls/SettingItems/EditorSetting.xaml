@@ -36,7 +36,7 @@
             <controls:NormalSettingItem.Icon>
                 <FontIcon Glyph="&#xe8d2;"/>
             </controls:NormalSettingItem.Icon>
-            <AutoSuggestBox MinWidth="200"
+            <AutoSuggestBox MinWidth="200" AutomationProperties.AutomationId="FontFamilyBox"
                 Text="{x:Bind Settings.FontFamily, Mode=OneWay}"
                 PlaceholderText="{u:LocaleString Key=Editor.FontFamily.Placeholder}"
                 ItemsSource="{x:Bind FontFamilySuggestions}"
@@ -92,6 +92,30 @@
                 <FontIcon Glyph="&#xe80a;"/>
             </controls:NormalSettingItem.Icon>
             <ToggleSwitch IsOn="{x:Bind Settings.TableAlignColumns, Mode=TwoWay}"/>
+        </controls:NormalSettingItem>
+        <controls:NormalSettingItem Title="{u:LocaleString Key=Editor.ShowBlankLines.Title}" Description="{u:LocaleString Key=Editor.ShowBlankLines.Description}">
+            <controls:NormalSettingItem.Icon>
+                <FontIcon Glyph="&#xe8e4;"/>
+            </controls:NormalSettingItem.Icon>
+            <ToggleSwitch IsOn="{x:Bind Settings.ShowBlankLines, Mode=TwoWay}" AutomationProperties.AutomationId="ShowBlankLinesToggle"/>
+        </controls:NormalSettingItem>
+        <controls:NormalSettingItem Title="{u:LocaleString Key=Editor.ShowMarkdownMarks.Title}" Description="{u:LocaleString Key=Editor.ShowMarkdownMarks.Description}">
+            <controls:NormalSettingItem.Icon>
+                <FontIcon Glyph="&#xe943;"/>
+            </controls:NormalSettingItem.Icon>
+            <ToggleSwitch IsOn="{x:Bind Settings.ShowMarkdownMarks, Mode=TwoWay}" AutomationProperties.AutomationId="ShowMarkdownMarksToggle"/>
+        </controls:NormalSettingItem>
+        <controls:NormalSettingItem Title="{u:LocaleString Key=Editor.ProgressiveRendering.Title}" Description="{u:LocaleString Key=Editor.ProgressiveRendering.Description}">
+            <controls:NormalSettingItem.Icon>
+                <FontIcon Glyph="&#xEC4A;"/>
+            </controls:NormalSettingItem.Icon>
+            <ToggleSwitch IsOn="{x:Bind Settings.ProgressiveRendering, Mode=TwoWay}" AutomationProperties.AutomationId="ProgressiveRenderingToggle"/>
+        </controls:NormalSettingItem>
+        <controls:NormalSettingItem Title="{u:LocaleString Key=Editor.PredictHeights.Title}" Description="{u:LocaleString Key=Editor.PredictHeights.Description}">
+            <controls:NormalSettingItem.Icon>
+                <FontIcon Glyph="&#xE9D9;"/>
+            </controls:NormalSettingItem.Icon>
+            <ToggleSwitch IsOn="{x:Bind Settings.PredictHeights, Mode=TwoWay}" AutomationProperties.AutomationId="PredictHeightsToggle"/>
         </controls:NormalSettingItem>
         <controls:NormalSettingItem Title="{u:LocaleString Key=Editor.AutoPairQuote.Title}" Description="{u:LocaleString Key=Editor.AutoPairQuote.Description}">
             <controls:NormalSettingItem.Icon>

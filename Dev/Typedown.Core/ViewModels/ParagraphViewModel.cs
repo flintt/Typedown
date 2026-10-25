@@ -56,7 +56,9 @@ namespace Typedown.Core.ViewModels
 
         private async void InsertTable()
         {
+            Log.Debug("table: the insert-table dialog asked for");
             var result = await InsertTableDialog.OpenInsertTableDialog(ViewModel.XamlRoot);
+            Log.Debug($"table: the insert-table dialog closed ({(result == null ? "cancelled" : $"{result.Rows}x{result.Columns}")})");
             if (result != null)
                 MarkdownEditor?.PostMessage("InsertTable", new { rows = result.Rows, columns = result.Columns });
         }

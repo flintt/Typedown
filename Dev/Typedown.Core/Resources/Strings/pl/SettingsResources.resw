@@ -138,7 +138,7 @@
     <comment>关于/发送反馈</comment>
   </data>
   <data name="About.Title" xml:space="preserve">
-    <value>Około</value>
+    <value>Informacje</value>
     <comment>关于/关于</comment>
   </data>
   <data name="Editor.AutoPairBracket.Description" xml:space="preserve">
@@ -238,7 +238,7 @@
     <comment>编辑器/默认缩进</comment>
   </data>
   <data name="Editor.Title" xml:space="preserve">
-    <value>Redaktor</value>
+    <value>Edytor</value>
     <comment>编辑器/编辑器</comment>
   </data>
   <data name="Export.AddConfig.Description" xml:space="preserve">
@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Włącz efekt tła miki dla tła obszaru edycji</value>
+    <value>Panel boczny i pasek kart pokazują efekt Mica; obszar edycji zachowuje jednolity kolor motywu</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Użyj materiału miki w obszarze edycji</value>
+    <value>Używaj materiału Mica wokół obszaru edycji</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Otwórz jego folder</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Zapamiętuj ostatnio otwierane pliki</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Otwierane pliki i foldery są widoczne w menu Plik &gt; Otwórz ostatnie i na stronie startowej. Po wyłączeniu nic nowego nie jest dodawane.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Wyczyść ostatnie pliki i foldery</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Opróżnia listy ostatnio otwieranych plików i folderów.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Wyczyść</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Pokazuj stronę startową na pustej karcie</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Przy uruchomieniu bez niczego do otwarcia i po zamknięciu ostatniej karty: ostatnie pliki i foldery, ulubione</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Nowe karty pokazują stronę startową</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Nowa karta (Plik &gt; Nowy, przycisk +) pokazuje stronę startową zamiast pustego dokumentu</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Pokazuj dodatkowe puste wiersze</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Puste wiersze między akapitami zajmują miejsce także w trybie czytania oraz w eksporcie do HTML i PDF, tak jak podczas edycji. Sam plik się nie zmienia</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Rysuj długie dokumenty stopniowo</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Długi dokument otwiera się w miejscu, w którym go zostawiono, a reszta jest rysowana w tle. Wyłącz to, jeśli coś wygląda nieprawidłowo podczas otwierania długiego dokumentu: wtedy zostanie narysowany od razu w całości</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Pasek boczny po prawej</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Pokazuj pasek boczny po prawej stronie dokumentu zamiast po lewej</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Zachowuj niezapisane zmiany przy zamykaniu</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Zamykaj bez pytania o zapisanie: niezapisane dokumenty wracają takie, jakie były, nadal niezapisane, z kartami z ostatniej sesji</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Zawsze pokazuj znaczniki Markdown</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Pokazuj znaczniki Markdown (**, #, adres łącza) w każdym akapicie, nie tylko tam, gdzie jest kursor</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Przewiduj układ długich dokumentów (eksperymentalne)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Podczas rysowania długiego dokumentu częściami wysokość tego, co nie jest jeszcze wyświetlane, jest obliczana na podstawie tekstu zamiast szacowana, dzięki czemu pasek przewijania i przeskoki z konspektu są dokładniejsze. Eksperymentalne</value>
   </data>
 </root>

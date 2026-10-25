@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Typedown.Core.Utilities;
-using Windows.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls;
 using muxc = Microsoft.UI.Xaml.Controls;
 
 namespace Typedown.Core.Controls.EditorControls.MenuBarItems
@@ -54,7 +54,7 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             // Picks up a theme that was just added or edited without restarting. The rebuild waits for the click
             // to be over: the menu would otherwise be torn down while it is still on screen.
             var reload = new MenuFlyoutItem { Text = Locale.GetString("View.CustomTheme.Refresh") };
-            reload.Click += (_, _) => _ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, RefreshThemeMenu);
+            reload.Click += (_, _) => _ = DispatcherQueue.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, RefreshThemeMenu);
             ThemeSubMenu.Items.Add(reload);
             UpdateThemeChecks();
         }
@@ -87,7 +87,7 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
 
         // A folder of themes added or removed (ThemeFiles.AddFolder/RemoveFolder, by an edition): the menu shows the
         // themes there are now, as "Reload themes" would.
-        private void OnThemesChanged() => _ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, RefreshThemeMenu);
+        private void OnThemesChanged() => _ = DispatcherQueue.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, RefreshThemeMenu);
 
         /// <summary>The theme submenu's entries as shown, and its "Reload themes" item (the automation test host clicks it).</summary>
         public (IReadOnlyList<string> Entries, MenuFlyoutItem Reload) ThemeMenu()
@@ -97,7 +97,7 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             return (entries, reload);
         }
 
-        private async void OnOpenThemeDesigner(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private async void OnOpenThemeDesigner(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
         {
             try
             {
@@ -217,7 +217,7 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             TypewriterModeItem.IsEnabled = caretModes;
         }
 
-        private void OnUnloaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void OnUnloaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
         {
             Unsubscribe();
             Bindings?.StopTracking();

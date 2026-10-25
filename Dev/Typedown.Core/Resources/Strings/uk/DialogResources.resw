@@ -130,7 +130,7 @@
     <comment>对话框/取消</comment>
   </data>
   <data name="Confirm" xml:space="preserve">
-    <value>ГАРАЗД</value>
+    <value>OK</value>
     <comment>对话框/确定</comment>
   </data>
   <data name="CreateDocErrorTitle" xml:space="preserve">
@@ -202,7 +202,7 @@
     <comment>确定恢复应用默认设置？</comment>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Рятувати</value>
+    <value>Зберегти</value>
     <comment>文件保存对话框/保存</comment>
   </data>
   <data name="SaveErrorTitle" xml:space="preserve">
@@ -328,5 +328,14 @@
   </data>
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>{0} з них уже завантажувалися раніше з цією конфігурацією, тому використано їхні попередні адреси.</value>
+  </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Завантажити середовище виконання WebView2 з сайту Microsoft</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Середовище виконання не встановлено. Інсталятору потрібне підключення до інтернету; можна також завантажити середовище виконання з сайту Microsoft (є й автономний інсталятор), встановити його та перезапустити програму.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>Встановлення середовища виконання WebView2...</value>
   </data>
 </root>

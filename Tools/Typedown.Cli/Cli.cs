@@ -473,7 +473,7 @@ Exit codes: 0 ok, 2 usage, 3 not running or not reachable, 4 version or scope, 5
         /// <summary>The installed application's endpoint: its named pipe on Windows, its socket path elsewhere.</summary>
         public static string DefaultEndpoint() =>
 #if NET7_0_OR_GREATER
-            !RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? UnixSocketListener.DefaultPath(BuildTypes.Application) :
+            !OperatingSystem.IsWindows() ? UnixSocketListener.DefaultPath(BuildTypes.Application) :
 #endif
             AutomationEndpoint.PipeName(BuildTypes.Application, CurrentUserId());
 
@@ -491,7 +491,7 @@ Exit codes: 0 ok, 2 usage, 3 not running or not reachable, 4 version or scope, 5
         public static async Task<Stream> ConnectPipeAsync(string endpoint, CancellationToken ct)
         {
 #if NET7_0_OR_GREATER
-            if (endpoint.Contains('/') && !RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            if (endpoint.Contains('/') && !OperatingSystem.IsWindows())
             {
                 using var timeout = CancellationTokenSource.CreateLinkedTokenSource(ct);
                 timeout.CancelAfter(3000);

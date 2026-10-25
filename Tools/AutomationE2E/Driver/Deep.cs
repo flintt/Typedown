@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Automation;
@@ -14,19 +14,50 @@ internal static class Deep
 {
     public static AutomationElement? First(AutomationElement root, Condition condition)
     {
-        var found = Retry(() => root.FindFirst(TreeScope.Descendants, condition));
-        return found ?? Walk(root, condition).FirstOrDefault();
+        var found = Retry(() => Searched(root).Select(part => part.FindFirst(TreeScope.Descendants, condition)).FirstOrDefault(e => e != null));
+        found ??= Walk(root, condition).FirstOrDefault();
+        ReleaseNow();
+        return found;
     }
 
     public static List<AutomationElement> All(AutomationElement root, Condition condition)
     {
         // Both, not the walk only when the search finds nothing: the search finds the window's own (Win32) parts, the
         // title bar's buttons say, and still misses the XAML ones.
-        var found = Retry(() => root.FindAll(TreeScope.Descendants, condition).Cast<AutomationElement>().ToList());
+        var found = Retry(() => Searched(root).SelectMany(part => part.FindAll(TreeScope.Descendants, condition).Cast<AutomationElement>()).ToList());
         var ids = new HashSet<string>(found.Select(Id));
         foreach (var e in Walk(root, condition))
             if (ids.Add(Id(e))) found.Add(e);
+        ReleaseNow();
         return found;
+    }
+
+    // The elements a search went through and the caller does not keep, let go of now, while what they stand for is still
+    // on screen. Left to a later collection, UI Automation released them into the test host after a case had closed tabs
+    // or windows, and a release reaching an automation peer already gone crashed the host (uiautomationcore's
+    // ~ProviderInfo on a freed provider, fail-fast 0xc0000409: every case after it timed out).
+    private static void ReleaseNow()
+    {
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+        GC.Collect();
+    }
+
+    // Where UI Automation's own search goes: the root's children one by one, without a web view's window. Searched as a
+    // whole, a window hiding its web view (the settings page shown) took the search into that window's legacy (MSAA)
+    // accessible objects, one of which listed itself among its own descendants: the search never came back (FB01). The
+    // root itself, when it is what is looked for, is matched by the walk.
+    private static IEnumerable<AutomationElement> Searched(AutomationElement root)
+    {
+        AutomationElementCollection children;
+        try { children = root.FindAll(TreeScope.Children, Condition.TrueCondition); } catch { yield break; }
+        foreach (AutomationElement child in children)
+        {
+            string cls;
+            try { cls = child.Current.ClassName ?? ""; } catch { continue; }
+            if (cls.Contains("WebView2") || cls.StartsWith("Chrome_")) continue;
+            yield return child;
+        }
     }
 
     // A search over a tree that changes under it (a virtualized list dropping rows) can fail with the element gone:

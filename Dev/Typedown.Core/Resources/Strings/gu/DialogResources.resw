@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>તેમાંથી {0} આ રૂપરેખાંકન સાથે પહેલાં અપલોડ થઈ ચૂકી હતી, તેથી તેમના અગાઉના સરનામાં વપરાયા.</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Microsoft પરથી WebView2 રનટાઇમ ડાઉનલોડ કરો</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>રનટાઇમ ઇન્સ્ટોલ થયું નથી. સેટઅપને ઇન્ટરનેટ કનેક્શન જોઈએ છે; તમે Microsoft પરથી રનટાઇમ ડાઉનલોડ પણ કરી શકો છો (ઑફલાઇન ઇન્સ્ટોલર પણ છે), તેને ઇન્સ્ટોલ કરીને ઍપ ફરી શરૂ કરો.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>WebView2 રનટાઇમ ઇન્સ્ટોલ થઈ રહ્યું છે...</value>
+  </data>
 </root>

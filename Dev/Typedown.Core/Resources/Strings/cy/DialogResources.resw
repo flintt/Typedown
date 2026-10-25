@@ -130,7 +130,7 @@
     <comment>对话框/取消</comment>
   </data>
   <data name="Confirm" xml:space="preserve">
-    <value>OCÊ</value>
+    <value>Iawn</value>
     <comment>对话框/确定</comment>
   </data>
   <data name="CreateDocErrorTitle" xml:space="preserve">
@@ -202,7 +202,7 @@
     <comment>确定恢复应用默认设置？</comment>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Achub</value>
+    <value>Cadw</value>
     <comment>文件保存对话框/保存</comment>
   </data>
   <data name="SaveErrorTitle" xml:space="preserve">
@@ -328,5 +328,14 @@
   </data>
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>Roedd {0} ohonynt wedi'u huwchlwytho o'r blaen gyda'r cyfluniad hwn, felly defnyddiwyd eu cyfeiriadau blaenorol.</value>
+  </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Llwytho WebView2 Runtime i lawr o Microsoft</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Ni osodwyd yr amser rhedeg. Mae angen cysylltiad rhyngrwyd ar y gosodwr; gallwch hefyd lwytho'r amser rhedeg i lawr o Microsoft (mae gosodwr all-lein hefyd), ei osod ac ailgychwyn yr ap.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>Wrthi'n gosod WebView2 Runtime...</value>
   </data>
 </root>

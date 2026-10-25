@@ -138,7 +138,7 @@
     <comment>关于/发送反馈</comment>
   </data>
   <data name="About.Title" xml:space="preserve">
-    <value>Περίπου</value>
+    <value>Πληροφορίες</value>
     <comment>关于/关于</comment>
   </data>
   <data name="Editor.AutoPairBracket.Description" xml:space="preserve">
@@ -238,7 +238,7 @@
     <comment>编辑器/默认缩进</comment>
   </data>
   <data name="Editor.Title" xml:space="preserve">
-    <value>Συντάκτης</value>
+    <value>Επεξεργαστής</value>
     <comment>编辑器/编辑器</comment>
   </data>
   <data name="Export.AddConfig.Description" xml:space="preserve">
@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Ενεργοποίηση του εφέ φόντου μαρμαρυγία για το φόντο της περιοχής επεξεργασίας</value>
+    <value>Το πλευρικό τμήμα και η γραμμή καρτελών δείχνουν το εφέ μαρμαρυγία· η περιοχή επεξεργασίας διατηρεί το συμπαγές χρώμα του θέματος</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Χρησιμοποιήστε υλικό μαρμαρυγίας στην περιοχή επεξεργασίας</value>
+    <value>Χρήση υλικού μαρμαρυγία γύρω από την περιοχή επεξεργασίας</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Άνοιγμα του φακέλου του</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Απομνημόνευση πρόσφατα ανοιγμένων αρχείων</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Τα αρχεία και οι φάκελοι που ανοίγετε εμφανίζονται στο Αρχείο &gt; Άνοιγμα πρόσφατου και στην αρχική σελίδα. Όταν είναι απενεργοποιημένο, δεν προστίθεται τίποτα νέο.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Απαλοιφή πρόσφατων αρχείων και φακέλων</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Αδειάζει τις λίστες πρόσφατα ανοιγμένων αρχείων και φακέλων.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Απαλοιφή</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Εμφάνιση αρχικής σελίδας σε κενή καρτέλα</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Κατά την εκκίνηση χωρίς κάτι για άνοιγμα και όταν κλείνει η τελευταία καρτέλα: πρόσφατα αρχεία και φάκελοι, αγαπημένα</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Οι νέες καρτέλες εμφανίζουν την αρχική σελίδα</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Μια νέα καρτέλα (Αρχείο &gt; Νέο, το κουμπί +) εμφανίζει την αρχική σελίδα αντί για κενό έγγραφο</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Εμφάνιση επιπλέον κενών γραμμών</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Οι κενές γραμμές μεταξύ παραγράφων καταλαμβάνουν χώρο και στη λειτουργία ανάγνωσης και στις εξαγωγές HTML και PDF, όπως κατά την επεξεργασία. Το ίδιο το αρχείο δεν αλλάζει</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Σταδιακή σχεδίαση μεγάλων εγγράφων</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Ένα μεγάλο έγγραφο ανοίγει στο σημείο όπου το αφήσατε και το υπόλοιπο σχεδιάζεται στο παρασκήνιο. Απενεργοποιήστε το αν κάτι δεν φαίνεται σωστό ενώ ανοίγει ένα μεγάλο έγγραφο: τότε σχεδιάζεται ολόκληρο με τη μία</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Πλευρική γραμμή στα δεξιά</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Εμφάνιση της πλευρικής γραμμής στα δεξιά του εγγράφου αντί για τα αριστερά</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Διατήρηση μη αποθηκευμένων αλλαγών κατά το κλείσιμο</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Κλείσιμο χωρίς ερώτηση για αποθήκευση: τα μη αποθηκευμένα έγγραφα επιστρέφουν όπως ήταν, ακόμη μη αποθηκευμένα, με τις καρτέλες της τελευταίας συνεδρίας</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Πάντα εμφάνιση σημείων Markdown</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Εμφάνιση των σημείων Markdown (**, #, η διεύθυνση ενός συνδέσμου) σε κάθε παράγραφο, όχι μόνο εκεί που βρίσκεται ο δρομέας</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Πρόβλεψη διάταξης μεγάλων εγγράφων (πειραματικό)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Ενώ ένα μεγάλο έγγραφο σχεδιάζεται τμηματικά, το ύψος όσων δεν εμφανίζονται ακόμη υπολογίζεται από το κείμενο αντί να εκτιμάται, ώστε η γραμμή κύλισης και τα άλματα από τη διάρθρωση να είναι πιο ακριβή. Πειραματικό</value>
   </data>
 </root>

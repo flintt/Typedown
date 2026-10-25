@@ -138,7 +138,7 @@
     <comment>关于/发送反馈</comment>
   </data>
   <data name="About.Title" xml:space="preserve">
-    <value>Mō</value>
+    <value>Mō tēnei</value>
     <comment>关于/关于</comment>
   </data>
   <data name="Editor.AutoPairBracket.Description" xml:space="preserve">
@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Whakahohe i te rākeitanga papamuri mica mō te papamuri rohe whakatika</value>
+    <value>Ka whakaatu te pae taha me te pae ripa i te pānga mica; ka mau tonu te wāhi whakatika i te tae mārō o te kaupapa</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Whakamahia ngā rauemi mica i te horahanga whakatika</value>
+    <value>Whakamahia te rauemi mica huri noa i te wāhi whakatika</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Huakina tōna kōpaki</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Maumahara ki ngā kōnae i huakina tata nei</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Ka whakaraupapahia ngā kōnae me ngā kōpaki ka huakina e koe ki Kōnae &gt; Huaki o nā tata nei, ki te whārangi kāinga hoki. Ka whakawetohia, kāore he mea hou e tāpirihia.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Ūkuia ngā kōnae me ngā kōpaki o nā tata nei</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Ka whakawātea i ngā rārangi o ngā kōnae me ngā kōpaki i huakina tata nei.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Ūkuia</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Whakaaturia te whārangi kāinga ki tētahi ripa wātea</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>I te tīmatanga kāore he mea hei huaki, ā, ina katia te ripa whakamutunga: ngā kōnae me ngā kōpaki o nā tata nei, ngā makau</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Ka whakaatu ngā ripa hou i te whārangi kāinga</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Ka whakaatu tētahi ripa hou (Kōnae &gt; Hou, te pātene +) i te whārangi kāinga, kaua he tuhinga wātea</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Whakaaturia ngā rārangi wātea tāpiri</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Ka whai wāhi anō ngā rārangi wātea i waenga i ngā kōwae i te aratau pānui me ngā kaweake HTML me PDF, pērā i te wā whakatika. Kāore te kōnae tonu e huri</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Tuhia haere ngā tuhinga roa</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Ka tuwhera tētahi tuhinga roa ki te wāhi i waiho ai e koe, ā, ka tuhia te toenga ki muri. Whakawetohia tēnei mēnā he hē te āhua o tētahi mea i te wā e tuwhera ana tētahi tuhinga roa: kātahi ka tuhia katoatia i te wā kotahi</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Pae taha ki matau</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Whakaaturia te pae taha ki te taha matau o te tuhinga, kaua ki te taha mauī</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Puritia ngā panoni kāore anō kia tiakina ina katia</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Katia me te kore e pātai kia tiakina: ka hoki mai ngā tuhinga kāore anō kia tiakina pērā i mua, kāore tonu i tiakina, me ngā ripa o te wāhanga whakamutunga</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Whakaaturia tonutia ngā tohu Markdown</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Whakaaturia ngā tohu Markdown (**, #, te wāhitau o tētahi hono) i ia kōwae, kaua ko te wāhi anake kei reira te pehu</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Matapae i te takotoranga o ngā tuhinga roa (whakamātau)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>I te wā e tuhia ana he tuhinga roa i ōna wāhanga, ka tātaihia te teitei o ngā wāhanga kāore anō kia whakaaturia mai i te kuputuhi, kaua e whakatau tata, kia tika ake ai te pae panuku me ngā peke mai i te whakarāpopototanga. Whakamātau</value>
   </data>
 </root>

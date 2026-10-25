@@ -2,6 +2,8 @@ import StateRender from './index'
 import loadRenderer from '../../renderers'
 
 jest.mock('../../renderers', () => jest.fn())
+// The drawing reports to the host (DrawJump); there is no host here.
+jest.mock('services/transport', () => ({ __esModule: true, default: { postMessage: jest.fn() } }))
 
 const deferred = () => {
   let resolve

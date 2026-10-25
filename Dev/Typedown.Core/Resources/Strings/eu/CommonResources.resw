@@ -182,7 +182,7 @@
     <comment>图表</comment>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Argi</value>
+    <value>Garbitu</value>
     <comment>清除</comment>
   </data>
   <data name="ClearFormat" xml:space="preserve">
@@ -346,15 +346,15 @@
     <comment>文件/导出/导出为PDF</comment>
   </data>
   <data name="Feedback" xml:space="preserve">
-    <value>Atzera-alimentazioa</value>
+    <value>Iritzia</value>
     <comment>应用程序反馈</comment>
   </data>
   <data name="File" xml:space="preserve">
-    <value>Artxiboa</value>
+    <value>Fitxategia</value>
     <comment>文件(单数)</comment>
   </data>
   <data name="Files" xml:space="preserve">
-    <value>Artxiboak</value>
+    <value>Fitxategiak</value>
     <comment>文件(复数)</comment>
   </data>
   <data name="Find" xml:space="preserve">
@@ -378,7 +378,7 @@
     <comment>Flow Chart</comment>
   </data>
   <data name="FocusMode" xml:space="preserve">
-    <value>Ikuspuntua</value>
+    <value>Kontzentrazio modua</value>
     <comment>视图/专注模式</comment>
   </data>
   <data name="Folder" xml:space="preserve">
@@ -386,7 +386,7 @@
     <comment>文件夹</comment>
   </data>
   <data name="Font" xml:space="preserve">
-    <value>Iturria</value>
+    <value>Letra-tipoa</value>
     <comment>设置/字体</comment>
   </data>
   <data name="FontSize" xml:space="preserve">
@@ -474,7 +474,7 @@
     <comment>图片上传设置</comment>
   </data>
   <data name="Import" xml:space="preserve">
-    <value>Inportazioa</value>
+    <value>Inportatu</value>
     <comment>文件/导入</comment>
   </data>
   <data name="IncreaseHeadingLevel" xml:space="preserve">
@@ -558,7 +558,7 @@
     <comment>设置/行高</comment>
   </data>
   <data name="Lines" xml:space="preserve">
-    <value>Lineak</value>
+    <value>Lerroak</value>
     <comment>行(复数)</comment>
   </data>
   <data name="LinkReference" xml:space="preserve">
@@ -618,7 +618,7 @@
     <comment>文件/新建</comment>
   </data>
   <data name="NewFile" xml:space="preserve">
-    <value>Artxibo berria</value>
+    <value>Fitxategi berria</value>
     <comment>文件浏览框/新建文件</comment>
   </data>
   <data name="NewFolder" xml:space="preserve">
@@ -654,7 +654,7 @@
     <comment>未设置</comment>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Itxi</value>
+    <value>Desaktibatuta</value>
     <comment>开关/关</comment>
   </data>
   <data name="Ok" xml:space="preserve">
@@ -662,7 +662,7 @@
     <comment>对话框/确定</comment>
   </data>
   <data name="On" xml:space="preserve">
-    <value>En</value>
+    <value>Aktibatuta</value>
     <comment>开关/开</comment>
   </data>
   <data name="Open" xml:space="preserve">
@@ -698,7 +698,7 @@
     <comment>段落/有序列表</comment>
   </data>
   <data name="Outline" xml:space="preserve">
-    <value>Kontornoa</value>
+    <value>Eskema</value>
     <comment>侧栏/大纲</comment>
   </data>
   <data name="Paragraph" xml:space="preserve">
@@ -706,7 +706,7 @@
     <comment>段落</comment>
   </data>
   <data name="Paste" xml:space="preserve">
-    <value>Pegar</value>
+    <value>Itsatsi</value>
     <comment>编辑/粘贴</comment>
   </data>
   <data name="PasteAsPlainText" xml:space="preserve">
@@ -722,15 +722,15 @@
     <comment>PlantUML Diagram</comment>
   </data>
   <data name="Print" xml:space="preserve">
-    <value>Iritzi</value>
+    <value>Inprimatu</value>
     <comment>文件/打印</comment>
   </data>
   <data name="Quote" xml:space="preserve">
-    <value>Zitatu</value>
+    <value>Aipua</value>
     <comment>段落/引用</comment>
   </data>
   <data name="Redo" xml:space="preserve">
-    <value>Berregite</value>
+    <value>Berregin</value>
     <comment>编辑/重做</comment>
   </data>
   <data name="RemoveColumn" xml:space="preserve">
@@ -742,7 +742,7 @@
     <comment>表格/删除行</comment>
   </data>
   <data name="Rename" xml:space="preserve">
-    <value>Berregokitu</value>
+    <value>Aldatu izena</value>
     <comment>文件/重命名</comment>
   </data>
   <data name="Replace" xml:space="preserve">
@@ -758,7 +758,7 @@
     <comment>表格/调整表格大小</comment>
   </data>
   <data name="Restore" xml:space="preserve">
-    <value>Zaharberritzea</value>
+    <value>Leheneratu</value>
     <comment>还原默认设置</comment>
   </data>
   <data name="Rows" xml:space="preserve">
@@ -810,15 +810,15 @@
     <comment>侧栏</comment>
   </data>
   <data name="SourceCodeMode" xml:space="preserve">
-    <value>Kode-mota iturria</value>
+    <value>Iturburu-kodearen modua</value>
     <comment>视图/源代码模式</comment>
   </data>
   <data name="StatusBar" xml:space="preserve">
-    <value>Estatu barra</value>
+    <value>Egoera-barra</value>
     <comment>状态栏</comment>
   </data>
   <data name="Stop" xml:space="preserve">
-    <value>Geldialdia</value>
+    <value>Gelditu</value>
     <comment>停止操作</comment>
   </data>
   <data name="Strikethrough" xml:space="preserve">
@@ -826,11 +826,11 @@
     <comment>格式/删除线</comment>
   </data>
   <data name="Strong" xml:space="preserve">
-    <value>Ausarta</value>
+    <value>Lodia</value>
     <comment>格式/加粗</comment>
   </data>
   <data name="Table" xml:space="preserve">
-    <value>Mahaia</value>
+    <value>Taula</value>
     <comment>段落/表格</comment>
   </data>
   <data name="TaskList" xml:space="preserve">
@@ -1011,5 +1011,146 @@
   </data>
   <data name="ExportedTo" xml:space="preserve">
     <value>Hona esportatua: {0}</value>
+  </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>Erabiltzailearen gida</value>
+  </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Karaktereak (zuriunerik gabe)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Karaktereak (zuriuneekin)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK karaktereak</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Hitzak</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>CJK ez diren hitzak</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Paragrafoak</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Izenburuak</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Irudiak</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Estekak</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Irakurketa-denbora</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>{0} min inguru</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Minutu bat baino gutxiago</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Testu ikusgaian zenbatua. Kode-blokeak eta formulak ez dira irakurketa-denboran sartzen.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Egoera-barrak erakusten du</value>
+  </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Gordeta</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Gorde gabe</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Gordetze automatikoa pausatuta</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Egin klik gordetzeko</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Dokumentua hutsik dago, baina diskoko fitxategia ez, eta ez du edizio batek hustu; beraz, gordetze automatikoak ez du fitxategia gainidatzi.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Fitxategi hau ezin izan da galerarik gabe irakurri (UTF-8 ez den kodeketa bat?); beraz, gordetze automatikoak ez du gainidazten. Gorde ezazu zuk zeuk, erakutsitako testua zuzena bada soilik.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Ezin izan da fitxategia idatzi: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{1} {2}(e)tik {0} hautatuta</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Kodeketa eta lerro-amaierak</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Bihurtu UTF-8 formatura</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Ireki berriro kodeketa batekin</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Uneko izenburua</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Gordetze-egoera</value>
+  </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Karpetak</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Ez dago azken karpetarik</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Garbitu azken karpetak</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Egin eskuineko klik edo sakatu Delete zerrendatik kentzeko</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Maila bat gora</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Ezarri erro gisa</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Gogokoak</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Gehitu gogokoetara</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Kendu gogokoetatik</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Hasiera</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Hasiera</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Dokumentu berria</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Ireki fitxategia</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Ireki karpeta</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Azken fitxategiak</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Azken karpetak</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Kendu zerrendatik</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Ezarpenak</value>
+  </data>
+  <data name="EditorOpening" xml:space="preserve">
+    <value>Irekitzen…</value>
   </data>
 </root>

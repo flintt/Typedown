@@ -182,7 +182,7 @@
     <comment>图表</comment>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Ċara</value>
+    <value>Neħħi</value>
     <comment>清除</comment>
   </data>
   <data name="ClearFormat" xml:space="preserve">
@@ -198,7 +198,7 @@
     <comment>点击添加一张图片</comment>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>Qrib</value>
+    <value>Agħlaq</value>
     <comment>文件/关闭</comment>
   </data>
   <data name="Code" xml:space="preserve">
@@ -214,7 +214,7 @@
     <comment>插入表格/列数</comment>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>Kopja</value>
+    <value>Ikkopja</value>
     <comment>编辑/复制</comment>
   </data>
   <data name="CopyAsHTMLCode" xml:space="preserve">
@@ -250,7 +250,7 @@
     <comment>操作/复制到路径</comment>
   </data>
   <data name="Create" xml:space="preserve">
-    <value>Toħloq</value>
+    <value>Oħloq</value>
     <comment>创建</comment>
   </data>
   <data name="CtrlAndClickOpenLink" xml:space="preserve">
@@ -266,7 +266,7 @@
     <comment>自定义快捷键</comment>
   </data>
   <data name="Cut" xml:space="preserve">
-    <value>Maqtugħa</value>
+    <value>Aqta'</value>
     <comment>编辑/剪切</comment>
   </data>
   <data name="Dark" xml:space="preserve">
@@ -302,7 +302,7 @@
     <comment>段落/重复</comment>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Teditja</value>
+    <value>Editja</value>
     <comment>编辑</comment>
   </data>
   <data name="EditImage" xml:space="preserve">
@@ -334,7 +334,7 @@
     <comment>错误</comment>
   </data>
   <data name="Export" xml:space="preserve">
-    <value>Esportazzjoni</value>
+    <value>Esporta</value>
     <comment>文件/导出</comment>
   </data>
   <data name="ExportSettings" xml:space="preserve">
@@ -358,7 +358,7 @@
     <comment>文件(复数)</comment>
   </data>
   <data name="Find" xml:space="preserve">
-    <value>Issib</value>
+    <value>Sib</value>
     <comment>编辑/查找和替换/查找</comment>
   </data>
   <data name="FindAndReplace" xml:space="preserve">
@@ -450,7 +450,7 @@
     <comment>应用程序帮助</comment>
   </data>
   <data name="Highlight" xml:space="preserve">
-    <value>Aċċenn</value>
+    <value>Enfasizza</value>
     <comment>格式/高亮</comment>
   </data>
   <data name="HorizontalLine" xml:space="preserve">
@@ -474,7 +474,7 @@
     <comment>图片上传设置</comment>
   </data>
   <data name="Import" xml:space="preserve">
-    <value>Importazzjoni</value>
+    <value>Importa</value>
     <comment>文件/导入</comment>
   </data>
   <data name="IncreaseHeadingLevel" xml:space="preserve">
@@ -546,7 +546,7 @@
     <comment>了解更多</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Dawl</value>
+    <value>Ċar</value>
     <comment>应用主题/浅色</comment>
   </data>
   <data name="Line" xml:space="preserve">
@@ -654,7 +654,7 @@
     <comment>未设置</comment>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Qrib</value>
+    <value>Mitfi</value>
     <comment>开关/关</comment>
   </data>
   <data name="Ok" xml:space="preserve">
@@ -662,11 +662,11 @@
     <comment>对话框/确定</comment>
   </data>
   <data name="On" xml:space="preserve">
-    <value>Fuq</value>
+    <value>Mixgħul</value>
     <comment>开关/开</comment>
   </data>
   <data name="Open" xml:space="preserve">
-    <value>Miftuħa</value>
+    <value>Iftaħ</value>
     <comment>文件/打开</comment>
   </data>
   <data name="OpenFileLocation" xml:space="preserve">
@@ -698,7 +698,7 @@
     <comment>段落/有序列表</comment>
   </data>
   <data name="Outline" xml:space="preserve">
-    <value>Profil</value>
+    <value>Skema</value>
     <comment>侧栏/大纲</comment>
   </data>
   <data name="Paragraph" xml:space="preserve">
@@ -722,7 +722,7 @@
     <comment>PlantUML Diagram</comment>
   </data>
   <data name="Print" xml:space="preserve">
-    <value>Tipprintja</value>
+    <value>Ipprintja</value>
     <comment>文件/打印</comment>
   </data>
   <data name="Quote" xml:space="preserve">
@@ -758,7 +758,7 @@
     <comment>表格/调整表格大小</comment>
   </data>
   <data name="Restore" xml:space="preserve">
-    <value>Restawr</value>
+    <value>Irrestawra</value>
     <comment>还原默认设置</comment>
   </data>
   <data name="Rows" xml:space="preserve">
@@ -782,7 +782,7 @@
     <comment>图片另存为</comment>
   </data>
   <data name="Search" xml:space="preserve">
-    <value>Tiftix</value>
+    <value>Fittex</value>
     <comment>搜索</comment>
   </data>
   <data name="SelectAll" xml:space="preserve">
@@ -822,7 +822,7 @@
     <comment>停止操作</comment>
   </data>
   <data name="Strikethrough" xml:space="preserve">
-    <value>Ingassa</value>
+    <value>Ingassat</value>
     <comment>格式/删除线</comment>
   </data>
   <data name="Strong" xml:space="preserve">
@@ -866,7 +866,7 @@
     <comment>格式/下划线</comment>
   </data>
   <data name="Undo" xml:space="preserve">
-    <value>Erġa</value>
+    <value>Erġa' lura</value>
     <comment>编辑/撤销</comment>
   </data>
   <data name="UnorderedList" xml:space="preserve">
@@ -894,7 +894,7 @@
     <comment>Vega Chart</comment>
   </data>
   <data name="View" xml:space="preserve">
-    <value>Tara</value>
+    <value>Ara</value>
     <comment>查看</comment>
   </data>
   <data name="Website" xml:space="preserve">
@@ -1011,5 +1011,146 @@
   </data>
   <data name="ExportedTo" xml:space="preserve">
     <value>Esportat lejn {0}</value>
+  </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>Gwida għall-utent</value>
+  </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Karattri (mingħajr spazji)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Karattri (bl-ispazji)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>Karattri CJK</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Kliem</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Kliem mhux CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Paragrafi</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Intestaturi</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Immaġni</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Links</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Ħin tal-qari</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Madwar {0} min</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Inqas minn minuta</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Magħdud fuq it-test viżibbli. Il-blokki tal-kodiċi u l-formuli ma jingħaddux fil-ħin tal-qari.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>L-istrixxa tal-istatus turi</value>
+  </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Issejvjat</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Mhux issejvjat</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Is-sejvjar awtomatiku huwa pawżat</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Ikklikkja biex tissejvja</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Id-dokument huwa vojt iżda l-fajl fuq id-diska mhux, u l-ebda editjar ma vojtah, għalhekk is-sejvjar awtomatiku ma kitibx fuq il-fajl.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Dan il-fajl ma setax jinqara mingħajr telf (kodifikazzjoni oħra minbarra UTF-8?), għalhekk is-sejvjar awtomatiku ma jiktibx fuqu. Issejvjah int biss jekk it-test muri huwa korrett.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Il-kitba tal-fajl falliet: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{0} minn {1} {2} magħżula</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Kodifikazzjoni u truf tal-linji</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Ikkonverti għal UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Erġa’ iftaħ b’kodifikazzjoni</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Intestatura attwali</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Status tas-sejvjar</value>
+  </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Folders</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>L-ebda folder riċenti</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Ħassar il-folders riċenti</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Agħfas il-lemin jew agħfas Delete biex tneħħih mil-lista</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Livell wieħed 'il fuq</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Issettja bħala għerq</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Favoriti</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Żid mal-favoriti</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Neħħi mill-favoriti</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Paġna ewlenija</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Bidu</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Dokument ġdid</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Iftaħ fajl</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Iftaħ folder</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Fajls riċenti</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Folders riċenti</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Neħħi mil-lista</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="EditorOpening" xml:space="preserve">
+    <value>Qed jinfetaħ…</value>
   </data>
 </root>

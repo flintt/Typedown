@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add" xml:space="preserve">
-    <value>Hozzáad</value>
+    <value>Hozzáadás</value>
     <comment>添加</comment>
   </data>
   <data name="AlignCenter" xml:space="preserve">
@@ -146,7 +146,7 @@
     <comment>自动</comment>
   </data>
   <data name="Back" xml:space="preserve">
-    <value>Hát</value>
+    <value>Vissza</value>
     <comment>返回</comment>
   </data>
   <data name="Browse" xml:space="preserve">
@@ -182,7 +182,7 @@
     <comment>图表</comment>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Világos</value>
+    <value>Kiürítés</value>
     <comment>清除</comment>
   </data>
   <data name="ClearFormat" xml:space="preserve">
@@ -198,7 +198,7 @@
     <comment>点击添加一张图片</comment>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>Bezár</value>
+    <value>Bezárás</value>
     <comment>文件/关闭</comment>
   </data>
   <data name="Code" xml:space="preserve">
@@ -214,7 +214,7 @@
     <comment>插入表格/列数</comment>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>Másolat</value>
+    <value>Másolás</value>
     <comment>编辑/复制</comment>
   </data>
   <data name="CopyAsHTMLCode" xml:space="preserve">
@@ -250,7 +250,7 @@
     <comment>操作/复制到路径</comment>
   </data>
   <data name="Create" xml:space="preserve">
-    <value>Alkot</value>
+    <value>Létrehozás</value>
     <comment>创建</comment>
   </data>
   <data name="CtrlAndClickOpenLink" xml:space="preserve">
@@ -266,7 +266,7 @@
     <comment>自定义快捷键</comment>
   </data>
   <data name="Cut" xml:space="preserve">
-    <value>Vág</value>
+    <value>Kivágás</value>
     <comment>编辑/剪切</comment>
   </data>
   <data name="Dark" xml:space="preserve">
@@ -298,11 +298,11 @@
     <comment>删除表格</comment>
   </data>
   <data name="Duplicate" xml:space="preserve">
-    <value>Ismétlődő</value>
+    <value>Kettőzés</value>
     <comment>段落/重复</comment>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Szerkeszt</value>
+    <value>Szerkesztés</value>
     <comment>编辑</comment>
   </data>
   <data name="EditImage" xml:space="preserve">
@@ -334,7 +334,7 @@
     <comment>错误</comment>
   </data>
   <data name="Export" xml:space="preserve">
-    <value>Kivitel</value>
+    <value>Exportálás</value>
     <comment>文件/导出</comment>
   </data>
   <data name="ExportSettings" xml:space="preserve">
@@ -346,7 +346,7 @@
     <comment>文件/导出/导出为PDF</comment>
   </data>
   <data name="Feedback" xml:space="preserve">
-    <value>Visszacsatolás</value>
+    <value>Visszajelzés</value>
     <comment>应用程序反馈</comment>
   </data>
   <data name="File" xml:space="preserve">
@@ -354,11 +354,11 @@
     <comment>文件(单数)</comment>
   </data>
   <data name="Files" xml:space="preserve">
-    <value>Fájlokat</value>
+    <value>Fájlok</value>
     <comment>文件(复数)</comment>
   </data>
   <data name="Find" xml:space="preserve">
-    <value>Talál</value>
+    <value>Keresés</value>
     <comment>编辑/查找和替换/查找</comment>
   </data>
   <data name="FindAndReplace" xml:space="preserve">
@@ -446,11 +446,11 @@
     <comment>段落/六级标题</comment>
   </data>
   <data name="Help" xml:space="preserve">
-    <value>Segítség</value>
+    <value>Súgó</value>
     <comment>应用程序帮助</comment>
   </data>
   <data name="Highlight" xml:space="preserve">
-    <value>Kiemel</value>
+    <value>Kiemelés</value>
     <comment>格式/高亮</comment>
   </data>
   <data name="HorizontalLine" xml:space="preserve">
@@ -474,7 +474,7 @@
     <comment>图片上传设置</comment>
   </data>
   <data name="Import" xml:space="preserve">
-    <value>Importál</value>
+    <value>Importálás</value>
     <comment>文件/导入</comment>
   </data>
   <data name="IncreaseHeadingLevel" xml:space="preserve">
@@ -546,7 +546,7 @@
     <comment>了解更多</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Fény</value>
+    <value>Világos</value>
     <comment>应用主题/浅色</comment>
   </data>
   <data name="Line" xml:space="preserve">
@@ -570,7 +570,7 @@
     <comment>加载图片失败</comment>
   </data>
   <data name="Math" xml:space="preserve">
-    <value>Matek</value>
+    <value>Matematika</value>
     <comment>数学</comment>
   </data>
   <data name="MathBlock" xml:space="preserve">
@@ -654,7 +654,7 @@
     <comment>未设置</comment>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Bezár</value>
+    <value>Ki</value>
     <comment>开关/关</comment>
   </data>
   <data name="Ok" xml:space="preserve">
@@ -662,11 +662,11 @@
     <comment>对话框/确定</comment>
   </data>
   <data name="On" xml:space="preserve">
-    <value>Ra</value>
+    <value>Be</value>
     <comment>开关/开</comment>
   </data>
   <data name="Open" xml:space="preserve">
-    <value>Nyitott</value>
+    <value>Megnyitás</value>
     <comment>文件/打开</comment>
   </data>
   <data name="OpenFileLocation" xml:space="preserve">
@@ -686,7 +686,7 @@
     <comment>文件/在新窗口中打开</comment>
   </data>
   <data name="OpenRecent" xml:space="preserve">
-    <value>A Legutóbbi megnyitása</value>
+    <value>Legutóbbi megnyitása</value>
     <comment>文件/打开最近</comment>
   </data>
   <data name="OpenSourceSoftware" xml:space="preserve">
@@ -706,7 +706,7 @@
     <comment>段落</comment>
   </data>
   <data name="Paste" xml:space="preserve">
-    <value>Paszta</value>
+    <value>Beillesztés</value>
     <comment>编辑/粘贴</comment>
   </data>
   <data name="PasteAsPlainText" xml:space="preserve">
@@ -722,15 +722,15 @@
     <comment>PlantUML Diagram</comment>
   </data>
   <data name="Print" xml:space="preserve">
-    <value>Nyomtat</value>
+    <value>Nyomtatás</value>
     <comment>文件/打印</comment>
   </data>
   <data name="Quote" xml:space="preserve">
-    <value>Idéz</value>
+    <value>Idézet</value>
     <comment>段落/引用</comment>
   </data>
   <data name="Redo" xml:space="preserve">
-    <value>Újra kifest</value>
+    <value>Mégis</value>
     <comment>编辑/重做</comment>
   </data>
   <data name="RemoveColumn" xml:space="preserve">
@@ -742,11 +742,11 @@
     <comment>表格/删除行</comment>
   </data>
   <data name="Rename" xml:space="preserve">
-    <value>Átnevez</value>
+    <value>Átnevezés</value>
     <comment>文件/重命名</comment>
   </data>
   <data name="Replace" xml:space="preserve">
-    <value>Helyettesít</value>
+    <value>Csere</value>
     <comment>编辑/查找和替换/替换</comment>
   </data>
   <data name="ReplaceAll" xml:space="preserve">
@@ -758,7 +758,7 @@
     <comment>表格/调整表格大小</comment>
   </data>
   <data name="Restore" xml:space="preserve">
-    <value>Visszaad</value>
+    <value>Visszaállítás</value>
     <comment>还原默认设置</comment>
   </data>
   <data name="Rows" xml:space="preserve">
@@ -774,7 +774,7 @@
     <comment>文件/另存为</comment>
   </data>
   <data name="Saved" xml:space="preserve">
-    <value>Mentett</value>
+    <value>Mentve</value>
     <comment>文件/已保存</comment>
   </data>
   <data name="SaveImageAs" xml:space="preserve">
@@ -818,7 +818,7 @@
     <comment>状态栏</comment>
   </data>
   <data name="Stop" xml:space="preserve">
-    <value>Állj</value>
+    <value>Leállítás</value>
     <comment>停止操作</comment>
   </data>
   <data name="Strikethrough" xml:space="preserve">
@@ -826,11 +826,11 @@
     <comment>格式/删除线</comment>
   </data>
   <data name="Strong" xml:space="preserve">
-    <value>Merész</value>
+    <value>Félkövér</value>
     <comment>格式/加粗</comment>
   </data>
   <data name="Table" xml:space="preserve">
-    <value>Asztal</value>
+    <value>Táblázat</value>
     <comment>段落/表格</comment>
   </data>
   <data name="TaskList" xml:space="preserve">
@@ -862,11 +862,11 @@
     <comment>视图/打字机模式</comment>
   </data>
   <data name="Underline" xml:space="preserve">
-    <value>Aláhúz</value>
+    <value>Aláhúzás</value>
     <comment>格式/下划线</comment>
   </data>
   <data name="Undo" xml:space="preserve">
-    <value>Kigombol</value>
+    <value>Visszavonás</value>
     <comment>编辑/撤销</comment>
   </data>
   <data name="UnorderedList" xml:space="preserve">
@@ -874,7 +874,7 @@
     <comment>段落/无序列表</comment>
   </data>
   <data name="Update" xml:space="preserve">
-    <value>Frissít</value>
+    <value>Frissítés</value>
     <comment>应用程序更新</comment>
   </data>
   <data name="UploadImage" xml:space="preserve">
@@ -918,7 +918,7 @@
     <comment>字数</comment>
   </data>
   <data name="Words" xml:space="preserve">
-    <value>Szöveg</value>
+    <value>Szavak</value>
     <comment>词(复数)</comment>
   </data>
   <data name="YAMLFrontMatter" xml:space="preserve">
@@ -926,7 +926,7 @@
     <comment>YAML Front Matter</comment>
   </data>
   <data name="Zoom" xml:space="preserve">
-    <value>Búg</value>
+    <value>Nagyítás</value>
     <comment>字体缩放</comment>
   </data>
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
@@ -1011,5 +1011,146 @@
   </data>
   <data name="ExportedTo" xml:space="preserve">
     <value>Exportálva ide: {0}</value>
+  </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>Felhasználói útmutató</value>
+  </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Karakterek (szóközök nélkül)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Karakterek (szóközökkel)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK-karakterek</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Szavak</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Nem CJK-szavak</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Bekezdések</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Címsorok</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Képek</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Hivatkozások</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Olvasási idő</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Kb. {0} perc</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Egy percnél kevesebb</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>A látható szöveg alapján számolva. A kódblokkok és a képletek nem számítanak bele az olvasási időbe.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Az állapotsor mutatja</value>
+  </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Mentve</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Nincs mentve</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Automatikus mentés szüneteltetve</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Kattintson a mentéshez</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>A dokumentum üres, de a lemezen lévő fájl nem, és egyetlen szerkesztés sem ürítette ki, ezért az automatikus mentés nem írta felül a fájlt.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Ezt a fájlt nem sikerült veszteség nélkül beolvasni (UTF-8-tól eltérő kódolás?), ezért az automatikus mentés nem írja felül. Csak akkor mentse saját maga, ha a megjelenített szöveg helyes.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>A fájl írása sikertelen: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{1} {2} közül {0} kijelölve</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Kódolás és sorvégek</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Átalakítás UTF-8-ra</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Újbóli megnyitás kódolással</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Aktuális címsor</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Mentés állapota</value>
+  </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Mappák</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Nincsenek legutóbbi mappák</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Legutóbbi mappák törlése</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Jobb kattintással vagy a Delete billentyűvel eltávolíthatja a listából</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Egy szinttel feljebb</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Beállítás gyökérként</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Kedvencek</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Hozzáadás a kedvencekhez</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Eltávolítás a kedvencek közül</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Kezdőlap</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Kezdés</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Új dokumentum</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Fájl megnyitása</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Mappa megnyitása</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Legutóbbi fájlok</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Legutóbbi mappák</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Eltávolítás a listából</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Beállítások</value>
+  </data>
+  <data name="EditorOpening" xml:space="preserve">
+    <value>Megnyitás…</value>
   </data>
 </root>

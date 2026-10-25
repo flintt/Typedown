@@ -138,7 +138,7 @@
     <comment>关于/发送反馈</comment>
   </data>
   <data name="About.Title" xml:space="preserve">
-    <value>Približno</value>
+    <value>O programu</value>
     <comment>关于/关于</comment>
   </data>
   <data name="Editor.AutoPairBracket.Description" xml:space="preserve">
@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Omogočite učinek ozadja mice za ozadje območja urejanja</value>
+    <value>Stransko podokno in vrstica z zavihki prikazujeta učinek sljude; območje urejanja ohrani polno barvo teme</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Uporaba mica materiala v območju za urejanje</value>
+    <value>Uporabi material sljude okoli območja urejanja</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Odpri njeno mapo</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Zapomni si nedavno odprte datoteke</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Odprte datoteke in mape so navedene v Datoteka &gt; Odpri nedavno in na začetni strani. Ko je izklopljeno, se nič novega ne doda.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Počisti nedavne datoteke in mape</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Izprazni seznama nedavno odprtih datotek in map.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Počisti</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Pokaži začetno stran na prazen zavihek</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Ob zagonu brez česa za odpreti in ob zaprtju zadnjega zavihka: nedavne datoteke in mape, priljubljene</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Novi zavihki pokažejo začetno stran</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Nov zavihek (Datoteka &gt; Novo, gumb +) pokaže začetno stran namesto praznega dokumenta</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Pokaži dodatne prazne vrstice</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Prazne vrstice med odstavki zavzamejo prostor tudi v načinu branja ter pri izvozu v HTML in PDF, tako kot med urejanjem. Sama datoteka se ne spremeni</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Postopno izrisuj dolge dokumente</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Dolg dokument se odpre na mestu, kjer ste ga pustili, preostanek pa se izriše v ozadju. To izklopite, če med odpiranjem dolgega dokumenta kaj ni videti prav: takrat se izriše naenkrat</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Stranska vrstica na desni</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Prikaži stransko vrstico desno od dokumenta namesto levo</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Ob zapiranju obdrži neshranjene spremembe</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Zapri brez vprašanja o shranjevanju: neshranjeni dokumenti se vrnejo takšni, kot so bili, še vedno neshranjeni, z zavihki zadnje seje</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Vedno prikaži oznake Markdown</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Prikaži oznake Markdown (**, #, naslov povezave) v vsakem odstavku, ne le tam, kjer je kazalec</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Predvidevanje postavitve dolgih dokumentov (preizkusno)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Medtem ko se dolg dokument izrisuje po delih, se višina še neprikazanega dela izračuna iz besedila namesto ocenjuje, zato sta drsni trak in skoki iz orisa natančnejša. Preizkusno</value>
   </data>
 </root>

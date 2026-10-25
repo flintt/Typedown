@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add" xml:space="preserve">
-    <value>Cuir</value>
+    <value>Cuir leis</value>
     <comment>添加</comment>
   </data>
   <data name="AlignCenter" xml:space="preserve">
@@ -214,7 +214,7 @@
     <comment>插入表格/列数</comment>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>Cóip</value>
+    <value>Cóipeáil</value>
     <comment>编辑/复制</comment>
   </data>
   <data name="CopyAsHTMLCode" xml:space="preserve">
@@ -450,7 +450,7 @@
     <comment>应用程序帮助</comment>
   </data>
   <data name="Highlight" xml:space="preserve">
-    <value>Buaicphointe</value>
+    <value>Aibhsigh</value>
     <comment>格式/高亮</comment>
   </data>
   <data name="HorizontalLine" xml:space="preserve">
@@ -654,7 +654,7 @@
     <comment>未设置</comment>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Dún</value>
+    <value>As</value>
     <comment>开关/关</comment>
   </data>
   <data name="Ok" xml:space="preserve">
@@ -662,11 +662,11 @@
     <comment>对话框/确定</comment>
   </data>
   <data name="On" xml:space="preserve">
-    <value>Ar aghaidh</value>
+    <value>Ar siúl</value>
     <comment>开关/开</comment>
   </data>
   <data name="Open" xml:space="preserve">
-    <value>Oscailte</value>
+    <value>Oscail</value>
     <comment>文件/打开</comment>
   </data>
   <data name="OpenFileLocation" xml:space="preserve">
@@ -686,7 +686,7 @@
     <comment>文件/在新窗口中打开</comment>
   </data>
   <data name="OpenRecent" xml:space="preserve">
-    <value>Oscailte le déanaí</value>
+    <value>Oscail le déanaí</value>
     <comment>文件/打开最近</comment>
   </data>
   <data name="OpenSourceSoftware" xml:space="preserve">
@@ -730,7 +730,7 @@
     <comment>段落/引用</comment>
   </data>
   <data name="Redo" xml:space="preserve">
-    <value>Redo</value>
+    <value>Athdhéan</value>
     <comment>编辑/重做</comment>
   </data>
   <data name="RemoveColumn" xml:space="preserve">
@@ -758,7 +758,7 @@
     <comment>表格/调整表格大小</comment>
   </data>
   <data name="Restore" xml:space="preserve">
-    <value>Athchóiriú</value>
+    <value>Athchóirigh</value>
     <comment>还原默认设置</comment>
   </data>
   <data name="Rows" xml:space="preserve">
@@ -822,7 +822,7 @@
     <comment>停止操作</comment>
   </data>
   <data name="Strikethrough" xml:space="preserve">
-    <value>Strikethrough</value>
+    <value>Líne tríd</value>
     <comment>格式/删除线</comment>
   </data>
   <data name="Strong" xml:space="preserve">
@@ -866,7 +866,7 @@
     <comment>格式/下划线</comment>
   </data>
   <data name="Undo" xml:space="preserve">
-    <value>Gan amhras</value>
+    <value>Cealaigh</value>
     <comment>编辑/撤销</comment>
   </data>
   <data name="UnorderedList" xml:space="preserve">
@@ -874,7 +874,7 @@
     <comment>段落/无序列表</comment>
   </data>
   <data name="Update" xml:space="preserve">
-    <value>Nuashonrú</value>
+    <value>Nuashonraigh</value>
     <comment>应用程序更新</comment>
   </data>
   <data name="UploadImage" xml:space="preserve">
@@ -894,7 +894,7 @@
     <comment>Vega Chart</comment>
   </data>
   <data name="View" xml:space="preserve">
-    <value>Féach</value>
+    <value>Amharc</value>
     <comment>查看</comment>
   </data>
   <data name="Website" xml:space="preserve">
@@ -1011,5 +1011,146 @@
   </data>
   <data name="ExportedTo" xml:space="preserve">
     <value>Easpórtáilte go {0}</value>
+  </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>Treoir úsáideora</value>
+  </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Carachtair (gan spásanna)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Carachtair (le spásanna)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>Carachtair CJK</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Focail</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Focail neamh-CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Míreanna</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Ceannteidil</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Íomhánna</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Naisc</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Am léitheoireachta</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Thart ar {0} nóim</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Níos lú ná nóiméad</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Áirithe ar an téacs infheicthe. Ní chuirtear bloic chóid ná foirmlí san áireamh san am léitheoireachta.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Taispeánann an barra stádais</value>
+  </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Sábháilte</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Gan sábháil</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Sábháil uathoibríoch ar sos</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Cliceáil chun sábháil</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Tá an doiciméad folamh ach níl an comhad ar an diosca, agus níor fholmhaigh aon eagarthóireacht é, mar sin níor scríobh sábháil uathoibríoch thar an gcomhad.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Níorbh fhéidir an comhad seo a léamh gan chaillteanas (ionchódú seachas UTF-8?), mar sin ní scríobhann sábháil uathoibríoch thairis. Sábháil é tú féin ach amháin má tá an téacs a thaispeántar ceart.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Theip ar scríobh an chomhaid: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{0} as {1} {2} roghnaithe</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Ionchódú agus críocha líne</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Tiontaigh go UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Athoscail le hionchódú</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Ceannteideal reatha</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Stádas sábhála</value>
+  </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Fillteáin</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Níl aon fhillteáin le déanaí</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Glan fillteáin le déanaí</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Deaschliceáil nó brúigh Delete chun é a bhaint den liosta</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Leibhéal amháin suas</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Socraigh mar fhréamh</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Ceanáin</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Cuir leis na ceanáin</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Bain de na ceanáin</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Baile</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Tosaigh</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Doiciméad nua</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Oscail comhad</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Oscail fillteán</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Comhaid le déanaí</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Fillteáin le déanaí</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Bain den liosta</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Socruithe</value>
+  </data>
+  <data name="EditorOpening" xml:space="preserve">
+    <value>Á oscailt…</value>
   </data>
 </root>

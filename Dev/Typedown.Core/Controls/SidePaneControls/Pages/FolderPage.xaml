@@ -25,32 +25,24 @@
             <Setter Property="MinHeight" Value="0"/>
         </Style>
 
-        <MenuFlyout x:Key="FolderContextFlyout" Opened="OnItemContextFlyoutOpened" Closed="OnItemContextFlyoutClosed">
-            <MenuFlyoutItem Text="{u:LocaleString Key=NewFile}" Click="OnNewFileClick"/>
-            <MenuFlyoutItem Text="{u:LocaleString Key=NewFolder}" Click="OnNewFolderClick"/>
+        <!-- A row's menu, for a folder or a file: the entries of the other kind (Tag) are hidden as it opens. One menu, set
+             by the row's template, so a reused row never shows the wrong one. -->
+        <MenuFlyout x:Key="ItemContextFlyout" Opening="OnItemContextFlyoutOpening" Opened="OnItemContextFlyoutOpened" Closed="OnItemContextFlyoutClosed">
+            <MenuFlyoutItem Tag="File" Text="{u:LocaleString Key=Open}" Click="OnOpenClick"/>
+            <MenuFlyoutItem Tag="File" Text="{u:LocaleString Key=OpenInNewWindow}" Click="OnOpenInNewWindowClick"/>
+            <MenuFlyoutItem Tag="Folder" Text="{u:LocaleString Key=NewFile}" Click="OnNewFileClick"/>
+            <MenuFlyoutItem Tag="Folder" Text="{u:LocaleString Key=NewFolder}" Click="OnNewFolderClick"/>
             <MenuFlyoutItem Text="{u:LocaleString Key=OpenFileLocation}" Click="OnOpenFileLocationClick"/>
+            <MenuFlyoutItem Tag="Folder" Text="{u:LocaleString Key=FolderPane.SetAsRoot}" AutomationProperties.AutomationId="FolderSetAsRoot" Click="OnSetAsRootClick"/>
+            <MenuFlyoutItem Tag="Favorite" AutomationProperties.AutomationId="TreeFavoriteItem" Text="{u:LocaleString Key=Favorites.Add}" Click="OnToggleFavoriteClick"/>
             <MenuFlyoutSeparator/>
             <MenuFlyoutItem Text="{u:LocaleString Key=Cut}" Click="OnCutClick"/>
             <MenuFlyoutItem Text="{u:LocaleString Key=Copy}" Click="OnCopyClick"/>
-            <MenuFlyoutItem Text="{u:LocaleString Key=Paste}" Click="OnPasteClick"/>
+            <MenuFlyoutItem Tag="Folder" Text="{u:LocaleString Key=Paste}" Click="OnPasteClick"/>
             <MenuFlyoutSeparator/>
             <MenuFlyoutItem Text="{u:LocaleString Key=CopyAsPath}" Click="OnCopyAsPathClick"/>
             <MenuFlyoutSeparator/>
-            <MenuFlyoutItem Text="{u:LocaleString Key=Rename}" Click="OnRenameClick"/>
-            <MenuFlyoutItem Text="{u:LocaleString Key=Delete}" Click="OnDeleteClick"/>
-        </MenuFlyout>
-
-        <MenuFlyout x:Key="FileContextFlyout" Opened="OnItemContextFlyoutOpened" Closed="OnItemContextFlyoutClosed">
-            <MenuFlyoutItem Text="{u:LocaleString Key=Open}" Click="OnOpenClick"/>
-            <MenuFlyoutItem Text="{u:LocaleString Key=OpenInNewWindow}" Click="OnOpenInNewWindowClick"/>
-            <MenuFlyoutItem Text="{u:LocaleString Key=OpenFileLocation}" Click="OnOpenFileLocationClick"/>
-            <MenuFlyoutSeparator/>
-            <MenuFlyoutItem Text="{u:LocaleString Key=Cut}" Click="OnCutClick"/>
-            <MenuFlyoutItem Text="{u:LocaleString Key=Copy}" Click="OnCopyClick"/>
-            <MenuFlyoutSeparator/>
-            <MenuFlyoutItem Text="{u:LocaleString Key=CopyAsPath}" Click="OnCopyAsPathClick"/>
-            <MenuFlyoutSeparator/>
-            <MenuFlyoutItem Text="{u:LocaleString Key=Rename}" Click="OnRenameClick"/>
+            <MenuFlyoutItem Text="{u:LocaleString Key=Rename}" AutomationProperties.AutomationId="TreeRenameItem" Click="OnRenameClick"/>
             <MenuFlyoutItem Text="{u:LocaleString Key=Delete}" Click="OnDeleteClick"/>
         </MenuFlyout>
 
@@ -64,9 +56,13 @@
             <MenuFlyoutItem Text="{u:LocaleString Key=CopyAsPath}" Click="OnCopyAsPathClick"/>
         </MenuFlyout>
 
-        <DataTemplate x:Key="FolderTemplate" x:DataType="models:ExplorerItem">
-            <muxc:TreeViewItem ItemsSource="{Binding Children}" IsExpanded="{Binding IsExpanded, Mode=TwoWay}" 
-                               ContextFlyout="{StaticResource FolderContextFlyout}" BorderThickness="1" Margin="-1" 
+        <!-- One template for folders and files: the tree reuses rows, and a row made for a file and reused for a folder
+             kept the file's template - no arrow, a folder that looked like a file and would not open (E2E FT04, FT03).
+             What differs (the icon, the menu's entries) follows the row's item. A file has no children, so no arrow. -->
+        <DataTemplate x:Key="ExplorerItemTemplate" x:DataType="models:ExplorerItem">
+            <muxc:TreeViewItem ItemsSource="{Binding Children}" IsExpanded="{Binding IsExpanded, Mode=TwoWay}"
+                               IsSelected="{Binding IsSelected, Mode=TwoWay}" BorderThickness="1" Margin="-1"
+                               ContextFlyout="{StaticResource ItemContextFlyout}"
                                Loaded="{x:Bind local:FolderPage.OnTreeViewItemLoaded}"
                                CanDrag="True" DragStarting="{x:Bind local:FolderPage.OnItemDragStarting}" DragOver="{x:Bind local:FolderPage.OnItemDragOver}" 
                                Background="Transparent" AllowDrop="True" Drop="{x:Bind local:FolderPage.OnFolderItemDrop}">
@@ -75,35 +71,18 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <FontIcon FontSize="14" Glyph="&#xf12b;" VerticalAlignment="Center"/>
+                    <FontIcon FontSize="14" Glyph="{x:Bind local:FolderPage.GlyphOf(Type), Mode=OneWay}" VerticalAlignment="Center"/>
                     <TextBlock x:Name="NameTextBlock" Grid.Column="1" Text="{Binding Name, Mode=OneWay}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="0,0,0,1"/>
                     <ContentPresenter Grid.Column="1" x:Name="TextBoxContainer" VerticalAlignment="Center"/>
                 </Grid>
             </muxc:TreeViewItem>
         </DataTemplate>
 
-        <DataTemplate x:Key="FileTemplate" x:DataType="models:ExplorerItem">
-            <muxc:TreeViewItem ContextFlyout="{StaticResource FileContextFlyout}" BorderThickness="1" Margin="-1" 
-                               Loaded="{x:Bind local:FolderPage.OnTreeViewItemLoaded}"
-                               IsSelected="{Binding IsSelected, Mode=TwoWay}"
-                               CanDrag="True" DragStarting="{x:Bind local:FolderPage.OnItemDragStarting}" DragOver="{x:Bind local:FolderPage.OnItemDragOver}" 
-                               Background="Transparent" AllowDrop="True" Drop="{x:Bind local:FolderPage.OnFolderItemDrop}">
-                <Grid ColumnSpacing="8" Height="32">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <FontIcon FontSize="14" Glyph="&#xe8a5;" VerticalAlignment="Center"/>
-                    <TextBlock x:Name="NameTextBlock" Grid.Column="1" Text="{Binding Name, Mode=OneWay}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
-                    <ContentPresenter Grid.Column="1" x:Name="TextBoxContainer" VerticalAlignment="Center"/>
-                </Grid>
-            </muxc:TreeViewItem>
-        </DataTemplate>
+        <MenuFlyout x:Key="FavoriteContextFlyout">
+            <MenuFlyoutItem AutomationProperties.AutomationId="FavoriteRemoveItem" Text="{u:LocaleString Key=Favorites.Remove}" Click="OnRemoveFavoriteClick"/>
+            <MenuFlyoutItem Text="{u:LocaleString Key=OpenFileLocation}" Click="OnFavoriteLocationClick"/>
+        </MenuFlyout>
 
-        <local:ExplorerItemTemplateSelector 
-            x:Key="ExplorerItemTemplateSelector"
-            FolderTemplate="{StaticResource FolderTemplate}"
-            FileTemplate="{StaticResource FileTemplate}" />
     </Page.Resources>
 
     <Grid>
@@ -113,22 +92,82 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <!-- Which folder is open: without this an unrelated or Markdown-less folder just looks like an empty pane. -->
-        <Grid Grid.Row="0" Margin="12,2,4,4" ColumnSpacing="4" Visibility="{x:Bind local:FolderPage.IsVisible(WorkFolderExplorerItem.FullPath), Mode=OneWay}">
+        <!-- Which folder is open: without this an unrelated or Markdown-less folder just looks like an empty pane. Its name
+             opens a menu to go elsewhere: up, the folders above (a folded breadcrumb), favourite and recent folders,
+             Open folder. The arrow beside it goes up one level. Changing the root leaves the open tabs alone. -->
+        <StackPanel Grid.Row="0">
+        <Grid Margin="4,2,4,4" ColumnSpacing="2" Visibility="{x:Bind local:FolderPage.IsVisible(WorkFolderExplorerItem.FullPath), Mode=OneWay}">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <TextBlock FontWeight="SemiBold" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"
-                       Text="{x:Bind WorkFolderExplorerItem.Name, Mode=OneWay}"
-                       ToolTipService.ToolTip="{x:Bind WorkFolderExplorerItem.FullPath, Mode=OneWay}"/>
+            <Button x:Name="FolderUpButton" AutomationProperties.AutomationId="FolderUpButton" Width="32" Height="28" Style="{ThemeResource EllipsisIconButtonStyle}"
+                    Click="OnFolderUpClick" ToolTipService.ToolTip="{u:LocaleString Key=FolderPane.Up}" AutomationProperties.Name="{u:LocaleString Key=FolderPane.Up}"
+                    IsEnabled="{x:Bind local:FolderPage.HasParent(WorkFolderExplorerItem.FullPath), Mode=OneWay}">
+                <FontIcon FontSize="12" Glyph="&#xe74a;"/>
+            </Button>
+            <Button x:Name="FolderRootButton" Grid.Column="1" AutomationProperties.AutomationId="FolderRootButton" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                    Padding="6,4" Background="Transparent" BorderThickness="0"
+                    ToolTipService.ToolTip="{x:Bind WorkFolderExplorerItem.FullPath, Mode=OneWay}">
+                <Button.Flyout>
+                    <MenuFlyout x:Name="FolderRootMenu" Placement="BottomEdgeAlignedLeft" Opening="OnFolderRootMenuOpening"/>
+                </Button.Flyout>
+                <Grid ColumnSpacing="6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock FontWeight="SemiBold" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"
+                               Text="{x:Bind WorkFolderExplorerItem.Name, Mode=OneWay}"/>
+                    <FontIcon Grid.Column="1" FontSize="10" Glyph="&#xe70d;" VerticalAlignment="Center"/>
+                </Grid>
+            </Button>
             <!-- Jump the tree to the folder of the current document when it lives somewhere else. -->
-            <Button Grid.Column="1" Width="32" Height="28" Style="{ThemeResource EllipsisIconButtonStyle}" Click="OnRevealCurrentFileClick"
+            <Button Grid.Column="2" Width="32" Height="28" Style="{ThemeResource EllipsisIconButtonStyle}" Click="OnRevealCurrentFileClick"
+                    AutomationProperties.AutomationId="FolderRevealButton"
                     ToolTipService.ToolTip="{u:LocaleString Key=FolderPane.RevealCurrentFile}"
                     Visibility="{x:Bind local:FolderPage.RevealVisibility(FileViewModel.FilePath, WorkFolderExplorerItem.FullPath), Mode=OneWay}">
                 <FontIcon FontSize="12" Glyph="&#xe8b7;"/>
             </Button>
         </Grid>
+        <!-- Favourites, above the tree and folded away with a click on their title: a folder clicked becomes the root, a
+             file clicked opens as the tree's single click does (a double click keeps it). Shown when there are any. -->
+        <StackPanel x:Name="FavoritesGroup" Margin="4,0,4,4" Visibility="{x:Bind FavoritesVisibility, Mode=OneWay}">
+            <Button x:Name="FavoritesHeader" AutomationProperties.AutomationId="FavoritesHeader" Click="OnFavoritesHeaderClick"
+                    Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="6,4">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <FontIcon FontSize="10" Glyph="{x:Bind FavoritesChevron, Mode=OneWay}"/>
+                    <TextBlock FontWeight="SemiBold" Text="{u:LocaleString Key=Favorites.Title}"/>
+                </StackPanel>
+            </Button>
+            <ListView x:Name="FavoritesList" AutomationProperties.AutomationId="FavoritesList" MaxHeight="220" Padding="0"
+                      ItemsSource="{x:Bind FavoriteItems}" SelectionMode="None" IsItemClickEnabled="True"
+                      ItemClick="OnFavoriteClick" DoubleTapped="OnFavoriteDoubleTapped"
+                      Visibility="{x:Bind FavoritesListVisibility, Mode=OneWay}">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem" BasedOn="{StaticResource DefaultListViewItemStyle}">
+                        <Setter Property="MinHeight" Value="30"/>
+                        <Setter Property="Padding" Value="8,0"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="models:PathItem">
+                        <Grid ColumnSpacing="8" Height="30" Background="Transparent" Opacity="{x:Bind Opacity, Mode=OneWay}"
+                              ToolTipService.ToolTip="{x:Bind Path}" AutomationProperties.Name="{x:Bind Name}" AutomationProperties.HelpText="{x:Bind Path}"
+                              ContextFlyout="{StaticResource FavoriteContextFlyout}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <FontIcon FontSize="14" Glyph="{x:Bind Glyph}" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="{x:Bind Name}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackPanel>
+        </StackPanel>
         <muxc:TreeView 
             x:Name="TreeView"
             Grid.Row="1"
@@ -137,7 +176,7 @@
             AllowDrop="False"
             DataContext="{x:Bind WorkFolderExplorerItem, Mode=OneWay}"
             ItemsSource="{x:Bind WorkFolderExplorerItem.Children, Mode=OneWay}" 
-            ItemTemplateSelector="{StaticResource ExplorerItemTemplateSelector}" 
+            ItemTemplate="{StaticResource ExplorerItemTemplate}" 
             ContextFlyout="{StaticResource TreeViewContextFlyout}">
             <muxc:TreeView.ItemContainerTransitions>
                 <TransitionCollection>

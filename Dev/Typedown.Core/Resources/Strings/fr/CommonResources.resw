@@ -450,7 +450,7 @@
     <comment>应用程序帮助</comment>
   </data>
   <data name="Highlight" xml:space="preserve">
-    <value>Mettre en évidence</value>
+    <value>Surligner</value>
     <comment>格式/高亮</comment>
   </data>
   <data name="HorizontalLine" xml:space="preserve">
@@ -546,7 +546,7 @@
     <comment>了解更多</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Lumière</value>
+    <value>Clair</value>
     <comment>应用主题/浅色</comment>
   </data>
   <data name="Line" xml:space="preserve">
@@ -654,7 +654,7 @@
     <comment>未设置</comment>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Fermer</value>
+    <value>Désactivé</value>
     <comment>开关/关</comment>
   </data>
   <data name="Ok" xml:space="preserve">
@@ -662,7 +662,7 @@
     <comment>对话框/确定</comment>
   </data>
   <data name="On" xml:space="preserve">
-    <value>Sur</value>
+    <value>Activé</value>
     <comment>开关/开</comment>
   </data>
   <data name="Open" xml:space="preserve">
@@ -686,7 +686,7 @@
     <comment>文件/在新窗口中打开</comment>
   </data>
   <data name="OpenRecent" xml:space="preserve">
-    <value>Ouvrir récemment</value>
+    <value>Ouvrir un fichier récent</value>
     <comment>文件/打开最近</comment>
   </data>
   <data name="OpenSourceSoftware" xml:space="preserve">
@@ -830,7 +830,7 @@
     <comment>格式/加粗</comment>
   </data>
   <data name="Table" xml:space="preserve">
-    <value>Table</value>
+    <value>Tableau</value>
     <comment>段落/表格</comment>
   </data>
   <data name="TaskList" xml:space="preserve">
@@ -862,7 +862,7 @@
     <comment>视图/打字机模式</comment>
   </data>
   <data name="Underline" xml:space="preserve">
-    <value>Souligner</value>
+    <value>Souligné</value>
     <comment>格式/下划线</comment>
   </data>
   <data name="Undo" xml:space="preserve">
@@ -1011,5 +1011,146 @@
   </data>
   <data name="ExportedTo" xml:space="preserve">
     <value>Exporté vers {0}</value>
+  </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>Guide de l'utilisateur</value>
+  </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Caractères (sans espaces)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Caractères (avec espaces)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>Caractères CJK</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Mots</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Mots hors CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Paragraphes</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Titres</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Images</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Liens</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Temps de lecture</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Environ {0} min</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Moins d’une minute</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Compté sur le texte visible. Les blocs de code et les formules ne comptent pas dans le temps de lecture.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>La barre d’état affiche</value>
+  </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Enregistré</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Non enregistré</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Enregistrement automatique en pause</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Cliquer pour enregistrer</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Le document est vide mais le fichier sur le disque ne l’est pas, et aucune modification ne l’a vidé ; l’enregistrement automatique n’a donc pas écrasé le fichier.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Ce fichier n’a pas pu être lu sans perte (un encodage autre que UTF-8 ?) ; l’enregistrement automatique ne l’écrase donc pas. Enregistrez-le vous-même uniquement si le texte affiché est correct.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Échec de l’écriture du fichier : {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{0} sur {1} {2} sélectionnés</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Encodage et fins de ligne</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Convertir en UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Rouvrir avec l’encodage</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Titre actuel</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>État de l’enregistrement</value>
+  </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Dossiers</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Aucun dossier récent</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Effacer les dossiers récents</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Clic droit ou Suppr pour le retirer de cette liste</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Dossier parent</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Définir comme racine</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Favoris</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Ajouter aux favoris</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Retirer des favoris</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Accueil</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Démarrer</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Nouveau document</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Ouvrir un fichier</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Ouvrir un dossier</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Fichiers récents</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Dossiers récents</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Retirer de la liste</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Paramètres</value>
+  </data>
+  <data name="EditorOpening" xml:space="preserve">
+    <value>Ouverture…</value>
   </data>
 </root>

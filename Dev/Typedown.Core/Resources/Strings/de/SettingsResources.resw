@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Aktivieren Sie den Glimmer-Hintergrundeffekt für den Bearbeitungsbereich</value>
+    <value>Seitenleiste und Registerkartenleiste zeigen den Mica-Effekt; der Bearbeitungsbereich behält die einfarbige Farbe des Designs</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Verwenden Sie Glimmermaterial im Bearbeitungsbereich</value>
+    <value>Mica-Material um den Bearbeitungsbereich verwenden</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Ordner öffnen</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Zuletzt geöffnete Dateien merken</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Geöffnete Dateien und Ordner erscheinen unter Datei &gt; Zuletzt geöffnet und auf der Startseite. Ausgeschaltet wird nichts Neues hinzugefügt.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Zuletzt geöffnete Dateien und Ordner löschen</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Leert die Listen der zuletzt geöffneten Dateien und Ordner.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Löschen</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Startseite auf leerem Tab anzeigen</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Beim Start ohne zu öffnende Datei und wenn der letzte Tab geschlossen wird: zuletzt geöffnete Dateien und Ordner, Favoriten</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Neue Tabs zeigen die Startseite</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Ein neuer Tab (Datei &gt; Neu, die Schaltfläche +) zeigt die Startseite statt eines leeren Dokuments</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Zusätzliche Leerzeilen anzeigen</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Leerzeilen zwischen Absätzen nehmen auch im Lesemodus und beim Export als HTML und PDF Platz ein, wie beim Bearbeiten. Die Datei selbst bleibt unverändert</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Lange Dokumente schrittweise darstellen</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Ein langes Dokument öffnet sich an der Stelle, an der Sie es verlassen haben, der Rest wird im Hintergrund dargestellt. Schalten Sie dies aus, wenn beim Öffnen eines langen Dokuments etwas nicht stimmt: Es wird dann auf einmal dargestellt</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Seitenleiste rechts</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Die Seitenleiste rechts statt links vom Dokument anzeigen</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Nicht gespeicherte Änderungen beim Schließen behalten</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Ohne Rückfrage zum Speichern schließen: nicht gespeicherte Dokumente kommen unverändert und weiterhin ungespeichert mit den Tabs der letzten Sitzung zurück</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Markdown-Zeichen immer anzeigen</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Die Markdown-Zeichen (**, #, die Adresse eines Links) in jedem Absatz anzeigen, nicht nur dort, wo der Cursor steht</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Layout langer Dokumente vorausberechnen (experimentell)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Während ein langes Dokument in Teilen gezeichnet wird, wird die Höhe des noch nicht Angezeigten aus dem Text berechnet statt geschätzt, sodass die Bildlaufleiste und Sprünge aus der Gliederung genauer sind. Experimentell</value>
   </data>
 </root>

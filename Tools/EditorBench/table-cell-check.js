@@ -2,7 +2,7 @@
 // elsewhere and back" (1.2.18), and "a cell cannot hold more than one line - could Alt+Enter break the line, as in
 // Excel?" (1.2.18). A cell emptied by selecting its text and deleting it, or by typing over the selection, takes
 // what is typed next; Shift+Enter and Alt+Enter put a line break (<br/>) in the cell, which shows as a second line
-// and survives a load. Backspace in an emptied cell is table-backspace-check.js.
+// and survives a load; Enter adds a row below the cell's, Ctrl+Enter leaves the table for a paragraph after it. Backspace in an emptied cell is table-backspace-check.js.
 //
 //   node table-cell-check.js
 const { openEditor } = require('./harness');
@@ -61,6 +61,25 @@ const cell = '#ag-editor-id tbody tr:nth-child(1) > td:nth-child(1)';
       const after = await cellLines();
       check(after === before + 1, `${key}+Enter: the cell shows two lines (${before} before, ${after} after)`, t);
     }
+
+    // Enter in a cell: a new row below it, the caret in its first cell (it went to the next row, out of the table
+    // from the last). Ctrl+Enter: out of the table into a new paragraph after it (the host's Insert paragraph after
+    // takes the key first in the app; here the page does it itself).
+    await load(doc); await pause(500);
+    await page.click(cell); await page.keyboard.press('End');
+    await page.keyboard.press('Enter');
+    await page.keyboard.type('NEW');
+    await pause(300);
+    t = await flush();
+    const rows = t.split('\n').filter(l => l.startsWith('|'));
+    check(rows.length === 4 && rows[2].startsWith('| abc') && rows[3].replace(/\s+/g, ' ').startsWith('| NEW |') && t.includes('after'), 'Enter in a cell adds a row below it and the caret is in its first cell', t);
+    await load(doc); await pause(500);
+    await page.click(cell); await page.keyboard.press('End');
+    await page.keyboard.down('Control'); await page.keyboard.press('Enter'); await page.keyboard.up('Control');
+    await page.keyboard.type('Para');
+    await pause(300);
+    t = await flush();
+    check(t.split('\n').filter(l => l.startsWith('|')).length === 3 && /\| abc \| d \|\n\nPara\n\nafter/.test(t), 'Ctrl+Enter in a cell leaves the table for a new paragraph after it', t);
 
     await load('| A | B |\n| --- | --- |\n| one<br/>two | d |\n'); await pause(500);
     check(await cellLines() === 2, 'a cell loaded with <br/> shows two lines', '');

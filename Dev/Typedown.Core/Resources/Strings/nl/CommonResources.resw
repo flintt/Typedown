@@ -174,7 +174,7 @@
     <comment>字符(单数)</comment>
   </data>
   <data name="Characters" xml:space="preserve">
-    <value>Karakters</value>
+    <value>Tekens</value>
     <comment>字符(复数)</comment>
   </data>
   <data name="Chart" xml:space="preserve">
@@ -298,7 +298,7 @@
     <comment>删除表格</comment>
   </data>
   <data name="Duplicate" xml:space="preserve">
-    <value>Dupliceer</value>
+    <value>Dupliceren</value>
     <comment>段落/重复</comment>
   </data>
   <data name="Edit" xml:space="preserve">
@@ -654,7 +654,7 @@
     <comment>未设置</comment>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Sluiten</value>
+    <value>Uit</value>
     <comment>开关/关</comment>
   </data>
   <data name="Ok" xml:space="preserve">
@@ -742,7 +742,7 @@
     <comment>表格/删除行</comment>
   </data>
   <data name="Rename" xml:space="preserve">
-    <value>Hernoemen</value>
+    <value>Naam wijzigen</value>
     <comment>文件/重命名</comment>
   </data>
   <data name="Replace" xml:space="preserve">
@@ -1011,5 +1011,146 @@
   </data>
   <data name="ExportedTo" xml:space="preserve">
     <value>Geëxporteerd naar {0}</value>
+  </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>Gebruikershandleiding</value>
+  </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Tekens (zonder spaties)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Tekens (met spaties)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK-tekens</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Woorden</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Niet-CJK-woorden</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Alinea’s</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Koppen</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Afbeeldingen</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Koppelingen</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Leestijd</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Ongeveer {0} min</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Minder dan een minuut</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Geteld op de zichtbare tekst. Codeblokken en formules tellen niet mee voor de leestijd.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Statusbalk toont</value>
+  </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Opgeslagen</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Niet opgeslagen</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Automatisch opslaan gepauzeerd</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Klik om op te slaan</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Het document is leeg, maar het bestand op schijf niet, en geen bewerking heeft het leeggemaakt, dus automatisch opslaan heeft het bestand niet overschreven.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Dit bestand kon niet zonder verlies worden gelezen (een andere codering dan UTF-8?), dus automatisch opslaan overschrijft het niet. Sla het alleen zelf op als de getoonde tekst klopt.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Het bestand kon niet worden geschreven: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{0} van {1} {2} geselecteerd</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Codering en regeleinden</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Converteren naar UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Opnieuw openen met codering</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Huidige kop</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Opslagstatus</value>
+  </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Mappen</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Geen recente mappen</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Recente mappen wissen</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Klik met rechts of druk op Delete om het uit deze lijst te verwijderen</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Een niveau omhoog</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Als hoofdmap instellen</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Favorieten</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Toevoegen aan favorieten</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Verwijderen uit favorieten</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Nieuw document</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Bestand openen</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Map openen</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Recente bestanden</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Recente mappen</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Uit lijst verwijderen</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Instellingen</value>
+  </data>
+  <data name="EditorOpening" xml:space="preserve">
+    <value>Openen…</value>
   </data>
 </root>

@@ -86,6 +86,10 @@ class Keyboard {
         if (!this.isComposed && event.type === 'click') {
           this.muya.dispatchChange()
         } else {
+          // The caret can be gone by now (another document shown since the key): nothing to report, and
+          // selectionChange throws without one.
+          const now = selection.getCursorRange()
+          if (!now.start || !now.end) return
           this.muya.dispatchSelectionChange()
           this.muya.dispatchSelectionFormats()
         }

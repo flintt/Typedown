@@ -138,7 +138,7 @@
     <comment>关于/发送反馈</comment>
   </data>
   <data name="About.Title" xml:space="preserve">
-    <value>Informazioni su</value>
+    <value>Informazioni</value>
     <comment>关于/关于</comment>
   </data>
   <data name="Editor.AutoPairBracket.Description" xml:space="preserve">
@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Abilita l'effetto di sfondo in mica per l'area di editing</value>
+    <value>Il riquadro laterale e la barra delle schede mostrano l'effetto Mica; l'area di modifica mantiene il colore pieno del tema</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Utilizza il materiale in mica nell'area di editing</value>
+    <value>Usa il materiale Mica intorno all'area di modifica</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Apri la cartella</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Ricorda i file aperti di recente</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>I file e le cartelle aperti compaiono in File &gt; Apri recenti e nella pagina iniziale. Se disattivato, non viene aggiunto nulla di nuovo.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Cancella file e cartelle recenti</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Svuota gli elenchi dei file e delle cartelle aperti di recente.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Cancella</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Mostra la pagina iniziale in una scheda vuota</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>All'avvio senza nulla da aprire e alla chiusura dell'ultima scheda: file e cartelle recenti, preferiti</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Le nuove schede mostrano la pagina iniziale</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Una nuova scheda (File &gt; Nuovo, il pulsante +) mostra la pagina iniziale invece di un documento vuoto</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Mostra le righe vuote aggiuntive</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Le righe vuote tra i paragrafi occupano spazio anche in modalità lettura e nelle esportazioni HTML e PDF, come durante la modifica. Il file non viene modificato</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Disegna progressivamente i documenti lunghi</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Un documento lungo si apre nel punto in cui l'hai lasciato e il resto viene disegnato in background. Disattiva questa opzione se qualcosa non sembra corretto durante l'apertura di un documento lungo: verrà allora disegnato tutto in una volta</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Barra laterale a destra</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Mostra la barra laterale a destra del documento anziché a sinistra</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Conserva le modifiche non salvate alla chiusura</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Chiudi senza chiedere di salvare: i documenti non salvati tornano com'erano, ancora non salvati, con le schede dell'ultima sessione</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Mostra sempre i segni Markdown</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Mostra i segni Markdown (**, #, l'indirizzo di un collegamento) in ogni paragrafo, non solo dove si trova il cursore</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Prevedi il layout dei documenti lunghi (sperimentale)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Mentre un documento lungo viene disegnato a parti, l'altezza di ciò che non è ancora mostrato viene calcolata dal testo invece di essere stimata, così la barra di scorrimento e i salti dalla struttura sono più precisi. Sperimentale</value>
   </data>
 </root>

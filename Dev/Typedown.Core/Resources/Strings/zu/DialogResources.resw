@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>Ezingu-{0} kuzo bezilayishwe ngaphambilini ngalokhu kucushwa, ngakho kusetshenziswe amakheli azo angaphambilini.</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Landa i-WebView2 Runtime ku-Microsoft</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>I-runtime ayifakwanga. Ukusetha kudinga ukuxhumeka ku-inthanethi; ungalanda futhi i-runtime ku-Microsoft (kukhona nesifaki esingaxhunyiwe ku-inthanethi), uyifake bese uqala kabusha uhlelo lokusebenza.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>Ifaka i-WebView2 Runtime...</value>
+  </data>
 </root>

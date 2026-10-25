@@ -22,11 +22,15 @@ namespace Typedown
             Core.Config.UseAutomationTestHost(at >= 0 && at + 1 < args.Length ? args[at + 1]
                 : System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Typedown-AutomationTests", "manual"));
 #endif
+            // The start's stages go to debug.log from here (todo #16); this one is the .NET runtime's own start.
+            StartupTiming.Reached("main");
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
             // A crash that kills the process without reaching the handlers above (an exception escaping into the
             // native XAML dispatcher, a stack overflow) leaves no report at all. First-chance logging records
             // every exception as it is thrown, so the last lines of debug.log still say what happened.
             AppDomain.CurrentDomain.FirstChanceException += OnFirstChanceException;
+            // WinUI 3 with its own Main (DISABLE_XAML_GENERATED_MAIN): the WinRT object wrappers are set up first.
+            WinRT.ComWrappersSupport.InitializeComWrappers();
             App.Launch();
         }
 
@@ -36,7 +40,7 @@ namespace Typedown
         {
             // handled exceptions are normal in places (settings file in use, clipboard formats); keep the flood bounded
             if (System.Threading.Interlocked.Increment(ref firstChanceCount) > 200) return;
-            Log.Debug($"exception: {e.Exception.GetType().Name}: {e.Exception.Message}\n{e.Exception.StackTrace}");
+            Log.Debug($"exception: {e.Exception.GetType().Name} (0x{e.Exception.HResult:X8}): {e.Exception.Message}\n{e.Exception.StackTrace}");
         }
 
         private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)

@@ -138,7 +138,7 @@
     <comment>关于/发送反馈</comment>
   </data>
   <data name="About.Title" xml:space="preserve">
-    <value>O</value>
+    <value>O programu</value>
     <comment>关于/关于</comment>
   </data>
   <data name="Editor.AutoPairBracket.Description" xml:space="preserve">
@@ -238,7 +238,7 @@
     <comment>编辑器/默认缩进</comment>
   </data>
   <data name="Editor.Title" xml:space="preserve">
-    <value>Urednik</value>
+    <value>Uređivač</value>
     <comment>编辑器/编辑器</comment>
   </data>
   <data name="Export.AddConfig.Description" xml:space="preserve">
@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Omogućivanje efekta pozadine tinjca za pozadinu područja za uređivanje</value>
+    <value>Bočno okno i traka kartica prikazuju efekt tinjca; područje uređivanja zadržava punu boju teme</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Korištenje materijala tinjca u području za uređivanje</value>
+    <value>Koristi materijal tinjca oko područja uređivanja</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Otvori njezinu mapu</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Pamti nedavno otvorene datoteke</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Otvorene datoteke i mape prikazuju se u Datoteka &gt; Otvori nedavno i na početnoj stranici. Kad je isključeno, ništa novo se ne dodaje.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Očisti nedavne datoteke i mape</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Prazni popise nedavno otvorenih datoteka i mapa.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Očisti</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Prikaži početnu stranicu na praznoj kartici</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Pri pokretanju bez ičega za otvaranje i pri zatvaranju posljednje kartice: nedavne datoteke i mape, favoriti</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Nove kartice prikazuju početnu stranicu</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Nova kartica (Datoteka &gt; Novo, gumb +) prikazuje početnu stranicu umjesto praznog dokumenta</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Prikaži dodatne prazne retke</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Prazni retci između odlomaka zauzimaju prostor i u načinu čitanja te u izvozu u HTML i PDF, kao i tijekom uređivanja. Sama datoteka se ne mijenja</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Postupno iscrtavaj duge dokumente</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Dugi dokument otvara se na mjestu gdje ste ga ostavili, a ostatak se iscrtava u pozadini. Isključite ovo ako nešto izgleda pogrešno dok se dugi dokument otvara: tada se iscrtava odjednom</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Bočna traka s desne strane</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Prikaži bočnu traku s desne strane dokumenta umjesto s lijeve</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Zadrži nespremljene promjene pri zatvaranju</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Zatvori bez pitanja za spremanje: nespremljeni dokumenti vraćaju se kakvi su bili, i dalje nespremljeni, s karticama iz prošle sesije</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Uvijek prikaži Markdown oznake</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Prikaži Markdown oznake (**, #, adresu poveznice) u svakom odlomku, ne samo ondje gdje je pokazivač</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Predviđanje izgleda dugih dokumenata (eksperimentalno)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Dok se dugi dokument iscrtava u dijelovima, visina onoga što još nije prikazano izračunava se iz teksta umjesto da se procjenjuje, pa su klizač i skokovi iz pregleda točniji. Eksperimentalno</value>
   </data>
 </root>

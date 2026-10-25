@@ -146,7 +146,7 @@
     <comment>自动</comment>
   </data>
   <data name="Back" xml:space="preserve">
-    <value>Bak</value>
+    <value>Til baka</value>
     <comment>返回</comment>
   </data>
   <data name="Browse" xml:space="preserve">
@@ -182,7 +182,7 @@
     <comment>图表</comment>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Skýr</value>
+    <value>Hreinsa</value>
     <comment>清除</comment>
   </data>
   <data name="ClearFormat" xml:space="preserve">
@@ -202,7 +202,7 @@
     <comment>文件/关闭</comment>
   </data>
   <data name="Code" xml:space="preserve">
-    <value>Kóða</value>
+    <value>Kóði</value>
     <comment>代码</comment>
   </data>
   <data name="CodeFences" xml:space="preserve">
@@ -214,7 +214,7 @@
     <comment>插入表格/列数</comment>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>Afrit</value>
+    <value>Afrita</value>
     <comment>编辑/复制</comment>
   </data>
   <data name="CopyAsHTMLCode" xml:space="preserve">
@@ -250,7 +250,7 @@
     <comment>操作/复制到路径</comment>
   </data>
   <data name="Create" xml:space="preserve">
-    <value>Skapa</value>
+    <value>Búa til</value>
     <comment>创建</comment>
   </data>
   <data name="CtrlAndClickOpenLink" xml:space="preserve">
@@ -266,11 +266,11 @@
     <comment>自定义快捷键</comment>
   </data>
   <data name="Cut" xml:space="preserve">
-    <value>Skera</value>
+    <value>Klippa</value>
     <comment>编辑/剪切</comment>
   </data>
   <data name="Dark" xml:space="preserve">
-    <value>Dökkur</value>
+    <value>Dökkt</value>
     <comment>应用主题/深色</comment>
   </data>
   <data name="Data" xml:space="preserve">
@@ -298,11 +298,11 @@
     <comment>删除表格</comment>
   </data>
   <data name="Duplicate" xml:space="preserve">
-    <value>Afrit</value>
+    <value>Tvöfalda</value>
     <comment>段落/重复</comment>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Klippa</value>
+    <value>Breyta</value>
     <comment>编辑</comment>
   </data>
   <data name="EditImage" xml:space="preserve">
@@ -334,7 +334,7 @@
     <comment>错误</comment>
   </data>
   <data name="Export" xml:space="preserve">
-    <value>Útflutningur</value>
+    <value>Flytja út</value>
     <comment>文件/导出</comment>
   </data>
   <data name="ExportSettings" xml:space="preserve">
@@ -346,7 +346,7 @@
     <comment>文件/导出/导出为PDF</comment>
   </data>
   <data name="Feedback" xml:space="preserve">
-    <value>Afturverkun</value>
+    <value>Endurgjöf</value>
     <comment>应用程序反馈</comment>
   </data>
   <data name="File" xml:space="preserve">
@@ -378,7 +378,7 @@
     <comment>Flow Chart</comment>
   </data>
   <data name="FocusMode" xml:space="preserve">
-    <value>Fókushamur</value>
+    <value>Einbeitingarhamur</value>
     <comment>视图/专注模式</comment>
   </data>
   <data name="Folder" xml:space="preserve">
@@ -446,11 +446,11 @@
     <comment>段落/六级标题</comment>
   </data>
   <data name="Help" xml:space="preserve">
-    <value>Hjálpa</value>
+    <value>Hjálp</value>
     <comment>应用程序帮助</comment>
   </data>
   <data name="Highlight" xml:space="preserve">
-    <value>Hápunktur</value>
+    <value>Áherslulita</value>
     <comment>格式/高亮</comment>
   </data>
   <data name="HorizontalLine" xml:space="preserve">
@@ -462,7 +462,7 @@
     <comment>格式/超链接</comment>
   </data>
   <data name="Image" xml:space="preserve">
-    <value>Ímynd</value>
+    <value>Mynd</value>
     <comment>格式/图像</comment>
   </data>
   <data name="ImageAlt" xml:space="preserve">
@@ -474,7 +474,7 @@
     <comment>图片上传设置</comment>
   </data>
   <data name="Import" xml:space="preserve">
-    <value>Innflutningur</value>
+    <value>Flytja inn</value>
     <comment>文件/导入</comment>
   </data>
   <data name="IncreaseHeadingLevel" xml:space="preserve">
@@ -546,7 +546,7 @@
     <comment>了解更多</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Ljós</value>
+    <value>Ljóst</value>
     <comment>应用主题/浅色</comment>
   </data>
   <data name="Line" xml:space="preserve">
@@ -582,7 +582,7 @@
     <comment>窗口/最大化</comment>
   </data>
   <data name="MenuBar" xml:space="preserve">
-    <value>Valmynd Bar</value>
+    <value>Valmyndastika</value>
     <comment>菜单栏</comment>
   </data>
   <data name="Mermaid" xml:space="preserve">
@@ -654,7 +654,7 @@
     <comment>未设置</comment>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Loka</value>
+    <value>Slökkt</value>
     <comment>开关/关</comment>
   </data>
   <data name="Ok" xml:space="preserve">
@@ -662,11 +662,11 @@
     <comment>对话框/确定</comment>
   </data>
   <data name="On" xml:space="preserve">
-    <value>Á</value>
+    <value>Kveikt</value>
     <comment>开关/开</comment>
   </data>
   <data name="Open" xml:space="preserve">
-    <value>Opinn</value>
+    <value>Opna</value>
     <comment>文件/打开</comment>
   </data>
   <data name="OpenFileLocation" xml:space="preserve">
@@ -698,7 +698,7 @@
     <comment>段落/有序列表</comment>
   </data>
   <data name="Outline" xml:space="preserve">
-    <value>Ágrip</value>
+    <value>Útlína</value>
     <comment>侧栏/大纲</comment>
   </data>
   <data name="Paragraph" xml:space="preserve">
@@ -706,7 +706,7 @@
     <comment>段落</comment>
   </data>
   <data name="Paste" xml:space="preserve">
-    <value>Klístur</value>
+    <value>Líma</value>
     <comment>编辑/粘贴</comment>
   </data>
   <data name="PasteAsPlainText" xml:space="preserve">
@@ -730,7 +730,7 @@
     <comment>段落/引用</comment>
   </data>
   <data name="Redo" xml:space="preserve">
-    <value>Endurgera</value>
+    <value>Endurtaka</value>
     <comment>编辑/重做</comment>
   </data>
   <data name="RemoveColumn" xml:space="preserve">
@@ -774,7 +774,7 @@
     <comment>文件/另存为</comment>
   </data>
   <data name="Saved" xml:space="preserve">
-    <value>Vistuð</value>
+    <value>Vistað</value>
     <comment>文件/已保存</comment>
   </data>
   <data name="SaveImageAs" xml:space="preserve">
@@ -806,7 +806,7 @@
     <comment>快捷键</comment>
   </data>
   <data name="SidePane" xml:space="preserve">
-    <value>Hliðarslá</value>
+    <value>Hliðarstika</value>
     <comment>侧栏</comment>
   </data>
   <data name="SourceCodeMode" xml:space="preserve">
@@ -818,7 +818,7 @@
     <comment>状态栏</comment>
   </data>
   <data name="Stop" xml:space="preserve">
-    <value>Stoppa</value>
+    <value>Stöðva</value>
     <comment>停止操作</comment>
   </data>
   <data name="Strikethrough" xml:space="preserve">
@@ -826,11 +826,11 @@
     <comment>格式/删除线</comment>
   </data>
   <data name="Strong" xml:space="preserve">
-    <value>Djarfur</value>
+    <value>Feitletrað</value>
     <comment>格式/加粗</comment>
   </data>
   <data name="Table" xml:space="preserve">
-    <value>Borð</value>
+    <value>Tafla</value>
     <comment>段落/表格</comment>
   </data>
   <data name="TaskList" xml:space="preserve">
@@ -894,7 +894,7 @@
     <comment>Vega Chart</comment>
   </data>
   <data name="View" xml:space="preserve">
-    <value>Útsýni</value>
+    <value>Skoða</value>
     <comment>查看</comment>
   </data>
   <data name="Website" xml:space="preserve">
@@ -1011,5 +1011,146 @@
   </data>
   <data name="ExportedTo" xml:space="preserve">
     <value>Flutt út í {0}</value>
+  </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>Notendahandbók</value>
+  </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Stafir (án bila)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Stafir (með bilum)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK-stafir</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Orð</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Orð utan CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Málsgreinar</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Fyrirsagnir</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Myndir</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Tenglar</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Lestrartími</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Um {0} mín.</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Innan við mínúta</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Talið í sýnilega textanum. Kóðablokkir og formúlur teljast ekki með í lestrartíma.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Stöðustika sýnir</value>
+  </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Vistað</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Ekki vistað</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Sjálfvirk vistun í bið</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Smelltu til að vista</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Skjalið er tómt en skráin á diskinum ekki, og engin breyting tæmdi það, svo sjálfvirk vistun skrifaði ekki yfir skrána.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Ekki tókst að lesa þessa skrá án taps (önnur stafakóðun en UTF-8?), svo sjálfvirk vistun skrifar ekki yfir hana. Vistaðu hana sjálf(ur) aðeins ef textinn sem birtist er réttur.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Ekki tókst að skrifa skrána: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{0} af {1} {2} valin</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Stafakóðun og línuendar</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Umbreyta í UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Opna aftur með stafakóðun</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Núverandi fyrirsögn</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Vistunarstaða</value>
+  </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Möppur</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Engar nýlegar möppur</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Hreinsa nýlegar möppur</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Hægrismelltu eða ýttu á Delete til að fjarlægja af listanum</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Eitt stig upp</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Setja sem rót</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Eftirlæti</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Bæta við eftirlæti</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Fjarlægja úr eftirlæti</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Heim</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Byrja</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Nýtt skjal</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Opna skrá</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Opna möppu</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Nýlegar skrár</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Nýlegar möppur</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Fjarlægja af lista</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Stillingar</value>
+  </data>
+  <data name="EditorOpening" xml:space="preserve">
+    <value>Opnar…</value>
   </data>
 </root>

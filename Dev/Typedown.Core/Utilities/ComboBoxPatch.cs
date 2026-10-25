@@ -1,6 +1,6 @@
 ﻿using Typedown.Core.ViewModels;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 
 namespace Typedown.Core.Utilities
 {
@@ -16,11 +16,21 @@ namespace Typedown.Core.Utilities
             if ((bool)e.NewValue)
             {
                 target.DropDownOpened += OnDropDownOpened;
+                target.DropDownClosed += OnDropDownClosed;
             }
             else
             {
                 target.DropDownOpened -= OnDropDownOpened;
+                target.DropDownClosed -= OnDropDownClosed;
             }
+        }
+
+        // The theme was set on the box for its list and left there: a theme picked in that list (Settings > Appearance,
+        // from Dracula to Light) changed the page and not the box, drawn white on white until clicked again (TX01).
+        // Closed, it follows the page again.
+        private static void OnDropDownClosed(object sender, object e)
+        {
+            if (sender is ComboBox target) target.RequestedTheme = ElementTheme.Default;
         }
 
         private static void OnDropDownOpened(object sender, object e)

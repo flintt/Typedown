@@ -138,7 +138,7 @@
     <comment>关于/发送反馈</comment>
   </data>
   <data name="About.Title" xml:space="preserve">
-    <value>Sobre</value>
+    <value>Acerca de</value>
     <comment>关于/关于</comment>
   </data>
   <data name="Editor.AutoPairBracket.Description" xml:space="preserve">
@@ -414,7 +414,7 @@
     <comment>通用/启动操作</comment>
   </data>
   <data name="General.Title" xml:space="preserve">
-    <value>Xerais</value>
+    <value>Xeral</value>
     <comment>通用/常规</comment>
   </data>
   <data name="Image.InsertActions.CopyToPath" xml:space="preserve">
@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Activar o efecto de fondo mica para o fondo da área de edición</value>
+    <value>O panel lateral e a barra de lapelas amosan o efecto mica; a área de edición mantén a cor sólida do tema</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Usar material mica na área de edición</value>
+    <value>Usar material mica arredor da área de edición</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Abrir o seu cartafol</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Lembrar os ficheiros abertos recentemente</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Os ficheiros e cartafoles que abres aparecen en Ficheiro &gt; Abrir recente e na páxina de inicio. Desactivado, non se engade nada novo.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Borrar ficheiros e cartafoles recentes</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Baleira as listas de ficheiros e cartafoles abertos recentemente.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Borrar</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Amosar a páxina de inicio nunha lapela baleira</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Ao iniciar sen nada que abrir e ao pechar a última lapela: ficheiros e cartafoles recentes, favoritos</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>As lapelas novas amosan a páxina de inicio</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Unha lapela nova (Ficheiro &gt; Novo, o botón +) amosa a páxina de inicio en vez dun documento baleiro</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Amosar as liñas en branco adicionais</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>As liñas en branco entre parágrafos tamén ocupan espazo no modo de lectura e nas exportacións HTML e PDF, como ao editar. O ficheiro non cambia</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Debuxar os documentos longos progresivamente</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Un documento longo ábrese no punto onde o deixou e o resto debúxase en segundo plano. Desactíveo se algo non se ve ben mentres se abre un documento longo: entón debúxase todo dunha vez</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Barra lateral á dereita</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Amosar a barra lateral á dereita do documento en vez de á esquerda</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Conservar os cambios sen gardar ao pechar</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Pechar sen preguntar se gardar: os documentos sen gardar volven tal como estaban, aínda sen gardar, coas lapelas da última sesión</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Amosar sempre as marcas de Markdown</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Amosar as marcas de Markdown (**, #, o enderezo dunha ligazón) en cada parágrafo, non só onde está o cursor</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Prever a disposición dos documentos longos (experimental)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Mentres un documento longo se debuxa por partes, a altura do que aínda non se mostra calcúlase a partir do texto en lugar de estimarse, de xeito que a barra de desprazamento e os saltos desde o esquema son máis precisos. Experimental</value>
   </data>
 </root>

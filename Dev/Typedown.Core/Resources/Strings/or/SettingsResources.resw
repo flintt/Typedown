@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>ସମ୍ପାଦନା କ୍ଷେତ୍ର ପୃଷ୍ଠଭୂମି ପାଇଁ ମାଇକା ପୃଷ୍ଠଭୂମି ପ୍ରଭାବ ସକ୍ଷମ କରନ୍ତୁ</value>
+    <value>ପାର୍ଶ୍ୱ ପେନ୍ ଏବଂ ଟାବ୍ ବାର୍ ମାଇକା ପ୍ରଭାବ ଦେଖାଏ; ସମ୍ପାଦନା କ୍ଷେତ୍ର ଥିମ୍‌ର କଠିନ ରଙ୍ଗ ରଖେ</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>ସମ୍ପାଦନା କ୍ଷେତ୍ରରେ ମାଇକା ସାମଗ୍ରୀ ବ୍ୟବହାର କରନ୍ତୁ</value>
+    <value>ସମ୍ପାଦନା କ୍ଷେତ୍ର ଚାରିପାଖରେ ମାଇକା ସାମଗ୍ରୀ ବ୍ୟବହାର କରନ୍ତୁ</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>ଏହାର ଫୋଲ୍ଡର ଖୋଲନ୍ତୁ</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>ନିକଟରେ ଖୋଲାଯାଇଥିବା ଫାଇଲ୍ ମନେ ରଖନ୍ତୁ</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>ଆପଣ ଖୋଲିଥିବା ଫାଇଲ୍ ଓ ଫୋଲ୍ଡର ଫାଇଲ୍ &gt; ସାମ୍ପ୍ରତିକ ଖୋଲନ୍ତୁ ଏବଂ ହୋମ୍ ପୃଷ୍ଠାରେ ଦେଖାଯାଏ। ବନ୍ଦ ଥିଲେ କିଛି ନୂଆ ଯୋଡ଼ାଯାଏ ନାହିଁ।</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>ସାମ୍ପ୍ରତିକ ଫାଇଲ୍ ଓ ଫୋଲ୍ଡର ସଫା କରନ୍ତୁ</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>ନିକଟରେ ଖୋଲାଯାଇଥିବା ଫାଇଲ୍ ଓ ଫୋଲ୍ଡରର ତାଲିକା ଖାଲି କରେ।</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>ସଫା କରନ୍ତୁ</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>ଖାଲି ଟ୍ୟାବରେ ହୋମ୍ ପୃଷ୍ଠା ଦେଖାନ୍ତୁ</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>ଆରମ୍ଭରେ ଖୋଲିବାକୁ କିଛି ନଥିଲେ ଏବଂ ଶେଷ ଟ୍ୟାବ୍ ବନ୍ଦ ହେଲେ: ସାମ୍ପ୍ରତିକ ଫାଇଲ୍ ଓ ଫୋଲ୍ଡର, ପ୍ରିୟ</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>ନୂଆ ଟ୍ୟାବ୍ ହୋମ୍ ପୃଷ୍ଠା ଦେଖାଏ</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>ନୂଆ ଟ୍ୟାବ୍ (ଫାଇଲ୍ &gt; ନୂଆ, + ବଟନ୍) ଖାଲି ଦଲିଲ ବଦଳରେ ହୋମ୍ ପୃଷ୍ଠା ଦେଖାଏ</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>ଅତିରିକ୍ତ ଖାଲି ଧାଡ଼ି ଦେଖାନ୍ତୁ</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>ସମ୍ପାଦନା ସମୟ ପରି ପଢ଼ିବା ମୋଡ୍ ଏବଂ HTML ଓ PDF ରପ୍ତାନିରେ ମଧ୍ୟ ଅନୁଚ୍ଛେଦ ମଧ୍ୟରେ ଥିବା ଖାଲି ଧାଡ଼ି ସ୍ଥାନ ନିଏ। ଫାଇଲ୍ ନିଜେ ବଦଳେ ନାହିଁ</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>ଲମ୍ବା ଦଲିଲକୁ କ୍ରମାନ୍ୱୟରେ ଅଙ୍କନ କରନ୍ତୁ</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>ଲମ୍ବା ଦଲିଲ ଆପଣ ଯେଉଁଠି ଛାଡିଥିଲେ ସେଠାରୁ ଖୋଲେ, ଏବଂ ବାକି ଅଂଶ ପୃଷ୍ଠଭୂମିରେ ଅଙ୍କନ ହୁଏ। ଲମ୍ବା ଦଲିଲ ଖୋଲିବା ସମୟରେ କିଛି ଭୁଲ ଦେଖାଗଲେ ଏହାକୁ ବନ୍ଦ କରନ୍ତୁ: ତେବେ ଏହା ଥରକେ ଅଙ୍କନ ହେବ</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>ଡାହାଣ ପଟେ ସାଇଡ ବାର</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>ଡକ୍ୟୁମେଣ୍ଟର ବାମ ପଟ ବଦଳରେ ଡାହାଣ ପଟେ ସାଇଡ ବାର ଦେଖାନ୍ତୁ</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>ବନ୍ଦ କଲାବେଳେ ସେଭ୍ ହୋଇନଥିବା ପରିବର୍ତ୍ତନ ରଖନ୍ତୁ</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>ସେଭ୍ କରିବାକୁ ନପଚାରି ବନ୍ଦ କରନ୍ତୁ: ସେଭ୍ ହୋଇନଥିବା ଡକ୍ୟୁମେଣ୍ଟଗୁଡ଼ିକ ଯେପରି ଥିଲା ସେପରି, ଏବେ ବି ସେଭ୍ ନହୋଇ, ଶେଷ ସେସନର ଟ୍ୟାବ୍ ସହିତ ଫେରିଆସେ</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>ସର୍ବଦା Markdown ଚିହ୍ନ ଦେଖାନ୍ତୁ</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>କେବଳ କର୍ସର ଥିବା ସ୍ଥାନରେ ନୁହେଁ, ପ୍ରତ୍ୟେକ ଅନୁଚ୍ଛେଦରେ Markdown ଚିହ୍ନ (**, #, ଲିଙ୍କର ଠିକଣା) ଦେଖାନ୍ତୁ</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>ଲମ୍ବା ଦଲିଲର ଲେଆଉଟ୍ ପୂର୍ବାନୁମାନ କରନ୍ତୁ (ପରୀକ୍ଷାମୂଳକ)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>ଏକ ଲମ୍ବା ଦଲିଲ ଭାଗ ଭାଗ କରି ଆଙ୍କିବା ସମୟରେ, ଏପର୍ଯ୍ୟନ୍ତ ଦେଖାଯାଇନଥିବା ଅଂଶର ଉଚ୍ଚତା ଅନୁମାନ ବଦଳରେ ଲେଖାରୁ ଗଣନା କରାଯାଏ, ଫଳରେ ସ୍କ୍ରୋଲ୍ ବାର୍ ଏବଂ ରୂପରେଖାରୁ ଡେଇଁବା ଅଧିକ ସଠିକ୍ ହୁଏ। ପରୀକ୍ଷାମୂଳକ</value>
   </data>
 </root>

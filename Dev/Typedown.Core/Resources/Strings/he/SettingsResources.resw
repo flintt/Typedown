@@ -138,7 +138,7 @@
     <comment>关于/发送反馈</comment>
   </data>
   <data name="About.Title" xml:space="preserve">
-    <value>על</value>
+    <value>אודות</value>
     <comment>关于/关于</comment>
   </data>
   <data name="Editor.AutoPairBracket.Description" xml:space="preserve">
@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>הפיכת אפקט הרקע של נציץ לזמין עבור רקע אזור העריכה</value>
+    <value>החלונית הצדדית וסרגל הכרטיסיות מציגים את אפקט המיקה; אזור העריכה שומר על הצבע האחיד של ערכת הנושא</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>השתמש בחומר נציץ באזור העריכה</value>
+    <value>שימוש בחומר מיקה סביב אזור העריכה</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>פתח את התיקייה שלו</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>זכור קבצים שנפתחו לאחרונה</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>קבצים ותיקיות שאתה פותח מופיעים בקובץ &gt; פתח אחרונים ובדף הבית. כשהאפשרות כבויה, לא נוסף דבר חדש.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>נקה קבצים ותיקיות אחרונים</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>מרוקן את רשימות הקבצים והתיקיות שנפתחו לאחרונה.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>נקה</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>הצג את דף הבית בכרטיסייה ריקה</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>בהפעלה ללא מה לפתוח ובסגירת הכרטיסייה האחרונה: קבצים ותיקיות אחרונים, מועדפים</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>כרטיסיות חדשות מציגות את דף הבית</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>כרטיסייה חדשה (קובץ &gt; חדש, הלחצן +) מציגה את דף הבית במקום מסמך ריק</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>הצגת שורות ריקות נוספות</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>שורות ריקות בין פסקאות תופסות מקום גם במצב קריאה ובייצוא ל-HTML ול-PDF, כמו בזמן עריכה. הקובץ עצמו אינו משתנה</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>ציור הדרגתי של מסמכים ארוכים</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>מסמך ארוך נפתח במקום שבו השארת אותו, והשאר מצויר ברקע. כבה אפשרות זו אם משהו נראה שגוי בזמן שמסמך ארוך נפתח: אז הוא יצויר כולו בבת אחת</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>סרגל צד בצד ימין</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>הצגת סרגל הצד מימין למסמך במקום משמאל</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>שמירת שינויים שלא נשמרו בעת סגירה</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>סגירה בלי לשאול על שמירה: מסמכים שלא נשמרו חוזרים כפי שהיו, עדיין לא שמורים, עם הכרטיסיות מההפעלה האחרונה</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>הצגת סימני Markdown תמיד</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>הצגת סימני Markdown (**, #, כתובת של קישור) בכל פסקה, לא רק היכן שנמצא הסמן</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>חיזוי הפריסה של מסמכים ארוכים (ניסיוני)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>בזמן שמסמך ארוך מצויר בחלקים, הגובה של מה שעוד לא מוצג מחושב מהטקסט במקום להיות מוערך, כך שסרגל הגלילה והקפיצות מתוך המתאר מדויקים יותר. ניסיוני</value>
   </data>
 </root>

@@ -126,11 +126,11 @@
     <comment>未保存对话框/是否要保存更改？</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Membatalkan</value>
+    <value>Batal</value>
     <comment>对话框/取消</comment>
   </data>
   <data name="Confirm" xml:space="preserve">
-    <value>OKE</value>
+    <value>OK</value>
     <comment>对话框/确定</comment>
   </data>
   <data name="CreateDocErrorTitle" xml:space="preserve">
@@ -142,7 +142,7 @@
     <comment>创建文件夹对话框/新建文件夹失败</comment>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Menghapus</value>
+    <value>Hapus</value>
     <comment>恢复文件对话框/删除</comment>
   </data>
   <data name="Don'tSave" xml:space="preserve">
@@ -182,7 +182,7 @@
     <comment>打开文件对话框/读取失败</comment>
   </data>
   <data name="Recover" xml:space="preserve">
-    <value>Mengembalikan</value>
+    <value>Pulihkan</value>
     <comment>恢复文件对话框/恢复</comment>
   </data>
   <data name="RecoverContent" xml:space="preserve">
@@ -267,7 +267,7 @@
     <value>Gunakan tautan sebelumnya</value>
   </data>
   <data name="Keep" xml:space="preserve">
-    <value>Simpan</value>
+    <value>Pertahankan</value>
   </data>
   <data name="Reload" xml:space="preserve">
     <value>Muat ulang</value>
@@ -328,5 +328,14 @@
   </data>
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>{0} di antaranya sudah pernah diunggah dengan konfigurasi ini, jadi alamat sebelumnya digunakan.</value>
+  </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Unduh WebView2 Runtime dari Microsoft</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Runtime tidak terinstal. Penyiapan memerlukan koneksi internet; Anda juga dapat mengunduh runtime dari Microsoft (tersedia juga penginstal offline), menginstalnya, lalu memulai ulang aplikasi.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>Menginstal WebView2 Runtime...</value>
   </data>
 </root>

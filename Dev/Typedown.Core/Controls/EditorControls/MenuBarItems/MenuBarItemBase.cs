@@ -4,8 +4,9 @@ using Typedown.Core.Interfaces;
 using Typedown.Core.Models;
 using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Input;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
 using muxc = Microsoft.UI.Xaml.Controls;
 
 namespace Typedown.Core.Controls.EditorControls.MenuBarItems
@@ -24,11 +25,11 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             Loaded += OnLoaded;
         }
 
-        private void OnLoaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void OnLoaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
         {
             // An exception here runs on the dispatcher with nothing above it to catch it, which on XAML islands
             // takes the process down without a report.
-            _ = Dispatcher.RunIdleAsync(() =>
+            _ = DispatcherQueue.RunIdleAsync(() =>
             {
                 if (!IsLoaded) return;
                 try
@@ -56,7 +57,6 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
         {
             if (watching && items == Items) return;
             if (items == Items) watching = true;
-            DisabledMenuLook.Watch(items);
             foreach (var item in items)
             {
                 if (item is MenuFlyoutSubItem sub) WatchCommands(sub.Items);
@@ -64,23 +64,24 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             }
         }
 
-        private void OnCommandClick(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void OnCommandClick(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
         {
             var root = XamlRoot;
             if (root == null) return;
-            var dispatcher = Dispatcher;
+            var dispatcher = DispatcherQueue;
             _ = System.Threading.Tasks.Task.Delay(150).ContinueWith(t => _ = dispatcher.RunIdleAsync(_ =>
             {
-                if (Windows.UI.Xaml.Media.VisualTreeHelper.GetOpenPopupsForXamlRoot(root).Count > 0) return;
+                if (Microsoft.UI.Xaml.Media.VisualTreeHelper.GetOpenPopupsForXamlRoot(root).Count > 0) return;
                 var focused = FocusManager.GetFocusedElement(root);
                 if (focused != null && !(focused is muxc.MenuBarItem)) return;
                 ViewModel?.MarkdownEditor?.FocusEditor();
             }));
         }
 
-        protected void RegisterWindowShortcut(ShortcutKey key, MenuFlyoutItem item)
+        /// <param name="once">Once per press: the key held (repeated by the system) does nothing more, and is not typed.</param>
+        protected void RegisterWindowShortcut(ShortcutKey key, MenuFlyoutItem item, bool once = false)
         {
-            RegisterMenuItemShortcut(OnWindowShortcutEvent, key, item);
+            RegisterMenuItemShortcut(OnWindowShortcutEvent, key, item, once);
         }
 
         /// <summary>
@@ -92,10 +93,10 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             var acc = this.GetService<IKeyboardAccelerator>();
             disposables.Add(acc.Register(key, (s, e) =>
             {
-                if (PInvoke.GetForegroundWindow() != ViewModel.MainWindow) return;
+                if (ViewModel == null || PInvoke.GetForegroundWindow() != ViewModel.MainWindow) return;
                 if (VimWants(e)) return;
                 e.Handled = true;
-                _ = Dispatcher.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => action());
+                _ = DispatcherQueue.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => action());
             }));
         }
 
@@ -104,12 +105,17 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             RegisterMenuItemShortcut(OnEditorShortcutEvent, key, item);
         }
 
-        private void RegisterMenuItemShortcut(Func<MenuFlyoutItem, bool> handler, ShortcutKey key, MenuFlyoutItem item)
+        private void RegisterMenuItemShortcut(Func<MenuFlyoutItem, bool> handler, ShortcutKey key, MenuFlyoutItem item, bool once = false)
         {
             var acc = this.GetService<IKeyboardAccelerator>();
             item.KeyboardAcceleratorTextOverride = acc.GetShortcutKeyText(key);
             disposables.Add(acc.Register(key, (s, e) =>
             {
+                if (once && e.IsRepeat)
+                {
+                    if (ViewModel != null && PInvoke.GetForegroundWindow() == ViewModel.MainWindow) e.Handled = true;
+                    return;
+                }
                 if (VimWants(e)) return;
                 if (handler(item))
                     e.Handled = true;
@@ -121,25 +127,40 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
         {
             if (ViewModel?.SettingsViewModel?.VimMode != true) return false;
             if (!VimKeys.EditorWants(ViewModel.EditorViewModel.VimState, e.Modifiers, e.Key)) return false;
-            return FocusManager.GetFocusedElement(XamlRoot) == this.GetService<IMarkdownEditor>();
+            return EditorHasFocus();
+        }
+
+        /// <summary>
+        /// The keyboard is in the editor: the focused element is the editor or inside it. On WinUI 3 it is the web view the
+        /// editor holds, not the editor itself (it was the editor on XAML Islands, which hosted the page without a
+        /// control) - asked for the editor alone, every editor shortcut the page does not handle itself did nothing.
+        /// </summary>
+        protected bool EditorHasFocus()
+        {
+            var editor = this.GetService<IMarkdownEditor>() as DependencyObject;
+            if (editor == null || XamlRoot == null) return false;
+            for (var node = FocusManager.GetFocusedElement(XamlRoot) as DependencyObject; node != null; node = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetParent(node))
+                if (node == editor) return true;
+            return false;
         }
 
         private bool OnWindowShortcutEvent(MenuFlyoutItem item)
         {
+            // A menu bar on its way out (the main page made again while a key is held) has no window any more.
+            if (ViewModel == null || !IsLoaded)
+                return false;
             var focused = PInvoke.GetForegroundWindow();
             if (focused != ViewModel.MainWindow)
                 return false;
-            _ = Dispatcher.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => TriggerMenuFlyoutItem(item));
+            _ = DispatcherQueue.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => TriggerMenuFlyoutItem(item));
             return true;
         }
 
         private bool OnEditorShortcutEvent(MenuFlyoutItem item)
         {
-            var editor = this.GetService<IMarkdownEditor>();
-            var focused = FocusManager.GetFocusedElement(XamlRoot);
-            if (focused != editor)
+            if (!EditorHasFocus())
                 return false;
-            _ = Dispatcher.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => TriggerMenuFlyoutItem(item));
+            _ = DispatcherQueue.TryRunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => TriggerMenuFlyoutItem(item));
             return true;
         }
 
@@ -158,7 +179,7 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             }
         }
 
-        private void OnUnloaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void OnUnloaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
         {
             disposables.Clear();
         }

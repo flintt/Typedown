@@ -5,7 +5,7 @@
 ## 准备
 
 - 使用即将发布的 commit，记录 commit、版本、Windows build、WebView2 Runtime 和 CPU 架构。
-- 保持 Git 工作区干净。测试前备份现有 `%LOCALAPPDATA%\Typedown`，或使用专门的测试 Windows 账户。
+- 保持 Git 工作区干净。测试前备份现有 `文档\Typedown`（设置、数据库、会话、主题）和 `%LOCALAPPDATA%\Typedown`（日志、WebView2 数据），或使用专门的测试 Windows 账户。
 - 只结束本次测试启动的 Typedown 进程；不要批量终止 WebView2 进程。
 - 准备 UTF-8、UTF-8 BOM、UTF-16、CRLF/LF、大表格、Mermaid 错误、长文档和包含本地图片的样本。
 

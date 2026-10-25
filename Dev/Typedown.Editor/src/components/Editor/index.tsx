@@ -1,4 +1,4 @@
-import { setScrollLoadId } from 'services/scrollbar'
+﻿import { setScrollLoadId } from 'services/scrollbar'
 import CodeMirror from "components/CodeMirror";
 import MuyaEditor from "components/Muya";
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -9,7 +9,9 @@ import ExportHtml from "services/exportHtml";
 import { errorText } from "services/errorText";
 import { htmlToMarkdown } from "services/importHtml";
 import { DEFAULT_TURNDOWN_CONFIG } from "components/Muya/lib/config";
-import { resetUserIntent, takeChangeOrigin } from "services/changeOrigin";
+import { noteUserIntent, onUserIntent, resetUserIntent, takeChangeOrigin } from "services/changeOrigin";
+import { InputHold } from "services/inputHold";
+import { afterPaint, hideLoadPreview, PREVIEW_FROM_CHARS, ScrollAnchor, showLoadPreview } from "services/loadPreview";
 import { sha256Hex } from "services/sha256";
 import { classifierVersion } from "services/normalization";
 import { applyHostBackground } from "services/theme";
@@ -73,10 +75,17 @@ const styleElement = (id: string) => {
     if (!style) {
         style = document.createElement('style')
         style.id = id
+        // A custom theme's colours are the screen's: printed, the light theme's (services/theme.ts).
+        if (id === 'typedown-theme-css') style.media = 'screen'
         document.head.appendChild(style)
     }
     return style
 }
+
+// The static first screen (services/loadPreview) only where the editor draws a document all at once: drawn a part at a
+// time (Muya's progressive drawing, on unless a test turns it off), the editor's own first screen comes nearly as soon,
+// and a preview of a different make in front of it moved as the editor took over.
+const previewWhileBuilding = () => !!(window as any).__typedownProgressiveOff
 
 const Editor: React.FC = () => {
     // The document text and cursor live in refs, not React state: a state update per keystroke would commit
@@ -85,7 +94,9 @@ const Editor: React.FC = () => {
     // replacements (LoadFile/SetMarkdown/ImportFile) bump `contentVersion` to push new text into the editor.
     const markdownRef = useRef<string>();
     // Reporting the text is throttled while typing; this runs it now (see Muya's flushContentChange).
-    const flushRef = useRef<(() => void) | null>(null);
+    const flushRef = useRef<((opts?: { ifPending?: boolean }) => void) | null>(null);
+    // Finishes a load whose caret is placed in the next frame (Muya, finishLoadNow) at once.
+    const finishLoadRef = useRef<(() => void) | null>(null);
     const cursorRef = useRef<any>();
     const [contentVersion, setContentVersion] = useState(0);
     const [options, setOptions] = useState<any>();
@@ -93,6 +104,9 @@ const Editor: React.FC = () => {
     const [searchOpen, setSearchOpen] = useState(0);
     const [searchArg, setSearchArg] = useState<{ value: string, opt: any }>();
     const muyaScrollTopRef = useRef(0);
+    // The block that was at the top of the window when the document was left (services/loadPreview): the editor puts it
+    // back there, where the preview showed it.
+    const scrollAnchorRef = useRef<ScrollAnchor | null>(null);
     const codeMirrorScrollRef = useRef(0);
 
     // Every host-driven load carries a `loadId`; it is echoed on everything the editor reports so the host can drop
@@ -104,14 +118,41 @@ const Editor: React.FC = () => {
     // applied the new text — not from a fixed delay, which a large document or a slow first render overruns and
     // then leaves the file looking modified without an edit. The timers are only fallbacks.
     const fileLoadPending = useRef<{ armed: boolean, timer?: number }>()
+    // The text the host last put in the editor (a load, or text from its history) - what FileLoaded compares with.
+    const givenTextRef = useRef<string>()
+
+    // What is typed while a tab's document is on its way (services/inputHold.ts), and the hold the document shown was for.
+    const holdRef = useRef<InputHold>()
+    const appliedHoldRef = useRef<number>()
 
     const flushFileLoaded = useCallback(() => {
         const pending = fileLoadPending.current
         if (!pending) return
         clearTimeout(pending.timer)
         fileLoadPending.current = undefined
-        transport.postMessage('FileLoaded', { text: markdownRef.current, loadId: loadIdRef.current })
+        // The host only needs the text back when the editor changed it. Comparing here costs about nothing; sending a
+        // long document back (its JSON, and the host parsing and comparing it) cost 20-40 ms on a 300 KB text. `same`
+        // says the page holds exactly the text that came with this load id, which the host still has.
+        const text = markdownRef.current
+        const given = givenTextRef.current
+        // The editor shows the document now: its preview (services/loadPreview) goes.
+        hideLoadPreview()
+        transport.postMessage('FileLoaded', typeof given === 'string' && text === given
+            ? { same: true, loadId: loadIdRef.current }
+            : { text, loadId: loadIdRef.current })
+        // The host has the document as loaded; what was typed for it goes in now, as the reader's edit.
+        holdRef.current?.loaded(appliedHoldRef.current)
     }, [])
+
+    // The reader about to edit while a load is still being reported (its caret placed in the next frame, its first
+    // report not in yet): the load is finished and reported first, with the text as loaded. Otherwise the edit was the
+    // first report after the load, taken for the load's own text: the host saw the editor "rewrite" the document and
+    // loaded it again over what was just pasted or typed (E2E WP01, FO01 in a full run).
+    useEffect(() => onUserIntent(() => {
+        if (!fileLoadPending.current) return
+        finishLoadRef.current?.()
+        if (fileLoadPending.current?.armed) flushRef.current?.()
+    }), []);
 
     const OnFileLoaded = useCallback(() => {
         clearTimeout(fileLoadPending.current?.timer)
@@ -149,11 +190,13 @@ const Editor: React.FC = () => {
 
     // Host -> editor: the document rendered as the exports render it (diagrams drawn, math typeset), serialized as XHTML
     // so that it parses as XML, for a host turning it into another format. With diagramsAsPictures each diagram is a
-    // PNG on white (the export's light theme), for a format that cannot show SVG.
-    useEffect(() => transport.addListener<{ token: number, diagramsAsPictures?: boolean }>('RenderXhtml', async ({ token, diagramsAsPictures }) => {
+    // PNG on white (the export's light theme), for a format that cannot show SVG. A [TOC] line is an empty
+    // div.table-of-contents, for the host to fill with that format's own table of contents (it was left out). With
+    // mathAsTex each formula is its TeX (span.math-tex, span.math-tex-display) rather than KaTeX's drawing.
+    useEffect(() => transport.addListener<{ token: number, diagramsAsPictures?: boolean, mathAsTex?: boolean }>('RenderXhtml', async ({ token, diagramsAsPictures, mathAsTex }) => {
         flushRef.current?.()
         try {
-            const html = await new ExportHtml(markdownRef.current ?? '', { ...optionsRef.current, diagramsAsPictures }).renderHtml(undefined)
+            const html = await new ExportHtml(markdownRef.current ?? '', { ...optionsRef.current, diagramsAsPictures, mathAsTex }).renderHtml('<div class="table-of-contents"></div>')
             const body = new DOMParser().parseFromString(`<!DOCTYPE html><html><body>${html}</body></html>`, 'text/html').body
             if (diagramsAsPictures) {
                 // Local SVGs already visible in the editor are drawn into PNGs for a format that takes no SVG,
@@ -268,9 +311,26 @@ const Editor: React.FC = () => {
     // the host cannot tell a report about the document just left from one about the document now shown, and
     // a quick switch left it holding the previous document's outline — headings that are not in the
     // document on screen, which it then tried to scroll to.
+    // The outline goes only when it is not the one this load last sent: a document with three thousand headings
+    // made every report (a keystroke, a caret move) some 176 KB, which the host read in full and turned into its
+    // outline again each time, a few tens of milliseconds a report, for an outline nobody had changed. A report
+    // without it says `tocUnchanged`, and the host keeps the outline it holds. The first report of each load always
+    // carries it - the host keeps one outline per load and drops reports of any other load - and an outline counts
+    // as sent only once it has been.
+    const sentTocRef = useRef<{ loadId?: number, toc: string } | null>(null)
     const onStateChange = useCallback((state: any) => {
         if (fileLoadPending.current && !fileLoadPending.current.armed) return
-        transport.postMessage('StateChange', { state, loadId: loadIdRef.current, muya: true })
+        const loadId = loadIdRef.current
+        const toc = JSON.stringify(state?.toc ?? null)
+        const sent = sentTocRef.current
+        if (sent && sent.loadId === loadId && sent.toc === toc) {
+            const rest = { ...state }
+            delete rest.toc
+            transport.postMessage('StateChange', { state: rest, tocUnchanged: true, loadId, muya: true })
+            return
+        }
+        transport.postMessage('StateChange', { state, loadId, muya: true })
+        sentTocRef.current = { loadId, toc }
     }, [])
 
     // Which heading the reader has scrolled to, in reading mode. Deliberately not part of the state report:
@@ -290,9 +350,12 @@ const Editor: React.FC = () => {
     // A remembered scroll offset (reading mode has no caret to remember) takes precedence over scrolling to the caret.
     const scrollFromHostRef = useRef(false)
 
-    const setContentFromHost = useCallback((markdown: string, cursor?: any, scrollTop?: number | null, local = false) => {
+    const setContentFromHost = useCallback((markdown: string, cursor?: any, scrollTop?: number | null, local = false, scrollAnchor: ScrollAnchor | null = null) => {
         localChangeRef.current = local
+        scrollAnchorRef.current = scrollAnchor
         markdownRef.current = markdown
+        // An automation edit is not a load: it has no FileLoaded, and a load is refused while one is applied.
+        if (!local) givenTextRef.current = markdown
         cursorRef.current = cursor
         scrollFromHostRef.current = typeof scrollTop === 'number'
         muyaScrollTopRef.current = typeof scrollTop === 'number' ? scrollTop : 0
@@ -301,13 +364,31 @@ const Editor: React.FC = () => {
     }, [])
 
     useEffect(() => {
-        remote.getSettings().then(({ markdown, basePath, cursor, scrollTop, loadId, ...opt }: any) => {
-            window.basePath = basePath
-            loadIdRef.current = loadId
-            setScrollLoadId(loadId)
-            setOptions(opt)
-            OnFileLoaded();
-            setContentFromHost(markdown, cursor ?? undefined, scrollTop)
+        remote.getSettings().then(({ markdown, basePath, cursor, scrollTop, scrollAnchor, loadId, ...opt }: any) => {
+            const apply = () => {
+                window.basePath = basePath
+                loadIdRef.current = loadId
+                setScrollLoadId(loadId)
+                setOptions(opt)
+                OnFileLoaded();
+                setContentFromHost(markdown, cursor ?? undefined, scrollTop, false, scrollAnchor ?? null)
+            }
+            // A long document (the start-up restoring a tab) is shown first as its first screen, in the theme's colours
+            // and the editor's measures - set here, as the effects below set them only once the options are in - and
+            // built once that has been painted (services/loadPreview).
+            if (previewWhileBuilding() && !opt.sourceCode && typeof markdown === 'string' && markdown.length >= PREVIEW_FROM_CHARS) {
+                styleElement('typedown-theme-css').textContent = opt.themeCss || ''
+                if (opt.themeCss) document.body.style.backgroundColor = 'var(--editorBgColor)'
+                if (opt.editorAreaWidth) document.body.style.setProperty('--editorAreaWidth', opt.editorAreaWidth)
+                if (opt.fontFamily) document.body.style.setProperty('--editorFontFamily', opt.fontFamily)
+                if (showLoadPreview(markdown, cursor, opt, scrollAnchor)) {
+                    // Once painted, before the build (queued first): two frames on would be after the build.
+                    afterPaint(() => transport.postMessage('LoadPreviewShown', { loadId }))
+                    afterPaint(apply)
+                    return
+                }
+            }
+            apply()
         })
     }, [OnFileLoaded, setContentFromHost]);
 
@@ -336,8 +417,13 @@ const Editor: React.FC = () => {
         styleElement('typedown-custom-css').textContent = options?.customCss || ''
     }, [options?.customCss])
 
-    useEffect(() => transport.addListener<{ token?: number }>('FlushContent', ({ token }) => {
-        flushRef.current?.()
+    // Before a tab change the host flushes; text typed for the document shown a moment ago goes in first, so the tab
+    // being left keeps it.
+    useEffect(() => transport.addListener<{ token?: number }>('FlushContent', async ({ token }) => {
+        await holdRef.current?.settled()
+        // Once the load is reported, only a report still due: the last one is the text on screen otherwise, and a long
+        // document is not written out again (closing its tab waited seconds for it). Before that, the full report.
+        flushRef.current?.(fileLoadPending.current ? undefined : { ifPending: true })
         transport.postMessage('ContentFlushed', { token: token ?? 0, text: markdownRef.current })
     }), []);
 
@@ -357,6 +443,10 @@ const Editor: React.FC = () => {
             // out and lay every block out; the editor loses focus first so no block is the active one.
             try {
                 (document.activeElement as HTMLElement | null)?.blur?.()
+                // The margins around the printed page white (the host's web view colour, the theme's otherwise), and
+                // the theme's again once the print preview is closed.
+                await remote.printing({ printing: true }).catch(() => false)
+                window.addEventListener('afterprint', () => { remote.printing({ printing: false }).catch(() => false) }, { once: true })
                 await new Promise(r => requestAnimationFrame(() => r(null)))
                 window.print()
                 return
@@ -394,13 +484,25 @@ const Editor: React.FC = () => {
     // the tab shortcut sent five hundred of them in a few seconds; every one was rendered in turn, the host
     // dropped their reports as stale, and the reader waited a minute for the last to come round. Only the
     // load the host still wants can matter, and the host's stale-report rule already says which that is.
-    const pendingLoadRef = useRef<{ text: string, basePath: string, cursor?: any, scrollTop?: number | null, loadId?: number } | null>(null)
+    const pendingLoadRef = useRef<{ text: string, basePath: string, cursor?: any, scrollTop?: number | null, scrollAnchor?: ScrollAnchor | null, loadId?: number, hold?: number } | null>(null)
+
+    if (!holdRef.current) holdRef.current = new InputHold({
+        // Keys that are not text are not kept: reading mode, and Vim's commands in source mode.
+        canHold: () => { const o = optionsRef.current; return !!o && !o.readOnly && !(o.sourceCode && o.vimMode) },
+        insert: text => new Promise<void>(done => { noteUserIntent(); transport.emitLocal('InsertTyped', { text, done }) }),
+        focusEditor: () => transport.emitLocal('TakeKeyboard', {}),
+        idle: () => pendingLoadRef.current == null && !fileLoadPending.current,
+    })
+    useEffect(() => transport.addListener<{ hold: number }>('HoldInput', ({ hold }) => holdRef.current?.hold(hold)), []);
+    useEffect(() => transport.addListener<{ text: string }>('TypedElsewhere', ({ text }) => holdRef.current?.typedElsewhere(text)), []);
+    useEffect(() => transport.addListener<{ hold: number }>('ReleaseInput', ({ hold }) =>
+        holdRef.current?.release(hold, pendingLoadRef.current != null || !!fileLoadPending.current)), []);
     // A load older than the one the page holds is stale: the page asked for its document (getSettings) while the
     // host was posting one - a window recovering untitled backups at startup did both within a millisecond - and
     // the host's answer, the newer load, came first. Taking the older one after it left the page reporting a load
     // the host had dropped, and nothing the page said was heard again (R04).
     const isStaleLoad = (loadId?: number) => typeof loadId === 'number' && typeof loadIdRef.current === 'number' && loadId < loadIdRef.current
-    useEffect(() => transport.addListener<{ text: string, basePath: string, cursor?: any, scrollTop?: number | null, loadId?: number }>('LoadFile', (load) => {
+    useEffect(() => transport.addListener<{ text: string, basePath: string, cursor?: any, scrollTop?: number | null, scrollAnchor?: ScrollAnchor | null, loadId?: number, hold?: number }>('LoadFile', (load) => {
         if (isStaleLoad(load.loadId)) return
         // A load replaces whatever an automation edit was applying (the host restoring it, or a tab switch): that
         // edit's outcome is unknown to the host, which then restores from its own copy.
@@ -411,17 +513,26 @@ const Editor: React.FC = () => {
         }
         const scheduled = pendingLoadRef.current != null
         pendingLoadRef.current = load
+        // A long document is shown first as its first screen, and built once that has been painted (services/
+        // loadPreview); one kept from before (Muya's keptDocuments) comes back at once and needs none. The newest load
+        // is the one previewed.
+        const previewed = previewWhileBuilding() && !optionsRef.current?.sourceCode && typeof load.text === 'string' && load.text.length >= PREVIEW_FROM_CHARS
+            && !(window as any).__typedownKeptDocuments?.has?.(load.text) && showLoadPreview(load.text, load.cursor, undefined, load.scrollAnchor)
+        if (previewed) afterPaint(() => transport.postMessage('LoadPreviewShown', { loadId: load.loadId }))
+        else hideLoadPreview()
         if (scheduled) return
-        requestAnimationFrame(() => {
+        const run = (go: () => void) => previewed ? afterPaint(go) : requestAnimationFrame(go)
+        run(() => {
             const pending = pendingLoadRef.current
             pendingLoadRef.current = null
             if (!pending || isStaleLoad(pending.loadId)) return
-            const { text, basePath, cursor, scrollTop, loadId } = pending
+            const { text, basePath, cursor, scrollTop, scrollAnchor, loadId, hold } = pending
             window.basePath = basePath
             loadIdRef.current = loadId
+            appliedHoldRef.current = hold
             setScrollLoadId(loadId)
             OnFileLoaded();
-            setContentFromHost(text, cursor ?? undefined, scrollTop)
+            setContentFromHost(text, cursor ?? undefined, scrollTop, false, scrollAnchor ?? null)
         })
     }), [OnFileLoaded, setContentFromHost]);
 
@@ -499,9 +610,11 @@ const Editor: React.FC = () => {
                 searchArg={searchArg}
                 scrollTopRef={muyaScrollTopRef}
                 scrollFromHostRef={scrollFromHostRef}
+                scrollAnchorRef={scrollAnchorRef}
                 localChangeRef={localChangeRef}
                 scrollToChangeRef={scrollToChangeRef}
                 flushRef={flushRef}
+                finishLoadRef={finishLoadRef}
                 onMarkdownChange={onMarkdownChange}
                 onContentApplied={onContentApplied}
                 onStateChange={onStateChange}

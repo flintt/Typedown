@@ -2,7 +2,7 @@
 using System.Reactive.Disposables;
 using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
-using Windows.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls;
 
 namespace Typedown.Core.Controls
 {
@@ -17,19 +17,19 @@ namespace Typedown.Core.Controls
             Navigated += OnNavigated;
         }
 
-        private void OnLoaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void OnLoaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
         {
             var viewModel = this.GetService<AppViewModel>();
             viewModel.FrameStack = viewModel.FrameStack.Append(this).ToList();
             disposables.Add(Disposable.Create(() => viewModel.FrameStack = viewModel.FrameStack.Where(x => x != this).ToList()));
         }
 
-        private void OnUnloaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void OnUnloaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
         {
             disposables.Dispose();
         }
 
-        private void OnNavigated(object sender, Windows.UI.Xaml.Navigation.NavigationEventArgs e)
+        private void OnNavigated(object sender, Microsoft.UI.Xaml.Navigation.NavigationEventArgs e)
         {
             var viewModel = this.GetService<AppViewModel>();
             if (viewModel != null)

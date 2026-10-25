@@ -634,7 +634,7 @@
     <comment>视图/显示状态栏</comment>
   </data>
   <data name="View.Title" xml:space="preserve">
-    <value>Apariție</value>
+    <value>Aspect</value>
     <comment>视图/外观</comment>
   </data>
   <data name="View.Topmost.Description" xml:space="preserve">
@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Activați efectul de fundal mica pentru fundalul zonei de editare</value>
+    <value>Panoul lateral și bara de file afișează efectul mica; zona de editare păstrează culoarea solidă a temei</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Utilizați materialul mica în zona de editare</value>
+    <value>Folosește materialul mica în jurul zonei de editare</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Deschide folderul său</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Memorează fișierele deschise recent</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Fișierele și folderele deschise apar în Fișier &gt; Deschide recente și pe pagina de start. Dezactivat, nu se adaugă nimic nou.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Golește fișierele și folderele recente</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Golește listele fișierelor și folderelor deschise recent.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Golește</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Afișează pagina de start într-o filă goală</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>La pornire fără nimic de deschis și la închiderea ultimei file: fișiere și foldere recente, favorite</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Filele noi afișează pagina de start</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>O filă nouă (Fișier &gt; Nou, butonul +) afișează pagina de start în loc de un document gol</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Afișează rândurile goale suplimentare</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Rândurile goale dintre paragrafe ocupă spațiu și în modul de citire și în exporturile HTML și PDF, ca în timpul editării. Fișierul în sine nu se modifică</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Desenează documentele lungi treptat</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Un document lung se deschide acolo unde l-ați lăsat, iar restul este desenat în fundal. Dezactivați această opțiune dacă ceva pare greșit în timp ce se deschide un document lung: atunci va fi desenat dintr-odată</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Bara laterală în dreapta</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Afișează bara laterală în dreapta documentului în loc de stânga</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Păstrează modificările nesalvate la închidere</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Închide fără a întreba de salvare: documentele nesalvate revin așa cum erau, tot nesalvate, cu filele ultimei sesiuni</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Afișează mereu marcajele Markdown</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Afișează marcajele Markdown (**, #, adresa unui link) în fiecare paragraf, nu doar acolo unde este cursorul</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Prezice aspectul documentelor lungi (experimental)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>În timp ce un document lung este desenat pe părți, înălțimea a ceea ce nu este încă afișat se calculează din text în loc să fie estimată, astfel încât bara de derulare și salturile din schiță sunt mai precise. Experimental</value>
   </data>
 </root>

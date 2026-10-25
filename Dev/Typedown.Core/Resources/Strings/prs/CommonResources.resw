@@ -270,7 +270,7 @@
     <comment>编辑/剪切</comment>
   </data>
   <data name="Dark" xml:space="preserve">
-    <value>تاریک</value>
+    <value>تیره</value>
     <comment>应用主题/深色</comment>
   </data>
   <data name="Data" xml:space="preserve">
@@ -322,7 +322,7 @@
     <comment>嵌入链接</comment>
   </data>
   <data name="Emphasis" xml:space="preserve">
-    <value>ایتالیا</value>
+    <value>مورب</value>
     <comment>格式/斜体</comment>
   </data>
   <data name="Enable" xml:space="preserve">
@@ -334,7 +334,7 @@
     <comment>错误</comment>
   </data>
   <data name="Export" xml:space="preserve">
-    <value>صادرات</value>
+    <value>صادر کردن</value>
     <comment>文件/导出</comment>
   </data>
   <data name="ExportSettings" xml:space="preserve">
@@ -474,7 +474,7 @@
     <comment>图片上传设置</comment>
   </data>
   <data name="Import" xml:space="preserve">
-    <value>واردات</value>
+    <value>وارد کردن</value>
     <comment>文件/导入</comment>
   </data>
   <data name="IncreaseHeadingLevel" xml:space="preserve">
@@ -546,7 +546,7 @@
     <comment>了解更多</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>نور</value>
+    <value>روشن</value>
     <comment>应用主题/浅色</comment>
   </data>
   <data name="Line" xml:space="preserve">
@@ -654,7 +654,7 @@
     <comment>未设置</comment>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>بستن</value>
+    <value>خاموش</value>
     <comment>开关/关</comment>
   </data>
   <data name="Ok" xml:space="preserve">
@@ -662,7 +662,7 @@
     <comment>对话框/确定</comment>
   </data>
   <data name="On" xml:space="preserve">
-    <value>در</value>
+    <value>روشن</value>
     <comment>开关/开</comment>
   </data>
   <data name="Open" xml:space="preserve">
@@ -706,7 +706,7 @@
     <comment>段落</comment>
   </data>
   <data name="Paste" xml:space="preserve">
-    <value>خمیر کردن</value>
+    <value>چسباندن</value>
     <comment>编辑/粘贴</comment>
   </data>
   <data name="PasteAsPlainText" xml:space="preserve">
@@ -730,7 +730,7 @@
     <comment>段落/引用</comment>
   </data>
   <data name="Redo" xml:space="preserve">
-    <value>از سر بازنش</value>
+    <value>ازنو انجام دادن</value>
     <comment>编辑/重做</comment>
   </data>
   <data name="RemoveColumn" xml:space="preserve">
@@ -826,7 +826,7 @@
     <comment>格式/删除线</comment>
   </data>
   <data name="Strong" xml:space="preserve">
-    <value>جسورانه</value>
+    <value>پررنگ</value>
     <comment>格式/加粗</comment>
   </data>
   <data name="Table" xml:space="preserve">
@@ -866,7 +866,7 @@
     <comment>格式/下划线</comment>
   </data>
   <data name="Undo" xml:space="preserve">
-    <value>باز کردن</value>
+    <value>واگرد</value>
     <comment>编辑/撤销</comment>
   </data>
   <data name="UnorderedList" xml:space="preserve">
@@ -894,7 +894,7 @@
     <comment>Vega Chart</comment>
   </data>
   <data name="View" xml:space="preserve">
-    <value>مشاهده</value>
+    <value>نما</value>
     <comment>查看</comment>
   </data>
   <data name="Website" xml:space="preserve">
@@ -1011,5 +1011,146 @@
   </data>
   <data name="ExportedTo" xml:space="preserve">
     <value>به {0} صادر شد</value>
+  </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>راهنمای کاربر</value>
+  </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>حروف (بدون فاصله)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>حروف (با فاصله)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>حروف CJK</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>کلمات</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>کلمات غیر CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>پاراگراف‌ها</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>عنوان‌ها</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>تصاویر</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>لینک‌ها</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>زمان خواندن</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>حدود {0} دقیقه</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>کمتر از یک دقیقه</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>بر اساس متن قابل دید شمرده شده است. بلاک‌های کد و فرمول‌ها در زمان خواندن حساب نمی‌شوند.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>نوار وضعیت نشان می‌دهد</value>
+  </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>ذخیره شد</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>ذخیره نشده</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>ذخیره خودکار متوقف شده</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>برای ذخیره کلیک کنید</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>سند خالی است، اما فایل روی دیسک خالی نیست و هیچ ویرایشی آن را خالی نکرده است، بنابراین ذخیره خودکار فایل را بازنویسی نکرد.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>این فایل بدون از دست رفتن خوانده نشد (کدگذاری غیر از UTF-8؟)، بنابراین ذخیره خودکار آن را بازنویسی نمی‌کند. فقط زمانی خودتان ذخیره کنید که متن نمایش‌داده‌شده درست باشد.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>نوشتن فایل ناکام شد: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{0} از {1} {2} انتخاب شده</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>کدگذاری و پایان خط</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>تبدیل به UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>بازکردن دوباره با کدگذاری</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>عنوان فعلی</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>وضعیت ذخیره</value>
+  </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>پوشه‌ها</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>پوشهٔ اخیر وجود ندارد</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>پاک کردن پوشه‌های اخیر</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>برای حذف از لست، کلیک راست کنید یا Delete را فشار دهید</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>یک سطح بالاتر</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>تعیین به‌حیث ریشه</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>دلخواه‌ها</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>افزودن به دلخواه‌ها</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>حذف از دلخواه‌ها</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>خانه</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>شروع</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>سند جدید</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>باز کردن فایل</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>باز کردن پوشه</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>فایل‌های اخیر</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>پوشه‌های اخیر</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>حذف از لست</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>تنظیمات</value>
+  </data>
+  <data name="EditorOpening" xml:space="preserve">
+    <value>در حال باز کردن…</value>
   </data>
 </root>

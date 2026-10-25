@@ -238,7 +238,7 @@
     <comment>编辑器/默认缩进</comment>
   </data>
   <data name="Editor.Title" xml:space="preserve">
-    <value>Modifikues</value>
+    <value>Redaktori</value>
     <comment>编辑器/编辑器</comment>
   </data>
   <data name="Export.AddConfig.Description" xml:space="preserve">
@@ -414,7 +414,7 @@
     <comment>通用/启动操作</comment>
   </data>
   <data name="General.Title" xml:space="preserve">
-    <value>Gjeneral</value>
+    <value>Të përgjithshme</value>
     <comment>通用/常规</comment>
   </data>
   <data name="Image.InsertActions.CopyToPath" xml:space="preserve">
@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Aktivo efektin e sfondit mica për sfondin e zonës së redaktimit</value>
+    <value>Paneli anësor dhe shiriti i skedave shfaqin efektin mikë; zona e redaktimit ruan ngjyrën e plotë të temës</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Përdor materialin mica në zonën e redaktimit</value>
+    <value>Përdor materialin mikë rreth zonës së redaktimit</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Hap dosjen e tij</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Mbaj mend skedarët e hapur së fundi</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Skedarët dhe dosjet që hap shfaqen te Skedari &gt; Hap të fundit dhe në faqen kryesore. Kur është i çaktivizuar, nuk shtohet asgjë e re.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Pastro skedarët dhe dosjet e fundit</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Zbraz listat e skedarëve dhe dosjeve të hapura së fundi.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Pastro</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Shfaq faqen kryesore në një skedë bosh</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Në nisje pa asgjë për të hapur dhe kur mbyllet skeda e fundit: skedarët dhe dosjet e fundit, të preferuarat</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Skedat e reja shfaqin faqen kryesore</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Një skedë e re (Skedari &gt; I ri, butoni +) shfaq faqen kryesore në vend të një dokumenti bosh</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Shfaq rreshtat bosh shtesë</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Rreshtat bosh mes paragrafëve zënë vend edhe në modalitetin e leximit dhe në eksportet HTML e PDF, si gjatë redaktimit. Vetë skedari nuk ndryshon</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Vizato dokumentet e gjata gradualisht</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Një dokument i gjatë hapet aty ku e latë, dhe pjesa tjetër vizatohet në sfond. Çaktivizojeni këtë nëse diçka duket gabim ndërsa hapet një dokument i gjatë: atëherë ai vizatohet i gjithi njëherësh</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Shiriti anësor djathtas</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Shfaq shiritin anësor në të djathtë të dokumentit në vend të së majtës</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Mbaj ndryshimet e paruajtura gjatë mbylljes</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Mbyll pa pyetur për ruajtje: dokumentet e paruajtura kthehen siç ishin, ende të paruajtura, me skedat e sesionit të fundit</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Shfaq gjithmonë shenjat e Markdown</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Shfaq shenjat e Markdown (**, #, adresën e një lidhjeje) në çdo paragraf, jo vetëm aty ku është kursori</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Parashiko faqosjen e dokumenteve të gjata (eksperimentale)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Ndërsa një dokument i gjatë vizatohet me pjesë, lartësia e asaj që ende nuk shfaqet llogaritet nga teksti në vend që të vlerësohet, kështu që shiriti i rrëshqitjes dhe kërcimet nga skica janë më të sakta. Eksperimentale</value>
   </data>
 </root>

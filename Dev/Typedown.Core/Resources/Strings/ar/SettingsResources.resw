@@ -670,11 +670,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>تمكين تأثير خلفية الميكا لمنطقة التحرير</value>
+    <value>يعرض الجزء الجانبي وشريط علامات التبويب تأثير الميكا؛ وتحتفظ منطقة التحرير باللون الثابت للسمة</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>استخدام مادة الميكا في منطقة التحرير</value>
+    <value>استخدام مادة الميكا حول منطقة التحرير</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -900,5 +900,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>فتح المجلد الذي يحتويه</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>تذكّر الملفات المفتوحة مؤخرًا</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>تظهر الملفات والمجلدات التي تفتحها في ملف &gt; فتح الحديث وفي الصفحة الرئيسية. عند الإيقاف لا يُضاف شيء جديد.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>مسح الملفات والمجلدات الحديثة</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>يفرغ قوائم الملفات والمجلدات المفتوحة مؤخرًا.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>مسح</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>إظهار الصفحة الرئيسية في علامة تبويب فارغة</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>عند البدء دون شيء لفتحه وعند إغلاق آخر علامة تبويب: الملفات والمجلدات الحديثة، المفضلة</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>علامات التبويب الجديدة تُظهر الصفحة الرئيسية</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>تُظهر علامة التبويب الجديدة (ملف &gt; جديد، الزر +) الصفحة الرئيسية بدلًا من مستند فارغ</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>إظهار الأسطر الفارغة الإضافية</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>تشغل الأسطر الفارغة بين الفقرات مساحة في وضع القراءة وفي تصدير HTML وPDF أيضًا، كما هي أثناء التحرير. لا يتغير الملف نفسه</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>عرض المستندات الطويلة تدريجيًا</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>يُفتح المستند الطويل عند الموضع الذي تركته فيه، ويُعرض الباقي في الخلفية. أوقف هذا الخيار إذا بدا شيء غير صحيح أثناء فتح مستند طويل: سيُعرض حينها دفعة واحدة</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>الشريط الجانبي على اليمين</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>إظهار الشريط الجانبي على يمين المستند بدلاً من يساره</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>الاحتفاظ بالتغييرات غير المحفوظة عند الإغلاق</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>الإغلاق دون السؤال عن الحفظ: تعود المستندات غير المحفوظة كما كانت، وتبقى غير محفوظة، مع علامات تبويب الجلسة السابقة</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>إظهار علامات Markdown دائمًا</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>إظهار علامات Markdown (**، #، عنوان الرابط) في كل فقرة، وليس فقط حيث يوجد المؤشر</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>توقّع تخطيط المستندات الطويلة (تجريبي)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>أثناء رسم مستند طويل على أجزاء، يُحسب ارتفاع ما لم يُعرض بعد من نصه بدلاً من تقديره، فيصبح شريط التمرير والانتقال من المخطط أدق. تجريبي</value>
   </data>
 </root>

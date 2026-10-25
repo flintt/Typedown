@@ -142,7 +142,7 @@
     <comment>创建文件夹对话框/新建文件夹失败</comment>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>தீங்கான</value>
+    <value>நீக்கு</value>
     <comment>恢复文件对话框/删除</comment>
   </data>
   <data name="Don'tSave" xml:space="preserve">
@@ -202,7 +202,7 @@
     <comment>确定恢复应用默认设置？</comment>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>கெலிப்புத்தடங்கல்</value>
+    <value>சேமி</value>
     <comment>文件保存对话框/保存</comment>
   </data>
   <data name="SaveErrorTitle" xml:space="preserve">
@@ -328,5 +328,14 @@
   </data>
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>அவற்றில் {0} இந்த உள்ளமைவுடன் ஏற்கனவே பதிவேற்றப்பட்டிருந்ததால், அவற்றின் முந்தைய முகவரிகள் பயன்படுத்தப்பட்டன.</value>
+  </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Microsoft இலிருந்து WebView2 இயக்க நேரத்தைப் பதிவிறக்கவும்</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>இயக்க நேரம் நிறுவப்படவில்லை. அமைவுக்கு இணைய இணைப்பு தேவை; Microsoft இலிருந்து இயக்க நேரத்தைப் பதிவிறக்கவும் முடியும் (ஆஃப்லைன் நிறுவியும் உள்ளது), அதை நிறுவி பயன்பாட்டை மீண்டும் தொடங்கவும்.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>WebView2 இயக்க நேரம் நிறுவப்படுகிறது...</value>
   </data>
 </root>

@@ -270,7 +270,7 @@
     <comment>编辑/剪切</comment>
   </data>
   <data name="Dark" xml:space="preserve">
-    <value>അന്ധകാരം</value>
+    <value>ഇരുണ്ട</value>
     <comment>应用主题/深色</comment>
   </data>
   <data name="Data" xml:space="preserve">
@@ -302,7 +302,7 @@
     <comment>段落/重复</comment>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>സംശോധനം</value>
+    <value>എഡിറ്റ് ചെയ്യുക</value>
     <comment>编辑</comment>
   </data>
   <data name="EditImage" xml:space="preserve">
@@ -546,7 +546,7 @@
     <comment>了解更多</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>വെളിച്ചം</value>
+    <value>ഇളം</value>
     <comment>应用主题/浅色</comment>
   </data>
   <data name="Line" xml:space="preserve">
@@ -654,7 +654,7 @@
     <comment>未设置</comment>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>അടയ്ക്കുക</value>
+    <value>ഓഫ്</value>
     <comment>开关/关</comment>
   </data>
   <data name="Ok" xml:space="preserve">
@@ -662,7 +662,7 @@
     <comment>对话框/确定</comment>
   </data>
   <data name="On" xml:space="preserve">
-    <value>ഓൺ.</value>
+    <value>ഓൺ</value>
     <comment>开关/开</comment>
   </data>
   <data name="Open" xml:space="preserve">
@@ -770,11 +770,11 @@
     <comment>文件/保存</comment>
   </data>
   <data name="SaveAs" xml:space="preserve">
-    <value>As സംരക്ഷിക്കുക</value>
+    <value>ഇങ്ങനെ സംരക്ഷിക്കുക</value>
     <comment>文件/另存为</comment>
   </data>
   <data name="Saved" xml:space="preserve">
-    <value>രക്ഷപെട്ടു</value>
+    <value>സംരക്ഷിച്ചു</value>
     <comment>文件/已保存</comment>
   </data>
   <data name="SaveImageAs" xml:space="preserve">
@@ -830,7 +830,7 @@
     <comment>格式/加粗</comment>
   </data>
   <data name="Table" xml:space="preserve">
-    <value>മേശ</value>
+    <value>പട്ടിക</value>
     <comment>段落/表格</comment>
   </data>
   <data name="TaskList" xml:space="preserve">
@@ -838,7 +838,7 @@
     <comment>段落/任务列表</comment>
   </data>
   <data name="Theme" xml:space="preserve">
-    <value>പ്രമേയം</value>
+    <value>തീം</value>
     <comment>应用程序主题</comment>
   </data>
   <data name="Title" xml:space="preserve">
@@ -1011,5 +1011,146 @@
   </data>
   <data name="ExportedTo" xml:space="preserve">
     <value>{0} ലേക്ക് എക്സ്പോർട്ട് ചെയ്തു</value>
+  </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>ഉപയോക്തൃ ഗൈഡ്</value>
+  </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>അക്ഷരങ്ങൾ (സ്പേസ് ഇല്ലാതെ)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>അക്ഷരങ്ങൾ (സ്പേസ് ഉൾപ്പെടെ)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK അക്ഷരങ്ങൾ</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>വാക്കുകൾ</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>CJK അല്ലാത്ത വാക്കുകൾ</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>ഖണ്ഡികകൾ</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>തലക്കെട്ടുകൾ</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>ചിത്രങ്ങൾ</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>ലിങ്കുകൾ</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>വായനാ സമയം</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>ഏകദേശം {0} മിനിറ്റ്</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>ഒരു മിനിറ്റിൽ താഴെ</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>ദൃശ്യമായ വാചകത്തിൽ എണ്ണിയത്. കോഡ് ബ്ലോക്കുകളും സൂത്രവാക്യങ്ങളും വായനാ സമയത്തിൽ ഉൾപ്പെടുന്നില്ല.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>സ്റ്റാറ്റസ് ബാറിൽ കാണിക്കുന്നത്</value>
+  </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>സംരക്ഷിച്ചു</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>സംരക്ഷിച്ചിട്ടില്ല</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>ഓട്ടോ സേവ് താൽക്കാലികമായി നിർത്തി</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>സംരക്ഷിക്കാൻ ക്ലിക്ക് ചെയ്യുക</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>പ്രമാണം ശൂന്യമാണ്, എന്നാൽ ഡിസ്കിലെ ഫയൽ ശൂന്യമല്ല, ഒരു എഡിറ്റും അത് ശൂന്യമാക്കിയിട്ടുമില്ല, അതിനാൽ ഓട്ടോ സേവ് ഫയൽ മാറ്റിയെഴുതിയില്ല.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>ഈ ഫയൽ നഷ്ടമില്ലാതെ വായിക്കാനായില്ല (UTF-8 അല്ലാത്ത എൻകോഡിംഗ്?), അതിനാൽ ഓട്ടോ സേവ് ഇത് മാറ്റിയെഴുതില്ല. കാണിക്കുന്ന വാചകം ശരിയാണെങ്കിൽ മാത്രം സ്വയം സംരക്ഷിക്കുക.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>ഫയൽ എഴുതുന്നത് പരാജയപ്പെട്ടു: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{1} {2}-ൽ {0} തിരഞ്ഞെടുത്തു</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>എൻകോഡിംഗും വരിയുടെ അവസാനങ്ങളും</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>UTF-8 ലേക്ക് മാറ്റുക</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>എൻകോഡിംഗ് ഉപയോഗിച്ച് വീണ്ടും തുറക്കുക</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>നിലവിലെ തലക്കെട്ട്</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>സംരക്ഷണ നില</value>
+  </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>ഫോൾഡറുകൾ</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>സമീപകാല ഫോൾഡറുകളില്ല</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>സമീപകാല ഫോൾഡറുകൾ മായ്ക്കുക</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>പട്ടികയിൽ നിന്ന് നീക്കാൻ വലത്-ക്ലിക്ക് ചെയ്യുക അല്ലെങ്കിൽ Delete അമർത്തുക</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>ഒരു നില മുകളിലേക്ക്</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>റൂട്ട് ആയി സജ്ജമാക്കുക</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>പ്രിയങ്കരങ്ങൾ</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>പ്രിയങ്കരങ്ങളിൽ ചേർക്കുക</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>പ്രിയങ്കരങ്ങളിൽ നിന്ന് നീക്കുക</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>ഹോം</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>തുടക്കം</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>പുതിയ പ്രമാണം</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>ഫയൽ തുറക്കുക</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>ഫോൾഡർ തുറക്കുക</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>സമീപകാല ഫയലുകൾ</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>സമീപകാല ഫോൾഡറുകൾ</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>പട്ടികയിൽ നിന്ന് നീക്കുക</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>ക്രമീകരണങ്ങൾ</value>
+  </data>
+  <data name="EditorOpening" xml:space="preserve">
+    <value>തുറക്കുന്നു…</value>
   </data>
 </root>

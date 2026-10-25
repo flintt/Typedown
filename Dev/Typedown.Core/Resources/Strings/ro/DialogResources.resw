@@ -126,7 +126,7 @@
     <comment>未保存对话框/是否要保存更改？</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Anula</value>
+    <value>Anulează</value>
     <comment>对话框/取消</comment>
   </data>
   <data name="Confirm" xml:space="preserve">
@@ -182,7 +182,7 @@
     <comment>打开文件对话框/读取失败</comment>
   </data>
   <data name="Recover" xml:space="preserve">
-    <value>Restaura</value>
+    <value>Restaurează</value>
     <comment>恢复文件对话框/恢复</comment>
   </data>
   <data name="RecoverContent" xml:space="preserve">
@@ -202,7 +202,7 @@
     <comment>确定恢复应用默认设置？</comment>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Salva</value>
+    <value>Salvează</value>
     <comment>文件保存对话框/保存</comment>
   </data>
   <data name="SaveErrorTitle" xml:space="preserve">
@@ -328,5 +328,14 @@
   </data>
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>{0} dintre ele fuseseră deja încărcate cu această configurație, așa că s-au folosit adresele lor anterioare.</value>
+  </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Descărcați WebView2 Runtime de la Microsoft</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Runtime-ul nu a fost instalat. Programul de instalare are nevoie de conexiune la internet; puteți descărca runtime-ul și de la Microsoft (există și un program de instalare offline), îl instalați și reporniți aplicația.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>Se instalează WebView2 Runtime...</value>
   </data>
 </root>

@@ -5,14 +5,16 @@
     xmlns:local="using:Typedown.Core.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:ui="using:Typedown.XamlUI"
+    xmlns:chrome="using:Typedown.Core.Utilities"
     xmlns:u="using:Typedown.Core.Utilities"
     mc:Ignorable="d"
     Unloaded="OnUnloaded"
     d:DesignHeight="300"
     d:DesignWidth="400">
 
-    <Grid RowSpacing="8">
+    <!-- A background of its own: the window has no backdrop and no other content to draw one (the main window's
+         RootControl draws its own when there is no Mica). -->
+    <Grid RowSpacing="8" Background="{ThemeResource SolidBackgroundFillColorBaseBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -21,7 +23,7 @@
         <StackPanel Grid.RowSpan="3" VerticalAlignment="Top" Orientation="Horizontal" Height="32" Padding="8,0" Spacing="8">
             <StackPanel.Style>
                 <Style TargetType="StackPanel">
-                    <Setter Property="ui:XamlWindow.Drag" Value="True"/>
+                    <Setter Property="chrome:WindowChrome.Drag" Value="True"/>
                 </Style>
             </StackPanel.Style>
         </StackPanel>
@@ -31,13 +33,39 @@
             Margin="24,24,0,8"
             VerticalAlignment="Center" 
             FontFamily="{StaticResource ContentControlThemeFontFamily}"/>
-        <StackPanel Grid.Row="1" Margin="24,0" Spacing="8">
-            <TextBlock TextWrapping="Wrap" Text="{u:LocaleString Key=WebView2RuntimeNotInstalledContent}"/>
-            <HyperlinkButton Content="{u:LocaleString Key=LearnMore}" NavigateUri="https://developer.microsoft.com/microsoft-edge/webview2/" Margin="-12,0"/>
-        </StackPanel>
+        <ScrollViewer Grid.Row="1" Padding="24,0">
+            <StackPanel Spacing="8">
+                <TextBlock TextWrapping="Wrap" Text="{u:LocaleString Key=WebView2RuntimeNotInstalledContent}"/>
+                <!-- Said after the bundled setup ran and the runtime is still not there (offline, elevation refused):
+                     the window comes back with this instead of the app ending without a word. -->
+                <TextBlock
+                    x:Name="InstallFailedText"
+                    AutomationProperties.AutomationId="WebView2InstallFailedText"
+                    Visibility="Collapsed"
+                    TextWrapping="Wrap"
+                    Foreground="{ThemeResource SystemFillColorCriticalBrush}"
+                    Text="{u:LocaleString Key=WebView2InstallFailed}"/>
+                <!-- While the setup runs: the window stays on screen (it used to hide), saying so. -->
+                <StackPanel
+                    x:Name="InstallingPanel"
+                    AutomationProperties.AutomationId="WebView2InstallingPanel"
+                    Visibility="Collapsed"
+                    Orientation="Horizontal"
+                    Spacing="8">
+                    <ProgressRing IsActive="True" Width="16" Height="16"/>
+                    <TextBlock VerticalAlignment="Center" Text="{u:LocaleString Key=WebView2Installing}"/>
+                </StackPanel>
+                <HyperlinkButton
+                    x:Name="DownloadLink"
+                    AutomationProperties.AutomationId="WebView2DownloadLink"
+                    Content="{u:LocaleString Key=WebView2DownloadLink}"
+                    NavigateUri="https://developer.microsoft.com/microsoft-edge/webview2/#download"
+                    Margin="-12,0"/>
+            </StackPanel>
+        </ScrollViewer>
         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="16,0,16,16" Spacing="8" HorizontalAlignment="Right">
-            <Button MinWidth="80" Style="{ThemeResource AccentButtonStyle}" Click="OnInstallButtonClick" Content="{u:LocaleString Key=InstallNow}"/>
-            <Button MinWidth="80" Click="OnCloseButtonClick" Content="{u:LocaleString Key=Cancel}"/>
+            <Button x:Name="InstallButton" MinWidth="80" AutomationProperties.AutomationId="WebView2InstallButton" Style="{ThemeResource AccentButtonStyle}" Click="OnInstallButtonClick" Content="{u:LocaleString Key=InstallNow}"/>
+            <Button MinWidth="80" AutomationProperties.AutomationId="WebView2CancelButton" Click="OnCloseButtonClick" Content="{u:LocaleString Key=Cancel}"/>
         </StackPanel>
     </Grid>
 </UserControl>

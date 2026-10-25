@@ -1,5 +1,5 @@
 ﻿using Typedown.Core.ViewModels;
-using Windows.UI.Xaml;
+using Microsoft.UI.Xaml;
 
 namespace Typedown.Core.Controls.EditorControls.MenuBarItems
 {
@@ -20,13 +20,13 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
         // item flips its own check when clicked, and the binding wrote that back: Table clicked and its dialog
         // cancelled stayed checked with no table anywhere, until the caret moved (PM01). The click's flip is undone;
         // what the command changes comes back from the editor, which sets the check.
-        private static void KeepChecksFromTheEditor(System.Collections.Generic.IList<Windows.UI.Xaml.Controls.MenuFlyoutItemBase> items)
+        private static void KeepChecksFromTheEditor(System.Collections.Generic.IList<Microsoft.UI.Xaml.Controls.MenuFlyoutItemBase> items)
         {
             foreach (var item in items)
             {
-                if (item is Windows.UI.Xaml.Controls.ToggleMenuFlyoutItem toggle)
-                    toggle.Click += (sender, e) => toggle.IsChecked = !toggle.IsChecked;
-                else if (item is Windows.UI.Xaml.Controls.MenuFlyoutSubItem sub)
+                if (item is Microsoft.UI.Xaml.Controls.ToggleMenuFlyoutItem toggle)
+                    toggle.Click += (_, _) => toggle.IsChecked = !toggle.IsChecked;
+                else if (item is Microsoft.UI.Xaml.Controls.MenuFlyoutSubItem sub)
                     KeepChecksFromTheEditor(sub.Items);
             }
         }

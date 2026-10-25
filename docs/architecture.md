@@ -10,7 +10,7 @@ flowchart LR
     W <--> E[React + Muya + CodeMirror / Dev/Typedown.Editor]
     C --> F[文档、Settings.json、Backup]
     C --> D[SQLite / EF Core migrations]
-    P[Typedown.Package + Installer] --> U
+    P[MSIX + Installer] --> U
     P --> C
     P --> E
 ```
@@ -22,12 +22,12 @@ flowchart LR
 | `Dev/Typedown` | Windows 桌面宿主、窗口生命周期、WebView2 初始化、进程和系统集成 |
 | `Dev/Typedown.Core` | XAML 控件、ViewModel、文档流程、设置、数据库、服务和通用工具 |
 | `Dev/Typedown.Editor` | 浏览器内编辑器，React 外壳、Muya 所见即所得、CodeMirror 源码模式 |
-| `Tools/Typedown.Package` | MSIX packaging project 和 manifest |
+| `Dev/Typedown/Package.appxmanifest` | MSIX manifest（单项目 MSIX，由 `Dev/Typedown` 直接打包） |
 | `Tools/Installer` | 本地构建脚本与 Inno Setup 安装器 |
 | `Tools/EditorBench` | 对构建后编辑器执行浏览器集成和性能检查 |
 | `Tests/Typedown.ReliabilityTests` | 可脱离 XAML 构建的持久化、数据库、清单和依赖方向测试 |
 
-`Typedown.Core` 的名称不能理解为纯领域层：它目前包含 UWP/XAML 控件。可执行宿主依赖 Core，Core 不应反向引用 `Dev/Typedown/Typedown.csproj`。可靠性测试守卫这一方向，避免形成项目循环。
+`Typedown.Core` 的名称不能理解为纯领域层：它目前包含 WinUI 3 XAML 控件。可执行宿主依赖 Core，Core 不应反向引用 `Dev/Typedown/Typedown.csproj`。可靠性测试守卫这一方向，避免形成项目循环。
 
 ## 启动和编辑器
 

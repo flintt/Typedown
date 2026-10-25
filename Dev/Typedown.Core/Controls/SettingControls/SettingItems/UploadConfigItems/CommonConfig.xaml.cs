@@ -5,9 +5,9 @@ using Typedown.Core.Models;
 using Typedown.Core.Pages.SettingPages;
 using Typedown.Core.Utilities;
 using Windows.Storage.Pickers;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Markup;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Markup;
 
 namespace Typedown.Core.Controls.SettingControls.SettingItems.UploadConfigItems
 {

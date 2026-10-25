@@ -270,7 +270,7 @@
     <comment>编辑/剪切</comment>
   </data>
   <data name="Dark" xml:space="preserve">
-    <value>Ubumnyama</value>
+    <value>Kumnyama</value>
     <comment>应用主题/深色</comment>
   </data>
   <data name="Data" xml:space="preserve">
@@ -402,7 +402,7 @@
     <comment>未找到脚注标记 [^{identifier}]:</comment>
   </data>
   <data name="Format" xml:space="preserve">
-    <value>Hlela</value>
+    <value>Ifomethi</value>
     <comment>格式</comment>
   </data>
   <data name="FormatCode" xml:space="preserve">
@@ -546,7 +546,7 @@
     <comment>了解更多</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Ukukhanya</value>
+    <value>Kukhanya</value>
     <comment>应用主题/浅色</comment>
   </data>
   <data name="Line" xml:space="preserve">
@@ -654,7 +654,7 @@
     <comment>未设置</comment>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Vala</value>
+    <value>Valiwe</value>
     <comment>开关/关</comment>
   </data>
   <data name="Ok" xml:space="preserve">
@@ -662,7 +662,7 @@
     <comment>对话框/确定</comment>
   </data>
   <data name="On" xml:space="preserve">
-    <value>Ku</value>
+    <value>Vuliwe</value>
     <comment>开关/开</comment>
   </data>
   <data name="Open" xml:space="preserve">
@@ -782,7 +782,7 @@
     <comment>图片另存为</comment>
   </data>
   <data name="Search" xml:space="preserve">
-    <value>Hlola</value>
+    <value>Sesha</value>
     <comment>搜索</comment>
   </data>
   <data name="SelectAll" xml:space="preserve">
@@ -838,7 +838,7 @@
     <comment>段落/任务列表</comment>
   </data>
   <data name="Theme" xml:space="preserve">
-    <value>Indikimba</value>
+    <value>Itimu</value>
     <comment>应用程序主题</comment>
   </data>
   <data name="Title" xml:space="preserve">
@@ -862,11 +862,11 @@
     <comment>视图/打字机模式</comment>
   </data>
   <data name="Underline" xml:space="preserve">
-    <value>Gcizelela</value>
+    <value>Dwebela</value>
     <comment>格式/下划线</comment>
   </data>
   <data name="Undo" xml:space="preserve">
-    <value>Guqula</value>
+    <value>Hlehlisa</value>
     <comment>编辑/撤销</comment>
   </data>
   <data name="UnorderedList" xml:space="preserve">
@@ -1011,5 +1011,146 @@
   </data>
   <data name="ExportedTo" xml:space="preserve">
     <value>Kukhishelwe ku-{0}</value>
+  </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>Umhlahlandlela womsebenzisi</value>
+  </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Izinhlamvu (ngaphandle kwezikhala)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Izinhlamvu (nezikhala)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>Izinhlamvu ze-CJK</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Amagama</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Amagama angewona e-CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Izigaba</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Izihloko</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Izithombe</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Izixhumanisi</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Isikhathi sokufunda</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Cishe imizuzu engu-{0}</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Ngaphansi komzuzu</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Kubalwe embhalweni obonakalayo. Amabhulokhi ekhodi namafomula awafakwa esikhathini sokufunda.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Ibha yesimo ibonisa</value>
+  </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Kulondoloziwe</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Akulondoloziwe</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Ukulondoloza okuzenzakalelayo kumisiwe</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Chofoza ukuze ulondoloze</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Idokhumenti ayinalutho kodwa ifayela kudiski linokuthile, futhi akukho ukuhlela okuyenze ayaba nalutho, ngakho ukulondoloza okuzenzakalelayo akuzange kubhale phezu kwefayela.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Leli fayela alikwazanga ukufundwa ngaphandle kokulahlekelwa (ukubhala ngekhodi okungeyona i-UTF-8?), ngakho ukulondoloza okuzenzakalelayo akubhali phezu kwalo. Lilondoloze wena kuphela uma umbhalo oboniswayo ulungile.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Ukubhala ifayela kuhlulekile: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>Kukhethwe {0} kokungu-{1} {2}</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Ukubhala ngekhodi neziphetho zemigqa</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Guqulela ku-UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Vula futhi ngokubhala ngekhodi</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Isihloko samanje</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Isimo sokulondoloza</value>
+  </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Amafolda</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Awekho amafolda akamuva</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Sula amafolda akamuva</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Chofoza ngakwesokudla noma cindezela u-Delete ukuze ulisuse ohlwini</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Izinga elilodwa phezulu</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Setha njengempande</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Izintandokazi</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Engeza ezintandokazini</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Susa ezintandokazini</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Ikhaya</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Qala</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Idokhumenti entsha</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Vula ifayela</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Vula ifolda</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Amafayela akamuva</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Amafolda akamuva</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Susa ohlwini</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Izilungiselelo</value>
+  </data>
+  <data name="EditorOpening" xml:space="preserve">
+    <value>Iyavula…</value>
   </data>
 </root>

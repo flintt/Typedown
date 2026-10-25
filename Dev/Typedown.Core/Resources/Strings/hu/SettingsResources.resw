@@ -138,7 +138,7 @@
     <comment>关于/发送反馈</comment>
   </data>
   <data name="About.Title" xml:space="preserve">
-    <value>Körülbelül</value>
+    <value>Névjegy</value>
     <comment>关于/关于</comment>
   </data>
   <data name="Editor.AutoPairBracket.Description" xml:space="preserve">
@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>A csillám háttéreffektus engedélyezése a szerkesztési terület hátteréhez</value>
+    <value>Az oldalsó panel és a lapsáv csillám hatást mutat; a szerkesztési terület megtartja a téma egyszínű színét</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Használjon csillámanyagot a szerkesztési területen</value>
+    <value>Csillám anyag használata a szerkesztési terület körül</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Mappa megnyitása</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Legutóbb megnyitott fájlok megjegyzése</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>A megnyitott fájlok és mappák a Fájl &gt; Legutóbbiak megnyitása menüben és a kezdőlapon jelennek meg. Kikapcsolva semmi új nem kerül be.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Legutóbbi fájlok és mappák törlése</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Kiüríti a legutóbb megnyitott fájlok és mappák listáját.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Törlés</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Kezdőlap megjelenítése üres lapon</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Indításkor, ha nincs mit megnyitni, és az utolsó lap bezárásakor: legutóbbi fájlok és mappák, kedvencek</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Az új lapok a kezdőlapot mutatják</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Egy új lap (Fájl &gt; Új, a + gomb) üres dokumentum helyett a kezdőlapot mutatja</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>További üres sorok megjelenítése</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>A bekezdések közötti üres sorok olvasási módban, valamint HTML- és PDF-exportáláskor is helyet foglalnak, ahogy szerkesztés közben. Magát a fájlt ez nem módosítja</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Hosszú dokumentumok fokozatos megjelenítése</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>A hosszú dokumentum ott nyílik meg, ahol abbahagyta, a többi a háttérben jelenik meg. Kapcsolja ki, ha valami nem jól néz ki egy hosszú dokumentum megnyitása közben: ekkor egyszerre jelenik meg</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Oldalsáv jobb oldalon</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Az oldalsáv megjelenítése a dokumentum jobb oldalán a bal helyett</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Nem mentett módosítások megtartása bezáráskor</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Bezárás mentési kérdés nélkül: a nem mentett dokumentumok változatlanul, továbbra is mentetlenül térnek vissza az előző munkamenet lapjaival</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Markdown-jelölések mindig látszanak</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>A Markdown-jelölések (**, #, egy hivatkozás címe) megjelenítése minden bekezdésben, nem csak ott, ahol a kurzor van</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Hosszú dokumentumok elrendezésének előrejelzése (kísérleti)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Amíg egy hosszú dokumentum részenként rajzolódik ki, a még nem látható rész magasságát a program a szövegből számítja ki becslés helyett, így a görgetősáv és a vázlatból történő ugrás pontosabb. Kísérleti</value>
   </data>
 </root>

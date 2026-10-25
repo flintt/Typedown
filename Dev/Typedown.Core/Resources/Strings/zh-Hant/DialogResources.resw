@@ -222,7 +222,7 @@
     <comment>确定恢复应用默认设置？</comment>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>保存</value>
+    <value>儲存</value>
     <comment>文件保存对话框/保存</comment>
   </data>
   <data name="SaveErrorTitle" xml:space="preserve">
@@ -333,5 +333,14 @@
   </data>
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>其中 {0} 張之前已用此配置上傳過，因此沿用了它們之前的位址。</value>
+  </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>從微軟網站下載 WebView2 執行階段</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>執行階段沒有安裝成功。安裝程式需要連網；也可以從微軟網站下載執行階段（也有離線安裝套件），安裝後重新啟動本程式。</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>正在安裝 WebView2 執行階段...</value>
   </data>
 </root>

@@ -238,7 +238,7 @@
     <comment>编辑器/默认缩进</comment>
   </data>
   <data name="Editor.Title" xml:space="preserve">
-    <value>Redaktör</value>
+    <value>Redigerare</value>
     <comment>编辑器/编辑器</comment>
   </data>
   <data name="Export.AddConfig.Description" xml:space="preserve">
@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Aktivera glimmerbakgrundseffekten för redigeringsområdets bakgrund</value>
+    <value>Sidofönstret och flikfältet visar glimmereffekten; redigeringsområdet behåller temats enfärgade färg</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Använd glimmermaterial i redigeringsområdet</value>
+    <value>Använd glimmermaterial runt redigeringsområdet</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Öppna dess mapp</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Kom ihåg nyligen öppnade filer</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Filer och mappar du öppnar visas under Arkiv &gt; Öppna senaste och på startsidan. Avstängt läggs inget nytt till.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Rensa senaste filer och mappar</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Tömmer listorna över nyligen öppnade filer och mappar.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Rensa</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Visa startsidan på en tom flik</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Vid start utan något att öppna och när den sista fliken stängs: senaste filer och mappar, favoriter</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Nya flikar visar startsidan</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>En ny flik (Arkiv &gt; Nytt, knappen +) visar startsidan i stället för ett tomt dokument</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Visa extra tomma rader</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Tomma rader mellan stycken tar plats även i läsläget och vid export till HTML och PDF, precis som när du redigerar. Själva filen ändras inte</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Rita långa dokument stegvis</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Ett långt dokument öppnas där du lämnade det, och resten ritas i bakgrunden. Stäng av detta om något ser fel ut medan ett långt dokument öppnas: då ritas det på en gång</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Sidofält till höger</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Visa sidofältet till höger om dokumentet i stället för till vänster</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Behåll osparade ändringar vid stängning</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Stäng utan att fråga om att spara: osparade dokument kommer tillbaka som de var, fortfarande osparade, med flikarna från förra sessionen</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Visa alltid Markdown-tecken</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Visa Markdown-tecknen (**, #, en länks adress) i varje stycke, inte bara där markören är</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Förutsäg layouten för långa dokument (experimentell)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Medan ett långt dokument ritas i delar beräknas höjden på det som ännu inte visas utifrån texten i stället för att uppskattas, så att rullningslisten och hopp från dispositionen blir mer exakta. Experimentell</value>
   </data>
 </root>

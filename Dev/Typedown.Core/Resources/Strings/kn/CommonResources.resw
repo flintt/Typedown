@@ -546,7 +546,7 @@
     <comment>了解更多</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>ಬೆಳಕು</value>
+    <value>ತಿಳಿ</value>
     <comment>应用主题/浅色</comment>
   </data>
   <data name="Line" xml:space="preserve">
@@ -654,7 +654,7 @@
     <comment>未设置</comment>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>ಮುಚ್ಚು</value>
+    <value>ಆಫ್</value>
     <comment>开关/关</comment>
   </data>
   <data name="Ok" xml:space="preserve">
@@ -730,7 +730,7 @@
     <comment>段落/引用</comment>
   </data>
   <data name="Redo" xml:space="preserve">
-    <value>ಮತ್ತೆ ನೋಡಿ</value>
+    <value>ಮತ್ತೆ ಮಾಡು</value>
     <comment>编辑/重做</comment>
   </data>
   <data name="RemoveColumn" xml:space="preserve">
@@ -770,7 +770,7 @@
     <comment>文件/保存</comment>
   </data>
   <data name="SaveAs" xml:space="preserve">
-    <value>As ಉಳಿಸು</value>
+    <value>ಹೀಗೆ ಉಳಿಸಿ</value>
     <comment>文件/另存为</comment>
   </data>
   <data name="Saved" xml:space="preserve">
@@ -826,11 +826,11 @@
     <comment>格式/删除线</comment>
   </data>
   <data name="Strong" xml:space="preserve">
-    <value>Bold</value>
+    <value>ದಪ್ಪ</value>
     <comment>格式/加粗</comment>
   </data>
   <data name="Table" xml:space="preserve">
-    <value>ಮೇಜು</value>
+    <value>ಕೋಷ್ಟಕ</value>
     <comment>段落/表格</comment>
   </data>
   <data name="TaskList" xml:space="preserve">
@@ -1011,5 +1011,146 @@
   </data>
   <data name="ExportedTo" xml:space="preserve">
     <value>{0} ಗೆ ರಫ್ತು ಮಾಡಲಾಗಿದೆ</value>
+  </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>ಬಳಕೆದಾರ ಮಾರ್ಗದರ್ಶಿ</value>
+  </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>ಅಕ್ಷರಗಳು (ಸ್ಪೇಸ್ ಇಲ್ಲದೆ)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>ಅಕ್ಷರಗಳು (ಸ್ಪೇಸ್ ಸಹಿತ)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK ಅಕ್ಷರಗಳು</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>ಪದಗಳು</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>CJK ಅಲ್ಲದ ಪದಗಳು</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>ಪ್ಯಾರಾಗ್ರಾಫ್‌ಗಳು</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>ಶೀರ್ಷಿಕೆಗಳು</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>ಚಿತ್ರಗಳು</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>ಲಿಂಕ್‌ಗಳು</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>ಓದುವ ಸಮಯ</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>ಸುಮಾರು {0} ನಿಮಿಷ</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>ಒಂದು ನಿಮಿಷಕ್ಕಿಂತ ಕಡಿಮೆ</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>ಕಾಣುವ ಪಠ್ಯದ ಮೇಲೆ ಎಣಿಸಲಾಗಿದೆ. ಕೋಡ್ ಬ್ಲಾಕ್‌ಗಳು ಮತ್ತು ಸೂತ್ರಗಳು ಓದುವ ಸಮಯದಲ್ಲಿ ಸೇರುವುದಿಲ್ಲ.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>ಸ್ಥಿತಿ ಪಟ್ಟಿಯಲ್ಲಿ ತೋರಿಸು</value>
+  </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>ಉಳಿಸಲಾಗಿದೆ</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>ಉಳಿಸಿಲ್ಲ</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>ಸ್ವಯಂ ಉಳಿಕೆಯನ್ನು ವಿರಾಮಗೊಳಿಸಲಾಗಿದೆ</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>ಉಳಿಸಲು ಕ್ಲಿಕ್ ಮಾಡಿ</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>ಡಾಕ್ಯುಮೆಂಟ್ ಖಾಲಿಯಾಗಿದೆ, ಆದರೆ ಡಿಸ್ಕ್‌ನಲ್ಲಿರುವ ಫೈಲ್ ಖಾಲಿಯಾಗಿಲ್ಲ, ಮತ್ತು ಯಾವುದೇ ಸಂಪಾದನೆ ಅದನ್ನು ಖಾಲಿ ಮಾಡಿಲ್ಲ, ಆದ್ದರಿಂದ ಸ್ವಯಂ ಉಳಿಕೆ ಫೈಲ್ ಅನ್ನು ಮೇಲ್ಬರೆಯಲಿಲ್ಲ.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>ಈ ಫೈಲ್ ಅನ್ನು ನಷ್ಟವಿಲ್ಲದೆ ಓದಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ (UTF-8 ಅಲ್ಲದ ಎನ್‌ಕೋಡಿಂಗ್?), ಆದ್ದರಿಂದ ಸ್ವಯಂ ಉಳಿಕೆ ಅದನ್ನು ಮೇಲ್ಬರೆಯುವುದಿಲ್ಲ. ತೋರಿಸಿದ ಪಠ್ಯ ಸರಿಯಾಗಿದ್ದರೆ ಮಾತ್ರ ನೀವೇ ಉಳಿಸಿ.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>ಫೈಲ್ ಬರೆಯುವುದು ವಿಫಲವಾಗಿದೆ: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{1} {2} ಪೈಕಿ {0} ಆಯ್ಕೆಯಾಗಿದೆ</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>ಎನ್‌ಕೋಡಿಂಗ್ ಮತ್ತು ಸಾಲಿನ ಅಂತ್ಯಗಳು</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>UTF-8 ಗೆ ಪರಿವರ್ತಿಸಿ</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>ಎನ್‌ಕೋಡಿಂಗ್‌ನೊಂದಿಗೆ ಮತ್ತೆ ತೆರೆಯಿರಿ</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>ಪ್ರಸ್ತುತ ಶೀರ್ಷಿಕೆ</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>ಉಳಿಕೆ ಸ್ಥಿತಿ</value>
+  </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>ಫೋಲ್ಡರ್‌ಗಳು</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>ಇತ್ತೀಚಿನ ಫೋಲ್ಡರ್‌ಗಳಿಲ್ಲ</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>ಇತ್ತೀಚಿನ ಫೋಲ್ಡರ್‌ಗಳನ್ನು ತೆರವುಗೊಳಿಸಿ</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>ಪಟ್ಟಿಯಿಂದ ತೆಗೆದುಹಾಕಲು ಬಲ-ಕ್ಲಿಕ್ ಮಾಡಿ ಅಥವಾ Delete ಒತ್ತಿರಿ</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>ಒಂದು ಹಂತ ಮೇಲೆ</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>ಮೂಲವಾಗಿ ಹೊಂದಿಸಿ</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>ಮೆಚ್ಚಿನವು</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>ಮೆಚ್ಚಿನವುಗಳಿಗೆ ಸೇರಿಸಿ</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>ಮೆಚ್ಚಿನವುಗಳಿಂದ ತೆಗೆದುಹಾಕಿ</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>ಮುಖಪುಟ</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>ಪ್ರಾರಂಭ</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>ಹೊಸ ದಾಖಲೆ</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>ಫೈಲ್ ತೆರೆಯಿರಿ</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>ಫೋಲ್ಡರ್ ತೆರೆಯಿರಿ</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>ಇತ್ತೀಚಿನ ಫೈಲ್‌ಗಳು</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>ಇತ್ತೀಚಿನ ಫೋಲ್ಡರ್‌ಗಳು</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>ಪಟ್ಟಿಯಿಂದ ತೆಗೆದುಹಾಕಿ</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>ಸೆಟ್ಟಿಂಗ್‌ಗಳು</value>
+  </data>
+  <data name="EditorOpening" xml:space="preserve">
+    <value>ತೆರೆಯಲಾಗುತ್ತಿದೆ…</value>
   </data>
 </root>

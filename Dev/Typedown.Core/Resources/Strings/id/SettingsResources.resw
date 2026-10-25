@@ -138,7 +138,7 @@
     <comment>关于/发送反馈</comment>
   </data>
   <data name="About.Title" xml:space="preserve">
-    <value>Sekitar</value>
+    <value>Tentang</value>
     <comment>关于/关于</comment>
   </data>
   <data name="Editor.AutoPairBracket.Description" xml:space="preserve">
@@ -634,7 +634,7 @@
     <comment>视图/显示状态栏</comment>
   </data>
   <data name="View.Title" xml:space="preserve">
-    <value>Rupa</value>
+    <value>Tampilan</value>
     <comment>视图/外观</comment>
   </data>
   <data name="View.Topmost.Description" xml:space="preserve">
@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Aktifkan efek latar belakang mika untuk latar belakang area pengeditan</value>
+    <value>Panel samping dan bilah tab menampilkan efek mika; area pengeditan tetap memakai warna solid tema</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Gunakan bahan mika di area pengeditan</value>
+    <value>Gunakan bahan mika di sekitar area pengeditan</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Buka foldernya</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Ingat file yang baru dibuka</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>File dan folder yang Anda buka tercantum di File &gt; Buka terbaru dan di beranda. Jika nonaktif, tidak ada yang baru ditambahkan.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Hapus file dan folder terbaru</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Mengosongkan daftar file dan folder yang baru dibuka.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Hapus</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Tampilkan beranda pada tab kosong</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Saat memulai tanpa ada yang dibuka dan saat tab terakhir ditutup: file dan folder terbaru, favorit</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Tab baru menampilkan beranda</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Tab baru (File &gt; Baru, tombol +) menampilkan beranda alih-alih dokumen kosong</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Tampilkan baris kosong tambahan</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Baris kosong di antara paragraf juga mengambil ruang di mode baca serta ekspor HTML dan PDF, seperti saat mengedit. File itu sendiri tidak diubah</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Gambar dokumen panjang secara bertahap</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Dokumen panjang terbuka di tempat Anda meninggalkannya, dan sisanya digambar di latar belakang. Matikan ini jika ada yang tampak salah saat dokumen panjang dibuka: dokumen lalu digambar sekaligus</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Bilah samping di kanan</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Tampilkan bilah samping di sebelah kanan dokumen, bukan di kiri</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Simpan perubahan yang belum disimpan saat menutup</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Tutup tanpa menanyakan untuk menyimpan: dokumen yang belum disimpan kembali seperti semula, tetap belum disimpan, bersama tab sesi terakhir</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Selalu tampilkan tanda Markdown</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Tampilkan tanda Markdown (**, #, alamat tautan) di setiap paragraf, tidak hanya di tempat kursor berada</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Prediksi tata letak dokumen panjang (eksperimental)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Saat dokumen panjang digambar per bagian, tinggi bagian yang belum ditampilkan dihitung dari teksnya, bukan diperkirakan, sehingga bilah gulir dan lompatan dari kerangka lebih akurat. Eksperimental</value>
   </data>
 </root>

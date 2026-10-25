@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <!-- Runs on Linux: `dotnet test Dev/Typedown.Automation.Tests`. -->
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
@@ -19,6 +19,9 @@
     <Compile Include="..\Typedown.Core\Utilities\MarkdownImages.cs" Link="Core\MarkdownImages.cs" />
     <Compile Include="..\Typedown.Core\Services\S3Uploader.cs" Link="Core\S3Uploader.cs" />
     <Compile Include="..\Typedown.Core\Services\UploadHistory.cs" Link="Core\UploadHistory.cs" />
+    <Compile Include="..\Typedown.Core\Utilities\OutlineMark.cs" Link="Core\OutlineMark.cs" />
+    <Compile Include="..\Typedown.Core\Utilities\RecentTime.cs" Link="Core\RecentTime.cs" />
+    <Compile Include="..\Typedown.Core\Utilities\FormatCulture.cs" Link="Core\FormatCulture.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Typedown.Automation\Unix\UnixSocketListener.cs" Link="Unix\UnixSocketListener.cs" />

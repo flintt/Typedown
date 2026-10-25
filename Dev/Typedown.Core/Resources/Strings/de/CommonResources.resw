@@ -546,7 +546,7 @@
     <comment>了解更多</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Licht</value>
+    <value>Hell</value>
     <comment>应用主题/浅色</comment>
   </data>
   <data name="Line" xml:space="preserve">
@@ -654,7 +654,7 @@
     <comment>未设置</comment>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Schließen</value>
+    <value>Aus</value>
     <comment>开关/关</comment>
   </data>
   <data name="Ok" xml:space="preserve">
@@ -662,7 +662,7 @@
     <comment>对话框/确定</comment>
   </data>
   <data name="On" xml:space="preserve">
-    <value>An</value>
+    <value>Ein</value>
     <comment>开关/开</comment>
   </data>
   <data name="Open" xml:space="preserve">
@@ -1011,5 +1011,146 @@
   </data>
   <data name="ExportedTo" xml:space="preserve">
     <value>Exportiert nach {0}</value>
+  </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>Benutzerhandbuch</value>
+  </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Zeichen (ohne Leerzeichen)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Zeichen (mit Leerzeichen)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK-Zeichen</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Wörter</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Nicht-CJK-Wörter</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Absätze</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Überschriften</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Bilder</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Links</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Lesezeit</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Etwa {0} Min.</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Unter einer Minute</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Gezählt wird der sichtbare Text. Codeblöcke und Formeln zählen nicht zur Lesezeit.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Statusleiste zeigt</value>
+  </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Gespeichert</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Nicht gespeichert</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Automatisches Speichern pausiert</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Klicken zum Speichern</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Das Dokument ist leer, die Datei auf dem Datenträger aber nicht, und keine Bearbeitung hat es geleert. Daher hat das automatische Speichern die Datei nicht überschrieben.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Diese Datei konnte nicht verlustfrei gelesen werden (eine andere Codierung als UTF-8?). Daher überschreibt das automatische Speichern sie nicht. Speichern Sie selbst nur, wenn der angezeigte Text stimmt.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Die Datei konnte nicht geschrieben werden: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{0} von {1} {2} ausgewählt</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Codierung und Zeilenenden</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>In UTF-8 konvertieren</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Mit Codierung erneut öffnen</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Aktuelle Überschrift</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Speicherstatus</value>
+  </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Ordner</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Keine zuletzt geöffneten Ordner</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Zuletzt geöffnete Ordner löschen</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Rechtsklick oder Entf entfernt den Eintrag aus dieser Liste</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Eine Ebene höher</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Als Stamm festlegen</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Favoriten</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Zu Favoriten hinzufügen</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Aus Favoriten entfernen</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Neues Dokument</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Datei öffnen</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Ordner öffnen</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Zuletzt geöffnete Dateien</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Zuletzt geöffnete Ordner</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Aus der Liste entfernen</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Einstellungen</value>
+  </data>
+  <data name="EditorOpening" xml:space="preserve">
+    <value>Wird geöffnet…</value>
   </data>
 </root>

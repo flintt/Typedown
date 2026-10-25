@@ -13,7 +13,7 @@ using Typedown.Core.Enums;
 using Typedown.Core.Interfaces;
 using Typedown.Core.Services;
 using Typedown.Core.Utilities;
-using Windows.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls;
 
 namespace Typedown.Core.ViewModels
 {
@@ -22,7 +22,11 @@ namespace Typedown.Core.ViewModels
         public PInvoke.WINDOWPLACEMENT? StartupPlacement { get => GetSettingValue<PInvoke.WINDOWPLACEMENT?>(null); set => SetSettingValue(value); }
         public bool SidePaneOpen { get => GetSettingValue(false); set => SetSettingValue(value); }
         public double SidePaneWidth { get => GetSettingValue(300d); set => SetSettingValue(value); }
+        /// <summary>The side pane (files, outline) on the right of the document instead of the left.</summary>
+        public bool SidePaneOnRight { get => GetSettingValue(false); set => SetSettingValue(value); }
         public bool StatusBarOpen { get => GetSettingValue(true); set => SetSettingValue(value); }
+        /// <summary>The status bar's items the reader turned off (its context menu), comma-separated: modes, heading, format, save, count.</summary>
+        public string StatusBarHiddenItems { get => GetSettingValue("format"); set => SetSettingValue(value); }
         public double FindReplaceDialogWidth { get => GetSettingValue(600d); set => SetSettingValue(value); }
         /// <summary>
         /// Source mode shows the raw Markdown, reading mode shows only the rendered document: the two contradict
@@ -45,6 +49,26 @@ namespace Typedown.Core.ViewModels
         public string ListIndentation { get => GetSettingValue("1"); set => SetSettingValue(value); }
         /// <summary>Pad table cells so columns line up in the source (upstream #24/#70 ask for a way to turn this off).</summary>
         public bool TableAlignColumns { get => GetSettingValue(true); set => SetSettingValue(value); }
+        /// <summary>
+        /// Extra blank lines (shown as empty paragraphs) keep a line's height in reading mode and in HTML and PDF exports
+        /// too, as they do while editing (todo S8). Display only: the file is written the same either way.
+        /// </summary>
+        public bool ShowBlankLines { get => GetSettingValue(false); set => SetSettingValue(value); }
+        /// <summary>The visual editor shows the Markdown marks (**, #, a link's address) everywhere, not only where the caret is.</summary>
+        public bool ShowMarkdownMarks { get => GetSettingValue(false); set => SetSettingValue(value); }
+
+        /// <summary>
+        /// A long document is drawn a part at a time: where the reader left it first, the rest while the page is idle. Off,
+        /// it is drawn all at once as before - for a document that looks wrong while it is coming.
+        /// </summary>
+        public bool ProgressiveRendering { get => GetSettingValue(true); set => SetSettingValue(value); }
+
+        /// <summary>
+        /// While a long document is drawn a part at a time, the parts not drawn yet are given the height their text lays out
+        /// to (pretext, predictHeights.js) rather than one estimated from its length: the scroll bar and the outline's jumps
+        /// are where they belong sooner. Experimental, off by default.
+        /// </summary>
+        public bool PredictHeights { get => GetSettingValue(false); set => SetSettingValue(value); }
         /// <summary>Show the paragraph type marker ("P", "H1"...) left of the active block (upstream #45).</summary>
         public bool ShowParagraphMarker { get => GetSettingValue(true); set => SetSettingValue(value); }
         /// <summary>
@@ -52,7 +76,23 @@ namespace Typedown.Core.ViewModels
         /// with <see cref="SourceCode"/>; focus and typewriter mode follow the caret and are ignored while it
         /// is on (the menu greys them out).
         /// </summary>
-        public bool ReadOnly { get => GetSettingValue(false); set { SetSettingValue(value); if (value && SourceCode) SourceCode = false; } }
+        public bool ReadOnly
+        {
+            get => GetSettingValue(false);
+            set
+            {
+                // Leaving reading mode goes back to the mode it was entered from: source mode, which reading turned off,
+                // is turned on again. Held for this run only.
+                if (value && !ReadOnly) sourceCodeBeforeReading = SourceCode;
+                var back = !value && ReadOnly && sourceCodeBeforeReading;
+                if (!value) sourceCodeBeforeReading = false;
+                SetSettingValue(value);
+                if (value && SourceCode) SourceCode = false;
+                if (back && !SourceCode) SourceCode = true;
+            }
+        }
+
+        private bool sourceCodeBeforeReading;
         /// <summary>Outline: expand collapsed sections automatically to reveal the current heading (upstream #35).</summary>
         public bool TocAutoExpand { get => GetSettingValue(true); set => SetSettingValue(value); }
         /// <summary>Reopen documents at the last caret position (upstream #50).</summary>
@@ -137,6 +177,11 @@ namespace Typedown.Core.ViewModels
         public string FontFamily { get => GetSettingValue(""); set => SetSettingValue(value); }
         public string TextDirection { get => GetSettingValue("auto"); set => SetSettingValue(value); }
         public bool AutoSave { get => GetSettingValue(false); set => SetSettingValue(value); }
+        /// <summary>
+        /// A window closes without asking about unsaved documents: they are kept (backed up) and come back as they were,
+        /// still unsaved, the next time - with the last session's tabs.
+        /// </summary>
+        public bool KeepUnsavedOnClose { get => GetSettingValue(false); set => SetSettingValue(value); }
         public bool AutoReload { get => GetSettingValue(true); set => SetSettingValue(value); }
         public bool AskBeforeReload { get => GetSettingValue(true); set => SetSettingValue(value); }
         public AppTheme AppTheme { get => GetSettingValue(AppTheme.Default); set => SetSettingValue(value); }
@@ -165,6 +210,21 @@ namespace Typedown.Core.ViewModels
         public FileStartupAction FileStartupAction { get => GetSettingValue(FileStartupAction.None); set => SetSettingValue(value); }
         public FolderStartupAction FolderStartupAction { get => GetSettingValue(FolderStartupAction.OpenLast); set => SetSettingValue(value); }
         public string StartupOpenFolder { get => GetSettingValue(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)); set => SetSettingValue(value); }
+        /// <summary>
+        /// Settings > General > Data: the files and folders opened are remembered (File > Open recent, the home page, the
+        /// last folder at start-up). Off, nothing new is recorded; what is there stays until it is cleared. Read by
+        /// AccessHistory from the settings file under this name (AccessHistory.RecordSettingName).
+        /// </summary>
+        public bool RecordRecentFiles { get => GetSettingValue(true); set => SetSettingValue(value); }
+        /// <summary>The folder pane's favourites group is unfolded (a click on its title folds it).</summary>
+        public bool FavoritesExpanded { get => GetSettingValue(true); set => SetSettingValue(value); }
+        /// <summary>
+        /// Settings > General > On startup: a blank tab shows the home page (recent files and folders, favourites) - at
+        /// start-up with nothing to open, and when the last tab is closed (which then leaves the window open).
+        /// </summary>
+        public bool ShowHomePage { get => GetSettingValue(true); set => SetSettingValue(value); }
+        /// <summary>Settings > General > On startup: a new tab (Ctrl+N, the + button) shows the home page too. Off: it is for writing at once.</summary>
+        public bool ShowHomeOnNewTab { get => GetSettingValue(false); set => SetSettingValue(value); }
         public bool AppCompactMode { get => GetSettingValue(false); set => SetSettingValue(value); }
         public InsertImageAction InsertClipboardImageAction { get => GetSettingValue(InsertImageAction.None); set => SetSettingValue(value); }
         public string InsertClipboardImageCopyPath { get => GetSettingValue("./images"); set => SetSettingValue(value); }
@@ -222,6 +282,10 @@ namespace Typedown.Core.ViewModels
             "PreferLooseListItem",
             "ListIndentation",
             "TableAlignColumns",
+            "ShowBlankLines",
+            "ShowMarkdownMarks",
+            "ProgressiveRendering",
+            "PredictHeights",
             "ShowParagraphMarker",
             "ReadOnly",
             "CustomCss",

@@ -356,3 +356,5 @@ Tools/Installer/Output/
 Tools/EditorBench/cm-bundle/
 Tools/EditorBench/doc*.md
 Tools/EditorBench/*.cpuprofile
+# A local link to node_modules (a symlink, which node_modules/ above does not match): never committed.
+Tools/EditorBench/node_modules

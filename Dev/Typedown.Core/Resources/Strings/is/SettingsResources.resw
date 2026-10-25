@@ -138,7 +138,7 @@
     <comment>关于/发送反馈</comment>
   </data>
   <data name="About.Title" xml:space="preserve">
-    <value>Um</value>
+    <value>Um forritið</value>
     <comment>关于/关于</comment>
   </data>
   <data name="Editor.AutoPairBracket.Description" xml:space="preserve">
@@ -238,7 +238,7 @@
     <comment>编辑器/默认缩进</comment>
   </data>
   <data name="Editor.Title" xml:space="preserve">
-    <value>Ritstjóri</value>
+    <value>Ritill</value>
     <comment>编辑器/编辑器</comment>
   </data>
   <data name="Export.AddConfig.Description" xml:space="preserve">
@@ -414,7 +414,7 @@
     <comment>通用/启动操作</comment>
   </data>
   <data name="General.Title" xml:space="preserve">
-    <value>Almennur</value>
+    <value>Almennt</value>
     <comment>通用/常规</comment>
   </data>
   <data name="Image.InsertActions.CopyToPath" xml:space="preserve">
@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Virkja bakgrunnsáhrif glimmers fyrir bakgrunn klippisvæðis</value>
+    <value>Hliðarsvæðið og flipastikan sýna gljááhrifin; breytingasvæðið heldur heilum lit þemans</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Nota glimmerefni á klippisvæðinu</value>
+    <value>Nota gljáefni í kringum breytingasvæðið</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Opna möppu hennar</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Muna nýlega opnaðar skrár</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Skrár og möppur sem þú opnar birtast í Skrá &gt; Opna nýlegt og á heimasíðunni. Þegar slökkt er bætist ekkert nýtt við.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Hreinsa nýlegar skrár og möppur</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Tæmir lista yfir nýlega opnaðar skrár og möppur.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Hreinsa</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Sýna heimasíðu á auðum flipa</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Við ræsingu þegar ekkert á að opna og þegar síðasta flipanum er lokað: nýlegar skrár og möppur, eftirlæti</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Nýir flipar sýna heimasíðuna</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Nýr flipi (Skrá &gt; Nýtt, hnappurinn +) sýnir heimasíðuna í stað auðs skjals</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Sýna auka auðar línur</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Auðar línur milli efnisgreina taka líka pláss í lestrarham og í HTML- og PDF-útflutningi, eins og við breytingar. Skránni sjálfri er ekki breytt</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Teikna löng skjöl smám saman</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Langt skjal opnast þar sem þú skildir við það og afgangurinn er teiknaður í bakgrunni. Slökktu á þessu ef eitthvað lítur rangt út á meðan langt skjal opnast: þá er það teiknað allt í einu</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Hliðarstika til hægri</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Sýna hliðarstikuna hægra megin við skjalið í stað vinstra megin</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Halda óvistuðum breytingum við lokun</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Loka án þess að spyrja um vistun: óvistuð skjöl koma aftur eins og þau voru, enn óvistuð, með flipum síðustu lotu</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Sýna alltaf Markdown-merki</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Sýna Markdown-merkin (**, #, slóð tengils) í hverri málsgrein, ekki aðeins þar sem bendillinn er</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Spá fyrir um umbrot langra skjala (tilraun)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Á meðan langt skjal er teiknað í hlutum er hæð þess sem ekki er enn sýnt reiknuð út frá textanum í stað þess að vera áætluð, svo skrunstikan og stökk úr efnisyfirlitinu verða nákvæmari. Tilraun</value>
   </data>
 </root>

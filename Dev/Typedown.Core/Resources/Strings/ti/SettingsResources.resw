@@ -414,7 +414,7 @@
     <comment>通用/启动操作</comment>
   </data>
   <data name="General.Title" xml:space="preserve">
-    <value>ጀነራል</value>
+    <value>ሓፈሻዊ</value>
     <comment>通用/常规</comment>
   </data>
   <data name="Image.InsertActions.CopyToPath" xml:space="preserve">
@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>ድሕረ ባይታ እቲ እተሰናደወ ኸባቢ ዜሕድሮ ጽልዋ ብሚካ ኸም ዚህሉ ምግባር</value>
+    <value>ናይ ጎኒ ፓነልን ናይ ታብ ባርን ናይ ማይካ ውጽኢት የርእዩ፤ ቦታ ምእራም ጽኑዕ ሕብሪ ናይ ገጽታ ይሕዝ</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>ኣብቲ እተሰናደወ ኸባቢ ሚካ ዚብሃል ናውቲ ተጠቐም</value>
+    <value>ኣብ ዙርያ ቦታ ምእራም ናይ ማይካ ነገር ተጠቐም</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>ማህደሩ ክፈት</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>ብቐረባ ዝተኸፍቱ ፋይላት ዘክር</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>ዝኸፈትካዮም ፋይላትን ማህደራትን ኣብ ፋይል &gt; ናይ ቀረባ ክፈት ከምኡውን ኣብ መበገሲ ገጽ ይዝርዘሩ። ምስ ጠፍአ ሓድሽ ነገር ኣይውሰኽን።</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>ናይ ቀረባ እዋን ፋይላትን ማህደራትን ኣጽሪ</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>ዝርዝራት ብቐረባ ዝተኸፍቱ ፋይላትን ማህደራትን የጽሪ።</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>ኣጽሪ</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>ኣብ ባዶ ቶብ መበገሲ ገጽ ኣርኢ</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>ኣብ ምጅማር ዝኽፈት ነገር ምስ ዘይህሉ ከምኡውን እቲ ናይ መወዳእታ ቶብ ምስ ዝዕጾ፦ ናይ ቀረባ እዋን ፋይላትን ማህደራትን፣ ፍቱዋት</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>ሓደስቲ ቶባት መበገሲ ገጽ የርእዩ</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>ሓድሽ ቶብ (ፋይል &gt; ሓድሽ፣ መጠወቒ +) ኣብ ክንዲ ባዶ ሰነድ መበገሲ ገጽ የርኢ</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>ተወሳኺ ባዶ መስመራት ኣርኢ</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>ኣብ መንጎ ሕጡበ-ሓሳባት ዘለዉ ባዶ መስመራት ከም ኣብ ግዜ ምእራም ኣብ ናይ ንባብ ኩነታትን ኣብ HTMLን PDFን ምልኣኽን እውን ቦታ ይሕዙ። እቲ ፋይል ባዕሉ ኣይቅየርን</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>ነዋሕቲ ሰነዳት ብደረጃ ስኣሎም</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>ነዊሕ ሰነድ ኣብቲ ዝገደፍካዮ ቦታ ይኽፈት፣ እቲ ዝተረፈ ድማ ኣብ ድሕሪት ይስኣል። ነዊሕ ሰነድ ክኽፈት ከሎ ገለ ነገር ጌጋ እንተመሲሉ ነዚ ኣጥፍኦ፤ ሽዑ ብሓንሳብ ምሉእ ይስኣል</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>ናይ ጎኒ ባር ብየማን</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>ናይ ጎኒ ባር ኣብ ክንዲ ጸጋም ናይቲ ሰነድ ብየማን ኣርኢ</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>ክትዓጹ ከለኻ ዘይተዓቀቡ ለውጥታት ሓዝ</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>ንምዕቃብ ከይሓተትካ ዕጾ፦ ዘይተዓቀቡ ሰነዳት ከምቲ ዝነበርዎ፣ ገና ዘይተዓቀቡ፣ ምስ ትሮታት ናይ ዝሓለፈ ክፍለ ግዜ ይምለሱ</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>ምልክታት Markdown ኩሉ ግዜ ኣርኢ</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>ምልክታት Markdown (**፣ #፣ ኣድራሻ መላግቦ) ኣብቲ ጠቋሚ ዘለዎ ጥራይ ዘይኮነ ኣብ ነፍሲ ወከፍ ሕጡብ ኣርኢ</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>ኣቀማምጣ ነዋሕቲ ሰነዳት ኣቐዲምካ ግመት (ፈተነ)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>ነዊሕ ሰነድ ብክፋላት ክስኣል ከሎ፡ ቁመት እቲ ገና ዘይተራእየ ክፋል ብግምት ዘይኮነስ ካብቲ ጽሑፍ ይሕሰብ፡ ስለዚ መሸብለሊ ባርን ካብ ትሕዝቶ ምዝላልን ዝያዳ ልክዕ ይኸውን። ፈተነ</value>
   </data>
 </root>

@@ -5,11 +5,11 @@ using System.Reactive.Linq;
 using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
 using Typedown.Windows;
-using Typedown.XamlUI;
 using Windows.Foundation;
-using Windows.UI;
+using Microsoft.UI;
+using Color = Windows.UI.Color;
 using Windows.UI.ViewManagement;
-using Windows.UI.Xaml;
+using Microsoft.UI.Xaml;
 
 namespace Typedown.Utilities
 {
@@ -33,11 +33,27 @@ namespace Typedown.Utilities
             // A custom theme may name its own accent; without one the editor keeps the system colour.
             var custom = Typedown.Core.Utilities.ThemeFiles.Find(settings.CustomTheme);
             // global:: — inside Typedown.* a plain "Windows." binds to Typedown.Windows, the app's own namespace.
-            var themeAccent = Typedown.Core.Utilities.ThemeFiles.Brush(custom?.Accent) as global::Windows.UI.Xaml.Media.SolidColorBrush;
+            var themeAccent = Typedown.Core.Utilities.ThemeFiles.Brush(custom?.Accent) as global::Microsoft.UI.Xaml.Media.SolidColorBrush;
             var accentColor = themeAccent?.Color ?? new UISettings().GetColorValue(UIColorType.Accent);
-            var solidBackground = isBlack ? Colors.Black : isDarkMode ? Color.FromArgb(0xFF, 0x28, 0x28, 0x28) : Color.FromArgb(0xFF, 0xF9, 0xF9, 0xF9);
-            var background = settings.UseMicaEffect && settings.UseEditorMicaEffect && !isBlack ? Colors.Transparent : solidBackground;
-            return new { theme = isBlack ? "Black" : isDarkMode ? "Dark" : "Light", accentColor, background };
+            return new { theme = isBlack ? "Black" : isDarkMode ? "Dark" : "Light", accentColor, background = provider.GetPageBackground() };
+        }
+
+        /// <summary>
+        /// The editor page's colour: the theme's own. WinUI 3's WebView2 cannot be transparent (it fills what the page leaves
+        /// clear with a grey of its own), so the editor's Mica of XamlUI, where the page showed the window through, is not
+        /// possible. A custom theme's page colour from the first frame: the page painted the app theme's (light) colour
+        /// until the theme's CSS came with its settings, a light flash over a dark theme on every load (startup, leaving
+        /// the settings). The web view is given it too, for what shows before the page has painted anything.
+        /// </summary>
+        public static Color GetPageBackground(this IServiceProvider provider)
+        {
+            var ui = provider.GetService<UIViewModel>();
+            var settings = provider.GetService<SettingsViewModel>();
+            var custom = Typedown.Core.Utilities.ThemeFiles.Find(settings.CustomTheme);
+            if (Typedown.Core.Utilities.ThemeFiles.Brush(custom?.Background) is global::Microsoft.UI.Xaml.Media.SolidColorBrush customBackground)
+                return customBackground.Color;
+            return settings.EffectiveTheme == Typedown.Core.Enums.AppTheme.Black ? Colors.Black
+                : ui.ActualTheme == ElementTheme.Dark ? Color.FromArgb(0xFF, 0x28, 0x28, 0x28) : Color.FromArgb(0xFF, 0xF9, 0xF9, 0xF9);
         }
 
         public static bool GetUseLightTheme()
@@ -45,17 +61,11 @@ namespace Typedown.Utilities
             return Application.Current.RequestedTheme == ApplicationTheme.Light;
         }
 
-        public static void TrySaveWindowPlacement(this MainWindow window, Point offset = default)
+        public static void TrySaveWindowPlacement(this MainWindow window)
         {
             if (window.Handle == IntPtr.Zero)
                 return;
             PInvoke.GetWindowPlacement(window.Handle, out var placement);
-            var rawX = (int)(offset.X * window.ScalingFactor);
-            var rawY = (int)(offset.Y * window.ScalingFactor);
-            placement.rcNormalPosition.left += rawX;
-            placement.rcNormalPosition.top += rawY;
-            placement.rcNormalPosition.right += rawX;
-            placement.rcNormalPosition.bottom += rawY;
             window.AppViewModel.SettingsViewModel.StartupPlacement = placement;
         }
 
@@ -63,11 +73,17 @@ namespace Typedown.Utilities
         {
             var placement = window.AppViewModel.SettingsViewModel.StartupPlacement;
             if (!placement.HasValue)
-            {
-                window.Show(ShowWindowCommand.SW_NORMAL);
                 return false;
-            }
             var value = placement.Value;
+            // Another window open already: this one 8 px lower right of the place saved, not on top of it.
+            if (MainWindow.AllWindows.Any(w => w != window && !w.IsGoingAway))
+            {
+                var step = (int)(8 * window.ScalingFactor);
+                value.rcNormalPosition.left += step;
+                value.rcNormalPosition.top += step;
+                value.rcNormalPosition.right += step;
+                value.rcNormalPosition.bottom += step;
+            }
             if (value.showCmd != PInvoke.ShowWindowCommand.ShowMaximized)
                 value.showCmd = PInvoke.ShowWindowCommand.Normal;
             PInvoke.SetWindowPlacement(window.Handle, ref value);
@@ -80,7 +96,7 @@ namespace Typedown.Utilities
             if (!string.IsNullOrEmpty(filePath) && FileViewModel.TryGetOpenedWindow(filePath, out var windowHWnd))
             {
                 // Already open somewhere: bring that window (and tab) to the front.
-                var window = XamlWindow.AllWindows.OfType<MainWindow>().FirstOrDefault(x => x.Handle == windowHWnd);
+                var window = MainWindow.AllWindows.FirstOrDefault(x => x.Handle == windowHWnd);
                 if (window != null)
                 {
                     if (PInvoke.IsIconic(window.Handle))
@@ -92,7 +108,7 @@ namespace Typedown.Utilities
             }
             // A file opened from the shell goes into the last active window as a new tab (upstream #73) unless the
             // user prefers separate windows; a plain launch without a file always creates a window.
-            var target = MainWindow.LastActive ?? XamlWindow.AllWindows.OfType<MainWindow>().FirstOrDefault();
+            var target = MainWindow.LastActive ?? MainWindow.AllWindows.FirstOrDefault();
             if (!forceNewWindow && !string.IsNullOrEmpty(filePath) && target != null && target.AppViewModel != null && target.AppViewModel.SettingsViewModel.OpenFilesInNewTab)
             {
                 if (PInvoke.IsIconic(target.Handle))
@@ -101,8 +117,8 @@ namespace Typedown.Utilities
                 return target.Handle;
             }
             var newWindow = new MainWindow();
-            newWindow.Show(ShowWindowCommand.SW_HIDE);
             newWindow.AppViewModel.CommandLineArgs = args;
+            newWindow.Start();
             return newWindow.Handle;
         }
     }

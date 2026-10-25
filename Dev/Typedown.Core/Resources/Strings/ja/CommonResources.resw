@@ -546,7 +546,7 @@
     <comment>了解更多</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>明るい</value>
+    <value>ライト</value>
     <comment>应用主题/浅色</comment>
   </data>
   <data name="Line" xml:space="preserve">
@@ -654,7 +654,7 @@
     <comment>未设置</comment>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>閉じる</value>
+    <value>オフ</value>
     <comment>开关/关</comment>
   </data>
   <data name="Ok" xml:space="preserve">
@@ -866,7 +866,7 @@
     <comment>格式/下划线</comment>
   </data>
   <data name="Undo" xml:space="preserve">
-    <value>アンドゥ</value>
+    <value>元に戻す</value>
     <comment>编辑/撤销</comment>
   </data>
   <data name="UnorderedList" xml:space="preserve">
@@ -1011,5 +1011,146 @@
   </data>
   <data name="ExportedTo" xml:space="preserve">
     <value>{0} にエクスポートしました</value>
+  </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>使い方ガイド</value>
+  </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>文字数（スペースなし）</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>文字数（スペースを含む）</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK 文字</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>単語数</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>CJK 以外の単語</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>段落</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>見出し</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>画像</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>リンク</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>読了時間</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>約 {0} 分</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>1 分未満</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>表示されている本文で集計しています。コードブロックと数式は読了時間に含まれません。</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>ステータスバーの表示</value>
+  </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>保存済み</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>未保存</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>自動保存を一時停止中</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>クリックして保存</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>ドキュメントは空ですが、ディスク上のファイルは空ではなく、編集で空にしたものでもないため、自動保存はファイルを上書きしませんでした。</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>このファイルは損失なく読み込めませんでした（UTF-8 以外のエンコーディング？）。そのため自動保存は上書きしません。表示されている内容が正しい場合にのみ、手動で保存してください。</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>ファイルの書き込みに失敗しました: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{1} {2}中 {0} を選択</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>エンコーディングと改行コード</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>UTF-8 に変換</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>エンコーディングを指定して再度開く</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>現在の見出し</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>保存状態</value>
+  </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>フォルダー</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>最近のフォルダーなし</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>最近のフォルダーをクリア</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>右クリックまたは Delete キーで一覧から削除</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>1 つ上のフォルダー</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>ルートに設定</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>お気に入り</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>お気に入りに追加</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>お気に入りから削除</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>ホーム</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>スタート</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>新しいドキュメント</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>ファイルを開く</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>フォルダーを開く</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>最近のファイル</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>最近のフォルダー</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>一覧から削除</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="EditorOpening" xml:space="preserve">
+    <value>開いています…</value>
   </data>
 </root>

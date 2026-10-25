@@ -15,8 +15,7 @@ CI 的普通分支构建只保留小型 installer artifact；`v*` tag 构建才�
 
 ## 本地依赖
 
-- Visual Studio 2022 或 Build Tools，安装 UWP 和 .NET 桌面构建组件；
-- Windows 10/11 SDK，项目当前目标 SDK 见 `Dev/Typedown/Typedown.csproj`；
+- .NET 10 SDK（应用是 WinUI 3 + .NET 10，单项目构建和打包都用 `dotnet`，不需要 Visual Studio；Windows SDK 构建工具由 NuGet 包提供）；
 - Node.js 20 和 Yarn；
 - Inno Setup 6，仅在生成 `.exe` 安装包时需要；
 - .NET 9 SDK，用于独立可靠性测试。
@@ -41,7 +40,7 @@ dotnet test Tests\Typedown.ReliabilityTests\Typedown.ReliabilityTests.csproj -c 
 
 ## 本地构建
 
-`Tools/Installer/build-local.ps1` 会定位 MSBuild 和 Windows SDK，检查编辑器 bundle 是否比源码新，然后构建自包含应用。只编译应用、不生成安装包：
+`Tools/Installer/build-local.ps1` 会定位 .NET 10 SDK（`PATH` 上的 `dotnet`，或环境变量 `TYPEDOWN_DOTNET` 指定的）和 Inno Setup，检查编辑器 bundle 是否比源码新，然后用 `dotnet publish` 构建自包含应用（带 Windows App SDK 运行时，与 CI 一样 ReadyToRun 预编译并裁剪）。只编译应用、不生成安装包：
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File Tools\Installer\build-local.ps1 -Platform x64 -BuildEditor -NoInstaller
@@ -61,10 +60,10 @@ ARM64 把 `-Platform x64` 改为 `-Platform ARM64`。`-SkipBuild` 只适用于�
 
 | 文件 | 格式 |
 | --- | --- |
-| `Dev/Typedown/Typedown.csproj` | `1.3.9` |
-| `Dev/Typedown.Core/Properties/AssemblyInfo.cs` | `1.3.9.0` |
-| `Tools/Typedown.Package/Package.appxmanifest` | `1.3.9.0` |
-| `Tools/Installer/Typedown.iss` | `1.3.9` |
+| `Dev/Typedown/Typedown.csproj` | `1.4.0` |
+| `Dev/Typedown.Core/Properties/AssemblyInfo.cs` | `1.4.0.0` |
+| `Dev/Typedown/Package.appxmanifest` | `1.4.0.0` |
+| `Tools/Installer/Typedown.iss` | `1.4.0` |
 
 可靠性测试在所有 CI 构建中检查这四处；tag 构建还会检查 tag 与项目版本是否一致。
 
@@ -82,23 +81,23 @@ ARM64 把 `-Platform x64` 改为 `-Platform ARM64`。`-SkipBuild` 只适用于�
 
 ## 微软商店上传包
 
-`Branding.props` 的 `BrandStoreUpload` 为 `true` 的版本（Typeleaf），CI 每个平台在旁加载 MSIX 之后再按 `StoreUpload` 模式打一次包：不签名（商店会重新签名），得到 `<BrandName>_<版本>_<平台>.msixupload`（内含 `.msix` 和符号 `.appxsym`），作为 `store-upload-x64` / `store-upload-ARM64` 产物交给发布任务，打标签的构建把它们放进 GitHub Release；产物本身只保留 1 天（各产物都是，私有仓库的产物占账户的 Actions 存储额度），手动运行、不打标签的构建要在一天内从运行页面下载。在合作伙伴中心的提交里把两个平台的 `.msixupload` 都上传。包身份（`Identity` 的 `Name`、`Publisher`，以及 `PublisherDisplayName`）取自 `Tools/Typedown.Package/Package.appxmanifest`，必须与合作伙伴中心为该名称保留的值一致；版本号的第四段保持 0（商店保留它）。Typedown 本身没有商店身份，`BrandStoreUpload` 为 `false`。
+`Branding.props` 的 `BrandStoreUpload` 为 `true` 的版本（Typeleaf），CI 每个平台在旁加载 MSIX 之后再按 `StoreUpload` 模式打一次包：不签名（商店会重新签名），得到 `<BrandName>_<版本>_<平台>.msixupload`（内含 `.msix`；迁移到单项目 MSIX 后不再带符号包 `.appxsym`：.NET SDK 的 MSBuild 下 MSIX 工具的符号步骤需要 Visual Studio 的 `mspdbcmf.exe`），作为 `store-upload-x64` / `store-upload-ARM64` 产物交给发布任务，打标签的构建把它们放进 GitHub Release；产物本身只保留 1 天（各产物都是，私有仓库的产物占账户的 Actions 存储额度），手动运行、不打标签的构建要在一天内从运行页面下载。在合作伙伴中心的提交里把两个平台的 `.msixupload` 都上传。包身份（`Identity` 的 `Name`、`Publisher`，以及 `PublisherDisplayName`）取自 `Dev/Typedown/Package.appxmanifest`，必须与合作伙伴中心为该名称保留的值一致；版本号的第四段保持 0（商店保留它）。Typedown 本身没有商店身份，`BrandStoreUpload` 为 `false`。
 
-本机生成（需要 Visual Studio Build Tools 的 MSIX 打包组件）：
+本机生成（.NET 10 SDK；应用和包是同一个项目 `Dev/Typedown`，单项目 MSIX）：
 
 ```powershell
-msbuild Tools\Typedown.Package\Typedown.Package.wapproj /t:Restore /p:Configuration=Release /p:Platform=x64
-msbuild Tools\Typedown.Package\Typedown.Package.wapproj /p:Configuration=Release /p:Platform=x64 `
-    /p:AppxBundle=Never /p:UapAppxPackageBuildMode=StoreUpload /p:AppxPackageSigningEnabled=false /p:AppxPackageDir=StoreUpload\
+dotnet publish Dev\Typedown\Typedown.csproj -c Release -p:Platform=x64 -r win-x64 -p:TypedownTrim=true `
+    -p:WindowsPackageType=MSIX -p:GenerateAppxPackageOnBuild=true -p:AppxBundle=Never `
+    -p:UapAppxPackageBuildMode=StoreUpload -p:AppxPackageSigningEnabled=false -p:AppxSymbolPackageEnabled=false -p:AppxPackageDir=StoreUpload\
 ```
 
-SDK 不在 `Program Files` 时，像 `Tools\Installer\build-local.ps1` 那样另传 `/p:ManifestTool=<SDK>\x86\mt.exe /p:MakePri=<SDK>\x64\makepri.exe`。
+不加 `-p:WindowsPackageType=MSIX` 等打包参数时得到的是安装包和便携版用的免安装目录（`-o <目录>`）。
 
 ## 发布前产物检查
 
 - 安装包、便携版和 MSIX 都包含 `Typedown.exe`、WebView2 loader、SQLite native 库和 `Resources/Statics/index.html`；
 - 文件名、应用“关于”页、程序集、MSIX 和安装程序显示同一版本；
-- 安装器能升级上一稳定版，卸载不会删除用户文档；
+- 安装器能升级上一稳定版（安装前会清掉程序目录里旧版本的文件，用户数据不在程序目录），卸载不会删除用户文档；
 - `.md` 关联正常，`.txt` 和 `.text` 只出现在“打开方式”中；
 - 安装包和 `Typedown.exe` 的签名可检查，MSIX 使用同批 `.cer`；
 - Release 说明和附件属于同一个 tag/commit。

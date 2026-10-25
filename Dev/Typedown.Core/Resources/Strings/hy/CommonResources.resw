@@ -146,7 +146,7 @@
     <comment>自动</comment>
   </data>
   <data name="Back" xml:space="preserve">
-    <value>Հետույք</value>
+    <value>Հետ</value>
     <comment>返回</comment>
   </data>
   <data name="Browse" xml:space="preserve">
@@ -174,7 +174,7 @@
     <comment>字符(单数)</comment>
   </data>
   <data name="Characters" xml:space="preserve">
-    <value>Կերպարներ</value>
+    <value>Նիշեր</value>
     <comment>字符(复数)</comment>
   </data>
   <data name="Chart" xml:space="preserve">
@@ -182,7 +182,7 @@
     <comment>图表</comment>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Քլիր</value>
+    <value>Մաքրել</value>
     <comment>清除</comment>
   </data>
   <data name="ClearFormat" xml:space="preserve">
@@ -198,7 +198,7 @@
     <comment>点击添加一张图片</comment>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>Փակ</value>
+    <value>Փակել</value>
     <comment>文件/关闭</comment>
   </data>
   <data name="Code" xml:space="preserve">
@@ -250,7 +250,7 @@
     <comment>操作/复制到路径</comment>
   </data>
   <data name="Create" xml:space="preserve">
-    <value>Ստեղծագործել</value>
+    <value>Ստեղծել</value>
     <comment>创建</comment>
   </data>
   <data name="CtrlAndClickOpenLink" xml:space="preserve">
@@ -270,7 +270,7 @@
     <comment>编辑/剪切</comment>
   </data>
   <data name="Dark" xml:space="preserve">
-    <value>Դարակ</value>
+    <value>Մուգ</value>
     <comment>应用主题/深色</comment>
   </data>
   <data name="Data" xml:space="preserve">
@@ -322,7 +322,7 @@
     <comment>嵌入链接</comment>
   </data>
   <data name="Emphasis" xml:space="preserve">
-    <value>Իտալիկ</value>
+    <value>Շեղ</value>
     <comment>格式/斜体</comment>
   </data>
   <data name="Enable" xml:space="preserve">
@@ -334,7 +334,7 @@
     <comment>错误</comment>
   </data>
   <data name="Export" xml:space="preserve">
-    <value>Արտադրություն</value>
+    <value>Արտահանել</value>
     <comment>文件/导出</comment>
   </data>
   <data name="ExportSettings" xml:space="preserve">
@@ -474,7 +474,7 @@
     <comment>图片上传设置</comment>
   </data>
   <data name="Import" xml:space="preserve">
-    <value>Ներմուծում</value>
+    <value>Ներմուծել</value>
     <comment>文件/导入</comment>
   </data>
   <data name="IncreaseHeadingLevel" xml:space="preserve">
@@ -546,11 +546,11 @@
     <comment>了解更多</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Լույս</value>
+    <value>Լուսավոր</value>
     <comment>应用主题/浅色</comment>
   </data>
   <data name="Line" xml:space="preserve">
-    <value>Նախագիծ</value>
+    <value>Տող</value>
     <comment>行(单数)</comment>
   </data>
   <data name="LineHeight" xml:space="preserve">
@@ -570,7 +570,7 @@
     <comment>加载图片失败</comment>
   </data>
   <data name="Math" xml:space="preserve">
-    <value>Մատեն</value>
+    <value>Մաթեմատիկա</value>
     <comment>数学</comment>
   </data>
   <data name="MathBlock" xml:space="preserve">
@@ -582,7 +582,7 @@
     <comment>窗口/最大化</comment>
   </data>
   <data name="MenuBar" xml:space="preserve">
-    <value>Մենյու Բար</value>
+    <value>Ընտրացանկի տող</value>
     <comment>菜单栏</comment>
   </data>
   <data name="Mermaid" xml:space="preserve">
@@ -654,7 +654,7 @@
     <comment>未设置</comment>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Փակ</value>
+    <value>Անջատված</value>
     <comment>开关/关</comment>
   </data>
   <data name="Ok" xml:space="preserve">
@@ -662,11 +662,11 @@
     <comment>对话框/确定</comment>
   </data>
   <data name="On" xml:space="preserve">
-    <value>On</value>
+    <value>Միացված</value>
     <comment>开关/开</comment>
   </data>
   <data name="Open" xml:space="preserve">
-    <value>Բաց</value>
+    <value>Բացել</value>
     <comment>文件/打开</comment>
   </data>
   <data name="OpenFileLocation" xml:space="preserve">
@@ -686,7 +686,7 @@
     <comment>文件/在新窗口中打开</comment>
   </data>
   <data name="OpenRecent" xml:space="preserve">
-    <value>Բաց վերջին</value>
+    <value>Բացել վերջինները</value>
     <comment>文件/打开最近</comment>
   </data>
   <data name="OpenSourceSoftware" xml:space="preserve">
@@ -698,15 +698,15 @@
     <comment>段落/有序列表</comment>
   </data>
   <data name="Outline" xml:space="preserve">
-    <value>Ելակետ</value>
+    <value>Ուրվագիծ</value>
     <comment>侧栏/大纲</comment>
   </data>
   <data name="Paragraph" xml:space="preserve">
-    <value>Երեւան</value>
+    <value>Պարբերություն</value>
     <comment>段落</comment>
   </data>
   <data name="Paste" xml:space="preserve">
-    <value>Պաստա</value>
+    <value>Տեղադրել</value>
     <comment>编辑/粘贴</comment>
   </data>
   <data name="PasteAsPlainText" xml:space="preserve">
@@ -730,7 +730,7 @@
     <comment>段落/引用</comment>
   </data>
   <data name="Redo" xml:space="preserve">
-    <value>Ռեդո</value>
+    <value>Կրկնել</value>
     <comment>编辑/重做</comment>
   </data>
   <data name="RemoveColumn" xml:space="preserve">
@@ -770,11 +770,11 @@
     <comment>文件/保存</comment>
   </data>
   <data name="SaveAs" xml:space="preserve">
-    <value>Save As</value>
+    <value>Պահպանել որպես</value>
     <comment>文件/另存为</comment>
   </data>
   <data name="Saved" xml:space="preserve">
-    <value>Փրկված</value>
+    <value>Պահպանված</value>
     <comment>文件/已保存</comment>
   </data>
   <data name="SaveImageAs" xml:space="preserve">
@@ -822,15 +822,15 @@
     <comment>停止操作</comment>
   </data>
   <data name="Strikethrough" xml:space="preserve">
-    <value>Ստրայդթրոու</value>
+    <value>Գծանցված</value>
     <comment>格式/删除线</comment>
   </data>
   <data name="Strong" xml:space="preserve">
-    <value>Բոլդ</value>
+    <value>Թավ</value>
     <comment>格式/加粗</comment>
   </data>
   <data name="Table" xml:space="preserve">
-    <value>Սեղան</value>
+    <value>Աղյուսակ</value>
     <comment>段落/表格</comment>
   </data>
   <data name="TaskList" xml:space="preserve">
@@ -858,7 +858,7 @@
     <comment>转换为</comment>
   </data>
   <data name="TypewriterMode" xml:space="preserve">
-    <value>Typewriter Mode</value>
+    <value>Գրամեքենայի ռեժիմ</value>
     <comment>视图/打字机模式</comment>
   </data>
   <data name="Underline" xml:space="preserve">
@@ -866,7 +866,7 @@
     <comment>格式/下划线</comment>
   </data>
   <data name="Undo" xml:space="preserve">
-    <value>Ունդո</value>
+    <value>Հետարկել</value>
     <comment>编辑/撤销</comment>
   </data>
   <data name="UnorderedList" xml:space="preserve">
@@ -894,7 +894,7 @@
     <comment>Vega Chart</comment>
   </data>
   <data name="View" xml:space="preserve">
-    <value>Դիտել</value>
+    <value>Տեսք</value>
     <comment>查看</comment>
   </data>
   <data name="Website" xml:space="preserve">
@@ -906,7 +906,7 @@
     <comment>编辑/查找和替换/选项/全字匹配</comment>
   </data>
   <data name="Window" xml:space="preserve">
-    <value>Վինդոուզ</value>
+    <value>Պատուհան</value>
     <comment>窗口</comment>
   </data>
   <data name="Word" xml:space="preserve">
@@ -926,7 +926,7 @@
     <comment>YAML Front Matter</comment>
   </data>
   <data name="Zoom" xml:space="preserve">
-    <value>Զովք</value>
+    <value>Մասշտաբ</value>
     <comment>字体缩放</comment>
   </data>
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
@@ -1011,5 +1011,146 @@
   </data>
   <data name="ExportedTo" xml:space="preserve">
     <value>Արտահանվել է {0}</value>
+  </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>Օգտագործողի ուղեցույց</value>
+  </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Նիշեր (առանց բացատների)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Նիշեր (բացատներով)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK նիշեր</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Բառեր</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Ոչ CJK բառեր</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Պարբերություններ</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Վերնագրեր</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Պատկերներ</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Հղումներ</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Ընթերցման ժամանակ</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Մոտ {0} րոպե</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Մեկ րոպեից պակաս</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Հաշվված է տեսանելի տեքստով։ Կոդի բլոկները և բանաձևերը չեն մտնում ընթերցման ժամանակի մեջ։</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Կարգավիճակի գոտում ցույց տալ</value>
+  </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Պահպանված է</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Պահպանված չէ</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Ավտոպահպանումը դադարեցված է</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Սեղմեք՝ պահպանելու համար</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Փաստաթուղթը դատարկ է, բայց սկավառակի ֆայլը դատարկ չէ, և ոչ մի խմբագրում այն չի դատարկել, ուստի ավտոպահպանումը ֆայլը չվերագրեց։</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Այս ֆայլը չհաջողվեց կարդալ առանց կորուստի (UTF-8-ից տարբեր կոդավորում՞), ուստի ավտոպահպանումը այն չի վերագրում։ Պահպանեք ինքներդ միայն եթե ցուցադրված տեքստը ճիշտ է։</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Ֆայլի գրումը ձախողվեց՝ {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>Ընտրված է {0}՝ {1} {2}-ից</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Կոդավորում և տողավերջեր</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Փոխարկել UTF-8-ի</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Կրկին բացել կոդավորմամբ</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Ընթացիկ վերնագիր</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Պահպանման կարգավիճակ</value>
+  </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Թղթապանակներ</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Վերջին թղթապանակներ չկան</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Մաքրել վերջին թղթապանակները</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Սեղմեք աջ կոճակը կամ Delete՝ ցանկից հեռացնելու համար</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Մեկ մակարդակ վեր</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Նշանակել որպես արմատ</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Ընտրյալներ</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Ավելացնել ընտրյալներին</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Հեռացնել ընտրյալներից</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Գլխավոր</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Սկիզբ</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Նոր փաստաթուղթ</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Բացել ֆայլ</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Բացել թղթապանակ</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Վերջին ֆայլեր</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Վերջին թղթապանակներ</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Հեռացնել ցանկից</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Կարգավորումներ</value>
+  </data>
+  <data name="EditorOpening" xml:space="preserve">
+    <value>Բացվում է…</value>
   </data>
 </root>

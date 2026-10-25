@@ -30,17 +30,17 @@ namespace Typedown.Core.Utilities
             return smallValue;
         }
 
+        // Through the shell, as Explorer opens it. Not Process.Start(url) first: on .NET it never runs the shell, so it
+        // always failed (and was logged) before the second try; nor with & written as ^&, cmd's escape, which the shell
+        // does not take - a link with a query came out with ^ in it.
         public static void OpenUrl(string url)
         {
-            try
-            {
-                Process.Start(url);
-            }
-            catch
-            {
-                Process.Start(new ProcessStartInfo(url.Replace("&", "^&")) { UseShellExecute = true });
-            }
+            if (OpenUrlOverride?.Invoke(url) == true) return;
+            Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
         }
+
+        /// <summary>The test host's (Services/Automation/TestHostHooks): what would have opened is kept, and no browser comes up over the cases.</summary>
+        public static Func<string, bool> OpenUrlOverride;
 
         public static void OpenFileLocation(string filePath)
         {

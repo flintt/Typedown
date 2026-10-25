@@ -9,8 +9,6 @@ using System.Windows.Automation;
 /// </summary>
 internal static partial class Program
 {
-    [System.Runtime.InteropServices.DllImport("user32.dll")] private static extern int GetSystemMetrics(int index);
-
     private static async Task PM01(List<string> notes)
     {
         using var c = await Session("e2e PM01");

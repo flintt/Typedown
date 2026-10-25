@@ -130,7 +130,7 @@
     <comment>对话框/取消</comment>
   </data>
   <data name="Confirm" xml:space="preserve">
-    <value>ตกลง, ได้</value>
+    <value>ตกลง</value>
     <comment>对话框/确定</comment>
   </data>
   <data name="CreateDocErrorTitle" xml:space="preserve">
@@ -182,7 +182,7 @@
     <comment>打开文件对话框/读取失败</comment>
   </data>
   <data name="Recover" xml:space="preserve">
-    <value>ซ่อมแซม</value>
+    <value>คืนค่า</value>
     <comment>恢复文件对话框/恢复</comment>
   </data>
   <data name="RecoverContent" xml:space="preserve">
@@ -202,7 +202,7 @@
     <comment>确定恢复应用默认设置？</comment>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>ประหยัด</value>
+    <value>บันทึก</value>
     <comment>文件保存对话框/保存</comment>
   </data>
   <data name="SaveErrorTitle" xml:space="preserve">
@@ -328,5 +328,14 @@
   </data>
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>ในจำนวนนี้ {0} รูปเคยอัปโหลดด้วยการกำหนดค่านี้แล้ว จึงใช้ที่อยู่เดิมของรูปเหล่านั้น</value>
+  </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>ดาวน์โหลด WebView2 Runtime จาก Microsoft</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>ไม่ได้ติดตั้งรันไทม์ โปรแกรมติดตั้งต้องเชื่อมต่ออินเทอร์เน็ต คุณสามารถดาวน์โหลดรันไทม์จาก Microsoft ได้เช่นกัน (มีตัวติดตั้งแบบออฟไลน์ด้วย) ติดตั้งแล้วเริ่มแอปใหม่</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>กำลังติดตั้ง WebView2 Runtime...</value>
   </data>
 </root>

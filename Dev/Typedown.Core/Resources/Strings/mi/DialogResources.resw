@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>Kua tukuatuhia kētia te {0} o ēnei ki tēnei whirihoranga i mua, nā reira i whakamahia ō rātou wāhitau o mua.</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Tikiake te WebView2 Runtime mai i Microsoft</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Kāore i tāutahia te wā whakahaere. Me hono ki te ipurangi te tāuta; ka taea hoki e koe te tikiake i te wā whakahaere mai i Microsoft (he tāuta tuimotu anō hoki), tāuta ai, ka tīmata anō i te taupānga.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>E tāuta ana i te WebView2 Runtime...</value>
+  </data>
 </root>

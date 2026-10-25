@@ -51,6 +51,10 @@ namespace Typedown.Core.Services
             if (!ready.IsCompleted) Log.Debug($"automation: window {windowId} waits for its startup document");
             if (await Task.WhenAny(ready, Task.Delay(StartupTimeoutMs)) != ready)
                 throw new AutomationException(AutomationErrorKind.editor_not_ready, "The window has not finished starting.");
+            // The last session's other tabs read too: their text is what a client asks for.
+            var session = app.FileViewModel.SessionLoaded;
+            if (!session.IsCompleted && await Task.WhenAny(session, Task.Delay(StartupTimeoutMs)) != session)
+                throw new AutomationException(AutomationErrorKind.editor_not_ready, "The window has not finished reading its last session's documents.");
             return await work(app);
         }));
 
@@ -261,7 +265,7 @@ namespace Typedown.Core.Services
                 var frames = tabActive ? app.EditorViewModel.AwaitPageFramesAsync(timeoutMs) : Task.FromResult(false);
                 var rendered = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
                 EventHandler<object> onRendering = (sender, e) => rendered.TrySetResult(true);
-                global::Windows.UI.Xaml.Media.CompositionTarget.Rendering += onRendering;
+                global::Microsoft.UI.Xaml.Media.CompositionTarget.Rendering += onRendering;
                 try
                 {
                     await Task.WhenAny(rendered.Task, deadline);
@@ -276,7 +280,7 @@ namespace Typedown.Core.Services
                 }
                 finally
                 {
-                    global::Windows.UI.Xaml.Media.CompositionTarget.Rendering -= onRendering;
+                    global::Microsoft.UI.Xaml.Media.CompositionTarget.Rendering -= onRendering;
                 }
             });
         }
@@ -386,10 +390,11 @@ namespace Typedown.Core.Services
                 var modeChanged = change.Mode != null && change.Mode != ReadView(app).Mode;
                 if (modeChanged)
                 {
-                    // Setting one on turns the other off (SettingsViewModel); visual turns both off.
+                    // Setting one on turns the other off (SettingsViewModel); visual turns both off, reading first: leaving it
+                    // puts back source mode when reading was entered from there.
                     if (change.Mode == "source") settings.SourceCode = true;
                     else if (change.Mode == "reading") settings.ReadOnly = true;
-                    else { settings.SourceCode = false; settings.ReadOnly = false; }
+                    else { settings.ReadOnly = false; settings.SourceCode = false; }
                 }
                 if (change.SidePanePage != null) settings.SidePaneIndex = change.SidePanePage == "outline" ? 1 : 0;
                 if (change.SidePaneOpen is bool open) settings.SidePaneOpen = open;

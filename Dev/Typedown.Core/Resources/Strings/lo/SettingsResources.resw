@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>ເຮັດໃຫ້ຜົນກະທົບພູມຫຼັງຂອງ mica ສໍາລັບພູມຫຼັງຂອງພື້ນທີ່ແກ້ໄຂ</value>
+    <value>ແຖບດ້ານຂ້າງ ແລະ ແຖບແທັບສະແດງເອັບເຟັກໄມກາ; ພື້ນທີ່ແກ້ໄຂຮັກສາສີທຶບຂອງທີມ</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>ໃຊ້ວັດສະດຸ mica ໃນພື້ນທີ່ແກ້ໄຂ</value>
+    <value>ໃຊ້ວັດສະດຸໄມກາອ້ອມຮອບພື້ນທີ່ແກ້ໄຂ</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>ເປີດໂຟນເດີຂອງມັນ</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>ຈື່ໄຟລ໌ທີ່ເປີດຫຼ້າສຸດ</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>ໄຟລ໌ ແລະ ໂຟນເດີທີ່ທ່ານເປີດຈະສະແດງໃນ ໄຟລ໌ &gt; ເປີດຫຼ້າສຸດ ແລະ ໃນໜ້າຫຼັກ. ເມື່ອປິດ ຈະບໍ່ເພີ່ມຫຍັງໃໝ່.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>ລຶບໄຟລ໌ ແລະ ໂຟນເດີຫຼ້າສຸດ</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>ລ້າງລາຍການໄຟລ໌ ແລະ ໂຟນເດີທີ່ເປີດຫຼ້າສຸດ.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>ລຶບ</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>ສະແດງໜ້າຫຼັກໃນແຖບຫວ່າງ</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>ເມື່ອເລີ່ມໂດຍບໍ່ມີຫຍັງຈະເປີດ ແລະ ເມື່ອປິດແຖບສຸດທ້າຍ: ໄຟລ໌ ແລະ ໂຟນເດີຫຼ້າສຸດ, ລາຍການທີ່ມັກ</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>ແຖບໃໝ່ສະແດງໜ້າຫຼັກ</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>ແຖບໃໝ່ (ໄຟລ໌ &gt; ໃໝ່, ປຸ່ມ +) ສະແດງໜ້າຫຼັກແທນເອກະສານຫວ່າງ</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>ສະແດງແຖວຫວ່າງເພີ່ມເຕີມ</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>ແຖວຫວ່າງລະຫວ່າງວັກກໍໃຊ້ພື້ນທີ່ໃນໂໝດອ່ານ ແລະ ໃນການສົ່ງອອກ HTML ແລະ PDF ຄືກັບຕອນແກ້ໄຂ. ໄຟລ໌ເອງບໍ່ປ່ຽນແປງ</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>ແຕ້ມເອກະສານຍາວເທື່ອລະໜ້ອຍ</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>ເອກະສານຍາວຈະເປີດຢູ່ບ່ອນທີ່ທ່ານປະໄວ້ ແລະ ສ່ວນທີ່ເຫຼືອຈະຖືກແຕ້ມຢູ່ເບື້ອງຫຼັງ. ປິດອັນນີ້ຖ້າມີບາງຢ່າງເບິ່ງຄືບໍ່ຖືກຕ້ອງໃນຂະນະທີ່ເອກະສານຍາວກຳລັງເປີດ: ຈາກນັ້ນມັນຈະຖືກແຕ້ມທັງໝົດໃນຄັ້ງດຽວ</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>ແຖບດ້ານຂ້າງຢູ່ເບື້ອງຂວາ</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>ສະແດງແຖບດ້ານຂ້າງຢູ່ເບື້ອງຂວາຂອງເອກະສານແທນເບື້ອງຊ້າຍ</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>ເກັບການປ່ຽນແປງທີ່ບໍ່ໄດ້ບັນທຶກໄວ້ເມື່ອປິດ</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>ປິດໂດຍບໍ່ຖາມໃຫ້ບັນທຶກ: ເອກະສານທີ່ບໍ່ໄດ້ບັນທຶກຈະກັບມາຄືເກົ່າ, ຍັງບໍ່ໄດ້ບັນທຶກ, ພ້ອມກັບແຖບຂອງເຊສຊັນສຸດທ້າຍ</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>ສະແດງເຄື່ອງໝາຍ Markdown ສະເໝີ</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>ສະແດງເຄື່ອງໝາຍ Markdown (**, #, ທີ່ຢູ່ຂອງລິ້ງ) ໃນທຸກຫຍໍ້ໜ້າ, ບໍ່ແມ່ນສະເພາະບ່ອນທີ່ມີຕົວກະພິບ</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>ຄາດຄະເນໂຄງຮ່າງຂອງເອກະສານຍາວ (ທົດລອງ)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>ໃນຂະນະທີ່ເອກະສານຍາວຖືກແຕ້ມເປັນສ່ວນໆ, ຄວາມສູງຂອງສ່ວນທີ່ຍັງບໍ່ໄດ້ສະແດງຈະຖືກຄິດໄລ່ຈາກຂໍ້ຄວາມແທນການປະມານ, ເຮັດໃຫ້ແຖບເລື່ອນ ແລະ ການໂດດຈາກໂຄງຮ່າງຖືກຕ້ອງກວ່າ. ທົດລອງ</value>
   </data>
 </root>

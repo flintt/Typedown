@@ -8,10 +8,10 @@ using System.Reactive.Linq;
 using Typedown.Core.Pages.SettingPages;
 using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media.Animation;
-using Windows.UI.Xaml.Navigation;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media.Animation;
+using Microsoft.UI.Xaml.Navigation;
 using muxc = Microsoft.UI.Xaml.Controls;
 
 namespace Typedown.Core.Pages
@@ -45,6 +45,9 @@ namespace Typedown.Core.Pages
             }
         }
 
+        /// <summary>The section shown now, by its route name (null when it has none).</summary>
+        public string ShownSection => Route.GetSettingsPageName(ContentFrame.SourcePageType);
+
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
@@ -55,6 +58,26 @@ namespace Typedown.Core.Pages
         private void OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
             VisualStateManager.GoToState(this, ActualWidth.GetBreakPointValue("Large", "Medium", "Small"), false);
+            ApplyCompact();
+        }
+
+        // In compact mode the window has no caption (RootControl): the settings start at its top, in their own colours,
+        // as the main page starts with its menu bar. Their way back is the pane's back button; the strip along the top, as
+        // high as that menu row, is where the window is dragged, the page's title below it. The strip leaves out the
+        // pane's buttons at its left: the back button, and narrow, the menu button beside it.
+        private void ApplyCompact()
+        {
+            var compact = Settings?.AppCompactMode ?? false;
+            NavigationView.IsBackButtonVisible = compact ? muxc.NavigationViewBackButtonVisible.Visible : muxc.NavigationViewBackButtonVisible.Collapsed;
+            TopDrag.Visibility = compact ? Visibility.Visible : Visibility.Collapsed;
+            TopDrag.Margin = new Thickness(ActualWidth.GetBreakPointValue(48, 48, 88), 0, 0, 0);
+            WindowChrome.SetDrag(TopDrag, compact);
+            ContentFrameWrapper.Padding = new Thickness(0, compact ? TopDrag.Height : 0, 0, 0);
+        }
+
+        private void OnBackRequested(muxc.NavigationView sender, muxc.NavigationViewBackRequestedEventArgs args)
+        {
+            if (ViewModel?.GoBackCommand.IsExecutable == true) ViewModel.GoBackCommand.Execute(null);
         }
 
         private void OnNavigated(object sender, NavigationEventArgs e)
@@ -96,6 +119,11 @@ namespace Typedown.Core.Pages
             // The settings are a page of their own, so they have to take the theme from the settings as well:
             // opening them under a custom theme would otherwise drop back to the built-in colours.
             disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.CustomTheme)).StartWith(Settings.CustomTheme).Subscribe(_ => UpdateThemeColours()));
+            disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.AppCompactMode)).Subscribe(_ => ApplyCompact()));
+            disposables.Add(ViewModel.GoBackCommand.WhenPropertyChanged(nameof(ViewModel.GoBackCommand.IsExecutable))
+                .StartWith(ViewModel.GoBackCommand.IsExecutable)
+                .Subscribe(_ => NavigationView.IsBackEnabled = ViewModel.GoBackCommand.IsExecutable));
+            ApplyCompact();
         }
 
         /// <summary>

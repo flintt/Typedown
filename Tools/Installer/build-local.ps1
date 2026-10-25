@@ -4,20 +4,16 @@
     the Build Tools installed.
 
 .DESCRIPTION
-    Three steps: MSBuild publishes Dev\Typedown (self-contained, per architecture, precompiled with ReadyToRun
-    as in CI), the output is copied to Tools\Installer\publish, and ISCC compiles Tools\Installer\Typedown.iss
-    over it. -AutomationTestHost only builds (the E2E scripts run the test host from its bin folder). The result is
-    Tools\Installer\Output\Typedown-windows-<arch>-v<version>.exe.
+    Three steps: the .NET SDK publishes Dev\Typedown (self-contained with the Windows App SDK runtime, per
+    architecture, precompiled with ReadyToRun and trimmed as in CI), the output is copied to Tools\Installer\publish,
+    and ISCC compiles Tools\Installer\Typedown.iss over it. -AutomationTestHost only builds (the E2E scripts run the
+    test host from its bin folder). The result is Tools\Installer\Output\Typedown-windows-<arch>-v<version>.exe.
 
     Unlike CI it does not sign anything — CI signs with a self-signed certificate the system does not trust
     either, so for testing on your own machine the difference is one more SmartScreen prompt.
 
     What it needs, and where it looks:
-      MSBuild        Visual Studio 2022 Build Tools with the "UWP" and ".NET desktop" build tool workloads,
-                     found through vswhere.
-      Windows SDK    read from the KitsRoot10 registry value, so an SDK installed outside Program Files is
-                     found too; mt.exe and makepri.exe from the newest version present are passed to MSBuild,
-                     which otherwise looks for them under Program Files only and fails with MSB3073.
+      .NET 10 SDK    dotnet on PATH, or the one TYPEDOWN_DOTNET names (an SDK unpacked outside Program Files).
       Inno Setup 6   ISCC.exe, either the per-user install (%LOCALAPPDATA%\Programs\Inno Setup 6, which needs
                      no administrator) or the machine-wide one.
       Editor bundle  Dev\Typedown\Resources\Statics, which is not in the repository: build it with
@@ -39,6 +35,11 @@ param(
     [switch]$NoInstaller,
     # What to show in About instead of "local.<commit>"; empty keeps whatever the file already says.
     [string]$Label,
+    # A trial's own version (1.4.0.13): the app and the installer carry it instead of the csproj's release number,
+    # the same number its MSIX gets, so the two files of one trial say the same.
+    [ValidatePattern('^\d+\.\d+\.\d+\.\d+$')][string]$TrialVersion,
+    # A release: About shows no label, as CI's build of a release tag. Only from a clean checkout, never a trial.
+    [switch]$Release,
     # Rebuilds the editor bundle first (needs node and Dev\Typedown.Editor\node_modules).
     [switch]$BuildEditor,
     # Builds the automation test host instead (the app with test.* methods and edit barriers, its own data root) into
@@ -50,30 +51,13 @@ $ErrorActionPreference = 'Stop'
 $repo = Resolve-Path (Join-Path $PSScriptRoot '..\..')
 Set-Location $repo
 
-function Find-MSBuild {
-    $vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio\Installer\vswhere.exe'
-    if (-not (Test-Path $vswhere)) { throw "vswhere not found - install Visual Studio 2022 Build Tools (see the comment at the top of this script)" }
-    $install = & $vswhere -products * -requires Microsoft.Component.MSBuild -property installationPath | Select-Object -First 1
-    if (-not $install) { throw "no Visual Studio installation with MSBuild found" }
-    $msbuild = Join-Path $install 'MSBuild\Current\Bin\MSBuild.exe'
-    if (-not (Test-Path $msbuild)) { throw "MSBuild not found under $install" }
-    $msbuild
-}
-
-function Find-SdkTools {
-    $root = (Get-ItemProperty 'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows Kits\Installed Roots' -ErrorAction SilentlyContinue).KitsRoot10
-    if (-not $root) { $root = Join-Path ${env:ProgramFiles(x86)} 'Windows Kits\10' }
-    $bin = Join-Path $root 'bin'
-    if (-not (Test-Path $bin)) { throw "no Windows SDK under $root" }
-    $version = Get-ChildItem $bin -Directory |
-        Where-Object { $_.Name -match '^10\.' -and (Test-Path (Join-Path $_.FullName 'x86\mt.exe')) } |
-        Sort-Object { [version]$_.Name } -Descending | Select-Object -First 1
-    if (-not $version) { throw "no Windows SDK with mt.exe under $bin" }
-    @{
-        ManifestTool = Join-Path $version.FullName 'x86\mt.exe'
-        MakePri      = Join-Path $version.FullName 'x86\makepri.exe'
-        Version      = $version.Name
+function Find-Dotnet {
+    $dotnet = if ($env:TYPEDOWN_DOTNET) { $env:TYPEDOWN_DOTNET } else { 'dotnet' }
+    $sdks = & $dotnet --list-sdks 2>$null
+    if ($LASTEXITCODE -ne 0 -or -not ($sdks | Where-Object { $_ -match '^10\.' })) {
+        throw "no .NET 10 SDK found ($dotnet) - install it, or set TYPEDOWN_DOTNET to its dotnet.exe"
     }
+    $dotnet
 }
 
 function Find-ISCC {
@@ -117,17 +101,29 @@ if ($newestSource -and $newestSource.LastWriteTimeUtc -gt $builtAt) {
 
 $version = ([xml](Get-Content 'Dev\Typedown\Typedown.csproj')).Project.PropertyGroup.Version |
     Where-Object { $_ } | Select-Object -First 1
+$versionArgs = @()
+$isccVersion = @()
+if ($TrialVersion) {
+    $version = $TrialVersion
+    $versionArgs = @("-p:Version=$TrialVersion")
+    $isccVersion = @("/DMyFileVersion=$TrialVersion")
+}
+if ($Release) {
+    if ($TrialVersion -or $Label -or $AutomationTestHost) { throw '-Release builds the release itself: no -TrialVersion, -Label or -AutomationTestHost' }
+    if ((git status --porcelain --untracked-files=no 2>$null | Measure-Object).Count -gt 0) { throw '-Release needs a clean checkout' }
+}
 $arch = $Platform.ToLowerInvariant()
 Write-Host "Typedown $version  $Platform  $Configuration"
 
 # About shows this next to the version. CI stamps its run and commit here, so a local build says where it came
 # from too rather than carrying whatever label the repository was committed with.
 function Get-LocalLabel {
+    if ($Release) { return '' }
     if ($Label) { return $Label }
     try {
         $commit = (git rev-parse --short HEAD 2>$null)
         if ($LASTEXITCODE -ne 0 -or -not $commit) { return "local.$(Get-Date -Format yyyyMMdd.HHmm)" }
-        $dirty = (git status --porcelain 2>$null | Measure-Object).Count -gt 0
+        $dirty = (git status --porcelain --untracked-files=no 2>$null | Measure-Object).Count -gt 0
         return "local.$commit" + $(if ($dirty) { '+dirty' } else { '' })
     }
     catch {
@@ -135,11 +131,11 @@ function Get-LocalLabel {
     }
 }
 
+$rid = if ($Platform -eq 'ARM64') { 'win-arm64' } else { 'win-x64' }
+
 if (-not $SkipBuild) {
-    $msbuild = Find-MSBuild
-    $sdk = Find-SdkTools
-    Write-Host "MSBuild: $msbuild"
-    Write-Host "Windows SDK: $($sdk.Version)"
+    $dotnet = Find-Dotnet
+    Write-Host "dotnet: $dotnet"
 
     # The label lives in a source file, so it is put back afterwards: building must not leave the checkout
     # modified, or the next build would call itself dirty and a commit could carry the label by accident.
@@ -151,25 +147,19 @@ if (-not $SkipBuild) {
     if ($stamped -eq $configOriginal) { Write-Warning "TestBuild not found in Config.cs; building without a label" }
     try {
         Set-Content $configPath $stamped -Encoding utf8 -NoNewline
-        # /restore re-evaluates the project after generating NuGet imports. Running
-        # Restore,Build as targets in one evaluation misses those imports on a fresh checkout.
-        $hostArgs = @()
-        if ($AutomationTestHost) { $hostArgs = @('/p:AutomationTestHost=true') }
-        # The application is published, as the packaging project does in CI: a release comes out precompiled
-        # (ReadyToRun, Typedown.csproj). The test host is only built - the E2E scripts run it from its bin folder.
-        $target = if ($AutomationTestHost) { '/t:Build' } else { '/t:Publish' }
-        # An array built up, not "if (...) { @(...) }": PowerShell unwraps a one-element array to its string, and
-        # splatting a string passes it character by character.
-        $publishArgs = @()
-        if (-not $AutomationTestHost) {
-            # Emptied first: publish only adds, and a checkout the WinUI 3 build also uses kept that build's files
-            # beside these (assert-application-build.ps1 refuses such a folder).
-            Remove-Item (Join-Path $repo "Dev\Typedown\bin\$Platform\$Configuration\publish") -Recurse -Force -ErrorAction SilentlyContinue
-            $publishArgs += "/p:PublishDir=$(Join-Path $repo "Dev\Typedown\bin\$Platform\$Configuration\publish")\"
+        # The application is published, as CI does: precompiled (ReadyToRun) and trimmed (TypedownTrim, Typedown.csproj).
+        # The test host is only built - the E2E scripts run it from its bin folder.
+        if ($AutomationTestHost) {
+            & $dotnet build 'Dev\Typedown\Typedown.csproj' -nologo -v m -c $Configuration -p:Platform=$Platform -p:AutomationTestHost=true
         }
-        & $msbuild 'Dev\Typedown\Typedown.csproj' /restore $target /m /v:m `
-            /p:Configuration=$Configuration /p:Platform=$Platform `
-            /p:ManifestTool=$($sdk.ManifestTool) /p:MakePri=$($sdk.MakePri) @hostArgs @publishArgs
+        else {
+            # Emptied first: publish only adds, and a checkout the old XAML Islands build also used kept that build's
+            # files beside these - its WebView2 1.0.1661 wrapper among them, which left the installed app without
+            # WebView2 (assert-application-build.ps1 refuses such a folder).
+            Remove-Item (Join-Path $repo "Dev\Typedown\bin\$Platform\$Configuration\publish") -Recurse -Force -ErrorAction SilentlyContinue
+            & $dotnet publish 'Dev\Typedown\Typedown.csproj' -nologo -v m -c $Configuration -p:Platform=$Platform -r $rid `
+                -p:TypedownTrim=true @versionArgs -o (Join-Path $repo "Dev\Typedown\bin\$Platform\$Configuration\publish")
+        }
         $buildFailed = $LASTEXITCODE -ne 0
     }
     finally {
@@ -178,9 +168,8 @@ if (-not $SkipBuild) {
     if ($buildFailed) { throw "build failed" }
 }
 
-$rid = if ($Platform -eq 'ARM64') { 'win10-arm64' } else { 'win10-x64' }
 if ($AutomationTestHost) {
-    $published = Join-Path $repo "Dev\Typedown\bin\AutomationTestHost\$Platform\$Configuration\netcoreapp3.1\$rid"
+    $published = Join-Path $repo "Dev\Typedown\bin\AutomationTestHost\$Platform\$Configuration\net10.0-windows10.0.26100.0\$rid"
     if (-not (Test-Path (Join-Path $published 'automation-test-host.marker'))) { throw "no test host marker in $published" }
     Write-Host "Automation test host: $published"
     return
@@ -196,15 +185,14 @@ $iscc = Find-ISCC
 $stage = Join-Path $repo 'Tools\Installer\publish'
 Remove-Item $stage -Recurse -Force -ErrorAction SilentlyContinue
 New-Item -ItemType Directory -Force $stage | Out-Null
-# Not the MSIX project's own build of the app (win-x64\msixpublish, made beside this one when the package is built
-# here too): 140 MB the installer has no use for.
+# Not a runtime-specific build left beside it (win-x64\...): nothing the installer uses.
 Get-ChildItem $published | Where-Object { -not ($_.PSIsContainer -and $_.Name -match '^win-(x64|x86|arm64)$') } |
     Copy-Item -Destination $stage -Recurse -Force
-# The CLI (and its MCP server) beside the app, on the app's runtime, with the automation documents.
+# The CLI (and its MCP server) is published with the app; this checks it starts and adds the automation documents.
 & (Join-Path $PSScriptRoot 'add-cli.ps1') -AppFolder $stage -RuntimeIdentifier $rid -Configuration $Configuration
 & (Join-Path $PSScriptRoot 'assert-application-build.ps1') -Path $stage
 
-& $iscc /DMyAppVersion=$version /DMyArch=$arch 'Tools\Installer\Typedown.iss' | Select-String -Pattern 'error|Successful compile' | ForEach-Object { $_.Line }
+& $iscc /DMyAppVersion=$version @isccVersion /DMyArch=$arch 'Tools\Installer\Typedown.iss' | Select-String -Pattern 'error|Successful compile' | ForEach-Object { $_.Line }
 if ($LASTEXITCODE -ne 0) { throw "ISCC failed" }
 
 $setup = Get-ChildItem 'Tools\Installer\Output\*.exe' | Sort-Object LastWriteTime -Descending | Select-Object -First 1

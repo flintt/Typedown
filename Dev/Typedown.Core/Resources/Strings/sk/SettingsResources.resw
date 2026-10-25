@@ -138,7 +138,7 @@
     <comment>关于/发送反馈</comment>
   </data>
   <data name="About.Title" xml:space="preserve">
-    <value>O</value>
+    <value>O aplikácii</value>
     <comment>关于/关于</comment>
   </data>
   <data name="Editor.AutoPairBracket.Description" xml:space="preserve">
@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Povolenie efektu pozadia sľudy pre pozadie oblasti úprav</value>
+    <value>Bočná tabla a panel kariet zobrazujú efekt sľudy; oblasť úprav si ponechá plnú farbu motívu</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>V oblasti úprav použite materiál sľudy</value>
+    <value>Použiť materiál sľuda okolo oblasti úprav</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Otvoriť jeho priečinok</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Pamätať si nedávno otvorené súbory</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Otvorené súbory a priečinky sa zobrazujú v ponuke Súbor &gt; Otvoriť nedávne a na domovskej stránke. Po vypnutí sa nič nové nepridáva.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Vymazať nedávne súbory a priečinky</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Vyprázdni zoznamy nedávno otvorených súborov a priečinkov.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Vymazať</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Zobraziť domovskú stránku na prázdnej karte</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Pri spustení bez ničoho na otvorenie a po zatvorení poslednej karty: nedávne súbory a priečinky, obľúbené</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Nové karty zobrazujú domovskú stránku</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Nová karta (Súbor &gt; Nový, tlačidlo +) zobrazí domovskú stránku namiesto prázdneho dokumentu</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Zobraziť nadbytočné prázdne riadky</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Prázdne riadky medzi odsekmi zaberajú miesto aj v režime čítania a v exporte do HTML a PDF, rovnako ako pri úpravách. Samotný súbor sa nemení</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Vykresľovať dlhé dokumenty postupne</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Dlhý dokument sa otvorí na mieste, kde ste ho opustili, a zvyšok sa vykreslí na pozadí. Vypnite to, ak pri otváraní dlhého dokumentu niečo nevyzerá správne: potom sa vykreslí celý naraz</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Bočný panel vpravo</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Zobraziť bočný panel vpravo od dokumentu namiesto vľavo</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Pri zatvorení zachovať neuložené zmeny</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Zatvoriť bez otázky na uloženie: neuložené dokumenty sa vrátia tak, ako boli, stále neuložené, s kartami z poslednej relácie</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Vždy zobrazovať značky Markdownu</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Zobrazovať značky Markdownu (**, #, adresu odkazu) v každom odseku, nielen tam, kde je kurzor</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Predvídať rozloženie dlhých dokumentov (experimentálne)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Kým sa dlhý dokument vykresľuje po častiach, výška toho, čo ešte nie je zobrazené, sa namiesto odhadu vypočíta z textu, takže posúvač a skoky z osnovy sú presnejšie. Experimentálne</value>
   </data>
 </root>

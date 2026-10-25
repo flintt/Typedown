@@ -8,6 +8,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Typedown.Automation;
 
+#nullable enable
+
 namespace Typedown.Services.Automation
 {
     /// <summary>
@@ -25,7 +27,7 @@ namespace Typedown.Services.Automation
         private readonly string name;
         private readonly string sid;
         private bool first = true;
-        private volatile NamedPipeServerStream waiting;
+        private volatile NamedPipeServerStream? waiting;
         private volatile bool disposed;
 
         public SecurePipeListener(string name, string sid)
@@ -101,7 +103,11 @@ namespace Typedown.Services.Automation
                     var sid = Marshal.ReadIntPtr(buffer); // TOKEN_USER.User.Sid
                     if (!ConvertSidToStringSidW(sid, out var text))
                         throw new Win32Exception(Marshal.GetLastWin32Error());
-                    try { return Marshal.PtrToStringUni(text); }
+                    try
+                    {
+                        return Marshal.PtrToStringUni(text)
+                            ?? throw new InvalidOperationException("Windows returned an empty SID string.");
+                    }
                     finally { LocalFree(text); }
                 }
                 finally

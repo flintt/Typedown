@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add" xml:space="preserve">
-    <value>Magdagdag ng</value>
+    <value>Magdagdag</value>
     <comment>添加</comment>
   </data>
   <data name="AlignCenter" xml:space="preserve">
@@ -174,7 +174,7 @@
     <comment>字符(单数)</comment>
   </data>
   <data name="Characters" xml:space="preserve">
-    <value>Mga Tauhan</value>
+    <value>Mga Character</value>
     <comment>字符(复数)</comment>
   </data>
   <data name="Chart" xml:space="preserve">
@@ -182,7 +182,7 @@
     <comment>图表</comment>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Malinaw na</value>
+    <value>I-clear</value>
     <comment>清除</comment>
   </data>
   <data name="ClearFormat" xml:space="preserve">
@@ -198,7 +198,7 @@
     <comment>点击添加一张图片</comment>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>Isara ang</value>
+    <value>Isara</value>
     <comment>文件/关闭</comment>
   </data>
   <data name="Code" xml:space="preserve">
@@ -250,7 +250,7 @@
     <comment>操作/复制到路径</comment>
   </data>
   <data name="Create" xml:space="preserve">
-    <value>Lumikha ng</value>
+    <value>Gumawa</value>
     <comment>创建</comment>
   </data>
   <data name="CtrlAndClickOpenLink" xml:space="preserve">
@@ -298,7 +298,7 @@
     <comment>删除表格</comment>
   </data>
   <data name="Duplicate" xml:space="preserve">
-    <value>Duplo</value>
+    <value>Doblehin</value>
     <comment>段落/重复</comment>
   </data>
   <data name="Edit" xml:space="preserve">
@@ -334,7 +334,7 @@
     <comment>错误</comment>
   </data>
   <data name="Export" xml:space="preserve">
-    <value>I-export ang</value>
+    <value>I-export</value>
     <comment>文件/导出</comment>
   </data>
   <data name="ExportSettings" xml:space="preserve">
@@ -350,7 +350,7 @@
     <comment>应用程序反馈</comment>
   </data>
   <data name="File" xml:space="preserve">
-    <value>Mag-file</value>
+    <value>File</value>
     <comment>文件(单数)</comment>
   </data>
   <data name="Files" xml:space="preserve">
@@ -358,7 +358,7 @@
     <comment>文件(复数)</comment>
   </data>
   <data name="Find" xml:space="preserve">
-    <value>Hanapin ang</value>
+    <value>Hanapin</value>
     <comment>编辑/查找和替换/查找</comment>
   </data>
   <data name="FindAndReplace" xml:space="preserve">
@@ -450,7 +450,7 @@
     <comment>应用程序帮助</comment>
   </data>
   <data name="Highlight" xml:space="preserve">
-    <value>I-highlight ang</value>
+    <value>I-highlight</value>
     <comment>格式/高亮</comment>
   </data>
   <data name="HorizontalLine" xml:space="preserve">
@@ -546,7 +546,7 @@
     <comment>了解更多</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Liwanag</value>
+    <value>Maliwanag</value>
     <comment>应用主题/浅色</comment>
   </data>
   <data name="Line" xml:space="preserve">
@@ -614,7 +614,7 @@
     <comment>名称不能为空</comment>
   </data>
   <data name="New" xml:space="preserve">
-    <value>Bagong</value>
+    <value>Bago</value>
     <comment>文件/新建</comment>
   </data>
   <data name="NewFile" xml:space="preserve">
@@ -654,7 +654,7 @@
     <comment>未设置</comment>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Isara ang</value>
+    <value>Naka-off</value>
     <comment>开关/关</comment>
   </data>
   <data name="Ok" xml:space="preserve">
@@ -662,11 +662,11 @@
     <comment>对话框/确定</comment>
   </data>
   <data name="On" xml:space="preserve">
-    <value>Sa</value>
+    <value>Naka-on</value>
     <comment>开关/开</comment>
   </data>
   <data name="Open" xml:space="preserve">
-    <value>Buksan ang</value>
+    <value>Buksan</value>
     <comment>文件/打开</comment>
   </data>
   <data name="OpenFileLocation" xml:space="preserve">
@@ -686,7 +686,7 @@
     <comment>文件/在新窗口中打开</comment>
   </data>
   <data name="OpenRecent" xml:space="preserve">
-    <value>Buksan ang Kamakailang</value>
+    <value>Buksan ang Kamakailan</value>
     <comment>文件/打开最近</comment>
   </data>
   <data name="OpenSourceSoftware" xml:space="preserve">
@@ -746,7 +746,7 @@
     <comment>文件/重命名</comment>
   </data>
   <data name="Replace" xml:space="preserve">
-    <value>Palitan ang</value>
+    <value>Palitan</value>
     <comment>编辑/查找和替换/替换</comment>
   </data>
   <data name="ReplaceAll" xml:space="preserve">
@@ -818,7 +818,7 @@
     <comment>状态栏</comment>
   </data>
   <data name="Stop" xml:space="preserve">
-    <value>Tigilan mo na</value>
+    <value>Ihinto</value>
     <comment>停止操作</comment>
   </data>
   <data name="Strikethrough" xml:space="preserve">
@@ -826,7 +826,7 @@
     <comment>格式/删除线</comment>
   </data>
   <data name="Strong" xml:space="preserve">
-    <value>Matapang na</value>
+    <value>Bold</value>
     <comment>格式/加粗</comment>
   </data>
   <data name="Table" xml:space="preserve">
@@ -862,7 +862,7 @@
     <comment>视图/打字机模式</comment>
   </data>
   <data name="Underline" xml:space="preserve">
-    <value>Salungguhitan ang</value>
+    <value>Salungguhitan</value>
     <comment>格式/下划线</comment>
   </data>
   <data name="Undo" xml:space="preserve">
@@ -894,7 +894,7 @@
     <comment>Vega Chart</comment>
   </data>
   <data name="View" xml:space="preserve">
-    <value>Tingnan ang</value>
+    <value>Tingnan</value>
     <comment>查看</comment>
   </data>
   <data name="Website" xml:space="preserve">
@@ -1011,5 +1011,146 @@
   </data>
   <data name="ExportedTo" xml:space="preserve">
     <value>Na-export sa {0}</value>
+  </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>Gabay sa paggamit</value>
+  </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Mga karakter (walang espasyo)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Mga karakter (may espasyo)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>Mga CJK na karakter</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Mga salita</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Mga salitang hindi CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Mga talata</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Mga heading</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Mga larawan</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Mga link</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Oras ng pagbasa</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Mga {0} min</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Wala pang isang minuto</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Binilang sa nakikitang teksto. Hindi kasama sa oras ng pagbasa ang mga code block at formula.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Ipinapakita ng status bar</value>
+  </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Nai-save</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Hindi naka-save</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Naka-pause ang auto save</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>I-click para i-save</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Walang laman ang dokumento pero hindi ang file sa disk, at walang edit na nag-alis ng laman nito, kaya hindi pinatungan ng auto save ang file.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Hindi mabasa ang file na ito nang walang nawawala (encoding na hindi UTF-8?), kaya hindi ito pinapatungan ng auto save. I-save ito nang mano-mano kung tama lang ang ipinapakitang teksto.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Nabigo ang pagsulat ng file: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{0} sa {1} {2} ang napili</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Encoding at line ending</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>I-convert sa UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Buksan muli gamit ang encoding</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Kasalukuyang heading</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Status ng pag-save</value>
+  </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Mga folder</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Walang kamakailang folder</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>I-clear ang mga kamakailang folder</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Mag-right-click o pindutin ang Delete para alisin ito sa listahan</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Isang antas pataas</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Itakda bilang root</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Mga paborito</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Idagdag sa mga paborito</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Alisin sa mga paborito</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Simula</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Bagong dokumento</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Buksan ang file</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Buksan ang folder</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Mga kamakailang file</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Mga kamakailang folder</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Alisin sa listahan</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Mga setting</value>
+  </data>
+  <data name="EditorOpening" xml:space="preserve">
+    <value>Binubuksan…</value>
   </data>
 </root>

@@ -329,4 +329,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>সেইবোৰৰ {0}টা এই কনফিগাৰেচনেৰে আগতে আপলোড কৰা হৈছিল, গতিকে সেইবোৰৰ আগৰ ঠিকনা ব্যৱহাৰ কৰা হ'ল।</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Microsoft ৰ পৰা WebView2 ৰানটাইম ডাউনলোড কৰক</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>ৰানটাইম ইনষ্টল হোৱা নাই। ছেটআপৰ বাবে ইণ্টাৰনেট সংযোগ লাগে; আপুনি Microsoft ৰ পৰা ৰানটাইম ডাউনলোডো কৰিব পাৰে (অফলাইন ইনষ্টলাৰো আছে), ইনষ্টল কৰি এপটো পুনৰ আৰম্ভ কৰক।</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>WebView2 ৰানটাইম ইনষ্টল কৰি থকা হৈছে...</value>
+  </data>
 </root>

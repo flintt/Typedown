@@ -18,13 +18,13 @@ internal static partial class Program
     // ---- finding and waiting ----
 
     private static AutomationElement? FindIn(IntPtr window, string automationId) =>
-        AutomationElement.FromHandle(window).FindFirst(TreeScope.Descendants, new PropertyCondition(AutomationElement.AutomationIdProperty, automationId));
+        Deep.First(AutomationElement.FromHandle(window), new PropertyCondition(AutomationElement.AutomationIdProperty, automationId));
 
     private static AutomationElement? FindNamed(IntPtr window, string name, ControlType? type = null)
     {
         Condition condition = new PropertyCondition(AutomationElement.NameProperty, name);
         if (type != null) condition = new AndCondition(condition, new PropertyCondition(AutomationElement.ControlTypeProperty, type));
-        return AutomationElement.FromHandle(window).FindFirst(TreeScope.Descendants, condition);
+        return Deep.First(AutomationElement.FromHandle(window), condition);
     }
 
     /// <summary>The element once it is there; a failure that says what was waited for when it is not.</summary>
@@ -38,6 +38,17 @@ internal static partial class Program
             if (clock.ElapsedMilliseconds > timeoutMs) throw new CaseFailed($"'{automationId}' did not appear within {timeoutMs} ms ({FocusInfo(window)})");
             await Task.Delay(100);
         }
+    }
+
+    /// <summary>
+    /// The automation id of what has the keyboard, or null. Read while the focus moves (from the editor's page to a box of
+    /// the window), the element can be gone before it is read: UI Automation then throws, which is "not there yet".
+    /// </summary>
+    private static string? FocusedAutomationId()
+    {
+        try { return System.Windows.Automation.AutomationElement.FocusedElement?.Current.AutomationId; }
+        catch (System.Windows.Automation.ElementNotAvailableException) { return null; }
+        catch (System.Runtime.InteropServices.COMException) { return null; }
     }
 
     private static async Task WaitGone(IntPtr window, string automationId, int timeoutMs = 5000)
@@ -81,14 +92,29 @@ internal static partial class Program
     }
 
     /// <summary>
-    /// A real click at a point on the screen. The point must be in the window: what lies under it otherwise (another
-    /// window over it) is named in the failure, as it is the click's first suspect.
+    /// A real click at a point on the screen. The point must be in the window, or in a popup of its own (a menu is a
+    /// window of its own, in the app's process): what lies under it otherwise (another window over it) is named in the
+    /// failure, as it is the click's first suspect.
     /// </summary>
     private static async Task Click(IntPtr window, int x, int y, Mouse button = Mouse.Left, int clicks = 1)
     {
-        await Activate(window);
+        // An open menu is clicked as it is: bringing the window to the front first closed it.
+        bool OwnPopup(IntPtr at)
+        {
+            GetWindowThreadProcessId(window, out var process);
+            GetWindowThreadProcessId(at, out var atProcess);
+            var kind = new System.Text.StringBuilder(256);
+            GetClassName(at, kind, 256);
+            return atProcess == process && kind.ToString() == "Xaml_WindowedPopupClass";
+        }
         var under = WindowFromPoint(new POINT { X = x, Y = y });
-        if (under != window && GetAncestor(under, 2) != window)
+        var ownPopup = OwnPopup(under);
+        if (!ownPopup)
+        {
+            await Activate(window);
+            under = WindowFromPoint(new POINT { X = x, Y = y });
+        }
+        if (under != window && GetAncestor(under, 2) != window && !ownPopup)
         {
             var name = new System.Text.StringBuilder(256);
             GetClassName(under, name, 256);
@@ -129,17 +155,28 @@ internal static partial class Program
         Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0002 } } }, new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0004 } } });
     }
 
-    /// <summary>A press at one point, a move to another in steps, and the release there.</summary>
+    /// <summary>
+    /// A press at one point, a move to another in steps, and the release there - moved as a mouse moves (SendInput):
+    /// a cursor only placed (SetCursorPos) sends no pointer moves, and a splitter dragged that way did not move.
+    /// </summary>
     private static async Task Drag(IntPtr window, (int X, int Y) from, (int X, int Y) to, int steps = 12)
     {
         await Activate(window);
-        SetCursorPos(from.X, from.Y);
+        int screenW = GetSystemMetrics(0), screenH = GetSystemMetrics(1);
+        void MoveTo(int x, int y) => Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dx = x * 65535 / (screenW - 1), dy = y * 65535 / (screenH - 1), dwFlags = 0x0001 | 0x8000 } } });
+        foreach (var dx in new[] { 6, 3, 0 })
+        {
+            MoveTo(from.X + dx, from.Y);
+            await Task.Delay(40);
+        }
+        await Task.Delay(100);
         Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0002 } } });
         for (var i = 1; i <= steps; i++)
         {
-            SetCursorPos(from.X + (to.X - from.X) * i / steps, from.Y + (to.Y - from.Y) * i / steps);
-            await Task.Delay(15);
+            MoveTo(from.X + (to.X - from.X) * i / steps, from.Y + (to.Y - from.Y) * i / steps);
+            await Task.Delay(25);
         }
+        await Task.Delay(100);
         Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0004 } } });
     }
 
@@ -157,6 +194,8 @@ internal static partial class Program
         ["Ctrl"] = 0x11, ["Shift"] = 0x10, ["Alt"] = 0x12, ["Win"] = 0x5B, ["Enter"] = 0x0D, ["Esc"] = 0x1B, ["Tab"] = 0x09,
         ["Space"] = 0x20, ["Back"] = 0x08, ["Delete"] = 0x2E, ["Home"] = 0x24, ["End"] = 0x23, ["PageUp"] = 0x21, ["PageDown"] = 0x22,
         ["Left"] = 0x25, ["Up"] = 0x26, ["Right"] = 0x27, ["Down"] = 0x28, ["Insert"] = 0x2D,
+        // The / key (US layout), as Vim's search reads it: a key, not a character typed (VK_OEM_2).
+        ["Slash"] = 0xBF,
     };
 
     /// <summary>

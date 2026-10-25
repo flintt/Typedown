@@ -156,6 +156,16 @@ class ContentState {
   }
 
   setCursor() {
+    // A caret in a part of the document not drawn yet (renderProgressive): put on the page once its block is drawn -
+    // and the rest is drawn before anything the reader does, so it is there before their first key. The model has it
+    // already: what the editor reports (the text and the caret's line) is read from the model, not the page.
+    const { start, end } = this.cursor || {}
+    const root = this.muya.container
+    const progressive = this.stateRender.progressive
+    if (progressive && root && ((start && !root.querySelector(`#${start.key}`)) || (end && !root.querySelector(`#${end.key}`)))) {
+      progressive.cursorPending = true
+      return
+    }
     selection.setCursorRange(this.cursor)
   }
 
@@ -173,7 +183,11 @@ class ContentState {
     this.resizeLineNumber()
   }
 
-  render(isRenderCursor = true, clearCache = false, fresh = false) {
+  // cursorLater: the caller places the caret itself in a later task (Muya.setMarkdown on a whole new document), so
+  // the caret is not set here, and the editor is not blurred either - that would take the focus from it.
+  // progressive (a whole new document only): { center: the top-level block to draw first, done: once all is drawn } -
+  // the document is drawn a part at a time (StateRender.renderProgressive).
+  render(isRenderCursor = true, clearCache = false, fresh = false, cursorLater = false, progressive = null) {
     const { blocks, searchMatches: { matches, index } } = this
     const activeBlocks = this.getActiveBlocks()
     if (clearCache) {
@@ -184,13 +198,57 @@ class ContentState {
     })
     this.setNextRenderRange()
     this.stateRender.collectLabels(blocks)
-    this.stateRender.render(blocks, activeBlocks, matches, fresh)
-    if (isRenderCursor) {
+    if (fresh && progressive) {
+      this.stateRender.renderProgressive(blocks, activeBlocks, matches, progressive.center, () => {
+        this.postRender()
+        progressive.done && progressive.done()
+      })
+    } else {
+      this.stateRender.render(blocks, activeBlocks, matches, fresh)
+    }
+    if (cursorLater) {
+      // The old document's caret went with its elements, and the selection is left collapsed on the editor itself
+      // until the new one is placed. With it there the browser's next style pass over a long document took a second
+      // and a half instead of a tenth (measured, 3000 headings); with no selection at all it is the tenth. Only a
+      // selection in the editor: one in a text box elsewhere (the input hold's) is not ours to drop.
+      const sel = document.getSelection()
+      if (sel && sel.rangeCount && this.muya.container.contains(sel.anchorNode)) sel.removeAllRanges()
+    } else if (isRenderCursor) {
       this.setCursor()
     } else {
       this.muya.blur()
     }
     this.postRender()
+  }
+
+  /**
+   * The code blocks in `lang` on the page drawn again, now that its highlighting is loaded (importMarkdown). It drew
+   * the whole document again: on every start with code in it, a second full drawing of the document - and a document
+   * being drawn a part at a time drawn to its end at once. A block not on the page yet is highlighted as it is drawn.
+   */
+  redrawCodeOf(lang) {
+    const root = this.muya.container
+    if (!root) return
+    const activeBlocks = this.getActiveBlocks()
+    const { matches } = this.searchMatches
+    const hasLang = block => (block.type === 'pre' && block.lang === lang) || (block.children || []).some(hasLang)
+    let caretBlock = null
+    try {
+      caretBlock = this.cursor && this.findOutMostBlock(this.getBlock(this.cursor.start.key))
+    } catch (err) {
+      caretBlock = null
+    }
+    let caretRedrawn = false
+    for (const block of this.blocks) {
+      if (!hasLang(block)) continue
+      const element = root.querySelector(`#${block.key}`)
+      if (!element) continue
+      element.outerHTML = this.stateRender.blocksHtml([block], activeBlocks, matches)
+      if (block === caretBlock) caretRedrawn = true
+    }
+    this.stateRender.codeCache.clear()
+    this.postRender()
+    if (caretRedrawn && root.contains(document.activeElement)) this.setCursor()
   }
 
   partialRender(isRenderCursor = true) {

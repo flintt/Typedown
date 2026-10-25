@@ -12,8 +12,6 @@ Typedown 的测试分几层，越往下越接近真实使用，也越慢、越�
 | 发布候选检查 | `Tools/AutomationE2E/windows-rc-check.ps1` | 已安装的程序：直接客户端、`typedownctl`、`typedownctl mcp`、安装目录里的示例 | 装好待发布版本的 Windows | 否 |
 | 人工验证 | [windows-verification.md](windows-verification.md) | 自动测试覆盖不到的：安装升级、文件锁、输入法、真实文件 | Windows | 否 |
 
-`Tests/Typedown.Test`、`Tests/Typedown.UITest`、`Tests/Typedown.Universal.Test` 是上游留下的 .NET Core 3.1 项目，目前不维护，也不在 CI 里运行。
-
 Uno 版（Typedown-Uno 仓库）有自己的检查脚本，见那边的 `docs/testing.md`；两边共用的自动化等价场景在 `Tools/AutomationE2E/equivalence`。
 
 ## 单元测试
@@ -46,7 +44,7 @@ npm run check:source                          # 自动化写入依赖的源码�
 CI 的“Test editor integration”一步运行这些：
 
 <!-- BEGIN generated: editor-checks -->
-- `handshake-check.js`: Verifies the LoadFile -> FileLoaded handshake: FileLoaded must carry the original source text and the load's id, nothing for a superseded load may leak through, and no MarkdownChange precedes FileLoaded.
+- `handshake-check.js`: Verifies the LoadFile -> FileLoaded handshake: FileLoaded must report the original source and the load's id, nothing for a superseded load may leak through, and no MarkdownChange precedes FileLoaded.
 - `reading-source-check.js`: Regression (source-text mapping stability): viewing a document must never rewrite its source.
 - `mermaid-lazy-check.js`: mermaid.min.js (3.5 MB) loads only when a document draws a diagram (public/lazy-mermaid.js): a document without one never requests it, a document with one requests it exactly once and the diagram is drawn.
 - `mermaid-edit-check.js`: Rapid Mermaid edits used to start overlapping renders against one shared queue.
@@ -61,9 +59,13 @@ CI 的“Test editor integration”一步运行这些：
 - `remote-image-check.js`: Pictures on the web (todo #18, "network images do not show").
 - `diagram-picture-check.js`: Diagrams rendered as pictures (RenderXhtml with diagramsAsPictures, what a host turning the document into another format asks for): a big diagram still becomes a picture - drawn at twice its size it went past the browser's canvas limits and came out empty ("data:,") - and each picture's text says what it was: the diagram's kind and the start of its source, not just "diagram".
 - `table-backspace-check.js`: Backspace in a table cell stays in that cell: one Backspace too many after emptying a cell went to the end of the cell before, the next deleted that cell's text and what was typed next landed there - a reader saw "a cell emptied takes no typing" and lost its neighbour's text.
+- `xhtml-toc-check.js`: The document rendered as XHTML for another format (RenderXhtml) keeps the place of its [TOC] line: an empty div.table-of-contents where the table of contents goes, which a host fills with that format's own (Word's).
+- `xhtml-math-check.js`: The document rendered as XHTML for another format (RenderXhtml) with mathAsTex: each formula is its TeX, inline in a span.math-tex and on its own line in a span.math-tex-display, for a host writing formulas its own way (Word's equations).
 - `xhtml-footnote-check.js`: The document rendered as XHTML for another format (RenderXhtml) carries its footnotes as section.footnotes and a.footnote-ref, as the HTML export does: the host sends no footnote option, and the export uses the editor's own default (footnotes on) - [^1] stayed literal Markdown there.
 - `export-anchors-check.js`: The HTML that becomes the PDF must link its contents to the headings the parser actually rendered.
 - `wordcount-mode-check.js`: The word count is the same in the visual editor and in source mode: source mode counted every character and split words at spaces only, so a mode switch moved the count with nothing written, and what follows the count's changes as edits took the jump for writing.
+- `blank-jump-check.js`: The reader scrolls up into the part not drawn yet while a long document is still drawn (back at its end, as a tab switched back to): the rest is drawn at once (completeRender), and the window must then show what the reader scrolled to - not jump 100,000 px on (hp, 1.4.0: a 1.5 MB document back at its end, the wheel turned up 18,000 px, the page went from 371k to 272k 5 ms after the drawing ended, and was put back there on every later switch).
+- `jt04-drift-check.js`: A long document switched back to near its end, nobody at it while the rest is drawn above (a part at a time): the block at the top of the window stays where it is, frame after frame, for 15 s (Automation JT04: 2 px at most).
 <!-- END generated: editor-checks -->
 
 ## Windows 端到端测试
@@ -138,11 +140,24 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | Q02 | a window closed at once after it opened (its web view still being created): the process lives on |
 | D01 | the window's UI thread runs every callback posted to it, from many threads at once |
 | K02 | Ctrl+, twice opens and closes the settings: the caret and the keyboard are where they were |
+| CM01 | in compact mode the settings have no title bar: they start at the window's top, their top strip drags the window, their back button goes back to the editor page as it was |
+| SH01 | Ctrl+, held down opens the settings once - no going in and out until the app hangs and falls over - and types no comma |
+| JU01 | a long document comes back where it was without the page moving - switched back to in its tab, and opened in a window of its own as the start-up restores it |
 | K04 | a window just opened takes the keys at once: a letter typed without a click reaches the document |
 | K05 | a new tab (the + button, Ctrl+N) and a tab clicked in the strip take the keys at once, without a click in the text |
+| TL01 | keys typed at once after Ctrl+N, a tab clicked, Ctrl+Tab, the + button, Ctrl+Shift+H and a long document's tab clicked go into the tab shown, in order, Enter and Chinese text too; the document left is unchanged |
 | K06 | after closing a tab, a menu command, a mode switch, an outline jump, closing the find bar or a dialog, and Ctrl+Tab, the keys go to the document without a click |
 | K03 | the same with an untitled document (no per-file caret memory) |
 | FS01 | in full screen the main page starts at the top edge of the screen |
+| FS03 | in full screen the pointer at the top edge reveals the menu bar every time, and it hides when the pointer leaves |
+| MB01 | a menu open while the title bar is clicked or dragged closes: the File menu and the editor's context menu |
+| WV01 | the editor comes back after its web view's browser process ends: the document on the page again, taking edits |
+| SF01 | a window opening under the dark theme shows no light frame in its first two seconds on screen |
+| SF02 | a long document under a dark custom theme (Dracula): leaving the settings and a window opening with it show the theme's colour, never light or the app's dark colour |
+| WV02 | without the WebView2 runtime the install window comes up with the download; a setup that installs it goes on to the main window |
+| WV03 | a setup that did not install the WebView2 runtime leaves the install window saying so, with the download; Cancel ends the start |
+| LG01 | after the language is changed through the API, no Chinese or Japanese is left on the main window, the home page or the settings page |
+| HM01 | Help > User guide opens the user guide in the interface's language, Help > About the About page |
 | FS02 | out of full screen the window is dragged by its title bar again at once (with the title row, and in compact mode by the menu row) |
 | PU01 | PlantUML is not drawn by default (nothing goes to plantuml.com, the block says so); turned on it is, by the server set if one is, off again it is not |
 | RV01 | reveal: "change" scrolls a change off screen into view, the caret where it was; "document" leaves the page |
@@ -155,31 +170,96 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | VI02 | Vim keys in reading mode: G, gg, ]] and Ctrl+D move the page |
 | TC01 | a tab closed with its x button: the outline shows the headings of the tab shown next |
 | TC02 | a tab closed while its neighbour is not the tab used last: the outline is the shown tab's, with long documents |
-| SE01 | the startup action chosen on the settings page is in the settings file |
+| TC03 | a long document's tab closed and another file opened right after: the file opened is the one shown |
+| SE01 | the startup action chosen on the settings page is in the settings file, and so are the two home page switches below it |
+| RC01 | two folders opened, A then B: File > Open recent > Folders lists B then A by name and folder, and choosing A makes it the folder pane's root |
+| RC02 | a recent file deleted stays in the list greyed out and a right-click removes it; Clear recent files leaves the recent folders |
+| RC03 | with "Remember recently opened files" off a file opened is not listed; Clear recent on the settings page empties files and folders |
+| FN01 | the folder pane's up arrow, the folder above chosen in its root menu and "Set as root" on a folder each move the tree; the open documents stay as they were |
+| FT02 | a folder in the file tree is shown as a folder that expands after the root changed: up from a folder of files to a folder of folders, and back and forth |
+| FT03 | the same after a big folder was expanded and the root changed, a folder moved in, one renamed from a temporary name and one whose attributes changed |
+| FT04 | a file opened in Repo/docs (the tree following it there) and the root set at once two levels up: Repo expanded shows docs as a folder |
+| FN02 | with a folder opened, the button beside the root's name moves the tree to the folder of a document outside it |
+| FW01 | an open document renamed outside the app is followed by its window, also after the app renamed it once |
+| FV01 | a file favoured from its tab's menu and a folder from the tree's menu are in favorites.json and the folder pane's group, still after a restart (and on the home page); renamed in the tree, the favourite follows |
+| HP01 | a start with the settings as they come shows the home page; a recent file clicked there opens in its tab and the home page goes |
+| HP02 | Ctrl+N and the + button show no home page and the next letter goes into the new document; with "New tabs show the home page" on, Ctrl+N shows it |
+| HP03 | the last tab closed leaves the window with the home page (closed again, the window goes); a session whose files are gone shows it; with the switch off a blank document |
+| SR01 | a cold start bringing the last session back: the active document on screen within seconds of the window, the other tabs not waited for |
+| JT01 | switching between long documents the text in the window stays still - no block moving by half a pixel or more from frame to frame, while drawn or after |
+| JT02 | back to a long document from a short one - read a quarter, 60% and 95% of the way down, and left while still drawn - the screen goes from the cover to it without the short one again, and its text stays still frame by frame; predicting the layout off and on, in visual and in reading mode |
+| JT03 | back to a long document read far down: while the blocks above are drawn back and the reader turns the wheel, the frames come at most 50 ms apart in the middle and a notch reaches the next frame within 100 ms |
+| JT04 | back to a long document left at its very end, after 3 s, 60 s, or 90 s with the window minimized, nothing touched: the block in the window stays there for 15 s; or the wheel turned up: the page goes up a few blocks a notch, no further; predicting the layout on and off, at the reader's window and settings |
+| WD01 | the window comes back where it was after the process ends, closed or killed, and another window opens set off from it |
+| HJ03 | the outline's jump to a heading far down lands and stays there - while a long document is still drawn and once it is |
+| HP04 | with files open, File > Home, the home button and Ctrl+Shift+H show the home page in one blank tab, the documents left alone; an automation write into it hides it with the text written |
+| HP05 | the home page hidden by typing, and by its New document button, leaves the keys in the editor |
 | WP02 | pasted web pictures: one behind hotlink protection is fetched with the page as referrer, a page that is not a picture is kept on the web and said, and an untitled document saved into a folder takes its pictures along |
 | EX02 | an export says where it was written, with buttons to open it, and goes when closed; with no action after export, nothing shows |
 | TB01 | the table toolbar's Resize table opens with the table's own size; Cancel leaves the table as it was; OK resizes it |
 | TH01 | a custom theme colours the page in visual, reading and source mode, and a change shows at once in each |
 | RD01 | reading mode: the context menu offers copying and selecting only, Copy works on a selection, copy as plain text leaves the Markdown out, Ctrl+Z changes nothing |
 | RD02 | reading mode: Focus mode and Typewriter mode in the View menu are disabled and drawn fainter than the entries that work, in Dark and Light, whether the menu was opened before or not |
-| SF01 | a window opening under the dark theme shows no light frame in its first two seconds on screen |
 | DG02 | every diagram of the showcase document, written into a window just opened, is drawn once |
 | IM01 | the showcase's checkerboard, after View > Source mode and back, is drawn and not failed when clicked |
 | CP01 | Copy pasted into Word: pictures at absolute file:/// addresses, a name and an alt text with brackets, an SVG sized in pt, a JPEG |
 | TH03 | the side pane marks what is chosen (the bar under Files/Outline, the outline's and the folder tree's row pill) in a custom theme's accent, and in the system accent again without one |
+| ES01 | an editor shortcut only the app carries out (Ctrl+1, Heading 1) works while one types in the editor |
+| ES02 | Ctrl+B on a selection makes it bold, and it stays bold a while later |
+| TI01 | the window carries the app's icon (Alt+Tab, taskbar, system menu) |
+| TE01 | the restored window resizes from its top edge and top corners |
+| MN01 | a minimized window's document is written and saved through the automation API |
+| LK01 | a link to another Markdown file opens it as a tab of the same window when files open in tabs |
+| FL01 | the settings' font family box suggests the installed fonts |
+| FO01 | after another window and back, and after the context menu closed with Esc, the next letter goes into the document |
+| TH04 | Windows switched between light and dark while the app follows the system: caption buttons readable, editor follows |
+| FT01 | the file tree sorts names as 1.3.7 did |
+| MN02 | a window minimized a while and restored: a document opened at once is shown within 5 s and takes keys |
+| TH05 | the editor follows Dark, Black, Mica off and on, then Light (it stayed dark under a light window) |
 | TH06 | a custom theme switched back to Light or Dark: the editor page, the line beside the side pane, the side pane and the status bar are drawn as before, and the editor is dark under Dark |
+| TH07 | the settings' and the dialogs' controls (a switch, the accent button, a check box) take a custom theme's accent, with readable text on it, and the system accent again without one |
+| SB01 | the status bar switches modes: its reading button and badge go into reading mode and back to the mode it was entered from (source too), and its mode menu ticks the mode and greys focus and typewriter mode where they do nothing |
+| SB02 | a click on the status bar's count shows the document's numbers on its visible text (words, CJK characters, headings, links, pictures, reading time), and the count it shows can be chosen there |
+| SB03 | the status bar shows whether the document is saved, and when auto-save holds a file back (one it could not read without loss) it says so and why |
+| SB04 | a selection shows its count of the whole in the status bar, and the whole count again once it is gone |
+| SB05 | the status bar shows the file's encoding and line ending: CRLF chosen there is what a save writes, and a GBK file is read again as GB18030 from its menu |
+| SB06 | the status bar names the heading the caret is under, and a click on it opens the outline |
+| SB07 | a narrow window puts the status bar items with no room into a "..." menu (the heading first, the count stays), and a right-click chooses which items show |
+| AC01 | an edition hears of what happens around the writing: a document shown, the mode changed, an undo, the window left and come back to, a save under a new name and a rename, the page scrolled (not at every scroll event) |
 | KY01 | Ctrl+Z and Ctrl+Y are the host's undo and redo however close Ctrl and the letter come, in the visual editor and in source mode |
 | ED01 | in the visual editor Ctrl+Shift+Right selects by words and Ctrl+Shift+Down to the end of the paragraph, Ctrl+Left/Right move without selecting, Ctrl+F opens the find bar, and the wheel scrolls the page |
 | ED02 | Shift+Enter and Alt+Enter in a table cell put a line break in that cell |
 | BL01 | blank lines survive a visual edit and a save: 1 at the start, 2, 4, 2, 3, 5 and 2 between blocks, 1 at the end |
+| BL02 | Settings > Editor > "Show extra blank lines": on, empty lines keep their height in reading mode and an HTML export; off (the default), both collapse them as before |
+| MN03 | minimized, written to, restored without activation: the editor's web view gets its size back |
+| MN04 | F11 in and out of full screen, then minimized and brought back as a person does: the window works |
+| MN05 | F11 in and out of full screen, minimized, then a file opened from Explorer: the window comes back working |
+| DP01 | the window is per-monitor DPI aware (not stretched, so not blurred, on a scaled screen) |
+| DR01 | files dragged from Explorer onto the editor: a Markdown file opens, a picture goes into the document |
+| DM01 | the window's top edge is drawn in the app's theme, and a dialog's smoke covers it too: the top row matches the row under it, light and dark |
 | TH02 | View > Theme > Reload themes finds a new theme file and a renamed one; the window draws in the custom theme's base whatever the built-in setting says |
 | WP01 | a web page pasted: headings with #, code fenced with its language and without line numbers, Google Docs bold and italic, late-loaded and relative pictures by their real addresses; with Insert web image copying, its pictures are copied beside the document and their addresses replaced |
 | ER01 | a page message handler that throws stays subscribed and the message still reaches the other handlers; an exception out of an event handler XAML calls is logged and the app goes on |
 | DG01 | a dialog wears the custom theme (its surface and text colours), and the system's colours again without it |
 | PM01 | the Paragraph menu's checks follow the caret: Table stays unchecked after its dialog is cancelled, Quote and Table are checked with the caret in a quote and a table |
 | OL02 | two long documents scrolled to their middle, switched between: the outline does not mark another heading of the document being left |
+| OL03 | the outline marks the heading being read as soon as the page is shown again (back from the settings), without a scroll |
+| OL01 | tabs switched back and forth, quickly and slowly: every heading with headings under it stays expanded in the outline |
 | LD01 | a load the editor gives back rewritten is loaded once more and keeps the file's text; one rewritten again is taken after that one retry, not retried without end |
+| NV01 | the editor page is never taken to another address: a script sending it to a web site is refused, and the document is still there |
+| VM01 | Vim's search in source mode on a long document: / and the letters typed after it go into the search box, nothing into the document, and Enter goes to the match |
+| TX01 | Settings > Appearance: the theme chosen in its own drop-down, from Dark and from Dracula to Light, leaves the drop-down drawn |
+| PP01 | the print preview under a dark custom theme (Dracula): the page and its margins white, the theme's colour back after |
+| CV01 | a very long document left (a tab switched to, the tab closed) is covered at once and uncovered when the next is on the page; a close cancelled at the save question covers nothing |
+| XF01 | a file changed outside: unchanged here, it is offered again and reloaded; with changes here, Keep keeps them; without asking, reloaded at once; a tab in the background asks when shown; deleted, the document turns unsaved |
+| SS01 | the settings in a narrow window: the items end left of the scroll bar, not under it |
+| LS01 | the interface language changed in the settings' General section, which was reached from Help > About: the settings are built again on General, not on About |
+| KU01 | Keep unsaved changes when closing: every window closes without asking, the app exits, and started again it has the titled and the untitled document back as they were, unsaved, without a recovery question |
+| PS01 | the side pane on the right (Settings > View): right of the document, which is not mirrored; its splitter dragged left widens it; off, it is on the left again |
 | PF01 | measured: a 300 KB document opened, typed into and saved; the memory with two windows |
+| PF03 | profiled: where the host's CPU goes while it opens 300 KB documents |
+| HJ01 | measured: the scroll bar while a long document is drawn - predicted heights (pretext) against the old estimate, with Windows' fonts |
+| HJ02 | measured: where a heading far down lands when the outline jumps to it while a long document is drawn, and once drawn - predicted heights against the old estimate |
 | PF02 | measured: a cold start with a document on the command line, then the window closed |
 | Q01 | two windows closed one after the other: the process exits (it stayed, headless) |
 <!-- END generated: e2e-cases -->
@@ -196,22 +276,27 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | `test.barrier.arm` | `point`, `documentId?` | Arms a one-shot barrier at a point of the write path (optionally for one document); returns its barrierId. | EditBarriers.cs |
 | `test.barrier.waitHit` | `barrierId`, `timeoutMs?` | Waits until an edit is held at the barrier (hit) or the timeout passes; the held operation's id. | EditBarriers.cs |
 | `test.barrier.release` | `barrierId` | Lets the held edit go on. | EditBarriers.cs |
+| `test.links.opened` | - | What the app would have opened as links since the test host started (a browser, a file's own program). | TestHostHooks.cs |
 | `test.editor.pageText` | `documentId` | What the page itself holds right now - lets a test wait for real input to arrive instead of sleeping. | TestHostHooks.cs |
 | `test.dispatcher.stress` | `windowId`, `threads?`, `posts?` | The window's UI thread runs every callback posted to it, from any number of threads at once. Its dispatcher numbered posts with a plain increment: two threads could take the same number, and one callback was dropped - an await continuation that never ran (E2E C01 hung a minute with the UI thread idle). | TestHostHooks.cs |
 | `test.backup.run` | - | Backups: one pass now in every window, and what the backup folder holds afterwards. | TestHostHooks.cs |
 | `test.editor.style` | `windowId` | How a window's editor page is drawn: its font size, line height and text direction, as the page reports them. | TestHostHooks.cs |
 | `test.editor.focus` | `windowId` | Keyboard focus into the window's editor page, the way the app itself gives it (the editor control's focus is handed on to the web view) - independent of what a click would land on. | TestHostHooks.cs |
+| `test.webview.state` | `windowId` | The web view as the app sees it: whether WinUI counts it visible, suspended, its size, the window's state. | TestHostHooks.cs |
 | `test.editor.eval` | `windowId`, `script` | Runs a script in the window's editor page and returns its JSON result: for diagnosing what the page holds (caret, Muya's state) when a check fails in the real window and not in the page harness. | TestHostHooks.cs |
+| `test.editor.xhtml` | `windowId` | The XHTML the editor renders for another format (RenderXhtml with diagrams as pictures and maths as TeX), for a test to check what such an export receives. | TestHostHooks.cs |
 | `test.editor.screenPoint` | `x?`, `y?`, `windowId` | Where a point of the editor page (CSS pixels, as getBoundingClientRect gives them) is on the screen, in physical pixels: the page's coordinates are the editor control's (the floating tools are placed by the same mapping), scaled by the window's rasterization scale from its client area. The web view draws into the window without a window or an automation element of its own, so a test that clicks the page has nothing else to measure. | TestHostHooks.cs |
 | `test.edition.set` | `name`, `value?`, `windowId` | A state an edition takes from outside (Edition.TestSet), set for a test; an error when the edition has no such name (Typedown has none). | TestHostHooks.cs |
 | `test.edition.get` | `name`, `windowId` | A state of the edition's (Edition.TestGet), as a string; an error when the edition has no such name. | TestHostHooks.cs |
 | `test.editor.reload` | `windowId` | Reloads the window's editor page, as the application does after a page error or a crashed web process. | TestHostHooks.cs |
 | `test.window.handle` | `windowId` | The window's native handle (HWND), for UI Automation and window messages from the driver. | TestHostHooks.cs |
 | `test.window.menuTitles` | `windowId` | The titles of the window's menu bar, as drawn: the menu follows the interface language. | TestHostHooks.cs |
+| `test.window.texts` | `windowId` | Every text the window's own controls show (not the editor page's): what a reader sees of the interface, to find words left in another language. Collapsed parts are left out. | TestHostHooks.cs |
+| `test.window.statusTexts` | `windowId` | The texts the status bar shows (its save state among them), in the order of the visual tree. | TestHostHooks.cs |
 | `test.window.layout` | `windowId` | Where the main page starts in its window, and whether the window is in full screen: in full screen nothing may sit above it (a 4 px row of window background did, along the top of the screen). | TestHostHooks.cs |
-| `test.window.keep` | `windowId` | Holds a window in memory from now on, as anything still referring to it does after it closes: XamlWindow.AllWindows lists a window until the garbage collector has finalized it, closed or not. | TestHostHooks.cs |
+| `test.window.keep` | `windowId` | Holds a window in memory from now on, as anything still referring to it does after it closes: MainWindow.AllWindows lists a window until it has closed; the XAML Islands list kept it until finalized, closed or not. | TestHostHooks.cs |
 | `test.window.navigate` | `route`, `windowId` | Moves a window to a page, as its menu would: route "Settings/Editor" opens that settings page, "Main" goes back. | TestHostHooks.cs |
-| `test.window.open` | - | Opens another window, as File > New window does, and returns its windowId once it is registered. | TestHostHooks.cs |
+| `test.window.open` | `path?` | Opens another window, as File > New window does, and returns its windowId once it is registered. | TestHostHooks.cs |
 | `test.settings.set` | `name`, `windowId`, `value` | Sets a property of a window's settings view model by name, as its settings page would: also the settings the automation API does not expose. | TestHostHooks.cs |
 | `test.settings.get` | `name`, `windowId` | Reads a property of a window's settings view model by name. | TestHostHooks.cs |
 | `test.images.configure` | `method?`, `config?`, `windowId` | Image upload without its dialogs: an enabled configuration (PowerShell or S3), chosen as Settings > Image > Upload with; returns what was stored, so a test can see that the secret is not there in plain text. | TestHostHooks.cs |
@@ -229,14 +314,31 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | `test.app.caseLabel` | `label?` | The running E2E case and its purpose, shown in every window's title after the test host's marker (label empty: none). Not tied to a window: a case sets it before it has one. | TestHostHooks.cs |
 | `test.app.titleMarker` | `show?`, `windowId` | The test host's title markers ("AUTOMATION TEST HOST ·" and the connected client's note) on (show: true) or off in every window, for screenshots that are to look like the app. | TestHostHooks.cs |
 | `test.file.saveAs` | `path`, `windowId` | The window's active document saved as the path, as File > Save as with that file picked (an untitled one's first save too); the path back, or null when it was not saved. | TestHostHooks.cs |
+| `test.file.rename` | `path`, `windowId` | The window's active document's file renamed to the path, as Rename in the folder pane does for the open document; answers whether it was renamed. | TestHostHooks.cs |
 | `test.export.run` | `type?`, `path`, `windowId` | The window's document exported to a file, as File > Export > <type> with that file picked in the save dialog (html or pdf: the first export configuration of that type); answers once the export is asked for, not done. | TestHostHooks.cs |
 | `test.export.notice` | `windowId` | The notice an export leaves (Settings > Export > After export): the file it names, or null when none shows. | TestHostHooks.cs |
 | `test.export.menu` | `windowId` | The entries of a window's File > Export submenu, as shown. | TestHostHooks.cs |
-| `test.dialogs.dismiss` | - | Every dialog left open in any window, closed as its close button would: the driver asks before each case, so one case's dialog (an insert-table dialog an Esc did not reach, an unsaved document's "save?") does not hold the next cases' clicks back. | TestHostHooks.cs |
+| `test.dialogs.dismiss` | - | Every dialog left open in any window, closed as its close button would: the driver asks before each case, so one case's prompt (an unsaved document's "save?") does not hold the next cases' dialogs back. | TestHostHooks.cs |
 | `test.dialog.colours` | `windowId` | The open dialog's colours and the custom theme's, to tell whether the dialog wears the theme. | TestHostHooks.cs |
+| `test.outline.jump` | `slug`, `windowId` | The jump a click on an outline heading makes (EditorViewModel.JumpBySlug), to the heading block `slug` (HJ03). | TestHostHooks.cs |
+| `test.outline.state` | `windowId` | The outline's expansion as the tree holds it (its nodes) and as the model holds it, row by row: the two disagreeing after a tab switch is how a heading's children came to be hidden with nobody collapsing it. | TestHostHooks.cs |
 | `test.theme.chrome` | `windowId` | The colours a custom theme changes around the editor, as they are now: the line between the side pane and the editor, the side pane, the menu bar and the status bar. A theme switched off has to put back what the built-in theme draws (TH06). | TestHostHooks.cs |
 | `test.pane.accent` | `windowId` | The colours the side pane marks what is chosen with: every selection indicator drawn in it (the bar under Files/Outline, the pill of each outline and folder-tree row), by where it is, with its fill. | TestHostHooks.cs |
+| `test.activity.recent` | `clear?` | The last events EditionHooks.Activity raised, oldest first (kind, mode, document, path, the old path of a rename); with clear, forgets them after answering (AC01). | TestHostHooks.cs |
+| `test.element.dump` | `name`, `windowId` | How an element of the window is drawn, by its x:Name: it and every element under it, with what decides whether it shows (its opacity and its composition visual's, visibility, size, theme, colours). For a control seen gone from the page while still there (TX01). | TestHostHooks.cs |
+| `test.theme.controls` | `windowId` | The accent the standard controls draw with, as they draw it: a switch turned on, an accent button (the dialogs' default button has its style) and a ticked check box are put up in a popup over the window, their colours read from what WinUI drew, and taken down again. The settings and the dialogs stayed the system blue under every theme (TH07). | TestHostHooks.cs |
 | `test.images.uploadAll` | `windowId` | File > Upload local images on the window's active document, without its dialogs; returns the result. | TestHostHooks.cs |
+| `test.recent.menu` | `windowId` | The entries of a window's File > Open recent menu as it builds them: kind (file, folder), text, path and whether the entry is greyed out (its file or folder is not there, looked at afresh). | TestHostHooks.cs |
+| `test.recent.clear` | `what?`, `windowId` | The recent lists emptied as their menu entries and the settings button do: what = files, folders or all. | TestHostHooks.cs |
+| `test.folder.state` | `windowId` | The folder pane: the root its tree shows (null when the pane is not loaded), the window's work folder and whether it was chosen (Open folder, a recent folder, the pane's navigation) rather than following the document. | TestHostHooks.cs |
+| `test.folder.menu` | `windowId` | The folder pane's root menu (its name's dropdown) as it would open now: each entry's automation id, text and path. | TestHostHooks.cs |
+| `test.favorites.state` | `windowId` | The favourites: what favorites.json holds (path, folder) and what the window's folder pane shows in its group (path, whether dimmed as missing; null when the pane is not shown). | TestHostHooks.cs |
+| `test.favorites.clear` | - | Every favourite taken out (a case starting from none). | TestHostHooks.cs |
+| `test.home.state` | `windowId` | The window's home page: whether it is asked for and shown (the view model and the page on screen), the active tab's document and whether it is blank, the page's lists (favourites, recent files and folders: path, dimmed, the last change shown) and the ids of an edition's sections shown on it (a collapsed one is not). | TestHostHooks.cs |
+| `test.settings.flush` | `windowId` | The settings written to Settings.json now (a case that restarts the host after test.settings.set). | TestHostHooks.cs |
+| `test.layout.contentTop` | `windowId` | Where the content starts below the window's top row, in the window's coordinates: the main page's menu bar row's bottom, or the top of the page the frame shows (the settings, under their caption). E2E CM01. | TestHostHooks.cs |
+| `test.editor.opening` | `windowId` | How many times the window said "Opening…" over its editor, and how many long loads it had (JU01: a switch between long documents does not say it). | TestHostHooks.cs |
+| `test.folder.open` | `path`, `windowId` | A folder opened as the folder pane's root, as File > Open folder with that folder picked. | TestHostHooks.cs |
 <!-- END generated: test-methods -->
 
 屏障的位置（`test.barrier.arm` 的 `point`）：`beforeFlushReply`、`afterEditorMutationBeforeReport`、`beforeSaveCommit`，定义在 `Dev/Typedown.Automation/DocumentEdit.cs`。一个屏障只拦一次；没人放行的屏障 60 秒后自己放行，所以失败的用例不会把测试宿主卡住。

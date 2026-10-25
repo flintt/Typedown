@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Habilitar o efeito de plano de fundo da mica para o plano de fundo da área de edição</value>
+    <value>O painel lateral e a barra de guias mostram o efeito mica; a área de edição mantém a cor sólida do tema</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Use material de mica na área de edição</value>
+    <value>Usar material mica ao redor da área de edição</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Abrir a pasta</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Memorizar ficheiros abertos recentemente</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Os ficheiros e pastas que abre aparecem em Ficheiro &gt; Abrir recente e na página inicial. Desativado, nada de novo é adicionado.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Limpar ficheiros e pastas recentes</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Esvazia as listas de ficheiros e pastas abertos recentemente.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Limpar</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Mostrar a página inicial num separador vazio</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>No arranque sem nada para abrir e ao fechar o último separador: ficheiros e pastas recentes, favoritos</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Novos separadores mostram a página inicial</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Um novo separador (Ficheiro &gt; Novo, o botão +) mostra a página inicial em vez de um documento vazio</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Mostrar linhas em branco adicionais</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>As linhas em branco entre parágrafos também ocupam espaço no modo de leitura e nas exportações para HTML e PDF, como durante a edição. O ficheiro em si não é alterado</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Desenhar documentos longos progressivamente</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Um documento longo abre no ponto onde você o deixou, e o resto é desenhado em segundo plano. Desative isto se algo parecer errado enquanto um documento longo é aberto: ele será então desenhado de uma só vez</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Barra lateral à direita</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Mostrar a barra lateral à direita do documento em vez de à esquerda</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Manter alterações não guardadas ao fechar</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Fechar sem perguntar se quer guardar: os documentos não guardados voltam como estavam, ainda não guardados, com os separadores da última sessão</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Mostrar sempre as marcas de Markdown</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Mostrar as marcas de Markdown (**, #, o endereço de uma ligação) em todos os parágrafos, não apenas onde está o cursor</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Prever o layout de documentos longos (experimental)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Enquanto um documento longo é desenhado por partes, a altura do que ainda não é exibido é calculada a partir do texto em vez de estimada, para que a barra de rolagem e os saltos a partir do esboço sejam mais precisos. Experimental</value>
   </data>
 </root>

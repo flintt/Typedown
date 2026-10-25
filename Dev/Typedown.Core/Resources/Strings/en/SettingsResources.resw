@@ -373,6 +373,12 @@
     <value>Automatically save when the file is modified</value>
     <comment>通用/打开后应用会在文件发生修改时自动保存</comment>
   </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Keep Unsaved Changes When Closing</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Close without asking to save: unsaved documents come back as they were, still unsaved, with the last session's tabs</value>
+  </data>
   <data name="General.AutoSave.Title" xml:space="preserve">
     <value>Auto save</value>
     <comment>通用/自动保存</comment>
@@ -669,6 +675,12 @@
     <value>Show Side Bar</value>
     <comment>视图/显示侧栏</comment>
   </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Side Bar on the Right</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Show the side bar on the right of the document instead of the left</value>
+  </data>
   <data name="View.StatusBarOpen.Description" xml:space="preserve">
     <value>Choose whether to display the bottom status bar</value>
     <comment>视图/选择是否显示底部状态栏</comment>
@@ -690,11 +702,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Enable the mica background effect for the editing area background</value>
+    <value>The side pane and tab bar show the mica effect; the editing area keeps the theme's solid colour</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Use mica material in the editing area</value>
+    <value>Use mica material around the editing area</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -748,6 +760,36 @@
   <data name="Editor.TableAlignColumns.Description" xml:space="preserve">
     <value>Pad table cells so columns line up in the Markdown source. Turn off to keep tables compact (fewer tokens for AI tools)</value>
     <comment>编辑器/对齐表格列说明</comment>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Show extra blank lines</value>
+    <comment>编辑器/保留多余空行（显示为空白）</comment>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Empty lines between paragraphs take up space in reading mode and in HTML and PDF exports too, as they do while editing. The file itself is not changed</value>
+    <comment>编辑器/保留多余空行说明：段落之间多出的空行在阅读模式和 HTML、PDF 导出中也留出空白，与编辑时一致，文件内容不变</comment>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Always Show Markdown Marks</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Show the Markdown marks (**, #, a link's address) in every paragraph, not only where the caret is</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Draw long documents progressively</value>
+    <comment>编辑器/分段渲染长文档</comment>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>A long document opens at the place you left it, and the rest is drawn in the background. Turn this off if something looks wrong while a long document is opening: it is then drawn all at once</value>
+    <comment>编辑器/分段渲染长文档说明：长文档打开时先显示上次阅读的位置，其余部分在后台补齐；若打开长文档时出现异常，可关闭此项，改为一次渲染整篇</comment>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Predict the layout of long documents (experimental)</value>
+    <comment>编辑器/预测长文档排版（实验性）</comment>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>While a long document is drawn in parts, the height of what is not shown yet is worked out from its text instead of estimated, so the scroll bar and jumps from the outline are more accurate. Experimental</value>
+    <comment>编辑器/预测长文档排版说明：长文档分段渲染时，按文字排版算出尚未显示部分的高度，而不是估算，滚动条和大纲跳转更准确。实验性功能</comment>
   </data>
   <data name="Editor.ShowParagraphMarker.Title" xml:space="preserve">
     <value>Paragraph marker</value>
@@ -934,5 +976,41 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Open its folder</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Remember recently opened files</value>
+    <comment>设置 → 常规 → 数据：记录最近打开的文件（开关标题）</comment>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Files and folders you open are listed in File &gt; Open recent and on the home page. Turned off, nothing new is added.</value>
+    <comment>设置 → 常规 → 数据：记录最近打开的文件（说明）</comment>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Clear recent files and folders</value>
+    <comment>设置 → 常规 → 数据：清除最近记录（标题）</comment>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Empties the lists of recently opened files and folders.</value>
+    <comment>设置 → 常规 → 数据：清除最近记录（说明）</comment>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Clear</value>
+    <comment>设置 → 常规 → 数据：清除最近记录按钮</comment>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Show the home page on a blank tab</value>
+    <comment>设置 → 常规 → 启动时：空白标签显示首页（标题）</comment>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>At startup with nothing to open, and when the last tab is closed: recent files and folders, favourites</value>
+    <comment>设置 → 常规 → 启动时：空白标签显示首页（说明）</comment>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>New tabs show the home page</value>
+    <comment>设置 → 常规 → 启动时：新建标签也显示首页（标题）</comment>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>A new tab (File > New, the + button) shows the home page instead of an empty document</value>
+    <comment>设置 → 常规 → 启动时：新建标签也显示首页（说明）</comment>
   </data>
 </root>

@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Ippermetti l-effett tal-isfond tal-majka għall-isfond taż-żona tal-editjar</value>
+    <value>Il-pannell tal-ġenb u l-bar tat-tabs juru l-effett tal-mika; iż-żona tal-editjar iżżomm il-kulur solidu tat-tema</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Uża materjal tal-majka fiż-żona tal-editjar</value>
+    <value>Uża materjal tal-mika madwar iż-żona tal-editjar</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Iftaħ il-folder tiegħu</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Ftakar il-fajls miftuħa riċentement</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Il-fajls u l-folders li tiftaħ jidhru f'Fajl &gt; Iftaħ riċenti u fil-paġna ewlenija. Meta mitfi, xejn ġdid ma jiżdied.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Ħassar il-fajls u l-folders riċenti</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Ibattal il-listi tal-fajls u l-folders miftuħa riċentement.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Ħassar</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Uri l-paġna ewlenija f'tab vojta</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Fil-bidu meta ma jkun hemm xejn x'tiftaħ u meta tingħalaq l-aħħar tab: fajls u folders riċenti, favoriti</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>It-tabs il-ġodda juru l-paġna ewlenija</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Tab ġdida (Fajl &gt; Ġdid, il-buttuna +) turi l-paġna ewlenija minflok dokument vojt</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Uri l-linji vojta żejda</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Il-linji vojta bejn il-paragrafi jieħdu spazju wkoll fil-modalità tal-qari u fl-esportazzjonijiet HTML u PDF, bħal waqt l-editjar. Il-fajl innifsu ma jinbidilx</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Iddisinja dokumenti twal bil-mod il-mod</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Dokument twil jinfetaħ fejn ħallejtu, u l-bqija jiġi ddisinjat fl-isfond. Itfi dan jekk xi ħaġa tidher ħażin waqt li jkun qed jinfetaħ dokument twil: imbagħad jiġi ddisinjat kollu f'daqqa</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Il-bar tal-ġenb fuq il-lemin</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Uri l-bar tal-ġenb fuq il-lemin tad-dokument minflok fuq ix-xellug</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Żomm il-bidliet mhux salvati meta tagħlaq</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Agħlaq mingħajr ma tistaqsi biex tissejvja: id-dokumenti mhux salvati jerġgħu lura kif kienu, għadhom mhux salvati, bit-tabs tal-aħħar sessjoni</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Uri dejjem is-sinjali tal-Markdown</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Uri s-sinjali tal-Markdown (**, #, l-indirizz ta' link) f'kull paragrafu, mhux biss fejn hemm il-kursur</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Bassar it-tqassim ta' dokumenti twal (sperimentali)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Waqt li dokument twil jinġibed f'partijiet, l-għoli ta' dak li għadu ma jidhirx jiġi kkalkulat mit-test minflok ma jiġi stmat, sabiex il-bar tal-iscroll u l-qbiż mill-iskema jkunu aktar preċiżi. Sperimentali</value>
   </data>
 </root>

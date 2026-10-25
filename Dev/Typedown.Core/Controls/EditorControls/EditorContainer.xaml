@@ -116,10 +116,12 @@
                 </MenuFlyout>
             </ContentPresenter.ContextFlyout>
         </ContentPresenter>
+        <!-- The home page over the editor of a blank tab; a file or picture dropped on it goes where a drop on the editor goes. -->
+        <local:HomePage x:Name="HomeView" AllowDrop="True" DragEnter="OnDragEnter" Drop="OnDrop"/>
         <ScrollViewer x:Name="EditorInitErrorView" x:Load="{x:Bind ViewModel.MarkdownEditor.IsEditorLoadFailed, Mode=OneWay}">
             <StackPanel Margin="24" Spacing="8">
                 <TextBlock TextWrapping="Wrap" Text="{u:LocaleString Key=EditorInitErrorMessage}"/>
-                <HyperlinkButton Content="Microsoft WebView2 Runtime" NavigateUri="https://developer.microsoft.com/microsoft-edge/webview2/" Margin="-12,0,0,0"/>
+                <HyperlinkButton Content="Microsoft WebView2 Runtime" NavigateUri="https://developer.microsoft.com/microsoft-edge/webview2/#download" Margin="-12,0,0,0"/>
             </StackPanel>
         </ScrollViewer>
         <ScrollBar 

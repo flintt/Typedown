@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add" xml:space="preserve">
-    <value>Adio</value>
+    <value>Ychwanegu</value>
     <comment>添加</comment>
   </data>
   <data name="AlignCenter" xml:space="preserve">
@@ -146,7 +146,7 @@
     <comment>自动</comment>
   </data>
   <data name="Back" xml:space="preserve">
-    <value>Cefn</value>
+    <value>Yn ôl</value>
     <comment>返回</comment>
   </data>
   <data name="Browse" xml:space="preserve">
@@ -174,7 +174,7 @@
     <comment>字符(单数)</comment>
   </data>
   <data name="Characters" xml:space="preserve">
-    <value>Cymeriadau</value>
+    <value>Nodau</value>
     <comment>字符(复数)</comment>
   </data>
   <data name="Chart" xml:space="preserve">
@@ -214,7 +214,7 @@
     <comment>插入表格/列数</comment>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>Copi</value>
+    <value>Copïo</value>
     <comment>编辑/复制</comment>
   </data>
   <data name="CopyAsHTMLCode" xml:space="preserve">
@@ -358,7 +358,7 @@
     <comment>文件(复数)</comment>
   </data>
   <data name="Find" xml:space="preserve">
-    <value>Ffeindio</value>
+    <value>Canfod</value>
     <comment>编辑/查找和替换/查找</comment>
   </data>
   <data name="FindAndReplace" xml:space="preserve">
@@ -446,7 +446,7 @@
     <comment>段落/六级标题</comment>
   </data>
   <data name="Help" xml:space="preserve">
-    <value>Helpu</value>
+    <value>Help</value>
     <comment>应用程序帮助</comment>
   </data>
   <data name="Highlight" xml:space="preserve">
@@ -582,7 +582,7 @@
     <comment>窗口/最大化</comment>
   </data>
   <data name="MenuBar" xml:space="preserve">
-    <value>Bar Bwydlen</value>
+    <value>Bar Dewislen</value>
     <comment>菜单栏</comment>
   </data>
   <data name="Mermaid" xml:space="preserve">
@@ -654,7 +654,7 @@
     <comment>未设置</comment>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Cau</value>
+    <value>I ffwrdd</value>
     <comment>开关/关</comment>
   </data>
   <data name="Ok" xml:space="preserve">
@@ -662,7 +662,7 @@
     <comment>对话框/确定</comment>
   </data>
   <data name="On" xml:space="preserve">
-    <value>Ar</value>
+    <value>Ymlaen</value>
     <comment>开关/开</comment>
   </data>
   <data name="Open" xml:space="preserve">
@@ -698,7 +698,7 @@
     <comment>段落/有序列表</comment>
   </data>
   <data name="Outline" xml:space="preserve">
-    <value>Amlinellu</value>
+    <value>Amlinelliad</value>
     <comment>侧栏/大纲</comment>
   </data>
   <data name="Paragraph" xml:space="preserve">
@@ -726,11 +726,11 @@
     <comment>文件/打印</comment>
   </data>
   <data name="Quote" xml:space="preserve">
-    <value>Dyfynnu</value>
+    <value>Dyfyniad</value>
     <comment>段落/引用</comment>
   </data>
   <data name="Redo" xml:space="preserve">
-    <value>Redo</value>
+    <value>Ail-wneud</value>
     <comment>编辑/重做</comment>
   </data>
   <data name="RemoveColumn" xml:space="preserve">
@@ -818,19 +818,19 @@
     <comment>状态栏</comment>
   </data>
   <data name="Stop" xml:space="preserve">
-    <value>Peidio</value>
+    <value>Stopio</value>
     <comment>停止操作</comment>
   </data>
   <data name="Strikethrough" xml:space="preserve">
-    <value>Strikethrough</value>
+    <value>Llinell drwodd</value>
     <comment>格式/删除线</comment>
   </data>
   <data name="Strong" xml:space="preserve">
-    <value>Hy</value>
+    <value>Trwm</value>
     <comment>格式/加粗</comment>
   </data>
   <data name="Table" xml:space="preserve">
-    <value>Bwrdd</value>
+    <value>Tabl</value>
     <comment>段落/表格</comment>
   </data>
   <data name="TaskList" xml:space="preserve">
@@ -866,7 +866,7 @@
     <comment>格式/下划线</comment>
   </data>
   <data name="Undo" xml:space="preserve">
-    <value>Datod</value>
+    <value>Dadwneud</value>
     <comment>编辑/撤销</comment>
   </data>
   <data name="UnorderedList" xml:space="preserve">
@@ -1011,5 +1011,146 @@
   </data>
   <data name="ExportedTo" xml:space="preserve">
     <value>Wedi'i allforio i {0}</value>
+  </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>Canllaw defnyddiwr</value>
+  </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Nodau (heb fylchau)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Nodau (gyda bylchau)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>Nodau CJK</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Geiriau</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Geiriau nad ydynt yn CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Paragraffau</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Penawdau</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Delweddau</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Dolenni</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Amser darllen</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Tua {0} mun</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Llai na munud</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Wedi’i gyfrif ar y testun gweladwy. Nid yw blociau cod a fformiwlâu yn rhan o’r amser darllen.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Mae’r bar statws yn dangos</value>
+  </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Wedi’i gadw</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Heb ei gadw</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Cadw awtomatig wedi’i oedi</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Cliciwch i gadw</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Mae’r ddogfen yn wag ond nid yw’r ffeil ar y ddisg, ac ni wnaeth unrhyw olygiad ei gwagio, felly ni wnaeth cadw awtomatig drosysgrifo’r ffeil.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Nid oedd modd darllen y ffeil hon heb golled (amgodiad heblaw UTF-8?), felly nid yw cadw awtomatig yn ei throsysgrifo. Cadwch hi eich hun dim ond os yw’r testun a ddangosir yn gywir.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Methwyd ag ysgrifennu’r ffeil: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{0} o {1} {2} wedi’u dewis</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Amgodiad a diwedd llinellau</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Trosi i UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Ailagor gydag amgodiad</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Pennawd cyfredol</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Statws cadw</value>
+  </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Ffolderi</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Dim ffolderi diweddar</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Clirio ffolderi diweddar</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>De-gliciwch neu pwyswch Delete i'w dynnu o'r rhestr</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Un lefel i fyny</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Gosod fel gwraidd</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Ffefrynnau</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Ychwanegu at ffefrynnau</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Tynnu o ffefrynnau</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Hafan</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Dechrau</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Dogfen newydd</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Agor ffeil</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Agor ffolder</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Ffeiliau diweddar</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Ffolderi diweddar</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Tynnu o'r rhestr</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Gosodiadau</value>
+  </data>
+  <data name="EditorOpening" xml:space="preserve">
+    <value>Yn agor…</value>
   </data>
 </root>

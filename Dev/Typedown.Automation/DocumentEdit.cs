@@ -161,6 +161,12 @@ namespace Typedown.Automation
         /// <summary>Computes the candidate from the latest text; may throw (e.g. <c>match_count_mismatch</c>).</summary>
         public Func<string, string> Edit { get; set; } = t => t;
         public bool AllowUnknown { get; set; }
+        /// <summary>
+        /// The reader's own action in the app, not a client's (a version restored, a document made from a template): the
+        /// text is theirs and goes in as given even when the first visual edit would change some of it - the page's
+        /// notice on the first visual edit says so. Never set from the automation API, whose clients stay refused.
+        /// </summary>
+        public bool AllowUnsafe { get; set; }
         public bool Save { get; set; }
         /// <summary>
         /// <c>reveal: "change"</c>: once applied, the page scrolls the first changed block into view when it is off
@@ -340,7 +346,7 @@ namespace Typedown.Automation
                         failure = Error(AutomationErrorKind.editor_not_ready, "The editor failed to apply the edit; the document was restored.");
                     else if (reply.SourceHash != candidateHash)
                         failure = Error(AutomationErrorKind.editor_not_ready, "The editor holds other text than was sent; the document was restored.");
-                    else if (reply.Normalization.Pending == PendingNormalization.Unsafe)
+                    else if (reply.Normalization.Pending == PendingNormalization.Unsafe && !request.AllowUnsafe)
                         failure = Error(AutomationErrorKind.content_not_roundtrippable, "The first visual edit would lose content from this text; the document was restored.",
                             NormalizationData(reply.Normalization));
                     else if (reply.Normalization.Pending == PendingNormalization.Unknown && !request.AllowUnknown)

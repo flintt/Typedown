@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add" xml:space="preserve">
-    <value>Dodati</value>
+    <value>Dodaj</value>
     <comment>添加</comment>
   </data>
   <data name="AlignCenter" xml:space="preserve">
@@ -146,7 +146,7 @@
     <comment>自动</comment>
   </data>
   <data name="Back" xml:space="preserve">
-    <value>Leđa</value>
+    <value>Natrag</value>
     <comment>返回</comment>
   </data>
   <data name="Browse" xml:space="preserve">
@@ -174,7 +174,7 @@
     <comment>字符(单数)</comment>
   </data>
   <data name="Characters" xml:space="preserve">
-    <value>Znakova</value>
+    <value>Znakovi</value>
     <comment>字符(复数)</comment>
   </data>
   <data name="Chart" xml:space="preserve">
@@ -182,7 +182,7 @@
     <comment>图表</comment>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Jasan</value>
+    <value>Očisti</value>
     <comment>清除</comment>
   </data>
   <data name="ClearFormat" xml:space="preserve">
@@ -198,11 +198,11 @@
     <comment>点击添加一张图片</comment>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>Blizak</value>
+    <value>Zatvori</value>
     <comment>文件/关闭</comment>
   </data>
   <data name="Code" xml:space="preserve">
-    <value>Zakonik</value>
+    <value>Kod</value>
     <comment>代码</comment>
   </data>
   <data name="CodeFences" xml:space="preserve">
@@ -214,7 +214,7 @@
     <comment>插入表格/列数</comment>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>Kopija</value>
+    <value>Kopiraj</value>
     <comment>编辑/复制</comment>
   </data>
   <data name="CopyAsHTMLCode" xml:space="preserve">
@@ -250,7 +250,7 @@
     <comment>操作/复制到路径</comment>
   </data>
   <data name="Create" xml:space="preserve">
-    <value>Stvoriti</value>
+    <value>Stvori</value>
     <comment>创建</comment>
   </data>
   <data name="CtrlAndClickOpenLink" xml:space="preserve">
@@ -266,11 +266,11 @@
     <comment>自定义快捷键</comment>
   </data>
   <data name="Cut" xml:space="preserve">
-    <value>Rezati</value>
+    <value>Izreži</value>
     <comment>编辑/剪切</comment>
   </data>
   <data name="Dark" xml:space="preserve">
-    <value>Mračan</value>
+    <value>Tamna</value>
     <comment>应用主题/深色</comment>
   </data>
   <data name="Data" xml:space="preserve">
@@ -302,7 +302,7 @@
     <comment>段落/重复</comment>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Urediti</value>
+    <value>Uredi</value>
     <comment>编辑</comment>
   </data>
   <data name="EditImage" xml:space="preserve">
@@ -334,7 +334,7 @@
     <comment>错误</comment>
   </data>
   <data name="Export" xml:space="preserve">
-    <value>Izvoz</value>
+    <value>Izvezi</value>
     <comment>文件/导出</comment>
   </data>
   <data name="ExportSettings" xml:space="preserve">
@@ -354,11 +354,11 @@
     <comment>文件(单数)</comment>
   </data>
   <data name="Files" xml:space="preserve">
-    <value>Datotekama</value>
+    <value>Datoteke</value>
     <comment>文件(复数)</comment>
   </data>
   <data name="Find" xml:space="preserve">
-    <value>Naći</value>
+    <value>Pronađi</value>
     <comment>编辑/查找和替换/查找</comment>
   </data>
   <data name="FindAndReplace" xml:space="preserve">
@@ -386,7 +386,7 @@
     <comment>文件夹</comment>
   </data>
   <data name="Font" xml:space="preserve">
-    <value>Krstionica</value>
+    <value>Font</value>
     <comment>设置/字体</comment>
   </data>
   <data name="FontSize" xml:space="preserve">
@@ -418,7 +418,7 @@
     <comment>转到</comment>
   </data>
   <data name="Heading" xml:space="preserve">
-    <value>Zaglavlje</value>
+    <value>Naslov</value>
     <comment>段落/标题</comment>
   </data>
   <data name="Heading1" xml:space="preserve">
@@ -450,7 +450,7 @@
     <comment>应用程序帮助</comment>
   </data>
   <data name="Highlight" xml:space="preserve">
-    <value>Osvijetliti</value>
+    <value>Istakni</value>
     <comment>格式/高亮</comment>
   </data>
   <data name="HorizontalLine" xml:space="preserve">
@@ -474,7 +474,7 @@
     <comment>图片上传设置</comment>
   </data>
   <data name="Import" xml:space="preserve">
-    <value>Uvoz</value>
+    <value>Uvezi</value>
     <comment>文件/导入</comment>
   </data>
   <data name="IncreaseHeadingLevel" xml:space="preserve">
@@ -546,7 +546,7 @@
     <comment>了解更多</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Svjetlo</value>
+    <value>Svijetla</value>
     <comment>应用主题/浅色</comment>
   </data>
   <data name="Line" xml:space="preserve">
@@ -614,7 +614,7 @@
     <comment>名称不能为空</comment>
   </data>
   <data name="New" xml:space="preserve">
-    <value>Nov</value>
+    <value>Novo</value>
     <comment>文件/新建</comment>
   </data>
   <data name="NewFile" xml:space="preserve">
@@ -654,7 +654,7 @@
     <comment>未设置</comment>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Blizak</value>
+    <value>Isključeno</value>
     <comment>开关/关</comment>
   </data>
   <data name="Ok" xml:space="preserve">
@@ -662,11 +662,11 @@
     <comment>对话框/确定</comment>
   </data>
   <data name="On" xml:space="preserve">
-    <value>Na</value>
+    <value>Uključeno</value>
     <comment>开关/开</comment>
   </data>
   <data name="Open" xml:space="preserve">
-    <value>Otvoren</value>
+    <value>Otvori</value>
     <comment>文件/打开</comment>
   </data>
   <data name="OpenFileLocation" xml:space="preserve">
@@ -698,7 +698,7 @@
     <comment>段落/有序列表</comment>
   </data>
   <data name="Outline" xml:space="preserve">
-    <value>Kontura</value>
+    <value>Struktura</value>
     <comment>侧栏/大纲</comment>
   </data>
   <data name="Paragraph" xml:space="preserve">
@@ -706,7 +706,7 @@
     <comment>段落</comment>
   </data>
   <data name="Paste" xml:space="preserve">
-    <value>Pasta</value>
+    <value>Zalijepi</value>
     <comment>编辑/粘贴</comment>
   </data>
   <data name="PasteAsPlainText" xml:space="preserve">
@@ -722,15 +722,15 @@
     <comment>PlantUML Diagram</comment>
   </data>
   <data name="Print" xml:space="preserve">
-    <value>Otisak</value>
+    <value>Ispis</value>
     <comment>文件/打印</comment>
   </data>
   <data name="Quote" xml:space="preserve">
-    <value>Citirati</value>
+    <value>Citat</value>
     <comment>段落/引用</comment>
   </data>
   <data name="Redo" xml:space="preserve">
-    <value>Ponoviti</value>
+    <value>Ponovi</value>
     <comment>编辑/重做</comment>
   </data>
   <data name="RemoveColumn" xml:space="preserve">
@@ -746,7 +746,7 @@
     <comment>文件/重命名</comment>
   </data>
   <data name="Replace" xml:space="preserve">
-    <value>Nadomjestiti</value>
+    <value>Zamijeni</value>
     <comment>编辑/查找和替换/替换</comment>
   </data>
   <data name="ReplaceAll" xml:space="preserve">
@@ -758,7 +758,7 @@
     <comment>表格/调整表格大小</comment>
   </data>
   <data name="Restore" xml:space="preserve">
-    <value>Vratiti</value>
+    <value>Vrati</value>
     <comment>还原默认设置</comment>
   </data>
   <data name="Rows" xml:space="preserve">
@@ -774,7 +774,7 @@
     <comment>文件/另存为</comment>
   </data>
   <data name="Saved" xml:space="preserve">
-    <value>Spremljeni</value>
+    <value>Spremljeno</value>
     <comment>文件/已保存</comment>
   </data>
   <data name="SaveImageAs" xml:space="preserve">
@@ -782,7 +782,7 @@
     <comment>图片另存为</comment>
   </data>
   <data name="Search" xml:space="preserve">
-    <value>Pretraživanje</value>
+    <value>Pretraži</value>
     <comment>搜索</comment>
   </data>
   <data name="SelectAll" xml:space="preserve">
@@ -798,7 +798,7 @@
     <comment>Sequence Diagram</comment>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Postavkama</value>
+    <value>Postavke</value>
     <comment>设置</comment>
   </data>
   <data name="ShortcutKey" xml:space="preserve">
@@ -818,7 +818,7 @@
     <comment>状态栏</comment>
   </data>
   <data name="Stop" xml:space="preserve">
-    <value>Prestati</value>
+    <value>Zaustavi</value>
     <comment>停止操作</comment>
   </data>
   <data name="Strikethrough" xml:space="preserve">
@@ -826,11 +826,11 @@
     <comment>格式/删除线</comment>
   </data>
   <data name="Strong" xml:space="preserve">
-    <value>Odvažan</value>
+    <value>Podebljano</value>
     <comment>格式/加粗</comment>
   </data>
   <data name="Table" xml:space="preserve">
-    <value>Stol</value>
+    <value>Tablica</value>
     <comment>段落/表格</comment>
   </data>
   <data name="TaskList" xml:space="preserve">
@@ -862,11 +862,11 @@
     <comment>视图/打字机模式</comment>
   </data>
   <data name="Underline" xml:space="preserve">
-    <value>Podvući</value>
+    <value>Podcrtano</value>
     <comment>格式/下划线</comment>
   </data>
   <data name="Undo" xml:space="preserve">
-    <value>Poništiti</value>
+    <value>Poništi</value>
     <comment>编辑/撤销</comment>
   </data>
   <data name="UnorderedList" xml:space="preserve">
@@ -874,7 +874,7 @@
     <comment>段落/无序列表</comment>
   </data>
   <data name="Update" xml:space="preserve">
-    <value>Ažurirati</value>
+    <value>Ažuriraj</value>
     <comment>应用程序更新</comment>
   </data>
   <data name="UploadImage" xml:space="preserve">
@@ -894,7 +894,7 @@
     <comment>Vega Chart</comment>
   </data>
   <data name="View" xml:space="preserve">
-    <value>Pogled</value>
+    <value>Prikaz</value>
     <comment>查看</comment>
   </data>
   <data name="Website" xml:space="preserve">
@@ -1011,5 +1011,146 @@
   </data>
   <data name="ExportedTo" xml:space="preserve">
     <value>Izvezeno u {0}</value>
+  </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>Korisnički priručnik</value>
+  </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Znakovi (bez razmaka)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Znakovi (s razmacima)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK znakovi</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Riječi</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Riječi izvan CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Odlomci</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Naslovi</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Slike</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Poveznice</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Vrijeme čitanja</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Oko {0} min</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Manje od minute</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Broji se vidljivi tekst. Blokovi koda i formule ne ulaze u vrijeme čitanja.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Traka stanja prikazuje</value>
+  </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Spremljeno</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Nije spremljeno</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Automatsko spremanje je pauzirano</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Kliknite za spremanje</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Dokument je prazan, ali datoteka na disku nije, i nijedna izmjena ga nije ispraznila, pa automatsko spremanje nije prebrisalo datoteku.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Ova se datoteka nije mogla pročitati bez gubitaka (kodiranje koje nije UTF-8?), pa je automatsko spremanje ne prebrisuje. Spremite je sami samo ako je prikazani tekst ispravan.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Pisanje datoteke nije uspjelo: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>Odabrano {0} od {1} {2}</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Kodiranje i završeci redaka</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Pretvori u UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Ponovno otvori s kodiranjem</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Trenutačni naslov</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Stanje spremanja</value>
+  </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Mape</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Nema nedavnih mapa</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Očisti nedavne mape</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Desni klik ili Delete uklanja stavku s popisa</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Razinu gore</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Postavi kao korijen</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Favoriti</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Dodaj u favorite</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Ukloni iz favorita</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Početna</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Početak</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Novi dokument</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Otvori datoteku</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Otvori mapu</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Nedavne datoteke</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Nedavne mape</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Ukloni s popisa</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Postavke</value>
+  </data>
+  <data name="EditorOpening" xml:space="preserve">
+    <value>Otvaranje…</value>
   </data>
 </root>

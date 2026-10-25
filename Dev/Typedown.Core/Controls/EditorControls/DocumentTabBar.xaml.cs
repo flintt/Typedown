@@ -1,14 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Typedown.Core.Models;
 using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
+using Microsoft.UI;
 using Windows.UI;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
 using muxc = Microsoft.UI.Xaml.Controls;
 
 namespace Typedown.Core.Controls
@@ -25,6 +28,10 @@ namespace Typedown.Core.Controls
         public DocumentTabBar()
         {
             InitializeComponent();
+            // Typing that reaches the strip just after a tab or the + button was clicked is for the document: the strip
+            // has the keyboard until the editor gets it back, and with a long document coming in that took some 600 ms
+            // (the window's thread busy). Passed on in order to the page, which keeps it for the document shown next.
+            TabView.CharacterReceived += OnStripCharacterReceived;
             // handledEventsToo: once there are more tabs than fit, the strip's own scroll viewer takes the
             // wheel and marks it handled, so a plain handler never sees it and the wheel only slid the strip
             // sideways instead of moving between tabs.
@@ -34,6 +41,9 @@ namespace Typedown.Core.Controls
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             Bindings.Update();
+            // The + button too leaves the keyboard in the document (see the tabs' AllowFocusOnInteraction). It is made with
+            // the strip's template, which may come after this: looked for again as the strip lays itself out, until found.
+            if (!KeepAddButtonOffFocus()) TabView.LayoutUpdated += OnStripLayoutUpdated;
             var settings = ViewModel?.SettingsViewModel;
             if (settings != null)
                 disposables.Add(settings.WhenPropertyChanged(nameof(settings.CustomTheme)).StartWith(settings.CustomTheme).Subscribe(_ => UpdateThemeColours()));
@@ -175,7 +185,7 @@ namespace Typedown.Core.Controls
         /// The wheel over the tab strip moves between tabs: up goes left, down goes right. The strip scrolls
         /// itself when there are more tabs than fit, which is never what the wheel is wanted for here.
         /// </summary>
-        private void OnPointerWheelChanged(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        private void OnPointerWheelChanged(object sender, Microsoft.UI.Xaml.Input.PointerRoutedEventArgs e)
         {
             if (Tabs == null) return;
             var delta = e.GetCurrentPoint(this).Properties.MouseWheelDelta;
@@ -189,19 +199,73 @@ namespace Typedown.Core.Controls
         private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (Tabs == null) return;
+            // The selection moved because the selected tab went (closed): which tab is shown then is the close's to decide
+            // (TabsViewModel.CloseTab shows the neighbour itself). Asked for here as well, the switch could come after a
+            // file opened at once had been shown, and put the neighbour back over it (TC03; HJ02/HJ03 on w10).
+            if (e.RemovedItems.Any(x => x is DocumentTab gone && !Tabs.Tabs.Contains(gone)))
+            {
+                if (TabView.SelectedItem != Tabs.ActiveTab) TabView.SelectedItem = Tabs.ActiveTab;
+                return;
+            }
             if (TabView.SelectedItem is DocumentTab tab && tab != Tabs.ActiveTab)
             {
+                if (!closing) handedOverAt = DateTime.UtcNow;
                 Tabs.SwitchTabCommand.Execute(tab);
                 // A tab clicked in the strip keeps the keyboard on the tab; the reader came to write in the document.
                 // Not when the selection moved because a tab was closed: handed over while the next document was
                 // being loaded, the keys disturbed its loading, and the outline stayed on the closed document's
                 // headings (E2E TC02). The keyboard is where it was after a close anyway.
-                if (!closing) _ = Dispatcher.RunIdleAsync(_ => ViewModel?.MarkdownEditor?.FocusEditor());
+                // The tab does not take the keyboard when clicked (AllowFocusOnInteraction); should it have it anyway
+                // (reached with Tab), the editor gets it back once the click is done with - only then: moving it while
+                // the reader types loses a key.
+                if (!closing)
+                {
+                    DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, () =>
+                    {
+                        if (XamlRoot != null && Microsoft.UI.Xaml.Input.FocusManager.GetFocusedElement(XamlRoot) is not Microsoft.UI.Xaml.Controls.WebView2)
+                            ViewModel?.MarkdownEditor?.FocusEditor();
+                    });
+                }
             }
+        }
+
+        private bool KeepAddButtonOffFocus()
+        {
+            var buttons = Descendants(TabView).OfType<Button>().Where(b => b.Name == "AddButton" || Microsoft.UI.Xaml.Automation.AutomationProperties.GetAutomationId(b) == "AddButton").ToList();
+            foreach (var button in buttons) button.AllowFocusOnInteraction = false;
+            if (buttons.Count > 0) Log.Debug($"tabs: the + button leaves the keyboard where it is ({buttons.Count})");
+            return buttons.Count > 0;
+        }
+
+        private void OnStripLayoutUpdated(object sender, object e)
+        {
+            if (KeepAddButtonOffFocus()) TabView.LayoutUpdated -= OnStripLayoutUpdated;
+        }
+
+        private static IEnumerable<DependencyObject> Descendants(DependencyObject root)
+        {
+            for (var i = 0; i < VisualTreeHelper.GetChildrenCount(root); i++)
+            {
+                var child = VisualTreeHelper.GetChild(root, i);
+                yield return child;
+                foreach (var d in Descendants(child)) yield return d;
+            }
+        }
+
+        private DateTime handedOverAt = DateTime.MinValue;
+
+        private void OnStripCharacterReceived(UIElement sender, Microsoft.UI.Xaml.Input.CharacterReceivedRoutedEventArgs e)
+        {
+            if (DateTime.UtcNow - handedOverAt > TimeSpan.FromSeconds(3)) return;
+            var ch = e.Character;
+            if (ch != '\r' && char.IsControl(ch)) return;
+            e.Handled = true;
+            ViewModel?.MarkdownEditor?.PostMessage("TypedElsewhere", new { text = ch == '\r' ? "\n" : ch.ToString() });
         }
 
         private void OnAddTabButtonClick(muxc.TabView sender, object args)
         {
+            handedOverAt = DateTime.UtcNow;
             ViewModel?.FileViewModel.NewFileCommand.Execute(default);
         }
 
@@ -213,8 +277,47 @@ namespace Typedown.Core.Controls
             {
                 closing = true;
                 Tabs?.CloseTabCommand.Execute(tab);
-                _ = Dispatcher.RunIdleAsync(_ => closing = false);
+                _ = DispatcherQueue.RunIdleAsync(_ => closing = false);
             }
+        }
+
+        /// <summary>The ⌂ button's tooltip: Home and its shortcut.</summary>
+        public string HomeToolTip
+        {
+            get
+            {
+                var key = ViewModel?.SettingsViewModel?.ShortcutHome;
+                var text = key == null ? null : this.GetService<Interfaces.IKeyboardAccelerator>()?.GetShortcutKeyText(key);
+                return string.IsNullOrEmpty(text) ? Locale.GetString("Home") : $"{Locale.GetString("Home")} ({text})";
+            }
+        }
+
+        private void OnHomeButtonClick(object sender, RoutedEventArgs e)
+        {
+            ViewModel?.HomeViewModel.ShowHomeCommand.Execute(default);
+        }
+
+        // The tab the menu was opened on, and its file.
+        private DocumentTab menuTab;
+
+        private void OnTabContextFlyoutOpening(object sender, object e)
+        {
+            var flyout = (MenuFlyout)sender;
+            menuTab = (flyout.Target as FrameworkElement)?.DataContext as DocumentTab;
+            var item = flyout.Items.OfType<MenuFlyoutItem>().First();
+            var path = menuTab?.FilePath;
+            var store = Services.Favorites.Shared;
+            var isFavorite = !string.IsNullOrEmpty(path) && store.Contains(path);
+            item.Text = Locale.GetString(isFavorite ? "Favorites.Remove" : "Favorites.Add");
+            item.IsEnabled = !string.IsNullOrEmpty(path) && (isFavorite || store.Items.Count < Services.FavoritesStore.MaxCount);
+        }
+
+        private void OnTabFavoriteClick(object sender, RoutedEventArgs e)
+        {
+            var path = menuTab?.FilePath;
+            if (string.IsNullOrEmpty(path)) return;
+            var store = Services.Favorites.Shared;
+            if (!store.Remove(path)) store.Add(path, folder: false);
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)

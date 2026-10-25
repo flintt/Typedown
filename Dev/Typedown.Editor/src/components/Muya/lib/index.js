@@ -151,6 +151,7 @@ class Muya {
       this.dispatchChangeContentChange()
       return
     }
+    this.contentChangeDue = true
     this.contentChangeTimer = setTimeout(() => {
       this.lastContentChangeAt = Date.now()
       this.dispatchChangeContentChange()
@@ -164,7 +165,16 @@ class Muya {
     this.dispatchChangeContentChange()
   }
 
+  /// Runs the pending report now if there is one. With none pending the last report is the text on screen already
+  /// (every edit reports through dispatchChange): the document is not written out again - a long one took seconds, and
+  /// closing its tab waited for it with the document still on screen.
+  flushPendingContentChange = () => {
+    if (this.contentChangeDue) this.flushContentChange()
+  }
+
   dispatchChangeContentChange = () => {
+    // Whether a throttled report is still to come (the page keeps no document whose last report is not its state).
+    this.contentChangeDue = false
     try {
       const { markdown, cursor } = this.getMarkdownAndCursor()
       const wordCount = this.getWordCountThrottled(markdown)
@@ -214,7 +224,11 @@ class Muya {
   }
 
   dispatchSelectionChange = (fromLoad = false) => {
-    const selection = this.contentState.selectionChange()
+    // A caret still waiting for its block to be drawn (renderProgressive) is not on the page: the model's is reported
+    // (a copy: selectionChange writes into what it is given).
+    const { cursor, stateRender } = this.contentState
+    const waiting = stateRender.progressive && stateRender.progressive.cursorPending && cursor
+    const selection = this.contentState.selectionChange(waiting ? { start: { ...cursor.start }, end: { ...cursor.end } } : undefined)
     if (fromLoad) selection.fromLoad = true
     this.eventCenter.dispatch('selectionChange', selection)
   }
@@ -232,6 +246,15 @@ class Muya {
     const { isGitlabCompatibilityEnabled, listIndentation } = this.contentState
     const { tableAlignColumns } = this.options
     return new ExportMarkdown(blocks, listIndentation, isGitlabCompatibilityEnabled, { alignTableColumns: tableAlignColumns !== false }).generate();
+  }
+
+  /** A text as the editor writes it back: read into a model of its own and exported, the document shown untouched. */
+  normalizeMarkdown(markdown) {
+    if (!this.contentState) return markdown
+    const blocks = this.contentState.markdownToState(markdown)
+    const { isGitlabCompatibilityEnabled, listIndentation } = this.contentState
+    const { tableAlignColumns } = this.options
+    return new ExportMarkdown(blocks, listIndentation, isGitlabCompatibilityEnabled, { alignTableColumns: tableAlignColumns !== false }).generate()
   }
 
   getTOC() {
@@ -256,7 +279,22 @@ class Muya {
     return this.contentState.getMarkdownAndCodeMirrorCursor()
   }
 
-  setMarkdown(markdown, cursor, isRenderCursor = true) {
+  // afterCursor: place the caret in the next frame instead of now, then call afterCursor (the page puts the scroll
+  // position back there), then report the load. Placing the caret makes the browser lay the whole new document out
+  // at once - on a long document over a second - and in the same task as building it that was one block of two or
+  // three seconds in which the page could not take a key or the focus. Split, the browser handles input between the
+  // two. A newer document arriving the same way before that frame cancels it: its caret and its scroll position
+  // are the ones that count. One set at once (Muya.setCursor) only takes the caret over; the page's part of the
+  // earlier load still runs, or that load would never be reported.
+  /**
+   * progressive: draw a long document a part at a time - { pick(blocks, cursorIndex): the top-level block to draw
+   * first, or -1 for all at once; done(): once the whole document is drawn } (StateRender.renderProgressive).
+   * @param {(() => void) | null} [afterCursor]
+   * @param {{ pick: (blocks: any[], cursorIndex: number) => number, done?: () => void } | null} [progressive]
+   */
+  setMarkdown(markdown, cursor, isRenderCursor = true, afterCursor = null, progressive = null) {
+    const later = isRenderCursor && typeof afterCursor === 'function'
+    if (later) this.cancelLoadCursor()
     let newMarkdown = markdown
     let isValid = false
     if (cursor && cursor.anchor && cursor.focus) {
@@ -270,12 +308,182 @@ class Muya {
     }
     this.contentState.importMarkdown(newMarkdown)
     this.contentState.importCursor(cursor && isValid)
+    // Where to start drawing: what the caller picks, the caret's block in mind (both have to be on the page at once).
+    let draw = null
+    if (progressive && typeof progressive.pick === 'function') {
+      const { blocks } = this.contentState
+      let cursorIndex = -1
+      try {
+        const start = this.contentState.cursor && this.contentState.getBlock(this.contentState.cursor.start.key)
+        const top = start && this.contentState.findOutMostBlock(start)
+        cursorIndex = top ? blocks.indexOf(top) : -1
+      } catch (err) {
+        console.log(err)
+      }
+      const center = progressive.pick(blocks, cursorIndex)
+      // The caret may be far from it (the reader scrolled without clicking): it goes on the page with its block.
+      if (center >= 0) draw = { center, done: progressive.done }
+    }
     // A whole new document: the one on screen has nothing in common with it, so throw it away rather than
     // diff against it (see StateRender.render).
-    this.contentState.render(isRenderCursor, false, true)
-    setTimeout(() => {
-      this.dispatchLoadChange()
-    }, 0)
+    this.contentState.render(isRenderCursor, false, true, later, draw)
+    if (!draw && progressive && progressive.done) setTimeout(() => progressive.done(), 0)
+    if (!later) {
+      setTimeout(() => {
+        this.dispatchLoadChange()
+      }, 0)
+      return
+    }
+    this.placeLoadCursor(afterCursor)
+  }
+
+  /** Part of the document is still to be drawn (setMarkdown's progressive). */
+  get renderPending() {
+    return !!this.contentState.stateRender.progressive
+  }
+
+  /**
+   * Runs `then` in the first task after the frame now coming is painted: before the first slice of a document drawn a
+   * part at a time (that slice was queued first, and held a task queued now back by a slice's worth, ~200 ms), else
+   * as the next task.
+   */
+  afterThisFrame(then) {
+    const state = this.contentState.stateRender.progressive
+    if (state && state.slices === 0) (state.beforeFirstSlice || (state.beforeFirstSlice = [])).push(then)
+    else setTimeout(then, 0)
+  }
+
+  /** Draws the rest of a document drawn a part at a time, now. */
+  completeRender() {
+    this.contentState.stateRender.completeRender()
+  }
+
+  /** Stops drawing the rest of the document (it is being replaced or put away). */
+  cancelProgressiveRender() {
+    this.contentState.stateRender.cancelProgressive()
+  }
+
+  // The second half of a load shown with afterCursor (setMarkdown, showDocument): the caret, then the page's part,
+  // then the report, in the next frame.
+  placeLoadCursor(afterCursor) {
+    // The caret this load decided on. If the reader put it somewhere else in between (a click on the new
+    // document), theirs stays, as it did when the click could only be handled after the load.
+    const loadCursor = this.contentState.cursor
+    const step = () => {
+      this.cancelLoadCursor()
+      this.loadCursorStep = null
+      try {
+        if (this.contentState.cursor === loadCursor) this.contentState.setCursor()
+      } catch (err) {
+        console.log(err)
+      }
+      try {
+        afterCursor()
+      } catch (err) {
+        console.log(err)
+      }
+      // After the caret is placed: the report reads it from the page's selection.
+      setTimeout(() => {
+        this.dispatchLoadChange()
+      }, 0)
+    }
+    // A frame, so the scroll position is put back before the new document is first painted. A page that is
+    // not shown gets no frames; it takes the next task instead.
+    this.loadCursorStep = step
+    if (document.hidden) {
+      this.loadCursorTimer = setTimeout(step, 0)
+    } else {
+      this.loadCursorFrame = requestAnimationFrame(step)
+    }
+  }
+
+  /**
+   * The second half of a load (placeLoadCursor) now rather than in the next frame: the reader is about to edit the new
+   * document, and the edit must come after the load is placed and reported, not be taken for part of it.
+   */
+  finishLoadNow() {
+    const step = this.loadCursorStep
+    if (step && this.loadCursorPending) step()
+  }
+
+  /**
+   * Takes the document shown out of the editor whole - its blocks, its caret and its root element with everything in
+   * it - for showDocument to put back later instead of parsing and drawing its text again (the page keeps the last
+   * long documents a tab switch left, components/Muya/index.tsx). The editor gets an empty root of the same kind; the
+   * caller shows another document in it at once. Swapping the root is one removal and one insertion for the browser,
+   * as cheap as emptying it: taking the blocks out of it one by one cost half as much again on a long document.
+   */
+  takeDocument() {
+    const { contentState } = this
+    const { stateRender } = contentState
+    const root = stateRender.container
+    // Put away half drawn (drawn a part at a time): how far it got goes with it, and showDocument carries on.
+    const progressive = stateRender.suspendProgressive()
+    const empty = root.cloneNode(false)
+    // The room it keeps for its rest goes with it, not to the next document's root.
+    empty.style.removeProperty('--td-room-above')
+    empty.style.removeProperty('--td-room-fraction')
+    empty.style.removeProperty('--td-room-below')
+    if (!empty.getAttribute('style')) empty.removeAttribute('style')
+    root.replaceWith(empty)
+    stateRender.setContainer(empty)
+    this.eventCenter.dispatch('rootChange', empty)
+    return { blocks: contentState.blocks, cursor: contentState.cursor, root, progressive }
+  }
+
+  /** Whether a root taken out by takeDocument is the same element as the one shown, but for what it holds. */
+  canShowDocument(kept) {
+    // The room a half-drawn document keeps for its rest (StateRender.estimateRest) is its own, not a difference.
+    const shell = root => {
+      const copy = root.cloneNode(false)
+      copy.style.removeProperty('--td-room-above')
+      copy.style.removeProperty('--td-room-fraction')
+      copy.style.removeProperty('--td-room-below')
+      if (!copy.getAttribute('style')) copy.removeAttribute('style')
+      return copy
+    }
+    return shell(kept.root).isEqualNode(shell(this.contentState.stateRender.container))
+  }
+
+  /**
+   * Shows a document taken out by takeDocument, as setMarkdown with afterCursor shows a newly built one: the elements
+   * go in now, the caret, afterCursor and the report follow in the next frame. The caller has made sure the document
+   * is drawn as a new build of its text would draw it now (the same text, caret and settings).
+   */
+  showDocument(kept, afterCursor) {
+    this.cancelLoadCursor()
+    const { contentState } = this
+    const { stateRender } = contentState
+    contentState.blocks = kept.blocks
+    contentState.blockCache = null
+    contentState.cursor = kept.cursor
+    stateRender.collectLabels(kept.blocks)
+    contentState.setNextRenderRange()
+    stateRender.cancelProgressive()
+    stateRender.container.replaceWith(kept.root)
+    stateRender.setContainer(kept.root)
+    this.eventCenter.dispatch('rootChange', kept.root)
+    stateRender.codeCache.clear()
+    // Put away half drawn: the rest is drawn from where it stopped (the caret waits for its block as on a load).
+    stateRender.resumeProgressive(kept.progressive)
+    // As render does for a whole new document whose caret comes later (contentState.render, cursorLater).
+    const sel = document.getSelection()
+    if (sel && sel.rangeCount && this.container.contains(sel.anchorNode)) sel.removeAllRanges()
+    contentState.postRender()
+    this.placeLoadCursor(afterCursor)
+  }
+
+  /** Whether a load's caret is still to be placed (setMarkdown with afterCursor). */
+  get loadCursorPending() {
+    return !!(this.loadCursorFrame || this.loadCursorTimer)
+  }
+
+  cancelLoadCursor() {
+    this.loadCursorStep = null
+    if (this.loadCursorFrame) cancelAnimationFrame(this.loadCursorFrame)
+    clearTimeout(this.loadCursorTimer)
+    this.loadCursorFrame = 0
+    this.loadCursorTimer = 0
   }
 
   /** The keys of the top-level blocks shown now that differ from oldBlocks (what an automation edit changed). */
@@ -466,9 +674,10 @@ class Muya {
     return document.activeElement === this.container
   }
 
-  focus() {
+  // options: as HTMLElement.focus's ({ preventScroll }).
+  focus(options) {
     this.contentState.setCursor()
-    this.container.focus()
+    this.container.focus(options)
   }
 
   blur(isRemoveAllRange = false, unSelect = false) {
@@ -532,6 +741,8 @@ class Muya {
   }
 
   invalidateImageCache() {
+    // Pictures are to be loaded again: a document kept out of the editor still shows the old ones.
+    this.imageEpoch = (this.imageEpoch || 0) + 1
     this.contentState.stateRender.invalidateImageCache()
     this.contentState.render(true)
   }
@@ -611,6 +822,7 @@ class Muya {
 
   destroy() {
     clearTimeout(this.wordCountTimer)
+    this.cancelLoadCursor()
     // this.quickInsert.destroy()
     // this.tablePicker.destroy()
     this.contentState.clear()

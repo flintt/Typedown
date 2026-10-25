@@ -8,5 +8,5 @@ automation API only: the interface language (`settings set ui.language`), the do
   `APPDIR=<published Typedown.Uno folder> OUT=<folder> Tools/Screenshots/shots-linux.sh`
 - `shots-windows.ps1` — the installed Windows app, run in the logged-on session (a scheduled task), with the user's
   Typedown data copied aside first and put back at the end, file for file. It stops if Typedown is running. Its work
-  folders (`E:\src\…`) are the build box's; `SHOTS_OUT` sets the output folder.
+  folders are set at the top of the script (change them for your machine); `SHOTS_OUT` sets the output folder.
 - `samples/` — the sample document in each language.

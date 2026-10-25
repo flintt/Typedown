@@ -414,7 +414,7 @@
     <comment>通用/启动操作</comment>
   </data>
   <data name="General.Title" xml:space="preserve">
-    <value>Գեներալ</value>
+    <value>Ընդհանուր</value>
     <comment>通用/常规</comment>
   </data>
   <data name="Image.InsertActions.CopyToPath" xml:space="preserve">
@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Հնարավորություն տալ խմբագրման տարածքի ֆոնի համար նախատեսված միկա ֆոնի էֆեկտը</value>
+    <value>Կողային վահանակը և ներդիրների գոտին ցույց են տալիս միկա էֆեկտը, խմբագրման տարածքը պահպանում է թեմայի միագույն գույնը</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Օգտագործեք խմբագրման տարածքում գտնվող միկա նյութը</value>
+    <value>Օգտագործել միկա նյութ խմբագրման տարածքի շուրջ</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Բացել դրա թղթապանակը</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Հիշել վերջերս բացված ֆայլերը</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Ձեր բացած ֆայլերն ու թղթապանակները ցուցադրվում են Ֆայլ &gt; Բացել վերջինը ցանկում և գլխավոր էջում։ Անջատված վիճակում նոր բան չի ավելացվում։</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Մաքրել վերջին ֆայլերն ու թղթապանակները</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Դատարկում է վերջերս բացված ֆայլերի և թղթապանակների ցանկերը։</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Մաքրել</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Ցույց տալ գլխավոր էջը դատարկ ներդիրում</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Գործարկելիս, երբ բացելու բան չկա, և վերջին ներդիրը փակելիս՝ վերջին ֆայլեր և թղթապանակներ, ընտրյալներ</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Նոր ներդիրները ցույց են տալիս գլխավոր էջը</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Նոր ներդիրը (Ֆայլ &gt; Նոր, + կոճակ) դատարկ փաստաթղթի փոխարեն ցույց է տալիս գլխավոր էջը</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Ցույց տալ լրացուցիչ դատարկ տողերը</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Պարբերությունների միջև դատարկ տողերը տեղ են զբաղեցնում նաև ընթերցման ռեժիմում և HTML ու PDF արտահանման մեջ, ինչպես խմբագրելիս։ Ֆայլն ինքը չի փոխվում</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Երկար փաստաթղթերը պատկերել աստիճանաբար</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Երկար փաստաթուղթը բացվում է այնտեղ, որտեղ թողել եք, իսկ մնացածը պատկերվում է հետին պլանում։ Անջատեք սա, եթե երկար փաստաթղթի բացման ժամանակ ինչ-որ բան սխալ է թվում․ այդ դեպքում այն կպատկերվի միանգամից</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Կողային վահանակը աջ կողմում</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Ցուցադրել կողային վահանակը փաստաթղթի աջ կողմում՝ ձախի փոխարեն</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Փակելիս պահել չպահպանված փոփոխությունները</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Փակել առանց պահպանելու հարցի. չպահպանված փաստաթղթերը վերադառնում են նույնությամբ, դեռևս չպահպանված, վերջին նստաշրջանի ներդիրներով</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Միշտ ցուցադրել Markdown նշանները</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Ցուցադրել Markdown նշանները (**, #, հղման հասցեն) յուրաքանչյուր պարբերությունում, ոչ միայն այնտեղ, որտեղ կուրսորն է</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Կանխատեսել երկար փաստաթղթերի դասավորությունը (փորձնական)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Երբ երկար փաստաթուղթը նկարվում է մաս առ մաս, դեռ չցուցադրված մասի բարձրությունը հաշվարկվում է տեքստից՝ գնահատելու փոխարեն, ուստի ոլորման գոտին և ուրվագծից անցումները ավելի ճշգրիտ են։ Փորձնական</value>
   </data>
 </root>

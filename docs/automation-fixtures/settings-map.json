@@ -824,9 +824,22 @@
       ]
     },
     {
+      "reason": "privacy: whether the files and folders opened are remembered; only the person decides that, not a program",
+      "windows": [
+        "RecordRecentFiles"
+      ]
+    },
+    {
       "reason": "security: shows the person what a program changed; a program must not be able to hide its own edits",
       "windows": [
         "HighlightAutomationChanges"
+      ]
+    },
+    {
+      "reason": "layout: whether the folder pane's favourites group is folded, and which status bar items the person turned off; details of the window, not preferences worth a program's change",
+      "windows": [
+        "FavoritesExpanded",
+        "StatusBarHiddenItems"
       ]
     },
     {
@@ -900,6 +913,8 @@
         "AskBeforeReload",
         "FileStartupAction",
         "FolderStartupAction",
+        "ShowHomePage",
+        "ShowHomeOnNewTab",
         "InsertClipboardImageAction",
         "InsertClipboardImageUseUploadConfigId",
         "InsertLocalImageAction",
@@ -908,6 +923,12 @@
         "InsertWebImageUseUploadConfigId",
         "DefaultImageUploadConfigId",
         "VimMode",
+        "ShowBlankLines",
+        "ShowMarkdownMarks",
+        "ProgressiveRendering",
+        "PredictHeights",
+        "KeepUnsavedOnClose",
+        "SidePaneOnRight",
         "OpenFolderAfterExport",
         "AfterExport"
       ]

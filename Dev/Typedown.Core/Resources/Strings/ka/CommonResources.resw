@@ -322,7 +322,7 @@
     <comment>嵌入链接</comment>
   </data>
   <data name="Emphasis" xml:space="preserve">
-    <value>Italic</value>
+    <value>დახრილი</value>
     <comment>格式/斜体</comment>
   </data>
   <data name="Enable" xml:space="preserve">
@@ -418,7 +418,7 @@
     <comment>转到</comment>
   </data>
   <data name="Heading" xml:space="preserve">
-    <value>სასაქონლო</value>
+    <value>სათაური</value>
     <comment>段落/标题</comment>
   </data>
   <data name="Heading1" xml:space="preserve">
@@ -546,7 +546,7 @@
     <comment>了解更多</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>მსუბუქი</value>
+    <value>ღია</value>
     <comment>应用主题/浅色</comment>
   </data>
   <data name="Line" xml:space="preserve">
@@ -654,7 +654,7 @@
     <comment>未设置</comment>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>დახურვა</value>
+    <value>გამორთული</value>
     <comment>开关/关</comment>
   </data>
   <data name="Ok" xml:space="preserve">
@@ -662,7 +662,7 @@
     <comment>对话框/确定</comment>
   </data>
   <data name="On" xml:space="preserve">
-    <value>წლის</value>
+    <value>ჩართული</value>
     <comment>开关/开</comment>
   </data>
   <data name="Open" xml:space="preserve">
@@ -730,7 +730,7 @@
     <comment>段落/引用</comment>
   </data>
   <data name="Redo" xml:space="preserve">
-    <value>რედო</value>
+    <value>გამეორება</value>
     <comment>编辑/重做</comment>
   </data>
   <data name="RemoveColumn" xml:space="preserve">
@@ -786,7 +786,7 @@
     <comment>搜索</comment>
   </data>
   <data name="SelectAll" xml:space="preserve">
-    <value>ყველას მონიშნა</value>
+    <value>ყველას მონიშვნა</value>
     <comment>全选</comment>
   </data>
   <data name="SelectFile" xml:space="preserve">
@@ -826,11 +826,11 @@
     <comment>格式/删除线</comment>
   </data>
   <data name="Strong" xml:space="preserve">
-    <value>თამამი</value>
+    <value>მუქი</value>
     <comment>格式/加粗</comment>
   </data>
   <data name="Table" xml:space="preserve">
-    <value>მაგიდა</value>
+    <value>ცხრილი</value>
     <comment>段落/表格</comment>
   </data>
   <data name="TaskList" xml:space="preserve">
@@ -1011,5 +1011,146 @@
   </data>
   <data name="ExportedTo" xml:space="preserve">
     <value>ექსპორტირებულია: {0}</value>
+  </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>მომხმარებლის სახელმძღვანელო</value>
+  </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>სიმბოლოები (ჰარის გარეშე)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>სიმბოლოები (ჰარით)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK სიმბოლოები</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>სიტყვები</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>არა-CJK სიტყვები</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>აბზაცები</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>სათაურები</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>სურათები</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>ბმულები</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>კითხვის დრო</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>დაახლ. {0} წთ</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>წუთზე ნაკლები</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>დათვლილია ხილულ ტექსტზე. კოდის ბლოკები და ფორმულები კითხვის დროში არ ითვლება.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>სტატუსის ზოლში ჩანს</value>
+  </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>შენახულია</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>არ არის შენახული</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>ავტომატური შენახვა შეჩერებულია</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>დააწკაპუნეთ შესანახად</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>დოკუმენტი ცარიელია, მაგრამ დისკზე არსებული ფაილი არა, და არცერთ რედაქტირებას არ დაუცლია, ამიტომ ავტომატურმა შენახვამ ფაილი არ გადააწერა.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>ამ ფაილის დანაკარგის გარეშე წაკითხვა ვერ მოხერხდა (UTF-8-ისგან განსხვავებული კოდირება?), ამიტომ ავტომატური შენახვა მას არ გადააწერს. შეინახეთ ხელით მხოლოდ მაშინ, თუ ნაჩვენები ტექსტი სწორია.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>ფაილის ჩაწერა ვერ მოხერხდა: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>არჩეულია {0} / {1} {2}</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>კოდირება და ხაზის დაბოლოებები</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>UTF-8-ში გადაყვანა</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>ხელახლა გახსნა კოდირებით</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>მიმდინარე სათაური</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>შენახვის სტატუსი</value>
+  </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>საქაღალდეები</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>ბოლო საქაღალდეები არ არის</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>ბოლო საქაღალდეების გასუფთავება</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>სიიდან წასაშლელად დააწკაპუნეთ მარჯვნივ ან დააჭირეთ Delete-ს</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>ერთი დონით ზემოთ</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>ძირად დაყენება</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>რჩეულები</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>რჩეულებში დამატება</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>რჩეულებიდან ამოშლა</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>მთავარი</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>დასაწყისი</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>ახალი დოკუმენტი</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>ფაილის გახსნა</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>საქაღალდის გახსნა</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>ბოლო ფაილები</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>ბოლო საქაღალდეები</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>სიიდან ამოშლა</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>პარამეტრები</value>
+  </data>
+  <data name="EditorOpening" xml:space="preserve">
+    <value>იხსნება…</value>
   </data>
 </root>

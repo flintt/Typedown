@@ -237,7 +237,7 @@ export const PREVIEW_DOMPURIFY_CONFIG = Object.freeze({
 export const EXPORT_DOMPURIFY_CONFIG = Object.freeze({
   FORBID_ATTR: ['contenteditable'],
   ALLOW_DATA_ATTR: false,
-  ADD_ATTR: ['data-align'],
+  ADD_ATTR: ['data-align', 'data-delimiter'], // data-delimiter: a list numbered 1) (marked/renderer.js)
   USE_PROFILES: {
     html: true,
     svg: true,

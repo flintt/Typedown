@@ -142,7 +142,7 @@
     <comment>创建文件夹对话框/新建文件夹失败</comment>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
+    <value>削除</value>
     <comment>恢复文件对话框/删除</comment>
   </data>
   <data name="Don'tSave" xml:space="preserve">
@@ -328,5 +328,14 @@
   </data>
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>そのうち {0} 枚はこの設定で以前にアップロード済みだったため、以前のアドレスを使用しました。</value>
+  </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Microsoft から WebView2 ランタイムをダウンロード</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>ランタイムはインストールされませんでした。セットアップにはインターネット接続が必要です。Microsoft からランタイム（オフライン インストーラーもあります）をダウンロードしてインストールし、アプリを再起動することもできます。</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>WebView2 ランタイムをインストールしています...</value>
   </data>
 </root>

@@ -1,6 +1,8 @@
 ﻿using Microsoft.Web.WebView2.Core;
 using System;
 using System.Threading.Tasks;
+using Typedown.Core.Utilities;
+using Typedown.Services.Automation;
 using Typedown.Windows;
 
 namespace Typedown
@@ -9,10 +11,10 @@ namespace Typedown
     {
         public static bool IsWebView2Installed()
         {
+            if (TestHostHooks.PretendWebView2Missing) return false;
             try
             {
-                _ = CoreWebView2Environment.GetAvailableBrowserVersionString();
-                return true;
+                return WebView2Runtime.IsInstalledVersion(CoreWebView2Environment.GetAvailableBrowserVersionString());
             }
             catch (Exception)
             {
@@ -26,6 +28,7 @@ namespace Typedown
             {
                 return true;
             }
+            Log.Debug("startup: the WebView2 runtime is not installed, offering to install it");
             return await WebViewInstallWindow.TryInstallWebView2();
         }
     }

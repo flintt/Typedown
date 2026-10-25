@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>ለአስረጅ አካባቢ የጀርባ አገናኞች ንሚካ የጀርባ ውጤት ማስቻል</value>
+    <value>የጎን ፓነሉ እና የትር አሞሌው የማይካ ውጤት ያሳያሉ፤ የአርትዖት ቦታው የገጽታውን ጠንካራ ቀለም ይይዛል</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>በማሳረግ አካባቢ ሚካ ቁሳቁስ ይጠቀሙ</value>
+    <value>በአርትዖት ቦታው ዙሪያ የማይካ ቁስ ተጠቀም</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>አቃፊውን ክፈት</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>በቅርቡ የተከፈቱ ፋይሎችን አስታውስ</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>የሚከፍቷቸው ፋይሎች እና አቃፊዎች በፋይል &gt; የቅርብ ጊዜውን ክፈት እና በመነሻ ገጹ ላይ ይዘረዘራሉ። ሲጠፋ ምንም አዲስ አይታከልም።</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>የቅርብ ጊዜ ፋይሎችን እና አቃፊዎችን አጽዳ</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>በቅርቡ የተከፈቱ ፋይሎች እና አቃፊዎች ዝርዝሮችን ባዶ ያደርጋል።</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>አጽዳ</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>በባዶ ትር ላይ መነሻ ገጹን አሳይ</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>ሲጀመር የሚከፈት ነገር ከሌለ እና የመጨረሻው ትር ሲዘጋ፦ የቅርብ ጊዜ ፋይሎች እና አቃፊዎች፣ ተወዳጆች</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>አዲስ ትሮች መነሻ ገጹን ያሳያሉ</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>አዲስ ትር (ፋይል &gt; አዲስ፣ የ+ አዝራር) ከባዶ ሰነድ ይልቅ መነሻ ገጹን ያሳያል</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>ተጨማሪ ባዶ መስመሮችን አሳይ</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>በአንቀጾች መካከል ያሉ ባዶ መስመሮች ልክ በማረም ጊዜ እንደሚያደርጉት በንባብ ሁነታ እና በHTML እና PDF ወደ ውጭ መላኪያዎች ውስጥም ቦታ ይይዛሉ። ፋይሉ ራሱ አይለወጥም</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>ረጅም ሰነዶችን ቀስ በቀስ ይሳሉ</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>ረጅም ሰነድ በተዉት ቦታ ይከፈታል፣ የቀረው ደግሞ ከበስተጀርባ ይሳላል። ረጅም ሰነድ ሲከፈት የሆነ ነገር ትክክል ካልመሰለ ይህን ያጥፉ፤ ከዚያ ሰነዱ በአንድ ጊዜ ይሳላል</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>የጎን አሞሌ በቀኝ</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>የጎን አሞሌውን ከሰነዱ በግራ ፋንታ በቀኝ አሳይ</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>ሲዘጋ ያልተቀመጡ ለውጦችን አቆይ</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>ለማስቀመጥ ሳይጠየቅ ዝጋ፦ ያልተቀመጡ ሰነዶች እንደነበሩ፣ አሁንም ሳይቀመጡ፣ ከቀደመው ክፍለ ጊዜ ትሮች ጋር ይመለሳሉ</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>የMarkdown ምልክቶችን ሁልጊዜ አሳይ</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>የMarkdown ምልክቶችን (**፣ #፣ የአገናኝ አድራሻ) ጠቋሚው ባለበት ብቻ ሳይሆን በእያንዳንዱ አንቀጽ አሳይ</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>የረጅም ሰነዶችን አቀማመጥ ተንብይ (ሙከራ)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>ረጅም ሰነድ በክፍል ሲሳል፣ ገና ያልታየው ክፍል ቁመት ከመገመት ይልቅ ከጽሑፉ ይሰላል፤ በዚህም የማሸብለያ አሞሌው እና ከዝርዝሩ የሚደረጉ ዝላይዎች ይበልጥ ትክክል ይሆናሉ። ሙከራ</value>
   </data>
 </root>

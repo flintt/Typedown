@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add" xml:space="preserve">
-    <value>Sumar</value>
+    <value>Afegeix</value>
     <comment>添加</comment>
   </data>
   <data name="AlignCenter" xml:space="preserve">
@@ -146,7 +146,7 @@
     <comment>自动</comment>
   </data>
   <data name="Back" xml:space="preserve">
-    <value>Esquena</value>
+    <value>Enrere</value>
     <comment>返回</comment>
   </data>
   <data name="Browse" xml:space="preserve">
@@ -182,7 +182,7 @@
     <comment>图表</comment>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Clar</value>
+    <value>Esborra</value>
     <comment>清除</comment>
   </data>
   <data name="ClearFormat" xml:space="preserve">
@@ -198,7 +198,7 @@
     <comment>点击添加一张图片</comment>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>Tancar</value>
+    <value>Tanca</value>
     <comment>文件/关闭</comment>
   </data>
   <data name="Code" xml:space="preserve">
@@ -214,7 +214,7 @@
     <comment>插入表格/列数</comment>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>Copiar</value>
+    <value>Copia</value>
     <comment>编辑/复制</comment>
   </data>
   <data name="CopyAsHTMLCode" xml:space="preserve">
@@ -250,7 +250,7 @@
     <comment>操作/复制到路径</comment>
   </data>
   <data name="Create" xml:space="preserve">
-    <value>Crear</value>
+    <value>Crea</value>
     <comment>创建</comment>
   </data>
   <data name="CtrlAndClickOpenLink" xml:space="preserve">
@@ -266,7 +266,7 @@
     <comment>自定义快捷键</comment>
   </data>
   <data name="Cut" xml:space="preserve">
-    <value>Tallar</value>
+    <value>Retalla</value>
     <comment>编辑/剪切</comment>
   </data>
   <data name="Dark" xml:space="preserve">
@@ -302,7 +302,7 @@
     <comment>段落/重复</comment>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Editar</value>
+    <value>Edita</value>
     <comment>编辑</comment>
   </data>
   <data name="EditImage" xml:space="preserve">
@@ -334,7 +334,7 @@
     <comment>错误</comment>
   </data>
   <data name="Export" xml:space="preserve">
-    <value>Exportar</value>
+    <value>Exporta</value>
     <comment>文件/导出</comment>
   </data>
   <data name="ExportSettings" xml:space="preserve">
@@ -346,7 +346,7 @@
     <comment>文件/导出/导出为PDF</comment>
   </data>
   <data name="Feedback" xml:space="preserve">
-    <value>Retroalimentació</value>
+    <value>Comentaris</value>
     <comment>应用程序反馈</comment>
   </data>
   <data name="File" xml:space="preserve">
@@ -354,11 +354,11 @@
     <comment>文件(单数)</comment>
   </data>
   <data name="Files" xml:space="preserve">
-    <value>ﬁtxers</value>
+    <value>Fitxers</value>
     <comment>文件(复数)</comment>
   </data>
   <data name="Find" xml:space="preserve">
-    <value>Trobar</value>
+    <value>Cerca</value>
     <comment>编辑/查找和替换/查找</comment>
   </data>
   <data name="FindAndReplace" xml:space="preserve">
@@ -378,7 +378,7 @@
     <comment>Flow Chart</comment>
   </data>
   <data name="FocusMode" xml:space="preserve">
-    <value>Mode d'enfocament</value>
+    <value>Mode concentració</value>
     <comment>视图/专注模式</comment>
   </data>
   <data name="Folder" xml:space="preserve">
@@ -446,11 +446,11 @@
     <comment>段落/六级标题</comment>
   </data>
   <data name="Help" xml:space="preserve">
-    <value>Ajudar</value>
+    <value>Ajuda</value>
     <comment>应用程序帮助</comment>
   </data>
   <data name="Highlight" xml:space="preserve">
-    <value>Remarcar</value>
+    <value>Ressalta</value>
     <comment>格式/高亮</comment>
   </data>
   <data name="HorizontalLine" xml:space="preserve">
@@ -474,7 +474,7 @@
     <comment>图片上传设置</comment>
   </data>
   <data name="Import" xml:space="preserve">
-    <value>Importació</value>
+    <value>Importa</value>
     <comment>文件/导入</comment>
   </data>
   <data name="IncreaseHeadingLevel" xml:space="preserve">
@@ -546,7 +546,7 @@
     <comment>了解更多</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Llum</value>
+    <value>Clar</value>
     <comment>应用主题/浅色</comment>
   </data>
   <data name="Line" xml:space="preserve">
@@ -654,7 +654,7 @@
     <comment>未设置</comment>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Tancar</value>
+    <value>Desactivat</value>
     <comment>开关/关</comment>
   </data>
   <data name="Ok" xml:space="preserve">
@@ -662,11 +662,11 @@
     <comment>对话框/确定</comment>
   </data>
   <data name="On" xml:space="preserve">
-    <value>Sobre</value>
+    <value>Activat</value>
     <comment>开关/开</comment>
   </data>
   <data name="Open" xml:space="preserve">
-    <value>Obrir</value>
+    <value>Obre</value>
     <comment>文件/打开</comment>
   </data>
   <data name="OpenFileLocation" xml:space="preserve">
@@ -698,7 +698,7 @@
     <comment>段落/有序列表</comment>
   </data>
   <data name="Outline" xml:space="preserve">
-    <value>Contorn</value>
+    <value>Esquema</value>
     <comment>侧栏/大纲</comment>
   </data>
   <data name="Paragraph" xml:space="preserve">
@@ -706,7 +706,7 @@
     <comment>段落</comment>
   </data>
   <data name="Paste" xml:space="preserve">
-    <value>Enganxar</value>
+    <value>Enganxa</value>
     <comment>编辑/粘贴</comment>
   </data>
   <data name="PasteAsPlainText" xml:space="preserve">
@@ -722,15 +722,15 @@
     <comment>PlantUML Diagram</comment>
   </data>
   <data name="Print" xml:space="preserve">
-    <value>Imprimir</value>
+    <value>Imprimeix</value>
     <comment>文件/打印</comment>
   </data>
   <data name="Quote" xml:space="preserve">
-    <value>Citar</value>
+    <value>Cita</value>
     <comment>段落/引用</comment>
   </data>
   <data name="Redo" xml:space="preserve">
-    <value>Refer</value>
+    <value>Refés</value>
     <comment>编辑/重做</comment>
   </data>
   <data name="RemoveColumn" xml:space="preserve">
@@ -742,11 +742,11 @@
     <comment>表格/删除行</comment>
   </data>
   <data name="Rename" xml:space="preserve">
-    <value>Rebatejar</value>
+    <value>Canvia el nom</value>
     <comment>文件/重命名</comment>
   </data>
   <data name="Replace" xml:space="preserve">
-    <value>Reemplaçar</value>
+    <value>Substitueix</value>
     <comment>编辑/查找和替换/替换</comment>
   </data>
   <data name="ReplaceAll" xml:space="preserve">
@@ -774,7 +774,7 @@
     <comment>文件/另存为</comment>
   </data>
   <data name="Saved" xml:space="preserve">
-    <value>Salvat</value>
+    <value>Desat</value>
     <comment>文件/已保存</comment>
   </data>
   <data name="SaveImageAs" xml:space="preserve">
@@ -782,7 +782,7 @@
     <comment>图片另存为</comment>
   </data>
   <data name="Search" xml:space="preserve">
-    <value>Buscar</value>
+    <value>Cerca</value>
     <comment>搜索</comment>
   </data>
   <data name="SelectAll" xml:space="preserve">
@@ -818,15 +818,15 @@
     <comment>状态栏</comment>
   </data>
   <data name="Stop" xml:space="preserve">
-    <value>Parar</value>
+    <value>Atura</value>
     <comment>停止操作</comment>
   </data>
   <data name="Strikethrough" xml:space="preserve">
-    <value>Vaga</value>
+    <value>Ratllat</value>
     <comment>格式/删除线</comment>
   </data>
   <data name="Strong" xml:space="preserve">
-    <value>Atrevit</value>
+    <value>Negreta</value>
     <comment>格式/加粗</comment>
   </data>
   <data name="Table" xml:space="preserve">
@@ -862,11 +862,11 @@
     <comment>视图/打字机模式</comment>
   </data>
   <data name="Underline" xml:space="preserve">
-    <value>Subratllar</value>
+    <value>Subratllat</value>
     <comment>格式/下划线</comment>
   </data>
   <data name="Undo" xml:space="preserve">
-    <value>Desfer</value>
+    <value>Desfés</value>
     <comment>编辑/撤销</comment>
   </data>
   <data name="UnorderedList" xml:space="preserve">
@@ -1011,5 +1011,146 @@
   </data>
   <data name="ExportedTo" xml:space="preserve">
     <value>Exportat a {0}</value>
+  </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>Guia de l'usuari</value>
+  </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Caràcters (sense espais)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Caràcters (amb espais)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>Caràcters CJK</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Paraules</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Paraules no CJK</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Paràgrafs</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Encapçalaments</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Imatges</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Enllaços</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Temps de lectura</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Uns {0} min</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Menys d’un minut</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Comptat sobre el text visible. Els blocs de codi i les fórmules no compten per al temps de lectura.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>La barra d’estat mostra</value>
+  </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Desat</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>No desat</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Desament automàtic en pausa</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Feu clic per desar</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>El document és buit però el fitxer del disc no ho és, i cap edició no l’ha buidat, així que el desament automàtic no ha sobreescrit el fitxer.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Aquest fitxer no s’ha pogut llegir sense pèrdues (una codificació diferent d’UTF-8?), així que el desament automàtic no el sobreescriu. Deseu-lo vosaltres només si el text que es mostra és correcte.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>No s’ha pogut escriure el fitxer: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{0} de {1} {2} seleccionats</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Codificació i finals de línia</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Converteix a UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Torna a obrir amb la codificació</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Encapçalament actual</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Estat del desament</value>
+  </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Carpetes</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>No hi ha carpetes recents</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Esborra les carpetes recents</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Feu clic amb el botó dret o premeu Supr per treure-la de la llista</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>Un nivell amunt</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Estableix com a arrel</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Preferits</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Afegeix als preferits</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Treu dels preferits</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Inici</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Inici</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Document nou</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Obre un fitxer</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Obre una carpeta</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Fitxers recents</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Carpetes recents</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Treu de la llista</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Configuració</value>
+  </data>
+  <data name="EditorOpening" xml:space="preserve">
+    <value>S'està obrint…</value>
   </data>
 </root>

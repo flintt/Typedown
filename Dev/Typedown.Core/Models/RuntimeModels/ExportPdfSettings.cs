@@ -1,6 +1,6 @@
 ﻿using Typedown.Core.Enums;
 using Windows.Foundation;
-using Windows.UI.Xaml;
+using Microsoft.UI.Xaml;
 
 namespace Typedown.Core.Models
 {

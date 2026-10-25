@@ -138,7 +138,7 @@
     <comment>关于/发送反馈</comment>
   </data>
   <data name="About.Title" xml:space="preserve">
-    <value>Về</value>
+    <value>Giới thiệu</value>
     <comment>关于/关于</comment>
   </data>
   <data name="Editor.AutoPairBracket.Description" xml:space="preserve">
@@ -238,7 +238,7 @@
     <comment>编辑器/默认缩进</comment>
   </data>
   <data name="Editor.Title" xml:space="preserve">
-    <value>Biên tập viên</value>
+    <value>Trình soạn thảo</value>
     <comment>编辑器/编辑器</comment>
   </data>
   <data name="Export.AddConfig.Description" xml:space="preserve">
@@ -634,7 +634,7 @@
     <comment>视图/显示状态栏</comment>
   </data>
   <data name="View.Title" xml:space="preserve">
-    <value>Bề ngoài</value>
+    <value>Giao diện</value>
     <comment>视图/外观</comment>
   </data>
   <data name="View.Topmost.Description" xml:space="preserve">
@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Bật hiệu ứng nền mica cho nền vùng chỉnh sửa</value>
+    <value>Ngăn bên và thanh thẻ hiển thị hiệu ứng mica; vùng chỉnh sửa giữ màu đặc của chủ đề</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Sử dụng tài liệu mica trong khu vực chỉnh sửa</value>
+    <value>Dùng chất liệu mica quanh vùng chỉnh sửa</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Mở thư mục chứa</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Ghi nhớ tệp mở gần đây</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Các tệp và thư mục bạn mở được liệt kê trong Tệp &gt; Mở gần đây và trên trang chủ. Khi tắt, không có gì mới được thêm.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Xóa tệp và thư mục gần đây</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Làm trống danh sách tệp và thư mục mở gần đây.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Xóa</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Hiển thị trang chủ trên tab trống</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Khi khởi động mà không có gì để mở và khi đóng tab cuối cùng: tệp và thư mục gần đây, yêu thích</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Tab mới hiển thị trang chủ</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Tab mới (Tệp &gt; Mới, nút +) hiển thị trang chủ thay vì tài liệu trống</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Hiển thị các dòng trống thừa</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Các dòng trống giữa các đoạn cũng chiếm chỗ trong chế độ đọc và khi xuất HTML, PDF, giống như lúc chỉnh sửa. Bản thân tệp không thay đổi</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Vẽ tài liệu dài theo từng phần</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Tài liệu dài mở tại vị trí bạn rời đi, phần còn lại được vẽ trong nền. Tắt tùy chọn này nếu có gì đó trông không đúng khi tài liệu dài đang mở: khi đó tài liệu được vẽ toàn bộ một lần</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Thanh bên ở bên phải</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Hiển thị thanh bên ở bên phải tài liệu thay vì bên trái</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Giữ thay đổi chưa lưu khi đóng</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Đóng mà không hỏi lưu: các tài liệu chưa lưu sẽ quay lại như cũ, vẫn chưa lưu, cùng các tab của phiên trước</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Luôn hiện ký hiệu Markdown</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Hiện các ký hiệu Markdown (**, #, địa chỉ của liên kết) ở mọi đoạn, không chỉ nơi có con trỏ</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Dự đoán bố cục của tài liệu dài (thử nghiệm)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Khi một tài liệu dài được vẽ theo từng phần, chiều cao của phần chưa hiển thị được tính từ văn bản thay vì ước lượng, nhờ đó thanh cuộn và các lần nhảy từ dàn ý chính xác hơn. Thử nghiệm</value>
   </data>
 </root>

@@ -334,4 +334,13 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>其中 {0} 张之前已用此配置上传过，因此沿用了它们之前的地址。</value>
   </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>从微软网站下载 WebView2 运行时</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>运行时没有装上。安装程序需要联网；也可以从微软网站下载运行时（也有离线安装包），装好后重新启动本程序。</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>正在安装 WebView2 运行时...</value>
+  </data>
 </root>

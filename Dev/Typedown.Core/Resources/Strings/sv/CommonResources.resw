@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add" xml:space="preserve">
-    <value>Addera</value>
+    <value>Lägg till</value>
     <comment>添加</comment>
   </data>
   <data name="AlignCenter" xml:space="preserve">
@@ -182,7 +182,7 @@
     <comment>图表</comment>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Klar</value>
+    <value>Rensa</value>
     <comment>清除</comment>
   </data>
   <data name="ClearFormat" xml:space="preserve">
@@ -198,7 +198,7 @@
     <comment>点击添加一张图片</comment>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>Stänga</value>
+    <value>Stäng</value>
     <comment>文件/关闭</comment>
   </data>
   <data name="Code" xml:space="preserve">
@@ -214,7 +214,7 @@
     <comment>插入表格/列数</comment>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>Kopia</value>
+    <value>Kopiera</value>
     <comment>编辑/复制</comment>
   </data>
   <data name="CopyAsHTMLCode" xml:space="preserve">
@@ -266,11 +266,11 @@
     <comment>自定义快捷键</comment>
   </data>
   <data name="Cut" xml:space="preserve">
-    <value>Skära</value>
+    <value>Klipp ut</value>
     <comment>编辑/剪切</comment>
   </data>
   <data name="Dark" xml:space="preserve">
-    <value>Mörk</value>
+    <value>Mörkt</value>
     <comment>应用主题/深色</comment>
   </data>
   <data name="Data" xml:space="preserve">
@@ -334,7 +334,7 @@
     <comment>错误</comment>
   </data>
   <data name="Export" xml:space="preserve">
-    <value>Export</value>
+    <value>Exportera</value>
     <comment>文件/导出</comment>
   </data>
   <data name="ExportSettings" xml:space="preserve">
@@ -354,11 +354,11 @@
     <comment>文件(单数)</comment>
   </data>
   <data name="Files" xml:space="preserve">
-    <value>ﬁler</value>
+    <value>Filer</value>
     <comment>文件(复数)</comment>
   </data>
   <data name="Find" xml:space="preserve">
-    <value>Hitta</value>
+    <value>Sök</value>
     <comment>编辑/查找和替换/查找</comment>
   </data>
   <data name="FindAndReplace" xml:space="preserve">
@@ -450,7 +450,7 @@
     <comment>应用程序帮助</comment>
   </data>
   <data name="Highlight" xml:space="preserve">
-    <value>Höjdpunkt</value>
+    <value>Markera</value>
     <comment>格式/高亮</comment>
   </data>
   <data name="HorizontalLine" xml:space="preserve">
@@ -474,7 +474,7 @@
     <comment>图片上传设置</comment>
   </data>
   <data name="Import" xml:space="preserve">
-    <value>Import</value>
+    <value>Importera</value>
     <comment>文件/导入</comment>
   </data>
   <data name="IncreaseHeadingLevel" xml:space="preserve">
@@ -546,7 +546,7 @@
     <comment>了解更多</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Ljus</value>
+    <value>Ljust</value>
     <comment>应用主题/浅色</comment>
   </data>
   <data name="Line" xml:space="preserve">
@@ -558,7 +558,7 @@
     <comment>设置/行高</comment>
   </data>
   <data name="Lines" xml:space="preserve">
-    <value>Linjer</value>
+    <value>Rader</value>
     <comment>行(复数)</comment>
   </data>
   <data name="LinkReference" xml:space="preserve">
@@ -654,7 +654,7 @@
     <comment>未设置</comment>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Stänga</value>
+    <value>Av</value>
     <comment>开关/关</comment>
   </data>
   <data name="Ok" xml:space="preserve">
@@ -698,7 +698,7 @@
     <comment>段落/有序列表</comment>
   </data>
   <data name="Outline" xml:space="preserve">
-    <value>Kontur</value>
+    <value>Disposition</value>
     <comment>侧栏/大纲</comment>
   </data>
   <data name="Paragraph" xml:space="preserve">
@@ -706,7 +706,7 @@
     <comment>段落</comment>
   </data>
   <data name="Paste" xml:space="preserve">
-    <value>Klistra</value>
+    <value>Klistra in</value>
     <comment>编辑/粘贴</comment>
   </data>
   <data name="PasteAsPlainText" xml:space="preserve">
@@ -722,15 +722,15 @@
     <comment>PlantUML Diagram</comment>
   </data>
   <data name="Print" xml:space="preserve">
-    <value>Trycka</value>
+    <value>Skriv ut</value>
     <comment>文件/打印</comment>
   </data>
   <data name="Quote" xml:space="preserve">
-    <value>Citera</value>
+    <value>Citat</value>
     <comment>段落/引用</comment>
   </data>
   <data name="Redo" xml:space="preserve">
-    <value>Göra om</value>
+    <value>Gör om</value>
     <comment>编辑/重做</comment>
   </data>
   <data name="RemoveColumn" xml:space="preserve">
@@ -746,7 +746,7 @@
     <comment>文件/重命名</comment>
   </data>
   <data name="Replace" xml:space="preserve">
-    <value>Ersätta</value>
+    <value>Ersätt</value>
     <comment>编辑/查找和替换/替换</comment>
   </data>
   <data name="ReplaceAll" xml:space="preserve">
@@ -758,7 +758,7 @@
     <comment>表格/调整表格大小</comment>
   </data>
   <data name="Restore" xml:space="preserve">
-    <value>Återställa</value>
+    <value>Återställ</value>
     <comment>还原默认设置</comment>
   </data>
   <data name="Rows" xml:space="preserve">
@@ -774,7 +774,7 @@
     <comment>文件/另存为</comment>
   </data>
   <data name="Saved" xml:space="preserve">
-    <value>Räddad</value>
+    <value>Sparad</value>
     <comment>文件/已保存</comment>
   </data>
   <data name="SaveImageAs" xml:space="preserve">
@@ -782,7 +782,7 @@
     <comment>图片另存为</comment>
   </data>
   <data name="Search" xml:space="preserve">
-    <value>Söka</value>
+    <value>Sök</value>
     <comment>搜索</comment>
   </data>
   <data name="SelectAll" xml:space="preserve">
@@ -806,7 +806,7 @@
     <comment>快捷键</comment>
   </data>
   <data name="SidePane" xml:space="preserve">
-    <value>Sidostång</value>
+    <value>Sidofält</value>
     <comment>侧栏</comment>
   </data>
   <data name="SourceCodeMode" xml:space="preserve">
@@ -818,7 +818,7 @@
     <comment>状态栏</comment>
   </data>
   <data name="Stop" xml:space="preserve">
-    <value>Stanna</value>
+    <value>Stoppa</value>
     <comment>停止操作</comment>
   </data>
   <data name="Strikethrough" xml:space="preserve">
@@ -826,11 +826,11 @@
     <comment>格式/删除线</comment>
   </data>
   <data name="Strong" xml:space="preserve">
-    <value>Djärv</value>
+    <value>Fet</value>
     <comment>格式/加粗</comment>
   </data>
   <data name="Table" xml:space="preserve">
-    <value>Bord</value>
+    <value>Tabell</value>
     <comment>段落/表格</comment>
   </data>
   <data name="TaskList" xml:space="preserve">
@@ -862,7 +862,7 @@
     <comment>视图/打字机模式</comment>
   </data>
   <data name="Underline" xml:space="preserve">
-    <value>Understryka</value>
+    <value>Understrykning</value>
     <comment>格式/下划线</comment>
   </data>
   <data name="Undo" xml:space="preserve">
@@ -894,7 +894,7 @@
     <comment>Vega Chart</comment>
   </data>
   <data name="View" xml:space="preserve">
-    <value>Utsikt</value>
+    <value>Visa</value>
     <comment>查看</comment>
   </data>
   <data name="Website" xml:space="preserve">
@@ -926,7 +926,7 @@
     <comment>YAML Front Matter</comment>
   </data>
   <data name="Zoom" xml:space="preserve">
-    <value>Zooma</value>
+    <value>Zoom</value>
     <comment>字体缩放</comment>
   </data>
   <data name="FolderPane.NoFolderOpen" xml:space="preserve">
@@ -1011,5 +1011,146 @@
   </data>
   <data name="ExportedTo" xml:space="preserve">
     <value>Exporterad till {0}</value>
+  </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>Användarhandbok</value>
+  </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>Tecken (utan blanksteg)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>Tecken (med blanksteg)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK-tecken</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>Ord</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>Icke-CJK-ord</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>Stycken</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>Rubriker</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>Bilder</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>Länkar</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>Lästid</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>Cirka {0} min</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>Under en minut</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>Räknat på den synliga texten. Kodblock och formler ingår inte i lästiden.</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>Statusfältet visar</value>
+  </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>Sparad</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>Inte sparad</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>Spara automatiskt pausat</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>Klicka för att spara</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>Dokumentet är tomt men filen på disken är det inte, och ingen redigering tömde det, så automatisk sparning skrev inte över filen.</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>Filen kunde inte läsas utan förlust (en annan kodning än UTF-8?), så automatisk sparning skriver inte över den. Spara den själv bara om den visade texten stämmer.</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>Det gick inte att skriva filen: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{0} av {1} {2} markerade</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>Kodning och radslut</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>Konvertera till UTF-8</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>Öppna igen med kodning</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>Aktuell rubrik</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>Sparstatus</value>
+  </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>Mappar</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>Inga senaste mappar</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>Rensa senaste mappar</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>Högerklicka eller tryck på Delete för att ta bort den från listan</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>En nivå upp</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>Ange som rot</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>Favoriter</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>Lägg till i favoriter</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>Ta bort från favoriter</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>Nytt dokument</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>Öppna fil</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>Öppna mapp</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>Senaste filer</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>Senaste mappar</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>Ta bort från listan</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>Inställningar</value>
+  </data>
+  <data name="EditorOpening" xml:space="preserve">
+    <value>Öppnar…</value>
   </data>
 </root>

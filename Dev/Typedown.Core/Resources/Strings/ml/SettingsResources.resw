@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>എഡിറ്റിംഗ് ഏരിയ പശ്ചാത്തലത്തിനായി മൈക്ക പശ്ചാത്തല പ്രഭാവം പ്രവർത്തനക്ഷമമാക്കുക</value>
+    <value>സൈഡ് പാളിയും ടാബ് ബാറും മൈക്ക ഇഫക്റ്റ് കാണിക്കുന്നു; എഡിറ്റിംഗ് ഏരിയ തീമിന്റെ ഖര നിറം നിലനിർത്തുന്നു</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>എഡിറ്റിംഗ് ഏരിയയിൽ മൈക്ക മെറ്റീരിയൽ ഉപയോഗിക്കുക</value>
+    <value>എഡിറ്റിംഗ് ഏരിയയ്ക്ക് ചുറ്റും മൈക്ക മെറ്റീരിയൽ ഉപയോഗിക്കുക</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>അതിന്റെ ഫോൾഡർ തുറക്കുക</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>അടുത്തിടെ തുറന്ന ഫയലുകൾ ഓർമ്മിക്കുക</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>നിങ്ങൾ തുറക്കുന്ന ഫയലുകളും ഫോൾഡറുകളും ഫയൽ &gt; സമീപകാലം തുറക്കുക എന്നതിലും ഹോം പേജിലും കാണാം. ഓഫ് ആണെങ്കിൽ പുതിയതൊന്നും ചേർക്കില്ല.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>സമീപകാല ഫയലുകളും ഫോൾഡറുകളും മായ്ക്കുക</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>അടുത്തിടെ തുറന്ന ഫയലുകളുടെയും ഫോൾഡറുകളുടെയും പട്ടികകൾ ശൂന്യമാക്കുന്നു.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>മായ്ക്കുക</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>ശൂന്യമായ ടാബിൽ ഹോം പേജ് കാണിക്കുക</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>ആരംഭത്തിൽ തുറക്കാൻ ഒന്നുമില്ലാത്തപ്പോഴും അവസാന ടാബ് അടയ്ക്കുമ്പോഴും: സമീപകാല ഫയലുകൾ, ഫോൾഡറുകൾ, പ്രിയങ്കരങ്ങൾ</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>പുതിയ ടാബുകൾ ഹോം പേജ് കാണിക്കുന്നു</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>പുതിയ ടാബ് (ഫയൽ &gt; പുതിയത്, + ബട്ടൺ) ശൂന്യ പ്രമാണത്തിന് പകരം ഹോം പേജ് കാണിക്കുന്നു</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>അധിക ശൂന്യ വരികൾ കാണിക്കുക</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>എഡിറ്റ് ചെയ്യുമ്പോഴെന്നപോലെ വായനാ മോഡിലും HTML, PDF എക്സ്പോർട്ടുകളിലും ഖണ്ഡികകൾക്കിടയിലെ ശൂന്യ വരികൾ ഇടം എടുക്കുന്നു. ഫയൽ തന്നെ മാറുന്നില്ല</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>നീളമുള്ള പ്രമാണങ്ങൾ ഘട്ടംഘട്ടമായി വരയ്ക്കുക</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>നീളമുള്ള പ്രമാണം നിങ്ങൾ വിട്ടുപോയ സ്ഥലത്തുതന്നെ തുറക്കുന്നു, ബാക്കി പശ്ചാത്തലത്തിൽ വരയ്ക്കുന്നു. നീളമുള്ള പ്രമാണം തുറക്കുമ്പോൾ എന്തെങ്കിലും തെറ്റായി തോന്നിയാൽ ഇത് ഓഫ് ചെയ്യുക: അപ്പോൾ അത് ഒറ്റയടിക്ക് വരയ്ക്കും</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>വലതുവശത്ത് സൈഡ് ബാർ</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>ഡോക്യുമെന്റിന്റെ ഇടതുവശത്തിന് പകരം വലതുവശത്ത് സൈഡ് ബാർ കാണിക്കുക</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>അടയ്ക്കുമ്പോൾ സംരക്ഷിക്കാത്ത മാറ്റങ്ങൾ സൂക്ഷിക്കുക</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>സംരക്ഷിക്കാൻ ചോദിക്കാതെ അടയ്ക്കുക: സംരക്ഷിക്കാത്ത പ്രമാണങ്ങൾ അതേപടി, ഇപ്പോഴും സംരക്ഷിക്കാതെ, കഴിഞ്ഞ സെഷനിലെ ടാബുകൾക്കൊപ്പം തിരിച്ചുവരും</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Markdown അടയാളങ്ങൾ എപ്പോഴും കാണിക്കുക</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>കഴ്‌സർ ഉള്ളിടത്ത് മാത്രമല്ല, എല്ലാ ഖണ്ഡികയിലും Markdown അടയാളങ്ങൾ (**, #, ലിങ്കിന്റെ വിലാസം) കാണിക്കുക</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>നീണ്ട പ്രമാണങ്ങളുടെ ലേഔട്ട് മുൻകൂട്ടി കണക്കാക്കുക (പരീക്ഷണാത്മകം)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>നീണ്ട പ്രമാണം ഭാഗങ്ങളായി വരയ്ക്കുമ്പോൾ, ഇതുവരെ കാണിക്കാത്ത ഭാഗത്തിന്റെ ഉയരം ഊഹിക്കുന്നതിനു പകരം വാചകത്തിൽ നിന്ന് കണക്കാക്കുന്നു, അതിനാൽ സ്ക്രോൾ ബാറും രൂപരേഖയിൽ നിന്നുള്ള ചാട്ടങ്ങളും കൂടുതൽ കൃത്യമാകും. പരീക്ഷണാത്മകം</value>
   </data>
 </root>

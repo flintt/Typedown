@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>ਸੰਪਾਦਨ ਖੇਤਰ ਬੈਕਗ੍ਰਾਊਂਡ ਲਈ mica ਬੈਕਗਰਾਊਂਡ ਪ੍ਰਭਾਵ ਯੋਗ ਕਰੋ</value>
+    <value>ਪਾਸੇ ਵਾਲਾ ਪੈਨ ਅਤੇ ਟੈਬ ਬਾਰ ਮਾਈਕਾ ਪ੍ਰਭਾਵ ਦਿਖਾਉਂਦੇ ਹਨ; ਸੰਪਾਦਨ ਖੇਤਰ ਥੀਮ ਦਾ ਠੋਸ ਰੰਗ ਰੱਖਦਾ ਹੈ</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>ਸੰਪਾਦਨ ਖੇਤਰ ਵਿੱਚ ਮੀਕਾ ਸਮੱਗਰੀ ਦੀ ਵਰਤੋਂ ਕਰੋ</value>
+    <value>ਸੰਪਾਦਨ ਖੇਤਰ ਦੇ ਆਲੇ-ਦੁਆਲੇ ਮਾਈਕਾ ਸਮੱਗਰੀ ਵਰਤੋ</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>ਇਸਦਾ ਫ਼ੋਲਡਰ ਖੋਲ੍ਹੋ</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>ਹਾਲ ਹੀ ਵਿੱਚ ਖੋਲ੍ਹੀਆਂ ਫ਼ਾਈਲਾਂ ਯਾਦ ਰੱਖੋ</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>ਤੁਹਾਡੀਆਂ ਖੋਲ੍ਹੀਆਂ ਫ਼ਾਈਲਾਂ ਅਤੇ ਫੋਲਡਰ ਫ਼ਾਈਲ &gt; ਹਾਲੀਆ ਖੋਲ੍ਹੋ ਅਤੇ ਹੋਮ ਪੇਜ ਉੱਤੇ ਦਿਖਦੇ ਹਨ। ਬੰਦ ਹੋਣ 'ਤੇ ਕੁਝ ਨਵਾਂ ਨਹੀਂ ਜੁੜਦਾ।</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>ਹਾਲੀਆ ਫ਼ਾਈਲਾਂ ਅਤੇ ਫੋਲਡਰ ਸਾਫ਼ ਕਰੋ</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>ਹਾਲ ਹੀ ਵਿੱਚ ਖੋਲ੍ਹੀਆਂ ਫ਼ਾਈਲਾਂ ਅਤੇ ਫੋਲਡਰਾਂ ਦੀਆਂ ਸੂਚੀਆਂ ਖਾਲੀ ਕਰਦਾ ਹੈ।</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>ਸਾਫ਼ ਕਰੋ</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>ਖਾਲੀ ਟੈਬ ਉੱਤੇ ਹੋਮ ਪੇਜ ਦਿਖਾਓ</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>ਸ਼ੁਰੂ ਕਰਨ ਵੇਲੇ ਖੋਲ੍ਹਣ ਲਈ ਕੁਝ ਨਾ ਹੋਵੇ ਅਤੇ ਆਖਰੀ ਟੈਬ ਬੰਦ ਕਰਨ 'ਤੇ: ਹਾਲੀਆ ਫ਼ਾਈਲਾਂ ਅਤੇ ਫੋਲਡਰ, ਮਨਪਸੰਦ</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>ਨਵੀਆਂ ਟੈਬਾਂ ਹੋਮ ਪੇਜ ਦਿਖਾਉਂਦੀਆਂ ਹਨ</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>ਨਵੀਂ ਟੈਬ (ਫ਼ਾਈਲ &gt; ਨਵਾਂ, + ਬਟਨ) ਖਾਲੀ ਦਸਤਾਵੇਜ਼ ਦੀ ਥਾਂ ਹੋਮ ਪੇਜ ਦਿਖਾਉਂਦੀ ਹੈ</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>ਵਾਧੂ ਖਾਲੀ ਲਾਈਨਾਂ ਦਿਖਾਓ</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>ਪੈਰਿਆਂ ਵਿਚਕਾਰ ਖਾਲੀ ਲਾਈਨਾਂ ਸੰਪਾਦਨ ਵਾਂਗ ਪੜ੍ਹਨ ਮੋਡ ਅਤੇ HTML ਤੇ PDF ਨਿਰਯਾਤ ਵਿੱਚ ਵੀ ਥਾਂ ਲੈਂਦੀਆਂ ਹਨ। ਫ਼ਾਈਲ ਆਪ ਨਹੀਂ ਬਦਲਦੀ</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>ਲੰਮੇ ਦਸਤਾਵੇਜ਼ ਹੌਲੀ-ਹੌਲੀ ਬਣਾਓ</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>ਲੰਮਾ ਦਸਤਾਵੇਜ਼ ਉੱਥੋਂ ਹੀ ਖੁੱਲ੍ਹਦਾ ਹੈ ਜਿੱਥੇ ਤੁਸੀਂ ਛੱਡਿਆ ਸੀ, ਅਤੇ ਬਾਕੀ ਪਿਛੋਕੜ ਵਿੱਚ ਬਣਦਾ ਹੈ। ਲੰਮਾ ਦਸਤਾਵੇਜ਼ ਖੁੱਲ੍ਹਦੇ ਸਮੇਂ ਕੁਝ ਗਲਤ ਲੱਗੇ ਤਾਂ ਇਸਨੂੰ ਬੰਦ ਕਰੋ: ਫਿਰ ਇਹ ਇੱਕੋ ਵਾਰ ਵਿੱਚ ਬਣੇਗਾ</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>ਸੱਜੇ ਪਾਸੇ ਸਾਈਡ ਬਾਰ</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>ਦਸਤਾਵੇਜ਼ ਦੇ ਖੱਬੇ ਪਾਸੇ ਦੀ ਬਜਾਏ ਸੱਜੇ ਪਾਸੇ ਸਾਈਡ ਬਾਰ ਦਿਖਾਓ</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>ਬੰਦ ਕਰਨ ਵੇਲੇ ਅਣਸੰਭਾਲੀਆਂ ਤਬਦੀਲੀਆਂ ਰੱਖੋ</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>ਸੰਭਾਲਣ ਲਈ ਪੁੱਛੇ ਬਿਨਾਂ ਬੰਦ ਕਰੋ: ਅਣਸੰਭਾਲੇ ਦਸਤਾਵੇਜ਼ ਜਿਵੇਂ ਸਨ ਉਵੇਂ, ਅਜੇ ਵੀ ਅਣਸੰਭਾਲੇ, ਪਿਛਲੇ ਸੈਸ਼ਨ ਦੀਆਂ ਟੈਬਾਂ ਨਾਲ ਵਾਪਸ ਆਉਂਦੇ ਹਨ</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Markdown ਨਿਸ਼ਾਨ ਹਮੇਸ਼ਾ ਦਿਖਾਓ</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>ਸਿਰਫ਼ ਕਰਸਰ ਵਾਲੀ ਥਾਂ ਨਹੀਂ, ਹਰ ਪੈਰੇ ਵਿੱਚ Markdown ਨਿਸ਼ਾਨ (**, #, ਲਿੰਕ ਦਾ ਪਤਾ) ਦਿਖਾਓ</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>ਲੰਬੇ ਦਸਤਾਵੇਜ਼ਾਂ ਦਾ ਖਾਕਾ ਪਹਿਲਾਂ ਹੀ ਅੰਦਾਜ਼ਾ ਲਗਾਓ (ਪ੍ਰਯੋਗਾਤਮਕ)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>ਜਦੋਂ ਲੰਬਾ ਦਸਤਾਵੇਜ਼ ਹਿੱਸਿਆਂ ਵਿੱਚ ਬਣਾਇਆ ਜਾਂਦਾ ਹੈ, ਤਾਂ ਹਾਲੇ ਨਾ ਦਿਖਾਏ ਗਏ ਹਿੱਸੇ ਦੀ ਉਚਾਈ ਅੰਦਾਜ਼ੇ ਦੀ ਬਜਾਏ ਲਿਖਤ ਤੋਂ ਗਿਣੀ ਜਾਂਦੀ ਹੈ, ਜਿਸ ਨਾਲ ਸਕ੍ਰੋਲ ਬਾਰ ਅਤੇ ਰੂਪ-ਰੇਖਾ ਤੋਂ ਛਾਲਾਂ ਵਧੇਰੇ ਸਹੀ ਹੁੰਦੀਆਂ ਹਨ। ਪ੍ਰਯੋਗਾਤਮਕ</value>
   </data>
 </root>

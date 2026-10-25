@@ -270,7 +270,7 @@
     <comment>编辑/剪切</comment>
   </data>
   <data name="Dark" xml:space="preserve">
-    <value>অদৃশ্য</value>
+    <value>গাঢ়</value>
     <comment>应用主题/深色</comment>
   </data>
   <data name="Data" xml:space="preserve">
@@ -334,7 +334,7 @@
     <comment>错误</comment>
   </data>
   <data name="Export" xml:space="preserve">
-    <value>রপ্তানি</value>
+    <value>এক্সপোর্ট</value>
     <comment>文件/导出</comment>
   </data>
   <data name="ExportSettings" xml:space="preserve">
@@ -462,7 +462,7 @@
     <comment>格式/超链接</comment>
   </data>
   <data name="Image" xml:space="preserve">
-    <value>প্রতিচ্ছবি</value>
+    <value>ছবি</value>
     <comment>格式/图像</comment>
   </data>
   <data name="ImageAlt" xml:space="preserve">
@@ -474,7 +474,7 @@
     <comment>图片上传设置</comment>
   </data>
   <data name="Import" xml:space="preserve">
-    <value>আমদানি</value>
+    <value>ইমপোর্ট</value>
     <comment>文件/导入</comment>
   </data>
   <data name="IncreaseHeadingLevel" xml:space="preserve">
@@ -662,7 +662,7 @@
     <comment>对话框/确定</comment>
   </data>
   <data name="On" xml:space="preserve">
-    <value>On</value>
+    <value>চালু</value>
     <comment>开关/开</comment>
   </data>
   <data name="Open" xml:space="preserve">
@@ -686,7 +686,7 @@
     <comment>文件/在新窗口中打开</comment>
   </data>
   <data name="OpenRecent" xml:space="preserve">
-    <value>উন্মুক্ত সাম্প্রতিক</value>
+    <value>সাম্প্রতিক খুলুন</value>
     <comment>文件/打开最近</comment>
   </data>
   <data name="OpenSourceSoftware" xml:space="preserve">
@@ -826,7 +826,7 @@
     <comment>格式/删除线</comment>
   </data>
   <data name="Strong" xml:space="preserve">
-    <value>স্থূল</value>
+    <value>বোল্ড</value>
     <comment>格式/加粗</comment>
   </data>
   <data name="Table" xml:space="preserve">
@@ -1011,5 +1011,146 @@
   </data>
   <data name="ExportedTo" xml:space="preserve">
     <value>{0}-এ রপ্তানি করা হয়েছে</value>
+  </data>
+  <data name="UserGuide" xml:space="preserve">
+    <value>ব্যবহারকারীর নির্দেশিকা</value>
+  </data>
+  <data name="Stats.CharactersNoSpaces" xml:space="preserve">
+    <value>অক্ষর (স্পেস ছাড়া)</value>
+  </data>
+  <data name="Stats.CharactersWithSpaces" xml:space="preserve">
+    <value>অক্ষর (স্পেস সহ)</value>
+  </data>
+  <data name="Stats.CjkCharacters" xml:space="preserve">
+    <value>CJK অক্ষর</value>
+  </data>
+  <data name="Stats.Words" xml:space="preserve">
+    <value>শব্দ</value>
+  </data>
+  <data name="Stats.OtherWords" xml:space="preserve">
+    <value>CJK-বহির্ভূত শব্দ</value>
+  </data>
+  <data name="Stats.Paragraphs" xml:space="preserve">
+    <value>অনুচ্ছেদ</value>
+  </data>
+  <data name="Stats.Headings" xml:space="preserve">
+    <value>শিরোনাম</value>
+  </data>
+  <data name="Stats.Images" xml:space="preserve">
+    <value>ছবি</value>
+  </data>
+  <data name="Stats.Links" xml:space="preserve">
+    <value>লিংক</value>
+  </data>
+  <data name="Stats.ReadingTime" xml:space="preserve">
+    <value>পড়ার সময়</value>
+  </data>
+  <data name="Stats.AboutMinutes" xml:space="preserve">
+    <value>প্রায় {0} মিনিট</value>
+  </data>
+  <data name="Stats.UnderAMinute" xml:space="preserve">
+    <value>এক মিনিটের কম</value>
+  </data>
+  <data name="Stats.Note" xml:space="preserve">
+    <value>দৃশ্যমান লেখার ভিত্তিতে গণনা করা হয়েছে। কোড ব্লক ও সূত্র পড়ার সময়ে ধরা হয় না।</value>
+  </data>
+  <data name="Stats.ShownInStatusBar" xml:space="preserve">
+    <value>স্ট্যাটাস বারে দেখাবে</value>
+  </data>
+  <data name="SaveState.Saved" xml:space="preserve">
+    <value>সংরক্ষিত</value>
+  </data>
+  <data name="SaveState.Unsaved" xml:space="preserve">
+    <value>সংরক্ষিত নয়</value>
+  </data>
+  <data name="SaveState.Paused" xml:space="preserve">
+    <value>স্বয়ংক্রিয় সংরক্ষণ বিরতিতে</value>
+  </data>
+  <data name="SaveState.ClickToSave" xml:space="preserve">
+    <value>সংরক্ষণ করতে ক্লিক করুন</value>
+  </data>
+  <data name="SaveState.BlankHeldBack" xml:space="preserve">
+    <value>নথিটি খালি, কিন্তু ডিস্কের ফাইলটি খালি নয়, এবং কোনো সম্পাদনা এটিকে খালি করেনি, তাই স্বয়ংক্রিয় সংরক্ষণ ফাইলটি ওভাররাইট করেনি।</value>
+  </data>
+  <data name="SaveState.EncodingHeldBack" xml:space="preserve">
+    <value>এই ফাইলটি ক্ষতি ছাড়া পড়া যায়নি (UTF-8 ছাড়া অন্য এনকোডিং?), তাই স্বয়ংক্রিয় সংরক্ষণ এটি ওভাররাইট করে না। দেখানো লেখা সঠিক হলেই কেবল নিজে সংরক্ষণ করুন।</value>
+  </data>
+  <data name="SaveState.WriteFailed" xml:space="preserve">
+    <value>ফাইল লেখা ব্যর্থ হয়েছে: {0}</value>
+  </data>
+  <data name="Stats.SelectedOfTotal" xml:space="preserve">
+    <value>{1} {2}-এর মধ্যে {0} নির্বাচিত</value>
+  </data>
+  <data name="Encoding.Tip" xml:space="preserve">
+    <value>এনকোডিং ও লাইনের শেষ</value>
+  </data>
+  <data name="Encoding.ConvertToUtf8" xml:space="preserve">
+    <value>UTF-8-এ রূপান্তর করুন</value>
+  </data>
+  <data name="Encoding.ReopenWith" xml:space="preserve">
+    <value>এনকোডিং দিয়ে আবার খুলুন</value>
+  </data>
+  <data name="StatusBarItem.CurrentHeading" xml:space="preserve">
+    <value>বর্তমান শিরোনাম</value>
+  </data>
+  <data name="StatusBarItem.SaveState" xml:space="preserve">
+    <value>সংরক্ষণের অবস্থা</value>
+  </data>
+  <data name="Recent.Folders" xml:space="preserve">
+    <value>ফোল্ডার</value>
+  </data>
+  <data name="Recent.NoFolders" xml:space="preserve">
+    <value>কোনো সাম্প্রতিক ফোল্ডার নেই</value>
+  </data>
+  <data name="Recent.ClearFolders" xml:space="preserve">
+    <value>সাম্প্রতিক ফোল্ডার মুছুন</value>
+  </data>
+  <data name="Recent.RemoveHint" xml:space="preserve">
+    <value>তালিকা থেকে সরাতে ডান-ক্লিক করুন বা Delete চাপুন</value>
+  </data>
+  <data name="FolderPane.Up" xml:space="preserve">
+    <value>এক স্তর উপরে</value>
+  </data>
+  <data name="FolderPane.SetAsRoot" xml:space="preserve">
+    <value>রুট হিসেবে সেট করুন</value>
+  </data>
+  <data name="Favorites.Title" xml:space="preserve">
+    <value>প্রিয়</value>
+  </data>
+  <data name="Favorites.Add" xml:space="preserve">
+    <value>প্রিয়তে যোগ করুন</value>
+  </data>
+  <data name="Favorites.Remove" xml:space="preserve">
+    <value>প্রিয় থেকে সরান</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>হোম</value>
+  </data>
+  <data name="HomePage.Title" xml:space="preserve">
+    <value>শুরু</value>
+  </data>
+  <data name="HomePage.NewDocument" xml:space="preserve">
+    <value>নতুন নথি</value>
+  </data>
+  <data name="HomePage.OpenFile" xml:space="preserve">
+    <value>ফাইল খুলুন</value>
+  </data>
+  <data name="HomePage.OpenFolder" xml:space="preserve">
+    <value>ফোল্ডার খুলুন</value>
+  </data>
+  <data name="HomePage.RecentFiles" xml:space="preserve">
+    <value>সাম্প্রতিক ফাইল</value>
+  </data>
+  <data name="HomePage.RecentFolders" xml:space="preserve">
+    <value>সাম্প্রতিক ফোল্ডার</value>
+  </data>
+  <data name="HomePage.RemoveFromList" xml:space="preserve">
+    <value>তালিকা থেকে সরান</value>
+  </data>
+  <data name="HomePage.Settings" xml:space="preserve">
+    <value>সেটিংস</value>
+  </data>
+  <data name="EditorOpening" xml:space="preserve">
+    <value>খোলা হচ্ছে…</value>
   </data>
 </root>

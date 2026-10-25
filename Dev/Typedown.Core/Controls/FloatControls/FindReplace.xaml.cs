@@ -6,9 +6,9 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Input;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
 
 namespace Typedown.Core.Controls.FloatControls
 {
@@ -48,7 +48,7 @@ namespace Typedown.Core.Controls.FloatControls
 
         private void OnFocusSearchRequested()
         {
-            _ = Dispatcher.RunIdleAsync(_ =>
+            _ = DispatcherQueue.RunIdleAsync(_ =>
             {
                 // Focus the search box and select its text, so pressing the shortcut again after clicking
                 // into the document brings the caret back and the next keystroke replaces the old query.
@@ -75,7 +75,7 @@ namespace Typedown.Core.Controls.FloatControls
         private void Close()
         {
             Float.FindReplaceDialogOpen = 0;
-            _ = Dispatcher.RunIdleAsync(_ => ViewModel?.MarkdownEditor?.FocusEditor());
+            _ = DispatcherQueue.RunIdleAsync(_ => ViewModel?.MarkdownEditor?.FocusEditor());
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)

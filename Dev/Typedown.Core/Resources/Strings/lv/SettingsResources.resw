@@ -634,7 +634,7 @@
     <comment>视图/显示状态栏</comment>
   </data>
   <data name="View.Title" xml:space="preserve">
-    <value>Izskatu</value>
+    <value>Izskats</value>
     <comment>视图/外观</comment>
   </data>
   <data name="View.Topmost.Description" xml:space="preserve">
@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>Iespējojiet vizlas fona efektu rediģēšanas apgabala fonam</value>
+    <value>Sānu rūts un ciļņu josla rāda vizlas efektu; rediģēšanas apgabals saglabā motīva vienlaidu krāsu</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>Izmantojiet vizlas materiālu rediģēšanas apgabalā</value>
+    <value>Izmantot vizlas materiālu ap rediģēšanas apgabalu</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>Atvērt tā mapi</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>Atcerēties nesen atvērtos failus</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>Atvērtie faili un mapes tiek rādīti sadaļā Fails &gt; Atvērt nesenos un sākumlapā. Ja izslēgts, nekas jauns netiek pievienots.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>Notīrīt nesenos failus un mapes</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>Iztukšo nesen atvērto failu un mapju sarakstus.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>Notīrīt</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>Rādīt sākumlapu tukšā cilnē</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>Startējot bez nekā atveramā un aizverot pēdējo cilni: nesenie faili un mapes, izlase</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>Jaunās cilnes rāda sākumlapu</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>Jauna cilne (Fails &gt; Jauns, poga +) rāda sākumlapu tukša dokumenta vietā</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>Rādīt papildu tukšās rindas</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>Tukšās rindas starp rindkopām aizņem vietu arī lasīšanas režīmā un HTML un PDF eksportā, tāpat kā rediģējot. Pats fails netiek mainīts</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>Garos dokumentus zīmēt pakāpeniski</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>Garš dokuments atveras vietā, kur to atstājāt, bet pārējais tiek zīmēts fonā. Izslēdziet šo, ja, atverot garu dokumentu, kaut kas izskatās nepareizi: tad tas tiek zīmēts uzreiz</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>Sānjosla labajā pusē</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>Rādīt sānjoslu dokumenta labajā pusē, nevis kreisajā</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>Aizverot saglabāt nesaglabātās izmaiņas</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>Aizvērt, nejautājot par saglabāšanu: nesaglabātie dokumenti atgriežas tādi, kādi bija, joprojām nesaglabāti, ar pēdējās sesijas cilnēm</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Vienmēr rādīt Markdown zīmes</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Rādīt Markdown zīmes (**, #, saites adresi) katrā rindkopā, ne tikai tur, kur ir kursors</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>Paredzēt garu dokumentu izkārtojumu (eksperimentāls)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>Kamēr garš dokuments tiek zīmēts pa daļām, vēl neparādītās daļas augstums tiek aprēķināts no teksta, nevis novērtēts, tāpēc ritjosla un pārlēcieni no struktūras ir precīzāki. Eksperimentāls</value>
   </data>
 </root>

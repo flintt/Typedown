@@ -138,7 +138,7 @@
     <comment>关于/发送反馈</comment>
   </data>
   <data name="About.Title" xml:space="preserve">
-    <value>약</value>
+    <value>정보</value>
     <comment>关于/关于</comment>
   </data>
   <data name="Editor.AutoPairBracket.Description" xml:space="preserve">
@@ -646,11 +646,11 @@
     <comment>视图/置于顶层</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Description" xml:space="preserve">
-    <value>편집 영역에 유사한 효과가 있는 마이카 배경을 활성화하십시오</value>
+    <value>사이드 창과 탭 표시줄에 마이카 효과를 표시하고, 편집 영역은 테마의 단색을 유지합니다</value>
     <comment>视图/开启后编辑区域具有云母背景效果</comment>
   </data>
   <data name="View.UseEditorMicaMaterial.Title" xml:space="preserve">
-    <value>편집 영역에서 마이카 재질을 사용하십시오</value>
+    <value>편집 영역 주변에 마이카 소재 사용</value>
     <comment>视图/编辑区域使用云母材质</comment>
   </data>
   <data name="View.UseMicaMaterial.Description" xml:space="preserve">
@@ -894,5 +894,68 @@
   </data>
   <data name="Export.AfterExport.OpenFolder" xml:space="preserve">
     <value>폴더 열기</value>
+  </data>
+  <data name="General.RecordRecent.Title" xml:space="preserve">
+    <value>최근에 연 파일 기록</value>
+  </data>
+  <data name="General.RecordRecent.Description" xml:space="preserve">
+    <value>연 파일과 폴더가 [파일 &gt; 최근 항목 열기]와 홈에 표시됩니다. 끄면 새 항목이 추가되지 않습니다.</value>
+  </data>
+  <data name="General.ClearRecent.Title" xml:space="preserve">
+    <value>최근 기록 지우기</value>
+  </data>
+  <data name="General.ClearRecent.Description" xml:space="preserve">
+    <value>최근에 연 파일과 폴더 목록을 비웁니다.</value>
+  </data>
+  <data name="General.ClearRecent.Button" xml:space="preserve">
+    <value>지우기</value>
+  </data>
+  <data name="General.HomePage.Title" xml:space="preserve">
+    <value>빈 탭에 홈 표시</value>
+  </data>
+  <data name="General.HomePage.Description" xml:space="preserve">
+    <value>시작할 때 열 항목이 없을 때와 마지막 탭을 닫을 때: 최근 파일과 폴더, 즐겨찾기</value>
+  </data>
+  <data name="General.HomeOnNewTab.Title" xml:space="preserve">
+    <value>새 탭에도 홈 표시</value>
+  </data>
+  <data name="General.HomeOnNewTab.Description" xml:space="preserve">
+    <value>새 탭(파일 &gt; 새로 만들기, + 단추)에서 빈 문서 대신 홈을 표시합니다</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Title" xml:space="preserve">
+    <value>추가 빈 줄 표시</value>
+  </data>
+  <data name="Editor.ShowBlankLines.Description" xml:space="preserve">
+    <value>단락 사이의 빈 줄이 편집할 때처럼 읽기 모드와 HTML·PDF 내보내기에서도 공간을 차지합니다. 파일 자체는 바뀌지 않습니다</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Title" xml:space="preserve">
+    <value>긴 문서를 단계적으로 그리기</value>
+  </data>
+  <data name="Editor.ProgressiveRendering.Description" xml:space="preserve">
+    <value>긴 문서는 마지막으로 보던 위치에서 열리고 나머지는 백그라운드에서 그려집니다. 긴 문서를 여는 동안 표시가 이상하면 이 옵션을 끄세요. 그러면 문서 전체를 한 번에 그립니다</value>
+  </data>
+  <data name="View.SidePaneOnRight.Title" xml:space="preserve">
+    <value>사이드바를 오른쪽에</value>
+  </data>
+  <data name="View.SidePaneOnRight.Description" xml:space="preserve">
+    <value>사이드바를 문서 왼쪽 대신 오른쪽에 표시합니다</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Title" xml:space="preserve">
+    <value>닫을 때 저장하지 않은 변경 내용 유지</value>
+  </data>
+  <data name="General.KeepUnsavedOnClose.Description" xml:space="preserve">
+    <value>저장 여부를 묻지 않고 닫습니다. 저장하지 않은 문서는 지난 세션의 탭과 함께 저장되지 않은 상태 그대로 돌아옵니다</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
+    <value>Markdown 기호 항상 표시</value>
+  </data>
+  <data name="Editor.ShowMarkdownMarks.Description" xml:space="preserve">
+    <value>Markdown 기호(**, #, 링크 주소)를 커서가 있는 곳뿐 아니라 모든 단락에 표시합니다</value>
+  </data>
+  <data name="Editor.PredictHeights.Title" xml:space="preserve">
+    <value>긴 문서의 레이아웃 예측(실험적)</value>
+  </data>
+  <data name="Editor.PredictHeights.Description" xml:space="preserve">
+    <value>긴 문서를 나누어 그리는 동안 아직 표시되지 않은 부분의 높이를 추정하지 않고 텍스트로 계산하므로 스크롤 막대와 개요에서의 이동이 더 정확해집니다. 실험적 기능</value>
   </data>
 </root>

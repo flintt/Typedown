@@ -90,6 +90,10 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   list item; types one key in visual mode on a sample of them; and pins what an edit of the blank lines saves
   (Enter adds an empty paragraph, two lines; Backspace in one removes it, and the run is then written the ordinary
   way). It failed on 679 of 1053 documents before the change.
+- `blanklines-show-check.js` — the "show extra blank lines" setting (Settings > Editor, `showBlankLines`, off by
+  default). An empty paragraph has a line's height while editing; reading mode and the HTML/PDF export collapsed it
+  (`<p></p>`). With the setting on it keeps that height in reading mode and is exported as `<p><br></p>`; off, both are
+  as before; the text handed back is the same either way. Before the setting the "on" half failed.
 - `style-check.js` — lays out `style-fixture.md` (headings, lists, tables, code, quote, maths, footnote, raw
   html) and measures every element: position, size, font, weight, colour, background. A block passes if it is
   within 2px of where it was and within 1px of its size; fonts and colours must match exactly. `--update`
@@ -161,6 +165,10 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
 - `table-cell-check.js` — a table cell emptied by selecting its text and deleting it, or typed over, takes what is
   typed next; Shift+Enter and Alt+Enter put a line break (`<br/>`) in the cell, which shows as a second line and is
   written back as it was loaded. Two Store reviews (the emptied cell, and "Alt+Enter as in Excel" for a second line).
+- `xhtml-toc-check.js` — the document rendered as XHTML for another format (RenderXhtml) keeps its `[TOC]` line's place
+  as an empty `div.table-of-contents`, for the host to fill with that format's own table of contents.
+- `xhtml-math-check.js` — RenderXhtml with mathAsTex writes each formula as its TeX (`span.math-tex`,
+  `span.math-tex-display`) instead of KaTeX's drawing, whose MathML (with the TeX) the sanitizer drops.
 - `xhtml-footnote-check.js` — RenderXhtml turns numbered, named and multi-paragraph footnotes into references and
   note content for a host writing another format, even though the host does not send a footnote setting.
 - `export-anchors-check.js` — the HTML that becomes the PDF links its contents to the headings the parser rendered
@@ -221,6 +229,10 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   of the last block on the page must land at the end of the document: a render that replaced the page only up to a
   stale key drew the block after the selection twice while the Markdown was right. Enter over a keyboard selection
   shares that render and is checked the same way.
+- `codeblock-save-check.js` — code typed into a code block is in the text a save writes while the caret is still in
+  the block, in a short document and in one long enough for the text report to be throttled (FlushContent brings it
+  up to date). A Store review on 1.2.18 lost the code block when Save came straight after it. Fails against a bundle
+  whose flush does nothing.
 - `legacy-issues.js` — the issues reported against the original Typedown, in one run: raw html renders with its
   inline CSS, a code block is in the saved markdown the moment it is typed, a table cell whose text is selected
   and deleted still takes input, PageUp/PageDown keep moving.

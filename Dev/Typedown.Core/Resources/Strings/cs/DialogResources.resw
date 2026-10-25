@@ -142,7 +142,7 @@
     <comment>创建文件夹对话框/新建文件夹失败</comment>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Vymazat</value>
+    <value>Odstranit</value>
     <comment>恢复文件对话框/删除</comment>
   </data>
   <data name="Don'tSave" xml:space="preserve">
@@ -328,5 +328,14 @@
   </data>
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>{0} z nich už bylo dříve nahráno s touto konfigurací, proto byly použity jejich dřívější adresy.</value>
+  </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Stáhnout modul runtime WebView2 od Microsoftu</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Modul runtime se nenainstaloval. Instalace vyžaduje připojení k internetu; modul runtime si můžete také stáhnout od Microsoftu (k dispozici je i offline instalační program), nainstalovat ho a aplikaci spustit znovu.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>Instaluje se modul runtime WebView2...</value>
   </data>
 </root>

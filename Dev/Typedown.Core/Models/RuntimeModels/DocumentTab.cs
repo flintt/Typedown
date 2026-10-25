@@ -1,4 +1,4 @@
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.IO;
 using Typedown.Core.Utilities;
 
@@ -50,6 +50,12 @@ namespace Typedown.Core.Models
 
         public string Markdown { get; set; }
 
+        /// <summary>
+        /// A tab of the last session not read yet (only its file is known): the start shows the active document first and
+        /// reads these after it (FileViewModel.LoadIntoTab), or when one is switched to first.
+        /// </summary>
+        public bool Pending { get; set; }
+
         public ulong CurrentHash { get; set; }
 
         public ulong FileHash { get; set; }
@@ -59,6 +65,9 @@ namespace Typedown.Core.Models
         public bool Saved { get; set; } = true;
 
         public bool AutoSavedSucc { get; set; } = true;
+
+        /// <summary>Why auto-save last held this document back (EditorViewModel.AutoSaveHeldBack), or null.</summary>
+        public string AutoSaveHeldBack { get; set; }
 
         public bool FileLoaded { get; set; }
 
@@ -70,6 +79,12 @@ namespace Typedown.Core.Models
 
         /// <summary>Content hash last written to this tab's crash backup, so an unchanged background tab is not re-backed each tick.</summary>
         public ulong BackupHash { get; set; }
+
+        /// <summary>
+        /// The home page asked for on this tab (HomeViewModel): shown while the tab is a blank document, given up for good
+        /// once something is written in it or a file opened in it.
+        /// </summary>
+        public bool ShowHome { get; set; }
 
         /// <summary>Opened by a single click in the file tree: the next single-click open replaces this tab (VS Code style).</summary>
         public bool IsPreview { get; set; }

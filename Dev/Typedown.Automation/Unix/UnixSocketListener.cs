@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,6 +16,7 @@ namespace Typedown.Automation
     /// answers belongs to a running instance and is left alone. Not part of the netstandard2.0 build: the CLI, the Uno
     /// port and the tests compile this file themselves.
     /// </summary>
+    [UnsupportedOSPlatform("windows")]
     internal sealed class UnixSocketListener : IConnectionListener
     {
         public const string ApplicationFile = "automation.v1.sock";

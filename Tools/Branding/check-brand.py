@@ -41,7 +41,7 @@ cs_name = re.search(r'const string Name = "([^"]+)"', brand_cs).group(1)
 cs_cli = re.search(r'const string CliName = "([^"]+)"', brand_cs).group(1)
 props = {e.tag: (e.text or "").strip() for e in ET.parse(os.path.join(ROOT, "Branding.props")).getroot().iter()}
 iss = dict(re.findall(r'^#define (\w+) "([^"]*)"', read(os.path.join(ROOT, "Tools/Installer/brand.iss")), re.M))
-manifest = read(os.path.join(ROOT, "Tools/Typedown.Package/Package.appxmanifest"))
+manifest = read(os.path.join(ROOT, "Dev/Typedown/Package.appxmanifest"))
 display_names = re.findall(r'<DisplayName>([^<]*)</DisplayName>|DisplayName="([^"]*)"|<uap:DisplayName>([^<]*)</uap:DisplayName>', manifest)
 display_names = [next(x for x in t if x) for t in display_names]
 
@@ -54,7 +54,8 @@ for label, value, expected in [
 ] + [("Package.appxmanifest DisplayName", d, cli if d == cli else name) for d in display_names] + [
     # The command line's own entry: its exe beside the app's, and the name typed in a terminal.
     ("Package.appxmanifest execution alias", a, cli + ".exe") for a in re.findall(r'ExecutionAlias Alias="([^"]*)"', manifest)
-] + [("Package.appxmanifest command line Executable", e, cli + ".exe") for e in re.findall(r'Executable="Typedown\\([^"]*)"', manifest)]:
+    # Every Executable but the app's own ($targetnametoken$.exe, the assembly name) is the command line's, at the package root.
+] + [("Package.appxmanifest command line Executable", e, cli + ".exe") for e in re.findall(r'Executable="(?!\$targetnametoken\$)([^"]*)"', manifest)]:
     if value != expected:
         problems.append(f"brand files disagree: {label} is {value!r}, Branding.props says {expected!r}")
 
@@ -146,10 +147,11 @@ if name == "Typedown":
             problems.append(f"{rel(f)}: implements the edition hook - Typedown leaves it empty")
 
 # What only an edition has stays in the edition's repository: its code (Dev/Edition), its Store listing and the
-# scripts that build it (docs/store, Tools/Store), the private build and test scripts (Tools/dev). Typedown is public,
+# scripts that build it (docs/store, Tools/Store), the private build and test scripts (Tools/dev), its own chapter of
+# the user guide (docs/user-guide.edition[.en].md). Typedown is public,
 # and merges go from Typedown to an edition only (docs/editions.md in the edition's repository).
 if name == "Typedown":
-    for private in ("Dev/Edition", "docs/store", "Tools/Store", "Tools/dev"):
+    for private in ("Dev/Edition", "docs/store", "Tools/Store", "Tools/dev", "docs/user-guide.edition.md", "docs/user-guide.edition.en.md"):
         if os.path.exists(os.path.join(ROOT, private)):
             problems.append(f"{private}: an edition's own material in Typedown - it belongs to the edition's repository")
 

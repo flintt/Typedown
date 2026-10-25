@@ -14,19 +14,22 @@
     Loaded="OnLoaded"
     Unloaded="OnUnloaded"
     mc:Ignorable="d">
-    <muxc:NavigationView x:Name="NavigationView" IsSettingsVisible="False" IsBackButtonVisible="Collapsed" SelectionChanged="OnNavigationViewSelectionChanged">
+    <Grid>
+    <!-- On the page's root, where VisualStateManager.GoToState(page) looks for them: on the NavigationView inside it (since
+         the grid was put around it for the drag strip) they were never found, and the narrow layouts' margins never set -
+         the items reached under the scroll bar. -->
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="LayoutStates">
                 <VisualState x:Name="Small">
                     <VisualState.Setters>
-                        <Setter Target="ContentFrame.Margin" Value="16,8,16,16"/>
+                        <Setter Target="ContentFrame.Margin" Value="16,8,28,16"/>
                         <Setter Target="FrameHeader.Margin" Value="48,0,16,0"/>
                         <Setter Target="ContentFrameWrapper.RowSpacing" Value="8"/>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="Medium">
                     <VisualState.Setters>
-                        <Setter Target="ContentFrame.Margin" Value="16,8,16,16"/>
+                        <Setter Target="ContentFrame.Margin" Value="16,8,28,16"/>
                         <Setter Target="FrameHeader.Margin" Value="16,0,16,0"/>
                         <Setter Target="ContentFrameWrapper.RowSpacing" Value="8"/>
                     </VisualState.Setters>
@@ -40,6 +43,7 @@
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
+    <muxc:NavigationView x:Name="NavigationView" IsSettingsVisible="False" IsBackButtonVisible="Collapsed" SelectionChanged="OnNavigationViewSelectionChanged" BackRequested="OnBackRequested">
         <muxc:NavigationView.Resources>
             <SolidColorBrush x:Key="NavigationViewContentBackground" Color="Transparent"/>
             <SolidColorBrush x:Key="NavigationViewContentGridBorderBrush" Color="Transparent"/>
@@ -47,7 +51,7 @@
         <muxc:NavigationView.MenuItems>
             <muxc:NavigationViewItem Icon="Globe" Content="{u:LocaleString Key=General.Title}" Tag="General"/>
             <muxc:NavigationViewItem Icon="View" Content="{u:LocaleString Key=View.Title}" Tag="View"/>
-            <muxc:NavigationViewItem Icon="Edit" Content="{u:LocaleString Key=Editor.Title}" Tag="Editor"/>
+            <muxc:NavigationViewItem Icon="Edit" Content="{u:LocaleString Key=Editor.Title}" Tag="Editor" AutomationProperties.AutomationId="SettingsNavEditor"/>
             <muxc:NavigationViewItem Content="{u:LocaleString Key=Image.Title}" Tag="Image">
                 <muxc:NavigationViewItem.Icon>
                     <FontIcon Glyph="&#xe91b;"/>
@@ -85,6 +89,8 @@
                     </muxc:BreadcrumbBar.ItemTemplate>
                 </muxc:BreadcrumbBar>
             </Grid>
+            <!-- The narrow layouts keep room on the right for the scroll bar, which is drawn over the content: the items
+                 went under it. -->
             <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
                 <Grid>
                     <controls:GlobalFrame x:Name="ContentFrame" MaxWidth="1200"/>
@@ -92,4 +98,9 @@
             </ScrollViewer>
         </Grid>
     </muxc:NavigationView>
+        <!-- In compact mode, where the window has no caption: the strip along the top, as high as the main page's menu
+             row, is where the window is dragged - all of it but the pane's buttons at its left (SettingsPage.ApplyCompact).
+             The caption buttons sit over its right end. -->
+        <Grid x:Name="TopDrag" Height="40" VerticalAlignment="Top" Background="Transparent" Visibility="Collapsed"/>
+    </Grid>
 </Page>

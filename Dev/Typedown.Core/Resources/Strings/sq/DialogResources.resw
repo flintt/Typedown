@@ -142,7 +142,7 @@
     <comment>创建文件夹对话框/新建文件夹失败</comment>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Elemino</value>
+    <value>Fshi</value>
     <comment>恢复文件对话框/删除</comment>
   </data>
   <data name="Don'tSave" xml:space="preserve">
@@ -328,5 +328,14 @@
   </data>
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>{0} prej tyre ishin ngarkuar më parë me këtë konfigurim, prandaj u përdorën adresat e tyre të mëparshme.</value>
+  </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Shkarko WebView2 Runtime nga Microsoft</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Runtime nuk u instalua. Instaluesi ka nevojë për lidhje interneti; mund ta shkarkoni runtime edhe nga Microsoft (ka edhe instalues jashtë linje), ta instaloni dhe ta rinisni aplikacionin.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>Po instalohet WebView2 Runtime...</value>
   </data>
 </root>

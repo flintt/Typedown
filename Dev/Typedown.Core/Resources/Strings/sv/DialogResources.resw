@@ -126,11 +126,11 @@
     <comment>未保存对话框/是否要保存更改？</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Annullera</value>
+    <value>Avbryt</value>
     <comment>对话框/取消</comment>
   </data>
   <data name="Confirm" xml:space="preserve">
-    <value>OKEJ</value>
+    <value>OK</value>
     <comment>对话框/确定</comment>
   </data>
   <data name="CreateDocErrorTitle" xml:space="preserve">
@@ -182,7 +182,7 @@
     <comment>打开文件对话框/读取失败</comment>
   </data>
   <data name="Recover" xml:space="preserve">
-    <value>Återställa</value>
+    <value>Återställ</value>
     <comment>恢复文件对话框/恢复</comment>
   </data>
   <data name="RecoverContent" xml:space="preserve">
@@ -328,5 +328,14 @@
   </data>
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>{0} av dem hade redan laddats upp med den här konfigurationen, så deras tidigare adresser användes.</value>
+  </data>
+  <data name="WebView2DownloadLink" xml:space="preserve">
+    <value>Ladda ned WebView2 Runtime från Microsoft</value>
+  </data>
+  <data name="WebView2InstallFailed" xml:space="preserve">
+    <value>Körningsmiljön installerades inte. Installationen kräver en internetanslutning; du kan också ladda ned körningsmiljön från Microsoft (det finns även ett offlineinstallationsprogram), installera den och starta appen igen.</value>
+  </data>
+  <data name="WebView2Installing" xml:space="preserve">
+    <value>Installerar WebView2 Runtime...</value>
   </data>
 </root>

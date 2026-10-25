@@ -9,12 +9,12 @@ using Typedown.Core.Models;
 using Typedown.Core.Utilities;
 using Typedown.Core.ViewModels;
 using Windows.ApplicationModel.DataTransfer;
-using Windows.Devices.Input;
+using Microsoft.UI.Input;
 using Windows.Foundation;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Input;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls.Primitives;
+using Microsoft.UI.Xaml.Input;
 
 namespace Typedown.Core.Controls
 {
@@ -40,7 +40,6 @@ namespace Typedown.Core.Controls
         public EditorContainer()
         {
             InitializeComponent();
-            DisabledMenuLook.Watch(Flyout);
             AddHandler(PointerMovedEvent, new PointerEventHandler(OnPointerPointerMoved), true);
             AddHandler(PointerWheelChangedEvent, new PointerEventHandler(OnPointerWheelChanged), true);
         }
@@ -60,6 +59,22 @@ namespace Typedown.Core.Controls
             disposables.Add(Editor.EventCenter.GetObservable<EditorEventArgs>("OnScroll")
                 .Subscribe(x => ScrollState = x.Args.ToObject<ScrollState>()));
             UpdateFindReplaceState(Float.FindReplaceDialogOpen, false);
+            // The home page reads its words when it is built ({u:LocaleString}, its dates): after the language changed from
+            // another window or the automation API it stayed in the old one. A new one takes its place, as it was.
+            disposables.Add(Settings.WhenPropertyChanged(nameof(SettingsViewModel.Language)).Subscribe(_ =>
+                _ = DispatcherQueue.RunIdleAsync(_ => RebuildHome())));
+        }
+
+        private void RebuildHome()
+        {
+            if (HomeView?.Parent is not Panel parent) return;
+            var at = parent.Children.IndexOf(HomeView);
+            if (at < 0) return;
+            var fresh = new HomePage { AllowDrop = true };
+            fresh.DragEnter += OnDragEnter;
+            fresh.Drop += OnDrop;
+            parent.Children[at] = fresh;
+            HomeView = fresh;
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
