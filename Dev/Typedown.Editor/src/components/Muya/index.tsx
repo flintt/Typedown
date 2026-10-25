@@ -69,7 +69,7 @@ import { createReadingKeys } from "services/vimReading";
 import { KeptDocuments, blockCaretKey, caretKey, isForward, markedAt, sameLines } from "services/keptDocuments";
 import { CURSOR_ANCHOR_DNA, CURSOR_FOCUS_DNA } from 'components/Muya/lib/config'
 import 'components/Muya/themes/default.css'
-import { noteScroll } from 'services/scrollWriters'
+import { noteScroll, recentScrolls } from 'services/scrollWriters'
 
 interface IMuyaEditor {
     markdown: string
@@ -700,6 +700,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
 
     useEffect(() => transport.addListener<{ value: string, opt: unknown }>('Search', (arg) => {
         const came = performance.now()
+        findHoldRef.current()
         noteSearch('Search came', came)
         if (arg && typeof arg === 'object') fromMessageRef.current.add(arg)
         lastSearchRef.current = arg
@@ -722,6 +723,53 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         pendingSearchRef.current = entry
     }), [editor, props, scrollToElementIfInvisible, search, noteSearch]);
 
+    // After a step to a match (Find), the match's block is kept in the window while the rest of a long document is drawn
+    // around it, until the reader moves the page or does anything else, a new search comes, or 3 s: w10, LT01, one run in
+    // three, Enter on a word near the end found it (one match), and its block never came into the window in 30 s. If
+    // something takes it out, it is put back, and what had just scrolled the page is told to the host's log (FindHold).
+    const findHoldRef = useRef<() => void>(() => { })
+    const holdMatchInWindow = useCallback(() => {
+        findHoldRef.current()
+        const mark = document.querySelector('#ag-editor-id .ag-highlight')
+        const block = mark?.closest('#ag-editor-id > *') as HTMLElement | null
+        if (!block) return
+        const key = block.id
+        let over = false
+        let told = false
+        // Anything the host asks for but these may move the page itself (the outline's jump, its scroll bar dragged).
+        const quiet = new Set(['FlushContent', 'QueryNormalization', 'QueryEditorStyle', 'AwaitPresentation', 'Find', 'Search'])
+        const hostMessage = (name: string) => { if (!quiet.has(name) && !name.startsWith('invoke_')) stop() }
+        const stop = () => {
+            over = true
+            for (const e of GIVE_WAY) window.removeEventListener(e, stop, true)
+            beforeHostMessage.delete(hostMessage)
+        }
+        for (const e of GIVE_WAY) window.addEventListener(e, stop, { capture: true, passive: true })
+        beforeHostMessage.add(hostMessage)
+        findHoldRef.current = stop
+        const startedAt = performance.now()
+        const tick = () => {
+            if (over) return
+            if (performance.now() - startedAt > 3000) return stop()
+            const element = document.getElementById(key)
+            if (!element) return stop()
+            const r = element.getBoundingClientRect()
+            if (r.bottom <= 0 || r.top >= window.innerHeight) {
+                const writers = recentScrolls(1000)
+                const from = window.scrollY
+                const now = element.querySelector('.ag-highlight') || element
+                window.scrollBy(0, now.getBoundingClientRect().top - STANDAR_Y)
+                noteScroll('find hold', from)
+                if (!told) {
+                    told = true
+                    transport.postMessage('FindHold', { ms: Math.round(performance.now() - startedAt), top: Math.round(r.top), bottom: Math.round(r.bottom), y: Math.round(from), to: Math.round(window.scrollY), drawing: !!(editor as any)?.renderPending, writers })
+                }
+            }
+            requestAnimationFrame(tick)
+        }
+        requestAnimationFrame(tick)
+    }, [editor])
+
     useEffect(() => transport.addListener<{ action: string }>('Find', ({ action }) => {
         const came = performance.now()
         runPendingSearch()
@@ -734,8 +782,9 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         // Into the window now, in the frame the match is drawn in (a long document's match not drawn before is drawn by
         // the step itself, ContentState.renderSearch), not a task later behind the drawing's next slice.
         scrollToElementIfInvisible('.ag-highlight')
+        holdMatchInWindow()
         noteSearch('Find', came)
-    }), [editor, scrollToElementIfInvisible, runPendingSearch, noteSearch, search]);
+    }), [editor, scrollToElementIfInvisible, runPendingSearch, noteSearch, search, holdMatchInWindow]);
 
     useEffect(() => transport.addListener<{ value: string, opt: unknown }>('Replace', ({ value, opt }) => {
         runPendingSearch()

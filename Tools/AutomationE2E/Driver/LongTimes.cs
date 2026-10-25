@@ -105,6 +105,9 @@ internal static partial class Program
         // clock, ms), how long the page took over it and how many matches - whether the wait was the page's or the messages'.
         var searchLog = await Eval("JSON.stringify({ now: Math.round(performance.now()), log: window.__typedownSearchLog || [] })");
         notes.Add($"search, the page's account (now = when the word was seen + one eval): {searchLog}");
+        // Not seen: where the page is, where the match and its block are, and who moved the page last (services/scrollWriters).
+        if (double.IsInfinity(found))
+            notes.Add("search not seen, the page: " + await Eval("JSON.stringify((() => { const h = document.querySelector('#ag-editor-id .ag-highlight'); const b = h && h.closest('#ag-editor-id > *'); const r = x => x && (({ top, bottom }) => [Math.round(top), Math.round(bottom)])(x.getBoundingClientRect()); const st = window.__typedownMuya && window.__typedownMuya.contentState.stateRender.progressive; return { y: Math.round(scrollY), h: document.documentElement.scrollHeight, inner: innerHeight, mark: r(h), block: b && b.id, blockAt: r(b), blockText: b ? b.textContent.length : null, drawing: st ? [st.lo, st.hi, st.blocks.length] : null, matches: window.__typedownMuya && window.__typedownMuya.contentState.searchMatches.matches.length, scrolls: window.__typedownScrolls ? window.__typedownScrolls(30000) : null } })())"));
         Keys((ushort)0x1B); // Esc
         notes.Add($"search for \"{word}\" {(searching ? "while drawing" : "(already drawn)")}: on screen in {(double.IsInfinity(found) ? "over 30 s" : $"{found:0} ms")}");
         await Close(heavy);

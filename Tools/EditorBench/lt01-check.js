@@ -176,6 +176,15 @@ const focusEditor = p => p.evaluate(() => { const e = document.getElementById('a
     // Marked as the match chosen, in the window.
     const mark = await evalOr(p, () => { const m = document.querySelector('#ag-editor-id .ag-highlight'); if (!m) return null; const r = m.getBoundingClientRect(); return { text: m.textContent, inWindow: r.bottom > 0 && r.top < innerHeight } });
     check(!!mark && mark.text.toLowerCase() === word.toLowerCase() && mark.inWindow, `it is marked as the match, in the window (${JSON.stringify(mark)})`);
+    // The match stays in the window while the rest is drawn: w10 (LT01, 1 run in 3) found the word and its block never
+    // came into the window, something put the page elsewhere. Here a script takes the page away - nothing the reader did,
+    // no message from the host - and the match must be back at once.
+    const away = await evalOr(p, word => {
+      const drawing = !!window.__typedownMuya?.renderPending;
+      window.scrollTo(0, 0);
+      return new Promise(done => { const t0 = performance.now(); const look = () => { const back = Array.from(document.querySelectorAll('#ag-editor-id > *')).some(b => { const r = b.getBoundingClientRect(); return r.bottom > 0 && r.top < innerHeight && b.textContent.includes(word) }); if (back) done({ drawing, ms: Math.round(performance.now() - t0) }); else if (performance.now() - t0 > 2000) done({ drawing, ms: null }); else requestAnimationFrame(look) }; requestAnimationFrame(look) });
+    }, word);
+    check(!!away && away.ms !== null && away.ms <= 200, `taken away by something else ${away && away.drawing ? 'while drawing' : '(drawn already)'}, the match is back in the window within 200 ms (${away && away.ms} ms)`);
     // The bar closed: the marks go, the caret is left on the match.
     const closed = Date.now();
     await evalOr(p, () => window.__deliver('SearchOpenChange', { open: 0 }));
