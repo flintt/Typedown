@@ -62,6 +62,11 @@ const prototypes = [
   importMarkdown
 ]
 
+// A match not drawn yet, while a search is typed: drawn once the typing has stopped this long (renderSearch). Drawn for
+// every letter, each a new start of the drawing (a quarter of a second, more on a slower machine), the letters typed after
+// queued behind them (LT01 on w10: the match on screen 2.6 s after Enter). A step to a match (Enter) draws it at once.
+const SEARCH_DRAW_AFTER_MS = 250
+
 class ContentState {
   constructor(muya, options) {
     const { bulletListMarker } = options
@@ -246,7 +251,7 @@ class ContentState {
    * (StateRender.jumpProgressive). The blocks with the match chosen and the caret, before and now, are drawn at once (a
    * mark left on one would be scrolled to), the others around the window too, the rest in idle time (redrawBlocks).
    */
-  renderSearch(before, isRenderCursor = true) {
+  renderSearch(before, isRenderCursor = true, onDrawn = null, drawNow = false) {
     const { blocks, searchMatches: { matches, index } } = this
     matches.forEach((m, i) => {
       m.active = i === index
@@ -264,7 +269,20 @@ class ContentState {
     const now = [...before.urgent, ...after.urgent].map(topOf).filter(Boolean)
     const active = matches[index]
     const activeTop = active ? topOf(active.key) : null
-    if (activeTop && this.stateRender.progressive) this.stateRender.jumpProgressive(blocks.indexOf(activeTop))
+    clearTimeout(this.searchJumpTimer)
+    this.searchJumpTimer = null
+    if (activeTop && this.stateRender.progressive) {
+      // At once for a step to a match (Find: Enter in the bar), a moment after the last letter for a search being typed.
+      if (drawNow) this.stateRender.jumpProgressive(blocks.indexOf(activeTop))
+      else {
+        this.searchJumpTimer = setTimeout(() => {
+          this.searchJumpTimer = null
+          const now = this.searchMatches.matches[this.searchMatches.index]
+          if (now !== active || !this.stateRender.progressive) return
+          if (this.stateRender.jumpProgressive(this.blocks.indexOf(activeTop)) && onDrawn) onDrawn()
+        }, SEARCH_DRAW_AFTER_MS)
+      }
+    }
     this.setNextRenderRange()
     this.stateRender.redrawBlocks([...tops], now)
     if (isRenderCursor) {

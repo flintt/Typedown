@@ -695,12 +695,19 @@ class Muya {
     this.contentState.insertImages(images, afterKey)
   }
 
-  search(value, opt) {
+  /**
+   * onDrawn: called once a match chosen that was not drawn yet is drawn (a moment after the typing stops, see
+   * ContentState.renderSearch).
+   * @param {string} value
+   * @param {any} opt
+   * @param {(() => void) | null} [onDrawn]
+   */
+  search(value, opt, onDrawn = null) {
     const { selectHighlight } = opt
     const before = this.contentState.searchKeys()
     this.contentState.search(value, opt)
     // Only the blocks whose marks or caret changed are drawn again (ContentState.renderSearch).
-    this.contentState.renderSearch(before, !!selectHighlight)
+    this.contentState.renderSearch(before, !!selectHighlight, onDrawn)
     return this.contentState.searchMatches
   }
 
@@ -714,7 +721,7 @@ class Muya {
   find(action/* pre or next */) {
     const before = this.contentState.searchKeys()
     this.contentState.find(action)
-    this.contentState.renderSearch(before, false)
+    this.contentState.renderSearch(before, false, null, true)
     return this.contentState.searchMatches
   }
 
