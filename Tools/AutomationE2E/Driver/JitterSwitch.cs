@@ -162,7 +162,7 @@ internal static partial class Program
             var still = Diff(0);
             if (still < 0.5) { stillBand = true; continue; }
             // A band that barely changed (a line a pixel off) is not lined up with another place: in a page of like lines
-            // (demo1's "switchport ..." lines, 46 px apart at 200%) it matched one three lines away (w10: -140 px for a
+            // (the long document's runs of near-identical lines, 46 px apart at 200%) it matched one three lines away (w10: -140 px for a
             // line 1 px higher; hp: +46 px again and again, the page's own blocks never moving).
             if (still < 3) continue;
             var best = 0; var bestD = still;
