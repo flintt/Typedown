@@ -57,6 +57,10 @@ internal static partial class Program
             var screen = await shots;
             var page = JObject.Parse((string?)(await c.Call("test.editor.eval", new { windowId, script = JtStopScript }))["result"] ?? "{}");
             var said = (string?)(await c.Call("test.editor.eval", new { windowId, script = "JSON.stringify(window.__jtSaid||[])" }))["result"];
+            // The web view's own size frame by frame (ms from the first frame: width x height @ its top on the screen): a move
+            // on the screen that the page's blocks do not show (JT02, reading, hp window, 106 px and back) is the host's.
+            var view = (string?)(await c.Call("test.editor.eval", new { windowId, script = "JSON.stringify(((window.__jt&&window.__jt.frames)||[]).filter((f,i,a)=>i===0||f[9]!==a[i-1][9]).map(f=>[f[0]-a0(),f[9]]))".Replace("a0()", "(window.__jt.frames[0]||[0])[0]") }))["result"];
+            notes.Add($"{label}: the web view frame by frame: {view}");
             notes.Add($"{label}: screen {screen}; page {page.ToString(Newtonsoft.Json.Formatting.None)}; the page told the host (ms from the switch; frame gaps over 100 ms as gap): {said}");
             results.Add((label, page, screen));
         }
