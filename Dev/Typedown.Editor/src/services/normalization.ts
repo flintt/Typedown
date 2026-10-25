@@ -146,6 +146,14 @@ export function extractProtectedPayload(markdown: string): ProtectedPayload {
 
 /** Items of `expected` (as a multiset) that `actual` does not contain. */
 function missing(expected: string[], actual: string[]): string[] {
+    // `expected` the start of `actual`, item for item - the words of a document only its formatting would change, nearly
+    // always: nothing missing, found without counting. Counted, the words of a 1.5 MB document took a tenth of a second
+    // or more, in the task that puts it on the screen when it is opened (LT01).
+    if (expected.length <= actual.length) {
+        let i = 0;
+        while (i < expected.length && expected[i] === actual[i]) i++;
+        if (i === expected.length) return [];
+    }
     const counts = new Map<string, number>();
     for (const item of actual) counts.set(item, (counts.get(item) ?? 0) + 1);
     const lost: string[] = [];
