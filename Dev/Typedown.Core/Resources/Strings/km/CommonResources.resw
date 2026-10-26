@@ -948,12 +948,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>ស្វែងរកក្នុងថត…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(ឈ្មោះឯកសារត្រូវគ្នា)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>ឯកសារត្រូវគ្នា {0} ក្នុងចំណោម {1} ដែលបានស្វែងរក</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>កំពុងស្វែងរក…</value>
   </data>
@@ -1152,5 +1146,26 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>កំពុងបើក…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>ឈ្មោះឯកសារ ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>ខ្លឹមសារ ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>ខ្លឹមសារក៏ត្រូវគ្នាដែរ</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>បង្ហាញទាំងអស់ ({0})</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>ថត</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>ឈ្មោះឯកសារ៖ {0} · កំពុងស្វែងរកក្នុងខ្លឹមសារ…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>ឈ្មោះឯកសារ៖ {0} · ខ្លឹមសារ៖ {1} · ឯកសារដែលបានស្វែងរក៖ {2}</value>
   </data>
 </root>

@@ -948,12 +948,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>Ieškoti aplanke…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(atitinka failo vardą)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>Rasta {0} failų iš {1} peržiūrėtų</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>Ieškoma…</value>
   </data>
@@ -1152,5 +1146,26 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>Atidaroma…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>Failų vardai ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>Turinys ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>Atitinka ir turinys</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>Rodyti visus ({0})</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>Aplankas</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>Failų vardai: {0} · Ieškoma turinyje…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>Failų vardai: {0} · Turinys: {1} · Peržiūrėta failų: {2}</value>
   </data>
 </root>

@@ -948,12 +948,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>Maghanap sa folder…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(tugma ang pangalan ng file)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>{0} tugmang file mula sa {1} na hinanap</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>Naghahanap…</value>
   </data>
@@ -1152,5 +1146,26 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>Binubuksan…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>Mga pangalan ng file ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>Nilalaman ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>Tugma rin ang nilalaman</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>Ipakita lahat ({0})</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>Folder</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>Mga pangalan ng file: {0} · Naghahanap sa nilalaman…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>Mga pangalan ng file: {0} · Nilalaman: {1} · Mga file na hinanap: {2}</value>
   </data>
 </root>

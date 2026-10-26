@@ -954,9 +954,6 @@
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>Buscando…</value>
   </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>{0} archivo(s) coincidente(s) de {1} analizado(s)</value>
-  </data>
   <data name="TocPane.ExpandAll" xml:space="preserve">
     <value>Expandir todo</value>
   </data>
@@ -986,9 +983,6 @@
   </data>
   <data name="SearchInFolder" xml:space="preserve">
     <value>Buscar en la carpeta</value>
-  </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(coincide el nombre del archivo)</value>
   </data>
   <data name="LastUsedTab" xml:space="preserve">
     <value>Última pestaña usada</value>
@@ -1152,5 +1146,26 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>Abriendo…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>Nombres de archivo ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>Contenido ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>También coincide el contenido</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>Mostrar los {0}</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>Carpeta</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>Nombres de archivo: {0} · Buscando en el contenido…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>Nombres de archivo: {0} · Contenido: {1} · Archivos analizados: {2}</value>
   </data>
 </root>

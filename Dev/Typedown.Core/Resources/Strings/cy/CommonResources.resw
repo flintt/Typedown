@@ -948,12 +948,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>Chwilio yn y ffolder…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(enw'r ffeil yn cyfateb)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>{0} ffeil sy'n cyfateb o {1} a chwiliwyd</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>Wrthi'n chwilio…</value>
   </data>
@@ -1152,5 +1146,26 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>Yn agor…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>Enwau ffeiliau ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>Cynnwys ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>Mae'r cynnwys yn cyfateb hefyd</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>Dangos y cyfan ({0})</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>Ffolder</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>Enwau ffeiliau: {0} · Wrthi'n chwilio'r cynnwys…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>Enwau ffeiliau: {0} · Cynnwys: {1} · Ffeiliau a chwiliwyd: {2}</value>
   </data>
 </root>

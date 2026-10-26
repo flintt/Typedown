@@ -948,12 +948,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>Soek in vouer…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(lêernaam pas)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>{0} passende lêer(s) uit {1} deursoek</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>Soek tans…</value>
   </data>
@@ -1152,5 +1146,26 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>Word oopgemaak…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>Lêername ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>Inhoud ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>Inhoud pas ook</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>Wys al {0}</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>Vouer</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>Lêername: {0} · Soek tans in inhoud…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>Lêername: {0} · Inhoud: {1} · Lêers deursoek: {2}</value>
   </data>
 </root>

@@ -948,12 +948,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>Leita í möppu…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(skráarnafn passar)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>{0} samsvarandi skrár af {1} leituðum</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>Leita…</value>
   </data>
@@ -1152,5 +1146,26 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>Opnar…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>Skráarnöfn ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>Efni ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>Efnið passar líka</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>Sýna öll ({0})</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>Mappa</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>Skráarnöfn: {0} · Leita í efni…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>Skráarnöfn: {0} · Efni: {1} · Skrár leitaðar: {2}</value>
   </data>
 </root>

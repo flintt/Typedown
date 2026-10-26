@@ -948,12 +948,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>Որոնել պանակում…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(ֆայլի անունը համընկնում է)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>Որոնված {1} ֆայլից {0}-ը համընկավ</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>Որոնվում է…</value>
   </data>
@@ -1152,5 +1146,26 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>Բացվում է…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>Ֆայլերի անուններ ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>Բովանդակություն ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>Բովանդակությունը նույնպես համընկնում է</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>Ցուցադրել բոլորը ({0})</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>Թղթապանակ</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>Ֆայլերի անուններ՝ {0} · Որոնվում է բովանդակության մեջ…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>Ֆայլերի անուններ՝ {0} · Բովանդակություն՝ {1} · Որոնված ֆայլեր՝ {2}</value>
   </data>
 </root>

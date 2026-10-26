@@ -954,9 +954,6 @@
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>Ricerca in corso…</value>
   </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>{0} file corrispondenti su {1} esaminati</value>
-  </data>
   <data name="TocPane.ExpandAll" xml:space="preserve">
     <value>Espandi tutto</value>
   </data>
@@ -986,9 +983,6 @@
   </data>
   <data name="SearchInFolder" xml:space="preserve">
     <value>Cerca nella cartella</value>
-  </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(corrisponde il nome del file)</value>
   </data>
   <data name="LastUsedTab" xml:space="preserve">
     <value>Ultima scheda usata</value>
@@ -1152,5 +1146,26 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>Apertura in corso…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>Nomi dei file ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>Contenuto ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>Corrisponde anche il contenuto</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>Mostra tutti ({0})</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>Cartella</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>Nomi dei file: {0} · Ricerca nel contenuto…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>Nomi dei file: {0} · Contenuto: {1} · File esaminati: {2}</value>
   </data>
 </root>

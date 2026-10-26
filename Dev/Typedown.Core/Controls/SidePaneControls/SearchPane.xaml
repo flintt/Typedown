@@ -5,6 +5,7 @@
     xmlns:local="using:Typedown.Core.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     xmlns:u="using:Typedown.Core.Utilities"
     Loaded="OnLoaded"
     Unloaded="OnUnloaded"
@@ -12,12 +13,24 @@
     d:DesignHeight="300"
     d:DesignWidth="400">
     <UserControl.Resources>
-        <DataTemplate x:Key="ResultTemplate" x:DataType="local:SearchResultItem">
-            <StackPanel Padding="0,6" Spacing="2">
-                <TextBlock Text="{x:Bind FileName}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
-                <TextBlock Text="{x:Bind RelativePath}" Opacity="0.6" FontSize="11" TextTrimming="CharacterEllipsis"/>
-                <TextBlock Text="{x:Bind Snippet}" Opacity="0.85" FontSize="12" TextTrimming="CharacterEllipsis" MaxLines="2" TextWrapping="Wrap"/>
-            </StackPanel>
+        <!-- One row: a folder or a file, its path under the root, the line that matched, and the marker of a name match
+             whose content matches too. Each row's automation id and name are set as it is shown (OnResultContainerChanging). -->
+        <DataTemplate x:Key="ResultTemplate" x:DataType="u:FolderSearchHit">
+            <Grid Padding="0,6" ColumnSpacing="8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <FontIcon FontSize="14" Margin="0,2,0,0" VerticalAlignment="Top" Glyph="{x:Bind local:SearchPane.GlyphOf(IsFolder)}"/>
+                <StackPanel Grid.Column="1" Spacing="2">
+                    <TextBlock Text="{x:Bind Name}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
+                    <TextBlock Text="{x:Bind RelativePath}" Opacity="0.6" FontSize="11" TextTrimming="CharacterEllipsis"/>
+                    <TextBlock Text="{x:Bind Snippet, Mode=OneWay}" Visibility="{x:Bind local:SearchPane.ShownIfText(Snippet), Mode=OneWay}"
+                               Opacity="0.85" FontSize="12" TextTrimming="CharacterEllipsis" MaxLines="2" TextWrapping="Wrap"/>
+                    <TextBlock AutomationProperties.AutomationId="SearchAlsoContent" Text="{u:LocaleString Key=FolderSearch.AlsoInContent}"
+                               Visibility="{x:Bind AlsoContent, Mode=OneWay}" FontSize="11" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
+                </StackPanel>
+            </Grid>
         </DataTemplate>
     </UserControl.Resources>
     <Grid>
@@ -31,9 +44,9 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <AutoSuggestBox 
-                x:Name="SearchTextBox" 
-                LostFocus="OnSearchTextBoxLostFocus" 
+            <AutoSuggestBox
+                x:Name="SearchTextBox"
+                LostFocus="OnSearchTextBoxLostFocus"
                 TextChanged="OnSearchTextChanged"
                 QueryIcon="Find"
                 PlaceholderText="{u:LocaleString Key=FolderSearch.InFolderPlaceholder}"/>
@@ -41,8 +54,37 @@
                 <FontIcon FontSize="10" Glyph="&#xe8bb;"/>
             </Button>
         </Grid>
-        <TextBlock Grid.Row="1" Margin="12,8,12,4" Opacity="0.7" FontSize="12" Text="{x:Bind Status, Mode=OneWay}"/>
-        <ListView Grid.Row="2" x:Name="ResultList" ItemsSource="{x:Bind Results}" ItemTemplate="{StaticResource ResultTemplate}"
-                  SelectionMode="None" IsItemClickEnabled="True" ItemClick="OnResultClick" Padding="4,0"/>
+        <TextBlock Grid.Row="1" x:Name="SearchStatus" Margin="12,8,12,4" Opacity="0.7" FontSize="12" TextWrapping="Wrap" Text="{x:Bind Status, Mode=OneWay}"/>
+        <!-- Two groups, names above contents, each a header with its count that folds the group (Enter/Space, a chevron).
+             The lists inside do not scroll themselves: the pane does. -->
+        <ScrollViewer Grid.Row="2" x:Name="ResultList" Padding="4,0" Visibility="{x:Bind HasQuery, Mode=OneWay}">
+            <StackPanel Spacing="4" Padding="0,0,0,8">
+                <muxc:Expander x:Name="NamesGroup" AutomationProperties.AutomationId="SearchNamesGroup"
+                               HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Padding="4,0,4,4"
+                               IsExpanded="{x:Bind Results.NamesExpanded, Mode=TwoWay}"
+                               Header="{x:Bind local:SearchPane.NamesHeader(Results.NameCount), Mode=OneWay}"
+                               AutomationProperties.Name="{x:Bind local:SearchPane.NamesHeader(Results.NameCount), Mode=OneWay}">
+                    <StackPanel>
+                        <ListView x:Name="NameResultList" AutomationProperties.AutomationId="SearchNameResults"
+                                  ItemsSource="{x:Bind Results.ShownNames}" ItemTemplate="{StaticResource ResultTemplate}"
+                                  SelectionMode="None" IsItemClickEnabled="True" ItemClick="OnResultClick"
+                                  ContainerContentChanging="OnResultContainerChanging" ScrollViewer.VerticalScrollMode="Disabled"/>
+                        <HyperlinkButton x:Name="ShowAllNamesButton" AutomationProperties.AutomationId="SearchShowAllNames" Margin="8,2,0,0"
+                                         Content="{x:Bind local:SearchPane.ShowAllText(Results.NameCount), Mode=OneWay}"
+                                         Visibility="{x:Bind Results.CanShowAllNames, Mode=OneWay}" Click="OnShowAllNamesClick"/>
+                    </StackPanel>
+                </muxc:Expander>
+                <muxc:Expander x:Name="ContentsGroup" AutomationProperties.AutomationId="SearchContentsGroup"
+                               HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Padding="4,0,4,4"
+                               IsExpanded="{x:Bind Results.ContentsExpanded, Mode=TwoWay}"
+                               Header="{x:Bind local:SearchPane.ContentsHeader(Results.ContentCount), Mode=OneWay}"
+                               AutomationProperties.Name="{x:Bind local:SearchPane.ContentsHeader(Results.ContentCount), Mode=OneWay}">
+                    <ListView x:Name="ContentResultList" AutomationProperties.AutomationId="SearchContentResults"
+                              ItemsSource="{x:Bind Results.Contents}" ItemTemplate="{StaticResource ResultTemplate}"
+                              SelectionMode="None" IsItemClickEnabled="True" ItemClick="OnResultClick"
+                              ContainerContentChanging="OnResultContainerChanging" ScrollViewer.VerticalScrollMode="Disabled"/>
+                </muxc:Expander>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </UserControl>

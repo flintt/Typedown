@@ -948,12 +948,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>ძებნა საქაღალდეში…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(ფაილის სახელი ემთხვევა)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>{1} მოძებნილიდან {0} ფაილი დაემთხვა</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>მიმდინარეობს ძებნა…</value>
   </data>
@@ -1152,5 +1146,26 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>იხსნება…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>ფაილების სახელები ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>შინაარსი ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>შინაარსიც ემთხვევა</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>ყველას ჩვენება ({0})</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>საქაღალდე</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>ფაილების სახელები: {0} · მიმდინარეობს ძებნა შინაარსში…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>ფაილების სახელები: {0} · შინაარსი: {1} · მოძებნილი ფაილები: {2}</value>
   </data>
 </root>

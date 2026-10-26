@@ -944,12 +944,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>ኣብ ፎልደር ድለ…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(ስም ፋይል ይሰማማዕ)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>ካብ ዝተደልዩ {1} ፋይላት {0} ተሰማሚዖም</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>ይደሊ ኣሎ…</value>
   </data>
@@ -1151,5 +1145,26 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>ይኽፈት ኣሎ…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>ኣስማት ፋይላት ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>ትሕዝቶ ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>ትሕዝቶ'ውን ይሰማማዕ</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>ኩሉ ኣርኢ ({0})</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>ማህደር</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>ኣስማት ፋይላት፦ {0} · ኣብ ትሕዝቶ ይደሊ ኣሎ…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>ኣስማት ፋይላት፦ {0} · ትሕዝቶ፦ {1} · ዝተደለዩ ፋይላት፦ {2}</value>
   </data>
 </root>

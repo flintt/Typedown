@@ -66,6 +66,16 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             RefreshFavorites();
             UpdateWorkFolder();
             Bindings.Update();
+            // A folder the search pane found (UIViewModel.RevealInFolderTree): asked for before this page was here
+            // (the outline was shown) or while it is.
+            var ui = ViewModel.UIViewModel;
+            disposables.Add(ui.WhenPropertyChanged(nameof(UIViewModel.FolderRevealPath))
+                .StartWith(ui.FolderRevealPath)
+                .Subscribe(_ =>
+                {
+                    var path = ui.TakeFolderRevealPath();
+                    if (!string.IsNullOrEmpty(path)) RevealFolder(path);
+                }));
         }
 
         // The folder the tree is currently rooted at. It is sticky: switching tabs or previewing files elsewhere must
@@ -345,23 +355,63 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
                 var path = FileViewModel?.FilePath;
                 var root = WorkFolderExplorerItem?.FullPath;
                 if (string.IsNullOrEmpty(path) || string.IsNullOrEmpty(root) || !IsInsideFolder(path, root)) return;
-                var rootFull = Path.GetFullPath(root).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
-                var relative = Path.GetFullPath(path).Substring(rootFull.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
-                var item = WorkFolderExplorerItem;
-                var current = rootFull;
-                foreach (var segment in relative.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar))
-                {
-                    if (item == null) return;
-                    item.IsExpanded = true;
-                    current = Path.Combine(current, segment);
-                    item = await FindChild(item, current);
-                }
+                await RevealPath(path);
                 UpdateSelectedItem(WorkFolderExplorerItem);
             }
             catch (Exception ex)
             {
                 Log.Debug($"FolderPage.RevealActiveFile: {ex.Message}");
             }
+        }
+
+        /// <summary>
+        /// A folder the side pane's search found, shown in the tree: the folders down to it opened, it opened too,
+        /// selected, brought into view and given the keyboard. The root stays: a folder outside it is left alone.
+        /// </summary>
+        private async void RevealFolder(string path)
+        {
+            try
+            {
+                var item = await RevealPath(path);
+                Log.Debug($"FolderPage.RevealFolder: '{path}' {(item == null ? "not under the root" : "shown")}");
+                if (item == null) return;
+                item.IsExpanded = true;
+                item.IsSelected = true;
+                // The row is made once the tree has laid out the rows just opened.
+                for (var attempt = 0; attempt < 20; attempt++)
+                {
+                    if (TreeView.ContainerFromItem(item) is muxc.TreeViewItem row)
+                    {
+                        row.StartBringIntoView();
+                        row.Focus(FocusState.Programmatic);
+                        return;
+                    }
+                    await System.Threading.Tasks.Task.Delay(50);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"FolderPage.RevealFolder: {ex.Message}");
+            }
+        }
+
+        /// <summary>The folders from the root down to <paramref name="path"/> opened; its item, or null when it is not under the root.</summary>
+        private async System.Threading.Tasks.Task<ExplorerItem> RevealPath(string path)
+        {
+            var root = WorkFolderExplorerItem?.FullPath;
+            if (string.IsNullOrEmpty(path) || string.IsNullOrEmpty(root) || !IsInsideFolder(path, root)) return null;
+            var rootFull = Path.GetFullPath(root).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+            var relative = Path.GetFullPath(path).Substring(rootFull.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+            var item = WorkFolderExplorerItem;
+            var current = rootFull;
+            foreach (var segment in relative.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar))
+            {
+                if (item == null) return null;
+                item.IsExpanded = true;
+                current = Path.Combine(current, segment);
+                item = await FindChild(item, current);
+            }
+            return item;
         }
 
         /// <summary>A folder is enumerated in the background, so the child may take a moment to appear.</summary>

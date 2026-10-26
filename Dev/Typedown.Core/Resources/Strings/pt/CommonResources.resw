@@ -896,9 +896,6 @@
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>Pesquisando…</value>
   </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>{0} arquivo(s) correspondente(s) de {1} pesquisado(s)</value>
-  </data>
   <data name="TocPane.ExpandAll" xml:space="preserve">
     <value>Expandir tudo</value>
   </data>
@@ -928,9 +925,6 @@
   </data>
   <data name="SearchInFolder" xml:space="preserve">
     <value>Pesquisar na pasta</value>
-  </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(nome do arquivo corresponde)</value>
   </data>
   <data name="LastUsedTab" xml:space="preserve">
     <value>Última guia usada</value>
@@ -1094,5 +1088,26 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>A abrir…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>Nomes de arquivo ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>Conteúdo ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>O conteúdo também corresponde</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>Mostrar todos ({0})</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>Pasta</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>Nomes de arquivo: {0} · Pesquisando no conteúdo…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>Nomes de arquivo: {0} · Conteúdo: {1} · Arquivos pesquisados: {2}</value>
   </data>
 </root>

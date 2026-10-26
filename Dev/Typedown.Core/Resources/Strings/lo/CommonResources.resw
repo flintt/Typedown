@@ -948,12 +948,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>ຄົ້ນຫາໃນໂຟນເດີ…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(ຊື່ໄຟລ໌ກົງກັນ)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>ພົບ {0} ໄຟລ໌ ຈາກ {1} ທີ່ຄົ້ນຫາ</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>ກຳລັງຄົ້ນຫາ…</value>
   </data>
@@ -1152,5 +1146,26 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>ກຳລັງເປີດ…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>ຊື່ໄຟລ໌ ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>ເນື້ອໃນ ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>ເນື້ອໃນກໍກົງກັນ</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>ສະແດງທັງໝົດ ({0})</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>ໂຟນເດີ</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>ຊື່ໄຟລ໌: {0} · ກຳລັງຄົ້ນຫາໃນເນື້ອໃນ…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>ຊື່ໄຟລ໌: {0} · ເນື້ອໃນ: {1} · ໄຟລ໌ທີ່ຄົ້ນຫາ: {2}</value>
   </data>
 </root>

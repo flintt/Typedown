@@ -948,12 +948,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>Sök i mappen…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(filnamnet matchar)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>{0} matchande fil(er) av {1} genomsökta</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>Söker…</value>
   </data>
@@ -1152,5 +1146,26 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>Öppnar…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>Filnamn ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>Innehåll ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>Innehållet matchar också</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>Visa alla {0}</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>Mapp</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>Filnamn: {0} · Söker i innehåll…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>Filnamn: {0} · Innehåll: {1} · Genomsökta filer: {2}</value>
   </data>
 </root>

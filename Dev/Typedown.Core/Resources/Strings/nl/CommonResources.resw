@@ -948,12 +948,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>Zoeken in map…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(bestandsnaam komt overeen)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>{0} overeenkomende bestand(en) van {1} doorzocht</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>Bezig met zoeken…</value>
   </data>
@@ -1152,5 +1146,26 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>Openen…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>Bestandsnamen ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>Inhoud ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>Inhoud komt ook overeen</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>Alle {0} tonen</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>Map</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>Bestandsnamen: {0} · Zoeken in inhoud…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>Bestandsnamen: {0} · Inhoud: {1} · Doorzochte bestanden: {2}</value>
   </data>
 </root>

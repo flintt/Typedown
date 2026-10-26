@@ -948,12 +948,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>Hľadať v priečinku…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(zhoda v názve súboru)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>Zhodujúcich sa súborov: {0} z {1} prehľadaných</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>Hľadá sa…</value>
   </data>
@@ -1152,5 +1146,26 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>Otvára sa…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>Názvy súborov ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>Obsah ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>Zhoda aj v obsahu</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>Zobraziť všetky ({0})</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>Priečinok</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>Názvy súborov: {0} · Prehľadáva sa obsah…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>Názvy súborov: {0} · Obsah: {1} · Prehľadané súbory: {2}</value>
   </data>
 </root>

@@ -948,12 +948,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>Bilatu karpetan…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(fitxategi-izena bat dator)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>{0} fitxategi bat datoz bilatutako {1}(e)tik</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>Bilatzen…</value>
   </data>
@@ -1152,5 +1146,26 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>Irekitzen…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>Fitxategi-izenak ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>Edukia ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>Edukia ere bat dator</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>Erakutsi guztiak ({0})</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>Karpeta</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>Fitxategi-izenak: {0} · Edukian bilatzen…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>Fitxategi-izenak: {0} · Edukia: {1} · Bilatutako fitxategiak: {2}</value>
   </data>
 </root>

@@ -948,12 +948,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>Szukaj w folderze…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(pasuje nazwa pliku)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>Pasujące pliki: {0} z {1} przeszukanych</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>Wyszukiwanie…</value>
   </data>
@@ -1152,5 +1146,26 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>Otwieranie…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>Nazwy plików ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>Zawartość ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>Pasuje też zawartość</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>Pokaż wszystkie ({0})</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>Folder</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>Nazwy plików: {0} · Przeszukiwanie zawartości…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>Nazwy plików: {0} · Zawartość: {1} · Przeszukane pliki: {2}</value>
   </data>
 </root>

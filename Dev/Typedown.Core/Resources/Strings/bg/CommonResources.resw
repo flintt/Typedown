@@ -948,12 +948,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>Търсене в папката…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(съвпада името на файла)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>{0} съвпадащ(и) файл(а) от {1} претърсени</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>Търсене…</value>
   </data>
@@ -1152,5 +1146,26 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>Отваряне…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>Имена на файлове ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>Съдържание ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>Съвпада и съдържанието</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>Покажи всички {0}</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>Папка</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>Имена на файлове: {0} · Търсене в съдържанието…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>Имена на файлове: {0} · Съдържание: {1} · Претърсени файлове: {2}</value>
   </data>
 </root>

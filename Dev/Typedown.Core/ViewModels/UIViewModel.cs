@@ -99,6 +99,29 @@ namespace Typedown.Core.ViewModels
 
         public Command<Unit> SearchInFolderCommand { get; } = new();
 
+        /// <summary>
+        /// A folder to show in the folder pane's tree (a folder the search pane found), until the folder page takes it:
+        /// the page may not be there yet when it is asked for (the outline was shown).
+        /// </summary>
+        public string FolderRevealPath { get; private set; }
+
+        /// <summary>The search pane closed, the Files page shown, and <paramref name="path"/> opened and selected in its tree. The root stays.</summary>
+        public void RevealInFolderTree(string path)
+        {
+            FolderSearchOpen = false;
+            SettingsViewModel.SidePaneOpen = true;
+            SettingsViewModel.SidePaneIndex = 0;
+            FolderRevealPath = path;
+        }
+
+        /// <summary>The folder asked for, once: the folder page shows it and it is forgotten.</summary>
+        public string TakeFolderRevealPath()
+        {
+            var path = FolderRevealPath;
+            if (path != null) FolderRevealPath = null;
+            return path;
+        }
+
         /// <summary>Borderless full-screen window without the caption/menu bar (F11).</summary>
 
         public bool IsFullScreen { get; set; }

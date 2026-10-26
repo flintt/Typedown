@@ -948,12 +948,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>ফোল্ডাৰত সন্ধান কৰক…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(ফাইলৰ নাম মিলিছে)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>সন্ধান কৰা {1}টা ফাইলৰ ভিতৰত {0}টা মিলিছে</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>সন্ধান কৰি আছে…</value>
   </data>
@@ -1152,5 +1146,26 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>খুলি আছে…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>ফাইলৰ নাম ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>সমল ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>সমলো মিলিছে</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>আটাইকেইটা দেখুৱাওক ({0})</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>ফ'ল্ডাৰ</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>ফাইলৰ নাম: {0} · সমলত সন্ধান কৰি আছে…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>ফাইলৰ নাম: {0} · সমল: {1} · সন্ধান কৰা ফাইল: {2}</value>
   </data>
 </root>

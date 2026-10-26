@@ -954,9 +954,6 @@
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>検索中…</value>
   </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>{1} 件中 {0} 件のファイルが一致</value>
-  </data>
   <data name="TocPane.ExpandAll" xml:space="preserve">
     <value>すべて展開</value>
   </data>
@@ -986,9 +983,6 @@
   </data>
   <data name="SearchInFolder" xml:space="preserve">
     <value>フォルダー内を検索</value>
-  </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>（ファイル名が一致）</value>
   </data>
   <data name="LastUsedTab" xml:space="preserve">
     <value>最後に使ったタブ</value>
@@ -1152,5 +1146,26 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>開いています…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>ファイル名 ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>内容 ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>内容も一致</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>すべて表示 ({0} 件)</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>フォルダー</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>ファイル名: {0} · 内容を検索中…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>ファイル名: {0} · 内容: {1} · 検索したファイル: {2}</value>
   </data>
 </root>

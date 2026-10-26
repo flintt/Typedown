@@ -948,12 +948,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>Пошук у теці…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(збіг за назвою файлу)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>Знайдено файлів: {0} із {1} переглянутих</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>Пошук…</value>
   </data>
@@ -1152,5 +1146,26 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>Відкриття…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>Назви файлів ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>Вміст ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>Збігається й вміст</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>Показати всі ({0})</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>Папка</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>Назви файлів: {0} · Пошук у вмісті…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>Назви файлів: {0} · Вміст: {1} · Переглянуто файлів: {2}</value>
   </data>
 </root>

@@ -948,12 +948,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>Қалтадан іздеу…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(файл аты сәйкес келеді)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>Ізделген {1} файлдың {0} сәйкес келді</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>Ізделуде…</value>
   </data>
@@ -1152,5 +1146,26 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>Ашылуда…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>Файл аттары ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>Мазмұны ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>Мазмұны да сәйкес келеді</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>Барлығын көрсету ({0})</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>Қалта</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>Файл аттары: {0} · Мазмұннан ізделуде…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>Файл аттары: {0} · Мазмұны: {1} · Ізделген файлдар: {2}</value>
   </data>
 </root>

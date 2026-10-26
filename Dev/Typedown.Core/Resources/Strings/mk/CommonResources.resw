@@ -948,12 +948,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>Барај во папката…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(името на датотеката се совпаѓа)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>{0} совпаднати датотеки од {1} пребарани</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>Пребарување…</value>
   </data>
@@ -1152,5 +1146,26 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>Се отвора…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>Имиња на датотеки ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>Содржина ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>Се совпаѓа и содржината</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>Прикажи ги сите ({0})</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>Папка</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>Имиња на датотеки: {0} · Пребарување во содржината…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>Имиња на датотеки: {0} · Содржина: {1} · Пребарани датотеки: {2}</value>
   </data>
 </root>

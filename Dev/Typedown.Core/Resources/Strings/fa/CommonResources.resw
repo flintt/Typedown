@@ -948,12 +948,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>جست‌وجو در پوشه…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(نام پرونده مطابقت دارد)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>{0} پروندهٔ مطابق از {1} پروندهٔ جست‌وجوشده</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>در حال جست‌وجو…</value>
   </data>
@@ -1152,5 +1146,26 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>در حال باز کردن…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>نام پرونده‌ها ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>محتوا ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>محتوا هم مطابقت دارد</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>نمایش همه ({0})</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>پوشه</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>نام پرونده‌ها: {0} · در حال جست‌وجو در محتوا…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>نام پرونده‌ها: {0} · محتوا: {1} · پرونده‌های جست‌وجوشده: {2}</value>
   </data>
 </root>

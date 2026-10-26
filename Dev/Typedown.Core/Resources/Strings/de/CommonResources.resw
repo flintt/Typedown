@@ -954,9 +954,6 @@
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>Suche läuft…</value>
   </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>{0} Treffer in {1} durchsuchten Dateien</value>
-  </data>
   <data name="TocPane.ExpandAll" xml:space="preserve">
     <value>Alle ausklappen</value>
   </data>
@@ -986,9 +983,6 @@
   </data>
   <data name="SearchInFolder" xml:space="preserve">
     <value>Im Ordner suchen</value>
-  </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(Dateiname stimmt überein)</value>
   </data>
   <data name="LastUsedTab" xml:space="preserve">
     <value>Zuletzt verwendeter Tab</value>
@@ -1152,5 +1146,26 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>Wird geöffnet…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>Dateinamen ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>Inhalt ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>Inhalt stimmt auch überein</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>Alle {0} anzeigen</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>Ordner</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>Dateinamen: {0} · Inhalte werden durchsucht…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>Dateinamen: {0} · Inhalt: {1} · Durchsuchte Dateien: {2}</value>
   </data>
 </root>

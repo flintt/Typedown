@@ -948,12 +948,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>ఫోల్డర్‌లో వెతుకు…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(ఫైల్ పేరు సరిపోలింది)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>వెతికిన {1} ఫైళ్లలో {0} సరిపోలాయి</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>వెతుకుతోంది…</value>
   </data>
@@ -1152,5 +1146,26 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>తెరుస్తోంది…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>ఫైల్ పేర్లు ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>కంటెంట్ ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>కంటెంట్ కూడా సరిపోలింది</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>అన్నీ చూపించు ({0})</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>ఫోల్డర్</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>ఫైల్ పేర్లు: {0} · కంటెంట్‌లో వెతుకుతోంది…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>ఫైల్ పేర్లు: {0} · కంటెంట్: {1} · వెతికిన ఫైళ్లు: {2}</value>
   </data>
 </root>

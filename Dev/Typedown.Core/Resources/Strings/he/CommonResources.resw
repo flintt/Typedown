@@ -948,12 +948,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>חיפוש בתיקייה…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(שם הקובץ תואם)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>{0} קבצים תואמים מתוך {1} שנסרקו</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>מחפש…</value>
   </data>
@@ -1152,5 +1146,26 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>פותח…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>שמות קבצים ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>תוכן ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>גם התוכן תואם</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>הצגת הכול ({0})</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>תיקייה</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>שמות קבצים: {0} · מחפש בתוכן…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>שמות קבצים: {0} · תוכן: {1} · קבצים שנסרקו: {2}</value>
   </data>
 </root>

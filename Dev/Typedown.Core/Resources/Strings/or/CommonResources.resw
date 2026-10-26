@@ -948,12 +948,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>ଫୋଲ୍ଡର୍‌ରେ ଖୋଜନ୍ତୁ…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(ଫାଇଲ୍ ନାମ ମେଳ ଖାଉଛି)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>ଖୋଜାଯାଇଥିବା {1} ଫାଇଲ୍ ମଧ୍ୟରୁ {0} ମେଳ ଖାଇଲା</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>ଖୋଜୁଛି…</value>
   </data>
@@ -1152,5 +1146,26 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>ଖୋଲୁଛି…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>ଫାଇଲ୍ ନାମ ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>ବିଷୟବସ୍ତୁ ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>ବିଷୟବସ୍ତୁ ମଧ୍ୟ ମେଳ ଖାଉଛି</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>ସମସ୍ତ {0} ଦେଖାନ୍ତୁ</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>ଫୋଲ୍ଡର୍</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>ଫାଇଲ୍ ନାମ: {0} · ବିଷୟବସ୍ତୁରେ ଖୋଜୁଛି…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>ଫାଇଲ୍ ନାମ: {0} · ବିଷୟବସ୍ତୁ: {1} · ଖୋଜାଯାଇଥିବା ଫାଇଲ୍: {2}</value>
   </data>
 </root>

@@ -960,9 +960,33 @@
     <value>Searching…</value>
     <comment>搜索/搜索中</comment>
   </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>{0} matching file(s) of {1} searched</value>
-    <comment>搜索/结果统计</comment>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>File names ({0})</value>
+    <comment>搜索/文件名组标题（数量）</comment>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>Contents ({0})</value>
+    <comment>搜索/内容组标题（数量）</comment>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>Content matches too</value>
+    <comment>搜索/文件名匹配的结果内容也匹配</comment>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>Show all {0}</value>
+    <comment>搜索/显示全部 n 条文件名结果</comment>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>Folder</value>
+    <comment>搜索/结果是文件夹（读屏）</comment>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>File names: {0} · Searching contents…</value>
+    <comment>搜索/文件名已搜完，正在搜索内容</comment>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>File names: {0} · Contents: {1} · Files searched: {2}</value>
+    <comment>搜索/结果统计：文件名、内容、已搜索文件数</comment>
   </data>
   <data name="TocPane.ExpandAll" xml:space="preserve">
     <value>Expand all</value>
@@ -1005,9 +1029,6 @@
   </data>
   <data name="SearchInFolder" xml:space="preserve">
     <value>Search in folder</value>
-  </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(file name matches)</value>
   </data>
   <data name="AutomationConnected" xml:space="preserve">
     <value>Automation connected</value>

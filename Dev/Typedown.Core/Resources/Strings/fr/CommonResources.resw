@@ -954,9 +954,6 @@
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>Recherche…</value>
   </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>{0} fichier(s) correspondant(s) sur {1} analysé(s)</value>
-  </data>
   <data name="TocPane.ExpandAll" xml:space="preserve">
     <value>Tout développer</value>
   </data>
@@ -986,9 +983,6 @@
   </data>
   <data name="SearchInFolder" xml:space="preserve">
     <value>Rechercher dans le dossier</value>
-  </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(nom de fichier correspondant)</value>
   </data>
   <data name="LastUsedTab" xml:space="preserve">
     <value>Dernier onglet utilisé</value>
@@ -1152,5 +1146,26 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>Ouverture…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>Noms de fichiers ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>Contenu ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>Le contenu correspond aussi</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>Afficher les {0}</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>Dossier</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>Noms de fichiers : {0} · Recherche dans le contenu…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>Noms de fichiers : {0} · Contenu : {1} · Fichiers analysés : {2}</value>
   </data>
 </root>

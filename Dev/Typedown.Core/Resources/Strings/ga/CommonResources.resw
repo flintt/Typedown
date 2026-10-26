@@ -948,12 +948,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>Cuardaigh san fhillteán…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(meaitseálann ainm an chomhaid)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>{0} comhad meaitseála as {1} a cuardaíodh</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>Ag cuardach…</value>
   </data>
@@ -1152,5 +1146,26 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>Á oscailt…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>Ainmneacha comhad ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>Ábhar ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>Meaitseálann an t-ábhar freisin</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>Taispeáin iad uile ({0})</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>Fillteán</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>Ainmneacha comhad: {0} · Ag cuardach an ábhair…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>Ainmneacha comhad: {0} · Ábhar: {1} · Comhaid a cuardaíodh: {2}</value>
   </data>
 </root>

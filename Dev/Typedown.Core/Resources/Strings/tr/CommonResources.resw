@@ -948,12 +948,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>Klasörde ara…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(dosya adı eşleşiyor)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>Aranan {1} dosyadan {0} tanesi eşleşti</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>Aranıyor…</value>
   </data>
@@ -1152,5 +1146,26 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>Açılıyor…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>Dosya adları ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>İçerik ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>İçerik de eşleşiyor</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>Tümünü göster ({0})</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>Klasör</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>Dosya adları: {0} · İçerikte aranıyor…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>Dosya adları: {0} · İçerik: {1} · Aranan dosyalar: {2}</value>
   </data>
 </root>

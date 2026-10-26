@@ -948,12 +948,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>फोल्डरमा खोज्नुहोस्…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(फाइलको नाम मिल्यो)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>खोजिएका {1} फाइलमध्ये {0} मिले</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>खोज्दै…</value>
   </data>
@@ -1152,5 +1146,26 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>खोल्दै…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>फाइलका नामहरू ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>सामग्री ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>सामग्री पनि मिल्यो</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>सबै {0} देखाउनुहोस्</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>फोल्डर</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>फाइलका नामहरू: {0} · सामग्रीमा खोज्दै…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>फाइलका नामहरू: {0} · सामग्री: {1} · खोजिएका फाइलहरू: {2}</value>
   </data>
 </root>

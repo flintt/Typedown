@@ -21,7 +21,7 @@ This guide covers version 1.3.8. Menu and setting names are given as they appear
 
 **Open a folder**: File → Open Folder. The side bar on the left (Ctrl+Shift+L shows/hides it) has two pages:
 
-- **Files**: the documents in the folder. A single click previews a file (the tab is replaced when you open another file); a double click opens it for real. The magnifier at the top of the side bar searches the whole folder (Ctrl+Shift+F)
+- **Files**: the documents in the folder. A single click previews a file (the tab is replaced when you open another file); a double click opens it for real. The magnifier at the top of the side bar searches the whole folder (Ctrl+Shift+F): the names of files and folders are listed first, under File names, then the files whose text contains the words, under Contents, as they are found. A file whose name and text both match is listed once, under File names, marked "Content matches too". File names shows five until you choose Show all; a group's heading folds it away. Clicking a folder shows it in the Files tree; clicking a file opens it, and finds the words in it when its text matched
 - **Outline**: the headings of the current document; click one to jump to it. While you write, the heading you are under is highlighted
 
 **Save**: Ctrl+S; Save As is Ctrl+Shift+S. Unsaved changes are backed up regularly, and if the app closes unexpectedly they are restored the next time you open it. On the next start, the tabs you had open last time come back automatically.

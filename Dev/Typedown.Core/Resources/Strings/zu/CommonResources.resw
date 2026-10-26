@@ -948,12 +948,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>Sesha efoldeni…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(igama lefayela liyafana)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>Amafayela angu-{0} ayafana kwangu-{1} aseshwe</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>Iyasesha…</value>
   </data>
@@ -1152,5 +1146,26 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>Iyavula…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>Amagama amafayela ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>Okuqukethwe ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>Nokuqukethwe kuyafana</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>Bonisa konke ({0})</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>Ifolda</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>Amagama amafayela: {0} · Isesha okuqukethwe…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>Amagama amafayela: {0} · Okuqukethwe: {1} · Amafayela aseshiwe: {2}</value>
   </data>
 </root>

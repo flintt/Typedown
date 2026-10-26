@@ -948,12 +948,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>Meklēt mapē…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(faila nosaukums sakrīt)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>Atrasti {0} faili no {1} pārmeklētajiem</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>Notiek meklēšana…</value>
   </data>
@@ -1152,5 +1146,26 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>Atver…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>Failu nosaukumi ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>Saturs ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>Sakrīt arī saturs</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>Rādīt visus ({0})</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>Mape</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>Failu nosaukumi: {0} · Notiek meklēšana saturā…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>Failu nosaukumi: {0} · Saturs: {1} · Pārmeklēti faili: {2}</value>
   </data>
 </root>
