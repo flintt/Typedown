@@ -128,6 +128,10 @@ namespace Typedown.Services
                 }
                 stream.Seek(0);
                 dataPackage.SetBitmap(global::Windows.Storage.Streams.RandomAccessStreamReference.CreateFromStream(stream));
+                // Word takes plain text over a bitmap, and pasted the diagram's code; it takes RTF over both, so the picture
+                // goes in as RTF too (Word, WordPad, Outlook). Places with text only still get the code.
+                var rtf = PngRtf(png);
+                if (rtf != null) dataPackage.SetRtf(rtf);
             }
             SetContent(dataPackage);
             try
@@ -138,6 +142,24 @@ namespace Typedown.Services
             {
                 Core.Utilities.Log.Debug($"clipboard: not flushed ({ex.HResult:x8}); the copy stays while the app runs");
             }
+        }
+
+        /// <summary>
+        /// A PNG as an RTF picture, shown at half its pixels (the diagram copy draws at 2x); null if it is not a PNG.
+        /// </summary>
+        internal static string PngRtf(byte[] png)
+        {
+            if (png == null || png.Length < 24 || png[0] != 0x89 || png[1] != (byte)'P' || png[2] != (byte)'N' || png[3] != (byte)'G') return null;
+            int width = png[16] << 24 | png[17] << 16 | png[18] << 8 | png[19];
+            int height = png[20] << 24 | png[21] << 16 | png[22] << 8 | png[23];
+            if (width <= 0 || height <= 0) return null;
+            // Twips at 96 dpi are 15 a pixel; half the pixels for the 2x drawing.
+            var rtf = new System.Text.StringBuilder(png.Length * 2 + 200);
+            rtf.Append(@"{\rtf1\ansi{\pict\pngblip\picw").Append(width).Append(@"\pich").Append(height)
+               .Append(@"\picwgoal").Append(width * 15 / 2).Append(@"\pichgoal").Append(height * 15 / 2).Append(' ');
+            rtf.Append(Convert.ToHexString(png));
+            rtf.Append("}}");
+            return rtf.ToString();
         }
 
         public void SetText(string text, TextDataFormat format)
