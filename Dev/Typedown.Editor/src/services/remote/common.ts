@@ -17,6 +17,9 @@ const remote = {
     // page gave up and the editor stayed blank.
     getSettings: remoteFunction<undefined, unknown>('GetSettings', 0),
     setClipboard: remoteFunction<{ type: string, data: unknown }, boolean>('SetClipboard'),
+    // A diagram's copy button: its picture (a PNG, base64; null when it has none) and its fenced Markdown as one
+    // clipboard item. True once the clipboard holds them.
+    copyDiagram: remoteFunction<{ text: string, png: string | null }, boolean>('CopyDiagram'),
     getStringResources: remoteFunction<{ names: string[] }, { [name: string]: string }>('GetStringResources'),
     openNewWindow: remoteFunction<string, undefined>('OpenNewWindow'),
     unhandledException: remoteFunction<string, undefined>('UnhandledException'),

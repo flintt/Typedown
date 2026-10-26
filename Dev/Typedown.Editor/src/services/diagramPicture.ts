@@ -1,3 +1,5 @@
+import ExportHtml from './exportHtml'
+
 // Each SVG drawing in the element (a diagram) replaced by a PNG of it, drawn at twice its size on white - less for a big
 // one, kept within 8000 pixels a side and 16 million in all: a canvas past the browser's limits gave an empty picture. The
 // drawing is drawn on its own, with only its own styles: the page's (a dark theme) do not reach it. One that cannot be
@@ -51,3 +53,33 @@ export const diagramsToPictures = async (root: HTMLElement) => {
 }
 
 
+const blobBase64 = (blob: Blob) => new Promise<string>((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => resolve(String(reader.result).replace(/^data:[^,]*,/, ''))
+    reader.onerror = () => reject(reader.error)
+    reader.readAsDataURL(blob)
+})
+
+/**
+ * One diagram block (its Markdown, the fenced source) as a PNG, base64 without the data: prefix - the picture a format
+ * that takes no SVG gets (RenderXhtml with diagramsAsPictures): drawn again in the light theme, on white, at twice its
+ * size, whatever theme the editor shows it in. A PlantUML diagram is the server's PNG. Null when no picture can be
+ * made: a diagram that cannot be drawn, PlantUML drawing off or its server out of reach.
+ */
+export const diagramPicture = async (markdown: string, options: any): Promise<string | null> => {
+    const html = await new ExportHtml(markdown, { ...options, diagramsAsPictures: true }).renderHtml('')
+    const body = new DOMParser().parseFromString(`<!DOCTYPE html><html><body>${html}</body></html>`, 'text/html').body
+    await diagramsToPictures(body)
+    const src = body.querySelector('img')?.getAttribute('src') ?? ''
+    if (src.startsWith('data:image/png;base64,')) return src.slice('data:image/png;base64,'.length)
+    if (/^https?:/.test(src)) {
+        try {
+            const response = await fetch(src)
+            const blob = response.ok ? await response.blob() : null
+            if (blob && blob.type === 'image/png') return await blobBase64(blob)
+        } catch (e) {
+            console.log('a diagram picture could not be fetched', e)
+        }
+    }
+    return null
+}

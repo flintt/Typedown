@@ -185,6 +185,10 @@ export default function renderContainerBlock (parent, block, activeBlocks, match
       selector += `.${CLASS_OR_ID.AG_CONTAINER_BLOCK}`
       Object.assign(data.attrs, { spellcheck: 'false' })
     }
+    // A diagram copies as its picture and its code (ContentState.copyDiagram).
+    if (/^(?:flowchart|mermaid|sequence|plantuml|vega-lite)$/.test(functionType)) {
+      children.push(renderCopyButton(true))
+    }
   } else if (/ul|ol/.test(type) && listType) {
     selector += `.ag-${listType}-list`
     if (type === 'ol') {

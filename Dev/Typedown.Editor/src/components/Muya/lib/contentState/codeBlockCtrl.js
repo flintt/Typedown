@@ -2,6 +2,10 @@ import { loadLanguage } from '../prism/index'
 import { escapeHTML } from '../utils'
 // import resizeCodeBlockLineNumber from '../utils/resizeCodeLineNumber'
 import selection from '../selection'
+import { CLASS_OR_ID } from '../config'
+import ExportMarkdown from '../utils/exportMarkdown'
+import remote from 'services/remote/common'
+import { diagramPicture } from 'services/diagramPicture'
 
 const CODE_UPDATE_REP = /^`{3,}(.*)/
 
@@ -185,6 +189,45 @@ const codeBlockCtrl = ContentState => {
       clearTimeout(button._copiedTimer)
       button._copiedTimer = setTimeout(() => button.classList.remove('ag-code-copied'), 1500)
     }
+  }
+
+  /**
+   * Copy a diagram by its copy button (top right of the drawing, shown on hover while its source is not being edited):
+   * one clipboard item holding the picture, for Word, OneNote, mail or chat, and the block's Markdown fenced with its
+   * language as text, for a text editor - pasted back here it is the diagram again. The picture is drawn as a format
+   * that takes no SVG gets it (services/diagramPicture): the light theme on white at twice the size, never the dark
+   * theme's light lines on nothing. A diagram that could not be drawn is copied as its code only. The host writes the
+   * clipboard (CopyDiagram): a picture and text in one item there is what Word and the chat programs paste. Nothing in
+   * the document, its history or the selection changes.
+   */
+  ContentState.prototype.copyDiagram = async function (button) {
+    const figure = button.closest('figure')
+    const block = figure && this.getBlock(figure.id)
+    if (!block) return
+    const { listIndentation, isGitlabCompatibilityEnabled } = this
+    const text = new ExportMarkdown([block], listIndentation, isGitlabCompatibilityEnabled).generate().replace(/^\n+|\n+$/g, '')
+    const preview = figure.querySelector(':scope > div.ag-container-preview')
+    const drawn = !!preview && !preview.classList.contains(CLASS_OR_ID.AG_MATH_ERROR) &&
+      !preview.classList.contains('ag-plantuml-off') && !preview.classList.contains(CLASS_OR_ID.AG_EMPTY)
+    let png = null
+    if (drawn) {
+      try {
+        // Mermaid is one global the editor's own drawing also uses: not both at once.
+        await this.stateRender.mermaidRenderQueue.catch(() => {})
+        png = await diagramPicture(text + '\n', this.muya.options)
+      } catch (e) {
+        console.log('copy diagram: no picture', e)
+      }
+    }
+    try {
+      if (!await remote.copyDiagram({ text, png })) return
+    } catch (e) {
+      console.log('copy diagram: the clipboard was not written', e)
+      return
+    }
+    button.classList.add('ag-code-copied')
+    clearTimeout(button._copiedTimer)
+    button._copiedTimer = setTimeout(() => button.classList.remove('ag-code-copied'), 1500)
   }
 
   ContentState.prototype.resizeLineNumber = function () {
