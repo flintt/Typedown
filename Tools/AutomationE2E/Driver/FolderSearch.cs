@@ -50,10 +50,19 @@ internal static partial class Program
             await c.Call("window.setView", new { windowId, sidePane = new { open = true, page = "files" } });
             Check(await Eventually(async () => SamePath((string?)(await FolderState(c, windowId))["root"], root), 5000), "the tree is rooted at the fixture folder");
 
+            // An element is there for UI Automation as soon as it is made, before it has a place on the screen: the
+            // search box reopened was clicked at that moment ("not on screen", w10). Waited for until it has one.
+            async Task<AutomationElement> OnScreen(string id, string what)
+            {
+                var element = await WaitFor(window, id);
+                if (!await Eventually(async () => { await Task.CompletedTask; var r = element.Current.BoundingRectangle; return !r.IsEmpty && r.Width > 0 && r.Height > 0; }, 5000))
+                    throw new CaseFailed($"{what} ({id}) is there but has no place on the screen after 5 s ({FocusInfo(window)})");
+                return element;
+            }
             async Task Search()
             {
-                await Click(window, await WaitFor(window, "SearchButton"));
-                var box = await WaitFor(window, "SearchTextBox");
+                await Click(window, await OnScreen("SearchButton", "the side pane's search button"));
+                var box = await OnScreen("SearchTextBox", "the search box");
                 await Click(window, box);
                 await Task.Delay(300);
                 TypeText("kiwi");
@@ -141,9 +150,17 @@ internal static partial class Program
                 $"the folder is shown open in the tree (deep: {StateOf("deep")}, kiwi-box: {StateOf("kiwi-box")})");
             Check(StateOf("deep") == ExpandCollapseState.Expanded, "the folder above it is open");
             Check(TreeRow(window, "inner.md") != null, "the folder's file is shown under it");
-            var box = TreeItemOf("kiwi-box")!;
-            if (box.TryGetCurrentPattern(SelectionItemPattern.Pattern, out var sel)) notes.Add($"kiwi-box selected: {((SelectionItemPattern)sel).Current.IsSelected}");
-            notes.Add($"focus after the folder: {FocusInfo(window)}");
+            // Selected, and the keyboard on it (FolderPage.RevealFolder waits for the row to be made).
+            bool Selected() => TreeItemOf("kiwi-box") is { } row && row.TryGetCurrentPattern(SelectionItemPattern.Pattern, out var sel) && ((SelectionItemPattern)sel).Current.IsSelected;
+            Check(await Eventually(async () => { await Task.CompletedTask; return Selected(); }, 5000), "the folder clicked in the results is the tree's selected row");
+            bool Focused()
+            {
+                try { return TreeItemOf("kiwi-box") is { } row && AutomationElement.FocusedElement is { } focus && Automation.Compare(focus, row); }
+                catch (ElementNotAvailableException) { return false; }
+            }
+            Check(await Eventually(async () => { await Task.CompletedTask; return Focused(); }, 5000), $"the keyboard is on the folder's row in the tree ({FocusInfo(window)}, focused: '{AutomationElement.FocusedElement?.Current.Name}')");
+            // The search pane closed for the folder: the next search opens it again, empty (the step below does that).
+            Check(FindIn(window, "SearchTextBox") == null, "the search pane is closed after a folder result");
             Check(SamePath((string?)(await FolderState(c, windowId))["root"], root), "the tree's root did not change");
 
             // A content result: the file opens.
