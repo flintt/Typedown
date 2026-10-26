@@ -159,6 +159,10 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
 - `diagram-picture-check.js` — diagrams rendered as pictures (RenderXhtml with diagramsAsPictures): a 9000×9000
   diagram still becomes a picture (drawn at twice its size it passed the canvas limits and came out empty), and each
   picture's text is the diagram's kind and the start of its source.
+- `diagram-copy-check.js` — a diagram's copy button (Mermaid, flowchart, sequence, Vega-Lite, failed ones), in the dark
+  theme, visual and reading mode: shown on hover, not while the source is edited; a click sends `CopyDiagram` with
+  the fenced Markdown and a PNG twice the export picture's width, opaque and light; a failed diagram sends its code
+  only; text, change reports, caret and selection unchanged. `DUMP=<dir>` writes the PNGs there.
 - `table-backspace-check.js` — Backspace in a table cell stays in that cell: one too many after emptying a cell went on
   into the cell before (or out of the table into the heading above), deleted its text, and the typing landed there. An
   empty table still becomes a paragraph with Backspace in its first cell.
