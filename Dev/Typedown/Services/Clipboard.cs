@@ -107,6 +107,39 @@ namespace Typedown.Services
             SetContent(dataPackage);
         }
 
+        // A bitmap (Windows offers it as CF_BITMAP, CF_DIB and CF_DIBV5: what Word, OneNote, mail and the chat programs
+        // paste as a picture) and the text (what Notepad and code editors paste), in one item. No HTML with the picture in
+        // it: a program that takes HTML before a bitmap (Word does) would then depend on reading a data: picture there.
+        // Flushed, so the picture stays on the clipboard when the app is closed and another program asking for it does
+        // not wait on this window to draw it.
+        public async Task SetTextAndPngAsync(string text, byte[] png)
+        {
+            var dataPackage = new global::Windows.ApplicationModel.DataTransfer.DataPackage();
+            if (!string.IsNullOrEmpty(text)) dataPackage.SetText(text);
+            if (png is { Length: > 0 })
+            {
+                var stream = new global::Windows.Storage.Streams.InMemoryRandomAccessStream();
+                using (var writer = new global::Windows.Storage.Streams.DataWriter(stream.GetOutputStreamAt(0)))
+                {
+                    writer.WriteBytes(png);
+                    await writer.StoreAsync();
+                    await writer.FlushAsync();
+                    writer.DetachStream();
+                }
+                stream.Seek(0);
+                dataPackage.SetBitmap(global::Windows.Storage.Streams.RandomAccessStreamReference.CreateFromStream(stream));
+            }
+            SetContent(dataPackage);
+            try
+            {
+                global::Windows.ApplicationModel.DataTransfer.Clipboard.Flush();
+            }
+            catch (Exception ex)
+            {
+                Core.Utilities.Log.Debug($"clipboard: not flushed ({ex.HResult:x8}); the copy stays while the app runs");
+            }
+        }
+
         public void SetText(string text, TextDataFormat format)
         {
             var dataPackage = new global::Windows.ApplicationModel.DataTransfer.DataPackage();

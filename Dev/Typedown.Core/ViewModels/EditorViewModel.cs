@@ -149,6 +149,7 @@ namespace Typedown.Core.ViewModels
             EventCenter.GetObservable<EditorEventArgs>("PageError").Subscribe(x => Log.Debug($"page error: {x.Args}"));
             RemoteInvoke.Handle("GetSettings", GetSettings);
             RemoteInvoke.Handle<JToken>("SetClipboard", OnSetClipboard);
+            RemoteInvoke.Handle<JToken, bool>("CopyDiagram", OnCopyDiagram);
             Settings.WhenPropertyChanged(nameof(Settings.AutoSave)).Subscribe(_ => Settings_AutoSaveChanged(Settings.AutoSave));
             // A selection belongs to the mode it was made in: the next mode reports its own.
             Settings.WhenPropertyChanged(nameof(Settings.ReadOnly)).Subscribe(_ => TextSelected = Selected = false);
@@ -1494,6 +1495,32 @@ namespace Typedown.Core.ViewModels
         // What the app last put on the clipboard as text: pasted back into any of its windows, the copy is that text (the
         // Markdown) as it always was, not its HTML turned back into Markdown.
         private static string lastCopiedText;
+
+        /// <summary>
+        /// A diagram's copy button (the page's ContentState.copyDiagram): its picture, a PNG in base64 (none for a diagram
+        /// that could not be drawn), and its Markdown fenced with its language, as one clipboard item. True once written.
+        /// </summary>
+        public async Task<bool> OnCopyDiagram(JToken arg)
+        {
+            var text = arg?["text"]?.ToString() ?? "";
+            var base64 = arg?["png"]?.Type == JTokenType.String ? arg["png"].ToString() : null;
+            try
+            {
+                var png = string.IsNullOrEmpty(base64) ? null : Convert.FromBase64String(base64);
+                await Clipboard.SetTextAndPngAsync(text, png);
+                // Pasted back into the app it is the Markdown, as any copy of ours is (Paste).
+                lastCopiedText = text;
+                pendingCopyHtml = null;
+                Log.Debug($"copy diagram: {text.Length} characters of text, {(png == null ? "no picture" : $"a {png.Length}-byte picture")}");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"copy diagram: the clipboard could not be written: {ex}");
+                _ = AppContentDialog.Create(Locale.GetString("Error"), ex.Message, Locale.GetString("Ok")).ShowAsync(AppViewModel.XamlRoot);
+                return false;
+            }
+        }
 
         public void OnSetClipboard(JToken arg)
         {
