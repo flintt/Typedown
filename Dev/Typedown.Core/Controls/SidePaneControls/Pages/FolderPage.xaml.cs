@@ -376,18 +376,28 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
                 Log.Debug($"FolderPage.RevealFolder: '{path}' {(item == null ? "not under the root" : "shown")}");
                 if (item == null) return;
                 item.IsExpanded = true;
-                item.IsSelected = true;
-                // The row is made once the tree has laid out the rows just opened.
-                for (var attempt = 0; attempt < 20; attempt++)
+                // Selected through its row, once the tree has made it: a row the tree makes takes the tree's own
+                // selection, and the two-way binding then wrote false back to an item selected before (FQ01, w10:
+                // the folder shown open, not selected, the keyboard elsewhere). Files are put right as their rows
+                // load (OnTreeViewItemLoaded); a folder is not, so this waits for its row and checks it held.
+                muxc.TreeViewItem row = null;
+                var focused = false;
+                for (var attempt = 0; attempt < 60; attempt++)
                 {
-                    if (TreeView.ContainerFromItem(item) is muxc.TreeViewItem row)
+                    if (row == null && TreeView.ContainerFromItem(item) is muxc.TreeViewItem made)
                     {
+                        row = made;
                         row.StartBringIntoView();
-                        row.Focus(FocusState.Programmatic);
-                        return;
+                    }
+                    if (row != null)
+                    {
+                        if (!row.IsSelected) row.IsSelected = true;
+                        focused = FocusManager.GetFocusedElement(XamlRoot) == row || row.Focus(FocusState.Programmatic) && FocusManager.GetFocusedElement(XamlRoot) == row;
+                        if (row.IsSelected && item.IsSelected && focused) break;
                     }
                     await System.Threading.Tasks.Task.Delay(50);
                 }
+                Log.Debug($"FolderPage.RevealFolder: row {(row == null ? "never made" : "made")}, selected {row?.IsSelected == true && item.IsSelected}, focused {focused}");
             }
             catch (Exception ex)
             {
