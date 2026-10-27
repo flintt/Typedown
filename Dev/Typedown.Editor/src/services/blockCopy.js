@@ -111,6 +111,21 @@ export const mathPicture = async (tex) => {
   return canvas.toDataURL('image/png').slice('data:image/png;base64,'.length)
 }
 
+/**
+ * A display formula as MathML (KaTeX's, with its TeX as an annotation): for Word, which makes an equation it can edit of
+ * MathML put on the clipboard under a format of its name (the host's SetTextAndPngAsync); the picture and the text stay
+ * for every other program. Null when KaTeX cannot read the formula.
+ */
+export const mathMl = (tex) => {
+  try {
+    const html = katex.renderToString(texColors(tex), { displayMode: true, output: 'mathml' })
+    const math = html.match(/<math[\s\S]*<\/math>/)
+    return math ? math[0] : null
+  } catch (e) {
+    return null
+  }
+}
+
 const ALIGN = /text-align:\s*(left|center|right)/i
 
 /**

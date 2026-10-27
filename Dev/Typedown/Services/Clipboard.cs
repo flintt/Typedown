@@ -112,26 +112,25 @@ namespace Typedown.Services
         // it: a program that takes HTML before a bitmap (Word does) would then depend on reading a data: picture there.
         // Flushed, so the picture stays on the clipboard when the app is closed and another program asking for it does
         // not wait on this window to draw it.
-        public async Task SetTextAndPngAsync(string text, byte[] png)
+        public async Task SetTextAndPngAsync(string text, byte[] png, string mathml = null)
         {
             var dataPackage = new global::Windows.ApplicationModel.DataTransfer.DataPackage();
             if (!string.IsNullOrEmpty(text)) dataPackage.SetText(text);
             if (png is { Length: > 0 })
             {
-                var stream = new global::Windows.Storage.Streams.InMemoryRandomAccessStream();
-                using (var writer = new global::Windows.Storage.Streams.DataWriter(stream.GetOutputStreamAt(0)))
-                {
-                    writer.WriteBytes(png);
-                    await writer.StoreAsync();
-                    await writer.FlushAsync();
-                    writer.DetachStream();
-                }
-                stream.Seek(0);
+                var stream = await StreamOf(png);
                 dataPackage.SetBitmap(global::Windows.Storage.Streams.RandomAccessStreamReference.CreateFromStream(stream));
                 // Word takes plain text over a bitmap, and pasted the diagram's code; it takes RTF over both, so the picture
                 // goes in as RTF too (Word, WordPad, Outlook). Places with text only still get the code.
                 var rtf = PngRtf(png);
                 if (rtf != null) dataPackage.SetRtf(rtf);
+            }
+            // A formula's MathML (UTF-8, ended by a zero byte) under the names Office and the MathML programs use: Word
+            // makes an equation of it, an editable one; the rest keep the picture or the text.
+            if (!string.IsNullOrEmpty(mathml))
+            {
+                var bytes = System.Text.Encoding.UTF8.GetBytes(mathml + "\0");
+                foreach (var format in MathMLFormats) dataPackage.SetData(format, await StreamOf(bytes));
             }
             SetContent(dataPackage);
             try
@@ -142,6 +141,23 @@ namespace Typedown.Services
             {
                 Core.Utilities.Log.Debug($"clipboard: not flushed ({ex.HResult:x8}); the copy stays while the app runs");
             }
+        }
+
+        /// <summary>The clipboard formats a formula's MathML goes under (SetTextAndPngAsync).</summary>
+        internal static readonly string[] MathMLFormats = { "MathML", "MathML Presentation", "application/mathml+xml" };
+
+        private static async Task<global::Windows.Storage.Streams.InMemoryRandomAccessStream> StreamOf(byte[] bytes)
+        {
+            var stream = new global::Windows.Storage.Streams.InMemoryRandomAccessStream();
+            using (var writer = new global::Windows.Storage.Streams.DataWriter(stream.GetOutputStreamAt(0)))
+            {
+                writer.WriteBytes(bytes);
+                await writer.StoreAsync();
+                await writer.FlushAsync();
+                writer.DetachStream();
+            }
+            stream.Seek(0);
+            return stream;
         }
 
         /// <summary>

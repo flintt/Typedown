@@ -6,7 +6,7 @@ import { CLASS_OR_ID } from '../config'
 import ExportMarkdown from '../utils/exportMarkdown'
 import remote from 'services/remote/common'
 import { diagramPicture } from 'services/diagramPicture'
-import { mathPicture, tableHtml } from 'services/blockCopy'
+import { mathMl, mathPicture, tableHtml } from 'services/blockCopy'
 import { blockSource } from 'services/sourceMerge'
 
 const CODE_UPDATE_REP = /^`{3,}(.*)/
@@ -199,8 +199,8 @@ const codeBlockCtrl = ContentState => {
    * the document saves it - for a text editor, and pasted back here it is the block again - and, for the programs that
    * take something richer (Word, OneNote, mail, chat, Excel):
    * - a diagram or a formula: its picture, drawn as a format that takes no SVG gets it - the light theme on white at
-   *   twice the size (services/diagramPicture), a formula black on white (services/blockCopy). One that could not be
-   *   drawn is copied as its text only.
+   *   twice the size (services/diagramPicture), a formula black on white (services/blockCopy), and a formula as MathML
+   *   too, which Word makes an editable equation of. One that could not be drawn is copied as its text only.
    * - a table: its HTML (services/blockCopy), which they paste as a table, with its header row, cell formatting and
    *   column alignment.
    * The host writes the clipboard (CopyBlock). Nothing in the document, its history or the selection changes. True once
@@ -221,7 +221,7 @@ const codeBlockCtrl = ContentState => {
     } catch (e) {
       console.log('copy block: as exported', e)
     }
-    const message = { text, png: null, html: null }
+    const message = { text, png: null, html: null, mathml: null }
     if (block.functionType === 'table') {
       try {
         message.html = tableHtml(exported + '\n', this.muya.options)
@@ -236,7 +236,10 @@ const codeBlockCtrl = ContentState => {
         try {
           if (block.functionType === 'multiplemath') {
             const code = block.children[0] && block.children[0].children[0]
-            message.png = await mathPicture(code ? code.children.map(line => line.text).join('\n') : '')
+            const tex = code ? code.children.map(line => line.text).join('\n') : ''
+            message.png = await mathPicture(tex)
+            // With the picture, the formula as MathML: Word makes an equation of it (an editable one).
+            message.mathml = mathMl(tex)
           } else {
             // Mermaid is one global the editor's own drawing also uses: not both at once.
             await this.stateRender.mermaidRenderQueue.catch(() => {})

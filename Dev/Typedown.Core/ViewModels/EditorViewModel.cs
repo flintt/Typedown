@@ -1543,17 +1543,18 @@ namespace Typedown.Core.ViewModels
             var text = arg?["text"]?.ToString() ?? "";
             var base64 = arg?["png"]?.Type == JTokenType.String ? arg["png"].ToString() : null;
             var html = arg?["html"]?.Type == JTokenType.String ? arg["html"].ToString() : null;
+            var mathml = arg?["mathml"]?.Type == JTokenType.String ? arg["mathml"].ToString() : null;
             try
             {
                 var png = string.IsNullOrEmpty(base64) ? null : Convert.FromBase64String(base64);
                 // A table: CF_HTML (Word and Excel paste it as a table) and the text. A picture: a bitmap, RTF with the
-                // picture and the text (SetTextAndPngAsync).
+                // picture and the text (SetTextAndPngAsync), and a formula's MathML for Word's equations.
                 if (png == null && !string.IsNullOrEmpty(html)) Clipboard.SetTextAndHtml(text, html);
-                else await Clipboard.SetTextAndPngAsync(text, png);
+                else await Clipboard.SetTextAndPngAsync(text, png, png != null ? mathml : null);
                 // Pasted back into the app it is the Markdown, as any copy of ours is (Paste).
                 lastCopiedText = text;
                 pendingCopyHtml = null;
-                Log.Debug($"copy block: {text.Length} characters of text, {(png != null ? $"a {png.Length}-byte picture" : !string.IsNullOrEmpty(html) ? $"{html.Length} characters of HTML" : "nothing else")}");
+                Log.Debug($"copy block: {text.Length} characters of text, {(png != null ? $"a {png.Length}-byte picture{(string.IsNullOrEmpty(mathml) ? "" : $", {mathml.Length} characters of MathML")}" : !string.IsNullOrEmpty(html) ? $"{html.Length} characters of HTML" : "nothing else")}");
                 return true;
             }
             catch (Exception ex)
