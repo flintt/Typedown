@@ -74,6 +74,10 @@ internal static partial class Program
         {
             await ClickEditorTextOnce(c, windowId, window, "kiwi one");
             await Task.Delay(300);
+            // The caret at the start of the document: the bar's search starts at the first match at or after the caret (as it
+            // always has), and the click above leaves it inside "The kiwi one", past that kiwi - the bar then said 2 of 6.
+            Chord("Ctrl+Home");
+            await Task.Delay(300);
             Chord("Ctrl+F");
             Check(await Eventually(async () => { await Task.CompletedTask; return FocusedAutomationId() == "TextBoxSearch"; }, 3000), $"Ctrl+F puts the keyboard in the find bar's box ({FocusInfo(window)})");
             TypeText("kiwi");
