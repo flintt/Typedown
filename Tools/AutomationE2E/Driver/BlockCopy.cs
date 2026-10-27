@@ -26,8 +26,8 @@ internal static partial class Program
     /// that before all of them),
     /// and the formula's Markdown as the document has it ($$ ... $$) as text. The document, its revision and its saved
     /// state stay as they were and the formula's source is not opened. Where Word is installed the copy pastes as one
-    /// picture or one equation (the app puts the formula's MathML there too, under "MathML", "MathML Presentation" and
-    /// "application/mathml+xml": the equation is what is wanted). Pasted back into the document it is the formula again.
+    /// equation Word can edit, not a picture (the app puts the formula's MathML there in the shape Word writes it itself,
+    /// under "MathML" and "MathML Presentation"; a picture failed the reader, 2026-10-28). Pasted back into the document it is the formula again.
     /// Then, for the record only (ProbeWordMathML): what Word puts on the clipboard for an equation of its own, and what
     /// it makes of each form the app could put there.
     /// </summary>
@@ -80,11 +80,12 @@ internal static partial class Program
             Check(picture is { white: >= 0.6 and < 1 }, "the picture is mostly white with ink on it: black on white, in the dark theme too");
             Check(ClipboardHasFormat("Rich Text Format"), "the picture is there as RTF too (Word takes it before the text)");
             Check(ClipboardHtml() == null, "no HTML on the clipboard (Word would take it before the picture)");
-            // The formula's MathML, for Word's editable equations, under the names Office and the MathML programs use.
+            // The formula's MathML, for Word's editable equations, as Word writes it: XML declaration, mml: prefix, no TeX annotation.
             var ours = CaptureClipboard();
             foreach (var f in ours.Where(f => f.name.Contains("MathML", StringComparison.OrdinalIgnoreCase)))
                 notes.Add($"ours: {DescribeFormat(f)}");
-            Check(ours.Any(f => f.name == "MathML" && Encoding.UTF8.GetString(f.bytes).Contains("<math")), "the clipboard holds the formula's MathML (format \"MathML\")");
+            Check(ours.Any(f => f.name == "MathML" && Encoding.UTF8.GetString(f.bytes) is var m && m.StartsWith("<?xml") && m.Contains("<mml:math") && !m.Contains("annotation")),
+                "the clipboard holds the formula's MathML as Word writes it (format \"MathML\": XML declaration, mml: prefix, no annotation)");
             notes.Add("the button shows it copied: " + Eval(await c.Call("test.editor.eval", new { windowId, script = $"String({figure}.querySelector('.ag-diagram-copy').classList.contains('ag-code-copied'))" })));
             Check(Eval(await c.Call("test.editor.eval", new { windowId, script = $"String({figure}.classList.contains('ag-active'))" })) == "false", "the formula's source was not opened for editing");
 
@@ -92,7 +93,7 @@ internal static partial class Program
             {
                 notes.Add($"Word: {word.shapes} picture(s), {word.media} embedded, {word.equations} equation(s); {word.detail}");
                 notes.Add(word.equations >= 1 ? "Word made an EQUATION of the copy (the MathML was taken)" : "Word made a PICTURE of the copy (the MathML was not taken)");
-                Check(word.equations == 1 && word.shapes == 0 || word.equations == 0 && word.shapes == 1 && word.media == 1, "Word: the copy pastes as one picture or one equation");
+                Check(word.equations == 1 && word.shapes == 0, "Word: the copy pastes as one equation Word can edit, not a picture");
             }
             else
                 notes.Add("Word: not installed, not tried");

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Threading.Tasks;
 using Typedown.Core.Interfaces;
 using Typedown.Utilities;
@@ -125,11 +126,14 @@ namespace Typedown.Services
                 var rtf = PngRtf(png);
                 if (rtf != null) dataPackage.SetRtf(rtf);
             }
-            // A formula's MathML (UTF-8, ended by a zero byte) under the names Office and the MathML programs use: Word
-            // makes an equation of it, an editable one; the rest keep the picture or the text.
-            if (!string.IsNullOrEmpty(mathml))
+            // A formula's MathML in the shape Word writes it itself, under its two names: Word makes an equation of it, an
+            // editable one; the rest keep the picture or the text. KaTeX's MathML as it was (no prefix, a <semantics> with
+            // the TeX, ended by a zero byte, also as application/mathml+xml) Word did not take and pasted the picture
+            // (2026-10-28, CB01's probe: Word's own bytes put back made an equation, ours under each name did not).
+            var wordMathML = WordMathML(mathml);
+            if (wordMathML != null)
             {
-                var bytes = System.Text.Encoding.UTF8.GetBytes(mathml + "\0");
+                var bytes = System.Text.Encoding.UTF8.GetBytes(wordMathML);
                 foreach (var format in MathMLFormats) dataPackage.SetData(format, await StreamOf(bytes));
             }
             SetContent(dataPackage);
@@ -143,8 +147,49 @@ namespace Typedown.Services
             }
         }
 
-        /// <summary>The clipboard formats a formula's MathML goes under (SetTextAndPngAsync).</summary>
-        internal static readonly string[] MathMLFormats = { "MathML", "MathML Presentation", "application/mathml+xml" };
+        /// <summary>The clipboard formats a formula's MathML goes under (SetTextAndPngAsync): the two Word puts an equation under.</summary>
+        internal static readonly string[] MathMLFormats = { "MathML", "MathML Presentation" };
+
+        private static readonly System.Xml.Linq.XNamespace MathMLNs = "http://www.w3.org/1998/Math/MathML";
+
+        /// <summary>
+        /// MathML as Word writes it on the clipboard for an equation: an XML declaration, every element in the mml: prefix
+        /// (with Office's m: namespace declared too), the root without attributes, no &lt;semantics&gt; wrapper and no
+        /// annotations; no zero byte at the end. Null when it is empty or not MathML.
+        /// </summary>
+        internal static string WordMathML(string mathml)
+        {
+            if (string.IsNullOrWhiteSpace(mathml)) return null;
+            System.Xml.Linq.XElement math;
+            try { math = System.Xml.Linq.XElement.Parse(mathml); }
+            catch (System.Xml.XmlException) { return null; }
+            if (math.Name != MathMLNs + "math") return null;
+            // <semantics>: its first child is the formula, the rest its annotations (KaTeX's TeX).
+            var content = math.Elements().ToList();
+            if (content.Count == 1 && content[0].Name == MathMLNs + "semantics")
+                content = content[0].Elements().Take(1).ToList();
+            content.RemoveAll(e => e.Name == MathMLNs + "annotation" || e.Name == MathMLNs + "annotation-xml");
+            var root = new System.Xml.Linq.XElement(MathMLNs + "math",
+                new System.Xml.Linq.XAttribute(System.Xml.Linq.XNamespace.Xmlns + "mml", MathMLNs.NamespaceName),
+                new System.Xml.Linq.XAttribute(System.Xml.Linq.XNamespace.Xmlns + "m", "http://schemas.openxmlformats.org/officeDocument/2006/math"),
+                content.Select(Unannotated));
+            return "<?xml version=\"1.0\"?>\r\n" + root.ToString(System.Xml.Linq.SaveOptions.DisableFormatting);
+        }
+
+        // A copy of the element without annotations below it, in the MathML namespace (prefixed by the root's mml:).
+        private static System.Xml.Linq.XElement Unannotated(System.Xml.Linq.XElement element)
+        {
+            var copy = new System.Xml.Linq.XElement(element.Name, element.Attributes().Where(a => !a.IsNamespaceDeclaration));
+            foreach (var node in element.Nodes())
+            {
+                if (node is System.Xml.Linq.XElement child)
+                {
+                    if (child.Name != MathMLNs + "annotation" && child.Name != MathMLNs + "annotation-xml") copy.Add(Unannotated(child));
+                }
+                else if (node is System.Xml.Linq.XText text) copy.Add(new System.Xml.Linq.XText(text.Value));
+            }
+            return copy;
+        }
 
         private static async Task<global::Windows.Storage.Streams.InMemoryRandomAccessStream> StreamOf(byte[] bytes)
         {
