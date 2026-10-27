@@ -70,6 +70,8 @@ import { KeptDocuments, blockCaretKey, caretKey, isForward, markedAt, sameLines 
 import { CURSOR_ANCHOR_DNA, CURSOR_FOCUS_DNA } from 'components/Muya/lib/config'
 import 'components/Muya/themes/default.css'
 import { noteScroll, recentScrolls } from 'services/scrollWriters'
+import { FIND_EDIT_REFRESH_MS, findResultsOpen, noteFindChange, setFindProvider } from 'services/findResults'
+import { previewOf } from 'services/findPreview'
 
 interface IMuyaEditor {
     markdown: string
@@ -352,6 +354,8 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             const selection = opt.selection.start ? opt.selection : undefined
             // A match not drawn yet is drawn a moment after the typing stops (Muya.search): then put in the window.
             editor.search(value, { ...opt, selection }, () => scrollToElementIfInvisible('.ag-highlight'))
+            // The bar's count and the side pane's results list (services/findResults).
+            noteFindChange()
         }
     }, [editor, scrollToElementIfInvisible])
 
@@ -475,11 +479,12 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         }
         const events = ['keydown', 'mousedown', 'paste', 'cut', 'copy', 'compositionstart', 'dragstart', 'drop', 'contextmenu']
         for (const type of events) document.addEventListener(type, finish, true)
-        // A search, a step to its next match and the search bar opening or closing draw only the blocks they change, and the
-        // match chosen first where it is not drawn yet (ContentState.renderSearch).
+        // A search, a step to its next match (or to one chosen in the results list) and the search bar or its list opening or
+        // closing draw only the blocks they change, and the match chosen first where it is not drawn yet
+        // (ContentState.renderSearch).
         const passive = new Set(['LoadFile', 'SetMarkdown', 'HoldInput', 'ReleaseInput', 'ThemeChanged', 'SettingsChanged', 'LanguageChanged',
             'OnScroll', 'RestoreScroll', 'FlushContent', 'QueryNormalization', 'QueryEditorStyle', 'AwaitPresentation',
-            'Search', 'Find', 'SearchOpenChange'])
+            'Search', 'Find', 'SearchOpenChange', 'FindActivate', 'FindResultsOpen'])
         const hook = (name: string) => { if (muya.renderPending && !passive.has(name) && !name.startsWith('invoke_')) muya.completeRender() }
         beforeHostMessage.add(hook)
         return () => {
@@ -737,7 +742,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         let over = false
         let told = false
         // Anything the host asks for but these may move the page itself (the outline's jump, its scroll bar dragged).
-        const quiet = new Set(['FlushContent', 'QueryNormalization', 'QueryEditorStyle', 'AwaitPresentation', 'Find', 'Search'])
+        const quiet = new Set(['FlushContent', 'QueryNormalization', 'QueryEditorStyle', 'AwaitPresentation', 'Find', 'Search', 'FindActivate', 'FindResultsOpen'])
         const hostMessage = (name: string) => { if (!quiet.has(name) && !name.startsWith('invoke_')) stop() }
         const stop = () => {
             over = true
@@ -784,12 +789,80 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         scrollToElementIfInvisible('.ag-highlight')
         holdMatchInWindow()
         noteSearch('Find', came)
+        noteFindChange()
     }), [editor, scrollToElementIfInvisible, runPendingSearch, noteSearch, search, holdMatchInWindow]);
+
+    // The find bar's results list (services/findResults): the matches of the bar's search as they are in the document's
+    // model - previews from the blocks' text, never from what is drawn (a long document is drawn a part at a time) - and an
+    // entry chosen there selected as a step to it would go (Find), drawn first where it is not drawn yet.
+    useEffect(() => {
+        if (!editor) return
+        const contentState = (editor as any).contentState
+        let blocks = new Map<string, any>()
+        const off = setFindProvider({
+            begin: () => {
+                blocks = new Map()
+                const travel = (list: any[]) => { for (const b of list) { blocks.set(b.key, b); if (b.children?.length) travel(b.children) } }
+                travel(contentState.blocks)
+            },
+            state: () => {
+                const { matches, index } = contentState.searchMatches
+                return { total: matches.length, index: matches.length ? index : -1 }
+            },
+            preview: (i: number) => {
+                const m = contentState.searchMatches.matches[i]
+                const block = m && blocks.get(m.key)
+                if (!block || typeof block.text !== 'string') return { text: m?.match ?? '', start: 0, end: (m?.match ?? '').length }
+                const type = block.functionType
+                const raw = type === 'codeContent' || type === 'languageInput' || type === 'footnoteInput' || type === 'thematicBreakLine'
+                return previewOf(block.text, m.start, m.end, { raw, heading: type === 'atxLine' })
+            },
+            token: (i: number) => contentState.searchMatches.matches[i],
+            activate: (i: number, token: any) => {
+                runPendingSearch()
+                const last = lastSearchRef.current
+                if (last?.value && contentState.searchMatches.value !== last.value) search(last)
+                const { matches } = contentState.searchMatches
+                let k = token ? matches.indexOf(token) : -1
+                if (k < 0 && token) k = matches.findIndex((m: any) => m.key === token.key && m.start === token.start)
+                if (k < 0) k = i
+                if (!(k >= 0 && k < matches.length)) return
+                const came = performance.now()
+                // Selected in visual mode; reading mode has no caret: there it is put in the window and marked only.
+                editor.selectMatch(k, !optionsRef.current?.readOnly)
+                scrollToElementIfInvisible('.ag-highlight')
+                holdMatchInWindow()
+                noteSearch('FindActivate', came)
+                noteFindChange()
+            }
+        })
+        return off
+    }, [editor, runPendingSearch, search, scrollToElementIfInvisible, holdMatchInWindow, noteSearch])
+
+    // An edit while the results list is open: the matches found again once the typing stops (not during a composition),
+    // the caret left where it is (Muya.refreshSearch).
+    useEffect(() => {
+        if (!editor) return
+        let timer = 0
+        const refresh = () => {
+            timer = 0
+            if (!findResultsOpen()) return
+            if ((editor as any).keyboard?.isComposed) { timer = window.setTimeout(refresh, FIND_EDIT_REFRESH_MS); return }
+            if ((editor as any).refreshSearch()) noteFindChange()
+        }
+        const off = editor.on('contentChange', () => {
+            if (!findResultsOpen()) return
+            window.clearTimeout(timer)
+            timer = window.setTimeout(refresh, FIND_EDIT_REFRESH_MS)
+        })
+        return () => { window.clearTimeout(timer); if (typeof off === 'function') off() }
+    }, [editor])
 
     useEffect(() => transport.addListener<{ value: string, opt: unknown }>('Replace', ({ value, opt }) => {
         runPendingSearch()
         markEdited(shownRef)
         editor?.replace(value, opt)
+        noteFindChange()
     }), [editor, scrollToElement, runPendingSearch]);
 
     useEffect(() => {
@@ -811,6 +884,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             contentState.renderSearch(before, true);
             props.onSearchArgChange(undefined)
             lastSearchRef.current = undefined
+            noteFindChange()
             // Back from the search with the keyboard in the page: the editor has it, not the body.
             if (document.hasFocus()) restoreEditorFocus(editor, loadHoldingRef.current)
         }

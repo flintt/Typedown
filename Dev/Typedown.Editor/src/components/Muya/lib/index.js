@@ -726,6 +726,52 @@ class Muya {
   }
 
   /**
+   * Match `index` of the last search chosen (the find bar's results list), as a step to it (find) goes there - its block
+   * drawn first where a long document is not drawn there yet (ContentState.renderSearch) - and, with `select`, its text
+   * selected (not in reading mode, which has no caret).
+   */
+  selectMatch(index, select = true) {
+    const { contentState } = this
+    const { matches } = contentState.searchMatches
+    if (!(index >= 0 && index < matches.length)) return contentState.searchMatches
+    const before = contentState.searchKeys()
+    contentState.searchMatches.index = index
+    contentState.setCursorToHighlight()
+    contentState.renderSearch(before, select, null, true)
+    return contentState.searchMatches
+  }
+
+  /**
+   * The last search's matches found again after an edit (ContentState.refreshSearch), the caret left where it is; only
+   * the blocks whose marks changed are drawn again. False when there is no search.
+   */
+  refreshSearch() {
+    const { contentState } = this
+    const changed = contentState.refreshSearch()
+    if (!changed) return false
+    if (!changed.size) return true
+    let caretTop = null
+    try {
+      const { start } = contentState.cursor || {}
+      caretTop = start ? contentState.findOutMostBlock(contentState.getBlock(start.key)) : null
+    } catch (err) {
+      caretTop = null
+    }
+    const tops = new Set()
+    for (const key of changed) {
+      const block = contentState.getBlock(key)
+      if (block) tops.add(contentState.findOutMostBlock(block))
+    }
+    const { matches, index } = contentState.searchMatches
+    matches.forEach((m, i) => { m.active = i === index })
+    contentState.stateRender.redrawBlocks([...tops])
+    // The caret's block drawn again loses the selection on the page: put back where the model has it.
+    if (caretTop && tops.has(caretTop) && !this.options.readOnly && this.container.contains(document.activeElement)) contentState.setCursor()
+    contentState.postRender()
+    return true
+  }
+
+  /**
    * Ctrl+End or Ctrl+Home (`end` false) while a document is drawn a part at a time and that end of it is not drawn yet:
    * the caret goes there and the drawing starts again from there (StateRender.jumpProgressive), rather than the whole
    * document being drawn first (LT01, a 1.5 MB document of raw HTML: 7 s on w10). False where the browser can do it as

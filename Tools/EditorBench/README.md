@@ -270,3 +270,13 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
 - `search-race-check.js` — Enter in the find bar (`Find`) right behind the last letters (`Search`), all in one task after
   a shorter prefix was searched on its own: the step works on the matches of the text in the bar. The prefix's search was
   done again after the last one (its React effect, flushed late), and the step went to one of its matches (w10, LT01).
+- `find-list-check.js [--only previews,cap,activate,modes,edit,long]` — the find bar's results list ("Search in document"
+  in the side pane), the page's half (services/findResults.ts, services/findPreview.ts): the previews of matches in a
+  heading, a paragraph (bold, a link's text, a link's address), a list, a table and a code block - plain text, the match
+  marked, 40 characters of context each side; the exact count and the 500-entry cap; an entry chosen (`FindActivate`)
+  selects exactly its match and makes it the bar's current one (`FindState`) in visual, source and reading mode, also
+  from a list sent before the search narrowed; typing a match in while the list is open sends it again with the caret
+  where it was; a new document sends its own. On `gen-lt01.js`'s document right after opening: the list within 1 s, the
+  last entry (block 2918 of 2928, not drawn yet) in the window and selected within 1 s, no frame gap over 200 ms. This
+  machine's own drawing of that document comes near 200 ms when it is busy (lt01-check's open shows the same, and the
+  same steps with the list closed do too): compare with lt01-check run alongside.
