@@ -87,6 +87,8 @@ In visual editing, typing Markdown syntax turns into formatting right away: `## 
 
 You can change every shortcut under **Settings → General → Shortcuts**.
 
+**Search in document**: the find bar shows which match you are on and how many there are. Its "Show all results" button opens the side bar's Search in document page: the number of matches and the text around each one (up to 500; with more, it asks you to keep typing). Click one, or pick it with the arrow keys and press Enter, to go there with the match selected. The page's close button takes the side bar back to the page it was on (or closes it again if it was closed); closing the find bar closes the page too.
+
 The **Paragraph** menu also lets you insert charts (Flow Chart, Sequence Diagram, Mermaid, PlantUML Diagram, Vega Chart), footnotes, a horizontal line, YAML front matter and more.
 
 ---
