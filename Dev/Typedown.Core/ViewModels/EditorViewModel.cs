@@ -37,6 +37,11 @@ namespace Typedown.Core.ViewModels
         public MenuState MenuState { get; set; }
         public ParagraphState ParagraphState { get; set; }
         /// <summary>
+        /// Whether the last right-click in the visual editor or reading mode was in a table (the page's ContextMenuTarget,
+        /// sent as the button goes down - before the menu opens, which the caret's report is not): the menu's Copy table.
+        /// </summary>
+        public bool ContextMenuInTable { get; set; }
+        /// <summary>
         /// The outline tree. Replaced whole when a different document arrives, updated in place when the
         /// same document changes: the tree control is bound to it, and taking a document's outline apart
         /// row by row under that control while a second document's arrived is what crashed the process —
@@ -122,6 +127,11 @@ namespace Typedown.Core.ViewModels
             EventCenter.GetObservable<EditorEventArgs>("CursorChange").Subscribe(x => OnCursorChange(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("OnScroll").Subscribe(x => OnScroll(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("SelectionChange").Subscribe(x => OnSelectionChange(x.Args));
+            EventCenter.GetObservable<EditorEventArgs>("ContextMenuTarget").Subscribe(x =>
+            {
+                ContextMenuInTable = x.Args?["table"]?.Value<bool>() ?? false;
+                Log.Debug($"context menu: right-click {(ContextMenuInTable ? "in" : "not in")} a table");
+            });
             EventCenter.GetObservable<EditorEventArgs>("CodeMirrorSelectionChange").Subscribe(x => OnCodeMirrorSelectionChange(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("ReadingSelectionChange").Subscribe(x => OnReadingSelectionChange(x.Args));
             // A paste the page caught from the browser (its own would put the clipboard's HTML into the document as is).

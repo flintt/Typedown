@@ -646,6 +646,24 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         (editor as any)?.contentState.copyTableAtMenu()
     }), [editor]);
 
+    // What a right-click is on, told the host as the button goes down: the host opens its context menu as the button
+    // comes up, before the caret the click moved has been reported (SelectionChange), and its Copy table shows by this
+    // (EditorViewModel.ContextMenuInTable). The page keeps the element for Copy table (ContentState.copyTableAtMenu).
+    useEffect(() => {
+        if (!editor) return
+        const down = (event: MouseEvent) => {
+            if (event.button !== 2) return
+            const target = event.target as Element | null
+            const contentState = (editor as any).contentState
+            if (contentState) contentState.contextMenuTarget = target
+            const report = { table: !!target?.closest?.('#ag-editor-id figure[data-role="TABLE"]') };
+            (window as any).__typedownContextMenuTarget = report
+            transport.postMessage('ContextMenuTarget', report)
+        }
+        document.addEventListener('mousedown', down, true)
+        return () => document.removeEventListener('mousedown', down, true)
+    }, [editor]);
+
     useEffect(() => transport.addListener<any>('Cut', arg => {
         if (optionsRef.current?.readOnly) return
         markEdited(shownRef)
