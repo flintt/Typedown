@@ -87,6 +87,13 @@ namespace Typedown.Core.Controls.FloatControls
 
         private void OnCloseButtonClick(object sender, RoutedEventArgs e) => Close();
 
+        // Every match in the side pane's list ("Search in document"), opened on demand.
+        private void OnShowAllResultsClick(object sender, RoutedEventArgs e) => ViewModel?.UIViewModel?.ShowFindResults();
+
+        /// <summary>The bar's place among the matches: "3 of 85", "No results", nothing while nothing is searched for.</summary>
+        public static string PositionText(int current, int total, string searchValue) =>
+            FindResultsList.PositionText(Locale.GetString("FindResults.Position"), Locale.GetString("FindResults.None"), !string.IsNullOrEmpty(searchValue), current, total);
+
         private void OnReplaceButtonClick(object sender, RoutedEventArgs e)
         {
             PostReplaceMessage(true);

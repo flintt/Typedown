@@ -25,6 +25,7 @@
     <Compile Include="..\Typedown.Core\Utilities\FileTypeHelper.cs" Link="Core\FileTypeHelper.cs" />
     <Compile Include="..\Typedown.Core\Utilities\FolderSearch.cs" Link="Core\FolderSearch.cs" />
     <Compile Include="..\Typedown.Core\Utilities\FolderSearchResults.cs" Link="Core\FolderSearchResults.cs" />
+    <Compile Include="..\Typedown.Core\Utilities\FindResults.cs" Link="Core\FindResults.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Typedown.Automation\Unix\UnixSocketListener.cs" Link="Unix\UnixSocketListener.cs" />

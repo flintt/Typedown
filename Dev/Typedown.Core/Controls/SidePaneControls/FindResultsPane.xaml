@@ -1,0 +1,64 @@
+<UserControl
+    x:Class="Typedown.Core.Controls.FindResultsPane"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Typedown.Core.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:u="using:Typedown.Core.Utilities"
+    Loaded="OnLoaded"
+    Unloaded="OnUnloaded"
+    KeyDown="OnKeyDown"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400">
+    <UserControl.Resources>
+        <!-- One match: the text around it with the match itself marked, and a bar beside the one the find bar is on. Each row's
+             automation id and name are set as it is shown (OnResultContainerChanging). -->
+        <DataTemplate x:Key="ResultTemplate" x:DataType="u:FindResultEntry">
+            <Grid Padding="0,6" ColumnSpacing="8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Border CornerRadius="1.5" Background="{ThemeResource AccentFillColorDefaultBrush}" Visibility="{x:Bind IsCurrent, Mode=OneWay}"/>
+                <TextBlock Grid.Column="1" FontSize="12" TextWrapping="Wrap" MaxLines="3" TextTrimming="CharacterEllipsis">
+                    <Run Text="{x:Bind Before}"/><Run Text="{x:Bind Match}" FontWeight="SemiBold" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/><Run Text="{x:Bind After}"/>
+                </TextBlock>
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Height="49" Padding="12,8,8,8" ColumnSpacing="4" BorderThickness="0,0,0,1" BorderBrush="{ThemeResource CardStrokeColorDefault}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Name="Title" AutomationProperties.AutomationId="FindResultsTitle" VerticalAlignment="Center" FontWeight="SemiBold"
+                       TextTrimming="CharacterEllipsis" Text="{u:LocaleString Key=FindResults.Title}"/>
+            <Button Grid.Column="1" Width="32" Height="32" x:Name="CloseButton" AutomationProperties.AutomationId="FindResultsClose"
+                    AutomationProperties.Name="{u:LocaleString Key=Close}" Click="OnCloseButtonClick"
+                    Style="{ThemeResource EllipsisIconButtonStyle}" local:ToolTip.TextResource="Close">
+                <FontIcon FontSize="10" Glyph="&#xe8bb;"/>
+            </Button>
+        </Grid>
+        <StackPanel Grid.Row="1" Margin="12,8,12,4" Spacing="2">
+            <TextBlock x:Name="TotalText" AutomationProperties.AutomationId="FindResultsTotal" Opacity="0.7" FontSize="12" TextWrapping="Wrap"
+                       Text="{x:Bind local:FindResultsPane.TotalText(Results.Total, Results.Capped), Mode=OneWay}"/>
+            <TextBlock x:Name="TooManyText" AutomationProperties.AutomationId="FindResultsTooMany" FontSize="12" TextWrapping="Wrap"
+                       Foreground="{ThemeResource SystemFillColorCautionBrush}" Text="{u:LocaleString Key=FindResults.TooMany}"
+                       Visibility="{x:Bind Results.Capped, Mode=OneWay}"/>
+        </StackPanel>
+        <!-- Arrows move through the entries, Enter or a click chooses one: the editor goes to that match and selects it. -->
+        <ListView Grid.Row="2" x:Name="ResultList" AutomationProperties.AutomationId="FindResultsList"
+                  AutomationProperties.Name="{u:LocaleString Key=FindResults.Title}" Padding="4,0,4,8"
+                  ItemsSource="{x:Bind Results.Entries, Mode=OneWay}" ItemTemplate="{StaticResource ResultTemplate}"
+                  SelectionMode="None" IsItemClickEnabled="True" ItemClick="OnResultClick"
+                  ContainerContentChanging="OnResultContainerChanging"/>
+    </Grid>
+</UserControl>

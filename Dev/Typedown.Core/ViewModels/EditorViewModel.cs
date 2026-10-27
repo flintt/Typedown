@@ -74,6 +74,12 @@ namespace Typedown.Core.ViewModels
         /// </summary>
         public int LoadId { get; private set; }
         public string SearchValue { get; set; } = null;
+
+        /// <summary>
+        /// The find bar's search as the page reports it: the count and the match chosen (the bar's "3 of 85"), and while
+        /// the side pane's results list is open, its entries (services/findResults.ts).
+        /// </summary>
+        public FindResultsList FindResults { get; } = new();
         public bool FirstStart { get; set; } = true;
         public bool FileLoaded { get; set; }
 
@@ -143,6 +149,8 @@ namespace Typedown.Core.ViewModels
                 if ((bool?)x.Args?["show"] == true) { if (load == LoadId) ui.ShowFirstEditNotice(LoadId); }
                 else if (load == null || load == ui.FirstEditNoticeLoad) ui.HideFirstEditNotice();
             });
+            EventCenter.GetObservable<EditorEventArgs>("FindState").Subscribe(x => FindResults.ApplyState(x.Args));
+            EventCenter.GetObservable<EditorEventArgs>("FindResults").Subscribe(x => FindResults.Apply(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("FindHold").Subscribe(x => Log.Debug($"find hold: the match's block left the window, put back: {x.Args?.ToString(Newtonsoft.Json.Formatting.None)}"));
             EventCenter.GetObservable<EditorEventArgs>("DrawJump").Subscribe(x => Log.Debug($"draw jump: {x.Args?.ToString(Newtonsoft.Json.Formatting.None)}"));
             // An error in the page nobody caught (a listener, a promise): in the log, where the next one is looked for.
@@ -282,6 +290,8 @@ namespace Typedown.Core.ViewModels
         {
             // Another document, or this one again: a first-edit notice was for the load before (the page says again if so).
             ServiceProvider.GetService<UIViewModel>()?.HideFirstEditNotice();
+            // The bar's matches were the document's before: the page reports the new one's once it has searched it.
+            FindResults.Clear();
             LongLoadDelay = pageEmpty ? 150 : 600;
             LongLoadPending = (text?.Length ?? 0) >= LongDocumentChars;
             if (LongLoadPending) OpeningLoads++;
@@ -1618,6 +1628,17 @@ namespace Typedown.Core.ViewModels
                 Log.Debug($"search: find {action} posted");
                 MarkdownEditor?.PostMessage("Find", new { action });
             }
+        }
+
+        /// <summary>
+        /// An entry of the results list chosen (a click, Enter): the page puts that match in the window and selects it, and
+        /// reports it as the match chosen (the bar's "n of m" follows).
+        /// </summary>
+        public void ActivateFindResult(FindResultEntry entry)
+        {
+            if (entry == null) return;
+            Log.Debug($"search: result {entry.Index + 1} of {FindResults.Total} chosen (list {FindResults.Version})");
+            MarkdownEditor?.PostMessage("FindActivate", new { index = entry.Index, version = FindResults.Version });
         }
 
         public void SearchValueChanged()

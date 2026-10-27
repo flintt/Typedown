@@ -78,6 +78,9 @@ namespace Typedown.Core.ViewModels
         public void OnFindReplaceDialogOpenChange(FindReplaceDialogState open)
         {
             MarkdownEditor?.PostMessage("SearchOpenChange", new { open = (int)open });
+            // The results list is the bar's search: it closes with the bar, the side pane back as it was.
+            if (open == FindReplaceDialogState.None)
+                ServiceProvider.GetService<UIViewModel>()?.CloseFindResults();
         }
 
         public void OnOpenImageToolbar(JToken args)

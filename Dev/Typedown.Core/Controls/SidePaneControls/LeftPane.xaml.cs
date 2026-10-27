@@ -16,6 +16,14 @@ namespace Typedown.Core.Controls
         public static readonly DependencyProperty IsSearchPaneOpenProperty = DependencyProperty.Register(nameof(IsSearchPaneOpen), typeof(bool), typeof(LeftPane), new(false));
         public bool IsSearchPaneOpen { get => (bool)GetValue(IsSearchPaneOpenProperty); set => SetValue(IsSearchPaneOpenProperty, value); }
 
+        public static readonly DependencyProperty IsFindResultsOpenProperty = DependencyProperty.Register(nameof(IsFindResultsOpen), typeof(bool), typeof(LeftPane), new(false));
+        /// <summary>The find bar's results list is shown over the pane's page (UIViewModel.FindResultsOpen).</summary>
+        public bool IsFindResultsOpen { get => (bool)GetValue(IsFindResultsOpenProperty); set => SetValue(IsFindResultsOpenProperty, value); }
+
+        /// <summary>Files/Outline are shown unless the folder search or the find bar's results list is over them.</summary>
+        public static Visibility PageVisibility(bool searchPaneOpen, bool findResultsOpen) =>
+            searchPaneOpen || findResultsOpen ? Visibility.Collapsed : Visibility.Visible;
+
         public AppViewModel ViewModel => DataContext as AppViewModel;
 
         public SettingsViewModel Settings => ViewModel?.SettingsViewModel;
@@ -49,6 +57,10 @@ namespace Typedown.Core.Controls
                 .Cast<bool>()
                 .StartWith(uiViewModel.FolderSearchOpen)
                 .Subscribe(open => IsSearchPaneOpen = open));
+            disposables.Add(uiViewModel.WhenPropertyChanged(nameof(UIViewModel.FindResultsOpen))
+                .Cast<bool>()
+                .StartWith(uiViewModel.FindResultsOpen)
+                .Subscribe(open => IsFindResultsOpen = open));
             // The tabs read their text when the pane loads. Changing the language on the settings page builds a new
             // main page; a change from another window or the automation API leaves this one, so the tabs follow it
             // here, once the language has been applied.
@@ -119,6 +131,9 @@ namespace Typedown.Core.Controls
             if (ViewModel?.UIViewModel != null) ViewModel.UIViewModel.FolderSearchOpen = false;
             IsSearchPaneOpen = false;
         }
+
+        // Its close button or Esc: the pane back to the page it was on, or closed again.
+        private void OnFindResultsPaneClose(object sender, EventArgs e) => ViewModel?.UIViewModel?.CloseFindResults();
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
