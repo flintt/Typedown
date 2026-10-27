@@ -2,8 +2,8 @@
 // theme, in visual and reading mode:
 // - each display formula and each table has a copy button, shown when the pointer is over the block; an inline formula
 //   has none; a table's sits just above its top right corner, over no cell;
-// - a click sends the host one CopyBlock message: for a formula its Markdown as the document has it ($$ ... $$) and a
-//   PNG of it - opaque, mostly white with dark ink (black on white though the editor is dark), twice the size of the
+// - a click sends the host one CopyBlock message: for a formula its Markdown as the document has it ($$ ... $$), its
+//   MathML (Word makes an editable equation of it) and a PNG of it - opaque, mostly white with dark ink (black on white though the editor is dark), twice the size of the
 //   formula drawn at 16px; a formula KaTeX cannot read sends its text only; for a table its Markdown as the document has
 //   it (written compact, it stays compact) and HTML: a <table> with the header row as <th>, the rows and columns of the
 //   table, each column's alignment, bold, italic, code and links in the cells, a formula in a cell as its TeX;
@@ -124,7 +124,7 @@ const doc = '# Blocks\n\nFirst paragraph with $a+b$ inline.\n\n' + math + '\n\n'
 
     const checkTableMessage = async (message, label) => {
       check(!!message && message.text === table, `${label}: its text is the table as the document has it, compact${message && message.text !== table ? ` (${JSON.stringify(message.text)})` : ''}`);
-      check(!!message && message.png == null, `${label}: no picture`);
+      check(!!message && message.png == null && message.mathml == null, `${label}: no picture, no MathML`);
       const html = message && message.html;
       check(typeof html === 'string' && html.startsWith('<table'), `${label}: with HTML, a table`);
       if (typeof html !== 'string') return;
@@ -169,6 +169,9 @@ const doc = '# Blocks\n\nFirst paragraph with $a+b$ inline.\n\n' + math + '\n\n'
       check(!!message && message.text === math, `${modeLabel} formula: its text is the block as written ($$ ... $$)${message && message.text !== math ? ` (${JSON.stringify(message.text)})` : ''}`);
       check(!!message && typeof message.png === 'string' && message.png.length > 100 && message.html == null, `${modeLabel} formula: with a PNG, no HTML`);
       check(copied, `${modeLabel} formula: the button shows it copied`);
+      const mathml = message && message.mathml;
+      check(typeof mathml === 'string' && /^<math[^>]*display="block"/.test(mathml) && /<\/math>$/.test(mathml) && mathml.includes('<mfrac>') && mathml.includes('\\int_0^1'),
+        `${modeLabel} formula: with its MathML (display, a fraction, its TeX as an annotation), for Word's equations${typeof mathml === 'string' ? '' : ` (${mathml})`}`);
       if (message && typeof message.png === 'string') {
         const p = await inspect(message.png);
         if (process.env.DUMP) require('fs').writeFileSync(`${process.env.DUMP}/${modeLabel}-formula.png`, Buffer.from(message.png, 'base64'));
@@ -179,7 +182,7 @@ const doc = '# Blocks\n\nFirst paragraph with $a+b$ inline.\n\n' + math + '\n\n'
       }
 
       ({ message } = await clickCopy(badSel, `${modeLabel} formula KaTeX cannot read`));
-      check(!!message && message.text === badMath && message.png == null && message.html == null, `${modeLabel} formula KaTeX cannot read: its text only`);
+      check(!!message && message.text === badMath && message.png == null && message.html == null && message.mathml == null, `${modeLabel} formula KaTeX cannot read: its text only`);
 
       let shown;
       ({ message, copied, shown } = await clickCopy(tableSel, `${modeLabel} table`));
