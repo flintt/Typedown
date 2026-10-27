@@ -39,6 +39,35 @@ namespace Typedown.Automation.Tests
         }
 
         [Fact]
+        public void A_new_list_keeps_the_entries_that_did_not_change()
+        {
+            var results = new FindResultsList();
+            results.Apply(List(1, 3, 0, ("a kiwi", 2, 6), ("b kiwi", 2, 6), ("c kiwi", 2, 6)));
+            var before = results.Entries.ToList();
+            var changes = 0;
+            results.Entries.CollectionChanged += (_, _) => changes++;
+            // The same list again with another match chosen: no entry replaced, only the mark moved.
+            results.Apply(List(2, 3, 2, ("a kiwi", 2, 6), ("b kiwi", 2, 6), ("c kiwi", 2, 6)));
+            Assert.Equal(0, changes);
+            Assert.Equal(before, results.Entries);
+            Assert.False(before[0].IsCurrent);
+            Assert.True(before[2].IsCurrent);
+            // One line changed and one match more: that entry replaced, one added, the others the same objects.
+            results.Apply(List(3, 4, 0, ("a kiwi", 2, 6), ("b kiwi!", 2, 6), ("c kiwi", 2, 6), ("d kiwi", 2, 6)));
+            Assert.Equal(2, changes);
+            Assert.Same(before[0], results.Entries[0]);
+            Assert.NotSame(before[1], results.Entries[1]);
+            Assert.Same(before[2], results.Entries[2]);
+            Assert.Equal(4, results.Entries.Count);
+            Assert.True(results.Entries[0].IsCurrent);
+            Assert.False(before[2].IsCurrent);
+            // Fewer: taken off the end.
+            results.Apply(List(4, 1, 0, ("a kiwi", 2, 6)));
+            Assert.Single(results.Entries);
+            Assert.Same(before[0], results.Entries[0]);
+        }
+
+        [Fact]
         public void Offsets_out_of_range_are_clamped()
         {
             var entry = FindResultEntry.FromPreview(0, "kiwi", 2, 99);

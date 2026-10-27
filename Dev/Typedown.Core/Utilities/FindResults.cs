@@ -1,6 +1,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Newtonsoft.Json.Linq;
 
@@ -40,6 +41,10 @@ namespace Typedown.Core.Utilities
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsCurrent)));
         }
 
+        /// <summary>The same place and the same line: kept as it is when a new list comes.</summary>
+        public bool SameAs(FindResultEntry other) =>
+            other != null && Index == other.Index && Before == other.Before && Match == other.Match && After == other.After;
+
         /// <summary>The preview line [start, end) of the match, cut into its three parts (out-of-range offsets clamped).</summary>
         public static FindResultEntry FromPreview(int index, string text, int start, int end)
         {
@@ -62,14 +67,18 @@ namespace Typedown.Core.Utilities
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private IReadOnlyList<FindResultEntry> entries = Array.Empty<FindResultEntry>();
+        private readonly ObservableCollection<FindResultEntry> entries = new();
         private int total;
         private int current = -1;
         private bool capped;
         private int version;
 
-        /// <summary>The entries shown: replaced as a whole for each list the page sends (one change for the list view, not 500).</summary>
-        public IReadOnlyList<FindResultEntry> Entries => entries;
+        /// <summary>
+        /// The entries shown, changed in place: an entry the same as before stays the same object (its row on the screen
+        /// stays), one that differs is replaced, the rest added or removed at the end. Replacing the whole list for each
+        /// list the page sent rebuilt every row under the reader's click: the list flashed.
+        /// </summary>
+        public ObservableCollection<FindResultEntry> Entries => entries;
 
         /// <summary>Every match of the search, shown or not.</summary>
         public int Total => total;
@@ -108,46 +117,53 @@ namespace Typedown.Core.Utilities
         public void Apply(JToken args)
         {
             if (args is not JObject o) return;
-            var list = new List<FindResultEntry>();
+            var count = 0;
             if (o["entries"] is JArray array)
             {
                 foreach (var item in array)
                 {
-                    if (list.Count >= Cap) break;
-                    list.Add(FindResultEntry.FromPreview(list.Count, item.Value<string>("text"), item.Value<int?>("start") ?? 0, item.Value<int?>("end") ?? 0));
+                    if (count >= Cap) break;
+                    var entry = FindResultEntry.FromPreview(count, item.Value<string>("text"), item.Value<int?>("start") ?? 0, item.Value<int?>("end") ?? 0);
+                    if (count < entries.Count)
+                    {
+                        if (!entries[count].SameAs(entry)) entries[count] = entry;
+                    }
+                    else entries.Add(entry);
+                    count++;
                 }
             }
+            while (entries.Count > count) entries.RemoveAt(entries.Count - 1);
             version = o.Value<int?>("version") ?? version;
-            var t = Math.Max(o.Value<int?>("total") ?? list.Count, list.Count);
+            var t = Math.Max(o.Value<int?>("total") ?? count, count);
             var wasCapped = capped;
-            capped = o.Value<bool?>("capped") ?? t > list.Count;
-            entries = list;
-            current = -1;
-            Raise(nameof(Entries));
+            capped = o.Value<bool?>("capped") ?? t > count;
             Raise(nameof(Version));
             if (wasCapped != capped) Raise(nameof(Capped));
             SetState(t, o.Value<int?>("index") ?? -1);
-            // The entry of the match chosen is marked even if the index did not change (a new list's entries are new).
-            CurrentEntry?.SetCurrent(true);
+            MarkCurrent();
         }
 
         /// <summary>No search (another document, the bar closed): nothing listed.</summary>
         public void Clear()
         {
-            entries = Array.Empty<FindResultEntry>();
+            entries.Clear();
             var wasCapped = capped;
             capped = false;
-            Raise(nameof(Entries));
             if (wasCapped) Raise(nameof(Capped));
             SetState(0, -1);
+        }
+
+        // The mark on the entry of the match chosen and on no other (entries replaced or added come unmarked).
+        private void MarkCurrent()
+        {
+            foreach (var entry in entries) entry.SetCurrent(entry.Index == current);
         }
 
         private void SetCurrent(int value)
         {
             if (current == value) return;
-            CurrentEntry?.SetCurrent(false);
             current = value;
-            CurrentEntry?.SetCurrent(true);
+            MarkCurrent();
             Raise(nameof(Current));
             Raise(nameof(CurrentEntry));
         }
