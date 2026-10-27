@@ -22,7 +22,7 @@ internal static partial class Program
         using var c = await Session("e2e FR01");
         var text = string.Join("\n", new[]
         {
-            "# FR01", "", "## First part", "", "The kiwi one is here.", "", "The kiwi two is here.", "",
+            "## First part", "", "The kiwi one is here.", "", "The kiwi two is here.", "",
             "## Second part", "", "The kiwi three is here.", "", "- kiwi four in a list", "",
             "## Third part", "", "| a | b |", "| --- | --- |", "| kiwi five | x |", "", "The kiwi six is the last.", "",
         });
@@ -48,13 +48,27 @@ internal static partial class Program
             return JObject.Parse((string?)(await c.Call("test.editor.eval", new { windowId, script }))["result"] ?? "{}");
         }
         async Task<JToken> View() => await c.Call("window.getView", new { windowId });
-        // The outline page shown in the pane: its tree on the screen (it is there but hidden under the list).
+        // The outline page shown in the pane: one of its rows on the screen. Its headings are all top level (no row hidden
+        // under a collapsed one), and the editor's own "Second part" is in the web view, which the search leaves out. The
+        // outline's tree has no automation id of its own (its x:Name does not reach UI Automation): a row is what shows.
         bool OutlineShown()
         {
-            var tree = FindIn(window, "TreeView");
-            if (tree == null) return false;
-            var r = tree.Current.BoundingRectangle;
-            return !r.IsEmpty && r.Width > 0 && r.Height > 0;
+            try
+            {
+                return Deep.All(AutomationElement.FromHandle(window), new PropertyCondition(AutomationElement.NameProperty, "Second part"))
+                    .Any(e => { var r = e.Current.BoundingRectangle; return !e.Current.IsOffscreen && !r.IsEmpty && r.Width > 0 && r.Height > 0; });
+            }
+            catch (ElementNotAvailableException) { return false; }
+        }
+        // What the pane is showing, for a failure: the host's view, the outline as the host holds it, and what is over it.
+        async Task<string> PaneState()
+        {
+            var view = await View();
+            var outline = await c.Call("test.outline.state", new { windowId });
+            var rows = ((outline["rows"] as JArray) ?? new JArray()).Select(r => (string?)r["name"]);
+            return $"side pane {view["sidePane"]?.ToString(Newtonsoft.Json.Formatting.None)}, outline page there: {outline["tree"]}, outline rows [{string.Join(", ", rows)}], " +
+                $"folder search {(FindIn(window, "SearchTextBox") != null ? "open" : "closed")}, results list {(FindIn(window, "FindResultsList") != null ? "open" : "closed")}, " +
+                $"outline row on screen: {OutlineShown()}; screen: {Screenshot("fr01-pane-" + DateTime.Now.ToString("HHmmss"))}";
         }
         async Task FindWithKeys()
         {
@@ -78,9 +92,19 @@ internal static partial class Program
         {
             await WaitUntilDrawn(c, windowId, doc, "kiwi six");
 
-            // The side pane on the Outline.
+            // A folder search left open by an earlier case would cover the pages: closed first (its close button).
+            if (FindIn(window, "SearchTextBox") != null && FindIn(window, "CloseButton") is { } closeSearch)
+            {
+                notes.Add("the folder search was open: closed");
+                await Click(window, closeSearch);
+                await WaitGone(window, "SearchTextBox");
+            }
+            // The side pane on the Outline, with this document's headings in it.
             await c.Call("window.setView", new { windowId, sidePane = new { open = true, page = "outline" } });
-            Check(await Eventually(async () => { await Task.CompletedTask; return OutlineShown(); }, 5000), "the side pane shows the Outline");
+            var outlineRows = await Eventually(async () => ((await c.Call("test.outline.state", new { windowId }))["rows"] as JArray)?.Any(r => (string?)r["name"] == "Second part") == true, 8000);
+            Check(outlineRows, "the outline holds this document's headings" + (outlineRows ? "" : $" ({await PaneState()})"));
+            var shown = await Eventually(async () => { await Task.CompletedTask; return OutlineShown(); }, 8000);
+            Check(shown, "the side pane shows the Outline" + (shown ? "" : $" ({await PaneState()})"));
 
             await FindWithKeys();
             await ShowAll();
@@ -91,7 +115,8 @@ internal static partial class Program
                 "six entries, each read as its place (n of 6) and the line around its match, in the document's order");
             Check(FindIn(window, "FindResult:7") == null, "no seventh entry");
             Check(FindIn(window, "FindResultsTooMany") == null, "no \"too many results\" line for 6");
-            Check(!OutlineShown(), "the list is shown in the pane's place, over the Outline");
+            var covered = !OutlineShown();
+            Check(covered, "the list is shown in the pane's place, over the Outline" + (covered ? "" : $" ({await PaneState()})"));
 
             // Entry 3 with the real mouse: the third match selected in the editor, the bar on it.
             await Click(window, await OnScreen("FindResult:3", "the third entry"));
@@ -106,7 +131,8 @@ internal static partial class Program
             // Closed: the Outline again.
             await Click(window, await OnScreen("FindResultsClose", "the list's close button"));
             await WaitGone(window, "FindResultsList");
-            Check(await Eventually(async () => { await Task.CompletedTask; return OutlineShown(); }, 5000), "closing the list shows the Outline again");
+            var back = await Eventually(async () => { await Task.CompletedTask; return OutlineShown(); }, 5000);
+            Check(back, "closing the list shows the Outline again" + (back ? "" : $" ({await PaneState()})"));
             var view = await View();
             Check((bool?)view["sidePane"]?["open"] == true && (string?)view["sidePane"]?["page"] == "outline", $"the side pane is open on the Outline ({view["sidePane"]})");
             Check(FindIn(window, "TextBoxSearch") != null, "the find bar stays open");
