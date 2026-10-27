@@ -27,6 +27,13 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
 
         private void OnLoaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
         {
+            // The menu's items are shown in a popup of their own, outside the window's tree: they carry the interface's
+            // language tag themselves, set now (a menu made after a language change) and on every later application -
+            // a menu made while the interface was English drew Chinese in the English fallback font after switching
+            // back (UiLanguage).
+            SetLanguage();
+            Locale.LanguageApplied -= OnLanguageApplied;
+            Locale.LanguageApplied += OnLanguageApplied;
             // An exception here runs on the dispatcher with nothing above it to catch it, which on XAML islands
             // takes the process down without a report.
             _ = DispatcherQueue.RunIdleAsync(() =>
@@ -45,6 +52,18 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
         }
 
         protected abstract void OnRegisterShortcut();
+
+        private void SetLanguage()
+        {
+            UiLanguage.Set(this);
+            UiLanguage.SetItems(Items);
+        }
+
+        private void OnLanguageApplied()
+        {
+            if (DispatcherQueue.HasThreadAccess) SetLanguage();
+            else DispatcherQueue.TryEnqueue(SetLanguage);
+        }
 
         private bool watching;
 
@@ -181,6 +200,7 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
 
         private void OnUnloaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
         {
+            Locale.LanguageApplied -= OnLanguageApplied;
             disposables.Clear();
         }
     }

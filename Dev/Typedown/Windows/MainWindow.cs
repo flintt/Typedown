@@ -113,7 +113,12 @@ namespace Typedown.Windows
             rootGrid.Children.Add(RootControl);
             Content = rootGrid;
             RootControl.Loaded += OnLoaded;
-            RootControl.LayoutUpdated += (_, _) => UpdateCaptionRegions();
+            RootControl.LayoutUpdated += (_, _) =>
+            {
+                UpdateCaptionRegions();
+                // A menu, flyout or tooltip opening is laid out first: it takes the interface's language tag before it is drawn.
+                UiLanguage.StampOpenPopups(RootControl.XamlRoot);
+            };
             Activated += OnActivated;
             AppWindow.Changed += OnAppWindowChanged;
             AppWindow.Closing += OnClosing;
@@ -405,6 +410,7 @@ namespace Typedown.Windows
             AppViewModel.MainWindow = Handle;
             Core.Services.AutomationWindows.Register(AppViewModel, DispatcherQueue);
             UpdateCaptionRegions();
+            ApplyElementLanguage();
             // Files dragged from Explorer (Markdown opens, pictures go in): the web view over the editor takes such a drop
             // itself and did nothing with it. The OLE drop targets of the window and its children are wrapped once they
             // are registered, a moment after the content loads (again later, for one registered late).
@@ -656,6 +662,29 @@ namespace Typedown.Windows
                 Log.Debug($"language: PrimaryLanguageOverride refused: {ex.Message}");
             }
             Locale.ApplyLanguage(supported ? settingLanguage : null);
+            if (DispatcherQueue.HasThreadAccess) ApplyElementLanguage();
+            else DispatcherQueue.TryEnqueue(ApplyElementLanguage);
+        }
+
+        /// <summary>
+        /// The interface's language tag on this window's root (inherited by everything in it, the dialogs that join it
+        /// too), on its open popups, and on the flyouts attached to its elements for when they open (UiLanguage). Without
+        /// it a menu made under another language kept that language's Chinese fallback font after switching back.
+        /// </summary>
+        private void ApplyElementLanguage()
+        {
+            try
+            {
+                UiLanguage.Set(rootGrid);
+                UiLanguage.Set(RootControl);
+                if (RootControl?.XamlRoot == null) return;
+                UiLanguage.StampOpenPopups(RootControl.XamlRoot);
+                UiLanguage.WatchFlyouts(rootGrid);
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"language: the window's elements: {ex.Message}");
+            }
         }
     }
 }
