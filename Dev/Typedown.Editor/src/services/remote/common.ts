@@ -17,9 +17,10 @@ const remote = {
     // page gave up and the editor stayed blank.
     getSettings: remoteFunction<undefined, unknown>('GetSettings', 0),
     setClipboard: remoteFunction<{ type: string, data: unknown }, boolean>('SetClipboard'),
-    // A diagram's copy button: its picture (a PNG, base64; null when it has none) and its fenced Markdown as one
-    // clipboard item. True once the clipboard holds them.
-    copyDiagram: remoteFunction<{ text: string, png: string | null }, boolean>('CopyDiagram'),
+    // A figure's copy button (a diagram's, a display formula's, a table's): its Markdown and, for the programs that
+    // take more, a picture (a PNG, base64) or HTML (a table's) - null when it has none - as one clipboard item. True
+    // once the clipboard holds them.
+    copyBlock: remoteFunction<{ text: string, png: string | null, html: string | null }, boolean>('CopyBlock'),
     getStringResources: remoteFunction<{ names: string[] }, { [name: string]: string }>('GetStringResources'),
     openNewWindow: remoteFunction<string, undefined>('OpenNewWindow'),
     unhandledException: remoteFunction<string, undefined>('UnhandledException'),

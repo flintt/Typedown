@@ -185,8 +185,9 @@ export default function renderContainerBlock (parent, block, activeBlocks, match
       selector += `.${CLASS_OR_ID.AG_CONTAINER_BLOCK}`
       Object.assign(data.attrs, { spellcheck: 'false' })
     }
-    // A diagram copies as its picture and its code (ContentState.copyDiagram).
-    if (/^(?:flowchart|mermaid|sequence|plantuml|vega-lite)$/.test(functionType)) {
+    // A diagram or a display formula copies as its picture and its Markdown, a table as HTML and its Markdown
+    // (ContentState.copyBlock). Inline formulas have none.
+    if (/^(?:flowchart|mermaid|sequence|plantuml|vega-lite|multiplemath|table)$/.test(functionType)) {
       children.push(renderCopyButton(true))
     }
   } else if (/ul|ol/.test(type) && listType) {

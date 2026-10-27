@@ -1,6 +1,6 @@
 // A diagram's copy button (ContentState.copyDiagram): it shows when the pointer is over a drawn diagram of each kind the
 // editor draws (Mermaid, flowchart, sequence, Vega-Lite; PlantUML too, as a block), in visual and reading mode, and not
-// while the diagram's source is being edited (ag-active). A click sends the host one CopyDiagram message with the
+// while the diagram's source is being edited (ag-active). A click sends the host one CopyBlock message with the
 // block's Markdown fenced with its language and a PNG of the diagram: twice the size of the picture the exports make
 // of it (RenderXhtml diagramsAsPictures), opaque, mostly white and with little dark in it - the light theme on white -
 // though the editor shows the diagram in the dark theme. A diagram that could not be drawn (bad Mermaid, PlantUML with
@@ -33,14 +33,14 @@ const doc = '# Diagrams\n\nFirst paragraph.\n\n' + [...Object.values(blocks), ..
     // The host's text for a PlantUML block while drawing it is off (GetStringResources, empty in this stub): without it
     // the block has no height, and nothing to hover.
     await page.evaluate(() => document.documentElement.style.setProperty('--PlantUmlOff', '"PlantUML drawing is off"'));
-    // The host's side of CopyDiagram: each message kept, answered "written". Any change report is counted.
+    // The host's side of CopyBlock: each message kept, answered "written". Any change report is counted.
     await page.evaluate(() => {
       window.__copies = [];
       window.__changes = 0;
       const post = window.chrome.webview.postMessage;
       window.chrome.webview.postMessage = raw => {
         const m = JSON.parse(raw);
-        if (m.type === 'invoke' && m.name === 'CopyDiagram') { window.__copies.push(m.args); setTimeout(() => window.__deliver(m.id, { code: 0, data: true }), 0); return; }
+        if (m.type === 'invoke' && m.name === 'CopyBlock') { window.__copies.push(m.args); setTimeout(() => window.__deliver(m.id, { code: 0, data: true }), 0); return; }
         if (m.name === 'MarkdownChange') window.__changes++;
         post(raw);
       };
@@ -138,7 +138,7 @@ const doc = '# Diagrams\n\nFirst paragraph.\n\n' + [...Object.values(blocks), ..
         const role = kind.toUpperCase();
         const label = `${modeLabel} ${kind}`;
         const { message, copied } = await clickCopy(figureSel(role), label);
-        check(!!message, `${label}: a click sends CopyDiagram`);
+        check(!!message, `${label}: a click sends CopyBlock`);
         if (!message) { index++; continue; }
         check(message.text === fenced, `${label}: its text is the block's Markdown fenced with its language${message.text === fenced ? '' : ` (${JSON.stringify(message.text).slice(0, 120)})`}`);
         check(typeof message.png === 'string' && message.png.length > 100, `${label}: with a PNG`);

@@ -181,3 +181,36 @@ export function cursorIn<T extends { anchor?: Position, focus?: Position }>(from
     const pairs = matchLines(fromLines, toLines)
     return { ...cursor, anchor: positionIn(fromLines, toLines, pairs, cursor.anchor), focus: positionIn(fromLines, toLines, pairs, cursor.focus) }
 }
+
+/**
+ * One block's text as the document holds it (a copy button's Markdown): `block` is Muya's export of the block, `exported`
+ * its export of the whole document now and `source` the document's text as the page gives it to the host (the reader's
+ * own lines kept where they did not edit). The block's lines found once in the export; the source's lines between the
+ * nearest lines matched on both sides around them, without blank lines at either end. Used only when they read back as
+ * the block (`normalize`: as Muya writes a text) - a compact table stays compact, a fence as it was written. Null when
+ * not found or not the same block: the caller takes Muya's export.
+ */
+export function blockSource(block: string, exported: string, source: string, normalize: (text: string) => string): string | null {
+    const trim = (text: string) => text.replace(/^\n+|\n+$/g, '')
+    const wanted = trim(block)
+    if (!wanted) return null
+    if (source === exported) return null
+    const blockLines = splitLines(wanted + '\n')
+    const all = splitLines(exported.endsWith('\n') ? exported : exported + '\n')
+    let at = -1
+    for (let i = 0; i + blockLines.length <= all.length; i++) {
+        if (!same(all, i, i + blockLines.length, blockLines, 0, blockLines.length)) continue
+        if (at >= 0) return null
+        at = i
+    }
+    if (at < 0) return null
+    const sourceLines = splitLines(source.endsWith('\n') ? source : source + '\n')
+    let before = -1, after = sourceLines.length
+    for (const [ie, is] of matchLines(all, sourceLines)) {
+        if (ie < at) before = is
+        else if (ie >= at + blockLines.length) { after = is; break }
+    }
+    const candidate = trim(sourceLines.slice(before + 1, after).join(''))
+    if (!candidate || trim(normalize(candidate + '\n')) !== wanted) return null
+    return candidate
+}

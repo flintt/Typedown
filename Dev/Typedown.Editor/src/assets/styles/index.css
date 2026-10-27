@@ -1306,22 +1306,29 @@ pre:not(.ag-active):hover .ag-code-copy {
   opacity: 1;
 }
 
-/* A diagram's copy button (ContentState.copyDiagram), on its figure: shown over the drawing on hover, as the code block's,
-   and not while the diagram's source is being edited (ag-active), where the source's own code button is. */
-figure.ag-container-block>.ag-diagram-copy {
+/* A figure's copy button (ContentState.copyBlock) - a diagram's, a display formula's, a table's: shown on hover, as the
+   code block's, and not while the block is being edited (ag-active): a diagram's or a formula's source has its own code
+   button then, a table its tool bar. */
+figure>.ag-diagram-copy {
   z-index: 2;
 }
 
-figure.ag-container-block:not(.ag-active):hover>.ag-diagram-copy {
+figure:not(.ag-active):hover>.ag-diagram-copy {
   opacity: .5;
 }
 
-figure.ag-container-block:not(.ag-active)>.ag-diagram-copy:hover {
+figure:not(.ag-active)>.ag-diagram-copy:hover {
   opacity: 1;
 }
 
 figure.ag-active>.ag-diagram-copy {
   display: none;
+}
+
+/* A table's sits just above its top right corner (placed there by ClickEvent: the figure is wider than a narrow table),
+   where the tool bar of a table being edited goes, so it covers no cell. */
+figure[data-role=TABLE]>.ag-diagram-copy {
+  top: -21px;
 }
 
 .ag-code-copy span.icon {

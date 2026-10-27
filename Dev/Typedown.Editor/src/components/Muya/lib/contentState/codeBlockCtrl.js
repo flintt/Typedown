@@ -6,6 +6,8 @@ import { CLASS_OR_ID } from '../config'
 import ExportMarkdown from '../utils/exportMarkdown'
 import remote from 'services/remote/common'
 import { diagramPicture } from 'services/diagramPicture'
+import { mathPicture, tableHtml } from 'services/blockCopy'
+import { blockSource } from 'services/sourceMerge'
 
 const CODE_UPDATE_REP = /^`{3,}(.*)/
 
@@ -192,42 +194,87 @@ const codeBlockCtrl = ContentState => {
   }
 
   /**
-   * Copy a diagram by its copy button (top right of the drawing, shown on hover while its source is not being edited):
-   * one clipboard item holding the picture, for Word, OneNote, mail or chat, and the block's Markdown fenced with its
-   * language as text, for a text editor - pasted back here it is the diagram again. The picture is drawn as a format
-   * that takes no SVG gets it (services/diagramPicture): the light theme on white at twice the size, never the dark
-   * theme's light lines on nothing. A diagram that could not be drawn is copied as its code only. The host writes the
-   * clipboard (CopyDiagram): a picture and text in one item there is what Word and the chat programs paste. Nothing in
-   * the document, its history or the selection changes.
+   * Copy a diagram, a display formula or a table by its copy button (top right, shown on hover while the block is not
+   * being edited) or, for a table, by the menu's Copy table: one clipboard item holding the block's Markdown as text, as
+   * the document saves it - for a text editor, and pasted back here it is the block again - and, for the programs that
+   * take something richer (Word, OneNote, mail, chat, Excel):
+   * - a diagram or a formula: its picture, drawn as a format that takes no SVG gets it - the light theme on white at
+   *   twice the size (services/diagramPicture), a formula black on white (services/blockCopy). One that could not be
+   *   drawn is copied as its text only.
+   * - a table: its HTML (services/blockCopy), which they paste as a table, with its header row, cell formatting and
+   *   column alignment.
+   * The host writes the clipboard (CopyBlock). Nothing in the document, its history or the selection changes. True once
+   * the clipboard holds the copy; the button, when there is one, shows the check mark.
    */
-  ContentState.prototype.copyDiagram = async function (button) {
-    const figure = button.closest('figure')
+  ContentState.prototype.copyBlock = async function (figure, button = null) {
     const block = figure && this.getBlock(figure.id)
-    if (!block) return
+    if (!block || block.type !== 'figure') return false
     const { listIndentation, isGitlabCompatibilityEnabled } = this
-    const text = new ExportMarkdown([block], listIndentation, isGitlabCompatibilityEnabled).generate().replace(/^\n+|\n+$/g, '')
-    const preview = figure.querySelector(':scope > div.ag-container-preview')
-    const drawn = !!preview && !preview.classList.contains(CLASS_OR_ID.AG_MATH_ERROR) &&
-      !preview.classList.contains('ag-plantuml-off') && !preview.classList.contains(CLASS_OR_ID.AG_EMPTY)
-    let png = null
-    if (drawn) {
+    const exportOptions = { alignTableColumns: this.muya.options.tableAlignColumns !== false }
+    const exported = new ExportMarkdown([block], listIndentation, isGitlabCompatibilityEnabled, exportOptions).generate().replace(/^\n+|\n+$/g, '')
+    // As the document has it: a table written compact stays compact, a fence as it was written (sourceMerge.blockSource).
+    let text = exported
+    try {
+      const whole = this.muya.getMarkdown()
+      const source = this.muya.documentText ? this.muya.documentText(whole) : whole
+      if (source.length <= 150000) text = blockSource(exported, whole, source, markdown => this.muya.normalizeMarkdown(markdown)) || exported
+    } catch (e) {
+      console.log('copy block: as exported', e)
+    }
+    const message = { text, png: null, html: null }
+    if (block.functionType === 'table') {
       try {
-        // Mermaid is one global the editor's own drawing also uses: not both at once.
-        await this.stateRender.mermaidRenderQueue.catch(() => {})
-        png = await diagramPicture(text + '\n', this.muya.options)
+        message.html = tableHtml(exported + '\n', this.muya.options)
       } catch (e) {
-        console.log('copy diagram: no picture', e)
+        console.log('copy table: no HTML', e)
+      }
+    } else {
+      const preview = figure.querySelector(':scope > div.ag-container-preview')
+      const drawn = !!preview && !preview.classList.contains(CLASS_OR_ID.AG_MATH_ERROR) &&
+        !preview.classList.contains('ag-plantuml-off') && !preview.classList.contains(CLASS_OR_ID.AG_EMPTY)
+      if (drawn) {
+        try {
+          if (block.functionType === 'multiplemath') {
+            const code = block.children[0] && block.children[0].children[0]
+            message.png = await mathPicture(code ? code.children.map(line => line.text).join('\n') : '')
+          } else {
+            // Mermaid is one global the editor's own drawing also uses: not both at once.
+            await this.stateRender.mermaidRenderQueue.catch(() => {})
+            message.png = await diagramPicture(exported + '\n', this.muya.options)
+          }
+        } catch (e) {
+          console.log('copy block: no picture', e)
+        }
       }
     }
     try {
-      if (!await remote.copyDiagram({ text, png })) return
+      if (!await remote.copyBlock(message)) return false
     } catch (e) {
-      console.log('copy diagram: the clipboard was not written', e)
-      return
+      console.log('copy block: the clipboard was not written', e)
+      return false
     }
-    button.classList.add('ag-code-copied')
-    clearTimeout(button._copiedTimer)
-    button._copiedTimer = setTimeout(() => button.classList.remove('ag-code-copied'), 1500)
+    if (button) {
+      button.classList.add('ag-code-copied')
+      clearTimeout(button._copiedTimer)
+      button._copiedTimer = setTimeout(() => button.classList.remove('ag-code-copied'), 1500)
+    }
+    return true
+  }
+
+  /**
+   * The menu's Copy table: the table right-clicked (the menu's own target), else the one the caret is in. False when
+   * neither is a table.
+   */
+  ContentState.prototype.copyTableAtMenu = function () {
+    const target = this.contextMenuTarget
+    let figure = target && target.isConnected && target.closest ? target.closest('figure[data-role="TABLE"]') : null
+    if (!figure && this.cursor && this.cursor.start) {
+      let block = this.getBlock(this.cursor.start.key)
+      while (block && !(block.type === 'figure' && block.functionType === 'table')) block = block.parent ? this.getBlock(block.parent) : null
+      figure = block ? document.getElementById(block.key) : null
+    }
+    if (!figure) return Promise.resolve(false)
+    return this.copyBlock(figure, figure.querySelector(':scope > .ag-diagram-copy'))
   }
 
   ContentState.prototype.resizeLineNumber = function () {

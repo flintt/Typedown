@@ -424,6 +424,12 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             readOnly: JSON.stringify(!!o?.readOnly)
         };
         (window as any).__typedownMuya = muya; // for Tools/EditorBench and DevTools inspection
+        // The document's text as the host holds it (the reader's own lines kept where unedited, keptSource): a copy
+        // button's Markdown is the block as written there (ContentState.copyBlock).
+        (muya as any).documentText = (exported: string) => {
+            const imported = importedRef.current
+            return !imported ? exported : exported === imported.normalized ? imported.source : markdownRef.current
+        };
         // What the next real visual edit would rewrite in the document (services/normalization): the loaded
         // source against Muya's export of it. Once an edit has made the export the text there is nothing left
         // to rewrite. Null before anything was loaded.
@@ -633,6 +639,11 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
 
     useEffect(() => transport.addListener<any>('Copy', arg => {
         editor?.clipboard.copy(arg)
+    }), [editor]);
+
+    // The menu's Copy table (ContentState.copyTableAtMenu): the table right-clicked as its copy button copies it.
+    useEffect(() => transport.addListener<any>('CopyTable', () => {
+        (editor as any)?.contentState.copyTableAtMenu()
     }), [editor]);
 
     useEffect(() => transport.addListener<any>('Cut', arg => {

@@ -88,6 +88,7 @@ namespace Typedown.Core.ViewModels
         public Command<string> CutCommand { get; } = new();
         public Command<string> PasteCommand { get; } = new();
         public Command<string> CopyCommand { get; } = new();
+        public Command<Unit> CopyTableCommand { get; } = new();
         public Command<Unit> DeleteSelectionCommand { get; } = new();
         public Command<Unit> SelectAllCommand { get; } = new();
         public Command<string> FindCommand { get; } = new();
@@ -160,7 +161,7 @@ namespace Typedown.Core.ViewModels
                 $"page error: {LogText.Error(x.Args?["message"]?.ToString())} (where {x.Args?["where"]}; stack {LogText.Stack(x.Args?["stack"]?.ToString())})"));
             RemoteInvoke.Handle("GetSettings", GetSettings);
             RemoteInvoke.Handle<JToken>("SetClipboard", OnSetClipboard);
-            RemoteInvoke.Handle<JToken, bool>("CopyDiagram", OnCopyDiagram);
+            RemoteInvoke.Handle<JToken, bool>("CopyBlock", OnCopyBlock);
             Settings.WhenPropertyChanged(nameof(Settings.AutoSave)).Subscribe(_ => Settings_AutoSaveChanged(Settings.AutoSave));
             // A selection belongs to the mode it was made in: the next mode reports its own.
             Settings.WhenPropertyChanged(nameof(Settings.ReadOnly)).Subscribe(_ => TextSelected = Selected = false);
@@ -185,6 +186,7 @@ namespace Typedown.Core.ViewModels
             PasteCommand.OnExecute.Subscribe(x => Paste(x));
             CutCommand.OnExecute.Subscribe(x => Cut(x));
             CopyCommand.OnExecute.Subscribe(x => Copy(x));
+            CopyTableCommand.OnExecute.Subscribe(_ => CopyTable());
             DeleteSelectionCommand.OnExecute.Subscribe(_ => DeleteSelection());
             SelectAllCommand.OnExecute.Subscribe(_ => SelectAll());
         }
@@ -1521,29 +1523,41 @@ namespace Typedown.Core.ViewModels
         private static string lastCopiedText;
 
         /// <summary>
-        /// A diagram's copy button (the page's ContentState.copyDiagram): its picture, a PNG in base64 (none for a diagram
-        /// that could not be drawn), and its Markdown fenced with its language, as one clipboard item. True once written.
+        /// A figure's copy button (the page's ContentState.copyBlock: a diagram's, a display formula's, a table's) or the
+        /// menu's Copy table: the block's Markdown as text and, for the programs that take more, its picture - a PNG in
+        /// base64, none for a diagram or formula that could not be drawn - or a table's HTML, as one clipboard item.
+        /// True once written.
         /// </summary>
-        public async Task<bool> OnCopyDiagram(JToken arg)
+        public async Task<bool> OnCopyBlock(JToken arg)
         {
             var text = arg?["text"]?.ToString() ?? "";
             var base64 = arg?["png"]?.Type == JTokenType.String ? arg["png"].ToString() : null;
+            var html = arg?["html"]?.Type == JTokenType.String ? arg["html"].ToString() : null;
             try
             {
                 var png = string.IsNullOrEmpty(base64) ? null : Convert.FromBase64String(base64);
-                await Clipboard.SetTextAndPngAsync(text, png);
+                // A table: CF_HTML (Word and Excel paste it as a table) and the text. A picture: a bitmap, RTF with the
+                // picture and the text (SetTextAndPngAsync).
+                if (png == null && !string.IsNullOrEmpty(html)) Clipboard.SetTextAndHtml(text, html);
+                else await Clipboard.SetTextAndPngAsync(text, png);
                 // Pasted back into the app it is the Markdown, as any copy of ours is (Paste).
                 lastCopiedText = text;
                 pendingCopyHtml = null;
-                Log.Debug($"copy diagram: {text.Length} characters of text, {(png == null ? "no picture" : $"a {png.Length}-byte picture")}");
+                Log.Debug($"copy block: {text.Length} characters of text, {(png != null ? $"a {png.Length}-byte picture" : !string.IsNullOrEmpty(html) ? $"{html.Length} characters of HTML" : "nothing else")}");
                 return true;
             }
             catch (Exception ex)
             {
-                Log.Debug($"copy diagram: the clipboard could not be written: {ex}");
+                Log.Debug($"copy block: the clipboard could not be written: {ex}");
                 _ = AppContentDialog.Create(Locale.GetString("Error"), ex.Message, Locale.GetString("Ok")).ShowAsync(AppViewModel.XamlRoot);
                 return false;
             }
+        }
+
+        /// <summary>The menu's Copy table: the page copies the table right-clicked, as its copy button does (OnCopyBlock).</summary>
+        public void CopyTable()
+        {
+            MarkdownEditor?.PostMessage("CopyTable", null);
         }
 
         public void OnSetClipboard(JToken arg)
