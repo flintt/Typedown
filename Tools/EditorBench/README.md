@@ -160,9 +160,16 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   diagram still becomes a picture (drawn at twice its size it passed the canvas limits and came out empty), and each
   picture's text is the diagram's kind and the start of its source.
 - `diagram-copy-check.js` — a diagram's copy button (Mermaid, flowchart, sequence, Vega-Lite, failed ones), in the dark
-  theme, visual and reading mode: shown on hover, not while the source is edited; a click sends `CopyDiagram` with
+  theme, visual and reading mode: shown on hover, not while the source is edited; a click sends `CopyBlock` with
   the fenced Markdown and a PNG twice the export picture's width, opaque and light; a failed diagram sends its code
   only; text, change reports, caret and selection unchanged. `DUMP=<dir>` writes the PNGs there.
+- `copy-blocks-check.js` — the copy buttons of a display formula and of a table, and the menu's Copy table (`CopyTable`),
+  in the dark theme, visual and reading mode: a button on each display formula and table, none on an inline formula, a
+  table's just above its top right corner, none while the block is edited; a formula sends `CopyBlock` with its `$$`
+  Markdown and a PNG twice its size at 16px, opaque, black on white (one KaTeX cannot read: its text only); a table its
+  Markdown as written (compact stays compact) and HTML with the header row in `<th>`, 3×3, each column's `align`, bold,
+  italic, code, link, strike-through, a formula in a cell as its TeX; the right-click in a cell reports `isTable`; text,
+  change reports, caret and selection unchanged. `DUMP=<dir>` writes the formula PNGs there.
 - `table-backspace-check.js` — Backspace in a table cell stays in that cell: one too many after emptying a cell went on
   into the cell before (or out of the table into the heading above), deleted its text, and the typing landed there. An
   empty table still becomes a paragraph with Backspace in its first cell.
