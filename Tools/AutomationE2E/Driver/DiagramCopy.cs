@@ -43,24 +43,8 @@ internal static partial class Program
             EmptyTheClipboard();
             await Activate(window);
             SetProcessDpiAwarenessContext(new IntPtr(-4));
-            async Task<(int x, int y)> ScreenOf(string script)
-            {
-                var at = (await c.Call("test.editor.eval", new { windowId, script }))["result"]!;
-                if (at.Type != JTokenType.Object) throw new CaseFailed($"no element for {script}: {at}");
-                var screen = await c.Call("test.editor.screenPoint", new { windowId, x = (int)at["x"]!, y = (int)at["y"]! });
-                return ((int)screen["x"]!, (int)screen["y"]!);
-            }
-            // As a mouse moves: put somewhere, then nudged across a few pixels so the page sees the pointer arrive.
-            async Task MoveTo((int x, int y) to)
-            {
-                SetCursorPos(to.x - 12, to.y);
-                for (var i = 0; i < 6; i++)
-                {
-                    await Task.Delay(40);
-                    Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dx = 2, dy = 0, dwFlags = 0x0001 } } });
-                }
-                await Task.Delay(400);
-            }
+            Task<(int x, int y)> ScreenOf(string script) => PagePointOnScreen(c, windowId, script);
+            Task MoveTo((int x, int y) to) => MovePointerTo(to);
             const string figure = "document.querySelector('#ag-editor-id figure[data-role=MERMAID]')";
             await c.Call("test.editor.eval", new { windowId, script = $"{figure}.scrollIntoView({{ block: 'center' }})" });
             await Task.Delay(400);
@@ -70,9 +54,7 @@ internal static partial class Program
             Check(double.TryParse(opacity, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out var o) && o >= 0.4, $"the pointer over the diagram shows its copy button (opacity {opacity})");
 
             await MoveTo(await ScreenOf($"(() => {{ const r = {figure}.querySelector('.ag-diagram-copy').getBoundingClientRect(); return {{ x: Math.round(r.left + r.width / 2), y: Math.round(r.top + r.height / 2) }} }})()"));
-            Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0002 } } });
-            await Task.Delay(80);
-            Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0004 } } });
+            await LeftClick();
 
             string? clip = null;
             for (var i = 0; i < 50 && clip != block; i++) { await Task.Delay(200); clip = ClipboardText(); }
@@ -106,6 +88,38 @@ internal static partial class Program
         {
             if (themeBefore != null) await c.Call("test.settings.set", new { windowId, name = "AppTheme", value = themeBefore });
         }
+    }
+
+    /// <summary>
+    /// Where a point of the page is on screen, in physical pixels: the script gives it as { x, y } in the page (CSS
+    /// pixels of the window), the test host maps it (test.editor.screenPoint).
+    /// </summary>
+    private static async Task<(int x, int y)> PagePointOnScreen(Client c, string windowId, string script)
+    {
+        var at = (await c.Call("test.editor.eval", new { windowId, script }))["result"]!;
+        if (at.Type != JTokenType.Object) throw new CaseFailed($"no element for {script}: {at}");
+        var screen = await c.Call("test.editor.screenPoint", new { windowId, x = (int)at["x"]!, y = (int)at["y"]! });
+        return ((int)screen["x"]!, (int)screen["y"]!);
+    }
+
+    /// <summary>As a mouse moves: put just left of the point, then nudged onto it a few pixels at a time, so the page sees the pointer arrive.</summary>
+    private static async Task MovePointerTo((int x, int y) to)
+    {
+        SetCursorPos(to.x - 12, to.y);
+        for (var i = 0; i < 6; i++)
+        {
+            await Task.Delay(40);
+            Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dx = 2, dy = 0, dwFlags = 0x0001 } } });
+        }
+        await Task.Delay(400);
+    }
+
+    /// <summary>The left button pressed and, a moment later, let go where the pointer is.</summary>
+    private static async Task LeftClick()
+    {
+        Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0002 } } });
+        await Task.Delay(80);
+        Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0004 } } });
     }
 
     private static void EmptyTheClipboard()

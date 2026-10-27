@@ -209,6 +209,8 @@ internal static partial class Program
             await Case("RD02 reading mode: Focus mode and Typewriter mode in the View menu are disabled and drawn fainter than the entries that work, in Dark and Light, whether the menu was opened before or not", RD02);
             await Case("DG02 every diagram of the showcase document, written into a window just opened, is drawn once", DG02);
             await Case("DG03 a diagram's copy button, with the real mouse in the dark theme: shown on hover; a click puts a picture (mostly white, light theme) and the fenced Markdown on the clipboard, and leaves the document as it was", DG03);
+            await Case("CB01 a display formula's copy button, with the real mouse in the dark theme: shown on hover, none on an inline formula; a click puts a picture (black on white), RTF with it and the formula's $$ Markdown on the clipboard, no HTML; the document as it was; Word pastes a picture or an equation; pasted back it is the formula", CB01);
+            await Case("CB02 a table's copy button and the menu's Copy table, with the real mouse: the button above the table's top right corner; the clipboard holds the table as HTML (header row, alignment, formatting) and its Markdown as written; the document as it was; Word pastes one 3x3 table; pasted back it is the table's Markdown", CB02);
             await Case("IM01 the showcase's checkerboard, after View > Source mode and back, is drawn and not failed when clicked", IM01);
             await Case("CP01 Copy pasted into Word: pictures at absolute file:/// addresses, a name and an alt text with brackets, an SVG sized in pt, a JPEG", CP01);
             await Case("TH03 the side pane marks what is chosen (the bar under Files/Outline, the outline's and the folder tree's row pill) in a custom theme's accent, and in the system accent again without one", TH03);
@@ -2994,8 +2996,10 @@ internal static partial class Program
     /// Right-clicks the first element matching the selector (a real click, at its left part) and returns the context
     /// menu's items by automation id (their x:Name), read the way a screen reader reads them. Collapsed items are not
     /// there. Where the page point is on screen comes from the test host (test.editor.screenPoint), in physical pixels.
+    /// <paramref name="awaiting"/>: an item that loads with what the page says of the click (x:Load), waited for as
+    /// Select all is - for up to the same three seconds; the items are returned without it when it does not come.
     /// </summary>
-    private static async Task<Dictionary<string, System.Windows.Automation.AutomationElement>> ContextMenuAt(Client c, string windowId, IntPtr window, string selector)
+    private static async Task<Dictionary<string, System.Windows.Automation.AutomationElement>> ContextMenuAt(Client c, string windowId, IntPtr window, string selector, string? awaiting = null)
     {
         await Activate(window);
         var at = (await c.Call("test.editor.eval", new { windowId, script = $"(() => {{ const r = document.querySelector({JsonConvert.ToString(selector)}).getBoundingClientRect(); return {{ x: Math.round(r.left + 20), y: Math.round(r.top + r.height / 2) }} }})()" }))["result"]!;
@@ -3016,7 +3020,7 @@ internal static partial class Program
         Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0010 } } });
         var items = new Dictionary<string, System.Windows.Automation.AutomationElement>();
         var menuItem = new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.MenuItem);
-        for (var i = 0; i < 30 && !items.ContainsKey("SelectAllItem"); i++)
+        for (var i = 0; i < 30 && !(items.ContainsKey("SelectAllItem") && (awaiting == null || items.ContainsKey(awaiting))); i++)
         {
             await Task.Delay(100);
             items.Clear();
@@ -3095,11 +3099,12 @@ internal static partial class Program
 
     /// <summary>
     /// Pastes the clipboard into a new document of a Word of its own (hidden), saves it as .docx in the folder given and
-    /// counts the pictures in it and the picture files embedded in the .docx (a picture Word could not load is none).
-    /// Null where Word is not installed. A Word already running is left alone: when the new instance turns out to be
-    /// that one, only the document made here is closed.
+    /// counts the pictures in it and the picture files embedded in the .docx (a picture Word could not load is none), the
+    /// equations (OMath: what Word made of a formula it can edit) and its tables: each one's rows, columns and first row's
+    /// cell texts joined with "|". Null where Word is not installed. A Word already running is left alone: when the new
+    /// instance turns out to be that one, only the document made here is closed.
     /// </summary>
-    private static (int shapes, int media, string detail)? PasteIntoWord(string folder)
+    private static (int shapes, int media, string detail, int equations, List<(int rows, int columns, string header)> tables)? PasteIntoWord(string folder)
     {
         var type = Type.GetTypeFromProgID("Word.Application");
         if (type == null) return null;
@@ -3119,13 +3124,23 @@ internal static partial class Program
                 var shape = document.InlineShapes[i];
                 detail.Add($"type {(int)shape.Type} {(double)shape.Width:0.#}x{(double)shape.Height:0.#}pt");
             }
+            int equations = document.OMaths.Count;
+            var tables = new List<(int rows, int columns, string header)>();
+            for (var i = 1; i <= (int)document.Tables.Count; i++)
+            {
+                var table = document.Tables[i];
+                // A cell's text ends with "\r\a" (Word's end-of-cell mark); a row's with one more.
+                string first = table.Rows[1].Range.Text;
+                var header = string.Join("|", first.Split("\r\a").Select(t => t.Trim()).Where(t => t.Length > 0));
+                tables.Add(((int)table.Rows.Count, (int)table.Columns.Count, header));
+            }
             var file = Path.Combine(folder, "word-paste.docx");
             document.SaveAs2(file, 16);
             document.Close(0);
             document = null;
             using var zip = System.IO.Compression.ZipFile.OpenRead(file);
             var media = zip.Entries.Count(e => e.FullName.StartsWith("word/media/"));
-            return (shapes, media, string.Join(", ", detail));
+            return (shapes, media, string.Join(", ", detail), equations, tables);
         }
         finally
         {
