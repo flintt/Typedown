@@ -44,6 +44,7 @@ let provider: FindProvider | null = null;
 let open = false;
 let timer: ReturnType<typeof setTimeout> | null = null;
 let version = 0;
+let lastTotal = -1;
 /** The tokens of the lists sent last, by version: an entry clicked in a list a newer one has replaced still finds its match. */
 const sent = new Map<number, unknown[]>();
 
@@ -70,6 +71,11 @@ function postResults() {
     if (!provider || !open) return;
     const started = performance.now();
     const { message, tokens } = buildFindResults(provider);
+    // The same matches as the list sent last (a step with the bar, an entry chosen): nothing new to list - FindState has
+    // moved the host's mark already. A list sent again rebuilt the host's list under the reader's click (it flashed).
+    const last = sent.get(version);
+    if (last && last.length === tokens.length && tokens.every((t, i) => t === last[i]) && message.total === lastTotal) return;
+    lastTotal = message.total;
     version++;
     sent.set(version, tokens);
     for (const v of Array.from(sent.keys())) if (v < version - 2) sent.delete(v);
@@ -107,8 +113,10 @@ transport.addListener<{ open: boolean }>('FindResultsOpen', arg => {
     open = !!arg?.open;
     if (timer) clearTimeout(timer);
     timer = null;
+    // Opened: the list sent whatever was sent before (the host's list was emptied when it closed).
+    sent.clear();
+    lastTotal = -1;
     if (open) noteFindChange(true);
-    else sent.clear();
 });
 
 transport.addListener<{ index: number, version?: number }>('FindActivate', arg => {

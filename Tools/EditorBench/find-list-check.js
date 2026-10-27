@@ -149,8 +149,19 @@ const OPT = { searchIsCaseSensitive: false, searchIsWholeWord: false, searchIsRe
       };
     });
     if (only.includes('activate')) {
+      // Whatever the load before still sends, sent first (a load searches again once its scroll settles).
+      await pause(600);
       list = await lastList();
       count = (await lists()).length;
+      // The blocks drawn again for the step: those of the match chosen before and now (and the caret's), not every block
+      // with a mark.
+      const marked = await page.evaluate(() => {
+        const m = window.__typedownMuya; const cs = m.contentState; const sr = cs.stateRender;
+        window.__redrawn = new Set();
+        const wrap = name => { const f = sr[name]; sr[name] = function (blocks, ...a) { for (const b of blocks) window.__redrawn.add(b.key); return f.call(this, blocks, ...a) } };
+        wrap('redrawNow'); wrap('redrawBlocks');
+        return new Set(cs.searchMatches.matches.map(x => cs.findOutMostBlock(cs.getBlock(x.key)).key)).size;
+      });
       await activate(2, list.version);
       await pause(100);
       const now = await chosen();
@@ -159,8 +170,12 @@ const OPT = { searchIsCaseSensitive: false, searchIsWholeWord: false, searchIsRe
       check(now.selection === 'kiwi' && now.inEditor, `and its text is selected in the editor ("${now.selection}")`);
       const st = await state();
       check(!!st && st.index === 2 && st.total === 10, `the bar says 3 of 10 (${JSON.stringify(st)})`);
-      const after = await nextList(count, l => l.index === 2);
-      check(!!after, 'the list is sent again with entry 3 as the current one');
+      const redrawn = await page.evaluate(() => window.__redrawn.size);
+      check(redrawn <= 2 && redrawn < marked, `only the blocks of the match chosen before and now are drawn again (${redrawn} of the ${marked} with marks)`);
+      // The matches are the same: no new list (the host's list moves its mark on FindState; a list sent again rebuilt it
+      // under the click, and it flashed).
+      await pause(300);
+      check((await lists()).length === count, `choosing an entry sends no new list (${(await lists()).length - count} sent: ${JSON.stringify((await lists()).slice(count).map(l => ({ v: l.version, at: Math.round(l.at), total: l.total, index: l.index })))}, before: ${JSON.stringify((await lists()).slice(Math.max(0, count - 2), count).map(l => ({ v: l.version, at: Math.round(l.at), total: l.total })))})`);
       // Find next goes on from there.
       await page.evaluate(() => window.__deliver('Find', { action: 'next' }));
       await pause(50);

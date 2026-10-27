@@ -721,7 +721,7 @@ class Muya {
   find(action/* pre or next */) {
     const before = this.contentState.searchKeys()
     this.contentState.find(action)
-    this.contentState.renderSearch(before, false, null, true)
+    this.contentState.renderSearch(before, false, null, true, true)
     return this.contentState.searchMatches
   }
 
@@ -737,7 +737,7 @@ class Muya {
     const before = contentState.searchKeys()
     contentState.searchMatches.index = index
     contentState.setCursorToHighlight()
-    contentState.renderSearch(before, select, null, true)
+    contentState.renderSearch(before, select, null, true, true)
     return contentState.searchMatches
   }
 

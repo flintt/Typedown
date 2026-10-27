@@ -251,7 +251,10 @@ class ContentState {
    * (StateRender.jumpProgressive). The blocks with the match chosen and the caret, before and now, are drawn at once (a
    * mark left on one would be scrolled to), the others around the window too, the rest in idle time (redrawBlocks).
    */
-  renderSearch(before, isRenderCursor = true, onDrawn = null, drawNow = false) {
+  // onlyChosen: the matches are the same as before, only the one chosen (and the caret) moved - a step to another match
+  // (find, an entry of the results list): only the blocks of the match chosen and the caret, before and now, are drawn
+  // again, not every block with a mark.
+  renderSearch(before, isRenderCursor = true, onDrawn = null, drawNow = false, onlyChosen = false) {
     const { blocks, searchMatches: { matches, index } } = this
     matches.forEach((m, i) => {
       m.active = i === index
@@ -262,7 +265,7 @@ class ContentState {
     }
     const after = this.searchKeys()
     const tops = new Set()
-    for (const key of [...before.keys, ...after.keys]) {
+    for (const key of onlyChosen ? [...before.urgent, ...after.urgent] : [...before.keys, ...after.keys]) {
       const top = topOf(key)
       if (top) tops.add(top)
     }

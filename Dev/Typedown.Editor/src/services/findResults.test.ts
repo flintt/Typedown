@@ -38,12 +38,14 @@ const sent = (name: string) => {
 
 function provider(total: number, index = 0) {
     const activated: [number, unknown][] = [];
+    // The same object for the same match, as the editors' own matches are.
+    const tokens: { match: number }[] = [];
     const p = {
         total, index,
         begin: jest.fn(),
         state: () => ({ total: p.total, index: p.index }),
         preview: (i: number) => ({ text: `match ${i}`, start: 6, end: 6 + String(i).length }),
-        token: (i: number) => ({ match: i }),
+        token: (i: number) => (tokens[i] ??= { match: i }),
         activate: (i: number, token: unknown) => { activated.push([i, token]); },
         activated,
     };
@@ -66,14 +68,21 @@ describe('findResults', () => {
         expect(list.entries).toEqual([0, 1, 2].map(i => ({ text: `match ${i}`, start: 6, end: 7 })));
         expect(p.begin).toHaveBeenCalledTimes(1);
 
-        // Later changes a moment after the last one.
+        // Only the match chosen moved (a step, an entry chosen): the host is told where the bar is, the list not sent again.
         p.index = 2;
+        results.noteFindChange();
+        jest.advanceTimersByTime(results.FIND_RESULTS_DELAY_MS);
+        expect(sent('FindResults')).toHaveLength(1);
+        expect(sent('FindState').pop()).toEqual({ total: 3, index: 2 });
+
+        // New matches: sent again, a moment after the last change.
+        p.total = 4;
         results.noteFindChange();
         results.noteFindChange();
         expect(sent('FindResults')).toHaveLength(1);
         jest.advanceTimersByTime(results.FIND_RESULTS_DELAY_MS);
         expect(sent('FindResults')).toHaveLength(2);
-        expect(sent('FindResults')[1]).toMatchObject({ version: 2, index: 2 });
+        expect(sent('FindResults')[1]).toMatchObject({ version: 2, total: 4, index: 2 });
     });
 
     it('caps the entries and keeps the count exact', () => {
