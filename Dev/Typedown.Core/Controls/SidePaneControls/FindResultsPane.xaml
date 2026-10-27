@@ -48,7 +48,7 @@
             </Button>
         </Grid>
         <StackPanel Grid.Row="1" Margin="12,8,12,4" Spacing="2">
-            <TextBlock x:Name="TotalText" AutomationProperties.AutomationId="FindResultsTotal" Opacity="0.7" FontSize="12" TextWrapping="Wrap"
+            <TextBlock x:Name="TotalLabel" AutomationProperties.AutomationId="FindResultsTotal" Opacity="0.7" FontSize="12" TextWrapping="Wrap"
                        Text="{x:Bind local:FindResultsPane.TotalText(Results.Total, Results.Capped), Mode=OneWay}"/>
             <TextBlock x:Name="TooManyText" AutomationProperties.AutomationId="FindResultsTooMany" FontSize="12" TextWrapping="Wrap"
                        Foreground="{ThemeResource SystemFillColorCautionBrush}" Text="{u:LocaleString Key=FindResults.TooMany}"
