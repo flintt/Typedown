@@ -157,6 +157,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | WV02 | without the WebView2 runtime the install window comes up with the download; a setup that installs it goes on to the main window |
 | WV03 | a setup that did not install the WebView2 runtime leaves the install window saying so, with the download; Cancel ends the start |
 | LG01 | after the language is changed through the API, no Chinese or Japanese is left on the main window, the home page or the settings page |
+| LG02 | the Chinese View menu after a language switch (zh -> en with menus opened -> zh; zh -> en -> zh; started in en -> zh) looks as in a test host started in Chinese, the real mouse opening it |
 | DL01 | the debug log holds no document text: a document with marker words opened, switched away from and back, outlined, read, typed into, searched, pasted into and exported, and none of its words in debug.log |
 | HM01 | Help > User guide opens the user guide in the interface's language, Help > About the About page |
 | FS02 | out of full screen the window is dragged by its title bar again at once (with the title row, and in compact mode by the menu row) |
@@ -316,6 +317,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | `test.events.throwingHandler` | `windowId` | The window's editor messages with a handler that throws on the first one: how many each of two handlers got of two messages (a handler that threw was detached for good, and the message went no further). | TestHostHooks.cs |
 | `test.app.throwUnhandled` | `windowId` | An exception out of an event handler XAML calls (a timer's, as a click handler's would be): the process stays (it ended the app), and the exception is in the log. | TestHostHooks.cs |
 | `test.window.popups` | `windowId` | The popups open in a window (menus, flyouts, a number box's buttons...), by the type of what they show. | TestHostHooks.cs |
+| `test.window.popupLanguages` | `windowId` | The language tag of each open popup, of what it shows and of the texts in it (FrameworkElement.Language, as inherited): WinUI picks the Chinese fallback font by it, and a menu made under another language kept that one's after switching back (LG02). | TestHostHooks.cs |
 | `test.app.caseLabel` | `label?` | The running E2E case and its purpose, shown in every window's title after the test host's marker (label empty: none). Not tied to a window: a case sets it before it has one. | TestHostHooks.cs |
 | `test.app.titleMarker` | `show?`, `windowId` | The test host's title markers ("AUTOMATION TEST HOST ·" and the connected client's note) on (show: true) or off in every window, for screenshots that are to look like the app. | TestHostHooks.cs |
 | `test.file.saveAs` | `path`, `windowId` | The window's active document saved as the path, as File > Save as with that file picked (an untitled one's first save too); the path back, or null when it was not saved. | TestHostHooks.cs |

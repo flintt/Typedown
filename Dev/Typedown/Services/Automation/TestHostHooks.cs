@@ -573,6 +573,40 @@ namespace Typedown.Services.Automation
                         : global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetOpenPopupsForXamlRoot(app.XamlRoot).Select(p => p.Child?.GetType().Name ?? "empty").ToList();
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["popups"] = new Newtonsoft.Json.Linq.JArray(open) };
                 })));
+            // The language tag of each open popup, of what it shows and of the texts in it (FrameworkElement.Language, as
+            // inherited): WinUI picks the Chinese fallback font by it, and a menu made under another language kept that
+            // one's after switching back (LG02).
+            methods.Add(new MethodDescriptor("test.window.popupLanguages", null, "test.window.popupLanguages/1", (c, ct) =>
+                Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    var popups = new Newtonsoft.Json.Linq.JArray();
+                    if (app.XamlRoot != null)
+                        foreach (var popup in global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetOpenPopupsForXamlRoot(app.XamlRoot))
+                        {
+                            var texts = new Newtonsoft.Json.Linq.JArray();
+                            void Walk(global::Microsoft.UI.Xaml.DependencyObject node)
+                            {
+                                if (node is global::Microsoft.UI.Xaml.Controls.TextBlock block && !string.IsNullOrEmpty(block.Text))
+                                    texts.Add(new Newtonsoft.Json.Linq.JObject { ["text"] = block.Text, ["language"] = block.Language });
+                                var count = global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(node);
+                                for (var i = 0; i < count; i++) Walk(global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChild(node, i));
+                            }
+                            if (popup.Child != null) Walk(popup.Child);
+                            popups.Add(new Newtonsoft.Json.Linq.JObject
+                            {
+                                ["type"] = popup.Child?.GetType().Name ?? "empty",
+                                ["popup"] = popup.Language,
+                                ["child"] = (popup.Child as global::Microsoft.UI.Xaml.FrameworkElement)?.Language,
+                                ["texts"] = texts,
+                            });
+                        }
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject
+                    {
+                        ["popups"] = popups,
+                        ["root"] = (app.XamlRoot?.Content as global::Microsoft.UI.Xaml.FrameworkElement)?.Language,
+                        ["interface"] = Core.Utilities.Locale.ElementLanguage,
+                    };
+                })));
             // The running E2E case and its purpose, shown in every window's title after the test host's marker (label
             // empty: none). Not tied to a window: a case sets it before it has one.
             methods.Add(new MethodDescriptor("test.app.caseLabel", null, "test.app.caseLabel/1", async (c, ct) =>
