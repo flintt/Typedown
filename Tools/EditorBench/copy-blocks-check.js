@@ -10,7 +10,8 @@
 // - the button shows the check mark;
 // - while a formula's source or a table's cell is being edited (ag-active) the block has no copy button;
 // - the menu's Copy table (the host's CopyTable message after a right-click in a table) copies the table right-clicked,
-//   and the right-click told the host it was in a table (SelectionChange menuState.isTable: the menu item shows by it);
+//   and the right-click told the host whether it was in a table as the button went down (ContextMenuTarget, before the
+//   host's menu opens on the button's release: its Copy table shows by it);
 // - the document's text, the caret and the selection stay as they were, and no change is reported.
 const { openEditor } = require('./harness');
 
@@ -201,11 +202,25 @@ const doc = '# Blocks\n\nFirst paragraph with $a+b$ inline.\n\n' + math + '\n\n'
         const r = cell.getBoundingClientRect();
         return { x: r.left + 8, y: r.top + r.height / 2 };
       }, tableSel);
-      await page.evaluate(() => { delete window.__last.SelectionChange; });
-      await page.mouse.click(at.x, at.y, { button: 'right' });
-      await pause(400);
-      const isTable = await page.evaluate(() => window.__last.SelectionChange?.menuState?.isTable);
-      if (modeLabel === 'visual') check(isTable === true, `${modeLabel} menu: the right-click in a cell told the host it is in a table (menuState.isTable ${isTable})`);
+      // The host opens its menu as the button comes up: the page must have said where the click is by then.
+      const rightDown = async (x, y) => {
+        await page.evaluate(() => { delete window.__last.ContextMenuTarget; });
+        await page.mouse.move(x, y);
+        await page.mouse.down({ button: 'right' });
+        await pause(50);
+        const report = await page.evaluate(() => window.__last.ContextMenuTarget);
+        await page.mouse.up({ button: 'right' });
+        await pause(300);
+        return report;
+      };
+      const elsewhere = await page.evaluate(() => {
+        const r = document.querySelector('#ag-editor-id p').getBoundingClientRect();
+        return { x: r.left + 8, y: r.top + r.height / 2 };
+      });
+      const onParagraph = await rightDown(elsewhere.x, elsewhere.y);
+      check(onParagraph && onParagraph.table === false, `${modeLabel} menu: a right-click on a paragraph tells the host, as the button goes down, it is not in a table (${JSON.stringify(onParagraph)})`);
+      const inCell = await rightDown(at.x, at.y);
+      check(inCell && inCell.table === true, `${modeLabel} menu: a right-click in a cell tells the host, as the button goes down, it is in a table (${JSON.stringify(inCell)})`);
       const before = await page.evaluate(() => window.__copies.length);
       await page.evaluate(() => window.__deliver('CopyTable', null));
       await page.waitForFunction(n => window.__copies.length > n, { timeout: 30000 }, before).catch(() => {});
