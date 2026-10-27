@@ -17,6 +17,48 @@ using Newtonsoft.Json.Linq;
 /// </summary>
 internal static partial class Program
 {
+    /// <summary>
+    /// The results list's region of the screen captured frame after frame until stopped, each frame against the first: how
+    /// many frames had a line changed outside the <paramref name="allowed"/> rows (their mark and the pointer's highlight
+    /// may change), and how many were nearly blank (less than half the first frame's ink: the list rebuilt).
+    /// </summary>
+    private static (int Frames, int Outside, int Blank, string Detail) WatchList(System.Windows.Rect region, List<System.Windows.Rect> allowed, System.Threading.CancellationToken stop)
+    {
+        int x = (int)region.Left, y = (int)region.Top, w = Math.Max(1, (int)region.Width), h = Math.Max(1, (int)region.Height);
+        using var bitmap = new System.Drawing.Bitmap(w, h);
+        int[]? first = null; long firstInk = 0;
+        int frames = 0, outside = 0, blank = 0;
+        var events = new List<string>();
+        var clock = System.Diagnostics.Stopwatch.StartNew();
+        bool Allowed(int line) => allowed.Any(r => y + line >= r.Top - 3 && y + line <= r.Bottom + 3);
+        while (!stop.IsCancellationRequested)
+        {
+            using (var g = System.Drawing.Graphics.FromImage(bitmap)) g.CopyFromScreen(x, y, 0, 0, new System.Drawing.Size(w, h));
+            var data = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            var bytes = new byte[data.Stride * h];
+            System.Runtime.InteropServices.Marshal.Copy(data.Scan0, bytes, 0, bytes.Length);
+            bitmap.UnlockBits(data);
+            // Each line: the sum of its pixels' brightness; the frame's ink: how far its pixels are from its first pixel.
+            var lines = new int[h];
+            long ink = 0;
+            int bg = bytes[0] + bytes[1] + bytes[2];
+            for (var row = 0; row < h; row++)
+                for (var col = 0; col < w; col++)
+                {
+                    var p = row * data.Stride + col * 4;
+                    var v = bytes[p] + bytes[p + 1] + bytes[p + 2];
+                    lines[row] += v;
+                    ink += Math.Abs(v - bg);
+                }
+            frames++;
+            if (first == null) { first = lines; firstInk = Math.Max(1, ink); continue; }
+            var changed = Enumerable.Range(0, h).Where(row => Math.Abs(lines[row] - first[row]) > w * 6 && !Allowed(row)).ToList();
+            if (changed.Count > 0) { outside++; if (events.Count < 8) events.Add($"{clock.ElapsedMilliseconds}ms lines {changed.First()}-{changed.Last()}"); }
+            if (ink * 2 < firstInk) { blank++; if (events.Count < 8) events.Add($"{clock.ElapsedMilliseconds}ms blank"); }
+        }
+        return (frames, outside, blank, events.Count == 0 ? "steady" : string.Join(", ", events));
+    }
+
     private static async Task FR01(List<string> notes)
     {
         using var c = await Session("e2e FR01");
@@ -123,7 +165,27 @@ internal static partial class Program
             Check(covered, "the list is shown in the pane's place, over the Outline" + (covered ? "" : $" ({await PaneState()})"));
 
             // Entry 3 with the real mouse: the third match selected in the editor, the bar on it.
+            // Choosing it must not rebuild the list (the user saw it flash on every click): the same rows before and after,
+            // the list where it was, and on the screen nothing but the two rows whose mark moves (1 to 3) changing.
+            SetProcessDpiAwarenessContext(new IntPtr(-4));
+            var list = await OnScreen("FindResultsList", "the results list");
+            var rowsBefore = Enumerable.Range(1, 6).Select(i => FindIn(window, $"FindResult:{i}")!.GetRuntimeId()).ToList();
+            double? Scrolled() => list.TryGetCurrentPattern(ScrollPattern.Pattern, out var sp) ? ((ScrollPattern)sp).Current.VerticalScrollPercent : null;
+            var scrollBefore = Scrolled();
+            var allowed = new[] { 1, 3 }.Select(i => FindIn(window, $"FindResult:{i}")!.Current.BoundingRectangle).ToList();
+            var watching = new System.Threading.CancellationTokenSource();
+            var watch = Task.Run(() => WatchList(list.Current.BoundingRectangle, allowed, watching.Token));
+            await Task.Delay(150);
             await Click(window, await OnScreen("FindResult:3", "the third entry"));
+            await Task.Delay(1000);
+            watching.Cancel();
+            var (frames, outside, blank, detail) = await watch;
+            notes.Add($"list region after the click: {frames} frames, {outside} changed outside rows 1 and 3, {blank} nearly blank; {detail}");
+            Check(frames >= 5 && outside == 0 && blank == 0, $"the list does not flash when an entry is chosen ({frames} frames, {outside} changed outside rows 1 and 3, {blank} blank: {detail})");
+            var rowsAfter = Enumerable.Range(1, 6).Select(i => FindIn(window, $"FindResult:{i}")?.GetRuntimeId()).ToList();
+            Check(rowsBefore.Zip(rowsAfter).All(p => p.Second != null && p.First.SequenceEqual(p.Second)), "the list's rows are the same elements after the click (not made again)");
+            var scrollAfter = Scrolled();
+            Check(scrollBefore == scrollAfter, $"the list stays scrolled where it was ({scrollBefore} -> {scrollAfter})");
             JObject chosen = new();
             Check(await Eventually(async () => { chosen = await Chosen(); return (int?)chosen["index"] == 2; }, 5000), $"entry 3 makes the third match the editor's current one ({chosen})");
             notes.Add($"after entry 3: {chosen.ToString(Newtonsoft.Json.Formatting.None)}");
