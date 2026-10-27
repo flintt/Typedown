@@ -1168,4 +1168,22 @@
   <data name="FolderSearch.Summary" xml:space="preserve">
     <value>Failų vardai: {0} · Turinys: {1} · Peržiūrėta failų: {2}</value>
   </data>
+  <data name="FindResults.ShowAll" xml:space="preserve">
+    <value>Rodyti visus rezultatus</value>
+  </data>
+  <data name="FindResults.Title" xml:space="preserve">
+    <value>Ieškoti dokumente</value>
+  </data>
+  <data name="FindResults.Total" xml:space="preserve">
+    <value>Rezultatų: {0}</value>
+  </data>
+  <data name="FindResults.TooMany" xml:space="preserve">
+    <value>Per daug rezultatų – rašykite toliau</value>
+  </data>
+  <data name="FindResults.None" xml:space="preserve">
+    <value>Rezultatų nėra</value>
+  </data>
+  <data name="FindResults.Position" xml:space="preserve">
+    <value>{0} iš {1}</value>
+  </data>
 </root>

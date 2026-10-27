@@ -1168,4 +1168,22 @@
   <data name="FolderSearch.Summary" xml:space="preserve">
     <value>Majina ya faili: {0} · Maudhui: {1} · Faili zilizotafutwa: {2}</value>
   </data>
+  <data name="FindResults.ShowAll" xml:space="preserve">
+    <value>Onyesha matokeo yote</value>
+  </data>
+  <data name="FindResults.Title" xml:space="preserve">
+    <value>Tafuta katika hati</value>
+  </data>
+  <data name="FindResults.Total" xml:space="preserve">
+    <value>Matokeo: {0}</value>
+  </data>
+  <data name="FindResults.TooMany" xml:space="preserve">
+    <value>Matokeo ni mengi mno – endelea kuandika</value>
+  </data>
+  <data name="FindResults.None" xml:space="preserve">
+    <value>Hakuna matokeo</value>
+  </data>
+  <data name="FindResults.Position" xml:space="preserve">
+    <value>{0} kati ya {1}</value>
+  </data>
 </root>

@@ -1168,4 +1168,22 @@
   <data name="FolderSearch.Summary" xml:space="preserve">
     <value>Fitxategi-izenak: {0} · Edukia: {1} · Bilatutako fitxategiak: {2}</value>
   </data>
+  <data name="FindResults.ShowAll" xml:space="preserve">
+    <value>Erakutsi emaitza guztiak</value>
+  </data>
+  <data name="FindResults.Title" xml:space="preserve">
+    <value>Bilatu dokumentuan</value>
+  </data>
+  <data name="FindResults.Total" xml:space="preserve">
+    <value>Emaitzak: {0}</value>
+  </data>
+  <data name="FindResults.TooMany" xml:space="preserve">
+    <value>Emaitza gehiegi – jarraitu idazten</value>
+  </data>
+  <data name="FindResults.None" xml:space="preserve">
+    <value>Ez dago emaitzarik</value>
+  </data>
+  <data name="FindResults.Position" xml:space="preserve">
+    <value>{0}/{1}</value>
+  </data>
 </root>

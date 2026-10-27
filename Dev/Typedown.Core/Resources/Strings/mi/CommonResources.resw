@@ -1168,4 +1168,22 @@
   <data name="FolderSearch.Summary" xml:space="preserve">
     <value>Ngā ingoa kōnae: {0} · Ihirangi: {1} · Ngā kōnae i rapua: {2}</value>
   </data>
+  <data name="FindResults.ShowAll" xml:space="preserve">
+    <value>Whakaaturia ngā hua katoa</value>
+  </data>
+  <data name="FindResults.Title" xml:space="preserve">
+    <value>Rapua i te tuhinga</value>
+  </data>
+  <data name="FindResults.Total" xml:space="preserve">
+    <value>Ngā hua: {0}</value>
+  </data>
+  <data name="FindResults.TooMany" xml:space="preserve">
+    <value>He tini rawa ngā hua – me pato tonu</value>
+  </data>
+  <data name="FindResults.None" xml:space="preserve">
+    <value>Kāore he hua</value>
+  </data>
+  <data name="FindResults.Position" xml:space="preserve">
+    <value>{0} o {1}</value>
+  </data>
 </root>

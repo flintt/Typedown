@@ -1167,4 +1167,22 @@
   <data name="FolderSearch.Summary" xml:space="preserve">
     <value>የፋይል ስሞች፦ {0} · ይዘት፦ {1} · የተፈለጉ ፋይሎች፦ {2}</value>
   </data>
+  <data name="FindResults.ShowAll" xml:space="preserve">
+    <value>ሁሉንም ውጤቶች አሳይ</value>
+  </data>
+  <data name="FindResults.Title" xml:space="preserve">
+    <value>በሰነዱ ውስጥ ፈልግ</value>
+  </data>
+  <data name="FindResults.Total" xml:space="preserve">
+    <value>ውጤቶች፦ {0}</value>
+  </data>
+  <data name="FindResults.TooMany" xml:space="preserve">
+    <value>በጣም ብዙ ውጤቶች – መተየብዎን ይቀጥሉ</value>
+  </data>
+  <data name="FindResults.None" xml:space="preserve">
+    <value>ምንም ውጤት የለም</value>
+  </data>
+  <data name="FindResults.Position" xml:space="preserve">
+    <value>{0} ከ{1}</value>
+  </data>
 </root>

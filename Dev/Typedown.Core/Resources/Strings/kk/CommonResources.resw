@@ -1168,4 +1168,22 @@
   <data name="FolderSearch.Summary" xml:space="preserve">
     <value>Файл аттары: {0} · Мазмұны: {1} · Ізделген файлдар: {2}</value>
   </data>
+  <data name="FindResults.ShowAll" xml:space="preserve">
+    <value>Барлық нәтижені көрсету</value>
+  </data>
+  <data name="FindResults.Title" xml:space="preserve">
+    <value>Құжаттан іздеу</value>
+  </data>
+  <data name="FindResults.Total" xml:space="preserve">
+    <value>Нәтижелер: {0}</value>
+  </data>
+  <data name="FindResults.TooMany" xml:space="preserve">
+    <value>Нәтиже тым көп – теруді жалғастырыңыз</value>
+  </data>
+  <data name="FindResults.None" xml:space="preserve">
+    <value>Нәтиже жоқ</value>
+  </data>
+  <data name="FindResults.Position" xml:space="preserve">
+    <value>{0} / {1}</value>
+  </data>
 </root>

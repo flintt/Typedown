@@ -1168,4 +1168,22 @@
   <data name="FolderSearch.Summary" xml:space="preserve">
     <value>파일 이름: {0} · 내용: {1} · 검색한 파일: {2}</value>
   </data>
+  <data name="FindResults.ShowAll" xml:space="preserve">
+    <value>모든 결과 표시</value>
+  </data>
+  <data name="FindResults.Title" xml:space="preserve">
+    <value>문서에서 검색</value>
+  </data>
+  <data name="FindResults.Total" xml:space="preserve">
+    <value>결과: {0}개</value>
+  </data>
+  <data name="FindResults.TooMany" xml:space="preserve">
+    <value>결과가 너무 많습니다 – 계속 입력하세요</value>
+  </data>
+  <data name="FindResults.None" xml:space="preserve">
+    <value>결과 없음</value>
+  </data>
+  <data name="FindResults.Position" xml:space="preserve">
+    <value>{0}/{1}</value>
+  </data>
 </root>

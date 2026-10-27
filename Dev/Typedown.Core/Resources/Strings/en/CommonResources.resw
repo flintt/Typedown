@@ -1239,4 +1239,28 @@
     <value>Settings</value>
     <comment>首页底部去设置的链接</comment>
   </data>
+  <data name="FindResults.ShowAll" xml:space="preserve">
+    <value>Show all results</value>
+    <comment>查找栏按钮：在侧栏列出本文全部搜索结果</comment>
+  </data>
+  <data name="FindResults.Title" xml:space="preserve">
+    <value>Search in document</value>
+    <comment>侧栏页面标题：本文搜索（查找栏结果列表）</comment>
+  </data>
+  <data name="FindResults.Total" xml:space="preserve">
+    <value>Results: {0}</value>
+    <comment>本文搜索：结果总数</comment>
+  </data>
+  <data name="FindResults.TooMany" xml:space="preserve">
+    <value>Too many results – keep typing</value>
+    <comment>本文搜索：结果超过 500 条，只列出前 500 条，提示继续输入以缩小范围</comment>
+  </data>
+  <data name="FindResults.None" xml:space="preserve">
+    <value>No results</value>
+    <comment>查找栏：没有匹配</comment>
+  </data>
+  <data name="FindResults.Position" xml:space="preserve">
+    <value>{0} of {1}</value>
+    <comment>查找栏：当前是第 {0} 个，共 {1} 个匹配（也用于结果列表的读屏名称）</comment>
+  </data>
 </root>

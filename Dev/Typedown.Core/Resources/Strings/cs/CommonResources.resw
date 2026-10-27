@@ -1168,4 +1168,22 @@
   <data name="FolderSearch.Summary" xml:space="preserve">
     <value>Názvy souborů: {0} · Obsah: {1} · Prohledáno souborů: {2}</value>
   </data>
+  <data name="FindResults.ShowAll" xml:space="preserve">
+    <value>Zobrazit všechny výsledky</value>
+  </data>
+  <data name="FindResults.Title" xml:space="preserve">
+    <value>Hledat v dokumentu</value>
+  </data>
+  <data name="FindResults.Total" xml:space="preserve">
+    <value>Výsledky: {0}</value>
+  </data>
+  <data name="FindResults.TooMany" xml:space="preserve">
+    <value>Příliš mnoho výsledků – pište dál</value>
+  </data>
+  <data name="FindResults.None" xml:space="preserve">
+    <value>Žádné výsledky</value>
+  </data>
+  <data name="FindResults.Position" xml:space="preserve">
+    <value>{0} z {1}</value>
+  </data>
 </root>

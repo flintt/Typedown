@@ -1168,4 +1168,22 @@
   <data name="FolderSearch.Summary" xml:space="preserve">
     <value>ファイル名: {0} · 内容: {1} · 検索したファイル: {2}</value>
   </data>
+  <data name="FindResults.ShowAll" xml:space="preserve">
+    <value>すべての結果を表示</value>
+  </data>
+  <data name="FindResults.Title" xml:space="preserve">
+    <value>ドキュメント内を検索</value>
+  </data>
+  <data name="FindResults.Total" xml:space="preserve">
+    <value>結果: {0} 件</value>
+  </data>
+  <data name="FindResults.TooMany" xml:space="preserve">
+    <value>結果が多すぎます – 入力を続けてください</value>
+  </data>
+  <data name="FindResults.None" xml:space="preserve">
+    <value>結果なし</value>
+  </data>
+  <data name="FindResults.Position" xml:space="preserve">
+    <value>{0} / {1}</value>
+  </data>
 </root>

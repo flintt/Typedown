@@ -1168,4 +1168,22 @@
   <data name="FolderSearch.Summary" xml:space="preserve">
     <value>שמות קבצים: {0} · תוכן: {1} · קבצים שנסרקו: {2}</value>
   </data>
+  <data name="FindResults.ShowAll" xml:space="preserve">
+    <value>הצגת כל התוצאות</value>
+  </data>
+  <data name="FindResults.Title" xml:space="preserve">
+    <value>חיפוש במסמך</value>
+  </data>
+  <data name="FindResults.Total" xml:space="preserve">
+    <value>תוצאות: {0}</value>
+  </data>
+  <data name="FindResults.TooMany" xml:space="preserve">
+    <value>יותר מדי תוצאות – המשיכו להקליד</value>
+  </data>
+  <data name="FindResults.None" xml:space="preserve">
+    <value>אין תוצאות</value>
+  </data>
+  <data name="FindResults.Position" xml:space="preserve">
+    <value>{0} מתוך {1}</value>
+  </data>
 </root>

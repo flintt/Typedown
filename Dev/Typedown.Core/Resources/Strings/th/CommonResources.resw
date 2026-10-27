@@ -1168,4 +1168,22 @@
   <data name="FolderSearch.Summary" xml:space="preserve">
     <value>ชื่อไฟล์: {0} · เนื้อหา: {1} · ไฟล์ที่ค้นหา: {2}</value>
   </data>
+  <data name="FindResults.ShowAll" xml:space="preserve">
+    <value>แสดงผลลัพธ์ทั้งหมด</value>
+  </data>
+  <data name="FindResults.Title" xml:space="preserve">
+    <value>ค้นหาในเอกสาร</value>
+  </data>
+  <data name="FindResults.Total" xml:space="preserve">
+    <value>ผลลัพธ์: {0}</value>
+  </data>
+  <data name="FindResults.TooMany" xml:space="preserve">
+    <value>ผลลัพธ์มากเกินไป – พิมพ์ต่อ</value>
+  </data>
+  <data name="FindResults.None" xml:space="preserve">
+    <value>ไม่มีผลลัพธ์</value>
+  </data>
+  <data name="FindResults.Position" xml:space="preserve">
+    <value>{0} จาก {1}</value>
+  </data>
 </root>

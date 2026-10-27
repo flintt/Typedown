@@ -1168,4 +1168,22 @@
   <data name="FolderSearch.Summary" xml:space="preserve">
     <value>Filnavn: {0} · Innhold: {1} · Gjennomsøkte filer: {2}</value>
   </data>
+  <data name="FindResults.ShowAll" xml:space="preserve">
+    <value>Vis alle resultater</value>
+  </data>
+  <data name="FindResults.Title" xml:space="preserve">
+    <value>Søk i dokumentet</value>
+  </data>
+  <data name="FindResults.Total" xml:space="preserve">
+    <value>Resultater: {0}</value>
+  </data>
+  <data name="FindResults.TooMany" xml:space="preserve">
+    <value>For mange resultater – skriv videre</value>
+  </data>
+  <data name="FindResults.None" xml:space="preserve">
+    <value>Ingen resultater</value>
+  </data>
+  <data name="FindResults.Position" xml:space="preserve">
+    <value>{0} av {1}</value>
+  </data>
 </root>

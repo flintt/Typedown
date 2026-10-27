@@ -1168,4 +1168,22 @@
   <data name="FolderSearch.Summary" xml:space="preserve">
     <value>Tiedostonimet: {0} · Sisältö: {1} · Haettuja tiedostoja: {2}</value>
   </data>
+  <data name="FindResults.ShowAll" xml:space="preserve">
+    <value>Näytä kaikki tulokset</value>
+  </data>
+  <data name="FindResults.Title" xml:space="preserve">
+    <value>Etsi asiakirjasta</value>
+  </data>
+  <data name="FindResults.Total" xml:space="preserve">
+    <value>Tuloksia: {0}</value>
+  </data>
+  <data name="FindResults.TooMany" xml:space="preserve">
+    <value>Liikaa tuloksia – jatka kirjoittamista</value>
+  </data>
+  <data name="FindResults.None" xml:space="preserve">
+    <value>Ei tuloksia</value>
+  </data>
+  <data name="FindResults.Position" xml:space="preserve">
+    <value>{0}/{1}</value>
+  </data>
 </root>

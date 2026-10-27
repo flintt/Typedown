@@ -1168,4 +1168,22 @@
   <data name="FolderSearch.Summary" xml:space="preserve">
     <value>फाइलची नावे: {0} · मजकूर: {1} · शोधलेल्या फाइल्स: {2}</value>
   </data>
+  <data name="FindResults.ShowAll" xml:space="preserve">
+    <value>सर्व निकाल दाखवा</value>
+  </data>
+  <data name="FindResults.Title" xml:space="preserve">
+    <value>दस्तऐवजात शोधा</value>
+  </data>
+  <data name="FindResults.Total" xml:space="preserve">
+    <value>निकाल: {0}</value>
+  </data>
+  <data name="FindResults.TooMany" xml:space="preserve">
+    <value>खूप जास्त निकाल – टाइप करणे सुरू ठेवा</value>
+  </data>
+  <data name="FindResults.None" xml:space="preserve">
+    <value>कोणतेही निकाल नाहीत</value>
+  </data>
+  <data name="FindResults.Position" xml:space="preserve">
+    <value>{1} पैकी {0}</value>
+  </data>
 </root>

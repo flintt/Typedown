@@ -1168,4 +1168,22 @@
   <data name="FolderSearch.Summary" xml:space="preserve">
     <value>Noms de fichiers : {0} · Contenu : {1} · Fichiers analysés : {2}</value>
   </data>
+  <data name="FindResults.ShowAll" xml:space="preserve">
+    <value>Afficher tous les résultats</value>
+  </data>
+  <data name="FindResults.Title" xml:space="preserve">
+    <value>Rechercher dans le document</value>
+  </data>
+  <data name="FindResults.Total" xml:space="preserve">
+    <value>Résultats : {0}</value>
+  </data>
+  <data name="FindResults.TooMany" xml:space="preserve">
+    <value>Trop de résultats – continuez à taper</value>
+  </data>
+  <data name="FindResults.None" xml:space="preserve">
+    <value>Aucun résultat</value>
+  </data>
+  <data name="FindResults.Position" xml:space="preserve">
+    <value>{0} sur {1}</value>
+  </data>
 </root>

@@ -1182,4 +1182,22 @@
   <data name="FolderSearch.Summary" xml:space="preserve">
     <value>檔名：{0} · 內容：{1} · 已搜尋 {2} 個檔案</value>
   </data>
+  <data name="FindResults.ShowAll" xml:space="preserve">
+    <value>顯示所有結果</value>
+  </data>
+  <data name="FindResults.Title" xml:space="preserve">
+    <value>本文搜尋</value>
+  </data>
+  <data name="FindResults.Total" xml:space="preserve">
+    <value>結果：{0} 個</value>
+  </data>
+  <data name="FindResults.TooMany" xml:space="preserve">
+    <value>結果太多，請繼續輸入</value>
+  </data>
+  <data name="FindResults.None" xml:space="preserve">
+    <value>沒有結果</value>
+  </data>
+  <data name="FindResults.Position" xml:space="preserve">
+    <value>第 {0} 個，共 {1} 個</value>
+  </data>
 </root>

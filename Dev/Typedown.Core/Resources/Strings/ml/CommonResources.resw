@@ -1168,4 +1168,22 @@
   <data name="FolderSearch.Summary" xml:space="preserve">
     <value>ഫയൽ പേരുകൾ: {0} · ഉള്ളടക്കം: {1} · തിരഞ്ഞ ഫയലുകൾ: {2}</value>
   </data>
+  <data name="FindResults.ShowAll" xml:space="preserve">
+    <value>എല്ലാ ഫലങ്ങളും കാണിക്കുക</value>
+  </data>
+  <data name="FindResults.Title" xml:space="preserve">
+    <value>പ്രമാണത്തിൽ തിരയുക</value>
+  </data>
+  <data name="FindResults.Total" xml:space="preserve">
+    <value>ഫലങ്ങൾ: {0}</value>
+  </data>
+  <data name="FindResults.TooMany" xml:space="preserve">
+    <value>വളരെയധികം ഫലങ്ങൾ – ടൈപ്പ് ചെയ്യുന്നത് തുടരുക</value>
+  </data>
+  <data name="FindResults.None" xml:space="preserve">
+    <value>ഫലങ്ങളൊന്നുമില്ല</value>
+  </data>
+  <data name="FindResults.Position" xml:space="preserve">
+    <value>{1}-ൽ {0}</value>
+  </data>
 </root>
