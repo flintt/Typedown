@@ -40,7 +40,7 @@ namespace Typedown
         {
             // handled exceptions are normal in places (settings file in use, clipboard formats); keep the flood bounded
             if (System.Threading.Interlocked.Increment(ref firstChanceCount) > 200) return;
-            Log.Debug($"exception: {e.Exception.GetType().Name} (0x{e.Exception.HResult:X8}): {e.Exception.Message}\n{e.Exception.StackTrace}");
+            Log.Debug($"exception: {e.Exception.GetType().Name} (0x{e.Exception.HResult:X8}): {LogText.Error(e.Exception.Message)}\n{e.Exception.StackTrace}");
         }
 
         private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)

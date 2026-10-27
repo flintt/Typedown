@@ -110,9 +110,10 @@ namespace Typedown.Core.ViewModels
             // where it is drawn at once): no "Opening…" over it from then on.
             EventCenter.GetObservable<EditorEventArgs>("LoadPreviewShown").Subscribe(x => { if (x.Args?["loadId"]?.Value<int?>() == LoadId) { LongLoadPending = false; LeavingCover = false; } });
             EventCenter.GetObservable<EditorEventArgs>("DocumentEditApplied").Subscribe(x => OnDocumentEditApplied(x.Args));
-            // How the page drew a long document (a part at a time or all at once, from what), for the log.
+            // How the page drew a long document (a part at a time or all at once, from what), for the log. The anchor (the
+            // block that was at the top of the window) by its place and length: its text is the document's.
             EventCenter.GetObservable<EditorEventArgs>("LoadDrawnWhole").Subscribe(x => Log.Debug($"load {x.Args?["loadId"]}: all drawn after {x.Args?["ms"]} ms in {x.Args?["slices"]} slices"));
-            EventCenter.GetObservable<EditorEventArgs>("LoadDrawn").Subscribe(x => Log.Debug($"load {x.Args?["loadId"]}: drawn {((bool?)x.Args?["progressive"] == true ? "a part at a time" : "all at once")} ({x.Args?["how"]}, block {x.Args?["center"]} of {x.Args?["blocks"]}, {x.Args?["chars"]} chars), first paint after {x.Args?["firstPaintMs"]} ms; anchor {x.Args?["anchor"]}"));
+            EventCenter.GetObservable<EditorEventArgs>("LoadDrawn").Subscribe(x => Log.Debug($"load {x.Args?["loadId"]}: drawn {((bool?)x.Args?["progressive"] == true ? "a part at a time" : "all at once")} ({x.Args?["how"]}, block {x.Args?["center"]} of {x.Args?["blocks"]}, {x.Args?["chars"]} chars), first paint after {x.Args?["firstPaintMs"]} ms; {DescribeAnchor(x.Args)}"));
             EventCenter.GetObservable<EditorEventArgs>("NormalizationReport").Subscribe(x => OnNormalizationReport(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("PresentationFrames").Subscribe(x => { var t = x.Args?["token"]?.Value<int?>() ?? 0; if (framesWaiters.TryGetValue(t, out var w)) w.TrySetResult(true); });
             EventCenter.GetObservable<EditorEventArgs>("EditorStyle").Subscribe(x => { var t = x.Args?["token"]?.Value<int?>() ?? 0; if (styleWaiters.TryGetValue(t, out var w)) w.TrySetResult(x.Args); });
@@ -154,7 +155,9 @@ namespace Typedown.Core.ViewModels
             EventCenter.GetObservable<EditorEventArgs>("FindHold").Subscribe(x => Log.Debug($"find hold: the match's block left the window, put back: {x.Args?.ToString(Newtonsoft.Json.Formatting.None)}"));
             EventCenter.GetObservable<EditorEventArgs>("DrawJump").Subscribe(x => Log.Debug($"draw jump: {x.Args?.ToString(Newtonsoft.Json.Formatting.None)}"));
             // An error in the page nobody caught (a listener, a promise): in the log, where the next one is looked for.
-            EventCenter.GetObservable<EditorEventArgs>("PageError").Subscribe(x => Log.Debug($"page error: {x.Args}"));
+            // Its message without what it quotes (a formula, a diagram's source) and its stack's frames (LogText).
+            EventCenter.GetObservable<EditorEventArgs>("PageError").Subscribe(x => Log.Debug(
+                $"page error: {LogText.Error(x.Args?["message"]?.ToString())} (where {x.Args?["where"]}; stack {LogText.Stack(x.Args?["stack"]?.ToString())})"));
             RemoteInvoke.Handle("GetSettings", GetSettings);
             RemoteInvoke.Handle<JToken>("SetClipboard", OnSetClipboard);
             RemoteInvoke.Handle<JToken, bool>("CopyDiagram", OnCopyDiagram);
@@ -583,6 +586,17 @@ namespace Typedown.Core.ViewModels
         /// <summary>For the automation test host: the next this many loads come back from the editor rewritten.</summary>
         public int RewriteLoadsForTest { get; set; }
 
+        /// <summary>The scroll anchor of a LoadDrawn report: "anchor: block 3 (24 chars)", or "no anchor".</summary>
+        internal static string DescribeAnchor(JToken args)
+        {
+            var block = args?["anchorBlock"];
+            var chars = args?["anchorChars"];
+            // A page of before this report changed sent the anchor's text: its length only.
+            if (chars == null && args?["anchor"]?.Type == JTokenType.String) chars = args["anchor"].ToString().Length;
+            if (chars == null || chars.Type == JTokenType.Null) return "no anchor";
+            return $"anchor: block {(block == null || block.Type == JTokenType.Null ? "?" : block.ToString())} ({chars} chars)";
+        }
+
         /// <summary>
         /// Where and how much a load rewrote, for the log - not what it says: the lines between the first and the last
         /// that differ, how many on each side, and how many of those were table rows, HTML, code fences and the rest.
@@ -879,7 +893,7 @@ namespace Typedown.Core.ViewModels
                     : $"outline: heading {slug} is not among the {ContentState.Toc.Count} entries{at}; kept for the next outline");
                 return;
             }
-            Log.Debug($"outline: now on {match.Content}{at}");
+            Log.Debug($"outline: now on {LogText.Heading(ContentState.Toc.IndexOf(match), ContentState.Toc.Count, match.Lvl, match.Content)}{at}");
             rebuildingToc = true;
             try
             {
@@ -1361,7 +1375,7 @@ namespace Typedown.Core.ViewModels
             var inDocument = MarkdownImages.Find(Markdown ?? "").Select(r => r.Address).ToHashSet();
             var wanted = addresses.Where(inDocument.Contains).ToList();
             if (wanted.Count < addresses.Count)
-                Log.Debug($"paste: {addresses.Count - wanted.Count} of the HTML's {addresses.Count} picture address(es) are not in the document (first: {addresses.FirstOrDefault(a => !inDocument.Contains(a))})");
+                Log.Debug($"paste: {addresses.Count - wanted.Count} of the HTML's {addresses.Count} picture address(es) are not in the document (first: {LogText.Address(addresses.FirstOrDefault(a => !inDocument.Contains(a)))})");
             var action = ServiceProvider.GetService<ImageAction>();
             var page = PageAddress(html);
             Log.Debug($"paste: {wanted.Count} web picture(s) to fetch; the page they came from: {(page?.Host ?? "not in the clipboard")}");

@@ -1553,7 +1553,9 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             const blocks = (editor as any).contentState?.blocks?.length ?? 0
             requestAnimationFrame(() => transport.postMessage('LoadDrawn', {
                 loadId: drawnLoad, chars: props.markdown.length, blocks, progressive: !!part, how: picked.how, center: picked.index,
-                anchor: anchor ? anchor.text.slice(0, 40) : null, firstPaintMs: Math.round(performance.now() - startedAt),
+                // The anchor by its place and length, not its text: the host's log never holds the document's words.
+                anchorBlock: anchor ? (anchor.block ?? null) : null, anchorChars: anchor ? (anchor.text ?? '').length : null,
+                firstPaintMs: Math.round(performance.now() - startedAt),
             }))
         }
         if (blocksBefore && props.options?.highlightAutomationChanges !== false)

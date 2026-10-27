@@ -445,7 +445,7 @@ namespace Typedown.Controls
                     return;
                 }
                 args.Cancel = true;
-                Core.Utilities.Log.Debug($"editor: navigation away from the editor page refused ({(args.IsUserInitiated ? "a click" : "not the reader's")}): {args.Uri}");
+                Core.Utilities.Log.Debug($"editor: navigation away from the editor page refused ({(args.IsUserInitiated ? "a click" : "not the reader's")}): {Core.Utilities.LogText.Address(args.Uri)}");
                 if (args.IsUserInitiated) OpenNewWindow(args.Uri);
             };
             // The browser process can die under the editor (a GPU driver, a renderer bug). Left alone that is a

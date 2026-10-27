@@ -195,7 +195,11 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
                     if (TreeView.SelectedNode != node)
                     {
                         TreeView.SelectedNode = node;
-                        Utilities.Log.Debug($"outline: marked {(node.Content as Models.TocTreeItem)?.TocItem?.Content} (load {Editor?.LoadId})");
+                        // By its place and the file, not its words (the heading is the document's text).
+                        var item = (node.Content as Models.TocTreeItem)?.TocItem;
+                        var toc = Editor?.ContentState?.Toc;
+                        Utilities.Log.Debug($"outline: marked {System.IO.Path.GetFileName(ViewModel?.FileViewModel?.FilePath) ?? "untitled"} "
+                            + $"{LogText.Heading(toc?.IndexOf(item) ?? -1, toc?.Count ?? 0, item?.Lvl ?? 0, item?.Content)} (load {Editor?.LoadId})");
                     }
                     FindList(TreeView)?.ScrollIntoView(node);
                 }

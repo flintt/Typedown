@@ -37,7 +37,7 @@ namespace Typedown.Core.Services
                     }
                     catch (Exception ex)
                     {
-                        Utilities.Log.Debug($"editor message '{name}': a handler failed and stays subscribed: {ex}");
+                        Utilities.Log.Debug($"editor message '{name}': a handler failed and stays subscribed: {ex.GetType().Name}: {Utilities.LogText.Error(ex.Message)}\n{ex.StackTrace}");
                     }
                 }
                 lock (center.handlersDictionary)

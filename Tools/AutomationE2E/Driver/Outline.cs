@@ -134,6 +134,8 @@ internal static partial class Program
             await Task.Delay(1500);
         }
         List<string> Marks() => LogLines("outline: marked ");
+        // The log names a marked heading by its file and place, not its words: "ol02-kilo.md heading 21 of 40 (...)".
+        string Doc(int i) => $"ol02-{prefixes[i].ToLowerInvariant()}.md ";
         var bad = new List<string>();
         var current = 1;
         for (var round = 0; round < 8; round++)
@@ -147,11 +149,11 @@ internal static partial class Program
             var during = Marks().Skip(before.Count).ToList();
             notes.Add($"round {round}, {prefixes[current]} -> {prefixes[next]}: last mark '{Tail(lastMark)}', then {string.Join(" / ", during.Select(Tail))}");
             // A mark of the document being left, other than the one it had, is the jump.
-            foreach (var m in during.TakeWhile(m => !Tail(m).StartsWith(prefixes[next])))
-                if (Tail(m).StartsWith(prefixes[current]) && Tail(m) != Tail(lastMark)) bad.Add($"round {round}: {Tail(m)}");
-            Check(during.Count == 0 || Tail(during.Last()).StartsWith(prefixes[next]), $"round {round}: the outline ends on a heading of {prefixes[next]}");
+            foreach (var m in during.TakeWhile(m => !Tail(m).StartsWith(Doc(next))))
+                if (Tail(m).StartsWith(Doc(current)) && Tail(m) != Tail(lastMark)) bad.Add($"round {round}: {Tail(m)}");
+            Check(during.Count == 0 || Tail(during.Last()).StartsWith(Doc(next)), $"round {round}: the outline ends on a heading of {prefixes[next]}");
             // The document shown is marked once, at the place being read - not first at its caret's heading.
-            var shownMarks = during.Where(m => Tail(m).StartsWith(prefixes[next])).Select(Tail).ToList();
+            var shownMarks = during.Where(m => Tail(m).StartsWith(Doc(next))).Select(Tail).ToList();
             if (round > 0 && shownMarks.Count > 1) bad.Add($"round {round}: {prefixes[next]} marked {string.Join(", then ", shownMarks)}");
             current = next;
         }
@@ -159,7 +161,7 @@ internal static partial class Program
         await c.Call("window.setView", new { windowId, mode = "visual" });
     }
 
-    // "12:00:00.000 outline: marked Kilo 21 (load 9)" -> "Kilo 21"
+    // "12:00:00.000 outline: marked ol02-kilo.md heading 21 of 40 (level 2, 7 chars) (load 9)" -> "ol02-kilo.md heading 21 of 40 (level 2, 7 chars)"
     private static string Tail(string line)
     {
         var i = line.IndexOf("outline: marked ");

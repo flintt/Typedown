@@ -907,7 +907,7 @@ namespace Typedown.Core.ViewModels
         {
             var error = args?["error"]?.ToString();
             if (string.IsNullOrEmpty(error)) return false;
-            Log.Debug($"export: the page could not make the HTML: {error}");
+            Log.Debug($"export: the page could not make the HTML: {LogText.Error(error)}");
             await AppContentDialog.Create(Locale.GetDialogString("ExportErrorTitle"), error, Locale.GetString("Ok")).ShowAsync(AppViewModel.XamlRoot);
             return true;
         }

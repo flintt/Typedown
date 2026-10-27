@@ -34,7 +34,7 @@ namespace Typedown.Services.Automation
             Core.Utilities.Common.OpenUrlOverride = url =>
             {
                 lock (openedLinks) openedLinks.Add(url);
-                Core.Utilities.Log.Debug($"test host: not opened (a test host opens no links): {url}");
+                Core.Utilities.Log.Debug($"test host: not opened (a test host opens no links): {Core.Utilities.LogText.Address(url)}");
                 return true;
             };
             // What the app would have opened as links since the test host started (a browser, a file's own program).
