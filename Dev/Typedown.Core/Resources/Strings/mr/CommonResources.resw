@@ -1186,4 +1186,7 @@
   <data name="FindResults.Position" xml:space="preserve">
     <value>{1} पैकी {0}</value>
   </data>
+  <data name="CopyTable" xml:space="preserve">
+    <value>टेबल कॉपी करा</value>
+  </data>
 </root>

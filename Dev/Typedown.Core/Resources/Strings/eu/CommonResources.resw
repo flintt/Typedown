@@ -1186,4 +1186,7 @@
   <data name="FindResults.Position" xml:space="preserve">
     <value>{0}/{1}</value>
   </data>
+  <data name="CopyTable" xml:space="preserve">
+    <value>Kopiatu taula</value>
+  </data>
 </root>

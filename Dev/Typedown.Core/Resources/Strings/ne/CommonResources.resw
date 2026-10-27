@@ -1186,4 +1186,7 @@
   <data name="FindResults.Position" xml:space="preserve">
     <value>{1} मध्ये {0}</value>
   </data>
+  <data name="CopyTable" xml:space="preserve">
+    <value>तालिका प्रतिलिपि बनाउनुहोस्</value>
+  </data>
 </root>

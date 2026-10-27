@@ -237,6 +237,10 @@
     <value>Copy Content</value>
     <comment>复制内容</comment>
   </data>
+  <data name="CopyTable" xml:space="preserve">
+    <value>Copy Table</value>
+    <comment>复制表格</comment>
+  </data>
   <data name="CopyImageTo" xml:space="preserve">
     <value>Copy Image to...</value>
     <comment>复制图片到...</comment>

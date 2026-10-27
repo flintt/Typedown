@@ -1200,4 +1200,7 @@
   <data name="FindResults.Position" xml:space="preserve">
     <value>第 {0} 个，共 {1} 个</value>
   </data>
+  <data name="CopyTable" xml:space="preserve">
+    <value>复制表格</value>
+  </data>
 </root>

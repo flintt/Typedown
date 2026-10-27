@@ -1186,4 +1186,7 @@
   <data name="FindResults.Position" xml:space="preserve">
     <value>{0} z {1}</value>
   </data>
+  <data name="CopyTable" xml:space="preserve">
+    <value>Kopiuj tabelę</value>
+  </data>
 </root>

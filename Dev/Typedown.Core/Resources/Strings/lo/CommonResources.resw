@@ -1186,4 +1186,7 @@
   <data name="FindResults.Position" xml:space="preserve">
     <value>{0} ຈາກ {1}</value>
   </data>
+  <data name="CopyTable" xml:space="preserve">
+    <value>ສໍາເນົາຕາຕະລາງ</value>
+  </data>
 </root>

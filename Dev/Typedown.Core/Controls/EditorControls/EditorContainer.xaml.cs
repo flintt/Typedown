@@ -212,6 +212,12 @@ namespace Typedown.Core.Controls
         /// <summary>The bold/italic/... row: not in reading mode, where the page refuses every format.</summary>
         public static bool IsLoadFormatMenu(bool formatIsEnable, bool readOnly) => formatIsEnable && !readOnly;
 
+        /// <summary>
+        /// Copy table: when the right-click was in a table, in the visual editor - the paragraph state is the visual
+        /// editor's, and is left as it was in source mode and reading mode, where it says nothing of what was clicked.
+        /// </summary>
+        public static bool IsLoadTableMenu(bool inTable, bool sourceCode, bool readOnly) => inTable && !sourceCode && !readOnly;
+
         /// <summary>Paste as plain text: in the visual editor only (source mode has no paste-as, reading mode no paste).</summary>
         public static Visibility IsPasteAsVisible(bool sourceCode, bool readOnly) => sourceCode || readOnly ? Visibility.Collapsed : Visibility.Visible;
     }

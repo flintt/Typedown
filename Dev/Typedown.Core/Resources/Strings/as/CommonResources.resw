@@ -1186,4 +1186,7 @@
   <data name="FindResults.Position" xml:space="preserve">
     <value>{1}ৰ ভিতৰত {0}</value>
   </data>
+  <data name="CopyTable" xml:space="preserve">
+    <value>টেবুল প্ৰতিলিপি কৰক</value>
+  </data>
 </root>
