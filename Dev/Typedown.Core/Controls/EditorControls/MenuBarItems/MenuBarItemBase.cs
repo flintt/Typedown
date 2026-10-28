@@ -59,10 +59,15 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             UiLanguage.SetItems(Items);
         }
 
+        // On the menu's own thread, and only while it is in its window: a window closed without its menus unloading keeps
+        // them subscribed, and they are not touched as the window goes.
         private void OnLanguageApplied()
         {
-            if (DispatcherQueue.HasThreadAccess) SetLanguage();
-            else DispatcherQueue.TryEnqueue(SetLanguage);
+            DispatcherQueue.TryEnqueue(() =>
+            {
+                if (!IsLoaded || XamlRoot == null) return;
+                SetLanguage();
+            });
         }
 
         private bool watching;

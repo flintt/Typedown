@@ -161,8 +161,13 @@ namespace Typedown.Core.Utilities
             try { Culture = wanted != null ? FormatCulture.For(wanted) : System.Globalization.CultureInfo.CurrentCulture; }
             catch (System.Globalization.CultureNotFoundException) { Culture = System.Globalization.CultureInfo.CurrentCulture; }
             Apply(ResourceContext, wanted);
+            var before = ElementLanguage;
             ElementLanguage = wanted ?? SystemLanguageTag();
             Log.Debug($"language: setting={language} applied={wanted ?? "(system)"} resolved={(ResourceContext.QualifierValues.TryGetValue("Language", out var resolved) ? resolved : "")} elements={ElementLanguage}");
+            // Only a change goes to the windows. Every window applies the language as it is made, and a window made gives its
+            // own menus the tag as they load: told to every window, a window closing at that moment had its menus' language
+            // set as they were torn down, and the process ended (0xc000027b in CoreMessagingXP, AC01 in the full suite on w10).
+            if (before == ElementLanguage) return;
             foreach (var handler in LanguageApplied?.GetInvocationList() ?? Array.Empty<Delegate>())
             {
                 try { ((Action)handler)(); }
