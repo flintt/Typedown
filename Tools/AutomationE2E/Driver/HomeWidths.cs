@@ -43,6 +43,12 @@ internal static partial class Program
                     .Where(t => !t.Current.BoundingRectangle.IsEmpty).OrderBy(t => t.Current.BoundingRectangle.Left).LastOrDefault();
                 if (time == null) { notes.Add($"{width}: no recent entry or no time"); cut.Add(width); continue; }
                 seen.Add((width, list!.Current.BoundingRectangle, time.Current.BoundingRectangle, time.Current.Name));
+                // Where the window is, and the first cut one's picture: what takes the page's left there.
+                GetWindowRect(window, out var w);
+                var listNow = list.Current.BoundingRectangle;
+                if (cut.Count == 0 && time.Current.BoundingRectangle.Right > listNow.Right - 1)
+                    notes.Add($"{width}: window {w.Left}-{w.Right}, screenshot {Screenshot("hp06-" + width)}");
+                if (width % 100 == 0 || width is 840 or 860) notes.Add($"{width}: window {w.Left}-{w.Right}");
             }
             var full = seen.Count > 0 ? seen.Max(x => x.Time.Width) : 0;
             foreach (var (width, listRect, timeRect, text) in seen)
