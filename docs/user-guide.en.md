@@ -39,7 +39,7 @@ The **Help** menu: **User guide** (this guide), **Shortcuts** (the shortcuts pag
 **Other settings worth knowing**:
 
 - **Settings → Appearance → Compact mode**: the menu bar and the title in the same row
-- **Settings → Appearance → Window animations**: off for a faster response
+- **Settings → Appearance → Window animations**: off by default, so pages, the sidebar and menus appear at once; turn it on for transitions
 - **Settings → General → Allow local automation** (off by default): programs you run on this computer can read and edit the open documents; the window title shows when one is connected. **Highlight changes made by programs** briefly highlights the text such a program changed
 
 ---
