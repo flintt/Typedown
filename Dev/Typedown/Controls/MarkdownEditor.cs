@@ -333,7 +333,11 @@ namespace Typedown.Controls
             if (IsEditorLoaded && WebViewController?.CoreWebView2 != null)
             {
                 Core.Utilities.Log.Debug("editor: back in a window, the page kept");
-                ShowPage(true);
+                // Hidden and shown again a moment later: the browser hears the page is shown, paints it and goes on drawing
+                // a long document. The settings' slide in and out did that by itself; without the window animations (off by
+                // default) a long document scrolled down came back blank and stayed so (SF02 after the cases before it).
+                ShowPage(false);
+                DispatcherQueue.TryEnqueue(() => { if (IsLoaded) ShowPage(true); });
                 if (AppViewModel.EditorViewModel.FocusWhenLoaded)
                 {
                     AppViewModel.EditorViewModel.FocusWhenLoaded = false;
