@@ -30,7 +30,7 @@ This guide covers version 1.4. Menu and setting names are given as they appear i
 
 **Settings**: Ctrl+, or the gear in the top-right corner of the window.
 
-The **Help** menu: **User guide** (this guide), **Shortcuts** (the shortcuts page of the settings), **Send Feedback** (see section 8) and **About**.
+The **Help** menu: **User guide** (this guide), **Shortcuts** (the shortcuts page of the settings), feedback (see section 8) and **About**.
 
 **Home page**: a blank tab shows the home page: a new document, open a file or a folder, your favourites, and the files and folders you opened recently. Just start typing to write in the blank document. File → Home (Ctrl+Shift+H) or the ⌂ at the left of the tab bar brings it back without closing anything. It can be turned off under Settings → General → Startup.
 
@@ -399,4 +399,4 @@ Switch themes under **View → Theme**: Light, Dark, Black (OLED), plus several 
 
 **Reporting a problem**
 
-Click **Help → Send Feedback** (it is under **Settings → About** too). Include the version number and the steps to reproduce: the version is on the **Settings → About** page; click **Open Log Folder** on that page and attach the `debug.log` from it. The log stays on your computer and is never uploaded automatically.
+Use the feedback items in the **Help** menu (also under the **Send Feedback** button in **Settings → About**). Include the version number and the steps to reproduce: the version is on the **Settings → About** page; click **Open Log Folder** on that page and attach the `debug.log` from it. The log stays on your computer and is never uploaded automatically.
