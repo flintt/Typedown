@@ -8,11 +8,11 @@ using System.Windows.Automation;
 /// HP06: the home page's recent files show their time whole at every window width. A window with a file of a long name
 /// just closed (the home page shows, the file first in Recent files) is made 480 to 1400 pixels wide, 20 at a time; at
 /// each width the first entry's time (its last text, at the right) must show as wide as at the widest and inside the list -
-/// at some widths it was cut off at the list's right edge.
+/// at some widths it was cut off at the list's right edge - and once the window is wide enough, the column stands in the
+/// middle (it stood 82 pixels right of it, which is what pushed the times off).
 /// </summary>
 internal static partial class Program
 {
-    private static string Truncate(string s) => s.Length > 40 ? s[..40] + "…" : s;
 
     [System.Runtime.InteropServices.DllImport("user32.dll", EntryPoint = "SetWindowPos")] private static extern bool HwSetWindowPos(IntPtr window, IntPtr after, int x, int y, int width, int height, uint flags);
 
@@ -34,6 +34,7 @@ internal static partial class Program
             // was cut (at 880 pixels on w10 it showed 32 of its 43 pixels, against the list's right edge, and passed a
             // check that only asked whether it ended inside the list).
             var seen = new List<(int Width, System.Windows.Rect List, System.Windows.Rect Time, string Text)>();
+            var offCentre = new List<int>();
             var cut = new List<int>();
             for (var width = 480; width <= 1400; width += 20)
             {
@@ -45,36 +46,10 @@ internal static partial class Program
                     .Where(t => !t.Current.BoundingRectangle.IsEmpty).OrderBy(t => t.Current.BoundingRectangle.Left).LastOrDefault();
                 if (time == null) { notes.Add($"{width}: no recent entry or no time"); cut.Add(width); continue; }
                 seen.Add((width, list!.Current.BoundingRectangle, time.Current.BoundingRectangle, time.Current.Name));
-                // Where the window is, and the first cut one's picture: what takes the page's left there.
+                // Wide enough for the whole column: it stands in the middle (it stood 82 pixels right of it, HP06's fault).
                 GetWindowRect(window, out var w);
-                var listNow = list.Current.BoundingRectangle;
-                if (cut.Count == 0 && time.Current.BoundingRectangle.Right > listNow.Right - 1)
-                    notes.Add($"{width}: window {w.Left}-{w.Right}, screenshot {Screenshot("hp06-" + width)}");
-                if (width % 100 == 0 || width is 840 or 860) notes.Add($"{width}: window {w.Left}-{w.Right}");
-                // Everything on the page wider than the list may be or reaching past the scroll area: what makes it wider.
-                if (width is 880 or 1400)
-                {
-                    var scroller = Deep.First(AutomationElement.FromHandle(window), new PropertyCondition(AutomationElement.AutomationIdProperty, "Scroller"));
-                    if (scroller != null)
-                    {
-                        var sr = scroller.Current.BoundingRectangle;
-                        notes.Add($"{width}: scroller {sr.Left:0}-{sr.Right:0}");
-                        foreach (AutomationElement e in Deep.All(scroller, Condition.TrueCondition))
-                        {
-                            var r = e.Current.BoundingRectangle;
-                            if (r.IsEmpty || !(r.Width > 761 || r.Right > sr.Right)) continue;
-                            notes.Add($"{width}:   wide {e.Current.ControlType.ProgrammaticName} {e.Current.ClassName} '{e.Current.AutomationId}' '{Truncate(e.Current.Name)}' {r.Left:0}-{r.Right:0}");
-                        }
-                    }
-                }
-                // Each element from the list up to the window, at the widths around the first cut: which one is wider than the window.
-                if (width is 840 or 860)
-                    for (var e = TreeWalker.RawViewWalker.GetParent(list); e != null && e != AutomationElement.RootElement; e = TreeWalker.RawViewWalker.GetParent(e))
-                    {
-                        var r = e.Current.BoundingRectangle;
-                        notes.Add($"{width}:   {e.Current.ClassName} {e.Current.AutomationId} {r.Left:0}-{r.Right:0}");
-                        if (e.Current.NativeWindowHandle == window.ToInt32()) break;
-                    }
+                var listRect = list.Current.BoundingRectangle;
+                if (listRect.Width >= 759 && Math.Abs((listRect.Left - w.Left) - (w.Right - listRect.Right)) > 24) offCentre.Add(width);
             }
             var full = seen.Count > 0 ? seen.Max(x => x.Time.Width) : 0;
             foreach (var (width, listRect, timeRect, text) in seen)
@@ -83,6 +58,7 @@ internal static partial class Program
                 notes.Add($"{width}: list {listRect.Left:0}-{listRect.Right:0}, time \"{text}\" {timeRect.Left:0}-{timeRect.Right:0} ({timeRect.Width:0} of {full:0}){(whole ? "" : " CUT")}");
                 if (!whole) cut.Add(width);
             }
+            Check(offCentre.Count == 0, "the page's column stands in the middle of the window" + (offCentre.Count > 0 ? $" (not at {string.Join(", ", offCentre)})" : ""));
             Check(cut.Count == 0, "the first recent file's time is whole at every width" + (cut.Count > 0 ? $" (cut at {string.Join(", ", cut)})" : ""));
         }
         finally
