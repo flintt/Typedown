@@ -117,7 +117,9 @@ namespace Typedown.Windows
             {
                 UpdateCaptionRegions();
                 // A menu, flyout or tooltip opening is laid out first: it takes the interface's language tag before it is drawn.
-                UiLanguage.StampOpenPopups(RootControl.XamlRoot);
+                // A layout pass can still come after the window closed and let go of its root control (OnClosed): nothing then
+                // (Q02, a window closed as it opened: unhandled NullReferenceException).
+                UiLanguage.StampOpenPopups(RootControl?.XamlRoot);
             };
             Activated += OnActivated;
             AppWindow.Changed += OnAppWindowChanged;
