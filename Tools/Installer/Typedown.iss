@@ -5,7 +5,7 @@
 #endif
 ; A trial build passes its own (/DMyAppVersion=1.4.0.13, build-local.ps1 -TrialVersion) with /DMyFileVersion.
 #ifndef MyAppVersion
-  #define MyAppVersion "1.4.0"
+  #define MyAppVersion "1.4.1"
 #endif
 #ifndef MyFileVersion
   #define MyFileVersion MyAppVersion + ".0"
