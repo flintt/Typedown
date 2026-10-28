@@ -32,6 +32,7 @@ internal static partial class Program
         try
         {
             await Task.Delay(2000);
+            await Activate(window);
             foreach (var animation in new[] { true, false })
             {
                 await c.Call("test.settings.set", new { windowId, name = "AnimationEnable", value = animation });
@@ -40,15 +41,16 @@ internal static partial class Program
                 for (var trip = 1; trip <= 10; trip++)
                 {
                     var to = trip % 2 == 1 ? "settings" : "main";
-                    await Activate(window);
+                    // As a reader presses it (CtrlComma): Ctrl down, the comma, Ctrl up 80 ms later; timed from the comma.
                     Send(Key(0x11, false));
                     await Task.Delay(80);
                     var watch = Stopwatch.StartNew();
                     Send(Comma(false), Comma(true));
+                    await Task.Delay(80);
+                    Send(Key(0x11, true));
                     string page = "";
                     while (watch.ElapsedMilliseconds < 10000 && (page = await Page()) != to) await Task.Delay(10);
                     var shown = watch.Elapsed.TotalMilliseconds;
-                    Send(Key(0x11, true));
                     Check(page == to, $"Ctrl+, goes to the {to} page within 10 s (animation {(animation ? "on" : "off")}, trip {trip})");
                     // The host's steps: drawn comes a frame or two after the page is seen.
                     JObject times = new();
