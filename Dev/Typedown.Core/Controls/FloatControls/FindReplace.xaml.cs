@@ -71,9 +71,12 @@ namespace Typedown.Core.Controls.FloatControls
         }
 
         // Closed by the reader (Esc, its close button): the keyboard goes back to the text. It stayed on the closed bar's
-        // host, and the letters typed next went nowhere until a click in the document.
+        // host, and the letters typed next went nowhere until a click in the document. The text takes it before the bar
+        // goes: without the window animations the bar is unloaded at once, with the keyboard still in it, and the focus
+        // WinUI then moves on from it came after the editor had been given it (K06, the animations off by default).
         private void Close()
         {
+            ViewModel?.MarkdownEditor?.FocusEditor();
             Float.FindReplaceDialogOpen = 0;
             _ = DispatcherQueue.RunIdleAsync(_ => ViewModel?.MarkdownEditor?.FocusEditor());
         }
