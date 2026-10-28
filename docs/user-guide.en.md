@@ -2,7 +2,7 @@
 
 Typedown is a WYSIWYG Markdown editor for Windows: what you see while you write is the formatted page, and what gets saved is a plain `.md` text file that any editor can open.
 
-This guide covers version 1.3.8. Menu and setting names are given as they appear in the English interface; you can change the interface language under **Settings → General**.
+This guide covers version 1.4. Menu and setting names are given as they appear in the English interface; you can change the interface language under **Settings → General**.
 
 - [1. Quick start](#1-quick-start)
 - [2. Four modes](#2-four-modes)
@@ -17,20 +17,30 @@ This guide covers version 1.3.8. Menu and setting names are given as they appear
 
 ## 1. Quick start
 
-**Open a file**: File → Open (Ctrl+O), or drag a `.md` file into the window. Each document gets its own tab; switch tabs with Ctrl+Tab / Ctrl+Shift+Tab and close one with Ctrl+W.
+**Open a file**: File → Open (Ctrl+O), or drag a `.md` file into the window. Each document gets its own tab; switch tabs with Ctrl+Tab / Ctrl+Shift+Tab and close one with Ctrl+W. The mouse wheel over the tab bar switches tabs too: past the last tab it goes round to the first; with **Settings → General → Mouse wheel goes round the tabs** off it stops at either end.
 
-**Open a folder**: File → Open Folder. The side bar on the left (Ctrl+Shift+L shows/hides it) has two pages:
+**Open a folder**: File → Open Folder. The side bar on the left (Ctrl+Shift+L shows/hides it; **Settings → Appearance → Side Bar on the Right** moves it to the right) has two pages:
 
 - **Files**: the documents in the folder. A single click previews a file (the tab is replaced when you open another file); a double click opens it for real. The magnifier at the top of the side bar searches the whole folder (Ctrl+Shift+F): the names of files and folders are listed first, under File names, then the files whose text contains the words, under Contents, as they are found. A file whose name and text both match is listed once, under File names, marked "Content matches too". File names shows five until you choose Show all; a group's heading folds it away. Clicking a folder shows it in the Files tree; clicking a file opens it, and finds the words in it when its text matched
 - **Outline**: the headings of the current document; click one to jump to it. While you write, the heading you are under is highlighted
 
-**Save**: Ctrl+S; Save As is Ctrl+Shift+S. Unsaved changes are backed up regularly, and if the app closes unexpectedly they are restored the next time you open it. On the next start, the tabs you had open last time come back automatically.
+**Save**: Ctrl+S; Save As is Ctrl+Shift+S. Unsaved changes are backed up regularly, and if the app closes unexpectedly they are restored the next time you open it. On the next start, the tabs you had open last time come back automatically. Closing a document with unsaved changes asks whether to save them; with **Settings → General → Keep Unsaved Changes When Closing** on it does not ask, and unsaved documents come back as they were, still marked unsaved.
+
+**A file changed by another program**: it is reloaded (**Auto reload on external change**), after asking first (**Ask before reload**; turned off, it asks only when there are unsaved changes). A document you open again goes back to where you were editing (**Remember cursor position**). All three are under **Settings → General**.
 
 **Settings**: Ctrl+, or the gear in the top-right corner of the window.
 
+The **Help** menu: **User guide** (this guide), **Shortcuts** (the shortcuts page of the settings), **Send Feedback** (see section 8) and **About**.
+
 **Home page**: a blank tab shows the home page: a new document, open a file or a folder, your favourites, and the files and folders you opened recently. Just start typing to write in the blank document. File → Home (Ctrl+Shift+H) or the ⌂ at the left of the tab bar brings it back without closing anything. It can be turned off under Settings → General → Startup.
 
-**Recent files and favourites**: File → Open recent lists files and, in its Folders submenu, folders; right-click an entry to remove it. Right-click a file or folder in the side bar, or a tab, to add it to your favourites, which appear above the file tree. The folder name at the top of the side bar opens a menu to go up a level, to a folder above, or to a favourite or recent folder.
+**Recent files and favourites**: File → Open Recent lists files and, in its Folders submenu, folders. Each entry shows the name and the folder it is in; hover over it for the full path. A file or folder that is no longer there is greyed. Right-click an entry (or press Delete) to remove it; **Clear Recent Files**, and **Clear recent folders** in the Folders submenu, empty the two lists one at a time. Under **Settings → General** you can turn off **Remember recently opened files**, or empty both lists at once with **Clear recent files and folders**. Right-click a file or folder in the side bar, or a tab, to add it to your favourites, which appear above the file tree. The folder name at the top of the side bar opens a menu to go up a level, to a folder above, or to a favourite or recent folder.
+
+**Other settings worth knowing**:
+
+- **Settings → Appearance → Compact mode**: the menu bar and the title in the same row
+- **Settings → Appearance → Window animations**: off for a faster response
+- **Settings → General → Allow local automation** (off by default): programs you run on this computer can read and edit the open documents; the window title shows when one is connected. **Highlight changes made by programs** briefly highlights the text such a program changed
 
 ---
 
@@ -45,12 +55,20 @@ This guide covers version 1.3.8. Menu and setting names are given as they appear
 
 F11 toggles full screen.
 
+Under **Settings → Editor**, a few settings change what you see:
+
+- **Always Show Markdown Marks**: the Markdown marks (`**`, `#`, a link's address) show in every paragraph, not only where the caret is
+- **Show extra blank lines**: empty lines between paragraphs take up space in Reading Mode and in HTML and PDF exports too, as they do while editing; the file itself is not changed
+- **Vim keys**: Vim in Source Code Mode (`:w` saves, `:q` closes the tab); j/k, gg/G, ]] and / to move around in Reading Mode. Not in visual editing
+
 In Reading Mode the right-click menu only has copying and Select All:
 
 - **Copy**: keeps the formatting when you paste into Word or an email
 - **Copy as Plain Text**: drops the Markdown markup and copies the text as it looks on the page
 
 While editing, the right-click menu also has **Copy as Markdown** (Ctrl+Shift+C), which copies the raw Markdown.
+
+**Copying diagrams, formulas and tables**: hover over a diagram, a math block or a table and a copy button appears at its top right. A diagram is copied as a picture: a picture in Word, and its Markdown again when pasted back here. A formula pasted into Word is an equation you can go on editing; a table pasted into Word or another rich text editor is a table. Right-click a table for **Copy Table** too (not in Source Code Mode).
 
 **The status bar** (at the bottom of the window; View → Status Bar turns it on and off):
 
@@ -90,6 +108,8 @@ You can change every shortcut under **Settings → General → Shortcuts**.
 **Search in document**: the find bar shows which match you are on and how many there are. Its "Show all results" button opens the side bar's Search in document page: the number of matches and the text around each one (up to 500; with more, it asks you to keep typing). Click one, or pick it with the arrow keys and press Enter, to go there with the match selected. The page's close button takes the side bar back to the page it was on (or closes it again if it was closed); closing the find bar closes the page too.
 
 The **Paragraph** menu also lets you insert charts (Flow Chart, Sequence Diagram, Mermaid, PlantUML Diagram, Vega Chart), footnotes, a horizontal line, YAML front matter and more.
+
+PlantUML diagrams are not drawn unless you turn on **Settings → Editor → Draw PlantUML diagrams**, which sends the diagram's source to plantuml.com to be drawn. Put the address of a server of your own in **PlantUML server** below it, and the diagrams' source stays with you.
 
 ---
 
@@ -352,7 +372,7 @@ Switch themes under **View → Theme**: Light, Dark, Black (OLED), plus several 
 
 ## 7. Export, print and share
 
-- **File → Export**: HTML, PDF (with bookmarks), plain text. Export formats and options are set under **Settings → Export**
+- **File → Export**: HTML, PDF (with bookmarks), plain text. Export formats and options are set under **Settings → Export**. When an export is done, the window says where it was saved, with **Open** and **Open File Location**; **Settings → Export → After export** can open the file or its folder instead
 - **File → Print**: Alt+Shift+P
 - **File → Share to HedgeDoc…**: publishes the document to a HedgeDoc server and gives you a link
 
@@ -372,6 +392,11 @@ Switch themes under **View → Theme**: Light, Dark, Black (OLED), plus several 
 - S3: check the Endpoint, Region, key permissions and the bucket's public read setting
 - PowerShell: make sure the script's last output is the address; you can run `Upload-Image 'C:\某张图片.png'` by hand in a PowerShell window first and look at the output
 
+**Long documents open slowly or look wrong**
+
+- A long document is drawn progressively: it opens at the place you left it, and the rest is drawn in the background. If something looks wrong while it opens, turn off **Settings → Editor → Draw long documents progressively** to draw it all at once
+- **Predict the layout of long documents (experimental)** (same page): while a long document is drawn in parts, the height of what is not shown yet is worked out from its text instead of estimated, so the scroll bar and jumps from the outline are more accurate
+
 **Reporting a problem**
 
-Go to **Settings → About** and click **Send Feedback**. Include the version number (shown on the same page) and the steps to reproduce; click **Open Log Folder** and attach the `debug.log` from it. The log stays on your computer and is never uploaded automatically.
+Click **Help → Send Feedback** (it is under **Settings → About** too). Include the version number and the steps to reproduce: the version is on the **Settings → About** page; click **Open Log Folder** on that page and attach the `debug.log` from it. The log stays on your computer and is never uploaded automatically.
