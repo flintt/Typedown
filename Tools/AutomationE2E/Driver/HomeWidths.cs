@@ -49,6 +49,14 @@ internal static partial class Program
                 if (cut.Count == 0 && time.Current.BoundingRectangle.Right > listNow.Right - 1)
                     notes.Add($"{width}: window {w.Left}-{w.Right}, screenshot {Screenshot("hp06-" + width)}");
                 if (width % 100 == 0 || width is 840 or 860) notes.Add($"{width}: window {w.Left}-{w.Right}");
+                // Each element from the list up to the window, at the widths around the first cut: which one is wider than the window.
+                if (width is 840 or 860)
+                    for (var e = TreeWalker.RawViewWalker.GetParent(list); e != null && e != AutomationElement.RootElement; e = TreeWalker.RawViewWalker.GetParent(e))
+                    {
+                        var r = e.Current.BoundingRectangle;
+                        notes.Add($"{width}:   {e.Current.ClassName} {e.Current.AutomationId} {r.Left:0}-{r.Right:0}");
+                        if (e.Current.NativeWindowHandle == window.ToInt32()) break;
+                    }
             }
             var full = seen.Count > 0 ? seen.Max(x => x.Time.Width) : 0;
             foreach (var (width, listRect, timeRect, text) in seen)
