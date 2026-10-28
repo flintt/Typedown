@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>ਜਦੋਂ ਲੰਬਾ ਦਸਤਾਵੇਜ਼ ਹਿੱਸਿਆਂ ਵਿੱਚ ਬਣਾਇਆ ਜਾਂਦਾ ਹੈ, ਤਾਂ ਹਾਲੇ ਨਾ ਦਿਖਾਏ ਗਏ ਹਿੱਸੇ ਦੀ ਉਚਾਈ ਅੰਦਾਜ਼ੇ ਦੀ ਬਜਾਏ ਲਿਖਤ ਤੋਂ ਗਿਣੀ ਜਾਂਦੀ ਹੈ, ਜਿਸ ਨਾਲ ਸਕ੍ਰੋਲ ਬਾਰ ਅਤੇ ਰੂਪ-ਰੇਖਾ ਤੋਂ ਛਾਲਾਂ ਵਧੇਰੇ ਸਹੀ ਹੁੰਦੀਆਂ ਹਨ। ਪ੍ਰਯੋਗਾਤਮਕ</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>ਮਾਊਸ ਵ੍ਹੀਲ ਟੈਬਾਂ ਵਿੱਚ ਗੋਲ ਘੁੰਮਦਾ ਹੈ</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>ਆਖਰੀ ਟੈਬ ਤੋਂ ਅੱਗੇ ਸਕ੍ਰੌਲ ਕਰਨ 'ਤੇ ਪਹਿਲੀ ਟੈਬ 'ਤੇ ਜਾਂਦਾ ਹੈ, ਅਤੇ ਉਲਟ ਵੀ; ਬੰਦ ਹੋਣ 'ਤੇ ਪਹਿਲੀ ਅਤੇ ਆਖਰੀ ਟੈਬ 'ਤੇ ਰੁਕ ਜਾਂਦਾ ਹੈ</value>
+  </data>
 </root>

@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Ενώ ένα μεγάλο έγγραφο σχεδιάζεται τμηματικά, το ύψος όσων δεν εμφανίζονται ακόμη υπολογίζεται από το κείμενο αντί να εκτιμάται, ώστε η γραμμή κύλισης και τα άλματα από τη διάρθρωση να είναι πιο ακριβή. Πειραματικό</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Η ροδέλα του ποντικιού κάνει κύκλο στις καρτέλες</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Η κύλιση μετά την τελευταία καρτέλα πηγαίνει στην πρώτη και αντίστροφα· ανενεργό σταματά στην πρώτη και στην τελευταία καρτέλα</value>
+  </data>
 </root>

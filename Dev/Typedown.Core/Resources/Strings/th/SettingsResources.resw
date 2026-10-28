@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>ขณะที่เอกสารยาวถูกวาดทีละส่วน ความสูงของส่วนที่ยังไม่แสดงจะคำนวณจากข้อความแทนการประมาณ ทำให้แถบเลื่อนและการข้ามจากเค้าร่างแม่นยำขึ้น ทดลอง</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>ล้อเมาส์วนไปตามแท็บ</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>เลื่อนผ่านแท็บสุดท้ายจะไปที่แท็บแรก และย้อนกลับ ปิดไว้จะหยุดที่แท็บแรกและแท็บสุดท้าย</value>
+  </data>
 </root>

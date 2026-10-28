@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Додека долг документ се исцртува во делови, висината на она што сè уште не е прикажано се пресметува од текстот наместо да се проценува, па лентата за лизгање и скоковите од прегледот се попрецизни. Експериментално</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Тркалцето на глувчето кружи низ картичките</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Лизгањето по последната картичка оди на првата, и обратно; исклучено запира на првата и последната картичка</value>
+  </data>
 </root>

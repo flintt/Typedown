@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Mientras un documento largo se dibuja por partes, la altura de lo que aún no se muestra se calcula a partir del texto en lugar de estimarse, de modo que la barra de desplazamiento y los saltos desde el esquema son más precisos. Experimental</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>La rueda del ratón da la vuelta a las pestañas</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Desplazarse más allá de la última pestaña lleva a la primera, y viceversa; si se desactiva, se detiene en la primera y la última pestaña</value>
+  </data>
 </root>

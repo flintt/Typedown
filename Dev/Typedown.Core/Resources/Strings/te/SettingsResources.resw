@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>పొడవైన పత్రం భాగాలుగా గీయబడుతున్నప్పుడు, ఇంకా చూపని భాగం ఎత్తు అంచనా వేయడానికి బదులుగా వచనం నుండి లెక్కించబడుతుంది, కాబట్టి స్క్రోల్ బార్ మరియు రూపురేఖ నుండి దూకడం మరింత ఖచ్చితంగా ఉంటాయి. ప్రయోగాత్మకం</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>మౌస్ వీల్ టాబ్‌ల చుట్టూ తిరుగుతుంది</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>చివరి టాబ్ దాటి స్క్రోల్ చేస్తే మొదటిదానికి వెళ్తుంది, తిరిగి కూడా; ఆపివేస్తే మొదటి మరియు చివరి టాబ్ వద్ద ఆగుతుంది</value>
+  </data>
 </root>

@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>দীর্ঘ নথি অংশে অংশে আঁকার সময়, এখনও না দেখানো অংশের উচ্চতা অনুমান না করে লেখা থেকে হিসাব করা হয়, ফলে স্ক্রলবার ও রূপরেখা থেকে লাফ আরও নির্ভুল হয়। পরীক্ষামূলক</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>মাউস হুইল ট্যাবগুলোর মধ্যে ঘোরে</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>শেষ ট্যাব ছাড়িয়ে স্ক্রল করলে প্রথমটিতে যায়, এবং উল্টোটাও; বন্ধ থাকলে প্রথম ও শেষ ট্যাবে থামে</value>
+  </data>
 </root>

@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>ពេលឯកសារវែងត្រូវបានគូរជាផ្នែកៗ កម្ពស់នៃផ្នែកដែលមិនទាន់បង្ហាញ ត្រូវបានគណនាពីអត្ថបទជំនួសឱ្យការប៉ាន់ស្មាន ដូច្នេះរបាររំកិល និងការលោតពីគ្រោង មានភាពត្រឹមត្រូវជាងមុន។ សាកល្បង</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>កង់កណ្ដុរវិលជុំវិញផ្ទាំង</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>រំកិលហួសផ្ទាំងចុងក្រោយនឹងទៅផ្ទាំងដំបូង ហើយផ្ទុយមកវិញ បើបិទនឹងឈប់នៅផ្ទាំងដំបូង និងផ្ទាំងចុងក្រោយ</value>
+  </data>
 </root>

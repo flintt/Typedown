@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Terwijl een lang document in delen wordt getekend, wordt de hoogte van wat nog niet wordt getoond uit de tekst berekend in plaats van geschat, zodat de schuifbalk en sprongen vanuit het overzicht nauwkeuriger zijn. Experimenteel</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Muiswiel gaat rond langs de tabbladen</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Voorbij het laatste tabblad scrollen gaat naar het eerste, en terug; uit stopt bij het eerste en laatste tabblad</value>
+  </data>
 </root>

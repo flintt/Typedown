@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Ndërsa një dokument i gjatë vizatohet me pjesë, lartësia e asaj që ende nuk shfaqet llogaritet nga teksti në vend që të vlerësohet, kështu që shiriti i rrëshqitjes dhe kërcimet nga skica janë më të sakta. Eksperimentale</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Rrota e miut kalon rreth skedave</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Rrotullimi përtej skedës së fundit shkon te e para, dhe anasjelltas; joaktiv ndalon te skeda e parë dhe e fundit</value>
+  </data>
 </root>

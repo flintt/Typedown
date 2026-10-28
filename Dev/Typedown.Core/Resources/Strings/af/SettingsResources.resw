@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Terwyl 'n lang dokument in dele geteken word, word die hoogte van wat nog nie gewys word nie uit die teks bereken in plaas van geskat, sodat die rolstaaf en spronge vanaf die uiteensetting akkurater is. Eksperimenteel</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Muiswiel gaan rond deur die oortjies</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Rol verby die laaste oortjie gaan na die eerste, en terug; af stop by die eerste en laaste oortjie</value>
+  </data>
 </root>

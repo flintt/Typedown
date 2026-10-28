@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>लांब दस्तऐवज भागांमध्ये काढला जात असताना, अद्याप न दाखवलेल्या भागाची उंची अंदाजाऐवजी मजकुरावरून मोजली जाते, त्यामुळे स्क्रोल बार आणि रूपरेषेतून उडी अधिक अचूक होतात. प्रायोगिक</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>माउस व्हील टॅबभोवती फिरते</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>शेवटच्या टॅबनंतर स्क्रोल केल्यास पहिल्या टॅबवर जाते, आणि उलटही; बंद असल्यास पहिल्या व शेवटच्या टॅबवर थांबते</value>
+  </data>
 </root>

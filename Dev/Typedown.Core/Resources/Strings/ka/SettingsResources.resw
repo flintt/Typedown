@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>როცა გრძელი დოკუმენტი ნაწილ-ნაწილ იხატება, ჯერ არნაჩვენები ნაწილის სიმაღლე ტექსტიდან გამოითვლება და არა მიახლოებით, ამიტომ გადახვევის ზოლი და მონახაზიდან გადასვლები უფრო ზუსტია. ექსპერიმენტული</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>მაუსის ბორბალი ჩანართებს წრეზე მიჰყვება</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>ბოლო ჩანართის შემდეგ გადახვევა პირველზე გადადის და პირიქით; გამორთვისას ჩერდება პირველ და ბოლო ჩანართზე</value>
+  </data>
 </root>

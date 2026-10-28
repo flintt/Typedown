@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Pendant qu'un long document est affiché par parties, la hauteur de ce qui n'est pas encore affiché est calculée à partir du texte au lieu d'être estimée, si bien que la barre de défilement et les sauts depuis le plan sont plus précis. Expérimental</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>La molette fait le tour des onglets</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Défiler au-delà du dernier onglet mène au premier, et inversement ; désactivé : s'arrête au premier et au dernier onglet</value>
+  </data>
 </root>

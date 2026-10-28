@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>جب طویل دستاویز حصوں میں بنائی جاتی ہے، تو ابھی نہ دکھائے گئے حصے کی اونچائی اندازے کے بجائے متن سے شمار کی جاتی ہے، تاکہ اسکرول بار اور خاکے سے چھلانگیں زیادہ درست ہوں۔ تجرباتی</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>ماؤس وہیل ٹیبز میں گھومتا ہے</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>آخری ٹیب سے آگے اسکرول کرنے پر پہلے ٹیب پر جاتا ہے، اور واپس بھی؛ بند ہونے پر پہلے اور آخری ٹیب پر رک جاتا ہے</value>
+  </data>
 </root>

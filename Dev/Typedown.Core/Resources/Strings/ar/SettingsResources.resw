@@ -964,4 +964,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>أثناء رسم مستند طويل على أجزاء، يُحسب ارتفاع ما لم يُعرض بعد من نصه بدلاً من تقديره، فيصبح شريط التمرير والانتقال من المخطط أدق. تجريبي</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>عجلة الماوس تدور بين علامات التبويب</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>التمرير بعد آخر علامة تبويب ينتقل إلى الأولى والعكس صحيح؛ عند الإيقاف يتوقف عند أول علامة تبويب وآخرها</value>
+  </data>
 </root>

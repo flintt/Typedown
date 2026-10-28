@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Ұзын құжат бөлік-бөлігімен салынып жатқанда, әлі көрсетілмеген бөліктің биіктігі шамаланбай, мәтіннен есептеледі, сондықтан айналдыру жолағы мен құрылымнан өту дәлірек болады. Тәжірибелік</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Тінтуір дөңгелегі қойындыларды айналдырады</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Соңғы қойындыдан әрі айналдыру біріншісіне өтеді, және керісінше; өшірулі болса бірінші және соңғы қойындыда тоқтайды</value>
+  </data>
 </root>

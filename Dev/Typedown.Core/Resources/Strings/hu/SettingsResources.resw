@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Amíg egy hosszú dokumentum részenként rajzolódik ki, a még nem látható rész magasságát a program a szövegből számítja ki becslés helyett, így a görgetősáv és a vázlatból történő ugrás pontosabb. Kísérleti</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Az egérgörgő körbejárja a lapokat</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Az utolsó lapon túl görgetve az elsőre ugrik, és vissza; kikapcsolva az első és az utolsó lapnál megáll</value>
+  </data>
 </root>

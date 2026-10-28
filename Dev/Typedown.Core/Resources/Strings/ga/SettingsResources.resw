@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Fad atá doiciméad fada á tharraingt ina chodanna, ríomhtar airde an mhéid nach dtaispeántar fós ón téacs in ionad é a mheas, ionas go mbíonn an barra scrollaithe agus na léimeanna ón imlíne níos cruinne. Turgnamhach</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Téann roth na luiche timpeall na gcluaisíní</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Má scrollaítear thar an gcluaisín deireanach, téitear chuig an gcéad cheann, agus ar ais; múchta stopann sé ag an gcéad chluaisín agus ag an gcluaisín deireanach</value>
+  </data>
 </root>

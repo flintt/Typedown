@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>長いドキュメントを段階的に描画する間、まだ表示されていない部分の高さを推定ではなくテキストから計算するため、スクロールバーやアウトラインからのジャンプがより正確になります。試験的な機能です</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>マウスホイールでタブを循環する</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>最後のタブを越えてスクロールすると最初のタブに移り、逆も同様です。オフの場合は最初と最後のタブで止まります</value>
+  </data>
 </root>

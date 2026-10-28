@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Enquanto um documento longo é desenhado por partes, a altura do que ainda não é exibido é calculada a partir do texto em vez de estimada, para que a barra de rolagem e os saltos a partir do esboço sejam mais precisos. Experimental</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>A roda do mouse dá a volta nas guias</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Rolar além da última guia leva à primeira, e vice-versa; se desativado, para na primeira e na última guia</value>
+  </data>
 </root>

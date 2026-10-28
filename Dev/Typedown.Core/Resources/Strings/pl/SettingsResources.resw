@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Podczas rysowania długiego dokumentu częściami wysokość tego, co nie jest jeszcze wyświetlane, jest obliczana na podstawie tekstu zamiast szacowana, dzięki czemu pasek przewijania i przeskoki z konspektu są dokładniejsze. Eksperymentalne</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Kółko myszy przechodzi po kartach w kółko</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Przewinięcie za ostatnią kartę przechodzi do pierwszej i odwrotnie; wyłączone zatrzymuje się na pierwszej i ostatniej karcie</value>
+  </data>
 </root>

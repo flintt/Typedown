@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Khi một tài liệu dài được vẽ theo từng phần, chiều cao của phần chưa hiển thị được tính từ văn bản thay vì ước lượng, nhờ đó thanh cuộn và các lần nhảy từ dàn ý chính xác hơn. Thử nghiệm</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Con lăn chuột xoay vòng qua các thẻ</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Cuộn qua thẻ cuối sẽ về thẻ đầu, và ngược lại; tắt sẽ dừng ở thẻ đầu và thẻ cuối</value>
+  </data>
 </root>

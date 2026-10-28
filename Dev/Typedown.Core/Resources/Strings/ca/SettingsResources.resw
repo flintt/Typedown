@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Mentre un document llarg es dibuixa per parts, l'alçada del que encara no es mostra es calcula a partir del text en lloc d'estimar-se, de manera que la barra de desplaçament i els salts des de l'esquema són més precisos. Experimental</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>La roda del ratolí dona la volta a les pestanyes</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Desplaçar-se més enllà de l'última pestanya porta a la primera, i a la inversa; desactivat s'atura a la primera i a l'última pestanya</value>
+  </data>
 </root>

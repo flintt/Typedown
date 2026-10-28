@@ -162,6 +162,8 @@ namespace Typedown.Core.ViewModels
         public bool AlwaysShowTabBar { get => GetSettingValue(false); set => SetSettingValue(value); }
         /// <summary>Files opened from Explorer / the command line go into a tab of the current window instead of a new window.</summary>
         public bool OpenFilesInNewTab { get => GetSettingValue(true); set => SetSettingValue(value); }
+        /// <summary>The mouse wheel over the tab strip goes on from the last tab to the first and back; off, it stops at the ends.</summary>
+        public bool TabWheelWraps { get => GetSettingValue(true); set => SetSettingValue(value); }
         public bool AutoPairMarkdownSyntax { get => GetSettingValue(true); set => SetSettingValue(value); }
 
         /// <summary>

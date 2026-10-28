@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Medtem ko se dolg dokument izrisuje po delih, se višina še neprikazanega dela izračuna iz besedila namesto ocenjuje, zato sta drsni trak in skoki iz orisa natančnejša. Preizkusno</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Miškino kolesce kroži po zavihkih</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Pomik mimo zadnjega zavihka skoči na prvega in obratno; izklopljeno se ustavi na prvem in zadnjem zavihku</value>
+  </data>
 </root>

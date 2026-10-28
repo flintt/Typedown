@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Ngenkathi umbhalo omude udwetshwa ngezingxenye, ukuphakama kwalokho okungakaboniswa kubalwa embhalweni esikhundleni sokulinganiselwa, ngakho ibha yokuskrola nokweqa kusuka kuhlaka kunembe kakhulu. Okokuhlola</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Isondo lemawusi lizungeza amathebhu</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Ukuskrola ngale kwethebhu lokugcina kuya kwelokuqala, nokubuya; uma ivaliwe limisa ethebhini lokuqala nelokugcina</value>
+  </data>
 </root>

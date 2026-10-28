@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Kamēr garš dokuments tiek zīmēts pa daļām, vēl neparādītās daļas augstums tiek aprēķināts no teksta, nevis novērtēts, tāpēc ritjosla un pārlēcieni no struktūras ir precīzāki. Eksperimentāls</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Peles ritenītis pārslēdz cilnes pa apli</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Ritināšana aiz pēdējās cilnes pāriet uz pirmo, un otrādi; izslēgts apstājas pie pirmās un pēdējās cilnes</value>
+  </data>
 </root>

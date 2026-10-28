@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Tra bo dogfen hir yn cael ei llunio fesul rhan, mae uchder yr hyn nad yw'n cael ei ddangos eto yn cael ei gyfrifo o'r testun yn lle ei amcangyfrif, felly mae'r bar sgrolio a'r neidiau o'r amlinelliad yn fwy cywir. Arbrofol</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Mae olwyn y llygoden yn mynd o amgylch y tabiau</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Mae sgrolio heibio'r tab olaf yn mynd i'r cyntaf, ac yn ôl; i ffwrdd yn stopio wrth y tab cyntaf a'r olaf</value>
+  </data>
 </root>

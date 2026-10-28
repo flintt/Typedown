@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>ದೀರ್ಘ ದಾಖಲೆಯನ್ನು ಭಾಗಗಳಾಗಿ ಚಿತ್ರಿಸುವಾಗ, ಇನ್ನೂ ತೋರಿಸದ ಭಾಗದ ಎತ್ತರವನ್ನು ಅಂದಾಜಿನ ಬದಲು ಪಠ್ಯದಿಂದ ಲೆಕ್ಕಹಾಕಲಾಗುತ್ತದೆ, ಇದರಿಂದ ಸ್ಕ್ರಾಲ್ ಬಾರ್ ಮತ್ತು ರೂಪರೇಖೆಯಿಂದ ಜಿಗಿತಗಳು ಹೆಚ್ಚು ನಿಖರವಾಗುತ್ತವೆ. ಪ್ರಾಯೋಗಿಕ</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>ಮೌಸ್ ವೀಲ್ ಟ್ಯಾಬ್‌ಗಳ ಸುತ್ತ ತಿರುಗುತ್ತದೆ</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>ಕೊನೆಯ ಟ್ಯಾಬ್ ದಾಟಿ ಸ್ಕ್ರೋಲ್ ಮಾಡಿದರೆ ಮೊದಲನೆಯದಕ್ಕೆ ಹೋಗುತ್ತದೆ, ಮತ್ತು ಹಿಂದಕ್ಕೂ; ಆಫ್ ಆಗಿದ್ದರೆ ಮೊದಲ ಮತ್ತು ಕೊನೆಯ ಟ್ಯಾಬ್‌ನಲ್ಲಿ ನಿಲ್ಲುತ್ತದೆ</value>
+  </data>
 </root>

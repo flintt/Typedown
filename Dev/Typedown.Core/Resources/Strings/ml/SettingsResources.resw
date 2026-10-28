@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>നീണ്ട പ്രമാണം ഭാഗങ്ങളായി വരയ്ക്കുമ്പോൾ, ഇതുവരെ കാണിക്കാത്ത ഭാഗത്തിന്റെ ഉയരം ഊഹിക്കുന്നതിനു പകരം വാചകത്തിൽ നിന്ന് കണക്കാക്കുന്നു, അതിനാൽ സ്ക്രോൾ ബാറും രൂപരേഖയിൽ നിന്നുള്ള ചാട്ടങ്ങളും കൂടുതൽ കൃത്യമാകും. പരീക്ഷണാത്മകം</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>മൗസ് വീൽ ടാബുകളിൽ ചുറ്റിക്കറങ്ങുന്നു</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>അവസാന ടാബിനപ്പുറം സ്ക്രോൾ ചെയ്താൽ ആദ്യത്തേതിലേക്ക് പോകും, തിരിച്ചും; ഓഫാണെങ്കിൽ ആദ്യ, അവസാന ടാബിൽ നിൽക്കും</value>
+  </data>
 </root>

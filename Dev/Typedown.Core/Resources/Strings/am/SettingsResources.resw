@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>ረጅም ሰነድ በክፍል ሲሳል፣ ገና ያልታየው ክፍል ቁመት ከመገመት ይልቅ ከጽሑፉ ይሰላል፤ በዚህም የማሸብለያ አሞሌው እና ከዝርዝሩ የሚደረጉ ዝላይዎች ይበልጥ ትክክል ይሆናሉ። ሙከራ</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>የመዳፊት ጎማ በትሮች ዙሪያ ይዞራል</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>ከመጨረሻው ትር በላይ ማሸብለል ወደ መጀመሪያው ይሄዳል፣ እና በተቃራኒው፤ ከጠፋ በመጀመሪያው እና በመጨረሻው ትር ይቆማል</value>
+  </data>
 </root>

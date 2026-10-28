@@ -987,4 +987,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>長文件分段轉譯時，依文字排版算出尚未顯示部分的高度，而不是估算，捲軸和大綱跳轉更準確。實驗性功能</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>滾輪切換分頁時首尾循環</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>在最後一個分頁上繼續捲動會回到第一個，反之亦然；關閉則停在第一個和最後一個分頁</value>
+  </data>
 </root>

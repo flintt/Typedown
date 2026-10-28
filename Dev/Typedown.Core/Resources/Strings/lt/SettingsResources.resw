@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Kol ilgas dokumentas piešiamas dalimis, dar nerodomos dalies aukštis apskaičiuojamas iš teksto, o ne įvertinamas apytiksliai, todėl slinkties juosta ir šuoliai iš struktūros yra tikslesni. Eksperimentinė</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Pelės ratukas sukasi ratu per korteles</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Slinkimas už paskutinės kortelės nukelia į pirmąją, ir atvirkščiai; išjungus sustoja ties pirmąja ir paskutine kortele</value>
+  </data>
 </root>

@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Поки довгий документ відображається частинами, висота ще не показаного обчислюється з тексту, а не оцінюється, тож смуга прокручування й переходи зі структури точніші. Експериментально</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Колесо миші гортає вкладки по колу</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Прокручування за останню вкладку переходить до першої, і навпаки; вимкнено — зупиняється на першій і останній вкладці</value>
+  </data>
 </root>

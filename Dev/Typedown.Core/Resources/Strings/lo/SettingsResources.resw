@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>ໃນຂະນະທີ່ເອກະສານຍາວຖືກແຕ້ມເປັນສ່ວນໆ, ຄວາມສູງຂອງສ່ວນທີ່ຍັງບໍ່ໄດ້ສະແດງຈະຖືກຄິດໄລ່ຈາກຂໍ້ຄວາມແທນການປະມານ, ເຮັດໃຫ້ແຖບເລື່ອນ ແລະ ການໂດດຈາກໂຄງຮ່າງຖືກຕ້ອງກວ່າ. ທົດລອງ</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>ລໍ້ເມົາສ໌ວຽນໄປຕາມແທັບ</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>ເລື່ອນຜ່ານແທັບສຸດທ້າຍຈະໄປແທັບທຳອິດ ແລະກັບກັນ; ຖ້າປິດຈະຢຸດຢູ່ແທັບທຳອິດ ແລະແທັບສຸດທ້າຍ</value>
+  </data>
 </root>

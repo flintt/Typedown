@@ -908,6 +908,7 @@
         "RememberCursorPosition",
         "HedgeDocPublishReadOnly",
         "OpenFilesInNewTab",
+        "TabWheelWraps",
         "AutoSave",
         "AutoReload",
         "AskBeforeReload",

@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>În timp ce un document lung este desenat pe părți, înălțimea a ceea ce nu este încă afișat se calculează din text în loc să fie estimată, astfel încât bara de derulare și salturile din schiță sunt mai precise. Experimental</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Rotița mouse-ului parcurge filele în buclă</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Derularea dincolo de ultima filă duce la prima, și invers; dezactivat se oprește la prima și la ultima filă</value>
+  </data>
 </root>

@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>בזמן שמסמך ארוך מצויר בחלקים, הגובה של מה שעוד לא מוצג מחושב מהטקסט במקום להיות מוערך, כך שסרגל הגלילה והקפיצות מתוך המתאר מדויקים יותר. ניסיוני</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>גלגל העכבר עובר בין הלשוניות במעגל</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>גלילה אחרי הלשונית האחרונה עוברת לראשונה, ולהפך; כבוי עוצר בלשונית הראשונה והאחרונה</value>
+  </data>
 </root>

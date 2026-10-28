@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Kui pikka dokumenti joonistatakse osade kaupa, arvutatakse veel kuvamata osa kõrgus teksti põhjal, mitte ei hinnata, nii et kerimisriba ja liigendusest hüpped on täpsemad. Katseline</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Hiirerull käib vahekaardid ringi</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Viimasest vahekaardist edasi kerimine viib esimesele ja vastupidi; väljas peatub esimesel ja viimasel vahekaardil</value>
+  </data>
 </root>

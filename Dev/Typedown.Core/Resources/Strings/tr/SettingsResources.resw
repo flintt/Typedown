@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Uzun bir belge parça parça çizilirken henüz gösterilmeyen kısmın yüksekliği tahmin edilmek yerine metinden hesaplanır; böylece kaydırma çubuğu ve ana hattan atlamalar daha doğru olur. Deneysel</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Fare tekerleği sekmeler arasında döner</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Son sekmenin ötesine kaydırmak ilk sekmeye gider, tersi de geçerlidir; kapalıyken ilk ve son sekmede durur</value>
+  </data>
 </root>

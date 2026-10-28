@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Mentre un documento lungo viene disegnato a parti, l'altezza di ciò che non è ancora mostrato viene calcolata dal testo invece di essere stimata, così la barra di scorrimento e i salti dalla struttura sono più precisi. Sperimentale</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>La rotellina scorre le schede in modo circolare</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Scorrere oltre l'ultima scheda porta alla prima, e viceversa; se disattivato, si ferma alla prima e all'ultima scheda</value>
+  </data>
 </root>

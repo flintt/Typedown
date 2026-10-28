@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Dok se dugi dokument iscrtava u dijelovima, visina onoga što još nije prikazano izračunava se iz teksta umjesto da se procjenjuje, pa su klizač i skokovi iz pregleda točniji. Eksperimentalno</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Kotačić miša kruži kroz kartice</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Pomicanje nakon posljednje kartice vodi na prvu, i obrnuto; isključeno staje na prvoj i posljednjoj kartici</value>
+  </data>
 </root>

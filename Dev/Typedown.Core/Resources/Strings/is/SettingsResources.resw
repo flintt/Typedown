@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Á meðan langt skjal er teiknað í hlutum er hæð þess sem ekki er enn sýnt reiknuð út frá textanum í stað þess að vera áætluð, svo skrunstikan og stökk úr efnisyfirlitinu verða nákvæmari. Tilraun</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Músarhjólið fer hring um flipana</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Skrun framhjá síðasta flipa fer á þann fyrsta og til baka; slökkt stöðvar á fyrsta og síðasta flipa</value>
+  </data>
 </root>

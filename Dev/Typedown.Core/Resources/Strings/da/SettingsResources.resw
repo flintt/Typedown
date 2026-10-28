@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Mens et langt dokument tegnes i dele, beregnes højden af det, der endnu ikke vises, ud fra teksten i stedet for at blive anslået, så rullepanelet og spring fra dispositionen bliver mere præcise. Eksperimentel</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Musehjulet går rundt mellem fanerne</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Rul forbi den sidste fane går til den første og omvendt; slået fra stopper ved den første og sidste fane</value>
+  </data>
 </root>

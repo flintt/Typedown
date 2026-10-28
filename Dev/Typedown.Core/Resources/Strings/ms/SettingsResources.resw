@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Semasa dokumen panjang dilukis secara berperingkat, ketinggian bahagian yang belum dipaparkan dikira daripada teksnya dan bukannya dianggarkan, jadi bar tatal dan lompatan dari rangka lebih tepat. Eksperimen</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Roda tetikus berpusing mengelilingi tab</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Menatal melepasi tab terakhir akan ke tab pertama, dan sebaliknya; dimatikan berhenti pada tab pertama dan terakhir</value>
+  </data>
 </root>

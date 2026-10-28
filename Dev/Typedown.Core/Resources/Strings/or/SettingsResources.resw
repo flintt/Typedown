@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>ଏକ ଲମ୍ବା ଦଲିଲ ଭାଗ ଭାଗ କରି ଆଙ୍କିବା ସମୟରେ, ଏପର୍ଯ୍ୟନ୍ତ ଦେଖାଯାଇନଥିବା ଅଂଶର ଉଚ୍ଚତା ଅନୁମାନ ବଦଳରେ ଲେଖାରୁ ଗଣନା କରାଯାଏ, ଫଳରେ ସ୍କ୍ରୋଲ୍ ବାର୍ ଏବଂ ରୂପରେଖାରୁ ଡେଇଁବା ଅଧିକ ସଠିକ୍ ହୁଏ। ପରୀକ୍ଷାମୂଳକ</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>ମାଉସ୍ ଚକ ଟ୍ୟାବ୍‌ଗୁଡ଼ିକରେ ଘୁରେ</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>ଶେଷ ଟ୍ୟାବ୍ ପରେ ସ୍କ୍ରୋଲ୍ କଲେ ପ୍ରଥମକୁ ଯାଏ, ଏବଂ ଫେରି ମଧ୍ୟ; ବନ୍ଦ ଥିଲେ ପ୍ରଥମ ଓ ଶେଷ ଟ୍ୟାବ୍‌ରେ ଅଟକେ</value>
+  </data>
 </root>

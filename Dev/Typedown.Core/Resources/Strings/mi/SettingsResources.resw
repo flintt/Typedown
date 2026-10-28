@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>I te wā e tuhia ana he tuhinga roa i ōna wāhanga, ka tātaihia te teitei o ngā wāhanga kāore anō kia whakaaturia mai i te kuputuhi, kaua e whakatau tata, kia tika ake ai te pae panuku me ngā peke mai i te whakarāpopototanga. Whakamātau</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Ka huri te wīra kiore i ngā ripa</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Ka haere ki te ripa tuatahi mēnā ka retireti ki tua i te ripa whakamutunga, me te whakamuri hoki; ki te whakaweto ka tū ki te ripa tuatahi me te ripa whakamutunga</value>
+  </data>
 </root>

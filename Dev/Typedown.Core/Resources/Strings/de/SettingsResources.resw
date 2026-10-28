@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Während ein langes Dokument in Teilen gezeichnet wird, wird die Höhe des noch nicht Angezeigten aus dem Text berechnet statt geschätzt, sodass die Bildlaufleiste und Sprünge aus der Gliederung genauer sind. Experimentell</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Mausrad wechselt zyklisch zwischen Tabs</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Weiterscrollen über den letzten Tab springt zum ersten, und umgekehrt; aus: stoppt am ersten und letzten Tab</value>
+  </data>
 </root>

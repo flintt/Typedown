@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Mentres un documento longo se debuxa por partes, a altura do que aínda non se mostra calcúlase a partir do texto en lugar de estimarse, de xeito que a barra de desprazamento e os saltos desde o esquema son máis precisos. Experimental</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>A roda do rato dá a volta ás lapelas</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Desprazarse máis alá da última lapela leva á primeira, e viceversa; desactivado detense na primeira e na última lapela</value>
+  </data>
 </root>

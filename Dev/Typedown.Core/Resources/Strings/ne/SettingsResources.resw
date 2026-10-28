@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>लामो कागजात भाग-भाग गरी कोरिँदै गर्दा, अझै नदेखाइएको भागको उचाइ अनुमान गर्नुको सट्टा पाठबाट गणना गरिन्छ, जसले स्क्रोल बार र रूपरेखाबाट हुने उफ्राइ अझ सटीक बनाउँछ। प्रयोगात्मक</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>माउस ह्विलले ट्याबहरू घुमाउँछ</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>अन्तिम ट्याबभन्दा पर स्क्रोल गर्दा पहिलोमा जान्छ, र फर्केर पनि; बन्द भए पहिलो र अन्तिम ट्याबमा रोकिन्छ</value>
+  </data>
 </root>

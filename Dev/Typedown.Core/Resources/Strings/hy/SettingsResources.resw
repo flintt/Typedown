@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Երբ երկար փաստաթուղթը նկարվում է մաս առ մաս, դեռ չցուցադրված մասի բարձրությունը հաշվարկվում է տեքստից՝ գնահատելու փոխարեն, ուստի ոլորման գոտին և ուրվագծից անցումները ավելի ճշգրիտ են։ Փորձնական</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Մկնիկի անիվը պտտվում է ներդիրների շրջանում</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Վերջին ներդիրից հետո ոլորելը անցնում է առաջինին, և հակառակը; անջատված դեպքում կանգ է առնում առաջին և վերջին ներդիրի վրա</value>
+  </data>
 </root>

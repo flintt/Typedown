@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>দীঘলীয়া নথি অংশ অংশকৈ অঁকাৰ সময়ত, এতিয়াও নেদেখুওৱা অংশৰ উচ্চতা অনুমান নকৰি পাঠৰ পৰা গণনা কৰা হয়, যাতে স্ক্ৰ'ল বাৰ আৰু ৰূপৰেখাৰ পৰা জঁপিয়াই যোৱা অধিক সঠিক হয়। পৰীক্ষামূলক</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>মাউছ হুইলে টেবসমূহ ঘূৰি থাকে</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>শেষ টেবৰ পিছলৈ স্ক্ৰল কৰিলে প্ৰথমটোলৈ যায়, আৰু উলটি; বন্ধ থাকিলে প্ৰথম আৰু শেষ টেবত ৰ'ব</value>
+  </data>
 </root>

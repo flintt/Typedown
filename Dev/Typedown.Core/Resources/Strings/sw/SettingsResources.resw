@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Hati ndefu inapochorwa kwa sehemu, urefu wa sehemu ambayo bado haijaonyeshwa hukokotolewa kutoka kwa maandishi badala ya kukadiriwa, hivyo upau wa kusogeza na kuruka kutoka kwa muhtasari kunakuwa sahihi zaidi. Majaribio</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Gurudumu la kipanya huzunguka vichupo</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Kusogeza zaidi ya kichupo cha mwisho huenda cha kwanza, na kurudi; ikiwa imezimwa husimama kwenye kichupo cha kwanza na cha mwisho</value>
+  </data>
 </root>

@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Dokumentu luze bat zatika marrazten den bitartean, oraindik erakusten ez denaren altuera testutik kalkulatzen da, kalkulu hurbila egin beharrean; horrela, korritze-barra eta eskemako jauziak zehatzagoak dira. Esperimentala</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Sagu-gurpilak fitxak zirkularki zeharkatzen ditu</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Azken fitxatik harago korritzeak lehenengora eramaten du, eta alderantziz; desaktibatuta lehen eta azken fitxan gelditzen da</value>
+  </data>
 </root>

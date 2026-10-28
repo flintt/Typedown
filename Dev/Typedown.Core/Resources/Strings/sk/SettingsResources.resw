@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Kým sa dlhý dokument vykresľuje po častiach, výška toho, čo ešte nie je zobrazené, sa namiesto odhadu vypočíta z textu, takže posúvač a skoky z osnovy sú presnejšie. Experimentálne</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Kolieskom myši dokola cez karty</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Posunutie za poslednú kartu prejde na prvú a naopak; vypnuté sa zastaví na prvej a poslednej karte</value>
+  </data>
 </root>

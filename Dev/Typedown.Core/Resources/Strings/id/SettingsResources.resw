@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Saat dokumen panjang digambar per bagian, tinggi bagian yang belum ditampilkan dihitung dari teksnya, bukan diperkirakan, sehingga bilah gulir dan lompatan dari kerangka lebih akurat. Eksperimental</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Roda mouse berputar mengelilingi tab</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Menggulir melewati tab terakhir akan ke tab pertama, dan sebaliknya; mati berhenti di tab pertama dan terakhir</value>
+  </data>
 </root>

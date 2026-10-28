@@ -851,6 +851,14 @@
     <value>Files opened from Explorer open as a tab in the current window; off opens a new window</value>
     <comment>常规/从资源管理器打开的文件进入当前窗口的标签页</comment>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Mouse wheel goes round the tabs</value>
+    <comment>常规/滚轮切换标签时首尾循环</comment>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Scrolling past the last tab goes to the first, and back; off stops at the first and last tab</value>
+    <comment>常规/在标签栏上滚动到最后一个后回到第一个；关闭则停在两端</comment>
+  </data>
   <data name="HedgeDocShare.Section" xml:space="preserve">
     <value>Share to HedgeDoc</value>
   </data>

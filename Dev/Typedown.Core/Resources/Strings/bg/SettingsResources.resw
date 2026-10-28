@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Докато дълъг документ се изобразява на части, височината на още непоказаното се изчислява от текста, вместо да се оценява, така че лентата за превъртане и преходите от структурата са по-точни. Експериментално</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Колелцето на мишката обикаля разделите</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Превъртането след последния раздел отива към първия и обратно; изключено спира при първия и последния раздел</value>
+  </data>
 </root>

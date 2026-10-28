@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>긴 문서를 나누어 그리는 동안 아직 표시되지 않은 부분의 높이를 추정하지 않고 텍스트로 계산하므로 스크롤 막대와 개요에서의 이동이 더 정확해집니다. 실험적 기능</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>마우스 휠로 탭을 순환</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>마지막 탭에서 더 스크롤하면 첫 번째 탭으로 이동하고, 반대도 같습니다. 끄면 첫 번째와 마지막 탭에서 멈춥니다</value>
+  </data>
 </root>

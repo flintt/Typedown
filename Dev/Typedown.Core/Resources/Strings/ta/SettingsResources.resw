@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>நீண்ட ஆவணம் பகுதி பகுதியாக வரையப்படும்போது, இன்னும் காட்டப்படாத பகுதியின் உயரம் மதிப்பிடப்படுவதற்குப் பதிலாக உரையிலிருந்து கணக்கிடப்படுகிறது, இதனால் உருட்டுப் பட்டியும் சுருக்கவரைவிலிருந்து தாவுதலும் மேலும் துல்லியமாகின்றன. சோதனை</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>மவுஸ் சக்கரம் தாவல்களைச் சுற்றி வரும்</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>கடைசி தாவலைத் தாண்டி உருட்டினால் முதல் தாவலுக்குச் செல்லும், திரும்பவும்; அணைத்தால் முதல் மற்றும் கடைசி தாவலில் நிற்கும்</value>
+  </data>
 </root>

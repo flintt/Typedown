@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Habang iginuguhit nang paisa-isang bahagi ang mahabang dokumento, kinukuwenta mula sa teksto ang taas ng hindi pa ipinapakita sa halip na tantiyahin, kaya mas tumpak ang scroll bar at ang mga pagtalon mula sa outline. Eksperimental</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Umiikot sa mga tab ang mouse wheel</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Ang pag-scroll lampas sa huling tab ay pupunta sa una, at pabalik; kapag naka-off, hihinto sa una at huling tab</value>
+  </data>
 </root>

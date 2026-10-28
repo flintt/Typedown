@@ -958,4 +958,10 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Kun pitkää asiakirjaa piirretään osissa, vielä näyttämättömän osan korkeus lasketaan tekstistä arvioinnin sijaan, joten vierityspalkki ja siirtymät jäsennyksestä ovat tarkempia. Kokeellinen</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Hiiren rulla kiertää välilehdet ympäri</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Vieritys viimeisen välilehden yli siirtyy ensimmäiseen ja takaisin; pois päältä pysähtyy ensimmäiseen ja viimeiseen välilehteen</value>
+  </data>
 </root>
