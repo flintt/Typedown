@@ -1162,6 +1162,15 @@ namespace Typedown.Services.Automation
                         ["contentTop"] = settings != null ? Top(settings) : menuBar != null ? Bottom(menuBar) : -1,
                     };
                 })));
+            // The last trip between the main page and the settings, step by step (RootControl.NavigationTimes). E2E ST01.
+            methods.Add(new MethodDescriptor("test.window.navigationTimes", null, "test.window.navigationTimes/1", (c, ct) =>
+                Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    var times = new Newtonsoft.Json.Linq.JObject();
+                    foreach (var (step, ms) in FindInWindow<Core.Controls.RootControl>(app)?.NavigationTimes ?? new())
+                        times[step] = Math.Round(ms, 1);
+                    return (Newtonsoft.Json.Linq.JToken?)times;
+                })));
             // How many times the window said "Opening…" over its editor, and how many long loads it had (JU01: a switch
             // between long documents does not say it).
             methods.Add(new MethodDescriptor("test.editor.opening", null, "test.editor.opening/1", (c, ct) =>

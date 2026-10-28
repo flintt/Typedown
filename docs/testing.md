@@ -142,6 +142,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | K02 | Ctrl+, twice opens and closes the settings: the caret and the keyboard are where they were |
 | CM01 | in compact mode the settings have no title bar: they start at the window's top, their top strip drags the window, their back button goes back to the editor page as it was |
 | SH01 | Ctrl+, held down opens the settings once - no going in and out until the app hangs and falls over - and types no comma |
+| NT01 | Ctrl+, into the settings and out again, measured: when each page is seen and the host's steps (made, laid out, drawn), with the page animation on and off; notes only, no limit yet |
 | JU01 | a long document comes back where it was without the page moving - switched back to in its tab, and opened in a window of its own as the start-up restores it |
 | K04 | a window just opened takes the keys at once: a letter typed without a click reaches the document |
 | K05 | a new tab (the + button, Ctrl+N) and a tab clicked in the strip take the keys at once, without a click in the text |
@@ -347,6 +348,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | `test.home.state` | `windowId` | The window's home page: whether it is asked for and shown (the view model and the page on screen), the active tab's document and whether it is blank, the page's lists (favourites, recent files and folders: path, dimmed, the last change shown) and the ids of an edition's sections shown on it (a collapsed one is not). | TestHostHooks.cs |
 | `test.settings.flush` | `windowId` | The settings written to Settings.json now (a case that restarts the host after test.settings.set). | TestHostHooks.cs |
 | `test.layout.contentTop` | `windowId` | Where the content starts below the window's top row, in the window's coordinates: the main page's menu bar row's bottom, or the top of the page the frame shows (the settings, under their caption). E2E CM01. | TestHostHooks.cs |
+| `test.window.navigationTimes` | `windowId` | The last trip between the main page and the settings, step by step (RootControl.NavigationTimes). E2E ST01. | TestHostHooks.cs |
 | `test.editor.opening` | `windowId` | How many times the window said "Opening…" over its editor, and how many long loads it had (JU01: a switch between long documents does not say it). | TestHostHooks.cs |
 | `test.folder.open` | `path`, `windowId` | A folder opened as the folder pane's root, as File > Open folder with that folder picked. | TestHostHooks.cs |
 <!-- END generated: test-methods -->

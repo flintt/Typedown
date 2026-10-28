@@ -61,6 +61,7 @@ namespace Typedown.Core.Controls
         // gave it to nothing: the first letters went nowhere until a click in the text.
         private void OnFrameNavigated(object sender, NavigationEventArgs e)
         {
+            MarkNavigation("navigated", e.Content as FrameworkElement);
             var from = shownPage;
             shownPage = e.SourcePageType;
             UpdateCaptionTheme();
@@ -167,11 +168,58 @@ namespace Typedown.Core.Controls
                 if (type == typeof(MainPage) || args != currentRoute)
                     return;
                 currentRoute = "Main";
+                StartNavigationTimes(typeof(MainPage));
                 Frame.Navigate(typeof(MainPage), null, GetTransition());
                 return;
             }
             currentRoute = args;
+            StartNavigationTimes(type);
             Frame.Navigate(type, string.Join('/', path.Skip(1)), GetTransition());
+        }
+
+        /// <summary>
+        /// The last trip between the main page and the settings, step by step, in ms from the moment it was asked for:
+        /// "navigated" (the new page made and in the frame), "loaded" (laid out, its Loaded) and "drawn" (the second
+        /// frame after that, the page on screen). Read by test.window.navigationTimes (E2E ST01) and written to the log.
+        /// </summary>
+        public System.Collections.Generic.List<(string Step, double Ms)> NavigationTimes { get; private set; } = new();
+
+        private System.Diagnostics.Stopwatch navigationWatch;
+        private string navigationTarget;
+
+        private void StartNavigationTimes(Type page)
+        {
+            NavigationTimes = new();
+            navigationTarget = page?.Name;
+            navigationWatch = System.Diagnostics.Stopwatch.StartNew();
+        }
+
+        private void MarkNavigation(string step, FrameworkElement page)
+        {
+            var watch = navigationWatch;
+            if (watch == null) return;
+            NavigationTimes.Add((step, watch.Elapsed.TotalMilliseconds));
+            if (page == null) { navigationWatch = null; return; }
+            void OnPageLoaded(object sender, RoutedEventArgs e)
+            {
+                page.Loaded -= OnPageLoaded;
+                if (navigationWatch != watch) return;
+                // (Loaded before Navigated: the time it is seen here.)
+                NavigationTimes.Add(("loaded", watch.Elapsed.TotalMilliseconds));
+                var frames = 0;
+                void OnRendering(object s, object a)
+                {
+                    if (++frames < 2) return;
+                    Microsoft.UI.Xaml.Media.CompositionTarget.Rendering -= OnRendering;
+                    if (navigationWatch != watch) return;
+                    NavigationTimes.Add(("drawn", watch.Elapsed.TotalMilliseconds));
+                    navigationWatch = null;
+                    Utilities.Log.Debug($"navigation to {navigationTarget}: " + string.Join(", ", NavigationTimes.Select(t => $"{t.Step} {t.Ms:0} ms")));
+                }
+                Microsoft.UI.Xaml.Media.CompositionTarget.Rendering += OnRendering;
+            }
+            if (page.IsLoaded) OnPageLoaded(page, null);
+            else page.Loaded += OnPageLoaded;
         }
 
         public NavigationTransitionInfo GetTransition() => Settings?.AnimationEnable ?? false ? new SlideNavigationTransitionInfo()
