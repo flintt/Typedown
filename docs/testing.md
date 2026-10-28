@@ -201,6 +201,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | HJ03 | the outline's jump to a heading far down lands and stays there - while a long document is still drawn and once it is |
 | HP04 | with files open, File > Home, the home button and Ctrl+Shift+H show the home page in one blank tab, the documents left alone; an automation write into it hides it with the text written |
 | HP05 | the home page hidden by typing, and by its New document button, leaves the keys in the editor |
+| HP06 | the home page's recent files show their time whole at every window width |
 | WP02 | pasted web pictures: one behind hotlink protection is fetched with the page as referrer, a page that is not a picture is kept on the web and said, and an untitled document saved into a folder takes its pictures along |
 | EX02 | an export says where it was written, with buttons to open it, and goes when closed; with no action after export, nothing shows |
 | TB01 | the table toolbar's Resize table opens with the table's own size; Cancel leaves the table as it was; OK resizes it |

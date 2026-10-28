@@ -203,6 +203,7 @@ internal static partial class Program
             await Case("HJ03 the outline's jump to a heading far down lands and stays there - while a long document is still drawn and once it is", HJ03);
             await Case("HP04 with files open, File > Home, the home button and Ctrl+Shift+H show the home page in one blank tab, the documents left alone; an automation write into it hides it with the text written", HP04);
             await Case("HP05 the home page hidden by typing, and by its New document button, leaves the keys in the editor", HP05);
+            await Case("HP06 the home page's recent files show their time whole at every window width", HP06);
             await Case("WP02 pasted web pictures: one behind hotlink protection is fetched with the page as referrer, a page that is not a picture is kept on the web and said, and an untitled document saved into a folder takes its pictures along", WP02);
             await Case("EX02 an export says where it was written, with buttons to open it, and goes when closed; with no action after export, nothing shows", EX02);
             await Case("TB01 the table toolbar's Resize table opens with the table's own size; Cancel leaves the table as it was; OK resizes it", TB01);
