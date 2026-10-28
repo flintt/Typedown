@@ -34,17 +34,7 @@
             <Setter Property="SelectionMode" Value="None"/>
             <Setter Property="IsItemClickEnabled" Value="True"/>
             <Setter Property="Padding" Value="0"/>
-            <!-- The entries laid out again whenever the list's width changes, and each as wide as the list. In the list's own
-                 (virtualising) panel they kept the width they were first measured at: where the window grew past the width
-                 at which something takes the page's left (860-880 pixels on w10) the list narrowed and they did not, and
-                 the time at their right was cut off at its edge (HP06). A dozen or so entries need no virtualising. -->
-            <Setter Property="ItemsPanel">
-                <Setter.Value>
-                    <ItemsPanelTemplate>
-                        <StackPanel/>
-                    </ItemsPanelTemplate>
-                </Setter.Value>
-            </Setter>
+            <!-- Each entry as wide as the list (the item's own default is its own width). -->
             <Setter Property="ItemContainerStyle">
                 <Setter.Value>
                     <Style TargetType="ListViewItem" BasedOn="{StaticResource DefaultListViewItemStyle}">
