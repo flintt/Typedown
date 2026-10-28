@@ -9,6 +9,9 @@
     xmlns:u="using:Typedown.Core.Utilities"
     mc:Ignorable="d">
     <MenuFlyoutItem x:Name="UserGuideItem" Text="{u:LocaleString Key=UserGuide}" Click="OnUserGuideClick"/>
+    <MenuFlyoutItem x:Name="ShortcutsItem" Text="{u:LocaleString Key=ShortcutKey}" Click="OnShortcutsClick"/>
+    <MenuFlyoutSeparator/>
+    <MenuFlyoutItem x:Name="FeedbackItem" Text="{u:LocaleString Key=About.SendFeedback}" Click="OnFeedbackClick"/>
     <MenuFlyoutSeparator/>
     <MenuFlyoutItem x:Name="AboutItem" Text="{u:LocaleString Key=About.Title}" Click="OnAboutClick"/>
 </local:MenuBarItemBase>
