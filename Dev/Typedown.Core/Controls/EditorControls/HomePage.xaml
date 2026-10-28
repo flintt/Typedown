@@ -111,7 +111,9 @@
     <Grid x:Name="Root" Background="{ThemeResource SolidBackgroundFillColorTertiaryBrush}">
         <!-- A custom theme's background over the system's (set from code; empty without one). -->
         <Border x:Name="ThemeLayer"/>
-        <ScrollViewer x:Name="Scroller" HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Auto">
+        <!-- No horizontal extent: with only its scrolling turned off, the page could still be laid out wider than the window (at
+             860-900 pixels on w10 about 140 pixels wider, centred), and the right of the recent lists - their times - ran off it (HP06). -->
+        <ScrollViewer x:Name="Scroller" HorizontalScrollMode="Disabled" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
             <StackPanel MaxWidth="760" Margin="32,32,32,24" HorizontalAlignment="Stretch">
                 <TextBlock Text="{u:LocaleString Key=HomePage.Title}" FontSize="28" FontWeight="SemiBold" Margin="0,0,0,16"/>
 
