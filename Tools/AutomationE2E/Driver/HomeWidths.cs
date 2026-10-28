@@ -12,6 +12,8 @@ using System.Windows.Automation;
 /// </summary>
 internal static partial class Program
 {
+    private static string Truncate(string s) => s.Length > 40 ? s[..40] + "…" : s;
+
     [System.Runtime.InteropServices.DllImport("user32.dll", EntryPoint = "SetWindowPos")] private static extern bool HwSetWindowPos(IntPtr window, IntPtr after, int x, int y, int width, int height, uint flags);
 
     private static async Task HP06(List<string> notes)
@@ -49,6 +51,22 @@ internal static partial class Program
                 if (cut.Count == 0 && time.Current.BoundingRectangle.Right > listNow.Right - 1)
                     notes.Add($"{width}: window {w.Left}-{w.Right}, screenshot {Screenshot("hp06-" + width)}");
                 if (width % 100 == 0 || width is 840 or 860) notes.Add($"{width}: window {w.Left}-{w.Right}");
+                // Everything on the page wider than the list may be or reaching past the scroll area: what makes it wider.
+                if (width is 880 or 1400)
+                {
+                    var scroller = Deep.First(AutomationElement.FromHandle(window), new PropertyCondition(AutomationElement.AutomationIdProperty, "Scroller"));
+                    if (scroller != null)
+                    {
+                        var sr = scroller.Current.BoundingRectangle;
+                        notes.Add($"{width}: scroller {sr.Left:0}-{sr.Right:0}");
+                        foreach (AutomationElement e in Deep.All(scroller, Condition.TrueCondition))
+                        {
+                            var r = e.Current.BoundingRectangle;
+                            if (r.IsEmpty || !(r.Width > 761 || r.Right > sr.Right)) continue;
+                            notes.Add($"{width}:   wide {e.Current.ControlType.ProgrammaticName} {e.Current.ClassName} '{e.Current.AutomationId}' '{Truncate(e.Current.Name)}' {r.Left:0}-{r.Right:0}");
+                        }
+                    }
+                }
                 // Each element from the list up to the window, at the widths around the first cut: which one is wider than the window.
                 if (width is 840 or 860)
                     for (var e = TreeWalker.RawViewWalker.GetParent(list); e != null && e != AutomationElement.RootElement; e = TreeWalker.RawViewWalker.GetParent(e))
