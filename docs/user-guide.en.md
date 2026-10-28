@@ -395,7 +395,7 @@ Switch themes under **View → Theme**: Light, Dark, Black (OLED), plus several 
 **Long documents open slowly or look wrong**
 
 - A long document is drawn progressively: it opens at the place you left it, and the rest is drawn in the background. If something looks wrong while it opens, turn off **Settings → Editor → Draw long documents progressively** to draw it all at once
-- **Predict the layout of long documents (experimental)** (same page): while a long document is drawn in parts, the height of what is not shown yet is worked out from its text instead of estimated, so the scroll bar and jumps from the outline are more accurate
+- **Predict the layout of long documents (experimental)** (same page): the scroll bar and jumps from the outline are more accurate in long documents
 
 **Reporting a problem**
 
