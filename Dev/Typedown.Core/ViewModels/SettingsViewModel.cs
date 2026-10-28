@@ -205,8 +205,12 @@ namespace Typedown.Core.ViewModels
         public bool AllowLocalAutomation { get => GetSettingValue(false); set => SetSettingValue(value); }
         /// <summary>Editor pages briefly highlight what an automation write changed.</summary>
         public bool HighlightAutomationChanges { get => GetSettingValue(true); set => SetSettingValue(value); }
-        /// <summary>Off by default (2026-10-28): every page, pane and menu shows at once; the slide alone was 0.3 s of each trip into the settings and out (NT01).</summary>
-        public bool AnimationEnable { get => GetSettingValue(false); set => SetSettingValue(value); }
+        /// <summary>
+        /// On by default. Off by default for a while (2026-10-28, the settings' slide was 0.3 s of each trip in and out, NT01),
+        /// but then a long document scrolled down came back from the settings blank after the cases before SF02 (on with it
+        /// in the same run); back on until that is understood (docs/todo.md).
+        /// </summary>
+        public bool AnimationEnable { get => GetSettingValue(true); set => SetSettingValue(value); }
         public bool UseMicaEffect { get => GetSettingValue(Config.IsMicaSupported); set => SetSettingValue(value); }
         public bool UseEditorMicaEffect { get => GetSettingValue(false); set => SetSettingValue(value); }
         public bool Topmost { get => GetSettingValue(false); set => SetSettingValue(value); }
