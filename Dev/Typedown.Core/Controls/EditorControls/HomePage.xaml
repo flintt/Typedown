@@ -1,4 +1,4 @@
-<UserControl
+﻿<UserControl
     x:Class="Typedown.Core.Controls.HomePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -34,6 +34,15 @@
             <Setter Property="SelectionMode" Value="None"/>
             <Setter Property="IsItemClickEnabled" Value="True"/>
             <Setter Property="Padding" Value="0"/>
+            <!-- An entry as wide as the list: left at its own width (the item's default), a long name made it wider than the
+                 list at some window widths, and the time at its right was cut off at the list's edge (HP06). -->
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="ListViewItem" BasedOn="{StaticResource DefaultListViewItemStyle}">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    </Style>
+                </Setter.Value>
+            </Setter>
         </Style>
         <Style x:Key="SectionTitleStyle" TargetType="TextBlock">
             <Setter Property="FontWeight" Value="SemiBold"/>
