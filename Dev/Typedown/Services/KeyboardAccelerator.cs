@@ -65,7 +65,12 @@ namespace Typedown.Services
                     var args = (PInvoke.KBDLLHOOKSTRUCT)Marshal.PtrToStructure(lParam, typeof(PInvoke.KBDLLHOOKSTRUCT));
                     // A key already down is the system repeating it while it is held: said so, for the shortcuts that
                     // must run once per press (the settings' toggle, which held went in and out until the app fell over).
-                    var repeat = !keysDown.Add(args.vkCode);
+                    // Its own count is checked with the system's: a key up can pass while this thread is busy (the
+                    // settings laid out for 0.6 s on w10) and the hook is skipped for it; the key then stayed "down" here
+                    // and the next press was taken for a repeat - Ctrl+, did not close the settings (2026-10-28, NT01).
+                    // The system's state does not have this key down yet when the hook sees it: down there, it was down
+                    // before, held; up there, its key up was missed and this is a new press.
+                    var repeat = !keysDown.Add(args.vkCode) && (PInvoke.GetAsyncKeyState((int)args.vkCode) & 0x8000) != 0;
                     if (OnKeyBoardEvent(args, repeat)) return 1;
                 }
                 else if (msg == PInvoke.WindowMessage.WM_KEYUP || msg == PInvoke.WindowMessage.WM_SYSKEYUP)
