@@ -212,6 +212,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | RD01 | reading mode: the context menu offers copying and selecting only, Copy works on a selection, copy as plain text leaves the Markdown out, Ctrl+Z changes nothing |
 | RD02 | reading mode: Focus mode and Typewriter mode in the View menu are disabled and drawn fainter than the entries that work, in Dark and Light, whether the menu was opened before or not |
 | DG02 | every diagram of the showcase document, written into a window just opened, is drawn once |
+| PL01 | Settings > Editor > Draw Mermaid diagrams with: Pele chosen draws a flowchart and an agentflow (which Mermaid cannot), Mermaid chosen again draws the flowchart with Mermaid |
 | DG03 | a diagram's copy button, with the real mouse in the dark theme: shown on hover; a click puts a picture (mostly white, light theme) and the fenced Markdown on the clipboard, and leaves the document as it was |
 | CB01 | a display formula's copy button, with the real mouse in the dark theme: shown on hover, none on an inline formula; a click puts a picture (black on white), RTF with it and the formula's $$ Markdown and its MathML as Word writes it on the clipboard, no HTML; the document as it was; Word pastes an equation it can edit; pasted back it is the formula |
 | CB02 | a table's copy button and the menu's Copy table, with the real mouse: the button above the table's top right corner; the clipboard holds the table as HTML (header row, alignment, formatting) and its Markdown as written; the document as it was; Word pastes one 3x3 table; pasted back it is the table's Markdown |
@@ -225,6 +226,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | MN01 | a minimized window's document is written and saved through the automation API |
 | LK01 | a link to another Markdown file opens it as a tab of the same window when files open in tabs |
 | FL01 | the settings' font family box suggests the installed fonts |
+| FL02 | the font picker beside Settings > Editor > Font: every installed font listed without typing, narrowed by its box; the one clicked goes first in the setting, the fallbacks after it kept |
 | FO01 | after another window and back, and after the context menu closed with Esc, the next letter goes into the document |
 | TH04 | Windows switched between light and dark while the app follows the system: caption buttons readable, editor follows |
 | FT01 | the file tree sorts names as 1.3.7 did |
