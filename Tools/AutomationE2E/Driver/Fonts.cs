@@ -85,7 +85,9 @@ internal static partial class Program
             else ((UIA.InvokePattern)nav.GetCurrentPattern(UIA.InvokePattern.Pattern)).Invoke();
             await Task.Delay(1500);
             var choose = Deep.First(root, new UIA.PropertyCondition(UIA.AutomationElement.AutomationIdProperty, "FontFamilyChoose")) ?? throw new CaseFailed("no Choose… button beside the font box");
-            choose.Current.BoundingRectangle.ToString();
+            // The row may be below the page's fold in a short window: scrolled to first, as a reader would.
+            if (choose.TryGetCurrentPattern(UIA.ScrollItemPattern.Pattern, out var scroll)) ((UIA.ScrollItemPattern)scroll).ScrollIntoView();
+            await Task.Delay(400);
             await Click(window, choose);
             UIA.AutomationElement? search = null;
             for (var i = 0; i < 25 && search == null; i++) { await Task.Delay(200); search = Anywhere("FontPicker.Search"); }
