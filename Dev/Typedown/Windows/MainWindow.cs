@@ -560,13 +560,7 @@ namespace Typedown.Windows
             // Window placement is itself a setting. Do not let process shutdown cut off the queued atomic write.
             await AppViewModel.SettingsViewModel.FlushSettingsAsync();
             isCloseable = true;
-            // The web view closed before the window, and what its closing posts to this thread run while the window is
-            // still here. Closed in OnClosed (8fc50507), a task WebView2 posted on its way out still ran after the window
-            // had gone: DispatcherQueue::DeferInvokeCallback failed (0x800710dd) and ended the process (0xc000027b; the
-            // dump of the full run of 2026-10-30, at the end of AC01).
-            try { global::Typedown.Controls.MarkdownEditor.Of(ServiceScope?.ServiceProvider)?.ReleaseWebView(); }
-            catch (Exception ex) { Log.Debug($"window closing: the web view: {ex.Message}"); }
-            await Task.Delay(200);
+            await Task.Yield();
             if (!closed)
                 Close();
         }
