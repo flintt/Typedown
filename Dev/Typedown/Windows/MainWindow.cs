@@ -530,10 +530,13 @@ namespace Typedown.Windows
                     if (!isClosing)
                     {
                         isClosing = true;
+                        // The tab the reader is on, before the saving: it switches to each unsaved tab to save it or
+                        // ask, and the session then named the last of them the active one.
+                        var shown = AppViewModel.TabsViewModel.ActiveTab;
                         await AppViewModel.FileViewModel.AutoSaveFile();
                         if (await AppViewModel.TabsViewModel.AskToSaveAll())
                         {
-                            AppViewModel.TabsViewModel.SaveSession();
+                            AppViewModel.TabsViewModel.SaveSession(shown);
                             ForceClose();
                         }
                     }
