@@ -138,6 +138,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | R04 | untitled and background documents come back from their backups after a kill, each its own |
 | C01 | document.close: a saved document closes, an unsaved one (a fresh keystroke too) is refused, the last one leaves an empty document |
 | Q02 | a window closed at once after it opened (its web view still being created): the process lives on |
+| WC01 | windows opened and closed again and again, each closed as its page scrolls and a script call is on its way: the process lives on |
 | D01 | the window's UI thread runs every callback posted to it, from many threads at once |
 | K02 | Ctrl+, twice opens and closes the settings: the caret and the keyboard are where they were |
 | CM01 | in compact mode the settings have no title bar: they start at the window's top, their top strip drags the window, their back button goes back to the editor page as it was |

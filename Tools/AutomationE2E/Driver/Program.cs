@@ -140,6 +140,7 @@ internal static partial class Program
             await Case("R04 untitled and background documents come back from their backups after a kill, each its own", R04);
             await Case("C01 document.close: a saved document closes, an unsaved one (a fresh keystroke too) is refused, the last one leaves an empty document", C01);
             await Case("Q02 a window closed at once after it opened (its web view still being created): the process lives on", Q02);
+            await Case("WC01 windows opened and closed again and again, each closed as its page scrolls and a script call is on its way: the process lives on", WC01);
             await Case("D01 the window's UI thread runs every callback posted to it, from many threads at once", D01);
             await Case("K02 Ctrl+, twice opens and closes the settings: the caret and the keyboard are where they were", K02);
             await Case("CM01 in compact mode the settings have no title bar: they start at the window's top, their top strip drags the window, their back button goes back to the editor page as it was", CM01);
