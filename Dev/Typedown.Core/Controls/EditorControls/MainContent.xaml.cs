@@ -50,6 +50,9 @@ namespace Typedown.Core.Controls
             else DispatcherQueue.TryEnqueue(ShowEditionPanel);
         }
 
+        // Which page's scroller holds an edition panel's content now.
+        private static readonly System.Runtime.CompilerServices.ConditionalWeakTable<object, ScrollViewer> panelHosts = new();
+
         private void ShowEditionPanel()
         {
             var panel = EditionHooks.SidePanelOf(ViewModel);
@@ -59,8 +62,13 @@ namespace Typedown.Core.Controls
                 EditionPanelHost.Visibility = Visibility.Collapsed;
                 return;
             }
-            // Another window's panel content cannot be in this one: the edition makes one per window.
-            if ((panel.Content as FrameworkElement)?.Parent is ContentControl owner && owner != EditionPanelScroller) owner.Content = null;
+            // The page before this one (left for the settings, and made anew on the way back) may still hold the panel's
+            // content: it is let go first. Its Parent did not always name that page's scroller, and the content set here
+            // while still there threw (0x800F1000, "Element is already the child of another element"; the reader's
+            // 1.4.0.24, the designer open, the language changed in the settings).
+            if (panelHosts.TryGetValue(panel.Content, out var held) && held != EditionPanelScroller && held.Content == panel.Content) held.Content = null;
+            else if ((panel.Content as FrameworkElement)?.Parent is ContentControl owner && owner != EditionPanelScroller) owner.Content = null;
+            panelHosts.AddOrUpdate(panel.Content, EditionPanelScroller);
             EditionPanelTitle.Text = panel.Title ?? "";
             EditionPanelHost.Width = panel.Width;
             EditionPanelScroller.Content = panel.Content;
