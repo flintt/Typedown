@@ -187,11 +187,16 @@ class Keyboard {
         return
       }
       switch (event.key) {
+        // A Backspace or Delete the handler made itself (it prevented the browser's) fires no input event: told here,
+        // as Enter is. Without it the host kept the text from before - an empty paragraph taken out of a run of blank
+        // lines came back on the next save, and a save at once wrote the old text.
         case EVENT_KEYS.Backspace:
           contentState.backspaceHandler(event)
+          if (event.defaultPrevented) this.muya.dispatchChange()
           break
         case EVENT_KEYS.Delete:
           contentState.deleteHandler(event)
+          if (event.defaultPrevented) this.muya.dispatchChange()
           break
         case EVENT_KEYS.Enter:
           if (!this.isComposed) {
