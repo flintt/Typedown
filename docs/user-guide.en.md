@@ -21,7 +21,7 @@ This guide covers version 1.4. Menu and setting names are given as they appear i
 
 **Open a folder**: File → Open Folder. The side bar on the left (Ctrl+Shift+L shows/hides it; **Settings → Appearance → Side Bar on the Right** moves it to the right) has two pages:
 
-- **Files**: the documents in the folder. A single click previews a file (the tab is replaced when you open another file); a double click opens it for real. The magnifier at the top of the side bar searches the whole folder (Ctrl+Shift+F): the names of files and folders are listed first, under File names, then the files whose text contains the words, under Contents, as they are found. A file whose name and text both match is listed once, under File names, marked "Content matches too". File names shows five until you choose Show all; a group's heading folds it away. Clicking a folder shows it in the Files tree; clicking a file opens it, and finds the words in it when its text matched
+- **Files**: the documents in the folder. A single click previews a file (the tab is replaced when you open another file); a double click opens it for real. The magnifier at the top of the side bar searches the whole folder (Ctrl+Shift+F): the names of files and folders are listed first, under File names, then the files whose text contains the words, under Contents, as they are found. A file whose name and text both match is listed once, under File names, marked "Content matches too". File names shows five until you choose Show all; a group's heading folds it away. Clicking a folder shows it in the Files tree; clicking a file opens it, and finds the words in it when its text matched. The search looks in the folder of the document in front first, then in the folder the Files tree shows; when the document is not in that folder, the files beside it are listed with their folder's name in front
 - **Outline**: the headings of the current document; click one to jump to it. While you write, the heading you are under is highlighted
 
 **Save**: Ctrl+S; Save As is Ctrl+Shift+S. Unsaved changes are backed up regularly, and if the app closes unexpectedly they are restored the next time you open it. On the next start, the tabs you had open last time come back automatically. Closing a document with unsaved changes asks whether to save them; with **Settings → General → Keep Unsaved Changes When Closing** on it does not ask, and unsaved documents come back as they were, still marked unsaved.
@@ -57,6 +57,7 @@ F11 toggles full screen.
 
 Under **Settings → Editor**, a few settings change what you see:
 
+- **Font**: **Choose…** beside it lists every font installed on the computer, each shown in its own face, with a box above to search them; the font you choose goes first, and the fallback fonts written after it (a Chinese font, for one) stay
 - **Always Show Markdown Marks**: the Markdown marks (`**`, `#`, a link's address) show in every paragraph, not only where the caret is
 - **Show extra blank lines**: empty lines between paragraphs take up space in Reading Mode and in HTML and PDF exports too, as they do while editing; the file itself is not changed
 - **Vim keys**: Vim in Source Code Mode (`:w` saves, `:q` closes the tab); j/k, gg/G, ]] and / to move around in Reading Mode. Not in visual editing
@@ -110,6 +111,8 @@ You can change every shortcut under **Settings → General → Shortcuts**.
 The **Paragraph** menu also lets you insert charts (Flow Chart, Sequence Diagram, Mermaid, PlantUML Diagram, Vega Chart), footnotes, a horizontal line, YAML front matter and more.
 
 PlantUML diagrams are not drawn unless you turn on **Settings → Editor → Draw PlantUML diagrams**, which sends the diagram's source to plantuml.com to be drawn. Put the address of a server of your own in **PlantUML server** below it, and the diagrams' source stays with you.
+
+Mermaid diagrams are drawn by Mermaid. Choose **Pele** in **Settings → Editor → Draw Mermaid diagrams with** to have Pele draw them: it draws more kinds of diagram (agentflow and usecase, for example) and lays them out differently; the exports and the copy button use it too.
 
 ---
 
