@@ -37,18 +37,20 @@ internal static partial class Program
             Check(await WindowIdOf(c, here) == windowId, "the document from beside opens in the same window");
             Check(await Eventually(async () => SamePath((string?)(await FolderState(c, windowId))["root"], tree), 3000), "an opened folder stays the root when a document from elsewhere is opened");
 
-            await Click(window, await WaitFor(window, "SearchButton"));
+            // The search pane may still be open from the case before (FQ01 leaves it open): then its box is used.
+            if (FindIn(window, "SearchTextBox") == null) await Click(window, await WaitFor(window, "SearchButton"));
             var box = await WaitFor(window, "SearchTextBox");
             await Eventually(async () => { await Task.CompletedTask; var r = box.Current.BoundingRectangle; return !r.IsEmpty && r.Width > 0; }, 5000);
             await Click(window, box);
             await Task.Delay(300);
+            Keys(("ctrl", (ushort)0x41));
             TypeText("mango");
 
             AutomationElement? Row(string id) => FindIn(window, id);
-            var status = "";
-            await Eventually(async () => { await Task.CompletedTask; status = FindIn(window, "SearchStatus")?.Current.Name ?? ""; return status.Length > 0 && !status.Contains('…'); }, 15000);
-            notes.Add($"status: '{status}'");
-            Check(Row("SearchName:mango-tree.md") != null, "a name in the opened folder is found");
+            // Waited for by its own results: the status line can still be the case before's summary.
+            Check(await Eventually(async () => { await Task.CompletedTask; return Row("SearchName:mango-tree.md") != null; }, 15000), "a name in the opened folder is found");
+            await Eventually(async () => { await Task.CompletedTask; return Row("SearchContent:fq02-beside/sibling.md") != null; }, 15000);
+            notes.Add($"status: '{FindIn(window, "SearchStatus")?.Current.Name}'");
             Check(Row("SearchContent:fq02-beside/sibling.md") != null, $"the file beside the document is found, led by its folder's name ({FocusInfo(window)})");
             Check(Row("SearchContent:sibling.md") == null, "the file beside the document is not shown as if it were in the opened folder");
         }
