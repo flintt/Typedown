@@ -5,8 +5,9 @@ using System.Windows.Automation;
 
 /// <summary>
 /// FQ02: the folder search looks where the reader is. A folder opened in the side pane, then a document opened from
-/// another folder beside it: the search finds names in the opened folder and, as well, a file next to the document,
-/// led by its folder's name. (It searched the opened folder only, so nothing beside the document was found.)
+/// another folder beside it: the search finds the files next to the document first, led by their folder's name, then
+/// the names in the opened folder, in one list. (It searched the opened folder only, so nothing beside the document
+/// was found.)
 /// </summary>
 internal static partial class Program
 {
@@ -23,6 +24,7 @@ internal static partial class Program
         File.WriteAllText(Path.Combine(tree, "mango-tree.md"), "# in the tree\n");
         File.WriteAllText(Path.Combine(beside, "here.md"), "# the document in front\n");
         File.WriteAllText(Path.Combine(beside, "sibling.md"), "# beside it\nA mango on this line.\n");
+        File.WriteAllText(Path.Combine(beside, "mango-beside.md"), "# beside it too\n");
 
         var first = await Open(c, Path.Combine(tree, "start.md"));
         var windowId = await WindowIdOf(c, first);
@@ -53,6 +55,10 @@ internal static partial class Program
             notes.Add($"status: '{FindIn(window, "SearchStatus")?.Current.Name}'");
             Check(Row("SearchContent:fq02-beside/sibling.md") != null, $"the file beside the document is found, led by its folder's name ({FocusInfo(window)})");
             Check(Row("SearchContent:sibling.md") == null, "the file beside the document is not shown as if it were in the opened folder");
+            var besideRow = Row("SearchName:fq02-beside/mango-beside.md");
+            var treeRow = Row("SearchName:mango-tree.md");
+            Check(besideRow != null && treeRow != null && besideRow.Current.BoundingRectangle.Top < treeRow.Current.BoundingRectangle.Top,
+                "the name beside the document is listed above the one in the opened folder");
         }
         finally
         {
