@@ -1,6 +1,7 @@
 ﻿﻿using System;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Typedown.Core.Utilities;
@@ -63,26 +64,26 @@ namespace Typedown.Core.Controls
         }
 
         /// <summary>
-        /// Where the search looks: the folder the tree shows, and the document's own folder when that is not inside it.
-        /// Before the tree was shown, the folder it would show: an opened folder, else the document's, else the one
-        /// restored at startup. (Only the restored folder was searched while there was one, so a document opened from
-        /// elsewhere, with the tree on its folder, found nothing beside it.)
+        /// Where the search looks: the folder of the document in front first, then the folder the tree shows (one list;
+        /// a path is shown from the tree's folder, or led by the document folder's name when that is elsewhere). Before
+        /// the tree was shown, the folder it would show: an opened folder, else the document's, else the one restored at
+        /// startup. (Only the restored folder was searched while there was one, so a document opened from elsewhere, with
+        /// the tree on its folder, found nothing beside it.)
         /// </summary>
-        private string[] SearchRoots
+        private (string[] Roots, string ShownFrom) SearchRoots
         {
             get
             {
                 var file = ViewModel?.FileViewModel;
-                if (file == null) return null;
+                if (file == null) return (null, null);
                 var documentFolder = string.IsNullOrEmpty(file.FilePath) ? null : Path.GetDirectoryName(file.FilePath);
                 var tree = file.FolderTreeRoot;
                 if (string.IsNullOrEmpty(tree))
                     tree = file.WorkFolderIsExplicit ? file.WorkFolder : documentFolder ?? file.WorkFolder;
                 if (string.IsNullOrEmpty(tree) || !Directory.Exists(tree)) tree = null;
-                if (documentFolder != null && (!Directory.Exists(documentFolder) || (tree != null && SidePanelControls.Pages.FolderPage.IsInFolder(file.FilePath, tree))))
-                    documentFolder = null;
-                if (tree == null) return documentFolder == null ? null : new[] { documentFolder };
-                return documentFolder == null ? new[] { tree } : new[] { tree, documentFolder };
+                if (documentFolder != null && !Directory.Exists(documentFolder)) documentFolder = null;
+                var roots = new[] { documentFolder, tree }.Where(r => r != null).Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
+                return roots.Length == 0 ? (null, null) : (roots, tree ?? documentFolder);
             }
         }
 
@@ -99,7 +100,7 @@ namespace Typedown.Core.Controls
                 Status = "";
                 return;
             }
-            var roots = SearchRoots;
+            var (roots, shownFrom) = SearchRoots;
             if (roots == null)
             {
                 HasQuery = false;
@@ -119,7 +120,7 @@ namespace Typedown.Core.Controls
                         Status = string.Format(Locale.GetString("FolderSearch.SearchingContents"), Count(names.Names, names.NamesAtCap));
                 });
                 var search = new FolderSearch();
-                var summary = await Task.Run(() => search.Run(roots, query, ((IProgress<FolderSearchHit>)hits).Report, cts.Token, ((IProgress<FolderSearchSummary>)namesDone).Report), cts.Token);
+                var summary = await Task.Run(() => search.Run(roots, query, ((IProgress<FolderSearchHit>)hits).Report, cts.Token, ((IProgress<FolderSearchSummary>)namesDone).Report, shownFrom), cts.Token);
                 if (cts.IsCancellationRequested) return;
                 Status = string.Format(Locale.GetString("FolderSearch.Summary"),
                     Count(summary.Names, summary.NamesAtCap), Count(summary.Contents, summary.ContentsAtCap), summary.FilesRead);

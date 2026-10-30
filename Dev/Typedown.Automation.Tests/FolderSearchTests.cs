@@ -69,25 +69,29 @@ namespace Typedown.Automation.Tests
         }
 
         [Fact]
-        public void A_second_root_is_searched_too_its_hits_led_by_its_name_and_a_folder_met_twice_is_searched_once()
+        public void The_document_folder_comes_first_then_the_tree_shown_from_the_tree_and_nothing_twice()
         {
             // The tree's folder and, beside it, the document's own folder (not inside the tree's).
-            Write("tree-plan.md", "x");
+            Write("tree-plan.md", "the plan");
             var other = Path.Combine(Path.GetDirectoryName(root)!, "beside");
             Directory.CreateDirectory(other);
             File.WriteAllText(Path.Combine(other, "plan-beside.md"), "x");
             File.WriteAllText(Path.Combine(other, "notes.md"), "the plan is here");
             var hits = new List<FolderSearchHit>();
-            var summary = new FolderSearch().Run(new[] { root, other }, "plan", hits.Add, CancellationToken.None);
-            Assert.Equal(new[] { "tree-plan.md", "beside/plan-beside.md" }, hits.Where(h => h.Kind == FolderSearchHitKind.Name).Select(Slashed));
+            var summary = new FolderSearch().Run(new[] { other, root }, "plan", hits.Add, CancellationToken.None, shownFrom: root);
+            Assert.Equal(new[] { "beside/plan-beside.md", "tree-plan.md" }, hits.Where(h => h.Kind == FolderSearchHitKind.Name).Select(Slashed));
             Assert.Equal(new[] { "beside/notes.md" }, hits.Where(h => h.Kind == FolderSearchHitKind.Content).Select(Slashed));
             Assert.Equal(2, summary.Names);
 
-            // A root inside another is not searched again.
-            Write("sub/plan-sub.md", "x");
-            var twice = new List<FolderSearchHit>();
-            new FolderSearch().Run(new[] { root, Path.Combine(root, "sub") }, "plan-sub", twice.Add, CancellationToken.None);
-            Assert.Single(twice);
+            // The document's folder inside the tree's: its files first, shown from the tree, each once.
+            Write("a-plan.md", "x");
+            Write("deep/sub/plan-sub.md", "x");
+            var inside = new List<FolderSearchHit>();
+            new FolderSearch().Run(new[] { Path.Combine(root, "deep", "sub"), root }, "plan", inside.Add, CancellationToken.None, shownFrom: root);
+            var names = inside.Where(h => h.Kind == FolderSearchHitKind.Name).Select(Slashed).ToList();
+            Assert.Equal("deep/sub/plan-sub.md", names[0]);
+            Assert.Equal(names.Count, names.Distinct().Count());
+            Assert.Contains("a-plan.md", names);
         }
 
         [Fact]

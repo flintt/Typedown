@@ -97,11 +97,12 @@ namespace Typedown.Core.Utilities
             Run(new[] { root }, query, report, token, namesDone);
 
         /// <summary>
-        /// Searches several folders as one: the caps count over all of them, the first root's folders are listed
-        /// first, and a folder met twice (one root inside another) is searched once. A hit under the first root has its
-        /// path relative to it; under a later root, relative to that root and led by the root's name ("notes\plan.md").
+        /// Searches several folders as one list: each root walked whole before the next (the first one's hits come
+        /// first, and the caps fill with them first), the caps counted over all of them, and a folder met again (one
+        /// root inside another) not searched twice. A hit under <paramref name="shownFrom"/> has its path relative to
+        /// it; one elsewhere, relative to its root and led by the root's name ("notes\plan.md").
         /// </summary>
-        public FolderSearchSummary Run(IReadOnlyList<string> roots, string query, Action<FolderSearchHit> report, CancellationToken token, Action<FolderSearchSummary> namesDone = null)
+        public FolderSearchSummary Run(IReadOnlyList<string> roots, string query, Action<FolderSearchHit> report, CancellationToken token, Action<FolderSearchSummary> namesDone = null, string shownFrom = null)
         {
             if (string.IsNullOrEmpty(query)) return new FolderSearchSummary(0, false, 0, false, 0);
             var listed = new Dictionary<string, string>(StringComparer.Ordinal); // a listed file's path -> its relative path
@@ -109,18 +110,20 @@ namespace Typedown.Core.Utilities
             var names = 0;
 
             // Pass 1: the listings, breadth first (the nearer a name is to the root, the earlier), each folder's entries by name.
-            var pending = new Queue<(string Dir, string Root, string Lead)>();
+            var pending = new Queue<(string Dir, string Root)>();
             var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            for (var i = 0; i < roots.Count; i++)
+            var nextRoot = 0;
+            while (true)
             {
-                if (string.IsNullOrEmpty(roots[i])) continue;
-                var lead = i == 0 ? "" : Path.GetFileName(roots[i].TrimEnd('\\', '/'));
-                pending.Enqueue((roots[i], roots[i], lead));
-            }
-            while (pending.Count > 0)
-            {
+                if (pending.Count == 0)
+                {
+                    while (nextRoot < roots.Count && string.IsNullOrEmpty(roots[nextRoot])) nextRoot++;
+                    if (nextRoot == roots.Count) break;
+                    pending.Enqueue((roots[nextRoot], roots[nextRoot]));
+                    nextRoot++;
+                }
                 token.ThrowIfCancellationRequested();
-                var (dir, root, lead) = pending.Dequeue();
+                var (dir, root) = pending.Dequeue();
                 if (!seen.Add(dir.TrimEnd('\\', '/'))) continue;
                 List<FileSystemInfo> entries;
                 try { entries = new DirectoryInfo(dir).EnumerateFileSystemInfos().OrderBy(e => e.Name, StringComparer.OrdinalIgnoreCase).ToList(); }
@@ -130,8 +133,8 @@ namespace Typedown.Core.Utilities
                     token.ThrowIfCancellationRequested();
                     if (!Included(entry)) continue;
                     var isFolder = entry is DirectoryInfo;
-                    var relative = Relative(root, lead, entry.FullName);
-                    if (isFolder) pending.Enqueue((entry.FullName, root, lead));
+                    var relative = Relative(root, shownFrom, entry.FullName);
+                    if (isFolder) pending.Enqueue((entry.FullName, root));
                     else if (((FileInfo)entry).Length <= MaxFileBytes) toRead.Add((entry.FullName, entry.Name, relative));
                     if (names >= NameCap || entry.Name.IndexOf(query, StringComparison.OrdinalIgnoreCase) < 0) continue;
                     names++;
@@ -192,11 +195,18 @@ namespace Typedown.Core.Utilities
             return null;
         }
 
-        private static string Relative(string root, string lead, string path)
+        private static string Relative(string root, string shownFrom, string path)
         {
-            if (!path.StartsWith(root, StringComparison.OrdinalIgnoreCase)) return path;
-            var relative = path.Substring(root.Length).TrimStart('\\', '/');
-            return string.IsNullOrEmpty(lead) ? relative : Path.Combine(lead, relative);
+            if (Under(shownFrom ?? root, path)) return path.Substring((shownFrom ?? root).TrimEnd('\\', '/').Length).TrimStart('\\', '/');
+            if (!Under(root, path)) return path;
+            return Path.Combine(Path.GetFileName(root.TrimEnd('\\', '/')), path.Substring(root.TrimEnd('\\', '/').Length).TrimStart('\\', '/'));
+        }
+
+        private static bool Under(string folder, string path)
+        {
+            if (string.IsNullOrEmpty(folder)) return false;
+            var root = folder.TrimEnd('\\', '/');
+            return path.StartsWith(root, StringComparison.OrdinalIgnoreCase) && path.Length > root.Length && (path[root.Length] == '\\' || path[root.Length] == '/');
         }
     }
 }
