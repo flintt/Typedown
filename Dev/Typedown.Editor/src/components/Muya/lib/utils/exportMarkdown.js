@@ -217,8 +217,12 @@ class ExportMarkdown {
     return result.join('')
   }
 
+  // The empty paragraph the caret is in carries the caret's markers (an export with a cursor): still a blank line. Not
+  // counted as one, the blank lines before it were taken as missing and written again - a run of 15 became 29 while
+  // the caret was in it, and back as it left: a change at every click, with automatic saving a version each time.
   isBlankLine(line, indent) {
-    return line.trim() === '' || line.trim() === indent.trim()
+    const bare = line.replace(CURSOR_ANCHOR_DNA, '').replace(CURSOR_FOCUS_DNA, '').trim()
+    return bare === '' || bare === indent.trim()
   }
 
   // Blank lines the empty paragraphs and the gaps around them did not write, put back where the run starts.
