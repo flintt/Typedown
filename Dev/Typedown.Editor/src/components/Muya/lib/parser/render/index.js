@@ -195,7 +195,10 @@ class StateRender {
     for (const [key, { code }] of this.mermaidCache.entries()) {
       const target = document.querySelector(key)
       if (!target) continue
-      const cacheKey = `${theme}\n${code}`
+      // Which engine draws it is part of the key (public/lazy-mermaid.js): a drawing Mermaid finished after Pele was
+      // chosen was cached under the same key and shown again where Pele was to draw.
+      const engine = window.__typedownMermaidRenderer ? window.__typedownMermaidRenderer() : 'mermaid'
+      const cacheKey = `${engine}\n${theme}\n${code}`
       if (this.mermaidRenderTargets.get(target) === cacheKey && target.querySelector('svg')) continue
       const requestId = ++this.mermaidRenderRequestId
       this.mermaidRenderRequests.set(target, requestId)
