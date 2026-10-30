@@ -50,6 +50,19 @@ const doc = [
     console.log('mermaid:', JSON.stringify(shown), (await scripts()).join(', '));
     check(shown[0] && !shown[0].pele, 'Mermaid again draws the flowchart');
     check((await scripts()).includes('mermaid.min.js'), 'and Mermaid is loaded for it');
+
+    // Pele chosen while Mermaid is still drawing a document just opened: Mermaid's drawing, finished after the switch,
+    // was cached under the same key and shown again where Pele was to draw.
+    await load('# Again\n\n```mermaid\ngraph LR\n  X[One] --> Y[Two]\n```\n\nend\n');
+    await page.evaluate(() => window.__deliver('SettingsChanged', { mermaidRenderer: 'pele' }));
+    await page.waitForFunction(() => {
+      const svg = document.querySelector('#ag-editor-id figure[data-role="MERMAID"] .ag-container-preview svg');
+      return svg && /--pele-/.test(svg.getAttribute('style') || '');
+    }, { timeout: 20000 }).catch(() => {});
+    await pause(1500);
+    shown = await drawn();
+    console.log('switched while drawing:', JSON.stringify(shown));
+    check(shown[0] && shown[0].pele, 'Pele chosen while Mermaid was drawing: the diagram ends up drawn by Pele');
   } finally { await close(); }
   console.log(ok ? '\nPASS' : '\nFAIL');
   process.exit(ok ? 0 : 1);
