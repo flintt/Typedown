@@ -92,12 +92,20 @@ const pasteCtrl = ContentState => {
     const tables = Array.from(tempWrapper.querySelectorAll('table'))
     for (const table of tables) {
       const row = table.querySelector('tr')
-      if (row.firstElementChild.tagName !== 'TH') {
+      if (!row) continue
+      if (row.firstElementChild && row.firstElementChild.tagName !== 'TH') {
         [...row.children].forEach(cell => {
           const th = document.createElement('th')
           th.innerHTML = cell.innerHTML
           cell.replaceWith(th)
         })
+      }
+      // The table plugin takes the first row for the header only when nothing comes before its body; Excel puts <col>
+      // widths there (a <colgroup> once parsed), and it then wrote an empty header above the real one.
+      if (row.parentElement.tagName !== 'THEAD') {
+        const thead = document.createElement('thead')
+        table.insertBefore(thead, table.firstChild)
+        thead.appendChild(row)
       }
       const paragraphs = Array.from(table.querySelectorAll('p'))
       for (const p of paragraphs) {

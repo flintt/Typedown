@@ -52,6 +52,13 @@ const samples = [
     expect: [/\|\s*:-+\s*\|\s*:-+:\s*\|\s*-+:\s*\|/],
   },
   {
+    // Excel puts <col> widths before the rows; parsed, they are a <colgroup> ahead of the <tbody>, and the table plugin
+    // then took the first row for a body row and put an empty header above it.
+    name: 'Excel range: column widths ahead of the rows, the first row is the header',
+    html: `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel"><body><!--StartFragment--><table border=0 cellpadding=0 cellspacing=0 width=144 style='border-collapse:collapse;width:108pt'><col width=72 span=2 style='width:54pt'><tr height=19 style='height:14.25pt'><td height=19 class=xl65 width=72 style='height:14.25pt;width:54pt'>名称</td><td class=xl65 width=72 style='width:54pt'>数量</td></tr><tr height=19 style='height:14.25pt'><td height=19 style='height:14.25pt'>苹果</td><td align=right>3</td></tr></table><!--EndFragment--></body></html>`,
+    expect: [/^\|\s*名称\s*\|\s*数量\s*\|\s*\n\|\s*:?-+/, /\|\s*苹果\s*\|\s*3\s*\|/],
+  },
+  {
     name: 'a heading pasted at the end of a heading line is a block of its own',
     start: '# Title\n',
     html: `<h2>Pasted</h2><p>after</p>`,
