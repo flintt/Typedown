@@ -1131,4 +1131,10 @@
   <data name="CopyTable" xml:space="preserve">
     <value>Copiar tabela</value>
   </data>
+  <data name="FontPicker.Choose" xml:space="preserve">
+    <value>Escolher…</value>
+  </data>
+  <data name="FontPicker.Search" xml:space="preserve">
+    <value>Procurar tipos de letra</value>
+  </data>
 </root>

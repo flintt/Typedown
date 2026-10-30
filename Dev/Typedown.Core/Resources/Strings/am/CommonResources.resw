@@ -1188,4 +1188,10 @@
   <data name="CopyTable" xml:space="preserve">
     <value>ሠንጠረዡን ይገልብጡ</value>
   </data>
+  <data name="FontPicker.Choose" xml:space="preserve">
+    <value>ምረጥ…</value>
+  </data>
+  <data name="FontPicker.Search" xml:space="preserve">
+    <value>ቅርጸ-ቁምፊዎችን ፈልግ</value>
+  </data>
 </root>

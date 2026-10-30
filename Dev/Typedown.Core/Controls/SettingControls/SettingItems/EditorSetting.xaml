@@ -36,13 +36,16 @@
             <controls:NormalSettingItem.Icon>
                 <FontIcon Glyph="&#xe8d2;"/>
             </controls:NormalSettingItem.Icon>
-            <AutoSuggestBox MinWidth="200" AutomationProperties.AutomationId="FontFamilyBox"
-                Text="{x:Bind Settings.FontFamily, Mode=OneWay}"
-                PlaceholderText="{u:LocaleString Key=Editor.FontFamily.Placeholder}"
-                ItemsSource="{x:Bind FontFamilySuggestions}"
-                TextChanged="OnFontFamilyTextChanged"
-                SuggestionChosen="OnFontFamilySuggestionChosen"
-                QuerySubmitted="OnFontFamilyQuerySubmitted"/>
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <AutoSuggestBox MinWidth="200" AutomationProperties.AutomationId="FontFamilyBox"
+                    Text="{x:Bind Settings.FontFamily, Mode=OneWay}"
+                    PlaceholderText="{u:LocaleString Key=Editor.FontFamily.Placeholder}"
+                    ItemsSource="{x:Bind FontFamilySuggestions}"
+                    TextChanged="OnFontFamilyTextChanged"
+                    SuggestionChosen="OnFontFamilySuggestionChosen"
+                    QuerySubmitted="OnFontFamilyQuerySubmitted"/>
+                <Button Content="{u:LocaleString Key=FontPicker.Choose}" AutomationProperties.AutomationId="FontFamilyChoose" Click="OnChooseFontFamily"/>
+            </StackPanel>
         </controls:NormalSettingItem>
         <controls:NormalSettingItem Title="{u:LocaleString Key=Editor.ShowParagraphMarker.Title}" Description="{u:LocaleString Key=Editor.ShowParagraphMarker.Description}">
             <controls:NormalSettingItem.Icon>

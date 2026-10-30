@@ -54,6 +54,10 @@ namespace Typedown.Core.Controls.SettingControls.SettingItems
             { "rtl", Locale.GetString("Editor.TextDirection.Rtl") },
         };
 
+        // The installed fonts listed, each in its own face: the one chosen goes first, the fallbacks after it stay.
+        private void OnChooseFontFamily(object sender, RoutedEventArgs e) =>
+            FontPicker.Show((FrameworkElement)sender, Settings.FontFamily, value => Settings.FontFamily = value);
+
         public static string GetTextDirectionDisplayName(string key) => TextDirectionOptions.TryGetValue(key, out var value) ? value : key;
 
         /// <summary>The engines that can draw Mermaid fences, by their own names (not translated).</summary>

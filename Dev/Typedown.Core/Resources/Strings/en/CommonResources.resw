@@ -1267,4 +1267,12 @@
     <value>{0} of {1}</value>
     <comment>查找栏：当前是第 {0} 个，共 {1} 个匹配（也用于结果列表的读屏名称）</comment>
   </data>
+  <data name="FontPicker.Choose" xml:space="preserve">
+    <value>Choose…</value>
+    <comment>字体框旁的按钮：打开已安装字体的列表</comment>
+  </data>
+  <data name="FontPicker.Search" xml:space="preserve">
+    <value>Search fonts</value>
+    <comment>字体列表上方的搜索框提示</comment>
+  </data>
 </root>

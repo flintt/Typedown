@@ -1189,4 +1189,10 @@
   <data name="CopyTable" xml:space="preserve">
     <value>Kopisha ithebula</value>
   </data>
+  <data name="FontPicker.Choose" xml:space="preserve">
+    <value>Khetha…</value>
+  </data>
+  <data name="FontPicker.Search" xml:space="preserve">
+    <value>Sesha amafonti</value>
+  </data>
 </root>

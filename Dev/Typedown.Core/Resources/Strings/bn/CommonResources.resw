@@ -1189,4 +1189,10 @@
   <data name="CopyTable" xml:space="preserve">
     <value>সারণী অনুলিপি করুন</value>
   </data>
+  <data name="FontPicker.Choose" xml:space="preserve">
+    <value>বাছুন…</value>
+  </data>
+  <data name="FontPicker.Search" xml:space="preserve">
+    <value>ফন্ট খুঁজুন</value>
+  </data>
 </root>

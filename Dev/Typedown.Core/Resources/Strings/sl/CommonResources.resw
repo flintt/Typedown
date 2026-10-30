@@ -1189,4 +1189,10 @@
   <data name="CopyTable" xml:space="preserve">
     <value>Kopiraj tabelo</value>
   </data>
+  <data name="FontPicker.Choose" xml:space="preserve">
+    <value>Izberi …</value>
+  </data>
+  <data name="FontPicker.Search" xml:space="preserve">
+    <value>Iskanje pisav</value>
+  </data>
 </root>

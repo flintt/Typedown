@@ -1203,4 +1203,12 @@
   <data name="CopyTable" xml:space="preserve">
     <value>复制表格</value>
   </data>
+  <data name="FontPicker.Choose" xml:space="preserve">
+    <value>选择…</value>
+    <comment>字体框旁的按钮：打开已安装字体的列表</comment>
+  </data>
+  <data name="FontPicker.Search" xml:space="preserve">
+    <value>搜索字体</value>
+    <comment>字体列表上方的搜索框提示</comment>
+  </data>
 </root>

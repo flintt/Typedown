@@ -1188,4 +1188,10 @@
   <data name="CopyTable" xml:space="preserve">
     <value>ሰሌዳ ቅዳሕ</value>
   </data>
+  <data name="FontPicker.Choose" xml:space="preserve">
+    <value>ምረጽ…</value>
+  </data>
+  <data name="FontPicker.Search" xml:space="preserve">
+    <value>ፊደላት ድለ</value>
+  </data>
 </root>

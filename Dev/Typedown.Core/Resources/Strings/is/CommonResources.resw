@@ -1189,4 +1189,10 @@
   <data name="CopyTable" xml:space="preserve">
     <value>Afrita töflu</value>
   </data>
+  <data name="FontPicker.Choose" xml:space="preserve">
+    <value>Velja…</value>
+  </data>
+  <data name="FontPicker.Search" xml:space="preserve">
+    <value>Leita að letri</value>
+  </data>
 </root>

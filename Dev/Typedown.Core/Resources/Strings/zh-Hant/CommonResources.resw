@@ -1203,4 +1203,10 @@
   <data name="CopyTable" xml:space="preserve">
     <value>複製表格</value>
   </data>
+  <data name="FontPicker.Choose" xml:space="preserve">
+    <value>選擇…</value>
+  </data>
+  <data name="FontPicker.Search" xml:space="preserve">
+    <value>搜尋字型</value>
+  </data>
 </root>
