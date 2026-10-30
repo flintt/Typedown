@@ -22,6 +22,7 @@ gate "translations (74 languages complete)" python3 Tools/Translations/check.py 
 gate "brand names only in the brand files" python3 Tools/Branding/check-brand.py
 gate "docs/testing.md lists the cases and test methods" python3 Tools/Docs/testing-index.py
 gate "the Chinese and English user guides match" python3 Tools/Docs/user-guide-check.py
+gate "every icon is in Windows 10's icon font too" python3 Tools/Icons/check-glyphs.py
 [ -f Tools/Docs/edition-testing-index.py ] && gate "the edition's case list" python3 Tools/Docs/edition-testing-index.py
 [ -f Tools/Store/check-theme-count.py ] && gate "the texts count the supporter themes there are" python3 Tools/Store/check-theme-count.py
 [ -f Tools/Translations/check-edition.py ] && gate "the edition's feature texts" python3 Tools/Translations/check-edition.py
