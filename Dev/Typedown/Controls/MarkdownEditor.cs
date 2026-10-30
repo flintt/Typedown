@@ -71,9 +71,17 @@ namespace Typedown.Controls
 
         private readonly CompositeDisposable disposables = new();
 
+        // The editor each window's services made, found without making one (a window closed before its editor was).
+        private static readonly System.Runtime.CompilerServices.ConditionalWeakTable<IServiceProvider, MarkdownEditor> made = new();
+
+        /// <summary>The editor these window services made, if they made one.</summary>
+        public static MarkdownEditor Of(IServiceProvider serviceProvider) =>
+            serviceProvider != null && made.TryGetValue(serviceProvider, out var editor) ? editor : null;
+
         public MarkdownEditor(IServiceProvider serviceProvider)
         {
             ServiceProvider = serviceProvider;
+            made.AddOrUpdate(serviceProvider, this);
             Loaded += OnLoaded;
             canvas.Children.Add(dummyRectangle);
             root.Children.Add(canvas);
@@ -326,6 +334,7 @@ namespace Typedown.Controls
         // The web view made (again, when the one there lost its browser) and the editor page loaded in it.
         private async Task StartAsync()
         {
+            if (released) return;
             // Back in a window with its page as it was (leaving the settings rebuilds the main page, which takes the editor
             // out and puts it back): nothing to load again. Loading the page again drew the whole document once more - on a
             // long one a second or more over a light page - and lost the documents it kept for a switch back. Settings
@@ -358,7 +367,7 @@ namespace Typedown.Controls
                     IsEditorLoadFailed = true;
                     return;
                 }
-                if (disposables.IsDisposed)
+                if (disposables.IsDisposed || released)
                 {
                     webViewController.Dispose();
                     IsEditorLoadFailed = true;
@@ -387,6 +396,20 @@ namespace Typedown.Controls
             {
                 IsEditorLoadFailed = true;
             }
+        }
+
+        private bool released;
+
+        /// <summary>
+        /// The window is closing: its web view is closed now, while the window is still there, and none is made again.
+        /// Let go only with the window's services, after the window had gone, a call the web view still had on its way
+        /// failed in the window's message loop and ended the process (0xc000027b in CoreMessagingXP, the end of AC01).
+        /// </summary>
+        public void ReleaseWebView()
+        {
+            released = true;
+            Core.Utilities.Log.Debug("editor: window closing, web view closed");
+            DropWebView();
         }
 
         private void DropWebView()

@@ -585,6 +585,10 @@ namespace Typedown.Windows
             // Unloaded after Closed, and their handlers still reach the window's services (EditorContainer's editor) -
             // disposed first, the close ended in an ObjectDisposedException.
             var scope = ServiceScope;
+            // The web view closed now, while the window is still here: closed with the services below, after the window
+            // had gone, a call it still had on its way failed in the window's message loop and ended the process.
+            try { global::Typedown.Controls.MarkdownEditor.Of(scope?.ServiceProvider)?.ReleaseWebView(); }
+            catch (Exception ex) { Log.Debug($"window closed: the web view: {ex.Message}"); }
             RootControl = null;
             Content = null;
             void Release() { ServiceScope = null; scope?.Dispose(); }
