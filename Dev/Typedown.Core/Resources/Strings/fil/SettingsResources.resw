@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>Ang pag-scroll lampas sa huling tab ay pupunta sa una, at pabalik; kapag naka-off, hihinto sa una at huling tab</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Iguhit ang mga diagram ng Mermaid gamit ang</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Mas maraming uri ng diagram ang iginuguhit ng Pele at iba ang pagkakaayos nito kaysa sa Mermaid</value>
+  </data>
 </root>

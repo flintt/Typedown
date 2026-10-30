@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>마지막 탭에서 더 스크롤하면 첫 번째 탭으로 이동하고, 반대도 같습니다. 끄면 첫 번째와 마지막 탭에서 멈춥니다</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Mermaid 다이어그램 그리기 방식</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele는 더 많은 종류의 다이어그램을 그리며 배치가 Mermaid와 다릅니다</value>
+  </data>
 </root>

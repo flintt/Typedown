@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>Rol verby die laaste oortjie gaan na die eerste, en terug; af stop by die eerste en laaste oortjie</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Teken Mermaid-diagramme met</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele teken meer soorte diagramme en rangskik hulle anders as Mermaid</value>
+  </data>
 </root>

@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>Azken fitxatik harago korritzeak lehenengora eramaten du, eta alderantziz; desaktibatuta lehen eta azken fitxan gelditzen da</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Marraztu Mermaid diagramak honekin</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele-k diagrama mota gehiago marrazten ditu eta Mermaid-ek ez bezala antolatzen ditu</value>
+  </data>
 </root>

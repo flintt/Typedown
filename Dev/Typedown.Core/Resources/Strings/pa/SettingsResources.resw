@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>ਆਖਰੀ ਟੈਬ ਤੋਂ ਅੱਗੇ ਸਕ੍ਰੌਲ ਕਰਨ 'ਤੇ ਪਹਿਲੀ ਟੈਬ 'ਤੇ ਜਾਂਦਾ ਹੈ, ਅਤੇ ਉਲਟ ਵੀ; ਬੰਦ ਹੋਣ 'ਤੇ ਪਹਿਲੀ ਅਤੇ ਆਖਰੀ ਟੈਬ 'ਤੇ ਰੁਕ ਜਾਂਦਾ ਹੈ</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Mermaid ਚਿੱਤਰ ਇਸ ਨਾਲ ਬਣਾਓ</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele ਹੋਰ ਕਿਸਮਾਂ ਦੇ ਚਿੱਤਰ ਬਣਾਉਂਦਾ ਹੈ ਅਤੇ ਉਹਨਾਂ ਨੂੰ Mermaid ਤੋਂ ਵੱਖਰੇ ਢੰਗ ਨਾਲ ਸਜਾਉਂਦਾ ਹੈ</value>
+  </data>
 </root>

@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>ከመጨረሻው ትር በላይ ማሸብለል ወደ መጀመሪያው ይሄዳል፣ እና በተቃራኒው፤ ከጠፋ በመጀመሪያው እና በመጨረሻው ትር ይቆማል</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>የMermaid ሥዕላዊ መግለጫዎችን በዚህ ሣል</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele ብዙ ዓይነት ሥዕላዊ መግለጫዎችን ይስላል እና ከMermaid በተለየ ያስቀምጣቸዋል</value>
+  </data>
 </root>

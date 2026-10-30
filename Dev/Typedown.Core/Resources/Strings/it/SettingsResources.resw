@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>Scorrere oltre l'ultima scheda porta alla prima, e viceversa; se disattivato, si ferma alla prima e all'ultima scheda</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Disegna i diagrammi Mermaid con</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele disegna più tipi di diagramma e li dispone in modo diverso da Mermaid</value>
+  </data>
 </root>

@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>చివరి టాబ్ దాటి స్క్రోల్ చేస్తే మొదటిదానికి వెళ్తుంది, తిరిగి కూడా; ఆపివేస్తే మొదటి మరియు చివరి టాబ్ వద్ద ఆగుతుంది</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Mermaid రేఖాచిత్రాలను దీనితో గీయండి</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele మరిన్ని రకాల రేఖాచిత్రాలను గీస్తుంది, వాటిని Mermaid కంటే భిన్నంగా అమరుస్తుంది</value>
+  </data>
 </root>

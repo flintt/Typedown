@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>Desplazarse más allá de la última pestaña lleva a la primera, y viceversa; si se desactiva, se detiene en la primera y la última pestaña</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Dibujar diagramas Mermaid con</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele dibuja más tipos de diagramas y los distribuye de otra forma que Mermaid</value>
+  </data>
 </root>

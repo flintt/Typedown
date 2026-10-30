@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>Att rulla förbi den sista fliken går till den första, och tillbaka; av stannar vid första och sista fliken</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Rita Mermaid-diagram med</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele ritar fler sorters diagram och ordnar dem annorlunda än Mermaid</value>
+  </data>
 </root>

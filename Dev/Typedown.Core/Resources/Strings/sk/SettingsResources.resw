@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>Posunutie za poslednú kartu prejde na prvú a naopak; vypnuté sa zastaví na prvej a poslednej karte</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Kresliť diagramy Mermaid pomocou</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele kreslí viac druhov diagramov a rozmiestňuje ich inak ako Mermaid</value>
+  </data>
 </root>

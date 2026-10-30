@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>Posunutí za poslední kartu přejde na první a naopak; vypnuto se zastaví na první a poslední kartě</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Kreslit diagramy Mermaid pomocí</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele kreslí více druhů diagramů a rozvrhuje je jinak než Mermaid</value>
+  </data>
 </root>

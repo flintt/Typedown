@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>Má scrollaítear thar an gcluaisín deireanach, téitear chuig an gcéad cheann, agus ar ais; múchta stopann sé ag an gcéad chluaisín agus ag an gcluaisín deireanach</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Tarraing léaráidí Mermaid le</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Tarraingíonn Pele níos mó cineálacha léaráidí agus leagann sé amach iad ar bhealach difriúil ó Mermaid</value>
+  </data>
 </root>

@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>Ritināšana aiz pēdējās cilnes pāriet uz pirmo, un otrādi; izslēgts apstājas pie pirmās un pēdējās cilnes</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Zīmēt Mermaid diagrammas ar</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele zīmē vairāk diagrammu veidu un izkārto tās citādi nekā Mermaid</value>
+  </data>
 </root>

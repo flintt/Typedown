@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>છેલ્લા ટૅબ પછી સ્ક્રોલ કરવાથી પહેલા ટૅબ પર જવાય છે, અને પાછા પણ; બંધ હોય તો પહેલા અને છેલ્લા ટૅબ પર અટકે છે</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Mermaid આકૃતિઓ આનાથી દોરો</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele વધુ પ્રકારની આકૃતિઓ દોરે છે અને તેમને Mermaid કરતાં અલગ રીતે ગોઠવે છે</value>
+  </data>
 </root>

@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>Az utolsó lapon túl görgetve az elsőre ugrik, és vissza; kikapcsolva az első és az utolsó lapnál megáll</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Mermaid-diagramok rajzolása ezzel</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>A Pele többféle diagramot rajzol, és máshogy rendezi el őket, mint a Mermaid</value>
+  </data>
 </root>

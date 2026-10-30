@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>پیمایش بعد از آخرین زبانه به اولین زبانه می‌رود و برعکس؛ خاموش در اولین و آخرین زبانه می‌ایستد</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>رسم نمودارهای Mermaid با</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele انواع بیشتر نمودارها را رسم می‌کند و آن‌ها را متفاوت از Mermaid می‌چیند</value>
+  </data>
 </root>

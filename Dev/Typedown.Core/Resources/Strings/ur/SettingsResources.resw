@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>آخری ٹیب سے آگے اسکرول کرنے پر پہلے ٹیب پر جاتا ہے، اور واپس بھی؛ بند ہونے پر پہلے اور آخری ٹیب پر رک جاتا ہے</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Mermaid خاکے اس سے بنائیں</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele زیادہ قسم کے خاکے بناتا ہے اور انہیں Mermaid سے مختلف ترتیب دیتا ہے</value>
+  </data>
 </root>

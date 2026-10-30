@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>Przewinięcie za ostatnią kartę przechodzi do pierwszej i odwrotnie; wyłączone zatrzymuje się na pierwszej i ostatniej karcie</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Rysuj diagramy Mermaid za pomocą</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele rysuje więcej rodzajów diagramów i układa je inaczej niż Mermaid</value>
+  </data>
 </root>

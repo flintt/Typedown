@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>Å rulle forbi den siste fanen går til den første, og tilbake; av stopper ved første og siste fane</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Tegn Mermaid-diagrammer med</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele tegner flere typer diagrammer og plasserer dem annerledes enn Mermaid</value>
+  </data>
 </root>

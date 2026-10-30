@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>Skrun framhjá síðasta flipa fer á þann fyrsta og til baka; slökkt stöðvar á fyrsta og síðasta flipa</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Teikna Mermaid-skýringarmyndir með</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele teiknar fleiri gerðir skýringarmynda og raðar þeim öðruvísi en Mermaid</value>
+  </data>
 </root>

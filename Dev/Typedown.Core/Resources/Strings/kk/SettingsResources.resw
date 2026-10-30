@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>Соңғы қойындыдан әрі айналдыру біріншісіне өтеді, және керісінше; өшірулі болса бірінші және соңғы қойындыда тоқтайды</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Mermaid диаграммаларын салу құралы</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele диаграмманың көбірек түрін салады және оларды Mermaid-тен басқаша орналастырады</value>
+  </data>
 </root>

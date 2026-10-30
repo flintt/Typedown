@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>ເລື່ອນຜ່ານແທັບສຸດທ້າຍຈະໄປແທັບທຳອິດ ແລະກັບກັນ; ຖ້າປິດຈະຢຸດຢູ່ແທັບທຳອິດ ແລະແທັບສຸດທ້າຍ</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>ແຕ້ມແຜນວາດ Mermaid ດ້ວຍ</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele ແຕ້ມແຜນວາດໄດ້ຫຼາຍຊະນິດກວ່າ ແລະ ຈັດວາງຕ່າງຈາກ Mermaid</value>
+  </data>
 </root>

@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>Desplaçar-se més enllà de l'última pestanya porta a la primera, i a la inversa; desactivat s'atura a la primera i a l'última pestanya</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Dibuixa els diagrames Mermaid amb</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele dibuixa més tipus de diagrames i els distribueix diferent de Mermaid</value>
+  </data>
 </root>

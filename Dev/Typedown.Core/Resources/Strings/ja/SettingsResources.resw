@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>最後のタブを越えてスクロールすると最初のタブに移り、逆も同様です。オフの場合は最初と最後のタブで止まります</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Mermaid 図の描画方法</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele はより多くの種類の図を描け、レイアウトは Mermaid と異なります</value>
+  </data>
 </root>

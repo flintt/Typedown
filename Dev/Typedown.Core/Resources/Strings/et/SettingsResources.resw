@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>Viimasest vahekaardist edasi kerimine viib esimesele ja vastupidi; väljas peatub esimesel ja viimasel vahekaardil</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Joonista Mermaidi diagramme rakendusega</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele joonistab rohkem diagrammitüüpe ja paigutab need teisiti kui Mermaid</value>
+  </data>
 </root>

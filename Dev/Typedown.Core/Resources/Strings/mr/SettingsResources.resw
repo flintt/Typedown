@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>शेवटच्या टॅबनंतर स्क्रोल केल्यास पहिल्या टॅबवर जाते, आणि उलटही; बंद असल्यास पहिल्या व शेवटच्या टॅबवर थांबते</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Mermaid आकृत्या यानी काढा</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele अधिक प्रकारच्या आकृत्या काढते आणि त्या Mermaid पेक्षा वेगळ्या मांडते</value>
+  </data>
 </root>

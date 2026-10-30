@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>Kusogeza zaidi ya kichupo cha mwisho huenda cha kwanza, na kurudi; ikiwa imezimwa husimama kwenye kichupo cha kwanza na cha mwisho</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Chora michoro ya Mermaid kwa</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele huchora aina nyingi zaidi za michoro na kuipanga tofauti na Mermaid</value>
+  </data>
 </root>

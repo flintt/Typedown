@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>Rrotullimi përtej skedës së fundit shkon te e para, dhe anasjelltas; joaktiv ndalon te skeda e parë dhe e fundit</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Vizato diagramet Mermaid me</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele vizaton më shumë lloje diagramesh dhe i rregullon ndryshe nga Mermaid</value>
+  </data>
 </root>

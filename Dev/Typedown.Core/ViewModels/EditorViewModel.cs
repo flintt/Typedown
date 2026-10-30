@@ -262,6 +262,7 @@ namespace Typedown.Core.ViewModels
                 Settings.AutoPairMarkdownSyntax,
                 Settings.RenderPlantUml,
                 Settings.PlantUmlServer,
+                Settings.MermaidRenderer,
                 Settings.VimMode,
                 Settings.EditorAreaWidth,
                 Settings.FontFamily,

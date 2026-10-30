@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>Pomeranje posle poslednje kartice vodi na prvu, i obrnuto; isključeno staje na prvoj i poslednjoj kartici</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Crtaj Mermaid dijagrame pomoću</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele crta više vrsta dijagrama i raspoređuje ih drugačije od Mermaida</value>
+  </data>
 </root>

@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>Cuộn qua thẻ cuối sẽ về thẻ đầu, và ngược lại; tắt sẽ dừng ở thẻ đầu và thẻ cuối</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Vẽ sơ đồ Mermaid bằng</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele vẽ được nhiều loại sơ đồ hơn và bố trí khác với Mermaid</value>
+  </data>
 </root>

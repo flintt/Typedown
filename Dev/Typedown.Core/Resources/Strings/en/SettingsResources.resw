@@ -967,6 +967,14 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>Address of the PlantUML server (plantuml-server) that draws the diagrams. Empty: plantuml.com. With a server of your own, the diagrams' source stays with you.</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Draw Mermaid diagrams with</value>
+    <comment>编辑器/Mermaid 图表的绘制方式（选项：Mermaid、Pele，不翻译）</comment>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele draws more kinds of diagram and lays them out differently from Mermaid</value>
+    <comment>编辑器/Mermaid 图表的绘制方式：说明</comment>
+  </data>
   <data name="Editor.VimMode.Title" xml:space="preserve">
     <value>Vim keys</value>
   </data>

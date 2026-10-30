@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>ბოლო ჩანართის შემდეგ გადახვევა პირველზე გადადის და პირიქით; გამორთვისას ჩერდება პირველ და ბოლო ჩანართზე</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Mermaid დიაგრამების დახატვა</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele მეტი სახის დიაგრამას ხატავს და მათ Mermaid-ისგან განსხვავებულად ალაგებს</value>
+  </data>
 </root>

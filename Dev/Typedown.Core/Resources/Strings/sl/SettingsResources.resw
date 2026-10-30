@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>Pomik mimo zadnjega zavihka skoči na prvega in obratno; izklopljeno se ustavi na prvem in zadnjem zavihku</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Diagrame Mermaid riši z</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele riše več vrst diagramov in jih razporedi drugače kot Mermaid</value>
+  </data>
 </root>

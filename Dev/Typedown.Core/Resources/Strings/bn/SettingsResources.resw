@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>শেষ ট্যাব ছাড়িয়ে স্ক্রল করলে প্রথমটিতে যায়, এবং উল্টোটাও; বন্ধ থাকলে প্রথম ও শেষ ট্যাবে থামে</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Mermaid ডায়াগ্রাম আঁকার উপায়</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele আরও বেশি ধরনের ডায়াগ্রাম আঁকে এবং Mermaid থেকে ভিন্নভাবে সাজায়</value>
+  </data>
 </root>

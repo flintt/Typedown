@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>Menatal melepasi tab terakhir akan ke tab pertama, dan sebaliknya; dimatikan berhenti pada tab pertama dan terakhir</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Lukis rajah Mermaid dengan</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele melukis lebih banyak jenis rajah dan menyusunnya secara berbeza daripada Mermaid</value>
+  </data>
 </root>

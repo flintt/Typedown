@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>Прокрутка за последнюю вкладку переходит к первой, и наоборот; если выключено — останавливается на первой и последней вкладке</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Рисовать диаграммы Mermaid с помощью</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele рисует больше видов диаграмм и располагает их иначе, чем Mermaid</value>
+  </data>
 </root>

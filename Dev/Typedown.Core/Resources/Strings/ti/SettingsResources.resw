@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>ካብ ዳሕሮት ታብ ሓሊፍካ ምሸብለል ናብ ቀዳማይ ይኸይድ፣ ድሕሪት'ውን፤ እንተጠፊኡ ኣብ ቀዳማይን ዳሕሮትን ታብ ይቐውም</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>ናይ Mermaid ስእላዊ መግለጺታት ብዚ ስኣል</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele ዝበዝሑ ዓይነታት ስእላዊ መግለጺ ይስእል፣ ካብ Mermaid ብዝተፈልየ ድማ የቐምጦም</value>
+  </data>
 </root>

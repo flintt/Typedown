@@ -909,6 +909,7 @@
         "HedgeDocPublishReadOnly",
         "OpenFilesInNewTab",
         "TabWheelWraps",
+        "MermaidRenderer",
         "AutoSave",
         "AutoReload",
         "AskBeforeReload",

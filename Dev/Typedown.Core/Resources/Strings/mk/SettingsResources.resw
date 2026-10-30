@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>Лизгањето по последната картичка оди на првата, и обратно; исклучено запира на првата и последната картичка</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Цртај Mermaid дијаграми со</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele црта повеќе видови дијаграми и ги распоредува поинаку од Mermaid</value>
+  </data>
 </root>

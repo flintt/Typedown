@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>เลื่อนผ่านแท็บสุดท้ายจะไปที่แท็บแรก และย้อนกลับ ปิดไว้จะหยุดที่แท็บแรกและแท็บสุดท้าย</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>วาดไดอะแกรม Mermaid ด้วย</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele วาดไดอะแกรมได้หลายชนิดกว่าและจัดวางต่างจาก Mermaid</value>
+  </data>
 </root>

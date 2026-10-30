@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>រំកិលហួសផ្ទាំងចុងក្រោយនឹងទៅផ្ទាំងដំបូង ហើយផ្ទុយមកវិញ បើបិទនឹងឈប់នៅផ្ទាំងដំបូង និងផ្ទាំងចុងក្រោយ</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>គូរដ្យាក្រាម Mermaid ដោយ</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele គូរដ្យាក្រាមបានច្រើនប្រភេទជាង ហើយរៀបចំខុសពី Mermaid</value>
+  </data>
 </root>

@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>Weiterscrollen über den letzten Tab springt zum ersten, und umgekehrt; aus: stoppt am ersten und letzten Tab</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Mermaid-Diagramme zeichnen mit</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele zeichnet mehr Diagrammarten und ordnet sie anders an als Mermaid</value>
+  </data>
 </root>

@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>Η κύλιση μετά την τελευταία καρτέλα πηγαίνει στην πρώτη και αντίστροφα· ανενεργό σταματά στην πρώτη και στην τελευταία καρτέλα</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Σχεδίαση διαγραμμάτων Mermaid με</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Το Pele σχεδιάζει περισσότερα είδη διαγραμμάτων και τα διατάσσει διαφορετικά από το Mermaid</value>
+  </data>
 </root>

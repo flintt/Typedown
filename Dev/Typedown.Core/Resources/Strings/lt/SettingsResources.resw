@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>Slinkimas už paskutinės kortelės nukelia į pirmąją, ir atvirkščiai; išjungus sustoja ties pirmąja ir paskutine kortele</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Braižyti Mermaid diagramas naudojant</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele braižo daugiau diagramų rūšių ir išdėsto jas kitaip nei Mermaid</value>
+  </data>
 </root>

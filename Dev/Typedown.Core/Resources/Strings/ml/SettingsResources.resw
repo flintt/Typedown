@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>അവസാന ടാബിനപ്പുറം സ്ക്രോൾ ചെയ്താൽ ആദ്യത്തേതിലേക്ക് പോകും, തിരിച്ചും; ഓഫാണെങ്കിൽ ആദ്യ, അവസാന ടാബിൽ നിൽക്കും</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Mermaid ഡയഗ്രങ്ങൾ ഇതുപയോഗിച്ച് വരയ്ക്കുക</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele കൂടുതൽ തരം ഡയഗ്രങ്ങൾ വരയ്ക്കുന്നു, അവയെ Mermaid-ൽ നിന്ന് വ്യത്യസ്തമായി ക്രമീകരിക്കുന്നു</value>
+  </data>
 </root>

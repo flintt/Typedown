@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>Վերջին ներդիրից հետո ոլորելը անցնում է առաջինին, և հակառակը; անջատված դեպքում կանգ է առնում առաջին և վերջին ներդիրի վրա</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Mermaid գծապատկերները գծել</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele-ն գծում է ավելի շատ տեսակի գծապատկերներ և դասավորում դրանք Mermaid-ից տարբեր</value>
+  </data>
 </root>

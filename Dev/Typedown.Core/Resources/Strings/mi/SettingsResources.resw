@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>Ka haere ki te ripa tuatahi mēnā ka retireti ki tua i te ripa whakamutunga, me te whakamuri hoki; ki te whakaweto ka tū ki te ripa tuatahi me te ripa whakamutunga</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Tuhia ngā hoahoa Mermaid ki</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>He maha ake ngā momo hoahoa ka tuhia e Pele, ā, he rerekē te whakatakotoranga i tā Mermaid</value>
+  </data>
 </root>

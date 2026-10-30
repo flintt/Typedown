@@ -56,6 +56,15 @@ namespace Typedown.Core.Controls.SettingControls.SettingItems
 
         public static string GetTextDirectionDisplayName(string key) => TextDirectionOptions.TryGetValue(key, out var value) ? value : key;
 
+        /// <summary>The engines that can draw Mermaid fences, by their own names (not translated).</summary>
+        public static Dictionary<string, string> MermaidRendererOptions { get; } = new()
+        {
+            ["mermaid"] = "Mermaid",
+            ["pele"] = "Pele",
+        };
+
+        public static string GetMermaidRendererDisplayName(string key) => MermaidRendererOptions.TryGetValue(key, out var value) ? value : key;
+
         public static Dictionary<string, string> ListIndentationOptions { get; } = new()
         {
             { "1", Locale.GetString("Editor.ListIndentation.Spaces1") },

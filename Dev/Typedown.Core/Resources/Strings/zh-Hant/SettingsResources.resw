@@ -993,4 +993,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>在最後一個分頁上繼續捲動會回到第一個，反之亦然；關閉則停在第一個和最後一個分頁</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Mermaid 圖表的繪製方式</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele 能畫更多種類的圖表，排版與 Mermaid 不同</value>
+  </data>
 </root>

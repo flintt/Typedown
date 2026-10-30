@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>Défiler au-delà du dernier onglet mène au premier, et inversement ; désactivé : s'arrête au premier et au dernier onglet</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Dessiner les diagrammes Mermaid avec</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele dessine plus de types de diagrammes et les dispose autrement que Mermaid</value>
+  </data>
 </root>

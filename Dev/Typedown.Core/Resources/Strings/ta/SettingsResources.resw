@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>கடைசி தாவலைத் தாண்டி உருட்டினால் முதல் தாவலுக்குச் செல்லும், திரும்பவும்; அணைத்தால் முதல் மற்றும் கடைசி தாவலில் நிற்கும்</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Mermaid வரைபடங்களை இதைக் கொண்டு வரை</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele அதிக வகை வரைபடங்களை வரைகிறது, அவற்றை Mermaid-இலிருந்து வேறுவிதமாக அமைக்கிறது</value>
+  </data>
 </root>

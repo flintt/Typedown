@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>Ukuskrola ngale kwethebhu lokugcina kuya kwelokuqala, nokubuya; uma ivaliwe limisa ethebhini lokuqala nelokugcina</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Dweba imidwebo ye-Mermaid nge</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>I-Pele idweba izinhlobo eziningi zemidwebo futhi iyihlele ngendlela ehlukile kune-Mermaid</value>
+  </data>
 </root>

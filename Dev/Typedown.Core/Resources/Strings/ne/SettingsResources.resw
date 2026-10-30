@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>अन्तिम ट्याबभन्दा पर स्क्रोल गर्दा पहिलोमा जान्छ, र फर्केर पनि; बन्द भए पहिलो र अन्तिम ट्याबमा रोकिन्छ</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Mermaid रेखाचित्र यसबाट बनाउनुहोस्</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele ले धेरै प्रकारका रेखाचित्र बनाउँछ र तिनलाई Mermaid भन्दा फरक ढङ्गले मिलाउँछ</value>
+  </data>
 </root>

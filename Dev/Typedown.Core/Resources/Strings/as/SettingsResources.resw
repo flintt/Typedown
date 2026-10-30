@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>শেষ টেবৰ পিছলৈ স্ক্ৰল কৰিলে প্ৰথমটোলৈ যায়, আৰু উলটি; বন্ধ থাকিলে প্ৰথম আৰু শেষ টেবত ৰ'ব</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Mermaid চিত্ৰ আঁকাৰ উপায়</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele-এ অধিক প্ৰকাৰৰ চিত্ৰ আঁকে আৰু Mermaid-ৰ পৰা বেলেগকৈ সজায়</value>
+  </data>
 </root>

@@ -413,6 +413,9 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     useEffect(() => {
         const ele = document.getElementById('editor')
         const o = optionsRef.current
+        // The diagram renderer set before the first diagram is drawn (public/lazy-mermaid.js).
+        const setMermaidRenderer = (window as any).__typedownSetMermaidRenderer
+        setMermaidRenderer?.(o?.mermaidRenderer)
         const muya = new Muya(ele, o);
         // The constructor already built the document with these, so they count as applied.
         (muya as any).__applied = {
@@ -559,6 +562,11 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         const server = props.options?.plantUmlServer ?? ''
         applyOnce(editor, 'renderPlantUml', [on, server], () => editor?.setOptions({ renderPlantUml: on, plantUmlServer: server }, true))
     }, [editor, props.options?.renderPlantUml, props.options?.plantUmlServer])
+
+    useEffect(() => {
+        // Settings > Editor > Diagram renderer: Mermaid or Pele draws the Mermaid fences; the drawn ones are drawn again.
+        if (editor) (window as any).__typedownSetMermaidRenderer?.(props.options?.mermaidRenderer)
+    }, [editor, props.options?.mermaidRenderer])
 
     useEffect(() => {
         // Muya: 'dfm' = 4-space nested indentation, otherwise the number of spaces after the list marker (1-4).

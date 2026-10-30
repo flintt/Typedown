@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>Desprazarse máis alá da última lapela leva á primeira, e viceversa; desactivado detense na primeira e na última lapela</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Debuxar diagramas Mermaid con</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele debuxa máis tipos de diagrama e dispóns de forma distinta a Mermaid</value>
+  </data>
 </root>

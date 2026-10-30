@@ -964,4 +964,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>Превъртането след последния раздел отива към първия и обратно; изключено спира при първия и последния раздел</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Рисуване на диаграми Mermaid с</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele рисува повече видове диаграми и ги подрежда различно от Mermaid</value>
+  </data>
 </root>
