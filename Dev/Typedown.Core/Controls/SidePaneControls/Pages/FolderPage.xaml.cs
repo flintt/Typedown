@@ -104,7 +104,11 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
             Log.Debug($"FolderPage.UpdateWorkFolder: WorkFolder='{FileViewModel.WorkFolder}' FilePath='{FileViewModel.FilePath}' -> '{workFolder}'");
             WorkFolderExplorerItem.FullPath = workFolder;
             WorkFolderExplorerItem.IsExpanded = true;
+            FileViewModel.FolderTreeRoot = workFolder; // the search starts where the tree is
         }
+
+        /// <summary>The file is in the folder or somewhere below it.</summary>
+        public static bool IsInFolder(string filePath, string folder) => IsInsideFolder(filePath, folder);
 
         private void OnFileOpened(string path, bool preview)
         {

@@ -69,6 +69,28 @@ namespace Typedown.Automation.Tests
         }
 
         [Fact]
+        public void A_second_root_is_searched_too_its_hits_led_by_its_name_and_a_folder_met_twice_is_searched_once()
+        {
+            // The tree's folder and, beside it, the document's own folder (not inside the tree's).
+            Write("tree-plan.md", "x");
+            var other = Path.Combine(Path.GetDirectoryName(root)!, "beside");
+            Directory.CreateDirectory(other);
+            File.WriteAllText(Path.Combine(other, "plan-beside.md"), "x");
+            File.WriteAllText(Path.Combine(other, "notes.md"), "the plan is here");
+            var hits = new List<FolderSearchHit>();
+            var summary = new FolderSearch().Run(new[] { root, other }, "plan", hits.Add, CancellationToken.None);
+            Assert.Equal(new[] { "tree-plan.md", "beside/plan-beside.md" }, hits.Where(h => h.Kind == FolderSearchHitKind.Name).Select(Slashed));
+            Assert.Equal(new[] { "beside/notes.md" }, hits.Where(h => h.Kind == FolderSearchHitKind.Content).Select(Slashed));
+            Assert.Equal(2, summary.Names);
+
+            // A root inside another is not searched again.
+            Write("sub/plan-sub.md", "x");
+            var twice = new List<FolderSearchHit>();
+            new FolderSearch().Run(new[] { root, Path.Combine(root, "sub") }, "plan-sub", twice.Add, CancellationToken.None);
+            Assert.Single(twice);
+        }
+
+        [Fact]
         public void Folders_match_by_name_but_the_root_does_not()
         {
             Write("Plans/a.md", "x\n");

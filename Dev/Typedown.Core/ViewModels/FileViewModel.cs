@@ -48,6 +48,12 @@ namespace Typedown.Core.ViewModels
         /// <summary>True when the user chose the workspace folder (Open Folder), false when it was restored at startup.</summary>
         public bool WorkFolderIsExplicit { get; private set; }
 
+        /// <summary>
+        /// The folder the side pane's tree shows, set by the tree; null before it was first shown. It can differ from
+        /// <see cref="WorkFolder"/>: unless a folder was opened, the tree follows the document in front.
+        /// </summary>
+        public string FolderTreeRoot { get; set; }
+
         /// <summary>Raised after a document was loaded from disk (not on tab switches); <c>preview</c> = single-click open.</summary>
         public event Action<string, bool> FileOpened;
 

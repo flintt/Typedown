@@ -62,15 +62,27 @@ namespace Typedown.Core.Controls
             Close?.Invoke(this, EventArgs.Empty);
         }
 
-        private string SearchRoot
+        /// <summary>
+        /// Where the search looks: the folder the tree shows, and the document's own folder when that is not inside it.
+        /// Before the tree was shown, the folder it would show: an opened folder, else the document's, else the one
+        /// restored at startup. (Only the restored folder was searched while there was one, so a document opened from
+        /// elsewhere, with the tree on its folder, found nothing beside it.)
+        /// </summary>
+        private string[] SearchRoots
         {
             get
             {
                 var file = ViewModel?.FileViewModel;
                 if (file == null) return null;
-                if (!string.IsNullOrEmpty(file.WorkFolder) && Directory.Exists(file.WorkFolder)) return file.WorkFolder;
-                if (!string.IsNullOrEmpty(file.FilePath)) return Path.GetDirectoryName(file.FilePath);
-                return null;
+                var documentFolder = string.IsNullOrEmpty(file.FilePath) ? null : Path.GetDirectoryName(file.FilePath);
+                var tree = file.FolderTreeRoot;
+                if (string.IsNullOrEmpty(tree))
+                    tree = file.WorkFolderIsExplicit ? file.WorkFolder : documentFolder ?? file.WorkFolder;
+                if (string.IsNullOrEmpty(tree) || !Directory.Exists(tree)) tree = null;
+                if (documentFolder != null && (!Directory.Exists(documentFolder) || (tree != null && SidePanelControls.Pages.FolderPage.IsInFolder(file.FilePath, tree))))
+                    documentFolder = null;
+                if (tree == null) return documentFolder == null ? null : new[] { documentFolder };
+                return documentFolder == null ? new[] { tree } : new[] { tree, documentFolder };
             }
         }
 
@@ -87,8 +99,8 @@ namespace Typedown.Core.Controls
                 Status = "";
                 return;
             }
-            var root = SearchRoot;
-            if (root == null)
+            var roots = SearchRoots;
+            if (roots == null)
             {
                 HasQuery = false;
                 Status = Locale.GetString("FolderPane.NoFolderOpen");
@@ -107,7 +119,7 @@ namespace Typedown.Core.Controls
                         Status = string.Format(Locale.GetString("FolderSearch.SearchingContents"), Count(names.Names, names.NamesAtCap));
                 });
                 var search = new FolderSearch();
-                var summary = await Task.Run(() => search.Run(root, query, ((IProgress<FolderSearchHit>)hits).Report, cts.Token, ((IProgress<FolderSearchSummary>)namesDone).Report), cts.Token);
+                var summary = await Task.Run(() => search.Run(roots, query, ((IProgress<FolderSearchHit>)hits).Report, cts.Token, ((IProgress<FolderSearchSummary>)namesDone).Report), cts.Token);
                 if (cts.IsCancellationRequested) return;
                 Status = string.Format(Locale.GetString("FolderSearch.Summary"),
                     Count(summary.Names, summary.NamesAtCap), Count(summary.Contents, summary.ContentsAtCap), summary.FilesRead);
