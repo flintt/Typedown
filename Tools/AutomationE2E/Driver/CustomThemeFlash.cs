@@ -17,12 +17,16 @@ internal static partial class Program
     private static readonly (int R, int G, int B) DraculaBg = (0x28, 0x2a, 0x36), DraculaFg = (0xf8, 0xf8, 0xf2), AppDark = (0x28, 0x28, 0x28);
 
     // One read of the window's area: the share of it that is light, the app's dark colour, Dracula's page colour, and its text.
-    private static (double Light, double AppDark, double Theme, double Text) ThemeShares(IntPtr window)
+    // `textArea` (screen pixels): the text counted there only, of that area - the editor's. Over the whole window, any
+    // near-white pixel counted (Dracula's text is near white): the settings page's own text sliding out passed for the
+    // document's.
+    private static (double Light, double AppDark, double Theme, double Text) ThemeShares(IntPtr window, RECT? textArea = null)
     {
         if (!GetWindowRect(window, out var r)) return (0, 0, 0, 0);
         int w = r.Right - r.Left, h = r.Bottom - r.Top;
         if (w <= 0 || h <= 0) return (0, 0, 0, 0);
-        int light = 0, appDark = 0, theme = 0, text = 0, all = 0;
+        int light = 0, appDark = 0, theme = 0, text = 0, all = 0, inArea = 0;
+        bool InArea(int x, int y) => textArea is not { } a || (r.Left + x >= a.Left && r.Left + x < a.Right && r.Top + y >= a.Top && r.Top + y < a.Bottom);
         bool Near(int cr, int cg, int cb, (int R, int G, int B) c, int tolerance) =>
             Math.Abs(cr - c.R) <= tolerance && Math.Abs(cg - c.G) <= tolerance && Math.Abs(cb - c.B) <= tolerance;
         using (var shot = new System.Drawing.Bitmap(w, h))
@@ -41,23 +45,42 @@ internal static partial class Program
                     if (0.299 * rr + 0.587 * gg + 0.114 * b > 150) light++;
                     if (Near(rr, gg, b, AppDark, 2)) appDark++;
                     if (Near(rr, gg, b, DraculaBg, 3)) theme++;
+                    if (!InArea(x, y)) continue;
+                    inArea++;
                     if (Near(rr, gg, b, DraculaFg, 12)) text++;
                 }
         }
-        return (light * 100.0 / all, appDark * 100.0 / all, theme * 100.0 / all, text * 100.0 / all);
+        return (light * 100.0 / all, appDark * 100.0 / all, theme * 100.0 / all, inArea == 0 ? 0 : text * 100.0 / inArea);
     }
 
-    // The window's frames for a while: each one's shares, and the time the document's text first covers some of it.
-    private static async Task<(List<(long At, double Light, double AppDark, double Theme, double Text)> Frames, long? TextAt)> WatchTheme(IntPtr window, int ms)
+    // Where the editor is on the screen, a little inside its edges. The web view is drawn into the window's composition
+    // (its Chrome_WidgetWin_0 child is 0x0), so it is placed by its size (test.webview.state): at the window's right
+    // edge, right of the side pane, above the 32 px status bar.
+    private static async Task<RECT?> EditorArea(Client c, string windowId, IntPtr window)
+    {
+        var state = await c.Call("test.webview.state", new { windowId });
+        static (double W, double H)? Size(string? s) =>
+            s?.Split('x') is [var w, var h] && double.TryParse(w, out var dw) && double.TryParse(h, out var dh) ? (dw, dh) : null;
+        if (Size((string?)state["viewSize"]) is not { } view || Size((string?)state["rootSize"]) is not { } root || root.W <= 0) return null;
+        if (!GetWindowRect(window, out var r)) return null;
+        var scale = (r.Right - r.Left) / root.W;
+        int Px(double dip) => (int)Math.Round(dip * scale);
+        var bottom = r.Bottom - Px(32) - Px(12);
+        return new RECT { Left = r.Right - Px(view.W) + Px(24), Right = r.Right - Px(24), Bottom = bottom, Top = bottom - Px(view.H) + Px(64) };
+    }
+
+    // The window's frames for a while: each one's shares, and the time the document's text first covers some of it - more
+    // than half a percent of the window, or with `textArea`, `textNeeded` percent of that area.
+    private static async Task<(List<(long At, double Light, double AppDark, double Theme, double Text)> Frames, long? TextAt)> WatchTheme(IntPtr window, int ms, RECT? textArea = null, double textNeeded = 0.5)
     {
         var frames = new List<(long, double, double, double, double)>();
         long? textAt = null;
         var clock = System.Diagnostics.Stopwatch.StartNew();
         while (clock.ElapsedMilliseconds < ms)
         {
-            var (light, appDark, theme, text) = ThemeShares(window);
+            var (light, appDark, theme, text) = ThemeShares(window, textArea);
             frames.Add((clock.ElapsedMilliseconds, light, appDark, theme, text));
-            if (textAt == null && text > 0.5) textAt = clock.ElapsedMilliseconds;
+            if (textAt == null && (textArea == null ? text > textNeeded : text >= textNeeded)) textAt = clock.ElapsedMilliseconds;
             await Task.Delay(1);
         }
         return (frames, textAt);
@@ -93,11 +116,24 @@ internal static partial class Program
             await TypeInto(c, first, "");
             await Task.Delay(2500);
 
-            // Out of the settings and back.
+            // Out of the settings and back. The document's text is told by the editor's area against what it showed there
+            // before: back when 70 % of that is there again.
+            var editorArea = await EditorArea(c, windowId, window);
+            var textBefore = editorArea == null ? 0 : ThemeShares(window, editorArea).Text;
+            notes.Add(editorArea is { } ea ? $"the editor's area {ea.Right - ea.Left}x{ea.Bottom - ea.Top} at {ea.Left},{ea.Top}, its text before {textBefore:0.00} %" : "the editor's size not known: the whole window's text");
+            Check(editorArea == null || textBefore > 0.2, $"the document's text is on screen before the settings ({textBefore:0.00} % of the editor's area)");
             await CtrlComma();
             await Task.Delay(2000);
+            if (editorArea != null)
+            {
+                // The settings page over it: the document's text is gone from there (else nothing below is a way back). The
+                // settings' own near-white text is about a third of the document's (w10, 0.19 % of 0.56 %).
+                var inSettings = ThemeShares(window, editorArea).Text;
+                notes.Add($"in the settings: {inSettings:0.00} % of the editor's area is the document's text colour");
+                Check(inSettings < textBefore * 0.5,$"the settings page covers the document ({inSettings:0.00} % text left of {textBefore:0.00} %)");
+            }
             await CtrlComma();
-            var (back, backText) = await WatchTheme(window, 2500);
+            var (back, backText) = editorArea == null ? await WatchTheme(window, 2500) : await WatchTheme(window, 2500, editorArea, textBefore * 0.7);
             var flashBack = back.Count(f => f.Light > 25 || f.AppDark > 25) + LeftTheTheme(back);
             notes.Add($"leaving the settings: {back.Count} frames, text at {backText} ms; {Describe(back)}");
             Check(flashBack == 0, $"leaving the settings shows no light, app-dark or other frame once in the theme's colour ({flashBack} of {back.Count})");
