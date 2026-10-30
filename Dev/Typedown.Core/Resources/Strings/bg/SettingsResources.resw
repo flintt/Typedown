@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele рисува повече видове диаграми и ги подрежда различно от Mermaid</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Сливане на редовете на абзац в режим на четене</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>В режим на четене единичен нов ред в абзац се показва като интервал, както изисква Markdown и както вече правят експортите (без интервал между китайски или японски знаци). За да запазите нов ред, завършете реда с два интервала или обратна наклонена черта</value>
+  </data>
 </root>

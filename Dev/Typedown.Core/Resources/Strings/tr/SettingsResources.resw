@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele daha fazla diyagram türü çizer ve bunları Mermaid'den farklı yerleştirir</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Okuma modunda paragraf satırlarını birleştir</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>Okuma modunda paragraf içindeki tek bir satır sonu, Markdown'ın belirttiği ve dışa aktarmaların zaten yaptığı gibi boşluk olarak gösterilir (Çince veya Japonca karakterler arasına boşluk konmaz). Bir satır sonunu korumak için satırı iki boşluk veya ters eğik çizgiyle bitirin</value>
+  </data>
 </root>

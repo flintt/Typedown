@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele huchora aina nyingi zaidi za michoro na kuipanga tofauti na Mermaid</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Unganisha mistari ya aya katika hali ya kusoma</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>Katika hali ya kusoma, kikatizo kimoja cha mstari ndani ya aya kinaonyeshwa kama nafasi, kama Markdown inavyoeleza na kama uhamishaji tayari unavyofanya (hakuna nafasi kati ya herufi za Kichina au Kijapani). Ili kubakiza kikatizo, maliza mstari kwa nafasi mbili au mkwaju wa nyuma</value>
+  </data>
 </root>

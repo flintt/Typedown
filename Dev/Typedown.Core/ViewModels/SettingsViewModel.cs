@@ -54,6 +54,12 @@ namespace Typedown.Core.ViewModels
         /// too, as they do while editing (todo S8). Display only: the file is written the same either way.
         /// </summary>
         public bool ShowBlankLines { get => GetSettingValue(false); set => SetSettingValue(value); }
+        /// <summary>
+        /// Reading mode shows a single line ending inside a paragraph as a space, as Markdown has it (and as the exports
+        /// write it), and as nothing between two CJK characters; editing shows the lines as they are in the file. Display
+        /// only. Asked for by markdown-linewrap and a Store review ("wraps lines on single line breaks").
+        /// </summary>
+        public bool JoinSoftBreaks { get => GetSettingValue(false); set => SetSettingValue(value); }
         /// <summary>The visual editor shows the Markdown marks (**, #, a link's address) everywhere, not only where the caret is.</summary>
         public bool ShowMarkdownMarks { get => GetSettingValue(false); set => SetSettingValue(value); }
 
@@ -293,6 +299,7 @@ namespace Typedown.Core.ViewModels
             "ListIndentation",
             "TableAlignColumns",
             "ShowBlankLines",
+            "JoinSoftBreaks",
             "ShowMarkdownMarks",
             "ProgressiveRendering",
             "PredictHeights",

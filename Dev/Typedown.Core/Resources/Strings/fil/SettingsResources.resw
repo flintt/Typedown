@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Mas maraming uri ng diagram ang iginuguhit ng Pele at iba ang pagkakaayos nito kaysa sa Mermaid</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Pagsamahin ang mga linya ng talata sa reading mode</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>Sa reading mode, ang iisang line break sa loob ng talata ay ipinapakita bilang espasyo, ayon sa itinakda ng Markdown at gaya ng ginagawa na ng mga export (walang espasyo sa pagitan ng mga karakter na Chinese o Japanese). Para mapanatili ang line break, tapusin ang linya sa dalawang espasyo o isang backslash</value>
+  </data>
 </root>

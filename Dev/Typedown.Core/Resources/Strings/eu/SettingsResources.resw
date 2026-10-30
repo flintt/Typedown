@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele-k diagrama mota gehiago marrazten ditu eta Mermaid-ek ez bezala antolatzen ditu</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Elkartu paragrafo baten lerroak irakurtzeko moduan</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>Irakurtzeko moduan, paragrafo bateko lerro-jauzi bakuna zuriune gisa erakusten da, Markdown-ek dioen bezala eta esportazioek dagoeneko egiten duten bezala (ez da zuriunerik jartzen txinerazko edo japonierazko karaktereen artean). Jauzia mantentzeko, amaitu lerroa bi zuriunerekin edo alderantzizko barra batekin</value>
+  </data>
 </root>

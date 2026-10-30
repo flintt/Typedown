@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele piirtää useampia kaaviotyyppejä ja asettelee ne eri tavalla kuin Mermaid</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Yhdistä kappaleen rivit lukutilassa</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>Lukutilassa kappaleen sisäinen yksittäinen rivinvaihto näytetään välilyöntinä, kuten Markdown määrää ja viennit jo tekevät (ei välilyöntiä kiinalaisten tai japanilaisten merkkien väliin). Säilytä rivinvaihto päättämällä rivi kahteen välilyöntiin tai kenoviivaan</value>
+  </data>
 </root>

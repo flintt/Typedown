@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele მეტი სახის დიაგრამას ხატავს და მათ Mermaid-ისგან განსხვავებულად ალაგებს</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>აბზაცის სტრიქონების გაერთიანება კითხვის რეჟიმში</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>კითხვის რეჟიმში აბზაცის შიგნით ერთი ახალი სტრიქონი ნაჩვენებია ჰარად, როგორც ამას Markdown ადგენს და როგორც ექსპორტი უკვე აკეთებს (ჩინურ ან იაპონურ სიმბოლოებს შორის ჰარი არ ჩაისმება). ახალი სტრიქონის შესანარჩუნებლად სტრიქონი დაასრულეთ ორი ჰარით ან უკუღმა დახრილი ხაზით</value>
+  </data>
 </root>

@@ -123,6 +123,8 @@ export const CLASS_OR_ID = Object.freeze(genUpper2LowerKeyHash([
   'AG_RUBY_RENDER',
   'AG_SELECTED',
   'AG_SOFT_LINE_BREAK',
+  'AG_SOFT_LINE_BREAK_CJK',
+  'AG_SOFT_LINE_BREAK_KEEP',
   'AG_MATH_ERROR',
   'AG_MATH_MARKER',
   'AG_MATH_RENDER',

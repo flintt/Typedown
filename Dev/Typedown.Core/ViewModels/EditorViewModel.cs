@@ -250,6 +250,7 @@ namespace Typedown.Core.ViewModels
                 Settings.ListIndentation,
                 Settings.TableAlignColumns,
                 Settings.ShowBlankLines,
+                Settings.JoinSoftBreaks,
                 Settings.ShowMarkdownMarks,
                 Settings.ProgressiveRendering,
                 Settings.PredictHeights,

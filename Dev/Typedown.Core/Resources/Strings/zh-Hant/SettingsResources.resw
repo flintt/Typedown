@@ -999,4 +999,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele 能畫更多種類的圖表，排版與 Mermaid 不同</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>閱讀模式下合併段內換行</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>閱讀模式下，段落中的單個換行顯示為空格，與 Markdown 規範和匯出結果一致（中文、日文字元之間不加空格）。要保留換行，請在行尾加兩個空格或反斜線</value>
+  </data>
 </root>

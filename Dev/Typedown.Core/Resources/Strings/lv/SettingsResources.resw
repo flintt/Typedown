@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele zīmē vairāk diagrammu veidu un izkārto tās citādi nekā Mermaid</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Apvienot rindkopas rindas lasīšanas režīmā</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>Lasīšanas režīmā viena rindiņas pāreja rindkopā tiek rādīta kā atstarpe, kā to nosaka Markdown un kā to jau dara eksports (starp ķīniešu vai japāņu rakstzīmēm atstarpe netiek likta). Lai saglabātu pāreju, beidziet rindu ar divām atstarpēm vai apgriezto slīpsvītru</value>
+  </data>
 </root>

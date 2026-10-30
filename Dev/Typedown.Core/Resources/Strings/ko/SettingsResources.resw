@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele는 더 많은 종류의 다이어그램을 그리며 배치가 Mermaid와 다릅니다</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>읽기 모드에서 단락 안의 줄 합치기</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>읽기 모드에서 단락 안의 단일 줄바꿈을 Markdown 규격과 내보내기 결과처럼 공백으로 표시합니다(중국어·일본어 문자 사이에는 공백을 넣지 않음). 줄바꿈을 유지하려면 줄 끝에 공백 두 개나 백슬래시를 넣으세요</value>
+  </data>
 </root>

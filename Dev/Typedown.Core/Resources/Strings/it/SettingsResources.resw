@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele disegna più tipi di diagramma e li dispone in modo diverso da Mermaid</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Unisci le righe di un paragrafo in modalità lettura</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>In modalità lettura, un singolo a capo all’interno di un paragrafo viene mostrato come uno spazio, come prevede Markdown e come fanno già le esportazioni (nessuno spazio tra caratteri cinesi o giapponesi). Per mantenere un a capo, termina la riga con due spazi o una barra rovesciata</value>
+  </data>
 </root>

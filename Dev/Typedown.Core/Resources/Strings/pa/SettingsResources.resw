@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele ਹੋਰ ਕਿਸਮਾਂ ਦੇ ਚਿੱਤਰ ਬਣਾਉਂਦਾ ਹੈ ਅਤੇ ਉਹਨਾਂ ਨੂੰ Mermaid ਤੋਂ ਵੱਖਰੇ ਢੰਗ ਨਾਲ ਸਜਾਉਂਦਾ ਹੈ</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>ਪੜ੍ਹਨ ਮੋਡ ਵਿੱਚ ਪੈਰੇ ਦੀਆਂ ਲਾਈਨਾਂ ਜੋੜੋ</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>ਪੜ੍ਹਨ ਮੋਡ ਵਿੱਚ ਪੈਰੇ ਦੇ ਅੰਦਰ ਇੱਕਲੀ ਲਾਈਨ ਬ੍ਰੇਕ ਸਪੇਸ ਵਜੋਂ ਦਿਖਾਈ ਦਿੰਦੀ ਹੈ, ਜਿਵੇਂ Markdown ਦੱਸਦਾ ਹੈ ਅਤੇ ਨਿਰਯਾਤ ਪਹਿਲਾਂ ਹੀ ਕਰਦੇ ਹਨ (ਚੀਨੀ ਜਾਂ ਜਾਪਾਨੀ ਅੱਖਰਾਂ ਵਿਚਕਾਰ ਸਪੇਸ ਨਹੀਂ)। ਲਾਈਨ ਬ੍ਰੇਕ ਰੱਖਣ ਲਈ ਲਾਈਨ ਦੇ ਅੰਤ ਵਿੱਚ ਦੋ ਸਪੇਸ ਜਾਂ ਬੈਕਸਲੈਸ਼ ਲਗਾਓ</value>
+  </data>
 </root>

@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele teken meer soorte diagramme en rangskik hulle anders as Mermaid</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Voeg die reëls van ’n paragraaf in leesmodus saam</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>In leesmodus word ’n enkele reëlbreuk binne ’n paragraaf as ’n spasie gewys, soos Markdown bepaal en soos die uitvoere reeds doen (geen spasie tussen Chinese of Japannese karakters nie). Om ’n breuk te behou, eindig die reël met twee spasies of ’n agteroorstreep</value>
+  </data>
 </root>

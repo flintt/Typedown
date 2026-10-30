@@ -769,6 +769,14 @@
     <value>Empty lines between paragraphs take up space in reading mode and in HTML and PDF exports too, as they do while editing. The file itself is not changed</value>
     <comment>编辑器/保留多余空行说明：段落之间多出的空行在阅读模式和 HTML、PDF 导出中也留出空白，与编辑时一致，文件内容不变</comment>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Join the lines of a paragraph in reading mode</value>
+    <comment>编辑器/阅读模式下合并段内换行</comment>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>In reading mode, a single line break inside a paragraph shows as a space, as Markdown specifies and exports already do (no space between Chinese or Japanese characters). To keep a break, end the line with two spaces or a backslash</value>
+    <comment>编辑器/合并段内换行说明：阅读模式下段落中的单个换行显示为空格，与 Markdown 规范和导出一致（中日文字符之间不加空格）；要保留换行，在行尾加两个空格或反斜杠</comment>
+  </data>
   <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
     <value>Always Show Markdown Marks</value>
   </data>

@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele अधिक प्रकार के आरेख बनाता है और उन्हें Mermaid से अलग ढंग से सजाता है</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>पढ़ने के मोड में अनुच्छेद की पंक्तियाँ जोड़ें</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>पढ़ने के मोड में अनुच्छेद के भीतर एकल पंक्ति विराम स्पेस के रूप में दिखता है, जैसा Markdown निर्धारित करता है और निर्यात पहले से करते हैं (चीनी या जापानी वर्णों के बीच स्पेस नहीं)। पंक्ति विराम रखने के लिए पंक्ति के अंत में दो स्पेस या बैकस्लैश लगाएँ</value>
+  </data>
 </root>

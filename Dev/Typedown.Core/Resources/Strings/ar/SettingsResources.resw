@@ -976,4 +976,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>يرسم Pele أنواعًا أكثر من المخططات ويرتبها بطريقة مختلفة عن Mermaid</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>دمج أسطر الفقرة في وضع القراءة</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>في وضع القراءة، يُعرض فاصل السطر المفرد داخل الفقرة كمسافة، كما تنص Markdown وكما تفعل عمليات التصدير بالفعل (من دون مسافة بين الأحرف الصينية أو اليابانية). للإبقاء على فاصل السطر، أنهِ السطر بمسافتين أو بشرطة مائلة عكسية</value>
+  </data>
 </root>

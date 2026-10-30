@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele teiknar fleiri gerðir skýringarmynda og raðar þeim öðruvísi en Mermaid</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Sameina línur málsgreinar í lestrarham</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>Í lestrarham birtist stakt línubil innan málsgreinar sem bil, eins og Markdown kveður á um og útflutningur gerir nú þegar (ekkert bil milli kínverskra eða japanskra stafa). Til að halda línubili skaltu enda línuna á tveimur bilum eða öfugu skástriki</value>
+  </data>
 </root>

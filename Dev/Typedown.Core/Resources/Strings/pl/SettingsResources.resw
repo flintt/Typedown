@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele rysuje więcej rodzajów diagramów i układa je inaczej niż Mermaid</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Łącz wiersze akapitu w trybie czytania</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>W trybie czytania pojedynczy znak nowego wiersza w akapicie jest wyświetlany jako spacja, tak jak określa Markdown i jak już robią eksporty (bez spacji między znakami chińskimi lub japońskimi). Aby zachować podział, zakończ wiersz dwiema spacjami lub ukośnikiem odwrotnym</value>
+  </data>
 </root>

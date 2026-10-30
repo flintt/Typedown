@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele আরও বেশি ধরনের ডায়াগ্রাম আঁকে এবং Mermaid থেকে ভিন্নভাবে সাজায়</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>পড়ার মোডে অনুচ্ছেদের লাইন জোড়া দিন</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>পড়ার মোডে অনুচ্ছেদের ভেতরের একক লাইন বিরতি স্পেস হিসেবে দেখায়, যেমন Markdown নির্ধারণ করে এবং রপ্তানি আগে থেকেই করে (চীনা বা জাপানি অক্ষরের মাঝে স্পেস নয়)। লাইন বিরতি রাখতে লাইনের শেষে দুটি স্পেস বা ব্যাকস্ল্যাশ দিন</value>
+  </data>
 </root>

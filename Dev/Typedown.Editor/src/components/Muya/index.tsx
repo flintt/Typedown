@@ -1183,6 +1183,11 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         document.body.classList.toggle('show-blank-lines', props.options?.showBlankLines === true)
     }, [props.options?.showBlankLines])
 
+    // Settings > Editor > Join the lines of a paragraph in reading mode (assets/styles/index.css): no block drawn again.
+    useEffect(() => {
+        document.body.classList.toggle('join-soft-breaks', props.options?.joinSoftBreaks === true)
+    }, [props.options?.joinSoftBreaks])
+
     // Settings > Editor > Always show Markdown marks: the marks shown everywhere as they are in the block with the caret
     // (assets/styles/index.css), no block drawn again.
     useEffect(() => {

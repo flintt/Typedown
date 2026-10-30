@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele tekent meer soorten diagrammen en deelt ze anders in dan Mermaid</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Regels van een alinea samenvoegen in leesmodus</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>In leesmodus wordt een enkele regeleinde binnen een alinea als spatie weergegeven, zoals Markdown voorschrijft en de exports al doen (geen spatie tussen Chinese of Japanse tekens). Wilt u een regeleinde behouden, eindig de regel dan met twee spaties of een backslash</value>
+  </data>
 </root>

@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele ritar fler sorters diagram och ordnar dem annorlunda än Mermaid</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Slå ihop raderna i ett stycke i läsläge</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>I läsläge visas en enkel radbrytning inuti ett stycke som ett mellanslag, som Markdown anger och som exporterna redan gör (inget mellanslag mellan kinesiska eller japanska tecken). Avsluta raden med två mellanslag eller ett omvänt snedstreck för att behålla en radbrytning</value>
+  </data>
 </root>

@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele அதிக வகை வரைபடங்களை வரைகிறது, அவற்றை Mermaid-இலிருந்து வேறுவிதமாக அமைக்கிறது</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>படிக்கும் பயன்முறையில் பத்தியின் வரிகளை இணை</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>படிக்கும் பயன்முறையில், பத்திக்குள் உள்ள ஒற்றை வரி முறிவு Markdown குறிப்பிடுவது போலவும் ஏற்றுமதிகள் ஏற்கனவே செய்வது போலவும் இடைவெளியாகக் காட்டப்படும் (சீன அல்லது ஜப்பானிய எழுத்துகளுக்கு இடையே இடைவெளி இல்லை). வரி முறிவை வைத்திருக்க, வரியின் இறுதியில் இரண்டு இடைவெளிகள் அல்லது பின்சாய்வுக்கோடு இடவும்</value>
+  </data>
 </root>

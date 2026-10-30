@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele vizaton më shumë lloje diagramesh dhe i rregullon ndryshe nga Mermaid</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Bashko rreshtat e një paragrafi në modalitetin e leximit</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>Në modalitetin e leximit, një kalim i vetëm rreshti brenda paragrafit shfaqet si hapësirë, siç e përcakton Markdown dhe siç bëjnë tashmë eksportet (pa hapësirë midis shkronjave kineze ose japoneze). Për ta ruajtur kalimin, mbyllni rreshtin me dy hapësira ose një vijë të pjerrët mbrapsht</value>
+  </data>
 </root>

@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele menggambar lebih banyak jenis diagram dan menatanya berbeda dari Mermaid</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Gabungkan baris paragraf dalam mode baca</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>Dalam mode baca, satu jeda baris di dalam paragraf ditampilkan sebagai spasi, sebagaimana ditetapkan Markdown dan sebagaimana sudah dilakukan ekspor (tanpa spasi di antara karakter Tionghoa atau Jepang). Untuk mempertahankan jeda baris, akhiri baris dengan dua spasi atau garis miring terbalik</value>
+  </data>
 </root>

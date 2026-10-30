@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele црта повеќе видови дијаграми и ги распоредува поинаку од Mermaid</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Спојување на редовите на пасус во режим за читање</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>Во режимот за читање, единечен нов ред во пасус се прикажува како празно место, како што пропишува Markdown и како што веќе прават извозите (без празно место меѓу кинески или јапонски знаци). За да зачувате нов ред, завршете го редот со две празни места или обратна коса црта</value>
+  </data>
 </root>

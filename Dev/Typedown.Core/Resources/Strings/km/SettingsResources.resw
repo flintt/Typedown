@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele គូរដ្យាក្រាមបានច្រើនប្រភេទជាង ហើយរៀបចំខុសពី Mermaid</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>ភ្ជាប់បន្ទាត់នៃកថាខណ្ឌក្នុងរបៀបអាន</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>ក្នុងរបៀបអាន ការចុះបន្ទាត់តែមួយនៅក្នុងកថាខណ្ឌត្រូវបានបង្ហាញជាដកឃ្លា ដូចដែល Markdown កំណត់ និងដូចដែលការនាំចេញធ្វើរួចហើយ (គ្មានដកឃ្លារវាងតួអក្សរចិន ឬជប៉ុន)។ ដើម្បីរក្សាការចុះបន្ទាត់ សូមបញ្ចប់បន្ទាត់ដោយដកឃ្លាពីរ ឬសញ្ញាខ្វែងថយក្រោយ</value>
+  </data>
 </root>

@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele കൂടുതൽ തരം ഡയഗ്രങ്ങൾ വരയ്ക്കുന്നു, അവയെ Mermaid-ൽ നിന്ന് വ്യത്യസ്തമായി ക്രമീകരിക്കുന്നു</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>വായനാ മോഡിൽ ഖണ്ഡികയിലെ വരികൾ ചേർക്കുക</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>വായനാ മോഡിൽ ഖണ്ഡികയ്ക്കുള്ളിലെ ഒറ്റ വരി മുറിവ് Markdown നിർദ്ദേശിക്കുന്നതുപോലെയും എക്‌സ്‌പോർട്ടുകൾ ഇതിനകം ചെയ്യുന്നതുപോലെയും സ്പേസായി കാണിക്കും (ചൈനീസ് അല്ലെങ്കിൽ ജാപ്പനീസ് അക്ഷരങ്ങൾക്കിടയിൽ സ്പേസ് ഇല്ല). വരി മുറിവ് നിലനിർത്താൻ വരിയുടെ അവസാനം രണ്ട് സ്പേസ് അല്ലെങ്കിൽ ബാക്ക്‌സ്ലാഷ് ചേർക്കുക</value>
+  </data>
 </root>

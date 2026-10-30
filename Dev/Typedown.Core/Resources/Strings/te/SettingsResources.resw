@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele మరిన్ని రకాల రేఖాచిత్రాలను గీస్తుంది, వాటిని Mermaid కంటే భిన్నంగా అమరుస్తుంది</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>చదివే మోడ్‌లో పేరా పంక్తులను కలపండి</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>చదివే మోడ్‌లో పేరాలోని ఒకే పంక్తి విరామం Markdown నిర్దేశించినట్లు, ఎగుమతులు ఇప్పటికే చేస్తున్నట్లు ఖాళీగా కనిపిస్తుంది (చైనీస్ లేదా జపనీస్ అక్షరాల మధ్య ఖాళీ ఉండదు). పంక్తి విరామాన్ని ఉంచాలంటే పంక్తి చివర రెండు ఖాళీలు లేదా బ్యాక్‌స్లాష్ ఉంచండి</value>
+  </data>
 </root>

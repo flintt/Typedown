@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele kreslí viac druhov diagramov a rozmiestňuje ich inak ako Mermaid</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Spájať riadky odseku v režime čítania</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>V režime čítania sa jednoduché zalomenie riadka v odseku zobrazí ako medzera, ako určuje Markdown a ako to už robia exporty (medzi čínskymi či japonskými znakmi bez medzery). Ak chcete zalomenie zachovať, ukončite riadok dvoma medzerami alebo spätnou lomkou</value>
+  </data>
 </root>

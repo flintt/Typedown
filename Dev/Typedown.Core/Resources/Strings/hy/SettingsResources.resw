@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele-ն գծում է ավելի շատ տեսակի գծապատկերներ և դասավորում դրանք Mermaid-ից տարբեր</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Միացնել պարբերության տողերը ընթերցման ռեժիմում</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>Ընթերցման ռեժիմում պարբերության ներսում մեկ տողադարձը ցուցադրվում է որպես բացատ, ինչպես սահմանում է Markdown-ը և ինչպես արդեն անում են արտահանումները (չինական կամ ճապոնական նիշերի միջև բացատ չի դրվում)։ Տողադարձը պահպանելու համար տողն ավարտեք երկու բացատով կամ հակառակ թեք գծով</value>
+  </data>
 </root>

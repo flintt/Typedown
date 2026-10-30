@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele ዝበዝሑ ዓይነታት ስእላዊ መግለጺ ይስእል፣ ካብ Mermaid ብዝተፈልየ ድማ የቐምጦም</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>ኣብ ኣገባብ ንባብ መስመራት ናይ ሓደ ኣንቀጽ ኣላግብ</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>ኣብ ኣገባብ ንባብ፡ ኣብ ውሽጢ ኣንቀጽ ዘሎ ሓደ ምብታኽ መስመር ከምቲ Markdown ዝእዝዞን ምውጻእ ድሮ ዝገብሮን ከም ባዶ ቦታ ይርአ (ኣብ መንጎ ፊደላት ቻይንኛ ወይ ጃፓንኛ ባዶ ቦታ ኣይኣቱን)። ምብታኽ ንምዕቃብ፡ ነቲ መስመር ብክልተ ባዶ ቦታታት ወይ ብድሕሪት ዘንበል ዛዝሞ</value>
+  </data>
 </root>

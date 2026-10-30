@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele crta više vrsta dijagrama i raspoređuje ih drukčije od Mermaida</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Spoji retke odlomka u načinu čitanja</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>U načinu čitanja jedan prijelom retka unutar odlomka prikazuje se kao razmak, kako propisuje Markdown i kako to već čine izvozi (bez razmaka između kineskih ili japanskih znakova). Da biste zadržali prijelom, završite redak s dva razmaka ili obrnutom kosom crtom</value>
+  </data>
 </root>

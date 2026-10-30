@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele dessine plus de types de diagrammes et les dispose autrement que Mermaid</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Joindre les lignes d’un paragraphe en mode lecture</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>En mode lecture, un simple saut de ligne dans un paragraphe s’affiche comme une espace, comme le prévoit Markdown et comme le font déjà les exportations (aucune espace entre caractères chinois ou japonais). Pour garder un saut, terminez la ligne par deux espaces ou une barre oblique inverse</value>
+  </data>
 </root>

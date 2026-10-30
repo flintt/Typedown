@@ -1007,4 +1007,10 @@
   <data name="General.TabWheelWraps.Description" xml:space="preserve">
     <value>在最后一个标签上继续滚动会回到第一个，反之亦然；关闭则停在第一个和最后一个标签</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>阅读模式下合并段内换行</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>阅读模式下，段落中的单个换行显示为空格，与 Markdown 规范和导出结果一致（中文、日文字符之间不加空格）。要保留换行，在行尾加两个空格或反斜杠</value>
+  </data>
 </root>

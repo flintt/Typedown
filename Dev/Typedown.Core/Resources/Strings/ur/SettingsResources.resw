@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele زیادہ قسم کے خاکے بناتا ہے اور انہیں Mermaid سے مختلف ترتیب دیتا ہے</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>پڑھنے کے موڈ میں پیراگراف کی سطریں جوڑیں</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>پڑھنے کے موڈ میں پیراگراف کے اندر ایک واحد لائن بریک وقفے کے طور پر دکھائی دیتی ہے، جیسا کہ Markdown بتاتا ہے اور ایکسپورٹ پہلے سے کرتے ہیں (چینی یا جاپانی حروف کے درمیان وقفہ نہیں ڈالا جاتا)۔ لائن بریک برقرار رکھنے کے لیے سطر کو دو وقفوں یا بیک سلیش پر ختم کریں</value>
+  </data>
 </root>

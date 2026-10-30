@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>A Pele többféle diagramot rajzol, és máshogy rendezi el őket, mint a Mermaid</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Bekezdés sorainak összevonása olvasó módban</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>Olvasó módban a bekezdésen belüli egyszeres sortörés szóközként jelenik meg, ahogy a Markdown előírja és az exportálás már teszi (kínai vagy japán karakterek közé nem kerül szóköz). A sortörés megtartásához zárja a sort két szóközzel vagy fordított perjellel</value>
+  </data>
 </root>

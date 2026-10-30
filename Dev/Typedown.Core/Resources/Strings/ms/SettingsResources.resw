@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele melukis lebih banyak jenis rajah dan menyusunnya secara berbeza daripada Mermaid</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Gabungkan baris perenggan dalam mod baca</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>Dalam mod baca, satu pemisah baris di dalam perenggan dipaparkan sebagai ruang, seperti yang ditetapkan Markdown dan seperti yang sudah dilakukan oleh eksport (tiada ruang antara aksara Cina atau Jepun). Untuk mengekalkan pemisah baris, akhiri baris dengan dua ruang atau garis condong ke belakang</value>
+  </data>
 </root>

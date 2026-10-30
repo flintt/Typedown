@@ -1248,6 +1248,17 @@ body.read-only.show-blank-lines .ag-show-quick-insert-hint p.ag-paragraph > span
   display: inline !important;
 }
 
+/* Settings > Editor > Join the lines of a paragraph in reading mode: a single line ending inside a paragraph shows as a
+   space, as Markdown has it (the exports do so already), and as nothing between two CJK characters
+   (softLineBreak.js). A hard break (two spaces or a backslash) stays a break. */
+body.read-only.join-soft-breaks span.ag-soft-line-break:not(.ag-soft-line-break-keep) {
+  white-space: normal;
+}
+
+body.read-only.join-soft-breaks span.ag-soft-line-break.ag-soft-line-break-cjk {
+  display: none;
+}
+
 body.read-only img,
 body.read-only table,
 body.read-only table td,

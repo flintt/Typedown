@@ -94,6 +94,11 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   default). An empty paragraph has a line's height while editing; reading mode and the HTML/PDF export collapsed it
   (`<p></p>`). With the setting on it keeps that height in reading mode and is exported as `<p><br></p>`; off, both are
   as before; the text handed back is the same either way. Before the setting the "on" half failed.
+- `softbreaks-join-check.js` — the "join the lines of a paragraph in reading mode" setting (Settings > Editor,
+  `joinSoftBreaks`, off by default; markdown-linewrap's samples). With it, reading mode shows a single line ending inside
+  a paragraph or quotation as a space, and as nothing between two Chinese or Japanese characters (Korean keeps its
+  space); lines ended with two spaces or a backslash, and list items, stay lines. Off, and while editing either way, the
+  lines are as in the file; the text handed back is the file's.
 - `style-check.js` — lays out `style-fixture.md` (headings, lists, tables, code, quote, maths, footnote, raw
   html) and measures every element: position, size, font, weight, colour, background. A block passes if it is
   within 2px of where it was and within 1px of its size; fonts and colours must match exactly. `--update`

@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele ಹೆಚ್ಚು ಬಗೆಯ ರೇಖಾಚಿತ್ರಗಳನ್ನು ಬಿಡಿಸುತ್ತದೆ ಮತ್ತು ಅವುಗಳನ್ನು Mermaid ಗಿಂತ ಬೇರೆ ರೀತಿಯಲ್ಲಿ ಜೋಡಿಸುತ್ತದೆ</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>ಓದುವ ಮೋಡ್‌ನಲ್ಲಿ ಪ್ಯಾರಾಗ್ರಾಫ್‌ನ ಸಾಲುಗಳನ್ನು ಸೇರಿಸಿ</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>ಓದುವ ಮೋಡ್‌ನಲ್ಲಿ ಪ್ಯಾರಾಗ್ರಾಫ್‌ನೊಳಗಿನ ಏಕ ಸಾಲು ವಿರಾಮವು Markdown ಸೂಚಿಸುವಂತೆ ಮತ್ತು ರಫ್ತುಗಳು ಈಗಾಗಲೇ ಮಾಡುವಂತೆ ಖಾಲಿ ಜಾಗವಾಗಿ ತೋರುತ್ತದೆ (ಚೈನೀಸ್ ಅಥವಾ ಜಪಾನೀಸ್ ಅಕ್ಷರಗಳ ನಡುವೆ ಖಾಲಿ ಜಾಗವಿಲ್ಲ). ಸಾಲು ವಿರಾಮ ಉಳಿಸಲು ಸಾಲಿನ ಕೊನೆಯಲ್ಲಿ ಎರಡು ಖಾಲಿ ಜಾಗ ಅಥವಾ ಬ್ಯಾಕ್‌ಸ್ಲ್ಯಾಶ್ ಹಾಕಿ</value>
+  </data>
 </root>

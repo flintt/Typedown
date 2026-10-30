@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>He maha ake ngā momo hoahoa ka tuhia e Pele, ā, he rerekē te whakatakotoranga i tā Mermaid</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Hono ngā rārangi o te kōwae i te aratau pānui</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>I te aratau pānui, ka whakaaturia he whatinga rārangi kotahi i roto i te kōwae hei mokowā, pērā i tā Markdown e whakarite ana, ā, pērā i tā ngā kaweake e mahi kē ana (kāore he mokowā i waenga i ngā pūāhua Hainamana, Hapanihi rānei). Hei pupuri i te whatinga, whakamutua te rārangi ki ngā mokowā e rua, ki tētahi rītaha whakamuri rānei</value>
+  </data>
 </root>

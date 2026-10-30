@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>O Pele desenha mais tipos de diagrama e organiza-os de forma diferente do Mermaid</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Unir as linhas de um parágrafo no modo de leitura</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>No modo de leitura, uma quebra de linha simples dentro de um parágrafo aparece como um espaço, como o Markdown determina e as exportações já fazem (sem espaço entre caracteres chineses ou japoneses). Para manter uma quebra, termine a linha com dois espaços ou uma barra invertida</value>
+  </data>
 </root>

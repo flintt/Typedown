@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Mae Pele yn lluniadu mwy o fathau o ddiagram ac yn eu gosod yn wahanol i Mermaid</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Uno llinellau paragraff yn y modd darllen</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>Yn y modd darllen, mae toriad llinell sengl o fewn paragraff yn ymddangos fel bwlch, fel y mae Markdown yn ei nodi ac fel y mae’r allforion yn ei wneud eisoes (dim bwlch rhwng nodau Tsieinëeg neu Japaneeg). I gadw toriad, gorffennwch y llinell gyda dau fwlch neu slaes ôl</value>
+  </data>
 </root>

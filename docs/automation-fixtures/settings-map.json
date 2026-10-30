@@ -926,6 +926,7 @@
         "DefaultImageUploadConfigId",
         "VimMode",
         "ShowBlankLines",
+        "JoinSoftBreaks",
         "ShowMarkdownMarks",
         "ProgressiveRendering",
         "PredictHeights",

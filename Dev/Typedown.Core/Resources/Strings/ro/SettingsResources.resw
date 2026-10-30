@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele desenează mai multe tipuri de diagrame și le aranjează altfel decât Mermaid</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Unește rândurile unui paragraf în modul de citire</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>În modul de citire, o singură trecere la rând nou într-un paragraf apare ca spațiu, așa cum prevede Markdown și cum fac deja exporturile (fără spațiu între caractere chinezești sau japoneze). Pentru a păstra trecerea la rând nou, încheiați rândul cu două spații sau o bară oblică inversă</value>
+  </data>
 </root>

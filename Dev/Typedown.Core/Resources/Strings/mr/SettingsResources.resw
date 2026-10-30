@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele अधिक प्रकारच्या आकृत्या काढते आणि त्या Mermaid पेक्षा वेगळ्या मांडते</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>वाचन मोडमध्ये परिच्छेदाच्या ओळी जोडा</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>वाचन मोडमध्ये परिच्छेदातील एकच ओळ खंड रिक्त जागेसारखा दिसतो, जसे Markdown सांगते आणि निर्यात आधीच करते (चिनी किंवा जपानी अक्षरांमध्ये रिक्त जागा नाही). ओळ खंड ठेवण्यासाठी ओळीच्या शेवटी दोन रिक्त जागा किंवा बॅकस्लॅश द्या</value>
+  </data>
 </root>

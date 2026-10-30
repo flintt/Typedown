@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele tegner flere slags diagrammer og placerer dem anderledes end Mermaid</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Saml linjerne i et afsnit i læsetilstand</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>I læsetilstand vises et enkelt linjeskift i et afsnit som et mellemrum, som Markdown foreskriver, og som eksporterne allerede gør (intet mellemrum mellem kinesiske eller japanske tegn). Afslut linjen med to mellemrum eller en omvendt skråstreg for at bevare et linjeskift</value>
+  </data>
 </root>

@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele braižo daugiau diagramų rūšių ir išdėsto jas kitaip nei Mermaid</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Sujungti pastraipos eilutes skaitymo režimu</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>Skaitymo režimu pavienis eilutės lūžis pastraipoje rodomas kaip tarpas, kaip nustato Markdown ir kaip jau daro eksportas (tarp kinų ar japonų rašmenų tarpas nededamas). Norėdami išlaikyti lūžį, eilutę užbaikite dviem tarpais arba atvirkštiniu pasviruoju brūkšniu</value>
+  </data>
 </root>

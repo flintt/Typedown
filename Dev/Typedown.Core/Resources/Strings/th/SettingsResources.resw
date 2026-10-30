@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele วาดไดอะแกรมได้หลายชนิดกว่าและจัดวางต่างจาก Mermaid</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>รวมบรรทัดของย่อหน้าในโหมดอ่าน</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>ในโหมดอ่าน การขึ้นบรรทัดใหม่ครั้งเดียวภายในย่อหน้าจะแสดงเป็นช่องว่าง ตามที่ Markdown กำหนดและที่การส่งออกทำอยู่แล้ว (ไม่มีช่องว่างระหว่างอักขระจีนหรือญี่ปุ่น) หากต้องการคงการขึ้นบรรทัดใหม่ ให้จบบรรทัดด้วยช่องว่างสองช่องหรือแบ็กสแลช</value>
+  </data>
 </root>

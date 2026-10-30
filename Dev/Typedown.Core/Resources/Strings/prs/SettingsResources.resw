@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele انواع بیشتر نمودارها را رسم می‌کند و آن‌ها را متفاوت از Mermaid می‌چیند</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>پیوستن سطرهای یک پاراگراف در حالت خواندن</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>در حالت خواندن، یک شکست سطر تکی درون پاراگراف به‌شکل فاصله نمایش داده می‌شود، چنانکه Markdown تعیین می‌کند و صادرات از قبل انجام می‌دهد (میان حروف چینی یا جاپانی فاصله گذاشته نمی‌شود). برای نگه داشتن شکست سطر، سطر را با دو فاصله یا یک خط مایل معکوس تمام کنید</value>
+  </data>
 </root>

@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele riše več vrst diagramov in jih razporedi drugače kot Mermaid</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Združi vrstice odstavka v načinu branja</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>V načinu branja je posamezen prelom vrstice v odstavku prikazan kot presledek, kot določa Markdown in kot to že počnejo izvozi (med kitajskimi ali japonskimi znaki ni presledka). Če želite prelom ohraniti, vrstico končajte z dvema presledkoma ali poševnico nazaj</value>
+  </data>
 </root>

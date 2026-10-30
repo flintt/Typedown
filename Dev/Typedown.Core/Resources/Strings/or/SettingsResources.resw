@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele ଅଧିକ ପ୍ରକାରର ଚିତ୍ର ଆଙ୍କେ ଏବଂ ସେଗୁଡ଼ିକୁ Mermaid ଠାରୁ ଭିନ୍ନ ଭାବେ ସଜାଏ</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>ପଢ଼ିବା ମୋଡରେ ଅନୁଚ୍ଛେଦର ଧାଡ଼ିଗୁଡ଼ିକ ଯୋଡ଼ନ୍ତୁ</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>ପଢ଼ିବା ମୋଡରେ ଅନୁଚ୍ଛେଦ ଭିତରେ ଥିବା ଏକକ ଧାଡ଼ି ବିରତି ସ୍ପେସ ଭାବେ ଦେଖାଯାଏ, ଯେପରି Markdown ନିର୍ଦ୍ଧାରଣ କରେ ଏବଂ ରପ୍ତାନି ପୂର୍ବରୁ କରେ (ଚାଇନିଜ କିମ୍ବା ଜାପାନୀ ଅକ୍ଷର ମଧ୍ୟରେ ସ୍ପେସ ନାହିଁ)। ଧାଡ଼ି ବିରତି ରଖିବାକୁ ଧାଡ଼ି ଶେଷରେ ଦୁଇଟି ସ୍ପେସ କିମ୍ବା ବ୍ୟାକସ୍ଲାସ ଦିଅନ୍ତୁ</value>
+  </data>
 </root>

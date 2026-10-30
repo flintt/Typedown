@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele zeichnet mehr Diagrammarten und ordnet sie anders an als Mermaid</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Zeilen eines Absatzes im Lesemodus verbinden</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>Im Lesemodus wird ein einzelner Zeilenumbruch innerhalb eines Absatzes als Leerzeichen angezeigt, wie es Markdown vorsieht und die Exporte bereits tun (kein Leerzeichen zwischen chinesischen oder japanischen Zeichen). Um einen Umbruch zu behalten, beenden Sie die Zeile mit zwei Leerzeichen oder einem Backslash</value>
+  </data>
 </root>

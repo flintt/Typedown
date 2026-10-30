@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele диаграмманың көбірек түрін салады және оларды Mermaid-тен басқаша орналастырады</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Оқу режимінде абзац жолдарын біріктіру</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>Оқу режимінде абзац ішіндегі жалғыз жол ауысуы Markdown талап ететіндей және экспорттар қазірдің өзінде істейтіндей бос орын ретінде көрсетіледі (қытай немесе жапон таңбалары арасында бос орын қойылмайды). Жол ауысуын сақтау үшін жолды екі бос орынмен немесе кері қиғаш сызықпен аяқтаңыз</value>
+  </data>
 </root>

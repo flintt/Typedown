@@ -970,4 +970,10 @@
   <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
     <value>Pele dibuixa més tipus de diagrames i els distribueix diferent de Mermaid</value>
   </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Uneix les línies d’un paràgraf en el mode de lectura</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>En el mode de lectura, un salt de línia simple dins d’un paràgraf es mostra com un espai, tal com indica Markdown i com ja fan les exportacions (sense espai entre caràcters xinesos o japonesos). Per conservar un salt, acabeu la línia amb dos espais o una barra inversa</value>
+  </data>
 </root>
