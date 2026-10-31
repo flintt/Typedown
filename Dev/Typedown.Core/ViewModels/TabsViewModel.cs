@@ -372,10 +372,14 @@ namespace Typedown.Core.ViewModels
         public void SaveSession(DocumentTab shown = null)
         {
             var files = Tabs.Select(t => t == ActiveTab ? FileViewModel.FilePath : t.FilePath).ToList();
-            var activeIndex = Tabs.IndexOf(shown != null && Tabs.Contains(shown) ? shown : ActiveTab);
+            var shownTab = shown != null && Tabs.Contains(shown) ? shown : ActiveTab;
+            var activeIndex = Tabs.IndexOf(shownTab);
             var activePath = activeIndex >= 0 ? files[activeIndex] : null;
             var kept = files.Where(f => !string.IsNullOrEmpty(f)).ToList();
-            SessionMemory.Save(kept, Math.Max(0, kept.IndexOf(activePath)));
+            // An untitled document has no place in the file list: it is named by its document id, which its backup keeps
+            // (the first file came back active instead, or the last untitled one recovered).
+            var order = Tabs.Select((t, i) => SessionMemory.OrderKey(files[i], t.DocumentId)).ToList();
+            SessionMemory.Save(kept, Math.Max(0, kept.IndexOf(activePath)), string.IsNullOrEmpty(activePath) ? shownTab?.DocumentId : null, order);
         }
 
         public void Dispose()
