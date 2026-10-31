@@ -16,7 +16,12 @@ $ErrorActionPreference = 'Stop'
 # end) ends now: left, at its deadline its cleanup below deleted this run's task (the same name) and stopped this run's
 # driver (the same folder) - on the W10 PC the driver of the next run vanished 90 minutes after each run that went that
 # way (2026-10-31, 09:33 and 10:47).
-Get-CimInstance Win32_Process -Filter "Name='powershell.exe'" | Where-Object { $_.ProcessId -ne $PID -and $_.CommandLine -and $_.CommandLine.Contains($PSCommandPath) } | ForEach-Object {
+# Not this script's own process nor those that started it: on hp the SSH shell is PowerShell, and the command it was
+# given names this script too (ended, it took this run down with it).
+$all = @(Get-CimInstance Win32_Process)
+$mine = @{}
+for ([int]$p = $PID; $p -and -not $mine.ContainsKey($p); [int]$p = ($all | Where-Object { $_.ProcessId -eq $p } | Select-Object -First 1).ParentProcessId) { $mine[$p] = $true }
+$all | Where-Object { $_.Name -eq 'powershell.exe' -and -not $mine.ContainsKey([int]$_.ProcessId) -and $_.CommandLine -and $_.CommandLine.Contains($PSCommandPath) } | ForEach-Object {
     Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue
     Write-Output "stopped an earlier run still waiting: $($_.ProcessId), started $($_.CreationDate)"
 }
