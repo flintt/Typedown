@@ -27,6 +27,10 @@ internal static partial class Program
         string? windowId = null;
         bool? keepBefore = null, runBefore = null;
         Client c = await Session("e2e SR03");
+        // Where the first window was: the started one put back there at the end. Started again, it came back elsewhere, and
+        // the cases after found their status bar under the taskbar (SB01, SB02 clicked the taskbar, LS01 found no setting).
+        SetProcessDpiAwarenessContext(new IntPtr(-4));
+        GetWindowRect(await WindowOf(await FirstWindowId(c), c), out var placed);
         // The window's tabs as names: a file's name, an untitled one's first line.
         async Task<List<string>> Tabs()
         {
@@ -101,6 +105,11 @@ internal static partial class Program
                     if (((string?)d["path"] ?? "").Contains("sr03-")) try { await c.Call("document.close", new { documentId = (string)d["documentId"]! }); } catch { }
                 await c.Call("test.settings.set", new { windowId, name = "KeepUnsavedOnClose", value = keepBefore ?? false });
                 await c.Call("test.settings.set", new { windowId, name = "KeepRun", value = runBefore ?? false });
+                var window = await WindowOf(windowId, c);
+                GetWindowRect(window, out var now);
+                notes.Add($"the window: before {placed.Left},{placed.Top} {placed.Right - placed.Left}x{placed.Bottom - placed.Top}, after the starts {now.Left},{now.Top} {now.Right - now.Left}x{now.Bottom - now.Top}");
+                if (now.Left != placed.Left || now.Top != placed.Top || now.Right != placed.Right || now.Bottom != placed.Bottom)
+                    MbSetWindowPos(window, IntPtr.Zero, placed.Left, placed.Top, placed.Right - placed.Left, placed.Bottom - placed.Top, 0x0004 | 0x0010);
             }
             catch (Exception e) { notes.Add("clean-up: " + e.Message.Split('\n')[0]); }
             c.Dispose();
