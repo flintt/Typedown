@@ -181,11 +181,7 @@ namespace Typedown.Core.ViewModels
         public string PlantUmlServer { get => GetSettingValue(""); set => SetSettingValue(value ?? ""); }
 
         /// <summary>What draws the Mermaid fences: "mermaid" (the default) or "pele" (public/lazy-mermaid.js in the editor).</summary>
-        // Read back as the very strings the settings list offers (EditorSetting.MermaidRendererOptions' keys): a string
-        // read from the settings file is another object, the list did not find it among its items and put its own
-        // choice back, and the two-way binding wrote that back - the list and the setting went on swapping Pele and
-        // Mermaid until the stack overflowed (1.4.0.29: choosing either one in Settings > Editor ended the app).
-        public string MermaidRenderer { get => GetSettingValue("mermaid") == "pele" ? "pele" : "mermaid"; set => SetSettingValue(value == "pele" ? "pele" : "mermaid"); }
+        public string MermaidRenderer { get => GetSettingValue("mermaid"); set => SetSettingValue(value == "pele" ? "pele" : "mermaid"); }
         /// <summary>Vim in source mode, Vim-style moving around in reading mode (Utilities/VimKeys).</summary>
         public bool VimMode { get => GetSettingValue(false); set => SetSettingValue(value); }
         public string EditorAreaWidth { get => GetSettingValue("1200px"); set => SetSettingValue(value); }
@@ -383,7 +379,8 @@ namespace Typedown.Core.ViewModels
             object value;
             try { value = property.GetValue(this); }
             catch { return; }
-            OnPropertyChanged(name, null, value);
+            // Changed elsewhere: told whatever it is now (null too).
+            Notify(name, value);
         }
 
         private bool disposed;
@@ -413,7 +410,17 @@ namespace Typedown.Core.ViewModels
 
         public Task FlushSettingsAsync() => settingsStore.FlushAsync();
 
+        // Called by every setter, as PropertyChanged.Fody weaves them: a setting is no field, so Fody cannot check the value
+        // changed, and a setter given the value it has notified all the same. A list bound two-way (Settings > Editor >
+        // Draw Mermaid diagrams with) was set again by that notice, wrote the same value back, and the two went round
+        // until the stack overflowed (0xc00000fd): an unchanged value tells nobody.
         public void OnPropertyChanged(string propertyName, object before, object after)
+        {
+            if (Equals(before, after)) return;
+            Notify(propertyName, after);
+        }
+
+        private void Notify(string propertyName, object after)
         {
             // Notifications run inside the property setter, so anything that throws here (a handler on a control
             // that is no longer loaded, a binding update) escapes into the XAML dispatcher, where nothing catches
