@@ -1321,6 +1321,13 @@ internal static partial class Program
             catch (Exception ex) { notes.Add("undo: " + ex.Message.Split('\n')[0]); }
             PostMessage(window, 0x0010, IntPtr.Zero, IntPtr.Zero);
             await Task.Delay(1000);
+            // Undone, the page can still hold a line break the empty document did not: asked to save, "Don't save" closes
+            // it - left open, the question sat over the window the following cases opened their documents in.
+            if (IsWindow(window))
+            {
+                try { notes.Add("asked on closing: " + (await PressDialogButton(c, windowId, DialogButton.Secondary)).Title); } catch (Exception ex) { notes.Add("no question: " + ex.Message.Split('\n')[0]); }
+                for (var i = 0; i < 20 && IsWindow(window); i++) await Task.Delay(100);
+            }
             Check(!IsWindow(window), "the new window closes (no question about saving left on screen)");
         }
     }
