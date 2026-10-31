@@ -181,7 +181,11 @@ namespace Typedown.Core.ViewModels
         public string PlantUmlServer { get => GetSettingValue(""); set => SetSettingValue(value ?? ""); }
 
         /// <summary>What draws the Mermaid fences: "mermaid" (the default) or "pele" (public/lazy-mermaid.js in the editor).</summary>
-        public string MermaidRenderer { get => GetSettingValue("mermaid"); set => SetSettingValue(value == "pele" ? "pele" : "mermaid"); }
+        // Read back as the very strings the settings list offers (EditorSetting.MermaidRendererOptions' keys): a string
+        // read from the settings file is another object, the list did not find it among its items and put its own
+        // choice back, and the two-way binding wrote that back - the list and the setting went on swapping Pele and
+        // Mermaid until the stack overflowed (1.4.0.29: choosing either one in Settings > Editor ended the app).
+        public string MermaidRenderer { get => GetSettingValue("mermaid") == "pele" ? "pele" : "mermaid"; set => SetSettingValue(value == "pele" ? "pele" : "mermaid"); }
         /// <summary>Vim in source mode, Vim-style moving around in reading mode (Utilities/VimKeys).</summary>
         public bool VimMode { get => GetSettingValue(false); set => SetSettingValue(value); }
         public string EditorAreaWidth { get => GetSettingValue("1200px"); set => SetSettingValue(value); }
