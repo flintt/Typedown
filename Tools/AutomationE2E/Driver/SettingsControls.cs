@@ -32,13 +32,15 @@ internal static partial class Program
         async Task<int> Rows(string language, string page)
         {
             await c.Call("test.window.navigate", new { windowId, route = "Settings/" + page });
-            // Laid out: the same rows twice running, some (a page read just after the language changed had none yet).
+            // Laid out: the same rows twice running, some. Just after the language changed the window went back to the
+            // editor page as it took the language, after this page was asked for: none is asked for again.
             JArray rows = new();
             var last = -1;
             await Eventually(async () =>
             {
                 await Task.Delay(300);
                 rows = (JArray)(await c.Call("test.settings.layout", new { windowId }))["rows"]!;
+                if (rows.Count == 0) await c.Call("test.window.navigate", new { windowId, route = "Settings/" + page });
                 var same = rows.Count == last && rows.Count > 0;
                 last = rows.Count;
                 return same;
@@ -67,7 +69,7 @@ internal static partial class Program
             foreach (var language in new[] { "en", "de", "fr", "ja", "zh-Hans" })
             {
                 await SetSetting(c, "ui.language", language);
-                await Task.Delay(500);
+                await Task.Delay(1500);
                 foreach (var page in SettingsPagesShown)
                 {
                     var seen = await Rows(language, page);
