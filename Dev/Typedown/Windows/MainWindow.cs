@@ -556,13 +556,26 @@ namespace Typedown.Windows
 
         public async void ForceClose()
         {
-            this.TrySaveWindowPlacement();
-            // Window placement is itself a setting. Do not let process shutdown cut off the queued atomic write.
-            await AppViewModel.SettingsViewModel.FlushSettingsAsync();
+            // An async void method's throw - before its first await too - is not the caller's: it is thrown again on the
+            // window's queue, and a throw there ends the process (0xc000027b, DispatcherQueue::DeferInvokeCallback, as the
+            // full E2E run did closing a second window while the interface language changed). Noted and the close gone on
+            // with instead.
+            try { this.TrySaveWindowPlacement(); }
+            catch (Exception ex) { Log.WriteLocal("WindowClosing", "placement: " + ex); }
+            try
+            {
+                // Window placement is itself a setting. Do not let process shutdown cut off the queued atomic write.
+                await AppViewModel.SettingsViewModel.FlushSettingsAsync();
+            }
+            catch (Exception ex) { Log.WriteLocal("WindowClosing", "settings: " + ex); }
             isCloseable = true;
             await Task.Yield();
-            if (!closed)
-                Close();
+            try
+            {
+                if (!closed)
+                    Close();
+            }
+            catch (Exception ex) { Log.WriteLocal("WindowClosing", "close: " + ex); }
         }
 
         /// <summary>Set as the window's close handler starts: from then on it is not one of the open windows.</summary>
@@ -635,6 +648,12 @@ namespace Typedown.Windows
                 {
                     if (throttle) await Task.Delay(100);
                     await DispatcherQueue.RunAsync(() => this.TrySaveWindowPlacement());
+                }
+                // The window gone in the meantime (the queue refuses the work) or its placement unreadable: thrown out of
+                // this async void method, the throw ended the process on the window's queue.
+                catch (Exception ex)
+                {
+                    Log.Debug($"window placement not saved: {ex.GetType().Name} {ex.Message}");
                 }
                 finally
                 {
