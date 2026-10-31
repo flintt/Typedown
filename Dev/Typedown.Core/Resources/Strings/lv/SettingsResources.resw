@@ -958,4 +958,22 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Kamēr garš dokuments tiek zīmēts pa daļām, vēl neparādītās daļas augstums tiek aprēķināts no teksta, nevis novērtēts, tāpēc ritjosla un pārlēcieni no struktūras ir precīzāki. Eksperimentāls</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Peles ritenītis pārslēdz cilnes pa apli</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Ritināšana aiz pēdējās cilnes pāriet uz pirmo, un otrādi; izslēgts apstājas pie pirmās un pēdējās cilnes</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Zīmēt Mermaid diagrammas ar</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele zīmē vairāk diagrammu veidu un izkārto tās citādi nekā Mermaid</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Apvienot rindkopas rindas lasīšanas režīmā</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>Lasīšanas režīmā viena rindiņas pāreja rindkopā tiek rādīta kā atstarpe, kā to nosaka Markdown un kā to jau dara eksports (starp ķīniešu vai japāņu rakstzīmēm atstarpe netiek likta). Lai saglabātu pāreju, beidziet rindu ar divām atstarpēm vai apgriezto slīpsvītru</value>
+  </data>
 </root>

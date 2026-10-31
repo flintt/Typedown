@@ -94,6 +94,11 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   default). An empty paragraph has a line's height while editing; reading mode and the HTML/PDF export collapsed it
   (`<p></p>`). With the setting on it keeps that height in reading mode and is exported as `<p><br></p>`; off, both are
   as before; the text handed back is the same either way. Before the setting the "on" half failed.
+- `softbreaks-join-check.js` — the "join the lines of a paragraph in reading mode" setting (Settings > Editor,
+  `joinSoftBreaks`, off by default; markdown-linewrap's samples). With it, reading mode shows a single line ending inside
+  a paragraph or quotation as a space, and as nothing between two Chinese or Japanese characters (Korean keeps its
+  space); lines ended with two spaces or a backslash, and list items, stay lines. Off, and while editing either way, the
+  lines are as in the file; the text handed back is the file's.
 - `style-check.js` — lays out `style-fixture.md` (headings, lists, tables, code, quote, maths, footnote, raw
   html) and measures every element: position, size, font, weight, colour, background. A block passes if it is
   within 2px of where it was and within 1px of its size; fonts and colours must match exactly. `--update`
@@ -159,6 +164,17 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
 - `diagram-picture-check.js` — diagrams rendered as pictures (RenderXhtml with diagramsAsPictures): a 9000×9000
   diagram still becomes a picture (drawn at twice its size it passed the canvas limits and came out empty), and each
   picture's text is the diagram's kind and the start of its source.
+- `diagram-copy-check.js` — a diagram's copy button (Mermaid, flowchart, sequence, Vega-Lite, failed ones), in the dark
+  theme, visual and reading mode: shown on hover, not while the source is edited; a click sends `CopyBlock` with
+  the fenced Markdown and a PNG twice the export picture's width, opaque and light; a failed diagram sends its code
+  only; text, change reports, caret and selection unchanged. `DUMP=<dir>` writes the PNGs there.
+- `copy-blocks-check.js` — the copy buttons of a display formula and of a table, and the menu's Copy table (`CopyTable`),
+  in the dark theme, visual and reading mode: a button on each display formula and table, none on an inline formula, a
+  table's just above its top right corner, none while the block is edited; a formula sends `CopyBlock` with its `$$`
+  Markdown and a PNG twice its size at 16px, opaque, black on white (one KaTeX cannot read: its text only); a table its
+  Markdown as written (compact stays compact) and HTML with the header row in `<th>`, 3×3, each column's `align`, bold,
+  italic, code, link, strike-through, a formula in a cell as its TeX; the right-click in a cell reports `isTable`; text,
+  change reports, caret and selection unchanged. `DUMP=<dir>` writes the formula PNGs there.
 - `table-backspace-check.js` — Backspace in a table cell stays in that cell: one too many after emptying a cell went on
   into the cell before (or out of the table into the heading above), deleted its text, and the typing landed there. An
   empty table still becomes a paragraph with Backspace in its first cell.
@@ -247,3 +263,32 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
 - `scroll-restore-check.js` — a load that carries `scrollTop` (remembered offset, read-only mode) lands at that offset instead of at the caret; a load without it starts at the top.
 - `export-check.js '"md..."'` — run the HTML export pipeline and print the body (upstream #48 emphasis case by default).
 - `scrollup-check.js` — Up arrow must scroll the caret back into view (upstream #51).
+- `lt01-check.js [--only open,end,search] [--prof name] [--trace name]` — LT01 (Tools/AutomationE2E LongTimes.cs) in the
+  page alone, on a document made by `gen-lt01.js` in the shape of the 1.5 MB one LT01 was reported with (2,900 top-level
+  blocks, dense in raw HTML: tables, styled divs, `<details>`, runs of span-styled lines; no real text): its text on
+  screen, drawn whole, the longest frame gap meanwhile, Ctrl+End right after opening, and a search for a word near the
+  end right after opening (the host's find bar: `SearchOpenChange`, a `Search` per letter, `Find` next). LT01's limits.
+  The local machine is not the W10 PC: compare runs with each other.
+- `html-source-check.js` — the source of a raw HTML block is highlighted only while the caret is in it (hidden otherwise,
+  the preview standing for it); out of it, it is its plain text, and a search match in it is still marked. Highlighting
+  every hidden source was 60% of drawing LT01's document (20 MB of HTML for the page, 430,000 elements).
+- `room-style-check.js` — the room a long document drawn a part at a time keeps for its rest is written into rules for
+  the root's ::before and ::after (parser/render/roomStyle.js), never on the root: a change of the root's own style
+  restyled every block under it, 35-60 ms a write on 2,900 blocks (LT01: slices of 80-250 ms instead of 40).
+- `notice-host-check.js` — the notice that the first visual edit may rewrite part of a document is the host's card
+  (FirstEditNotice, like the export's), nothing in the page: the page tells the host once per load, after the document is
+  on the screen, with the text it has for it; it says it is gone in reading mode; a document with nothing to lose gets none;
+  the document never moves for it.
+- `search-race-check.js` — Enter in the find bar (`Find`) right behind the last letters (`Search`), all in one task after
+  a shorter prefix was searched on its own: the step works on the matches of the text in the bar. The prefix's search was
+  done again after the last one (its React effect, flushed late), and the step went to one of its matches (w10, LT01).
+- `find-list-check.js [--only previews,cap,activate,modes,edit,long]` — the find bar's results list ("Search in document"
+  in the side pane), the page's half (services/findResults.ts, services/findPreview.ts): the previews of matches in a
+  heading, a paragraph (bold, a link's text, a link's address), a list, a table and a code block - plain text, the match
+  marked, 40 characters of context each side; the exact count and the 500-entry cap; an entry chosen (`FindActivate`)
+  selects exactly its match and makes it the bar's current one (`FindState`) in visual, source and reading mode, also
+  from a list sent before the search narrowed; typing a match in while the list is open sends it again with the caret
+  where it was; a new document sends its own. On `gen-lt01.js`'s document right after opening: the list within 1 s, the
+  last entry (block 2918 of 2928, not drawn yet) in the window and selected within 1 s, no frame gap over 200 ms. This
+  machine's own drawing of that document comes near 200 ms when it is busy (lt01-check's open shows the same, and the
+  same steps with the list closed do too): compare with lt01-check run alongside.

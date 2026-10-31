@@ -958,4 +958,22 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>جب طویل دستاویز حصوں میں بنائی جاتی ہے، تو ابھی نہ دکھائے گئے حصے کی اونچائی اندازے کے بجائے متن سے شمار کی جاتی ہے، تاکہ اسکرول بار اور خاکے سے چھلانگیں زیادہ درست ہوں۔ تجرباتی</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>ماؤس وہیل ٹیبز میں گھومتا ہے</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>آخری ٹیب سے آگے اسکرول کرنے پر پہلے ٹیب پر جاتا ہے، اور واپس بھی؛ بند ہونے پر پہلے اور آخری ٹیب پر رک جاتا ہے</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Mermaid خاکے اس سے بنائیں</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele زیادہ قسم کے خاکے بناتا ہے اور انہیں Mermaid سے مختلف ترتیب دیتا ہے</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>پڑھنے کے موڈ میں پیراگراف کی سطریں جوڑیں</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>پڑھنے کے موڈ میں پیراگراف کے اندر ایک واحد لائن بریک وقفے کے طور پر دکھائی دیتی ہے، جیسا کہ Markdown بتاتا ہے اور ایکسپورٹ پہلے سے کرتے ہیں (چینی یا جاپانی حروف کے درمیان وقفہ نہیں ڈالا جاتا)۔ لائن بریک برقرار رکھنے کے لیے سطر کو دو وقفوں یا بیک سلیش پر ختم کریں</value>
+  </data>
 </root>

@@ -419,12 +419,8 @@ class Muya {
     const root = stateRender.container
     // Put away half drawn (drawn a part at a time): how far it got goes with it, and showDocument carries on.
     const progressive = stateRender.suspendProgressive()
+    // The room it keeps for its rest goes with it (roomStyle.js keeps it by root), not to the next document's root.
     const empty = root.cloneNode(false)
-    // The room it keeps for its rest goes with it, not to the next document's root.
-    empty.style.removeProperty('--td-room-above')
-    empty.style.removeProperty('--td-room-fraction')
-    empty.style.removeProperty('--td-room-below')
-    if (!empty.getAttribute('style')) empty.removeAttribute('style')
     root.replaceWith(empty)
     stateRender.setContainer(empty)
     this.eventCenter.dispatch('rootChange', empty)
@@ -433,16 +429,8 @@ class Muya {
 
   /** Whether a root taken out by takeDocument is the same element as the one shown, but for what it holds. */
   canShowDocument(kept) {
-    // The room a half-drawn document keeps for its rest (StateRender.estimateRest) is its own, not a difference.
-    const shell = root => {
-      const copy = root.cloneNode(false)
-      copy.style.removeProperty('--td-room-above')
-      copy.style.removeProperty('--td-room-fraction')
-      copy.style.removeProperty('--td-room-below')
-      if (!copy.getAttribute('style')) copy.removeAttribute('style')
-      return copy
-    }
-    return shell(kept.root).isEqualNode(shell(this.contentState.stateRender.container))
+    // The room a half-drawn document keeps for its rest (StateRender.estimateRest) is not on the root (roomStyle.js).
+    return kept.root.cloneNode(false).isEqualNode(this.contentState.stateRender.container.cloneNode(false))
   }
 
   /**
@@ -707,10 +695,19 @@ class Muya {
     this.contentState.insertImages(images, afterKey)
   }
 
-  search(value, opt) {
+  /**
+   * onDrawn: called once a match chosen that was not drawn yet is drawn (a moment after the typing stops, see
+   * ContentState.renderSearch).
+   * @param {string} value
+   * @param {any} opt
+   * @param {(() => void) | null} [onDrawn]
+   */
+  search(value, opt, onDrawn = null) {
     const { selectHighlight } = opt
+    const before = this.contentState.searchKeys()
     this.contentState.search(value, opt)
-    this.contentState.render(!!selectHighlight)
+    // Only the blocks whose marks or caret changed are drawn again (ContentState.renderSearch).
+    this.contentState.renderSearch(before, !!selectHighlight, onDrawn)
     return this.contentState.searchMatches
   }
 
@@ -722,9 +719,82 @@ class Muya {
   }
 
   find(action/* pre or next */) {
+    const before = this.contentState.searchKeys()
     this.contentState.find(action)
-    this.contentState.render(false)
+    this.contentState.renderSearch(before, false, null, true, true)
     return this.contentState.searchMatches
+  }
+
+  /**
+   * Match `index` of the last search chosen (the find bar's results list), as a step to it (find) goes there - its block
+   * drawn first where a long document is not drawn there yet (ContentState.renderSearch) - and, with `select`, its text
+   * selected (not in reading mode, which has no caret).
+   */
+  selectMatch(index, select = true) {
+    const { contentState } = this
+    const { matches } = contentState.searchMatches
+    if (!(index >= 0 && index < matches.length)) return contentState.searchMatches
+    const before = contentState.searchKeys()
+    contentState.searchMatches.index = index
+    contentState.setCursorToHighlight()
+    contentState.renderSearch(before, select, null, true, true)
+    return contentState.searchMatches
+  }
+
+  /**
+   * The last search's matches found again after an edit (ContentState.refreshSearch), the caret left where it is; only
+   * the blocks whose marks changed are drawn again. False when there is no search.
+   */
+  refreshSearch() {
+    const { contentState } = this
+    const changed = contentState.refreshSearch()
+    if (!changed) return false
+    if (!changed.size) return true
+    let caretTop = null
+    try {
+      const { start } = contentState.cursor || {}
+      caretTop = start ? contentState.findOutMostBlock(contentState.getBlock(start.key)) : null
+    } catch (err) {
+      caretTop = null
+    }
+    const tops = new Set()
+    for (const key of changed) {
+      const block = contentState.getBlock(key)
+      if (block) tops.add(contentState.findOutMostBlock(block))
+    }
+    const { matches, index } = contentState.searchMatches
+    matches.forEach((m, i) => { m.active = i === index })
+    contentState.stateRender.redrawBlocks([...tops])
+    // The caret's block drawn again loses the selection on the page: put back where the model has it.
+    if (caretTop && tops.has(caretTop) && !this.options.readOnly && this.container.contains(document.activeElement)) contentState.setCursor()
+    contentState.postRender()
+    return true
+  }
+
+  /**
+   * Ctrl+End or Ctrl+Home (`end` false) while a document is drawn a part at a time and that end of it is not drawn yet:
+   * the caret goes there and the drawing starts again from there (StateRender.jumpProgressive), rather than the whole
+   * document being drawn first (LT01, a 1.5 MB document of raw HTML: 7 s on w10). False where the browser can do it as
+   * usual (all drawn, or that end drawn already).
+   */
+  goToEdge(end) {
+    const { contentState } = this
+    const { stateRender, blocks } = contentState
+    const state = stateRender.progressive
+    if (!state || !blocks.length) return false
+    const index = end ? blocks.length - 1 : 0
+    if (index >= state.lo && index < state.hi) return false
+    const leaf = end ? contentState.lastInDescendant(blocks[index]) : contentState.firstInDescendant(blocks[index])
+    const readOnly = !!this.options.readOnly
+    if (!readOnly && leaf) {
+      const offset = end ? (leaf.text || '').length : 0
+      contentState.cursor = { start: { key: leaf.key, offset }, end: { key: leaf.key, offset } }
+    }
+    stateRender.jumpProgressive(index)
+    if (!readOnly && leaf) contentState.setCursor()
+    const scroller = document.scrollingElement || document.documentElement
+    window.scrollTo(0, end ? scroller.scrollHeight : 0)
+    return true
   }
 
   on(event, listener) {

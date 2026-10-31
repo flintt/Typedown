@@ -958,4 +958,22 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Dok se dugi dokument iscrtava u dijelovima, visina onoga što još nije prikazano izračunava se iz teksta umjesto da se procjenjuje, pa su klizač i skokovi iz pregleda točniji. Eksperimentalno</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Kotačić miša kruži kroz kartice</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Pomicanje nakon posljednje kartice vodi na prvu, i obrnuto; isključeno staje na prvoj i posljednjoj kartici</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Crtaj Mermaid dijagrame pomoću</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele crta više vrsta dijagrama i raspoređuje ih drukčije od Mermaida</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Spoji retke odlomka u načinu čitanja</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>U načinu čitanja jedan prijelom retka unutar odlomka prikazuje se kao razmak, kako propisuje Markdown i kako to već čine izvozi (bez razmaka između kineskih ili japanskih znakova). Da biste zadržali prijelom, završite redak s dva razmaka ili obrnutom kosom crtom</value>
+  </data>
 </root>

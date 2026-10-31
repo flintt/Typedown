@@ -22,10 +22,11 @@
         BorderThickness="{x:Bind BorderThickness, Mode=OneWay}"
         Background="{x:Bind Background, Mode=OneWay}">
 
+        <!-- The text's and the action's columns are set by HorizontalActionAlignment (UpdateColumns). -->
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition x:Name="TextColumn" Width="*"/>
+            <ColumnDefinition x:Name="ActionColumn" Width="Auto"/>
         </Grid.ColumnDefinitions>
 
         <Viewbox Width="16" Height="16" VerticalAlignment="Center">

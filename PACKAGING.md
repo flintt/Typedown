@@ -60,10 +60,10 @@ ARM64 把 `-Platform x64` 改为 `-Platform ARM64`。`-SkipBuild` 只适用于�
 
 | 文件 | 格式 |
 | --- | --- |
-| `Dev/Typedown/Typedown.csproj` | `1.4.0` |
-| `Dev/Typedown.Core/Properties/AssemblyInfo.cs` | `1.4.0.0` |
-| `Dev/Typedown/Package.appxmanifest` | `1.4.0.0` |
-| `Tools/Installer/Typedown.iss` | `1.4.0` |
+| `Dev/Typedown/Typedown.csproj` | `1.4.1` |
+| `Dev/Typedown.Core/Properties/AssemblyInfo.cs` | `1.4.1.0` |
+| `Dev/Typedown/Package.appxmanifest` | `1.4.1.0` |
+| `Tools/Installer/Typedown.iss` | `1.4.1` |
 
 可靠性测试在所有 CI 构建中检查这四处；tag 构建还会检查 tag 与项目版本是否一致。
 

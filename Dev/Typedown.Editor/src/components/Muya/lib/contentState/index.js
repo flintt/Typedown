@@ -62,6 +62,11 @@ const prototypes = [
   importMarkdown
 ]
 
+// A match not drawn yet, while a search is typed: drawn once the typing has stopped this long (renderSearch). Drawn for
+// every letter, each a new start of the drawing (a quarter of a second, more on a slower machine), the letters typed after
+// queued behind them (LT01 on w10: the match on screen 2.6 s after Enter). A step to a match (Enter) draws it at once.
+const SEARCH_DRAW_AFTER_MS = 250
+
 class ContentState {
   constructor(muya, options) {
     const { bulletListMarker } = options
@@ -214,6 +219,76 @@ class ContentState {
       const sel = document.getSelection()
       if (sel && sel.rangeCount && this.muya.container.contains(sel.anchorNode)) sel.removeAllRanges()
     } else if (isRenderCursor) {
+      this.setCursor()
+    } else {
+      this.muya.blur()
+    }
+    this.postRender()
+  }
+
+  /**
+   * Where a search's marks and the caret are now, for renderSearch after a change: the keys of the blocks with marks
+   * (`keys`), and those of the match chosen and the caret (`urgent`: drawn again at once).
+   */
+  searchKeys() {
+    const { matches, index } = this.searchMatches
+    const keys = new Set()
+    for (const m of matches) keys.add(m.key)
+    const urgent = []
+    if (matches[index]) urgent.push(matches[index].key)
+    const { start, end } = this.cursor || {}
+    if (start) urgent.push(start.key)
+    if (end) urgent.push(end.key)
+    for (const key of urgent) keys.add(key)
+    return { keys, urgent }
+  }
+
+  /**
+   * After a search, a step to the next match or the search closed: draws again the top-level blocks that had marks or the
+   * caret before (`before`, searchKeys) and those that have them now, not the whole document - which also drew what was
+   * left of a long document drawn a part at a time first, and for a search typed into a long document did both for every
+   * letter (LT01: the page stopped answering for minutes). The match chosen, if not drawn yet, is drawn first, from there
+   * (StateRender.jumpProgressive). The blocks with the match chosen and the caret, before and now, are drawn at once (a
+   * mark left on one would be scrolled to), the others around the window too, the rest in idle time (redrawBlocks).
+   */
+  // onlyChosen: the matches are the same as before, only the one chosen (and the caret) moved - a step to another match
+  // (find, an entry of the results list): only the blocks of the match chosen and the caret, before and now, are drawn
+  // again, not every block with a mark.
+  renderSearch(before, isRenderCursor = true, onDrawn = null, drawNow = false, onlyChosen = false) {
+    const { blocks, searchMatches: { matches, index } } = this
+    matches.forEach((m, i) => {
+      m.active = i === index
+    })
+    const topOf = key => {
+      const block = key && this.getBlock(key)
+      return block ? this.findOutMostBlock(block) : null
+    }
+    const after = this.searchKeys()
+    const tops = new Set()
+    for (const key of onlyChosen ? [...before.urgent, ...after.urgent] : [...before.keys, ...after.keys]) {
+      const top = topOf(key)
+      if (top) tops.add(top)
+    }
+    const now = [...before.urgent, ...after.urgent].map(topOf).filter(Boolean)
+    const active = matches[index]
+    const activeTop = active ? topOf(active.key) : null
+    clearTimeout(this.searchJumpTimer)
+    this.searchJumpTimer = null
+    if (activeTop && this.stateRender.progressive) {
+      // At once for a step to a match (Find: Enter in the bar), a moment after the last letter for a search being typed.
+      if (drawNow) this.stateRender.jumpProgressive(blocks.indexOf(activeTop))
+      else {
+        this.searchJumpTimer = setTimeout(() => {
+          this.searchJumpTimer = null
+          const now = this.searchMatches.matches[this.searchMatches.index]
+          if (now !== active || !this.stateRender.progressive) return
+          if (this.stateRender.jumpProgressive(this.blocks.indexOf(activeTop)) && onDrawn) onDrawn()
+        }, SEARCH_DRAW_AFTER_MS)
+      }
+    }
+    this.setNextRenderRange()
+    this.stateRender.redrawBlocks([...tops], now)
+    if (isRenderCursor) {
       this.setCursor()
     } else {
       this.muya.blur()

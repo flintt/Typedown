@@ -73,11 +73,115 @@ namespace Typedown.Core.ViewModels
 
         private void OnExportedTimerTick(object sender, object e) => HideExported();
 
+        /// <summary>
+        /// The notice that the first visual edit may rewrite part of the document shown (the page works out whether, and
+        /// says so with FirstEditNotice): shown as a card over the window like the export's, for that load only - taken
+        /// away when another document is shown or this one closed. Null: no notice. The page takes it away after 10 s.
+        /// </summary>
+        public string FirstEditNotice { get; private set; }
+
+        public bool FirstEditNoticeOpen => FirstEditNotice != null;
+
+        /// <summary>The load the notice is for (EditorViewModel.LoadId).</summary>
+        public int FirstEditNoticeLoad { get; private set; }
+
+        public void ShowFirstEditNotice(int loadId)
+        {
+            FirstEditNoticeLoad = loadId;
+            FirstEditNotice = Locale.GetString("FirstEditWarning");
+        }
+
+        public void HideFirstEditNotice() => FirstEditNotice = null;
+
 
         /// <summary>Folder-wide search pane in the side bar (Edit → Find → Search in folder, Ctrl+Shift+F).</summary>
         public bool FolderSearchOpen { get; set; }
 
         public Command<Unit> SearchInFolderCommand { get; } = new();
+
+        /// <summary>
+        /// A folder to show in the folder pane's tree (a folder the search pane found), until the folder page takes it:
+        /// the page may not be there yet when it is asked for (the outline was shown).
+        /// </summary>
+        public string FolderRevealPath { get; private set; }
+
+        /// <summary>
+        /// The find bar's results list ("Search in document") is shown in the side pane, over the page it was on (Files,
+        /// Outline, the folder search). Opened by the bar's "Show all results"; closed by its own close button, Esc, or the
+        /// bar closing (the list is the bar's search: without the bar there is nothing to step through or follow).
+        /// </summary>
+        public bool FindResultsOpen { get; private set; }
+
+        /// <summary>Raised when the list opens (or is asked for again while open): the list takes the keyboard.</summary>
+        public event Action FindResultsFocusRequested;
+
+        private readonly SidePaneReturn findResultsReturn = new();
+
+        // The pane closed by the list itself (back to closed): not the reader closing it under the list.
+        private bool restoringSidePane;
+
+        /// <summary>The results list shown, the side pane opened for it if it was closed; the page asked for the list.</summary>
+        public void ShowFindResults()
+        {
+            findResultsReturn.Open(SettingsViewModel.SidePaneOpen, SettingsViewModel.SidePaneIndex);
+            SettingsViewModel.SidePaneOpen = true;
+            if (!FindResultsOpen)
+            {
+                FindResultsOpen = true;
+                ServiceProvider.GetService<Interfaces.IMarkdownEditor>()?.PostMessage("FindResultsOpen", new { open = true });
+            }
+            FindResultsFocusRequested?.Invoke();
+        }
+
+        /// <summary>The results list closed: the side pane back to the page it was on, or closed again if it was closed.</summary>
+        public void CloseFindResults()
+        {
+            if (!FindResultsOpen) return;
+            EndFindResults();
+            if (findResultsReturn.Close() is not { } was) return;
+            restoringSidePane = true;
+            try
+            {
+                SettingsViewModel.SidePaneIndex = was.Page;
+                SettingsViewModel.SidePaneOpen = was.Open;
+            }
+            finally
+            {
+                restoringSidePane = false;
+            }
+        }
+
+        /// <summary>The list goes and the pane stays as the reader has made it (they closed it, or opened the folder search).</summary>
+        private void DropFindResults()
+        {
+            if (!FindResultsOpen) return;
+            findResultsReturn.Forget();
+            EndFindResults();
+        }
+
+        private void EndFindResults()
+        {
+            FindResultsOpen = false;
+            ServiceProvider.GetService<Interfaces.IMarkdownEditor>()?.PostMessage("FindResultsOpen", new { open = false });
+        }
+
+        /// <summary>The search pane closed, the Files page shown, and <paramref name="path"/> opened and selected in its tree. The root stays.</summary>
+        public void RevealInFolderTree(string path)
+        {
+            DropFindResults();
+            FolderSearchOpen = false;
+            SettingsViewModel.SidePaneOpen = true;
+            SettingsViewModel.SidePaneIndex = 0;
+            FolderRevealPath = path;
+        }
+
+        /// <summary>The folder asked for, once: the folder page shows it and it is forgotten.</summary>
+        public string TakeFolderRevealPath()
+        {
+            var path = FolderRevealPath;
+            if (path != null) FolderRevealPath = null;
+            return path;
+        }
 
         /// <summary>Borderless full-screen window without the caption/menu bar (F11).</summary>
 
@@ -100,6 +204,7 @@ namespace Typedown.Core.ViewModels
             ServiceProvider = serviceProvider;
             SearchInFolderCommand.OnExecute.Subscribe(_ =>
             {
+                DropFindResults();
                 SettingsViewModel.SidePaneOpen = true;
                 FolderSearchOpen = true;
             });
@@ -116,6 +221,11 @@ namespace Typedown.Core.ViewModels
             disposables.Add(SettingsViewModel.WhenPropertyChanged(nameof(SettingsViewModel.ReadOnly)).Subscribe(_ => UpdateTitle()));
             disposables.Add(this.WhenPropertyChanged(nameof(AutomationConnected)).Subscribe(_ => UpdateTitle()));
             disposables.Add(this.WhenPropertyChanged(nameof(AutomationNotice)).Subscribe(_ => UpdateTitle()));
+            // The reader closed the side pane under the results list: the list goes with it, and nothing is put back later.
+            disposables.Add(SettingsViewModel.WhenPropertyChanged(nameof(SettingsViewModel.SidePaneOpen)).Subscribe(_ =>
+            {
+                if (!SettingsViewModel.SidePaneOpen && !restoringSidePane) DropFindResults();
+            }));
             // The title carries a translated word now, so it has to be rebuilt when the language changes —
             // otherwise it keeps the old one while the menus around it have already changed.
             disposables.Add(SettingsViewModel.WhenPropertyChanged(nameof(SettingsViewModel.Language)).Subscribe(_ => UpdateTitle()));

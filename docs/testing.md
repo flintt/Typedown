@@ -138,13 +138,16 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | R04 | untitled and background documents come back from their backups after a kill, each its own |
 | C01 | document.close: a saved document closes, an unsaved one (a fresh keystroke too) is refused, the last one leaves an empty document |
 | Q02 | a window closed at once after it opened (its web view still being created): the process lives on |
+| WC01 | windows opened and closed again and again, each closed as its page scrolls and a script call is on its way: the process lives on |
 | D01 | the window's UI thread runs every callback posted to it, from many threads at once |
 | K02 | Ctrl+, twice opens and closes the settings: the caret and the keyboard are where they were |
 | CM01 | in compact mode the settings have no title bar: they start at the window's top, their top strip drags the window, their back button goes back to the editor page as it was |
 | SH01 | Ctrl+, held down opens the settings once - no going in and out until the app hangs and falls over - and types no comma |
+| NT01 | Ctrl+, into the settings and out again, measured: when each page is seen and the host's steps (made, laid out, drawn), with the page animation on and off; notes only, no limit yet |
 | JU01 | a long document comes back where it was without the page moving - switched back to in its tab, and opened in a window of its own as the start-up restores it |
 | K04 | a window just opened takes the keys at once: a letter typed without a click reaches the document |
 | K05 | a new tab (the + button, Ctrl+N) and a tab clicked in the strip take the keys at once, without a click in the text |
+| TW01 | the mouse wheel over the tab strip stops at the first and last tab with the option off, and goes round with it on |
 | TL01 | keys typed at once after Ctrl+N, a tab clicked, Ctrl+Tab, the + button, Ctrl+Shift+H and a long document's tab clicked go into the tab shown, in order, Enter and Chinese text too; the document left is unchanged |
 | K06 | after closing a tab, a menu command, a mode switch, an outline jump, closing the find bar or a dialog, and Ctrl+Tab, the keys go to the document without a click |
 | K03 | the same with an untitled document (no per-file caret memory) |
@@ -157,6 +160,8 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | WV02 | without the WebView2 runtime the install window comes up with the download; a setup that installs it goes on to the main window |
 | WV03 | a setup that did not install the WebView2 runtime leaves the install window saying so, with the download; Cancel ends the start |
 | LG01 | after the language is changed through the API, no Chinese or Japanese is left on the main window, the home page or the settings page |
+| LG02 | the Chinese View menu after a language switch (zh -> en with menus opened -> zh; zh -> en -> zh; started in en -> zh) looks as in a test host started in Chinese, the real mouse opening it |
+| DL01 | the debug log holds no document text: a document with marker words opened, switched away from and back, outlined, read, typed into, searched, pasted into and exported, and none of its words in debug.log |
 | HM01 | Help > User guide opens the user guide in the interface's language, Help > About the About page |
 | FS02 | out of full screen the window is dragged by its title bar again at once (with the title row, and in compact mode by the menu row) |
 | PU01 | PlantUML is not drawn by default (nothing goes to plantuml.com, the block says so); turned on it is, by the server set if one is, off again it is not |
@@ -179,21 +184,28 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | FT02 | a folder in the file tree is shown as a folder that expands after the root changed: up from a folder of files to a folder of folders, and back and forth |
 | FT03 | the same after a big folder was expanded and the root changed, a folder moved in, one renamed from a temporary name and one whose attributes changed |
 | FT04 | a file opened in Repo/docs (the tree following it there) and the root set at once two levels up: Repo expanded shows docs as a folder |
+| FQ01 | the side pane's folder search typed with real keys: file and folder names in the first group, contents below, each counted; five names and a show-all row; a file matching both listed once with its marker; big, hidden, dot-folder and node_modules entries left out; each group folds and opens; a folder result opens it in the tree with the root kept, a content result opens the file |
+| FQ02 | a folder opened in the side pane and a document opened from beside it: the search finds names in the folder and the file next to the document, led by its folder's name |
+| FR01 | the find bar's results list ("Search in document"): with the Outline in the side pane, Ctrl+F and a word typed with real keys, the bar says 1 of 6; "Show all results" lists the count and six entries, each its place and the line around its match; entry 3 clicked with the mouse selects exactly the third match in the editor and the bar says 3 of 6; closing the list shows the Outline again; with the side pane closed the list opens it and closing the list closes it again; closing the find bar closes the list too |
 | FN02 | with a folder opened, the button beside the root's name moves the tree to the folder of a document outside it |
 | FW01 | an open document renamed outside the app is followed by its window, also after the app renamed it once |
 | FV01 | a file favoured from its tab's menu and a folder from the tree's menu are in favorites.json and the folder pane's group, still after a restart (and on the home page); renamed in the tree, the favourite follows |
 | HP01 | a start with the settings as they come shows the home page; a recent file clicked there opens in its tab and the home page goes |
 | HP02 | Ctrl+N and the + button show no home page and the next letter goes into the new document; with "New tabs show the home page" on, Ctrl+N shows it |
 | HP03 | the last tab closed leaves the window with the home page (closed again, the window goes); a session whose files are gone shows it; with the switch off a blank document |
+| SR02 | a window with an unsaved document behind the one shown, closed with automatic saving on: the session names the tab the reader was on as the active one, not the last one saved |
+| SR03 | Keep unsaved changes when closing on, two untitled documents unsaved among the tabs: closed and started again, the start shows the tab closed on (a file, then the second untitled one, its text with it), the tabs in their order |
 | SR01 | a cold start bringing the last session back: the active document on screen within seconds of the window, the other tabs not waited for |
 | JT01 | switching between long documents the text in the window stays still - no block moving by half a pixel or more from frame to frame, while drawn or after |
 | JT02 | back to a long document from a short one - read a quarter, 60% and 95% of the way down, and left while still drawn - the screen goes from the cover to it without the short one again, and its text stays still frame by frame; predicting the layout off and on, in visual and in reading mode |
 | JT03 | back to a long document read far down: while the blocks above are drawn back and the reader turns the wheel, the frames come at most 50 ms apart in the middle and a notch reaches the next frame within 100 ms |
 | JT04 | back to a long document left at its very end, after 3 s, 60 s, or 90 s with the window minimized, nothing touched: the block in the window stays there for 15 s; or the wheel turned up: the page goes up a few blocks a notch, no further; predicting the layout on and off, at the reader's window and settings |
 | WD01 | the window comes back where it was after the process ends, closed or killed, and another window opens set off from it |
+| LT01 | a long document opened: its text on screen within 1.5 s, drawn whole within 10 s, the page never more than 200 ms without a frame meanwhile, and Ctrl+End or a search right after opening shows the end within 1 s |
 | HJ03 | the outline's jump to a heading far down lands and stays there - while a long document is still drawn and once it is |
 | HP04 | with files open, File > Home, the home button and Ctrl+Shift+H show the home page in one blank tab, the documents left alone; an automation write into it hides it with the text written |
 | HP05 | the home page hidden by typing, and by its New document button, leaves the keys in the editor |
+| HP06 | the home page's recent files show their time whole at every window width |
 | WP02 | pasted web pictures: one behind hotlink protection is fetched with the page as referrer, a page that is not a picture is kept on the web and said, and an untitled document saved into a folder takes its pictures along |
 | EX02 | an export says where it was written, with buttons to open it, and goes when closed; with no action after export, nothing shows |
 | TB01 | the table toolbar's Resize table opens with the table's own size; Cancel leaves the table as it was; OK resizes it |
@@ -201,6 +213,14 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | RD01 | reading mode: the context menu offers copying and selecting only, Copy works on a selection, copy as plain text leaves the Markdown out, Ctrl+Z changes nothing |
 | RD02 | reading mode: Focus mode and Typewriter mode in the View menu are disabled and drawn fainter than the entries that work, in Dark and Light, whether the menu was opened before or not |
 | DG02 | every diagram of the showcase document, written into a window just opened, is drawn once |
+| PL01 | Settings > Editor > Draw Mermaid diagrams with: Pele chosen draws a flowchart and an agentflow (which Mermaid cannot), Mermaid chosen again draws the flowchart with Mermaid |
+| PL02 | Settings > Editor > Draw Mermaid diagrams with, chosen in its list on the page: Pele and then Mermaid again, the app lives on and the setting follows |
+| SV01 | every switch and list of the settings pages is inside a narrow window, in English, German, French, Japanese and Chinese |
+| SC01 | every list of the settings pages, each of its choices made in it as a person makes it: the app lives on and the list shows the choice |
+| SN01 | moving about the settings never leaves them by itself: Help > Shortcuts, General in the pane, its Shortcuts row shows the shortcuts; Ctrl+, leaves them from any section |
+| DG03 | a diagram's copy button, with the real mouse in the dark theme: shown on hover; a click puts a picture (mostly white, light theme) and the fenced Markdown on the clipboard, and leaves the document as it was |
+| CB01 | a display formula's copy button, with the real mouse in the dark theme: shown on hover, none on an inline formula; a click puts a picture (black on white), RTF with it and the formula's $$ Markdown and its MathML as Word writes it on the clipboard, no HTML; the document as it was; Word pastes an equation it can edit; pasted back it is the formula |
+| CB02 | a table's copy button and the menu's Copy table, with the real mouse: the button above the table's top right corner; the clipboard holds the table as HTML (header row, alignment, formatting) and its Markdown as written; the document as it was; Word pastes one 3x3 table; pasted back it is the table's Markdown |
 | IM01 | the showcase's checkerboard, after View > Source mode and back, is drawn and not failed when clicked |
 | CP01 | Copy pasted into Word: pictures at absolute file:/// addresses, a name and an alt text with brackets, an SVG sized in pt, a JPEG |
 | TH03 | the side pane marks what is chosen (the bar under Files/Outline, the outline's and the folder tree's row pill) in a custom theme's accent, and in the system accent again without one |
@@ -211,6 +231,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | MN01 | a minimized window's document is written and saved through the automation API |
 | LK01 | a link to another Markdown file opens it as a tab of the same window when files open in tabs |
 | FL01 | the settings' font family box suggests the installed fonts |
+| FL02 | the font picker beside Settings > Editor > Font: every installed font listed without typing, narrowed by its box; the one clicked goes first in the setting, the fallbacks after it kept |
 | FO01 | after another window and back, and after the context menu closed with Esc, the next letter goes into the document |
 | TH04 | Windows switched between light and dark while the app follows the system: caption buttons readable, editor follows |
 | FT01 | the file tree sorts names as 1.3.7 did |
@@ -296,6 +317,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | `test.window.layout` | `windowId` | Where the main page starts in its window, and whether the window is in full screen: in full screen nothing may sit above it (a 4 px row of window background did, along the top of the screen). | TestHostHooks.cs |
 | `test.window.keep` | `windowId` | Holds a window in memory from now on, as anything still referring to it does after it closes: MainWindow.AllWindows lists a window until it has closed; the XAML Islands list kept it until finalized, closed or not. | TestHostHooks.cs |
 | `test.window.navigate` | `route`, `windowId` | Moves a window to a page, as its menu would: route "Settings/Editor" opens that settings page, "Main" goes back. | TestHostHooks.cs |
+| `test.settings.layout` | `windowId` | The settings rows of a window's page as laid out: each row's title and where its control (the switch, list or box at its side) is within it. UI Automation cannot tell a control clipped out of its row - it reports it with no place, as one scrolled off the screen (SV01: "Join the lines of a paragraph in reading mode" had pushed its switch out of the row, and nothing said so). | TestHostHooks.cs |
 | `test.window.open` | `path?` | Opens another window, as File > New window does, and returns its windowId once it is registered. | TestHostHooks.cs |
 | `test.settings.set` | `name`, `windowId`, `value` | Sets a property of a window's settings view model by name, as its settings page would: also the settings the automation API does not expose. | TestHostHooks.cs |
 | `test.settings.get` | `name`, `windowId` | Reads a property of a window's settings view model by name. | TestHostHooks.cs |
@@ -311,12 +333,14 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | `test.events.throwingHandler` | `windowId` | The window's editor messages with a handler that throws on the first one: how many each of two handlers got of two messages (a handler that threw was detached for good, and the message went no further). | TestHostHooks.cs |
 | `test.app.throwUnhandled` | `windowId` | An exception out of an event handler XAML calls (a timer's, as a click handler's would be): the process stays (it ended the app), and the exception is in the log. | TestHostHooks.cs |
 | `test.window.popups` | `windowId` | The popups open in a window (menus, flyouts, a number box's buttons...), by the type of what they show. | TestHostHooks.cs |
+| `test.window.popupLanguages` | `windowId` | The language tag of each open popup, of what it shows and of the texts in it (FrameworkElement.Language, as inherited): WinUI picks the Chinese fallback font by it, and a menu made under another language kept that one's after switching back (LG02). | TestHostHooks.cs |
 | `test.app.caseLabel` | `label?` | The running E2E case and its purpose, shown in every window's title after the test host's marker (label empty: none). Not tied to a window: a case sets it before it has one. | TestHostHooks.cs |
 | `test.app.titleMarker` | `show?`, `windowId` | The test host's title markers ("AUTOMATION TEST HOST ·" and the connected client's note) on (show: true) or off in every window, for screenshots that are to look like the app. | TestHostHooks.cs |
 | `test.file.saveAs` | `path`, `windowId` | The window's active document saved as the path, as File > Save as with that file picked (an untitled one's first save too); the path back, or null when it was not saved. | TestHostHooks.cs |
 | `test.file.rename` | `path`, `windowId` | The window's active document's file renamed to the path, as Rename in the folder pane does for the open document; answers whether it was renamed. | TestHostHooks.cs |
 | `test.export.run` | `type?`, `path`, `windowId` | The window's document exported to a file, as File > Export > <type> with that file picked in the save dialog (html or pdf: the first export configuration of that type); answers once the export is asked for, not done. | TestHostHooks.cs |
 | `test.export.notice` | `windowId` | The notice an export leaves (Settings > Export > After export): the file it names, or null when none shows. | TestHostHooks.cs |
+| `test.editor.firstEditNotice` | `windowId` | The card that the first visual edit may rewrite part of the document shown (FirstEditNotice): its text and the load it is for, or null text when none shows. | TestHostHooks.cs |
 | `test.export.menu` | `windowId` | The entries of a window's File > Export submenu, as shown. | TestHostHooks.cs |
 | `test.dialogs.dismiss` | - | Every dialog left open in any window, closed as its close button would: the driver asks before each case, so one case's prompt (an unsaved document's "save?") does not hold the next cases' dialogs back. | TestHostHooks.cs |
 | `test.dialog.colours` | `windowId` | The open dialog's colours and the custom theme's, to tell whether the dialog wears the theme. | TestHostHooks.cs |
@@ -337,6 +361,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | `test.home.state` | `windowId` | The window's home page: whether it is asked for and shown (the view model and the page on screen), the active tab's document and whether it is blank, the page's lists (favourites, recent files and folders: path, dimmed, the last change shown) and the ids of an edition's sections shown on it (a collapsed one is not). | TestHostHooks.cs |
 | `test.settings.flush` | `windowId` | The settings written to Settings.json now (a case that restarts the host after test.settings.set). | TestHostHooks.cs |
 | `test.layout.contentTop` | `windowId` | Where the content starts below the window's top row, in the window's coordinates: the main page's menu bar row's bottom, or the top of the page the frame shows (the settings, under their caption). E2E CM01. | TestHostHooks.cs |
+| `test.window.navigationTimes` | `windowId` | The last trip between the main page and the settings, step by step (RootControl.NavigationTimes). E2E ST01. | TestHostHooks.cs |
 | `test.editor.opening` | `windowId` | How many times the window said "Opening…" over its editor, and how many long loads it had (JU01: a switch between long documents does not say it). | TestHostHooks.cs |
 | `test.folder.open` | `path`, `windowId` | A folder opened as the folder pane's root, as File > Open folder with that folder picked. | TestHostHooks.cs |
 <!-- END generated: test-methods -->

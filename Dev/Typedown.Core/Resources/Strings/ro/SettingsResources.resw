@@ -958,4 +958,22 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>În timp ce un document lung este desenat pe părți, înălțimea a ceea ce nu este încă afișat se calculează din text în loc să fie estimată, astfel încât bara de derulare și salturile din schiță sunt mai precise. Experimental</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Rotița mouse-ului parcurge filele în buclă</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Derularea dincolo de ultima filă duce la prima, și invers; dezactivat se oprește la prima și la ultima filă</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Desenează diagramele Mermaid cu</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele desenează mai multe tipuri de diagrame și le aranjează altfel decât Mermaid</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Unește rândurile unui paragraf în modul de citire</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>În modul de citire, o singură trecere la rând nou într-un paragraf apare ca spațiu, așa cum prevede Markdown și cum fac deja exporturile (fără spațiu între caractere chinezești sau japoneze). Pentru a păstra trecerea la rând nou, încheiați rândul cu două spații sau o bară oblică inversă</value>
+  </data>
 </root>

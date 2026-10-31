@@ -87,15 +87,26 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBox PlaceholderText="{u:LocaleString Key=Find}" x:Name="TextBoxSearch" KeyDown="OnTextBoxSearchKeyDown" Text="{x:Bind ViewModel.EditorViewModel.SearchValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    <Button Grid.Column="1" Width="32" Height="32" Style="{ThemeResource EllipsisIconButtonStyle}" Command="{x:Bind ViewModel.EditorViewModel.FindCommand}" CommandParameter="next" controls:ToolTip.TextResource="FindNext">
+                    <!-- Where the bar is among the matches ("3 of 85"), as the page reports it (FindState). -->
+                    <TextBlock Grid.Column="1" x:Name="FindCount" AutomationProperties.AutomationId="FindCount" VerticalAlignment="Center" Opacity="0.7" FontSize="12"
+                               Text="{x:Bind local:FindReplace.PositionText(ViewModel.EditorViewModel.FindResults.Current, ViewModel.EditorViewModel.FindResults.Total, ViewModel.EditorViewModel.SearchValue), Mode=OneWay}"/>
+                    <Button Grid.Column="2" Width="32" Height="32" Style="{ThemeResource EllipsisIconButtonStyle}" Command="{x:Bind ViewModel.EditorViewModel.FindCommand}" CommandParameter="next" controls:ToolTip.TextResource="FindNext">
                         <FontIcon FontSize="14" Glyph="&#xE74B;"/>
                     </Button>
-                    <Button Grid.Column="2" Width="32" Height="32" Style="{ThemeResource EllipsisIconButtonStyle}" Command="{x:Bind ViewModel.EditorViewModel.FindCommand}" CommandParameter="prev" controls:ToolTip.TextResource="FindPrevious">
+                    <Button Grid.Column="3" Width="32" Height="32" Style="{ThemeResource EllipsisIconButtonStyle}" Command="{x:Bind ViewModel.EditorViewModel.FindCommand}" CommandParameter="prev" controls:ToolTip.TextResource="FindPrevious">
                         <FontIcon FontSize="14" Glyph="&#xE74A;"/>
                     </Button>
-                    <Button Grid.Column="3" Width="32" Height="32" Style="{ThemeResource EllipsisIconButtonStyle}" controls:ToolTip.TextResource="MoreOptions">
+                    <!-- Every match in a list in the side pane ("Search in document"). -->
+                    <Button Grid.Column="4" Width="32" Height="32" x:Name="ShowAllResultsButton" AutomationProperties.AutomationId="FindShowAllResults"
+                            AutomationProperties.Name="{u:LocaleString Key=FindResults.ShowAll}"
+                            Style="{ThemeResource EllipsisIconButtonStyle}" Click="OnShowAllResultsClick" controls:ToolTip.TextResource="FindResults.ShowAll">
+                        <FontIcon FontSize="14" Glyph="&#xE8FD;"/>
+                    </Button>
+                    <Button Grid.Column="5" Width="32" Height="32" Style="{ThemeResource EllipsisIconButtonStyle}" controls:ToolTip.TextResource="MoreOptions">
                         <FontIcon FontSize="14" Glyph="&#xE9E9;"/>
                         <Button.Flyout>
                             <MenuFlyout Placement="Top">
@@ -105,7 +116,7 @@
                             </MenuFlyout>
                         </Button.Flyout>
                     </Button>
-                    <Button Grid.Column="4" Width="32" Height="32" Style="{ThemeResource EllipsisIconButtonStyle}" Click="OnCloseButtonClick" controls:ToolTip.TextResource="Close">
+                    <Button Grid.Column="6" Width="32" Height="32" Style="{ThemeResource EllipsisIconButtonStyle}" Click="OnCloseButtonClick" controls:ToolTip.TextResource="Close">
                         <FontIcon FontSize="14" Glyph="&#xf78a;"/>
                     </Button>
                 </Grid>

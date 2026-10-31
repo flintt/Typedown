@@ -958,4 +958,22 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>긴 문서를 나누어 그리는 동안 아직 표시되지 않은 부분의 높이를 추정하지 않고 텍스트로 계산하므로 스크롤 막대와 개요에서의 이동이 더 정확해집니다. 실험적 기능</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>마우스 휠로 탭을 순환</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>마지막 탭에서 더 스크롤하면 첫 번째 탭으로 이동하고, 반대도 같습니다. 끄면 첫 번째와 마지막 탭에서 멈춥니다</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Mermaid 다이어그램 그리기 방식</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele는 더 많은 종류의 다이어그램을 그리며 배치가 Mermaid와 다릅니다</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>읽기 모드에서 단락 안의 줄 합치기</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>읽기 모드에서 단락 안의 단일 줄바꿈을 Markdown 규격과 내보내기 결과처럼 공백으로 표시합니다(중국어·일본어 문자 사이에는 공백을 넣지 않음). 줄바꿈을 유지하려면 줄 끝에 공백 두 개나 백슬래시를 넣으세요</value>
+  </data>
 </root>

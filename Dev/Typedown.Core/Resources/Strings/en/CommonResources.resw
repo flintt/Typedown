@@ -237,6 +237,10 @@
     <value>Copy Content</value>
     <comment>复制内容</comment>
   </data>
+  <data name="CopyTable" xml:space="preserve">
+    <value>Copy Table</value>
+    <comment>复制表格</comment>
+  </data>
   <data name="CopyImageTo" xml:space="preserve">
     <value>Copy Image to...</value>
     <comment>复制图片到...</comment>
@@ -960,9 +964,33 @@
     <value>Searching…</value>
     <comment>搜索/搜索中</comment>
   </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>{0} matching file(s) of {1} searched</value>
-    <comment>搜索/结果统计</comment>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>File names ({0})</value>
+    <comment>搜索/文件名组标题（数量）</comment>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>Contents ({0})</value>
+    <comment>搜索/内容组标题（数量）</comment>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>Content matches too</value>
+    <comment>搜索/文件名匹配的结果内容也匹配</comment>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>Show all {0}</value>
+    <comment>搜索/显示全部 n 条文件名结果</comment>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>Folder</value>
+    <comment>搜索/结果是文件夹（读屏）</comment>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>File names: {0} · Searching contents…</value>
+    <comment>搜索/文件名已搜完，正在搜索内容</comment>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>File names: {0} · Contents: {1} · Files searched: {2}</value>
+    <comment>搜索/结果统计：文件名、内容、已搜索文件数</comment>
   </data>
   <data name="TocPane.ExpandAll" xml:space="preserve">
     <value>Expand all</value>
@@ -1005,9 +1033,6 @@
   </data>
   <data name="SearchInFolder" xml:space="preserve">
     <value>Search in folder</value>
-  </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(file name matches)</value>
   </data>
   <data name="AutomationConnected" xml:space="preserve">
     <value>Automation connected</value>
@@ -1217,5 +1242,37 @@
   <data name="HomePage.Settings" xml:space="preserve">
     <value>Settings</value>
     <comment>首页底部去设置的链接</comment>
+  </data>
+  <data name="FindResults.ShowAll" xml:space="preserve">
+    <value>Show all results</value>
+    <comment>查找栏按钮：在侧栏列出本文全部搜索结果</comment>
+  </data>
+  <data name="FindResults.Title" xml:space="preserve">
+    <value>Search in document</value>
+    <comment>侧栏页面标题：本文搜索（查找栏结果列表）</comment>
+  </data>
+  <data name="FindResults.Total" xml:space="preserve">
+    <value>Results: {0}</value>
+    <comment>本文搜索：结果总数</comment>
+  </data>
+  <data name="FindResults.TooMany" xml:space="preserve">
+    <value>Too many results – keep typing</value>
+    <comment>本文搜索：结果超过 500 条，只列出前 500 条，提示继续输入以缩小范围</comment>
+  </data>
+  <data name="FindResults.None" xml:space="preserve">
+    <value>No results</value>
+    <comment>查找栏：没有匹配</comment>
+  </data>
+  <data name="FindResults.Position" xml:space="preserve">
+    <value>{0} of {1}</value>
+    <comment>查找栏：当前是第 {0} 个，共 {1} 个匹配（也用于结果列表的读屏名称）</comment>
+  </data>
+  <data name="FontPicker.Choose" xml:space="preserve">
+    <value>Choose…</value>
+    <comment>字体框旁的按钮：打开已安装字体的列表</comment>
+  </data>
+  <data name="FontPicker.Search" xml:space="preserve">
+    <value>Search fonts</value>
+    <comment>字体列表上方的搜索框提示</comment>
   </data>
 </root>

@@ -27,6 +27,13 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
 
         private void OnLoaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
         {
+            // The menu's items are shown in a popup of their own, outside the window's tree: they carry the interface's
+            // language tag themselves, set now (a menu made after a language change) and on every later application -
+            // a menu made while the interface was English drew Chinese in the English fallback font after switching
+            // back (UiLanguage).
+            SetLanguage();
+            Locale.LanguageApplied -= OnLanguageApplied;
+            Locale.LanguageApplied += OnLanguageApplied;
             // An exception here runs on the dispatcher with nothing above it to catch it, which on XAML islands
             // takes the process down without a report.
             _ = DispatcherQueue.RunIdleAsync(() =>
@@ -45,6 +52,33 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
         }
 
         protected abstract void OnRegisterShortcut();
+
+        private void SetLanguage()
+        {
+            UiLanguage.Set(this);
+            UiLanguage.SetItems(Items);
+        }
+
+        // On the menu's own thread, and only while it is in its window: a window closed without its menus unloading keeps
+        // them subscribed, and they are not touched as the window goes. A window closing as the language changes still
+        // has them loaded while they are torn down, and setting the tag then throws: out of a callback on the window's
+        // queue, that ended the process (0xc000027b at DispatcherQueue::DeferInvokeCallback, 0x800710dd - LG01 and AC01 in
+        // the full suite on w10). The menu is going with its window; nothing is left to tag.
+        private void OnLanguageApplied()
+        {
+            DispatcherQueue.TryEnqueue(() =>
+            {
+                try
+                {
+                    if (!IsLoaded || XamlRoot == null) return;
+                    SetLanguage();
+                }
+                catch (Exception ex)
+                {
+                    Log.Debug($"language: a menu not tagged ({ex.GetType().Name} 0x{ex.HResult:x8}): {ex.Message}");
+                }
+            });
+        }
 
         private bool watching;
 
@@ -181,6 +215,7 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
 
         private void OnUnloaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
         {
+            Locale.LanguageApplied -= OnLanguageApplied;
             disposables.Clear();
         }
     }

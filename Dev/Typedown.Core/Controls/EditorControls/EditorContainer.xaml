@@ -96,6 +96,12 @@
                         </local:MenuItemCollection.Value>
                     </MenuFlyoutSubItem>
                     <MenuFlyoutSeparator x:Name="MenuCodeFencesItemSeparator" x:Load="{x:Bind Editor.ParagraphState.CodeFences.IsChecked, Mode=OneWay}"/>-->
+                    <!-- Right-clicked in a table: the table copied as its copy button copies it, as a table for Word and Excel
+                         and as Markdown for text (the page's ContentState.copyBlock). Shown by Visibility, not x:Load: the
+                         page says where the click was as the button goes down, and an item loaded into a menu already open
+                         did not show. -->
+                    <MenuFlyoutItem x:Name="CopyTableItem" Icon="Copy" Text="{u:LocaleString Key=CopyTable}" Command="{x:Bind Editor.CopyTableCommand}" Visibility="{x:Bind local:EditorContainer.TableMenuVisibility(Editor.ContextMenuInTable, Settings.SourceCode), Mode=OneWay}"/>
+                    <MenuFlyoutSeparator x:Name="CopyTableSeparator" Visibility="{x:Bind local:EditorContainer.TableMenuVisibility(Editor.ContextMenuInTable, Settings.SourceCode), Mode=OneWay}"/>
                     <!-- Reading mode offers what reading needs: copying and selecting. Undo, cut, paste and delete would change
                          the document (undo did, through the host's history), so they are not there. -->
                     <MenuFlyoutItem x:Name="UndoItem" Visibility="{x:Bind Settings.ReadOnly, Mode=OneWay, Converter={StaticResource BoolToVisibilityReverseConverter}}" Text="{u:LocaleString Key=Undo}" KeyboardAcceleratorTextOverride="{x:Bind Settings.ShortcutUndo, Mode=OneWay, Converter={StaticResource ShortcutKeyToStringConverter}}" Icon="Undo" Command="{x:Bind Editor.UndoCommand}" IsEnabled="{x:Bind Editor.History.Undoable, Mode=OneWay}"/>

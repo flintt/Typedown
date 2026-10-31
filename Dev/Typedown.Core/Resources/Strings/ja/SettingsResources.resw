@@ -958,4 +958,22 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>長いドキュメントを段階的に描画する間、まだ表示されていない部分の高さを推定ではなくテキストから計算するため、スクロールバーやアウトラインからのジャンプがより正確になります。試験的な機能です</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>マウスホイールでタブを循環する</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>最後のタブを越えてスクロールすると最初のタブに移り、逆も同様です。オフの場合は最初と最後のタブで止まります</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Mermaid 図の描画方法</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele はより多くの種類の図を描け、レイアウトは Mermaid と異なります</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>閲覧モードで段落内の行をつなげる</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>閲覧モードでは、段落内の単一の改行を Markdown の仕様やエクスポートと同じく空白として表示します（中国語・日本語の文字の間には空白を入れません）。改行を残すには、行末にスペース 2 つかバックスラッシュを付けます</value>
+  </data>
 </root>

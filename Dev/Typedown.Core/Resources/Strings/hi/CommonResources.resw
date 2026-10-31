@@ -948,12 +948,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>फ़ोल्डर में खोजें…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(फ़ाइल नाम मेल खाता है)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>खोजी गई {1} फ़ाइलों में से {0} मेल खाती हैं</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>खोजा जा रहा है…</value>
   </data>
@@ -1152,5 +1146,53 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>खुल रहा है…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>फ़ाइल नाम ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>सामग्री ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>सामग्री भी मेल खाती है</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>सभी {0} दिखाएँ</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>फ़ोल्डर</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>फ़ाइल नाम: {0} · सामग्री में खोजा जा रहा है…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>फ़ाइल नाम: {0} · सामग्री: {1} · खोजी गई फ़ाइलें: {2}</value>
+  </data>
+  <data name="FindResults.ShowAll" xml:space="preserve">
+    <value>सभी परिणाम दिखाएँ</value>
+  </data>
+  <data name="FindResults.Title" xml:space="preserve">
+    <value>दस्तावेज़ में खोजें</value>
+  </data>
+  <data name="FindResults.Total" xml:space="preserve">
+    <value>परिणाम: {0}</value>
+  </data>
+  <data name="FindResults.TooMany" xml:space="preserve">
+    <value>बहुत अधिक परिणाम – टाइप करते रहें</value>
+  </data>
+  <data name="FindResults.None" xml:space="preserve">
+    <value>कोई परिणाम नहीं</value>
+  </data>
+  <data name="FindResults.Position" xml:space="preserve">
+    <value>{1} में से {0}</value>
+  </data>
+  <data name="CopyTable" xml:space="preserve">
+    <value>तालिका कॉपी करें</value>
+  </data>
+  <data name="FontPicker.Choose" xml:space="preserve">
+    <value>चुनें…</value>
+  </data>
+  <data name="FontPicker.Search" xml:space="preserve">
+    <value>फ़ॉन्ट खोजें</value>
   </data>
 </root>

@@ -958,4 +958,22 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Terwyl 'n lang dokument in dele geteken word, word die hoogte van wat nog nie gewys word nie uit die teks bereken in plaas van geskat, sodat die rolstaaf en spronge vanaf die uiteensetting akkurater is. Eksperimenteel</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Muiswiel gaan rond deur die oortjies</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Rol verby die laaste oortjie gaan na die eerste, en terug; af stop by die eerste en laaste oortjie</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Teken Mermaid-diagramme met</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele teken meer soorte diagramme en rangskik hulle anders as Mermaid</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Voeg die reëls van ’n paragraaf in leesmodus saam</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>In leesmodus word ’n enkele reëlbreuk binne ’n paragraaf as ’n spasie gewys, soos Markdown bepaal en soos die uitvoere reeds doen (geen spasie tussen Chinese of Japannese karakters nie). Om ’n breuk te behou, eindig die reël met twee spasies of ’n agteroorstreep</value>
+  </data>
 </root>

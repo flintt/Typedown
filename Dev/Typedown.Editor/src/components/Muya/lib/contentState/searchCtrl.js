@@ -90,18 +90,19 @@ const searchCtrl = ContentState => {
     this.setCursorToHighlight()
   }
 
-  ContentState.prototype.search = function (value, opt = {}) {
+  /**
+   * The matches of `value` in the document's text (its model, drawn or not), in order, and the first at or after
+   * `selection`'s start (null without one).
+   */
+  ContentState.prototype.collectMatches = function (value, options) {
     const matches = []
-    const options = Object.assign({}, defaultSearchOption, opt)
-    const { highlightIndex, selection } = options
-    const { blocks } = this
-
-    let overCursor = false;
+    const { selection } = options
+    let overCursor = false
     let firstMatchAfterCursor = null
 
     const travel = blocks => {
       for (const block of blocks) {
-        let { text, key } = block
+        const { text, key } = block
         // A caller with no selection (the search bar drawn by the page, for instance) means "from the top":
         // reading through it must not throw, or the whole search — and a replace that ends with one — is lost.
         if (selection?.start?.key == key)
@@ -128,7 +129,14 @@ const searchCtrl = ContentState => {
         }
       }
     }
-    if (value) travel(blocks)
+    if (value) travel(this.blocks)
+    return { matches, firstMatchAfterCursor }
+  }
+
+  ContentState.prototype.search = function (value, opt = {}) {
+    const options = Object.assign({}, defaultSearchOption, opt)
+    const { highlightIndex } = options
+    const { matches, firstMatchAfterCursor } = this.collectMatches(value, options)
     let index = -1
     if (highlightIndex !== -1) {
       index = highlightIndex // If set the highlight index, then highlight the highlighIndex
@@ -141,11 +149,43 @@ const searchCtrl = ContentState => {
       }
     }
 
-    Object.assign(this.searchMatches, { value, matches, index })
+    // The options too: the matches are found again with them after an edit (refreshSearch).
+    Object.assign(this.searchMatches, { value, matches, index, options })
     if (value) {
       this.setCursorToHighlight()
     }
     return matches
+  }
+
+  /**
+   * The last search's matches found again in the text as it is now (an edit while the find bar's results list is open),
+   * with the options it was made with. The caret stays where it is; the match chosen stays chosen if it is still there
+   * (the same block and place), else the first one at or after the caret is. Returns the keys of the blocks whose marks
+   * changed, or null when there is no search.
+   */
+  ContentState.prototype.refreshSearch = function () {
+    const { value, options, matches: old, index: oldIndex } = this.searchMatches
+    if (!value || !options) return null
+    const { start } = this.cursor || {}
+    const { matches, firstMatchAfterCursor } = this.collectMatches(value, { ...options, selection: start ? { start } : null })
+    const chosen = old[oldIndex]
+    let index = chosen ? matches.findIndex(m => m.key === chosen.key && m.start === chosen.start && m.end === chosen.end) : -1
+    if (index < 0 && matches.length) {
+      index = firstMatchAfterCursor ? matches.findIndex(m => m.key === firstMatchAfterCursor.key && m.start === firstMatchAfterCursor.start) : 0
+      if (index < 0) index = 0
+    }
+    const marks = (list, at) => {
+      const byKey = new Map()
+      list.forEach((m, i) => byKey.set(m.key, (byKey.get(m.key) || '') + `${m.start}-${m.end}${i === at ? '*' : ''},`))
+      return byKey
+    }
+    const before = marks(old, oldIndex)
+    const after = marks(matches, index)
+    const changed = new Set()
+    for (const [key, sig] of before) if (after.get(key) !== sig) changed.add(key)
+    for (const [key, sig] of after) if (before.get(key) !== sig) changed.add(key)
+    Object.assign(this.searchMatches, { matches, index })
+    return changed
   }
 }
 

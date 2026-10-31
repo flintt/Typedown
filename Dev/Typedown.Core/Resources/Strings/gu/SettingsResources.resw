@@ -958,4 +958,22 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>લાંબો દસ્તાવેજ ભાગોમાં દોરાતો હોય ત્યારે, હજી ન બતાવેલા ભાગની ઊંચાઈ અંદાજવાને બદલે લખાણ પરથી ગણવામાં આવે છે, જેથી સ્ક્રોલ બાર અને રૂપરેખામાંથી કૂદકા વધુ સચોટ બને. પ્રાયોગિક</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>માઉસ વ્હીલ ટૅબમાં ફરતું રહે છે</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>છેલ્લા ટૅબ પછી સ્ક્રોલ કરવાથી પહેલા ટૅબ પર જવાય છે, અને પાછા પણ; બંધ હોય તો પહેલા અને છેલ્લા ટૅબ પર અટકે છે</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Mermaid આકૃતિઓ આનાથી દોરો</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele વધુ પ્રકારની આકૃતિઓ દોરે છે અને તેમને Mermaid કરતાં અલગ રીતે ગોઠવે છે</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>વાંચન મોડમાં ફકરાની લાઇનો જોડો</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>વાંચન મોડમાં ફકરાની અંદરનો એકલ લાઇન બ્રેક જગ્યા તરીકે દેખાય છે, જેમ Markdown નક્કી કરે છે અને નિકાસ પહેલેથી કરે છે (ચાઇનીઝ કે જાપાનીઝ અક્ષરો વચ્ચે જગ્યા નહીં). લાઇન બ્રેક રાખવા માટે લાઇનના અંતે બે જગ્યા અથવા બેકસ્લેશ મૂકો</value>
+  </data>
 </root>

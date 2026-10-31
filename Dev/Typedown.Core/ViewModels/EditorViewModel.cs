@@ -37,6 +37,11 @@ namespace Typedown.Core.ViewModels
         public MenuState MenuState { get; set; }
         public ParagraphState ParagraphState { get; set; }
         /// <summary>
+        /// Whether the last right-click in the visual editor or reading mode was in a table (the page's ContextMenuTarget,
+        /// sent as the button goes down - before the menu opens, which the caret's report is not): the menu's Copy table.
+        /// </summary>
+        public bool ContextMenuInTable { get; set; }
+        /// <summary>
         /// The outline tree. Replaced whole when a different document arrives, updated in place when the
         /// same document changes: the tree control is bound to it, and taking a document's outline apart
         /// row by row under that control while a second document's arrived is what crashed the process —
@@ -74,6 +79,12 @@ namespace Typedown.Core.ViewModels
         /// </summary>
         public int LoadId { get; private set; }
         public string SearchValue { get; set; } = null;
+
+        /// <summary>
+        /// The find bar's search as the page reports it: the count and the match chosen (the bar's "3 of 85"), and while
+        /// the side pane's results list is open, its entries (services/findResults.ts).
+        /// </summary>
+        public FindResultsList FindResults { get; } = new();
         public bool FirstStart { get; set; } = true;
         public bool FileLoaded { get; set; }
 
@@ -82,6 +93,7 @@ namespace Typedown.Core.ViewModels
         public Command<string> CutCommand { get; } = new();
         public Command<string> PasteCommand { get; } = new();
         public Command<string> CopyCommand { get; } = new();
+        public Command<Unit> CopyTableCommand { get; } = new();
         public Command<Unit> DeleteSelectionCommand { get; } = new();
         public Command<Unit> SelectAllCommand { get; } = new();
         public Command<string> FindCommand { get; } = new();
@@ -104,9 +116,10 @@ namespace Typedown.Core.ViewModels
             // where it is drawn at once): no "Opening…" over it from then on.
             EventCenter.GetObservable<EditorEventArgs>("LoadPreviewShown").Subscribe(x => { if (x.Args?["loadId"]?.Value<int?>() == LoadId) { LongLoadPending = false; LeavingCover = false; } });
             EventCenter.GetObservable<EditorEventArgs>("DocumentEditApplied").Subscribe(x => OnDocumentEditApplied(x.Args));
-            // How the page drew a long document (a part at a time or all at once, from what), for the log.
+            // How the page drew a long document (a part at a time or all at once, from what), for the log. The anchor (the
+            // block that was at the top of the window) by its place and length: its text is the document's.
             EventCenter.GetObservable<EditorEventArgs>("LoadDrawnWhole").Subscribe(x => Log.Debug($"load {x.Args?["loadId"]}: all drawn after {x.Args?["ms"]} ms in {x.Args?["slices"]} slices"));
-            EventCenter.GetObservable<EditorEventArgs>("LoadDrawn").Subscribe(x => Log.Debug($"load {x.Args?["loadId"]}: drawn {((bool?)x.Args?["progressive"] == true ? "a part at a time" : "all at once")} ({x.Args?["how"]}, block {x.Args?["center"]} of {x.Args?["blocks"]}, {x.Args?["chars"]} chars), first paint after {x.Args?["firstPaintMs"]} ms; anchor {x.Args?["anchor"]}"));
+            EventCenter.GetObservable<EditorEventArgs>("LoadDrawn").Subscribe(x => Log.Debug($"load {x.Args?["loadId"]}: drawn {((bool?)x.Args?["progressive"] == true ? "a part at a time" : "all at once")} ({x.Args?["how"]}, block {x.Args?["center"]} of {x.Args?["blocks"]}, {x.Args?["chars"]} chars), first paint after {x.Args?["firstPaintMs"]} ms; {DescribeAnchor(x.Args)}"));
             EventCenter.GetObservable<EditorEventArgs>("NormalizationReport").Subscribe(x => OnNormalizationReport(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("PresentationFrames").Subscribe(x => { var t = x.Args?["token"]?.Value<int?>() ?? 0; if (framesWaiters.TryGetValue(t, out var w)) w.TrySetResult(true); });
             EventCenter.GetObservable<EditorEventArgs>("EditorStyle").Subscribe(x => { var t = x.Args?["token"]?.Value<int?>() ?? 0; if (styleWaiters.TryGetValue(t, out var w)) w.TrySetResult(x.Args); });
@@ -114,6 +127,11 @@ namespace Typedown.Core.ViewModels
             EventCenter.GetObservable<EditorEventArgs>("CursorChange").Subscribe(x => OnCursorChange(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("OnScroll").Subscribe(x => OnScroll(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("SelectionChange").Subscribe(x => OnSelectionChange(x.Args));
+            EventCenter.GetObservable<EditorEventArgs>("ContextMenuTarget").Subscribe(x =>
+            {
+                ContextMenuInTable = x.Args?["table"]?.Value<bool>() ?? false;
+                Log.Debug($"context menu: right-click {(ContextMenuInTable ? "in" : "not in")} a table");
+            });
             EventCenter.GetObservable<EditorEventArgs>("CodeMirrorSelectionChange").Subscribe(x => OnCodeMirrorSelectionChange(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("ReadingSelectionChange").Subscribe(x => OnReadingSelectionChange(x.Args));
             // A paste the page caught from the browser (its own would put the clipboard's HTML into the document as is).
@@ -133,11 +151,27 @@ namespace Typedown.Core.ViewModels
             // it started with — a viewport of no height is a page loaded before its window was there.
             EventCenter.GetObservable<EditorEventArgs>("ScrollSettled").Subscribe(x => Log.Debug($"settle: {x.Args}"));
             // The page going far with nobody at it while a long document is drawn, and what the drawing knew then.
+            // The page: the first visual edit of this load may rewrite part of it (or no longer: 10 s gone, reading mode).
+            // Shown only for the load on screen; a later load has taken the card away already (NoteLoad).
+            EventCenter.GetObservable<EditorEventArgs>("FirstEditNotice").Subscribe(x =>
+            {
+                var load = x.Args?["loadId"]?.Value<int?>();
+                var ui = ServiceProvider.GetService<UIViewModel>();
+                if (ui == null) return;
+                if ((bool?)x.Args?["show"] == true) { if (load == LoadId) ui.ShowFirstEditNotice(LoadId); }
+                else if (load == null || load == ui.FirstEditNoticeLoad) ui.HideFirstEditNotice();
+            });
+            EventCenter.GetObservable<EditorEventArgs>("FindState").Subscribe(x => FindResults.ApplyState(x.Args));
+            EventCenter.GetObservable<EditorEventArgs>("FindResults").Subscribe(x => FindResults.Apply(x.Args));
+            EventCenter.GetObservable<EditorEventArgs>("FindHold").Subscribe(x => Log.Debug($"find hold: the match's block left the window, put back: {x.Args?.ToString(Newtonsoft.Json.Formatting.None)}"));
             EventCenter.GetObservable<EditorEventArgs>("DrawJump").Subscribe(x => Log.Debug($"draw jump: {x.Args?.ToString(Newtonsoft.Json.Formatting.None)}"));
             // An error in the page nobody caught (a listener, a promise): in the log, where the next one is looked for.
-            EventCenter.GetObservable<EditorEventArgs>("PageError").Subscribe(x => Log.Debug($"page error: {x.Args}"));
+            // Its message without what it quotes (a formula, a diagram's source) and its stack's frames (LogText).
+            EventCenter.GetObservable<EditorEventArgs>("PageError").Subscribe(x => Log.Debug(
+                $"page error: {LogText.Error(x.Args?["message"]?.ToString())} (where {x.Args?["where"]}; stack {LogText.Stack(x.Args?["stack"]?.ToString())})"));
             RemoteInvoke.Handle("GetSettings", GetSettings);
             RemoteInvoke.Handle<JToken>("SetClipboard", OnSetClipboard);
+            RemoteInvoke.Handle<JToken, bool>("CopyBlock", OnCopyBlock);
             Settings.WhenPropertyChanged(nameof(Settings.AutoSave)).Subscribe(_ => Settings_AutoSaveChanged(Settings.AutoSave));
             // A selection belongs to the mode it was made in: the next mode reports its own.
             Settings.WhenPropertyChanged(nameof(Settings.ReadOnly)).Subscribe(_ => TextSelected = Selected = false);
@@ -162,6 +196,7 @@ namespace Typedown.Core.ViewModels
             PasteCommand.OnExecute.Subscribe(x => Paste(x));
             CutCommand.OnExecute.Subscribe(x => Cut(x));
             CopyCommand.OnExecute.Subscribe(x => Copy(x));
+            CopyTableCommand.OnExecute.Subscribe(_ => CopyTable());
             DeleteSelectionCommand.OnExecute.Subscribe(_ => DeleteSelection());
             SelectAllCommand.OnExecute.Subscribe(_ => SelectAll());
         }
@@ -215,6 +250,7 @@ namespace Typedown.Core.ViewModels
                 Settings.ListIndentation,
                 Settings.TableAlignColumns,
                 Settings.ShowBlankLines,
+                Settings.JoinSoftBreaks,
                 Settings.ShowMarkdownMarks,
                 Settings.ProgressiveRendering,
                 Settings.PredictHeights,
@@ -227,6 +263,7 @@ namespace Typedown.Core.ViewModels
                 Settings.AutoPairMarkdownSyntax,
                 Settings.RenderPlantUml,
                 Settings.PlantUmlServer,
+                Settings.MermaidRenderer,
                 Settings.VimMode,
                 Settings.EditorAreaWidth,
                 Settings.FontFamily,
@@ -268,6 +305,10 @@ namespace Typedown.Core.ViewModels
         // The next load's id, noting whether it is a long document and whether the page has anything on it meanwhile.
         private int NoteLoad(string text, bool pageEmpty = false)
         {
+            // Another document, or this one again: a first-edit notice was for the load before (the page says again if so).
+            ServiceProvider.GetService<UIViewModel>()?.HideFirstEditNotice();
+            // The bar's matches were the document's before: the page reports the new one's once it has searched it.
+            FindResults.Clear();
             LongLoadDelay = pageEmpty ? 150 : 600;
             LongLoadPending = (text?.Length ?? 0) >= LongDocumentChars;
             if (LongLoadPending) OpeningLoads++;
@@ -558,6 +599,17 @@ namespace Typedown.Core.ViewModels
 
         /// <summary>For the automation test host: the next this many loads come back from the editor rewritten.</summary>
         public int RewriteLoadsForTest { get; set; }
+
+        /// <summary>The scroll anchor of a LoadDrawn report: "anchor: block 3 (24 chars)", or "no anchor".</summary>
+        internal static string DescribeAnchor(JToken args)
+        {
+            var block = args?["anchorBlock"];
+            var chars = args?["anchorChars"];
+            // A page of before this report changed sent the anchor's text: its length only.
+            if (chars == null && args?["anchor"]?.Type == JTokenType.String) chars = args["anchor"].ToString().Length;
+            if (chars == null || chars.Type == JTokenType.Null) return "no anchor";
+            return $"anchor: block {(block == null || block.Type == JTokenType.Null ? "?" : block.ToString())} ({chars} chars)";
+        }
 
         /// <summary>
         /// Where and how much a load rewrote, for the log - not what it says: the lines between the first and the last
@@ -855,7 +907,7 @@ namespace Typedown.Core.ViewModels
                     : $"outline: heading {slug} is not among the {ContentState.Toc.Count} entries{at}; kept for the next outline");
                 return;
             }
-            Log.Debug($"outline: now on {match.Content}{at}");
+            Log.Debug($"outline: now on {LogText.Heading(ContentState.Toc.IndexOf(match), ContentState.Toc.Count, match.Lvl, match.Content)}{at}");
             rebuildingToc = true;
             try
             {
@@ -875,6 +927,8 @@ namespace Typedown.Core.ViewModels
         {
             if (string.IsNullOrEmpty(SearchValue))
                 SearchValue = null;
+            // When each search went to the page (its length only, not the text): LT01 compares these with the page's account.
+            Log.Debug($"search: posted, {SearchValue?.Length ?? 0} letters");
             MarkdownEditor?.PostMessage("Search", new
             {
                 value = SearchValue,
@@ -1335,7 +1389,7 @@ namespace Typedown.Core.ViewModels
             var inDocument = MarkdownImages.Find(Markdown ?? "").Select(r => r.Address).ToHashSet();
             var wanted = addresses.Where(inDocument.Contains).ToList();
             if (wanted.Count < addresses.Count)
-                Log.Debug($"paste: {addresses.Count - wanted.Count} of the HTML's {addresses.Count} picture address(es) are not in the document (first: {addresses.FirstOrDefault(a => !inDocument.Contains(a))})");
+                Log.Debug($"paste: {addresses.Count - wanted.Count} of the HTML's {addresses.Count} picture address(es) are not in the document (first: {LogText.Address(addresses.FirstOrDefault(a => !inDocument.Contains(a)))})");
             var action = ServiceProvider.GetService<ImageAction>();
             var page = PageAddress(html);
             Log.Debug($"paste: {wanted.Count} web picture(s) to fetch; the page they came from: {(page?.Host ?? "not in the clipboard")}");
@@ -1480,6 +1534,45 @@ namespace Typedown.Core.ViewModels
         // Markdown) as it always was, not its HTML turned back into Markdown.
         private static string lastCopiedText;
 
+        /// <summary>
+        /// A figure's copy button (the page's ContentState.copyBlock: a diagram's, a display formula's, a table's) or the
+        /// menu's Copy table: the block's Markdown as text and, for the programs that take more, its picture - a PNG in
+        /// base64, none for a diagram or formula that could not be drawn - or a table's HTML, as one clipboard item.
+        /// True once written.
+        /// </summary>
+        public async Task<bool> OnCopyBlock(JToken arg)
+        {
+            var text = arg?["text"]?.ToString() ?? "";
+            var base64 = arg?["png"]?.Type == JTokenType.String ? arg["png"].ToString() : null;
+            var html = arg?["html"]?.Type == JTokenType.String ? arg["html"].ToString() : null;
+            var mathml = arg?["mathml"]?.Type == JTokenType.String ? arg["mathml"].ToString() : null;
+            try
+            {
+                var png = string.IsNullOrEmpty(base64) ? null : Convert.FromBase64String(base64);
+                // A table: CF_HTML (Word and Excel paste it as a table) and the text. A picture: a bitmap, RTF with the
+                // picture and the text (SetTextAndPngAsync), and a formula's MathML for Word's equations.
+                if (png == null && !string.IsNullOrEmpty(html)) Clipboard.SetTextAndHtml(text, html);
+                else await Clipboard.SetTextAndPngAsync(text, png, png != null ? mathml : null);
+                // Pasted back into the app it is the Markdown, as any copy of ours is (Paste).
+                lastCopiedText = text;
+                pendingCopyHtml = null;
+                Log.Debug($"copy block: {text.Length} characters of text, {(png != null ? $"a {png.Length}-byte picture{(string.IsNullOrEmpty(mathml) ? "" : $", {mathml.Length} characters of MathML")}" : !string.IsNullOrEmpty(html) ? $"{html.Length} characters of HTML" : "nothing else")}");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"copy block: the clipboard could not be written: {ex}");
+                _ = AppContentDialog.Create(Locale.GetString("Error"), ex.Message, Locale.GetString("Ok")).ShowAsync(AppViewModel.XamlRoot);
+                return false;
+            }
+        }
+
+        /// <summary>The menu's Copy table: the page copies the table right-clicked, as its copy button does (OnCopyBlock).</summary>
+        public void CopyTable()
+        {
+            MarkdownEditor?.PostMessage("CopyTable", null);
+        }
+
         public void OnSetClipboard(JToken arg)
         {
             try
@@ -1573,8 +1666,20 @@ namespace Typedown.Core.ViewModels
             }
             else
             {
+                Log.Debug($"search: find {action} posted");
                 MarkdownEditor?.PostMessage("Find", new { action });
             }
+        }
+
+        /// <summary>
+        /// An entry of the results list chosen (a click, Enter): the page puts that match in the window and selects it, and
+        /// reports it as the match chosen (the bar's "n of m" follows).
+        /// </summary>
+        public void ActivateFindResult(FindResultEntry entry)
+        {
+            if (entry == null) return;
+            Log.Debug($"search: result {entry.Index + 1} of {FindResults.Total} chosen (list {FindResults.Version})");
+            MarkdownEditor?.PostMessage("FindActivate", new { index = entry.Index, version = FindResults.Version });
         }
 
         public void SearchValueChanged()

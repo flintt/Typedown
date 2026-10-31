@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using UIA = System.Windows.Automation;
 
 /// <summary>
+/// FL02: the font picker beside it (Settings > Editor > Font, Choose…): every installed font listed without typing,
+/// narrowed down by its box, and the one clicked goes first in the setting with the fallbacks after it kept.
 /// FL01: Settings > Editor > font family suggests the installed fonts as one types (Win2D enumerates them: in the
 /// trimmed, unpackaged build Win2D must still load). "Seg" offers Segoe UI, which every Windows has.
 /// </summary>
@@ -53,6 +55,69 @@ internal static partial class Program
             await c.Call("test.window.navigate", new { windowId, route = "Main" });
             var after = (string?)(await c.Call("test.settings.get", new { windowId, name = "FontFamily" }))["value"];
             if (after != before) await c.Call("test.settings.set", new { windowId, name = "FontFamily", value = before });
+        }
+    }
+
+    private static async Task FL02(List<string> notes)
+    {
+        using var c = await Session("e2e FL02");
+        var id = await Open(c, Fixture("fl02.md", "# FL02\n"));
+        var windowId = await WindowIdOf(c, id);
+        var window = await WindowOf(windowId, c);
+        var before = (string?)(await c.Call("test.settings.get", new { windowId, name = "FontFamily" }))["value"];
+        UIA.AutomationElement? Anywhere(string automationId) =>
+            UIA.AutomationElement.RootElement.FindAll(UIA.TreeScope.Children, new UIA.PropertyCondition(UIA.AutomationElement.ProcessIdProperty, hostPid))
+                .Cast<UIA.AutomationElement>()
+                .Select(w => Deep.First(w, new UIA.PropertyCondition(UIA.AutomationElement.AutomationIdProperty, automationId)))
+                .FirstOrDefault(e => e != null);
+        int Listed() => UIA.AutomationElement.RootElement.FindAll(UIA.TreeScope.Children, new UIA.PropertyCondition(UIA.AutomationElement.ProcessIdProperty, hostPid))
+            .Cast<UIA.AutomationElement>()
+            .Sum(w => Deep.All(w, new UIA.PropertyCondition(UIA.AutomationElement.ControlTypeProperty, UIA.ControlType.ListItem)).Count(e => (e.Current.AutomationId ?? "").StartsWith("FontPicker.Font:")));
+        try
+        {
+            await c.Call("test.settings.set", new { windowId, name = "FontFamily", value = "Georgia, 'Microsoft YaHei UI', sans-serif" });
+            await c.Call("test.window.navigate", new { windowId, route = "Settings" });
+            await Task.Delay(1500);
+            await Activate(window);
+            var root = UIA.AutomationElement.FromHandle(window);
+            var nav = Deep.First(root, new UIA.PropertyCondition(UIA.AutomationElement.AutomationIdProperty, "SettingsNavEditor")) ?? throw new CaseFailed("no Editor item on the settings page");
+            if (nav.TryGetCurrentPattern(UIA.SelectionItemPattern.Pattern, out var select)) ((UIA.SelectionItemPattern)select).Select();
+            else ((UIA.InvokePattern)nav.GetCurrentPattern(UIA.InvokePattern.Pattern)).Invoke();
+            await Task.Delay(1500);
+            var choose = Deep.First(root, new UIA.PropertyCondition(UIA.AutomationElement.AutomationIdProperty, "FontFamilyChoose")) ?? throw new CaseFailed("no Choose… button beside the font box");
+            // Pressed through UI Automation: the row can be below the settings page's fold in a short window (scrolling
+            // it into view did not move the page on w10). The list it opens is used with the real mouse and keys.
+            ((UIA.InvokePattern)choose.GetCurrentPattern(UIA.InvokePattern.Pattern)).Invoke();
+            UIA.AutomationElement? search = null;
+            for (var i = 0; i < 25 && search == null; i++) { await Task.Delay(200); search = Anywhere("FontPicker.Search"); }
+            Check(search != null, "Choose… opens the list with its search box");
+            var shown = 0;
+            for (var i = 0; i < 15 && shown < 5; i++) { await Task.Delay(200); shown = Listed(); }
+            notes.Add($"rows shown before typing: {shown}");
+            Check(shown >= 5, "the fonts are listed without typing anything");
+            foreach (var ch in "Segoe UI") { TypeChar(ch); await Task.Delay(60); }
+            UIA.AutomationElement? segoe = null;
+            for (var i = 0; i < 20 && segoe == null; i++) { await Task.Delay(200); segoe = Anywhere("FontPicker.Font:Segoe UI"); }
+            Check(segoe != null, "typing narrows the list to Segoe UI");
+            await Click(window, segoe!);
+            string? after = null;
+            for (var i = 0; i < 20; i++)
+            {
+                await Task.Delay(200);
+                after = (string?)(await c.Call("test.settings.get", new { windowId, name = "FontFamily" }))["value"];
+                if (after != null && after.StartsWith("'Segoe UI'")) break;
+            }
+            notes.Add($"font after: {after}");
+            Check(after == "'Segoe UI', 'Microsoft YaHei UI', sans-serif", "the font clicked goes first, the fallbacks after it stay");
+            Check(Anywhere("FontPicker.Search") == null, "the list closes once a font is chosen");
+        }
+        finally
+        {
+            Send(Key(0x1B, false), Key(0x1B, true));
+            await Task.Delay(300);
+            await c.Call("test.window.navigate", new { windowId, route = "Main" });
+            await c.Call("test.settings.set", new { windowId, name = "FontFamily", value = before ?? "" });
+            try { await c.Call("document.close", new { documentId = id }); } catch { }
         }
     }
 }

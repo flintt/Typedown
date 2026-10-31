@@ -73,7 +73,10 @@ internal static partial class Program
 
             // A long document scrolled: a Scrolled event (at most one every ten seconds a window, so moved again until it comes).
             var longText = "# AC01 long\n\n" + string.Concat(Enumerable.Range(1, 200).Select(i => $"Paragraph {i} of a long document.\n\n"));
-            var longId = await Open(c, Fixture("ac01-long.md", longText));
+            // Into this window by its id: without one the document goes to the window in front, and the rename just
+            // before can leave the other window there (the full run of 2026-10-30 scrolled this window, the document
+            // in the other).
+            var longId = (string)(await c.Call("document.open", new { path = Fixture("ac01-long.md", longText), windowId, reveal = "document" }))["documentId"]!;
             await c.Call("document.focus", new { documentId = longId });
             await Activate(window);
             await Task.Delay(800);

@@ -958,4 +958,22 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Podczas rysowania długiego dokumentu częściami wysokość tego, co nie jest jeszcze wyświetlane, jest obliczana na podstawie tekstu zamiast szacowana, dzięki czemu pasek przewijania i przeskoki z konspektu są dokładniejsze. Eksperymentalne</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Kółko myszy przechodzi po kartach w kółko</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Przewinięcie za ostatnią kartę przechodzi do pierwszej i odwrotnie; wyłączone zatrzymuje się na pierwszej i ostatniej karcie</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Rysuj diagramy Mermaid za pomocą</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele rysuje więcej rodzajów diagramów i układa je inaczej niż Mermaid</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Łącz wiersze akapitu w trybie czytania</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>W trybie czytania pojedynczy znak nowego wiersza w akapicie jest wyświetlany jako spacja, tak jak określa Markdown i jak już robią eksporty (bez spacji między znakami chińskimi lub japońskimi). Aby zachować podział, zakończ wiersz dwiema spacjami lub ukośnikiem odwrotnym</value>
+  </data>
 </root>

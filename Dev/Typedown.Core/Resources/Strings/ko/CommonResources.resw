@@ -954,9 +954,6 @@
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>검색 중…</value>
   </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>검색한 {1}개 파일 중 {0}개 일치</value>
-  </data>
   <data name="TocPane.ExpandAll" xml:space="preserve">
     <value>모두 펼치기</value>
   </data>
@@ -986,9 +983,6 @@
   </data>
   <data name="SearchInFolder" xml:space="preserve">
     <value>폴더에서 검색</value>
-  </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(파일 이름 일치)</value>
   </data>
   <data name="LastUsedTab" xml:space="preserve">
     <value>마지막으로 사용한 탭</value>
@@ -1152,5 +1146,53 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>여는 중…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>파일 이름 ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>내용 ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>내용도 일치</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>모두 표시 ({0}개)</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>폴더</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>파일 이름: {0} · 내용 검색 중…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>파일 이름: {0} · 내용: {1} · 검색한 파일: {2}</value>
+  </data>
+  <data name="FindResults.ShowAll" xml:space="preserve">
+    <value>모든 결과 표시</value>
+  </data>
+  <data name="FindResults.Title" xml:space="preserve">
+    <value>문서에서 검색</value>
+  </data>
+  <data name="FindResults.Total" xml:space="preserve">
+    <value>결과: {0}개</value>
+  </data>
+  <data name="FindResults.TooMany" xml:space="preserve">
+    <value>결과가 너무 많습니다 – 계속 입력하세요</value>
+  </data>
+  <data name="FindResults.None" xml:space="preserve">
+    <value>결과 없음</value>
+  </data>
+  <data name="FindResults.Position" xml:space="preserve">
+    <value>{0}/{1}</value>
+  </data>
+  <data name="CopyTable" xml:space="preserve">
+    <value>표 복사</value>
+  </data>
+  <data name="FontPicker.Choose" xml:space="preserve">
+    <value>선택…</value>
+  </data>
+  <data name="FontPicker.Search" xml:space="preserve">
+    <value>글꼴 검색</value>
   </data>
 </root>

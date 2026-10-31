@@ -954,9 +954,6 @@
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>Suche läuft…</value>
   </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>{0} Treffer in {1} durchsuchten Dateien</value>
-  </data>
   <data name="TocPane.ExpandAll" xml:space="preserve">
     <value>Alle ausklappen</value>
   </data>
@@ -986,9 +983,6 @@
   </data>
   <data name="SearchInFolder" xml:space="preserve">
     <value>Im Ordner suchen</value>
-  </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(Dateiname stimmt überein)</value>
   </data>
   <data name="LastUsedTab" xml:space="preserve">
     <value>Zuletzt verwendeter Tab</value>
@@ -1152,5 +1146,53 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>Wird geöffnet…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>Dateinamen ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>Inhalt ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>Inhalt stimmt auch überein</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>Alle {0} anzeigen</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>Ordner</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>Dateinamen: {0} · Inhalte werden durchsucht…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>Dateinamen: {0} · Inhalt: {1} · Durchsuchte Dateien: {2}</value>
+  </data>
+  <data name="FindResults.ShowAll" xml:space="preserve">
+    <value>Alle Ergebnisse anzeigen</value>
+  </data>
+  <data name="FindResults.Title" xml:space="preserve">
+    <value>Im Dokument suchen</value>
+  </data>
+  <data name="FindResults.Total" xml:space="preserve">
+    <value>Ergebnisse: {0}</value>
+  </data>
+  <data name="FindResults.TooMany" xml:space="preserve">
+    <value>Zu viele Ergebnisse – weiter tippen</value>
+  </data>
+  <data name="FindResults.None" xml:space="preserve">
+    <value>Keine Ergebnisse</value>
+  </data>
+  <data name="FindResults.Position" xml:space="preserve">
+    <value>{0} von {1}</value>
+  </data>
+  <data name="CopyTable" xml:space="preserve">
+    <value>Tabelle kopieren</value>
+  </data>
+  <data name="FontPicker.Choose" xml:space="preserve">
+    <value>Auswählen…</value>
+  </data>
+  <data name="FontPicker.Search" xml:space="preserve">
+    <value>Schriftarten suchen</value>
   </data>
 </root>

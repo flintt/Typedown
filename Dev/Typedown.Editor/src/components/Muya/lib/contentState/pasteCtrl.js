@@ -1,6 +1,6 @@
 
 import { PARAGRAPH_TYPES, PREVIEW_DOMPURIFY_CONFIG, HAS_TEXT_BLOCK_REG, IMAGE_EXT_REG, URL_REG } from '../config'
-import { sanitize, getUniqueId, getImageInfo as getImageSrc, getPageTitle } from '../utils'
+import { sanitize, getUniqueId, getImageInfo as getImageSrc } from '../utils'
 import { getImageInfo } from '../utils/getImageInfo'
 import { dedentPastedText } from '../utils/pastedText'
 
@@ -92,12 +92,20 @@ const pasteCtrl = ContentState => {
     const tables = Array.from(tempWrapper.querySelectorAll('table'))
     for (const table of tables) {
       const row = table.querySelector('tr')
-      if (row.firstElementChild.tagName !== 'TH') {
+      if (!row) continue
+      if (row.firstElementChild && row.firstElementChild.tagName !== 'TH') {
         [...row.children].forEach(cell => {
           const th = document.createElement('th')
           th.innerHTML = cell.innerHTML
           cell.replaceWith(th)
         })
+      }
+      // The table plugin takes the first row for the header only when nothing comes before its body; Excel puts <col>
+      // widths there (a <colgroup> once parsed), and it then wrote an empty header above the real one.
+      if (row.parentElement.tagName !== 'THEAD') {
+        const thead = document.createElement('thead')
+        table.insertBefore(thead, table.firstChild)
+        thead.appendChild(row)
       }
       const paragraphs = Array.from(table.querySelectorAll('p'))
       for (const p of paragraphs) {
@@ -115,21 +123,17 @@ const pasteCtrl = ContentState => {
       }
     }
 
-    // Prevent it parse into a link if copy a url.
+    // A link whose text is its own address is pasted as the address. Its page's title is not fetched: the paste waited
+    // for it, up to 1.5 s a link, one after another, and from the editor's page a site almost never lets it be read.
     const links = Array.from(tempWrapper.querySelectorAll('a'))
     for (const link of links) {
       const href = link.getAttribute('href')
       const text = link.textContent
 
       if (URL_REG.test(href) && href === text) {
-        const title = await getPageTitle(href)
-        if (title) {
-          link.innerHTML = sanitize(title, PREVIEW_DOMPURIFY_CONFIG, true)
-        } else {
-          const span = document.createElement('span')
-          span.innerHTML = text
-          link.replaceWith(span)
-        }
+        const span = document.createElement('span')
+        span.innerHTML = text
+        link.replaceWith(span)
       }
     }
     return tempWrapper.innerHTML

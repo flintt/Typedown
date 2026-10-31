@@ -958,4 +958,22 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>בזמן שמסמך ארוך מצויר בחלקים, הגובה של מה שעוד לא מוצג מחושב מהטקסט במקום להיות מוערך, כך שסרגל הגלילה והקפיצות מתוך המתאר מדויקים יותר. ניסיוני</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>גלגל העכבר עובר בין הלשוניות במעגל</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>גלילה אחרי הלשונית האחרונה עוברת לראשונה, ולהפך; כבוי עוצר בלשונית הראשונה והאחרונה</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>ציור דיאגרמות Mermaid באמצעות</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele מצייר יותר סוגי דיאגרמות ומסדר אותן אחרת מ-Mermaid</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>חיבור שורות הפסקה במצב קריאה</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>במצב קריאה, מעבר שורה בודד בתוך פסקה מוצג כרווח, כפי ש-Markdown קובע וכפי שהייצוא כבר עושה (ללא רווח בין תווים סיניים או יפניים). כדי לשמור על מעבר שורה, סיימו את השורה בשני רווחים או בלוכסן הפוך</value>
+  </data>
 </root>

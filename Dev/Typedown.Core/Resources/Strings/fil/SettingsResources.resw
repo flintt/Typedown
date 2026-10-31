@@ -958,4 +958,22 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Habang iginuguhit nang paisa-isang bahagi ang mahabang dokumento, kinukuwenta mula sa teksto ang taas ng hindi pa ipinapakita sa halip na tantiyahin, kaya mas tumpak ang scroll bar at ang mga pagtalon mula sa outline. Eksperimental</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Umiikot sa mga tab ang mouse wheel</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Ang pag-scroll lampas sa huling tab ay pupunta sa una, at pabalik; kapag naka-off, hihinto sa una at huling tab</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Iguhit ang mga diagram ng Mermaid gamit ang</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Mas maraming uri ng diagram ang iginuguhit ng Pele at iba ang pagkakaayos nito kaysa sa Mermaid</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Pagsamahin ang mga linya ng talata sa reading mode</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>Sa reading mode, ang iisang line break sa loob ng talata ay ipinapakita bilang espasyo, ayon sa itinakda ng Markdown at gaya ng ginagawa na ng mga export (walang espasyo sa pagitan ng mga karakter na Chinese o Japanese). Para mapanatili ang line break, tapusin ang linya sa dalawang espasyo o isang backslash</value>
+  </data>
 </root>

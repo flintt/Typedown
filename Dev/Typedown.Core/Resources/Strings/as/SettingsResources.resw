@@ -958,4 +958,22 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>দীঘলীয়া নথি অংশ অংশকৈ অঁকাৰ সময়ত, এতিয়াও নেদেখুওৱা অংশৰ উচ্চতা অনুমান নকৰি পাঠৰ পৰা গণনা কৰা হয়, যাতে স্ক্ৰ'ল বাৰ আৰু ৰূপৰেখাৰ পৰা জঁপিয়াই যোৱা অধিক সঠিক হয়। পৰীক্ষামূলক</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>মাউছ হুইলে টেবসমূহ ঘূৰি থাকে</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>শেষ টেবৰ পিছলৈ স্ক্ৰল কৰিলে প্ৰথমটোলৈ যায়, আৰু উলটি; বন্ধ থাকিলে প্ৰথম আৰু শেষ টেবত ৰ'ব</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Mermaid চিত্ৰ আঁকাৰ উপায়</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele-এ অধিক প্ৰকাৰৰ চিত্ৰ আঁকে আৰু Mermaid-ৰ পৰা বেলেগকৈ সজায়</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>পঢ়া ম’ডত অনুচ্ছেদৰ শাৰীবোৰ সংযোগ কৰক</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>পঢ়া ম’ডত অনুচ্ছেদৰ ভিতৰৰ একক শাৰী বিৰতি স্পেচ হিচাপে দেখুওৱা হয়, যেনেকৈ Markdown-এ নিৰ্ধাৰণ কৰে আৰু ৰপ্তানিয়ে আগৰে পৰা কৰে (চীনা বা জাপানী আখৰৰ মাজত স্পেচ নাথাকে)। শাৰী বিৰতি ৰাখিবলৈ শাৰীৰ শেষত দুটা স্পেচ বা বেকস্লেচ দিয়ক</value>
+  </data>
 </root>

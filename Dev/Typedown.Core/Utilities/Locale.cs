@@ -161,7 +161,45 @@ namespace Typedown.Core.Utilities
             try { Culture = wanted != null ? FormatCulture.For(wanted) : System.Globalization.CultureInfo.CurrentCulture; }
             catch (System.Globalization.CultureNotFoundException) { Culture = System.Globalization.CultureInfo.CurrentCulture; }
             Apply(ResourceContext, wanted);
-            Log.Debug($"language: setting={language} applied={wanted ?? "(system)"} resolved={(ResourceContext.QualifierValues.TryGetValue("Language", out var resolved) ? resolved : "")}");
+            var before = ElementLanguage;
+            ElementLanguage = wanted ?? SystemLanguageTag();
+            Log.Debug($"language: setting={language} applied={wanted ?? "(system)"} resolved={(ResourceContext.QualifierValues.TryGetValue("Language", out var resolved) ? resolved : "")} elements={ElementLanguage}");
+            // Only a change goes to the windows. Every window applies the language as it is made, and a window made gives its
+            // own menus the tag as they load: told to every window, a window closing at that moment had its menus' language
+            // set as they were torn down, and the process ended (0xc000027b in CoreMessagingXP, AC01 in the full suite on w10).
+            if (before == ElementLanguage) return;
+            foreach (var handler in LanguageApplied?.GetInvocationList() ?? Array.Empty<Delegate>())
+            {
+                try { ((Action)handler)(); }
+                catch (Exception ex) { Log.Debug($"language: a window could not take {ElementLanguage}: {ex.Message}"); }
+            }
+        }
+
+        /// <summary>
+        /// The language tag the interface's elements carry (FrameworkElement.Language): the chosen language, or the
+        /// system's display language when the interface follows the system. WinUI picks the fallback font for Chinese,
+        /// Japanese and Korean text by it; an element that carries none takes a default fixed when it (or the popup
+        /// window it is shown in) was made, so a menu made while the interface was in English showed Chinese in the
+        /// English fallback font after switching back - thinner, other glyph shapes - until the app was restarted.
+        /// Null until the first application.
+        /// </summary>
+        public static string ElementLanguage { get; private set; }
+
+        /// <summary>After every application of the language (the first one too): the windows put the tag on their elements (UiLanguage).</summary>
+        public static event Action LanguageApplied;
+
+        private static string SystemLanguageTag()
+        {
+            try
+            {
+                var first = Windows.System.UserProfile.GlobalizationPreferences.Languages.FirstOrDefault();
+                if (!string.IsNullOrEmpty(first)) return first;
+            }
+            catch (Exception)
+            {
+                // not available (no user profile): the process's own below
+            }
+            return System.Globalization.CultureInfo.CurrentUICulture.Name;
         }
 
         private static void Apply(ResourceContext context, string language)

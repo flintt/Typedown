@@ -958,4 +958,22 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Fad atá doiciméad fada á tharraingt ina chodanna, ríomhtar airde an mhéid nach dtaispeántar fós ón téacs in ionad é a mheas, ionas go mbíonn an barra scrollaithe agus na léimeanna ón imlíne níos cruinne. Turgnamhach</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Téann roth na luiche timpeall na gcluaisíní</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Má scrollaítear thar an gcluaisín deireanach, téitear chuig an gcéad cheann, agus ar ais; múchta stopann sé ag an gcéad chluaisín agus ag an gcluaisín deireanach</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Tarraing léaráidí Mermaid le</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Tarraingíonn Pele níos mó cineálacha léaráidí agus leagann sé amach iad ar bhealach difriúil ó Mermaid</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Ceangail línte míre sa mhód léitheoireachta</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>Sa mhód léitheoireachta, taispeántar briseadh líne aonair laistigh de mhír mar spás, mar a shonraíonn Markdown agus mar a dhéanann na heaspórtálacha cheana (gan spás idir carachtair Shíneacha nó Sheapánacha). Chun briseadh a choinneáil, críochnaigh an líne le dhá spás nó le cúlslais</value>
+  </data>
 </root>

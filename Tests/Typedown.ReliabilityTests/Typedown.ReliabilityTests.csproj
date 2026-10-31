@@ -22,6 +22,7 @@
     <Compile Include="../../Dev/Typedown.Core/Utilities/ThemeDesignerPage.cs" Link="Production/ThemeDesignerPage.cs" />
     <Compile Include="../../Dev/Typedown.Core/Utilities/WebView2Runtime.cs" Link="Production/WebView2Runtime.cs" />
     <Compile Include="../../Dev/Typedown.Core/Utilities/StartupTiming.cs" Link="Production/StartupTiming.cs" />
+    <Compile Include="../../Dev/Typedown.Core/Utilities/LogText.cs" Link="Production/LogText.cs" />
     <Compile Include="../../Dev/Typedown.Core/Utilities/RecentPaths.cs" Link="Production/RecentPaths.cs" />
     <Compile Include="../../Dev/Typedown.Core/Services/FavoritesStore.cs" Link="Production/FavoritesStore.cs" />
     <Compile Include="../../Dev/Typedown.Core/Migrations/*.cs" Link="Production/Migrations/%(Filename)%(Extension)" />

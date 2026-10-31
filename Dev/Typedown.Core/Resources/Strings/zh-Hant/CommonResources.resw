@@ -960,10 +960,6 @@
     <value>搜尋中…</value>
     <comment>搜索/搜索中</comment>
   </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>{1} 個檔案中有 {0} 個匹配</value>
-    <comment>搜索/结果统计</comment>
-  </data>
   <data name="TocPane.ExpandAll" xml:space="preserve">
     <value>全部展開</value>
     <comment>大纲/全部展开</comment>
@@ -1001,9 +997,6 @@
   </data>
   <data name="SearchInFolder" xml:space="preserve">
     <value>在資料夾中搜尋</value>
-  </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>（檔名符合）</value>
   </data>
   <data name="LastUsedTab" xml:space="preserve">
     <value>上次使用的分頁</value>
@@ -1167,5 +1160,53 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>正在開啟…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>檔名 ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>內容 ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>內容也符合</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>顯示全部 {0} 筆</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>資料夾</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>檔名：{0} · 正在搜尋內容…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>檔名：{0} · 內容：{1} · 已搜尋 {2} 個檔案</value>
+  </data>
+  <data name="FindResults.ShowAll" xml:space="preserve">
+    <value>顯示所有結果</value>
+  </data>
+  <data name="FindResults.Title" xml:space="preserve">
+    <value>本文搜尋</value>
+  </data>
+  <data name="FindResults.Total" xml:space="preserve">
+    <value>結果：{0} 個</value>
+  </data>
+  <data name="FindResults.TooMany" xml:space="preserve">
+    <value>結果太多，請繼續輸入</value>
+  </data>
+  <data name="FindResults.None" xml:space="preserve">
+    <value>沒有結果</value>
+  </data>
+  <data name="FindResults.Position" xml:space="preserve">
+    <value>第 {0} 個，共 {1} 個</value>
+  </data>
+  <data name="CopyTable" xml:space="preserve">
+    <value>複製表格</value>
+  </data>
+  <data name="FontPicker.Choose" xml:space="preserve">
+    <value>選擇…</value>
+  </data>
+  <data name="FontPicker.Search" xml:space="preserve">
+    <value>搜尋字型</value>
   </data>
 </root>

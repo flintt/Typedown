@@ -32,6 +32,8 @@ namespace Typedown.Windows
             Title = Locale.GetDialogString("WebView2RuntimeNotInstalledTitle");
             ExtendsContentIntoTitleBar = true;
             Content = webView2InstallControl;
+            // The interface's language tag, where one was applied already (UiLanguage); else the system's default stays.
+            UiLanguage.Set(webView2InstallControl);
             if (AppWindow.Presenter is OverlappedPresenter presenter)
             {
                 presenter.IsResizable = false;

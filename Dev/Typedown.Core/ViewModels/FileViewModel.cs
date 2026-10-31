@@ -48,6 +48,12 @@ namespace Typedown.Core.ViewModels
         /// <summary>True when the user chose the workspace folder (Open Folder), false when it was restored at startup.</summary>
         public bool WorkFolderIsExplicit { get; private set; }
 
+        /// <summary>
+        /// The folder the side pane's tree shows, set by the tree; null before it was first shown. It can differ from
+        /// <see cref="WorkFolder"/>: unless a folder was opened, the tree follows the document in front.
+        /// </summary>
+        public string FolderTreeRoot { get; set; }
+
         /// <summary>Raised after a document was loaded from disk (not on tab switches); <c>preview</c> = single-click open.</summary>
         public event Action<string, bool> FileOpened;
 
@@ -907,7 +913,7 @@ namespace Typedown.Core.ViewModels
         {
             var error = args?["error"]?.ToString();
             if (string.IsNullOrEmpty(error)) return false;
-            Log.Debug($"export: the page could not make the HTML: {error}");
+            Log.Debug($"export: the page could not make the HTML: {LogText.Error(error)}");
             await AppContentDialog.Create(Locale.GetDialogString("ExportErrorTitle"), error, Locale.GetString("Ok")).ShowAsync(AppViewModel.XamlRoot);
             return true;
         }
@@ -1131,11 +1137,14 @@ namespace Typedown.Core.ViewModels
                     await NewFileFun(false);
                 }
             }
-            else
+            SessionMemory.Session session = null;
+            if (string.IsNullOrEmpty(path))
             {
                 // Documents kept when the window closed (Settings > Keep unsaved changes when closing) come back with the
                 // tabs they were in, whatever the start-up setting says.
-                switch (SettingsViewModel.KeepUnsavedOnClose ? Enums.FileStartupAction.RestoreSession : SettingsViewModel.FileStartupAction)
+                var action = SettingsViewModel.KeepUnsavedOnClose ? Enums.FileStartupAction.RestoreSession : SettingsViewModel.FileStartupAction;
+                if (action == Enums.FileStartupAction.RestoreSession) session = SessionMemory.Load();
+                switch (action)
                 {
                     case Enums.FileStartupAction.OpenLast:
                         await AccessHistory.EnsureInitialized();
@@ -1155,6 +1164,7 @@ namespace Typedown.Core.ViewModels
             // when the settings want it. Before the recovery question, which a recovered document then answers.
             Home?.ShowIfWanted();
             await RecoverUntitledBackupsAsync();
+            await RestoreSessionTabs(session);
         }
 
         private static bool untitledRecoveryDone;
@@ -1185,27 +1195,78 @@ namespace Typedown.Core.ViewModels
                 foreach (var (documentId, _) in backups) AutoBackup.DeleteBackup(null, documentId);
                 return;
             }
+            var intoEditor = false;
             foreach (var (documentId, file) in backups)
             {
                 string text;
                 try { text = await File.ReadAllTextAsync(file); }
                 catch (Exception ex) { Log.Debug($"recover untitled {documentId}: {ex.Message}"); continue; }
                 if (TabsViewModel.Tabs.Any(t => t.DocumentId == documentId)) continue;
-                if (!TabsViewModel.IsActiveTabBlank) TabsViewModel.BeginNewTab();
-                TabsViewModel.ActiveTab.RestoreIdentity(documentId);
-                FilePath = null;
-                FileFormat = TextFileFormat.Default;
-                EditorViewModel.FileHash = Common.SimpleHash(Common.DefaultMarkdwn);
-                EditorViewModel.Markdown = text;
-                EditorViewModel.CurrentHash = Common.SimpleHash(text);
-                EditorViewModel.Saved = false;
-                EditorViewModel.AutoSavedSucc = false;
-                EditorViewModel.FileLoaded = true;
-                EditorViewModel.History.InitHistory(text);
-                TabsViewModel.ActiveTab.BackupHash = EditorViewModel.CurrentHash;
+                if (TabsViewModel.IsActiveTabBlank)
+                {
+                    // Nothing else open (no session): the first one goes into the blank tab, in the editor.
+                    TabsViewModel.ActiveTab.RestoreIdentity(documentId);
+                    FilePath = null;
+                    FileFormat = TextFileFormat.Default;
+                    EditorViewModel.FileHash = Common.SimpleHash(Common.DefaultMarkdwn);
+                    EditorViewModel.Markdown = text;
+                    EditorViewModel.CurrentHash = Common.SimpleHash(text);
+                    EditorViewModel.Saved = false;
+                    EditorViewModel.AutoSavedSucc = false;
+                    EditorViewModel.FileLoaded = true;
+                    EditorViewModel.History.InitHistory(text);
+                    TabsViewModel.ActiveTab.BackupHash = EditorViewModel.CurrentHash;
+                    intoEditor = true;
+                    continue;
+                }
+                // The others come back behind the active one, as the session's other tabs do: each made the active tab
+                // in turn, the start showed the last of them instead of the tab the reader had closed on.
+                var tab = new DocumentTab
+                {
+                    Markdown = text,
+                    FileHash = Common.SimpleHash(Common.DefaultMarkdwn),
+                    CurrentHash = Common.SimpleHash(text),
+                    Saved = false,
+                    AutoSavedSucc = false,
+                    FileLoaded = true,
+                    IsDirty = true,
+                };
+                tab.RestoreIdentity(documentId);
+                tab.History.InitHistory(text);
+                tab.BackupHash = tab.CurrentHash;
+                TabsViewModel.Tabs.Add(tab);
             }
             Log.Debug($"recovered {backups.Count} untitled document(s)");
-            EditorViewModel.PostLoadFile(EditorViewModel.Markdown);
+            if (intoEditor) EditorViewModel.PostLoadFile(EditorViewModel.Markdown);
+        }
+
+        /// <summary>
+        /// Once the untitled documents are back from their backups: the tabs in the order they were closed in (the untitled
+        /// ones came after the files), and the tab the reader closed on shown - an untitled one is named by its document id,
+        /// having no file in the list.
+        /// </summary>
+        private async Task RestoreSessionTabs(SessionMemory.Session session)
+        {
+            var tabs = TabsViewModel;
+            if (session == null || tabs == null) return;
+            if (session.Order is { Count: > 0 } order)
+            {
+                var place = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+                for (var i = 0; i < order.Count; i++) place.TryAdd(order[i], i);
+                int Place(DocumentTab t) => place.TryGetValue(SessionMemory.OrderKey(t == tabs.ActiveTab ? FilePath : t.FilePath, t.DocumentId), out var i) ? i : int.MaxValue;
+                // Stable: tabs the session did not have keep their order, after the ones it had.
+                var wanted = tabs.Tabs.Select((t, i) => (Tab: t, Place: Place(t), Now: i)).OrderBy(x => x.Place).ThenBy(x => x.Now).Select(x => x.Tab).ToList();
+                for (var i = 0; i < wanted.Count; i++)
+                {
+                    var now = tabs.Tabs.IndexOf(wanted[i]);
+                    if (now != i) tabs.Tabs.Move(now, i);
+                }
+            }
+            if (session.ActiveDocumentId is string id && tabs.Tabs.FirstOrDefault(t => t.DocumentId == id) is { } shown && shown != tabs.ActiveTab)
+            {
+                Log.Debug("RestoreSession: back on the untitled document the session was closed on");
+                await tabs.SwitchTo(shown);
+            }
         }
 
         private async void Export(ExportConfig config)

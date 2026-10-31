@@ -1,7 +1,9 @@
-// While a long document is drawn a part at a time, the room kept for the rest (StateRender.estimateRest, written on the
-// root every 100 ms) is the height of the root's ::before and ::after, and nothing under the root inherits it: as plain
-// custom properties every element of the document was restyled each time it was written - four fifths of the time
-// drawing a 1.5 MB document of HTML-heavy blocks.
+// While a long document is drawn a part at a time, the room kept for the rest (StateRender.estimateRest, written every
+// 100 ms, its fraction of a pixel almost every slice) is the height of the root's ::before and ::after, written into a
+// style sheet's rules for them (parser/render/roomStyle.js) - not on the root: as plain custom properties there every
+// element of the document was restyled each time (four fifths of the time drawing a 1.5 MB document of HTML-heavy
+// blocks), and as properties registered as not inherited still every block under the root, 35-60 ms a write on 2,900
+// blocks (LT01: slices of 80-250 ms, frames 200-300 ms apart).
 //
 //   node room-style-check.js
 const { openEditor } = require('./harness');
@@ -21,18 +23,25 @@ const doc = '# Room\n\n' + Array.from({ length: 3000 }, (_, i) => block(i + 1)).
     const r = await page.evaluate(() => {
       const root = document.getElementById('ag-editor-id');
       const state = window.__typedownMuya.contentState.stateRender.progressive;
-      const child = root.querySelector('p');
       return {
         drawing: !!state,
-        below: root.style.getPropertyValue('--td-room-below'),
+        rootStyle: root.getAttribute('style') || '',
         after: getComputedStyle(root, '::after').height,
-        child: getComputedStyle(child).getPropertyValue('--td-room-below').trim(),
+        before: getComputedStyle(root, '::before').height,
       };
     });
     console.log(JSON.stringify(r));
     check(r.drawing, 'the document is still being drawn (the case this checks)');
-    check(parseFloat(r.below) > 1000 && Math.abs(parseFloat(r.after) - parseFloat(r.below)) < 1, `the room below is the ::after's height (${r.below} / ${r.after})`);
-    check(r.child === '0px', `a block under the root does not inherit it (${r.child || 'empty'})`);
+    check(parseFloat(r.after) > 1000, `the room below is the root's ::after's height (${r.after})`);
+    check(!/td-room|height|padding/.test(r.rootStyle), `the room is not written on the root's own style ("${r.rootStyle}")`);
+    // Written again (a slice's estimate), and the fraction of a pixel (keepInPlace): still nothing on the root.
+    const again = await page.evaluate(() => {
+      const sr = window.__typedownMuya.contentState.stateRender; const state = sr.progressive;
+      sr.estimateRest(state);
+      const keep = sr.keepInPlace(state, state.root.firstElementChild); window.scrollBy(0, 0); keep();
+      return { rootStyle: state.root.getAttribute('style') || '', after: getComputedStyle(state.root, '::after').height };
+    });
+    check(!/td-room|height|padding/.test(again.rootStyle) && parseFloat(again.after) > 1000, `written again, still on the ::after (${again.after}), not on the root ("${again.rootStyle}")`);
     if (errors.length) failures.push(`page errors: ${errors.join(' | ')}`);
   } finally {
     await close();

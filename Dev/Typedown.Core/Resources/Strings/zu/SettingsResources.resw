@@ -958,4 +958,22 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Ngenkathi umbhalo omude udwetshwa ngezingxenye, ukuphakama kwalokho okungakaboniswa kubalwa embhalweni esikhundleni sokulinganiselwa, ngakho ibha yokuskrola nokweqa kusuka kuhlaka kunembe kakhulu. Okokuhlola</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Isondo lemawusi lizungeza amathebhu</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Ukuskrola ngale kwethebhu lokugcina kuya kwelokuqala, nokubuya; uma ivaliwe limisa ethebhini lokuqala nelokugcina</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Dweba imidwebo ye-Mermaid nge</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>I-Pele idweba izinhlobo eziningi zemidwebo futhi iyihlele ngendlela ehlukile kune-Mermaid</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Hlanganisa imigqa yesigaba kumodi yokufunda</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>Kumodi yokufunda, ukwephuka komugqa okukodwa ngaphakathi kwesigaba kuboniswa njengesikhala, njengoba i-Markdown ibeka futhi njengoba ukuthunyelwa sekwenza kakade (asikho isikhala phakathi kwezinhlamvu zesiShayina noma zesiJapane). Ukuze ugcine ukwephuka, qeda umugqa ngezikhala ezimbili noma nge-backslash</value>
+  </data>
 </root>

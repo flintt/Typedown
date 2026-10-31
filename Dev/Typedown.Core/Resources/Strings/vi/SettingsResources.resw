@@ -958,4 +958,22 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Khi một tài liệu dài được vẽ theo từng phần, chiều cao của phần chưa hiển thị được tính từ văn bản thay vì ước lượng, nhờ đó thanh cuộn và các lần nhảy từ dàn ý chính xác hơn. Thử nghiệm</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Con lăn chuột xoay vòng qua các thẻ</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Cuộn qua thẻ cuối sẽ về thẻ đầu, và ngược lại; tắt sẽ dừng ở thẻ đầu và thẻ cuối</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Vẽ sơ đồ Mermaid bằng</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele vẽ được nhiều loại sơ đồ hơn và bố trí khác với Mermaid</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Nối các dòng của đoạn văn trong chế độ đọc</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>Trong chế độ đọc, một dấu xuống dòng đơn bên trong đoạn văn được hiển thị như một khoảng trắng, đúng như Markdown quy định và như các bản xuất đã làm (không có khoảng trắng giữa các ký tự tiếng Trung hoặc tiếng Nhật). Để giữ lại xuống dòng, hãy kết thúc dòng bằng hai khoảng trắng hoặc một dấu gạch chéo ngược</value>
+  </data>
 </root>

@@ -20,3 +20,6 @@ export function recentScrolls(ms = 1500) {
     const now = performance.now()
     return notes.filter(n => now - n.at <= ms).map(n => ({ who: n.who, from: n.from, to: n.to, ago: Math.round(now - n.at) }))
 }
+
+// For the checks (Tools/EditorBench, LT01): who moved the page lately.
+(window as any).__typedownScrolls = (ms = 1500) => recentScrolls(ms)

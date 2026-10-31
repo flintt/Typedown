@@ -948,12 +948,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>Etsi kansiosta…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(tiedostonimi täsmää)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>{0} osumaa {1} haetusta tiedostosta</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>Haetaan…</value>
   </data>
@@ -1152,5 +1146,53 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>Avataan…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>Tiedostonimet ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>Sisältö ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>Myös sisältö täsmää</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>Näytä kaikki ({0})</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>Kansio</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>Tiedostonimet: {0} · Haetaan sisällöstä…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>Tiedostonimet: {0} · Sisältö: {1} · Haettuja tiedostoja: {2}</value>
+  </data>
+  <data name="FindResults.ShowAll" xml:space="preserve">
+    <value>Näytä kaikki tulokset</value>
+  </data>
+  <data name="FindResults.Title" xml:space="preserve">
+    <value>Etsi asiakirjasta</value>
+  </data>
+  <data name="FindResults.Total" xml:space="preserve">
+    <value>Tuloksia: {0}</value>
+  </data>
+  <data name="FindResults.TooMany" xml:space="preserve">
+    <value>Liikaa tuloksia – jatka kirjoittamista</value>
+  </data>
+  <data name="FindResults.None" xml:space="preserve">
+    <value>Ei tuloksia</value>
+  </data>
+  <data name="FindResults.Position" xml:space="preserve">
+    <value>{0}/{1}</value>
+  </data>
+  <data name="CopyTable" xml:space="preserve">
+    <value>Kopioi taulukko</value>
+  </data>
+  <data name="FontPicker.Choose" xml:space="preserve">
+    <value>Valitse…</value>
+  </data>
+  <data name="FontPicker.Search" xml:space="preserve">
+    <value>Hae fontteja</value>
   </data>
 </root>

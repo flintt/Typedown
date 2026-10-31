@@ -958,4 +958,22 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Mientras un documento largo se dibuja por partes, la altura de lo que aún no se muestra se calcula a partir del texto en lugar de estimarse, de modo que la barra de desplazamiento y los saltos desde el esquema son más precisos. Experimental</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>La rueda del ratón da la vuelta a las pestañas</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Desplazarse más allá de la última pestaña lleva a la primera, y viceversa; si se desactiva, se detiene en la primera y la última pestaña</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Dibujar diagramas Mermaid con</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele dibuja más tipos de diagramas y los distribuye de otra forma que Mermaid</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Unir las líneas de un párrafo en el modo de lectura</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>En el modo de lectura, un salto de línea simple dentro de un párrafo se muestra como un espacio, como indica Markdown y como ya hacen las exportaciones (sin espacio entre caracteres chinos o japoneses). Para conservar un salto, termine la línea con dos espacios o una barra invertida</value>
+  </data>
 </root>

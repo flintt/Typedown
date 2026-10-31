@@ -1,4 +1,4 @@
-import { alignment, cursorIn, matchLines, mergeSource, splitLines } from './sourceMerge'
+import { alignment, blockSource, cursorIn, matchLines, mergeSource, splitLines } from './sourceMerge'
 
 const merge = (source: string, base: string, current: string) => {
     const s = splitLines(source), b = splitLines(base)
@@ -96,5 +96,27 @@ describe('cursorIn', () => {
     })
     it('keeps a caret on the empty line after the last line break', () => {
         expect(cursorIn('| a   |\n| --- |\n', '|a|\n|-|\n', at(2, 0))).toEqual(at(2, 0))
+    })
+})
+
+describe('blockSource', () => {
+    // Muya's export of a table pads it; the source keeps it compact. A stand-in for Muya's reading back.
+    const pad = (text: string) => text.replace('|a|b|\n|-|-|\n|1|22|', '| a   | b   |\n| --- | --- |\n| 1   | 22  |')
+    const table = '| a   | b   |\n| --- | --- |\n| 1   | 22  |'
+    const exported = '# T\n\n' + table + '\n\nSome text.\n'
+    it('gives the block as the source has it', () => {
+        expect(blockSource(table, exported, '# T\n\n|a|b|\n|-|-|\n|1|22|\n\nSome text.\n', pad)).toBe('|a|b|\n|-|-|\n|1|22|')
+    })
+    it('at the start and at the end of a document', () => {
+        expect(blockSource(table, table + '\n\nEnd.\n', '|a|b|\n|-|-|\n|1|22|\n\nEnd.\n', pad)).toBe('|a|b|\n|-|-|\n|1|22|')
+        expect(blockSource(table, '# T\n\n' + table + '\n', '# T\n\n|a|b|\n|-|-|\n|1|22|', pad)).toBe('|a|b|\n|-|-|\n|1|22|')
+    })
+    it('none when the source is the export, or when what is found is not the same block', () => {
+        expect(blockSource(table, exported, exported, pad)).toBeNull()
+        // The paragraph before the table edited too: the lines between the anchors are more than the table.
+        expect(blockSource(table, '# T\n\nNew.\n' + table + '\n\nSome text.\n', '# T\n\nOld.\n|a|b|\n|-|-|\n|1|22|\n\nSome text.\n', pad)).toBeNull()
+    })
+    it('none for a block found twice in the export', () => {
+        expect(blockSource(table, table + '\n\n' + table + '\n', '|a|b|\n|-|-|\n|1|22|\n\n|a|b|\n|-|-|\n|1|22|\n', pad)).toBeNull()
     })
 })

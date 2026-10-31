@@ -958,4 +958,22 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Während ein langes Dokument in Teilen gezeichnet wird, wird die Höhe des noch nicht Angezeigten aus dem Text berechnet statt geschätzt, sodass die Bildlaufleiste und Sprünge aus der Gliederung genauer sind. Experimentell</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Mausrad wechselt zyklisch zwischen Tabs</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Weiterscrollen über den letzten Tab springt zum ersten, und umgekehrt; aus: stoppt am ersten und letzten Tab</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Mermaid-Diagramme zeichnen mit</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele zeichnet mehr Diagrammarten und ordnet sie anders an als Mermaid</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Zeilen eines Absatzes im Lesemodus verbinden</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>Im Lesemodus wird ein einzelner Zeilenumbruch innerhalb eines Absatzes als Leerzeichen angezeigt, wie es Markdown vorsieht und die Exporte bereits tun (kein Leerzeichen zwischen chinesischen oder japanischen Zeichen). Um einen Umbruch zu behalten, beenden Sie die Zeile mit zwei Leerzeichen oder einem Backslash</value>
+  </data>
 </root>

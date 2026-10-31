@@ -948,12 +948,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>Søg i mappe…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(filnavnet matcher)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>{0} matchende fil(er) ud af {1} søgte</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>Søger…</value>
   </data>
@@ -1152,5 +1146,53 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>Åbner…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>Filnavne ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>Indhold ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>Indholdet matcher også</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>Vis alle {0}</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>Mappe</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>Filnavne: {0} · Søger i indhold…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>Filnavne: {0} · Indhold: {1} · Gennemsøgte filer: {2}</value>
+  </data>
+  <data name="FindResults.ShowAll" xml:space="preserve">
+    <value>Vis alle resultater</value>
+  </data>
+  <data name="FindResults.Title" xml:space="preserve">
+    <value>Søg i dokumentet</value>
+  </data>
+  <data name="FindResults.Total" xml:space="preserve">
+    <value>Resultater: {0}</value>
+  </data>
+  <data name="FindResults.TooMany" xml:space="preserve">
+    <value>For mange resultater – skriv videre</value>
+  </data>
+  <data name="FindResults.None" xml:space="preserve">
+    <value>Ingen resultater</value>
+  </data>
+  <data name="FindResults.Position" xml:space="preserve">
+    <value>{0} af {1}</value>
+  </data>
+  <data name="CopyTable" xml:space="preserve">
+    <value>Kopiér tabel</value>
+  </data>
+  <data name="FontPicker.Choose" xml:space="preserve">
+    <value>Vælg…</value>
+  </data>
+  <data name="FontPicker.Search" xml:space="preserve">
+    <value>Søg efter skrifttyper</value>
   </data>
 </root>

@@ -8,6 +8,8 @@ import { minimalChange } from "services/minimalChange";
 import { EXTERNAL_CHANGE_CLASS, EXTERNAL_CHANGE_MS, scrollTargetForChange } from "services/externalChange";
 import { setVimState, vimCommand } from "services/vim";
 import { wordCount as countWords } from 'components/Muya/lib/utils';
+import { FIND_EDIT_REFRESH_MS, findResultsOpen, noteFindChange, setFindProvider } from 'services/findResults';
+import { FENCE, isTableRow, lineMarksLength, previewOf } from 'services/findPreview';
 require('codemirror/mode/markdown/markdown');
 require('codemirror/keymap/vim');
 require('codemirror/addon/dialog/dialog.css');
@@ -106,6 +108,21 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
         }
     }, [editor])
 
+    // The marks of the matches drawn again: the one chosen as the current match, the others as the rest.
+    const remark = useCallback(() => {
+        matchsRef.current.forEach((item, i) => {
+            item.marker.clear()
+            item.marker = editor.markText(
+                editor.posFromIndex(item.index),
+                editor.posFromIndex(item.index + item.match.length),
+                { className: i == matchIndexRef.current ? 'ag-highlight' : 'ag-selection' }
+            )
+        })
+    }, [editor])
+
+    // The last search: its matches are found again with it after an edit while the results list is open.
+    const lastSearchRef = useRef<{ value: string, opt: any } | null>(null)
+
     const search = useCallback(({ value, opt }) => {
         const lastMatch = matchsRef.current[matchIndexRef.current];
         matchsRef.current.forEach(({ marker }) => marker.clear())
@@ -114,8 +131,13 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
                 const head = editor.posFromIndex(lastMatch.index);
                 editor.setSelection(head, head);
             }
+            // No matches left (their marks are gone): the bar counts none, the results list is empty.
+            matchsRef.current = []
+            lastSearchRef.current = null
+            noteFindChange()
             return;
         }
+        lastSearchRef.current = { value, opt }
         let startIndex = 0
         if (opt.selection) {
             const { anchor, head } = opt.selection;
@@ -137,6 +159,7 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
             match,
             subMatches
         }))
+        noteFindChange()
     }, [editor, setMatchSelection])
 
     const find = useCallback(({ action }) => {
@@ -152,15 +175,9 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
             matchIndexRef.current = 0;
         }
         setMatchSelection(matchsRef.current[matchIndexRef.current])
-        matchsRef.current.forEach((item, i) => {
-            item.marker.clear()
-            item.marker = editor.markText(
-                editor.posFromIndex(item.index),
-                editor.posFromIndex(item.index + item.match.length),
-                { className: i == matchIndexRef.current ? 'ag-highlight' : 'ag-selection' }
-            )
-        })
-    }, [editor, setMatchSelection])
+        remark()
+        noteFindChange()
+    }, [setMatchSelection, remark])
 
     const replaceOne = useCallback((match, replaceValue, offset = 0) => {
         const text = editor.getValue();
@@ -342,9 +359,98 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
         if (open == 0) {
             matchsRef.current.forEach(({ marker }) => marker.clear())
             matchsRef.current = []
+            lastSearchRef.current = null
             props.onSearchArgChange(undefined)
+            noteFindChange()
         }
     }), [editor, props, relativeScroll]);
+
+    // The find bar's results list (services/findResults): a preview of each match from its line of the text, without the
+    // line's own marks; an entry chosen there selected, as a step to it would.
+    useEffect(() => {
+        if (!editor) return
+        // The lines of fenced code blocks (fences too), found once for each list: their matches are shown as written.
+        let code = new Uint8Array(0)
+        return setFindProvider({
+            begin: () => {
+                const count = editor.lineCount()
+                code = new Uint8Array(count)
+                let fence: string | null = null
+                for (let l = 0; l < count; l++) {
+                    const m = FENCE.exec(editor.getLine(l) ?? '')
+                    if (fence) {
+                        code[l] = 1
+                        if (m && m[1][0] === fence[0] && m[1].length >= fence.length) fence = null
+                    } else if (m) {
+                        code[l] = 1
+                        fence = m[1]
+                    }
+                }
+            },
+            state: () => {
+                const total = matchsRef.current.length
+                return { total, index: total ? matchIndexRef.current : -1 }
+            },
+            preview: (i: number) => {
+                const m = matchsRef.current[i]
+                const pos = editor.posFromIndex(m.index)
+                const line: string = editor.getLine(pos.line) ?? ''
+                const start = pos.ch
+                const end = Math.min(line.length, start + m.match.length)
+                if (code[pos.line]) return previewOf(line, start, end, { raw: true })
+                const lead = lineMarksLength(line)
+                return start < lead ? previewOf(line, start, end, { raw: true }) : previewOf(line, start, end, { lead, table: isTableRow(line) })
+            },
+            token: (i: number) => matchsRef.current[i],
+            activate: (i: number, token: unknown) => {
+                let k = token ? matchsRef.current.indexOf(token as any) : -1
+                if (k < 0) k = i
+                if (!(k >= 0 && k < matchsRef.current.length)) return
+                matchIndexRef.current = k
+                setMatchSelection(matchsRef.current[k])
+                remark()
+                scrollToElementIfInvisible('.ag-highlight')
+                setTimeout(() => scrollToElementIfInvisible('.ag-highlight'), 0)
+                noteFindChange()
+            }
+        })
+    }, [editor, setMatchSelection, remark, scrollToElementIfInvisible])
+
+    // An edit while the results list is open: the matches found again once the typing stops, the selection left as it is.
+    useEffect(() => {
+        if (!editor) return
+        let timer: any = 0
+        const refresh = () => {
+            timer = 0
+            const last = lastSearchRef.current
+            if (!findResultsOpen() || !last) return
+            const chosen = matchsRef.current[matchIndexRef.current]
+            const at = chosen?.marker?.find()?.from
+            const was = at ? editor.indexFromPos(at) : -1
+            const caret = editor.indexFromPos(editor.getCursor('from'))
+            const found = matchString(editor.getValue(), last.value, last.opt)
+            let index = found.findIndex(({ index, match }) => index === was && match === chosen?.match)
+            if (index < 0) index = found.findIndex(({ index }) => index >= caret)
+            if (index < 0) index = 0
+            matchsRef.current.forEach(({ marker }) => marker.clear())
+            matchIndexRef.current = index
+            matchsRef.current = found.map(({ index, match, subMatches }) => ({ marker: null, index, match, subMatches }))
+            remarkNew()
+            noteFindChange()
+        }
+        // Marks for matches that have none yet (remark clears each first).
+        const remarkNew = () => matchsRef.current.forEach((item, i) => {
+            item.marker = editor.markText(editor.posFromIndex(item.index), editor.posFromIndex(item.index + item.match.length),
+                { className: i == matchIndexRef.current ? 'ag-highlight' : 'ag-selection' })
+        })
+        const onChanges = () => {
+            if (!findResultsOpen() || !lastSearchRef.current) return
+            clearTimeout(timer)
+            timer = setTimeout(refresh, FIND_EDIT_REFRESH_MS)
+        }
+        editor.on('changes', onChanges)
+        return () => { clearTimeout(timer); editor.off('changes', onChanges) }
+    }, [editor])
 
     useEffect(() => transport.addListener<{ value: string, opt: any }>('Search', (arg) => {
         props.onSearchArgChange(arg)
@@ -358,6 +464,7 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
 
     useEffect(() => transport.addListener<{ value: string, opt: any }>('Replace', (arg) => {
         replace(arg)
+        noteFindChange()
     }), [replace]);
 
     useEffect(() => {

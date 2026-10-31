@@ -1,4 +1,4 @@
-<UserControl
+﻿<UserControl
     x:Class="Typedown.Core.Controls.HomePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -34,6 +34,14 @@
             <Setter Property="SelectionMode" Value="None"/>
             <Setter Property="IsItemClickEnabled" Value="True"/>
             <Setter Property="Padding" Value="0"/>
+            <!-- Each entry as wide as the list (the item's own default is its own width). -->
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="ListViewItem" BasedOn="{StaticResource DefaultListViewItemStyle}">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    </Style>
+                </Setter.Value>
+            </Setter>
         </Style>
         <Style x:Key="SectionTitleStyle" TargetType="TextBlock">
             <Setter Property="FontWeight" Value="SemiBold"/>
@@ -93,8 +101,11 @@
     <Grid x:Name="Root" Background="{ThemeResource SolidBackgroundFillColorTertiaryBrush}">
         <!-- A custom theme's background over the system's (set from code; empty without one). -->
         <Border x:Name="ThemeLayer"/>
-        <ScrollViewer x:Name="Scroller" HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Auto">
-            <StackPanel MaxWidth="760" Margin="32,32,32,24" HorizontalAlignment="Stretch">
+        <ScrollViewer x:Name="Scroller" HorizontalScrollMode="Disabled" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" SizeChanged="PlaceColumn">
+            <!-- Width and left margin set from the scroll area's width (PlaceColumn): centred by its alignment in the area the
+                 scroll viewer gives it, it sat 82 pixels right of the middle at every width above 840 on w10, and at 860-920
+                 its right - the recent files' times - ran off the window (HP06). -->
+            <StackPanel x:Name="Column" Margin="32,32,32,24" HorizontalAlignment="Left">
                 <TextBlock Text="{u:LocaleString Key=HomePage.Title}" FontSize="28" FontWeight="SemiBold" Margin="0,0,0,16"/>
 
                 <StackPanel Orientation="Horizontal" Spacing="8">

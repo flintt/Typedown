@@ -958,4 +958,22 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>നീണ്ട പ്രമാണം ഭാഗങ്ങളായി വരയ്ക്കുമ്പോൾ, ഇതുവരെ കാണിക്കാത്ത ഭാഗത്തിന്റെ ഉയരം ഊഹിക്കുന്നതിനു പകരം വാചകത്തിൽ നിന്ന് കണക്കാക്കുന്നു, അതിനാൽ സ്ക്രോൾ ബാറും രൂപരേഖയിൽ നിന്നുള്ള ചാട്ടങ്ങളും കൂടുതൽ കൃത്യമാകും. പരീക്ഷണാത്മകം</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>മൗസ് വീൽ ടാബുകളിൽ ചുറ്റിക്കറങ്ങുന്നു</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>അവസാന ടാബിനപ്പുറം സ്ക്രോൾ ചെയ്താൽ ആദ്യത്തേതിലേക്ക് പോകും, തിരിച്ചും; ഓഫാണെങ്കിൽ ആദ്യ, അവസാന ടാബിൽ നിൽക്കും</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Mermaid ഡയഗ്രങ്ങൾ ഇതുപയോഗിച്ച് വരയ്ക്കുക</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele കൂടുതൽ തരം ഡയഗ്രങ്ങൾ വരയ്ക്കുന്നു, അവയെ Mermaid-ൽ നിന്ന് വ്യത്യസ്തമായി ക്രമീകരിക്കുന്നു</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>വായനാ മോഡിൽ ഖണ്ഡികയിലെ വരികൾ ചേർക്കുക</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>വായനാ മോഡിൽ ഖണ്ഡികയ്ക്കുള്ളിലെ ഒറ്റ വരി മുറിവ് Markdown നിർദ്ദേശിക്കുന്നതുപോലെയും എക്‌സ്‌പോർട്ടുകൾ ഇതിനകം ചെയ്യുന്നതുപോലെയും സ്പേസായി കാണിക്കും (ചൈനീസ് അല്ലെങ്കിൽ ജാപ്പനീസ് അക്ഷരങ്ങൾക്കിടയിൽ സ്പേസ് ഇല്ല). വരി മുറിവ് നിലനിർത്താൻ വരിയുടെ അവസാനം രണ്ട് സ്പേസ് അല്ലെങ്കിൽ ബാക്ക്‌സ്ലാഷ് ചേർക്കുക</value>
+  </data>
 </root>

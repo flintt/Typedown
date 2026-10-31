@@ -53,7 +53,9 @@ const anchor = 'EDITHERE';
         const { prediction, exported } = await page.evaluate(() => ({ prediction: window.__typedownPendingNormalization(), exported: window.__typedownMuya.getMarkdown() }));
         if (!prediction) { fail('no prediction after the load'); continue; }
         // The notice that the first edit may rewrite part of the document shows exactly when that is predicted.
-        const warned = await page.evaluate(() => !!document.querySelector('.td-first-edit-warning'));
+        // The notice is the host's card: the page tells it (FirstEditNotice) for this load; nothing of it is in the page.
+        const warned = await page.evaluate(() => { const n = window.__last.FirstEditNotice; return !!(n && n.show && window.__last.FileLoaded && n.loadId === window.__last.FileLoaded.loadId) });
+        if (await page.evaluate(() => !!document.querySelector('.td-first-edit-warning, .td-first-edit-warning-slot'))) fail('a first-edit notice in the page (it is the host\'s card)');
         if (warned !== (prediction.pendingNormalization === 'unsafe')) fail(`first-edit notice ${warned ? 'shown' : 'missing'} for a ${prediction.pendingNormalization} prediction`);
         if (exported.split(anchor).length !== 2) { fail(`the export does not hold "${anchor}" exactly once`); continue; }
 

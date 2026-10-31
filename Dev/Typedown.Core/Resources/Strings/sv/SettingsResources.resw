@@ -958,4 +958,22 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Medan ett långt dokument ritas i delar beräknas höjden på det som ännu inte visas utifrån texten i stället för att uppskattas, så att rullningslisten och hopp från dispositionen blir mer exakta. Experimentell</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Mushjulet går runt bland flikarna</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Att rulla förbi den sista fliken går till den första, och tillbaka; av stannar vid första och sista fliken</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Rita Mermaid-diagram med</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele ritar fler sorters diagram och ordnar dem annorlunda än Mermaid</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Slå ihop raderna i ett stycke i läsläge</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>I läsläge visas en enkel radbrytning inuti ett stycke som ett mellanslag, som Markdown anger och som exporterna redan gör (inget mellanslag mellan kinesiska eller japanska tecken). Avsluta raden med två mellanslag eller ett omvänt snedstreck för att behålla en radbrytning</value>
+  </data>
 </root>

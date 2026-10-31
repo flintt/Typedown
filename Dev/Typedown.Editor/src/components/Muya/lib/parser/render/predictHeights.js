@@ -1,6 +1,7 @@
 import { CLASS_OR_ID } from '../../config'
 import { tokenizer } from '../'
 import { noteScroll } from 'services/scrollWriters'
+import { getRoom, setRoom } from './roomStyle'
 
 /**
  * How tall a top-level block will be once drawn, before it is: for a long document drawn a part at a time
@@ -1243,7 +1244,7 @@ export default class HeightPredictor {
       this.addRules(rules)
       if (keep) {
         keep()
-        // The padding keep() set (--td-room-fraction) laid out now, while anchoring is still off: left to the next frame,
+        // The padding keep() set (the room's fraction, roomStyle.js) laid out now, while anchoring is still off: left to the next frame,
         // the browser's anchoring took that fraction of a pixel for a move of the blocks and scrolled the page by a whole
         // pixel to undo it (jitter-check: the text moved by 1 px, 3 times, after a 1M document was drawn).
         void root.offsetHeight
@@ -1330,7 +1331,7 @@ function outwards(n, from) {
 }
 
 // The top-level block at the top of the window, and a function that puts it back where it was: the page scrolled by whole
-// pixels, the fraction a scroll cannot take left in the padding above the blocks (--td-room-fraction). The block is found
+// pixels, the fraction a scroll cannot take left in the padding above the blocks (the room's fraction, roomStyle.js). The block is found
 // by its place among the root's children (the first whose bottom is in the window), not by what is under a point of the
 // window: a point between two blocks (their margins) hit the root itself, nothing was kept, and the outline's jump just
 // made was thrown 55 px off by the first blocks refined above it (HJ02, Windows).
@@ -1341,10 +1342,10 @@ function keepTop(root) {
   if (before >= window.innerHeight) return null
   return () => {
     if (!el.isConnected) return
-    // Whole pixels by scrolling, the fraction left in the padding above the blocks (--td-room-fraction), as StateRender's
+    // Whole pixels by scrolling, the fraction left in the padding above the blocks (the room's fraction, roomStyle.js), as StateRender's
     // keepInPlace does while drawn: carried to the next step instead, the text sat up to half a pixel off and back again
     // as the steps went on (jitter-check: 3 moves of 0.6 px once a 1M document was drawn).
-    const fraction = parseFloat(root.style.getPropertyValue('--td-room-fraction')) || 0
+    const fraction = parseFloat(getRoom(root, 'fraction')) || 0
     const moved = el.getBoundingClientRect().top - before
     const from = window.scrollY
     const by = Math.ceil(moved - fraction)
@@ -1355,7 +1356,7 @@ function keepTop(root) {
     let next = fraction - moved + (window.scrollY - from)
     // A scroll that did not go as far as asked (the end of the page): the rest stays as it is.
     if (next < 0 || next >= 2) next = fraction
-    if (Math.abs(next - fraction) > 0.0005) root.style.setProperty('--td-room-fraction', `${Math.round(next * 10000) / 10000}px`)
+    if (Math.abs(next - fraction) > 0.0005) setRoom(root, 'fraction', `${Math.round(next * 10000) / 10000}px`)
   }
 }
 

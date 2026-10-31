@@ -191,6 +191,9 @@ namespace Typedown.Core.Controls
             var delta = e.GetCurrentPoint(this).Properties.MouseWheelDelta;
             if (delta == 0) return;
             e.Handled = true;
+            // Off, the wheel stops at the first and the last tab instead of going round (General > the wheel over the tabs).
+            var index = Tabs.Tabs.IndexOf(Tabs.ActiveTab);
+            if (ViewModel?.SettingsViewModel?.TabWheelWraps == false && (delta > 0 ? index <= 0 : index >= Tabs.Tabs.Count - 1)) return;
             (delta > 0 ? Tabs.PreviousTabCommand : Tabs.NextTabCommand).Execute(default);
             // The strip may have scrolled itself before this ran; following the selection puts it right.
             TabView.SelectedItem = Tabs.ActiveTab;

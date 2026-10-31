@@ -958,4 +958,22 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>ነዊሕ ሰነድ ብክፋላት ክስኣል ከሎ፡ ቁመት እቲ ገና ዘይተራእየ ክፋል ብግምት ዘይኮነስ ካብቲ ጽሑፍ ይሕሰብ፡ ስለዚ መሸብለሊ ባርን ካብ ትሕዝቶ ምዝላልን ዝያዳ ልክዕ ይኸውን። ፈተነ</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>ጎማ ሞውስ ኣብ ታባት ይዞር</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>ካብ ዳሕሮት ታብ ሓሊፍካ ምሸብለል ናብ ቀዳማይ ይኸይድ፣ ድሕሪት'ውን፤ እንተጠፊኡ ኣብ ቀዳማይን ዳሕሮትን ታብ ይቐውም</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>ናይ Mermaid ስእላዊ መግለጺታት ብዚ ስኣል</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele ዝበዝሑ ዓይነታት ስእላዊ መግለጺ ይስእል፣ ካብ Mermaid ብዝተፈልየ ድማ የቐምጦም</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>ኣብ ኣገባብ ንባብ መስመራት ናይ ሓደ ኣንቀጽ ኣላግብ</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>ኣብ ኣገባብ ንባብ፡ ኣብ ውሽጢ ኣንቀጽ ዘሎ ሓደ ምብታኽ መስመር ከምቲ Markdown ዝእዝዞን ምውጻእ ድሮ ዝገብሮን ከም ባዶ ቦታ ይርአ (ኣብ መንጎ ፊደላት ቻይንኛ ወይ ጃፓንኛ ባዶ ቦታ ኣይኣቱን)። ምብታኽ ንምዕቃብ፡ ነቲ መስመር ብክልተ ባዶ ቦታታት ወይ ብድሕሪት ዘንበል ዛዝሞ</value>
+  </data>
 </root>

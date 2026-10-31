@@ -958,4 +958,22 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Semasa dokumen panjang dilukis secara berperingkat, ketinggian bahagian yang belum dipaparkan dikira daripada teksnya dan bukannya dianggarkan, jadi bar tatal dan lompatan dari rangka lebih tepat. Eksperimen</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Roda tetikus berpusing mengelilingi tab</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Menatal melepasi tab terakhir akan ke tab pertama, dan sebaliknya; dimatikan berhenti pada tab pertama dan terakhir</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Lukis rajah Mermaid dengan</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele melukis lebih banyak jenis rajah dan menyusunnya secara berbeza daripada Mermaid</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Gabungkan baris perenggan dalam mod baca</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>Dalam mod baca, satu pemisah baris di dalam perenggan dipaparkan sebagai ruang, seperti yang ditetapkan Markdown dan seperti yang sudah dilakukan oleh eksport (tiada ruang antara aksara Cina atau Jepun). Untuk mengekalkan pemisah baris, akhiri baris dengan dua ruang atau garis condong ke belakang</value>
+  </data>
 </root>

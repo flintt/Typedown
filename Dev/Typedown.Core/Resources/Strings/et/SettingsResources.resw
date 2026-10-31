@@ -958,4 +958,22 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Kui pikka dokumenti joonistatakse osade kaupa, arvutatakse veel kuvamata osa kõrgus teksti põhjal, mitte ei hinnata, nii et kerimisriba ja liigendusest hüpped on täpsemad. Katseline</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Hiirerull käib vahekaardid ringi</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Viimasest vahekaardist edasi kerimine viib esimesele ja vastupidi; väljas peatub esimesel ja viimasel vahekaardil</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Joonista Mermaidi diagramme rakendusega</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele joonistab rohkem diagrammitüüpe ja paigutab need teisiti kui Mermaid</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Ühenda lõigu read lugemisrežiimis</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>Lugemisrežiimis kuvatakse lõigusisene üksik reavahetus tühikuna, nagu Markdown ette näeb ja nagu eksport juba teeb (hiina või jaapani märkide vahele tühikut ei panda). Reavahetuse säilitamiseks lõpetage rida kahe tühiku või kurakaldkriipsuga</value>
+  </data>
 </root>

@@ -45,7 +45,7 @@
         </controls:ExpanderSettingItem>
         <controls:ExpanderSettingItem Title="{u:LocaleString Key=View.UseMicaMaterial.Title}" Description="{u:LocaleString Key=View.UseMicaMaterial.Description}">
             <controls:ExpanderSettingItem.Icon>
-                <FontIcon Glyph="&#xf4a5;"/>
+                <FontIcon Glyph="&#xe81e;"/>
             </controls:ExpanderSettingItem.Icon>
             <controls:ExpanderSettingItem.State>
                 <ToggleSwitch IsOn="{x:Bind Settings.UseMicaEffect, Mode=TwoWay}" IsEnabled="{x:Bind app:Config.IsMicaSupported}"/>

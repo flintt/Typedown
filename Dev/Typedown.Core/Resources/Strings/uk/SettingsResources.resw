@@ -958,4 +958,22 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Поки довгий документ відображається частинами, висота ще не показаного обчислюється з тексту, а не оцінюється, тож смуга прокручування й переходи зі структури точніші. Експериментально</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Колесо миші гортає вкладки по колу</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Прокручування за останню вкладку переходить до першої, і навпаки; вимкнено — зупиняється на першій і останній вкладці</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Малювати діаграми Mermaid за допомогою</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele малює більше видів діаграм і розташовує їх інакше, ніж Mermaid</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Об’єднувати рядки абзацу в режимі читання</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>У режимі читання одиночний перенос рядка всередині абзацу показується як пробіл, як вимагає Markdown і як уже роблять експорти (між китайськими чи японськими символами пробіл не ставиться). Щоб зберегти перенос, завершіть рядок двома пробілами або зворотною скісною рискою</value>
+  </data>
 </root>

@@ -89,6 +89,18 @@ namespace Typedown
             {
                 Log.WriteLocal("XamlUnhandledExceptionHook", ex.ToString());
             }
+            // The test host only: a window closed as the interface language changed ended the process now and then
+            // (0xc000027b: a callback on the window's queue threw 0x800710dd, and the queue ends the process for it, before
+            // the debug log is written out). Each such throw is written down at once, with where it came from.
+            if (Config.IsAutomationTestHost)
+            {
+                var noted = 0;
+                AppDomain.CurrentDomain.FirstChanceException += (_, e) =>
+                {
+                    if (e.Exception.HResult == unchecked((int)0x800710DD) && System.Threading.Interlocked.Increment(ref noted) <= 20)
+                        Log.WriteLocal("InvalidOperation800710DD", $"{e.Exception.GetType().FullName}: {e.Exception.Message}\nthread {Environment.CurrentManagedThreadId}\n{e.Exception.StackTrace}\nthrown from:\n{Environment.StackTrace}");
+                };
+            }
             var dispatcher = DispatcherQueue.GetForCurrentThread();
             if (!await EnvCheck.EnsureWebView2Installed())
             {

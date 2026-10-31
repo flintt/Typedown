@@ -958,4 +958,22 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Pendant qu'un long document est affiché par parties, la hauteur de ce qui n'est pas encore affiché est calculée à partir du texte au lieu d'être estimée, si bien que la barre de défilement et les sauts depuis le plan sont plus précis. Expérimental</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>La molette fait le tour des onglets</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Défiler au-delà du dernier onglet mène au premier, et inversement ; désactivé : s'arrête au premier et au dernier onglet</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Dessiner les diagrammes Mermaid avec</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele dessine plus de types de diagrammes et les dispose autrement que Mermaid</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Joindre les lignes d’un paragraphe en mode lecture</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>En mode lecture, un simple saut de ligne dans un paragraphe s’affiche comme une espace, comme le prévoit Markdown et comme le font déjà les exportations (aucune espace entre caractères chinois ou japonais). Pour garder un saut, terminez la ligne par deux espaces ou une barre oblique inverse</value>
+  </data>
 </root>

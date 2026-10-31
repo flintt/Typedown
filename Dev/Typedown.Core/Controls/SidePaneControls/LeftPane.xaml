@@ -21,7 +21,7 @@
     <Grid x:Name="Root">
         <muxc:NavigationView 
             x:Name="NavigationView"
-            Visibility="{x:Bind IsSearchPaneOpen, Mode=OneWay, Converter={StaticResource BoolToVisibilityReverseConverter}}"
+            Visibility="{x:Bind local:LeftPane.PageVisibility(IsSearchPaneOpen, IsFindResultsOpen), Mode=OneWay}"
             IsBackButtonVisible="Collapsed" 
             SelectionChanged="OnSelectionChanged"
             IsSettingsVisible="False"
@@ -45,6 +45,10 @@
                 <RectangleGeometry x:Name="FrameClip"/>
             </Frame.Clip>
         </Frame>
-        <local:SearchPane x:Name="SearchPane" x:Load="{x:Bind IsSearchPaneOpen, Mode=OneWay}" Close="OnSearchPaneClose"/>
+        <local:SearchPane x:Name="SearchPane" x:Load="{x:Bind IsSearchPaneOpen, Mode=OneWay}" Close="OnSearchPaneClose"
+                          Visibility="{x:Bind IsFindResultsOpen, Mode=OneWay, Converter={StaticResource BoolToVisibilityReverseConverter}}"/>
+        <!-- The find bar's results list, over whichever page the pane was on (that page comes back when it closes). -->
+        <local:FindResultsPane x:Name="FindResultsPane" AutomationProperties.AutomationId="FindResultsPane"
+                               x:Load="{x:Bind IsFindResultsOpen, Mode=OneWay}" Close="OnFindResultsPaneClose"/>
     </Grid>
 </UserControl>

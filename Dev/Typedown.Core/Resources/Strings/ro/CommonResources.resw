@@ -948,12 +948,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>Caută în folder…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(numele fișierului se potrivește)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>{0} fișier(e) potrivit(e) din {1} căutate</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>Se caută…</value>
   </data>
@@ -1152,5 +1146,53 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>Se deschide…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>Nume de fișiere ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>Conținut ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>Se potrivește și conținutul</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>Afișează toate ({0})</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>Dosar</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>Nume de fișiere: {0} · Se caută în conținut…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>Nume de fișiere: {0} · Conținut: {1} · Fișiere căutate: {2}</value>
+  </data>
+  <data name="FindResults.ShowAll" xml:space="preserve">
+    <value>Afișează toate rezultatele</value>
+  </data>
+  <data name="FindResults.Title" xml:space="preserve">
+    <value>Caută în document</value>
+  </data>
+  <data name="FindResults.Total" xml:space="preserve">
+    <value>Rezultate: {0}</value>
+  </data>
+  <data name="FindResults.TooMany" xml:space="preserve">
+    <value>Prea multe rezultate – continuați să tastați</value>
+  </data>
+  <data name="FindResults.None" xml:space="preserve">
+    <value>Niciun rezultat</value>
+  </data>
+  <data name="FindResults.Position" xml:space="preserve">
+    <value>{0} din {1}</value>
+  </data>
+  <data name="CopyTable" xml:space="preserve">
+    <value>Copiază tabelul</value>
+  </data>
+  <data name="FontPicker.Choose" xml:space="preserve">
+    <value>Alege…</value>
+  </data>
+  <data name="FontPicker.Search" xml:space="preserve">
+    <value>Caută fonturi</value>
   </data>
 </root>

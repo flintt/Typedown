@@ -948,12 +948,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>Chwilio yn y ffolder…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(enw'r ffeil yn cyfateb)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>{0} ffeil sy'n cyfateb o {1} a chwiliwyd</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>Wrthi'n chwilio…</value>
   </data>
@@ -1152,5 +1146,53 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>Yn agor…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>Enwau ffeiliau ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>Cynnwys ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>Mae'r cynnwys yn cyfateb hefyd</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>Dangos y cyfan ({0})</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>Ffolder</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>Enwau ffeiliau: {0} · Wrthi'n chwilio'r cynnwys…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>Enwau ffeiliau: {0} · Cynnwys: {1} · Ffeiliau a chwiliwyd: {2}</value>
+  </data>
+  <data name="FindResults.ShowAll" xml:space="preserve">
+    <value>Dangos pob canlyniad</value>
+  </data>
+  <data name="FindResults.Title" xml:space="preserve">
+    <value>Chwilio yn y ddogfen</value>
+  </data>
+  <data name="FindResults.Total" xml:space="preserve">
+    <value>Canlyniadau: {0}</value>
+  </data>
+  <data name="FindResults.TooMany" xml:space="preserve">
+    <value>Gormod o ganlyniadau – daliwch ati i deipio</value>
+  </data>
+  <data name="FindResults.None" xml:space="preserve">
+    <value>Dim canlyniadau</value>
+  </data>
+  <data name="FindResults.Position" xml:space="preserve">
+    <value>{0} o {1}</value>
+  </data>
+  <data name="CopyTable" xml:space="preserve">
+    <value>Copïo'r Tabl</value>
+  </data>
+  <data name="FontPicker.Choose" xml:space="preserve">
+    <value>Dewis…</value>
+  </data>
+  <data name="FontPicker.Search" xml:space="preserve">
+    <value>Chwilio am ffontiau</value>
   </data>
 </root>

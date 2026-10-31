@@ -958,4 +958,22 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Dokumentu luze bat zatika marrazten den bitartean, oraindik erakusten ez denaren altuera testutik kalkulatzen da, kalkulu hurbila egin beharrean; horrela, korritze-barra eta eskemako jauziak zehatzagoak dira. Esperimentala</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Sagu-gurpilak fitxak zirkularki zeharkatzen ditu</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Azken fitxatik harago korritzeak lehenengora eramaten du, eta alderantziz; desaktibatuta lehen eta azken fitxan gelditzen da</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Marraztu Mermaid diagramak honekin</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele-k diagrama mota gehiago marrazten ditu eta Mermaid-ek ez bezala antolatzen ditu</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Elkartu paragrafo baten lerroak irakurtzeko moduan</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>Irakurtzeko moduan, paragrafo bateko lerro-jauzi bakuna zuriune gisa erakusten da, Markdown-ek dioen bezala eta esportazioek dagoeneko egiten duten bezala (ez da zuriunerik jartzen txinerazko edo japonierazko karaktereen artean). Jauzia mantentzeko, amaitu lerroa bi zuriunerekin edo alderantzizko barra batekin</value>
+  </data>
 </root>

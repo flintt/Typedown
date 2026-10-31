@@ -948,12 +948,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>Cari dalam folder…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(nama fail sepadan)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>{0} fail sepadan daripada {1} yang dicari</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>Mencari…</value>
   </data>
@@ -1152,5 +1146,53 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>Membuka…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>Nama fail ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>Kandungan ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>Kandungan juga sepadan</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>Tunjukkan semua ({0})</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>Folder</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>Nama fail: {0} · Mencari dalam kandungan…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>Nama fail: {0} · Kandungan: {1} · Fail yang dicari: {2}</value>
+  </data>
+  <data name="FindResults.ShowAll" xml:space="preserve">
+    <value>Tunjukkan semua hasil</value>
+  </data>
+  <data name="FindResults.Title" xml:space="preserve">
+    <value>Cari dalam dokumen</value>
+  </data>
+  <data name="FindResults.Total" xml:space="preserve">
+    <value>Hasil: {0}</value>
+  </data>
+  <data name="FindResults.TooMany" xml:space="preserve">
+    <value>Terlalu banyak hasil – teruskan menaip</value>
+  </data>
+  <data name="FindResults.None" xml:space="preserve">
+    <value>Tiada hasil</value>
+  </data>
+  <data name="FindResults.Position" xml:space="preserve">
+    <value>{0} daripada {1}</value>
+  </data>
+  <data name="CopyTable" xml:space="preserve">
+    <value>Salin Jadual</value>
+  </data>
+  <data name="FontPicker.Choose" xml:space="preserve">
+    <value>Pilih…</value>
+  </data>
+  <data name="FontPicker.Search" xml:space="preserve">
+    <value>Cari fon</value>
   </data>
 </root>

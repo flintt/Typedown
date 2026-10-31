@@ -958,4 +958,22 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>ረጅም ሰነድ በክፍል ሲሳል፣ ገና ያልታየው ክፍል ቁመት ከመገመት ይልቅ ከጽሑፉ ይሰላል፤ በዚህም የማሸብለያ አሞሌው እና ከዝርዝሩ የሚደረጉ ዝላይዎች ይበልጥ ትክክል ይሆናሉ። ሙከራ</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>የመዳፊት ጎማ በትሮች ዙሪያ ይዞራል</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>ከመጨረሻው ትር በላይ ማሸብለል ወደ መጀመሪያው ይሄዳል፣ እና በተቃራኒው፤ ከጠፋ በመጀመሪያው እና በመጨረሻው ትር ይቆማል</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>የMermaid ሥዕላዊ መግለጫዎችን በዚህ ሣል</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele ብዙ ዓይነት ሥዕላዊ መግለጫዎችን ይስላል እና ከMermaid በተለየ ያስቀምጣቸዋል</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>በንባብ ሁነታ የአንቀጽ መስመሮችን አገናኝ</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>በንባብ ሁነታ በአንቀጽ ውስጥ ያለ ነጠላ የመስመር መቋረጥ Markdown እንደሚያዘው እና ወደ ውጭ መላክ አስቀድሞ እንደሚያደርገው እንደ ክፍተት ይታያል (በቻይንኛ ወይም በጃፓንኛ ቁምፊዎች መካከል ክፍተት አይገባም)። መቋረጡን ለማቆየት መስመሩን በሁለት ክፍተቶች ወይም በኋላ ዘንበል ያብቁ</value>
+  </data>
 </root>

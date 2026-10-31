@@ -958,4 +958,22 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Ενώ ένα μεγάλο έγγραφο σχεδιάζεται τμηματικά, το ύψος όσων δεν εμφανίζονται ακόμη υπολογίζεται από το κείμενο αντί να εκτιμάται, ώστε η γραμμή κύλισης και τα άλματα από τη διάρθρωση να είναι πιο ακριβή. Πειραματικό</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Η ροδέλα του ποντικιού κάνει κύκλο στις καρτέλες</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Η κύλιση μετά την τελευταία καρτέλα πηγαίνει στην πρώτη και αντίστροφα· ανενεργό σταματά στην πρώτη και στην τελευταία καρτέλα</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Σχεδίαση διαγραμμάτων Mermaid με</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Το Pele σχεδιάζει περισσότερα είδη διαγραμμάτων και τα διατάσσει διαφορετικά από το Mermaid</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Ένωση των γραμμών μιας παραγράφου στη λειτουργία ανάγνωσης</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>Στη λειτουργία ανάγνωσης, μια μεμονωμένη αλλαγή γραμμής μέσα σε παράγραφο εμφανίζεται ως κενό, όπως ορίζει το Markdown και όπως ήδη κάνουν οι εξαγωγές (χωρίς κενό μεταξύ κινεζικών ή ιαπωνικών χαρακτήρων). Για να κρατήσετε μια αλλαγή γραμμής, τελειώστε τη γραμμή με δύο κενά ή μια ανάποδη κάθετο</value>
+  </data>
 </root>

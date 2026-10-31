@@ -8,18 +8,10 @@ import renderBlock from './renderBlock'
 import HeightPredictor, { account } from './predictHeights'
 import transport from 'services/transport'
 import { noteScroll, recentScrolls } from 'services/scrollWriters'
+import { getRoom, setRoom, showRoom } from './roomStyle'
 
 let mermaidRenderId = 0
 const MERMAID_RENDER_CACHE_LIMIT = 32
-
-// The room kept for the part of a document not drawn yet (estimateRest), as properties not inherited: written on the
-// root, they restyle only it and its ::before and ::after (which take them explicitly, assets/styles/index.css). As
-// plain custom properties every element of the document was restyled each time.
-try {
-  for (const name of ['--td-room-above', '--td-room-below', '--td-room-fraction']) window.CSS?.registerProperty?.({ name, syntax: '<length>', inherits: false, initialValue: '0px' })
-} catch (err) {
-  // Registered already (a second bundle on the page), or not supported: inherited, as before.
-}
 
 // How long a slice of a document drawn a part at a time may take: short while the reader is at the keys, the mouse or
 // the wheel (a frame's worth, so what they do is answered at once), longer when they are not - each slice also costs a
@@ -55,6 +47,35 @@ const sliceBudget = () => performance.now() - lastInputAt < 1000 ? 12 : 40
 // 1M characters: 8% of each slice 1.37 times the old estimate's time, 4% 1.32, none 1.15-1.23).
 const HEIGHTS_SLICE_SHARE = 0
 
+// The part of a document drawn first (renderProgressive): blocks above and below the one to start from, as many as these
+// allow - the count, or their text's length once past a few blocks.
+const FIRST_ABOVE_BLOCKS = 30
+const FIRST_BELOW_BLOCKS = 70
+const FIRST_ABOVE_CHARS = 8000
+const FIRST_BELOW_CHARS = 16000
+const FIRST_MIN_BLOCKS = 8
+// What a jump (jumpProgressive) draws at once: about a window's worth around the block gone to - the rest comes in the
+// slices right after (w10, LT01: Enter in the find bar and Ctrl+End 0.7-1 s with 8 blocks and more on each side).
+const JUMP_FIRST = { above: 4000, below: 4000, min: 2 }
+const textLength = block => {
+  let n = typeof block.text === 'string' ? block.text.length + 1 : 0
+  if (block.children) for (const child of block.children) n += textLength(child)
+  return n
+}
+// The index past the last block drawn first on one side of `center` (step 1: below, from center; -1: above, the first).
+function edgeOf(blocks, center, step, maxBlocks, maxChars, minBlocks = FIRST_MIN_BLOCKS) {
+  let chars = 0
+  let n = 0
+  let i = step > 0 ? center : center - 1
+  while (i >= 0 && i < blocks.length && n < maxBlocks) {
+    if (n >= minBlocks && chars >= maxChars) break
+    chars += textLength(blocks[i])
+    n++
+    i += step
+  }
+  return step > 0 ? i : i + 1
+}
+
 class StateRender {
   constructor(muya) {
     this.muya = muya
@@ -84,6 +105,8 @@ class StateRender {
 
   setContainer(container) {
     this.container = container
+    // The room kept for the rest of a document drawn a part at a time is this root's from now on (roomStyle.js).
+    showRoom(container)
     // The fonts a long document's blocks are drawn in asked for early (predictHeights.js), so the first one opened can
     // have its heights predicted without waiting for them.
     this.heights.warm(container)
@@ -172,7 +195,10 @@ class StateRender {
     for (const [key, { code }] of this.mermaidCache.entries()) {
       const target = document.querySelector(key)
       if (!target) continue
-      const cacheKey = `${theme}\n${code}`
+      // Which engine draws it is part of the key (public/lazy-mermaid.js): a drawing Mermaid finished after Pele was
+      // chosen was cached under the same key and shown again where Pele was to draw.
+      const engine = window.__typedownMermaidRenderer ? window.__typedownMermaidRenderer() : 'mermaid'
+      const cacheKey = `${engine}\n${theme}\n${code}`
       if (this.mermaidRenderTargets.get(target) === cacheKey && target.querySelector('svg')) continue
       const requestId = ++this.mermaidRenderRequestId
       this.mermaidRenderRequests.set(target, requestId)
@@ -344,6 +370,7 @@ class StateRender {
   // instead and let the patch below build the new tree into an empty element.
   render(blocks, activeBlocks, matches, fresh = false) {
     // A new document replaces whatever was still being drawn; anything else is drawn over the whole document.
+    this.dropRedraws()
     if (fresh) this.cancelProgressive()
     else this.completeRender()
     const selector = `div#${CLASS_OR_ID.AG_EDITOR_ID}`
@@ -465,18 +492,21 @@ class StateRender {
    * ever partly drawn while nobody does anything with it. Blocks inserted above the window keep it still (the
    * browser's scroll anchoring). `done` runs once the whole document is on the page, whichever way it got there.
    */
-  renderProgressive(blocks, activeBlocks, matches, center, done) {
+  // first: how much to draw at once around `center` ({ above, below } in characters of text; see edgeOf).
+  renderProgressive(blocks, activeBlocks, matches, center, done, first = null) {
     this.cancelProgressive()
+    this.dropRedraws()
     const rootDom = this.container || document.querySelector(`div#${CLASS_OR_ID.AG_EDITOR_ID}`)
-    const before = 30
-    const after = 70
-    const lo = Math.max(0, center - before)
-    const hi = Math.min(blocks.length, center + after)
+    // A screen or two around the block to start from: up to 30 blocks above it and 70 below, fewer where their text is
+    // long - 70 blocks of raw HTML tables are 37,000 characters, five screens, and drawing and laying them out was a third
+    // of the time before a 1.5 MB document was first on the screen (LT01), and all of a jump's (jumpProgressive).
+    const lo = edgeOf(blocks, center, -1, FIRST_ABOVE_BLOCKS, first ? first.above : FIRST_ABOVE_CHARS, first ? first.min : FIRST_MIN_BLOCKS)
+    const hi = edgeOf(blocks, center, 1, FIRST_BELOW_BLOCKS, first ? first.below : FIRST_BELOW_CHARS, first ? first.min : FIRST_MIN_BLOCKS)
     rootDom.id = CLASS_OR_ID.AG_EDITOR_ID
     rootDom.innerHTML = this.blocksHtml(blocks.slice(lo, hi), activeBlocks, matches)
     // The fraction of a pixel the document before was moved by (keepInPlace): it stays after a drawing (taken away, the
     // text would move by it once more), not into a new one.
-    rootDom.style.removeProperty('--td-room-fraction')
+    setRoom(rootDom, 'fraction', null)
     this.renderMermaid()
     this.renderDiagram()
     this.codeCache.clear()
@@ -695,8 +725,8 @@ class StateRender {
     if (above === null) above = room(0, state.lo)
     if (below === null) below = room(state.hi, blocks.length)
     if (write) {
-      root.style.setProperty('--td-room-above', `${above}px`)
-      root.style.setProperty('--td-room-below', `${below}px`)
+      setRoom(root, 'above', `${above}px`)
+      setRoom(root, 'below', `${below}px`)
     }
   }
 
@@ -765,8 +795,8 @@ class StateRender {
   }
 
   clearRoom(state) {
-    state.root.style.removeProperty('--td-room-above')
-    state.root.style.removeProperty('--td-room-below')
+    setRoom(state.root, 'above', null)
+    setRoom(state.root, 'below', null)
     if (state.pinned) for (const [element, was] of state.pinned) {
       if (was === null) element.removeAttribute('style')
       else element.setAttribute('style', was)
@@ -809,7 +839,7 @@ class StateRender {
         transport.postMessage('DrawJump', {
           dy: Math.round(dy), y: Math.round(y), ms: Math.round(performance.now() - state.startedAt), slices: state.slices,
           lo: state.lo, hi: state.hi, n: state.blocks.length, scrollHeight: document.documentElement.scrollHeight, innerHeight: window.innerHeight,
-          roomAbove: getComputedStyle(root).getPropertyValue('--td-room-above').trim(), fraction: root.style.getPropertyValue('--td-room-fraction'),
+          roomAbove: getRoom(root, 'above'), fraction: getRoom(root, 'fraction'),
           first: root.firstElementChild ? `${root.firstElementChild.id}@${Math.round(root.firstElementChild.getBoundingClientRect().top)}` : null,
           window: inWindow ? `${inWindow.id}@${Math.round(inWindow.getBoundingClientRect().top)}` : null,
           lastKeep: state.lastKeep || null, pinned: state.pinned ? state.pinned.length : 0, reader,
@@ -846,7 +876,12 @@ class StateRender {
 
   // The next `count` blocks on one side of what is drawn.
   drawMore(state, side, count) {
-    const { blocks, activeBlocks, matches, root } = state
+    const { blocks, root } = state
+    // The caret and the search as they are now, not as when the drawing began: a search while a document is drawn marks
+    // the blocks still to come as they are drawn (only those on the page are drawn again for it, redrawBlocks).
+    const contentState = this.muya.contentState
+    const activeBlocks = contentState ? contentState.getActiveBlocks() : state.activeBlocks
+    const matches = contentState ? contentState.searchMatches.matches : state.matches
     // In a document past the long-document size, a block drawn off screen is not laid out (content-visibility): it
     // stands at the size predicted or guessed for it (predictHeights.js), not at the style sheet's 50 px: queued here,
     // written with the slice's others before the page is next laid out (flushHeightRules). The environment as the slice
@@ -1054,12 +1089,12 @@ class StateRender {
     return () => {
       if (!first.isConnected) return
       // The page scrolls by whole pixels and the blocks' heights have fractions. What a scroll leaves over goes into a
-      // padding above the blocks (--td-room-fraction, between 0 and 1 px), so the text in the window ends every slice
+      // padding above the blocks (the room's fraction, roomStyle.js: between 0 and 1 px), so the text in the window ends every slice
       // exactly where it was: carried to the next slice instead (JU01: dozens of slices added up to pixels), it sat up to
       // half a pixel off and back again, slice after slice - on Windows the text shook (JT01: 19 moves of 0.7-0.9 px).
-      // The height above (--td-room-above) cannot take it: past the long-document size it is laid out to whole pixels.
+      // The height above (the room above) cannot take it: past the long-document size it is laid out to whole pixels.
       const root = state.root
-      const fraction = parseFloat(root.style.getPropertyValue('--td-room-fraction')) || 0
+      const fraction = parseFloat(getRoom(root, 'fraction')) || 0
       const moved = first.getBoundingClientRect().top - before
       const from = window.scrollY
       const by = Math.ceil(moved - fraction)
@@ -1071,7 +1106,7 @@ class StateRender {
       let next = fraction - moved + (window.scrollY - from)
       // A scroll that did not go as far as asked (the end of the page): the rest stays as it is.
       if (next < 0 || next >= 2) next = fraction
-      if (Math.abs(next - fraction) > 0.0005) root.style.setProperty('--td-room-fraction', `${Math.round(next * 10000) / 10000}px`)
+      if (Math.abs(next - fraction) > 0.0005) setRoom(root, 'fraction', `${Math.round(next * 10000) / 10000}px`)
     }
   }
 
@@ -1079,6 +1114,108 @@ class StateRender {
   holdAnchoring(hold) {
     const element = document.scrollingElement || document.documentElement
     if (element) element.style.overflowAnchor = hold ? 'none' : ''
+  }
+
+  /**
+   * The reader going to a part of a document drawn a part at a time that is not drawn yet (Ctrl+End, a search's match far
+   * down): the drawing starts again from the top-level block at `index` - the blocks around it at once, the rest in slices
+   * above and below it, as when a document is opened there - instead of the whole document being drawn first (LT01, a
+   * 1.5 MB document of raw HTML: Ctrl+End 7 s on w10, a search hung the page). What was drawn elsewhere goes; it is drawn
+   * again in its turn. False where there is nothing to do: all drawn, or the block drawn already.
+   */
+  jumpProgressive(index) {
+    const state = this.progressive
+    if (!state || !(index >= 0 && index < state.blocks.length) || (index >= state.lo && index < state.hi)) return false
+    const contentState = this.muya.contentState
+    // Less at once than for a document opened there: the reader waits for the window's worth, and the rest follows in
+    // slices as soon as it is on the screen.
+    this.renderProgressive(state.blocks, contentState.getActiveBlocks(), contentState.searchMatches.matches, index, state.done, JUMP_FIRST)
+    return true
+  }
+
+  /**
+   * Draws these top-level blocks again where they are on the page, with the caret and the search as they are now (a
+   * search's marks, the caret moved to a match): at once those within a few windows' height of the one shown and those
+   * in `now`, the others in the page's idle time - a search for one letter marks most blocks of a long document, and
+   * drawing them all again at once took as long as drawing the document. A block not on the page is left alone: it is
+   * drawn as things are when its turn comes (drawMore).
+   */
+  redrawBlocks(blocks, now = []) {
+    const root = this.container
+    if (!root) return
+    const queue = this.redrawQueue || (this.redrawQueue = new Set())
+    const urgent = new Set(now)
+    // The blocks from two windows' height above the one shown to three below (one layout, read before anything changes).
+    const kids = root.children
+    const h = window.innerHeight
+    const near = new Set()
+    if (kids.length) {
+      let lo = 0
+      let hi = kids.length - 1
+      while (lo < hi) {
+        const mid = (lo + hi) >> 1
+        if (kids[mid].getBoundingClientRect().bottom <= -2 * h) lo = mid + 1
+        else hi = mid
+      }
+      for (let k = lo; k < kids.length; k++) {
+        if (kids[k].getBoundingClientRect().top >= 3 * h) break
+        near.add(kids[k].id)
+      }
+    }
+    const draw = []
+    for (const block of blocks) {
+      if (urgent.has(block) || near.has(block.key)) {
+        draw.push(block)
+        queue.delete(block)
+      } else queue.add(block)
+    }
+    this.redrawNow(draw)
+    if (queue.size && !this.redrawTimer) this.redrawTimer = setTimeout(() => this.redrawIdle(), 0)
+  }
+
+  redrawNow(blocks) {
+    const root = this.container
+    if (!root || !blocks.length) return
+    const contentState = this.muya.contentState
+    const activeBlocks = contentState.getActiveBlocks()
+    const { matches } = contentState.searchMatches
+    let drawn = 0
+    for (const block of blocks) {
+      const element = root.querySelector(`#${block.key}`)
+      if (!element || element.parentElement !== root) continue
+      patch(toVNode(element), this.renderBlock(null, block, activeBlocks, matches, true))
+      drawn++
+    }
+    if (!drawn) return
+    this.renderMermaid()
+    this.renderDiagram()
+    this.codeCache.clear()
+  }
+
+  // The rest of redrawBlocks' blocks, a slice at a time, as the rest of a document is drawn (scheduleProgressive).
+  redrawIdle() {
+    this.redrawTimer = null
+    const queue = this.redrawQueue
+    if (!queue || !queue.size) return
+    const until = performance.now() + sliceBudget()
+    const batch = []
+    for (const block of queue) {
+      batch.push(block)
+      queue.delete(block)
+      if (batch.length >= 4) {
+        this.redrawNow(batch.splice(0))
+        if (performance.now() >= until) break
+      }
+    }
+    this.redrawNow(batch)
+    if (queue.size) this.redrawTimer = setTimeout(() => this.redrawIdle(), 0)
+  }
+
+  // A whole new document: nothing of the one before is drawn again.
+  dropRedraws() {
+    if (this.redrawQueue) this.redrawQueue.clear()
+    clearTimeout(this.redrawTimer)
+    this.redrawTimer = null
   }
 
   /** Stops drawing the document (another takes its place): what is on the page stays as it is. */

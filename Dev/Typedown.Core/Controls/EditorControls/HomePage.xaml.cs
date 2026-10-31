@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -50,6 +50,17 @@ namespace Typedown.Core.Controls
             // A letter typed while one of the page's buttons or lists has the keyboard: the page goes and the editor takes
             // the keys from now on (that letter itself is not typed: it went to the button).
             AddHandler(CharacterReceivedEvent, new TypedEventHandler<UIElement, CharacterReceivedRoutedEventArgs>(OnCharacterReceived), true);
+        }
+
+        private const double ColumnWidth = 760, ColumnSide = 32;
+
+        // The page's column: at most 760 wide, in the middle of the scroll area, worked out from the area's own width.
+        private void PlaceColumn(object sender, SizeChangedEventArgs e)
+        {
+            var room = Math.Max(0, e.NewSize.Width - 2 * ColumnSide);
+            var width = Math.Min(ColumnWidth, room);
+            Column.Width = width;
+            Column.Margin = new Thickness(ColumnSide + (room - width) / 2, Column.Margin.Top, ColumnSide, Column.Margin.Bottom);
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)

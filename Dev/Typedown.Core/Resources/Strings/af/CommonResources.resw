@@ -948,12 +948,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>Soek in vouer…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(lêernaam pas)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>{0} passende lêer(s) uit {1} deursoek</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>Soek tans…</value>
   </data>
@@ -1152,5 +1146,53 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>Word oopgemaak…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>Lêername ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>Inhoud ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>Inhoud pas ook</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>Wys al {0}</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>Vouer</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>Lêername: {0} · Soek tans in inhoud…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>Lêername: {0} · Inhoud: {1} · Lêers deursoek: {2}</value>
+  </data>
+  <data name="FindResults.ShowAll" xml:space="preserve">
+    <value>Wys alle resultate</value>
+  </data>
+  <data name="FindResults.Title" xml:space="preserve">
+    <value>Soek in dokument</value>
+  </data>
+  <data name="FindResults.Total" xml:space="preserve">
+    <value>Resultate: {0}</value>
+  </data>
+  <data name="FindResults.TooMany" xml:space="preserve">
+    <value>Te veel resultate – hou aan tik</value>
+  </data>
+  <data name="FindResults.None" xml:space="preserve">
+    <value>Geen resultate</value>
+  </data>
+  <data name="FindResults.Position" xml:space="preserve">
+    <value>{0} van {1}</value>
+  </data>
+  <data name="CopyTable" xml:space="preserve">
+    <value>Kopieer tabel</value>
+  </data>
+  <data name="FontPicker.Choose" xml:space="preserve">
+    <value>Kies…</value>
+  </data>
+  <data name="FontPicker.Search" xml:space="preserve">
+    <value>Soek lettertipes</value>
   </data>
 </root>

@@ -948,12 +948,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>ഫോൾഡറിൽ തിരയുക…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(ഫയലിന്റെ പേര് യോജിക്കുന്നു)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>തിരഞ്ഞ {1} ഫയലുകളിൽ {0} എണ്ണം യോജിച്ചു</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>തിരയുന്നു…</value>
   </data>
@@ -1152,5 +1146,53 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>തുറക്കുന്നു…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>ഫയൽ പേരുകൾ ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>ഉള്ളടക്കം ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>ഉള്ളടക്കവും യോജിക്കുന്നു</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>എല്ലാം കാണിക്കുക ({0})</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>ഫോൾഡർ</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>ഫയൽ പേരുകൾ: {0} · ഉള്ളടക്കത്തിൽ തിരയുന്നു…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>ഫയൽ പേരുകൾ: {0} · ഉള്ളടക്കം: {1} · തിരഞ്ഞ ഫയലുകൾ: {2}</value>
+  </data>
+  <data name="FindResults.ShowAll" xml:space="preserve">
+    <value>എല്ലാ ഫലങ്ങളും കാണിക്കുക</value>
+  </data>
+  <data name="FindResults.Title" xml:space="preserve">
+    <value>പ്രമാണത്തിൽ തിരയുക</value>
+  </data>
+  <data name="FindResults.Total" xml:space="preserve">
+    <value>ഫലങ്ങൾ: {0}</value>
+  </data>
+  <data name="FindResults.TooMany" xml:space="preserve">
+    <value>വളരെയധികം ഫലങ്ങൾ – ടൈപ്പ് ചെയ്യുന്നത് തുടരുക</value>
+  </data>
+  <data name="FindResults.None" xml:space="preserve">
+    <value>ഫലങ്ങളൊന്നുമില്ല</value>
+  </data>
+  <data name="FindResults.Position" xml:space="preserve">
+    <value>{1}-ൽ {0}</value>
+  </data>
+  <data name="CopyTable" xml:space="preserve">
+    <value>പട്ടിക പകർത്തുക</value>
+  </data>
+  <data name="FontPicker.Choose" xml:space="preserve">
+    <value>തിരഞ്ഞെടുക്കുക…</value>
+  </data>
+  <data name="FontPicker.Search" xml:space="preserve">
+    <value>ഫോണ്ടുകൾ തിരയുക</value>
   </data>
 </root>

@@ -948,12 +948,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>கோப்புறையில் தேடு…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(கோப்புப் பெயர் பொருந்துகிறது)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>தேடப்பட்ட {1} கோப்புகளில் {0} பொருந்தியவை</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>தேடுகிறது…</value>
   </data>
@@ -1152,5 +1146,53 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>திறக்கிறது…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>கோப்புப் பெயர்கள் ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>உள்ளடக்கம் ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>உள்ளடக்கமும் பொருந்துகிறது</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>அனைத்து {0} காட்டு</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>கோப்புறை</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>கோப்புப் பெயர்கள்: {0} · உள்ளடக்கத்தில் தேடுகிறது…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>கோப்புப் பெயர்கள்: {0} · உள்ளடக்கம்: {1} · தேடிய கோப்புகள்: {2}</value>
+  </data>
+  <data name="FindResults.ShowAll" xml:space="preserve">
+    <value>அனைத்து முடிவுகளையும் காட்டு</value>
+  </data>
+  <data name="FindResults.Title" xml:space="preserve">
+    <value>ஆவணத்தில் தேடு</value>
+  </data>
+  <data name="FindResults.Total" xml:space="preserve">
+    <value>முடிவுகள்: {0}</value>
+  </data>
+  <data name="FindResults.TooMany" xml:space="preserve">
+    <value>மிக அதிகமான முடிவுகள் – தொடர்ந்து தட்டச்சிடவும்</value>
+  </data>
+  <data name="FindResults.None" xml:space="preserve">
+    <value>முடிவுகள் இல்லை</value>
+  </data>
+  <data name="FindResults.Position" xml:space="preserve">
+    <value>{1} இல் {0}</value>
+  </data>
+  <data name="CopyTable" xml:space="preserve">
+    <value>அட்டவணையை நகலெடுக்கவும்</value>
+  </data>
+  <data name="FontPicker.Choose" xml:space="preserve">
+    <value>தேர்வுசெய்…</value>
+  </data>
+  <data name="FontPicker.Search" xml:space="preserve">
+    <value>எழுத்துருக்களைத் தேடு</value>
   </data>
 </root>

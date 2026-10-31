@@ -958,4 +958,22 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Hati ndefu inapochorwa kwa sehemu, urefu wa sehemu ambayo bado haijaonyeshwa hukokotolewa kutoka kwa maandishi badala ya kukadiriwa, hivyo upau wa kusogeza na kuruka kutoka kwa muhtasari kunakuwa sahihi zaidi. Majaribio</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Gurudumu la kipanya huzunguka vichupo</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Kusogeza zaidi ya kichupo cha mwisho huenda cha kwanza, na kurudi; ikiwa imezimwa husimama kwenye kichupo cha kwanza na cha mwisho</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Chora michoro ya Mermaid kwa</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele huchora aina nyingi zaidi za michoro na kuipanga tofauti na Mermaid</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Unganisha mistari ya aya katika hali ya kusoma</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>Katika hali ya kusoma, kikatizo kimoja cha mstari ndani ya aya kinaonyeshwa kama nafasi, kama Markdown inavyoeleza na kama uhamishaji tayari unavyofanya (hakuna nafasi kati ya herufi za Kichina au Kijapani). Ili kubakiza kikatizo, maliza mstari kwa nafasi mbili au mkwaju wa nyuma</value>
+  </data>
 </root>

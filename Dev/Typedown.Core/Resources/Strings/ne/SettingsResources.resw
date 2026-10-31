@@ -958,4 +958,22 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>लामो कागजात भाग-भाग गरी कोरिँदै गर्दा, अझै नदेखाइएको भागको उचाइ अनुमान गर्नुको सट्टा पाठबाट गणना गरिन्छ, जसले स्क्रोल बार र रूपरेखाबाट हुने उफ्राइ अझ सटीक बनाउँछ। प्रयोगात्मक</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>माउस ह्विलले ट्याबहरू घुमाउँछ</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>अन्तिम ट्याबभन्दा पर स्क्रोल गर्दा पहिलोमा जान्छ, र फर्केर पनि; बन्द भए पहिलो र अन्तिम ट्याबमा रोकिन्छ</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Mermaid रेखाचित्र यसबाट बनाउनुहोस्</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele ले धेरै प्रकारका रेखाचित्र बनाउँछ र तिनलाई Mermaid भन्दा फरक ढङ्गले मिलाउँछ</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>पढ्ने मोडमा अनुच्छेदका पङ्क्तिहरू जोड्नुहोस्</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>पढ्ने मोडमा अनुच्छेदभित्रको एकल पङ्क्ति विच्छेद खाली ठाउँका रूपमा देखिन्छ, जस्तो Markdown ले तोकेको छ र निर्यातले पहिले नै गर्छ (चिनियाँ वा जापानी अक्षरबीच खाली ठाउँ हुँदैन)। पङ्क्ति विच्छेद राख्न पङ्क्तिको अन्त्यमा दुई खाली ठाउँ वा ब्याकस्ल्यास राख्नुहोस्</value>
+  </data>
 </root>

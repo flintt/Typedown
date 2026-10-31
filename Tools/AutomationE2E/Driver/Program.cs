@@ -140,13 +140,16 @@ internal static partial class Program
             await Case("R04 untitled and background documents come back from their backups after a kill, each its own", R04);
             await Case("C01 document.close: a saved document closes, an unsaved one (a fresh keystroke too) is refused, the last one leaves an empty document", C01);
             await Case("Q02 a window closed at once after it opened (its web view still being created): the process lives on", Q02);
+            await Case("WC01 windows opened and closed again and again, each closed as its page scrolls and a script call is on its way: the process lives on", WC01);
             await Case("D01 the window's UI thread runs every callback posted to it, from many threads at once", D01);
             await Case("K02 Ctrl+, twice opens and closes the settings: the caret and the keyboard are where they were", K02);
             await Case("CM01 in compact mode the settings have no title bar: they start at the window's top, their top strip drags the window, their back button goes back to the editor page as it was", CM01);
             await Case("SH01 Ctrl+, held down opens the settings once - no going in and out until the app hangs and falls over - and types no comma", SH01);
+            await Case("NT01 Ctrl+, into the settings and out again, measured: when each page is seen and the host's steps (made, laid out, drawn), with the page animation on and off; notes only, no limit yet", NT01);
             await Case("JU01 a long document comes back where it was without the page moving - switched back to in its tab, and opened in a window of its own as the start-up restores it", JU01);
             await Case("K04 a window just opened takes the keys at once: a letter typed without a click reaches the document", K04);
             await Case("K05 a new tab (the + button, Ctrl+N) and a tab clicked in the strip take the keys at once, without a click in the text", K05);
+            await Case("TW01 the mouse wheel over the tab strip stops at the first and last tab with the option off, and goes round with it on", TW01);
             await Case("TL01 keys typed at once after Ctrl+N, a tab clicked, Ctrl+Tab, the + button, Ctrl+Shift+H and a long document's tab clicked go into the tab shown, in order, Enter and Chinese text too; the document left is unchanged", TL01);
             await Case("K06 after closing a tab, a menu command, a mode switch, an outline jump, closing the find bar or a dialog, and Ctrl+Tab, the keys go to the document without a click", K06);
             await Case("K03 the same with an untitled document (no per-file caret memory)", K03);
@@ -159,6 +162,8 @@ internal static partial class Program
             await Case("WV02 without the WebView2 runtime the install window comes up with the download; a setup that installs it goes on to the main window", WV02);
             await Case("WV03 a setup that did not install the WebView2 runtime leaves the install window saying so, with the download; Cancel ends the start", WV03);
             await Case("LG01 after the language is changed through the API, no Chinese or Japanese is left on the main window, the home page or the settings page", LG01);
+            await Case("LG02 the Chinese View menu after a language switch (zh -> en with menus opened -> zh; zh -> en -> zh; started in en -> zh) looks as in a test host started in Chinese, the real mouse opening it", LG02);
+            await Case("DL01 the debug log holds no document text: a document with marker words opened, switched away from and back, outlined, read, typed into, searched, pasted into and exported, and none of its words in debug.log", DL01);
             await Case("HM01 Help > User guide opens the user guide in the interface's language, Help > About the About page", HM01);
             await Case("FS02 out of full screen the window is dragged by its title bar again at once (with the title row, and in compact mode by the menu row)", FS02);
             await Case("PU01 PlantUML is not drawn by default (nothing goes to plantuml.com, the block says so); turned on it is, by the server set if one is, off again it is not", PU01);
@@ -181,21 +186,28 @@ internal static partial class Program
             await Case("FT02 a folder in the file tree is shown as a folder that expands after the root changed: up from a folder of files to a folder of folders, and back and forth", FT02);
             await Case("FT03 the same after a big folder was expanded and the root changed, a folder moved in, one renamed from a temporary name and one whose attributes changed", FT03);
             await Case("FT04 a file opened in Repo/docs (the tree following it there) and the root set at once two levels up: Repo expanded shows docs as a folder", FT04);
+            await Case("FQ01 the side pane's folder search typed with real keys: file and folder names in the first group, contents below, each counted; five names and a show-all row; a file matching both listed once with its marker; big, hidden, dot-folder and node_modules entries left out; each group folds and opens; a folder result opens it in the tree with the root kept, a content result opens the file", FQ01);
+            await Case("FQ02 a folder opened in the side pane and a document opened from beside it: the search finds names in the folder and the file next to the document, led by its folder's name", FQ02);
+            await Case("FR01 the find bar's results list (\"Search in document\"): with the Outline in the side pane, Ctrl+F and a word typed with real keys, the bar says 1 of 6; \"Show all results\" lists the count and six entries, each its place and the line around its match; entry 3 clicked with the mouse selects exactly the third match in the editor and the bar says 3 of 6; closing the list shows the Outline again; with the side pane closed the list opens it and closing the list closes it again; closing the find bar closes the list too", FR01);
             await Case("FN02 with a folder opened, the button beside the root's name moves the tree to the folder of a document outside it", FN02);
             await Case("FW01 an open document renamed outside the app is followed by its window, also after the app renamed it once", FW01);
             await Case("FV01 a file favoured from its tab's menu and a folder from the tree's menu are in favorites.json and the folder pane's group, still after a restart (and on the home page); renamed in the tree, the favourite follows", FV01);
             await Case("HP01 a start with the settings as they come shows the home page; a recent file clicked there opens in its tab and the home page goes", HP01);
             await Case("HP02 Ctrl+N and the + button show no home page and the next letter goes into the new document; with \"New tabs show the home page\" on, Ctrl+N shows it", HP02);
             await Case("HP03 the last tab closed leaves the window with the home page (closed again, the window goes); a session whose files are gone shows it; with the switch off a blank document", HP03);
+            await Case("SR02 a window with an unsaved document behind the one shown, closed with automatic saving on: the session names the tab the reader was on as the active one, not the last one saved", SR02);
+            await Case("SR03 Keep unsaved changes when closing on, two untitled documents unsaved among the tabs: closed and started again, the start shows the tab closed on (a file, then the second untitled one, its text with it), the tabs in their order", SR03);
             await Case("SR01 a cold start bringing the last session back: the active document on screen within seconds of the window, the other tabs not waited for", SR01);
             await Case("JT01 switching between long documents the text in the window stays still - no block moving by half a pixel or more from frame to frame, while drawn or after", JT01);
             await Case("JT02 back to a long document from a short one - read a quarter, 60% and 95% of the way down, and left while still drawn - the screen goes from the cover to it without the short one again, and its text stays still frame by frame; predicting the layout off and on, in visual and in reading mode", JT02);
             await Case("JT03 back to a long document read far down: while the blocks above are drawn back and the reader turns the wheel, the frames come at most 50 ms apart in the middle and a notch reaches the next frame within 100 ms", JT03);
             await Case("JT04 back to a long document left at its very end, after 3 s, 60 s, or 90 s with the window minimized, nothing touched: the block in the window stays there for 15 s; or the wheel turned up: the page goes up a few blocks a notch, no further; predicting the layout on and off, at the reader's window and settings", JT04);
             await Case("WD01 the window comes back where it was after the process ends, closed or killed, and another window opens set off from it", WD01);
+            await Case("LT01 a long document opened: its text on screen within 1.5 s, drawn whole within 10 s, the page never more than 200 ms without a frame meanwhile, and Ctrl+End or a search right after opening shows the end within 1 s", LT01);
             await Case("HJ03 the outline's jump to a heading far down lands and stays there - while a long document is still drawn and once it is", HJ03);
             await Case("HP04 with files open, File > Home, the home button and Ctrl+Shift+H show the home page in one blank tab, the documents left alone; an automation write into it hides it with the text written", HP04);
             await Case("HP05 the home page hidden by typing, and by its New document button, leaves the keys in the editor", HP05);
+            await Case("HP06 the home page's recent files show their time whole at every window width", HP06);
             await Case("WP02 pasted web pictures: one behind hotlink protection is fetched with the page as referrer, a page that is not a picture is kept on the web and said, and an untitled document saved into a folder takes its pictures along", WP02);
             await Case("EX02 an export says where it was written, with buttons to open it, and goes when closed; with no action after export, nothing shows", EX02);
             await Case("TB01 the table toolbar's Resize table opens with the table's own size; Cancel leaves the table as it was; OK resizes it", TB01);
@@ -203,6 +215,14 @@ internal static partial class Program
             await Case("RD01 reading mode: the context menu offers copying and selecting only, Copy works on a selection, copy as plain text leaves the Markdown out, Ctrl+Z changes nothing", RD01);
             await Case("RD02 reading mode: Focus mode and Typewriter mode in the View menu are disabled and drawn fainter than the entries that work, in Dark and Light, whether the menu was opened before or not", RD02);
             await Case("DG02 every diagram of the showcase document, written into a window just opened, is drawn once", DG02);
+            await Case("PL01 Settings > Editor > Draw Mermaid diagrams with: Pele chosen draws a flowchart and an agentflow (which Mermaid cannot), Mermaid chosen again draws the flowchart with Mermaid", PL01);
+            await Case("PL02 Settings > Editor > Draw Mermaid diagrams with, chosen in its list on the page: Pele and then Mermaid again, the app lives on and the setting follows", PL02);
+            await Case("SV01 every switch and list of the settings pages is inside a narrow window, in English, German, French, Japanese and Chinese", SV01);
+            await Case("SC01 every list of the settings pages, each of its choices made in it as a person makes it: the app lives on and the list shows the choice", SC01);
+            await Case("SN01 moving about the settings never leaves them by itself: Help > Shortcuts, General in the pane, its Shortcuts row shows the shortcuts; Ctrl+, leaves them from any section", SN01);
+            await Case("DG03 a diagram's copy button, with the real mouse in the dark theme: shown on hover; a click puts a picture (mostly white, light theme) and the fenced Markdown on the clipboard, and leaves the document as it was", DG03);
+            await Case("CB01 a display formula's copy button, with the real mouse in the dark theme: shown on hover, none on an inline formula; a click puts a picture (black on white), RTF with it and the formula's $$ Markdown and its MathML as Word writes it on the clipboard, no HTML; the document as it was; Word pastes an equation it can edit; pasted back it is the formula", CB01);
+            await Case("CB02 a table's copy button and the menu's Copy table, with the real mouse: the button above the table's top right corner; the clipboard holds the table as HTML (header row, alignment, formatting) and its Markdown as written; the document as it was; Word pastes one 3x3 table; pasted back it is the table's Markdown", CB02);
             await Case("IM01 the showcase's checkerboard, after View > Source mode and back, is drawn and not failed when clicked", IM01);
             await Case("CP01 Copy pasted into Word: pictures at absolute file:/// addresses, a name and an alt text with brackets, an SVG sized in pt, a JPEG", CP01);
             await Case("TH03 the side pane marks what is chosen (the bar under Files/Outline, the outline's and the folder tree's row pill) in a custom theme's accent, and in the system accent again without one", TH03);
@@ -213,6 +233,7 @@ internal static partial class Program
             await Case("MN01 a minimized window's document is written and saved through the automation API", MN01);
             await Case("LK01 a link to another Markdown file opens it as a tab of the same window when files open in tabs", LK01);
             await Case("FL01 the settings' font family box suggests the installed fonts", FL01);
+            await Case("FL02 the font picker beside Settings > Editor > Font: every installed font listed without typing, narrowed by its box; the one clicked goes first in the setting, the fallbacks after it kept", FL02);
             await Case("FO01 after another window and back, and after the context menu closed with Esc, the next letter goes into the document", FO01);
             await Case("TH04 Windows switched between light and dark while the app follows the system: caption buttons readable, editor follows", TH04);
             await Case("FT01 the file tree sorts names as 1.3.7 did", FT01);
@@ -369,7 +390,7 @@ internal static partial class Program
             // Pictures in several languages take their time; RD02 opens six windows in two themes and measures each menu
             // (about 110 s on its own, so a busy machine took it past two minutes); any other case that runs past two minutes
             // is stuck.
-            var limit = name.StartsWith("SHOT") ? 900 : name.StartsWith("RD02") ? 300 : name.StartsWith("HJ01") ? 600 : name.StartsWith("HJ02") ? 360 : name.StartsWith("JT02") ? 1800 : name.StartsWith("JT03") ? 1200 : name.StartsWith("JT04") ? 900 : 120;
+            var limit = name.StartsWith("SHOT") ? 900 : name.StartsWith("RD02") ? 300 : name.StartsWith("HJ01") ? 600 : name.StartsWith("HJ02") ? 360 : name.StartsWith("JT02") ? 1800 : name.StartsWith("JT03") ? 1200 : name.StartsWith("JT04") ? 900 : name.StartsWith("LT01") ? 300 : name.StartsWith("SV01") || name.StartsWith("SC01") ? 600 : name.StartsWith("SR03") ? 300 : 120;
             if (await Task.WhenAny(run, Task.Delay(TimeSpan.FromSeconds(limit))) != run) throw new CaseFailed($"the case did not finish within {limit} s");
             await run;
             results.Add(new JObject { ["name"] = name, ["passed"] = true, ["ms"] = watch.ElapsedMilliseconds, ["notes"] = new JArray(notes) });
@@ -1305,6 +1326,13 @@ internal static partial class Program
             catch (Exception ex) { notes.Add("undo: " + ex.Message.Split('\n')[0]); }
             PostMessage(window, 0x0010, IntPtr.Zero, IntPtr.Zero);
             await Task.Delay(1000);
+            // Undone, the page can still hold a line break the empty document did not: asked to save, "Don't save" closes
+            // it - left open, the question sat over the window the following cases opened their documents in.
+            if (IsWindow(window))
+            {
+                try { notes.Add("asked on closing: " + (await PressDialogButton(c, windowId, DialogButton.Secondary)).Title); } catch (Exception ex) { notes.Add("no question: " + ex.Message.Split('\n')[0]); }
+                for (var i = 0; i < 20 && IsWindow(window); i++) await Task.Delay(100);
+            }
             Check(!IsWindow(window), "the new window closes (no question about saving left on screen)");
         }
     }
@@ -2988,8 +3016,10 @@ internal static partial class Program
     /// Right-clicks the first element matching the selector (a real click, at its left part) and returns the context
     /// menu's items by automation id (their x:Name), read the way a screen reader reads them. Collapsed items are not
     /// there. Where the page point is on screen comes from the test host (test.editor.screenPoint), in physical pixels.
+    /// <paramref name="awaiting"/>: an item that loads with what the page says of the click (x:Load), waited for as
+    /// Select all is - for up to the same three seconds; the items are returned without it when it does not come.
     /// </summary>
-    private static async Task<Dictionary<string, System.Windows.Automation.AutomationElement>> ContextMenuAt(Client c, string windowId, IntPtr window, string selector)
+    private static async Task<Dictionary<string, System.Windows.Automation.AutomationElement>> ContextMenuAt(Client c, string windowId, IntPtr window, string selector, string? awaiting = null)
     {
         await Activate(window);
         var at = (await c.Call("test.editor.eval", new { windowId, script = $"(() => {{ const r = document.querySelector({JsonConvert.ToString(selector)}).getBoundingClientRect(); return {{ x: Math.round(r.left + 20), y: Math.round(r.top + r.height / 2) }} }})()" }))["result"]!;
@@ -3010,7 +3040,7 @@ internal static partial class Program
         Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0010 } } });
         var items = new Dictionary<string, System.Windows.Automation.AutomationElement>();
         var menuItem = new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.MenuItem);
-        for (var i = 0; i < 30 && !items.ContainsKey("SelectAllItem"); i++)
+        for (var i = 0; i < 30 && !(items.ContainsKey("SelectAllItem") && (awaiting == null || items.ContainsKey(awaiting))); i++)
         {
             await Task.Delay(100);
             items.Clear();
@@ -3089,11 +3119,12 @@ internal static partial class Program
 
     /// <summary>
     /// Pastes the clipboard into a new document of a Word of its own (hidden), saves it as .docx in the folder given and
-    /// counts the pictures in it and the picture files embedded in the .docx (a picture Word could not load is none).
-    /// Null where Word is not installed. A Word already running is left alone: when the new instance turns out to be
-    /// that one, only the document made here is closed.
+    /// counts the pictures in it and the picture files embedded in the .docx (a picture Word could not load is none), the
+    /// equations (OMath: what Word made of a formula it can edit) and its tables: each one's rows, columns and first row's
+    /// cell texts joined with "|". Null where Word is not installed. A Word already running is left alone: when the new
+    /// instance turns out to be that one, only the document made here is closed.
     /// </summary>
-    private static (int shapes, int media, string detail)? PasteIntoWord(string folder)
+    private static (int shapes, int media, string detail, int equations, List<(int rows, int columns, string header)> tables)? PasteIntoWord(string folder)
     {
         var type = Type.GetTypeFromProgID("Word.Application");
         if (type == null) return null;
@@ -3113,13 +3144,23 @@ internal static partial class Program
                 var shape = document.InlineShapes[i];
                 detail.Add($"type {(int)shape.Type} {(double)shape.Width:0.#}x{(double)shape.Height:0.#}pt");
             }
+            int equations = document.OMaths.Count;
+            var tables = new List<(int rows, int columns, string header)>();
+            for (var i = 1; i <= (int)document.Tables.Count; i++)
+            {
+                var table = document.Tables[i];
+                // A cell's text ends with "\r\a" (Word's end-of-cell mark); a row's with one more.
+                string first = table.Rows[1].Range.Text;
+                var header = string.Join("|", first.Split("\r\a").Select(t => t.Trim()).Where(t => t.Length > 0));
+                tables.Add(((int)table.Rows.Count, (int)table.Columns.Count, header));
+            }
             var file = Path.Combine(folder, "word-paste.docx");
             document.SaveAs2(file, 16);
             document.Close(0);
             document = null;
             using var zip = System.IO.Compression.ZipFile.OpenRead(file);
             var media = zip.Entries.Count(e => e.FullName.StartsWith("word/media/"));
-            return (shapes, media, string.Join(", ", detail));
+            return (shapes, media, string.Join(", ", detail), equations, tables);
         }
         finally
         {
@@ -3543,20 +3584,32 @@ internal static partial class Program
         // CommonMark example 31: Muya rewrites the entity in this HTML block on the first visual edit.
         var id = await Open(c, Fixture("f02.md", "<a href=\"&ouml;&ouml;.html\">\n\nEDITHERE\n"));
         var windowId = await WindowIdOf(c, id);
-        async Task<bool> Warning() => (bool?)(await c.Call("test.editor.eval", new
+        // The window's own card (FirstEditNotice, like the export's), not anything in the page: the page works it out a
+        // frame after the document is on the screen and tells the host, for the load it is about.
+        async Task<bool> Warning()
+        {
+            var card = await c.Call("test.editor.firstEditNotice", new { windowId });
+            return card["text"]?.Type == Newtonsoft.Json.Linq.JTokenType.String && (int?)card["loadId"] == (int?)card["currentLoadId"];
+        }
+        async Task<bool> InPage() => (bool?)(await c.Call("test.editor.eval", new
         {
             windowId,
-            script = "!!document.querySelector('.td-first-edit-warning')"
+            script = "!!document.querySelector('.td-first-edit-warning, .td-first-edit-warning-slot')"
         }))["result"] ?? false;
 
-        // Drawn straight into the DOM, not from React state (docs/todo.md): on a busy main thread (many windows
-        // already open, as deep in the full suite) it can be a moment behind the page's own load.
-        Check(await Eventually(Warning, 3000, 100), "unsafe raw HTML shows the first-edit warning");
+        Check(await Eventually(Warning, 3000, 100), "unsafe raw HTML shows the first-edit warning (the window's card)");
+        Check(!await InPage(), "nothing of it is in the page");
         await Task.Delay(5000);
         Check(await Warning(), "the warning remains visible long enough to read");
         await Task.Delay(6000);
         Check(!await Warning(), "the warning closes after about 10 seconds without a click");
         notes.Add("warning was visible after 5 seconds and gone after 11 seconds");
+        // It is for its document only: back to it, it shows again; another document shown, it goes at once.
+        var other = await Open(c, Fixture("f02-other.md", "# F02 other\n\nplain text\n"));
+        await c.Call("document.focus", new { documentId = id });
+        Check(await Eventually(Warning, 3000, 100), "back to the document, the card shows again");
+        await c.Call("document.focus", new { documentId = other });
+        Check(await Eventually(async () => !await Warning(), 1000, 50), "another document shown, the card goes at once (it is never over another document)");
     }
 
     private static async Task M01(List<string> notes)

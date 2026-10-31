@@ -958,4 +958,22 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>పొడవైన పత్రం భాగాలుగా గీయబడుతున్నప్పుడు, ఇంకా చూపని భాగం ఎత్తు అంచనా వేయడానికి బదులుగా వచనం నుండి లెక్కించబడుతుంది, కాబట్టి స్క్రోల్ బార్ మరియు రూపురేఖ నుండి దూకడం మరింత ఖచ్చితంగా ఉంటాయి. ప్రయోగాత్మకం</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>మౌస్ వీల్ టాబ్‌ల చుట్టూ తిరుగుతుంది</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>చివరి టాబ్ దాటి స్క్రోల్ చేస్తే మొదటిదానికి వెళ్తుంది, తిరిగి కూడా; ఆపివేస్తే మొదటి మరియు చివరి టాబ్ వద్ద ఆగుతుంది</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Mermaid రేఖాచిత్రాలను దీనితో గీయండి</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele మరిన్ని రకాల రేఖాచిత్రాలను గీస్తుంది, వాటిని Mermaid కంటే భిన్నంగా అమరుస్తుంది</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>చదివే మోడ్‌లో పేరా పంక్తులను కలపండి</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>చదివే మోడ్‌లో పేరాలోని ఒకే పంక్తి విరామం Markdown నిర్దేశించినట్లు, ఎగుమతులు ఇప్పటికే చేస్తున్నట్లు ఖాళీగా కనిపిస్తుంది (చైనీస్ లేదా జపనీస్ అక్షరాల మధ్య ఖాళీ ఉండదు). పంక్తి విరామాన్ని ఉంచాలంటే పంక్తి చివర రెండు ఖాళీలు లేదా బ్యాక్‌స్లాష్ ఉంచండి</value>
+  </data>
 </root>

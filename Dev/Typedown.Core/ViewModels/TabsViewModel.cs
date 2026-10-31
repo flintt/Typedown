@@ -35,7 +35,8 @@ namespace Typedown.Core.ViewModels
         {
             get => activeTab;
             // Every tab put on screen, by whatever path, makes a switch asked for before it stale (SwitchTo).
-            private set { activeTab = value; showRequests++; }
+            // A first-edit notice is for the document it was said for: not over another one, nor over the home page.
+            private set { activeTab = value; showRequests++; ServiceProvider.GetService<UIViewModel>()?.HideFirstEditNotice(); }
         }
 
         private DocumentTab activeTab;
@@ -364,14 +365,21 @@ namespace Typedown.Core.ViewModels
 
         public bool IsOpenInAnyTab(string path) => FindByPath(path) != null;
 
-        /// <summary>Writes the open documents (untitled ones excluded) and the active one for the next start.</summary>
-        public void SaveSession()
+        /// <summary>
+        /// Writes the open documents (untitled ones excluded) and the active one for the next start: <paramref name="shown"/>
+        /// when it is still open (the tab the reader was on before closing went through the unsaved ones), else the active tab.
+        /// </summary>
+        public void SaveSession(DocumentTab shown = null)
         {
             var files = Tabs.Select(t => t == ActiveTab ? FileViewModel.FilePath : t.FilePath).ToList();
-            var activeIndex = Tabs.IndexOf(ActiveTab);
+            var shownTab = shown != null && Tabs.Contains(shown) ? shown : ActiveTab;
+            var activeIndex = Tabs.IndexOf(shownTab);
             var activePath = activeIndex >= 0 ? files[activeIndex] : null;
             var kept = files.Where(f => !string.IsNullOrEmpty(f)).ToList();
-            SessionMemory.Save(kept, Math.Max(0, kept.IndexOf(activePath)));
+            // An untitled document has no place in the file list: it is named by its document id, which its backup keeps
+            // (the first file came back active instead, or the last untitled one recovered).
+            var order = Tabs.Select((t, i) => SessionMemory.OrderKey(files[i], t.DocumentId)).ToList();
+            SessionMemory.Save(kept, Math.Max(0, kept.IndexOf(activePath)), string.IsNullOrEmpty(activePath) ? shownTab?.DocumentId : null, order);
         }
 
         public void Dispose()

@@ -13,7 +13,8 @@
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
-    <Button 
+    <Button
+        x:Name="RowButton"
         MinHeight="68"
         Padding="16,12,16,12" 
         Click="OnClick"
@@ -27,10 +28,11 @@
         Background="{x:Bind Background, Mode=OneWay}">
         <Grid ColumnSpacing="16">
 
+            <!-- The text's and the action's columns are set by HorizontalActionAlignment (UpdateColumns). -->
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition x:Name="TextColumn" Width="*"/>
+                <ColumnDefinition x:Name="ActionColumn" Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 

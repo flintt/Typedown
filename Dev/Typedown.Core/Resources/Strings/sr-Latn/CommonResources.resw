@@ -948,12 +948,6 @@
   <data name="FolderSearch.InFolderPlaceholder" xml:space="preserve">
     <value>Pretraži fasciklu…</value>
   </data>
-  <data name="FolderSearch.NameMatch" xml:space="preserve">
-    <value>(ime datoteke se poklapa)</value>
-  </data>
-  <data name="FolderSearch.ResultSummary" xml:space="preserve">
-    <value>{0} pronađenih datoteka od {1} pretraženih</value>
-  </data>
   <data name="FolderSearch.Searching" xml:space="preserve">
     <value>Pretraga…</value>
   </data>
@@ -1152,5 +1146,53 @@
   </data>
   <data name="EditorOpening" xml:space="preserve">
     <value>Otvaranje…</value>
+  </data>
+  <data name="FolderSearch.NamesHeader" xml:space="preserve">
+    <value>Imena datoteka ({0})</value>
+  </data>
+  <data name="FolderSearch.ContentsHeader" xml:space="preserve">
+    <value>Sadržaj ({0})</value>
+  </data>
+  <data name="FolderSearch.AlsoInContent" xml:space="preserve">
+    <value>Poklapa se i sadržaj</value>
+  </data>
+  <data name="FolderSearch.ShowAll" xml:space="preserve">
+    <value>Prikaži sve ({0})</value>
+  </data>
+  <data name="FolderSearch.Folder" xml:space="preserve">
+    <value>Fascikla</value>
+  </data>
+  <data name="FolderSearch.SearchingContents" xml:space="preserve">
+    <value>Imena datoteka: {0} · Pretraga sadržaja…</value>
+  </data>
+  <data name="FolderSearch.Summary" xml:space="preserve">
+    <value>Imena datoteka: {0} · Sadržaj: {1} · Pretraženo datoteka: {2}</value>
+  </data>
+  <data name="FindResults.ShowAll" xml:space="preserve">
+    <value>Prikaži sve rezultate</value>
+  </data>
+  <data name="FindResults.Title" xml:space="preserve">
+    <value>Pretraži dokument</value>
+  </data>
+  <data name="FindResults.Total" xml:space="preserve">
+    <value>Rezultati: {0}</value>
+  </data>
+  <data name="FindResults.TooMany" xml:space="preserve">
+    <value>Previše rezultata – nastavite da kucate</value>
+  </data>
+  <data name="FindResults.None" xml:space="preserve">
+    <value>Nema rezultata</value>
+  </data>
+  <data name="FindResults.Position" xml:space="preserve">
+    <value>{0} od {1}</value>
+  </data>
+  <data name="CopyTable" xml:space="preserve">
+    <value>Kopiraj tabelu</value>
+  </data>
+  <data name="FontPicker.Choose" xml:space="preserve">
+    <value>Izaberi…</value>
+  </data>
+  <data name="FontPicker.Search" xml:space="preserve">
+    <value>Pretraži fontove</value>
   </data>
 </root>

@@ -34,7 +34,7 @@ namespace Typedown.Services.Automation
             Core.Utilities.Common.OpenUrlOverride = url =>
             {
                 lock (openedLinks) openedLinks.Add(url);
-                Core.Utilities.Log.Debug($"test host: not opened (a test host opens no links): {url}");
+                Core.Utilities.Log.Debug($"test host: not opened (a test host opens no links): {Core.Utilities.LogText.Address(url)}");
                 return true;
             };
             // What the app would have opened as links since the test host started (a browser, a file's own program).
@@ -330,6 +330,46 @@ namespace Typedown.Services.Automation
                 });
             }));
 
+            // The settings rows of a window's page as laid out: each row's title and where its control (the switch, list or
+            // box at its side) is within it. UI Automation cannot tell a control clipped out of its row - it reports it with
+            // no place, as one scrolled off the screen (SV01: "Join the lines of a paragraph in reading mode" had pushed its
+            // switch out of the row, and nothing said so).
+            methods.Add(new MethodDescriptor("test.settings.layout", null, "test.settings.layout/1", (c, ct) =>
+                Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    var window = Typedown.Windows.MainWindow.AllWindows.FirstOrDefault(w => w.Handle == app.MainWindow)
+                        ?? throw new AutomationException(AutomationErrorKind.window_not_found, "no main window with that handle");
+                    var rows = new Newtonsoft.Json.Linq.JArray();
+                    string section = null; // the settings section shown; none on the editor page
+                    var stack = new System.Collections.Generic.Stack<Microsoft.UI.Xaml.DependencyObject>();
+                    if (window.Content != null) stack.Push(window.Content);
+                    while (stack.Count > 0)
+                    {
+                        var node = stack.Pop();
+                        for (var i = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(node) - 1; i >= 0; i--)
+                            stack.Push(Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChild(node, i));
+                        if (node is Core.Pages.SettingsPage page) section = page.ShownSection;
+                        if (node is not Microsoft.UI.Xaml.FrameworkElement row || !(row is Core.Controls.NormalSettingItem || row is Core.Controls.ButtonSettingItem)) continue;
+                        if (row.ActualWidth <= 0 || row.Visibility != Microsoft.UI.Xaml.Visibility.Visible) continue; // in a closed expander
+                        var title = row.GetType().GetProperty("Title")?.GetValue(row)?.ToString() ?? "";
+                        if (row.GetType().GetProperty("Action")?.GetValue(row) is not Microsoft.UI.Xaml.FrameworkElement action || action.Visibility != Microsoft.UI.Xaml.Visibility.Visible) continue;
+                        var place = action.ActualWidth > 0
+                            ? action.TransformToVisual(row).TransformBounds(new global::Windows.Foundation.Rect(0, 0, action.ActualWidth, action.ActualHeight))
+                            : global::Windows.Foundation.Rect.Empty;
+                        rows.Add(new Newtonsoft.Json.Linq.JObject
+                        {
+                            ["title"] = title,
+                            ["control"] = action.GetType().Name,
+                            ["automationId"] = Microsoft.UI.Xaml.Automation.AutomationProperties.GetAutomationId(action),
+                            ["rowWidth"] = Math.Round(row.ActualWidth),
+                            ["left"] = place.IsEmpty ? null : Math.Round(place.Left),
+                            ["right"] = place.IsEmpty ? null : Math.Round(place.Right),
+                            ["width"] = Math.Round(action.ActualWidth),
+                        });
+                    }
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["section"] = section, ["rows"] = rows };
+                })));
+
             // Opens another window, as File > New window does, and returns its windowId once it is registered.
             methods.Add(new MethodDescriptor("test.window.open", null, "test.window.open/1", async (c, ct) =>
             {
@@ -573,6 +613,40 @@ namespace Typedown.Services.Automation
                         : global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetOpenPopupsForXamlRoot(app.XamlRoot).Select(p => p.Child?.GetType().Name ?? "empty").ToList();
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["popups"] = new Newtonsoft.Json.Linq.JArray(open) };
                 })));
+            // The language tag of each open popup, of what it shows and of the texts in it (FrameworkElement.Language, as
+            // inherited): WinUI picks the Chinese fallback font by it, and a menu made under another language kept that
+            // one's after switching back (LG02).
+            methods.Add(new MethodDescriptor("test.window.popupLanguages", null, "test.window.popupLanguages/1", (c, ct) =>
+                Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    var popups = new Newtonsoft.Json.Linq.JArray();
+                    if (app.XamlRoot != null)
+                        foreach (var popup in global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetOpenPopupsForXamlRoot(app.XamlRoot))
+                        {
+                            var texts = new Newtonsoft.Json.Linq.JArray();
+                            void Walk(global::Microsoft.UI.Xaml.DependencyObject node)
+                            {
+                                if (node is global::Microsoft.UI.Xaml.Controls.TextBlock block && !string.IsNullOrEmpty(block.Text))
+                                    texts.Add(new Newtonsoft.Json.Linq.JObject { ["text"] = block.Text, ["language"] = block.Language });
+                                var count = global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(node);
+                                for (var i = 0; i < count; i++) Walk(global::Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChild(node, i));
+                            }
+                            if (popup.Child != null) Walk(popup.Child);
+                            popups.Add(new Newtonsoft.Json.Linq.JObject
+                            {
+                                ["type"] = popup.Child?.GetType().Name ?? "empty",
+                                ["popup"] = popup.Language,
+                                ["child"] = (popup.Child as global::Microsoft.UI.Xaml.FrameworkElement)?.Language,
+                                ["texts"] = texts,
+                            });
+                        }
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject
+                    {
+                        ["popups"] = popups,
+                        ["root"] = (app.XamlRoot?.Content as global::Microsoft.UI.Xaml.FrameworkElement)?.Language,
+                        ["interface"] = Core.Utilities.Locale.ElementLanguage,
+                    };
+                })));
             // The running E2E case and its purpose, shown in every window's title after the test host's marker (label
             // empty: none). Not tied to a window: a case sets it before it has one.
             methods.Add(new MethodDescriptor("test.app.caseLabel", null, "test.app.caseLabel/1", async (c, ct) =>
@@ -636,6 +710,11 @@ namespace Typedown.Services.Automation
             methods.Add(new MethodDescriptor("test.export.notice", null, "test.export.notice/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
                     (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["path"] = app.UIViewModel.ExportedPath, ["text"] = app.UIViewModel.ExportedNotice })));
+            // The card that the first visual edit may rewrite part of the document shown (FirstEditNotice): its text and the
+            // load it is for, or null text when none shows.
+            methods.Add(new MethodDescriptor("test.editor.firstEditNotice", null, "test.editor.firstEditNotice/1", (c, ct) =>
+                Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                    (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["text"] = app.UIViewModel.FirstEditNotice, ["loadId"] = app.UIViewModel.FirstEditNoticeLoad, ["currentLoadId"] = app.EditorViewModel.LoadId })));
             // The entries of a window's File > Export submenu, as shown.
             methods.Add(new MethodDescriptor("test.export.menu", null, "test.export.menu/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
@@ -1122,6 +1201,15 @@ namespace Typedown.Services.Automation
                         ["page"] = settings != null ? "settings" : menuBar != null ? "main" : "other",
                         ["contentTop"] = settings != null ? Top(settings) : menuBar != null ? Bottom(menuBar) : -1,
                     };
+                })));
+            // The last trip between the main page and the settings, step by step (RootControl.NavigationTimes). E2E ST01.
+            methods.Add(new MethodDescriptor("test.window.navigationTimes", null, "test.window.navigationTimes/1", (c, ct) =>
+                Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    var times = new Newtonsoft.Json.Linq.JObject();
+                    foreach (var (step, ms) in FindInWindow<Core.Controls.RootControl>(app)?.NavigationTimes ?? new())
+                        times[step] = Math.Round(ms, 1);
+                    return (Newtonsoft.Json.Linq.JToken?)times;
                 })));
             // How many times the window said "Opening…" over its editor, and how many long loads it had (JU01: a switch
             // between long documents does not say it).

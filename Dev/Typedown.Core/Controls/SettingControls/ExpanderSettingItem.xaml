@@ -15,10 +15,12 @@
         <muxc:Expander.Header>
             <Grid Padding="0,12,0,12" ColumnSpacing="16">
 
+                <!-- The text takes the room left and wraps; the state its own size (sized to the text, a long
+                     description pushed the state out of the window). -->
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
                 <Viewbox Width="16" Height="16" VerticalAlignment="Center">

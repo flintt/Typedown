@@ -127,6 +127,9 @@ function documents() {
       ['Enter after a paragraph followed by 3 blank lines', 'a\n\n\n\nb\n', 0, true, 'Enter', 'a\n\n\n\n\n\nb\n'],
       ['Enter after a paragraph followed by 2 blank lines', 'a\n\n\nb\n', 0, true, 'Enter', 'a\n\n\n\nb\n'],
       ['Backspace in the empty paragraph of 4 blank lines', 'a\n\n\n\n\nb\n', 1, false, 'Backspace', 'a\n\nb\n'],
+      // The editor's own Backspace and Delete (it prevents the browser's) fire no input event: until keyboard.js told
+      // the change itself, the host kept the text from before and the 4 lines came back.
+      ['Delete at the end of a paragraph followed by 4 blank lines', 'a\n\n\n\n\nb\n', 0, true, 'Delete', 'a\n\nb\n'],
     ];
     for (const [what, md, index, atEnd, key, expected] of edits) {
       await mode(true, false);

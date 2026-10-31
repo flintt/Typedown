@@ -958,4 +958,22 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>लांब दस्तऐवज भागांमध्ये काढला जात असताना, अद्याप न दाखवलेल्या भागाची उंची अंदाजाऐवजी मजकुरावरून मोजली जाते, त्यामुळे स्क्रोल बार आणि रूपरेषेतून उडी अधिक अचूक होतात. प्रायोगिक</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>माउस व्हील टॅबभोवती फिरते</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>शेवटच्या टॅबनंतर स्क्रोल केल्यास पहिल्या टॅबवर जाते, आणि उलटही; बंद असल्यास पहिल्या व शेवटच्या टॅबवर थांबते</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Mermaid आकृत्या यानी काढा</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele अधिक प्रकारच्या आकृत्या काढते आणि त्या Mermaid पेक्षा वेगळ्या मांडते</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>वाचन मोडमध्ये परिच्छेदाच्या ओळी जोडा</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>वाचन मोडमध्ये परिच्छेदातील एकच ओळ खंड रिक्त जागेसारखा दिसतो, जसे Markdown सांगते आणि निर्यात आधीच करते (चिनी किंवा जपानी अक्षरांमध्ये रिक्त जागा नाही). ओळ खंड ठेवण्यासाठी ओळीच्या शेवटी दोन रिक्त जागा किंवा बॅकस्लॅश द्या</value>
+  </data>
 </root>

@@ -909,6 +909,14 @@
   <data name="Editor.PlantUmlServer.Description" xml:space="preserve">
     <value>绘制图表的 PlantUML 服务器（plantuml-server）地址。留空：plantuml.com。使用自己的服务器时，图表源码不会离开你手中。</value>
   </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Mermaid 图表的绘制方式</value>
+    <comment>编辑器/Mermaid 图表的绘制方式（选项：Mermaid、Pele，不翻译）</comment>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele 能画更多种类的图表，排版和 Mermaid 不同</value>
+    <comment>编辑器/Mermaid 图表的绘制方式：说明</comment>
+  </data>
   <data name="Editor.VimMode.Title" xml:space="preserve">
     <value>Vim 键位</value>
   </data>
@@ -992,5 +1000,17 @@
   </data>
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>长文档分段渲染时，按文字排版算出尚未显示部分的高度，而不是估算，滚动条和大纲跳转更准确。实验性功能</value>
+  </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>滚轮切换标签时首尾循环</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>在最后一个标签上继续滚动会回到第一个，反之亦然；关闭则停在第一个和最后一个标签</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>阅读模式下合并段内换行</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>阅读模式下，段落中的单个换行显示为空格，与 Markdown 规范和导出结果一致（中文、日文字符之间不加空格）。要保留换行，在行尾加两个空格或反斜杠</value>
   </data>
 </root>

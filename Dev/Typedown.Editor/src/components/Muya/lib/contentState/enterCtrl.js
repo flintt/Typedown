@@ -390,6 +390,15 @@ const enterCtrl = ContentState => {
     ) {
       block = parent
       parent = this.getParent(block)
+    } else if (
+      // At the very start of an item's text with more under it (a nested list, another paragraph): a new item above,
+      // as for an item with nothing under it. It was an empty line split off inside the same item.
+      parent && parent.type === 'li' && start.offset === 0 && text.length > 0 &&
+      block.children[0] && block.children[0].key === start.key &&
+      parent.children[parent.listItemType === 'task' ? 1 : 0] === block
+    ) {
+      block = parent
+      parent = this.getParent(block)
     }
     const left = start.offset
     const right = text.length - left

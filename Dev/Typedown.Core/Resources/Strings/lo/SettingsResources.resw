@@ -958,4 +958,22 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>ໃນຂະນະທີ່ເອກະສານຍາວຖືກແຕ້ມເປັນສ່ວນໆ, ຄວາມສູງຂອງສ່ວນທີ່ຍັງບໍ່ໄດ້ສະແດງຈະຖືກຄິດໄລ່ຈາກຂໍ້ຄວາມແທນການປະມານ, ເຮັດໃຫ້ແຖບເລື່ອນ ແລະ ການໂດດຈາກໂຄງຮ່າງຖືກຕ້ອງກວ່າ. ທົດລອງ</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>ລໍ້ເມົາສ໌ວຽນໄປຕາມແທັບ</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>ເລື່ອນຜ່ານແທັບສຸດທ້າຍຈະໄປແທັບທຳອິດ ແລະກັບກັນ; ຖ້າປິດຈະຢຸດຢູ່ແທັບທຳອິດ ແລະແທັບສຸດທ້າຍ</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>ແຕ້ມແຜນວາດ Mermaid ດ້ວຍ</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele ແຕ້ມແຜນວາດໄດ້ຫຼາຍຊະນິດກວ່າ ແລະ ຈັດວາງຕ່າງຈາກ Mermaid</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>ລວມແຖວຂອງວັກໃນໂໝດອ່ານ</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>ໃນໂໝດອ່ານ ການຂຶ້ນແຖວໃໝ່ຄັ້ງດຽວພາຍໃນວັກຈະສະແດງເປັນຍະຫວ່າງ ຕາມທີ່ Markdown ກຳນົດ ແລະ ທີ່ການສົ່ງອອກເຮັດຢູ່ແລ້ວ (ບໍ່ມີຍະຫວ່າງລະຫວ່າງຕົວອັກສອນຈີນ ຫຼື ຍີ່ປຸ່ນ). ເພື່ອຮັກສາການຂຶ້ນແຖວໃໝ່ ໃຫ້ຈົບແຖວດ້ວຍຍະຫວ່າງສອງບ່ອນ ຫຼື ແບັກສະແລຊ</value>
+  </data>
 </root>

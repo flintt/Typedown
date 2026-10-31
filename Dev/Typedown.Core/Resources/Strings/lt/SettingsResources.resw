@@ -958,4 +958,22 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Kol ilgas dokumentas piešiamas dalimis, dar nerodomos dalies aukštis apskaičiuojamas iš teksto, o ne įvertinamas apytiksliai, todėl slinkties juosta ir šuoliai iš struktūros yra tikslesni. Eksperimentinė</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Pelės ratukas sukasi ratu per korteles</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Slinkimas už paskutinės kortelės nukelia į pirmąją, ir atvirkščiai; išjungus sustoja ties pirmąja ir paskutine kortele</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Braižyti Mermaid diagramas naudojant</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele braižo daugiau diagramų rūšių ir išdėsto jas kitaip nei Mermaid</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Sujungti pastraipos eilutes skaitymo režimu</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>Skaitymo režimu pavienis eilutės lūžis pastraipoje rodomas kaip tarpas, kaip nustato Markdown ir kaip jau daro eksportas (tarp kinų ar japonų rašmenų tarpas nededamas). Norėdami išlaikyti lūžį, eilutę užbaikite dviem tarpais arba atvirkštiniu pasviruoju brūkšniu</value>
+  </data>
 </root>

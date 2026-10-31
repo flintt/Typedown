@@ -69,7 +69,9 @@ import { createReadingKeys } from "services/vimReading";
 import { KeptDocuments, blockCaretKey, caretKey, isForward, markedAt, sameLines } from "services/keptDocuments";
 import { CURSOR_ANCHOR_DNA, CURSOR_FOCUS_DNA } from 'components/Muya/lib/config'
 import 'components/Muya/themes/default.css'
-import { noteScroll } from 'services/scrollWriters'
+import { noteScroll, recentScrolls } from 'services/scrollWriters'
+import { FIND_EDIT_REFRESH_MS, findResultsOpen, noteFindChange, setFindProvider } from 'services/findResults'
+import { previewOf } from 'services/findPreview'
 
 interface IMuyaEditor {
     markdown: string
@@ -245,14 +247,14 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     // Import/export normalizes Markdown. Keep the original text while the document
     // still exports to its initial value, including after an undo back to that value.
     const importedRef = useRef<{ source: string, normalized: string }>();
-    // The notice is put in and taken out by hand, not through React state: a React commit while the editor has the
-    // focus walks the whole document to save and put back the selection (react-dom's getSelectionInformation), and
-    // on a document with diagrams - thousands of SVG elements - that took over a second, once as the notice came with
-    // the load and again as it went ten seconds later.
-    const warningSlotRef = useRef<HTMLDivElement>(null)
+    // The notice that the first visual edit may rewrite part of this document is the host's: a card over the window,
+    // as the one an export leaves (FirstEditNotice, Typedown.Core MainPage), never in the page - in it, it pushed the
+    // document down as it came and up as it went, or lay over its first line. The page says when it is to show and when
+    // not, for the load it is about; the host shows it only while that load is the document shown.
     const firstEditWarningRef = useRef(false)
     const readOnlyRef = useRef(!!props.options?.readOnly)
     const firstEditWarningTimerRef = useRef<number | null>(null)
+    const firstEditToldRef = useRef<{ show: boolean, loadId: number | undefined } | null>(null)
     const drawFirstEditWarningRef = useRef<() => void>(() => { })
     const showFirstEditWarning = useCallback((show: boolean) => {
         if (firstEditWarningTimerRef.current !== null) window.clearTimeout(firstEditWarningTimerRef.current)
@@ -266,34 +268,17 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         }, 10000)
     }, [])
     drawFirstEditWarningRef.current = () => {
-        const slot = warningSlotRef.current
-        if (!slot) return
         const show = firstEditWarningRef.current && !readOnlyRef.current
-        if (show === !!slot.firstElementChild) return
-        // The notice takes its height above the document: coming or going with the page scrolled down, the block at the
-        // top of the window is held where it is. The browser's scroll anchoring would, but it is off while a long
-        // document is drawn a part at a time, and the notice going 10 s after the load moved the text in the window up
-        // by its height (JT04, w10: 33 px, a 1.5 MB document back at its end). At the top of the page it pushes the
-        // document down, as it always did.
-        const hold = window.scrollY > 0 ? holdWindowBlock('first-edit notice') : null
-        if (!show) {
-            slot.replaceChildren()
-            hold?.()
-            return
-        }
-        const notice = document.createElement('div')
-        notice.className = 'td-first-edit-warning'
-        notice.setAttribute('role', 'status')
-        const text = document.createElement('span')
-        text.className = 'td-first-edit-warning-text'
-        const close = document.createElement('button')
-        close.className = 'td-first-edit-warning-close'
-        close.setAttribute('aria-label', 'Close')
-        close.textContent = '×'
-        close.addEventListener('click', () => showFirstEditWarning(false))
-        notice.append(text, close)
-        slot.append(notice)
-        hold?.()
+        const loadId = currentLoadId()
+        const told = firstEditToldRef.current
+        // Shown: once for the load. Gone: only if it was shown (the host takes it away by itself when another document is
+        // shown, so a load that never showed it says nothing).
+        if (show ? told?.show && told.loadId === loadId : !told?.show) return
+        firstEditToldRef.current = { show, loadId }
+        // The text as the page has it (localization.ts): the host shows its own copy of the same string, this is for its log.
+        let text = ''
+        try { text = JSON.parse(getComputedStyle(document.documentElement).getPropertyValue('--FirstEditWarning') || '""') } catch { text = '' }
+        transport.postMessage('FirstEditNotice', { show, loadId, text: show ? text : '' })
     }
     useEffect(() => {
         readOnlyRef.current = !!props.options?.readOnly
@@ -356,13 +341,23 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         }
     }, [editor, relativeScroll])
 
+    // The searches a Search message brought: done by its listener, at once, never again by the effect below. The effect
+    // came late for one (React runs it after the next update), did the search for an earlier, shorter text after the last
+    // one, and a Find right behind stepped through that text's matches (w10, LT01: Enter went to one of six near the top,
+    // the word near the end never came on screen).
+    const fromMessageRef = useRef(new WeakSet<object>())
+    // The last search a Search message asked for: a Find steps through its matches, whatever else was searched since.
+    const lastSearchRef = useRef<any>()
     const search = useCallback(arg => {
         if (arg?.value != "" && arg?.opt?.selection && editor) {
             const { value, opt } = arg
             const selection = opt.selection.start ? opt.selection : undefined
-            editor.search(value, { ...opt, selection })
+            // A match not drawn yet is drawn a moment after the typing stops (Muya.search): then put in the window.
+            editor.search(value, { ...opt, selection }, () => scrollToElementIfInvisible('.ag-highlight'))
+            // The bar's count and the side pane's results list (services/findResults).
+            noteFindChange()
         }
-    }, [editor])
+    }, [editor, scrollToElementIfInvisible])
 
     useEffect(() => {
         searchArgRef.current = props.searchArg
@@ -383,6 +378,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     }, [editor])
 
     useEffect(() => {
+        if (props.searchArg && typeof props.searchArg === 'object' && fromMessageRef.current.has(props.searchArg)) return
         search(props.searchArg)
     }, [editor, props.searchArg, search])
 
@@ -417,6 +413,9 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     useEffect(() => {
         const ele = document.getElementById('editor')
         const o = optionsRef.current
+        // The diagram renderer set before the first diagram is drawn (public/lazy-mermaid.js).
+        const setMermaidRenderer = (window as any).__typedownSetMermaidRenderer
+        setMermaidRenderer?.(o?.mermaidRenderer)
         const muya = new Muya(ele, o);
         // The constructor already built the document with these, so they count as applied.
         (muya as any).__applied = {
@@ -428,6 +427,12 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             readOnly: JSON.stringify(!!o?.readOnly)
         };
         (window as any).__typedownMuya = muya; // for Tools/EditorBench and DevTools inspection
+        // The document's text as the host holds it (the reader's own lines kept where unedited, keptSource): a copy
+        // button's Markdown is the block as written there (ContentState.copyBlock).
+        (muya as any).documentText = (exported: string) => {
+            const imported = importedRef.current
+            return !imported ? exported : exported === imported.normalized ? imported.source : markdownRef.current
+        };
         // What the next real visual edit would rewrite in the document (services/normalization): the loaded
         // source against Muya's export of it. Once an edit has made the export the text there is nothing left
         // to rewrite. Null before anything was loaded.
@@ -465,12 +470,30 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         const finish = (e: Event) => {
             if (!muya.renderPending) return
             if (e.type === 'mousedown' && e.target === document.documentElement) return
+            if (e.type === 'keydown') {
+                const key = e as KeyboardEvent
+                // A modifier pressed alone does nothing to the page: the Ctrl of a shortcut the host takes (Ctrl+F: the key
+                // itself never reaches the page) drew the whole of a 1.5 MB document first, and the page stopped answering
+                // (LT01).
+                if (/^(Control|Shift|Alt|Meta|CapsLock|AltGraph)$/.test(key.key)) return
+                // Ctrl+End, Ctrl+Home: that end of the document drawn first, the caret there, the rest drawn on from there
+                // (Muya.goToEdge) - not all of it first (LT01: 7 s on w10).
+                if ((key.ctrlKey || key.metaKey) && !key.shiftKey && !key.altKey && (key.key === 'End' || key.key === 'Home') &&
+                    muya.goToEdge(key.key === 'End')) {
+                    e.preventDefault()
+                    return
+                }
+            }
             muya.completeRender()
         }
         const events = ['keydown', 'mousedown', 'paste', 'cut', 'copy', 'compositionstart', 'dragstart', 'drop', 'contextmenu']
         for (const type of events) document.addEventListener(type, finish, true)
+        // A search, a step to its next match (or to one chosen in the results list) and the search bar or its list opening or
+        // closing draw only the blocks they change, and the match chosen first where it is not drawn yet
+        // (ContentState.renderSearch).
         const passive = new Set(['LoadFile', 'SetMarkdown', 'HoldInput', 'ReleaseInput', 'ThemeChanged', 'SettingsChanged', 'LanguageChanged',
-            'OnScroll', 'RestoreScroll', 'FlushContent', 'QueryNormalization', 'QueryEditorStyle', 'AwaitPresentation'])
+            'OnScroll', 'RestoreScroll', 'FlushContent', 'QueryNormalization', 'QueryEditorStyle', 'AwaitPresentation',
+            'Search', 'Find', 'SearchOpenChange', 'FindActivate', 'FindResultsOpen'])
         const hook = (name: string) => { if (muya.renderPending && !passive.has(name) && !name.startsWith('invoke_')) muya.completeRender() }
         beforeHostMessage.add(hook)
         return () => {
@@ -539,6 +562,11 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         const server = props.options?.plantUmlServer ?? ''
         applyOnce(editor, 'renderPlantUml', [on, server], () => editor?.setOptions({ renderPlantUml: on, plantUmlServer: server }, true))
     }, [editor, props.options?.renderPlantUml, props.options?.plantUmlServer])
+
+    useEffect(() => {
+        // Settings > Editor > Diagram renderer: Mermaid or Pele draws the Mermaid fences; the drawn ones are drawn again.
+        if (editor) (window as any).__typedownSetMermaidRenderer?.(props.options?.mermaidRenderer)
+    }, [editor, props.options?.mermaidRenderer])
 
     useEffect(() => {
         // Muya: 'dfm' = 4-space nested indentation, otherwise the number of spaces after the list marker (1-4).
@@ -621,6 +649,29 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         editor?.clipboard.copy(arg)
     }), [editor]);
 
+    // The menu's Copy table (ContentState.copyTableAtMenu): the table right-clicked as its copy button copies it.
+    useEffect(() => transport.addListener<any>('CopyTable', () => {
+        (editor as any)?.contentState.copyTableAtMenu()
+    }), [editor]);
+
+    // What a right-click is on, told the host as the button goes down: the host opens its context menu as the button
+    // comes up, before the caret the click moved has been reported (SelectionChange), and its Copy table shows by this
+    // (EditorViewModel.ContextMenuInTable). The page keeps the element for Copy table (ContentState.copyTableAtMenu).
+    useEffect(() => {
+        if (!editor) return
+        const down = (event: MouseEvent) => {
+            if (event.button !== 2) return
+            const target = event.target as Element | null
+            const contentState = (editor as any).contentState
+            if (contentState) contentState.contextMenuTarget = target
+            const report = { table: !!target?.closest?.('#ag-editor-id figure[data-role="TABLE"]') };
+            (window as any).__typedownContextMenuTarget = report
+            transport.postMessage('ContextMenuTarget', report)
+        }
+        document.addEventListener('mousedown', down, true)
+        return () => document.removeEventListener('mousedown', down, true)
+    }, [editor]);
+
     useEffect(() => transport.addListener<any>('Cut', arg => {
         if (optionsRef.current?.readOnly) return
         markEdited(shownRef)
@@ -668,20 +719,188 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         editor?.insertImages(arg)
     }), [editor]);
 
+    // The find bar sends a search for every letter typed: those that came while the page was busy are one search, the last
+    // (on a long document each was a search of the whole text and, for a match not drawn yet, the drawing started again
+    // there - LT01). A step to the next match, a replace or the bar closing does the search waiting first.
+    const pendingSearchRef = useRef<{ timer: number, run: () => void } | null>(null)
+    const runPendingSearch = useCallback(() => {
+        const pending = pendingSearchRef.current
+        if (!pending) return
+        pendingSearchRef.current = null
+        window.clearTimeout(pending.timer)
+        pending.run()
+    }, [])
+    useEffect(() => () => { runPendingSearch() }, [runPendingSearch])
+
+    // For the checks (LT01 reads it after its search): when each search message came, how long the page took over it, and
+    // how many matches it found - whether a slow search is the page's or the messages', on a machine one cannot watch.
+    const noteSearch = useCallback((name: string, came: number) => {
+        const log = ((window as any).__typedownSearchLog ||= []) as any[]
+        log.push({ name, came: Math.round(came), ms: Math.round(performance.now() - came), matches: (editor as any)?.contentState?.searchMatches?.matches?.length ?? null, pending: !!(editor as any)?.renderPending })
+        if (log.length > 60) log.splice(0, log.length - 60)
+    }, [editor])
+
     useEffect(() => transport.addListener<{ value: string, opt: unknown }>('Search', (arg) => {
-        props.onSearchArgChange(arg)
-        setTimeout(() => scrollToElementIfInvisible('.ag-highlight'), 0)
-    }), [editor, props, scrollToElementIfInvisible]);
+        const came = performance.now()
+        findHoldRef.current()
+        noteSearch('Search came', came)
+        if (arg && typeof arg === 'object') fromMessageRef.current.add(arg)
+        lastSearchRef.current = arg
+        // Searched here, not only through the state the bar's text is kept in: through it alone the search came after a
+        // Find that followed it at once, and the step went to the next match of the search before.
+        const run = () => {
+            const started = performance.now()
+            search(arg)
+            noteSearch('Search', started)
+            props.onSearchArgChange(arg)
+            setTimeout(() => scrollToElementIfInvisible('.ag-highlight'), 0)
+        }
+        const pending = pendingSearchRef.current
+        if (pending) {
+            pending.run = run
+            return
+        }
+        const entry = { timer: 0, run }
+        entry.timer = window.setTimeout(() => { if (pendingSearchRef.current === entry) { pendingSearchRef.current = null; entry.run() } }, 0)
+        pendingSearchRef.current = entry
+    }), [editor, props, scrollToElementIfInvisible, search, noteSearch]);
+
+    // After a step to a match (Find), the match's block is kept in the window while the rest of a long document is drawn
+    // around it, until the reader moves the page or does anything else, a new search comes, or 3 s: w10, LT01, one run in
+    // three, Enter on a word near the end found it (one match), and its block never came into the window in 30 s. If
+    // something takes it out, it is put back, and what had just scrolled the page is told to the host's log (FindHold).
+    const findHoldRef = useRef<() => void>(() => { })
+    const holdMatchInWindow = useCallback(() => {
+        findHoldRef.current()
+        const mark = document.querySelector('#ag-editor-id .ag-highlight')
+        const block = mark?.closest('#ag-editor-id > *') as HTMLElement | null
+        if (!block) return
+        const key = block.id
+        let over = false
+        let told = false
+        // Anything the host asks for but these may move the page itself (the outline's jump, its scroll bar dragged).
+        const quiet = new Set(['FlushContent', 'QueryNormalization', 'QueryEditorStyle', 'AwaitPresentation', 'Find', 'Search', 'FindActivate', 'FindResultsOpen'])
+        const hostMessage = (name: string) => { if (!quiet.has(name) && !name.startsWith('invoke_')) stop() }
+        const stop = () => {
+            over = true
+            for (const e of GIVE_WAY) window.removeEventListener(e, stop, true)
+            beforeHostMessage.delete(hostMessage)
+        }
+        for (const e of GIVE_WAY) window.addEventListener(e, stop, { capture: true, passive: true })
+        beforeHostMessage.add(hostMessage)
+        findHoldRef.current = stop
+        const startedAt = performance.now()
+        const tick = () => {
+            if (over) return
+            if (performance.now() - startedAt > 3000) return stop()
+            const element = document.getElementById(key)
+            if (!element) return stop()
+            const r = element.getBoundingClientRect()
+            if (r.bottom <= 0 || r.top >= window.innerHeight) {
+                const writers = recentScrolls(1000)
+                const from = window.scrollY
+                const now = element.querySelector('.ag-highlight') || element
+                window.scrollBy(0, now.getBoundingClientRect().top - STANDAR_Y)
+                noteScroll('find hold', from)
+                if (!told) {
+                    told = true
+                    transport.postMessage('FindHold', { ms: Math.round(performance.now() - startedAt), top: Math.round(r.top), bottom: Math.round(r.bottom), y: Math.round(from), to: Math.round(window.scrollY), drawing: !!(editor as any)?.renderPending, writers })
+                }
+            }
+            requestAnimationFrame(tick)
+        }
+        requestAnimationFrame(tick)
+    }, [editor])
 
     useEffect(() => transport.addListener<{ action: string }>('Find', ({ action }) => {
+        const came = performance.now()
+        runPendingSearch()
+        // The matches stepped through are those of the text in the bar: searched again first if anything else was
+        // searched since (an option changed, a search done for the host's own reasons).
+        const last = lastSearchRef.current
+        const matches = (editor as any)?.contentState?.searchMatches
+        if (last?.value && matches && matches.value !== last.value) search(last)
         editor?.find(action)
-        setTimeout(() => scrollToElementIfInvisible('.ag-highlight'), 0)
-    }), [editor, scrollToElementIfInvisible]);
+        // Into the window now, in the frame the match is drawn in (a long document's match not drawn before is drawn by
+        // the step itself, ContentState.renderSearch), not a task later behind the drawing's next slice.
+        scrollToElementIfInvisible('.ag-highlight')
+        holdMatchInWindow()
+        noteSearch('Find', came)
+        noteFindChange()
+    }), [editor, scrollToElementIfInvisible, runPendingSearch, noteSearch, search, holdMatchInWindow]);
+
+    // The find bar's results list (services/findResults): the matches of the bar's search as they are in the document's
+    // model - previews from the blocks' text, never from what is drawn (a long document is drawn a part at a time) - and an
+    // entry chosen there selected as a step to it would go (Find), drawn first where it is not drawn yet.
+    useEffect(() => {
+        if (!editor) return
+        const contentState = (editor as any).contentState
+        let blocks = new Map<string, any>()
+        const off = setFindProvider({
+            begin: () => {
+                blocks = new Map()
+                const travel = (list: any[]) => { for (const b of list) { blocks.set(b.key, b); if (b.children?.length) travel(b.children) } }
+                travel(contentState.blocks)
+            },
+            state: () => {
+                const { matches, index } = contentState.searchMatches
+                return { total: matches.length, index: matches.length ? index : -1 }
+            },
+            preview: (i: number) => {
+                const m = contentState.searchMatches.matches[i]
+                const block = m && blocks.get(m.key)
+                if (!block || typeof block.text !== 'string') return { text: m?.match ?? '', start: 0, end: (m?.match ?? '').length }
+                const type = block.functionType
+                const raw = type === 'codeContent' || type === 'languageInput' || type === 'footnoteInput' || type === 'thematicBreakLine'
+                return previewOf(block.text, m.start, m.end, { raw, heading: type === 'atxLine' })
+            },
+            token: (i: number) => contentState.searchMatches.matches[i],
+            activate: (i: number, token: any) => {
+                runPendingSearch()
+                const last = lastSearchRef.current
+                if (last?.value && contentState.searchMatches.value !== last.value) search(last)
+                const { matches } = contentState.searchMatches
+                let k = token ? matches.indexOf(token) : -1
+                if (k < 0 && token) k = matches.findIndex((m: any) => m.key === token.key && m.start === token.start)
+                if (k < 0) k = i
+                if (!(k >= 0 && k < matches.length)) return
+                const came = performance.now()
+                // Selected in visual mode; reading mode has no caret: there it is put in the window and marked only.
+                editor.selectMatch(k, !optionsRef.current?.readOnly)
+                scrollToElementIfInvisible('.ag-highlight')
+                holdMatchInWindow()
+                noteSearch('FindActivate', came)
+                noteFindChange()
+            }
+        })
+        return off
+    }, [editor, runPendingSearch, search, scrollToElementIfInvisible, holdMatchInWindow, noteSearch])
+
+    // An edit while the results list is open: the matches found again once the typing stops (not during a composition),
+    // the caret left where it is (Muya.refreshSearch).
+    useEffect(() => {
+        if (!editor) return
+        let timer = 0
+        const refresh = () => {
+            timer = 0
+            if (!findResultsOpen()) return
+            if ((editor as any).keyboard?.isComposed) { timer = window.setTimeout(refresh, FIND_EDIT_REFRESH_MS); return }
+            if ((editor as any).refreshSearch()) noteFindChange()
+        }
+        const off = editor.on('contentChange', () => {
+            if (!findResultsOpen()) return
+            window.clearTimeout(timer)
+            timer = window.setTimeout(refresh, FIND_EDIT_REFRESH_MS)
+        })
+        return () => { window.clearTimeout(timer); if (typeof off === 'function') off() }
+    }, [editor])
 
     useEffect(() => transport.addListener<{ value: string, opt: unknown }>('Replace', ({ value, opt }) => {
+        runPendingSearch()
         markEdited(shownRef)
         editor?.replace(value, opt)
-    }), [editor, scrollToElement]);
+        noteFindChange()
+    }), [editor, scrollToElement, runPendingSearch]);
 
     useEffect(() => {
         setMarginTop(currentMarginTop => {
@@ -692,16 +911,21 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     }, [props.searchOpen, relativeScroll])
 
     useEffect(() => transport.addListener<{ open: number }>('SearchOpenChange', ({ open }) => {
+        runPendingSearch()
         if (open == 0 && editor) {
             const { contentState } = editor as any;
+            const before = contentState.searchKeys();
             contentState.setCursorToHighlight();
             contentState.searchMatches.matches = [];
-            contentState.render(true);
+            // The blocks that had marks drawn again, not the whole document (ContentState.renderSearch).
+            contentState.renderSearch(before, true);
             props.onSearchArgChange(undefined)
+            lastSearchRef.current = undefined
+            noteFindChange()
             // Back from the search with the keyboard in the page: the editor has it, not the body.
             if (document.hasFocus()) restoreEditorFocus(editor, loadHoldingRef.current)
         }
-    }), [editor, props, relativeScroll]);
+    }), [editor, props, relativeScroll, runPendingSearch]);
 
     useEffect(() => transport.addListener<Record<string, unknown>>('SettingsChanged', (newOptions) => {
         for (const name in newOptions) {
@@ -958,6 +1182,11 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     useEffect(() => {
         document.body.classList.toggle('show-blank-lines', props.options?.showBlankLines === true)
     }, [props.options?.showBlankLines])
+
+    // Settings > Editor > Join the lines of a paragraph in reading mode (assets/styles/index.css): no block drawn again.
+    useEffect(() => {
+        document.body.classList.toggle('join-soft-breaks', props.options?.joinSoftBreaks === true)
+    }, [props.options?.joinSoftBreaks])
 
     // Settings > Editor > Always show Markdown marks: the marks shown everywhere as they are in the block with the caret
     // (assets/styles/index.css), no block drawn again.
@@ -1366,24 +1595,36 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             const blocks = (editor as any).contentState?.blocks?.length ?? 0
             requestAnimationFrame(() => transport.postMessage('LoadDrawn', {
                 loadId: drawnLoad, chars: props.markdown.length, blocks, progressive: !!part, how: picked.how, center: picked.index,
-                anchor: anchor ? anchor.text.slice(0, 40) : null, firstPaintMs: Math.round(performance.now() - startedAt),
+                // The anchor by its place and length, not its text: the host's log never holds the document's words.
+                anchorBlock: anchor ? (anchor.block ?? null) : null, anchorChars: anchor ? (anchor.text ?? '').length : null,
+                firstPaintMs: Math.round(performance.now() - startedAt),
             }))
         }
         if (blocksBefore && props.options?.highlightAutomationChanges !== false)
             highlightExternalChange(editor.changedBlockKeys(blocksBefore).map((key: string) => document.getElementById(key)))
         ;(window as any).__typedownLastApply = replacedLocally ? 'local' : 'whole'
         importedRef.current = { source: props.markdown, normalized: editor.getMarkdown() }
-        // Text the first visual edit would change in a way that loses something (today: some raw HTML) gets a notice
-        // that does not block editing; source mode keeps it exactly.
-        const warn = classifyNormalization(props.markdown, importedRef.current.normalized).pendingNormalization === 'unsafe'
-        showFirstEditWarning(warn)
         // What a later switch away needs to know to keep this document (keepShown).
         const { contentState } = editor as any
-        shownRef.current = !blocksBefore && props.markdown.length >= KEEP_FROM_CHARS && !hasDiagram(contentState.blocks) ? {
-            text: props.markdown, imported: importedRef.current, warn, renderKey: renderKey(),
+        const imported = importedRef.current
+        const shown: ShownDocument | null = !blocksBefore && props.markdown.length >= KEEP_FROM_CHARS && !hasDiagram(contentState.blocks) ? {
+            text: props.markdown, imported, warn: false, renderKey: renderKey(),
             loadCaret: { given: caretKey(cursorRef.current), at: blockCaretKey(contentState.cursor) },
             blockCount: contentState.blocks.length, pristine: true, reported: null,
         } : null
+        shownRef.current = shown
+        // Text the first visual edit would change in a way that loses something (today: some raw HTML) gets a notice
+        // that does not block editing; source mode keeps it exactly. Told once the document is on the screen, not before:
+        // working it out took a quarter of a second for a 1.5 MB document, in the task that puts it on the screen (LT01).
+        // The notice lies over the top of the page (assets/styles/index.css), so coming a frame later moves nothing.
+        showFirstEditWarning(false)
+        const markdown = props.markdown
+        requestAnimationFrame(() => setTimeout(() => {
+            if (importedRef.current !== imported) return
+            const warn = classifyNormalization(markdown, imported.normalized).pendingNormalization === 'unsafe'
+            if (shown) shown.warn = warn
+            showFirstEditWarning(warn)
+        }, 0))
         // reveal: "change": the first changed block into view unless the reader can already see it. Measured in page
         // coordinates against where the page is (a local edit) or is about to be put back (a whole new document).
         let changeY: number | null = null
@@ -1448,9 +1689,6 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             lineHeight: props.options?.lineHeight,
             fontFamily: props.options?.fontFamily ? `${props.options.fontFamily}, "Open Sans", "Segoe UI", sans-serif` : undefined
         }}>
-            {/* A wrapper that always exists: Muya replaces #editor's node, so React must never insert next to it -
-                inserting the notice before #editor threw and took the whole page down. */}
-            <div className="td-first-edit-warning-slot" ref={warningSlotRef} />
             <div id="editor" />
         </div>
     )

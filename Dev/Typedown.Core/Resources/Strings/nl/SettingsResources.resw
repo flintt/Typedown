@@ -958,4 +958,22 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Terwijl een lang document in delen wordt getekend, wordt de hoogte van wat nog niet wordt getoond uit de tekst berekend in plaats van geschat, zodat de schuifbalk en sprongen vanuit het overzicht nauwkeuriger zijn. Experimenteel</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Muiswiel gaat rond langs de tabbladen</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Voorbij het laatste tabblad scrollen gaat naar het eerste, en terug; uit stopt bij het eerste en laatste tabblad</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Mermaid-diagrammen tekenen met</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele tekent meer soorten diagrammen en deelt ze anders in dan Mermaid</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Regels van een alinea samenvoegen in leesmodus</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>In leesmodus wordt een enkele regeleinde binnen een alinea als spatie weergegeven, zoals Markdown voorschrijft en de exports al doen (geen spatie tussen Chinese of Japanse tekens). Wilt u een regeleinde behouden, eindig de regel dan met twee spaties of een backslash</value>
+  </data>
 </root>

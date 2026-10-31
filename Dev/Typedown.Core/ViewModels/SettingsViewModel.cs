@@ -54,6 +54,12 @@ namespace Typedown.Core.ViewModels
         /// too, as they do while editing (todo S8). Display only: the file is written the same either way.
         /// </summary>
         public bool ShowBlankLines { get => GetSettingValue(false); set => SetSettingValue(value); }
+        /// <summary>
+        /// Reading mode shows a single line ending inside a paragraph as a space, as Markdown has it (and as the exports
+        /// write it), and as nothing between two CJK characters; editing shows the lines as they are in the file. Display
+        /// only. Asked for by markdown-linewrap and a Store review ("wraps lines on single line breaks").
+        /// </summary>
+        public bool JoinSoftBreaks { get => GetSettingValue(false); set => SetSettingValue(value); }
         /// <summary>The visual editor shows the Markdown marks (**, #, a link's address) everywhere, not only where the caret is.</summary>
         public bool ShowMarkdownMarks { get => GetSettingValue(false); set => SetSettingValue(value); }
 
@@ -162,6 +168,8 @@ namespace Typedown.Core.ViewModels
         public bool AlwaysShowTabBar { get => GetSettingValue(false); set => SetSettingValue(value); }
         /// <summary>Files opened from Explorer / the command line go into a tab of the current window instead of a new window.</summary>
         public bool OpenFilesInNewTab { get => GetSettingValue(true); set => SetSettingValue(value); }
+        /// <summary>The mouse wheel over the tab strip goes on from the last tab to the first and back; off, it stops at the ends.</summary>
+        public bool TabWheelWraps { get => GetSettingValue(true); set => SetSettingValue(value); }
         public bool AutoPairMarkdownSyntax { get => GetSettingValue(true); set => SetSettingValue(value); }
 
         /// <summary>
@@ -171,6 +179,9 @@ namespace Typedown.Core.ViewModels
         public bool RenderPlantUml { get => GetSettingValue(false); set => SetSettingValue(value); }
         /// <summary>The plantuml-server that draws PlantUML blocks; empty (or not an http(s) address): plantuml.com.</summary>
         public string PlantUmlServer { get => GetSettingValue(""); set => SetSettingValue(value ?? ""); }
+
+        /// <summary>What draws the Mermaid fences: "mermaid" (the default) or "pele" (public/lazy-mermaid.js in the editor).</summary>
+        public string MermaidRenderer { get => GetSettingValue("mermaid"); set => SetSettingValue(value == "pele" ? "pele" : "mermaid"); }
         /// <summary>Vim in source mode, Vim-style moving around in reading mode (Utilities/VimKeys).</summary>
         public bool VimMode { get => GetSettingValue(false); set => SetSettingValue(value); }
         public string EditorAreaWidth { get => GetSettingValue("1200px"); set => SetSettingValue(value); }
@@ -203,6 +214,11 @@ namespace Typedown.Core.ViewModels
         public bool AllowLocalAutomation { get => GetSettingValue(false); set => SetSettingValue(value); }
         /// <summary>Editor pages briefly highlight what an automation write changed.</summary>
         public bool HighlightAutomationChanges { get => GetSettingValue(true); set => SetSettingValue(value); }
+        /// <summary>
+        /// On by default. Off by default for a while (2026-10-28, the settings' slide was 0.3 s of each trip in and out, NT01),
+        /// but then a long document scrolled down came back from the settings blank after the cases before SF02 (on with it
+        /// in the same run); back on until that is understood (docs/todo.md).
+        /// </summary>
         public bool AnimationEnable { get => GetSettingValue(true); set => SetSettingValue(value); }
         public bool UseMicaEffect { get => GetSettingValue(Config.IsMicaSupported); set => SetSettingValue(value); }
         public bool UseEditorMicaEffect { get => GetSettingValue(false); set => SetSettingValue(value); }
@@ -283,6 +299,7 @@ namespace Typedown.Core.ViewModels
             "ListIndentation",
             "TableAlignColumns",
             "ShowBlankLines",
+            "JoinSoftBreaks",
             "ShowMarkdownMarks",
             "ProgressiveRendering",
             "PredictHeights",
@@ -293,6 +310,7 @@ namespace Typedown.Core.ViewModels
             "AutoPairMarkdownSyntax",
             "RenderPlantUml",
             "PlantUmlServer",
+            "MermaidRenderer",
             "VimMode",
             "EditorAreaWidth",
             "FontFamily",
@@ -361,7 +379,8 @@ namespace Typedown.Core.ViewModels
             object value;
             try { value = property.GetValue(this); }
             catch { return; }
-            OnPropertyChanged(name, null, value);
+            // Changed elsewhere: told whatever it is now (null too).
+            Notify(name, value);
         }
 
         private bool disposed;
@@ -391,7 +410,17 @@ namespace Typedown.Core.ViewModels
 
         public Task FlushSettingsAsync() => settingsStore.FlushAsync();
 
+        // Called by every setter, as PropertyChanged.Fody weaves them: a setting is no field, so Fody cannot check the value
+        // changed, and a setter given the value it has notified all the same. A list bound two-way (Settings > Editor >
+        // Draw Mermaid diagrams with) was set again by that notice, wrote the same value back, and the two went round
+        // until the stack overflowed (0xc00000fd): an unchanged value tells nobody.
         public void OnPropertyChanged(string propertyName, object before, object after)
+        {
+            if (Equals(before, after)) return;
+            Notify(propertyName, after);
+        }
+
+        private void Notify(string propertyName, object after)
         {
             // Notifications run inside the property setter, so anything that throws here (a handler on a control
             // that is no longer loaded, a binding update) escapes into the XAML dispatcher, where nothing catches

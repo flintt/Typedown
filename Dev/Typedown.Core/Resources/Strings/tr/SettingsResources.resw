@@ -958,4 +958,22 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Uzun bir belge parça parça çizilirken henüz gösterilmeyen kısmın yüksekliği tahmin edilmek yerine metinden hesaplanır; böylece kaydırma çubuğu ve ana hattan atlamalar daha doğru olur. Deneysel</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Fare tekerleği sekmeler arasında döner</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Son sekmenin ötesine kaydırmak ilk sekmeye gider, tersi de geçerlidir; kapalıyken ilk ve son sekmede durur</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Mermaid diyagramlarını çizme aracı</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele daha fazla diyagram türü çizer ve bunları Mermaid'den farklı yerleştirir</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Okuma modunda paragraf satırlarını birleştir</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>Okuma modunda paragraf içindeki tek bir satır sonu, Markdown'ın belirttiği ve dışa aktarmaların zaten yaptığı gibi boşluk olarak gösterilir (Çince veya Japonca karakterler arasına boşluk konmaz). Bir satır sonunu korumak için satırı iki boşluk veya ters eğik çizgiyle bitirin</value>
+  </data>
 </root>

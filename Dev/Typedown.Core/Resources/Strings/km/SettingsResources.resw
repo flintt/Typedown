@@ -958,4 +958,22 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>ពេលឯកសារវែងត្រូវបានគូរជាផ្នែកៗ កម្ពស់នៃផ្នែកដែលមិនទាន់បង្ហាញ ត្រូវបានគណនាពីអត្ថបទជំនួសឱ្យការប៉ាន់ស្មាន ដូច្នេះរបាររំកិល និងការលោតពីគ្រោង មានភាពត្រឹមត្រូវជាងមុន។ សាកល្បង</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>កង់កណ្ដុរវិលជុំវិញផ្ទាំង</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>រំកិលហួសផ្ទាំងចុងក្រោយនឹងទៅផ្ទាំងដំបូង ហើយផ្ទុយមកវិញ បើបិទនឹងឈប់នៅផ្ទាំងដំបូង និងផ្ទាំងចុងក្រោយ</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>គូរដ្យាក្រាម Mermaid ដោយ</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele គូរដ្យាក្រាមបានច្រើនប្រភេទជាង ហើយរៀបចំខុសពី Mermaid</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>ភ្ជាប់បន្ទាត់នៃកថាខណ្ឌក្នុងរបៀបអាន</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>ក្នុងរបៀបអាន ការចុះបន្ទាត់តែមួយនៅក្នុងកថាខណ្ឌត្រូវបានបង្ហាញជាដកឃ្លា ដូចដែល Markdown កំណត់ និងដូចដែលការនាំចេញធ្វើរួចហើយ (គ្មានដកឃ្លារវាងតួអក្សរចិន ឬជប៉ុន)។ ដើម្បីរក្សាការចុះបន្ទាត់ សូមបញ្ចប់បន្ទាត់ដោយដកឃ្លាពីរ ឬសញ្ញាខ្វែងថយក្រោយ</value>
+  </data>
 </root>

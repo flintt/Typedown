@@ -958,4 +958,22 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Kým sa dlhý dokument vykresľuje po častiach, výška toho, čo ešte nie je zobrazené, sa namiesto odhadu vypočíta z textu, takže posúvač a skoky z osnovy sú presnejšie. Experimentálne</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Kolieskom myši dokola cez karty</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Posunutie za poslednú kartu prejde na prvú a naopak; vypnuté sa zastaví na prvej a poslednej karte</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Kresliť diagramy Mermaid pomocou</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele kreslí viac druhov diagramov a rozmiestňuje ich inak ako Mermaid</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Spájať riadky odseku v režime čítania</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>V režime čítania sa jednoduché zalomenie riadka v odseku zobrazí ako medzera, ako určuje Markdown a ako to už robia exporty (medzi čínskymi či japonskými znakmi bez medzery). Ak chcete zalomenie zachovať, ukončite riadok dvoma medzerami alebo spätnou lomkou</value>
+  </data>
 </root>

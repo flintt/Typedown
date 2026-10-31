@@ -958,4 +958,22 @@
   <data name="Editor.PredictHeights.Description" xml:space="preserve">
     <value>Waqt li dokument twil jinġibed f'partijiet, l-għoli ta' dak li għadu ma jidhirx jiġi kkalkulat mit-test minflok ma jiġi stmat, sabiex il-bar tal-iscroll u l-qbiż mill-iskema jkunu aktar preċiżi. Sperimentali</value>
   </data>
+  <data name="General.TabWheelWraps.Title" xml:space="preserve">
+    <value>Ir-rota tal-maws iddur mat-tabs</value>
+  </data>
+  <data name="General.TabWheelWraps.Description" xml:space="preserve">
+    <value>Tiskrollja lil hinn mill-aħħar tab tmur fl-ewwel waħda, u lura; mitfi jieqaf fl-ewwel u l-aħħar tab</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Title" xml:space="preserve">
+    <value>Pinġi d-dijagrammi Mermaid b'</value>
+  </data>
+  <data name="Editor.MermaidRenderer.Description" xml:space="preserve">
+    <value>Pele jpinġi aktar tipi ta' dijagrammi u jqassamhom b'mod differenti minn Mermaid</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Title" xml:space="preserve">
+    <value>Għaqqad il-linji ta’ paragrafu fil-modalità tal-qari</value>
+  </data>
+  <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
+    <value>Fil-modalità tal-qari, qabża waħda ta’ linja ġewwa paragrafu tidher bħala spazju, kif jistabbilixxi Markdown u kif diġà jagħmlu l-esportazzjonijiet (l-ebda spazju bejn karattri Ċiniżi jew Ġappuniżi). Biex iżżomm qabża, temm il-linja b’żewġ spazji jew backslash</value>
+  </data>
 </root>

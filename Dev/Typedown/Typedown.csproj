@@ -43,7 +43,7 @@
 		<!-- Kept in a trimmed build: the Explorer file drop wraps the window's OLE drop targets (FileDropTarget). -->
 		<BuiltInComInteropSupport>true</BuiltInComInteropSupport>
 		<PublishAot>false</PublishAot>
-		<Version>1.4.0</Version>
+		<Version>1.4.1</Version>
 		<!-- Shown as "File description" in Explorer and "Open with", and indexed by Start menu search (upstream #28): a search
 		     for "markdown" finds the installed app. An MSIX shows its manifest's DisplayName there instead, the Start menu's
 		     name, which stays the product's alone. -->
