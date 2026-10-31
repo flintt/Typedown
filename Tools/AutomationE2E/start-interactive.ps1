@@ -12,6 +12,14 @@ param(
     [string]$Only = ''
 )
 $ErrorActionPreference = 'Stop'
+# An earlier run's copy of this script still waiting (its SSH connection broke, or the run was stopped from the other
+# end) ends now: left, at its deadline its cleanup below deleted this run's task (the same name) and stopped this run's
+# driver (the same folder) - on the W10 PC the driver of the next run vanished 90 minutes after each run that went that
+# way (2026-10-31, 09:33 and 10:47).
+Get-CimInstance Win32_Process -Filter "Name='powershell.exe'" | Where-Object { $_.ProcessId -ne $PID -and $_.CommandLine -and $_.CommandLine.Contains($PSCommandPath) } | ForEach-Object {
+    Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue
+    Write-Output "stopped an earlier run still waiting: $($_.ProcessId), started $($_.CreationDate)"
+}
 $task = 'TypedownAutomationE2E'
 $script = Join-Path $PSScriptRoot 'run-windows-e2e.ps1'
 New-Item -ItemType Directory -Force $Artifacts | Out-Null
