@@ -154,6 +154,9 @@ namespace Typedown.Core.Controls
         /// <summary>Where the frame is now, so that asking for it again can be read as "close this".</summary>
         private string currentRoute;
 
+        /// <summary>The settings' own way in: Ctrl+, (File > Settings), the settings buttons of the menu bar and the home page.</summary>
+        private const string SettingsToggleRoute = "Settings/General";
+
         private void Navigate(string args)
         {
             var path = args?.TrimStart('/').Split('/');
@@ -165,7 +168,15 @@ namespace Typedown.Core.Controls
             // image settings from the image menu, say) still just moves to that section.
             if (type == Frame.SourcePageType)
             {
-                if (type == typeof(MainPage) || args != currentRoute)
+                if (type == typeof(MainPage))
+                    return;
+                // The settings' own way in (Ctrl+, and the settings buttons) leaves them from any section. Any other
+                // route leaves them only asked for again where it brought them: asked for from another section it is a
+                // way there - Help > Shortcuts opened the shortcuts, General's "Shortcut keys" then went back to the
+                // document instead of to them.
+                var shown = (Frame.Content as SettingsPage)?.ShownSection;
+                var asked = path.Length > 1 ? path[1].Split('?')[0] : null;
+                if (args != SettingsToggleRoute && (args != currentRoute || shown != asked))
                     return;
                 currentRoute = "Main";
                 StartNavigationTimes(typeof(MainPage));

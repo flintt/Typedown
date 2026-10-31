@@ -37,6 +37,12 @@ namespace Typedown.Core.Controls
         {
             InitializeComponent();
             UpdateColumns();
+            // The row's automation id on its button, the part UI Automation sees (the control itself has no peer).
+            Loaded += (_, _) =>
+            {
+                var id = Microsoft.UI.Xaml.Automation.AutomationProperties.GetAutomationId(this);
+                if (!string.IsNullOrEmpty(id)) Microsoft.UI.Xaml.Automation.AutomationProperties.SetAutomationId(RowButton, id);
+            };
         }
 
         // As NormalSettingItem's: the text takes the room left and wraps, unless the action is stretched to fill the row.

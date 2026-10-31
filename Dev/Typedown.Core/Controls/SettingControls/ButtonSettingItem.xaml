@@ -13,7 +13,8 @@
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
-    <Button 
+    <Button
+        x:Name="RowButton"
         MinHeight="68"
         Padding="16,12,16,12" 
         Click="OnClick"

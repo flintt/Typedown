@@ -151,7 +151,7 @@
         </controls:NormalSettingItem>
 
         <TextBlock Text="{u:LocaleString Key=General.Custom}" Margin="0,16,0,4"/>
-        <controls:ButtonSettingItem Title="{u:LocaleString Key=General.ShortcutKeys.Title}" Description="{u:LocaleString Key=General.ShortcutKeys.Description}" Command="{x:Bind ViewModel.NavigateCommand}" CommandParameter="Settings/Shortcut">
+        <controls:ButtonSettingItem Title="{u:LocaleString Key=General.ShortcutKeys.Title}" Description="{u:LocaleString Key=General.ShortcutKeys.Description}" Command="{x:Bind ViewModel.NavigateCommand}" CommandParameter="Settings/Shortcut" AutomationProperties.AutomationId="GeneralShortcutKeys">
             <controls:ButtonSettingItem.Icon>
                 <FontIcon Glyph="&#xe92e;"/>
             </controls:ButtonSettingItem.Icon>
