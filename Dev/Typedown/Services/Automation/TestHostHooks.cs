@@ -352,8 +352,8 @@ namespace Typedown.Services.Automation
                         var title = row.GetType().GetProperty("Title")?.GetValue(row)?.ToString() ?? "";
                         if (row.GetType().GetProperty("Action")?.GetValue(row) is not Microsoft.UI.Xaml.FrameworkElement action || action.Visibility != Microsoft.UI.Xaml.Visibility.Visible) continue;
                         var place = action.ActualWidth > 0
-                            ? action.TransformToVisual(row).TransformBounds(new Windows.Foundation.Rect(0, 0, action.ActualWidth, action.ActualHeight))
-                            : Windows.Foundation.Rect.Empty;
+                            ? action.TransformToVisual(row).TransformBounds(new global::Windows.Foundation.Rect(0, 0, action.ActualWidth, action.ActualHeight))
+                            : global::Windows.Foundation.Rect.Empty;
                         rows.Add(new Newtonsoft.Json.Linq.JObject
                         {
                             ["title"] = title,
