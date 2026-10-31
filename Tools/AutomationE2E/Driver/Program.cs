@@ -196,6 +196,7 @@ internal static partial class Program
             await Case("HP02 Ctrl+N and the + button show no home page and the next letter goes into the new document; with \"New tabs show the home page\" on, Ctrl+N shows it", HP02);
             await Case("HP03 the last tab closed leaves the window with the home page (closed again, the window goes); a session whose files are gone shows it; with the switch off a blank document", HP03);
             await Case("SR02 a window with an unsaved document behind the one shown, closed with automatic saving on: the session names the tab the reader was on as the active one, not the last one saved", SR02);
+            await Case("SR03 Keep unsaved changes when closing on, two untitled documents unsaved among the tabs: closed and started again, the start shows the tab closed on (a file, then the second untitled one, its text with it), the tabs in their order", SR03);
             await Case("SR01 a cold start bringing the last session back: the active document on screen within seconds of the window, the other tabs not waited for", SR01);
             await Case("JT01 switching between long documents the text in the window stays still - no block moving by half a pixel or more from frame to frame, while drawn or after", JT01);
             await Case("JT02 back to a long document from a short one - read a quarter, 60% and 95% of the way down, and left while still drawn - the screen goes from the cover to it without the short one again, and its text stays still frame by frame; predicting the layout off and on, in visual and in reading mode", JT02);
@@ -389,7 +390,7 @@ internal static partial class Program
             // Pictures in several languages take their time; RD02 opens six windows in two themes and measures each menu
             // (about 110 s on its own, so a busy machine took it past two minutes); any other case that runs past two minutes
             // is stuck.
-            var limit = name.StartsWith("SHOT") ? 900 : name.StartsWith("RD02") ? 300 : name.StartsWith("HJ01") ? 600 : name.StartsWith("HJ02") ? 360 : name.StartsWith("JT02") ? 1800 : name.StartsWith("JT03") ? 1200 : name.StartsWith("JT04") ? 900 : name.StartsWith("LT01") ? 300 : name.StartsWith("SV01") || name.StartsWith("SC01") ? 600 : 120;
+            var limit = name.StartsWith("SHOT") ? 900 : name.StartsWith("RD02") ? 300 : name.StartsWith("HJ01") ? 600 : name.StartsWith("HJ02") ? 360 : name.StartsWith("JT02") ? 1800 : name.StartsWith("JT03") ? 1200 : name.StartsWith("JT04") ? 900 : name.StartsWith("LT01") ? 300 : name.StartsWith("SV01") || name.StartsWith("SC01") ? 600 : name.StartsWith("SR03") ? 300 : 120;
             if (await Task.WhenAny(run, Task.Delay(TimeSpan.FromSeconds(limit))) != run) throw new CaseFailed($"the case did not finish within {limit} s");
             await run;
             results.Add(new JObject { ["name"] = name, ["passed"] = true, ["ms"] = watch.ElapsedMilliseconds, ["notes"] = new JArray(notes) });

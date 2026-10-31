@@ -194,6 +194,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | HP02 | Ctrl+N and the + button show no home page and the next letter goes into the new document; with "New tabs show the home page" on, Ctrl+N shows it |
 | HP03 | the last tab closed leaves the window with the home page (closed again, the window goes); a session whose files are gone shows it; with the switch off a blank document |
 | SR02 | a window with an unsaved document behind the one shown, closed with automatic saving on: the session names the tab the reader was on as the active one, not the last one saved |
+| SR03 | Keep unsaved changes when closing on, two untitled documents unsaved among the tabs: closed and started again, the start shows the tab closed on (a file, then the second untitled one, its text with it), the tabs in their order |
 | SR01 | a cold start bringing the last session back: the active document on screen within seconds of the window, the other tabs not waited for |
 | JT01 | switching between long documents the text in the window stays still - no block moving by half a pixel or more from frame to frame, while drawn or after |
 | JT02 | back to a long document from a short one - read a quarter, 60% and 95% of the way down, and left while still drawn - the screen goes from the cover to it without the short one again, and its text stays still frame by frame; predicting the layout off and on, in visual and in reading mode |
