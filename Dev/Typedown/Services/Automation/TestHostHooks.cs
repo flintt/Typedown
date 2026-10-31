@@ -340,6 +340,7 @@ namespace Typedown.Services.Automation
                     var window = Typedown.Windows.MainWindow.AllWindows.FirstOrDefault(w => w.Handle == app.MainWindow)
                         ?? throw new AutomationException(AutomationErrorKind.window_not_found, "no main window with that handle");
                     var rows = new Newtonsoft.Json.Linq.JArray();
+                    string section = null; // the settings section shown; none on the editor page
                     var stack = new System.Collections.Generic.Stack<Microsoft.UI.Xaml.DependencyObject>();
                     if (window.Content != null) stack.Push(window.Content);
                     while (stack.Count > 0)
@@ -347,6 +348,7 @@ namespace Typedown.Services.Automation
                         var node = stack.Pop();
                         for (var i = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(node) - 1; i >= 0; i--)
                             stack.Push(Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChild(node, i));
+                        if (node is Core.Pages.SettingsPage page) section = page.ShownSection;
                         if (node is not Microsoft.UI.Xaml.FrameworkElement row || !(row is Core.Controls.NormalSettingItem || row is Core.Controls.ButtonSettingItem)) continue;
                         if (row.ActualWidth <= 0 || row.Visibility != Microsoft.UI.Xaml.Visibility.Visible) continue; // in a closed expander
                         var title = row.GetType().GetProperty("Title")?.GetValue(row)?.ToString() ?? "";
@@ -365,7 +367,7 @@ namespace Typedown.Services.Automation
                             ["width"] = Math.Round(action.ActualWidth),
                         });
                     }
-                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["rows"] = rows };
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["section"] = section, ["rows"] = rows };
                 })));
 
             // Opens another window, as File > New window does, and returns its windowId once it is registered.

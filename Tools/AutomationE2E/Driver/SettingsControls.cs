@@ -88,6 +88,50 @@ internal static partial class Program
         }
     }
 
+    /// <summary>
+    /// SN01: moving about the settings never leaves them by itself. Help > Shortcuts opened the shortcuts; General picked in
+    /// the settings' pane, then its "Shortcuts" row, went back to the document instead (the row asked for the route the
+    /// settings had been opened with, read as "close them"). Ctrl+, (their own way in) still leaves them from any section.
+    /// </summary>
+    private static async Task SN01(List<string> notes)
+    {
+        using var c = await Session("e2e SN01");
+        var id = await Open(c, Fixture("sn01.md", "# SN01\n"));
+        var windowId = await WindowIdOf(c, id);
+        var window = await WindowOf(windowId, c);
+        async Task<string?> Section()
+        {
+            string? s = null;
+            await Eventually(async () => { await Task.Delay(200); s = (string?)(await c.Call("test.settings.layout", new { windowId }))["section"]; return true; }, 1000);
+            return s;
+        }
+        async Task<bool> Becomes(string? want) => await Eventually(async () => { await Task.Delay(200); return (string?)(await c.Call("test.settings.layout", new { windowId }))["section"] == want; }, 4000);
+        try
+        {
+            await Activate(window);
+            // Help > Shortcuts.
+            await c.Call("test.window.navigate", new { windowId, route = "Settings/Shortcut" });
+            Check(await Becomes("Shortcut"), $"Help > Shortcuts shows the shortcuts ({await Section()})");
+            // General, picked in the pane as a person does.
+            var general = await WaitFor(window, "SettingsNavGeneral");
+            ((SelectionItemPattern)general.GetCurrentPattern(SelectionItemPattern.Pattern)).Select();
+            Check(await Becomes("General"), $"General picked in the pane shows General ({await Section()})");
+            // Its Shortcuts row.
+            Invoke(await WaitFor(window, "GeneralShortcutKeys"));
+            var shortcuts = await Becomes("Shortcut");
+            notes.Add($"after General's Shortcuts row: {await Section() ?? "the document"}");
+            Check(shortcuts, $"General's Shortcuts row shows the shortcuts, the settings still open ({await Section() ?? "back on the document"})");
+            // Their own way in leaves them, from the section they are on.
+            await c.Call("test.window.navigate", new { windowId, route = "Settings/General" });
+            Check(await Becomes(null), $"Ctrl+, (Settings/General) leaves the settings from the shortcuts ({await Section()})");
+        }
+        finally
+        {
+            try { if (await Section() != null) await c.Call("test.window.navigate", new { windowId, route = "Settings/General" }); } catch { }
+            try { await c.Call("document.close", new { documentId = id }); } catch { }
+        }
+    }
+
     private static async Task SC01(List<string> notes)
     {
         using var host = System.Diagnostics.Process.GetProcessById(hostPid);
