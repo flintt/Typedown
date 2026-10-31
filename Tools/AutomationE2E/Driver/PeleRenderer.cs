@@ -40,4 +40,59 @@ internal static partial class Program
             try { await c.Call("document.close", new { documentId = id }); } catch { }
         }
     }
+
+    /// <summary>
+    /// PL02: the same choice made on the settings page, with its list, as a person makes it - PL01 sets it through the
+    /// test host, past the page. Chosen there, Pele and then Mermaid again ended the process (a stack overflow, 1.4.0.29
+    /// on hp with a document of diagrams open).
+    /// </summary>
+    private static async Task PL02(List<string> notes)
+    {
+        using var host = System.Diagnostics.Process.GetProcessById(hostPid);
+        using var c = await Session("e2e PL02");
+        var text = "# PL02\n\n```mermaid\ngraph TD\n  A[Start] --> B[End]\n```\n\nend\n";
+        var id = await Open(c, Fixture("pl02.md", text));
+        var windowId = await WindowIdOf(c, id);
+        var window = await WindowOf(windowId, c);
+        var before = (string?)(await c.Call("test.settings.get", new { windowId, name = "MermaidRenderer" }))["value"];
+        async Task Choose(string shown, string value)
+        {
+            var box = await WaitFor(window, "MermaidRendererBox");
+            ((System.Windows.Automation.ExpandCollapsePattern)box.GetCurrentPattern(System.Windows.Automation.ExpandCollapsePattern.Pattern)).Expand();
+            System.Windows.Automation.AutomationElement? item = null;
+            var listed = await Eventually(async () =>
+            {
+                await Task.CompletedTask;
+                item = Deep.First(System.Windows.Automation.AutomationElement.FromHandle(window), new System.Windows.Automation.AndCondition(
+                    new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.NameProperty, shown),
+                    new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.ControlTypeProperty, System.Windows.Automation.ControlType.ListItem)));
+                return item != null;
+            }, 3000);
+            Check(listed, $"the list offers {shown}");
+            ((System.Windows.Automation.SelectionItemPattern)item!.GetCurrentPattern(System.Windows.Automation.SelectionItemPattern.Pattern)).Select();
+            // A stack overflow takes a moment to end the process: given time to.
+            for (var i = 0; i < 12 && !host.HasExited; i++) await Task.Delay(250);
+            Check(!host.HasExited, $"the app lives on after {shown} is chosen in the list (exit code {(host.HasExited ? host.ExitCode.ToString("x8") : "-")})");
+            var now = (string?)(await c.Call("test.settings.get", new { windowId, name = "MermaidRenderer" }))["value"];
+            notes.Add($"{shown} chosen: the setting is {now}");
+            Check(now == value, $"the setting is {value} after {shown} is chosen ({now})");
+        }
+        try
+        {
+            await c.Call("test.settings.set", new { windowId, name = "MermaidRenderer", value = "mermaid" });
+            await c.Call("test.window.navigate", new { windowId, route = "Settings/Editor" });
+            await Activate(window);
+            await Choose("Pele", "pele");
+            await Choose("Mermaid", "mermaid");
+        }
+        finally
+        {
+            if (!host.HasExited)
+            {
+                try { await c.Call("test.window.navigate", new { windowId, route = "Main" }); } catch { }
+                try { await c.Call("test.settings.set", new { windowId, name = "MermaidRenderer", value = before ?? "mermaid" }); } catch { }
+                try { await c.Call("document.close", new { documentId = id }); } catch { }
+            }
+        }
+    }
 }

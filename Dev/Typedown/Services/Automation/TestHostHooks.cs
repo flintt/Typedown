@@ -330,6 +330,44 @@ namespace Typedown.Services.Automation
                 });
             }));
 
+            // The settings rows of a window's page as laid out: each row's title and where its control (the switch, list or
+            // box at its side) is within it. UI Automation cannot tell a control clipped out of its row - it reports it with
+            // no place, as one scrolled off the screen (SV01: "Join the lines of a paragraph in reading mode" had pushed its
+            // switch out of the row, and nothing said so).
+            methods.Add(new MethodDescriptor("test.settings.layout", null, "test.settings.layout/1", (c, ct) =>
+                Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    var window = Typedown.Windows.MainWindow.AllWindows.FirstOrDefault(w => w.Handle == app.MainWindow)
+                        ?? throw new AutomationException(AutomationErrorKind.window_not_found, "no main window with that handle");
+                    var rows = new Newtonsoft.Json.Linq.JArray();
+                    var stack = new System.Collections.Generic.Stack<Microsoft.UI.Xaml.DependencyObject>();
+                    if (window.Content != null) stack.Push(window.Content);
+                    while (stack.Count > 0)
+                    {
+                        var node = stack.Pop();
+                        for (var i = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(node) - 1; i >= 0; i--)
+                            stack.Push(Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChild(node, i));
+                        if (node is not Microsoft.UI.Xaml.FrameworkElement row || !(row is Core.Controls.NormalSettingItem || row is Core.Controls.ButtonSettingItem)) continue;
+                        if (row.ActualWidth <= 0 || row.Visibility != Microsoft.UI.Xaml.Visibility.Visible) continue; // in a closed expander
+                        var title = row.GetType().GetProperty("Title")?.GetValue(row)?.ToString() ?? "";
+                        if (row.GetType().GetProperty("Action")?.GetValue(row) is not Microsoft.UI.Xaml.FrameworkElement action || action.Visibility != Microsoft.UI.Xaml.Visibility.Visible) continue;
+                        var place = action.ActualWidth > 0
+                            ? action.TransformToVisual(row).TransformBounds(new Windows.Foundation.Rect(0, 0, action.ActualWidth, action.ActualHeight))
+                            : Windows.Foundation.Rect.Empty;
+                        rows.Add(new Newtonsoft.Json.Linq.JObject
+                        {
+                            ["title"] = title,
+                            ["control"] = action.GetType().Name,
+                            ["automationId"] = Microsoft.UI.Xaml.Automation.AutomationProperties.GetAutomationId(action),
+                            ["rowWidth"] = Math.Round(row.ActualWidth),
+                            ["left"] = place.IsEmpty ? null : Math.Round(place.Left),
+                            ["right"] = place.IsEmpty ? null : Math.Round(place.Right),
+                            ["width"] = Math.Round(action.ActualWidth),
+                        });
+                    }
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["rows"] = rows };
+                })));
+
             // Opens another window, as File > New window does, and returns its windowId once it is registered.
             methods.Add(new MethodDescriptor("test.window.open", null, "test.window.open/1", async (c, ct) =>
             {

@@ -215,6 +215,9 @@ internal static partial class Program
             await Case("RD02 reading mode: Focus mode and Typewriter mode in the View menu are disabled and drawn fainter than the entries that work, in Dark and Light, whether the menu was opened before or not", RD02);
             await Case("DG02 every diagram of the showcase document, written into a window just opened, is drawn once", DG02);
             await Case("PL01 Settings > Editor > Draw Mermaid diagrams with: Pele chosen draws a flowchart and an agentflow (which Mermaid cannot), Mermaid chosen again draws the flowchart with Mermaid", PL01);
+            await Case("PL02 Settings > Editor > Draw Mermaid diagrams with, chosen in its list on the page: Pele and then Mermaid again, the app lives on and the setting follows", PL02);
+            await Case("SV01 every switch and list of the settings pages is inside a narrow window, in English, German, French, Japanese and Chinese", SV01);
+            await Case("SC01 every list of the settings pages, each of its choices made in it as a person makes it: the app lives on and the list shows the choice", SC01);
             await Case("DG03 a diagram's copy button, with the real mouse in the dark theme: shown on hover; a click puts a picture (mostly white, light theme) and the fenced Markdown on the clipboard, and leaves the document as it was", DG03);
             await Case("CB01 a display formula's copy button, with the real mouse in the dark theme: shown on hover, none on an inline formula; a click puts a picture (black on white), RTF with it and the formula's $$ Markdown and its MathML as Word writes it on the clipboard, no HTML; the document as it was; Word pastes an equation it can edit; pasted back it is the formula", CB01);
             await Case("CB02 a table's copy button and the menu's Copy table, with the real mouse: the button above the table's top right corner; the clipboard holds the table as HTML (header row, alignment, formatting) and its Markdown as written; the document as it was; Word pastes one 3x3 table; pasted back it is the table's Markdown", CB02);
@@ -385,7 +388,7 @@ internal static partial class Program
             // Pictures in several languages take their time; RD02 opens six windows in two themes and measures each menu
             // (about 110 s on its own, so a busy machine took it past two minutes); any other case that runs past two minutes
             // is stuck.
-            var limit = name.StartsWith("SHOT") ? 900 : name.StartsWith("RD02") ? 300 : name.StartsWith("HJ01") ? 600 : name.StartsWith("HJ02") ? 360 : name.StartsWith("JT02") ? 1800 : name.StartsWith("JT03") ? 1200 : name.StartsWith("JT04") ? 900 : name.StartsWith("LT01") ? 300 : 120;
+            var limit = name.StartsWith("SHOT") ? 900 : name.StartsWith("RD02") ? 300 : name.StartsWith("HJ01") ? 600 : name.StartsWith("HJ02") ? 360 : name.StartsWith("JT02") ? 1800 : name.StartsWith("JT03") ? 1200 : name.StartsWith("JT04") ? 900 : name.StartsWith("LT01") ? 300 : name.StartsWith("SV01") || name.StartsWith("SC01") ? 600 : 120;
             if (await Task.WhenAny(run, Task.Delay(TimeSpan.FromSeconds(limit))) != run) throw new CaseFailed($"the case did not finish within {limit} s");
             await run;
             results.Add(new JObject { ["name"] = name, ["passed"] = true, ["ms"] = watch.ElapsedMilliseconds, ["notes"] = new JArray(notes) });
