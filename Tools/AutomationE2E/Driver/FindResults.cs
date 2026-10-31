@@ -105,6 +105,17 @@ internal static partial class Program
             var element = await WaitFor(window, id);
             if (!await Eventually(async () => { await Task.CompletedTask; var r = element.Current.BoundingRectangle; return !r.IsEmpty && r.Width > 0 && r.Height > 0; }, 5000))
                 throw new CaseFailed($"{what} ({id}) is there but has no place on the screen after 5 s ({FocusInfo(window)})");
+            // Where it stays: the side pane closing slides the find bar over, and "Show all results" clicked where it was a
+            // moment before went into the editor's text (hp, the full run of 2026-10-31: the list never came).
+            var last = element.Current.BoundingRectangle;
+            await Eventually(async () =>
+            {
+                await Task.Delay(100);
+                var now = element.Current.BoundingRectangle;
+                var still = now == last;
+                last = now;
+                return still;
+            }, 3000);
             return element;
         }
         // The editor's match chosen and selection, as the page holds them.
