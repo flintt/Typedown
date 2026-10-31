@@ -4458,7 +4458,11 @@ internal static partial class Program
         {
             await c.Call("test.window.navigate", new { windowId, route = "Settings/About" });
             await Task.Delay(800);
-            await c.Call("test.window.navigate", new { windowId, route = "Settings/General" });
+            // General picked in the settings' pane, as a person does: the route Settings/General is Ctrl+,'s, which leaves
+            // settings that are open from any section (dbb4bc39).
+            await Activate(window);
+            var generalNav = await WaitFor(window, "SettingsNavGeneral");
+            ((System.Windows.Automation.SelectionItemPattern)generalNav.GetCurrentPattern(System.Windows.Automation.SelectionItemPattern.Pattern)).Select();
             await WaitFor(window, "KeepUnsavedOnCloseToggle");
             var other = language == "ja" ? "en" : "ja";
             await c.Call("test.settings.set", new { windowId, name = "Language", value = other });
