@@ -21,7 +21,8 @@ namespace Typedown.Core.Controls
         public static readonly DependencyProperty IconProperty = DependencyProperty.Register(nameof(Icon), typeof(IconElement), typeof(ButtonSettingItem), null);
         public IconElement Icon { get => (IconElement)GetValue(IconProperty); set => SetValue(IconProperty, value); }
 
-        public static readonly DependencyProperty HorizontalActionAlignmentProperty = DependencyProperty.Register(nameof(HorizontalActionAlignment), typeof(HorizontalAlignment), typeof(ButtonSettingItem), new(HorizontalAlignment.Right));
+        public static readonly DependencyProperty HorizontalActionAlignmentProperty = DependencyProperty.Register(nameof(HorizontalActionAlignment), typeof(HorizontalAlignment), typeof(ButtonSettingItem),
+            new(HorizontalAlignment.Right, (d, _) => ((ButtonSettingItem)d).UpdateColumns()));
         public HorizontalAlignment HorizontalActionAlignment { get => (HorizontalAlignment)GetValue(HorizontalActionAlignmentProperty); set => SetValue(HorizontalActionAlignmentProperty, value); }
 
         public static readonly DependencyProperty CommandProperty = DependencyProperty.Register(nameof(Command), typeof(ICommand), typeof(ButtonSettingItem), new(null));
@@ -35,6 +36,16 @@ namespace Typedown.Core.Controls
         public ButtonSettingItem()
         {
             InitializeComponent();
+            UpdateColumns();
+        }
+
+        // As NormalSettingItem's: the text takes the room left and wraps, unless the action is stretched to fill the row.
+        private void UpdateColumns()
+        {
+            if (TextColumn == null || ActionColumn == null) return;
+            var stretch = HorizontalActionAlignment == HorizontalAlignment.Stretch;
+            TextColumn.Width = stretch ? GridLength.Auto : new GridLength(1, GridUnitType.Star);
+            ActionColumn.Width = stretch ? new GridLength(1, GridUnitType.Star) : GridLength.Auto;
         }
 
         private void OnClick(object sender, RoutedEventArgs e)
