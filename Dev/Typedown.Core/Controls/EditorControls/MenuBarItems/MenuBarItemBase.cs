@@ -60,13 +60,23 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
         }
 
         // On the menu's own thread, and only while it is in its window: a window closed without its menus unloading keeps
-        // them subscribed, and they are not touched as the window goes.
+        // them subscribed, and they are not touched as the window goes. A window closing as the language changes still
+        // has them loaded while they are torn down, and setting the tag then throws: out of a callback on the window's
+        // queue, that ended the process (0xc000027b at DispatcherQueue::DeferInvokeCallback, 0x800710dd - LG01 and AC01 in
+        // the full suite on w10). The menu is going with its window; nothing is left to tag.
         private void OnLanguageApplied()
         {
             DispatcherQueue.TryEnqueue(() =>
             {
-                if (!IsLoaded || XamlRoot == null) return;
-                SetLanguage();
+                try
+                {
+                    if (!IsLoaded || XamlRoot == null) return;
+                    SetLanguage();
+                }
+                catch (Exception ex)
+                {
+                    Log.Debug($"language: a menu not tagged ({ex.GetType().Name} 0x{ex.HResult:x8}): {ex.Message}");
+                }
             });
         }
 
