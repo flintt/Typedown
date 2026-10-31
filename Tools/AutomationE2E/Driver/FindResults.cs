@@ -28,6 +28,8 @@ internal static partial class Program
         using var bitmap = new System.Drawing.Bitmap(w, h);
         int[]? first = null; long firstInk = 0;
         int frames = 0, outside = 0, blank = 0;
+        // The first frame and the first one changed outside the rows allowed, kept to be looked at (saved below).
+        System.Drawing.Bitmap? firstFrame = null, changedFrame = null;
         var events = new List<string>();
         var clock = System.Diagnostics.Stopwatch.StartNew();
         bool Allowed(int line) => allowed.Any(r => y + line >= r.Top - 3 && y + line <= r.Bottom + 3);
@@ -38,8 +40,8 @@ internal static partial class Program
             var bytes = new byte[data.Stride * h];
             System.Runtime.InteropServices.Marshal.Copy(data.Scan0, bytes, 0, bytes.Length);
             bitmap.UnlockBits(data);
-            // Each line: the sum of its pixels' brightness; the frame's ink: how far its pixels are from its first pixel.
-            var lines = new int[h];
+            // Each pixel's brightness; the frame's ink: how far its pixels are from its first pixel.
+            var pixels = new int[w * h];
             long ink = 0;
             int bg = bytes[0] + bytes[1] + bytes[2];
             for (var row = 0; row < h; row++)
@@ -47,15 +49,39 @@ internal static partial class Program
                 {
                     var p = row * data.Stride + col * 4;
                     var v = bytes[p] + bytes[p + 1] + bytes[p + 2];
-                    lines[row] += v;
+                    pixels[row * w + col] = v;
                     ink += Math.Abs(v - bg);
                 }
             frames++;
-            if (first == null) { first = lines; firstInk = Math.Max(1, ink); continue; }
-            var changed = Enumerable.Range(0, h).Where(row => Math.Abs(lines[row] - first[row]) > w * 6 && !Allowed(row)).ToList();
-            if (changed.Count > 0) { outside++; if (events.Count < 8) events.Add($"{clock.ElapsedMilliseconds}ms lines {changed.First()}-{changed.Last()}"); }
+            if (first == null) { first = pixels; firstInk = Math.Max(1, ink); firstFrame = (System.Drawing.Bitmap)bitmap.Clone(); continue; }
+            // A line changed: 3 or more of its pixels 150 or more brighter or darker (of 765). Text drawn again a shade apart
+            // is not one - on hp (Windows 10 22H2, 2560x1440 at 100%) the click left every row's text 162 to 163 and, as the list took the
+            // focus, all of it a tenth brighter (201 to 222 a channel): summed over a line, both passed for a change. Text
+            // gone or moved, a row rebuilt, is several hundred.
+            bool LineChanged(int row)
+            {
+                var count = 0;
+                for (var col = 0; col < w && count < 3; col++)
+                    if (Math.Abs(pixels[row * w + col] - first[row * w + col]) >= 150) count++;
+                return count >= 3;
+            }
+            var changed = Enumerable.Range(0, h).Where(row => !Allowed(row) && LineChanged(row)).ToList();
+            if (changed.Count > 0) { outside++; if (events.Count < 8) events.Add($"{clock.ElapsedMilliseconds}ms lines {changed.First()}-{changed.Last()}"); changedFrame ??= (System.Drawing.Bitmap)bitmap.Clone(); }
             if (ink * 2 < firstInk) { blank++; if (events.Count < 8) events.Add($"{clock.ElapsedMilliseconds}ms blank"); }
         }
+        if (changedFrame != null && firstFrame != null)
+        {
+            var stamp = DateTime.Now.ToString("HHmmss");
+            try
+            {
+                firstFrame.Save(System.IO.Path.Combine(outputDir, $"list-first-{stamp}.png"), System.Drawing.Imaging.ImageFormat.Png);
+                changedFrame.Save(System.IO.Path.Combine(outputDir, $"list-changed-{stamp}.png"), System.Drawing.Imaging.ImageFormat.Png);
+                events.Add($"frames saved as list-first/list-changed-{stamp}.png (region {x},{y} {w}x{h})");
+            }
+            catch (Exception e) { events.Add("frames not saved: " + e.Message); }
+        }
+        firstFrame?.Dispose();
+        changedFrame?.Dispose();
         return (frames, outside, blank, events.Count == 0 ? "steady" : string.Join(", ", events));
     }
 
