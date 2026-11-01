@@ -245,8 +245,8 @@ internal static partial class Program
     /// SF04: SF03 as the reader starts the app (2026-11-01, still a black flash at every start): the host started cold,
     /// bringing back a session of three tabs (a long document shown, two others not), the light theme with the Apricot
     /// page and Windows' apps dark - and once more with Windows' apps light. From the process's start the window is
-    /// read from the screen as often as it can be for five seconds; dark over a quarter of it is a dark frame. The
-    /// first dark frames are saved, with the startup lines of the debug log for when they came.
+    /// read from the screen as often as it can be for five seconds - a patch of the editor's area, the reader saw a
+    /// single dark frame; over half of it dark is a dark frame. The first dark patches are saved, with the startup lines of the debug log for when they came.
     /// </summary>
     private static async Task SF04(List<string> notes)
     {
@@ -317,19 +317,23 @@ internal static partial class Program
                         appeared = clock.ElapsedMilliseconds;
                     }
                     if (!GetWindowRect(window, out var r)) break;
-                    int width = r.Right - r.Left, height = r.Bottom - r.Top;
+                    // A patch of the editor's area (the middle, below the tab strip and the toolbar), not the whole
+                    // window: the reader saw one dark frame, and a read of the whole window takes longer than a frame.
+                    // The patch is read every millisecond or two.
+                    int width = 160, height = 120;
+                    int left = (r.Left + r.Right) / 2 - width / 2, top = r.Top + (r.Bottom - r.Top) * 55 / 100 - height / 2;
                     var darkPixels = 0;
                     var all = 0;
                     using var shot = new System.Drawing.Bitmap(width, height);
-                    using (var g = System.Drawing.Graphics.FromImage(shot)) g.CopyFromScreen(r.Left, r.Top, 0, 0, new System.Drawing.Size(width, height));
+                    using (var g = System.Drawing.Graphics.FromImage(shot)) g.CopyFromScreen(left, top, 0, 0, new System.Drawing.Size(width, height));
                     var data = shot.LockBits(new System.Drawing.Rectangle(0, 0, width, height), System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                     try
                     {
                         var row = new byte[data.Stride];
-                        for (var y = 0; y < height; y += 8)
+                        for (var y = 0; y < height; y += 4)
                         {
                             Marshal.Copy(data.Scan0 + y * data.Stride, row, 0, row.Length);
-                            for (var x = 0; x < width; x += 8)
+                            for (var x = 0; x < width; x += 4)
                             {
                                 var i = x * 4;
                                 all++;
@@ -341,18 +345,28 @@ internal static partial class Program
                     var share = all == 0 ? 0 : 100.0 * darkPixels / all;
                     var at = clock.ElapsedMilliseconds;
                     samples.Add((at, share));
-                    // The first dark frames, and one every half second of a dark stretch.
-                    if (share > 25 && (saved < 3 || samples.Count(s => s.Dark > 25) % 15 == 0) && saved < 8)
-                        shot.Save(System.IO.Path.Combine(outputDir, $"SF04-{(dark ? "dark" : "light")}-{saved++}-{at}ms.png"));
+                    // The first dark patches, with the whole window read once right after.
+                    if (share > 50 && saved < 4)
+                    {
+                        shot.Save(System.IO.Path.Combine(outputDir, $"SF04-{(dark ? "dark" : "light")}-{saved}-{at}ms.png"));
+                        if (saved == 0) notes.Add($"{label}: the window just after the first dark patch: " + Screenshot($"SF04-{(dark ? "dark" : "light")}-window"));
+                        saved++;
+                    }
                 }
-                var darkFrames = samples.Where(s => s.Dark > 25).ToList();
-                notes.Add($"{label}: the window on screen {appeared} ms after the start; {samples.Count} samples, most dark {(samples.Count > 0 ? samples.Max(s => s.Dark) : 0):0}%; " +
-                    string.Join(" ", samples.Where((_, i) => i % 4 == 0).Take(40).Select(s => $"{s.At}:{s.Dark:0}%")));
-                if (darkFrames.Count > 0)
+                // Dark stretches: from and to (ms from the start), with how many reads each had.
+                var stretches = new List<(long From, long To, int Reads)>();
+                foreach (var s in samples)
                 {
-                    notes.Add($"{label}: dark from {darkFrames.First().At} ms to {darkFrames.Last().At} ms after the start ({darkFrames.Count} samples, {saved} saved as SF04-{(dark ? "dark" : "light")}-*.png)");
-                    failures.Add($"{label}: a dark frame {darkFrames.Count} times (first at {darkFrames.First().At} ms from the start, the window up at {appeared} ms, {darkFrames.First().Dark:0}% of it dark)");
+                    if (s.Dark <= 50) continue;
+                    if (stretches.Count > 0 && s.At - stretches[^1].To <= 20) stretches[^1] = (stretches[^1].From, s.At, stretches[^1].Reads + 1);
+                    else stretches.Add((s.At, s.At, 1));
                 }
+                var gaps = samples.Zip(samples.Skip(1), (x, y) => y.At - x.At).DefaultIfEmpty(0).ToList();
+                notes.Add($"{label}: the window on screen {appeared} ms after the start; {samples.Count} reads of the editor's patch (longest gap {gaps.Max()} ms), most dark {(samples.Count > 0 ? samples.Max(s => s.Dark) : 0):0}%; dark stretches: " +
+                    (stretches.Count == 0 ? "none" : string.Join(", ", stretches.Take(10).Select(t => $"{t.From}-{t.To} ms ({t.Reads} reads)"))));
+                notes.Add($"{label}: every 100th read: " + string.Join(" ", samples.Where((_, i) => i % 100 == 0).Take(40).Select(s => $"{s.At}:{s.Dark:0}%")));
+                if (stretches.Count > 0)
+                    failures.Add($"{label}: the editor's area dark {stretches.Count} time(s), first {stretches[0].From}-{stretches[0].To} ms from the start (the window up at {appeared} ms)");
                 endpoint = await ReadEndpointFile(System.IO.Path.Combine(testRoot, "automation-endpoint.txt")) ?? throw new CaseFailed("the restarted host never published its endpoint");
                 using (var probe = await Connect())
                 {
