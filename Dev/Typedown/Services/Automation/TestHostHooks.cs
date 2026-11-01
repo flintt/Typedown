@@ -128,6 +128,7 @@ namespace Typedown.Services.Automation
                         ["coversShown"] = app.EditorViewModel?.CoversShown,
                         ["editorLoaded"] = editor?.IsLoaded,
                         ["viewVisibility"] = view?.Visibility.ToString(),
+                        ["viewOpacity"] = view?.Opacity,
                         ["viewSize"] = view == null ? null : $"{view.ActualWidth:0}x{view.ActualHeight:0}",
                         ["hostVisible"] = editor?.XamlRoot?.IsHostVisible,
                         ["suspended"] = editor?.CoreWebView2?.IsSuspended,

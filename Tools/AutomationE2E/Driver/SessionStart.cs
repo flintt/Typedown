@@ -179,7 +179,7 @@ internal static partial class Program
                     var text = (bool?)(await c.Call("test.editor.eval", new { windowId, script = "[...document.querySelectorAll('#ag-editor-id > *')].slice(0, 40).some(e => { const r = e.getBoundingClientRect(); return r.height > 0 && r.bottom > 0 && r.top < innerHeight && e.textContent.trim().length > 0 })" }))["result"] == true;
                     last = await c.Call("test.webview.state", new { windowId });
                     var app = last["app"] ?? last;
-                    var visible = (string?)app["editorVisibility"] != "Collapsed" && (string?)app["viewVisibility"] != "Collapsed" && (bool?)app["leavingCover"] != true && ((double?)app["editorOpacity"] ?? 1) > 0.99;
+                    var visible = (string?)app["editorVisibility"] != "Collapsed" && (string?)app["viewVisibility"] != "Collapsed" && ((double?)app["viewOpacity"] ?? 1) > 0.99 && (bool?)app["leavingCover"] != true && ((double?)app["editorOpacity"] ?? 1) > 0.99;
                     if (isActive && text && visible) content = clock.ElapsedMilliseconds;
                 }
             }

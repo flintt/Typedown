@@ -347,7 +347,9 @@ internal static partial class Program
                             {
                                 var i = x * 4;
                                 all++;
-                                if (0.0722 * row[i] + 0.7152 * row[i + 1] + 0.2126 * row[i + 2] < 60) darkPixels++;
+                                // Under 80: the empty window before XAML drew in it was a dark grey of 63, the Apricot
+                                // page over 200.
+                                if (0.0722 * row[i] + 0.7152 * row[i + 1] + 0.2126 * row[i + 2] < 80) darkPixels++;
                             }
                         }
                     }
