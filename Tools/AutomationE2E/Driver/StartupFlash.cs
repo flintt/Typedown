@@ -13,10 +13,10 @@ using Newtonsoft.Json.Linq;
 internal static partial class Program
 {
     [DllImport("user32.dll")] private static extern bool EnumWindows(EnumWindowsProc callback, IntPtr data);
-    [DllImport("dwmapi.dll")] private static extern int DwmGetWindowAttribute(IntPtr window, int attribute, out int value, int size);
+    [DllImport("dwmapi.dll", EntryPoint = "DwmGetWindowAttribute")] private static extern int DwmGetWindowAttributeInt(IntPtr window, int attribute, out int value, int size);
 
     /// <summary>The window kept off the screen by DWM (DWMWA_CLOAKED): the host cloaks a new one until its first frame.</summary>
-    private static bool IsCloaked(IntPtr window) => DwmGetWindowAttribute(window, 14, out var cloaked, sizeof(int)) == 0 && cloaked != 0;
+    private static bool IsCloaked(IntPtr window) => DwmGetWindowAttributeInt(window, 14, out var cloaked, sizeof(int)) == 0 && cloaked != 0;
 
     private static async Task SF01(List<string> notes)
     {
