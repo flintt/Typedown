@@ -149,4 +149,95 @@ internal static partial class Program
             await SetSetting(c, "appearance.theme", theme);
         }
     }
+
+    /// <summary>
+    /// SF03: SF01 the other way round - a window opening under the light theme shows no dark frame on its way (a reader's
+    /// report, 2026-11-01: a brief black screen at start, a light theme with Windows' apps dark). Sampled as SF01 does:
+    /// the window's area read from the screen every 10 ms for two seconds, dark over a quarter of it is a dark frame. The
+    /// light page's text is far below that. Each sample's dark share goes into the notes, with when the window came up.
+    /// </summary>
+    private static async Task SF03(List<string> notes)
+    {
+        using var c = await Session("e2e SF03");
+        var theme = (await c.Call("settings.get", new { keys = new[] { "appearance.theme" } }))["values"]!["appearance.theme"]!;
+        await SetSetting(c, "appearance.theme", JObject.FromObject(new { kind = "builtIn", id = "light" }));
+        await Task.Delay(1500);
+        List<IntPtr> HostWindows()
+        {
+            var found = new List<IntPtr>();
+            EnumWindows((window, _) =>
+            {
+                GetWindowThreadProcessId(window, out var pid);
+                if (pid == hostPid && IsWindowVisible(window) && GetWindowRect(window, out var r) && r.Right - r.Left > 300 && r.Bottom - r.Top > 200)
+                    found.Add(window);
+                return true;
+            }, IntPtr.Zero);
+            return found;
+        }
+        var before = HostWindows();
+        IntPtr shown = IntPtr.Zero;
+        try
+        {
+            var opening = c.Call("test.window.open");
+            var clock = System.Diagnostics.Stopwatch.StartNew();
+            while (clock.ElapsedMilliseconds < 8000 && shown == IntPtr.Zero)
+            {
+                shown = HostWindows().FirstOrDefault(w => !before.Contains(w));
+                if (shown == IntPtr.Zero) await Task.Delay(5);
+            }
+            if (shown == IntPtr.Zero) throw new CaseFailed("no new window came on screen");
+            var appeared = clock.ElapsedMilliseconds;
+            SetProcessDpiAwarenessContext(new IntPtr(-4));
+            var samples = new List<(long At, double Dark)>();
+            var sampling = System.Diagnostics.Stopwatch.StartNew();
+            var savedFirstDark = false;
+            while (sampling.ElapsedMilliseconds < 2000)
+            {
+                if (GetWindowRect(shown, out var r))
+                {
+                    int w = r.Right - r.Left, h = r.Bottom - r.Top;
+                    var darkPixels = 0;
+                    var all = 0;
+                    using var shot = new System.Drawing.Bitmap(w, h);
+                    using (var g = System.Drawing.Graphics.FromImage(shot)) g.CopyFromScreen(r.Left, r.Top, 0, 0, new System.Drawing.Size(w, h));
+                    var data = shot.LockBits(new System.Drawing.Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                    try
+                    {
+                        var row = new byte[data.Stride];
+                        for (var y = 0; y < h; y += 8)
+                        {
+                            System.Runtime.InteropServices.Marshal.Copy(data.Scan0 + y * data.Stride, row, 0, row.Length);
+                            for (var x = 0; x < w; x += 8)
+                            {
+                                var i = x * 4;
+                                all++;
+                                if (0.0722 * row[i] + 0.7152 * row[i + 1] + 0.2126 * row[i + 2] < 60) darkPixels++;
+                            }
+                        }
+                    }
+                    finally { shot.UnlockBits(data); }
+                    var dark = all == 0 ? 0 : 100.0 * darkPixels / all;
+                    samples.Add((sampling.ElapsedMilliseconds, dark));
+                    if (dark > 25 && !savedFirstDark)
+                    {
+                        shot.Save(System.IO.Path.Combine(outputDir, "SF03-first-dark.png"));
+                        savedFirstDark = true;
+                    }
+                }
+                await Task.Delay(10);
+            }
+            await opening;
+            var darkFrames = samples.Where(s => s.Dark > 25).ToList();
+            notes.Add($"on screen {appeared} ms after the call; {samples.Count} samples, most dark {samples.Max(s => s.Dark):0}% of the window; " +
+                string.Join(" ", samples.Where((_, i) => i % 6 == 0).Take(25).Select(s => $"{s.At}:{s.Dark:0}%")));
+            if (darkFrames.Count > 0)
+                notes.Add($"dark from {darkFrames.First().At} ms to {darkFrames.Last().At} ms after it came up ({darkFrames.Count} samples); the first saved as SF03-first-dark.png");
+            Check(darkFrames.Count == 0, $"the light window showed a dark frame {darkFrames.Count} times in its first two seconds (first at {darkFrames.FirstOrDefault().At} ms, {darkFrames.FirstOrDefault().Dark:0}% of it dark)");
+        }
+        finally
+        {
+            if (shown != IntPtr.Zero) { PostMessage(shown, 0x0010, IntPtr.Zero, IntPtr.Zero); await Task.Delay(1000); }
+            await SetSetting(c, "appearance.theme", theme);
+        }
+    }
 }
