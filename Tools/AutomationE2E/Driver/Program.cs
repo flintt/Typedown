@@ -159,6 +159,7 @@ internal static partial class Program
             await Case("WV01 the editor comes back after its web view's browser process ends: the document on the page again, taking edits", WV01);
             await Case("SF01 a window opening under the dark theme shows no light frame in its first two seconds on screen", SF01);
             await Case("SF03 a window opening under the light theme shows no dark frame on its way: sampled from the screen for two seconds, none over a quarter dark", SF03);
+            await Case("SF04 a cold start restoring three tabs under the light Apricot theme shows no dark frame, Windows' apps dark and light: sampled from the process's start for five seconds", SF04);
             await Case("SF02 a long document under a dark custom theme (Dracula): leaving the settings and a window opening with it show the theme's colour, never light or the app's dark colour", SF02);
             await Case("WV02 without the WebView2 runtime the install window comes up with the download; a setup that installs it goes on to the main window", WV02);
             await Case("WV03 a setup that did not install the WebView2 runtime leaves the install window saying so, with the download; Cancel ends the start", WV03);

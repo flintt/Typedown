@@ -240,4 +240,147 @@ internal static partial class Program
             await SetSetting(c, "appearance.theme", theme);
         }
     }
+
+    /// <summary>
+    /// SF04: SF03 as the reader starts the app (2026-11-01, still a black flash at every start): the host started cold,
+    /// bringing back a session of three tabs (a long document shown, two others not), the light theme with the Apricot
+    /// page and Windows' apps dark - and once more with Windows' apps light. From the process's start the window is
+    /// read from the screen as often as it can be for five seconds; dark over a quarter of it is a dark frame. The
+    /// first dark frames are saved, with the startup lines of the debug log for when they came.
+    /// </summary>
+    private static async Task SF04(List<string> notes)
+    {
+        string Embedded(string name)
+        {
+            using var stream = typeof(Program).Assembly.GetManifestResourceStream(name) ?? throw new CaseFailed("no resource " + name);
+            using var reader = new System.IO.StreamReader(stream, new System.Text.UTF8Encoding(false));
+            return reader.ReadToEnd();
+        }
+        var files = new[] { Fixture("sf04-a.md", "# SF04 first\n\nA short document.\n"), Fixture("sf04-showcase.md", Embedded("showcase.md")), Fixture("sf04-c.md", "# SF04 last\n\nA short document.\n") };
+        var session = System.IO.Path.Combine(testRoot, "data", "session.json");
+        SetProcessDpiAwarenessContext(new IntPtr(-4));
+        using var personalize = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize");
+        var systemLight = personalize?.GetValue("AppsUseLightTheme") as int? ?? 1;
+        JToken theme;
+        string? customTheme;
+        RECT placed;
+        using (var c = await Session("e2e SF04"))
+        {
+            var w = await FirstWindowId(c);
+            GetWindowRect(await WindowOf(w, c), out placed);
+            theme = (await c.Call("settings.get", new { keys = new[] { "appearance.theme" } }))["values"]!["appearance.theme"]!;
+            customTheme = (string?)(await c.Call("test.settings.get", new { windowId = w, name = "CustomTheme" }))["value"];
+            await SetSetting(c, "appearance.theme", JObject.FromObject(new { kind = "builtIn", id = "light" }));
+            await c.Call("test.settings.set", new { windowId = w, name = "CustomTheme", value = "typeleaf-apricot" });
+            await c.Call("test.settings.set", new { windowId = w, name = "FileStartupAction", value = 2 });
+        }
+        var failures = new List<string>();
+        try
+        {
+            foreach (var dark in new[] { true, false })
+            {
+                var label = dark ? "apps dark" : "apps light";
+                SetSystemTheme(!dark);
+                System.IO.File.WriteAllText(session, Newtonsoft.Json.JsonConvert.SerializeObject(new { Files = files, ActiveIndex = 1, Time = DateTime.UtcNow }));
+                try
+                {
+                    using var pre = await Session("e2e flush");
+                    foreach (var w in (JArray)(await pre.Call("window.list"))["windows"]!)
+                        await pre.Call("test.settings.flush", new { windowId = (string)w["windowId"]! });
+                }
+                catch (Exception e) { notes.Add("flush before the restart: " + e.Message.Split('\n')[0]); }
+                using (var dying = System.Diagnostics.Process.GetProcessById(hostPid))
+                {
+                    dying.Kill();
+                    dying.WaitForExit(10000);
+                }
+                await Task.Delay(1000);
+                System.IO.File.Delete(System.IO.Path.Combine(testRoot, "automation-endpoint.txt"));
+                var clock = System.Diagnostics.Stopwatch.StartNew();
+                var restarted = System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(hostExe, $"--automation-test-root \"{testRoot}\"") { UseShellExecute = true })!;
+                hostPid = restarted.Id;
+                var samples = new List<(long At, double Dark)>();
+                long appeared = -1;
+                var saved = 0;
+                IntPtr window = IntPtr.Zero;
+                while (clock.ElapsedMilliseconds < 8000 && (appeared < 0 || clock.ElapsedMilliseconds - appeared < 5000))
+                {
+                    if (window == IntPtr.Zero)
+                    {
+                        EnumWindows((h, _) =>
+                        {
+                            GetWindowThreadProcessId(h, out var pid);
+                            if (pid == hostPid && IsWindowVisible(h) && GetWindowRect(h, out var rr) && rr.Right - rr.Left > 300 && rr.Bottom - rr.Top > 200) { window = h; return false; }
+                            return true;
+                        }, IntPtr.Zero);
+                        if (window == IntPtr.Zero) { await Task.Delay(2); continue; }
+                        appeared = clock.ElapsedMilliseconds;
+                    }
+                    if (!GetWindowRect(window, out var r)) break;
+                    int width = r.Right - r.Left, height = r.Bottom - r.Top;
+                    var darkPixels = 0;
+                    var all = 0;
+                    using var shot = new System.Drawing.Bitmap(width, height);
+                    using (var g = System.Drawing.Graphics.FromImage(shot)) g.CopyFromScreen(r.Left, r.Top, 0, 0, new System.Drawing.Size(width, height));
+                    var data = shot.LockBits(new System.Drawing.Rectangle(0, 0, width, height), System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                    try
+                    {
+                        var row = new byte[data.Stride];
+                        for (var y = 0; y < height; y += 8)
+                        {
+                            Marshal.Copy(data.Scan0 + y * data.Stride, row, 0, row.Length);
+                            for (var x = 0; x < width; x += 8)
+                            {
+                                var i = x * 4;
+                                all++;
+                                if (0.0722 * row[i] + 0.7152 * row[i + 1] + 0.2126 * row[i + 2] < 60) darkPixels++;
+                            }
+                        }
+                    }
+                    finally { shot.UnlockBits(data); }
+                    var share = all == 0 ? 0 : 100.0 * darkPixels / all;
+                    var at = clock.ElapsedMilliseconds;
+                    samples.Add((at, share));
+                    // The first dark frames, and one every half second of a dark stretch.
+                    if (share > 25 && (saved < 3 || samples.Count(s => s.Dark > 25) % 15 == 0) && saved < 8)
+                        shot.Save(System.IO.Path.Combine(outputDir, $"SF04-{(dark ? "dark" : "light")}-{saved++}-{at}ms.png"));
+                }
+                var darkFrames = samples.Where(s => s.Dark > 25).ToList();
+                notes.Add($"{label}: the window on screen {appeared} ms after the start; {samples.Count} samples, most dark {(samples.Count > 0 ? samples.Max(s => s.Dark) : 0):0}%; " +
+                    string.Join(" ", samples.Where((_, i) => i % 4 == 0).Take(40).Select(s => $"{s.At}:{s.Dark:0}%")));
+                if (darkFrames.Count > 0)
+                {
+                    notes.Add($"{label}: dark from {darkFrames.First().At} ms to {darkFrames.Last().At} ms after the start ({darkFrames.Count} samples, {saved} saved as SF04-{(dark ? "dark" : "light")}-*.png)");
+                    failures.Add($"{label}: a dark frame {darkFrames.Count} times (first at {darkFrames.First().At} ms from the start, the window up at {appeared} ms, {darkFrames.First().Dark:0}% of it dark)");
+                }
+                endpoint = await ReadEndpointFile(System.IO.Path.Combine(testRoot, "automation-endpoint.txt")) ?? throw new CaseFailed("the restarted host never published its endpoint");
+                using (var probe = await Connect())
+                {
+                    await Initialize(probe, "e2e SF04 cold");
+                    await WaitForWindow(probe);
+                    await Task.Delay(1500);
+                    try { await probe.Call("test.dialogs.dismiss", new { }); } catch { }
+                }
+                notes.Add($"{label}: startup lines: " + string.Join(" | ", LogLines("startup:").TakeLast(9)));
+            }
+            Check(failures.Count == 0, string.Join("; ", failures));
+        }
+        finally
+        {
+            SetSystemTheme(systemLight != 0);
+            using var c = await Session("e2e SF04 restore");
+            var w = await FirstWindowId(c);
+            try { await c.Call("test.settings.set", new { windowId = w, name = "FileStartupAction", value = 0 }); } catch { }
+            try { await c.Call("test.settings.set", new { windowId = w, name = "CustomTheme", value = customTheme ?? "" }); } catch { }
+            try { await SetSetting(c, "appearance.theme", theme); } catch { }
+            try
+            {
+                var window = await WindowOf(w, c);
+                GetWindowRect(window, out var now);
+                if (now.Left != placed.Left || now.Top != placed.Top || now.Right != placed.Right || now.Bottom != placed.Bottom)
+                    MbSetWindowPos(window, IntPtr.Zero, placed.Left, placed.Top, placed.Right - placed.Left, placed.Bottom - placed.Top, 0x0004 | 0x0010);
+            }
+            catch (Exception e) { notes.Add("the window not put back: " + e.Message.Split('\n')[0]); }
+        }
+    }
 }
