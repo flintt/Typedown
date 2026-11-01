@@ -212,8 +212,11 @@ class Keyboard {
             contentState.arrowHandler(event)
           }
           break
+        // Tab is always the handler's own (it indents, unindents, inserts spaces or jumps): told here as Enter is, or
+        // the host kept the text from before the indent and a save at once lost it.
         case EVENT_KEYS.Tab:
           contentState.tabHandler(event)
+          this.muya.dispatchChange()
           break
         default:
           break

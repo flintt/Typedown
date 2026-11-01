@@ -13,7 +13,37 @@ const adjustOffset = (offset, block, event) => {
   return offset
 }
 
+// Where a heading's text starts: after its # marks, which are part of its text (typed before them, the heading became a
+// paragraph).
+const headingTextStart = block => block.functionType === 'atxLine'
+  ? (/^ {0,3}#{1,6}(?:[ \t]+|$)/.exec(block.text) || [''])[0].length
+  : 0
+
 const arrowCtrl = ContentState => {
+  // Up or Down into another block keeps the caret's place across the window, as in any text box (it went to the end of
+  // the block above, the start of the one below): once the block has its caret and is drawn, the place on its last line
+  // (Up) or first line (Down) under `x`. Where there is none to be had - the block out of the window, a picture, a
+  // diagram - the caret stays where it was put.
+  ContentState.prototype.keepColumn = function (x, key, up) {
+    const element = document.getElementById(key)
+    if (!x || !element || !document.caretRangeFromPoint) return
+    const rect = element.getBoundingClientRect()
+    const line = Math.min(parseFloat(getComputedStyle(element).lineHeight) || rect.height, rect.height)
+    const y = up ? rect.bottom - line / 2 : rect.top + line / 2
+    const range = document.caretRangeFromPoint(x, y)
+    if (!range || !element.contains(range.startContainer)) return
+    selection.select(range.startContainer, range.startOffset)
+    const { start } = selection.getCursorRange()
+    if (!start || start.key !== key) return
+    const offset = Math.max(start.offset, headingTextStart(this.getBlock(key)))
+    this.cursor = {
+      start: { key, offset },
+      end: { key, offset }
+    }
+    // Drawn again: the inline marks shown are the ones around the caret.
+    this.partialRender()
+  }
+
   ContentState.prototype.findNextRowCell = function (cell) {
     if (cell.functionType !== 'cellContent') {
       throw new Error(`block with type ${cell && cell.type} is not a table cell`)
@@ -188,7 +218,7 @@ const arrowCtrl = ContentState => {
         // Up on the first line of the document: to its start, as in any text box (it did nothing). A heading's start is
         // after its # marks, which are part of its text: typed before them, the heading became a paragraph.
         if (event.key !== EVENT_KEYS.ArrowUp) return
-        const lineStart = block.functionType === 'atxLine' ? (/^ {0,3}#{1,6}(?:[ \t]+|$)/.exec(block.text) || [''])[0].length : 0
+        const lineStart = headingTextStart(block)
         if (start.offset <= lineStart) return
         this.cursor = {
           start: { key: start.key, offset: lineStart },
@@ -198,12 +228,15 @@ const arrowCtrl = ContentState => {
       }
       const key = preBlock.key
       const offset = preBlock.text.length
+      const { x } = event.key === EVENT_KEYS.ArrowUp ? selection.getCursorCoords() : {}
       this.cursor = {
         start: { key, offset },
         end: { key, offset }
       }
 
-      return this.partialRender()
+      this.partialRender()
+      if (x) this.keepColumn(x, key, true)
+      return
     } else if (
       (event.key === EVENT_KEYS.ArrowDown) ||
       (event.key === EVENT_KEYS.ArrowRight && start.offset === block.text.length)
@@ -221,12 +254,15 @@ const arrowCtrl = ContentState => {
         key = newBlock.children[0].key
       }
       const offset = adjustOffset(0, nextBlock || newBlock, event)
+      const { x } = event.key === EVENT_KEYS.ArrowDown && nextBlock ? selection.getCursorCoords() : {}
       this.cursor = {
         start: { key, offset },
         end: { key, offset }
       }
 
-      return this.partialRender()
+      this.partialRender()
+      if (x) this.keepColumn(x, key, false)
+      return
     }
   }
 }

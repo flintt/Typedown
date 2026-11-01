@@ -206,6 +206,47 @@ const tabCtrl = ContentState => {
     }
   }
 
+  // Tab over a selection in a code block, and Shift+Tab there: one level on or off each line the caret or selection
+  // touches - on, the same no-break spaces Tab puts at the caret; off, up to the tab size of spaces or no-break spaces,
+  // or one tab character. A code block is one text block, its lines split by \n.
+  ContentState.prototype.indentCodeLines = function (block, start, end, outdent) {
+    const tabSize = this.tabSize
+    const unit = String.fromCharCode(160).repeat(tabSize)
+    const { text } = block
+    const lines = text.split('\n')
+    const changes = [] // [line start in the old text, characters added (negative: taken)]
+    let lineStart = 0
+    const out = lines.map(line => {
+      const from = lineStart
+      lineStart += line.length + 1
+      // Lines the selection touches: from the one holding its start to the one holding its end - not a line it only
+      // reaches the start of, as whole lines are selected.
+      if (from + line.length < start.offset || from > end.offset) return line
+      if (from === end.offset && from > start.offset) return line
+      if (!outdent) {
+        changes.push([from, unit.length])
+        return unit + line
+      }
+      const taken = line[0] === '\t' ? 1 : Math.min(/^[  ]*/.exec(line)[0].length, tabSize)
+      if (taken) changes.push([from, -taken])
+      return line.substring(taken)
+    })
+    if (!changes.length) return
+    // An offset in the old text, where it is in the new: moved by every change on the lines before, and within its own
+    // line by the indent taken, as far as it reaches.
+    const moved = offset => changes.reduce((o, [from, delta]) => {
+      if (offset < from) return o
+      return delta > 0 ? o + delta : o - Math.min(-delta, offset - from)
+    }, offset)
+    block.text = out.join('\n')
+    const key = block.key
+    this.cursor = {
+      start: { key, offset: moved(start.offset) },
+      end: { key, offset: moved(end.offset) }
+    }
+    return this.partialRender()
+  }
+
   ContentState.prototype.checkCursorAtEndFormat = function (text, offset) {
     const { labels } = this.stateRender
     const tokens = tokenizer(text, {
@@ -308,6 +349,13 @@ const tabCtrl = ContentState => {
     }
     const startBlock = this.getBlock(start.key)
     const endBlock = this.getBlock(end.key)
+
+    if (
+      startBlock.functionType === 'codeContent' && start.key === end.key &&
+      (event.shiftKey || start.offset !== end.offset)
+    ) {
+      return this.indentCodeLines(startBlock, start, end, event.shiftKey)
+    }
 
     if (event.shiftKey && startBlock.functionType !== 'cellContent') {
       const unindentType = this.isUnindentableListItem(startBlock)
