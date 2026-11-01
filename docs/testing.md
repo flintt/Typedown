@@ -66,6 +66,23 @@ CI 的“Test editor integration”一步运行这些：
 - `wordcount-mode-check.js`: The word count is the same in the visual editor and in source mode: source mode counted every character and split words at spaces only, so a mode switch moved the count with nothing written, and what follows the count's changes as edits took the jump for writing.
 - `blank-jump-check.js`: The reader scrolls up into the part not drawn yet while a long document is still drawn (back at its end, as a tab switched back to): the rest is drawn at once (completeRender), and the window must then show what the reader scrolled to - not jump 100,000 px on (hp, 1.4.0: a 1.5 MB document back at its end, the wheel turned up 18,000 px, the page went from 371k to 272k 5 ms after the drawing ended, and was put back there on every later switch).
 - `jt04-drift-check.js`: A long document switched back to near its end, nobody at it while the rest is drawn above (a part at a time): the block at the top of the window stays where it is, frame after frame, for 15 s (Automation JT04: 2 px at most).
+- `tab-keys-check.js`: Tab and Shift+Tab in the visual editor: what they do reaches the host (the text it gets back, FlushContent) - the editor handled the key and told nothing, so the host kept the text from before and a save at once lost the indent.
+- `arrow-edge-check.js`: Up on the first line of a document goes to the start of that line, as in any text box - the visual editor took the key and did nothing, so the caret stayed where it was.
+- `nested-list-enter-check.js`: Enter on the last, empty item of a nested list makes an item of the list around it - one level out, as in a word processor - and Enter on that one leaves the list.
+- `hr-delete-check.js`: Backspace at the start of the block after a thematic break, and Delete at the end of the one before it, take the break away and leave the caret where it was; the next one joins the two blocks as usual.
+- `auto-pair-check.js`: An opening `*`, `_`, `~` or `$` typed in a paragraph gets its closing one put in after the caret; when the next key is a space, or a digit after `$`, it was no opening mark and the closing one is taken out again.
+- `code-font-fallback-check.js`: Chinese in code (a code block, inline code, a math source) is drawn in the text's font - the one chosen in the settings, or the system's sans-serif - not the browser's monospace fallback (SimSun, a serif one, on Chinese Windows); the Latin letters stay in the monospaced font.
+- `line-numbers-check.js`: Settings > Editor > Line numbers in code blocks: a number beside each line of a fenced or indented code block - level with its line, as many as its lines after Enter and Backspace there - and none for a diagram's or maths' source; the lines do not wrap (a long one scrolls across); the numbers are not text (not in the file, not in a copied selection); off, there are none.
+- `enter-closing-marks-check.js`: Enter with the caret just before a format's closing marks splits the line after them: the marks stay with their text.
+- `triple-click-format-check.js`: A triple click selects a block up to the start of the next one (the browser takes its line break too); Bold or Strikethrough then (the context menu, a shortcut: the host's Format) formats that block only.
+- `duplicate-check.js`: Paragraph > Duplicate puts a copy of the block with the caret after it, and the host has it.
+- `scroll-past-end-check.js`: Settings > Editor > Scroll past the end: scrolled all the way down, the last line comes up to about the middle of the window, in editing and reading; off (the default), it stays at the window's bottom as before.
+- `progressive-apply-check.js`: An automation write (ApplyDocumentEdit) while a long document is still being drawn a part at a time: it is applied exactly, the host gets that text, and once drawn the page shows the changes at both ends - with the changes highlighted and scrolled to as well.
+- `prototype-names-check.js`: No method of the editor's ContentState is defined twice.
+- `heading-list-keys-check.js`: Keys in headings and lists that the key matrix (key-matrix-check.js) found wrong, 2026-11-01: - Enter in the middle of a heading: the new heading had the caret before its "#" marks (the next letter made it the paragraph "X## rest"), and with the caret after a format's opening marks Enter threw.
+- `keep-source-on-save-check.js`: A document past 150,000 characters, edited in one place: while typing the host gets the editor's own export (the whole document in the editor's way of writing it - keeping the reader's source reads the result back, a fifth of a second at 300,000 characters, too much for every change); asked with keepSource (a save the reader made, a close) it gets the reader's own text with only the edit in it.
+- `fence-line-check.js`: "~~" typed at a line's start for a strikethrough was auto-paired into the line "~~~~" - a code fence once the file was read again (opened, source mode and back, an automation write): the rest of the document became a code block, and the closing "```" the editor then wrote stayed at the document's end (a reader's report, 2026-11-01).
+- `key-matrix-check.js`: The editing keys and the host's editing commands, each in each kind of block at its start, middle and end, an X typed after to show where the caret went.
 <!-- END generated: editor-checks -->
 
 ## Windows 端到端测试
@@ -250,10 +267,10 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | KY01 | Ctrl+Z and Ctrl+Y are the host's undo and redo however close Ctrl and the letter come, in the visual editor and in source mode |
 | ED01 | in the visual editor Ctrl+Shift+Right selects by words and Ctrl+Shift+Down to the end of the paragraph, Ctrl+Left/Right move without selecting, Ctrl+F opens the find bar, and the wheel scrolls the page |
 | ED02 | Shift+Enter and Alt+Enter in a table cell put a line break in that cell |
-| OL04 | Measured: switching to a document of 3000 headings, the host's time to build the outline's tree, hand it to the pane and have the pane laid out (the host's debug log, in the notes) |
-| PY01 | The Chinese IME (Microsoft Pinyin, Chinese mode) typing through the keyboard: pinyin committed once, full-width brackets one each with none put in by the editor, the host's text the editor's; what `, Shift+8 and Shift+4 give is noted |
+| OL04 | measured: switching to a document of 3000 headings, the host's time to build the outline's tree, hand it to the pane and have it laid out |
+| PY01 | the Chinese IME (Microsoft Pinyin) typing through the keyboard into the visual editor: pinyin committed once, full-width brackets one each with none put in by the editor, the host's text the editor's |
 | BL01 | blank lines survive a visual edit and a save: 1 at the start, 2, 4, 2, 3, 5 and 2 between blocks, 1 at the end |
-| KS01 | A document past 150,000 characters, one key typed and saved with Ctrl+S: the file is the reader's text with that key in it and nothing else (a compact table stays compact) |
+| KS01 | a document past 150,000 characters, one key typed and saved with Ctrl+S: the file is the reader's text with that key in it and nothing else |
 | BL02 | Settings > Editor > "Show extra blank lines": on, empty lines keep their height in reading mode and an HTML export; off (the default), both collapse them as before |
 | MN03 | minimized, written to, restored without activation: the editor's web view gets its size back |
 | MN04 | F11 in and out of full screen, then minimized and brought back as a person does: the window works |
