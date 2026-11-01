@@ -1,7 +1,7 @@
 import { beginRules, inlineRules, inlineExtensionRules } from './rules'
 import { isLengthEven, union } from '../utils'
 import { findClosingBracket } from './marked/utils'
-import { getAttributes, parseSrcAndTitle, validateEmphasize, lowerPriority } from './utils'
+import { getAttributes, parseSrcAndTitle, validateEmphasize, lowerPriority, execOutsideCode } from './utils'
 
 // const CAN_NEST_RULES = ['strong', 'em', 'link', 'del', 'a_link', 'reference_link', 'html_tag']
 // disallowed html tags in https://github.github.com/gfm/#raw-html
@@ -151,7 +151,7 @@ const tokenizerFac = (src, beginRules, inlineRules, pos = 0, top, labels, option
     const emRules = ['strong', 'em']
     let inChunk
     for (const rule of emRules) {
-      const to = inlineRules[rule].exec(src)
+      const to = execOutsideCode(inlineRules[rule], src, inlineRules.inline_code)
       if (to && isLengthEven(to[3])) {
         const isValid = validateEmphasize(src, to[0].length, to[1], pending, validateRules)
         if (isValid) {
@@ -182,7 +182,7 @@ const tokenizerFac = (src, beginRules, inlineRules, pos = 0, top, labels, option
     // strong | em | emoji | inline_code | del | mark | inline_math
     const chunks = ['inline_code', 'del', 'mark', 'emoji', 'inline_math']
     for (const rule of chunks) {
-      const to = inlineRules[rule].exec(src)
+      const to = rule === 'del' || rule === 'mark' ? execOutsideCode(inlineRules[rule], src, inlineRules.inline_code) : inlineRules[rule].exec(src)
       if (to && isLengthEven(to[3])) {
         if (rule === 'emoji' && !lowerPriority(src, to[0].length, validateRules)) break
         inChunk = true

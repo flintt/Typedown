@@ -45,6 +45,50 @@ const validWidthAndHeight = value => {
   return value >= 0 ? value : ''
 }
 
+// src with each code span in it (backticks too) turned into as many letters: no marks in it are seen.
+const maskCodeSpans = (src, codeRule) => {
+  let out = ''
+  let i = 0
+  while (i < src.length) {
+    const ch = src[i]
+    if (ch === '\\') {
+      out += src.slice(i, i + 2)
+      i += 2
+    } else if (ch === '`') {
+      const to = codeRule.exec(src.substring(i))
+      const length = to ? to[0].length : /^`+/.exec(src.substring(i))[0].length
+      out += to ? 'a'.repeat(length) : src.substr(i, length)
+      i += length
+    } else {
+      out += ch
+      i++
+    }
+  }
+  return out
+}
+
+/**
+ * A rule of marks around text (strong, em, del, mark) matched at the start of src, closed outside any code span: a
+ * code span binds tighter than the marks around it (GFM). The rule alone closes at the first closing marks, in a code
+ * span too: "~~a `~~` b~~" struck "a `" and left "` b~~" as text, and a whole paragraph struck through from the menu
+ * fell apart so when it held "~~" in code. Groups 1-3 (marks, text, backslashes) as the rule gives them.
+ */
+export const execOutsideCode = (rule, src, codeRule) => {
+  const to = rule.exec(src)
+  if (!to || !to[2].includes('`')) return to
+  const masked = maskCodeSpans(src, codeRule)
+  if (masked === src) return to
+  const m = rule.exec(masked)
+  if (!m) return null
+  const marks = m[1].length
+  const text = m[2].length
+  const backslashes = (m[3] || '').length
+  const found = [src.slice(0, m[0].length), src.slice(0, marks), src.substr(marks, text), src.substr(marks + text, backslashes)]
+  found.index = 0
+  found.input = src
+  return found
+}
+
 export const lowerPriority = (src, offset, rules) => {
   let i
   const ignoreIndex = []
