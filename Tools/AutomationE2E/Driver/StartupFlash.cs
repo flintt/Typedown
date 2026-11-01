@@ -13,6 +13,10 @@ using Newtonsoft.Json.Linq;
 internal static partial class Program
 {
     [DllImport("user32.dll")] private static extern bool EnumWindows(EnumWindowsProc callback, IntPtr data);
+    [DllImport("dwmapi.dll")] private static extern int DwmGetWindowAttribute(IntPtr window, int attribute, out int value, int size);
+
+    /// <summary>The window kept off the screen by DWM (DWMWA_CLOAKED): the host cloaks a new one until its first frame.</summary>
+    private static bool IsCloaked(IntPtr window) => DwmGetWindowAttribute(window, 14, out var cloaked, sizeof(int)) == 0 && cloaked != 0;
 
     private static async Task SF01(List<string> notes)
     {
@@ -302,6 +306,7 @@ internal static partial class Program
                 var samples = new List<(long At, double Dark)>();
                 long appeared = -1;
                 var saved = 0;
+                long cloakedAt = -1;
                 IntPtr window = IntPtr.Zero;
                 while (clock.ElapsedMilliseconds < 8000 && (appeared < 0 || clock.ElapsedMilliseconds - appeared < 5000))
                 {
@@ -310,7 +315,12 @@ internal static partial class Program
                         EnumWindows((h, _) =>
                         {
                             GetWindowThreadProcessId(h, out var pid);
-                            if (pid == hostPid && IsWindowVisible(h) && GetWindowRect(h, out var rr) && rr.Right - rr.Left > 300 && rr.Bottom - rr.Top > 200) { window = h; return false; }
+                            if (pid == hostPid && IsWindowVisible(h) && GetWindowRect(h, out var rr) && rr.Right - rr.Left > 300 && rr.Bottom - rr.Top > 200)
+                            {
+                                // Cloaked, it is not on the screen yet: what is read there is what lies behind it.
+                                if (!IsCloaked(h)) { window = h; return false; }
+                                if (cloakedAt < 0) cloakedAt = clock.ElapsedMilliseconds;
+                            }
                             return true;
                         }, IntPtr.Zero);
                         if (window == IntPtr.Zero) { await Task.Delay(2); continue; }
@@ -362,7 +372,7 @@ internal static partial class Program
                     else stretches.Add((s.At, s.At, 1));
                 }
                 var gaps = samples.Zip(samples.Skip(1), (x, y) => y.At - x.At).DefaultIfEmpty(0).ToList();
-                notes.Add($"{label}: the window on screen {appeared} ms after the start; {samples.Count} reads of the editor's patch (longest gap {gaps.Max()} ms), most dark {(samples.Count > 0 ? samples.Max(s => s.Dark) : 0):0}%; dark stretches: " +
+                notes.Add($"{label}: the window up {cloakedAt} ms after the start (cloaked; -1: never seen so), on screen {appeared} ms; {samples.Count} reads of the editor's patch (longest gap {gaps.Max()} ms), most dark {(samples.Count > 0 ? samples.Max(s => s.Dark) : 0):0}%; dark stretches: " +
                     (stretches.Count == 0 ? "none" : string.Join(", ", stretches.Take(10).Select(t => $"{t.From}-{t.To} ms ({t.Reads} reads)"))));
                 notes.Add($"{label}: every 100th read: " + string.Join(" ", samples.Where((_, i) => i % 100 == 0).Take(40).Select(s => $"{s.At}:{s.Dark:0}%")));
                 if (stretches.Count > 0)
@@ -375,7 +385,7 @@ internal static partial class Program
                     await Task.Delay(1500);
                     try { await probe.Call("test.dialogs.dismiss", new { }); } catch { }
                 }
-                notes.Add($"{label}: startup lines: " + string.Join(" | ", LogLines("startup:").TakeLast(9)));
+                notes.Add($"{label}: startup lines: " + string.Join(" | ", LogLines("startup:").TakeLast(9).Concat(LogLines("window: on screen").TakeLast(1)).Concat(LogLines("window: cloak").TakeLast(2))));
             }
             Check(failures.Count == 0, string.Join("; ", failures));
         }

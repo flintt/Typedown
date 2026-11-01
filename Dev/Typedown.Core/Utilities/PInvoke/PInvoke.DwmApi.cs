@@ -6,6 +6,7 @@ namespace Typedown.Core.Utilities
     {
         public enum DwmWindowAttribute : uint
         {
+            DWMWA_CLOAK = 13,
             DWMWA_USE_IMMERSIVE_DARK_MODE = 20,
             DWMWA_MICA_EFFECT = 1029,
             DWMWA_SYSTEMBACKDROP_TYPE = 38,

@@ -134,6 +134,11 @@ namespace Typedown.Windows
         /// <summary>Shown where the window was last (or centred at its first size), and activated.</summary>
         public void Start()
         {
+            // Kept off the screen until its content has drawn its first frame: shown at once, the window was black for a
+            // frame before XAML drew in it (a reader's report, a black flash at every start; SF04 saw the editor's area
+            // dark some 20 ms after the window came up). Shown again after a second whatever happens.
+            SetCloaked(true);
+            ShowAfterFirstFrame();
             if (!this.ShowWindowWithSavedPlacement())
             {
                 var size = new SizeInt32((int)(1130 * ScalingFactor), (int)(700 * ScalingFactor));
@@ -142,6 +147,40 @@ namespace Typedown.Windows
             }
             Activate();
             if (Config.WindowsBuild < 22000) KeepTopEdgeInClientArea();
+        }
+
+        private void SetCloaked(bool cloaked)
+        {
+            uint value = cloaked ? 1u : 0u;
+            var result = PInvoke.DwmSetWindowAttribute(Handle, PInvoke.DwmWindowAttribute.DWMWA_CLOAK, ref value, sizeof(uint));
+            if (result != 0) Log.Debug($"window: cloak {cloaked} refused (0x{result:x8})");
+        }
+
+        // The window shown on the second frame drawn after it was made visible: the first one is being put together as
+        // the first Rendering is raised, and is on its way by the next.
+        private void ShowAfterFirstFrame()
+        {
+            var frames = 0;
+            var shown = false;
+            var clock = Stopwatch.StartNew();
+            void Show(string why)
+            {
+                if (shown) return;
+                shown = true;
+                CompositionTarget.Rendering -= OnRendering;
+                SetCloaked(false);
+                Log.Debug($"window: on screen after {why}, {clock.ElapsedMilliseconds} ms");
+            }
+            void OnRendering(object sender, object e)
+            {
+                if (++frames >= 2) Show("its first frame");
+            }
+            CompositionTarget.Rendering += OnRendering;
+            var timer = DispatcherQueue.CreateTimer();
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.IsRepeating = false;
+            timer.Tick += (_, _) => Show("the second waited for it");
+            timer.Start();
         }
 
         public void InitializeBinding()
