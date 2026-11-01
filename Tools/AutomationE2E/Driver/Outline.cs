@@ -198,4 +198,36 @@ internal static partial class Program
         foreach (var line in lines) notes.Add(line.Substring(line.IndexOf("outline: ", StringComparison.Ordinal)));
         Check(lines.Count >= 3, $"the host measured the outline's tree at each switch to the long document ({lines.Count})");
     }
+
+    /// <summary>
+    /// OL05: Ctrl+Tab to a document of 3000 headings with the outline shown, and letters typed as a quick typist does
+    /// straight after (the first at 150 ms, then one every 60 ms): all of them reach that document. Its outline takes the
+    /// window's thread a quarter to a third of a second (OL04), in which keys typed were lost (todo: "切到标题极多的文档").
+    /// </summary>
+    private static async Task OL05(List<string> notes)
+    {
+        using var c = await Session("e2e OL05");
+        var a = await Open(c, Fixture("ol05-a.md", "# OL05 A\n\nalpha\n"));
+        var text = "# OL05 B\n\nbeta\n\n" + string.Concat(Enumerable.Range(0, 3000).Select(i => $"## Heading {i}\n\nParagraph {i} under it.\n\n"));
+        var b = await Open(c, Fixture("ol05-b.md", text));
+        var windowId = await WindowIdOf(c, a);
+        await c.Call("window.setView", new { windowId, sidePane = new { open = true, page = "outline" } });
+        await Task.Delay(3000);
+        var before = LogLines("outline: tree of ").Count;
+        for (var round = 1; round <= 3; round++)
+        {
+            await TypeInto(c, a, "");
+            await Task.Delay(1500);
+            Chord("Ctrl+Tab");
+            await Task.Delay(150);
+            var letters = $"zqx{round}";
+            foreach (var ch in letters) { TypeText(ch.ToString()); await Task.Delay(60); }
+            var shown = await Eventually(async () => await ActiveOf(c, windowId) == b, 3000);
+            var got = "";
+            var reached = await Eventually(async () => (got = (string?)(await Get(c, b))["text"] ?? "").Contains(letters), 6000);
+            notes.Add($"round {round}: {(reached ? "all letters in" : "letters missing: " + string.Concat(letters.Where(l => !got.Contains(l))))}");
+            Check(shown && reached, $"round {round}: Ctrl+Tab showed the long document and every letter typed straight after is in it");
+        }
+        foreach (var line in LogLines("outline: tree of ").Skip(before)) notes.Add(line.Substring(line.IndexOf("outline: ", StringComparison.Ordinal)));
+    }
 }

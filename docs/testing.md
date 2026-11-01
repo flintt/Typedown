@@ -268,6 +268,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | ED01 | in the visual editor Ctrl+Shift+Right selects by words and Ctrl+Shift+Down to the end of the paragraph, Ctrl+Left/Right move without selecting, Ctrl+F opens the find bar, and the wheel scrolls the page |
 | ED02 | Shift+Enter and Alt+Enter in a table cell put a line break in that cell |
 | OL04 | measured: switching to a document of 3000 headings, the host's time to build the outline's tree, hand it to the pane and have it laid out |
+| OL05 | Ctrl+Tab to a document of 3000 headings with the outline shown, letters typed straight after: every one reaches that document |
 | PY01 | the Chinese IME (Microsoft Pinyin) typing through the keyboard into the visual editor: pinyin committed once, full-width brackets one each with none put in by the editor, the host's text the editor's |
 | BL01 | blank lines survive a visual edit and a save: 1 at the start, 2, 4, 2, 3, 5 and 2 between blocks, 1 at the end |
 | KS01 | a document past 150,000 characters, one key typed and saved with Ctrl+S: the file is the reader's text with that key in it and nothing else |
