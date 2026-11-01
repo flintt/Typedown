@@ -45,7 +45,10 @@ const { firstDifference, openEditor } = require('./harness');
       ['Shift+Tab over two selected code lines', 'Para\n\n```\n    a\n    b\n    c\n```\n', '    a', 5, 11, true, '', 'Para\n\n```\na\nb\n    c\n```\n'],
       ['Tab over two selected code lines', 'Para\n\n```\na\nb\nc\n```\n', 'a', 0, 3, false, '', `Para\n\n\`\`\`\n${nb}a\n${nb}b\nc\n\`\`\`\n`],
       ['Shift+Tab on an unindented code line changes nothing', 'Para\n\n```\nflat\n```\n', 'flat', 2, 2, true, 'X', 'Para\n\n```\nflXat\n```\n'],
-      ['Shift+Tab in a paragraph changes nothing', 'Para one\n\nPara two\n', 'Para two', 4, 4, true, 'X', 'Para one\n\nParaX two\n'],
+      ['Shift+Tab in a paragraph with no space before the caret changes nothing', 'Para one\n\nPara two\n', 'Para two', 4, 4, true, 'X', 'Para one\n\nParaX two\n'],
+      // Tab's space taken back in a paragraph (a reader's report: Shift+Tab could not take out what Tab put in).
+      ['Shift+Tab right after the space Tab put in a paragraph', `Para${nb} one\n`, 'Para', 8, 8, true, 'X', 'ParaX one\n'],
+      ['Shift+Tab in a paragraph Tab indented, the caret in its text', `${nb}Para one\n`, `${nb}Para`, 8, 8, true, 'X', 'ParaX one\n'],
     ];
     for (const [what, md, starts, offset, to, shift, typed, expected] of cases) {
       await mode(true, false);

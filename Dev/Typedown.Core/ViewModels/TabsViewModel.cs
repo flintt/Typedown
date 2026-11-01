@@ -143,6 +143,10 @@ namespace Typedown.Core.ViewModels
         {
             SnapshotActive();
             tabBeforeNew = ActiveTab;
+            // The tab left for the new one is where Alt+0 goes back to, as after a switch: kept only by SwitchTo, a new
+            // document's Alt+0 went to the tab before the last switch, or with none the next tab (from the new last
+            // tab the first) - back to the document left only when that was the first (a reader's report).
+            previousTab = ActiveTab;
             var tab = new DocumentTab();
             Tabs.Add(tab);
             ActiveTab = tab;

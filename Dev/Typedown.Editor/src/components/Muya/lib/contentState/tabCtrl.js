@@ -206,6 +206,49 @@ const tabCtrl = ContentState => {
     }
   }
 
+  // Shift+Tab in a paragraph (or a heading, a list item's text not to be moved out): Tab's space taken back - the
+  // spaces or no-break spaces right before the caret, up to the tab size, or one tab character; with none there, the
+  // indentation of the caret's line. It did nothing: Tab put four spaces in that Shift+Tab could not take out.
+  ContentState.prototype.removeTab = function () {
+    const { start, end } = this.cursor
+    if (!start || !end || start.key !== end.key || start.offset !== end.offset) return false
+    const block = this.getBlock(start.key)
+    if (!block || typeof block.text !== 'string') return false
+    const { text } = block
+    const { offset } = start
+    const space = /[  ]/
+    // A heading's "## " is its marks, not space to take back.
+    const marks = block.functionType === 'atxLine' ? (/^ {0,3}#{1,6}[ \t]+/.exec(text) || [''])[0].length : 0
+    if (offset < marks) return false
+    let from = offset
+    if (text[offset - 1] === '\t' && offset - 1 >= marks) {
+      from = offset - 1
+    } else {
+      while (from > marks && offset - from < this.tabSize && space.test(text[from - 1])) from--
+    }
+    let to = offset
+    if (from === offset) {
+      // Nothing before the caret: the line's own indentation.
+      const lineStart = Math.max(text.lastIndexOf('\n', offset - 1) + 1, marks)
+      from = to = lineStart
+      if (text[lineStart] === '\t') {
+        to = lineStart + 1
+      } else {
+        while (to < text.length && to - lineStart < this.tabSize && space.test(text[to])) to++
+      }
+      if (to === from) return false
+    }
+    block.text = text.substring(0, from) + text.substring(to)
+    const removed = to - from
+    const caret = offset >= to ? offset - removed : Math.min(offset, from)
+    this.cursor = {
+      start: { key: block.key, offset: caret },
+      end: { key: block.key, offset: caret }
+    }
+    this.partialRender()
+    return true
+  }
+
   // Tab over a selection in a code block, and Shift+Tab there: one level on or off each line the caret or selection
   // touches - on, the same no-break spaces Tab puts at the caret; off, up to the tab size of spaces or no-break spaces,
   // or one tab character. A code block is one text block, its lines split by \n.
@@ -361,6 +404,8 @@ const tabCtrl = ContentState => {
       const unindentType = this.isUnindentableListItem(startBlock)
       if (unindentType) {
         this.unindentListItem(startBlock, unindentType)
+      } else {
+        this.removeTab()
       }
       return
     }
