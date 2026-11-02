@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -36,26 +37,123 @@ namespace Typedown.Core.Utilities
 
         /// <summary>
         /// Reads a file and returns its text with every line ending turned into "\n" — the editor only ever sees
-        /// that — along with the shape to write back. Text files with no byte order mark are read as UTF-8, which
-        /// is what the app has always done.
+        /// that — along with the shape to write back. A file with no byte order mark is read in the encoding it is
+        /// found to be in (<see cref="GuessEncoding"/>).
         /// </summary>
-        public static async Task<(string Text, TextFileFormat Format)> ReadAsync(string path, Encoding encodingWithoutMark = null)
+        public static async Task<(string Text, TextFileFormat Format)> ReadAsync(string path, Encoding encodingWithoutMark = null) =>
+            Read(await File.ReadAllBytesAsync(path), encodingWithoutMark);
+
+        /// <summary>
+        /// <see cref="ReadAsync"/> on bytes already read. <paramref name="ansiCodePage"/>: the system's legacy code page
+        /// (936 on Chinese Windows), the guess for a file too short to tell; the running system's when not given.
+        /// </summary>
+        public static (string Text, TextFileFormat Format) Read(byte[] bytes, Encoding encodingWithoutMark = null, int? ansiCodePage = null)
         {
-            var bytes = await File.ReadAllBytesAsync(path);
             var (encoding, bomLength) = DetectEncoding(bytes);
             // The reader's choice for a file with no byte order mark (the status bar's encoding menu): GBK, Big5...
-            if (bomLength == 0 && encodingWithoutMark != null) encoding = encodingWithoutMark;
+            if (bomLength == 0) encoding = encodingWithoutMark ?? GuessEncoding(bytes, ansiCodePage ?? CultureInfo.CurrentCulture.TextInfo.ANSICodePage);
             var text = encoding.GetString(bytes, bomLength, bytes.Length - bomLength);
             var format = new TextFileFormat(encoding, bomLength > 0, DetectLineEnding(text), !RoundTrips(encoding, bytes, bomLength, text));
             return (Normalize(text), format);
         }
 
+        /// <summary>
+        /// The encoding of a file with no byte order mark. All files used to be read as UTF-8: a GBK, Big5 or
+        /// Shift-JIS file came up garbled (a reader's report). In turn, each taken only if the file's bytes come back
+        /// from it unchanged:
+        /// <list type="number">
+        /// <item>valid UTF-8 (plain ASCII too) is UTF-8;</item>
+        /// <item>UTF-16 without its mark, told by where the zero bytes of ASCII letters fall;</item>
+        /// <item>the charset detector (Mozilla's, UTF.Unknown) when it is at least half sure: right on a paragraph of
+        /// Chinese, Japanese, Korean, Russian or Western text, lost on a few characters;</item>
+        /// <item>the system's legacy code page, for those few characters (GBK on Chinese Windows);</item>
+        /// <item>else UTF-8 as before, its decode marked lossy so that nothing saves over the file unasked.</item>
+        /// </list>
+        /// </summary>
+        internal static Encoding GuessEncoding(byte[] bytes, int ansiCodePage)
+        {
+            var utf8 = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
+            if (IsValidUtf8(bytes)) return utf8;
+            if (Utf16WithoutMark(bytes) is { } utf16) return utf16;
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            var detected = UtfUnknown.CharsetDetector.DetectFromBytes(bytes).Detected;
+            if (detected != null && detected.Confidence >= 0.5f && Clean(ByDetectorName(detected.EncodingName)) is { } byDetector) return byDetector;
+            if (ansiCodePage > 0 && ansiCodePage != 65001 && Clean(TryGetEncoding(ansiCodePage)) is { } byLocale) return byLocale;
+            return utf8;
+
+            Encoding Clean(Encoding encoding)
+            {
+                if (encoding == null) return null;
+                try
+                {
+                    var text = encoding.GetString(bytes);
+                    return text.Contains('�') || !RoundTrips(encoding, bytes, 0, text) ? null : encoding;
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+        }
+
+        // The detector's names as .NET knows them; ISO-8859-1 as Windows-1252, its superset (the curly quotes and the
+        // euro a Western file has are 1252's).
+        private static Encoding ByDetectorName(string name)
+        {
+            if (string.IsNullOrEmpty(name)) return null;
+            var known = name.ToLowerInvariant() switch
+            {
+                "iso-8859-1" or "ascii" => "windows-1252",
+                "gb2312" or "gbk" or "x-cp936" => "gb18030",
+                "shift-jis" => "shift_jis",
+                "utf-16le" or "utf-16be" or "utf-8" or "utf-32le" or "utf-32be" => null, // UTF-8 and the marked ones are tested before
+                var other => other,
+            };
+            if (known == null) return null;
+            try { return Encoding.GetEncoding(known); }
+            catch { return null; }
+        }
+
+        private static Encoding TryGetEncoding(int codePage)
+        {
+            try { return codePage == 936 ? Encoding.GetEncoding("gb18030") : Encoding.GetEncoding(codePage); }
+            catch { return null; }
+        }
+
+        private static bool IsValidUtf8(byte[] bytes)
+        {
+            try
+            {
+                new UTF8Encoding(encoderShouldEmitUTF8Identifier: false, throwOnInvalidBytes: true).GetCharCount(bytes);
+                return true;
+            }
+            catch (DecoderFallbackException)
+            {
+                return false;
+            }
+        }
+
+        // UTF-16 without a mark: text with Latin letters, digits or line breaks has a zero byte beside each of them -
+        // after it in little-endian, before it in big-endian - and almost never on the other side.
+        private static Encoding Utf16WithoutMark(byte[] bytes)
+        {
+            if (bytes.Length < 4 || bytes.Length % 2 != 0) return null;
+            int evenZeros = 0, oddZeros = 0;
+            for (var i = 0; i < bytes.Length; i++)
+                if (bytes[i] == 0) { if (i % 2 == 0) evenZeros++; else oddZeros++; }
+            var pairs = bytes.Length / 2;
+            if (oddZeros >= pairs * 0.3 && evenZeros <= pairs * 0.05) return new UnicodeEncoding(bigEndian: false, byteOrderMark: false);
+            if (evenZeros >= pairs * 0.3 && oddZeros <= pairs * 0.05) return new UnicodeEncoding(bigEndian: true, byteOrderMark: false);
+            return null;
+        }
+
         /// <summary>The encodings a file without a byte order mark can be read in again, by name (code pages registered first).</summary>
-        public static readonly string[] ReopenEncodings = { "utf-8", "gb18030", "big5", "shift_jis", "euc-kr", "windows-1252" };
+        public static readonly string[] ReopenEncodings = { "utf-8", "gb18030", "big5", "shift_jis", "euc-jp", "euc-kr", "windows-1252", "windows-1251", "utf-16le", "utf-16be" };
 
         public static Encoding EncodingByName(string name)
         {
             if (name == "utf-8") return new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
+            if (name == "utf-16le" || name == "utf-16be") return new UnicodeEncoding(bigEndian: name == "utf-16be", byteOrderMark: false);
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             return Encoding.GetEncoding(name);
         }
@@ -68,8 +166,9 @@ namespace Typedown.Core.Utilities
                 var name = Encoding switch
                 {
                     UTF8Encoding => "UTF-8",
-                    UnicodeEncoding u => u.GetPreamble() is [0xFE, 0xFF] ? "UTF-16 BE" : "UTF-16 LE",
-                    UTF32Encoding u => u.GetPreamble() is [0, 0, 0xFE, 0xFF] ? "UTF-32 BE" : "UTF-32 LE",
+                    // By code page: one read without its mark has no preamble to tell the byte order by.
+                    UnicodeEncoding u => u.CodePage == 1201 ? "UTF-16 BE" : "UTF-16 LE",
+                    UTF32Encoding u => u.CodePage == 12001 ? "UTF-32 BE" : "UTF-32 LE",
                     _ => Encoding.WebName.ToUpperInvariant(),
                 };
                 return Encoding is UTF8Encoding && HasByteOrderMark ? name + " BOM" : name;
