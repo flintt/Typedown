@@ -3478,8 +3478,9 @@ internal static partial class Program
         {
             var script = "(() => { const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); let n, e = null; " +
                 $"while ((n = w.nextNode())) if (n.textContent.includes({JsonConvert.ToString(mark)})) {{ e = n.parentElement; break }} " +
-                "const r = e && e.getBoundingClientRect(); const s = getSelection(); " +
-                "return { y: Math.round(scrollY), h: innerHeight, top: r ? Math.round(r.top) : null, " +
+                // Scrolled: the page, or in source mode the editor's own scroller (it scrolls itself, the page does not).
+                "const r = e && e.getBoundingClientRect(); const s = getSelection(); const sc = document.querySelector('.CodeMirror-scroll'); " +
+                "return { y: Math.round(sc ? sc.scrollTop : scrollY), h: innerHeight, top: r ? Math.round(r.top) : null, " +
                 "caret: s && s.anchorNode ? (s.anchorNode.textContent || '').slice(0, 30) : null, apply: window.__typedownLastApply || null } })()";
             return (await c.Call("test.editor.eval", new { windowId, script }))["result"]!;
         }
