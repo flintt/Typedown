@@ -68,6 +68,13 @@ class ListDrag {
         })
       }
       if (!li || !container.contains(li)) return null
+      // The item whose own line the pointer is on: left of a nested item's text is its parent's (or grandparent's)
+      // indent, which is theirs in the page, and the handle showed for them there (a reader's report). Of the items in
+      // this one, the deepest whose text holds the pointer's height.
+      for (const inner of [...li.querySelectorAll('li')].reverse()) {
+        const r = contentState.listItemTextElement(inner)?.getBoundingClientRect()
+        if (r && event.clientY >= r.top && event.clientY <= r.bottom) { li = inner; break }
+      }
       const block = contentState.getBlock(li.id)
       return block && block.type === 'li' ? { block, li } : null
     }

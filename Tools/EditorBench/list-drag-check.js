@@ -115,6 +115,24 @@ const { firstDifference, openEditor } = require('./harness');
       if (!now.shown || Math.abs(now.y - nestedAt.y) > 4) { jumped = { step: i, ...now }; break; }
     }
     report(!jumped, "a nested item's handle stays on its line on the pointer's way through the parent's indent", JSON.stringify({ jumped, nestedAt, two }));
+    // Anywhere on an item's line - its grandparent's and parent's indent included - the handle is that item's (a
+    // reader saw a parent's or grandparent's handle at some places on a line).
+    await page.mouse.move(5, 600);
+    await pause(700);
+    await visual('- top\n  - middle\n    - deep item\n- after\n');
+    const deep = await geometry('deep item');
+    const topText = await geometry('top');
+    const wrong = [];
+    for (let x = topText.markerX - 6; x <= deep.textX + 20; x += 6) {
+      await page.mouse.move(5, 600);
+      await pause(450);
+      await page.mouse.move(x, deep.y);
+      await pause(120);
+      const h = await page.evaluate(() => { const e = document.getElementById('mu-list-drag-handle'); const r = e.getBoundingClientRect(); return { shown: getComputedStyle(e).display !== 'none', y: r.top + r.height / 2 }; });
+      if (h.shown && Math.abs(h.y - deep.y) > 4) wrong.push({ x: Math.round(x), y: Math.round(h.y) });
+    }
+    report(wrong.length === 0, "on a nested item's line, wherever the pointer is, the handle is that item's", JSON.stringify({ wrong, deepY: deep.y }));
+    await visual('- parent\n  - child one\n  - child two\n- next\n');
     const one = await geometry('child one');
     await page.mouse.move(nestedAt.x, nestedAt.y);
     await page.mouse.down();
