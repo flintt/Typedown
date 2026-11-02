@@ -80,7 +80,7 @@ CI 的“Test editor integration”一步运行这些：
 - `theme-text-colour-check.js`: A custom theme's text colour on the page: paragraphs, lists, tables in --editorColor, the theme's own, as the theme designer shows it.
 - `select-all-steps-check.js`: Settings > Editor > Select all in steps (a reader's request, 2026-11-02): Ctrl+A (the host's SelectAll) selects the caret's paragraph, then each block around it that holds more, then the document; in source mode the paragraph, then the document.
 - `plain-text-check.js`: A plain text file (.txt, .text, .log; Settings.PlainTextShown): nothing in it parsed as Markdown (a reader's request, 2026-11-02).
-- `list-drag-check.js`: A list item dragged by its marker (a reader's request, 2026-11-02): up and down its list, deeper under the item above (dragged right) and out again (left), with the items nested in it; an ordered list renumbered; a click on the marker with no drag changes nothing, and Escape drops a drag.
+- `list-drag-check.js`: A list item dragged by the handle shown beside it (a reader's request, 2026-11-02; the handle alone, not the marker): up and down its list, deeper under the item above (dragged right) and out again (left), with the items nested in it; an ordered list renumbered; Escape drops a drag; a drag from the marker moves nothing.
 - `list-copy-check.js`: An ordered list copied stays ordered (a reader's report, 2026-11-02: the outer list of a copy came out as bullets).
 - `progressive-apply-check.js`: An automation write (ApplyDocumentEdit) while a long document is still being drawn a part at a time: it is applied exactly, the host gets that text, and once drawn the page shows the changes at both ends - with the changes highlighted and scrolled to as well.
 - `prototype-names-check.js`: No method of the editor's ContentState is defined twice.
@@ -185,6 +185,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | EN01 | files in GB18030, Big5, Shift-JIS, EUC-JP, EUC-KR, Windows-1252/1251 and unmarked UTF-16 open as written, the status bar names the encoding, and a save keeps it |
 | PT01 | a .txt is shown as it is: as prose in visual mode and as code in source mode, no Markdown parsed or highlighted in either, a save changes the key typed alone |
 | LR01 | a list item dragged by its marker with the mouse: to the top, then right under the item above; saved with both moves, one undo takes the last back |
+| TR01 | closing the tab shown goes back to the tab used before it, not to its neighbour |
 | SF02 | a long document under a dark custom theme (Dracula): leaving the settings and a window opening with it show the theme's colour, never light or the app's dark colour |
 | WV02 | without the WebView2 runtime the install window comes up with the download; a setup that installs it goes on to the main window |
 | WV03 | a setup that did not install the WebView2 runtime leaves the install window saying so, with the download; Cancel ends the start |

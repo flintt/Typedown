@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
@@ -36,10 +37,19 @@ namespace Typedown.Core.ViewModels
             get => activeTab;
             // Every tab put on screen, by whatever path, makes a switch asked for before it stale (SwitchTo).
             // A first-edit notice is for the document it was said for: not over another one, nor over the home page.
-            private set { activeTab = value; showRequests++; ServiceProvider.GetService<UIViewModel>()?.HideFirstEditNotice(); }
+            private set
+            {
+                activeTab = value;
+                showRequests++;
+                if (value != null) { recentTabs.Remove(value); recentTabs.Insert(0, value); }
+                ServiceProvider.GetService<UIViewModel>()?.HideFirstEditNotice();
+            }
         }
 
         private DocumentTab activeTab;
+
+        // The tabs as they were last shown, the latest first: where closing the one shown goes back to.
+        private readonly List<DocumentTab> recentTabs = new();
 
         // Asks to show a tab (SwitchTo) and tabs shown (ActiveTab), counted: a switch that waited (its flush) while a later
         // one was asked for or another tab was shown gives way to it.
@@ -329,7 +339,11 @@ namespace Typedown.Core.ViewModels
             EditorViewModel.Saved = true;
             var index = Tabs.IndexOf(tab);
             Tabs.Remove(tab);
-            var next = Tabs[Math.Min(index, Tabs.Count - 1)];
+            recentTabs.Remove(tab);
+            // Back to the tab used before it, as an editor's tabs do (the reader's choice, 2026-11-02); the strip's
+            // neighbour only when none of the others was shown yet. The neighbour the strip selects as the tab goes asks
+            // for itself (SwitchTo), and gives way to this one (ActiveTab counts it).
+            var next = recentTabs.FirstOrDefault(t => Tabs.Contains(t) && !t.Pending) ?? Tabs[Math.Min(index, Tabs.Count - 1)];
             switching = true;
             try
             {

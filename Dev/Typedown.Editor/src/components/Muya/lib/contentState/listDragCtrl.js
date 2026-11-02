@@ -1,36 +1,11 @@
-// Dragging a list item by its marker to another place in its list, at another level too (a reader's request,
-// 2026-11-02). The item goes with the items nested in it; a line shows where it will land, indented to the level it
+// Dragging a list item by the handle shown beside it (eventHandler/listDrag) to another place in its list, at another
+// level too (a reader's request, 2026-11-02; the handle alone, not the marker too - where to press was unclear). The item goes with the items nested in it; a line shows where it will land, indented to the level it
 // will have. Within one list and the lists nested in it: the line can only show a level the items around it allow
 // (no deeper than one below the item above, no shallower than the item below), so no item after it changes parent.
 const GHOST_ID = 'mu-list-drag-ghost'
 const START_DISTANCE = 4
 
 const listDragCtrl = ContentState => {
-  // The list item block whose marker the event is on (left of its text, not its task box), or null.
-  ContentState.prototype.listItemByMarker = function (event) {
-    const target = event.target
-    if (!target || !target.closest || target.tagName === 'INPUT' || target.closest('.ag-front-icon')) return null
-    // Over a marker the event is the item's or its list's own (no text there): a bullet is drawn outside its item's
-    // box, and a nested item's marker lies inside the outer item's box. The item is then the one of that element (or
-    // its list's children) whose own line is under the pointer. Read on a press only, and only the few items there:
-    // reading every item of a long list on each move made the pointer slow (a reader's report).
-    if (!/^(LI|UL|OL)$/.test(target.tagName) || !this.muya.container.contains(target)) return null
-    const candidates = target.tagName === 'LI'
-      ? [target, ...[...target.children].filter(c => /^(UL|OL)$/.test(c.tagName)).flatMap(list => [...list.children])]
-      : [...target.children]
-    const li = candidates.find(item => {
-      if (item.tagName !== 'LI') return false
-      const r = this.listItemTextElement(item)?.getBoundingClientRect()
-      return r && event.clientY >= r.top && event.clientY <= r.bottom
-    })
-    if (!li) return null
-    const text = this.listItemTextElement(li)
-    if (!text) return null
-    if (event.clientX >= text.getBoundingClientRect().left) return null
-    const block = this.getBlock(li.id)
-    return block && block.type === 'li' ? block : null
-  }
-
   // The element of a list item's own first line: its paragraph (after a task's box), not the lists nested in it.
   ContentState.prototype.listItemTextElement = function (li) {
     for (const child of li.children) {
@@ -57,9 +32,8 @@ const listDragCtrl = ContentState => {
     return list
   }
 
-  // A drag begun by the item's marker, or by the handle shown beside the item under the pointer (item given).
-  ContentState.prototype.listDragBegin = function (event, given = null) {
-    const item = given || this.listItemByMarker(event)
+  // A drag begun on the handle beside an item.
+  ContentState.prototype.listDragBegin = function (event, item) {
     if (!item || document.body.classList.contains('read-only')) return false
     this.listDrag = { item, startX: event.clientX, startY: event.clientY, started: false, drop: null }
     return true
@@ -138,16 +112,7 @@ const listDragCtrl = ContentState => {
     const started = drag && drag.started
     const drop = drag && drag.drop
     this.listDragCancel()
-    // A click on the marker, no drag: the caret at the start of the item's text, where a click there put it before.
-    if (drag && !started) {
-      const text = this.firstInDescendant(drag.item)
-      if (text) {
-        const at = { key: text.key, offset: 0 }
-        this.cursor = { start: at, end: at }
-        this.partialRender()
-      }
-      return false
-    }
+    if (!started) return false
     if (!drop) return started
     this.moveListItem(drag.item, drop.prev, drop.depth)
     return true

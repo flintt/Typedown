@@ -179,6 +179,44 @@ internal static partial class Program
     }
 
     /// <summary>
+    /// TR01: closing the tab shown goes back to the tab used before it, as an editor's tabs do (the reader's choice,
+    /// 2026-11-02), not to its neighbour in the strip: A, B, C opened, A shown again and closed - C, not B; then C closed
+    /// - B.
+    /// </summary>
+    private static async Task TR01(List<string> notes)
+    {
+        using var c = await Session("e2e TR01");
+        var a = await Open(c, Fixture("tr01-a.md", "# TR01 A\n"));
+        var b = await Open(c, Fixture("tr01-b.md", "# TR01 B\n"));
+        var cc = await Open(c, Fixture("tr01-c.md", "# TR01 C\n"));
+        var windowId = await WindowIdOf(c, a);
+        async Task<string> Active() => (string)((JArray)(await c.Call("window.list"))["windows"]!).First(w => (string)w["windowId"]! == windowId)["activeDocumentId"]!;
+        async Task<string> WaitActive(Func<string, bool> done)
+        {
+            var now = await Active();
+            for (var i = 0; i < 40 && !done(now); i++) { await Task.Delay(100); now = await Active(); }
+            return now;
+        }
+        string Name(string id) => id == a ? "A" : id == b ? "B" : id == cc ? "C" : id;
+        await c.Call("document.focus", new { documentId = a });
+        Check(await WaitActive(d => d == a) == a, "A shown again");
+        await Task.Delay(500);
+        await c.Call("document.close", new { documentId = a });
+        var afterA = await WaitActive(d => d != a);
+        await Task.Delay(800);
+        afterA = await Active();
+        notes.Add($"A closed: {Name(afterA)} shown");
+        Check(afterA == cc, $"closing A goes back to C, the tab used before it, not B beside it ({Name(afterA)})");
+        await c.Call("document.close", new { documentId = cc });
+        var afterC = await WaitActive(d => d != cc);
+        await Task.Delay(800);
+        afterC = await Active();
+        notes.Add($"C closed: {Name(afterC)} shown");
+        Check(afterC == b, $"then closing C goes back to B ({Name(afterC)})");
+        try { await c.Call("document.close", new { documentId = b }); } catch { }
+    }
+
+    /// <summary>
     /// PE01: Settings > Editor > Scroll past the end in the app itself: a long document scrolled all the way down
     /// brings its last line up to about the middle of the editor's area; off, it stays at the bottom (a reader saw no
     /// change with it on, 2026-11-01). EditorBench's check sets the one setting on a bare page; here the host sends
