@@ -138,7 +138,9 @@ mark::after {
   letter-spacing: -3px;
   border-radius: 4px;
   color: var(--editorColor40);
-  cursor: grab;
+  /* Windows' own move cursor: the web view in the app shows system cursors only, and grab / grabbing (the browser's
+     own pictures) came out as the arrow (a reader saw no drag pointer). */
+  cursor: move;
   user-select: none;
 }
 #mu-list-drag-handle:hover {
@@ -150,15 +152,12 @@ body.ag-list-dragging #mu-list-drag-handle {
   display: none !important;
 }
 
-/* Grabbing from the moment the handle is pressed (ag-list-pressed), through the drag, anywhere the pointer goes. */
+/* Moving from the moment the handle is pressed (ag-list-pressed), through the drag, anywhere the pointer goes. */
 body.ag-list-pressed,
 body.ag-list-pressed *,
 body.ag-list-dragging,
 body.ag-list-dragging * {
-  cursor: grabbing !important;
-}
-#mu-list-drag-handle:active {
-  cursor: grabbing;
+  cursor: move !important;
 }
 
 body.ag-list-dragging {
