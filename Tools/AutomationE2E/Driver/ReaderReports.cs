@@ -118,7 +118,7 @@ internal static partial class Program
     }
 
     /// <summary>
-    /// LR01: a list item dragged by its marker with the mouse, in the app's web view (a reader's request, 2026-11-02):
+    /// LR01: a list item dragged by its handle with the mouse, in the app's web view (a reader's request, 2026-11-02):
     /// the last item to the top, then the new last one dragged right under the item above; the file saved has both.
     /// One undo puts the second move back. EditorBench's list-drag-check covers the cases; this is the real pointer.
     /// </summary>
@@ -146,19 +146,38 @@ internal static partial class Program
             for (var i = 0; i < 30; i++) { text = (string?)(await Get(c, id))["text"] ?? ""; if (text != not) break; await Task.Delay(200); }
             return text;
         }
+        // The handle an item is dragged by (the marker is none): the pointer moved over the item's text brings it, then
+        // where it is on the screen.
+        async Task<(int X, int Y)> Handle((int X, int Y, int Top, int Bottom) item)
+        {
+            await Activate(window);
+            int screenW = GetSystemMetrics(0), screenH = GetSystemMetrics(1);
+            foreach (var dx in new[] { 60, 50, 40 })
+            {
+                Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dx = (item.X + dx) * 65535 / (screenW - 1), dy = item.Y * 65535 / (screenH - 1), dwFlags = 0x0001 | 0x8000 } } });
+                await Task.Delay(60);
+            }
+            await Task.Delay(300);
+            var h = (await c.Call("test.editor.eval", new { windowId, script = "(() => { const h = document.getElementById('mu-list-drag-handle'); const r = h.getBoundingClientRect(); return getComputedStyle(h).display === 'none' ? null : { x: Math.round(r.left + r.width / 2), y: Math.round(r.top + r.height / 2) } })()" }))["result"];
+            if (h == null || h.Type != JTokenType.Object) throw new CaseFailed("no drag handle beside the item under the pointer");
+            var p = await c.Call("test.editor.screenPoint", new { windowId, x = (int)h["x"]!, y = (int)h["y"]! });
+            return ((int)p["x"]!, (int)p["y"]!);
+        }
         try
         {
             var before = (string?)(await Get(c, id))["text"] ?? "";
             var gamma = await Item("gamma");
             var alpha = await Item("alpha");
-            await Drag(window, (gamma.X, gamma.Y), (gamma.X, alpha.Top + 2));
+            var gammaHandle = await Handle(gamma);
+            await Drag(window, gammaHandle, (gammaHandle.X, alpha.Top + 2));
             var moved = await Text(before);
             notes.Add("after the first drag: " + moved.Replace("\n", "\\n"));
             Check(moved == "# LR01\n\n- gamma\n- alpha\n- beta\n", "gamma dragged to the top of the list");
             var beta = await Item("beta");
             // Right by a level: under alpha, the item above.
             var scale = GetDpiForWindow(window) / 96.0;
-            await Drag(window, (beta.X, beta.Y), (beta.X + (int)(40 * scale), beta.Bottom - 2));
+            var betaHandle = await Handle(beta);
+            await Drag(window, betaHandle, (betaHandle.X + (int)(40 * scale), beta.Bottom - 2));
             var nested = await Text(moved);
             notes.Add("after the second drag: " + nested.Replace("\n", "\\n"));
             Check(nested == "# LR01\n\n- gamma\n- alpha\n  - beta\n", "beta dragged right goes under alpha");
