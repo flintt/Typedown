@@ -100,6 +100,30 @@ const { firstDifference, openEditor } = require('./harness');
     await page.mouse.move(at.x, at.y + 200, { steps: 4 });
     await pause(700);
     report(await page.evaluate(() => getComputedStyle(document.getElementById('mu-list-drag-handle')).display) === 'none', 'moved away, the handle goes after a moment', '');
+    // A nested item: its handle sits in the parent's indent, which the pointer crosses on its way - the handle went to
+    // the parent before it was reached (a reader's report). It stays on the item's line all the way, and drags it.
+    await visual('- parent\n  - child one\n  - child two\n- next\n');
+    const two = await geometry('child two');
+    await page.mouse.move(two.textX, two.y);
+    await pause(150);
+    const nestedAt = await page.evaluate(() => { const r = document.getElementById('mu-list-drag-handle').getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; });
+    let jumped = null;
+    for (let i = 1; i <= 24; i++) {
+      await page.mouse.move(two.textX + (nestedAt.x - two.textX) * i / 24, two.y + (nestedAt.y - two.y) * i / 24);
+      await pause(30);
+      const now = await page.evaluate(() => { const h = document.getElementById('mu-list-drag-handle'); const r = h.getBoundingClientRect(); return { shown: getComputedStyle(h).display !== 'none', y: r.top + r.height / 2 }; });
+      if (!now.shown || Math.abs(now.y - nestedAt.y) > 4) { jumped = { step: i, ...now }; break; }
+    }
+    report(!jumped, "a nested item's handle stays on its line on the pointer's way through the parent's indent", JSON.stringify({ jumped, nestedAt, two }));
+    const one = await geometry('child one');
+    await page.mouse.move(nestedAt.x, nestedAt.y);
+    await page.mouse.down();
+    await page.mouse.move(nestedAt.x + 2, nestedAt.y - 6, { steps: 2 });
+    await page.mouse.move(nestedAt.x, one.top + 2, { steps: 8 });
+    await page.mouse.up();
+    await pause(300);
+    const nestedMd = await page.evaluate(() => window.__typedownMuya.getMarkdown());
+    report(/child two[\s\S]*child one/.test(nestedMd) && /parent[\s\S]*child two[\s\S]*next/.test(nestedMd), 'and drags the nested item, not its parent', nestedMd);
     await visual('- a\n- b\n- c\n');
     await page.mouse.move(cText.x, cText.y);
     await pause(150);

@@ -81,6 +81,9 @@ class ListDrag {
       if (!found) return towardHandle(event) ? keep() : hideSoon()
       keep()
       if (handleItem && found.li === handleItem.li && handle.style.display !== 'none') return
+      // On the way to the handle of a nested item the pointer crosses its parent's indent, which is the parent's: the
+      // handle went to the parent before it was reached (a reader's report). Kept while the pointer stays on its line.
+      if (handleItem && towardHandle(event)) return
       const text = contentState.listItemTextElement(found.li)
       if (!text) return hide()
       const r = text.getBoundingClientRect()
