@@ -6,6 +6,8 @@
     "check:source": "node source-stability-check.js && node first-edit-check.js && node protected-payload-check.js && node origin-check.js && node apply-edit-check.js && node reading-source-check.js && node handshake-check.js && node blanklines-check.js"
   },
   "devDependencies": {
+    "markdown-it": "^15.0.3",
+    "markdown-it-footnote": "^4.0.0",
     "puppeteer-core": "23.11.1",
     "source-map": "^0.7.4"
   }
