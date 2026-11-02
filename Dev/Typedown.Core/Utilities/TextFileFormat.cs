@@ -87,6 +87,9 @@ namespace Typedown.Core.Utilities
             // one of a pair of high bytes and they all read as Chinese - a Western accent is one high byte among letters.
             if (gbkLike && Clean(Encoding.GetEncoding("gb18030")) is { } gbk) return gbk;
             if (ansiCodePage > 0 && ansiCodePage != 65001 && Clean(TryGetEncoding(ansiCodePage)) is { } byLocale) return byLocale;
+            // A Western file on a Windows of another language (a French note on Chinese Windows, EN01 on hp): its
+            // accents in 1252, the detector unsure and the system's code page not reading it. Nothing in it a C1 control.
+            if (ansiCodePage != 1252 && Clean(TryGetEncoding(1252)) is { } western) return western;
             return utf8;
 
             bool LooksLikeGbk()

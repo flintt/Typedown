@@ -39,6 +39,15 @@ public class TextFileFormatTests
     }
 
     [TestMethod]
+    public void AWesternFileOnAChineseWindowsIs1252()
+    {
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        var written = "Größe und Café: déjà vu, Übersicht.\n";
+        var (text, format) = TextFileFormat.Read(Encoding.GetEncoding(1252).GetBytes(written), ansiCodePage: 936);
+        Assert.AreEqual((written, 1252, false), (text, format.Encoding.CodePage, format.LossyDecode));
+    }
+
+    [TestMethod]
     public void BytesInNoEncodingAreLossyOnAWesternAndAChineseWindows()
     {
         // 0x81 0x20: a GBK lead byte before a space (no GBK character); 0x81 and 0x9D: undefined in 1252.
