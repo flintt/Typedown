@@ -135,7 +135,10 @@ class ListDrag {
       if (event.button !== 0 || !handleItem) return
       event.preventDefault()
       event.stopPropagation()
-      if (contentState.listDragBegin(event, handleItem.block)) contentState.listDrag.byHandle = true
+      if (contentState.listDragBegin(event, handleItem.block)) {
+        contentState.listDrag.byHandle = true
+        document.body.classList.add('ag-list-pressed')
+      }
     })
     eventCenter.attachDOMEvent(window, 'mousemove', event => {
       if (!contentState.listDrag) return

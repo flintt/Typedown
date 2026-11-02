@@ -102,7 +102,7 @@ const listDragCtrl = ContentState => {
 
   ContentState.prototype.listDragCancel = function () {
     this.listDrag = null
-    document.body.classList.remove('ag-list-dragging')
+    document.body.classList.remove('ag-list-dragging', 'ag-list-pressed')
     const ghost = document.getElementById(GHOST_ID)
     ghost && ghost.remove()
   }

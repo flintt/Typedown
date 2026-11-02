@@ -150,9 +150,15 @@ body.ag-list-dragging #mu-list-drag-handle {
   display: none !important;
 }
 
+/* Grabbing from the moment the handle is pressed (ag-list-pressed), through the drag, anywhere the pointer goes. */
+body.ag-list-pressed,
+body.ag-list-pressed *,
 body.ag-list-dragging,
 body.ag-list-dragging * {
   cursor: grabbing !important;
+}
+#mu-list-drag-handle:active {
+  cursor: grabbing;
 }
 
 body.ag-list-dragging {
