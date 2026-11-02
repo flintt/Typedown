@@ -110,6 +110,7 @@ internal static partial class Program
         var themeBefore = (string?)(await c.Call("test.settings.get", new { windowId, name = "CustomTheme" }))["value"];
         string? otherWindow = null;
         IntPtr otherHandle = IntPtr.Zero;
+        bool? animationBefore = null;
         try
         {
             await c.Call("test.settings.set", new { windowId, name = "CustomTheme", value = "dracula" });
@@ -139,6 +140,20 @@ internal static partial class Program
             Check(flashBack == 0, $"leaving the settings shows no light, app-dark or other frame once in the theme's colour ({flashBack} of {back.Count})");
             Check(backText != null && backText < 400, $"leaving the settings, the document is there at once ({backText} ms)");
 
+            // The same with the window's animations off: a long document came back blank there (2026-10-28, measured
+            // then over the whole window; the app keeps animations on by default for it until this holds).
+            animationBefore = (bool?)(await c.Call("test.settings.get", new { windowId, name = "AnimationEnable" }))["value"];
+            await c.Call("test.settings.set", new { windowId, name = "AnimationEnable", value = false });
+            await Task.Delay(500);
+            await CtrlComma();
+            await Task.Delay(2000);
+            await CtrlComma();
+            var (still, stillText) = editorArea == null ? await WatchTheme(window, 2500) : await WatchTheme(window, 2500, editorArea, textBefore * 0.7);
+            var flashStill = still.Count(f => f.Light > 25 || f.AppDark > 25) + LeftTheTheme(still);
+            notes.Add($"animations off, leaving the settings: {still.Count} frames, text at {stillText} ms; {Describe(still)}");
+            Check(flashStill == 0 && stillText != null && stillText < 400, $"animations off, leaving the settings: no other frame, the document there at once ({flashStill} of {still.Count}, text at {stillText} ms)");
+            await c.Call("test.settings.set", new { windowId, name = "AnimationEnable", value = animationBefore ?? true });
+
             // A window opening with the long document, as the start-up restores its tabs (or Explorer opens it).
             // Another file of the same text: a file open already is shown in its window, not opened in a new one.
             var second = Fixture("sf02-second.md", text);
@@ -154,6 +169,7 @@ internal static partial class Program
         {
             if (otherHandle != IntPtr.Zero) { PostMessage(otherHandle, 0x0010, IntPtr.Zero, IntPtr.Zero); await Task.Delay(1500); } // WM_CLOSE
             try { await c.Call("test.settings.set", new { windowId, name = "CustomTheme", value = themeBefore ?? "" }); } catch { }
+            if (animationBefore != null) try { await c.Call("test.settings.set", new { windowId, name = "AnimationEnable", value = animationBefore }); } catch { }
             try { await c.Call("document.close", new { documentId = first }); } catch { }
         }
     }
