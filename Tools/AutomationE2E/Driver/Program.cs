@@ -3250,8 +3250,13 @@ internal static partial class Program
         await Activate(window);
         await c.Call("test.editor.focus", new { windowId });
         await Task.Delay(200);
-        Keys(("ctrl", (ushort)0x41));
-        await Task.Delay(400);
+        // Select all in steps (on by default): the paragraph first, then more; pressed until it is the document (pressed
+        // again there, it stays the document).
+        for (var press = 0; press < 4; press++)
+        {
+            Keys(("ctrl", (ushort)0x41));
+            await Task.Delay(300);
+        }
         Keys(("ctrl", (ushort)0x43));
         string? html = null;
         for (var i = 0; i < 30 && html == null; i++) { await Task.Delay(100); html = ClipboardHtml(); }
