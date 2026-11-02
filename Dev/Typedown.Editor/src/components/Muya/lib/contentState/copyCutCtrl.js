@@ -9,6 +9,7 @@ import { tokenizer } from '../parser'
 import { EXPORT_DOMPURIFY_CONFIG } from '../config'
 import remote from 'services/remote/common'
 import { selectionToPlainText } from 'services/plainText'
+import { tableHtml } from 'services/blockCopy'
 
 const getSanitizeHtml = (markdown, options) => {
   const html = marked(markdown, options)
@@ -24,8 +25,9 @@ const copyCutCtrl = ContentState => {
   }
 
   ContentState.prototype.cutHandler = function () {
+    // Cells selected: emptied (copied first, by the host's Cut: clipboard.cut).
     if (this.selectedTableCells) {
-      return
+      return this.docCutHandler()
     }
     const { selectedImage } = this
     if (selectedImage) {
@@ -257,7 +259,9 @@ const copyCutCtrl = ContentState => {
     return { html: htmlData, text: textData, plainText }
   }
 
-  ContentState.prototype.docCopyHandler = function () {
+  // The cells selected in a table: one cell's text; a range as a table - for Word and Excel (HTML, as Copy table puts it)
+  // and as Markdown for text (copyAsMarkdown and copyAsPlainText: the Markdown alone).
+  ContentState.prototype.docCopyHandler = function (type = 'normal') {
     const { selectedTableCells } = this
     if (selectedTableCells) {
       const { row, column, cells } = selectedTableCells
@@ -290,9 +294,10 @@ const copyCutCtrl = ContentState => {
         this.appendChild(figureBlock, table)
         const { isGitlabCompatibilityEnabled, listIndentation } = this
         try {
-          const markdown = new ExportMarkdown([figureBlock], listIndentation, isGitlabCompatibilityEnabled).generate()
-          remote.setClipboard({ type: 'text/html', data: '' })
-          remote.setClipboard({ type: 'text/plain', data: markdown })
+          const markdown = new ExportMarkdown([figureBlock], listIndentation, isGitlabCompatibilityEnabled, { alignTableColumns: this.muya.options.tableAlignColumns !== false })
+            .generate().replace(/^\n+|\n+$/g, '')
+          const html = type === 'normal' ? tableHtml(markdown + '\n', this.muya.options) : null
+          remote.copyBlock({ text: markdown, png: null, html, mathml: null })
         } catch (e) {
           console.log(e)
         }
@@ -301,9 +306,10 @@ const copyCutCtrl = ContentState => {
   }
 
   ContentState.prototype.copyHandler = function (type, copyInfo = null) {
+    // Cells selected: the host's Copy (Ctrl+C, the menu) copies them. Handed to the browser's copy event, they were never
+    // copied: the host takes the shortcut, and the page has no text selected while cells are.
     if (this.selectedTableCells) {
-      // Hand over to docCopyHandler
-      return
+      return this.docCopyHandler(type)
     }
     const { selectedImage } = this
     if (selectedImage) {
