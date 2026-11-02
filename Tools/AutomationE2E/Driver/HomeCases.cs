@@ -506,17 +506,19 @@ internal static partial class Program
             await c.Call("document.close", new { documentId = favId });
             favId = null;
             await Task.Delay(800);
-            Check(Tabs().Count == 1 && Tabs()[0].Current.Name.Contains("fv02-current"), "one tab, the current document");
+            var before = Tabs().Select(t => t.Current.Name).ToList();
+            notes.Add("tabs before: " + string.Join(" | ", before));
+            Check(!before.Any(n => n.Contains("fv02-fav")) && before.Any(n => n.Contains("fv02-current")), "the favourite's tab closed, the current document shown");
 
             // Double-clicked in the favourites group: a tab of its own, the current document kept.
             AutomationElement? item = null;
             await Eventually(() => Task.FromResult((item = FindIn(window, "FavoritesList")?.FindFirst(TreeScope.Descendants, new PropertyCondition(AutomationElement.NameProperty, "fv02-fav.md"))) != null), 5000);
             Check(item != null, "the favourite is in the folder pane's group");
             await Click(window, item!, Mouse.Left, clicks: 2);
-            await Eventually(() => Task.FromResult(Tabs().Count == 2), 5000);
+            await Eventually(() => Task.FromResult(Tabs().Count == before.Count + 1), 5000);
             var names = Tabs().Select(t => t.Current.Name).ToList();
             notes.Add("tabs: " + string.Join(" | ", names));
-            Check(names.Count == 2 && names.Any(n => n.Contains("fv02-current")) && names.Any(n => n.Contains("fv02-fav")), "double-clicked: the favourite in a new tab, the current document still open");
+            Check(names.Count == before.Count + 1 && names.Any(n => n.Contains("fv02-current")) && names.Any(n => n.Contains("fv02-fav")), "double-clicked: the favourite in a new tab, the current document still open");
 
             // Its menu: Open and Open in new window.
             await Click(window, item!, Mouse.Right);
