@@ -178,6 +178,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | SF04 | a cold start restoring three tabs under the light Apricot theme shows no dark frame, Windows' apps dark and light: sampled from the process's start for five seconds |
 | LU01 | Alt+0 after Ctrl+N goes back to the document the new one was made from, not the tab before the last switch |
 | PE01 | Scroll past the end in the app: a long document scrolled to the bottom brings its last line to the middle; off, it stays at the bottom |
+| EN01 | files in GB18030, Big5, Shift-JIS, EUC-JP, EUC-KR, Windows-1252/1251 and unmarked UTF-16 open as written, the status bar names the encoding, and a save keeps it |
 | SF02 | a long document under a dark custom theme (Dracula): leaving the settings and a window opening with it show the theme's colour, never light or the app's dark colour |
 | WV02 | without the WebView2 runtime the install window comes up with the download; a setup that installs it goes on to the main window |
 | WV03 | a setup that did not install the WebView2 runtime leaves the install window saying so, with the download; Cancel ends the start |
