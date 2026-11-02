@@ -33,6 +33,16 @@ const { openEditor } = require('./harness');
       report(s.drawn < 400, `${label} view: only the lines on screen drawn (${s.drawn})`, `${s.drawn}`);
       report(!s.pageScrolls, `${label} view: the page does not scroll, the editor does`, JSON.stringify(s));
     }
+    // The host's scroll bar is the editor's (a reader: a long .txt had a thick bar of its own, beside the column, not
+    // at the window's edge): its own bars hidden, its scroller reported and moved by the host.
+    await page.evaluate(() => { document.querySelector('.CodeMirror-scroll').scrollTop = 5000; });
+    await pause(300);
+    const reported = await page.evaluate(() => ({ ...window.__last.OnScroll, bar: getComputedStyle(document.querySelector('.CodeMirror-vscrollbar')).display }));
+    report(Math.abs(reported.scrollY - 5000) < 2 && reported.maximumY > 100000 && reported.bar === 'none', "the editor's scrolling reported to the host's scroll bar, its own bar hidden", JSON.stringify(reported));
+    await page.evaluate(() => window.__deliver('OnScroll', { scrollX: 0, scrollY: 20000 }));
+    await pause(200);
+    const moved = await page.evaluate(() => document.querySelector('.CodeMirror-scroll').scrollTop);
+    report(Math.abs(moved - 20000) < 2, `the host's scroll bar moves the editor (${moved})`, `${moved}`);
     // A scroll position with the load (a tab switched back to): there.
     await open(txt.replace('line 1 ', 'line one '), { sourceCode: true, plainTextShown: true, plainTextProse: false }, 30000);
     await pause(200);

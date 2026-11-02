@@ -8,6 +8,11 @@ body {
     display: none;
 }
 
+/* The source editor's own bars hidden: the host's scroll bar shows its scroller (services/scrollbar). */
+.CodeMirror-vscrollbar, .CodeMirror-hscrollbar, .CodeMirror-scrollbar-filler {
+    display: none !important;
+}
+
 .CodeMirror-sizer {
     margin-bottom: 64px !important;
 }

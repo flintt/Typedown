@@ -1,5 +1,6 @@
 ﻿import React, { useCallback, useEffect, useRef, useState } from "react";
 import transport from "services/transport";
+import { setScroller } from "services/scrollbar";
 import { matchString } from 'services/common'
 import { UnControlled as CodeMirror } from 'react-codemirror2';
 import 'codemirror/lib/codemirror.css';
@@ -524,6 +525,13 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
         editor.on('scroll', onscroll)
         return () => editor.off('scroll', onscroll)
     }, [editor, props.scrollTopRef])
+
+    // Its scroller is what the host's scroll bar shows and moves while it is there (services/scrollbar).
+    useEffect(() => {
+        if (!editor) return
+        setScroller(editor.getScrollerElement())
+        return () => setScroller(null)
+    }, [editor])
 
     // The editor the window's height, below the top margin: it scrolls itself and draws only the lines on screen.
     // Settings > Editor > Scroll past the end in source mode too: the last line can come up the window.

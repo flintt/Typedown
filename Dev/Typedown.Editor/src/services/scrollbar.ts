@@ -11,15 +11,28 @@ export const setScrollLoadId = (id: number | undefined) => { loadId = id }
 /** The load the page is showing (or about to). */
 export const currentLoadId = () => loadId
 
+// What scrolls: the page, or an element that scrolls itself in its place - the source editor, which draws only the
+// lines on screen (components/CodeMirror). The host's scroll bar shows and moves that one; its own bars are hidden.
+let scroller: HTMLElement | null = null
+/** An element that scrolls in the page's place (null: the page again). */
+export const setScroller = (element: HTMLElement | null) => {
+    if (scroller === element) return
+    scroller?.removeEventListener('scroll', scheduleScrollState)
+    scroller = element
+    scroller?.addEventListener('scroll', scheduleScrollState, { passive: true })
+    scheduleScrollState()
+}
+
 const postScrollState = () => {
+    const s = scroller
     transport.postMessage('OnScroll', {
         loadId,
-        viewportWidth: window.innerWidth,
-        viewportHeight: window.innerHeight,
-        maximumX: document.body.scrollWidth - window.innerWidth,
-        maximumY: document.body.scrollHeight - window.innerHeight,
-        scrollX: window.scrollX,
-        scrollY: window.scrollY,
+        viewportWidth: s ? s.clientWidth : window.innerWidth,
+        viewportHeight: s ? s.clientHeight : window.innerHeight,
+        maximumX: s ? s.scrollWidth - s.clientWidth : document.body.scrollWidth - window.innerWidth,
+        maximumY: s ? s.scrollHeight - s.clientHeight : document.body.scrollHeight - window.innerHeight,
+        scrollX: s ? s.scrollLeft : window.scrollX,
+        scrollY: s ? s.scrollTop : window.scrollY,
         // The block at the top of the window, kept with the offset: what the next load puts back (services/loadPreview).
         anchor: readScrollAnchor()
     })
@@ -53,6 +66,10 @@ addEventListener('resize', scheduleScrollState)
 
 transport.addListener<{ scrollX: number, scrollY: number }>('OnScroll', ({ scrollX, scrollY }) => {
     const equals = (a: number, b: number) => Math.abs(a - b) < 1
+    if (scroller) {
+        if (!equals(scrollX, scroller.scrollLeft) || !equals(scrollY, scroller.scrollTop)) scroller.scrollTo(scrollX, scrollY)
+        return
+    }
     if (!equals(scrollX, window.scrollX) || !equals(scrollY, window.scrollY)) {
         const from = window.scrollY
         window.scrollTo(scrollX, scrollY)
