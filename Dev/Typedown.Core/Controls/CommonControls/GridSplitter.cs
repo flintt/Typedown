@@ -22,6 +22,10 @@ namespace Typedown.Core.Controls
         public static DependencyProperty ColumnMaxWidthProperty = DependencyProperty.Register(nameof(ColumnMaxWidth), typeof(double), typeof(GridSplitter), new(double.PositiveInfinity, OnPropertyChanged));
         public double ColumnMaxWidth { get => (double)GetValue(ColumnMaxWidthProperty); set => SetValue(ColumnMaxWidthProperty, value); }
 
+        /// <summary>The column it sizes is on its right (the side pane on the right): a drag to the left widens it.</summary>
+        public static DependencyProperty MirroredProperty = DependencyProperty.Register(nameof(Mirrored), typeof(bool), typeof(GridSplitter), new(false));
+        public bool Mirrored { get => (bool)GetValue(MirroredProperty); set => SetValue(MirroredProperty, value); }
+
         public static DependencyProperty DeltaScaleProperty = DependencyProperty.Register(nameof(DeltaScale), typeof(double), typeof(GridSplitter), new(1d));
         public double DeltaScale { get => (double)GetValue(DeltaScaleProperty); set => SetValue(DeltaScaleProperty, value); }
 
@@ -68,8 +72,8 @@ namespace Typedown.Core.Controls
         {
             base.OnManipulationDelta(e);
             var scale = XamlRoot?.RasterizationScale ?? 1;
-            // The move on screen: with the pane on the right (the layout mirrored) a drag to the left widens it.
-            var direction = FlowDirection == FlowDirection.RightToLeft ? -1 : 1;
+            // The move on screen: with the pane on the right a drag to the left widens it.
+            var direction = Mirrored ? -1 : 1;
             columnWidth += direction * DeltaScale * e.Delta.Translation.X * scale;
             ColumnExpectWidth = Math.Min(Math.Max(ColumnMinWidth, columnWidth), ColumnMaxWidth);
         }

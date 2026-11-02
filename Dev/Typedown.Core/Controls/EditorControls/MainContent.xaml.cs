@@ -36,6 +36,7 @@ namespace Typedown.Core.Controls
             disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.SidePaneOpen)).Cast<bool>().Subscribe(x => UpdateSidePaneState(x, true)));
             disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.UseEditorMicaEffect)).Cast<bool>().StartWith(Settings.UseEditorMicaEffect).Subscribe(x => UpdateBackground(x)));
             disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.CustomTheme)).StartWith(Settings.CustomTheme).Subscribe(_ => UpdateThemeColours()));
+            disposables.Add(Settings.WhenPropertyChanged(nameof(Settings.SidePaneOnRight)).Cast<bool>().StartWith(Settings.SidePaneOnRight).Subscribe(ArrangeSide));
             UpdateSidePaneState(Settings.SidePaneOpen, false);
             EditionHooks.SidePanelChanged += OnEditionPanelChanged;
             disposables.Add(Disposable.Create(() => EditionHooks.SidePanelChanged -= OnEditionPanelChanged));
@@ -146,13 +147,24 @@ namespace Typedown.Core.Controls
             Bindings?.StopTracking();
         }
 
-        public static FlowDirection PaneSide(bool right) => right ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
+        // The side pane's column outermost on its side: the definitions in that order, the pane and the document in theirs.
+        public static int PaneColumn(bool right) => right ? 2 : 0;
+
+        public static int DocumentColumnIndex(bool right) => right ? 0 : 2;
+
+        private void ArrangeSide(bool right)
+        {
+            var columns = MainContentGrid.ColumnDefinitions;
+            var order = right ? new[] { DocumentColumn, SplitterColumn, LeftPaneColumn } : new[] { LeftPaneColumn, SplitterColumn, DocumentColumn };
+            if (columns.Count == 3 && columns[0] == order[0] && columns[2] == order[2]) return;
+            columns.Clear();
+            foreach (var column in order) columns.Add(column);
+        }
+
+        // Where the pane slides in from: off the window's edge on its side.
 
         public static bool IsTabBarLoad(int tabCount, bool alwaysShow) => alwaysShow || tabCount > 1;
 
-        public static double GetColumnWidthNegative(GridLength length)
-        {
-            return -length.Value;
-        }
+        public static double GetPaneOffset(GridLength length, bool right) => right ? length.Value : -length.Value;
     }
 }

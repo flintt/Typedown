@@ -678,9 +678,9 @@ internal static partial class Program
         }
     }
 
-    // A reader asked for the side pane on the right. The main grid's columns are mirrored (FlowDirection), the pane and the
-    // document themselves are not: the document must still read left to right, and the splitter must still widen the
-    // pane when dragged away from it - now to the left.
+    // A reader asked for the side pane on the right: the main grid's columns in the other order (a mirrored grid left the
+    // pane's content out of place once the splitter resized it). The document still reads left to right, the splitter
+    // widens the pane when dragged away from it - now to the left - and the pane's content is laid out again, clickable.
     private static async Task PS01(List<string> notes)
     {
         using var c = await Session("e2e PS01");
@@ -696,6 +696,8 @@ internal static partial class Program
             await c.Call("window.setView", new { windowId, bounds = new { x = 20, y = 20, width = 1400, height = 800 }, sidePane = new { open = true } });
             await c.Call("test.settings.set", new { windowId, name = "SidePaneWidth", value = 300.0 });
             await c.Call("test.settings.set", new { windowId, name = "SidePaneOnRight", value = true });
+            // The folder page shown: its favourites header is what the click after the resize aims at.
+            await c.Call("test.folder.open", new { windowId, path = Path.GetDirectoryName(Fixture("ps01.md", "# PS01 heading\n\nSome text on the left of the page.\n"))! });
             await Task.Delay(1500);
             GetWindowRect(window, out var w);
             var middle = (w.Left + w.Right) / 2;
@@ -717,6 +719,21 @@ internal static partial class Program
             var widened = (double)await Setting("SidePaneWidth");
             notes.Add($"width 300 -> {widened}");
             Check(widened > 340, $"dragged to the left, the pane is wider ({widened})");
+
+            // Its content laid out again for the new width, where it is drawn: in the pane, and a click on it lands (a
+            // mirrored grid left the files and the outline where they were, out of the pane and not to be clicked).
+            var wide = Find("NavigationView")?.Current.BoundingRectangle;
+            var header = Find("FavoritesHeader");
+            var headerRect = header?.Current.BoundingRectangle;
+            notes.Add($"widened: pane {wide}; favourites header {headerRect}");
+            Check(wide != null && headerRect != null && headerRect.Value.Left >= wide.Value.Left - 1 && headerRect.Value.Right <= wide.Value.Right + 1,
+                "the pane's content is in the pane after the resize");
+            var expanded = (bool)await Setting("FavoritesExpanded");
+            await Click(window, header!);
+            await Task.Delay(600);
+            Check((bool)await Setting("FavoritesExpanded") != expanded, "and a click on it lands (the favourites group folds)");
+            await Click(window, Find("FavoritesHeader")!);
+            await Task.Delay(400);
 
             await c.Call("test.settings.set", new { windowId, name = "SidePaneOnRight", value = false });
             await Task.Delay(1200);

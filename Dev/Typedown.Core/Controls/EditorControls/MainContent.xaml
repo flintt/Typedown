@@ -20,9 +20,10 @@
         <SolidColorBrush x:Key="MicaContentBackgroundBrush" Color="{ThemeResource LayerFillColorDefault}"/>
         <SolidColorBrush x:Key="SolidContentBackgroundBrush" Color="{ThemeResource SolidBackgroundFillColorTertiary}"/>
     </UserControl.Resources>
-    <!-- The side pane on the right (Settings > View): the columns mirrored, the pane and the document themselves not. -->
-    <Grid Background="{ThemeResource SolidBackgroundFillColorTertiary}" x:Name="MainContentGrid"
-          FlowDirection="{x:Bind local:MainContent.PaneSide(Settings.SidePaneOnRight), Mode=OneWay}">
+    <!-- The side pane on the right (Settings > View): the columns in the other order (MainContent.ArrangeSide), the pane
+         sliding in from that side. A mirrored grid (FlowDirection) kept the pane's content where it was drawn when the
+         splitter resized it: the files and the outline out of place and not to be clicked (a reader's report). -->
+    <Grid Background="{ThemeResource SolidBackgroundFillColorTertiary}" x:Name="MainContentGrid">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="SidePaneStates">
                 <VisualStateGroup.Transitions>
@@ -33,7 +34,7 @@
                                     <DiscreteObjectKeyFrame KeyTime="0" Value="True"/>
                                 </ObjectAnimationUsingKeyFrames>
                                 <DoubleAnimationUsingKeyFrames Storyboard.TargetName="LeftPaneTransform" Storyboard.TargetProperty="X">
-                                    <DiscreteDoubleKeyFrame KeyTime="0" Value="{x:Bind local:MainContent.GetColumnWidthNegative(LeftPaneColumn.Width), Mode=OneWay}"/>
+                                    <DiscreteDoubleKeyFrame KeyTime="0" Value="{x:Bind local:MainContent.GetPaneOffset(LeftPaneColumn.Width, Settings.SidePaneOnRight), Mode=OneWay}"/>
                                     <SplineDoubleKeyFrame KeyTime="0:0:0.333" Value="0" KeySpline="0.0, 0.0, 0.0, 1.0"/>
                                 </DoubleAnimationUsingKeyFrames>
                             </Storyboard>
@@ -50,7 +51,7 @@
                                 </ObjectAnimationUsingKeyFrames>
                                 <DoubleAnimationUsingKeyFrames Storyboard.TargetName="LeftPaneTransform" Storyboard.TargetProperty="X">
                                     <DiscreteDoubleKeyFrame KeyTime="0" Value="0"/>
-                                    <SplineDoubleKeyFrame KeyTime="0:0:0.167"  KeySpline="1.0, 1.0, 0.0, 1.0" Value="{x:Bind local:MainContent.GetColumnWidthNegative(LeftPaneColumn.Width), Mode=OneWay}"/>
+                                    <SplineDoubleKeyFrame KeyTime="0:0:0.167"  KeySpline="1.0, 1.0, 0.0, 1.0" Value="{x:Bind local:MainContent.GetPaneOffset(LeftPaneColumn.Width, Settings.SidePaneOnRight), Mode=OneWay}"/>
                                 </DoubleAnimationUsingKeyFrames>
                             </Storyboard>
                         </VisualTransition.Storyboard>
@@ -72,15 +73,15 @@
         </VisualStateManager.VisualStateGroups>
         <Grid.ColumnDefinitions>
             <ColumnDefinition x:Name="LeftPaneColumn" Width="*"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition x:Name="SplitterColumn" Width="Auto"/>
+            <ColumnDefinition x:Name="DocumentColumn" Width="*"/>
         </Grid.ColumnDefinitions>
         <local:LeftPane 
             x:Name="LeftPane" 
-            FlowDirection="LeftToRight"
+            Grid.Column="{x:Bind local:MainContent.PaneColumn(Settings.SidePaneOnRight), Mode=OneWay}"
             x:Load="{x:Bind IsLeftPaneLoad, Mode=OneWay}" 
             RenderTransform="{StaticResource LeftPaneTransform}"/>
-        <Grid Grid.Column="2" FlowDirection="LeftToRight">
+        <Grid x:Name="DocumentArea" Grid.Column="{x:Bind local:MainContent.DocumentColumnIndex(Settings.SidePaneOnRight), Mode=OneWay}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
@@ -129,7 +130,8 @@
             </Border.Style>
         </Border>
         <local:GridSplitter 
-            x:Name="Splitter" Grid.Column="1" ColumnMinWidth="40" 
+            x:Name="Splitter" Grid.Column="1" ColumnMinWidth="40"
+            Mirrored="{x:Bind Settings.SidePaneOnRight, Mode=OneWay}" 
             x:Load="{x:Bind IsLeftPaneLoad, Mode=OneWay}" 
             ColumnExpectWidth="{x:Bind Settings.SidePaneWidth, Mode=TwoWay}" 
             ColumnMaxWidth="{x:Bind LeftPaneMaxWidth, Mode=OneWay}"
