@@ -99,6 +99,16 @@ internal static partial class Program
             var again = await State();
             Check((bool)again["codeMirror"]! && (bool)again["prose"]! && (int)again["highlighted"]! == 0, "back on the .txt: plain prose again");
             try { await c.Call("document.close", new { documentId = txt }); } catch { }
+            // A Markdown block in a plain text file (an md fence, a longer one holding a code block): drawn as Markdown
+            // in the prose view, the rest plain.
+            var blocks = await Open(c, Fixture("pt01-blocks.txt", "# plain line\n\n````md\n# Block title\n\n**bold**\n\n```js\nconst x = 1\n```\n````\n\nplain **again**\n"));
+            await Task.Delay(1500);
+            await c.Call("test.editor.eval", new { windowId, script = "(() => { const cm = document.querySelector('.CodeMirror').CodeMirror; cm.setCursor({ line: 0, ch: 0 }); return true })()" });
+            await Task.Delay(600);
+            var drawn = (string?)(await c.Call("test.editor.eval", new { windowId, script = "JSON.stringify([...document.querySelectorAll('.plain-md-block')].map(b => [b.querySelectorAll('h1').length, b.querySelectorAll('strong').length, b.querySelectorAll('pre').length]))" }))["result"];
+            notes.Add("the Markdown block drawn: " + drawn);
+            Check(drawn == "[[1,1,1]]", $"the md block drawn as Markdown, its code block inside ({drawn})");
+            try { await c.Call("document.close", new { documentId = blocks }); } catch { }
         }
         finally
         {

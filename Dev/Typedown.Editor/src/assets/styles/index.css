@@ -70,6 +70,49 @@ mark::after {
   background: var(--highlightColor);
 }
 
+/* A Markdown block in a plain text file laid out as prose (components/CodeMirror/markdownBlocks): drawn as Markdown,
+   in the theme's colours; a click shows its lines. */
+.plain-prose .plain-md-block {
+  padding: 4px 12px;
+  margin: 2px 0;
+  border-left: 3px solid var(--themeColor);
+  border-radius: 4px;
+  background: var(--editorColor04);
+  color: var(--editorColor);
+  white-space: normal;
+  cursor: text;
+}
+.plain-prose .plain-md-block > :first-child { margin-top: 0.3em; }
+.plain-prose .plain-md-block > :last-child { margin-bottom: 0.3em; }
+.plain-prose .plain-md-block h1, .plain-prose .plain-md-block h2, .plain-prose .plain-md-block h3,
+.plain-prose .plain-md-block h4, .plain-prose .plain-md-block h5, .plain-prose .plain-md-block h6 {
+  margin: 0.6em 0 0.3em;
+  line-height: 1.3;
+}
+.plain-prose .plain-md-block code {
+  font-family: var(--codeFontFamily, monospace);
+  padding: 0.1em 0.3em;
+  border-radius: 3px;
+  background: var(--editorColor10);
+}
+.plain-prose .plain-md-block pre {
+  padding: 8px 10px;
+  overflow-x: auto;
+  border-radius: 4px;
+  background: var(--editorColor10);
+}
+.plain-prose .plain-md-block pre code { padding: 0; background: none; }
+.plain-prose .plain-md-block blockquote {
+  margin: 0.4em 0;
+  padding-left: 0.8em;
+  border-left: 3px solid var(--editorColor30);
+  color: var(--editorColor80);
+}
+.plain-prose .plain-md-block table { border-collapse: collapse; }
+.plain-prose .plain-md-block th, .plain-prose .plain-md-block td { padding: 3px 8px; border: 1px solid var(--editorColor30); }
+.plain-prose .plain-md-block a { color: var(--themeColor); }
+.plain-prose .plain-md-block img { max-width: 100%; }
+
 /* A list item dragged by its marker (contentState/listDragCtrl): the line where it will land, at its level. Placed by
    the window's coordinates, so fixed. */
 #mu-list-drag-ghost {

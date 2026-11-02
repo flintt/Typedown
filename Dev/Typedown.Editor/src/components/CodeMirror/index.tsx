@@ -10,6 +10,7 @@ import { setVimState, vimCommand } from "services/vim";
 import { wordCount as countWords } from 'components/Muya/lib/utils';
 import { FIND_EDIT_REFRESH_MS, findResultsOpen, noteFindChange, setFindProvider } from 'services/findResults';
 import { FENCE, isTableRow, lineMarksLength, previewOf } from 'services/findPreview';
+import { drawMarkdownBlocks } from './markdownBlocks';
 require('codemirror/mode/markdown/markdown');
 require('codemirror/keymap/vim');
 require('codemirror/addon/dialog/dialog.css');
@@ -521,6 +522,27 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
         editor.setOption('indentUnit', tab)
         editor.refresh()
     }, [editor, props.options?.fontSize, props.options?.lineHeight, props.options?.tabSize])
+
+    // A plain text file laid out as prose: its md and markdown fences drawn as Markdown (markdownBlocks), the one the
+    // caret is in shown as its lines. Drawn again a moment after the text or the caret moves, not on every key.
+    useEffect(() => {
+        if (!editor) return
+        const enabled = !!props.options?.plainTextShown && !!props.options?.plainTextProse
+        let marks: any[] = []
+        let timer: any = null
+        const draw = () => { timer = null; marks = drawMarkdownBlocks(editor, marks, enabled) }
+        const later = () => { if (!timer) timer = setTimeout(draw, 120) }
+        draw()
+        if (!enabled) return
+        editor.on('changes', later)
+        editor.on('cursorActivity', later)
+        return () => {
+            editor.off('changes', later)
+            editor.off('cursorActivity', later)
+            if (timer) clearTimeout(timer)
+            marks = drawMarkdownBlocks(editor, marks, false)
+        }
+    }, [editor, props.options?.plainTextShown, props.options?.plainTextProse])
 
     // A plain text file's view, set on the editor as it changes: the options it was made with are not read again.
     useEffect(() => {
