@@ -45,7 +45,8 @@ internal static partial class Program
 
             // Auto-save: held back, the status bar says why, nothing written.
             await c.Call("test.settings.set", new { windowId, name = "AutoSave", value = true });
-            await ClickEditorText(c, windowId, window, "Some text");
+            // "here": the first click was in "Some text", and what was typed there split it.
+            await ClickEditorText(c, windowId, window, "here");
             TypeText("!");
             await Task.Delay(9000);
             var state = SaveState();
