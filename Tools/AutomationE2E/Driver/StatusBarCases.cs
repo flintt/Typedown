@@ -123,9 +123,10 @@ internal static partial class Program
     private static async Task SB03(List<string> notes)
     {
         using var c = await Session("e2e SB03");
-        // Bytes that are text in no encoding (0xFF): read with a loss, so auto-save must not write over them.
+        // Bytes that are text in no encoding: read with a loss, so auto-save must not write over them. 0x81 before a space
+        // is no GBK character, 0x81 and 0x9D none in 1252 (0xFF was: the encoding found from the bytes read it as 1252's ÿ).
         var lossy = Path.Combine(fixtures, "sb03-lossy.md");
-        var original = Enumerable.Concat(System.Text.Encoding.ASCII.GetBytes("# SB03\n\nSome text "), new byte[] { 0xFF, 0xFF }).Concat(System.Text.Encoding.ASCII.GetBytes(" here.\n")).ToArray();
+        var original = Enumerable.Concat(System.Text.Encoding.ASCII.GetBytes("# SB03\n\nSome text "), new byte[] { 0x81, 0x20, 0x9D, 0x81 }).Concat(System.Text.Encoding.ASCII.GetBytes(" here.\n")).ToArray();
         File.WriteAllBytes(lossy, original);
         var id = await Open(c, lossy);
         var windowId = await WindowIdOf(c, id);

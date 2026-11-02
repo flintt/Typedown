@@ -78,11 +78,14 @@ namespace Typedown.Core.Utilities
             if (Utf16WithoutMark(bytes) is { } utf16) return utf16;
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             var detected = UtfUnknown.CharsetDetector.DetectFromBytes(bytes).Detected;
+            // Bytes that read as nothing but Chinese in GBK, the detector unsure (it gave "笔记" as 1252 at exactly 0.5): GBK.
+            var gbkLike = ansiCodePage != 936 && LooksLikeGbk();
+            if (gbkLike && (detected == null || detected.Confidence < 0.6f) && Clean(Encoding.GetEncoding("gb18030")) is { } likelyGbk) return likelyGbk;
             if (detected != null && detected.Confidence >= 0.5f && Clean(ByDetectorName(detected.EncodingName)) is { } byDetector) return byDetector;
             // A few Chinese characters on a non-Chinese Windows (English Windows with a Chinese reader, w10 in EN01):
             // too short for the detector, and the system's 1252 took "笔记" for "±Ê¼Ç". GBK when every non-ASCII byte is
             // one of a pair of high bytes and they all read as Chinese - a Western accent is one high byte among letters.
-            if (ansiCodePage != 936 && LooksLikeGbk() && Clean(Encoding.GetEncoding("gb18030")) is { } gbk) return gbk;
+            if (gbkLike && Clean(Encoding.GetEncoding("gb18030")) is { } gbk) return gbk;
             if (ansiCodePage > 0 && ansiCodePage != 65001 && Clean(TryGetEncoding(ansiCodePage)) is { } byLocale) return byLocale;
             return utf8;
 
@@ -109,7 +112,9 @@ namespace Typedown.Core.Utilities
                 try
                 {
                     var text = encoding.GetString(bytes);
-                    return text.Contains('�') || !RoundTrips(encoding, bytes, 0, text) ? null : encoding;
+                    // C1 controls (U+0080-U+009F) are in no text: 1252 gives its five undefined bytes as them, so with
+                    // them taken a Western Windows read every file "without loss" and auto-save wrote over any (SB03).
+                    return text.Contains('�') || text.Any(ch => ch is >= '\u0080' and <= '\u009F') || !RoundTrips(encoding, bytes, 0, text) ? null : encoding;
                 }
                 catch
                 {
