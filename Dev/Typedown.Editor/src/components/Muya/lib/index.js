@@ -915,6 +915,7 @@ class Muya {
     this.codePicker.destroy()
     this.emojiPicker.destroy()
     this.eventCenter.detachAllDomEvents()
+    this.listDrag.destroy()
     this.frontMenu.destroy()
     this.imageSelector.destroy()
     this.imageToolbar.destroy()

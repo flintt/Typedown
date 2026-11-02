@@ -10,14 +10,16 @@ const listDragCtrl = ContentState => {
   ContentState.prototype.listItemByMarker = function (event) {
     const target = event.target
     if (!target || !target.closest || target.tagName === 'INPUT' || target.closest('.ag-front-icon')) return null
-    // The item is the one whose own line is under the pointer, found in the list around it: a bullet is drawn outside
-    // its item's box (the event is the list's), and a nested item's marker lies inside the outer item's box.
-    let list = target.closest('ul, ol')
-    if (!list || !this.muya.container.contains(list)) return null
-    while (list.parentElement && list.parentElement.closest('ul, ol') && this.muya.container.contains(list.parentElement.closest('ul, ol'))) {
-      list = list.parentElement.closest('ul, ol')
-    }
-    const li = [...list.querySelectorAll('li')].find(item => {
+    // Over a marker the event is the item's or its list's own (no text there): a bullet is drawn outside its item's
+    // box, and a nested item's marker lies inside the outer item's box. The item is then the one of that element (or
+    // its list's children) whose own line is under the pointer. Read on a press only, and only the few items there:
+    // reading every item of a long list on each move made the pointer slow (a reader's report).
+    if (!/^(LI|UL|OL)$/.test(target.tagName) || !this.muya.container.contains(target)) return null
+    const candidates = target.tagName === 'LI'
+      ? [target, ...[...target.children].filter(c => /^(UL|OL)$/.test(c.tagName)).flatMap(list => [...list.children])]
+      : [...target.children]
+    const li = candidates.find(item => {
+      if (item.tagName !== 'LI') return false
       const r = this.listItemTextElement(item)?.getBoundingClientRect()
       return r && event.clientY >= r.top && event.clientY <= r.bottom
     })
@@ -55,8 +57,9 @@ const listDragCtrl = ContentState => {
     return list
   }
 
-  ContentState.prototype.listDragBegin = function (event) {
-    const item = this.listItemByMarker(event)
+  // A drag begun by the item's marker, or by the handle shown beside the item under the pointer (item given).
+  ContentState.prototype.listDragBegin = function (event, given = null) {
+    const item = given || this.listItemByMarker(event)
     if (!item || document.body.classList.contains('read-only')) return false
     this.listDrag = { item, startX: event.clientX, startY: event.clientY, started: false, drop: null }
     return true
@@ -75,29 +78,38 @@ const listDragCtrl = ContentState => {
     const outerEl = this.muya.container.querySelector(`[id="${outer.key}"]`)
     const draggedEl = this.muya.container.querySelector(`[id="${drag.item.key}"]`)
     if (!outerEl || !draggedEl) return this.listDragCancel()
-    // The items it can land beside, in the document's order: not itself or what is nested in it.
-    const items = [...outerEl.querySelectorAll('li')].filter(el => el !== draggedEl && !draggedEl.contains(el))
-    let next = items.findIndex(el => {
-      const r = this.listItemTextElement(el)?.getBoundingClientRect()
-      return r && event.clientY < r.top + r.height / 2
-    })
-    if (next < 0) next = items.length
+    // The items it can land beside, in the document's order: not itself or what is nested in it. Found once per drag,
+    // and the one under the pointer by halves - they are top to bottom - so a long list reads a few lines per move.
+    if (!drag.items) drag.items = [...outerEl.querySelectorAll('li')].filter(el => el !== draggedEl && !draggedEl.contains(el))
+    const items = drag.items
+    const middle = el => { const r = this.listItemTextElement(el)?.getBoundingClientRect(); return r ? r.top + r.height / 2 : -Infinity }
+    let low = 0
+    let high = items.length
+    while (low < high) {
+      const mid = (low + high) >> 1
+      if (event.clientY < middle(items[mid])) high = mid
+      else low = mid + 1
+    }
+    const next = low
     const prevEl = items[next - 1] || null
     const nextEl = items[next] || null
     const prev = prevEl && this.getBlock(prevEl.id)
     const nextBlock = nextEl && this.getBlock(nextEl.id)
     const maxDepth = prev ? this.listItemDepth(prev) + 1 : 0
     const minDepth = Math.min(nextBlock ? this.listItemDepth(nextBlock) : 0, maxDepth)
-    // One level per indent of the list, measured where one item is nested in another.
-    const firstText = this.listItemTextElement(outerEl.querySelector('li'))
-    const base = firstText ? firstText.getBoundingClientRect().left : outerEl.getBoundingClientRect().left
-    const nested = outerEl.querySelector('li li')
-    let indent = 28
-    if (nested) {
-      const inner = this.listItemTextElement(nested)?.getBoundingClientRect().left
-      const outerText = this.listItemTextElement(nested.parentElement.closest('li'))?.getBoundingClientRect().left
-      if (inner && outerText && inner > outerText) indent = inner - outerText
+    // One level per indent of the list, measured where one item is nested in another; once per drag.
+    if (drag.indent == null) {
+      const firstText = this.listItemTextElement(outerEl.querySelector('li'))
+      drag.base = firstText ? firstText.getBoundingClientRect().left : outerEl.getBoundingClientRect().left
+      const nested = outerEl.querySelector('li li')
+      drag.indent = 28
+      if (nested) {
+        const inner = this.listItemTextElement(nested)?.getBoundingClientRect().left
+        const outerText = this.listItemTextElement(nested.parentElement.closest('li'))?.getBoundingClientRect().left
+        if (inner && outerText && inner > outerText) drag.indent = inner - outerText
+      }
     }
+    const { base, indent } = drag
     const wanted = this.listItemDepth(drag.item) + Math.round((event.clientX - drag.startX) / indent)
     const depth = Math.max(minDepth, Math.min(maxDepth, wanted))
     drag.drop = { prev, depth }

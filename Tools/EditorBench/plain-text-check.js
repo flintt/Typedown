@@ -65,6 +65,24 @@ const { openEditor } = require('./harness');
     await pause(400);
     report((await drawn()).length === 0, 'source mode: no block drawn, the lines as they are', JSON.stringify(await drawn()));
 
+    // With Vim on (as the reader has it): not in the prose view - which is visual mode's, and with Vim looked like source
+    // mode and took Ctrl+/ - but in the source view; switched back, off again.
+    const vimState = () => page.evaluate(() => ({ keyMap: document.querySelector('.CodeMirror').CodeMirror.getOption('keyMap'), badge: document.querySelector('.vim-mode-badge')?.textContent || null }));
+    await page.evaluate(() => window.__deliver('SettingsChanged', { vimMode: true, plainTextProse: true }));
+    await pause(400);
+    const proseVim = await vimState();
+    report(proseVim.keyMap === 'default' && !proseVim.badge, 'Vim on, prose view: no Vim keys, no Vim badge', JSON.stringify(proseVim));
+    await page.evaluate(() => window.__deliver('SettingsChanged', { plainTextProse: false }));
+    await pause(400);
+    const sourceVim = await vimState();
+    report(sourceVim.keyMap === 'vim' && /NORMAL/.test(sourceVim.badge || ''), 'Vim on, source view: Vim keys and its badge', JSON.stringify(sourceVim));
+    await page.evaluate(() => window.__deliver('SettingsChanged', { plainTextProse: true }));
+    await pause(400);
+    const backVim = await vimState();
+    report(backVim.keyMap === 'default' && !backVim.badge, 'back to the prose view: Vim off again', JSON.stringify(backVim));
+    await page.evaluate(() => window.__deliver('SettingsChanged', { vimMode: false }));
+    await pause(200);
+
     // A Markdown file again: the Markdown editor, highlighted as before.
     await page.evaluate(() => window.__deliver('SettingsChanged', { sourceCode: false, plainTextShown: false, plainTextProse: false }));
     await pause(500);

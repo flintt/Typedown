@@ -57,11 +57,16 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
     const markdownRef = useRef('');
     const searchArgRef = useRef<any>();
     const cursorRef = useRef<any>();
-    const vim = !!props.options?.vimMode && !props.options?.readOnly
+    // Vim is source mode's: not in a plain text file laid out as prose, which is visual mode's view of it (with Vim,
+    // the reader saw source mode there and Ctrl+/ went to Vim).
+    const vim = !!props.options?.vimMode && !props.options?.readOnly && !props.options?.plainTextProse
     const [vimLabel, setVimLabel] = useState('NORMAL');
     useEffect(() => {
         // The mode Vim is in, for the badge and for the host, which must leave Vim's Ctrl keys alone in normal and
         // visual mode (services/vim).
+        // The key map set here too: the editor's options are read once, as it is made, and a plain text file switched
+        // between its prose and source views kept the one it was made with.
+        if (editor) editor.setOption('keyMap', vim ? 'vim' : 'default')
         if (!editor || !vim) {
             setVimState('off')
             return
@@ -73,7 +78,12 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
             setVimLabel(VIM_LABELS[e.mode === 'visual' && e.subMode ? e.subMode : e.mode] ?? e.mode.toUpperCase())
         }
         editor.on('vim-mode-change', onMode)
-        return () => editor.off('vim-mode-change', onMode)
+        return () => {
+            editor.off('vim-mode-change', onMode)
+            // Leaving source mode (a Markdown tab after a plain text file, the mode switched): Vim is off, or the host's
+            // status bar kept "INSERT" after it (a reader's report).
+            setVimState('off')
+        }
     }, [editor, vim])
 
     const relativeScroll = useCallback((delta: number) => {

@@ -124,11 +124,33 @@ mark::after {
   background: var(--themeColor);
 }
 
-/* The marker of a list item is a handle to drag it by. */
-li.ag-list-item.ag-marker-hover,
+/* The handle beside the list item under the pointer (eventHandler/listDrag): what shows it can be dragged. */
+#mu-list-drag-handle {
+  position: fixed;
+  z-index: 10;
+  width: 18px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  font-size: 14px;
+  letter-spacing: -3px;
+  border-radius: 4px;
+  color: var(--editorColor40);
+  cursor: grab;
+  user-select: none;
+}
+#mu-list-drag-handle:hover {
+  color: var(--editorColor80);
+  background: var(--editorColor10);
+}
+body.read-only #mu-list-drag-handle,
+body.ag-list-dragging #mu-list-drag-handle {
+  display: none !important;
+}
+
 body.ag-list-dragging,
 body.ag-list-dragging * {
-  cursor: grab !important;
+  cursor: grabbing !important;
 }
 
 body.ag-list-dragging {

@@ -59,6 +59,45 @@ const { firstDifference, openEditor } = require('./harness');
     const caret = await page.evaluate(() => { const s = window.__typedownMuya.contentState; const t = s.getBlock(s.cursor.start.key); return `${t.text}@${s.cursor.start.offset}`; });
     report(after === '- a\n- b\n- c\n', 'a click on a marker moves nothing', after);
     report(caret === 'b@0', 'a click on a marker puts the caret at the item\'s start', caret);
+    // The handle: shown beside the item under the pointer, and a drag by it moves the item (a reader saw no sign an item
+    // could be dragged).
+    await visual('- a\n- b\n- c\n');
+    const c = await geometry('c');
+    const cText = await page.evaluate(() => { const r = [...document.querySelectorAll('#ag-editor-id li p')][2].getBoundingClientRect(); return { x: r.left + 10, y: r.top + r.height / 2 }; });
+    await page.mouse.move(cText.x, cText.y);
+    await pause(150);
+    const handle = await page.evaluate(() => { const h = document.getElementById('mu-list-drag-handle'); const r = h.getBoundingClientRect(); return { shown: getComputedStyle(h).display !== 'none', x: r.left + r.width / 2, y: r.top + r.height / 2 }; });
+    report(handle.shown && Math.abs(handle.y - c.y) < 8, 'hovering an item shows the drag handle beside it', JSON.stringify(handle));
+    const top = await geometry('a');
+    await page.mouse.move(handle.x, handle.y);
+    await page.mouse.down();
+    await page.mouse.move(handle.x + 2, handle.y - 6, { steps: 2 });
+    await page.mouse.move(handle.x, top.top + 2, { steps: 8 });
+    await page.mouse.up();
+    await pause(400);
+    report(await page.evaluate(() => window.__typedownMuya.getMarkdown()) === '- c\n- a\n- b\n', 'a drag by the handle moves the item', await page.evaluate(() => window.__typedownMuya.getMarkdown()));
+    await page.keyboard.type('x');
+    await pause(100);
+    report(await page.evaluate(() => getComputedStyle(document.getElementById('mu-list-drag-handle')).display) === 'none', 'typing hides the handle', '');
+
+    // A long list: the pointer moving over it costs little (each move read every item before).
+    await visual(Array.from({ length: 3000 }, (_, i) => `- item ${i}`).join('\n') + '\n');
+    const cost = await page.evaluate(async () => {
+      const lis = document.querySelectorAll('#ag-editor-id li p');
+      const r = lis[Math.min(40, lis.length - 1)].getBoundingClientRect();
+      const t0 = performance.now();
+      for (let i = 0; i < 200; i++) {
+        const target = document.elementFromPoint(r.left - 12, r.top + r.height / 2) || lis[40];
+        target.dispatchEvent(new MouseEvent('mousemove', { bubbles: true, clientX: r.left - 12 + (i % 5), clientY: r.top + r.height / 2 }));
+        await new Promise(requestAnimationFrame);
+      }
+      const frames = performance.now() - t0;
+      const t1 = performance.now();
+      for (let i = 0; i < 200; i++) await new Promise(requestAnimationFrame);
+      return { perMove: (frames - (performance.now() - t1)) / 200 };
+    });
+    report(cost.perMove < 2, `the pointer over a 3000-item list costs little a move (${cost.perMove.toFixed(2)} ms beyond a frame)`, JSON.stringify(cost));
+
     // The text is not a handle: a drag in an item's text selects text, moves nothing.
     await visual('- alpha\n- beta\n');
     const t = await page.evaluate(() => { const r = document.querySelector('#ag-editor-id li p').getBoundingClientRect(); return { x: r.left + 4, y: r.top + r.height / 2 }; });
