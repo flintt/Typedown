@@ -3008,7 +3008,10 @@ internal static partial class Program
                 notes.Add($"Word: {word.shapes} picture(s) pasted, {word.media} embedded; {word.detail}");
                 // All three are pictures in the document (type 3), the SVG at the size it is shown at (30x20 px), not at
                 // its PNG's twice as many pixels. The two PNGs are the same file, which Word embeds once.
-                Check(word.detail == "type 3 0.8x0.8pt, type 3 22.5x15pt, type 3 0.8x0.8pt" && word.media == 2, "Word: every picture of the copy is in the pasted document, the SVG at its size");
+                // Sizes within 0.2 pt: Word's point sizes follow the display's scale (hp gave 0.9 and 22.6x15.1 where w10 gives 0.8 and 22.5x15).
+                var sizes = System.Text.RegularExpressions.Regex.Matches(word.detail ?? "", @"type 3 ([\d.]+)x([\d.]+)pt").Select(m => (W: double.Parse(m.Groups[1].Value, System.Globalization.CultureInfo.InvariantCulture), H: double.Parse(m.Groups[2].Value, System.Globalization.CultureInfo.InvariantCulture))).ToList();
+                bool Near(int i, double w, double h) => i < sizes.Count && Math.Abs(sizes[i].W - w) <= 0.2 && Math.Abs(sizes[i].H - h) <= 0.2;
+                Check(sizes.Count == 3 && Near(0, 0.8, 0.8) && Near(1, 22.5, 15) && Near(2, 0.8, 0.8) && word.media == 2, "Word: every picture of the copy is in the pasted document, the SVG at its size");
             }
             else
                 notes.Add("Word: not installed, not tried");
