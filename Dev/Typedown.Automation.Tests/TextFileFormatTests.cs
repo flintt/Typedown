@@ -83,6 +83,31 @@ public class TextFileFormatTests
         Assert.False(format.LossyDecode);
     }
 
+    [Theory]
+    [InlineData("中文")]
+    [InlineData("# 笔记\n\n今天\n")]
+    [InlineData("你好，世界！")]
+    public void A_few_Chinese_characters_on_English_Windows_are_GBK_too(string text)
+    {
+        // The system's code page (1252) read "笔记" as "±Ê¼Ç" (EN01 on w10, an English Windows).
+        var bytes = Encoding.GetEncoding("gb18030").GetBytes(text);
+        var (read, format) = TextFileFormat.Read(bytes, ansiCodePage: 1252);
+        Assert.Equal(text, read);
+        Assert.Equal("GB18030", format.EncodingLabel);
+    }
+
+    [Theory]
+    [InlineData("Größe")]
+    [InlineData("Übung für Mädchen")]
+    [InlineData("élève à côté")]
+    public void A_few_accented_Western_words_are_not_taken_for_Chinese(string text)
+    {
+        var bytes = Encoding.GetEncoding(1252).GetBytes(text);
+        var (read, format) = TextFileFormat.Read(bytes, ansiCodePage: 1252);
+        Assert.Equal(text, read);
+        Assert.NotEqual("GB18030", format.EncodingLabel);
+    }
+
     [Fact]
     public void A_few_accented_letters_on_Western_Windows_are_Windows_1252()
     {

@@ -66,6 +66,7 @@ namespace Typedown.Core.Utilities
         /// <item>UTF-16 without its mark, told by where the zero bytes of ASCII letters fall;</item>
         /// <item>the charset detector (Mozilla's, UTF.Unknown) when it is at least half sure: right on a paragraph of
         /// Chinese, Japanese, Korean, Russian or Western text, lost on a few characters;</item>
+        /// <item>GBK for a few Chinese characters on a Windows of another language: pairs of high bytes, all Chinese;</item>
         /// <item>the system's legacy code page, for those few characters (GBK on Chinese Windows);</item>
         /// <item>else UTF-8 as before, its decode marked lossy so that nothing saves over the file unasked.</item>
         /// </list>
@@ -78,8 +79,29 @@ namespace Typedown.Core.Utilities
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             var detected = UtfUnknown.CharsetDetector.DetectFromBytes(bytes).Detected;
             if (detected != null && detected.Confidence >= 0.5f && Clean(ByDetectorName(detected.EncodingName)) is { } byDetector) return byDetector;
+            // A few Chinese characters on a non-Chinese Windows (English Windows with a Chinese reader, w10 in EN01):
+            // too short for the detector, and the system's 1252 took "笔记" for "±Ê¼Ç". GBK when every non-ASCII byte is
+            // one of a pair of high bytes and they all read as Chinese - a Western accent is one high byte among letters.
+            if (ansiCodePage != 936 && LooksLikeGbk() && Clean(Encoding.GetEncoding("gb18030")) is { } gbk) return gbk;
             if (ansiCodePage > 0 && ansiCodePage != 65001 && Clean(TryGetEncoding(ansiCodePage)) is { } byLocale) return byLocale;
             return utf8;
+
+            bool LooksLikeGbk()
+            {
+                var run = 0;
+                foreach (var b in bytes)
+                {
+                    if (b >= 0x81 && b != 0xFF) { run++; continue; }
+                    if (b >= 0x80 || run % 2 != 0) return false;
+                    run = 0;
+                }
+                if (run % 2 != 0) return false;
+                string text;
+                try { text = Encoding.GetEncoding("gb18030").GetString(bytes); }
+                catch { return false; }
+                // Chinese characters and the full-width punctuation around them; nothing else above ASCII.
+                return text.Any(ch => ch > 127) && text.All(ch => ch < 128 || ch is >= '　' and <= '〿' or >= '㐀' and <= '䶿' or >= '一' and <= '鿿' or >= '＀' and <= '￯');
+            }
 
             Encoding Clean(Encoding encoding)
             {
