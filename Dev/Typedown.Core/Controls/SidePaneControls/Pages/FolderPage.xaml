@@ -78,7 +78,10 @@
             </muxc:TreeViewItem>
         </DataTemplate>
 
-        <MenuFlyout x:Key="FavoriteContextFlyout">
+        <MenuFlyout x:Key="FavoriteContextFlyout" Opening="OnFavoriteFlyoutOpening">
+            <MenuFlyoutItem AutomationProperties.AutomationId="FavoriteOpenItem" Text="{u:LocaleString Key=Open}" Click="OnFavoriteOpenClick"/>
+            <MenuFlyoutItem AutomationProperties.AutomationId="FavoriteOpenInNewWindowItem" Text="{u:LocaleString Key=OpenInNewWindow}" Click="OnFavoriteOpenInNewWindowClick"/>
+            <MenuFlyoutSeparator/>
             <MenuFlyoutItem AutomationProperties.AutomationId="FavoriteRemoveItem" Text="{u:LocaleString Key=Favorites.Remove}" Click="OnRemoveFavoriteClick"/>
             <MenuFlyoutItem Text="{u:LocaleString Key=OpenFileLocation}" Click="OnFavoriteLocationClick"/>
         </MenuFlyout>
@@ -143,7 +146,7 @@
             </Button>
             <ListView x:Name="FavoritesList" AutomationProperties.AutomationId="FavoritesList" MaxHeight="220" Padding="0"
                       ItemsSource="{x:Bind FavoriteItems}" SelectionMode="None" IsItemClickEnabled="True"
-                      ItemClick="OnFavoriteClick" DoubleTapped="OnFavoriteDoubleTapped"
+                      ItemClick="OnFavoriteClick"
                       Visibility="{x:Bind FavoritesListVisibility, Mode=OneWay}">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem" BasedOn="{StaticResource DefaultListViewItemStyle}">

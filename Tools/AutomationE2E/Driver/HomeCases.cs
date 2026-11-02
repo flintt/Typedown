@@ -473,6 +473,68 @@ internal static partial class Program
         return (stored, pane);
     }
 
+    // A favourite file double-clicked opens in a tab of its own, the document shown before kept; a single click showed it
+    // at once in the current tab, and the double click found it open (a reader's report). Its menu: Open, Open in new window.
+    private static async Task FV02(List<string> notes)
+    {
+        var folder = FixtureFolder("fv02");
+        var favourite = Path.Combine(folder, "fv02-fav.md");
+        File.WriteAllText(favourite, "# fv02 favourite\n");
+        var current = Path.Combine(folder, "fv02-current.md");
+        File.WriteAllText(current, "# fv02 current\n");
+        using var c = await Session("e2e FV02");
+        var windowId = await FirstWindowId(c);
+        await c.Call("test.favorites.clear", new { });
+        string? favId = await Open(c, favourite);
+        windowId = await WindowIdOf(c, favId!);
+        var window = await WindowOf(windowId, c);
+        string? curId = null;
+        await c.Call("test.settings.set", new { windowId, name = "AlwaysShowTabBar", value = true });
+        await c.Call("test.folder.open", new { windowId, path = folder });
+        await Task.Delay(1000);
+        List<AutomationElement> Tabs() => Deep.All(AutomationElement.FromHandle(window), new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.TabItem)).Cast<AutomationElement>().ToList();
+        try
+        {
+            // The favourite made from its tab's menu, its tab closed; another document shown.
+            AutomationElement? tab = null;
+            await Eventually(() => Task.FromResult((tab = Tabs().FirstOrDefault(t => t.Current.Name.Contains("fv02-fav"))) != null), 5000);
+            await Click(window, tab!, Mouse.Right);
+            await Task.Delay(600);
+            await ClickInPopup(window, await MenuEntry(window, "TabFavoriteItem"));
+            await Task.Delay(500);
+            curId = await Open(c, current);
+            await c.Call("document.close", new { documentId = favId });
+            favId = null;
+            await Task.Delay(800);
+            Check(Tabs().Count == 1 && Tabs()[0].Current.Name.Contains("fv02-current"), "one tab, the current document");
+
+            // Double-clicked in the favourites group: a tab of its own, the current document kept.
+            AutomationElement? item = null;
+            await Eventually(() => Task.FromResult((item = FindIn(window, "FavoritesList")?.FindFirst(TreeScope.Descendants, new PropertyCondition(AutomationElement.NameProperty, "fv02-fav.md"))) != null), 5000);
+            Check(item != null, "the favourite is in the folder pane's group");
+            await Click(window, item!, Mouse.Left, clicks: 2);
+            await Eventually(() => Task.FromResult(Tabs().Count == 2), 5000);
+            var names = Tabs().Select(t => t.Current.Name).ToList();
+            notes.Add("tabs: " + string.Join(" | ", names));
+            Check(names.Count == 2 && names.Any(n => n.Contains("fv02-current")) && names.Any(n => n.Contains("fv02-fav")), "double-clicked: the favourite in a new tab, the current document still open");
+
+            // Its menu: Open and Open in new window.
+            await Click(window, item!, Mouse.Right);
+            await Task.Delay(600);
+            var open = await MenuEntry(window, "FavoriteOpenItem");
+            var newWindow = await MenuEntry(window, "FavoriteOpenInNewWindowItem");
+            Check(open != null && newWindow != null, "its menu offers Open and Open in new window");
+            await CloseMenus();
+        }
+        finally
+        {
+            await CloseMenus();
+            try { await c.Call("test.favorites.clear", new { }); } catch { }
+            foreach (var d in new[] { favId, curId }) if (d != null) try { await c.Call("document.close", new { documentId = d }); } catch { }
+            try { await c.Call("test.settings.set", new { windowId, name = "AlwaysShowTabBar", value = false }); } catch { }
+        }
+    }
+
     private static async Task FV01(List<string> notes)
     {
         var folder = FixtureFolder("fv01");

@@ -221,6 +221,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | FR01 | the find bar's results list ("Search in document"): with the Outline in the side pane, Ctrl+F and a word typed with real keys, the bar says 1 of 6; "Show all results" lists the count and six entries, each its place and the line around its match; entry 3 clicked with the mouse selects exactly the third match in the editor and the bar says 3 of 6; closing the list shows the Outline again; with the side pane closed the list opens it and closing the list closes it again; closing the find bar closes the list too |
 | FN02 | with a folder opened, the button beside the root's name moves the tree to the folder of a document outside it |
 | FW01 | an open document renamed outside the app is followed by its window, also after the app renamed it once |
+| FV02 | a favourite file double-clicked opens in a tab of its own, the document shown before kept; its menu offers Open and Open in new window |
 | FV01 | a file favoured from its tab's menu and a folder from the tree's menu are in favorites.json and the folder pane's group, still after a restart (and on the home page); renamed in the tree, the favourite follows |
 | HP01 | a start with the settings as they come shows the home page; a recent file clicked there opens in its tab and the home page goes |
 | HP02 | Ctrl+N and the + button show no home page and the next letter goes into the new document; with "New tabs show the home page" on, Ctrl+N shows it |

@@ -38,6 +38,8 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
         public FolderPage()
         {
             InitializeComponent();
+            // A favourite's double click, also where its item took the taps (the list's own event did not always come).
+            FavoritesList.AddHandler(DoubleTappedEvent, new Microsoft.UI.Xaml.Input.DoubleTappedEventHandler(OnFavoriteDoubleTapped), true);
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
@@ -267,16 +269,53 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
         private async void OnFavoriteClick(object sender, ItemClickEventArgs e)
         {
             if (e.ClickedItem is not PathItem item || FileViewModel == null) return;
-            if (item.Folder) await SetRootAsync(item.Path);
-            // As the tree's single click: the file shown in the preview tab.
-            else if (!RecentPaths.Same(item.Path, FileViewModel.FilePath)) await FileViewModel.OpenFile(item.Path, preview: true);
+            if (item.Folder) { await SetRootAsync(item.Path); return; }
+            if (RecentPaths.Same(item.Path, FileViewModel.FilePath)) return;
+            // As the tree's single click: the file shown in the preview tab, after the double-click interval - shown at
+            // once, it had taken the current tab's place before a double click could ask for a new tab (a reader's report).
+            pendingSingleClickOpen?.Cancel();
+            var cts = pendingSingleClickOpen = new System.Threading.CancellationTokenSource();
+            try
+            {
+                await Task.Delay((int)Math.Min(Math.Max(PInvoke.GetDoubleClickTime(), 150), 600), cts.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                return;
+            }
+            if (cts.IsCancellationRequested || FileViewModel == null) return;
+            await FileViewModel.OpenFile(item.Path, preview: true);
         }
 
         private async void OnFavoriteDoubleTapped(object sender, Microsoft.UI.Xaml.Input.DoubleTappedRoutedEventArgs e)
         {
             if ((e.OriginalSource as FrameworkElement)?.DataContext is not PathItem item || item.Folder || FileViewModel == null) return;
             e.Handled = true;
+            pendingSingleClickOpen?.Cancel();
+            // In a tab of its own, as the tree's double click.
             await FileViewModel.OpenFile(item.Path, preview: false);
+        }
+
+        // Open and Open in new window, as the tree's menu has them: for a file.
+        private void OnFavoriteFlyoutOpening(object sender, object e)
+        {
+            if (sender is not MenuFlyout flyout) return;
+            var file = (flyout.Target?.DataContext as PathItem) is { Folder: false };
+            foreach (var entry in flyout.Items)
+            {
+                var opens = entry is MenuFlyoutSeparator || Microsoft.UI.Xaml.Automation.AutomationProperties.GetAutomationId(entry) is "FavoriteOpenItem" or "FavoriteOpenInNewWindowItem";
+                if (opens) entry.Visibility = file ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
+        private async void OnFavoriteOpenClick(object sender, RoutedEventArgs e)
+        {
+            if ((sender as FrameworkElement)?.DataContext is PathItem { Folder: false } item && FileViewModel != null) await FileViewModel.OpenFile(item.Path);
+        }
+
+        private void OnFavoriteOpenInNewWindowClick(object sender, RoutedEventArgs e)
+        {
+            if ((sender as FrameworkElement)?.DataContext is PathItem { Folder: false } item) FileViewModel?.NewWindowCommand.Execute(item.Path);
         }
 
         private void OnRemoveFavoriteClick(object sender, RoutedEventArgs e)
