@@ -1342,6 +1342,13 @@ body.read-only.show-blank-lines .ag-show-quick-insert-hint p.ag-paragraph > span
   display: inline !important;
 }
 
+/* An empty list item is an item, not a blank line: its line is kept in reading mode too. Without it an empty task item
+   had no height - its box beside the first box of the list under it, as if one item had two, and the last one's box
+   over the next item's (a reader, 2026-11-03). */
+body.read-only li.ag-list-item > p.ag-paragraph > span.ag-paragraph-content:empty::after {
+  display: inline !important;
+}
+
 /* Settings > Editor > Join the lines of a paragraph in reading mode: a single line ending inside a paragraph shows as a
    space, as Markdown has it (the exports do so already), and as nothing between two CJK characters
    (softLineBreak.js). A hard break (two spaces or a backslash) stays a break. */
