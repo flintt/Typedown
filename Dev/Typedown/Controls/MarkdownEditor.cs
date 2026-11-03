@@ -114,6 +114,8 @@ namespace Typedown.Controls
             };
             disposables.Add(AppViewModel.EditorViewModel.WhenPropertyChanged(nameof(EditorViewModel.LongLoadPending)).Subscribe(_ => UpdateOpening()));
             disposables.Add(AppViewModel.EditorViewModel.WhenPropertyChanged(nameof(EditorViewModel.LeavingCover)).Subscribe(_ => UpdateCover()));
+            disposables.Add(AppViewModel.EditorViewModel.WhenPropertyChanged(nameof(EditorViewModel.ConfirmedLoadId))
+                .Subscribe(_ => DispatcherQueue.TryEnqueueSafe(() => RevealPage("its document drawn"))));
             disposables.Add(RemoteInvoke.Handle("ContentLoaded", OnContentLoaded));
             disposables.Add(RemoteInvoke.Handle<string>("UnhandledException", OnUnhandledException));
             disposables.Add(RemoteInvoke.Handle("GetCurrentTheme", () => ServiceProvider.GetCurrentTheme()));
@@ -308,6 +310,22 @@ namespace Typedown.Controls
             ShowOpening();
         }
 
+        private bool awaitingDocument;
+        private Microsoft.UI.Dispatching.DispatcherQueueTimer revealLimit;
+
+        private void OnRevealLimit(Microsoft.UI.Dispatching.DispatcherQueueTimer timer, object args) => RevealPage("no document confirmed in 1.5 s");
+
+        // The page, loaded and with its first document drawn (or past the limit), shown; the start's "Opening…" gone.
+        private void RevealPage(string why)
+        {
+            if (!awaitingDocument) return;
+            awaitingDocument = false;
+            revealLimit?.Stop();
+            Core.Utilities.Log.Debug($"editor: page shown, {why}");
+            EndStarting();
+            ShowPage(true);
+        }
+
         private void EndStarting()
         {
             startingDelay?.Stop();
@@ -340,8 +358,16 @@ namespace Typedown.Controls
         private void OnContentLoaded()
         {
             Core.Utilities.StartupTiming.Reached("editor page loaded");
-            EndStarting();
-            ShowPage(true);
+            // Shown once the page has drawn its document, not now: the page had nothing on it yet, and the web view showed
+            // a light grey of its own until the document came - theme colour, a white flash, the document (hp88, Sepia: from
+            // "editor page loaded" to "document shown", 0.2-0.7 s). At most a second and a half after this.
+            awaitingDocument = true;
+            revealLimit ??= DispatcherQueue.CreateTimer();
+            revealLimit.IsRepeating = false;
+            revealLimit.Interval = TimeSpan.FromMilliseconds(1500);
+            revealLimit.Tick -= OnRevealLimit;
+            revealLimit.Tick += OnRevealLimit;
+            revealLimit.Start();
             IsEditorLoaded = true;
             if (AppViewModel.EditorViewModel.FocusWhenLoaded)
             {
