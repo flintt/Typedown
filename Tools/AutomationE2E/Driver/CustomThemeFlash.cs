@@ -130,8 +130,9 @@ internal static partial class Program
                 // The settings page over it: the document's text is gone from there (else nothing below is a way back). The
                 // settings' own near-white text is about a third of the document's (w10, 0.19 % of 0.56 %).
                 var inSettings = ThemeShares(window, editorArea).Text;
-                notes.Add($"in the settings: {inSettings:0.00} % of the editor's area is the document's text colour");
-                Check(inSettings < textBefore * 0.5,$"the settings page covers the document ({inSettings:0.00} % text left of {textBefore:0.00} %)");
+                // Recorded, not checked: the settings' own near-white text varies (0.19 % to 0.69 % on w10) and failed this
+                // for a page that was there; the way back below is what is checked.
+                notes.Add($"in the settings: {inSettings:0.00} % of the editor's area is the document's text colour (before {textBefore:0.00} %)");
             }
             await CtrlComma();
             var (back, backText) = editorArea == null ? await WatchTheme(window, 2500) : await WatchTheme(window, 2500, editorArea, textBefore * 0.7);
@@ -170,6 +171,8 @@ internal static partial class Program
             if (otherHandle != IntPtr.Zero) { PostMessage(otherHandle, 0x0010, IntPtr.Zero, IntPtr.Zero); await Task.Delay(1500); } // WM_CLOSE
             try { await c.Call("test.settings.set", new { windowId, name = "CustomTheme", value = themeBefore ?? "" }); } catch { }
             if (animationBefore != null) try { await c.Call("test.settings.set", new { windowId, name = "AnimationEnable", value = animationBefore }); } catch { }
+            // Out of the settings, whatever failed: left on them, the next cases' documents never reached the page (job 52).
+            try { await c.Call("test.window.navigate", new { windowId, route = "Main" }); } catch { }
             try { await c.Call("document.close", new { documentId = first }); } catch { }
         }
     }

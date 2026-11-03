@@ -17,8 +17,13 @@ internal static partial class Program
     {
         using var c = await Session("e2e PD01");
         var folder = FixtureFolder("pd01");
-        // A small PNG (1x1, red) beside the document.
-        File.WriteAllBytes(Path.Combine(folder, "pd01.png"), Convert.FromBase64String("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8DwHwAFBQIAX8jx0gAAAABJRU5ErkJggg=="));
+        // A picture beside the document, 120x80 with a gradient: a 1x1 one was drawn as a filled square, no image in the PDF.
+        using (var picture = new System.Drawing.Bitmap(120, 80))
+        {
+            for (var y = 0; y < 80; y++)
+                for (var x = 0; x < 120; x++) picture.SetPixel(x, y, System.Drawing.Color.FromArgb(255, x * 2, y * 3, (x + y) % 256));
+            picture.Save(Path.Combine(folder, "pd01.png"), System.Drawing.Imaging.ImageFormat.Png);
+        }
         var path = Path.Combine(folder, "pd01.md");
         File.WriteAllText(path, "# PD01 Report\n\nIntro text.\n\n## First part\n\nSome text.\n\n![red](pd01.png)\n\n## Second part\n\nMore text.\n\n### A detail\n\nEnd.\n");
         var pdf = Path.Combine(folder, "pd01.pdf");
