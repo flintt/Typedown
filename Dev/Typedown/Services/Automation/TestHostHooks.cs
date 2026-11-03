@@ -745,6 +745,9 @@ namespace Typedown.Services.Automation
             methods.Add(new MethodDescriptor("test.dialogs.dismiss", null, "test.dialogs.dismiss/1", async (c, ct) =>
             {
                 var closed = new Newtonsoft.Json.Linq.JArray();
+                // And what a dialog of text showed (About's license terms, its open-source notices): a read-only box UI
+                // Automation did not find inside the dialog.
+                var texts = new Newtonsoft.Json.Linq.JArray();
                 foreach (var window in Typedown.Windows.MainWindow.AllWindows.ToList())
                 {
                     var done = new System.Threading.Tasks.TaskCompletionSource<bool>();
@@ -756,6 +759,7 @@ namespace Typedown.Services.Automation
                                 foreach (var dialog in panel.Children.OfType<Core.Controls.AppContentDialog>().ToList())
                                 {
                                     lock (closed) closed.Add(dialog.Title?.ToString() ?? dialog.GetType().Name);
+                                    if (dialog.Content is global::Microsoft.UI.Xaml.Controls.TextBox box) lock (texts) texts.Add(box.Text);
                                     dialog.Close();
                                 }
                         }
@@ -763,7 +767,7 @@ namespace Typedown.Services.Automation
                     })) continue;
                     await System.Threading.Tasks.Task.WhenAny(done.Task, System.Threading.Tasks.Task.Delay(3000));
                 }
-                return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["closed"] = closed };
+                return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["closed"] = closed, ["texts"] = texts };
             }));
             // The open dialog's colours and the custom theme's, to tell whether the dialog wears the theme.
             methods.Add(new MethodDescriptor("test.dialog.colours", null, "test.dialog.colours/1", (c, ct) =>
