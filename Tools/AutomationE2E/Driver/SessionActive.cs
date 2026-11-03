@@ -131,9 +131,11 @@ internal static partial class Program
         }
         var window = await WindowOf(last, c);
         c.Dispose();
-        PostMessage(window, 0x0010, IntPtr.Zero, IntPtr.Zero);
+        // Held before the close: the process ends at once after its last window (Environment.Exit), and asked for by its
+        // id after the close it may be gone already.
         using (var ending = System.Diagnostics.Process.GetProcessById(hostPid))
         {
+            PostMessage(window, 0x0010, IntPtr.Zero, IntPtr.Zero);
             if (!ending.WaitForExit(20000))
             {
                 notes.Add($"{label}: the process did not end after its last window closed; ended");

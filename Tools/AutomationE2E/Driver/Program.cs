@@ -4560,6 +4560,9 @@ internal static partial class Program
     {
         var titled = Fixture("ku01.md", "# KU01\n\nsaved\n");
         string t, u;
+        // The process held before its windows close: it ends at once after the last one (Environment.Exit), and asked
+        // for by its id afterwards it was not there to give its exit code.
+        using var host = Process.GetProcessById(hostPid);
         using (var c = await Session("e2e KU01 before"))
         {
             t = await Open(c, titled);
@@ -4580,7 +4583,6 @@ internal static partial class Program
                 Check(!IsWindow(handle), "a window closes without asking about its unsaved documents");
             }
         }
-        using (var host = Process.GetProcessById(hostPid))
         {
             Check(host.WaitForExit(20000), "the app exits once its windows are closed");
             // And cleanly: WinUI taken down first, the finalizer then released a control and the exit ended in 0xc000027b
