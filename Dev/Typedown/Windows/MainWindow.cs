@@ -184,6 +184,14 @@ namespace Typedown.Windows
                 if (!Stop() || closed) return;
                 SetCloaked(false);
                 Log.Debug($"window: on screen after {why}, {clock.ElapsedMilliseconds} ms");
+                // Brought to the front as it appears: activated while still hidden (Start), the foreground could go
+                // elsewhere meanwhile - the Start menu closing, a click - and the window came up behind, its taskbar
+                // button there first, and to the front only when the editor took the keyboard later (a reader, hp88).
+                if (PInvoke.GetForegroundWindow() != Handle)
+                {
+                    Log.Debug("window: not in front as it appeared; activated");
+                    Activate();
+                }
             }
             stopShowing = () => Stop();
             void OnRendered(object sender, RenderedEventArgs e) => Show("its content drawn");
