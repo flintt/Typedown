@@ -161,23 +161,32 @@ namespace Typedown.Windows
         // window's: frames came before the content was in them, and the window came up white but for the caption buttons
         // for some 150 ms (SF05; the reader's Sepia start, hp88). Six frames, not two: the frames are counted on the UI
         // thread, and the content reaches the screen through the compositor a little after - with two, the window still
-        // came up white for one read (SF05, w10 job 86).
+        // came up white for one read (SF05, w10 job 86). But not six frames either: XAML draws a frame only when something
+        // changes, and at a start little does - six took 1.3 s, the window came up that much later than 1.4.1.10's (hp88,
+        // 1.4.1.14: the reader felt it slower). The first frame after the content has loaded, then 80 ms for the compositor.
         private void ShowAfterFirstFrame()
         {
-            var frames = 0;
             var shown = false;
             var clock = Stopwatch.StartNew();
+            Microsoft.UI.Dispatching.DispatcherQueueTimer settle = null;
             void Show(string why)
             {
                 if (shown) return;
                 shown = true;
                 CompositionTarget.Rendering -= OnRendering;
+                settle?.Stop();
                 SetCloaked(false);
                 Log.Debug($"window: on screen after {why}, {clock.ElapsedMilliseconds} ms");
             }
             void OnRendering(object sender, object e)
             {
-                if (RootControl.IsLoaded && ++frames >= 6) Show("its first frames");
+                if (!RootControl.IsLoaded || settle != null) return;
+                CompositionTarget.Rendering -= OnRendering;
+                settle = DispatcherQueue.CreateTimer();
+                settle.Interval = TimeSpan.FromMilliseconds(80);
+                settle.IsRepeating = false;
+                settle.Tick += (_, _) => Show("its first frame");
+                settle.Start();
             }
             CompositionTarget.Rendering += OnRendering;
             var timer = DispatcherQueue.CreateTimer();
