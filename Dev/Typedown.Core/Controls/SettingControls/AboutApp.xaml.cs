@@ -78,6 +78,40 @@ namespace Typedown.Core.Controls
             }
         }
 
+        private async void OpenSourceButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var path = System.IO.Path.Combine(System.AppContext.BaseDirectory, "ThirdPartyNotices.txt");
+                await ShowTextAsync(XamlRoot, Locale.GetString("OpenSourceSoftware"), System.IO.File.ReadAllText(path));
+            }
+            catch (System.Exception ex)
+            {
+                Utilities.Log.WriteLocal("AboutOpenSource", ex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// A long text (the licences) in a dialog, to read and copy from: a read-only box that scrolls, as wide as the
+        /// window allows; in a fixed-width font unless <paramref name="monospace"/> is false (prose, not a laid-out file).
+        /// </summary>
+        public static async System.Threading.Tasks.Task ShowTextAsync(XamlRoot root, string title, string text, bool monospace = true)
+        {
+            var box = new TextBox
+            {
+                Text = text,
+                IsReadOnly = true,
+                TextWrapping = TextWrapping.Wrap,
+                AcceptsReturn = true,
+                FontSize = monospace ? 12 : 14,
+                Width = System.Math.Min(640, root.Size.Width - 120),
+                Height = System.Math.Max(200, System.Math.Min(520, root.Size.Height - 220)),
+            };
+            if (monospace) box.FontFamily = new Microsoft.UI.Xaml.Media.FontFamily("Consolas");
+            ScrollViewer.SetVerticalScrollBarVisibility(box, ScrollBarVisibility.Auto);
+            await AppContentDialog.Create(title, box, Locale.GetDialogString("Ok")).ShowAsync(root);
+        }
+
         /// <summary>
         /// A section of its own that an edition adds below the rest (set from Edition.Initialize); called each time the
         /// page is shown. Typedown leaves it null and the page is as it always was.

@@ -37,6 +37,11 @@
             <Button MinWidth="100" Name="OpenLogFolderButton" Content="{u:LocaleString Key=About.OpenLogFolder}" Click="OpenLogFolderButton_Click"/>
         </StackPanel>
 
+        <!-- The open-source software it includes and their licences (ThirdPartyNotices.txt, next to the program). -->
+        <StackPanel Margin="-12,0,0,0">
+            <HyperlinkButton Name="OpenSourceButton" Content="{u:LocaleString Key=OpenSourceSoftware}" Click="OpenSourceButton_Click"/>
+        </StackPanel>
+
         <!-- What an edition adds to the page (AboutApp.EditionSection); empty unless an edition sets it. -->
         <ContentPresenter x:Name="EditionSectionPresenter" Margin="0,16,0,0"/>
 

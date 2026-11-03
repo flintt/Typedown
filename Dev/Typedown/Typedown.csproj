@@ -140,6 +140,8 @@
 		<Content Include="Resources\Themes\**" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Link="Resources\Themes\%(RecursiveDir)%(Filename)%(Extension)" />
 		<!-- The MIT notice travels with the program (installer, portable zip and MSIX alike). -->
 		<Content Include="..\..\LICENSE" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Link="LICENSE.txt" />
+		<!-- And the third-party notices beside it (written by Tools/Licenses/third-party-notices.py). -->
+		<Content Include="..\..\ThirdPartyNotices.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Link="ThirdPartyNotices.txt" />
 		<!-- The theme document ships next to the themes, and a copy lands in the user's themes folder. -->
 		<!-- The user guide, Chinese and English, for Help > User guide (UserGuide.cs): in every build, the Store's too. -->
 		<Content Include="..\..\docs\user-guide.md" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Link="Resources\Guide\user-guide.md" />
