@@ -43,6 +43,7 @@ namespace Typedown.Utilities
                     Opacity = background.HasValue ? 0 : 1,
                 };
                 host.Children.Insert(0, WebView);
+                StartupTiming.Reached("web view added");
                 await WebView.EnsureCoreWebView2Async(environment);
                 StartupTiming.Reached("web view ready");
                 return WebView.CoreWebView2 != null;

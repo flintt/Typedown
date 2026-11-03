@@ -1053,6 +1053,7 @@ namespace Typedown.Core.ViewModels
                 else TabsViewModel.Tabs.Add(placeholder);
             }
             Log.Debug($"RestoreSession: {TabsViewModel.Tabs.Count} tab(s) shown, reading {Path.GetFileName(activeFile)}");
+            StartupTiming.Reached("session tabs shown");
             var loaded = false;
             try
             {
@@ -1063,6 +1064,7 @@ namespace Typedown.Core.ViewModels
             {
                 Log.Debug($"RestoreSession: {activeFile}: {ex.Message}");
             }
+            StartupTiming.Reached("session active file read");
             var activeTab = loaded ? TabsViewModel.ActiveTab : null;
             if (activeTab == null && TabsViewModel.Tabs.Contains(blank) && TabsViewModel.Tabs.Count > 1)
                 TabsViewModel.Tabs.Remove(blank);

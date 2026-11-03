@@ -17,6 +17,7 @@ import { classifierVersion } from "services/normalization";
 import { applyHostBackground } from "services/theme";
 import { absoluteImageUrls, svgImagesAsPng } from "services/localPaths";
 import { diagramsToPictures } from "services/diagramPicture";
+import { markStartup, sendStartupMarks } from "services/startupMarks";
 
 /** The style element with this id, appended to the head on first use. */
 const styleElement = (id: string) => {
@@ -97,9 +98,11 @@ const Editor: React.FC = () => {
         const given = givenTextRef.current
         // The editor shows the document now: its preview (services/loadPreview) goes.
         hideLoadPreview()
+        markStartup('document drawn')
         transport.postMessage('FileLoaded', typeof given === 'string' && text === given
             ? { same: true, loadId: loadIdRef.current }
             : { text, loadId: loadIdRef.current })
+        sendStartupMarks()
         // The host has the document as loaded; what was typed for it goes in now, as the reader's edit.
         holdRef.current?.loaded(appliedHoldRef.current)
     }, [])
@@ -324,7 +327,9 @@ const Editor: React.FC = () => {
     }, [])
 
     useEffect(() => {
+        markStartup('settings asked')
         remote.getSettings().then(({ markdown, basePath, cursor, scrollTop, scrollAnchor, loadId, ...opt }: any) => {
+            markStartup('settings received')
             const apply = () => {
                 window.basePath = basePath
                 loadIdRef.current = loadId

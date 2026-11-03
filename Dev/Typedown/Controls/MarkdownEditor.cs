@@ -86,6 +86,7 @@ namespace Typedown.Controls
 
         public MarkdownEditor(IServiceProvider serviceProvider)
         {
+            Core.Utilities.StartupTiming.Reached("editor control made");
             ServiceProvider = serviceProvider;
             made.AddOrUpdate(serviceProvider, this);
             Loaded += OnLoaded;
@@ -628,6 +629,8 @@ namespace Typedown.Controls
 #else
             var staticsFolder = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Statics");
             var htmlPath = System.IO.Path.Combine(staticsFolder, "index.html");
+            Core.Utilities.StartupTiming.Reached("page navigate");
+            WebViewController.CoreWebView2.NavigationCompleted += (_, _) => Core.Utilities.StartupTiming.Reached("page navigated");
             WebViewController.CoreWebView2.Navigate(new Uri(htmlPath).AbsoluteUri);
 #endif
         }

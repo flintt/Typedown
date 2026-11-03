@@ -1,12 +1,14 @@
 import transport from 'services/transport';
 import { remote } from 'services/remote';
+import { markStartup } from 'services/startupMarks';
 
 transport.addListener('ThemeChanged', onThemeChanged)
 
 // The host shows the editor once told the content is loaded: told whatever happens to the theme (a theme that could
 // not be read or applied left the editor invisible).
+markStartup('theme asked')
 remote.getCurrentTheme()
-    .then(arg => onThemeChanged(arg))
+    .then(arg => { markStartup('theme received'); onThemeChanged(arg) })
     .catch(err => console.log('theme: the current theme could not be applied', err))
     .finally(() => setTimeout(() => remote.contentLoaded(), 0))
 

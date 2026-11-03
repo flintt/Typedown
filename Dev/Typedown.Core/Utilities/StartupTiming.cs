@@ -26,6 +26,16 @@ namespace Typedown.Core.Utilities
             this.write = write;
         }
 
+        /// <summary>
+        /// A moment of the start measured elsewhere (the editor page's own clock, its marks sent after the document is
+        /// shown), written on the same time line; the stages and their deltas are left as they are.
+        /// </summary>
+        public void Note(string stage, DateTime at)
+        {
+            if (processStart == null) return;
+            write($"startup: {stage} at {(at - processStart.Value).TotalMilliseconds:0} ms");
+        }
+
         public void Mark(string stage, DateTime now, bool last = false)
         {
             lock (marked)

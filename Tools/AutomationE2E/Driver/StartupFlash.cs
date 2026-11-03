@@ -283,6 +283,15 @@ internal static partial class Program
     /// <paramref name="wholeWindow"/>, the whole client area is read too in the first second after the window is up
     /// (every third read, twenty at most): a flash around the editor, not only in it.
     /// </summary>
+    // The startup lines of the last start, from its "startup: main" on: the host's stages and, once the document is
+    // shown, the page's own moments ("startup: page ..."), for where a start's time goes.
+    private static IEnumerable<string> StartupLinesOfLastStart()
+    {
+        var lines = LogLines("startup:").ToList();
+        var from = lines.FindLastIndex(l => l.Contains("startup: main at"));
+        return from < 0 ? lines.TakeLast(9) : lines.Skip(from).Where(l => !l.Contains("startup: version="));
+    }
+
     private static async Task ColdStartFlash(List<string> notes, string id, string customThemeId, string wrongName, Func<byte, byte, byte, bool> wrong, bool wholeWindow = false)
     {
         string Embedded(string name)
@@ -457,7 +466,9 @@ internal static partial class Program
                     await Task.Delay(1500);
                     try { await probe.Call("test.dialogs.dismiss", new { }); } catch { }
                 }
-                notes.Add($"{label}: startup lines: " + string.Join(" | ", LogLines("startup:").TakeLast(9).Concat(LogLines("window: on screen").TakeLast(1)).Concat(LogLines("window: cloak").TakeLast(2))));
+                // The page's moments are written once its document is shown, the log a moment later: waited for, 3 s at most.
+                for (var w = 0; w < 30 && !StartupLinesOfLastStart().Any(l => l.Contains("startup: page document drawn")); w++) await Task.Delay(100);
+                notes.Add($"{label}: startup lines: " + string.Join(" | ", StartupLinesOfLastStart().Concat(LogLines("window: on screen").TakeLast(1)).Concat(LogLines("window: cloak").TakeLast(2))));
             }
             Check(failures.Count == 0, string.Join("; ", failures));
         }

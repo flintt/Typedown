@@ -106,12 +106,23 @@ namespace Typedown.Core.ViewModels
 
         private bool contentUpdating = false;
 
+        // The first window's page only: the start's time line is the process's first.
+        private static int pageMarksNoted;
+
         public EditorViewModel(IServiceProvider serviceProvider)
         {
             ServiceProvider = serviceProvider;
             EventCenter.GetObservable<EditorEventArgs>("MarkdownChange").Subscribe(x => OnMarkdownChange(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("ContentFlushed").Subscribe(x => OnContentFlushed(x.Args));
             EventCenter.GetObservable<EditorEventArgs>("FileLoaded").Subscribe(x => OnFileLoaded(x.Args));
+            // The page's own moments of the start (services/startupMarks), each a wall-clock time in ms: on the log's
+            // start-up time line, "startup: page ..." (where the start's time goes, a reader's slow start).
+            EventCenter.GetObservable<EditorEventArgs>("StartupMarks").Subscribe(x =>
+            {
+                if (x.Args is not JObject marks || System.Threading.Interlocked.Exchange(ref pageMarksNoted, 1) == 1) return;
+                foreach (var mark in marks.Properties().OrderBy(p => p.Value.Value<double>()))
+                    StartupTiming.Current.Note("page " + mark.Name, DateTimeOffset.FromUnixTimeMilliseconds((long)mark.Value.Value<double>()).LocalDateTime);
+            });
             // The page shows a long document's first part before it reports the load (drawn a part at a time, or a preview
             // where it is drawn at once): no "Opening…" over it from then on.
             EventCenter.GetObservable<EditorEventArgs>("LoadPreviewShown").Subscribe(x => { if (x.Args?["loadId"]?.Value<int?>() == LoadId) { LongLoadPending = false; LeavingCover = false; } });
@@ -221,6 +232,7 @@ namespace Typedown.Core.ViewModels
             if (!FirstStart || startupLoad != null || !FileViewModel.StartsWithSession) return;
             FirstStart = false;
             Log.Debug("startup: the last session restored before the page asks");
+            StartupTiming.Reached("session restore starts");
             startupLoad = FileViewModel.LoadStartUpMarkdown();
         }
 

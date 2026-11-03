@@ -72,6 +72,7 @@ import 'components/Muya/themes/default.css'
 import { noteScroll, recentScrolls } from 'services/scrollWriters'
 import { FIND_EDIT_REFRESH_MS, findResultsOpen, noteFindChange, setFindProvider } from 'services/findResults'
 import { previewOf } from 'services/findPreview'
+import { markStartup } from 'services/startupMarks'
 
 interface IMuyaEditor {
     markdown: string
@@ -429,7 +430,9 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         // The diagram renderer set before the first diagram is drawn (public/lazy-mermaid.js).
         const setMermaidRenderer = (window as any).__typedownSetMermaidRenderer
         setMermaidRenderer?.(o?.mermaidRenderer)
+        markStartup('muya making')
         const muya = new Muya(ele, o);
+        markStartup('muya made');
         // The constructor already built the document with these, so they count as applied.
         (muya as any).__applied = {
             font: JSON.stringify({ fontSize: o?.fontSize, lineHeight: o?.lineHeight }),

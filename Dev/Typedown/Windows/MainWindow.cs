@@ -79,9 +79,12 @@ namespace Typedown.Windows
 
         public MainWindow()
         {
+            // The window, its services' scope and its content (RootControl, built by the field initialisers) made.
+            StartupTiming.Reached("window object");
             Handle = WinRT.Interop.WindowNative.GetWindowHandle(this);
             allWindows.Add(this);
             TrySetPrimaryLanguage();
+            StartupTiming.Reached("window language");
             // Applied again whenever the setting changes: the windows and dialogs opened after it then come up
             // in the new language, and the settings say which parts still need the program restarted.
             disposables.Add(AppViewModel.SettingsViewModel.WhenPropertyChanged(nameof(SettingsViewModel.Language)).Subscribe(_ => TrySetPrimaryLanguage()));
@@ -483,6 +486,7 @@ namespace Typedown.Windows
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
+            StartupTiming.Reached("window content loaded");
             SaveWindowPlacementSoon(false);
             AppViewModel.MainWindow = Handle;
             Core.Services.AutomationWindows.Register(AppViewModel, DispatcherQueue);
