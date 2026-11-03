@@ -78,6 +78,28 @@ namespace Typedown.Core.Utilities
             });
         }
 
+        /// <summary>
+        /// The lines still queued written out now, on the caller's thread: before the process ends on purpose
+        /// (Environment.Exit), which does not wait for the background writer.
+        /// </summary>
+        public static void Flush()
+        {
+            try
+            {
+                var batch = new System.Text.StringBuilder();
+                while (pending.TryDequeue(out var line)) batch.Append(line);
+                if (batch.Length == 0) return;
+                Directory.CreateDirectory(LogFolder);
+                var file = Path.Combine(LogFolder, "debug.log");
+                RollOver(file);
+                File.AppendAllText(file, batch.ToString());
+            }
+            catch
+            {
+                // logging must never throw
+            }
+        }
+
         /// <summary>debug.log grows to this, then becomes debug.old.log (replacing the one before) and starts again.</summary>
         public const long DebugLogLimit = 2 * 1024 * 1024;
 

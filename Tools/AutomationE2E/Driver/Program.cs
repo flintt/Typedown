@@ -4581,7 +4581,13 @@ internal static partial class Program
             }
         }
         using (var host = Process.GetProcessById(hostPid))
+        {
             Check(host.WaitForExit(20000), "the app exits once its windows are closed");
+            // And cleanly: WinUI taken down first, the finalizer then released a control and the exit ended in 0xc000027b
+            // (hp job 59, 2026-11-03) - the app gone as asked, a crash report and dump each time.
+            notes.Add($"exit code 0x{host.ExitCode:x8}");
+            Check(host.ExitCode == 0, $"the app exits cleanly (exit code 0x{host.ExitCode:x8})");
+        }
         notes.Add("closed, exited");
 
         using var after = await StartHostAgain(notes, "e2e KU01 after");

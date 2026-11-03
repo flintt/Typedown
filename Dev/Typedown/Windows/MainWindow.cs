@@ -664,7 +664,18 @@ namespace Typedown.Windows
                 else
                 {
                     Log.Debug($"last window closed, exiting ({instances} view model(s) still referenced)");
-                    Application.Current.Exit();
+                    // Not Application.Exit: it took WinUI down first, and the runtime's shutdown after it let the finalizer
+                    // release a control a view model still held - WinUI, already gone, ended the process for it
+                    // (0xc000027b, DetachFromHandOffVisual on the .NET Finalizer thread, hp job 59, 2026-11-03). Everything
+                    // is saved by now (the session, the settings flushed in ForceClose); the window's services go first
+                    // (Release above, queued before this), ProcessExit handlers still run (the writing statistics), the log
+                    // is written out, and the process ends with WinUI still up.
+                    static void ExitNow()
+                    {
+                        Log.Flush();
+                        Environment.Exit(0);
+                    }
+                    if (!DispatcherQueue.TryEnqueueSafe(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, ExitNow)) ExitNow();
                 }
             }
             else
