@@ -760,7 +760,10 @@ internal static partial class Program
             var wide = Find("NavigationView")?.Current.BoundingRectangle;
             await c.Call("window.setView", new { windowId, sidePane = new { open = true, page = "files" } });
             await Task.Delay(500);
-            var outlineTab = wide == null ? null : Deep.All(System.Windows.Automation.AutomationElement.FromHandle(window), new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.NameProperty, "Outline"))
+            var outlineTab = wide == null ? null : Deep.All(System.Windows.Automation.AutomationElement.FromHandle(window), new System.Windows.Automation.OrCondition(
+                    // By its name in the XAML (Toc), in any interface language - "Outline" is hp's 大纲.
+                    new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.AutomationIdProperty, "Toc"),
+                    new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.NameProperty, "Outline")))
                 .Cast<System.Windows.Automation.AutomationElement>().FirstOrDefault(e => { var r = e.Current.BoundingRectangle; return r.Width > 0 && r.Left >= wide.Value.Left - 1 && r.Right <= wide.Value.Right + 1; });
             notes.Add($"widened: pane {wide}; its Outline tab {outlineTab?.Current.BoundingRectangle}");
             Check(outlineTab != null, "the pane's content is in the pane after the resize (its Outline tab there)");

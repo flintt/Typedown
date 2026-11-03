@@ -93,22 +93,21 @@ namespace Typedown.Utilities
         public static IntPtr OpenNewWindow(string[] args, bool forceNewWindow = false)
         {
             var filePath = CommandLine.GetOpenFilePath(args);
-            if (!string.IsNullOrEmpty(filePath) && FileViewModel.TryGetOpenedWindow(filePath, out var windowHWnd))
+            // Already open somewhere: bring that window (and tab) to the front. Not a window going away (past its close, or
+            // gone from the open ones): handed the file, it closed with it and nothing opened (CW01, hp job 68 and w10 job
+            // 62: a file opened again just as its window closed).
+            if (!string.IsNullOrEmpty(filePath) && FileViewModel.TryGetOpenedWindow(filePath, out var windowHWnd)
+                && MainWindow.AllWindows.FirstOrDefault(x => x.Handle == windowHWnd) is { IsGoingAway: false } window)
             {
-                // Already open somewhere: bring that window (and tab) to the front.
-                var window = MainWindow.AllWindows.FirstOrDefault(x => x.Handle == windowHWnd);
-                if (window != null)
-                {
-                    if (PInvoke.IsIconic(window.Handle))
-                        PInvoke.ShowWindow(window.Handle, PInvoke.ShowWindowCommand.Restore);
-                    var tab = window.AppViewModel.TabsViewModel?.FindByPath(filePath);
-                    if (tab != null) _ = window.AppViewModel.TabsViewModel.SwitchTo(tab);
-                }
+                if (PInvoke.IsIconic(window.Handle))
+                    PInvoke.ShowWindow(window.Handle, PInvoke.ShowWindowCommand.Restore);
+                var tab = window.AppViewModel.TabsViewModel?.FindByPath(filePath);
+                if (tab != null) _ = window.AppViewModel.TabsViewModel.SwitchTo(tab);
                 return windowHWnd;
             }
             // A file opened from the shell goes into the last active window as a new tab (upstream #73) unless the
             // user prefers separate windows; a plain launch without a file always creates a window.
-            var target = MainWindow.LastActive ?? MainWindow.AllWindows.FirstOrDefault();
+            var target = MainWindow.LastActive is { IsGoingAway: false } last ? last : MainWindow.AllWindows.FirstOrDefault(w => !w.IsGoingAway);
             if (!forceNewWindow && !string.IsNullOrEmpty(filePath) && target != null && target.AppViewModel != null && target.AppViewModel.SettingsViewModel.OpenFilesInNewTab)
             {
                 if (PInvoke.IsIconic(target.Handle))
