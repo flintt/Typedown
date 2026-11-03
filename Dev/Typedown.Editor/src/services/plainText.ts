@@ -180,6 +180,9 @@ export function fragmentToPlainText(fragment: Node): string {
  *  list item is not "4. word"). */
 const STRUCTURE = new Set(['LI', 'OL', 'UL', 'TABLE', 'THEAD', 'TBODY', 'TR', 'BLOCKQUOTE']);
 
+/** Where the structure taken along ends: the containers that are a whole of their own. */
+const OUTERMOST = new Set(['OL', 'UL', 'TABLE', 'BLOCKQUOTE']);
+
 /** One range's content, inside copies of the structure around it (cloneContents gives only what is between the
  *  range's ends, so a selection within one list item lost the list and with it the number). */
 function rangeFragment(range: Range): Node {
@@ -202,6 +205,9 @@ function rangeFragment(range: Range): Node {
         const copy = node.cloneNode(false);
         copy.appendChild(fragment);
         fragment = copy;
+        // Up to the list, table or quote the selection is in, not the ones around it: items of a nested list came as
+        // the outer item (an empty "3.") with them indented under it (a reader, 2026-11-03).
+        if (OUTERMOST.has(node.tagName)) break;
     }
     const div = document.createElement('div');
     div.appendChild(fragment);

@@ -71,6 +71,19 @@ test('a selection starting in a later list item keeps that item\'s number', () =
     expect(selectionToPlainText()).toBe('4. four\n    • nested');
 });
 
+// Items of a list nested in another, selected from one to another: those items with their numbers, as a list of its
+// own - not under the outer item (an empty "3." with them indented, a reader's copy, 2026-11-03).
+test('items of a nested list are copied without the item around them', () => {
+    document.body.innerHTML = `<div id="ag-editor-id"><ol id="outer" class="ag-paragraph ag-order-list" start="3"><li id="o3" class="ag-paragraph ag-list-item"><p class="ag-paragraph"><span class="ag-paragraph-content"><span class="ag-plain-text">细节</span></span></p><ol id="inner" class="ag-paragraph ag-order-list" start="21"><li id="i21" class="ag-paragraph ag-list-item"><p class="ag-paragraph"><span class="ag-paragraph-content"><span class="ag-plain-text">twenty-one</span></span></p></li><li id="i22" class="ag-paragraph ag-list-item"><p class="ag-paragraph"><span class="ag-paragraph-content"><span class="ag-plain-text">twenty-two</span></span></p></li><li id="i23" class="ag-paragraph ag-list-item"><p class="ag-paragraph"><span class="ag-paragraph-content"><span class="ag-plain-text">twenty-three</span></span></p></li></ol></li></ol></div>`;
+    const range = document.createRange();
+    range.setStart(document.querySelector('#i22 .ag-plain-text')!.firstChild!, 0);
+    range.setEnd(document.querySelector('#i23 .ag-plain-text')!.firstChild!, 12);
+    const selection = window.getSelection()!;
+    selection.removeAllRanges();
+    selection.addRange(range);
+    expect(selectionToPlainText()).toBe('22. twenty-two\n23. twenty-three');
+});
+
 test('a word picked out of a list item is only that word', () => {
     const root = container();
     const text = root.querySelector('#li2 .ag-plain-text')!.firstChild!;
