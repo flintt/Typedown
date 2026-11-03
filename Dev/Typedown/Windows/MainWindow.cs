@@ -601,6 +601,11 @@ namespace Typedown.Windows
             // with instead.
             try { this.TrySaveWindowPlacement(); }
             catch (Exception ex) { Log.WriteLocal("WindowClosing", "placement: " + ex); }
+            // Past the save question and its placement kept (read while it is still shown): gone from the screen now, the
+            // rest - the settings written, the content taken down, the process ended - out of sight (a reader: closing
+            // flashed white, the window up while it was taken apart).
+            try { AppWindow.Hide(); }
+            catch (Exception ex) { Log.Debug($"window closing: hiding it: {ex.Message}"); }
             try
             {
                 // Window placement is itself a setting. Do not let process shutdown cut off the queued atomic write.
