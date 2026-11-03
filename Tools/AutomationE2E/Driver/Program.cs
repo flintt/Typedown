@@ -411,6 +411,7 @@ internal static partial class Program
             var limit = name.StartsWith("SHOT") ? 900 : name.StartsWith("RD02") ? 300 : name.StartsWith("HJ01") ? 600 : name.StartsWith("HJ02") ? 360 : name.StartsWith("JT02") ? 1800 : name.StartsWith("JT03") ? 1200 : name.StartsWith("JT04") ? 900 : name.StartsWith("LT01") ? 300 : name.StartsWith("SV01") || name.StartsWith("SC01") ? 600 : name.StartsWith("SR03") ? 300 : 120;
             if (await Task.WhenAny(run, Task.Delay(TimeSpan.FromSeconds(limit))) != run) throw new CaseFailed($"the case did not finish within {limit} s");
             await run;
+            QueuedWorkThatThrew(notes);
             results.Add(new JObject { ["name"] = name, ["passed"] = true, ["ms"] = watch.ElapsedMilliseconds, ["notes"] = new JArray(notes) });
         }
         catch (Exception e)
@@ -428,8 +429,33 @@ internal static partial class Program
                 notes.Add("at the failure: " + FailureEvidence(name.Split(' ')[0]));
                 try { await DiagnoseWebViews(notes); } catch (Exception d) { notes.Add("no web view diagnosis: " + d.Message.Split('\n')[0]); }
             }
+            QueuedWorkThatThrew(notes);
             results.Add(new JObject { ["name"] = name, ["passed"] = false, ["ms"] = watch.ElapsedMilliseconds, ["error"] = e is CaseFailed ? e.Message : e.ToString(), ["notes"] = new JArray(notes) });
         }
+    }
+
+    private static readonly HashSet<string> queuedWorkLogsSeen = new();
+
+    /// <summary>
+    /// Work queued for a window that threw (the close crash's kind, 0xc000027b): the guard (TryEnqueueSafe) keeps the app
+    /// running and writes a DispatcherQueueCallback log, which would otherwise go unseen. Each new one is named in the notes
+    /// of the case it came in, with the work and the exception's first lines.
+    /// </summary>
+    private static void QueuedWorkThatThrew(List<string> notes)
+    {
+        try
+        {
+            if (!Directory.Exists(testRoot)) return;
+            foreach (var log in Directory.GetFiles(testRoot, "*-DispatcherQueueCallback.log", SearchOption.AllDirectories).OrderBy(f => f))
+            {
+                if (!queuedWorkLogsSeen.Add(log)) continue;
+                var lines = File.ReadAllLines(log).SkipWhile(l => l.Length > 0).Skip(1).Take(3).Select(l => l.Length > 220 ? l[..220] : l);
+                var note = $"QUEUED WORK THREW ({Path.GetFileName(log)}): {string.Join(" | ", lines)}";
+                notes.Add(note);
+                Console.Error.WriteLine($"{currentCase}: {note}");
+            }
+        }
+        catch (Exception e) { notes.Add("no scan of the queued-work logs: " + e.Message.Split('\n')[0]); }
     }
 
     // What one failure used to take with it: a page message handler that threw was detached for good (the outline or
