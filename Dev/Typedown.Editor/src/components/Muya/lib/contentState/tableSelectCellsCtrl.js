@@ -7,6 +7,9 @@ const tableSelectCellsCtrl = ContentState => {
       return
     }
     const { eventCenter } = this.muya
+    // A press whose release never came (let go outside the window, or taken by another handler) left its listeners
+    // on: they are taken off before the next press adds its own.
+    this.detachCellSelectEvents()
     const { target } = event
     const cell = target.closest('th') || target.closest('td')
     const tableId = target.closest('table').id
@@ -30,7 +33,20 @@ const tableSelectCellsCtrl = ContentState => {
     this.cellSelectEventIds.push(mouseMoveId, mouseUpId)
   }
 
+  ContentState.prototype.detachCellSelectEvents = function () {
+    const { eventCenter } = this.muya
+    for (const id of this.cellSelectEventIds) {
+      eventCenter.detachDOMEvent(id)
+    }
+    this.cellSelectEventIds = []
+  }
+
   ContentState.prototype.handleCellMouseMove = function (event) {
+    // The button is up: the release was missed. Without this, the pointer merely passing over another cell later took
+    // the caret away (blurred) and started a cell selection nobody made - "the caret vanished while editing a table".
+    // Taken as the release it was: a selection already made is kept, as at a mouseup.
+    if (!this.cellSelectInfo) return this.detachCellSelectEvents()
+    if ((event.buttons & 1) === 0) return this.handleCellMouseUp(event)
     const { target } = event
     const cell = target.closest('th') || target.closest('td')
     const table = target.closest('table')
@@ -56,11 +72,7 @@ const tableSelectCellsCtrl = ContentState => {
   }
 
   ContentState.prototype.handleCellMouseUp = function (event) {
-    const { eventCenter } = this.muya
-    for (const id of this.cellSelectEventIds) {
-      eventCenter.detachDOMEvent(id)
-    }
-    this.cellSelectEventIds = []
+    this.detachCellSelectEvents()
     if (this.cellSelectInfo && this.cellSelectInfo.isStartSelect) {
       event.preventDefault()
       const { tableId, selectedCells, anchor, focus } = this.cellSelectInfo
