@@ -31,7 +31,7 @@ namespace Typedown.Utilities
         /// and more), WinUI filled it with a light grey of its own - a white flash between the theme's colour and the
         /// document at every start (hp88, Sepia). The caller shows it once its page is there.
         /// </summary>
-        public async Task<bool> InitializeAsync(Panel host, Windows.UI.Color? background = null)
+        public async Task<bool> InitializeAsync(Panel host, global::Windows.UI.Color? background = null)
         {
             try
             {
