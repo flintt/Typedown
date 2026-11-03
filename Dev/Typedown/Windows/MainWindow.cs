@@ -156,8 +156,10 @@ namespace Typedown.Windows
             if (result != 0) Log.Debug($"window: cloak {cloaked} refused (0x{result:x8})");
         }
 
-        // The window shown on the second frame drawn after it was made visible: the first one is being put together as
-        // the first Rendering is raised, and is on its way by the next.
+        // The window shown on the second frame drawn once its content has loaded: the first one is being put together as
+        // the first Rendering is raised, and is on its way by the next. Counted from its content's Loaded, not from the
+        // window's: frames came before the content was in them, and the window came up white but for the caption buttons
+        // for some 150 ms (SF05; the reader's Sepia start, hp88).
         private void ShowAfterFirstFrame()
         {
             var frames = 0;
@@ -173,13 +175,13 @@ namespace Typedown.Windows
             }
             void OnRendering(object sender, object e)
             {
-                if (++frames >= 2) Show("its first frame");
+                if (RootControl.IsLoaded && ++frames >= 2) Show("its first frame");
             }
             CompositionTarget.Rendering += OnRendering;
             var timer = DispatcherQueue.CreateTimer();
-            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Interval = TimeSpan.FromSeconds(2);
             timer.IsRepeating = false;
-            timer.Tick += (_, _) => Show("the second waited for it");
+            timer.Tick += (_, _) => Show("two seconds waited for it");
             timer.Start();
         }
 
