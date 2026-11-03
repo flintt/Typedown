@@ -843,6 +843,8 @@ class Muya {
       return
     }
     this.contentState.selectAll(inSteps)
+    // A table selected as cells has no text selection (selectTable blurs): reported as one, the change threw.
+    if (this.contentState.selectedTableCells) return
     this.dispatchSelectionChange()
     this.dispatchSelectionFormats()
   }

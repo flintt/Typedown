@@ -83,6 +83,41 @@ const { openEditor } = require('./harness');
     await pause(300);
     const g = await state();
     report(g.range === 4 && g.listening === 0, 'a drag with a lost release keeps its range (2 x 2) and stops listening', JSON.stringify(g));
+
+    // Select all in a cell: its text first (typing replaces it), then the table (a reader: typing after Ctrl+A in a cell
+    // went nowhere - the cell had become a selected cell, the caret gone). With and without select all in steps.
+    for (const steps of [true, false]) {
+      await page.evaluate(on => window.__deliver('SettingsChanged', { selectAllInSteps: on }), steps);
+      await page.mouse.click(5, 5);
+      await pause(200);
+      const o = await cell('Oslo');
+      await page.mouse.click(o.x, o.y);
+      await pause(200);
+      await page.evaluate(() => window.__deliver('SelectAll'));
+      await pause(250);
+      const h = await state();
+      const text = await page.evaluate(() => window.getSelection().toString());
+      report(h.range === 0 && h.caretIn === 'Oslo' && text === 'Oslo', `select all in a cell selects its text (steps ${steps})`, JSON.stringify({ ...h, text }));
+      await page.keyboard.type(steps ? 'Bergen' : 'Paris');
+      await pause(300);
+      const md = await page.evaluate(() => window.__typedownMuya.getMarkdown());
+      report(new RegExp(`\\|\\s*${steps ? 'Bergen' : 'Paris'}\\s*\\|`).test(md) && !/Oslo/.test(md), `and typing replaces it (steps ${steps})`, md);
+      await page.evaluate(() => window.__deliver('SelectAll'));
+      await pause(250);
+      await page.evaluate(() => window.__deliver('SelectAll'));
+      await pause(250);
+      const t = await state();
+      report(t.range === 9, `select all again: the whole table (steps ${steps})`, JSON.stringify(t));
+      // Oslo back for the next round.
+      await page.mouse.click(5, 5);
+      await pause(200);
+      const back = await cell(steps ? 'Bergen' : 'Paris');
+      await page.mouse.click(back.x, back.y);
+      await page.evaluate(() => window.__deliver('SelectAll'));
+      await pause(250);
+      await page.keyboard.type('Oslo');
+      await pause(300);
+    }
     if (errors.length) failures.push(`page errors: ${errors.join(' | ')}`);
   } finally {
     await close();

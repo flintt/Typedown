@@ -973,24 +973,15 @@ const paragraphCtrl = ContentState => {
     if (startBlock.functionType === 'cellContent' && endBlock.functionType === 'cellContent') {
       if (start.key === end.key) {
         const table = this.closest(startBlock, 'table')
-        const cellBlock = this.closest(startBlock, /th|td/)
-
-        this.selectedTableCells = {
-          tableId: table.key,
-          row: 1,
-          column: 1,
-          cells: [{
-            key: cellBlock.key,
-            text: cellBlock.children[0].text,
-            top: true,
-            right: true,
-            bottom: true,
-            left: true
-          }]
+        // The cell's text first, as text: typing then replaces it (a reader: Ctrl+A in a cell made it a selected cell,
+        // the caret gone, and nothing typed went in). All of it selected already, or nothing in it: the table.
+        const length = startBlock.text.length
+        const whole = Math.min(start.offset, end.offset) === 0 && Math.max(start.offset, end.offset) === length
+        if (length > 0 && !whole) {
+          this.cursor = { start: { key: start.key, offset: 0 }, end: { key: start.key, offset: length } }
+          return this.singleRender(table, true)
         }
-
-        this.singleRender(table, false)
-        return this.muya.eventCenter.dispatch('muya-format-picker', { reference: null })
+        return this.selectTable(table)
       } else {
         const startTable = this.closest(startBlock, 'table')
         const endTable = this.closest(endBlock, 'table')
