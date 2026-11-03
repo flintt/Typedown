@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -252,7 +252,25 @@ internal static partial class Program
     /// read from the screen as often as it can be for five seconds - a patch of the editor's area, the reader saw a
     /// single dark frame; over half of it dark is a dark frame. The first dark patches are saved, with the startup lines of the debug log for when they came.
     /// </summary>
-    private static async Task SF04(List<string> notes)
+    private static Task SF04(List<string> notes) =>
+        // Under 80: the empty window before XAML drew in it was a dark grey of 63, the Apricot page over 200.
+        ColdStartFlash(notes, "SF04", "typeleaf-apricot", "dark", (r, g, b) => 0.0722 * b + 0.7152 * g + 0.2126 * r < 80);
+
+    /// <summary>
+    /// SF05: SF04 under a light custom theme the other way: no WHITE frame. A reader (hp88, the Store package 1.4.1.13,
+    /// Sepia) saw the editor's area flash white as the app started and brought its tabs back; SF04 looks for dark frames
+    /// only. Sepia's page is #f4ecd8 - its blue 216; white, the editor page's own light (#f9f9f9) and the app's light grey
+    /// are all over 240 in every channel. A read whose patch is over half such a colour is a white frame.
+    /// </summary>
+    private static Task SF05(List<string> notes) =>
+        ColdStartFlash(notes, "SF05", "sepia", "white", (r, g, b) => b >= 236 && 0.0722 * b + 0.7152 * g + 0.2126 * r >= 230);
+
+    /// <summary>
+    /// A cold start restoring three tabs under a custom theme, Windows' apps dark and then light: the editor's patch read
+    /// from the screen from the process's start, and any stretch of reads over half <paramref name="wrongName"/>
+    /// (<paramref name="wrong"/> says which pixels are) a failure, saved and timed against the startup log.
+    /// </summary>
+    private static async Task ColdStartFlash(List<string> notes, string id, string customThemeId, string wrongName, Func<byte, byte, byte, bool> wrong)
     {
         string Embedded(string name)
         {
@@ -260,7 +278,8 @@ internal static partial class Program
             using var reader = new System.IO.StreamReader(stream, new System.Text.UTF8Encoding(false));
             return reader.ReadToEnd();
         }
-        var files = new[] { Fixture("sf04-a.md", "# SF04 first\n\nA short document.\n"), Fixture("sf04-showcase.md", Embedded("showcase.md")), Fixture("sf04-c.md", "# SF04 last\n\nA short document.\n") };
+        var n = id.ToLowerInvariant();
+        var files = new[] { Fixture(n + "-a.md", $"# {id} first\n\nA short document.\n"), Fixture(n + "-showcase.md", Embedded("showcase.md")), Fixture(n + "-c.md", $"# {id} last\n\nA short document.\n") };
         var session = System.IO.Path.Combine(testRoot, "data", "session.json");
         SetProcessDpiAwarenessContext(new IntPtr(-4));
         using var personalize = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize");
@@ -268,14 +287,14 @@ internal static partial class Program
         JToken theme;
         string? customTheme;
         RECT placed;
-        using (var c = await Session("e2e SF04"))
+        using (var c = await Session("e2e " + id))
         {
             var w = await FirstWindowId(c);
             GetWindowRect(await WindowOf(w, c), out placed);
             theme = (await c.Call("settings.get", new { keys = new[] { "appearance.theme" } }))["values"]!["appearance.theme"]!;
             customTheme = (string?)(await c.Call("test.settings.get", new { windowId = w, name = "CustomTheme" }))["value"];
             await SetSetting(c, "appearance.theme", JObject.FromObject(new { kind = "builtIn", id = "light" }));
-            await c.Call("test.settings.set", new { windowId = w, name = "CustomTheme", value = "typeleaf-apricot" });
+            await c.Call("test.settings.set", new { windowId = w, name = "CustomTheme", value = customThemeId });
             await c.Call("test.settings.set", new { windowId = w, name = "FileStartupAction", value = 2 });
         }
         var failures = new List<string>();
@@ -303,7 +322,7 @@ internal static partial class Program
                 var clock = System.Diagnostics.Stopwatch.StartNew();
                 var restarted = System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(hostExe, $"--automation-test-root \"{testRoot}\"") { UseShellExecute = true })!;
                 hostPid = restarted.Id;
-                var samples = new List<(long At, double Dark)>();
+                var samples = new List<(long At, double Wrong)>();
                 long appeared = -1;
                 var saved = 0;
                 long cloakedAt = -1;
@@ -332,7 +351,7 @@ internal static partial class Program
                     // The patch is read every millisecond or two.
                     int width = 160, height = 120;
                     int left = (r.Left + r.Right) / 2 - width / 2, top = r.Top + (r.Bottom - r.Top) * 55 / 100 - height / 2;
-                    var darkPixels = 0;
+                    var wrongPixels = 0;
                     var all = 0;
                     using var shot = new System.Drawing.Bitmap(width, height);
                     using (var g = System.Drawing.Graphics.FromImage(shot)) g.CopyFromScreen(left, top, 0, 0, new System.Drawing.Size(width, height));
@@ -347,42 +366,40 @@ internal static partial class Program
                             {
                                 var i = x * 4;
                                 all++;
-                                // Under 80: the empty window before XAML drew in it was a dark grey of 63, the Apricot
-                                // page over 200.
-                                if (0.0722 * row[i] + 0.7152 * row[i + 1] + 0.2126 * row[i + 2] < 80) darkPixels++;
+                                if (wrong(row[i + 2], row[i + 1], row[i])) wrongPixels++;
                             }
                         }
                     }
                     finally { shot.UnlockBits(data); }
-                    var share = all == 0 ? 0 : 100.0 * darkPixels / all;
+                    var share = all == 0 ? 0 : 100.0 * wrongPixels / all;
                     var at = clock.ElapsedMilliseconds;
                     samples.Add((at, share));
-                    // The first dark patches, with the whole window read once right after.
+                    // The first wrong patches, with the whole window read once right after.
                     if (share > 50 && saved < 4)
                     {
-                        shot.Save(System.IO.Path.Combine(outputDir, $"SF04-{(dark ? "dark" : "light")}-{saved}-{at}ms.png"));
-                        if (saved == 0) notes.Add($"{label}: the window just after the first dark patch: " + Screenshot($"SF04-{(dark ? "dark" : "light")}-window"));
+                        shot.Save(System.IO.Path.Combine(outputDir, $"{id}-{(dark ? "dark" : "light")}-{saved}-{at}ms.png"));
+                        if (saved == 0) notes.Add($"{label}: the window just after the first {wrongName} patch: " + Screenshot($"{id}-{(dark ? "dark" : "light")}-window"));
                         saved++;
                     }
                 }
-                // Dark stretches: from and to (ms from the start), with how many reads each had.
+                // Wrong stretches: from and to (ms from the start), with how many reads each had.
                 var stretches = new List<(long From, long To, int Reads)>();
                 foreach (var s in samples)
                 {
-                    if (s.Dark <= 50) continue;
+                    if (s.Wrong <= 50) continue;
                     if (stretches.Count > 0 && s.At - stretches[^1].To <= 20) stretches[^1] = (stretches[^1].From, s.At, stretches[^1].Reads + 1);
                     else stretches.Add((s.At, s.At, 1));
                 }
                 var gaps = samples.Zip(samples.Skip(1), (x, y) => y.At - x.At).DefaultIfEmpty(0).ToList();
-                notes.Add($"{label}: the window up {cloakedAt} ms after the start (cloaked; -1: never seen so), on screen {appeared} ms; {samples.Count} reads of the editor's patch (longest gap {gaps.Max()} ms), most dark {(samples.Count > 0 ? samples.Max(s => s.Dark) : 0):0}%; dark stretches: " +
+                notes.Add($"{label}: the window up {cloakedAt} ms after the start (cloaked; -1: never seen so), on screen {appeared} ms; {samples.Count} reads of the editor's patch (longest gap {gaps.Max()} ms), most {wrongName} {(samples.Count > 0 ? samples.Max(s => s.Wrong) : 0):0}%; {wrongName} stretches: " +
                     (stretches.Count == 0 ? "none" : string.Join(", ", stretches.Take(10).Select(t => $"{t.From}-{t.To} ms ({t.Reads} reads)"))));
-                notes.Add($"{label}: every 100th read: " + string.Join(" ", samples.Where((_, i) => i % 100 == 0).Take(40).Select(s => $"{s.At}:{s.Dark:0}%")));
+                notes.Add($"{label}: every 100th read: " + string.Join(" ", samples.Where((_, i) => i % 100 == 0).Take(40).Select(s => $"{s.At}:{s.Wrong:0}%")));
                 if (stretches.Count > 0)
-                    failures.Add($"{label}: the editor's area dark {stretches.Count} time(s), first {stretches[0].From}-{stretches[0].To} ms from the start (the window up at {appeared} ms)");
+                    failures.Add($"{label}: the editor's area {wrongName} {stretches.Count} time(s), first {stretches[0].From}-{stretches[0].To} ms from the start (the window up at {appeared} ms)");
                 endpoint = await ReadEndpointFile(System.IO.Path.Combine(testRoot, "automation-endpoint.txt")) ?? throw new CaseFailed("the restarted host never published its endpoint");
                 using (var probe = await Connect())
                 {
-                    await Initialize(probe, "e2e SF04 cold");
+                    await Initialize(probe, $"e2e {id} cold");
                     await WaitForWindow(probe);
                     await Task.Delay(1500);
                     try { await probe.Call("test.dialogs.dismiss", new { }); } catch { }
@@ -394,7 +411,7 @@ internal static partial class Program
         finally
         {
             SetSystemTheme(systemLight != 0);
-            using var c = await Session("e2e SF04 restore");
+            using var c = await Session($"e2e {id} restore");
             var w = await FirstWindowId(c);
             try { await c.Call("test.settings.set", new { windowId = w, name = "FileStartupAction", value = 0 }); } catch { }
             try { await c.Call("test.settings.set", new { windowId = w, name = "CustomTheme", value = customTheme ?? "" }); } catch { }
