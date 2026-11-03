@@ -55,6 +55,32 @@ const { firstDifference, openEditor } = require('./harness');
       report(held === expected, `${what}: the document`, firstDifference(expected, held));
       report(host === held, `${what}: the host has it`, firstDifference(held, host));
     }
+    // From a loose list into a list made for it: alone there it is tight, so an item added after it is too - it kept the
+    // loose list's spacing, and a list grown from it had blank lines between its items (a reader, 2026-11-03).
+    await visual('- a\n\n- b\n\n- c\n');
+    await drag('c', 'c', { before: false, dx: 40 });
+    const moved = await page.evaluate(() => window.__typedownMuya.getMarkdown());
+    report(moved === '- a\n\n- b\n\n  - c\n', 'from a loose list into a new nested list: the document', firstDifference('- a\n\n- b\n\n  - c\n', moved));
+    const cAt = await geometry('c');
+    await page.mouse.click(cAt.textX + 30, cAt.y);
+    await page.keyboard.press('End');
+    await page.keyboard.press('Enter');
+    await page.keyboard.type('d');
+    await pause(300);
+    const grown = await page.evaluate(() => window.__typedownMuya.getMarkdown());
+    report(/ {2}- c\n {2}- d\n/.test(grown), 'and an item added after it keeps the nested list tight (no blank line between)', JSON.stringify(grown));
+    // A drag keeps the spacing of the list it lands in: tight stays tight, across levels too.
+    for (const [md, how, expected] of [
+      ['- a\n  - a1\n  - a2\n- b\n- c\n', ['c', 'a2', { before: false, dx: 40 }], null],
+      ['1. A\n\n   1. a1\n   2. a2\n\n2. B\n\n   1. b1\n   2. b2\n', ['b2', 'a2', {}], '1. A\n\n   1. a1\n   2. b2\n   3. a2\n\n2. B\n\n   1. b1\n'],
+    ]) {
+      await visual(md);
+      await drag(...how);
+      const held = await page.evaluate(() => window.__typedownMuya.getMarkdown());
+      const blankIn = (text, from) => text.split('\n').filter(l => l === '').length - from.split('\n').filter(l => l === '').length;
+      report(expected ? held === expected : blankIn(held, md) <= 0, `a drag adds no blank line (${JSON.stringify(md)})`, JSON.stringify(held));
+    }
+
     // The marker is no handle: a drag from it moves nothing.
     await visual('- a\n- b\n- c\n');
     const b = await geometry('b');

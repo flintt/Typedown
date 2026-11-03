@@ -154,10 +154,12 @@ const listDragCtrl = ContentState => {
       this.insertAfter(item, anchor)
       list = this.getParent(item)
     }
-    // Its new list's kind and spacing, from an item already there.
+    // Its new list's kind and spacing, from an item already there. Alone in a list made for it, it is tight: it kept the
+    // spacing of the loose list it came from, the next item made there (Enter, another drag) took it on, and read again
+    // the whole list was loose - its source spaced with blank lines (a reader, 2026-11-03).
     const sibling = list.children.find(child => child !== item)
+    item.isLooseListItem = sibling ? sibling.isLooseListItem : false
     if (sibling) {
-      item.isLooseListItem = sibling.isLooseListItem
       if (item.listItemType !== 'task' && sibling.listItemType !== 'task') {
         item.listItemType = sibling.listItemType
         item.bulletMarkerOrDelimiter = sibling.bulletMarkerOrDelimiter
