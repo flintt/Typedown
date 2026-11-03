@@ -367,7 +367,8 @@ namespace Typedown.Controls
             if (WebViewController == null)
             {
                 var webViewController = new WebViewController();
-                if (!await webViewController.InitializeAsync(root))
+                // Hidden and in the page's colour from the start (ShowPage(false) above came before there was a web view).
+                if (!await webViewController.InitializeAsync(root, printing ? Microsoft.UI.Colors.White : ServiceProvider.GetPageBackground()))
                 {
                     webViewController.Dispose();
                     IsEditorLoadFailed = true;

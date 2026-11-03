@@ -25,14 +25,23 @@ namespace Typedown.Utilities
 
         public CoreWebView2 CoreWebView2 => WebView?.CoreWebView2;
 
-        /// <summary>The web view put first in <paramref name="host"/> (under anything laid over it), its core ready.</summary>
-        public async Task<bool> InitializeAsync(Panel host)
+        /// <summary>
+        /// The web view put first in <paramref name="host"/> (under anything laid over it), its core ready. With a
+        /// <paramref name="background"/> it starts hidden, in that colour: shown and clear while its core started (a second
+        /// and more), WinUI filled it with a light grey of its own - a white flash between the theme's colour and the
+        /// document at every start (hp88, Sepia). The caller shows it once its page is there.
+        /// </summary>
+        public async Task<bool> InitializeAsync(Panel host, Windows.UI.Color? background = null)
         {
             try
             {
                 Container = host;
                 var environment = await EnsureCreateEnvironment();
-                WebView = new WebView2 { DefaultBackgroundColor = Colors.Transparent };
+                WebView = new WebView2
+                {
+                    DefaultBackgroundColor = background ?? Colors.Transparent,
+                    Opacity = background.HasValue ? 0 : 1,
+                };
                 host.Children.Insert(0, WebView);
                 await WebView.EnsureCoreWebView2Async(environment);
                 StartupTiming.Reached("web view ready");
