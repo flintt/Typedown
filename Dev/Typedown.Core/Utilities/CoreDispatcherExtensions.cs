@@ -77,6 +77,14 @@ namespace Typedown.Core.Utilities
         public static bool TryEnqueueSafe(this DispatcherQueue queue, DispatcherQueuePriority priority, DispatcherQueueHandler work) =>
             queue != null && queue.TryEnqueue(priority, Guard(work));
 
+        /// <summary>The same for the system's queue (Windows.System.DispatcherQueue, the file tree's items use it).</summary>
+        public static bool TryEnqueueSafe(this Windows.System.DispatcherQueue queue, Windows.System.DispatcherQueueHandler work) =>
+            queue != null && queue.TryEnqueue(() =>
+            {
+                try { work(); }
+                catch (Exception ex) { Log.WriteLocal("DispatcherQueueCallback", $"{work.Method.DeclaringType?.Name}.{work.Method.Name}: {ex}"); }
+            });
+
         private static DispatcherQueueHandler Guard(DispatcherQueueHandler work) => () =>
         {
             try { work(); }
