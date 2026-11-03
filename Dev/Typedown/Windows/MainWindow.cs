@@ -159,7 +159,9 @@ namespace Typedown.Windows
         // The window shown on the second frame drawn once its content has loaded: the first one is being put together as
         // the first Rendering is raised, and is on its way by the next. Counted from its content's Loaded, not from the
         // window's: frames came before the content was in them, and the window came up white but for the caption buttons
-        // for some 150 ms (SF05; the reader's Sepia start, hp88).
+        // for some 150 ms (SF05; the reader's Sepia start, hp88). Six frames, not two: the frames are counted on the UI
+        // thread, and the content reaches the screen through the compositor a little after - with two, the window still
+        // came up white for one read (SF05, w10 job 86).
         private void ShowAfterFirstFrame()
         {
             var frames = 0;
@@ -175,7 +177,7 @@ namespace Typedown.Windows
             }
             void OnRendering(object sender, object e)
             {
-                if (RootControl.IsLoaded && ++frames >= 2) Show("its first frame");
+                if (RootControl.IsLoaded && ++frames >= 6) Show("its first frames");
             }
             CompositionTarget.Rendering += OnRendering;
             var timer = DispatcherQueue.CreateTimer();
