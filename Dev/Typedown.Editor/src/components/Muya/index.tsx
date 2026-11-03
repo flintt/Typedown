@@ -85,6 +85,8 @@ interface IMuyaEditor {
     scrollTopRef: React.MutableRefObject<number>
     /** True when scrollTopRef holds a remembered offset from the host for this load: restore it instead of chasing the caret. */
     scrollFromHostRef?: React.MutableRefObject<boolean>
+    /** Set for the text an undo or a redo put back: its caret into view by the least scroll, only if out of view. */
+    revealCaretRef?: React.MutableRefObject<boolean>
     /** The block that was at the top of the window when the document was left: put back there rather than by offset. */
     scrollAnchorRef?: React.MutableRefObject<ScrollAnchor | null>
     /** True when the new markdown is an edit of the text shown (automation): only the changed blocks are replaced. */
@@ -350,6 +352,21 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             if (y < 0 || y > window.innerHeight) {
                 relativeScroll(y - STANDAR_Y)
             }
+        } catch (err) {
+            console.log(err)
+        }
+    }, [editor, relativeScroll])
+
+    // The caret into view by the least scroll, if it is out of view - an undo or a redo: the page stays where the reader
+    // has it (scrollToCursorIfInvisible puts the caret a third of the way down, a jump).
+    const revealCaretMinimally = useCallback(() => {
+        try {
+            const coords = editor?.getSelection().cursorCoords
+            if (!coords) return
+            const margin = 48
+            const height = coords.height || 24
+            if (coords.y < margin) relativeScroll(coords.y - margin)
+            else if (coords.y + height > window.innerHeight - margin) relativeScroll(coords.y + height - (window.innerHeight - margin))
         } catch (err) {
             console.log(err)
         }
@@ -1387,7 +1404,11 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         const settleFrom = window.scrollY
         window.scrollTo(window.scrollX, scrollTop)
         noteScroll('settle', settleFrom)
-        if (!keepScroll) scrollToCursorIfInvisible()
+        // An undo or a redo: the caret into view by the least scroll, here and in the second go below alike.
+        const minimal = !!props.revealCaretRef?.current
+        if (props.revealCaretRef) props.revealCaretRef.current = false
+        const revealCaret = minimal ? revealCaretMinimally : scrollToCursorIfInvisible
+        if (!keepScroll) revealCaret()
         // One flag for everything that puts the page back, the frame-by-frame hold and the delayed second
         // go alike: the moment the reader moves the page, none of them may touch it again. The delayed one
         // used to ignore this and yanked the page back a tenth of a second after a drag.
@@ -1451,7 +1472,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
                 const from = window.scrollY
                 window.scrollTo(window.scrollX, target())
                 noteScroll('settle later', from)
-                if (!keepScroll) scrollToCursorIfInvisible()
+                if (!keepScroll) revealCaret()
             }
             // The hold above decides for itself when it is over; ending it here ended it after six frames,
             // whatever its budget said. The reader's own movement still ends everything at once.
@@ -1459,7 +1480,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             search(searchArgRef.current)
         }, 100);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [props.scrollFromHostRef, scrollToCursorIfInvisible, search])
+    }, [props.scrollFromHostRef, props.revealCaretRef, scrollToCursorIfInvisible, revealCaretMinimally, search])
 
     // The host takes the web view out of its window and puts it back when it navigates between its own
     // pages (leaving the settings does that), and the browser is at the top when it comes back. The host

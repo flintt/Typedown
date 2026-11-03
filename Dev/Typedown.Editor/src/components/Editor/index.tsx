@@ -312,6 +312,8 @@ const Editor: React.FC = () => {
     // Host -> editor: replace the content without echoing it back as a MarkdownChange.
     // A remembered scroll offset (reading mode has no caret to remember) takes precedence over scrolling to the caret.
     const scrollFromHostRef = useRef(false)
+    // The text an undo or a redo put back: its caret brought into view by the least scroll, if it is out of view (SetMarkdown).
+    const revealCaretRef = useRef(false)
 
     const setContentFromHost = useCallback((markdown: string, cursor?: any, scrollTop?: number | null, local = false, scrollAnchor: ScrollAnchor | null = null) => {
         localChangeRef.current = local
@@ -524,7 +526,13 @@ const Editor: React.FC = () => {
         // Only a message that names the folder changes it (Redo sent none, and every relative picture stopped loading).
         if (basePath) window.basePath = basePath
         pendingSetRef.current = { loadId }
-        setContentFromHost(text, cursor)
+        // An undo or a redo stays where the reader is: put back where it was, then the caret brought into view by the least
+        // scroll, and only if it is not in view already. With no offset the page went to the top and the caret was put
+        // a third of the way down (or, in the source editor, left at the top) - the caret out of sight (a reader).
+        const codeMirror = optionsRef.current?.sourceCode || optionsRef.current?.plainTextShown
+        revealCaretRef.current = true
+        setContentFromHost(text, cursor, codeMirror ? codeMirrorScrollRef.current : window.scrollY)
+        scrollFromHostRef.current = false
     }), [setContentFromHost]);
 
     useEffect(() => transport.addListener<Record<string, unknown>>('SettingsChanged', (newOptions) => {
@@ -573,6 +581,7 @@ const Editor: React.FC = () => {
                 searchArg={searchArg}
                 scrollTopRef={codeMirrorScrollRef}
                 scrollFromHostRef={scrollFromHostRef}
+                revealCaretRef={revealCaretRef}
                 localChangeRef={localChangeRef}
                 scrollToChangeRef={scrollToChangeRef}
                 onMarkdownChange={onMarkdownChange}
@@ -595,6 +604,7 @@ const Editor: React.FC = () => {
                 searchArg={searchArg}
                 scrollTopRef={muyaScrollTopRef}
                 scrollFromHostRef={scrollFromHostRef}
+                revealCaretRef={revealCaretRef}
                 scrollAnchorRef={scrollAnchorRef}
                 localChangeRef={localChangeRef}
                 scrollToChangeRef={scrollToChangeRef}

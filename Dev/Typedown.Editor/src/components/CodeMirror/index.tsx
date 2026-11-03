@@ -37,6 +37,8 @@ interface ICodeMirrorEditor {
     searchArg: { value: string, opt: any } | undefined
     scrollTopRef: React.MutableRefObject<number>
     scrollFromHostRef?: React.MutableRefObject<boolean>
+    /** Set for the text an undo or a redo put back: its caret into view by the least scroll, only if out of view. */
+    revealCaretRef?: React.MutableRefObject<boolean>
     /** True when the new markdown is an edit of the text shown (automation): only the changed part is replaced. */
     localChangeRef?: React.MutableRefObject<boolean>
     scrollToChangeRef?: React.MutableRefObject<boolean>
@@ -313,12 +315,25 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
             if (props.scrollFromHostRef) props.scrollFromHostRef.current = false
         } else if (markdownRef.current != props.markdown) {
             markdownRef.current = props.markdown
-            const { anchor, head } = cursorRef.current ?? {}
+            // The caret that came with this text, not the one held: that effect (below) runs after this one, and held the
+            // document before - a .txt opened after a .md (the editor already up for it, shown as plain text a moment
+            // before its text came) took the .md's caret, a line and column of another file (a reader: the .txt's caret
+            // drifted at every switch).
+            // None given (a file never opened before): at its start, not at the caret of the one before.
+            const given = props.cursor
+            const anchor = given?.anchor
+            const head = given?.focus ?? given?.head
+            cursorRef.current = anchor && head ? { anchor, head } : undefined
             editor.setValue(markdownRef.current)
             if (anchor && head)
                 editor.setSelection(anchor, head, { scroll: !props.scrollFromHostRef?.current })
             editor.scrollTo(null, props.scrollTopRef.current)
             if (props.scrollFromHostRef) props.scrollFromHostRef.current = false
+            // An undo or a redo: where the reader was (above), the caret then into view by the least scroll if it is out.
+            if (props.revealCaretRef?.current) {
+                props.revealCaretRef.current = false
+                if (head) editor.scrollIntoView(head, 48)
+            }
             if (searchArgRef.current?.value != "" && searchArgRef.current?.opt?.selection) {
                 const { value, opt } = searchArgRef.current
                 const selection = opt.selection.head ? opt.selection : undefined
