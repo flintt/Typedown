@@ -66,7 +66,7 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
         // the full suite on w10). The menu is going with its window; nothing is left to tag.
         private void OnLanguageApplied()
         {
-            DispatcherQueue.TryEnqueue(() =>
+            DispatcherQueue.TryEnqueueSafe(() =>
             {
                 try
                 {

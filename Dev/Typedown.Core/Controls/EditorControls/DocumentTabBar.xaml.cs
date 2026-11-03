@@ -223,7 +223,7 @@ namespace Typedown.Core.Controls
                 // the reader types loses a key.
                 if (!closing)
                 {
-                    DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, () =>
+                    DispatcherQueue.TryEnqueueSafe(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, () =>
                     {
                         if (XamlRoot != null && Microsoft.UI.Xaml.Input.FocusManager.GetFocusedElement(XamlRoot) is not Microsoft.UI.Xaml.Controls.WebView2)
                             ViewModel?.MarkdownEditor?.FocusEditor();

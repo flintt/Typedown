@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Typedown.Automation;
+using Typedown.Core.Utilities;
 
 namespace Typedown.Services.Automation
 {
@@ -747,7 +748,7 @@ namespace Typedown.Services.Automation
                 foreach (var window in Typedown.Windows.MainWindow.AllWindows.ToList())
                 {
                     var done = new System.Threading.Tasks.TaskCompletionSource<bool>();
-                    if (!window.DispatcherQueue.TryEnqueue(() =>
+                    if (!window.DispatcherQueue.TryEnqueueSafe(() =>
                     {
                         try
                         {

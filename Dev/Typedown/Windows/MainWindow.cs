@@ -456,7 +456,7 @@ namespace Typedown.Windows
             // itself and did nothing with it. The OLE drop targets of the window and its children are wrapped once they
             // are registered, a moment after the content loads (again later, for one registered late).
             _ = DispatcherQueue.RunIdleAsync(_ => Utilities.FileDropTarget.Install(this));
-            _ = Task.Delay(2000).ContinueWith(_ => DispatcherQueue.TryEnqueue(() => Utilities.FileDropTarget.Install(this)));
+            _ = Task.Delay(2000).ContinueWith(_ => DispatcherQueue.TryEnqueueSafe(() => Utilities.FileDropTarget.Install(this)));
         }
 
         private void OnAppWindowChanged(AppWindow sender, AppWindowChangedEventArgs args)
@@ -491,7 +491,7 @@ namespace Typedown.Windows
         private void ScheduleEditorLayoutCheck()
         {
             _ = DispatcherQueue.RunIdleAsync(_ => FixStaleRootSize());
-            _ = Task.Delay(300).ContinueWith(_ => DispatcherQueue.TryEnqueue(FixStaleRootSize));
+            _ = Task.Delay(300).ContinueWith(_ => DispatcherQueue.TryEnqueueSafe(FixStaleRootSize));
         }
 
         private void FixStaleRootSize()
@@ -647,7 +647,7 @@ namespace Typedown.Windows
             RootControl = null;
             Content = null;
             void Release() { ServiceScope = null; scope?.Dispose(); }
-            if (!DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, Release)) Release();
+            if (!DispatcherQueue.TryEnqueueSafe(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, Release)) Release();
             disposables.Dispose();
             // Whether this was the last window is read off the open windows, not off the view models (kept by weak
             // references; one not yet collected counted as a live window, and the process stayed headless with the
@@ -730,7 +730,7 @@ namespace Typedown.Windows
             }
             Locale.ApplyLanguage(supported ? settingLanguage : null);
             if (DispatcherQueue.HasThreadAccess) ApplyElementLanguage();
-            else DispatcherQueue.TryEnqueue(ApplyElementLanguage);
+            else DispatcherQueue.TryEnqueueSafe(ApplyElementLanguage);
         }
 
         /// <summary>

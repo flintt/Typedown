@@ -64,5 +64,23 @@ namespace Typedown.Core.Utilities
 
         public static Task RunIdleAsync(this DispatcherQueue queue, Action action) =>
             Enqueue<object>(queue, DispatcherQueuePriority.Low, () => { action(); return null; });
+
+        /// <summary>
+        /// DispatcherQueue.TryEnqueue with the work's exception caught and logged. One that escapes a queued callback is no
+        /// unhandled exception the app hears of: WinUI fails the process fast (0xc000027b, DispatcherQueue::
+        /// DeferInvokeCallback - the close crash's dump, 2026-11-03: a window closed, another left, a callback queued for
+        /// it threw). The log names the work that threw.
+        /// </summary>
+        public static bool TryEnqueueSafe(this DispatcherQueue queue, DispatcherQueueHandler work) =>
+            queue != null && queue.TryEnqueue(Guard(work));
+
+        public static bool TryEnqueueSafe(this DispatcherQueue queue, DispatcherQueuePriority priority, DispatcherQueueHandler work) =>
+            queue != null && queue.TryEnqueue(priority, Guard(work));
+
+        private static DispatcherQueueHandler Guard(DispatcherQueueHandler work) => () =>
+        {
+            try { work(); }
+            catch (Exception ex) { Log.WriteLocal("DispatcherQueueCallback", $"{work.Method.DeclaringType?.Name}.{work.Method.Name}: {ex}"); }
+        };
     }
 }

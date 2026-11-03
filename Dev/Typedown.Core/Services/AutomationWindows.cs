@@ -5,6 +5,7 @@ using Typedown.Automation;
 using Typedown.Core.Models;
 using Typedown.Core.ViewModels;
 using Windows.UI.Core;
+using Typedown.Core.Utilities;
 
 namespace Typedown.Core.Services
 {
@@ -39,7 +40,7 @@ namespace Typedown.Core.Services
             public Task<T> InvokeAsync<T>(Func<T> work)
             {
                 var done = new TaskCompletionSource<T>(TaskCreationOptions.RunContinuationsAsynchronously);
-                if (!dispatcher.TryEnqueue(() =>
+                if (!dispatcher.TryEnqueueSafe(() =>
                 {
                     try { done.SetResult(work()); }
                     catch (Exception e) { done.SetException(e); }

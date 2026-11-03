@@ -123,7 +123,7 @@ namespace Typedown.Core.Controls
             ViewModel?.MarkdownEditor?.FocusEditor();
         }
 
-        private void OnListsChanged() => DispatcherQueue?.TryEnqueue(() =>
+        private void OnListsChanged() => DispatcherQueue?.TryEnqueueSafe(() =>
         {
             if (Visibility == Visibility.Visible) Refresh();
         });

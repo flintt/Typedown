@@ -855,7 +855,7 @@ namespace Typedown.Core.ViewModels
                     {
                         var handed = clock.ElapsedMilliseconds;
                         var count = ContentState.Toc.Count;
-                        Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread()?.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low,
+                        Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread()?.TryEnqueueSafe(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low,
                             () => Log.Debug($"outline: tree of {count} entries built in {built} ms, handed to the pane by {handed} ms, laid out by {clock.ElapsedMilliseconds} ms"));
                     }
                 }

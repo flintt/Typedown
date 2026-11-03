@@ -291,7 +291,7 @@ namespace Typedown.Controls
         {
             // Windows' colour changes come on a thread of their own: the control is touched on the UI thread only. Set from
             // there, it threw, and the throw ended the subscription - the page never heard of a theme change again (TH04-06).
-            DispatcherQueue.TryEnqueue(UpdateBackdrop);
+            DispatcherQueue.TryEnqueueSafe(UpdateBackdrop);
             _ = DispatcherQueue.RunIdleAsync(() => PostMessage("ThemeChanged", ServiceProvider.GetCurrentTheme()));
         }
 
@@ -486,7 +486,7 @@ namespace Typedown.Controls
                 if (args.ProcessFailedKind == CoreWebView2ProcessFailedKind.BrowserProcessExited)
                 {
                     WebViewController.Forget(environment);
-                    DispatcherQueue.TryEnqueue(() => RestartAfterBrowserExited(controller));
+                    DispatcherQueue.TryEnqueueSafe(() => RestartAfterBrowserExited(controller));
                 }
                 else if (args.ProcessFailedKind == CoreWebView2ProcessFailedKind.RenderProcessExited || args.ProcessFailedKind == CoreWebView2ProcessFailedKind.RenderProcessUnresponsive)
                     _ = DispatcherQueue.RunIdleAsync(_ => { try { CoreWebView2?.Reload(); } catch (Exception ex) { Core.Utilities.Log.Debug($"editor: reload after process failure failed: {ex.Message}"); } });

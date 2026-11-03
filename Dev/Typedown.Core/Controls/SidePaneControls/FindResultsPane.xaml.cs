@@ -52,7 +52,7 @@ namespace Typedown.Core.Controls
         private void OnResultsChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName != nameof(FindResultsList.CurrentEntry) || Results?.CurrentEntry is not { } entry) return;
-            _ = DispatcherQueue.TryEnqueue(() =>
+            _ = DispatcherQueue.TryEnqueueSafe(() =>
             {
                 try { ResultList.ScrollIntoView(entry); } catch (ArgumentException) { }
             });

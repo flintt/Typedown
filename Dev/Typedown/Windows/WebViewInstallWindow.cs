@@ -82,7 +82,7 @@ namespace Typedown.Windows
             var dispatcher = DispatcherQueue;
             // The setup waited for on the thread pool; what follows is put back on the window's thread explicitly.
             var outcome = await Task.Run(() => RunSetup());
-            dispatcher.TryEnqueue(() => OnSetupEnded(outcome));
+            dispatcher.TryEnqueueSafe(() => OnSetupEnded(outcome));
         }
 
         private static string RunSetup()

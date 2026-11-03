@@ -304,7 +304,7 @@ namespace Typedown.Core.Models
             {
                 if (e?.Name == null) return;
                 var attr = await GetFileAttributes(e.FullPath);
-                if (attr.HasValue) dispatcherQueue?.TryEnqueue(() =>
+                if (attr.HasValue) dispatcherQueue?.TryEnqueueSafe(() =>
                 {
                     if (!disposed && fileSystemWatcher == watcher) OnFileCreated(e, attr.Value);
                 });
@@ -313,7 +313,7 @@ namespace Typedown.Core.Models
             {
                 if (e?.Name == null) return;
                 var attr = await GetFileAttributes(e.FullPath);
-                if (attr.HasValue) dispatcherQueue?.TryEnqueue(() =>
+                if (attr.HasValue) dispatcherQueue?.TryEnqueueSafe(() =>
                 {
                     if (!disposed && fileSystemWatcher == watcher) OnFileRenamed(e, attr.Value);
                 });
@@ -322,7 +322,7 @@ namespace Typedown.Core.Models
             {
                 if (e?.Name == null) return;
                 var attr = await GetFileAttributes(e.FullPath);
-                if (attr.HasValue) dispatcherQueue?.TryEnqueue(() =>
+                if (attr.HasValue) dispatcherQueue?.TryEnqueueSafe(() =>
                 {
                     if (!disposed && fileSystemWatcher == watcher) OnFileChanged(e, attr.Value);
                 });
@@ -330,7 +330,7 @@ namespace Typedown.Core.Models
             fileSystemWatcher.Deleted += (s, e) =>
             {
                 if (e?.Name == null) return;
-                dispatcherQueue?.TryEnqueue(() =>
+                dispatcherQueue?.TryEnqueueSafe(() =>
                 {
                     if (!disposed && fileSystemWatcher == watcher) OnFileDeleted(e);
                 });

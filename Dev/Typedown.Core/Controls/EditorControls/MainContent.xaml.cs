@@ -48,7 +48,7 @@ namespace Typedown.Core.Controls
         {
             if (app != ViewModel) return;
             if (DispatcherQueue.HasThreadAccess) ShowEditionPanel();
-            else DispatcherQueue.TryEnqueue(ShowEditionPanel);
+            else DispatcherQueue.TryEnqueueSafe(ShowEditionPanel);
         }
 
         // Which page's scroller holds an edition panel's content now.

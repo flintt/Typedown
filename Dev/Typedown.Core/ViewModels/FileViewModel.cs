@@ -1524,7 +1524,7 @@ namespace Typedown.Core.ViewModels
 
         private void OnDiskFileRenamed(object sender, RenamedEventArgs e)
         {
-            dispatcherQueue?.TryEnqueue(() =>
+            dispatcherQueue?.TryEnqueueSafe(() =>
             {
                 if (disposables.IsDisposed)
                     return;
@@ -1553,7 +1553,7 @@ namespace Typedown.Core.ViewModels
         {
             if (DateTime.UtcNow < ignoreExternalChangeUntil)
                 return;
-            dispatcherQueue?.TryEnqueue(() =>
+            dispatcherQueue?.TryEnqueueSafe(() =>
             {
                 if (disposables.IsDisposed || DateTime.UtcNow < ignoreExternalChangeUntil)
                     return;

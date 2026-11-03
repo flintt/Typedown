@@ -231,7 +231,7 @@ namespace Typedown.Core.Controls.SidePanelControls.Pages
 
         public string FavoritesChevron { get; private set; } = "\uE70D";
 
-        private void OnFavoritesChanged() => DispatcherQueue?.TryEnqueue(RefreshFavorites);
+        private void OnFavoritesChanged() => DispatcherQueue?.TryEnqueueSafe(RefreshFavorites);
 
         /// <summary>The favourites group made again from the store; the ones not there are dimmed once that is known.</summary>
         private async void RefreshFavorites()

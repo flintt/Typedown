@@ -128,7 +128,7 @@ namespace Typedown.Core.ViewModels
         {
             if (updateQueued) return;
             updateQueued = true;
-            if (dispatcherQueue == null || !dispatcherQueue.TryEnqueue(() => { updateQueued = false; Update(); }))
+            if (dispatcherQueue == null || !dispatcherQueue.TryEnqueueSafe(() => { updateQueued = false; Update(); }))
             {
                 updateQueued = false;
                 Update();

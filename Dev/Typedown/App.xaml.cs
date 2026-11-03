@@ -112,7 +112,7 @@ namespace Typedown
             if (dispatcher != null && !dispatcher.HasThreadAccess)
             {
                 Log.Debug("startup: the runtime check ended off the window thread; going back to it");
-                dispatcher.TryEnqueue(OpenFirstWindow);
+                dispatcher.TryEnqueueSafe(OpenFirstWindow);
                 return;
             }
             OpenFirstWindow();

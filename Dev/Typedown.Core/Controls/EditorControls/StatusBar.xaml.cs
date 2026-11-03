@@ -354,7 +354,7 @@ namespace Typedown.Core.Controls
         private void OnBarSizeChanged(object sender, SizeChangedEventArgs e) => LayOutItems();
 
         // After the bindings have put the new text in.
-        private void LayOutItemsSoon() => DispatcherQueue?.TryEnqueue(LayOutItems);
+        private void LayOutItemsSoon() => DispatcherQueue?.TryEnqueueSafe(LayOutItems);
 
         /// <summary>
         /// Every item the reader chose, then, while the two sides do not fit, the next of <see cref="SqueezeOrder"/>

@@ -75,7 +75,7 @@ namespace Typedown.Core.Controls
                 .Subscribe(_ => UpdateAccent()));
             // The system's accent changed (Windows settings): raised off the UI thread.
             disposables.Add(uiSettings.GetColorValuesObservable()
-                .Subscribe(_ => DispatcherQueue.TryEnqueue(UpdateAccent)));
+                .Subscribe(_ => DispatcherQueue.TryEnqueueSafe(UpdateAccent)));
         }
 
         // The marks of what is chosen here - the bar under Files/Outline, the pill beside the current heading in the

@@ -54,7 +54,7 @@ namespace Typedown.Core.Utilities
                 watching = true;
                 // Raised off the UI thread; the colours are put back on the thread of the window that asked last.
                 var queue = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
-                uiSettings.ColorValuesChanged += (_, _) => queue?.TryEnqueue(() => { if (Current == null) Update(null); });
+                uiSettings.ColorValuesChanged += (_, _) => queue?.TryEnqueueSafe(() => { if (Current == null) Update(null); });
             }
             Update((ThemeFiles.Brush(accent) as SolidColorBrush)?.Color);
         }
