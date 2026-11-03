@@ -274,6 +274,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | TH07 | the settings' and the dialogs' controls (a switch, the accent button, a check box) take a custom theme's accent, with readable text on it, and the system accent again without one |
 | SB01 | the status bar switches modes: its reading button and badge go into reading mode and back to the mode it was entered from (source too), and its mode menu ticks the mode and greys focus and typewriter mode where they do nothing |
 | SB02 | a click on the status bar's count shows the document's numbers on its visible text (words, CJK characters, headings, links, pictures, reading time), and the count it shows can be chosen there |
+| DK01 | the dark theme's surfaces are dark: the editor with a code block scrolling sideways, the side pane's outline and files, the editor's menu, the settings page, each a picture with few light pixels |
 | KR01 | a window closed lets go of its document's folder: renamed and deleted from outside after the close |
 | PD01 | File > Export > PDF in the app writes a PDF with the document's headings as its bookmarks and its picture in it |
 | SA01 | a save whose page does not hand over its text in time writes nothing: Ctrl+S says it failed, auto-save says why in the status bar, the file as it was; answered again, it saves |
