@@ -738,8 +738,12 @@ internal static partial class Program
             notes.Add($"widened: pane {wide}; its Outline tab {outlineTab?.Current.BoundingRectangle}");
             Check(outlineTab != null, "the pane's content is in the pane after the resize (its Outline tab there)");
             await Click(window, outlineTab!);
-            await Task.Delay(600);
-            Check((int)await Setting("SidePaneIndex") == 1, "and a click on it lands (the pane shows the outline)");
+            await Task.Delay(800);
+            // Landed: the pane's page is the outline, its heading listed in the pane (the tab does not write the
+            // SidePaneIndex setting, which only says which page to open).
+            var listed = Deep.All(System.Windows.Automation.AutomationElement.FromHandle(window), new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.NameProperty, "PS01 heading"))
+                .Cast<System.Windows.Automation.AutomationElement>().Any(e => { var r = e.Current.BoundingRectangle; return r.Width > 0 && r.Left >= wide!.Value.Left - 1 && r.Right <= wide.Value.Right + 1; });
+            Check(listed, "and a click on it lands (the pane shows the outline, the heading in it)");
 
             await c.Call("test.settings.set", new { windowId, name = "SidePaneOnRight", value = false });
             await Task.Delay(1200);
