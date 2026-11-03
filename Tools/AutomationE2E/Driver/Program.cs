@@ -4563,6 +4563,8 @@ internal static partial class Program
         // The process held before its windows close: it ends at once after the last one (Environment.Exit), and asked
         // for by its id afterwards it was not there to give its exit code.
         using var host = Process.GetProcessById(hostPid);
+        // Its handle opened now: a process object that never had one cannot give the exit code after the process ended.
+        _ = host.Handle;
         using (var c = await Session("e2e KU01 before"))
         {
             t = await Open(c, titled);
