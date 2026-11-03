@@ -163,29 +163,37 @@ namespace Typedown.Windows
         // By events: the window's thread is busy restoring the session until its editor control has loaded, and the
         // content cannot reach the screen before; once the editor says it has loaded, the next frame rendered with it
         // (Rendered: handed to the compositor) brings the window up. Two seconds only as a guard, if those never come.
+        // A window closed before it came up lets go of all of it (StopShowing): its guard timer fired after the close and
+        // touched what the close had taken away - an exception out of a timer's callback ends the process (hp job 91).
         private void ShowAfterFirstFrame()
         {
             var shown = false;
             var clock = Stopwatch.StartNew();
             var guard = DispatcherQueue.CreateTimer();
-            void Show(string why)
+            bool Stop()
             {
-                if (shown) return;
+                if (shown) return false;
                 shown = true;
                 guard.Stop();
                 global::Typedown.Controls.MarkdownEditor.ControlLoaded -= OnEditorLoaded;
                 CompositionTarget.Rendered -= OnRendered;
+                return true;
+            }
+            void Show(string why)
+            {
+                if (!Stop() || closed) return;
                 SetCloaked(false);
                 Log.Debug($"window: on screen after {why}, {clock.ElapsedMilliseconds} ms");
             }
+            stopShowing = () => Stop();
             void OnRendered(object sender, RenderedEventArgs e) => Show("its content drawn");
             void WaitForFrame()
             {
-                if (shown) return;
+                if (shown || closed) return;
                 CompositionTarget.Rendered -= OnRendered;
                 CompositionTarget.Rendered += OnRendered;
                 // A frame drawn with the content, even if nothing else changes now.
-                RootControl.InvalidateArrange();
+                RootControl?.InvalidateArrange();
             }
             void OnEditorLoaded(IServiceProvider provider)
             {
@@ -196,9 +204,12 @@ namespace Typedown.Windows
             if (global::Typedown.Controls.MarkdownEditor.Of(ServiceProvider) is { IsLoaded: true }) WaitForFrame();
             guard.Interval = TimeSpan.FromSeconds(2);
             guard.IsRepeating = false;
-            guard.Tick += (_, _) => Show("two seconds waited for it");
+            guard.TickSafe((_, _) => Show("two seconds waited for it"));
             guard.Start();
         }
+
+        /// <summary>The coming up on screen given up (the window closed first); null once there is nothing to give up.</summary>
+        private Action stopShowing;
 
         public void InitializeBinding()
         {
@@ -648,6 +659,8 @@ namespace Typedown.Windows
         private void OnClosed(object sender, WindowEventArgs e)
         {
             closed = true;
+            stopShowing?.Invoke();
+            stopShowing = null;
             // Off the screen before its content is taken away below: the window stayed up a moment after, and showed its
             // own white where the page and the panes had been (a reader: closing flashed white).
             try { AppWindow.Hide(); }

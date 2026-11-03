@@ -247,11 +247,17 @@ namespace Typedown.Controls
             if (openingContent.Visibility != Visibility.Visible) opening.Visibility = Visibility.Collapsed;
         }
 
+        // The timers' handlers below catch what they throw: one out of a timer's callback ends the process (hp job 91), and
+        // a window closed meanwhile has let go of what they reach (its view models, its services).
         private void OnCoverLimit(Microsoft.UI.Dispatching.DispatcherQueueTimer timer, object args)
         {
-            if (!covering) return;
-            covering = false;
-            if (openingContent.Visibility != Visibility.Visible) opening.Visibility = Visibility.Collapsed;
+            try
+            {
+                if (released || !covering) return;
+                covering = false;
+                if (openingContent.Visibility != Visibility.Visible) opening.Visibility = Visibility.Collapsed;
+            }
+            catch (Exception ex) { CoreDispatcherExtensions.TimerFailed(System.Reflection.MethodBase.GetCurrentMethod(), ex); }
         }
 
         private DateTime openingShownAt;
@@ -259,7 +265,13 @@ namespace Typedown.Controls
         private void OnOpeningDelay(Microsoft.UI.Dispatching.DispatcherQueueTimer timer, object args)
         {
             timer.Tick -= OnOpeningDelay;
-            if (!AppViewModel.EditorViewModel.LongLoadPending) return;
+            try { OpeningDelay(timer); }
+            catch (Exception ex) { CoreDispatcherExtensions.TimerFailed(System.Reflection.MethodBase.GetCurrentMethod(), ex); }
+        }
+
+        private void OpeningDelay(Microsoft.UI.Dispatching.DispatcherQueueTimer timer)
+        {
+            if (released || !AppViewModel.EditorViewModel.LongLoadPending) return;
             if (opening.Visibility == Visibility.Visible && DateTime.UtcNow - openingShownAt > TimeSpan.FromSeconds(10))
             {
                 opening.Visibility = Visibility.Collapsed;
@@ -310,16 +322,24 @@ namespace Typedown.Controls
 
         private void OnStartingDelay(Microsoft.UI.Dispatching.DispatcherQueueTimer timer, object args)
         {
-            if (IsEditorLoaded || released || opening.Visibility == Visibility.Visible) return;
-            starting = true;
-            Core.Utilities.Log.Debug("editor: \"Opening…\" shown while the editor starts");
-            ShowOpening();
+            try
+            {
+                if (IsEditorLoaded || released || opening.Visibility == Visibility.Visible) return;
+                starting = true;
+                Core.Utilities.Log.Debug("editor: \"Opening…\" shown while the editor starts");
+                ShowOpening();
+            }
+            catch (Exception ex) { CoreDispatcherExtensions.TimerFailed(System.Reflection.MethodBase.GetCurrentMethod(), ex); }
         }
 
         private bool awaitingDocument;
         private Microsoft.UI.Dispatching.DispatcherQueueTimer revealLimit;
 
-        private void OnRevealLimit(Microsoft.UI.Dispatching.DispatcherQueueTimer timer, object args) => RevealPage("no document confirmed in 1.5 s");
+        private void OnRevealLimit(Microsoft.UI.Dispatching.DispatcherQueueTimer timer, object args)
+        {
+            try { if (!released) RevealPage("no document confirmed in 1.5 s"); }
+            catch (Exception ex) { CoreDispatcherExtensions.TimerFailed(System.Reflection.MethodBase.GetCurrentMethod(), ex); }
+        }
 
         // The page, loaded and with its first document drawn (or past the limit), shown; the start's "Opening…" gone.
         private void RevealPage(string why)
@@ -493,6 +513,12 @@ namespace Typedown.Controls
         public void ReleaseWebView()
         {
             released = true;
+            // Its timers stopped with it: firing after the window had gone, they reached what it had let go.
+            openingDelay?.Stop();
+            coverLimit?.Stop();
+            startingDelay?.Stop();
+            revealLimit?.Stop();
+            awaitingDocument = false;
             Core.Utilities.Log.Debug("editor: window closing, web view closed");
             DropWebView();
         }

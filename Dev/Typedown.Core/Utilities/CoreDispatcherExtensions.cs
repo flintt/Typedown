@@ -85,6 +85,23 @@ namespace Typedown.Core.Utilities
                 catch (Exception ex) { Log.WriteLocal("DispatcherQueueCallback", $"{work.Method.DeclaringType?.Name}.{work.Method.Name}: {ex}"); }
             });
 
+        /// <summary>
+        /// A DispatcherQueueTimer's Tick with the handler's exception caught and logged: one that escapes a timer's callback
+        /// fails the process fast as one out of queued work does (0xc000027b, DispatcherQueueTimer::TimerCallback - hp job 91,
+        /// 2026-11-03: a window's timer firing after the window closed). Add-only; a handler that is taken off and put on
+        /// again keeps its method-group subscription and catches in its body (<see cref="TimerFailed"/>).
+        /// </summary>
+        public static void TickSafe(this DispatcherQueueTimer timer, global::Windows.Foundation.TypedEventHandler<DispatcherQueueTimer, object> work) =>
+            timer.Tick += (t, a) =>
+            {
+                try { work(t, a); }
+                catch (Exception ex) { TimerFailed(work.Method, ex); }
+            };
+
+        /// <summary>A timer handler's exception, logged as queued work's is (the E2E driver names each new one).</summary>
+        public static void TimerFailed(System.Reflection.MethodBase handler, Exception ex) =>
+            Log.WriteLocal("DispatcherQueueCallback", $"{handler?.DeclaringType?.Name}.{handler?.Name} (timer): {ex}");
+
         private static DispatcherQueueHandler Guard(DispatcherQueueHandler work) => () =>
         {
             try { work(); }
