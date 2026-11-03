@@ -74,6 +74,12 @@ namespace Typedown.Controls
         // The editor each window's services made, found without making one (a window closed before its editor was).
         private static readonly System.Runtime.CompilerServices.ConditionalWeakTable<IServiceProvider, MarkdownEditor> made = new();
 
+        /// <summary>
+        /// An editor control loaded, with the window services it belongs to: the window keeps itself off the screen until
+        /// then (MainWindow.ShowAfterFirstFrame).
+        /// </summary>
+        public static event Action<IServiceProvider> ControlLoaded;
+
         /// <summary>The editor these window services made, if they made one.</summary>
         public static MarkdownEditor Of(IServiceProvider serviceProvider) =>
             serviceProvider != null && made.TryGetValue(serviceProvider, out var editor) ? editor : null;
@@ -424,6 +430,7 @@ namespace Typedown.Controls
             }
             // The web view is made only now, once the window's content is laid out (todo #16).
             Core.Utilities.StartupTiming.Reached("editor control loaded");
+            ControlLoaded?.Invoke(ServiceProvider);
             UpdateBackdrop();
             ShowPage(false);
             IsEditorLoaded = false;

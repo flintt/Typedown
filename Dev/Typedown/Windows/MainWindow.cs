@@ -156,50 +156,48 @@ namespace Typedown.Windows
             if (result != 0) Log.Debug($"window: cloak {cloaked} refused (0x{result:x8})");
         }
 
-        // The window shown on the second frame drawn once its content has loaded: the first one is being put together as
-        // the first Rendering is raised, and is on its way by the next. Counted from its content's Loaded, not from the
-        // window's: frames came before the content was in them, and the window came up white but for the caption buttons
-        // for some 150 ms (SF05; the reader's Sepia start, hp88). Six frames, not two: the frames are counted on the UI
-        // thread, and the content reaches the screen through the compositor a little after - with two, the window still
-        // came up white for one read (SF05, w10 job 86). But not six frames either: XAML draws a frame only when something
-        // changes, and at a start little does - six took 1.3 s, the window came up that much later than 1.4.1.10's (hp88,
-        // 1.4.1.14: the reader felt it slower). Nor 80 ms after the content loaded: the window's thread is busy then
-        // (the session restored, its files read) until the editor control has loaded, and the content cannot reach the
-        // screen meanwhile - white again (SF05, w10 job 88). So: once the editor control has loaded (looked at every 30 ms,
-        // not per frame), 80 ms for the compositor - about 1.4.1.10's moment on hp88, and drawn.
+        // The window kept off the screen until its content has been drawn: shown at once it was black, and then white but
+        // for the caption buttons, for a frame or more before XAML drew in it (a reader's black flash; SF04, SF05, the
+        // reader's Sepia start on hp88). Not by counting frames or waiting a set time - machines differ, and XAML draws a
+        // frame only when something changes: six frames took 1.3 s on hp88, the window up that much later than in 1.4.1.10.
+        // By events: the window's thread is busy restoring the session until its editor control has loaded, and the
+        // content cannot reach the screen before; once the editor says it has loaded, the next frame rendered with it
+        // (Rendered: handed to the compositor) brings the window up. Two seconds only as a guard, if those never come.
         private void ShowAfterFirstFrame()
         {
             var shown = false;
             var clock = Stopwatch.StartNew();
-            var poll = DispatcherQueue.CreateTimer();
-            Microsoft.UI.Dispatching.DispatcherQueueTimer settle = null;
+            var guard = DispatcherQueue.CreateTimer();
             void Show(string why)
             {
                 if (shown) return;
                 shown = true;
-                poll.Stop();
-                settle?.Stop();
+                guard.Stop();
+                global::Typedown.Controls.MarkdownEditor.ControlLoaded -= OnEditorLoaded;
+                CompositionTarget.Rendered -= OnRendered;
                 SetCloaked(false);
                 Log.Debug($"window: on screen after {why}, {clock.ElapsedMilliseconds} ms");
             }
-            poll.Interval = TimeSpan.FromMilliseconds(30);
-            poll.IsRepeating = true;
-            poll.Tick += (_, _) =>
+            void OnRendered(object sender, RenderedEventArgs e) => Show("its content drawn");
+            void WaitForFrame()
             {
-                if (!RootControl.IsLoaded || global::Typedown.Controls.MarkdownEditor.Of(ServiceProvider) is not { IsLoaded: true }) return;
-                poll.Stop();
-                settle = DispatcherQueue.CreateTimer();
-                settle.Interval = TimeSpan.FromMilliseconds(80);
-                settle.IsRepeating = false;
-                settle.Tick += (_, _) => Show("its content drawn");
-                settle.Start();
-            };
-            poll.Start();
-            var timer = DispatcherQueue.CreateTimer();
-            timer.Interval = TimeSpan.FromSeconds(2);
-            timer.IsRepeating = false;
-            timer.Tick += (_, _) => Show("two seconds waited for it");
-            timer.Start();
+                if (shown) return;
+                CompositionTarget.Rendered -= OnRendered;
+                CompositionTarget.Rendered += OnRendered;
+                // A frame drawn with the content, even if nothing else changes now.
+                RootControl.InvalidateArrange();
+            }
+            void OnEditorLoaded(IServiceProvider provider)
+            {
+                if (provider == ServiceProvider) DispatcherQueue.TryEnqueueSafe(WaitForFrame);
+            }
+            global::Typedown.Controls.MarkdownEditor.ControlLoaded += OnEditorLoaded;
+            // Loaded already (a window made again around the same services): no event to wait for.
+            if (global::Typedown.Controls.MarkdownEditor.Of(ServiceProvider) is { IsLoaded: true }) WaitForFrame();
+            guard.Interval = TimeSpan.FromSeconds(2);
+            guard.IsRepeating = false;
+            guard.Tick += (_, _) => Show("two seconds waited for it");
+            guard.Start();
         }
 
         public void InitializeBinding()
