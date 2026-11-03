@@ -3,6 +3,7 @@ import { PARAGRAPH_TYPES, PREVIEW_DOMPURIFY_CONFIG, HAS_TEXT_BLOCK_REG, IMAGE_EX
 import { sanitize, getUniqueId, getImageInfo as getImageSrc } from '../utils'
 import { getImageInfo } from '../utils/getImageInfo'
 import { dedentPastedText } from '../utils/pastedText'
+import { getAllTableCells } from './tableDragBarCtrl'
 
 const LIST_REG = /ul|ol/
 const LINE_BREAKS_REG = /\n/
@@ -273,6 +274,85 @@ const pasteCtrl = ContentState => {
     // }
   }
 
+  // What was copied as rows of cells: an HTML table (from here, Word, Excel or a web page), a Markdown table, tab-
+  // separated lines (Excel's text), else the one text for one cell.
+  const pastedGrid = (text, html) => {
+    if (html && /<table/i.test(html)) {
+      const doc = new DOMParser().parseFromString(html, 'text/html')
+      const table = doc.querySelector('table')
+      if (table) {
+        const rows = Array.from(table.querySelectorAll('tr'))
+          .map(tr => Array.from(tr.children).filter(c => /^(TD|TH)$/.test(c.tagName)).map(c => c.textContent.trim()))
+          .filter(r => r.length)
+        if (rows.length) return rows
+      }
+    }
+    const lines = (text || '').replace(/\r\n?/g, '\n').replace(/\n+$/, '').split('\n')
+    if (lines.length && lines.every(l => /^\s*\|.*\|\s*$/.test(l))) {
+      const cells = l => l.trim().replace(/^\||\|$/g, '').split(/(?<!\\)\|/).map(c => c.trim().replace(/\\\|/g, '|'))
+      return lines.filter(l => !/^\s*\|(\s*:?-+:?\s*\|)+\s*$/.test(l)).map(cells)
+    }
+    if (lines.some(l => l.includes('\t'))) return lines.map(l => l.split('\t').map(c => c.trim()))
+    return [[(text || '').trim()]]
+  }
+
+  // Pasted into selected cells as a spreadsheet does:
+  // - one cell copied: into every cell selected;
+  // - the selection a whole multiple of what was copied (1 x 2 into 3 x 4): what was copied repeated over it;
+  // - else: what was copied, whole, from the selection's top-left - not cut to the selection (nothing copied is
+  //   silently lost), the table given the rows and columns it needs past its edge.
+  ContentState.prototype.pasteIntoSelectedCells = function (text, html) {
+    const { tableId, row: rows, column: columns, cells: selected } = this.selectedTableCells
+    const grid = pastedGrid(text, html)
+    const gridRows = grid.length
+    const gridColumns = Math.max(...grid.map(r => r.length))
+    let all = getAllTableCells(tableId)
+    // The selection's top-left in the table.
+    let top = 0
+    let left = 0
+    all.forEach((tr, i) => tr.forEach((td, j) => {
+      if (td.id === selected[0].key) {
+        top = i
+        left = j
+      }
+    }))
+    const one = gridRows === 1 && gridColumns === 1
+    const tiled = !one && rows % gridRows === 0 && columns % gridColumns === 0
+    const height = one || tiled ? rows : gridRows
+    const width = one || tiled ? columns : gridColumns
+    this.selectedTableCells = null
+    // Rows and columns added where it runs past the table: after its last row, after its last column.
+    const contentOf = element => this.getBlock(element.id).children[0].key
+    for (let n = top + height - all.length; n > 0; n--) {
+      this.editTable({ location: 'next', action: 'insert', target: 'row' }, contentOf(all[all.length - 1][0]))
+      all = getAllTableCells(tableId)
+    }
+    for (let n = left + width - all[0].length; n > 0; n--) {
+      this.editTable({ location: 'next', action: 'insert', target: 'column' }, contentOf(all[0][all[0].length - 1]))
+      all = getAllTableCells(tableId)
+    }
+    for (let i = 0; i < height; i++) {
+      for (let j = 0; j < width; j++) {
+        const value = one ? grid[0][0] : (grid[i % gridRows] || [])[j % gridColumns]
+        const element = (all[top + i] || [])[left + j]
+        if (value === undefined || !element) continue
+        const cell = this.getBlock(element.id)
+        if (!cell || !cell.children[0]) continue
+        cell.children[0].text = value.replace(/\|/g, '\\|').replace(/\n/g, '<br/>')
+      }
+    }
+    const table = this.getBlock(tableId)
+    // The caret in the last cell filled.
+    const last = (all[top + height - 1] || [])[left + width - 1]
+    const lastCell = last && this.getBlock(last.id)
+    if (lastCell && lastCell.children[0]) {
+      const { key, text: cellText } = lastCell.children[0]
+      this.cursor = { start: { key, offset: cellText.length }, end: { key, offset: cellText.length } }
+    }
+    this.singleRender(table, true)
+    return this.muya.dispatchChange()
+  }
+
   // Handle `normal` and `pasteAsPlainText` paste for preview mode.
   ContentState.prototype.pasteHandler = async function (type = 'normal', text, html) {
 
@@ -287,6 +367,12 @@ const pasteCtrl = ContentState => {
     // Remove crap from HTML such as meta data and styles and sanitize HTML,
     // but `text` may still contain dangerous HTML.
     html = await this.standardizeHTML(html)
+
+    // Cells selected (a drag across them, or select all in a cell): what is pasted fills them, as a spreadsheet does.
+    // Several cells selected took nothing (a reader: a range copied could not be pasted into an empty one of its size).
+    if (this.selectedTableCells) {
+      return this.pasteIntoSelectedCells(text, html)
+    }
 
     let copyType = this.checkCopyType(html, text)
     const { start, end } = this.cursor
@@ -372,6 +458,17 @@ const pasteCtrl = ContentState => {
     }
 
     if (startBlock.functionType === 'cellContent') {
+      // Several cells' worth (a range copied, Excel's rows) pasted at a caret in a cell: spread from that cell, as into
+      // one selected cell - not all of it into the one cell.
+      const grid = pastedGrid(text, html)
+      if (grid.length > 1 || grid[0].length > 1) {
+        const cell = this.closest(startBlock, /th|td/)
+        const table = this.closest(startBlock, 'table')
+        if (cell && table) {
+          this.selectedTableCells = { tableId: table.key, row: 1, column: 1, cells: [{ key: cell.key }] }
+          return this.pasteIntoSelectedCells(text, html)
+        }
+      }
       let isOneCellSelected = false
       if (this.selectedTableCells) {
         const { selectedTableCells: stc } = this
