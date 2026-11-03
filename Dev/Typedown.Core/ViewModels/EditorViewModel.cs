@@ -238,6 +238,9 @@ namespace Typedown.Core.ViewModels
 
         public async Task<object> GetSettings()
         {
+            // When the page's ask reached the host, and when the answer was ready (the startup document in place): the
+            // page's own "settings asked/received" around them say where its wait went.
+            StartupTiming.Reached("settings asked of the host");
             awaitingNewPage = false;
             if (FirstStart)
             {
@@ -245,6 +248,7 @@ namespace Typedown.Core.ViewModels
                 startupLoad = FileViewModel.LoadStartUpMarkdown();
             }
             if (startupLoad != null) await startupLoad;
+            StartupTiming.Reached("settings ready in the host");
             startupDocumentReady.TrySetResult(true);
             Log.Debug($"load {LoadId + 1}: the editor page asked for the document again ({System.IO.Path.GetFileName(FileViewModel.FilePath) ?? "untitled"})");
             loadText = Markdown;
