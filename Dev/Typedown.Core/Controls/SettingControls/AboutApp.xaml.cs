@@ -99,14 +99,16 @@ namespace Typedown.Core.Controls
         {
             var box = new TextBox
             {
-                Text = text,
+                // AcceptsReturn before the text: a box that does not take returns cuts what it is given at the first line
+                // break (the terms showed their title alone, FB01 on w10).
+                AcceptsReturn = true,
                 IsReadOnly = true,
                 TextWrapping = TextWrapping.Wrap,
-                AcceptsReturn = true,
                 FontSize = monospace ? 12 : 14,
                 Width = System.Math.Min(640, root.Size.Width - 120),
                 Height = System.Math.Max(200, System.Math.Min(520, root.Size.Height - 220)),
             };
+            box.Text = text;
             if (monospace) box.FontFamily = new Microsoft.UI.Xaml.Media.FontFamily("Consolas");
             ScrollViewer.SetVerticalScrollBarVisibility(box, ScrollBarVisibility.Auto);
             await AppContentDialog.Create(title, box, Locale.GetDialogString("Ok")).ShowAsync(root);
