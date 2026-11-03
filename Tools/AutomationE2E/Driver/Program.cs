@@ -726,18 +726,20 @@ internal static partial class Program
 
             // Its content laid out again for the new width, where it is drawn: in the pane, and a click on it lands (a
             // mirrored grid left the files and the outline where they were, out of the pane and not to be clicked).
+            // The side pane's Outline tab (always there; the favourites header is not, with no favourites): in the pane,
+            // and a click on it lands - the pane's page setting goes to the outline. A picture of the window kept to see
+            // the pane drawn on the right.
+            Screenshot("PS01-widened");
             var wide = Find("NavigationView")?.Current.BoundingRectangle;
-            var header = Find("FavoritesHeader");
-            var headerRect = header?.Current.BoundingRectangle;
-            notes.Add($"widened: pane {wide}; favourites header {headerRect}");
-            Check(wide != null && headerRect != null && headerRect.Value.Left >= wide.Value.Left - 1 && headerRect.Value.Right <= wide.Value.Right + 1,
-                "the pane's content is in the pane after the resize");
-            var expanded = (bool)await Setting("FavoritesExpanded");
-            await Click(window, header!);
+            await c.Call("window.setView", new { windowId, sidePane = new { open = true, page = "files" } });
+            await Task.Delay(500);
+            var outlineTab = wide == null ? null : Deep.All(System.Windows.Automation.AutomationElement.FromHandle(window), new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.NameProperty, "Outline"))
+                .Cast<System.Windows.Automation.AutomationElement>().FirstOrDefault(e => { var r = e.Current.BoundingRectangle; return r.Width > 0 && r.Left >= wide.Value.Left - 1 && r.Right <= wide.Value.Right + 1; });
+            notes.Add($"widened: pane {wide}; its Outline tab {outlineTab?.Current.BoundingRectangle}");
+            Check(outlineTab != null, "the pane's content is in the pane after the resize (its Outline tab there)");
+            await Click(window, outlineTab!);
             await Task.Delay(600);
-            Check((bool)await Setting("FavoritesExpanded") != expanded, "and a click on it lands (the favourites group folds)");
-            await Click(window, Find("FavoritesHeader")!);
-            await Task.Delay(400);
+            Check((int)await Setting("SidePaneIndex") == 1, "and a click on it lands (the pane shows the outline)");
 
             await c.Call("test.settings.set", new { windowId, name = "SidePaneOnRight", value = false });
             await Task.Delay(1200);
