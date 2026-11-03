@@ -16,6 +16,17 @@ internal static partial class Program
     [DllImport("dwmapi.dll", EntryPoint = "DwmGetWindowAttribute")] private static extern int DwmGetWindowAttributeInt(IntPtr window, int attribute, out int value, int size);
 
     /// <summary>The window kept off the screen by DWM (DWMWA_CLOAKED): the host cloaks a new one until its first frame.</summary>
+    [DllImport("user32.dll", EntryPoint = "GetClientRect")] private static extern bool SfGetClientRect(IntPtr window, out RECT rect);
+
+    /// <summary>The window's client area where it is on the screen (physical pixels).</summary>
+    private static RECT ClientOnScreen(IntPtr window)
+    {
+        SfGetClientRect(window, out var size);
+        var origin = new POINT();
+        DmClientToScreen(window, ref origin);
+        return new RECT { Left = origin.X, Top = origin.Y, Right = origin.X + size.Right, Bottom = origin.Y + size.Bottom };
+    }
+
     private static bool IsCloaked(IntPtr window) => DwmGetWindowAttributeInt(window, 14, out var cloaked, sizeof(int)) == 0 && cloaked != 0;
 
     private static async Task SF01(List<string> notes)
@@ -263,14 +274,16 @@ internal static partial class Program
     /// are all over 240 in every channel. A read whose patch is over half such a colour is a white frame.
     /// </summary>
     private static Task SF05(List<string> notes) =>
-        ColdStartFlash(notes, "SF05", "sepia", "white", (r, g, b) => b >= 236 && 0.0722 * b + 0.7152 * g + 0.2126 * r >= 230);
+        ColdStartFlash(notes, "SF05", "sepia", "white", (r, g, b) => b >= 236 && 0.0722 * b + 0.7152 * g + 0.2126 * r >= 230, wholeWindow: true);
 
     /// <summary>
     /// A cold start restoring three tabs under a custom theme, Windows' apps dark and then light: the editor's patch read
     /// from the screen from the process's start, and any stretch of reads over half <paramref name="wrongName"/>
-    /// (<paramref name="wrong"/> says which pixels are) a failure, saved and timed against the startup log.
+    /// (<paramref name="wrong"/> says which pixels are) a failure, saved and timed against the startup log. With
+    /// <paramref name="wholeWindow"/>, the whole client area is read too in the first second after the window is up
+    /// (every third read, twenty at most): a flash around the editor, not only in it.
     /// </summary>
-    private static async Task ColdStartFlash(List<string> notes, string id, string customThemeId, string wrongName, Func<byte, byte, byte, bool> wrong)
+    private static async Task ColdStartFlash(List<string> notes, string id, string customThemeId, string wrongName, Func<byte, byte, byte, bool> wrong, bool wholeWindow = false)
     {
         string Embedded(string name)
         {
@@ -323,6 +336,9 @@ internal static partial class Program
                 var restarted = System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(hostExe, $"--automation-test-root \"{testRoot}\"") { UseShellExecute = true })!;
                 hostPid = restarted.Id;
                 var samples = new List<(long At, double Wrong)>();
+                var wholeSamples = new List<(long At, double Wrong)>();
+                var reads = 0;
+                var savedWhole = false;
                 long appeared = -1;
                 var saved = 0;
                 long cloakedAt = -1;
@@ -346,6 +362,36 @@ internal static partial class Program
                         appeared = clock.ElapsedMilliseconds;
                     }
                     if (!GetWindowRect(window, out var r)) break;
+                    // The whole client area now and then in the first second: what shows around the editor too.
+                    if (wholeWindow && reads++ % 3 == 0 && wholeSamples.Count < 20 && clock.ElapsedMilliseconds - appeared < 1000)
+                    {
+                        var client = ClientOnScreen(window);
+                        int cw = client.Right - client.Left, ch = client.Bottom - client.Top;
+                        if (cw > 0 && ch > 0)
+                        {
+                            using var whole = new System.Drawing.Bitmap(cw, ch);
+                            using (var g = System.Drawing.Graphics.FromImage(whole)) g.CopyFromScreen(client.Left, client.Top, 0, 0, new System.Drawing.Size(cw, ch));
+                            var wd = whole.LockBits(new System.Drawing.Rectangle(0, 0, cw, ch), System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                            int wrongWhole = 0, allWhole = 0;
+                            try
+                            {
+                                var line = new byte[wd.Stride];
+                                for (var y = 0; y < ch; y += 8)
+                                {
+                                    Marshal.Copy(wd.Scan0 + y * wd.Stride, line, 0, line.Length);
+                                    for (var x = 0; x < cw; x += 8) { allWhole++; if (wrong(line[x * 4 + 2], line[x * 4 + 1], line[x * 4])) wrongWhole++; }
+                                }
+                            }
+                            finally { whole.UnlockBits(wd); }
+                            var wholeShare = allWhole == 0 ? 0 : 100.0 * wrongWhole / allWhole;
+                            wholeSamples.Add((clock.ElapsedMilliseconds, wholeShare));
+                            if (wholeShare > 50 && !savedWhole)
+                            {
+                                whole.Save(System.IO.Path.Combine(outputDir, $"{id}-{(dark ? "dark" : "light")}-whole-{clock.ElapsedMilliseconds}ms.png"));
+                                savedWhole = true;
+                            }
+                        }
+                    }
                     // A patch of the editor's area (the middle, below the tab strip and the toolbar), not the whole
                     // window: the reader saw one dark frame, and a read of the whole window takes longer than a frame.
                     // The patch is read every millisecond or two.
@@ -394,6 +440,13 @@ internal static partial class Program
                 notes.Add($"{label}: the window up {cloakedAt} ms after the start (cloaked; -1: never seen so), on screen {appeared} ms; {samples.Count} reads of the editor's patch (longest gap {gaps.Max()} ms), most {wrongName} {(samples.Count > 0 ? samples.Max(s => s.Wrong) : 0):0}%; {wrongName} stretches: " +
                     (stretches.Count == 0 ? "none" : string.Join(", ", stretches.Take(10).Select(t => $"{t.From}-{t.To} ms ({t.Reads} reads)"))));
                 notes.Add($"{label}: every 100th read: " + string.Join(" ", samples.Where((_, i) => i % 100 == 0).Take(40).Select(s => $"{s.At}:{s.Wrong:0}%")));
+                if (wholeWindow)
+                {
+                    notes.Add($"{label}: the whole client area in the first second: " + string.Join(" ", wholeSamples.Select(s => $"{s.At}:{s.Wrong:0}%")));
+                    var wrongWholes = wholeSamples.Where(s => s.Wrong > 50).ToList();
+                    if (wrongWholes.Count > 0)
+                        failures.Add($"{label}: the whole window {wrongName} in {wrongWholes.Count} of {wholeSamples.Count} reads of its first second, first at {wrongWholes[0].At} ms ({wrongWholes[0].Wrong:0}%)");
+                }
                 if (stretches.Count > 0)
                     failures.Add($"{label}: the editor's area {wrongName} {stretches.Count} time(s), first {stretches[0].From}-{stretches[0].To} ms from the start (the window up at {appeared} ms)");
                 endpoint = await ReadEndpointFile(System.IO.Path.Combine(testRoot, "automation-endpoint.txt")) ?? throw new CaseFailed("the restarted host never published its endpoint");
