@@ -626,6 +626,10 @@ namespace Typedown.Windows
         private void OnClosed(object sender, WindowEventArgs e)
         {
             closed = true;
+            // Off the screen before its content is taken away below: the window stayed up a moment after, and showed its
+            // own white where the page and the panes had been (a reader: closing flashed white).
+            try { AppWindow.Hide(); }
+            catch (Exception ex) { Log.Debug($"window closed: hiding it: {ex.Message}"); }
             allWindows.Remove(this);
             WindowChrome.DragAreasChanged -= OnDragAreasChanged;
             // A window that closes without the user asking for it is how "the app just vanished" happens, and
