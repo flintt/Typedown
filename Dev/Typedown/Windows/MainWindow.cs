@@ -163,32 +163,38 @@ namespace Typedown.Windows
         // thread, and the content reaches the screen through the compositor a little after - with two, the window still
         // came up white for one read (SF05, w10 job 86). But not six frames either: XAML draws a frame only when something
         // changes, and at a start little does - six took 1.3 s, the window came up that much later than 1.4.1.10's (hp88,
-        // 1.4.1.14: the reader felt it slower). The first frame after the content has loaded, then 80 ms for the compositor.
+        // 1.4.1.14: the reader felt it slower). Nor 80 ms after the content loaded: the window's thread is busy then
+        // (the session restored, its files read) until the editor control has loaded, and the content cannot reach the
+        // screen meanwhile - white again (SF05, w10 job 88). So: once the editor control has loaded (looked at every 30 ms,
+        // not per frame), 80 ms for the compositor - about 1.4.1.10's moment on hp88, and drawn.
         private void ShowAfterFirstFrame()
         {
             var shown = false;
             var clock = Stopwatch.StartNew();
+            var poll = DispatcherQueue.CreateTimer();
             Microsoft.UI.Dispatching.DispatcherQueueTimer settle = null;
             void Show(string why)
             {
                 if (shown) return;
                 shown = true;
-                CompositionTarget.Rendering -= OnRendering;
+                poll.Stop();
                 settle?.Stop();
                 SetCloaked(false);
                 Log.Debug($"window: on screen after {why}, {clock.ElapsedMilliseconds} ms");
             }
-            void OnRendering(object sender, object e)
+            poll.Interval = TimeSpan.FromMilliseconds(30);
+            poll.IsRepeating = true;
+            poll.Tick += (_, _) =>
             {
-                if (!RootControl.IsLoaded || settle != null) return;
-                CompositionTarget.Rendering -= OnRendering;
+                if (!RootControl.IsLoaded || global::Typedown.Controls.MarkdownEditor.Of(ServiceProvider) is not { IsLoaded: true }) return;
+                poll.Stop();
                 settle = DispatcherQueue.CreateTimer();
                 settle.Interval = TimeSpan.FromMilliseconds(80);
                 settle.IsRepeating = false;
-                settle.Tick += (_, _) => Show("its first frame");
+                settle.Tick += (_, _) => Show("its content drawn");
                 settle.Start();
-            }
-            CompositionTarget.Rendering += OnRendering;
+            };
+            poll.Start();
             var timer = DispatcherQueue.CreateTimer();
             timer.Interval = TimeSpan.FromSeconds(2);
             timer.IsRepeating = false;
