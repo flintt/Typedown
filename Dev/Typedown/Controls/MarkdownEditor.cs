@@ -259,23 +259,62 @@ namespace Typedown.Controls
             }
             if (opening.Visibility != Visibility.Visible || openingContent.Visibility != Visibility.Visible)
             {
-                openingContent.Visibility = Visibility.Visible;
                 openingShownAt = DateTime.UtcNow;
                 AppViewModel.EditorViewModel.OpeningShown++;
                 Core.Utilities.Log.Debug($"editor: \"Opening…\" shown for load {AppViewModel.EditorViewModel.LoadId}");
-                openingText.Text = Locale.GetString("EditorOpening");
-                var theme = ThemeFiles.Find(AppViewModel.SettingsViewModel.CustomTheme);
-                var foreground = theme == null ? null : (ThemeFiles.Brush(theme.Foreground) ?? ThemeFiles.Readable(theme.Background));
-                if (foreground != null) openingText.Foreground = foreground; else openingText.ClearValue(Microsoft.UI.Xaml.Controls.TextBlock.ForegroundProperty);
-                // The page's own colour under every theme: the control's is set under a custom theme only, and a clear one
-                // showed the page beneath - the document being left, or nothing yet.
-                opening.Background = new Microsoft.UI.Xaml.Media.SolidColorBrush(ServiceProvider.GetPageBackground());
-                opening.Visibility = Visibility.Visible;
+                ShowOpening();
             }
             // Looked at again until the load is confirmed, so the ten seconds can end it.
             timer.Interval = TimeSpan.FromMilliseconds(500);
             timer.Tick += OnOpeningDelay;
             timer.Start();
+        }
+
+        // The ring and "Opening…" over the page's colour, in the theme's text colour.
+        private void ShowOpening()
+        {
+            openingContent.Visibility = Visibility.Visible;
+            openingText.Text = Locale.GetString("EditorOpening");
+            var theme = ThemeFiles.Find(AppViewModel.SettingsViewModel.CustomTheme);
+            var foreground = theme == null ? null : (ThemeFiles.Brush(theme.Foreground) ?? ThemeFiles.Readable(theme.Background));
+            if (foreground != null) openingText.Foreground = foreground; else openingText.ClearValue(Microsoft.UI.Xaml.Controls.TextBlock.ForegroundProperty);
+            // The page's own colour under every theme: the control's is set under a custom theme only, and a clear one
+            // showed the page beneath - the document being left, or nothing yet.
+            opening.Background = new Microsoft.UI.Xaml.Media.SolidColorBrush(ServiceProvider.GetPageBackground());
+            opening.Visibility = Visibility.Visible;
+        }
+
+        // While the editor itself starts (its web view's core, then its page: three seconds at a cold start on hp88), the
+        // same ring and words once it has taken a moment: "Opening…" was shown for a long document only, and a start
+        // showed an empty page for those seconds (a reader). Gone when the page is there.
+        private Microsoft.UI.Dispatching.DispatcherQueueTimer startingDelay;
+        private bool starting;
+
+        private void ScheduleStarting()
+        {
+            startingDelay ??= DispatcherQueue.CreateTimer();
+            startingDelay.IsRepeating = false;
+            startingDelay.Interval = TimeSpan.FromMilliseconds(600);
+            startingDelay.Tick -= OnStartingDelay;
+            startingDelay.Tick += OnStartingDelay;
+            startingDelay.Start();
+        }
+
+        private void OnStartingDelay(Microsoft.UI.Dispatching.DispatcherQueueTimer timer, object args)
+        {
+            if (IsEditorLoaded || released || opening.Visibility == Visibility.Visible) return;
+            starting = true;
+            Core.Utilities.Log.Debug("editor: \"Opening…\" shown while the editor starts");
+            ShowOpening();
+        }
+
+        private void EndStarting()
+        {
+            startingDelay?.Stop();
+            if (!starting) return;
+            starting = false;
+            // A long document's own "Opening…", or the cover over one left, carries on.
+            if (!AppViewModel.EditorViewModel.LongLoadPending && !covering) opening.Visibility = Visibility.Collapsed;
         }
 
         // The page hidden or shown: only the web view, over the control's own colour (UpdateBackdrop). Hiding the whole
@@ -301,6 +340,7 @@ namespace Typedown.Controls
         private void OnContentLoaded()
         {
             Core.Utilities.StartupTiming.Reached("editor page loaded");
+            EndStarting();
             ShowPage(true);
             IsEditorLoaded = true;
             if (AppViewModel.EditorViewModel.FocusWhenLoaded)
@@ -362,6 +402,7 @@ namespace Typedown.Controls
             ShowPage(false);
             IsEditorLoaded = false;
             IsEditorLoadFailed = false;
+            ScheduleStarting();
             // A web view whose browser process is gone has no core any more: it cannot load a page, only be replaced.
             if (WebViewController != null && WebViewController.CoreWebView2 == null) DropWebView();
             if (WebViewController == null)
@@ -372,12 +413,14 @@ namespace Typedown.Controls
                 {
                     webViewController.Dispose();
                     IsEditorLoadFailed = true;
+                    EndStarting();
                     return;
                 }
                 if (disposables.IsDisposed || released)
                 {
                     webViewController.Dispose();
                     IsEditorLoadFailed = true;
+                    EndStarting();
                     return;
                 }
                 try
@@ -392,6 +435,7 @@ namespace Typedown.Controls
                     webViewController.Dispose();
                     WebViewController = null;
                     IsEditorLoadFailed = true;
+                    EndStarting();
                     return;
                 }
             }
@@ -402,6 +446,7 @@ namespace Typedown.Controls
             catch
             {
                 IsEditorLoadFailed = true;
+                EndStarting();
             }
         }
 
@@ -443,6 +488,7 @@ namespace Typedown.Controls
             catch (Exception ex)
             {
                 IsEditorLoadFailed = true;
+                EndStarting();
                 Core.Utilities.Log.Debug($"editor: new web view after the browser exited failed: {ex.Message}");
             }
         }
