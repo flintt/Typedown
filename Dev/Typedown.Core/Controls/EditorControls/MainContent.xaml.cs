@@ -29,6 +29,15 @@ namespace Typedown.Core.Controls
         public MainContent()
         {
             InitializeComponent();
+            // The window's colours as soon as its settings are known, before its first frame: set on Loaded only, the
+            // first frames showed the default brushes - with Mica on (Windows 11), its light backdrop around and under the
+            // editor, a white flash at the start of a Sepia window (hp88, 1.4.1.13). Loaded keeps them in step after.
+            DataContextChanged += (_, _) =>
+            {
+                if (Settings == null || IsLoaded) return;
+                UpdateBackground(Settings.UseEditorMicaEffect);
+                UpdateThemeColours();
+            };
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)

@@ -93,6 +93,9 @@ namespace Typedown.Controls
             // Above the web view, which is added to the same grid later.
             Canvas.SetZIndex(opening, 10);
             Content = root;
+            // The theme's page colour from the first frame the window shows, not from Loaded: in between, the area showed
+            // what lay behind - with Mica on (Windows 11), its light backdrop: a Sepia start flashed white (hp88, 1.4.1.13).
+            UpdateBackdrop();
             IsTabStop = true;
             // Where the keyboard goes when it leaves or comes to the editor, in the log: a key lost in between shows up
             // there (E2E TL01).
