@@ -189,6 +189,12 @@ namespace Typedown.Core.Controls
         {
             bool success = false;
             prevFocusedElement = FocusManager.GetFocusedElement(XamlRoot);
+            // The keyboard taken from the editor first: a web view holds it in a window of its own, and a button focused in
+            // XAML "succeeded" while the keys still went to the page - Enter on "the file has been changed on disk" typed a
+            // line break into the document instead of pressing Keep mine (XF02, W10, 2026-11-04). The window itself given
+            // it, the XAML content has it again and the button's focus is real. Every dialog opened over the editor.
+            if (prevFocusedElement is WebView2 && this.GetService<AppViewModel>()?.MainWindow is { } window && window != IntPtr.Zero)
+                PInvoke.SetFocus(window);
             for (int i = 0; i < 10 && !success; i++)
             {
                 await Task.Delay(100);

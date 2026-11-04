@@ -296,7 +296,7 @@ internal static partial class Program
             await Case("PP01 the print preview under a dark custom theme (Dracula): the page and its margins white, the theme's colour back after", PP01);
             await Case("CV01 a very long document left (a tab switched to, the tab closed) is covered at once and uncovered when the next is on the page; a close cancelled at the save question covers nothing", CV01);
             await Case("XF01 a file changed outside: unchanged here, it is offered again and reloaded; with changes here, Keep keeps them; without asking, reloaded at once; a tab in the background asks when shown; deleted, the document turns unsaved", XF01);
-            await Case("XF02 a file changed outside while changed here: neither version is lost - the default (Enter) keeps the reader's, the disk's kept as a copy; Reload keeps the reader's as a copy and one undo away; a change not seen (inside the second after a save) is not written over by the API's save (changed_on_disk) or by hand (asked, Cancel the default); auto-save writes nothing while asked", XF02);
+            await Case("XF02 a file changed outside while changed here: neither version is lost - a real Enter keeps the reader's (nothing typed into the document), the disk's kept as a copy; Reload keeps the reader's as a copy and one undo away; a change not seen (inside the second after a save) is not written over by the API's save (changed_on_disk) or by hand (asked, Cancel the default); auto-save writes nothing while asked", XF02);
             await Case("SS01 the settings in a narrow window: the items end left of the scroll bar, not under it", SS01);
             await Case("LS01 the interface language changed in the settings' General section, which was reached from Help > About: the settings are built again on General, not on About", LS01);
             await Case("KU01 Keep unsaved changes when closing: every window closes without asking, the app exits, and started again it has the titled and the untitled document back as they were, unsaved, without a recovery question", KU01);
@@ -4418,16 +4418,21 @@ internal static partial class Program
             await Task.Delay(500);
 
             // Unchanged here: asked, reloaded. Once (W10, 2026-11-04, right after R04 started the host again) the write
-            // brought nothing at all - no question, nothing in the log: written again once, and noted.
+            // brought nothing at all - no question, nothing in the log. Still a failure (the run's log is kept then: its
+            // 'watch:' and 'external change:' lines say whether the event came and why it was passed over); written once
+            // more to tell a watcher that is dead from one write it missed.
             File.WriteAllText(aPath, "# XF01 A\n\ntwo\n");
             string? title, content;
+            var firstAsked = true;
             try { (title, content) = await PressDialogButton(c, windowId, DialogButton.Primary, 6000); }
             catch (CaseFailed)
             {
-                notes.Add("NOT ASKED in 6 s after the first write (the log's 'watch:' and 'external change:' lines say why); written again");
+                firstAsked = false;
                 File.WriteAllText(aPath, "# XF01 A\n\ntwo\n\n");
-                (title, content) = await PressDialogButton(c, windowId, DialogButton.Primary, 6000);
+                try { (title, content) = await PressDialogButton(c, windowId, DialogButton.Primary, 6000); notes.Add("NOT ASKED after the first write; the second one was"); }
+                catch (CaseFailed) { notes.Add("NOT ASKED after either write: the file is not watched"); throw; }
             }
+            Check(firstAsked, "the first change written outside is offered (see the log's 'watch:' and 'external change:' lines)");
             notes.Add($"unchanged here: '{title}' / '{content}'");
             var reloaded = await TextWhen(a, t => t.Contains("two"));
             Check(reloaded.Contains("two") && await SavedOf(a), "unchanged here, the file changed outside is offered and reloaded, saved");
@@ -4532,17 +4537,26 @@ internal static partial class Program
             await Set("AutoSave", false);
             await Task.Delay(500);
 
-            // 1. Changed here and there: the default (what Enter presses: it was Reload) keeps the reader's; the disk's
-            //    version is kept as a copy; the save after it writes the reader's. Pressed by the test host: a real Enter
-            //    went to the editor, which keeps the keyboard while the question is up (W10, 2026-11-04).
+            // 1. Changed here and there: a real Enter presses the default, which keeps the reader's (it reloaded); nothing
+            //    is typed into the document (the editor kept the keyboard while the question was up, and Enter made a new
+            //    line there - W10, 2026-11-04); the disk's version is kept as a copy; the save after it writes the reader's.
             await Replace("# XF02\n\nmine one\n");
             File.WriteAllText(path, "# XF02\n\ntheirs one\n");
             var question = await Asked();
             notes.Add($"asked: '{question["title"]}' / '{question["content"]}' - buttons '{question["primary"]}' / '{question["close"]}', default {question["defaultButton"]}");
             Check((string?)question["defaultButton"] == "close" && ((string?)question["content"] ?? "").Contains(kept), "the question's default is to keep the reader's, and it says where the other version goes");
-            await PressDialogButton(c, windowId, DialogButton.Close);
+            await Activate(window);
+            await Task.Delay(500);
+            Chord("Enter");
+            await Task.Delay(800);
+            JToken? stillAsked = null;
+            try { stillAsked = await c.Call("test.dialog.press", new { windowId, button = "none" }); } catch (JsonRpcRemoteException) { }
+            var afterEnter = await TextOf();
+            notes.Add($"after Enter: the question {(stillAsked == null ? "closed" : "still open")}, the text {JsonConvert.SerializeObject(afterEnter)}");
+            Check(stillAsked == null, "a real Enter answers the question (the keyboard is the question's, not the editor's)");
+            Check(afterEnter.TrimEnd('\n') == "# XF02\n\nmine one" && !await SavedOf(), "Enter keeps the reader's changes, unsaved, and types nothing into the document");
+            if (stillAsked != null) await PressDialogButton(c, windowId, DialogButton.Close);
             var theirsKept = await KeptWith("on disk", "theirs one");
-            Check((await TextOf()).Contains("mine one") && !await SavedOf(), "the default keeps the reader's changes, unsaved");
             notes.Add("the disk's version kept as: " + (theirsKept == null ? "(none)" : Path.GetFileName(theirsKept)));
             Check(theirsKept != null, "the disk's version is kept as a copy");
             await c.Call("document.save", new { documentId = id, baseRevision = await Revision(c, id) });

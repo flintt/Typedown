@@ -921,6 +921,9 @@ namespace Typedown.Core.Utilities
         [DllImport("user32.dll", ExactSpelling = true)]
         public static extern nint GetForegroundWindow();
 
+        [DllImport("user32.dll", ExactSpelling = true)]
+        public static extern nint SetFocus(nint hWnd);
+
         [DllImport("user32.dll", EntryPoint = "MapVirtualKeyW", CharSet = CharSet.Unicode, ExactSpelling = true)]
         public static extern int MapVirtualKey(uint uCode, MapVirtualKeyMapTypes uMapType);
 
