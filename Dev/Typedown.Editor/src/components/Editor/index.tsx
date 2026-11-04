@@ -56,10 +56,10 @@ const Editor: React.FC = () => {
     const finishLoadRef = useRef<(() => void) | null>(null);
     const cursorRef = useRef<any>();
     const [contentVersion, setContentVersion] = useState(0);
-    // The text held is a plain text file's (loaded while PlainTextShown), and the content version it came with: the
-    // visual editor waits for the next load (see below the listeners).
-    const plainHeldRef = useRef(false)
-    const plainVersionRef = useRef(0)
+    // The mode the editor shown was made for, and the content version it came with: a switch between a plain text file
+    // and a Markdown one waits for the new file's text (see below the listeners).
+    const shownModeRef = useRef<{ plainTextShown?: boolean, sourceCode?: boolean, plainTextProse?: boolean, version: number } | null>(null)
+    const modeHeldOverRef = useRef(false)
     const [options, setOptions] = useState<any>();
     const optionsRef = useRef<any>();
     const [searchOpen, setSearchOpen] = useState(0);
@@ -550,30 +550,40 @@ const Editor: React.FC = () => {
         setSearchOpen(open)
     }), []);
 
-    // A plain text file left for a Markdown one: the host says so (PlainTextShown off) just before it sends the Markdown
-    // file. The visual editor is made once that has come, not with the plain text still held - it parsed and drew the
-    // whole text file first, seconds on a long one, before the Markdown file came and was shown from what was kept
-    // (a reader: switching to and from a long .txt tab was slow). The text held is the visual editor's if nothing comes
-    // (Save as turned a .txt into a .md).
-    if (options?.plainTextShown) plainHeldRef.current = true
-    else if (plainHeldRef.current && contentVersion !== plainVersionRef.current) plainHeldRef.current = false
-    if (options?.plainTextShown) plainVersionRef.current = contentVersion
-    const [, setHeldTimeout] = useState(0)
+    // A switch between a plain text file and a Markdown one: the host sets the mode (PlainTextShown, and SourceCode and
+    // PlainTextProse with it, one message each) as the tab's path changes, and sends the new file's text after it. The
+    // editor shown keeps the mode it had until that text has come, then the two change together. Before, the source
+    // editor showed the Markdown file's source for a few frames before the .txt came (a reader, 2026-11-04), and the
+    // other way the page was blank until the Markdown file came - the visual editor is not made with the plain text, it
+    // parsed and drew the whole text file first, seconds on a long one (a reader, 2026-11-02). The mode comes on its own
+    // if nothing does within half a second (Save as turned a .md into a .txt, or a .txt into a .md).
+    let shownOptions = options
+    if (options) {
+        const shown = shownModeRef.current
+        if (shown && !!shown.plainTextShown !== !!options.plainTextShown && contentVersion === shown.version && !modeHeldOverRef.current)
+            shownOptions = { ...options, plainTextShown: shown.plainTextShown, sourceCode: shown.sourceCode, plainTextProse: shown.plainTextProse }
+        else {
+            shownModeRef.current = { plainTextShown: options.plainTextShown, sourceCode: options.sourceCode, plainTextProse: options.plainTextProse, version: contentVersion }
+            modeHeldOverRef.current = false
+        }
+    }
+    const modeHeld = shownOptions !== options
+    const [, setModeHeldOver] = useState(0)
     useEffect(() => {
-        if (options?.plainTextShown || !plainHeldRef.current) return
-        const timer = setTimeout(() => { plainHeldRef.current = false; setHeldTimeout(t => t + 1) }, 300)
+        if (!modeHeld) return
+        const timer = setTimeout(() => { modeHeldOverRef.current = true; setModeHeldOver(t => t + 1) }, 500)
         return () => clearTimeout(timer)
-    }, [options?.plainTextShown])
+    }, [modeHeld])
 
-    if (!options) {
+    if (!shownOptions) {
         return <></>
     }
 
     // A plain text file is never in the visual editor, which would parse it as Markdown and write it back so.
-    if (options.sourceCode || options.plainTextShown) {
+    if (shownOptions.sourceCode || shownOptions.plainTextShown) {
         return (
             <CodeMirror
-                options={options}
+                options={shownOptions}
                 cursor={cursorRef.current}
                 markdown={markdownRef.current ?? ''}
                 contentVersion={contentVersion}
@@ -591,12 +601,10 @@ const Editor: React.FC = () => {
                 onSearchArgChange={setSearchArg}
             />
         )
-    } else if (plainHeldRef.current) {
-        return <></>
     } else {
         return (
             <MuyaEditor
-                options={options}
+                options={shownOptions}
                 cursor={cursorRef.current}
                 markdown={markdownRef.current ?? ''}
                 contentVersion={contentVersion}

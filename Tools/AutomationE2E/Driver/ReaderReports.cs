@@ -90,14 +90,30 @@ internal static partial class Program
             var saved = File.ReadAllText(path);
             notes.Add("saved: " + saved.Replace("\n", "\\n"));
             Check(saved == text + "X", "the save wrote the key typed and nothing else changed");
+            // Each frame painted while switching, looked at (a reader, 2026-11-04: from the .md to the .txt the Markdown
+            // file's source flashed first): what the source editor and the visual editor hold, or neither (blank).
+            const string watch = "(() => { const frames = window.__pt01Frames = []; const me = window.__pt01Watch = {}; const look = () => { if (window.__pt01Watch !== me) return; const cm = document.querySelector('.CodeMirror'); const muya = document.querySelector('#ag-editor-id'); frames.push({ cm: cm ? cm.CodeMirror.getValue().slice(0, 30) : null, muya: muya ? (muya.textContent || '').slice(0, 30) : null }); requestAnimationFrame(look) }; requestAnimationFrame(look); return true })()";
+            async Task<JArray> Frames() => JArray.Parse((string)(await c.Call("test.editor.eval", new { windowId, script = "(() => { window.__pt01Watch = null; return JSON.stringify(window.__pt01Frames || []) })()" }))["result"]!);
+            await c.Call("test.editor.eval", new { windowId, script = watch });
             await c.Call("document.focus", new { documentId = md });
             await Task.Delay(1500);
+            var toMarkdown = await Frames();
             var markdownTab = await State();
             Check((bool)markdownTab["muya"]! && !(bool)markdownTab["codeMirror"]!, "the Markdown tab is in the visual editor, the reader's mode");
+            var plainInVisual = toMarkdown.Count(f => ((string?)f["muya"] ?? "").Contains("not a heading"));
+            var blankToMarkdown = toMarkdown.Count(f => f["cm"]?.Type == JTokenType.Null && f["muya"]?.Type == JTokenType.Null);
+            notes.Add($"to the .md: {toMarkdown.Count} frames, {plainInVisual} with the plain text in the visual editor, {blankToMarkdown} blank");
+            Check(plainInVisual == 0 && blankToMarkdown == 0, $"to the .md: no frame of the plain text in the visual editor, none blank ({plainInVisual}, {blankToMarkdown} of {toMarkdown.Count})");
+            await c.Call("test.editor.eval", new { windowId, script = watch });
             await c.Call("document.focus", new { documentId = txt });
             await Task.Delay(1500);
+            var toPlain = await Frames();
             var again = await State();
             Check((bool)again["codeMirror"]! && (bool)again["prose"]! && (int)again["highlighted"]! == 0, "back on the .txt: plain prose again");
+            var markdownInSource = toPlain.Count(f => ((string?)f["cm"] ?? "").Contains("A Markdown tab"));
+            var blankToPlain = toPlain.Count(f => f["cm"]?.Type == JTokenType.Null && f["muya"]?.Type == JTokenType.Null);
+            notes.Add($"to the .txt: {toPlain.Count} frames, {markdownInSource} with the Markdown file in the source editor, {blankToPlain} blank");
+            Check(markdownInSource == 0 && blankToPlain == 0, $"to the .txt: no frame of the Markdown file's source, none blank ({markdownInSource}, {blankToPlain} of {toPlain.Count})");
             try { await c.Call("document.close", new { documentId = txt }); } catch { }
             // A Markdown block in a plain text file (an md fence, a longer one holding a code block): drawn as Markdown
             // in the prose view, the rest plain.
