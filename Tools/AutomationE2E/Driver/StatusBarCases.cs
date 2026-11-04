@@ -232,8 +232,17 @@ internal static partial class Program
             Check(await DialogShown(8000), "a save by hand asks first");
             var question = string.Join(" | ", Deep.All(AutomationElement.FromHandle(window), new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.Text)).Cast<AutomationElement>().Select(Deep.Name).Where(n => n.Contains("UTF-8")));
             notes.Add($"the question: '{question}'");
-            Invoke(Cancel() ?? throw new CaseFailed("the question has no Cancel"));
-            Check(await Closed(4000), "Cancel closes the question");
+            // Clicked as a person does (an Invoke left the question open on w10).
+            var cancelButton = Cancel() ?? throw new CaseFailed("the question has no Cancel");
+            notes.Add($"Cancel: '{Deep.Name(cancelButton)}' at {cancelButton.Current.BoundingRectangle}, Save as UTF-8 at {FindIn(window, "PrimaryButton")?.Current.BoundingRectangle}");
+            await Click(window, cancelButton);
+            if (!await Closed(4000))
+            {
+                var buttons = Deep.All(AutomationElement.FromHandle(window), new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.Button)).Cast<AutomationElement>()
+                    .Where(b => !b.Current.IsOffscreen).Select(b => $"{b.Current.AutomationId}:'{Deep.Name(b)}'");
+                notes.Add("buttons after Cancel: " + string.Join(", ", buttons));
+                throw new CaseFailed("Cancel closes the question");
+            }
             await Task.Delay(800);
             Check(File.ReadAllBytes(lossy).SequenceEqual(original), "Cancel: the file kept its bytes");
             var after = await Get(c, id);
@@ -252,7 +261,7 @@ internal static partial class Program
             // Save as UTF-8: the text as shown, as UTF-8; the mark gone, and the next save asks nothing.
             await Click(window, Find("StatusBarSaveState"));
             Check(await DialogShown(8000), "asked again: nothing was remembered");
-            Invoke(FindIn(window, "PrimaryButton")!);
+            await Click(window, FindIn(window, "PrimaryButton")!);
             for (var i = 0; i < 40 && File.ReadAllBytes(lossy).SequenceEqual(original); i++) await Task.Delay(200);
             var written = File.ReadAllBytes(lossy);
             string text;
