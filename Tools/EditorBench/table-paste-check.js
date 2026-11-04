@@ -96,6 +96,19 @@ const { openEditor } = require('./harness');
     report(r.length === 4 && r[0].length === 5 && JSON.stringify(r[2].slice(3)) === JSON.stringify(['a', 'b']) && JSON.stringify(r[3].slice(3)) === JSON.stringify(['c', 'd']),
       '2 x 2 from the last cell: spread, the table given a row and a column', JSON.stringify(r));
 
+    // 6. Pasted as plain text, tabs and all, at a caret in a cell: not split - the whole text in that cell, tabs as
+    //    spaces (a reader: text with tabs is sometimes meant for one cell); a normal paste of the same text splits.
+    await fresh();
+    const p = await at(1, 2);
+    await page.mouse.click(5, 5);
+    await pause(150);
+    await page.mouse.click(p.x, p.y);
+    await pause(250);
+    await page.evaluate(() => window.__deliver('Paste', { type: 'pasteAsPlainText', text: 'a\tb', html: '' }));
+    await pause(500);
+    r = rows(await markdown());
+    report(r.length === 3 && r[0].length === 4 && r[1][2] === 'a b' && r[1][3] === '', 'pasted as plain text: tabs and all in one cell, as spaces', JSON.stringify(r));
+
     // 5. A single cell, one value: replaced as before.
     await fresh();
     const cell = await at(1, 0);

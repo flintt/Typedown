@@ -301,9 +301,10 @@ const pasteCtrl = ContentState => {
   // - the selection a whole multiple of what was copied (1 x 2 into 3 x 4): what was copied repeated over it;
   // - else: what was copied, whole, from the selection's top-left - not cut to the selection (nothing copied is
   //   silently lost), the table given the rows and columns it needs past its edge.
-  ContentState.prototype.pasteIntoSelectedCells = function (text, html) {
+  // Pasted as plain text: never split - the whole text is one value (tabs as spaces), as into one cell.
+  ContentState.prototype.pasteIntoSelectedCells = function (text, html, plain = false) {
     const { tableId, row: rows, column: columns, cells: selected } = this.selectedTableCells
-    const grid = pastedGrid(text, html)
+    const grid = plain ? [[(text || '').trim().replace(/\t/g, ' ')]] : pastedGrid(text, html)
     const gridRows = grid.length
     const gridColumns = Math.max(...grid.map(r => r.length))
     let all = getAllTableCells(tableId)
@@ -371,7 +372,7 @@ const pasteCtrl = ContentState => {
     // Cells selected (a drag across them, or select all in a cell): what is pasted fills them, as a spreadsheet does.
     // Several cells selected took nothing (a reader: a range copied could not be pasted into an empty one of its size).
     if (this.selectedTableCells) {
-      return this.pasteIntoSelectedCells(text, html)
+      return this.pasteIntoSelectedCells(text, html, type === 'pasteAsPlainText')
     }
 
     let copyType = this.checkCopyType(html, text)
@@ -459,8 +460,9 @@ const pasteCtrl = ContentState => {
 
     if (startBlock.functionType === 'cellContent') {
       // Several cells' worth (a range copied, Excel's rows) pasted at a caret in a cell: spread from that cell, as into
-      // one selected cell - not all of it into the one cell.
-      const grid = pastedGrid(text, html)
+      // one selected cell - not all of it into the one cell. Pasted as plain text it is not split (a reader: text with
+      // tabs is sometimes meant for one cell): all of it into this cell, tabs as spaces.
+      const grid = type === 'pasteAsPlainText' ? [['']] : pastedGrid(text, html)
       if (grid.length > 1 || grid[0].length > 1) {
         const cell = this.closest(startBlock, /th|td/)
         const table = this.closest(startBlock, 'table')
@@ -482,7 +484,7 @@ const pasteCtrl = ContentState => {
       }
 
       const { key } = startBlock
-      const pendingText = text.trim().replace(/\n/g, '<br/>')
+      const pendingText = text.trim().replace(/\n/g, '<br/>').replace(type === 'pasteAsPlainText' ? /\t/g : /(?!)/, ' ')
       let offset = pendingText.length
       if (isOneCellSelected) {
         // Replace text and deselect cell.
