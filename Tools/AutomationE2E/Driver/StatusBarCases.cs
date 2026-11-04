@@ -180,6 +180,7 @@ internal static partial class Program
         var windowId = await WindowIdOf(c, id);
         var window = await WindowOf(windowId, c);
         var autoSave = (bool)(await c.Call("test.settings.get", new { windowId, name = "AutoSave" }))["value"]!;
+        var hidden = (string?)(await c.Call("test.settings.get", new { windowId, name = "StatusBarHiddenItems" }))["value"];
         AutomationElement Find(string automationId) =>
             Deep.First(AutomationElement.FromHandle(window), new PropertyCondition(AutomationElement.AutomationIdProperty, automationId))
             ?? throw new CaseFailed($"no {automationId}");
@@ -196,6 +197,7 @@ internal static partial class Program
         try
         {
             await c.Call("test.settings.set", new { windowId, name = "AutoSave", value = false });
+            await c.Call("test.settings.set", new { windowId, name = "StatusBarHiddenItems", value = "" });
             await c.Call("window.setView", new { windowId, statusBar = true, mode = "visual", bounds = new { x = 20, y = 20, width = 1400, height = 800 } });
             await Task.Delay(1200);
             var marked = BarText(window, "StatusBarFileFormat");
@@ -249,6 +251,7 @@ internal static partial class Program
         {
             try { if (FindIn(window, "CloseButton") is { } cancel && FindIn(window, "PrimaryButton") != null) Invoke(cancel); } catch { }
             try { await c.Call("test.settings.set", new { windowId, name = "AutoSave", value = autoSave }); } catch { }
+            try { await c.Call("test.settings.set", new { windowId, name = "StatusBarHiddenItems", value = hidden }); } catch { }
             try { await c.Call("document.close", new { documentId = id }); } catch { }
         }
     }
