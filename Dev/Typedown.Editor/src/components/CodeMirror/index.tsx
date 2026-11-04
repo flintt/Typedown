@@ -614,6 +614,46 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
         }
     }, [editor, props.options?.plainTextShown, props.options?.plainTextProse])
 
+    // A press in the space around the editor (the prose view's margins either side of its column, the padding above):
+    // the editor never heard it, and the browser made a selection of its own over the lines - painted in another
+    // colour, while the editor's own went on showing the one before (a reader: two selections, two colours, in a .txt).
+    // Taken here instead: the browser's selection prevented, the editor's made from the point, held to the editor's box.
+    useEffect(() => {
+        if (!editor) return
+        const wrapper = editor.getWrapperElement()
+        const at = (e: MouseEvent) => {
+            const r = wrapper.getBoundingClientRect()
+            const x = Math.min(Math.max(e.clientX, r.left + 1), r.right - 1)
+            const y = Math.min(Math.max(e.clientY, r.top + 1), r.bottom - 1)
+            return editor.coordsChar({ left: x, top: y }, 'window')
+        }
+        const onDown = (e: MouseEvent) => {
+            if (e.button !== 0 || e.defaultPrevented) return
+            const target = e.target as Element
+            if (!(target instanceof Element) || target.closest('.CodeMirror') || !target.contains(wrapper)) return
+            e.preventDefault()
+            window.getSelection()?.removeAllRanges()
+            editor.focus()
+            const anchor = e.shiftKey ? editor.getCursor('anchor') : at(e)
+            editor.setSelection(anchor, at(e))
+            const move = (m: MouseEvent) => {
+                // Past the top or the bottom: the editor scrolls itself, a little each move.
+                const r = wrapper.getBoundingClientRect()
+                const over = m.clientY < r.top ? m.clientY - r.top : m.clientY > r.bottom ? m.clientY - r.bottom : 0
+                if (over) editor.scrollTo(null, editor.getScrollInfo().top + over)
+                editor.setSelection(anchor, at(m), { scroll: false })
+            }
+            const up = () => {
+                document.removeEventListener('mousemove', move)
+                document.removeEventListener('mouseup', up)
+            }
+            document.addEventListener('mousemove', move)
+            document.addEventListener('mouseup', up)
+        }
+        document.addEventListener('mousedown', onDown)
+        return () => document.removeEventListener('mousedown', onDown)
+    }, [editor])
+
     // A plain text file's view, set on the editor as it changes: the options it was made with are not read again.
     useEffect(() => {
         if (!editor) return

@@ -7,6 +7,8 @@
     background-color: transparent;
   }
   .cm-s-one-dark .CodeMirror-selected {background-color: var(--selectionColor);}
+  /* A selection the browser makes over the lines (outside the editor's own) in the same colour, not CodeMirror's default lilac. */
+  .cm-s-one-dark .CodeMirror-line::selection, .cm-s-one-dark .CodeMirror-line > span::selection, .cm-s-one-dark .CodeMirror-line > span > span::selection {background: var(--selectionColor);}
   .cm-s-one-dark .CodeMirror-gutter,
   .cm-s-one-dark .CodeMirror-gutters {
     border: none;
