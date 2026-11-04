@@ -189,7 +189,7 @@ internal static partial class Program
         {
             for (var i = 0; i < timeoutMs / 150; i++)
             {
-                if (Open()) return true;
+                if (Asking()) return true;
                 await Task.Delay(150);
             }
             return false;
@@ -204,12 +204,12 @@ internal static partial class Program
             return null;
         }
         // Gone, or left in the tree off screen.
-        bool Open() => FindIn(window, "PrimaryButton") is { } p && !p.Current.IsOffscreen;
+        bool Asking() => FindIn(window, "PrimaryButton") is { } p && !p.Current.IsOffscreen;
         async Task<bool> Closed(int timeoutMs)
         {
             for (var i = 0; i < timeoutMs / 150; i++)
             {
-                if (!Open()) return true;
+                if (!Asking()) return true;
                 await Task.Delay(150);
             }
             return false;
@@ -246,7 +246,7 @@ internal static partial class Program
             notes.Add($"document.save: {refusal?.ToString(Newtonsoft.Json.Formatting.None) ?? "saved"}");
             Check((string?)refusal?["kind"] == "save_failed" && (string?)refusal?["reason"] == "encoding_not_exact", "the API's save is refused with the reason");
             await Task.Delay(1000);
-            Check(!Open(), "the API's save shows no dialog");
+            Check(!Asking(), "the API's save shows no dialog");
             Check(File.ReadAllBytes(lossy).SequenceEqual(original), "the API's save wrote nothing");
 
             // Save as UTF-8: the text as shown, as UTF-8; the mark gone, and the next save asks nothing.
@@ -271,7 +271,7 @@ internal static partial class Program
         }
         finally
         {
-            try { if (Open() && Cancel() is { } cancel) Invoke(cancel); } catch { }
+            try { if (Asking() && Cancel() is { } cancel) Invoke(cancel); } catch { }
             try { await c.Call("test.settings.set", new { windowId, name = "AutoSave", value = autoSave }); } catch { }
             try { await c.Call("test.settings.set", new { windowId, name = "StatusBarHiddenItems", value = hidden }); } catch { }
             try { await c.Call("document.close", new { documentId = id }); } catch { }
