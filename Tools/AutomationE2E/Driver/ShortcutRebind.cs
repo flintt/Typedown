@@ -83,7 +83,7 @@ internal static partial class Program
             Check(bigger > size, $"Ctrl+Alt+F10, given to Zoom in, makes the text larger ({size} -> {bigger})");
             Chord("Ctrl+Shift+0");
             Check(await Eventually(async () => (double)await Setting("FontSize") == 16, 3000), $"Ctrl+Shift+0 (Reset zoom) goes back to 16 ({await Setting("FontSize")})");
-            await OpenMenu(window, "视图", "放大");
+            await InvokeMenuBarItem(window, "ZoomInItem");
             Check(await Eventually(async () => (double)await Setting("FontSize") > 16, 3000), $"View > Zoom in makes the text larger ({await Setting("FontSize")})");
 
             // An ordinary shortcut's picker: no warning.
