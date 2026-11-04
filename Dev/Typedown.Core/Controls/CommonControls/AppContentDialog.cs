@@ -227,6 +227,14 @@ namespace Typedown.Core.Controls
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
+            // Closed between being added and now (Hide waits for Loaded): taken away at once. Before, ShowAsync had
+            // returned and the dialog stayed on screen for good, over every dialog after it (ST11 dismissed the supporter
+            // sheet that soon; PR02, HS01 and HS02 found it there on hp and W10, 2026-11-04).
+            if (result?.Task.IsCompleted == true)
+            {
+                Hide();
+                return;
+            }
             ApplyThemeColours();
             watchedSettings = this.GetService<SettingsViewModel>();
             if (watchedSettings != null) watchedSettings.PropertyChanged += OnSettingsChanged;
