@@ -194,14 +194,13 @@ internal static partial class Program
             }
             return false;
         }
-        // The question's Cancel: the CloseButton beside its PrimaryButton (the window has other CloseButtons - the find
-        // bar's, the title bar's).
+        // The question's Cancel: the CloseButton level with its PrimaryButton (every tab's Close Tab is a CloseButton too).
         AutomationElement? Cancel()
         {
-            var primary = FindIn(window, "PrimaryButton");
-            for (var parent = primary == null ? null : TreeWalker.RawViewWalker.GetParent(primary); parent != null; parent = TreeWalker.RawViewWalker.GetParent(parent))
-                if (Deep.First(parent, new PropertyCondition(AutomationElement.AutomationIdProperty, "CloseButton")) is { } close) return close;
-            return null;
+            if (FindIn(window, "PrimaryButton") is not { } primary) return null;
+            var row = primary.Current.BoundingRectangle;
+            return Deep.All(AutomationElement.FromHandle(window), new PropertyCondition(AutomationElement.AutomationIdProperty, "CloseButton")).Cast<AutomationElement>()
+                .FirstOrDefault(b => !b.Current.IsOffscreen && Math.Abs(b.Current.BoundingRectangle.Top - row.Top) < 12);
         }
         // Gone, or left in the tree off screen.
         bool Asking() => FindIn(window, "PrimaryButton") is { } p && !p.Current.IsOffscreen;
@@ -232,7 +231,7 @@ internal static partial class Program
             Check(await DialogShown(8000), "a save by hand asks first");
             var question = string.Join(" | ", Deep.All(AutomationElement.FromHandle(window), new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.Text)).Cast<AutomationElement>().Select(Deep.Name).Where(n => n.Contains("UTF-8")));
             notes.Add($"the question: '{question}'");
-            // Clicked as a person does (an Invoke left the question open on w10).
+            // Clicked as a person does.
             var cancelButton = Cancel() ?? throw new CaseFailed("the question has no Cancel");
             notes.Add($"Cancel: '{Deep.Name(cancelButton)}' at {cancelButton.Current.BoundingRectangle}, Save as UTF-8 at {FindIn(window, "PrimaryButton")?.Current.BoundingRectangle}");
             await Click(window, cancelButton);
