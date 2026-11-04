@@ -347,4 +347,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>Gem som UTF-8</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>Behold min</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>Filen er ændret på disken, og du har ændringer, der ikke er gemt. Ingen version går tabt: den, du ikke beholder, gemmes som en kopi i {0}, og efter genindlæsning bringer Ctrl+Z din tilbage.</value>
+  </data>
 </root>

@@ -347,4 +347,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>Salvesta UTF-8-na</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>Jäta minu oma</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>Fail on kettal muutunud ja sul on salvestamata muudatusi. Kumbki versioon ei kao: see, mida sa ei jäta, salvestatakse koopiana kausta {0} ja pärast uuesti laadimist toob Ctrl+Z sinu oma tagasi.</value>
+  </data>
 </root>

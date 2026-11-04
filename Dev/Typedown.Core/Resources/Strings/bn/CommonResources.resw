@@ -1255,4 +1255,7 @@
   <data name="ShortcutClickHint" xml:space="preserve">
     <value>ক্লিক করার সময় চেপে রাখার মডিফায়ার কী চাপুন।</value>
   </data>
+  <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
+    <value>অন্য একটি প্রোগ্রাম এই ফাইলটি বদলেছে, তাই স্বয়ংক্রিয় সংরক্ষণ এর ওপর লেখে না। কোন সংস্করণ রাখবেন বেছে নিন।</value>
+  </data>
 </root>

@@ -347,4 +347,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>UTF-8 ретінде сақтау</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>Менікін қалдыру</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>Дискідегі файл өзгерді, ал сізде сақталмаған өзгерістер бар. Ешбір нұсқа жоғалмайды: сіз қалдырмаған нұсқа {0} ішінде көшірме ретінде сақталады, ал қайта жүктегеннен кейін Ctrl+Z сіздікін қайтарады.</value>
+  </data>
 </root>

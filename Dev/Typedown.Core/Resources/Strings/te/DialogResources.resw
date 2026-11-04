@@ -347,4 +347,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>UTF-8 గా సేవ్ చేయి</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>నాది ఉంచు</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>డిస్క్‌లోని ఫైల్ మారింది, మీకు సేవ్ చేయని మార్పులు ఉన్నాయి. ఏ వెర్షనూ పోదు: మీరు ఉంచనిది {0}లో కాపీగా సేవ్ అవుతుంది, మళ్లీ లోడ్ చేశాక Ctrl+Z మీ మార్పులను తిరిగి తెస్తుంది.</value>
+  </data>
 </root>

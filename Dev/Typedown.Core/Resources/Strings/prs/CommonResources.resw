@@ -1255,4 +1255,7 @@
   <data name="ShortcutClickHint" xml:space="preserve">
     <value>کلیدهای تغییردهنده‌ای را که هنگام کلیک نگه می‌دارید فشار دهید.</value>
   </data>
+  <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
+    <value>برنامهٔ دیگری این فایل را تغییر داده، پس ذخیرهٔ خودکار روی آن نمی‌نویسد. انتخاب کنید کدام نسخه بماند.</value>
+  </data>
 </root>

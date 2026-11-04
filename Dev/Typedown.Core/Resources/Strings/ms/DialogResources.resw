@@ -347,4 +347,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>Simpan sebagai UTF-8</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>Kekalkan milik saya</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>Fail pada cakera telah berubah, dan anda mempunyai perubahan yang belum disimpan. Tiada versi yang hilang: versi yang tidak anda kekalkan disimpan sebagai salinan dalam {0}, dan selepas Muat semula, Ctrl+Z mengembalikan milik anda.</value>
+  </data>
 </root>

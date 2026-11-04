@@ -1255,4 +1255,7 @@
   <data name="ShortcutClickHint" xml:space="preserve">
     <value>ക്ലിക്ക് ചെയ്യുമ്പോൾ അമർത്തിപ്പിടിക്കേണ്ട മോഡിഫയർ കീകൾ അമർത്തുക.</value>
   </data>
+  <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
+    <value>മറ്റൊരു പ്രോഗ്രാം ഈ ഫയൽ മാറ്റി, അതിനാൽ സ്വയം സംരക്ഷണം അതിനു മുകളിൽ എഴുതില്ല. ഏത് പതിപ്പ് നിലനിർത്തണമെന്ന് തിരഞ്ഞെടുക്കുക.</value>
+  </data>
 </root>

@@ -347,4 +347,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>Запиши като UTF-8</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>Запази моята</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>Файлът на диска е променен, а имате незапазени промени. Нито една версия не се губи: тази, която не запазите, се записва като копие в {0}, а след презареждане Ctrl+Z връща вашата.</value>
+  </data>
 </root>

@@ -128,7 +128,29 @@ namespace Typedown.Core.Services
         {
             if (!IsActive) return Task.FromResult(false);
             if (app.FileViewModel.SaveNeedsEncodingConsent) throw EncodingNotExact(tab.Revision, applied: true);
-            return app.FileViewModel.SaveToExistingPathAsync();
+            return SaveOrSayWhy(app, tab.Revision, applied: true);
+        }
+
+        // The save, refused with its reason when another program changed the file meanwhile (ChangedOnDisk).
+        public static async Task<bool> SaveOrSayWhy(AppViewModel app, long revision, bool applied)
+        {
+            if (await app.FileViewModel.SaveToExistingPathAsync()) return true;
+            if (app.FileViewModel.LastSaveRefusal == FileViewModel.ChangedOnDiskReason) throw ChangedOnDisk(revision, applied);
+            return false;
+        }
+
+        /// <summary>
+        /// The API's save of a file another program changed since it was read, its version not seen yet: refused with
+        /// save_failed and reason "changed_on_disk", nothing written - the person is asked in the window which to keep.
+        /// </summary>
+        public static AutomationException ChangedOnDisk(long revision, bool applied)
+        {
+            var data = new Dictionary<string, object> { ["reason"] = FileViewModel.ChangedOnDiskReason, ["revision"] = revision };
+            if (applied) data["applied"] = true;
+            return new AutomationException(AutomationErrorKind.save_failed,
+                (applied ? "The edit was applied but not saved: " : "Not saved: ")
+                + "another program changed this file since it was read, and saving would write over its version. The person is asked in the window which to keep.",
+                data);
         }
 
         /// <summary>

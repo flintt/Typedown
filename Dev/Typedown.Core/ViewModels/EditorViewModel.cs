@@ -600,11 +600,38 @@ namespace Typedown.Core.ViewModels
                 if (hash != FileHash)
                     Log.Debug($"FileLoaded: editor normalized the text (len {Markdown.Length} -> {newText.Length}, loadId={LoadId})");
                 FileHash = hash;
-                History.InitHistory(newText);
+                // Reloaded from disk over the reader's unsaved changes: the disk's text one undo step after theirs, so
+                // Ctrl+Z brings them back (the history begun again took them for good). Any other load begins it again.
+                if (keepHistoryFor != null && string.Equals(keepHistoryFor, given, StringComparison.Ordinal))
+                {
+                    History.CommitPending();
+                    History.ContentChange(newText);
+                    History.CursorChange(CurrentCursor ?? new(Focus: new(Line: 0, Ch: 0), Anchor: new(Line: 0, Ch: 0)));
+                    History.CommitPending();
+                }
+                else History.InitHistory(newText);
+                keepHistoryFor = null;
                 OnMarkdownChange(newText);
                 if (FloatViewModel.FindReplaceDialogOpen > 0)
                     OnSearch();
             }
+        }
+
+        // The text of a reload from disk that keeps the history before it (KeepHistoryOnLoad), until its load is confirmed.
+        private string keepHistoryFor;
+
+        /// <summary>
+        /// The load of this text, about to be sent, keeps the undo history: the text before it one Ctrl+Z away. The reader's
+        /// own typing still pending is closed as a step of its own first.
+        /// </summary>
+        internal void KeepHistoryOnLoad(string text)
+        {
+            // The text now (the reader's), a step of its own even if its typing had no caret yet to make it one.
+            History.CommitPending();
+            History.ContentChange(Markdown);
+            History.CursorChange(CurrentCursor ?? new(Focus: new(Line: 0, Ch: 0), Anchor: new(Line: 0, Ch: 0)));
+            History.CommitPending();
+            keepHistoryFor = text;
         }
 
         // The text sent with the newest load id (a load, the page asking for its document, text from the history).

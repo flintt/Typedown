@@ -213,6 +213,14 @@
     <value>Keep</value>
     <comment>外部修改对话框/保留</comment>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>Keep mine</value>
+    <comment>外部修改对话框/有未保存更改时：保留我的（另一版本存为副本）</comment>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>The file has been changed on disk, and you have unsaved changes. Neither is lost: the version you don't keep is saved as a copy in {0}, and after Reload, Ctrl+Z brings yours back.</value>
+    <comment>外部修改对话框/有未保存更改时的正文：两份都不丢，没保留的那份存为副本放在 {0}（文件夹路径）；重新加载后按 Ctrl+Z 可找回自己的</comment>
+  </data>
   <data name="ResizeTableTitle" xml:space="preserve">
     <value>Resize Table</value>
     <comment>表格对话框/调整表格</comment>

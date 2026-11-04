@@ -97,6 +97,8 @@ namespace Typedown.Core.ViewModels
         private DateTime ignoreExternalChangeUntil = DateTime.MinValue;
 
         private bool reloadDialogOpened;
+        // A save by hand asking what to do about a change on disk it found (AskSaveOverChange).
+        private bool saveConflictOpen;
 
         public AutoBackup AutoBackup => ServiceProvider.GetService<AutoBackup>();
 
@@ -192,6 +194,10 @@ namespace Typedown.Core.ViewModels
         {
             try
             {
+                // Not while the reader is asked what to do about a change on disk: written then, the save put their text
+                // over the other version before they answered (and a Reload swapped the two).
+                if (reloadDialogOpened || saveConflictOpen)
+                    return false;
                 if (SettingsViewModel.AutoSave && EditorViewModel.FileLoaded && (EditorViewModel.FileHash != EditorViewModel.CurrentHash) && FilePath != null)
                     return await Save(false);
                 return FilePath != null;
@@ -638,8 +644,80 @@ namespace Typedown.Core.ViewModels
             }
         }
 
+        /// <summary>
+        /// Why the last save wrote nothing when it was not the reader's own choice to cancel: <see cref="ChangedOnDiskReason"/>
+        /// when another program had changed the file (the API says so as save_failed's reason); null otherwise.
+        /// </summary>
+        public string LastSaveRefusal { get; private set; }
+
+        public const string ChangedOnDiskReason = "changed_on_disk";
+
+        // The labels of the kept copies' names (DiskConflict.KeptCopyName): whose version it is.
+        private const string KeptOnDisk = "on disk";
+        private const string KeptUnsaved = "unsaved";
+
+        /// <summary>
+        /// The file's text and format now, when it is not what the app last read or wrote there nor what is about to be
+        /// written (DiskConflict.ChangedSinceKnown); null when it is, when nothing is known of it, or it cannot be read.
+        /// </summary>
+        private async Task<(string Text, TextFileFormat Format)?> ReadChangedOnDisk(string path, ulong toWrite)
+        {
+            if (DiskHash == 0 || !File.Exists(path)) return null;
+            try
+            {
+                var (text, format) = await TextFileFormat.ReadAsync(path);
+                return DiskConflict.ChangedSinceKnown(Common.SimpleHash(text), DiskHash, EditorViewModel.FileHash, toWrite) ? (text, format) : null;
+            }
+            catch (Exception ex)
+            {
+                Log.Debug($"save: '{path}' could not be read to compare before writing ({ex.GetType().Name}); written as before");
+                return null;
+            }
+        }
+
+        /// <summary>A copy of one version, kept for good (AutoBackup.KeepCopy), the log saying where.</summary>
+        private async Task<string> KeepVersion(string path, string text, string label)
+        {
+            var file = await AutoBackup.KeepCopy(path, text, label);
+            Log.Debug(file != null
+                ? $"conflict: the {label} version of '{Path.GetFileName(path)}' kept as '{Path.GetFileName(file)}'"
+                : $"conflict: the {label} version of '{Path.GetFileName(path)}' could not be kept");
+            return file;
+        }
+
+        // The question's text when the reader has changes the disk does not: neither version is lost, and where the other goes.
+        private string ConflictContent() => string.Format(
+            Locale.GetDialogString("ReloadFromDiskConflict") ?? "The file has been changed on disk, and you have unsaved changes. Neither is lost: the version you don't keep is saved as a copy in {0}, and after Reload, Ctrl+Z brings yours back.",
+            AutoBackup.KeptFolder);
+
+        /// <summary>
+        /// A save by hand that found the file changed on disk by another program since it was read: Keep mine (write it,
+        /// the disk's version kept as a copy), Reload (the disk's text, the reader's kept as a copy and one Ctrl+Z away),
+        /// or Cancel - the default, which writes nothing.
+        /// </summary>
+        private async Task<ContentDialogResult> AskSaveOverChange()
+        {
+            saveConflictOpen = true;
+            try
+            {
+                var dialog = AppContentDialog.Create(
+                    Locale.GetDialogString("ReloadFromDiskTitle") ?? "The file has been changed on disk",
+                    ConflictContent(),
+                    Locale.GetDialogString("Cancel") ?? "Cancel",
+                    Locale.GetDialogString("KeepMine") ?? "Keep mine",
+                    Locale.GetDialogString("Reload") ?? "Reload");
+                dialog.DefaultButton = ContentDialogButton.Close;
+                return await dialog.ShowAsync(AppViewModel.XamlRoot);
+            }
+            finally
+            {
+                saveConflictOpen = false;
+            }
+        }
+
         private async Task<bool> SaveCore(bool alert)
         {
+            LastSaveRefusal = null;
             if (FilePath == null)
             {
                 var result = await SaveAsCore();
@@ -688,6 +766,44 @@ namespace Typedown.Core.ViewModels
                 }
                 var markdown = EditorViewModel.Markdown;
                 var hash = Common.SimpleHash(markdown);
+                // The file as it is now, weighed against what was last read or written: another program's version not seen
+                // (written inside the second after our own save, which the watcher does not look at) is not written over
+                // unasked. A save by hand asks; an automatic one (and the API's) writes nothing and the reader is asked.
+                var onDisk = await ReadChangedOnDisk(path, hash);
+                if (onDisk != null)
+                {
+                    if (disposables.IsDisposed || FilePath != path || TabsViewModel?.ActiveTab != tab)
+                        return false;
+                    if (!alert)
+                    {
+                        Log.Debug($"save: '{path}' was changed on disk by another program since it was last read; not written over, the reader is asked");
+                        LastSaveRefusal = ChangedOnDiskReason;
+                        EditorViewModel.AutoSaveHeldBack = Locale.GetString("SaveState.ChangedOnDiskHeldBack");
+                        dispatcherQueue?.TryEnqueueSafe(() => _ = HandleExternalFileChange());
+                        return false;
+                    }
+                    var choice = await AskSaveOverChange();
+                    if (disposables.IsDisposed || FilePath != path || TabsViewModel?.ActiveTab != tab)
+                        return false;
+                    if (choice == ContentDialogResult.Secondary)
+                    {
+                        await KeepVersion(path, EditorViewModel.Markdown, KeptUnsaved);
+                        FileFormat = onDisk.Value.Format;
+                        ApplyDiskText(onDisk.Value.Text, keepHistory: true);
+                        return false;
+                    }
+                    if (choice != ContentDialogResult.Primary)
+                    {
+                        Log.Debug($"save: '{path}' was changed on disk; the reader cancelled, nothing written");
+                        return false;
+                    }
+                    await KeepVersion(path, onDisk.Value.Text, KeptOnDisk);
+                    EditionHooks.ReportDocumentOnDisk(path, onDisk.Value.Text, written: false);
+                    if (disposables.IsDisposed || FilePath != path || TabsViewModel?.ActiveTab != tab)
+                        return false;
+                    markdown = EditorViewModel.Markdown;
+                    hash = Common.SimpleHash(markdown);
+                }
                 var result = await WriteAllText(path, markdown, alert);
                 if (result && !disposables.IsDisposed && FilePath == path)
                 {
@@ -1668,21 +1784,36 @@ namespace Typedown.Core.ViewModels
             reloadDialogOpened = true;
             try
             {
-                var contentKey = EditorViewModel.Saved ? "ReloadFromDiskContentClean" : "ReloadFromDiskContent";
-                var contentFallback = EditorViewModel.Saved
-                    ? "磁盘上的文件已更改，是否重新加载？"
-                    : "磁盘上的文件已更改。重新加载将丢失当前未保存的更改。";
-                var result = await AppContentDialog.Create(
+                // Neither version is lost (a reader: "only the changes before can be thrown away?"). With changes of the
+                // reader's own, Keep mine is the default - Enter reloaded and they were gone, with no undo and no backup -
+                // and the version not kept is saved as a copy; reloaded, theirs is also one Ctrl+Z away.
+                var unsaved = !EditorViewModel.Saved;
+                var dialog = AppContentDialog.Create(
                     Locale.GetDialogString("ReloadFromDiskTitle") ?? "文件已在外部被修改",
-                    Locale.GetDialogString(contentKey) ?? contentFallback,
-                    Locale.GetDialogString("Keep") ?? "保留",
-                    Locale.GetDialogString("Reload") ?? "重新加载").ShowAsync(AppViewModel.XamlRoot);
+                    unsaved ? ConflictContent() : Locale.GetDialogString("ReloadFromDiskContentClean") ?? "磁盘上的文件已更改，是否重新加载？",
+                    unsaved ? Locale.GetDialogString("KeepMine") ?? "保留我的" : Locale.GetDialogString("Keep") ?? "保留",
+                    Locale.GetDialogString("Reload") ?? "重新加载");
+                if (unsaved) dialog.DefaultButton = ContentDialogButton.Close;
+                var mine = EditorViewModel.Markdown;
+                var result = await dialog.ShowAsync(AppViewModel.XamlRoot);
                 if (disposables.IsDisposed || FilePath != path)
                     return;
                 if (result == ContentDialogResult.Primary)
-                    ApplyDiskText(text);
+                {
+                    if (unsaved) await KeepVersion(path, EditorViewModel.Markdown ?? mine, KeptUnsaved);
+                    if (disposables.IsDisposed || FilePath != path)
+                        return;
+                    EditionHooks.ReportDocumentOnDisk(path, text, written: false);
+                    ApplyDiskText(text, keepHistory: unsaved);
+                }
                 else
                 {
+                    // Kept: the disk's version would be written over by the next save - it is kept as a copy first (and
+                    // in the version history, Pro).
+                    await KeepVersion(path, text, KeptOnDisk);
+                    EditionHooks.ReportDocumentOnDisk(path, text, written: false);
+                    if (disposables.IsDisposed || FilePath != path)
+                        return;
                     EditorViewModel.FileHash = diskHash;
                     DiskHash = diskHash;
                     EditorViewModel.Saved = EditorViewModel.CurrentHash == diskHash;
@@ -1734,10 +1865,13 @@ namespace Typedown.Core.ViewModels
             EditorViewModel.Saved = false;
         }
 
-        private void ApplyDiskText(string text)
+        // keepHistory: reloaded over the reader's unsaved changes - their text stays one undo step back (and its backup is
+        // not deleted: the next save tick puts it right).
+        private void ApplyDiskText(string text, bool keepHistory = false)
         {
             if (!string.Equals(EditorViewModel.Markdown, text, StringComparison.Ordinal))
                 TabsViewModel?.ActiveTab?.NoteTextChanged();
+            if (keepHistory) EditorViewModel.KeepHistoryOnLoad(text);
             EditorViewModel.FirstStart = false;
             EditorViewModel.FileHash = Common.SimpleHash(text);
             DiskHash = EditorViewModel.FileHash;
@@ -1747,8 +1881,11 @@ namespace Typedown.Core.ViewModels
             EditorViewModel.FileLoaded = false;
             EditorViewModel.AutoSavedSucc = true;
             EditorViewModel.AutoSaveHeldBack = null;
-            EditorViewModel.History.InitHistory(text);
-            AutoBackup.DeleteBackup(FilePath);
+            if (!keepHistory)
+            {
+                EditorViewModel.History.InitHistory(text);
+                AutoBackup.DeleteBackup(FilePath);
+            }
             EditorViewModel.PostLoadFile(text);
         }
 

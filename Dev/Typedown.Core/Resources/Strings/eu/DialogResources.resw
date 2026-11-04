@@ -347,4 +347,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>Gorde UTF-8 gisa</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>Gorde nirea</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>Fitxategia diskoan aldatu da, eta gorde gabeko aldaketak dituzu. Ez da bertsiorik galtzen: gordetzen ez duzuna kopia gisa gordetzen da {0} karpetan, eta berriro kargatu ondoren Ctrl+Z-k zurea itzultzen du.</value>
+  </data>
 </root>

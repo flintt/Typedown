@@ -347,4 +347,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>Cadw fel UTF-8</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>Cadw fy un i</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>Mae'r ffeil wedi newid ar y ddisg, ac mae gennych newidiadau heb eu cadw. Ni chollir yr un fersiwn: caiff yr un nad ydych yn ei chadw ei chadw fel copi yn {0}, ac ar ôl Ail-lwytho, mae Ctrl+Z yn dod â'ch un chi yn ôl.</value>
+  </data>
 </root>

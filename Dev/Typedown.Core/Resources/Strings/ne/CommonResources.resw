@@ -1255,4 +1255,7 @@
   <data name="ShortcutClickHint" xml:space="preserve">
     <value>क्लिक गर्दा थिचिराख्ने परिमार्जक कुञ्जीहरू थिच्नुहोस्।</value>
   </data>
+  <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
+    <value>अर्को प्रोग्रामले यो फाइल परिवर्तन गर्‍यो, त्यसैले स्वतः सुरक्षणले यसमाथि लेख्दैन। कुन संस्करण राख्ने छान्नुहोस्।</value>
+  </data>
 </root>

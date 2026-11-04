@@ -1139,6 +1139,10 @@
     <value>This file could not be read without loss (an encoding other than UTF-8?), so auto-save does not write over it. Save it yourself only if the text shown is right.</value>
     <comment>自动保存暂停原因：文件编码无法无损读取</comment>
   </data>
+  <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
+    <value>Another program changed this file, so auto-save does not write over it. Choose which version to keep.</value>
+    <comment>自动保存暂停原因：文件已被其他程序修改，等用户选择保留哪一份</comment>
+  </data>
   <data name="SaveState.WriteFailed" xml:space="preserve">
     <value>Writing the file failed: {0}</value>
     <comment>自动保存暂停原因：写入失败，{0} 为错误信息</comment>

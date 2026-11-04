@@ -1255,4 +1255,7 @@
   <data name="ShortcutClickHint" xml:space="preserve">
     <value>Натисніть клавіші-модифікатори, які утримуються під час клацання.</value>
   </data>
+  <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
+    <value>Інша програма змінила цей файл, тому автозбереження його не перезаписує. Виберіть, яку версію залишити.</value>
+  </data>
 </root>

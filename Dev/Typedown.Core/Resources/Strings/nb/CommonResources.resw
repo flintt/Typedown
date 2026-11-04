@@ -1255,4 +1255,7 @@
   <data name="ShortcutClickHint" xml:space="preserve">
     <value>Trykk på endringstastene som holdes nede ved klikk.</value>
   </data>
+  <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
+    <value>Et annet program har endret filen, så automatisk lagring overskriver den ikke. Velg hvilken versjon du vil beholde.</value>
+  </data>
 </root>

@@ -1269,4 +1269,7 @@
   <data name="ShortcutClickHint" xml:space="preserve">
     <value>按下按一下時要按住的輔助鍵。</value>
   </data>
+  <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
+    <value>其他程式修改了這個檔案，自動儲存不會覆寫它。請選擇保留哪一份。</value>
+  </data>
 </root>

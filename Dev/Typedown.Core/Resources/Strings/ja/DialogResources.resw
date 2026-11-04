@@ -347,4 +347,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>UTF-8 で保存</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>自分の変更を残す</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>ディスク上のファイルが変更されましたが、ここには未保存の変更があります。どちらも失われません。残さなかった方は {0} にコピーとして保存され、再読み込みした後は Ctrl+Z で自分の変更を戻せます。</value>
+  </data>
 </root>

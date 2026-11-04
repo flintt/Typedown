@@ -347,4 +347,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>Desa com a UTF-8</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>Conserva la meva</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>El fitxer ha canviat al disc i tens canvis sense desar. Cap versió es perd: la que no conservis es desa com a còpia a {0} i, després de tornar a carregar, Ctrl+Z recupera la teva.</value>
+  </data>
 </root>

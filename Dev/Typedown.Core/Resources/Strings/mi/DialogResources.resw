@@ -347,4 +347,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>Tiaki hei UTF-8</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>Puritia tōku</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>Kua hurihia te kōnae i te kōpae, ā, he panonitanga kāore anō kia tiakina e koe. Kāore he putanga e ngaro: ko te mea kāore koe e pupuri ka tiakina hei kape ki {0}, ā, i muri i te Uta anō, ka whakahokia mai e Ctrl+Z ōu.</value>
+  </data>
 </root>

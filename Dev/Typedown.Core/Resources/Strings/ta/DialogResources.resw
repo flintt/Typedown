@@ -347,4 +347,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>UTF-8 ஆகச் சேமி</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>என்னுடையதை வைத்திரு</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>வட்டில் கோப்பு மாற்றப்பட்டுள்ளது, உங்களிடம் சேமிக்காத மாற்றங்கள் உள்ளன. எந்தப் பதிப்பும் இழக்கப்படாது: நீங்கள் வைத்திருக்காதது {0} இல் நகலாகச் சேமிக்கப்படும்; மீண்டும் ஏற்றிய பிறகு Ctrl+Z உங்கள் மாற்றங்களைத் திரும்பக் கொண்டுவரும்.</value>
+  </data>
 </root>

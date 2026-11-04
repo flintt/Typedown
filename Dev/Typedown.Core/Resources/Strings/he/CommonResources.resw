@@ -1255,4 +1255,7 @@
   <data name="ShortcutClickHint" xml:space="preserve">
     <value>הקש על מקשי הצירוף שיש להחזיק בעת הלחיצה.</value>
   </data>
+  <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
+    <value>תוכנה אחרת שינתה את הקובץ, ולכן השמירה האוטומטית לא דורסת אותו. בחר איזו גרסה לשמור.</value>
+  </data>
 </root>

@@ -347,4 +347,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>შენახვა UTF-8-ით</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>ჩემის შენარჩუნება</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>ფაილი დისკზე შეიცვალა, თქვენ კი შეუნახავი ცვლილებები გაქვთ. არცერთი ვერსია არ იკარგება: რომელსაც არ დატოვებთ, შეინახება ასლად {0}-ში, ხოლო ხელახლა ჩატვირთვის შემდეგ Ctrl+Z თქვენსას დააბრუნებს.</value>
+  </data>
 </root>

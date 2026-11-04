@@ -347,4 +347,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>UTF-8 হিচাপে ছেভ কৰক</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>মোৰটো ৰাখক</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>ডিস্কত ফাইলটো সলনি হৈছে, আৰু আপোনাৰ কিছু পৰিৱৰ্তন ছেভ কৰা হোৱা নাই। কোনো সংস্কৰণ নেহেৰায়: যিটো নাৰাখে সেইটো {0}-ত প্ৰতিলিপি হিচাপে ছেভ হ'ব, আৰু পুনৰ লোড কৰাৰ পিছত Ctrl+Z-এ আপোনাৰ পৰিৱৰ্তন ঘূৰাই আনিব।</value>
+  </data>
 </root>

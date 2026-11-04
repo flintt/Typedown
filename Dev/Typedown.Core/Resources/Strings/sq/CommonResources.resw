@@ -1255,4 +1255,7 @@
   <data name="ShortcutClickHint" xml:space="preserve">
     <value>Shtyp tastet modifikuese që mbahen gjatë klikimit.</value>
   </data>
+  <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
+    <value>Një program tjetër e ndryshoi këtë skedar, ndaj ruajtja automatike nuk e mbishkruan. Zgjidhni cilin version të mbani.</value>
+  </data>
 </root>

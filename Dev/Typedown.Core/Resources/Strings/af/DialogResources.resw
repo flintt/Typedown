@@ -347,4 +347,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>Stoor as UTF-8</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>Hou myne</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>Die lêer is op die skyf verander, en jy het ongestoorde veranderinge. Geen weergawe gaan verlore nie: die een wat jy nie hou nie, word as 'n kopie in {0} gestoor, en ná Herlaai bring Ctrl+Z joune terug.</value>
+  </data>
 </root>

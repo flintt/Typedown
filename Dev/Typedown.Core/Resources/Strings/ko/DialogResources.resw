@@ -347,4 +347,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>UTF-8로 저장</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>내 변경 유지</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>디스크의 파일이 변경되었고, 여기에는 저장하지 않은 변경 내용이 있습니다. 어느 쪽도 사라지지 않습니다. 유지하지 않은 쪽은 {0}에 사본으로 저장되며, 다시 불러온 뒤에는 Ctrl+Z로 내 변경을 되돌릴 수 있습니다.</value>
+  </data>
 </root>

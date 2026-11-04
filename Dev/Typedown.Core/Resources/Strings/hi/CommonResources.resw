@@ -1255,4 +1255,7 @@
   <data name="ShortcutClickHint" xml:space="preserve">
     <value>क्लिक करते समय दबाई रखने वाली संशोधक कुंजियाँ दबाएँ।</value>
   </data>
+  <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
+    <value>किसी दूसरे प्रोग्राम ने यह फ़ाइल बदली है, इसलिए स्वतः सहेजना इस पर नहीं लिखता। चुनें कि कौन-सा संस्करण रखना है।</value>
+  </data>
 </root>

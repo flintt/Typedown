@@ -1197,4 +1197,7 @@
   <data name="ShortcutClickHint" xml:space="preserve">
     <value>Prima as teclas modificadoras a manter premidas ao clicar.</value>
   </data>
+  <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
+    <value>Outro programa alterou este arquivo, por isso o salvamento automático não o substitui. Escolha qual versão manter.</value>
+  </data>
 </root>

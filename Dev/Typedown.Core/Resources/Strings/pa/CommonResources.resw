@@ -1255,4 +1255,7 @@
   <data name="ShortcutClickHint" xml:space="preserve">
     <value>ਕਲਿੱਕ ਕਰਦੇ ਸਮੇਂ ਦਬਾਈਆਂ ਰੱਖਣ ਵਾਲੀਆਂ ਮੋਡੀਫਾਇਰ ਕੁੰਜੀਆਂ ਦਬਾਓ।</value>
   </data>
+  <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
+    <value>ਕਿਸੇ ਹੋਰ ਪ੍ਰੋਗਰਾਮ ਨੇ ਇਹ ਫ਼ਾਈਲ ਬਦਲੀ ਹੈ, ਇਸ ਲਈ ਆਟੋ-ਸੇਵ ਇਸ ਉੱਤੇ ਨਹੀਂ ਲਿਖਦਾ। ਚੁਣੋ ਕਿ ਕਿਹੜਾ ਸੰਸਕਰਣ ਰੱਖਣਾ ਹੈ।</value>
+  </data>
 </root>

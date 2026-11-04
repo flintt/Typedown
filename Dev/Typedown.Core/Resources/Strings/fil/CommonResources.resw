@@ -1255,4 +1255,7 @@
   <data name="ShortcutClickHint" xml:space="preserve">
     <value>Pindutin ang mga modifier key na pipindutin habang nagki-click.</value>
   </data>
+  <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
+    <value>Binago ng ibang program ang file na ito, kaya hindi ito pinapatungan ng auto-save. Piliin kung aling bersyon ang panatilihin.</value>
+  </data>
 </root>

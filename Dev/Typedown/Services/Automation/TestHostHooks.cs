@@ -533,7 +533,9 @@ namespace Typedown.Services.Automation
             // UI Automation found the window's own close button first.
             methods.Add(new MethodDescriptor("test.dialog.press", null, "test.dialog.press/1", (c, ct) =>
             {
-                var which = c.Params.OptionalEnum("button", "close", "primary", "secondary", "close");
+                // "none": nothing pressed - the open dialog's title, message and default button, for a case that presses a
+                // real key on it (Enter does what the default button does).
+                var which = c.Params.OptionalEnum("button", "close", "primary", "secondary", "close", "none");
                 return Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
                 {
                     Core.Controls.AppContentDialog? dialog = null;
@@ -546,6 +548,16 @@ namespace Typedown.Services.Automation
                     }
                     Find(app.XamlRoot?.Content as global::Microsoft.UI.Xaml.DependencyObject);
                     if (dialog == null) throw new AutomationException(AutomationErrorKind.editor_not_ready, "no dialog is open in this window");
+                    if (which == "none")
+                        return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject
+                        {
+                            ["title"] = dialog.Title as string,
+                            ["content"] = dialog.Content as string,
+                            ["defaultButton"] = dialog.DefaultButton.ToString().ToLowerInvariant(),
+                            ["primary"] = dialog.PrimaryButtonText,
+                            ["secondary"] = dialog.SecondaryButtonText,
+                            ["close"] = dialog.CloseButtonText,
+                        };
                     var button = which == "primary" ? dialog.PrimaryButton : which == "secondary" ? dialog.SecondaryButton : dialog.CloseButton;
                     if (button == null || button.Visibility != global::Microsoft.UI.Xaml.Visibility.Visible || !button.IsEnabled)
                         throw new AutomationException(AutomationErrorKind.editor_not_ready, $"the dialog has no {which} button to press");

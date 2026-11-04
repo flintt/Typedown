@@ -1255,4 +1255,7 @@
   <data name="ShortcutClickHint" xml:space="preserve">
     <value>Stiskněte modifikační klávesy držené při kliknutí.</value>
   </data>
+  <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
+    <value>Jiný program tento soubor změnil, a proto jej automatické ukládání nepřepíše. Vyberte, kterou verzi ponechat.</value>
+  </data>
 </root>

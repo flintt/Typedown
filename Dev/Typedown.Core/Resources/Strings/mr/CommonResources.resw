@@ -1255,4 +1255,7 @@
   <data name="ShortcutClickHint" xml:space="preserve">
     <value>क्लिक करताना दाबून ठेवायच्या सुधारक कळा दाबा.</value>
   </data>
+  <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
+    <value>दुसऱ्या प्रोग्रामने ही फाइल बदलली आहे, म्हणून स्वयं-जतन तिच्यावर लिहीत नाही. कोणती आवृत्ती ठेवायची ते निवडा.</value>
+  </data>
 </root>

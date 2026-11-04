@@ -347,4 +347,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>Зберегти як UTF-8</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>Залишити мою</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>Файл на диску змінився, а у вас є незбережені зміни. Нічого не загубиться: версію, яку ви не залишите, буде збережено копією в {0}, а після перезавантаження Ctrl+Z поверне ваші зміни.</value>
+  </data>
 </root>

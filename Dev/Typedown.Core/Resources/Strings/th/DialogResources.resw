@@ -347,4 +347,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>บันทึกเป็น UTF-8</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>เก็บของฉันไว้</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>ไฟล์บนดิสก์ถูกเปลี่ยน และคุณมีการเปลี่ยนแปลงที่ยังไม่ได้บันทึก ไม่มีฉบับใดหายไป: ฉบับที่คุณไม่เก็บจะถูกบันทึกเป็นสำเนาไว้ใน {0} และหลังโหลดใหม่ Ctrl+Z จะนำของคุณกลับมา</value>
+  </data>
 </root>

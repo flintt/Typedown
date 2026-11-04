@@ -347,4 +347,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>እንደ UTF-8 አስቀምጥ</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>የእኔን አቆይ</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>ፋይሉ በዲስኩ ላይ ተቀይሯል፣ እና ያልተቀመጡ ለውጦች አሉዎት። ምንም ስሪት አይጠፋም፦ ያላቆዩት በ{0} ውስጥ እንደ ቅጂ ይቀመጣል፣ እና እንደገና ከጫኑ በኋላ Ctrl+Z የእርስዎን ይመልሳል።</value>
+  </data>
 </root>

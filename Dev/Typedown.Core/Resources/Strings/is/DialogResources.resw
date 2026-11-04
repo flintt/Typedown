@@ -347,4 +347,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>Vista sem UTF-8</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>Halda minni</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>Skránni hefur verið breytt á diskinum og þú ert með óvistaðar breytingar. Engin útgáfa tapast: sú sem þú heldur ekki er vistuð sem afrit í {0}, og eftir endurhleðslu sækir Ctrl+Z þína aftur.</value>
+  </data>
 </root>

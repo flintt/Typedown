@@ -347,4 +347,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>Ruaje si UTF-8</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>Mbaj timen</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>Skedari në disk ka ndryshuar dhe ju keni ndryshime të paruajtura. Asnjë version nuk humbet: ai që nuk e mbani ruhet si kopje në {0}, dhe pas ringarkimit Ctrl+Z ju kthen tuajin.</value>
+  </data>
 </root>

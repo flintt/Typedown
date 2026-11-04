@@ -347,4 +347,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>حفظ بترميز UTF-8</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>الاحتفاظ بنسختي</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>تغيّر الملف على القرص، ولديك تغييرات غير محفوظة. لن تضيع أي نسخة: النسخة التي لا تحتفظ بها تُحفظ نسخةً في {0}، وبعد إعادة التحميل يعيد Ctrl+Z تغييراتك.</value>
+  </data>
 </root>

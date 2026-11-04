@@ -347,4 +347,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>Mentés UTF-8-ként</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>Az enyém megtartása</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>A fájl megváltozott a lemezen, és Önnek nem mentett módosításai vannak. Egyik változat sem vész el: amelyiket nem tartja meg, másolatként a(z) {0} mappába kerül, újratöltés után pedig a Ctrl+Z visszahozza az Önét.</value>
+  </data>
 </root>

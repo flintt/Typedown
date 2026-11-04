@@ -1255,4 +1255,7 @@
   <data name="ShortcutClickHint" xml:space="preserve">
     <value>クリックするときに押しておく修飾キーを押してください。</value>
   </data>
+  <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
+    <value>別のプログラムがこのファイルを変更したため、自動保存は上書きしません。残す方を選んでください。</value>
+  </data>
 </root>

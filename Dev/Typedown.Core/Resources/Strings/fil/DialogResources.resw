@@ -347,4 +347,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>I-save bilang UTF-8</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>Panatilihin ang akin</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>Nabago ang file sa disk, at may mga pagbabago kang hindi pa nase-save. Walang mawawala: ang bersyong hindi mo papanatilihin ay ise-save bilang kopya sa {0}, at pagkatapos mag-Reload, ibabalik ng Ctrl+Z ang sa iyo.</value>
+  </data>
 </root>

@@ -1255,4 +1255,7 @@
   <data name="ShortcutClickHint" xml:space="preserve">
     <value>கிளிக் செய்யும்போது அழுத்திப் பிடிக்கும் மாற்றி விசைகளை அழுத்தவும்.</value>
   </data>
+  <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
+    <value>வேறொரு நிரல் இந்தக் கோப்பை மாற்றியுள்ளது, எனவே தானியங்குச் சேமிப்பு அதன் மேல் எழுதாது. எந்தப் பதிப்பை வைத்திருப்பது எனத் தேர்ந்தெடுக்கவும்.</value>
+  </data>
 </root>

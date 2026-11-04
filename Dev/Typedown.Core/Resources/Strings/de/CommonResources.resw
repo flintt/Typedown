@@ -1255,4 +1255,7 @@
   <data name="ShortcutClickHint" xml:space="preserve">
     <value>Drücken Sie die Zusatztasten, die beim Klicken gehalten werden.</value>
   </data>
+  <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
+    <value>Ein anderes Programm hat diese Datei geändert, daher überschreibt die automatische Speicherung sie nicht. Wählen Sie, welche Fassung Sie behalten.</value>
+  </data>
 </root>

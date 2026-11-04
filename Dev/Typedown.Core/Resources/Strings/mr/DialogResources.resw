@@ -347,4 +347,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>UTF-8 म्हणून जतन करा</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>माझी आवृत्ती ठेवा</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>डिस्कवरील फाइल बदलली आहे, आणि तुमचे बदल जतन झालेले नाहीत. कोणतीही आवृत्ती हरवणार नाही: जी तुम्ही ठेवणार नाही ती {0} मध्ये प्रत म्हणून जतन होईल, आणि पुन्हा लोड केल्यानंतर Ctrl+Z तुमचे बदल परत आणेल.</value>
+  </data>
 </root>

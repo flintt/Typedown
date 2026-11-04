@@ -347,4 +347,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>UTF-8 olarak kaydet</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>Benimkini koru</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>Dosya diskte değiştirildi ve kaydedilmemiş değişiklikleriniz var. Hiçbiri kaybolmaz: tutmadığınız sürüm {0} içine kopya olarak kaydedilir; yeniden yükledikten sonra Ctrl+Z sizinkini geri getirir.</value>
+  </data>
 </root>

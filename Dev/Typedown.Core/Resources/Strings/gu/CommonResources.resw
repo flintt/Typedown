@@ -1255,4 +1255,7 @@
   <data name="ShortcutClickHint" xml:space="preserve">
     <value>ક્લિક કરતી વખતે દબાવી રાખવાની મોડિફાયર કી દબાવો.</value>
   </data>
+  <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
+    <value>બીજા પ્રોગ્રામે આ ફાઇલ બદલી છે, તેથી સ્વતઃ સાચવવું તેના પર લખતું નથી. કઈ આવૃત્તિ રાખવી તે પસંદ કરો.</value>
+  </data>
 </root>

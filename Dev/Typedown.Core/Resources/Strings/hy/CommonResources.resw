@@ -1255,4 +1255,7 @@
   <data name="ShortcutClickHint" xml:space="preserve">
     <value>Սեղմեք այն փոփոխիչ ստեղները, որոնք պահվում են սեղմելիս։</value>
   </data>
+  <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
+    <value>Մեկ այլ ծրագիր փոխել է այս ֆայլը, ուստի ավտոմատ պահումը չի վերագրում այն։ Ընտրեք, որ տարբերակը պահել։</value>
+  </data>
 </root>

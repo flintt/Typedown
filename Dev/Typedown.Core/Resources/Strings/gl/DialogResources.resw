@@ -347,4 +347,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>Gardar como UTF-8</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>Manter a miña</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>O ficheiro cambiou no disco e tes cambios sen gardar. Ningunha versión se perde: a que non manteñas gárdase como copia en {0} e, despois de recargar, Ctrl+Z recupera a túa.</value>
+  </data>
 </root>

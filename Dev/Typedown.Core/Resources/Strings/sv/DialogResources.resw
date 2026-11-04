@@ -347,4 +347,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>Spara som UTF-8</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>Behåll min</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>Filen har ändrats på disken och du har osparade ändringar. Ingen version går förlorad: den du inte behåller sparas som en kopia i {0}, och efter omläsning tar Ctrl+Z tillbaka din.</value>
+  </data>
 </root>

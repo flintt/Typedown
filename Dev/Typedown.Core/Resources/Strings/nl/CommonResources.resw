@@ -1255,4 +1255,7 @@
   <data name="ShortcutClickHint" xml:space="preserve">
     <value>Druk op de wijzigingstoetsen die je bij het klikken ingedrukt houdt.</value>
   </data>
+  <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
+    <value>Een ander programma heeft dit bestand gewijzigd, dus automatisch opslaan overschrijft het niet. Kies welke versie u houdt.</value>
+  </data>
 </root>

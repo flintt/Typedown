@@ -1255,4 +1255,7 @@
   <data name="ShortcutClickHint" xml:space="preserve">
     <value>ক্লিক কৰোঁতে হেঁচি ৰাখিবলগীয়া মডিফায়াৰ কী হেঁচক।</value>
   </data>
+  <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
+    <value>আন এটা প্ৰগ্ৰামে এই ফাইলটো সলনি কৰিছে, সেয়ে স্বয়ংক্ৰিয় ছেভে ইয়াৰ ওপৰত নিলিখে। কোনটো সংস্কৰণ ৰাখিব বাছক।</value>
+  </data>
 </root>

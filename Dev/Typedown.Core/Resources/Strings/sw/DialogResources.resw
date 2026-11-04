@@ -347,4 +347,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>Hifadhi kama UTF-8</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>Weka yangu</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>Faili kwenye diski imebadilishwa, na una mabadiliko ambayo hayajahifadhiwa. Hakuna toleo linalopotea: lile usilolihifadhi linahifadhiwa kama nakala katika {0}, na baada ya Kupakia upya, Ctrl+Z inarudisha yako.</value>
+  </data>
 </root>

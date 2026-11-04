@@ -347,4 +347,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>Londoloza njenge-UTF-8</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>Gcina okwami</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>Ifayela lishintshiwe kudiski, futhi unezinguquko ezingagciniwe. Ayikho inguqulo elahlekayo: leyo ongayigcini igcinwa njengekhophi ku-{0}, futhi ngemva kokulayisha kabusha, i-Ctrl+Z ibuyisa okwakho.</value>
+  </data>
 </root>

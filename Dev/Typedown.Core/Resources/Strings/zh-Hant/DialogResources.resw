@@ -352,4 +352,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>以 UTF-8 儲存</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>保留我的</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>磁碟上的檔案已被修改，而你這裡有未儲存的變更。兩份都不會遺失：沒保留的那份會存為副本，放在 {0}；重新載入後按 Ctrl+Z 可找回你的變更。</value>
+  </data>
 </root>

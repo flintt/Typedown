@@ -1255,4 +1255,7 @@
   <data name="ShortcutClickHint" xml:space="preserve">
     <value>Paspauskite modifikavimo klavišus, laikomus spustelint.</value>
   </data>
+  <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
+    <value>Kita programa pakeitė šį failą, todėl automatinis įrašymas jo neperrašo. Pasirinkite, kurią versiją palikti.</value>
+  </data>
 </root>

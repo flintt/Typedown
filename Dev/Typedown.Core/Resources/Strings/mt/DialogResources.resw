@@ -347,4 +347,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>Issejvja bħala UTF-8</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>Żomm tiegħi</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>Il-fajl inbidel fuq id-diska, u għandek bidliet mhux salvati. L-ebda verżjoni ma tintilef: dik li ma żżommx tiġi salvata bħala kopja f'{0}, u wara li terġa' ttella', Ctrl+Z iġib lura tiegħek.</value>
+  </data>
 </root>

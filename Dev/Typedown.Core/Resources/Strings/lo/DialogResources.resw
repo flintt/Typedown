@@ -347,4 +347,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>ບັນທຶກເປັນ UTF-8</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>ເກັບຂອງຂ້ອຍໄວ້</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>ໄຟລ໌ໃນດິສກ໌ຖືກປ່ຽນແປງ ແລະທ່ານມີການປ່ຽນແປງທີ່ຍັງບໍ່ໄດ້ບັນທຶກ. ບໍ່ມີສະບັບໃດເສຍໄປ: ສະບັບທີ່ທ່ານບໍ່ເກັບຈະຖືກບັນທຶກເປັນສຳເນົາໄວ້ໃນ {0} ແລະຫຼັງຈາກໂຫຼດຄືນ Ctrl+Z ຈະນຳຂອງທ່ານກັບມາ.</value>
+  </data>
 </root>

@@ -347,4 +347,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>Lưu dưới dạng UTF-8</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>Giữ bản của tôi</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>Tệp trên đĩa đã bị thay đổi, và bạn có thay đổi chưa lưu. Không bản nào bị mất: bản bạn không giữ được lưu thành bản sao trong {0}, và sau khi tải lại, Ctrl+Z sẽ đưa bản của bạn trở lại.</value>
+  </data>
 </root>

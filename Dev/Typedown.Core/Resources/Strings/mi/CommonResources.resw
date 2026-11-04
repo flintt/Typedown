@@ -1255,4 +1255,7 @@
   <data name="ShortcutClickHint" xml:space="preserve">
     <value>Pēhia ngā pātuhi whakarerekē e puritia ana i te pāwhiri.</value>
   </data>
+  <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
+    <value>Kua hurihia tēnei kōnae e tētahi atu hōtaka, nō reira kāore te tiaki aunoa e tuhi ki runga. Kōwhiria te putanga hei pupuri.</value>
+  </data>
 </root>

@@ -347,4 +347,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>Պահպանել UTF-8-ով</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>Պահել իմը</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>Ֆայլը սկավառակի վրա փոխվել է, իսկ դուք ունեք չպահված փոփոխություններ։ Ոչ մի տարբերակ չի կորչում. այն, որը չեք պահում, պահվում է որպես պատճեն {0}-ում, իսկ վերաբեռնելուց հետո Ctrl+Z-ը վերադարձնում է ձերը։</value>
+  </data>
 </root>

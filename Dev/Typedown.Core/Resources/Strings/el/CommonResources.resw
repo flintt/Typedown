@@ -1255,4 +1255,7 @@
   <data name="ShortcutClickHint" xml:space="preserve">
     <value>Πατήστε τα πλήκτρα τροποποίησης που κρατάτε πατημένα στο κλικ.</value>
   </data>
+  <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
+    <value>Ένα άλλο πρόγραμμα άλλαξε αυτό το αρχείο, οπότε η αυτόματη αποθήκευση δεν το αντικαθιστά. Επιλέξτε ποια έκδοση θα κρατήσετε.</value>
+  </data>
 </root>

@@ -347,4 +347,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>Opslaan als UTF-8</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>Mijn versie behouden</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>Het bestand is op de schijf gewijzigd en u hebt niet-opgeslagen wijzigingen. Geen van beide gaat verloren: de versie die u niet houdt, wordt als kopie opgeslagen in {0}, en na opnieuw laden haalt Ctrl+Z de uwe terug.</value>
+  </data>
 </root>

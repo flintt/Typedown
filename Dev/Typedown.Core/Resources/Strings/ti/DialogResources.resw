@@ -347,4 +347,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>ብ UTF-8 ዓቅብ</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>ናተይ ኣቐምጥ</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>እቲ ፋይል ኣብ ዲስክ ተቐይሩ ኣሎ፣ ንስኻ ድማ ዘይተዓቀቡ ለውጥታት ኣለዉኻ። ዝኾነ ስሪት ኣይጠፍእን፦ ዘየቐመጥካዮ ኣብ {0} ከም ቅዳሕ ይዕቀብ፣ ዳግማይ ምስ ጸዓንካ ድማ Ctrl+Z ናትካ ይመልሶ።</value>
+  </data>
 </root>

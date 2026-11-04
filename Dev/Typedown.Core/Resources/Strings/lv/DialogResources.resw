@@ -347,4 +347,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>Saglabāt kā UTF-8</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>Paturēt manu</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>Fails diskā ir mainīts, un jums ir nesaglabātas izmaiņas. Neviena versija nepazūd: tā, kuru nepaturat, tiek saglabāta kā kopija mapē {0}, un pēc atkārtotas ielādes Ctrl+Z atjauno jūsējo.</value>
+  </data>
 </root>

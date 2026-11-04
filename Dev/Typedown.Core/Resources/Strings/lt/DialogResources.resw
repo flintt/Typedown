@@ -347,4 +347,10 @@
   <data name="LossySaveAsUtf8" xml:space="preserve">
     <value>Įrašyti kaip UTF-8</value>
   </data>
+  <data name="KeepMine" xml:space="preserve">
+    <value>Palikti mano</value>
+  </data>
+  <data name="ReloadFromDiskConflict" xml:space="preserve">
+    <value>Failas diske pakeistas, o jūs turite neįrašytų pakeitimų. Nė viena versija neprarandama: ta, kurios nepaliksite, įrašoma kaip kopija į {0}, o įkėlus iš naujo Ctrl+Z grąžina jūsiškę.</value>
+  </data>
 </root>

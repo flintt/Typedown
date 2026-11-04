@@ -83,6 +83,41 @@ namespace Typedown.Core.Services
             return list;
         }
 
+        /// <summary>
+        /// Where the versions a conflict with the disk did not keep are put (KeepCopy): kept, not cleared by a save as a
+        /// document's backup is.
+        /// </summary>
+        public string KeptFolder => Path.Combine(backupPath, "Kept");
+
+        // Kept copies past this many go, the oldest first: the folder is not left to grow without end.
+        private const int KeptLimit = 200;
+
+        /// <summary>
+        /// A copy of one version of a document, kept for good (a file changed on disk while it had unsaved changes: the
+        /// version the reader did not keep - the disk's under "Keep mine", theirs under "Reload"). The copy's path, or null
+        /// when it could not be written.
+        /// </summary>
+        public async Task<string> KeepCopy(string sourcePath, string text, string label)
+        {
+            try
+            {
+                Directory.CreateDirectory(KeptFolder);
+                var file = Path.Combine(KeptFolder, DiskConflict.KeptCopyName(sourcePath, System.DateTime.Now, label));
+                for (var i = 2; File.Exists(file); i++)
+                    file = Path.Combine(KeptFolder, Path.GetFileNameWithoutExtension(DiskConflict.KeptCopyName(sourcePath, System.DateTime.Now, label)) + $" ({i})" + Path.GetExtension(file));
+                await Utilities.SafeFile.WriteAllTextAtomicAsync(file, text ?? "");
+                var kept = new DirectoryInfo(KeptFolder).GetFiles();
+                if (kept.Length > KeptLimit)
+                    foreach (var old in System.Linq.Enumerable.Take(System.Linq.Enumerable.OrderBy(kept, f => f.LastWriteTimeUtc), kept.Length - KeptLimit))
+                        old.Delete();
+                return file;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         public void DeleteBackup(string path, string documentId = null)
         {
             try

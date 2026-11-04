@@ -1255,4 +1255,7 @@
   <data name="ShortcutClickHint" xml:space="preserve">
     <value>클릭할 때 누르고 있을 보조 키를 누르세요.</value>
   </data>
+  <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
+    <value>다른 프로그램이 이 파일을 변경했으므로 자동 저장이 덮어쓰지 않습니다. 유지할 버전을 선택하세요.</value>
+  </data>
 </root>
