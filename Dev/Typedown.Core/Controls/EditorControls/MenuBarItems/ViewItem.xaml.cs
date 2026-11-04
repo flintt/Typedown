@@ -13,6 +13,9 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
         public ViewItem()
         {
             InitializeComponent();
+            ZoomInCommand.OnExecute.Subscribe(_ => Zoom(1.1));
+            ZoomOutCommand.OnExecute.Subscribe(_ => Zoom(1 / 1.1));
+            ResetZoomCommand.OnExecute.Subscribe(_ => { if (Settings != null) Settings.FontSize = 16; });
             // The event is static: a closed window's menu must not stay reachable through it.
             Unloaded += (_, _) => ThemeFiles.Changed -= OnThemesChanged;
         }
@@ -171,14 +174,13 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
         }
 
         // The editor's font size in steps of a tenth, within 8 to 48 as Ctrl+wheel keeps it; back to the default (16).
-        private void OnZoomInClick(object sender, Microsoft.UI.Xaml.RoutedEventArgs e) => Zoom(1.1);
+        // Commands, not Click handlers: a menu item's shortcut runs its command (MenuBarItemBase.TriggerMenuFlyoutItem),
+        // and with Click the keys did nothing (KB01).
+        public Command<System.Reactive.Unit> ZoomInCommand { get; } = new();
 
-        private void OnZoomOutClick(object sender, Microsoft.UI.Xaml.RoutedEventArgs e) => Zoom(1 / 1.1);
+        public Command<System.Reactive.Unit> ZoomOutCommand { get; } = new();
 
-        private void OnResetZoomClick(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
-        {
-            if (Settings != null) Settings.FontSize = 16;
-        }
+        public Command<System.Reactive.Unit> ResetZoomCommand { get; } = new();
 
         private void Zoom(double factor)
         {
