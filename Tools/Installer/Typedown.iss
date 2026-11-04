@@ -53,7 +53,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [CustomMessages]
 english.FileAssociations=File associations:
-english.AssocMarkdown=Open Markdown files (.md, .markdown, ...) with %1
+english.AssocMarkdown=Open Markdown files (.md, .markdown) with %1
 english.AssocDefaultApps=Windows keeps the app you chose for Markdown files before. To open them with %1, choose it in Settings > Default apps.%n%nOpen Default apps now?
 
 [Tasks]
@@ -120,17 +120,12 @@ Root: HKA; Subkey: "Software\{#MyAppName}\Capabilities\FileAssociations"; ValueT
 Root: HKA; Subkey: "Software\{#MyAppName}\Capabilities\FileAssociations"; ValueType: string; ValueName: ".txt"; ValueData: "{#MyAppAssocKey}"
 Root: HKA; Subkey: "Software\{#MyAppName}\Capabilities\FileAssociations"; ValueType: string; ValueName: ".text"; ValueData: "{#MyAppAssocKey}"
 Root: HKA; Subkey: "Software\RegisteredApplications"; ValueType: string; ValueName: "{#MyAppName}"; ValueData: "Software\{#MyAppName}\Capabilities"; Flags: uninsdeletevalue
-; The task: the default for each Markdown extension, where the user has not chosen one of their own. Uninstall takes
-; it away only where it still names this app (UninstallAssociations), not one another app has put there since.
+; The task: the default for .md and .markdown, where the user has not chosen one of their own. The rarer spellings
+; (.mdown, .mkd, .rmd...) and .txt / .text only offer the app in "Open with" (the user, 2026-11-04: too many types taken
+; by default). Uninstall takes it away only where it still names this app (UninstallAssociations), not one another app
+; has put there since.
 Root: HKA; Subkey: "Software\Classes\.md"; ValueType: string; ValueName: ""; ValueData: "{#MyAppAssocKey}"; Tasks: assocmd
 Root: HKA; Subkey: "Software\Classes\.markdown"; ValueType: string; ValueName: ""; ValueData: "{#MyAppAssocKey}"; Tasks: assocmd
-Root: HKA; Subkey: "Software\Classes\.mdown"; ValueType: string; ValueName: ""; ValueData: "{#MyAppAssocKey}"; Tasks: assocmd
-Root: HKA; Subkey: "Software\Classes\.mkdn"; ValueType: string; ValueName: ""; ValueData: "{#MyAppAssocKey}"; Tasks: assocmd
-Root: HKA; Subkey: "Software\Classes\.mkd"; ValueType: string; ValueName: ""; ValueData: "{#MyAppAssocKey}"; Tasks: assocmd
-Root: HKA; Subkey: "Software\Classes\.mdwn"; ValueType: string; ValueName: ""; ValueData: "{#MyAppAssocKey}"; Tasks: assocmd
-Root: HKA; Subkey: "Software\Classes\.mdtxt"; ValueType: string; ValueName: ""; ValueData: "{#MyAppAssocKey}"; Tasks: assocmd
-Root: HKA; Subkey: "Software\Classes\.mdtext"; ValueType: string; ValueName: ""; ValueData: "{#MyAppAssocKey}"; Tasks: assocmd
-Root: HKA; Subkey: "Software\Classes\.rmd"; ValueType: string; ValueName: ""; ValueData: "{#MyAppAssocKey}"; Tasks: assocmd
 
 [Run]
 Filename: "{tmp}\MicrosoftEdgeWebview2Setup.exe"; Parameters: "/silent /install"; StatusMsg: "Installing WebView2 Runtime..."; Flags: waituntilterminated; Check: not IsWebView2RuntimeInstalled
@@ -181,6 +176,8 @@ end;
 
 const
   MarkdownExtensions = '.md,.markdown,.mdown,.mkdn,.mkd,.mdwn,.mdtxt,.mdtext,.rmd';
+  // The extensions the task does not make this app the default of (the versions before did).
+  OtherMarkdownExtensions = '.mdown,.mkdn,.mkd,.mdwn,.mdtxt,.mdtext,.rmd';
 
 // An extension's default, where it names this app.
 procedure RemoveDefault(RootKey: Integer; Ext: String);
@@ -197,12 +194,12 @@ end;
 // Each Markdown extension's default goes where it still names this app: the task left unchecked on an update (the
 // versions before it always set it) or the app uninstalled. One another app has set since stays. HKCU too: the
 // versions before wrote through HKCR, which put it there where HKCU had the extension already.
-procedure UninstallAssociations;
+procedure RemoveDefaults(Extensions: String);
 var
   Rest, Ext: String;
   I: Integer;
 begin
-  Rest := MarkdownExtensions + ',';
+  Rest := Extensions + ',';
   while Rest <> '' do
   begin
     I := Pos(',', Rest);
@@ -211,6 +208,11 @@ begin
     RemoveDefault(HKA, Ext);
     RemoveDefault(HKCU, Ext);
   end;
+end;
+
+procedure UninstallAssociations;
+begin
+  RemoveDefaults(MarkdownExtensions);
 end;
 
 // The user's own choice for .md other than this app, which what the installer writes does not change: UserChoice, or
@@ -235,10 +237,15 @@ begin
   begin
     if not WizardIsTaskSelected('assocmd') then
       UninstallAssociations
-    // Settings opened on this app's page where Windows has one (11), else on Default apps.
-    else if OtherUserChoice and not WizardSilent and
-      (SuppressibleMsgBox(FmtMessage(CustomMessage('AssocDefaultApps'), ['{#MyAppName}']), mbConfirmation, MB_YESNO, IDNO) = IDYES) then
-      ShellExecAsOriginalUser('open', 'ms-settings:defaultapps?registeredAppMachine={#MyAppName}', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
+    else
+    begin
+      // An update from a version that took every Markdown spelling gives the rarer ones back.
+      RemoveDefaults(OtherMarkdownExtensions);
+      // Settings opened on this app's page where Windows has one (11), else on Default apps.
+      if OtherUserChoice and not WizardSilent and
+        (SuppressibleMsgBox(FmtMessage(CustomMessage('AssocDefaultApps'), ['{#MyAppName}']), mbConfirmation, MB_YESNO, IDNO) = IDYES) then
+        ShellExecAsOriginalUser('open', 'ms-settings:defaultapps?registeredAppMachine={#MyAppName}', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
+    end;
   end;
 end;
 
