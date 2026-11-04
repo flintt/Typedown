@@ -296,7 +296,7 @@ internal static partial class Program
             await Case("PP01 the print preview under a dark custom theme (Dracula): the page and its margins white, the theme's colour back after", PP01);
             await Case("CV01 a very long document left (a tab switched to, the tab closed) is covered at once and uncovered when the next is on the page; a close cancelled at the save question covers nothing", CV01);
             await Case("XF01 a file changed outside: unchanged here, it is offered again and reloaded; with changes here, Keep keeps them; without asking, reloaded at once; a tab in the background asks when shown; deleted, the document turns unsaved", XF01);
-            await Case("XF02 a file changed outside while changed here: neither version is lost - a real Enter keeps the reader's (nothing typed into the document), the disk's kept as a copy; Reload keeps the reader's as a copy and one undo away; a change not seen (inside the second after a save) is not written over by the API's save (changed_on_disk) or by hand (asked, Cancel the default); auto-save writes nothing while asked", XF02);
+            await Case("XF02 a file changed outside while changed here: neither version is lost - a real Enter keeps the reader's (nothing typed into the document), the disk's kept as a copy; Reload keeps the reader's as a copy and one undo away; a change inside the second after a save is offered once it is over; one not seen at all is not written over by the API's save (changed_on_disk; the reader asked even with reloading off) or by hand (asked, Cancel the default); auto-save writes nothing while asked", XF02);
             await Case("SS01 the settings in a narrow window: the items end left of the scroll bar, not under it", SS01);
             await Case("LS01 the interface language changed in the settings' General section, which was reached from Help > About: the settings are built again on General, not on About", LS01);
             await Case("KU01 Keep unsaved changes when closing: every window closes without asking, the app exits, and started again it has the titled and the untitled document back as they were, unsaved, without a recovery question", KU01);
@@ -4577,77 +4577,68 @@ internal static partial class Program
             notes.Add("after Reload and an undo: " + undone.Replace("\n", "\\n"));
             Check(undone.Contains("mine two") && !await SavedOf(), "after Reload, an undo brings the reader's changes back, unsaved");
 
-            // 3. Written by another program inside the second after a save of the app's own (the watcher does not look
-            //    then): the API's save does not write over it - refused with the reason - and the reader is asked.
+            // 3. Written by another program inside the second after a save of the app's own: once that second is over the
+            //    file is looked at and the reader asked (the event was dropped for good before, and the next save wrote over
+            //    it - R06).
             await c.Call("document.save", new { documentId = id, baseRevision = await Revision(c, id) });
             File.WriteAllText(path, "# XF02\n\ntheirs three\n");
-            await Task.Delay(1500);
-            JToken? silent = null;
-            try { silent = await c.Call("test.dialog.press", new { windowId, button = "none" }); } catch (JsonRpcRemoteException) { }
-            notes.Add($"unseen change: {(silent == null ? "not noticed, as meant" : "noticed (the watcher was late) - the save check is not reached")}");
-            if (silent == null)
-            {
-                await Replace("# XF02\n\nmine three\n");
-                JToken? refusal = null;
-                try { await c.Call("document.save", new { documentId = id, baseRevision = await Revision(c, id) }); }
-                catch (JsonRpcRemoteException e) { refusal = e.ErrorData; }
-                notes.Add($"document.save over it: {refusal?.ToString(Newtonsoft.Json.Formatting.None) ?? "saved"}");
-                Check((string?)refusal?["kind"] == "save_failed" && (string?)refusal?["reason"] == "changed_on_disk", "the API's save over a change not seen is refused with the reason");
-                Check(Disk().Contains("theirs three"), "and the other program's version is not written over");
-                await Asked();
-                await PressDialogButton(c, windowId, DialogButton.Close);
-                Check(await KeptWith("on disk", "theirs three") != null, "the reader is asked; kept theirs, the disk's version is kept as a copy");
-                await c.Call("document.save", new { documentId = id, baseRevision = await Revision(c, id) });
-                await Task.Delay(1200);
-                Check(Disk().Contains("mine three"), "then saved, it is the reader's");
-            }
-            else await PressDialogButton(c, windowId, DialogButton.Close);
+            await Asked();
+            await PressDialogButton(c, windowId, DialogButton.Primary);
+            Check((await TextWhen(t => t.Contains("theirs three"))).Contains("theirs three"), "a change inside the second after our own save is offered once it is over");
 
-            // 4. The same by hand (Ctrl+S): asked - Cancel writes nothing, Keep mine writes it and keeps the other.
-            await Task.Delay(1500);
-            await Replace("# XF02\n\nmine four\n");
-            await c.Call("document.save", new { documentId = id, baseRevision = await Revision(c, id) });
+            // 4. Not seen at all (reloading off while it was written): the API's save does not write over it - refused
+            //    with the reason - and the reader is asked even so; kept theirs, the other is kept as a copy.
+            await Set("AutoReload", false);
+            await Task.Delay(300);
             File.WriteAllText(path, "# XF02\n\ntheirs four\n");
-            await Task.Delay(1500);
-            JToken? noticed = null;
-            try { noticed = await c.Call("test.dialog.press", new { windowId, button = "none" }); } catch (JsonRpcRemoteException) { }
-            if (noticed == null)
-            {
-                await Replace("# XF02\n\nmine four, more\n");
-                await c.Call("test.editor.focus", new { windowId });
-                await Activate(window);
-                await Task.Delay(300);
-                Chord("Ctrl+S");
-                var byHand = await Asked();
-                notes.Add($"saved by hand over it: '{byHand["content"]}' - '{byHand["primary"]}' / '{byHand["secondary"]}' / '{byHand["close"]}', default {byHand["defaultButton"]}");
-                Check((string?)byHand["defaultButton"] == "close", "a save by hand over a change not seen asks, Cancel the default");
-                await PressDialogButton(c, windowId, DialogButton.Close);
-                await Task.Delay(800);
-                Check(Disk().Contains("theirs four") && !await SavedOf(), "Cancel writes nothing");
-                Chord("Ctrl+S");
-                await Asked();
-                await PressDialogButton(c, windowId, DialogButton.Primary);
-                await Task.Delay(1200);
-                Check(Disk().Contains("mine four, more") && await KeptWith("on disk", "theirs four") != null, "Keep mine writes the reader's and keeps the other as a copy");
-            }
-            else
-            {
-                notes.Add("the change by hand was noticed by the watcher (late): skipped");
-                await PressDialogButton(c, windowId, DialogButton.Close);
-            }
+            await Replace("# XF02\n\nmine four\n");
+            JToken? refusal = null;
+            try { await c.Call("document.save", new { documentId = id, baseRevision = await Revision(c, id) }); }
+            catch (JsonRpcRemoteException e) { refusal = e.ErrorData; }
+            notes.Add($"document.save over a change not seen: {refusal?.ToString(Newtonsoft.Json.Formatting.None) ?? "saved"}");
+            Check((string?)refusal?["kind"] == "save_failed" && (string?)refusal?["reason"] == "changed_on_disk", "the API's save over a change not seen is refused with the reason");
+            Check(Disk().Contains("theirs four"), "and the other program's version is not written over");
+            await Asked();
+            await PressDialogButton(c, windowId, DialogButton.Close);
+            Check(await KeptWith("on disk", "theirs four") != null, "the reader is asked (reloading off too); kept theirs, the disk's version is kept as a copy");
+            await c.Call("document.save", new { documentId = id, baseRevision = await Revision(c, id) });
+            await Task.Delay(1200);
+            Check(Disk().Contains("mine four"), "then saved, it is the reader's");
 
-            // 5. Auto-save on: nothing written while the question is open; kept, it writes the reader's.
+            // 5. The same by hand (Ctrl+S): asked - Cancel the default, writing nothing; Keep mine writes it and keeps the
+            //    other.
+            File.WriteAllText(path, "# XF02\n\ntheirs five\n");
+            await Replace("# XF02\n\nmine five\n");
+            await c.Call("test.editor.focus", new { windowId });
+            await Activate(window);
+            await Task.Delay(300);
+            Chord("Ctrl+S");
+            var byHand = await Asked();
+            notes.Add($"saved by hand over it: '{byHand["primary"]}' / '{byHand["secondary"]}' / '{byHand["close"]}', default {byHand["defaultButton"]}");
+            Check((string?)byHand["defaultButton"] == "close", "a save by hand over a change not seen asks, Cancel the default");
+            await PressDialogButton(c, windowId, DialogButton.Close);
+            await Task.Delay(800);
+            Check(Disk().Contains("theirs five") && !await SavedOf(), "Cancel writes nothing");
+            Chord("Ctrl+S");
+            await Asked();
+            await PressDialogButton(c, windowId, DialogButton.Primary);
+            await Task.Delay(1200);
+            Check(Disk().Contains("mine five") && await KeptWith("on disk", "theirs five") != null, "Keep mine writes the reader's and keeps the other as a copy");
+            await Set("AutoReload", true);
+            await Task.Delay(1500);
+
+            // 6. Auto-save on: nothing written while the question is open; kept, it writes the reader's.
             await Task.Delay(1500);
             await Set("AutoSave", true);
-            await Replace("# XF02\n\nmine five\n");
-            File.WriteAllText(path, "# XF02\n\ntheirs five\n");
+            await Replace("# XF02\n\nmine six\n");
+            File.WriteAllText(path, "# XF02\n\ntheirs six\n");
             await Asked();
             await Task.Delay(7000);
-            Check(Disk().Contains("theirs five"), "while the question is open, auto-save writes nothing");
+            Check(Disk().Contains("theirs six"), "while the question is open, auto-save writes nothing");
             await PressDialogButton(c, windowId, DialogButton.Close);
             var written = false;
-            for (var i = 0; i < 40 && !written; i++) { await Task.Delay(250); written = Disk().Contains("mine five"); }
-            Check(written && await KeptWith("on disk", "theirs five") != null, "kept, auto-save writes the reader's, the other kept as a copy");
+            for (var i = 0; i < 40 && !written; i++) { await Task.Delay(250); written = Disk().Contains("mine six"); }
+            Check(written && await KeptWith("on disk", "theirs six") != null, "kept, auto-save writes the reader's, the other kept as a copy");
         }
         finally
         {

@@ -779,7 +779,7 @@ namespace Typedown.Core.ViewModels
                         Log.Debug($"save: '{path}' was changed on disk by another program since it was last read; not written over, the reader is asked");
                         LastSaveRefusal = ChangedOnDiskReason;
                         EditorViewModel.AutoSaveHeldBack = Locale.GetString("SaveState.ChangedOnDiskHeldBack");
-                        dispatcherQueue?.TryEnqueueSafe(() => _ = HandleExternalFileChange());
+                        dispatcherQueue?.TryEnqueueSafe(() => _ = HandleExternalFileChange(asked: true));
                         return false;
                     }
                     var choice = await AskSaveOverChange();
@@ -1636,6 +1636,11 @@ namespace Typedown.Core.ViewModels
                 fileWatcher.Deleted += OnDiskFileEvent;
                 fileWatcher.Renamed += OnDiskFileRenamed;
                 fileWatcher.EnableRaisingEvents = true;
+                // Looked at once now it is watched: a change written between the file being read and the watcher starting
+                // (while it opened, while reloading was off, while the tab was in the background) had no event and was
+                // never offered. Quiet when the disk holds what was read.
+                Log.Debug($"watch: started on {name}; the file looked at once");
+                ScheduleReloadFromDisk();
             }
             catch
             {
@@ -1660,7 +1665,7 @@ namespace Typedown.Core.ViewModels
         {
             // Which events came and whether our own write's second hid them: a change outside not offered (XF01 on W10,
             // 2026-11-04) left nothing in the log to tell a missed event from one passed over.
-            if (DateTime.UtcNow >= ignoreExternalChangeUntil) Log.Debug($"watch: {e.ChangeType} {Path.GetFileName(e.FullPath)}");
+            Log.Debug($"watch: {e.ChangeType} {Path.GetFileName(e.FullPath)}{(DateTime.UtcNow < ignoreExternalChangeUntil ? " (inside the second after our own write: looked at once it is over)" : "")}");
             ScheduleReloadFromDisk();
         }
 
@@ -1703,15 +1708,19 @@ namespace Typedown.Core.ViewModels
             });
         }
 
+        // An event inside the second after our own write is not dropped but looked at once that second is over: it was
+        // dropped for good, and another program's change then (R06) - or the next document's, the second being the window's
+        // and not the file's (XF01 opened its file just after SB08 saved another in the same window) - was never offered.
+        // Looking costs a read: the content check tells our own write (the disk holds what we wrote) from anyone else's.
         private void ScheduleReloadFromDisk()
         {
-            if (DateTime.UtcNow < ignoreExternalChangeUntil)
-                return;
             dispatcherQueue?.TryEnqueueSafe(() =>
             {
-                if (disposables.IsDisposed || DateTime.UtcNow < ignoreExternalChangeUntil)
+                if (disposables.IsDisposed)
                     return;
+                var wait = ignoreExternalChangeUntil - DateTime.UtcNow;
                 fileReloadTimer.Stop();
+                fileReloadTimer.Interval = wait > TimeSpan.FromMilliseconds(300) ? wait + TimeSpan.FromMilliseconds(100) : TimeSpan.FromMilliseconds(400);
                 fileReloadTimer.Start();
             });
         }
@@ -1719,14 +1728,22 @@ namespace Typedown.Core.ViewModels
         private async void FileReloadTimerTick(object sender, object e)
         {
             fileReloadTimer.Stop();
-            if (disposables.IsDisposed || DateTime.UtcNow < ignoreExternalChangeUntil)
+            if (disposables.IsDisposed)
                 return;
+            // Another write of our own began meanwhile: looked at after its second instead.
+            if (DateTime.UtcNow < ignoreExternalChangeUntil)
+            {
+                ScheduleReloadFromDisk();
+                return;
+            }
             await HandleExternalFileChange();
         }
 
-        private async Task HandleExternalFileChange()
+        // asked: a save found the change (SaveCore) - the reader is asked even with reloading off, or an automatic save
+        // would be held back for good with nobody asked.
+        private async Task HandleExternalFileChange(bool asked = false)
         {
-            if (!SettingsViewModel.AutoReload || string.IsNullOrEmpty(FilePath) || reloadDialogOpened)
+            if ((!SettingsViewModel.AutoReload && !asked) || string.IsNullOrEmpty(FilePath) || reloadDialogOpened)
             {
                 if (!string.IsNullOrEmpty(FilePath)) Log.Debug($"external change: not looked at ({(reloadDialogOpened ? "a question is open" : "reloading is off")})");
                 return;
@@ -1791,6 +1808,9 @@ namespace Typedown.Core.ViewModels
                 return;
             }
 
+            // Two looks at once (the watcher's start and a tab's switch both look): the one that read second does not ask again.
+            if (reloadDialogOpened)
+                return;
             reloadDialogOpened = true;
             try
             {
