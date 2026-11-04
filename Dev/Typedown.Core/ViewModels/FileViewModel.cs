@@ -1752,6 +1752,7 @@ namespace Typedown.Core.ViewModels
             var path = FilePath;
             string text = null;
             TextFileFormat format = null;
+            ulong diskHash = 0;
             for (var i = 0; i < 10; i++)
             {
                 if (disposables.IsDisposed || FilePath != path)
@@ -1767,7 +1768,15 @@ namespace Typedown.Core.ViewModels
                         }
                         return;
                     }
-                    var reloaded = await TextFileFormat.ReadAsync(path);
+                    // Read, decoded and hashed off the window's thread: the file is looked at on every tab switch now (the
+                    // watcher started again looks at it once), and a long one decoded here held the editor's keys a moment
+                    // after the switch (OL05, 3000 headings, W10 job 183, 2026-11-05).
+                    var (reloaded, hash) = await Task.Run(async () =>
+                    {
+                        var read = await TextFileFormat.ReadAsync(path);
+                        return (read, Common.SimpleHash(read.Text));
+                    });
+                    diskHash = hash;
                     text = reloaded.Text;
                     // Hold the format locally; committing it to the shared FileFormat here — before the identity
                     // re-check below — would stamp this file's encoding/line-ending onto whatever document the
@@ -1788,7 +1797,6 @@ namespace Typedown.Core.ViewModels
                 return;
             FileFormat = format;
 
-            var diskHash = Common.SimpleHash(text);
             if (diskHash == EditorViewModel.FileHash || diskHash == DiskHash)
             {
                 Log.Debug($"external change: '{Path.GetFileName(path)}' holds what was last read or written; nothing to ask");
