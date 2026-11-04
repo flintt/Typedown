@@ -161,6 +161,41 @@ namespace Typedown.Core.Utilities
 
         internal static event Action<AppViewModel> OverlayChanged;
 
+        private static readonly System.Runtime.CompilerServices.ConditionalWeakTable<AppViewModel, EditorBar> bars = new();
+
+        /// <summary>
+        /// A bar of the edition's across the top of one window's document area (one at a time), below the tab bar and above
+        /// the editor or the home page: the editor is moved down for it, nothing under it is covered. It stays while the
+        /// window does until <see cref="CloseBar"/> is called.
+        /// </summary>
+        public static void ShowBar(AppViewModel app, EditorBar bar)
+        {
+            if (app == null || bar == null) return;
+            if (bars.TryGetValue(app, out var shown) && shown != bar)
+            {
+                bars.Remove(app);
+                try { shown.Closed?.Invoke(); } catch (Exception ex) { Log.WriteLocal("EditionBar", ex.ToString()); }
+            }
+            bars.AddOrUpdate(app, bar);
+            BarChanged?.Invoke(app);
+        }
+
+        /// <summary>The window's bar taken away, if it is the one with this id (null: whichever); its <see cref="EditorBar.Closed"/> is called.</summary>
+        public static void CloseBar(AppViewModel app, string id = null)
+        {
+            if (app == null || !bars.TryGetValue(app, out var shown) || (id != null && shown.Id != id)) return;
+            bars.Remove(app);
+            BarChanged?.Invoke(app);
+            try { shown.Closed?.Invoke(); } catch (Exception ex) { Log.WriteLocal("EditionBar", ex.ToString()); }
+        }
+
+        /// <summary>The id of the bar shown in the window, or null.</summary>
+        public static string BarShown(AppViewModel app) => app != null && bars.TryGetValue(app, out var shown) ? shown.Id : null;
+
+        internal static EditorBar BarOf(AppViewModel app) => app != null && bars.TryGetValue(app, out var shown) ? shown : null;
+
+        internal static event Action<AppViewModel> BarChanged;
+
         private static readonly List<Func<AppViewModel, IEnumerable<HomeSection>>> homeSections = new();
 
         /// <summary>
@@ -229,11 +264,11 @@ namespace Typedown.Core.Utilities
         /// </summary>
         public static event Action<DocumentOnDiskReport> DocumentOnDisk;
 
-        internal static void ReportDocumentOnDisk(string path, string text, bool written)
+        internal static void ReportDocumentOnDisk(string path, string text, bool written, bool manual = false, AppViewModel window = null)
         {
             try
             {
-                DocumentOnDisk?.Invoke(new DocumentOnDiskReport { Path = path, Text = text, Written = written });
+                DocumentOnDisk?.Invoke(new DocumentOnDiskReport { Path = path, Text = text, Written = written, Manual = manual, Window = window });
             }
             catch (Exception ex)
             {
@@ -422,6 +457,12 @@ namespace Typedown.Core.Utilities
 
         /// <summary>Written (a save, an automatic one too) rather than read (the file opened).</summary>
         public bool Written { get; set; }
+
+        /// <summary>Written by the reader's own save (Save, Save As, Ctrl+S), not an automatic one.</summary>
+        public bool Manual { get; set; }
+
+        /// <summary>The window the document is in, when known.</summary>
+        public AppViewModel Window { get; set; }
     }
 
     /// <summary>
@@ -523,6 +564,15 @@ namespace Typedown.Core.Utilities
 
     /// <summary>An edition's page over the editor area (<see cref="EditionHooks.ShowOverlay"/>).</summary>
     public sealed class EditorOverlay
+    {
+        public string Id { get; init; }
+        public Microsoft.UI.Xaml.UIElement Content { get; init; }
+        /// <summary>Called when it is closed or another takes its place.</summary>
+        public Action Closed { get; init; }
+    }
+
+    /// <summary>An edition's bar across the top of the document area (<see cref="EditionHooks.ShowBar"/>).</summary>
+    public sealed class EditorBar
     {
         public string Id { get; init; }
         public Microsoft.UI.Xaml.UIElement Content { get; init; }
