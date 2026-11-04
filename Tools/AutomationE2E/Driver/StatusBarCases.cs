@@ -189,7 +189,27 @@ internal static partial class Program
         {
             for (var i = 0; i < timeoutMs / 150; i++)
             {
-                if (FindIn(window, "PrimaryButton") != null) return true;
+                if (Open()) return true;
+                await Task.Delay(150);
+            }
+            return false;
+        }
+        // The question's Cancel: the CloseButton beside its PrimaryButton (the window has other CloseButtons - the find
+        // bar's, the title bar's).
+        AutomationElement? Cancel()
+        {
+            var primary = FindIn(window, "PrimaryButton");
+            for (var parent = primary == null ? null : TreeWalker.RawViewWalker.GetParent(primary); parent != null; parent = TreeWalker.RawViewWalker.GetParent(parent))
+                if (Deep.First(parent, new PropertyCondition(AutomationElement.AutomationIdProperty, "CloseButton")) is { } close) return close;
+            return null;
+        }
+        // Gone, or left in the tree off screen.
+        bool Open() => FindIn(window, "PrimaryButton") is { } p && !p.Current.IsOffscreen;
+        async Task<bool> Closed(int timeoutMs)
+        {
+            for (var i = 0; i < timeoutMs / 150; i++)
+            {
+                if (!Open()) return true;
                 await Task.Delay(150);
             }
             return false;
@@ -212,8 +232,9 @@ internal static partial class Program
             Check(await DialogShown(8000), "a save by hand asks first");
             var question = string.Join(" | ", Deep.All(AutomationElement.FromHandle(window), new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.Text)).Cast<AutomationElement>().Select(Deep.Name).Where(n => n.Contains("UTF-8")));
             notes.Add($"the question: '{question}'");
-            Invoke(FindIn(window, "CloseButton") ?? throw new CaseFailed("the question has no Cancel"));
-            await Task.Delay(1500);
+            Invoke(Cancel() ?? throw new CaseFailed("the question has no Cancel"));
+            Check(await Closed(4000), "Cancel closes the question");
+            await Task.Delay(800);
             Check(File.ReadAllBytes(lossy).SequenceEqual(original), "Cancel: the file kept its bytes");
             var after = await Get(c, id);
             Check(!(bool)after["saved"]! && ((string?)after["text"] ?? "").Contains('Q'), "Cancel: the document stays unsaved, with what was typed");
@@ -224,7 +245,8 @@ internal static partial class Program
             catch (JsonRpcRemoteException e) { refusal = e.ErrorData; }
             notes.Add($"document.save: {refusal?.ToString(Newtonsoft.Json.Formatting.None) ?? "saved"}");
             Check((string?)refusal?["kind"] == "save_failed" && (string?)refusal?["reason"] == "encoding_not_exact", "the API's save is refused with the reason");
-            Check(!await DialogShown(1000), "the API's save shows no dialog");
+            await Task.Delay(1000);
+            Check(!Open(), "the API's save shows no dialog");
             Check(File.ReadAllBytes(lossy).SequenceEqual(original), "the API's save wrote nothing");
 
             // Save as UTF-8: the text as shown, as UTF-8; the mark gone, and the next save asks nothing.
@@ -249,7 +271,7 @@ internal static partial class Program
         }
         finally
         {
-            try { if (FindIn(window, "CloseButton") is { } cancel && FindIn(window, "PrimaryButton") != null) Invoke(cancel); } catch { }
+            try { if (Open() && Cancel() is { } cancel) Invoke(cancel); } catch { }
             try { await c.Call("test.settings.set", new { windowId, name = "AutoSave", value = autoSave }); } catch { }
             try { await c.Call("test.settings.set", new { windowId, name = "StatusBarHiddenItems", value = hidden }); } catch { }
             try { await c.Call("document.close", new { documentId = id }); } catch { }
