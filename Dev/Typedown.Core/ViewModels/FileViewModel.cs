@@ -1658,6 +1658,9 @@ namespace Typedown.Core.ViewModels
 
         private void OnDiskFileEvent(object sender, FileSystemEventArgs e)
         {
+            // Which events came and whether our own write's second hid them: a change outside not offered (XF01 on W10,
+            // 2026-11-04) left nothing in the log to tell a missed event from one passed over.
+            if (DateTime.UtcNow >= ignoreExternalChangeUntil) Log.Debug($"watch: {e.ChangeType} {Path.GetFileName(e.FullPath)}");
             ScheduleReloadFromDisk();
         }
 
@@ -1724,7 +1727,10 @@ namespace Typedown.Core.ViewModels
         private async Task HandleExternalFileChange()
         {
             if (!SettingsViewModel.AutoReload || string.IsNullOrEmpty(FilePath) || reloadDialogOpened)
+            {
+                if (!string.IsNullOrEmpty(FilePath)) Log.Debug($"external change: not looked at ({(reloadDialogOpened ? "a question is open" : "reloading is off")})");
                 return;
+            }
 
             var path = FilePath;
             string text = null;
@@ -1767,7 +1773,11 @@ namespace Typedown.Core.ViewModels
 
             var diskHash = Common.SimpleHash(text);
             if (diskHash == EditorViewModel.FileHash || diskHash == DiskHash)
+            {
+                Log.Debug($"external change: '{Path.GetFileName(path)}' holds what was last read or written; nothing to ask");
                 return;
+            }
+            Log.Debug($"external change: '{Path.GetFileName(path)}' holds another version ({(EditorViewModel.Saved ? "nothing" : "changes")} unsaved here)");
             if (diskHash == EditorViewModel.CurrentHash)
             {
                 EditorViewModel.FileHash = diskHash;
