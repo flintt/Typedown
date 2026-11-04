@@ -242,8 +242,32 @@ begin
   end;
 end;
 
+// "Open with" entries the versions before put in HKCU through HKCR (as UninstallAssociations says), which their
+// uninstall, deleting through HKCR as well, did not find there (left on W10, 2026-11-04).
+procedure UninstallUserOpenWith;
+var
+  Rest, Ext: String;
+  I: Integer;
+begin
+  Rest := MarkdownExtensions + ',.txt,.text,';
+  while Rest <> '' do
+  begin
+    I := Pos(',', Rest);
+    Ext := Copy(Rest, 1, I - 1);
+    Delete(Rest, 1, I);
+    if RegValueExists(HKCU, 'Software\Classes\' + Ext + '\OpenWithProgids', '{#MyAppAssocKey}') then
+    begin
+      Log('Removing the Open with entry of ' + Ext + ' in HKCU');
+      RegDeleteValue(HKCU, 'Software\Classes\' + Ext + '\OpenWithProgids', '{#MyAppAssocKey}');
+    end;
+  end;
+end;
+
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
 begin
   if CurUninstallStep = usUninstall then
+  begin
     UninstallAssociations;
+    UninstallUserOpenWith;
+  end;
 end;
