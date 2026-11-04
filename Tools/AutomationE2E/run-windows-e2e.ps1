@@ -45,6 +45,10 @@ catch {
 }
 $code = 3
 try {
+    # The driver's stderr (a case's note, "QUEUED WORK THREW ...") is not an error of this script: under 'Stop' Windows
+    # PowerShell made its first line a terminating error, the run ended there without a result and with an empty log
+    # (hp job 165, 2026-11-04).
+    $ErrorActionPreference = 'Continue'
     & dotnet (Join-Path $Driver 'Typedown.AutomationE2E.dll') --root $root --pid $hostProcess.Id --exe $exe --fixtures $fixtures --out (Join-Path $out 'result.json') $(if ($Only) { '--only'; $Only }) *> (Join-Path $out 'driver.log')
     $code = $LASTEXITCODE
 }

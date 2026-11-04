@@ -755,6 +755,9 @@ namespace Typedown.Services.Automation
                     {
                         try
                         {
+                            // A window closing in the meantime has no content to read (0x800710DD, "already closed": WV03 on
+                            // hp, 2026-11-04, logged as queued work that threw).
+                            if (window.IsGoingAway) return;
                             if (window.Content?.XamlRoot?.Content is global::Microsoft.UI.Xaml.Controls.Panel panel)
                                 foreach (var dialog in panel.Children.OfType<Core.Controls.AppContentDialog>().ToList())
                                 {
