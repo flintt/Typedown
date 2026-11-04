@@ -39,14 +39,21 @@ internal static partial class Program
             await Task.Delay(800);
         }
         async Task<string> Text(string id) => ((string?)(await Get(c, id))["text"] ?? "").Replace("\r", "");
-        // A shortcut's row on the shortcuts page, found by its search box, and its picker opened.
-        async Task<AutomationElement?> OpenPicker(string setting, string search)
+        // A shortcut's row on the shortcuts page, found by its search box (its name in Chinese, else in English: the
+        // interface's language), and its picker opened; the picker's warning, if it has one.
+        async Task<AutomationElement?> OpenPicker(string setting, params string[] searches)
         {
             var box = await WaitFor(window, "ShortcutSearchBox");
             var edit = box.FindFirst(TreeScope.Descendants, new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.Edit)) ?? box;
-            ((ValuePattern)edit.GetCurrentPattern(ValuePattern.Pattern)).SetValue(search);
-            await Task.Delay(600);
-            Invoke(await WaitFor(window, "Shortcut." + setting));
+            AutomationElement? row = null;
+            foreach (var search in searches)
+            {
+                ((ValuePattern)edit.GetCurrentPattern(ValuePattern.Pattern)).SetValue(search);
+                await Task.Delay(600);
+                try { row = await WaitFor(window, "Shortcut." + setting, 2500); break; }
+                catch (CaseFailed) { }
+            }
+            Invoke(row ?? throw new CaseFailed($"no row Shortcut.{setting} found by searching {string.Join(" or ", searches)}"));
             try { return await WaitFor(window, "WarningText", 3000); }
             catch (CaseFailed) { return null; }
         }
@@ -89,13 +96,13 @@ internal static partial class Program
             // An ordinary shortcut's picker: no warning.
             await c.Call("test.window.navigate", new { windowId, route = "Settings/Shortcut" });
             Check(await Eventually(async () => await Section() == "Shortcut", 4000), "the shortcuts page shown");
-            var none = await OpenPicker("ShortcutLastUsedTab", "上次使用");
+            var none = await OpenPicker("ShortcutLastUsedTab", "上次使用", "Last Used");
             Check(none == null, "an ordinary shortcut's picker has no warning");
             await PressDialogButton(c, windowId, DialogButton.Close);
 
             // Indent, a key better not changed: the warning, and F2 alone taken (F8 and F9 are Focus and Typewriter mode;
             // F6, F7 and F10 the browser's own).
-            var warning = await OpenPicker("ShortcutIndent", "缩进");
+            var warning = await OpenPicker("ShortcutIndent", "缩进", "Indent");
             Check(warning != null, "the indent shortcut's picker warns that it is better not changed");
             notes.Add("warning: " + warning?.Current.Name);
             Chord("F2");
@@ -122,7 +129,7 @@ internal static partial class Program
             // Restore default in the picker: Tab again.
             await c.Call("test.window.navigate", new { windowId, route = "Settings/Shortcut" });
             Check(await Eventually(async () => await Section() == "Shortcut", 4000), "the shortcuts page shown again");
-            await OpenPicker("ShortcutIndent", "缩进");
+            await OpenPicker("ShortcutIndent", "缩进", "Indent");
             Invoke(await WaitFor(window, "RestoreDefaultButton"));
             await Task.Delay(300);
             await PressDialogButton(c, windowId, DialogButton.Primary);
