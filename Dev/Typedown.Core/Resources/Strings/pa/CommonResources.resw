@@ -1243,4 +1243,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>ਡਿਫ਼ਾਲਟ ਬਹਾਲ ਕਰੋ</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>ਲਿੰਕ ਖੋਲ੍ਹੋ (ਨਾਲ ਕਲਿੱਕ)</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>ਸਾਰਣੀ ਤੋਂ ਬਾਹਰ ਨਿਕਲੋ</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>ਕਲਿੱਕ</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>ਕਲਿੱਕ ਕਰਦੇ ਸਮੇਂ ਦਬਾਈਆਂ ਰੱਖਣ ਵਾਲੀਆਂ ਮੋਡੀਫਾਇਰ ਕੁੰਜੀਆਂ ਦਬਾਓ।</value>
+  </data>
 </root>

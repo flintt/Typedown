@@ -1243,4 +1243,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>Buyisela okuzenzakalelayo</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>Vula isixhumanisi (chofoza no-)</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>Phuma ethebuleni</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>Chofoza</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>Cindezela okhiye abashintshayo obabambayo lapho uchofoza.</value>
+  </data>
 </root>

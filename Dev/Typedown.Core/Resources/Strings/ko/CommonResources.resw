@@ -1243,4 +1243,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>기본값 복원</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>링크 열기(누른 채 클릭)</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>표에서 나가기</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>클릭</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>클릭할 때 누르고 있을 보조 키를 누르세요.</value>
+  </data>
 </root>

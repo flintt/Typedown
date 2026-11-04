@@ -1243,4 +1243,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>Athchóirigh an réamhshocrú</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>Oscail nasc (cliceáil le)</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>Fág an tábla</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>Cliceáil</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>Brúigh na heochracha mionathraithe le coinneáil síos agus tú ag cliceáil.</value>
+  </data>
 </root>

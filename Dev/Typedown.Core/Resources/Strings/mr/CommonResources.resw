@@ -1243,4 +1243,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>डीफॉल्ट पुनर्संचयित करा</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>दुवा उघडा (सह क्लिक)</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>तक्त्यातून बाहेर पडा</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>क्लिक</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>क्लिक करताना दाबून ठेवायच्या सुधारक कळा दाबा.</value>
+  </data>
 </root>

@@ -1243,4 +1243,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>డిఫాల్ట్‌ను పునరుద్ధరించు</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>లింక్ తెరువు (తో క్లిక్)</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>పట్టిక నుండి బయటకు వెళ్ళు</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>క్లిక్</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>క్లిక్ చేసేటప్పుడు నొక్కి ఉంచే మాడిఫైయర్ కీలను నొక్కండి.</value>
+  </data>
 </root>

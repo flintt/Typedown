@@ -1243,4 +1243,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>Rejesha chaguomsingi</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>Fungua kiungo (bofya pamoja na)</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>Toka kwenye jedwali</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>Bofya</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>Bonyeza vitufe vya kubadilisha vya kushikilia unapobofya.</value>
+  </data>
 </root>

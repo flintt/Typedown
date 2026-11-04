@@ -1243,4 +1243,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>Palauta oletus</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>Avaa linkki (napsautus ja)</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>Poistu taulukosta</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>Napsautus</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>Paina muokkausnäppäimiä, joita pidetään alhaalla napsautettaessa.</value>
+  </data>
 </root>

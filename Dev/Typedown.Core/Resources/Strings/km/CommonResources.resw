@@ -1243,4 +1243,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>ស្ដារលំនាំដើម</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>បើកតំណ (ចុចជាមួយ)</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>ចេញពីតារាង</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>ចុច</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>ចុចគ្រាប់ចុចកែប្រែដែលត្រូវសង្កត់ពេលចុច។</value>
+  </data>
 </root>

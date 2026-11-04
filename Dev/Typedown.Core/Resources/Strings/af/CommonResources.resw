@@ -1243,4 +1243,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>Herstel verstek</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>Maak skakel oop (klik met)</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>Verlaat tabel</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>Klik</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>Druk die wysigsleutels wat jy hou terwyl jy klik.</value>
+  </data>
 </root>

@@ -1243,4 +1243,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>ڈیفالٹ بحال کریں</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>لنک کھولیں (کے ساتھ کلک)</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>جدول سے باہر نکلیں</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>کلک</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>کلک کرتے وقت دبائے رکھنے والی ترمیمی کلیدیں دبائیں۔</value>
+  </data>
 </root>

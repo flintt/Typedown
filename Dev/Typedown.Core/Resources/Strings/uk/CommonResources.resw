@@ -1243,4 +1243,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>Відновити типове</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>Відкрити посилання (клацання з)</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>Вийти з таблиці</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>Клацання</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>Натисніть клавіші-модифікатори, які утримуються під час клацання.</value>
+  </data>
 </root>

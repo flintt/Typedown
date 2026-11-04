@@ -120,6 +120,12 @@ class Keyboard {
       event.preventDefault()
       return true
     }
+    // Out of a table: in a cell only; elsewhere the key is what it otherwise is.
+    if (matchesKey(event, keyBinding(options, 'leaveTable')) && contentState.leaveTable()) {
+      event.preventDefault()
+      this.muya.dispatchChange()
+      return true
+    }
     const soft = matchesKey(event, keyBinding(options, 'softLineBreak'))
     const cell = !soft && matchesKey(event, keyBinding(options, 'cellLineBreak'))
     if (soft || cell) {

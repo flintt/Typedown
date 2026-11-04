@@ -1243,4 +1243,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>Restabilește implicit</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>Deschide linkul (clic cu)</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>Ieși din tabel</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>Clic</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>Apasă tastele modificatoare ținute apăsate la clic.</value>
+  </data>
 </root>

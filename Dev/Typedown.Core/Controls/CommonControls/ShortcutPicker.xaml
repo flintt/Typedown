@@ -49,6 +49,12 @@
                 Text="{utils:LocaleString Key=NotSet}"/>
         </Grid>
         <TextBlock
+            x:Name="ClickHint"
+            Margin="0,16,0,0"
+            TextWrapping="Wrap"
+            MaxWidth="360"
+            Text="{utils:LocaleString Key=ShortcutClickHint}"/>
+        <TextBlock
             x:Name="WarningText"
             Margin="0,16,0,0"
             TextWrapping="Wrap"

@@ -1243,4 +1243,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>ກູ້ຄືນຄ່າເລີ່ມຕົ້ນ</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>ເປີດລິ້ງ (ຄລິກພ້ອມ)</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>ອອກຈາກຕາຕະລາງ</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>ຄລິກ</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>ກົດປຸ່ມປັບແຕ່ງທີ່ຈະກົດຄ້າງໄວ້ຂະນະຄລິກ.</value>
+  </data>
 </root>

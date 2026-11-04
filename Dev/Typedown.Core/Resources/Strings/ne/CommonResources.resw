@@ -1243,4 +1243,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>पूर्वनिर्धारित पुनर्स्थापना गर्नुहोस्</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>लिङ्क खोल्नुहोस् (सँगै क्लिक)</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>तालिकाबाट बाहिर निस्कनुहोस्</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>क्लिक</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>क्लिक गर्दा थिचिराख्ने परिमार्जक कुञ्जीहरू थिच्नुहोस्।</value>
+  </data>
 </root>

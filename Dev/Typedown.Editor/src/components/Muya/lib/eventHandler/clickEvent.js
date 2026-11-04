@@ -5,6 +5,7 @@ import selection from '../selection'
 import remote from 'services/remote/common'
 import Slugger from '../parser/marked/slugger'
 import { getHeadingPlainText } from '../utils'
+import { keyBinding, matchesClick } from '../utils/keyBinding'
 
 class ClickEvent {
   constructor(muya) {
@@ -287,7 +288,7 @@ class ClickEvent {
       const link = event.target.closest('a')
       if (link) {
         event.preventDefault();
-        if (event.metaKey || event.ctrlKey || readOnly) return
+        if (matchesClick(event, keyBinding(this.muya.options, 'openLink')) || readOnly) return
       }
 
       contentState.clickHandler(event)
@@ -315,7 +316,8 @@ class ClickEvent {
       // Raw HTML (ag-html-preview) is never editable, in or out of reading mode: a plain click follows a link there
       // too, as one does in reading mode, there being nothing else it could mean.
       const inRawHtml = !!(link && link.closest('div.ag-html-preview'))
-      if (!(event.metaKey || event.ctrlKey || readOnly || inRawHtml)) return
+      // Ctrl by default: the "open link" shortcut's modifiers as set (Settings > Shortcuts).
+      if (!(matchesClick(event, keyBinding(this.muya.options, 'openLink')) || readOnly || inRawHtml)) return
       const href = link && link.getAttribute('href')
       if (!href) return
       event.preventDefault()

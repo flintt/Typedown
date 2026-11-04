@@ -1243,4 +1243,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>Ibalik ang default</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>Buksan ang link (i-click nang may)</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>Lumabas sa table</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>Click</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>Pindutin ang mga modifier key na pipindutin habang nagki-click.</value>
+  </data>
 </root>

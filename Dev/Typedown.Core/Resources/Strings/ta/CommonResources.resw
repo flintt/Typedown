@@ -1243,4 +1243,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>இயல்புநிலையை மீட்டமை</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>இணைப்பைத் திற (உடன் கிளிக்)</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>அட்டவணையிலிருந்து வெளியேறு</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>கிளிக்</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>கிளிக் செய்யும்போது அழுத்திப் பிடிக்கும் மாற்றி விசைகளை அழுத்தவும்.</value>
+  </data>
 </root>

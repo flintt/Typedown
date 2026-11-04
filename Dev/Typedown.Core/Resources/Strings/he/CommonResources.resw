@@ -1243,4 +1243,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>שחזר ברירת מחדל</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>פתח קישור (לחיצה עם)</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>צא מהטבלה</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>לחיצה</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>הקש על מקשי הצירוף שיש להחזיק בעת הלחיצה.</value>
+  </data>
 </root>

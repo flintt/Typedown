@@ -1243,4 +1243,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>Alapértelmezett visszaállítása</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>Hivatkozás megnyitása (kattintás ezzel)</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>Kilépés a táblázatból</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>Kattintás</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>Nyomja le a kattintáskor lenyomva tartandó módosítóbillentyűket.</value>
+  </data>
 </root>

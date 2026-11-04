@@ -1243,4 +1243,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>Obnoviť predvolené</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>Otvoriť odkaz (kliknutie s)</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>Opustiť tabuľku</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>Kliknutie</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>Stlačte modifikačné klávesy držané pri kliknutí.</value>
+  </data>
 </root>

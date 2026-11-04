@@ -1243,4 +1243,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>ডিফল্ট পুনরুদ্ধার করুন</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>লিংক খুলুন (সহ ক্লিক)</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>সারণি থেকে বের হন</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>ক্লিক</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>ক্লিক করার সময় চেপে রাখার মডিফায়ার কী চাপুন।</value>
+  </data>
 </root>

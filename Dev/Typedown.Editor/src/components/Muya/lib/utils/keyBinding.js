@@ -9,6 +9,9 @@ export const DEFAULT_KEY_BINDINGS = {
   documentStart: { keyCode: 36, ctrl: true, alt: false, shift: false },
   documentEnd: { keyCode: 35, ctrl: true, alt: false, shift: false },
   previewImage: { keyCode: 32, ctrl: false, alt: false, shift: false },
+  // A click with these held (the key code stands for the click: ShortcutKey.Click).
+  openLink: { keyCode: 0xE9, ctrl: true, alt: false, shift: false },
+  leaveTable: { keyCode: 13, ctrl: true, alt: false, shift: false },
   undo: { keyCode: 90, ctrl: true, alt: false, shift: false },
   redo: { keyCode: 89, ctrl: true, alt: false, shift: false },
   selectAll: { keyCode: 65, ctrl: true, alt: false, shift: false }
@@ -28,6 +31,16 @@ export const matchesKey = (event, binding) =>
   !!event.altKey === !!binding.alt &&
   !!event.shiftKey === !!binding.shift &&
   !event.metaKey
+
+/**
+ * Whether a mouse event is that click binding: its modifiers held (others may be too, as Ctrl+Shift+click opened a link
+ * before the key could be changed; Cmd counts as Ctrl). None cleared or none chosen: never.
+ */
+export const matchesClick = (event, binding) =>
+  !!binding && !!(binding.ctrl || binding.alt || binding.shift) &&
+  (!binding.ctrl || !!event.ctrlKey || !!event.metaKey) &&
+  (!binding.alt || !!event.altKey) &&
+  (!binding.shift || !!event.shiftKey)
 
 /**
  * The event as the handler that does the work expects it (Tab for an indent, Shift+Enter for a line break) when another

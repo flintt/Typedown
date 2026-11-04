@@ -1243,4 +1243,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>بازگردانی پیش‌فرض</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>باز کردن پیوند (کلیک با)</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>خروج از جدول</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>کلیک</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>کلیدهای تغییردهنده‌ای را که هنگام کلیک نگه می‌دارید فشار دهید.</value>
+  </data>
 </root>

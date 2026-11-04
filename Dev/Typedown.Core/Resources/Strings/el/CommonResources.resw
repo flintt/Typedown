@@ -1243,4 +1243,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>Επαναφορά προεπιλογής</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>Άνοιγμα συνδέσμου (κλικ με)</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>Έξοδος από τον πίνακα</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>Κλικ</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>Πατήστε τα πλήκτρα τροποποίησης που κρατάτε πατημένα στο κλικ.</value>
+  </data>
 </root>

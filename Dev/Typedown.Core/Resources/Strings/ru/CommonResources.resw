@@ -1243,4 +1243,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>Восстановить по умолчанию</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>Открыть ссылку (щелчок с)</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>Выйти из таблицы</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>Щелчок</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>Нажмите клавиши-модификаторы, которые удерживаются при щелчке.</value>
+  </data>
 </root>

@@ -11,6 +11,12 @@ namespace Typedown.Core.Models
         /// </summary>
         public const VirtualKey AnyDigit = (VirtualKey)0xE8;
 
+        /// <summary>
+        /// The "key" of a shortcut that is a mouse click with modifiers held (open a link): 0xE9, unassigned too. Only
+        /// its modifiers are chosen.
+        /// </summary>
+        public const VirtualKey Click = (VirtualKey)0xE9;
+
         /// <summary>The nine keys a digits shortcut stands for, 1 to 9; the one key otherwise.</summary>
         public ShortcutKey[] Expand()
         {
@@ -40,4 +46,11 @@ namespace Typedown.Core.Models
     /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
     public sealed class DigitsShortcutAttribute : Attribute { }
+
+    /// <summary>
+    /// A shortcut setting for a click with modifiers held: only its modifiers are chosen, at least one (its key is
+    /// <see cref="ShortcutKey.Click"/>).
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property)]
+    public sealed class ClickShortcutAttribute : Attribute { }
 }

@@ -1243,4 +1243,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>Әдепкіні қалпына келтіру</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>Сілтемені ашу (бірге шерту)</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>Кестеден шығу</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>Шерту</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>Шерту кезінде басып тұратын түрлендіргіш пернелерді басыңыз.</value>
+  </data>
 </root>

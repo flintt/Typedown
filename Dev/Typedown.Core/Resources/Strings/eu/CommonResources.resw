@@ -1243,4 +1243,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>Leheneratu lehenetsia</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>Ireki esteka (klik honekin)</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>Irten taulatik</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>Klik</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>Sakatu klik egitean sakatuta eduki beharreko tekla aldatzaileak.</value>
+  </data>
 </root>

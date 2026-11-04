@@ -1243,4 +1243,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>Standaard herstellen</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>Koppeling openen (klik met)</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>Tabel verlaten</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>Klik</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>Druk op de wijzigingstoetsen die je bij het klikken ingedrukt houdt.</value>
+  </data>
 </root>

@@ -1243,4 +1243,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>ಡೀಫಾಲ್ಟ್ ಮರುಸ್ಥಾಪಿಸಿ</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>ಲಿಂಕ್ ತೆರೆಯಿರಿ (ಜೊತೆ ಕ್ಲಿಕ್)</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>ಕೋಷ್ಟಕದಿಂದ ಹೊರಬನ್ನಿ</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>ಕ್ಲಿಕ್</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>ಕ್ಲಿಕ್ ಮಾಡುವಾಗ ಒತ್ತಿ ಹಿಡಿಯುವ ಮಾರ್ಪಾಡು ಕೀಗಳನ್ನು ಒತ್ತಿ.</value>
+  </data>
 </root>

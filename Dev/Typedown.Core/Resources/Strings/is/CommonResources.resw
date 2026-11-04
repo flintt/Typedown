@@ -1243,4 +1243,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>Endurheimta sjálfgefið</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>Opna tengil (smella með)</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>Fara úr töflu</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>Smella</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>Ýttu á breytilyklana sem haldið er niðri þegar smellt er.</value>
+  </data>
 </root>

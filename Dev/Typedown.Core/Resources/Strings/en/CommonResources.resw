@@ -1339,4 +1339,20 @@
     <value>Restore Default</value>
     <comment>快捷键选择框里的链接：把这个快捷键放回默认的键（再按保存生效）</comment>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>Open Link (Click with)</value>
+    <comment>快捷键：编辑时按住这些修饰键单击链接打开它（默认 Ctrl+单击；阅读模式单击就打开）</comment>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>Leave Table</value>
+    <comment>快捷键：在表格单元格里跳出表格，到表格后的新段落（默认 Ctrl+Enter）</comment>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>Click</value>
+    <comment>快捷键里代表鼠标单击的那一项，如 Ctrl+单击</comment>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>Press the modifier keys to hold while clicking.</value>
+    <comment>单击类快捷键的选择框里的说明：按下单击时要按住的修饰键</comment>
+  </data>
 </root>

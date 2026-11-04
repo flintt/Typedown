@@ -1243,4 +1243,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>Irrestawra d-default</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>Iftaħ il-link (ikklikkja ma’)</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>Oħroġ mit-tabella</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>Klikk</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>Agħfas iċ-ċwievet modifikaturi li żżomm waqt li tikklikkja.</value>
+  </data>
 </root>

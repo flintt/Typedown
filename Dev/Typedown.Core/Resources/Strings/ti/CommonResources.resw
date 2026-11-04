@@ -1242,4 +1242,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>ነባሪ መልስ</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>መላግቦ ክፈት (ምስ… ጠውቕ)</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>ካብ ሰንጠረዥ ውጻእ</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>ጠውቕ</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>ክትጠውቑ ከለኹም እትሕዝዎም መቐየሪ መፍትሕ ጠውቑ።</value>
+  </data>
 </root>

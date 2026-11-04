@@ -1259,4 +1259,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>恢复默认</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>打开链接（按住单击）</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>跳出表格</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>单击</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>按下单击时要按住的修饰键。</value>
+  </data>
 </root>

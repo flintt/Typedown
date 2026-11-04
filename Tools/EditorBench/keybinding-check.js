@@ -98,6 +98,57 @@ const F6 = 117, F7 = 118, F8 = 119, F9 = 120;
     same('Shift+F7 given to the document start goes there', 'XPara one\n\nPara two\n', await after(para, 'Para two', 2, 'F7', ['Shift'], 'X'));
     same('Ctrl+End given away does nothing', 'PaXra one\n\nPara two\n', await after(para, 'Para one', 2, 'End', ['Control'], 'X'));
 
+    // Out of a table: Ctrl+Enter by default; on F4 given to it, and Ctrl+Enter then an Enter (a new row).
+    const F4 = 115;
+    const left = 'X\n';
+    await bind(null);
+    const leftByCtrl = await after(table, 'cell', 2, 'Enter', ['Control'], 'X');
+    check('Ctrl+Enter in a cell leaves the table (no bindings from the host)', leftByCtrl.startsWith(table) && leftByCtrl.endsWith(left), JSON.stringify(leftByCtrl));
+    const newRow = await after(table, 'cell', 2, 'Enter', [], 'X');
+    await bind({ leaveTable: { keyCode: F4, ctrl: false, alt: false, shift: false } });
+    same('F4 given to leaving a table leaves it', leftByCtrl, await after(table, 'cell', 2, 'F4', [], 'X'));
+    same('Ctrl+Enter given away is an Enter in a cell (a new row)', newRow, await after(table, 'cell', 2, 'Enter', ['Control'], 'X'));
+    same('F4 outside a table is what it otherwise is (nothing)', para, await after(para, 'Para one', 2, 'F4'));
+
+    // A link while editing: Ctrl+click opens it by default; with Alt given to it, Alt+click does and Ctrl+click not;
+    // cleared, no click does. A plain click never does.
+    const linkDoc = 'First para\n\n[site](https://example.com/kb) after\n';
+    await page.evaluate(() => {
+      window.__opened = [];
+      const post = window.chrome.webview.postMessage;
+      window.chrome.webview.postMessage = raw => {
+        const m = JSON.parse(raw);
+        if (m.type === 'invoke' && m.name === 'OpenNewWindow') window.__opened.push(m.args);
+        return post(raw);
+      };
+    });
+    const opens = async modifiers => {
+      await mode(true, false);
+      await load(linkDoc);
+      await mode(false, false);
+      await page.evaluate(() => { window.__opened.length = 0; });
+      const at = await page.evaluate(() => {
+        const a = document.querySelector('#ag-editor-id a[href="https://example.com/kb"]');
+        if (!a) return null;
+        const r = a.getBoundingClientRect();
+        return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+      });
+      if (!at) throw new Error('no link drawn');
+      for (const m of modifiers) await page.keyboard.down(m);
+      await page.mouse.click(at.x, at.y);
+      for (const m of modifiers.slice().reverse()) await page.keyboard.up(m);
+      await pause(300);
+      return page.evaluate(() => window.__opened.length > 0);
+    };
+    await bind(null);
+    check('Ctrl+click opens a link (no bindings from the host)', await opens(['Control']), 'not opened');
+    check('a plain click while editing opens no link', !(await opens([])), 'opened');
+    await bind({ openLink: { keyCode: 0xE9, ctrl: false, alt: true, shift: false } });
+    check('Alt+click, given to opening a link, opens it', await opens(['Alt']), 'not opened');
+    check('Ctrl+click given away opens no link', !(await opens(['Control'])), 'opened');
+    await bind({ openLink: null });
+    check('Ctrl+click with opening a link cleared opens nothing', !(await opens(['Control'])), 'opened');
+
     // A key cleared (null): nothing does it, the old key included.
     await bind({ indent: null });
     same('Tab with indent cleared does nothing', list, await after(list, 'two', 1, 'Tab'));

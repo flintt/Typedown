@@ -1243,4 +1243,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>Възстановяване по подразбиране</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>Отваряне на връзка (щракване с)</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>Излизане от таблицата</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>Щракване</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>Натиснете клавишите модификатори, задържани при щракване.</value>
+  </data>
 </root>

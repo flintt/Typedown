@@ -1243,4 +1243,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>സ്ഥിരസ്ഥിതി പുനഃസ്ഥാപിക്കുക</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>ലിങ്ക് തുറക്കുക (കൂടെ ക്ലിക്ക്)</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>പട്ടികയിൽ നിന്ന് പുറത്തുകടക്കുക</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>ക്ലിക്ക്</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>ക്ലിക്ക് ചെയ്യുമ്പോൾ അമർത്തിപ്പിടിക്കേണ്ട മോഡിഫയർ കീകൾ അമർത്തുക.</value>
+  </data>
 </root>

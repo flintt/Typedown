@@ -1243,4 +1243,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>既定に戻す</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>リンクを開く（押しながらクリック）</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>表から出る</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>クリック</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>クリックするときに押しておく修飾キーを押してください。</value>
+  </data>
 </root>

@@ -1243,4 +1243,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>Whakahoki ki te taunoa</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>Huakina te hono (pāwhiri me)</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>Puta atu i te ripanga</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>Pāwhiri</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>Pēhia ngā pātuhi whakarerekē e puritia ana i te pāwhiri.</value>
+  </data>
 </root>

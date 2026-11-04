@@ -1243,4 +1243,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>Atkurti numatytąjį</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>Atidaryti saitą (spustelėjimas su)</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>Išeiti iš lentelės</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>Spustelėjimas</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>Paspauskite modifikavimo klavišus, laikomus spustelint.</value>
+  </data>
 </root>

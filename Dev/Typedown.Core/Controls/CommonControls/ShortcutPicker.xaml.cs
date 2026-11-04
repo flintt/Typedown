@@ -38,16 +38,20 @@ namespace Typedown.Core.Controls
 
         private readonly bool digits;
 
+        private readonly bool click;
+
         public ShortcutPicker(ShortcutKey currentShortcutKey, PropertyInfo property = null)
         {
             this.currentShortcutKey = currentShortcutKey;
             this.property = property;
             notRecommended = property?.GetCustomAttribute<NotRecommendedShortcutAttribute>() != null;
             digits = property?.GetCustomAttribute<DigitsShortcutAttribute>() != null;
+            click = property?.GetCustomAttribute<ClickShortcutAttribute>() != null;
             ShortcutKey = currentShortcutKey;
             InitializeComponent();
             // A key people expect where it is: it may be changed, with a word that it is better not to.
             WarningText.Visibility = notRecommended ? Visibility.Visible : Visibility.Collapsed;
+            ClickHint.Visibility = click ? Visibility.Visible : Visibility.Collapsed;
             RestoreDefaultButton.Visibility = property != null ? Visibility.Visible : Visibility.Collapsed;
         }
 
@@ -92,9 +96,28 @@ namespace Typedown.Core.Controls
             Bindings?.StopTracking();
         }
 
+        // The modifier a modifier key is.
+        private static VirtualKeyModifiers ModifierOf(VirtualKey key) => key switch
+        {
+            VirtualKey.LeftControl or VirtualKey.RightControl or VirtualKey.Control => VirtualKeyModifiers.Control,
+            VirtualKey.LeftShift or VirtualKey.RightShift or VirtualKey.Shift => VirtualKeyModifiers.Shift,
+            VirtualKey.LeftMenu or VirtualKey.RightMenu or VirtualKey.Menu => VirtualKeyModifiers.Menu,
+            VirtualKey.LeftWindows or VirtualKey.RightWindows => VirtualKeyModifiers.Windows,
+            _ => VirtualKeyModifiers.None,
+        };
+
         private void OnKeyEvent(object sender, KeyEventArgs args)
         {
             ErrorMsgPanel.Visibility = Visibility.Collapsed;
+            // A click shortcut: the modifiers held down are what is chosen, the click stands for the key.
+            if (click)
+            {
+                if (ModifierOf(args.Key) == VirtualKeyModifiers.None) return;
+                Verified = true;
+                ShortcutKey = new ShortcutKey(args.Modifiers | ModifierOf(args.Key), Models.ShortcutKey.Click);
+                args.Handled = true;
+                return;
+            }
             var shortcutKey = new ShortcutKey(args.Modifiers, args.Key);
             var displayText = Common.GetShortcutKeyTextList(shortcutKey);
             var isDigit = args.Key >= VirtualKey.Number1 && args.Key <= VirtualKey.Number9;
@@ -109,7 +132,7 @@ namespace Typedown.Core.Controls
                 // Taken by another setting: any of the keys it stands for.
                 var owner = shortcutKey.Expand()
                     .Select(k => existShortcutKeys.TryGetValue(k, out var p) ? p : null)
-                    .FirstOrDefault(p => p != null && (property != null ? p != property : shortcutKey != currentShortcutKey));
+                    .FirstOrDefault(p => p != null && (property != null ? p != property && !SettingsViewModel.MayShare(p.Name, property.Name) : shortcutKey != currentShortcutKey));
                 if (owner != null)
                 {
                     Verified = false;

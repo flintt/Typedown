@@ -1242,4 +1242,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>ነባሪውን መልስ</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>አገናኝ ክፈት (ከ… ጋር ጠቅ)</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>ከሰንጠረዡ ውጣ</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>ጠቅ</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>ጠቅ ሲያደርጉ የሚይዙትን የማሻሻያ ቁልፎች ይጫኑ።</value>
+  </data>
 </root>

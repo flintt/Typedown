@@ -140,6 +140,9 @@ namespace Typedown.Core.Utilities
             // The digits of a shortcut that stands for nine (switch to a tab by its place).
             if (key == Models.ShortcutKey.AnyDigit)
                 return "1–9";
+            // The click of a shortcut that is one (open a link).
+            if (key == Models.ShortcutKey.Click)
+                return Locale.GetString("ShortcutClick");
             if (key == VirtualKey.LeftWindows || key == VirtualKey.RightWindows)
                 return "Win";
             var buffer = new StringBuilder(32);

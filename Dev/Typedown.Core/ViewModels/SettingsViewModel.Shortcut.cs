@@ -1,4 +1,5 @@
-﻿using Typedown.Core.Models;
+﻿using System.Linq;
+using Typedown.Core.Models;
 using Typedown.Core.Utilities;
 using Key = Windows.System.VirtualKey;
 using Mod = Windows.System.VirtualKeyModifiers;
@@ -293,6 +294,24 @@ namespace Typedown.Core.ViewModels
         [Locale("NotRecommendedShortcuts", "PreviewImage"), NotRecommendedShortcut]
         public ShortcutKey ShortcutPreviewImage { get => GetSettingValue<ShortcutKey>(new(Mod.None, Key.Space)); set => SetSettingValue(value); }
 
+        // Ctrl+click on a link while editing (in reading mode a plain click opens it, whatever is set here).
+        [Locale("NotRecommendedShortcuts", "OpenLink"), NotRecommendedShortcut, ClickShortcut]
+        public ShortcutKey ShortcutOpenLink { get => GetSettingValue<ShortcutKey>(new(Mod.Control, ShortcutKey.Click)); set => SetSettingValue(value); }
+
+        // Ctrl+Enter in a table cell: out of the table, into a paragraph after it. Paragraph > Insert paragraph after is
+        // Ctrl+Enter too and does the same there: the two may share the key (ShareableShortcuts), and either changed
+        // leaves the other as it was.
+        [Locale("NotRecommendedShortcuts", "LeaveTable"), NotRecommendedShortcut]
+        public ShortcutKey ShortcutLeaveTable { get => GetSettingValue<ShortcutKey>(new(Mod.Control, Key.Enter)); set => SetSettingValue(value); }
+
+        /// <summary>Settings that may hold the same key, as their defaults do (the picker does not call it taken).</summary>
+        public static readonly string[][] ShareableShortcuts =
+        {
+            new[] { nameof(ShortcutInsertParagraphAfter), nameof(ShortcutLeaveTable) },
+        };
+
+        public static bool MayShare(string a, string b) => ShareableShortcuts.Any(pair => pair.Contains(a) && pair.Contains(b));
+
         /// <summary>The shortcut settings the editor page acts on itself, by the page's name for each.</summary>
         public static readonly System.Collections.Generic.Dictionary<string, string> PageKeyBindingNames = new()
         {
@@ -303,6 +322,8 @@ namespace Typedown.Core.ViewModels
             ["documentStart"] = nameof(ShortcutDocumentStart),
             ["documentEnd"] = nameof(ShortcutDocumentEnd),
             ["previewImage"] = nameof(ShortcutPreviewImage),
+            ["openLink"] = nameof(ShortcutOpenLink),
+            ["leaveTable"] = nameof(ShortcutLeaveTable),
             ["undo"] = nameof(ShortcutUndo),
             ["redo"] = nameof(ShortcutRedo),
             ["selectAll"] = nameof(ShortcutSelectAll),

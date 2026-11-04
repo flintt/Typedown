@@ -1243,4 +1243,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>Adfer y rhagosodiad</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>Agor dolen (clicio gyda)</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>Gadael y tabl</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>Clic</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>Pwyswch y bysellau addasu i’w dal wrth glicio.</value>
+  </data>
 </root>

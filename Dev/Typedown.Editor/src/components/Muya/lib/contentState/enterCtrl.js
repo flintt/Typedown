@@ -1,5 +1,4 @@
 import selection from '../selection'
-import { isOsx } from '../config'
 import { tokenizer } from '../parser'
 
 // Formats closed by the same mark they open with ("**", "~~", "`", "$", "=="), as the tokenizer names them.
@@ -231,6 +230,29 @@ const enterCtrl = ContentState => {
     }
   }
 
+  /**
+   * The caret in a table cell: out of the table, into a new paragraph after it (the "leave table" key, Ctrl+Enter by
+   * default; in the app the host's Insert paragraph after, Ctrl+Enter too, takes that key first and does the same).
+   * False when the caret is not in a cell.
+   */
+  ContentState.prototype.leaveTable = function () {
+    const { start } = this.cursor || {}
+    const block = start && this.getBlock(start.key)
+    if (!block || block.functionType !== 'cellContent') return false
+    const table = this.closest(block, 'table')
+    const figure = table && this.getBlock(table.parent)
+    if (!figure) return false
+    const paragraph = this.createBlockP()
+    this.insertAfter(paragraph, figure)
+    const key = paragraph.children[0].key
+    this.cursor = {
+      start: { key, offset: 0 },
+      end: { key, offset: 0 }
+    }
+    this.partialRender()
+    return true
+  }
+
   ContentState.prototype.enterHandler = function (event) {
     const { start, end } = selection.getCursorRange()
     if (!start || !end) {
@@ -397,22 +419,8 @@ const enterCtrl = ContentState => {
       const rowContainer = this.getBlock(row.parent)
       const table = this.closest(rowContainer, 'table')
 
-      // Ctrl+Enter: out of the table, into a new paragraph after it (in the app the host's Insert paragraph after takes
-      // the key first and does the same).
-      if (
-        (isOsx && event.metaKey) ||
-        (!isOsx && event.ctrlKey)
-      ) {
-        const figure = this.getBlock(table.parent)
-        const paragraph = this.createBlockP()
-        this.insertAfter(paragraph, figure)
-        const key = paragraph.children[0].key
-        this.cursor = {
-          start: { key, offset: 0 },
-          end: { key, offset: 0 }
-        }
-        return this.partialRender()
-      }
+      // Out of the table is the "leave table" key's (Ctrl+Enter by default; eventHandler/keyboard.js, leaveTable below):
+      // an Enter with Ctrl given away from it is an Enter here.
 
       // Enter: a new row below this one, the caret in its first cell, as a reader asked (it went to the next row, out
       // of the table from the last). The arrow keys still go from row to row.

@@ -1243,4 +1243,16 @@
   <data name="RestoreDefaultShortcut" xml:space="preserve">
     <value>Standard wiederherstellen</value>
   </data>
+  <data name="OpenLink" xml:space="preserve">
+    <value>Link öffnen (Klick mit)</value>
+  </data>
+  <data name="LeaveTable" xml:space="preserve">
+    <value>Tabelle verlassen</value>
+  </data>
+  <data name="ShortcutClick" xml:space="preserve">
+    <value>Klick</value>
+  </data>
+  <data name="ShortcutClickHint" xml:space="preserve">
+    <value>Drücken Sie die Zusatztasten, die beim Klicken gehalten werden.</value>
+  </data>
 </root>
