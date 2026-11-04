@@ -543,7 +543,7 @@ namespace Typedown.Core.ViewModels
                 IgnoreOwnFileWrite();
                 await SafeFile.WriteAllBytesAtomicAsync(path, (FileFormat ?? TextFileFormat.Default).GetBytes(text));
                 IgnoreOwnFileWrite();
-                EditionHooks.ReportDocumentOnDisk(path, text, written: true);
+                EditionHooks.ReportDocumentOnDisk(path, text, written: true, manual: alert, window: AppViewModel);
                 EditorViewModel.AutoSaveHeldBack = null;
                 return true;
             }

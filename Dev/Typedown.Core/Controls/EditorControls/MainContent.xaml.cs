@@ -51,6 +51,34 @@ namespace Typedown.Core.Controls
             EditionHooks.SidePanelChanged += OnEditionPanelChanged;
             disposables.Add(Disposable.Create(() => EditionHooks.SidePanelChanged -= OnEditionPanelChanged));
             ShowEditionPanel();
+            EditionHooks.BarChanged += OnEditionBarChanged;
+            disposables.Add(Disposable.Create(() => EditionHooks.BarChanged -= OnEditionBarChanged));
+            ShowEditionBar();
+        }
+
+        private void OnEditionBarChanged(AppViewModel app)
+        {
+            if (app != ViewModel) return;
+            if (DispatcherQueue.HasThreadAccess) ShowEditionBar();
+            else DispatcherQueue.TryEnqueueSafe(ShowEditionBar);
+        }
+
+        // Which page's host holds an edition bar's content now: the page before this one (left for the settings) lets it go.
+        private static readonly System.Runtime.CompilerServices.ConditionalWeakTable<object, ContentPresenter> barHosts = new();
+
+        private void ShowEditionBar()
+        {
+            var bar = EditionHooks.BarOf(ViewModel);
+            if (bar?.Content == null)
+            {
+                EditionBarHost.Content = null;
+                EditionBarHost.Visibility = Visibility.Collapsed;
+                return;
+            }
+            if (barHosts.TryGetValue(bar.Content, out var held) && held != EditionBarHost && held.Content == bar.Content) held.Content = null;
+            barHosts.AddOrUpdate(bar.Content, EditionBarHost);
+            EditionBarHost.Content = bar.Content;
+            EditionBarHost.Visibility = Visibility.Visible;
         }
 
         // An edition's panel shown or closed for this window: the host takes it (on the window's own thread).
@@ -153,6 +181,7 @@ namespace Typedown.Core.Controls
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
+            EditionBarHost.Content = null;
             disposables.Clear();
             Bindings?.StopTracking();
         }
