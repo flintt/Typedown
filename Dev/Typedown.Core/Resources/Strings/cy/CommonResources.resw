@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>Chwilio am ffontiau</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>Amnewid y cyfatebiaeth gyfredol</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Chwyddo i mewn</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Chwyddo allan</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>Ailosod chwyddo</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>Newid i dab 1–9</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>Bysellau golygu (ni argymhellir eu newid)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>Mewnoli / Cell nesaf</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>Allanoli / Cell flaenorol</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>Toriad llinell o fewn paragraff</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>Toriad llinell mewn cell</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>Mynd i ddechrau’r ddogfen</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>Mynd i ddiwedd y ddogfen</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>Cau’r bar chwilio, deialog neu banel</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>Rhagweld y ddelwedd a ddewiswyd</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>Mae’r fysell hon yn cael ei defnyddio’n aml wrth olygu. Gall ei newid wrthdaro â’ch arferion neu â rhaglenni eraill.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>Adfer y rhagosodiad</value>
+  </data>
 </root>

@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>Поиск шрифтов</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>Заменить текущее совпадение</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Увеличить</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Уменьшить</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>Сбросить масштаб</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>Перейти на вкладку 1–9</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>Клавиши редактирования (менять не рекомендуется)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>Отступ / Следующая ячейка</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>Уменьшить отступ / Предыдущая ячейка</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>Перенос строки в абзаце</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>Перенос строки в ячейке</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>В начало документа</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>В конец документа</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>Закрыть панель поиска, диалог или панель</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>Просмотр выбранного изображения</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>Эта клавиша часто используется при редактировании. Её изменение может противоречить вашим привычкам или другим программам.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>Восстановить по умолчанию</value>
+  </data>
 </root>

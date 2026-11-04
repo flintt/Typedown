@@ -291,6 +291,7 @@ namespace Typedown.Core.ViewModels
                 Settings.TextDirection,
                 Settings.TabSize,
                 Settings.HighlightAutomationChanges,
+                Settings.KeyBindings,
                 Markdown,
                 BasePath = FileViewModel.ImageBasePath,
                 // The editor page loading again (leaving the settings page rebuilds the main page) shows the document the

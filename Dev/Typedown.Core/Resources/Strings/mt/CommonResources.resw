@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>Fittex fonts</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>Ibdel it-tqabbil attwali</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Kabbar</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Ċekken</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>Irrisettja z-zoom</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>Aqleb għat-tab 1–9</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>Ċwievet tal-editjar (mhux rakkomandat li jinbidlu)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>Daħħal / Iċ-ċella li jmiss</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>Neħħi d-dħul / Iċ-ċella ta’ qabel</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>Linja ġdida fil-paragrafu</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>Linja ġdida fiċ-ċella</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>Mur fil-bidu tad-dokument</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>Mur fit-tmiem tad-dokument</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>Agħlaq il-bar tat-tfittxija, id-djalogu jew il-pannell</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>Ara l-istampa magħżula</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>Din iċ-ċavetta tintuża spiss waqt l-editjar. Jekk tbiddilha tista’ tikkonfliġġi mad-drawwiet tiegħek jew ma’ programmi oħra.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>Irrestawra d-default</value>
+  </data>
 </root>

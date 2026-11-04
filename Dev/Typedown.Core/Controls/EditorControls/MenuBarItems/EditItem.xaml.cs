@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Disposables;
 using Typedown.Core.Interfaces;
 using Typedown.Core.Models;
@@ -35,9 +36,13 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             var acc = this.GetService<IKeyboardAccelerator>();
+            // The keys the web view must not act on itself while the editor has the focus: its own undo, select all and
+            // clipboard bypass the document's history (or select the whole page). Both the keys these commands have
+            // now (Settings) and the ones they had before (a key given to another does nothing in the page, rather
+            // than the browser's own undo); the commands themselves answer their keys as registered below.
             disposables.Add(acc.RegisterGlobal((s, e) =>
             {
-                handledKey ??= new()
+                handledKey ??= new HashSet<Models.ShortcutKey>(new Models.ShortcutKey[]
                 {
                     new(Mod.Control, Key.Z),
                     new(Mod.Control, Key.Y),
@@ -45,8 +50,13 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
                     new(Mod.Control, Key.C),
                     new(Mod.Control, Key.V),
                     new(Mod.Control, Key.A),
-                    // new(Mod.None, Key.Delete),
-                };
+                    Settings?.ShortcutUndo,
+                    Settings?.ShortcutRedo,
+                    Settings?.ShortcutCut,
+                    Settings?.ShortcutCopy,
+                    Settings?.ShortcutPaste,
+                    Settings?.ShortcutSelectAll,
+                }.Where(k => k != null && k.Key != Key.None));
                 if (handledKey.Contains(new(e.Modifiers, e.Key)) && !VimWants(e))
                 {
                     if (EditorHasFocus())
@@ -72,6 +82,8 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             RegisterWindowShortcut(Settings.ShortcutFindNext, FindNextItem);
             RegisterWindowShortcut(Settings.ShortcutFindPrevious, FindPreviousItem);
             RegisterWindowShortcut(Settings.ShortcutReplace, ReplaceItem);
+            RegisterWindowShortcut(Settings.ShortcutReplaceOne, ReplaceOneItem);
+            RegisterWindowShortcut(Settings.ShortcutReplaceAll, ReplaceAllItem);
             RegisterWindowShortcut(Settings.ShortcutSearchInFolder, SearchInFolderItem);
         }
 

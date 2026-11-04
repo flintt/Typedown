@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>ഫോണ്ടുകൾ തിരയുക</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>നിലവിലെ പൊരുത്തം മാറ്റിസ്ഥാപിക്കുക</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>സൂം ഇൻ</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>സൂം ഔട്ട്</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>സൂം പുനഃസജ്ജമാക്കുക</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>ടാബ് 1–9-ലേക്ക് മാറുക</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>എഡിറ്റിംഗ് കീകൾ (മാറ്റാൻ ശുപാർശയില്ല)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>ഇൻഡന്റ് / അടുത്ത സെൽ</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>ഇൻഡന്റ് കുറയ്ക്കുക / മുമ്പത്തെ സെൽ</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>ഖണ്ഡികയ്ക്കുള്ളിൽ പുതിയ വരി</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>സെല്ലിനുള്ളിൽ പുതിയ വരി</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>പ്രമാണത്തിന്റെ തുടക്കത്തിലേക്ക് പോകുക</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>പ്രമാണത്തിന്റെ അവസാനത്തിലേക്ക് പോകുക</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>തിരയൽ ബാർ, ഡയലോഗ് അല്ലെങ്കിൽ പാനൽ അടയ്ക്കുക</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>തിരഞ്ഞെടുത്ത ചിത്രം പ്രിവ്യൂ ചെയ്യുക</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>എഡിറ്റ് ചെയ്യുമ്പോൾ ഈ കീ പതിവായി ഉപയോഗിക്കുന്നു. ഇത് മാറ്റിയാൽ നിങ്ങളുടെ ശീലങ്ങളുമായോ മറ്റ് പ്രോഗ്രാമുകളുമായോ വൈരുദ്ധ്യമുണ്ടാകാം.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>സ്ഥിരസ്ഥിതി പുനഃസ്ഥാപിക്കുക</value>
+  </data>
 </root>

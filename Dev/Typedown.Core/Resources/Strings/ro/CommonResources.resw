@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>Caută fonturi</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>Înlocuiește potrivirea curentă</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Mărește</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Micșorează</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>Resetează zoomul</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>Comută la fila 1–9</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>Taste de editare (nu se recomandă modificarea)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>Indentare / Celula următoare</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>Reducere indentare / Celula anterioară</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>Rând nou în paragraf</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>Rând nou în celulă</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>Mergi la începutul documentului</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>Mergi la sfârșitul documentului</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>Închide bara de căutare, dialogul sau panoul</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>Previzualizează imaginea selectată</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>Această tastă este folosită des la editare. Modificarea ei poate intra în conflict cu obiceiurile tale sau cu alte programe.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>Restabilește implicit</value>
+  </data>
 </root>

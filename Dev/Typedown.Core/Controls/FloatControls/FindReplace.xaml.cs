@@ -44,6 +44,7 @@ namespace Typedown.Core.Controls.FloatControls
             SearchOpenChanged(Float.FindReplaceDialogOpen, false);
             // Take focus on open and whenever the search shortcut is pressed again (see FloatViewModel.Search).
             Float.FocusSearchRequested += OnFocusSearchRequested;
+            Float.ReplaceRequested += PostReplaceMessage;
         }
 
         private void OnFocusSearchRequested()
@@ -83,7 +84,11 @@ namespace Typedown.Core.Controls.FloatControls
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
-            if (Float != null) Float.FocusSearchRequested -= OnFocusSearchRequested;
+            if (Float != null)
+            {
+                Float.FocusSearchRequested -= OnFocusSearchRequested;
+                Float.ReplaceRequested -= PostReplaceMessage;
+            }
             disposables.Clear();
             Bindings?.StopTracking();
         }
@@ -121,7 +126,7 @@ namespace Typedown.Core.Controls.FloatControls
 
         private void OnKeyDown(object sender, KeyRoutedEventArgs e)
         {
-            if (e.Key == Windows.System.VirtualKey.Escape)
+            if (this.IsClosePanelKey(e.Key))
                 Close();
         }
 

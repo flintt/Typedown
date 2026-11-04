@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>Қаріптерді іздеу</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>Ағымдағы сәйкестікті ауыстыру</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Үлкейту</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Кішірейту</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>Масштабты қалпына келтіру</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>1–9 қойындысына ауысу</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>Өңдеу пернелері (өзгерту ұсынылмайды)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>Шегініс / Келесі ұяшық</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>Шегіністі азайту / Алдыңғы ұяшық</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>Абзац ішінде жаңа жол</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>Ұяшық ішінде жаңа жол</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>Құжат басына өту</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>Құжат соңына өту</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>Іздеу жолағын, диалогты немесе тақтаны жабу</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>Таңдалған суретті алдын ала қарау</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>Бұл перне өңдеу кезінде жиі қолданылады. Оны өзгерту әдеттеріңізге немесе басқа бағдарламаларға қайшы келуі мүмкін.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>Әдепкіні қалпына келтіру</value>
+  </data>
 </root>

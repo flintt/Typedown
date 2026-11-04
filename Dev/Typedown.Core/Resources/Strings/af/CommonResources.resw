@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>Soek lettertipes</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>Vervang huidige passing</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Zoem in</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Zoem uit</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>Stel zoem terug</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>Skakel na oortjie 1–9</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>Redigeersleutels (verandering word nie aanbeveel nie)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>Keep in / Volgende sel</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>Keep uit / Vorige sel</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>Reëlbreuk binne paragraaf</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>Reëlbreuk in sel</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>Gaan na begin van dokument</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>Gaan na einde van dokument</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>Maak soekbalk, dialoog of paneel toe</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>Voorskou van gekose prent</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>Hierdie sleutel word dikwels tydens redigering gebruik. Om dit te verander kan bots met jou gewoontes of ander programme.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>Herstel verstek</value>
+  </data>
 </root>

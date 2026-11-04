@@ -1137,4 +1137,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>Procurar tipos de letra</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>Substituir correspondência atual</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Ampliar</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Reduzir</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>Redefinir zoom</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>Mudar para o separador 1–9</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>Teclas de edição (não recomendado alterar)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>Aumentar avanço / Célula seguinte</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>Diminuir avanço / Célula anterior</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>Quebra de linha no parágrafo</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>Quebra de linha na célula</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>Ir para o início do documento</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>Ir para o fim do documento</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>Fechar a barra de pesquisa, a caixa de diálogo ou o painel</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>Pré-visualizar a imagem selecionada</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>Esta tecla é muito usada ao editar. Alterá-la pode entrar em conflito com os seus hábitos ou com outros programas.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>Repor predefinição</value>
+  </data>
 </root>

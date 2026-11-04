@@ -23,7 +23,8 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <AutoSuggestBox 
+        <AutoSuggestBox
+            x:Name="ShortcutSearchBox"
             PlaceholderText="{u:LocaleString Key=Search}" 
             Text="{x:Bind SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
             QueryIcon="Find"/>
@@ -62,7 +63,7 @@
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="local:ShortcutSettingItemModel">
                     <controls:NormalSettingItem Title="{x:Bind DisplayName}" Description="{x:Bind Description}">
-                        <controls:ShortcutPickerButton ShortcutKey="{x:Bind ShortcutKey, Mode=TwoWay}"/>
+                        <controls:ShortcutPickerButton ShortcutKey="{x:Bind ShortcutKey, Mode=TwoWay}" Setting="{x:Bind Property}" AutomationProperties.AutomationId="{x:Bind AutomationId}"/>
                     </controls:NormalSettingItem>
                 </DataTemplate>
             </ListView.ItemTemplate>

@@ -1211,4 +1211,52 @@
     <value>搜索字体</value>
     <comment>字体列表上方的搜索框提示</comment>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>替换当前匹配</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>放大</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>缩小</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>重置缩放</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>切换到第 1–9 个标签页</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>编辑常用键（不建议修改）</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>缩进 / 下一个单元格</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>取消缩进 / 上一个单元格</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>段落内换行</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>单元格内换行</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>到文档开头</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>到文档末尾</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>关闭查找栏、对话框或面板</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>预览选中的图片</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>这是编辑时常用的按键，修改后可能和习惯或其他程序冲突。</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>恢复默认</value>
+  </data>
 </root>

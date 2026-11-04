@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>Maghanap ng font</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>Palitan ang kasalukuyang tugma</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Mag-zoom in</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Mag-zoom out</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>I-reset ang zoom</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>Lumipat sa tab 1–9</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>Mga key sa pag-edit (hindi inirerekomendang baguhin)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>Indent / Susunod na cell</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>Bawasan ang indent / Nakaraang cell</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>Bagong linya sa loob ng talata</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>Bagong linya sa loob ng cell</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>Pumunta sa simula ng dokumento</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>Pumunta sa dulo ng dokumento</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>Isara ang search bar, dialog o panel</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>I-preview ang napiling larawan</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>Madalas gamitin ang key na ito sa pag-edit. Ang pagbago nito ay maaaring sumalungat sa iyong nakasanayan o sa ibang mga program.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>Ibalik ang default</value>
+  </data>
 </root>

@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>Betűtípusok keresése</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>Aktuális találat cseréje</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Nagyítás</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Kicsinyítés</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>Nagyítás visszaállítása</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>Váltás az 1–9. lapra</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>Szerkesztőbillentyűk (módosításuk nem ajánlott)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>Behúzás / Következő cella</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>Behúzás csökkentése / Előző cella</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>Sortörés bekezdésen belül</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>Sortörés cellán belül</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>Ugrás a dokumentum elejére</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>Ugrás a dokumentum végére</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>Keresősáv, párbeszédpanel vagy panel bezárása</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>Kijelölt kép előnézete</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>Ezt a billentyűt gyakran használják szerkesztés közben. A módosítása ütközhet a megszokásaival vagy más programokkal.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>Alapértelmezett visszaállítása</value>
+  </data>
 </root>

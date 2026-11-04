@@ -1275,4 +1275,68 @@
     <value>Search fonts</value>
     <comment>字体列表上方的搜索框提示</comment>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>Replace Current Match</value>
+    <comment>编辑 &gt; 查找和替换：替换当前这一处匹配（替换框里按回车也是它）</comment>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Zoom In</value>
+    <comment>视图菜单：放大（字号加大，Ctrl+滚轮向上也是）</comment>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Zoom Out</value>
+    <comment>视图菜单：缩小（字号减小）</comment>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>Reset Zoom</value>
+    <comment>视图菜单：恢复默认字号</comment>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>Switch to Tab 1–9</value>
+    <comment>快捷键设置：按位置切到第 1 至第 9 个标签页，只选修饰键，数字固定</comment>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>Editing Keys (Not Recommended to Change)</value>
+    <comment>快捷键设置最后一组的标题：编辑时常用的按键，可以改但不建议</comment>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>Indent / Next Table Cell</value>
+    <comment>快捷键：缩进；在表格里是到下一个单元格（默认 Tab）</comment>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>Outdent / Previous Table Cell</value>
+    <comment>快捷键：取消缩进；在表格里是到上一个单元格（默认 Shift+Tab）</comment>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>Line Break Within Paragraph</value>
+    <comment>快捷键：段落内换行，不新起一段（默认 Shift+Enter）</comment>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>Line Break in Table Cell</value>
+    <comment>快捷键：表格单元格里换行（默认 Alt+Enter）</comment>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>Go to Document Start</value>
+    <comment>快捷键：光标到文档开头（默认 Ctrl+Home）</comment>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>Go to Document End</value>
+    <comment>快捷键：光标到文档末尾（默认 Ctrl+End）</comment>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>Close Find Bar, Dialog or Panel</value>
+    <comment>快捷键：关闭查找栏、对话框、写作时间线（默认 Esc）</comment>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>Preview Selected Image</value>
+    <comment>快捷键：预览选中的图片（默认空格）</comment>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>This key is commonly used while editing. Changing it may conflict with your habits or with other programs.</value>
+    <comment>快捷键选择框里的提示：这是编辑时常用的按键，修改后可能和习惯或其他程序冲突（仍可确定）</comment>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>Restore Default</value>
+    <comment>快捷键选择框里的链接：把这个快捷键放回默认的键（再按保存生效）</comment>
+  </data>
 </root>

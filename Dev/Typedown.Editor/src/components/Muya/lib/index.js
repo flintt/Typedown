@@ -817,6 +817,23 @@ class Muya {
     return true
   }
 
+  // The caret to the first or last place of the document, and that end in view (the "document start/end" shortcuts; the
+  // browser's own Ctrl+Home/End is not used, so the keys can be changed).
+  moveToEdge(end) {
+    const { contentState } = this
+    const { blocks } = contentState
+    if (!blocks.length) return
+    if (this.goToEdge(end)) return
+    const leaf = end ? contentState.lastInDescendant(blocks[blocks.length - 1]) : contentState.firstInDescendant(blocks[0])
+    if (!this.options.readOnly && leaf) {
+      const offset = end ? (leaf.text || '').length : 0
+      contentState.cursor = { start: { key: leaf.key, offset }, end: { key: leaf.key, offset } }
+      contentState.setCursor()
+    }
+    const scroller = document.scrollingElement || document.documentElement
+    window.scrollTo(0, end ? scroller.scrollHeight : 0)
+  }
+
   on(event, listener) {
     this.eventCenter.subscribe(event, listener)
     return () => this.off(event, listener)

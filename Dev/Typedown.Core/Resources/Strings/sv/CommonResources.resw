@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>Sök teckensnitt</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>Ersätt aktuell träff</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Zooma in</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Zooma ut</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>Återställ zoom</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>Växla till flik 1–9</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>Redigeringstangenter (ändring rekommenderas inte)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>Öka indrag / Nästa cell</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>Minska indrag / Föregående cell</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>Radbrytning i stycke</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>Radbrytning i cell</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>Gå till dokumentets början</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>Gå till dokumentets slut</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>Stäng sökfältet, dialogrutan eller panelen</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>Förhandsgranska markerad bild</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>Den här tangenten används ofta vid redigering. Att ändra den kan krocka med dina vanor eller andra program.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>Återställ standard</value>
+  </data>
 </root>

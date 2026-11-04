@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>ਫੌਂਟ ਖੋਜੋ</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>ਮੌਜੂਦਾ ਮੇਲ ਬਦਲੋ</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>ਜ਼ੂਮ ਇਨ</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>ਜ਼ੂਮ ਆਊਟ</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>ਜ਼ੂਮ ਰੀਸੈੱਟ ਕਰੋ</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>ਟੈਬ 1–9 ’ਤੇ ਜਾਓ</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>ਸੰਪਾਦਨ ਕੁੰਜੀਆਂ (ਬਦਲਣ ਦੀ ਸਲਾਹ ਨਹੀਂ)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>ਇੰਡੈਂਟ / ਅਗਲਾ ਸੈੱਲ</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>ਇੰਡੈਂਟ ਘਟਾਓ / ਪਿਛਲਾ ਸੈੱਲ</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>ਪੈਰੇ ਅੰਦਰ ਨਵੀਂ ਲਾਈਨ</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>ਸੈੱਲ ਅੰਦਰ ਨਵੀਂ ਲਾਈਨ</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>ਦਸਤਾਵੇਜ਼ ਦੇ ਸ਼ੁਰੂ ’ਤੇ ਜਾਓ</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>ਦਸਤਾਵੇਜ਼ ਦੇ ਅੰਤ ’ਤੇ ਜਾਓ</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>ਖੋਜ ਪੱਟੀ, ਡਾਇਲਾਗ ਜਾਂ ਪੈਨਲ ਬੰਦ ਕਰੋ</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>ਚੁਣੀ ਤਸਵੀਰ ਦੀ ਝਲਕ</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>ਇਹ ਕੁੰਜੀ ਸੰਪਾਦਨ ਦੌਰਾਨ ਅਕਸਰ ਵਰਤੀ ਜਾਂਦੀ ਹੈ। ਇਸਨੂੰ ਬਦਲਣ ਨਾਲ ਤੁਹਾਡੀਆਂ ਆਦਤਾਂ ਜਾਂ ਹੋਰ ਪ੍ਰੋਗਰਾਮਾਂ ਨਾਲ ਟਕਰਾਅ ਹੋ ਸਕਦਾ ਹੈ।</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>ਡਿਫ਼ਾਲਟ ਬਹਾਲ ਕਰੋ</value>
+  </data>
 </root>

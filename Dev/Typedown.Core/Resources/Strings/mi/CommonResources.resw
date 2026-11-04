@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>Rapua ngā momotuhi</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>Whakakapia te ōritenga o nāianei</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Topa mai</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Topa atu</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>Tautuhi anō te topa</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>Huri ki te ripa 1–9</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>Ngā pātuhi whakatika (kāore e tūtohutia kia hurihia)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>Nuku whakauru / Pūtau panuku</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>Nuku whakaputa / Pūtau o mua</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>Rārangi hou i roto i te kōwae</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>Rārangi hou i roto i te pūtau</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>Haere ki te tīmatanga o te tuhinga</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>Haere ki te mutunga o te tuhinga</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>Kati i te pae rapu, te pouaka kōrero, te pae rānei</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>Arokite i te whakaahua kua tīpakohia</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>He maha ngā wā e whakamahia ai tēnei pātuhi i te whakatika. Ki te hurihia, tērā pea ka taupatupatu ki ōu tikanga, ki ētahi atu hōtaka rānei.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>Whakahoki ki te taunoa</value>
+  </data>
 </root>

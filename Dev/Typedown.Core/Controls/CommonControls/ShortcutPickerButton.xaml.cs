@@ -13,6 +13,12 @@ namespace Typedown.Core.Controls
         public static DependencyProperty ShortcutKeyProperty = DependencyProperty.Register(nameof(ShortcutKey), typeof(ShortcutKey), typeof(ShortcutPickerButton), new(null));
         public ShortcutKey ShortcutKey { get => (ShortcutKey)GetValue(ShortcutKeyProperty); set => SetValue(ShortcutKeyProperty, value); }
 
+        /// <summary>The setting this button edits (its PropertyInfo): the picker reads from it whether a key without a modifier
+        /// is allowed and a warning shown (NotRecommendedShortcut), or only the modifiers of the digits 1-9 are chosen
+        /// (DigitsShortcut).</summary>
+        public static DependencyProperty SettingProperty = DependencyProperty.Register(nameof(Setting), typeof(object), typeof(ShortcutPickerButton), new(null));
+        public object Setting { get => GetValue(SettingProperty); set => SetValue(SettingProperty, value); }
+
         public ShortcutPickerButton()
         {
             InitializeComponent();
@@ -20,7 +26,7 @@ namespace Typedown.Core.Controls
 
         private async void OnClick(object sender, RoutedEventArgs e)
         {
-            var picker = new ShortcutPicker(ShortcutKey);
+            var picker = new ShortcutPicker(ShortcutKey, Setting as System.Reflection.PropertyInfo);
             var dialog = new AppContentDialog
             {
                 XamlRoot = XamlRoot,

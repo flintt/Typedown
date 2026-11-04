@@ -1194,4 +1194,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>ቅርጸ-ቁምፊዎችን ፈልግ</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>የአሁኑን ተዛማጅ ተካ</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>አጉላ</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>አሳንስ</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>ማጉላትን ዳግም አስጀምር</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>ወደ ትር 1–9 ቀይር</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>የአርትዖት ቁልፎች (መቀየር አይመከርም)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>ገብ / ቀጣይ ሕዋስ</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>ገብ ቀንስ / ቀዳሚ ሕዋስ</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>በአንቀጽ ውስጥ አዲስ መስመር</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>በሕዋስ ውስጥ አዲስ መስመር</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>ወደ ሰነዱ መጀመሪያ ሂድ</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>ወደ ሰነዱ መጨረሻ ሂድ</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>የፍለጋ አሞሌን፣ መገናኛን ወይም ፓነልን ዝጋ</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>የተመረጠውን ምስል ቅድመ እይታ</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>ይህ ቁልፍ በአርትዖት ጊዜ በብዛት ጥቅም ላይ ይውላል። መቀየሩ ከልማዶችዎ ወይም ከሌሎች ፕሮግራሞች ጋር ሊጋጭ ይችላል።</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>ነባሪውን መልስ</value>
+  </data>
 </root>

@@ -1194,4 +1194,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>ፊደላት ድለ</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>ናይ ሕጂ ተመሳሳሊ ተክእ</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>ኣዕብይ</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>ኣንኣእስ</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>ምዕባይ ዳግማይ ኣቐምጥ</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>ናብ ትር 1–9 ቀይር</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>መፍትሒታት ምዕራይ (ምቕያር ኣይምከርን)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>ኣእቱ / ዝቕጽል ክፍሊ</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>ምእታው ኣንኪ / ዝሓለፈ ክፍሊ</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>ኣብ ውሽጢ ኣንቀጽ ሓድሽ መስመር</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>ኣብ ውሽጢ ክፍሊ ሓድሽ መስመር</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>ናብ መጀመርታ ሰነድ ኪድ</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>ናብ መወዳእታ ሰነድ ኪድ</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>መስመር ምድላይ፣ መዘራረቢ ወይ ፓነል ዕጸው</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>ዝተመርጸ ምስሊ ቅድመ ርአ</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>እዚ መፍትሕ ኣብ ግዜ ምዕራይ ብብዝሒ ይጥቀመሉ። ምቕያሩ ምስ ልምድታትኩም ወይ ካልኦት ፕሮግራማት ክጋጮ ይኽእል።</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>ነባሪ መልስ</value>
+  </data>
 </root>

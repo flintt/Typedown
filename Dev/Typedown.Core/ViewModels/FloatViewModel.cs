@@ -23,6 +23,17 @@ namespace Typedown.Core.ViewModels
 
         public Command<FindReplaceDialogState> SearchCommand { get; } = new();
 
+        /// <summary>
+        /// Edit > Find and replace > Replace / Replace all, and their shortcuts: what the find bar's two buttons do. The bar
+        /// not open for replacing, it opens so (the words to replace with are typed there first).
+        /// </summary>
+        public Command<System.Reactive.Unit> ReplaceOneCommand { get; } = new();
+
+        public Command<System.Reactive.Unit> ReplaceAllCommand { get; } = new();
+
+        /// <summary>A replace asked for by command: true for the one match, false for all (the find bar answers it).</summary>
+        public event Action<bool> ReplaceRequested;
+
         public AppViewModel ViewModel => ServiceProvider.GetService<AppViewModel>();
 
         public EventCenter EventCenter => ServiceProvider.GetService<EventCenter>();
@@ -44,6 +55,8 @@ namespace Typedown.Core.ViewModels
             Subscribe("OpenToolTip", OnOpenToolTip);
             this.WhenPropertyChanged(nameof(FindReplaceDialogOpen)).Subscribe(_ => OnFindReplaceDialogOpenChange(FindReplaceDialogOpen));
             SearchCommand.OnExecute.Subscribe(Search);
+            ReplaceOneCommand.OnExecute.Subscribe(_ => Replace(true));
+            ReplaceAllCommand.OnExecute.Subscribe(_ => Replace(false));
         }
 
         private void Subscribe(string name, Action<JToken> handler)
@@ -73,6 +86,16 @@ namespace Typedown.Core.ViewModels
             if (!string.IsNullOrEmpty(text))
                 ViewModel.EditorViewModel.OnSearch();
             FocusSearchRequested?.Invoke();
+        }
+
+        private void Replace(bool single)
+        {
+            if (FindReplaceDialogOpen != FindReplaceDialogState.Replace)
+            {
+                Search(FindReplaceDialogState.Replace);
+                return;
+            }
+            ReplaceRequested?.Invoke(single);
         }
 
         public void OnFindReplaceDialogOpenChange(FindReplaceDialogState open)

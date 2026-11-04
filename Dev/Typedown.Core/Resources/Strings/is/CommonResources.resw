@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>Leita að letri</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>Skipta út núverandi samsvörun</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Auka aðdrátt</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Minnka aðdrátt</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>Endurstilla aðdrátt</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>Skipta yfir í flipa 1–9</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>Breytingalyklar (ekki mælt með að breyta)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>Inndráttur / Næsti reitur</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>Minnka inndrátt / Fyrri reitur</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>Línuskil innan málsgreinar</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>Línuskil í reit</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>Fara á upphaf skjals</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>Fara á enda skjals</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>Loka leitarstiku, glugga eða spjaldi</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>Forskoða valda mynd</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>Þessi lykill er oft notaður við breytingar. Ef honum er breytt getur það rekist á venjur þínar eða önnur forrit.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>Endurheimta sjálfgefið</value>
+  </data>
 </root>

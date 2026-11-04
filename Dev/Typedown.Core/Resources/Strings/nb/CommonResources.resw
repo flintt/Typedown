@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>Søk etter skrifter</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>Erstatt gjeldende treff</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Zoom inn</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Zoom ut</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>Tilbakestill zoom</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>Bytt til fane 1–9</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>Redigeringstaster (endring frarådes)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>Innrykk / Neste celle</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>Reduser innrykk / Forrige celle</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>Linjeskift i avsnitt</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>Linjeskift i celle</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>Gå til starten av dokumentet</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>Gå til slutten av dokumentet</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>Lukk søkefeltet, dialogboksen eller panelet</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>Forhåndsvis valgt bilde</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>Denne tasten brukes ofte ved redigering. Å endre den kan komme i konflikt med vanene dine eller andre programmer.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>Gjenopprett standard</value>
+  </data>
 </root>

@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>البحث عن الخطوط</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>استبدال التطابق الحالي</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>تكبير</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>تصغير</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>إعادة تعيين التكبير</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>التبديل إلى علامة التبويب 1–9</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>مفاتيح التحرير (لا يُنصح بتغييرها)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>مسافة بادئة / الخلية التالية</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>إنقاص المسافة البادئة / الخلية السابقة</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>سطر جديد داخل الفقرة</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>سطر جديد داخل الخلية</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>الانتقال إلى بداية المستند</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>الانتقال إلى نهاية المستند</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>إغلاق شريط البحث أو مربع الحوار أو اللوحة</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>معاينة الصورة المحددة</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>هذا المفتاح شائع الاستخدام أثناء التحرير. قد يتعارض تغييره مع عاداتك أو مع برامج أخرى.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>استعادة الافتراضي</value>
+  </data>
 </root>

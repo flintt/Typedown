@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { keyBinding, matchesKey } from "./lib/utils/keyBinding";
 import { anchorKey, PREVIEW_FROM_CHARS, ScrollAnchor, scrollForAnchor, startsAlike } from "services/loadPreview";
 
 /**
@@ -514,10 +515,10 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
                 // itself never reaches the page) drew the whole of a 1.5 MB document first, and the page stopped answering
                 // (LT01).
                 if (/^(Control|Shift|Alt|Meta|CapsLock|AltGraph)$/.test(key.key)) return
-                // Ctrl+End, Ctrl+Home: that end of the document drawn first, the caret there, the rest drawn on from there
-                // (Muya.goToEdge) - not all of it first (LT01: 7 s on w10).
-                if ((key.ctrlKey || key.metaKey) && !key.shiftKey && !key.altKey && (key.key === 'End' || key.key === 'Home') &&
-                    muya.goToEdge(key.key === 'End')) {
+                // Ctrl+End, Ctrl+Home (the "document end/start" shortcuts as set): that end of the document drawn first, the
+                // caret there, the rest drawn on from there (Muya.goToEdge) - not all of it first (LT01: 7 s on w10).
+                const end = matchesKey(key, keyBinding(muya.options, 'documentEnd'))
+                if ((end || matchesKey(key, keyBinding(muya.options, 'documentStart'))) && muya.goToEdge(end)) {
                     e.preventDefault()
                     return
                 }
@@ -543,6 +544,12 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     useEffect(() => {
         editor && Object.assign(editor.options, props.options)
     }, [editor, props.options])
+
+    useEffect(() => {
+        // The keys the page acts on that can be changed (Settings > Shortcuts): Muya's handlers read them from its options.
+        const bindings = props.options?.keyBindings
+        applyOnce(editor, 'keyBindings', bindings, () => editor?.setOptions({ keyBindings: bindings }))
+    }, [editor, props.options?.keyBindings])
 
     useEffect(() => {
         // Focus mode dims everything but the active block, and reading mode has no active block: together they
@@ -1353,11 +1360,14 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             transport.postMessage('ReadingSelectionChange', { selected })
         }
         const onChange = () => { if (!frame) frame = requestAnimationFrame(report) }
-        // The browser's own Ctrl+A would select the whole page, the tools around the document included.
+        // The browser's own Ctrl+A would select the whole page, the tools around the document included: the "select all"
+        // shortcut as set selects the document, and a Ctrl+A given away from it selects nothing.
         const onKey = (event: KeyboardEvent) => {
-            if ((event.ctrlKey || event.metaKey) && !event.altKey && !event.shiftKey && event.key.toLowerCase() === 'a') {
+            if (matchesKey(event, keyBinding(editor.options, 'selectAll'))) {
                 event.preventDefault()
                 selectDocument(editor.container)
+            } else if ((event.ctrlKey || event.metaKey) && !event.altKey && !event.shiftKey && event.key.toLowerCase() === 'a') {
+                event.preventDefault()
             }
         }
         document.addEventListener('selectionchange', onChange)

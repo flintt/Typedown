@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>חיפוש גופנים</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>החלף את ההתאמה הנוכחית</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>הגדל תצוגה</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>הקטן תצוגה</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>אפס תצוגה</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>עבור ללשונית 1–9</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>מקשי עריכה (לא מומלץ לשנות)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>הזחה / התא הבא</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>ביטול הזחה / התא הקודם</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>מעבר שורה בתוך הפסקה</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>מעבר שורה בתוך התא</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>עבור לתחילת המסמך</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>עבור לסוף המסמך</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>סגור את סרגל החיפוש, תיבת הדו-שיח או החלונית</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>תצוגה מקדימה של התמונה שנבחרה</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>מקש זה נפוץ בזמן עריכה. שינוי שלו עלול להתנגש עם ההרגלים שלך או עם תוכניות אחרות.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>שחזר ברירת מחדל</value>
+  </data>
 </root>

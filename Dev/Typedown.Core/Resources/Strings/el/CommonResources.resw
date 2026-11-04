@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>Αναζήτηση γραμματοσειρών</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>Αντικατάσταση τρέχουσας αντιστοιχίας</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Μεγέθυνση</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Σμίκρυνση</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>Επαναφορά ζουμ</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>Μετάβαση στην καρτέλα 1–9</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>Πλήκτρα επεξεργασίας (δεν συνιστάται η αλλαγή)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>Εσοχή / Επόμενο κελί</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>Μείωση εσοχής / Προηγούμενο κελί</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>Αλλαγή γραμμής μέσα στην παράγραφο</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>Αλλαγή γραμμής στο κελί</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>Μετάβαση στην αρχή του εγγράφου</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>Μετάβαση στο τέλος του εγγράφου</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>Κλείσιμο γραμμής αναζήτησης, διαλόγου ή πλαισίου</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>Προεπισκόπηση επιλεγμένης εικόνας</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>Αυτό το πλήκτρο χρησιμοποιείται συχνά κατά την επεξεργασία. Η αλλαγή του μπορεί να συγκρουστεί με τις συνήθειές σας ή με άλλα προγράμματα.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>Επαναφορά προεπιλογής</value>
+  </data>
 </root>

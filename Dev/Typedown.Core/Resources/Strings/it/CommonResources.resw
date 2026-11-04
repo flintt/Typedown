@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>Cerca caratteri</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>Sostituisci corrispondenza corrente</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Ingrandisci</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Riduci</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>Reimposta zoom</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>Passa alla scheda 1–9</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>Tasti di modifica (sconsigliato cambiarli)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>Aumenta rientro / Cella successiva</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>Riduci rientro / Cella precedente</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>A capo nel paragrafo</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>A capo nella cella</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>Vai all’inizio del documento</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>Vai alla fine del documento</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>Chiudi barra di ricerca, finestra di dialogo o pannello</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>Anteprima dell’immagine selezionata</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>Questo tasto è usato spesso durante la modifica. Cambiarlo può entrare in conflitto con le tue abitudini o con altri programmi.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>Ripristina predefinito</value>
+  </data>
 </root>

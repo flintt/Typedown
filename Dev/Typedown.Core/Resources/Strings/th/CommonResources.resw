@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>ค้นหาแบบอักษร</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>แทนที่รายการที่ตรงกันปัจจุบัน</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>ขยาย</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>ย่อ</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>รีเซ็ตการซูม</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>สลับไปแท็บ 1–9</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>ปุ่มสำหรับแก้ไข (ไม่แนะนำให้เปลี่ยน)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>เยื้อง / เซลล์ถัดไป</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>ลดการเยื้อง / เซลล์ก่อนหน้า</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>ขึ้นบรรทัดใหม่ในย่อหน้า</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>ขึ้นบรรทัดใหม่ในเซลล์</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>ไปที่ต้นเอกสาร</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>ไปที่ท้ายเอกสาร</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>ปิดแถบค้นหา กล่องโต้ตอบ หรือแผง</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>แสดงตัวอย่างรูปภาพที่เลือก</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>ปุ่มนี้ใช้บ่อยขณะแก้ไข การเปลี่ยนอาจขัดกับความเคยชินของคุณหรือโปรแกรมอื่น</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>คืนค่าเริ่มต้น</value>
+  </data>
 </root>

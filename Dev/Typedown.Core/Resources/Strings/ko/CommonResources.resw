@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>글꼴 검색</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>현재 일치 항목 바꾸기</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>확대</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>축소</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>확대/축소 초기화</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>탭 1–9로 전환</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>자주 쓰는 편집 키(변경 비권장)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>들여쓰기 / 다음 셀</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>내어쓰기 / 이전 셀</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>단락 내 줄 바꿈</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>셀 내 줄 바꿈</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>문서 처음으로 이동</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>문서 끝으로 이동</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>찾기 표시줄, 대화 상자 또는 패널 닫기</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>선택한 이미지 미리 보기</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>편집할 때 자주 쓰는 키입니다. 변경하면 습관이나 다른 프로그램과 충돌할 수 있습니다.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>기본값 복원</value>
+  </data>
 </root>

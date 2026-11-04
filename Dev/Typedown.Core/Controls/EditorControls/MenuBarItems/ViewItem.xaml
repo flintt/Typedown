@@ -19,6 +19,11 @@
     <ToggleMenuFlyoutItem x:Name="StatusBarItem" Text="{u:LocaleString Key=StatusBar}" IsChecked="{x:Bind Settings.StatusBarOpen, Mode=TwoWay}"/>
     <ToggleMenuFlyoutItem x:Name="FullScreenItem" Text="{u:LocaleString Key=FullScreen}" IsChecked="{x:Bind ViewModel.UIViewModel.IsFullScreen, Mode=TwoWay}"/>
     <MenuFlyoutSeparator/>
+    <!-- The editor's font size, as Ctrl+wheel changes it. -->
+    <MenuFlyoutItem x:Name="ZoomInItem" Text="{u:LocaleString Key=ZoomIn}" Click="OnZoomInClick"/>
+    <MenuFlyoutItem x:Name="ZoomOutItem" Text="{u:LocaleString Key=ZoomOut}" Click="OnZoomOutClick"/>
+    <MenuFlyoutItem x:Name="ResetZoomItem" Text="{u:LocaleString Key=ResetZoom}" Click="OnResetZoomClick"/>
+    <MenuFlyoutSeparator/>
     <!-- Filled in code: the built-in themes plus whatever is in the themes folder (see docs/custom-theme.md). -->
     <MenuFlyoutSubItem x:Name="ThemeSubMenu" Text="{u:LocaleString Key=Theme}"/>
     <MenuFlyoutSeparator/>

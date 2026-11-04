@@ -12,6 +12,7 @@ import { wordCount as countWords } from 'components/Muya/lib/utils';
 import { FIND_EDIT_REFRESH_MS, findResultsOpen, noteFindChange, setFindProvider } from 'services/findResults';
 import { FENCE, isTableRow, lineMarksLength, previewOf } from 'services/findPreview';
 import { MarkdownBlocksView } from './markdownBlocks';
+import { keyBinding } from 'components/Muya/lib/utils/keyBinding';
 require('codemirror/mode/markdown/markdown');
 require('codemirror/addon/scroll/scrollpastend');
 require('codemirror/keymap/vim');
@@ -24,6 +25,27 @@ CodeMirrorLib.commands.save = () => vimCommand('write');
 CodeMirrorLib.Vim.defineEx('quit', 'q', () => vimCommand('quit'));
 CodeMirrorLib.Vim.defineEx('wq', 'wq', () => vimCommand('writeQuit'));
 CodeMirrorLib.Vim.defineEx('xit', 'x', () => vimCommand('writeQuit'));
+
+// A key binding from the host (Muya/lib/utils/keyBinding) as CodeMirror names a key: "Shift-Ctrl-Alt-Z".
+const codeMirrorKey = (binding: any) => {
+    const name = binding && CodeMirrorLib.keyNames[binding.keyCode]
+    if (!name) return null
+    return (binding.shift ? 'Shift-' : '') + (binding.ctrl ? 'Ctrl-' : '') + (binding.alt ? 'Alt-' : '') + name
+}
+
+// CodeMirror's own history is not the document's: the undo and redo shortcuts as set ask the host for its undo and
+// redo, and Ctrl+Z, Ctrl+Y and Ctrl+Shift+Z given away from them do nothing (not CodeMirror's history either).
+const historyKeys = (options: any) => {
+    const ask = (redo: boolean) => () => transport.postMessage('HistoryRequested', { redo })
+    const nothing = () => {}
+    const keys: Record<string, () => void> = { 'Ctrl-Z': nothing, 'Ctrl-Y': nothing, 'Shift-Ctrl-Z': nothing }
+    const undo = codeMirrorKey(keyBinding(options, 'undo'))
+    const redo = codeMirrorKey(keyBinding(options, 'redo'))
+    if (redo === 'Ctrl-Y') keys['Shift-Ctrl-Z'] = ask(true)
+    if (redo) keys[redo] = ask(true)
+    if (undo) keys[undo] = ask(false)
+    return keys
+}
 
 const VIM_LABELS: Record<string, string> = { normal: 'NORMAL', insert: 'INSERT', replace: 'REPLACE', visual: 'VISUAL', linewise: 'V-LINE', blockwise: 'V-BLOCK' };
 
@@ -625,13 +647,8 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
                     lineWrapping: true,
                     readOnly: !!props.options?.readOnly,
                     keyMap: vim ? 'vim' : 'default',
-                    // CodeMirror's own history is not the document's: these ask the host for its undo and redo (Vim keeps
-                    // its own keys).
-                    extraKeys: vim ? {} : {
-                        'Ctrl-Z': () => transport.postMessage('HistoryRequested', { redo: false }),
-                        'Ctrl-Y': () => transport.postMessage('HistoryRequested', { redo: true }),
-                        'Shift-Ctrl-Z': () => transport.postMessage('HistoryRequested', { redo: true }),
-                    }
+                    // The host's undo and redo (historyKeys; Vim keeps its own keys).
+                    extraKeys: vim ? {} : historyKeys(props.options)
                 }}
                 onChange={handleCodeMirrorContent}
                 onSelection={handleCodeMirrorSelection}

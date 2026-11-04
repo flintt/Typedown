@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>Cuardaigh clónna</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>Cuir an meaitseáil reatha in ionad</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Zúmáil isteach</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Zúmáil amach</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>Athshocraigh an zúmáil</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>Athraigh go cluaisín 1–9</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>Eochracha eagarthóireachta (ní mholtar iad a athrú)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>Eangaigh / An chéad chill eile</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>Díeangaigh / An chill roimhe</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>Briseadh líne laistigh d’alt</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>Briseadh líne i gcill</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>Téigh go tús na cáipéise</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>Téigh go deireadh na cáipéise</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>Dún an barra cuardaigh, an dialóg nó an painéal</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>Réamhamharc ar an íomhá roghnaithe</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>Úsáidtear an eochair seo go minic agus tú ag eagarthóireacht. D’fhéadfadh a hathrú teacht salach ar do nósanna nó ar chláir eile.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>Athchóirigh an réamhshocrú</value>
+  </data>
 </root>

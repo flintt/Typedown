@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>Meklēt fontus</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>Aizstāt pašreizējo atbilstību</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Tuvināt</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Tālināt</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>Atiestatīt tālummaiņu</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>Pārslēgties uz cilni 1–9</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>Rediģēšanas taustiņi (mainīt nav ieteicams)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>Atkāpe / Nākamā šūna</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>Samazināt atkāpi / Iepriekšējā šūna</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>Rindiņas pārtraukums rindkopā</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>Rindiņas pārtraukums šūnā</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>Uz dokumenta sākumu</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>Uz dokumenta beigām</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>Aizvērt meklēšanas joslu, dialogu vai paneli</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>Priekšskatīt atlasīto attēlu</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>Šo taustiņu bieži izmanto rediģēšanā. Tā maiņa var būt pretrunā ar jūsu ieradumiem vai citām programmām.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>Atjaunot noklusējumu</value>
+  </data>
 </root>

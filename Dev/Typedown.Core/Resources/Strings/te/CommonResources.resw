@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>ఫాంట్‌లను వెతకండి</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>ప్రస్తుత సరిపోలికను భర్తీ చేయి</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>జూమ్ ఇన్</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>జూమ్ అవుట్</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>జూమ్ రీసెట్ చేయి</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>ట్యాబ్ 1–9కి మారు</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>సవరణ కీలు (మార్చడం సిఫార్సు చేయబడదు)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>ఇండెంట్ / తదుపరి సెల్</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>ఇండెంట్ తగ్గించు / మునుపటి సెల్</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>పేరాలో కొత్త పంక్తి</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>సెల్‌లో కొత్త పంక్తి</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>పత్రం ప్రారంభానికి వెళ్ళు</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>పత్రం చివరికి వెళ్ళు</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>శోధన పట్టీ, డైలాగ్ లేదా ప్యానెల్‌ను మూసివేయి</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>ఎంచుకున్న చిత్రాన్ని ప్రివ్యూ చేయి</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>ఈ కీ సవరణలో తరచుగా ఉపయోగించబడుతుంది. దీన్ని మార్చితే మీ అలవాట్లతో లేదా ఇతర ప్రోగ్రామ్‌లతో విభేదించవచ్చు.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>డిఫాల్ట్‌ను పునరుద్ధరించు</value>
+  </data>
 </root>

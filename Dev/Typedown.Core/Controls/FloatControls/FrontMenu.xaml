@@ -80,7 +80,7 @@
 
         <ToggleMenuFlyoutItem 
             Text="{u:LocaleString Key=UnorderedList}" 
-            KeyboardAcceleratorTextOverride="{Binding SettingsViewModel.ShortcutUnordered, Converter={StaticResource ShortcutKeyToStringConverter}}" 
+            KeyboardAcceleratorTextOverride="{Binding SettingsViewModel.ShortcutUnorderedList, Converter={StaticResource ShortcutKeyToStringConverter}}" 
             IsEnabled="{Binding EditorViewModel.ParagraphState.BulletList.IsEnable, Mode=OneWay}" 
             IsChecked="{Binding EditorViewModel.ParagraphState.BulletList.IsChecked, Mode=TwoWay}" 
             Command="{Binding ParagraphViewModel.UpdateParagraphCommand}" 

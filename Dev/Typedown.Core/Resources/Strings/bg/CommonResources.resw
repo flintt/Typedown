@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>Търсене на шрифтове</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>Замяна на текущото съвпадение</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Увеличаване</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Намаляване</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>Нулиране на мащаба</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>Към раздел 1–9</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>Клавиши за редактиране (не се препоръчва промяна)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>Отстъп / Следваща клетка</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>Намаляване на отстъпа / Предишна клетка</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>Нов ред в абзаца</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>Нов ред в клетката</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>Към началото на документа</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>Към края на документа</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>Затваряне на лентата за търсене, диалога или панела</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>Преглед на избраното изображение</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>Този клавиш се използва често при редактиране. Промяната му може да влезе в конфликт с навиците ви или с други програми.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>Възстановяване по подразбиране</value>
+  </data>
 </root>

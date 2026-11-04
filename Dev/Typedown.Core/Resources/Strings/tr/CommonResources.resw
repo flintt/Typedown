@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>Yazı tiplerini ara</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>Geçerli eşleşmeyi değiştir</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Yakınlaştır</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Uzaklaştır</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>Yakınlaştırmayı sıfırla</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>1–9. sekmeye geç</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>Düzenleme tuşları (değiştirilmesi önerilmez)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>Girinti / Sonraki hücre</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>Girintiyi azalt / Önceki hücre</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>Paragraf içinde satır sonu</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>Hücre içinde satır sonu</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>Belgenin başına git</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>Belgenin sonuna git</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>Arama çubuğunu, iletişim kutusunu veya paneli kapat</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>Seçili resmi önizle</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>Bu tuş düzenleme sırasında sık kullanılır. Değiştirmek alışkanlıklarınızla veya diğer programlarla çakışabilir.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>Varsayılana döndür</value>
+  </data>
 </root>

@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>Hae fontteja</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>Korvaa nykyinen osuma</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Lähennä</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Loitonna</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>Palauta zoomaus</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>Siirry välilehteen 1–9</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>Muokkausnäppäimet (muuttamista ei suositella)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>Sisennä / Seuraava solu</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>Poista sisennys / Edellinen solu</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>Rivinvaihto kappaleen sisällä</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>Rivinvaihto solussa</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>Siirry asiakirjan alkuun</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>Siirry asiakirjan loppuun</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>Sulje hakupalkki, valintaikkuna tai paneeli</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>Esikatsele valittua kuvaa</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>Tätä näppäintä käytetään usein muokatessa. Sen muuttaminen voi olla ristiriidassa tottumustesi tai muiden ohjelmien kanssa.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>Palauta oletus</value>
+  </data>
 </root>

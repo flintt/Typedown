@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>Szukaj czcionek</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>Zamień bieżące dopasowanie</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Powiększ</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Pomniejsz</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>Resetuj powiększenie</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>Przejdź do karty 1–9</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>Klawisze edycji (zmiana niezalecana)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>Wcięcie / Następna komórka</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>Zmniejsz wcięcie / Poprzednia komórka</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>Podział wiersza w akapicie</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>Podział wiersza w komórce</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>Przejdź na początek dokumentu</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>Przejdź na koniec dokumentu</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>Zamknij pasek wyszukiwania, okno dialogowe lub panel</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>Podgląd zaznaczonego obrazu</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>Ten klawisz jest często używany podczas edycji. Jego zmiana może kolidować z przyzwyczajeniami lub innymi programami.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>Przywróć domyślny</value>
+  </data>
 </root>

@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>Kërko shkronja</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>Zëvendëso përputhjen aktuale</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Zmadho</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Zvogëlo</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>Rivendos zmadhimin</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>Kalo te skeda 1–9</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>Tastet e redaktimit (nuk rekomandohet ndryshimi)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>Kryeradhë / Qeliza tjetër</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>Zvogëlo kryeradhën / Qeliza e mëparshme</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>Rresht i ri brenda paragrafit</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>Rresht i ri brenda qelizës</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>Shko në fillim të dokumentit</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>Shko në fund të dokumentit</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>Mbyll shiritin e kërkimit, dialogun ose panelin</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>Shiko imazhin e zgjedhur</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>Ky tast përdoret shpesh gjatë redaktimit. Ndryshimi i tij mund të bjerë ndesh me zakonet tuaja ose me programe të tjera.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>Rikthe parazgjedhjen</value>
+  </data>
 </root>

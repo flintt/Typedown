@@ -298,7 +298,8 @@ namespace Typedown.Core.Controls
 
         private void OnKeyDown(object sender, KeyRoutedEventArgs e)
         {
-            if (IsLoaded && CloseButton.Visibility == Visibility.Visible && e.Key == Windows.System.VirtualKey.Escape)
+            // Esc by default; the "close panel" shortcut as set.
+            if (IsLoaded && CloseButton.Visibility == Visibility.Visible && this.IsClosePanelKey(e.Key))
                 OnCloseButtonClick(this, null);
         }
 

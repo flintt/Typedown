@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>Bilatu letra-tipoak</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>Ordeztu uneko bat-etortzea</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Handiagotu</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Txikiagotu</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>Berrezarri zooma</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>Aldatu 1–9 fitxara</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>Edizio-teklak (ez da gomendatzen aldatzea)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>Koska / Hurrengo gelaxka</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>Txikitu koska / Aurreko gelaxka</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>Lerro-jauzia paragrafoaren barruan</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>Lerro-jauzia gelaxkan</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>Joan dokumentuaren hasierara</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>Joan dokumentuaren amaierara</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>Itxi bilaketa-barra, elkarrizketa-koadroa edo panela</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>Aurreikusi hautatutako irudia</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>Tekla hau maiz erabiltzen da editatzean. Aldatzeak zure ohiturekin edo beste programa batzuekin talka egin dezake.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>Leheneratu lehenetsia</value>
+  </data>
 </root>

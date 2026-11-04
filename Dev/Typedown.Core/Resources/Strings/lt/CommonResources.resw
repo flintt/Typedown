@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>Ieškoti šriftų</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>Pakeisti dabartinį atitikmenį</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Didinti</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Mažinti</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>Atkurti mastelį</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>Pereiti į skirtuką 1–9</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>Redagavimo klavišai (keisti nerekomenduojama)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>Įtrauka / Kitas langelis</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>Mažinti įtrauką / Ankstesnis langelis</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>Eilutės lūžis pastraipoje</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>Eilutės lūžis langelyje</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>Į dokumento pradžią</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>Į dokumento pabaigą</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>Uždaryti paieškos juostą, dialogą ar skydelį</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>Peržiūrėti pasirinktą paveikslėlį</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>Šis klavišas dažnai naudojamas redaguojant. Jį pakeitus gali kilti konfliktas su jūsų įpročiais ar kitomis programomis.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>Atkurti numatytąjį</value>
+  </data>
 </root>

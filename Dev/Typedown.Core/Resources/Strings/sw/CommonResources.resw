@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>Tafuta fonti</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>Badilisha ulinganifu wa sasa</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Kuza</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Fifiza</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>Weka upya ukuzaji</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>Badili hadi kichupo 1–9</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>Vitufe vya kuhariri (haipendekezwi kubadilisha)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>Jongeza ndani / Kisanduku kinachofuata</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>Punguza ujongezaji / Kisanduku kilichotangulia</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>Mstari mpya ndani ya aya</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>Mstari mpya ndani ya kisanduku</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>Nenda mwanzo wa hati</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>Nenda mwisho wa hati</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>Funga upau wa kutafuta, kidirisha au paneli</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>Hakiki picha iliyochaguliwa</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>Kitufe hiki hutumika mara nyingi wakati wa kuhariri. Kukibadilisha kunaweza kugongana na mazoea yako au programu nyingine.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>Rejesha chaguomsingi</value>
+  </data>
 </root>

@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>جستجوی قلم‌ها</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>جایگزینی مورد مطابق فعلی</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>بزرگ‌نمایی</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>کوچک‌نمایی</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>بازنشانی بزرگ‌نمایی</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>رفتن به زبانهٔ ۱–۹</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>کلیدهای ویرایش (تغییر توصیه نمی‌شود)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>تورفتگی / خانهٔ بعدی</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>کاهش تورفتگی / خانهٔ قبلی</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>شکستن خط درون پاراگراف</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>شکستن خط درون خانه</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>رفتن به ابتدای سند</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>رفتن به انتهای سند</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>بستن نوار جست‌وجو، کادر گفتگو یا پانل</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>پیش‌نمایش تصویر انتخاب‌شده</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>این کلید هنگام ویرایش زیاد استفاده می‌شود. تغییر آن ممکن است با عادت‌های شما یا برنامه‌های دیگر تداخل داشته باشد.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>بازگردانی پیش‌فرض</value>
+  </data>
 </root>

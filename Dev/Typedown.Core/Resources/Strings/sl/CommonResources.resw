@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>Iskanje pisav</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>Zamenjaj trenutno ujemanje</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Povečaj</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Pomanjšaj</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>Ponastavi povečavo</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>Preklopi na zavihek 1–9</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>Tipke za urejanje (spreminjanje ni priporočljivo)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>Zamik / Naslednja celica</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>Zmanjšaj zamik / Prejšnja celica</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>Prelom vrstice v odstavku</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>Prelom vrstice v celici</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>Na začetek dokumenta</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>Na konec dokumenta</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>Zapri iskalno vrstico, pogovorno okno ali podokno</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>Predogled izbrane slike</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>Ta tipka se pri urejanju pogosto uporablja. Njena sprememba je lahko v sporu z vašimi navadami ali drugimi programi.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>Obnovi privzeto</value>
+  </data>
 </root>

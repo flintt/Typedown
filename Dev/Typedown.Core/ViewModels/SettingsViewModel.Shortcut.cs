@@ -93,6 +93,14 @@ namespace Typedown.Core.ViewModels
         [Locale("Edit", "FindAndReplace", "Replace")]
         public ShortcutKey ShortcutReplace { get => GetSettingValue<ShortcutKey>(new(Mod.Control, Key.H)); set => SetSettingValue(value); }
 
+        // The find bar's two buttons as commands (only Enter in its replace box did the one). VS Code's keys: Ctrl+H is
+        // Replace already, and Ctrl+Shift+1 and Ctrl+Alt+Enter are free here.
+        [Locale("Edit", "FindAndReplace", "ReplaceOne")]
+        public ShortcutKey ShortcutReplaceOne { get => GetSettingValue<ShortcutKey>(new(Mod.Control | Mod.Shift, Key.Number1)); set => SetSettingValue(value); }
+
+        [Locale("Edit", "FindAndReplace", "ReplaceAll")]
+        public ShortcutKey ShortcutReplaceAll { get => GetSettingValue<ShortcutKey>(new(Mod.Control | Mod.Menu, Key.Enter)); set => SetSettingValue(value); }
+
         [Locale("Paragraph", "Heading", "Heading1")]
         public ShortcutKey ShortcutHeading1 { get => GetSettingValue<ShortcutKey>(new(Mod.Control, Key.Number1)); set => SetSettingValue(value); }
 
@@ -239,5 +247,93 @@ namespace Typedown.Core.ViewModels
 
         [Locale("View", "PreviousTab")]
         public ShortcutKey ShortcutPreviousTab { get => GetSettingValue<ShortcutKey>(new(Mod.Control | Mod.Shift, Key.Tab)); set => SetSettingValue(value); }
+
+        [Locale("View", "LastUsedTab")]
+        public ShortcutKey ShortcutLastUsedTab { get => GetSettingValue<ShortcutKey>(new(Mod.Menu, Key.Number0)); set => SetSettingValue(value); }
+
+        // Alt rather than Ctrl: Ctrl+1..6 set the heading level. Only the modifiers are chosen; the digits stay 1 to 9.
+        [Locale("View", "TabByPosition"), DigitsShortcut]
+        public ShortcutKey ShortcutTabByPosition { get => GetSettingValue<ShortcutKey>(new(Mod.Menu, ShortcutKey.AnyDigit)); set => SetSettingValue(value); }
+
+        // The editor's font size, as Ctrl+wheel changes it. Ctrl+= and Ctrl+- raise and lower the heading level, Ctrl+0 is
+        // Paragraph: with Shift.
+        [Locale("View", "ZoomIn")]
+        public ShortcutKey ShortcutZoomIn { get => GetSettingValue<ShortcutKey>(new(Mod.Control | Mod.Shift, (Key)187)); set => SetSettingValue(value); }
+
+        [Locale("View", "ZoomOut")]
+        public ShortcutKey ShortcutZoomOut { get => GetSettingValue<ShortcutKey>(new(Mod.Control | Mod.Shift, (Key)189)); set => SetSettingValue(value); }
+
+        [Locale("View", "ResetZoom")]
+        public ShortcutKey ShortcutResetZoom { get => GetSettingValue<ShortcutKey>(new(Mod.Control | Mod.Shift, Key.Number0)); set => SetSettingValue(value); }
+
+        // Keys people expect where they are, kept last on the settings page under a group of their own: they can be
+        // changed, with a word that it is better not to. The editor page reads them (KeyBindings); the host's own
+        // (Esc in the find bar, dialogs and the writing timeline) read them here.
+        [Locale("NotRecommendedShortcuts", "Indent"), NotRecommendedShortcut]
+        public ShortcutKey ShortcutIndent { get => GetSettingValue<ShortcutKey>(new(Mod.None, Key.Tab)); set => SetSettingValue(value); }
+
+        [Locale("NotRecommendedShortcuts", "Outdent"), NotRecommendedShortcut]
+        public ShortcutKey ShortcutOutdent { get => GetSettingValue<ShortcutKey>(new(Mod.Shift, Key.Tab)); set => SetSettingValue(value); }
+
+        [Locale("NotRecommendedShortcuts", "SoftLineBreak"), NotRecommendedShortcut]
+        public ShortcutKey ShortcutSoftLineBreak { get => GetSettingValue<ShortcutKey>(new(Mod.Shift, Key.Enter)); set => SetSettingValue(value); }
+
+        [Locale("NotRecommendedShortcuts", "CellLineBreak"), NotRecommendedShortcut]
+        public ShortcutKey ShortcutCellLineBreak { get => GetSettingValue<ShortcutKey>(new(Mod.Menu, Key.Enter)); set => SetSettingValue(value); }
+
+        [Locale("NotRecommendedShortcuts", "DocumentStart"), NotRecommendedShortcut]
+        public ShortcutKey ShortcutDocumentStart { get => GetSettingValue<ShortcutKey>(new(Mod.Control, Key.Home)); set => SetSettingValue(value); }
+
+        [Locale("NotRecommendedShortcuts", "DocumentEnd"), NotRecommendedShortcut]
+        public ShortcutKey ShortcutDocumentEnd { get => GetSettingValue<ShortcutKey>(new(Mod.Control, Key.End)); set => SetSettingValue(value); }
+
+        [Locale("NotRecommendedShortcuts", "ClosePanel"), NotRecommendedShortcut]
+        public ShortcutKey ShortcutClosePanel { get => GetSettingValue<ShortcutKey>(new(Mod.None, Key.Escape)); set => SetSettingValue(value); }
+
+        [Locale("NotRecommendedShortcuts", "PreviewImage"), NotRecommendedShortcut]
+        public ShortcutKey ShortcutPreviewImage { get => GetSettingValue<ShortcutKey>(new(Mod.None, Key.Space)); set => SetSettingValue(value); }
+
+        /// <summary>The shortcut settings the editor page acts on itself, by the page's name for each.</summary>
+        public static readonly System.Collections.Generic.Dictionary<string, string> PageKeyBindingNames = new()
+        {
+            ["indent"] = nameof(ShortcutIndent),
+            ["outdent"] = nameof(ShortcutOutdent),
+            ["softLineBreak"] = nameof(ShortcutSoftLineBreak),
+            ["cellLineBreak"] = nameof(ShortcutCellLineBreak),
+            ["documentStart"] = nameof(ShortcutDocumentStart),
+            ["documentEnd"] = nameof(ShortcutDocumentEnd),
+            ["previewImage"] = nameof(ShortcutPreviewImage),
+            ["undo"] = nameof(ShortcutUndo),
+            ["redo"] = nameof(ShortcutRedo),
+            ["selectAll"] = nameof(ShortcutSelectAll),
+        };
+
+        /// <summary>
+        /// Those keys for the page: each as its key code (Windows' virtual key, the page's KeyboardEvent.keyCode) and
+        /// modifiers, or null when cleared.
+        /// </summary>
+        public System.Collections.Generic.Dictionary<string, object> KeyBindings
+        {
+            get
+            {
+                var result = new System.Collections.Generic.Dictionary<string, object>();
+                foreach (var (name, property) in PageKeyBindingNames)
+                {
+                    var key = GetType().GetProperty(property).GetValue(this) as ShortcutKey;
+                    result[name] = key == null || key.Key == Key.None ? null : new
+                    {
+                        keyCode = (int)key.Key,
+                        ctrl = key.Modifiers.HasFlag(Mod.Control),
+                        alt = key.Modifiers.HasFlag(Mod.Menu),
+                        shift = key.Modifiers.HasFlag(Mod.Shift),
+                    };
+                }
+                return result;
+            }
+        }
+
+        /// <summary>Whether a key event is this shortcut (the host's own uses of the keys above).</summary>
+        public static bool Matches(ShortcutKey key, Key pressed, Mod modifiers) =>
+            key != null && key.Key != Key.None && key.Key == pressed && key.Modifiers == modifiers;
     }
 }

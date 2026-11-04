@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>Барај фонтови</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>Замени го тековното совпаѓање</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Зумирај</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Одзумирај</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>Ресетирај зумирање</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>Префрли на картичка 1–9</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>Копчиња за уредување (не се препорачува менување)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>Вовлекување / Следна ќелија</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>Намали вовлекување / Претходна ќелија</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>Нов ред во пасусот</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>Нов ред во ќелијата</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>Оди на почетокот на документот</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>Оди на крајот на документот</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>Затвори ја лентата за пребарување, дијалогот или панелот</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>Преглед на избраната слика</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>Ова копче често се користи при уредување. Неговата промена може да се судри со вашите навики или со други програми.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>Врати стандардно</value>
+  </data>
 </root>

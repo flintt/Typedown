@@ -109,10 +109,15 @@ In visual editing, typing Markdown syntax turns into formatting right away: `## 
 | Insert paragraph before / after | Ctrl+Shift+Enter / Ctrl+Enter |
 | Table: add a row below / line break in a cell / leave the table | Enter / Shift+Enter or Alt+Enter / Ctrl+Enter |
 | Find / replace / find next | Ctrl+F / Ctrl+H / F3 |
+| Replace current match / replace all | Ctrl+Shift+1 / Ctrl+Alt+Enter |
 | Paste as plain text | Ctrl+Shift+V |
+| Zoom in / zoom out / reset zoom | Ctrl+Shift+= / Ctrl+Shift+- / Ctrl+Shift+0 (Ctrl+wheel zooms too) |
+| Last used tab / tab 1–9 | Alt+0 / Alt+1 … Alt+9 |
 | Print | Alt+Shift+P |
 
-You can change every shortcut under **Settings → General → Shortcuts**.
+You can change every shortcut under **Settings → General → Shortcuts**. For switching to a tab by its position you choose only the modifier keys; the digits are always 1–9.
+
+The last group on the shortcuts page is **Editing Keys (Not Recommended to Change)**: indent / next table cell (Tab), outdent / previous table cell (Shift+Tab), line break within a paragraph (Shift+Enter), line break in a table cell (Alt+Enter), go to the document start / end (Ctrl+Home / Ctrl+End), close the find bar, a dialog or a panel (Esc), and preview the selected image (Space). You can change these too, even to a single key without modifiers; the picker then warns "This key is commonly used while editing. Changing it may conflict with your habits or with other programs." and still lets you confirm; **Restore Default** in the picker puts the key back (every shortcut has it). Once undo, redo, select all and the like are given other keys, the old Ctrl+Z, Ctrl+Y and Ctrl+A do nothing.
 
 **Search in document**: the find bar shows which match you are on and how many there are. Its "Show all results" button opens the side bar's Search in document page: the number of matches and the text around each one (up to 500; with more, it asks you to keep typing). Click one, or pick it with the arrow keys and press Enter, to go there with the match selected. The page's close button takes the side bar back to the page it was on (or closes it again if it was closed); closing the find bar closes the page too.
 

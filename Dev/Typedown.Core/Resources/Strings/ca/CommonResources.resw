@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>Cerca tipus de lletra</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>Substitueix la coincidència actual</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Amplia</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Redueix</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>Restableix el zoom</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>Canvia a la pestanya 1–9</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>Tecles d’edició (no es recomana canviar-les)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>Sagnia / Cel·la següent</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>Redueix la sagnia / Cel·la anterior</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>Salt de línia dins del paràgraf</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>Salt de línia a la cel·la</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>Vés a l’inici del document</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>Vés al final del document</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>Tanca la barra de cerca, el diàleg o el plafó</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>Previsualitza la imatge seleccionada</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>Aquesta tecla s’utilitza sovint en editar. Canviar-la pot entrar en conflicte amb els teus hàbits o amb altres programes.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>Restaura el valor per defecte</value>
+  </data>
 </root>

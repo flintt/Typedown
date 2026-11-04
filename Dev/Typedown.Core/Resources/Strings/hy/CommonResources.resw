@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>Որոնել տառատեսակներ</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>Փոխարինել ընթացիկ համընկնումը</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Խոշորացնել</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Փոքրացնել</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>Վերակայել մասշտաբը</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>Անցնել 1–9 ներդիրին</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>Խմբագրման ստեղներ (փոխել խորհուրդ չի տրվում)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>Խորքայնացում / Հաջորդ վանդակ</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>Նվազեցնել խորքայնացումը / Նախորդ վանդակ</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>Նոր տող պարբերության մեջ</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>Նոր տող վանդակում</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>Անցնել փաստաթղթի սկիզբ</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>Անցնել փաստաթղթի վերջ</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>Փակել որոնման վահանակը, երկխոսությունը կամ վահանակը</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>Նախադիտել ընտրված պատկերը</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>Այս ստեղնը հաճախ է օգտագործվում խմբագրելիս։ Այն փոխելը կարող է հակասել ձեր սովորություններին կամ այլ ծրագրերին։</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>Վերականգնել լռելյայնը</value>
+  </data>
 </root>

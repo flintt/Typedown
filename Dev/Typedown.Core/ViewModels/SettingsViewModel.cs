@@ -465,8 +465,20 @@ namespace Typedown.Core.ViewModels
 
         private bool disposed;
 
+        // Set while DefaultOf reads a setting: its getter gives the default it is declared with, whatever is stored.
+        [ThreadStatic] private static bool readingDefault;
+
+        /// <summary>A setting's default (a shortcut's "restore default" in its picker).</summary>
+        public object DefaultOf(System.Reflection.PropertyInfo property)
+        {
+            readingDefault = true;
+            try { return property.GetValue(this); }
+            finally { readingDefault = false; }
+        }
+
         public T GetSettingValue<T>(T defaultValue = default, [CallerMemberName] string propertyName = null)
         {
+            if (readingDefault) return defaultValue;
             if (windowLocalValues.TryGetValue(propertyName, out var own))
             {
                 if (own == null || own.Type == Newtonsoft.Json.Linq.JTokenType.Null) return defaultValue;
@@ -515,6 +527,9 @@ namespace Typedown.Core.ViewModels
             }
             if (notifySet.Contains(propertyName))
                 MarkdownEditor.PostMessage("SettingsChanged", new Dictionary<string, object>() { { propertyName, after } });
+            // A key the page acts on itself, changed on the settings page: the page has all of them again.
+            if (PageKeyBindingNames.ContainsValue(propertyName))
+                MarkdownEditor.PostMessage("SettingsChanged", new Dictionary<string, object>() { { nameof(KeyBindings), KeyBindings } });
         }
 
         public async void ResetSetting()

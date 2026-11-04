@@ -91,6 +91,32 @@ namespace Typedown.Core.Utilities
             return string.Join('+', GetShortcutKeyTextList(key));
         }
 
+        /// <summary>The modifier keys held down now, on this thread (a KeyRoutedEventArgs carries none).</summary>
+        public static VirtualKeyModifiers CurrentModifiers()
+        {
+            static bool Down(VirtualKey key) =>
+                Microsoft.UI.Input.InputKeyboardSource.GetKeyStateForCurrentThread(key).HasFlag(Windows.UI.Core.CoreVirtualKeyStates.Down);
+            var result = VirtualKeyModifiers.None;
+            if (Down(VirtualKey.Control)) result |= VirtualKeyModifiers.Control;
+            if (Down(VirtualKey.Menu)) result |= VirtualKeyModifiers.Menu;
+            if (Down(VirtualKey.Shift)) result |= VirtualKeyModifiers.Shift;
+            if (Down(VirtualKey.LeftWindows) || Down(VirtualKey.RightWindows)) result |= VirtualKeyModifiers.Windows;
+            return result;
+        }
+
+        /// <summary>
+        /// Whether a key that reached a control is the "close panel" shortcut (Settings > Shortcuts, Esc by default): the
+        /// find bar's and a dialog's close.
+        /// </summary>
+        public static bool IsClosePanelKey(this Microsoft.UI.Xaml.FrameworkElement element, VirtualKey key)
+        {
+            ShortcutKey close = null;
+            try { close = element.GetService<ViewModels.SettingsViewModel>()?.ShortcutClosePanel; }
+            catch (Exception) { /* no services here (a dialog outside a window's tree): Esc */ }
+            close ??= new(VirtualKeyModifiers.None, VirtualKey.Escape);
+            return ViewModels.SettingsViewModel.Matches(close, key, CurrentModifiers());
+        }
+
         public static List<string> GetShortcutKeyTextList(this ShortcutKey key)
         {
             if (key == null) return new();
@@ -111,6 +137,9 @@ namespace Typedown.Core.Utilities
         {
             if (key == VirtualKey.Delete)
                 return "Delete";
+            // The digits of a shortcut that stands for nine (switch to a tab by its place).
+            if (key == Models.ShortcutKey.AnyDigit)
+                return "1–9";
             if (key == VirtualKey.LeftWindows || key == VirtualKey.RightWindows)
                 return "Win";
             var buffer = new StringBuilder(32);

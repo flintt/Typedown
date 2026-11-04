@@ -148,27 +148,41 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
             RegisterWindowShortcut(Settings.ShortcutNextTab, NextTabItem);
             RegisterWindowShortcut(Settings.ShortcutPreviousTab, PreviousTabItem);
             RegisterTabNumberShortcuts();
-            // Bind the shortcut through the menu item so the key is shown next to it (it runs the item's own
-            // command); the action overload leaves the entry with no visible shortcut.
-            RegisterWindowShortcut(new Models.ShortcutKey(Windows.System.VirtualKeyModifiers.Menu, Windows.System.VirtualKey.Number0), LastUsedTabItem);
+            RegisterWindowShortcut(Settings.ShortcutLastUsedTab, LastUsedTabItem);
+            RegisterWindowShortcut(Settings.ShortcutZoomIn, ZoomInItem);
+            RegisterWindowShortcut(Settings.ShortcutZoomOut, ZoomOutItem);
+            RegisterWindowShortcut(Settings.ShortcutResetZoom, ResetZoomItem);
         }
 
         /// <summary>
-        /// Alt+1..9 switch to a tab by position, 9 being the last one however many there are. Alt rather than
-        /// Ctrl because Ctrl+1..6 already sets the heading level. They are fixed, not bindable, so they have no
-        /// menu entry.
+        /// The digits 1..9 with the modifiers set (Settings > Shortcuts, Alt by default: Ctrl+1..6 set the heading
+        /// level) switch to a tab by position, 9 being the last one however many there are. They have no menu entry.
         /// </summary>
         private void RegisterTabNumberShortcuts()
         {
             var tabs = ViewModel?.TabsViewModel;
-            if (tabs == null) return;
+            var keys = Settings?.ShortcutTabByPosition?.Expand();
+            if (tabs == null || keys == null || keys.Length != 9) return;
             for (var n = 1; n <= 9; n++)
             {
                 var index = n == 9 ? int.MaxValue : n - 1;
-                var key = new Models.ShortcutKey(Windows.System.VirtualKeyModifiers.Menu,
-                    (Windows.System.VirtualKey)((int)Windows.System.VirtualKey.Number0 + n));
-                RegisterWindowShortcut(key, () => tabs.SwitchTabIndexCommand.Execute(index));
+                RegisterWindowShortcut(keys[n - 1], () => tabs.SwitchTabIndexCommand.Execute(index));
             }
+        }
+
+        // The editor's font size in steps of a tenth, within 8 to 48 as Ctrl+wheel keeps it; back to the default (16).
+        private void OnZoomInClick(object sender, Microsoft.UI.Xaml.RoutedEventArgs e) => Zoom(1.1);
+
+        private void OnZoomOutClick(object sender, Microsoft.UI.Xaml.RoutedEventArgs e) => Zoom(1 / 1.1);
+
+        private void OnResetZoomClick(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+        {
+            if (Settings != null) Settings.FontSize = 16;
+        }
+
+        private void Zoom(double factor)
+        {
+            if (Settings != null) Settings.FontSize = Math.Max(8, Math.Min(48, Math.Round(Settings.FontSize * factor, 1)));
         }
 
         /// <summary>

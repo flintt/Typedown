@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>შრიფტების ძიება</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>მიმდინარე დამთხვევის ჩანაცვლება</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>გადიდება</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>დაპატარავება</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>მასშტაბის აღდგენა</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>გადასვლა ჩანართზე 1–9</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>რედაქტირების კლავიშები (შეცვლა არ არის რეკომენდებული)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>შეწევა / შემდეგი უჯრა</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>შეწევის შემცირება / წინა უჯრა</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>ახალი სტრიქონი აბზაცში</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>ახალი სტრიქონი უჯრაში</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>დოკუმენტის დასაწყისში გადასვლა</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>დოკუმენტის ბოლოში გადასვლა</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>ძიების ზოლის, დიალოგის ან პანელის დახურვა</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>არჩეული სურათის გადახედვა</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>ეს კლავიში რედაქტირებისას ხშირად გამოიყენება. მისმა შეცვლამ შეიძლება შეეჯახოს თქვენს ჩვევებს ან სხვა პროგრამებს.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>ნაგულისხმევის აღდგენა</value>
+  </data>
 </root>

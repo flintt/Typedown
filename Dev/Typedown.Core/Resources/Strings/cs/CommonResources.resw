@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>Hledat písma</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>Nahradit aktuální shodu</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Přiblížit</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Oddálit</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>Obnovit přiblížení</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>Přepnout na kartu 1–9</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>Klávesy pro úpravy (změna se nedoporučuje)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>Odsadit / Další buňka</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>Zrušit odsazení / Předchozí buňka</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>Zalomení řádku v odstavci</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>Zalomení řádku v buňce</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>Na začátek dokumentu</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>Na konec dokumentu</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>Zavřít panel hledání, dialog nebo panel</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>Náhled vybraného obrázku</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>Tato klávesa se při úpravách často používá. Její změna může kolidovat s vašimi zvyky nebo s jinými programy.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>Obnovit výchozí</value>
+  </data>
 </root>

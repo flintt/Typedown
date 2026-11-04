@@ -95,6 +95,9 @@ namespace Typedown.Core.Controls.SettingControls.SettingItems
 
         public string Category { get; }
 
+        /// <summary>The row's picker button for UI Automation: "Shortcut." and the setting's name (the end-to-end tests).</summary>
+        public string AutomationId => "Shortcut." + Property.Name;
+
         public ShortcutKey ShortcutKey { get => (ShortcutKey)Property.GetValue(Target); set => Property.SetValue(Target, value); }
 
         public ShortcutSettingItemModel(SettingsViewModel target, PropertyInfo property)

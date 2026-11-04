@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>Tìm phông chữ</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>Thay thế kết quả hiện tại</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Phóng to</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Thu nhỏ</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>Đặt lại thu phóng</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>Chuyển đến thẻ 1–9</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>Phím soạn thảo (không nên thay đổi)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>Thụt lề / Ô tiếp theo</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>Giảm thụt lề / Ô trước</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>Xuống dòng trong đoạn</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>Xuống dòng trong ô</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>Đến đầu tài liệu</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>Đến cuối tài liệu</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>Đóng thanh tìm kiếm, hộp thoại hoặc bảng</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>Xem trước ảnh đã chọn</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>Phím này thường dùng khi soạn thảo. Thay đổi có thể xung đột với thói quen của bạn hoặc với chương trình khác.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>Khôi phục mặc định</value>
+  </data>
 </root>

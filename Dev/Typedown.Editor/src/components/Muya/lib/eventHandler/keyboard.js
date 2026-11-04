@@ -3,6 +3,7 @@ import selection from '../selection'
 import { findNearestParagraph } from '../selection/dom'
 import { getParagraphReference, getImageInfo } from '../utils'
 import { checkEditEmoji } from '../ui/emojis'
+import { keyBinding, matchesKey, asKeys } from '../utils/keyBinding'
 
 class Keyboard {
   constructor(muya) {
@@ -101,6 +102,58 @@ class Keyboard {
     eventCenter.attachDOMEvent(container, 'keyup', changeHandler)
   }
 
+  // The keys a person can change (Settings > Shortcuts, under "not recommended to change"): each answered by the handler
+  // that did it before, given the event as that handler expects it. A key given away does nothing more here - Tab moved
+  // to another key leaves the focus in the document, a line-break key moved is an Enter. True when the key was taken.
+  boundKey(event) {
+    const { contentState } = this.muya
+    const options = this.muya.options
+    if (this.isComposed) return false
+    const indent = matchesKey(event, keyBinding(options, 'indent'))
+    const outdent = !indent && matchesKey(event, keyBinding(options, 'outdent'))
+    if (indent || outdent) {
+      contentState.tabHandler(asKeys(event, { key: 'Tab', code: 'Tab', shiftKey: outdent, ctrlKey: false, altKey: false }))
+      this.muya.dispatchChange()
+      return true
+    }
+    if (event.key === 'Tab' && !event.ctrlKey && !event.altKey && !event.metaKey) {
+      event.preventDefault()
+      return true
+    }
+    const soft = matchesKey(event, keyBinding(options, 'softLineBreak'))
+    const cell = !soft && matchesKey(event, keyBinding(options, 'cellLineBreak'))
+    if (soft || cell) {
+      contentState.enterHandler(asKeys(event, { key: 'Enter', code: 'Enter', shiftKey: soft, altKey: cell, ctrlKey: false }))
+      this.muya.dispatchChange()
+      return true
+    }
+    if (event.key === 'Enter' && !event.ctrlKey && !event.metaKey && (event.shiftKey || event.altKey)) {
+      contentState.enterHandler(asKeys(event, { shiftKey: false, altKey: false }))
+      this.muya.dispatchChange()
+      return true
+    }
+    return this.edgeKey(event)
+  }
+
+  // The document's start and end on their keys (Ctrl+Home and Ctrl+End by default), in reading mode too (only the page
+  // scrolls there); Ctrl+Home and Ctrl+End given away do nothing. True when the key was taken.
+  edgeKey(event) {
+    const options = this.muya.options
+    const start = matchesKey(event, keyBinding(options, 'documentStart'))
+    const end = !start && matchesKey(event, keyBinding(options, 'documentEnd'))
+    if (start || end) {
+      // Done already when the page drew that end first (Muya/index.tsx, while the document is drawn a part at a time).
+      if (!event.defaultPrevented) this.muya.moveToEdge(end)
+      event.preventDefault()
+      return true
+    }
+    if ((event.key === 'Home' || event.key === 'End') && event.ctrlKey && !event.shiftKey && !event.altKey) {
+      event.preventDefault()
+      return true
+    }
+    return false
+  }
+
   keydownBinding() {
     const { container, eventCenter, contentState } = this.muya
     const docHandler = event => {
@@ -111,23 +164,23 @@ class Keyboard {
         return
       }
       if (this.muya.options.readOnly) {
+        this.edgeKey(event)
+        return
+      }
+      // A selected image previewed: Space by default, the "preview image" shortcut as set.
+      if (contentState.selectedImage && matchesKey(event, keyBinding(this.muya.options, 'previewImage'))) {
+        const { token } = contentState.selectedImage
+        const { src } = getImageInfo(token.src || token.attrs.src)
+        if (src) {
+          eventCenter.dispatch('preview-image', {
+            data: src
+          })
+        }
         return
       }
       switch (event.code) {
         case EVENT_KEYS.Enter:
           return contentState.docEnterHandler(event)
-        case EVENT_KEYS.Space: {
-          if (contentState.selectedImage) {
-            const { token } = contentState.selectedImage
-            const { src } = getImageInfo(token.src || token.attrs.src)
-            if (src) {
-              eventCenter.dispatch('preview-image', {
-                data: src
-              })
-            }
-          }
-          break
-        }
         case EVENT_KEYS.Backspace: {
           return contentState.docBackspaceHandler(event)
         }
@@ -151,6 +204,7 @@ class Keyboard {
       // Reading mode: the container is not editable, so nothing below can apply — but Backspace/Enter/Tab would
       // still run their content handlers against the last cursor. Arrow keys and shortcuts are left alone.
       if (this.muya.options.readOnly) {
+        this.edgeKey(event)
         return
       }
 
@@ -186,6 +240,7 @@ class Keyboard {
         // event.stopPropagation()
         return
       }
+      if (this.boundKey(event)) return
       switch (event.key) {
         // A Backspace or Delete the handler made itself (it prevented the browser's) fires no input event: told here,
         // as Enter is. Without it the host kept the text from before - an empty paragraph taken out of a run of blank

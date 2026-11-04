@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>ફોન્ટ શોધો</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>વર્તમાન મેળ બદલો</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>ઝૂમ ઇન</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>ઝૂમ આઉટ</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>ઝૂમ રીસેટ કરો</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>ટૅબ 1–9 પર જાઓ</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>સંપાદન કી (બદલવાની ભલામણ નથી)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>ઇન્ડેન્ટ / આગળનો કોષ</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>ઇન્ડેન્ટ ઘટાડો / પાછલો કોષ</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>ફકરાની અંદર નવી લીટી</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>કોષની અંદર નવી લીટી</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>દસ્તાવેજની શરૂઆતમાં જાઓ</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>દસ્તાવેજના અંતે જાઓ</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>શોધ બાર, સંવાદ અથવા પેનલ બંધ કરો</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>પસંદ કરેલી છબીનું પૂર્વાવલોકન</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>આ કી સંપાદન દરમિયાન વારંવાર વપરાય છે. તેને બદલવાથી તમારી ટેવો અથવા અન્ય પ્રોગ્રામ સાથે સંઘર્ષ થઈ શકે છે.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>ડિફૉલ્ટ પુનઃસ્થાપિત કરો</value>
+  </data>
 </root>

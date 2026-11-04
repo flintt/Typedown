@@ -34,5 +34,7 @@
         <MenuFlyoutItem x:Name="SearchInFolderItem" Text="{u:LocaleString Key=SearchInFolder}" Command="{x:Bind ViewModel.UIViewModel.SearchInFolderCommand}"/>
         <MenuFlyoutSeparator/>
         <MenuFlyoutItem x:Name="ReplaceItem" Text="{u:LocaleString Key=Replace}" Command="{x:Bind Float.SearchCommand}" CommandParameter="{x:Bind OpenReplace}"/>
+        <MenuFlyoutItem x:Name="ReplaceOneItem" Text="{u:LocaleString Key=ReplaceOne}" Command="{x:Bind Float.ReplaceOneCommand}"/>
+        <MenuFlyoutItem x:Name="ReplaceAllItem" Text="{u:LocaleString Key=ReplaceAll}" Command="{x:Bind Float.ReplaceAllCommand}"/>
     </MenuFlyoutSubItem>
 </local:MenuBarItemBase>

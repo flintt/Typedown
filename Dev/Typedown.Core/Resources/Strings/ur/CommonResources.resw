@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>فونٹ تلاش کریں</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>موجودہ مماثلت تبدیل کریں</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>زوم ان</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>زوم آؤٹ</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>زوم دوبارہ ترتیب دیں</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>ٹیب 1–9 پر جائیں</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>ترمیم کی کلیدیں (تبدیلی کی سفارش نہیں)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>حاشیہ / اگلا خانہ</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>حاشیہ کم کریں / پچھلا خانہ</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>پیراگراف کے اندر نئی سطر</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>خانے کے اندر نئی سطر</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>دستاویز کے شروع میں جائیں</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>دستاویز کے آخر میں جائیں</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>تلاش بار، مکالمہ یا پینل بند کریں</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>منتخب تصویر کا پیش منظر</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>یہ کلید ترمیم کے دوران عام طور پر استعمال ہوتی ہے۔ اسے تبدیل کرنے سے آپ کی عادات یا دوسرے پروگراموں سے ٹکراؤ ہو سکتا ہے۔</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>ڈیفالٹ بحال کریں</value>
+  </data>
 </root>

@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>Sesha amafonti</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>Faka esikhundleni okufanayo kwamanje</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Sondeza</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Hlehlisa</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>Setha kabusha ukusondeza</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>Shintshela kuthebhu 1–9</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>Okhiye bokuhlela (akunconywa ukubashintsha)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>Hlehlisa umugqa / Iseli elilandelayo</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>Nciphisa ukuhlehlisa / Iseli elidlule</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>Umugqa omusha ngaphakathi kwesigaba</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>Umugqa omusha ngaphakathi kweseli</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>Iya ekuqaleni kwedokhumenti</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>Iya ekugcineni kwedokhumenti</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>Vala ibha yokusesha, ibhokisi lengxoxo noma iphaneli</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>Buka kuqala isithombe esikhethiwe</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>Lo khiye usetshenziswa kakhulu lapho uhlela. Ukuwushintsha kungase kungqubuzane nemikhuba yakho noma nezinye izinhlelo.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>Buyisela okuzenzakalelayo</value>
+  </data>
 </root>

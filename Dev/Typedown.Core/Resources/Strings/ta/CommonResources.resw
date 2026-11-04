@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>எழுத்துருக்களைத் தேடு</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>தற்போதைய பொருத்தத்தை மாற்று</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>பெரிதாக்கு</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>சிறிதாக்கு</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>பெரிதாக்கலை மீட்டமை</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>தாவல் 1–9-க்கு மாறு</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>திருத்த விசைகள் (மாற்ற பரிந்துரைக்கப்படவில்லை)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>உள்தள்ளு / அடுத்த கலம்</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>உள்தள்ளலைக் குறை / முந்தைய கலம்</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>பத்திக்குள் புதிய வரி</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>கலத்துக்குள் புதிய வரி</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>ஆவணத்தின் தொடக்கத்துக்குச் செல்</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>ஆவணத்தின் முடிவுக்குச் செல்</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>தேடல் பட்டி, உரையாடல் அல்லது பலகத்தை மூடு</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>தேர்ந்தெடுத்த படத்தை முன்னோட்டமிடு</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>இந்த விசை திருத்தும்போது அடிக்கடி பயன்படுகிறது. இதை மாற்றினால் உங்கள் பழக்கங்களுடனோ பிற நிரல்களுடனோ முரண்படலாம்.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>இயல்புநிலையை மீட்டமை</value>
+  </data>
 </root>

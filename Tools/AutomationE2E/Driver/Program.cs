@@ -265,6 +265,7 @@ internal static partial class Program
             await Case("SB07 a narrow window puts the status bar items with no room into a \"...\" menu (the heading first, the count stays), and a right-click chooses which items show", SB07);
             await Case("AC01 an edition hears of what happens around the writing: a document shown, the mode changed, an undo, the window left and come back to, a save under a new name and a rename, the page scrolled (not at every scroll event)", AC01);
             await Case("KY01 Ctrl+Z and Ctrl+Y are the host's undo and redo however close Ctrl and the letter come, in the visual editor and in source mode", KY01);
+            await Case("KB01 shortcuts given other keys: Last used tab and Zoom in answer theirs and Alt+0 nothing; indent's picker warns, takes F2 alone, the page indents on it; Restore default gives Tab back", KB01);
             await Case("ED01 in the visual editor Ctrl+Shift+Right selects by words and Ctrl+Shift+Down to the end of the paragraph, Ctrl+Left/Right move without selecting, Ctrl+F opens the find bar, and the wheel scrolls the page", ED01);
             await Case("ED02 Shift+Enter and Alt+Enter in a table cell put a line break in that cell", ED02);
             await Case("OL04 measured: switching to a document of 3000 headings, the host's time to build the outline's tree, hand it to the pane and have it laid out", OL04);

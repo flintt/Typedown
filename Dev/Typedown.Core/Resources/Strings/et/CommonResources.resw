@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>Otsi fonte</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>Asenda praegune vaste</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Suurenda</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Vähenda</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>Lähtesta suum</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>Lülitu vahelehele 1–9</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>Redigeerimisklahvid (muutmine pole soovitatav)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>Taane / Järgmine lahter</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>Vähenda taanet / Eelmine lahter</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>Reavahetus lõigu sees</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>Reavahetus lahtris</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>Mine dokumendi algusse</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>Mine dokumendi lõppu</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>Sulge otsinguriba, dialoog või paan</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>Valitud pildi eelvaade</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>Seda klahvi kasutatakse redigeerimisel sageli. Selle muutmine võib minna vastuollu sinu harjumuste või teiste programmidega.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>Taasta vaikeväärtus</value>
+  </data>
 </root>

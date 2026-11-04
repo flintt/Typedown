@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>ស្វែងរកពុម្ពអក្សរ</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>ជំនួសការផ្គូផ្គងបច្ចុប្បន្ន</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>ពង្រីក</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>បង្រួម</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>កំណត់ការពង្រីកឡើងវិញ</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>ប្ដូរទៅផ្ទាំង 1–9</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>គ្រាប់ចុចកែសម្រួល (មិនណែនាំឱ្យប្ដូរ)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>ចូលបន្ទាត់ / ក្រឡាបន្ទាប់</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>បន្ថយការចូលបន្ទាត់ / ក្រឡាមុន</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>ចុះបន្ទាត់ក្នុងកថាខណ្ឌ</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>ចុះបន្ទាត់ក្នុងក្រឡា</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>ទៅដើមឯកសារ</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>ទៅចុងឯកសារ</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>បិទរបារស្វែងរក ប្រអប់ ឬផ្ទាំង</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>មើលរូបភាពដែលបានជ្រើសជាមុន</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>គ្រាប់ចុចនេះត្រូវបានប្រើញឹកញាប់ពេលកែសម្រួល។ ការប្ដូរវាអាចប៉ះទង្គិចនឹងទម្លាប់របស់អ្នក ឬកម្មវិធីផ្សេងទៀត។</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>ស្ដារលំនាំដើម</value>
+  </data>
 </root>

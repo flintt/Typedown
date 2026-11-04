@@ -1209,4 +1209,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>搜尋字型</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>取代目前相符項目</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>放大</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>縮小</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>重設縮放</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>切換到第 1–9 個索引標籤</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>編輯常用鍵（不建議修改）</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>縮排 / 下一個儲存格</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>取消縮排 / 上一個儲存格</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>段落內換行</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>儲存格內換行</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>移至文件開頭</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>移至文件結尾</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>關閉尋找列、對話方塊或面板</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>預覽選取的圖片</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>這是編輯時常用的按鍵，修改後可能與習慣或其他程式衝突。</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>還原預設值</value>
+  </data>
 </root>

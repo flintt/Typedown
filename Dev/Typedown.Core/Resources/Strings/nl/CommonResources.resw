@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>Lettertypen zoeken</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>Huidige overeenkomst vervangen</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Inzoomen</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Uitzoomen</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>Zoom herstellen</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>Naar tabblad 1–9</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>Bewerkingstoetsen (wijzigen afgeraden)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>Inspringen / Volgende cel</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>Uitspringen / Vorige cel</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>Regeleinde binnen alinea</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>Regeleinde in cel</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>Naar begin van document</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>Naar einde van document</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>Zoekbalk, dialoogvenster of paneel sluiten</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>Geselecteerde afbeelding bekijken</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>Deze toets wordt veel gebruikt bij het bewerken. Wijzigen kan botsen met je gewoonten of met andere programma’s.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>Standaard herstellen</value>
+  </data>
 </root>

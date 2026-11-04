@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>फन्ट खोज्नुहोस्</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>हालको मिलान बदल्नुहोस्</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>जुम इन</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>जुम आउट</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>जुम रिसेट गर्नुहोस्</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>ट्याब 1–9 मा जानुहोस्</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>सम्पादन कुञ्जीहरू (परिवर्तन सिफारिस गरिँदैन)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>इन्डेन्ट / अर्को सेल</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>इन्डेन्ट घटाउनुहोस् / अघिल्लो सेल</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>अनुच्छेदभित्र नयाँ लाइन</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>सेलभित्र नयाँ लाइन</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>कागजातको सुरुमा जानुहोस्</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>कागजातको अन्त्यमा जानुहोस्</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>खोज पट्टी, संवाद वा प्यानल बन्द गर्नुहोस्</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>चयन गरिएको छविको पूर्वावलोकन</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>यो कुञ्जी सम्पादन गर्दा प्रायः प्रयोग हुन्छ। यसलाई बदल्दा तपाईंको बानी वा अन्य कार्यक्रमसँग द्वन्द्व हुन सक्छ।</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>पूर्वनिर्धारित पुनर्स्थापना गर्नुहोस्</value>
+  </data>
 </root>

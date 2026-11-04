@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>Cari font</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>Ganti kecocokan saat ini</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Perbesar</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Perkecil</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>Atur ulang zoom</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>Beralih ke tab 1–9</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>Tombol penyuntingan (tidak disarankan diubah)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>Indentasi / Sel berikutnya</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>Kurangi indentasi / Sel sebelumnya</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>Baris baru dalam paragraf</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>Baris baru dalam sel</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>Ke awal dokumen</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>Ke akhir dokumen</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>Tutup bilah pencarian, dialog, atau panel</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>Pratinjau gambar yang dipilih</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>Tombol ini sering dipakai saat menyunting. Mengubahnya dapat bentrok dengan kebiasaan Anda atau program lain.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>Pulihkan default</value>
+  </data>
 </root>

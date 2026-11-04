@@ -48,6 +48,19 @@
                 VerticalAlignment="Center" 
                 Text="{utils:LocaleString Key=NotSet}"/>
         </Grid>
+        <TextBlock
+            x:Name="WarningText"
+            Margin="0,16,0,0"
+            TextWrapping="Wrap"
+            MaxWidth="360"
+            Foreground="{ThemeResource SystemFillColorCautionBrush}"
+            Text="{utils:LocaleString Key=ShortcutNotRecommendedWarning}"/>
+        <HyperlinkButton
+            x:Name="RestoreDefaultButton"
+            Margin="0,8,0,0"
+            HorizontalAlignment="Center"
+            Content="{utils:LocaleString Key=RestoreDefaultShortcut}"
+            Click="OnRestoreDefaultClick"/>
         <StackPanel Name="ErrorMsgPanel" Orientation="Horizontal" Spacing="8" Margin="0,16,0,0" Visibility="Collapsed" VerticalAlignment="Bottom">
             <TextBlock Foreground="{ThemeResource SystemFillColorCriticalBrush}" Text="{utils:LocaleString Key=ShortcutKeyIsOccupied}"/>
             <TextBlock x:Name="ExistOwnerTextBlock" Foreground="{ThemeResource SystemFillColorCriticalBrush}"/>

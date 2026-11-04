@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>フォントを検索</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>現在の一致箇所を置換</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>拡大</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>縮小</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>ズームをリセット</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>タブ 1–9 に切り替え</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>編集でよく使うキー（変更は非推奨）</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>インデント / 次のセル</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>インデント解除 / 前のセル</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>段落内で改行</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>セル内で改行</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>文書の先頭へ移動</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>文書の末尾へ移動</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>検索バー、ダイアログ、パネルを閉じる</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>選択した画像をプレビュー</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>これは編集中によく使うキーです。変更すると、使い慣れた操作や他のプログラムと競合する可能性があります。</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>既定に戻す</value>
+  </data>
 </root>

@@ -1195,4 +1195,52 @@
   <data name="FontPicker.Search" xml:space="preserve">
     <value>Rechercher des polices</value>
   </data>
+  <data name="ReplaceOne" xml:space="preserve">
+    <value>Remplacer l’occurrence actuelle</value>
+  </data>
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Zoom avant</value>
+  </data>
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Zoom arrière</value>
+  </data>
+  <data name="ResetZoom" xml:space="preserve">
+    <value>Réinitialiser le zoom</value>
+  </data>
+  <data name="TabByPosition" xml:space="preserve">
+    <value>Aller à l’onglet 1–9</value>
+  </data>
+  <data name="NotRecommendedShortcuts" xml:space="preserve">
+    <value>Touches d’édition (modification déconseillée)</value>
+  </data>
+  <data name="Indent" xml:space="preserve">
+    <value>Augmenter le retrait / Cellule suivante</value>
+  </data>
+  <data name="Outdent" xml:space="preserve">
+    <value>Diminuer le retrait / Cellule précédente</value>
+  </data>
+  <data name="SoftLineBreak" xml:space="preserve">
+    <value>Saut de ligne dans le paragraphe</value>
+  </data>
+  <data name="CellLineBreak" xml:space="preserve">
+    <value>Saut de ligne dans la cellule</value>
+  </data>
+  <data name="DocumentStart" xml:space="preserve">
+    <value>Aller au début du document</value>
+  </data>
+  <data name="DocumentEnd" xml:space="preserve">
+    <value>Aller à la fin du document</value>
+  </data>
+  <data name="ClosePanel" xml:space="preserve">
+    <value>Fermer la barre de recherche, la boîte de dialogue ou le panneau</value>
+  </data>
+  <data name="PreviewImage" xml:space="preserve">
+    <value>Aperçu de l’image sélectionnée</value>
+  </data>
+  <data name="ShortcutNotRecommendedWarning" xml:space="preserve">
+    <value>Cette touche est souvent utilisée pendant l’édition. La modifier peut entrer en conflit avec vos habitudes ou avec d’autres programmes.</value>
+  </data>
+  <data name="RestoreDefaultShortcut" xml:space="preserve">
+    <value>Rétablir la valeur par défaut</value>
+  </data>
 </root>
