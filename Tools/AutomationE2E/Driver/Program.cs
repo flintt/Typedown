@@ -404,6 +404,8 @@ internal static partial class Program
             await dialogs.Call("test.app.caseLabel", new { label = CaseCatalog.Label(currentCase) }).WaitAsync(TimeSpan.FromSeconds(10));
         }
         catch (Exception) { /* no test host yet, or one without the hook */ }
+        var front = await TakeForeground();
+        if (front != null) notes.Add(front);
         var watch = Stopwatch.StartNew();
         try
         {
@@ -4856,6 +4858,39 @@ internal static partial class Program
         SetCursorPos(rect.Left + 120, rect.Top + 12);
         Send(new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0002 } } }, new INPUT { type = 0, u = new InputUnion { mi = new MOUSEINPUT { dwFlags = 0x0004 } } });
         for (var i = 0; i < 40 && GetForegroundWindow() != window; i++) await Task.Delay(25);
+    }
+
+    /// <summary>
+    /// Another program's window in front at a case's start - a browser open on the PC, given the foreground by Windows when
+    /// a case minimized or left the test window (the sentinel, 2026-11-05: JT04, MN02, TH05; VM01, TX01 and CW01 then
+    /// failed on keys and clicks that went to it): the test window is taken back to the front first, and what was in front
+    /// named. Null when the test host's own window is in front already, or there is none to take back (minimized by a case).
+    /// </summary>
+    private static async Task<string?> TakeForeground()
+    {
+        if (hostPid <= 0) return null;
+        try
+        {
+            var front = GetForegroundWindow();
+            uint owner = 0;
+            if (front != IntPtr.Zero) GetWindowThreadProcessId(front, out owner);
+            if (owner == (uint)hostPid) return null;
+            var window = MainWindow();
+            if (window == IntPtr.Zero || IsIconic(window)) return null;
+            var who = "nothing";
+            if (front != IntPtr.Zero)
+            {
+                var title = new StringBuilder(256);
+                GetWindowText(front, title, title.Capacity);
+                string name;
+                try { name = Process.GetProcessById((int)owner).ProcessName; }
+                catch (ArgumentException) { name = "process " + owner; }
+                who = $"{name} ('{title}')";
+            }
+            await Activate(window);
+            return $"the test window taken back to the front from {who}" + (GetForegroundWindow() == window ? "" : " - it did not come");
+        }
+        catch (Exception e) { return "the test window not taken to the front: " + e.Message.Split('\n')[0]; }
     }
 
     // ---- real input ----
