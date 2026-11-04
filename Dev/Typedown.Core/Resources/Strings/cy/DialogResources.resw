@@ -338,4 +338,13 @@
   <data name="WebView2Installing" xml:space="preserve">
     <value>Wrthi'n gosod WebView2 Runtime...</value>
   </data>
+  <data name="LossySaveTitle" xml:space="preserve">
+    <value>Cadw fel UTF-8?</value>
+  </data>
+  <data name="LossySaveContent" xml:space="preserve">
+    <value>Doedd dim modd darllen amgodiad y ffeil hon yn union. Mae cadw yn ei hysgrifennu fel UTF-8, a bydd y nodau a ddangosir fel � yn cael eu colli am byth. I roi cynnig ar amgodiad arall, defnyddiwch y ddewislen amgodio yn y bar statws.</value>
+  </data>
+  <data name="LossySaveAsUtf8" xml:space="preserve">
+    <value>Cadw fel UTF-8</value>
+  </data>
 </root>

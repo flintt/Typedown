@@ -338,4 +338,13 @@
   <data name="WebView2Installing" xml:space="preserve">
     <value>WebView2 রানটাইম ইনস্টল হচ্ছে...</value>
   </data>
+  <data name="LossySaveTitle" xml:space="preserve">
+    <value>UTF-8 হিসেবে সংরক্ষণ করবেন?</value>
+  </data>
+  <data name="LossySaveContent" xml:space="preserve">
+    <value>এই ফাইলের এনকোডিং সঠিকভাবে পড়া যায়নি। সংরক্ষণ করলে এটি UTF-8 হিসেবে লেখা হবে, এবং � হিসেবে দেখানো অক্ষরগুলো চিরতরে হারিয়ে যাবে। অন্য এনকোডিং চেষ্টা করতে স্ট্যাটাস বারের এনকোডিং মেনু ব্যবহার করুন।</value>
+  </data>
+  <data name="LossySaveAsUtf8" xml:space="preserve">
+    <value>UTF-8 হিসেবে সংরক্ষণ করুন</value>
+  </data>
 </root>

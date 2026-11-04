@@ -338,4 +338,13 @@
   <data name="WebView2Installing" xml:space="preserve">
     <value>Notiek WebView2 izpildlaika instalēšana...</value>
   </data>
+  <data name="LossySaveTitle" xml:space="preserve">
+    <value>Saglabāt kā UTF-8?</value>
+  </data>
+  <data name="LossySaveContent" xml:space="preserve">
+    <value>Šī faila kodējumu neizdevās precīzi nolasīt. Saglabājot tas tiks ierakstīts kā UTF-8, un rakstzīmes, kas parādītas kā �, tiks zaudētas uz visiem laikiem. Lai izmēģinātu citu kodējumu, izmantojiet statusa joslas kodējuma izvēlni.</value>
+  </data>
+  <data name="LossySaveAsUtf8" xml:space="preserve">
+    <value>Saglabāt kā UTF-8</value>
+  </data>
 </root>

@@ -338,4 +338,13 @@
   <data name="WebView2Installing" xml:space="preserve">
     <value>Inasakinisha WebView2 Runtime...</value>
   </data>
+  <data name="LossySaveTitle" xml:space="preserve">
+    <value>Ihifadhi kama UTF-8?</value>
+  </data>
+  <data name="LossySaveContent" xml:space="preserve">
+    <value>Usimbaji wa faili hii haukuweza kusomwa kwa usahihi. Kuhifadhi kunaiandika kama UTF-8, na herufi zinazoonyeshwa kama � zitapotea milele. Ili kujaribu usimbaji mwingine, tumia menyu ya usimbaji kwenye upau wa hali.</value>
+  </data>
+  <data name="LossySaveAsUtf8" xml:space="preserve">
+    <value>Hifadhi kama UTF-8</value>
+  </data>
 </root>

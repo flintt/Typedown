@@ -91,7 +91,8 @@ namespace Typedown.Core.Controls
             ToolTipService.SetToolTip(ReadingButton, string.IsNullOrEmpty(shortcut) ? text : $"{text} ({shortcut})");
         }
 
-        private string FormatText(TextFileFormat format) => format == null ? "" : $"{format.EncodingLabel} \u00B7 {format.LineEndingLabel}";
+        // A file not read exactly is marked (\u26A0) before any save: a save by hand asks, auto-save does not write it (R07).
+        private string FormatText(TextFileFormat format) => format == null ? "" : $"{format.EncodingLabel}{(format.LossyDecode ? " \u26A0" : "")} \u00B7 {format.LineEndingLabel}";
 
         /// <summary>The line endings to write, converting to UTF-8, reading the file again in another encoding.</summary>
         private void OnFileFormatMenuOpening(object sender, object e)

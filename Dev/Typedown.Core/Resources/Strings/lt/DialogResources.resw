@@ -338,4 +338,13 @@
   <data name="WebView2Installing" xml:space="preserve">
     <value>Diegiama WebView2 vykdymo aplinka...</value>
   </data>
+  <data name="LossySaveTitle" xml:space="preserve">
+    <value>Įrašyti kaip UTF-8?</value>
+  </data>
+  <data name="LossySaveContent" xml:space="preserve">
+    <value>Šio failo koduotės nepavyko tiksliai nuskaityti. Įrašant jis bus įrašytas kaip UTF-8, o simboliai, rodomi kaip �, bus prarasti visam laikui. Norėdami išbandyti kitą koduotę, naudokite būsenos juostos koduotės meniu.</value>
+  </data>
+  <data name="LossySaveAsUtf8" xml:space="preserve">
+    <value>Įrašyti kaip UTF-8</value>
+  </data>
 </root>

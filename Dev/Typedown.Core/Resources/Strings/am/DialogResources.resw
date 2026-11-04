@@ -338,4 +338,13 @@
   <data name="WebView2Installing" xml:space="preserve">
     <value>WebView2 Runtime በመጫን ላይ...</value>
   </data>
+  <data name="LossySaveTitle" xml:space="preserve">
+    <value>እንደ UTF-8 ይቀመጥ?</value>
+  </data>
+  <data name="LossySaveContent" xml:space="preserve">
+    <value>የዚህ ፋይል ኢንኮዲንግ በትክክል ሊነበብ አልቻለም። ማስቀመጥ እንደ UTF-8 ይጽፈዋል፣ እንደ � የሚታዩት ቁምፊዎችም ለዘለቄታው ይጠፋሉ። ሌላ ኢንኮዲንግ ለመሞከር በሁኔታ አሞሌው ያለውን የኢንኮዲንግ ምናሌ ይጠቀሙ።</value>
+  </data>
+  <data name="LossySaveAsUtf8" xml:space="preserve">
+    <value>እንደ UTF-8 አስቀምጥ</value>
+  </data>
 </root>

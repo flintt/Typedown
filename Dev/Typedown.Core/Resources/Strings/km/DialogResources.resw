@@ -338,4 +338,13 @@
   <data name="WebView2Installing" xml:space="preserve">
     <value>កំពុងដំឡើង WebView2 Runtime...</value>
   </data>
+  <data name="LossySaveTitle" xml:space="preserve">
+    <value>រក្សាទុកជា UTF-8 ឬ?</value>
+  </data>
+  <data name="LossySaveContent" xml:space="preserve">
+    <value>មិនអាចអានការអ៊ិនកូដរបស់ឯកសារនេះបានត្រឹមត្រូវទេ។ ការរក្សាទុកនឹងសរសេរវាជា UTF-8 ហើយតួអក្សរដែលបង្ហាញជា � នឹងបាត់បង់ជារៀងរហូត។ ដើម្បីសាកល្បងការអ៊ិនកូដផ្សេង សូមប្រើម៉ឺនុយការអ៊ិនកូដនៅរបារស្ថានភាព។</value>
+  </data>
+  <data name="LossySaveAsUtf8" xml:space="preserve">
+    <value>រក្សាទុកជា UTF-8</value>
+  </data>
 </root>

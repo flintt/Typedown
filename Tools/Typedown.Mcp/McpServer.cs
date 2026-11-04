@@ -374,6 +374,8 @@ namespace Typedown.Mcp
             "window_not_found" => "That window is closed. Call typedown_list_documents.",
             "path_required" => "The document is untitled; only the person can choose where to save it.",
             "unsaved_changes" => "The document has unsaved changes, so it was not closed and nothing was lost. Save it first with typedown_save_document (or ask the person), then close it.",
+            "save_failed" when (string?)data?["reason"] == "encoding_not_exact" =>
+                $"Not saved: {Brand.Name} could not read this file's encoding exactly, and saving would replace the characters shown as \uFFFD for good. Any edit stays in the document, unsaved. Do not retry; tell the person - only they can choose to save it (File > Save asks them) or reopen it in another encoding.",
             "save_failed" => "Saving failed; the edit stays in the document, unsaved. Tell the person.",
             "scope_required" => $"This {Brand.Name} does not allow that operation for automation clients.",
             "busy" => $"{Brand.Name} is busy with this document. Wait a moment, read the document again, then retry.",

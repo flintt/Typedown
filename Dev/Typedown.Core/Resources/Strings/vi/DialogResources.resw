@@ -338,4 +338,13 @@
   <data name="WebView2Installing" xml:space="preserve">
     <value>Đang cài đặt WebView2 Runtime...</value>
   </data>
+  <data name="LossySaveTitle" xml:space="preserve">
+    <value>Lưu dưới dạng UTF-8?</value>
+  </data>
+  <data name="LossySaveContent" xml:space="preserve">
+    <value>Không thể đọc chính xác mã hóa của tệp này. Khi lưu, tệp sẽ được ghi dưới dạng UTF-8 và các ký tự hiển thị là � sẽ mất vĩnh viễn. Để thử mã hóa khác, hãy dùng menu mã hóa trên thanh trạng thái.</value>
+  </data>
+  <data name="LossySaveAsUtf8" xml:space="preserve">
+    <value>Lưu dưới dạng UTF-8</value>
+  </data>
 </root>

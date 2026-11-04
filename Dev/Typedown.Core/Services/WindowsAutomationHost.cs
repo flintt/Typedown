@@ -248,6 +248,7 @@ namespace Typedown.Core.Services
                     throw new AutomationException(AutomationErrorKind.content_sync_timeout, "Could not confirm the editor's latest text.");
                 if (baseRevision != null && baseRevision != tab.Revision)
                     throw new AutomationException(AutomationErrorKind.revision_conflict, "The document changed since baseRevision.", new Dictionary<string, object> { ["revision"] = tab.Revision });
+                if (app.FileViewModel.SaveNeedsEncodingConsent) throw AutomationDocument.EncodingNotExact(tab.Revision, applied: false);
                 if (!await app.FileViewModel.SaveToExistingPathAsync())
                     throw new AutomationException(AutomationErrorKind.save_failed, "Saving failed; the document stays unsaved.", new Dictionary<string, object> { ["revision"] = tab.Revision });
                 return (Info(app, window.WindowId, tab), DocumentText.ContentHash(app.EditorViewModel.Markdown));
@@ -302,6 +303,7 @@ namespace Typedown.Core.Services
                 if (save)
                 {
                     if (app.FileViewModel.FilePath == null) throw new AutomationException(AutomationErrorKind.path_required, "The document has no file yet.");
+                    if (app.FileViewModel.SaveNeedsEncodingConsent) throw AutomationDocument.EncodingNotExact(tab.Revision, applied: true);
                     if (!await app.FileViewModel.SaveToExistingPathAsync())
                         throw new AutomationException(AutomationErrorKind.save_failed, "Undone, but saving failed.", new Dictionary<string, object> { ["applied"] = true, ["revision"] = tab.Revision });
                     saved = true;

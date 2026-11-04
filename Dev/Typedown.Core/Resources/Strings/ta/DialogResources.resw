@@ -338,4 +338,13 @@
   <data name="WebView2Installing" xml:space="preserve">
     <value>WebView2 இயக்க நேரம் நிறுவப்படுகிறது...</value>
   </data>
+  <data name="LossySaveTitle" xml:space="preserve">
+    <value>UTF-8 ஆகச் சேமிக்கவா?</value>
+  </data>
+  <data name="LossySaveContent" xml:space="preserve">
+    <value>இந்தக் கோப்பின் குறியாக்கத்தைத் துல்லியமாகப் படிக்க முடியவில்லை. சேமித்தால் இது UTF-8 ஆக எழுதப்படும், � எனக் காட்டப்படும் எழுத்துகள் நிரந்தரமாக இழக்கப்படும். வேறு குறியாக்கத்தை முயல நிலைப் பட்டியிலுள்ள குறியாக்க மெனுவைப் பயன்படுத்தவும்.</value>
+  </data>
+  <data name="LossySaveAsUtf8" xml:space="preserve">
+    <value>UTF-8 ஆகச் சேமி</value>
+  </data>
 </root>

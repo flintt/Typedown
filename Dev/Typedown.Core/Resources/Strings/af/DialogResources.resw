@@ -338,4 +338,13 @@
   <data name="WebView2Installing" xml:space="preserve">
     <value>Installeer tans WebView2 Runtime...</value>
   </data>
+  <data name="LossySaveTitle" xml:space="preserve">
+    <value>As UTF-8 stoor?</value>
+  </data>
+  <data name="LossySaveContent" xml:space="preserve">
+    <value>Hierdie lêer se enkodering kon nie presies gelees word nie. Stoor skryf dit as UTF-8, en die karakters wat as � gewys word, gaan vir altyd verlore. Gebruik die enkoderingkieslys in die statusbalk om ’n ander enkodering te probeer.</value>
+  </data>
+  <data name="LossySaveAsUtf8" xml:space="preserve">
+    <value>Stoor as UTF-8</value>
+  </data>
 </root>

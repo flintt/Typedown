@@ -338,4 +338,13 @@
   <data name="WebView2Installing" xml:space="preserve">
     <value>WebView2 Runtime á shuiteáil...</value>
   </data>
+  <data name="LossySaveTitle" xml:space="preserve">
+    <value>Sábháil mar UTF-8?</value>
+  </data>
+  <data name="LossySaveContent" xml:space="preserve">
+    <value>Níorbh fhéidir ionchódú an chomhaid seo a léamh go beacht. Scríobhann sábháil é mar UTF-8, agus caillfear go deo na carachtair a thaispeántar mar �. Chun ionchódú eile a thriail, úsáid an roghchlár ionchódaithe sa bharra stádais.</value>
+  </data>
+  <data name="LossySaveAsUtf8" xml:space="preserve">
+    <value>Sábháil mar UTF-8</value>
+  </data>
 </root>

@@ -338,4 +338,13 @@
   <data name="WebView2Installing" xml:space="preserve">
     <value>WebView2 käituskeskkonna installimine...</value>
   </data>
+  <data name="LossySaveTitle" xml:space="preserve">
+    <value>Kas salvestada UTF-8-na?</value>
+  </data>
+  <data name="LossySaveContent" xml:space="preserve">
+    <value>Selle faili kodeeringut ei õnnestunud täpselt lugeda. Salvestamine kirjutab selle UTF-8-na ja märgina � näidatud tähemärgid lähevad jäädavalt kaotsi. Muu kodeeringu proovimiseks kasutage olekuriba kodeeringumenüüd.</value>
+  </data>
+  <data name="LossySaveAsUtf8" xml:space="preserve">
+    <value>Salvesta UTF-8-na</value>
+  </data>
 </root>

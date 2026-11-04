@@ -216,6 +216,14 @@ namespace Typedown.Core.Utilities
         /// </summary>
         public TextFileFormat AsUtf8() => new(new UTF8Encoding(encoderShouldEmitUTF8Identifier: false), false, LineEnding);
 
+        /// <summary>
+        /// Whether writing a document read in this shape over a file needs the reader's yes first: the file was not read
+        /// exactly (<see cref="LossyDecode"/>), so the write replaces the bytes shown as U+FFFD for good (R07). A save by
+        /// hand asks (Save as UTF-8, or Cancel); an automatic save and an automation client's do not write at all. A new
+        /// file, or one gone from disk, has no bytes to lose.
+        /// </summary>
+        public bool NeedsConsentToOverwrite(bool fileExists) => LossyDecode && fileExists;
+
         /// <summary>The text as it should hit the disk: the file's own line endings, and its byte order mark.</summary>
         public byte[] GetBytes(string text)
         {

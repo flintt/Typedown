@@ -263,6 +263,7 @@ internal static partial class Program
             await Case("SB05 the status bar shows the file's encoding and line ending: CRLF chosen there is what a save writes, and a GBK file is read again as GB18030 from its menu", SB05);
             await Case("SB06 the status bar names the heading the caret is under, and a click on it opens the outline", SB06);
             await Case("SB07 a narrow window puts the status bar items with no room into a \"...\" menu (the heading first, the count stays), and a right-click chooses which items show", SB07);
+            await Case("SB08 a save by hand of a file whose encoding could not be read exactly asks first: Cancel (the default) leaves its bytes, Save as UTF-8 writes the text as shown; the API's save refuses with the reason, and the status bar marks the file", SB08);
             await Case("AC01 an edition hears of what happens around the writing: a document shown, the mode changed, an undo, the window left and come back to, a save under a new name and a rename, the page scrolled (not at every scroll event)", AC01);
             await Case("KY01 Ctrl+Z and Ctrl+Y are the host's undo and redo however close Ctrl and the letter come, in the visual editor and in source mode", KY01);
             await Case("KB01 shortcuts given other keys: Last used tab and Zoom in answer theirs and Alt+0 nothing; indent's picker warns, takes F2 alone, the page indents on it; Restore default gives Tab back", KB01);

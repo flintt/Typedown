@@ -338,4 +338,13 @@
   <data name="WebView2Installing" xml:space="preserve">
     <value>Memasang WebView2 Runtime...</value>
   </data>
+  <data name="LossySaveTitle" xml:space="preserve">
+    <value>Simpan sebagai UTF-8?</value>
+  </data>
+  <data name="LossySaveContent" xml:space="preserve">
+    <value>Pengekodan fail ini tidak dapat dibaca dengan tepat. Menyimpan akan menulisnya sebagai UTF-8, dan aksara yang dipaparkan sebagai � akan hilang selama-lamanya. Untuk mencuba pengekodan lain, gunakan menu pengekodan dalam bar status.</value>
+  </data>
+  <data name="LossySaveAsUtf8" xml:space="preserve">
+    <value>Simpan sebagai UTF-8</value>
+  </data>
 </root>

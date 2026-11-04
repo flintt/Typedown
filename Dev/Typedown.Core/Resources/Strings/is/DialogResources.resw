@@ -338,4 +338,13 @@
   <data name="WebView2Installing" xml:space="preserve">
     <value>Set upp WebView2 Runtime...</value>
   </data>
+  <data name="LossySaveTitle" xml:space="preserve">
+    <value>Vista sem UTF-8?</value>
+  </data>
+  <data name="LossySaveContent" xml:space="preserve">
+    <value>Ekki tókst að lesa stafakóðun þessarar skrár nákvæmlega. Vistun skrifar hana sem UTF-8 og stafirnir sem sýndir eru sem � glatast að eilífu. Til að prófa aðra kóðun skaltu nota kóðunarvalmyndina á stöðustikunni.</value>
+  </data>
+  <data name="LossySaveAsUtf8" xml:space="preserve">
+    <value>Vista sem UTF-8</value>
+  </data>
 </root>

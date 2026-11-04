@@ -527,9 +527,8 @@ namespace Typedown.Core.ViewModels
                 // A file we could not decode losslessly (a non-UTF-8 file — GBK, Latin-1 — read as UTF-8, so its
                 // undecodable bytes became U+FFFD) must not be overwritten by an automatic save: that rewrites it
                 // as UTF-8 and the undecodable bytes are lost for good. The skipped auto-save falls through to a
-                // crash backup, so nothing typed is lost. (A confirm-on-manual-save prompt is deferred until its
-                // dialog strings are translated.)
-                if (!alert && (FileFormat?.LossyDecode ?? false) && File.Exists(path))
+                // crash backup, so nothing typed is lost. A save by hand has asked already (AskToOverwriteLossy).
+                if (!alert && (FileFormat?.NeedsConsentToOverwrite(File.Exists(path)) ?? false))
                 {
                     Log.Debug($"auto-save skipped: '{path}' was decoded lossily as {(FileFormat?.Encoding?.WebName ?? "utf-8")}; an automatic overwrite would replace its original bytes");
                     EditorViewModel.AutoSaveHeldBack = Locale.GetString("SaveState.EncodingHeldBack");
@@ -598,6 +597,28 @@ namespace Typedown.Core.ViewModels
         /// </summary>
         public Task<bool> SaveToExistingPathAsync() => FilePath == null ? Task.FromResult(false) : Save(false);
 
+        /// <summary>
+        /// True when the file on disk was not read exactly and a save would replace its undecodable bytes: a save by hand
+        /// asks first, the automation API's save refuses and says why.
+        /// </summary>
+        public bool SaveNeedsEncodingConsent => FilePath != null && (FileFormat?.NeedsConsentToOverwrite(File.Exists(FilePath)) ?? false);
+
+        /// <summary>
+        /// A save by hand over a file that was not read exactly (R07): the reader is told what it does, and chooses to write
+        /// it as UTF-8 - the text as shown, the characters shown as replacements written as they are - or to cancel, the
+        /// default, which writes nothing. Nothing is remembered: the next file read with a loss asks again. True to write.
+        /// </summary>
+        private async Task<bool> AskToOverwriteLossy()
+        {
+            var dialog = AppContentDialog.Create();
+            dialog.Title = Locale.GetDialogString("LossySaveTitle");
+            dialog.Content = Locale.GetDialogString("LossySaveContent");
+            dialog.PrimaryButtonText = Locale.GetDialogString("LossySaveAsUtf8");
+            dialog.CloseButtonText = Locale.GetDialogString("Cancel");
+            dialog.DefaultButton = ContentDialogButton.Close;
+            return await dialog.ShowAsync(AppViewModel.XamlRoot) == ContentDialogResult.Primary;
+        }
+
         /// <summary>What File > Save does (Vim's :wq waits for it before closing the tab).</summary>
         public Task<bool> SaveAsync() => Save();
 
@@ -653,6 +674,18 @@ namespace Typedown.Core.ViewModels
                 // null path, so the path check alone would not notice a switch between them.
                 if (disposables.IsDisposed || FilePath != path || TabsViewModel?.ActiveTab != tab)
                     return false;
+                // Saved by hand over a file not read exactly: asked first; the answer may come after a tab switch.
+                if (alert && SaveNeedsEncodingConsent)
+                {
+                    if (!await AskToOverwriteLossy())
+                    {
+                        Log.Debug($"save: '{path}' was not read exactly; the reader cancelled, nothing written");
+                        return false;
+                    }
+                    if (disposables.IsDisposed || FilePath != path || TabsViewModel?.ActiveTab != tab)
+                        return false;
+                    FileFormat = FileFormat.AsUtf8();
+                }
                 var markdown = EditorViewModel.Markdown;
                 var hash = Common.SimpleHash(markdown);
                 var result = await WriteAllText(path, markdown, alert);

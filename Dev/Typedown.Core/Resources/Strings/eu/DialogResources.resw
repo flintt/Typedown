@@ -338,4 +338,13 @@
   <data name="WebView2Installing" xml:space="preserve">
     <value>WebView2 Runtime instalatzen...</value>
   </data>
+  <data name="LossySaveTitle" xml:space="preserve">
+    <value>UTF-8 gisa gorde?</value>
+  </data>
+  <data name="LossySaveContent" xml:space="preserve">
+    <value>Ezin izan da fitxategi honen kodeketa zehazki irakurri. Gordetzean UTF-8 gisa idatziko da, eta � gisa erakusten diren karaktereak betiko galduko dira. Beste kodeketa bat probatzeko, erabili egoera-barrako kodeketa-menua.</value>
+  </data>
+  <data name="LossySaveAsUtf8" xml:space="preserve">
+    <value>Gorde UTF-8 gisa</value>
+  </data>
 </root>

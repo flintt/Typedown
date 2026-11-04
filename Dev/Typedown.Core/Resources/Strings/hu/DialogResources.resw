@@ -338,4 +338,13 @@
   <data name="WebView2Installing" xml:space="preserve">
     <value>A WebView2 futtatókörnyezet telepítése...</value>
   </data>
+  <data name="LossySaveTitle" xml:space="preserve">
+    <value>Mentés UTF-8 formátumban?</value>
+  </data>
+  <data name="LossySaveContent" xml:space="preserve">
+    <value>A fájl kódolását nem sikerült pontosan beolvasni. Mentéskor UTF-8 formátumban íródik ki, és a � jelként megjelenő karakterek végleg elvesznek. Más kódolás kipróbálásához használja az állapotsor kódolás menüjét.</value>
+  </data>
+  <data name="LossySaveAsUtf8" xml:space="preserve">
+    <value>Mentés UTF-8-ként</value>
+  </data>
 </root>

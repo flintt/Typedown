@@ -338,4 +338,13 @@
   <data name="WebView2Installing" xml:space="preserve">
     <value>WebView2 Runtime-ը տեղադրվում է...</value>
   </data>
+  <data name="LossySaveTitle" xml:space="preserve">
+    <value>Պահպանե՞լ UTF-8-ով</value>
+  </data>
+  <data name="LossySaveContent" xml:space="preserve">
+    <value>Այս ֆայլի կոդավորումը հնարավոր չեղավ ճշգրիտ կարդալ։ Պահպանելիս այն կգրվի UTF-8-ով, և � ձևով ցուցադրված նիշերը ընդմիշտ կկորչեն։ Այլ կոդավորում փորձելու համար օգտագործեք կարգավիճակի գոտու կոդավորման ընտրացանկը։</value>
+  </data>
+  <data name="LossySaveAsUtf8" xml:space="preserve">
+    <value>Պահպանել UTF-8-ով</value>
+  </data>
 </root>

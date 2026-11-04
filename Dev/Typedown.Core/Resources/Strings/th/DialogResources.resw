@@ -338,4 +338,13 @@
   <data name="WebView2Installing" xml:space="preserve">
     <value>กำลังติดตั้ง WebView2 Runtime...</value>
   </data>
+  <data name="LossySaveTitle" xml:space="preserve">
+    <value>บันทึกเป็น UTF-8 หรือไม่</value>
+  </data>
+  <data name="LossySaveContent" xml:space="preserve">
+    <value>ไม่สามารถอ่านการเข้ารหัสของไฟล์นี้ได้อย่างถูกต้อง การบันทึกจะเขียนไฟล์เป็น UTF-8 และอักขระที่แสดงเป็น � จะหายไปถาวร หากต้องการลองการเข้ารหัสอื่น ให้ใช้เมนูการเข้ารหัสในแถบสถานะ</value>
+  </data>
+  <data name="LossySaveAsUtf8" xml:space="preserve">
+    <value>บันทึกเป็น UTF-8</value>
+  </data>
 </root>

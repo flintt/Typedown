@@ -338,4 +338,13 @@
   <data name="WebView2Installing" xml:space="preserve">
     <value>WebView2 Runtime ይጽዓን ኣሎ...</value>
   </data>
+  <data name="LossySaveTitle" xml:space="preserve">
+    <value>ብ UTF-8 ይዕቀብ?</value>
+  </data>
+  <data name="LossySaveContent" xml:space="preserve">
+    <value>ኢንኮዲንግ ናይዚ ፋይል ብልክዕ ክንበብ ኣይከኣለን። ምዕቃብ ብ UTF-8 ይጽሕፎ፣ እቶም ከም � ዝርኣዩ ፊደላት ድማ ንሓዋሩ ይጠፍኡ። ካልእ ኢንኮዲንግ ንምፍታን ኣብ መስመር ኩነታት ዘሎ ምናሌ ኢንኮዲንግ ተጠቐሙ።</value>
+  </data>
+  <data name="LossySaveAsUtf8" xml:space="preserve">
+    <value>ብ UTF-8 ዓቅብ</value>
+  </data>
 </root>

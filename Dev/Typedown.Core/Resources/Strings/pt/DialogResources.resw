@@ -338,4 +338,13 @@
   <data name="WebView2Installing" xml:space="preserve">
     <value>Instalando o WebView2 Runtime...</value>
   </data>
+  <data name="LossySaveTitle" xml:space="preserve">
+    <value>Salvar como UTF-8?</value>
+  </data>
+  <data name="LossySaveContent" xml:space="preserve">
+    <value>Não foi possível ler com exatidão a codificação deste arquivo. Ao salvar, ele será gravado como UTF-8, e os caracteres mostrados como � serão perdidos para sempre. Para tentar outra codificação, use o menu de codificação na barra de status.</value>
+  </data>
+  <data name="LossySaveAsUtf8" xml:space="preserve">
+    <value>Salvar como UTF-8</value>
+  </data>
 </root>

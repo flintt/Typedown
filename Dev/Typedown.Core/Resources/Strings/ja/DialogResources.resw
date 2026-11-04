@@ -338,4 +338,13 @@
   <data name="WebView2Installing" xml:space="preserve">
     <value>WebView2 ランタイムをインストールしています...</value>
   </data>
+  <data name="LossySaveTitle" xml:space="preserve">
+    <value>UTF-8 で保存しますか?</value>
+  </data>
+  <data name="LossySaveContent" xml:space="preserve">
+    <value>このファイルのエンコードを正確に読み取れませんでした。保存すると UTF-8 で書き込まれ、� と表示されている文字は元に戻せなくなります。別のエンコードを試すには、ステータス バーのエンコード メニューを使ってください。</value>
+  </data>
+  <data name="LossySaveAsUtf8" xml:space="preserve">
+    <value>UTF-8 で保存</value>
+  </data>
 </root>

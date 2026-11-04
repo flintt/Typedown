@@ -338,4 +338,13 @@
   <data name="WebView2Installing" xml:space="preserve">
     <value>WebView2 Runtime ინსტალირდება...</value>
   </data>
+  <data name="LossySaveTitle" xml:space="preserve">
+    <value>შევინახო UTF-8-ით?</value>
+  </data>
+  <data name="LossySaveContent" xml:space="preserve">
+    <value>ამ ფაილის კოდირების ზუსტად წაკითხვა ვერ მოხერხდა. შენახვისას ის UTF-8-ით ჩაიწერება, ხოლო � სახით ნაჩვენები სიმბოლოები სამუდამოდ დაიკარგება. სხვა კოდირების საცდელად გამოიყენეთ სტატუსის ზოლის კოდირების მენიუ.</value>
+  </data>
+  <data name="LossySaveAsUtf8" xml:space="preserve">
+    <value>შენახვა UTF-8-ით</value>
+  </data>
 </root>

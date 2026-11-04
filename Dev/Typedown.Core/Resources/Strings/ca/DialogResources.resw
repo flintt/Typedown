@@ -338,4 +338,13 @@
   <data name="WebView2Installing" xml:space="preserve">
     <value>S'està instal·lant el WebView2 Runtime...</value>
   </data>
+  <data name="LossySaveTitle" xml:space="preserve">
+    <value>Voleu desar-lo com a UTF-8?</value>
+  </data>
+  <data name="LossySaveContent" xml:space="preserve">
+    <value>No s’ha pogut llegir exactament la codificació d’aquest fitxer. En desar-lo s’escriurà com a UTF-8, i els caràcters que es mostren com a � es perdran per sempre. Per provar una altra codificació, utilitzeu el menú de codificació de la barra d’estat.</value>
+  </data>
+  <data name="LossySaveAsUtf8" xml:space="preserve">
+    <value>Desa com a UTF-8</value>
+  </data>
 </root>

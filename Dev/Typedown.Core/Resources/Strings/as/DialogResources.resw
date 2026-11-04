@@ -338,4 +338,13 @@
   <data name="WebView2Installing" xml:space="preserve">
     <value>WebView2 ৰানটাইম ইনষ্টল কৰি থকা হৈছে...</value>
   </data>
+  <data name="LossySaveTitle" xml:space="preserve">
+    <value>UTF-8 হিচাপে ছেভ কৰিবনে?</value>
+  </data>
+  <data name="LossySaveContent" xml:space="preserve">
+    <value>এই ফাইলৰ এনক’ডিং সঠিকভাৱে পঢ়িব পৰা নগ’ল। ছেভ কৰিলে ই UTF-8 হিচাপে লিখা হ’ব, আৰু � হিচাপে দেখুওৱা আখৰবোৰ চিৰদিনৰ বাবে হেৰাব। আন এনক’ডিং চাবলৈ ষ্টেটাছ বাৰৰ এনক’ডিং মেনু ব্যৱহাৰ কৰক।</value>
+  </data>
+  <data name="LossySaveAsUtf8" xml:space="preserve">
+    <value>UTF-8 হিচাপে ছেভ কৰক</value>
+  </data>
 </root>

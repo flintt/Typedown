@@ -338,4 +338,13 @@
   <data name="WebView2Installing" xml:space="preserve">
     <value>Qed jiġi installat il-WebView2 Runtime...</value>
   </data>
+  <data name="LossySaveTitle" xml:space="preserve">
+    <value>Issejvja bħala UTF-8?</value>
+  </data>
+  <data name="LossySaveContent" xml:space="preserve">
+    <value>L-encoding ta’ dan il-fajl ma setax jinqara eżatt. Is-salvataġġ jiktbu bħala UTF-8, u l-karattri murija bħala � jintilfu għal dejjem. Biex tipprova encoding ieħor, uża l-menu tal-encoding fil-bar tal-istatus.</value>
+  </data>
+  <data name="LossySaveAsUtf8" xml:space="preserve">
+    <value>Issejvja bħala UTF-8</value>
+  </data>
 </root>

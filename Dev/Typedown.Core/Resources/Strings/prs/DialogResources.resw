@@ -338,4 +338,13 @@
   <data name="WebView2Installing" xml:space="preserve">
     <value>در حال نصب WebView2 Runtime...</value>
   </data>
+  <data name="LossySaveTitle" xml:space="preserve">
+    <value>با UTF-8 ذخیره شود؟</value>
+  </data>
+  <data name="LossySaveContent" xml:space="preserve">
+    <value>رمزگذاری این فایل دقیق خوانده نشد. ذخیره کردن آن را با UTF-8 می‌نویسد و حروفی که به شکل � نشان داده می‌شوند برای همیش از بین می‌روند. برای امتحان رمزگذاری دیگر، از مینوی رمزگذاری در نوار وضعیت استفاده کنید.</value>
+  </data>
+  <data name="LossySaveAsUtf8" xml:space="preserve">
+    <value>ذخیره با UTF-8</value>
+  </data>
 </root>

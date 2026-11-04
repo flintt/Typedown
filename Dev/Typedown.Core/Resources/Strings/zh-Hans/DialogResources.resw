@@ -343,4 +343,13 @@
   <data name="WebView2Installing" xml:space="preserve">
     <value>正在安装 WebView2 运行时...</value>
   </data>
+  <data name="LossySaveTitle" xml:space="preserve">
+    <value>以 UTF-8 保存？</value>
+  </data>
+  <data name="LossySaveContent" xml:space="preserve">
+    <value>没能准确读出此文件的编码。保存会把它写成 UTF-8，显示为 � 的字符将永久丢失。要换一种编码打开，请用状态栏的编码菜单。</value>
+  </data>
+  <data name="LossySaveAsUtf8" xml:space="preserve">
+    <value>以 UTF-8 保存</value>
+  </data>
 </root>

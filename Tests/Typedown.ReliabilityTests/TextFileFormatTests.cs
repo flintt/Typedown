@@ -61,4 +61,33 @@ public class TextFileFormatTests
     {
         Assert.IsTrue(TextFileFormat.Read(Bytes("Some text ", 0x81), ansiCodePage: 1252).Format.LossyDecode, "0x81 is no character in 1252: its C1 control is not text");
     }
+
+    // R07: a save by hand over a file not read exactly asks first; one read exactly, a new file, or one gone from disk does not.
+    [TestMethod]
+    public void ASaveOverAFileNotReadExactlyAsksFirst()
+    {
+        var lossy = TextFileFormat.Read(Bytes("# SB03\n\nSome text ", 0x81, 0x20, 0x9D, 0x81), ansiCodePage: 1252).Format;
+        Assert.IsTrue(lossy.NeedsConsentToOverwrite(fileExists: true), "the file's bytes would be replaced");
+        Assert.IsFalse(lossy.NeedsConsentToOverwrite(fileExists: false), "no file left to lose");
+        Assert.IsTrue(lossy.WithLineEnding("\r\n").NeedsConsentToOverwrite(fileExists: true), "another line ending is still not the bytes");
+        var exact = TextFileFormat.Read(Encoding.UTF8.GetBytes("# Notes\n"), ansiCodePage: 1252).Format;
+        Assert.IsFalse(exact.NeedsConsentToOverwrite(fileExists: true), "read exactly");
+        Assert.IsFalse(TextFileFormat.Default.NeedsConsentToOverwrite(fileExists: true), "a new document");
+    }
+
+    // "Save as UTF-8" (the dialog's yes, or the status bar's Convert to UTF-8): the text as shown, the replacement
+    // characters and all, as UTF-8 with no mark and the file's line ending; nothing asked again after it.
+    [TestMethod]
+    public void SavedAsUtf8ItIsTheTextAsShown()
+    {
+        var bytes = Bytes("# SB03\r\n\r\nSome text ", 0x81, 0x20, 0x9D, 0x81);
+        var (text, format) = TextFileFormat.Read(bytes, ansiCodePage: 1252);
+        var utf8 = format.AsUtf8();
+        Assert.IsFalse(utf8.NeedsConsentToOverwrite(fileExists: true));
+        var written = utf8.GetBytes(text + "Q");
+        var strict = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false, throwOnInvalidBytes: true);
+        Assert.AreEqual(text.Replace("\n", "\r\n") + "Q", strict.GetString(written), "valid UTF-8, the text as shown, CRLF kept");
+        Assert.IsTrue(text.Contains('�'), "the undecodable bytes were shown as U+FFFD");
+        Assert.AreNotEqual((byte)0xEF, written[0], "no byte order mark");
+    }
 }

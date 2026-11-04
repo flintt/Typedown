@@ -338,4 +338,13 @@
   <data name="WebView2Installing" xml:space="preserve">
     <value>Inštaluje sa modul runtime WebView2...</value>
   </data>
+  <data name="LossySaveTitle" xml:space="preserve">
+    <value>Uložiť ako UTF-8?</value>
+  </data>
+  <data name="LossySaveContent" xml:space="preserve">
+    <value>Kódovanie tohto súboru sa nepodarilo presne prečítať. Uložením sa zapíše ako UTF-8 a znaky zobrazené ako � sa navždy stratia. Ak chcete skúsiť iné kódovanie, použite ponuku kódovania v stavovom riadku.</value>
+  </data>
+  <data name="LossySaveAsUtf8" xml:space="preserve">
+    <value>Uložiť ako UTF-8</value>
+  </data>
 </root>

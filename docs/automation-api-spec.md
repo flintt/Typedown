@@ -394,7 +394,7 @@ JSON-RPC 的 `error.code` 必须是整数。除 `-32602` 等标准错误外，v1
 | `-32014` | `content_sync_timeout` | 无法确认宿主持有最新正文 |
 | `-32015` | `read_only` | 当前策略禁止修改 |
 | `-32016` | `path_required` | 保存操作需要显式路径 |
-| `-32017` | `save_failed` | 文件保存失败，正文仍保持未保存状态 |
+| `-32017` | `save_failed` | 文件保存失败，正文仍保持未保存状态；`data.reason` 为 `encoding_not_exact` 时是文件编码没能准确读出，保存会替换显示为 U+FFFD 的字符，API 不写，只能由用户在界面里选择（R07） |
 | `-32018` | `content_not_roundtrippable` | 保守校验已确认候选序列化会损失内容或结构；宿主已恢复权威旧正文，revision 和 history 未提交 |
 | `-32019` | `match_count_mismatch` | `replaceText` 的实际匹配数与 `expectedCount` 不同 |
 | `-32020` | `setting_not_exposed` | 设置未列入外部白名单 |

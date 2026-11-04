@@ -338,4 +338,13 @@
   <data name="WebView2Installing" xml:space="preserve">
     <value>Installerer WebView2 Runtime...</value>
   </data>
+  <data name="LossySaveTitle" xml:space="preserve">
+    <value>Lagre som UTF-8?</value>
+  </data>
+  <data name="LossySaveContent" xml:space="preserve">
+    <value>Tegnkodingen til denne filen kunne ikke leses nøyaktig. Når du lagrer, skrives den som UTF-8, og tegnene som vises som �, går tapt for godt. Bruk kodingsmenyen på statuslinjen for å prøve en annen koding.</value>
+  </data>
+  <data name="LossySaveAsUtf8" xml:space="preserve">
+    <value>Lagre som UTF-8</value>
+  </data>
 </root>

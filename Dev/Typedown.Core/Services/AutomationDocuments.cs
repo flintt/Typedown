@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -123,7 +124,26 @@ namespace Typedown.Core.Services
         }
 
         /// <summary>Only the active document is saved in this version; a background tab is focused first.</summary>
-        public Task<bool> SaveAsync(CancellationToken cancellationToken) =>
-            IsActive ? app.FileViewModel.SaveToExistingPathAsync() : Task.FromResult(false);
+        public Task<bool> SaveAsync(CancellationToken cancellationToken)
+        {
+            if (!IsActive) return Task.FromResult(false);
+            if (app.FileViewModel.SaveNeedsEncodingConsent) throw EncodingNotExact(tab.Revision, applied: true);
+            return app.FileViewModel.SaveToExistingPathAsync();
+        }
+
+        /// <summary>
+        /// The API's save of a file that was not read exactly (R07): refused with save_failed and reason
+        /// "encoding_not_exact", not a dialog - writing it replaces the bytes shown as U+FFFD, and only the person may
+        /// choose that (File > Save asks them; the status bar's encoding menu reads it again in another encoding).
+        /// </summary>
+        public static AutomationException EncodingNotExact(long revision, bool applied)
+        {
+            var data = new Dictionary<string, object> { ["reason"] = "encoding_not_exact", ["revision"] = revision };
+            if (applied) data["applied"] = true;
+            return new AutomationException(AutomationErrorKind.save_failed,
+                (applied ? "The edit was applied but not saved: " : "Not saved: ")
+                + "this file's encoding could not be read exactly, and saving would replace the characters shown as U+FFFD for good. Only the person can choose to save it (File > Save asks them).",
+                data);
+        }
     }
 }

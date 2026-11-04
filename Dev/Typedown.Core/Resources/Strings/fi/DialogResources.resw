@@ -338,4 +338,13 @@
   <data name="WebView2Installing" xml:space="preserve">
     <value>Asennetaan WebView2-suorituspalvelua...</value>
   </data>
+  <data name="LossySaveTitle" xml:space="preserve">
+    <value>Tallennetaanko UTF-8-muodossa?</value>
+  </data>
+  <data name="LossySaveContent" xml:space="preserve">
+    <value>Tämän tiedoston merkistöä ei voitu lukea tarkasti. Tallennus kirjoittaa sen UTF-8-muodossa, ja merkkeinä � näkyvät merkit menetetään pysyvästi. Kokeile toista merkistöä tilarivin merkistövalikosta.</value>
+  </data>
+  <data name="LossySaveAsUtf8" xml:space="preserve">
+    <value>Tallenna UTF-8-muodossa</value>
+  </data>
 </root>

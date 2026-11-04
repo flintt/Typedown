@@ -338,4 +338,13 @@
   <data name="WebView2Installing" xml:space="preserve">
     <value>جارٍ تثبيت وقت تشغيل WebView2...</value>
   </data>
+  <data name="LossySaveTitle" xml:space="preserve">
+    <value>هل تريد الحفظ بترميز UTF-8؟</value>
+  </data>
+  <data name="LossySaveContent" xml:space="preserve">
+    <value>تعذّرت قراءة ترميز هذا الملف بدقة. الحفظ يكتبه بترميز UTF-8، وتضيع الأحرف المعروضة كـ � نهائيًا. لتجربة ترميز آخر، استخدم قائمة الترميز في شريط الحالة.</value>
+  </data>
+  <data name="LossySaveAsUtf8" xml:space="preserve">
+    <value>حفظ بترميز UTF-8</value>
+  </data>
 </root>

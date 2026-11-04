@@ -338,4 +338,13 @@
   <data name="WebView2Installing" xml:space="preserve">
     <value>WebView2 రన్‌టైమ్ ఇన్‌స్టాల్ అవుతోంది...</value>
   </data>
+  <data name="LossySaveTitle" xml:space="preserve">
+    <value>UTF-8 గా సేవ్ చేయాలా?</value>
+  </data>
+  <data name="LossySaveContent" xml:space="preserve">
+    <value>ఈ ఫైల్ ఎన్‌కోడింగ్‌ను ఖచ్చితంగా చదవలేకపోయాం. సేవ్ చేస్తే ఇది UTF-8 గా రాయబడుతుంది, � గా చూపిన అక్షరాలు శాశ్వతంగా పోతాయి. వేరే ఎన్‌కోడింగ్ ప్రయత్నించడానికి స్టేటస్ బార్‌లోని ఎన్‌కోడింగ్ మెనూను ఉపయోగించండి.</value>
+  </data>
+  <data name="LossySaveAsUtf8" xml:space="preserve">
+    <value>UTF-8 గా సేవ్ చేయి</value>
+  </data>
 </root>

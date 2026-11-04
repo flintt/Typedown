@@ -338,4 +338,13 @@
   <data name="WebView2Installing" xml:space="preserve">
     <value>מתקין את זמן הריצה WebView2...</value>
   </data>
+  <data name="LossySaveTitle" xml:space="preserve">
+    <value>לשמור כ-UTF-8?</value>
+  </data>
+  <data name="LossySaveContent" xml:space="preserve">
+    <value>לא ניתן היה לקרוא במדויק את הקידוד של קובץ זה. השמירה תכתוב אותו כ-UTF-8, והתווים המוצגים כ-� יאבדו לתמיד. כדי לנסות קידוד אחר, השתמשו בתפריט הקידוד בשורת המצב.</value>
+  </data>
+  <data name="LossySaveAsUtf8" xml:space="preserve">
+    <value>שמירה כ-UTF-8</value>
+  </data>
 </root>

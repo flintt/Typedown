@@ -338,4 +338,13 @@
   <data name="WebView2Installing" xml:space="preserve">
     <value>Ifaka i-WebView2 Runtime...</value>
   </data>
+  <data name="LossySaveTitle" xml:space="preserve">
+    <value>Londoloza njenge-UTF-8?</value>
+  </data>
+  <data name="LossySaveContent" xml:space="preserve">
+    <value>Ukubhalwa ngekhodi kwaleli fayela akukwazanga ukufundwa ngqo. Ukulondoloza kulibhala njenge-UTF-8, futhi izinhlamvu eziboniswa njenge-� zilahleka unomphela. Ukuze uzame okunye ukubhalwa ngekhodi, sebenzisa imenyu yokubhalwa ngekhodi kubha yesimo.</value>
+  </data>
+  <data name="LossySaveAsUtf8" xml:space="preserve">
+    <value>Londoloza njenge-UTF-8</value>
+  </data>
 </root>

@@ -338,4 +338,13 @@
   <data name="WebView2Installing" xml:space="preserve">
     <value>E tāuta ana i te WebView2 Runtime...</value>
   </data>
+  <data name="LossySaveTitle" xml:space="preserve">
+    <value>Me tiaki hei UTF-8?</value>
+  </data>
+  <data name="LossySaveContent" xml:space="preserve">
+    <value>Kāore i taea te pānui tika i te whakawaehere o tēnei kōnae. Mā te tiaki ka tuhia hei UTF-8, ā, ka ngaro mō ake tonu ngā pūāhua e whakaaturia ana hei �. Hei whakamātau i tētahi atu whakawaehere, whakamahia te tahua whakawaehere i te pae tūnga.</value>
+  </data>
+  <data name="LossySaveAsUtf8" xml:space="preserve">
+    <value>Tiaki hei UTF-8</value>
+  </data>
 </root>

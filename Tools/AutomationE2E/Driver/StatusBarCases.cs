@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Automation;
 using Newtonsoft.Json.Linq;
+using Typedown.Automation;
 
 /// <summary>The status bar's own controls, used as a person uses them: real clicks.</summary>
 internal static partial class Program
@@ -163,6 +164,92 @@ internal static partial class Program
         finally
         {
             try { await c.Call("test.settings.set", new { windowId, name = "AutoSave", value = autoSave }); } catch { }
+        }
+    }
+
+    // R07: a save by hand over a file not read exactly asks first - Cancel (the default) writes nothing, Save as UTF-8
+    // writes the text as shown as UTF-8; the API's save refuses with a reason; the status bar marks the file before.
+    private static async Task SB08(List<string> notes)
+    {
+        using var c = await Session("e2e SB08");
+        // SB03's bytes: text in no encoding (0x81 before a space is no GBK character, 0x81 and 0x9D none in 1252).
+        var lossy = Path.Combine(fixtures, "sb08-lossy.md");
+        var original = Enumerable.Concat(System.Text.Encoding.ASCII.GetBytes("# SB08\n\nSome text "), new byte[] { 0x81, 0x20, 0x9D, 0x81 }).Concat(System.Text.Encoding.ASCII.GetBytes(" here.\n")).ToArray();
+        File.WriteAllBytes(lossy, original);
+        var id = await Open(c, lossy);
+        var windowId = await WindowIdOf(c, id);
+        var window = await WindowOf(windowId, c);
+        var autoSave = (bool)(await c.Call("test.settings.get", new { windowId, name = "AutoSave" }))["value"]!;
+        AutomationElement Find(string automationId) =>
+            Deep.First(AutomationElement.FromHandle(window), new PropertyCondition(AutomationElement.AutomationIdProperty, automationId))
+            ?? throw new CaseFailed($"no {automationId}");
+        void Invoke(AutomationElement button) => ((InvokePattern)button.GetCurrentPattern(InvokePattern.Pattern)).Invoke();
+        async Task<bool> DialogShown(int timeoutMs)
+        {
+            for (var i = 0; i < timeoutMs / 150; i++)
+            {
+                if (FindIn(window, "PrimaryButton") != null) return true;
+                await Task.Delay(150);
+            }
+            return false;
+        }
+        try
+        {
+            await c.Call("test.settings.set", new { windowId, name = "AutoSave", value = false });
+            await c.Call("window.setView", new { windowId, statusBar = true, mode = "visual", bounds = new { x = 20, y = 20, width = 1400, height = 800 } });
+            await Task.Delay(1200);
+            var marked = BarText(window, "StatusBarFileFormat");
+            notes.Add($"status bar: '{marked}'");
+            Check(marked.Contains('⚠'), $"the status bar marks the file as not read exactly ({marked})");
+            await ClickEditorText(c, windowId, window, "Some text");
+            TypeChar('Q');
+            await Task.Delay(800);
+
+            // Saved by hand: the question; Cancel writes nothing and leaves it unsaved.
+            await Click(window, Find("StatusBarSaveState"));
+            Check(await DialogShown(8000), "a save by hand asks first");
+            var question = string.Join(" | ", Deep.All(AutomationElement.FromHandle(window), new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.Text)).Cast<AutomationElement>().Select(Deep.Name).Where(n => n.Contains("UTF-8")));
+            notes.Add($"the question: '{question}'");
+            Invoke(FindIn(window, "CloseButton") ?? throw new CaseFailed("the question has no Cancel"));
+            await Task.Delay(1500);
+            Check(File.ReadAllBytes(lossy).SequenceEqual(original), "Cancel: the file kept its bytes");
+            var after = await Get(c, id);
+            Check(!(bool)after["saved"]! && ((string?)after["text"] ?? "").Contains('Q'), "Cancel: the document stays unsaved, with what was typed");
+
+            // The API's save: refused, and why - no dialog.
+            JToken? refusal = null;
+            try { await c.Call("document.save", new { documentId = id }); }
+            catch (JsonRpcRemoteException e) { refusal = e.ErrorData; }
+            notes.Add($"document.save: {refusal?.ToString(Newtonsoft.Json.Formatting.None) ?? "saved"}");
+            Check((string?)refusal?["kind"] == "save_failed" && (string?)refusal?["reason"] == "encoding_not_exact", "the API's save is refused with the reason");
+            Check(!await DialogShown(1000), "the API's save shows no dialog");
+            Check(File.ReadAllBytes(lossy).SequenceEqual(original), "the API's save wrote nothing");
+
+            // Save as UTF-8: the text as shown, as UTF-8; the mark gone, and the next save asks nothing.
+            await Click(window, Find("StatusBarSaveState"));
+            Check(await DialogShown(8000), "asked again: nothing was remembered");
+            Invoke(FindIn(window, "PrimaryButton")!);
+            for (var i = 0; i < 40 && File.ReadAllBytes(lossy).SequenceEqual(original); i++) await Task.Delay(200);
+            var written = File.ReadAllBytes(lossy);
+            string text;
+            try { text = new System.Text.UTF8Encoding(false, true).GetString(written); }
+            catch (System.Text.DecoderFallbackException) { throw new CaseFailed("Save as UTF-8 wrote bytes that are not UTF-8"); }
+            notes.Add($"written: '{text.Replace("\n", "\\n")}' ({written.Length} bytes)");
+            Check(text.Contains('Q') && text.Contains('�') && text.StartsWith("# SB08"), "Save as UTF-8 wrote the text as shown");
+            var converted = BarText(window, "StatusBarFileFormat");
+            Check(!converted.Contains('⚠') && converted.Contains("UTF-8"), $"the mark is gone ({converted})");
+            Check((bool)(await Get(c, id))["saved"]!, "the document is saved");
+            await ClickEditorText(c, windowId, window, "Some text");
+            TypeChar('R');
+            await Task.Delay(800);
+            await c.Call("document.save", new { documentId = id });
+            Check(Disk(lossy).Contains('R'), "after it the API's save writes");
+        }
+        finally
+        {
+            try { if (FindIn(window, "CloseButton") is { } cancel && FindIn(window, "PrimaryButton") != null) Invoke(cancel); } catch { }
+            try { await c.Call("test.settings.set", new { windowId, name = "AutoSave", value = autoSave }); } catch { }
+            try { await c.Call("document.close", new { documentId = id }); } catch { }
         }
     }
 

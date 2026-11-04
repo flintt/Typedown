@@ -346,4 +346,16 @@
   <data name="UploadImages.Reused" xml:space="preserve">
     <value>{0} of them had been uploaded before with this configuration, so their earlier addresses were used.</value>
   </data>
+  <data name="LossySaveTitle" xml:space="preserve">
+    <value>Save as UTF-8?</value>
+    <comment>手动保存编码没能准确读出的文件时的提问标题（R07）</comment>
+  </data>
+  <data name="LossySaveContent" xml:space="preserve">
+    <value>This file's encoding could not be read exactly. Saving writes it as UTF-8, and the characters shown as � are lost for good. To try another encoding, use the encoding menu in the status bar.</value>
+    <comment>同上，正文：保存会改写为 UTF-8，显示为 � 的字符永久丢失；可在状态栏编码菜单换编码重新打开</comment>
+  </data>
+  <data name="LossySaveAsUtf8" xml:space="preserve">
+    <value>Save as UTF-8</value>
+    <comment>同上，按钮：按 UTF-8 保存</comment>
+  </data>
 </root>

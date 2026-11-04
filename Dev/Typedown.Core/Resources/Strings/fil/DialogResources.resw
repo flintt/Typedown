@@ -338,4 +338,13 @@
   <data name="WebView2Installing" xml:space="preserve">
     <value>Ini-install ang WebView2 Runtime...</value>
   </data>
+  <data name="LossySaveTitle" xml:space="preserve">
+    <value>I-save bilang UTF-8?</value>
+  </data>
+  <data name="LossySaveContent" xml:space="preserve">
+    <value>Hindi nabasa nang eksakto ang encoding ng file na ito. Kapag sine-save, isusulat ito bilang UTF-8, at tuluyang mawawala ang mga character na ipinapakita bilang �. Para sumubok ng ibang encoding, gamitin ang encoding menu sa status bar.</value>
+  </data>
+  <data name="LossySaveAsUtf8" xml:space="preserve">
+    <value>I-save bilang UTF-8</value>
+  </data>
 </root>

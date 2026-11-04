@@ -338,4 +338,13 @@
   <data name="WebView2Installing" xml:space="preserve">
     <value>WebView2 Çalışma Zamanı yükleniyor...</value>
   </data>
+  <data name="LossySaveTitle" xml:space="preserve">
+    <value>UTF-8 olarak kaydedilsin mi?</value>
+  </data>
+  <data name="LossySaveContent" xml:space="preserve">
+    <value>Bu dosyanın kodlaması tam olarak okunamadı. Kaydetmek onu UTF-8 olarak yazar ve � olarak gösterilen karakterler kalıcı olarak kaybolur. Başka bir kodlama denemek için durum çubuğundaki kodlama menüsünü kullanın.</value>
+  </data>
+  <data name="LossySaveAsUtf8" xml:space="preserve">
+    <value>UTF-8 olarak kaydet</value>
+  </data>
 </root>
