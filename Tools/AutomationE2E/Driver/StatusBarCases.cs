@@ -271,7 +271,7 @@ internal static partial class Program
             var converted = BarText(window, "StatusBarFileFormat");
             Check(!converted.Contains('⚠') && converted.Contains("UTF-8"), $"the mark is gone ({converted})");
             Check((bool)(await Get(c, id))["saved"]!, "the document is saved");
-            await ClickEditorText(c, windowId, window, "Some text");
+            await ClickEditorText(c, windowId, window, "here.");
             TypeChar('R');
             await Task.Delay(800);
             await c.Call("document.save", new { documentId = id });
