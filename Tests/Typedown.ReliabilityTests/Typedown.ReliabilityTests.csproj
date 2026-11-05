@@ -28,6 +28,7 @@
     <Compile Include="../../Dev/Typedown.Core/Utilities/LogText.cs" Link="Production/LogText.cs" />
     <Compile Include="../../Dev/Typedown.Core/Utilities/DiskConflict.cs" Link="Production/DiskConflict.cs" />
     <Compile Include="../../Dev/Typedown.Core/Utilities/ClipboardHtml.cs" Link="Production/ClipboardHtml.cs" />
+    <Compile Include="../../Dev/Typedown.Core/Utilities/FocusRule.cs" Link="Production/FocusRule.cs" />
     <Compile Include="../../Dev/Typedown.Core/Utilities/RecentPaths.cs" Link="Production/RecentPaths.cs" />
     <Compile Include="../../Dev/Typedown.Core/Utilities/TextFileFormat.cs" Link="Production/TextFileFormat.cs" />
     <Compile Include="../../Dev/Typedown.Core/Services/FavoritesStore.cs" Link="Production/FavoritesStore.cs" />

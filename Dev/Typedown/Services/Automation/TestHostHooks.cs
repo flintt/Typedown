@@ -379,6 +379,78 @@ namespace Typedown.Services.Automation
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["section"] = section, ["rows"] = rows };
                 })));
 
+            // The settings page as a hand sees it (SL01): where its scroller is, what has the keyboard focus (and the setting row
+            // it is in), and each row wholly in view with the screen points of its title and of its control, to click.
+            methods.Add(new MethodDescriptor("test.settings.focus", null, "test.settings.focus/1", (c, ct) =>
+                Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>
+                {
+                    var window = Typedown.Windows.MainWindow.AllWindows.FirstOrDefault(w => w.Handle == app.MainWindow)
+                        ?? throw new AutomationException(AutomationErrorKind.window_not_found, "no main window with that handle");
+                    var root = window.Content as Microsoft.UI.Xaml.UIElement
+                        ?? throw new AutomationException(AutomationErrorKind.editor_not_ready, "the window has no content");
+                    Core.Pages.SettingsPage page = null;
+                    var stack = new System.Collections.Generic.Stack<Microsoft.UI.Xaml.DependencyObject>();
+                    stack.Push(root);
+                    while (stack.Count > 0 && page == null)
+                    {
+                        var node = stack.Pop();
+                        if (node is Core.Pages.SettingsPage found) { page = found; break; }
+                        for (var i = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(node) - 1; i >= 0; i--)
+                            stack.Push(Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChild(node, i));
+                    }
+                    if (page == null) throw new AutomationException(AutomationErrorKind.editor_not_ready, "no settings page shown");
+                    var scale = app.XamlRoot.RasterizationScale;
+                    Newtonsoft.Json.Linq.JObject Screen(Microsoft.UI.Xaml.FrameworkElement element)
+                    {
+                        var inRoot = element.TransformToVisual(root).TransformPoint(new global::Windows.Foundation.Point(element.ActualWidth / 2, element.ActualHeight / 2));
+                        var point = new NativePoint { X = (int)System.Math.Round(inRoot.X * scale), Y = (int)System.Math.Round(inRoot.Y * scale) };
+                        ClientToScreen(app.MainWindow, ref point);
+                        return new Newtonsoft.Json.Linq.JObject { ["x"] = point.X, ["y"] = point.Y };
+                    }
+                    var scroller = page.Scroller;
+                    var view = scroller.TransformToVisual(root).TransformBounds(new global::Windows.Foundation.Rect(0, 0, scroller.ActualWidth, scroller.ActualHeight));
+                    var rows = new Newtonsoft.Json.Linq.JArray();
+                    string first = null;
+                    stack.Clear();
+                    stack.Push(scroller);
+                    while (stack.Count > 0)
+                    {
+                        var node = stack.Pop();
+                        for (var i = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(node) - 1; i >= 0; i--)
+                            stack.Push(Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChild(node, i));
+                        if (node is not Core.Controls.NormalSettingItem row || row.ActualWidth <= 0 || row.Visibility != Microsoft.UI.Xaml.Visibility.Visible) continue;
+                        var title = row.Title?.ToString() ?? "";
+                        first ??= title;
+                        var place = row.TransformToVisual(root).TransformBounds(new global::Windows.Foundation.Rect(0, 0, row.ActualWidth, row.ActualHeight));
+                        if (place.Top < view.Top || place.Bottom > view.Bottom) continue; // not wholly in view
+                        if (row.Action is not Microsoft.UI.Xaml.FrameworkElement action || action.ActualWidth <= 0) continue;
+                        // The title: a point in the row's text column, left of the control and clear of the icon.
+                        var text = row.TransformToVisual(root).TransformPoint(new global::Windows.Foundation.Point(56, row.ActualHeight / 2));
+                        var textPoint = new NativePoint { X = (int)System.Math.Round(text.X * scale), Y = (int)System.Math.Round(text.Y * scale) };
+                        ClientToScreen(app.MainWindow, ref textPoint);
+                        rows.Add(new Newtonsoft.Json.Linq.JObject
+                        {
+                            ["title"] = title,
+                            ["control"] = action.GetType().Name,
+                            ["on"] = action is Microsoft.UI.Xaml.Controls.ToggleSwitch toggle ? toggle.IsOn : null,
+                            ["controlAt"] = Screen(action),
+                            ["textAt"] = new Newtonsoft.Json.Linq.JObject { ["x"] = textPoint.X, ["y"] = textPoint.Y },
+                        });
+                    }
+                    var focused = Microsoft.UI.Xaml.Input.FocusManager.GetFocusedElement(app.XamlRoot) as Microsoft.UI.Xaml.DependencyObject;
+                    return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject
+                    {
+                        ["section"] = page.ShownSection,
+                        ["offset"] = Math.Round(scroller.VerticalOffset, 1),
+                        ["extent"] = Math.Round(scroller.ExtentHeight, 1),
+                        ["viewport"] = Math.Round(scroller.ViewportHeight, 1),
+                        ["focused"] = Core.Pages.SettingsPage.Describe(focused),
+                        ["focusedRow"] = focused != null ? Core.Pages.SettingsPage.RowOf(focused) : null,
+                        ["firstRow"] = first,
+                        ["rows"] = rows,
+                    };
+                })));
+
             // Opens another window, as File > New window does, and returns its windowId once it is registered.
             methods.Add(new MethodDescriptor("test.window.open", null, "test.window.open/1", async (c, ct) =>
             {

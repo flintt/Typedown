@@ -91,7 +91,7 @@
             </Grid>
             <!-- The narrow layouts keep room on the right for the scroll bar, which is drawn over the content: the items
                  went under it. -->
-            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <ScrollViewer x:Name="SettingsScroller" AutomationProperties.AutomationId="SettingsScroller" Grid.Row="1" VerticalScrollBarVisibility="Auto">
                 <Grid>
                     <controls:GlobalFrame x:Name="ContentFrame" MaxWidth="1200"/>
                 </Grid>
