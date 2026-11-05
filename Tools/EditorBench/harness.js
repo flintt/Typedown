@@ -76,7 +76,9 @@ async function openEditor({ browserArgs = [] } = {}) {
     window.chrome = { webview: { addEventListener: (_t, l) => listeners.push(l), postMessage: raw => {
       const m = JSON.parse(raw);
       if (m.type === 'invoke') { setTimeout(() => window.__deliver(m.id, { code: 0, data: replies[m.name] ?? null }), 0); return; }
-      if (m.type === 'diffmsg') { const old = prev[m.name] || ''; prev[m.name] = m.diff ? old.slice(0, m.start) + m.args + old.slice(m.end) : m.args; window.__last[m.name] = JSON.parse(prev[m.name]); }
+      if (m.type === 'diffmsg') { const old = prev[m.name] || ''; prev[m.name] = m.diff ? old.slice(0, m.start) + m.args + old.slice(m.end) : m.args; window.__last[m.name] = JSON.parse(prev[m.name]);
+        // The outline as last sent: a StateChange whose outline did not change leaves it out (tocUnchanged).
+        if (m.name === 'StateChange' && window.__last.StateChange.state?.toc) window.__toc = window.__last.StateChange.state.toc; }
     } } };
   }, settings);
   const errors = [];

@@ -4,7 +4,7 @@ import { setScroller } from "services/scrollbar";
 import { matchString } from 'services/common'
 import { UnControlled as CodeMirror } from 'react-codemirror2';
 import 'codemirror/lib/codemirror.css';
-import { getTOC } from "services/common";
+import { getTOC, sourceHeadingLine } from "services/common";
 import { minimalChange } from "services/minimalChange";
 import { EXTERNAL_CHANGE_CLASS, EXTERNAL_CHANGE_MS, scrollTargetForChange } from "services/externalChange";
 import { setVimState, vimCommand } from "services/vim";
@@ -267,6 +267,17 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
         if (editor && !editor.hasFocus()) editor.focus()
     }), [editor]);
 
+    // A heading clicked in the outline: the caret to the start of its line, the line near the top of the window. Only the
+    // visual editor listened for it, and in source mode the outline showed but a click did nothing (the user, 2026-11-05).
+    useEffect(() => transport.addListener<{ slug: string }>('ScrollTo', ({ slug }) => {
+        const line = sourceHeadingLine(slug)
+        if (!editor || line === null || line >= editor.lineCount()) return
+        editor.setCursor({ line, ch: 0 })
+        const top = editor.charCoords({ line, ch: 0 }, 'local').top
+        editor.scrollTo(null, Math.max(0, top - 40))
+        if (!editor.hasFocus()) editor.focus()
+    }), [editor]);
+
     useEffect(() => transport.addListener('DeleteSelection', () => {
         editor?.replaceSelection('')
     }), [editor]);
@@ -315,6 +326,7 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
         if (props.localChangeRef) props.localChangeRef.current = false
         const scrollToChange = !!props.scrollToChangeRef?.current
         if (props.scrollToChangeRef) props.scrollToChangeRef.current = false
+        let replaced = false
         if (local && markdownRef.current != props.markdown) {
             // Replacing only what changed keeps the cursor, the selection and the scroll position where the reader
             // left them; CodeMirror maps them over the change.
@@ -336,6 +348,7 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
             }
             if (props.scrollFromHostRef) props.scrollFromHostRef.current = false
         } else if (markdownRef.current != props.markdown) {
+            replaced = true
             markdownRef.current = props.markdown
             // The caret that came with this text, not the one held: that effect (below) runs after this one, and held the
             // document before - a .txt opened after a .md (the editor already up for it, shown as plain text a moment
@@ -363,6 +376,9 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
             }
         }
         props.onContentApplied?.()
+        // The new text's count and outline once the load has taken it: the change setValue raised came before, while the
+        // page still dropped reports as the previous document's - source mode showed the outline before it until an edit.
+        if (replaced) handleCodeMirrorState(markdownRef.current, true)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [editor, props.markdown, props.contentVersion, props.scrollTopRef, search])
 
@@ -379,9 +395,9 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
         cursorRef.current = { anchor, head }
     }, [editor, props.cursor])
 
-    const countRef = useRef<{ time: number, value: any, timer?: any }>({ time: 0, value: null })
+    const countRef = useRef<{ time: number, value: any, timer?: any, toc?: any[] }>({ time: 0, value: null })
 
-    const handleCodeMirrorState = useCallback((value: string) => {
+    const handleCodeMirrorState = useCallback((value: string, loaded = false) => {
         // Counted as the visual editor counts (Muya's wordCount): source mode had its own count (every character,
         // words split at spaces only), so a mode switch moved the count with nothing written - and what follows the
         // count, as edits, took the jump for writing. On a long document at most every 300 ms while typing, and once
@@ -389,18 +405,24 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
         const counted = countRef.current
         clearTimeout(counted.timer)
         const now = Date.now()
-        if (value.length < 50000 || !counted.value || now - counted.time >= 300) {
+        // The outline with it: read by the visual editor's lexer now (services/common.ts getTOC), about 70 ms on 300k
+        // characters - on a long document only once the typing stops, not every 300 ms of it.
+        const long = value.length >= 50000
+        // A document just loaded: counted at once, not the one before's count and outline a moment longer.
+        if (!long || loaded || !counted.value || now - counted.time >= 300) {
             counted.time = now
             counted.value = countWords(value)
-        } else {
+            if (!long || loaded || !counted.toc) counted.toc = getTOC(value).toc
+        }
+        if (long) {
             counted.timer = setTimeout(() => {
                 counted.time = Date.now()
                 counted.value = countWords(value)
-                const { toc } = getTOC(value)
-                onStateChange({ wordCount: counted.value, toc, cur: toc[0] })
+                counted.toc = getTOC(value).toc
+                onStateChange({ wordCount: counted.value, toc: counted.toc, cur: counted.toc[0] })
             }, 300)
         }
-        const { toc } = getTOC(value)
+        const toc = counted.toc ?? []
         const state = { wordCount: counted.value, toc, cur: toc[0] }
         onStateChange(state)
     }, [onStateChange])
