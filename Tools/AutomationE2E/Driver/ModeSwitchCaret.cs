@@ -24,11 +24,24 @@ internal static partial class Program
         async Task<string> PageMode() => (string?)await Eval("document.querySelector('.CodeMirror') ? 'source' : 'visual'") ?? "?";
         try
         {
-            // The marker's paragraph about 60% down the window, and a real click inside the word.
-            await Eval("(() => { const p = [...document.querySelectorAll('#ag-editor-id p')].find(e => e.textContent.includes('ms01 marker')); p.scrollIntoView({ block: 'start' }); window.scrollBy(0, -window.innerHeight * 0.6); return 1 })()");
-            await Task.Delay(600);
-            var at = await Eval("(() => { const p = [...document.querySelectorAll('#ag-editor-id p')].find(e => e.textContent.includes('ms01 marker')); const walker = document.createTreeWalker(p, NodeFilter.SHOW_TEXT); let n; while ((n = walker.nextNode()) && !n.textContent.includes('ms01')); const r = document.createRange(); const i = n.textContent.indexOf('ms01') + 2; r.setStart(n, i); r.setEnd(n, i + 1); const b = r.getBoundingClientRect(); return { x: Math.round(b.left), y: Math.round(b.top + b.height / 2) } })()");
-            if (at == null || at.Type != JTokenType.Object) throw new CaseFailed("the marker is not on the page");
+            // The marker's word, scrolled into the window (about 60% down) and measured in one go, and measured again a
+            // moment on: clicked only once it is in the window and has stopped moving - at first the editor's own scroll as
+            // the document came put the page back (W10 job 197: the word at y 2461 of a page 591 high).
+            const string word = "const p = [...document.querySelectorAll('#ag-editor-id p')].find(e => e.textContent.includes('ms01 marker')); if (!p) return null; const walker = document.createTreeWalker(p, NodeFilter.SHOW_TEXT); let n; while ((n = walker.nextNode()) && !n.textContent.includes('ms01')); const r = document.createRange(); const i = n.textContent.indexOf('ms01') + 2; r.setStart(n, i); r.setEnd(n, i + 1);";
+            const string place = "(() => { " + word + " let b = r.getBoundingClientRect(); const want = window.innerHeight * 0.6; if (Math.abs(b.top - want) > 40) { p.scrollIntoView({ block: 'center' }); b = r.getBoundingClientRect(); } return { x: Math.round(b.left), y: Math.round(b.top + b.height / 2), h: window.innerHeight } })()";
+            const string measure = "(() => { " + word + " const b = r.getBoundingClientRect(); return { x: Math.round(b.left), y: Math.round(b.top + b.height / 2), h: window.innerHeight } })()";
+            JToken? at = null;
+            for (var tries = 0; tries < 10 && at == null; tries++)
+            {
+                var first = await Eval(place);
+                if (first == null || first.Type != JTokenType.Object) throw new CaseFailed("the marker is not on the page");
+                await Task.Delay(500);
+                var now = await Eval(measure);
+                var y = (int)now!["y"]!;
+                if (y > 20 && y < (int)now["h"]! - 20 && Math.Abs(y - (int)first["y"]!) <= 2) at = now;
+            }
+            if (at == null) throw new CaseFailed("the marker's word could not be scrolled into the window and kept there");
+            notes.Add($"clicked at {at["x"]},{at["y"]} of a page {at["h"]} high");
             var screen = await c.Call("test.editor.screenPoint", new { windowId, x = (int)at["x"]!, y = (int)at["y"]! });
             await Click(window, (int)screen["x"]!, (int)screen["y"]!);
             await Task.Delay(700);
