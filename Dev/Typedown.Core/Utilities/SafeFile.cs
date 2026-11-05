@@ -48,7 +48,10 @@ namespace Typedown.Core.Utilities
             {
                 using (var stream = new FileStream(tempPath, FileMode.CreateNew, FileAccess.Write, FileShare.None, 4096, FileOptions.Asynchronous))
                 {
-                    await stream.WriteAsync(bytes, 0, bytes.Length);
+                    // Not back on the caller's thread: the typography designer, version history and writing statistics
+                    // wait for this on the window's thread (GetResult), and a write that completed later needed that
+                    // thread to go on - the window hung for good (the user's x280, typing a preset's name).
+                    await stream.WriteAsync(bytes, 0, bytes.Length).ConfigureAwait(false);
                     stream.Flush(flushToDisk: true);
                 }
                 try { File.SetAttributes(tempPath, FileAttributes.Hidden | FileAttributes.Temporary); } catch { }
@@ -79,7 +82,7 @@ namespace Typedown.Core.Utilities
                     // recoverable cause; retry the atomic replace a few times.
                     for (var attempt = 0; attempt < 4; attempt++)
                     {
-                        await Task.Delay(75);
+                        await Task.Delay(75).ConfigureAwait(false);
                         try
                         {
                             if (!MoveReplace(tempPath, path))

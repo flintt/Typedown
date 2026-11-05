@@ -21,6 +21,35 @@ namespace Typedown.ReliabilityTests
             CollectionAssert.AreEqual(new[] { path }, Directory.GetFiles(directory.Path));
         }
 
+        // The typography designer, version history and writing statistics wait for the write on the window's thread
+        // (GetResult). A write completing later must not need that thread to go on: the window hung for good when it did
+        // (the user's x280, 2026-11-05). Here a thread whose context runs nothing it is handed while it waits, as a
+        // window's thread blocked in GetResult.
+        [TestMethod]
+        public void AWriteWaitedForOnABusyThreadEnds()
+        {
+            using var directory = new TestDirectory();
+            var path = directory.File("preset.json");
+            Exception failure = null;
+            var worker = new Thread(() =>
+            {
+                SynchronizationContext.SetSynchronizationContext(new HeldContext());
+                try { SafeFile.WriteAllTextAtomicAsync(path, new string('x', 4 << 20)).GetAwaiter().GetResult(); }
+                catch (Exception ex) { failure = ex; }
+            }) { IsBackground = true };
+            worker.Start();
+            Assert.IsTrue(worker.Join(TimeSpan.FromSeconds(20)), "the write waited for on a thread that is held never ended");
+            Assert.IsNull(failure, failure?.ToString());
+            Assert.AreEqual(4 << 20, new FileInfo(path).Length);
+        }
+
+        // A context that keeps what it is handed and never runs it (its thread is busy waiting).
+        private sealed class HeldContext : SynchronizationContext
+        {
+            public override void Post(SendOrPostCallback d, object state) { }
+            public override void Send(SendOrPostCallback d, object state) { }
+        }
+
         [TestMethod]
         public async Task FailedTemporaryWriteLeavesTheOriginalUntouched()
         {
