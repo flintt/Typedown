@@ -75,9 +75,11 @@ const { openEditor } = require('./harness');
     await pause(200);
     b = await block();
     report(b && b.kind === 'p' && b.level === 0, 'into a paragraph: that block', JSON.stringify(b));
-    await page.keyboard.type('x');
-    await pause(200);
-    report(await block() === null, 'typing: no block (the panel goes)', JSON.stringify(await block()));
+    // Several keys, a moment apart: each draws the paragraph again as a new element (the same id), still the block
+    // typed in (w10 job 254: the panel came back at each key).
+    await page.keyboard.type('xyz', { delay: 120 });
+    await pause(400);
+    report(await block() === null, 'typing: no block (the panel goes), and none again as the block is drawn anew', JSON.stringify(await block()));
     await page.keyboard.press('ArrowLeft');
     await pause(200);
     report(await block() === null, 'the caret moved along the same paragraph: still none', JSON.stringify(await block()));

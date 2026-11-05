@@ -148,10 +148,13 @@ const sendCaretBlock = () => {
     sent = text
     transport.postMessage('TypographyBlock', args)
 }
+const sameBlock = (a: HTMLElement | null, b: HTMLElement | null) => a === b || (!!a && !!b && !!a.id && a.id === b.id)
 const onSelection = () => {
     const node = window.getSelection()?.anchorNode
     const block = blockAt(node ? (node.nodeType === Node.ELEMENT_NODE ? node as Element : node.parentElement) : null)
-    if (block !== caretBlock) typing = false
+    // Another block, by its id (its key): typing draws the block again as a new element with the same id, which is
+    // still the block typed in - the panel came back at each key (w10 job 254).
+    if (!sameBlock(block, caretBlock)) typing = false
     caretBlock = block
     sendCaretBlock()
 }
