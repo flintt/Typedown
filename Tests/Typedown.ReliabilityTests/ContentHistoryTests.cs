@@ -91,6 +91,21 @@ namespace Typedown.ReliabilityTests
         }
 
         [TestMethod]
+        public void TheVisualEditorsSelectionHeardOfThroughItsSelectionChange()
+        {
+            // The visual editor reports no selection as a caret, only the caret after a change; the host hears of the
+            // selection from the page's SelectionChange (W10 job 196: one Ctrl+Z still took the typing away).
+            var h = Typed();
+            h.SelectionMade();
+            h.ContentChange("# T\n\n\n\n");
+            h.CursorChange(Caret(3, 0));
+            var back = h.Undo();
+            Assert.AreEqual("# T\n\nhello world\n", back?.Text, "one undo puts back the paragraph as typed");
+            Assert.AreEqual(Caret(2, 11), back.Cursor, "with the caret the typing left");
+            Assert.AreEqual("# T\n\n", h.Undo()?.Text);
+        }
+
+        [TestMethod]
         public void TypingWithoutASelectionIsStillOneStepUntilAPause()
         {
             var h = Typed("abc");

@@ -499,6 +499,9 @@ namespace Typedown.Core.ViewModels
             SelectionText = arg["selectionText"].ToString();
             ParagraphState = new ParagraphState(MenuState);
             UpdateMuyaSelected();
+            // The visual editor tells of a selection only here (its caret comes with a change): the change that follows
+            // replaces it, and the text before is a step of its own (#39).
+            if (TextSelected) History?.SelectionMade();
         }
 
         public void OnCodeMirrorSelectionChange(JToken arg)

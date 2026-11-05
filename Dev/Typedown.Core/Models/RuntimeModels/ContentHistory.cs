@@ -30,6 +30,13 @@ namespace Typedown.Core.Models
         // waits in pending until a pause or a line change; a selection within one line and Enter over it changed pending
         // instead, and one undo took the typing away too, or brought back part of it (the user, 2026-11-05, #39).
         CursorState selectionSinceChange;
+        // The visual editor reports its caret only with a change (the caret after it), never a selection on its own: the
+        // host hears of one from the page's SelectionChange (SelectionMade). The step is then put back with the caret
+        // the typing left; source mode reports the selection itself, and its step is put back selected.
+        bool selectedSinceChange;
+
+        /// <summary>The page has text selected now (the visual editor's SelectionChange): the next change replaces it.</summary>
+        public void SelectionMade() => selectedSinceChange = true;
 
         partial void InitTimer();
         partial void StartTimer(TimeSpan interval);
@@ -91,6 +98,7 @@ namespace Typedown.Core.Models
             {
                 lastCursor = null;
                 selectionSinceChange = null;
+                selectedSinceChange = false;
                 histories.Clear();
                 totalChars = 0;
                 StopTimer();
@@ -202,12 +210,14 @@ namespace Typedown.Core.Models
                     return;
                 }
                 // The text before a change over a selection is a step of its own, put back with that selection.
-                if (selectionSinceChange != null && pending.Text != null)
+                if ((selectionSinceChange != null || selectedSinceChange) && pending.Text != null)
                 {
-                    pending.Cursor = selectionSinceChange;
+                    if (selectionSinceChange != null) pending.Cursor = selectionSinceChange;
+                    pending.Cursor ??= lastCursor;
                     CommitPending();
                 }
                 selectionSinceChange = null;
+                selectedSinceChange = false;
                 pending.Text = content;
                 pending.Cursor ??= lastCursor;
                 if (pending.Cursor != null && histories.Count == 0)
