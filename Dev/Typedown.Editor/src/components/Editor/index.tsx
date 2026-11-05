@@ -100,7 +100,9 @@ const Editor: React.FC = () => {
     // A switch between the visual editor and source mode: where the caret was in the window, to be put at the same
     // height in the editor coming (each put back its own last scroll position, and the caret went out of sight - a
     // reader, 2026-11-05).
-    const caretTopRef = useRef<{ top: number, source: boolean } | null>(null);
+    // Only within one document (its loadId): a tab switch between a .md and a .txt in the visual editor changes source mode
+    // too, and the .md coming back was scrolled to the .txt's caret height, its text jumping (the user, 2026-11-05).
+    const caretTopRef = useRef<{ top: number, source: boolean, loadId?: number } | null>(null);
     // The block that was at the top of the window when the document was left (services/loadPreview): the editor puts it
     // back there, where the preview showed it.
     const scrollAnchorRef = useRef<ScrollAnchor | null>(null);
@@ -267,7 +269,8 @@ const Editor: React.FC = () => {
         // editor's own scroll has been put back (two frames), and again a moment on - source mode measures the lines it
         // draws only once they are scrolled to.
         const align = caretTopRef.current
-        if (align && !!optionsRef.current?.sourceCode === align.source) {
+        if (align && align.loadId !== loadIdRef.current) caretTopRef.current = null
+        else if (align && !!optionsRef.current?.sourceCode === align.source) {
             caretTopRef.current = null
             const run = () => { if (!!optionsRef.current?.sourceCode === align.source) scrollCaretTo(align.source, align.top) }
             requestAnimationFrame(() => requestAnimationFrame(run))
@@ -587,7 +590,7 @@ const Editor: React.FC = () => {
         const was = optionsRef.current
         if ('sourceCode' in newOptions && !!newOptions.sourceCode !== !!was?.sourceCode && !was?.plainTextShown) {
             const top = caretWindowTop(!!was?.sourceCode)
-            caretTopRef.current = top === null ? null : { top, source: !!newOptions.sourceCode }
+            caretTopRef.current = top === null ? null : { top, source: !!newOptions.sourceCode, loadId: loadIdRef.current }
         }
         // Finish any throttled edit before changing mode or unmounting its editor.
         if ('sourceCode' in newOptions || 'readOnly' in newOptions) flushRef.current?.()

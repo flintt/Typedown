@@ -71,6 +71,42 @@ const { openEditor } = require('./harness');
       report(/MDHEAD/.test(f[f.length - 1].muya || ''), `round ${round}, .txt to .md: the Markdown file ends up shown`, show(f.slice(-2)));
     }
 
+    // A long .md, scrolled down, to a .txt and back in the visual editor: once the .md is shown again its text stays put.
+    // The caret's height carried over a switch of source mode (aab2ce07) was taken across the tab switch too - the .md
+    // coming back was scrolled to the .txt caret's height, its text jumping (the user, 2026-11-05); in source mode both
+    // tabs are the source editor and nothing jumped.
+    const longMd = '# MDHEAD long\n\n' + Array.from({ length: 600 }, (_, i) => `Paragraph ${i} MDBODY with some words to fill the line.`).join('\n\n') + '\n';
+    await mode(false);
+    await page.evaluate(({ text, id }) => window.__deliver('LoadFile', { text, loadId: id, basePath: '/tmp', scrollTop: 1600, cursor: { anchor: { line: 120, ch: 4 }, focus: { line: 120, ch: 4 } } }), { text: longMd, id: ++id });
+    await pause(1200);
+    await switchTo(true, txt);
+    await watch();
+    await page.evaluate(() => { window.__scrolls = []; const watching = window.__watching; const look = () => { if (window.__watching !== watching) return; if (document.querySelector('#ag-editor-id')) window.__scrolls.push(Math.round(window.scrollY)); requestAnimationFrame(look); }; requestAnimationFrame(look); });
+    await mode(false);
+    await pause(30);
+    await page.evaluate(({ text, id }) => window.__deliver('LoadFile', { text, loadId: id, basePath: '/tmp', scrollTop: 1600, cursor: { anchor: { line: 120, ch: 4 }, focus: { line: 120, ch: 4 } } }), { text: longMd, id: ++id });
+    await pause(900);
+    const scrolls = await page.evaluate(() => { window.__watching = null; return window.__scrolls; });
+    const settled = scrolls.slice(scrolls.findIndex(y => y > 0));
+    const moved = settled.length ? Math.max(...settled) - Math.min(...settled) : -1;
+    report(settled.length > 0 && moved <= 2, 'a long .md back from a .txt in the visual editor: its text does not jump once shown', `scrollY over the frames ${JSON.stringify(scrolls.slice(0, 40))}`);
+
+    // The same with only the caret to go back to (no offset, which the page holds for a while as it settles): the caret
+    // is brought into view, then nothing else moves it.
+    await switchTo(true, txt);
+    await watch();
+    await page.evaluate(() => { window.__scrolls = []; const watching = window.__watching; const look = () => { if (window.__watching !== watching) return; if (document.querySelector('#ag-editor-id')) window.__scrolls.push(Math.round(window.scrollY)); requestAnimationFrame(look); }; requestAnimationFrame(look); });
+    await mode(false);
+    await pause(30);
+    await page.evaluate(({ text, id }) => window.__deliver('LoadFile', { text, loadId: id, basePath: '/tmp', cursor: { anchor: { line: 400, ch: 4 }, focus: { line: 400, ch: 4 } } }), { text: longMd, id: ++id });
+    await pause(900);
+    const caretScrolls = await page.evaluate(() => { window.__watching = null; return window.__scrolls; });
+    // Its first frames are Muya's own placing of a long document (the caret into view, then a settle of a few dozen
+    // pixels); after them nothing may move it - the caret height taken across the tab moved it 316 px six frames on.
+    const placed = caretScrolls.slice(caretScrolls.findIndex(y => y > 0) + 3);
+    const movedAfter = placed.length ? Math.max(...placed) - Math.min(...placed) : -1;
+    report(placed.length > 0 && movedAfter <= 2, 'a long .md back from a .txt, its caret brought into view: nothing moves it after', `scrollY over the frames ${JSON.stringify(caretScrolls.slice(0, 40))}`);
+
     // Save as: the .md becomes a .txt - the mode, no load. The plain view comes, with the text.
     await mode(true);
     await pause(1600);
