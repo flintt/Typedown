@@ -289,6 +289,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | SB08 | a save by hand of a file whose encoding could not be read exactly asks first: Cancel (the default) leaves its bytes, Save as UTF-8 writes the text as shown; the API's save refuses with the reason, and the status bar marks the file |
 | AC01 | an edition hears of what happens around the writing: a document shown, the mode changed, an undo, the window left and come back to, a save under a new name and a rename, the page scrolled (not at every scroll event) |
 | KY01 | Ctrl+Z and Ctrl+Y are the host's undo and redo however close Ctrl and the letter come, in the visual editor and in source mode |
+| UN01 | a paragraph typed, selected and Enter pressed over it: one Ctrl+Z gives the paragraph back whole, a second takes the typing away, Ctrl+Y goes forward through both, in the visual editor and in source mode |
 | KB01 | shortcuts given other keys: Last used tab and Zoom in answer theirs and Alt+0 nothing; indent's picker warns, takes F2 alone, the page indents on it; Restore default gives Tab back |
 | ED01 | in the visual editor Ctrl+Shift+Right selects by words and Ctrl+Shift+Down to the end of the paragraph, Ctrl+Left/Right move without selecting, Ctrl+F opens the find bar, and the wheel scrolls the page |
 | ED02 | Shift+Enter and Alt+Enter in a table cell put a line break in that cell |

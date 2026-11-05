@@ -65,4 +65,62 @@ internal static partial class Program
             try { await c.Call("window.setView", new { windowId, mode = "visual" }); } catch { }
         }
     }
+
+    // The user's steps (2026-11-05, #39), with real keys and within the pause that ends a typing step: a paragraph typed,
+    // selected (Ctrl+A in the visual editor selects the paragraph; Shift+Home in source mode), Enter over it. One Ctrl+Z
+    // put back the state before the typing, or part of the paragraph: the typing had not yet become a step, and the
+    // Enter changed it instead. Now one Ctrl+Z gives the paragraph back whole, a second takes the typing away, and Ctrl+Y
+    // goes forward through both.
+    private static async Task UN01(List<string> notes)
+    {
+        using var c = await Session("e2e UN01");
+        var id = await Open(c, Fixture("un01.md", "# UN01\n\nfirst\n"));
+        var windowId = await WindowIdOf(c, id);
+        var window = await WindowOf(windowId, c);
+        async Task<string> Text() => ((string?)(await Get(c, id))["text"] ?? "").Replace("\r\n", "\n");
+        async Task<string> Until(Func<string, bool> done, string what)
+        {
+            var text = "";
+            if (!await Eventually(async () => done(text = await Text()), 5000)) throw new CaseFailed($"{what} (the text: '{text.Replace("\n", "\\n")}')");
+            return text;
+        }
+        try
+        {
+            foreach (var (mode, select) in new[] { ("visual", "Ctrl+A"), ("source", "Shift+Home") })
+            {
+                await c.Call("window.setView", new { windowId, mode });
+                await Task.Delay(1000);
+                await Activate(window);
+                await c.Call("test.editor.focus", new { windowId });
+                await Task.Delay(200);
+                Chord("Ctrl+End");
+                Chord("Enter");
+                TypeText("hello world");
+                var typed = await Until(t => t.Contains("hello world"), $"{mode}: the paragraph typed");
+                Chord(select);
+                await Task.Delay(150);
+                Chord("Enter");
+                var cleared = await Until(t => !t.Contains("hello"), $"{mode}: Enter over the selection clears it");
+                Chord("Ctrl+Z");
+                var once = await Until(t => t != cleared, $"{mode}: Ctrl+Z changes the text");
+                notes.Add($"{mode}: typed '{typed.Replace("\n", "\\n")}', Enter '{cleared.Replace("\n", "\\n")}', Ctrl+Z '{once.Replace("\n", "\\n")}'");
+                Check(once.Contains("\nhello world\n"), $"{mode}: one Ctrl+Z after Enter over the selection gives the paragraph back whole");
+                Chord("Ctrl+Z");
+                var twice = await Until(t => t != once, $"{mode}: a second Ctrl+Z changes the text");
+                notes.Add($"{mode}: a second Ctrl+Z '{twice.Replace("\n", "\\n")}'");
+                Check(!twice.Contains("hello world"), $"{mode}: a second Ctrl+Z takes the typing away");
+                Chord("Ctrl+Y");
+                await Until(t => t.Contains("\nhello world\n"), $"{mode}: Ctrl+Y brings the paragraph back");
+                Chord("Ctrl+Y");
+                await Until(t => !t.Contains("hello"), $"{mode}: and a second Ctrl+Y the Enter");
+                // The document as it began, for the other mode.
+                await c.Call("document.replace", new { documentId = id, text = "# UN01\n\nfirst\n", baseRevision = await Revision(c, id) });
+                await Task.Delay(800);
+            }
+        }
+        finally
+        {
+            try { await c.Call("window.setView", new { windowId, mode = "visual" }); } catch { }
+        }
+    }
 }

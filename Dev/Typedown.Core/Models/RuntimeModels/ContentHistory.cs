@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using Microsoft.UI.Xaml;
 
 namespace Typedown.Core.Models
 {
@@ -12,7 +11,8 @@ namespace Typedown.Core.Models
         public CursorState Cursor { get; set; } = null;
     }
 
-    public class ContentHistory : INotifyPropertyChanged
+    // The commit timer is the other part (ContentHistory.Timer.cs, the window's DispatcherTimer); the tests give their own.
+    public partial class ContentHistory : INotifyPropertyChanged
     {
         const int deep = 100;
         // Snapshots are whole-document strings; also cap the total size so a multi-MB document cannot pin
@@ -25,7 +25,15 @@ namespace Typedown.Core.Models
         // The caret last reported. Source mode reports it before the change it goes with: a change then had no caret, was
         // never a step (a step needs both), and an undo went past it - the letter just typed and the step before (KY01).
         CursorState lastCursor;
-        private readonly DispatcherTimer commitTimer = new();
+        // A selection reported since the last change: the change that follows replaced it (Enter, a letter, Backspace or
+        // Delete, a paste or a cut over it), and the text before it is a step of its own, with that selection. Typing
+        // waits in pending until a pause or a line change; a selection within one line and Enter over it changed pending
+        // instead, and one undo took the typing away too, or brought back part of it (the user, 2026-11-05, #39).
+        CursorState selectionSinceChange;
+
+        partial void InitTimer();
+        partial void StartTimer(TimeSpan interval);
+        partial void StopTimer();
 
         public bool Undoable { get; set; }
         public bool Redoable { get; set; }
@@ -33,7 +41,7 @@ namespace Typedown.Core.Models
 
         public ContentHistory()
         {
-            commitTimer.Tick += (s, e) => CommitPending();
+            InitTimer();
         }
 
         public HistoryModel Undo()
@@ -62,7 +70,7 @@ namespace Typedown.Core.Models
             {
                 if (index < histories.Count - 1)
                 {
-                    commitTimer.Stop();
+                    StopTimer();
                     pending = new();
                     index++;
                     Redoable = index < histories.Count - 1;
@@ -82,9 +90,10 @@ namespace Typedown.Core.Models
             try
             {
                 lastCursor = null;
+                selectionSinceChange = null;
                 histories.Clear();
                 totalChars = 0;
-                commitTimer.Stop();
+                StopTimer();
                 pending = new();
                 index = -1;
                 Redoable = false;
@@ -101,7 +110,7 @@ namespace Typedown.Core.Models
             try
             {
                 if (!IsPending) return;
-                commitTimer.Stop();
+                StopTimer();
                 for (var i = index + 1; i < histories.Count; i++)
                     totalChars -= histories[i].Text?.Length ?? 0;
                 histories.RemoveRange(index + 1, histories.Count - (index + 1));
@@ -126,9 +135,8 @@ namespace Typedown.Core.Models
 
         private void ResetTimer()
         {
-            commitTimer.Stop();
-            commitTimer.Interval = TimeSpan.FromSeconds(3);
-            commitTimer.Start();
+            StopTimer();
+            StartTimer(TimeSpan.FromSeconds(3));
         }
 
         public void CursorChange(CursorState cursor)
@@ -136,6 +144,7 @@ namespace Typedown.Core.Models
             try
             {
                 if (cursor != null) lastCursor = cursor;
+                if (cursor != null && cursor.Anchor != cursor.Focus) selectionSinceChange = cursor;
                 if (pending.Text == null && index > -1)
                 {
                     histories[index].Cursor = cursor;
@@ -192,6 +201,13 @@ namespace Typedown.Core.Models
                 {
                     return;
                 }
+                // The text before a change over a selection is a step of its own, put back with that selection.
+                if (selectionSinceChange != null && pending.Text != null)
+                {
+                    pending.Cursor = selectionSinceChange;
+                    CommitPending();
+                }
+                selectionSinceChange = null;
                 pending.Text = content;
                 pending.Cursor ??= lastCursor;
                 if (pending.Cursor != null && histories.Count == 0)
