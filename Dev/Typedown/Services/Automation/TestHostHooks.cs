@@ -864,6 +864,9 @@ namespace Typedown.Services.Automation
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject
                     {
                         ["pane"] = page != null, ["tree"] = tree != null, ["autoExpand"] = app.SettingsViewModel?.TocAutoExpand, ["rows"] = rows,
+                        // The rows the pane shows at its top level, apart from the model: a pane left with another
+                        // document's rows (OL06) shows them though the model was emptied.
+                        ["shown"] = tree?.RootNodes.Count,
                     };
                 })));
             // The colours a custom theme changes around the editor, as they are now: the line between the side pane and

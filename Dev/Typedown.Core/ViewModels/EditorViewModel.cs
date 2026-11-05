@@ -186,6 +186,10 @@ namespace Typedown.Core.ViewModels
             Settings.WhenPropertyChanged(nameof(Settings.AutoSave)).Subscribe(_ => Settings_AutoSaveChanged(Settings.AutoSave));
             // A selection belongs to the mode it was made in: the next mode reports its own.
             Settings.WhenPropertyChanged(nameof(Settings.ReadOnly)).Subscribe(_ => TextSelected = Selected = false);
+            // Plain text has no outline (a reader, 2026-11-05: a .md's headings stayed in it for the .txt switched to):
+            // emptied as soon as the tab shows plain text, before any report of the page's - the first report of a plain
+            // text load can come before the page counts the load as begun, and is dropped there, and no other came.
+            Settings.WhenPropertyChanged(nameof(Settings.PlainTextShown)).Subscribe(_ => { if (Settings.PlainTextShown) ClearOutline(); });
             // The editor reads the theme as "themeCss"; the setting only holds the file name.
             Settings.WhenPropertyChanged(nameof(Settings.CustomTheme)).Subscribe(_ =>
                 MarkdownEditor?.PostMessage("SettingsChanged", new Dictionary<string, object>() { { "themeCss", ThemeFiles.Read(Settings.CustomTheme) } }));
@@ -836,12 +840,23 @@ namespace Typedown.Core.ViewModels
             // longer on screen, and every heading in it is a place the editor cannot go.
             if (IsStaleReport(report.LoadId)) return;
             var state = report.State ?? new ContentState();
+            // Plain text: no outline whatever the page counted in it (lines starting with #, the headings of a ```md block
+            // drawn in it, a report of the Markdown editor still shown while the text came - 2152daee) and no heading to
+            // mark or go to. Kept once emptied: nothing to hand the pane again at every keystroke.
+            var plain = Settings.PlainTextShown;
+            if (plain)
+            {
+                state.Toc = null;
+                state.Cur = null;
+            }
             // An outline left out is the one this load's earlier report carried: the same list is kept, and the tree
             // made from it is not made again. The page always sends it in the first report of a load, so there is one
             // here for this load; if there is not (a report lost on the way), an empty outline is shown rather than
             // another document's, until the page sends one.
-            var tocKept = report.TocUnchanged && tocLoadId == LoadId && ContentState?.Toc != null;
-            if (report.TocUnchanged && !tocKept)
+            var tocKept = plain
+                ? tocLoadId == LoadId && ContentState?.Toc?.Count == 0
+                : report.TocUnchanged && tocLoadId == LoadId && ContentState?.Toc != null;
+            if (!plain && report.TocUnchanged && !tocKept)
                 Log.Debug($"outline: a report of load {LoadId} left its outline out, and none is held for that load");
             state.Toc = tocKept ? ContentState.Toc : state.Toc ?? new List<TocItem>();
             ContentState = state;
@@ -933,6 +948,22 @@ namespace Typedown.Core.ViewModels
             }
         }
 
+        /// <summary>The outline emptied at once (a plain text document shown): no entries, none marked, none waiting.</summary>
+        private void ClearOutline()
+        {
+            if (ContentState != null)
+            {
+                ContentState.Toc = new List<TocItem>();
+                ContentState.Cur = null;
+            }
+            pendingOutlineSlug = null;
+            pendingOutlineWhere = null;
+            tocLoadId = LoadId;
+            Toc = new TocTreeItem();
+            Log.Debug("outline: emptied for a plain text document");
+            OutlineUpdated?.Invoke();
+        }
+
         /// <summary>
         /// Which heading the reader has scrolled to. Reading mode has no caret for the outline to follow, so
         /// the editor says where the page is instead — on a message of its own, and this is the whole reason
@@ -943,6 +974,7 @@ namespace Typedown.Core.ViewModels
         public void OnOutlineCurrent(JToken arg)
         {
             if (IsStaleReport(arg)) return;
+            if (Settings.PlainTextShown) return;
             var slug = arg["slug"]?.ToString();
             if (string.IsNullOrEmpty(slug)) return;
             var where = arg["where"];

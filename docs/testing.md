@@ -293,6 +293,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | ED02 | Shift+Enter and Alt+Enter in a table cell put a line break in that cell |
 | OL04 | measured: switching to a document of 3000 headings, the host's time to build the outline's tree, hand it to the pane and have it laid out |
 | OL05 | Ctrl+Tab to a document of 3000 headings with the outline shown, letters typed straight after: every one reaches that document |
+| OL06 | a plain text document has no outline: from a .md to a .txt (a # line, a ```md block's heading in it) the outline empties, back to the .md it is its headings again; written into, the pane closed and opened, a .md with none |
 | PY01 | the Chinese IME (Microsoft Pinyin) typing through the keyboard into the visual editor: pinyin committed once, full-width brackets one each with none put in by the editor, the host's text the editor's |
 | BL01 | blank lines survive a visual edit and a save: 1 at the start, 2, 4, 2, 3, 5 and 2 between blocks, 1 at the end |
 | KS01 | a document past 150,000 characters, one key typed and saved with Ctrl+S: the file is the reader's text with that key in it and nothing else |
