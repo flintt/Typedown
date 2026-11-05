@@ -83,6 +83,13 @@ const { openEditor } = require('./harness');
     await page.keyboard.press('ArrowLeft');
     await pause(200);
     report(await block() === null, 'the caret moved along the same paragraph: still none', JSON.stringify(await block()));
+    // Text from an input method: no key with its character (it comes as "Process"), only the text put in.
+    await page.mouse.click(at.x, at.y);
+    await pause(200);
+    report((await block())?.kind === 'p', 'a click: the block (before the input method)', JSON.stringify(await block()));
+    await page.keyboard.sendCharacter('中');
+    await pause(300);
+    report(await block() === null, 'text from an input method: no block (the panel goes)', JSON.stringify(await block()));
     await page.mouse.click(at.x, at.y);
     await pause(200);
     b = await block();

@@ -158,12 +158,17 @@ const onSelection = () => {
     caretBlock = block
     sendCaretBlock()
 }
+// Typing: what the page is given to put in (beforeinput, an input method's composition) - with an input method on
+// a key comes as "Process", not its character, and typing Chinese never hid the panel (w10 job 255); and the keys
+// the editor takes itself, which may give no beforeinput.
+const typed = () => {
+    hide()
+    typing = true
+    sendCaretBlock()
+}
 const onKey = (event: KeyboardEvent) => {
     hide()
-    if (event.key.length === 1 || event.key === 'Backspace' || event.key === 'Delete' || event.key === 'Enter') {
-        typing = true
-        sendCaretBlock()
-    }
+    if (event.key.length === 1 || event.key === 'Process' || event.key === 'Backspace' || event.key === 'Delete' || event.key === 'Enter') typed()
 }
 const onPress = () => { typing = false }
 // A click closes the host's panel (a flyout gives way to a click elsewhere): the caret's block sent again once
@@ -186,6 +191,8 @@ export const setTypographyGuides = (value: boolean) => {
         document.addEventListener('pointermove', onPointer, { passive: true })
         document.addEventListener('scroll', onScroll, { passive: true, capture: true })
         document.addEventListener('keydown', onKey, true)
+        document.addEventListener('beforeinput', typed, true)
+        document.addEventListener('compositionstart', typed, true)
         document.addEventListener('pointerdown', onPress, true)
         document.addEventListener('pointerup', onRelease, true)
         document.addEventListener('selectionchange', onSelection)
@@ -196,6 +203,8 @@ export const setTypographyGuides = (value: boolean) => {
         document.removeEventListener('pointermove', onPointer)
         document.removeEventListener('scroll', onScroll, { capture: true } as EventListenerOptions)
         document.removeEventListener('keydown', onKey, true)
+        document.removeEventListener('beforeinput', typed, true)
+        document.removeEventListener('compositionstart', typed, true)
         document.removeEventListener('pointerdown', onPress, true)
         document.removeEventListener('pointerup', onRelease, true)
         document.removeEventListener('selectionchange', onSelection)
