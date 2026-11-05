@@ -256,6 +256,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | CB01 | a display formula's copy button, with the real mouse in the dark theme: shown on hover, none on an inline formula; a click puts a picture (black on white), RTF with it and the formula's $$ Markdown and its MathML as Word writes it on the clipboard, no HTML; the document as it was; Word pastes an equation it can edit; pasted back it is the formula |
 | CB02 | a table's copy button and the menu's Copy table, with the real mouse: the button above the table's top right corner; the clipboard holds the table as HTML (header row, alignment, formatting) and its Markdown as written; the document as it was; Word pastes one 3x3 table; pasted back it is the table's Markdown |
 | IM01 | the showcase's checkerboard, after View > Source mode and back, is drawn and not failed when clicked |
+| MS01 | a caret clicked into the middle of a long document, after View > Source mode and back, is on the same line and at the same height in the window |
 | CP01 | Copy pasted into Word: pictures at absolute file:/// addresses, a name and an alt text with brackets, an SVG sized in pt, a JPEG |
 | TH03 | the side pane marks what is chosen (the bar under Files/Outline, the outline's and the folder tree's row pill) in a custom theme's accent, and in the system accent again without one |
 | ES01 | an editor shortcut only the app carries out (Ctrl+1, Heading 1) works while one types in the editor |

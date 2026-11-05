@@ -44,6 +44,38 @@ const themeSheet = (css: string) => css ? `body { color: var(--editorColor); }\n
 // and a preview of a different make in front of it moved as the editor took over.
 const previewWhileBuilding = () => !!(window as any).__typedownProgressiveOff
 
+/** The caret's height in the window in the editor shown (source mode's or the visual one); null with no caret in it. */
+const caretWindowTop = (source: boolean): number | null => {
+    if (source) {
+        const cm = (document.querySelector('.CodeMirror') as any)?.CodeMirror
+        return cm ? cm.cursorCoords(null, 'window').top : null
+    }
+    const root = document.getElementById('ag-editor-id')
+    const selection = window.getSelection()
+    if (!root || !selection || !selection.rangeCount || !root.contains(selection.anchorNode)) return null
+    const range = selection.getRangeAt(0).cloneRange()
+    range.collapse(true)
+    let box = range.getBoundingClientRect()
+    // A caret in an empty paragraph has no box of its own: its paragraph's.
+    if (!box.height) {
+        const node = range.startContainer
+        box = (node.nodeType === Node.ELEMENT_NODE ? node as Element : node.parentElement!).getBoundingClientRect()
+    }
+    return box.top
+}
+
+/** Scrolls the editor shown so that its caret is at that height in the window (as far as the document lets it). */
+const scrollCaretTo = (source: boolean, top: number) => {
+    const now = caretWindowTop(source)
+    if (now === null || Math.abs(now - top) < 1) return
+    if (source) {
+        const cm = (document.querySelector('.CodeMirror') as any)?.CodeMirror
+        cm?.scrollTo(null, cm.getScrollInfo().top + now - top)
+    } else {
+        window.scrollBy(0, now - top)
+    }
+}
+
 const Editor: React.FC = () => {
     // The document text and cursor live in refs, not React state: a state update per keystroke would commit
     // a React render while the contenteditable has focus, and React then walks the whole editor DOM to
@@ -65,6 +97,10 @@ const Editor: React.FC = () => {
     const [searchOpen, setSearchOpen] = useState(0);
     const [searchArg, setSearchArg] = useState<{ value: string, opt: any }>();
     const muyaScrollTopRef = useRef(0);
+    // A switch between the visual editor and source mode: where the caret was in the window, to be put at the same
+    // height in the editor coming (each put back its own last scroll position, and the caret went out of sight - a
+    // reader, 2026-11-05).
+    const caretTopRef = useRef<{ top: number, source: boolean } | null>(null);
     // The block that was at the top of the window when the document was left (services/loadPreview): the editor puts it
     // back there, where the preview showed it.
     const scrollAnchorRef = useRef<ScrollAnchor | null>(null);
@@ -227,6 +263,16 @@ const Editor: React.FC = () => {
     const pendingSetRef = useRef<{ loadId?: number } | null>(null)
 
     const onContentApplied = useCallback(() => {
+        // The editor a mode switch brought has its text and caret: the caret to where it was in the window, once that
+        // editor's own scroll has been put back (two frames), and again a moment on - source mode measures the lines it
+        // draws only once they are scrolled to.
+        const align = caretTopRef.current
+        if (align && !!optionsRef.current?.sourceCode === align.source) {
+            caretTopRef.current = null
+            const run = () => { if (!!optionsRef.current?.sourceCode === align.source) scrollCaretTo(align.source, align.top) }
+            requestAnimationFrame(() => requestAnimationFrame(run))
+            setTimeout(run, 150)
+        }
         const set = pendingSetRef.current
         if (set) {
             pendingSetRef.current = null
@@ -536,6 +582,11 @@ const Editor: React.FC = () => {
     }), [setContentFromHost]);
 
     useEffect(() => transport.addListener<Record<string, unknown>>('SettingsChanged', (newOptions) => {
+        const was = optionsRef.current
+        if ('sourceCode' in newOptions && !!newOptions.sourceCode !== !!was?.sourceCode && !was?.plainTextShown) {
+            const top = caretWindowTop(!!was?.sourceCode)
+            caretTopRef.current = top === null ? null : { top, source: !!newOptions.sourceCode }
+        }
         // Finish any throttled edit before changing mode or unmounting its editor.
         if ('sourceCode' in newOptions || 'readOnly' in newOptions) flushRef.current?.()
         for (const name in newOptions) {
