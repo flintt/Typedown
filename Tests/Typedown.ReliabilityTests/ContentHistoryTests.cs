@@ -131,5 +131,127 @@ namespace Typedown.ReliabilityTests
             Assert.AreEqual("# T\n\n", h.Undo()?.Text);
             Assert.IsNull(h.Undo());
         }
+
+        // ---- steps by the kind of edit (the page tells it; the user, 2026-11-05, #39) ----
+
+        private const ContentHistory.EditKind Insert = ContentHistory.EditKind.Insert;
+        private const ContentHistory.EditKind Delete = ContentHistory.EditKind.Delete;
+        private const ContentHistory.EditKind Other = ContentHistory.EditKind.Other;
+        private const ContentHistory.EditKind External = ContentHistory.EditKind.External;
+
+        // The paragraph after the heading, as the page reports it: the text and then its caret, all within 3 s.
+        private static void Report(ContentHistory h, string paragraph, ContentHistory.EditKind kind, bool moved = false, string inserted = null)
+        {
+            h.ContentChange("# T\n\n" + paragraph + "\n", kind, moved, inserted);
+            h.CursorChange(Caret(2, paragraph.Length));
+        }
+
+        private static ContentHistory Fresh()
+        {
+            var h = new ContentHistory();
+            h.InitHistory("# T\n\n");
+            h.CursorChange(Caret(2, 0));
+            return h;
+        }
+
+        private static string TypeLetters(ContentHistory h, string start, string letters)
+        {
+            var text = start;
+            foreach (var letter in letters)
+            {
+                text += letter;
+                Report(h, text, Insert, inserted: letter.ToString());
+            }
+            return text;
+        }
+
+        [TestMethod]
+        public void ALongParagraphTypedFastIsSeveralSteps()
+        {
+            // One line in Markdown and no pause: before, one step however long. Now a step is at most TypingStepChars.
+            var h = Fresh();
+            var letters = new string('a', ContentHistory.TypingStepChars * 2 + 10);
+            TypeLetters(h, "", letters);
+            Assert.AreEqual("# T\n\n" + letters[..(ContentHistory.TypingStepChars * 2)] + "\n", h.Undo()?.Text);
+            Assert.AreEqual("# T\n\n" + letters[..ContentHistory.TypingStepChars] + "\n", h.Undo()?.Text);
+            Assert.AreEqual("# T\n\n", h.Undo()?.Text);
+        }
+
+        [TestMethod]
+        public void ASentencesEndEndsATypingStep()
+        {
+            var h = Fresh();
+            var text = TypeLetters(h, "", "One. ");
+            TypeLetters(h, text, "Two");
+            Assert.AreEqual("# T\n\nOne. \n", h.Undo()?.Text, "the sentence typed before is kept");
+            Assert.AreEqual("# T\n\n", h.Undo()?.Text);
+        }
+
+        [TestMethod]
+        public void AFormatAPasteOrAWordDeletedAfterTypingIsAStepOfItsOwn()
+        {
+            foreach (var (name, after) in new[] { ("Ctrl+B", "**hello**"), ("a paste", "hello pasted"), ("Ctrl+Backspace", ""), ("a list dragged", "- hello") })
+            {
+                var h = Fresh();
+                TypeLetters(h, "", "hello");
+                Report(h, after, Other);
+                Assert.AreEqual("# T\n\nhello\n", h.Undo()?.Text, name + ": one undo takes it back alone");
+                Assert.AreEqual("# T\n\n", h.Undo()?.Text, name + ": a second the typing");
+                // And typing after it is a step after it, not merged into it.
+                h = Fresh();
+                TypeLetters(h, "", "hello");
+                Report(h, after, Other);
+                TypeLetters(h, after, "!");
+                Assert.AreEqual("# T\n\n" + after + "\n", h.Undo()?.Text, name + ": typing after it is a step of its own");
+            }
+        }
+
+        [TestMethod]
+        public void TypingAfterTheCaretWasMovedWithinTheLineIsANewStep()
+        {
+            var h = Fresh();
+            TypeLetters(h, "", "hello world");
+            // Home, then letters at the start of the line: the same line, under 3 s.
+            Report(h, "X" + "hello world", Insert, moved: true, inserted: "X");
+            Assert.AreEqual("# T\n\nhello world\n", h.Undo()?.Text);
+        }
+
+        [TestMethod]
+        public void DeletingIsAStepApartFromTheTypingBeforeIt()
+        {
+            var h = Fresh();
+            TypeLetters(h, "", "hello");
+            Report(h, "hell", Delete);
+            Report(h, "hel", Delete);
+            Assert.AreEqual("# T\n\nhello\n", h.Undo()?.Text, "the Backspaces are one step");
+            Assert.AreEqual("# T\n\n", h.Undo()?.Text, "the typing another");
+        }
+
+        [TestMethod]
+        public void AChangeNotTheReadersIsNeverMergedWithTheirs()
+        {
+            // An automation write (or a reload) three seconds or less after the reader's typing.
+            var h = Fresh();
+            TypeLetters(h, "", "mine");
+            h.CommitPending();
+            Report(h, "mine theirs", External);
+            TypeLetters(h, "mine theirs", " again");
+            Assert.AreEqual("# T\n\nmine theirs\n", h.Undo()?.Text, "the reader's typing after it");
+            Assert.AreEqual("# T\n\nmine\n", h.Undo()?.Text, "the write");
+            Assert.AreEqual("# T\n\n", h.Undo()?.Text, "the reader's typing before it");
+            Assert.AreEqual("# T\n\nmine\n", h.Redo()?.Text);
+            Assert.AreEqual("# T\n\nmine theirs\n", h.Redo()?.Text);
+        }
+
+        [TestMethod]
+        public void AReportThatDoesNotSayKeepsTheStepsAsBefore()
+        {
+            // An editor's own re-render while typing (no kind): merged with the typing, as every report was before.
+            var h = Fresh();
+            TypeLetters(h, "", "hello");
+            Report(h, "hello", ContentHistory.EditKind.Unknown);
+            Report(h, "hello!", ContentHistory.EditKind.Unknown);
+            Assert.AreEqual("# T\n\n", h.Undo()?.Text);
+        }
     }
 }

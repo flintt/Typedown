@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 /// <summary>
@@ -104,13 +105,14 @@ internal static partial class Program
                 Chord("Ctrl+Z");
                 var once = await Until(t => t != cleared, $"{mode}: Ctrl+Z changes the text");
                 notes.Add($"{mode}: typed '{typed.Replace("\n", "\\n")}', Enter '{cleared.Replace("\n", "\\n")}', Ctrl+Z '{once.Replace("\n", "\\n")}'");
-                Check(once.Contains("\nhello world\n"), $"{mode}: one Ctrl+Z after Enter over the selection gives the paragraph back whole");
+                // As typed (source mode's text has no line end after the last line).
+                Check(once.TrimEnd('\n') == typed.TrimEnd('\n'), $"{mode}: one Ctrl+Z after Enter over the selection gives the paragraph back whole");
                 Chord("Ctrl+Z");
                 var twice = await Until(t => t != once, $"{mode}: a second Ctrl+Z changes the text");
                 notes.Add($"{mode}: a second Ctrl+Z '{twice.Replace("\n", "\\n")}'");
                 Check(!twice.Contains("hello world"), $"{mode}: a second Ctrl+Z takes the typing away");
                 Chord("Ctrl+Y");
-                await Until(t => t.Contains("\nhello world\n"), $"{mode}: Ctrl+Y brings the paragraph back");
+                await Until(t => t.TrimEnd('\n') == typed.TrimEnd('\n'), $"{mode}: Ctrl+Y brings the paragraph back");
                 Chord("Ctrl+Y");
                 await Until(t => !t.Contains("hello"), $"{mode}: and a second Ctrl+Y the Enter");
                 // The document as it began, for the other mode.
@@ -122,5 +124,103 @@ internal static partial class Program
         {
             try { await c.Call("window.setView", new { windowId, mode = "visual" }); } catch { }
         }
+    }
+
+    // Undo steps by the kind of edit (the user, 2026-11-05, #39), with real keys, everything within the pause that ends a
+    // typing step: the history once grouped steps only by a pause or a line change, so in one paragraph (one line in
+    // Markdown) all of these went into the typing before them. Each: typed, then the edit, then one Ctrl+Z gives the
+    // typing back as it was before the edit.
+    private static async Task UN02(List<string> notes)
+    {
+        using var c = await Session("e2e UN02");
+        const string start = "# UN02\n\nfirst\n";
+        var id = await Open(c, Fixture("un02.md", start));
+        var windowId = await WindowIdOf(c, id);
+        var window = await WindowOf(windowId, c);
+        async Task<string> Text() => ((string?)(await Get(c, id))["text"] ?? "").Replace("\r\n", "\n");
+        async Task<string> Until(Func<string, bool> done, string what)
+        {
+            var text = "";
+            if (!await Eventually(async () => done(text = await Text()), 5000)) throw new CaseFailed($"{what} (the text: '{text.Replace("\n", "\\n")}')");
+            return text;
+        }
+        // A new paragraph after "first", the given letters typed into it.
+        async Task<string> Begin(string letters)
+        {
+            await c.Call("document.replace", new { documentId = id, text = start, baseRevision = await Revision(c, id) });
+            await Task.Delay(800);
+            await Activate(window);
+            await c.Call("test.editor.focus", new { windowId });
+            await Task.Delay(200);
+            Chord("Ctrl+End");
+            Chord("Enter");
+            await Task.Delay(300);
+            TypeText(letters);
+            return await Until(t => t.Contains(letters), $"'{letters}' typed");
+        }
+        async Task<string> UndoOnce(string after)
+        {
+            Chord("Ctrl+Z");
+            return await Until(t => t != after, "Ctrl+Z changes the text");
+        }
+        string Show(string t) => t.Replace("\n", "\\n");
+
+        // 1. A long paragraph typed fast, in bursts well under the pause: several steps, not one.
+        var burst = "abcdefghij abcdefghij ";
+        await Begin("x");
+        for (var i = 0; i < 9; i++) { TypeText(burst); await Task.Delay(150); }
+        var paragraph = await Until(t => t.Contains(string.Concat(Enumerable.Repeat(burst, 9)).TrimEnd()), "the long paragraph typed");
+        var shorter = await UndoOnce(paragraph);
+        var left = shorter.Split('\n').FirstOrDefault(l => l.StartsWith("x")) ?? "";
+        notes.Add($"a long paragraph of {paragraph.Split('\n').First(l => l.StartsWith("x")).Length} letters, one Ctrl+Z left {left.Length}");
+        Check(left.Length > 1, "a long paragraph typed fast is undone in several steps: one Ctrl+Z leaves part of it");
+
+        // 2. Ctrl+B over a word typed.
+        var typed = await Begin("hello");
+        Chord("Shift+Home");
+        await Task.Delay(150);
+        Chord("Ctrl+B");
+        var bold = await Until(t => t.Contains("**hello**"), "Ctrl+B makes it bold");
+        var back = await UndoOnce(bold);
+        notes.Add($"Ctrl+B: '{Show(bold)}', Ctrl+Z '{Show(back)}'");
+        Check(back.TrimEnd('\n') == typed.TrimEnd('\n'), "typed, then Ctrl+B: one Ctrl+Z takes the bold away and keeps the typing");
+
+        // 3. A paste after typing.
+        typed = await Begin("hello");
+        PutFormats(new[] { (13u, System.Text.Encoding.Unicode.GetBytes(" pasted\0")) });
+        Chord("Ctrl+V");
+        var pasted = await Until(t => t.Contains("hello pasted"), "Ctrl+V pastes");
+        back = await UndoOnce(pasted);
+        notes.Add($"paste: '{Show(pasted)}', Ctrl+Z '{Show(back)}'");
+        Check(back.TrimEnd('\n') == typed.TrimEnd('\n'), "typed, then a paste: one Ctrl+Z takes the paste away and keeps the typing");
+
+        // 4. The caret moved within the line, then letters there.
+        typed = await Begin("hello world");
+        Chord("Home");
+        TypeText("X");
+        var moved = await Until(t => t.Contains("Xhello world"), "a letter typed at the line's start");
+        back = await UndoOnce(moved);
+        notes.Add($"Home then a letter: '{Show(moved)}', Ctrl+Z '{Show(back)}'");
+        Check(back.TrimEnd('\n') == typed.TrimEnd('\n'), "typed, Home, a letter: one Ctrl+Z takes the letter away and keeps the typing");
+
+        // 5. Backspace after typing.
+        typed = await Begin("hello");
+        Chord("Back");
+        Chord("Back");
+        var deleted = await Until(t => t.Contains("hel") && !t.Contains("hello"), "two Backspaces");
+        back = await UndoOnce(deleted);
+        notes.Add($"Backspace: '{Show(deleted)}', Ctrl+Z '{Show(back)}'");
+        Check(back.TrimEnd('\n') == typed.TrimEnd('\n'), "typed, then Backspace: one Ctrl+Z gives the letters back and keeps the typing");
+
+        // 6. An automation write within the pause after the reader's typing.
+        typed = await Begin("mine");
+        await c.Call("document.replaceText", new { documentId = id, baseRevision = await Revision(c, id), find = "mine", replacement = "mine theirs", expectedCount = 1 });
+        var written = await Until(t => t.Contains("mine theirs"), "the automation write");
+        await Activate(window);
+        await c.Call("test.editor.focus", new { windowId });
+        await Task.Delay(200);
+        back = await UndoOnce(written);
+        notes.Add($"automation write: '{Show(written)}', Ctrl+Z '{Show(back)}'");
+        Check(back.TrimEnd('\n') == typed.TrimEnd('\n'), "typed, then an automation write: one Ctrl+Z takes the write away and keeps the reader's typing");
     }
 }

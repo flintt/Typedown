@@ -9,7 +9,7 @@ import ExportHtml from "services/exportHtml";
 import { errorText } from "services/errorText";
 import { htmlToMarkdown } from "services/importHtml";
 import { DEFAULT_TURNDOWN_CONFIG } from "components/Muya/lib/config";
-import { noteUserIntent, onUserIntent, resetUserIntent, takeChangeOrigin } from "services/changeOrigin";
+import { noteUserIntent, onUserIntent, resetUserIntent, takeChangeOrigin, takeEditReport } from "services/changeOrigin";
 import { InputHold } from "services/inputHold";
 import { afterPaint, hideLoadPreview, PREVIEW_FROM_CHARS, ScrollAnchor, showLoadPreview } from "services/loadPreview";
 import { sha256Hex } from "services/sha256";
@@ -312,7 +312,9 @@ const Editor: React.FC = () => {
         }
         if (markdownRef.current != markdown) {
             markdownRef.current = markdown
-            transport.postMessage('MarkdownChange', { text: markdown, loadId: loadIdRef.current, origin: takeChangeOrigin() });
+            // The kind of edit for the host's undo steps, taken before the origin (it reads the same armed action).
+            const edit = takeEditReport();
+            transport.postMessage('MarkdownChange', { text: markdown, loadId: loadIdRef.current, origin: takeChangeOrigin(), edit });
         }
     }, [flushFileLoaded])
 

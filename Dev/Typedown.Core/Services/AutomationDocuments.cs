@@ -108,7 +108,7 @@ namespace Typedown.Core.Services
                 tab.CurrentHash = Common.SimpleHash(text);
                 tab.Saved = tab.FileHash == tab.CurrentHash;
                 tab.IsDirty = !tab.Saved;
-                tab.History?.ContentChange(text);
+                tab.History?.ContentChange(text, Typedown.Core.Models.ContentHistory.EditKind.External);
                 tab.History?.CommitPending();
             }
             if (tab.Revision != revision)

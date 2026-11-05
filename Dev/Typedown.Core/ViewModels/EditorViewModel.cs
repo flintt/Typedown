@@ -535,12 +535,32 @@ namespace Typedown.Core.ViewModels
             Selected = TextSelected || formatViewModel.FormatState.Image;
         }
 
-        public async void OnMarkdownChange(string markdown)
+        public void OnMarkdownChange(string markdown) => OnMarkdownChange(markdown, null);
+
+        // The page's account of the edit (services/changeOrigin.ts): its kind, a caret moved first, the letters typed.
+        private static (ContentHistory.EditKind Kind, bool Moved, string Inserted) EditOf(JToken edit)
+        {
+            if (edit == null || edit.Type != JTokenType.Object) return (ContentHistory.EditKind.Unknown, false, null);
+            var kind = (string)edit["kind"] switch
+            {
+                "insert" => ContentHistory.EditKind.Insert,
+                "delete" => ContentHistory.EditKind.Delete,
+                "other" => ContentHistory.EditKind.Other,
+                _ => ContentHistory.EditKind.Unknown,
+            };
+            return (kind, (bool?)edit["moved"] ?? false, (string)edit["inserted"]);
+        }
+
+        private async void OnMarkdownChange(string markdown, JToken edit)
         {
             if (!string.Equals(Markdown, markdown, StringComparison.Ordinal))
                 ServiceProvider.GetService<TabsViewModel>()?.ActiveTab?.NoteTextChanged();
             Markdown = markdown;
-            if (!contentUpdating) History.ContentChange(Markdown);
+            if (!contentUpdating)
+            {
+                var (kind, moved, inserted) = EditOf(edit);
+                History.ContentChange(Markdown, kind, moved, inserted);
+            }
             CurrentHash = Common.SimpleHash(Markdown);
             if (!FileLoaded) await Task.Delay(100);
             var saved = FileHash == CurrentHash;
@@ -612,7 +632,7 @@ namespace Typedown.Core.ViewModels
                 if (keepHistoryFor != null && string.Equals(keepHistoryFor, given, StringComparison.Ordinal))
                 {
                     History.CommitPending();
-                    History.ContentChange(newText);
+                    History.ContentChange(newText, ContentHistory.EditKind.External);
                     History.CursorChange(CurrentCursor ?? new(Focus: new(Line: 0, Ch: 0), Anchor: new(Line: 0, Ch: 0)));
                     History.CommitPending();
                 }
@@ -635,7 +655,7 @@ namespace Typedown.Core.ViewModels
         {
             // The text now (the reader's), a step of its own even if its typing had no caret yet to make it one.
             History.CommitPending();
-            History.ContentChange(Markdown);
+            History.ContentChange(Markdown, ContentHistory.EditKind.External);
             History.CursorChange(CurrentCursor ?? new(Focus: new(Line: 0, Ch: 0), Anchor: new(Line: 0, Ch: 0)));
             History.CommitPending();
             keepHistoryFor = text;
@@ -703,7 +723,7 @@ namespace Typedown.Core.ViewModels
                 heldReport = text;
                 return;
             }
-            OnMarkdownChange(text);
+            OnMarkdownChange(text, arg["edit"]);
         }
 
         private bool holdingReports;
@@ -1364,7 +1384,7 @@ namespace Typedown.Core.ViewModels
                 ServiceProvider.GetService<TabsViewModel>()?.ActiveTab?.NoteTextChanged();
             History.CommitPending();
             Markdown = text;
-            History.ContentChange(text);
+            History.ContentChange(text, ContentHistory.EditKind.External);
             History.CursorChange(CurrentCursor ?? new(Focus: new(Line: 0, Ch: 0), Anchor: new(Line: 0, Ch: 0)));
             History.CommitPending();
             CurrentHash = Common.SimpleHash(text);

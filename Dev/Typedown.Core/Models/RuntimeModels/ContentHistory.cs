@@ -103,6 +103,7 @@ namespace Typedown.Core.Models
                 totalChars = 0;
                 StopTimer();
                 pending = new();
+                ResetPendingKind();
                 index = -1;
                 Redoable = false;
                 Undoable = false;
@@ -132,6 +133,7 @@ namespace Typedown.Core.Models
                     index--;
                 }
                 pending = new();
+                ResetPendingKind();
                 Redoable = false;
                 Undoable = index > 0;
             }
@@ -139,6 +141,13 @@ namespace Typedown.Core.Models
             {
                 Trace.WriteLine(ex.Message);
             }
+        }
+
+        private void ResetPendingKind()
+        {
+            pendingKind = EditKind.Unknown;
+            pendingInserted = 0;
+            pendingSentenceEnded = false;
         }
 
         private void ResetTimer()
@@ -199,7 +208,38 @@ namespace Typedown.Core.Models
             return la == lb && string.CompareOrdinal(a, 0, b, 0, la) == 0;
         }
 
-        public void ContentChange(string content)
+        /// <summary>
+        /// What made a change, as the page tells (services/changeOrigin.ts) or the host knows: letters typed, Backspace or
+        /// Delete a character at a time, any other edit of the reader's, or a change not the reader's (an automation write,
+        /// a reload from disk). Unknown: a report that does not say (as before: steps by a pause or a line change).
+        /// </summary>
+        public enum EditKind { Unknown, Insert, Delete, Other, External }
+
+        /// <summary>Letters typed that make one step at most: about a sentence; it ends sooner at a sentence's end.</summary>
+        public const int TypingStepChars = 80;
+
+        // The pending step's kind, the letters typed into it, and whether its last letters ended a sentence.
+        EditKind pendingKind;
+        int pendingInserted;
+        bool pendingSentenceEnded;
+
+        private static bool Blank(string inserted) => inserted != null && inserted.Length > 0 && inserted.Trim().Length == 0;
+
+        // The letters typed end a sentence ("Done. ", "完成。"): the next letters begin a step of their own.
+        private static bool EndsASentence(string inserted)
+        {
+            var typed = inserted?.TrimEnd(' ');
+            return !string.IsNullOrEmpty(typed) && "。！？.!?；;…".IndexOf(typed[^1]) >= 0;
+        }
+
+        // Step boundaries by the kind of edit (the user, 2026-11-05, #39): the host gets whole-document snapshots, and with a
+        // pause or a caret on another line as the only boundaries, everything within a paragraph (one line in Markdown) and
+        // three seconds merged - a long paragraph typed fast was one step; a format, a paste, a word deleted, a caret moved
+        // within the line went into the typing before them; an automation write or a reload landed in the reader's typing.
+        // Now typing is a step while it is letters typed one after another (no other edit, no caret moved, no selection
+        // replaced), up to a sentence's end or TypingStepChars; deleting a character at a time is a step of its own; any
+        // other edit is a step of its own, closed at once; a change not the reader's is never merged with anything.
+        public void ContentChange(string content, EditKind kind = EditKind.Unknown, bool moved = false, string inserted = null)
         {
             try
             {
@@ -209,8 +249,16 @@ namespace Typedown.Core.Models
                 {
                     return;
                 }
-                // The text before a change over a selection is a step of its own, put back with that selection.
-                if ((selectionSinceChange != null || selectedSinceChange) && pending.Text != null)
+                var replacesSelection = selectionSinceChange != null || selectedSinceChange;
+                var boundary = replacesSelection
+                    || kind is EditKind.Other or EditKind.External
+                    || moved
+                    // Typing then deleting, or the other way round (a report that does not say is not a change of kind).
+                    || (kind != EditKind.Unknown && pendingKind != EditKind.Unknown && pendingKind != kind)
+                    || (kind == EditKind.Insert && ((pendingSentenceEnded && !Blank(inserted)) || pendingInserted >= TypingStepChars));
+                // The text before this change a step of its own; the one before a change over a selection put back with that
+                // selection (source mode reports it; the visual editor's comes as the caret the typing left).
+                if (boundary && pending.Text != null)
                 {
                     if (selectionSinceChange != null) pending.Cursor = selectionSinceChange;
                     pending.Cursor ??= lastCursor;
@@ -220,9 +268,23 @@ namespace Typedown.Core.Models
                 selectedSinceChange = false;
                 pending.Text = content;
                 pending.Cursor ??= lastCursor;
+                if (pendingKind == EditKind.Unknown) pendingKind = kind;
+                if (kind == EditKind.Insert)
+                {
+                    pendingInserted += string.IsNullOrEmpty(inserted) ? 1 : inserted.Length;
+                    // The space after a sentence stays with it; the next letter begins the next step.
+                    if (!Blank(inserted)) pendingSentenceEnded = EndsASentence(inserted);
+                }
                 if (pending.Cursor != null && histories.Count == 0)
                 {
                     CommitPending();
+                    return;
+                }
+                // Any edit but typing or deleting is a step of its own at once; its caret, reported next, goes with it.
+                if (kind is EditKind.Other or EditKind.External && pending.Cursor != null)
+                {
+                    CommitPending();
+                    StateChange();
                     return;
                 }
                 StateChange();
