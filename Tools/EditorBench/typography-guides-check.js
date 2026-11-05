@@ -92,6 +92,23 @@ const { openEditor } = require('./harness');
     const sentAfter = await page.evaluate(() => window.__count.TypographyBlock || 0);
     report(sentAfter > sentBefore && (await block())?.kind === 'p', 'a click into the block the caret is in: the block sent again', `${sentBefore} -> ${sentAfter}`);
 
+    // Each block's group, as the designer groups its fields - in reading mode too, where the editor sends no
+    // paragraph state (the user: there the panel came but kept the kind it had).
+    for (const readOnly of [false, true]) {
+      await mode(false, readOnly);
+      await pause(300);
+      const groups = [];
+      for (const [selector, expected] of [['h1', 'headings'], ['ul li p', 'lists'], ['blockquote p', 'quote'], ['p.ag-paragraph:not(li p):not(blockquote p)', 'body']]) {
+        const point = await centre(selector);
+        await page.mouse.click(point.x, point.y);
+        await pause(200);
+        const got = (await block())?.group;
+        groups.push(`${selector}: ${got}`);
+        report(got === expected, `${readOnly ? 'reading mode' : 'edit mode'}: a click into ${selector} sends the group ${expected}`, String(got));
+      }
+    }
+    await mode(false, false);
+
     await page.evaluate(() => window.__deliver('TypographyGuides', { on: false }));
     await pause(150);
     report(await block() === null, 'off: no block', JSON.stringify(await block()));

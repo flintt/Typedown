@@ -117,6 +117,19 @@ const onScroll = () => {
 }
 const hide = () => { target = null; schedule() }
 
+/**
+ * The designer's group for a block, as the designer groups its fields (code, then headings, a quote, a list, the body):
+ * from the page, so reading mode has it too - the editor's paragraph state, which the host had it from, is not sent
+ * there (the user, 2026-11-05: in reading mode the panel came but kept the kind it had).
+ */
+export const groupOf = (block: HTMLElement): string => {
+    if (block.closest('pre') || (block.tagName === 'FIGURE' && block.querySelector('pre'))) return 'code'
+    if (/^H[1-6]$/.test(block.tagName)) return 'headings'
+    if (block.closest('#ag-editor-id blockquote')) return 'quote'
+    if (block.closest('#ag-editor-id li')) return 'lists'
+    return 'body'
+}
+
 // The caret's block for the designer's small panel beside it (TypographyBlock: its rect in the page's px, its kind and
 // a heading's level; null for none): not while typing - a key pressed hides it until a click or another block.
 let caretBlock: HTMLElement | null = null
@@ -128,7 +141,7 @@ const sendCaretBlock = () => {
     if (block && block.isConnected) {
         const r = block.getBoundingClientRect()
         const kind = block.tagName.toLowerCase()
-        if (r.height > 0) args = { x: r.left, y: r.top, width: r.width, height: r.height, kind, level: /^h[1-6]$/.test(kind) ? +kind[1] : 0 }
+        if (r.height > 0) args = { x: r.left, y: r.top, width: r.width, height: r.height, kind, level: /^h[1-6]$/.test(kind) ? +kind[1] : 0, group: groupOf(block) }
     }
     const text = JSON.stringify(args)
     if (text === sent) return
