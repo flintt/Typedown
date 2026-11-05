@@ -125,7 +125,7 @@ F11 全屏。
 
 PlantUML 图默认不绘制：打开 **设置 → 编辑器 → 绘制 PlantUML 图表** 后，图表源码发送到 plantuml.com 绘制。在下面的 **PlantUML 服务器** 填自己的服务器地址，图表源码就不会离开你手中。
 
-Mermaid 图默认由 Mermaid 绘制。**设置 → 编辑器 → Mermaid 图表的绘制方式** 选 **Pele** 后改由 Pele 绘制：能画更多种类的图（如 agentflow、usecase），排版和 Mermaid 不同；导出和复制按钮也跟着用它。
+Mermaid 图默认由 Pele 绘制：快得多（每张约 1 毫秒），能画更多种类的图（如 agentflow、usecase），颜色跟随主题。**设置 → 编辑器 → Mermaid 图表的绘制方式** 选 **Mermaid** 后改由 Mermaid 绘制，排版和 Mermaid 官方一致。导出和复制按钮跟着所选的那个。
 
 ---
 

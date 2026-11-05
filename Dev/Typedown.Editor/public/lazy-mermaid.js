@@ -9,6 +9,8 @@
 
     var engines = { mermaid: null, pele: null };
     var loading = { mermaid: null, pele: null };
+    // Until the host says (its settings come before the first document; Pele by default there since 2026-11-05): the
+    // page on its own - EditorBench's checks - draws with Mermaid, as those checks expect.
     var renderer = 'mermaid';
     var options = { theme: 'default' };
     var nextId = 0;

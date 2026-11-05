@@ -255,8 +255,12 @@ namespace Typedown.Core.ViewModels
         /// <summary>The plantuml-server that draws PlantUML blocks; empty (or not an http(s) address): plantuml.com.</summary>
         public string PlantUmlServer { get => GetSettingValue(""); set => SetSettingValue(value ?? ""); }
 
-        /// <summary>What draws the Mermaid fences: "mermaid" (the default) or "pele" (public/lazy-mermaid.js in the editor).</summary>
-        public string MermaidRenderer { get => GetSettingValue("mermaid"); set => SetSettingValue(value == "pele" ? "pele" : "mermaid"); }
+        /// <summary>
+        /// What draws the Mermaid fences: "pele" (the default) or "mermaid" (public/lazy-mermaid.js in the editor). Pele by
+        /// default (the user, 2026-11-05): of 62 diagrams both drew every one, Pele about 1 ms each against Mermaid's 45, and
+        /// a first one in 186 ms against 560; a reader who chose Mermaid keeps it.
+        /// </summary>
+        public string MermaidRenderer { get => GetSettingValue("pele"); set => SetSettingValue(value == "mermaid" ? "mermaid" : "pele"); }
         /// <summary>Vim in source mode, Vim-style moving around in reading mode (Utilities/VimKeys).</summary>
         public bool VimMode { get => GetSettingValue(false); set => SetSettingValue(value); }
         public string EditorAreaWidth { get => GetSettingValue("1200px"); set => SetSettingValue(value); }

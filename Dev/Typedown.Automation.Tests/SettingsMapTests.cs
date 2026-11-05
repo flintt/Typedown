@@ -28,6 +28,14 @@ namespace Typedown.Automation.Tests
         }
 
         [Fact]
+        public void Mermaid_diagrams_are_drawn_by_Pele_unless_Mermaid_is_chosen()
+        {
+            // Pele by default (2026-11-05); only "mermaid" stored or set keeps Mermaid, anything else is Pele.
+            var source = File.ReadAllText(Path.Combine(Root, "Dev/Typedown.Core/ViewModels/SettingsViewModel.cs"));
+            Assert.Matches(@"public\s+string\s+MermaidRenderer\s*\{\s*get\s*=>\s*GetSettingValue\(""pele""\);\s*set\s*=>\s*SetSettingValue\(value\s*==\s*""mermaid""\s*\?\s*""mermaid""\s*:\s*""pele""\)", source);
+        }
+
+        [Fact]
         public void Every_stored_setting_is_exposed_or_has_a_reason_not_to_be()
         {
             var map = Map();

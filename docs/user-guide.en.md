@@ -125,7 +125,7 @@ The **Paragraph** menu also lets you insert charts (Flow Chart, Sequence Diagram
 
 PlantUML diagrams are not drawn unless you turn on **Settings → Editor → Draw PlantUML diagrams**, which sends the diagram's source to plantuml.com to be drawn. Put the address of a server of your own in **PlantUML server** below it, and the diagrams' source stays with you.
 
-Mermaid diagrams are drawn by Mermaid. Choose **Pele** in **Settings → Editor → Draw Mermaid diagrams with** to have Pele draw them: it draws more kinds of diagram (agentflow and usecase, for example) and lays them out differently; the exports and the copy button use it too.
+Mermaid diagrams are drawn by Pele: much faster (about a millisecond each), more kinds of diagram (agentflow and usecase, for example), coloured by the theme. Choose **Mermaid** in **Settings → Editor → Draw Mermaid diagrams with** to have Mermaid draw them, laid out as Mermaid itself does. The exports and the copy button use the one chosen.
 
 ---
 
