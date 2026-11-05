@@ -1399,6 +1399,9 @@ namespace Typedown.Core.ViewModels
                 return;
             }
             EditionHooks.ReportActivity(ActivityKind.Undone, AppViewModel);
+            // The reader's own: a text an automation client wrote, come back by an undo, is not its edit again - the
+            // undo was taken for one and not counted as writing (ST01, hp job 257).
+            automationText = null;
             OnMarkdownChange(state.Text);
             contentUpdating = true;
             MarkdownEditor?.PostMessage("SetMarkdown", new
@@ -1418,6 +1421,7 @@ namespace Typedown.Core.ViewModels
                 return;
             }
             EditionHooks.ReportActivity(ActivityKind.Redone, AppViewModel);
+            automationText = null;
             OnMarkdownChange(state.Text);
             contentUpdating = true;
             // The document's folder too, as Undo sends it: without it the page lost its folder, and every relative picture
