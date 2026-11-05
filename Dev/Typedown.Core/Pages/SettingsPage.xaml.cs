@@ -70,7 +70,12 @@ namespace Typedown.Core.Pages
         {
             focusByKeyboard = args.FocusState == FocusState.Keyboard;
             focusAt = Environment.TickCount64;
-            if (!focusByKeyboard && args.NewFocusedElement is DependencyObject next && Within(next, SettingsScroller))
+            // Only the focus WinUI hands to the page's first setting on its own (a click on what takes no focus, the
+            // window had again): a focus set on a setting of its own choosing - UI Automation's SetFocus, a screen
+            // reader - goes where it was set; sent to the section picked, typing into the font box went nowhere
+            // (FL01 on both PCs, the full run after 1.4.1.22).
+            if (!focusByKeyboard && args.NewFocusedElement is DependencyObject next && Within(next, SettingsScroller)
+                && (args.FocusState != FocusState.Programmatic || IsFirstSetting(next)))
             {
                 var under = CursorInRoot() is { } at
                     ? Microsoft.UI.Xaml.Media.VisualTreeHelper.FindElementsInHostCoordinates(at, SettingsScroller).Cast<DependencyObject>().ToList()
@@ -91,6 +96,12 @@ namespace Typedown.Core.Pages
             }
             Log.Debug($"settings: focus to {Describe(args.NewFocusedElement)} from {Describe(args.OldFocusedElement)} ({args.FocusState}, {args.InputDevice}, {args.Direction})");
         }
+
+        // The first control of the page that takes the focus, or one inside it (a number box's text): where WinUI puts a
+        // focus nobody chose.
+        private bool IsFirstSetting(DependencyObject element) =>
+            Microsoft.UI.Xaml.Input.FocusManager.FindFirstFocusableElement(SettingsScroller) is DependencyObject first
+            && (element == first || Within(element, first) || Within(first, element));
 
         private bool focusByKeyboard = true;
         private long focusAt;
