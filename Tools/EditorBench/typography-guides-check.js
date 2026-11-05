@@ -85,6 +85,12 @@ const { openEditor } = require('./harness');
     await pause(200);
     b = await block();
     report(b && b.kind === 'p', 'a click: the block again', JSON.stringify(b));
+    // A click back into the same block sends it again (the host's panel gave way to the click and comes back).
+    const sentBefore = await page.evaluate(() => window.__count.TypographyBlock || 0);
+    await page.mouse.click(at.x + 5, at.y);
+    await pause(200);
+    const sentAfter = await page.evaluate(() => window.__count.TypographyBlock || 0);
+    report(sentAfter > sentBefore && (await block())?.kind === 'p', 'a click into the block the caret is in: the block sent again', `${sentBefore} -> ${sentAfter}`);
 
     await page.evaluate(() => window.__deliver('TypographyGuides', { on: false }));
     await pause(150);

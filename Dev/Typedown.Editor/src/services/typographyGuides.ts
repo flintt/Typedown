@@ -150,8 +150,9 @@ const onKey = (event: KeyboardEvent) => {
     }
 }
 const onPress = () => { typing = false }
-// A click back into the block the caret was in may move no selection: its block sent again once released.
-const onRelease = () => setTimeout(onSelection, 0)
+// A click closes the host's panel (a flyout gives way to a click elsewhere): the caret's block sent again once
+// released, even unchanged - a click back into the block the caret was in left the panel closed.
+const onRelease = () => setTimeout(() => { sent = ''; onSelection() }, 0)
 let scrollFrame = 0
 const onBlockScroll = () => {
     if (!caretBlock || scrollFrame) return

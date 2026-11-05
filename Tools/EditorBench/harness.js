@@ -71,11 +71,13 @@ async function openEditor({ browserArgs = [] } = {}) {
   await page.evaluateOnNewDocument(settings => {
     const listeners = [], prev = {};
     window.__last = {};
+    window.__count = {};
     window.__deliver = (name, args) => listeners.forEach(l => l({ data: JSON.stringify({ name, args }) }));
     const replies = { GetSettings: settings, GetCurrentTheme: { theme: 'Light', accentColor: { r: 0, g: 120, b: 212, a: 1 }, background: { R: 249, G: 249, B: 249, A: 1 } }, ContentLoaded: '', GetStringResources: {} };
     window.chrome = { webview: { addEventListener: (_t, l) => listeners.push(l), postMessage: raw => {
       const m = JSON.parse(raw);
       if (m.type === 'invoke') { setTimeout(() => window.__deliver(m.id, { code: 0, data: replies[m.name] ?? null }), 0); return; }
+      if (m.name) window.__count[m.name] = (window.__count[m.name] || 0) + 1;
       if (m.type === 'diffmsg') { const old = prev[m.name] || ''; prev[m.name] = m.diff ? old.slice(0, m.start) + m.args + old.slice(m.end) : m.args; window.__last[m.name] = JSON.parse(prev[m.name]);
         // The outline as last sent: a StateChange whose outline did not change leaves it out (tocUnchanged).
         if (m.name === 'StateChange' && window.__last.StateChange.state?.toc) window.__toc = window.__last.StateChange.state.toc; }
