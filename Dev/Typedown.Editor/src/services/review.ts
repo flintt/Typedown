@@ -73,6 +73,13 @@ export function tokenize(text: string): string[] {
 type Op = { a: number, b: number, aLen: number, bLen: number }
 
 /**
+ * Which ways the last diffTexts took, for the page checks (Tools/EditorBench/review-matrix.js): lines paired and
+ * compared by words, lines taken as deleted or added whole, groups too big to pair compared as one run of words, and
+ * comparisons given up past their cost (the whole middle one replacement).
+ */
+export const diffPaths = { local: 0, pairs: 0, wholeLines: 0, unpairedGroups: 0, gaveUp: 0 }
+
+/**
  * The edits turning a into b (Myers' algorithm, the common ends taken off first), as runs: aLen items of a at a replaced
  * by bLen items of b at b. Equal items compare with ===. Gives up past maxCost differences and reports the whole middle
  * as one replacement.
@@ -91,7 +98,8 @@ export function diffSequences<T>(a: T[], b: T[], maxCost = 4000): Op[] {
     const trace: Int32Array[] = []
     let found = -1
     for (let d = 0; d <= max && found < 0; d++) {
-        trace.push(v.slice())
+        // V as it was, only the diagonals this step can read (all of it each step took 64 MB at 2,000 steps).
+        trace.push(v.slice(offset - d - 1, offset + d + 2))
         for (let k = -d; k <= d; k += 2) {
             let x = k === -d || (k !== d && v[offset + k - 1] < v[offset + k + 1]) ? v[offset + k + 1] : v[offset + k - 1] + 1
             let y = x - k
@@ -100,16 +108,17 @@ export function diffSequences<T>(a: T[], b: T[], maxCost = 4000): Op[] {
             if (x >= n && y >= m) { found = d; break }
         }
     }
-    if (found < 0) return [{ a: start, b: start, aLen: n, bLen: m }]
+    if (found < 0) { diffPaths.gaveUp++; return [{ a: start, b: start, aLen: n, bLen: m }] }
     // Back through the trace: each step one deletion or insertion, the equal runs between them skipped.
     const steps: { a: number, b: number, del: boolean }[] = []
     let x = n, y = m
     for (let d = found; d > 0; d--) {
         const vd = trace[d]
+        const o = d + 1
         const k = x - y
-        const down = k === -d || (k !== d && vd[offset + k - 1] < vd[offset + k + 1])
+        const down = k === -d || (k !== d && vd[o + k - 1] < vd[o + k + 1])
         const prevK = down ? k + 1 : k - 1
-        const prevX = vd[offset + prevK]
+        const prevX = vd[o + prevK]
         const prevY = prevX - prevK
         while (x > prevX + (down ? 0 : 1) && y > prevY + (down ? 1 : 0)) { x--; y-- }
         if (down) { y--; steps.push({ a: x, b: y, del: false }) }
@@ -148,7 +157,52 @@ const splitLines = (text: string) => {
  * others is that paragraph and its line break, not the break before it and the paragraph.
  */
 export function diffTexts(baseline: string, current: string): Hunk[] {
+    diffPaths.local = diffPaths.pairs = diffPaths.wholeLines = diffPaths.unpairedGroups = diffPaths.gaveUp = 0
     if (baseline === current) return []
+    // The words of everything between what the two have in common at their ends, the fewest words changed: fast while
+    // few differ, however long the document (Myers: the length times the words changed). Line by line first, a group of
+    // lines was compared apart from the rest - blank lines matched across paragraphs, a letter typed marked its word,
+    // Enter deleted a paragraph and added two (review-matrix.js, 2026-11-06). Only when too much differs for that, line
+    // by line (diffByLines).
+    // The fewest words is not always what reads best: a paragraph edited beside one deleted had the deleted one's words
+    // serve the edited one's ("paragraph" kept, ".\n\nThird" made ","). So line by line too (each group of changed lines
+    // its best way), and the one marking less taken, a few characters counted for each hunk: one clean deletion beats a
+    // few scraps.
+    const lines = diffByLines(baseline, current)
+    const linePaths = { ...diffPaths }
+    const [pre, suf] = wordEnds(baseline, current)
+    const words: Hunk[] = []
+    const gaveUp = diffPaths.gaveUp
+    wordHunks(words, baseline.slice(pre, baseline.length - suf), current.slice(pre, current.length - suf), pre, pre, 3000)
+    const cost = (list: Hunk[]) => hunksCost(baseline, current, list)
+    // Line by line only where it marks hardly more than the fewest words would (it reads better, it must not mark more).
+    const marked = (list: Hunk[]) => list.reduce((n, h) => n + (h.baseEnd - h.baseStart) + (h.curEnd - h.curStart), 0)
+    if (diffPaths.gaveUp === gaveUp && (cost(words) <= cost(lines) || marked(lines) > marked(words) + 2)) {
+        Object.assign(diffPaths, { local: 1, pairs: 0, wholeLines: 0, unpairedGroups: 0 })
+        return words.map(h => slide(baseline, current, h))
+    }
+    Object.assign(diffPaths, linePaths)
+    return lines
+}
+
+/**
+ * How much a way of telling the differences marks: its characters, a few more for each hunk (one clean deletion beats a
+ * few scraps), and more for one that takes a line break with part of a line ("." and the next paragraph's first word made
+ * "," - a paragraph deleted, read across two).
+ */
+function hunksCost(baseline: string, current: string, list: Hunk[]): number {
+    let n = 0
+    for (const h of list) {
+        const a = baseline.slice(h.baseStart, h.baseEnd), b = current.slice(h.curStart, h.curEnd)
+        n += a.length + b.length + 3
+        const across = (t: string) => t.includes('\n') && /[^\n]/.test(t.replace(/^[^\n]*\n/, '').replace(/\n[^\n]*$/, '')) === false && /[^\n]/.test(t) && !/^\n|\n$/.test(t)
+        if ((a.includes('\n') && b.length > 0 && /\S/.test(b)) || (b.includes('\n') && a.length > 0 && /\S/.test(a)) || across(a) || across(b)) n += 10
+    }
+    return n
+}
+
+/** diffTexts line by line, for texts too different to compare word by word at once. */
+function diffByLines(baseline: string, current: string): Hunk[] {
     const aLines = splitLines(baseline), bLines = splitLines(current)
     const aStarts = lineStarts(baseline), bStarts = lineStarts(current)
     const hunks: Hunk[] = []
@@ -159,48 +213,146 @@ export function diffTexts(baseline: string, current: string): Hunk[] {
             hunks.push({ baseStart: aFrom, baseEnd: aTo, curStart: bFrom, curEnd: bTo })
             continue
         }
-        // Lines changed: each line paired with the one it most resembles on the other side, the words of a pair
-        // compared; a line paired with none was added or deleted whole. Compared as one run of words, a paragraph
-        // edited next to one deleted had its words matched with the deleted one's ("paragraph" with "paragraph").
-        const aGroup = aLines.slice(op.a, op.a + op.aLen), bGroup = bLines.slice(op.b, op.b + op.bLen)
-        const steps = aGroup.length * bGroup.length <= 40000 ? pairLines(aGroup, bGroup) : null
-        if (!steps) {
-            wordHunks(hunks, baseline.slice(aFrom, aTo), current.slice(bFrom, bTo), aFrom, bFrom)
-            continue
+        // Lines changed, two ways, the one marking less taken (each hunk counting a little, so that one clean deletion
+        // beats a few scraps): (1) what the two sides do not have in common at their ends, its words compared - one edit
+        // in one place (a letter typed, a word, Enter splitting a paragraph, a format) is exactly that; (2) each line
+        // paired with the one it most resembles, the words of a pair compared, a line paired with none added or deleted
+        // whole - several edits apart, or a paragraph edited beside one deleted. Line by line alone, a letter typed in a
+        // word marked the word and Enter in a paragraph deleted it and added two (review-matrix.js, 2026-11-06).
+        const aText = baseline.slice(aFrom, aTo), bText = current.slice(bFrom, bTo)
+        const [pre, suf] = commonEnds(aText, bText)
+        let local: Hunk[] | null = null
+        if (aText.length - pre - suf <= LOCAL_EDIT && bText.length - pre - suf <= LOCAL_EDIT) {
+            local = []
+            wordHunks(local, aText.slice(pre, aText.length - suf), bText.slice(pre, bText.length - suf), aFrom + pre, bFrom + pre)
         }
-        let a = aFrom, b = bFrom
-        let run: Hunk | null = null
-        const flush = () => { if (run) hunks.push(run); run = null }
-        for (const step of steps) {
-            if (step === 'pair') {
-                flush()
-                const aLine = aGroup.shift()!, bLine = bGroup.shift()!
-                wordHunks(hunks, aLine, bLine, a, b)
-                a += aLine.length
-                b += bLine.length
-            } else if (step === 'del') {
-                const aLine = aGroup.shift()!
-                if (run && run.curStart === run.curEnd) run.baseEnd += aLine.length
-                else { flush(); run = { baseStart: a, baseEnd: a + aLine.length, curStart: b, curEnd: b } }
-                a += aLine.length
-            } else {
-                const bLine = bGroup.shift()!
-                if (run && run.baseStart === run.baseEnd) run.curEnd += bLine.length
-                else { flush(); run = { baseStart: a, baseEnd: a, curStart: b, curEnd: b + bLine.length } }
-                b += bLine.length
-            }
+        const paired = pairedHunks(aLines.slice(op.a, op.a + op.aLen), bLines.slice(op.b, op.b + op.bLen), aText, bText, aFrom, bFrom)
+        const cost = (list: Hunk[]) => hunksCost(baseline, current, list)
+        if (local && cost(local) <= cost(paired.hunks)) {
+            diffPaths.local++
+            hunks.push(...local)
+        } else {
+            diffPaths.pairs += paired.pairs
+            diffPaths.wholeLines += paired.whole
+            if (paired.unpaired) diffPaths.unpairedGroups++
+            hunks.push(...paired.hunks)
         }
-        flush()
     }
     return hunks.map(h => slide(baseline, current, h))
 }
 
+// A group of changed lines compared line by line (diffTexts' second way): the hunks, and how many lines were paired and
+// taken whole; too many to pair, its words compared as one run (unpaired).
+function pairedHunks(aGroup: string[], bGroup: string[], aText: string, bText: string, aFrom: number, bFrom: number) {
+    const hunks: Hunk[] = []
+    let pairs = 0, whole = 0
+    const steps = aGroup.length * bGroup.length <= 40000 ? pairLines(aGroup, bGroup) : null
+    if (!steps) {
+        wordHunks(hunks, aText, bText, aFrom, bFrom)
+        return { hunks, pairs, whole, unpaired: true }
+    }
+    aGroup = [...aGroup]
+    bGroup = [...bGroup]
+    let a = aFrom, b = bFrom
+    let run: Hunk | null = null
+    const flush = () => { if (run) hunks.push(run); run = null }
+    for (const step of steps) {
+        if (step === 'pair') {
+            pairs++
+            flush()
+            const aLine = aGroup.shift()!, bLine = bGroup.shift()!
+            wordHunks(hunks, aLine, bLine, a, b)
+            a += aLine.length
+            b += bLine.length
+        } else if (step === 'del') {
+            whole++
+            const aLine = aGroup.shift()!
+            if (run && run.curStart === run.curEnd) run.baseEnd += aLine.length
+            else { flush(); run = { baseStart: a, baseEnd: a + aLine.length, curStart: b, curEnd: b } }
+            a += aLine.length
+        } else {
+            whole++
+            const bLine = bGroup.shift()!
+            if (run && run.baseStart === run.baseEnd) run.curEnd += bLine.length
+            else { flush(); run = { baseStart: a, baseEnd: a, curStart: b, curEnd: b + bLine.length } }
+            b += bLine.length
+        }
+    }
+    flush()
+    return { hunks, pairs, whole, unpaired: false }
+}
+
 // The words of two texts compared, the hunks at their offsets.
-function wordHunks(hunks: Hunk[], aText: string, bText: string, aFrom: number, bFrom: number) {
+function wordHunks(hunks: Hunk[], aText: string, bText: string, aFrom: number, bFrom: number, maxCost = 2000) {
     const aTokens = tokenize(aText), bTokens = tokenize(bText)
     const aPos = positions(aTokens), bPos = positions(bTokens)
-    for (const t of diffSequences(aTokens, bTokens, 2000))
-        hunks.push({ baseStart: aFrom + aPos[t.a], baseEnd: aFrom + aPos[t.a + t.aLen], curStart: bFrom + bPos[t.b], curEnd: bFrom + bPos[t.b + t.bLen] })
+    const ops = diffSequences(aTokens, bTokens, maxCost)
+    // Words changed only a space or a mark apart are looked at together as well ("# review" to "eview": the "# r" gone,
+    // not "#" made "eview" and "review " deleted - the same number of words).
+    for (let i = 0; i < ops.length;) {
+        let j = i
+        while (j + 1 < ops.length && ops[j + 1].a - (ops[j].a + ops[j].aLen) <= 2 && aPos[ops[j + 1].a] - aPos[ops[j].a + ops[j].aLen] <= 3) j++
+        const one = (t: Op) => letters(aText, bText, aPos[t.a], aPos[t.a + t.aLen], bPos[t.b], bPos[t.b + t.bLen])
+        const apart = ops.slice(i, j + 1).flatMap(one)
+        const together = j > i ? letters(aText, bText, aPos[ops[i].a], aPos[ops[j].a + ops[j].aLen], bPos[ops[i].b], bPos[ops[j].b + ops[j].bLen]) : null
+        const size = (list: Hunk[]) => list.reduce((n, h) => n + h.baseEnd - h.baseStart + h.curEnd - h.curStart, 0)
+        for (const h of together && size(together) < size(apart) ? together : apart)
+            hunks.push({ baseStart: aFrom + h.baseStart, baseEnd: aFrom + h.baseEnd, curStart: bFrom + h.curStart, curEnd: bFrom + h.curEnd })
+        i = j + 1
+    }
+}
+
+/**
+ * aText[aS, aE) made bText[bS, bE): its ends in common taken off, then by letters where that marks at most three
+ * quarters as much ("paragraph" to "paraZgraph" is a "Z" added; a word put for a wholly different one stays one
+ * replacement). Offsets in the two texts.
+ */
+function letters(aText: string, bText: string, aS: number, aE: number, bS: number, bE: number): Hunk[] {
+    const [pre, suf] = commonEnds(aText.slice(aS, aE), bText.slice(bS, bE))
+    const h = { baseStart: aS + pre, baseEnd: aE - suf, curStart: bS + pre, curEnd: bE - suf }
+    const x = aText.slice(h.baseStart, h.baseEnd), y = bText.slice(h.curStart, h.curEnd)
+    if (x && y && x.length <= 160 && y.length <= 160) {
+        const ops = diffSequences([...x], [...y])
+        const offsets = (str: string) => { const o = [0]; for (const ch of str) o.push(o[o.length - 1] + ch.length); return o }
+        const xo = offsets(x), yo = offsets(y)
+        const marked = ops.reduce((n, o) => n + (xo[o.a + o.aLen] - xo[o.a]) + (yo[o.b + o.bLen] - yo[o.b]), 0)
+        if (marked * 4 <= (x.length + y.length) * 3)
+            return ops.map(o => ({ baseStart: h.baseStart + xo[o.a], baseEnd: h.baseStart + xo[o.a + o.aLen], curStart: h.curStart + yo[o.b], curEnd: h.curStart + yo[o.b + o.bLen] }))
+    }
+    return [h]
+}
+
+// A letter of a word (not CJK, whose characters are words of their own).
+const WORD_CHAR = /[\p{L}\p{N}_]/u
+const CJK_CHAR = /[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uac00-\ud7af]/
+const inWord = (t: string, i: number) => i > 0 && i < t.length && WORD_CHAR.test(t[i - 1]) && WORD_CHAR.test(t[i]) && !CJK_CHAR.test(t[i - 1]) && !CJK_CHAR.test(t[i])
+
+/**
+ * commonEnds moved back to the edges of words: the words around an edit are compared whole (and then by letters), so
+ * "gamma" and "delta" sharing their last "a" does not cut both (" delta" added, not "a delt").
+ */
+function wordEnds(a: string, b: string): [number, number] {
+    let [pre, suf] = commonEnds(a, b)
+    while (pre > 0 && (inWord(a, pre) || inWord(b, pre))) pre--
+    while (suf > 0 && (inWord(a, a.length - suf) || inWord(b, b.length - suf))) suf--
+    return [pre, suf]
+}
+
+/** A change in one place as long as this (on either side) is compared on its own, not line by line. */
+const LOCAL_EDIT = 400
+
+const lowSurrogate = (c: number) => c >= 0xdc00 && c <= 0xdfff
+
+/** How many characters two texts have in common at their start and at their end (not overlapping, never half a pair). */
+export function commonEnds(a: string, b: string): [number, number] {
+    const max = Math.min(a.length, b.length)
+    let pre = 0
+    while (pre < max && a.charCodeAt(pre) === b.charCodeAt(pre)) pre++
+    if (pre > 0 && pre < max && lowSurrogate(a.charCodeAt(pre))) pre--
+    let suf = 0
+    while (suf < max - pre && a.charCodeAt(a.length - 1 - suf) === b.charCodeAt(b.length - 1 - suf)) suf++
+    if (suf > 0 && lowSurrogate(a.charCodeAt(a.length - suf))) suf--
+    return [pre, suf]
 }
 
 // How alike two lines are, 0 to 1: the share of their words (not spaces) they have in common. Two blank lines are alike.
@@ -440,7 +592,9 @@ export function acceptAll(baseline: string, revisions: Revision[]): string {
 /** Rejects the given revisions at once: the new document text. */
 export function rejectAll(current: string, revisions: Revision[]): string {
     let text = current
-    for (const r of [...revisions].sort((a, b) => b.curStart - a.curStart)) text = rejectFrom(text, r)
+    // From the end; at one place, the insertion taken out before the deletion is put back there (the other way round the
+    // text put back was taken out again).
+    for (const r of [...revisions].sort((a, b) => b.curStart - a.curStart || b.curEnd - a.curEnd)) text = rejectFrom(text, r)
     return text
 }
 

@@ -298,3 +298,14 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   accept all of one source into the baseline; the buttons beside the revision `next` went to; Alt+Backspace rejects
   (the text the baseline again, told as the reader's edit); the marks in source mode; hidden and off (`ReviewSet`); the
   revisions the host kept matched again on a load. Nothing of the marks in the text.
+- `review-matrix.js [--only <doc,...>] [--modes visual,source] [--edits ins,del,...] [--quick] [--json <file>]` — review mode
+  across 31 small documents (lists of every kind, emphasis with _ and __, setext headings, ~~~ and indented code,
+  tables, lazy quotes, HTML, footnotes, math, YAML, hard breaks, escapes, trailing spaces, blank lines, tabs, reference
+  links, Chinese and English mixed, CRLF, a BOM, no final newline, repeated lines) × edits (a letter typed, deleted, a
+  word replaced, an input method's character, Enter, Backspace joining blocks, a paste of two lines, Ctrl+B, the host's
+  undo, a program's write) × places (a block's start, middle, end, inside bold or a link, the first and last block) × the
+  two editors, and the ways through (a mode switch, a save, review off and on, a reject then another edit, a long
+  document with forty revisions far away). Each cell: nothing revised by a load; the revisions are the edit and mark no
+  more than it and a little; in the visual editor each mark where its text is (a deletion never inside a hidden mark);
+  reject all gives the baseline back, accept all makes it the text; nothing of the marks in the text. Prints a table
+  (with the ways the diff took: lines paired, taken whole, groups unpaired, comparisons given up) and the page's errors.
