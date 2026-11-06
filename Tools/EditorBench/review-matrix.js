@@ -6,10 +6,18 @@
 //   3 (visual mode) each revision's marks are where its text is: an insertion's marked text is its text, a deletion's
 //     mark is on a character that shows (not inside a hidden ** ` [ ...);
 //   4 reject all gives the baseline back byte for byte (and, for the insertion, accept all makes the baseline the text);
-//   5 the text has nothing of the marks.
+//   5 the text has nothing of the marks;
+//   6 the document's other lines are as the source wrote them (the edit's own line and the next one aside, and an
+//     ordered list's numbers, which follow the items): a fence's ~~~, a setext underline, a lazy line, __ and _, the
+//     list markers, the end without a line break.
 // It prints a table (one line a cell: ok or FAIL, revisions, characters marked, the diff's ways - lines paired, lines
 // whole, groups unpaired, comparisons given up - and what failed) and a summary.
-// Options: --only <doc,doc>  --modes visual,source  --edits ins,del,...  --quick (one place a document)  --json <file>
+// Options: --only <doc,doc>  --modes visual,source  --edits ins,del,...  --json <file>
+//   --quick    one place a document and two of the edits each (every document, edit and mode at least once), and the
+//              ways through: the CI's set, a few minutes.
+//   --workers N  the documents shared among N browsers at once (each its own process; "auto", the default without
+//              --quick: one a core but one, at most 8).
+//   A failure listed in review-matrix-known.json (doc|mode|place|edit) is known: only a new one fails the run (exit 1).
 const crypto = require('crypto');
 const fs = require('fs');
 const { openEditor } = require('./harness');
@@ -21,6 +29,14 @@ const modes = (arg('--modes') ?? 'visual,source').split(',');
 const editsWanted = arg('--edits')?.split(',');
 const quick = process.argv.includes('--quick');
 const jsonOut = arg('--json');
+const docIndexes = arg('--docs')?.split(',').map(Number);
+const noFlows = process.argv.includes('--no-flows');
+const workersArg = arg('--workers');
+// The whole matrix shared among as many browsers as the machine takes (vm103: 8) unless told; the quick one in one.
+const auto = () => Math.max(1, Math.min(8, require('os').cpus().length - 1));
+const workers = workersArg === 'auto' || (workersArg == null && !quick) ? auto() : Math.max(1, parseInt(workersArg ?? '1', 10) || 1);
+const KNOWN = require('path').join(__dirname, 'review-matrix-known.json');
+const cellKey = row => `${row.doc}|${row.mode}|${row.place}|${row.edit}`;
 
 // The documents: their text (as the host hands it to the page) and the places to edit, each a [label, index] - the
 // index in the text the caret goes to. `after(s)`: just after the first s; `before(s)`: just before it.
@@ -45,9 +61,14 @@ const docs = [
     doc('aligned table', '# T\n\n| Left | Centre | Right |\n| :--- | :----: | ----: |\n| l1   | c1     | r1    |\n\nAfter.\n', [['in cell', 'after', 'c1'], ['after', 'after', 'After']]),
     doc('lazy quote', '# Q\n\n> quoted line\nlazy continuation\n\nAfter.\n', [['in quote', 'after', 'quoted l'], ['lazy line', 'after', 'lazy c'], ['after', 'after', 'After']]),
     doc('html block', '# H\n\n<div>\nhtml text\n</div>\n\nAfter html.\n', [['after', 'after', 'After']]),
-    doc('footnote', '# F\n\nText with note[^1].\n\n[^1]: The note.\n', [['text', 'after', 'Text w'], ['note', 'after', 'The n']]),
+    doc('footnote', '# F\n\nText with note[^1].\n\n[^1]: The note.\n\nAfter the note here.\n', [['text', 'after', 'Text w'], ['note', 'after', 'The n'], ['after the note', 'after', 'After the']]),
+    // Drawn blocks: their text in no leaf the page shows (the diagram drawn instead); what follows them was left unmarked
+    // on x280 (1.4.1.29).
+    doc('mermaid', '# M\n\n```mermaid\ngraph TD\n  A-->B\n```\n\nAfter the diagram here.\n\nLast one.\n', [['after the diagram', 'after', 'After the'], ['last block', 'after', 'Last']]),
+    doc('plantuml', '# P\n\n```plantuml\n@startuml\nA -> B\n@enduml\n```\n\nAfter the drawing here.\n', [['after the drawing', 'after', 'After the']]),
+    doc('vega-lite', '# V\n\n```vega-lite\n{"mark": "bar", "data": {"values": [{"a": 1}]}, "encoding": {"x": {"field": "a"}}}\n```\n\nAfter the chart here.\n', [['after the chart', 'after', 'After the']]),
     doc('math', '# M\n\nInline $a+b$ here.\n\n$$\nx^2\n$$\n\nAfter.\n', [['near math', 'after', 'Inline'], ['after', 'after', 'After']]),
-    doc('yaml', '---\ntitle: x\n---\n\n# Y\n\nBody here.\n', [['body', 'after', 'Body']]),
+    doc('yaml', '---\ntitle: x\n---\n\n# Y\n\nBody here.\n', [['in yaml', 'after', 'tit'], ['body', 'after', 'Body']]),
     doc('hard break', '# B\n\nline one  \nline two\n\nAfter.\n', [['first line', 'after', 'line o'], ['second line', 'after', 'line t']]),
     doc('backslash escape', '# S\n\nA \\* star and \\_ under.\n', [['mid', 'after', 'star'], ['end', 'after', 'under']]),
     doc('trailing spaces', '# W\n\nwords with trailing   \n\nnext para\n', [['mid', 'after', 'words w'], ['next', 'after', 'next']]),
@@ -76,7 +97,50 @@ const edits = {
     ext: { size: 4, count: 1, ext: true },
 };
 
-(async () => {
+// The documents shared among workers: each a process of its own with a browser of its own, the rows put together here.
+async function runWorkers() {
+    const { spawn } = require('child_process');
+    const os = require('os');
+    const started = Date.now();
+    const chosen = docs.map((d, i) => i).filter(i => !only || only.some(o => docs[i].name.startsWith(o)));
+    const parts = Array.from({ length: workers }, () => []);
+    chosen.forEach((d, i) => parts[i % workers].push(d));
+    const passOn = process.argv.slice(2).filter((a, i, all) => !['--workers', '--json', '--only', '--docs'].includes(a) && !['--workers', '--json', '--only', '--docs'].includes(all[i - 1]));
+    const results = await Promise.all(parts.filter(p => p.length).map((part, w) => new Promise(resolve => {
+        const out = require('path').join(os.tmpdir(), `review-matrix-${process.pid}-${w}.json`);
+        const args = [__filename, ...passOn, '--docs', part.join(','), '--json', out, ...(w > 0 ? ['--no-flows'] : [])];
+        const child = spawn(process.execPath, args, { stdio: ['ignore', 'ignore', 'inherit'], env: process.env });
+        child.on('exit', () => {
+            try { resolve(JSON.parse(fs.readFileSync(out, 'utf8'))); } catch { resolve({ rows: [], errors: [`worker ${w} wrote nothing`] }); }
+            try { fs.unlinkSync(out); } catch { }
+        });
+    })));
+    const rows = results.flatMap(r => r.rows);
+    const errors = results.flatMap(r => r.errors);
+    report(rows, errors, Date.now() - started);
+}
+
+const pathText = p => p ? (p.local ? 'words' : `p${p.pairs}/w${p.wholeLines}/u${p.unpairedGroups}`) + (p.gaveUp ? '/gave up' : '') : '';
+
+function report(rows, errors, ms) {
+    let known = [];
+    try { known = JSON.parse(fs.readFileSync(KNOWN, 'utf8')).cells || []; } catch { }
+    const knownSet = new Set(known);
+    console.log('doc | mode | place | edit | result | revisions | marked | diff | why');
+    for (const row of rows) console.log([row.doc, row.mode, row.place, row.edit, row.result === 'FAIL' && knownSet.has(cellKey(row)) ? 'known' : row.result, row.n, row.marked, pathText(row.paths), row.why.join('; ')].join(' | '));
+    const fails = rows.filter(x => x.result === 'FAIL');
+    const fresh = fails.filter(x => !knownSet.has(cellKey(x)));
+    const healed = known.filter(k => rows.some(r => cellKey(r) === k && r.result === 'ok'));
+    for (const e of [...new Set(errors)].slice(0, 8)) console.log('page error: ' + String(e).slice(0, 300));
+    console.log(`\n${rows.length} rows: ${rows.filter(x => x.result === 'ok').length} ok, ${fails.length} FAIL (${fails.length - fresh.length} known, ${fresh.length} new), ${rows.filter(x => x.result === 'skip').length} skip; page errors ${errors.length}; ${Math.round(ms / 1000)} s`);
+    if (healed.length) console.log(`known failures that pass now (take them out of review-matrix-known.json): ${healed.join(', ')}`);
+    if (jsonOut) fs.writeFileSync(jsonOut, JSON.stringify(rows, null, 1));
+    process.exit(fresh.length || errors.length ? 1 : 0);
+}
+
+if (workers > 1 && !docIndexes) runWorkers();
+else (async () => {
+    const started = Date.now();
     const { page, errors, mode, flush, pause, close } = await openEditor();
     const rows = [];
     let loadId = 1000;
@@ -88,7 +152,7 @@ const edits = {
             window.__deliver('LoadFile', { text, loadId: id, basePath: '/tmp', review: { on: true, baseline, revisions: [] } });
         }, { text, baseline, id });
         await page.waitForFunction(id => window.__last.FileLoaded?.loadId === id, { timeout: 60000 }, id);
-        await pause(250);
+        await pause(80);
         return id;
     };
     // The caret at an index of the source: in source mode CodeMirror's; in the visual editor the leaf whose text holds the
@@ -101,7 +165,8 @@ const edits = {
         const lineStart = text.lastIndexOf('\n', index - 1) + 1;
         const lineEnd = (text.indexOf('\n', index) + 1 || text.length + 1) - 1;
         const left = text.slice(Math.max(lineStart, index - 10), index);
-        const right = text.slice(index, Math.min(lineEnd, index + 10));
+        // Not past a table's | or a formula's $: neither is in the leaf's text as written there.
+        const right = text.slice(index, Math.min(lineEnd, index + 10)).split(/[|$]/)[0];
         return page.evaluate(({ left, right }) => {
             const leaves = [...document.querySelectorAll('#ag-editor-id .ag-paragraph-content, #ag-editor-id .ag-atx-line, #ag-editor-id .ag-cell-content, #ag-editor-id .ag-code-content, #ag-editor-id .ag-setext-line, #ag-editor-id span.ag-paragraph')];
             // The longest left context (the markers before a leaf's text are not in it) that some leaf has with the right.
@@ -140,7 +205,8 @@ const edits = {
                 const spans = [...document.querySelectorAll(`#ag-editor-id .ag-review-ins[data-rid="${rev.id}"]`)];
                 const whole = document.querySelector(`#ag-editor-id .ag-review-whole[data-rid="${rev.id}"]`);
                 const marked = spans.map(s => s.textContent).join('').replace(/\s+/g, '');
-                const want = rev.newText.replace(/\s+/g, '');
+                // Without the block marks at its lines' starts (a quotation's >, a list's -), which no leaf holds.
+                const want = rev.newText.replace(/(^|\n)[ \t]*(?:>[ \t]?)*(?:[*+-][ \t]|\d+[.)][ \t])?/g, '$1').replace(/\s+/g, '');
                 // Only block marks added (a new list item's "* "): nothing of them in the leaves to mark.
                 if (/^[*+\-#>|\d.)[\]xX`~]*$/.test(want)) continue
                 if (!whole && !want.includes(marked)) problems.push(`ins "${marked}"≠"${want}"`);
@@ -157,8 +223,8 @@ const edits = {
     });
     const summary = { cells: 0, ok: 0, fail: 0, skip: 0 };
     const fail = (row, why) => { row.result = 'FAIL'; row.why.push(why); };
-    for (const d of docs) {
-        if (only && !only.some(o => d.name.startsWith(o))) continue;
+    for (const [di, d] of docs.entries()) {
+        if (docIndexes ? !docIndexes.includes(di) : only && !only.some(o => d.name.startsWith(o))) continue;
         for (const m of modes) {
             const visual = m === 'visual';
             await mode(!visual, false);
@@ -167,8 +233,12 @@ const edits = {
             let r = await review();
             rows.push({ doc: d.name, mode: m, place: '-', edit: 'load', result: r.revisions.length ? 'FAIL' : 'ok', n: r.revisions.length, marked: r.revisions.reduce((s, x) => s + x.newText.length + x.oldText.length, 0), paths: r.paths, why: r.revisions.length ? ['revisions after a load: ' + JSON.stringify(r.revisions.map(x => [x.oldText, x.newText]))] : [] });
             for (const [place, index] of quick ? d.places.slice(0, 1) : d.places) {
+                // Quick: two edits a document (three in the visual editor), the documents taking them in turn.
+                const names = Object.keys(edits)
+                const quickNames = new Set([0, 1, 2].slice(0, visual ? 3 : 2).map(k => names[(di * 3 + k) % names.length]))
                 for (const [name, e] of Object.entries(edits)) {
                     if (editsWanted && !editsWanted.includes(name)) continue;
+                    if (quick && !editsWanted && !quickNames.has(name)) continue;
                     if (e.only && !e.only.includes(place)) continue;
                     if (e.not && e.not.includes(place)) continue;
                     if (e.visualOnly && !visual) continue;
@@ -188,7 +258,10 @@ const edits = {
                             await page.waitForFunction(() => window.__last.DocumentEditApplied, { timeout: 30000 });
                         } else {
                             if (!(await caretAt(d.text, before, Math.min(index, before.length), visual))) { row.result = 'skip'; row.why.push('no caret place'); summary.skip++; continue; }
-                            await pause(80);
+                            // A key that changes nothing: the visual editor's model takes the caret from the page then
+                            // (a paste from the host went where the caret was before, as no person's would).
+                            await page.keyboard.press('Shift');
+                            await pause(40);
                             if (e.undo) {
                                 await page.keyboard.type('Z');
                                 await pause(200);
@@ -197,8 +270,9 @@ const edits = {
                             } else if (e.host) await e.host(page);
                             else await e.keys(page);
                         }
-                        await pause(350);
+                        await pause(120);
                         const after = await flush();
+                        await pause(30);
                         r = await review();
                         row.n = r.revisions.length;
                         row.marked = r.revisions.reduce((s, x) => s + x.newText.length + x.oldText.length, 0);
@@ -211,11 +285,26 @@ const edits = {
                         if (visual) for (const p of await marksOk()) fail(row, p);
                         // 5: nothing of the marks in the text.
                         if (/¶|data-del|ag-review/.test(after)) fail(row, 'marks in the text');
+                        // 6: the rest as the source wrote it.
+                        if (!e.undo) {
+                            const lines = d.text.split('\n')
+                            let at = 0, editLine = 0
+                            for (let i = 0; i < lines.length; i++) { if (index <= at + lines[i].length) { editLine = i; break } at += lines[i].length + 1 }
+                            const have = new Set(after.split('\n'))
+                            // Two lines either side: Backspace at a block's start joins it to the one before.
+                            const lost = lines.filter((l, i) => l.trim() && Math.abs(i - editLine) > 2 && !/^\s*\d+[.)]\s/.test(l) && !have.has(l))
+                            if (lost.length) fail(row, 'rewritten: ' + JSON.stringify(lost).slice(0, 120))
+                            if (!d.text.endsWith('\n') && after.endsWith('\n') && !['enter', 'paste'].includes(name)) fail(row, 'a line break added at the end')
+                        }
                         // 4: reject all - the baseline again; for the insertion, accept all on another load.
                         await page.evaluate(() => window.__deliver('ReviewCommand', { command: 'rejectAll' }));
-                        await pause(350);
+                        await page.waitForFunction(() => window.__typedownReview().revisions.length === 0, { timeout: 3000 }).catch(() => { });
+                        await pause(60);
                         const rejected = await flush();
-                        if (rejected !== d.text) fail(row, 'reject all ≠ baseline: ' + JSON.stringify(firstDiff(rejected, d.text)));
+                        // The page's baseline: writing alone was taken into it (not a revision, so not rejected).
+                        const pageBaseline = (await review()).baseline;
+                        if (rejected !== pageBaseline) fail(row, 'reject all ≠ baseline: ' + JSON.stringify(firstDiff(rejected, pageBaseline)));
+                        else if (rejected !== d.text) row.why.push('writing taken into the baseline');
                         if (name === 'ins') {
                             await load(d.text, d.text);
                             const b2 = await flush();
@@ -243,7 +332,7 @@ const edits = {
 
     // The ways through: after an edit, a mode switch, a save, review off and on, a reject then another edit.
     const flows = [];
-    const runFlows = !only || only.includes('flows');
+    const runFlows = !noFlows && (!only || only.includes('flows'));
     const flow = async (name, run) => {
         if (!runFlows) return;
         const row = { doc: 'para', mode: 'flow', place: '-', edit: name, result: 'ok', n: 0, marked: 0, paths: null, why: [] };
@@ -329,7 +418,7 @@ const edits = {
     // CRLF, a BOM: the baseline as the file is on disk (what the host would have if it did not normalize).
     // After the long document's load (its id 9001): a lower id is a stale load the page drops.
     loadId = 10000;
-    for (const d of docs.filter(x => x.raw && (!only || only.some(o => x.name.startsWith(o))))) {
+    for (const d of docs.filter((x, i) => x.raw && (docIndexes ? docIndexes.includes(i) : !only || only.some(o => x.name.startsWith(o))))) {
         const raw = (d.raw.bom ? '﻿' : '') + (d.raw.crlf ? d.text.replace(/\n/g, '\r\n') : d.text);
         await mode(false, false);
         try { await load(d.text, raw); } catch (err) {
@@ -340,15 +429,13 @@ const edits = {
         rows.push({ doc: d.name + ' (baseline raw)', mode: 'visual', place: '-', edit: 'load', result: r.revisions.length ? 'FAIL' : 'ok', n: r.revisions.length, marked: r.revisions.reduce((s, x) => s + x.newText.length + x.oldText.length, 0), paths: r.paths, why: r.revisions.length ? ['the raw file against the editor\'s text'] : [] });
     }
 
-    const pathText = p => p ? `p${p.pairs}/w${p.wholeLines}/u${p.unpairedGroups}/g${p.gaveUp}` : '';
-    console.log('doc | mode | place | edit | result | revisions | marked | diff ways (pairs/whole lines/unpaired groups/gave up) | why');
-    for (const row of rows) console.log([row.doc, row.mode, row.place, row.edit, row.result, row.n, row.marked, pathText(row.paths), row.why.join('; ')].join(' | '));
-    const fails = rows.filter(x => x.result === 'FAIL');
-    console.log(`\n${rows.length} rows: ${rows.filter(x => x.result === 'ok').length} ok, ${fails.length} FAIL, ${rows.filter(x => x.result === 'skip').length} skip; page errors ${errors.length}`);
-    for (const e of [...new Set(errors)].slice(0, 8)) console.log('page error: ' + String(e).slice(0, 300))
-    if (jsonOut) fs.writeFileSync(jsonOut, JSON.stringify(rows, null, 1));
     await close();
-    process.exit(fails.length || errors.length ? 1 : 0);
+    if (docIndexes) {
+        // A worker's: the rows to the process that started it.
+        fs.writeFileSync(jsonOut, JSON.stringify({ rows, errors }));
+        process.exit(0);
+    }
+    report(rows, errors, Date.now() - started);
 })();
 
 function firstDiff(a, b) {

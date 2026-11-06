@@ -148,7 +148,17 @@ export function refresh() {
     // Writing the change itself put in or took out (Enter making an empty list item) stays a revision: it is the reader's
     // doing; only what it rewrote (a number, a mark) goes.
     const touched = (r: Revision) => !!region && r.curStart <= region.to && region.from <= r.curEnd
-    const writing = state.revisions.filter(r => onlyWriting(state.baseline, text, r) && !isFormatMark(r) && (!touched(r) || r.kind === 'replace'))
+    // (A rewriting inside one line - a table's cells padded - goes even where the change touched it; a line the change
+    // put in or took out stays.)
+    // Nor one right against a revision of words (the space typed before a word is part of what was typed).
+    const writingOnly = state.revisions.map(r => onlyWriting(state.baseline, text, r) && !isFormatMark(r))
+    const besideWords = (i: number) => [i - 1, i + 1].some(j => j >= 0 && j < state.revisions.length && !writingOnly[j] &&
+        (state.revisions[j].curEnd === state.revisions[i].curStart || state.revisions[i].curEnd === state.revisions[j].curStart))
+    // Nor one at the caret: a space just typed is the reader's (the word after it comes with the next key).
+    const caret = view?.caretOffset() ?? (region ? region.to : -1)
+    const atCaret = (r: Revision) => r.curStart <= caret && caret <= r.curEnd
+    const writing = state.revisions.filter((r, i) => writingOnly[i] &&
+        (!touched(r) || ((r.kind === 'replace' || !(r.newText + r.oldText).includes('\n')) && !besideWords(i) && !atCaret(r))))
     if (writing.length) {
         state.baseline = acceptAll(state.baseline, writing)
         state.baselineChanged = true

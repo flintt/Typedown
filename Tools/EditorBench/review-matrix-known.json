@@ -1,0 +1,24 @@
+{
+ "about": "Known failures of review-matrix.js, each with its reason in docs/todo.md (审阅模式, 2026-11-07): Muya moves a footnote definition to the end when the text near it is edited; a paste of two lines into a heading writes block keys into it (Muya); Enter in a setext heading; Ctrl+Shift+Left selecting across a link or bold marks; a table edited in the visual editor is padded as Muya writes it (one revision of its padding left where the caret is); Backspace at a list item start in source mode taken as writing. Take a cell out once it passes (the run says which).",
+ "cells": [
+  "bold and link|visual|after bold|bold",
+  "bold and link|visual|after link|word",
+  "footnote|visual|after the note|del",
+  "footnote|visual|after the note|ime",
+  "footnote|visual|after the note|ins",
+  "footnote|visual|after the note|paste",
+  "footnote|visual|note|ime",
+  "footnote|visual|note|ins",
+  "footnote|visual|note|paste",
+  "para|visual|first block|paste",
+  "setext heading|visual|in heading|enter",
+  "star list|source|start|merge",
+  "star list|visual|start|bold",
+  "unaligned table|visual|in cell|bold",
+  "unaligned table|visual|in cell|del",
+  "unaligned table|visual|in cell|enter",
+  "unaligned table|visual|in cell|ime",
+  "unaligned table|visual|in cell|ins",
+  "unaligned table|visual|in cell|undo"
+ ]
+}

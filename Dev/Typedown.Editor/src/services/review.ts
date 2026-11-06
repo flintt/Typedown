@@ -655,7 +655,7 @@ export function nextRevision(revisions: Revision[], offset: number, back = false
  * heading marks), fences of either mark, setext underlines, emphasis marks, escapes, spaces at line ends and blank lines.
  */
 export function wordingOf(text: string): string {
-    return text.split('\n').map(line => line
+    return text.split('\n').map(line => /^[ \t]*\|?[ \t]*:?-+:?[ \t]*(\|[ \t]*:?-+:?[ \t]*)*\|?[ \t]*$/.test(line) ? '|-|' : line
         .replace(/^[ \t]*(?:>[ \t]?)*[ \t]*/, '')
         .replace(/^(?:[*+-]|\d+[.)])[ \t]+/, '')
         .replace(/^\[[ xX]\][ \t]+/, '')
@@ -664,6 +664,9 @@ export function wordingOf(text: string): string {
         .replace(/^(?:=+|-+)[ \t]*$/, '')
         .replace(/[*_]+/g, '')
         .replace(/\\(?=[^\w\s])/g, '')
+        // A table's cells padded or not.
+        .replace(/[ \t]*\|[ \t]*/g, '|')
+        .replace(/[ \t]+/g, ' ')
         .replace(/[ \t]+$/, ''))
         .filter(line => line.length).join('\n')
 }
@@ -677,8 +680,10 @@ const lineEndOf = (text: string, at: number) => { const i = text.indexOf('\n', a
  * item put in, a fence's mark, a blank line, a list's marker.
  */
 export function onlyWriting(baseline: string, current: string, r: Hunk): boolean {
-    const a = baseline.slice(lineStartOf(baseline, r.baseStart), lineEndOf(baseline, r.baseEnd))
-    const b = current.slice(lineStartOf(current, r.curStart), lineEndOf(current, r.curEnd))
+    // The baseline's lines around it, and the same with only this revision made (another one on the line is not this one's).
+    const start = lineStartOf(baseline, r.baseStart), end = lineEndOf(baseline, r.baseEnd)
+    const a = baseline.slice(start, end)
+    const b = baseline.slice(start, r.baseStart) + current.slice(r.curStart, r.curEnd) + baseline.slice(r.baseEnd, end)
     return a !== b && wordingOf(a) === wordingOf(b)
 }
 
