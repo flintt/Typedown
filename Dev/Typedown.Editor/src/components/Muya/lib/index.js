@@ -559,7 +559,10 @@ class Muya {
       return new ExportMarkdown(blocks, listIndentation, isGitlabCompatibilityEnabled, { alignTableColumns: this.options.tableAlignColumns !== false }).generate()
     }
     link(assembled)
-    if (exportOf(assembled) !== exportOf(newBlocks)) {
+    // The same blocks as a new parse, not only the same text written out: an empty paragraph the old blocks kept (Enter
+    // at the end, then the text put back by a reject) writes out as nothing, and came out as an extra line break at the
+    // next edit (Ctrl+B in review-matrix.js).
+    if (assembled.length !== newBlocks.length || exportOf(assembled) !== exportOf(newBlocks)) {
       link(oldBlocks)
       stateRender.collectLabels(oldBlocks)
       return false

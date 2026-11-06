@@ -482,7 +482,9 @@ const importRegister = ContentState => {
     // JSON "{" and "}" that adjustCursor cannot tell from ordinary text.
     const frontMatter = FRONT_MATTER.exec(markdown.replace(/^ +$/gm, ''))
     const fenceLines = frontMatter ? [0, frontMatter[0].split('\n').length - 1] : []
-    const adjust = c => fenceLines.includes(c.line) ? null : adjustCursor(c, lines[c.line - 1], lines[c.line], lines[c.line + 1])
+    // A caret past the text's last line (the text it was in was longer: a revision rejected, an undo) goes to the nearest
+    // line with text: marked on the empty last line, it made an empty paragraph there - a line break more at the next edit.
+    const adjust = c => fenceLines.includes(c.line) || lines[c.line] === undefined ? null : adjustCursor(c, lines[c.line - 1], lines[c.line], lines[c.line + 1])
     // adjustCursor 对空行/HTML 行返回 null。以前的做法是把光标挪到文档末尾并追加一行放标记，
     // 这会在每次切换源码模式时给文件末尾多加空行（#20 #61）。改为放到最近的非空行末尾/行首。
     const nearest = c => {

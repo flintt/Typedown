@@ -138,12 +138,56 @@ export function mergeSource(source: string[], base: string[], current: string[],
             for (let x = j; x < nj; x++) out.push(source[x])
             if (nj > j || ni > i) kept = kept || !same(source, j, nj, base, i, ni)
         } else {
-            // Edited (whether or not the source was written as Muya writes it): as Muya writes it now.
-            for (let x = k; x < nk; x++) out.push(current[x])
+            // Edited: as Muya writes it now - but the lines of it the edit did not change as the source has them where
+            // the source's line is that line written its own way (a ~~~ fence; editing the code inside turned it into
+            // \`\`\`), and without a blank line Muya adds that the source does not have (a lazy line after a quotation
+            // was pushed out of it).
+            const region = editedRegion(source.slice(j, nj), base.slice(i, ni), current.slice(k, nk))
+            out.push(...region.lines)
+            kept = kept || region.kept
         }
         i = ni; j = nj; k = nk
     }
     return kept ? out.join('') : null
+}
+
+// A line as far as the edit is concerned: a code fence of either mark and any length the same, and a list item's marker
+// followed by a tab or spaces.
+const fenceKey = (line: string) => line.replace(/^( {0,3})(`{3,}|~{3,})/, '$1```').replace(/^(\s*)([*+-]|\d+[.)])[ \t]+/, '$1$2 ')
+
+/**
+ * An edited stretch of the document: Muya's lines now, each line the edit did not change (the same in the base and now)
+ * taken from the source where the source has it written its own way (fenceKey); a blank line Muya added where the source
+ * has none dropped. `kept`: something of the source's own writing is in it.
+ */
+export function editedRegion(source: string[], base: string[], current: string[]): { lines: string[], kept: boolean } {
+    const toCurrent = alignment(base, current)
+    // The base lines' own source lines, in order, by fenceKey; blank lines only to blank lines.
+    const toSource = new Int32Array(base.length).fill(-1)
+    let from = 0
+    for (let b = 0; b < base.length; b++) {
+        for (let x = from; x < source.length; x++) {
+            if (fenceKey(source[x]) === fenceKey(base[b])) { toSource[b] = x; from = x + 1; break }
+            // Only past lines the source has that the base does not (a line of the source's own): no further.
+            if (source[x].trim() && base.slice(b).some(l => fenceKey(l) === fenceKey(source[x]))) break
+        }
+    }
+    const sourceHasBlank = source.some(l => !l.trim())
+    const fromBase = new Int32Array(current.length).fill(-1)
+    for (let b = 0; b < base.length; b++) if (toCurrent[b] >= 0) fromBase[toCurrent[b]] = b
+    const lines: string[] = []
+    let kept = false
+    for (let c = 0; c < current.length; c++) {
+        const b = fromBase[c]
+        if (b >= 0 && toSource[b] >= 0) {
+            const line = source[toSource[b]]
+            if (line !== current[c]) kept = true
+            lines.push(line)
+        } else if (b >= 0 && !current[c].trim() && !sourceHasBlank) {
+            kept = true
+        } else lines.push(current[c])
+    }
+    return { lines, kept }
 }
 
 type Position = { line: number, ch: number }

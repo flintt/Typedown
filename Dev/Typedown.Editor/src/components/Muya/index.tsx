@@ -160,7 +160,8 @@ const sourceKept = { kept: 0, fellBack: 0, last: '' };
 (window as any).__typedownSourceKept = sourceKept
 
 function keptSource(muya: any, imported: { source: string, normalized: string }, markdown: string): string {
-    if (imported.source === imported.normalized || (imported.source.length > KEEP_SOURCE_UP_TO && !keepSourceAnyLength) || !muya?.normalizeMarkdown) return markdown
+    if (imported.source === imported.normalized) return withSourceEnd(muya, imported.source, markdown, markdown)
+    if ((imported.source.length > KEEP_SOURCE_UP_TO && !keepSourceAnyLength) || !muya?.normalizeMarkdown) return markdown
     let lines = sourceLines.get(imported)
     if (!lines) {
         const source = splitLines(imported.source), base = splitLines(imported.normalized)
@@ -170,7 +171,7 @@ function keptSource(muya: any, imported: { source: string, normalized: string },
     let merged: string | null
     try {
         merged = mergeSource(lines.source, lines.base, splitLines(markdown), lines.toSource)
-        if (merged == null) return markdown
+        if (merged == null) return withSourceEnd(muya, imported.source, markdown, markdown)
         if (muya.normalizeMarkdown(merged) !== markdown) {
             sourceKept.fellBack++
             sourceKept.last = 'fell back: the merge did not read back as the export'
@@ -183,7 +184,19 @@ function keptSource(muya: any, imported: { source: string, normalized: string },
     }
     sourceKept.kept++
     sourceKept.last = 'kept'
-    return merged
+    return withSourceEnd(muya, imported.source, merged, markdown)
+}
+
+// The document's end as the source has it: Muya writes a line break at the end of every document, and one written
+// without (the user's file) got one at the first edit. Only where it reads back the same.
+function withSourceEnd(muya: any, source: string, text: string, markdown: string): string {
+    if (source.endsWith('\n') || !text.endsWith('\n')) return text
+    const trimmed = text.replace(/\n$/, '')
+    try {
+        return muya.normalizeMarkdown(trimmed) === markdown ? trimmed : text
+    } catch {
+        return text
+    }
 }
 
 /** What is known of the document shown, to tell whether it may be kept when a tab switch replaces it. */
@@ -262,6 +275,8 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     // Import/export normalizes Markdown. Keep the original text while the document
     // still exports to its initial value, including after an undo back to that value.
     const importedRef = useRef<{ source: string, normalized: string }>();
+    // For page checks: the document as loaded and as Muya wrote it then (what keptSource keeps the source by).
+    (window as any).__typedownImported = () => importedRef.current
     // The notice that the first visual edit may rewrite part of this document is the host's: a card over the window,
     // as the one an export leaves (FirstEditNotice, Typedown.Core MainPage), never in the page - in it, it pushed the
     // document down as it came and up as it went, or lay over its first line. The page says when it is to show and when
@@ -1221,7 +1236,10 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         let map: LeafMap | null = null
         return registerReviewView({
             draw(revisions, text) {
-                map = mapLeaves(text, muya.reviewLeaves())
+                const leaves = muya.reviewLeaves()
+                map = mapLeaves(text, leaves)
+                // For page checks: which leaves were found where.
+                Object.assign(window, { __typedownReviewMap: { leaves, pieces: map.pieces } })
                 muya.setReviewMarks(revisions.length ? leafMarks(map, revisions, text) : null)
             },
             clear() {

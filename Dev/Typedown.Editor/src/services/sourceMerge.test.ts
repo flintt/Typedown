@@ -72,6 +72,30 @@ describe('mergeSource', () => {
     })
 })
 
+describe('editedRegion (an edited block keeps its own writing where the edit did not change it)', () => {
+    it('keeps a ~~~ fence when the code inside it is edited', () => {
+        const src = '# C\n\n~~~js\nlet a = 1;\n~~~\n\nAfter.\n'
+        const b = '# C\n\n```js\nlet a = 1;\n```\n\nAfter.\n'
+        expect(merge(src, b, b.replace('let a', 'let aZ'))).toBe(src.replace('let a', 'let aZ'))
+    })
+    it('keeps a longer fence of its own length', () => {
+        const src = '````\ncode\n````\n'
+        const b = '```\ncode\n```\n'
+        expect(merge(src, b, '```\ncodeZ\n```\n')).toBe('````\ncodeZ\n````\n')
+    })
+    it('does not add the blank line Muya puts after a quotation with a lazy line', () => {
+        const src = '> quoted line\nlazy continuation\n\nAfter.\n'
+        const b = '> quoted line\n\nlazy continuation\n\nAfter.\n'
+        const cur = '> quoted lZine\n\nlazy continuation\n\nAfter.\n'
+        expect(merge(src, b, cur)).toBe('> quoted lZine\nlazy continuation\n\nAfter.\n')
+    })
+    it('takes the edited lines as Muya writes them', () => {
+        const src = '~~~\na\n~~~\n'
+        const b = '```\na\n```\n'
+        expect(merge(src, b, '```\na\nb\n```\n')).toBe('~~~\na\nb\n~~~\n')
+    })
+})
+
 describe('cursorIn', () => {
     const at = (line: number, ch: number) => ({ anchor: { line, ch }, focus: { line, ch } })
     it('keeps a caret on a line both texts have, moved to where that line is', () => {
