@@ -87,7 +87,8 @@ const docs = [
 const edits = {
     ins: { size: 1, count: 1, keys: async (p) => p.keyboard.type('Z') },
     del: { size: 1, count: 1, keys: async (p) => p.keyboard.press('Backspace'), not: ['block start', 'start'] },
-    merge: { size: 2, count: 1, keys: async (p) => p.keyboard.press('Backspace'), only: ['block start', 'start'] },
+    // Backspace at a list item's start makes it a paragraph of the item before: its marker and a blank line.
+    merge: { size: 3, count: 2, keys: async (p) => p.keyboard.press('Backspace'), only: ['block start', 'start'] },
     word: { size: 14, count: 2, keys: async (p) => { await p.keyboard.down('Control'); await p.keyboard.down('Shift'); await p.keyboard.press('ArrowLeft'); await p.keyboard.up('Shift'); await p.keyboard.up('Control'); await p.keyboard.type('Word'); } },
     ime: { size: 1, count: 1, keys: async (p) => p.keyboard.sendCharacter('中') },
     enter: { size: 3, count: 1, keys: async (p) => p.keyboard.press('Enter') },

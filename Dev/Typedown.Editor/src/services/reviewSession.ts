@@ -154,11 +154,15 @@ export function refresh() {
     const writingOnly = state.revisions.map(r => onlyWriting(state.baseline, text, r) && !isFormatMark(r))
     const besideWords = (i: number) => [i - 1, i + 1].some(j => j >= 0 && j < state.revisions.length && !writingOnly[j] &&
         (state.revisions[j].curEnd === state.revisions[i].curStart || state.revisions[i].curEnd === state.revisions[j].curStart))
+    // A mark put for a mark of its kind (a number for a number, a fence's ~ for `, a list's * for -) - not a marker
+    // made spaces (Backspace at an item's start, the item no longer one) - is writing even where the change touched it.
+    const kind = (t: string) => /^\d+$/.test(t) ? 'n' : /^[`~]+$/.test(t) ? 'f' : /^[*+-]$/.test(t) ? 'l' : /^[=-]+$/.test(t) ? 'u' : /^[ \t]+$/.test(t) ? 'w' : null
+    const sameKindOfMark = (r: Revision) => r.kind === 'replace' && !!kind(r.oldText) && kind(r.oldText) === kind(r.newText)
     // Nor one at the caret: a space just typed is the reader's (the word after it comes with the next key).
     const caret = view?.caretOffset() ?? (region ? region.to : -1)
-    const atCaret = (r: Revision) => r.curStart <= caret && caret <= r.curEnd
+    const atCaret = (r: Revision) => r.kind !== 'replace' && r.curStart <= caret && caret <= r.curEnd
     const writing = state.revisions.filter((r, i) => writingOnly[i] &&
-        (!touched(r) || ((r.kind === 'replace' || !(r.newText + r.oldText).includes('\n')) && !besideWords(i) && !atCaret(r))))
+        (!touched(r) || ((sameKindOfMark(r) || (r.kind !== 'replace' && !(r.newText + r.oldText).includes('\n'))) && !besideWords(i) && !atCaret(r))))
     if (writing.length) {
         state.baseline = acceptAll(state.baseline, writing)
         state.baselineChanged = true
