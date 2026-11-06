@@ -78,7 +78,7 @@ export const measure = (block: HTMLElement): GuideMeasure => {
     }
 }
 
-const band = (left: number, top: number, width: number, height: number, colour: string, text?: string) => {
+const band = (left: number, top: number, width: number, height: number, colour: string, text?: string, field?: string | null) => {
     const box = document.createElement('div')
     box.style.cssText = `position:fixed;left:${left}px;top:${top}px;width:${Math.max(0, width)}px;height:${Math.max(0, height)}px;background:${colour};`
     if (text) {
@@ -87,9 +87,32 @@ const band = (left: number, top: number, width: number, height: number, colour: 
         tag.style.cssText = 'position:absolute;right:2px;top:50%;transform:translateY(-50%);font:11px/1.2 system-ui,sans-serif;'
             + 'color:#fff;background:rgba(0,0,0,.62);padding:1px 4px;border-radius:3px;white-space:nowrap;'
         if (height < 14) tag.style.top = '0', tag.style.transform = 'translateY(-100%)'
+        // A value a field sets: the label takes a click (the bands take none), and the small panel shows that field.
+        if (field) {
+            tag.dataset.field = field
+            tag.style.pointerEvents = 'auto'
+            tag.style.cursor = 'pointer'
+            tag.style.textDecoration = 'underline dotted'
+        }
         box.appendChild(tag)
     }
     layer!.appendChild(box)
+}
+
+/**
+ * The designer's field (the small panel's field id) that sets a value the guides show on a block of this kind, or null
+ * for one no field sets (a list item's space after): the same as typography-guides-audit traces them.
+ */
+export const fieldOf = (value: 'before' | 'after' | 'indent' | 'firstLine' | 'width', kind: string): string | null => {
+    if (value === 'width') return 'Width'
+    if (value === 'firstLine') return kind === 'p' ? 'Indent' : null
+    const heading = /^h[1-6]$/.test(kind)
+    if (value === 'indent') return kind === 'li' ? 'ListIndent' : kind === 'blockquote' ? 'QuoteIndent' : null
+    if (kind === 'p') return value === 'before' ? 'ParagraphBefore' : 'ParagraphAfter'
+    if (heading) return value === 'before' ? 'HeadingBefore' : 'HeadingAfter'
+    if (kind === 'li') return value === 'before' ? 'ListItemSpacing' : null
+    if (/^(blockquote|pre|figure)$/.test(kind)) return 'BlockSpacing'
+    return null
 }
 
 const draw = () => {
@@ -115,16 +138,16 @@ const draw = () => {
     const margin = 'rgba(0,120,212,.07)'
     band(page.left, 0, px(pageStyle.paddingLeft), window.innerHeight, margin)
     band(page.right - px(pageStyle.paddingRight), 0, px(pageStyle.paddingRight), window.innerHeight, margin)
-    band(page.left, Math.max(0, r.top - m.before - 18), m.width, 0, 'transparent', `↔ ${Math.round(m.width)}px`)
+    band(page.left, Math.max(0, r.top - m.before - 18), m.width, 0, 'transparent', `↔ ${Math.round(m.width)}px`, fieldOf('width', m.kind))
     const orange = 'rgba(246,178,107,.42)', green = 'rgba(147,196,125,.45)'
-    if (m.before) band(r.left, r.top - m.before, r.width, m.before, orange, `↑ ${label(m.before, m.fontSize)}`)
-    if (m.after) band(r.left, r.bottom, r.width, m.after, orange, `↓ ${label(m.after, m.fontSize)}`)
+    if (m.before) band(r.left, r.top - m.before, r.width, m.before, orange, `↑ ${label(m.before, m.fontSize)}`, fieldOf('before', m.kind))
+    if (m.after) band(r.left, r.bottom, r.width, m.after, orange, `↓ ${label(m.after, m.fontSize)}`, fieldOf('after', m.kind))
     const style = getComputedStyle(target)
     const padding = px(style.borderLeftWidth) + px(style.paddingLeft)
-    if (m.indent) band(textLeft, r.top, m.indent, r.height, green, `→ ${label(m.indent, m.fontSize)}`)
+    if (m.indent) band(textLeft, r.top, m.indent, r.height, green, `→ ${label(m.indent, m.fontSize)}`, fieldOf('indent', m.kind))
     if (m.firstLine) {
         const line = px(style.lineHeight) || m.fontSize * 1.6
-        band(r.left + padding, r.top + px(style.paddingTop), m.firstLine, line, green, `⇥ ${label(m.firstLine, m.fontSize)}`)
+        band(r.left + padding, r.top + px(style.paddingTop), m.firstLine, line, green, `⇥ ${label(m.firstLine, m.fontSize)}`, fieldOf('firstLine', m.kind))
     }
 }
 
@@ -132,6 +155,8 @@ const schedule = () => { if (!frame) frame = requestAnimationFrame(draw) }
 
 const onPointer = (event: PointerEvent) => {
     lastPointer = { x: event.clientX, y: event.clientY }
+    // On a label of the guides' own: the block it is for stays (it is not under the pointer, the label is).
+    if (layer && event.target instanceof Node && layer.contains(event.target)) return
     const block = blockAt(document.elementFromPoint(event.clientX, event.clientY))
     if (block === target) return
     target = block
@@ -139,6 +164,8 @@ const onPointer = (event: PointerEvent) => {
 }
 const onScroll = () => {
     if (!lastPointer) return schedule()
+    const over = document.elementFromPoint(lastPointer.x, lastPointer.y)
+    if (layer && over && layer.contains(over)) return schedule()
     target = blockAt(document.elementFromPoint(lastPointer.x, lastPointer.y))
     schedule()
 }
@@ -212,20 +239,42 @@ export const effectiveValues = (block: HTMLElement): Record<string, number> => {
 let caretBlock: HTMLElement | null = null
 let typing = false
 let sent = ''
-const sendCaretBlock = () => {
+// moved: sent for a click or the caret moved (the host gives the keyboard back to the document then); not for the
+// styles changed or a scroll - while a value was typed in the panel, its own change took the keyboard from it.
+const sendCaretBlock = (moved = false) => {
     const block = on && !typing ? caretBlock : null
-    let args: unknown = null
-    if (block && block.isConnected) {
-        const r = block.getBoundingClientRect()
-        const kind = block.tagName.toLowerCase()
-        if (r.height > 0) args = { x: r.left, y: r.top, width: r.width, height: r.height, kind, level: /^h[1-6]$/.test(kind) ? +kind[1] : 0, group: groupOf(block), effective: effectiveValues(block) }
-    }
+    const report = block ? reportOf(block) : null
+    const args = report ? { ...report, moved } : null
     const text = JSON.stringify(args)
     if (text === sent) return
     sent = text
     transport.postMessage('TypographyBlock', args)
 }
 const sameBlock = (a: HTMLElement | null, b: HTMLElement | null) => a === b || (!!a && !!b && !!a.id && a.id === b.id)
+/** A block as the host's small panel takes it: its rect, kind, a heading's level, group and its fields' values. */
+const reportOf = (block: HTMLElement): Record<string, unknown> | null => {
+    if (!block.isConnected) return null
+    const r = block.getBoundingClientRect()
+    const kind = block.tagName.toLowerCase()
+    return r.height > 0
+        ? { x: r.left, y: r.top, width: r.width, height: r.height, kind, level: /^h[1-6]$/.test(kind) ? +kind[1] : 0, group: groupOf(block), effective: effectiveValues(block) }
+        : null
+}
+
+// A label clicked: its block and its field to the host (TypographyField), which shows the field in the small panel -
+// where a value the guides show is to be changed (the user, 2026-11-06). Taken before the editor sees the press.
+let labelPressed = false
+const onLabel = (event: PointerEvent) => {
+    const tag = event.target instanceof HTMLElement ? event.target.closest('[data-field]') as HTMLElement | null : null
+    if (!tag || !layer?.contains(tag) || !target) return
+    event.preventDefault()
+    event.stopImmediatePropagation()
+    // Its release sends no caret's block: the panel stays on this block and field.
+    labelPressed = true
+    const report = reportOf(target)
+    if (report) transport.postMessage('TypographyField', { ...report, field: tag.dataset.field })
+}
+
 const onSelection = () => {
     const node = window.getSelection()?.anchorNode
     const block = blockAt(node ? (node.nodeType === Node.ELEMENT_NODE ? node as Element : node.parentElement) : null)
@@ -233,7 +282,7 @@ const onSelection = () => {
     // still the block typed in - the panel came back at each key (w10 job 254).
     if (!sameBlock(block, caretBlock)) typing = false
     caretBlock = block
-    sendCaretBlock()
+    sendCaretBlock(true)
 }
 // Typing: what the page is given to put in (beforeinput, an input method's composition) - with an input method on
 // a key comes as "Process", not its character, and typing Chinese never hid the panel (w10 job 255); and the keys
@@ -250,7 +299,10 @@ const onKey = (event: KeyboardEvent) => {
 const onPress = () => { typing = false }
 // A click closes the host's panel (a flyout gives way to a click elsewhere): the caret's block sent again once
 // released, even unchanged - a click back into the block the caret was in left the panel closed.
-const onRelease = () => setTimeout(() => { sent = ''; onSelection() }, 0)
+const onRelease = () => {
+    if (labelPressed) { labelPressed = false; return }
+    setTimeout(() => { sent = ''; onSelection() }, 0)
+}
 // The styles changed (a preset saved, a field set or cleared): the caret's block sent again, its values with it.
 let styles: MutationObserver | null = null
 const onStyles = () => {
@@ -277,6 +329,7 @@ export const setTypographyGuides = (value: boolean) => {
         document.addEventListener('keydown', onKey, true)
         document.addEventListener('beforeinput', typed, true)
         document.addEventListener('compositionstart', typed, true)
+        document.addEventListener('pointerdown', onLabel, true)
         document.addEventListener('pointerdown', onPress, true)
         document.addEventListener('pointerup', onRelease, true)
         document.addEventListener('selectionchange', onSelection)
@@ -291,6 +344,7 @@ export const setTypographyGuides = (value: boolean) => {
         document.removeEventListener('keydown', onKey, true)
         document.removeEventListener('beforeinput', typed, true)
         document.removeEventListener('compositionstart', typed, true)
+        document.removeEventListener('pointerdown', onLabel, true)
         document.removeEventListener('pointerdown', onPress, true)
         document.removeEventListener('pointerup', onRelease, true)
         document.removeEventListener('selectionchange', onSelection)

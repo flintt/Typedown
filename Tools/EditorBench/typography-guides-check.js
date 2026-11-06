@@ -47,11 +47,27 @@ const { openEditor } = require('./harness');
     report(labels.some(l => l.startsWith('↑') && l.includes('12px')) && labels.some(l => l.startsWith('↓') && l.includes('20px')) && labels.some(l => l.startsWith('↔')),
       'the marks name the values', JSON.stringify(labels));
 
+    // Each value a field sets is a label to click, naming that field; the pointer on it keeps the guides; a click sends
+    // the block and the field for the small panel to show (the user: where is this value in the panel?).
+    const fields = await page.evaluate(() => [...document.querySelectorAll('#td-typography-guides [data-field]')].map(t => t.dataset.field).sort());
+    report(JSON.stringify(fields) === JSON.stringify(['Indent', 'ParagraphAfter', 'ParagraphBefore', 'Width']), 'a paragraph\'s labels name their fields', JSON.stringify(fields));
+    const labelAt = await page.evaluate(() => { const r = document.querySelector('#td-typography-guides [data-field="ParagraphBefore"]').getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; });
+    await page.mouse.move(labelAt.x, labelAt.y);
+    await pause(150);
+    report(await marks() > 0 && (await guide())?.kind === 'p', 'the pointer on a label keeps the guides', String(await marks()));
+    await page.mouse.down();
+    await page.mouse.up();
+    await pause(200);
+    const clicked = await page.evaluate(() => window.__last.TypographyField);
+    report(clicked && clicked.field === 'ParagraphBefore' && clicked.kind === 'p' && clicked.group === 'body', 'a label clicked: its block and field sent', JSON.stringify(clicked && { field: clicked.field, kind: clicked.kind, group: clicked.group }));
+
     at = await centre('ul li p');
     await page.mouse.move(at.x, at.y);
     await pause(150);
     g = await guide();
     report(g && g.kind === 'li' && g.indent >= 40, 'a list item\'s paragraph: the item measured (what List item spacing sets), its indent', JSON.stringify(g));
+    const listFields = await page.evaluate(() => [...document.querySelectorAll('#td-typography-guides [data-field]')].map(t => t.dataset.field).sort());
+    report(listFields.includes('ListIndent') && !listFields.includes('ParagraphAfter'), 'a list item\'s labels: List indent, none for what no field sets', JSON.stringify(listFields));
 
     // A quote measured whole: its spacing and its indent (Quote indent's padding), not its paragraph's.
     await page.addStyleTag({ content: '#ag-editor-id blockquote { padding-left: 30px !important; }' });
