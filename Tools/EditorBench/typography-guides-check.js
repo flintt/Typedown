@@ -121,14 +121,16 @@ const { openEditor } = require('./harness');
     await pause(200);
     b = await block();
     report(b && b.kind === 'p' && b.level === 0, 'into a paragraph: that block', JSON.stringify(b));
-    // What each field is on the page now, sent with it (an empty field shows it): the paragraph's own, the page's width.
-    const e = b && b.effective;
-    report(e && e.ParagraphBefore === 0.75 && e.ParagraphAfter === 1.25 && e.Indent === 2 && e.Width > 0 && e.Size > 0,
-      'and what its fields are on the page now (12 px, 20 px, 2em at 16 px; the width)', JSON.stringify(e));
+    // What every field is on the page now (an empty field shows it), whatever the document holds: H3 and H5 though it
+    // has no such heading; the paragraph's own, the page's width.
+    const e = await page.evaluate(() => window.__last.TypographyValues);
+    report(e && e.ParagraphBefore === 0.75 && e.ParagraphAfter === 1.25 && e.Indent === 2 && e.Width > 0 && e.Size > 0 && e.H3 > 1 && e.H5 > 0.5 && e.QuoteIndent >= 0 && e.ListIndent > 0,
+      'every field\'s value on the page (12 px, 20 px, 2em at 16 px; the width; every heading level; list, quote)', JSON.stringify(e));
+    report(await page.evaluate(() => !document.querySelector('[data-typography-probe], #ag-editor-id > [contenteditable="false"][style*="-10000px"]')), 'and the samples read are gone', '');
     // The styles changed: sent again, with the new value.
     await page.addStyleTag({ content: '#ag-editor-id p.ag-paragraph { margin-top: 24px !important; }' });
     await pause(250);
-    report((await block())?.effective?.ParagraphBefore === 1.5, 'the styles changed: sent again with the new value (24 px = 1.5em)', JSON.stringify((await block())?.effective));
+    report((await page.evaluate(() => window.__last.TypographyValues))?.ParagraphBefore === 1.5, 'the styles changed: sent again with the new value (24 px = 1.5em)', JSON.stringify(await page.evaluate(() => window.__last.TypographyValues)));
     // Several keys, a moment apart: each draws the paragraph again as a new element (the same id), still the block
     // typed in (w10 job 254: the panel came back at each key).
     await page.keyboard.type('xyz', { delay: 120 });

@@ -214,16 +214,34 @@ export const groupOf = (block: HTMLElement): string => {
  * an empty field shows it, greyed - "as it is" with its value in it; cleared, the value is the page's own again (the
  * user, 2026-11-06). px for sizes and widths, a factor for line heights, em for the rest; rounded to two places.
  */
-export const effectiveValues = (block: HTMLElement): Record<string, number> => {
+export const effectiveValues = (_block?: HTMLElement): Record<string, number> => {
     const editor = document.getElementById('ag-editor-id')
     if (!editor) return {}
     const round = (v: number) => Math.round(v * 100) / 100
     const out: Record<string, number> = {}
     const em = (value: string, of: Element) => round(px(value) / (px(getComputedStyle(of).fontSize) || 16))
-    const body = editor.querySelector(':scope > p.ag-paragraph') as HTMLElement | null
-    const bodySize = px(getComputedStyle(body ?? editor).fontSize) || 16
-    if (body) {
+    // Every field's, whatever the document holds: a sample of each kind of block at the editor's end, hidden, read and
+    // taken out at once (a document with no third-level heading had no H3 to read, and the designer's fields stayed
+    // empty - the user, 2026-11-06). Muya's observer minds a table removed or the editor emptied, neither of which this is.
+    const probe = document.createElement('div')
+    probe.setAttribute('data-typography-probe', '')
+    probe.innerHTML = '<p class="ag-paragraph">x</p><h1>x</h1><h2>x</h2><h3>x</h3><h4>x</h4><h5>x</h5><h6>x</h6>'
+        + '<ul><li class="ag-list-item"><p class="ag-paragraph">x</p></li><li class="ag-list-item"><p class="ag-paragraph">x</p></li></ul>'
+        + '<blockquote><p class="ag-paragraph">x</p></blockquote>'
+    const samples = Array.from(probe.children) as HTMLElement[]
+    for (const sample of samples) {
+        sample.style.visibility = 'hidden'
+        sample.style.position = 'absolute'
+        sample.style.left = '-10000px'
+        sample.setAttribute('contenteditable', 'false')
+        editor.appendChild(sample)
+    }
+    try {
+        const [body, ...rest] = samples
+        const headings = rest.slice(0, 6)
+        const list = rest[6], quote = rest[7]
         const s = getComputedStyle(body)
+        const bodySize = px(s.fontSize) || 16
         out.Size = round(bodySize)
         const line = px(s.lineHeight)
         if (line) out.LineHeight = round(line / bodySize)
@@ -231,32 +249,36 @@ export const effectiveValues = (block: HTMLElement): Record<string, number> => {
         out.ParagraphAfter = em(s.marginBottom, body)
         out.Indent = em(s.textIndent, body)
         out.LetterSpacing = s.letterSpacing === 'normal' ? 0 : em(s.letterSpacing, body)
-    }
-    out.Width = Math.round(editor.offsetWidth)
-    // The space between blocks: a list, a quote, code or a table at the top.
-    const spaced = editor.querySelector(':scope > ul, :scope > ol, :scope > blockquote, :scope > pre, :scope > figure') as HTMLElement | null
-    if (spaced) out.BlockSpacing = em(getComputedStyle(spaced).marginTop, spaced)
-    if (/^H[1-6]$/.test(block.tagName)) {
-        const s = getComputedStyle(block)
-        out['H' + block.tagName[1]] = round(px(s.fontSize) / bodySize)
-        out.HeadingBefore = em(s.marginTop, block)
-        out.HeadingAfter = em(s.marginBottom, block)
-        const line = px(s.lineHeight)
-        if (line) out.HeadingLineHeight = round(line / (px(s.fontSize) || 16))
-    }
-    const list = block.closest('#ag-editor-id ul, #ag-editor-id ol') as HTMLElement | null
-    if (list) {
+        out.Width = Math.round(editor.offsetWidth)
+        out.BlockSpacing = em(getComputedStyle(list).marginTop, list)
+        headings.forEach((h, i) => { out['H' + (i + 1)] = round(px(getComputedStyle(h).fontSize) / bodySize) })
+        const h = getComputedStyle(headings[0])
+        out.HeadingBefore = em(h.marginTop, headings[0])
+        out.HeadingAfter = em(h.marginBottom, headings[0])
+        const hLine = px(h.lineHeight)
+        if (hLine) out.HeadingLineHeight = round(hLine / (px(h.fontSize) || 16))
         out.ListIndent = em(getComputedStyle(list).paddingInlineStart, list)
-        const next = list.querySelector(':scope > li + li') as HTMLElement | null
-        if (next) out.ListItemSpacing = em(getComputedStyle(next).marginTop, next)
-    }
-    const quote = block.closest('#ag-editor-id blockquote') as HTMLElement | null
-    if (quote) {
+        const second = list.children[1] as HTMLElement
+        out.ListItemSpacing = em(getComputedStyle(second).marginTop, second)
         out.QuoteIndent = em(getComputedStyle(quote).paddingLeft, quote)
         const bar = px(getComputedStyle(quote, '::before').width)
         if (bar) out.QuoteBarWidth = round(bar)
+    } finally {
+        for (const sample of samples) sample.remove()
     }
     return out
+}
+
+// Every field's value on the page, for the designer's empty fields (TypographyValues): when the guides come on and
+// whenever the styles change.
+let sentValues = ''
+const sendValues = () => {
+    if (!on) return
+    const values = effectiveValues()
+    const text = JSON.stringify(values)
+    if (text === sentValues) return
+    sentValues = text
+    transport.postMessage('TypographyValues', values)
 }
 
 // The caret's block for the designer's small panel beside it (TypographyBlock: its rect in the page's px, its kind and
@@ -282,7 +304,7 @@ const reportOf = (block: HTMLElement): Record<string, unknown> | null => {
     const r = block.getBoundingClientRect()
     const kind = block.tagName.toLowerCase()
     return r.height > 0
-        ? { x: r.left, y: r.top, width: r.width, height: r.height, kind, level: /^h[1-6]$/.test(kind) ? +kind[1] : 0, group: groupOf(block), effective: effectiveValues(block) }
+        ? { x: r.left, y: r.top, width: r.width, height: r.height, kind, level: /^h[1-6]$/.test(kind) ? +kind[1] : 0, group: groupOf(block) }
         : null
 }
 
@@ -331,6 +353,7 @@ const onRelease = () => {
 // The styles changed (a preset saved, a field set or cleared): the caret's block sent again, its values with it.
 let styles: MutationObserver | null = null
 const onStyles = () => {
+    sendValues()
     if (!caretBlock || scrollFrame) return
     scrollFrame = requestAnimationFrame(() => { scrollFrame = 0; sendCaretBlock() })
 }
@@ -362,6 +385,8 @@ export const setTypographyGuides = (value: boolean) => {
         document.documentElement.addEventListener('pointerleave', hide)
         styles = new MutationObserver(onStyles)
         styles.observe(document.head, { childList: true, subtree: true, characterData: true, attributes: true })
+        sentValues = ''
+        sendValues()
         onSelection()
     } else {
         document.removeEventListener('pointermove', onPointer)
