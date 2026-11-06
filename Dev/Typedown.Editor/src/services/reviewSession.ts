@@ -124,6 +124,16 @@ export function setReview(payload: ReviewPayload | null | undefined, newDocument
     if (!newDocument) refresh()
 }
 
+// The page's clock for revisions; a test moves it on (window.__typedownReviewClockOffset, ms) instead of waiting.
+const now = () => Date.now() + (Number((window as any).__typedownReviewClockOffset) || 0)
+
+/** Whether the caret was put elsewhere before the next change (the page's EditReport): typing on starts a new revision. */
+let nextMoved = false
+
+export function noteChangeMoved(moved: boolean) {
+    nextMoved = moved
+}
+
 /** The source of the next change (an automation edit being applied); null: the reader's. */
 let nextSource: RevisionSource | null = null
 
@@ -136,11 +146,13 @@ export function refresh() {
     if (!state.on || !host) return
     const text = host.text()
     if (text === state.lastText && !state.pending) return redraw()
-    const time = Date.now()
+    const time = now()
+    const moved = nextMoved
+    nextMoved = false
     const previous = state.pending ?? state.revisions
     const region = state.lastText === null || state.pending ? null : changedRegion(state.lastText, text)
     const source = nextSource ?? YOU
-    state.revisions = trackRevisions(state.baseline, text, previous, region ? { ...region, source, time } : { source: state.fallback, time })
+    state.revisions = trackRevisions(state.baseline, text, previous, region ? { ...region, source, time, moved } : { source: state.fallback, time })
     // Only the writing changed where the change did not touch (Muya numbered a list on, wrote a fence its way): no revision
     // - taken into the baseline, so it cannot be rejected either (the user's decision, 2026-11-06).
     // The reader's own too (a list marker changed by hand): the user's decision is that writing is not a revision. Not a

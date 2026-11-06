@@ -19,7 +19,7 @@ import { absoluteImageUrls, svgImagesAsPng } from "services/localPaths";
 import { diagramsToPictures } from "services/diagramPicture";
 import { markStartup, sendStartupMarks } from "services/startupMarks";
 import { markedMarkdown, markRendered } from "services/reviewExport";
-import { command as reviewCommand, revisionsForExport, connectReviewHost, installReviewActions, noteChangeSource, refresh as refreshReview, reportNow as reportReview, ReviewPayload, setReview } from "services/reviewSession";
+import { command as reviewCommand, revisionsForExport, connectReviewHost, installReviewActions, noteChangeMoved, noteChangeSource, refresh as refreshReview, reportNow as reportReview, ReviewPayload, setReview } from "services/reviewSession";
 
 /** The style element with this id, appended to the head on first use. */
 const styleElement = (id: string) => {
@@ -331,6 +331,7 @@ const Editor: React.FC = () => {
             // The kind of edit for the host's undo steps, taken before the origin (it reads the same armed action).
             const edit = takeEditReport();
             transport.postMessage('MarkdownChange', { text: markdown, loadId: loadIdRef.current, origin: takeChangeOrigin(), edit });
+            noteChangeMoved(edit.moved)
             refreshReview()
         }
     }, [flushFileLoaded])

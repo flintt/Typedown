@@ -456,6 +456,31 @@ export interface ChangeInfo {
     oldTo?: number
     source: RevisionSource
     time: number
+    /** The caret was put somewhere else before this change (an arrow, a click): typing on is not the revision before. */
+    moved?: boolean
+}
+
+/**
+ * How long a pause may be inside one revision: typing on at the end of one's own revision after longer is a new one
+ * (the user, 2026-11-07: list items written at different times were one revision, rejecting the last took the others).
+ * Changed for the tests (setRevisionPause).
+ */
+export let REVISION_PAUSE_MS = 3 * 60 * 1000
+export function setRevisionPause(ms: number) { REVISION_PAUSE_MS = ms }
+
+// The ranges of a text inside fenced code: a revision is split at its line breaks, except there.
+function fencedRanges(text: string): [number, number][] {
+    const ranges: [number, number][] = []
+    let open: { at: number, mark: string } | null = null
+    let at = 0
+    for (const line of text.split('\n')) {
+        const m = /^ {0,3}(`{3,}|~{3,})/.exec(line)
+        if (m && !open) open = { at, mark: m[1][0] }
+        else if (m && open && m[1][0] === open.mark) { ranges.push([open.at, at + line.length]); open = null }
+        at += line.length + 1
+    }
+    if (open) ranges.push([open.at, text.length])
+    return ranges
 }
 
 const touches = (aStart: number, aEnd: number, bStart: number, bEnd: number) => aStart <= bEnd && bStart <= aEnd
@@ -517,36 +542,65 @@ export function trackRevisions(baseline: string, current: string, previous: Know
             const keeps = from && from.id === id && from.group ? { group: from.group, format: from.format } : {}
             return { ...piece, id, kind: kindOf(piece), oldText: oldPart, newText: current.slice(piece.curStart, piece.curEnd), source: source.name, session: source.session, time, ...keeps }
         }
-        // The new text, a character at a time: whose it is.
-        if (h.curEnd > h.curStart) {
+        // The new text, a character at a time: whose it is - a revision known before, or the change's.
+        if (h.curEnd > h.curStart && (places.some(x => x.at.length) || region)) {
             const owner: (Known | null)[] = new Array(h.curEnd - h.curStart).fill(null)
             let known = false
             for (const { p, at } of places)
                 for (const x of at)
                     for (let i = Math.max(x.start, h.curStart); i < Math.min(x.end, h.curEnd); i++) { owner[i - h.curStart] = p; known = true }
-            if (known) {
-                // Text the change did not put in and no one is known for: the revision next to it (before, else after).
-                const isNew = (i: number) => !!region && i >= region.from && i < region.to
-                for (let i = 0; i < owner.length; i++) if (!owner[i] && !isNew(h.curStart + i)) owner[i] = owner[i - 1] ?? owner.find(o => !!o) ?? null
-                const sourceOf = (o: Known | null): RevisionSource => o ? { name: o.source, session: o.session } : change.source
-                // Runs of one source; the first run has the baseline's text this hunk replaces, the others are insertions.
-                let start = 0
-                let first = true
-                for (let i = 1; i <= owner.length; i++) {
-                    const a = sourceOf(owner[start]), b = i < owner.length ? sourceOf(owner[i]) : null
-                    if (b && a.name === b.name && (a.session ?? '') === (b.session ?? '')) continue
-                    const piece: Hunk = first
-                        ? { baseStart: h.baseStart, baseEnd: h.baseEnd, curStart: h.curStart + start, curEnd: h.curStart + i }
-                        : { baseStart: h.baseEnd, baseEnd: h.baseEnd, curStart: h.curStart + start, curEnd: h.curStart + i }
-                    const run = owner.slice(start, i)
-                    const was = run.find(o => !!o && !used.has(o.id)) ?? null
-                    const grew = run.some(o => !o)
-                    out.push(make(piece, first ? oldText : '', was, a, grew || !was ? change.time : was.time))
-                    first = false
-                    start = i
-                }
-                continue
+            // Text the change did not put in and no one is known for: the revision next to it (before, else after).
+            const isNew = (i: number) => !!region && i >= region.from && i < region.to
+            if (known) for (let i = 0; i < owner.length; i++) if (!owner[i] && !isNew(h.curStart + i)) owner[i] = owner[i - 1] ?? owner.find(o => !!o) ?? null
+            // What the change put in grows a revision of its own source beside it only when typed on at once: not after
+            // a pause, not after the caret went elsewhere (the user, 2026-11-07).
+            const grows = (p: Known | null) => !!p && sameSource(p, change.source) && !change.moved && change.time - p.time <= REVISION_PAUSE_MS
+            for (let i = 0; i < owner.length; i++) {
+                if (owner[i]) continue
+                let j = i
+                while (j < owner.length && !owner[j]) j++
+                const left = owner[i - 1] ?? null, right = owner[j] ?? null
+                const p = grows(left) ? left : grows(right) ? right : null
+                for (let k = i; k < j; k++) owner[k] = p
+                i = j
             }
+            // Split where a new block starts (a list item, a paragraph: a line's start, outside fenced code), and where
+            // the owner changes.
+            const fenced = fencedRanges(current)
+            const inFence = (at: number) => fenced.some(([a, b]) => at > a && at < b)
+            const blockStart = (i: number) => i > 0 && current[h.curStart + i - 1] === '\n' && current[h.curStart + i] !== '\n' && !inFence(h.curStart + i)
+            const sourceOf = (o: Known | null): RevisionSource => o ? { name: o.source, session: o.session } : change.source
+            let start = 0
+            let first = true
+            const from = out.length
+            for (let i = 1; i <= owner.length; i++) {
+                // Two revisions of one source side by side, made within a pause of each other (one split by text
+                // typed in it and rejected since), are one again.
+                const together = (a: Known | null, b: Known | null) => a === b ||
+                    (!!a && !!b && sameSource(a, { name: b.source, session: b.session }) && Math.abs(a.time - b.time) <= REVISION_PAUSE_MS)
+                // (Line breaks and marks alone before a block go with it: Enter in a quotation is one revision.)
+                const newBlock = blockStart(i) && /[\p{L}\p{N}]/u.test(current.slice(h.curStart + start, h.curStart + i))
+                if (i < owner.length && together(owner[i], owner[start]) && !newBlock) continue
+                const piece: Hunk = first
+                    ? { baseStart: h.baseStart, baseEnd: h.baseEnd, curStart: h.curStart + start, curEnd: h.curStart + i }
+                    : { baseStart: h.baseEnd, baseEnd: h.baseEnd, curStart: h.curStart + start, curEnd: h.curStart + i }
+                const was = owner[start] && !used.has(owner[start]!.id) ? owner[start] : null
+                const grew = owner.slice(start, i).some((o, k) => isNew(h.curStart + start + k)) && !!was
+                out.push(make(piece, first ? oldText : '', was, sourceOf(owner[start]), grew || !was ? change.time : was.time))
+                first = false
+                start = i
+            }
+            // Line breaks alone, left over at a revision's end (more typed before them later): with the one before.
+            for (let k = out.length - 1; k > from; k--) {
+                const piece = out[k], prev = out[k - 1]
+                if (/^\n+$/.test(piece.newText) && !piece.oldText && prev.curEnd === piece.curStart && prev.source === piece.source) {
+                    prev.curEnd = piece.curEnd
+                    prev.newText += piece.newText
+                    prev.kind = kindOf(prev)
+                    out.splice(k, 1)
+                }
+            }
+            continue
         }
         const same = exact.get(`${h.baseStart}:${h.baseEnd}:${newText}`)
         if (same && !used.has(same.id)) { out.push(make(h, oldText, same, { name: same.source, session: same.session }, same.time)); continue }

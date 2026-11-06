@@ -400,6 +400,44 @@ else (async () => {
         const texts = r.revisions.map(x => x.newText).sort().join(',');
         if (texts !== 'A,C') { row.result = 'FAIL'; row.why.push(texts); }
     });
+    // Two list items (and two paragraphs) written a while apart, the later one typed on at the end of the first: two
+    // revisions; rejecting the later leaves the first, accepting the first leaves the later (the user, 2026-11-07).
+    for (const [what, text, first, second] of [
+        ['list items', '# L\n\n- one\n', '\n- two', '\n- three'],
+        ['paragraphs', '# P\n\nOne.\n', '\n\nTwo.', '\n\nThree.'],
+    ]) {
+        await flow(`${what} written a while apart: one revision each, the later rejected alone`, async row => {
+            await mode(false, false);
+            await page.evaluate(() => { window.__typedownReviewClockOffset = 0 });
+            await load(text, text);
+            // Enter then the words, as typed: the parts split on the line breaks.
+            const typeLines = async s => { const parts = s.split('\n'); for (let i = 0; i < parts.length; i++) { if (i > 0) await page.keyboard.press('Enter'); if (parts[i]) await page.keyboard.type(parts[i]); } await pause(200); };
+            let t = await flush();
+            await caretAt(t, t, t.replace(/\n+$/, '').length, true);
+            await page.keyboard.press('Shift');
+            await typeLines(first.replace(/^\n/, '\n'));
+            await page.evaluate(() => { window.__typedownReviewClockOffset = 10 * 60 * 1000 });
+            await typeLines(second);
+            const r = await review();
+            row.n = r.revisions.length;
+            const words = r.revisions.map(x => x.newText.replace(/[\s\-]/g, ''));
+            if (r.revisions.length !== 2) { row.result = 'FAIL'; row.why.push('revisions: ' + JSON.stringify(r.revisions.map(x => x.newText))); return; }
+            // Reject the later one with the caret in it.
+            t = await flush();
+            const later = r.revisions[1];
+            await caretAt(t, t, later.curStart + later.newText.replace(/\s+$/, '').length, true);
+            await page.keyboard.press('Shift');
+            await pause(80);
+            await page.evaluate(() => window.__deliver('ReviewCommand', { command: 'reject' }));
+            await pause(400);
+            const afterReject = await review();
+            t = await flush();
+            if (afterReject.revisions.length !== 1 || afterReject.revisions[0].id !== r.revisions[0].id || !t.includes(first.trim().replace(/^- /, ''))) {
+                row.result = 'FAIL'; row.why.push('after reject: ' + JSON.stringify({ revisions: afterReject.revisions.map(x => x.newText), text: t, words }));
+            }
+            await page.evaluate(() => { window.__typedownReviewClockOffset = 0 });
+        });
+    }
     await flow('long document, many revisions far away, one letter', async row => {
         const words = 'alpha beta gamma delta epsilon zeta eta theta iota kappa lambda mu'.split(' ');
         const paras = Array.from({ length: 600 }, (_, i) => `Paragraph ${i} ${words.map((w, j) => words[(i + j) % words.length]).join(' ')}.`);

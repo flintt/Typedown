@@ -1,6 +1,6 @@
 import {
     acceptAll, acceptInto, changedRegion, countRevisions, diffSequences, diffTexts, nextRevision, rejectAll, rejectFrom,
-    groupFormats, onlyWriting, Revision, revisionAt, shiftAfterAccept, storedOf, tokenize, trackRevisions, YOU,
+    groupFormats, onlyWriting, REVISION_PAUSE_MS, Revision, revisionAt, shiftAfterAccept, storedOf, tokenize, trackRevisions, YOU,
 } from './review';
 
 const apply = (a: string[], b: string[]) => {
@@ -208,4 +208,39 @@ test('a bold put on with Ctrl+B is one group of its two marks', () => {
     const more = current + '\nMore.\n'
     const again = trackRevisions(baseline, more, revs, { ...changedRegion(current, more)!, ...you(3) })
     expect(again.filter(r => r.group === revs[0].id).length).toBe(2)
+})
+
+test('list items written at different times are revisions of their own: rejecting the last leaves the one before', () => {
+    const baseline = '# L\n\n- one\n'
+    const one = baseline + '- two\n'
+    let revs = trackRevisions(baseline, one, [], { ...changedRegion(baseline, one)!, source: YOU, time: 0 })
+    expect(revs.map(r => r.newText)).toEqual(['- two\n'])
+    // Later than the pause: the next item typed on at the end is another revision.
+    const two = one + '- three\n'
+    revs = trackRevisions(baseline, two, revs, { ...changedRegion(one, two)!, source: YOU, time: REVISION_PAUSE_MS + 1 })
+    expect(revs.map(r => r.newText)).toEqual(['- two\n', '- three\n'])
+    expect(revs[0].time).toBe(0)
+    const back = rejectFrom(two, revs[1])
+    expect(back).toBe(one)
+    const after = trackRevisions(baseline, back, revs.filter(r => r !== revs[1]), { ...changedRegion(two, back)!, source: YOU, time: REVISION_PAUSE_MS + 2 })
+    expect(after.map(r => [r.id, r.newText])).toEqual([[revs[0].id, '- two\n']])
+    // Accepting the first alone leaves the second.
+    const left = trackRevisions(acceptInto(baseline, revs[0]), two, shiftAfterAccept(revs, [revs[0]]), { source: YOU, time: REVISION_PAUSE_MS + 3 })
+    expect(left.map(r => [r.id, r.newText])).toEqual([[revs[1].id, '- three\n']])
+})
+
+test('typed on at once, two paragraphs are still two revisions (a block each); a word typed on is the same one', () => {
+    const baseline = 'a\n'
+    const t1 = baseline + '\nfirst para\n'
+    let revs = trackRevisions(baseline, t1, [], { ...changedRegion(baseline, t1)!, source: YOU, time: 0 })
+    const t2 = t1 + '\nsecond para\n'
+    revs = trackRevisions(baseline, t2, revs, { ...changedRegion(t1, t2)!, source: YOU, time: 1000 })
+    expect(revs.length).toBe(2)
+    const t3 = t2.replace('second para', 'second paragraph')
+    const again = trackRevisions(baseline, t3, revs, { ...changedRegion(t2, t3)!, source: YOU, time: 2000 })
+    expect(again.map(r => r.id)).toEqual(revs.map(r => r.id))
+    // After the caret went elsewhere and came back, more typed at the end is a revision of its own.
+    const t4 = t3.replace('second paragraph', 'second paragraph done')
+    const moved = trackRevisions(baseline, t4, again, { ...changedRegion(t3, t4)!, source: YOU, time: 3000, moved: true })
+    expect(moved.length).toBe(3)
 })
