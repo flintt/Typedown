@@ -206,7 +206,8 @@ function reject(revisions: Revision[]) {
     state.outcomes.push(...revisions.map(r => outcomeOf(r, 'rejected')))
     const ids = new Set(revisions.map(r => r.id))
     // The text without them: the other revisions keep what they are (no change region - nobody new made them).
-    state.revisions = trackRevisions(state.baseline, next, state.revisions.filter(r => !ids.has(r.id)), { source: YOU, time: Date.now() })
+    const region = changedRegion(text, next)
+    state.revisions = trackRevisions(state.baseline, next, state.revisions.filter(r => !ids.has(r.id)), region ? { ...region, source: YOU, time: Date.now() } : { source: YOU, time: Date.now() })
     state.lastText = next
     hideActions()
     host.replaceText(next)

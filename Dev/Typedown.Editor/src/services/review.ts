@@ -50,6 +50,9 @@ export interface StoredRevision {
     source: string
     session?: string
     time: number
+    /** Where its text is in the document as reported (matched again only where that text still is). */
+    curStart?: number
+    curEnd?: number
     /** The line it starts on in the document (1-based) and that line's beginning: "the block it is in", for the record. */
     line?: number
     block?: string
@@ -288,56 +291,117 @@ export interface ChangeInfo {
     /** The changed region of the new text (offsets); none: a change of nothing (the baseline moved, a load). */
     from?: number
     to?: number
+    /** Where the changed region ended in the text before (to when not given: a change of the same length). */
+    oldTo?: number
     source: RevisionSource
     time: number
 }
 
 const touches = (aStart: number, aEnd: number, bStart: number, bEnd: number) => aStart <= bEnd && bStart <= aEnd
 
-/** The region of `after` that differs from `before`: what an edit changed. */
-export function changedRegion(before: string, after: string): { from: number, to: number } | null {
+/** The region of `after` that differs from `before`: what an edit changed (`oldTo`: where it ended in `before`). */
+export function changedRegion(before: string, after: string): { from: number, to: number, oldTo: number } | null {
     if (before === after) return null
     let start = 0
     const max = Math.min(before.length, after.length)
     while (start < max && before.charCodeAt(start) === after.charCodeAt(start)) start++
     let endB = before.length, endA = after.length
     while (endB > start && endA > start && before.charCodeAt(endB - 1) === after.charCodeAt(endA - 1)) { endB--; endA-- }
-    return { from: start, to: endA }
+    return { from: start, to: endA, oldTo: endB }
+}
+
+type Known = Revision | StoredRevision
+
+/**
+ * Where the text of a revision known before is in the current text: its old place moved over the change (the part the
+ * change replaced is not its any more). A stored one (the host's, after a load) is where it says, if its text is there.
+ */
+function placesOf(p: Known, current: string, region: { from: number, to: number, oldTo: number } | null): { start: number, end: number }[] {
+    if (typeof p.curStart !== 'number' || typeof p.curEnd !== 'number' || p.curEnd <= p.curStart) return []
+    if (!region) {
+        // Not moved: only where its text is.
+        return current.slice(p.curStart, p.curEnd) === p.newText ? [{ start: p.curStart, end: p.curEnd }] : []
+    }
+    const delta = region.to - region.oldTo
+    const out: { start: number, end: number }[] = []
+    if (p.curStart < region.from) out.push({ start: p.curStart, end: Math.min(p.curEnd, region.from) })
+    if (p.curEnd > region.oldTo) out.push({ start: Math.max(p.curStart, region.oldTo) + delta, end: p.curEnd + delta })
+    return out.filter(x => x.end > x.start)
 }
 
 /**
- * The revisions between baseline and current, each matched with those known before (`previous`, by their baseline
- * places): one at the same place with the same text is the same revision; one the change touched is the change's
- * (keeping the id of a revision of the same source it grew from); any other takes over the one it overlaps, or else is
- * the change's.
+ * The revisions between baseline and current, each matched with those known before (`previous`): what each revision's
+ * text is made of is followed through the change, so a hunk of new text is split where its parts are of different
+ * sources (the reader typing inside a program's insertion: the program's text stays the program's, the letters typed are
+ * the reader's), and a part keeps the id and time of the revision it was. Text the change put in is the change's; text no
+ * one is known for, the revision it touches or else the change's. A hunk with no new text (a deletion) is the one at
+ * the same place in the baseline, or the change's if the change touched it.
  */
-export function trackRevisions(baseline: string, current: string, previous: (Revision | StoredRevision)[], change: ChangeInfo): Revision[] {
+export function trackRevisions(baseline: string, current: string, previous: Known[], change: ChangeInfo): Revision[] {
     const hunks = diffTexts(baseline, current)
     const used = new Set<string>()
-    const exact = new Map<string, Revision | StoredRevision>()
+    const region = change.from !== undefined && change.to !== undefined ? { from: change.from, to: change.to, oldTo: change.oldTo ?? change.to } : null
+    const places = previous.map(p => ({ p, at: placesOf(p, current, region) }))
+    const exact = new Map<string, Known>()
     for (const p of previous) exact.set(`${p.baseStart}:${p.baseEnd}:${p.newText}`, p)
-    return hunks.map(h => {
+    const sameSource = (p: Known, s: RevisionSource) => p.source === s.name && (p.session ?? '') === (s.session ?? '')
+    const out: Revision[] = []
+    for (const h of hunks) {
         const newText = current.slice(h.curStart, h.curEnd)
         const oldText = baseline.slice(h.baseStart, h.baseEnd)
-        const make = (from: Revision | StoredRevision | null, source: RevisionSource, time: number): Revision => {
+        const touched = !!region && touches(h.curStart, h.curEnd, region.from, region.to)
+        const make = (piece: Hunk, oldPart: string, from: Known | null, source: RevisionSource, time: number): Revision => {
             const id = from && !used.has(from.id) ? from.id : newRevisionId()
             used.add(id)
-            return { ...h, id, kind: kindOf(h), oldText, newText, source: source.name, session: source.session, time }
+            return { ...piece, id, kind: kindOf(piece), oldText: oldPart, newText: current.slice(piece.curStart, piece.curEnd), source: source.name, session: source.session, time }
+        }
+        // The new text, a character at a time: whose it is.
+        if (h.curEnd > h.curStart) {
+            const owner: (Known | null)[] = new Array(h.curEnd - h.curStart).fill(null)
+            let known = false
+            for (const { p, at } of places)
+                for (const x of at)
+                    for (let i = Math.max(x.start, h.curStart); i < Math.min(x.end, h.curEnd); i++) { owner[i - h.curStart] = p; known = true }
+            if (known) {
+                // Text the change did not put in and no one is known for: the revision next to it (before, else after).
+                const isNew = (i: number) => !!region && i >= region.from && i < region.to
+                for (let i = 0; i < owner.length; i++) if (!owner[i] && !isNew(h.curStart + i)) owner[i] = owner[i - 1] ?? owner.find(o => !!o) ?? null
+                const sourceOf = (o: Known | null): RevisionSource => o ? { name: o.source, session: o.session } : change.source
+                // Runs of one source; the first run has the baseline's text this hunk replaces, the others are insertions.
+                let start = 0
+                let first = true
+                for (let i = 1; i <= owner.length; i++) {
+                    const a = sourceOf(owner[start]), b = i < owner.length ? sourceOf(owner[i]) : null
+                    if (b && a.name === b.name && (a.session ?? '') === (b.session ?? '')) continue
+                    const piece: Hunk = first
+                        ? { baseStart: h.baseStart, baseEnd: h.baseEnd, curStart: h.curStart + start, curEnd: h.curStart + i }
+                        : { baseStart: h.baseEnd, baseEnd: h.baseEnd, curStart: h.curStart + start, curEnd: h.curStart + i }
+                    const run = owner.slice(start, i)
+                    const was = run.find(o => !!o && !used.has(o.id)) ?? null
+                    const grew = run.some(o => !o)
+                    out.push(make(piece, first ? oldText : '', was, a, grew || !was ? change.time : was.time))
+                    first = false
+                    start = i
+                }
+                continue
+            }
         }
         const same = exact.get(`${h.baseStart}:${h.baseEnd}:${newText}`)
-        if (same && !used.has(same.id)) return make(same, { name: same.source, session: same.session }, same.time)
+        if (same && !used.has(same.id)) { out.push(make(h, oldText, same, { name: same.source, session: same.session }, same.time)); continue }
         const overlapping = previous.filter(p => touches(p.baseStart, p.baseEnd, h.baseStart, h.baseEnd) && !used.has(p.id))
-        const touched = change.from !== undefined && change.to !== undefined && touches(h.curStart, h.curEnd, change.from, change.to)
         if (touched) {
-            const grown = overlapping.find(p => p.source === change.source.name && (p.session ?? '') === (change.source.session ?? ''))
-            return make(grown ?? null, change.source, change.time)
+            const grown = overlapping.find(p => sameSource(p, change.source)) ?? null
+            out.push(make(h, oldText, grown, change.source, change.time))
+            continue
         }
         if (overlapping.length) {
             const p = overlapping[0]
-            return make(p, { name: p.source, session: p.session }, p.time)
+            out.push(make(h, oldText, p, { name: p.source, session: p.session }, p.time))
+            continue
         }
-        return make(null, change.source, change.time)
-    })
+        out.push(make(h, oldText, null, change.source, change.time))
+    }
+    return out
 }
 
 /** The baseline with the revision written in (accepted): the revisions after it move by the difference. */
@@ -359,7 +423,8 @@ export function shiftAfterAccept(revisions: Revision[], accepted: Revision[]): R
     const ids = new Set(sorted.map(r => r.id))
     return revisions.filter(r => !ids.has(r.id)).map(r => {
         let shift = 0
-        for (const a of sorted) if (a.baseEnd <= r.baseStart) shift += a.newText.length - (a.baseEnd - a.baseStart)
+        // Before it in the baseline, or at the same place and before it in the document (two insertions there).
+        for (const a of sorted) if (a.baseEnd < r.baseStart || (a.baseEnd === r.baseStart && a.curEnd <= r.curStart)) shift += a.newText.length - (a.baseEnd - a.baseStart)
         return { ...r, baseStart: r.baseStart + shift, baseEnd: r.baseEnd + shift }
     })
 }
@@ -367,7 +432,8 @@ export function shiftAfterAccept(revisions: Revision[], accepted: Revision[]): R
 /** Accepts the given revisions at once: the new baseline. */
 export function acceptAll(baseline: string, revisions: Revision[]): string {
     let text = baseline
-    for (const r of [...revisions].sort((a, b) => b.baseStart - a.baseStart)) text = acceptInto(text, r)
+    // From the end; two at one place in the baseline, the later in the document first.
+    for (const r of [...revisions].sort((a, b) => b.baseStart - a.baseStart || b.curStart - a.curStart)) text = acceptInto(text, r)
     return text
 }
 
@@ -397,7 +463,7 @@ export function storedOf(r: Revision, current: string): StoredRevision {
     let line = 1
     for (let i = current.indexOf('\n'); i >= 0 && i < r.curStart; i = current.indexOf('\n', i + 1)) line++
     return {
-        id: r.id, kind: r.kind, baseStart: r.baseStart, baseEnd: r.baseEnd, oldText: r.oldText, newText: r.newText,
+        id: r.id, kind: r.kind, baseStart: r.baseStart, baseEnd: r.baseEnd, curStart: r.curStart, curEnd: r.curEnd, oldText: r.oldText, newText: r.newText,
         source: r.source, session: r.session, time: r.time, line,
         block: current.slice(lineStart, lineEnd < 0 ? current.length : lineEnd).slice(0, 60),
     }

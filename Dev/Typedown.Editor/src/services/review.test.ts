@@ -94,12 +94,39 @@ test('typing on at the end of an insertion of ones own keeps its id', () => {
     expect(revs[0].newText).toBe(' bc')
 })
 
-test('the reader editing inside a program insertion makes it the reader\'s', () => {
+test('the reader typing inside a program insertion: the program keeps its text, the letters typed are the reader\'s', () => {
+    const baseline = 'a\n\nb\n'
+    const bot = 'a\n\nRewritten by the bot.\n\nb\n'
+    let revs = trackRevisions(baseline, bot, [], { ...changedRegion(baseline, bot)!, ...program('Bot') })
+    expect(revs.map(r => r.source)).toEqual(['Bot'])
+    const typed = bot.replace('the bot.', 'the bot. Mine')
+    revs = trackRevisions(baseline, typed, revs, { ...changedRegion(bot, typed)!, ...you(9) })
+    expect(revs.map(r => [r.newText, r.source])).toEqual([['Rewritten by the bot.', 'Bot'], [' Mine', ''], ['\n\n', 'Bot']])
+    // Typing on elsewhere keeps the three as they are.
+    const more = typed.replace('a\n', 'a!\n')
+    revs = trackRevisions(baseline, more, revs, { ...changedRegion(typed, more)!, ...you(10) })
+    expect(revs.map(r => r.source)).toEqual(['', 'Bot', '', 'Bot'])
+    expect(revs.filter(r => r.source === '').map(r => r.newText)).toEqual(['!', ' Mine'])
+    expect(revs.filter(r => r.source === 'Bot').map(r => r.newText).join('').trim()).toBe('Rewritten by the bot.')
+    // All of the program's accepted: the baseline has its text, the reader's are left.
+    const bots = revs.filter(r => r.source === 'Bot')
+    const accepted = acceptAll(baseline, bots)
+    expect(accepted).toBe(bot)
+    const left = trackRevisions(accepted, more, shiftAfterAccept(revs, bots), { source: YOU, time: 11 })
+    expect(left.map(r => [r.newText, r.source])).toEqual([['!', ''], [' Mine', '']])
+    // Rejecting the reader's typing from the program's text: the program's stays.
+    const mine = revs.find(r => r.newText === ' Mine')!
+    const back = rejectFrom(more, mine)
+    const after = trackRevisions(baseline, back, revs.filter(r => r !== mine), { ...changedRegion(more, back)!, ...you(12) })
+    expect(after.map(r => r.source)).toEqual(['', 'Bot'])
+    expect(after[1].newText.trim()).toBe('Rewritten by the bot.')
+})
+
+test('the reader editing a letter inside a program insertion: that letter is the reader\'s', () => {
     const baseline = 'a\n'
     let revs = trackRevisions(baseline, 'a xyz\n', [], { ...changedRegion(baseline, 'a xyz\n')!, ...program('Bot') })
     revs = trackRevisions(baseline, 'a xYz\n', revs, { ...changedRegion('a xyz\n', 'a xYz\n')!, ...you(9) })
-    expect(revs).toHaveLength(1)
-    expect(revs[0].source).toBe('')
+    expect(revs.map(r => [r.newText, r.source])).toEqual([[' x', 'Bot'], ['Y', ''], ['z', 'Bot']])
 })
 
 test('accept writes into the baseline, reject puts the baseline back; the other revisions stay', () => {
