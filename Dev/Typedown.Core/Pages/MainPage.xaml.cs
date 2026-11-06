@@ -100,6 +100,25 @@ namespace Typedown.Core.Pages
             // in an English window. It is built again, as switching it off and on does, once the language is applied.
             disposables.Add(settings.WhenPropertyChanged(nameof(settings.Language)).Subscribe(_ =>
                 _ = DispatcherQueue.RunIdleAsync(_ => RebuildStatusBar())));
+            EditionHooks.CardChanged += OnEditionCardChanged;
+            disposables.Add(System.Reactive.Disposables.Disposable.Create(() => EditionHooks.CardChanged -= OnEditionCardChanged));
+            ShowEditionCard();
+        }
+
+        private void OnEditionCardChanged(AppViewModel app)
+        {
+            if (app != AppViewModel) return;
+            if (DispatcherQueue.HasThreadAccess) ShowEditionCard();
+            else DispatcherQueue.TryEnqueueSafe(ShowEditionCard);
+        }
+
+        // The edition's card for this window, or none. A page made anew (the settings left) takes it from the one before.
+        private void ShowEditionCard()
+        {
+            var card = EditionHooks.CardOf(AppViewModel);
+            if (card?.Content is FrameworkElement content && content.Parent is ContentPresenter before && before != EditionCardHost) before.Content = null;
+            EditionCardHost.Content = card?.Content;
+            EditionCard.Visibility = card?.Content == null ? Visibility.Collapsed : Visibility.Visible;
         }
 
         private void RebuildStatusBar()
