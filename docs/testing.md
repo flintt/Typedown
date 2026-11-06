@@ -90,6 +90,7 @@ CI 的“Test editor integration”一步运行这些：
 - `keep-source-on-save-check.js`: A document past 150,000 characters, edited in one place: while typing the host gets the editor's own export (the whole document in the editor's way of writing it - keeping the reader's source reads the result back, a fifth of a second at 300,000 characters, too much for every change); asked with keepSource (a save the reader made, a close) it gets the reader's own text with only the edit in it.
 - `fence-line-check.js`: "~~" typed at a line's start for a strikethrough was auto-paired into the line "~~~~" - a code fence once the file was read again (opened, source mode and back, an automation write): the rest of the document became a code block, and the closing "```" the editor then wrote stayed at the document's end (a reader's report, 2026-11-01).
 - `key-matrix-check.js`: The editing keys and the host's editing commands, each in each kind of block at its start, middle and end, an X typed after to show where the caret went.
+- `review-check.js`: Review mode on the page (services/reviewSession.ts, docs/todo.md "审阅模式"): a document loaded with its baseline, what is typed marked as the reader's revision, what a program writes marked with its name, a paragraph deleted shown as a strip, accept (into the baseline) and reject (the text put back) from the host's commands and the keys, the marks in source mode too, hidden and gone when the host says so - and nothing of it in the text.
 <!-- END generated: editor-checks -->
 
 ## Windows 端到端测试
