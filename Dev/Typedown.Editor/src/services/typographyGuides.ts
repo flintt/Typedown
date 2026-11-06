@@ -1,9 +1,11 @@
 import transport from './transport'
 
-// The typography designer open (an edition's, beside the document): the block under the pointer shows its spacing as
-// the browser's developer tools do - the space before and after it and its indent tinted, the text's width marked,
-// each with its value in em and px. Only shown, never in the way: the marks take no pointer, typing hides them. The
-// host turns it on and off (TypographyGuides { on }).
+// The typography designer open (an edition's, beside the document): the caret's block - the one the small panel beside
+// it is for - shows its spacing as the browser's developer tools do: the space before and after it and its indent
+// tinted, the text's width marked, each with its value in em and px. Fixed there until the caret goes to another block
+// (a click, the arrow keys), not following the pointer: the guides and the panel were often on two blocks, and on its
+// way to a label the pointer took the guides to another (the user, 2026-11-06). Never in the way: only the labels take
+// a click, typing hides them. The host turns it on and off (TypographyGuides { on }).
 
 const BLOCKS = 'p, h1, h2, h3, h4, h5, h6, li, blockquote, pre, figure'
 
@@ -21,7 +23,6 @@ let on = false
 let layer: HTMLDivElement | null = null
 let target: HTMLElement | null = null
 let frame = 0
-let lastPointer: { x: number, y: number } | null = null
 let measured: GuideMeasure | null = null
 
 const px = (value: string) => parseFloat(value) || 0
@@ -132,6 +133,8 @@ const draw = () => {
     frame = 0
     if (!layer) return
     layer.textContent = ''
+    // Drawn anew as an element of the same id (typed in, its styles changed): that one.
+    if (target && !target.isConnected && target.id) target = document.getElementById(target.id)
     if (!on || !target || !target.isConnected) { measured = null; return }
     const r = target.getBoundingClientRect()
     if (!r.width && !r.height) { measured = null; return }
@@ -166,35 +169,9 @@ const draw = () => {
 
 const schedule = () => { if (!frame) frame = requestAnimationFrame(draw) }
 
-// Where the guides of the block shown are: the block, its space before and after, the labels above it (a narrow band's
-// label sits over the block before), across the page. While the pointer is in it the block stays shown - on its way to a
-// label the pointer crossed the block above, the guides went to that one and the label with them (hp job 274).
-const keeps = (x: number, y: number) => {
-    if (!target || !target.isConnected || !measured) return false
-    const r = target.getBoundingClientRect()
-    const page = document.getElementById('ag-editor-id')?.getBoundingClientRect()
-    return !!page && x >= page.left && x <= page.right && y >= r.top - measured.before - 24 && y <= r.bottom + measured.after + 4
-}
-
-const onPointer = (event: PointerEvent) => {
-    lastPointer = { x: event.clientX, y: event.clientY }
-    // On a label of the guides' own: the block it is for stays (it is not under the pointer, the label is).
-    if (layer && event.target instanceof Node && layer.contains(event.target)) return
-    const block = blockAt(document.elementFromPoint(event.clientX, event.clientY))
-    // Kept, unless the pointer went into a block inside the one shown (a nested quote, a nested list's item).
-    if (keeps(event.clientX, event.clientY) && !(block && block !== target && target?.contains(block))) return
-    if (block === target) return
-    target = block
-    schedule()
-}
-const onScroll = () => {
-    if (!lastPointer) return schedule()
-    const over = document.elementFromPoint(lastPointer.x, lastPointer.y)
-    if (layer && over && layer.contains(over)) return schedule()
-    target = blockAt(document.elementFromPoint(lastPointer.x, lastPointer.y))
-    schedule()
-}
 const hide = () => { target = null; schedule() }
+// The caret's block, shown: not while typing.
+const show = () => { target = typing ? null : caretBlock; schedule() }
 
 /**
  * The designer's group for a block, as the designer groups its fields (code, then headings, a quote, a list, the body):
@@ -329,6 +306,7 @@ const onSelection = () => {
     // still the block typed in - the panel came back at each key (w10 job 254).
     if (!sameBlock(block, caretBlock)) typing = false
     caretBlock = block
+    show()
     sendCaretBlock(true)
 }
 // Typing: what the page is given to put in (beforeinput, an input method's composition) - with an input method on
@@ -340,7 +318,6 @@ const typed = () => {
     sendCaretBlock()
 }
 const onKey = (event: KeyboardEvent) => {
-    hide()
     if (event.key.length === 1 || event.key === 'Process' || event.key === 'Backspace' || event.key === 'Delete' || event.key === 'Enter') typed()
 }
 const onPress = () => { typing = false }
@@ -354,12 +331,14 @@ const onRelease = () => {
 let styles: MutationObserver | null = null
 const onStyles = () => {
     sendValues()
+    schedule()
     if (!caretBlock || scrollFrame) return
     scrollFrame = requestAnimationFrame(() => { scrollFrame = 0; sendCaretBlock() })
 }
 
 let scrollFrame = 0
 const onBlockScroll = () => {
+    schedule()
     if (!caretBlock || scrollFrame) return
     scrollFrame = requestAnimationFrame(() => { scrollFrame = 0; sendCaretBlock() })
 }
@@ -372,8 +351,6 @@ export const setTypographyGuides = (value: boolean) => {
         layer.id = 'td-typography-guides'
         layer.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:2147483000;'
         document.body.appendChild(layer)
-        document.addEventListener('pointermove', onPointer, { passive: true })
-        document.addEventListener('scroll', onScroll, { passive: true, capture: true })
         document.addEventListener('keydown', onKey, true)
         document.addEventListener('beforeinput', typed, true)
         document.addEventListener('compositionstart', typed, true)
@@ -382,15 +359,12 @@ export const setTypographyGuides = (value: boolean) => {
         document.addEventListener('pointerup', onRelease, true)
         document.addEventListener('selectionchange', onSelection)
         document.addEventListener('scroll', onBlockScroll, { passive: true, capture: true })
-        document.documentElement.addEventListener('pointerleave', hide)
         styles = new MutationObserver(onStyles)
         styles.observe(document.head, { childList: true, subtree: true, characterData: true, attributes: true })
         sentValues = ''
         sendValues()
         onSelection()
     } else {
-        document.removeEventListener('pointermove', onPointer)
-        document.removeEventListener('scroll', onScroll, { capture: true } as EventListenerOptions)
         document.removeEventListener('keydown', onKey, true)
         document.removeEventListener('beforeinput', typed, true)
         document.removeEventListener('compositionstart', typed, true)
@@ -399,7 +373,6 @@ export const setTypographyGuides = (value: boolean) => {
         document.removeEventListener('pointerup', onRelease, true)
         document.removeEventListener('selectionchange', onSelection)
         document.removeEventListener('scroll', onBlockScroll, { capture: true } as EventListenerOptions)
-        document.documentElement.removeEventListener('pointerleave', hide)
         styles?.disconnect()
         styles = null
         if (scrollFrame) cancelAnimationFrame(scrollFrame)

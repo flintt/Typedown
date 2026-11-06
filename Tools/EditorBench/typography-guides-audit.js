@@ -53,7 +53,8 @@ const doc = [
         return { x: Math.round(r.left + Math.min(30, r.width / 3)), y: Math.round(r.top + Math.min(8, r.height / 2)) };
       }, t.id);
       await pause(60);
-      await page.mouse.move(at.x, at.y);
+      // The caret's block is the one shown.
+      await page.mouse.click(at.x, at.y);
       await pause(80);
       const g = await page.evaluate(() => window.__typographyGuides && window.__typographyGuides());
       if (!g) { console.log(`  NO   ${t.label}: no guides`); unmatched++; continue; }

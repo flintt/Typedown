@@ -1,6 +1,7 @@
-// The typography designer's guides (services/typographyGuides.ts): with them on, the block under the pointer shows its
-// space before and after, its indent and the text's width, the values those of its computed style; a list item's
-// paragraph its item's indent; the marks take no click; typing hides them; off, nothing is left.
+// The typography designer's guides (services/typographyGuides.ts): with them on, the caret's block shows its space
+// before and after, its indent and the text's width, the values those of its computed style - fixed there, the pointer
+// going elsewhere moves them not; a list item's paragraph its item's indent; the marks take no click; typing hides
+// them; off, nothing is left.
 //
 //   node typography-guides-check.js
 const { openEditor } = require('./harness');
@@ -30,14 +31,14 @@ const { openEditor } = require('./harness');
     report(await guide() === null && await marks() === 0, 'off: no guides', JSON.stringify(await guide()));
 
     await page.evaluate(() => window.__deliver('TypographyGuides', { on: true }));
-    await page.mouse.move(at.x + 1, at.y);
+    await page.mouse.click(at.x + 1, at.y);
     await pause(150);
     let g = await guide();
     report(g && g.kind === 'p' && g.before === 12 && g.after === 20, 'a paragraph: its space before and after', JSON.stringify(g));
     report(g && Math.round(g.firstLine) === Math.round(2 * g.fontSize), 'and its first line\'s indent (2em)', JSON.stringify(g));
     // The page's width as the designer's Page width sets it (the whole page, its margins with it): set to 800, 800.
     await page.evaluate(() => document.body.style.setProperty('--editorAreaWidth', '800px'));
-    await page.mouse.move(at.x + 2, at.y);
+    await page.mouse.click(at.x + 2, at.y);
     await pause(200);
     g = await guide();
     report(g && Math.round(g.width) === 800, 'the page\'s width as Page width sets it (800, its margins with it)', `${g && g.width}`);
@@ -64,6 +65,13 @@ const { openEditor } = require('./harness');
     await page.mouse.move(labelAt.x, labelAt.y);
     await pause(150);
     report(await marks() > 0 && (await guide())?.kind === 'p', 'the pointer on a label keeps the guides', String(await marks()));
+    // The pointer over another block: they stay on the caret's (the user, 2026-11-06: fixed, not under the pointer).
+    const heading = await centre('h1');
+    await page.mouse.move(heading.x, heading.y);
+    await pause(150);
+    report((await guide())?.kind === 'p', 'the pointer over the heading: the guides stay on the caret\'s paragraph', JSON.stringify(await guide()));
+    await page.mouse.move(labelAt.x, labelAt.y);
+    await pause(100);
     await page.mouse.down();
     await page.mouse.up();
     await pause(200);
@@ -71,7 +79,7 @@ const { openEditor } = require('./harness');
     report(clicked && clicked.field === 'ParagraphBefore' && clicked.kind === 'p' && clicked.group === 'body', 'a label clicked: its block and field sent', JSON.stringify(clicked && { field: clicked.field, kind: clicked.kind, group: clicked.group }));
 
     at = await centre('ul li p');
-    await page.mouse.move(at.x, at.y);
+    await page.mouse.click(at.x, at.y);
     await pause(150);
     g = await guide();
     report(g && g.kind === 'li' && g.indent >= 40, 'a list item\'s paragraph: the item measured (what List item spacing sets), its indent', JSON.stringify(g));
@@ -81,30 +89,29 @@ const { openEditor } = require('./harness');
     // A quote measured whole: its spacing and its indent (Quote indent's padding), not its paragraph's.
     await page.addStyleTag({ content: '#ag-editor-id blockquote { padding-left: 30px !important; }' });
     at = await centre('blockquote p');
-    await page.mouse.move(at.x, at.y);
+    await page.mouse.click(at.x, at.y);
     await pause(150);
     g = await guide();
     report(g && g.kind === 'blockquote' && g.indent >= 30, 'a quote: measured whole, its indent as Quote indent sets it', JSON.stringify(g));
     // Code: the editor's pre, which Block spacing sets (a figure only for tables, formulas, diagrams).
     await page.addStyleTag({ content: '#ag-editor-id > pre { margin-top: 22px !important; margin-bottom: 22px !important; }' });
     at = await centre('pre');
-    await page.mouse.move(at.x, at.y);
+    await page.mouse.click(at.x, at.y);
     await pause(150);
     g = await guide();
     report(g && g.kind === 'pre' && g.before === 22 && g.after === 22, 'code: its block measured, its spacing as Block spacing sets it', JSON.stringify(g));
 
     // A click through the marks reaches the text: the caret goes there.
     at = await centre('blockquote p');
-    await page.mouse.move(at.x, at.y);
-    await pause(150);
     await page.mouse.click(at.x, at.y);
     await pause(150);
     const inQuote = await page.evaluate(() => !!window.getSelection().anchorNode?.parentElement?.closest('blockquote'));
     report(inQuote, 'a click through the marks puts the caret in the text under them', String(inQuote));
 
+    report((await guide())?.kind === 'blockquote', 'and the guides go with the caret, to the quote', JSON.stringify(await guide()));
     await page.keyboard.press('ArrowRight');
     await pause(150);
-    report(await marks() === 0, 'a key pressed hides them', String(await marks()));
+    report(await marks() > 0 && (await guide())?.kind === 'blockquote', 'an arrow key: they stay on the caret\'s block', String(await marks()));
 
     // The caret's block for the small panel beside it (TypographyBlock): its rect and kind, a heading's level; none
     // while typing, back at a click.
@@ -136,6 +143,7 @@ const { openEditor } = require('./harness');
     await page.keyboard.type('xyz', { delay: 120 });
     await pause(400);
     report(await block() === null, 'typing: no block (the panel goes), and none again as the block is drawn anew', JSON.stringify(await block()));
+    report(await marks() === 0, 'typing hides the guides', String(await marks()));
     await page.keyboard.press('ArrowLeft');
     await pause(200);
     report(await block() === null, 'the caret moved along the same paragraph: still none', JSON.stringify(await block()));
@@ -150,6 +158,7 @@ const { openEditor } = require('./harness');
     await pause(200);
     b = await block();
     report(b && b.kind === 'p', 'a click: the block again', JSON.stringify(b));
+    report(await marks() > 0 && (await guide())?.kind === 'p', 'and its guides', String(await marks()));
     // A click back into the same block sends it again (the host's panel gave way to the click and comes back).
     const sentBefore = await page.evaluate(() => window.__count.TypographyBlock || 0);
     await page.mouse.click(at.x + 5, at.y);
