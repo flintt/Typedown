@@ -157,6 +157,56 @@ export const groupOf = (block: HTMLElement): string => {
     return 'body'
 }
 
+/**
+ * What each of the designer's fields is on the page now, by the automation id the panel's field has (Size, H2, ...):
+ * an empty field shows it, greyed - "as it is" with its value in it; cleared, the value is the page's own again (the
+ * user, 2026-11-06). px for sizes and widths, a factor for line heights, em for the rest; rounded to two places.
+ */
+export const effectiveValues = (block: HTMLElement): Record<string, number> => {
+    const editor = document.getElementById('ag-editor-id')
+    if (!editor) return {}
+    const round = (v: number) => Math.round(v * 100) / 100
+    const out: Record<string, number> = {}
+    const em = (value: string, of: Element) => round(px(value) / (px(getComputedStyle(of).fontSize) || 16))
+    const body = editor.querySelector(':scope > p.ag-paragraph') as HTMLElement | null
+    const bodySize = px(getComputedStyle(body ?? editor).fontSize) || 16
+    if (body) {
+        const s = getComputedStyle(body)
+        out.Size = round(bodySize)
+        const line = px(s.lineHeight)
+        if (line) out.LineHeight = round(line / bodySize)
+        out.ParagraphBefore = em(s.marginTop, body)
+        out.ParagraphAfter = em(s.marginBottom, body)
+        out.Indent = em(s.textIndent, body)
+        out.LetterSpacing = s.letterSpacing === 'normal' ? 0 : em(s.letterSpacing, body)
+    }
+    out.Width = Math.round(editor.offsetWidth)
+    // The space between blocks: a list, a quote, code or a table at the top.
+    const spaced = editor.querySelector(':scope > ul, :scope > ol, :scope > blockquote, :scope > pre, :scope > figure') as HTMLElement | null
+    if (spaced) out.BlockSpacing = em(getComputedStyle(spaced).marginTop, spaced)
+    if (/^H[1-6]$/.test(block.tagName)) {
+        const s = getComputedStyle(block)
+        out['H' + block.tagName[1]] = round(px(s.fontSize) / bodySize)
+        out.HeadingBefore = em(s.marginTop, block)
+        out.HeadingAfter = em(s.marginBottom, block)
+        const line = px(s.lineHeight)
+        if (line) out.HeadingLineHeight = round(line / (px(s.fontSize) || 16))
+    }
+    const list = block.closest('#ag-editor-id ul, #ag-editor-id ol') as HTMLElement | null
+    if (list) {
+        out.ListIndent = em(getComputedStyle(list).paddingInlineStart, list)
+        const next = list.querySelector(':scope > li + li') as HTMLElement | null
+        if (next) out.ListItemSpacing = em(getComputedStyle(next).marginTop, next)
+    }
+    const quote = block.closest('#ag-editor-id blockquote') as HTMLElement | null
+    if (quote) {
+        out.QuoteIndent = em(getComputedStyle(quote).paddingLeft, quote)
+        const bar = px(getComputedStyle(quote, '::before').width)
+        if (bar) out.QuoteBarWidth = round(bar)
+    }
+    return out
+}
+
 // The caret's block for the designer's small panel beside it (TypographyBlock: its rect in the page's px, its kind and
 // a heading's level; null for none): not while typing - a key pressed hides it until a click or another block.
 let caretBlock: HTMLElement | null = null
@@ -168,7 +218,7 @@ const sendCaretBlock = () => {
     if (block && block.isConnected) {
         const r = block.getBoundingClientRect()
         const kind = block.tagName.toLowerCase()
-        if (r.height > 0) args = { x: r.left, y: r.top, width: r.width, height: r.height, kind, level: /^h[1-6]$/.test(kind) ? +kind[1] : 0, group: groupOf(block) }
+        if (r.height > 0) args = { x: r.left, y: r.top, width: r.width, height: r.height, kind, level: /^h[1-6]$/.test(kind) ? +kind[1] : 0, group: groupOf(block), effective: effectiveValues(block) }
     }
     const text = JSON.stringify(args)
     if (text === sent) return
@@ -201,6 +251,13 @@ const onPress = () => { typing = false }
 // A click closes the host's panel (a flyout gives way to a click elsewhere): the caret's block sent again once
 // released, even unchanged - a click back into the block the caret was in left the panel closed.
 const onRelease = () => setTimeout(() => { sent = ''; onSelection() }, 0)
+// The styles changed (a preset saved, a field set or cleared): the caret's block sent again, its values with it.
+let styles: MutationObserver | null = null
+const onStyles = () => {
+    if (!caretBlock || scrollFrame) return
+    scrollFrame = requestAnimationFrame(() => { scrollFrame = 0; sendCaretBlock() })
+}
+
 let scrollFrame = 0
 const onBlockScroll = () => {
     if (!caretBlock || scrollFrame) return
@@ -225,6 +282,8 @@ export const setTypographyGuides = (value: boolean) => {
         document.addEventListener('selectionchange', onSelection)
         document.addEventListener('scroll', onBlockScroll, { passive: true, capture: true })
         document.documentElement.addEventListener('pointerleave', hide)
+        styles = new MutationObserver(onStyles)
+        styles.observe(document.head, { childList: true, subtree: true, characterData: true, attributes: true })
         onSelection()
     } else {
         document.removeEventListener('pointermove', onPointer)
@@ -237,6 +296,8 @@ export const setTypographyGuides = (value: boolean) => {
         document.removeEventListener('selectionchange', onSelection)
         document.removeEventListener('scroll', onBlockScroll, { capture: true } as EventListenerOptions)
         document.documentElement.removeEventListener('pointerleave', hide)
+        styles?.disconnect()
+        styles = null
         if (scrollFrame) cancelAnimationFrame(scrollFrame)
         scrollFrame = 0
         caretBlock = null
