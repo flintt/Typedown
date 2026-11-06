@@ -38,6 +38,15 @@ const { openEditor } = require('./harness');
     report(at.line === thirdLine && at.ch === 0, 'ScrollTo: the caret at the start of the heading\'s line', JSON.stringify(at));
     report(at.inView, 'ScrollTo: the heading\'s line in view, in the upper half', JSON.stringify(at));
 
+    // The outline's mark is the heading the caret is under, and follows the caret (it was always the first heading).
+    const curNow = () => page.evaluate(() => window.__last.StateChange?.state?.cur?.content ?? null);
+    report(await curNow() === 'Third', 'the caret at Third: the outline marks Third', String(await curNow()));
+    for (const [line, expected] of [[lines.indexOf('## Second') + 2, 'Second'], [1, 'First'], [lines.length - 2, 'Third']]) {
+      await page.evaluate(l => { const cm = document.querySelector('.CodeMirror').CodeMirror; cm.setCursor({ line: l, ch: 0 }); }, line);
+      await pause(200);
+      report(await curNow() === expected, `the caret moved to line ${line} (no edit): the outline marks ${expected}`, String(await curNow()));
+    }
+
     // The showcase in both modes: the same outline, heading for heading (setext ones, ones in lists and quotes, "#"
     // lines in code).
     const showcase = fs.readFileSync(path.join(__dirname, 'fixtures/showcase/showcase.md'), 'utf8');

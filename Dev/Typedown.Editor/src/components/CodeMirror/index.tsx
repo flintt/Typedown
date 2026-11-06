@@ -396,6 +396,20 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
     }, [editor, props.cursor])
 
     const countRef = useRef<{ time: number, value: any, timer?: any, toc?: any[] }>({ time: 0, value: null })
+    // The heading the caret is under, as the outline marks it: the last one at or above the caret's line - the first
+    // heading always, before (the user, 2026-11-06: the outline marked the first heading wherever the caret was).
+    const curOf = useCallback((toc: any[] | undefined) => {
+        if (!toc?.length || !editor) return undefined
+        const line = editor.getCursor().line
+        let cur
+        for (const item of toc) {
+            const at = sourceHeadingLine(item.slug)
+            if (at === null || at > line) break
+            cur = item
+        }
+        return cur
+    }, [editor])
+    const sentCurRef = useRef<string | undefined>(undefined)
 
     const handleCodeMirrorState = useCallback((value: string, loaded = false) => {
         // Counted as the visual editor counts (Muya's wordCount): source mode had its own count (every character,
@@ -419,13 +433,32 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
                 counted.time = Date.now()
                 counted.value = countWords(value)
                 counted.toc = getTOC(value).toc
-                onStateChange({ wordCount: counted.value, toc: counted.toc, cur: counted.toc[0] })
+                const cur = curOf(counted.toc)
+                sentCurRef.current = cur?.slug
+                onStateChange({ wordCount: counted.value, toc: counted.toc, cur })
             }, 300)
         }
         const toc = counted.toc ?? []
-        const state = { wordCount: counted.value, toc, cur: toc[0] }
+        const cur = curOf(toc)
+        sentCurRef.current = cur?.slug
+        const state = { wordCount: counted.value, toc, cur }
         onStateChange(state)
-    }, [onStateChange])
+    }, [onStateChange, curOf])
+
+    // The caret moved into another section (no edit): the outline's mark follows it.
+    useEffect(() => {
+        if (!editor) return
+        const moved = () => {
+            const counted = countRef.current
+            if (!counted.toc) return
+            const cur = curOf(counted.toc)
+            if (cur?.slug === sentCurRef.current) return
+            sentCurRef.current = cur?.slug
+            onStateChange({ wordCount: counted.value, toc: counted.toc, cur })
+        }
+        editor.on('cursorActivity', moved)
+        return () => { editor.off('cursorActivity', moved) }
+    }, [editor, curOf, onStateChange])
 
     const handleCodeMirrorContent = useCallback((cm: any, data: any, value: string) => {
         handleCodeMirrorState(value)
