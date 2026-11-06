@@ -1291,7 +1291,7 @@ namespace Typedown.Core.ViewModels
         /// diagram is a PNG on white (an img with a data: address) instead of an SVG; with <paramref name="mathAsTex"/> each
         /// formula is its TeX (span.math-tex, span.math-tex-display) instead of KaTeX's drawing.
         /// </summary>
-        public async Task<string> RenderXhtmlAsync(int timeoutMs, bool diagramsAsPictures = false, bool mathAsTex = false)
+        public async Task<string> RenderXhtmlAsync(int timeoutMs, bool diagramsAsPictures = false, bool mathAsTex = false, bool revisions = false)
         {
             if (MarkdownEditor == null) return null;
             var token = ++normalizationToken;
@@ -1299,7 +1299,8 @@ namespace Typedown.Core.ViewModels
             xhtmlWaiters[token] = waiter;
             try
             {
-                MarkdownEditor.PostMessage("RenderXhtml", new { token, diagramsAsPictures, mathAsTex });
+                // revisions: review mode's marked as <ins> and <del> (services/reviewExport.ts), for a format that keeps them.
+                MarkdownEditor.PostMessage("RenderXhtml", new { token, diagramsAsPictures, mathAsTex, revisions });
                 if (await Task.WhenAny(waiter.Task, Task.Delay(timeoutMs)) != waiter.Task) return null;
                 var reply = waiter.Task.Result;
                 if (reply?["error"] != null) throw new InvalidOperationException(reply["error"].ToString());
