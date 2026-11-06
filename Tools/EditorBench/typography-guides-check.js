@@ -11,7 +11,7 @@ const { openEditor } = require('./harness');
   const report = (ok, what, detail) => { console.log(`  ${ok ? 'ok  ' : 'FAIL'} ${what}${ok ? '' : ': ' + detail}`); if (!ok) failures.push(what); };
   try {
     await mode(false, false);
-    await load('# A heading\n\nA paragraph of text, long enough to wrap a little in the editor, with more words after it.\n\n- An item in a list\n- Another item\n\n> A quote.\n\nThe last paragraph.\n');
+    await load('# A heading\n\nA paragraph of text, long enough to wrap a little in the editor, with more words after it.\n\n- An item in a list\n- Another item\n\n> A quote.\n\n```js\nlet x = 1\n```\n\nThe last paragraph.\n');
     await pause(600);
     // A preset's rules, as the designer writes them.
     await page.addStyleTag({ content: '#ag-editor-id p.ag-paragraph { margin-top: 12px !important; margin-bottom: 20px !important; text-indent: 2em; } #ag-editor-id ul { padding-left: 40px !important; }' });
@@ -35,8 +35,14 @@ const { openEditor } = require('./harness');
     let g = await guide();
     report(g && g.kind === 'p' && g.before === 12 && g.after === 20, 'a paragraph: its space before and after', JSON.stringify(g));
     report(g && Math.round(g.firstLine) === Math.round(2 * g.fontSize), 'and its first line\'s indent (2em)', JSON.stringify(g));
-    const width = await page.evaluate(() => { const e = document.getElementById('ag-editor-id'); const s = getComputedStyle(e); return e.clientWidth - parseFloat(s.paddingLeft) - parseFloat(s.paddingRight); });
-    report(g && Math.abs(g.width - width) < 1, 'the text\'s width', `${g && g.width} / ${width}`);
+    // The page's width as the designer's Page width sets it (the whole page, its margins with it): set to 800, 800.
+    await page.evaluate(() => document.body.style.setProperty('--editorAreaWidth', '800px'));
+    await page.mouse.move(at.x + 2, at.y);
+    await pause(200);
+    g = await guide();
+    report(g && Math.round(g.width) === 800, 'the page\'s width as Page width sets it (800, its margins with it)', `${g && g.width}`);
+    const margins = await page.evaluate(() => [...document.querySelectorAll('#td-typography-guides > div')].filter(d => d.style.background.includes('0.07')).length);
+    report(margins === 2, 'its margins each side tinted', String(margins));
     const labels = await page.evaluate(() => [...document.querySelectorAll('#td-typography-guides span')].map(s => s.textContent));
     report(labels.some(l => l.startsWith('↑') && l.includes('12px')) && labels.some(l => l.startsWith('↓') && l.includes('20px')) && labels.some(l => l.startsWith('↔')),
       'the marks name the values', JSON.stringify(labels));
@@ -45,7 +51,22 @@ const { openEditor } = require('./harness');
     await page.mouse.move(at.x, at.y);
     await pause(150);
     g = await guide();
-    report(g && g.kind === 'p' && g.indent >= 40, 'a list item\'s paragraph: the item\'s indent', JSON.stringify(g));
+    report(g && g.kind === 'li' && g.indent >= 40, 'a list item\'s paragraph: the item measured (what List item spacing sets), its indent', JSON.stringify(g));
+
+    // A quote measured whole: its spacing and its indent (Quote indent's padding), not its paragraph's.
+    await page.addStyleTag({ content: '#ag-editor-id blockquote { padding-left: 30px !important; }' });
+    at = await centre('blockquote p');
+    await page.mouse.move(at.x, at.y);
+    await pause(150);
+    g = await guide();
+    report(g && g.kind === 'blockquote' && g.indent >= 30, 'a quote: measured whole, its indent as Quote indent sets it', JSON.stringify(g));
+    // Code: the editor's pre, which Block spacing sets (a figure only for tables, formulas, diagrams).
+    await page.addStyleTag({ content: '#ag-editor-id > pre { margin-top: 22px !important; margin-bottom: 22px !important; }' });
+    at = await centre('pre');
+    await page.mouse.move(at.x, at.y);
+    await pause(150);
+    g = await guide();
+    report(g && g.kind === 'pre' && g.before === 22 && g.after === 22, 'code: its block measured, its spacing as Block spacing sets it', JSON.stringify(g));
 
     // A click through the marks reaches the text: the caret goes there.
     at = await centre('blockquote p');

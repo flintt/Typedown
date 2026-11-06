@@ -32,7 +32,25 @@ export const blockAt = (element: Element | null): HTMLElement | null => {
     const editor = document.getElementById('ag-editor-id')
     if (!editor || !element || !editor.contains(element)) return null
     const block = element.closest(BLOCKS) as HTMLElement | null
-    return block && editor.contains(block) && block !== editor ? block : null
+    return block && editor.contains(block) && block !== editor ? fieldBlock(block, editor) : null
+}
+
+/**
+ * The element the designer's fields set for a block, which the guides measure: code's figure (block spacing is
+ * around it, not its pre), a quote whole (its spacing and indent), a list item (the spacing between items) - a
+ * paragraph's own inside them had values no field changes (the user, 2026-11-06).
+ */
+const fieldBlock = (block: HTMLElement, editor: HTMLElement): HTMLElement => {
+    const code = block.closest('pre')
+    if (code) {
+        const figure = code.closest('figure') as HTMLElement | null
+        return figure && editor.contains(figure) ? figure : code as HTMLElement
+    }
+    if (/^H[1-6]$/.test(block.tagName)) return block
+    const quote = block.closest('#ag-editor-id blockquote') as HTMLElement | null
+    if (quote) return quote
+    const item = block.closest('#ag-editor-id li') as HTMLElement | null
+    return item ?? block
 }
 
 /** What the guides show for a block: its space before and after, indent (the first line's too) and the text's width. */
@@ -50,7 +68,9 @@ export const measure = (block: HTMLElement): GuideMeasure => {
         after: px(style.marginBottom),
         indent: Math.max(0, Math.round(contentLeft - textLeft)),
         firstLine: px(style.textIndent),
-        width: editor.clientWidth - px(page.paddingLeft) - px(page.paddingRight),
+        // The page's width as the designer's Page width sets it: the whole page, its margins each side with it (the
+        // text's own was 100 px less, and the two read as one value disagreeing - the user, 2026-11-06).
+        width: editor.offsetWidth,
         fontSize: px(style.fontSize) || 16,
     }
 }
@@ -81,14 +101,18 @@ const draw = () => {
     const page = editor.getBoundingClientRect()
     const pageStyle = getComputedStyle(editor)
     const textLeft = page.left + px(pageStyle.paddingLeft)
-    // The text's width: a dashed edge each side, its value at the top.
+    // The page's width: a dashed edge each side, its value at the top; its margins (inside the width, outside the
+    // text) lightly tinted.
     const edge = 'position:fixed;top:0;bottom:0;width:0;border-left:1px dashed rgba(0,120,212,.55);'
-    for (const x of [textLeft, textLeft + m.width]) {
+    for (const x of [page.left, page.left + m.width]) {
         const line = document.createElement('div')
         line.style.cssText = edge + `left:${Math.round(x)}px;`
         layer.appendChild(line)
     }
-    band(textLeft, Math.max(0, r.top - m.before - 18), m.width, 0, 'transparent', `↔ ${Math.round(m.width)}px`)
+    const margin = 'rgba(0,120,212,.07)'
+    band(page.left, 0, px(pageStyle.paddingLeft), window.innerHeight, margin)
+    band(page.right - px(pageStyle.paddingRight), 0, px(pageStyle.paddingRight), window.innerHeight, margin)
+    band(page.left, Math.max(0, r.top - m.before - 18), m.width, 0, 'transparent', `↔ ${Math.round(m.width)}px`)
     const orange = 'rgba(246,178,107,.42)', green = 'rgba(147,196,125,.45)'
     if (m.before) band(r.left, r.top - m.before, r.width, m.before, orange, `↑ ${label(m.before, m.fontSize)}`)
     if (m.after) band(r.left, r.bottom, r.width, m.after, orange, `↓ ${label(m.after, m.fontSize)}`)
