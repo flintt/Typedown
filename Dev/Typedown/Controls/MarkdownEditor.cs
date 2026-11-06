@@ -297,11 +297,15 @@ namespace Typedown.Controls
             openingContent.Visibility = Visibility.Visible;
             openingText.Text = Locale.GetString("EditorOpening");
             var theme = ThemeFiles.Find(AppViewModel.SettingsViewModel.CustomTheme);
-            var foreground = theme == null ? null : (ThemeFiles.Brush(theme.Foreground) ?? ThemeFiles.Readable(theme.Background));
-            if (foreground != null) openingText.Foreground = foreground; else openingText.ClearValue(Microsoft.UI.Xaml.Controls.TextBlock.ForegroundProperty);
             // The page's own colour under every theme: the control's is set under a custom theme only, and a clear one
             // showed the page beneath - the document being left, or nothing yet.
-            opening.Background = new Microsoft.UI.Xaml.Media.SolidColorBrush(ServiceProvider.GetPageBackground());
+            var background = ServiceProvider.GetPageBackground();
+            // The words in a colour read against that page: under a built-in theme they took the window's, light words
+            // on a page not yet dark at a start (the built-in Dark theme, 2026-11-07).
+            var foreground = theme == null ? null : ThemeFiles.Brush(theme.Foreground) ?? ThemeFiles.Readable(theme.Background);
+            openingText.Foreground = foreground ?? new Microsoft.UI.Xaml.Media.SolidColorBrush(
+                background.R * 299 + background.G * 587 + background.B * 114 < 128000 ? Microsoft.UI.Colors.White : Windows.UI.Color.FromArgb(0xFF, 0x1A, 0x1A, 0x1A));
+            opening.Background = new Microsoft.UI.Xaml.Media.SolidColorBrush(background);
             opening.Visibility = Visibility.Visible;
         }
 

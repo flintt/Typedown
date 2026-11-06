@@ -52,8 +52,21 @@ namespace Typedown.Utilities
             var custom = Typedown.Core.Utilities.ThemeFiles.Find(settings.CustomTheme);
             if (Typedown.Core.Utilities.ThemeFiles.Brush(custom?.Background) is global::Microsoft.UI.Xaml.Media.SolidColorBrush customBackground)
                 return customBackground.Color;
-            return settings.EffectiveTheme == Typedown.Core.Enums.AppTheme.Black ? Colors.Black
-                : ui.ActualTheme == ElementTheme.Dark ? Color.FromArgb(0xFF, 0x28, 0x28, 0x28) : Color.FromArgb(0xFF, 0xF9, 0xF9, 0xF9);
+            // From the setting, not the window's theme: at a start the window was not dark yet, and the built-in Dark
+            // theme's "Opening..." stood in light grey with its white words unseen (the user, 2026-11-07). The system's
+            // own choice read from Windows when the setting follows it.
+            var theme = settings.EffectiveTheme;
+            var dark = theme == Typedown.Core.Enums.AppTheme.Dark
+                || (theme == Typedown.Core.Enums.AppTheme.Default && SystemIsDark(ui));
+            return theme == Typedown.Core.Enums.AppTheme.Black ? Colors.Black
+                : dark ? Color.FromArgb(0xFF, 0x28, 0x28, 0x28) : Color.FromArgb(0xFF, 0xF9, 0xF9, 0xF9);
+        }
+
+        // Windows' app mode: its background colour is black in dark mode. The window's own theme when it cannot be read.
+        private static bool SystemIsDark(UIViewModel ui)
+        {
+            try { return new UISettings().GetColorValue(UIColorType.Background).R < 0x80; }
+            catch (Exception) { return ui.ActualTheme == ElementTheme.Dark; }
         }
 
         public static bool GetUseLightTheme()
