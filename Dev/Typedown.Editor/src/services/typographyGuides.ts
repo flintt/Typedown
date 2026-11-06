@@ -61,7 +61,10 @@ export const measure = (block: HTMLElement): GuideMeasure => {
     // The indent as it is on the page: from the text's left edge to where this block's text begins - a list's
     // indent is its list's padding, a quote's its own, a nested item's all of them.
     const textLeft = editor.getBoundingClientRect().left + px(page.paddingLeft)
-    const contentLeft = block.getBoundingClientRect().left + px(style.borderLeftWidth) + px(style.paddingLeft)
+    // A quote's or a list item's text starts inside its padding (Quote indent, List indent); code's and a table's padding
+    // is their own inside, not an indent - shown as one, it was a value no field changes.
+    const own = /^(PRE|FIGURE|TABLE)$/.test(block.tagName)
+    const contentLeft = block.getBoundingClientRect().left + (own ? 0 : px(style.borderLeftWidth) + px(style.paddingLeft))
     return {
         kind: block.tagName.toLowerCase(),
         before: px(style.marginTop),
