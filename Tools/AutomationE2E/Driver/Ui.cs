@@ -105,7 +105,8 @@ internal static partial class Program
             GetWindowThreadProcessId(at, out var atProcess);
             var kind = new System.Text.StringBuilder(256);
             GetClassName(at, kind, 256);
-            return atProcess == process && kind.ToString() == "Xaml_WindowedPopupClass";
+            // The newer Windows App SDK's windowed popups (a NumberBox's spin buttons) are a bridge's window (hp job 290).
+            return atProcess == process && kind.ToString() is "Xaml_WindowedPopupClass" or "Microsoft.UI.Content.PopupWindowSiteBridge";
         }
         var under = WindowFromPoint(new POINT { X = x, Y = y });
         var ownPopup = OwnPopup(under);
