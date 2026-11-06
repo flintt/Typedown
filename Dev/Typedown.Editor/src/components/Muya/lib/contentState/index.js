@@ -168,6 +168,9 @@ class ContentState {
     // already: what the editor reports (the text and the caret's line) is read from the model, not the page.
     const { start, end } = this.cursor || {}
     const root = this.muya.container
+    // An editor taken off the page (a switch to source mode just after an edit whose caret comes a moment later): no
+    // page to put the caret on - it threw, reading the node of a block no longer there.
+    if (!root || !root.isConnected) return
     const progressive = this.stateRender.progressive
     if (progressive && root && ((start && !root.querySelector(`#${start.key}`)) || (end && !root.querySelector(`#${end.key}`)))) {
       progressive.cursorPending = true

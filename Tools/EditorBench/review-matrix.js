@@ -143,6 +143,10 @@ if (workers > 1 && !docIndexes) runWorkers();
 else (async () => {
     const started = Date.now();
     const { page, errors, mode, flush, pause, close } = await openEditor();
+    // Where each page error happened, with its stack: the harness keeps the message only.
+    let currentCell = 'start';
+    const errorPlaces = [];
+    page.on('pageerror', e => errorPlaces.push(`${currentCell}: ${String(e.stack || e.message).split('\n').slice(0, 9).join(' | ')}`));
     const rows = [];
     let loadId = 1000;
     const review = () => page.evaluate(() => window.__typedownReview());
@@ -228,6 +232,7 @@ else (async () => {
         if (docIndexes ? !docIndexes.includes(di) : only && !only.some(o => d.name.startsWith(o))) continue;
         for (const m of modes) {
             const visual = m === 'visual';
+            currentCell = `${d.name}|${m}|load`;
             await mode(!visual, false);
             // 1: loaded, nothing revised.
             await load(d.text, d.text);
@@ -245,6 +250,7 @@ else (async () => {
                     if (e.visualOnly && !visual) continue;
                     const row = { doc: d.name, mode: m, place, edit: name, result: 'ok', n: 0, marked: 0, paths: null, why: [] };
                     const errorsBefore = errors.length;
+                    currentCell = cellKey(row);
                     rows.push(row);
                     summary.cells++;
                     try {
@@ -336,6 +342,7 @@ else (async () => {
     const runFlows = !noFlows && (!only || only.includes('flows'));
     const flow = async (name, run) => {
         if (!runFlows) return;
+        currentCell = 'flow: ' + name;
         const row = { doc: 'para', mode: 'flow', place: '-', edit: name, result: 'ok', n: 0, marked: 0, paths: null, why: [] };
         try { await run(row); } catch (err) { row.result = 'FAIL'; row.why.push('error ' + String(err.message || err).slice(0, 120)); }
         rows.push(row); flows.push(row);
@@ -433,10 +440,10 @@ else (async () => {
     await close();
     if (docIndexes) {
         // A worker's: the rows to the process that started it.
-        fs.writeFileSync(jsonOut, JSON.stringify({ rows, errors }));
+        fs.writeFileSync(jsonOut, JSON.stringify({ rows, errors: errorPlaces.length ? errorPlaces : errors }));
         process.exit(0);
     }
-    report(rows, errors, Date.now() - started);
+    report(rows, errorPlaces.length ? errorPlaces : errors, Date.now() - started);
 })();
 
 function firstDiff(a, b) {
