@@ -21,6 +21,12 @@
              edit may rewrite part of this document (the page says when, UIViewModel.FirstEditNotice), and an export
              written. -->
         <StackPanel Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="16" Spacing="8">
+            <!-- An edition's card (EditionHooks.ShowCard): in the notices' own frame, its content the edition's. -->
+            <Border x:Name="EditionCard" MaxWidth="560" Visibility="Collapsed"
+                    Padding="16,10,8,12" CornerRadius="8" BorderThickness="1"
+                    Background="{ThemeResource SolidBackgroundFillColorTertiary}" BorderBrush="{ThemeResource CardStrokeColorDefault}">
+                <ContentPresenter x:Name="EditionCardHost"/>
+            </Border>
             <Border x:Name="FirstEditNotice" MaxWidth="560"
                     Padding="16,10,8,10" CornerRadius="8" BorderThickness="1"
                     Background="{ThemeResource SolidBackgroundFillColorTertiary}" BorderBrush="{ThemeResource CardStrokeColorDefault}"

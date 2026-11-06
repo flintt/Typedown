@@ -192,6 +192,42 @@ namespace Typedown.Core.Utilities
         /// <summary>The id of the bar shown in the window, or null.</summary>
         public static string BarShown(AppViewModel app) => app != null && bars.TryGetValue(app, out var shown) ? shown.Id : null;
 
+        private static readonly System.Runtime.CompilerServices.ConditionalWeakTable<AppViewModel, EditorBar> cards = new();
+
+        /// <summary>
+        /// A card of the edition's at the window's bottom right, with the app's own notices there (the first edit's, an
+        /// export's), one at a time: for what is short and can wait, not worth a bar across the document (the user,
+        /// 2026-11-06). Its frame is the notices' own; <see cref="EditorBar.Content"/> is what goes in it. It stays while
+        /// the window does until <see cref="CloseCard"/> is called.
+        /// </summary>
+        public static void ShowCard(AppViewModel app, EditorBar card)
+        {
+            if (app == null || card == null) return;
+            if (cards.TryGetValue(app, out var shown) && shown != card)
+            {
+                cards.Remove(app);
+                try { shown.Closed?.Invoke(); } catch (Exception ex) { Log.WriteLocal("EditionCard", ex.ToString()); }
+            }
+            cards.AddOrUpdate(app, card);
+            CardChanged?.Invoke(app);
+        }
+
+        /// <summary>The window's card taken away, if it is the one with this id (null: whichever); its <see cref="EditorBar.Closed"/> is called.</summary>
+        public static void CloseCard(AppViewModel app, string id = null)
+        {
+            if (app == null || !cards.TryGetValue(app, out var shown) || (id != null && shown.Id != id)) return;
+            cards.Remove(app);
+            CardChanged?.Invoke(app);
+            try { shown.Closed?.Invoke(); } catch (Exception ex) { Log.WriteLocal("EditionCard", ex.ToString()); }
+        }
+
+        /// <summary>The id of the card shown in the window, or null.</summary>
+        public static string CardShown(AppViewModel app) => app != null && cards.TryGetValue(app, out var shown) ? shown.Id : null;
+
+        internal static EditorBar CardOf(AppViewModel app) => app != null && cards.TryGetValue(app, out var shown) ? shown : null;
+
+        internal static event Action<AppViewModel> CardChanged;
+
         internal static EditorBar BarOf(AppViewModel app) => app != null && bars.TryGetValue(app, out var shown) ? shown : null;
 
         internal static event Action<AppViewModel> BarChanged;
