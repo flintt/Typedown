@@ -133,6 +133,9 @@ const edits = {
         const r = window.__typedownReview();
         const problems = [];
         for (const rev of r.revisions) {
+            // Code is drawn again by its highlighting: a bar beside it, not its letters (parser/render/review.js).
+            const inCode = [...document.querySelectorAll('#ag-editor-id .ag-review-whole')].some(e => e.matches('.ag-code-content, pre *'))
+            if (inCode) continue
             if (rev.newText && /\S/.test(rev.newText)) {
                 const spans = [...document.querySelectorAll(`#ag-editor-id .ag-review-ins[data-rid="${rev.id}"]`)];
                 const whole = document.querySelector(`#ag-editor-id .ag-review-whole[data-rid="${rev.id}"]`);
@@ -170,6 +173,7 @@ const edits = {
                     if (e.not && e.not.includes(place)) continue;
                     if (e.visualOnly && !visual) continue;
                     const row = { doc: d.name, mode: m, place, edit: name, result: 'ok', n: 0, marked: 0, paths: null, why: [] };
+                    const errorsBefore = errors.length;
                     rows.push(row);
                     summary.cells++;
                     try {
@@ -229,6 +233,7 @@ const edits = {
                     } catch (err) {
                         fail(row, 'error ' + String(err.message || err).slice(0, 120));
                     }
+                    if (errors.length > errorsBefore) row.why.push('page error: ' + String(errors[errors.length - 1]).split('\n')[0].slice(0, 80));
                     if (row.result === 'ok') summary.ok++;
                     else if (row.result === 'FAIL') summary.fail++;
                 }
@@ -322,6 +327,8 @@ const edits = {
     });
 
     // CRLF, a BOM: the baseline as the file is on disk (what the host would have if it did not normalize).
+    // After the long document's load (its id 9001): a lower id is a stale load the page drops.
+    loadId = 10000;
     for (const d of docs.filter(x => x.raw && (!only || only.some(o => x.name.startsWith(o))))) {
         const raw = (d.raw.bom ? '﻿' : '') + (d.raw.crlf ? d.text.replace(/\n/g, '\r\n') : d.text);
         await mode(false, false);
