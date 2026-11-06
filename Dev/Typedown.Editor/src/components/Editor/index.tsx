@@ -516,6 +516,8 @@ const Editor: React.FC = () => {
     // the tab shortcut sent five hundred of them in a few seconds; every one was rendered in turn, the host
     // dropped their reports as stale, and the reader waited a minute for the last to come round. Only the
     // load the host still wants can matter, and the host's stale-report rule already says which that is.
+    // Review mode's state the host sent for a load not in yet (ReviewSet).
+    const deferredReviewRef = useRef<{ loadId: number, review: ReviewPayload | null } | null>(null)
     const pendingLoadRef = useRef<{ text: string, basePath: string, cursor?: any, scrollTop?: number | null, scrollAnchor?: ScrollAnchor | null, loadId?: number, hold?: number, review?: ReviewPayload | null } | null>(null)
 
     if (!holdRef.current) holdRef.current = new InputHold({
@@ -559,9 +561,12 @@ const Editor: React.FC = () => {
             pendingLoadRef.current = null
             if (!pending || isStaleLoad(pending.loadId)) return
             const { text, basePath, cursor, scrollTop, scrollAnchor, loadId, hold, review } = pending
-            // Review mode's state for the document coming (none: not in review), before its text is in.
+            // Review mode's state for the document coming (none: not in review), before its text is in; the host's newer
+            // word for this load, if it came first (ReviewSet below).
             reportReview()
-            setReview(review, true)
+            const deferred = deferredReviewRef.current
+            deferredReviewRef.current = null
+            setReview(deferred && deferred.loadId === loadId ? { ...(review ?? {}), ...deferred.review } as ReviewPayload : review, true)
             window.basePath = basePath
             loadIdRef.current = loadId
             appliedHoldRef.current = hold
@@ -622,6 +627,12 @@ const Editor: React.FC = () => {
     // Review mode (services/reviewSession.ts): the host's state for the document shown changed (turned on or off, the
     // revisions shown or hidden, a source filtered), or its status bar asks for something.
     useEffect(() => transport.addListener<{ review: ReviewPayload | null, loadId?: number }>('ReviewSet', ({ review, loadId }) => {
+        // For a load still on its way (the host turned review on just after opening the document): it goes in with
+        // that load, not into the document still shown. One for an older load is about another document.
+        if (typeof loadId === 'number' && typeof loadIdRef.current === 'number' && loadId > loadIdRef.current) {
+            deferredReviewRef.current = { loadId, review }
+            return
+        }
         if (typeof loadId === 'number' && loadId !== loadIdRef.current) return
         setReview(review, false)
     }), []);

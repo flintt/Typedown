@@ -128,6 +128,17 @@ const sha = text => crypto.createHash('sha256').update(text, 'utf8').digest('hex
         r = await review();
         check(r.revisions.length === 1 && r.revisions[0].id === 'kept1' && r.revisions[0].source === 'Bot', 'revisions kept by the host come back with their source', r.revisions);
         void kept;
+
+        // Turned on by the host just after it sent a document, before the page took the load in: on for that document.
+        await page.evaluate(() => {
+            delete window.__last.FileLoaded;
+            window.__deliver('LoadFile', { text: '# Late\n\nText.\n', loadId: 60, basePath: '/tmp', review: null });
+            window.__deliver('ReviewSet', { loadId: 60, review: { on: true, baseline: '# Late\n\nText.\n', revisions: [] } });
+        });
+        await page.waitForFunction(() => window.__last.FileLoaded?.loadId === 60, { timeout: 60000 });
+        await pause(400);
+        r = await review();
+        check(r.on && r.baseline === '# Late\n\nText.\n' && r.revisions.length === 0, 'review turned on for a load not in yet goes with it', r);
         check(errors.length === 0, 'no page errors', errors);
     } catch (e) {
         console.log('FAIL ' + (e && e.stack || e));
