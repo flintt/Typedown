@@ -153,11 +153,23 @@ const draw = () => {
 
 const schedule = () => { if (!frame) frame = requestAnimationFrame(draw) }
 
+// Where the guides of the block shown are: the block, its space before and after, the labels above it (a narrow band's
+// label sits over the block before), across the page. While the pointer is in it the block stays shown - on its way to a
+// label the pointer crossed the block above, the guides went to that one and the label with them (hp job 274).
+const keeps = (x: number, y: number) => {
+    if (!target || !target.isConnected || !measured) return false
+    const r = target.getBoundingClientRect()
+    const page = document.getElementById('ag-editor-id')?.getBoundingClientRect()
+    return !!page && x >= page.left && x <= page.right && y >= r.top - measured.before - 24 && y <= r.bottom + measured.after + 4
+}
+
 const onPointer = (event: PointerEvent) => {
     lastPointer = { x: event.clientX, y: event.clientY }
     // On a label of the guides' own: the block it is for stays (it is not under the pointer, the label is).
     if (layer && event.target instanceof Node && layer.contains(event.target)) return
     const block = blockAt(document.elementFromPoint(event.clientX, event.clientY))
+    // Kept, unless the pointer went into a block inside the one shown (a nested quote, a nested list's item).
+    if (keeps(event.clientX, event.clientY) && !(block && block !== target && target?.contains(block))) return
     if (block === target) return
     target = block
     schedule()
