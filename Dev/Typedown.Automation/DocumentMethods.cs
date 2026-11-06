@@ -93,7 +93,7 @@ namespace Typedown.Automation
                 try
                 {
                     var edit = await host.EditDocumentAsync(info.DocumentId,
-                        new EditRequest { BaseRevision = info.Revision, Edit = _ => text!, AllowUnknown = allowUnknown }, reveal, ct).ConfigureAwait(false);
+                        new EditRequest { BaseRevision = info.Revision, Edit = _ => text!, AllowUnknown = allowUnknown, Source = SourceOf(c) }, reveal, ct).ConfigureAwait(false);
                     result["revision"] = edit.Revision;
                     result["contentHash"] = edit.ContentHash;
                     result["normalization"] = Normalization(edit.Normalization);
@@ -153,6 +153,7 @@ namespace Typedown.Automation
                     Edit = edit,
                     AllowUnknown = PolicyAllowsUnknown(p),
                     Save = p.OptionalBoolean("save", false),
+                    Source = SourceOf(c),
                 };
                 if (request.Save && !c.Session.HasScope(Scopes.DocumentSave))
                     throw new AutomationException(AutomationErrorKind.scope_required, "Saving needs the 'document.save' scope.",
@@ -164,6 +165,10 @@ namespace Typedown.Automation
                 Wrote(c, documentId);
                 return await Presented(documentId, WriteResult(result), awaitPresentation, ct).ConfigureAwait(false);
             }
+
+            // The client as review mode names its revisions: its program and session.
+            static EditSource? SourceOf(MethodContext c) =>
+                c.Session.Client == null ? null : new EditSource(c.Session.Client.Name, c.Session.ClientSessionId);
 
             async Task<JToken?> UndoAsync(MethodContext c, bool redo, CancellationToken ct)
             {

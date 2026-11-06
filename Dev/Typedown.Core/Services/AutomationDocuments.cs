@@ -16,7 +16,7 @@ namespace Typedown.Core.Services
     /// runs on the tab's window dispatcher: the coordinator is started there and stays there. The active tab is edited
     /// through its editor page; a background tab only has the snapshot the tab holds.
     /// </summary>
-    public sealed class AutomationDocument : IEditableDocument
+    public sealed class AutomationDocument : IEditableDocument, IEditSourceAware
     {
         public const int FlushTimeoutMs = 2000;
         public const int ApplyTimeoutMs = 10000;
@@ -55,11 +55,16 @@ namespace Typedown.Core.Services
         // The load the page was on when it applied the edit: another load since means it no longer shows the edit.
         private int appliedLoadId;
 
+        // The client the edit in flight is from (review mode): told to the page with it, and to the edition once committed.
+        private EditSource editSource;
+
+        public void NoteEditSource(EditSource source) => editSource = source;
+
         public async Task<ApplyReply> ApplyInEditorAsync(ApplyCommand command, CancellationToken cancellationToken)
         {
             Editor.HoldEditorReports();
             appliedLoadId = Editor.LoadId;
-            var reply = await Editor.ApplyDocumentEditAsync(command.OperationId, command.TargetRevision, command.BaseContentHash, command.Text, command.ScrollToChange, ApplyTimeoutMs);
+            var reply = await Editor.ApplyDocumentEditAsync(command.OperationId, command.TargetRevision, command.BaseContentHash, command.Text, command.ScrollToChange, ApplyTimeoutMs, command.Source);
             if (reply == null) throw new TimeoutException("The editor did not answer ApplyDocumentEdit.");
             switch (reply["outcome"]?.ToString())
             {
@@ -113,6 +118,10 @@ namespace Typedown.Core.Services
             }
             if (tab.Revision != revision)
                 Log.Debug($"automation: {operationId} committed revision {tab.Revision}, expected {revision}");
+            // Review mode: a write to a tab in the background has no page to mark it; the edition notes who it is from.
+            if (editSource != null)
+                EditionHooks.ReportAutomationEdit(new AutomationEditReport { Window = app, Path = tab.FilePath, DocumentId = tab.DocumentId, Name = editSource.Name, SessionId = editSource.SessionId, Active = IsActive });
+            editSource = null;
             tab.IsPreview = false; // an edited tab is no longer a throwaway preview
         }
 

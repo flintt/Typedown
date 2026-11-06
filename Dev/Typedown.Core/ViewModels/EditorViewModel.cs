@@ -127,6 +127,13 @@ namespace Typedown.Core.ViewModels
             // where it is drawn at once): no "Opening…" over it from then on.
             EventCenter.GetObservable<EditorEventArgs>("LoadPreviewShown").Subscribe(x => { if (x.Args?["loadId"]?.Value<int?>() == LoadId) { LongLoadPending = false; LeavingCover = false; } });
             EventCenter.GetObservable<EditorEventArgs>("DocumentEditApplied").Subscribe(x => OnDocumentEditApplied(x.Args));
+            // Review mode's revisions as the page has them now (services/reviewSession.ts): for the edition, which keeps them
+            // with the document. Only those of the load shown: a report of the document just left is about another one.
+            EventCenter.GetObservable<EditorEventArgs>("ReviewState").Subscribe(x =>
+            {
+                if (x.Args is not JObject state || state["loadId"]?.Value<int?>() != LoadId) return;
+                EditionHooks.ReportReview(new ReviewReport { Window = AppViewModel, Path = FileViewModel.FilePath, DocumentId = ServiceProvider.GetService<TabsViewModel>()?.ActiveTab?.DocumentId, State = state });
+            });
             // How the page drew a long document (a part at a time or all at once, from what), for the log. The anchor (the
             // block that was at the top of the window) by its place and length: its text is the document's.
             EventCenter.GetObservable<EditorEventArgs>("LoadDrawnWhole").Subscribe(x => Log.Debug($"load {x.Args?["loadId"]}: all drawn after {x.Args?["ms"]} ms in {x.Args?["slices"]} slices"));
@@ -305,8 +312,18 @@ namespace Typedown.Core.ViewModels
                 ScrollTop = Settings.RememberCursorPosition ? CursorMemory.GetScroll(FileViewModel.FilePath) : null,
                 ScrollAnchor = Settings.RememberCursorPosition ? ScrollAnchorOf(FileViewModel.FilePath) : null,
                 LoadId = NoteLoad(Markdown, pageEmpty: true),
+                Review = ReviewForLoad(),
             };
         }
+
+        /// <summary>Review mode's state for the document being loaded, as the edition has it (null: not in review).</summary>
+        private object ReviewForLoad() => EditionHooks.ReviewFor(AppViewModel, FileViewModel.FilePath, ServiceProvider.GetService<TabsViewModel>()?.ActiveTab?.DocumentId);
+
+        /// <summary>Review mode's state for the document shown changed (turned on or off, shown, filtered): the page takes it.</summary>
+        public void PostReview(object review) => MarkdownEditor?.PostMessage("ReviewSet", new { review, loadId = LoadId });
+
+        /// <summary>One of review mode's commands for the page: next, previous, accept, reject, acceptAll, rejectAll (of one source, '' the reader).</summary>
+        public void PostReviewCommand(string command, string source = null) => MarkdownEditor?.PostMessage("ReviewCommand", new { command, source });
 
         /// <summary>
         /// Documents this long take the page a noticeable while to draw: the editor says it is opening them, where the page
@@ -390,7 +407,7 @@ namespace Typedown.Core.ViewModels
             var scrollAnchor = Settings.RememberCursorPosition ? ScrollAnchorOf(FileViewModel.FilePath) : null;
             loadClock = text != null && text.Length > 200000 ? System.Diagnostics.Stopwatch.StartNew() : null;
             loadText = text;
-            MarkdownEditor?.PostMessage("LoadFile", new { text, basePath = FileViewModel.ImageBasePath, cursor, scrollTop, scrollAnchor, loadId = NoteLoad(text), hold = inputHold });
+            MarkdownEditor?.PostMessage("LoadFile", new { text, basePath = FileViewModel.ImageBasePath, cursor, scrollTop, scrollAnchor, loadId = NoteLoad(text), hold = inputHold, review = ReviewForLoad() });
             Log.Debug($"load {LoadId}: {System.IO.Path.GetFileName(FileViewModel.FilePath) ?? "untitled"}, {text?.Length ?? 0} chars, from {Callers()}");
         }
 
@@ -1205,14 +1222,16 @@ namespace Typedown.Core.ViewModels
         private readonly Dictionary<int, TaskCompletionSource<string>> reloadWaiters = new();
 
         /// <summary>Hands an automation edit to the page and waits for its reply; null when it did not answer in time.</summary>
-        public async Task<JToken> ApplyDocumentEditAsync(string operationId, long targetRevision, string baseContentHash, string text, bool scrollToChange, int timeoutMs)
+        public async Task<JToken> ApplyDocumentEditAsync(string operationId, long targetRevision, string baseContentHash, string text, bool scrollToChange, int timeoutMs, Typedown.Automation.EditSource source = null)
         {
             if (MarkdownEditor == null) return null;
             var waiter = new TaskCompletionSource<JToken>(TaskCreationOptions.RunContinuationsAsynchronously);
             editWaiters[operationId] = (LoadId, waiter);
             try
             {
-                MarkdownEditor.PostMessage("ApplyDocumentEdit", new { operationId, targetRevision, baseContentHash, text, scrollToChange, loadId = LoadId });
+                // Who it is from, for review mode's revisions (services/reviewSession.ts).
+                var from = source == null ? null : new { name = source.Name, session = source.SessionId };
+                MarkdownEditor.PostMessage("ApplyDocumentEdit", new { operationId, targetRevision, baseContentHash, text, scrollToChange, loadId = LoadId, source = from });
                 var finished = await Task.WhenAny(waiter.Task, Task.Delay(timeoutMs));
                 return finished == waiter.Task ? waiter.Task.Result : null;
             }
@@ -1352,7 +1371,7 @@ namespace Typedown.Core.ViewModels
             reloadWaiters[loadId] = waiter;
             try
             {
-                MarkdownEditor.PostMessage("LoadFile", new { text, basePath = FileViewModel.ImageBasePath, cursor, scrollTop, loadId });
+                MarkdownEditor.PostMessage("LoadFile", new { text, basePath = FileViewModel.ImageBasePath, cursor, scrollTop, loadId, review = ReviewForLoad() });
                 var finished = await Task.WhenAny(waiter.Task, Task.Delay(timeoutMs));
                 return finished == waiter.Task ? waiter.Task.Result : null;
             }

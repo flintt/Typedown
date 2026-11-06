@@ -259,6 +259,64 @@ namespace Typedown.Core.Utilities
             }
         }
 
+        // ---- review mode ----
+
+        /// <summary>
+        /// Review mode's state for a document as it is loaded into a window's page (the window, the file - null for an
+        /// untitled one - and the document's id): an object the page takes as its review payload (services/reviewSession.ts),
+        /// or null when the document is not in review. Typedown sets none.
+        /// </summary>
+        public static Func<AppViewModel, string, string, object> ReviewState { get; set; }
+
+        internal static object ReviewFor(AppViewModel window, string path, string documentId)
+        {
+            try
+            {
+                return ReviewState?.Invoke(window, path, documentId);
+            }
+            catch (Exception ex)
+            {
+                Log.WriteLocal("EditionReview", ex.ToString());
+                return null;
+            }
+        }
+
+        /// <summary>The page's revisions of the document shown (review mode), as it reports them while they change. Raised on the window's thread.</summary>
+        public static event Action<ReviewReport> ReviewReported;
+
+        internal static void ReportReview(ReviewReport report)
+        {
+            try
+            {
+                ReviewReported?.Invoke(report);
+            }
+            catch (Exception ex)
+            {
+                Log.WriteLocal("EditionReview", ex.ToString());
+            }
+        }
+
+        /// <summary>Review mode's state for the document a window shows changed: its page takes it (null: no review).</summary>
+        public static void PostReview(AppViewModel window, object review) => window?.EditorViewModel?.PostReview(review);
+
+        /// <summary>One of review mode's commands for a window's page: next, previous, accept, reject, acceptAll, rejectAll (of one source, '' the reader).</summary>
+        public static void PostReviewCommand(AppViewModel window, string command, string source = null) => window?.EditorViewModel?.PostReviewCommand(command, source);
+
+        /// <summary>An automation client's edit was committed to a document (the one shown or a tab in the background). Raised on the window's thread.</summary>
+        public static event Action<AutomationEditReport> AutomationEdited;
+
+        internal static void ReportAutomationEdit(AutomationEditReport report)
+        {
+            try
+            {
+                AutomationEdited?.Invoke(report);
+            }
+            catch (Exception ex)
+            {
+                Log.WriteLocal("EditionAutomationEdit", ex.ToString());
+            }
+        }
+
         internal static void ReportWordCount(WordCountReport report)
         {
             try
@@ -385,6 +443,37 @@ namespace Typedown.Core.Utilities
         /// the same path), nobody having typed since: a change in it is not the reader's writing.
         /// </summary>
         public bool Automation { get; set; }
+    }
+
+    /// <summary>The page's review mode revisions of a window's document (<see cref="EditionHooks.ReviewReported"/>).</summary>
+    public sealed class ReviewReport
+    {
+        public AppViewModel Window { get; set; }
+
+        /// <summary>The document's file, or null for an untitled one.</summary>
+        public string Path { get; set; }
+
+        public string DocumentId { get; set; }
+
+        /// <summary>
+        /// The page's ReviewState: "revisions" (each with id, kind, baseStart, baseEnd, oldText, newText, source, session,
+        /// time, line, block), "inserted", "deleted", "sources" (name and count), "outcomes" since the last report (id,
+        /// outcome, at, source, kind, oldText, newText), and "baseline" when it changed (a revision accepted).
+        /// </summary>
+        public Newtonsoft.Json.Linq.JObject State { get; set; }
+    }
+
+    /// <summary>An automation client's edit committed (<see cref="EditionHooks.AutomationEdited"/>).</summary>
+    public sealed class AutomationEditReport
+    {
+        public AppViewModel Window { get; set; }
+        public string Path { get; set; }
+        public string DocumentId { get; set; }
+        /// <summary>The client's program name and session, as it declared them.</summary>
+        public string Name { get; set; }
+        public string SessionId { get; set; }
+        /// <summary>The document was the one shown (its page marked the edit itself), not a tab in the background.</summary>
+        public bool Active { get; set; }
     }
 
     /// <summary>An edition's panel beside the document (<see cref="EditionHooks.ShowSidePanel"/>).</summary>

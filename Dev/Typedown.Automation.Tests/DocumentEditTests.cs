@@ -118,6 +118,19 @@ namespace Typedown.Automation.Tests
         }
 
         [Fact]
+        public async Task The_client_an_edit_is_from_goes_to_the_page_with_it()
+        {
+            // Review mode marks the edit's revisions with the program's name (the page's ApplyDocumentEdit source).
+            var doc = new FakeDocument();
+            var request = Replace(0, "# new\n");
+            request.Source = new EditSource("Bot", "s1");
+            await coordinator.EditAsync(doc, request, CancellationToken.None);
+            Assert.Equal(("Bot", "s1"), (doc.LastApply!.Source!.Name, doc.LastApply.Source.SessionId));
+            await coordinator.EditAsync(doc, Replace(1, "# newer\n"), CancellationToken.None);
+            Assert.Null(doc.LastApply!.Source);
+        }
+
+        [Fact]
         public async Task A_stale_base_revision_changes_nothing()
         {
             var doc = new FakeDocument { Revision = 5 };

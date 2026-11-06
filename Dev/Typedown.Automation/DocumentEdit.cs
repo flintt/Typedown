@@ -61,17 +61,43 @@ namespace Typedown.Automation
         public NormalizationInfo? Normalization { get; }
     }
 
+    /// <summary>
+    /// Who asked for an edit: the automation client's program name and its session, as initialize declared them (never
+    /// proof of who it is). Review mode marks the edit's revisions with it.
+    /// </summary>
+    public sealed class EditSource
+    {
+        public EditSource(string name, string? sessionId)
+        {
+            Name = name;
+            SessionId = sessionId;
+        }
+
+        public string Name { get; }
+        public string? SessionId { get; }
+    }
+
+    /// <summary>A document that wants to know who an edit is from before it is applied and committed (review mode).</summary>
+    public interface IEditSourceAware
+    {
+        void NoteEditSource(EditSource? source);
+    }
+
     /// <summary>What the host hands the page for one edit (the page-side ApplyDocumentEdit message).</summary>
     public sealed class ApplyCommand
     {
-        public ApplyCommand(string operationId, long targetRevision, string baseContentHash, string text, bool scrollToChange = false)
+        public ApplyCommand(string operationId, long targetRevision, string baseContentHash, string text, bool scrollToChange = false, EditSource? source = null)
         {
             OperationId = operationId;
             TargetRevision = targetRevision;
             BaseContentHash = baseContentHash;
             Text = text;
             ScrollToChange = scrollToChange;
+            Source = source;
         }
+
+        /// <summary>The client the edit is from; null for the reader's own actions that go this way.</summary>
+        public EditSource? Source { get; }
 
         public string OperationId { get; }
         public long TargetRevision { get; }
@@ -173,6 +199,8 @@ namespace Typedown.Automation
         /// screen. The reader's cursor stays where it was.
         /// </summary>
         public bool ScrollToChange { get; set; }
+        /// <summary>The automation client the edit is from (null: the reader's own action, a version restored say).</summary>
+        public EditSource? Source { get; set; }
     }
 
     public sealed class EditResult
@@ -311,6 +339,7 @@ namespace Typedown.Automation
 
             // 4. Candidate revision; the pre-edit state is kept for the one rollback path.
             var targetRevision = document.Revision + 1;
+            (document as IEditSourceAware)?.NoteEditSource(request.Source);
             NormalizationInfo normalization;
             if (!document.IsActive)
             {
@@ -326,7 +355,7 @@ namespace Typedown.Automation
                 try
                 {
                     // 5-7. The page compares its live text with baseContentHash, applies, and reports.
-                    reply = await document.ApplyInEditorAsync(new ApplyCommand(operationId, targetRevision, baseHash, candidate, request.ScrollToChange), CancellationToken.None);
+                    reply = await document.ApplyInEditorAsync(new ApplyCommand(operationId, targetRevision, baseHash, candidate, request.ScrollToChange, request.Source), CancellationToken.None);
                     if (reply.Outcome == ApplyOutcome.Applied) await Barrier(EditBarrierPoints.AfterEditorMutationBeforeReport, document, operationId);
                 }
                 catch (Exception e) when (e is TimeoutException || e is OperationCanceledException)
