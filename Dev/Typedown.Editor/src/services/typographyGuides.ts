@@ -97,7 +97,20 @@ const band = (left: number, top: number, width: number, height: number, colour: 
         box.appendChild(tag)
     }
     layer!.appendChild(box)
+    // Not under the host's small panel: there a click meant for the label went into the panel's first field (hp job
+    // 274, w10 job 276) - moved to the panel's left. At the band's left it lay over the text's start instead.
+    const tag = box.firstElementChild as HTMLElement | null
+    if (tag && panelRect) {
+        const t = tag.getBoundingClientRect()
+        if (t.right > panelRect.left - 4 && t.left < panelRect.right && t.bottom > panelRect.top && t.top < panelRect.bottom) {
+            tag.style.right = 'auto'
+            tag.style.left = `${Math.max(2 - left, panelRect.left - 6 - t.width - left)}px`
+        }
+    }
 }
+
+// The host's small panel beside the block, in the page's px (TypographyPanel; null when it is not shown).
+let panelRect: { left: number, top: number, right: number, bottom: number } | null = null
 
 /**
  * The designer's field (the small panel's field id) that sets a value the guides show on a block of this kind, or null
@@ -380,6 +393,10 @@ export const setTypographyGuides = (value: boolean) => {
 
 export const installTypographyGuides = () => {
     transport.addListener<{ on?: boolean }>('TypographyGuides', args => setTypographyGuides(!!args?.on))
+    transport.addListener<{ x: number, y: number, width: number, height: number } | null>('TypographyPanel', args => {
+        panelRect = args ? { left: args.x, top: args.y, right: args.x + args.width, bottom: args.y + args.height } : null
+        schedule()
+    })
     // For the page checks: what the guides show now (null: nothing).
     ;(window as any).__typographyGuides = () => (on ? measured : null)
 }

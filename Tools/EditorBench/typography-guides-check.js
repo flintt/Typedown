@@ -51,6 +51,15 @@ const { openEditor } = require('./harness');
     // the block and the field for the small panel to show (the user: where is this value in the panel?).
     const fields = await page.evaluate(() => [...document.querySelectorAll('#td-typography-guides [data-field]')].map(t => t.dataset.field).sort());
     report(JSON.stringify(fields) === JSON.stringify(['Indent', 'ParagraphAfter', 'ParagraphBefore', 'Width']), 'a paragraph\'s labels name their fields', JSON.stringify(fields));
+    // The host's small panel over a label: the label keeps out from under it, to its left (under it, a click meant for the
+    // label went into the panel - hp jobs 274-277).
+    const before = await page.evaluate(() => document.querySelector('#td-typography-guides [data-field="ParagraphBefore"]').getBoundingClientRect().toJSON());
+    await page.evaluate(r => window.__deliver('TypographyPanel', { x: r.left - 20, y: r.top - 40, width: 260, height: 300 }), before);
+    await pause(150);
+    const moved = await page.evaluate(() => document.querySelector('#td-typography-guides [data-field="ParagraphBefore"]').getBoundingClientRect().toJSON());
+    report(moved.right <= before.left - 20, 'a label under the small panel moves to its left', `${JSON.stringify(before)} -> ${JSON.stringify(moved)}`);
+    await page.evaluate(() => window.__deliver('TypographyPanel', null));
+    await pause(150);
     const labelAt = await page.evaluate(() => { const r = document.querySelector('#td-typography-guides [data-field="ParagraphBefore"]').getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; });
     await page.mouse.move(labelAt.x, labelAt.y);
     await pause(150);
