@@ -18,7 +18,8 @@ import { applyHostBackground } from "services/theme";
 import { absoluteImageUrls, svgImagesAsPng } from "services/localPaths";
 import { diagramsToPictures } from "services/diagramPicture";
 import { markStartup, sendStartupMarks } from "services/startupMarks";
-import { command as reviewCommand, connectReviewHost, installReviewActions, noteChangeSource, refresh as refreshReview, reportNow as reportReview, ReviewPayload, setReview } from "services/reviewSession";
+import { markedMarkdown, markRendered } from "services/reviewExport";
+import { command as reviewCommand, revisionsForExport, connectReviewHost, installReviewActions, noteChangeSource, refresh as refreshReview, reportNow as reportReview, ReviewPayload, setReview } from "services/reviewSession";
 
 /** The style element with this id, appended to the head on first use. */
 const styleElement = (id: string) => {
@@ -198,10 +199,13 @@ const Editor: React.FC = () => {
     // PNG on white (the export's light theme), for a format that cannot show SVG. A [TOC] line is an empty
     // div.table-of-contents, for the host to fill with that format's own table of contents (it was left out). With
     // mathAsTex each formula is its TeX (span.math-tex, span.math-tex-display) rather than KaTeX's drawing.
-    useEffect(() => transport.addListener<{ token: number, diagramsAsPictures?: boolean, mathAsTex?: boolean }>('RenderXhtml', async ({ token, diagramsAsPictures, mathAsTex }) => {
+    useEffect(() => transport.addListener<{ token: number, diagramsAsPictures?: boolean, mathAsTex?: boolean, revisions?: boolean }>('RenderXhtml', async ({ token, diagramsAsPictures, mathAsTex, revisions }) => {
         flushRef.current?.()
         try {
-            const html = await new ExportHtml(markdownRef.current ?? '', { ...optionsRef.current, diagramsAsPictures, mathAsTex }).renderHtml('<div class="table-of-contents"></div>')
+            // Review mode's revisions, when the host keeps them (Word): marked in the text, turned into <ins> and <del>.
+            const marked = revisions ? revisionsForExport() : null
+            const source = markdownRef.current ?? ''
+            const html = await new ExportHtml(marked ? markedMarkdown(source, marked) : source, { ...optionsRef.current, diagramsAsPictures, mathAsTex }).renderHtml('<div class="table-of-contents"></div>')
             const body = new DOMParser().parseFromString(`<!DOCTYPE html><html><body>${html}</body></html>`, 'text/html').body
             if (diagramsAsPictures) {
                 // Local SVGs already visible in the editor are drawn into PNGs for a format that takes no SVG,
@@ -209,6 +213,7 @@ const Editor: React.FC = () => {
                 body.innerHTML = svgImagesAsPng(absoluteImageUrls(body.innerHTML))
                 await diagramsToPictures(body)
             }
+            if (marked) markRendered(body, marked)
             transport.postMessage('RenderedXhtml', { token, xhtml: new XMLSerializer().serializeToString(body) })
         } catch (e) {
             transport.postMessage('RenderedXhtml', { token, error: errorText(e) })

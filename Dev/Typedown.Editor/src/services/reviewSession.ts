@@ -4,6 +4,7 @@
 // bar), and reported back to the host, which keeps them with the document in the app's data.
 
 import transport from './transport'
+import { diffPaths } from './review'
 import {
     acceptAll, acceptInto, changedRegion, countRevisions, nextRevision, rejectAll, rejectFrom, Revision, revisionAt,
     RevisionSource, shiftAfterAccept, StoredRevision, storedOf, trackRevisions, YOU,
@@ -21,7 +22,7 @@ export interface ReviewPayload {
     /** Who the differences nobody is known for are from (a program's write to a tab in the background). */
     fallback?: RevisionSource | null
     /** The words the page shows, in the interface's language. */
-    labels?: { accept?: string, reject?: string, you?: string }
+    labels?: { accept?: string, reject?: string, you?: string, locale?: string }
 }
 
 /** How an editor shows the revisions: Muya's and CodeMirror's. Offsets are in the Markdown. */
@@ -68,7 +69,7 @@ interface State {
     lastText: string | null
     baselineChanged: boolean
     outcomes: ReviewOutcome[]
-    labels: { accept: string, reject: string, you: string }
+    labels: { accept: string, reject: string, you: string, locale?: string }
 }
 
 const state: State = {
@@ -106,7 +107,8 @@ export function setReview(payload: ReviewPayload | null | undefined, newDocument
     }
     const p = payload!
     if (newDocument || !state.on || typeof p.baseline === 'string') {
-        state.baseline = p.baseline ?? state.baseline
+        // As the editor holds text: LF, no byte order mark - a baseline taken from a CRLF file otherwise differed on every line.
+        state.baseline = (p.baseline ?? state.baseline).replace(/^\ufeff/, '').replace(/\r\n?/g, '\n')
         state.pending = p.revisions ?? (newDocument ? [] : state.revisions)
         state.revisions = []
         state.lastText = null
@@ -278,7 +280,11 @@ function actionsElement() {
         b.addEventListener('mousedown', e => { e.preventDefault(); e.stopPropagation(); act() })
         return b
     }
+    // Who made it and when, beside the buttons (the user, 2026-11-06: "同意或拒绝按钮旁边加时间和修改来源").
+    const meta = document.createElement('span')
+    meta.className = 'td-review-meta'
     actions.append(
+        meta,
         button('td-review-accept', '✓', () => { const r = byId(actionsFor); if (r) accept([r]) }),
         button('td-review-reject', '✗', () => { const r = byId(actionsFor); if (r) reject([r]) }),
     )
@@ -286,8 +292,18 @@ function actionsElement() {
     return actions
 }
 
+// The revision the buttons are for is outlined: with several revisions on one line, which one they act on.
+const CURRENT = 'td-review-current'
+
+function markCurrent(id: string | null) {
+    document.querySelectorAll('.' + CURRENT).forEach(e => e.classList.remove(CURRENT))
+    if (!id) return
+    document.querySelectorAll(`[data-rid="${id}"], [data-del-above-rid="${id}"], [data-del-below-rid="${id}"]`).forEach(e => e.classList.add(CURRENT))
+}
+
 function hideActions() {
     actionsFor = null
+    markCurrent(null)
     if (actions) actions.style.display = 'none'
 }
 
@@ -297,11 +313,21 @@ export function showActionsFor(id: string | null) {
     const rect = view?.rectOf(id)
     if (!rect) return hideActions()
     const el = actionsElement()
-    const [accept, reject] = Array.from(el.children) as HTMLElement[]
-    accept.title = state.labels.accept
-    reject.title = state.labels.reject
-    accept.setAttribute('aria-label', state.labels.accept)
-    reject.setAttribute('aria-label', state.labels.reject)
+    const [meta, accept, reject] = Array.from(el.children) as HTMLElement[]
+    // Each revision its own buttons: what they act on said in their tooltips, the revision outlined.
+    const r = byId(id)
+    const what = r ? (r.newText || r.oldText).replace(/\s+/g, ' ').trim().slice(0, 40) : ''
+    accept.title = what ? `${state.labels.accept}: ${what}` : state.labels.accept
+    reject.title = what ? `${state.labels.reject}: ${what}` : state.labels.reject
+    accept.setAttribute('aria-label', accept.title)
+    reject.setAttribute('aria-label', reject.title)
+    el.dataset.for = id
+    if (r) {
+        const who = r.source || state.labels.you
+        meta.textContent = `${who} · ${revisionTime(r.time, state.labels.locale)}`
+        meta.title = [who, new Date(r.time).toLocaleString(state.labels.locale || undefined), r.session ? `#${r.session}` : ''].filter(Boolean).join(' · ')
+    } else meta.textContent = ''
+    markCurrent(id)
     el.style.display = 'flex'
     const editor = document.querySelector('#ag-editor-id') ?? document.querySelector('.CodeMirror-lines')
     const column = editor?.getBoundingClientRect()
@@ -313,6 +339,19 @@ export function showActionsFor(id: string | null) {
     el.style.top = `${Math.round(rect.top + window.scrollY)}px`
     actionsFor = id
     quietUntilOther = null
+}
+
+/**
+ * A revision's time as its buttons say it: today's as hours and minutes, this year's with the day, older ones with the
+ * year - in the interface's language's way (the host gives its locale). A revision written to again has the last time.
+ */
+export function revisionTime(time: number, locale?: string, now = new Date()): string {
+    const when = new Date(time)
+    const loc = locale || undefined
+    const hm: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit' }
+    if (when.toDateString() === now.toDateString()) return when.toLocaleTimeString(loc, hm)
+    if (when.getFullYear() === now.getFullYear()) return when.toLocaleString(loc, { month: 'numeric', day: 'numeric', ...hm })
+    return when.toLocaleString(loc, { year: 'numeric', month: 'numeric', day: 'numeric', ...hm })
 }
 
 let hoverTimer = 0
@@ -347,9 +386,17 @@ export function installReviewActions() {
 
 let hovering = false
 
+/** The revisions an export keeps (Word's own revisions), all of them whatever is shown; null when not in review. */
+export function revisionsForExport(): Revision[] | null {
+    if (!state.on || !state.revisions.length) return null
+    if (host && host.text() !== state.lastText) refresh()
+    return state.revisions
+}
+
 /** For page checks: the state as the page holds it. */
-;(window as any).__typedownReview = () => ({
+(window as any).__typedownReview = () => ({
     on: state.on, show: state.show, filter: state.filter, baseline: state.baseline,
     revisions: state.revisions.map(r => ({ id: r.id, kind: r.kind, oldText: r.oldText, newText: r.newText, source: r.source, curStart: r.curStart })),
     actionsFor,
+    paths: { ...diffPaths },
 })

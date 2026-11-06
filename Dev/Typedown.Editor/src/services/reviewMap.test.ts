@@ -36,14 +36,50 @@ test('a new paragraph has the bar; a deleted one is a strip above the next', () 
     expect(m.get('c')!.deletedAbove!.map(d => d.text)).toEqual(['two'])
 })
 
-test('a word deleted inside a line is shown where it was, at the line end after the last character', () => {
+test('a word deleted inside a line is shown where it was: after the character before it', () => {
     let { marks: m } = marks('keep this word\n', 'keep word\n', [{ key: 'p', text: 'keep word' }])
     const [seg] = m.get('p')!.segments
     expect(seg.inserted).toBe(false)
-    expect(['this ', ' this']).toContain(seg.deletedBefore)
+    // Drawn right after the character before the deletion: its place, whichever side of the space the diff put it.
+    const text = 'keep word'
+    expect(text.slice(0, seg.start + 1) + (seg.deletedAfter ?? '')).toMatch(/^keep ?(this ?)$/)
     ;({ marks: m } = marks('keep this\n', 'keep\n', [{ key: 'p', text: 'keep' }]))
     expect(m.get('p')!.segments[0].deletedAfter).toBe(' this')
     expect(m.get('p')!.segments[0].start).toBe(3)
+})
+
+test('a deletion beside a mark the editor hides is drawn on a character that shows', () => {
+    // Where the deletion was, and the leaf's text: the mark must be on a character that is not *, `, [ or the like.
+    const cases: [string, string, string][] = [
+        ['a x **bold** c\n', 'a **bold** c\n', 'a **bold** c'],
+        ['a **bold** x c\n', 'a **bold** c\n', 'a **bold** c'],
+        ['see x [link](http://e.com) end\n', 'see [link](http://e.com) end\n', 'see [link](http://e.com) end'],
+        ['run x `code` now\n', 'run `code` now\n', 'run `code` now'],
+        ['# Big x title\n', '# Big title\n', '# Big title'],
+        ['x **start** here\n', '**start** here\n', '**start** here'],
+        ['end **here** x\n', 'end **here**\n', 'end **here**'],
+    ]
+    for (const [baseline, current, leaf] of cases) {
+        const { revisions, marks: m } = marks(baseline, current, [{ key: 'p', text: leaf }])
+        const seg = m.get('p')!.segments.find(s => s.deletedBefore || s.deletedAfter)!
+        expect(seg).toBeTruthy()
+        expect(leaf[seg.start]).not.toMatch(/[*`[\]()#]/)
+        // The place it is drawn at, in the leaf's text, is where the deletion was or only marks away from it.
+        const drawnAt = seg.deletedAfter ? seg.start + 1 : seg.start
+        const at = revisions[0].curStart - (current.indexOf(leaf))
+        const between = leaf.slice(Math.min(at, drawnAt), Math.max(at, drawnAt))
+        expect(between).toMatch(/^[*`[\]()#]*$/)
+    }
+})
+
+test('two revisions side by side in a run keep a mark each', () => {
+    // An insertion of the program's and the reader's deletion right inside it: the deletion has its own mark.
+    const baseline = 'one two three\n'
+    let revisions = trackRevisions(baseline, 'one two NEW three\n', [], { from: 8, to: 12, source: { name: 'Bot' }, time: 1 })
+    revisions = trackRevisions(baseline, 'one NEW three\n', revisions, { from: 4, to: 4, oldTo: 8, source: YOU, time: 2 })
+    const m = leafMarks(mapLeaves('one NEW three\n', [{ key: 'p', text: 'one NEW three' }]), revisions, 'one NEW three\n')
+    const ids = new Set(m.get('p')!.segments.map(s => s.rid))
+    expect(ids.size).toBe(revisions.length)
 })
 
 test('the paragraphs deleted at the end are below the last leaf', () => {

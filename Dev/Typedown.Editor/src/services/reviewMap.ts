@@ -23,8 +23,9 @@ interface Piece {
 
 export interface LeafMap {
     pieces: Piece[]
-    /** Each leaf's text length, by key, and the leaves in order. */
+    /** Each leaf's text length and text, by key, and the leaves in order. */
     lengths: Map<string, number>
+    texts: Map<string, string>
     order: string[]
 }
 
@@ -35,10 +36,12 @@ const GAP = /^[\s>*+\-\d.)|:#`~[\]xX$=]*$/
 export function mapLeaves(markdown: string, leaves: Leaf[]): LeafMap {
     const pieces: Piece[] = []
     const lengths = new Map<string, number>()
+    const texts = new Map<string, string>()
     const order: string[] = []
     let pos = 0
     for (const leaf of leaves) {
         lengths.set(leaf.key, leaf.text.length)
+        texts.set(leaf.key, leaf.text)
         order.push(leaf.key)
         let at = 0
         for (const line of leaf.text.split('\n')) {
@@ -52,7 +55,7 @@ export function mapLeaves(markdown: string, leaves: Leaf[]): LeafMap {
             at += line.length + 1
         }
     }
-    return { pieces, lengths, order }
+    return { pieces, lengths, texts, order }
 }
 
 /** The leaf place of a Markdown offset: in a line of a leaf (its end too), or else the start of the next one. */
@@ -169,36 +172,66 @@ export function leafMarks(map: LeafMap, revisions: Revision[], current: string):
             // A replacement: the deleted text before the inserted run.
             const seg = m.segments.find(s => s.rid === r.id && s.start === point.start)
             if (seg) seg.deletedBefore = text
-        } else if (point.start < length) m.segments.push({ start: point.start, end: point.start + 1, rid: r.id, inserted: false, deletedBefore: text, source: r.source })
-        else if (length > 0) m.segments.push({ start: length - 1, end: length, rid: r.id, inserted: false, deletedAfter: text, source: r.source })
-        else (m.deletedAbove ??= []).push({ text, rid: r.id, source: r.source })
+            continue
+        }
+        const place = deletionPlace(map.texts.get(point.key) ?? '', point.start)
+        if (place) m.segments.push({ start: place.at, end: place.at + 1, rid: r.id, inserted: false, ...(place.after ? { deletedAfter: text } : { deletedBefore: text }), source: r.source })
+        else if (length === 0) (m.deletedAbove ??= []).push({ text, rid: r.id, source: r.source })
     }
     for (const m of all.values()) m.segments = settle(m.segments)
     return all
 }
 
-// The runs of a leaf sorted and made not to overlap: a deletion's mark on a character an insertion covers joins the
-// insertion's run there (split where needed).
+// The marks the visual editor may hide (bold, emphasis, code, links, math, escapes, headings): a deletion is drawn on a
+// character beside it that shows - on one of these it was drawn inside the hidden mark, out of sight, or where the
+// mark showed once the caret came in (the user, 2026-11-06: "删除的文字跑到不是原本它的位置").
+const MAYBE_HIDDEN = /[*_~=`[\]()<>!$^\\#:|{}]/
+
+/**
+ * Where to draw a deletion at offset `k` of a leaf's text: after the character before it (the place right after that
+ * character is the deletion's place), else before the character at it, each only where that character is not a mark the
+ * editor may hide; else the nearest character that is not one, on the side the deletion is. Null for an empty leaf.
+ */
+export function deletionPlace(text: string, k: number): { at: number, after: boolean } | null {
+    if (!text.length) return null
+    k = Math.max(0, Math.min(k, text.length))
+    const shows = (i: number) => i >= 0 && i < text.length && !MAYBE_HIDDEN.test(text[i]) && text[i] !== '\n'
+    if (shows(k - 1)) return { at: k - 1, after: true }
+    if (shows(k)) return { at: k, after: false }
+    for (let j = k; j < text.length; j++) if (shows(j)) return { at: j, after: false }
+    for (let j = k - 1; j >= 0; j--) if (shows(j)) return { at: j, after: true }
+    return k < text.length ? { at: k, after: false } : { at: text.length - 1, after: true }
+}
+
+// The runs of a leaf sorted and made not to overlap. A deletion's mark on a character an insertion covers splits the
+// insertion's run there; the character takes the deletion's id when the insertion is another revision's, so that each
+// revision has a mark of its own to be pointed at (its buttons, a click), not the one it is drawn beside.
 function settle(segments: Segment[]): Segment[] {
-    const sorted = [...segments].sort((a, b) => a.start - b.start || (a.inserted === b.inserted ? 0 : a.inserted ? -1 : 1))
-    const out: Segment[] = []
-    for (const s of sorted) {
-        const last = out[out.length - 1]
-        if (!last || s.start >= last.end) { out.push({ ...s }); continue }
-        if (!s.inserted) {
-            // A deletion's mark inside an inserted run: the run split at the mark, the deleted text shown there.
-            if (s.start === last.start) { last.deletedBefore = (last.deletedBefore ?? '') + (s.deletedBefore ?? ''); last.deletedAfter = s.deletedAfter ?? last.deletedAfter; continue }
-            const tail: Segment = { ...last, start: s.start, deletedBefore: s.deletedBefore, deletedAfter: undefined }
-            const keepAfter = last.deletedAfter
-            last.end = s.start
-            last.deletedAfter = undefined
-            if (s.deletedAfter) tail.deletedAfter = s.deletedAfter
-            else tail.deletedAfter = keepAfter
-            out.push(tail)
+    let runs = segments.filter(s => s.inserted).sort((a, b) => a.start - b.start).map(s => ({ ...s }))
+    const marks = segments.filter(s => !s.inserted).sort((a, b) => a.start - b.start)
+    const loose: Segment[] = []
+    for (const d of marks) {
+        const c = d.start
+        const i = runs.findIndex(r => r.start <= c && c < r.end)
+        if (i < 0) {
+            const same = loose.find(l => l.start === c)
+            if (same) {
+                if (d.deletedBefore) same.deletedBefore = (same.deletedBefore ?? '') + d.deletedBefore
+                if (d.deletedAfter) same.deletedAfter = (same.deletedAfter ?? '') + d.deletedAfter
+            } else loose.push({ ...d })
             continue
         }
-        // Two insertions overlapping cannot happen (revisions do not overlap); one is cut short to be safe.
-        if (s.end > last.end) out.push({ ...s, start: last.end })
+        const r = runs[i]
+        const own = r.rid === d.rid
+        const pieces: Segment[] = []
+        if (r.start < c) pieces.push({ ...r, end: c, deletedBefore: r.deletedBefore, deletedAfter: undefined })
+        const middle: Segment = { ...r, start: c, end: c + 1, rid: own ? r.rid : d.rid, source: own ? r.source : d.source,
+            deletedBefore: r.start === c ? r.deletedBefore : undefined, deletedAfter: c + 1 === r.end ? r.deletedAfter : undefined }
+        if (d.deletedBefore) middle.deletedBefore = (middle.deletedBefore ?? '') + d.deletedBefore
+        if (d.deletedAfter) middle.deletedAfter = d.deletedAfter + (middle.deletedAfter ?? '')
+        pieces.push(middle)
+        if (c + 1 < r.end) pieces.push({ ...r, start: c + 1, deletedBefore: undefined, deletedAfter: r.deletedAfter })
+        runs = [...runs.slice(0, i), ...pieces, ...runs.slice(i + 1)]
     }
-    return out.filter(s => s.end > s.start)
+    return [...runs, ...loose].sort((a, b) => a.start - b.start).filter(s => s.end > s.start)
 }

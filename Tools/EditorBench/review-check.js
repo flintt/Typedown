@@ -78,6 +78,27 @@ const sha = text => crypto.createHash('sha256').update(text, 'utf8').digest('hex
         const strip = await page.evaluate(() => [...document.querySelectorAll('#ag-editor-id .ag-review-del-above, #ag-editor-id .ag-review-del-below')].map(e => e.getAttribute('data-del-above') ?? e.getAttribute('data-del-below')));
         check(strip.some(s => s && s.includes('Third paragraph.')), 'the deleted paragraph is shown as a strip', { strip, r: await review(), text: await flush(), html: await page.evaluate(() => document.querySelector('#ag-editor-id').innerHTML.slice(-1500)) });
 
+        // Each revision its own buttons, with who made it and when beside them: the program's says its name and a time.
+        let meta = null;
+        for (let i = 0; i < 6 && !(meta && meta.includes('Bot')); i++) {
+            await page.evaluate(() => window.__deliver('ReviewCommand', { command: 'next' }));
+            await pause(250);
+            meta = await page.evaluate(() => document.querySelector('#td-review-actions .td-review-meta')?.textContent ?? null);
+        }
+        check(meta && meta.includes('Bot') && /\d{1,2}:\d\d/.test(meta), 'the buttons say the revision\'s source and time', meta);
+        const outlined = await page.evaluate(() => [...document.querySelectorAll('.td-review-current')].map(e => e.getAttribute('data-rid') || e.getAttribute('data-del-above-rid') || e.getAttribute('data-del-below-rid')));
+        const forId = await page.evaluate(() => document.getElementById('td-review-actions').dataset.for);
+        check(outlined.length > 0 && outlined.every(id => id === forId), 'the revision the buttons are for is outlined, and only it', { outlined, forId });
+
+        // Rendered for Word: the revisions as <ins> and <del> with their source and time.
+        await page.evaluate(() => { delete window.__last.RenderedXhtml; window.__deliver('RenderXhtml', { token: 77, revisions: true }) });
+        await page.waitForFunction(() => window.__last.RenderedXhtml?.token === 77, { timeout: 30000 });
+        const xhtml = await page.evaluate(() => window.__last.RenderedXhtml.xhtml);
+        check(/<ins[^>]*data-rev-source="Bot"/.test(xhtml) && /data-rev-para="del"|<del[^>]*data-rev-source="Bot"/.test(xhtml) && !/[\ue000-\ue005]/.test(xhtml), 'rendered for Word: <ins> and <del> with the source', xhtml.slice(0, 400));
+        await page.evaluate(() => { delete window.__last.RenderedXhtml; window.__deliver('RenderXhtml', { token: 78 }) });
+        await page.waitForFunction(() => window.__last.RenderedXhtml?.token === 78, { timeout: 30000 });
+        check(!/data-rev/.test(await page.evaluate(() => window.__last.RenderedXhtml.xhtml)), 'rendered without revisions when not asked');
+
         // Accept all of the program's: into the baseline, the reader's stays.
         await page.evaluate(() => { delete window.__last.ReviewState; window.__deliver('ReviewCommand', { command: 'acceptAll', source: 'Bot' }) });
         await pause(400);
@@ -93,7 +114,7 @@ const sha = text => crypto.createHash('sha256').update(text, 'utf8').digest('hex
         await page.evaluate(() => window.__deliver('ReviewCommand', { command: 'next' }));
         await pause(300);
         const actions = await page.evaluate(() => { const a = document.getElementById('td-review-actions'); return a && getComputedStyle(a).display !== 'none' ? a.querySelector('.td-review-accept').title : null });
-        check(actions === 'Accept', 'the buttons show beside the revision the caret went to', { actions, r: await review(), sel: await page.evaluate(() => { const s = getSelection(); return s.anchorNode && (s.anchorNode.parentElement.outerHTML.slice(0, 200) + ' @' + s.anchorOffset) }) });
+        check(typeof actions === 'string' && actions.startsWith('Accept'), 'the buttons show beside the revision the caret went to', { actions, r: await review(), sel: await page.evaluate(() => { const s = getSelection(); return s.anchorNode && (s.anchorNode.parentElement.outerHTML.slice(0, 200) + ' @' + s.anchorOffset) }) });
         await page.keyboard.down('Alt');
         await page.keyboard.press('Backspace');
         await page.keyboard.up('Alt');
@@ -128,6 +149,12 @@ const sha = text => crypto.createHash('sha256').update(text, 'utf8').digest('hex
         r = await review();
         check(r.revisions.length === 1 && r.revisions[0].id === 'kept1' && r.revisions[0].source === 'Bot', 'revisions kept by the host come back with their source', r.revisions);
         void kept;
+
+        // A word deleted right before bold, a link, code: drawn on a character that shows, not inside the hidden marks.
+        await loadInReview('Plain **bold** and [a link](http://e.com) end.\n', { baseline: 'Plain x **bold** and y [a link](http://e.com) end z `c`.\n' });
+        await loadInReview('Plain **bold** and [a link](http://e.com) end `c`.\n', { baseline: 'Plain x **bold** and y [a link](http://e.com) end z `c`.\n' });
+        const hidden = await page.evaluate(() => [...document.querySelectorAll('#ag-editor-id [data-del-before], #ag-editor-id [data-del-after]')].map(e => ({ text: e.textContent, hidden: !!e.closest('.ag-hide') })));
+        check(hidden.length === 3 && hidden.every(h => !h.hidden), 'deletions beside hidden marks are drawn where they show', hidden);
 
         // Turned on by the host just after it sent a document, before the page took the load in: on for that document.
         await page.evaluate(() => {

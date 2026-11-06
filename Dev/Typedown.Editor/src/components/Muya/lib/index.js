@@ -12,6 +12,7 @@ import { wordCount } from './utils'
 import ExportMarkdown from './utils/exportMarkdown'
 import ExportHtml from '../../../services/exportHtml'
 import ToolTip from './ui/tooltip'
+import selection from './selection'
 import '../../../assets/styles/index.css'
 
 // A top-level block's content without its identity (keys and links to its neighbours, and the parent a blank-line
@@ -835,8 +836,21 @@ class Muya {
     if (caretTop && tops.has(caretTop) && !this.options.readOnly && this.container.contains(document.activeElement)) contentState.setCursor()
   }
 
-  /** The caret's leaf and place in it, or null. */
+  /**
+   * The caret's leaf and place in it (the start of a selection), or null: from the page's selection where it is in the
+   * editor - the model's caret is brought up to date only by Muya's own handlers, a moment later, and the buttons and
+   * keys of a revision acted on the one the caret was in before (the user, 2026-11-06).
+   */
   reviewCaret() {
+    try {
+      const sel = document.getSelection()
+      if (sel && sel.rangeCount && this.container.contains(sel.anchorNode)) {
+        const { start } = selection.getCursorRange() || {}
+        if (start && start.key) return { key: start.key, offset: start.offset }
+      }
+    } catch (err) {
+      console.log(err)
+    }
     const { start } = this.contentState.cursor || {}
     return start && start.key ? { key: start.key, offset: start.offset } : null
   }

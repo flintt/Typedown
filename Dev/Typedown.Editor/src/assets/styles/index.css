@@ -1810,6 +1810,16 @@ span.ag-footnote-backlink {
   text-decoration: none;
   pointer-events: none;
 }
+/* The revision the buttons beside the line are for (several can share a line). */
+.td-review-current {
+  outline: 2px solid var(--reviewIns);
+  outline-offset: 1px;
+  border-radius: 2px;
+}
+.ag-review-mark.td-review-current,
+.cm-review-del.td-review-current {
+  outline-color: var(--reviewDel);
+}
 #td-review-actions {
   position: absolute;
   z-index: 50;
@@ -1819,6 +1829,16 @@ span.ag-footnote-backlink {
   border-radius: 4px;
   background: var(--editorBgColor, #fff);
   border: 1px solid var(--editorColor10, rgba(127, 127, 127, 0.35));
+}
+#td-review-actions .td-review-meta {
+  align-self: center;
+  max-width: 14em;
+  padding: 0 4px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 11px;
+  color: var(--editorColor80, #555);
 }
 #td-review-actions button {
   width: 24px;
