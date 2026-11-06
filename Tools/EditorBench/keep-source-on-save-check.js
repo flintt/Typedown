@@ -15,7 +15,7 @@ const { openEditor } = require('./harness');
   try {
     // Written as the editor does not write it: "*" bullets and a "***" break; then a long document after.
     const head = '# Kept\n\n* star one\n* star two\n\n***\n\nEDITHERE paragraph.\n\n';
-    const doc = head + fs.readFileSync(path.join(__dirname, 'doc300k.md'), 'utf8');
+    const doc = head + fs.readFileSync(require('./gen-doc300k').ensureDoc300k(), 'utf8');
     const flush = async keepSource => {
       const started = Date.now();
       await page.evaluate(k => { delete window.__last.ContentFlushed; window.__deliver('FlushContent', { token: 7, keepSource: k }); }, keepSource);

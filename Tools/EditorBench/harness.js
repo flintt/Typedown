@@ -41,7 +41,7 @@ function sourceFixtures(full) {
 
   const spec = require('./spec-data.json');
   for (const e of full ? spec : spec.filter(e => e.n % 10 === 1)) fixtures.push([`commonmark-${e.n}`, e.markdown]);
-  const big = fs.readFileSync(path.join(__dirname, 'doc300k.md'), 'utf8');
+  const big = fs.readFileSync(require('./gen-doc300k').ensureDoc300k(), 'utf8');
   fixtures.push(['large-doc', full ? big : big.slice(0, big.indexOf('\n', 50000) + 1)]);
   return fixtures;
 }

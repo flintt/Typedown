@@ -1,4 +1,4 @@
-import { alignment, blockSource, cursorIn, matchLines, mergeSource, splitLines } from './sourceMerge'
+import { alignment, blockSource, cursorIn, matchLines, mergeKeepingNotes, mergeSource, splitLines } from './sourceMerge'
 
 const merge = (source: string, base: string, current: string) => {
     const s = splitLines(source), b = splitLines(base)
@@ -34,10 +34,15 @@ describe('mergeSource', () => {
         expect(merge(source, base, current)).toBe('# T\n\n|a|b|\n|-|-|\n|1|22|\n\nSome more text.\n')
     })
 
-    it('writes an edited block as the export writes it', () => {
+    it('keeps an edited table written its own way: the other rows as they were, the edited one as compact', () => {
         const current = base.replace('| 1   | 22  |', '| 1   | 223 |')
-        // Nothing of the source kept: the edit is in the only block written differently.
-        expect(merge(source, base, current)).toBeNull()
+        expect(merge(source, base, current)).toBe(source.replace('|1|22|', '|1|223|'))
+    })
+
+    it('a table written with one space at its pipes keeps that', () => {
+        const src = '| a | b |\n| --- | --- |\n| 1 | 22 |\n'
+        const b = '| a   | b   |\n| --- | --- |\n| 1   | 22  |\n'
+        expect(merge(src, b, b.replace('| 1   | 22  |', '| 1   | 223 |'))).toBe('| a | b |\n| --- | --- |\n| 1 | 223 |\n')
     })
 
     it('keeps lines only the source has, where nothing was edited', () => {
@@ -142,5 +147,29 @@ describe('blockSource', () => {
     })
     it('none for a block found twice in the export', () => {
         expect(blockSource(table, table + '\n\n' + table + '\n', '|a|b|\n|-|-|\n|1|22|\n\n|a|b|\n|-|-|\n|1|22|\n', pad)).toBeNull()
+    })
+})
+
+describe('mergeKeepingNotes (a footnote definition stays where the source has it)', () => {
+    const src = '# F\n\nText with note[^1].\n\n[^1]: The note.\n\nAfter the note here.\n'
+    const base = '# F\n\nText with note[^1].\n\nAfter the note here.\n\n[^1]: The note.\n'
+    const keep = (current: string) => mergeKeepingNotes(splitLines(src), splitLines(base), splitLines(current))
+    it('an edit of the paragraph after the definition', () => {
+        expect(keep(base.replace('After the', 'After theZ'))).toBe(src.replace('After the', 'After theZ'))
+    })
+    it('an edit of the definition itself, in its place', () => {
+        expect(keep(base.replace('The note.', 'The nZote.'))).toBe(src.replace('The note.', 'The nZote.'))
+    })
+    it('an edit before it', () => {
+        expect(keep(base.replace('Text with', 'Text withZ'))).toBe(src.replace('Text with', 'Text withZ'))
+    })
+    it('nothing to keep without definitions', () => {
+        expect(mergeKeepingNotes(splitLines('a\n'), splitLines('a\n'), splitLines('b\n'))).toBeNull()
+    })
+})
+
+describe('an edited list item keeps its own marker spacing', () => {
+    it('a tab after the marker', () => {
+        expect(merge('-\titem one\n-\titem two\n', '- item one\n- item two\n', '- item oneZ\n- item two\n')).toBe('-\titem oneZ\n-\titem two\n')
     })
 })

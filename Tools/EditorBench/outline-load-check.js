@@ -29,7 +29,7 @@ const server = http.createServer((req, res) => {
 
 const section = (i) => [`## Section ${i}`, `Paragraph ${i} with text long enough to wrap onto a second line in the editor, and then some more.`, '- one\n- two'].join('\n\n');
 const make = (chars) => { let m = '', n = 0; while (m.length < chars) m += section(++n) + '\n\n'; return m; };
-const docs = [['short', make(5000)], ['long', make(40000)], ['300k', fs.readFileSync(path.join(__dirname, 'doc300k.md'), 'utf8')]]
+const docs = [['short', make(5000)], ['long', make(40000)], ['300k', fs.readFileSync(require('./gen-doc300k').ensureDoc300k(), 'utf8')]]
   .filter(([name]) => !opt('--doc') || opt('--doc') === name);
 const other = '# Another document\n\nSomething else to look at.\n\n## Its second heading\n\nMore.\n';
 const modes = ['edit', 'reading'].filter(m => !opt('--only') || opt('--only') === m);

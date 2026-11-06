@@ -63,7 +63,7 @@ import FrontMenu from 'components/Muya/lib/ui/frontMenu'
 import FormatPicker from 'components/Muya/lib/ui/formatPicker'
 import { createApplicationMenuState } from "services/menuState";
 import { classifyNormalization, extractProtectedPayload } from "services/normalization";
-import { alignment, cursorIn, mergeSource, splitLines } from "services/sourceMerge";
+import { alignment, cursorIn, mergeKeepingNotes, mergeSource, splitLines } from "services/sourceMerge";
 import { highlightExternalChange, scrollTargetForChange } from "services/externalChange";
 import { setVimState } from "services/vim";
 import { createReadingKeys } from "services/vimReading";
@@ -170,7 +170,14 @@ function keptSource(muya: any, imported: { source: string, normalized: string },
     }
     let merged: string | null
     try {
-        merged = mergeSource(lines.source, lines.base, splitLines(markdown), lines.toSource)
+        const current = splitLines(markdown)
+        merged = mergeSource(lines.source, lines.base, current, lines.toSource)
+        // Footnote definitions where the source has them: Muya writes them all at the end, and the merge could not keep
+        // one an edit was next to (or of) - it came out moved, the paragraph after it before it.
+        if (merged == null || muya.normalizeMarkdown(merged) !== markdown) {
+            const kept = mergeKeepingNotes(lines.source, lines.base, current)
+            if (kept != null && muya.normalizeMarkdown(kept) === markdown) merged = kept
+        }
         if (merged == null) return withSourceEnd(muya, imported.source, markdown, markdown)
         if (muya.normalizeMarkdown(merged) !== markdown) {
             sourceKept.fellBack++

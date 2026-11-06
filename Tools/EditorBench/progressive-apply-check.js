@@ -16,7 +16,7 @@ const sha = text => crypto.createHash('sha256').update(text, 'utf8').digest('hex
   const failures = [];
   const check = (ok, what) => { console.log(`  ${ok ? 'ok  ' : 'FAIL'} ${what}`); if (!ok) failures.push(what); };
   try {
-    const doc = fs.readFileSync(path.join(__dirname, 'doc300k.md'), 'utf8');
+    const doc = fs.readFileSync(require('./gen-doc300k').ensureDoc300k(), 'utf8');
     let op = 0;
     for (const [what, settings, scrollToChange] of [
       ['a write', { highlightAutomationChanges: false }, false],

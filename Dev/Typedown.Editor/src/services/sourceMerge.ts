@@ -153,7 +153,31 @@ export function mergeSource(source: string[], base: string[], current: string[],
 
 // A line as far as the edit is concerned: a code fence of either mark and any length the same, and a list item's marker
 // followed by a tab or spaces.
-const fenceKey = (line: string) => line.replace(/^( {0,3})(`{3,}|~{3,})/, '$1```').replace(/^(\s*)([*+-]|\d+[.)])[ \t]+/, '$1$2 ')
+const fenceKey = (line: string) => {
+    const key = line.replace(/^( {0,3})(`{3,}|~{3,})/, '$1```').replace(/^(\s*)([*+-]|\d+[.)])[ \t]+/, '$1$2 ')
+    // A table's row, its cells padded or not, its delimiters of any length.
+    return isTableLine(key) ? key.replace(/[ \t]*\|[ \t]*/g, '|').replace(/-+/g, '-').replace(/[ \t]+$/, '') : key
+}
+
+const isTableLine = (line: string) => /^[ \t]*\|.*\|[ \t]*\n?$/.test(line)
+
+// A line's block marks (quotation, list marker) with the spaces around them.
+const prefixOf = (line: string) => /^[ \t]*(?:>[ \t]?)*[ \t]*(?:(?:[*+-]|\d+[.)])[ \t]+)?/.exec(line)![0]
+// The same marks, written with other spaces only.
+const samePrefix = (a: string, b: string) => {
+    const pa = prefixOf(a), pb = prefixOf(b)
+    return pa !== pb && pa.replace(/[ \t]+/g, '') === pb.replace(/[ \t]+/g, '') && pa.replace(/[ \t]+/g, '').length > 0
+}
+
+// A table's row written as the source writes its rows: compact (no space at the pipes) or one space either side.
+function asSourceRow(row: string, sourceRows: string[]): string {
+    if (!sourceRows.length) return row
+    const nl = row.endsWith('\n') ? '\n' : ''
+    const body = row.replace(/\n$/, '')
+    if (sourceRows.every(r => !/[ \t]\||\|[ \t]/.test(r))) return body.replace(/[ \t]*\|[ \t]*/g, '|').replace(/-{2,}/g, '-') + nl
+    if (sourceRows.every(r => !/[ \t]{2,}/.test(r.replace(/^[ \t]+/, '')))) return body.replace(/[ \t]*\|[ \t]*/g, ' | ').trim().replace(/-{4,}/g, '---') + nl
+    return row
+}
 
 /**
  * An edited stretch of the document: Muya's lines now, each line the edit did not change (the same in the base and now)
@@ -177,6 +201,8 @@ export function editedRegion(source: string[], base: string[], current: string[]
     for (let b = 0; b < base.length; b++) if (toCurrent[b] >= 0) fromBase[toCurrent[b]] = b
     const lines: string[] = []
     let kept = false
+    // A table's rows the source writes its own way: an edited row written the same way (Muya pads every cell).
+    const sourceRows = source.filter(l => isTableLine(l) && !/^[ \t|:-]+\n?$/.test(l))
     for (let c = 0; c < current.length; c++) {
         const b = fromBase[c]
         if (b >= 0 && toSource[b] >= 0) {
@@ -185,9 +211,84 @@ export function editedRegion(source: string[], base: string[], current: string[]
             lines.push(line)
         } else if (b >= 0 && !current[c].trim() && !sourceHasBlank) {
             kept = true
+        } else if (base.length === current.length && source.length === base.length && samePrefix(current[c], source[c])) {
+            // An edited line, one for one with the source's: its block marks written as the source writes them (a list
+            // item's tab after its marker, a quotation's ">" without a space).
+            const line = prefixOf(source[c]) + current[c].slice(prefixOf(current[c]).length)
+            if (line !== current[c]) kept = true
+            lines.push(line)
+        } else if (isTableLine(current[c]) && sourceRows.length) {
+            const row = asSourceRow(current[c], sourceRows)
+            if (row !== current[c]) kept = true
+            lines.push(row)
         } else lines.push(current[c])
     }
     return { lines, kept }
+}
+
+// ---- footnote definitions ----
+
+const NOTE = /^ {0,3}\[\^([^\]\n]+)\]:/
+
+/**
+ * The text's lines with its footnote definitions taken out (a definition, its indented lines and the blank lines after
+ * it), and each definition by its label with the index, in the lines left, of the line it came after (-1: the start).
+ */
+export function takeNotes(lines: string[]): { rest: string[], notes: Map<string, { lines: string[], after: number }> } {
+    const rest: string[] = []
+    const notes = new Map<string, { lines: string[], after: number }>()
+    for (let i = 0; i < lines.length;) {
+        const m = NOTE.exec(lines[i])
+        if (!m) { rest.push(lines[i++]); continue }
+        const block = [lines[i++]]
+        while (i < lines.length && (/^(?: {4}|\t)\S/.test(lines[i]) || (!lines[i].trim() && i + 1 < lines.length && /^(?: {4}|\t)\S/.test(lines[i + 1])))) block.push(lines[i++])
+        while (i < lines.length && !lines[i].trim()) block.push(lines[i++])
+        notes.set(m[1], { lines: block, after: rest.length - 1 })
+    }
+    return { rest, notes }
+}
+
+/**
+ * The merge with footnote definitions where the source has them: Muya writes every definition at the end, and an edit
+ * near one (or of it) moved it there - and the paragraph after it before it (review-matrix.js). The definitions are
+ * taken out of all three texts, the rest merged, and each of the source's put back after the line it followed, as the
+ * edit has it now (an edited definition is the export's); one the source did not have goes at the end, as Muya writes
+ * it. Null when there is nothing to put back or the rest does not merge.
+ */
+export function mergeKeepingNotes(source: string[], base: string[], current: string[]): string | null {
+    const s = takeNotes(source), b = takeNotes(base), c = takeNotes(current)
+    if (!s.notes.size) return null
+    const merged = mergeSource(s.rest, b.rest, c.rest, alignment(b.rest, s.rest)) ?? c.rest.join('')
+    const lines = splitLines(merged)
+    // Where each of the source's lines left is in the merged text.
+    const toMerged = new Int32Array(s.rest.length).fill(-1)
+    for (const [is, im] of matchLines(s.rest, lines)) toMerged[is] = im
+    const insertAfter = new Map<number, string[]>()
+    for (const [label, note] of s.notes) {
+        const now = c.notes.get(label)
+        if (!now) continue
+        const edited = b.notes.get(label)?.lines.join('') !== now.lines.join('')
+        let at = note.after
+        while (at >= 0 && toMerged[at] < 0) at--
+        const target = at < 0 ? -1 : toMerged[at]
+        // An edited one as the export has it, with the blank lines the source had after it.
+        const lastText = (list: string[]) => { for (let i = list.length - 1; i >= 0; i--) if (list[i].trim()) return i; return -1 }
+        const trailing = note.lines.slice(lastText(note.lines) + 1)
+        const text = edited ? [...now.lines.slice(0, lastText(now.lines) + 1), ...trailing] : note.lines
+        insertAfter.set(target, [...(insertAfter.get(target) ?? []), ...text])
+    }
+    const out: string[] = [...(insertAfter.get(-1) ?? [])]
+    lines.forEach((line, i) => { out.push(line); out.push(...(insertAfter.get(i) ?? [])) })
+    // A definition put after the last line needs that line ended.
+    for (let i = 0; i < out.length - 1; i++) if (!out[i].endsWith('\n')) out[i] += '\n'
+    // The export's own new definitions, at the end.
+    const added = [...c.notes.entries()].filter(([label]) => !s.notes.has(label)).flatMap(([, n]) => n.lines)
+    if (added.length) {
+        if (out.length && !out[out.length - 1].endsWith('\n')) out[out.length - 1] += '\n'
+        if (out.length && out[out.length - 1].trim()) out.push('\n')
+        out.push(...added)
+    }
+    return out.join('')
 }
 
 type Position = { line: number, ch: number }
