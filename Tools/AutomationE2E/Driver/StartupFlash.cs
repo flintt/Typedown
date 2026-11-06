@@ -277,6 +277,14 @@ internal static partial class Program
         ColdStartFlash(notes, "SF05", "sepia", "white", (r, g, b) => b >= 236 && 0.0722 * b + 0.7152 * g + 0.2126 * r >= 230, wholeWindow: true);
 
     /// <summary>
+    /// SF06: SF04 under the built-in Dark theme: no LIGHT frame. The start's "Opening..." took its page colour from the
+    /// window's theme, not dark yet at a start: light grey, and its white words unseen (the user, 2026-11-07). The
+    /// dark page is #282828 (40); light grey, white and the light page are over 200.
+    /// </summary>
+    private static Task SF06(List<string> notes) =>
+        ColdStartFlash(notes, "SF06", null, "light", (r, g, b) => 0.0722 * b + 0.7152 * g + 0.2126 * r >= 200, wholeWindow: true, builtInTheme: "dark");
+
+    /// <summary>
     /// A cold start restoring three tabs under a custom theme, Windows' apps dark and then light: the editor's patch read
     /// from the screen from the process's start, and any stretch of reads over half <paramref name="wrongName"/>
     /// (<paramref name="wrong"/> says which pixels are) a failure, saved and timed against the startup log. With
@@ -292,7 +300,7 @@ internal static partial class Program
         return from < 0 ? lines.TakeLast(9) : lines.Skip(from).Where(l => !l.Contains("startup: version="));
     }
 
-    private static async Task ColdStartFlash(List<string> notes, string id, string customThemeId, string wrongName, Func<byte, byte, byte, bool> wrong, bool wholeWindow = false)
+    private static async Task ColdStartFlash(List<string> notes, string id, string? customThemeId, string wrongName, Func<byte, byte, byte, bool> wrong, bool wholeWindow = false, string builtInTheme = "light")
     {
         string Embedded(string name)
         {
@@ -315,8 +323,8 @@ internal static partial class Program
             GetWindowRect(await WindowOf(w, c), out placed);
             theme = (await c.Call("settings.get", new { keys = new[] { "appearance.theme" } }))["values"]!["appearance.theme"]!;
             customTheme = (string?)(await c.Call("test.settings.get", new { windowId = w, name = "CustomTheme" }))["value"];
-            await SetSetting(c, "appearance.theme", JObject.FromObject(new { kind = "builtIn", id = "light" }));
-            await c.Call("test.settings.set", new { windowId = w, name = "CustomTheme", value = customThemeId });
+            await SetSetting(c, "appearance.theme", JObject.FromObject(new { kind = "builtIn", id = builtInTheme }));
+            await c.Call("test.settings.set", new { windowId = w, name = "CustomTheme", value = customThemeId ?? "" });
             await c.Call("test.settings.set", new { windowId = w, name = "FileStartupAction", value = 2 });
         }
         var failures = new List<string>();

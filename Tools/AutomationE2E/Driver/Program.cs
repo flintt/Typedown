@@ -161,6 +161,7 @@ internal static partial class Program
             await Case("SF03 a window opening under the light theme shows no dark frame on its way: sampled from the screen for two seconds, none over a quarter dark", SF03);
             await Case("SF04 a cold start restoring three tabs under the light Apricot theme shows no dark frame, Windows' apps dark and light: sampled from the process's start for five seconds", SF04);
             await Case("SF05 a cold start restoring three tabs under the Sepia theme shows no white frame, Windows' apps dark and light: sampled from the process's start for five seconds", SF05);
+            await Case("SF06 a cold start restoring three tabs under the built-in Dark theme shows no light frame, \"Opening...\" on a dark page, Windows' apps dark and light: sampled from the process's start for five seconds", SF06);
             await Case("LU01 Alt+0 after Ctrl+N goes back to the document the new one was made from, not the tab before the last switch", LU01);
             await Case("PE01 Scroll past the end in the app: a long document scrolled to the bottom brings its last line to the middle; off, it stays at the bottom", PE01);
             await Case("EN01 files in GB18030, Big5, Shift-JIS, EUC-JP, EUC-KR, Windows-1252/1251 and unmarked UTF-16 open as written, the status bar names the encoding, and a save keeps it", EN01);
