@@ -244,3 +244,41 @@ test('typed on at once, two paragraphs are still two revisions (a block each); a
     const moved = trackRevisions(baseline, t4, again, { ...changedRegion(t3, t4)!, source: YOU, time: 3000, moved: true })
     expect(moved.length).toBe(3)
 })
+
+test('blocks deleted together are a deletion each: one rejected alone puts back only it, in its place', () => {
+    const baseline = 'intro\n\nhttps://example.com/a/very/long/path/one\n\nhttps://example.com/two\n\nhttps://example.com/three\n\nend\n'
+    const current = 'intro\n\nend\n'
+    const revs = trackRevisions(baseline, current, [], { ...changedRegion(baseline, current)!, source: YOU, time: 0 })
+    expect(revs.map(r => r.oldText)).toEqual(['https://example.com/a/very/long/path/one\n\n', 'https://example.com/two\n\n', 'https://example.com/three\n\n'])
+    expect(new Set(revs.map(r => r.id)).size).toBe(3)
+    // The middle one rejected: it alone is back, between the two still deleted.
+    const back = rejectFrom(current, revs[1])
+    expect(back).toBe('intro\n\nhttps://example.com/two\n\nend\n')
+    const left = trackRevisions(baseline, back, revs.filter(r => r !== revs[1]), { ...changedRegion(current, back)!, source: YOU, time: 1 })
+    expect(left.map(r => [r.id, r.oldText])).toEqual([[revs[0].id, revs[0].oldText], [revs[2].id, revs[2].oldText]])
+    // All rejected at once: the baseline, in its order.
+    expect(rejectAll(current, revs)).toBe(baseline)
+    // One accepted: the others still deletions.
+    const accepted = acceptInto(baseline, revs[0])
+    const rest = trackRevisions(accepted, current, shiftAfterAccept(revs, [revs[0]]), { source: YOU, time: 2 })
+    expect(rest.map(r => [r.id, r.oldText])).toEqual([[revs[1].id, revs[1].oldText], [revs[2].id, revs[2].oldText]])
+    expect(acceptAll(baseline, revs)).toBe(current)
+})
+
+test('list items deleted together are a deletion each; a deletion inside a line or inside fenced code stays one', () => {
+    const baseline = '# L\n\n- one\n- two\n- three\n- four\n'
+    const current = '# L\n\n- one\n- four\n'
+    const revs = trackRevisions(baseline, current, [], { ...changedRegion(baseline, current)!, source: YOU, time: 0 })
+    expect(revs.map(r => r.oldText)).toEqual(['- two\n', '- three\n'])
+    expect(rejectAll(current, revs)).toBe(baseline)
+    expect(rejectFrom(current, revs[1])).toBe('# L\n\n- one\n- three\n- four\n')
+
+    const inLine = 'a b c d\n'
+    const shorter = 'a d\n'
+    expect(trackRevisions(inLine, shorter, [], { ...changedRegion(inLine, shorter)!, source: YOU, time: 0 }).length).toBe(1)
+
+    const fence = 'x\n\n```\nl1\nl2\nl3\n```\n\ny\n'
+    const cut = 'x\n\n```\nl1\n```\n\ny\n'
+    const inFence = trackRevisions(fence, cut, [], { ...changedRegion(fence, cut)!, source: YOU, time: 0 })
+    expect(inFence.map(r => r.oldText)).toEqual(['l2\nl3\n'])
+})

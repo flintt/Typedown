@@ -22,7 +22,8 @@ const wholeLines = (text: string, start: number, end: number) =>
 export function markedMarkdown(text: string, revisions: Revision[]): string {
     // A format's marks (Ctrl+B's **) are left as they are: marks around them would break the format. The text goes to
     // Word formatted as it is now (Word's own format revisions are for later).
-    const sorted = revisions.map((r, i) => ({ r, i })).filter(({ r }) => !r.format).sort((a, b) => b.r.curStart - a.r.curStart || b.r.curEnd - a.r.curEnd)
+    const sorted = revisions.map((r, i) => ({ r, i })).filter(({ r }) => !r.format).sort((a, b) => b.r.curStart - a.r.curStart || b.r.curEnd - a.r.curEnd || b.r.baseStart - a.r.baseStart)
+    // (Blocks deleted together, a deletion each at one place: the later in the baseline put in first, so they read in order.)
     let out = text
     for (const { r, i } of sorted) {
         const tag = `${i}${SEP}`

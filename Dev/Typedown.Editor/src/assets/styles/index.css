@@ -1772,6 +1772,7 @@ span.ag-footnote-backlink {
 }
 .ag-review-del-above::before,
 .ag-review-del-below::after,
+.ag-review-strip,
 .cm-review-del-lines {
   display: block;
   color: var(--reviewDel);
@@ -1780,19 +1781,16 @@ span.ag-footnote-backlink {
   border-left: 3px solid var(--reviewDel);
   padding: 0 6px;
   margin: 2px 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  /* The deleted text's own line breaks (a paragraph a line), and a long link broken anywhere rather than cut off. */
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
   font-size: 0.9em;
   user-select: none;
 }
 .ag-review-del-above::before { content: attr(data-del-above); }
 .ag-review-del-below::after { content: attr(data-del-below); }
-.ag-review-del-above:hover::before,
-.ag-review-del-below:hover::after,
-.cm-review-del-lines:hover {
-  white-space: pre-wrap;
-}
+.ag-review-strip-above::before { content: attr(data-del-above); }
+.ag-review-strip-below::before { content: attr(data-del-below); }
 .ag-review-tagged {
   position: relative;
 }
@@ -1822,6 +1820,8 @@ span.ag-footnote-backlink {
   border-radius: 2px;
 }
 .ag-review-mark.td-review-current,
+.ag-review-strip.td-review-current,
+.cm-review-del-lines.td-review-current,
 .cm-review-del.td-review-current {
   outline-color: var(--reviewDel);
 }

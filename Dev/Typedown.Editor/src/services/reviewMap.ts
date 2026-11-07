@@ -127,7 +127,8 @@ const marksOf = (all: Map<string, LeafMarks>, key: string) => {
     return m
 }
 
-const shownDeleted = (text: string) => text.replace(/\n+$/, '').replace(/^\n+/, '')
+// A strip's text: its own line breaks kept (a paragraph a line, a blank line between two not drawn).
+const shownDeleted = (text: string) => text.replace(/\n+$/, '').replace(/^\n+/, '').replace(/\n{2,}/g, '\n')
 
 /**
  * The marks to draw in each leaf for the revisions shown. A deletion that takes whole lines away is a strip above the

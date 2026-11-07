@@ -1,8 +1,12 @@
 // Review mode's marks in the visual editor (services/reviewMap.ts gives them, by leaf block): inserted runs drawn the way
 // a search's matches are (spans around the text, so the caret and the text stay Muya's own), deleted text in the span's
 // pseudo-elements (on the page, not in the text: the caret never goes into it and it is never written out), and the
-// marks of a whole leaf - the bar of a new paragraph, the strip of paragraphs deleted above it, a program's tag - as
-// classes and attributes on the leaf's element.
+// marks of a whole leaf - the bar of a new paragraph, a program's tag - as classes and attributes on the leaf's element.
+// The blocks deleted above or below a leaf are a strip each, an element of their own in the leaf (its text in a
+// pseudo-element, so never in the leaf's text): each has its own buttons (the user, 2026-11-07: three links deleted
+// together were one strip, one revision).
+
+import { h } from './snabbdom'
 
 /** The class of a review run, for the selector (and the emoji and backslash runs, which take only a class). */
 export const reviewClassOf = segment => {
@@ -31,16 +35,28 @@ export const withReviewLights = (highlights, segments) => {
   return [...highlights, ...lights].sort((a, b) => a.start - b.start)
 }
 
-/** The leaf's own marks on its selector and attributes. Code is not split into runs (its highlighting redraws it): a bar. */
+/** The strips of the blocks deleted above (`where` 'above') or below a leaf, as elements; none for code (see below). */
+export const reviewStrips = (marks, where, isCode) => {
+  if (!marks || isCode) return []
+  const list = (where === 'above' ? marks.deletedAbove : marks.deletedBelow) || []
+  return list.map(d => h(`span.ag-review-strip.ag-review-strip-${where}`, {
+    attrs: { 'data-rid': d.rid, [`data-del-${where}`]: d.text, contenteditable: 'false' }
+  }))
+}
+
+/**
+ * The leaf's own marks on its selector and attributes. Code is not split into runs (its highlighting redraws it): a bar,
+ * and its deleted blocks one strip in a pseudo-element (an element in the code would be highlighted over).
+ */
 export const reviewBlockMarks = (selector, data, marks, isCode) => {
   if (marks.whole || (isCode && marks.segments.length)) selector += '.ag-review-whole'
-  const above = marks.deletedAbove || []
+  const above = isCode ? marks.deletedAbove || [] : []
   if (above.length) {
     selector += '.ag-review-del-above'
     data.attrs['data-del-above'] = above.map(d => d.text).join('\n')
     data.attrs['data-del-above-rid'] = above[0].rid
   }
-  const below = marks.deletedBelow || []
+  const below = isCode ? marks.deletedBelow || [] : []
   if (below.length) {
     selector += '.ag-review-del-below'
     data.attrs['data-del-below'] = below.map(d => d.text).join('\n')

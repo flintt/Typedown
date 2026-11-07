@@ -218,7 +218,7 @@ else (async () => {
                 if (!whole && !marked) problems.push(`ins "${want}" unmarked`);
             }
             if (rev.oldText && /\S/.test(rev.oldText)) {
-                const host = document.querySelector(`#ag-editor-id [data-rid="${rev.id}"][data-del-before], #ag-editor-id [data-rid="${rev.id}"][data-del-after], #ag-editor-id [data-del-above-rid="${rev.id}"], #ag-editor-id [data-del-below-rid="${rev.id}"]`)
+                const host = document.querySelector(`#ag-editor-id [data-rid="${rev.id}"][data-del-before], #ag-editor-id [data-rid="${rev.id}"][data-del-after], #ag-editor-id [data-del-above-rid="${rev.id}"], #ag-editor-id [data-del-below-rid="${rev.id}"], #ag-editor-id .ag-review-strip[data-rid="${rev.id}"]`)
                     ?? [...document.querySelectorAll('#ag-editor-id [data-del-before], #ag-editor-id [data-del-after]')].find(e => (e.getAttribute('data-del-before') ?? e.getAttribute('data-del-after') ?? '').includes(rev.oldText.replace(/\n/g, ' ¶ ').trim()));
                 if (!host) problems.push(`del "${rev.oldText.trim()}" not drawn`);
                 else if (host.closest('.ag-hide')) problems.push(`del "${rev.oldText.trim()}" inside a hidden mark`);
@@ -437,6 +437,67 @@ else (async () => {
             }
             await page.evaluate(() => { window.__typedownReviewClockOffset = 0 });
         });
+    }
+    // Several paragraphs (links), several list items selected and deleted at once: a deletion each, each drawn as its
+    // own strip, the middle one rejected alone (the user, 2026-11-07: three links deleted were one revision).
+    for (const [what, text, from, count, blocks] of [
+        ['paragraphs (links)', '# D\n\nBefore.\n\nhttps://example.com/one\n\nhttps://example.com/two\n\nhttps://example.com/three\n\nAfter.\n', 'https://example.com/one', 3, ['https://example.com/one', 'https://example.com/two', 'https://example.com/three']],
+        ['list items', '# D\n\n- keep\n- one\n- two\n- three\n- last\n', '- one', 3, ['one', 'two', 'three']],
+    ]) {
+        for (const visual of [true, false]) {
+            await flow(`${what} deleted together (${visual ? 'visual' : 'source'}): a deletion each, the middle rejected alone`, async row => {
+                await mode(!visual, false);
+                await load(text, text);
+                // At the first block's start (a list item's text, in visual mode: its mark is not in the leaf).
+                const at = text.indexOf(from) + (from.startsWith('- ') && visual ? 2 : 0);
+                await caretAt(text, text, at, visual);
+                await pause(80);
+                // To the start of the block after the last one: the whole blocks selected, as with Shift+Down.
+                await page.keyboard.down('Shift');
+                // (In source mode a line at a time: the blank lines between paragraphs too.)
+                const lines = visual ? count : text.slice(at, text.indexOf(blocks[blocks.length - 1]) + blocks[blocks.length - 1].length).split('\n').length + (text.includes('\n\n' + blocks[1]) ? 1 : 0);
+                for (let i = 0; i < lines; i++) await page.keyboard.press('ArrowDown');
+                await page.keyboard.up('Shift');
+                await page.keyboard.press('Backspace');
+                await pause(500);
+                const r = await review();
+                const t = await flush();
+                row.n = r.revisions.length;
+                const dels = r.revisions.filter(x => x.oldText && /\w/.test(x.oldText));
+                const each = blocks.map(b => dels.filter(x => x.oldText.includes(b)).length);
+                if (dels.length !== blocks.length || each.some(n => n !== 1)) { row.result = 'FAIL'; row.why.push('deletions: ' + JSON.stringify({ revisions: r.revisions.map(x => [x.oldText, x.newText]), text: t, at })); return; }
+                if (visual) {
+                    const strips = await page.evaluate(() => [...document.querySelectorAll('#ag-editor-id .ag-review-strip')].map(e => e.getAttribute('data-rid')));
+                    if (dels.some(x => !strips.includes(x.id))) { row.result = 'FAIL'; row.why.push('strips: ' + JSON.stringify({ strips, ids: dels.map(x => x.id) })); }
+                }
+                // The middle one rejected with its own ✗: the mouse over its strip, then the button.
+                const middle = dels[1];
+                const over = await page.evaluate(id => {
+                    const e = document.querySelector(`#ag-editor-id .ag-review-strip[data-rid="${id}"], .CodeMirror [data-rid="${id}"]`);
+                    if (!e) return null;
+                    const b = e.getBoundingClientRect();
+                    return { x: b.left + 10, y: b.top + b.height / 2 };
+                }, middle.id);
+                if (!over) { row.result = 'FAIL'; row.why.push('the middle deletion is not drawn'); return; }
+                await page.mouse.move(over.x, over.y);
+                await pause(900);
+                const cross = await page.evaluate(id => {
+                    const a = document.getElementById('td-review-actions');
+                    if (!a || a.dataset.for !== id || a.style.display === 'none') return null;
+                    const b = a.querySelector('.td-review-reject').getBoundingClientRect();
+                    return { x: b.left + b.width / 2, y: b.top + b.height / 2 };
+                }, middle.id);
+                if (!cross) { row.result = 'FAIL'; row.why.push('no buttons for the middle deletion'); return; }
+                await page.mouse.click(cross.x, cross.y);
+                await pause(400);
+                const back = await flush();
+                const after = await review();
+                const left = after.revisions.filter(x => x.oldText && /\w/.test(x.oldText));
+                if (!back.includes(blocks[1]) || back.includes(blocks[0]) || back.includes(blocks[2]) || left.length !== 2) {
+                    row.result = 'FAIL'; row.why.push('after reject: ' + JSON.stringify({ text: back, left: left.map(x => x.oldText) }));
+                }
+            });
+        }
     }
     await flow('long document, many revisions far away, one letter', async row => {
         const words = 'alpha beta gamma delta epsilon zeta eta theta iota kappa lambda mu'.split(' ');

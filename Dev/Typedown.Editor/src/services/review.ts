@@ -425,7 +425,22 @@ function slide(baseline: string, current: string, h: Hunk): Hunk {
     const text = insert ? current : baseline
     const start = insert ? h.curStart : h.baseStart, end = insert ? h.curEnd : h.baseEnd
     const atLineStart = (i: number) => i === 0 || text[i - 1] === '\n'
-    if (atLineStart(start)) return h
+    const moved = (s: number, e: number) => {
+        const shift = s - start
+        return insert ? { ...h, baseStart: h.baseStart + shift, baseEnd: h.baseEnd + shift, curStart: s, curEnd: e }
+            : { ...h, baseStart: s, baseEnd: e, curStart: h.curStart + shift, curEnd: h.curEnd + shift }
+    }
+    if (atLineStart(start)) {
+        // Starting with the blank line before a block ("\nthree\n" after "two\n\n"): moved on to the block's own start,
+        // where it is that block - put back between the right ones when blocks deleted together are split.
+        if (text[start] !== '\n') return h
+        let s = start, e = end
+        for (let i = 0; i < 200 && e < text.length && text[s] === text[e]; i++) {
+            s++; e++
+            if (atLineStart(s) && text[s] !== '\n') return moved(s, e)
+        }
+        return h
+    }
     let s = start, e = end
     for (let i = 0; i < 200 && s > 0 && text[s - 1] === text[e - 1]; i++) {
         s--; e--
@@ -602,21 +617,47 @@ export function trackRevisions(baseline: string, current: string, previous: Know
             }
             continue
         }
-        const same = exact.get(`${h.baseStart}:${h.baseEnd}:${newText}`)
-        if (same && !used.has(same.id)) { out.push(make(h, oldText, same, { name: same.source, session: same.session }, same.time)); continue }
-        const overlapping = previous.filter(p => touches(p.baseStart, p.baseEnd, h.baseStart, h.baseEnd) && !used.has(p.id))
-        if (touched) {
-            const grown = overlapping.find(p => sameSource(p, change.source)) ?? null
-            out.push(make(h, oldText, grown, change.source, change.time))
-            continue
+        // Whole blocks deleted together (three links, two list items): a deletion each, each accepted or rejected alone
+        // (the user, 2026-11-07).
+        for (const piece of h.curEnd === h.curStart ? deletedBlocks(baseline, current, h) : [h]) {
+            const old = baseline.slice(piece.baseStart, piece.baseEnd)
+            const same = exact.get(`${piece.baseStart}:${piece.baseEnd}:${newText}`)
+            if (same && !used.has(same.id)) { out.push(make(piece, old, same, { name: same.source, session: same.session }, same.time)); continue }
+            const overlapping = previous.filter(p => touches(p.baseStart, p.baseEnd, piece.baseStart, piece.baseEnd) && !used.has(p.id))
+            if (touched) {
+                const grown = overlapping.find(p => sameSource(p, change.source)) ?? null
+                out.push(make(piece, old, grown, change.source, change.time))
+                continue
+            }
+            if (overlapping.length) {
+                const p = overlapping[0]
+                out.push(make(piece, old, p, { name: p.source, session: p.session }, p.time))
+                continue
+            }
+            out.push(make(piece, old, null, change.source, change.time))
         }
-        if (overlapping.length) {
-            const p = overlapping[0]
-            out.push(make(h, oldText, p, { name: p.source, session: p.session }, p.time))
-            continue
-        }
-        out.push(make(h, oldText, null, change.source, change.time))
     }
+    return out
+}
+
+/**
+ * A deletion of whole lines split where a block of the baseline starts (a paragraph, a list item; not inside fenced
+ * code), as new text is: line breaks and marks alone go with the block after them. One inside a line is one.
+ */
+function deletedBlocks(baseline: string, current: string, h: Hunk): Hunk[] {
+    const atLineStart = (h.curStart === 0 || current[h.curStart - 1] === '\n') && (h.baseStart === 0 || baseline[h.baseStart - 1] === '\n')
+    if (!atLineStart || !baseline.slice(h.baseStart, h.baseEnd - 1).includes('\n')) return [h]
+    const fenced = fencedRanges(baseline)
+    const inFence = (at: number) => fenced.some(([a, b]) => at > a && at < b)
+    const out: Hunk[] = []
+    let start = h.baseStart
+    for (let i = h.baseStart + 1; i < h.baseEnd; i++) {
+        if (baseline[i - 1] !== '\n' || baseline[i] === '\n' || inFence(i)) continue
+        if (!/[\p{L}\p{N}]/u.test(baseline.slice(start, i))) continue
+        out.push({ baseStart: start, baseEnd: i, curStart: h.curStart, curEnd: h.curStart })
+        start = i
+    }
+    out.push({ baseStart: start, baseEnd: h.baseEnd, curStart: h.curStart, curEnd: h.curStart })
     return out
 }
 
@@ -658,7 +699,8 @@ export function rejectAll(current: string, revisions: Revision[]): string {
     let text = current
     // From the end; at one place, the insertion taken out before the deletion is put back there (the other way round the
     // text put back was taken out again).
-    for (const r of [...revisions].sort((a, b) => b.curStart - a.curStart || b.curEnd - a.curEnd)) text = rejectFrom(text, r)
+    // Deletions at one place (blocks deleted together, a revision each): the later in the baseline put back first.
+    for (const r of [...revisions].sort((a, b) => b.curStart - a.curStart || b.curEnd - a.curEnd || b.baseStart - a.baseStart)) text = rejectFrom(text, r)
     return text
 }
 

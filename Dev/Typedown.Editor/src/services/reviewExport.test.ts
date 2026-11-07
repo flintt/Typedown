@@ -51,6 +51,15 @@ test('a paragraph deleted whole comes back as a paragraph marked deleted', () =>
     expect([...body.querySelectorAll('p')].map(x => x.textContent!.trim())).toEqual(['One.', 'Gone.', 'Three.'])
 })
 
+test('paragraphs deleted together are a deleted paragraph each, in their order', () => {
+    const revs = revisionsOf('One.\n\nA gone.\n\nB gone.\n\nC gone.\n\nThree.\n', 'One.\n\nThree.\n')
+    expect(revs.length).toBe(3)
+    const body = render(markedMarkdown('One.\n\nThree.\n', revs))
+    markRendered(body, revs)
+    expect([...body.querySelectorAll('[data-rev-para="del"]')].map(x => x.textContent)).toEqual(['A gone.', 'B gone.', 'C gone.'])
+    expect([...body.querySelectorAll('p')].map(x => x.textContent!.trim())).toEqual(['One.', 'A gone.', 'B gone.', 'C gone.', 'Three.'])
+})
+
 test('no revisions: the text as it is', () => {
     expect(markedMarkdown('a\n', [])).toBe('a\n')
 })

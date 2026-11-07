@@ -8,7 +8,7 @@ import { CLASS_OR_ID, DEVICE_MEMORY, PREVIEW_DOMPURIFY_CONFIG, HAS_TEXT_BLOCK_RE
 import { tokenizer } from '../../'
 import { snakeToCamel, sanitize, escapeHTML, getLongUniqueId, getImageInfo } from '../../../utils'
 import { h, htmlToVNode } from '../snabbdom'
-import { reviewBlockMarks, withReviewLights } from '../review'
+import { reviewBlockMarks, reviewStrips, withReviewLights } from '../review'
 
 // todo@jocs any better solutions?
 const MARKER_HASK = {
@@ -288,7 +288,13 @@ export default function renderLeafBlock (parent, block, activeBlocks, matches, u
     Object.assign(data.attrs, { spellcheck: 'false' })
   }
 
-  if (reviewMarks) selector = reviewBlockMarks(selector, data, reviewMarks, isCode)
+  if (reviewMarks) {
+    selector = reviewBlockMarks(selector, data, reviewMarks, isCode)
+    const above = reviewStrips(reviewMarks, 'above', isCode), below = reviewStrips(reviewMarks, 'below', isCode)
+    // (A leaf's children may be its text alone, a string: kept one child, not spread into its characters.)
+    const own = Array.isArray(children) ? children : children === '' ? [] : [children]
+    if (above.length || below.length) children = [...above, ...own, ...below]
+  }
 
   if (!block.parent) {
     return h(selector, data, [this.renderIcon(block), ...children])

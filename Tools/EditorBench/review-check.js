@@ -75,7 +75,7 @@ const sha = text => crypto.createHash('sha256').update(text, 'utf8').digest('hex
 
         // A paragraph deleted: a strip above the next one.
         await apply((await flush()).replace('Third paragraph.\n', '').replace(/\n\n$/, '\n'), { name: 'Bot', session: 's1' });
-        const strip = await page.evaluate(() => [...document.querySelectorAll('#ag-editor-id .ag-review-del-above, #ag-editor-id .ag-review-del-below')].map(e => e.getAttribute('data-del-above') ?? e.getAttribute('data-del-below')));
+        const strip = await page.evaluate(() => [...document.querySelectorAll('#ag-editor-id .ag-review-del-above, #ag-editor-id .ag-review-del-below, #ag-editor-id .ag-review-strip')].map(e => e.getAttribute('data-del-above') ?? e.getAttribute('data-del-below')));
         check(strip.some(s => s && s.includes('Third paragraph.')), 'the deleted paragraph is shown as a strip', { strip, r: await review(), text: await flush(), html: await page.evaluate(() => document.querySelector('#ag-editor-id').innerHTML.slice(-1500)) });
 
         // Each revision its own buttons, with who made it and when beside them: the program's says its name and a time.
@@ -155,6 +155,35 @@ const sha = text => crypto.createHash('sha256').update(text, 'utf8').digest('hex
         await loadInReview('Plain **bold** and [a link](http://e.com) end `c`.\n', { baseline: 'Plain x **bold** and y [a link](http://e.com) end z `c`.\n' });
         const hidden = await page.evaluate(() => [...document.querySelectorAll('#ag-editor-id [data-del-before], #ag-editor-id [data-del-after]')].map(e => ({ text: e.textContent, hidden: !!e.closest('.ag-hide') })));
         check(hidden.length === 3 && hidden.every(h => !h.hidden), 'deletions beside hidden marks are drawn where they show', hidden);
+
+        // Three links deleted together (the user, 2026-11-07): a strip each, a line each, a long one broken onto the next
+        // line rather than cut off, and each its own buttons - the middle one rejected alone.
+        const long = 'https://example.com/' + 'a-very-long-path-segment/'.repeat(12) + 'end';
+        const links = `# Links\n\nBefore.\n\n${long}\n\nhttps://example.com/two\n\nhttps://example.com/three\n\nAfter.\n`;
+        await loadInReview('# Links\n\nBefore.\n\nAfter.\n', { baseline: links });
+        r = await review();
+        check(r.revisions.length === 3 && r.revisions.every(x => x.kind === 'delete'), 'three blocks deleted together are three deletions', r.revisions);
+        const strips = await page.evaluate(() => [...document.querySelectorAll('#ag-editor-id .ag-review-strip')].map(e => {
+            const box = e.getBoundingClientRect(), leaf = e.parentElement.getBoundingClientRect();
+            const style = getComputedStyle(e, '::before');
+            return { rid: e.getAttribute('data-rid'), text: e.getAttribute('data-del-above') ?? e.getAttribute('data-del-below'), height: box.height, right: box.right, leafRight: leaf.right, lineHeight: parseFloat(getComputedStyle(e).lineHeight) || 20, white: style.whiteSpace };
+        }));
+        check(strips.length === 3 && new Set(strips.map(s => s.rid)).size === 3, 'a strip each, each its own revision', strips);
+        check(strips.every(s => !s.text.includes('\n')) && strips[0].text === long, 'each strip its paragraph, on a line of its own', strips.map(s => s.text));
+        check(strips[0].height > strips[1].height * 1.5 && strips.every(s => s.right <= s.leafRight + 1), 'a long link breaks onto the next line inside the page', strips);
+        const middle = await page.evaluate(() => { const b = document.querySelectorAll('#ag-editor-id .ag-review-strip')[1].getBoundingClientRect(); return { x: b.left + 20, y: b.top + b.height / 2 }; });
+        await page.mouse.move(middle.x, middle.y);
+        // (The buttons follow the mouse after half a second.)
+        await pause(900);
+        const shownFor = await page.evaluate(() => document.getElementById('td-review-actions')?.dataset.for);
+        check(shownFor === strips[1].rid, 'over the middle strip, the buttons are for it', { shownFor, strips });
+        const cross = await page.evaluate(() => { const b = document.querySelector('#td-review-actions .td-review-reject').getBoundingClientRect(); return { x: b.left + b.width / 2, y: b.top + b.height / 2 }; });
+        await page.mouse.click(cross.x, cross.y);
+        await pause(500);
+        const afterReject = await flush();
+        check(afterReject === '# Links\n\nBefore.\n\nhttps://example.com/two\n\nAfter.\n', 'its ✗ puts back that link alone, in its place', afterReject);
+        r = await review();
+        check(r.revisions.length === 2 && r.revisions.map(x => x.id).join() === [strips[0].rid, strips[2].rid].join(), 'the other two are still their own deletions', r.revisions);
 
         // Turned on by the host just after it sent a document, before the page took the load in: on for that document.
         await page.evaluate(() => {
