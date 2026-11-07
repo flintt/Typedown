@@ -1258,4 +1258,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>別のプログラムがこのファイルを変更したため、自動保存は上書きしません。残す方を選んでください。</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>このドキュメントをビジュアルモードで編集すると、一部（{0}）が書き換えられることがあります。そのまま残すには、ソースモードで編集してください。</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>このドキュメントでは今後表示しない</value>
+  </data>
 </root>

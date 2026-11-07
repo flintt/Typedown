@@ -1258,4 +1258,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>অন্য একটি প্রোগ্রাম এই ফাইলটি বদলেছে, তাই স্বয়ংক্রিয় সংরক্ষণ এর ওপর লেখে না। কোন সংস্করণ রাখবেন বেছে নিন।</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>এই নথিটি ভিজ্যুয়াল মোডে সম্পাদনা করলে এর কিছু অংশ ({0}) পুনরায় লেখা হতে পারে। হুবহু রাখতে সোর্স মোডে সম্পাদনা করুন।</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>এই নথির জন্য আর দেখাবেন না</value>
+  </data>
 </root>

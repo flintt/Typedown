@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Ctrl+A zaznacza najpierw akapit, potem otaczający go blok, a na końcu cały dokument</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>Powiadamiaj, gdy pierwsza edycja w trybie wizualnym może przepisać treść</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>Powiadomienie, gdy edycja w trybie wizualnym może zmienić część tekstu, linków lub HTML dokumentu; tryb źródłowy zachowuje go bez zmian</value>
+  </data>
 </root>

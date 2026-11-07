@@ -1258,4 +1258,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>Drugi program je promenio ovu datoteku, pa je automatsko čuvanje ne prepisuje. Izaberite koju verziju da zadržite.</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>Uređivanje ovog dokumenta u vizuelnom režimu može da prepiše deo njega ({0}). Da biste ga zadržali tačno onakvim kakav jeste, uređujte ga u režimu izvornog koda.</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>Ne prikazuj ponovo za ovaj dokument</value>
+  </data>
 </root>

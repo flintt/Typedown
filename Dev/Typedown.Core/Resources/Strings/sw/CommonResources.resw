@@ -1258,4 +1258,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>Programu nyingine imebadilisha faili hii, kwa hivyo kuhifadhi kiotomatiki hakuandiki juu yake. Chagua toleo la kuweka.</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>Kuhariri hati hii katika hali ya kuona kunaweza kuandika upya sehemu yake ({0}). Ili kuiweka kama ilivyo, ihariri katika hali ya chanzo.</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>Usionyeshe tena kwa hati hii</value>
+  </data>
 </root>

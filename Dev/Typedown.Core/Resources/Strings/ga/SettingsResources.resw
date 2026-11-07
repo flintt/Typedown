@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Roghnaíonn Ctrl+A an t-alt ar dtús, ansin an bloc timpeall air, ansin an doiciméad ar fad</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>Cuir in iúl nuair a d’fhéadfadh an chéad eagarthóireacht sa mhód amhairc ábhar a athscríobh</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>Fógra nuair a d’fhéadfadh eagarthóireacht sa mhód amhairc cuid den téacs, de na naisc nó den HTML i ndoiciméad a athrú; coinníonn an mód foinse é gan athrú</value>
+  </data>
 </root>

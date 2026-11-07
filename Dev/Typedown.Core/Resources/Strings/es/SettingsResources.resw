@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Ctrl+A selecciona primero el párrafo, luego el bloque que lo rodea y por último todo el documento</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>Avisar cuando la primera edición en modo visual pueda reescribir contenido</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>Un aviso cuando editar en modo visual puede cambiar parte del texto, los enlaces o el HTML de un documento; el modo de código fuente lo mantiene tal cual</value>
+  </data>
 </root>

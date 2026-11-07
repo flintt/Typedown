@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Ctrl+A ਪਹਿਲਾਂ ਪੈਰਾ, ਫਿਰ ਉਸਦੇ ਆਲੇ-ਦੁਆਲੇ ਦਾ ਬਲਾਕ ਅਤੇ ਅੰਤ ਵਿੱਚ ਪੂਰਾ ਦਸਤਾਵੇਜ਼ ਚੁਣਦਾ ਹੈ</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>ਸੂਚਿਤ ਕਰੋ ਜਦੋਂ ਵਿਜ਼ੂਅਲ ਮੋਡ ਵਿੱਚ ਪਹਿਲਾ ਸੰਪਾਦਨ ਸਮੱਗਰੀ ਨੂੰ ਦੁਬਾਰਾ ਲਿਖ ਸਕਦਾ ਹੈ</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>ਸੂਚਨਾ ਜਦੋਂ ਵਿਜ਼ੂਅਲ ਮੋਡ ਵਿੱਚ ਸੰਪਾਦਨ ਦਸਤਾਵੇਜ਼ ਦੇ ਕੁਝ ਪਾਠ, ਲਿੰਕ ਜਾਂ HTML ਨੂੰ ਬਦਲ ਸਕਦਾ ਹੈ; ਸੋਰਸ ਮੋਡ ਇਸਨੂੰ ਜਿਵੇਂ ਦਾ ਤਿਵੇਂ ਰੱਖਦਾ ਹੈ</value>
+  </data>
 </root>

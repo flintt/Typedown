@@ -176,7 +176,8 @@ namespace Typedown.Core.ViewModels
                 var load = x.Args?["loadId"]?.Value<int?>();
                 var ui = ServiceProvider.GetService<UIViewModel>();
                 if (ui == null) return;
-                if ((bool?)x.Args?["show"] == true) { if (load == LoadId) ui.ShowFirstEditNotice(LoadId); }
+                var reasons = (x.Args?["reasons"] as JArray)?.Select(r => r.ToString()).ToList();
+                if ((bool?)x.Args?["show"] == true) { if (load == LoadId) ui.ShowFirstEditNotice(LoadId, reasons); }
                 else if (load == null || load == ui.FirstEditNoticeLoad) ui.HideFirstEditNotice();
             });
             EventCenter.GetObservable<EditorEventArgs>("FindState").Subscribe(x => FindResults.ApplyState(x.Args));

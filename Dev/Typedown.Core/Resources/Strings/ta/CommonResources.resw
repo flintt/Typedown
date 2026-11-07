@@ -1258,4 +1258,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>வேறொரு நிரல் இந்தக் கோப்பை மாற்றியுள்ளது, எனவே தானியங்குச் சேமிப்பு அதன் மேல் எழுதாது. எந்தப் பதிப்பை வைத்திருப்பது எனத் தேர்ந்தெடுக்கவும்.</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>இந்த ஆவணத்தைக் காட்சி பயன்முறையில் திருத்தினால் அதன் சில பகுதி ({0}) மீண்டும் எழுதப்படலாம். அப்படியே வைத்திருக்க, மூலப் பயன்முறையில் திருத்தவும்.</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>இந்த ஆவணத்திற்கு மீண்டும் காட்ட வேண்டாம்</value>
+  </data>
 </root>

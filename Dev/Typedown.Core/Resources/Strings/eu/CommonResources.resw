@@ -1258,4 +1258,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>Beste programa batek fitxategi hau aldatu du, beraz gordetze automatikoak ez du gainidazten. Aukeratu zein bertsio gorde.</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>Dokumentu hau modu bisualean editatzeak haren zati bat ({0}) berridatz dezake. Dagoen bezala mantentzeko, editatu iturburu moduan.</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>Ez erakutsi berriro dokumentu honetarako</value>
+  </data>
 </root>

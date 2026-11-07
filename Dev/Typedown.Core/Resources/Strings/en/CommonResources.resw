@@ -1359,4 +1359,12 @@
     <value>Press the modifier keys to hold while clicking.</value>
     <comment>单击类快捷键的选择框里的说明：按下单击时要按住的修饰键</comment>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>Editing this document in visual mode may rewrite some of it ({0}). To keep it exactly as it is, edit it in source mode.</value>
+    <comment>可视编辑提示：首次可视编辑可能改写的部分（{0}：链接、脚注等）</comment>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>Don't show again for this document</value>
+    <comment>首次编辑提示卡片上的"这个文档不再提示"（只对当前文档）</comment>
+  </data>
 </root>

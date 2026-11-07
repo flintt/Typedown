@@ -129,6 +129,7 @@ internal static partial class Program
             await Case("B02 an open settings page shows a font size changed from elsewhere", B02);
             await Case("F01 a written document with protected payloads keeps every one of them through a real first keystroke", F01);
             await Case("F02 the first-edit warning for unsafe HTML stays briefly, then closes by itself", F02);
+            await Case("F03 the first-edit warning: not for a list Muya numbers on; \"Don't show again for this document\" mutes that document only, by its path, through a rename and a save as; Settings > Editor turns it off for every document", F03);
             await Case("M01 a written text survives visual, reading and source mode switches byte for byte, then saves exactly", M01);
             await Case("P01 awaitPresentation: a revealed write in a background tab of a minimized window reports it drawn; it needs reveal", P01);
             await Case("W01 the editor page reloads after it applied a write and before the commit: nothing is committed, host and page agree", W01);
@@ -3703,6 +3704,79 @@ internal static partial class Program
         Check(await Eventually(Warning, 3000, 100), "back to the document, the card shows again");
         await c.Call("document.focus", new { documentId = other });
         Check(await Eventually(async () => !await Warning(), 1000, 50), "another document shown, the card goes at once (it is never over another document)");
+    }
+
+    // The card was shown for a document with no HTML in it (a list numbered 8, 10 written 8, 9, taken for a word lost),
+    // and its "Don't show again" asked whether it was for this document (the user, 2026-11-07): it is, by the file's path,
+    // following a rename and a save as; the setting is for every document.
+    private static async Task F03(List<string> notes)
+    {
+        using var c = await Session("e2e F03");
+        // New names each run: the mutes are kept by path in the app's data (first-edit-mutes.json) across runs.
+        var run = Guid.NewGuid().ToString("N").Substring(0, 8);
+        const string unsafeHtml = "<a href=\"&ouml;&ouml;.html\">\n\nEDITHERE\n";
+        var list = await Open(c, Fixture($"f03-list-{run}.md", "# F03\n\n8. eight\n10. ten\n\nEDITHERE\n"));
+        var windowId = await WindowIdOf(c, list);
+        async Task<JToken> Card() => await c.Call("test.editor.firstEditNotice", new { windowId });
+        async Task<bool> Warning()
+        {
+            var card = await Card();
+            return card["text"]?.Type == JTokenType.String && (int?)card["loadId"] == (int?)card["currentLoadId"];
+        }
+        async Task<bool> Stays(bool shown, int ms)
+        {
+            for (var waited = 0; waited < ms; waited += 100) { if (await Warning() != shown) return false; await Task.Delay(100); }
+            return true;
+        }
+        var window = await WindowOf(windowId, c);
+        var setting = (bool?)(await c.Call("test.settings.get", new { windowId, name = "WarnFirstEditRewrite" }))["value"] ?? true;
+        try
+        {
+            await c.Call("test.settings.set", new { windowId, name = "WarnFirstEditRewrite", value = true });
+            Check(await Stays(false, 3000), "a list numbered on (8, 10 written 8, 9) has no first-edit card");
+
+            var a = await Open(c, Fixture($"f03-a-{run}.md", unsafeHtml));
+            Check(await Eventually(Warning, 3000, 100), "unsafe HTML shows the card");
+            notes.Add($"card: {(string?)(await Card())["text"]}");
+            // The card's own link, as the reader clicks it.
+            var never = await Eventually(() => Task.FromResult(Deep.First(System.Windows.Automation.AutomationElement.FromHandle(window),
+                new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.AutomationIdProperty, "FirstEditNoticeNever")) != null), 2000, 100);
+            Check(never, "the card has \"Don't show again for this document\"");
+            var link = Deep.First(System.Windows.Automation.AutomationElement.FromHandle(window),
+                new System.Windows.Automation.PropertyCondition(System.Windows.Automation.AutomationElement.AutomationIdProperty, "FirstEditNoticeNever"))!;
+            ((System.Windows.Automation.InvokePattern)link.GetCurrentPattern(System.Windows.Automation.InvokePattern.Pattern)).Invoke();
+            Check(await Eventually(async () => !await Warning(), 1500, 50), "the link closes the card");
+
+            var b = await Open(c, Fixture($"f03-b-{run}.md", unsafeHtml));
+            Check(await Eventually(Warning, 3000, 100), "another document with the same HTML still shows the card (the mute is for one document)");
+            await c.Call("document.focus", new { documentId = a });
+            Check(await Stays(false, 2500), "back to the muted document: no card");
+
+            var renamed = Path.Combine(Path.GetDirectoryName(Fixture($"f03-a-{run}.md", unsafeHtml))!, $"f03-renamed-{run}.md");
+            Check((bool?)(await c.Call("test.file.rename", new { windowId, path = renamed }))["renamed"] == true, "the muted document renamed");
+            await c.Call("document.focus", new { documentId = b });
+            await c.Call("document.focus", new { documentId = a });
+            Check(await Stays(false, 2500), "renamed, it is still muted (the mute follows the path)");
+
+            var copy = Path.Combine(Path.GetDirectoryName(renamed)!, $"f03-copy-{run}.md");
+            Check((string?)(await c.Call("test.file.saveAs", new { windowId, path = copy }))["path"] != null, "saved under another name");
+            await Open(c, renamed);
+            Check(await Stays(false, 2500), "the file it was saved from, opened again, is still muted");
+            await c.Call("document.focus", new { documentId = a });
+            Check(await Stays(false, 2000), "the copy saved as is muted too");
+
+            await c.Call("test.settings.set", new { windowId, name = "WarnFirstEditRewrite", value = false });
+            var d = await Open(c, Fixture($"f03-d-{run}.md", unsafeHtml));
+            Check(await Stays(false, 3000), "Settings > Editor off: no card for any document");
+            await c.Call("test.settings.set", new { windowId, name = "WarnFirstEditRewrite", value = true });
+            await c.Call("document.focus", new { documentId = b });
+            await c.Call("document.focus", new { documentId = d });
+            Check(await Eventually(Warning, 3000, 100), "turned back on, a document not muted shows the card again");
+        }
+        finally
+        {
+            await c.Call("test.settings.set", new { windowId, name = "WarnFirstEditRewrite", value = setting });
+        }
     }
 
     private static async Task M01(List<string> notes)

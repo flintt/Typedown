@@ -1274,4 +1274,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>其他程序修改了这个文件，自动保存不会覆盖它。请选择保留哪一份。</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>在可视模式下编辑这份文档，可能会改写其中的部分内容（{0}）。需要保持原样时，请在源码模式下编辑。</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>这个文档不再提示</value>
+  </data>
 </root>

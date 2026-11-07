@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Ctrl+A-ն նախ ընտրում է պարբերությունը, հետո դրա շուրջ եղած բլոկը, վերջում՝ ամբողջ փաստաթուղթը</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>Ծանուցել, երբ տեսողական ռեժիմում առաջին խմբագրումը կարող է վերագրել բովանդակությունը</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>Ծանուցում, երբ տեսողական ռեժիմում խմբագրումը կարող է փոխել փաստաթղթի տեքստի, հղումների կամ HTML-ի մի մասը. աղբյուրի ռեժիմը պահում է այն անփոփոխ</value>
+  </data>
 </root>

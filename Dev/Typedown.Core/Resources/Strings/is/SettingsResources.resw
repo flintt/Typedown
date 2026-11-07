@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Ctrl+A velur fyrst málsgreinina, síðan reitinn í kringum hana og loks allt skjalið</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>Láta vita þegar fyrsta breyting í sjónrænni stillingu getur endurskrifað efni</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>Tilkynning þegar breytingar í sjónrænni stillingu geta breytt hluta af texta, tenglum eða HTML skjals; frumkóðastilling heldur því óbreyttu</value>
+  </data>
 </root>

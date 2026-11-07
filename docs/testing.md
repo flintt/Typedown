@@ -154,6 +154,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | B02 | an open settings page shows a font size changed from elsewhere |
 | F01 | a written document with protected payloads keeps every one of them through a real first keystroke |
 | F02 | the first-edit warning for unsafe HTML stays briefly, then closes by itself |
+| F03 | the first-edit warning: not for a list Muya numbers on; "Don't show again for this document" mutes that document only, by its path, through a rename and a save as; Settings > Editor turns it off for every document |
 | M01 | a written text survives visual, reading and source mode switches byte for byte, then saves exactly |
 | P01 | awaitPresentation: a revealed write in a background tab of a minimized window reports it drawn; it needs reveal |
 | W01 | the editor page reloads after it applied a write and before the commit: nothing is committed, host and page agree |

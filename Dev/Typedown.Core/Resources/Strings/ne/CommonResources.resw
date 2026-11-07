@@ -1258,4 +1258,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>अर्को प्रोग्रामले यो फाइल परिवर्तन गर्‍यो, त्यसैले स्वतः सुरक्षणले यसमाथि लेख्दैन। कुन संस्करण राख्ने छान्नुहोस्।</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>यो कागजातलाई भिजुअल मोडमा सम्पादन गर्दा यसको केही भाग ({0}) पुनः लेखिन सक्छ। यसलाई जस्ताको तस्तै राख्न, स्रोत मोडमा सम्पादन गर्नुहोस्।</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>यो कागजातका लागि फेरि नदेखाउनुहोस्</value>
+  </data>
 </root>

@@ -1258,4 +1258,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>Mae rhaglen arall wedi newid y ffeil hon, felly nid yw cadw awtomatig yn ysgrifennu drosti. Dewiswch pa fersiwn i'w chadw.</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>Gall golygu’r ddogfen hon yn y modd gweledol ailysgrifennu rhan ohoni ({0}). I’w chadw’n union fel y mae, golygwch hi yn y modd ffynhonnell.</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>Peidio â dangos eto ar gyfer y ddogfen hon</value>
+  </data>
 </root>

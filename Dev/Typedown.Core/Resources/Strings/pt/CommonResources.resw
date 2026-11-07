@@ -1200,4 +1200,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>Outro programa alterou este arquivo, por isso o salvamento automático não o substitui. Escolha qual versão manter.</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>Editar este documento no modo visual pode reescrever parte dele ({0}). Para mantê-lo exatamente como está, edite-o no modo de código-fonte.</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>Não mostrar novamente para este documento</value>
+  </data>
 </root>

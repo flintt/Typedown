@@ -225,6 +225,8 @@ namespace Typedown.Core.Utilities
             if (string.IsNullOrEmpty(oldPath) || string.IsNullOrEmpty(newPath)) return;
             try
             {
+                // Typedown's own record by path follows here too: every rename in the folder pane comes this way.
+                Services.FirstEditMutes.Shared.Follow(oldPath, newPath, keepOld: false);
                 PathRenamed?.Invoke(oldPath, newPath);
             }
             catch (Exception ex)
@@ -236,6 +238,13 @@ namespace Typedown.Core.Utilities
         /// <summary>Raises <see cref="Activity"/> with the window's document and mode (public: the window itself is in the app project).</summary>
         public static void ReportActivity(ActivityKind kind, AppViewModel window, string oldPath = null)
         {
+            // The documents muted for the first-edit notice follow the window's document to its new path (saved under
+            // another name, the old file still there: both stay muted), whether an edition listens or not.
+            if (kind == ActivityKind.DocumentRenamed && window?.FileViewModel?.FilePath is { } newPath)
+            {
+                try { Services.FirstEditMutes.Shared.Follow(oldPath, newPath, keepOld: oldPath != null && System.IO.File.Exists(oldPath), window.TabsViewModel?.ActiveTab?.DocumentId); }
+                catch (Exception ex) { Log.WriteLocal("FirstEditMutesFollow", ex.ToString()); }
+            }
             if (Activity == null || window == null) return;
             try
             {

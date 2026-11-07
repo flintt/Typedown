@@ -69,6 +69,10 @@ const taskPattern = /^\s*(?:[-*+]|\d+[.)])\s+\[([ xX])\](?=\s)/;
 // inline a lost word.
 const identifierPatterns = [
     /^(\s*(?:[-*+]|\d+[.)])\s+)\[[ xX]\](?=\s)/gm,
+    // An ordered list's numbers, in a quotation too: Muya numbers a list on from its first item ("8." then "10." is
+    // written "8." then "9."), and the "10" was taken for a word lost - the first-edit notice for a document with no HTML
+    // in it (the user, 2026-11-07).
+    /^((?:[ \t]*>)*[ \t]*)\d{1,9}[.)](?=[ \t]|$)/gm,
     /^( {0,3})\[(?!\^)(?:[^\]\\]|\\.)+\]:/gm,
     /\]\[(?:[^\]\\]|\\.)*\]/g,
     /\[\^[^\]\s]+\]/g,

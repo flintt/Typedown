@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Ctrl+A jagħżel l-ewwel il-paragrafu, imbagħad il-blokk madwaru, imbagħad id-dokument kollu</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>Avża meta l-ewwel editjar fil-modalità viżwali jista’ jerġa’ jikteb il-kontenut</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>Avviż meta l-editjar fil-modalità viżwali jista’ jbiddel parti mit-test, il-links jew l-HTML ta’ dokument; il-modalità tas-sors iżżommu kif inhu</value>
+  </data>
 </root>

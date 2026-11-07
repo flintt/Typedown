@@ -1061,4 +1061,12 @@
     <value>A new tab (File > New, the + button) shows the home page instead of an empty document</value>
     <comment>设置 → 常规 → 启动时：新建标签也显示首页（说明）</comment>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>Notify when the first edit in visual mode may rewrite content</value>
+    <comment>设置 &gt; 编辑器：首次可视编辑提示</comment>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>A notice when editing a document in visual mode may change some of its text, links or HTML; source mode keeps it exactly</value>
+    <comment>设置 &gt; 编辑器：首次可视编辑提示的说明</comment>
+  </data>
 </root>

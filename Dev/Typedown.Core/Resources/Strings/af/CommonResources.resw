@@ -1258,4 +1258,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>'n Ander program het hierdie lêer verander, so outomatiese stoor skryf nie daaroor nie. Kies watter weergawe om te hou.</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>As jy hierdie dokument in visuele modus redigeer, kan ’n deel daarvan ({0}) herskryf word. Redigeer dit in bronmodus om dit presies so te hou.</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>Moenie weer vir hierdie dokument wys nie</value>
+  </data>
 </root>

@@ -31,8 +31,12 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" IsTextSelectionEnabled="True"
-                               AutomationProperties.AutomationId="FirstEditNoticeText" Text="{x:Bind AppViewModel.UIViewModel.FirstEditNotice, Mode=OneWay}"/>
+                    <StackPanel VerticalAlignment="Center" Spacing="4">
+                        <TextBlock TextWrapping="Wrap" IsTextSelectionEnabled="True"
+                                   AutomationProperties.AutomationId="FirstEditNoticeText" Text="{x:Bind AppViewModel.UIViewModel.FirstEditNotice, Mode=OneWay}"/>
+                        <!-- This document only (by its path); Settings > Editor turns the notice off for every document. -->
+                        <HyperlinkButton Padding="0" AutomationProperties.AutomationId="FirstEditNoticeNever" Content="{u:LocaleString Key=FirstEditNeverShow}" Click="OnFirstEditNoticeNeverClick"/>
+                    </StackPanel>
                     <Button Grid.Column="1" AutomationProperties.AutomationId="FirstEditNoticeClose" Background="Transparent" BorderThickness="0" Click="OnFirstEditNoticeCloseClick">
                         <FontIcon Glyph="&#xE711;" FontSize="12"/>
                     </Button>

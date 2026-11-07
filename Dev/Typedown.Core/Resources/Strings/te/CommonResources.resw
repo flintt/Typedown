@@ -1258,4 +1258,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>మరో ప్రోగ్రామ్ ఈ ఫైల్‌ను మార్చింది, కాబట్టి ఆటో-సేవ్ దానిపై రాయదు. ఏ వెర్షన్ ఉంచాలో ఎంచుకోండి.</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>ఈ పత్రాన్ని విజువల్ మోడ్‌లో సవరిస్తే దానిలోని కొంత భాగం ({0}) మళ్లీ రాయబడవచ్చు. దీన్ని అలాగే ఉంచడానికి, సోర్స్ మోడ్‌లో సవరించండి.</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>ఈ పత్రానికి మళ్లీ చూపవద్దు</value>
+  </data>
 </root>

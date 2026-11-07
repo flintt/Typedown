@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Ctrl+A memilih perenggan dahulu, kemudian blok di sekelilingnya, kemudian seluruh dokumen</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>Maklumkan apabila suntingan pertama dalam mod visual mungkin menulis semula kandungan</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>Notis apabila menyunting dalam mod visual boleh mengubah sebahagian teks, pautan atau HTML dokumen; mod sumber mengekalkannya seperti asal</value>
+  </data>
 </root>

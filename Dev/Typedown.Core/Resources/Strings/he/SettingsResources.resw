@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Ctrl+A בוחר קודם את הפסקה, אחר כך את הבלוק שסביבה ולבסוף את כל המסמך</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>הודע כאשר העריכה הראשונה במצב חזותי עלולה לשכתב תוכן</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>הודעה כאשר עריכה במצב חזותי עלולה לשנות חלק מהטקסט, הקישורים או ה־HTML של מסמך; מצב מקור שומר עליו כפי שהוא</value>
+  </data>
 </root>

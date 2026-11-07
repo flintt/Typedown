@@ -118,6 +118,9 @@ namespace Typedown.Core.ViewModels
         /// only. Asked for by markdown-linewrap and a Store review ("wraps lines on single line breaks").
         /// </summary>
         public bool JoinSoftBreaks { get => GetSettingValue(false); set => SetSettingValue(value); }
+
+        /// <summary>The notice that the first visual edit may rewrite part of a document (off: never shown, for every document).</summary>
+        public bool WarnFirstEditRewrite { get => GetSettingValue(true); set => SetSettingValue(value); }
         /// <summary>
         /// Line numbers beside the lines of a code block in the visual editor and reading mode; its lines do not wrap then
         /// (a long one scrolls across). Display only: not in the file, not copied, not printed. Asked for in Store reviews.

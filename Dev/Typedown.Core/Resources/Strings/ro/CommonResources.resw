@@ -1258,4 +1258,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>Alt program a modificat acest fișier, așa că salvarea automată nu îl suprascrie. Alegeți ce versiune păstrați.</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>Editarea acestui document în modul vizual poate rescrie o parte din el ({0}). Pentru a-l păstra exact așa cum este, editați-l în modul sursă.</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>Nu mai afișa pentru acest document</value>
+  </data>
 </root>

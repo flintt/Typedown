@@ -1031,4 +1031,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Ctrl+A 先选中段落，再选中外面的块，最后选中全文</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>可视模式首次编辑可能改写内容时提示</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>在可视模式下编辑可能改变文档中的部分文字、链接或 HTML 时给出提示；源码模式会保持原样</value>
+  </data>
 </root>

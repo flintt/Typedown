@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Ctrl+A прво го избира пасусот, потоа блокот околу него и на крај целиот документ</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>Извести кога првото уредување во визуелен режим може да препише содржина</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>Известување кога уредувањето во визуелен режим може да промени дел од текстот, врските или HTML на документот; режимот на изворен код го зачувува непроменет</value>
+  </data>
 </root>

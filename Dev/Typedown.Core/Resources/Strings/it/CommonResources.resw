@@ -1258,4 +1258,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>Un altro programma ha modificato questo file, quindi il salvataggio automatico non lo sovrascrive. Scegli quale versione tenere.</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>Modificare questo documento in modalità visuale può riscriverne una parte ({0}). Per mantenerlo così com’è, modificalo in modalità sorgente.</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>Non mostrare più per questo documento</value>
+  </data>
 </root>

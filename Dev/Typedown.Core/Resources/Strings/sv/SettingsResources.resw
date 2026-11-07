@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Ctrl+A markerar först stycket, sedan blocket runt det och till sist hela dokumentet</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>Meddela när den första redigeringen i visuellt läge kan skriva om innehåll</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>Ett meddelande när redigering i visuellt läge kan ändra en del av ett dokuments text, länkar eller HTML; källkodsläget behåller det oförändrat</value>
+  </data>
 </root>

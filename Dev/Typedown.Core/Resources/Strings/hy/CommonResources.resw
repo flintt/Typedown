@@ -1258,4 +1258,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>Մեկ այլ ծրագիր փոխել է այս ֆայլը, ուստի ավտոմատ պահումը չի վերագրում այն։ Ընտրեք, որ տարբերակը պահել։</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>Այս փաստաթուղթը տեսողական ռեժիմում խմբագրելիս դրա մի մասը ({0}) կարող է վերագրվել: Այն ճիշտ այնպես պահելու համար խմբագրեք աղբյուրի ռեժիմում:</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>Այլևս ցույց չտալ այս փաստաթղթի համար</value>
+  </data>
 </root>

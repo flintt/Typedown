@@ -1258,4 +1258,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>Egy másik program módosította ezt a fájlt, ezért az automatikus mentés nem írja felül. Válassza ki, melyik változatot tartja meg.</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>A dokumentum vizuális módban történő szerkesztése átírhatja egy részét ({0}). Ha pontosan így szeretné megtartani, szerkessze forrás módban.</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>Ne jelenjen meg újra ennél a dokumentumnál</value>
+  </data>
 </root>

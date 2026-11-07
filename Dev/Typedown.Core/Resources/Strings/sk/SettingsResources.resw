@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Ctrl+A vyberie najprv odsek, potom blok okolo neho a nakoniec celý dokument</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>Upozorniť, keď prvá úprava vo vizuálnom režime môže prepísať obsah</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>Upozornenie, keď úpravy vo vizuálnom režime môžu zmeniť časť textu, odkazov alebo HTML dokumentu; režim zdrojového kódu ho zachová bez zmeny</value>
+  </data>
 </root>

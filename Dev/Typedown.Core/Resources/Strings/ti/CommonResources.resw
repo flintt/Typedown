@@ -1257,4 +1257,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>ካልእ ፕሮግራም ነዚ ፋይል ቀይርዎ፣ ስለዚ ኣውቶማቲክ ምዕቃብ ኣብ ልዕሊኡ ኣይጽሕፍን። ኣየናይ ስሪት ከም እተቐምጥ ምረጽ።</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>ነዚ ሰነድ ብናይ ርእይቶ ኣገባብ ምእራም ገለ ክፋሉ ({0}) ዳግማይ ክጽሕፎ ይኽእል እዩ። ከም ዘለዎ ንምዕቃቡ፣ ብናይ ምንጪ ኣገባብ ኣርእሞ።</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>ነዚ ሰነድ ደጊምካ ኣይተርኢ</value>
+  </data>
 </root>

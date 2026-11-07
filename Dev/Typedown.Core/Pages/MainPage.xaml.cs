@@ -74,6 +74,8 @@ namespace Typedown.Core.Pages
 
         private void OnFirstEditNoticeCloseClick(object sender, RoutedEventArgs e) => AppViewModel.UIViewModel.HideFirstEditNotice();
 
+        private void OnFirstEditNoticeNeverClick(object sender, RoutedEventArgs e) => AppViewModel.UIViewModel.MuteFirstEditNotice();
+
         private async void OpenExported(Action<string> open)
         {
             var path = AppViewModel.UIViewModel.ExportedPath;

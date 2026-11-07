@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Ctrl+A përzgjedh fillimisht paragrafin, pastaj bllokun përreth tij dhe në fund gjithë dokumentin</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>Njofto kur redaktimi i parë në modalitetin vizual mund të rishkruajë përmbajtjen</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>Njoftim kur redaktimi në modalitetin vizual mund të ndryshojë një pjesë të tekstit, lidhjeve ose HTML-së së dokumentit; modaliteti i burimit e mban të pandryshuar</value>
+  </data>
 </root>

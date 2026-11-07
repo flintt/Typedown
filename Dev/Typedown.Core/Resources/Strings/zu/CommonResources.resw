@@ -1258,4 +1258,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>Olunye uhlelo lushintshe leli fayela, ngakho ukugcina okuzenzakalelayo akulibhali ngaphezulu. Khetha ukuthi iyiphi inguqulo ozoyigcina.</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>Ukuhlela lo mbhalo kumodi ebonakalayo kungabhala kabusha ingxenye yawo ({0}). Ukuze uwugcine unjengoba unjalo, wuhlele kumodi yomthombo.</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>Ungaphinde ubonise kulo mbhalo</value>
+  </data>
 </root>

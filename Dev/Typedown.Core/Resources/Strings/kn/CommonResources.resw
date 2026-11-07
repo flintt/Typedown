@@ -1258,4 +1258,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>ಬೇರೆ ಪ್ರೋಗ್ರಾಂ ಈ ಫೈಲ್ ಅನ್ನು ಬದಲಿಸಿದೆ, ಹಾಗಾಗಿ ಸ್ವಯಂ ಉಳಿಕೆ ಅದರ ಮೇಲೆ ಬರೆಯುವುದಿಲ್ಲ. ಯಾವ ಆವೃತ್ತಿಯನ್ನು ಇರಿಸಬೇಕೆಂದು ಆರಿಸಿ.</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>ಈ ದಾಖಲೆಯನ್ನು ದೃಶ್ಯ ಮೋಡ್‌ನಲ್ಲಿ ಸಂಪಾದಿಸಿದರೆ ಅದರ ಕೆಲವು ಭಾಗ ({0}) ಮತ್ತೆ ಬರೆಯಲ್ಪಡಬಹುದು. ಅದನ್ನು ಹಾಗೆಯೇ ಇರಿಸಲು, ಮೂಲ ಮೋಡ್‌ನಲ್ಲಿ ಸಂಪಾದಿಸಿ.</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>ಈ ದಾಖಲೆಗೆ ಮತ್ತೆ ತೋರಿಸಬೇಡಿ</value>
+  </data>
 </root>

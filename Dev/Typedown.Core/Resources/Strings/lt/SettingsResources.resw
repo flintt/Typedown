@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Ctrl+A pirmiausia pažymi pastraipą, tada ją supantį bloką ir galiausiai visą dokumentą</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>Pranešti, kai pirmasis redagavimas vaizdiniu režimu gali perrašyti turinį</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>Pranešimas, kai redagavimas vaizdiniu režimu gali pakeisti dalį dokumento teksto, nuorodų ar HTML; šaltinio režimas jį išlaiko nepakeistą</value>
+  </data>
 </root>

@@ -1258,4 +1258,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>আন এটা প্ৰগ্ৰামে এই ফাইলটো সলনি কৰিছে, সেয়ে স্বয়ংক্ৰিয় ছেভে ইয়াৰ ওপৰত নিলিখে। কোনটো সংস্কৰণ ৰাখিব বাছক।</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>এই নথিখন ভিজুৱেল মোডত সম্পাদনা কৰিলে ইয়াৰ কিছু অংশ ({0}) পুনৰ লিখা হ'ব পাৰে। হুবহু ৰাখিবলৈ ছ'ৰ্চ মোডত সম্পাদনা কৰক।</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>এই নথিৰ বাবে পুনৰ নেদেখুৱাব</value>
+  </data>
 </root>

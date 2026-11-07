@@ -1258,4 +1258,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>Et andet program har ændret filen, så automatisk lagring overskriver den ikke. Vælg, hvilken version du vil beholde.</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>Redigering af dette dokument i visuel tilstand kan omskrive en del af det ({0}). Rediger det i kildetilstand for at bevare det præcis, som det er.</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>Vis ikke igen for dette dokument</value>
+  </data>
 </root>

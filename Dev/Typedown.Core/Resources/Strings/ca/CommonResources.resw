@@ -1258,4 +1258,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>Un altre programa ha canviat aquest fitxer, així que el desament automàtic no el sobreescriu. Tria quina versió vols conservar.</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>Editar aquest document en mode visual pot reescriure’n una part ({0}). Per mantenir-lo exactament com és, editeu-lo en mode de codi font.</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>No ho tornis a mostrar per a aquest document</value>
+  </data>
 </root>

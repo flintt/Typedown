@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Ctrl+A ቅድሚያ ነቲ ሓረግ፣ ድሕሪኡ ነቲ ዙርያኡ ዘሎ ብሎክ፣ ኣብ መወዳእታ ንምሉእ ሰነድ ይመርጽ</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>እቲ ቀዳማይ ምእራም ብናይ ርእይቶ ኣገባብ ትሕዝቶ ዳግማይ ክጽሕፍ ምስ ዝኽእል ሓብር</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>ብናይ ርእይቶ ኣገባብ ምእራም ገለ ጽሑፍ፣ መላግቦታት ወይ HTML ናይ ሰነድ ክቕይር ምስ ዝኽእል መዘኻኸሪ፤ ናይ ምንጪ ኣገባብ ከም ዘለዎ የዕቅቦ</value>
+  </data>
 </root>

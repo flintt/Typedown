@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>U-Ctrl+A ukhetha isigaba kuqala, bese kuba yibhulokhi esizungezile, bese kuba yidokhumenti yonke</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>Yazisa lapho ukuhlela kokuqala kumodi ebonakalayo kungabhala kabusha okuqukethwe</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>Isaziso lapho ukuhlela kumodi ebonakalayo kungashintsha ingxenye yombhalo, izixhumanisi noma i-HTML yombhalo; imodi yomthombo iwugcina unjalo</value>
+  </data>
 </root>

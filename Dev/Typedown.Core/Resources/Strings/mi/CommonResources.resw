@@ -1258,4 +1258,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>Kua hurihia tēnei kōnae e tētahi atu hōtaka, nō reira kāore te tiaki aunoa e tuhi ki runga. Kōwhiria te putanga hei pupuri.</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>Mā te whakatika i tēnei tuhinga i te aratau ataata ka tuhi anō pea i tētahi wāhanga ({0}). Kia mau tonu ai ki tōna āhua, whakatikaina i te aratau pūtake.</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>Kaua e whakaatu anō mō tēnei tuhinga</value>
+  </data>
 </root>

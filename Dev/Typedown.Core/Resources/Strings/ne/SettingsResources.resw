@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Ctrl+A ले पहिले अनुच्छेद, त्यसपछि वरिपरिको ब्लक र अन्त्यमा पूरै कागजात चयन गर्छ</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>भिजुअल मोडमा पहिलो सम्पादनले सामग्री पुनः लेख्न सक्दा सूचित गर्नुहोस्</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>भिजुअल मोडमा सम्पादनले कागजातको केही पाठ, लिङ्क वा HTML परिवर्तन गर्न सक्दा सूचना; स्रोत मोडले यसलाई जस्ताको तस्तै राख्छ</value>
+  </data>
 </root>

@@ -289,6 +289,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     // document down as it came and up as it went, or lay over its first line. The page says when it is to show and when
     // not, for the load it is about; the host shows it only while that load is the document shown.
     const firstEditWarningRef = useRef(false)
+    const firstEditReasonsRef = useRef<string[]>([])
     const readOnlyRef = useRef(!!props.options?.readOnly)
     const firstEditWarningTimerRef = useRef<number | null>(null)
     const firstEditToldRef = useRef<{ show: boolean, loadId: number | undefined } | null>(null)
@@ -315,7 +316,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         // The text as the page has it (localization.ts): the host shows its own copy of the same string, this is for its log.
         let text = ''
         try { text = JSON.parse(getComputedStyle(document.documentElement).getPropertyValue('--FirstEditWarning') || '""') } catch { text = '' }
-        transport.postMessage('FirstEditNotice', { show, loadId, text: show ? text : '' })
+        transport.postMessage('FirstEditNotice', { show, loadId, text: show ? text : '', reasons: show ? firstEditReasonsRef.current : [] })
     }
     useEffect(() => {
         readOnlyRef.current = !!props.options?.readOnly
@@ -1717,6 +1718,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             editor.showDocument(kept.kept, loaded)
             ;(window as any).__typedownLastApply = 'kept'
             importedRef.current = kept.imported
+            firstEditReasonsRef.current = kept.warn ? classifyNormalization(kept.imported.source, kept.imported.normalized).reasons : []
             showFirstEditWarning(kept.warn)
             shownRef.current = {
                 text: kept.text, imported: kept.imported, warn: kept.warn, renderKey: kept.renderKey, loadCaret: kept.loadCaret,
@@ -1761,7 +1763,10 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         const markdown = props.markdown
         requestAnimationFrame(() => setTimeout(() => {
             if (importedRef.current !== imported) return
-            const warn = classifyNormalization(markdown, imported.normalized).pendingNormalization === 'unsafe'
+            const result = classifyNormalization(markdown, imported.normalized)
+            const warn = result.pendingNormalization === 'unsafe'
+            // What it would rewrite, for the host's words (HTML, links, footnotes...).
+            firstEditReasonsRef.current = warn ? result.reasons : []
             if (shown) shown.warn = warn
             showFirstEditWarning(warn)
         }, 0))

@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Ctrl+A पहले अनुच्छेद, फिर उसके आसपास का ब्लॉक और अंत में पूरा दस्तावेज़ चुनता है</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>सूचित करें जब विज़ुअल मोड में पहला संपादन सामग्री को फिर से लिख सकता है</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>सूचना जब विज़ुअल मोड में संपादन दस्तावेज़ के कुछ पाठ, लिंक या HTML को बदल सकता है; सोर्स मोड इसे वैसा ही रखता है</value>
+  </data>
 </root>

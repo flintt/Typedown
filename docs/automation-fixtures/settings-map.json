@@ -927,6 +927,7 @@
         "VimMode",
         "ShowBlankLines",
         "JoinSoftBreaks",
+        "WarnFirstEditRewrite",
         "CodeBlockLineNumbers",
         "ScrollPastEnd",
         "SelectAllInSteps",

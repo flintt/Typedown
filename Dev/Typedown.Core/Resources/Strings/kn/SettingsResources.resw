@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Ctrl+A ಮೊದಲು ಪ್ಯಾರಾಗ್ರಾಫ್, ನಂತರ ಅದರ ಸುತ್ತಲಿನ ಬ್ಲಾಕ್, ಕೊನೆಗೆ ಸಂಪೂರ್ಣ ಡಾಕ್ಯುಮೆಂಟ್ ಆಯ್ಕೆಮಾಡುತ್ತದೆ</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>ದೃಶ್ಯ ಮೋಡ್‌ನಲ್ಲಿ ಮೊದಲ ಸಂಪಾದನೆ ವಿಷಯವನ್ನು ಮತ್ತೆ ಬರೆಯಬಹುದಾದಾಗ ತಿಳಿಸಿ</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>ದೃಶ್ಯ ಮೋಡ್‌ನಲ್ಲಿ ಸಂಪಾದನೆ ದಾಖಲೆಯ ಕೆಲವು ಪಠ್ಯ, ಲಿಂಕ್‌ಗಳು ಅಥವಾ HTML ಅನ್ನು ಬದಲಿಸಬಹುದಾದಾಗ ಸೂಚನೆ; ಮೂಲ ಮೋಡ್ ಅದನ್ನು ಹಾಗೆಯೇ ಇರಿಸುತ್ತದೆ</value>
+  </data>
 </root>

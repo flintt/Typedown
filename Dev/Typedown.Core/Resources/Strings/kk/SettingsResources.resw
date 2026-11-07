@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Ctrl+A алдымен абзацты, содан кейін оның айналасындағы блокты, соңында бүкіл құжатты таңдайды</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>Визуалды режимдегі алғашқы өңдеу мазмұнды қайта жазуы мүмкін болғанда хабарлау</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>Визуалды режимде өңдеу құжаттың мәтінінің, сілтемелерінің немесе HTML-інің бір бөлігін өзгертуі мүмкін болғанда хабарлама; бастапқы код режимі оны өзгеріссіз сақтайды</value>
+  </data>
 </root>

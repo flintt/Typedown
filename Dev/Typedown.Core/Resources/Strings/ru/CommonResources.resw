@@ -1258,4 +1258,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>Другая программа изменила этот файл, поэтому автосохранение не перезаписывает его. Выберите, какую версию оставить.</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>При редактировании этого документа в визуальном режиме часть его ({0}) может быть переписана. Чтобы сохранить его как есть, редактируйте в режиме исходного кода.</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>Больше не показывать для этого документа</value>
+  </data>
 </root>

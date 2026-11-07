@@ -1258,4 +1258,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>Toinen ohjelma muutti tätä tiedostoa, joten automaattinen tallennus ei kirjoita sen päälle. Valitse, kumman version säilytät.</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>Tämän asiakirjan muokkaaminen visuaalisessa tilassa voi kirjoittaa osan siitä ({0}) uudelleen. Jos haluat säilyttää sen täsmälleen ennallaan, muokkaa sitä lähdekooditilassa.</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>Älä näytä uudelleen tälle asiakirjalle</value>
+  </data>
 </root>

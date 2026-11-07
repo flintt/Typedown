@@ -85,10 +85,43 @@ namespace Typedown.Core.ViewModels
         /// <summary>The load the notice is for (EditorViewModel.LoadId).</summary>
         public int FirstEditNoticeLoad { get; private set; }
 
-        public void ShowFirstEditNotice(int loadId)
+        public void ShowFirstEditNotice(int loadId, IReadOnlyList<string> reasons = null)
         {
+            // Not shown when turned off for every document (Settings > Editor) or for this one (the card's "Don't show
+            // again for this document", Services/FirstEditMutes.cs).
+            if (SettingsViewModel != null && !SettingsViewModel.WarnFirstEditRewrite) return;
+            if (FirstEditMutes.Shared.IsMuted(AppViewModel?.FileViewModel?.FilePath, AppViewModel?.TabsViewModel?.ActiveTab?.DocumentId)) return;
             FirstEditNoticeLoad = loadId;
-            FirstEditNotice = Locale.GetString("FirstEditWarning");
+            FirstEditNotice = FirstEditNoticeText(reasons);
+        }
+
+        // What the first visual edit may rewrite, by the page's reasons (services/normalization.ts), in the interface's
+        // words for those parts. The notice said "raw HTML" whatever it was - a list numbered on had it say so for a
+        // document with no HTML in it (the user, 2026-11-07).
+        private static readonly (string Reason, string Key)[] notedParts =
+        {
+            ("html-lost", null), ("link-lost", "Hyperlink"), ("footnote-lost", "Footnote"), ("math-lost", "Math"),
+            ("fence-lost", "CodeFences"), ("word-lost", "Paragraph"), ("task-state-changed", "TaskList"), ("front-matter-lost", "YAMLFrontMatter"),
+        };
+
+        public static string FirstEditNoticeText(IReadOnlyList<string> reasons)
+        {
+            var parts = notedParts.Where(p => reasons?.Contains(p.Reason) == true).Select(p => p.Key == null ? "HTML" : Locale.GetString(p.Key)).ToList();
+            if (parts.Count == 0 || (parts.Count == 1 && reasons.Contains("html-lost"))) return Locale.GetString("FirstEditWarning");
+            var language = Locale.Culture?.TwoLetterISOLanguageName ?? "en";
+            var separator = language is "zh" or "ja" ? "、" : language == "ar" || language == "fa" || language == "ur" ? "، " : ", ";
+            return string.Format(Locale.GetString("FirstEditWarningFor"), string.Join(separator, parts));
+        }
+
+        /// <summary>
+        /// The card's "Don't show again for this document": that document only, by its path (an untitled one for as long
+        /// as the app runs). The reader asked whether it was for this document (2026-11-07); Settings > Editor turns the
+        /// notice off for every document.
+        /// </summary>
+        public void MuteFirstEditNotice()
+        {
+            FirstEditMutes.Shared.Mute(AppViewModel?.FileViewModel?.FilePath, AppViewModel?.TabsViewModel?.ActiveTab?.DocumentId);
+            HideFirstEditNotice();
         }
 
         public void HideFirstEditNotice() => FirstEditNotice = null;

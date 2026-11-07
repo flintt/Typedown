@@ -1258,4 +1258,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>Program lain telah mengubah fail ini, jadi simpan automatik tidak menulis gantinya. Pilih versi yang hendak dikekalkan.</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>Mengedit dokumen ini dalam mod visual mungkin menulis semula sebahagian daripadanya ({0}). Untuk mengekalkannya seperti asal, edit dalam mod sumber.</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>Jangan tunjukkan lagi untuk dokumen ini</value>
+  </data>
 </root>

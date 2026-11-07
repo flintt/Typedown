@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Ctrl+A முதலில் பத்தியையும், பிறகு அதைச் சுற்றியுள்ள தொகுதியையும், இறுதியாக முழு ஆவணத்தையும் தேர்ந்தெடுக்கும்</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>காட்சி பயன்முறையில் முதல் திருத்தம் உள்ளடக்கத்தை மீண்டும் எழுதக்கூடும் போது அறிவி</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>காட்சி பயன்முறையில் திருத்துவது ஆவணத்தின் சில உரை, இணைப்புகள் அல்லது HTML-ஐ மாற்றக்கூடும் போது அறிவிப்பு; மூலப் பயன்முறை அதை அப்படியே வைத்திருக்கும்</value>
+  </data>
 </root>

@@ -1258,4 +1258,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>Drug program je spremenil to datoteko, zato je samodejno shranjevanje ne prepiše. Izberite, katero različico želite obdržati.</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>Urejanje tega dokumenta v vizualnem načinu lahko prepiše njegov del ({0}). Da ga ohranite natanko takšnega, kot je, ga urejajte v načinu izvorne kode.</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>Ne prikaži več za ta dokument</value>
+  </data>
 </root>

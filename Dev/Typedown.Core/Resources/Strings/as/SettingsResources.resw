@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Ctrl+A এ প্ৰথমে অনুচ্ছেদটো, তাৰ পিছত চাৰিওফালৰ ব্লকটো, শেষত সম্পূৰ্ণ নথিখন বাছে</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>ভিজুৱেল মোডত প্ৰথম সম্পাদনাই সমল পুনৰ লিখিব পাৰিলে জনাওক</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>ভিজুৱেল মোডত সম্পাদনাই নথিৰ কিছু লিখনি, লিংক বা HTML সলনি কৰিব পাৰিলে এটা জাননী; ছ'ৰ্চ মোডে ইয়াক হুবহু ৰাখে</value>
+  </data>
 </root>

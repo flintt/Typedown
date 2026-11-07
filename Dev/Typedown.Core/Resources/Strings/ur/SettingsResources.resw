@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Ctrl+A پہلے پیراگراف، پھر اس کے گرد کا بلاک اور آخر میں پوری دستاویز منتخب کرتا ہے</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>اطلاع دیں جب بصری موڈ میں پہلی ترمیم مواد کو دوبارہ لکھ سکتی ہو</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>اطلاع جب بصری موڈ میں ترمیم دستاویز کے کچھ متن، روابط یا HTML کو بدل سکتی ہو؛ سورس موڈ اسے جوں کا توں رکھتا ہے</value>
+  </data>
 </root>

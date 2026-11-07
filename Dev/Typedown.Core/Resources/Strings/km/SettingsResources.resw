@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Ctrl+A ជ្រើសកថាខណ្ឌមុន បន្ទាប់មកប្លុកជុំវិញវា ហើយចុងក្រោយឯកសារទាំងមូល</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>ជូនដំណឹងនៅពេលការកែសម្រួលដំបូងក្នុងរបៀបមើលឃើញអាចសរសេរខ្លឹមសារឡើងវិញ</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>ការជូនដំណឹងនៅពេលការកែសម្រួលក្នុងរបៀបមើលឃើញអាចផ្លាស់ប្ដូរអត្ថបទ តំណ ឬ HTML ខ្លះនៃឯកសារ; របៀបកូដប្រភពរក្សាវាដដែល</value>
+  </data>
 </root>

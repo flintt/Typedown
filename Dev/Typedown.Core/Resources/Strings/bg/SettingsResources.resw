@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Ctrl+A избира първо абзаца, после блока около него и накрая целия документ</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>Известяване, когато първата редакция във визуален режим може да презапише съдържание</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>Известие, когато редактирането във визуален режим може да промени част от текста, връзките или HTML на документ; режимът на изходен код го запазва непроменен</value>
+  </data>
 </root>

@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Ctrl+A сначала выделяет абзац, затем окружающий его блок, затем весь документ</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>Уведомлять, когда первая правка в визуальном режиме может переписать содержимое</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>Уведомление, когда правка в визуальном режиме может изменить часть текста, ссылок или HTML документа; режим исходного кода сохраняет его без изменений</value>
+  </data>
 </root>

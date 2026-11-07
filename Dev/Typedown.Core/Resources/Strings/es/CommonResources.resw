@@ -1258,4 +1258,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>Otro programa ha cambiado este archivo, así que el guardado automático no lo sobrescribe. Elige qué versión conservar.</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>Editar este documento en modo visual puede reescribir parte de él ({0}). Para mantenerlo tal cual, edítalo en modo de código fuente.</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>No volver a mostrar para este documento</value>
+  </data>
 </root>

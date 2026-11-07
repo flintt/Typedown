@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Ctrl+A valib kõigepealt lõigu, siis seda ümbritseva ploki ja lõpuks kogu dokumendi</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>Teavita, kui esimene redigeerimine visuaalses režiimis võib sisu ümber kirjutada</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>Teade, kui visuaalses režiimis redigeerimine võib muuta osa dokumendi tekstist, linkidest või HTML-ist; lähterežiim jätab selle muutmata</value>
+  </data>
 </root>

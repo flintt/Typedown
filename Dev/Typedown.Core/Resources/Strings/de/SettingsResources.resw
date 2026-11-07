@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Strg+A wählt zuerst den Absatz, dann den umgebenden Block, dann das ganze Dokument aus</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>Hinweisen, wenn die erste Bearbeitung im visuellen Modus Inhalte umschreiben kann</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>Ein Hinweis, wenn das Bearbeiten im visuellen Modus Text, Links oder HTML eines Dokuments ändern kann; der Quellmodus lässt es unverändert</value>
+  </data>
 </root>

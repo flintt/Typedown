@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Ctrl+A prvo bira pasus, zatim blok oko njega, pa ceo dokument</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>Obavesti kada prvo uređivanje u vizuelnom režimu može da prepiše sadržaj</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>Obaveštenje kada uređivanje u vizuelnom režimu može da promeni deo teksta, veza ili HTML-a dokumenta; režim izvornog koda ga čuva nepromenjenim</value>
+  </data>
 </root>

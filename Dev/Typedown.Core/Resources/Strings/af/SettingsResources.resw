@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Ctrl+A kies eers die paragraaf, dan die blok daarom, dan die hele dokument</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>Laat weet wanneer die eerste redigering in visuele modus inhoud kan herskryf</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>’n Kennisgewing wanneer redigering in visuele modus van ’n dokument se teks, skakels of HTML kan verander; bronmodus hou dit onveranderd</value>
+  </data>
 </root>

@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Ctrl+A önce paragrafı, sonra onu çevreleyen bloğu, en sonunda tüm belgeyi seçer</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>Görsel moddaki ilk düzenleme içeriği yeniden yazabilecekse bildir</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>Görsel modda düzenleme bir belgenin metninin, bağlantılarının veya HTML’sinin bir kısmını değiştirebileceğinde bir bildirim; kaynak modu onu olduğu gibi korur</value>
+  </data>
 </root>

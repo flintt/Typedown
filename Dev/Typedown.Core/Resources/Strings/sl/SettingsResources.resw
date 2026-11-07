@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Ctrl+A najprej izbere odstavek, nato blok okoli njega in nazadnje ves dokument</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>Obvesti, ko lahko prvo urejanje v vizualnem načinu prepiše vsebino</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>Obvestilo, ko lahko urejanje v vizualnem načinu spremeni del besedila, povezav ali HTML dokumenta; način izvorne kode ga ohrani nespremenjenega</value>
+  </data>
 </root>

@@ -1258,4 +1258,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>Jiný program tento soubor změnil, a proto jej automatické ukládání nepřepíše. Vyberte, kterou verzi ponechat.</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>Úpravy tohoto dokumentu ve vizuálním režimu mohou přepsat jeho část ({0}). Chcete-li jej zachovat přesně takový, jaký je, upravujte jej v režimu zdrojového kódu.</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>Pro tento dokument znovu nezobrazovat</value>
+  </data>
 </root>

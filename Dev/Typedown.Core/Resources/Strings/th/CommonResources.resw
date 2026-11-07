@@ -1258,4 +1258,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>โปรแกรมอื่นเปลี่ยนไฟล์นี้ การบันทึกอัตโนมัติจึงไม่เขียนทับ เลือกว่าจะเก็บฉบับใด</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>การแก้ไขเอกสารนี้ในโหมดภาพอาจเขียนบางส่วนใหม่ ({0}) หากต้องการคงไว้ตามเดิม ให้แก้ไขในโหมดซอร์ส</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>ไม่ต้องแสดงอีกสำหรับเอกสารนี้</value>
+  </data>
 </root>

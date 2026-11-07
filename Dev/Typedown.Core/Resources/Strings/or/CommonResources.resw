@@ -1258,4 +1258,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>ଅନ୍ୟ ଏକ ପ୍ରୋଗ୍ରାମ ଏହି ଫାଇଲ ବଦଳାଇଛି, ତେଣୁ ସ୍ୱୟଂ-ସଞ୍ଚୟ ଏହା ଉପରେ ଲେଖେ ନାହିଁ। କେଉଁ ସଂସ୍କରଣ ରଖିବେ ବାଛନ୍ତୁ।</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>ଏହି ଡକ୍ୟୁମେଣ୍ଟକୁ ଭିଜୁଆଲ୍ ମୋଡରେ ସମ୍ପାଦନ କଲେ ଏହାର କିଛି ଅଂଶ ({0}) ପୁଣି ଲେଖାଯାଇପାରେ। ଏହାକୁ ଠିକ୍ ସେହିପରି ରଖିବାକୁ, ସୋର୍ସ ମୋଡରେ ସମ୍ପାଦନ କରନ୍ତୁ।</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>ଏହି ଡକ୍ୟୁମେଣ୍ଟ ପାଇଁ ପୁଣି ଦେଖାନ୍ତୁ ନାହିଁ</value>
+  </data>
 </root>

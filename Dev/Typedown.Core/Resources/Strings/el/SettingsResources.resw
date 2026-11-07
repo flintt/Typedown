@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Το Ctrl+A επιλέγει πρώτα την παράγραφο, μετά το μπλοκ γύρω της και τέλος ολόκληρο το έγγραφο</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>Ειδοποίηση όταν η πρώτη επεξεργασία σε οπτική λειτουργία μπορεί να ξαναγράψει περιεχόμενο</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>Ειδοποίηση όταν η επεξεργασία σε οπτική λειτουργία μπορεί να αλλάξει μέρος του κειμένου, των συνδέσμων ή του HTML ενός εγγράφου· η λειτουργία πηγαίου κώδικα το διατηρεί αμετάβλητο</value>
+  </data>
 </root>

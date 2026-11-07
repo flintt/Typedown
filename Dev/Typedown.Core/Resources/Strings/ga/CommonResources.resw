@@ -1258,4 +1258,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>D'athraigh clár eile an comhad seo, mar sin ní scríobhann an sábháil uathoibríoch thairis. Roghnaigh cén leagan a choinneofar.</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>Má chuireann tú an doiciméad seo in eagar sa mhód amhairc, d’fhéadfaí cuid de ({0}) a athscríobh. Chun é a choinneáil díreach mar atá sé, cuir in eagar é sa mhód foinse.</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>Ná taispeáin arís don doiciméad seo</value>
+  </data>
 </root>

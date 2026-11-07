@@ -1258,4 +1258,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>غيّر برنامج آخر هذا الملف، لذا لا يكتب الحفظ التلقائي فوقه. اختر النسخة التي تريد الاحتفاظ بها.</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>قد يؤدي تحرير هذا المستند في الوضع المرئي إلى إعادة كتابة جزء منه ({0}). للإبقاء عليه كما هو تمامًا، حرّره في وضع المصدر.</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>عدم الإظهار مرة أخرى لهذا المستند</value>
+  </data>
 </root>

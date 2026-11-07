@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Ctrl+A మొదట పేరాను, తర్వాత దాని చుట్టూ ఉన్న బ్లాక్‌ను, చివరగా మొత్తం పత్రాన్ని ఎంచుకుంటుంది</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>విజువల్ మోడ్‌లో మొదటి సవరణ కంటెంట్‌ను మళ్లీ రాయగలిగినప్పుడు తెలియజేయి</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>విజువల్ మోడ్‌లో సవరణ పత్రంలోని కొంత వచనం, లింక్‌లు లేదా HTML‌ను మార్చగలిగినప్పుడు నోటీసు; సోర్స్ మోడ్ దాన్ని అలాగే ఉంచుతుంది</value>
+  </data>
 </root>

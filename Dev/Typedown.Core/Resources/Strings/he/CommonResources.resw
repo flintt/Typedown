@@ -1258,4 +1258,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>תוכנה אחרת שינתה את הקובץ, ולכן השמירה האוטומטית לא דורסת אותו. בחר איזו גרסה לשמור.</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>עריכת מסמך זה במצב חזותי עלולה לשכתב חלק ממנו ({0}). כדי לשמור עליו בדיוק כפי שהוא, ערוך אותו במצב מקור.</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>אל תציג שוב עבור מסמך זה</value>
+  </data>
 </root>

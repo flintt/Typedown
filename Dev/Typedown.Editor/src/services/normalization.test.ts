@@ -67,3 +67,19 @@ test('payload extraction ignores markup inside fences and reads the front matter
     expect(payload.links).toEqual(['d\u0000']);
     expect(payload.tasks).toEqual([]);
 });
+
+describe('an ordered list numbered on is not a word lost', () => {
+    const safe = (source: string, normalized: string) => classifyNormalization(source, normalized).reasons.includes('word-lost')
+    it('a skipped number', () => {
+        expect(safe('1. a\n2. b\n10. c\n', '1. a\n2. b\n3. c\n')).toBe(false)
+    })
+    it('a list starting at 3', () => {
+        expect(safe('3. a\n7. b\n', '3. a\n4. b\n')).toBe(false)
+    })
+    it('the "1)" way, nested and in a quotation', () => {
+        expect(safe('1) a\n5) b\n\n> 1. q\n> 9. r\n\n- x\n  1. y\n  4. z\n', '1) a\n2) b\n\n> 1. q\n> 2. r\n\n- x\n  1. y\n  2. z\n')).toBe(false)
+    })
+    it('a number in the text is still a word', () => {
+        expect(safe('1. it costs 10 yuan\n', '1. it costs yuan\n')).toBe(true)
+    })
+})

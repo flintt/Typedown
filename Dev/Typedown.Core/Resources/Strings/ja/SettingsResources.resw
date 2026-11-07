@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Ctrl+A でまず段落を、次にそれを囲むブロックを、最後に文書全体を選択します</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>ビジュアルモードの最初の編集で内容が書き換わる可能性があるときに知らせる</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>ビジュアルモードでの編集で文書の文字、リンク、HTML の一部が変わる可能性があるときに知らせます。ソースモードではそのまま保たれます</value>
+  </data>
 </root>

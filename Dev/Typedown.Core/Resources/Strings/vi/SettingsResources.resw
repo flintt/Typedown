@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Ctrl+A chọn đoạn văn trước, sau đó là khối bao quanh, cuối cùng là toàn bộ tài liệu</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>Thông báo khi lần chỉnh sửa đầu tiên ở chế độ trực quan có thể viết lại nội dung</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>Thông báo khi chỉnh sửa ở chế độ trực quan có thể thay đổi một phần văn bản, liên kết hoặc HTML của tài liệu; chế độ mã nguồn giữ nguyên</value>
+  </data>
 </root>

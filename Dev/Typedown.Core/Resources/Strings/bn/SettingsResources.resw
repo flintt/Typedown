@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Ctrl+A প্রথমে অনুচ্ছেদটি, তারপর চারপাশের ব্লকটি, শেষে পুরো নথি নির্বাচন করে</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>ভিজ্যুয়াল মোডে প্রথম সম্পাদনা বিষয়বস্তু পুনরায় লিখতে পারলে জানান</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>ভিজ্যুয়াল মোডে সম্পাদনা নথির কিছু লেখা, লিঙ্ক বা HTML পরিবর্তন করতে পারলে একটি বিজ্ঞপ্তি; সোর্স মোড এটি হুবহু রাখে</value>
+  </data>
 </root>

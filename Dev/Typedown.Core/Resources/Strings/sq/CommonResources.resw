@@ -1258,4 +1258,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>Një program tjetër e ndryshoi këtë skedar, ndaj ruajtja automatike nuk e mbishkruan. Zgjidhni cilin version të mbani.</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>Redaktimi i këtij dokumenti në modalitetin vizual mund të rishkruajë një pjesë të tij ({0}). Për ta mbajtur saktësisht siç është, redaktojeni në modalitetin e burimit.</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>Mos e shfaq më për këtë dokument</value>
+  </data>
 </root>

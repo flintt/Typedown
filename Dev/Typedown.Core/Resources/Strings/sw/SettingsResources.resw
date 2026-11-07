@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Ctrl+A huchagua aya kwanza, kisha kizuizi kinachoizunguka, kisha hati nzima</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>Arifu wakati uhariri wa kwanza katika hali ya kuona unaweza kuandika upya maudhui</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>Taarifa wakati kuhariri katika hali ya kuona kunaweza kubadilisha sehemu ya maandishi, viungo au HTML ya hati; hali ya chanzo huiweka kama ilivyo</value>
+  </data>
 </root>

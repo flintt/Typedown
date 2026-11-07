@@ -1258,4 +1258,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>Kita programa pakeitė šį failą, todėl automatinis įrašymas jo neperrašo. Pasirinkite, kurią versiją palikti.</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>Redaguojant šį dokumentą vaizdiniu režimu, dalis jo ({0}) gali būti perrašyta. Kad jis liktų toks pat, redaguokite šaltinio režimu.</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>Daugiau nerodyti šiam dokumentui</value>
+  </data>
 </root>

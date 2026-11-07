@@ -1272,4 +1272,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>其他程式修改了這個檔案，自動儲存不會覆寫它。請選擇保留哪一份。</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>在視覺化模式下編輯這份文件，可能會改寫其中的部分內容（{0}）。需要保持原樣時，請在原始碼模式下編輯。</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>這個文件不再提示</value>
+  </data>
 </root>

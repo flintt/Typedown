@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Ctrl+A પહેલા ફકરો, પછી તેની આસપાસનો બ્લૉક અને છેલ્લે આખો દસ્તાવેજ પસંદ કરે છે</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>વિઝ્યુઅલ મોડમાં પ્રથમ સંપાદન સામગ્રી ફરીથી લખી શકે ત્યારે સૂચિત કરો</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>જ્યારે વિઝ્યુઅલ મોડમાં સંપાદન દસ્તાવેજના કેટલાક લખાણ, લિંક અથવા HTML બદલી શકે ત્યારે સૂચના; સોર્સ મોડ તેને જેમ છે તેમ રાખે છે</value>
+  </data>
 </root>

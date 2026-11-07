@@ -1258,4 +1258,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>दुसऱ्या प्रोग्रामने ही फाइल बदलली आहे, म्हणून स्वयं-जतन तिच्यावर लिहीत नाही. कोणती आवृत्ती ठेवायची ते निवडा.</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>हा दस्तऐवज व्हिज्युअल मोडमध्ये संपादित केल्यास त्याचा काही भाग ({0}) पुन्हा लिहिला जाऊ शकतो. तो जसाच्या तसा ठेवण्यासाठी, सोर्स मोडमध्ये संपादित करा.</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>या दस्तऐवजासाठी पुन्हा दाखवू नका</value>
+  </data>
 </root>

@@ -1258,4 +1258,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>កម្មវិធីផ្សេងបានផ្លាស់ប្ដូរឯកសារនេះ ដូច្នេះការរក្សាទុកស្វ័យប្រវត្តិមិនសរសេរជាន់លើវាទេ។ សូមជ្រើសកំណែដែលត្រូវរក្សា។</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>ការកែសម្រួលឯកសារនេះក្នុងរបៀបមើលឃើញអាចសរសេរផ្នែកខ្លះរបស់វាឡើងវិញ ({0})។ ដើម្បីរក្សាវាដដែល សូមកែសម្រួលក្នុងរបៀបកូដប្រភព។</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>កុំបង្ហាញម្ដងទៀតសម្រាប់ឯកសារនេះ</value>
+  </data>
 </root>

@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Ctrl+A ആദ്യം ഖണ്ഡികയും പിന്നെ ചുറ്റുമുള്ള ബ്ലോക്കും ഒടുവിൽ മുഴുവൻ പ്രമാണവും തിരഞ്ഞെടുക്കുന്നു</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>വിഷ്വൽ മോഡിലെ ആദ്യ എഡിറ്റ് ഉള്ളടക്കം വീണ്ടും എഴുതാനിടയുള്ളപ്പോൾ അറിയിക്കുക</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>വിഷ്വൽ മോഡിലെ എഡിറ്റിംഗ് പ്രമാണത്തിലെ ചില വാചകം, ലിങ്കുകൾ അല്ലെങ്കിൽ HTML മാറ്റാനിടയുള്ളപ്പോൾ ഒരു അറിയിപ്പ്; സോഴ്‌സ് മോഡ് അതേപടി നിലനിർത്തുന്നു</value>
+  </data>
 </root>

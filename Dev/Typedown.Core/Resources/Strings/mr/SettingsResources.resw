@@ -994,4 +994,10 @@
   <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
     <value>Ctrl+A आधी परिच्छेद, नंतर त्याभोवतीचा ब्लॉक आणि शेवटी संपूर्ण दस्तऐवज निवडतो</value>
   </data>
+  <data name="Editor.FirstEditNotice.Title" xml:space="preserve">
+    <value>व्हिज्युअल मोडमधील पहिले संपादन मजकूर पुन्हा लिहू शकते तेव्हा सूचित करा</value>
+  </data>
+  <data name="Editor.FirstEditNotice.Description" xml:space="preserve">
+    <value>व्हिज्युअल मोडमधील संपादन दस्तऐवजातील काही मजकूर, दुवे किंवा HTML बदलू शकते तेव्हा सूचना; सोर्स मोड तो जसाच्या तसा ठेवतो</value>
+  </data>
 </root>

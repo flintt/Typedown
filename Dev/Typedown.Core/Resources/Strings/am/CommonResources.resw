@@ -1257,4 +1257,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>ሌላ ፕሮግራም ይህን ፋይል ቀይሮታል፣ ስለዚህ ራስ-ሰር ማስቀመጥ በላዩ ላይ አይጽፍም። የትኛውን ስሪት እንደሚያቆዩ ይምረጡ።</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>ይህን ሰነድ በእይታ ሁነታ ማርትዕ የተወሰነ ክፍሉን ({0}) እንደገና ሊጽፈው ይችላል። እንዳለ ለማቆየት፣ በምንጭ ሁነታ ያርትዑት።</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>ለዚህ ሰነድ ዳግም አታሳይ</value>
+  </data>
 </root>

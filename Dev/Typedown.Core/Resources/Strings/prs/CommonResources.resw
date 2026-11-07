@@ -1258,4 +1258,10 @@
   <data name="SaveState.ChangedOnDiskHeldBack" xml:space="preserve">
     <value>برنامهٔ دیگری این فایل را تغییر داده، پس ذخیرهٔ خودکار روی آن نمی‌نویسد. انتخاب کنید کدام نسخه بماند.</value>
   </data>
+  <data name="FirstEditWarningFor" xml:space="preserve">
+    <value>ویرایش این سند در حالت دیداری ممکن است بخشی از آن ({0}) را بازنویسی کند. برای حفظ دقیق آن، در حالت منبع ویرایش کنید.</value>
+  </data>
+  <data name="FirstEditNeverShow" xml:space="preserve">
+    <value>برای این سند دیگر نشان نده</value>
+  </data>
 </root>
