@@ -12,6 +12,18 @@ const ANY_MARK = /[-]/
 // The deleted text as it reads: Markdown's punctuation escaped, its lines one.
 const literal = (text: string) => text.replace(/\n+/g, ' ').replace(/([\\`*_{}[\]()#+\-.!|~<>$=^&])/g, '\\$1')
 
+const LIST_ITEM_START = /^[ \t]*(?:>[ \t]?)*[ \t]*(?:[*+-]|\d{1,9}[.)])[ \t]/
+
+/**
+ * A revision inside a line's block marks only (a task's box ticked, an item's indent): no marks there - they made
+ * "- [<del> </del><ins>x</ins>] a" plain text "[x]" - the line goes as it is now, a task still a task.
+ */
+function inBlockMarks(text: string, r: Revision): boolean {
+    const lineStart = text.lastIndexOf('\n', r.curStart - 1) + 1
+    const marks = /^[ \t]*(?:>[ \t]?)*[ \t]*(?:(?:[*+-]|\d{1,9}[.)])[ \t]+)?(?:\[[ xX]\][ \t]*)?/.exec(text.slice(lineStart))![0]
+    return marks.length > 0 && r.curEnd <= lineStart + marks.length && /^[ \t>*+\-\d.)[\]xX]*$/.test(r.oldText + r.newText)
+}
+
 const wholeLines = (text: string, start: number, end: number) =>
     (start === 0 || text[start - 1] === '\n') && (end === text.length || text[end - 1] === '\n')
 
@@ -22,7 +34,7 @@ const wholeLines = (text: string, start: number, end: number) =>
 export function markedMarkdown(text: string, revisions: Revision[]): string {
     // A format's marks (Ctrl+B's **) are left as they are: marks around them would break the format. The text goes to
     // Word formatted as it is now (Word's own format revisions are for later).
-    const sorted = revisions.map((r, i) => ({ r, i })).filter(({ r }) => !r.format).sort((a, b) => b.r.curStart - a.r.curStart || b.r.curEnd - a.r.curEnd || b.r.baseStart - a.r.baseStart)
+    const sorted = revisions.map((r, i) => ({ r, i })).filter(({ r }) => !r.format && !inBlockMarks(text, r)).sort((a, b) => b.r.curStart - a.r.curStart || b.r.curEnd - a.r.curEnd || b.r.baseStart - a.r.baseStart)
     // (Blocks deleted together, a deletion each at one place: the later in the baseline put in first, so they read in order.)
     let out = text
     for (const { r, i } of sorted) {
@@ -35,7 +47,11 @@ export function markedMarkdown(text: string, revisions: Revision[]): string {
         }
         let del = ''
         if (r.oldText && /\S/.test(r.oldText)) {
-            if (wholeLines(out, r.curStart, r.curStart) && r.oldText.endsWith('\n') && !inserted) del = paragraphs(r.oldText.replace(/\n*$/, '\n\n'), PARA + 'd' + tag)
+            // A list item deleted whole goes back as the item it was, in its list: a blank line after it split the list
+            // there, the item came out as an empty box and a paragraph, and the next item was split too (the store
+            // pictures' review.docx, 2026-11-07).
+            if (wholeLines(out, r.curStart, r.curStart) && r.oldText.endsWith('\n') && !inserted)
+                del = paragraphs(LIST_ITEM_START.test(r.oldText) ? r.oldText : r.oldText.replace(/\n*$/, '\n\n'), PARA + 'd' + tag)
             else del = DEL + tag + literal(r.oldText) + CLOSE_DEL
         }
         out = before + del + ins + after

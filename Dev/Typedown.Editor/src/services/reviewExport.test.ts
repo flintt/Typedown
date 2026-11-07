@@ -63,3 +63,15 @@ test('paragraphs deleted together are a deleted paragraph each, in their order',
 test('no revisions: the text as it is', () => {
     expect(markedMarkdown('a\n', [])).toBe('a\n')
 })
+
+test('a task ticked stays a task (no marks in its box); a task deleted whole goes back as an item of its list', () => {
+    const baseline = '- [ ] one\n- [ ] two\n- [ ] gone\n- [ ] after\n'
+    const current = '- [ ] one\n- [x] two\n- [ ] after\n'
+    const revs = revisionsOf(baseline, current)
+    const marked = markedMarkdown(current, revs)
+    // The ticked box as it is now, no mark in it.
+    expect(marked).toContain('- [x] two\n')
+    // The deleted item back as an item, its mark at its end, no blank line splitting the list; the next one untouched.
+    expect(marked.replace(/[\uE000-\uF8FF]\d*[\uE000-\uF8FF]?d?\d*[\uE000-\uF8FF]?/g, '')).toBe('- [ ] one\n- [x] two\n- [ ] gone\n- [ ] after\n')
+    expect(marked).not.toMatch(/gone[^\n]*\n\n/)
+})

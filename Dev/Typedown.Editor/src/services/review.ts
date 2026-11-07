@@ -484,6 +484,15 @@ function slide(baseline: string, current: string, h: Hunk): Hunk {
                 : { ...h, baseStart: s, baseEnd: e, curStart: h.curStart - shift, curEnd: h.curEnd - shift }
         }
     }
+    // Starting with the line break at the end of the line before ("\n- [ ] gone" after "two"): moved on past it, to the
+    // start of the line it took away.
+    if (text[start] === '\n') {
+        s = start; e = end
+        for (let i = 0; i < 200 && e < text.length && text[s] === text[e]; i++) {
+            s++; e++
+            if (atLineStart(s) && text[s] !== '\n') return moved(s, e)
+        }
+    }
     return h
 }
 
