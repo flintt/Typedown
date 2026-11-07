@@ -72,6 +72,22 @@ const sha = text => crypto.createHash('sha256').update(text, 'utf8').digest('hex
         check(bot && bot.newText.includes('revised') && r.revisions.length === 2, 'the program\'s write is its revision', r.revisions);
         const tag = await page.evaluate(() => document.querySelector('#ag-editor-id .ag-review-tagged')?.getAttribute('data-review-source'));
         check(tag === 'Bot', 'its paragraph is tagged with the program', tag);
+        // The tag in the left margin, clear of the text (the user's 3.16); a dot when the window is narrow.
+        const tagPlace = async () => { await pause(200); return page.evaluate(() => {
+            const t = document.querySelector('.td-review-tag'), leaf = document.querySelector('#ag-editor-id .ag-review-tagged');
+            if (!t || !leaf) return null;
+            const a = t.getBoundingClientRect(), b = leaf.getBoundingClientRect();
+            return { text: t.textContent, title: t.title, dot: t.classList.contains('td-review-tag-dot'), right: a.right, textLeft: b.left, top: a.top, leafTop: b.top, leafBottom: b.bottom };
+        }); };
+        const wide = page.viewport();
+        await page.setViewport({ width: 1400, height: wide.height });
+        let placed = await tagPlace();
+        check(placed && placed.text === 'Bot' && placed.right <= placed.textLeft - 8 && placed.top >= placed.leafTop - 4 && placed.top < placed.leafBottom,
+            'the program\'s name is in the left margin beside its block, clear of the text', placed);
+        await page.setViewport({ width: 600, height: wide.height });
+        placed = await tagPlace();
+        check(placed && placed.dot && placed.title === 'Bot' && placed.right <= placed.textLeft && placed.right > 0, 'in a narrow window a dot, the name on hover', placed);
+        await page.setViewport(wide);
 
         // A paragraph deleted: a block of its own where it was (a ghost).
         await apply((await flush()).replace('Third paragraph.\n', '').replace(/\n\n$/, '\n'), { name: 'Bot', session: 's1' });

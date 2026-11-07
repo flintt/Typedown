@@ -76,7 +76,7 @@ import { previewOf } from 'services/findPreview'
 import { markStartup } from 'services/startupMarks'
 import { registerReviewView, reviewActive, reviewLabels } from 'services/reviewSession'
 import { ghostsOf, leafMarks, leafPointOf, LeafMap, mapLeaves, markdownOffsetOf } from 'services/reviewMap'
-import { ghostLayer } from 'services/reviewGhosts'
+import { ghostLayer, tagLayer } from 'services/reviewGhosts'
 import { wordingOf } from 'services/review'
 
 interface IMuyaEditor {
@@ -1287,6 +1287,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         const muya = editor as any
         let map: LeafMap | null = null
         const ghosts = muya.container ? ghostLayer(muya.container) : null
+        const tags = muya.container ? tagLayer(muya.container) : null
         const unregister = registerReviewView({
             draw(revisions, text) {
                 const leaves = muya.reviewLeaves()
@@ -1296,11 +1297,14 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
                 muya.setReviewMarks(revisions.length ? leafMarks(map, revisions, text) : null)
                 const labels = reviewLabels()
                 ghosts?.draw(revisions.length ? ghostsOf(map, revisions, text) : [], labels.changes ?? {})
+                if (revisions.some(r => r.source)) tags?.draw()
+                else tags?.clear()
             },
             clear() {
                 map = null
                 muya.setReviewMarks(null)
                 ghosts?.clear()
+                tags?.clear()
             },
             caretOffset() {
                 const caret = muya.reviewCaret()
@@ -1319,7 +1323,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
                 return marked ? marked.getAttribute('data-rid') ?? marked.getAttribute('data-del-above-rid') ?? marked.getAttribute('data-del-below-rid') : null
             },
         })
-        return () => { unregister(); ghosts?.dispose() }
+        return () => { unregister(); ghosts?.dispose(); tags?.dispose() }
     }, [editor])
 
     useEffect(() => {

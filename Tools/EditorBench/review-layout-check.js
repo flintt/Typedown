@@ -26,6 +26,9 @@ const blocks = '# 标题一\n\n第一段文字。\n\n第二段文字。\n\n## �
 // (before/after: the neighbours' text it is drawn between, null at an end); ins: a text marked inserted; structure,
 // split, join: that mark; n: the number of revisions.
 const L = (name, text, want) => [name, lists, text, want];
+// Loose lists (a blank line between items), one after another (the user's 3.15: the last item deleted went into the next list).
+const loose = '# 松散\n\n1. 一\n\n2. 二\n\n3. 三\n\n- 甲\n\n- 乙\n\n- [ ] 待办一\n\n- [x] 待办二\n\n结尾。\n';
+const LL = (name, text, want) => [name, loose, text, want];
 const B = (name, text, want) => [name, blocks, text, want];
 const samples = [
     L('L01 无序列表末尾加一项', swap(lists, '- 橙子\n', '- 橙子\n- 葡萄\n'), { n: 1, ins: '葡萄' }),
@@ -48,6 +51,12 @@ const samples = [
     L('L18 两项合成一项', swap(lists, '- 香蕉\n- 橙子\n', '- 香蕉橙子\n'), { n: 1, join: '香蕉橙子' }),
     L('L19 列表后加一段', swap(lists, '结尾一段。', '列表后新加的一段。\n\n结尾一段。'), { n: 1, ins: '列表后新加的一段。' }),
     L('L20 一项变成普通段落', swap(lists, '- 橙子\n', '\n橙子\n'), { structure: '橙子' }),
+    LL('LL1 松散有序列表删最后一项', swap(loose, '3. 三\n\n', ''), { n: 1, ghosts: [['li', '三', '二', '甲']], list: 'OL' }),
+    LL('LL2 松散有序列表删中间一项', swap(loose, '2. 二\n\n', ''), { n: 1, ghosts: [['li', '二', '一', '三']], list: 'OL' }),
+    LL('LL3 松散有序列表删第一项', swap(loose, '1. 一\n\n', ''), { n: 1, ghosts: [['li', '一', '松散', '二']], list: 'OL' }),
+    LL('LL4 松散有序列表连删两项', swap(loose, '2. 二\n\n3. 三\n\n', ''), { n: 2, ghosts: [['li', '二', '一', '甲'], ['li', '三', '一', '甲']], list: 'OL' }),
+    LL('LL5 松散无序列表删最后一项', swap(loose, '- 乙\n\n', ''), { n: 1, ghosts: [['li', '乙', '甲', '待办一']], list: 'UL' }),
+    LL('LL6 松散待办列表删最后一项', swap(loose, '- [x] 待办二\n\n', ''), { n: 1, ghosts: [['li', '待办二', '待办一', '结尾。']], list: 'UL' }),
     B('B01 删一段（下一块是段落）', swap(blocks, '第一段文字。\n\n', ''), { n: 1, ghosts: [['p', '第一段文字。', '标题一', '第二段文字。']] }),
     B('B02 删一段（下一块是标题）', swap(blocks, '第二段文字。\n\n', ''), { n: 1, ghosts: [['p', '第二段文字。', '第一段文字。', '标题二']] }),
     B('B03 删一个标题', swap(blocks, '## 标题二\n\n', ''), { n: 1, ghosts: [['heading', '标题二', '第二段文字。', '引用第一行']] }),
@@ -109,7 +118,7 @@ const samples = [
                     const struck = [g, ...g.querySelectorAll('*')].some(e => getComputedStyle(e).textDecorationLine.includes('line-through'));
                     return { rid: g.getAttribute('data-rid'), kind: [...g.classList].find(c => /^ag-review-ghost-(?!marker|text|nested|card|h\d)/.test(c))?.replace('ag-review-ghost-', ''),
                         text: g.textContent, box: box(g), inLeaf: !!g.parentElement.closest('.ag-paragraph-content, .ag-atx-line, p, h1, h2, h3, h4, h5, h6, pre, td, th, .ag-math-render'),
-                        parentTag: g.parentElement.tagName, struck, inQuote: !!g.closest('blockquote'), card: !!g.querySelector('.ag-review-ghost-card'), color: s.color, fontSize: parseFloat(s.fontSize), lines: g.getClientRects().length };
+                        parentTag: g.parentElement.tagName, listTag: g.closest('ul, ol')?.tagName, listText: g.closest('ul, ol')?.textContent.slice(0, 40), struck, inQuote: !!g.closest('blockquote'), card: !!g.querySelector('.ag-review-ghost-card'), color: s.color, fontSize: parseFloat(s.fontSize), lines: g.getClientRects().length };
                 });
                 const near = t => { const e = leafOf(t); return e ? box(e) : null; };
                 const marks = sel => [...root.querySelectorAll(sel)].map(e => ({ text: e.textContent, rid: e.getAttribute('data-rid'), box: box(e) }));
@@ -142,6 +151,7 @@ const samples = [
                 if (a && g.box.bottom > a.top + 2) problems.push([`ghost "${inside}" not before "${after}"`, [g.box, a]]);
                 if (!!want.inQuote !== g.inQuote) problems.push([`ghost "${inside}" ${want.inQuote ? 'not in' : 'in'} a quotation`, null])
                 if ((kind === 'math' || kind === 'diagram') && !g.card) problems.push([`no card for the deleted ${kind}`, g.text])
+                if (kind === 'li' && want.list && g.listTag !== want.list) problems.push([`item "${inside}" not in its own list (${want.list})`, [g.listTag, g.listText]])
                 if (kind === 'li' && g.parentTag !== 'UL' && g.parentTag !== 'OL' && g.parentTag !== 'LI') problems.push([`item "${inside}" not in a list`, g.parentTag]);
                 if (kind === 'row' && g.parentTag !== 'TBODY' && g.parentTag !== 'THEAD' && g.parentTag !== 'TABLE') problems.push([`row "${inside}" not among rows`, g.parentTag]);
             }

@@ -160,3 +160,18 @@ test('a footnote definition Muya keeps at the end is found where the text has it
     const map = mapLeaves(md, [{ key: 't', text: 'Text[^1].' }, { key: 'a', text: 'After here.' }, { key: 'l', text: 'Last one.' }, { key: 'n', text: 'The note.' }])
     expect(map.pieces.map(p => p.key)).toEqual(['t', 'n', 'a', 'l'])
 })
+
+test('the last item of a loose list deleted stays at the end of its list, not at the start of the next one (3.15)', () => {
+    const li = (k: string, t: string, list: string) => leaf(k, t, [list, list === 'O' ? 'ol' : 'ul'], ['LI' + k, 'li'], ['P' + k, 'p'])
+    const h = leaf('h', '# T', ['H', 'h1']), one = li('a', '一', 'O'), two = li('b', '二', 'O'), jia = li('j', '甲', 'U')
+    const base = '# T\n\n1. 一\n\n2. 二\n\n3. 三\n\n- 甲\n'
+    const at = (g: { lines: string[], key: string, where: string }[]) => g.map(x => [x.lines[0], x.key, x.where])
+    expect(at(ghosts(base, '# T\n\n1. 一\n\n2. 二\n\n- 甲\n', [h, one, two, jia]))).toEqual([['三', 'LIb', 'after']])
+    // The first, a middle one, two together: in their list.
+    expect(at(ghosts(base, '# T\n\n2. 二\n\n3. 三\n\n- 甲\n', [h, two, li('c', '三', 'O'), jia]))).toEqual([['一', 'LIb', 'before']])
+    expect(at(ghosts(base, '# T\n\n1. 一\n\n3. 三\n\n- 甲\n', [h, one, li('c', '三', 'O'), jia]))).toEqual([['二', 'LIc', 'before']])
+    expect(at(ghosts(base, '# T\n\n1. 一\n\n- 甲\n', [h, one, jia]))).toEqual([['二', 'LIa', 'after'], ['三', 'LIa', 'after']])
+    // A loose bullet list before a numbered one, and a task list.
+    expect(at(ghosts('- a\n\n- b\n\n1. x\n', '- a\n\n1. x\n', [li('a', 'a', 'U'), li('x', 'x', 'O')]))).toEqual([['b', 'LIa', 'after']])
+    expect(at(ghosts('- [ ] a\n\n- [x] b\n\n1. x\n', '- [ ] a\n\n1. x\n', [li('a', 'a', 'U'), li('x', 'x', 'O')]))).toEqual([['b', 'LIa', 'after']])
+})

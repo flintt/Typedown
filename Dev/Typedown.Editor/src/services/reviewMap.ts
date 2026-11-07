@@ -247,11 +247,19 @@ export function ghostsOf(map: LeafMap, revisions: Revision[], current: string): 
             }
         }
         if (g.kind === 'li') {
-            const indent = (LIST_ITEM.exec(r.oldText.replace(/^\n+/, ''))?.[1] ?? '').length
-            const itemIndent = (p: Piece) => { const m = LIST_ITEM.exec(lineOf(p.md)); return m ? m[1].length : -1 }
+            const own = LIST_ITEM.exec(r.oldText.replace(/^\n+/, ''))
+            const indent = (own?.[1] ?? '').length
+            // A list's kind: its bullet, or its numbers' delimiter. An item of another kind is another list - the last
+            // item of a loose numbered list deleted went to the start of the bullet list after it (the user's 3.15,
+            // 2026-11-07): the blank line after a loose item made the next list's first item look "adjacent".
+            const kindOf = (m: RegExpExecArray | null) => m ? (m[2] ?? m[3].slice(-1)) : null
+            const ownKind = kindOf(own)
+            const itemIndent = (p: Piece) => { const m = LIST_ITEM.exec(lineOf(p.md)); return m && kindOf(m) === ownKind ? m[1].length : -1 }
             if (next && adjacentNext && itemIndent(next) === indent) { const li = deepest(pathOf(next), 'li'); if (li) place = { key: li.key, where: 'before' } }
             if (!place && prev && itemIndent(prev) === indent) { const li = deepest(pathOf(prev), 'li'); if (li) place = { key: li.key, where: 'after' } }
-            if (!place && prev && itemIndent(prev) >= 0 && itemIndent(prev) < indent) {
+            // (The item it was inside may be of another kind: a numbered list in a bullet's item.)
+            const anyIndent = (p: Piece) => { const m = LIST_ITEM.exec(lineOf(p.md)); return m ? m[1].length : -1 }
+            if (!place && prev && anyIndent(prev) >= 0 && anyIndent(prev) < indent) {
                 // The last of the items inside the one before: after that item's own text, inside it.
                 const li = deepest(pathOf(prev), 'li'); if (li) { inside = true; place = { key: pathOf(prev)[pathOf(prev).length - 1]?.key ?? li.key, where: 'after' } }
             }

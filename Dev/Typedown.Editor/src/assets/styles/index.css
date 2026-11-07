@@ -1861,14 +1861,19 @@ tr.ag-review-ghost td { text-decoration: line-through var(--reviewDel) 1.5px; }
    from the one before: a bar of their own at the left. */
 .ag-review-structure { box-shadow: inset 3px 0 0 var(--reviewStructure, #d08a00); padding-left: 6px; }
 .ag-review-split { box-shadow: inset 3px 0 0 var(--reviewIns); padding-left: 6px; border-top: 1px dashed var(--reviewIns); }
-.ag-review-tagged {
-  position: relative;
-}
-.ag-review-tagged:not(:empty):not(.ag-review-del-below)::after {
-  content: attr(data-review-source);
+/* The program a block's revisions are from: a tag in the page's left margin (services/reviewGhosts.ts tagLayer), not
+   against the text or over a list's marker (the user's 3.16); a dot where the margin is narrow, the name on hover. */
+.td-review-tags {
   position: absolute;
-  right: calc(100% + 8px);
-  top: 0.2em;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+.td-review-tag {
+  position: absolute;
   max-width: 7em;
   overflow: hidden;
   white-space: nowrap;
@@ -1876,12 +1881,23 @@ tr.ag-review-ghost td { text-decoration: line-through var(--reviewDel) 1.5px; }
   font-size: 11px;
   line-height: 1.6;
   padding: 0 4px;
+  margin-top: 0.15em;
   border-radius: 3px;
   color: var(--editorColor80, #555);
   background: var(--editorColor04, rgba(127, 127, 127, 0.12));
   border: 1px solid var(--editorColor10, rgba(127, 127, 127, 0.3));
-  text-decoration: none;
-  pointer-events: none;
+  pointer-events: auto;
+  cursor: default;
+  user-select: none;
+}
+.td-review-tag-dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  margin-top: 0.55em;
+  border-radius: 50%;
+  background: var(--editorColor50, rgba(127, 127, 127, 0.7));
+  border: none;
 }
 /* The revision the buttons beside the line are for (several can share a line). */
 .td-review-current {
@@ -1932,7 +1948,8 @@ tr.ag-review-ghost td { text-decoration: line-through var(--reviewDel) 1.5px; }
 #td-review-actions button:hover { background: var(--editorColor10, rgba(127, 127, 127, 0.2)); }
 @media print {
   .ag-review-ins { background: none; text-decoration: none; }
-  .ag-review-del-before::before, .ag-review-del-after::after, .ag-review-del-above::before, .ag-review-del-below::after, .ag-review-tagged::after { display: none !important; }
+  .ag-review-del-before::before, .ag-review-del-after::after, .ag-review-del-above::before, .ag-review-del-below::after { display: none !important; }
+  .td-review-tags { display: none !important; }
   .ag-review-whole { box-shadow: none; padding-left: 0; }
   #td-review-actions { display: none !important; }
 }
