@@ -50,7 +50,7 @@ internal static partial class Program
             // Written into the plain text: still none (each edit sends a report).
             await c.Call("document.focus", new { documentId = txt });
             await Expect("the .txt again", Empty);
-            await c.Call("document.replace", new { documentId = txt, baseRevision = await Revision(c, txt), text = "# not a heading here\n\nA plain line.\n\n# written later\n", reveal = "document", normalizationPolicy = "allowUnknown" });
+            await c.Call("document.replace", new { documentId = txt, baseRevision = await Revision(c, txt), text = "# not a heading here\n\nA plain line.\n\n# written later\n", reveal = "document" });
             await Task.Delay(800);
             await Expect("written into the .txt: still no outline", Empty);
             await c.Call("document.save", new { documentId = txt });

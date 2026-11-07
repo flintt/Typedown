@@ -62,7 +62,7 @@ import FootnoteTool from 'components/Muya/lib/ui/footnoteTool'
 import FrontMenu from 'components/Muya/lib/ui/frontMenu'
 import FormatPicker from 'components/Muya/lib/ui/formatPicker'
 import { createApplicationMenuState } from "services/menuState";
-import { classifyNormalization, extractProtectedPayload } from "services/normalization";
+import { classifierVersion, classifyNormalization, extractProtectedPayload } from "services/normalization";
 import { alignment, cursorIn, mergeKeepingNotes, mergeSource, splitLines } from "services/sourceMerge";
 import { highlightExternalChange, scrollTargetForChange } from "services/externalChange";
 import { setVimState } from "services/vim";
@@ -213,6 +213,26 @@ function withSourceEnd(muya: any, source: string, text: string, markdown: string
     }
 }
 
+/**
+ * What writing an automation edit back from the visual editor would change: the text before the edit merged with Muya's
+ * export of the text asked for (keptSource - the blocks not edited as the document writes them, the edited ones as Muya
+ * does), against the text asked for. The same: nothing ("none"). Else the lines that differ, classified, each with what
+ * was asked and what would be written (`changes`, for the error's data).
+ */
+function editNormalization(muya: any, before: { source: string, normalized: string }, requested: string, exported: string) {
+    const merged = keptSource(muya, before, exported)
+    if (merged === requested) return { pendingNormalization: 'none' as const, classifierVersion, reasons: [] as string[], normalized: merged, changes: [] }
+    const a = requested.split('\n'), b = merged.split('\n')
+    let head = 0
+    while (head < a.length && head < b.length && a[head] === b[head]) head++
+    let tail = 0
+    while (tail < a.length - head && tail < b.length - head && a[a.length - 1 - tail] === b[b.length - 1 - tail]) tail++
+    const asked = a.slice(head, a.length - tail).join('\n'), written = b.slice(head, b.length - tail).join('\n')
+    const result = classifyNormalization(asked, written)
+    const cut = (t: string) => t.length > 400 ? t.slice(0, 400) + '…' : t
+    return { ...result, normalized: merged, changes: [{ line: head + 1, lines: a.length - tail - head, requested: cut(asked), written: cut(written) }] }
+}
+
 /** What is known of the document shown, to tell whether it may be kept when a tab switch replaces it. */
 interface ShownDocument {
     text: string
@@ -297,6 +317,9 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     // not, for the load it is about; the host shows it only while that load is the document shown.
     const firstEditWarningRef = useRef(false)
     const firstEditReasonsRef = useRef<string[]>([])
+    // The automation edit last applied: the text before it (as the host held it, with Muya's export of it) and the text
+    // it asked for, for what writing it back from the visual editor would change (editNormalization).
+    const lastEditRef = useRef<{ before: { source: string, normalized: string } | null, textBefore: string, requested: string } | null>(null)
     const readOnlyRef = useRef(!!props.options?.readOnly)
     const firstEditWarningTimerRef = useRef<number | null>(null)
     const firstEditToldRef = useRef<{ show: boolean, loadId: number | undefined } | null>(null)
@@ -507,6 +530,15 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         const pendingNormalization = () => {
             const imported = importedRef.current
             if (!imported) return null
+            // After an automation edit: only what the visual editor would write differently from the text asked for -
+            // in the blocks the edit changed, the rest keeping the document's own writing (keptSource). The whole
+            // document's writing was judged before, and a real document (a ragged table, blank lines, == marks) had
+            // every edit refused (the user, 2026-11-07: "相当于 mcp 失效了").
+            const edit = lastEditRef.current
+            if (edit && markdownRef.current === edit.requested && imported.source === edit.requested) {
+                const base = edit.before && edit.before.source === edit.textBefore ? edit.before.normalized : muya.normalizeMarkdown(edit.textBefore)
+                return editNormalization(muya, { source: edit.textBefore, normalized: base }, edit.requested, imported.normalized)
+            }
             return markdownRef.current === imported.source
                 ? { ...classifyNormalization(imported.source, imported.normalized), normalized: imported.normalized }
                 : { ...classifyNormalization(markdownRef.current, markdownRef.current), normalized: markdownRef.current }
@@ -1658,11 +1690,13 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         if (!local) keepShown()
         else shownRef.current = null
         const kept = local ? null : takeKept(props.markdown, cursorRef.current)
+        const textBeforeEdit = markdownRef.current
         markdownRef.current = props.markdown
         markLongDocument(props.markdown, kept && !kept.kept.progressive ? kept.kept.blocks.length : undefined)
         // An automation edit keeps the blocks it did not change, with the reader's cursor and scroll position; the
         // browser keeps what is on screen in place when blocks above it change. Otherwise, a whole new document.
         const blocksBefore = local ? editor.contentState.blocks : null
+        lastEditRef.current = local ? { before: importedRef.current ?? null, textBefore: textBeforeEdit, requested: props.markdown } : null
         const replacedLocally = !!local && editor.replaceMarkdownLocally(props.markdown)
         // A whole new document is built now; its caret is placed, the page put back where it was left and the load
         // reported applied in the next frame (Muya.setMarkdown says why). Where to put it back is taken now: the

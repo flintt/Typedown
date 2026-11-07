@@ -135,6 +135,7 @@ internal static partial class Program
             await Case("W01 the editor page reloads after it applied a write and before the commit: nothing is committed, host and page agree", W01);
             await Case("W02 a mode switch while a write is held after the page applied it: the write commits and every mode shows it", W02);
             await Case("W03 the tab switched away and back while a write is held: refused and restored; switched away only: committed into the tab", W03);
+            await Case("W04 a document written its own way (a ragged table, runs of blank lines, * items, spaces at line ends, == marks, a diagram): a line struck through with replaceText and five lines changed with replace, no policy, both written; the file the text asked for, byte for byte", W04);
             await Case("MC01 typedownctl mcp as its own process: read, replace text with reveal, a stale revision is a conflict that says to read again", MC01);
             await Case("EX01 the PowerShell and Python client examples edit through the real pipe", EX01);
             await Case("EQ01 the equivalence scenario (compared with the Uno edition's answers offline)", EQ01);
@@ -554,7 +555,7 @@ internal static partial class Program
             Check(text.Contains($"]({site}/direct.png)") && text.Contains($"]({site}/lazy.png)") && text.Contains($"]({site}/article/img/relative.png)"), "pictures by their real addresses: the late-loaded one's and the relative one's made absolute");
 
             // Copied beside the document: the three pictures fetched and their addresses replaced.
-            await c.Call("document.replace", new { documentId = id, baseRevision = await Revision(c, id), text = "# WP01\n\n", reveal = "document", normalizationPolicy = "allowUnknown" });
+            await c.Call("document.replace", new { documentId = id, baseRevision = await Revision(c, id), text = "# WP01\n\n", reveal = "document" });
             await c.Call("test.images.webAction", new { windowId, action = "copy", path = "./wp01-images" });
             await c.Call("test.editor.focus", new { windowId });
             await c.Call("test.paste.html", new { windowId, html });
@@ -570,7 +571,7 @@ internal static partial class Program
             try { await c.Call("test.images.webAction", new { windowId, action = "none" }); } catch { }
             try
             {
-                await c.Call("document.replace", new { documentId = id, baseRevision = await Revision(c, id), text = "# WP01\n\n", reveal = "document", normalizationPolicy = "allowUnknown" });
+                await c.Call("document.replace", new { documentId = id, baseRevision = await Revision(c, id), text = "# WP01\n\n", reveal = "document" });
                 await c.Call("document.save", new { documentId = id, baseRevision = await Revision(c, id) });
             }
             catch { }
@@ -830,7 +831,7 @@ internal static partial class Program
         var doc = await Get(c, id);
         Check((string)doc["text"]! == "# S0\n\nalpha\n", "the opened text is the file's text");
         var r = (long)doc["revision"]!;
-        var written = await c.Call("document.replace", new { documentId = id, baseRevision = r, text = "# S0\n\nalpha written\n", reveal = "document", normalizationPolicy = "allowUnknown" });
+        var written = await c.Call("document.replace", new { documentId = id, baseRevision = r, text = "# S0\n\nalpha written\n", reveal = "document" });
         Check((long)written["revision"]! == r + 1, $"the write advanced the revision ({written["revision"]} after {r})");
         notes.Add($"normalization {written["normalization"]?["pendingNormalization"]}");
         Check((string)(await Get(c, id))["text"]! == "# S0\n\nalpha written\n", "latest read returns exactly what was written");
@@ -869,7 +870,7 @@ internal static partial class Program
         var a = await Open(driver, pathA);
         var rA = await Revision(driver, a);
         var barrier = (string)(await driver.Call("test.barrier.arm", new { point = EditBarrierPoints.BeforeFlushReply, documentId = a }))["barrierId"]!;
-        var write = writer.Call("document.replace", new { documentId = a, baseRevision = rA, text = "# A\n\nalpha by API\n", save = true, normalizationPolicy = "allowUnknown" });
+        var write = writer.Call("document.replace", new { documentId = a, baseRevision = rA, text = "# A\n\nalpha by API\n", save = true });
         var hit = await driver.Call("test.barrier.waitHit", new { barrierId = barrier, timeoutMs = 20000 });
         Check((bool)hit["hit"]!, "the write reached the barrier after its flush");
         await driver.Call("document.focus", new { documentId = b }); // the reader switches to B meanwhile
@@ -889,8 +890,8 @@ internal static partial class Program
         using var c = await Session("e2e R02");
         var a = await Open(c, Fixture("r02-a.md", "# A\n\none\n"));
         var b = await Open(c, Fixture("r02-b.md", "# B\n\ntwo\n"));
-        await c.Call("document.replace", new { documentId = a, baseRevision = await Revision(c, a), text = "# A\n\none edited\n", reveal = "document", normalizationPolicy = "allowUnknown" });
-        await c.Call("document.replace", new { documentId = b, baseRevision = await Revision(c, b), text = "# B\n\ntwo edited\n", reveal = "document", normalizationPolicy = "allowUnknown" });
+        await c.Call("document.replace", new { documentId = a, baseRevision = await Revision(c, a), text = "# A\n\none edited\n", reveal = "document" });
+        await c.Call("document.replace", new { documentId = b, baseRevision = await Revision(c, b), text = "# B\n\ntwo edited\n", reveal = "document" });
         await c.Call("document.undo", new { documentId = a, baseRevision = await Revision(c, a), reveal = "document" });
         Check((string)(await Get(c, a))["text"]! == "# A\n\none\n", "undo in A restores A");
         Check((string)(await Get(c, b))["text"]! == "# B\n\ntwo edited\n", "B is not touched by A's undo");
@@ -910,7 +911,7 @@ internal static partial class Program
         await driver.Call("document.focus", new { documentId = id });
         var r = await Revision(driver, id);
         var barrier = (string)(await driver.Call("test.barrier.arm", new { point = EditBarrierPoints.AfterEditorMutationBeforeReport, documentId = id }))["barrierId"]!;
-        var write = writer.Call("document.replace", new { documentId = id, baseRevision = r, text = "# R03\n\nwritten\n", save = true, normalizationPolicy = "allowUnknown" });
+        var write = writer.Call("document.replace", new { documentId = id, baseRevision = r, text = "# R03\n\nwritten\n", save = true });
         Check((bool)(await driver.Call("test.barrier.waitHit", new { barrierId = barrier, timeoutMs = 20000 }))["hit"]!, "the write reached the barrier with the page already changed");
         await TypeIntoWindow(driver, (string)(await driver.Call("document.get", new { documentId = id, consistency = "snapshot" }))["windowId"]!, "Z"); // the reader's keystroke on top of the write, while the host has not committed it
         await WaitForPage(driver, id, t => t.Contains('Z'), "the keystroke");
@@ -1330,7 +1331,7 @@ internal static partial class Program
             var clock = System.Diagnostics.Stopwatch.StartNew();
             var kind = await c.ErrorKind("document.get", new { documentId = id, consistency = "latest" });
             Check(kind == null, $"round {round}: the first latest read after returning from the settings page succeeds ({kind} after {clock.ElapsedMilliseconds} ms; page {await PageState(c, windowId)})");
-            await c.Call("document.replace", new { documentId = id, baseRevision = await Revision(c, id), text, normalizationPolicy = "allowUnknown" });
+            await c.Call("document.replace", new { documentId = id, baseRevision = await Revision(c, id), text });
             Check((string)(await Get(c, id))["text"]! == text, $"round {round}: the write is the text");
             notes.Add($"round {round}: read in {clock.ElapsedMilliseconds} ms");
         }
@@ -2402,7 +2403,7 @@ internal static partial class Program
                 await Task.Delay(500);
                 Check(((string?)(await Get(c, id))["text"] ?? "").Contains('x'), $"{theme}: Cancel kept the document with its change");
                 await c.Call("document.focus", new { documentId = id });
-                await c.Call("document.replace", new { documentId = id, text, baseRevision = await Revision(c, id), normalizationPolicy = "allowUnknown" });
+                await c.Call("document.replace", new { documentId = id, text, baseRevision = await Revision(c, id) });
                 await c.Call("document.save", new { documentId = id });
             }
             if (failures.Count > 0)
@@ -2742,7 +2743,7 @@ internal static partial class Program
         var saved = Path.Combine(testRoot, "wp02-saved");
         foreach (var d in new[] { pictures, saved }) if (Directory.Exists(d)) Directory.Delete(d, true);
         var pictureFolderBefore = (string?)(await c.Call("test.settings.get", new { windowId, name = "DefaultImageBasePath" }))["value"];
-        var id = (string)(await c.Call("document.create", new { text = "# WP02\n\n", normalizationPolicy = "allowUnknown" }))["documentId"]!;
+        var id = (string)(await c.Call("document.create", new { text = "# WP02\n\n" }))["documentId"]!;
         var fragment = $"<p><img src=\"{site}/guarded.png\" alt=\"guarded\"></p><p><img src=\"{site}/login.png\" alt=\"login\"></p>"
             + $"<p><img src=\"{site}/one.png\" alt=\"one\"></p><p><img src=\"{site}/two.png\" alt=\"two\"></p><p><img src=\"{site}/three.png\" alt=\"three\"></p>"
             + $"<p><img src=\"{site}/bare.png\" alt=\"bare\"></p>";
@@ -3581,8 +3582,8 @@ internal static partial class Program
             await c.Call("window.setView", new { windowId, mode = "source" });
             await Task.Delay(500);
             await ToTop();
-            // Source mode has no visual editor to tell what it would rewrite: every write there is "unknown".
-            await Replace("Paragraph 120 of", "Paragraph 120 (source) of", "change", "allowUnknown");
+            // Source mode writes the text as it is: nothing to rewrite, nothing refused (2026-11-07; it was "unknown" before).
+            await Replace("Paragraph 120 of", "Paragraph 120 (source) of", "change");
             // CodeMirror marks only the changed characters, which splits the line into text nodes.
             var s = await State("Paragraph 120 ");
             notes.Add("source mode: " + s.ToString(Formatting.None));
@@ -3830,7 +3831,7 @@ internal static partial class Program
         JToken written;
         try
         {
-            written = await c.Call("document.replace", new { documentId = a, baseRevision = rA, text = "# A\n\nalpha shown\n", reveal = "document", awaitPresentation = true, normalizationPolicy = "allowUnknown" });
+            written = await c.Call("document.replace", new { documentId = a, baseRevision = rA, text = "# A\n\nalpha shown\n", reveal = "document", awaitPresentation = true });
         }
         catch (JsonRpcRemoteException e)
         {
@@ -3854,7 +3855,7 @@ internal static partial class Program
     private static async Task<(Task<JToken> write, string barrier)> HoldAfterApply(Client writer, Client driver, string documentId, string text)
     {
         var barrier = (string)(await driver.Call("test.barrier.arm", new { point = EditBarrierPoints.AfterEditorMutationBeforeReport, documentId }))["barrierId"]!;
-        var write = writer.Call("document.replace", new { documentId, baseRevision = await Revision(driver, documentId), text, normalizationPolicy = "allowUnknown" });
+        var write = writer.Call("document.replace", new { documentId, baseRevision = await Revision(driver, documentId), text });
         var waiting = driver.Call("test.barrier.waitHit", new { barrierId = barrier, timeoutMs = 20000 });
         // A write refused before it reached the page (the page reloading, say) ends first: say why, without the wait.
         if (await Task.WhenAny(waiting, write) == write && !waiting.IsCompleted)
@@ -3889,7 +3890,7 @@ internal static partial class Program
         var doc = await Get(driver, a);
         Check((string)doc["text"]! == original && (long)doc["revision"]! == r, "host text and revision are the ones before the write");
         Check(await WaitForPage(driver, a, t => t == original, "the restored page") == original, "the page shows the same text as the host");
-        var again = await driver.Call("document.replace", new { documentId = a, baseRevision = r, text = "# W01\n\nsecond try\n", normalizationPolicy = "allowUnknown" });
+        var again = await driver.Call("document.replace", new { documentId = a, baseRevision = r, text = "# W01\n\nsecond try\n" });
         Check((long)again["revision"]! == r + 1, "the document still takes writes");
     }
 
@@ -3918,6 +3919,38 @@ internal static partial class Program
         finally
         {
             await driver.Call("test.settings.set", new { windowId, name = "SourceCode", value = false });
+        }
+    }
+
+    // Every write to a real document was refused (normalization_unclassified): the page judged the whole document's
+    // writing, not what the write changed (the user, 2026-11-07, typeleafctl on hp: "相当于 mcp 失效了"). No policy here.
+    private static async Task W04(List<string> notes)
+    {
+        using var c = await Session("e2e W04");
+        const string own = "# Notes  \n\n\n\n|名称|数量|\n|---|---|\n| 苹果 |3|\n|香蕉| 5 |\n\n\n* first item\n* second item  \n    * nested item\n\nA ==marked== line.\nAnother line.\nThird line.\n\n" +
+            "```mermaid\n%%{init: {\"theme\": \"neutral\"}}%%\ngraph TD\n  A-->B\n  classDef highlight fill:#ff0\n  class A highlight\n```\n\n\n\nThe end.\n";
+        var path = Fixture("w04.md", own);
+        var id = await Open(c, path);
+        await c.Call("document.focus", new { documentId = id });
+        var struck = await c.Call("document.replaceText", new { documentId = id, baseRevision = await Revision(c, id), find = "Another line.", replacement = "~~Another line.~~", expectedCount = 1, save = true });
+        notes.Add($"replaceText: {struck["normalization"]?.ToString(Formatting.None)}");
+        var one = own.Replace("Another line.", "~~Another line.~~");
+        Check(Disk(path) == one, $"replaceText: the file is the text asked for ({JsonConvert.SerializeObject(Disk(path))})");
+        var five = one.Replace("A ==marked== line.", "~~A ==marked== line.~~").Replace("Third line.", "~~Third line.~~").Replace("The end.", "~~The end.~~")
+            .Replace("* first item", "* first item, edited").Replace("# Notes  ", "# Notes, edited  ");
+        var replaced = await c.Call("document.replace", new { documentId = id, baseRevision = await Revision(c, id), text = five, save = true });
+        notes.Add($"replace: {replaced["normalization"]?.ToString(Formatting.None)}");
+        Check(Disk(path) == five, $"replace: the file is the text asked for, every other byte as it was ({JsonConvert.SerializeObject(Disk(path))})");
+        // In source mode too.
+        await c.Call("test.settings.set", new { windowId = await WindowIdOf(c, id), name = "SourceCode", value = true });
+        try
+        {
+            await c.Call("document.replaceText", new { documentId = id, baseRevision = await Revision(c, id), find = "* second item  ", replacement = "* ~~second item~~  ", expectedCount = 1, save = true });
+            Check(Disk(path) == five.Replace("* second item  ", "* ~~second item~~  "), "source mode: written as asked");
+        }
+        finally
+        {
+            await c.Call("test.settings.set", new { windowId = await WindowIdOf(c, id), name = "SourceCode", value = false });
         }
     }
 
@@ -4283,11 +4316,11 @@ internal static partial class Program
         var titled = Fixture("r04-t.md", "# T\n\nsaved\n");
         using (var c = await Session("e2e R04 before"))
         {
-            var created = await c.Call("document.create", new { text = "# U1\n\nfirst untitled\n", reveal = "document", normalizationPolicy = "allowUnknown" });
+            var created = await c.Call("document.create", new { text = "# U1\n\nfirst untitled\n", reveal = "document" });
             u1 = (string)created["documentId"]!;
-            u2 = (string)(await c.Call("document.create", new { text = "# U2\n\nsecond untitled\n", reveal = "document", normalizationPolicy = "allowUnknown" }))["documentId"]!;
+            u2 = (string)(await c.Call("document.create", new { text = "# U2\n\nsecond untitled\n", reveal = "document" }))["documentId"]!;
             t = await Open(c, titled);
-            await c.Call("document.replace", new { documentId = t, baseRevision = await Revision(c, t), text = "# T\n\nedited, not saved\n", normalizationPolicy = "allowUnknown" });
+            await c.Call("document.replace", new { documentId = t, baseRevision = await Revision(c, t), text = "# T\n\nedited, not saved\n" });
             await c.Call("document.focus", new { documentId = u2 }); // u1 and t are background tabs now
         }
         // The backups exist, with each document's own text, before the host dies.
@@ -4527,7 +4560,7 @@ internal static partial class Program
             Check(reloaded.Contains("two") && await SavedOf(a), "unchanged here, the file changed outside is offered and reloaded, saved");
 
             // Changed here too: asked (what is unsaved would go), Keep keeps it.
-            await c.Call("document.replace", new { documentId = a, baseRevision = await Revision(c, a), text = "# XF01 A\n\nmine\n", normalizationPolicy = "allowUnknown" });
+            await c.Call("document.replace", new { documentId = a, baseRevision = await Revision(c, a), text = "# XF01 A\n\nmine\n" });
             await Task.Delay(500);
             File.WriteAllText(aPath, "# XF01 A\n\nthree\n");
             (title, content) = await PressDialogButton(c, windowId, DialogButton.Close, 6000);
@@ -4597,7 +4630,7 @@ internal static partial class Program
         async Task<bool> SavedOf() => (bool)(await Get(c, id))["saved"]!;
         async Task<string> TextWhen(Func<string, bool> ok) { var t = await TextOf(); for (var i = 0; i < 25 && !ok(t); i++) { await Task.Delay(200); t = await TextOf(); } return t; }
         string Disk() => File.ReadAllText(path).Replace("\r\n", "\n");
-        async Task Replace(string text) { await c.Call("document.replace", new { documentId = id, baseRevision = await Revision(c, id), text, normalizationPolicy = "allowUnknown" }); await Task.Delay(400); }
+        async Task Replace(string text) { await c.Call("document.replace", new { documentId = id, baseRevision = await Revision(c, id), text }); await Task.Delay(400); }
         // The question, once it is up: what it says and which button Enter presses; nothing pressed.
         async Task<JToken> Asked(int timeoutMs = 6000)
         {
@@ -4838,8 +4871,8 @@ internal static partial class Program
             t = await Open(c, titled);
             var windowId = await WindowIdOf(c, t);
             await c.Call("test.settings.set", new { windowId, name = "KeepUnsavedOnClose", value = true });
-            await c.Call("document.replace", new { documentId = t, baseRevision = await Revision(c, t), text = "# KU01\n\nedited, not saved\n", normalizationPolicy = "allowUnknown" });
-            u = (string)(await c.Call("document.create", new { text = "# KU01 untitled\n\nkept too\n", reveal = "document", normalizationPolicy = "allowUnknown" }))["documentId"]!;
+            await c.Call("document.replace", new { documentId = t, baseRevision = await Revision(c, t), text = "# KU01\n\nedited, not saved\n" });
+            u = (string)(await c.Call("document.create", new { text = "# KU01 untitled\n\nkept too\n", reveal = "document" }))["documentId"]!;
             await c.Call("document.focus", new { documentId = t });
             notes.Add($"t={t[..6]} u={u[..6]}");
             // Every window closed as a person closes it, the titled document's last (its tabs are the session kept).
@@ -4889,8 +4922,8 @@ internal static partial class Program
             // Nothing of this case left for the next ones: the setting off, the file as it was, the untitled one emptied.
             var windowId = await WindowIdOf(after, keptId);
             try { await after.Call("test.settings.set", new { windowId, name = "KeepUnsavedOnClose", value = false }); } catch { }
-            try { await after.Call("document.replace", new { documentId = keptId, baseRevision = await Revision(after, keptId), text = "# KU01\n\nsaved\n", normalizationPolicy = "allowUnknown" }); await after.Call("document.save", new { documentId = keptId }); await after.Call("document.close", new { documentId = keptId }); } catch (Exception ex) { notes.Add("cleanup titled: " + ex.Message.Split('\n')[0]); }
-            try { await after.Call("document.replace", new { documentId = u, baseRevision = await Revision(after, u), text = "\n", normalizationPolicy = "allowUnknown" }); await after.Call("document.close", new { documentId = u }); } catch (Exception ex) { notes.Add("cleanup untitled: " + ex.Message.Split('\n')[0]); }
+            try { await after.Call("document.replace", new { documentId = keptId, baseRevision = await Revision(after, keptId), text = "# KU01\n\nsaved\n" }); await after.Call("document.save", new { documentId = keptId }); await after.Call("document.close", new { documentId = keptId }); } catch (Exception ex) { notes.Add("cleanup titled: " + ex.Message.Split('\n')[0]); }
+            try { await after.Call("document.replace", new { documentId = u, baseRevision = await Revision(after, u), text = "\n" }); await after.Call("document.close", new { documentId = u }); } catch (Exception ex) { notes.Add("cleanup untitled: " + ex.Message.Split('\n')[0]); }
         }
     }
 

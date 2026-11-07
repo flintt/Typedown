@@ -16,8 +16,10 @@ namespace Typedown.Automation
     /// <summary>What the first visual edit would do to the text (the <c>normalization</c> object of the spec).</summary>
     public sealed class NormalizationInfo
     {
-        public NormalizationInfo(string pending, string sourceHash, string? normalizedHash, IReadOnlyList<string> reasons, int classifierVersion)
+        public NormalizationInfo(string pending, string sourceHash, string? normalizedHash, IReadOnlyList<string> reasons, int classifierVersion,
+            Newtonsoft.Json.Linq.JArray? changes = null)
         {
+            Changes = changes;
             Pending = pending;
             SourceHash = sourceHash;
             NormalizedHash = normalizedHash;
@@ -30,6 +32,12 @@ namespace Typedown.Automation
         public string? NormalizedHash { get; }
         public IReadOnlyList<string> Reasons { get; }
         public int ClassifierVersion { get; }
+
+        /// <summary>
+        /// After an edit: where writing it back from the visual editor would differ from the text asked for - each
+        /// {line, lines, requested, written} (the editor's words, cut to a few hundred characters). Null when none.
+        /// </summary>
+        public Newtonsoft.Json.Linq.JArray? Changes { get; }
 
         /// <summary>A document no editor has loaded yet: nothing is known about its normalization.</summary>
         public static NormalizationInfo NotEvaluated(string sourceHash, int classifierVersion) =>
@@ -343,9 +351,11 @@ namespace Typedown.Automation
             NormalizationInfo normalization;
             if (!document.IsActive)
             {
-                // A background tab has no editor to classify the candidate.
+                // A background tab has no editor to classify the candidate: written as asked, said not evaluated. Not
+                // refused: the visual editor keeps the blocks an edit does not touch as the document writes them
+                // (keptSource), so nothing is rewritten by having it written - a write to a tab not shown was refused
+                // for want of an editor, every write of a program working on several documents (the user, 2026-11-07).
                 normalization = NormalizationInfo.NotEvaluated(candidateHash, classifierVersion);
-                if (!request.AllowUnknown) throw Unclassified(normalization);
             }
             else
             {
@@ -432,11 +442,14 @@ namespace Typedown.Automation
             ["normalizedHash"] = n.NormalizedHash,
             ["reasons"] = n.Reasons,
             ["classifierVersion"] = n.ClassifierVersion,
+            ["changes"] = n.Changes,
         };
 
         private static AutomationException Unclassified(NormalizationInfo n) =>
             new(AutomationErrorKind.normalization_unclassified,
-                "The text differs from what the editor would write back and could not be shown safe; nothing was changed. Retry with normalizationPolicy allowUnknown to accept it.",
+                n.Changes is { Count: > 0 } changes && changes[0] is Newtonsoft.Json.Linq.JObject first
+                    ? $"Around line {first["line"]} the editor would write the edited text differently from what was asked (data.changes: requested and written); nothing was changed. Retry with normalizationPolicy allowUnknown to accept it."
+                    : "The text differs from what the editor would write back and could not be shown safe; nothing was changed. Retry with normalizationPolicy allowUnknown to accept it.",
                 NormalizationData(n));
     }
 }

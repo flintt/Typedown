@@ -116,7 +116,7 @@ internal static partial class Program
             try { await c.Call("window.setView", new { windowId, mode = "visual", sidePane = new { open = false } }); } catch { }
             try
             {
-                await c.Call("document.replace", new { documentId = id, baseRevision = await Revision(c, id), text = source, reveal = "document", normalizationPolicy = "allowUnknown" });
+                await c.Call("document.replace", new { documentId = id, baseRevision = await Revision(c, id), text = source, reveal = "document" });
                 await c.Call("document.save", new { documentId = id, baseRevision = await Revision(c, id) });
             }
             catch { }

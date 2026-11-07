@@ -161,6 +161,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | W01 | the editor page reloads after it applied a write and before the commit: nothing is committed, host and page agree |
 | W02 | a mode switch while a write is held after the page applied it: the write commits and every mode shows it |
 | W03 | the tab switched away and back while a write is held: refused and restored; switched away only: committed into the tab |
+| W04 | a document written its own way (a ragged table, runs of blank lines, * items, spaces at line ends, == marks, a diagram): a line struck through with replaceText and five lines changed with replace, no policy, both written; the file the text asked for, byte for byte |
 | MC01 | typedownctl mcp as its own process: read, replace text with reveal, a stale revision is a conflict that says to read again |
 | EX01 | the PowerShell and Python client examples edit through the real pipe |
 | EQ01 | the equivalence scenario (compared with the Uno edition's answers offline) |

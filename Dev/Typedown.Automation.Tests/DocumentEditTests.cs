@@ -174,6 +174,34 @@ namespace Typedown.Automation.Tests
         }
 
         [Fact]
+        public async Task A_page_that_finds_nothing_rewritten_by_the_edit_commits_without_any_policy()
+        {
+            // The page judges the edit by what writing it back would change, not the whole document's writing (the user,
+            // 2026-11-07: every edit of a real document was refused): "none" commits as asked.
+            var doc = new FakeDocument { Text = "|a|b|\n|-|-|\n|1|22|\n\n\n\nOne line.\n", Page = c => FakeDocument.Classified(c, PendingNormalization.None) };
+            doc.PageText = doc.Text;
+            var result = await coordinator.EditAsync(doc, Replace(0, "|a|b|\n|-|-|\n|1|22|\n\n\n\n~~One line.~~\n"), CancellationToken.None);
+            Assert.Equal(1, result.Revision);
+            Assert.Equal("|a|b|\n|-|-|\n|1|22|\n\n\n\n~~One line.~~\n", doc.Text);
+            Assert.Contains("commit", doc.Calls);
+        }
+
+        [Fact]
+        public async Task A_refusal_says_where_and_what_would_be_written()
+        {
+            var changes = new Newtonsoft.Json.Linq.JArray(new Newtonsoft.Json.Linq.JObject { ["line"] = 3, ["lines"] = 1, ["requested"] = "|1|x|", ["written"] = "| 1 | x |" });
+            var doc = new FakeDocument
+            {
+                Page = c => new ApplyReply(ApplyOutcome.Applied, DocumentText.ContentHash(c.Text),
+                    new NormalizationInfo(PendingNormalization.Unknown, DocumentText.ContentHash(c.Text), null, new[] { "formatting-changed" }, 3, changes)),
+            };
+            var e = await Assert.ThrowsAsync<AutomationException>(() => coordinator.EditAsync(doc, Replace(0, "|1|x|\n"), CancellationToken.None));
+            Assert.Equal(AutomationErrorKind.normalization_unclassified, e.Kind);
+            Assert.Contains("line 3", e.Message);
+            Assert.Same(changes, e.ErrorData["changes"]);
+        }
+
+        [Fact]
         public async Task AllowUnknown_commits_and_keeps_reporting_the_risk()
         {
             var doc = new FakeDocument { Page = c => FakeDocument.Classified(c, PendingNormalization.Unknown, "formatting-changed") };
@@ -263,15 +291,14 @@ namespace Typedown.Automation.Tests
         }
 
         [Fact]
-        public async Task A_background_document_needs_allowUnknown_and_never_touches_an_editor()
+        public async Task A_background_document_is_written_without_any_policy_and_never_touches_an_editor()
         {
+            // Not refused for want of an editor (the user, 2026-11-07): written as asked, said not evaluated.
             var doc = new FakeDocument { IsActive = false };
-            var e = await Assert.ThrowsAsync<AutomationException>(() => coordinator.EditAsync(doc, Replace(0, "x\n"), CancellationToken.None));
-            Assert.Equal(AutomationErrorKind.normalization_unclassified, e.Kind);
-            Assert.Equal(new[] { "notEvaluated" }, (IReadOnlyList<string>)e.ErrorData["reasons"]!);
-            Assert.Null(e.ErrorData["normalizedHash"]);
-            var result = await coordinator.EditAsync(doc, Replace(0, "x\n", allowUnknown: true), CancellationToken.None);
+            var result = await coordinator.EditAsync(doc, Replace(0, "x\n"), CancellationToken.None);
             Assert.Equal(1, result.Revision);
+            Assert.Equal(new[] { "notEvaluated" }, result.Normalization.Reasons);
+            Assert.Equal(PendingNormalization.Unknown, result.Normalization.Pending);
             Assert.Equal(new[] { "commit", "end" }, doc.Calls);
         }
 

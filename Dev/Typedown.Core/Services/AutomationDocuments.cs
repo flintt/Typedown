@@ -80,7 +80,8 @@ namespace Typedown.Core.Services
                         n["sourceHash"]?.ToString() ?? "",
                         n["normalizedHash"]?.Type == JTokenType.String ? n["normalizedHash"].ToString() : null,
                         n["reasons"] is JArray reasons ? reasons.Select(r => r.ToString()).ToList() : new System.Collections.Generic.List<string>(),
-                        n["classifierVersion"]?.Value<int?>() ?? 0);
+                        n["classifierVersion"]?.Value<int?>() ?? 0,
+                        n["changes"] as JArray);
                     return new ApplyReply(ApplyOutcome.Applied, reply["sourceHash"]?.ToString(), normalization);
                 default:
                     return new ApplyReply(ApplyOutcome.Failed);

@@ -159,8 +159,10 @@ const sha = text => crypto.createHash('sha256').update(text, 'utf8').digest('hex
     await mode(true, false);
     const current = await flush();
     ({ reply, change } = await apply(current, '# source mode\n'));
-    check(reply.outcome === 'applied' && reply.normalization.pendingNormalization === 'unknown' && reply.normalization.reasons[0] === 'notEvaluated' && reply.normalization.normalizedHash === null,
-      `source mode: applied, normalization not evaluated (${JSON.stringify(reply.normalization.reasons)})`);
+    // Source mode writes the text as it is: nothing to rewrite, nothing refused (a visual edit later keeps what it does
+    // not touch as written).
+    check(reply.outcome === 'applied' && reply.normalization.pendingNormalization === 'none' && reply.normalization.normalizedHash === reply.sourceHash,
+      `source mode: applied, nothing to rewrite (${reply.normalization.pendingNormalization} ${JSON.stringify(reply.normalization.reasons)})`);
     check(await page.evaluate(() => document.querySelector('.CodeMirror').CodeMirror.getValue()) === '# source mode\n', 'CodeMirror holds the exact text');
     check(!change, 'source mode: no MarkdownChange');
 
@@ -216,6 +218,42 @@ const sha = text => crypto.createHash('sha256').update(text, 'utf8').digest('hex
     check(superseded?.operationId === 'late' && superseded.outcome === 'failed' && superseded.reason === 'superseded', `a load supersedes an edit in flight (${JSON.stringify(superseded)})`);
     await page.waitForFunction(() => window.__last.FileLoaded?.loadId === 900, { timeout: 30000 });
     check(await flush() === '# other tab\n', 'the load wins');
+
+    // A document written its own way (a ragged table, runs of blank lines, "*" items, spaces at line ends, == marks, a
+    // diagram): an edit of a few lines is judged by what writing it back would change - in the lines it changed - not
+    // by the whole document's writing. Every write to such a document was refused (the user, 2026-11-07: "相当于 mcp
+    // 失效了"); the file is the text asked for, byte for byte.
+    const real = process.env.APPLY_EDIT_REAL ? require('fs').readFileSync(process.env.APPLY_EDIT_REAL, 'utf8').replace(/\r\n/g, '\n') : null;
+    const own = real ?? '# Notes  \n\n\n\n|名称|数量|\n|---|---|\n| 苹果 |3|\n|香蕉| 5 |\n\n\n* first item\n* second item  \n    * nested item\n\nA ==marked== line.\nAnother line.\nThird line.\n\n```mermaid\n%%{init: {"theme": "neutral"}}%%\ngraph TD\n  A-->B\n  classDef highlight fill:#ff0\n  class A highlight\n```\n\n\n\nThe end.\n';
+    await mode(false, false);
+    // (A load id past the one above: the page drops an older one.)
+    await page.evaluate(text => { delete window.__last.FileLoaded; window.__deliver('LoadFile', { text, loadId: 1000, basePath: '/tmp' }); }, own);
+    await page.waitForFunction(() => window.__last.FileLoaded?.loadId === 1000, { timeout: 60000 });
+    await pause(500);
+    const lines = own.split('\n');
+    // replace-text: one whole line struck through (as typeleafctl replace-text --find <line> --replacement ~~<line>~~).
+    const target = real ? lines.findIndex(l => /^[^\s#>*|`~\-\d]/.test(l) && l.length > 4 && !l.includes('~~')) : lines.indexOf('Another line.');
+    const one = lines.map((l, i) => i === target ? `~~${l}~~` : l).join('\n');
+    ({ reply } = await apply(own, one));
+    check(reply.outcome === 'applied' && reply.normalization.pendingNormalization === 'none',
+      `a line struck through in a document written its own way is not refused (${reply.normalization.pendingNormalization} ${JSON.stringify(reply.normalization.reasons)} ${JSON.stringify(reply.normalization.changes ?? [])})`);
+    check(await flush() === one, 'the file is the text asked for, byte for byte');
+    // replace: the whole text again, five lines changed.
+    const picks = lines.map((l, i) => i).filter(i => /^[^\s#>*|`~\-\d%]/.test(lines[i]) && lines[i].length > 4 && !lines[i].includes('~~') && i !== target).slice(0, 5);
+    const five = one.split('\n').map((l, i) => picks.includes(i) ? `~~${l}~~` : l).join('\n');
+    ({ reply } = await apply(one, five));
+    check(reply.outcome === 'applied' && reply.normalization.pendingNormalization === 'none',
+      `the whole text replaced with ${picks.length} lines changed is not refused (${reply.normalization.pendingNormalization} ${JSON.stringify(reply.normalization.changes ?? [])})`);
+    check(await flush() === five, 'every byte outside the changed lines as it was');
+    // Still refused where writing it back would change the edit itself: a table row written in a way Muya pads.
+    if (!real) {
+      const row = five.replace('|香蕉| 5 |', '|香蕉| 5 |\n|梨|  7|');
+      ({ reply } = await apply(five, row));
+      // (Refused or not, it says where: the row as asked and as the visual editor writes it.)
+      const said = (reply.normalization.changes ?? [])[0];
+      check(reply.normalization.pendingNormalization === 'none' || (said && said.requested.includes('梨') && said.line === 9),
+        `a row added to a ragged table: the lines the visual editor would write differently are said (${reply.normalization.pendingNormalization} ${JSON.stringify(reply.normalization.changes ?? [])})`);
+    }
     check(!errors.length, `no page errors${errors.length ? `: ${errors.join(' | ')}` : ''}`);
   } finally {
     await close();

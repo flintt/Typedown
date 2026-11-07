@@ -77,7 +77,7 @@ internal static partial class Program
         }
         // An edit of the shown document: the outline is that document's again, a heading renamed in place.
         var shownText = System.IO.File.ReadAllText(paths[current]).Replace($"## {prefixes[current]}1.2\n", $"## {prefixes[current]}1.2 renamed\n");
-        await c.Call("document.replace", new { documentId = ids[current], baseRevision = await Revision(c, ids[current]), text = shownText, normalizationPolicy = "allowUnknown" });
+        await c.Call("document.replace", new { documentId = ids[current], baseRevision = await Revision(c, ids[current]), text = shownText });
         JArray edited = new();
         for (var i = 0; i < 40; i++)
         {

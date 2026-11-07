@@ -177,9 +177,14 @@ const Editor: React.FC = () => {
         const source = markdownRef.current ?? ''
         const sourceHash = sha256Hex(source)
         const pending = (window as any).__typedownPendingNormalization?.()
+        // Source mode writes the text as it is: nothing to rewrite (a visual edit later keeps the blocks it does not
+        // touch as written, keptSource).
+        const sourceShown = !pending && (optionsRef.current?.sourceCode || optionsRef.current?.plainTextShown)
         const normalization = pending
-            ? { pendingNormalization: pending.pendingNormalization, sourceHash, normalizedHash: sha256Hex(pending.normalized), reasons: pending.reasons, classifierVersion: pending.classifierVersion }
-            : { pendingNormalization: 'unknown', sourceHash, normalizedHash: null, reasons: ['notEvaluated'], classifierVersion }
+            ? { pendingNormalization: pending.pendingNormalization, sourceHash, normalizedHash: sha256Hex(pending.normalized), reasons: pending.reasons, classifierVersion: pending.classifierVersion, ...(pending.changes?.length ? { changes: pending.changes } : {}) }
+            : sourceShown
+                ? { pendingNormalization: 'none', sourceHash, normalizedHash: sourceHash, reasons: [], classifierVersion }
+                : { pendingNormalization: 'unknown', sourceHash, normalizedHash: null, reasons: ['notEvaluated'], classifierVersion }
         return { sourceHash, normalization }
     }, [])
 

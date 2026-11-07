@@ -118,7 +118,7 @@ internal static partial class Program
                 // The document as it began, for the other mode (the empty paragraphs Enter left are the editor's to tidy).
                 if (mode == "visual")
                 {
-                    await c.Call("document.replace", new { documentId = id, text = "# UN01\n\nfirst\n", baseRevision = await Revision(c, id), normalizationPolicy = "allowUnknown" });
+                    await c.Call("document.replace", new { documentId = id, text = "# UN01\n\nfirst\n", baseRevision = await Revision(c, id) });
                     await Task.Delay(800);
                 }
             }
@@ -150,7 +150,7 @@ internal static partial class Program
         // A new paragraph after "first", the given letters typed into it.
         async Task<string> Begin(string letters)
         {
-            await c.Call("document.replace", new { documentId = id, text = start, baseRevision = await Revision(c, id), normalizationPolicy = "allowUnknown" });
+            await c.Call("document.replace", new { documentId = id, text = start, baseRevision = await Revision(c, id) });
             await Task.Delay(800);
             await Activate(window);
             await c.Call("test.editor.focus", new { windowId });

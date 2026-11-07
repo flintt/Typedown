@@ -399,7 +399,7 @@ internal static partial class Program
         }
         async Task Save(string text)
         {
-            await c.Call("document.replace", new { documentId = id, baseRevision = await Revision(c, id), text, reveal = "document", normalizationPolicy = "allowUnknown" });
+            await c.Call("document.replace", new { documentId = id, baseRevision = await Revision(c, id), text, reveal = "document" });
             await c.Call("document.save", new { documentId = id, baseRevision = await Revision(c, id) });
         }
         try
@@ -839,7 +839,7 @@ internal static partial class Program
 
             // An automation write into the home page's document.
             const string text = "# Written\n\nby a program\n";
-            await c.Call("document.replace", new { documentId = blank, baseRevision = await Revision(c, blank), text, normalizationPolicy = "allowUnknown" });
+            await c.Call("document.replace", new { documentId = blank, baseRevision = await Revision(c, blank), text });
             Check(await HomeShown(c, windowId, false), "a write into its document hides the home page");
             var written = (string?)(await Get(c, blank))["text"];
             Check(written == text, $"the document holds what was written ({JsonConvert.SerializeObject(written)})");
