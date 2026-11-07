@@ -3747,7 +3747,9 @@ internal static partial class Program
             ((System.Windows.Automation.InvokePattern)link.GetCurrentPattern(System.Windows.Automation.InvokePattern.Pattern)).Invoke();
             Check(await Eventually(async () => !await Warning(), 1500, 50), "the link closes the card");
 
-            var b = await Open(c, Fixture($"f03-b-{run}.md", unsafeHtml));
+            // (Not the very same text: the page keeps the document shown for a load of the text it already has, and says
+            // nothing new for it - job 312.)
+            var b = await Open(c, Fixture($"f03-b-{run}.md", unsafeHtml + "\nB\n"));
             Check(await Eventually(Warning, 3000, 100), "another document with the same HTML still shows the card (the mute is for one document)");
             await c.Call("document.focus", new { documentId = a });
             Check(await Stays(false, 2500), "back to the muted document: no card");
@@ -3766,7 +3768,7 @@ internal static partial class Program
             Check(await Stays(false, 2000), "the copy saved as is muted too");
 
             await c.Call("test.settings.set", new { windowId, name = "WarnFirstEditRewrite", value = false });
-            var d = await Open(c, Fixture($"f03-d-{run}.md", unsafeHtml));
+            var d = await Open(c, Fixture($"f03-d-{run}.md", unsafeHtml + "\nD\n"));
             Check(await Stays(false, 3000), "Settings > Editor off: no card for any document");
             await c.Call("test.settings.set", new { windowId, name = "WarnFirstEditRewrite", value = true });
             await c.Call("document.focus", new { documentId = b });
