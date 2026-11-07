@@ -3771,9 +3771,12 @@ internal static partial class Program
             var d = await Open(c, Fixture($"f03-d-{run}.md", unsafeHtml + "\nD\n"));
             Check(await Stays(false, 3000), "Settings > Editor off: no card for any document");
             await c.Call("test.settings.set", new { windowId, name = "WarnFirstEditRewrite", value = true });
+            // One document shown, its card come, then the other: two switches at once left the second's card unsaid on
+            // w10 (job 314) - the page says it a frame after the document is drawn.
             await c.Call("document.focus", new { documentId = b });
+            Check(await Eventually(Warning, 5000, 100), "turned back on, the document not muted shows the card again");
             await c.Call("document.focus", new { documentId = d });
-            Check(await Eventually(Warning, 3000, 100), "turned back on, a document not muted shows the card again");
+            Check(await Eventually(Warning, 5000, 100), "turned back on, the document opened while it was off shows the card");
         }
         finally
         {
