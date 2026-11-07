@@ -1794,6 +1794,9 @@ span.ag-footnote-backlink {
 .ag-review-del-below::after { content: attr(data-del-below); }
 .ag-review-strip-above::before { content: attr(data-del-above); }
 .ag-review-strip-below::before { content: attr(data-del-below); }
+/* A format put on (or taken off) words: on the words themselves, a dotted line - the marks are hidden. */
+.ag-review-format-added { text-decoration: underline dotted var(--reviewIns) 2px; text-underline-offset: 3px; background-color: var(--reviewInsBg); }
+.ag-review-format-removed { text-decoration: underline dotted var(--reviewDel) 2px; text-underline-offset: 3px; background-color: var(--reviewDelBg); }
 /* A block deleted whole, where it was, as a block of its kind (services/reviewGhosts.ts): faded red, struck through, in
    the document's own size - not the next block's (a heading's), never inside another block. */
 .ag-review-ghost {

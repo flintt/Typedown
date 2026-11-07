@@ -482,7 +482,7 @@ export function revisionsForExport(): Revision[] | null {
 /** For page checks: the state as the page holds it. */
 (window as any).__typedownReview = () => ({
     on: state.on, show: state.show, filter: state.filter, baseline: state.baseline,
-    revisions: state.revisions.map(r => ({ id: r.id, kind: r.kind, oldText: r.oldText, newText: r.newText, source: r.source, curStart: r.curStart })),
+    revisions: state.revisions.map(r => ({ id: r.id, kind: r.kind, oldText: r.oldText, newText: r.newText, source: r.source, curStart: r.curStart, group: r.group, format: r.format })),
     actionsFor,
     paths: { ...diffPaths },
 })

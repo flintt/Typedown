@@ -68,6 +68,12 @@ const samples = [
     B('B18 段落改成标题', swap(blocks, '第二段文字。', '### 第二段文字。'), { n: 1, structure: '第二段文字。' }),
     B('B19 两段合成一段', swap(blocks, '第一段文字。\n\n第二段文字。', '第一段文字。第二段文字。'), { n: 1, join: '第一段文字。第二段文字。' }),
     B('B20 一段拆成两段', swap(blocks, '第一段文字。', '第一段\n\n文字。'), { n: 1, split: '文字。' }),
+    // A format put on words by hand or by a program (the user's 3.12, 2026-11-07): one revision, drawn on the words.
+    B('B21 加删除线', swap(blocks, '第一段文字。', '~~第一段文字~~。'), { n: 2, format: ['第一段文字', 'strike'] }),
+    B('B22 加斜体', swap(blocks, '第一段文字。', '*第一段文字*。'), { n: 2, format: ['第一段文字', 'italic'] }),
+    B('B23 加高亮', swap(blocks, '第一段文字。', '==第一段文字==。'), { n: 2, format: ['第一段文字', 'mark'] }),
+    B('B24 加行内代码', swap(blocks, '第一段文字。', '`第一段文字`。'), { n: 2, format: ['第一段文字', 'code'] }),
+    B('B25 去掉加粗', swap(blocks, '第一段文字。', '**第一段文字**。'), { n: 2, format: ['第一段文字', 'bold'], reverse: true }),
 ];
 
 (async () => {
@@ -79,7 +85,9 @@ const samples = [
         await mode(false, false);
         if (shots) fs.mkdirSync(shots, { recursive: true });
         let loadId = 900;
-        for (const [name, baseline, text, want] of samples) {
+        for (const [name, baselineGiven, textGiven, want] of samples) {
+            // (reverse: the edit taken back - the sample's text the baseline, the baseline the text.)
+            const [baseline, text] = want.reverse ? [textGiven, baselineGiven] : [baselineGiven, textGiven]
             const problems = [];
             const id = ++loadId;
             await page.evaluate(({ text, baseline, id }) => {
@@ -109,7 +117,7 @@ const samples = [
                     revisions: review.revisions, ghosts, del,
                     bodyFont: parseFloat(getComputedStyle(root.querySelector('.ag-paragraph-content') || root).fontSize),
                     before: (want.ghosts || []).map(g => near(g[2])), after: (want.ghosts || []).map(g => near(g[3])),
-                    ins: marks('.ag-review-ins, .ag-review-whole'), structure: marks('.ag-review-structure'), split: marks('.ag-review-split'),
+                    ins: marks('.ag-review-ins, .ag-review-whole'), formats: marks('.ag-review-format'), structure: marks('.ag-review-structure'), split: marks('.ag-review-split'),
                     joins: [...root.querySelectorAll('[data-del-before], [data-del-after]')].map(e => e.getAttribute('data-del-before') ?? e.getAttribute('data-del-after')),
                     shownMarks: [...root.querySelectorAll('[data-del-before], [data-del-after]')].map(e => e.getAttribute('data-del-before') ?? e.getAttribute('data-del-after')).filter(t => /(^|\s)[-*+>](\s|$)|¶/.test(t)),
                     math: root.querySelectorAll('.katex').length,
@@ -145,8 +153,10 @@ const samples = [
             if (want.split && !seen.split.some(m => m.text.includes(want.split) && m.rid)) problems.push([`no split mark on "${want.split}"`, seen.split]);
             if (want.join && !seen.joins.includes('↵')) problems.push(['no "↵" where two blocks were joined', seen.joins]);
             if (want.rowOnly && (seen.rowBars.length !== 1 || !seen.rowBars[0].includes(want.rowOnly) || seen.cellBars || seen.tableBar)) problems.push(['a bar beside other rows or the table', [seen.rowBars, seen.cellBars, seen.tableBar]])
+            if (want.format && !seen.formats.some(m => m.text.includes(want.format[0]) && m.rid && !m.text.includes('~') && !m.text.includes('*')))
+                problems.push([`the ${want.format[1]} not drawn on "${want.format[0]}"`, seen.formats])
             if (seen.shownMarks.length) problems.push(['block marks shown as deleted text', seen.shownMarks]);
-            if (baseline === blocks && !want.noMath && seen.math < 1) problems.push(['the formula is not drawn', null]);
+            if (baselineGiven === blocks && !want.noMath && seen.math < 1) problems.push(['the formula is not drawn', null]);
             // The buttons beside the first revision, with who and when.
             const first = seen.revisions[0];
             if (first) {
@@ -170,6 +180,7 @@ const samples = [
                     else {
                         if (Math.abs(actions.top - at.y) > 40) problems.push(['the buttons are not beside it', [actions.top, at.y]]);
                         if (!/\d{1,2}:\d\d/.test(actions.meta)) problems.push(['no time beside the buttons', actions.meta]);
+                        if (want.format && !actions.meta.includes(want.format[1])) problems.push([`the buttons do not say ${want.format[1]}`, actions.meta]);
                     }
                     await page.mouse.move(5, 990);
                 }

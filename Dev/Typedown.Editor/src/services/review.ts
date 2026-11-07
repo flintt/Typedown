@@ -896,13 +896,17 @@ export const isFormatMark = (r: Revision) => (r.kind === 'insert' || r.kind === 
  * both made by the change, one each side of the words on one line, as a group.
  */
 export function groupFormats(revisions: Revision[], current: string, region: { from: number, to: number } | null) {
-    if (!region) return
-    const marks = revisions.filter(r => !r.group && isFormatMark(r) &&
-        touches(r.curStart, r.curEnd, region.from - 2, region.to + 2))
+    // Any two marks of one format put on or taken off around words of one line, however they came - Ctrl+B, typed, a
+    // program's write, a document loaded with them (the user, 2026-11-07: "~~文字~~" written by hand was two
+    // insertions of "~~", drawn on the hidden marks). `region` is no longer needed.
+    void region
+    const marks = revisions.filter(r => !r.group && isFormatMark(r))
     for (let i = 0; i + 1 < marks.length; i++) {
         const a = marks[i], b = marks[i + 1]
         if (a.kind !== b.kind || (a.newText || a.oldText) !== (b.newText || b.oldText) || a.source !== b.source) continue
-        if (current.slice(a.curEnd, b.curStart).includes('\n')) continue
+        // The words between: on one line, not empty, not starting or ending with a space (or they are no emphasis).
+        const inner = current.slice(a.kind === 'insert' ? a.curEnd : a.curStart, b.curStart)
+        if (!inner || inner.includes('\n') || /^\s|\s$/.test(inner)) continue
         a.group = b.group = a.id
         a.format = b.format = FORMAT_MARKS[a.newText || a.oldText]
         i++

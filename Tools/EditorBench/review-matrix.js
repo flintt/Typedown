@@ -221,7 +221,7 @@ else (async () => {
                 if (!whole && !marked) problems.push(`ins "${want}" unmarked`);
             }
             if (rev.oldText && /\S/.test(rev.oldText)) {
-                const host = document.querySelector(`#ag-editor-id [data-rid="${rev.id}"][data-del-before], #ag-editor-id [data-rid="${rev.id}"][data-del-after], #ag-editor-id [data-del-above-rid="${rev.id}"], #ag-editor-id [data-del-below-rid="${rev.id}"], #ag-editor-id .ag-review-ghost[data-rid="${rev.id}"], #ag-editor-id .ag-review-structure[data-rid="${rev.id}"]`)
+                const host = document.querySelector(`#ag-editor-id [data-rid="${rev.id}"][data-del-before], #ag-editor-id [data-rid="${rev.id}"][data-del-after], #ag-editor-id [data-del-above-rid="${rev.id}"], #ag-editor-id [data-del-below-rid="${rev.id}"], #ag-editor-id .ag-review-ghost[data-rid="${rev.id}"], #ag-editor-id .ag-review-structure[data-rid="${rev.id}"], #ag-editor-id .ag-review-format[data-rid="${rev.group || rev.id}"]`)
                     ?? [...document.querySelectorAll('#ag-editor-id [data-del-before], #ag-editor-id [data-del-after]')].find(e => (e.getAttribute('data-del-before') ?? e.getAttribute('data-del-after') ?? '').includes(rev.oldText.replace(/\n/g, ' ¶ ').trim()));
                 if (!host) problems.push(`del "${rev.oldText.trim()}" not drawn`);
                 else if (host.closest('.ag-hide')) problems.push(`del "${rev.oldText.trim()}" inside a hidden mark`);

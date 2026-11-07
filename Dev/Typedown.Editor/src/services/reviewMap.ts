@@ -113,6 +113,8 @@ export interface Segment {
     deletedAfter?: string
     /** The program the revision is from ('' for the reader). */
     source: string
+    /** The words a format was put on ('added') or taken off ('removed'): drawn on them, the marks being hidden. */
+    format?: 'added' | 'removed'
 }
 
 export interface LeafMarks {
@@ -283,6 +285,21 @@ export function leafMarks(map: LeafMap, revisions: Revision[], current: string):
         if (source && !m.sources.includes(source)) m.sources.push(source)
     }
     for (const r of revisions) {
+        // A format put on or taken off (its two marks, one group): drawn on the words between the marks - the marks
+        // themselves are hidden in the visual editor, and a mark drawn on them was not seen (the user, 2026-11-07).
+        if (r.group && r.format) {
+            if (r.id !== r.group) continue
+            const partner = revisions.find(x => x.group === r.group && x !== r)
+            if (!partner) continue
+            const from = r.kind === 'insert' ? r.curEnd : r.curStart, to = partner.curStart
+            for (const p of map.pieces) {
+                const a = Math.max(from, p.md), b = Math.min(to, p.md + p.length)
+                if (a >= b) continue
+                marksOf(all, p.key).segments.push({ start: p.at + a - p.md, end: p.at + b - p.md, rid: r.id, inserted: true, source: r.source, format: r.kind === 'insert' ? 'added' : 'removed' })
+                tag(p.key, r.source)
+            }
+            continue
+        }
         // The inserted text, a run per line of a leaf it covers.
         const covered = new Map<string, number>()
         let firstInsert: { key: string, start: number } | null = null

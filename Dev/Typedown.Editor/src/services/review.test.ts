@@ -305,3 +305,25 @@ test('an item taken out of a numbered list is that item deleted; the numbers mov
     expect(diffTexts(baseline, more).map(h => [baseline.slice(h.baseStart, h.baseEnd), more.slice(h.curStart, h.curEnd)]))
         .toEqual([['', '2. 新的\n'], ['2', '3'], ['3', '4']])
 })
+
+test('any two marks of one format around words are one format revision: typed, written by a program, or loaded', () => {
+    for (const [mark, format] of [['~~', 'strike'], ['*', 'italic'], ['==', 'mark'], ['`', 'code'], ['**', 'bold']]) {
+        const baseline = '前面 文字 后面\n'
+        const current = `前面 ${mark}文字${mark} 后面\n`
+        // Loaded so (no change region), as a review reopened or a program's write finds it.
+        const revs = trackRevisions(baseline, current, [], { source: YOU, time: 1 })
+        groupFormats(revs, current, null)
+        expect(revs.map(r => [r.newText, r.format])).toEqual([[mark, format], [mark, format]])
+        expect(revs[0].group).toBe(revs[0].id)
+        expect(revs[1].group).toBe(revs[0].id)
+        expect(countRevisions(revs).inserted).toBe(1)
+        // Taken off again: one format revision too.
+        const off = trackRevisions(current, baseline, [], { source: YOU, time: 1 })
+        groupFormats(off, baseline, null)
+        expect(off.map(r => [r.oldText, r.format])).toEqual([[mark, format], [mark, format]])
+    }
+    // Two marks far apart on two lines, or around nothing: not a format.
+    const apart = trackRevisions('a\nb\n', '*a\nb*\n', [], { source: YOU, time: 1 })
+    groupFormats(apart, '*a\nb*\n', null)
+    expect(apart.some(r => r.group)).toBe(false)
+})

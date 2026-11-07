@@ -10,7 +10,7 @@ import { h } from './snabbdom'
 
 /** The class of a review run, for the selector (and the emoji and backslash runs, which take only a class). */
 export const reviewClassOf = segment => {
-  let selector = segment.inserted ? 'ag-review-ins' : 'ag-review-mark'
+  let selector = segment.format ? `ag-review-format.ag-review-format-${segment.format}` : segment.inserted ? 'ag-review-ins' : 'ag-review-mark'
   if (segment.source) selector += '.ag-review-ext'
   if (segment.deletedBefore) selector += '.ag-review-del-before'
   if (segment.deletedAfter) selector += '.ag-review-del-after'
