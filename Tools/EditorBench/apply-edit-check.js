@@ -49,7 +49,8 @@ const sha = text => crypto.createHash('sha256').update(text, 'utf8').digest('hex
     check(typed === '# Title\n\nwritten by a program!\n', 'the typing survives');
 
     ({ reply } = await apply(typed, '|a|b|\n|-|-|\n|1|2|\n'));
-    check(reply.outcome === 'applied' && reply.normalization.pendingNormalization === 'unknown', `a formatting difference is unknown (${reply.normalization.pendingNormalization})`);
+    // A table's padding alone: known formatting (only the writing differs, 2026-11-07; it was unknown).
+    check(reply.outcome === 'applied' && reply.normalization.pendingNormalization === 'knownFormatting', `a table's padding alone is known formatting (${reply.normalization.pendingNormalization})`);
     check(await flush() === '|a|b|\n|-|-|\n|1|2|\n', 'the source is kept exactly, not the normalized form');
     const report = await page.evaluate(() => { delete window.__last.NormalizationReport; window.__deliver('QueryNormalization', { token: 7 }); return window.__last.NormalizationReport; });
     check(report?.token === 7 && report.normalization.pendingNormalization === reply.normalization.pendingNormalization && report.sourceHash === reply.sourceHash,
@@ -240,13 +241,20 @@ const sha = text => crypto.createHash('sha256').update(text, 'utf8').digest('hex
     check(await flush() === one, 'the file is the text asked for, byte for byte');
     // replace: the whole text again, five lines changed.
     const picks = lines.map((l, i) => i).filter(i => /^[^\s#>*|`~\-\d%]/.test(lines[i]) && lines[i].length > 4 && !lines[i].includes('~~') && i !== target).slice(0, 5);
-    const five = one.split('\n').map((l, i) => picks.includes(i) ? `~~${l}~~` : l).join('\n');
+    let five = one.split('\n').map((l, i) => picks.includes(i) ? `~~${l}~~` : l).join('\n');
     ({ reply } = await apply(one, five));
     check(reply.outcome === 'applied' && reply.normalization.pendingNormalization === 'none',
       `the whole text replaced with ${picks.length} lines changed is not refused (${reply.normalization.pendingNormalization} ${JSON.stringify(reply.normalization.changes ?? [])})`);
     check(await flush() === five, 'every byte outside the changed lines as it was');
     // Still refused where writing it back would change the edit itself: a table row written in a way Muya pads.
     if (!real) {
+      // A heading with spaces at its end edited (Muya writes it without them): only the writing, known formatting -
+      // not refused (W04 on hp, job 318).
+      const heading = five.replace('# Notes  ', '# Notes, edited  ');
+      ({ reply } = await apply(five, heading));
+      check(['none', 'knownFormatting'].includes(reply.normalization.pendingNormalization),
+        `a heading with spaces at its end edited is only the writing (${reply.normalization.pendingNormalization} ${JSON.stringify(reply.normalization.changes ?? [])})`);
+      five = heading;
       const row = five.replace('|香蕉| 5 |', '|香蕉| 5 |\n|梨|  7|');
       ({ reply } = await apply(five, row));
       // (Refused or not, it says where: the row as asked and as the visual editor writes it.)

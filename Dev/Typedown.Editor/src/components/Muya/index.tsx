@@ -77,6 +77,7 @@ import { markStartup } from 'services/startupMarks'
 import { registerReviewView, reviewActive, reviewLabels } from 'services/reviewSession'
 import { ghostsOf, leafMarks, leafPointOf, LeafMap, mapLeaves, markdownOffsetOf } from 'services/reviewMap'
 import { ghostLayer } from 'services/reviewGhosts'
+import { wordingOf } from 'services/review'
 
 interface IMuyaEditor {
     markdown: string
@@ -228,7 +229,11 @@ function editNormalization(muya: any, before: { source: string, normalized: stri
     let tail = 0
     while (tail < a.length - head && tail < b.length - head && a[a.length - 1 - tail] === b[b.length - 1 - tail]) tail++
     const asked = a.slice(head, a.length - tail).join('\n'), written = b.slice(head, b.length - tail).join('\n')
-    const result = classifyNormalization(asked, written)
+    const classified = classifyNormalization(asked, written)
+    // Only the writing differs (spaces at a line's end, a marker of the same kind, a table's padding, a number, blank
+    // lines - review.ts wordingOf, which keeps what the marks say): known formatting, written as asked, not refused.
+    const result = classified.pendingNormalization === 'unknown' && wordingOf(asked) === wordingOf(written)
+        ? { ...classified, pendingNormalization: 'knownFormatting' as const } : classified
     const cut = (t: string) => t.length > 400 ? t.slice(0, 400) + '…' : t
     return { ...result, normalized: merged, changes: [{ line: head + 1, lines: a.length - tail - head, requested: cut(asked), written: cut(written) }] }
 }
