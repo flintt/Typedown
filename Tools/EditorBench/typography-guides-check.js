@@ -128,6 +128,21 @@ const { openEditor } = require('./harness');
     await pause(200);
     b = await block();
     report(b && b.kind === 'p' && b.level === 0, 'into a paragraph: that block', JSON.stringify(b));
+    // The page laid out anew without a scroll (All settings opened beside it, the window resized): the guides and the
+    // block's place follow (the user, 2026-11-07: they stayed where the block had been).
+    // The page's right edge: its left one stays put when only the window's width changes.
+    const edgeLeft = () => page.evaluate(() => { const l = [...document.querySelectorAll('#td-typography-guides > div')].filter(d => d.style.borderLeft.includes('dashed')); return l.length ? Math.max(...l.map(d => parseFloat(d.style.left))) : null; });
+    const editorLeft = () => page.evaluate(() => Math.round(document.getElementById('ag-editor-id').getBoundingClientRect().right));
+    const viewport = page.viewport();
+    const blockBefore = await block();
+    await page.setViewport({ ...viewport, width: 700 });
+    await pause(400);
+    const blockAfter = await block();
+    report(blockAfter && blockBefore && (blockAfter.x !== blockBefore.x || blockAfter.width !== blockBefore.width), 'the window resized: the block\'s place sent again', `${JSON.stringify(blockBefore)} -> ${JSON.stringify(blockAfter)}`);
+    report(Math.abs((await edgeLeft()) - (await editorLeft())) <= 1, 'and the page\'s edge drawn where the page is now', `${await edgeLeft()} vs ${await editorLeft()}`);
+    await page.setViewport(viewport);
+    await pause(400);
+    report(Math.abs((await edgeLeft()) - (await editorLeft())) <= 1, 'and back again', `${await edgeLeft()} vs ${await editorLeft()}`);
     // What every field is on the page now (an empty field shows it), whatever the document holds: H3 and H5 though it
     // has no such heading; the paragraph's own, the page's width.
     const e = await page.evaluate(() => window.__last.TypographyValues);

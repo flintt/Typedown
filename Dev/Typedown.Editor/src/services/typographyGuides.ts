@@ -343,6 +343,11 @@ const onBlockScroll = () => {
     scrollFrame = requestAnimationFrame(() => { scrollFrame = 0; sendCaretBlock() })
 }
 
+// The page laid out anew without a scroll - All settings opened or closed beside it, the window resized: the guides and
+// the small panel stayed where the block had been (the user, 2026-11-07). Redrawn, and the block's place sent again.
+let resized: ResizeObserver | null = null
+const onResize = () => onBlockScroll()
+
 export const setTypographyGuides = (value: boolean) => {
     if (value === on) return
     on = value
@@ -361,6 +366,11 @@ export const setTypographyGuides = (value: boolean) => {
         document.addEventListener('scroll', onBlockScroll, { passive: true, capture: true })
         styles = new MutationObserver(onStyles)
         styles.observe(document.head, { childList: true, subtree: true, characterData: true, attributes: true })
+        window.addEventListener('resize', onResize)
+        resized = new ResizeObserver(onResize)
+        resized.observe(document.documentElement)
+        const editor = document.getElementById('ag-editor-id')
+        if (editor) resized.observe(editor)
         sentValues = ''
         sendValues()
         onSelection()
@@ -375,6 +385,9 @@ export const setTypographyGuides = (value: boolean) => {
         document.removeEventListener('scroll', onBlockScroll, { capture: true } as EventListenerOptions)
         styles?.disconnect()
         styles = null
+        window.removeEventListener('resize', onResize)
+        resized?.disconnect()
+        resized = null
         if (scrollFrame) cancelAnimationFrame(scrollFrame)
         scrollFrame = 0
         caretBlock = null
