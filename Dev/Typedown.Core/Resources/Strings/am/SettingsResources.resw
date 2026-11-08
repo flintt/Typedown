@@ -988,4 +988,10 @@
   <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
     <value>የመጨረሻው መስመር በመስኮቱ መሃል እስኪደርስ ድረስ ገጹ መሸብለሉን ይቀጥላል</value>
   </data>
+  <data name="Editor.SelectAllInSteps.Title" xml:space="preserve">
+    <value>ሁሉንም በደረጃ ምረጥ</value>
+  </data>
+  <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
+    <value>Ctrl+A መጀመሪያ አንቀጹን፣ ከዚያ ዙሪያውን ያለውን ብሎክ፣ በመጨረሻ ሙሉውን ሰነድ ይመርጣል</value>
+  </data>
 </root>

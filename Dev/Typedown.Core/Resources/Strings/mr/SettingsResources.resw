@@ -988,4 +988,10 @@
   <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
     <value>शेवटची ओळ विंडोच्या मध्यभागी येईपर्यंत पेज स्क्रोल होत राहते</value>
   </data>
+  <data name="Editor.SelectAllInSteps.Title" xml:space="preserve">
+    <value>टप्प्याटप्प्याने सर्व निवडा</value>
+  </data>
+  <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
+    <value>Ctrl+A आधी परिच्छेद, नंतर त्याभोवतीचा ब्लॉक आणि शेवटी संपूर्ण दस्तऐवज निवडतो</value>
+  </data>
 </root>

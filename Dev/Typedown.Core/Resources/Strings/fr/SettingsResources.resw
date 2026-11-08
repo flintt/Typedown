@@ -988,4 +988,10 @@
   <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
     <value>La page continue de défiler jusqu'à ce que la dernière ligne soit au milieu de la fenêtre</value>
   </data>
+  <data name="Editor.SelectAllInSteps.Title" xml:space="preserve">
+    <value>Tout sélectionner par étapes</value>
+  </data>
+  <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
+    <value>Ctrl+A sélectionne d'abord le paragraphe, puis le bloc qui l'entoure, puis tout le document</value>
+  </data>
 </root>

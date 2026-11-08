@@ -988,4 +988,10 @@
   <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
     <value>ଶେଷ ଧାଡ଼ି ୱିଣ୍ଡୋର ମଝିକୁ ନଆସିବା ପର୍ଯ୍ୟନ୍ତ ପୃଷ୍ଠା ସ୍କ୍ରୋଲ୍ ହେଉଥାଏ</value>
   </data>
+  <data name="Editor.SelectAllInSteps.Title" xml:space="preserve">
+    <value>ପର୍ଯ୍ୟାୟକ୍ରମେ ସମସ୍ତ ଚୟନ କରନ୍ତୁ</value>
+  </data>
+  <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
+    <value>Ctrl+A ପ୍ରଥମେ ଅନୁଚ୍ଛେଦ, ତା'ପରେ ଚାରିପାଖର ବ୍ଲକ୍ ଏବଂ ଶେଷରେ ସମ୍ପୂର୍ଣ୍ଣ ଡକ୍ୟୁମେଣ୍ଟ ଚୟନ କରେ</value>
+  </data>
 </root>

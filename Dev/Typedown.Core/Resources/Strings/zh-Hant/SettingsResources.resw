@@ -1017,4 +1017,10 @@
   <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
     <value>頁面可以繼續往下捲動，直到最後一行位於視窗中間</value>
   </data>
+  <data name="Editor.SelectAllInSteps.Title" xml:space="preserve">
+    <value>分步全選</value>
+  </data>
+  <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
+    <value>Ctrl+A 先選取段落，再選取外層的區塊，最後選取全文</value>
+  </data>
 </root>

@@ -905,7 +905,51 @@ const paragraphCtrl = ContentState => {
     return this.render()
   }
 
-  ContentState.prototype.selectAll = function () {
+  // The range from the start of a block's first text to the end of its last.
+  ContentState.prototype.blockRange = function (block) {
+    const first = this.firstInDescendant(block)
+    const last = this.lastInDescendant(block)
+    if (!first || !last) return null
+    return { start: { key: first.key, offset: 0 }, end: { key: last.key, offset: last.text.length } }
+  }
+
+  /**
+   * Select all in steps (Settings > Editor, off by default; a reader's request): the caret's paragraph first, then each
+   * block around it that holds more (a list item, its list, a quote, an outer list...), then the document. A step that
+   * would select what is selected already is passed over. False once nothing smaller than the document is left.
+   */
+  ContentState.prototype.selectAllStep = function () {
+    const { start, end } = this.cursor
+    const startBlock = this.getBlock(start.key)
+    const endBlock = this.getBlock(end.key)
+    if (!startBlock || !endBlock) return false
+    const same = (a, b) => a.start.key === b.start.key && a.start.offset === b.start.offset && a.end.key === b.end.key && a.end.offset === b.end.offset
+    // Where a text position comes in the document against another: by the blocks around them, from the top down.
+    const order = (a, b) => {
+      if (a.key === b.key) return a.offset - b.offset
+      const pathA = this.getParents(this.getBlock(a.key)).reverse()
+      const pathB = this.getParents(this.getBlock(b.key)).reverse()
+      let i = 0
+      while (i < pathA.length && i < pathB.length && pathA[i] === pathB[i]) i++
+      if (i === pathA.length || i === pathB.length) return 0
+      const siblings = i === 0 ? this.blocks : pathA[i - 1].children
+      return siblings.indexOf(pathA[i]) - siblings.indexOf(pathB[i])
+    }
+    const lastBlock = this.getLastBlock()
+    // The blocks around the selection's start, innermost first: the first that holds more than the selection.
+    for (const block of this.getParents(startBlock)) {
+      const range = this.blockRange(block)
+      if (!range || same(range, { start, end })) continue
+      if (order(range.start, start) > 0 || order(range.end, end) < 0) continue
+      if (range.start.key === this.getFirstBlock().key && range.end.key === lastBlock.key && range.end.offset === lastBlock.text.length) return false
+      this.cursor = range
+      this.render()
+      return true
+    }
+    return false
+  }
+
+  ContentState.prototype.selectAll = function (inSteps = false) {
     const mayBeCell = this.isSingleCellSelected()
     const mayBeTable = this.isWholeTableSelected()
 
@@ -993,6 +1037,7 @@ const paragraphCtrl = ContentState => {
       return this.partialRender()
     }
 
+    if (inSteps && this.selectAllStep()) return
     return this.selectAllContent()
   }
 

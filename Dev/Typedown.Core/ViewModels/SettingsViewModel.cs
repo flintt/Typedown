@@ -75,6 +75,12 @@ namespace Typedown.Core.ViewModels
         /// last line no longer sits at the window's bottom while it is written (the Shazao forum, #52). Display only.
         /// </summary>
         public bool ScrollPastEnd { get => GetSettingValue(false); set => SetSettingValue(value); }
+        /// <summary>
+        /// Ctrl+A in steps: the caret's paragraph first, then each block around it (a list item, its list, a quote...),
+        /// then the document; in source mode the paragraph, then the document. Off: the document at once, as before
+        /// (a reader's request, 2026-11-02, asked to be a setting).
+        /// </summary>
+        public bool SelectAllInSteps { get => GetSettingValue(false); set => SetSettingValue(value); }
         /// <summary>The visual editor shows the Markdown marks (**, #, a link's address) everywhere, not only where the caret is.</summary>
         public bool ShowMarkdownMarks { get => GetSettingValue(false); set => SetSettingValue(value); }
 
@@ -317,6 +323,7 @@ namespace Typedown.Core.ViewModels
             "JoinSoftBreaks",
             "CodeBlockLineNumbers",
             "ScrollPastEnd",
+            "SelectAllInSteps",
             "ShowMarkdownMarks",
             "ProgressiveRendering",
             "PredictHeights",

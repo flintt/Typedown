@@ -988,4 +988,10 @@
   <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
     <value>Il-paġna tibqa' tiskrollja sakemm l-aħħar linja tkun f'nofs it-tieqa</value>
   </data>
+  <data name="Editor.SelectAllInSteps.Title" xml:space="preserve">
+    <value>Agħżel kollox f'passi</value>
+  </data>
+  <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
+    <value>Ctrl+A jagħżel l-ewwel il-paragrafu, imbagħad il-blokk madwaru, imbagħad id-dokument kollu</value>
+  </data>
 </root>

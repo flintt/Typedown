@@ -988,4 +988,10 @@
   <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
     <value>صفحہ تب تک اسکرول ہوتا رہتا ہے جب تک آخری لائن ونڈو کے درمیان میں نہ آ جائے</value>
   </data>
+  <data name="Editor.SelectAllInSteps.Title" xml:space="preserve">
+    <value>مرحلہ وار سب منتخب کریں</value>
+  </data>
+  <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
+    <value>Ctrl+A پہلے پیراگراف، پھر اس کے گرد کا بلاک اور آخر میں پوری دستاویز منتخب کرتا ہے</value>
+  </data>
 </root>

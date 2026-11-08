@@ -988,4 +988,10 @@
   <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
     <value>Orriak korritzen jarraitzen du azken lerroa leihoaren erdian geratu arte</value>
   </data>
+  <data name="Editor.SelectAllInSteps.Title" xml:space="preserve">
+    <value>Hautatu dena urratsez urrats</value>
+  </data>
+  <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
+    <value>Ctrl+A-k paragrafoa hautatzen du lehenik, gero inguruko blokea eta azkenik dokumentu osoa</value>
+  </data>
 </root>

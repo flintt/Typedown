@@ -988,4 +988,10 @@
   <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
     <value>చివరి పంక్తి విండో మధ్యకు వచ్చే వరకు పేజీ స్క్రోల్ అవుతూనే ఉంటుంది</value>
   </data>
+  <data name="Editor.SelectAllInSteps.Title" xml:space="preserve">
+    <value>దశలవారీగా అన్నీ ఎంచుకోండి</value>
+  </data>
+  <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
+    <value>Ctrl+A మొదట పేరాను, తర్వాత దాని చుట్టూ ఉన్న బ్లాక్‌ను, చివరగా మొత్తం పత్రాన్ని ఎంచుకుంటుంది</value>
+  </data>
 </root>

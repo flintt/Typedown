@@ -988,4 +988,10 @@
   <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
     <value>Strona przewija się dalej, aż ostatni wiersz znajdzie się na środku okna</value>
   </data>
+  <data name="Editor.SelectAllInSteps.Title" xml:space="preserve">
+    <value>Zaznacz wszystko etapami</value>
+  </data>
+  <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
+    <value>Ctrl+A zaznacza najpierw akapit, potem otaczający go blok, a na końcu cały dokument</value>
+  </data>
 </root>

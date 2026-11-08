@@ -988,4 +988,10 @@
   <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
     <value>Էջը շարունակում է ոլորվել, մինչև վերջին տողը հայտնվի պատուհանի մեջտեղում</value>
   </data>
+  <data name="Editor.SelectAllInSteps.Title" xml:space="preserve">
+    <value>Ընտրել ամբողջը քայլ առ քայլ</value>
+  </data>
+  <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
+    <value>Ctrl+A-ն նախ ընտրում է պարբերությունը, հետո դրա շուրջ եղած բլոկը, վերջում՝ ամբողջ փաստաթուղթը</value>
+  </data>
 </root>

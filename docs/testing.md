@@ -78,6 +78,7 @@ CI 的“Test editor integration”一步运行这些：
 - `duplicate-check.js`: Paragraph > Duplicate puts a copy of the block with the caret after it, and the host has it.
 - `scroll-past-end-check.js`: Settings > Editor > Scroll past the end: scrolled all the way down, the last line comes up to about the middle of the window, in editing and reading; off (the default), it stays at the window's bottom as before.
 - `theme-text-colour-check.js`: A custom theme's text colour on the page: paragraphs, lists, tables in --editorColor, the theme's own, as the theme designer shows it.
+- `select-all-steps-check.js`: Settings > Editor > Select all in steps (a reader's request, 2026-11-02): Ctrl+A (the host's SelectAll) selects the caret's paragraph, then each block around it that holds more, then the document; in source mode the paragraph, then the document.
 - `progressive-apply-check.js`: An automation write (ApplyDocumentEdit) while a long document is still being drawn a part at a time: it is applied exactly, the host gets that text, and once drawn the page shows the changes at both ends - with the changes highlighted and scrolled to as well.
 - `prototype-names-check.js`: No method of the editor's ContentState is defined twice.
 - `heading-list-keys-check.js`: Keys in headings and lists that the key matrix (key-matrix-check.js) found wrong, 2026-11-01: - Enter in the middle of a heading: the new heading had the caret before its "#" marks (the next letter made it the paragraph "X## rest"), and with the caret after a format's opening marks Enter threw.

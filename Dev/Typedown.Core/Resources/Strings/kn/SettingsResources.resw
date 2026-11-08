@@ -988,4 +988,10 @@
   <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
     <value>ಕೊನೆಯ ಸಾಲು ವಿಂಡೋದ ಮಧ್ಯಕ್ಕೆ ಬರುವವರೆಗೆ ಪುಟ ಸ್ಕ್ರೋಲ್ ಆಗುತ್ತಲೇ ಇರುತ್ತದೆ</value>
   </data>
+  <data name="Editor.SelectAllInSteps.Title" xml:space="preserve">
+    <value>ಹಂತಹಂತವಾಗಿ ಎಲ್ಲ ಆಯ್ಕೆಮಾಡಿ</value>
+  </data>
+  <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
+    <value>Ctrl+A ಮೊದಲು ಪ್ಯಾರಾಗ್ರಾಫ್, ನಂತರ ಅದರ ಸುತ್ತಲಿನ ಬ್ಲಾಕ್, ಕೊನೆಗೆ ಸಂಪೂರ್ಣ ಡಾಕ್ಯುಮೆಂಟ್ ಆಯ್ಕೆಮಾಡುತ್ತದೆ</value>
+  </data>
 </root>

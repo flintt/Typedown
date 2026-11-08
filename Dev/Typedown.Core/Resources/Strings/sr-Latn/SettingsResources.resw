@@ -988,4 +988,10 @@
   <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
     <value>Stranica se nastavlja pomerati dok poslednji red ne dođe na sredinu prozora</value>
   </data>
+  <data name="Editor.SelectAllInSteps.Title" xml:space="preserve">
+    <value>Izaberi sve u koracima</value>
+  </data>
+  <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
+    <value>Ctrl+A prvo bira pasus, zatim blok oko njega, pa ceo dokument</value>
+  </data>
 </root>

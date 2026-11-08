@@ -929,6 +929,7 @@
         "JoinSoftBreaks",
         "CodeBlockLineNumbers",
         "ScrollPastEnd",
+        "SelectAllInSteps",
         "ShowMarkdownMarks",
         "ProgressiveRendering",
         "PredictHeights",

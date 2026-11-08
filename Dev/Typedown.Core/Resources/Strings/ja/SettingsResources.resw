@@ -988,4 +988,10 @@
   <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
     <value>最後の行がウィンドウの中央に来るまでページをスクロールできます</value>
   </data>
+  <data name="Editor.SelectAllInSteps.Title" xml:space="preserve">
+    <value>段階的に全選択</value>
+  </data>
+  <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
+    <value>Ctrl+A でまず段落を、次にそれを囲むブロックを、最後に文書全体を選択します</value>
+  </data>
 </root>

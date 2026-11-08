@@ -988,4 +988,10 @@
   <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
     <value>Leanann an leathanach ag scrolláil go dtí go mbíonn an líne dheireanach i lár na fuinneoige</value>
   </data>
+  <data name="Editor.SelectAllInSteps.Title" xml:space="preserve">
+    <value>Roghnaigh gach rud ina chéimeanna</value>
+  </data>
+  <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
+    <value>Roghnaíonn Ctrl+A an t-alt ar dtús, ansin an bloc timpeall air, ansin an doiciméad ar fad</value>
+  </data>
 </root>

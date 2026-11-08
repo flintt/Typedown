@@ -253,6 +253,7 @@ namespace Typedown.Core.ViewModels
                 Settings.JoinSoftBreaks,
                 Settings.CodeBlockLineNumbers,
                 Settings.ScrollPastEnd,
+                Settings.SelectAllInSteps,
                 Settings.ShowMarkdownMarks,
                 Settings.ProgressiveRendering,
                 Settings.PredictHeights,

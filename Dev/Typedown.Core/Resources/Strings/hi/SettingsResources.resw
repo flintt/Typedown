@@ -988,4 +988,10 @@
   <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
     <value>पेज तब तक स्क्रॉल होता रहता है जब तक अंतिम पंक्ति विंडो के बीच में न आ जाए</value>
   </data>
+  <data name="Editor.SelectAllInSteps.Title" xml:space="preserve">
+    <value>चरणों में सब चुनें</value>
+  </data>
+  <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
+    <value>Ctrl+A पहले अनुच्छेद, फिर उसके आसपास का ब्लॉक और अंत में पूरा दस्तावेज़ चुनता है</value>
+  </data>
 </root>

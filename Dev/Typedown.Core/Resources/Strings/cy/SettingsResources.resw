@@ -988,4 +988,10 @@
   <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
     <value>Mae'r dudalen yn dal i sgrolio nes bod y llinell olaf yng nghanol y ffenestr</value>
   </data>
+  <data name="Editor.SelectAllInSteps.Title" xml:space="preserve">
+    <value>Dewis y cyfan fesul cam</value>
+  </data>
+  <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
+    <value>Mae Ctrl+A yn dewis y paragraff yn gyntaf, yna'r bloc o'i gwmpas, yna'r ddogfen gyfan</value>
+  </data>
 </root>

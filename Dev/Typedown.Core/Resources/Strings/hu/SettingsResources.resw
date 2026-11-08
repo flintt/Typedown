@@ -988,4 +988,10 @@
   <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
     <value>Az oldal tovább görgethető, amíg az utolsó sor az ablak közepére nem kerül</value>
   </data>
+  <data name="Editor.SelectAllInSteps.Title" xml:space="preserve">
+    <value>Az összes kijelölése lépésenként</value>
+  </data>
+  <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
+    <value>A Ctrl+A először a bekezdést, aztán a körülötte lévő blokkot, végül az egész dokumentumot jelöli ki</value>
+  </data>
 </root>

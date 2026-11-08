@@ -988,4 +988,10 @@
   <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
     <value>Соңғы жол терезенің ортасына келгенше бет айнала береді</value>
   </data>
+  <data name="Editor.SelectAllInSteps.Title" xml:space="preserve">
+    <value>Барлығын кезең-кезеңімен таңдау</value>
+  </data>
+  <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
+    <value>Ctrl+A алдымен абзацты, содан кейін оның айналасындағы блокты, соңында бүкіл құжатты таңдайды</value>
+  </data>
 </root>

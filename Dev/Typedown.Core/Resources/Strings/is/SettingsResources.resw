@@ -988,4 +988,10 @@
   <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
     <value>Síðan heldur áfram að skrunast þar til síðasta línan er í miðjum glugganum</value>
   </data>
+  <data name="Editor.SelectAllInSteps.Title" xml:space="preserve">
+    <value>Velja allt í skrefum</value>
+  </data>
+  <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
+    <value>Ctrl+A velur fyrst málsgreinina, síðan reitinn í kringum hana og loks allt skjalið</value>
+  </data>
 </root>

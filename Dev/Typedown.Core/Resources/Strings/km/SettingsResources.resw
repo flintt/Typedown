@@ -988,4 +988,10 @@
   <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
     <value>ទំព័ររំកិលបន្ត រហូតដល់បន្ទាត់ចុងក្រោយនៅកណ្ដាលបង្អួច</value>
   </data>
+  <data name="Editor.SelectAllInSteps.Title" xml:space="preserve">
+    <value>ជ្រើសទាំងអស់ជាជំហាន</value>
+  </data>
+  <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
+    <value>Ctrl+A ជ្រើសកថាខណ្ឌមុន បន្ទាប់មកប្លុកជុំវិញវា ហើយចុងក្រោយឯកសារទាំងមូល</value>
+  </data>
 </root>

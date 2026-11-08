@@ -988,4 +988,10 @@
   <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
     <value>છેલ્લી લીટી વિન્ડોની વચ્ચે આવે ત્યાં સુધી પેજ સ્ક્રોલ થતું રહે છે</value>
   </data>
+  <data name="Editor.SelectAllInSteps.Title" xml:space="preserve">
+    <value>તબક્કાવાર બધું પસંદ કરો</value>
+  </data>
+  <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
+    <value>Ctrl+A પહેલા ફકરો, પછી તેની આસપાસનો બ્લૉક અને છેલ્લે આખો દસ્તાવેજ પસંદ કરે છે</value>
+  </data>
 </root>

@@ -988,4 +988,10 @@
   <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
     <value>Ka panuku tonu te whārangi kia tae rā anō te rārangi whakamutunga ki waenga o te matapihi</value>
   </data>
+  <data name="Editor.SelectAllInSteps.Title" xml:space="preserve">
+    <value>Tīpakohia te katoa mā ngā hipanga</value>
+  </data>
+  <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
+    <value>Ka tīpakohia e Ctrl+A te kowae i te tuatahi, kātahi te paraka e karapoti ana, kātahi te tuhinga katoa</value>
+  </data>
 </root>

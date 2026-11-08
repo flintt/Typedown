@@ -652,7 +652,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             selectDocument(editor?.container)
             return
         }
-        editor?.selectAll()
+        editor?.selectAll(!!optionsRef.current?.selectAllInSteps)
     }), [editor]);
 
     useEffect(() => transport.addListener<any>('Copy', arg => {

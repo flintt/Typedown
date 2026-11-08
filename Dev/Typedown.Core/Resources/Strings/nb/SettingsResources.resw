@@ -988,4 +988,10 @@
   <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
     <value>Siden ruller videre til den siste linjen er midt i vinduet</value>
   </data>
+  <data name="Editor.SelectAllInSteps.Title" xml:space="preserve">
+    <value>Merk alt i trinn</value>
+  </data>
+  <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
+    <value>Ctrl+A merker først avsnittet, deretter blokken rundt det og til slutt hele dokumentet</value>
+  </data>
 </root>

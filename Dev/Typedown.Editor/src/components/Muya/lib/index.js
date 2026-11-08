@@ -835,11 +835,12 @@ class Muya {
     this.contentState.render(true)
   }
 
-  selectAll() {
+  // inSteps: Settings > Editor > Select all in steps (the paragraph, then each block around it, then the document).
+  selectAll(inSteps = false) {
     if (!this.hasFocus() && !this.contentState.selectedTableCells) {
       return
     }
-    this.contentState.selectAll()
+    this.contentState.selectAll(inSteps)
     this.dispatchSelectionChange()
     this.dispatchSelectionFormats()
   }

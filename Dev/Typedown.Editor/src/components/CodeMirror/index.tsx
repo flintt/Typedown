@@ -239,8 +239,26 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
     }), []);
 
     useEffect(() => transport.addListener('SelectAll', () => {
-        editor?.execCommand('selectAll')
-    }), [editor]);
+        if (!editor) return
+        // Settings > Editor > Select all in steps: the caret's paragraph (its lines between blank lines) first, then
+        // the document.
+        if (props.options?.selectAllInSteps) {
+            const doc = editor.getDoc()
+            const from = doc.getCursor('from'), to = doc.getCursor('to')
+            const blank = (line: number) => !doc.getLine(line).trim()
+            let first = from.line, last = to.line
+            while (first > 0 && !blank(first - 1)) first--
+            while (last < doc.lineCount() - 1 && !blank(last + 1)) last++
+            const start = { line: first, ch: 0 }, end = { line: last, ch: doc.getLine(last).length }
+            const whole = first === 0 && last === doc.lineCount() - 1
+            const already = from.line === start.line && from.ch === 0 && to.line === end.line && to.ch === end.ch
+            if (!whole && !already && !(blank(from.line) && from.line === to.line)) {
+                doc.setSelection(start, end)
+                return
+            }
+        }
+        editor.execCommand('selectAll')
+    }), [editor, props.options?.selectAllInSteps]);
 
     useEffect(() => {
         searchArgRef.current = props.searchArg;

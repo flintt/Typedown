@@ -988,4 +988,10 @@
   <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
     <value>Son satır pencerenin ortasına gelene kadar sayfa kaymaya devam eder</value>
   </data>
+  <data name="Editor.SelectAllInSteps.Title" xml:space="preserve">
+    <value>Tümünü adım adım seç</value>
+  </data>
+  <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
+    <value>Ctrl+A önce paragrafı, sonra onu çevreleyen bloğu, en sonunda tüm belgeyi seçer</value>
+  </data>
 </root>

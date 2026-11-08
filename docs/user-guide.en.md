@@ -63,6 +63,7 @@ Under **Settings → Editor**, a few settings change what you see:
 - **Join the lines of a paragraph in reading mode**: in Reading Mode a single line break inside a paragraph shows as a space, as Markdown specifies and as the exports write it; no space is put between Chinese or Japanese characters. To keep a break, end the line with two spaces or a backslash. While editing, the lines show as they are in the file
 - **Line numbers in code blocks**: numbers beside a code block's lines. With them on, a long line in a code block no longer wraps; it scrolls sideways. The numbers are not written to the file, copied or printed
 - **Scroll past the end**: the page scrolls on until the last line is in the middle of the window, so it no longer sits at the bottom while you write (typewriter mode already does this)
+- **Select all in steps**: Ctrl+A selects the paragraph the caret is in first, then the list, quote or other block around it, one level at a time, and finally the whole document (in source mode: the paragraph, then the document). Off by default: Ctrl+A selects everything at once
 - **Vim keys**: Vim in Source Code Mode (`:w` saves, `:q` closes the tab); j/k, gg/G, ]] and / to move around in Reading Mode. Not in visual editing
 
 In Reading Mode the right-click menu only has copying and Select All:

@@ -988,4 +988,10 @@
   <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
     <value>അവസാന വരി വിൻഡോയുടെ മധ്യത്തിൽ എത്തുന്നതുവരെ പേജ് സ്ക്രോൾ ചെയ്യാം</value>
   </data>
+  <data name="Editor.SelectAllInSteps.Title" xml:space="preserve">
+    <value>ഘട്ടംഘട്ടമായി എല്ലാം തിരഞ്ഞെടുക്കുക</value>
+  </data>
+  <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
+    <value>Ctrl+A ആദ്യം ഖണ്ഡികയും പിന്നെ ചുറ്റുമുള്ള ബ്ലോക്കും ഒടുവിൽ മുഴുവൻ പ്രമാണവും തിരഞ്ഞെടുക്കുന്നു</value>
+  </data>
 </root>

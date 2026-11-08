@@ -988,4 +988,10 @@
   <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
     <value>Сторінка прокручується далі, доки останній рядок не опиниться посередині вікна</value>
   </data>
+  <data name="Editor.SelectAllInSteps.Title" xml:space="preserve">
+    <value>Виділяти все поетапно</value>
+  </data>
+  <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
+    <value>Ctrl+A спочатку виділяє абзац, потім блок навколо нього, а потім увесь документ</value>
+  </data>
 </root>

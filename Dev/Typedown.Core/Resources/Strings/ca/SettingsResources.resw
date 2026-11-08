@@ -988,4 +988,10 @@
   <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
     <value>La pàgina continua desplaçant-se fins que l'última línia queda al mig de la finestra</value>
   </data>
+  <data name="Editor.SelectAllInSteps.Title" xml:space="preserve">
+    <value>Selecciona-ho tot per passos</value>
+  </data>
+  <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
+    <value>Ctrl+A selecciona primer el paràgraf, després el bloc que l'envolta i finalment tot el document</value>
+  </data>
 </root>

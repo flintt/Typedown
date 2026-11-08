@@ -988,4 +988,10 @@
   <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
     <value>ໜ້າຈະເລື່ອນຕໍ່ໄປຈົນແຖວສຸດທ້າຍຢູ່ກາງປ່ອງຢ້ຽມ</value>
   </data>
+  <data name="Editor.SelectAllInSteps.Title" xml:space="preserve">
+    <value>ເລືອກທັງໝົດເປັນຂັ້ນຕອນ</value>
+  </data>
+  <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
+    <value>Ctrl+A ເລືອກຫຍໍ້ໜ້າກ່ອນ, ຈາກນັ້ນບລັອກອ້ອມຮອບ, ສຸດທ້າຍທັງເອກະສານ</value>
+  </data>
 </root>

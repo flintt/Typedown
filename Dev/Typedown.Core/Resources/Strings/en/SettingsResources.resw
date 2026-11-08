@@ -793,6 +793,14 @@
     <value>The page scrolls on until the last line is in the middle of the window</value>
     <comment>编辑器/允许滚动超过文末说明：页面可以继续往下滚，直到最后一行到窗口中间</comment>
   </data>
+  <data name="Editor.SelectAllInSteps.Title" xml:space="preserve">
+    <value>Select all in steps</value>
+    <comment>编辑器/分步全选</comment>
+  </data>
+  <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
+    <value>Ctrl+A selects the paragraph first, then the block around it, then the whole document</value>
+    <comment>编辑器/分步全选说明：Ctrl+A 先选中段落，再选中外面的块，最后选中全文</comment>
+  </data>
   <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
     <value>Always Show Markdown Marks</value>
   </data>

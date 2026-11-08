@@ -988,4 +988,10 @@
   <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
     <value>Patuloy na nag-i-scroll ang page hanggang nasa gitna ng window ang huling linya</value>
   </data>
+  <data name="Editor.SelectAllInSteps.Title" xml:space="preserve">
+    <value>Piliin lahat nang paunti-unti</value>
+  </data>
+  <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
+    <value>Pinipili muna ng Ctrl+A ang talata, pagkatapos ang block sa paligid nito, at saka ang buong dokumento</value>
+  </data>
 </root>

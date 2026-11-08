@@ -988,4 +988,10 @@
   <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
     <value>Страницата продължава да се превърта, докато последният ред застане в средата на прозореца</value>
   </data>
+  <data name="Editor.SelectAllInSteps.Title" xml:space="preserve">
+    <value>Избиране на всичко на стъпки</value>
+  </data>
+  <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
+    <value>Ctrl+A избира първо абзаца, после блока около него и накрая целия документ</value>
+  </data>
 </root>

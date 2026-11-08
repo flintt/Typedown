@@ -988,4 +988,10 @@
   <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
     <value>Halaman terus menatal sehingga baris terakhir berada di tengah tetingkap</value>
   </data>
+  <data name="Editor.SelectAllInSteps.Title" xml:space="preserve">
+    <value>Pilih semua secara berperingkat</value>
+  </data>
+  <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
+    <value>Ctrl+A memilih perenggan dahulu, kemudian blok di sekelilingnya, kemudian seluruh dokumen</value>
+  </data>
 </root>

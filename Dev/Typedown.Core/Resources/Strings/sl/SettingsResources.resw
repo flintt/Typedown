@@ -988,4 +988,10 @@
   <data name="Editor.ScrollPastEnd.Description" xml:space="preserve">
     <value>Stran se pomika naprej, dokler zadnja vrstica ni na sredini okna</value>
   </data>
+  <data name="Editor.SelectAllInSteps.Title" xml:space="preserve">
+    <value>Izberi vse po korakih</value>
+  </data>
+  <data name="Editor.SelectAllInSteps.Description" xml:space="preserve">
+    <value>Ctrl+A najprej izbere odstavek, nato blok okoli njega in nazadnje ves dokument</value>
+  </data>
 </root>
