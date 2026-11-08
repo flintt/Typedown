@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Typedown.Core.Utilities
@@ -132,12 +133,15 @@ namespace Typedown.Core.Utilities
                     continue;
                 }
                 var probe = exists;
-                asked.Add((path, Task.Run(() =>
+                // A thread of its own for each: a path that does not answer (a share gone away) holds its thread for as
+                // long as Windows waits, and on the thread pool it kept the others from starting at all - a test of
+                // just that failed on CI's few cores with the pool busy (v1.4.2's tag build, twice).
+                asked.Add((path, Task.Factory.StartNew(() =>
                 {
                     var answer = probe(path);
                     cache[path] = (answer, DateTime.UtcNow);
                     return answer;
-                })));
+                }, CancellationToken.None, TaskCreationOptions.LongRunning, TaskScheduler.Default)));
             }
             if (asked.Count == 0) return missing;
             var all = Task.WhenAll(asked.Select(a => a.Answer));
