@@ -2155,6 +2155,8 @@ internal static partial class Program
                     Thread.Sleep(30);
                 }
             else if (k is ushort vk) Send(Key(vk, false), Key(vk, true));
+            // A key code written as a plain number (Keys(0x26)) is an int: once let through unsent (TG04, hp job 288).
+            else if (k is int code) Send(Key((ushort)code, false), Key((ushort)code, true));
             else if (k is ValueTuple<string, ushort> chord && chord.Item1 == "ctrl") Send(Key(0x11, false), Key(chord.Item2, false), Key(chord.Item2, true), Key(0x11, true));
             Thread.Sleep(60);
         }
