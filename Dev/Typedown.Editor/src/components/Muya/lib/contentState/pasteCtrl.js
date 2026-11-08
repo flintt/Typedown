@@ -72,9 +72,19 @@ const pasteCtrl = ContentState => {
     const sourceMatch = /^SourceURL:(\S+)/m.exec(rawHtml || '')
     const sourceUrl = sourceMatch ? sourceMatch[1] : null
 
+    // The clipboard's CF_HTML: the fragment between its markers, the header left out. Windows' own HtmlFormatHelper
+    // writes <HTML><BODY> and "<!--StartFragment -->", which the lower-case body pattern below missed: the header was
+    // pasted as text ("Version:1.0StartHTML:00000097...", a reader, 2026-11-04).
+    const fragment = /^Version:\d[\s\S]*?<!--\s*StartFragment\s*-->([\s\S]*)<!--\s*EndFragment\s*-->/i.exec(rawHtml || '')
+    if (fragment) {
+      rawHtml = fragment[1]
+    } else if (/^Version:\d/.test(rawHtml || '')) {
+      rawHtml = rawHtml.replace(/^(?:[A-Za-z]+:[^\r\n]*\r?\n)+/, '')
+    }
+
     // Only extract the `body.innerHTML` when the `html` is a full HTML Document.
-    if (/<body[^>]*>[\s\S]*<\/body>/.test(rawHtml)) {
-      const match = /<body[^>]*>([\s\S]*)<\/body>/.exec(rawHtml)
+    if (/<body[^>]*>[\s\S]*<\/body>/i.test(rawHtml)) {
+      const match = /<body[^>]*>([\s\S]*)<\/body>/i.exec(rawHtml)
       if (match && typeof match[1] === 'string') {
         rawHtml = match[1]
       }

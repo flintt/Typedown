@@ -103,8 +103,9 @@ namespace Typedown.Services
         {
             var dataPackage = new global::Windows.ApplicationModel.DataTransfer.DataPackage();
             if (!string.IsNullOrEmpty(text)) dataPackage.SetText(text);
-            // CF_HTML: the fragment with the header Word and the browsers read it by.
-            if (!string.IsNullOrEmpty(html)) dataPackage.SetHtmlFormat(global::Windows.ApplicationModel.DataTransfer.HtmlFormatHelper.CreateHtmlFormat(html));
+            // CF_HTML: the fragment with the header Word and the browsers read it by, written as the browsers write it
+            // (ClipboardHtml.Format: HtmlFormatHelper's upper-case one some editors pasted the header of as text).
+            if (!string.IsNullOrEmpty(html)) dataPackage.SetHtmlFormat(Core.Utilities.ClipboardHtml.Format(html));
             SetContent(dataPackage);
         }
 

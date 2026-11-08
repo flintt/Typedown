@@ -47,6 +47,20 @@ const samples = [
     expect: ['[Gruber](https://en.wikipedia.org/wiki/John_Gruber)', '![logo](https://en.wikipedia.org/static/logo.png)', '[History](#History)'],
   },
   {
+    // Windows' HtmlFormatHelper.CreateHtmlFormat, byte for byte (what Typeleaf's Copy wrote until 2026-11-04): upper-case
+    // tags and spaced markers. The lower-case body pattern missed it and the header was pasted as text.
+    name: 'CF_HTML as HtmlFormatHelper writes it: the header not pasted',
+    html: "Version:1.0\r\nStartHTML:00000097\r\nEndHTML:00000258\r\nStartFragment:00000153\r\nEndFragment:00000225\r\n<!DOCTYPE><HTML><HEAD></HEAD><BODY><!--StartFragment --><table><tr><th>Name</th><th>Age</th></tr><tr><td>Ann</td><td>31</td></tr></table><!--EndFragment --></BODY></HTML>",
+    expect: [/\|\s*Name\s*\|\s*Age\s*\|/, /\|\s*Ann\s*\|\s*31\s*\|/],
+    absent: ['Version', 'StartHTML', 'StartFragment'],
+  },
+  {
+    name: 'CF_HTML as the browsers (and Typeleaf now) write it: the header not pasted',
+    html: "Version:1.0\r\nStartHTML:0000000133\r\nEndHTML:0000000216\r\nStartFragment:0000000169\r\nEndFragment:0000000181\r\n<html>\r\n<body>\r\n<!--StartFragment--><p>Plain <b>bold</b></p><!--EndFragment-->\r\n</body>\r\n</html>",
+    expect: ['Plain **bold**'],
+    absent: ['Version', 'StartHTML'],
+  },
+  {
     name: 'table aligned by style',
     html: `<table><tr><th style="text-align:left">A</th><th style="text-align:center">B</th><th style="text-align:right">C</th></tr><tr><td>1</td><td>2</td><td>3</td></tr></table>`,
     expect: [/\|\s*:-+\s*\|\s*:-+:\s*\|\s*-+:\s*\|/],
