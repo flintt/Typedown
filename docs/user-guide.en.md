@@ -39,7 +39,7 @@ The **Help** menu: **User guide** (this guide), **Shortcuts** (the shortcuts pag
 **Other settings worth knowing**:
 
 - **Settings → Appearance → Compact mode**: the menu bar and the title in the same row
-- **Settings → Appearance → Window animations**: off, pages, the sidebar and menus appear at once, and the settings open and close faster
+- **Settings → Appearance → Window animations** (off by default): off, pages, the sidebar and menus appear at once, and the settings open and close faster; on, pages slide in and menus fade
 - **Settings → General → Allow local automation** (off by default): programs you run on this computer can read and edit the open documents; the window title shows when one is connected. **Highlight changes made by programs** briefly highlights the text such a program changed
 
 ---
@@ -53,7 +53,7 @@ The **Help** menu: **User guide** (this guide), **Shortcuts** (the shortcuts pag
 | Reading Mode | View → Reading Mode, Ctrl+Shift+R | Read-only, so nothing changes by accident; you can still select and copy |
 | Focus / Typewriter Mode | F8 / F9 | Focus Mode dims the other paragraphs; Typewriter Mode keeps the current line in the middle of the screen |
 
-Plain text files (`.txt`, `.text`, `.log`) have no Markdown in them parsed: in visual editing they are laid out as prose (no line numbers), in source code mode as code (line numbers), with no `#` or `*` highlighted in either, and you switch between the two as usual; they are saved exactly as they were apart from what you change. A part fenced as ` ```md ` or ` ```markdown ` is drawn as Markdown in visual editing, its lines shown again when the caret goes into it; for a code block inside it, fence the part with a longer fence (` ````md `) or tildes (`~~~md`).
+Plain text files (`.txt`, `.text`, `.log`, and config and data files: `.ini`, `.cfg`, `.conf`, `.json`, `.toml`, `.yaml`, `.yml`, `.xml`, `.csv`, `.tsv`) have no Markdown in them parsed: in visual editing they are laid out as prose (no line numbers), in source code mode as code (line numbers), with no `#` or `*` highlighted in either, and you switch between the two as usual; they are saved exactly as they were apart from what you change. A part fenced as ` ```md ` or ` ```markdown ` is drawn as Markdown in visual editing, its lines shown again when the caret goes into it; for a code block inside it, fence the part with a longer fence (` ````md `) or tildes (`~~~md`).
 
 F11 toggles full screen.
 

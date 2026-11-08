@@ -13,7 +13,8 @@ namespace Typedown.Core.Utilities
 
         // Plain-text files the editor can open and edit as Markdown text. Shown in the file tree alongside
         // Markdown so a folder of notes with the odd .txt or .log is not half-hidden (a Store review).
-        public static HashSet<string> PlainText { get; } = new() { ".txt", ".text", ".log", ".markdown" };
+        // Config and data files (.ini, .json, ...: a reader's request, 2026-11-04) are plain text too, opened as they are.
+        public static HashSet<string> PlainText { get; } = new() { ".txt", ".text", ".log", ".markdown", ".ini", ".cfg", ".conf", ".json", ".toml", ".yaml", ".yml", ".xml", ".csv", ".tsv" };
 
         public enum FileType
         {
@@ -52,7 +53,7 @@ namespace Typedown.Core.Utilities
 
         // Text files that are not Markdown: shown as they are, with nothing in them parsed as Markdown (a reader's
         // request, 2026-11-02) - a log's "#" or "*" is no heading or emphasis, and the visual editor would rewrite them.
-        private static readonly HashSet<string> plainTextDocuments = new() { ".txt", ".text", ".log" };
+        private static readonly HashSet<string> plainTextDocuments = new() { ".txt", ".text", ".log", ".ini", ".cfg", ".conf", ".json", ".toml", ".yaml", ".yml", ".xml", ".csv", ".tsv" };
 
         /// <summary>A plain text file: shown in source mode with no Markdown highlighting, its text saved as it is.</summary>
         public static bool IsPlainTextDocument(string fileName) =>

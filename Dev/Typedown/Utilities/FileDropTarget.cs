@@ -134,9 +134,9 @@ namespace Typedown.Utilities
                 {
                     var app = window.AppViewModel;
                     if (app == null) return;
-                    // The pictures into the document the drop was on first; then the Markdown files open.
+                    // The pictures into the document the drop was on first; then the Markdown and plain text files open.
                     await app.EditorViewModel.InsertLocalImagesAsync(files.Where(FileTypeHelper.IsImageFile).ToList());
-                    foreach (var file in files.Where(FileTypeHelper.IsMarkdownFile))
+                    foreach (var file in files.Where(FileTypeHelper.IsEditableTextFile))
                         app.FileViewModel.OpenFileCommand.Execute(file);
                 }
                 catch (Exception ex)
@@ -155,12 +155,12 @@ namespace Typedown.Utilities
 
         private static uint Effect(List<string> files) => files.Any(FileTypeHelper.IsImageFile) ? DROPEFFECT_COPY : DROPEFFECT_LINK;
 
-        /// <summary>The dropped Markdown and image files, in the drop's order; null when there is none.</summary>
+        /// <summary>The dropped Markdown, plain text (.txt, .log, .ini, .json, ...) and image files, in the drop's order; null when there is none.</summary>
         private static List<string> GetSupportedFiles(System.Runtime.InteropServices.ComTypes.IDataObject dataObject)
         {
             try
             {
-                var files = GetDroppedFiles(dataObject).Where(f => FileTypeHelper.IsMarkdownFile(f) || FileTypeHelper.IsImageFile(f)).ToList();
+                var files = GetDroppedFiles(dataObject).Where(f => FileTypeHelper.IsEditableTextFile(f) || FileTypeHelper.IsImageFile(f)).ToList();
                 if (files.Count > 0)
                     return files;
             }

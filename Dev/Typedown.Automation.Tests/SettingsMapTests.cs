@@ -20,6 +20,14 @@ namespace Typedown.Automation.Tests
                 .Cast<Match>().Select(m => m.Groups[1].Value).ToArray();
 
         [Fact]
+        public void Window_animations_are_off_unless_turned_on()
+        {
+            // Off by default (2026-11-04): a new install gets no slide or fade; a stored choice, on or off, still wins.
+            var source = File.ReadAllText(Path.Combine(Root, "Dev/Typedown.Core/ViewModels/SettingsViewModel.cs"));
+            Assert.Matches(@"public\s+bool\s+AnimationEnable\s*\{\s*get\s*=>\s*GetSettingValue\(false\)", source);
+        }
+
+        [Fact]
         public void Every_stored_setting_is_exposed_or_has_a_reason_not_to_be()
         {
             var map = Map();

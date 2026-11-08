@@ -290,11 +290,11 @@ namespace Typedown.Core.ViewModels
         /// <summary>Editor pages briefly highlight what an automation write changed.</summary>
         public bool HighlightAutomationChanges { get => GetSettingValue(true); set => SetSettingValue(value); }
         /// <summary>
-        /// On by default. Off by default for a while (2026-10-28, the settings' slide was 0.3 s of each trip in and out, NT01),
-        /// but then a long document scrolled down came back from the settings blank after the cases before SF02 (on with it
-        /// in the same run); back on until that is understood (docs/todo.md).
+        /// Off by default (the user's decision, 2026-11-04). Off once before (2026-10-28, the settings' slide was 0.3 s of each
+        /// trip in and out, NT01), then back on while a long document came back from the settings blank (SF02); with it off
+        /// that document is back in 43 ms (2026-11-03). Whoever switched it on or off keeps that: a stored value wins.
         /// </summary>
-        public bool AnimationEnable { get => GetSettingValue(true); set => SetSettingValue(value); }
+        public bool AnimationEnable { get => GetSettingValue(false); set => SetSettingValue(value); }
         public bool UseMicaEffect { get => GetSettingValue(Config.IsMicaSupported); set => SetSettingValue(value); }
         public bool UseEditorMicaEffect { get => GetSettingValue(false); set => SetSettingValue(value); }
         public bool Topmost { get => GetSettingValue(false); set => SetSettingValue(value); }

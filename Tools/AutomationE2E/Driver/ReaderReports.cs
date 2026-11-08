@@ -109,6 +109,33 @@ internal static partial class Program
             notes.Add("the Markdown block drawn: " + drawn);
             Check(drawn == "[[1,1,1]]", $"the md block drawn as Markdown, its code block inside ({drawn})");
             try { await c.Call("document.close", new { documentId = blocks }); } catch { }
+            // Config and data files are plain text too (2026-11-04): a .json and an .ini - its "#" and "*" no Markdown -
+            // shown as prose, nothing highlighted; the .ini (UTF-8 with a BOM, CRLF, as Windows writes them) saved with
+            // the key typed and every other byte as it was.
+            var json = await Open(c, Fixture("pt01.json", "{\n  \"# title\": \"**not bold**\",\n  \"list\": [1, 2]\n}\n"));
+            await Task.Delay(1500);
+            var jsonState = await State();
+            notes.Add("the .json: " + jsonState.ToString(Newtonsoft.Json.Formatting.None));
+            Check((bool)jsonState["codeMirror"]! && !(bool)jsonState["muya"]! && (bool)jsonState["prose"]! && (int)jsonState["highlighted"]! == 0, "the .json: plain prose, not in the Markdown editor, nothing highlighted");
+            try { await c.Call("document.close", new { documentId = json }); } catch { }
+            var iniText = "; settings\r\n[main]\r\n# not a heading\r\nname = *not italic*\r\n\r\nlast = 1";
+            var iniPath = Path.Combine(fixtures, "pt01.ini");
+            File.WriteAllText(iniPath, iniText, new System.Text.UTF8Encoding(true));
+            var iniBefore = File.ReadAllBytes(iniPath);
+            var ini = await Open(c, iniPath);
+            await Task.Delay(1500);
+            var iniState = await State();
+            notes.Add("the .ini: " + iniState.ToString(Newtonsoft.Json.Formatting.None));
+            Check((bool)iniState["codeMirror"]! && !(bool)iniState["muya"]! && (bool)iniState["prose"]! && (int)iniState["highlighted"]! == 0, "the .ini: plain prose, not in the Markdown editor, nothing highlighted");
+            var iniShown = (string?)(await Get(c, ini))["text"] ?? "";
+            await TypeIntoWindow(c, windowId, "X");
+            for (var i = 0; i < 50 && ((string?)(await Get(c, ini))["text"] ?? "") == iniShown; i++) await Task.Delay(200);
+            await c.Call("document.save", new { documentId = ini });
+            await Task.Delay(500);
+            var iniAfter = File.ReadAllBytes(iniPath);
+            notes.Add("the .ini saved: " + BitConverter.ToString(iniAfter.Take(3).ToArray()) + " " + System.Text.Encoding.UTF8.GetString(iniAfter).Replace("\r", "\\r").Replace("\n", "\\n"));
+            Check(iniAfter.SequenceEqual(iniBefore.Concat(new[] { (byte)'X' })), "the .ini saved: the key typed, its BOM, CRLF and every other byte as they were");
+            try { await c.Call("document.close", new { documentId = ini }); } catch { }
         }
         finally
         {

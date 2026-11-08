@@ -47,7 +47,7 @@ namespace Typedown.Core.Utilities
         public static async Task<string> PickMarkdownFileAsync(this nint window)
         {
             var filePicker = new FileOpenPicker();
-            FileTypeHelper.Markdown.ToList().ForEach(filePicker.FileTypeFilter.Add);
+            FileTypeHelper.Markdown.Union(FileTypeHelper.PlainText).ToList().ForEach(filePicker.FileTypeFilter.Add);
             filePicker.SetOwnerWindow(window);
             var file = await ShowAsync(() => filePicker.PickSingleFileAsync());
             return file?.Path;
