@@ -64,10 +64,14 @@ Parser.prototype.peek = function () {
  */
 
 Parser.prototype.parseText = function () {
-  let body = this.token.text
+  let token = this.token
+  let body = token.text
 
-  while (this.peek().type === 'text') {
-    body += '\n' + this.next().text
+  // Lines of one paragraph, up to a blank line: the lexer pushes no 'space' token for one (it marks the token before
+  // it), and two paragraphs of a list item were exported as one ("- one\n\n  two" as "one two"; CommonMark C1).
+  while (!token.followedByBlankLine && this.peek().type === 'text') {
+    token = this.next()
+    body += '\n' + token.text
   }
 
   return this.inline.output(body)

@@ -117,19 +117,20 @@ InlineLexer.prototype.output = function (src) {
 
     // link
     cap = this.rules.link.exec(src)
-    if (cap && lowerPriority(src, cap[0].length, this.highPriorityLinkRules)) {
+    // A destination in angle brackets needs its closing one, not escaped (CommonMark); else it is no link and the text
+    // is read by the rules below. This was "return" (from marked's tokenizer, where it means "not this rule"): here it
+    // left the whole paragraph's output undefined, and "[link](<foo\>)" was exported as "undefined" (CommonMark C2).
+    const angled = cap && !this.options.pedantic && cap[2].trim().startsWith('<')
+    const unclosed = angled && (() => {
       const trimmedUrl = cap[2].trim()
-      if (!this.options.pedantic && trimmedUrl.startsWith('<')) {
-        // commonmark requires matching angle brackets
-        if (!trimmedUrl.endsWith('>')) {
-          return
-        }
-
-        // ending angle bracket cannot be escaped
-        const rtrimSlash = rtrim(trimmedUrl.slice(0, -1), '\\')
-        if ((trimmedUrl.length - rtrimSlash.length) % 2 === 0) {
-          return
-        }
+      if (!trimmedUrl.endsWith('>')) return true
+      const rtrimSlash = rtrim(trimmedUrl.slice(0, -1), '\\')
+      return (trimmedUrl.length - rtrimSlash.length) % 2 === 0
+    })()
+    if (cap && !unclosed && lowerPriority(src, cap[0].length, this.highPriorityLinkRules)) {
+      const trimmedUrl = cap[2].trim()
+      if (angled) {
+        // matched angle brackets, checked above
       } else {
         // find closing parenthesis
         const lastParenIndex = findClosingBracket(cap[2], '()')
