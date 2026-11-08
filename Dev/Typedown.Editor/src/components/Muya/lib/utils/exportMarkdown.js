@@ -256,7 +256,17 @@ class ExportMarkdown {
     const { text } = block.children[0]
     if (headingStyle === 'atx') {
       const match = text.match(/(#{1,6})(.*)/)
-      const atxHeadingText = `${match[1]} ${match[2].trim()}`
+      // The caret's marks (written out with the text where the caret is, then taken away) between the "#" and the
+      // heading's words: taken out before the space is trimmed and put back after it. Left in, "## " + "<caret> 午后"
+      // was written "##  午后" once the marks went - a click at a heading's start changed the document (the store
+      // pictures, 2026-11-07).
+      let rest = match[2]
+      let caret = ''
+      for (const dna of [CURSOR_ANCHOR_DNA, CURSOR_FOCUS_DNA]) {
+        const at = rest.indexOf(dna)
+        if (at >= 0 && !rest.slice(0, at).trim()) { caret += dna; rest = rest.slice(0, at) + rest.slice(at + dna.length) }
+      }
+      const atxHeadingText = `${match[1]} ${caret}${rest.trim()}`
       return `${indent}${atxHeadingText}\n`
     } else if (headingStyle === 'setext') {
       const lines = text.trim().split('\n')
