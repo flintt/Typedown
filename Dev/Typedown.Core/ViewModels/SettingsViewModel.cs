@@ -32,7 +32,60 @@ namespace Typedown.Core.ViewModels
         /// Source mode shows the raw Markdown, reading mode shows only the rendered document: the two contradict
         /// each other, so turning one on turns the other off (see also <see cref="ReadOnly"/>).
         /// </summary>
-        public bool SourceCode { get => GetSettingValue(false); set { SetSettingValue(value); if (value && ReadOnly) ReadOnly = false; } }
+        // Whether the page shows the source editor: the reader's choice (SourceCodeSetting), or a plain text file shown,
+        // which is never in the visual editor - the host's menus, paste and selection follow this.
+        [PropertyChanged.DoNotNotify]
+        public bool SourceCode { get => PlainTextShown || GetSettingValue(false); set => SourceCodeSetting = value; }
+
+        /// <summary>
+        /// The reader's mode, visual or source, as stored: what the mode switches show and set (the View menu, the status
+        /// bar, Ctrl+/). A plain text file follows it too, in its own way (<see cref="PlainTextProse"/>). Stored as
+        /// SourceCode, the one setting (settings-map.json knows it by that name).
+        /// </summary>
+        [PropertyChanged.DoNotNotify]
+        public bool SourceCodeSetting
+        {
+            get { return GetSettingValue(false, nameof(SourceCode)); }
+            set
+            {
+                var before = (SourceCodeSetting, SourceCode, PlainTextProse);
+                SetSettingValue(value, nameof(SourceCode));
+                if (value && ReadOnly) ReadOnly = false;
+                NotifyModes(before);
+            }
+        }
+
+        private bool plainTextShown;
+
+        /// <summary>
+        /// The document shown is a plain text file (.txt, .text, .log): no Markdown in it is parsed or drawn (a reader's
+        /// request, 2026-11-02). It is shown in the source editor with no Markdown highlighting - laid out as prose in
+        /// visual mode (<see cref="PlainTextProse"/>), as code in source mode - and the visual editor never takes its
+        /// text in, so a save writes it back as it was. Not a setting: this window's, never stored.
+        /// </summary>
+        [PropertyChanged.DoNotNotify]
+        public bool PlainTextShown
+        {
+            get => plainTextShown;
+            set
+            {
+                if (plainTextShown == value) return;
+                var before = (SourceCodeSetting, SourceCode, PlainTextProse);
+                plainTextShown = value;
+                Notify(nameof(PlainTextShown), value);
+                NotifyModes(before);
+            }
+        }
+
+        /// <summary>A plain text file in visual mode: its text laid out as prose (the text's font, no line numbers), still not parsed.</summary>
+        public bool PlainTextProse => PlainTextShown && !SourceCodeSetting;
+
+        private void NotifyModes((bool Setting, bool Source, bool Prose) before)
+        {
+            if (SourceCodeSetting != before.Setting) Notify(nameof(SourceCodeSetting), SourceCodeSetting);
+            if (SourceCode != before.Source) Notify(nameof(SourceCode), SourceCode);
+            if (PlainTextProse != before.Prose) Notify(nameof(PlainTextProse), PlainTextProse);
+        }
         public bool Typewriter { get => GetSettingValue(false); set => SetSettingValue(value); }
         public bool FocusMode { get => GetSettingValue(false); set => SetSettingValue(value); }
         public bool SearchIsCaseSensitive { get => GetSettingValue(false); set => SetSettingValue(value); }
@@ -110,12 +163,13 @@ namespace Typedown.Core.ViewModels
             {
                 // Leaving reading mode goes back to the mode it was entered from: source mode, which reading turned off,
                 // is turned on again. Held for this run only.
-                if (value && !ReadOnly) sourceCodeBeforeReading = SourceCode;
+                // The reader's own mode (SourceCodeSetting): a plain text file shown reads as source mode whatever it is.
+                if (value && !ReadOnly) sourceCodeBeforeReading = SourceCodeSetting;
                 var back = !value && ReadOnly && sourceCodeBeforeReading;
                 if (!value) sourceCodeBeforeReading = false;
                 SetSettingValue(value);
-                if (value && SourceCode) SourceCode = false;
-                if (back && !SourceCode) SourceCode = true;
+                if (value && SourceCodeSetting) SourceCodeSetting = false;
+                if (back && !SourceCodeSetting) SourceCodeSetting = true;
             }
         }
 
@@ -305,6 +359,8 @@ namespace Typedown.Core.ViewModels
         private readonly HashSet<string> notifySet = new()
         {
             "SourceCode",
+            "PlainTextShown",
+            "PlainTextProse",
             "Typewriter",
             "FocusMode",
             "SearchIsCaseSensitive",

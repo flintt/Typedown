@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
@@ -42,6 +43,68 @@ internal static partial class Program
         var again = await WaitActive(d => d != a);
         Check(again == created, "Alt+0 again goes to the new document");
         try { await c.Call("document.close", new { documentId = created }); } catch (Exception e) { notes.Add("new document not closed: " + e.Message.Split('\n')[0]); }
+    }
+
+    /// <summary>
+    /// PT01: a plain text file (.txt) is shown as it is - no Markdown parsed or highlighted (a reader's request,
+    /// 2026-11-02): in visual mode laid out as prose (no line numbers), in source mode as code (line numbers), neither
+    /// parsing it; the mode switch works on it as on any document. A key typed and saved changes that key alone: its
+    /// "#", "**", table, trailing spaces and blank lines are written back as they were. A Markdown tab beside it is in
+    /// the visual editor, and back on the .txt it is plain again.
+    /// </summary>
+    private static async Task PT01(List<string> notes)
+    {
+        using var c = await Session("e2e PT01");
+        var text = "# not a heading\n\n**not bold** and *not italic*   \n\n| a | b |\n|---|---|\n| 1 | 2 |\n\n- not\n- a list\n\n\n\nlast line";
+        var path = Path.Combine(fixtures, "pt01.txt");
+        File.WriteAllText(path, text, new System.Text.UTF8Encoding(false));
+        var md = await Open(c, Fixture("pt01.md", "# A Markdown tab\n\n**bold**\n"));
+        var windowId = await WindowIdOf(c, md);
+        // The reader's own mode (SourceCodeSetting; SourceCode reads true while a plain text file is shown).
+        var source = (await c.Call("test.settings.get", new { windowId, name = "SourceCodeSetting" }))["value"]?.ToString();
+        notes.Add("mode setting before: " + (source ?? "(unset)"));
+        async Task SetSource(bool on) { await c.Call("test.settings.set", new { windowId, name = "SourceCodeSetting", value = on }); await Task.Delay(1000); }
+        try
+        {
+            await SetSource(false);
+            const string state = "JSON.stringify({ codeMirror: !!document.querySelector('.CodeMirror'), muya: !!document.querySelector('#ag-editor-id'), lineNumbers: !!document.querySelector('.CodeMirror-linenumber'), prose: !!document.querySelector('.plain-prose'), highlighted: document.querySelectorAll('.CodeMirror .cm-header, .CodeMirror .cm-strong, .CodeMirror .cm-em, .CodeMirror .cm-variable-2').length })";
+            async Task<JObject> State() => JObject.Parse((string)(await c.Call("test.editor.eval", new { windowId, script = state }))["result"]!);
+            var txt = await Open(c, path);
+            await Task.Delay(1500);
+            var visual = await State();
+            notes.Add("the .txt, visual mode: " + visual.ToString(Newtonsoft.Json.Formatting.None));
+            Check((bool)visual["codeMirror"]! && !(bool)visual["muya"]! && (bool)visual["prose"]! && !(bool)visual["lineNumbers"]!, "visual mode: the .txt laid out as prose, no line numbers, not in the Markdown editor");
+            Check((int)visual["highlighted"]! == 0, $"visual mode: no Markdown highlighted ({visual["highlighted"]} marks)");
+            Check((string?)(await Get(c, txt))["text"] == text, "its text is the file's, as it is");
+            await SetSource(true);
+            var code = await State();
+            notes.Add("the .txt, source mode: " + code.ToString(Newtonsoft.Json.Formatting.None));
+            Check((bool)code["codeMirror"]! && !(bool)code["prose"]! && (bool)code["lineNumbers"]!, "source mode: the .txt as code, with line numbers");
+            Check((int)code["highlighted"]! == 0, $"source mode: no Markdown highlighted ({code["highlighted"]} marks)");
+            await SetSource(false);
+            await TypeIntoWindow(c, windowId, "X");
+            string edited = text;
+            for (var i = 0; i < 50 && edited == text; i++) { await Task.Delay(200); edited = (string?)(await Get(c, txt))["text"] ?? ""; }
+            await c.Call("document.save", new { documentId = txt });
+            await Task.Delay(500);
+            var saved = File.ReadAllText(path);
+            notes.Add("saved: " + saved.Replace("\n", "\\n"));
+            Check(saved == text + "X", "the save wrote the key typed and nothing else changed");
+            await c.Call("document.focus", new { documentId = md });
+            await Task.Delay(1500);
+            var markdownTab = await State();
+            Check((bool)markdownTab["muya"]! && !(bool)markdownTab["codeMirror"]!, "the Markdown tab is in the visual editor, the reader's mode");
+            await c.Call("document.focus", new { documentId = txt });
+            await Task.Delay(1500);
+            var again = await State();
+            Check((bool)again["codeMirror"]! && (bool)again["prose"]! && (int)again["highlighted"]! == 0, "back on the .txt: plain prose again");
+            try { await c.Call("document.close", new { documentId = txt }); } catch { }
+        }
+        finally
+        {
+            try { await SetSource(source == "True" || source == "true"); } catch { }
+            try { await c.Call("document.close", new { documentId = md }); } catch { }
+        }
     }
 
     /// <summary>

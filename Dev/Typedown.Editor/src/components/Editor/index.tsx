@@ -537,7 +537,8 @@ const Editor: React.FC = () => {
         return <></>
     }
 
-    if (options.sourceCode) {
+    // A plain text file is never in the visual editor, which would parse it as Markdown and write it back so.
+    if (options.sourceCode || options.plainTextShown) {
         return (
             <CodeMirror
                 options={options}

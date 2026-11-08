@@ -11,7 +11,7 @@
     mc:Ignorable="d">
     <ToggleMenuFlyoutItem x:Name="SidePaneItem" Text="{u:LocaleString Key=SidePane}" IsChecked="{x:Bind Settings.SidePaneOpen, Mode=TwoWay}"/>
     <MenuFlyoutSeparator/>
-    <ToggleMenuFlyoutItem x:Name="SourceCodeModeItem" Text="{u:LocaleString Key=SourceCodeMode}" IsChecked="{x:Bind Settings.SourceCode, Mode=TwoWay}"/>
+    <ToggleMenuFlyoutItem x:Name="SourceCodeModeItem" Text="{u:LocaleString Key=SourceCodeMode}" IsChecked="{x:Bind Settings.SourceCodeSetting, Mode=TwoWay}"/>
     <ToggleMenuFlyoutItem x:Name="FocusModeItem" Text="{u:LocaleString Key=FocusMode}" IsChecked="{x:Bind Settings.FocusMode, Mode=TwoWay}"/>
     <ToggleMenuFlyoutItem x:Name="TypewriterModeItem" Text="{u:LocaleString Key=TypewriterMode}" IsChecked="{x:Bind Settings.Typewriter, Mode=TwoWay}"/>
     <ToggleMenuFlyoutItem x:Name="ReadOnlyModeItem" Text="{u:LocaleString Key=ReadOnlyMode}" IsChecked="{x:Bind Settings.ReadOnly, Mode=TwoWay}"/>

@@ -50,6 +50,14 @@ namespace Typedown.Core.Utilities
             return type == FileType.Markdown || type == FileType.PlainText;
         }
 
+        // Text files that are not Markdown: shown as they are, with nothing in them parsed as Markdown (a reader's
+        // request, 2026-11-02) - a log's "#" or "*" is no heading or emphasis, and the visual editor would rewrite them.
+        private static readonly HashSet<string> plainTextDocuments = new() { ".txt", ".text", ".log" };
+
+        /// <summary>A plain text file: shown in source mode with no Markdown highlighting, its text saved as it is.</summary>
+        public static bool IsPlainTextDocument(string fileName) =>
+            !string.IsNullOrEmpty(fileName) && plainTextDocuments.Contains(Path.GetExtension(fileName).ToLowerInvariant());
+
         public static bool IsImageFile(string fileName)
         {
             return GetFileType(fileName) == FileType.Image;

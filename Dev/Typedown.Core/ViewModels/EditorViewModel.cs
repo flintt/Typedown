@@ -241,6 +241,8 @@ namespace Typedown.Core.ViewModels
                 Settings.FocusMode,
                 Settings.Typewriter,
                 Settings.SourceCode,
+                Settings.PlainTextShown,
+                Settings.PlainTextProse,
                 Settings.FontSize,
                 Settings.LineHeight,
                 Settings.AutoPairBracket,

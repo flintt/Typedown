@@ -522,14 +522,25 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
         editor.refresh()
     }, [editor, props.options?.fontSize, props.options?.lineHeight, props.options?.tabSize])
 
+    // A plain text file's view, set on the editor as it changes: the options it was made with are not read again.
+    useEffect(() => {
+        if (!editor) return
+        editor.setOption('mode', props.options?.plainTextShown ? 'text/plain' : 'markdown')
+        editor.setOption('lineNumbers', !props.options?.plainTextProse)
+        editor.refresh()
+    }, [editor, props.options?.plainTextShown, props.options?.plainTextProse])
+
     return (
         <div
-            className="cm-s-one-dark"
+            className={props.options?.plainTextProse ? 'cm-s-one-dark plain-prose' : 'cm-s-one-dark'}
             style={{
                 boxSizing: 'border-box',
                 paddingTop: marginTop,
                 paddingLeft: 14,
                 paddingRight: 14,
+                // A plain text file in visual mode: laid out as the visual editor lays a document out, in the editor's
+                // width, with no line numbers - and still nothing in it parsed (Settings.PlainTextProse).
+                ...(props.options?.plainTextProse ? { maxWidth: props.options?.editorAreaWidth || '900px', margin: '0 auto' } : {}),
                 fontSize: props.options?.fontSize,
                 lineHeight: props.options?.lineHeight,
                 fontFamily: props.options?.fontFamily ? `${props.options.fontFamily}, "Open Sans", "Segoe UI", sans-serif` : undefined
@@ -538,8 +549,9 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
                 ref={(ref: any) => ref && setEditor(ref.editor)}
                 options={{
                     theme: 'one-dark',
-                    mode: 'markdown',
-                    lineNumbers: true,
+                    // A plain text file (.txt, .log): no Markdown highlighting, its "#" and "*" are just characters.
+                    mode: props.options?.plainTextShown ? 'text/plain' : 'markdown',
+                    lineNumbers: !props.options?.plainTextProse,
                     lineWrapping: true,
                     readOnly: !!props.options?.readOnly,
                     keyMap: vim ? 'vim' : 'default',

@@ -53,6 +53,8 @@ The **Help** menu: **User guide** (this guide), **Shortcuts** (the shortcuts pag
 | Reading Mode | View → Reading Mode, Ctrl+Shift+R | Read-only, so nothing changes by accident; you can still select and copy |
 | Focus / Typewriter Mode | F8 / F9 | Focus Mode dims the other paragraphs; Typewriter Mode keeps the current line in the middle of the screen |
 
+Plain text files (`.txt`, `.text`, `.log`) have no Markdown in them parsed: in visual editing they are laid out as prose (no line numbers), in source code mode as code (line numbers), with no `#` or `*` highlighted in either, and you switch between the two as usual; they are saved exactly as they were apart from what you change.
+
 F11 toggles full screen.
 
 Under **Settings → Editor**, a few settings change what you see:

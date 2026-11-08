@@ -202,7 +202,7 @@ namespace Typedown.Core.Controls.EditorControls.MenuBarItems
                 Unsubscribe();
                 return;
             }
-            if (e.PropertyName is nameof(Settings.ReadOnly) or nameof(Settings.SourceCode))
+            if (e.PropertyName is nameof(Settings.ReadOnly) or nameof(Settings.SourceCode) or nameof(Settings.PlainTextShown))
                 UpdateModeAvailability();
             if (e.PropertyName is nameof(Settings.AppTheme) or nameof(Settings.CustomTheme))
                 UpdateThemeChecks();

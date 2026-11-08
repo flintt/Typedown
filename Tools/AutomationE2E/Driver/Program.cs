@@ -163,6 +163,7 @@ internal static partial class Program
             await Case("LU01 Alt+0 after Ctrl+N goes back to the document the new one was made from, not the tab before the last switch", LU01);
             await Case("PE01 Scroll past the end in the app: a long document scrolled to the bottom brings its last line to the middle; off, it stays at the bottom", PE01);
             await Case("EN01 files in GB18030, Big5, Shift-JIS, EUC-JP, EUC-KR, Windows-1252/1251 and unmarked UTF-16 open as written, the status bar names the encoding, and a save keeps it", EN01);
+            await Case("PT01 a .txt is shown as it is: as prose in visual mode and as code in source mode, no Markdown parsed or highlighted in either, a save changes the key typed alone", PT01);
             await Case("SF02 a long document under a dark custom theme (Dracula): leaving the settings and a window opening with it show the theme's colour, never light or the app's dark colour", SF02);
             await Case("WV02 without the WebView2 runtime the install window comes up with the download; a setup that installs it goes on to the main window", WV02);
             await Case("WV03 a setup that did not install the WebView2 runtime leaves the install window saying so, with the download; Cancel ends the start", WV03);

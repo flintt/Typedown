@@ -107,6 +107,10 @@ namespace Typedown.Core.ViewModels
         public FileViewModel(IServiceProvider serviceProvider)
         {
             ServiceProvider = serviceProvider;
+            // A plain text file (.txt, .text, .log) shown: in source mode with no Markdown parsed (SettingsViewModel.
+            // PlainTextShown). Set as the path changes - an open, a tab switched to, a new document, Save as - which is
+            // before the text is handed to the page, so the visual editor never takes a plain text file in.
+            this.WhenPropertyChanged(nameof(FilePath)).Subscribe(_ => SettingsViewModel.PlainTextShown = FileTypeHelper.IsPlainTextDocument(FilePath));
             // New, as the reader asks for it (the + button, the menu, Ctrl+N): the keyboard goes to the new document. The
             // + button kept it, and the letters typed next went nowhere until a click in the text.
             // A new tab is for writing: no home page on it unless Settings > General > On startup asks for one there too.

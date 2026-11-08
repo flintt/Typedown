@@ -67,10 +67,10 @@
                 AutomationProperties.AutomationId="StatusBarModes"
                 AutomationProperties.Name="{u:LocaleString Key=View}"
                 controls:ToolTip.TextResource="View">
-                <FontIcon Glyph="{x:Bind ModeGlyph(Settings.ReadOnly, Settings.SourceCode), Mode=OneWay}" FontSize="14"/>
+                <FontIcon Glyph="{x:Bind ModeGlyph(Settings.ReadOnly, Settings.SourceCodeSetting), Mode=OneWay}" FontSize="14"/>
                 <Button.Flyout>
                     <MenuFlyout Placement="TopEdgeAlignedLeft" Opening="OnModeMenuOpening">
-                        <ToggleMenuFlyoutItem x:Name="StatusSourceCodeItem" Text="{u:LocaleString Key=SourceCodeMode}" IsChecked="{x:Bind Settings.SourceCode, Mode=TwoWay}"/>
+                        <ToggleMenuFlyoutItem x:Name="StatusSourceCodeItem" Text="{u:LocaleString Key=SourceCodeMode}" IsChecked="{x:Bind Settings.SourceCodeSetting, Mode=TwoWay}"/>
                         <ToggleMenuFlyoutItem x:Name="StatusReadOnlyItem" Text="{u:LocaleString Key=ReadOnlyMode}" IsChecked="{x:Bind Settings.ReadOnly, Mode=TwoWay}"/>
                         <MenuFlyoutSeparator/>
                         <ToggleMenuFlyoutItem x:Name="StatusFocusItem" Text="{u:LocaleString Key=FocusMode}" IsChecked="{x:Bind Settings.FocusMode, Mode=TwoWay}" IsEnabled="{x:Bind CaretModes(Settings.ReadOnly, Settings.SourceCode), Mode=OneWay}"/>

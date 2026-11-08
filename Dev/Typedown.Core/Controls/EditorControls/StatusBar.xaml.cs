@@ -413,7 +413,7 @@ namespace Typedown.Core.Controls
                 var caretModes = !Settings.ReadOnly && !Settings.SourceCode;
                 foreach (var (key, on, enabled, set) in new (string, bool, bool, Action<bool>)[]
                 {
-                    ("SourceCodeMode", Settings.SourceCode, true, v => Settings.SourceCode = v),
+                    ("SourceCodeMode", Settings.SourceCodeSetting, true, v => Settings.SourceCodeSetting = v),
                     ("ReadOnlyMode", Settings.ReadOnly, true, v => Settings.ReadOnly = v),
                     ("FocusMode", Settings.FocusMode, caretModes, v => Settings.FocusMode = v),
                     ("TypewriterMode", Settings.Typewriter, caretModes, v => Settings.Typewriter = v),
