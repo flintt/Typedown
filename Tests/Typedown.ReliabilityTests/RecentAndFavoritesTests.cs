@@ -57,7 +57,9 @@ namespace Typedown.ReliabilityTests
         {
             PathProbe.Forget();
             var clock = System.Diagnostics.Stopwatch.StartNew();
-            var missing = await PathProbe.MissingAsync(new[] { P("slow", "share.md"), P("fast", "gone.md") }, TimeSpan.FromMilliseconds(200),
+            // A second for the fast one: 200 ms was not enough on a busy CI runner (v1.4.2's tag build), where the fast path's
+            // own thread had not answered yet either.
+            var missing = await PathProbe.MissingAsync(new[] { P("slow", "share.md"), P("fast", "gone.md") }, TimeSpan.FromSeconds(1),
                 path => { if (path.Contains("slow")) Thread.Sleep(3000); return false; });
             Assert.IsTrue(clock.ElapsedMilliseconds < 2000, $"waited {clock.ElapsedMilliseconds} ms for a path that did not answer");
             CollectionAssert.AreEquivalent(new[] { P("fast", "gone.md") }, missing.ToArray());

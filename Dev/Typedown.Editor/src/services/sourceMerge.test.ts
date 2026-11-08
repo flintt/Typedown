@@ -1,4 +1,4 @@
-import { alignment, blockSource, cursorIn, matchLines, mergeKeepingNotes, mergeSource, splitLines } from './sourceMerge'
+import { alignment, blockSource, cursorIn, editedRegion, matchLines, mergeKeepingNotes, mergeSource, splitLines } from './sourceMerge'
 import { numbersMasked, orderedLists, renumberedAt, styleOf } from './orderedLists'
 
 const merge = (source: string, base: string, current: string) => {
@@ -94,6 +94,12 @@ describe('editedRegion (an edited block keeps its own writing where the edit did
         const b = '> quoted line\n\nlazy continuation\n\nAfter.\n'
         const cur = '> quoted lZine\n\nlazy continuation\n\nAfter.\n'
         expect(merge(src, b, cur)).toBe('> quoted lZine\nlazy continuation\n\nAfter.\n')
+    })
+    it('keeps the blank lines of what is pasted into an empty document (v1.4.2 tag build: paste-web-check)', () => {
+        // The stretch the paste replaced has no source lines; Muya's one blank line for the empty document lines up with
+        // the blank line between the paragraph and the code, which must stay.
+        const cur = ['Code follows:', '', '```python', 'x', '```']
+        expect(editedRegion([], [''], cur).lines).toEqual(cur)
     })
     it('takes the edited lines as Muya writes them', () => {
         const src = '~~~\na\n~~~\n'

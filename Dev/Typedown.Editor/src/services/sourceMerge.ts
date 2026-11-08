@@ -208,7 +208,9 @@ export function editedRegion(source: string[], base: string[], current: string[]
             if (source[x].trim() && base.slice(b).some(l => fenceKey(l) === fenceKey(source[x]))) break
         }
     }
-    const sourceHasBlank = source.some(l => !l.trim())
+    // A blank line is Muya's own only against a source with writing in it and no blank line (a lazy line after a
+    // quotation); a source with nothing (an empty document pasted into) has not left one out.
+    const sourceHasBlank = source.some(l => !l.trim()) || !source.some(l => l.trim())
     const fromBase = new Int32Array(current.length).fill(-1)
     for (let b = 0; b < base.length; b++) if (toCurrent[b] >= 0) fromBase[toCurrent[b]] = b
     const lines: string[] = []
