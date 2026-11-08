@@ -205,6 +205,12 @@ interface KeptDocument extends ShownDocument {
     kept: { blocks: any[], cursor: any, root: HTMLElement, progressive?: any }
 }
 
+// The long documents kept for a switch back (keepShown, takeKept): the page's, outliving the editor component - source
+// mode or a plain text file takes it away and brings a new one.
+const keptStore = new KeptDocuments<KeptDocument>(KEEP_DOCUMENTS, KEEP_CHARS)
+// For Tools/EditorBench: what is kept while no editor is there (source mode, a plain text file).
+;(window as any).__typedownKeptStore = { size: () => keptStore.size, has: (text: string) => keptStore.has(text) }
+
 /**
  * The top-level block at the top of the window (the first whose bottom is in it), and a function that scrolls the page
  * by what it moved since: for a change above it that the browser's scroll anchoring may not make up for (it is off while
@@ -293,7 +299,11 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     const searchArgRef = useRef<any>();
     const cursorRef = useRef<any>();
     const shownRef = useRef<ShownDocument | null>(null)
-    const keptRef = useRef(new KeptDocuments<KeptDocument>(KEEP_DOCUMENTS, KEEP_CHARS))
+    // The page's, not this editor's: a plain text file shown in the source editor takes this one away, and the long
+    // document it left is shown again from here when its tab is back (it was built again, seconds on a long one).
+    const keptRef = useRef(keptStore)
+    // keepShown as of the last render, for the editor's teardown (set where it is made).
+    const keepShownRef = useRef<((leaving?: boolean) => void) | null>(null)
     const optionsRef = useRef<any>(props.options);
     // The heading the outline was last told about in reading mode, and the moment until which a jump the
     // reader asked for stands: the jump's own scroll must not be re-read as the reader moving on.
@@ -377,7 +387,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         markdownRef.current = ''
         importedRef.current = undefined
         shownRef.current = null
-        keptRef.current.clear()
+        // The kept documents stay (keptStore): the editor before this one left them for this one to show.
     }, [editor])
 
     useEffect(() => {
@@ -459,7 +469,11 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             // Source mode has no Muya: a hook left behind would describe the document as it was when Muya went.
             if ((window as any).__typedownPendingNormalization === pendingNormalization) delete (window as any).__typedownPendingNormalization
             if ((window as any).__typedownKeptDocuments === keptHook) delete (window as any).__typedownKeptDocuments
-            keptHook.clear()
+            // The document shown kept for its tab coming back, as a switch to another document keeps it: a plain text
+            // file (shown in the source editor) took this editor away, and the long Markdown document left was built
+            // again on the way back - 3 to 4 s against half a second between two Markdown tabs (a reader's report).
+            // Only one drawn whole: one drawn a part at a time goes on with this editor's drawing, which goes with it.
+            keepShownRef.current?.(true)
             muya.destroy()
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -1464,10 +1478,13 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
     // state (no report on its way, the caret where that report put it), nothing is selected or highlighted in it,
     // no table tool bar is drawn, no picture is still loading and it has no diagram, whose drawing comes later and
     // would be lost while it is out.
-    const keepShown = () => {
+    const keepShown = (leaving = false) => {
         const shown = shownRef.current
         shownRef.current = null
         const muya = editor as any
+        // Leaving (the editor goes): a document still being drawn a part at a time is kept as far as it got too, and the
+        // next editor draws on (showDocument) - but what this one was to do once it was all drawn goes, with it.
+        if (leaving && muya?.contentState?.stateRender?.progressive) muya.contentState.stateRender.progressive.done = null
         // A document still being drawn a part at a time is kept as far as it got, and drawn on when it is back
         // (Muya.takeDocument, showDocument): switching between long documents should not wait for one to finish.
         if (!muya || !shown || !shown.pristine || !shown.reported) return
@@ -1485,6 +1502,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         if (root.querySelector('.ag-image-loading, .ag-tool-table')) return
         keptRef.current.put({ ...shown, cursorAt, kept: muya.takeDocument() })
     }
+    keepShownRef.current = keepShown
 
     // The kept document with this text, when showing it is showing what a new build would: the same settings, and a
     // caret that the build would put where the kept one is. Either the very caret this document was built with and has

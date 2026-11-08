@@ -55,6 +55,10 @@ const Editor: React.FC = () => {
     const finishLoadRef = useRef<(() => void) | null>(null);
     const cursorRef = useRef<any>();
     const [contentVersion, setContentVersion] = useState(0);
+    // The text held is a plain text file's (loaded while PlainTextShown), and the content version it came with: the
+    // visual editor waits for the next load (see below the listeners).
+    const plainHeldRef = useRef(false)
+    const plainVersionRef = useRef(0)
     const [options, setOptions] = useState<any>();
     const optionsRef = useRef<any>();
     const [searchOpen, setSearchOpen] = useState(0);
@@ -533,6 +537,21 @@ const Editor: React.FC = () => {
         setSearchOpen(open)
     }), []);
 
+    // A plain text file left for a Markdown one: the host says so (PlainTextShown off) just before it sends the Markdown
+    // file. The visual editor is made once that has come, not with the plain text still held - it parsed and drew the
+    // whole text file first, seconds on a long one, before the Markdown file came and was shown from what was kept
+    // (a reader: switching to and from a long .txt tab was slow). The text held is the visual editor's if nothing comes
+    // (Save as turned a .txt into a .md).
+    if (options?.plainTextShown) plainHeldRef.current = true
+    else if (plainHeldRef.current && contentVersion !== plainVersionRef.current) plainHeldRef.current = false
+    if (options?.plainTextShown) plainVersionRef.current = contentVersion
+    const [, setHeldTimeout] = useState(0)
+    useEffect(() => {
+        if (options?.plainTextShown || !plainHeldRef.current) return
+        const timer = setTimeout(() => { plainHeldRef.current = false; setHeldTimeout(t => t + 1) }, 300)
+        return () => clearTimeout(timer)
+    }, [options?.plainTextShown])
+
     if (!options) {
         return <></>
     }
@@ -558,6 +577,8 @@ const Editor: React.FC = () => {
                 onSearchArgChange={setSearchArg}
             />
         )
+    } else if (plainHeldRef.current) {
+        return <></>
     } else {
         return (
             <MuyaEditor
