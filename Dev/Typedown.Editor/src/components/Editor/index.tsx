@@ -31,6 +31,13 @@ const styleElement = (id: string) => {
     return style
 }
 
+/**
+ * A custom theme's CSS as it goes on the page: its text colour first. The themes set --editorColor and no colour of
+ * their own, and the text took the base sheet's (white on the dark base, black on the light) - Indigo's text white in
+ * the app and its own #dde3ef in the theme designer. First, so the theme's own rules and the user's CSS still win.
+ */
+const themeSheet = (css: string) => css ? `body { color: var(--editorColor); }\n${css}` : ''
+
 // The static first screen (services/loadPreview) only where the editor draws a document all at once: drawn a part at a
 // time (Muya's progressive drawing, on unless a test turns it off), the editor's own first screen comes nearly as soon,
 // and a preview of a different make in front of it moved as the editor took over.
@@ -326,7 +333,7 @@ const Editor: React.FC = () => {
             // and the editor's measures - set here, as the effects below set them only once the options are in - and
             // built once that has been painted (services/loadPreview).
             if (previewWhileBuilding() && !opt.sourceCode && typeof markdown === 'string' && markdown.length >= PREVIEW_FROM_CHARS) {
-                styleElement('typedown-theme-css').textContent = opt.themeCss || ''
+                styleElement('typedown-theme-css').textContent = themeSheet(opt.themeCss || '')
                 if (opt.themeCss) document.body.style.backgroundColor = 'var(--editorBgColor)'
                 if (opt.editorAreaWidth) document.body.style.setProperty('--editorAreaWidth', opt.editorAreaWidth)
                 if (opt.fontFamily) document.body.style.setProperty('--editorFontFamily', opt.fontFamily)
@@ -351,7 +358,7 @@ const Editor: React.FC = () => {
     // a change in every mode (source mode kept the old theme until the mode was switched).
     useEffect(() => {
         const css = options?.themeCss || ''
-        styleElement('typedown-theme-css').textContent = css
+        styleElement('typedown-theme-css').textContent = themeSheet(css)
         // The host paints the body to match the window chrome; a theme that sets its own page colour should win.
         // Clearing it lets the next ThemeChanged from the host paint it again when the theme is switched off.
         if (css) document.body.style.backgroundColor = 'var(--editorBgColor)'

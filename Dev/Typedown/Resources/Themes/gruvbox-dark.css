@@ -12,6 +12,7 @@
  * border: #504945
  */
 :root {
+  color: #ebdbb2;
   --editorBgColor: #282828;
   --editorColor: #ebdbb2;
   --editorColor80: rgba(235, 219, 178, .8);

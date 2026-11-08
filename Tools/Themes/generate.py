@@ -54,6 +54,7 @@ TEMPLATE = """/* Typedown theme
  * border: {border}
  */
 :root {{
+  color: {fg};
   --editorBgColor: {bg};
   --editorColor: {fg};
   --editorColor80: {fg80};
