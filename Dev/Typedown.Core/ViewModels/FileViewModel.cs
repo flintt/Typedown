@@ -624,7 +624,9 @@ namespace Typedown.Core.ViewModels
             {
                 var path = FilePath;
                 var tab = TabsViewModel?.ActiveTab;
-                await EditorViewModel.FlushContentAsync(); // what we write must be what is on screen
+                // What we write must be what is on screen; a save the reader asked for keeps their own text where they
+                // did not edit, at any length (an automatic save does not: it comes while they type).
+                await EditorViewModel.FlushContentAsync(keepSource: alert);
                 // The flush awaited, and a tab switch does not take this lock: if the active document changed
                 // under us the live buffer now belongs to another document, and writing it to this path would
                 // put one document's text into another. Check the tab reference too — two untitled tabs share a
@@ -710,7 +712,7 @@ namespace Typedown.Core.ViewModels
             {
                 if (!disposables.IsDisposed && FilePath == originalPath && TabsViewModel?.ActiveTab == originalTab)
                 {
-                    await EditorViewModel.FlushContentAsync();
+                    await EditorViewModel.FlushContentAsync(keepSource: true);
                     if (disposables.IsDisposed || FilePath != originalPath || TabsViewModel?.ActiveTab != originalTab)
                         return null;
                     var markdown = EditorViewModel.Markdown;
@@ -787,7 +789,7 @@ namespace Typedown.Core.ViewModels
                     if (upload == Microsoft.UI.Xaml.Controls.ContentDialogResult.Primary && !await UploadLocalImages())
                         return;
                 }
-                await EditorViewModel.FlushContentAsync();
+                await EditorViewModel.FlushContentAsync(keepSource: true);
                 var markdown = EditorViewModel.Markdown;
                 var hash = Common.SimpleHash(markdown);
                 var previous = HedgeDocShareMemory.Get(FilePath);
@@ -962,7 +964,9 @@ namespace Typedown.Core.ViewModels
             // Bring the editor's latest text in before deciding there is nothing to save. If the editor did not
             // answer (timeout), do not trust the stale Saved flag — fall through to auto-save or the prompt, so a
             // just-typed edit is not dropped on close.
-            var flushed = await EditorViewModel.FlushContentAsync();
+            // A close: the reader's own text kept where they did not edit, whatever the length (it is what a save or a
+            // kept backup then writes).
+            var flushed = await EditorViewModel.FlushContentAsync(keepSource: true);
             if ((flushed && EditorViewModel.Saved) || (SettingsViewModel.AutoSave && await AutoSaveFile()))
             {
                 return true;

@@ -154,7 +154,8 @@ const paragraphCtrl = ContentState => {
           })
         })
         this.removeBlock(listBlock)
-        return
+        // Told as the other paths are (updateParagraph's needDispatchChange): the list taken away reached no host.
+        return true
       }
       // if the old list block is task list, remove checkbox
       if (listBlock.listType === 'task') {

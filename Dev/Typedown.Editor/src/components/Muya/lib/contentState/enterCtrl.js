@@ -447,7 +447,6 @@ const enterCtrl = ContentState => {
       block = parent
       parent = this.getParent(block)
     }
-    const paragraph = document.querySelector(`#${block.key}`)
     if (
       (parent && parent.type === 'li' && this.isOnlyChild(block)) ||
       (parent && parent.type === 'li' && parent.listItemType === 'task' && parent.children.length === 2) // one `input` and one `p`
@@ -472,11 +471,23 @@ const enterCtrl = ContentState => {
     switch (true) {
       case left !== 0 && right !== 0: {
         // cursor in the middle
-        let { pre, post } = selection.chopHtmlByCursor(paragraph)
-        if (/^h\d$/.test(block.type)) {
+        const headingMarks = /^h\d$/.test(block.type) && block.headingStyle === 'atx'
+          ? (/^ {0,3}#{1,6}(?:[ \t]+|$)/.exec(text) || [''])[0].length
+          : 0
+        if (headingMarks && left <= headingMarks) {
+          // At the start of the heading's text (its "#" marks are before the caret): an empty paragraph above it, the
+          // heading as it was, the caret still at its text's start. The marks went to an empty heading above, and the
+          // heading below had the caret before its "#" marks.
+          this.insertBefore(this.createBlockP(), block)
+          newBlock = block
+        } else if (/^h\d$/.test(block.type)) {
+          // Split at the caret in the heading's own text, not in the page's: with the caret inside a format's marks
+          // (after the opening "**") the page's text before it did not start with the "#" marks, and Enter threw.
+          const pre = text.substring(0, left)
+          let post = text.substring(left)
           if (block.headingStyle === 'atx') {
-            const PREFIX = /^#+/.exec(pre)[0]
-            post = `${PREFIX} ${post}`
+            const PREFIX = (/^ {0,3}(#{1,6})/.exec(text) || ['', '#'])[1]
+            post = `${PREFIX} ${post.replace(/^[ \t]+/, '')}`
           }
           block.children[0].text = pre
           newBlock = this.createBlock(type, {
@@ -529,7 +540,8 @@ const enterCtrl = ContentState => {
           block.children[0].text = preText
         }
 
-        this.insertAfter(newBlock, block)
+        // At a heading's start the new block went in above it (headingMarks): nothing to put after it.
+        if (newBlock !== block) this.insertAfter(newBlock, block)
 
         break
       }
@@ -614,8 +626,17 @@ const enterCtrl = ContentState => {
     }
 
     cursorBlock = getParagraphBlock(cursorBlock)
-    const key = cursorBlock.type === 'p' || cursorBlock.type === 'pre' ? cursorBlock.children[0].key : cursorBlock.key
+    let key = cursorBlock.type === 'p' || cursorBlock.type === 'pre' ? cursorBlock.children[0].key : cursorBlock.key
     let offset = 0
+    // In a heading the caret goes into its line, after its "#" marks: before them, the first letter typed made the
+    // heading a paragraph with the marks in its text ("X## rest" after Enter in the middle of a heading).
+    const keyBlock = this.getBlock(key)
+    const atxLine = keyBlock && (keyBlock.functionType === 'atxLine' ? keyBlock
+      : /^h\d$/.test(keyBlock.type) && keyBlock.children[0] && keyBlock.children[0].functionType === 'atxLine' ? keyBlock.children[0] : null)
+    if (atxLine) {
+      key = atxLine.key
+      offset = (/^ {0,3}#{1,6}(?:[ \t]+|$)/.exec(atxLine.text) || [''])[0].length
+    }
     if (htmlNeedFocus) {
       const { text } = cursorBlock
       const match = /^[^\n]+\n[^\n]*/.exec(text)

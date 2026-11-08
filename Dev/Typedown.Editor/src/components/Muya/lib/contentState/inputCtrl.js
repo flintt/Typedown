@@ -269,7 +269,13 @@ const inputCtrl = ContentState => {
           // Not Unicode aware, since things like \p{Alphabetic} or \p{L} are not supported yet
           const isInInlineMath = this.checkCursorInTokenType(block.functionType, text, offset, 'inline_math')
           const isInInlineCode = this.checkCursorInTokenType(block.functionType, text, offset, 'inline_code')
+          // "~" or "`" at a line's start (nothing before it on the line but spaces and the same mark): no closing one put
+          // in. "~~" typed there for a strikethrough became the line "~~~~", and "~~~" for a fence "~~~~" too - a code
+          // fence once the file was read again, the rest of the document a code block.
+          const lineBefore = text.substring(text.lastIndexOf('\n', offset - 2) + 1, offset - 1)
+          const fenceStart = /[`~]/.test(inputChar) && new RegExp(`^ {0,3}\\${inputChar}*$`).test(lineBefore)
           if (
+            !fenceStart &&
             // Issue 2566: Do not complete markdown syntax if the previous character is
             // alphanumeric.
             !/\\/.test(preInputChar) &&

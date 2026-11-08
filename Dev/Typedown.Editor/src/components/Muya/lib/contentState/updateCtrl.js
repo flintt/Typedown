@@ -282,7 +282,10 @@ const updateCtrl = ContentState => {
     const TASK_LIST_REG = /^\[[x ]\] {1,4}/i
     const listItemText = block.children[0].text
     const { key } = block.children[0]
-    const delta = marker.length + preParagraphLines.join('\n').length + 1
+    // What came out of the text before the caret: the marker typed, and the lines before the list's own with the line
+    // break after them. The break was counted with no lines before it too, and a paragraph made a list from the menu
+    // had its caret one letter to the left.
+    const delta = marker.length + (preParagraphLines.length ? preParagraphLines.join('\n').length + 1 : 0)
     this.cursor = {
       start: {
         key,

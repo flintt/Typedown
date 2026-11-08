@@ -994,19 +994,27 @@ namespace Typedown.Core.ViewModels
         public Task<bool> FlushBeforeTabChangeAsync() =>
             FlushContentAsync(ConfirmedLoadId != LoadId ? 4500 : null, evenIfNotLoaded: true);
 
-        public async Task<bool> FlushContentAsync(int? timeoutMs = null, bool evenIfNotLoaded = false)
+        /// <param name="keepSource">
+        /// A save the reader asked for, or a close: the page keeps the reader's own text where they did not edit, at any
+        /// length. While typing it does that only up to 150,000 characters (reading the result back costs a fifth of a
+        /// second at 300,000, too much for every change); past that the editor's own export was written, the whole
+        /// document reformatted. Not for an automatic save, which comes while the reader types.
+        /// </param>
+        public async Task<bool> FlushContentAsync(int? timeoutMs = null, bool evenIfNotLoaded = false, bool keepSource = false)
         {
             if (MarkdownEditor == null || (!FileLoaded && !evenIfNotLoaded)) return true;
             // A very long document: the page may still be busy with it a moment after it is shown (on a slower PC a
             // 280,000-character document did not answer in half a second, and its close asked to save a document
-            // nobody had changed). Longer for it; half a second for the others, as before.
-            var wait = timeoutMs ?? ((Markdown?.Length ?? 0) >= CoverFromChars ? 3000 : 500);
+            // nobody had changed). Longer for it - longer again when its source is to be kept, which reads the whole
+            // document back; half a second for the others, as before.
+            var length = Markdown?.Length ?? 0;
+            var wait = timeoutMs ?? (length >= CoverFromChars ? (keepSource ? 8000 : 3000) : 500);
             var token = ++flushToken;
             var waiter = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
             lock (flushWaiters) flushWaiters[token] = waiter;
             try
             {
-                MarkdownEditor.PostMessage("FlushContent", new { token });
+                MarkdownEditor.PostMessage("FlushContent", new { token, keepSource });
                 var finished = await Task.WhenAny(waiter.Task, Task.Delay(wait));
                 if (finished != waiter.Task) Log.Debug($"editor: flush {token} not answered in {wait} ms (load {LoadId}, {Markdown?.Length ?? 0} chars)");
                 return finished == waiter.Task && waiter.Task.Result;

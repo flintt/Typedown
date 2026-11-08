@@ -346,7 +346,7 @@ namespace Typedown.Core.ViewModels
             // Bring the live editor's latest text in before judging what is dirty: an edit made within the report
             // throttle would otherwise still read as saved, and the window would close without asking about it.
             // If the editor did not answer, treat the active document as dirty rather than closing it silently.
-            var flushed = await EditorViewModel.FlushContentAsync();
+            var flushed = await EditorViewModel.FlushContentAsync(keepSource: true);
             // Kept instead of asked about (Settings > Keep unsaved changes when closing): every unsaved document backed up
             // as it is now - and asked about after all when one could not be, or the editor did not answer.
             if (flushed && ServiceProvider.GetService<SettingsViewModel>().KeepUnsavedOnClose && await FileViewModel.KeepUnsavedAsync())

@@ -315,6 +315,27 @@ const backspaceCtrl = ContentState => {
       return
     }
 
+    // At the start of a heading's text (just after its "#" marks): the heading becomes a paragraph of its text, as in
+    // a word processor. The browser took the space after the marks away and the heading became the paragraph
+    // "##Heading", the marks in its text.
+    const caretBlock = this.getBlock(start.key)
+    if (caretBlock && caretBlock.functionType === 'atxLine') {
+      const marks = (/^ {0,3}#{1,6}(?:[ \t]+|$)/.exec(caretBlock.text) || [''])[0].length
+      if (marks && start.offset === marks) {
+        event.preventDefault()
+        const heading = this.getParent(caretBlock)
+        const paragraph = this.createBlockP(caretBlock.text.substring(marks))
+        this.insertBefore(paragraph, heading)
+        this.removeBlock(heading)
+        const key = paragraph.children[0].key
+        this.cursor = {
+          start: { key, offset: 0 },
+          end: { key, offset: 0 }
+        }
+        return this.partialRender()
+      }
+    }
+
     const node = selection.getSelectionStart()
     const parentNode = node && node.nodeType === 1 ? node.parentNode : null
     const paragraph = findNearestParagraph(node)

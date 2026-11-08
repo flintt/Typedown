@@ -262,6 +262,9 @@ const arrowCtrl = ContentState => {
 
       this.partialRender()
       if (x) this.keepColumn(x, key, false)
+      // The paragraph made after the last block is in the document now (after a code block it is a line of the file):
+      // told as an edit is, or the host was a block behind.
+      if (newBlock) this.muya.dispatchChange()
       return
     }
   }

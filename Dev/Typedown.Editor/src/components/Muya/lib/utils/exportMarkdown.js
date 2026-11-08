@@ -241,7 +241,14 @@ class ExportMarkdown {
   normalizeParagraphText(block, indent) {
     const { text } = block
     const lines = text.split('\n')
-    return lines.map(line => `${indent}${line}`).join('\n') + '\n'
+    // A paragraph's line that reads as a code fence ("~~~~", "```" - three or more of the one mark, a backtick fence
+    // with no backtick after it) is written with its first mark escaped: as it was, the file opened again made it a
+    // code block that took in the rest of the document. Auto-paired "~~" at a line's start made such a line. Not in a
+    // quote: there the editor reads a fence the file has as a paragraph ("> ```", CommonMark 128 and 237), and escaping
+    // it would turn the reader's code block into text.
+    const fence = /^( {0,3})(~{3,}|`{3,}(?!.*`))/
+    const escape = !indent.includes('>')
+    return lines.map(line => `${indent}${escape ? line.replace(fence, '$1\\$2') : line}`).join('\n') + '\n'
   }
 
   normalizeHeaderText(block, indent) {

@@ -784,7 +784,9 @@ class ContentState {
   isOnlyRemoveableChild(block) {
     if (block.editable === false) return false
     const parent = this.getParent(block)
-    return (parent ? parent.children : this.blocks).filter(child => child.editable && child.functionType !== 'languageInput').length === 1
+    // A task item's checkbox is not content: its paragraph taken (Delete at the end of the item before), the item goes
+    // too. It stayed, an empty "- [ ]" left behind.
+    return (parent ? parent.children : this.blocks).filter(child => child.editable && child.functionType !== 'languageInput' && child.type !== 'input').length === 1
   }
 
   getLastChild(block) {

@@ -91,7 +91,7 @@ interface IMuyaEditor {
     scrollToChangeRef?: React.MutableRefObject<boolean>
     onMarkdownChange: (markdown: string) => void
     /** The shell puts a function here that reports the current text at once, for saves and exports. */
-    flushRef?: React.MutableRefObject<((opts?: { ifPending?: boolean }) => void) | null>
+    flushRef?: React.MutableRefObject<((opts?: { ifPending?: boolean, keepSource?: boolean }) => void) | null>
     /** Set to what finishes a load whose caret is still to come, now (Muya.finishLoadNow). */
     finishLoadRef?: React.MutableRefObject<(() => void) | null>
     /** Fired once host content has been pushed into the editor (see the FileLoaded handshake in Editor). */
@@ -146,12 +146,15 @@ const MOVING_KEYS = new Set(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 
 // back as exactly what it would have written (normalizeMarkdown), else its export as before. Up to this length: reading
 // back a document of 300,000 characters takes about 200 ms, too long for every change while typing.
 const KEEP_SOURCE_UP_TO = 150000
+// Past that length, kept only when the host asks for it - a save the reader made, a close (FlushContent's keepSource):
+// once, then, not at every change.
+let keepSourceAnyLength = false
 const sourceLines = new WeakMap<object, { source: string[], base: string[], toSource: Int32Array }>()
 const sourceKept = { kept: 0, fellBack: 0, last: '' };
 (window as any).__typedownSourceKept = sourceKept
 
 function keptSource(muya: any, imported: { source: string, normalized: string }, markdown: string): string {
-    if (imported.source === imported.normalized || imported.source.length > KEEP_SOURCE_UP_TO || !muya?.normalizeMarkdown) return markdown
+    if (imported.source === imported.normalized || (imported.source.length > KEEP_SOURCE_UP_TO && !keepSourceAnyLength) || !muya?.normalizeMarkdown) return markdown
     let lines = sourceLines.get(imported)
     if (!lines) {
         const source = splitLines(imported.source), base = splitLines(imported.normalized)
@@ -1145,8 +1148,22 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
 
     useEffect(() => {
         if (!editor || !props.flushRef) return
-        // ifPending: only a report still due (the host's FlushContent once the load is reported).
-        const flush = (opts?: { ifPending?: boolean }) => opts?.ifPending ? (editor as any).flushPendingContentChange() : editor.flushContentChange()
+        // ifPending: only a report still due (the host's FlushContent once the load is reported). keepSource: a document
+        // past KEEP_SOURCE_UP_TO and edited is reported again with the reader's own text kept (a save they asked for, a
+        // close); any other flush as with ifPending.
+        const flush = (opts?: { ifPending?: boolean, keepSource?: boolean }) => {
+            const imported = importedRef.current
+            if (opts?.keepSource && imported && imported.source.length > KEEP_SOURCE_UP_TO && markdownRef.current !== imported.source) {
+                keepSourceAnyLength = true
+                try {
+                    editor.flushContentChange()
+                } finally {
+                    keepSourceAnyLength = false
+                }
+                return
+            }
+            return opts?.ifPending || opts?.keepSource ? (editor as any).flushPendingContentChange() : editor.flushContentChange()
+        }
         props.flushRef.current = flush
         return () => {
             if (props.flushRef?.current === flush) props.flushRef.current = null

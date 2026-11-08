@@ -12,6 +12,8 @@ const { firstDifference, openEditor } = require('./harness');
     const cases = [
       // [what, document, typed at its end, expected]
       ['a multiplication', 'Note\n', ' 2 * 3 = 6', 'Note 2 * 3 = 6\n'],
+      // 1.4.1 wrote "2 * 3 * 4**": the second "*" put in another pair (a reader's report).
+      ['two multiplications', 'Note\n', ' 2 * 3 * 4', 'Note 2 * 3 * 4\n'],
       ['one amount', 'Price\n', ' costs $5.', 'Price costs $5.\n'],
       ['two amounts', 'Price\n', ' $5 and $10.', 'Price $5 and $10.\n'],
       ['an underscore on its own', 'Note\n', ' a _ b', 'Note a _ b\n'],

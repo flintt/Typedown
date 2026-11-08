@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using UIA = System.Windows.Automation;
 
@@ -45,6 +46,41 @@ internal static partial class Program
             await c.Call("document.save", new { documentId = id });
             var saved = Disk(path);
             Check(saved == text, "the file a save writes is that text");
+        }
+        finally
+        {
+            try { await c.Call("document.close", new { documentId = id }); } catch { }
+            try { File.Delete(path); } catch { }
+        }
+    }
+
+    /// <summary>
+    /// KS01: a document past 150,000 characters, one key typed, saved with Ctrl+S: the file is the reader's text with only
+    /// that key in it - its compact table stays compact. While typing the page keeps the reader's source only up to that
+    /// length (reading the result back is too slow for every change), and the save wrote the editor's export: the whole
+    /// document in its way of writing it. A save the reader asks for has the page keep it once (FlushContent keepSource).
+    /// </summary>
+    private static async Task KS01(List<string> notes)
+    {
+        using var c = await Session("e2e KS01");
+        var source = "# KS01\n\n| a | b |\n|---|---|\n| 1 | 2 |\n\n"
+            + string.Concat(Enumerable.Range(0, 3000).Select(i => $"Paragraph {i} of a long document, with enough words in it to be long.\n\n"))
+            + "Last\n";
+        var path = Fixture("ks01.md", source);
+        var id = await Open(c, path);
+        var windowId = await WindowIdOf(c, id);
+        try
+        {
+            await WaitUntilDrawn(c, windowId, id, "KS01");
+            await TypeIntoWindow(c, windowId, "X");
+            var expected = source.Replace("Last\n", "LastX\n");
+            Check(await Eventually(async () => ((string?)(await Get(c, id))["text"] ?? "").Contains("LastX"), 10000), "the key reached the document");
+            var clock = System.Diagnostics.Stopwatch.StartNew();
+            Chord("Ctrl+S");
+            var saved = "";
+            await Eventually(async () => { await Task.Delay(0); return (saved = Disk(path)) != source; }, 15000, 200);
+            notes.Add($"saved in {clock.ElapsedMilliseconds} ms ({source.Length} characters); the table in the file: " + saved.Split('\n')[3]);
+            Check(saved == expected, "the file is the reader's text with the key in it and nothing else (the compact table as written)");
         }
         finally
         {

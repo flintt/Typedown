@@ -182,6 +182,9 @@ internal static partial class Program
         var small = await Open(c, Fixture("ol04-small.md", "# OL04\n\nA short document.\n"));
         var text = "# OL04 headings\n\n" + string.Concat(Enumerable.Range(0, 3000).Select(i => $"## Heading {i}\n\nParagraph {i} under it.\n\n"));
         var big = await Open(c, Fixture("ol04-3000.md", text));
+        // The outline shown, so the pane's tree makes its rows (closed, only the model's tree was measured).
+        var windowId = await WindowIdOf(c, big);
+        await c.Call("window.setView", new { windowId, sidePane = new { open = true, page = "outline" } });
         await Task.Delay(3000);
         var before = LogLines("outline: tree of ").Count;
         for (var i = 0; i < 3; i++)

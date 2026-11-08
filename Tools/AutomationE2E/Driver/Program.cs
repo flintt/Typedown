@@ -255,6 +255,7 @@ internal static partial class Program
             await Case("OL04 measured: switching to a document of 3000 headings, the host's time to build the outline's tree, hand it to the pane and have it laid out", OL04);
             await Case("PY01 the Chinese IME (Microsoft Pinyin) typing through the keyboard into the visual editor: pinyin committed once, full-width brackets one each with none put in by the editor, the host's text the editor's", PY01);
             await Case("BL01 blank lines survive a visual edit and a save: 1 at the start, 2, 4, 2, 3, 5 and 2 between blocks, 1 at the end", BL01);
+            await Case("KS01 a document past 150,000 characters, one key typed and saved with Ctrl+S: the file is the reader's text with that key in it and nothing else", KS01);
             await Case("BL02 Settings > Editor > \"Show extra blank lines\": on, empty lines keep their height in reading mode and an HTML export; off (the default), both collapse them as before", BL02);
             await Case("MN03 minimized, written to, restored without activation: the editor's web view gets its size back", MN03);
             await Case("MN04 F11 in and out of full screen, then minimized and brought back as a person does: the window works", MN04);

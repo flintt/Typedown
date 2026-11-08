@@ -478,7 +478,22 @@ class Muya {
   changedBlockKeys(oldBlocks) {
     const blocks = this.contentState.blocks
     const { head, tail } = unchangedEnds(oldBlocks, blocks)
-    return blocks.slice(head, blocks.length - tail).map(block => block.key)
+    // Between the first change and the last, a block written as one of the old blocks there was (the same signature)
+    // did not change: two edits far apart had every block between them highlighted.
+    const before = new Map()
+    for (const block of oldBlocks.slice(head, oldBlocks.length - tail)) {
+      const signature = blockSignature(block)
+      before.set(signature, (before.get(signature) || 0) + 1)
+    }
+    return blocks.slice(head, blocks.length - tail).filter(block => {
+      const signature = blockSignature(block)
+      const left = before.get(signature)
+      if (left) {
+        before.set(signature, left - 1)
+        return false
+      }
+      return true
+    }).map(block => block.key)
   }
 
   /**
