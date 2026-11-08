@@ -1028,8 +1028,12 @@ namespace Typedown.Core.ViewModels
             }
         }
 
+        /// <summary>The test host's stand-in for a page that does not answer a flush (busy, or going away): its answers are dropped.</summary>
+        public static bool TestDropFlushAnswers { get; set; }
+
         private void OnContentFlushed(JToken args)
         {
+            if (TestDropFlushAnswers && Config.IsAutomationTestHost) return;
             var token = args?["token"]?.ToObject<int>() ?? 0;
             TaskCompletionSource<string> pageText = null;
             lock (pageTextWaiters) pageTextWaiters.TryGetValue(token, out pageText);

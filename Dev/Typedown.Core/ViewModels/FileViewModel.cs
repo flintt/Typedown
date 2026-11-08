@@ -630,7 +630,23 @@ namespace Typedown.Core.ViewModels
                 var tab = TabsViewModel?.ActiveTab;
                 // What we write must be what is on screen; a save the reader asked for keeps their own text where they
                 // did not edit, at any length (an automatic save does not: it comes while they type).
-                await EditorViewModel.FlushContentAsync(keepSource: alert);
+                var flushed = await EditorViewModel.FlushContentAsync(keepSource: alert);
+                // Saved by hand, the page given longer once more (a long document, a busy PC).
+                if (!flushed && alert && !disposables.IsDisposed && FilePath == path && TabsViewModel?.ActiveTab == tab)
+                    flushed = await EditorViewModel.FlushContentAsync(timeoutMs: 8000, keepSource: true);
+                // The page did not hand over its text (no answer in time, or the page going away): what the host has may
+                // be older than what is on screen, and its hash is as old - written, it was marked saved with the last
+                // words typed missing (R03). Nothing is written: a save by hand says so, an automatic one says it in the
+                // status bar and is tried again with the next change.
+                if (!flushed)
+                {
+                    Log.Debug($"save: the editor did not hand over its text (load {EditorViewModel.LoadId}); {path} not written");
+                    if (disposables.IsDisposed || FilePath != path || TabsViewModel?.ActiveTab != tab) return false;
+                    var reason = new TimeoutException("the editor did not hand over its latest text in time; nothing was written").Message;
+                    if (alert) await AppContentDialog.Create(Locale.GetDialogString("SaveErrorTitle"), reason, Locale.GetDialogString("Ok")).ShowAsync(AppViewModel.XamlRoot);
+                    else EditorViewModel.AutoSaveHeldBack = string.Format(Locale.GetString("SaveState.WriteFailed"), reason);
+                    return false;
+                }
                 // The flush awaited, and a tab switch does not take this lock: if the active document changed
                 // under us the live buffer now belongs to another document, and writing it to this path would
                 // put one document's text into another. Check the tab reference too — two untitled tabs share a

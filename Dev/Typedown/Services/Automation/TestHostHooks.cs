@@ -114,6 +114,13 @@ namespace Typedown.Services.Automation
                     (editor as Core.Interfaces.IMarkdownEditor)!.FocusEditor();
                     return (Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["focused"] = editor.FocusState != global::Microsoft.UI.Xaml.FocusState.Unfocused };
                 })));
+            // The editor page's answers to a flush dropped (drop: true) or taken again (false): a page that does not hand over
+            // its text in time, which a save must not take for saved (R03, SV10).
+            methods.Add(new MethodDescriptor("test.editor.dropFlush", null, "test.editor.dropFlush/1", (c, ct) =>
+            {
+                Core.ViewModels.EditorViewModel.TestDropFlushAnswers = c.Params.OptionalBoolean("drop", true);
+                return System.Threading.Tasks.Task.FromResult((Newtonsoft.Json.Linq.JToken?)new Newtonsoft.Json.Linq.JObject { ["drop"] = Core.ViewModels.EditorViewModel.TestDropFlushAnswers });
+            }));
             // The web view as the app sees it: whether WinUI counts it visible, suspended, its size, the window's state.
             methods.Add(new MethodDescriptor("test.webview.state", null, "test.webview.state/1", (c, ct) =>
                 Core.Services.AutomationWindows.Registry.OnWindowAsync(c.Params.RequiredString("windowId"), app =>

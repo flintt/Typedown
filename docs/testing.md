@@ -274,6 +274,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | TH07 | the settings' and the dialogs' controls (a switch, the accent button, a check box) take a custom theme's accent, with readable text on it, and the system accent again without one |
 | SB01 | the status bar switches modes: its reading button and badge go into reading mode and back to the mode it was entered from (source too), and its mode menu ticks the mode and greys focus and typewriter mode where they do nothing |
 | SB02 | a click on the status bar's count shows the document's numbers on its visible text (words, CJK characters, headings, links, pictures, reading time), and the count it shows can be chosen there |
+| SA01 | a save whose page does not hand over its text in time writes nothing: Ctrl+S says it failed, auto-save says why in the status bar, the file as it was; answered again, it saves |
 | SB03 | the status bar shows whether the document is saved, and when auto-save holds a file back (one it could not read without loss) it says so and why |
 | SB04 | a selection shows its count of the whole in the status bar, and the whole count again once it is gone |
 | SB05 | the status bar shows the file's encoding and line ending: CRLF chosen there is what a save writes, and a GBK file is read again as GB18030 from its menu |
@@ -340,6 +341,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | `test.backup.run` | - | Backups: one pass now in every window, and what the backup folder holds afterwards. | TestHostHooks.cs |
 | `test.editor.style` | `windowId` | How a window's editor page is drawn: its font size, line height and text direction, as the page reports them. | TestHostHooks.cs |
 | `test.editor.focus` | `windowId` | Keyboard focus into the window's editor page, the way the app itself gives it (the editor control's focus is handed on to the web view) - independent of what a click would land on. | TestHostHooks.cs |
+| `test.editor.dropFlush` | `drop?` | The editor page's answers to a flush dropped (drop: true) or taken again (false): a page that does not hand over its text in time, which a save must not take for saved (R03, SV10). | TestHostHooks.cs |
 | `test.webview.state` | `windowId` | The web view as the app sees it: whether WinUI counts it visible, suspended, its size, the window's state. | TestHostHooks.cs |
 | `test.editor.eval` | `windowId`, `script` | Runs a script in the window's editor page and returns its JSON result: for diagnosing what the page holds (caret, Muya's state) when a check fails in the real window and not in the page harness. | TestHostHooks.cs |
 | `test.editor.xhtml` | `windowId` | The XHTML the editor renders for another format (RenderXhtml with diagrams as pictures and maths as TeX), for a test to check what such an export receives. | TestHostHooks.cs |
