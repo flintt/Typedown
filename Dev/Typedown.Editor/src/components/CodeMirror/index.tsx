@@ -12,6 +12,7 @@ import { FIND_EDIT_REFRESH_MS, findResultsOpen, noteFindChange, setFindProvider 
 import { FENCE, isTableRow, lineMarksLength, previewOf } from 'services/findPreview';
 import { MarkdownBlocksView } from './markdownBlocks';
 require('codemirror/mode/markdown/markdown');
+require('codemirror/addon/scroll/scrollpastend');
 require('codemirror/keymap/vim');
 require('codemirror/addon/dialog/dialog.css');
 
@@ -86,9 +87,13 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
         }
     }, [editor, vim])
 
+    // The editor scrolls itself (it is the window's height): the page does not. It drew every line of the document
+    // when the page scrolled - its viewport was the whole text - and a 40,000-line file took 20 s to open (a reader:
+    // a long .txt was slow). Now it draws the lines on screen.
     const relativeScroll = useCallback((delta: number) => {
-        window.scrollBy(0, delta)
-    }, [])
+        if (!editor) return
+        editor.scrollTo(null, editor.getScrollInfo().top + delta)
+    }, [editor])
 
     const scrollToElement = useCallback((selector) => {
         if (editor == null) {
@@ -298,10 +303,10 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
                 }
                 // reveal: "change": the start of the change into view unless the reader can already see it.
                 if (scrollToChange) {
-                    const start = editor.charCoords(editor.posFromIndex(change.from), 'page')
-                    const end = editor.charCoords(editor.posFromIndex(change.from + change.text.length), 'page')
-                    const y = scrollTargetForChange(start.top, end.bottom, window.scrollY)
-                    if (y !== null) window.scrollTo(window.scrollX, y)
+                    const start = editor.charCoords(editor.posFromIndex(change.from), 'local')
+                    const end = editor.charCoords(editor.posFromIndex(change.from + change.text.length), 'local')
+                    const y = scrollTargetForChange(start.top, end.bottom, editor.getScrollInfo().top)
+                    if (y !== null) editor.scrollTo(null, y)
                 }
             }
             if (props.scrollFromHostRef) props.scrollFromHostRef.current = false
@@ -311,7 +316,7 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
             editor.setValue(markdownRef.current)
             if (anchor && head)
                 editor.setSelection(anchor, head, { scroll: !props.scrollFromHostRef?.current })
-            window.scrollTo(window.scrollX, props.scrollTopRef.current)
+            editor.scrollTo(null, props.scrollTopRef.current)
             if (props.scrollFromHostRef) props.scrollFromHostRef.current = false
             if (searchArgRef.current?.value != "" && searchArgRef.current?.opt?.selection) {
                 const { value, opt } = searchArgRef.current
@@ -512,12 +517,22 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
     }, [editor])
 
     useEffect(() => {
+        if (!editor) return
         const onscroll = () => {
-            props.scrollTopRef.current = window.scrollY
+            props.scrollTopRef.current = editor.getScrollInfo().top
         }
-        addEventListener('scroll', onscroll);
-        return () => removeEventListener('scroll', onscroll)
-    }, [props.scrollTopRef])
+        editor.on('scroll', onscroll)
+        return () => editor.off('scroll', onscroll)
+    }, [editor, props.scrollTopRef])
+
+    // The editor the window's height, below the top margin: it scrolls itself and draws only the lines on screen.
+    // Settings > Editor > Scroll past the end in source mode too: the last line can come up the window.
+    useEffect(() => {
+        if (!editor) return
+        editor.setSize(null, `calc(100vh - ${marginTop}px)`)
+        editor.setOption('scrollPastEnd', !!props.options?.scrollPastEnd)
+        editor.refresh()
+    }, [editor, marginTop, props.options?.scrollPastEnd])
 
     // Font and tab size reach the editor by hand: CodeMirror 5 keeps its own font size once created, and
     // its tab width is an option, not a style. "The text in code boxes stays as it was when the font is

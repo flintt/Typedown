@@ -176,18 +176,20 @@ const sha = text => crypto.createHash('sha256').update(text, 'utf8').digest('hex
       window.__mark = cm.markText({ line: 250, ch: 0 }, { line: 250, ch: 4 }, { className: 'bench-mark' });
     });
     await pause(300);
-    const placeBefore = await page.evaluate(() => ({ y: window.scrollY, cursor: document.querySelector('.CodeMirror').CodeMirror.getCursor() }));
+    // The source editor scrolls itself (it draws the lines on screen): its own scroll position.
+    const placeBefore = await page.evaluate(() => { const cm = document.querySelector('.CodeMirror').CodeMirror; return { y: cm.getScrollInfo().top, cursor: cm.getCursor() }; });
     const edited = long.replace('line 10 of', 'line ten of');
     ({ reply } = await apply(long, edited));
     const placeAfter = await page.evaluate(() => {
       const cm = document.querySelector('.CodeMirror').CodeMirror;
-      return { y: window.scrollY, cursor: cm.getCursor(), mark: window.__mark.find() ? true : false, text: cm.getValue() };
+      return { y: cm.getScrollInfo().top, cursor: cm.getCursor(), mark: window.__mark.find() ? true : false, text: cm.getValue() };
     });
     check(reply.outcome === 'applied' && placeAfter.text === edited, 'source mode: a short edit of a long document applies exactly');
     check(placeAfter.cursor.line === 300 && placeAfter.cursor.ch === 5, `the reader's cursor stays (${JSON.stringify(placeAfter.cursor)})`);
     check(Math.abs(placeAfter.y - placeBefore.y) < 2 && placeBefore.y > 0, `the scroll position stays (${placeBefore.y} -> ${placeAfter.y})`);
     check(placeAfter.mark, 'a mark in untouched text survives: only the changed part was replaced');
-    const litSource = await page.evaluate(() => Array.from(document.querySelectorAll('.CodeMirror .td-external-change')).map(e => e.textContent).join(''));
+    // By the editor's marks: the change is off screen (line 10, the view at 300), and only the lines on screen are drawn.
+    const litSource = await page.evaluate(() => { const cm = document.querySelector('.CodeMirror').CodeMirror; return cm.getAllMarks().filter(m => m.className === 'td-external-change').map(m => { const r = m.find(); return r ? cm.getRange(r.from, r.to) : ''; }).join(''); });
     check(litSource === 'ten', `source mode: the changed text is highlighted (${JSON.stringify(litSource)})`);
     // The reader turned the highlight off: nothing is lit.
     await page.evaluate(() => window.__deliver('SettingsChanged', { highlightAutomationChanges: false }));

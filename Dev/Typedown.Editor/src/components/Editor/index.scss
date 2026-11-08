@@ -2,11 +2,9 @@
   height: 100%;
 }
 
-.CodeMirror {
-  height: auto !important;
-}
-
+// The source editor's height is set with its size (components/CodeMirror: the window's, less the top margin): it
+// scrolls itself and draws the lines on screen. It was as tall as its text (height: auto here), the page scrolled, and
+// every line of a long file was drawn - a 40,000-line text took 20 s to open (a reader: a long .txt was slow).
 .CodeMirror-scroll {
-  min-height: calc(100vh - 48px);
   cursor: text;
 }
