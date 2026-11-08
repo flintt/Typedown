@@ -142,6 +142,35 @@ jobs:
           node xhtml-footnote-check.js
           node export-anchors-check.js
           node wordcount-mode-check.js
+          node tab-keys-check.js
+          node arrow-edge-check.js
+          node nested-list-enter-check.js
+          node hr-delete-check.js
+          node auto-pair-check.js
+          node code-font-fallback-check.js
+          node line-numbers-check.js
+          node enter-closing-marks-check.js
+          node triple-click-format-check.js
+          node duplicate-check.js
+          node scroll-past-end-check.js
+          node theme-text-colour-check.js
+          node select-all-steps-check.js
+          node plain-text-check.js
+          node list-drag-check.js
+          node list-copy-check.js
+          node plain-switch-check.js
+          node source-viewport-check.js
+          node progressive-apply-check.js
+          node prototype-names-check.js
+          node heading-list-keys-check.js
+          node keep-source-on-save-check.js
+          node fence-line-check.js
+          node key-matrix-check.js
+          node review-check.js
+          node review-layout-check.js
+          node heading-click-check.js
+          node paste-lines-check.js
+          node review-matrix.js --quick
           node blank-jump-check.js
           node jt04-drift-check.js
 
