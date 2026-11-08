@@ -66,6 +66,10 @@ export const reviewBlockMarks = (selector, data, marks, isCode) => {
     selector += '.ag-review-tagged'
     data.attrs['data-review-source'] = marks.sources.join(', ')
   }
-  if (marks.whole) data.attrs['data-rid'] = marks.whole
+  // What its marks say changed (a task ticked, an item indented) and a block split off: a bar of their own at its left.
+  if (marks.structure) selector += '.ag-review-structure'
+  if (marks.split) selector += '.ag-review-split'
+  const own = marks.whole || marks.structure || marks.split || (isCode && marks.segments.length ? marks.segments[0].rid : null)
+  if (own) data.attrs['data-rid'] = own
   return selector
 }

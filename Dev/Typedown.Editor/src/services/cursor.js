@@ -22,9 +22,12 @@ export const adjustCursor = (cursor, preline, line, nextline) => {
         }
     }
 
-    // Need to adjust the cursor when cursor at the begin of the list
-    if (/[*+-]\s.+/.test(line) && newCursor.ch <= 1) {
-        newCursor.ch = 2
+    // A caret in a line's block marks (a list's marker or number, a task box, a quotation's ">", their indent): after
+    // them. The caret's marker put before "11." made the item a line of the one before it (a numbered item rejected
+    // back into its list, review-matrix.js, 2026-11-07); "- " alone was looked after before.
+    const marks = /^[ \t]*(?:>[ \t]?)*[ \t]*(?:(?:[*+-]|\d{1,9}[.)])[ \t]+)?(?:\[[ xX]\][ \t]+)?/.exec(line)[0]
+    if (marks.length && /\S/.test(line.slice(marks.length)) && newCursor.ch < marks.length) {
+        newCursor.ch = marks.length
     }
 
     // Need to adjust the cursor when cursor at the begin of the header

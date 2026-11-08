@@ -192,6 +192,17 @@ test('only the writing changed: list numbers, markers, fences, emphasis marks, b
     expect(only('> a\nb\n', '> a\n\nb\n')).toBe(true)
     expect(only('a word\n', 'a ward\n')).toBe(false)
     expect(only('5. five\n', '5. fives\n')).toBe(false)
+    // What the marks say is the document's (the user, 2026-11-07): a task ticked, an item nested or out-dented, an item
+    // made a paragraph, a bullet list made a numbered one, a paragraph quoted.
+    expect(only('- [ ] task\n', '- [x] task\n')).toBe(false)
+    expect(only('- [x] task\n', '- [X] task\n')).toBe(true)
+    expect(only('- a\n- b\n', '- a\n  - b\n')).toBe(false)
+    expect(only('- a\n  - b\n', '- a\n- b\n')).toBe(false)
+    expect(only('- a\n  - b\n', '- a\n    - b\n')).toBe(true)
+    expect(only('- a\n- b\n', '- a\n\nb\n')).toBe(false)
+    expect(only('- a\n', '1. a\n')).toBe(false)
+    expect(only('a\n', '> a\n')).toBe(false)
+    expect(only('- a\n- b\n', '- a\n\n- b\n')).toBe(true)
 })
 
 test('a bold put on with Ctrl+B is one group of its two marks', () => {
@@ -281,4 +292,16 @@ test('list items deleted together are a deletion each; a deletion inside a line 
     const cut = 'x\n\n```\nl1\n```\n\ny\n'
     const inFence = trackRevisions(fence, cut, [], { ...changedRegion(fence, cut)!, source: YOU, time: 0 })
     expect(inFence.map(r => r.oldText)).toEqual(['l2\nl3\n'])
+})
+
+test('an item taken out of a numbered list is that item deleted; the numbers moved on are hunks of their own, the writing', () => {
+    const baseline = '1. 第一步\n2. 第二步\n3. 第三步\n\nEnd.\n'
+    const current = '1. 第一步\n2. 第三步\n\nEnd.\n'
+    const hunks = diffTexts(baseline, current).map(h => [baseline.slice(h.baseStart, h.baseEnd), current.slice(h.curStart, h.curEnd)])
+    expect(hunks).toEqual([['2. 第二步\n', ''], ['3', '2']])
+    expect(onlyWriting(baseline, current, diffTexts(baseline, current)[1])).toBe(true)
+    // An item put in, the rest numbered on.
+    const more = '1. 第一步\n2. 新的\n3. 第二步\n4. 第三步\n\nEnd.\n'
+    expect(diffTexts(baseline, more).map(h => [baseline.slice(h.baseStart, h.baseEnd), more.slice(h.curStart, h.curEnd)]))
+        .toEqual([['', '2. 新的\n'], ['2', '3'], ['3', '4']])
 })

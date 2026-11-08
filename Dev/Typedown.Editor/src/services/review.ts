@@ -7,6 +7,8 @@
 // that the source and time of a revision stay with it while the text around it is edited. A revision the change
 // touched is the change's; one it did not keeps what it had.
 
+import { numbersMasked } from './orderedLists'
+
 export type RevisionKind = 'insert' | 'delete' | 'replace'
 
 /** A place where the document differs from the baseline, by offsets in both. */
@@ -43,6 +45,8 @@ export interface Revision extends Hunk {
      */
     group?: string
     format?: string
+    /** What it changes of the structure, its words the same (structureChange): drawn at the block's left. */
+    structure?: string
 }
 
 /** What a revision is known by when the host keeps it: its place in the baseline and its text there and now. */
@@ -166,6 +170,36 @@ const splitLines = (text: string) => {
  */
 export function diffTexts(baseline: string, current: string): Hunk[] {
     diffPaths.local = diffPaths.pairs = diffPaths.wholeLines = diffPaths.unpairedGroups = diffPaths.gaveUp = 0
+    if (baseline === current) return []
+    // An ordered list's items compared whatever their numbers: an item taken out of 1, 2, 3 (the rest numbered on) is
+    // that item deleted, not "第二步 ¶ 3. 第" read across two (the user, 2026-11-07). The numbers that differ are hunks
+    // of their own, after (the writing: reviewSession takes them into the baseline).
+    const maskedBase = numbersMasked(baseline), maskedCurrent = numbersMasked(current)
+    if (maskedBase === baseline && maskedCurrent === current) return diffWords(baseline, current)
+    const hunks = maskedBase === maskedCurrent ? [] : diffWords(maskedBase, maskedCurrent)
+    const out: Hunk[] = []
+    let a = 0, b = 0
+    const numbers = (aEnd: number) => {
+        // Between hunks the masked texts are the same, character for character: where the texts are not, a number.
+        let i = 0
+        while (a + i < aEnd) {
+            if (baseline[a + i] === current[b + i]) { i++; continue }
+            let j = i
+            while (a + j < aEnd && baseline[a + j] !== current[b + j]) j++
+            out.push({ baseStart: a + i, baseEnd: a + j, curStart: b + i, curEnd: b + j })
+            i = j
+        }
+    }
+    for (const h of hunks) {
+        numbers(h.baseStart)
+        out.push(h)
+        a = h.baseEnd; b = h.curEnd
+    }
+    numbers(baseline.length)
+    return out
+}
+
+function diffWords(baseline: string, current: string): Hunk[] {
     if (baseline === current) return []
     // The words of everything between what the two have in common at their ends, the fewest words changed: fast while
     // few differ, however long the document (Myers: the length times the words changed). Line by line first, a group of
@@ -483,13 +517,13 @@ export interface ChangeInfo {
 export let REVISION_PAUSE_MS = 3 * 60 * 1000
 export function setRevisionPause(ms: number) { REVISION_PAUSE_MS = ms }
 
-// The ranges of a text inside fenced code: a revision is split at its line breaks, except there.
+// The ranges of a text inside fenced code (and a formula's $$): a revision is split at its line breaks, except there.
 function fencedRanges(text: string): [number, number][] {
     const ranges: [number, number][] = []
     let open: { at: number, mark: string } | null = null
     let at = 0
     for (const line of text.split('\n')) {
-        const m = /^ {0,3}(`{3,}|~{3,})/.exec(line)
+        const m = /^ {0,3}(`{3,}|~{3,}|\$\$(?=[ \t]*$))/.exec(line)
         if (m && !open) open = { at, mark: m[1][0] }
         else if (m && open && m[1][0] === open.mark) { ranges.push([open.at, at + line.length]); open = null }
         at += line.length + 1
@@ -581,9 +615,8 @@ export function trackRevisions(baseline: string, current: string, previous: Know
             }
             // Split where a new block starts (a list item, a paragraph: a line's start, outside fenced code), and where
             // the owner changes.
-            const fenced = fencedRanges(current)
-            const inFence = (at: number) => fenced.some(([a, b]) => at > a && at < b)
-            const blockStart = (i: number) => i > 0 && current[h.curStart + i - 1] === '\n' && current[h.curStart + i] !== '\n' && !inFence(h.curStart + i)
+            const startsBlock = blockStarts(current, current.slice(h.curStart, h.curEnd))
+            const blockStart = (i: number) => i > 0 && startsBlock(h.curStart + i)
             const sourceOf = (o: Known | null): RevisionSource => o ? { name: o.source, session: o.session } : change.source
             let start = 0
             let first = true
@@ -641,18 +674,32 @@ export function trackRevisions(baseline: string, current: string, previous: Know
 }
 
 /**
+ * Where a block starts in a text (a revision's stretch of it, `part`, is split there): a line's start, not inside
+ * fenced code or a formula, after a blank line, or at a list item, a heading, a table row of rows put in or taken out
+ * alone (a whole table is one block) - not a paragraph's next line, or an item's (pasted lines in an item are one).
+ */
+function blockStarts(text: string, part: string): (i: number) => boolean {
+    const fenced = fencedRanges(text)
+    const inFence = (at: number) => fenced.some(([a, b]) => at > a && at < b)
+    const wholeTable = /^[ \t]*\|?[ \t]*:?-+:?[ \t]*(\|[ \t]*:?-+:?[ \t]*)*\|?[ \t]*$/m.test(part)
+    const lineAt = (i: number) => text.slice(i, (text.indexOf('\n', i) + 1 || text.length + 1) - 1)
+    return (i: number) => i > 0 && text[i - 1] === '\n' && text[i] !== '\n' && !inFence(i) && (text[i - 2] === '\n' ||
+        /^[ \t]*(?:>[ \t]?)*[ \t]*(?:[*+-]|\d{1,9}[.)])(?:[ \t]|$)/.test(lineAt(i)) || /^[ \t]{0,3}#{1,6}(?:[ \t]|$)/.test(lineAt(i)) ||
+        (!wholeTable && /^[ \t]*\|/.test(lineAt(i))))
+}
+
+/**
  * A deletion of whole lines split where a block of the baseline starts (a paragraph, a list item; not inside fenced
  * code), as new text is: line breaks and marks alone go with the block after them. One inside a line is one.
  */
 function deletedBlocks(baseline: string, current: string, h: Hunk): Hunk[] {
     const atLineStart = (h.curStart === 0 || current[h.curStart - 1] === '\n') && (h.baseStart === 0 || baseline[h.baseStart - 1] === '\n')
     if (!atLineStart || !baseline.slice(h.baseStart, h.baseEnd - 1).includes('\n')) return [h]
-    const fenced = fencedRanges(baseline)
-    const inFence = (at: number) => fenced.some(([a, b]) => at > a && at < b)
+    const startsBlock = blockStarts(baseline, baseline.slice(h.baseStart, h.baseEnd))
     const out: Hunk[] = []
     let start = h.baseStart
     for (let i = h.baseStart + 1; i < h.baseEnd; i++) {
-        if (baseline[i - 1] !== '\n' || baseline[i] === '\n' || inFence(i)) continue
+        if (!startsBlock(i)) continue
         if (!/[\p{L}\p{N}]/u.test(baseline.slice(start, i))) continue
         out.push({ baseStart: start, baseEnd: i, curStart: h.curStart, curEnd: h.curStart })
         start = i
@@ -750,8 +797,8 @@ export function nextRevision(revisions: Revision[], offset: number, back = false
  * A text's words without its Markdown writing: block marks (quotation, list markers and their numbers, task boxes,
  * heading marks), fences of either mark, setext underlines, emphasis marks, escapes, spaces at line ends and blank lines.
  */
-export function wordingOf(text: string): string {
-    return text.split('\n').map(line => /^[ \t]*\|?[ \t]*:?-+:?[ \t]*(\|[ \t]*:?-+:?[ \t]*)*\|?[ \t]*$/.test(line) ? '|-|' : line
+export function wordingOf(text: string, structure = true): string {
+    return text.split('\n').map(line => /^[ \t]*\|?[ \t]*:?-+:?[ \t]*(\|[ \t]*:?-+:?[ \t]*)*\|?[ \t]*$/.test(line) ? '|-|' : withStructure(line, line
         .replace(/^[ \t]*(?:>[ \t]?)*[ \t]*/, '')
         .replace(/^(?:[*+-]|\d+[.)])[ \t]+/, '')
         .replace(/^\[[ xX]\][ \t]+/, '')
@@ -763,8 +810,32 @@ export function wordingOf(text: string): string {
         // A table's cells padded or not.
         .replace(/[ \t]*\|[ \t]*/g, '|')
         .replace(/[ \t]+/g, ' ')
-        .replace(/[ \t]+$/, ''))
+        .replace(/[ \t]+$/, ''), structure))
         .filter(line => line.length).join('\n')
+}
+
+// A line's words after what its marks say; a line of marks alone (a blank line in a quotation) is no line, an empty
+// list item is one.
+function withStructure(line: string, words: string, structure = true): string {
+    const marks = structure ? structureOf(line) : ''
+    return words || /[•.]/.test(marks) ? marks + words : ''
+}
+
+/**
+ * What a line's block marks say rather than how they are written: how deep in quotations, whether a list item and of
+ * which kind (bullet or numbered - not which marker or number), nested or not, and its task box ticked or not. Such a
+ * change is the document's, a revision (the user, 2026-11-07: a task ticked, an item indented or out-dented, an item
+ * made a paragraph showed nothing); a marker of the same kind, a number moved on, are the writing.
+ */
+function structureOf(line: string): string {
+    const m = /^([ \t]*)((?:>[ \t]?)*)([ \t]*)(?:([*+-])|\d+[.)])[ \t]+(\[[ xX]\][ \t]+)?/.exec(line)
+    const quotes = (/^[ \t]*((?:>[ \t]?)*)/.exec(line)?.[1].match(/>/g) ?? []).length
+    const heading = /^[ \t]*(?:>[ \t]?)*[ \t]{0,3}(#{1,6})(?=[ \t]|$)/.exec(line)
+    if (heading) return '>'.repeat(quotes) + 'H' + heading[1].length + ' '
+    if (!m) return quotes ? '>'.repeat(quotes) + ' ' : ''
+    const nested = (m[1] + m[3]).length > 0 ? '›' : ''
+    const task = m[5] ? (/\[[xX]\]/.test(m[5]) ? '☑' : '☐') : ''
+    return '>'.repeat(quotes) + nested + (m[4] ? '•' : '#.') + task + ' '
 }
 
 const lineStartOf = (text: string, at: number) => text.lastIndexOf('\n', at - 1) + 1
@@ -781,6 +852,38 @@ export function onlyWriting(baseline: string, current: string, r: Hunk): boolean
     const a = baseline.slice(start, end)
     const b = baseline.slice(start, r.baseStart) + current.slice(r.curStart, r.curEnd) + baseline.slice(r.baseEnd, end)
     return a !== b && wordingOf(a) === wordingOf(b)
+}
+
+/**
+ * What a revision changes in the document's structure when its words stay the same: a task ticked ("check") or not
+ * ("uncheck"), an item nested ("indent") or brought out ("outdent"), a paragraph made a list item ("toList"), an item or
+ * a heading made a paragraph ("toParagraph"), made a heading ("toHeading") or another level ("headingLevel"), quoted
+ * ("quote") or not ("unquote"). Null for a revision of words, or of the writing only.
+ */
+export function structureChange(baseline: string, current: string, r: Hunk): string | null {
+    const start = lineStartOf(baseline, r.baseStart), end = lineEndOf(baseline, r.baseEnd)
+    const a = baseline.slice(start, end)
+    const b = baseline.slice(start, r.baseStart) + current.slice(r.curStart, r.curEnd) + baseline.slice(r.baseEnd, end)
+    if (a === b || wordingOf(a, false) !== wordingOf(b, false) || wordingOf(a) === wordingOf(b)) return null
+    const la = a.split('\n').filter(l => l.trim()), lb = b.split('\n').filter(l => l.trim())
+    for (let i = 0; i < Math.max(la.length, lb.length); i++) {
+        const x = structureOf(la[i] ?? ''), y = structureOf(lb[i] ?? '')
+        if (x === y) continue
+        const list = (t: string) => /[•.]/.test(t), heading = (t: string) => /H\d/.exec(t)?.[0]
+        if (x.includes('☐') && y.includes('☑')) return 'check'
+        if (x.includes('☑') && y.includes('☐')) return 'uncheck'
+        if (heading(x) && heading(y)) return 'headingLevel'
+        if (heading(y)) return 'toHeading'
+        if (heading(x) || (list(x) && !list(y))) return 'toParagraph'
+        if (!list(x) && list(y)) return 'toList'
+        if (!x.includes('›') && y.includes('›')) return 'indent'
+        if (x.includes('›') && !y.includes('›')) return 'outdent'
+        const q = (t: string) => (t.match(/>/g) ?? []).length
+        if (q(y) > q(x)) return 'quote'
+        if (q(y) < q(x)) return 'unquote'
+        return 'structure'
+    }
+    return 'structure'
 }
 
 const FORMAT_MARKS: Record<string, string> = { '**': 'bold', '__': 'bold', '*': 'italic', '_': 'italic', '~~': 'strike', '`': 'code', '==': 'mark' }

@@ -1,5 +1,5 @@
 import { trackRevisions, YOU } from './review';
-import { leafMarks, leafPointOf, mapLeaves, markdownOffsetOf } from './reviewMap';
+import { ghostsOf, leafMarks, leafPointOf, mapLeaves, markdownOffsetOf } from './reviewMap';
 
 const marks = (baseline: string, current: string, leaves: { key: string, text: string }[]) => {
     const revisions = trackRevisions(baseline, current, [], { from: 0, to: current.length, source: YOU, time: 1 })
@@ -27,13 +27,58 @@ test('an inserted word is a run in its leaf; a replacement shows the deleted tex
     expect(segs.map(s => [s.start, s.end, s.inserted, s.deletedBefore])).toEqual([[2, 5, true, 'cat'], [9, 14, true, undefined]])
 })
 
-test('a new paragraph has the bar; a deleted one is a strip above the next', () => {
-    const leaves = [{ key: 'a', text: 'one' }, { key: 'b', text: 'two' }, { key: 'c', text: 'three' }]
-    let { marks: m } = marks('one\n\nthree\n', 'one\n\ntwo\n\nthree\n', leaves)
+// Leaves with the blocks they are in, as Muya's reviewLeaves gives them.
+const leaf = (key: string, text: string, ...path: [string, string][]) => ({ key, text, path: path.map(([k, type]) => ({ key: k, type })) })
+const ghosts = (baseline: string, current: string, leaves: ReturnType<typeof leaf>[]) => {
+    const revisions = trackRevisions(baseline, current, [], { from: 0, to: current.length, source: YOU, time: 1 })
+    return ghostsOf(mapLeaves(current, leaves), revisions, current).map(g => ({ kind: g.kind, lines: g.lines, marker: g.marker, key: g.key, where: g.where }))
+}
+
+test('a new paragraph has the bar; a deleted one is a block of its own before the next, not in it', () => {
+    const leaves = [leaf('a', 'one', ['P1', 'p']), leaf('b', 'two', ['P2', 'p']), leaf('c', 'three', ['P3', 'p'])]
+    const { marks: m } = marks('one\n\nthree\n', 'one\n\ntwo\n\nthree\n', leaves)
     expect(m.get('b')!.whole).toBeTruthy()
     expect(m.get('a')).toBeUndefined()
-    ;({ marks: m } = marks('one\n\ntwo\n\nthree\n', 'one\n\nthree\n', [leaves[0], leaves[2]]))
-    expect(m.get('c')!.deletedAbove!.map(d => d.text)).toEqual(['two'])
+    const after = marks('one\n\ntwo\n\nthree\n', 'one\n\nthree\n', [leaves[0], leaves[2]])
+    expect(after.marks.get('c')).toBeUndefined()
+    expect(ghosts('one\n\ntwo\n\nthree\n', 'one\n\nthree\n', [leaves[0], leaves[2]])).toEqual([{ kind: 'p', lines: ['two'], marker: undefined, key: 'P3', where: 'before' }])
+})
+
+test('a deleted heading, table, formula: each its own kind of block, between the top-level blocks', () => {
+    const base = '# Title\n\nText.\n\n## Gone\n\n|a|b|\n|-|-|\n|1|2|\n\n$$\nx^2\n$$\n\nEnd.\n'
+    const leaves = [leaf('h', '# Title', ['H', 'h1']), leaf('t', 'Text.', ['P', 'p']), leaf('e', 'End.', ['E', 'p'])]
+    expect(ghosts(base, '# Title\n\nText.\n\nEnd.\n', leaves)).toEqual([
+        { kind: 'heading', lines: ['Gone'], marker: undefined, key: 'E', where: 'before' },
+        { kind: 'table', lines: ['|a|b|', '|-|-|', '|1|2|'], marker: undefined, key: 'E', where: 'before' },
+        { kind: 'math', lines: ['x^2'], marker: undefined, key: 'E', where: 'before' },
+    ])
+})
+
+test('a deleted list item goes among its list\'s items: before the next, after the last, never in another list', () => {
+    const base = '- 苹果\n- 香蕉\n- 橙子\n\n1. 第一步\n'
+    const li = (k: string, t: string, list: string) => leaf(k, t, [list, 'ul'], ['LI' + k, 'li'], ['P' + k, 'p'])
+    const one = li('a', '苹果', 'U'), three = li('c', '橙子', 'U'), step = leaf('s', '第一步', ['O', 'ol'], ['LIs', 'li'], ['Ps', 'p'])
+    expect(ghosts(base, '- 苹果\n- 橙子\n\n1. 第一步\n', [one, three, step])).toEqual([{ kind: 'li', lines: ['香蕉'], marker: '•', key: 'LIc', where: 'before' }])
+    // The last two: after the item before them, in their order - not into the numbered list below.
+    const two = li('b', '香蕉', 'U')
+    const g = ghosts(base, '- 苹果\n\n1. 第一步\n', [one, step])
+    expect(g.map(x => [x.lines[0], x.key, x.where])).toEqual([['香蕉', 'LIa', 'after'], ['橙子', 'LIa', 'after']])
+    expect(two.key).toBe('b')
+})
+
+test('a deleted table row goes among the rows', () => {
+    const base = '|a|b|\n|-|-|\n|1|2|\n|3|4|\n'
+    const cell = (k: string, t: string, row: string) => leaf(k, t, ['F', 'figure'], ['T', 'table'], ['B', 'tbody'], [row, 'tr'])
+    const g = ghosts(base, '|a|b|\n|-|-|\n|3|4|\n', [cell('a', 'a', 'R0'), cell('b', 'b', 'R0'), cell('c', '3', 'R2'), cell('d', '4', 'R2')])
+    expect(g.map(x => [x.kind, x.key, x.where])).toEqual([['row', 'R2', 'before']])
+})
+
+test('two items joined: one "↵" deleted, not the marks; an item split: the new one marked at its left', () => {
+    const joined = marks('- 香蕉\n- 橙子\n', '- 香蕉橙子\n', [{ key: 'p', text: '香蕉橙子' }])
+    const shown = joined.marks.get('p')!.segments.map(s => s.deletedAfter ?? s.deletedBefore).filter(Boolean)
+    expect(shown).toEqual(['↵'])
+    const split = marks('- 香蕉\n', '- 香\n- 蕉\n', [{ key: 'a', text: '香' }, { key: 'b', text: '蕉' }])
+    expect(split.marks.get('b')!.split).toBeTruthy()
 })
 
 test('a word deleted inside a line is shown where it was: after the character before it', () => {
@@ -82,9 +127,8 @@ test('two revisions side by side in a run keep a mark each', () => {
     expect(ids.size).toBe(revisions.length)
 })
 
-test('the paragraphs deleted at the end are below the last leaf', () => {
-    const { marks: m } = marks('one\n\ntwo\n', 'one\n', [{ key: 'a', text: 'one' }])
-    expect(m.get('a')!.deletedBelow!.map(d => d.text)).toEqual(['two'])
+test('the paragraphs deleted at the end are after the last block', () => {
+    expect(ghosts('one\n\ntwo\n', 'one\n', [leaf('a', 'one', ['P', 'p'])])).toEqual([{ kind: 'p', lines: ['two'], marker: undefined, key: 'P', where: 'after' }])
 })
 
 test('a program revision tags its leaf', () => {

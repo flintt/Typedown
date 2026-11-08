@@ -798,13 +798,14 @@ class Muya {
   /** The leaf blocks with their text, in document order: what review mode finds in the Markdown (services/reviewMap.ts). */
   reviewLeaves() {
     const leaves = []
-    const walk = blocks => {
+    // With the blocks it is in, outermost first (where a deleted block is drawn: among the blocks of its own kind).
+    const walk = (blocks, path) => {
       for (const block of blocks) {
-        if (block.children && block.children.length) walk(block.children)
-        else if (typeof block.text === 'string') leaves.push({ key: block.key, text: block.text })
+        if (block.children && block.children.length) walk(block.children, [...path, { key: block.key, type: block.type, functionType: block.functionType }])
+        else if (typeof block.text === 'string') leaves.push({ key: block.key, text: block.text, path })
       }
     }
-    walk(this.contentState.blocks)
+    walk(this.contentState.blocks, [])
     return leaves
   }
 

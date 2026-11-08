@@ -74,8 +74,9 @@ import { noteScroll, recentScrolls } from 'services/scrollWriters'
 import { FIND_EDIT_REFRESH_MS, findResultsOpen, noteFindChange, setFindProvider } from 'services/findResults'
 import { previewOf } from 'services/findPreview'
 import { markStartup } from 'services/startupMarks'
-import { registerReviewView, reviewActive } from 'services/reviewSession'
-import { leafMarks, leafPointOf, LeafMap, mapLeaves, markdownOffsetOf } from 'services/reviewMap'
+import { registerReviewView, reviewActive, reviewLabels } from 'services/reviewSession'
+import { ghostsOf, leafMarks, leafPointOf, LeafMap, mapLeaves, markdownOffsetOf } from 'services/reviewMap'
+import { ghostLayer } from 'services/reviewGhosts'
 
 interface IMuyaEditor {
     markdown: string
@@ -172,6 +173,12 @@ function keptSource(muya: any, imported: { source: string, normalized: string },
     try {
         const current = splitLines(markdown)
         merged = mergeSource(lines.source, lines.base, current, lines.toSource)
+        // A list numbered the document's way that does not read back the same (its first number changed): as Muya
+        // numbers it, the rest of the source still kept.
+        if (merged != null && muya.normalizeMarkdown(merged) !== markdown) {
+            const plain = mergeSource(lines.source, lines.base, current, lines.toSource, false)
+            if (plain != null && muya.normalizeMarkdown(plain) === markdown) merged = plain
+        }
         // Footnote definitions where the source has them: Muya writes them all at the end, and the merge could not keep
         // one an edit was next to (or of) - it came out moved, the paragraph after it before it.
         if (merged == null || muya.normalizeMarkdown(merged) !== markdown) {
@@ -1242,17 +1249,21 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         if (!editor) return
         const muya = editor as any
         let map: LeafMap | null = null
-        return registerReviewView({
+        const ghosts = muya.container ? ghostLayer(muya.container) : null
+        const unregister = registerReviewView({
             draw(revisions, text) {
                 const leaves = muya.reviewLeaves()
                 map = mapLeaves(text, leaves)
                 // For page checks: which leaves were found where.
-                Object.assign(window, { __typedownReviewMap: { leaves, pieces: map.pieces } })
+                Object.assign(window, { __typedownReviewMap: { leaves: leaves.map((l: any) => ({ key: l.key, text: l.text })), pieces: map.pieces } })
                 muya.setReviewMarks(revisions.length ? leafMarks(map, revisions, text) : null)
+                const labels = reviewLabels()
+                ghosts?.draw(revisions.length ? ghostsOf(map, revisions, text) : [], labels.changes ?? {})
             },
             clear() {
                 map = null
                 muya.setReviewMarks(null)
+                ghosts?.clear()
             },
             caretOffset() {
                 const caret = muya.reviewCaret()
@@ -1271,6 +1282,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
                 return marked ? marked.getAttribute('data-rid') ?? marked.getAttribute('data-del-above-rid') ?? marked.getAttribute('data-del-below-rid') : null
             },
         })
+        return () => { unregister(); ghosts?.dispose() }
     }, [editor])
 
     useEffect(() => {
@@ -1831,6 +1843,8 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         <div style={{
             tabSize: Number(props.options?.tabSize) || 4,
             fontSize: props.options?.fontSize,
+            // The document's size for what review draws among the blocks (a deleted paragraph beside a heading).
+            ['--td-font-size' as any]: props.options?.fontSize ? (typeof props.options.fontSize === 'number' ? `${props.options.fontSize}px` : props.options.fontSize) : undefined,
             lineHeight: props.options?.lineHeight,
             fontFamily: props.options?.fontFamily ? `${props.options.fontFamily}, "Open Sans", "Segoe UI", sans-serif` : undefined
         }}>

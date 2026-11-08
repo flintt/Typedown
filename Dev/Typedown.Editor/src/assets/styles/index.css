@@ -1758,15 +1758,18 @@ span.ag-footnote-backlink {
 }
 .ag-review-del-before::before { content: attr(data-del-before); }
 .ag-review-del-after::after { content: attr(data-del-after); }
-.ag-review-whole {
+.ag-review-whole:not(td):not(th) {
   box-shadow: inset 3px 0 0 var(--reviewIns);
   padding-left: 6px;
 }
 /* A diagram or a code block with revisions in it: the bar beside the block (a diagram's code is hidden behind its drawing). */
-#ag-editor-id figure:has(.ag-review-whole),
+#ag-editor-id figure:not(:has(table)):has(.ag-review-whole),
 #ag-editor-id pre:has(.ag-review-whole) {
   box-shadow: inset 3px 0 0 var(--reviewIns);
 }
+/* A table row put in: one bar at the row's left, not one in every cell, nor beside the whole table (the user,
+   2026-11-07: the whole table looked new). */
+#ag-editor-id tr:has(.ag-review-whole) > :first-child { box-shadow: inset 3px 0 0 var(--reviewIns); }
 .cm-review-line-ins {
   box-shadow: inset 3px 0 0 var(--reviewIns);
 }
@@ -1791,6 +1794,70 @@ span.ag-footnote-backlink {
 .ag-review-del-below::after { content: attr(data-del-below); }
 .ag-review-strip-above::before { content: attr(data-del-above); }
 .ag-review-strip-below::before { content: attr(data-del-below); }
+/* A block deleted whole, where it was, as a block of its kind (services/reviewGhosts.ts): faded red, struck through, in
+   the document's own size - not the next block's (a heading's), never inside another block. */
+.ag-review-ghost {
+  color: var(--reviewDel);
+  background-color: var(--reviewDelBg);
+  opacity: 0.85;
+  user-select: none;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: var(--td-font-size, 1rem);
+  font-weight: normal;
+  font-style: normal;
+  line-height: inherit;
+  margin: 2px 0;
+  padding: 0 6px;
+  border-left: 3px solid var(--reviewDel);
+  list-style: none;
+}
+div.ag-review-ghost { display: block; }
+/* The deleted text struck through; a formula's or a diagram's card not (it says what was deleted). */
+.ag-review-ghost-text,
+.ag-review-ghost pre,
+.ag-review-ghost th,
+.ag-review-ghost td {
+  text-decoration: line-through var(--reviewDel) 1.5px;
+}
+li.ag-review-ghost {
+  display: block;
+  position: relative;
+  border-left: none;
+  padding-left: 0;
+}
+.ag-review-ghost-marker {
+  position: absolute;
+  right: 100%;
+  margin-right: 0.45em;
+  text-decoration: none;
+  opacity: 0.7;
+  white-space: nowrap;
+}
+.ag-review-ghost-nested { margin-left: 2em; }
+.ag-review-ghost-h1 { font-size: calc(var(--td-font-size, 1rem) * 1.6); font-weight: 600; }
+.ag-review-ghost-h2 { font-size: calc(var(--td-font-size, 1rem) * 1.4); font-weight: 600; }
+.ag-review-ghost-h3 { font-size: calc(var(--td-font-size, 1rem) * 1.2); font-weight: 600; }
+.ag-review-ghost-h4, .ag-review-ghost-h5, .ag-review-ghost-h6 { font-weight: 600; }
+.ag-review-ghost-quote { border-left-style: double; border-left-width: 4px; }
+.ag-review-ghost pre,
+.ag-review-ghost table {
+  margin: 0;
+  font-family: var(--codeFontFamily, monospace);
+  font-size: 0.9em;
+  white-space: pre-wrap;
+}
+.ag-review-ghost table { border-collapse: collapse; }
+.ag-review-ghost th, .ag-review-ghost td { border: 1px solid var(--reviewDel); padding: 0 6px; }
+tr.ag-review-ghost { border-left: none; }
+tr.ag-review-ghost td { text-decoration: line-through var(--reviewDel) 1.5px; }
+.ag-review-ghost hr { border: none; border-top: 2px dashed var(--reviewDel); margin: 6px 0; }
+.ag-review-ghost-card { font-style: italic; text-decoration: none; }
+.ag-review-ghost.td-review-current { outline: 2px solid var(--reviewDel); outline-offset: 1px; }
+/* A block whose marks say something else now (a task ticked, an item indented, made a heading), and a block split off
+   from the one before: a bar of their own at the left. */
+.ag-review-structure { box-shadow: inset 3px 0 0 var(--reviewStructure, #d08a00); padding-left: 6px; }
+.ag-review-split { box-shadow: inset 3px 0 0 var(--reviewIns); padding-left: 6px; border-top: 1px dashed var(--reviewIns); }
 .ag-review-tagged {
   position: relative;
 }

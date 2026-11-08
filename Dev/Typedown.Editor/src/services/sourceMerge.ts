@@ -8,6 +8,8 @@
 // export's lines are taken (a block edited is written as Muya writes it, as before). The caller checks the result
 // reads back as `current` before using it (Muya's normalizeMarkdown), and falls back to `current` when it does not.
 
+import { numberedAsSource, numbersMasked } from './orderedLists'
+
 /** Lines with their line breaks, so joining them gives the text back exactly. */
 export function splitLines(text: string): string[] {
     const lines: string[] = []
@@ -99,10 +101,13 @@ function lcs(a: string[], a0: number, a1: number, b: string[], b0: number, b1: n
     }
 }
 
-/** What a document's base lines are matched to on another side: base index -> that side's index. */
+/**
+ * What a document's base lines are matched to on another side: base index -> that side's index. An ordered list's
+ * item is matched whatever its number (Muya numbers a list on; the document's numbers are put back, orderedLists.ts).
+ */
 export function alignment(base: string[], other: string[]): Int32Array {
     const map = new Int32Array(base.length).fill(-1)
-    for (const [ib, io] of matchLines(base, other)) map[ib] = io
+    for (const [ib, io] of matchLines(base.map(l => numbersMasked(l, false)), other.map(l => numbersMasked(l, false)))) map[ib] = io
     return map
 }
 
@@ -117,14 +122,18 @@ const same = (x: string[], x0: number, x1: number, y: string[], y0: number, y1: 
  * the current export's where it did. `toSource` is alignment(base lines, source lines), the same for every edit of a
  * load. Null when nothing of the source could be kept (the result would be `current` itself).
  */
-export function mergeSource(source: string[], base: string[], current: string[], toSource: Int32Array): string | null {
+export function mergeSource(source: string[], base: string[], current: string[], toSource: Int32Array, numbers = true): string | null {
     const toCurrent = alignment(base, current)
     const out: string[] = []
+    // The source line each line out is (-1: one Muya wrote): an ordered list numbered as the source's list is.
+    const origins: number[] = []
     let kept = false
     let i = 0, j = 0, k = 0
     while (i < base.length || j < source.length || k < current.length) {
         if (i < base.length && toSource[i] === j && toCurrent[i] === k) {
+            if (current[k] !== source[j]) kept = true
             out.push(source[j])
+            origins.push(j)
             i++; j++; k++
             continue
         }
@@ -135,7 +144,7 @@ export function mergeSource(source: string[], base: string[], current: string[],
         const nk = ni < base.length ? toCurrent[ni] : current.length
         if (same(current, k, nk, base, i, ni)) {
             // Not edited: the source as it was.
-            for (let x = j; x < nj; x++) out.push(source[x])
+            for (let x = j; x < nj; x++) { out.push(source[x]); origins.push(x) }
             if (nj > j || ni > i) kept = kept || !same(source, j, nj, base, i, ni)
         } else {
             // Edited: as Muya writes it now - but the lines of it the edit did not change as the source has them where
@@ -144,17 +153,20 @@ export function mergeSource(source: string[], base: string[], current: string[],
             // was pushed out of it).
             const region = editedRegion(source.slice(j, nj), base.slice(i, ni), current.slice(k, nk))
             out.push(...region.lines)
+            origins.push(...region.origins.map(o => o < 0 ? -1 : o + j))
             kept = kept || region.kept
         }
         i = ni; j = nj; k = nk
     }
-    return kept ? out.join('') : null
+    if (!numbers) return kept ? out.join('') : null
+    const numbered = numberedAsSource(out, origins, source).join('')
+    return kept || numbered !== current.join('') ? numbered : null
 }
 
 // A line as far as the edit is concerned: a code fence of either mark and any length the same, and a list item's marker
 // followed by a tab or spaces.
 const fenceKey = (line: string) => {
-    const key = line.replace(/^( {0,3})(`{3,}|~{3,})/, '$1```').replace(/^(\s*)([*+-]|\d+[.)])[ \t]+/, '$1$2 ')
+    const key = numbersMasked(line, false).replace(/^( {0,3})(`{3,}|~{3,})/, '$1```').replace(/^(\s*)([*+-]|#+[.)])[ \t]+/, '$1$2 ')
     // A table's row, its cells padded or not, its delimiters of any length.
     return isTableLine(key) ? key.replace(/[ \t]*\|[ \t]*/g, '|').replace(/-+/g, '-').replace(/[ \t]+$/, '') : key
 }
@@ -184,7 +196,7 @@ function asSourceRow(row: string, sourceRows: string[]): string {
  * taken from the source where the source has it written its own way (fenceKey); a blank line Muya added where the source
  * has none dropped. `kept`: something of the source's own writing is in it.
  */
-export function editedRegion(source: string[], base: string[], current: string[]): { lines: string[], kept: boolean } {
+export function editedRegion(source: string[], base: string[], current: string[]): { lines: string[], kept: boolean, origins: number[] } {
     const toCurrent = alignment(base, current)
     // The base lines' own source lines, in order, by fenceKey; blank lines only to blank lines.
     const toSource = new Int32Array(base.length).fill(-1)
@@ -200,6 +212,7 @@ export function editedRegion(source: string[], base: string[], current: string[]
     const fromBase = new Int32Array(current.length).fill(-1)
     for (let b = 0; b < base.length; b++) if (toCurrent[b] >= 0) fromBase[toCurrent[b]] = b
     const lines: string[] = []
+    const origins: number[] = []
     let kept = false
     // A table's rows the source writes its own way: an edited row written the same way (Muya pads every cell).
     const sourceRows = source.filter(l => isTableLine(l) && !/^[ \t|:-]+\n?$/.test(l))
@@ -209,6 +222,7 @@ export function editedRegion(source: string[], base: string[], current: string[]
             const line = source[toSource[b]]
             if (line !== current[c]) kept = true
             lines.push(line)
+            origins.push(toSource[b])
         } else if (b >= 0 && !current[c].trim() && !sourceHasBlank) {
             kept = true
         } else if (base.length === current.length && source.length === base.length && samePrefix(current[c], source[c])) {
@@ -217,13 +231,15 @@ export function editedRegion(source: string[], base: string[], current: string[]
             const line = prefixOf(source[c]) + current[c].slice(prefixOf(current[c]).length)
             if (line !== current[c]) kept = true
             lines.push(line)
+            origins.push(c)
         } else if (isTableLine(current[c]) && sourceRows.length) {
             const row = asSourceRow(current[c], sourceRows)
             if (row !== current[c]) kept = true
             lines.push(row)
-        } else lines.push(current[c])
+            origins.push(-1)
+        } else { lines.push(current[c]); origins.push(-1) }
     }
-    return { lines, kept }
+    return { lines, kept, origins }
 }
 
 // ---- footnote definitions ----

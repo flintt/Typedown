@@ -1,4 +1,5 @@
 import { alignment, blockSource, cursorIn, matchLines, mergeKeepingNotes, mergeSource, splitLines } from './sourceMerge'
+import { numbersMasked, orderedLists, renumberedAt, styleOf } from './orderedLists'
 
 const merge = (source: string, base: string, current: string) => {
     const s = splitLines(source), b = splitLines(base)
@@ -171,5 +172,70 @@ describe('mergeKeepingNotes (a footnote definition stays where the source has it
 describe('an edited list item keeps its own marker spacing', () => {
     it('a tab after the marker', () => {
         expect(merge('-\titem one\n-\titem two\n', '- item one\n- item two\n', '- item oneZ\n- item two\n')).toBe('-\titem oneZ\n-\titem two\n')
+    })
+})
+
+describe('an ordered list numbered the document\'s way (orderedLists.ts)', () => {
+    // Muya's export: every list numbered on from its first item.
+    const muya = (text: string) => {
+        const lines = text.split('\n')
+        for (const list of orderedLists(lines)) list.forEach((item, k) => {
+            lines[item.line] = lines[item.line].slice(0, item.from) + (list[0].n + k) + lines[item.line].slice(item.to)
+        })
+        return lines.join('\n')
+    }
+    // The document after an edit Muya wrote as `edited` (its export of the edited text).
+    const after = (source: string, edited: string) => merge(source, muya(source), muya(edited)) ?? muya(edited)
+    const edits = (x: string) => ({
+        // (Before the first item: Muya keeps the list's first number.)
+        first: x.replace(/^(\d+[.)])/, '$1 new\n$1'),
+        middle: x.replace(/(\n)(?=\S+[.)] b)/, '\nN. new\n'),
+        end: x + 'N. new\n',
+        deleted: x.replace(/^\S+ b\n/m, ''),
+        split: x.replace(/(\S+[.)]) b\n/, '$1 b1\nN. b2\n'),
+        joined: x.replace(/ b\n\S+ c\n/, ' bc\n'),
+    })
+    const cases: [string, string, Record<string, string>][] = [
+        ['numbered on from 3', '3. a\n4. b\n5. c\n', {
+            first: '3. new\n4. a\n5. b\n6. c\n', middle: '3. a\n4. new\n5. b\n6. c\n', end: '3. a\n4. b\n5. c\n6. new\n',
+            deleted: '3. a\n4. c\n', split: '3. a\n4. b1\n5. b2\n6. c\n', joined: '3. a\n4. bc\n',
+        }],
+        ['all one number', '1. a\n1. b\n1. c\n', {
+            first: '1. new\n1. a\n1. b\n1. c\n', middle: '1. a\n1. new\n1. b\n1. c\n', end: '1. a\n1. b\n1. c\n1. new\n',
+            deleted: '1. a\n1. c\n', split: '1. a\n1. b1\n1. b2\n1. c\n', joined: '1. a\n1. bc\n',
+        }],
+        ['its own numbers', '8. a\n10. b\n11. c\n', {
+            first: '8. new\n8. a\n10. b\n11. c\n', middle: '8. a\n9. new\n10. b\n11. c\n', end: '8. a\n10. b\n11. c\n12. new\n',
+            deleted: '8. a\n11. c\n', split: '8. a\n10. b1\n11. b2\n11. c\n', joined: '8. a\n10. bc\n',
+        }],
+        ['"1)" all one number', '1) a\n1) b\n1) c\n', {
+            first: '1) new\n1) a\n1) b\n1) c\n', middle: '1) a\n1) new\n1) b\n1) c\n', end: '1) a\n1) b\n1) c\n1) new\n',
+            deleted: '1) a\n1) c\n', split: '1) a\n1) b1\n1) b2\n1) c\n', joined: '1) a\n1) bc\n',
+        }],
+    ]
+    for (const [name, source, want] of cases) {
+        for (const [edit, edited] of Object.entries(edits(source))) {
+            it(`${name}: ${edit}`, () => {
+                const text = edited.replace(/N\./g, '1' + (source.includes(')') ? ')' : '.'))
+                expect(after(source, text)).toBe(want[edit])
+            })
+        }
+    }
+    it('a list in a quotation, a nested one, and one after another list are each their own', () => {
+        const source = '> 1. a\n> 1. b\n\n- x\n  1. p\n  1. q\n\n5. m\n7. n\n'
+        const edited = source.replace('> 1. b', '> 1. b\n> 1. c').replace('  1. q', '  1. q\n  1. r').replace('7. n', '7. n\n8. o')
+        expect(after(source, edited)).toBe('> 1. a\n> 1. b\n> 1. c\n\n- x\n  1. p\n  1. q\n  1. r\n\n5. m\n7. n\n8. o\n')
+    })
+    it('a rejected item numbered back the way the list was numbered', () => {
+        expect(renumberedAt('1. a\n2. new\n3. b\n4. c\n', '1. a\n3. b\n4. c\n', 5)).toBe('1. a\n2. b\n3. c\n')
+        expect(renumberedAt('1. a\n2. c\n', '1. a\n2. b\n2. c\n', 5)).toBe('1. a\n2. b\n3. c\n')
+        expect(renumberedAt('1. a\n1. c\n', '1. a\n1. b\n1. c\n', 5)).toBe('1. a\n1. b\n1. c\n')
+        expect(renumberedAt('8. a\n11. c\n', '8. a\n10. b\n11. c\n', 5)).toBe('8. a\n10. b\n11. c\n')
+    })
+    it('numbers masked for comparing items keep the text\'s length', () => {
+        expect(numbersMasked('10. a\n> 3) b\n  7. c\nnot 5. this\n')).toBe('##. a\n> #) b\n  #. c\nnot 5. this\n')
+        expect(styleOf([3, 4, 5])).toBe('on')
+        expect(styleOf([1, 1])).toBe('same')
+        expect(styleOf([8, 10])).toBe('own')
     })
 })

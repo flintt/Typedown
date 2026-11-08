@@ -108,8 +108,12 @@ export default function renderLeafBlock (parent, block, activeBlocks, matches, u
   } = block
   // Review mode's marks of this leaf (StateRender.reviewMarks): its inserted runs go with the search's highlights,
   // except in code, which its highlighting draws again (the leaf gets a bar instead).
-  const reviewMarks = this.reviewMarks ? this.reviewMarks.get(key) : null
   const isCode = functionType === 'codeContent' || functionType === 'languageInput'
+  // Nothing of review in a block drawn whole (a formula, a diagram, HTML): a mark in its source broke the drawing (the
+  // user, 2026-11-07); its bar is drawn beside the block (assets/styles/index.css).
+  const drawnWhole = isCode && /^(?:latex|mermaid|flowchart|sequence|plantuml|vega-lite|html)$/.test(lang || '')
+  const ownMarks = this.reviewMarks ? this.reviewMarks.get(key) : null
+  const reviewMarks = ownMarks && drawnWhole ? (ownMarks.whole || ownMarks.segments.length ? { segments: [], sources: [], whole: ownMarks.whole || (ownMarks.segments[0] && ownMarks.segments[0].rid) } : null) : ownMarks
   const highlights = reviewMarks && reviewMarks.segments.length && !isCode ? withReviewLights(searchLights, reviewMarks.segments) : searchLights
 
   const data = {

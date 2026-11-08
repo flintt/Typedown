@@ -73,10 +73,10 @@ const sha = text => crypto.createHash('sha256').update(text, 'utf8').digest('hex
         const tag = await page.evaluate(() => document.querySelector('#ag-editor-id .ag-review-tagged')?.getAttribute('data-review-source'));
         check(tag === 'Bot', 'its paragraph is tagged with the program', tag);
 
-        // A paragraph deleted: a strip above the next one.
+        // A paragraph deleted: a block of its own where it was (a ghost).
         await apply((await flush()).replace('Third paragraph.\n', '').replace(/\n\n$/, '\n'), { name: 'Bot', session: 's1' });
-        const strip = await page.evaluate(() => [...document.querySelectorAll('#ag-editor-id .ag-review-del-above, #ag-editor-id .ag-review-del-below, #ag-editor-id .ag-review-strip')].map(e => e.getAttribute('data-del-above') ?? e.getAttribute('data-del-below')));
-        check(strip.some(s => s && s.includes('Third paragraph.')), 'the deleted paragraph is shown as a strip', { strip, r: await review(), text: await flush(), html: await page.evaluate(() => document.querySelector('#ag-editor-id').innerHTML.slice(-1500)) });
+        const strip = await page.evaluate(() => [...document.querySelectorAll('#ag-editor-id .ag-review-ghost')].map(e => e.textContent));
+        check(strip.some(s => s && s.includes('Third paragraph.')), 'the deleted paragraph is shown where it was', { strip, r: await review(), text: await flush(), html: await page.evaluate(() => document.querySelector('#ag-editor-id').innerHTML.slice(-1500)) });
 
         // Each revision its own buttons, with who made it and when beside them: the program's says its name and a time.
         let meta = null;
@@ -163,15 +163,14 @@ const sha = text => crypto.createHash('sha256').update(text, 'utf8').digest('hex
         await loadInReview('# Links\n\nBefore.\n\nAfter.\n', { baseline: links });
         r = await review();
         check(r.revisions.length === 3 && r.revisions.every(x => x.kind === 'delete'), 'three blocks deleted together are three deletions', r.revisions);
-        const strips = await page.evaluate(() => [...document.querySelectorAll('#ag-editor-id .ag-review-strip')].map(e => {
-            const box = e.getBoundingClientRect(), leaf = e.parentElement.getBoundingClientRect();
-            const style = getComputedStyle(e, '::before');
-            return { rid: e.getAttribute('data-rid'), text: e.getAttribute('data-del-above') ?? e.getAttribute('data-del-below'), height: box.height, right: box.right, leafRight: leaf.right, lineHeight: parseFloat(getComputedStyle(e).lineHeight) || 20, white: style.whiteSpace };
+        const strips = await page.evaluate(() => [...document.querySelectorAll('#ag-editor-id .ag-review-ghost')].map(e => {
+            const box = e.getBoundingClientRect(), page = document.querySelector('#ag-editor-id').getBoundingClientRect();
+            return { rid: e.getAttribute('data-rid'), text: e.textContent, height: box.height, right: box.right, leafRight: page.right, white: getComputedStyle(e).whiteSpace };
         }));
         check(strips.length === 3 && new Set(strips.map(s => s.rid)).size === 3, 'a strip each, each its own revision', strips);
         check(strips.every(s => !s.text.includes('\n')) && strips[0].text === long, 'each strip its paragraph, on a line of its own', strips.map(s => s.text));
         check(strips[0].height > strips[1].height * 1.5 && strips.every(s => s.right <= s.leafRight + 1), 'a long link breaks onto the next line inside the page', strips);
-        const middle = await page.evaluate(() => { const b = document.querySelectorAll('#ag-editor-id .ag-review-strip')[1].getBoundingClientRect(); return { x: b.left + 20, y: b.top + b.height / 2 }; });
+        const middle = await page.evaluate(() => { const b = document.querySelectorAll('#ag-editor-id .ag-review-ghost')[1].getBoundingClientRect(); return { x: b.left + 20, y: b.top + b.height / 2 }; });
         await page.mouse.move(middle.x, middle.y);
         // (The buttons follow the mouse after half a second.)
         await pause(900);

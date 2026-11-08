@@ -7,8 +7,10 @@ import transport from './transport'
 import { diffPaths } from './review'
 import {
     acceptAll, acceptInto, changedRegion, groupFormats, isFormatMark, onlyWriting, countRevisions, nextRevision, rejectAll, rejectFrom, Revision, revisionAt,
-    RevisionSource, shiftAfterAccept, StoredRevision, storedOf, trackRevisions, YOU,
+    RevisionSource, shiftAfterAccept, StoredRevision, storedOf, structureChange, trackRevisions, YOU,
 } from './review'
+import { renumberedAt } from './orderedLists'
+import { isBreakAndMarks } from './reviewMap'
 
 /** What the host sends with a document in review (or in ReviewSet): null or on false, no review. */
 export interface ReviewPayload {
@@ -22,7 +24,7 @@ export interface ReviewPayload {
     /** Who the differences nobody is known for are from (a program's write to a tab in the background). */
     fallback?: RevisionSource | null
     /** The words the page shows, in the interface's language. */
-    labels?: { accept?: string, reject?: string, you?: string, locale?: string, formats?: Record<string, string> }
+    labels?: { accept?: string, reject?: string, you?: string, locale?: string, formats?: Record<string, string>, changes?: Record<string, string> }
 }
 
 /** How an editor shows the revisions: Muya's and CodeMirror's. Offsets are in the Markdown. */
@@ -69,7 +71,7 @@ interface State {
     lastText: string | null
     baselineChanged: boolean
     outcomes: ReviewOutcome[]
-    labels: { accept: string, reject: string, you: string, locale?: string, formats?: Record<string, string> }
+    labels: { accept: string, reject: string, you: string, locale?: string, formats?: Record<string, string>, changes?: Record<string, string> }
 }
 
 const state: State = {
@@ -153,6 +155,15 @@ export function refresh() {
     const region = state.lastText === null || state.pending ? null : changedRegion(state.lastText, text)
     const source = nextSource ?? YOU
     state.revisions = trackRevisions(state.baseline, text, previous, region ? { ...region, source, time, moved } : { source: state.fallback, time })
+    absorbWriting(text, region, time)
+    groupFormats(state.revisions, text, region)
+    state.pending = null
+    state.lastText = text
+    redraw()
+    scheduleReport()
+}
+
+function absorbWriting(text: string, region: { from: number, to: number } | null, time: number) {
     // Only the writing changed where the change did not touch (Muya numbered a list on, wrote a fence its way): no revision
     // - taken into the baseline, so it cannot be rejected either (the user's decision, 2026-11-06).
     // The reader's own too (a list marker changed by hand): the user's decision is that writing is not a revision. Not a
@@ -173,18 +184,16 @@ export function refresh() {
     // Nor one at the caret: a space just typed is the reader's (the word after it comes with the next key).
     const caret = view?.caretOffset() ?? (region ? region.to : -1)
     const atCaret = (r: Revision) => r.kind !== 'replace' && r.curStart <= caret && caret <= r.curEnd
-    const writing = state.revisions.filter((r, i) => writingOnly[i] &&
-        (!touched(r) || ((sameKindOfMark(r) || (r.kind !== 'replace' && !(r.newText + r.oldText).includes('\n'))) && !besideWords(i) && !atCaret(r))))
+    // An ordered list's number moved on (an item put in above it) is writing even beside the item put in.
+    const listNumber = (r: Revision) => r.kind === 'replace' && kind(r.oldText) === 'n' && kind(r.newText) === 'n' &&
+        /^[ \t]*(?:>[ \t]?)*[ \t]*\d*$/.test(text.slice(text.lastIndexOf('\n', r.curStart - 1) + 1, r.curStart)) && /^\d*[.)]/.test(text.slice(r.curEnd))
+    const writing = state.revisions.filter((r, i) => writingOnly[i] && (listNumber(r) ||
+        !touched(r) || ((sameKindOfMark(r) || (r.kind !== 'replace' && !(r.newText + r.oldText).includes('\n'))) && !besideWords(i) && !atCaret(r))))
     if (writing.length) {
         state.baseline = acceptAll(state.baseline, writing)
         state.baselineChanged = true
         state.revisions = trackRevisions(state.baseline, text, shiftAfterAccept(state.revisions, writing), { source: state.fallback, time })
     }
-    groupFormats(state.revisions, text, region)
-    state.pending = null
-    state.lastText = text
-    redraw()
-    scheduleReport()
 }
 
 const shown = () => !state.show ? [] : state.filter === null ? state.revisions : state.revisions.filter(r => r.source === state.filter)
@@ -192,7 +201,11 @@ const shown = () => !state.show ? [] : state.filter === null ? state.revisions :
 function redraw() {
     if (!view) return
     if (!state.on) { view.clear(); return }
-    view.draw(shown(), state.lastText ?? host?.text() ?? '')
+    const text = state.lastText ?? host?.text() ?? ''
+    // What a revision changes of the structure (a task ticked, an item indented): drawn at its block's left, said by
+    // its buttons.
+    for (const r of state.revisions) r.structure = structureChange(state.baseline, text, r) ?? undefined
+    view.draw(shown(), text)
 }
 
 // ---- reporting ----
@@ -253,12 +266,17 @@ function reject(revisions: Revision[]) {
     revisions = withGroups(revisions)
     if (!revisions.length || !host) return
     const text = host.text()
-    const next = revisions.length === 1 ? rejectFrom(text, revisions[0]) : rejectAll(text, revisions)
+    let next = revisions.length === 1 ? rejectFrom(text, revisions[0]) : rejectAll(text, revisions)
+    // An item put in or taken out of a numbered list: the list numbered again its own way (on from its first, all one
+    // number), so that rejecting every revision gives the baseline back to the byte (orderedLists.ts).
+    for (const r of [...revisions].sort((a, b) => b.curStart - a.curStart)) next = renumberedAt(text, next, r.curStart)
     state.outcomes.push(...revisions.map(r => outcomeOf(r, 'rejected')))
     const ids = new Set(revisions.map(r => r.id))
     // The text without them: the other revisions keep what they are (no change region - nobody new made them).
     const region = changedRegion(text, next)
     state.revisions = trackRevisions(state.baseline, next, state.revisions.filter(r => !ids.has(r.id)), region ? { ...region, source: YOU, time: Date.now() } : { source: YOU, time: Date.now() })
+    // The numbers put back (a list numbered on again) are the writing: into the baseline, as at any change.
+    absorbWriting(next, region, Date.now())
     state.lastText = next
     hideActions()
     host.replaceText(next, Math.min(...revisions.map(r => r.curStart)))
@@ -376,7 +394,7 @@ export function showActionsFor(id: string | null) {
     el.dataset.for = id
     if (r) {
         const who = r.source || state.labels.you
-        const format = r.format ? state.labels.formats?.[r.format] ?? r.format : ''
+        const format = r.format ? state.labels.formats?.[r.format] ?? r.format : changeLabel(r)
         meta.textContent = [who, format, revisionTime(r.time, state.labels.locale)].filter(Boolean).join(' · ')
         meta.title = [who, new Date(r.time).toLocaleString(state.labels.locale || undefined), r.session ? `#${r.session}` : ''].filter(Boolean).join(' · ')
     } else meta.textContent = ''
@@ -393,6 +411,21 @@ export function showActionsFor(id: string | null) {
     actionsFor = id
     quietUntilOther = null
 }
+
+// What a revision of the structure, a join or a split is, beside its buttons: the host's words, else English.
+const CHANGES: Record<string, string> = {
+    check: 'Checked', uncheck: 'Unchecked', indent: 'Indented', outdent: 'Outdented', toList: 'Made a list item',
+    toParagraph: 'Made a paragraph', toHeading: 'Made a heading', headingLevel: 'Heading level', quote: 'Quoted',
+    unquote: 'Unquoted', structure: 'Structure', join: 'Joined', split: 'Split',
+}
+
+function changeLabel(r: Revision): string {
+    const name = r.structure ?? (r.kind === 'delete' && isBreakAndMarks(r.oldText) ? 'join' : r.kind === 'insert' && isBreakAndMarks(r.newText) ? 'split' : null)
+    return name ? state.labels.changes?.[name] ?? CHANGES[name] ?? name : ''
+}
+
+/** The host's words for the page (the deleted blocks' cards, the changes beside the buttons). */
+export const reviewLabels = () => state.labels
 
 /**
  * A revision's time as its buttons say it: today's as hours and minutes, this year's with the day, older ones with the

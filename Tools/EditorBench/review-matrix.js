@@ -51,6 +51,9 @@ const docs = [
     doc('plus list', '# L\n\n+ one item\n+ two item\n+ three item\n', [['mid', 'after', 'tw'], ['end', 'after', 'two item']]),
     doc('dash list', '# L\n\n- one item\n- two item\n- three item\n', [['mid', 'after', 'tw'], ['end', 'after', 'two item']]),
     doc('ordered from 3', '# L\n\n3. three\n4. four\n5. five\n', [['mid', 'after', 'fo'], ['end', 'after', 'four']]),
+    // Numbered the document's own way: kept so after any edit, and rejected back to the byte (orderedLists.ts).
+    doc('ordered all 1', '# L\n\n1. one\n1. two\n1. three\n', [['mid', 'after', 'tw'], ['end', 'after', 'two']]),
+    doc('ordered skipping', '# L\n\n8. eight\n10. ten\n11. eleven\n', [['mid', 'after', 'te'], ['end', 'after', 'ten']]),
     doc('nested list', '# L\n\n- top\n  - inner one\n  - inner two\n- next\n', [['mid', 'after', 'inner o'], ['end', 'after', 'inner two']]),
     doc('task list', '# L\n\n- [ ] todo one\n- [x] done two\n', [['mid', 'after', 'todo o'], ['end', 'after', 'done two']]),
     doc('underscore emphasis', '# E\n\nSome _em text_ and __strong text__ here.\n', [['in em', 'after', '_em t'], ['in strong', 'after', '__strong t'], ['after', 'after', 'here']]),
@@ -218,7 +221,7 @@ else (async () => {
                 if (!whole && !marked) problems.push(`ins "${want}" unmarked`);
             }
             if (rev.oldText && /\S/.test(rev.oldText)) {
-                const host = document.querySelector(`#ag-editor-id [data-rid="${rev.id}"][data-del-before], #ag-editor-id [data-rid="${rev.id}"][data-del-after], #ag-editor-id [data-del-above-rid="${rev.id}"], #ag-editor-id [data-del-below-rid="${rev.id}"], #ag-editor-id .ag-review-strip[data-rid="${rev.id}"]`)
+                const host = document.querySelector(`#ag-editor-id [data-rid="${rev.id}"][data-del-before], #ag-editor-id [data-rid="${rev.id}"][data-del-after], #ag-editor-id [data-del-above-rid="${rev.id}"], #ag-editor-id [data-del-below-rid="${rev.id}"], #ag-editor-id .ag-review-ghost[data-rid="${rev.id}"], #ag-editor-id .ag-review-structure[data-rid="${rev.id}"]`)
                     ?? [...document.querySelectorAll('#ag-editor-id [data-del-before], #ag-editor-id [data-del-after]')].find(e => (e.getAttribute('data-del-before') ?? e.getAttribute('data-del-after') ?? '').includes(rev.oldText.replace(/\n/g, ' ¶ ').trim()));
                 if (!host) problems.push(`del "${rev.oldText.trim()}" not drawn`);
                 else if (host.closest('.ag-hide')) problems.push(`del "${rev.oldText.trim()}" inside a hidden mark`);
@@ -299,7 +302,9 @@ else (async () => {
                             for (let i = 0; i < lines.length; i++) { if (index <= at + lines[i].length) { editLine = i; break } at += lines[i].length + 1 }
                             const have = new Set(after.split('\n'))
                             // Two lines either side: Backspace at a block's start joins it to the one before.
-                            const lost = lines.filter((l, i) => l.trim() && Math.abs(i - editLine) > 2 && !/^\s*\d+[.)]\s/.test(l) && !have.has(l))
+                            // (A list numbered on follows its items; one numbered its own way keeps its numbers.)
+                            const own = /^ordered (all 1|skipping)/.test(d.name)
+                            const lost = lines.filter((l, i) => l.trim() && Math.abs(i - editLine) > 2 && (own || !/^\s*\d+[.)]\s/.test(l)) && !have.has(l))
                             if (lost.length) fail(row, 'rewritten: ' + JSON.stringify(lost).slice(0, 120))
                             if (!d.text.endsWith('\n') && after.endsWith('\n') && !['enter', 'paste'].includes(name)) fail(row, 'a line break added at the end')
                         }
@@ -311,6 +316,8 @@ else (async () => {
                         // The page's baseline: writing alone was taken into it (not a revision, so not rejected).
                         const pageBaseline = (await review()).baseline;
                         if (rejected !== pageBaseline) fail(row, 'reject all ≠ baseline: ' + JSON.stringify(firstDiff(rejected, pageBaseline)));
+                        // An ordered list: its numbers back as they were too (rejecting an item numbers the list again its way).
+                        else if (/^ordered/.test(d.name) && rejected !== d.text) fail(row, 'reject all ≠ the document: ' + JSON.stringify(firstDiff(rejected, d.text)));
                         else if (rejected !== d.text) row.why.push('writing taken into the baseline');
                         if (name === 'ins') {
                             await load(d.text, d.text);
@@ -467,13 +474,13 @@ else (async () => {
                 const each = blocks.map(b => dels.filter(x => x.oldText.includes(b)).length);
                 if (dels.length !== blocks.length || each.some(n => n !== 1)) { row.result = 'FAIL'; row.why.push('deletions: ' + JSON.stringify({ revisions: r.revisions.map(x => [x.oldText, x.newText]), text: t, at })); return; }
                 if (visual) {
-                    const strips = await page.evaluate(() => [...document.querySelectorAll('#ag-editor-id .ag-review-strip')].map(e => e.getAttribute('data-rid')));
+                    const strips = await page.evaluate(() => [...document.querySelectorAll('#ag-editor-id .ag-review-ghost')].map(e => e.getAttribute('data-rid')));
                     if (dels.some(x => !strips.includes(x.id))) { row.result = 'FAIL'; row.why.push('strips: ' + JSON.stringify({ strips, ids: dels.map(x => x.id) })); }
                 }
                 // The middle one rejected with its own ✗: the mouse over its strip, then the button.
                 const middle = dels[1];
                 const over = await page.evaluate(id => {
-                    const e = document.querySelector(`#ag-editor-id .ag-review-strip[data-rid="${id}"], .CodeMirror [data-rid="${id}"]`);
+                    const e = document.querySelector(`#ag-editor-id .ag-review-ghost[data-rid="${id}"], .CodeMirror [data-rid="${id}"]`);
                     if (!e) return null;
                     const b = e.getBoundingClientRect();
                     return { x: b.left + 10, y: b.top + b.height / 2 };
