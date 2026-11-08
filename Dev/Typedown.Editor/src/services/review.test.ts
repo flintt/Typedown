@@ -1,6 +1,6 @@
 import {
     acceptAll, acceptInto, changedRegion, countRevisions, diffSequences, diffTexts, nextRevision, rejectAll, rejectFrom,
-    Revision, revisionAt, shiftAfterAccept, storedOf, tokenize, trackRevisions, YOU,
+    groupFormats, onlyWriting, Revision, revisionAt, shiftAfterAccept, storedOf, tokenize, trackRevisions, YOU,
 } from './review';
 
 const apply = (a: string[], b: string[]) => {
@@ -181,4 +181,31 @@ test('the revision at the caret, the next and the previous', () => {
     expect(nextRevision(revs, revs[0].curStart)?.newText.trim()).toBe('Y')
     expect(nextRevision(revs, revs[1].curStart)?.newText.trim()).toBe('X')
     expect(nextRevision(revs, 0, true)?.newText.trim()).toBe('Y')
+})
+
+test('only the writing changed: list numbers, markers, fences, emphasis marks, blank lines - not the words', () => {
+    const only = (a: string, b: string) => diffTexts(a, b).every(h => onlyWriting(a, b, h))
+    expect(only('3. three\n4. four\n5. five\n', '3. three\n4. four\n6. five\n')).toBe(true)
+    expect(only('~~~js\ncode\n~~~\n', '```js\ncode\n```\n')).toBe(true)
+    expect(only('* one\n', '- one\n')).toBe(true)
+    expect(only('a __b__ c\n', 'a **b** c\n')).toBe(true)
+    expect(only('> a\nb\n', '> a\n\nb\n')).toBe(true)
+    expect(only('a word\n', 'a ward\n')).toBe(false)
+    expect(only('5. five\n', '5. fives\n')).toBe(false)
+})
+
+test('a bold put on with Ctrl+B is one group of its two marks', () => {
+    const baseline = 'Plain words here.\n'
+    const current = 'Plain **words** here.\n'
+    const revs = trackRevisions(baseline, current, [], { ...changedRegion(baseline, current)!, ...you() })
+    groupFormats(revs, current, changedRegion(baseline, current))
+    expect(revs.map(r => r.newText)).toEqual(['**', '**'])
+    expect(revs[0].group).toBe(revs[0].id)
+    expect(revs[1].group).toBe(revs[0].id)
+    expect(revs[0].format).toBe('bold')
+    expect(countRevisions(revs).inserted).toBe(1)
+    // Kept through the next change elsewhere.
+    const more = current + '\nMore.\n'
+    const again = trackRevisions(baseline, more, revs, { ...changedRegion(current, more)!, ...you(3) })
+    expect(again.filter(r => r.group === revs[0].id).length).toBe(2)
 })

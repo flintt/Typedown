@@ -6,7 +6,7 @@
 import transport from './transport'
 import { diffPaths } from './review'
 import {
-    acceptAll, acceptInto, changedRegion, countRevisions, nextRevision, rejectAll, rejectFrom, Revision, revisionAt,
+    acceptAll, acceptInto, changedRegion, groupFormats, isFormatMark, onlyWriting, countRevisions, nextRevision, rejectAll, rejectFrom, Revision, revisionAt,
     RevisionSource, shiftAfterAccept, StoredRevision, storedOf, trackRevisions, YOU,
 } from './review'
 
@@ -22,7 +22,7 @@ export interface ReviewPayload {
     /** Who the differences nobody is known for are from (a program's write to a tab in the background). */
     fallback?: RevisionSource | null
     /** The words the page shows, in the interface's language. */
-    labels?: { accept?: string, reject?: string, you?: string, locale?: string }
+    labels?: { accept?: string, reject?: string, you?: string, locale?: string, formats?: Record<string, string> }
 }
 
 /** How an editor shows the revisions: Muya's and CodeMirror's. Offsets are in the Markdown. */
@@ -69,7 +69,7 @@ interface State {
     lastText: string | null
     baselineChanged: boolean
     outcomes: ReviewOutcome[]
-    labels: { accept: string, reject: string, you: string, locale?: string }
+    labels: { accept: string, reject: string, you: string, locale?: string, formats?: Record<string, string> }
 }
 
 const state: State = {
@@ -83,7 +83,8 @@ export const reviewActive = () => state.on
 export interface ReviewHost {
     text: () => string
     loadId: () => number | undefined
-    replaceText: (text: string) => void
+    /** The text put in, the caret at that offset. */
+    replaceText: (text: string, at: number) => void
 }
 
 let host: ReviewHost | null = null
@@ -140,6 +141,20 @@ export function refresh() {
     const region = state.lastText === null || state.pending ? null : changedRegion(state.lastText, text)
     const source = nextSource ?? YOU
     state.revisions = trackRevisions(state.baseline, text, previous, region ? { ...region, source, time } : { source: state.fallback, time })
+    // Only the writing changed where the change did not touch (Muya numbered a list on, wrote a fence its way): no revision
+    // - taken into the baseline, so it cannot be rejected either (the user's decision, 2026-11-06).
+    // The reader's own too (a list marker changed by hand): the user's decision is that writing is not a revision. Not a
+    // format's marks (Ctrl+B's **), which change how the words read: those are a revision, grouped (groupFormats).
+    // Writing the change itself put in or took out (Enter making an empty list item) stays a revision: it is the reader's
+    // doing; only what it rewrote (a number, a mark) goes.
+    const touched = (r: Revision) => !!region && r.curStart <= region.to && region.from <= r.curEnd
+    const writing = state.revisions.filter(r => onlyWriting(state.baseline, text, r) && !isFormatMark(r) && (!touched(r) || r.kind === 'replace'))
+    if (writing.length) {
+        state.baseline = acceptAll(state.baseline, writing)
+        state.baselineChanged = true
+        state.revisions = trackRevisions(state.baseline, text, shiftAfterAccept(state.revisions, writing), { source: state.fallback, time })
+    }
+    groupFormats(state.revisions, text, region)
     state.pending = null
     state.lastText = text
     redraw()
@@ -188,7 +203,14 @@ export function reportNow() {
 const outcomeOf = (r: Revision, outcome: 'accepted' | 'rejected'): ReviewOutcome =>
     ({ id: r.id, outcome, at: Date.now(), source: r.source, session: r.session, kind: r.kind, oldText: r.oldText, newText: r.newText })
 
+// With the rest of their groups (a format's two marks).
+const withGroups = (revisions: Revision[]) => {
+    const groups = new Set(revisions.map(r => r.group).filter(Boolean))
+    return groups.size ? state.revisions.filter(r => revisions.includes(r) || (r.group && groups.has(r.group))) : revisions
+}
+
 function accept(revisions: Revision[]) {
+    revisions = withGroups(revisions)
     if (!revisions.length || !host) return
     state.baseline = revisions.length === 1 ? acceptInto(state.baseline, revisions[0]) : acceptAll(state.baseline, revisions)
     state.baselineChanged = true
@@ -202,6 +224,7 @@ function accept(revisions: Revision[]) {
 }
 
 function reject(revisions: Revision[]) {
+    revisions = withGroups(revisions)
     if (!revisions.length || !host) return
     const text = host.text()
     const next = revisions.length === 1 ? rejectFrom(text, revisions[0]) : rejectAll(text, revisions)
@@ -212,7 +235,7 @@ function reject(revisions: Revision[]) {
     state.revisions = trackRevisions(state.baseline, next, state.revisions.filter(r => !ids.has(r.id)), region ? { ...region, source: YOU, time: Date.now() } : { source: YOU, time: Date.now() })
     state.lastText = next
     hideActions()
-    host.replaceText(next)
+    host.replaceText(next, Math.min(...revisions.map(r => r.curStart)))
     redraw()
     reportNow()
 }
@@ -298,7 +321,10 @@ const CURRENT = 'td-review-current'
 function markCurrent(id: string | null) {
     document.querySelectorAll('.' + CURRENT).forEach(e => e.classList.remove(CURRENT))
     if (!id) return
-    document.querySelectorAll(`[data-rid="${id}"], [data-del-above-rid="${id}"], [data-del-below-rid="${id}"]`).forEach(e => e.classList.add(CURRENT))
+    const r = byId(id)
+    const ids = r?.group ? state.revisions.filter(x => x.group === r.group).map(x => x.id) : [id]
+    for (const one of ids)
+        document.querySelectorAll(`[data-rid="${one}"], [data-del-above-rid="${one}"], [data-del-below-rid="${one}"]`).forEach(e => e.classList.add(CURRENT))
 }
 
 function hideActions() {
@@ -324,7 +350,8 @@ export function showActionsFor(id: string | null) {
     el.dataset.for = id
     if (r) {
         const who = r.source || state.labels.you
-        meta.textContent = `${who} · ${revisionTime(r.time, state.labels.locale)}`
+        const format = r.format ? state.labels.formats?.[r.format] ?? r.format : ''
+        meta.textContent = [who, format, revisionTime(r.time, state.labels.locale)].filter(Boolean).join(' · ')
         meta.title = [who, new Date(r.time).toLocaleString(state.labels.locale || undefined), r.session ? `#${r.session}` : ''].filter(Boolean).join(' · ')
     } else meta.textContent = ''
     markCurrent(id)

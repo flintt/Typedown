@@ -92,3 +92,27 @@ test('a program revision tags its leaf', () => {
     const m = leafMarks(mapLeaves('x y\n', [{ key: 'p', text: 'x y' }]), revisions, 'x y\n')
     expect(m.get('p')!.sources).toEqual(['Bot'])
 })
+
+test('after a diagram (its fence with "mermaid", no leaf of its own) the leaves are found on', () => {
+    const md = 'before\n\n```mermaid\ngraph TD\n  A-->B\n```\n\nafter one\n\nafter two\n'
+    const map = mapLeaves(md, [{ key: 'a', text: 'before' }, { key: 'd', text: 'graph TD\n  A-->B' }, { key: 'b', text: 'after one' }, { key: 'c', text: 'after two' }])
+    expect(map.pieces.map(p => p.key)).toEqual(['a', 'd', 'd', 'b', 'c'])
+})
+
+test('after a footnote definition and a formula block the leaves are found on', () => {
+    const md = 'Text[^note].\n\n[^note]: The note.\n\n$$\nx^2\n$$\n\nAfter.\n'
+    const map = mapLeaves(md, [{ key: 't', text: 'Text[^note].' }, { key: 'n', text: 'The note.' }, { key: 'm', text: 'x^2' }, { key: 'a', text: 'After.' }])
+    expect(map.pieces.map(p => p.key)).toEqual(['t', 'n', 'm', 'a'])
+})
+
+test('a block whose text is in no leaf (a drawing) is passed over: the next leaf of some length is found after it', () => {
+    const md = 'one\n\n<svg>drawn</svg>\n\nsecond paragraph\n'
+    const map = mapLeaves(md, [{ key: 'a', text: 'one' }, { key: 'x', text: 'not in the text' }, { key: 'b', text: 'second paragraph' }])
+    expect(map.pieces.map(p => p.key)).toEqual(['a', 'b'])
+})
+
+test('a footnote definition Muya keeps at the end is found where the text has it, and the leaves after it too', () => {
+    const md = 'Text[^1].\n\n[^1]: The note.\n\nAfter here.\n\nLast one.\n'
+    const map = mapLeaves(md, [{ key: 't', text: 'Text[^1].' }, { key: 'a', text: 'After here.' }, { key: 'l', text: 'Last one.' }, { key: 'n', text: 'The note.' }])
+    expect(map.pieces.map(p => p.key)).toEqual(['t', 'n', 'a', 'l'])
+})

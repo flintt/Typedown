@@ -37,6 +37,12 @@ export interface Revision extends Hunk {
     session?: string
     /** When it was made (ms since 1970). */
     time: number
+    /**
+     * One format the reader applied (the two ** of a bold made with Ctrl+B): the id of the group's first revision, and
+     * the mark - accepted, rejected and counted together.
+     */
+    group?: string
+    format?: string
 }
 
 /** What a revision is known by when the host keeps it: its place in the baseline and its text there and now. */
@@ -53,6 +59,8 @@ export interface StoredRevision {
     /** Where its text is in the document as reported (matched again only where that text still is). */
     curStart?: number
     curEnd?: number
+    group?: string
+    format?: string
     /** The line it starts on in the document (1-based) and that line's beginning: "the block it is in", for the record. */
     line?: number
     block?: string
@@ -316,7 +324,8 @@ function letters(aText: string, bText: string, aS: number, aE: number, bS: numbe
         const offsets = (str: string) => { const o = [0]; for (const ch of str) o.push(o[o.length - 1] + ch.length); return o }
         const xo = offsets(x), yo = offsets(y)
         const marked = ops.reduce((n, o) => n + (xo[o.a + o.aLen] - xo[o.a]) + (yo[o.b + o.bLen] - yo[o.b]), 0)
-        if (marked * 4 <= (x.length + y.length) * 3)
+        // And in one or two places only: "Body" made "Word" stays one replacement, not three scraps of letters.
+        if ((ops.length <= 2 && marked * 4 <= (x.length + y.length) * 3) || marked * 2 < x.length + y.length)
             return ops.map(o => ({ baseStart: h.baseStart + xo[o.a], baseEnd: h.baseStart + xo[o.a + o.aLen], curStart: h.curStart + yo[o.b], curEnd: h.curStart + yo[o.b + o.bLen] }))
     }
     return [h]
@@ -505,7 +514,8 @@ export function trackRevisions(baseline: string, current: string, previous: Know
         const make = (piece: Hunk, oldPart: string, from: Known | null, source: RevisionSource, time: number): Revision => {
             const id = from && !used.has(from.id) ? from.id : newRevisionId()
             used.add(id)
-            return { ...piece, id, kind: kindOf(piece), oldText: oldPart, newText: current.slice(piece.curStart, piece.curEnd), source: source.name, session: source.session, time }
+            const keeps = from && from.id === id && from.group ? { group: from.group, format: from.format } : {}
+            return { ...piece, id, kind: kindOf(piece), oldText: oldPart, newText: current.slice(piece.curStart, piece.curEnd), source: source.name, session: source.session, time, ...keeps }
         }
         // The new text, a character at a time: whose it is.
         if (h.curEnd > h.curStart) {
@@ -603,6 +613,8 @@ export function countRevisions(revisions: Revision[]) {
     const sources = new Map<string, number>()
     let inserted = 0, deleted = 0
     for (const r of revisions) {
+        // A format's group counts once.
+        if (r.group && r.group !== r.id) continue
         if (r.newText) inserted++
         if (r.oldText) deleted++
         sources.set(r.source, (sources.get(r.source) ?? 0) + 1)
@@ -618,7 +630,7 @@ export function storedOf(r: Revision, current: string): StoredRevision {
     for (let i = current.indexOf('\n'); i >= 0 && i < r.curStart; i = current.indexOf('\n', i + 1)) line++
     return {
         id: r.id, kind: r.kind, baseStart: r.baseStart, baseEnd: r.baseEnd, curStart: r.curStart, curEnd: r.curEnd, oldText: r.oldText, newText: r.newText,
-        source: r.source, session: r.session, time: r.time, line,
+        source: r.source, session: r.session, time: r.time, line, ...(r.group ? { group: r.group, format: r.format } : {}),
         block: current.slice(lineStart, lineEnd < 0 ? current.length : lineEnd).slice(0, 60),
     }
 }
@@ -634,4 +646,61 @@ export function nextRevision(revisions: Revision[], offset: number, back = false
     const sorted = [...revisions].sort((a, b) => a.curStart - b.curStart)
     if (back) return [...sorted].reverse().find(r => r.curStart < offset) ?? sorted[sorted.length - 1]
     return sorted.find(r => r.curStart > offset) ?? sorted[0]
+}
+
+// ---- the writing, not the words ----
+
+/**
+ * A text's words without its Markdown writing: block marks (quotation, list markers and their numbers, task boxes,
+ * heading marks), fences of either mark, setext underlines, emphasis marks, escapes, spaces at line ends and blank lines.
+ */
+export function wordingOf(text: string): string {
+    return text.split('\n').map(line => line
+        .replace(/^[ \t]*(?:>[ \t]?)*[ \t]*/, '')
+        .replace(/^(?:[*+-]|\d+[.)])[ \t]+/, '')
+        .replace(/^\[[ xX]\][ \t]+/, '')
+        .replace(/^#{1,6}(?:[ \t]+|$)/, '')
+        .replace(/^(`{3,}|~{3,})/, '```')
+        .replace(/^(?:=+|-+)[ \t]*$/, '')
+        .replace(/[*_]+/g, '')
+        .replace(/\\(?=[^\w\s])/g, '')
+        .replace(/[ \t]+$/, ''))
+        .filter(line => line.length).join('\n')
+}
+
+const lineStartOf = (text: string, at: number) => text.lastIndexOf('\n', at - 1) + 1
+const lineEndOf = (text: string, at: number) => { const i = text.indexOf('\n', at); return i < 0 ? text.length : i }
+
+/**
+ * A revision that changes only how the text is written, not its words (the user's decision, 2026-11-06: "格式改动不算
+ * 修订"): the whole lines it is in read the same word for word on both sides - an ordered list numbered on after an
+ * item put in, a fence's mark, a blank line, a list's marker.
+ */
+export function onlyWriting(baseline: string, current: string, r: Hunk): boolean {
+    const a = baseline.slice(lineStartOf(baseline, r.baseStart), lineEndOf(baseline, r.baseEnd))
+    const b = current.slice(lineStartOf(current, r.curStart), lineEndOf(current, r.curEnd))
+    return a !== b && wordingOf(a) === wordingOf(b)
+}
+
+const FORMAT_MARKS: Record<string, string> = { '**': 'bold', '__': 'bold', '*': 'italic', '_': 'italic', '~~': 'strike', '`': 'code', '==': 'mark' }
+
+/** A revision that is a format's mark put on or taken off (a "**" alone). */
+export const isFormatMark = (r: Revision) => (r.kind === 'insert' || r.kind === 'delete') && !!FORMAT_MARKS[r.newText || r.oldText]
+
+/**
+ * The reader's format put on or taken off (Ctrl+B: a ** before and after the words): the two revisions of its marks,
+ * both made by the change, one each side of the words on one line, as a group.
+ */
+export function groupFormats(revisions: Revision[], current: string, region: { from: number, to: number } | null) {
+    if (!region) return
+    const marks = revisions.filter(r => !r.group && isFormatMark(r) &&
+        touches(r.curStart, r.curEnd, region.from - 2, region.to + 2))
+    for (let i = 0; i + 1 < marks.length; i++) {
+        const a = marks[i], b = marks[i + 1]
+        if (a.kind !== b.kind || (a.newText || a.oldText) !== (b.newText || b.oldText) || a.source !== b.source) continue
+        if (current.slice(a.curEnd, b.curStart).includes('\n')) continue
+        a.group = b.group = a.id
+        a.format = b.format = FORMAT_MARKS[a.newText || a.oldText]
+        i++
+    }
 }

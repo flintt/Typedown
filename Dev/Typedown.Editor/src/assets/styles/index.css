@@ -1762,6 +1762,11 @@ span.ag-footnote-backlink {
   box-shadow: inset 3px 0 0 var(--reviewIns);
   padding-left: 6px;
 }
+/* A diagram or a code block with revisions in it: the bar beside the block (a diagram's code is hidden behind its drawing). */
+#ag-editor-id figure:has(.ag-review-whole),
+#ag-editor-id pre:has(.ag-review-whole) {
+  box-shadow: inset 3px 0 0 var(--reviewIns);
+}
 .cm-review-line-ins {
   box-shadow: inset 3px 0 0 var(--reviewIns);
 }

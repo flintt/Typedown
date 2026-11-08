@@ -649,9 +649,16 @@ const Editor: React.FC = () => {
             loadId: () => loadIdRef.current,
             // A rejected revision: the text put back in place as an edit of the text shown, and told to the host as the
             // reader's edit (an undo step), since the editor does not report text the host gave it.
-            replaceText: (text: string) => {
+            // The caret where the revision was: the one held was in the text before, and a line past the end of the text
+            // now made Muya put an empty paragraph there for it - a line break more at the next edit (Ctrl+B after a
+            // rejected Enter, review-matrix.js).
+            replaceText: (text: string, at: number) => {
                 const y = optionsRef.current?.sourceCode || optionsRef.current?.plainTextShown ? codeMirrorScrollRef.current : window.scrollY
-                setContentFromHost(text, cursorRef.current, y, true)
+                const before = text.slice(0, Math.max(0, Math.min(at, text.length)))
+                const line = before.split('\n').length - 1, ch = before.length - before.lastIndexOf('\n') - 1
+                const caret = { anchor: { line, ch }, focus: { line, ch } }
+                cursorRef.current = caret
+                setContentFromHost(text, caret, y, true)
                 transport.postMessage('MarkdownChange', { text, loadId: loadIdRef.current, origin: 'user', edit: { kind: 'other', moved: false, inserted: '' } })
             },
         })

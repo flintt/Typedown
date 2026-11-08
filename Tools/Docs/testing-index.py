@@ -89,7 +89,7 @@ def editor_checks():
     if not step:
         errors.append(f"{WORKFLOW}: no 'Test editor integration' step")
         return []
-    scripts = re.findall(r"^\s+node ([\w-]+\.js)\s*$", step.group(1), re.M)
+    scripts = re.findall(r"^\s+node ([\w-]+\.js)(?:[ \t]+--[^\n]*)?\s*$", step.group(1), re.M)
     rows = []
     for script in scripts:
         # The first sentence of the comment the script starts with.

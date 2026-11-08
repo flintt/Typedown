@@ -20,7 +20,9 @@ const wholeLines = (text: string, start: number, end: number) =>
  * paragraphs (a mark at the end of each of its paragraphs' first line); the rest in the line.
  */
 export function markedMarkdown(text: string, revisions: Revision[]): string {
-    const sorted = revisions.map((r, i) => ({ r, i })).sort((a, b) => b.r.curStart - a.r.curStart || b.r.curEnd - a.r.curEnd)
+    // A format's marks (Ctrl+B's **) are left as they are: marks around them would break the format. The text goes to
+    // Word formatted as it is now (Word's own format revisions are for later).
+    const sorted = revisions.map((r, i) => ({ r, i })).filter(({ r }) => !r.format).sort((a, b) => b.r.curStart - a.r.curStart || b.r.curEnd - a.r.curEnd)
     let out = text
     for (const { r, i } of sorted) {
         const tag = `${i}${SEP}`

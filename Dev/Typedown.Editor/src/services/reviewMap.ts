@@ -31,7 +31,12 @@ export interface LeafMap {
 
 // Between two leaves' lines: spaces, quotation and list markers, numbers, table pipes and the alignment row, heading
 // marks, fences, task boxes, math and front matter fences.
-const GAP = /^[\s>*+\-\d.)|:#`~[\]xX$=]*$/
+// A footnote's "[^1]: " too.
+const GAP = /^[\s>*+\-\d.)|:#`~[\]xX$=^]*$/
+
+// What may lie between two leaves: the markers, and also a fence's line with its info string (a diagram's "```mermaid",
+// which no leaf holds), a footnote's definition (Muya keeps it at the end), a formula's $$.
+const gapOk = (gap: string) => GAP.test(gap.replace(/^[ \t]*(?:`{3,}|~{3,})[^\n]*$/gm, '').replace(/^\[\^[^\]\n]*\]:[^\n]*$/gm, '').replace(/^[ \t]*\$\$[ \t]*$/gm, ''))
 
 export function mapLeaves(markdown: string, leaves: Leaf[]): LeafMap {
     const pieces: Piece[] = []
@@ -39,6 +44,9 @@ export function mapLeaves(markdown: string, leaves: Leaf[]): LeafMap {
     const texts = new Map<string, string>()
     const order: string[] = []
     let pos = 0
+    // A line not found where it should be (a block whose text is not among the leaves): the next one found, a line of
+    // some length, is taken wherever it is - what came after a diagram was all left unmarked (the user, 2026-11-06).
+    let missed = false
     for (const leaf of leaves) {
         lengths.set(leaf.key, leaf.text.length)
         texts.set(leaf.key, leaf.text)
@@ -47,14 +55,22 @@ export function mapLeaves(markdown: string, leaves: Leaf[]): LeafMap {
         for (const line of leaf.text.split('\n')) {
             if (line.length) {
                 const found = markdown.indexOf(line, pos)
-                if (found >= 0 && GAP.test(markdown.slice(pos, found))) {
+                if (found >= 0 && (gapOk(markdown.slice(pos, found)) || (missed && line.trim().length >= 3))) {
                     pieces.push({ key: leaf.key, at, length: line.length, md: found })
                     pos = found + line.length
+                    missed = false
+                } else {
+                    // A leaf Muya keeps elsewhere than the text has it (a footnote's definition, at the end of its
+                    // blocks): found anywhere, the place reached kept.
+                    const anywhere = line.trim().length >= 3 ? markdown.indexOf(line) : -1
+                    if (anywhere >= 0 && anywhere < pos && markdown.indexOf(line, anywhere + 1) < 0) pieces.push({ key: leaf.key, at, length: line.length, md: anywhere })
+                    else missed = true
                 }
             }
             at += line.length + 1
         }
     }
+    pieces.sort((a, b) => a.md - b.md)
     return { pieces, lengths, texts, order }
 }
 

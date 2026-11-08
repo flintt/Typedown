@@ -91,6 +91,7 @@ CI 的“Test editor integration”一步运行这些：
 - `fence-line-check.js`: "~~" typed at a line's start for a strikethrough was auto-paired into the line "~~~~" - a code fence once the file was read again (opened, source mode and back, an automation write): the rest of the document became a code block, and the closing "```" the editor then wrote stayed at the document's end (a reader's report, 2026-11-01).
 - `key-matrix-check.js`: The editing keys and the host's editing commands, each in each kind of block at its start, middle and end, an X typed after to show where the caret went.
 - `review-check.js`: Review mode on the page (services/reviewSession.ts, docs/todo.md "审阅模式"): a document loaded with its baseline, what is typed marked as the reader's revision, what a program writes marked with its name, a paragraph deleted shown as a strip, accept (into the baseline) and reject (the text put back) from the host's commands and the keys, the marks in source mode too, hidden and gone when the host says so - and nothing of it in the text.
+- `review-matrix.js`: Review mode across documents, edits, places and modes (docs/todo.md "审阅模式"; the user, 2026-11-06: "经常出现修订了 一个小地方，出现大量删除和新加的内容").
 <!-- END generated: editor-checks -->
 
 ## Windows 端到端测试
