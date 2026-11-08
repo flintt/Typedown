@@ -12,7 +12,8 @@ const { openEditor } = require('./harness');
   const { page, errors, mode, load, pause, close } = await openEditor();
   const failures = [];
   const report = (ok, what, detail) => { console.log(`  ${ok ? 'ok  ' : 'FAIL'} ${what}${ok ? '' : ': ' + detail}`); if (!ok) failures.push(what); };
-  const folders = ['../../Dev/Typedown/Resources/Themes', '../../Dev/Edition/Resources/Themes'].map(f => path.resolve(__dirname, f));
+  // The edition's themes where there is an edition (Typedown has none).
+  const folders = ['../../Dev/Typedown/Resources/Themes', '../../Dev/Edition/Resources/Themes'].map(f => path.resolve(__dirname, f)).filter(f => fs.existsSync(f));
   const themes = folders.flatMap(f => fs.readdirSync(f).filter(n => n.endsWith('.css')).map(n => path.join(f, n)));
   const doc = '# Heading\n\nA paragraph of **bold** text.\n\n- an item\n\n| a | b |\n|---|---|\n| 1 | 2 |\n';
   const colours = () => page.evaluate(() => {
