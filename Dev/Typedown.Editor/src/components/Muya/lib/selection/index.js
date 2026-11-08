@@ -268,7 +268,26 @@ class Selection {
     if (sel.rangeCount) {
       container = this.doc.createElement('div')
       for (i = 0, len = sel.rangeCount; i < len; i += 1) {
-        container.appendChild(sel.getRangeAt(i).cloneContents())
+        const range = sel.getRangeAt(i)
+        const contents = range.cloneContents()
+        // Items of one list selected: the range's common ancestor is the list, and its contents the items without it -
+        // bare <li>s, which the conversion to Markdown took for bullets (an ordered list was copied as a bullet list,
+        // a reader's report). The list put back around them, an ordered one counting from the first item copied.
+        const common = range.commonAncestorContainer
+        if (common.nodeType === 1 && /^(OL|UL)$/.test(common.nodeName)) {
+          const list = common.cloneNode(false)
+          if (common.nodeName === 'OL') {
+            const items = [...common.children].filter(child => child.nodeName === 'LI')
+            const first = items.findIndex(item => item === range.startContainer || item.contains(range.startContainer))
+            const start = (parseInt(common.getAttribute('start'), 10) || 1) + Math.max(first, 0)
+            if (start !== 1) list.setAttribute('start', String(start))
+            else list.removeAttribute('start')
+          }
+          list.appendChild(contents)
+          container.appendChild(list)
+        } else {
+          container.appendChild(contents)
+        }
       }
       html = container.innerHTML
     }

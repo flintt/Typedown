@@ -10,7 +10,7 @@ import { setVimState, vimCommand } from "services/vim";
 import { wordCount as countWords } from 'components/Muya/lib/utils';
 import { FIND_EDIT_REFRESH_MS, findResultsOpen, noteFindChange, setFindProvider } from 'services/findResults';
 import { FENCE, isTableRow, lineMarksLength, previewOf } from 'services/findPreview';
-import { drawMarkdownBlocks } from './markdownBlocks';
+import { MarkdownBlocksView } from './markdownBlocks';
 require('codemirror/mode/markdown/markdown');
 require('codemirror/keymap/vim');
 require('codemirror/addon/dialog/dialog.css');
@@ -534,23 +534,23 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
     }, [editor, props.options?.fontSize, props.options?.lineHeight, props.options?.tabSize])
 
     // A plain text file laid out as prose: its md and markdown fences drawn as Markdown (markdownBlocks), the one the
-    // caret is in shown as its lines. Drawn again a moment after the text or the caret moves, not on every key.
+    // caret is in shown as its lines. Found again a moment after the text changes, not on every key; a caret move
+    // only switches the block it entered and the one it left.
     useEffect(() => {
-        if (!editor) return
-        const enabled = !!props.options?.plainTextShown && !!props.options?.plainTextProse
-        let marks: any[] = []
+        if (!editor || !props.options?.plainTextShown || !props.options?.plainTextProse) return
+        const view = new MarkdownBlocksView(editor)
         let timer: any = null
-        const draw = () => { timer = null; marks = drawMarkdownBlocks(editor, marks, enabled) }
-        const later = () => { if (!timer) timer = setTimeout(draw, 120) }
-        draw()
-        if (!enabled) return
-        editor.on('changes', later)
-        editor.on('cursorActivity', later)
+        const update = () => { timer = null; view.update() }
+        const changed = () => { if (!timer) timer = setTimeout(update, 120) }
+        const moved = () => { if (!timer) view.caretMoved() }
+        view.update()
+        editor.on('changes', changed)
+        editor.on('cursorActivity', moved)
         return () => {
-            editor.off('changes', later)
-            editor.off('cursorActivity', later)
+            editor.off('changes', changed)
+            editor.off('cursorActivity', moved)
             if (timer) clearTimeout(timer)
-            marks = drawMarkdownBlocks(editor, marks, false)
+            view.clear()
         }
     }, [editor, props.options?.plainTextShown, props.options?.plainTextProse])
 

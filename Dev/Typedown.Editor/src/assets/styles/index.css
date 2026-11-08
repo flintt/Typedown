@@ -112,6 +112,8 @@ mark::after {
 .plain-prose .plain-md-block th, .plain-prose .plain-md-block td { padding: 3px 8px; border: 1px solid var(--editorColor30); }
 .plain-prose .plain-md-block a { color: var(--themeColor); }
 .plain-prose .plain-md-block img { max-width: 100%; }
+.plain-prose .plain-md-block .plain-md-diagram { margin: 0.5em 0; text-align: center; }
+.plain-prose .plain-md-block .plain-md-diagram svg { max-width: 100%; height: auto; }
 
 /* A list item dragged by its marker (contentState/listDragCtrl): the line where it will land, at its level. Placed by
    the window's coordinates, so fixed. */

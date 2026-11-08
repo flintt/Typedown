@@ -62,11 +62,6 @@ export const usePluginAddRules = (turndownService, keeps) => {
     filter: 'li',
 
     replacement: function (content, node, options) {
-      content = content
-        .replace(/^\n+/, '') // remove leading newlines
-        .replace(/\n+$/, '\n') // replace trailing newlines with just a single one
-        .replace(/\n/gm, '\n  ') // indent
-
       let prefix = options.bulletListMarker + ' '
       const parent = node.parentNode
       if (parent.nodeName === 'OL') {
@@ -74,6 +69,12 @@ export const usePluginAddRules = (turndownService, keeps) => {
         const index = Array.prototype.indexOf.call(parent.children, node)
         prefix = (start ? Number(start) + index : index + 1) + '. '
       }
+      // What follows the first line indented by the marker's width: "2. " is three wide, and a list nested in it two
+      // spaces in belonged to no item (a copied ordered list lost its nesting).
+      content = content
+        .replace(/^\n+/, '') // remove leading newlines
+        .replace(/\n+$/, '\n') // replace trailing newlines with just a single one
+        .replace(/\n/gm, '\n' + ' '.repeat(prefix.length)) // indent
       return (
         prefix + content + (node.nextSibling && !/\n$/.test(content) ? '\n' : '')
       )

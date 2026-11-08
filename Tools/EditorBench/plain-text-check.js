@@ -65,6 +65,46 @@ const { openEditor } = require('./harness');
     await pause(400);
     report((await drawn()).length === 0, 'source mode: no block drawn, the lines as they are', JSON.stringify(await drawn()));
 
+    // A picture in a block goes through the editor's own loading (relative paths resolved against the file's folder; a
+    // data address here, the folder in E2E PT01).
+    const pixel = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
+    await page.evaluate(() => window.__deliver('SettingsChanged', { plainTextProse: true }));
+    await load(`plain\n\n\`\`\`md\n![dot](${pixel})\n\`\`\`\n`);
+    await page.evaluate(() => { const cm = document.querySelector('.CodeMirror').CodeMirror; cm.focus(); cm.setCursor({ line: 0, ch: 0 }); });
+    await pause(800);
+    const picture = await page.evaluate(() => { const img = document.querySelector('.plain-md-block img'); return img ? { src: (img.getAttribute('src') || '').slice(0, 22), loaded: img.complete && img.naturalWidth > 0 } : null; });
+    report(picture && picture.loaded, 'a picture in a block is loaded and shown', JSON.stringify(picture));
+
+    // A Mermaid diagram in a block is drawn (a reader's report: it showed as its code).
+    await load('plain\n\n````md\n# With a diagram\n\n```mermaid\ngraph TD\n  A-->B\n```\n````\n');
+    await page.evaluate(() => { const cm = document.querySelector('.CodeMirror').CodeMirror; cm.focus(); cm.setCursor({ line: 0, ch: 0 }); });
+    let diagram = null;
+    for (let i = 0; i < 40 && !diagram; i++) {
+      await pause(250);
+      diagram = await page.evaluate(() => { const d = document.querySelector('.plain-md-block .plain-md-diagram svg'); return d ? d.getBoundingClientRect().height : null; });
+    }
+    report(diagram > 20, 'a Mermaid diagram in a block is drawn', `svg height ${diagram}`);
+    report(await flush() === 'plain\n\n````md\n# With a diagram\n\n```mermaid\ngraph TD\n  A-->B\n```\n````\n', 'the text with the diagram is the file\'s, as it is', '');
+
+    // A long plain text file with blocks: a caret move costs little (it read the whole file on each move).
+    const long = Array.from({ length: 20000 }, (_, i) => i % 2000 === 5 ? '```md\n# Block ' + i + '\n```' : `line ${i} of a long log`).join('\n');
+    await load(long);
+    await pause(800);
+    const moves = () => page.evaluate(async () => {
+      const cm = document.querySelector('.CodeMirror').CodeMirror;
+      const t0 = performance.now();
+      for (let i = 0; i < 200; i++) cm.setCursor({ line: 1000 + i * 37, ch: 0 });
+      return (performance.now() - t0) / 200;
+    });
+    const drawnCost = await moves();
+    // The same moves in the source view (no blocks drawn): what CodeMirror itself takes.
+    await page.evaluate(() => window.__deliver('SettingsChanged', { plainTextProse: false }));
+    await pause(500);
+    const bare = await moves();
+    await page.evaluate(() => window.__deliver('SettingsChanged', { plainTextProse: true }));
+    await pause(500);
+    report(drawnCost - bare < 1, `a long file with blocks: a caret move costs little more than without them (${drawnCost.toFixed(2)} ms against ${bare.toFixed(2)} ms)`, `${drawnCost} / ${bare}`);
+
     // With Vim on (as the reader has it): not in the prose view - which is visual mode's, and with Vim looked like source
     // mode and took Ctrl+/ - but in the source view; switched back, off again.
     const vimState = () => page.evaluate(() => ({ keyMap: document.querySelector('.CodeMirror').CodeMirror.getOption('keyMap'), badge: document.querySelector('.vim-mode-badge')?.textContent || null }));
