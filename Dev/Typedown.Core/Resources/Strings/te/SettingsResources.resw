@@ -976,4 +976,10 @@
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>చదివే మోడ్‌లో పేరాలోని ఒకే పంక్తి విరామం Markdown నిర్దేశించినట్లు, ఎగుమతులు ఇప్పటికే చేస్తున్నట్లు ఖాళీగా కనిపిస్తుంది (చైనీస్ లేదా జపనీస్ అక్షరాల మధ్య ఖాళీ ఉండదు). పంక్తి విరామాన్ని ఉంచాలంటే పంక్తి చివర రెండు ఖాళీలు లేదా బ్యాక్‌స్లాష్ ఉంచండి</value>
   </data>
+  <data name="Editor.CodeBlockLineNumbers.Title" xml:space="preserve">
+    <value>కోడ్ బ్లాక్‌లలో పంక్తి సంఖ్యలు</value>
+  </data>
+  <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
+    <value>కోడ్ బ్లాక్‌లలోని పొడవైన పంక్తులు చుట్టబడకుండా పక్కకు స్క్రోల్ అవుతాయి. సంఖ్యలు సేవ్, కాపీ లేదా ప్రింట్ కావు</value>
+  </data>
 </root>

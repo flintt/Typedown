@@ -982,4 +982,10 @@
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>في وضع القراءة، يُعرض فاصل السطر المفرد داخل الفقرة كمسافة، كما تنص Markdown وكما تفعل عمليات التصدير بالفعل (من دون مسافة بين الأحرف الصينية أو اليابانية). للإبقاء على فاصل السطر، أنهِ السطر بمسافتين أو بشرطة مائلة عكسية</value>
   </data>
+  <data name="Editor.CodeBlockLineNumbers.Title" xml:space="preserve">
+    <value>أرقام الأسطر في كتل الكود</value>
+  </data>
+  <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
+    <value>تُمرَّر الأسطر الطويلة في كتل الكود أفقيًا بدلًا من التفافها. لا تُحفظ الأرقام ولا تُنسخ ولا تُطبع</value>
+  </data>
 </root>

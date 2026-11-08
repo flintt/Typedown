@@ -927,6 +927,7 @@
         "VimMode",
         "ShowBlankLines",
         "JoinSoftBreaks",
+        "CodeBlockLineNumbers",
         "ShowMarkdownMarks",
         "ProgressiveRendering",
         "PredictHeights",

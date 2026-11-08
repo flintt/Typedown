@@ -976,4 +976,10 @@
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>I läsläge visas en enkel radbrytning inuti ett stycke som ett mellanslag, som Markdown anger och som exporterna redan gör (inget mellanslag mellan kinesiska eller japanska tecken). Avsluta raden med två mellanslag eller ett omvänt snedstreck för att behålla en radbrytning</value>
   </data>
+  <data name="Editor.CodeBlockLineNumbers.Title" xml:space="preserve">
+    <value>Radnummer i kodblock</value>
+  </data>
+  <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
+    <value>Långa rader i kodblock rullar i sidled i stället för att radbrytas. Numren sparas inte, kopieras inte och skrivs inte ut</value>
+  </data>
 </root>

@@ -2,6 +2,14 @@
   text-decoration: none;
 }
 
+/* Code's font as github-markdown-css has it, with the system's sans-serif before the monospace fallback: none of those
+   fonts has Chinese, Japanese or Korean letters, and the monospace fallback is a serif one (SimSun) on Chinese Windows.
+   A typography preset's code font comes after this and wins. */
+.markdown-body code,
+.markdown-body pre {
+  font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, Courier, sans-serif, monospace;
+}
+
 /* Keep separate fenced code blocks visibly separate in HTML and PDF exports, even
    when another stylesheet resets the generic pre margins. */
 .markdown-body pre + pre {

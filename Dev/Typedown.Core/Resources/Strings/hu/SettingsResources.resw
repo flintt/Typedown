@@ -976,4 +976,10 @@
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>Olvasó módban a bekezdésen belüli egyszeres sortörés szóközként jelenik meg, ahogy a Markdown előírja és az exportálás már teszi (kínai vagy japán karakterek közé nem kerül szóköz). A sortörés megtartásához zárja a sort két szóközzel vagy fordított perjellel</value>
   </data>
+  <data name="Editor.CodeBlockLineNumbers.Title" xml:space="preserve">
+    <value>Sorszámok a kódblokkokban</value>
+  </data>
+  <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
+    <value>A kódblokkok hosszú sorai tördelés helyett vízszintesen görgethetők. A számok nem kerülnek mentésre, másolásra vagy nyomtatásra</value>
+  </data>
 </root>

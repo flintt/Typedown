@@ -976,4 +976,10 @@
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>ໃນໂໝດອ່ານ ການຂຶ້ນແຖວໃໝ່ຄັ້ງດຽວພາຍໃນວັກຈະສະແດງເປັນຍະຫວ່າງ ຕາມທີ່ Markdown ກຳນົດ ແລະ ທີ່ການສົ່ງອອກເຮັດຢູ່ແລ້ວ (ບໍ່ມີຍະຫວ່າງລະຫວ່າງຕົວອັກສອນຈີນ ຫຼື ຍີ່ປຸ່ນ). ເພື່ອຮັກສາການຂຶ້ນແຖວໃໝ່ ໃຫ້ຈົບແຖວດ້ວຍຍະຫວ່າງສອງບ່ອນ ຫຼື ແບັກສະແລຊ</value>
   </data>
+  <data name="Editor.CodeBlockLineNumbers.Title" xml:space="preserve">
+    <value>ເລກແຖວໃນບລັອກໂຄ້ດ</value>
+  </data>
+  <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
+    <value>ແຖວຍາວໃນບລັອກໂຄ້ດຈະເລື່ອນທາງຂ້າງແທນການຕັດແຖວ. ເລກຈະບໍ່ຖືກບັນທຶກ, ສຳເນົາ ຫຼື ພິມ</value>
+  </data>
 </root>

@@ -976,4 +976,10 @@
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>Sa reading mode, ang iisang line break sa loob ng talata ay ipinapakita bilang espasyo, ayon sa itinakda ng Markdown at gaya ng ginagawa na ng mga export (walang espasyo sa pagitan ng mga karakter na Chinese o Japanese). Para mapanatili ang line break, tapusin ang linya sa dalawang espasyo o isang backslash</value>
   </data>
+  <data name="Editor.CodeBlockLineNumbers.Title" xml:space="preserve">
+    <value>Mga numero ng linya sa mga code block</value>
+  </data>
+  <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
+    <value>Nag-i-scroll patagilid ang mahahabang linya sa mga code block sa halip na mag-wrap. Hindi sine-save, kinokopya o ipiniprint ang mga numero</value>
+  </data>
 </root>

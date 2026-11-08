@@ -777,6 +777,14 @@
     <value>In reading mode, a single line break inside a paragraph shows as a space, as Markdown specifies and exports already do (no space between Chinese or Japanese characters). To keep a break, end the line with two spaces or a backslash</value>
     <comment>编辑器/合并段内换行说明：阅读模式下段落中的单个换行显示为空格，与 Markdown 规范和导出一致（中日文字符之间不加空格）；要保留换行，在行尾加两个空格或反斜杠</comment>
   </data>
+  <data name="Editor.CodeBlockLineNumbers.Title" xml:space="preserve">
+    <value>Line numbers in code blocks</value>
+    <comment>编辑器/代码块显示行号</comment>
+  </data>
+  <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
+    <value>Long lines in code blocks scroll sideways instead of wrapping. The numbers are not saved, copied or printed</value>
+    <comment>编辑器/代码块显示行号说明：代码块里的长行改为横向滚动、不再折行；行号不保存、不复制、不打印</comment>
+  </data>
   <data name="Editor.ShowMarkdownMarks.Title" xml:space="preserve">
     <value>Always Show Markdown Marks</value>
   </data>

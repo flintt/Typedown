@@ -976,4 +976,10 @@
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>Sa mhód léitheoireachta, taispeántar briseadh líne aonair laistigh de mhír mar spás, mar a shonraíonn Markdown agus mar a dhéanann na heaspórtálacha cheana (gan spás idir carachtair Shíneacha nó Sheapánacha). Chun briseadh a choinneáil, críochnaigh an líne le dhá spás nó le cúlslais</value>
   </data>
+  <data name="Editor.CodeBlockLineNumbers.Title" xml:space="preserve">
+    <value>Uimhreacha líne i mbloic chóid</value>
+  </data>
+  <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
+    <value>Scrollaíonn línte fada i mbloic chóid go cliathánach in ionad timfhilleadh. Ní shábháiltear, ní chóipeáiltear ná ní phriontáiltear na huimhreacha</value>
+  </data>
 </root>

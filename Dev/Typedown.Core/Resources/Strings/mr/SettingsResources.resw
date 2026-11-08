@@ -976,4 +976,10 @@
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>वाचन मोडमध्ये परिच्छेदातील एकच ओळ खंड रिक्त जागेसारखा दिसतो, जसे Markdown सांगते आणि निर्यात आधीच करते (चिनी किंवा जपानी अक्षरांमध्ये रिक्त जागा नाही). ओळ खंड ठेवण्यासाठी ओळीच्या शेवटी दोन रिक्त जागा किंवा बॅकस्लॅश द्या</value>
   </data>
+  <data name="Editor.CodeBlockLineNumbers.Title" xml:space="preserve">
+    <value>कोड ब्लॉकमध्ये ओळ क्रमांक</value>
+  </data>
+  <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
+    <value>कोड ब्लॉकमधील लांब ओळी गुंडाळण्याऐवजी आडव्या स्क्रोल होतात. क्रमांक सेव्ह, कॉपी किंवा प्रिंट होत नाहीत</value>
+  </data>
 </root>

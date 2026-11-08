@@ -271,7 +271,7 @@ figure[data-role="FOOTNOTE"] th code {
 span.ag-html-tag {
   color: var(--editorColor50);
   font-weight: 200;
-  font-family: monospace;
+  font-family: var(--codeFontFamily, monospace);
 }
 
 span.ag-ruby {
@@ -282,7 +282,7 @@ span.ag-ruby {
 span.ag-math {
   position: relative;
   color: var(--editorColor);
-  font-family: monospace;
+  font-family: var(--codeFontFamily, monospace);
   display: inline-block;
   vertical-align: top;
 }
@@ -326,7 +326,7 @@ span.ag-math>.ag-math-render.ag-math-error {
   color: var(--deleteColor);
   font-size: 14px;
   font-style: italic;
-  font-family: monospace;
+  font-family: var(--codeFontFamily, monospace);
   white-space: nowrap;
 }
 
@@ -1386,6 +1386,20 @@ figure:not(.ag-active) pre.ag-paragraph.line-numbers {
   pointer-events: none;
   display: block;
   counter-increment: linenumber;
+}
+
+/* Settings > Editor > Line numbers in code blocks: the lines do not wrap (a long one scrolls across), so each line is one
+   line high and its number, one span each, stands beside it (parser/render/renderBlock/renderContainerBlock.js). */
+pre.ag-paragraph.line-numbers .ag-code-content {
+  white-space: pre;
+  overflow-x: auto;
+}
+
+/* Printing wraps code's lines (below): the numbers would no longer stand by them. */
+@media print {
+  pre.ag-paragraph.line-numbers .line-numbers-rows {
+    display: none;
+  }
 }
 
 .line-numbers-rows>span:before {

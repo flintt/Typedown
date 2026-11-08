@@ -163,6 +163,7 @@ internal static partial class CaseCatalog
         ["KY01"] = Q("keys"),
         ["ED01"] = Q("keys", "content"),
         ["ED02"] = F("keys", "content"),
+        ["IM01"] = F("keys", "content"),
         ["BL01"] = F("content"),
         ["BL02"] = F("content", "export"),
         // Fails as a known issue (restored without activation, the editor has no size): in full runs only.
@@ -340,6 +341,7 @@ internal static partial class CaseCatalog
         ["KY01"] = "Ctrl 与字母同时到达时撤销/重做仍走宿主（可视与源码模式）",
         ["ED01"] = "可视编辑中 Ctrl+Shift+方向键扩选、Ctrl+方向键移动、Ctrl+F 打开查找、滚轮滚动页面",
         ["ED02"] = "表格单元格内 Shift+Enter 与 Alt+Enter 换行",
+        ["IM01"] = "中文输入法（微软拼音）打字：拼音只上屏一次，全角括号不多补，宿主与编辑器文本一致",
         ["BL01"] = "多个空行在可视编辑和保存后原样保留（开头、块之间、结尾）",
         ["BL02"] = "设置“保留多余空行（显示为空白）”：开启后阅读模式和 HTML 导出中空行保留高度，关闭时与以前一致",
         ["MN03"] = "最小化时写入，未激活恢复后编辑区尺寸",

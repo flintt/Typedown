@@ -976,4 +976,10 @@
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>읽기 모드에서 단락 안의 단일 줄바꿈을 Markdown 규격과 내보내기 결과처럼 공백으로 표시합니다(중국어·일본어 문자 사이에는 공백을 넣지 않음). 줄바꿈을 유지하려면 줄 끝에 공백 두 개나 백슬래시를 넣으세요</value>
   </data>
+  <data name="Editor.CodeBlockLineNumbers.Title" xml:space="preserve">
+    <value>코드 블록에 줄 번호 표시</value>
+  </data>
+  <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
+    <value>코드 블록의 긴 줄은 줄 바꿈 대신 가로로 스크롤됩니다. 줄 번호는 저장, 복사, 인쇄되지 않습니다</value>
+  </data>
 </root>

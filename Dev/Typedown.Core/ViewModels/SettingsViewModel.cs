@@ -44,7 +44,12 @@ namespace Typedown.Core.ViewModels
         public bool AutoPairBracket { get => GetSettingValue(true); set => SetSettingValue(value); }
         public bool AutoPairQuote { get => GetSettingValue(true); set => SetSettingValue(value); }
         public bool TrimUnnecessaryCodeBlockEmptyLines { get => GetSettingValue(false); set => SetSettingValue(value); }
-        public bool PreferLooseListItem { get => GetSettingValue(true); set => SetSettingValue(value); }
+        /// <summary>
+        /// New list items written loose, a blank line between them (and drawn further apart). Off by default since
+        /// 2026-11-01: a new list came out with a blank line between every item, which readers took for a fault (the
+        /// Shazao forum, #36). A list in the file keeps what it is either way.
+        /// </summary>
+        public bool PreferLooseListItem { get => GetSettingValue(false); set => SetSettingValue(value); }
         /// <summary>Spaces after the list marker for nested items: "1".."4", or "dfm" (4-space indentation). Muya default is 1.</summary>
         public string ListIndentation { get => GetSettingValue("1"); set => SetSettingValue(value); }
         /// <summary>Pad table cells so columns line up in the source (upstream #24/#70 ask for a way to turn this off).</summary>
@@ -60,6 +65,11 @@ namespace Typedown.Core.ViewModels
         /// only. Asked for by markdown-linewrap and a Store review ("wraps lines on single line breaks").
         /// </summary>
         public bool JoinSoftBreaks { get => GetSettingValue(false); set => SetSettingValue(value); }
+        /// <summary>
+        /// Line numbers beside the lines of a code block in the visual editor and reading mode; its lines do not wrap then
+        /// (a long one scrolls across). Display only: not in the file, not copied, not printed. Asked for in Store reviews.
+        /// </summary>
+        public bool CodeBlockLineNumbers { get => GetSettingValue(false); set => SetSettingValue(value); }
         /// <summary>The visual editor shows the Markdown marks (**, #, a link's address) everywhere, not only where the caret is.</summary>
         public bool ShowMarkdownMarks { get => GetSettingValue(false); set => SetSettingValue(value); }
 
@@ -300,6 +310,7 @@ namespace Typedown.Core.ViewModels
             "TableAlignColumns",
             "ShowBlankLines",
             "JoinSoftBreaks",
+            "CodeBlockLineNumbers",
             "ShowMarkdownMarks",
             "ProgressiveRendering",
             "PredictHeights",

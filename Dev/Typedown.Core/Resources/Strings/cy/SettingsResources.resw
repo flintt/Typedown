@@ -976,4 +976,10 @@
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>Yn y modd darllen, mae toriad llinell sengl o fewn paragraff yn ymddangos fel bwlch, fel y mae Markdown yn ei nodi ac fel y mae’r allforion yn ei wneud eisoes (dim bwlch rhwng nodau Tsieinëeg neu Japaneeg). I gadw toriad, gorffennwch y llinell gyda dau fwlch neu slaes ôl</value>
   </data>
+  <data name="Editor.CodeBlockLineNumbers.Title" xml:space="preserve">
+    <value>Rhifau llinell mewn blociau cod</value>
+  </data>
+  <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
+    <value>Mae llinellau hir mewn blociau cod yn sgrolio i'r ochr yn lle lapio. Nid yw'r rhifau'n cael eu cadw, eu copïo na'u hargraffu</value>
+  </data>
 </root>

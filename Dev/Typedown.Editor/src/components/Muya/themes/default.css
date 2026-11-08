@@ -100,6 +100,13 @@ html, body {
   line-height: 1.6;
 }
 
+/* Code's font. The monospaced ones have no Chinese, Japanese or Korean: those letters come from the text's own font
+   (the one chosen in the settings, or the system's sans-serif) before the browser's monospace fallback, which is a
+   serif one (SimSun) on Chinese Windows. On body, where the chosen font is set. */
+body {
+  --codeFontFamily: "DejaVu Sans Mono", "Source Code Pro", "Droid Sans Mono", Consolas, var(--editorFontFamily, sans-serif), monospace;
+}
+
 span code,
 td code,
 th code,
@@ -107,7 +114,7 @@ code,
 code[class*="language-"],
 .CodeMirror,
 pre.ag-paragraph {
-  font-family: "DejaVu Sans Mono", "Source Code Pro", "Droid Sans Mono", Consolas, monospace;
+  font-family: var(--codeFontFamily);
   font-size: 1em;
 }
 
@@ -557,7 +564,9 @@ kbd {
     /*font-family: Menlo, Monaco, Consolas, "Courier New", monospace;*/
     padding: 2px 4px 0px 4px;
     font-size: 85%;
-    margin: 0;
+    /* A little room outside its background too, so the letters on either side do not touch it (a Store review, mdview
+       #283: it sat flush against the text). */
+    margin: 0 0.15em;
     padding: 0.2em 0.4em;
     color: var(--editorColor);
   }

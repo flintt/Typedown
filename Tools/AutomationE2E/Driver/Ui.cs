@@ -196,6 +196,8 @@ internal static partial class Program
         ["Left"] = 0x25, ["Up"] = 0x26, ["Right"] = 0x27, ["Down"] = 0x28, ["Insert"] = 0x2D,
         // The / key (US layout), as Vim's search reads it: a key, not a character typed (VK_OEM_2).
         ["Slash"] = 0xBF,
+        // The ` key (US layout, VK_OEM_3): through an IME in Chinese mode it gives the IME's own mark.
+        ["Backquote"] = 0xC0,
     };
 
     /// <summary>

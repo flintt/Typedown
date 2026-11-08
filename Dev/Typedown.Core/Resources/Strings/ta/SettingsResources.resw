@@ -976,4 +976,10 @@
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>படிக்கும் பயன்முறையில், பத்திக்குள் உள்ள ஒற்றை வரி முறிவு Markdown குறிப்பிடுவது போலவும் ஏற்றுமதிகள் ஏற்கனவே செய்வது போலவும் இடைவெளியாகக் காட்டப்படும் (சீன அல்லது ஜப்பானிய எழுத்துகளுக்கு இடையே இடைவெளி இல்லை). வரி முறிவை வைத்திருக்க, வரியின் இறுதியில் இரண்டு இடைவெளிகள் அல்லது பின்சாய்வுக்கோடு இடவும்</value>
   </data>
+  <data name="Editor.CodeBlockLineNumbers.Title" xml:space="preserve">
+    <value>குறியீட்டுத் தொகுதிகளில் வரி எண்கள்</value>
+  </data>
+  <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
+    <value>குறியீட்டுத் தொகுதிகளின் நீண்ட வரிகள் மடிவதற்குப் பதிலாகப் பக்கவாட்டில் உருளும். எண்கள் சேமிக்கப்படுவதில்லை, நகலெடுக்கப்படுவதில்லை, அச்சிடப்படுவதில்லை</value>
+  </data>
 </root>

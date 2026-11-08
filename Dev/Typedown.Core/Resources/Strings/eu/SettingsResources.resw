@@ -976,4 +976,10 @@
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>Irakurtzeko moduan, paragrafo bateko lerro-jauzi bakuna zuriune gisa erakusten da, Markdown-ek dioen bezala eta esportazioek dagoeneko egiten duten bezala (ez da zuriunerik jartzen txinerazko edo japonierazko karaktereen artean). Jauzia mantentzeko, amaitu lerroa bi zuriunerekin edo alderantzizko barra batekin</value>
   </data>
+  <data name="Editor.CodeBlockLineNumbers.Title" xml:space="preserve">
+    <value>Lerro-zenbakiak kode-blokeetan</value>
+  </data>
+  <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
+    <value>Kode-blokeetako lerro luzeak horizontalki korritzen dira, egokitu beharrean. Zenbakiak ez dira gordetzen, kopiatzen edo inprimatzen</value>
+  </data>
 </root>

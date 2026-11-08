@@ -976,4 +976,10 @@
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>У режимі читання одиночний перенос рядка всередині абзацу показується як пробіл, як вимагає Markdown і як уже роблять експорти (між китайськими чи японськими символами пробіл не ставиться). Щоб зберегти перенос, завершіть рядок двома пробілами або зворотною скісною рискою</value>
   </data>
+  <data name="Editor.CodeBlockLineNumbers.Title" xml:space="preserve">
+    <value>Номери рядків у блоках коду</value>
+  </data>
+  <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
+    <value>Довгі рядки в блоках коду прокручуються по горизонталі замість перенесення. Номери не зберігаються, не копіюються і не друкуються</value>
+  </data>
 </root>

@@ -976,4 +976,10 @@
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>Skaitymo režimu pavienis eilutės lūžis pastraipoje rodomas kaip tarpas, kaip nustato Markdown ir kaip jau daro eksportas (tarp kinų ar japonų rašmenų tarpas nededamas). Norėdami išlaikyti lūžį, eilutę užbaikite dviem tarpais arba atvirkštiniu pasviruoju brūkšniu</value>
   </data>
+  <data name="Editor.CodeBlockLineNumbers.Title" xml:space="preserve">
+    <value>Eilučių numeriai kodo blokuose</value>
+  </data>
+  <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
+    <value>Ilgos kodo blokų eilutės slenkamos horizontaliai, o ne laužomos. Numeriai neišsaugomi, nekopijuojami ir nespausdinami</value>
+  </data>
 </root>

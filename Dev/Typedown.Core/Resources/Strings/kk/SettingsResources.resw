@@ -976,4 +976,10 @@
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>Оқу режимінде абзац ішіндегі жалғыз жол ауысуы Markdown талап ететіндей және экспорттар қазірдің өзінде істейтіндей бос орын ретінде көрсетіледі (қытай немесе жапон таңбалары арасында бос орын қойылмайды). Жол ауысуын сақтау үшін жолды екі бос орынмен немесе кері қиғаш сызықпен аяқтаңыз</value>
   </data>
+  <data name="Editor.CodeBlockLineNumbers.Title" xml:space="preserve">
+    <value>Код блоктарындағы жол нөмірлері</value>
+  </data>
+  <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
+    <value>Код блоктарындағы ұзын жолдар тасымалданбай, көлденең айналады. Нөмірлер сақталмайды, көшірілмейді және басып шығарылмайды</value>
+  </data>
 </root>

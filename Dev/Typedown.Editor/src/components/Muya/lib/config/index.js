@@ -261,7 +261,7 @@ export const MUYA_DEFAULT_OPTION = Object.freeze({
   markdown: '',
   // Whether to trim the beginning and ending empty line in code block when open markdown.
   trimUnnecessaryCodeBlockEmptyLines: false,
-  preferLooseListItem: true,
+  preferLooseListItem: false, // Settings > Editor > Loose lists, off by default (SettingsViewModel.PreferLooseListItem)
   autoPairBracket: true,
   autoPairMarkdownSyntax: true,
   autoPairQuote: true,

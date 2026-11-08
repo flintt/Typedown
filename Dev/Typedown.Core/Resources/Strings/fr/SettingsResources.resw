@@ -976,4 +976,10 @@
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>En mode lecture, un simple saut de ligne dans un paragraphe s’affiche comme une espace, comme le prévoit Markdown et comme le font déjà les exportations (aucune espace entre caractères chinois ou japonais). Pour garder un saut, terminez la ligne par deux espaces ou une barre oblique inverse</value>
   </data>
+  <data name="Editor.CodeBlockLineNumbers.Title" xml:space="preserve">
+    <value>Numéros de ligne dans les blocs de code</value>
+  </data>
+  <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
+    <value>Les longues lignes des blocs de code défilent horizontalement au lieu de revenir à la ligne. Les numéros ne sont ni enregistrés, ni copiés, ni imprimés</value>
+  </data>
 </root>

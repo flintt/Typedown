@@ -976,4 +976,10 @@
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>Trong chế độ đọc, một dấu xuống dòng đơn bên trong đoạn văn được hiển thị như một khoảng trắng, đúng như Markdown quy định và như các bản xuất đã làm (không có khoảng trắng giữa các ký tự tiếng Trung hoặc tiếng Nhật). Để giữ lại xuống dòng, hãy kết thúc dòng bằng hai khoảng trắng hoặc một dấu gạch chéo ngược</value>
   </data>
+  <data name="Editor.CodeBlockLineNumbers.Title" xml:space="preserve">
+    <value>Số dòng trong khối mã</value>
+  </data>
+  <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
+    <value>Dòng dài trong khối mã cuộn ngang thay vì xuống dòng. Số dòng không được lưu, sao chép hay in</value>
+  </data>
 </root>

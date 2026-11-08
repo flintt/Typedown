@@ -1,6 +1,5 @@
 import { loadLanguage } from '../prism/index'
 import { escapeHTML } from '../utils'
-// import resizeCodeBlockLineNumber from '../utils/resizeCodeLineNumber'
 import selection from '../selection'
 import { CLASS_OR_ID } from '../config'
 import ExportMarkdown from '../utils/exportMarkdown'
@@ -280,19 +279,19 @@ const codeBlockCtrl = ContentState => {
     return this.copyBlock(figure, figure.querySelector(':scope > .ag-diagram-copy'))
   }
 
+  // After every drawing. A block drawn whole has its line numbers drawn with it; a key typed in a code block draws only
+  // its text (singleRender), so the numbers of the code block with the caret are made as many as its lines here.
   ContentState.prototype.resizeLineNumber = function () {
-    // FIXME: Disabled due to #1648.
-    // const { codeBlockLineNumbers } = this.muya.options
-    // if (!codeBlockLineNumbers) {
-    //   return
-    // }
-
-    // const codeBlocks = document.querySelectorAll('pre.line-numbers')
-    // if (codeBlocks.length) {
-    //   for (const ele of codeBlocks) {
-    //     resizeCodeBlockLineNumber(ele)
-    //   }
-    // }
+    if (!this.muya.options.codeBlockLineNumbers) return
+    const key = this.cursor && this.cursor.start && this.cursor.start.key
+    const block = key && this.getBlock(key)
+    if (!block || block.functionType !== 'codeContent') return
+    const rows = document.getElementById(key)?.parentElement?.querySelector(':scope > .line-numbers-rows')
+    if (!rows) return
+    const { text } = block
+    const lines = (text.match(/\n(?!$)/g) || []).length + 1 + (text.endsWith('\n') ? 1 : 0)
+    while (rows.children.length < lines) rows.appendChild(document.createElement('span'))
+    while (rows.children.length > lines) rows.lastElementChild.remove()
   }
 }
 

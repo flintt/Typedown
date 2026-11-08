@@ -976,4 +976,10 @@
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>Στη λειτουργία ανάγνωσης, μια μεμονωμένη αλλαγή γραμμής μέσα σε παράγραφο εμφανίζεται ως κενό, όπως ορίζει το Markdown και όπως ήδη κάνουν οι εξαγωγές (χωρίς κενό μεταξύ κινεζικών ή ιαπωνικών χαρακτήρων). Για να κρατήσετε μια αλλαγή γραμμής, τελειώστε τη γραμμή με δύο κενά ή μια ανάποδη κάθετο</value>
   </data>
+  <data name="Editor.CodeBlockLineNumbers.Title" xml:space="preserve">
+    <value>Αριθμοί γραμμών σε μπλοκ κώδικα</value>
+  </data>
+  <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
+    <value>Οι μεγάλες γραμμές στα μπλοκ κώδικα κυλούν οριζόντια αντί να αναδιπλώνονται. Οι αριθμοί δεν αποθηκεύονται, δεν αντιγράφονται ούτε εκτυπώνονται</value>
+  </data>
 </root>

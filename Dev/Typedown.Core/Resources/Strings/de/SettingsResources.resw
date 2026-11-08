@@ -976,4 +976,10 @@
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>Im Lesemodus wird ein einzelner Zeilenumbruch innerhalb eines Absatzes als Leerzeichen angezeigt, wie es Markdown vorsieht und die Exporte bereits tun (kein Leerzeichen zwischen chinesischen oder japanischen Zeichen). Um einen Umbruch zu behalten, beenden Sie die Zeile mit zwei Leerzeichen oder einem Backslash</value>
   </data>
+  <data name="Editor.CodeBlockLineNumbers.Title" xml:space="preserve">
+    <value>Zeilennummern in Code-Blöcken</value>
+  </data>
+  <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
+    <value>Lange Zeilen in Code-Blöcken werden horizontal gescrollt statt umbrochen. Die Nummern werden nicht gespeichert, kopiert oder gedruckt</value>
+  </data>
 </root>

@@ -976,4 +976,10 @@
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>Dalam mod baca, satu pemisah baris di dalam perenggan dipaparkan sebagai ruang, seperti yang ditetapkan Markdown dan seperti yang sudah dilakukan oleh eksport (tiada ruang antara aksara Cina atau Jepun). Untuk mengekalkan pemisah baris, akhiri baris dengan dua ruang atau garis condong ke belakang</value>
   </data>
+  <data name="Editor.CodeBlockLineNumbers.Title" xml:space="preserve">
+    <value>Nombor baris dalam blok kod</value>
+  </data>
+  <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
+    <value>Baris panjang dalam blok kod menatal ke sisi dan tidak dibalut. Nombor tidak disimpan, disalin atau dicetak</value>
+  </data>
 </root>

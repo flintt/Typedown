@@ -1005,4 +1005,10 @@
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>閱讀模式下，段落中的單個換行顯示為空格，與 Markdown 規範和匯出結果一致（中文、日文字元之間不加空格）。要保留換行，請在行尾加兩個空格或反斜線</value>
   </data>
+  <data name="Editor.CodeBlockLineNumbers.Title" xml:space="preserve">
+    <value>程式碼區塊顯示行號</value>
+  </data>
+  <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
+    <value>程式碼區塊中的長行改為水平捲動，不再自動換行。行號不會儲存、複製或列印</value>
+  </data>
 </root>

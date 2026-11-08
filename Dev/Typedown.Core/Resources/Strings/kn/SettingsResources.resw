@@ -976,4 +976,10 @@
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>ಓದುವ ಮೋಡ್‌ನಲ್ಲಿ ಪ್ಯಾರಾಗ್ರಾಫ್‌ನೊಳಗಿನ ಏಕ ಸಾಲು ವಿರಾಮವು Markdown ಸೂಚಿಸುವಂತೆ ಮತ್ತು ರಫ್ತುಗಳು ಈಗಾಗಲೇ ಮಾಡುವಂತೆ ಖಾಲಿ ಜಾಗವಾಗಿ ತೋರುತ್ತದೆ (ಚೈನೀಸ್ ಅಥವಾ ಜಪಾನೀಸ್ ಅಕ್ಷರಗಳ ನಡುವೆ ಖಾಲಿ ಜಾಗವಿಲ್ಲ). ಸಾಲು ವಿರಾಮ ಉಳಿಸಲು ಸಾಲಿನ ಕೊನೆಯಲ್ಲಿ ಎರಡು ಖಾಲಿ ಜಾಗ ಅಥವಾ ಬ್ಯಾಕ್‌ಸ್ಲ್ಯಾಶ್ ಹಾಕಿ</value>
   </data>
+  <data name="Editor.CodeBlockLineNumbers.Title" xml:space="preserve">
+    <value>ಕೋಡ್ ಬ್ಲಾಕ್‌ಗಳಲ್ಲಿ ಸಾಲು ಸಂಖ್ಯೆಗಳು</value>
+  </data>
+  <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
+    <value>ಕೋಡ್ ಬ್ಲಾಕ್‌ಗಳ ಉದ್ದದ ಸಾಲುಗಳು ಸುತ್ತುವ ಬದಲು ಅಡ್ಡಲಾಗಿ ಸ್ಕ್ರೋಲ್ ಆಗುತ್ತವೆ. ಸಂಖ್ಯೆಗಳನ್ನು ಉಳಿಸಲಾಗುವುದಿಲ್ಲ, ನಕಲಿಸಲಾಗುವುದಿಲ್ಲ ಅಥವಾ ಮುದ್ರಿಸಲಾಗುವುದಿಲ್ಲ</value>
+  </data>
 </root>

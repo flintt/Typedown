@@ -976,4 +976,10 @@
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>I te aratau pānui, ka whakaaturia he whatinga rārangi kotahi i roto i te kōwae hei mokowā, pērā i tā Markdown e whakarite ana, ā, pērā i tā ngā kaweake e mahi kē ana (kāore he mokowā i waenga i ngā pūāhua Hainamana, Hapanihi rānei). Hei pupuri i te whatinga, whakamutua te rārangi ki ngā mokowā e rua, ki tētahi rītaha whakamuri rānei</value>
   </data>
+  <data name="Editor.CodeBlockLineNumbers.Title" xml:space="preserve">
+    <value>Ngā tau rārangi i ngā paraka waehere</value>
+  </data>
+  <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
+    <value>Ka panuku whakatahā ngā rārangi roa i ngā paraka waehere, kaua e takai. Kāore ngā tau e tiakina, e tāruatia, e tāngia rānei</value>
+  </data>
 </root>

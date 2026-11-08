@@ -976,4 +976,10 @@
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>Fil-modalità tal-qari, qabża waħda ta’ linja ġewwa paragrafu tidher bħala spazju, kif jistabbilixxi Markdown u kif diġà jagħmlu l-esportazzjonijiet (l-ebda spazju bejn karattri Ċiniżi jew Ġappuniżi). Biex iżżomm qabża, temm il-linja b’żewġ spazji jew backslash</value>
   </data>
+  <data name="Editor.CodeBlockLineNumbers.Title" xml:space="preserve">
+    <value>Numri tal-linji fil-blokki tal-kodiċi</value>
+  </data>
+  <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
+    <value>Il-linji twal fil-blokki tal-kodiċi jiskrollaw lejn il-ġenb minflok jinqasmu. In-numri ma jiġux salvati, ikkupjati jew stampati</value>
+  </data>
 </root>

@@ -976,4 +976,10 @@
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>পড়ার মোডে অনুচ্ছেদের ভেতরের একক লাইন বিরতি স্পেস হিসেবে দেখায়, যেমন Markdown নির্ধারণ করে এবং রপ্তানি আগে থেকেই করে (চীনা বা জাপানি অক্ষরের মাঝে স্পেস নয়)। লাইন বিরতি রাখতে লাইনের শেষে দুটি স্পেস বা ব্যাকস্ল্যাশ দিন</value>
   </data>
+  <data name="Editor.CodeBlockLineNumbers.Title" xml:space="preserve">
+    <value>কোড ব্লকে লাইন নম্বর</value>
+  </data>
+  <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
+    <value>কোড ব্লকের লম্বা লাইন মোড়ানোর বদলে পাশে স্ক্রল হয়। নম্বরগুলো সেভ, কপি বা প্রিন্ট হয় না</value>
+  </data>
 </root>

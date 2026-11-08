@@ -976,4 +976,10 @@
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>V režimu čtení se jednoduché zalomení řádku uvnitř odstavce zobrazí jako mezera, jak stanoví Markdown a jak to už dělají exporty (mezi čínskými či japonskými znaky bez mezery). Chcete-li zalomení zachovat, ukončete řádek dvěma mezerami nebo zpětným lomítkem</value>
   </data>
+  <data name="Editor.CodeBlockLineNumbers.Title" xml:space="preserve">
+    <value>Čísla řádků v blocích kódu</value>
+  </data>
+  <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
+    <value>Dlouhé řádky v blocích kódu se místo zalamování posouvají vodorovně. Čísla se neukládají, nekopírují ani netisknou</value>
+  </data>
 </root>

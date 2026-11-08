@@ -839,11 +839,6 @@ class Muya {
   }
 
   setOptions(options, needRender = false) {
-    // FIXME: Just to be sure, disabled due to #1648.
-    if (options.codeBlockLineNumbers) {
-      options.codeBlockLineNumbers = false
-    }
-
     Object.assign(this.options, options)
     if (needRender) {
       this.contentState.render(false, true)

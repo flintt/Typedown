@@ -976,4 +976,10 @@
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>پڑھنے کے موڈ میں پیراگراف کے اندر ایک واحد لائن بریک وقفے کے طور پر دکھائی دیتی ہے، جیسا کہ Markdown بتاتا ہے اور ایکسپورٹ پہلے سے کرتے ہیں (چینی یا جاپانی حروف کے درمیان وقفہ نہیں ڈالا جاتا)۔ لائن بریک برقرار رکھنے کے لیے سطر کو دو وقفوں یا بیک سلیش پر ختم کریں</value>
   </data>
+  <data name="Editor.CodeBlockLineNumbers.Title" xml:space="preserve">
+    <value>کوڈ بلاکس میں لائن نمبر</value>
+  </data>
+  <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
+    <value>کوڈ بلاکس کی لمبی لائنیں لپٹنے کے بجائے افقی اسکرول ہوتی ہیں۔ نمبر محفوظ، کاپی یا پرنٹ نہیں ہوتے</value>
+  </data>
 </root>

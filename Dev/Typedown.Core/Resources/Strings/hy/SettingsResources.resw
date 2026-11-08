@@ -976,4 +976,10 @@
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>Ընթերցման ռեժիմում պարբերության ներսում մեկ տողադարձը ցուցադրվում է որպես բացատ, ինչպես սահմանում է Markdown-ը և ինչպես արդեն անում են արտահանումները (չինական կամ ճապոնական նիշերի միջև բացատ չի դրվում)։ Տողադարձը պահպանելու համար տողն ավարտեք երկու բացատով կամ հակառակ թեք գծով</value>
   </data>
+  <data name="Editor.CodeBlockLineNumbers.Title" xml:space="preserve">
+    <value>Տողերի համարներ կոդի բլոկներում</value>
+  </data>
+  <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
+    <value>Կոդի բլոկների երկար տողերը չեն փաթաթվում, այլ ոլորվում են հորիզոնական։ Համարները չեն պահպանվում, պատճենվում կամ տպվում</value>
+  </data>
 </root>

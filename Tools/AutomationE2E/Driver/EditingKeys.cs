@@ -105,6 +105,65 @@ internal static partial class Program
     }
 
     /// <summary>
+    /// The test PC's Chinese IME (Microsoft Pinyin, Chinese mode) typing into the visual editor through the keyboard, as
+    /// a person types - keys, not characters sent past the IME as the other cases send them. Pinyin is composed and
+    /// committed once; full-width brackets typed come out one each, with no closing one put in by the editor (it pairs
+    /// only ASCII marks, on an input event, and what the IME commits comes as a composition); and what the host holds
+    /// afterwards is what the editor holds. What the IME gives for `, Shift+8 and Shift+4 goes into the notes.
+    /// </summary>
+    private static async Task IM01(List<string> notes)
+    {
+        using var c = await Session("e2e IM01");
+        var id = await Open(c, Fixture("im01.md", "# IM01\n\nstart\n"));
+        var windowId = await WindowIdOf(c, id);
+        var window = await WindowOf(windowId, c);
+        await WaitUntilDrawn(c, windowId, id, "start");
+        await ClickEditorTextOnce(c, windowId, window, "start");
+        await Task.Delay(300);
+        Chord("End");
+        await Task.Delay(150);
+        async Task<string> Text() => ((string?)(await Get(c, id))["text"] ?? "").Replace("\r", "");
+        async Task<string> Held() => (string?)(await c.Call("test.editor.eval", new { windowId, script = "window.__typedownMuya.getMarkdown()" }))["result"] ?? "";
+
+        // n i h a o, Space: the first candidate committed.
+        foreach (var k in "nihao") { Chord(k.ToString()); await Task.Delay(80); }
+        Chord("Space");
+        await Task.Delay(600);
+        var text = "";
+        await Eventually(async () => (text = await Text()).Contains("你好"), 3000);
+        notes.Add("n i h a o Space: " + text.Replace("\n", "\\n"));
+        if (!text.Contains("你好"))
+            throw new CaseFailed($"the IME did not compose 你好 - not Microsoft Pinyin in Chinese mode on this PC? (an environment problem, not the editor's): {text.Replace("\n", "\\n")}");
+        Check(text.Split("你好").Length == 2 && !text.Contains("nihao"), "the pinyin is committed once, with no letters of it left");
+
+        // Shift+9, Shift+0: the IME's full-width brackets, one each.
+        Chord("Shift+9"); await Task.Delay(250);
+        Chord("Shift+0"); await Task.Delay(400);
+        await Eventually(async () => (text = await Text()).Contains("）") || text.Contains(")"), 2000);
+        notes.Add("Shift+9 Shift+0: " + text.Replace("\n", "\\n"));
+        var open = text.Count(ch => ch == '（' || ch == '('); var close = text.Count(ch => ch == '）' || ch == ')');
+        Check(open == 1 && close == 1, $"a bracket typed and its closing one typed: one of each, none put in by the editor ({open} and {close})");
+
+        // `, Shift+8, Shift+4: whatever the IME gives, written down; nothing doubled by the editor around a composition.
+        foreach (var chord in new[] { "Backquote", "Shift+8", "Shift+4" })
+        {
+            var before = await Text();
+            Chord(chord); await Task.Delay(400);
+            var after = await Text();
+            notes.Add($"{chord}: {AddedText(before, after)}");
+        }
+        Chord("Space"); await Task.Delay(500);
+        var host = await Text();
+        var held = await Held();
+        notes.Add("at the end: " + host.Replace("\n", "\\n"));
+        Check(await Eventually(async () => (host = await Text()) == (held = await Held()), 3000), $"the host holds what the editor holds after the IME's input (host {host.Replace("\n", "\\n")}, editor {held.Replace("\n", "\\n")})");
+    }
+
+    /// <summary>What a key added to the document's text, as a short note.</summary>
+    private static string AddedText(string before, string after) =>
+        after.StartsWith(before.TrimEnd('\n')) ? Newtonsoft.Json.JsonConvert.ToString(after.Substring(before.TrimEnd('\n').Length).TrimEnd('\n')) : Newtonsoft.Json.JsonConvert.ToString(after.Replace("\n", "\\n"));
+
+    /// <summary>
     /// Waits for the opened document to be on the page, drawn as well as loaded, before a case clicks into it: the text
     /// first reaches the page's Markdown, then the editor draws the block. Clicking at once failed now and then with
     /// "no paragraph with 'first para' on the page" while the document was still being shown.

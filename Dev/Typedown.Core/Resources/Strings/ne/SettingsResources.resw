@@ -976,4 +976,10 @@
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>पढ्ने मोडमा अनुच्छेदभित्रको एकल पङ्क्ति विच्छेद खाली ठाउँका रूपमा देखिन्छ, जस्तो Markdown ले तोकेको छ र निर्यातले पहिले नै गर्छ (चिनियाँ वा जापानी अक्षरबीच खाली ठाउँ हुँदैन)। पङ्क्ति विच्छेद राख्न पङ्क्तिको अन्त्यमा दुई खाली ठाउँ वा ब्याकस्ल्यास राख्नुहोस्</value>
   </data>
+  <data name="Editor.CodeBlockLineNumbers.Title" xml:space="preserve">
+    <value>कोड ब्लकमा पङ्क्ति नम्बर</value>
+  </data>
+  <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
+    <value>कोड ब्लकका लामा पङ्क्तिहरू र्‍याप हुनुको सट्टा तेर्सो स्क्रोल हुन्छन्। नम्बरहरू सेभ, कपी वा प्रिन्ट हुँदैनन्</value>
+  </data>
 </root>

@@ -976,4 +976,10 @@
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>U načinu čitanja jedan prelom reda unutar pasusa prikazuje se kao razmak, kako propisuje Markdown i kako to već rade izvozi (bez razmaka između kineskih ili japanskih znakova). Da zadržite prelom, završite red s dva razmaka ili obrnutom kosom crtom</value>
   </data>
+  <data name="Editor.CodeBlockLineNumbers.Title" xml:space="preserve">
+    <value>Brojevi redova u blokovima koda</value>
+  </data>
+  <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
+    <value>Dugi redovi u blokovima koda pomiču se vodoravno umjesto prelamanja. Brojevi se ne spremaju, ne kopiraju i ne štampaju</value>
+  </data>
 </root>

@@ -976,4 +976,10 @@
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>Në modalitetin e leximit, një kalim i vetëm rreshti brenda paragrafit shfaqet si hapësirë, siç e përcakton Markdown dhe siç bëjnë tashmë eksportet (pa hapësirë midis shkronjave kineze ose japoneze). Për ta ruajtur kalimin, mbyllni rreshtin me dy hapësira ose një vijë të pjerrët mbrapsht</value>
   </data>
+  <data name="Editor.CodeBlockLineNumbers.Title" xml:space="preserve">
+    <value>Numrat e rreshtave në blloqet e kodit</value>
+  </data>
+  <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
+    <value>Rreshtat e gjatë në blloqet e kodit rrëshqasin anash në vend që të mbështillen. Numrat nuk ruhen, nuk kopjohen dhe nuk printohen</value>
+  </data>
 </root>

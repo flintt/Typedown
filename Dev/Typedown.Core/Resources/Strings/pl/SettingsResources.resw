@@ -976,4 +976,10 @@
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>W trybie czytania pojedynczy znak nowego wiersza w akapicie jest wyświetlany jako spacja, tak jak określa Markdown i jak już robią eksporty (bez spacji między znakami chińskimi lub japońskimi). Aby zachować podział, zakończ wiersz dwiema spacjami lub ukośnikiem odwrotnym</value>
   </data>
+  <data name="Editor.CodeBlockLineNumbers.Title" xml:space="preserve">
+    <value>Numery wierszy w blokach kodu</value>
+  </data>
+  <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
+    <value>Długie wiersze w blokach kodu przewijają się w poziomie zamiast zawijać. Numery nie są zapisywane, kopiowane ani drukowane</value>
+  </data>
 </root>

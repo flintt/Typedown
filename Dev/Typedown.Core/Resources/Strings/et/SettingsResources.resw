@@ -976,4 +976,10 @@
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>Lugemisrežiimis kuvatakse lõigusisene üksik reavahetus tühikuna, nagu Markdown ette näeb ja nagu eksport juba teeb (hiina või jaapani märkide vahele tühikut ei panda). Reavahetuse säilitamiseks lõpetage rida kahe tühiku või kurakaldkriipsuga</value>
   </data>
+  <data name="Editor.CodeBlockLineNumbers.Title" xml:space="preserve">
+    <value>Reanumbrid koodiplokkides</value>
+  </data>
+  <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
+    <value>Koodiplokkide pikad read keritakse murdmise asemel külgsuunas. Numbreid ei salvestata, kopeerita ega prindita</value>
+  </data>
 </root>

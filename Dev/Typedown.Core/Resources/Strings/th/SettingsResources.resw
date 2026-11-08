@@ -976,4 +976,10 @@
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>ในโหมดอ่าน การขึ้นบรรทัดใหม่ครั้งเดียวภายในย่อหน้าจะแสดงเป็นช่องว่าง ตามที่ Markdown กำหนดและที่การส่งออกทำอยู่แล้ว (ไม่มีช่องว่างระหว่างอักขระจีนหรือญี่ปุ่น) หากต้องการคงการขึ้นบรรทัดใหม่ ให้จบบรรทัดด้วยช่องว่างสองช่องหรือแบ็กสแลช</value>
   </data>
+  <data name="Editor.CodeBlockLineNumbers.Title" xml:space="preserve">
+    <value>เลขบรรทัดในบล็อกโค้ด</value>
+  </data>
+  <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
+    <value>บรรทัดยาวในบล็อกโค้ดจะเลื่อนในแนวนอนแทนการตัดขึ้นบรรทัดใหม่ เลขบรรทัดจะไม่ถูกบันทึก คัดลอก หรือพิมพ์</value>
+  </data>
 </root>

@@ -976,4 +976,10 @@
   <data name="Editor.JoinSoftBreaks.Description" xml:space="preserve">
     <value>വായനാ മോഡിൽ ഖണ്ഡികയ്ക്കുള്ളിലെ ഒറ്റ വരി മുറിവ് Markdown നിർദ്ദേശിക്കുന്നതുപോലെയും എക്‌സ്‌പോർട്ടുകൾ ഇതിനകം ചെയ്യുന്നതുപോലെയും സ്പേസായി കാണിക്കും (ചൈനീസ് അല്ലെങ്കിൽ ജാപ്പനീസ് അക്ഷരങ്ങൾക്കിടയിൽ സ്പേസ് ഇല്ല). വരി മുറിവ് നിലനിർത്താൻ വരിയുടെ അവസാനം രണ്ട് സ്പേസ് അല്ലെങ്കിൽ ബാക്ക്‌സ്ലാഷ് ചേർക്കുക</value>
   </data>
+  <data name="Editor.CodeBlockLineNumbers.Title" xml:space="preserve">
+    <value>കോഡ് ബ്ലോക്കുകളിൽ വരി നമ്പറുകൾ</value>
+  </data>
+  <data name="Editor.CodeBlockLineNumbers.Description" xml:space="preserve">
+    <value>കോഡ് ബ്ലോക്കുകളിലെ നീണ്ട വരികൾ പൊതിയുന്നതിനു പകരം വശത്തേക്ക് സ്ക്രോൾ ചെയ്യും. നമ്പറുകൾ സേവ് ചെയ്യുകയോ പകർത്തുകയോ പ്രിന്റ് ചെയ്യുകയോ ഇല്ല</value>
+  </data>
 </root>

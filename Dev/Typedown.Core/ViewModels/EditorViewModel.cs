@@ -251,6 +251,7 @@ namespace Typedown.Core.ViewModels
                 Settings.TableAlignColumns,
                 Settings.ShowBlankLines,
                 Settings.JoinSoftBreaks,
+                Settings.CodeBlockLineNumbers,
                 Settings.ShowMarkdownMarks,
                 Settings.ProgressiveRendering,
                 Settings.PredictHeights,

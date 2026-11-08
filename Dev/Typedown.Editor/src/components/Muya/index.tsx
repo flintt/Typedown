@@ -423,6 +423,7 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
             direction: JSON.stringify(o?.textDirection ?? null),
             spellcheck: JSON.stringify(!!o?.spellcheckEnabled),
             renderPlantUml: JSON.stringify([!!o?.renderPlantUml, o?.plantUmlServer ?? '']),
+            codeBlockLineNumbers: JSON.stringify(!!o?.codeBlockLineNumbers),
             listIndentation: JSON.stringify(o?.listIndentation ?? null),
             readOnly: JSON.stringify(!!o?.readOnly)
         };
@@ -562,6 +563,12 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         const server = props.options?.plantUmlServer ?? ''
         applyOnce(editor, 'renderPlantUml', [on, server], () => editor?.setOptions({ renderPlantUml: on, plantUmlServer: server }, true))
     }, [editor, props.options?.renderPlantUml, props.options?.plantUmlServer])
+
+    useEffect(() => {
+        // Settings > Editor > Line numbers in code blocks: the document drawn again with or without them.
+        const on = !!props.options?.codeBlockLineNumbers
+        applyOnce(editor, 'codeBlockLineNumbers', on, () => editor?.setOptions({ codeBlockLineNumbers: on }, true))
+    }, [editor, props.options?.codeBlockLineNumbers])
 
     useEffect(() => {
         // Settings > Editor > Diagram renderer: Mermaid or Pele draws the Mermaid fences; the drawn ones are drawn again.

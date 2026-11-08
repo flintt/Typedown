@@ -250,6 +250,7 @@ powershell -ExecutionPolicy Bypass -File Tools\AutomationE2E\start-interactive.p
 | KY01 | Ctrl+Z and Ctrl+Y are the host's undo and redo however close Ctrl and the letter come, in the visual editor and in source mode |
 | ED01 | in the visual editor Ctrl+Shift+Right selects by words and Ctrl+Shift+Down to the end of the paragraph, Ctrl+Left/Right move without selecting, Ctrl+F opens the find bar, and the wheel scrolls the page |
 | ED02 | Shift+Enter and Alt+Enter in a table cell put a line break in that cell |
+| IM01 | The Chinese IME (Microsoft Pinyin, Chinese mode) typing through the keyboard: pinyin committed once, full-width brackets one each with none put in by the editor, the host's text the editor's; what `, Shift+8 and Shift+4 give is noted |
 | BL01 | blank lines survive a visual edit and a save: 1 at the start, 2, 4, 2, 3, 5 and 2 between blocks, 1 at the end |
 | BL02 | Settings > Editor > "Show extra blank lines": on, empty lines keep their height in reading mode and an HTML export; off (the default), both collapse them as before |
 | MN03 | minimized, written to, restored without activation: the editor's web view gets its size back |

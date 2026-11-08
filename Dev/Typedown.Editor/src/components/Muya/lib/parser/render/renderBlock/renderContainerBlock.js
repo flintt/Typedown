@@ -2,7 +2,7 @@ import { CLASS_OR_ID } from '../../../config'
 import { renderTableTools } from './renderToolBar'
 import { footnoteJumpIcon } from './renderFootnoteJump'
 import { renderEditIcon } from './renderContainerEditIcon'
-// import renderLineNumberRows from './renderLineNumber'
+import renderLineNumberRows from './renderLineNumber'
 import renderCopyButton from './renderCopyButton'
 import { renderLeftBar, renderBottomBar } from './renderTableDargBar'
 import { h } from '../snabbdom'
@@ -89,14 +89,17 @@ export default function renderContainerBlock (parent, block, activeBlocks, match
     if (type === 'pre') {
       children.unshift(renderCopyButton())
     }
-    // FIXME: Disabled due to #1648 - be consistent.
-    // if (this.muya.options.codeBlockLineNumbers) {
-    //   if (type === 'pre') {
-    //     selector += '.line-numbers'
-    //   } else {
-    //     children.unshift(renderLineNumberRows(block.children[0]))
-    //   }
-    // }
+    // Settings > Editor > Line numbers in code blocks, for code (fenced or indented; not a diagram's or maths' source).
+    // The lines do not wrap then (they scroll across, assets/styles/index.css), so each number stands by its line with
+    // nothing measured - MarkText turned them off (#1648) as numbers measured against wrapped lines went wrong. The
+    // numbers are CSS counters on empty spans: not text, not copied.
+    if (this.muya.options.codeBlockLineNumbers) {
+      if (type === 'pre' && /^(?:fencecode|indentcode)$/.test(functionType)) {
+        selector += '.line-numbers'
+      } else if (type === 'code' && parent && /^(?:fencecode|indentcode)$/.test(parent.functionType)) {
+        children.unshift(renderLineNumberRows(block.children[0]))
+      }
+    }
     Object.assign(data.attrs, { spellcheck: 'false' })
   }
 
