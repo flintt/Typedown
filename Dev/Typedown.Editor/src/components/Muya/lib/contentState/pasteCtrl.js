@@ -386,6 +386,13 @@ const pasteCtrl = ContentState => {
     }
 
     let copyType = this.checkCopyType(html, text)
+    // A caret at a heading's start is before its "# " (hidden): what is pasted goes after the marks, not in front of
+    // them - there it took the heading's place, the "#" lost and the caret put at a negative offset after it.
+    for (const point of [this.cursor.start, this.cursor.end]) {
+      const block = this.getBlock(point.key)
+      const marks = block && block.functionType === 'atxLine' ? /^ {0,3}#{1,6}(?:[ \t]+|$)/.exec(block.text) : null
+      if (marks && point.offset < marks[0].length) point.offset = marks[0].length
+    }
     const { start, end } = this.cursor
     const startBlock = this.getBlock(start.key)
     const endBlock = this.getBlock(end.key)
@@ -634,8 +641,15 @@ const pasteCtrl = ContentState => {
             startBlock.text += lines[0]
             if (lines.length > 1) {
               const pBlock = this.createBlockP(lines.slice(1).join('\n'))
-              this.insertAfter(parent, pBlock)
+              // The new paragraph after the heading (the two were the other way round: the heading was put after a
+              // paragraph not in the document, and the blocks' keys came out as text in the heading).
+              this.insertAfter(pBlock, parent)
               target = pBlock
+              // The caret after the pasted text, in the new paragraph (the text after the caret went with it): left to
+              // the heading, the offset came out negative and the page stopped drawing the paste.
+              const pLeaf = pBlock.children[0]
+              key = pLeaf.key
+              offset = pLeaf.text.length - cacheText.length
             }
           } else {
             startBlock.text += text
