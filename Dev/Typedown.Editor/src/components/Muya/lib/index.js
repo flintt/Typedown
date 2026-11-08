@@ -791,6 +791,77 @@ class Muya {
     return true
   }
 
+  /** The leaf blocks with their text, in document order: what review mode finds in the Markdown (services/reviewMap.ts). */
+  reviewLeaves() {
+    const leaves = []
+    const walk = blocks => {
+      for (const block of blocks) {
+        if (block.children && block.children.length) walk(block.children)
+        else if (typeof block.text === 'string') leaves.push({ key: block.key, text: block.text })
+      }
+    }
+    walk(this.contentState.blocks)
+    return leaves
+  }
+
+  /**
+   * Review mode's marks by leaf key (parser/render/review.js; null: none): the top-level blocks whose marks changed are
+   * drawn again, as refreshSearch does for a search's, with the caret put back where the model has it.
+   */
+  setReviewMarks(marks) {
+    const { contentState } = this
+    const { stateRender } = contentState
+    const before = stateRender.reviewMarks || new Map()
+    const after = marks || new Map()
+    stateRender.reviewMarks = marks && marks.size ? marks : null
+    const changed = new Set()
+    for (const [key, value] of after) if (JSON.stringify(value) !== JSON.stringify(before.get(key))) changed.add(key)
+    for (const key of before.keys()) if (!after.has(key)) changed.add(key)
+    if (!changed.size) return
+    let caretTop = null
+    try {
+      const { start } = contentState.cursor || {}
+      caretTop = start ? contentState.findOutMostBlock(contentState.getBlock(start.key)) : null
+    } catch (err) {
+      caretTop = null
+    }
+    const tops = new Set()
+    for (const key of changed) {
+      const block = contentState.getBlock(key)
+      if (block) tops.add(contentState.findOutMostBlock(block))
+    }
+    if (!tops.size) return
+    stateRender.redrawBlocks([...tops], caretTop && tops.has(caretTop) ? [caretTop] : [])
+    if (caretTop && tops.has(caretTop) && !this.options.readOnly && this.container.contains(document.activeElement)) contentState.setCursor()
+  }
+
+  /** The caret's leaf and place in it, or null. */
+  reviewCaret() {
+    const { start } = this.contentState.cursor || {}
+    return start && start.key ? { key: start.key, offset: start.offset } : null
+  }
+
+  /** The caret put at a place in a leaf, and its block brought into view (review mode's next and previous). */
+  setReviewCaret(key, offset) {
+    const { contentState } = this
+    const block = contentState.getBlock(key)
+    if (!block) return
+    const top = contentState.findOutMostBlock(block)
+    const state = contentState.stateRender.progressive
+    const index = contentState.blocks.indexOf(top)
+    if (state && index >= 0 && (index < state.lo || index >= state.hi)) contentState.stateRender.jumpProgressive(index)
+    if (!this.options.readOnly) {
+      contentState.cursor = { start: { key, offset }, end: { key, offset } }
+      contentState.setCursor()
+    }
+    const element = document.getElementById(key)
+    if (element) {
+      const rect = element.getBoundingClientRect()
+      if (rect.top < 0 || rect.bottom > window.innerHeight) window.scrollBy(0, rect.top - window.innerHeight / 3)
+    }
+    this.dispatchSelectionChange()
+  }
+
   /**
    * Ctrl+End or Ctrl+Home (`end` false) while a document is drawn a part at a time and that end of it is not drawn yet:
    * the caret goes there and the drawing starts again from there (StateRender.jumpProgressive), rather than the whole

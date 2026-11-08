@@ -18,6 +18,7 @@ import { applyHostBackground } from "services/theme";
 import { absoluteImageUrls, svgImagesAsPng } from "services/localPaths";
 import { diagramsToPictures } from "services/diagramPicture";
 import { markStartup, sendStartupMarks } from "services/startupMarks";
+import { command as reviewCommand, connectReviewHost, installReviewActions, noteChangeSource, refresh as refreshReview, reportNow as reportReview, ReviewPayload, setReview } from "services/reviewSession";
 
 /** The style element with this id, appended to the head on first use. */
 const styleElement = (id: string) => {
@@ -185,6 +186,9 @@ const Editor: React.FC = () => {
         const edit = pendingEditRef.current
         if (!edit) return false
         pendingEditRef.current = null
+        // Review mode: the text the edit put in is the program's revision (the source came with the edit).
+        refreshReview()
+        noteChangeSource(null)
         transport.postMessage('DocumentEditApplied', { operationId: edit.operationId, loadId: loadIdRef.current, outcome: 'applied', ...describeNormalization() })
         return true
     }, [describeNormalization])
@@ -276,6 +280,8 @@ const Editor: React.FC = () => {
             requestAnimationFrame(() => requestAnimationFrame(run))
             setTimeout(run, 150)
         }
+        // Review mode: the text the host put in (a load, an undo, an edit) against the baseline.
+        refreshReview()
         const set = pendingSetRef.current
         if (set) {
             pendingSetRef.current = null
@@ -302,6 +308,7 @@ const Editor: React.FC = () => {
             markdownRef.current = markdown
             resetUserIntent()
             flushFileLoaded()
+            refreshReview()
             return
         }
         // Host history text on its way into the editor: until it is there, a report (a late one about the text
@@ -311,6 +318,7 @@ const Editor: React.FC = () => {
         // applying it are not edits and must not advance the host's history or revision.
         if (pendingEditRef.current) {
             markdownRef.current = markdown
+            refreshReview()
             return
         }
         if (markdownRef.current != markdown) {
@@ -318,6 +326,7 @@ const Editor: React.FC = () => {
             // The kind of edit for the host's undo steps, taken before the origin (it reads the same armed action).
             const edit = takeEditReport();
             transport.postMessage('MarkdownChange', { text: markdown, loadId: loadIdRef.current, origin: takeChangeOrigin(), edit });
+            refreshReview()
         }
     }, [flushFileLoaded])
 
@@ -381,9 +390,10 @@ const Editor: React.FC = () => {
 
     useEffect(() => {
         markStartup('settings asked')
-        remote.getSettings().then(({ markdown, basePath, cursor, scrollTop, scrollAnchor, loadId, ...opt }: any) => {
+        remote.getSettings().then(({ markdown, basePath, cursor, scrollTop, scrollAnchor, loadId, review, ...opt }: any) => {
             markStartup('settings received')
             const apply = () => {
+                setReview(review, true)
                 window.basePath = basePath
                 loadIdRef.current = loadId
                 setScrollLoadId(loadId)
@@ -444,6 +454,8 @@ const Editor: React.FC = () => {
         // keepSource (a save the reader asked for, a close): a long document edited is reported once more with their
         // own text kept where they did not edit (Muya's keptSource does that while typing only up to 150,000 chars).
         flushRef.current?.(fileLoadPending.current ? undefined : { ifPending: true, keepSource: !!keepSource })
+        // The revisions first (a save, a switch away): the host keeps them with the text it is given now.
+        reportReview()
         transport.postMessage('ContentFlushed', { token: token ?? 0, text: markdownRef.current })
     }), []);
 
@@ -504,7 +516,7 @@ const Editor: React.FC = () => {
     // the tab shortcut sent five hundred of them in a few seconds; every one was rendered in turn, the host
     // dropped their reports as stale, and the reader waited a minute for the last to come round. Only the
     // load the host still wants can matter, and the host's stale-report rule already says which that is.
-    const pendingLoadRef = useRef<{ text: string, basePath: string, cursor?: any, scrollTop?: number | null, scrollAnchor?: ScrollAnchor | null, loadId?: number, hold?: number } | null>(null)
+    const pendingLoadRef = useRef<{ text: string, basePath: string, cursor?: any, scrollTop?: number | null, scrollAnchor?: ScrollAnchor | null, loadId?: number, hold?: number, review?: ReviewPayload | null } | null>(null)
 
     if (!holdRef.current) holdRef.current = new InputHold({
         // Keys that are not text are not kept: reading mode, and Vim's commands in source mode.
@@ -522,7 +534,7 @@ const Editor: React.FC = () => {
     // the host's answer, the newer load, came first. Taking the older one after it left the page reporting a load
     // the host had dropped, and nothing the page said was heard again (R04).
     const isStaleLoad = (loadId?: number) => typeof loadId === 'number' && typeof loadIdRef.current === 'number' && loadId < loadIdRef.current
-    useEffect(() => transport.addListener<{ text: string, basePath: string, cursor?: any, scrollTop?: number | null, scrollAnchor?: ScrollAnchor | null, loadId?: number, hold?: number }>('LoadFile', (load) => {
+    useEffect(() => transport.addListener<{ text: string, basePath: string, cursor?: any, scrollTop?: number | null, scrollAnchor?: ScrollAnchor | null, loadId?: number, hold?: number, review?: ReviewPayload | null }>('LoadFile', (load) => {
         if (isStaleLoad(load.loadId)) return
         // A load replaces whatever an automation edit was applying (the host restoring it, or a tab switch): that
         // edit's outcome is unknown to the host, which then restores from its own copy.
@@ -546,7 +558,10 @@ const Editor: React.FC = () => {
             const pending = pendingLoadRef.current
             pendingLoadRef.current = null
             if (!pending || isStaleLoad(pending.loadId)) return
-            const { text, basePath, cursor, scrollTop, scrollAnchor, loadId, hold } = pending
+            const { text, basePath, cursor, scrollTop, scrollAnchor, loadId, hold, review } = pending
+            // Review mode's state for the document coming (none: not in review), before its text is in.
+            reportReview()
+            setReview(review, true)
             window.basePath = basePath
             loadIdRef.current = loadId
             appliedHoldRef.current = hold
@@ -559,12 +574,14 @@ const Editor: React.FC = () => {
     // Host -> editor: an automation edit (docs/automation-api-spec.md, section 2.2, steps 6-7). In this one event the
     // page takes in its own throttled typing, compares the live text with the base the host checked, and either
     // refuses (the reader typed meanwhile) or starts applying; the reply follows once the editor holds the text.
-    useEffect(() => transport.addListener<{ operationId: string, baseContentHash: string, text: string, scrollToChange?: boolean }>('ApplyDocumentEdit', ({ operationId, baseContentHash, text, scrollToChange }) => {
+    useEffect(() => transport.addListener<{ operationId: string, baseContentHash: string, text: string, scrollToChange?: boolean, source?: { name?: string, session?: string } | null }>('ApplyDocumentEdit', ({ operationId, baseContentHash, text, scrollToChange, source }) => {
         const refuse = (outcome: string, reason: string) => transport.postMessage('DocumentEditApplied', { operationId, loadId: loadIdRef.current, outcome, reason })
         if (fileLoadPending.current || pendingEditRef.current) return refuse('failed', 'busy')
         flushRef.current?.()
         if (sha256Hex(markdownRef.current ?? '') !== baseContentHash) return refuse('conflict', 'baseContentHashMismatch')
         pendingEditRef.current = { operationId }
+        // Who wrote it, for review mode: the automation client's program and session ('' would be the reader).
+        noteChangeSource(source?.name ? { name: source.name, session: source.session } : null)
         resetUserIntent()
         const y = optionsRef.current?.sourceCode ? codeMirrorScrollRef.current : window.scrollY
         scrollToChangeRef.current = !!scrollToChange
@@ -601,6 +618,28 @@ const Editor: React.FC = () => {
         }
         setOptions((oldOptions: any) => ({ ...oldOptions, ...newOptions }))
     }), []);
+
+    // Review mode (services/reviewSession.ts): the host's state for the document shown changed (turned on or off, the
+    // revisions shown or hidden, a source filtered), or its status bar asks for something.
+    useEffect(() => transport.addListener<{ review: ReviewPayload | null, loadId?: number }>('ReviewSet', ({ review, loadId }) => {
+        if (typeof loadId === 'number' && loadId !== loadIdRef.current) return
+        setReview(review, false)
+    }), []);
+    useEffect(() => transport.addListener<{ command: string, source?: string | null }>('ReviewCommand', ({ command, source }) => reviewCommand(command, source)), []);
+    useEffect(() => {
+        installReviewActions()
+        connectReviewHost({
+            text: () => markdownRef.current ?? '',
+            loadId: () => loadIdRef.current,
+            // A rejected revision: the text put back in place as an edit of the text shown, and told to the host as the
+            // reader's edit (an undo step), since the editor does not report text the host gave it.
+            replaceText: (text: string) => {
+                const y = optionsRef.current?.sourceCode || optionsRef.current?.plainTextShown ? codeMirrorScrollRef.current : window.scrollY
+                setContentFromHost(text, cursorRef.current, y, true)
+                transport.postMessage('MarkdownChange', { text, loadId: loadIdRef.current, origin: 'user', edit: { kind: 'other', moved: false, inserted: '' } })
+            },
+        })
+    }, [setContentFromHost]);
 
     useEffect(() => transport.addListener<{ open: number }>('SearchOpenChange', ({ open }) => {
         setSearchOpen(open)

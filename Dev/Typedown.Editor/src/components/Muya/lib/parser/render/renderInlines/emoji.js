@@ -19,8 +19,8 @@ export default function emoji (h, cursor, block, token, outerClass) {
   if (token.highlights && token.highlights.length) {
     content = []
     for (const light of token.highlights) {
-      let { start, end, active } = light
-      const HIGHLIGHT_CLASSNAME = this.getHighlightClassName(active)
+      let { start, end, active, review } = light
+      const HIGHLIGHT_CLASSNAME = this.getHighlightClassName(active, review)
       if (start === rStart) {
         startMarkerSelector += `.${HIGHLIGHT_CLASSNAME}`
         start++

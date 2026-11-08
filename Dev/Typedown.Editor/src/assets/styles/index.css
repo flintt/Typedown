@@ -1730,3 +1730,114 @@ span.ag-footnote-backlink {
 #ag-editor-id li.ag-order-list-item[data-marker=")"]::marker {
   content: counter(list-item) ") ";
 }
+
+/* Review mode (services/reviewSession.ts, docs/todo.md "审阅模式"): what the document has that the baseline did not is
+   green and underlined, what it no longer has is red and struck through where it was - drawn by the page beside the
+   text, never part of it (pseudo-elements and widgets the caret cannot enter). The underline and the strike-through say
+   it without the colours. A whole new paragraph has a green bar at its left; paragraphs deleted are a red strip above
+   the one after them, a line until the mouse is on it. A program's revision has its name at the left. */
+:root {
+  --reviewInsBg: rgba(46, 160, 67, 0.16);
+  --reviewIns: #2ea043;
+  --reviewDel: #d1242f;
+  --reviewDelBg: rgba(209, 36, 47, 0.08);
+}
+.ag-review-ins,
+.cm-review-ins {
+  background-color: var(--reviewInsBg);
+  text-decoration: underline var(--reviewIns) 2px;
+  text-underline-offset: 3px;
+}
+.ag-review-del-before::before,
+.ag-review-del-after::after,
+.cm-review-del {
+  color: var(--reviewDel);
+  text-decoration: line-through var(--reviewDel) 1.5px;
+  background-color: var(--reviewDelBg);
+  user-select: none;
+}
+.ag-review-del-before::before { content: attr(data-del-before); }
+.ag-review-del-after::after { content: attr(data-del-after); }
+.ag-review-whole {
+  box-shadow: inset 3px 0 0 var(--reviewIns);
+  padding-left: 6px;
+}
+.cm-review-line-ins {
+  box-shadow: inset 3px 0 0 var(--reviewIns);
+}
+.ag-review-del-above::before,
+.ag-review-del-below::after,
+.cm-review-del-lines {
+  display: block;
+  color: var(--reviewDel);
+  text-decoration: line-through var(--reviewDel) 1.5px;
+  background-color: var(--reviewDelBg);
+  border-left: 3px solid var(--reviewDel);
+  padding: 0 6px;
+  margin: 2px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.9em;
+  user-select: none;
+}
+.ag-review-del-above::before { content: attr(data-del-above); }
+.ag-review-del-below::after { content: attr(data-del-below); }
+.ag-review-del-above:hover::before,
+.ag-review-del-below:hover::after,
+.cm-review-del-lines:hover {
+  white-space: pre-wrap;
+}
+.ag-review-tagged {
+  position: relative;
+}
+.ag-review-tagged:not(:empty):not(.ag-review-del-below)::after {
+  content: attr(data-review-source);
+  position: absolute;
+  right: calc(100% + 8px);
+  top: 0.2em;
+  max-width: 7em;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 11px;
+  line-height: 1.6;
+  padding: 0 4px;
+  border-radius: 3px;
+  color: var(--editorColor80, #555);
+  background: var(--editorColor04, rgba(127, 127, 127, 0.12));
+  border: 1px solid var(--editorColor10, rgba(127, 127, 127, 0.3));
+  text-decoration: none;
+  pointer-events: none;
+}
+#td-review-actions {
+  position: absolute;
+  z-index: 50;
+  display: none;
+  gap: 2px;
+  padding: 2px;
+  border-radius: 4px;
+  background: var(--editorBgColor, #fff);
+  border: 1px solid var(--editorColor10, rgba(127, 127, 127, 0.35));
+}
+#td-review-actions button {
+  width: 24px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  color: var(--editorColor, #333);
+  font-size: 14px;
+  line-height: 22px;
+  cursor: pointer;
+}
+#td-review-actions .td-review-accept { color: var(--reviewIns); }
+#td-review-actions .td-review-reject { color: var(--reviewDel); }
+#td-review-actions button:hover { background: var(--editorColor10, rgba(127, 127, 127, 0.2)); }
+@media print {
+  .ag-review-ins { background: none; text-decoration: none; }
+  .ag-review-del-before::before, .ag-review-del-after::after, .ag-review-del-above::before, .ag-review-del-below::after, .ag-review-tagged::after { display: none !important; }
+  .ag-review-whole { box-shadow: none; padding-left: 0; }
+  #td-review-actions { display: none !important; }
+}

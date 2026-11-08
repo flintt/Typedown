@@ -1,4 +1,5 @@
 import { union } from '../../../utils'
+import { reviewAttrsOf, reviewClassOf } from '../review'
 
 // change text to highlight vdom
 export default function highlight (h, block, rStart, rEnd, token) {
@@ -17,14 +18,14 @@ export default function highlight (h, block, rStart, rEnd, token) {
 
   if (unions.length) {
     for (const u of unions) {
-      const { start, end, active } = u
-      const className = this.getHighlightClassName(active)
+      const { start, end, active, review } = u
 
       if (pos < start) {
         result.push(text.substring(pos, start))
       }
 
-      result.push(h(`span.${className}`, text.substring(start, end)))
+      if (review) result.push(h(`span.${reviewClassOf(review)}`, { attrs: reviewAttrsOf(review) }, text.substring(start, end)))
+      else result.push(h(`span.${this.getHighlightClassName(active)}`, text.substring(start, end)))
       pos = end
     }
     if (pos < rEnd) {

@@ -162,7 +162,8 @@ class StateRender {
     return outerClass || (this.checkConflicted(block, token, cursor) ? CLASS_OR_ID.AG_GRAY : CLASS_OR_ID.AG_HIDE)
   }
 
-  getHighlightClassName(active) {
+  getHighlightClassName(active, review) {
+    if (review) return reviewClassOf(review)
     return active ? CLASS_OR_ID.AG_HIGHLIGHT : CLASS_OR_ID.AG_SELECTION
   }
 

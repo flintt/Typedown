@@ -74,6 +74,8 @@ import { noteScroll, recentScrolls } from 'services/scrollWriters'
 import { FIND_EDIT_REFRESH_MS, findResultsOpen, noteFindChange, setFindProvider } from 'services/findResults'
 import { previewOf } from 'services/findPreview'
 import { markStartup } from 'services/startupMarks'
+import { registerReviewView, reviewActive } from 'services/reviewSession'
+import { leafMarks, leafPointOf, LeafMap, mapLeaves, markdownOffsetOf } from 'services/reviewMap'
 
 interface IMuyaEditor {
     markdown: string
@@ -1211,6 +1213,40 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
         }
     }, [editor, props.flushRef])
 
+    // Review mode's marks (services/reviewSession.ts): the revisions' places in the Markdown found in the leaf blocks,
+    // drawn with the blocks; the caret's place in the Markdown by the same map.
+    useEffect(() => {
+        if (!editor) return
+        const muya = editor as any
+        let map: LeafMap | null = null
+        return registerReviewView({
+            draw(revisions, text) {
+                map = mapLeaves(text, muya.reviewLeaves())
+                muya.setReviewMarks(revisions.length ? leafMarks(map, revisions, text) : null)
+            },
+            clear() {
+                map = null
+                muya.setReviewMarks(null)
+            },
+            caretOffset() {
+                const caret = muya.reviewCaret()
+                return caret && map ? markdownOffsetOf(map, caret.key, caret.offset) : null
+            },
+            setCaret(offset) {
+                const point = map ? leafPointOf(map, offset) : null
+                if (point) muya.setReviewCaret(point.key, point.offset)
+            },
+            rectOf(id) {
+                const element = document.querySelector(`#ag-editor-id [data-rid="${id}"], #ag-editor-id [data-del-above-rid="${id}"], #ag-editor-id [data-del-below-rid="${id}"]`)
+                return element ? element.getBoundingClientRect() : null
+            },
+            revisionOf(element) {
+                const marked = element.closest('#ag-editor-id [data-rid], #ag-editor-id [data-del-above-rid], #ag-editor-id [data-del-below-rid]')
+                return marked ? marked.getAttribute('data-rid') ?? marked.getAttribute('data-del-above-rid') ?? marked.getAttribute('data-del-below-rid') : null
+            },
+        })
+    }, [editor])
+
     useEffect(() => {
         if (!editor || !props.finishLoadRef) return
         const finish = () => editor.finishLoadNow()
@@ -1678,7 +1714,8 @@ const MuyaEditor: React.FC<IMuyaEditor> = (props) => {
                 firstPaintMs: Math.round(performance.now() - startedAt),
             }))
         }
-        if (blocksBefore && props.options?.highlightAutomationChanges !== false)
+        // In review mode the change stays marked as a revision instead (HighlightAutomationChanges merged into it).
+        if (blocksBefore && props.options?.highlightAutomationChanges !== false && !reviewActive())
             highlightExternalChange(editor.changedBlockKeys(blocksBefore).map((key: string) => document.getElementById(key)))
         ;(window as any).__typedownLastApply = replacedLocally ? 'local' : 'whole'
         importedRef.current = { source: props.markdown, normalized: editor.getMarkdown() }

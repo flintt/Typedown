@@ -58,6 +58,10 @@ test('a paragraph deleted', () => {
     expect(roundTrip('a\n\nb\n\nc\n', 'a\n\nc\n')).toEqual([['b\n\n', '']])
 })
 
+test('a paragraph edited beside one deleted: the edit in its words, the other deleted whole', () => {
+    expect(roundTrip('Second paragraph.\n\nThird paragraph.\n', 'Second paragraph, revised.\n')).toEqual([['', ', revised'], ['\nThird paragraph.\n', '']])
+})
+
 test('Chinese edits are by character', () => {
     expect(roundTrip('今天天气很好。\n', '今天天气不好。\n')).toEqual([['很', '不']])
 })

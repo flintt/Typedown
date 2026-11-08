@@ -13,6 +13,8 @@ import { FIND_EDIT_REFRESH_MS, findResultsOpen, noteFindChange, setFindProvider 
 import { FENCE, isTableRow, lineMarksLength, previewOf } from 'services/findPreview';
 import { MarkdownBlocksView } from './markdownBlocks';
 import { keyBinding } from 'components/Muya/lib/utils/keyBinding';
+import { registerReviewView, reviewActive } from 'services/reviewSession';
+import type { Revision } from 'services/review';
 require('codemirror/mode/markdown/markdown');
 require('codemirror/addon/scroll/scrollpastend');
 require('codemirror/keymap/vim');
@@ -320,6 +322,67 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
         markdownRef.current = ''
     }, [editor])
 
+    // Review mode's marks in source mode (services/reviewSession.ts): inserted text marked, deleted text a widget where
+    // it was (not in the text), a whole inserted line with the bar, deleted lines a strip above the line after them.
+    useEffect(() => {
+        if (!editor) return
+        let marks: { clear: () => void }[] = []
+        let lines: any[] = []
+        const clear = () => {
+            for (const m of marks) m.clear()
+            for (const l of lines) editor.removeLineClass(l, 'wrap', 'cm-review-line-ins')
+            marks = []
+            lines = []
+        }
+        const deleted = (text: string, r: Revision, block: boolean) => {
+            const span = document.createElement(block ? 'div' : 'span')
+            span.className = block ? 'cm-review-del-lines' : 'cm-review-del'
+            span.textContent = block ? text.replace(/\n+$/, '') : text.replace(/\n/g, ' ¶ ')
+            span.setAttribute('data-rid', r.id)
+            if (r.source) span.setAttribute('data-review-source', r.source)
+            return span
+        }
+        return registerReviewView({
+            draw(revisions, text) {
+                editor.operation(() => {
+                    clear()
+                    for (const r of revisions) {
+                        const from = editor.posFromIndex(r.curStart), to = editor.posFromIndex(r.curEnd)
+                        if (r.curEnd > r.curStart) {
+                            marks.push(editor.markText(from, to, { className: r.source ? 'cm-review-ins cm-review-ext' : 'cm-review-ins', attributes: { 'data-rid': r.id, ...(r.source ? { 'data-review-source': r.source } : {}) } }))
+                            const wholeLines = (r.curStart === 0 || text[r.curStart - 1] === '\n') && (r.curEnd === text.length || text[r.curEnd - 1] === '\n')
+                            if (wholeLines) for (let line = from.line; line < (to.ch === 0 ? to.line : to.line + 1); line++) lines.push(editor.addLineClass(line, 'wrap', 'cm-review-line-ins'))
+                        }
+                        if (r.oldText) {
+                            const block = r.oldText.includes('\n') && from.ch === 0
+                            if (block) marks.push(editor.addLineWidget(Math.min(from.line, editor.lineCount() - 1), deleted(r.oldText, r, true), { above: true }))
+                            else marks.push(editor.setBookmark(from, { widget: deleted(r.oldText, r, false), insertLeft: true }))
+                        }
+                    }
+                })
+            },
+            clear() {
+                editor.operation(clear)
+            },
+            caretOffset() {
+                return editor.indexFromPos(editor.getCursor())
+            },
+            setCaret(offset) {
+                editor.setCursor(editor.posFromIndex(offset))
+                editor.scrollIntoView(null, editor.getScrollInfo().clientHeight / 3)
+                editor.focus()
+            },
+            rectOf(id) {
+                const element = editor.getWrapperElement().querySelector(`[data-rid="${id}"]`)
+                return element ? element.getBoundingClientRect() : null
+            },
+            revisionOf(element) {
+                const marked = element.closest('.CodeMirror [data-rid]')
+                return marked ? marked.getAttribute('data-rid') : null
+            },
+        })
+    }, [editor])
+
     useEffect(() => {
         if (!editor) return
         const local = props.localChangeRef?.current
@@ -334,7 +397,7 @@ const CodeMirrorEditor: React.FC<ICodeMirrorEditor> = (props) => {
             markdownRef.current = props.markdown
             if (change) {
                 editor.replaceRange(change.text, editor.posFromIndex(change.from), editor.posFromIndex(change.to), '+automation')
-                if (change.text && props.options?.highlightAutomationChanges !== false) {
+                if (change.text && props.options?.highlightAutomationChanges !== false && !reviewActive()) {
                     const mark = editor.markText(editor.posFromIndex(change.from), editor.posFromIndex(change.from + change.text.length), { className: EXTERNAL_CHANGE_CLASS })
                     setTimeout(() => mark.clear(), EXTERNAL_CHANGE_MS)
                 }

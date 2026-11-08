@@ -156,14 +156,94 @@ export function diffTexts(baseline: string, current: string): Hunk[] {
             hunks.push({ baseStart: aFrom, baseEnd: aTo, curStart: bFrom, curEnd: bTo })
             continue
         }
-        // Lines changed: the words within them.
-        const aText = baseline.slice(aFrom, aTo), bText = current.slice(bFrom, bTo)
-        const aTokens = tokenize(aText), bTokens = tokenize(bText)
-        const aPos = positions(aTokens), bPos = positions(bTokens)
-        for (const t of diffSequences(aTokens, bTokens, 2000))
-            hunks.push({ baseStart: aFrom + aPos[t.a], baseEnd: aFrom + aPos[t.a + t.aLen], curStart: bFrom + bPos[t.b], curEnd: bFrom + bPos[t.b + t.bLen] })
+        // Lines changed: each line paired with the one it most resembles on the other side, the words of a pair
+        // compared; a line paired with none was added or deleted whole. Compared as one run of words, a paragraph
+        // edited next to one deleted had its words matched with the deleted one's ("paragraph" with "paragraph").
+        const aGroup = aLines.slice(op.a, op.a + op.aLen), bGroup = bLines.slice(op.b, op.b + op.bLen)
+        const steps = aGroup.length * bGroup.length <= 40000 ? pairLines(aGroup, bGroup) : null
+        if (!steps) {
+            wordHunks(hunks, baseline.slice(aFrom, aTo), current.slice(bFrom, bTo), aFrom, bFrom)
+            continue
+        }
+        let a = aFrom, b = bFrom
+        let run: Hunk | null = null
+        const flush = () => { if (run) hunks.push(run); run = null }
+        for (const step of steps) {
+            if (step === 'pair') {
+                flush()
+                const aLine = aGroup.shift()!, bLine = bGroup.shift()!
+                wordHunks(hunks, aLine, bLine, a, b)
+                a += aLine.length
+                b += bLine.length
+            } else if (step === 'del') {
+                const aLine = aGroup.shift()!
+                if (run && run.curStart === run.curEnd) run.baseEnd += aLine.length
+                else { flush(); run = { baseStart: a, baseEnd: a + aLine.length, curStart: b, curEnd: b } }
+                a += aLine.length
+            } else {
+                const bLine = bGroup.shift()!
+                if (run && run.baseStart === run.baseEnd) run.curEnd += bLine.length
+                else { flush(); run = { baseStart: a, baseEnd: a, curStart: b, curEnd: b + bLine.length } }
+                b += bLine.length
+            }
+        }
+        flush()
     }
     return hunks.map(h => slide(baseline, current, h))
+}
+
+// The words of two texts compared, the hunks at their offsets.
+function wordHunks(hunks: Hunk[], aText: string, bText: string, aFrom: number, bFrom: number) {
+    const aTokens = tokenize(aText), bTokens = tokenize(bText)
+    const aPos = positions(aTokens), bPos = positions(bTokens)
+    for (const t of diffSequences(aTokens, bTokens, 2000))
+        hunks.push({ baseStart: aFrom + aPos[t.a], baseEnd: aFrom + aPos[t.a + t.aLen], curStart: bFrom + bPos[t.b], curEnd: bFrom + bPos[t.b + t.bLen] })
+}
+
+// How alike two lines are, 0 to 1: the share of their words (not spaces) they have in common. Two blank lines are alike.
+function similarity(a: string, b: string): number {
+    const words = (s: string) => tokenize(s).filter(t => /\S/.test(t))
+    const x = words(a), y = words(b)
+    if (!x.length && !y.length) return 1
+    if (!x.length || !y.length) return 0
+    const counts = new Map<string, number>()
+    for (const t of x) counts.set(t, (counts.get(t) ?? 0) + 1)
+    let common = 0
+    for (const t of y) {
+        const n = counts.get(t) ?? 0
+        if (n > 0) { common++; counts.set(t, n - 1) }
+    }
+    return 2 * common / (x.length + y.length)
+}
+
+/**
+ * The lines of two runs paired in order (each pair alike enough), the others added or deleted: the cheapest way, a pair
+ * costing how unlike its lines are and a line on its own costing one.
+ */
+function pairLines(a: string[], b: string[]): ('pair' | 'del' | 'ins')[] {
+    const n = a.length, m = b.length
+    const cost = new Float64Array((n + 1) * (m + 1))
+    const at = (i: number, j: number) => i * (m + 1) + j
+    const alike = (i: number, j: number) => similarity(a[i], b[j])
+    const sims = new Float64Array(n * m)
+    for (let i = 0; i < n; i++) for (let j = 0; j < m; j++) sims[i * m + j] = alike(i, j)
+    for (let i = n; i >= 0; i--) for (let j = m; j >= 0; j--) {
+        if (i === n && j === m) continue
+        let best = Infinity
+        if (i < n) best = Math.min(best, 1 + cost[at(i + 1, j)])
+        if (j < m) best = Math.min(best, 1 + cost[at(i, j + 1)])
+        if (i < n && j < m && sims[i * m + j] >= 0.3) best = Math.min(best, 2 * (1 - sims[i * m + j]) + cost[at(i + 1, j + 1)])
+        cost[at(i, j)] = best
+    }
+    const steps: ('pair' | 'del' | 'ins')[] = []
+    let i = 0, j = 0
+    while (i < n || j < m) {
+        const here = cost[at(i, j)]
+        if (i < n && j < m && sims[i * m + j] >= 0.3 && Math.abs(here - (2 * (1 - sims[i * m + j]) + cost[at(i + 1, j + 1)])) < 1e-9) { steps.push('pair'); i++; j++ }
+        else if (i < n && Math.abs(here - (1 + cost[at(i + 1, j)])) < 1e-9) { steps.push('del'); i++ }
+        else { steps.push('ins'); j++ }
+    }
+    return steps
 }
 
 const positions = (tokens: string[]) => {
@@ -179,7 +259,7 @@ function slide(baseline: string, current: string, h: Hunk): Hunk {
     const remove = h.curStart === h.curEnd
     if (insert === remove) return h
     const text = insert ? current : baseline
-    let start = insert ? h.curStart : h.baseStart, end = insert ? h.curEnd : h.baseEnd
+    const start = insert ? h.curStart : h.baseStart, end = insert ? h.curEnd : h.baseEnd
     const atLineStart = (i: number) => i === 0 || text[i - 1] === '\n'
     if (atLineStart(start)) return h
     let s = start, e = end

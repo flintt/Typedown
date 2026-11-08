@@ -8,6 +8,7 @@ import { CLASS_OR_ID, DEVICE_MEMORY, PREVIEW_DOMPURIFY_CONFIG, HAS_TEXT_BLOCK_RE
 import { tokenizer } from '../../'
 import { snakeToCamel, sanitize, escapeHTML, getLongUniqueId, getImageInfo } from '../../../utils'
 import { h, htmlToVNode } from '../snabbdom'
+import { reviewBlockMarks, withReviewLights } from '../review'
 
 // todo@jocs any better solutions?
 const MARKER_HASK = {
@@ -95,7 +96,7 @@ export default function renderLeafBlock (parent, block, activeBlocks, matches, u
   const { cursor } = this.muya.contentState
   let selector = this.getSelector(block, activeBlocks)
   // highlight search key in block
-  const highlights = highlightsOf(matches, block.key)
+  const searchLights = highlightsOf(matches, block.key)
   const {
     text,
     type,
@@ -105,6 +106,11 @@ export default function renderLeafBlock (parent, block, activeBlocks, matches, u
     functionType,
     editable
   } = block
+  // Review mode's marks of this leaf (StateRender.reviewMarks): its inserted runs go with the search's highlights,
+  // except in code, which its highlighting draws again (the leaf gets a bar instead).
+  const reviewMarks = this.reviewMarks ? this.reviewMarks.get(key) : null
+  const isCode = functionType === 'codeContent' || functionType === 'languageInput'
+  const highlights = reviewMarks && reviewMarks.segments.length && !isCode ? withReviewLights(searchLights, reviewMarks.segments) : searchLights
 
   const data = {
     props: {},
@@ -253,7 +259,7 @@ export default function renderLeafBlock (parent, block, activeBlocks, matches, u
     }
     children = ''
   } else if (type === 'span' && functionType === 'codeContent') {
-    const code = getHighlightHtml(text, highlights, true, true)
+    const code = getHighlightHtml(text, searchLights, true, true)
       .replace(new RegExp(MARKER_HASK['<'], 'g'), '<')
       .replace(new RegExp(MARKER_HASK['>'], 'g'), '>')
       .replace(new RegExp(MARKER_HASK['"'], 'g'), '"')
@@ -276,11 +282,13 @@ export default function renderLeafBlock (parent, block, activeBlocks, matches, u
     }
   } else if (type === 'span' && functionType === 'languageInput') {
     const escapedText = sanitize(text, PREVIEW_DOMPURIFY_CONFIG, true)
-    const html = getHighlightHtml(escapedText, highlights, true)
+    const html = getHighlightHtml(escapedText, searchLights, true)
     children = htmlToVNode(html)
   } else if (type === 'span' && functionType === 'footnoteInput') {
     Object.assign(data.attrs, { spellcheck: 'false' })
   }
+
+  if (reviewMarks) selector = reviewBlockMarks(selector, data, reviewMarks, isCode)
 
   if (!block.parent) {
     return h(selector, data, [this.renderIcon(block), ...children])

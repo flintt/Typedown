@@ -292,3 +292,9 @@ Other checks (all take `STATICS=<dir>` or default to the built editor):
   last entry (block 2918 of 2928, not drawn yet) in the window and selected within 1 s, no frame gap over 200 ms. This
   machine's own drawing of that document comes near 200 ms when it is busy (lt01-check's open shows the same, and the
   same steps with the list closed do too): compare with lt01-check run alongside.
+- `review-check.js` — review mode on the page (services/reviewSession.ts, docs/todo.md "审阅模式"): a document loaded
+  with its baseline; typing marked as the reader's revision (green, underlined) and reported (`ReviewState`); a
+  program's write (`ApplyDocumentEdit` with its `source`) marked with the program's name; a deleted paragraph a strip;
+  accept all of one source into the baseline; the buttons beside the revision `next` went to; Alt+Backspace rejects
+  (the text the baseline again, told as the reader's edit); the marks in source mode; hidden and off (`ReviewSet`); the
+  revisions the host kept matched again on a load. Nothing of the marks in the text.

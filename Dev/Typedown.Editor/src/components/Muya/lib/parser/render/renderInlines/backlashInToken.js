@@ -13,7 +13,7 @@ export default function backlashInToken (h, backlashes, outerClass, start, token
     const light = highlights.filter(light => union({ start: start + i, end: start + i + 1 }, light))
     let selector = 'span'
     if (light.length) {
-      const className = this.getHighlightClassName(light[0].active)
+      const className = this.getHighlightClassName(light[0].active, light[0].review)
       selector += `.${className}`
     }
     if (isEven(i)) {

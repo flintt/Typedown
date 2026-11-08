@@ -41,19 +41,22 @@ export const conflict = (arr1, arr2) => {
   return !(arr1[1] < arr2[0] || arr2[1] < arr1[0])
 }
 
-export const union = ({ start: tStart, end: tEnd }, { start: lStart, end: lEnd, active }) => {
+// `review`: a review mode run (parser/render/review.js) goes on with the part of it in the token.
+export const union = ({ start: tStart, end: tEnd }, { start: lStart, end: lEnd, active, review }) => {
   if (!(tEnd <= lStart || lEnd <= tStart)) {
     if (lStart < tStart) {
       return {
         start: tStart,
         end: tEnd < lEnd ? tEnd : lEnd,
-        active
+        active,
+        review
       }
     } else {
       return {
         start: lStart,
         end: tEnd < lEnd ? tEnd : lEnd,
-        active
+        active,
+        review
       }
     }
   }
